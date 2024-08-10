@@ -1,0 +1,20 @@
+[
+    {
+        "uid": "1234-abcd-5678",
+        "uname": "지지자",
+        "age": "25",
+        "email": "testUser@naver.com",
+        "gender" : "m",
+        "point" : 0,
+        "combo" : 0,
+        "credit" : 0,
+        "solo_bid" : "",
+        "group_bid" : "",
+        "items" : {
+            "chatting" : 0,
+            "saver" : 0
+        },
+        "daily" : false,
+        "special" : false
+    }
+]

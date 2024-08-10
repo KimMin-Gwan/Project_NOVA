@@ -1,0 +1,10 @@
+[
+    {
+        "lid" : "1001",
+        "lname" : "시리우스",
+        "bid_list" : [],
+        "tier" : [1, 10],
+        "num_bias" : 0,
+        "state" : "active"
+    }
+]

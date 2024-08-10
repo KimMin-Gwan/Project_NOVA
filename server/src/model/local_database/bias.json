@@ -1,0 +1,23 @@
+[
+    {
+        "bid" : "1001",
+        "type" : "solo",
+        "bname" : "이시연",
+        "category" : "아티스트",
+        "birthday" : "2000/05/16",
+        "debut" :  "2023/10/18",
+        "agency" : "쓰리와이코퍼레이션",
+        "group" : "QWER",
+        "lid" : "1001",
+        "point" : 0,
+        "num_user" : 0,
+        "x_account" : "https://x.com/siyo_min",
+        "insta_acoount" : "https://www.instagram.com/siyo.co.kr/",
+        "tiktok_account" : "https://www.tiktok.com/@siyoming___qwer",
+        "youtube_account" : "",
+        "homepage" : "",
+        "fan_cafe" : "https://cafe.naver.com/eggkim",
+        "country" : "대한민국",
+        "nickname" : ["시요밍", "시쪽이", "명창햄찌"]
+    }
+]
