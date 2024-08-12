@@ -1,0 +1,264 @@
+/* .App {
+  text-align: center;
+}
+
+.nav-area {
+  background-color: black;
+  color: white;
+  height: 70px;
+  align-items: center;
+  padding: 10px;
+  display: flex;
+}
+.empty{
+  background-color: bisque;
+}
+
+.menu {
+  background-color: aqua;
+  display: flex;
+  text-align: end;
+
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+} */
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  background-color: #5710104a;
+  padding: 20px;
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: solid black;
+  padding-bottom: 20px;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.buttons button {
+  margin-left: 10px;
+}
+
+.banner {
+  position: relative;
+  background-color: #ccc;
+  padding: 35px;
+  text-align: center;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.banner-indicator {
+  position: absolute;
+  bottom: 10px;
+  right: 20px;
+  font-size: 12px;
+  background-color: black;
+  color: white;
+  border-radius: 7px;
+  width: 35px;
+}
+
+.authentication {
+  /* display: flex; */
+  /* justify-content: space-between; */
+  margin-bottom: 20px;
+}
+
+.authentication-title {
+  margin-bottom: 20px;
+}
+
+.item-box {
+  background-color: gray;
+  display: flex;
+  align-items: center;
+  /* justify-content: space-between; */
+  border-radius: 10px;
+  width: 100%;
+  height: 80px;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.auth-item {
+  display: flex;
+  align-items: center;
+}
+
+.profile {
+  width: 50px;
+  height: 50px;
+  background-color: #000;
+  border-radius: 50%;
+  color: white;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  margin-left: 20px;
+}
+
+.name {
+  padding-left: 20px;
+  font-size: 20px;
+}
+
+.profile-pic {
+  width: 50px;
+  height: 50px;
+  background-color: #000;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.auth-button {
+  background-color: #ccc;
+  border: none;
+  padding: 5px 10px;
+  position: absolute;
+  border-radius: 30px;
+  right: 20px;
+  width: 100px;
+
+}
+
+.support-group {
+  display: flex;
+  align-items: center;
+}
+
+.support-button {
+  background-color: #ddd;
+  border: none;
+  padding: 10px;
+  border-radius: 50%;
+}
+
+.ranking {
+  margin-bottom: 20px;
+}
+
+.ranking-tabs {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 10px;
+}
+
+.tab {
+  /* background-color: #eee; */
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.league {
+  background-color: #fff;
+  padding: 10px;
+}
+
+.rank-item-box {
+  background-color: gray;
+  display: flex;
+  align-items: center;
+  /* justify-content: space-between; */
+  border-radius: 10px;
+  width: 100%;
+  height: 70px;
+  position: relative;
+  margin-bottom: 10px;
+}
+
+.rank-profile {
+  width: 40px;
+  height: 40px;
+  background-color: #000;
+  border-radius: 50%;
+  color: white;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  margin-left: 5px;
+}
+
+.point {
+  position: absolute;
+  right: 20px;
+}
+
+.ranking-list .ranking-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ccc;
+  padding: 10px;
+  margin-bottom: 5px;
+}
+
+.rank-bottom {
+  text-align: center;
+  margin: 10px 0;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #eee;
+  padding: 10px;
+}
+
+.confirm-button {
+  background-color: #000;
+  color: #fff;
+  /* border: none; */
+  padding: 10px 20px;
+}
