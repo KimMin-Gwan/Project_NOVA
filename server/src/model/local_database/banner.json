@@ -1,6 +1,10 @@
 [
     {
         "baid" : "1",
-        "ba_url" : ""
+        "ba_url" : "http://www.naver.com"
+    },
+    {
+        "baid" : "2",
+        "ba_url" : "http://www.naver.com"
     }
 ]

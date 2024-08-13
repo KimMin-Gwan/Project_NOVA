@@ -70,10 +70,10 @@ class User(SampleDomain):
 
 
 class Bias(SampleDomain):
-    def __init__(self, bid="", type="", bname="", category="", birthday="", debut="",
-                 agency="", group="", lid="", point=0, num_user=0, x_account="",
+    def __init__(self, bid="", type="", bname="", category=[], birthday="", debut="",
+                 agency="", group=[], lid="", point=0, num_user=0, x_account="",
                  insta_account="", tiktok_account="", youtube_account="", homepage="",
-                 fan_cafe="", country="", nickname=[]):
+                 fan_cafe="", country=[], nickname=[], fanname = [], group_member_bids=[]):
         self.bid = bid
         self.type = type
         self.bname = bname
@@ -93,6 +93,8 @@ class Bias(SampleDomain):
         self.fan_cafe = fan_cafe
         self.country = country
         self.nickname = nickname
+        self.fanname = fanname
+        self.group_memeber_bids = group_member_bids
 
     def make_with_dict(self, dict_data):
         try:
@@ -164,7 +166,7 @@ class NameCard(SampleDomain):
         }
     
 class League(SampleDomain):
-    def __init__(self, lid="", lname="", bid_list=None, tier=None, num_bias=0, state=""):
+    def __init__(self, lid="", lname="", bid_list=None, tier=None, num_bias=0, state="", type="solo"):
         if bid_list is None:
             bid_list = []
         if tier is None:
@@ -175,6 +177,7 @@ class League(SampleDomain):
         self.tier = tier
         self.num_bias = num_bias
         self.state = state
+        self.type=type
 
     def make_with_dict(self, dict_data):
         try:

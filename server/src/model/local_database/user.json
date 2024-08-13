@@ -5,10 +5,10 @@
         "age": "25",
         "email": "testUser@naver.com",
         "gender" : "m",
-        "point" : 0,
+        "point" : 960,
         "combo" : 0,
         "credit" : 0,
-        "solo_bid" : "",
+        "solo_bid" : "1001",
         "group_bid" : "",
         "items" : {
             "chatting" : 0,
@@ -16,5 +16,3641 @@
         },
         "daily" : false,
         "special" : false
+    },
+    {
+        "uid": "5678-efgh-1234",
+        "uname": "지지자",
+        "age": "28",
+        "email": "randomUser1@naver.com",
+        "gender": "f",
+        "point": 1020,
+        "combo": 2,
+        "credit": 0,
+        "solo_bid": "1001",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "abcd-1234-5678",
+        "uname": "지지자",
+        "age": "22",
+        "email": "randomUser2@naver.com",
+        "gender": "m",
+        "point": 1000,
+        "combo": 4,
+        "credit": 0,
+        "solo_bid": "1001",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "ijkl-9876-mnop",
+        "uname": "지지자",
+        "age": "30",
+        "email": "randomUser3@naver.com",
+        "gender": "f",
+        "point": 220,
+        "combo": 1,
+        "credit": 0,
+        "solo_bid": "1001",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "qrst-6543-uvwx",
+        "uname": "지지자",
+        "age": "27",
+        "email": "randomUser4@naver.com",
+        "gender": "m",
+        "point": 660,
+        "combo": 3,
+        "credit": 0,
+        "solo_bid": "1001",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "yzab-1357-cdef",
+        "uname": "지지자",
+        "age": "24",
+        "email": "randomUser5@naver.com",
+        "gender": "f",
+        "point": 420,
+        "combo": 0,
+        "credit": 0,
+        "solo_bid": "1001",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "ghij-2468-klmn",
+        "uname": "지지자",
+        "age": "21",
+        "email": "randomUser6@naver.com",
+        "gender": "m",
+        "point": 430,
+        "combo": 1,
+        "credit": 0,
+        "solo_bid": "1001",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "opqr-3698-stuv",
+        "uname": "지지자",
+        "age": "29",
+        "email": "randomUser7@naver.com",
+        "gender": "f",
+        "point": 500,
+        "combo": 4,
+        "credit": 0,
+        "solo_bid": "1001",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "wxyz-7531-abcd",
+        "uname": "지지자",
+        "age": "23",
+        "email": "randomUser8@naver.com",
+        "gender": "m",
+        "point": 210,
+        "combo": 0,
+        "credit": 0,
+        "solo_bid": "1001",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "mnop-9876-qrst",
+        "uname": "지지자",
+        "age": "31",
+        "email": "randomUser9@naver.com",
+        "gender": "f",
+        "point": 330,
+        "combo": 2,
+        "credit": 0,
+        "solo_bid": "1001",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "abcd-4321-wxyz",
+        "uname": "지지자",
+        "age": "26",
+        "email": "randomUser10@naver.com",
+        "gender": "m",
+        "point": 680,
+        "combo": 3,
+        "credit": 0,
+        "solo_bid": "1001",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "efgh-8765-ijkl",
+        "uname": "지지자",
+        "age": "25",
+        "email": "randomUser11@naver.com",
+        "gender": "f",
+        "point": 360,
+        "combo": 0,
+        "credit": 0,
+        "solo_bid": "1001",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "qrst-2109-uvwx",
+        "uname": "지지자",
+        "age": "22",
+        "email": "randomUser12@naver.com",
+        "gender": "m",
+        "point": 1080,
+        "combo": 1,
+        "credit": 0,
+        "solo_bid": "1001",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "uvwx-1098-yzab",
+        "uname": "지지자",
+        "age": "28",
+        "email": "randomUser13@naver.com",
+        "gender": "f",
+        "point": 180,
+        "combo": 4,
+        "credit": 0,
+        "solo_bid": "1001",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "klmn-5432-opqr",
+        "uname": "지지자",
+        "age": "24",
+        "email": "randomUser14@naver.com",
+        "gender": "m",
+        "point": 80,
+        "combo": 0,
+        "credit": 0,
+        "solo_bid": "1001",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "abcd-5678-efgh",
+        "uname": "지지자",
+        "age": "29",
+        "email": "randomUser15@naver.com",
+        "gender": "f",
+        "point": 1080,
+        "combo": 3,
+        "credit": 0,
+        "solo_bid": "1001",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "mnop-1122-wxyz",
+        "uname": "지지자",
+        "age": "26",
+        "email": "randomUser16@naver.com",
+        "gender": "f",
+        "point": 1020,
+        "combo": 1,
+        "credit": 0,
+        "solo_bid": "1002",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "qrst-3344-uvwx",
+        "uname": "지지자",
+        "age": "23",
+        "email": "randomUser17@naver.com",
+        "gender": "m",
+        "point": 400,
+        "combo": 0,
+        "credit": 0,
+        "solo_bid": "1002",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "yzab-5566-cdef",
+        "uname": "지지자",
+        "age": "28",
+        "email": "randomUser18@naver.com",
+        "gender": "f",
+        "point": 380,
+        "combo": 2,
+        "credit": 0,
+        "solo_bid": "1002",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "ghij-7788-klmn",
+        "uname": "지지자",
+        "age": "21",
+        "email": "randomUser19@naver.com",
+        "gender": "m",
+        "point": 560,
+        "combo": 3,
+        "credit": 0,
+        "solo_bid": "1002",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "opqr-9900-stuv",
+        "uname": "지지자",
+        "age": "27",
+        "email": "randomUser20@naver.com",
+        "gender": "f",
+        "point": 840,
+        "combo": 0,
+        "credit": 0,
+        "solo_bid": "1002",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "abcd-1212-wxyz",
+        "uname": "지지자",
+        "age": "30",
+        "email": "randomUser21@naver.com",
+        "gender": "m",
+        "point": 430,
+        "combo": 4,
+        "credit": 0,
+        "solo_bid": "1002",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "ijkl-3434-mnop",
+        "uname": "지지자",
+        "age": "25",
+        "email": "randomUser22@naver.com",
+        "gender": "f",
+        "point": 180,
+        "combo": 1,
+        "credit": 0,
+        "solo_bid": "1002",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "qrst-5656-uvwx",
+        "uname": "지지자",
+        "age": "24",
+        "email": "randomUser23@naver.com",
+        "gender": "m",
+        "point": 580,
+        "combo": 2,
+        "credit": 0,
+        "solo_bid": "1002",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "uvwx-7878-yzab",
+        "uname": "지지자",
+        "age": "29",
+        "email": "randomUser24@naver.com",
+        "gender": "f",
+        "point": 420,
+        "combo": 3,
+        "credit": 0,
+        "solo_bid": "1002",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "abcd-9090-efgh",
+        "uname": "지지자",
+        "age": "22",
+        "email": "randomUser25@naver.com",
+        "gender": "m",
+        "point": 830,
+        "combo": 4,
+        "credit": 0,
+        "solo_bid": "1002",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "mnop-2323-wxyz",
+        "uname": "지지자",
+        "age": "27",
+        "email": "randomUser26@naver.com",
+        "gender": "f",
+        "point": 270,
+        "combo": 2,
+        "credit": 0,
+        "solo_bid": "1003",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "qrst-4545-uvwx",
+        "uname": "지지자",
+        "age": "25",
+        "email": "randomUser27@naver.com",
+        "gender": "m",
+        "point": 1140,
+        "combo": 1,
+        "credit": 0,
+        "solo_bid": "1003",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "yzab-6767-cdef",
+        "uname": "지지자",
+        "age": "30",
+        "email": "randomUser28@naver.com",
+        "gender": "f",
+        "point": 320,
+        "combo": 3,
+        "credit": 0,
+        "solo_bid": "1003",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "ghij-8989-klmn",
+        "uname": "지지자",
+        "age": "22",
+        "email": "randomUser29@naver.com",
+        "gender": "m",
+        "point": 820,
+        "combo": 0,
+        "credit": 0,
+        "solo_bid": "1003",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "opqr-2121-stuv",
+        "uname": "지지자",
+        "age": "29",
+        "email": "randomUser30@naver.com",
+        "gender": "f",
+        "point": 630,
+        "combo": 4,
+        "credit": 0,
+        "solo_bid": "1003",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "abcd-4343-wxyz",
+        "uname": "지지자",
+        "age": "24",
+        "email": "randomUser31@naver.com",
+        "gender": "m",
+        "point": 460,
+        "combo": 3,
+        "credit": 0,
+        "solo_bid": "1003",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "ijkl-6565-mnop",
+        "uname": "지지자",
+        "age": "26",
+        "email": "randomUser32@naver.com",
+        "gender": "f",
+        "point": 750,
+        "combo": 2,
+        "credit": 0,
+        "solo_bid": "1003",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "qrst-8787-uvwx",
+        "uname": "지지자",
+        "age": "28",
+        "email": "randomUser33@naver.com",
+        "gender": "m",
+        "point": 1240,
+        "combo": 1,
+        "credit": 0,
+        "solo_bid": "1003",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "uvwx-1212-yzab",
+        "uname": "지지자",
+        "age": "21",
+        "email": "randomUser34@naver.com",
+        "gender": "f",
+        "point": 580,
+        "combo": 0,
+        "credit": 0,
+        "solo_bid": "1003",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "abcd-3434-efgh",
+        "uname": "지지자",
+        "age": "23",
+        "email": "randomUser35@naver.com",
+        "gender": "m",
+        "point": 920,
+        "combo": 4,
+        "credit": 0,
+        "solo_bid": "1003",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "mnop-5656-wxyz",
+        "uname": "지지자",
+        "age": "30",
+        "email": "randomUser36@naver.com",
+        "gender": "f",
+        "point": 700,
+        "combo": 2,
+        "credit": 0,
+        "solo_bid": "1003",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "qrst-7878-uvwx",
+        "uname": "지지자",
+        "age": "22",
+        "email": "randomUser37@naver.com",
+        "gender": "m",
+        "point": 1300,
+        "combo": 3,
+        "credit": 0,
+        "solo_bid": "1003",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "yzab-9898-cdef",
+        "uname": "지지자",
+        "age": "26",
+        "email": "randomUser38@naver.com",
+        "gender": "f",
+        "point": 390,
+        "combo": 1,
+        "credit": 0,
+        "solo_bid": "1003",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "abcd-1212-klmn",
+        "uname": "지지자",
+        "age": "27",
+        "email": "randomUser39@naver.com",
+        "gender": "m",
+        "point": 1110,
+        "combo": 0,
+        "credit": 0,
+        "solo_bid": "1003",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "4321-cdef-8765",
+        "uname": "지지자",
+        "age": "27",
+        "email": "user1@naver.com",
+        "gender": "f",
+        "point": 680,
+        "combo": 3,
+        "credit": 0,
+        "solo_bid": "1004",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "5678-ghij-2345",
+        "uname": "지지자",
+        "age": "31",
+        "email": "user2@daum.net",
+        "gender": "m",
+        "point": 1230,
+        "combo": 1,
+        "credit": 0,
+        "solo_bid": "1004",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "7890-klmn-5432",
+        "uname": "지지자",
+        "age": "24",
+        "email": "user3@gmail.com",
+        "gender": "f",
+        "point": 340,
+        "combo": 0,
+        "credit": 0,
+        "solo_bid": "1004",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "1234-opqr-9876",
+        "uname": "지지자",
+        "age": "29",
+        "email": "user4@naver.com",
+        "gender": "m",
+        "point": 750,
+        "combo": 4,
+        "credit": 0,
+        "solo_bid": "1004",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "2345-stuv-6543",
+        "uname": "지지자",
+        "age": "22",
+        "email": "user5@daum.net",
+        "gender": "f",
+        "point": 120,
+        "combo": 2,
+        "credit": 0,
+        "solo_bid": "1004",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "3456-wxyz-8765",
+        "uname": "지지자",
+        "age": "35",
+        "email": "user6@gmail.com",
+        "gender": "m",
+        "point": 980,
+        "combo": 1,
+        "credit": 0,
+        "solo_bid": "1004",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "5678-abcd-4321",
+        "uname": "지지자",
+        "age": "28",
+        "email": "user7@naver.com",
+        "gender": "f",
+        "point": 460,
+        "combo": 0,
+        "credit": 0,
+        "solo_bid": "1004",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "6789-efgh-5432",
+        "uname": "지지자",
+        "age": "26",
+        "email": "user8@daum.net",
+        "gender": "m",
+        "point": 1400,
+        "combo": 4,
+        "credit": 0,
+        "solo_bid": "1004",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "7890-ijkl-6543",
+        "uname": "지지자",
+        "age": "23",
+        "email": "user9@gmail.com",
+        "gender": "f",
+        "point": 790,
+        "combo": 2,
+        "credit": 0,
+        "solo_bid": "1004",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "8901-mnop-7654",
+        "uname": "지지자",
+        "age": "30",
+        "email": "user10@naver.com",
+        "gender": "m",
+        "point": 370,
+        "combo": 1,
+        "credit": 0,
+        "solo_bid": "1004",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "9012-qrst-9876",
+        "uname": "지지자",
+        "age": "21",
+        "email": "user11@daum.net",
+        "gender": "f",
+        "point": 620,
+        "combo": 3,
+        "credit": 0,
+        "solo_bid": "1004",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "0123-uvwx-0987",
+        "uname": "지지자",
+        "age": "33",
+        "email": "user12@gmail.com",
+        "gender": "m",
+        "point": 310,
+        "combo": 0,
+        "credit": 0,
+        "solo_bid": "1004",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "2345-yzab-8765",
+        "uname": "지지자",
+        "age": "24",
+        "email": "user13@naver.com",
+        "gender": "f",
+        "point": 1300,
+        "combo": 4,
+        "credit": 0,
+        "solo_bid": "1004",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "3456-cdef-7654",
+        "uname": "지지자",
+        "age": "32",
+        "email": "user14@daum.net",
+        "gender": "m",
+        "point": 100,
+        "combo": 2,
+        "credit": 0,
+        "solo_bid": "1004",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "4567-ghij-6543",
+        "uname": "지지자",
+        "age": "25",
+        "email": "user15@gmail.com",
+        "gender": "f",
+        "point": 450,
+        "combo": 1,
+        "credit": 0,
+        "solo_bid": "1004",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "2345-abcd-6789",
+        "uname": "지지자",
+        "age": "29",
+        "email": "user1@naver.com",
+        "gender": "f",
+        "point": 450,
+        "combo": 2,
+        "credit": 0,
+        "solo_bid": "1005",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "3456-bcde-7890",
+        "uname": "지지자",
+        "age": "26",
+        "email": "user2@daum.net",
+        "gender": "m",
+        "point": 720,
+        "combo": 1,
+        "credit": 0,
+        "solo_bid": "1005",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "4567-cdef-8901",
+        "uname": "지지자",
+        "age": "32",
+        "email": "user3@gmail.com",
+        "gender": "f",
+        "point": 1050,
+        "combo": 4,
+        "credit": 0,
+        "solo_bid": "1005",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "5678-defg-9012",
+        "uname": "지지자",
+        "age": "27",
+        "email": "user4@naver.com",
+        "gender": "m",
+        "point": 620,
+        "combo": 3,
+        "credit": 0,
+        "solo_bid": "1005",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "6789-efgh-0123",
+        "uname": "지지자",
+        "age": "24",
+        "email": "user5@daum.net",
+        "gender": "f",
+        "point": 380,
+        "combo": 0,
+        "credit": 0,
+        "solo_bid": "1005",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "7890-fghi-1234",
+        "uname": "지지자",
+        "age": "31",
+        "email": "user6@gmail.com",
+        "gender": "m",
+        "point": 920,
+        "combo": 1,
+        "credit": 0,
+        "solo_bid": "1005",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "8901-ghij-2345",
+        "uname": "지지자",
+        "age": "23",
+        "email": "user7@naver.com",
+        "gender": "f",
+        "point": 140,
+        "combo": 2,
+        "credit": 0,
+        "solo_bid": "1005",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "9012-hijk-3456",
+        "uname": "지지자",
+        "age": "28",
+        "email": "user8@daum.net",
+        "gender": "m",
+        "point": 880,
+        "combo": 4,
+        "credit": 0,
+        "solo_bid": "1005",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "0123-ijkl-4567",
+        "uname": "지지자",
+        "age": "30",
+        "email": "user9@gmail.com",
+        "gender": "f",
+        "point": 670,
+        "combo": 3,
+        "credit": 0,
+        "solo_bid": "1005",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "1234-jklm-5678",
+        "uname": "지지자",
+        "age": "25",
+        "email": "user10@naver.com",
+        "gender": "m",
+        "point": 390,
+        "combo": 1,
+        "credit": 0,
+        "solo_bid": "1005",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "2345-klmn-6789",
+        "uname": "지지자",
+        "age": "33",
+        "email": "user11@daum.net",
+        "gender": "f",
+        "point": 1100,
+        "combo": 2,
+        "credit": 0,
+        "solo_bid": "1005",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "3456-lmno-7890",
+        "uname": "지지자",
+        "age": "22",
+        "email": "user12@gmail.com",
+        "gender": "m",
+        "point": 550,
+        "combo": 0,
+        "credit": 0,
+        "solo_bid": "1005",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "4567-mnop-8901",
+        "uname": "지지자",
+        "age": "34",
+        "email": "user13@naver.com",
+        "gender": "f",
+        "point": 780,
+        "combo": 1,
+        "credit": 0,
+        "solo_bid": "1005",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "5678-abcd-8901",
+        "uname": "지지자",
+        "age": "30",
+        "email": "user1@naver.com",
+        "gender": "f",
+        "point": 450,
+        "combo": 3,
+        "credit": 0,
+        "solo_bid": "1006",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "6789-bcde-9012",
+        "uname": "지지자",
+        "age": "27",
+        "email": "user2@daum.net",
+        "gender": "m",
+        "point": 800,
+        "combo": 2,
+        "credit": 0,
+        "solo_bid": "1006",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "7890-cdef-0123",
+        "uname": "지지자",
+        "age": "25",
+        "email": "user3@gmail.com",
+        "gender": "f",
+        "point": 620,
+        "combo": 1,
+        "credit": 0,
+        "solo_bid": "1006",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "8901-defg-1234",
+        "uname": "지지자",
+        "age": "32",
+        "email": "user4@naver.com",
+        "gender": "m",
+        "point": 720,
+        "combo": 4,
+        "credit": 0,
+        "solo_bid": "1006",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "9012-efgh-2345",
+        "uname": "지지자",
+        "age": "28",
+        "email": "user5@daum.net",
+        "gender": "f",
+        "point": 310,
+        "combo": 0,
+        "credit": 0,
+        "solo_bid": "1006",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "0123-fghi-3456",
+        "uname": "지지자",
+        "age": "24",
+        "email": "user6@gmail.com",
+        "gender": "m",
+        "point": 1050,
+        "combo": 2,
+        "credit": 0,
+        "solo_bid": "1006",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "1234-ghij-4567",
+        "uname": "지지자",
+        "age": "29",
+        "email": "user7@naver.com",
+        "gender": "f",
+        "point": 790,
+        "combo": 3,
+        "credit": 0,
+        "solo_bid": "1006",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "2345-hijk-5678",
+        "uname": "지지자",
+        "age": "26",
+        "email": "user8@daum.net",
+        "gender": "m",
+        "point": 600,
+        "combo": 4,
+        "credit": 0,
+        "solo_bid": "1006",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "3456-ijkl-6789",
+        "uname": "지지자",
+        "age": "21",
+        "email": "user9@gmail.com",
+        "gender": "f",
+        "point": 850,
+        "combo": 1,
+        "credit": 0,
+        "solo_bid": "1006",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "4567-jklm-7890",
+        "uname": "지지자",
+        "age": "31",
+        "email": "user10@naver.com",
+        "gender": "m",
+        "point": 460,
+        "combo": 0,
+        "credit": 0,
+        "solo_bid": "1006",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "5678-klmn-8901",
+        "uname": "지지자",
+        "age": "35",
+        "email": "user11@daum.net",
+        "gender": "f",
+        "point": 1200,
+        "combo": 2,
+        "credit": 0,
+        "solo_bid": "1006",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "6789-lmno-9012",
+        "uname": "지지자",
+        "age": "23",
+        "email": "user12@gmail.com",
+        "gender": "m",
+        "point": 300,
+        "combo": 1,
+        "credit": 0,
+        "solo_bid": "1006",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "7890-mnop-0123",
+        "uname": "지지자",
+        "age": "22",
+        "email": "user13@naver.com",
+        "gender": "f",
+        "point": 720,
+        "combo": 4,
+        "credit": 0,
+        "solo_bid": "1006",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "8901-nopq-1234",
+        "uname": "지지자",
+        "age": "30",
+        "email": "user14@daum.net",
+        "gender": "m",
+        "point": 550,
+        "combo": 0,
+        "credit": 0,
+        "solo_bid": "1006",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "9012-opqr-2345",
+        "uname": "지지자",
+        "age": "28",
+        "email": "user15@gmail.com",
+        "gender": "f",
+        "point": 1150,
+        "combo": 3,
+        "credit": 0,
+        "solo_bid": "1006",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "0123-pqrs-3456",
+        "uname": "지지자",
+        "age": "33",
+        "email": "user16@naver.com",
+        "gender": "m",
+        "point": 460,
+        "combo": 2,
+        "credit": 0,
+        "solo_bid": "1006",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "1234-qrst-4567",
+        "uname": "지지자",
+        "age": "24",
+        "email": "user17@daum.net",
+        "gender": "f",
+        "point": 380,
+        "combo": 4,
+        "credit": 0,
+        "solo_bid": "1006",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "2345-rstu-5678",
+        "uname": "지지자",
+        "age": "26",
+        "email": "user18@gmail.com",
+        "gender": "m",
+        "point": 950,
+        "combo": 1,
+        "credit": 0,
+        "solo_bid": "1006",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "2345-abcd-6789",
+        "uname": "지지자",
+        "age": "30",
+        "email": "user1@naver.com",
+        "gender": "m",
+        "point": 460,
+        "combo": 1,
+        "credit": 0,
+        "solo_bid": "1007",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "3456-bcde-7890",
+        "uname": "지지자",
+        "age": "27",
+        "email": "user2@daum.net",
+        "gender": "f",
+        "point": 560,
+        "combo": 2,
+        "credit": 0,
+        "solo_bid": "1007",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "4567-cdef-8901",
+        "uname": "지지자",
+        "age": "32",
+        "email": "user3@gmail.com",
+        "gender": "m",
+        "point": 780,
+        "combo": 3,
+        "credit": 0,
+        "solo_bid": "1007",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "5678-defg-9012",
+        "uname": "지지자",
+        "age": "25",
+        "email": "user4@naver.com",
+        "gender": "f",
+        "point": 1100,
+        "combo": 0,
+        "credit": 0,
+        "solo_bid": "1007",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "6789-efgh-0123",
+        "uname": "지지자",
+        "age": "28",
+        "email": "user5@daum.net",
+        "gender": "m",
+        "point": 650,
+        "combo": 4,
+        "credit": 0,
+        "solo_bid": "1007",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "7890-fghi-1234",
+        "uname": "지지자",
+        "age": "31",
+        "email": "user6@gmail.com",
+        "gender": "f",
+        "point": 920,
+        "combo": 2,
+        "credit": 0,
+        "solo_bid": "1007",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "8901-ghij-2345",
+        "uname": "지지자",
+        "age": "24",
+        "email": "user7@naver.com",
+        "gender": "m",
+        "point": 300,
+        "combo": 1,
+        "credit": 0,
+        "solo_bid": "1007",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "9012-hijk-3456",
+        "uname": "지지자",
+        "age": "29",
+        "email": "user8@daum.net",
+        "gender": "f",
+        "point": 550,
+        "combo": 3,
+        "credit": 0,
+        "solo_bid": "1007",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "0123-ijkl-4567",
+        "uname": "지지자",
+        "age": "26",
+        "email": "user9@gmail.com",
+        "gender": "m",
+        "point": 700,
+        "combo": 0,
+        "credit": 0,
+        "solo_bid": "1007",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "1234-jklm-5678",
+        "uname": "지지자",
+        "age": "33",
+        "email": "user10@naver.com",
+        "gender": "f",
+        "point": 400,
+        "combo": 2,
+        "credit": 0,
+        "solo_bid": "1007",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "2345-klmn-6789",
+        "uname": "지지자",
+        "age": "22",
+        "email": "user11@daum.net",
+        "gender": "m",
+        "point": 550,
+        "combo": 4,
+        "credit": 0,
+        "solo_bid": "1007",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "3456-lmno-7890",
+        "uname": "지지자",
+        "age": "31",
+        "email": "user12@gmail.com",
+        "gender": "f",
+        "point": 860,
+        "combo": 1,
+        "credit": 0,
+        "solo_bid": "1007",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "4567-mnop-8901",
+        "uname": "지지자",
+        "age": "25",
+        "email": "user13@naver.com",
+        "gender": "m",
+        "point": 380,
+        "combo": 3,
+        "credit": 0,
+        "solo_bid": "1007",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "5678-abcd-9012",
+        "uname": "지지자",
+        "age": "27",
+        "email": "user1@naver.com",
+        "gender": "m",
+        "point": 720,
+        "combo": 2,
+        "credit": 0,
+        "solo_bid": "1008",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "6789-bcde-0123",
+        "uname": "지지자",
+        "age": "34",
+        "email": "user2@daum.net",
+        "gender": "f",
+        "point": 950,
+        "combo": 3,
+        "credit": 0,
+        "solo_bid": "1008",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "7890-cdef-1234",
+        "uname": "지지자",
+        "age": "22",
+        "email": "user3@gmail.com",
+        "gender": "m",
+        "point": 380,
+        "combo": 1,
+        "credit": 0,
+        "solo_bid": "1008",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "8901-defg-2345",
+        "uname": "지지자",
+        "age": "26",
+        "email": "user4@naver.com",
+        "gender": "f",
+        "point": 560,
+        "combo": 4,
+        "credit": 0,
+        "solo_bid": "1008",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "9012-efgh-3456",
+        "uname": "지지자",
+        "age": "29",
+        "email": "user5@daum.net",
+        "gender": "m",
+        "point": 800,
+        "combo": 0,
+        "credit": 0,
+        "solo_bid": "1008",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "0123-fghi-4567",
+        "uname": "지지자",
+        "age": "31",
+        "email": "user6@gmail.com",
+        "gender": "f",
+        "point": 1150,
+        "combo": 3,
+        "credit": 0,
+        "solo_bid": "1008",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "1234-ghij-5678",
+        "uname": "지지자",
+        "age": "24",
+        "email": "user7@naver.com",
+        "gender": "m",
+        "point": 480,
+        "combo": 2,
+        "credit": 0,
+        "solo_bid": "1008",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "2345-hijk-6789",
+        "uname": "지지자",
+        "age": "23",
+        "email": "user8@daum.net",
+        "gender": "f",
+        "point": 670,
+        "combo": 4,
+        "credit": 0,
+        "solo_bid": "1008",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "3456-ijkl-7890",
+        "uname": "지지자",
+        "age": "28",
+        "email": "user9@gmail.com",
+        "gender": "m",
+        "point": 540,
+        "combo": 1,
+        "credit": 0,
+        "solo_bid": "1008",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "4567-jklm-8901",
+        "uname": "지지자",
+        "age": "26",
+        "email": "user10@naver.com",
+        "gender": "f",
+        "point": 320,
+        "combo": 3,
+        "credit": 0,
+        "solo_bid": "1008",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "5678-klmn-9012",
+        "uname": "지지자",
+        "age": "30",
+        "email": "user11@daum.net",
+        "gender": "m",
+        "point": 940,
+        "combo": 2,
+        "credit": 0,
+        "solo_bid": "1008",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "6789-lmno-0123",
+        "uname": "지지자",
+        "age": "25",
+        "email": "user12@gmail.com",
+        "gender": "f",
+        "point": 720,
+        "combo": 0,
+        "credit": 0,
+        "solo_bid": "1008",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "7890-mnop-1234",
+        "uname": "지지자",
+        "age": "35",
+        "email": "user13@naver.com",
+        "gender": "m",
+        "point": 580,
+        "combo": 4,
+        "credit": 0,
+        "solo_bid": "1008",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "8901-nopq-2345",
+        "uname": "지지자",
+        "age": "28",
+        "email": "user14@daum.net",
+        "gender": "f",
+        "point": 800,
+        "combo": 1,
+        "credit": 0,
+        "solo_bid": "1008",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "9012-opqr-3456",
+        "uname": "지지자",
+        "age": "22",
+        "email": "user15@gmail.com",
+        "gender": "m",
+        "point": 950,
+        "combo": 3,
+        "credit": 0,
+        "solo_bid": "1008",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "1234-abcd-7890",
+        "uname": "지지자",
+        "age": "24",
+        "email": "user1@naver.com",
+        "gender": "m",
+        "point": 690,
+        "combo": 3,
+        "credit": 0,
+        "solo_bid": "1009",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "2345-bcde-8901",
+        "uname": "지지자",
+        "age": "28",
+        "email": "user2@daum.net",
+        "gender": "f",
+        "point": 780,
+        "combo": 1,
+        "credit": 0,
+        "solo_bid": "1009",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "3456-cdef-9012",
+        "uname": "지지자",
+        "age": "27",
+        "email": "user3@gmail.com",
+        "gender": "m",
+        "point": 950,
+        "combo": 4,
+        "credit": 0,
+        "solo_bid": "1009",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "4567-defg-0123",
+        "uname": "지지자",
+        "age": "33",
+        "email": "user4@naver.com",
+        "gender": "f",
+        "point": 620,
+        "combo": 2,
+        "credit": 0,
+        "solo_bid": "1009",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "5678-efgh-1234",
+        "uname": "지지자",
+        "age": "30",
+        "email": "user5@daum.net",
+        "gender": "m",
+        "point": 550,
+        "combo": 3,
+        "credit": 0,
+        "solo_bid": "1009",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "6789-fghi-2345",
+        "uname": "지지자",
+        "age": "25",
+        "email": "user6@gmail.com",
+        "gender": "f",
+        "point": 790,
+        "combo": 0,
+        "credit": 0,
+        "solo_bid": "1009",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "7890-ghij-3456",
+        "uname": "지지자",
+        "age": "29",
+        "email": "user7@naver.com",
+        "gender": "m",
+        "point": 430,
+        "combo": 4,
+        "credit": 0,
+        "solo_bid": "1009",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "8901-hijk-4567",
+        "uname": "지지자",
+        "age": "31",
+        "email": "user8@daum.net",
+        "gender": "f",
+        "point": 1150,
+        "combo": 1,
+        "credit": 0,
+        "solo_bid": "1009",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "9012-ijkl-5678",
+        "uname": "지지자",
+        "age": "26",
+        "email": "user9@gmail.com",
+        "gender": "m",
+        "point": 350,
+        "combo": 2,
+        "credit": 0,
+        "solo_bid": "1009",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "0123-jklm-6789",
+        "uname": "지지자",
+        "age": "32",
+        "email": "user10@naver.com",
+        "gender": "f",
+        "point": 600,
+        "combo": 3,
+        "credit": 0,
+        "solo_bid": "1009",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "1234-klmn-7890",
+        "uname": "지지자",
+        "age": "28",
+        "email": "user11@daum.net",
+        "gender": "m",
+        "point": 730,
+        "combo": 0,
+        "credit": 0,
+        "solo_bid": "1009",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "2345-lmno-8901",
+        "uname": "지지자",
+        "age": "23",
+        "email": "user12@gmail.com",
+        "gender": "f",
+        "point": 430,
+        "combo": 4,
+        "credit": 0,
+        "solo_bid": "1009",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "3456-mnop-9012",
+        "uname": "지지자",
+        "age": "34",
+        "email": "user13@naver.com",
+        "gender": "m",
+        "point": 550,
+        "combo": 2,
+        "credit": 0,
+        "solo_bid": "1009",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "4567-nopq-0123",
+        "uname": "지지자",
+        "age": "27",
+        "email": "user14@daum.net",
+        "gender": "f",
+        "point": 910,
+        "combo": 1,
+        "credit": 0,
+        "solo_bid": "1009",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "5678-opqr-1234",
+        "uname": "지지자",
+        "age": "29",
+        "email": "user15@gmail.com",
+        "gender": "m",
+        "point": 670,
+        "combo": 3,
+        "credit": 0,
+        "solo_bid": "1009",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "abcd-1234-5678",
+        "uname": "지지자",
+        "age": "24",
+        "email": "user1@naver.com",
+        "gender": "m",
+        "point": 680,
+        "combo": 2,
+        "credit": 0,
+        "solo_bid": "1010",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "bcde-2345-6789",
+        "uname": "지지자",
+        "age": "29",
+        "email": "user2@daum.net",
+        "gender": "f",
+        "point": 790,
+        "combo": 4,
+        "credit": 0,
+        "solo_bid": "1010",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "cdef-3456-7890",
+        "uname": "지지자",
+        "age": "26",
+        "email": "user3@gmail.com",
+        "gender": "m",
+        "point": 830,
+        "combo": 1,
+        "credit": 0,
+        "solo_bid": "1010",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "defg-4567-8901",
+        "uname": "지지자",
+        "age": "32",
+        "email": "user4@naver.com",
+        "gender": "f",
+        "point": 1050,
+        "combo": 3,
+        "credit": 0,
+        "solo_bid": "1010",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "efgh-5678-9012",
+        "uname": "지지자",
+        "age": "27",
+        "email": "user5@daum.net",
+        "gender": "m",
+        "point": 560,
+        "combo": 2,
+        "credit": 0,
+        "solo_bid": "1010",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "fghi-6789-0123",
+        "uname": "지지자",
+        "age": "30",
+        "email": "user6@gmail.com",
+        "gender": "f",
+        "point": 650,
+        "combo": 0,
+        "credit": 0,
+        "solo_bid": "1010",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "ghij-7890-1234",
+        "uname": "지지자",
+        "age": "25",
+        "email": "user7@naver.com",
+        "gender": "m",
+        "point": 420,
+        "combo": 4,
+        "credit": 0,
+        "solo_bid": "1010",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "hijk-8901-2345",
+        "uname": "지지자",
+        "age": "28",
+        "email": "user8@daum.net",
+        "gender": "f",
+        "point": 970,
+        "combo": 3,
+        "credit": 0,
+        "solo_bid": "1010",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "abcd-1234-5678",
+        "uname": "지지자",
+        "age": "23",
+        "email": "user1@naver.com",
+        "gender": "f",
+        "point": 540,
+        "combo": 2,
+        "credit": 0,
+        "solo_bid": "1011",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "bcde-2345-6789",
+        "uname": "지지자",
+        "age": "30",
+        "email": "user2@daum.net",
+        "gender": "m",
+        "point": 870,
+        "combo": 4,
+        "credit": 0,
+        "solo_bid": "1011",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "cdef-3456-7890",
+        "uname": "지지자",
+        "age": "27",
+        "email": "user3@gmail.com",
+        "gender": "f",
+        "point": 690,
+        "combo": 1,
+        "credit": 0,
+        "solo_bid": "1011",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "defg-4567-8901",
+        "uname": "지지자",
+        "age": "25",
+        "email": "user4@naver.com",
+        "gender": "m",
+        "point": 780,
+        "combo": 3,
+        "credit": 0,
+        "solo_bid": "1011",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "efgh-5678-9012",
+        "uname": "지지자",
+        "age": "31",
+        "email": "user5@daum.net",
+        "gender": "f",
+        "point": 940,
+        "combo": 0,
+        "credit": 0,
+        "solo_bid": "1011",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "fghi-6789-0123",
+        "uname": "지지자",
+        "age": "28",
+        "email": "user6@gmail.com",
+        "gender": "m",
+        "point": 410,
+        "combo": 2,
+        "credit": 0,
+        "solo_bid": "1011",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "ghij-7890-1234",
+        "uname": "지지자",
+        "age": "22",
+        "email": "user7@naver.com",
+        "gender": "f",
+        "point": 650,
+        "combo": 4,
+        "credit": 0,
+        "solo_bid": "1011",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "hijk-8901-2345",
+        "uname": "지지자",
+        "age": "33",
+        "email": "user8@daum.net",
+        "gender": "m",
+        "point": 1020,
+        "combo": 1,
+        "credit": 0,
+        "solo_bid": "1011",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "ijkl-9012-3456",
+        "uname": "지지자",
+        "age": "26",
+        "email": "user9@gmail.com",
+        "gender": "f",
+        "point": 720,
+        "combo": 3,
+        "credit": 0,
+        "solo_bid": "1011",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "jklm-0123-4567",
+        "uname": "지지자",
+        "age": "30",
+        "email": "user10@naver.com",
+        "gender": "m",
+        "point": 430,
+        "combo": 0,
+        "credit": 0,
+        "solo_bid": "1011",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "abcd-2345-6789",
+        "uname": "지지자",
+        "age": "27",
+        "email": "user1@naver.com",
+        "gender": "m",
+        "point": 790,
+        "combo": 2,
+        "credit": 0,
+        "solo_bid": "1012",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "bcde-3456-7890",
+        "uname": "지지자",
+        "age": "31",
+        "email": "user2@daum.net",
+        "gender": "f",
+        "point": 920,
+        "combo": 1,
+        "credit": 0,
+        "solo_bid": "1012",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "cdef-4567-8901",
+        "uname": "지지자",
+        "age": "24",
+        "email": "user3@gmail.com",
+        "gender": "m",
+        "point": 670,
+        "combo": 4,
+        "credit": 0,
+        "solo_bid": "1012",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "defg-5678-9012",
+        "uname": "지지자",
+        "age": "29",
+        "email": "user4@naver.com",
+        "gender": "f",
+        "point": 560,
+        "combo": 3,
+        "credit": 0,
+        "solo_bid": "1012",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "efgh-6789-0123",
+        "uname": "지지자",
+        "age": "32",
+        "email": "user5@daum.net",
+        "gender": "m",
+        "point": 780,
+        "combo": 2,
+        "credit": 0,
+        "solo_bid": "1012",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "fghi-7890-1234",
+        "uname": "지지자",
+        "age": "26",
+        "email": "user6@gmail.com",
+        "gender": "f",
+        "point": 680,
+        "combo": 0,
+        "credit": 0,
+        "solo_bid": "1012",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "abcd-5678-1234",
+        "uname": "지지자",
+        "age": "29",
+        "email": "user1@naver.com",
+        "gender": "m",
+        "point": 700,
+        "combo": 2,
+        "credit": 0,
+        "solo_bid": "1013",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "bcde-6789-2345",
+        "uname": "지지자",
+        "age": "25",
+        "email": "user2@daum.net",
+        "gender": "f",
+        "point": 830,
+        "combo": 3,
+        "credit": 0,
+        "solo_bid": "1013",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "cdef-7890-3456",
+        "uname": "지지자",
+        "age": "32",
+        "email": "user3@gmail.com",
+        "gender": "m",
+        "point": 950,
+        "combo": 1,
+        "credit": 0,
+        "solo_bid": "1013",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "defg-8901-4567",
+        "uname": "지지자",
+        "age": "28",
+        "email": "user4@naver.com",
+        "gender": "f",
+        "point": 560,
+        "combo": 4,
+        "credit": 0,
+        "solo_bid": "1013",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "efgh-9012-5678",
+        "uname": "지지자",
+        "age": "27",
+        "email": "user5@daum.net",
+        "gender": "m",
+        "point": 410,
+        "combo": 0,
+        "credit": 0,
+        "solo_bid": "1013",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "fghi-0123-6789",
+        "uname": "지지자",
+        "age": "30",
+        "email": "user6@gmail.com",
+        "gender": "f",
+        "point": 680,
+        "combo": 2,
+        "credit": 0,
+        "solo_bid": "1013",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "ghij-1234-7890",
+        "uname": "지지자",
+        "age": "33",
+        "email": "user7@naver.com",
+        "gender": "m",
+        "point": 780,
+        "combo": 1,
+        "credit": 0,
+        "solo_bid": "1013",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "hijk-2345-8901",
+        "uname": "지지자",
+        "age": "26",
+        "email": "user8@daum.net",
+        "gender": "f",
+        "point": 910,
+        "combo": 4,
+        "credit": 0,
+        "solo_bid": "1013",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "ijkl-3456-9012",
+        "uname": "지지자",
+        "age": "28",
+        "email": "user9@gmail.com",
+        "gender": "m",
+        "point": 720,
+        "combo": 3,
+        "credit": 0,
+        "solo_bid": "1013",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "jklm-4567-0123",
+        "uname": "지지자",
+        "age": "22",
+        "email": "user10@naver.com",
+        "gender": "f",
+        "point": 580,
+        "combo": 2,
+        "credit": 0,
+        "solo_bid": "1013",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "klmn-5678-1234",
+        "uname": "지지자",
+        "age": "34",
+        "email": "user11@daum.net",
+        "gender": "m",
+        "point": 820,
+        "combo": 0,
+        "credit": 0,
+        "solo_bid": "1013",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "lmno-6789-2345",
+        "uname": "지지자",
+        "age": "24",
+        "email": "user12@gmail.com",
+        "gender": "f",
+        "point": 710,
+        "combo": 4,
+        "credit": 0,
+        "solo_bid": "1013",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "mnop-7890-3456",
+        "uname": "지지자",
+        "age": "29",
+        "email": "user13@naver.com",
+        "gender": "m",
+        "point": 920,
+        "combo": 3,
+        "credit": 0,
+        "solo_bid": "1013",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "nopq-8901-4567",
+        "uname": "지지자",
+        "age": "27",
+        "email": "user14@daum.net",
+        "gender": "f",
+        "point": 670,
+        "combo": 1,
+        "credit": 0,
+        "solo_bid": "1013",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "opqr-9012-5678",
+        "uname": "지지자",
+        "age": "31",
+        "email": "user15@gmail.com",
+        "gender": "m",
+        "point": 840,
+        "combo": 2,
+        "credit": 0,
+        "solo_bid": "1013",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "pqrs-0123-6789",
+        "uname": "지지자",
+        "age": "26",
+        "email": "user16@naver.com",
+        "gender": "f",
+        "point": 530,
+        "combo": 3,
+        "credit": 0,
+        "solo_bid": "1013",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "abcd-7890-1234",
+        "uname": "지지자",
+        "age": "22",
+        "email": "user1@naver.com",
+        "gender": "f",
+        "point": 720,
+        "combo": 3,
+        "credit": 0,
+        "solo_bid": "1014",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "bcde-8901-2345",
+        "uname": "지지자",
+        "age": "27",
+        "email": "user2@daum.net",
+        "gender": "m",
+        "point": 560,
+        "combo": 2,
+        "credit": 0,
+        "solo_bid": "1014",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "cdef-9012-3456",
+        "uname": "지지자",
+        "age": "31",
+        "email": "user3@gmail.com",
+        "gender": "f",
+        "point": 840,
+        "combo": 1,
+        "credit": 0,
+        "solo_bid": "1014",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "defg-0123-4567",
+        "uname": "지지자",
+        "age": "25",
+        "email": "user4@naver.com",
+        "gender": "m",
+        "point": 910,
+        "combo": 0,
+        "credit": 0,
+        "solo_bid": "1014",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "efgh-1234-5678",
+        "uname": "지지자",
+        "age": "28",
+        "email": "user5@daum.net",
+        "gender": "f",
+        "point": 670,
+        "combo": 4,
+        "credit": 0,
+        "solo_bid": "1014",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "fghi-2345-6789",
+        "uname": "지지자",
+        "age": "26",
+        "email": "user6@gmail.com",
+        "gender": "m",
+        "point": 790,
+        "combo": 2,
+        "credit": 0,
+        "solo_bid": "1014",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "ghij-3456-7890",
+        "uname": "지지자",
+        "age": "30",
+        "email": "user7@naver.com",
+        "gender": "f",
+        "point": 620,
+        "combo": 3,
+        "credit": 0,
+        "solo_bid": "1014",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "abcd-4567-8901",
+        "uname": "지지자",
+        "age": "26",
+        "email": "user1@naver.com",
+        "gender": "m",
+        "point": 730,
+        "combo": 2,
+        "credit": 0,
+        "solo_bid": "1015",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "bcde-5678-9012",
+        "uname": "지지자",
+        "age": "24",
+        "email": "user2@daum.net",
+        "gender": "f",
+        "point": 860,
+        "combo": 1,
+        "credit": 0,
+        "solo_bid": "1015",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "cdef-6789-0123",
+        "uname": "지지자",
+        "age": "29",
+        "email": "user3@gmail.com",
+        "gender": "m",
+        "point": 670,
+        "combo": 4,
+        "credit": 0,
+        "solo_bid": "1015",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "defg-7890-1234",
+        "uname": "지지자",
+        "age": "30",
+        "email": "user4@naver.com",
+        "gender": "f",
+        "point": 720,
+        "combo": 3,
+        "credit": 0,
+        "solo_bid": "1015",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "efgh-8901-2345",
+        "uname": "지지자",
+        "age": "25",
+        "email": "user5@daum.net",
+        "gender": "m",
+        "point": 950,
+        "combo": 0,
+        "credit": 0,
+        "solo_bid": "1015",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "fghi-9012-3456",
+        "uname": "지지자",
+        "age": "28",
+        "email": "user6@gmail.com",
+        "gender": "f",
+        "point": 680,
+        "combo": 2,
+        "credit": 0,
+        "solo_bid": "1015",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "ghij-0123-4567",
+        "uname": "지지자",
+        "age": "31",
+        "email": "user7@naver.com",
+        "gender": "m",
+        "point": 570,
+        "combo": 1,
+        "credit": 0,
+        "solo_bid": "1015",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "hijk-1234-5678",
+        "uname": "지지자",
+        "age": "22",
+        "email": "user8@daum.net",
+        "gender": "f",
+        "point": 850,
+        "combo": 4,
+        "credit": 0,
+        "solo_bid": "1015",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "ijkl-2345-6789",
+        "uname": "지지자",
+        "age": "26",
+        "email": "user9@gmail.com",
+        "gender": "m",
+        "point": 790,
+        "combo": 2,
+        "credit": 0,
+        "solo_bid": "1015",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "jklm-3456-7890",
+        "uname": "지지자",
+        "age": "28",
+        "email": "user10@naver.com",
+        "gender": "f",
+        "point": 920,
+        "combo": 0,
+        "credit": 0,
+        "solo_bid": "1015",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "klmn-4567-8901",
+        "uname": "지지자",
+        "age": "33",
+        "email": "user11@daum.net",
+        "gender": "m",
+        "point": 780,
+        "combo": 3,
+        "credit": 0,
+        "solo_bid": "1015",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "lmno-5678-9012",
+        "uname": "지지자",
+        "age": "24",
+        "email": "user12@gmail.com",
+        "gender": "f",
+        "point": 620,
+        "combo": 1,
+        "credit": 0,
+        "solo_bid": "1015",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "abcd-2345-6789",
+        "uname": "지지자",
+        "age": "27",
+        "email": "user1@naver.com",
+        "gender": "m",
+        "point": 850,
+        "combo": 3,
+        "credit": 0,
+        "solo_bid": "1016",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "bcde-3456-7890",
+        "uname": "지지자",
+        "age": "25",
+        "email": "user2@daum.net",
+        "gender": "f",
+        "point": 920,
+        "combo": 1,
+        "credit": 0,
+        "solo_bid": "1016",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "cdef-4567-8901",
+        "uname": "지지자",
+        "age": "30",
+        "email": "user3@gmail.com",
+        "gender": "m",
+        "point": 680,
+        "combo": 4,
+        "credit": 0,
+        "solo_bid": "1016",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "defg-5678-9012",
+        "uname": "지지자",
+        "age": "23",
+        "email": "user4@naver.com",
+        "gender": "f",
+        "point": 620,
+        "combo": 2,
+        "credit": 0,
+        "solo_bid": "1016",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "efgh-6789-0123",
+        "uname": "지지자",
+        "age": "28",
+        "email": "user5@daum.net",
+        "gender": "m",
+        "point": 750,
+        "combo": 3,
+        "credit": 0,
+        "solo_bid": "1016",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "fghi-7890-1234",
+        "uname": "지지자",
+        "age": "32",
+        "email": "user6@gmail.com",
+        "gender": "f",
+        "point": 820,
+        "combo": 1,
+        "credit": 0,
+        "solo_bid": "1016",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "ghij-8901-2345",
+        "uname": "지지자",
+        "age": "26",
+        "email": "user7@naver.com",
+        "gender": "m",
+        "point": 900,
+        "combo": 2,
+        "credit": 0,
+        "solo_bid": "1016",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "hijk-9012-3456",
+        "uname": "지지자",
+        "age": "21",
+        "email": "user8@daum.net",
+        "gender": "f",
+        "point": 690,
+        "combo": 4,
+        "credit": 0,
+        "solo_bid": "1016",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "ijkl-0123-4567",
+        "uname": "지지자",
+        "age": "29",
+        "email": "user9@gmail.com",
+        "gender": "m",
+        "point": 740,
+        "combo": 3,
+        "credit": 0,
+        "solo_bid": "1016",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "jklm-1234-5678",
+        "uname": "지지자",
+        "age": "27",
+        "email": "user10@naver.com",
+        "gender": "f",
+        "point": 780,
+        "combo": 0,
+        "credit": 0,
+        "solo_bid": "1016",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "klmn-2345-6789",
+        "uname": "지지자",
+        "age": "33",
+        "email": "user11@daum.net",
+        "gender": "m",
+        "point": 850,
+        "combo": 2,
+        "credit": 0,
+        "solo_bid": "1016",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "lmno-3456-7890",
+        "uname": "지지자",
+        "age": "25",
+        "email": "user12@gmail.com",
+        "gender": "f",
+        "point": 670,
+        "combo": 1,
+        "credit": 0,
+        "solo_bid": "1016",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "abcd-7890-1234",
+        "uname": "지지자",
+        "age": "22",
+        "email": "user1@naver.com",
+        "gender": "m",
+        "point": 650,
+        "combo": 1,
+        "credit": 0,
+        "solo_bid": "1017",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "bcde-8901-2345",
+        "uname": "지지자",
+        "age": "29",
+        "email": "user2@daum.net",
+        "gender": "f",
+        "point": 780,
+        "combo": 3,
+        "credit": 0,
+        "solo_bid": "1017",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
+    },
+    {
+        "uid": "cdef-9012-3456",
+        "uname": "지지자",
+        "age": "26",
+        "email": "user3@gmail.com",
+        "gender": "m",
+        "point": 720,
+        "combo": 2,
+        "credit": 0,
+        "solo_bid": "1017",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
+        },
+        "daily": false,
+        "special": false
     }
 ]
