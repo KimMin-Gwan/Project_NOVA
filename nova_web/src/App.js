@@ -34,7 +34,7 @@ function App() {
         </div>
       </section>
 
-      <section>
+      <section className="solo-bias-rank">
         <div className="ranking">최애의 랭킹</div>
         <div className="ranking-tabs">
           <div className='tab'>최애의 리그</div>
@@ -57,9 +57,35 @@ function App() {
         </div>
       </section>
 
+      <section className="group-bias-rank">
+        <div className="ranking">최애 그룹의 랭킹</div>
+        <div className="league">
+          <div className="rank-item-box">
+            <div>1.</div>
+            <div className="rank-profile"></div>
+            <div className="name">이름</div>
+            <div className="point">1000pt</div>
+          </div>
+          <div className="rank-item-box">
+            <div>1.</div>
+            <div className="rank-profile"></div>
+            <div className="name">이름</div>
+            <div className="point">1000pt</div>
+          </div>
+        </div>
+      </section>
+
+      <section className="advise"></section>
+
       <footer className="footer">
-        <p>사업명 및 다양한 정보를 etc...</p>
-        <button className="confirm-button">확성기</button>
+        <div>
+          <p>사업명 및 다양한 정보를 etc...</p>
+          <p>주소: 부산 어딘가</p>
+          <p>전화번호: 010-0000-000</p>
+        </div>
+        <div className="loundspeaker">
+          <button>확성기</button>
+        </div>
       </footer>
     </div>
   );
