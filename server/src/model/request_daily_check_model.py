@@ -7,14 +7,32 @@ class RequestDailyCheck(BaseModel):
     def __init__(self, database:Local_Database) -> None:
         super().__init__(database)
         self.__point = 0
+        self.__combo = 0
 
     def request_daily(self,request) -> bool: 
         try:
-            self._database.modify_data_with_id(target_id=request.uid,target_data={'daily':True})
+
             self.__point = 1 + request.combo
-            self._database.modify_data_with_id(target_id=request.uid,target_data={'point':request.point + self.__point})
-            if request.combo < 4:
-                self._database.modify_data_with_id(target_id=request.uid,target_data={'combo':request.combo + 1}) 
+
+            
+            self.__combo = request.combo + 1
+            if self.__combo > 4:
+                self.__combo = 4
+            self._database.modify_data_with_id(target_id='uid',target_data={
+                'uid': request.uid,
+                "uname": request.uname,
+                "age": request.age,
+                "email": request.email,
+                "gender" : request.gender,
+                'point':request.point + self.__point,
+                'combo':self.__combo,
+                "credit" : request.credit,
+                "solo_bid" : request.solo_bid,
+                "group_bid" : request.group_bid,
+                "items" : request.items,
+                'daily':True,
+                "special" : request.special
+            }) 
 
             return True
         
@@ -23,27 +41,100 @@ class RequestDailyCheck(BaseModel):
 
     def add_solo_bias_point(self,request):
         try:
-            bias_data = self._database.get_data_with_id(target='bid',id=request)
-            bias = Bias()
-            bias.make_with_dict(bias_data)
-            self._database.modify_data_with_id(target_id=request,target_data={'point':bias.point+self.__point})
+            # bias_data = self._database.get_data_with_id(target='bid',id=request)
+            bias = self._database.get_data_with_id(target='bid',id=request)
+            # if not bias_data:
+            #     return False
+            if not bias:
+                 return False
+            # bias = Bias()
+            # bias.make_with_dict(bias_data)
+            self._database.modify_data_with_id(target_id='bid',target_data={
+            #     "bid" : request,
+            #     "type" : bias.type,
+            #     "bname" : bias.bname,
+            #     "category" : bias.category,
+            #     "birthday" : bias.birthday,
+            #     "debut" :  bias.debut,
+            #     "agency" : bias.agency,
+            #     "group" : bias.group,
+            #     "lid" : bias.lid,
+            #     'point':bias.point+self.__point,
+            #     "num_user" : bias.num_user,
+            #     "x_account" : bias.x_account,
+            #     "insta_acoount" : bias.insta_account,
+            #     "tiktok_account" : bias.tiktok_account,
+            #     "youtube_account" : bias.youtube_account,
+            #     "homepage" : bias.homepage,
+            #     "fan_cafe" : bias.fan_cafe,
+            #     "country" : bias.country,
+            #     "nickname" : bias.nickname,
+            #     "fanname" : bias.fanname,
+            #     "group_memeber_bids" : bias.group_memeber_bids
+
+                "bid" : request,
+                "type" : bias['type'],
+                "bname" : bias['bname'],
+                "category" : bias['category'],
+                "birthday" : bias['birthday'],
+                "debut" :  bias['debut'],
+                "agency" : bias['agency'],
+                "group" : bias['group'],
+                "lid" : bias['lid'],
+                'point':bias['point']+self.__point,
+                "num_user" : bias['num_user'],
+                "x_account" : bias['x_account'],
+                "insta_acoount" : bias['insta_acoount'],
+                "tiktok_account" : bias['tiktok_account'],
+                "youtube_account" : bias['youtube_account'],
+                "homepage" : bias['homepage'],
+                "fan_cafe" : bias['fan_cafe'],
+                "country" : bias['country'],
+                "nickname" : bias['nickname'],
+                "fanname" : bias['fanname'],
+                "group_memeber_bids" : bias['group_memeber_bids']
+                })
 
             return True
         
         except Exception as e:
-            raise CoreControllerLogicError(error_type="set_group_leagues | " + str(e))
+            raise CoreControllerLogicError(error_type="add_solo_bias_point | " + str(e))
         
     def add_group_bias_point(self,request):
         try:
             bias_data = self._database.get_data_with_id(target='bid',id=request)
+            if not bias_data:
+                return False
             bias = Bias()
             bias.make_with_dict(bias_data)
-            self._database.modify_data_with_id(target_id=request,target_data={'point':bias.point+self.__point})
+            self._database.modify_data_with_id(target_id='bid',target_data={
+                "bid" : request,
+                "type" : bias.type,
+                "bname" : bias.bname,
+                "category" : bias.category,
+                "birthday" : bias.birthday,
+                "debut" :  bias.debut,
+                "agency" : bias.agency,
+                "group" : bias.group,
+                "lid" : bias.lid,
+                'point':bias.point+self.__point,
+                "num_user" : bias.num_user,
+                "x_account" : bias.x_account,
+                "insta_acoount" : bias.insta_account,
+                "tiktok_account" : bias.tiktok_account,
+                "youtube_account" : bias.youtube_account,
+                "homepage" : bias.homepage,
+                "fan_cafe" : bias.fan_cafe,
+                "country" : bias.country,
+                "nickname" : bias.nickname,
+                "fanname" : bias.fanname,
+                "group_memeber_bids" : bias.group_memeber_bids
+                })
 
             return True
         
         except Exception as e:
-            raise CoreControllerLogicError(error_type="set_group_leagues | " + str(e))
+            raise CoreControllerLogicError(error_type="add_group_bias_point | " + str(e))
 
 
     def get_response_form_data(self, head_parser):

@@ -68,7 +68,7 @@ class Local_Database:
 
     # 저장하기
     def __save_bias_json(self):
-        file_name = self.__data_files['chatting_file']
+        file_name = self.__data_files['bias_file']
         self.__save_json(file_name, self.__bias_data)
         return
 

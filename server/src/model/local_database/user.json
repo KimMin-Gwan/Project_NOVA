@@ -4,18 +4,18 @@
         "uname": "지지자",
         "age": "25",
         "email": "testUser@naver.com",
-        "gender" : "m",
-        "point" : 960,
-        "combo" : 0,
-        "credit" : 0,
-        "solo_bid" : "1001",
-        "group_bid" : "",
-        "items" : {
-            "chatting" : 0,
-            "saver" : 0
+        "gender": "m",
+        "point": 1415,
+        "combo": 4,
+        "credit": 0,
+        "solo_bid": "1001",
+        "group_bid": "",
+        "items": {
+            "chatting": 0,
+            "saver": 0
         },
-        "daily" : false,
-        "special" : false
+        "daily": true,
+        "special": false
     },
     {
         "uid": "5678-efgh-1234",

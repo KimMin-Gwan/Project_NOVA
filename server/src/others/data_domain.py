@@ -117,6 +117,8 @@ class Bias(SampleDomain):
             self.fan_cafe = dict_data['fan_cafe']
             self.country = dict_data['country']
             self.nickname = dict_data['nickname']
+            self.fanname = dict_data['fanname']
+            self.group_memeber_bids = dict_data['group_member_bids']
         except Exception as e:
             raise DictMakingError(error_type=e)
 
@@ -140,7 +142,9 @@ class Bias(SampleDomain):
             "homepage": self.homepage,
             "fan_cafe": self.fan_cafe,
             "country": self.country,
-            "nickname": self.nickname
+            "nickname": self.nickname,
+            'fanname':self.fanname,
+            'group_memeber_bids':self.group_memeber_bids
         }
 
 

@@ -56,7 +56,7 @@ class Core_Controller:
         
     def requese_daily_check(self, database:Local_Database, request) -> BaseModel: 
         model = RequestDailyCheck(database=database)
-
+        
         try:
             # 유저가 있는지 확인
             if not model.set_user_with_email(request=request):
@@ -70,6 +70,7 @@ class Core_Controller:
             model.request_daily(model._user)
             model.add_solo_bias_point(model._user.solo_bid)
             model.add_group_bias_point(model._user.group_bid)
+
             
 
         except CustomError as e:
