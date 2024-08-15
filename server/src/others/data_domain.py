@@ -10,16 +10,17 @@ class SampleDomain:
 
 class User(SampleDomain):
     def __init__(self, uid = "", uname = "", age=14, 
-                 email = "", gender = "d" , point = 0,
+                 email = "", gender = "d" , solo_point = 0, group_point = 0,
                  combo = 0, credit = 0, solo_bid = "",
                  group_bid = "", items = {"chatting":0, "saver":0},
-                 daily = False, special = False):
+                 daily = False, special = False, sign = ""):
         self.uid = uid
         self.uname = uname
         self.age = age
         self.email = email
         self.gender = gender
-        self.point = point
+        self.solo_point = solo_point
+        self.group_point = group_point
         self.combo = combo
         self.credit = credit
         self.solo_bid = solo_bid
@@ -27,6 +28,7 @@ class User(SampleDomain):
         self.items = items
         self.daily = daily
         self.special = special
+        self.sign = sign
         return
 
     # database로 부터 받아온 데이터를 사용해 내용 구성
@@ -37,7 +39,8 @@ class User(SampleDomain):
             self.age= dict_data['age']
             self.email= dict_data['email']
             self.gender= dict_data['gender']
-            self.point= dict_data['point']
+            self.solo_point = dict_data['solo_point']
+            self.group_point = dict_data['group_point']
             self.combo= dict_data['combo']
             self.credit= dict_data['credit']
             self.solo_bid= dict_data['solo_bid']
@@ -45,6 +48,7 @@ class User(SampleDomain):
             self.items = dict_data['items']
             self.daily= dict_data['daily']
             self.special= dict_data['special']
+            self.sign = dict_data['sign']
             return
         except Exception as e:
             raise DictMakingError(error_type=e)
@@ -57,14 +61,16 @@ class User(SampleDomain):
             "age" : self.age,
             "email" : self.email,
             "gender" : self.gender,
-            "point" : self.point,
+            "solo_point" : self.solo_point,
+            "group_point" : self.group_point,
             "combo" : self.combo,
             "credit" : self.credit,
             "solo_bid" : self.solo_bid,
             "group_bid" : self.group_bid,
             "items" : self.items,
             "daily" : self.daily,
-            "special" : self.special
+            "special" : self.special,
+            "sign" : self.sign
         }
 
 
@@ -120,6 +126,7 @@ class Bias(SampleDomain):
             self.fanname = dict_data['fanname']
             self.group_memeber_bids = dict_data['group_member_bids']
         except Exception as e:
+            print(e)
             raise DictMakingError(error_type=e)
 
     def get_dict_form_data(self):
@@ -191,6 +198,7 @@ class League(SampleDomain):
             self.tier = dict_data['tier']
             self.num_bias = dict_data['num_bias']
             self.state = dict_data['state']
+            self.type = dict_data['type']
         except Exception as e:
             raise DictMakingError(error_type=e)
 
@@ -201,7 +209,8 @@ class League(SampleDomain):
             "bid_list": self.bid_list,
             "tier": self.tier,
             "num_bias": self.num_bias,
-            "state": self.state
+            "state": self.state,
+            "type":self.type
         }
     
 class Chatting(SampleDomain):
