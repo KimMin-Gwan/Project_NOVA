@@ -10,7 +10,7 @@ class RequestDailyCheck(BaseModel):
 
     def request_daily(self,request) -> bool: 
         try:
-            self._database.modify_data_with_id(target_id=request.uid,target_data={'daily':1})
+            self._database.modify_data_with_id(target_id=request.uid,target_data={'daily':True})
             self.__point = 1 + request.combo
             self._database.modify_data_with_id(target_id=request.uid,target_data={'point':request.point + self.__point})
             if request.combo < 4:
@@ -19,7 +19,7 @@ class RequestDailyCheck(BaseModel):
             return True
         
         except Exception as e:
-            raise CoreControllerLogicError(error_type="set_group_leagues | " + str(e))
+            raise CoreControllerLogicError(error_type="request_daily | " + str(e))
 
     def add_solo_bias_point(self,request):
         try:
