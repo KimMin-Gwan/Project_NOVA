@@ -1,4 +1,4 @@
-from model.local_database import Local_Database
+from model.local_database_model import Local_Database
 from others.data_domain import User
 from view.parsers import Head_Parser
 import json
@@ -51,7 +51,22 @@ class BaseModel(HeaderModel):
     # 유저의 정보를 검색하는 함수
     def set_user_with_uid(self, request):
         # uid를 기반으로 user table 데이터와 userbias 데이터를 가지고 올것
-        user_data = self._database.get_data_with_id(target="uid", id=request.uid)
+        try:
+            user_data = self._database.get_data_with_id(target="uid", id=request.uid)
+        except:
+            user_data = self._database.get_data_with_id(target="uid", id=request['uid'])
+
+        if not user_data:
+            return False
+        self._user.make_with_dict(user_data)
+        return True
+    
+    def set_user_with_email(self, request):
+        # email 기반으로 user table 데이터와 userbias 데이터를 가지고 올것
+        try:
+            user_data = self._database.get_data_with_key(target='user', key='email', key_data=request.email)
+        except:
+            user_data = self._database.get_data_with_key(target='user', key='email', key_data=request['email'])
         if not user_data:
             return False
         self._user.make_with_dict(user_data)
@@ -66,13 +81,15 @@ class BaseModel(HeaderModel):
     
     # 정렬 함수
     # self._set_list_alignment(image_list = images, align = request.ordering)
-    def _set_list_alignment(self, image_list, align): #정렬
-        if align == "latest":
-            sorted_products = sorted(image_list, key=lambda x: x.upload_date , reverse=False)
-        elif align == "like":
-            sorted_products = sorted(image_list, key=lambda x: x.like, reverse=True)
+    def _set_list_alignment(self, league_list, align): #정렬
+        if align == "type":
+            sorted_products = sorted(league_list, key=lambda x: x.type , reverse=False)
+        elif align == "point":
+            sorted_products = sorted(league_list, key=lambda x: x.point, reverse=True)
+        elif align == "lid":
+            sorted_products = sorted(league_list, key=lambda x: x.lid, reverse=True)
         else:
-            sorted_products = sorted(image_list, key=lambda x: x.iid, reverse=True)
+            sorted_products = sorted(league_list, key=lambda x: x.bid, reverse=True)
         #sorted_products = sorted(product_list, key=lambda x: datetime.strptime(x.date, "%Y/%m/%d"))
 
         return sorted_products

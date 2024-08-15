@@ -1,4 +1,4 @@
-from others import DictMakingError
+from others.error_lib import DictMakingError
 
 # 추상 클래스
 class SampleDomain:

@@ -96,7 +96,7 @@ class Local_Database:
             return find_datas
         except Exception as e:
             raise DatabaseLogicError("get_datas_with_key error | " + str(e))
-
+        
 
     # db.get_data_with_id(target="uid", id="1001")
     def get_data_with_id(self, target:str, id:str):
