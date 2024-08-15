@@ -22,17 +22,18 @@ def main():
         "1017" : 0,
     }
 
-
+    new_data = []
 
     with open("./../src/model/local_database/user.json", 'r',  encoding='utf-8' )as f:
         data_list.extend(json.load(f))
 
-    for key in dict_data.keys():
         for data in data_list:
-            if data['solo_bid'] == key:
-                dict_data[key] += 1
+            print(data)
+            data["sign"] = "sample"
+            new_data.append(data)
 
-    print(dict_data)
+    with open("./../src/model/local_database/user.json", 'w',  encoding='utf-8' )as f:
+        json.dump(new_data, f, ensure_ascii=False, indent=4)
 
 
 main()
