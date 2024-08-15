@@ -63,10 +63,7 @@ class BaseModel(HeaderModel):
     
     def set_user_with_email(self, request):
         # email 기반으로 user table 데이터와 userbias 데이터를 가지고 올것
-        try:
-            user_data = self._database.get_data_with_key(target='user', key='email', key_data=request.email)
-        except:
-            user_data = self._database.get_data_with_key(target='user', key='email', key_data=request['email'])
+        user_data = self._database.get_data_with_key(target='user', key='email', key_data=request.email)
         if not user_data:
             return False
         self._user.make_with_dict(user_data)
@@ -81,15 +78,15 @@ class BaseModel(HeaderModel):
     
     # 정렬 함수
     # self._set_list_alignment(image_list = images, align = request.ordering)
-    def _set_list_alignment(self, league_list, align): #정렬
+    def _set_list_alignment(self, bias_list, align): #정렬
         if align == "type":
-            sorted_products = sorted(league_list, key=lambda x: x.type , reverse=False)
+            sorted_products = sorted(bias_list, key=lambda x: x.type , reverse=False)
         elif align == "point":
-            sorted_products = sorted(league_list, key=lambda x: x.point, reverse=True)
-        elif align == "lid":
-            sorted_products = sorted(league_list, key=lambda x: x.lid, reverse=True)
+            sorted_products = sorted(bias_list, key=lambda x: x.point, reverse=True)
+        elif align == "bid":
+            sorted_products = sorted(bias_list, key=lambda x: x.bid, reverse=True)
         else:
-            sorted_products = sorted(league_list, key=lambda x: x.bid, reverse=True)
+            sorted_products = sorted(bias_list, key=lambda x: x.bid, reverse=True)
         #sorted_products = sorted(product_list, key=lambda x: datetime.strptime(x.date, "%Y/%m/%d"))
 
         return sorted_products

@@ -30,6 +30,7 @@ class Local_Database:
             with open(self.__db_file_path+file_name, 'r',  encoding='utf-8' )as f:
                 list_data.extend(json.load(f))
 
+
     def __save_json(self, file_name, data):
         path = self.__db_file_path
         with open(path+file_name, 'w', encoding='utf-8') as f:
