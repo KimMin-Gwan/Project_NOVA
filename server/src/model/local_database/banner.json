@@ -1,10 +1,13 @@
 [
     {
         "baid" : "1",
-        "ba_url" : "http://www.naver.com"
+        "ba_url" : "https://kr.object.ncloudstorage.com/cheese-images/1.jpg",
+        "redirect" : "http://www.naver.com"
+
     },
     {
         "baid" : "2",
-        "ba_url" : "http://www.naver.com"
+        "ba_url" : "https://kr.object.ncloudstorage.com/cheese-images/2.jpg",
+        "redirect" : "http://www.naver.com"
     }
 ]

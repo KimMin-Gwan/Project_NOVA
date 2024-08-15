@@ -5,8 +5,9 @@
         "age": "25",
         "email": "testUser@naver.com",
         "gender": "m",
-        "point": 1415,
-        "combo": 4,
+        "solo_point": 1415,
+        "group_point": 0,
+        "combo": 0,
         "credit": 0,
         "solo_bid": "1001",
         "group_bid": "",
@@ -15,7 +16,8 @@
             "saver": 0
         },
         "daily": true,
-        "special": false
+        "special": false,
+        "sign": "sample"
     },
     {
         "uid": "5678-efgh-1234",
@@ -33,7 +35,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 1020,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "abcd-1234-5678",
@@ -51,7 +56,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 1000,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "ijkl-9876-mnop",
@@ -69,7 +77,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 220,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "qrst-6543-uvwx",
@@ -87,7 +98,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 660,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "yzab-1357-cdef",
@@ -105,7 +119,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 420,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "ghij-2468-klmn",
@@ -123,7 +140,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 430,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "opqr-3698-stuv",
@@ -141,7 +161,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 500,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "wxyz-7531-abcd",
@@ -159,7 +182,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 210,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "mnop-9876-qrst",
@@ -177,7 +203,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 330,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "abcd-4321-wxyz",
@@ -195,7 +224,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 680,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "efgh-8765-ijkl",
@@ -213,7 +245,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 360,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "qrst-2109-uvwx",
@@ -231,7 +266,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 1080,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "uvwx-1098-yzab",
@@ -249,7 +287,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 180,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "klmn-5432-opqr",
@@ -267,7 +308,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 80,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "abcd-5678-efgh",
@@ -285,7 +329,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 1080,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "mnop-1122-wxyz",
@@ -303,7 +350,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 1020,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "qrst-3344-uvwx",
@@ -321,7 +371,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 400,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "yzab-5566-cdef",
@@ -339,7 +392,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 380,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "ghij-7788-klmn",
@@ -357,7 +413,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 560,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "opqr-9900-stuv",
@@ -375,7 +434,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 840,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "abcd-1212-wxyz",
@@ -393,7 +455,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 430,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "ijkl-3434-mnop",
@@ -411,7 +476,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 180,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "qrst-5656-uvwx",
@@ -429,7 +497,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 580,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "uvwx-7878-yzab",
@@ -447,7 +518,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 420,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "abcd-9090-efgh",
@@ -465,7 +539,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 830,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "mnop-2323-wxyz",
@@ -483,7 +560,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 270,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "qrst-4545-uvwx",
@@ -501,7 +581,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 1140,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "yzab-6767-cdef",
@@ -519,7 +602,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 320,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "ghij-8989-klmn",
@@ -537,7 +623,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 820,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "opqr-2121-stuv",
@@ -555,7 +644,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 630,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "abcd-4343-wxyz",
@@ -573,7 +665,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 460,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "ijkl-6565-mnop",
@@ -591,7 +686,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 750,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "qrst-8787-uvwx",
@@ -609,7 +707,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 1240,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "uvwx-1212-yzab",
@@ -627,7 +728,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 580,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "abcd-3434-efgh",
@@ -645,7 +749,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 920,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "mnop-5656-wxyz",
@@ -663,7 +770,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 700,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "qrst-7878-uvwx",
@@ -681,7 +791,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 1300,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "yzab-9898-cdef",
@@ -699,7 +812,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 390,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "abcd-1212-klmn",
@@ -717,7 +833,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 1110,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "4321-cdef-8765",
@@ -735,7 +854,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 680,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "5678-ghij-2345",
@@ -753,7 +875,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 1230,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "7890-klmn-5432",
@@ -771,7 +896,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 340,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "1234-opqr-9876",
@@ -789,7 +917,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 750,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "2345-stuv-6543",
@@ -807,7 +938,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 120,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "3456-wxyz-8765",
@@ -825,7 +959,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 980,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "5678-abcd-4321",
@@ -843,7 +980,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 460,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "6789-efgh-5432",
@@ -861,7 +1001,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 1400,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "7890-ijkl-6543",
@@ -879,7 +1022,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 790,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "8901-mnop-7654",
@@ -897,7 +1043,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 370,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "9012-qrst-9876",
@@ -915,7 +1064,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 620,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "0123-uvwx-0987",
@@ -933,7 +1085,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 310,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "2345-yzab-8765",
@@ -951,7 +1106,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 1300,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "3456-cdef-7654",
@@ -969,7 +1127,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 100,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "4567-ghij-6543",
@@ -987,7 +1148,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 450,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "2345-abcd-6789",
@@ -1005,7 +1169,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 450,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "3456-bcde-7890",
@@ -1023,7 +1190,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 720,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "4567-cdef-8901",
@@ -1041,7 +1211,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 1050,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "5678-defg-9012",
@@ -1059,7 +1232,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 620,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "6789-efgh-0123",
@@ -1077,7 +1253,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 380,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "7890-fghi-1234",
@@ -1095,7 +1274,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 920,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "8901-ghij-2345",
@@ -1113,7 +1295,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 140,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "9012-hijk-3456",
@@ -1131,7 +1316,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 880,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "0123-ijkl-4567",
@@ -1149,7 +1337,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 670,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "1234-jklm-5678",
@@ -1167,7 +1358,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 390,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "2345-klmn-6789",
@@ -1185,7 +1379,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 1100,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "3456-lmno-7890",
@@ -1203,7 +1400,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 550,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "4567-mnop-8901",
@@ -1221,7 +1421,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 780,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "5678-abcd-8901",
@@ -1239,7 +1442,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 450,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "6789-bcde-9012",
@@ -1257,7 +1463,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 800,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "7890-cdef-0123",
@@ -1275,7 +1484,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 620,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "8901-defg-1234",
@@ -1293,7 +1505,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 720,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "9012-efgh-2345",
@@ -1311,7 +1526,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 310,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "0123-fghi-3456",
@@ -1329,7 +1547,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 1050,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "1234-ghij-4567",
@@ -1347,7 +1568,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 790,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "2345-hijk-5678",
@@ -1365,7 +1589,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 600,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "3456-ijkl-6789",
@@ -1383,7 +1610,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 850,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "4567-jklm-7890",
@@ -1401,7 +1631,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 460,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "5678-klmn-8901",
@@ -1419,7 +1652,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 1200,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "6789-lmno-9012",
@@ -1437,7 +1673,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 300,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "7890-mnop-0123",
@@ -1455,7 +1694,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 720,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "8901-nopq-1234",
@@ -1473,7 +1715,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 550,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "9012-opqr-2345",
@@ -1491,7 +1736,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 1150,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "0123-pqrs-3456",
@@ -1509,7 +1757,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 460,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "1234-qrst-4567",
@@ -1527,7 +1778,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 380,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "2345-rstu-5678",
@@ -1545,7 +1799,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 950,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "2345-abcd-6789",
@@ -1563,7 +1820,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 460,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "3456-bcde-7890",
@@ -1581,7 +1841,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 560,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "4567-cdef-8901",
@@ -1599,7 +1862,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 780,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "5678-defg-9012",
@@ -1617,7 +1883,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 1100,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "6789-efgh-0123",
@@ -1635,7 +1904,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 650,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "7890-fghi-1234",
@@ -1653,7 +1925,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 920,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "8901-ghij-2345",
@@ -1671,7 +1946,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 300,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "9012-hijk-3456",
@@ -1689,7 +1967,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 550,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "0123-ijkl-4567",
@@ -1707,7 +1988,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 700,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "1234-jklm-5678",
@@ -1725,7 +2009,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 400,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "2345-klmn-6789",
@@ -1743,7 +2030,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 550,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "3456-lmno-7890",
@@ -1761,7 +2051,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 860,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "4567-mnop-8901",
@@ -1779,7 +2072,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 380,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "5678-abcd-9012",
@@ -1797,7 +2093,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 720,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "6789-bcde-0123",
@@ -1815,7 +2114,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 950,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "7890-cdef-1234",
@@ -1833,7 +2135,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 380,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "8901-defg-2345",
@@ -1851,7 +2156,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 560,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "9012-efgh-3456",
@@ -1869,7 +2177,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 800,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "0123-fghi-4567",
@@ -1887,7 +2198,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 1150,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "1234-ghij-5678",
@@ -1905,7 +2219,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 480,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "2345-hijk-6789",
@@ -1923,7 +2240,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 670,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "3456-ijkl-7890",
@@ -1941,7 +2261,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 540,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "4567-jklm-8901",
@@ -1959,7 +2282,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 320,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "5678-klmn-9012",
@@ -1977,7 +2303,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 940,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "6789-lmno-0123",
@@ -1995,7 +2324,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 720,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "7890-mnop-1234",
@@ -2013,7 +2345,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 580,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "8901-nopq-2345",
@@ -2031,7 +2366,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 800,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "9012-opqr-3456",
@@ -2049,7 +2387,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 950,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "1234-abcd-7890",
@@ -2067,7 +2408,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 690,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "2345-bcde-8901",
@@ -2085,7 +2429,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 780,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "3456-cdef-9012",
@@ -2103,7 +2450,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 950,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "4567-defg-0123",
@@ -2121,7 +2471,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 620,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "5678-efgh-1234",
@@ -2139,7 +2492,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 550,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "6789-fghi-2345",
@@ -2157,7 +2513,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 790,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "7890-ghij-3456",
@@ -2175,7 +2534,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 430,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "8901-hijk-4567",
@@ -2193,7 +2555,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 1150,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "9012-ijkl-5678",
@@ -2211,7 +2576,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 350,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "0123-jklm-6789",
@@ -2229,7 +2597,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 600,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "1234-klmn-7890",
@@ -2247,7 +2618,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 730,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "2345-lmno-8901",
@@ -2265,7 +2639,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 430,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "3456-mnop-9012",
@@ -2283,7 +2660,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 550,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "4567-nopq-0123",
@@ -2301,7 +2681,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 910,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "5678-opqr-1234",
@@ -2319,7 +2702,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 670,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "abcd-1234-5678",
@@ -2337,7 +2723,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 680,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "bcde-2345-6789",
@@ -2355,7 +2744,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 790,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "cdef-3456-7890",
@@ -2373,7 +2765,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 830,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "defg-4567-8901",
@@ -2391,7 +2786,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 1050,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "efgh-5678-9012",
@@ -2409,7 +2807,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 560,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "fghi-6789-0123",
@@ -2427,7 +2828,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 650,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "ghij-7890-1234",
@@ -2445,7 +2849,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 420,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "hijk-8901-2345",
@@ -2463,7 +2870,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 970,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "abcd-1234-5678",
@@ -2481,7 +2891,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 540,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "bcde-2345-6789",
@@ -2499,7 +2912,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 870,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "cdef-3456-7890",
@@ -2517,7 +2933,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 690,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "defg-4567-8901",
@@ -2535,7 +2954,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 780,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "efgh-5678-9012",
@@ -2553,7 +2975,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 940,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "fghi-6789-0123",
@@ -2571,7 +2996,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 410,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "ghij-7890-1234",
@@ -2589,7 +3017,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 650,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "hijk-8901-2345",
@@ -2607,7 +3038,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 1020,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "ijkl-9012-3456",
@@ -2625,7 +3059,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 720,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "jklm-0123-4567",
@@ -2643,7 +3080,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 430,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "abcd-2345-6789",
@@ -2661,7 +3101,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 790,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "bcde-3456-7890",
@@ -2679,7 +3122,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 920,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "cdef-4567-8901",
@@ -2697,7 +3143,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 670,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "defg-5678-9012",
@@ -2715,7 +3164,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 560,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "efgh-6789-0123",
@@ -2733,7 +3185,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 780,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "fghi-7890-1234",
@@ -2751,7 +3206,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 680,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "abcd-5678-1234",
@@ -2769,7 +3227,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 700,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "bcde-6789-2345",
@@ -2787,7 +3248,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 830,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "cdef-7890-3456",
@@ -2805,7 +3269,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 950,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "defg-8901-4567",
@@ -2823,7 +3290,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 560,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "efgh-9012-5678",
@@ -2841,7 +3311,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 410,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "fghi-0123-6789",
@@ -2859,7 +3332,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 680,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "ghij-1234-7890",
@@ -2877,7 +3353,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 780,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "hijk-2345-8901",
@@ -2895,7 +3374,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 910,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "ijkl-3456-9012",
@@ -2913,7 +3395,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 720,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "jklm-4567-0123",
@@ -2931,7 +3416,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 580,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "klmn-5678-1234",
@@ -2949,7 +3437,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 820,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "lmno-6789-2345",
@@ -2967,7 +3458,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 710,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "mnop-7890-3456",
@@ -2985,7 +3479,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 920,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "nopq-8901-4567",
@@ -3003,7 +3500,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 670,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "opqr-9012-5678",
@@ -3021,7 +3521,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 840,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "pqrs-0123-6789",
@@ -3039,7 +3542,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 530,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "abcd-7890-1234",
@@ -3057,7 +3563,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 720,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "bcde-8901-2345",
@@ -3075,7 +3584,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 560,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "cdef-9012-3456",
@@ -3093,7 +3605,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 840,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "defg-0123-4567",
@@ -3111,7 +3626,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 910,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "efgh-1234-5678",
@@ -3129,7 +3647,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 670,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "fghi-2345-6789",
@@ -3147,7 +3668,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 790,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "ghij-3456-7890",
@@ -3165,7 +3689,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 620,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "abcd-4567-8901",
@@ -3183,7 +3710,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 730,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "bcde-5678-9012",
@@ -3201,7 +3731,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 860,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "cdef-6789-0123",
@@ -3219,7 +3752,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 670,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "defg-7890-1234",
@@ -3237,7 +3773,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 720,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "efgh-8901-2345",
@@ -3255,7 +3794,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 950,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "fghi-9012-3456",
@@ -3273,7 +3815,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 680,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "ghij-0123-4567",
@@ -3291,7 +3836,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 570,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "hijk-1234-5678",
@@ -3309,7 +3857,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 850,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "ijkl-2345-6789",
@@ -3327,7 +3878,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 790,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "jklm-3456-7890",
@@ -3345,7 +3899,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 920,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "klmn-4567-8901",
@@ -3363,7 +3920,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 780,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "lmno-5678-9012",
@@ -3381,7 +3941,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 620,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "abcd-2345-6789",
@@ -3399,7 +3962,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 850,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "bcde-3456-7890",
@@ -3417,7 +3983,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 920,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "cdef-4567-8901",
@@ -3435,7 +4004,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 680,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "defg-5678-9012",
@@ -3453,7 +4025,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 620,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "efgh-6789-0123",
@@ -3471,7 +4046,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 750,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "fghi-7890-1234",
@@ -3489,7 +4067,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 820,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "ghij-8901-2345",
@@ -3507,7 +4088,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 900,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "hijk-9012-3456",
@@ -3525,7 +4109,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 690,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "ijkl-0123-4567",
@@ -3543,7 +4130,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 740,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "jklm-1234-5678",
@@ -3561,7 +4151,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 780,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "klmn-2345-6789",
@@ -3579,7 +4172,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 850,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "lmno-3456-7890",
@@ -3597,7 +4193,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 670,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "abcd-7890-1234",
@@ -3615,7 +4214,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 650,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "bcde-8901-2345",
@@ -3633,7 +4235,10 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 780,
+        "group_point": 0,
+        "sign": "sample"
     },
     {
         "uid": "cdef-9012-3456",
@@ -3651,6 +4256,9 @@
             "saver": 0
         },
         "daily": false,
-        "special": false
+        "special": false,
+        "solo_point": 720,
+        "group_point": 0,
+        "sign": "sample"
     }
 ]
