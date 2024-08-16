@@ -20,8 +20,8 @@ class TestServer:
                 while True:
                     data = await websocket.receive_text()
                     converted_data = json.loads(data)
+                    print(type(converted_data))
                     await self.manager.broadcast(f"client text :{data}")
-                    print(converted_data,type(converted_data))
                 
             except WebSocketDisconnect:
                 self.manager.disconnect(websocket)

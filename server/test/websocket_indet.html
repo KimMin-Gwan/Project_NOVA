@@ -38,6 +38,7 @@
         const messages = document.getElementById('messages');
         const messageInput = document.getElementById('messageInput');
         const sendButton = document.getElementById('sendButton');
+        const token = 'your-token-string';  // 임의의 토큰 값 설정
 
         ws.onmessage = function(event) {
             const message = document.createElement('div');
@@ -47,9 +48,13 @@
         };
 
         sendButton.onclick = function() {
-            const message = messageInput.value;
-            if (message) {
-                ws.send(message);
+            const messageText = messageInput.value;
+            if (messageText) {
+                const message = {
+                    token: token,  // 토큰 값
+                    message: messageText  // 입력된 메시지
+                };
+                ws.send(JSON.stringify(message));  // JSON 형태로 전송
                 messageInput.value = '';
             }
         };
