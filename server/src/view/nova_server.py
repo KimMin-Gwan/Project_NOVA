@@ -9,13 +9,9 @@ class NOVA_Server:
     def __init__(self, database) -> None:
         self.__app = FastAPI()
 
-        origins = [
-            "http://localhost.tiangolo.com",
-        ]
-        # 미들웨어 추가
         self.__app.add_middleware(
             CORSMiddleware,
-            allow_origins=origins,
+            allow_origins=["*"],  # 원격 호스트의 웹소켓 연결을 허용할 도메인 설정
             allow_credentials=True,
             allow_methods=["*"],
             allow_headers=["*"],
