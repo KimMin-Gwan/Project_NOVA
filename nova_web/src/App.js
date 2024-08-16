@@ -1,64 +1,53 @@
 import logo from './logo.svg';
 import './App.css';
+import { useState } from 'react';
+import Banner from './component/banner';
+import Modal from './component/modal';
 
 function App() {
+
   return (
     <div className="container">
-      <header className='header'>
-        <div className='logo'>로고</div>
-        <div className='buttons'>
-          <button>돌아가기</button>
-          <button>마이페이지</button>
-        </div>
-      </header>
-
-      <section className="banner">
-        <div>베너</div>
-        <div className="banner-indicator">1/5</div>
-      </section>
-
-      <section className="authentication">
-        <div className="authentication-title">인증하기</div>
-        <div className="item-box">
-          <div className="profile">
-            <div>이미지</div>
+      <div className="top-area">
+        <header className='header'>
+          <div className='logo'>로고</div>
+          <div className='buttons'>
+            <button>돌아가기</button>
+            <button>마이페이지</button>
           </div>
-          <div className="name">이름</div>
-          <button className="auth-button">인증하기</button>
-        </div>
-        <div className="item-box">
-          <div className="profile">
-            <div>플러스</div>
-          </div>
-          <div className="name">최애 지지하기 (그룹)</div>
-        </div>
-      </section>
+        </header>
+        {/* 
+        1. 시간이 지나면 자동으로 다음 베너로 넘어가도록
+        2. 클릭 시 다음 베너로 넘어가도록
+        3. 클릭 전 이미지 */}
+        <Banner></Banner>
+        <section className='my-bias'>
+          <div className='left-box'>11</div>
+          <div className='left-box'>11</div>
+        </section>
+      </div>
 
       <section className="solo-bias-rank">
-        <div className="ranking">최애의 랭킹</div>
-        <div className="ranking-tabs">
-          <div className='tab'>최애의 리그</div>
-          <div className='tab'>전체 리그</div>
+        <div className='title-area'>
+          <div className="ranking">개인리그 랭킹</div>
+          <div className='select'>
+            <div className='bias'>내 최애</div>
+            <div className='all-bias'>전체</div>
+          </div>
+        </div>
+        <div className="stars">
+          <button>오리온자리</button>
+          <button>사수자리</button>
+          <button>천칭자리</button>
+          <button>물병자리</button>
+          <button>전갈자리</button>
+          <button>쌍둥이자리</button>
+          <button>7</button>
+          <button>8</button>
+          <button>9</button>
+          <button>10</button>
         </div>
         <h3>00리그</h3>
-        <div className="league">
-          <div className="rank-item-box">
-            <div>1.</div>
-            <div className="rank-profile"></div>
-            <div className="name">이름</div>
-            <div className="point">1000pt</div>
-          </div>
-          <div className="rank-item-box">
-            <div>1.</div>
-            <div className="rank-profile"></div>
-            <div className="name">이름</div>
-            <div className="point">1000pt</div>
-          </div>
-        </div>
-      </section>
-
-      <section className="group-bias-rank">
-        <div className="ranking">최애 그룹의 랭킹</div>
         <div className="league">
           <div className="rank-item-box">
             <div>1.</div>
