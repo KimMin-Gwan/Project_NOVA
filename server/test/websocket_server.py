@@ -1,5 +1,6 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 import uvicorn
+import json
 
 class TestServer:
     def __init__(self):
@@ -18,8 +19,9 @@ class TestServer:
             try:
                 while True:
                     data = await websocket.receive_text()
+                    converted_data = json.loads(data)
                     await self.manager.broadcast(f"client text :{data}")
-                    print(data)
+                    print(converted_data,type(converted_data))
                 
             except WebSocketDisconnect:
                 self.manager.disconnect(websocket)
