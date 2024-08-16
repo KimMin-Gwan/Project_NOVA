@@ -34,7 +34,8 @@ class HeaderModel:
             'body' : body
         }
 
-        response = json.dumps(form, ensure_ascii=False)
+        #response = json.dumps(form, ensure_ascii=False)
+        response = form
         return response
 
     def set_state_code(self, state_code):
