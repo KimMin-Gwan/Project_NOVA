@@ -6,3 +6,5 @@ from model.my_bias_league_model import *
 from model.all_leagues_model import *
 from model.league_model import *
 from model.home_model import *
+from model.chat_model import *
+from model.chat_list_model import *

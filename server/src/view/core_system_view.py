@@ -1,5 +1,5 @@
 from typing import Any, Optional
-from fastapi import FastAPI
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from view.master_view import Master_View, RequestHeader
 from view.parsers import Head_Parser
 from controller import Home_Controller, Core_Controller
@@ -11,6 +11,7 @@ class Core_Service_View(Master_View):
         self._endpoint = endpoint
         self.__database = database
         self.home_route(endpoint)
+        self.web_chatting_route(endpoint)
 
     def home_route(self, endpoint:str):
         @self.__app.get(endpoint+'/home')
@@ -87,6 +88,7 @@ class Core_Service_View(Master_View):
             model = home_controller.select_bias(database=self.__database, request=request)
             response = model.get_response_form_data(self._head_parser)
             return response
+        
 
         #@self.__app.post(endpoint+'/home/login')
         #def login(raw_request:dict):
@@ -124,6 +126,31 @@ class Core_Service_View(Master_View):
                                                              #request=request)
             #response = model.get_response_form_data(self._head_parser)
             #return response
+
+    def web_chatting_route(self,endpoint:str):
+        #채팅서버
+        @self.__app.get('/chatting_list')
+        def get_chatting_list():
+            core_controller=Core_Controller()
+            model = core_controller.get_chatting_data(database=self.__database,)
+            response = model.get_response_form_data(self._head_parser)
+            return response
+            
+        # @self.__app.websocket('/chatting')
+        # async def chatting_socket(websocket:WebSocket):
+        #     self.manager = ConnectionManager()
+        #     core_controller=Core_Controller()
+        #     await self.manager.connect(websocket)
+        #     try:
+        #         while True:
+        #             #{"token":"token"."message":"msg"}
+        #             request = await websocket.receive_text()
+        #             model = core_controller.chatting(database=self.__database, request=request)
+        #             await self.manager.broadcast(f"client text :{model._")
+                
+        #     except WebSocketDisconnect:
+        #         self.manager.disconnect(websocket)
+        #         await self.manager.broadcast("client disconnected")
 
 class SampleRequest(RequestHeader):
     def __init__(self, request) -> None:
@@ -178,8 +205,20 @@ class DailyRequest(RequestHeader):
         body = request['body']
         self.token = body['token']
 
+class ConnectionManager:
+    def __init__(self):
+        self.active_connection: list[WebSocket] = []
 
+    async def connect(self, websocket: WebSocket):
+        await websocket.accept()
+        self.active_connection.append(websocket)
 
+    def disconnect(self, websocket: WebSocket):
+        self.active_connection.remove(websocket)
+
+    async def broadcast(self, message:str):
+        for connection in self.active_connection:
+            await connection.send_text(message)
 
 
 

@@ -1,6 +1,7 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 import uvicorn
 import json
+import jwt
 
 class TestServer:
     def __init__(self):
@@ -16,12 +17,14 @@ class TestServer:
         @self.__app.websocket('/chatting')
         async def chatting_socket(websocket:WebSocket):
             await self.manager.connect(websocket)
+            secret_key = "your_secret_key"
             try:
                 while True:
                     data = await websocket.receive_text()
                     converted_data = json.loads(data)
-                    print(type(converted_data))
-                    await self.manager.broadcast(f"client text :{data}")
+                    decoded_payload = jwt.decode(converted_data['token'], secret_key, algorithms=["HS256"]) 
+                    print(decoded_payload)
+                    await self.manager.broadcast(f"client text :{converted_data['message']}")
                 
             except WebSocketDisconnect:
                 self.manager.disconnect(websocket)

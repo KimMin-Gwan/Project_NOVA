@@ -143,6 +143,52 @@ class Core_Controller:
 
         finally:
             return model
+
+#------------------------------------------------------------------------------------------
+    def get_chatting_data(self, database:Local_Database):
+        model = ChatListModel(database=database)
+        try:
+            model.set_chat_list()
+            model.set_state_code("200")
+            return model
+
+        except CustomError as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
+
+        except Exception as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
+
+        finally:
+            return model
+        
+    # def chatting(self, database:Local_Database, request): 
+    #     jwt_decoder = JWTDecoder()
+    #     model = ChatModel(database=database)
+    #     data = json.loads(request)
+
+    #     try:
+    #         # 유저가 있는지 확인           
+    #         request_payload = jwt_decoder.decode(token=data)
+    #         if not model.set_user_with_email(request=request_payload):
+    #             raise UserNotExist("Can not find User with email")
+    #     except UserNotExist as e:
+    #         print("Error Catched : ", e)
+    #         model.set_state_code(e.error_code) # 종합 에러
+    #         return model
+
+    #     try:
+    #         model.set_chat_data(request=request_payload)
+    #         model.save_chat(request=request_payload)
+    #         model.load_chat()
+
+    #     except CustomError as e:
+    #         print("Error Catched : ", e.error_type)
+    #         model.set_state_code(e.error_code) # 종합 에러
+
+    #     finally:
+    #         return model
         
 
 
