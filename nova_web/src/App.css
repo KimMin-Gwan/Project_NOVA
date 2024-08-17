@@ -55,7 +55,11 @@
     transform: rotate(360deg);
   }
 } */
-
+.mypage {
+  width: 100px;
+  height: 100px;
+  background-color: #000;
+}
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -367,6 +371,15 @@ body {
   text-align: center;
 
   margin-bottom: 20px;
+}
+
+/* .buttons {
+  margin-top: 10px;
+} */
+.button {
+  /* background-color: aqua; */
+  margin-right: 10px;
+  text-decoration: none;
 }
 
 .select {
