@@ -136,21 +136,21 @@ class Core_Service_View(Master_View):
             response = model.get_response_form_data(self._head_parser)
             return response
             
-        # @self.__app.websocket('/chatting')
-        # async def chatting_socket(websocket:WebSocket):
-        #     self.manager = ConnectionManager()
-        #     core_controller=Core_Controller()
-        #     await self.manager.connect(websocket)
-        #     try:
-        #         while True:
-        #             #{"token":"token"."message":"msg"}
-        #             request = await websocket.receive_text()
-        #             model = core_controller.chatting(database=self.__database, request=request)
-        #             await self.manager.broadcast(f"client text :{model._")
+        @self.__app.websocket('/chatting')
+        async def chatting_socket(websocket:WebSocket):
+            self.manager = ConnectionManager()
+            core_controller=Core_Controller()
+            await self.manager.connect(websocket)
+            try:
+                while True:
+                    #{"token":"token"."message":"msg"}
+                    request = await websocket.receive_text()
+                    model = core_controller.chatting(database=self.__database, request=request)
+                    await self.manager.broadcast(f"{model._user.uname} :{model.get_chat_data().message}")
                 
-        #     except WebSocketDisconnect:
-        #         self.manager.disconnect(websocket)
-        #         await self.manager.broadcast("client disconnected")
+            except WebSocketDisconnect:
+                self.manager.disconnect(websocket)
+                await self.manager.broadcast("client disconnected")
 
 class SampleRequest(RequestHeader):
     def __init__(self, request) -> None:

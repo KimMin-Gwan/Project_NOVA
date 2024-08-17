@@ -41,58 +41,37 @@ class RequestDailyCheck(BaseModel):
 
     def add_solo_bias_point(self,request):
         try:
-            # bias_data = self._database.get_data_with_id(target='bid',id=request)
-            bias = self._database.get_data_with_id(target='bid',id=request)
-            # if not bias_data:
-            #     return False
+            bias_data = self._database.get_data_with_id(target='bid',id=request)
+
+            if not bias_data:
+                return False
             if not bias:
                  return False
-            # bias = Bias()
-            # bias.make_with_dict(bias_data)
+            bias = Bias()
+            bias.make_with_dict(bias_data)
             self._database.modify_data_with_id(target_id='bid',target_data={
-            #     "bid" : request,
-            #     "type" : bias.type,
-            #     "bname" : bias.bname,
-            #     "category" : bias.category,
-            #     "birthday" : bias.birthday,
-            #     "debut" :  bias.debut,
-            #     "agency" : bias.agency,
-            #     "group" : bias.group,
-            #     "lid" : bias.lid,
-            #     'point':bias.point+self.__point,
-            #     "num_user" : bias.num_user,
-            #     "x_account" : bias.x_account,
-            #     "insta_acoount" : bias.insta_account,
-            #     "tiktok_account" : bias.tiktok_account,
-            #     "youtube_account" : bias.youtube_account,
-            #     "homepage" : bias.homepage,
-            #     "fan_cafe" : bias.fan_cafe,
-            #     "country" : bias.country,
-            #     "nickname" : bias.nickname,
-            #     "fanname" : bias.fanname,
-            #     "group_memeber_bids" : bias.group_memeber_bids
-
                 "bid" : request,
-                "type" : bias['type'],
-                "bname" : bias['bname'],
-                "category" : bias['category'],
-                "birthday" : bias['birthday'],
-                "debut" :  bias['debut'],
-                "agency" : bias['agency'],
-                "group" : bias['group'],
-                "lid" : bias['lid'],
-                'point':bias['point']+self.__point,
-                "num_user" : bias['num_user'],
-                "x_account" : bias['x_account'],
-                "insta_acoount" : bias['insta_acoount'],
-                "tiktok_account" : bias['tiktok_account'],
-                "youtube_account" : bias['youtube_account'],
-                "homepage" : bias['homepage'],
-                "fan_cafe" : bias['fan_cafe'],
-                "country" : bias['country'],
-                "nickname" : bias['nickname'],
-                "fanname" : bias['fanname'],
-                "group_memeber_bids" : bias['group_memeber_bids']
+                "type" : bias.type,
+                "bname" : bias.bname,
+                "category" : bias.category,
+                "birthday" : bias.birthday,
+                "debut" :  bias.debut,
+                "agency" : bias.agency,
+                "group" : bias.group,
+                "lid" : bias.lid,
+                'point':bias.point+self.__point,
+                "num_user" : bias.num_user,
+                "x_account" : bias.x_account,
+                "insta_acoount" : bias.insta_account,
+                "tiktok_account" : bias.tiktok_account,
+                "youtube_account" : bias.youtube_account,
+                "homepage" : bias.homepage,
+                "fan_cafe" : bias.fan_cafe,
+                "country" : bias.country,
+                "nickname" : bias.nickname,
+                "fanname" : bias.fanname,
+                "group_memeber_bids" : bias.group_memeber_bids
+
                 })
 
             return True
