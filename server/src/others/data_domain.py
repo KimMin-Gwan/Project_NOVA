@@ -12,8 +12,11 @@ class User(SampleDomain):
     def __init__(self, uid = "", uname = "", age=14, 
                  email = "", gender = "d" , solo_point = 0, group_point = 0,
                  combo = 0, credit = 0, solo_bid = "",
-                 group_bid = "", items = {"chatting":0, "saver":0},
+                 group_bid = "", items = None,
                  daily = False, special = False, sign = ""):
+        if items == None:
+            items = Item(init_data = {"chatting":0, "saver":0}),
+
         self.uid = uid
         self.uname = uname
         self.age = age
