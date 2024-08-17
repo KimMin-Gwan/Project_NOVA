@@ -12,7 +12,7 @@
         "solo_bid": "1001",
         "group_bid": "",
         "items": {
-            "chatting": 1,
+            "chatting": 99,
             "saver": 0
         },
         "daily": true,

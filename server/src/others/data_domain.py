@@ -77,7 +77,7 @@ class User(SampleDomain):
         }
 
 class Item(SampleDomain):
-    def __init(self, init_data = {"chatting" : 0, "saver":0}):
+    def __init__(self, init_data = {"chatting" : 0, "saver":0}):
         self.chatting  = init_data["chatting"]
         self.saver = init_data["saver"]
 

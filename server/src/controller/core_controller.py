@@ -5,10 +5,13 @@ from controller.jwt_decoder import JWTDecoder, JWTPayload
 class Core_Controller:
     def sample_func(self, database:Local_Database, request) -> BaseModel: 
         jwt_decoder = JWTDecoder()
-        request_payload = jwt_decoder.decode(token=request.token)  # jwt payload(email 정보 포함됨)
+        
 
         model = BaseModel(database=database)
         try:
+
+            request_payload = jwt_decoder.decode(token=request.token)  # jwt payload(email 정보 포함됨)
+
             # 유저가 있는지 확인
             if not model.set_user_with_uid(request=request):
                 raise UserNotExist("Can not find User with uid")
@@ -40,10 +43,12 @@ class Core_Controller:
     # 나의 바이어스 정보를 뽑아오는 방법
     def get_my_bias_league(self, database:Local_Database, request): 
         jwt_decoder = JWTDecoder()
-        request_payload = jwt_decoder.decode(token=request.token)  # jwt payload(email 정보 포함됨)
+       
 
         model = LeagueModel(database=database)  # 이건 안쓰지만 데이터 베이서 접속을 위해 사용
         try:
+            request_payload = jwt_decoder.decode(token=request.token)  # jwt payload(email 정보 포함됨)
+
             # 유저가 있는지 확인
             if not model.set_user_with_email(request=request_payload):
                 raise UserNotExist("Can not find User with uid")
@@ -165,7 +170,7 @@ class Core_Controller:
         
     def chatting(self, database:Local_Database, request):
         model = ChatModel(database=database)
-        jwt_decoder = JWTDecoder()   
+        jwt_decoder = JWTDecoder()
 
         try:
             model.set_chat_data(request=request)  
@@ -180,7 +185,7 @@ class Core_Controller:
             return model
 
         try:
-            #model.check_item(request=model._user)
+            model.check_item(request=model._user)
             model.save_chat(request=model._user)
 
         except CustomError as e:

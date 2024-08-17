@@ -146,11 +146,14 @@ class Core_Service_View(Master_View):
                     #{"token":"token"."message":"msg"}
                     request = await websocket.receive_text()
                     model = core_controller.chatting(database=self.__database, request=request)
-                    await self.manager.broadcast(f"{model._user.uname} :{model.get_chat_data().message}")
+                    if model.get_check() == True:
+                        await self.manager.broadcast(f"{model._user.uname} :{model.get_chat_data().message}")
+                    else:
+                        continue
                 
             except WebSocketDisconnect:
                 self.manager.disconnect(websocket)
-                await self.manager.broadcast("client disconnected")
+            #    await self.manager.broadcast("client disconnected")
 
 class SampleRequest(RequestHeader):
     def __init__(self, request) -> None:
