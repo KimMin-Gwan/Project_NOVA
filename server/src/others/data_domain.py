@@ -45,7 +45,7 @@ class User(SampleDomain):
             self.credit= dict_data['credit']
             self.solo_bid= dict_data['solo_bid']
             self.group_bid= dict_data['group_bid']
-            self.items = dict_data['items']
+            self.items = Item(init_data = dict_data['items'])
             self.daily= dict_data['daily']
             self.special= dict_data['special']
             self.sign = dict_data['sign']
@@ -67,10 +67,21 @@ class User(SampleDomain):
             "credit" : self.credit,
             "solo_bid" : self.solo_bid,
             "group_bid" : self.group_bid,
-            "items" : self.items,
+            "items" : self.items.get_dict_form_data(),
             "daily" : self.daily,
             "special" : self.special,
             "sign" : self.sign
+        }
+
+class Item(SampleDomain):
+    def __init(self, init_data = {"chatting" : 0, "saver":0}):
+        self.chatting  = init_data["chatting"]
+        self.saver = init_data["saver"]
+
+    def get_dict_form_data(self):
+        return {
+            "chatting" : self.chatting,
+            "saver": self.saver
         }
 
 
