@@ -10,7 +10,9 @@ import zoom from './img/zoom.png';
 import menu from './img/menu.png';
 import plus from './img/plus.png';
 import empty from './img/empty.png';
+import icon from './img/Icon.png';
 import SoloRank from './component/solo_rank';
+import FloatingButton from './component/floatingbutton';
 
 // bid = ''가 이거면 오른쪽 레이아웃 바둑판
 
@@ -35,11 +37,11 @@ function App() {
   let rank_copy = [];
   let profile_url = 'https://kr.object.ncloudstorage.com/nova-images/';
 
-  let [isClicked, setClick] = useState('전체');
+  let [isClicked, setClick] = useState(false);
 
-  function handleToggle(value) {
-    setClick(value);
-  }
+  function handleToggle() {
+    setClick(!isClicked);
+  };
 
   let [clickedIndex, setClickedIndex] = useState(0);
 
@@ -49,6 +51,7 @@ function App() {
       <Route path='/mybias' element={<MyBias />}></Route>
       <Route path='/' element={
         <div className="container">
+
           <div className="top-area">
             <header className='header'>
               <div className='logo'>NOVA</div>
@@ -68,7 +71,7 @@ function App() {
 
             <h2>인증하기</h2>
 
-            
+
             <section className='my-bias'>
               <MyBias></MyBias>
 
@@ -76,12 +79,12 @@ function App() {
                 <img src={empty}></img>
                 {/* <div className='support'>지지하기</div> */}
                 <div className='box'>
-                  <div className='my-bias-group'>새로운 최애 그룹<br/>지지하기</div>
+                  <div className='my-bias-group'>새로운 최애 그룹<br />지지하기</div>
                   {/* <div className='bias-name'>{bias.bname}</div> */}
                 </div>
-                <button className='more'>
+                <div className='more'>
                   <img src={plus}></img>
-                </button>
+                </div>
               </div>
             </section>
           </div>
@@ -89,9 +92,11 @@ function App() {
           <section className="solo-bias-rank">
             <div className='title-area'>
               <div className="ranking">개인리그 랭킹</div>
-              <div className='select-ranking'>
-                <div onClick={() => handleToggle('내 최애')} className={isClicked === '내 최애' ? 'select-now' : 'select-not'}>내 최애</div>
-                <div onClick={() => handleToggle('전체')} className={isClicked === '전체' ? 'select-now' : 'select-not'}>전체</div>
+              <div className={`toggle-container ${isClicked ? "active" : ""}`}>
+                <div onClick={handleToggle} className={`text ${isClicked ? "active" : ""}`}>내 최애</div>
+                <div onClick={handleToggle} className={`text ${isClicked ? "" : "active"}`}>전체</div>
+                <div className="toggle-slider"></div>
+
               </div>
             </div>
             <div className="stars">
@@ -115,7 +120,7 @@ function App() {
                 })
               }
             </div>
-            
+
             {/* <SoloRank rank={rank}></SoloRank> */}
             <div className="league">
               {
@@ -123,12 +128,13 @@ function App() {
                   if (isClicked === '전체') {
                     return (
                       <div className="rank-item-box" key={i}>
-                        <div className='number'>{i + 1}.</div>
                         <div className="rank-profile">
                           <img src={profile_url + `${rank[i].bid}.PNG`}></img>
                         </div>
                         <div className="name">{rank[i].bname}</div>
-                        <div className="point">1000pt</div>
+                        <div className="point">{rank[i].point} pt  
+                          <img src={icon}></img>
+                        </div>
                       </div>
                     )
                   }
@@ -138,7 +144,7 @@ function App() {
           </section>
 
           <section className="advise"></section>
-
+          <FloatingButton></FloatingButton>
           <footer className="footer">
             <div>
               <p>사업명 및 다양한 정보를 etc...</p>
@@ -146,10 +152,12 @@ function App() {
               <p>전화번호: 010-0000-000</p>
             </div>
             <div className="loundspeaker">
-              <button>확성기</button>
+              {/* <button>확성기</button> */}
             </div>
+
           </footer>
         </div >
+
 
       } />
 

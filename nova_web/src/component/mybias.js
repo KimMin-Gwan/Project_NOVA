@@ -14,7 +14,7 @@ function MyBias() {
         "endpoint": "/core_system/",
     }
 
-    let jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RVc2VyQG5hdmVyLmNvbSIsImlhdCI6MTcyMzk2NTExNCwiZXhwIjoxNzIzOTY2OTE0fQ.OOZkhgHWLLCY82q-bEK5oEsvNTNrt9lubkBKamN8aRs'
+    let jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RVc2VyQG5hdmVyLmNvbSIsImlhdCI6MTcyMzk3NTM3NywiZXhwIjoxNzIzOTc3MTc3fQ.W16wJ6LKexEDnFiXWUib4fzz5JHb8inmaUDalbotjic'
 
     let send_data = {
         "header": header,
@@ -33,7 +33,7 @@ function MyBias() {
 
     let url = 'http://127.0.0.1:5000/home/';
     let bias_url = url + 'my_bias';
-    let solo_bias = 'https://kr.object.ncloudstorage.com/cheese-images/';
+    let solo_bias_url = 'https://kr.object.ncloudstorage.com/nova-images/';
 
     useEffect(() => {
         fetch(bias_url, {
@@ -53,15 +53,15 @@ function MyBias() {
 
     return (
         <div className='left-box'>
-            <img src={solo_bias + `${bias.bid}.jpg`}></img>
+            <img src={solo_bias_url + `${bias.bid}.PNG`}></img>
             <div className='support'>지지하기</div>
             <div className='box'>
                 <div className='my-bias-solo'>나의 최애</div>
                 <div className='bias-name'>{bias.bname}</div>
             </div>
-            <button className='more'>
+            <div className='more'>
                 <img src={more}></img>
-            </button>
+            </div>
         </div>
     )
 }
