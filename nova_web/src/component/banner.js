@@ -1,6 +1,3 @@
-import img1 from '../img/img1.jpg';
-import img2 from '../img/img2.jpg';
-import img3 from '../img/img3.jpeg';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
@@ -8,7 +5,7 @@ function Banner() {
   let [currentBanner, setBanner] = useState(0);
   let [images, setImage] = useState([]);
   // 
-  let url = 'http://127.0.0.1:80/home/banner';
+  let url = 'http://127.0.0.1:5000/home/banner';
   // let data = { token: '토큰 정보'}
 
   useEffect(() => {
@@ -60,8 +57,6 @@ function Banner() {
           <img className="image2" src={url}></img>
         </div> */}
       </div>
-      <div className="banner-indicator">2/5</div>
-
     </section>
   )
 }
