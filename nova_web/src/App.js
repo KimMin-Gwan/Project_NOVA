@@ -20,7 +20,7 @@ function App() {
 
   let [leagues, setLeague] = useState([]);
   let league_copy = [];
-  let url = 'http://127.0.0.1:5000/home/';
+  let url = 'http://175.106.99.34/home/';
 
   useEffect(() => {
     fetch(url + 'league_data?league_type=solo')
@@ -38,12 +38,12 @@ function App() {
   let profile_url = 'https://kr.object.ncloudstorage.com/nova-images/';
 
   let [isClicked, setClick] = useState(false);
-  let [isTouchedm, setTouched] = useState('전체');
+  let [isTouched, setTouched] = useState('전체');
 
   function handleTouch(value){
     setTouched(value)
   };
-
+  
   function handleToggle() {
     setClick(!isClicked);
   };
@@ -97,13 +97,15 @@ function App() {
           <section className="solo-bias-rank">
             <div className='title-area'>
               <div className="ranking">개인리그 랭킹</div>
-              <div className={`toggle-container ${isClicked ? "active" : ""}`}>
+              <div className={`toggle-container ${isClicked ? "" : "active"}`}>
                 <div onClick={()=>{
                   handleToggle()
-                  handleTouch('내 최애')}} className={`text ${isClicked ? "active" : ""}`}>내 최애</div>
+                  handleTouch('내 최애')
+                  }} className={`text ${isClicked ? "" : "active"}`}>내 최애</div>
                 <div onClick={()=>{
-                  handleToggle()
-                  handleTouch('전체')}} className={`text ${isClicked ? "" : "active"}`}>전체</div>
+                    handleToggle()
+                    handleTouch('전체')
+                }} className={`text ${isClicked ? "active" : ""}`}>전체</div>
                 <div className="toggle-slider"></div>
 
               </div>
@@ -111,7 +113,7 @@ function App() {
             <div className="stars">
               {
                 leagues.map(function (b, i) {
-                  if (handleTouch === '전체') {
+                  if (isTouched === '전체') {
                     return (
                       <div className='행성 ' key={i}>
                         <button onClick={() => {
@@ -134,7 +136,7 @@ function App() {
             <div className="league">
               {
                 rank.map(function (a, i) {
-                  if (isClicked === '전체') {
+                  if (isTouched === '전체') {
                     return (
                       <div className="rank-item-box" key={i}>
                         <div className="rank-profile">

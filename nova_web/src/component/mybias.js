@@ -14,7 +14,7 @@ function MyBias() {
         "endpoint": "/core_system/",
     }
 
-    let jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RVc2VyQG5hdmVyLmNvbSIsImlhdCI6MTcyMzk3NTM3NywiZXhwIjoxNzIzOTc3MTc3fQ.W16wJ6LKexEDnFiXWUib4fzz5JHb8inmaUDalbotjic'
+    let jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RVc2VyQG5hdmVyLmNvbSIsImlhdCI6MTcyMzk4MjY0MiwiZXhwIjoxNzIzOTg0NDQyfQ.SJOrVEW-uHTCgCcZn3bcLRW6uj7TwkCCIsvPjYPzSuQ'
 
     let send_data = {
         "header": header,
@@ -31,7 +31,7 @@ function MyBias() {
         }
     }
 
-    let url = 'http://127.0.0.1:5000/home/';
+    let url = 'http://175.106.99.34/home/';
     let bias_url = url + 'my_bias';
     let solo_bias_url = 'https://kr.object.ncloudstorage.com/nova-images/';
 

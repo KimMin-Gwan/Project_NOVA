@@ -5,7 +5,7 @@ function Banner() {
   let [currentBanner, setBanner] = useState(0);
   let [images, setImage] = useState([]);
   // 
-  let url = 'http://127.0.0.1:5000/home/banner';
+  let url = 'http://175.106.99.34/home/banner';
   // let data = { token: '토큰 정보'}
 
   useEffect(() => {
