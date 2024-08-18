@@ -14,7 +14,7 @@ function MyBias() {
         "endpoint": "/core_system/",
     }
 
-    let jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RVc2VyQG5hdmVyLmNvbSIsImlhdCI6MTcyMzk4MjY0MiwiZXhwIjoxNzIzOTg0NDQyfQ.SJOrVEW-uHTCgCcZn3bcLRW6uj7TwkCCIsvPjYPzSuQ'
+    let jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RVc2VyQG5hdmVyLmNvbSIsImlhdCI6MTcyMzk5NDMzMCwiZXhwIjoxNzIzOTk2MTMwfQ.PWzlMUMKjMrgxc8Yl59-eIQPLP0QasunTnNl487ZWMA'
 
     let send_data = {
         "header": header,

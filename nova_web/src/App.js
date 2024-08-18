@@ -11,7 +11,7 @@ import menu from './img/menu.png';
 import plus from './img/plus.png';
 import empty from './img/empty.png';
 import icon from './img/Icon.png';
-import SoloRank from './component/solo_rank';
+import Rank from './component/rank';
 import FloatingButton from './component/floatingbutton';
 
 // bid = ''가 이거면 오른쪽 레이아웃 바둑판
@@ -37,13 +37,16 @@ function App() {
   let rank_copy = [];
   let profile_url = 'https://kr.object.ncloudstorage.com/nova-images/';
 
+  //내 최애 / 전체 선택버튼용
   let [isClicked, setClick] = useState(false);
+  let [isClicked2, setClick2] = useState(false);
+
   let [isTouched, setTouched] = useState('전체');
 
-  function handleTouch(value){
+  function handleTouch(value) {
     setTouched(value)
   };
-  
+
   function handleToggle() {
     setClick(!isClicked);
   };
@@ -74,7 +77,7 @@ function App() {
             </header>
             <Banner></Banner>
 
-            <h2>인증하기</h2>
+            <h2 className='authen'>인증하기</h2>
 
 
             <section className='my-bias'>
@@ -84,7 +87,7 @@ function App() {
                 <img src={empty}></img>
                 {/* <div className='support'>지지하기</div> */}
                 <div className='box'>
-                  <div className='my-bias-group'>새로운 최애 그룹<br />지지하기</div>
+                  <div className='my-bias-group'>새로운 최애 그룹<br/>지지하기</div>
                   {/* <div className='bias-name'>{bias.bname}</div> */}
                 </div>
                 <div className='more'>
@@ -98,13 +101,74 @@ function App() {
             <div className='title-area'>
               <div className="ranking">개인리그 랭킹</div>
               <div className={`toggle-container ${isClicked ? "" : "active"}`}>
-                <div onClick={()=>{
+                <div onClick={() => {
                   handleToggle()
                   handleTouch('내 최애')
-                  }} className={`text ${isClicked ? "" : "active"}`}>내 최애</div>
-                <div onClick={()=>{
-                    handleToggle()
-                    handleTouch('전체')
+                }} className={`text ${isClicked ? "" : "active"}`}>내 최애</div>
+                <div onClick={() => {
+                  handleToggle()
+                  handleTouch('전체')
+                }} className={`text ${isClicked ? "active" : ""}`}>전체</div>
+                <div className="toggle-slider"></div>
+
+              </div>
+            </div>
+            <div className="stars">
+              {
+                leagues.map(function (b, i) {
+                  if (isTouched === '전체') {
+                    return (
+                      <div className='행성 ' key={i}>
+                        <button onClick={() => {
+                          fetch(url + `show_league?league_name=${[leagues[i]]}`)
+                            .then(response => response.json())
+                            .then(data => {
+                              rank_copy = [...data.body.rank]
+                              setRank(rank_copy);
+                              setClickedIndex(i);
+                            })
+                            
+                        }} className={clickedIndex === i ? 'click-now' : 'non-click'} click>{leagues[i]}</button>
+                      </div>
+                    );
+                  }
+                })
+              }
+            </div>
+
+            <div className="league">
+              <Rank rank={rank} clicked={isTouched}></Rank>
+            </div>
+            {/* {
+                rank.map(function (a, i) {
+                  if (isTouched === '전체') {
+                    return (
+                      <div className="rank-item-box" key={i}>
+                        <div className="rank-profile">
+                          <img src={profile_url + `${rank[i].bid}.PNG`}></img>
+                        </div>
+                        <div className="name">{rank[i].bname}</div>
+                        <div className="point">{rank[i].point} pt  
+                          <img src={icon}></img>
+                        </div>
+                      </div>
+                    )
+                  }
+                })
+              } */}
+          </section>
+
+          <section className="solo-bias-rank">
+            <div className='title-area'>
+              <div className="ranking">단체리그 랭킹</div>
+              <div className={`toggle-container ${isClicked ? "" : "active"}`}>
+                <div onClick={() => {
+                  handleToggle()
+                  handleTouch('내 최애')
+                }} className={`text ${isClicked ? "" : "active"}`}>내 최애</div>
+                <div onClick={() => {
+                  handleToggle()
+                  handleTouch('전체')
                 }} className={`text ${isClicked ? "active" : ""}`}>전체</div>
                 <div className="toggle-slider"></div>
 
@@ -132,25 +196,8 @@ function App() {
               }
             </div>
 
-            {/* <SoloRank rank={rank}></SoloRank> */}
             <div className="league">
-              {
-                rank.map(function (a, i) {
-                  if (isTouched === '전체') {
-                    return (
-                      <div className="rank-item-box" key={i}>
-                        <div className="rank-profile">
-                          <img src={profile_url + `${rank[i].bid}.PNG`}></img>
-                        </div>
-                        <div className="name">{rank[i].bname}</div>
-                        <div className="point">{rank[i].point} pt  
-                          <img src={icon}></img>
-                        </div>
-                      </div>
-                    )
-                  }
-                })
-              }
+              <Rank rank={rank} clicked={isTouched}></Rank>
             </div>
           </section>
 

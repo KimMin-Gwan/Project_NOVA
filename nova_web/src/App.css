@@ -251,7 +251,10 @@ body {
   border-radius: 30px;
   right: 20px;
   width: 100px;
+}
 
+.authen {
+  margin-left: 20px;
 }
 
 .box {
