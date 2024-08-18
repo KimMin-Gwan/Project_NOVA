@@ -38,6 +38,11 @@ function App() {
   let profile_url = 'https://kr.object.ncloudstorage.com/nova-images/';
 
   let [isClicked, setClick] = useState(false);
+  let [isTouchedm, setTouched] = useState('전체');
+
+  function handleTouch(value){
+    setTouched(value)
+  };
 
   function handleToggle() {
     setClick(!isClicked);
@@ -93,8 +98,12 @@ function App() {
             <div className='title-area'>
               <div className="ranking">개인리그 랭킹</div>
               <div className={`toggle-container ${isClicked ? "active" : ""}`}>
-                <div onClick={handleToggle} className={`text ${isClicked ? "active" : ""}`}>내 최애</div>
-                <div onClick={handleToggle} className={`text ${isClicked ? "" : "active"}`}>전체</div>
+                <div onClick={()=>{
+                  handleToggle()
+                  handleTouch('내 최애')}} className={`text ${isClicked ? "active" : ""}`}>내 최애</div>
+                <div onClick={()=>{
+                  handleToggle()
+                  handleTouch('전체')}} className={`text ${isClicked ? "" : "active"}`}>전체</div>
                 <div className="toggle-slider"></div>
 
               </div>
@@ -102,7 +111,7 @@ function App() {
             <div className="stars">
               {
                 leagues.map(function (b, i) {
-                  if (isClicked === '전체') {
+                  if (handleTouch === '전체') {
                     return (
                       <div className='행성 ' key={i}>
                         <button onClick={() => {
