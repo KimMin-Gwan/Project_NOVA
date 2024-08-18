@@ -6,7 +6,10 @@ class JWTDecoder:
         self.argorithms = ["HS256"]
 
     def decode(self, token):
-        decoded_payload = jwt.decode(token, self.secret_key, algorithms=self.argorithms)
+        decoded_payload = jwt.decode(token, self.secret_key, 
+                                     algorithms=self.argorithms,
+                                     options={"verify_exp":False}
+                                     )
         payload = JWTPayload(email=decoded_payload['email'])
 
         return payload
