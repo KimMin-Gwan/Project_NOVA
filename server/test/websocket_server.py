@@ -32,7 +32,7 @@ class TestServer:
                 await self.manager.broadcast("client disconnected")
     
     def run_server(self):
-        uvicorn.run(app=self.__app, host="127.0.0.1", port=6000)
+        uvicorn.run(app=self.__app, host="127.0.0.1", port=4000)
 
 class ConnectionManager:
     def __init__(self):

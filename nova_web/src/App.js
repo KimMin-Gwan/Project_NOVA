@@ -10,6 +10,7 @@ import menu from './img/menu.png';
 import Rank from './component/ranks';
 import FloatingButton from './component/floatingbutton';
 import Meta from './Container/metaContainer';
+import Loundspeaker from './component/loundspeaker';
 
 function App() {
 
@@ -96,7 +97,7 @@ function App() {
                   <img src={menu}></img>
                 </button>
                 {/* <Link to='/' className='button'>홈</Link> */}
-                {/* <Link to='/mypage' className='button'>마이페이지</Link> */}
+                <Link to='/mypage' className='button'>마이페이지</Link>
                 {/* <Link to='/mybias' className='button'>최애페이지</Link> */}
               </div>
             </header>
@@ -162,6 +163,7 @@ function App() {
             </div>
 
           </footer>
+          
         </div >
 
 

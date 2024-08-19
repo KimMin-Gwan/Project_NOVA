@@ -1,0 +1,73 @@
+.chat-messages {
+    height: 600px;
+    width: 400px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* 위아래 여백을 두고 내용을 정렬 */
+  }
+  
+  .chat-messages .message-container {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    height: 500px;
+  }
+  
+  /* 메시지 말풍선 스타일 */
+  .chat-messages ul {
+    list-style: none;
+    padding: 0;
+    display: flex; /* 부모 엘리먼트를 Flex Container로 설정 */
+    flex-direction: column; /* 엘리먼트를 수직으로 정렬 */
+  }
+  
+  /* 각 메시지 스타일 */
+  .chat-messages .message {
+    margin: 10px;
+    max-width: 70%;
+    padding: 10px;
+    border-radius: 10px;
+    word-wrap: break-word;
+    clear: both;
+    position: relative;
+  }
+  
+  /* 서버에서 받은 메시지 스타일 (system-message) */
+  .chat-messages .message.server-message {
+    background-color: #007bff;
+    color: #fff;
+    text-align: center;
+    align-self: flex-start; /* 좌측 정렬 */
+  }
+  
+  /* 사용자 메시지 스타일 (user-message) */
+  .chat-messages .message.user-message {
+    background-color: #4caf50;
+    color: #fff;
+    align-self: flex-end; /* 우측 정렬 */
+  }
+  
+  .chat-messages .input-container {
+    display: flex;
+    align-items: center; /* 수직 중앙 정렬 */
+  }
+  
+  .chat-messages input[type="text"] {
+    width: 70%;
+    padding: 5px;
+    border: none;
+    border-bottom: 2px solid #007bff;
+    border-radius: 0;
+    margin: 0 10px 0 0;
+    flex: 1; /* 남은 공간 모두 사용 */
+  }
+  
+  .chat-messages button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+  }

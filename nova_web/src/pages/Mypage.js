@@ -1,4 +1,5 @@
 import { Routes, Route, Link } from 'react-router-dom'
+import Loundspeaker from '../component/loundspeaker';
 
 function MyPage() {
 
@@ -14,8 +15,7 @@ function MyPage() {
 
                 <div className="toggle-slider"></div>
             </div> */}
-
-
+            <Loundspeaker></Loundspeaker>
 
 
             <div>마이페이지</div>
