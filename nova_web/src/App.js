@@ -3,7 +3,7 @@ import './App.css';
 import { useEffect, useState } from 'react';
 import Banner from './component/banner';
 import Modal from './component/modal';
-import MyBias from './component/mybias';
+import MyBias from './Container/myBiasContainer';
 import MyPage from './pages/Mypage';
 import { Routes, Route, Link } from 'react-router-dom';
 import zoom from './img/zoom.png';
@@ -11,16 +11,73 @@ import menu from './img/menu.png';
 import plus from './img/plus.png';
 import empty from './img/empty.png';
 import icon from './img/Icon.png';
+
 import Rank from './component/rank';
 import FloatingButton from './component/floatingbutton';
+import EmptyBias from './component/subscribeBias/myGroupBias';
+import SupportBias from './component/subscribeBias/mySoloBias';
 
 // bid = ''가 이거면 오른쪽 레이아웃 바둑판
 
 function App() {
 
+  let url = 'http://175.106.99.34/home/';
+
+  let bias_url = url + 'my_bias';
+  let my_bias_url = 'https://kr.object.ncloudstorage.com/nova-images/';
+
+  let [bias, setBias] = useState([]);
+  let [group_bias, setGroupBias] = useState([]);
+
+  let bias_copy = [];
+  let group_bias_copy = [];
+
+  let header = {
+    "request-type": "default",
+    "client-version": 'v1.0.1',
+    "client-ip": '127.0.0.1',
+    "uid": '1234-abcd-5678',
+    "endpoint": "/core_system/",
+  }
+
+  let jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RVc2VyQG5hdmVyLmNvbSIsImlhdCI6MTcyMzk5NDMzMCwiZXhwIjoxNzIzOTk2MTMwfQ.PWzlMUMKjMrgxc8Yl59-eIQPLP0QasunTnNl487ZWMA'
+
+  let send_data = {
+    "header": header,
+    "body": {
+      'token': jwt
+    }
+  }
+
+  let select_bias_send_data = {
+    "header": header,
+    "body": {
+      'token': jwt,
+      'bid': 1001,
+    }
+  }
+
+  useEffect(() => {
+    fetch(bias_url, {
+      method: 'POST',
+      headers: {
+        "Content-Type": 'application/json',
+      },
+      body: JSON.stringify(send_data),
+    })
+      .then(response => response.json())
+      .then(data => {
+        bias_copy = data.body.solo_bias;
+        group_bias_copy = data.body.group_bias;
+        // console.log(group_bias_copy);
+        setBias(bias_copy);
+        setGroupBias(group_bias_copy);
+      })
+  }, [bias_url])
+
   let [leagues, setLeague] = useState([]);
   let league_copy = [];
-  let url = 'http://175.106.99.34/home/';
+
 
   useEffect(() => {
     fetch(url + 'league_data?league_type=solo')
@@ -53,6 +110,11 @@ function App() {
 
   let [clickedIndex, setClickedIndex] = useState(0);
 
+
+
+
+
+
   return (
     <Routes>
       <Route path='/mypage' element={<MyPage />}></Route>
@@ -82,18 +144,9 @@ function App() {
 
             <section className='my-bias'>
               <MyBias></MyBias>
-
-              <div className='left-box'>
-                <img src={empty}></img>
-                {/* <div className='support'>지지하기</div> */}
-                <div className='box'>
-                  <div className='my-bias-group'>새로운 최애 그룹<br/>지지하기</div>
-                  {/* <div className='bias-name'>{bias.bname}</div> */}
-                </div>
-                <div className='more'>
-                  <img src={plus}></img>
-                </div>
-              </div>
+              {/* <SupportBias></SupportBias>
+              {/* <MyBias></MyBias> */}
+              {/* <EmptyBias></EmptyBias> */}
             </section>
           </div>
 
@@ -127,7 +180,7 @@ function App() {
                               setRank(rank_copy);
                               setClickedIndex(i);
                             })
-                            
+
                         }} className={clickedIndex === i ? 'click-now' : 'non-click'} click>{leagues[i]}</button>
                       </div>
                     );
