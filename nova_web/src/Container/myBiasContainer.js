@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import MySoloBias from "../component/subscribeBias/mySoloBias";
 import MyGroupBias from "../component/subscribeBias/myGroupBias";
 
-function MyBias() {
+function MyBias({url}) {
 
     let [solo_bias, setSoloBias] = useState([]);
     let [group_bias, setGroupBias] = useState([]);
@@ -10,6 +10,8 @@ function MyBias() {
     let solo_bias_copy = [];
     let group_bias_copy = [];
 
+    let [supportBias, setSupportBias] = useState();
+    let supportBiasCopy = [];
 
     let header = {
         "request-type": "default",
@@ -27,7 +29,7 @@ function MyBias() {
             'token': jwt
         }
     }
-
+    
     let select_bias_send_data = {
         "header": header,
         "body": {
@@ -36,7 +38,23 @@ function MyBias() {
         }
     }
 
-    let url = 'http://175.106.99.34/home/';
+    useEffect(()=>{
+        fetch(url+'try_select_my_bias',
+            {
+                method: 'POST',
+                headers: {
+                    "Content-Type": 'application/json',
+                },
+                body: JSON.stringify(select_bias_send_data),
+            }
+        )
+        .then(response=>response.json())
+        .then(data=>{
+            supportBiasCopy = data.body;
+            console.log(supportBiasCopy);
+        })
+    },[])
+
     let my_bias_url = 'https://kr.object.ncloudstorage.com/nova-images/';
 
     useEffect(() => {
@@ -59,10 +77,10 @@ function MyBias() {
     }, [])
 
     return (
-        <div>
+        <>
             <MySoloBias solo_bias={solo_bias} bias_url={my_bias_url}></MySoloBias>
             <MyGroupBias group_bias={group_bias} bias_url={my_bias_url}></MyGroupBias>
-        </div>
+        </>
     )
 }
 
