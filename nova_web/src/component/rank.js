@@ -7,14 +7,11 @@ function Rank({ rank, clicked }) {
     let profile_url = 'https://kr.object.ncloudstorage.com/nova-images/';
     let [isClicked, setClick] = useState('전체');
 
-
-
-
     return (
         <div className="league">
             {
                 rank.map(function (a, i) {
-                    if (clicked === '전체') {
+                    //if (clicked === '전체') {
                         return (
                             <div className="rank-item-box" key={i}>
                                 <div className="rank-profile">
@@ -26,7 +23,7 @@ function Rank({ rank, clicked }) {
                                 </div>
                             </div>
                         )
-                    }
+                    //}
                 })
             }
         </div>
