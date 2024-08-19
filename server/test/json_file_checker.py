@@ -3,23 +3,14 @@ import json
 def main():
     data_list = []
     dict_data = {
-        "1001" : 0,
-        "1002" : 0,
-        "1003" : 0,
-        "1004" : 0,
-        "1005" : 0,
-        "1006" : 0,
-        "1007" : 0,
-        "1008" : 0,
-        "1009" : 0,
-        "1010" : 0,
-        "1011" : 0,
-        "1012" : 0,
-        "1013" : 0,
-        "1014" : 0,
-        "1015" : 0,
-        "1016" : 0,
-        "1017" : 0,
+        "9999" : 0,
+        "9998" : 0,
+        "9997" : 0,
+        "9996" : 0,
+        "9995" : 0,
+        "9994" : 0,
+        "9993" : 0,
+        "9992" : 0,
     }
 
     new_data = []
@@ -27,13 +18,19 @@ def main():
     with open("./../src/model/local_database/user.json", 'r',  encoding='utf-8' )as f:
         data_list.extend(json.load(f))
 
-        for data in data_list:
-            print(data)
-            data["password"] = "sample122"
-            new_data.append(data)
+        for bid in dict_data.keys():
+            for data in data_list:
+                if data['group_bid'] == bid:
+                    dict_data[bid] += 1
 
-    with open("./../src/model/local_database/user.json", 'w',  encoding='utf-8' )as f:
-        json.dump(new_data, f, ensure_ascii=False, indent=4)
+        print(dict_data)
+
+        #for data in data_list:
+            #data["password"] = "sample122"
+            #new_data.append(data)
+
+    #with open("./../src/model/local_database/user.json", 'w',  encoding='utf-8' )as f:
+        #json.dump(new_data, f, ensure_ascii=False, indent=4)
 
 
 main()
