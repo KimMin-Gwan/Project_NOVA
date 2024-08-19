@@ -49,6 +49,12 @@ class NOVAVerification:
         exp_checker = Thread(target=self._check_expiration)
         exp_checker.start()
     
+    def get_temp_user(self):
+        for data in self.__temp_user:
+            data()
+        return
+
+
     # 이메일 인증하는 사람 추가 tempUser 반환
     def make_new_user(self, email):
         verification_code = self.__make_verification_code()
@@ -65,7 +71,7 @@ class NOVAVerification:
 
     # 만료 시간 생성(현재시간 + 3분)
     def __make_expiration_time(self):
-        return datetime.now() + timedelta(minutes=3)
+        return datetime.now() + timedelta(minutes=10)
 
     # 인증 코드와 해당 유저가 일치하는지 검사
     def verificate_user(self, email, verification_code):
@@ -83,7 +89,7 @@ class NOVAVerification:
             return False
 
         # 인증 번호가 맞으면 임시 유저에서 지우고 True 반환
-        if target_user.verification_code == verification_code:
+        if int(target_user.verification_code) == verification_code:
             self.__temp_user.remove(target_user)
             return True
         # 인증 번호가 안맞으면 False 반환

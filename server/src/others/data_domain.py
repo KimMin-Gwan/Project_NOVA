@@ -1,3 +1,4 @@
+from typing import Any
 from others.error_lib import DictMakingError
 
 # 추상 클래스
@@ -16,6 +17,14 @@ class TempUser:
         self.verification_code = verification_code
         self.exp = exp
 
+    def __call__(self):
+        print(self.email)
+        print(self.verification_code)
+        print(self.exp)
+        return
+
+
+
 class User(SampleDomain):
     def __init__(self, uid = "", uname = "", age=14, 
                  email = "", gender = "d" , solo_point = 0, group_point = 0,
@@ -25,7 +34,7 @@ class User(SampleDomain):
                  password = ""
                  ):
         if items == None:
-            items = Item(init_data = {"chatting":0, "saver":0}),
+            items = Item()
 
         self.uid = uid
         self.uname = uname
@@ -43,7 +52,6 @@ class User(SampleDomain):
         self.daily = daily
         self.special = special
         self.sign = sign
-        return
 
     # database로 부터 받아온 데이터를 사용해 내용 구성
     def make_with_dict(self, dict_data):

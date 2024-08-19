@@ -4,8 +4,7 @@ from others.data_domain import User
 from others import CoreControllerLogicError
 import jwt
 import datetime
-import string
-import random
+import uuid
 
 class LoginModel(BaseModel):
     def __init__(self, database:Local_Database) -> None:
@@ -93,19 +92,18 @@ class SendEmailModel(BaseModel):
         
     def save_user(self,request):
         try:
-            letters_set = string.ascii_lowercase + string.digits
-            letters =[]
-            for _ in range(3):
-                random_list = random.sample(letters_set,4)
-                result = ''.join(random_list)
-                letters.append(result)
+            uid = self.__make_uid()
+            user = User(uid=uid,
+                        age=request.age,
+                        email=request.email,
+                        gender=request.gender,
+                        password=request.password)
 
-            uid = f'{letters[0]}-{letters[1]}-{letters[2]}'
-            user = User(uid=id,age=request.age,email=request.email,gender=request.gender,password=request.password)
+            self._database.add_new_data(target_id="uid",
+                                        new_data=user.get_dict_form_data())
 
-            self._database.add_new_data(target_id='uid',new_data=user.get_dict_form_data())
         except Exception as e:
-            raise CoreControllerLogicError(error_type="set_response | " + str(e))
+            raise CoreControllerLogicError(error_type="save_response | " + str(e))
         
     def set_response(self,):
         try:
@@ -118,7 +116,7 @@ class SendEmailModel(BaseModel):
             body = {
                 'resust' : self.__result,
                 'token' : self.__token,
-                'deyail' : self.__detail
+                'detail' : self.__detail
             }
 
             response = self._get_response_data(head_parser=head_parser, body=body)
@@ -129,3 +127,18 @@ class SendEmailModel(BaseModel):
     
     def get_result(self):
         return self.__result
+    
+    def __generate_uid(self):
+        uid = str(uuid.uuid4())
+        # uuid4()는 형식이 "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"인 UUID를 생성합니다.
+        # 이를 "1234-abcd-5678" 형태로 변형하려면 일부 문자만 선택하여 조합합니다.
+        uid_parts = uid.split('-')
+        return f"{uid_parts[0][:4]}-{uid_parts[1][:4]}-{uid_parts[2][:4]}"
+
+    def __make_uid(self):
+        uid = ""
+        while True:
+            uid = self.__generate_uid()
+            if not self._database.get_data_with_id(target="uid", id=uid):
+                break
+        return uid
