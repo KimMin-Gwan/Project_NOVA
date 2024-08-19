@@ -21,17 +21,18 @@ class TestServer:
             try:
                 while True:
                     data = await websocket.receive_text()
-                    converted_data = json.loads(data)
-                    decoded_payload = jwt.decode(converted_data['token'], secret_key, algorithms=["HS256"]) 
-                    print(decoded_payload)
-                    await self.manager.broadcast(f"client text :{converted_data['message']}")
+                    #converted_data = json.loads(data)
+                    #decoded_payload = jwt.decode(converted_data['token'], secret_key, algorithms=["HS256"]) 
+                    print(data)
+                    #await self.manager.broadcast(f"client text :{data['message']}")
+                    await self.manager.broadcast(f"지지자 {data}")
                 
             except WebSocketDisconnect:
                 self.manager.disconnect(websocket)
                 await self.manager.broadcast("client disconnected")
     
     def run_server(self):
-        uvicorn.run(app=self.__app, host="127.0.0.1", port=5000)
+        uvicorn.run(app=self.__app, host="127.0.0.1", port=6000)
 
 class ConnectionManager:
     def __init__(self):
