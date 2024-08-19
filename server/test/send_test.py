@@ -19,6 +19,10 @@ url = "http://127.0.0.1:6000/home/my_bias"  # 리그 랭킹 순위
 #url = "http://127.0.0.1:6000/home/my_bias_league"  # 최애 리그 랭킹 순위
 #url = "http://127.0.0.1:6000/home/try_select_my_bias"  # 최애 정하기
 
+#url = "http://127.0.0.1:6000/user/try_login"  # 로그인 시도
+#url = "http://127.0.0.1:6000/user/try_send_email"  # 이메일 보내기
+#url = "http://127.0.0.1:6000/user/try_sign_in"  # 로그인 시도
+
 ## GET 요청 보내기
 #response = requests.get(url)
 
@@ -35,7 +39,7 @@ url = "http://127.0.0.1:6000/home/my_bias"  # 리그 랭킹 순위
     #print("Failed to retrieve data")
 
 # make_jwt.py 실행시켜서 token 발급 받을 것
-token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RVc2VyQG5hdmVyLmNvbSIsImlhdCI6MTcyMzc1NjM0MiwiZXhwIjoxNzIzNzU4MTQyfQ.8oaBhl2__EWCtZ57uF8W6Jnvv70u5H_JxECsf_pmM_4"
+#token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RVc2VyQG5hdmVyLmNvbSIsImlhdCI6MTcyMzc1NjM0MiwiZXhwIjoxNzIzNzU4MTQyfQ.8oaBhl2__EWCtZ57uF8W6Jnvv70u5H_JxECsf_pmM_4"
 
 
 header = {
@@ -47,12 +51,12 @@ header = {
 }
 
 # home/my_bias
-send_data = {
-    "header" : header,
-    "body" : {
-        'token' : token
-    }
-}
+#send_data = {
+    #"header" : header,
+    #"body" : {
+        #'token' : token
+    #}
+#}
 
 ## home/my_bias_league
 #send_data = {
@@ -70,7 +74,38 @@ send_data = {
         #'token' : token,
         #'bid' : "1001"
     #}
+#
+
+## user/try_login 
+send_data = {
+    "header" : header,
+    "body" : {
+        'email' : 'userUser@naver.com',
+        'password' : "sample122"
+    }
+}
+
+
+## user/try_send_email
+#send_data = {
+    #"header" : header,
+    #"body" : {
+        #'email' : 'wjstjdgns418@naver.com',
+    #}
 #}
+
+## user/try_Sign_in
+#send_data = {
+    #"header" : header,
+    #"body" : {
+        #'email' : 'wjstjdgns418@naver.com',
+        #'verification_code' : 1234,
+        #'password' : 'sample1234',
+        #'age' : "24",
+        #'gender' : 'male',
+    #}
+#}
+
 
 
 #post 전송용

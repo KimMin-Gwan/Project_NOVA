@@ -29,7 +29,7 @@ def main():
 
         for data in data_list:
             print(data)
-            data["sign"] = "sample"
+            data["password"] = "sample122"
             new_data.append(data)
 
     with open("./../src/model/local_database/user.json", 'w',  encoding='utf-8' )as f:

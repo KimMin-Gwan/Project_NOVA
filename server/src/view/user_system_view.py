@@ -49,7 +49,7 @@ class User_Service_View(Master_View):
         # 회원가입 시도
         # response 포함 정보 -> 'result' : True or False
         #                    -> 'detail' : "실패 사유"
-        @self.__app.get('/user/try_Sign_in')
+        @self.__app.get('/user/try_sign_in')
         def try_send_email(raw_request:dict):
             request = SignInRequest(request=raw_request)
             user_controller=UserController()
@@ -77,7 +77,8 @@ class SignInRequest(RequestHeader):
         super().__init__(request)
         body = request['body']
         self.email = body['email']
-        self.email = body['password']
+        self.password= body['password']
+        self.verification_code = body['verification_code']
         self.age = body['age']
         self.gender = body['gender']
 
