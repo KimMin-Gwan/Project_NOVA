@@ -8,12 +8,22 @@ class SampleDomain:
     def make_with_dict(self, dict_data):
         pass
 
+class TempUser:
+    def __init__(self, email="", verification_code = "",
+                exp = "",
+                 ):
+        self.email = email
+        self.verification_code = verification_code
+        self.exp = exp
+
 class User(SampleDomain):
     def __init__(self, uid = "", uname = "", age=14, 
                  email = "", gender = "d" , solo_point = 0, group_point = 0,
                  combo = 0, credit = 0, solo_bid = "",
                  group_bid = "", items = None,
-                 daily = False, special = False, sign = ""):
+                 daily = False, special = False, sign = "",
+                 password = ""
+                 ):
         if items == None:
             items = Item(init_data = {"chatting":0, "saver":0}),
 
@@ -21,6 +31,7 @@ class User(SampleDomain):
         self.uname = uname
         self.age = age
         self.email = email
+        self.password = password
         self.gender = gender
         self.solo_point = solo_point
         self.group_point = group_point
@@ -41,6 +52,7 @@ class User(SampleDomain):
             self.uname = dict_data['uname']
             self.age= dict_data['age']
             self.email= dict_data['email']
+            self.password = dict_data['password']
             self.gender= dict_data['gender']
             self.solo_point = dict_data['solo_point']
             self.group_point = dict_data['group_point']
@@ -63,6 +75,7 @@ class User(SampleDomain):
             "uname" : self.uname,
             "age" : self.age,
             "email" : self.email,
+            "password" : self.password,
             "gender" : self.gender,
             "solo_point" : self.solo_point,
             "group_point" : self.group_point,
