@@ -5,7 +5,7 @@ import '../css/speaker.css';
 
 function Loundspeaker() {
     //function App( itit_txt ) {
-    const itit_txt = { text: "어떤 물건을 찾으러 오셨나요?(스마트폰/지갑/기타)(What do you want to find?)(smartphone/wallet/etc)", type: 'server-message' }
+    const itit_txt = { text: "어떤 물건을 찾으러 오셨나요?", type: 'server-message' }
     const [messages, setMessages] = useState([itit_txt]);
     const [newMessage, setNewMessage] = useState('');
     const [socket, setSocket] = useState(null);
@@ -62,10 +62,11 @@ function Loundspeaker() {
                         </ul>
                     </div>
                     <div className="input-container">
-                        <input type="text" placeholder="메시지 입력..." value={newMessage}
+                        <p>Text</p>
+                        <input type="text" placeholder="텍스트를 입력해주세요" value={newMessage}
                             onChange={(e) => setNewMessage(e.target.value)}
                         />
-                        <button onClick={handleSendMessage}>보내기</button>
+                        <button className='clicked-button send-button' onClick={handleSendMessage}>알리기</button>
                     </div>
                 </div>
             )}

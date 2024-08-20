@@ -1,15 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
+import Loundspeaker from "./loundspeaker";
 // import "./App.css";
 
-function FloatingButton() {
+function FloatingButton({showSpeaker, setShowSpeaker}) {
+
+  // let [showSpeaker, setShowSpeaker] = useState(false);
+
   const handleClick = () => {
-    alert("Floating button clicked!");
+    setShowSpeaker(!showSpeaker);
   };
 
   return (
-    <button className="floating-button" onClick={handleClick}>
-      +
-    </button>
+    <>
+      {
+        !showSpeaker &&
+        <button className="floating-button" onClick={handleClick}>
+          확성기
+        </button>
+      }
+      {
+        showSpeaker && (
+          <div>
+            <Loundspeaker></Loundspeaker>
+          </div>
+        )
+      }
+    </>
   );
 }
 

@@ -73,7 +73,7 @@ function App() {
     setGroupClick(!isGroupClicked);
   };
 
-
+  let [showBox, setShowBox] = useState(false);
 
 
 
@@ -84,7 +84,10 @@ function App() {
       <Route path='/mypage' element={<MyPage />}></Route>
       <Route path='/mybias' element={<MyBias />}></Route>
       <Route path='/' element={
-        <div className="container">
+        <div onClick={() => {
+          if (showBox)
+            setShowBox(false);
+        }} className="container">
 
           <div className="top-area">
             <header className='header'>
@@ -128,7 +131,7 @@ function App() {
               </div>
             </div>
             <Meta url={url} isClicked={isClicked} type={type[0]}></Meta>
-            
+
           </section>
 
           <section className="solo-bias-rank">
@@ -151,7 +154,7 @@ function App() {
           </section>
 
           <section className="advise"></section>
-          <FloatingButton></FloatingButton>
+          <FloatingButton showSpeaker={showBox} setShowSpeaker={setShowBox}></FloatingButton>
           <footer className="footer">
             <div>
               <p>사업명 및 다양한 정보를 etc...</p>
@@ -163,7 +166,7 @@ function App() {
             </div>
 
           </footer>
-          
+
         </div >
 
 
