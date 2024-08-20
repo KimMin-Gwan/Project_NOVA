@@ -23,7 +23,7 @@ class User_Service_View(Master_View):
         # 로그인 시도
         # response 포함 정보 -> 'result' : True or False
         #                    -> 'detail' : "실패 사유"
-        @self.__app.post('/user/try_login')
+        @self.__app.post('/user_home/try_login')
         def try_login(raw_request:dict):
             request = LoginRequest(request=raw_request)
             user_controller=UserController()
@@ -36,7 +36,7 @@ class User_Service_View(Master_View):
         # 이메일 전송
         # response 포함 정보 -> 'result' : True or False
         #                    -> 'detail' : "실패 사유"
-        @self.__app.post('/user/try_send_email')
+        @self.__app.post('/user_home/try_send_email')
         def try_send_email(raw_request:dict):
             request = EmailSendRequest(request=raw_request)
             user_controller=UserController()
@@ -49,7 +49,7 @@ class User_Service_View(Master_View):
         # 회원가입 시도
         # response 포함 정보 -> 'result' : True or False
         #                    -> 'detail' : "실패 사유"
-        @self.__app.post('/user/try_sign_in')
+        @self.__app.post('/user_home/try_sign_in')
         def try_send_email(raw_request:dict):
             request = SignInRequest(request=raw_request)
             user_controller=UserController()
