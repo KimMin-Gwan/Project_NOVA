@@ -26,10 +26,10 @@ class NOVA_Server:
         head_parser = Head_Parser()
         nova_verification = NOVAVerification()
 
-        # self.__core_system_view = Core_Service_View( app=self.__app,
-        #                                            endpoint='/core_system',
-        #                                            database=database,
-        #                                            head_parser=head_parser)
+        self.__core_system_view = Core_Service_View( app=self.__app,
+                                                   endpoint='/core_system',
+                                                   database=database,
+                                                   head_parser=head_parser)
         self.__user_system_view = User_Service_View( app=self.__app,
                                                      endpoint='/user_system',
                                                    database=database,
