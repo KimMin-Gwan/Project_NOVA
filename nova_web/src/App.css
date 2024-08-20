@@ -61,7 +61,7 @@
   background-color: #000;
 }
 body {
-  font-family: "Noto Sans KR", sans-serif;;
+  font-family: "Noto Sans KR", sans-serif;
   margin: 0;
   padding: 0;
 }
@@ -127,7 +127,6 @@ body {
   height: 150px;
   align-items: center;
   float: left;
-
 }
 
 .my-bias {
@@ -167,7 +166,7 @@ body {
   height: 40%;
   background-color: brown;
   float: left;
-  margin: 0 10px 0 10px
+  margin: 0 10px 0 10px;
 }
 
 .after-image-box {
@@ -321,7 +320,6 @@ body {
   border: none;
   padding: 10px;
   cursor: pointer;
-
 }
 
 .support {
@@ -329,7 +327,7 @@ body {
   height: 34px;
   backdrop-filter: blur(5px);
   background-color: rgba(255, 255, 255, 0.3);
-  color: white ;
+  color: white;
   font-weight: 500;
   font-size: 13px;
   border: solid #d9d9d9 1.8px;
@@ -340,7 +338,6 @@ body {
   position: absolute;
   top: 15px;
   left: 12px;
-
 }
 
 .more {
@@ -352,7 +349,6 @@ body {
   border-radius: 100%;
   /* align-content: center; */
   background-color: transparent;
-  
 }
 
 .more img {
@@ -385,7 +381,7 @@ body {
   height: 70px;
   position: relative;
   padding-left: 10px;
-  
+
   margin-bottom: 10px;
 }
 .buttons {
@@ -408,7 +404,7 @@ body {
   width: 40px;
   height: 40px;
   /* background-color: #000; */
-  background: black; 
+  background: black;
   border-radius: 50%;
   color: white;
   text-align: center;
@@ -417,7 +413,6 @@ body {
   border: solid 1.5px white;
   margin-left: 5px;
   box-shadow: 0 0 10px 1px white;
-  
 }
 
 .rank-profile img {
@@ -450,8 +445,6 @@ body {
   text-align: center;
   margin: 10px 0;
 }
-
-
 
 .footer {
   /* display: flex; */
@@ -562,7 +555,7 @@ body {
   background-color: white;
   color: #303030;
   border-radius: 100px;
-  transition: background-color 0.3s ease; 
+  transition: background-color 0.3s ease;
 }
 
 .select-not {
@@ -575,8 +568,6 @@ body {
   color: white;
   border-radius: 100px;
 }
-
-
 
 .text {
   color: #303030;
@@ -630,7 +621,7 @@ body {
   width: 130vw;
   /* overflow: hidden; */
   /* justify-content: space-between; */
-} 
+}
 
 .stars button {
   /* color: gray; */
@@ -679,7 +670,7 @@ body {
   justify-content: center;
   cursor: pointer;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  transform: translateX(-50%); 
+  transform: translateX(-50%);
   /* padding-bottom: 0; */
   margin-top: 10px;
   float: right;
