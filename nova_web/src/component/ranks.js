@@ -4,12 +4,13 @@ function Ranks({ rank, isClicked }) {
     let profile_url = 'https://kr.object.ncloudstorage.com/nova-images/';
 
     return (
-        <div className="league">
+        <div className="league" >
             {
                 rank.map(function (a, i) {
                     if (!isClicked) {
                         return (
                             <div className="rank-item-box" key={i}>
+                                <p className='rank-num'>{i+1}</p>
                                 <div className="rank-profile">
                                     <img src={profile_url + `${rank[i].bid}.PNG`}></img>
                                 </div>

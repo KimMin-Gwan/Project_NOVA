@@ -1,3 +1,15 @@
+.maincontainer {
+  display: flex;
+  margin: 0 auto;
+  /* max-width: 500px; */
+
+  margin: 0;
+  padding: 0;
+  background-color: bisque;
+  width: 1000px;
+  /* height: 100%; */
+}
+
 .chat-messages {
     height: 600px;
     width: 400px;

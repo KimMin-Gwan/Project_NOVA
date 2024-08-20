@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import "../css/loundspeaker.module.css"
+// import style from "../css/loundspeaker.module.css"
 import '../css/speaker.css';
 //import resetPageAndRunItemPage from 'ResetPageAndRunItemPage'
 
@@ -43,33 +43,35 @@ function Loundspeaker() {
     };
 
     return (
-        <div className="container-speaker">
-            {showTitleAndButton && (
-                <div className="chat-messages">
-                    <div className='title-box'>확성기</div>
-                    <span className='button-container'>
-                        <button className='clicked-button'>오리온자리</button>
-                        <button className='non-clicked-button'>사수자리</button>
-                    </span>
+        <div className='main-container'>
+            <div className="container-speaker" onClick={(e) => { e.stopPropagation() }}>
+                {showTitleAndButton && (
+                    <div className="chat-messages">
+                        <div className='title-box'>확성기</div>
+                        <span className='button-container'>
+                            <button className='clicked-button'>오리온자리</button>
+                            <button className='non-clicked-button'>사수자리</button>
+                        </span>
 
-                    <div className="message-container">
-                        <ul>
-                            {messages.map((message, index) => (
-                                <li key={index} className={'message server-message'}>
-                                    {message.text}
-                                </li>
-                            ))}
-                        </ul>
+                        <div className="message-container">
+                            <ul>
+                                {messages.map((message, index) => (
+                                    <li key={index} className={'message server-message'}>
+                                        {message.text}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                        <div className="input-container">
+                            <p>Text</p>
+                            <input type="text" placeholder="텍스트를 입력해주세요" value={newMessage}
+                                onChange={(e) => setNewMessage(e.target.value)}
+                            />
+                            <button className='clicked-button send-button' onClick={handleSendMessage}>알리기</button>
+                        </div>
                     </div>
-                    <div className="input-container">
-                        <p>Text</p>
-                        <input type="text" placeholder="텍스트를 입력해주세요" value={newMessage}
-                            onChange={(e) => setNewMessage(e.target.value)}
-                        />
-                        <button className='clicked-button send-button' onClick={handleSendMessage}>알리기</button>
-                    </div>
-                </div>
-            )}
+                )}
+            </div>
         </div>
     );
 

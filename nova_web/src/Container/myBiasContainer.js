@@ -21,19 +21,24 @@ function MyBias({url}) {
         "endpoint": "/core_system/",
     }
 
-    let jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RVc2VyQG5hdmVyLmNvbSIsImlhdCI6MTcyNDA0MDA1MCwiZXhwIjoxNzI0MDQxODUwfQ.WxZ9UAhZlD0hkNcyvc4rPN_IIraVr2oZSXvTuTteaQU'
+    let sample = localStorage.getItem('jwtToken');
+    
+    let jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJhbmRvbVVzZXIxQG5hdmVyLmNvbSIsImlhdCI6MTcyNDE3MzUzMiwiZXhwIjoxNzI0MTc1MzMyfQ.FCJV4cO8V62-mBPIoeCtxT-dH_9qkbL8yHdKU9F33lY'
+
+
+
 
     let send_data = {
         "header": header,
         "body": {
-            'token': jwt
+            'token': sample
         }
     }
     
     let select_bias_send_data = {
         "header": header,
         "body": {
-            'token': jwt,
+            'token': sample,
             'bid': 1001,
         }
     }

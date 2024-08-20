@@ -1,6 +1,7 @@
 import plus from '../../img/plus.png';
 import empty from '../../img/empty.png';
 import more from '../../img/more.png';
+import shadow from '../../img/shadow.png';
 
 function MySoloBias({ solo_bias, bias_url }) {
 
@@ -19,7 +20,10 @@ function MySoloBias({ solo_bias, bias_url }) {
             )}
             {solo_bias.bid && (
                 <>
-                    <img src={bias_url + `${solo_bias.bid}.PNG`}></img>
+                    
+                    <img className='img1' src={bias_url + `${solo_bias.bid}.PNG`}></img>
+                    <img className='img2' src={shadow}></img>
+                    
                     <div className='support'>지지하기</div>
                     <div className='box'>
                         <div className='my-bias-solo'>나의 최애</div>

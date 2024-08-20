@@ -55,16 +55,11 @@
     transform: rotate(360deg);
   }
 } */
-.mypage {
-  width: 100px;
-  height: 100px;
-  background-color: #000;
-}
 body {
-  font-family: "Noto Sans KR", sans-serif;;
+  font-family: "Noto Sans KR", sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #5a5a5a;
+  background-color: #EEE9FC;
 }
 
 .container {
@@ -72,8 +67,13 @@ body {
   margin: 0 auto;
   background-color: #1e1e1e;
   position: relative;
+  z-index: 99;
   /* min-height: 100vh; */
   /* padding: 20px; */
+}
+
+.black-box {
+  background-color: rgba(0, 0, 0, 0.3);
 }
 
 .top-area {
@@ -145,17 +145,31 @@ body {
   width: 220px;
   height: 264px;
   /* background-color: brown; */
+  background-image: url('./img/shadow.png');
   float: left;
   margin: 0 10px 20px 10px;
   position: relative;
   border-radius: 10%;
+  z-index: 4;
+  /* display: flex; */
 }
 .left-box img {
+  /* position: absolute; */
   object-fit: cover;
   width: 100%;
   height: 100%;
   border-radius: 10%;
+  z-index: -2;
 }
+
+.img1 {
+  /* z-index: 1; */
+}
+
+.img2 {
+  /* z-index: 2; */
+}
+
 .modal {
   width: 100%;
   height: 500px;
@@ -235,6 +249,13 @@ body {
   padding-left: 20px;
   font-size: 16px;
   color: white;
+}
+
+.rank-num {
+  color: white;
+  font-weight: 400;
+  font-size: 20px;
+  margin-right: 15px;
 }
 
 .profile-pic {
@@ -369,16 +390,19 @@ body {
 }
 
 .league {
-  /* background-color: #fff; */
+  /* background-color: #fff000; */
+  border: solid 1px gray;
+  border-radius: 25px;
   margin-left: 20px;
   margin-right: 20px;
   margin-top: 20px;
+  height: 500px;
   /* padding: 10px; */
 }
 
 .rank-item-box {
   /* background-color: gray; */
-  border-bottom: solid 1px #5a5a5a;
+  /* border-bottom: solid 1px #5a5a5a; */
   display: flex;
   align-items: center;
   /* justify-content: space-between; */
@@ -387,7 +411,6 @@ body {
   height: 70px;
   position: relative;
   padding-left: 10px;
-  
   margin-bottom: 10px;
 }
 .buttons {
@@ -681,8 +704,10 @@ body {
   justify-content: center;
   cursor: pointer;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  transform: translateX(-50%); 
+  /* transform: translateX(-50%);  */
   /* padding-bottom: 0; */
   margin-top: 10px;
+  margin-right: 20px;
   float: right;
 }
+

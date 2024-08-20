@@ -11,6 +11,7 @@ import Rank from './component/ranks';
 import FloatingButton from './component/floatingbutton';
 import Meta from './Container/metaContainer';
 import Loundspeaker from './component/loundspeaker';
+import NOVALogin from './pages/NovaLogin/NovaLogin';
 
 function App() {
 
@@ -74,20 +75,32 @@ function App() {
   };
 
   let [showBox, setShowBox] = useState(false);
+  let [blackBox, setBlackBox] = useState();
 
 
+  function backgroundBlack(){
+    if(showBox)
+    {
+      setBlackBox('black-box');
+    }
+    else{
+      setBlackBox('');
+    }
+  };
 
 
 
   return (
     <Routes>
       <Route path='/mypage' element={<MyPage />}></Route>
-      <Route path='/mybias' element={<MyBias />}></Route>
+      <Route path='/novalogin' element={<NOVALogin />}></Route>
       <Route path='/' element={
         <div onClick={() => {
           if (showBox)
-            setShowBox(false);
-        }} className="container">
+            {
+              setShowBox(false);
+            };
+        }} className={`container ${blackBox}`}>
 
           <div className="top-area">
             <header className='header'>
@@ -166,7 +179,6 @@ function App() {
             </div>
 
           </footer>
-
         </div >
 
 
