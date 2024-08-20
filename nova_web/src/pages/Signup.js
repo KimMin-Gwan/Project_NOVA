@@ -38,8 +38,31 @@ export default function Signup() {
   };
 
   const onClickUpdate = () => {
+    if (validateEmail()) {
+      // 이메일 인증을 위한 요청
+      const send_data = {
+        email: email,
+      };
+
+      axios
+        .post("http://nova-platform.kr/user/try_send_email", send_data)
+        .then((response) => {
+          if (response.data.success) {
+            console.log("이메일 인증이 발송되었습니다.");
+          } else {
+            console.log("인증 실패:", response.data.message);
+          }
+        })
+        .catch((error) => {
+          console.error("에러 발생:", error);
+          // 에러 처리
+        });
+    }
+  };
+
+  const onSignup = () => {
     if (validateEmail() && password === passwordConfirm) {
-      // 서버로 데이터 전송
+      // 회원가입을 위한 요청
       const header = {
         "request-type": "default",
         "client-version": "v1.0.1",
@@ -60,20 +83,18 @@ export default function Signup() {
       };
 
       axios
-        .post("https://your-server-endpoint.com/api/auth/signup", send_data)
+        .post("http://nova-platform.kr/user/try_sign_in", send_data)
         .then((response) => {
           if (response.data.success) {
-            // 서버가 성공을 반환했을 때
             const token = response.data.token;
 
             // 토큰을 쿠키에 저장합니다.
             Cookies.set("authToken", token, { expires: 7 }); // 7일 동안 유효한 쿠키로 설정
 
-            console.log("로그인에 성공했습니다.");
-            // 필요시 다른 페이지로 이동
+            console.log("회원가입에 성공했습니다.");
             nav("/dashboard");
           } else {
-            console.log("인증 실패:", response.data.message);
+            console.log("회원가입 실패:", response.data.message);
           }
         })
         .catch((error) => {
@@ -223,7 +244,7 @@ export default function Signup() {
         </div>
 
         <div className="StartBtn">
-          <Button text={"노바 시작하기"} onClick={onClickUpdate} />
+          <Button text={"노바 시작하기"} onClick={onSignup} />
         </div>
       </div>
     </div>
