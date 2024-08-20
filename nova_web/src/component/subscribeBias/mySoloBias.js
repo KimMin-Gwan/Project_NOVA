@@ -20,10 +20,9 @@ function MySoloBias({ solo_bias, bias_url }) {
             )}
             {solo_bias.bid && (
                 <>
-                    
-                    <img className='img1' src={bias_url + `${solo_bias.bid}.PNG`}></img>
-                    <img className='img2' src={shadow}></img>
-                    
+                    <div className='image-container'>
+                        <img src={bias_url + `${solo_bias.bid}.PNG`} alt="bias" className='img2' />
+                    </div>
                     <div className='support'>지지하기</div>
                     <div className='box'>
                         <div className='my-bias-solo'>나의 최애</div>

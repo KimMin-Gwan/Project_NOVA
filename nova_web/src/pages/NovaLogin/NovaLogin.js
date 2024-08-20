@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "./NovaLogin.css";
+import "./NovaLogin.module.css";
 import back from "../../img/back.png";
 import { useNavigate } from 'react-router-dom';
 

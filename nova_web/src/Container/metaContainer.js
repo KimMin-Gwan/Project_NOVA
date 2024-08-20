@@ -14,6 +14,7 @@ function Meta({ url, isClicked, type }) {
         "endpoint": "/core_system/",
     }
     let jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RVc2VyQG5hdmVyLmNvbSIsImlhdCI6MTcyNDA0MDA1MCwiZXhwIjoxNzI0MDQxODUwfQ.WxZ9UAhZlD0hkNcyvc4rPN_IIraVr2oZSXvTuTteaQU'
+    // let sample = localStorage.getItem('jwtToken');
 
     let my_bias_league_copy = [];
     let [myBiasLeague, setMyBiasLeague] = useState();
