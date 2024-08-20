@@ -1,6 +1,6 @@
 import "./Login.css";
 import back from "../img/back.png";
-import naverBtn from "../img/btnG_완성형.png";
+import naverBtn from "./../img/naver.png";
 
 function generateStateString() {
   return [...Array(30)].map(() => Math.random().toString(36)[2]).join("");

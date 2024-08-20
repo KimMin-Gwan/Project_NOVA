@@ -1,0 +1,85 @@
+.container {
+    max-width: 500;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; /* 중간이 아닌 위쪽으로 배치 */
+    height: 100vh;
+    background-color: #fff;
+    padding-top: 20px; /* 위쪽에 약간의 여백 추가 */
+}
+
+.Header {
+    height: 70px;
+    width: 100%;
+    border-bottom: 1px solid #a5a5a5;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.Top {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 55px;
+}
+
+.BackBtn img {
+    width: 50px;
+    height: 50px;
+}
+
+.backButton {
+  font-size: 18px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.title {
+  flex-grow: 1;
+  text-align: center;
+  margin: 0;
+  font-size: 20px;
+}
+
+.form {
+  width: 400px;
+  max-width: 400px;
+  margin-top: 50px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.label {
+    padding-left: 10px;
+    padding-bottom : 10px;
+    font-size: 16px;
+    color: #555;
+}
+
+.input {
+  width: 376px;
+  padding: 12px;
+  margin-top: 10px;
+  margin-bottom: 24px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: #f4f4f4;
+  font-size: 16px;
+}
+
+.loginButton {
+justify-content: center; /* 중간이 아닌 위쪽으로 배치 */
+  width: 400px;
+  padding: 15px;
+  border-radius: 8px;
+  background-color: #000;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+  border: none;
+}

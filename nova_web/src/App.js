@@ -18,6 +18,7 @@ import Rank from "./component/rank";
 import FloatingButton from "./component/floatingbutton";
 import EmptyBias from "./component/subscribeBias/myGroupBias";
 import SupportBias from "./component/subscribeBias/mySoloBias";
+import NOVALogin from "./pages/NovaLogin";
 
 // bid = ''가 이거면 오른쪽 레이아웃 바둑판
 
@@ -116,6 +117,7 @@ function App() {
       <Route path="/mypage" element={<MyPage />}></Route>
       <Route path="/mybias" element={<MyBias />}></Route>
       <Route path="/login" element={<Login />}></Route>
+      <Route path="/novalogin" element={<NOVALogin />}></Route>
       <Route path="/signup" element={<Signup />}></Route>
       <Route
         path="/"
@@ -132,7 +134,7 @@ function App() {
                     <img src={menu}></img>
                   </button>
                   {/* <Link to='/' className='button'>홈</Link> */}
-                  {/* <Link to='/mypage' className='button'>마이페이지</Link> */}
+                  {<Link to='/novalogin' className='button'>마이페이지</Link>}
                   {/* <Link to='/mybias' className='button'>최애페이지</Link> */}
                 </div>
               </header>
