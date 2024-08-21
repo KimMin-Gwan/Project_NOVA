@@ -14,7 +14,7 @@ function FloatingButton({showSpeaker, setShowSpeaker}) {
     <>
       {
         !showSpeaker &&
-        <button className="floating-button" onClick={handleClick}>
+        <button className="floating-button speaker-button" onClick={handleClick}>
           확성기
         </button>
       }

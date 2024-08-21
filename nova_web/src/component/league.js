@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-
+import { BsDot } from "react-icons/bs";
 import Ranks from "./ranks";
 
 
@@ -11,6 +11,11 @@ function League({ url, leagues, isClicked, biasLeague }) {
 
     // let rank_copy = [];
     let [clickedIndex, setClickedIndex] = useState(0);
+    // let [showIcon, setShowIcon] = useState(true);
+
+    // function dotIconShow(){
+    //     setShowIcon(true);
+    // }
 
     useEffect(() => {
         const fetchData = async () => {
@@ -19,14 +24,18 @@ function League({ url, leagues, isClicked, biasLeague }) {
                 const response = await fetch(url + `show_league?league_name=${league}`);
                 const data = await response.json();
                 setRank(data.body.rank);
+                // console.log(2);
+                console.log('랭킹 데이터');
+                
             }
             catch (error) {
                 console.error('Error fetching data: ', error);
+                
             }
         };
         fetchData();
 
-    }, [clickedIndex, leagues]);
+    }, [url, clickedIndex, leagues]);
 
     return (
         <>
@@ -40,7 +49,15 @@ function League({ url, leagues, isClicked, biasLeague }) {
                                         setClickedIndex(i);
                                     }
                                     } className={clickedIndex === i ? 'click-now' : 'non-click'}>{leagues[i]}</button>
+                                    {
+                                        clickedIndex === i && (
+                                            <div className="icon-box">
+                                                <BsDot className="icon" />
+                                            </div>
+                                        )
+                                    }
                                 </div>
+
                             );
                         }
                     })
@@ -50,5 +67,7 @@ function League({ url, leagues, isClicked, biasLeague }) {
         </>
     )
 }
+
+
 
 export default League;

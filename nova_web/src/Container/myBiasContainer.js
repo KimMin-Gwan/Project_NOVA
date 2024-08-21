@@ -23,11 +23,8 @@ function MyBias({url}) {
 
     let sample = localStorage.getItem('jwtToken');
     
-    let jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJhbmRvbVVzZXIxQG5hdmVyLmNvbSIsImlhdCI6MTcyNDE3MzUzMiwiZXhwIjoxNzI0MTc1MzMyfQ.FCJV4cO8V62-mBPIoeCtxT-dH_9qkbL8yHdKU9F33lY'
-
-
-
-
+    let jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJhbmRvbVVzZXIxQG5hdmVyLmNvbSIsImlhdCI6MTcyNDE3MzUzMiwiZXhwIjoxNzI0MTc1MzMyfQ.FCJV4cO8V62-mBPIoeCtxT-dH_9qkbL8yHdKU9F33lY';
+    
     let send_data = {
         "header": header,
         "body": {
@@ -43,22 +40,24 @@ function MyBias({url}) {
         }
     }
 
-    useEffect(()=>{
-        fetch(url+'try_select_my_bias',
-            {
-                method: 'POST',
-                headers: {
-                    "Content-Type": 'application/json',
-                },
-                body: JSON.stringify(select_bias_send_data),
-            }
-        )
-        .then(response=>response.json())
-        .then(data=>{
-            supportBiasCopy = data.body;
-            console.log(supportBiasCopy);
-        })
-    },[])
+    // useEffect(()=>{
+    //     fetch(url+'try_select_my_bias',
+    //         {
+    //             method: 'POST',
+    //             headers: {
+    //                 "Content-Type": 'application/json',
+    //             },
+    //             body: JSON.stringify(select_bias_send_data),
+    //         }
+    //     )
+    //     .then(response=>response.json())
+    //     .then(data=>{
+    //         supportBiasCopy = data.body;
+    //         console.log(supportBiasCopy);
+    //         console.log('지지하기 바이어스');
+            
+    //     })
+    // },[url])
 
     let my_bias_url = 'https://kr.object.ncloudstorage.com/nova-images/';
 
@@ -78,6 +77,7 @@ function MyBias({url}) {
 
                 setSoloBias(solo_bias_copy);
                 setGroupBias(group_bias_copy);
+                console.log(data)
             })
     }, [])
 

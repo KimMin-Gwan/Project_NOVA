@@ -49,6 +49,9 @@ function App() {
         league_copy = data.body.leagues.map(leagues => leagues.lname);
         // console.log(JSON.stringify(league_copy));
         setLeague(league_copy);
+        console.log('app화면')
+        
+        
       })
   }, [url])
 

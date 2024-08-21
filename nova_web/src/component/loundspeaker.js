@@ -51,6 +51,14 @@ function Loundspeaker() {
                         <span className='button-container'>
                             <button className='clicked-button'>오리온자리</button>
                             <button className='non-clicked-button'>사수자리</button>
+                            <button className='non-clicked-button'>사수자리</button>
+                            <button className='non-clicked-button'>사수자리</button>
+                            <button className='non-clicked-button'>사수자리</button>
+                            <button className='non-clicked-button'>사수자리</button>
+                            <button className='non-clicked-button'>사수자리</button>
+                            <button className='non-clicked-button'>사수자리</button>
+                            <button className='non-clicked-button'>사수자리</button>
+                            <button className='non-clicked-button'>사수자리</button>
                         </span>
 
                         <div className="message-container">

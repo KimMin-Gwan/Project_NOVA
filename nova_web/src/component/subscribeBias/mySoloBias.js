@@ -9,12 +9,12 @@ function MySoloBias({ solo_bias, bias_url }) {
         <div className='left-box'>
             {solo_bias.bid === '' && (
                 <>
-                    <img src={empty}></img>
+                    <img src={empty} alt=''></img>
                     <div className='box'>
                         <div className='my-bias-group'>새로운 최애 솔로<br />지지하기</div>
                     </div>
                     <div className='more'>
-                        <img src={plus}></img>
+                        <img src={plus} alt=''></img>
                     </div>
                 </>
             )}
@@ -29,7 +29,7 @@ function MySoloBias({ solo_bias, bias_url }) {
                         <div className='bias-name'>{solo_bias.bname}</div>
                     </div>
                     <div className='more'>
-                        <img src={more}></img>
+                        <img src={more} alt=''></img>
                     </div>
                 </>
             )}

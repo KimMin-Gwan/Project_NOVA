@@ -13,34 +13,37 @@ function Meta({ url, isClicked, type }) {
         "uid": '1234-abcd-5678',
         "endpoint": "/core_system/",
     }
-    let jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RVc2VyQG5hdmVyLmNvbSIsImlhdCI6MTcyNDA0MDA1MCwiZXhwIjoxNzI0MDQxODUwfQ.WxZ9UAhZlD0hkNcyvc4rPN_IIraVr2oZSXvTuTteaQU'
-    // let sample = localStorage.getItem('jwtToken');
+    // let jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RVc2VyQG5hdmVyLmNvbSIsImlhdCI6MTcyNDA0MDA1MCwiZXhwIjoxNzI0MDQxODUwfQ.WxZ9UAhZlD0hkNcyvc4rPN_IIraVr2oZSXvTuTteaQU'
+    let sample = localStorage.getItem('jwtToken');
 
     let my_bias_league_copy = [];
     let [myBiasLeague, setMyBiasLeague] = useState();
+
     let send_data = {
         "header": header,
         "body": {
-            'token': jwt,
+            'token': sample,
             'type': type,
         }
     }
-    // useEffect(()=>{
-    //     fetch(url+'my_bias_league',{
-    //         method: 'post',
-    //         headers: {
-    //             "Content-Type": 'application/json',
-    //         },
-    //         body: JSON.stringify(send_data),
-    //     })
-    //     .then(response=>response.json())
-    //     .then(data=>{
-    //         my_bias_league_copy = data.body;
-    //         console.log(my_bias_league_copy)
-    //         setMyBiasLeague(my_bias_league_copy);
-    //     })
 
-    // },[])
+    useEffect(()=>{
+        fetch(url+'my_bias_league',{
+            method: 'post',
+            headers: {
+                "Content-Type": 'application/json',
+            },
+            body: JSON.stringify(send_data),
+        })
+        .then(response=>response.json())
+        .then(data=>{
+            my_bias_league_copy = data.body;
+            console.log(my_bias_league_copy)
+            setMyBiasLeague(my_bias_league_copy);
+            console.log(myBiasLeague)
+        })
+
+    },[url])
 
 
     useEffect(() => {
@@ -50,7 +53,7 @@ function Meta({ url, isClicked, type }) {
                 league_copy = data.body.leagues.map(leagues => leagues.lname);
                 setLeagues(league_copy);
             })
-    }, [leagues])
+    }, [url])
 
     return (
         <League url={url} leagues={leagues} isClicked={isClicked} biasLeague={myBiasLeague}></League>

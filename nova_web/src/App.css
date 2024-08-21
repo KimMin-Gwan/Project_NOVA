@@ -377,6 +377,25 @@ body {
 
 }
 
+.icon-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* background-color: #fff000; */
+}
+.icon {
+  /* text-align: center; */
+  /* justify-self: end; */
+  /* align-self: center; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* background-color: #fff000; */
+  color: white;
+  width: 20px;
+  height: 20px;
+}
+
 .support {
   width: 90px;
   height: 34px;
@@ -426,6 +445,10 @@ body {
   margin-right: 20px;
   margin-top: 20px;
   height: 500px;
+  /* overflow: auto; */
+  scrollbar-width: none;
+  overflow: scroll;
+  
   /* padding: 10px; */
 }
 
@@ -730,6 +753,7 @@ body {
 }
 
 .click-now {
+  display: flex;
   color: white;
   font-size: 16px;
   font-weight: 500;
@@ -737,6 +761,7 @@ body {
 }
 
 .non-click {
+  display: flex;
   font-size: 16px;
   font-weight: 500;
   color: #767676;
@@ -748,7 +773,6 @@ body {
   /* right: 5px; */
   bottom: 20px;
   left: 90%;
-  background-color: #007bff;
   color: white;
   border: none;
   border-radius: 50%;

@@ -74,8 +74,29 @@
     margin: 0 auto;
     width: 90%;
     display: flex;
+    white-space: nowrap;
+    overflow: auto;
+    scrollbar-width: none;
+    /* overflow: scroll; */
     /* padding-left: 10px;
     padding-top: 10px; */
+}
+
+.speaker-button {
+    justify-content: center;
+    align-items: center;
+    border: solid 2px white;
+    border-radius: 100px;
+    backdrop-filter: blur(2px);
+    background-color: rgba(0, 0, 0, 0.4);
+    font-size: 20px;
+    font-weight: 600;
+    color: white;
+    width: 130px;
+    /* height: 50px; */
+    /* display: flex; */
+    /* padding: 0;
+    margin: 0; */
 }
 
 .clicked-button {
@@ -87,7 +108,7 @@
     font-weight: 600;
     color: white;
     width: 100px;
-    height: 40px;
+    height: 50px;
     display: flex;
     padding: 0;
     margin: 0;
