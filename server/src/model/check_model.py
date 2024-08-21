@@ -2,9 +2,12 @@ from model.base_model import BaseModel
 from model import Local_Database
 from others.data_domain import User, Bias
 from others import CoreControllerLogicError
+import time
 import datetime
 import boto3
 import cv2
+import glob
+import os
 
 class CheckPageModel(BaseModel):
     def __init__(self, database:Local_Database) -> None:
@@ -106,19 +109,6 @@ class TryCheckModel(CheckPageModel):
         self.__name_card = ""
         self.__special_time = True
 
-        self.__service_name = 's3'
-        self.__endpoint_url = 'https://kr.object.ncloudstorage.com'
-        self.__region_name = 'kr-standard'
-        self.__access_key = 'Access Key ID'
-        self.__secret_key = 'Secret Key'
-        self.__s3 = boto3.client(self.__service_name,
-                           endpoint_url=self.__endpoint_url,
-                           aws_access_key_id=self.__access_key,
-                      aws_secret_access_key=self.__secret_key)
-
-
-
-
     # 이미 만들어진 bias 주는애
     def set_bias_with_bias_data(self, bias:Bias):
         try:
@@ -147,62 +137,32 @@ class TryCheckModel(CheckPageModel):
             raise CoreControllerLogicError(error_type="set_bias_with_bias_data | " + str(e))
         
     # 네임카드를 만들고 업로드 하고 url을 name_card로 돌려줘야함
-    def make_name_card(self,bias,user):
-        # 네임카드 만드는 부분
-        # 네임카드 포함 내용은 아래와 같다
-        # 내용 : user.uid, bias.name, bias.fanname, user.solo_point(group_point), 최애 사진
-        #        user.solo_combo(group_combo), 오늘 날짜 등... 넣고싶은거 아무거나 넣어도댐
+    def make_name_card(self):
+        try:
+            name_card_maker = NameCardMaker()
+            name_card_maker.make_name_card(bias=self._bias, user=self._user)
+        except Exception as e:
+            raise CoreControllerLogicError(error_type="make_name_card | " + str(e))
+        return True
+
+    # 명함의 url 생성
+    def set_name_card_url(self):
+        try:
+            name_card_maker = NameCardMaker()
+            self.__name_card_url = name_card_maker.get_name_card_url(bias=self._bias, user=self._user)
+        except Exception as e:
+            raise CoreControllerLogicError(error_type="make_name_card | " + str(e))
+        return
         
-        # 네임카드 파일 이름은 bid-uid-날짜
-        # 예시 : 1001-1234-abcd-5678-24-08-21.png
-        now = datetime.datetime.now()
-        date = now.strftime('%Y-%m-%d')
-        name_card_url = f'{bias.bid}-{user.uid}-{date}.png'
-
-        self.__s3.download_file('nova-images',f'{bias.bid}.PNG','./temp_imgs')
-
-        img = cv2.imread(f"./{bias.bid}.png")
-        
-        cv2.putText(img,f"{user.uid}", (300,200), cv2.FONT_HERSHEY_COMPLEX, 1, (0,150,0), 1)   # 중심 위치 300,200인 폰트가 FONT_HERSHEY_COMPLEX인, 크기 1의, 약한 초록색의 ,두께 3인 글씨
-        cv2.putText(img,f"{bias.name}", (400,400), cv2.FONT_HERSHEY_SIMPLEX, 2, (255,255,255), 1)
-        #이미지 합성
-        #base_image[y시작:y끝, x시작:x끝] = 추가 이미지
-        cv2.imwrite(f'./temp_imgs/{name_card_url}',img)
-
-        # 호출문은 아래와 같음 (날짜는 알아서 모율 내에서 계산할것)
-        # modul.make_name_card(self._bias, self._user)
-        self.__s3.upload_file(f'./temp_imgs/{name_card_url}', "nova-name-card", f"{name_card_url}",ExtraArgs={'ACL':'public-read'})
-
-        # 함수 반환값을 파일 주소를 반환 할것
-        return name_card_url
-        # 아래는 모듈 내부 예시
-        #name_card_url = f"https://kr.object.ncloudstorage.com/nova-name-card/{card_name}.png"
-
-        # 파일 이름 뽑는 함수도 하나 만들어 둘것
-
-        # 아래가 실제 사용 예시
-        #self.__name_card_url = modul.get_name_card_url()
-        
-    def get_name_card_url(self, user, bias):
-        now = datetime.datetime.now()
-        date = now.strftime('%Y-%m-%d')
-        name_card_url = f'https://kr.object.ncloudstorage.com/nova-name-card/{bias.bid}-{user.uid}-{date}.png'
-        return name_card_url
-
-        
-
     # 이미 만들어진 name카드를 호출하는 함수
-    # 이미 호출한 사람이 다시 호출을 시도할 때 줄 내용
-    def get_name_card_name(self, user, bias):
+    def set_name_card_name(self):
+        try:
+            name_card_maker = NameCardMaker()
+            self.__name_card = name_card_maker.get_name_card_name(bias=self._bias, user=self._user)
+        except Exception as e:
+            raise CoreControllerLogicError(error_type="make_name_card | " + str(e))
 
-        # 이것도 모듈에서 제공하는것으로합니다
-        # 호출문 예시 (함수이름은 바꿔도 됨)
-        # self.name_card_url = self.get_name_card_url_with_uid_n_bid(self._user.uid, self._bias.bid)
-        now = datetime.datetime.now()
-        date = now.strftime('%Y-%m-%d')
-        name_card_url = f'{bias.bid}-{user.uid}-{date}'
-        return name_card_url
-    
+    # 스페셜 체크 시간 리스트
     def get_special_check_time(self):
         try:
             special_time = set()
@@ -222,7 +182,7 @@ class TryCheckModel(CheckPageModel):
     # 스페셜 체크가능 시간 리스트 만들기
     def __convert_date_to_time(self, date_string):
         # 날짜 문자열을 연, 월, 일로 분리
-        year, month, day = map(int, date_string.split('/'))
+        _, month, day = map(int, date_string.split('/'))
 
         # 월을 24시간 기준으로 변환 (0시부터 시작)
         month_as_hour = (month % 12) * 2
@@ -232,6 +192,7 @@ class TryCheckModel(CheckPageModel):
 
         return [month % 12, adjusted_hour]
     
+    # 공유 전용 url
     def get_shared_url(self):
         try:
             self.__shared_url = f"http://nova-platform.kr/home_check/shared/{self.__name_card}"
@@ -270,3 +231,96 @@ class TryCheckModel(CheckPageModel):
 
         except Exception as e:
             raise CoreControllerLogicError("response making error | " + e)
+        
+
+# 명함 제조기
+class NameCardMaker:
+    def __init__(self):
+        self.__path = './model/local_database/'
+        self.__service_name = 's3'
+        self.__endpoint_url = 'https://kr.object.ncloudstorage.com'
+        self.__region_name = 'kr-standard'
+        self.__access_key = 'Access Key ID'
+        self.__secret_key = 'Secret Key'
+        self.__s3 = boto3.client(self.__service_name,
+                           endpoint_url=self.__endpoint_url,
+                           aws_access_key_id=self.__access_key,
+                      aws_secret_access_key=self.__secret_key)
+
+    def make_name_card(self, bias:Bias, user:User): 
+        # 네임카드 만드는 부분
+        # 네임카드 포함 내용은 아래와 같다
+        # 내용 : user.uid, bias.name, bias.fanname, user.solo_point(group_point), 최애 사진
+        #        user.solo_combo(group_combo), 오늘 날짜 등... 넣고싶은거 아무거나 넣어도댐
+
+        # 1. 백그라운드 이미지  불러오기
+        img = self.__name_card_backgroud_image(user.select_name_card)
+
+        # 2. 바이어스 이미지 받아오기
+        self.__s3.download_file('nova-images',f'{bias.bid}.PNG','./temp_imgs')
+        img = cv2.imread(f"./{bias.bid}.png")
+        
+        # 3. 글자 붙혀넣기
+        cv2.putText(img,f"{user.uid}", (300,200), cv2.FONT_HERSHEY_COMPLEX, 1, (0,150,0), 1)   # 중심 위치 300,200인 폰트가 FONT_HERSHEY_COMPLEX인, 크기 1의, 약한 초록색의 ,두께 3인 글씨
+        cv2.putText(img,f"{bias.name}", (400,400), cv2.FONT_HERSHEY_SIMPLEX, 2, (255,255,255), 1)
+        #이미지 합성
+        #base_image[y시작:y끝, x시작:x끝] = 추가 이미지
+
+        # 4. 이미지 이름 만들기
+        image_name = self.__make_name_url(bias.bid, user.uid)
+
+        # 4. 이미지 저장
+        cv2.imwrite(f'{self.__path}temp_files/{image_name}.png', img)
+
+        # 호출문은 아래와 같음 (날짜는 알아서 모율 내에서 계산할것)
+        # modul.make_name_card(self._bias, self._user)
+        # 5. 이미지 업로드
+        self.__s3.upload_file(f'{self.__path}temp_files/{image_name}', "nova-name-card", f"{image_name}",ExtraArgs={'ACL':'public-read'})
+
+        #name_card_url = f"https://kr.object.ncloudstorage.com/nova-name-card/{card_name}.png"
+        # 함수 반환값을 파일 주소를 반환 할것
+        return True
+        # 아래가 실제 사용 예시
+        #self.__name_card_url = modul.get_name_card_url()
+
+    # 명함의 백그라운드 이미지 선택(name_card_id는 user에서 제공)
+    def __name_card_backgroud_image(self, name_card_id):
+        path = self.__path + "name_card/" + name_card_id + ".png"
+        img = cv2.imread(path)
+        return img
+
+    # 명함의 파일 이름 생성기
+    # 네임카드 파일 이름은 bid-uid-날짜
+    # 예시 : 1001-1234-abcd-5678-24-08-21.png
+    def __make_name_url(self, bid, uid) -> str:
+        now = datetime.datetime.now()
+        date = now.strftime('%Y-%m-%d')
+        name_card_url = f'{bid}-{uid}-{date}.png'
+        return name_card_url
+
+    # img 이미지 이름 가지고 오기
+    def get_name_card_name(self, bias:Bias, user:User) -> str:
+        image_name = self.__make_name_url(bias.bid, user.uid)
+        return image_name
+
+    # cloud의 url 가지고 오기
+    def get_name_card_url(self, bias:Bias, user:User) ->str:
+        image_name = self.get_name_card_name(bias, user)
+        name_card_url = f"{self.__endpoint_url}/nova-name-card/{image_name}.png"
+        return name_card_url
+
+    # 임시 이미지 파일 지우기
+    def delete_temp_image(self):
+        # 파일이 작성되기 까지 대기 시간
+        time.sleep(0.1)
+
+        # 디렉토리 내의 모든 파일을 찾음
+        directory_path = './model/local_database/'
+        files = glob.glob(os.path.join(directory_path, '*'))
+        print(files)
+        
+        #for file in files:
+            ## 파일인지 확인 후 삭제
+            #if os.path.isfile(file):
+                #os.remove(file)
+        return

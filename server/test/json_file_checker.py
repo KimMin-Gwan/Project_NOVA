@@ -26,8 +26,8 @@ def main():
         #print(dict_data)
 
         for data in data_list:
-            data["solo_combo"] = data['combo']
-            data["group_combo"] = data['combo']
+            data["select_name_card"] = "name_card_1"
+            data["name_card_list"] = ["name_card_1", "name_card_2"]
             new_data.append(data)
 
     with open("./../src/model/local_database/user.json", 'w',  encoding='utf-8' )as f:

@@ -35,6 +35,10 @@ class HomeBiasModel(BaseModel):
 
     # 솔로 바이어스 세팅
     def set_solo_bias_with_bid(self):
+
+        print(self._user.solo_bid)
+        print(self._user.group_bid)
+
         if self._user.solo_bid == "":  # 팔로우한 바이어스 없으면 false 반환
             return False
         

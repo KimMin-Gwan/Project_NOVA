@@ -23,8 +23,6 @@ class TempUser:
         print(self.exp)
         return
 
-
-
 class User(SampleDomain):
     def __init__(self, uid = "", uname = "", age=14, 
                  email = "", gender = "d" , solo_point = 0, group_point = 0,
@@ -33,8 +31,8 @@ class User(SampleDomain):
                  group_bid = "", items = None,
                  solo_daily = False, solo_special = False,
                  group_daily = False, group_special = False,
-                   sign = "",
-                 password = ""
+                 sign = "", password = "", select_name_card = "",
+                 name_card_list= []
                  ):
         if items == None:
             items = Item()
@@ -58,6 +56,8 @@ class User(SampleDomain):
         self.group_daily = group_daily
         self.group_special = group_special
         self.sign = sign
+        self.select_name_card = select_name_card
+        self.name_card_list = name_card_list
 
     # database로 부터 받아온 데이터를 사용해 내용 구성
     def make_with_dict(self, dict_data):
@@ -68,6 +68,8 @@ class User(SampleDomain):
             self.email= dict_data['email']
             self.password = dict_data['password']
             self.gender= dict_data['gender']
+            self.solo_bid = dict_data['solo_bid']
+            self.group_bid = dict_data['group_bid']
             self.solo_point = dict_data['solo_point']
             self.group_point = dict_data['group_point']
             self.solo_combo= dict_data['solo_combo']
@@ -79,6 +81,8 @@ class User(SampleDomain):
             self.group_special = dict_data['group_special']
             self.items = Item(init_data = dict_data['items'])
             self.sign = dict_data['sign']
+            self.select_name_card = dict_data['select_name_card']
+            self.name_card_list = dict_data['name_card_list']
             return
         except Exception as e:
             raise DictMakingError(error_type=e)
@@ -104,7 +108,9 @@ class User(SampleDomain):
             "solo_special" :self.solo_special,
             "group_daily" :self.group_daily,
             "group_special" :self.group_special,
-            "sign" : self.sign
+            "sign" : self.sign,
+            "select_name_card" : self.select_name_card,
+            "name_card_list": self.name_card_list
         }
 
 class Item(SampleDomain):

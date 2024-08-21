@@ -50,7 +50,7 @@ class User_Service_View(Master_View):
         # response 포함 정보 -> 'result' : True or False
         #                    -> 'detail' : "실패 사유"
         @self.__app.post('/user_home/try_sign_in')
-        def try_send_email(raw_request:dict):
+        def try_sign_in(raw_request:dict):
             request = SignInRequest(request=raw_request)
             user_controller=UserController()
             model = user_controller.try_sign_in(database=self.__database,

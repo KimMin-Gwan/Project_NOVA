@@ -45,6 +45,8 @@ class Home_Controller:
                 model.set_state_code("211")
                 return model
 
+            print("hello")
+
         except CustomError as e:
             print("Error Catched : ", e.error_type)
             model.set_state_code(e.error_code) # 종합 에러
