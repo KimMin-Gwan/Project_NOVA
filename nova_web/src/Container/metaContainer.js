@@ -38,7 +38,7 @@ function Meta({ url, isClicked, type }) {
         .then(response=>response.json())
         .then(data=>{
             my_bias_league_copy = data.body;
-            console.log(my_bias_league_copy)
+            
             setMyBiasLeague(my_bias_league_copy);
             console.log(myBiasLeague)
         })

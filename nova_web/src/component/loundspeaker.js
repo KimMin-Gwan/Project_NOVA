@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 // import style from "../css/loundspeaker.module.css"
 import '../css/speaker.css';
 //import resetPageAndRunItemPage from 'ResetPageAndRunItemPage'
+import speakerStar from '../img/speaker-star.png';
 
 function Loundspeaker() {
     //function App( itit_txt ) {
-    const itit_txt = { text: "어떤 물건을 찾으러 오셨나요?", type: 'server-message' }
+    const itit_txt = { text: "계약 만료일인 1월 31일 이후  파기하시면됩니다.계약 일 이후 3개월 이내에 파기하시면됩니다.", type: 'server-message' }
     const [messages, setMessages] = useState([itit_txt]);
     const [newMessage, setNewMessage] = useState('');
     const [socket, setSocket] = useState(null);
@@ -47,8 +48,16 @@ function Loundspeaker() {
             <div className="container-speaker" onClick={(e) => { e.stopPropagation() }}>
                 {showTitleAndButton && (
                     <div className="chat-messages">
-                        <div className='title-box'>확성기</div>
-                        <span className='button-container'>
+                        <div className='title-box'>
+                            <div className='speaker-star'>
+                                <img src={speakerStar} />
+                            </div>
+                            확성기
+                            <div className='speaker-star'>
+                                <img src={speakerStar} />
+                            </div>
+                        </div>
+                        <div className='button-container'>
                             <button className='clicked-button'>오리온자리</button>
                             <button className='non-clicked-button'>사수자리</button>
                             <button className='non-clicked-button'>사수자리</button>
@@ -59,7 +68,9 @@ function Loundspeaker() {
                             <button className='non-clicked-button'>사수자리</button>
                             <button className='non-clicked-button'>사수자리</button>
                             <button className='non-clicked-button'>사수자리</button>
-                        </span>
+                            <button className='non-clicked-button'>사수자리</button>
+                            <button className='non-clicked-button'>사수자리</button>
+                        </div>
 
                         <div className="message-container">
                             <ul>

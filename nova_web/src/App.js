@@ -15,7 +15,7 @@ import NOVALogin from './pages/NovaLogin/NovaLogin';
 
 function App() {
 
-  let url = 'http://175.106.99.34/home/';
+  let url = 'http://nova-platform.kr/home/';
   let type = ['solo', 'group'];
 
   let header = {

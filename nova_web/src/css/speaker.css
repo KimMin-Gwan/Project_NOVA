@@ -36,7 +36,7 @@
     left: 0;
     right: auto;
     bottom: 0px;
-    z-index: 999;
+    /* z-index: 999; */
     justify-content: center;
     align-items: center;
     /* background-color: white; */
@@ -44,12 +44,12 @@
 
 .chat-messages {
     position: sticky;
-    background-color: beige;
-    border-top-left-radius: 60px;
-    border-top-right-radius: 60px;
+    background-color: #ffffff;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
     /* position: absolute; */
     height: 600px;
-    width: 400px;
+    width: 350px;
     padding: 10px;
     padding-left: 0;
     padding-right: 0;
@@ -63,16 +63,32 @@
     width: 100%;
     display: flex;
     font-weight: 800;
-    font-size: 24px;
+    font-size: 20px;
     justify-content: center;
     align-content: center;
-    border-bottom: solid black 2px;
+    border-bottom: solid #303030 2px;
     padding-bottom: 10px;
+}
+
+.speaker-star {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.speaker-star img{
+    padding-left: 20px;
+    padding-right: 20px;
+    width: 15px;
+    height: 15px;
 }
 
 .button-container {
     margin: 0 auto;
+    /* padding-left: 4px; */
     width: 90%;
+    /* width: 300px; */
+    /* background-color: blue; */
     display: flex;
     white-space: nowrap;
     overflow: auto;
@@ -80,6 +96,41 @@
     /* overflow: scroll; */
     /* padding-left: 10px;
     padding-top: 10px; */
+}
+
+
+.clicked-button {
+    justify-content: center;
+    align-items: center;
+    border: solid 1px #303030;
+    border-radius: 100px;
+    background-color: black;
+    font-weight: 600;
+    font-size: 12px;
+    color: white;
+    width: 96px;
+    height: 35px;
+    display: flex;
+    padding: 0;
+    margin: 0;
+    flex-shrink: 0;
+}
+
+.non-clicked-button {
+    justify-content: center;
+    align-items: center;
+    border-radius: 100px;
+    border: solid 1px #303030;
+    background-color: white;
+    font-weight: 600;
+    font-size: 12px;
+    color: black;
+    margin: 0;
+    padding: 0;
+    width: 96px;
+    height: 35px;
+    display: flex;
+    flex-shrink: 0;
 }
 
 .speaker-button {
@@ -98,41 +149,10 @@
     /* padding: 0;
     margin: 0; */
 }
-
-.clicked-button {
-    justify-content: center;
-    align-items: center;
-    border: solid 1px black;
-    border-radius: 100px;
-    background-color: black;
-    font-weight: 600;
-    color: white;
-    width: 100px;
-    height: 50px;
-    display: flex;
-    padding: 0;
-    margin: 0;
-}
-
-.non-clicked-button {
-    justify-content: center;
-    align-items: center;
-    border-radius: 100px;
-    border: solid 1px black;
-    background-color: white;
-    font-weight: 600;
-    color: black;
-    margin: 0;
-    padding: 0;
-    width: 100px;
-    height: 40px;
-    display: flex;
-}
-
 .chat-messages .message-container {
-    background-color: gray;
+    background-color: #f5f5f5;
     border: solid 1px black;
-    border-radius: 35px;
+    border-radius: 19px;
     margin: 0 auto;
     width: 90%;
     display: flex;
@@ -153,9 +173,9 @@
 
 /* 각 메시지 스타일 */
 .chat-messages .message {
-    margin: 10px;
+    /* margin: 10px; */
     /* max-width: 70%; */
-    padding: 10px;
+    padding: 6px;
     /* border-radius: 10px; */
     word-wrap: break-word;
     clear: both;
@@ -165,9 +185,11 @@
 /* 서버에서 받은 메시지 스타일 (system-message) */
 .chat-messages .message.server-message {
     /* background-color: #007bff; */
-    border-bottom: solid black 1px;
-    width: 90%;
-    color: #fff;
+    border-bottom: solid #b1b1b1 1px;
+    width: 96%;
+    color: black;
+    font-size: 11px;
+    font-family: "Noto Sans", sans-serif;
     /* text-align: center; */
     align-self: flex-start;
     /* 좌측 정렬 */
@@ -189,30 +211,43 @@
     width: 90%;
     height: 40px;
     margin: 0 auto;
-    border: solid 1px black;
+    border: solid 1px #303030;
     border-radius: 100px;
     justify-content: space-evenly;
     /* 수직 중앙 정렬 */
 }
 
 .input-container p {
-    margin-left: 20px;
+    padding-bottom: 2px;
+    color: #303030;
+    margin-left: 15px;
+    font-size: 11px;
     font-weight: 600;
 }
 
 .chat-messages input[type="text"] {
     width: 150px;
-    padding-top: 5px;
+    /* padding-top: 5px; */
     padding-left: 15px;
     /* text-align-last: left; */
     border: none;
-    ;
+    font-weight: 500;
+    /* color: blue; */
+    /* font-style: black; */
     background-color: transparent;
     /* background-color: yellow; */
     /* border-radius: 0;
     margin: 0 10px 0 0; */
     flex: 1;
+    outline: none;
     /* 남은 공간 모두 사용 */
+}
+
+.chat-messages input[type="text"]::placeholder {
+    color: black;
+    font-family: "Noto Sans ", sans-serif;
+    font-size: 12px;
+    
 }
 
 /* .chat-messages button {
@@ -227,6 +262,8 @@
 .send-button {
     display: flex;
     /* justify-items: end; */
+    background-color: #1e1e1e;
+    border: solid #2c2c2c 1px;
     width: 90px;
     margin-right: 2px;
     margin-top: 1px;
