@@ -18,19 +18,20 @@ def main():
     with open("./../src/model/local_database/user.json", 'r',  encoding='utf-8' )as f:
         data_list.extend(json.load(f))
 
-        for bid in dict_data.keys():
-            for data in data_list:
-                if data['group_bid'] == bid:
-                    dict_data[bid] += 1
+        #for bid in dict_data.keys():
+            #for data in data_list:
+                #if data['group_bid'] == bid:
+                    #dict_data[bid] += 1
 
-        print(dict_data)
+        #print(dict_data)
 
-        #for data in data_list:
-            #data["password"] = "sample122"
-            #new_data.append(data)
+        for data in data_list:
+            data["solo_combo"] = data['combo']
+            data["group_combo"] = data['combo']
+            new_data.append(data)
 
-    #with open("./../src/model/local_database/user.json", 'w',  encoding='utf-8' )as f:
-        #json.dump(new_data, f, ensure_ascii=False, indent=4)
+    with open("./../src/model/local_database/user.json", 'w',  encoding='utf-8' )as f:
+        json.dump(new_data, f, ensure_ascii=False, indent=4)
 
 
 main()

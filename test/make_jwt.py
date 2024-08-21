@@ -12,7 +12,7 @@ headers = {
 
 # 페이로드 설정
 payload = {
-    "email": "testUser@naver.com",
+    "email": "randomUser1@naver.com",
     "iat": datetime.datetime.utcnow(),
     "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=30)  # 만료 시간 30분
 }

@@ -9,3 +9,4 @@ from model.home_model import *
 from model.chat_model import *
 from model.chat_list_model import *
 from model.user_models import *
+from model.check_model import *

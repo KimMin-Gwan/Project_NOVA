@@ -43,8 +43,6 @@ class Core_Controller:
     # 나의 바이어스 정보를 뽑아오는 방법
     def get_my_bias_league(self, database:Local_Database, request): 
         jwt_decoder = JWTDecoder()
-       
-
         model = LeagueModel(database=database)  # 이건 안쓰지만 데이터 베이서 접속을 위해 사용
         try:
             request_payload = jwt_decoder.decode(token=request.token)  # jwt payload(email 정보 포함됨)
@@ -127,20 +125,42 @@ class Core_Controller:
         finally:
             return model
 
-    def request_login(self, database:Local_Database, request) -> BaseModel: 
-        model = RequestLogin(database=database)
 
+#----------check_page ------------------------------------------
+    # check page 데이터
+    # 여기서 부터는 최애인증을 check라고 정의함
+    #1. 사용자인지 확인
+    #2. 사용자가 팔로우 중인 bias 가 맞는지 확인
+    #3. 이미 인증 했는지 확인  
+    def get_check_page(self, database:Local_Database, request) -> BaseModel: 
+        jwt_decoder = JWTDecoder()
+        model = CheckPageModel(database=database)
         try:
+            request_payload = jwt_decoder.decode(token=request.token)  # jwt payload(email 정보 포함됨)
+
             # 유저가 있는지 확인
-            if not model.set_user_with_email(request=request):
-                raise UserNotExist("Can not find User with uid")
+            if not model.set_user_with_email(request=request_payload):
+                raise UserNotExist("Can not find User with email")
+
         except UserNotExist as e:
             print("Error Catched : ", e)
             model.set_state_code(e.error_code) # 종합 에러
             return model
 
         try:
-            model.request_login(request=request,token=model._user.token)
+            model.set_bias(self, request.bid)
+            model.set_state_code("260") # 종합 에러
+
+            if not model.is_validate_user():
+                model.set_state_code("261") # 종합 에러
+                return model
+
+            # 이미 체크했는지 확인
+            if not model.is_already_check():
+                model.set_state_code("261") # 종합 에러
+                return model
+            
+            model.check_page_info()
 
         except CustomError as e:
             print("Error Catched : ", e.error_type)
@@ -149,7 +169,41 @@ class Core_Controller:
         finally:
             return model
 
-#------------------------------------------------------------------------------------------
+
+    def try_daily_check(self, database:Local_Database, request) -> BaseModel: 
+
+        model = CheckPageModel(database=database)
+        
+        try:
+            # 유저가 있는지 확인
+            if not model.set_user_with_email(request=request):
+                raise UserNotExist("Can not find User with email")
+        except UserNotExist as e:
+            print("Error Catched : ", e)
+            model.set_state_code(e.error_code) # 종합 에러
+            return model
+
+        try:
+            model.request_daily(model._user)
+            model.add_solo_bias_point(model._user.solo_bid)
+            model.add_group_bias_point(model._user.group_bid)
+
+        except CustomError as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
+
+        finally:
+            return model
+
+
+
+
+
+
+
+
+#-----------채팅 시스템-----------------------------------------------------------
+#--------------------------------------------------------------------------------
     def get_chatting_data(self, database:Local_Database):
         model = ChatListModel(database=database)
         try:
