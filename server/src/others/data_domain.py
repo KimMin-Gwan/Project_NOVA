@@ -28,9 +28,12 @@ class TempUser:
 class User(SampleDomain):
     def __init__(self, uid = "", uname = "", age=14, 
                  email = "", gender = "d" , solo_point = 0, group_point = 0,
-                 combo = 0, credit = 0, solo_bid = "",
+                 solo_combo = 0, group_combo = 0,
+                 credit = 0, solo_bid = "",
                  group_bid = "", items = None,
-                 daily = False, special = False, sign = "",
+                 solo_daily = False, solo_special = False,
+                 group_daily = False, group_special = False,
+                   sign = "",
                  password = ""
                  ):
         if items == None:
@@ -44,13 +47,16 @@ class User(SampleDomain):
         self.gender = gender
         self.solo_point = solo_point
         self.group_point = group_point
-        self.combo = combo
+        self.solo_combo = solo_combo
+        self.group_combo = group_combo
         self.credit = credit
         self.solo_bid = solo_bid
         self.group_bid = group_bid
         self.items = items
-        self.daily = daily
-        self.special = special
+        self.solo_daily = solo_daily
+        self.solo_special = solo_special
+        self.group_daily = group_daily
+        self.group_special = group_special
         self.sign = sign
 
     # database로 부터 받아온 데이터를 사용해 내용 구성
@@ -64,13 +70,14 @@ class User(SampleDomain):
             self.gender= dict_data['gender']
             self.solo_point = dict_data['solo_point']
             self.group_point = dict_data['group_point']
-            self.combo= dict_data['combo']
+            self.solo_combo= dict_data['solo_combo']
+            self.group_combo= dict_data['group_combo']
             self.credit= dict_data['credit']
-            self.solo_bid= dict_data['solo_bid']
-            self.group_bid= dict_data['group_bid']
+            self.solo_daily = dict_data['solo_daily']
+            self.solo_special = dict_data['solo_special']
+            self.group_daily = dict_data['group_daily']
+            self.group_special = dict_data['group_special']
             self.items = Item(init_data = dict_data['items'])
-            self.daily= dict_data['daily']
-            self.special= dict_data['special']
             self.sign = dict_data['sign']
             return
         except Exception as e:
@@ -87,13 +94,16 @@ class User(SampleDomain):
             "gender" : self.gender,
             "solo_point" : self.solo_point,
             "group_point" : self.group_point,
-            "combo" : self.combo,
+            "solo_combo" : self.solo_combo,
+            "group_combo" : self.group_combo,
             "credit" : self.credit,
             "solo_bid" : self.solo_bid,
             "group_bid" : self.group_bid,
             "items" : self.items.get_dict_form_data(),
-            "daily" : self.daily,
-            "special" : self.special,
+            "solo_daily" :self.solo_daily,
+            "solo_special" :self.solo_special,
+            "group_daily" :self.group_daily,
+            "group_special" :self.group_special,
             "sign" : self.sign
         }
 
