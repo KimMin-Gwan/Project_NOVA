@@ -39,7 +39,6 @@ class Core_Service_View(Master_View):
         # 회원의 bias의 리그를 받아내는 앤드 포인트 (post)
         @self.__app.post('/home/my_bias_league')
         def my_bias_leagues(raw_request:dict):
-            print(raw_request)
             request = MyLeagueRequest(request=raw_request)
             core_controller=Core_Controller()
             model = core_controller.get_my_bias_league(database=self.__database, request=request)
