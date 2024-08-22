@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import MySoloBias from "../component/subscribeBias/mySoloBias";
 import MyGroupBias from "../component/subscribeBias/myGroupBias";
 
-function MyBias({url}) {
+function MyBias({ url }) {
 
     let [solo_bias, setSoloBias] = useState([]);
     let [group_bias, setGroupBias] = useState([]);
@@ -22,23 +22,23 @@ function MyBias({url}) {
     }
 
     let sample = localStorage.getItem('jwtToken');
-    
+
     let jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJhbmRvbVVzZXIxQG5hdmVyLmNvbSIsImlhdCI6MTcyNDE3MzUzMiwiZXhwIjoxNzI0MTc1MzMyfQ.FCJV4cO8V62-mBPIoeCtxT-dH_9qkbL8yHdKU9F33lY';
-    
+
     let send_data = {
         "header": header,
         "body": {
             'token': sample
         }
     }
-    
-    let select_bias_send_data = {
-        "header": header,
-        "body": {
-            'token': sample,
-            'bid': 1001,
-        }
-    }
+
+    // let select_bias_send_data = {
+    //     "header": header,
+    //     "body": {
+    //         'token': sample,
+    //         'bid': 1001,
+    //     }
+    // }
 
     // useEffect(()=>{
     //     fetch(url+'try_select_my_bias',
@@ -53,9 +53,9 @@ function MyBias({url}) {
     //     .then(response=>response.json())
     //     .then(data=>{
     //         supportBiasCopy = data.body;
-    //         console.log(supportBiasCopy);
+    //         // console.log(supportBiasCopy);
     //         console.log('지지하기 바이어스');
-            
+
     //     })
     // },[url])
 
@@ -77,7 +77,7 @@ function MyBias({url}) {
 
                 setSoloBias(solo_bias_copy);
                 setGroupBias(group_bias_copy);
-                console.log(data)
+                console.log('솔로 그룹 바이어스 부분')
             })
     }, [])
 

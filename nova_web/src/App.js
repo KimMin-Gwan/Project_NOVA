@@ -12,6 +12,7 @@ import FloatingButton from './component/floatingbutton';
 import Meta from './Container/metaContainer';
 import Loundspeaker from './component/loundspeaker';
 import NOVALogin from './pages/NovaLogin/NovaLogin';
+import SelectBias from './component/selectBias/SelectBias';
 
 function App() {
 
@@ -60,17 +61,17 @@ function App() {
   let profile_url = 'https://kr.object.ncloudstorage.com/nova-images/';
 
   //내 최애 / 전체 선택버튼용
-  let [isClicked, setClick] = useState(false);
+  let [isSoloClicked, setSoloClick] = useState(false);
   let [isGroupClicked, setGroupClick] = useState(false);
 
-  let [isTouched, setTouched] = useState('전체');
+  // let [isTouched, setTouched] = useState('전체');
 
-  function handleTouch(value) {
-    setTouched(value)
-  };
+  // function handleTouch(value) {
+  //   setTouched(value)
+  // };
 
   function handleSoloToggle() {
-    setClick(!isClicked);
+    setSoloClick(!isSoloClicked);
   };
 
   function handleGroupToggle() {
@@ -81,21 +82,11 @@ function App() {
   let [blackBox, setBlackBox] = useState();
 
 
-  function backgroundBlack(){
-    if(showBox)
-    {
-      setBlackBox('black-box');
-    }
-    else{
-      setBlackBox('');
-    }
-  };
-
 
 
   return (
     <Routes>
-      <Route path='/mypage' element={<MyPage />}></Route>
+      <Route path='/mypage' element={<SelectBias/>}></Route>
       <Route path='/novalogin' element={<NOVALogin />}></Route>
       <Route path='/' element={
         <div onClick={() => {
@@ -133,20 +124,20 @@ function App() {
           <section className="solo-bias-rank">
             <div className='title-area'>
               <div className="ranking">개인리그 랭킹</div>
-              <div className={`toggle-container ${isClicked ? "" : "active"}`}>
+              <div className={`toggle-container ${isSoloClicked ? "" : "active"}`}>
                 <div onClick={() => {
-                  handleSoloToggle()
-                  handleTouch('내 최애')
-                }} className={`text ${isClicked ? "" : "active"}`}>내 최애</div>
+                  handleSoloToggle();
+                  // handleTouch('내 최애')
+                }} className={`text ${isSoloClicked ? "" : "active"}`}>내 최애</div>
                 <div onClick={() => {
-                  handleSoloToggle()
-                  handleTouch('전체')
-                }} className={`text ${isClicked ? "active" : ""}`}>전체</div>
+                  handleSoloToggle();
+                  // handleTouch('전체')
+                }} className={`text ${isSoloClicked ? "active" : ""}`}>전체</div>
                 <div className="toggle-slider"></div>
 
               </div>
             </div>
-            <Meta url={url} isClicked={isClicked} type={type[0]}></Meta>
+            <Meta url={url} isClicked={isSoloClicked} isSoloClicked={isSoloClicked} type={type[0]}></Meta>
 
           </section>
 
@@ -156,17 +147,17 @@ function App() {
               <div className={`toggle-container ${isGroupClicked ? "" : "active"}`}>
                 <div onClick={() => {
                   handleGroupToggle()
-                  handleTouch('내 최애')
+                  // handleTouch('내 최애')
                 }} className={`text ${isGroupClicked ? "" : "active"}`}>내 최애</div>
                 <div onClick={() => {
                   handleGroupToggle()
-                  handleTouch('전체')
+                  // handleTouch('전체')
                 }} className={`text ${isGroupClicked ? "active" : ""}`}>전체</div>
                 <div className="toggle-slider"></div>
 
               </div>
             </div>
-            <Meta url={url} isClicked={isGroupClicked} type={type[1]}></Meta>
+            <Meta url={url} isClicked={isGroupClicked} isGroupClicked={isGroupClicked} type={type[1]}></Meta>
           </section>
 
           <section className="advise"></section>

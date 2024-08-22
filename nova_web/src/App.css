@@ -634,6 +634,10 @@ body {
   /* 배경색 전환 애니메이션 */
 }
 
+.setting {
+  color: white;
+}
+
 .select {
   display: flex;
   justify-content: center;

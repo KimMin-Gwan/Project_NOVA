@@ -2,8 +2,13 @@ import plus from '../../img/plus.png';
 import empty from '../../img/empty.png';
 import more from '../../img/more.png';
 import shadow from '../../img/shadow.png';
+import { Routes, Route, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+
 
 function MySoloBias({ solo_bias, bias_url }) {
+
+    let navigate = useNavigate();
 
     return (
         <div className='left-box'>
@@ -13,7 +18,9 @@ function MySoloBias({ solo_bias, bias_url }) {
                     <div className='box'>
                         <div className='my-bias-group'>새로운 최애 솔로<br />지지하기</div>
                     </div>
-                    <div className='more'>
+                    <div className='more' onClick={()=>{
+                        navigate('mypage')
+                    }}>
                         <img src={plus} alt=''></img>
                     </div>
                 </>

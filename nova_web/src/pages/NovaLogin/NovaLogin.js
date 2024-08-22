@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 const NOVALogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const handleLogin = async () => {
     if (!email || !password) {
       alert("이메일과 비밀번호를 모두 입력해주세요.");

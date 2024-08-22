@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import League from "../component/league";
 
-function Meta({ url, isClicked, type }) {
+function Meta({ url, isClicked,isSoloClicked, isGroupClicked, type }) {
 
     let [leagues, setLeagues] = useState([]);
     let league_copy = [];
@@ -17,34 +17,118 @@ function Meta({ url, isClicked, type }) {
     let sample = localStorage.getItem('jwtToken');
 
     let my_bias_league_copy = [];
-    let [myBiasLeague, setMyBiasLeague] = useState();
+    let [mySoloBiasLeague, setMySoloBiasLeague] = useState([]);
+    let [myGroupBiasLeague, setMyGroupBiasLeague] = useState([]);
 
-    let send_data = {
-        "header": header,
-        "body": {
-            'token': sample,
-            'type': type,
-        }
-    }
+    // let send_data = {
+    //     "header": header,
+    //     "body": {
+    //         'token': sample,
+    //         'type': type,
+    //     }
+    // }
+
+    // useEffect(()=>{
+    //     fetch(url+'my_bias_league',{
+    //         method: 'post',
+    //         headers: {
+    //             "Content-Type": 'application/json',
+    //         },
+    //         body: JSON.stringify(send_data),
+    //     })
+    //     .then(response=>response.json())
+    //     .then(data=>{
+    //         my_bias_league_copy = data.body;
+
+    //         setMyBiasLeague(my_bias_league_copy);
+    //         console.log(myBiasLeague)
+    //     })
+
+    // },[url])
+    useEffect(() => {
+        const fetchSoloData = async () => {
+            // let solo_send_data = {
+            //     "header": header,
+            //     "body": {
+            //         'token': sample,
+            //         'type': 'solo',
+            //     }
+            // }
+            try {
+                const response = await fetch(url + 'my_bias_league',
+                    {
+                        method: 'post',
+                        headers: {
+                            "Content-Type": 'application/json',
+                        },
+                        body: JSON.stringify({
+                            "header": header,
+                            "body": {
+                                'token': sample,
+                                'type': 'solo',
+                            }
+                        }),
+                    }
+                );
+                const data = await response.json();
+                console.log('솔로 데잍: ', data);
+
+                setMySoloBiasLeague(data.body.league_data.lname);
+            }
+            catch (error) {
+                console.error('Error fetching data: ', error);
+            }
+        };
+
+        fetchSoloData();
+
+    }, [url]);
 
     useEffect(()=>{
-        fetch(url+'my_bias_league',{
-            method: 'post',
-            headers: {
-                "Content-Type": 'application/json',
-            },
-            body: JSON.stringify(send_data),
-        })
-        .then(response=>response.json())
-        .then(data=>{
-            my_bias_league_copy = data.body;
-            
-            setMyBiasLeague(my_bias_league_copy);
-            console.log(myBiasLeague)
-        })
+        const fetchGroupData = async () => {
+            // let group_send_data = {
+            //     "header": header,
+            //     "body": {
+            //         'token': sample,
+            //         'type': 'group',
+            //     }
+            // }
+            try {
+                const response = await fetch(url + 'my_bias_league',
+                    {
+                        method: 'post',
+                        headers: {
+                            "Content-Type": 'application/json',
+                        },
+                        body: JSON.stringify({
+                            "header": header,
+                            "body": {
+                                'token': sample,
+                                'type': 'group',
+                            }
+                        }),
+                    }
+                );
+                const data = await response.json();
+                console.log('그룹 데이터: ', data);
 
-    },[url])
+                setMyGroupBiasLeague(data.body.league_data.lname);
 
+            }
+            catch (error) {
+                console.error('Error fetching data: ', error);
+            }
+        };
+
+        fetchGroupData();
+    }, [url]);
+
+    useEffect(() => {
+        console.log(mySoloBiasLeague);
+        console.log(myGroupBiasLeague);
+        console.log('solo: ' + isSoloClicked + type);
+        console.log('group: ', isGroupClicked + type);
+    }, [mySoloBiasLeague, myGroupBiasLeague, isSoloClicked, isGroupClicked]);
 
     useEffect(() => {
         fetch(url + `league_data?league_type=${type}`)
@@ -56,7 +140,7 @@ function Meta({ url, isClicked, type }) {
     }, [url])
 
     return (
-        <League url={url} leagues={leagues} isClicked={isClicked} biasLeague={myBiasLeague}></League>
+        <League url={url} leagues={leagues} isClicked={isClicked}></League>
     )
 }
 
