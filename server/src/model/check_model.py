@@ -373,8 +373,8 @@ class NameCardMaker:
         img = self.__name_card_backgroud_image(user.select_name_card)
 
         # 2. 바이어스 이미지 받아오기
-        #self.__s3.download_file('nova-images',f'{bias.bid}.PNG',self.__path+'./temp_files')
-        bias_img = cv2.imread(f"{self.__path}temp_files/{bias.bid}.jpg")
+        self.__s3.download_file('nova-images',f'{bias.bid}.PNG',f'{self.__path}temp_files/{bias.bid}.png')
+        bias_img = cv2.imread(f"{self.__path}temp_files/{bias.bid}.png")
         bias_img = cv2.resize(bias_img, (100, 100))  # 예를 들어 100x100 크기로 리사이즈
 
         # 3. 글자 붙혀넣기
