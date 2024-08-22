@@ -130,7 +130,7 @@ class Core_Service_View(Master_View):
 
     def check_route(self):
         # 최애 인증 페이지
-        @self.__app.post('/nova-check/server/check_page')
+        @self.__app.post('/nova_check/server_info/check_page')
         def get_check_page(raw_request:dict):
             request = CheckRequest(request=raw_request)
             core_controller=Core_Controller()
@@ -140,7 +140,7 @@ class Core_Service_View(Master_View):
             return response
 
         # 최애 인증 시도 
-        @self.__app.post('/nova-check/server/try_daily_check')
+        @self.__app.post('/nova_check/server_info/try_daily_check')
         def get_check_page(raw_request:dict):
             request = CheckRequest(request=raw_request)
             core_controller=Core_Controller()
@@ -150,7 +150,7 @@ class Core_Service_View(Master_View):
             return response
 
         # 최애 특별시 인증
-        @self.__app.post('/nova-check/server/try_special_check')
+        @self.__app.post('/nova_check/server_info/try_special_check')
         def get_check_page(raw_request:dict):
             request = CheckRequest(request=raw_request)
             core_controller=Core_Controller()
@@ -159,7 +159,7 @@ class Core_Service_View(Master_View):
             response = model.get_response_form_data(self._head_parser)
             return response
 
-        @self.__app.get('/nova-check/shared/{name_card}', response_class=HTMLResponse)
+        @self.__app.get('/nova_check/shared/{name_card}', response_class=HTMLResponse)
         def sample_get(name_card:str):
             request = name_card 
             core_controller=Core_Controller()
