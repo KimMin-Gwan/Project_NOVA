@@ -202,7 +202,7 @@ class Bias(SampleDomain):
             "country": self.country,
             "nickname": self.nickname,
             'fanname':self.fanname,
-            'group_memeber_bids':self.group_memeber_bids
+            'group_member_bids':self.group_memeber_bids
         }
 
 

@@ -11,6 +11,7 @@ class Core_Service_View(Master_View):
         self._endpoint = endpoint
         self.__database = database
         self.home_route(endpoint)
+        self.check_route()
         self.web_chatting_route(endpoint)
 
     def home_route(self, endpoint:str):
@@ -126,6 +127,48 @@ class Core_Service_View(Master_View):
             #response = model.get_response_form_data(self._head_parser)
             #return response
 
+    def check_route(self):
+        # 최애 인증 페이지
+        @self.__app.post('/nova-check/server/check_page')
+        def get_check_page(raw_request:dict):
+            request = CheckRequest(request=raw_request)
+            core_controller=Core_Controller()
+            model = core_controller.get_check_page(database=self.__database,
+                                                             request=request)
+            response = model.get_response_form_data(self._head_parser)
+            return response
+
+        # 최애 인증 시도 
+        @self.__app.post('/nova-check/server/try_daily_check')
+        def get_check_page(raw_request:dict):
+            request = CheckRequest(request=raw_request)
+            core_controller=Core_Controller()
+            model = core_controller.try_daily_check(database=self.__database,
+                                                             request=request)
+            response = model.get_response_form_data(self._head_parser)
+            return response
+
+        # 최애 특별시 인증
+        @self.__app.post('/nova-check/server/try_special_check')
+        def get_check_page(raw_request:dict):
+            request = CheckRequest(request=raw_request)
+            core_controller=Core_Controller()
+            model = core_controller.try_special_check(database=self.__database,
+                                                             request=request)
+            response = model.get_response_form_data(self._head_parser)
+            return response
+
+        @self.__app.get('/nova-check/{name_card}')
+        def sample_get(name_card:str):
+            request = name_card 
+            core_controller=Core_Controller()
+            model = core_controller.sample_func(database=self.__database,
+                                                             request=request)
+            response = model.get_response_form_data(self._head_parser)
+            return response
+
+
+
     def web_chatting_route(self,endpoint:str):
         #채팅서버
         @self.__app.get('/chatting_list')
@@ -201,11 +244,12 @@ class BiasSelectRequest(RequestHeader):
         self.token = body['token']
         self.bid = body['bid']
 
-class DailyRequest(RequestHeader):
+class CheckRequest(RequestHeader):
     def __init__(self, request) -> None:
         super().__init__(request)
         body = request['body']
         self.token = body['token']
+        self.type = body['type']
 
 class ConnectionManager:
     def __init__(self):

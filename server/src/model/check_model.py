@@ -9,17 +9,32 @@ import cv2
 import glob
 import os
 
+import warnings
+
+# Boto3의 경고 메시지 무시
+warnings.filterwarnings("ignore", module='boto3.compat')
+
+
 class CheckPageModel(BaseModel):
     def __init__(self, database:Local_Database) -> None:
         super().__init__(database)
         self._bias = Bias()
-        self.__combo = 0
-        self.__point = 0
-        self.__contribution = 0.0
-        self.__result = "default"
+        self._combo = 0
+        self._point = 0
+        self._contribution = 0.0
+        self._result = "default"
 
-    def set_bias(self, bid):
+    # type에 맞는 bias 세팅
+    def set_bias(self, request):
         try:
+            bid = ""
+            if request.type == "solo":
+                bid = self._user.solo_bid
+            elif request.type == "group":
+                bid = self._user.group_bid
+            else:
+                raise CoreControllerLogicError(error_type="set bias | request type error")
+
             bias_data = self._database.get_data_with_id(target="bid", id=bid)
             self._bias.make_with_dict(bias_data)
             return
@@ -34,7 +49,7 @@ class CheckPageModel(BaseModel):
                 return True
             else:
                 # 팔로우 안하고 있으면 invalid 반환
-                self.__result = "invalid"
+                self._result = "invalid"
                 return False
         except Exception as e:
             raise CoreControllerLogicError(error_type="is_validate_user | " + str(e))
@@ -44,17 +59,17 @@ class CheckPageModel(BaseModel):
         try:
             if self._bias.type == "solo":
                 if self._user.solo_daily:
-                    self.__result = "done"
+                    self._result = "done"
                     return False
             elif self._bias.type == "group":
                 if self._user.group_daily:
-                    self.__result = "done"
+                    self._result = "done"
                     return False
             else: 
-                self.__result = "error"
+                self._result = "error"
                 return False
             
-            self.__result = "valid"
+            self._result = "valid"
             return True
 
         except Exception as e:
@@ -66,31 +81,31 @@ class CheckPageModel(BaseModel):
 
         # 누구 대상인지 확인
         if self._bias.type == "solo":
-            self.__point = self._user.solo_point
-            self.__combo = self._user.solo_combo
+            self._point = self._user.solo_point
+            self._combo = self._user.solo_combo
         elif self._bias.type == "group":
-            self.__point = self._user.group_point
-            self.__combo = self._user.group_combo
+            self._point = self._user.group_point
+            self._combo = self._user.group_combo
         else:
-            self.__result = "error"
+            self._result = "error"
             raise CoreControllerLogicError(error_type="is_check_page_info | bias_type error")
         
-        percentage = (self.__point / total) * 100 # 퍼센트 계산
-        self.__contribution = round(percentage, 2) # 소숫점 2자리
+        percentage = (self._point / total) * 100 # 퍼센트 계산
+        self._contribution = round(percentage, 2) # 소숫점 2자리
         return True
 
     # 바이어스 호출
-    def get_bias(self):
-        return  self.__bias
+    def get_data_memebers(self):
+        return self._user, self._bias, self._point, self._combo, self._contribution
 
     def get_response_form_data(self, head_parser):
         try:
             body = {
                 'bias' : self._bias.get_dict_form_data(),
-                'point' : self.__point,
-                'combo' : self.__combo,
-                'contribution' : self.__contribution,
-                'result' : self.__result
+                'point' : self._point,
+                'combo' : self._combo,
+                'contribution' : self._contribution,
+                'result' : self._result  # done error invalid valid
             }
 
             response = self._get_response_data(head_parser=head_parser, body=body)
@@ -103,38 +118,54 @@ class CheckPageModel(BaseModel):
 class TryCheckModel(CheckPageModel):
     def __init__(self, database:Local_Database) -> None:
         super().__init__(database)
-        self.__result = "default"
         self.__name_card_url = ""
-        self.__special_time = []
+        self._special_time = []
         self.__name_card = ""
-        self.__special_time = True
+        self.__shared_url = ""
+        self.__special_check_valid = False
 
-    # 이미 만들어진 bias 주는애
-    def set_bias_with_bias_data(self, bias:Bias):
-        try:
-            self._bias = bias
-            return
-        except Exception as e:
-            raise CoreControllerLogicError(error_type="set_bias_with_bias_data | " + str(e))
+    # 부모 클래스로 만들때 사용할 초기화 함수
+    def init_with_mother_model(self, model:CheckPageModel):
+        user, bias ,point, combo, contribution = model.get_data_memebers()
+        self._user = user
+        self._bias = bias
+        self._point = point
+        self._combo = combo
+        self._contribution = contribution
+        self._result = "done"
+        return
     
+    # 중복 최애 인증은 invalid 임
+    def set_result_invalid(self):
+        self._result="invalid"
+
     # 최애 인증 시도 함수
     def try_daily_check(self):
         try:
             point = 60
-
             if self._bias.type == "solo":
                 self._bias.point = self._bias.point + point + self._user.solo_combo * 10
                 self._user.solo_combo += 1
                 self._user.solo_daily = True
+                self._result = "done"
+                self._save_datas()
             elif self._bias.type == "group":
                 self._bias.point = self._bias.point + point + self._user.group_combo * 10
                 self._user.group_combo += 1
                 self._user.group_daily = True
+                self._result = "done"
+                self._save_datas()
             else:
-                self.__result = "error"
+                self._result = "error"
                 raise CoreControllerLogicError(error_type="try_daily_check | bias type error")
         except Exception as e:
-            raise CoreControllerLogicError(error_type="set_bias_with_bias_data | " + str(e))
+            print(e)
+            raise CoreControllerLogicError(error_type="try_daily_check | " )
+        
+    def _save_datas(self):
+        self._database.modify_data_with_id(target_id="bid", target_data=self._bias.get_dict_form_data())
+        self._database.modify_data_with_id(target_id="uid", target_data=self._user.get_dict_form_data())
+        return
         
     # 네임카드를 만들고 업로드 하고 url을 name_card로 돌려줘야함
     def make_name_card(self):
@@ -167,20 +198,20 @@ class TryCheckModel(CheckPageModel):
         try:
             special_time = set()
             if self._bias.birthday != "":
-                convert_result = self.__convert_date_to_time(date_string=self._bias.birthday)
+                convert_result = self._convert_date_to_time(date_string=self._bias.birthday)
                 special_time.update(convert_result)
 
             if self._bias.debut != "":
-                convert_result = self.__convert_date_to_time(date_string=self._bias.debut)
+                convert_result = self._convert_date_to_time(date_string=self._bias.debut)
                 special_time.update(convert_result)
 
-            self.__special_time = list(special_time)
+            self._special_time = list(special_time)
             return True
         except Exception as e:
             raise CoreControllerLogicError(error_type="get_special_check_time | " + str(e))
 
     # 스페셜 체크가능 시간 리스트 만들기
-    def __convert_date_to_time(self, date_string):
+    def _convert_date_to_time(self, date_string):
         # 날짜 문자열을 연, 월, 일로 분리
         _, month, day = map(int, date_string.split('/'))
 
@@ -218,12 +249,15 @@ class TryCheckModel(CheckPageModel):
         try:
             body = {
                 'bias' : self._bias.get_dict_form_data(),   # 이건 팬카페 주소 보려고 보냄
-                'user' : self._user.get_dict_form_data(),   # 이건 왜 필요한지 모르긴함
+                #'user' : self._user.get_dict_form_data(),   # 이건 왜 필요한지 모르긴함
                 'shared_url' : self.__shared_url,  # 공유용 url
                 'special_check_valid' : self.__special_check_valid,  # 특별시 인증 가능한지 여부 조사
-                'special_time' : self.__special_time,  # 특별시 인증 시간 리스트
+                'special_time' : self._special_time,  # 특별시 인증 시간 리스트
                 'name_card_url' : self.__name_card_url, # 명함 사진 ncloud 주소
-                'result' : self.__result
+                'point' : self._point,
+                'combo' : self._combo,
+                'contribution' : self._contribution,
+                'result' : self._result
             }
 
             response = self._get_response_data(head_parser=head_parser, body=body)
@@ -232,6 +266,88 @@ class TryCheckModel(CheckPageModel):
         except Exception as e:
             raise CoreControllerLogicError("response making error | " + e)
         
+class TrySpecialCheckModel(TryCheckModel):
+    def __init__(self, database:Local_Database) -> None:
+        super().__init__(database)
+        self.__result = "default"
+
+    # 이미 스페셜 체크 했는지 확인해야됨
+    # Override
+    def is_already_check(self) -> bool:
+        try:
+            if self._bias.type == "solo":
+                if self._user.solo_special:
+                    self._result = "error"
+                    return False
+            elif self._bias.type == "group":
+                if self._user.group_special:
+                    self._result = "error"
+                    return False
+            else: 
+                self._result = "type error"
+                return False
+            
+            self._result = "valid"
+            return True
+
+        except Exception as e:
+            raise CoreControllerLogicError(error_type="is_validate_user | " + str(e))
+
+    # 최애 인증 시도 함수
+    def try_special_check(self):
+        try:
+            point = 20
+            self._bias.point += point
+            if self._bias.type == "solo":
+                self._user.solo_special = True
+                self.__result = "done"
+                self._save_datas()
+            elif self._bias.type == "group":
+                self._user.group_special = True
+                self.__result = "done"
+                self._save_datas()
+            else:
+                self.__result = "error"
+                raise CoreControllerLogicError(error_type="try_daily_check | bias type error")
+        except Exception as e:
+            raise CoreControllerLogicError(error_type="set_bias_with_bias_data | " + str(e))
+    
+    # 특별시 인지 체크
+    def check_special_time(self):
+        self.get_special_check_time()
+        now = datetime.datetime.now()
+        hour = now.hour
+        hour = 10
+        if hour in self._special_time:
+            return True
+        else:
+            self.__result = "time invalid"
+            return False
+        
+    # 스페셜 체크가능 시간 리스트 만들기
+    def _convert_date_to_time(self, date_string):
+        # 날짜 문자열을 연, 월, 일로 분리
+        _, month, day = map(int, date_string.split('/'))
+
+        # 월을 24시간 기준으로 변환 (0시부터 시작)
+        month_as_hour = (month % 12) * 2
+
+        # 일에 따라 시간 조정 (일이 16일보다 작으면 0, 크거나 같으면 1을 추가)
+        adjusted_hour = month_as_hour + (1 if day >= 16 else 0)
+
+        return [month % 12, adjusted_hour]
+
+    def get_response_form_data(self, head_parser):
+        try:
+            body = {
+                'result' : self.__result
+            }
+
+            response = self._get_response_data(head_parser=head_parser, body=body)
+            return response
+
+        except Exception as e:
+            raise CoreControllerLogicError("response making error | " + e)
 
 # 명함 제조기
 class NameCardMaker:
@@ -240,8 +356,8 @@ class NameCardMaker:
         self.__service_name = 's3'
         self.__endpoint_url = 'https://kr.object.ncloudstorage.com'
         self.__region_name = 'kr-standard'
-        self.__access_key = 'Access Key ID'
-        self.__secret_key = 'Secret Key'
+        self.__access_key = 'eeJ2HV8gE5XTjmrBCi48'
+        self.__secret_key = 'zAGUlUjXMup1aSpG6SudbNDzPEXHITNkEUDcOGnv'
         self.__s3 = boto3.client(self.__service_name,
                            endpoint_url=self.__endpoint_url,
                            aws_access_key_id=self.__access_key,
@@ -257,14 +373,15 @@ class NameCardMaker:
         img = self.__name_card_backgroud_image(user.select_name_card)
 
         # 2. 바이어스 이미지 받아오기
-        self.__s3.download_file('nova-images',f'{bias.bid}.PNG','./temp_imgs')
-        img = cv2.imread(f"./{bias.bid}.png")
-        
+        #self.__s3.download_file('nova-images',f'{bias.bid}.PNG',self.__path+'./temp_files')
+        bias_img = cv2.imread(f"{self.__path}temp_files/{bias.bid}.jpg")
+        bias_img = cv2.resize(bias_img, (100, 100))  # 예를 들어 100x100 크기로 리사이즈
+
         # 3. 글자 붙혀넣기
         cv2.putText(img,f"{user.uid}", (300,200), cv2.FONT_HERSHEY_COMPLEX, 1, (0,150,0), 1)   # 중심 위치 300,200인 폰트가 FONT_HERSHEY_COMPLEX인, 크기 1의, 약한 초록색의 ,두께 3인 글씨
-        cv2.putText(img,f"{bias.name}", (400,400), cv2.FONT_HERSHEY_SIMPLEX, 2, (255,255,255), 1)
+        cv2.putText(img,f"{bias.bname}", (400,400), cv2.FONT_HERSHEY_SIMPLEX, 2, (255,255,255), 1)
         #이미지 합성
-        #base_image[y시작:y끝, x시작:x끝] = 추가 이미지
+        img[100:200, 100:200] = bias_img
 
         # 4. 이미지 이름 만들기
         image_name = self.__make_name_url(bias.bid, user.uid)
@@ -275,7 +392,7 @@ class NameCardMaker:
         # 호출문은 아래와 같음 (날짜는 알아서 모율 내에서 계산할것)
         # modul.make_name_card(self._bias, self._user)
         # 5. 이미지 업로드
-        self.__s3.upload_file(f'{self.__path}temp_files/{image_name}', "nova-name-card", f"{image_name}",ExtraArgs={'ACL':'public-read'})
+        self.__s3.upload_file(f'{self.__path}temp_files/{image_name}.png', "nova-name-card", f"{image_name}.png",ExtraArgs={'ACL':'public-read'})
 
         #name_card_url = f"https://kr.object.ncloudstorage.com/nova-name-card/{card_name}.png"
         # 함수 반환값을 파일 주소를 반환 할것
@@ -285,7 +402,7 @@ class NameCardMaker:
 
     # 명함의 백그라운드 이미지 선택(name_card_id는 user에서 제공)
     def __name_card_backgroud_image(self, name_card_id):
-        path = self.__path + "name_card/" + name_card_id + ".png"
+        path = self.__path + "name_card/" + name_card_id + ".PNG"
         img = cv2.imread(path)
         return img
 
@@ -295,7 +412,7 @@ class NameCardMaker:
     def __make_name_url(self, bid, uid) -> str:
         now = datetime.datetime.now()
         date = now.strftime('%Y-%m-%d')
-        name_card_url = f'{bid}-{uid}-{date}.png'
+        name_card_url = f'{bid}-{uid}-{date}'
         return name_card_url
 
     # img 이미지 이름 가지고 오기

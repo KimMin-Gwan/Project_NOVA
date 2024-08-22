@@ -23,9 +23,12 @@ PORT = 6000
 #url = "http://127.0.0.1:6000/home/try_select_my_bias"  # 최애 정하기
 
 #url = "http://175.106.99.34/user_home/try_login"  # 로그인 시도
-#url = "http://127.0.0.1:6000/user/try_login"  # 로그인 시도
-#url = "http://127.0.0.1:6000/user/try_send_email"  # 이메일 보내기
-#url = "http://127.0.0.1:6000/user/try_sign_in"  # 로그인 시도
+#url = "http://127.0.0.1:6000/user_home/try_send_email"  # 이메일 보내기
+#url = "http://127.0.0.1:6000/user_home/try_sign_in"  # 로그인 시도
+
+#url = "http://127.0.0.1:6000/nova-check/server/check_page"  # 로그인 시도
+url = "http://127.0.0.1:6000/nova-check/server/try_daily_check"  # 로그인 시도
+#url = "http://127.0.0.1:6000/nova-check/server/try_special_check"  # 로그인 시도
 
 ## # GET 요청 보내기
 #response = requests.get(url)
@@ -62,6 +65,7 @@ header = {
 #}
 
 # home/my_bias_league
+# nova-check/server/check_page
 send_data = {
     "header" : header,
     "body" : {

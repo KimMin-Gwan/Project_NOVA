@@ -46,8 +46,8 @@ class NOVAVerification:
     def __init__(self):
         self.__temp_user = []  # TempUser 
         # exp 채커
-        exp_checker = Thread(target=self._check_expiration)
-        exp_checker.start()
+        #exp_checker = Thread(target=self._check_expiration)
+        #exp_checker.start()
     
     def get_temp_user(self):
         for data in self.__temp_user:
