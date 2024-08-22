@@ -230,6 +230,7 @@ class Core_Controller:
             # 인증이랑 관련된 내용 만들기
             model = self.__check_response_maker(model=model)
 
+
         except CustomError as e:
             print("Error Catched : ", e.error_type)
             model.set_state_code(e.error_code) # 종합 에러
@@ -280,6 +281,116 @@ class Core_Controller:
 
         finally:
             return model
+        
+    def get_shared_url(self, database, request):
+        # URL을 동적으로 생성
+        url = f"https://kr.object.ncloudstorage.com/nova-name-card/{request}.png"
+        
+        # HTML 템플릿에서 URL을 반영
+        html = f"""
+        <!DOCTYPE html>
+        <html lang="ko">
+
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>최애 인증하기</title>
+            <style>
+                body {{
+                    font-family: Arial, sans-serif;
+                    margin: 0;
+                    padding: 0;
+                    text-align: center;
+                    width: 500px;
+                    margin: 0 auto;
+                }}
+
+                h1 {{
+                    font-size: 18px;
+                    margin-bottom: 20px;
+                    font-weight: normal;
+                }}
+
+                .card {{
+                    background-color: #e0e0e0;
+                    padding: 20px;
+                    border-radius: 10px;
+                    position: relative;
+                }}
+
+                .card h2 {{
+                    margin: 0;
+                    font-size: 20px;
+                    margin-bottom: 10px;
+                }}
+
+                .card a {{
+                    display: block;
+                    width: 100%;
+                    height: 200px;
+                    background-color: #d0d0d0;
+                    border-radius: 10px;
+                    text-align: center;
+                    overflow: hidden;
+                }}
+
+                .card img {{
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    border-radius: 10px;
+                }}
+
+                .card span {{
+                    display: block;
+                    margin-top: 10px;
+                    color: #999;
+                }}
+
+                .Header {{
+                    height: 70px;
+                    width: 100%;
+                    border-bottom: 1px solid #000000;
+                    text-align: center;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }}
+
+                .ad-placeholder {{
+                    background-color: #d0d0d0;
+                    padding: 20px;
+                    margin-top: 20px;
+                    font-size: 16px;
+                    color: #666;
+                }}
+            </style>
+        </head>
+
+        <body>
+            <div class="container">
+                <div class="Header">
+                    <div class="Top">
+                        <h1>최애 인증하기</h1>
+                    </div>
+                </div>
+                <div class="card">
+                    <h2>NOVA</h2>
+                    <a href="{url}">
+                        <img src="{url}" alt="명함 PNG">
+                    </a>
+                </div>
+                <div class="ad-placeholder">
+                    광고 들어갈 예정
+                </div>
+            </div>
+        </body>
+        </html>
+        """
+        return html
+
+
+
 
 
 #-----------채팅 시스템-----------------------------------------------------------

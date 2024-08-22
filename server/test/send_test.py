@@ -13,6 +13,7 @@ PORT = 6000
 #url = "http://127.0.0.1:6000/home/league_data?league_type=solo"  # 리그 매타 정보
 #url = "http://127.0.0.1:6000/home/show_league?league_name=양자리"  # 리그 랭킹 순위
 #url = "http://175.106.99.34/home/show_league?league_name=양자리"  # 리그 랭킹 순위
+#url = "http://175.106.99.34/home/search_bias?bias_name=김"  # bias 검색
 #url = "http://127.0.0.1:6000/home/search_bias?bias_name=김"  # bias 검색
 
  ##post
@@ -27,22 +28,25 @@ PORT = 6000
 #url = "http://127.0.0.1:6000/user_home/try_sign_in"  # 로그인 시도
 
 #url = "http://127.0.0.1:6000/nova-check/server/check_page"  # 로그인 시도
-url = "http://127.0.0.1:6000/nova-check/server/try_daily_check"  # 로그인 시도
+#url = "http://127.0.0.1:6000/nova-check/server/try_daily_check"  # 로그인 시도
 #url = "http://127.0.0.1:6000/nova-check/server/try_special_check"  # 로그인 시도
+url = "http://127.0.0.1:6000/nova-check/shared/1001-5678-efgh-1234-2024-08-23"# 로그인 시도
 
-## # GET 요청 보내기
-#response = requests.get(url)
+# # GET 요청 보내기
+response = requests.get(url)
 
-## # 상태 코드 확인
-#print(f"Status Code: {response.status_code}")
+# # 상태 코드 확인
+print(f"Status Code: {response.status_code}")
 
- ## 응답 데이터 (JSON) 출력
-#if response.status_code == 200:
-     #result = response.json()
-     #print(result)
-     #pprint.pprint(result)
-#else:
-     #print("Failed to retrieve data")
+ # 응답 데이터 (JSON) 출력
+if response.status_code == 200:
+    #result = response.json()
+    result = response.text
+    pprint.pprint(result)
+else:
+     print("Failed to retrieve data")
+exit()
+
 
 ## make_jwt.py 실행시켜서 token 발급 받을 것
 token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJhbmRvbVVzZXIxQG5hdmVyLmNvbSIsImlhdCI6MTcyNDI1MjA0MywiZXhwIjoxNzI0MjUzODQzfQ.iKh_X-p68ngTn5Xrg8YX1DGIf4sVqxwtl_ebuLlrDJw"

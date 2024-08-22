@@ -3,6 +3,7 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from view.master_view import Master_View, RequestHeader
 from view.parsers import Head_Parser
 from controller import Home_Controller, Core_Controller
+from fastapi.responses import HTMLResponse
 
 class Core_Service_View(Master_View):
     def __init__(self, app:FastAPI, endpoint:str, database, head_parser:Head_Parser) -> None:
@@ -158,16 +159,13 @@ class Core_Service_View(Master_View):
             response = model.get_response_form_data(self._head_parser)
             return response
 
-        @self.__app.get('/nova-check/{name_card}')
+        @self.__app.get('/nova-check/shared/{name_card}', response_class=HTMLResponse)
         def sample_get(name_card:str):
             request = name_card 
             core_controller=Core_Controller()
-            model = core_controller.sample_func(database=self.__database,
+            html = core_controller.get_shared_url(database=self.__database,
                                                              request=request)
-            response = model.get_response_form_data(self._head_parser)
-            return response
-
-
+            return html
 
     def web_chatting_route(self,endpoint:str):
         #채팅서버

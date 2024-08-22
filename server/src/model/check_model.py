@@ -396,6 +396,8 @@ class NameCardMaker:
 
         #name_card_url = f"https://kr.object.ncloudstorage.com/nova-name-card/{card_name}.png"
         # 함수 반환값을 파일 주소를 반환 할것
+
+        self.delete_temp_image()
         return True
         # 아래가 실제 사용 예시
         #self.__name_card_url = modul.get_name_card_url()
@@ -432,12 +434,10 @@ class NameCardMaker:
         time.sleep(0.1)
 
         # 디렉토리 내의 모든 파일을 찾음
-        directory_path = './model/local_database/'
+        directory_path = self.__path + "/temp_files/"
         files = glob.glob(os.path.join(directory_path, '*'))
-        print(files)
-        
-        #for file in files:
-            ## 파일인지 확인 후 삭제
-            #if os.path.isfile(file):
-                #os.remove(file)
+        for file in files:
+            # 파일인지 확인 후 삭제
+            if os.path.isfile(file):
+                os.remove(file)
         return
