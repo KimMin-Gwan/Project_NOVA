@@ -9,7 +9,7 @@
         "group_point": 0,
         "combo": 0,
         "credit": 0,
-        "solo_bid": "1001",
+        "solo_bid": "",
         "group_bid": "",
         "items": {
             "chatting": 99,
@@ -73,7 +73,7 @@
         "point": 1000,
         "combo": 4,
         "credit": 0,
-        "solo_bid": "1001",
+        "solo_bid": "1002",
         "group_bid": "",
         "items": {
             "chatting": 0,
@@ -106,8 +106,8 @@
         "point": 220,
         "combo": 1,
         "credit": 0,
-        "solo_bid": "1001",
-        "group_bid": "",
+        "solo_bid": "0",
+        "group_bid": "9999",
         "items": {
             "chatting": 0,
             "saver": 0
@@ -139,8 +139,8 @@
         "point": 660,
         "combo": 3,
         "credit": 0,
-        "solo_bid": "1001",
-        "group_bid": "",
+        "solo_bid": "",
+        "group_bid": "9995",
         "items": {
             "chatting": 0,
             "saver": 0
@@ -172,8 +172,8 @@
         "point": 420,
         "combo": 0,
         "credit": 0,
-        "solo_bid": "1001",
-        "group_bid": "",
+        "solo_bid": "1004",
+        "group_bid": "9997",
         "items": {
             "chatting": 0,
             "saver": 0
@@ -202,10 +202,10 @@
         "age": "21",
         "email": "randomUser6@naver.com",
         "gender": "m",
-        "point": 430,
+        "point": 0,
         "combo": 1,
         "credit": 0,
-        "solo_bid": "1001",
+        "solo_bid": "",
         "group_bid": "",
         "items": {
             "chatting": 0,
@@ -238,7 +238,7 @@
         "point": 500,
         "combo": 4,
         "credit": 0,
-        "solo_bid": "1001",
+        "solo_bid": "",
         "group_bid": "",
         "items": {
             "chatting": 0,
@@ -271,7 +271,7 @@
         "point": 210,
         "combo": 0,
         "credit": 0,
-        "solo_bid": "1001",
+        "solo_bid": "",
         "group_bid": "",
         "items": {
             "chatting": 0,
@@ -304,7 +304,7 @@
         "point": 330,
         "combo": 2,
         "credit": 0,
-        "solo_bid": "1001",
+        "solo_bid": "",
         "group_bid": "",
         "items": {
             "chatting": 0,
@@ -337,7 +337,7 @@
         "point": 680,
         "combo": 3,
         "credit": 0,
-        "solo_bid": "1001",
+        "solo_bid": "",
         "group_bid": "",
         "items": {
             "chatting": 0,
