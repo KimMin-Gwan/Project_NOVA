@@ -35,10 +35,6 @@ class HomeBiasModel(BaseModel):
 
     # 솔로 바이어스 세팅
     def set_solo_bias_with_bid(self):
-
-        print(self._user.solo_bid)
-        print(self._user.group_bid)
-
         if self._user.solo_bid == "":  # 팔로우한 바이어스 없으면 false 반환
             return False
         
@@ -191,7 +187,6 @@ class LeagueMetaModel(BaseModel):
             for league_data in raw_league_datas:
                 league = League()
                 league.make_with_dict(league_data)
-                print(league_data)
                 if league.type == request.league_type:
                     self.__leagues.append(league)
 

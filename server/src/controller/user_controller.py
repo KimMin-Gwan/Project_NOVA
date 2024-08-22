@@ -252,7 +252,6 @@ class MailSender:
             server.starttls()  # TLS 보안 연결
             server.login(self.sender_email, self.sender_password)
             server.sendmail(self.sender_email, receiver_email, message.as_string())
-            print("이메일 전송 성공!")
         except Exception as e:
             print(f"이메일 전송 실패: {e}")
         finally:

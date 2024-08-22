@@ -16,7 +16,8 @@ PORT = 6000
 #url = "http://127.0.0.1:6000/home/search_bias?bias_name=김"  # bias 검색
 
  ##post
-url = "http://127.0.0.1:6000/home/my_bias"  # 리그 랭킹 순위
+#url = "http://127.0.0.1:6000/home/my_bias"  # 리그 랭킹 순위
+#url = "http://175.106.99.34/home/my_bias"  # 리그 랭킹 순위
 #url = "http://175.106.99.34/home/my_bias_league"  # 최애 리그 랭킹 순위
 #url = "http://127.0.0.1:6000/home/my_bias_league"  # 최애 리그 랭킹 순위
 #url = "http://127.0.0.1:6000/home/try_select_my_bias"  # 최애 정하기
@@ -52,22 +53,22 @@ header = {
     "endpoint" : "/core_system/", 
 }
 
-# home/my_bias
-send_data = {
-    "header" : header,
-    "body" : {
-        'token' : token
-    }
-}
-
-## home/my_bias_league
+## home/my_bias
 #send_data = {
     #"header" : header,
     #"body" : {
-        #'token' : token,
-        #'type' : "solo"
+        #'token' : token
     #}
 #}
+
+# home/my_bias_league
+send_data = {
+    "header" : header,
+    "body" : {
+        'token' : token,
+        'type' : "solo"
+    }
+}
 
 # home/try_select_my_bias
 #send_data = {

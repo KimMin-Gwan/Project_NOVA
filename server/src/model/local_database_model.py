@@ -170,7 +170,6 @@ class Local_Database:
     # db.add_new_data(target_id="uid", new_data={key: value})
     def add_new_data(self, target_id:str, new_data:dict):
         try:
-            print(new_data)
             target_list:list = self._select_target_list(target=target_id)
             target_list.append(new_data)
             func = self._select_save_function(target=target_id)

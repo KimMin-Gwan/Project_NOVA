@@ -44,9 +44,6 @@ class Home_Controller:
             if not model.set_group_bias_with_bid():
                 model.set_state_code("211")
                 return model
-
-            print("hello")
-
         except CustomError as e:
             print("Error Catched : ", e.error_type)
             model.set_state_code(e.error_code) # 종합 에러

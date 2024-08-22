@@ -5,8 +5,6 @@ from controller.jwt_decoder import JWTDecoder, JWTPayload
 class Core_Controller:
     def sample_func(self, database:Local_Database, request) -> BaseModel: 
         jwt_decoder = JWTDecoder()
-        
-
         model = BaseModel(database=database)
         try:
 
@@ -19,14 +17,12 @@ class Core_Controller:
             print("Error Catched : ", e)
             model.set_state_code(e.error_code) # 종합 에러
             return model
-
         try:
             """
             if not model.set_biases_with_bids():
                 model.set_state_code("210")
                 return model
             """
-
         except CustomError as e:
             print("Error Catched : ", e.error_type)
             model.set_state_code(e.error_code) # 종합 에러
@@ -63,9 +59,6 @@ class Core_Controller:
                 target_bid = model.get_user().solo_bid
             else:
                 return model # 구분이 안되면 그냥 냅다 반환시켜버려 
-            
-            print("hello")
-
             model.set_bias_data(bid=target_bid)  # 목표 리그를 찾아야해서 bias 부터 검색
             new_request = LeagueRequest(league_id=model.get_bias().lid)  # 목표 리그의 lid 가지고옴
             model = self.get_league(database=database, request=new_request)
@@ -97,8 +90,6 @@ class Core_Controller:
         
 
     # -----------------------------------------------------------------------
-
-
     # 최애 인증 요청 용 컨트롤러 함수
     def requese_daily_check(self, database:Local_Database, request) -> BaseModel: 
         model = RequestDailyCheck(database=database)
@@ -195,11 +186,6 @@ class Core_Controller:
 
         finally:
             return model
-
-
-
-
-
 
 
 
