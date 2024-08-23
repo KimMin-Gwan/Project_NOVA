@@ -17,6 +17,7 @@ import SelectBias from './component/selectBias/SelectBias';
 function App() {
 
   let url = 'http://nova-platform.kr/home/';
+  // let url = 'http://127.0.0.1:5000/home/';
   let type = ['solo', 'group'];
 
   let header = {
@@ -26,43 +27,45 @@ function App() {
     "uid": '1234-abcd-5678',
     "endpoint": "/core_system/",
   }
+  let sample = localStorage.getItem('jwtToken');
 
-  let jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RVc2VyQG5hdmVyLmNvbSIsImlhdCI6MTcyMzk5NDMzMCwiZXhwIjoxNzIzOTk2MTMwfQ.PWzlMUMKjMrgxc8Yl59-eIQPLP0QasunTnNl487ZWMA'
+  // let jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RVc2VyQG5hdmVyLmNvbSIsImlhdCI6MTcyMzk5NDMzMCwiZXhwIjoxNzIzOTk2MTMwfQ.PWzlMUMKjMrgxc8Yl59-eIQPLP0QasunTnNl487ZWMA'
 
-  let select_bias_send_data = {
-    "header": header,
-    "body": {
-      'token': jwt,
-      'bid': 1001,
-    }
-  }
+  // let select_bias_send_data = {
+  //   "header": header,
+  //   "body": {
+  //     'token': jwt,
+  //     'bid': 1001,
+  //   }
+  // }
+
+  // let [leagues, setLeague] = useState([]);
+  // let league_copy = [];
 
 
-  let [leagues, setLeague] = useState([]);
-  let league_copy = [];
-
-
-  useEffect(() => {
-    fetch(url + 'league_data?league_type=solo')
-      .then(response => response.json())
-      .then(data => {
-        // league_copy = data.body.leagues[0].lname
-        league_copy = data.body.leagues.map(leagues => leagues.lname);
-        // console.log(JSON.stringify(league_copy));
-        setLeague(league_copy);
-        console.log('app화면')
+  // useEffect(() => {
+  //   fetch(url + 'league_data?league_type=solo')
+  //     .then(response => response.json())
+  //     .then(data => {
+  //       // league_copy = data.body.leagues[0].lname
+  //       league_copy = data.body.leagues.map(leagues => leagues.lname);
+  //       // console.log(JSON.stringify(league_copy));
+  //       setLeague(league_copy);
+  //       console.log('app화면')
+  //       console.log('리그즈 : ', leagues)
         
         
-      })
-  }, [url])
+  //     })
+  // }, [url])
 
-  let [rank, setRank] = useState([]);
-  let rank_copy = [];
-  let profile_url = 'https://kr.object.ncloudstorage.com/nova-images/';
+  // let [rank, setRank] = useState([]);
+  // let rank_copy = [];
+  // let profile_url = 'https://kr.object.ncloudstorage.com/nova-images/';
 
   //내 최애 / 전체 선택버튼용
   let [isSoloClicked, setSoloClick] = useState(false);
   let [isGroupClicked, setGroupClick] = useState(false);
+
 
   // let [isTouched, setTouched] = useState('전체');
 
@@ -77,6 +80,8 @@ function App() {
   function handleGroupToggle() {
     setGroupClick(!isGroupClicked);
   };
+
+
 
   let [showBox, setShowBox] = useState(false);
   let [blackBox, setBlackBox] = useState();
@@ -111,7 +116,7 @@ function App() {
                 {/* <Link to='/mybias' className='button'>최애페이지</Link> */}
               </div>
             </header>
-            <Banner></Banner>
+            <Banner url={url}></Banner>
 
             <h2 className='authen'>인증하기</h2>
 
@@ -127,6 +132,7 @@ function App() {
               <div className={`toggle-container ${isSoloClicked ? "" : "active"}`}>
                 <div onClick={() => {
                   handleSoloToggle();
+                 
                   // handleTouch('내 최애')
                 }} className={`text ${isSoloClicked ? "" : "active"}`}>내 최애</div>
                 <div onClick={() => {
@@ -137,7 +143,7 @@ function App() {
 
               </div>
             </div>
-            <Meta url={url} isClicked={isSoloClicked} isSoloClicked={isSoloClicked} type={type[0]}></Meta>
+            <Meta url={url} isSoloClicked={isSoloClicked} type={type[0]} ></Meta>
 
           </section>
 
@@ -157,7 +163,7 @@ function App() {
 
               </div>
             </div>
-            <Meta url={url} isClicked={isGroupClicked} isGroupClicked={isGroupClicked} type={type[1]}></Meta>
+            <Meta url={url}  isGroupClicked={isGroupClicked} type={type[1]}></Meta>
           </section>
 
           <section className="advise"></section>

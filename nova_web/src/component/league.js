@@ -4,10 +4,12 @@ import Ranks from "./ranks";
 
 
 
-function League({ url, leagues, isClicked, biasLeague }) {
+function League({ url, leagues, isClicked }) {
 
     let [rank, setRank] = useState([]);
     let [biasRank, setBiasRank] = useState([]);
+
+    let [myBiasIndex, setMyBiasIndex] = useState(0);
 
     // let rank_copy = [];
     let [clickedIndex, setClickedIndex] = useState(0);
@@ -25,7 +27,8 @@ function League({ url, leagues, isClicked, biasLeague }) {
                 const data = await response.json();
                 setRank(data.body.rank);
                 // console.log(2);
-                console.log('랭킹 데이터');
+                console.log('랭킹 데이터 :' , leagues);
+
                 
             }
             catch (error) {
@@ -35,14 +38,18 @@ function League({ url, leagues, isClicked, biasLeague }) {
         };
         fetchData();
 
-    }, [url, clickedIndex, leagues]);
+        if(isClicked)
+        {
+            return setClickedIndex(0)
+        }
+    }, [url, clickedIndex, leagues, isClicked]);
 
     return (
         <>
             <div className="stars">
                 {
                     leagues.map(function (b, i) {
-                        if (!isClicked) {
+                        if(!isClicked){
                             return (
                                 <div className='행성 ' key={i}>
                                     <button onClick={() => {
@@ -57,7 +64,23 @@ function League({ url, leagues, isClicked, biasLeague }) {
                                         )
                                     }
                                 </div>
-
+                            );
+                        }
+                        else if(isClicked){
+                            return (
+                                <div className='행성 ' key={i}>
+                                    <button onClick={() => {
+                                        setClickedIndex(0);
+                                    }
+                                    } className={'click-now'}>{leagues[i]}</button>
+                                    {
+                                        (
+                                            <div className="icon-box">
+                                                <BsDot className="icon" />
+                                            </div>
+                                        )
+                                    }
+                                </div>
                             );
                         }
                     })

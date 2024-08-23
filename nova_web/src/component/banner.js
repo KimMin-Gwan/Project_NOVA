@@ -1,31 +1,33 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
-function Banner() {
+function Banner({ url }) {
   let [currentBanner, setBanner] = useState(0);
   let [images, setImage] = useState([]);
   // 
-  let url = 'http://nova-platform.kr/home/banner';
+  // let url = 'http://nova-platform.kr/home/banner';
   // let data = { token: '토큰 정보'}
 
   useEffect(() => {
     let copy = [];
-    fetch(url)
+    fetch(url + 'banner')
       .then(response => response.json())
       .then(data => {
+        // console.log(data)
         copy = data.body.banner.map(banner => banner.ba_url);
         // copy = [data.body.banner[0].ba_url, data.body.banner[1].ba_url];
         setImage(copy);
       });
-    
-      let a = setInterval(()=>{ 
-      setBanner((prevIndex)=>{
+
+    let a = setInterval(() => {
+      setBanner((prevIndex) => {
         const nextIndex = (prevIndex + 1) % copy.length;
         return nextIndex;
-      })}, 3000)
-    
-      console.log('bannerrrr');
-      
+      })
+    }, 3000)
+
+    console.log('bannerrrr');
+
     //   copy.map(function(b, i){
     //   if(copy.length>i)
     //   {

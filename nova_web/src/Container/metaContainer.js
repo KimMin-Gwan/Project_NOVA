@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import League from "../component/league";
 
-function Meta({ url, isClicked,isSoloClicked, isGroupClicked, type }) {
+function Meta({ url, isSoloClicked, isGroupClicked, type }) {
 
     let [leagues, setLeagues] = useState([]);
     let league_copy = [];
@@ -16,7 +16,8 @@ function Meta({ url, isClicked,isSoloClicked, isGroupClicked, type }) {
     // let jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RVc2VyQG5hdmVyLmNvbSIsImlhdCI6MTcyNDA0MDA1MCwiZXhwIjoxNzI0MDQxODUwfQ.WxZ9UAhZlD0hkNcyvc4rPN_IIraVr2oZSXvTuTteaQU'
     let sample = localStorage.getItem('jwtToken');
 
-    let my_bias_league_copy = [];
+    let my_solo_league_copy = [];
+    let my_group_league_copy = [];
     let [mySoloBiasLeague, setMySoloBiasLeague] = useState([]);
     let [myGroupBiasLeague, setMyGroupBiasLeague] = useState([]);
 
@@ -27,34 +28,9 @@ function Meta({ url, isClicked,isSoloClicked, isGroupClicked, type }) {
     //         'type': type,
     //     }
     // }
-
-    // useEffect(()=>{
-    //     fetch(url+'my_bias_league',{
-    //         method: 'post',
-    //         headers: {
-    //             "Content-Type": 'application/json',
-    //         },
-    //         body: JSON.stringify(send_data),
-    //     })
-    //     .then(response=>response.json())
-    //     .then(data=>{
-    //         my_bias_league_copy = data.body;
-
-    //         setMyBiasLeague(my_bias_league_copy);
-    //         console.log(myBiasLeague)
-    //     })
-
-    // },[url])
     useEffect(() => {
-        const fetchSoloData = async () => {
-            // let solo_send_data = {
-            //     "header": header,
-            //     "body": {
-            //         'token': sample,
-            //         'type': 'solo',
-            //     }
-            // }
-            try {
+        {
+            const fetchData = async () => {
                 const response = await fetch(url + 'my_bias_league',
                     {
                         method: 'post',
@@ -65,83 +41,85 @@ function Meta({ url, isClicked,isSoloClicked, isGroupClicked, type }) {
                             "header": header,
                             "body": {
                                 'token': sample,
-                                'type': 'solo',
+                                'type': type,
                             }
                         }),
                     }
                 );
                 const data = await response.json();
-                console.log('솔로 데잍: ', data);
+                if (type === 'solo') {
+                    my_solo_league_copy = [data.body.league_data.lname];
+                    setMySoloBiasLeague(my_solo_league_copy);
+                    console.log('solodata: ', mySoloBiasLeague);
+                }
+                if (type === 'group') {
+                    my_group_league_copy = [data.body.league_data.lname];
+                    setMyGroupBiasLeague(my_group_league_copy);
+                    console.log('group : ', myGroupBiasLeague);
+                }
+            };
 
-                setMySoloBiasLeague(data.body.league_data.lname);
-            }
-            catch (error) {
-                console.error('Error fetching data: ', error);
-            }
-        };
-
-        fetchSoloData();
-
-    }, [url]);
-
-    useEffect(()=>{
-        const fetchGroupData = async () => {
-            // let group_send_data = {
-            //     "header": header,
-            //     "body": {
-            //         'token': sample,
-            //         'type': 'group',
-            //     }
-            // }
-            try {
-                const response = await fetch(url + 'my_bias_league',
-                    {
-                        method: 'post',
-                        headers: {
-                            "Content-Type": 'application/json',
-                        },
-                        body: JSON.stringify({
-                            "header": header,
-                            "body": {
-                                'token': sample,
-                                'type': 'group',
-                            }
-                        }),
-                    }
-                );
-                const data = await response.json();
-                console.log('그룹 데이터: ', data);
-
-                setMyGroupBiasLeague(data.body.league_data.lname);
-
-            }
-            catch (error) {
-                console.error('Error fetching data: ', error);
-            }
-        };
-
-        fetchGroupData();
-    }, [url]);
-
-    useEffect(() => {
-        console.log(mySoloBiasLeague);
-        console.log(myGroupBiasLeague);
-        console.log('solo: ' + isSoloClicked + type);
-        console.log('group: ', isGroupClicked + type);
-    }, [mySoloBiasLeague, myGroupBiasLeague, isSoloClicked, isGroupClicked]);
+            fetchData();
+        }
+    }, [url, isGroupClicked])
 
     useEffect(() => {
         fetch(url + `league_data?league_type=${type}`)
             .then(response => response.json())
             .then(data => {
-                league_copy = data.body.leagues.map(leagues => leagues.lname);
-                setLeagues(league_copy);
+                setLeagues(data.body.leagues.map(leagues => leagues.lname));
             })
     }, [url])
 
-    return (
-        <League url={url} leagues={leagues} isClicked={isClicked}></League>
-    )
+    // if (type === 'solo') {
+    //     if (isSoloClicked) {
+    //         return (
+    //             <League url={url} leagues={mySoloBiasLeague} isClicked={isSoloClicked}></League>
+    //         )
+    //     }
+    //     else {
+    //         return (
+    //             <League url={url} leagues={leagues} isClicked={isSoloClicked}></League>
+    //         )
+    //     }
+    // }
+    // else if (type === 'group') {
+    //     if (isGroupClicked) {
+    //         return (
+    //             <League url={url} leagues={myGroupBiasLeague} isClicked={isGroupClicked}></League>
+    //         )
+    //     }
+    //     else {
+    //         return (
+    //             <League url={url} leagues={leagues} isClicked={isGroupClicked}></League>
+    //         )
+    // }
+    // }
+    if (isSoloClicked) {
+        {
+            if (mySoloBiasLeague.length === 1 && mySoloBiasLeague[0] === '') {
+                return <div className="setting">최애 설정 필요</div>
+            }
+            else {
+                return <League url={url} leagues={mySoloBiasLeague} isClicked={isSoloClicked}></League>
+            }
+        }
+    }
+    else if (isGroupClicked) {
+        {
+            if (myGroupBiasLeague.length === 1 && myGroupBiasLeague[0] === '') {
+                return <div className="setting">최애 설정 필요</div>
+            }
+            else {
+                return <League url={url} leagues={myGroupBiasLeague} isClicked={isGroupClicked}></League>
+            }
+        }
+    }
+    else {
+        return (
+            <League url={url} leagues={leagues} isClicked={isSoloClicked||isGroupClicked}></League>
+        )
+    }
 }
 
 export default Meta;

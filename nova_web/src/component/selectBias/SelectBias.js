@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 function SelectBias() {
 
     let url = 'http://nova-platform.kr/home/';
+    // let url = 'http://127.0.0.1:5000/home/';
 
     let header = {
         "request-type": "default",
@@ -18,13 +19,13 @@ function SelectBias() {
 
     let sample = localStorage.getItem('jwtToken');
 
-    let select_bias_send_data = {
-        "header": header,
-        "body": {
-            'token': sample,
-            'bid': 1001,
-        }
-    }
+    // let select_bias_send_data = {
+    //     "header": header,
+    //     "body": {
+    //         'token': sample,
+    //         'bid': 1001,
+    //     }
+    // }
 
     let [searchName, setSearchName] = useState('');
     let [results, setResults] = useState([]);

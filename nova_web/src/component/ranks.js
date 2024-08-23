@@ -8,7 +8,7 @@ function Ranks({ rank, isClicked }) {
         <div className="league" >
             {
                 rank.map(function (a, i) {
-                    if (!isClicked) {
+                    {
                         return (
                             <div className="rank-item-box" key={i}>
                                 <p className='rank-num'>{i+1}</p>
