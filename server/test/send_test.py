@@ -18,7 +18,8 @@ PORT = 6000
 
 #url = "http://127.0.0.1:6000/nova_check/shared/1001-5678-efgh-1234-2024-08-23"# 공유 페이지
 
-url = "http://127.0.0.1:6000/bias_info/user_contribution?bias_id=1003"  # 리그 랭킹 순위
+url = "http://127.0.0.1:6000/bias_info/user_contribution?bias_id=1003"  # 최애 페이지 기여도 랭킹 
+#url = "http://175.106.99.34/bias_info/user_contribution?bias_id=9999"  # 최애 페이지 기여도  랭킹 순위
 
  ##post
 #url = "http://127.0.0.1:6000/home/my_bias"  # 리그 랭킹 순위
@@ -36,6 +37,11 @@ url = "http://127.0.0.1:6000/bias_info/user_contribution?bias_id=1003"  # 리그
 #url = "http://127.0.0.1:6000/nova_check/server_info/try_daily_check"  # 로그인 시도
 #url = "http://127.0.0.1:6000/nova_check/server_info/try_special_check"  # 로그인 시도
 #url = "http://175.106.99.34/nova_check/shared/1001-5678-efgh-1234-2024-08-23" # 로그인 시도
+
+#url = "http://127.0.0.1:6000/bias_info/my_contribution"  # 리그 랭킹 순위
+#url = "http://175.106.99.34/bias_info/my_contribution"  # 리그 랭킹 순위
+
+
 
 
 # # GET 요청 보내기
@@ -74,24 +80,26 @@ header = {
     #}
 #}
 
-# home/my_bias_league
-# nova-check/server/check_page
-send_data = {
-    "header" : header,
-    "body" : {
-        'token' : token,
-        'type' : "group"
-    }
-}
-
-# home/try_select_my_bias
+## home/my_bias_league
+## nova-check/server/check_page
 #send_data = {
     #"header" : header,
     #"body" : {
         #'token' : token,
-        #'bid' : "1001"
+        #'type' : "group"
     #}
-#
+#}
+
+# home/try_select_my_bias
+# bias_info/my_contribution
+send_data = {
+    "header" : header,
+    "body" : {
+        'token' : token,
+        'bid' : "1002"
+    }
+}
+
 
 #user/try_login 
 #send_data = {

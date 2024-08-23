@@ -26,8 +26,8 @@ class BaisBannerModel(BaseModel):
 class UserContributionModel(BaseModel):
     def __init__(self, database:Local_Database) -> None:
         super().__init__(database)
-        self.__bias = Bias()  # 목표 선택용 bias
-        self.__users = []   # 랭크 집계를 위한 bias 리스트
+        self._bias = Bias()  # 목표 선택용 bias
+        self._users = []   # 랭크 집계를 위한 bias 리스트
 
     def set_bias_data(self, request):
         bias_data = self._database.get_data_with_id(target="bid", id=request.bid)
@@ -35,44 +35,44 @@ class UserContributionModel(BaseModel):
         if not bias_data:
             return False
 
-        self.__bias.make_with_dict(dict_data=bias_data)
+        self._bias.make_with_dict(dict_data=bias_data)
         return True
     
     # 유저 정보 받아오기
     def set_user_datas(self):
 
-        if self.__bias.type == "solo":
-            user_datas = self._database.get_datas_with_key(target="uid", key="solo_bid", key_datas=[self.__bias.bid])
-        elif self.__bias.type == "group":
-            user_datas = self._database.get_datas_with_key(target="uid", key="group_bid", key_datas=[self.__bias.bid])
+        if self._bias.type == "solo":
+            user_datas = self._database.get_datas_with_key(target="uid", key="solo_bid", key_datas=[self._bias.bid])
+        elif self._bias.type == "group":
+            user_datas = self._database.get_datas_with_key(target="uid", key="group_bid", key_datas=[self._bias.bid])
         else:
             return False
         
         for user_data in user_datas:
             user = User()
             user.make_with_dict(dict_data=user_data)
-            self.__users.append(user)
+            self._users.append(user)
 
         return True
 
     def set_user_alignment(self):
-        if self.__bias.type == "solo":
-            self.__users = sorted(self.__users, key=lambda x: x.solo_point, reverse=True)
-        elif self.__bias.type == "group":
-            self.__users = sorted(self.__users, key=lambda x: x.group_point, reverse=True)
+        if self._bias.type == "solo":
+            self._users = sorted(self._users, key=lambda x: x.solo_point, reverse=True)
+        elif self._bias.type == "group":
+            self._users = sorted(self._users, key=lambda x: x.group_point, reverse=True)
         else:
             return False
         
         return True
     
-    def __get_dict_user_data_with_rank(self):
+    def _get_dict_user_data_with_rank(self):
         dict_user_form_list = []
         priv_point = 10000
         now_rank = 0
         set_rank = 0 
 
-        if self.__bias.type == "solo":
-            for user in self.__users:
+        if self._bias.type == "solo":
+            for user in self._users:
                 now_point = user.solo_point
                 if now_point < priv_point:
                     now_rank = now_rank + set_rank + 1
@@ -83,10 +83,11 @@ class UserContributionModel(BaseModel):
                 else:
                     print("data align set badly")
                 user_data = user.get_dict_form_data()
+                user_data['point'] = user.solo_point
                 user_data['rank'] = now_rank
                 dict_user_form_list.append(user_data)
-        elif self.__bias.type == "group":
-            for user in self.__users:
+        elif self._bias.type == "group":
+            for user in self._users:
                 now_point = user.group_point
                 if now_point < priv_point:
                     now_rank = now_rank + set_rank + 1
@@ -97,17 +98,18 @@ class UserContributionModel(BaseModel):
                 else:
                     print("data align set badly")
                 user_data = user.get_dict_form_data()
+                user_data['point'] = user.group_point
                 user_data['rank'] = now_rank
                 dict_user_form_list.append(user_data)
         else:
             print("bias_type error")
 
         return dict_user_form_list
-
+    
     def get_response_form_data(self, head_parser):
         try:
             body = {
-                'user_contribution' : self.__get_dict_user_data_with_rank(),
+                'user_contribution' : self._get_dict_user_data_with_rank(),
             }
 
             response = self._get_response_data(head_parser=head_parser, body=body)
@@ -116,3 +118,46 @@ class UserContributionModel(BaseModel):
         except Exception as e:
             raise CoreControllerLogicError("response making error | " + e)
         
+
+        
+class MyContributionModel(UserContributionModel):
+    def __init__(self, database:Local_Database) -> None:
+        super().__init__(database)
+        self.__result = False  # 내가 팔로우 중이면 True
+
+    # 내 최애가 맞는지 확인
+    def is_my_bias(self) -> bool:
+        if self._user.solo_bid == self._bias.bid or self._user.group_bid == self._bias.bid:
+            self.__result = True
+            return True
+        else:
+            return False
+
+    # rank와 point를 포함한 데이터
+    def _get_my_data(self) -> dict:
+        user_data = self._get_dict_user_data_with_rank()
+        point = 0
+        rank = 0
+
+        for user in user_data:
+            if user['uid'] == self._user.uid:
+                point = user['point']
+                rank = user['rank']
+
+        dict_user = self._user.get_dict_form_data()
+        dict_user['point'] = point
+        dict_user['rank'] = rank
+        return dict_user
+
+    def get_response_form_data(self, head_parser):
+        try:
+            body = {
+                'my_contribution' : self._get_my_data(),
+                'result' : self.__result
+            }
+
+            response = self._get_response_data(head_parser=head_parser, body=body)
+            return response
+
+        except Exception as e:
+            raise CoreControllerLogicError("response making error | " + e)
