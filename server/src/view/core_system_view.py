@@ -90,26 +90,6 @@ class Core_Service_View(Master_View):
             response = model.get_response_form_data(self._head_parser)
             return response
         
-
-        #@self.__app.post(endpoint+'/home/login')
-        #def login(raw_request:dict):
-            #request = LoginRequest(request=raw_request)
-            #core_controller=Core_Controller()
-            #model = core_controller.get_my_bias_league(database=self.__database,
-                                                             #request=request)
-            #response = model.get_response_form_data(self._head_parser)
-            #return response
-        
-        #@self.__app.post(endpoint+'/home/daily')
-        #def daily_request(raw_request:dict):
-            #request = DailyRequest(request=raw_request)
-            #core_controller=Core_Controller()
-            #model = core_controller.requese_daily_check(database=self.__database,
-                                                             #request=request)
-            #response = model.get_response_form_data(self._head_parser)
-            #return response
-
-
         #@self.__app.get(endpoint+'/{sample}')
         #def sample_get(sample:str):
             #request = sample

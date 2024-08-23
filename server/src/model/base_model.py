@@ -86,7 +86,6 @@ class BaseModel(HeaderModel):
         else:
             sorted_products = sorted(bias_list, key=lambda x: x.bid, reverse=True)
         #sorted_products = sorted(product_list, key=lambda x: datetime.strptime(x.date, "%Y/%m/%d"))
-
         return sorted_products
     
     # 추상
