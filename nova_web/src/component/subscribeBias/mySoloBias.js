@@ -18,7 +18,7 @@ function MySoloBias({ solo_bias, bias_url }) {
                     <div className='box'>
                         <div className='my-bias-group'>새로운 최애 솔로<br />지지하기</div>
                     </div>
-                    <div className='more' onClick={()=>{
+                    <div className='more' onClick={() => {
                         navigate('mypage')
                     }}>
                         <img src={plus} alt=''></img>
@@ -30,10 +30,14 @@ function MySoloBias({ solo_bias, bias_url }) {
                     <div className='image-container'>
                         <img src={bias_url + `${solo_bias.bid}.PNG`} alt="bias" className='img2' />
                     </div>
-                    <div className='support'>지지하기</div>
+                    <div className='support' onClick={() => {
+                        navigate(`/bias_info/user_contribution?bias_id=${solo_bias.bid}`)
+                    }} >지지하기</div>
                     <div className='box'>
                         <div className='my-bias-solo'>나의 최애</div>
-                        <div className='bias-name'>{solo_bias.bname}</div>
+                        <div className='bias-name' onClick={() => {
+                            navigate(`/bias_info/user_contribution?bias_id=${solo_bias.bid}`)
+                        }}>{solo_bias.bname}</div>
                     </div>
                     <div className='more'>
                         <img src={more} alt=''></img>

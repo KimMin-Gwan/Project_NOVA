@@ -25,9 +25,6 @@ function Banner({ url }) {
         return nextIndex;
       })
     }, 3000)
-
-    console.log('bannerrrr');
-
     //   copy.map(function(b, i){
     //   if(copy.length>i)
     //   {

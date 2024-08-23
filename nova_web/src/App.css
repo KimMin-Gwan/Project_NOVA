@@ -62,6 +62,10 @@ body {
   background-color: #EEE9FC;
 }
 
+.white-title {
+  color: white;
+}
+
 .container {
   max-width: 500px;
   margin: 0 auto;
@@ -412,6 +416,7 @@ body {
   position: absolute;
   top: 15px;
   left: 12px;
+  z-index: 9;
 }
 
 .more {

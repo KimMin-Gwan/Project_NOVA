@@ -13,6 +13,7 @@ import Meta from './Container/metaContainer';
 import Loundspeaker from './component/loundspeaker';
 import NOVALogin from './pages/NovaLogin/NovaLogin';
 import SelectBias from './component/selectBias/SelectBias';
+import BiasDetail from './pages/BiasDetail/biasDetail';
 
 function App() {
 
@@ -92,6 +93,7 @@ function App() {
   return (
     <Routes>
       <Route path='/mypage' element={<SelectBias/>}></Route>
+      <Route path='/bias_info/user_contribution' element={<BiasDetail/>}></Route>
       <Route path='/novalogin' element={<NOVALogin />}></Route>
       <Route path='/' element={
         <div onClick={() => {
@@ -113,6 +115,7 @@ function App() {
                 </button>
                 {/* <Link to='/' className='button'>홈</Link> */}
                 <Link to='/mypage' className='button'>마이페이지</Link>
+                {/* <Link to='/data_test' className='button'>테스트페이지</Link> */}
                 {/* <Link to='/mybias' className='button'>최애페이지</Link> */}
               </div>
             </header>

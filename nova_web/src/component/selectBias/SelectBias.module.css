@@ -57,6 +57,9 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+    scrollbar-width: none;
+    height: 300px;
+    overflow: scroll;
 }
 
 .favorite-item {
