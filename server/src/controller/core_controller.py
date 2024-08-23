@@ -56,7 +56,7 @@ class Core_Controller:
             if request.league_type == "solo":
                 target_bid = model.get_user().solo_bid
             elif request.league_type == "group":
-                target_bid = model.get_user().solo_bid
+                target_bid = model.get_user().group_bid
             else:
                 return model # 구분이 안되면 그냥 냅다 반환시켜버려 
             model.set_bias_data(bid=target_bid)  # 목표 리그를 찾아야해서 bias 부터 검색

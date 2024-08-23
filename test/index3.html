@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>최애 인증하기</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            width: 500px;
+            margin: 0 auto;
+        }
+
+        .header {
+            height: 50px;
+            width: 100%;
+            border-bottom: 1px solid #000000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 18px;
+            margin: 0;
+        }
+
+        .header .back-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+
+        .content {
+            margin: 20px 0;
+        }
+
+        .status-bar {
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .progress-bar {
+            width: 80%;
+            height: 20px;
+            background-color: #d0d0d0;
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .progress-bar-inner {
+            width: 80%;
+            height: 100%;
+            background-color: blue;
+            border-radius: 10px;
+        }
+
+        .progress-text {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 12px;
+            color: #333;
+        }
+
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .button {
+            background-color: #d0d0d0;
+            padding: 15px 0;
+            border-radius: 10px;
+            font-size: 16px;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: #c0c0c0;
+        }
+
+        .ad-placeholder {
+            background-color: #d0d0d0;
+            padding: 20px;
+            margin-top: 20px;
+            font-size: 16px;
+            color: #666;
+        }
+
+        .small-text {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="back-icon">⬅️</div>
+            <h1>최애 인증하기</h1>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Status Bar -->
+            <div class="status-bar">
+                <span>현재까지 적립한 포인트 or 최애 리그 순위</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-bar-inner"></div>
+                <div class="progress-text">80%</div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="buttons">
+                <div class="button">최애 인증</div>
+                <div class="small-text">최애 인증이슈고 시청인증(홈) 운영해주세요!</div>
+                <div class="button">명함 보기</div>
+            </div>
+        </div>
+
+        <!-- Ad Placeholder -->
+        <div class="ad-placeholder">
+            광고 들어갈 예정
+        </div>
+    </div>
+</body>
+
+</html>
