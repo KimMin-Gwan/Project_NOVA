@@ -37,19 +37,8 @@ class Sub_Controller:
     # 최애 페이지의 배너 정보
     # 배너가 없으면 뭘 보여줄래?
     def get_bias_banner(self, database:Local_Database, request) -> BaseModel: 
-        jwt_decoder = JWTDecoder()
-        model = BaseModel(database=database)
+        model = BiasBannerModel(database=database)
 
-        try:
-            request_payload = jwt_decoder.decode(token=request.token)  # jwt payload(email 정보 포함됨)
-
-            # 유저가 있는지 확인
-            if not model.set_user_with_uid(request=request):
-                raise UserNotExist("Can not find User with uid")
-        except UserNotExist as e:
-            print("Error Catched : ", e)
-            model.set_state_code(e.error_code) # 종합 에러
-            return model
         try:
             """
             if not model.set_biases_with_bids():
@@ -76,12 +65,12 @@ class Sub_Controller:
                 model.set_state_code("571") # 실패하면 571
                 return model
 
-
             # 유저 데이터들 만들기
             if not model.set_user_datas():
                 model.set_state_code("572") # 실패하면 572
                 return model
 
+            # 순위 만들기
             if not model.set_user_alignment():
                 model.set_state_code("573") # 실패하면 573
                 return model
@@ -98,6 +87,36 @@ class Sub_Controller:
             return model
 
     # 최애 페이지의 지지자 기여도 랭크 
+    def get_bias_n_league_data(self, database:Local_Database, request) -> UserContributionModel: 
+        model = BiasNLeagueModel(database=database)
+
+        try:
+            model.set_bias_data(request.bid)
+
+            # 리그 세팅 (오버라이드)
+            model.set_leagues()
+
+            # 리그 참여 바이어스 정렬
+            model.set_biases()
+
+            # 리그 정렬하고 딕셔너리 형태로 만들어야됨
+            model.set_list_alignment()
+
+            # 리그 통계정보
+            model.get_my_league_data()
+
+        except CustomError as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
+
+        except Exception as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
+
+        finally:
+            return model
+
+    # 최애 페이지의 지지자 본인의 기여도 정보
     def get_my_contribution(self, database:Local_Database, request) -> MyContributionModel: 
         jwt_decoder = JWTDecoder()
         model = MyContributionModel(database=database)
@@ -116,6 +135,7 @@ class Sub_Controller:
                 model.set_state_code("571") # 실패하면 571
                 return model
             
+            # 본인이 지지하는지 검토해야됨
             if not model.is_my_bias():
                 model.set_state_code("274") # 실패하면 271
                 return model
@@ -125,6 +145,7 @@ class Sub_Controller:
                 model.set_state_code("572") # 실패하면 572
                 return model
 
+            # 정렬
             if not model.set_user_alignment():
                 model.set_state_code("573") # 실패하면 573
                 return model

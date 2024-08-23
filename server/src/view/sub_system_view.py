@@ -25,11 +25,21 @@ class Sub_Service_View(Master_View):
             model = home_controller.get_bias_banner(database=self.__database,)
             response = model.get_response_form_data(self._head_parser)
             return response
+
+        # 최애 페이지에 지지자 순위 정보
+        @self.__app.get(endpoint + '/bias_n_league')
+        def get_bias_n_legue(bias_id:Optional[str] = ""):
+            request = BiasPageInfoRequest(bid=bias_id)
+            sub_controller =Sub_Controller()
+            model = sub_controller.get_bias_n_league_data(database=self.__database,
+                                                          request=request)
+            response = model.get_response_form_data(self._head_parser)
+            return response
         
         # 최애 페이지에 지지자 순위 정보
         @self.__app.get(endpoint + '/user_contribution')
         def get_user_contribution(bias_id:Optional[str] = ""):
-            request = UserContributionRequest(bid=bias_id)
+            request = BiasPageInfoRequest(bid=bias_id)
             sub_controller =Sub_Controller()
             model = sub_controller.get_user_contribution(database=self.__database,
                                                           request=request)
@@ -38,7 +48,7 @@ class Sub_Service_View(Master_View):
 
         # 최애 페이지에 지지자의 본인 기여도 정보
         @self.__app.post(endpoint + '/my_contribution')
-        def get_user_contribution(raw_request:dict):
+        def get_my_contribution(raw_request:dict):
             request = MyContributionRequest(request=raw_request)
             sub_controller=Sub_Controller()
             model = sub_controller.get_my_contribution(database=self.__database,
@@ -46,7 +56,7 @@ class Sub_Service_View(Master_View):
             response = model.get_response_form_data(self._head_parser)
             return response
         
-class UserContributionRequest():
+class BiasPageInfoRequest():
     def __init__(self, bid = None) -> None:
         self.bid=bid  
 
