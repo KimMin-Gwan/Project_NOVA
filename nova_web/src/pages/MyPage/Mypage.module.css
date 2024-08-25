@@ -1,0 +1,89 @@
+.main-container {
+    /* margin: 0 auto; */
+    background-color: black;
+    /* width: 500px; */
+    min-height: 200vh;
+}
+
+.title-area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* background-color: white; */
+    height: 50px;
+    border-bottom: solid black 1px;
+}
+
+.bias-show-area {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+
+    width: 100%;
+    height: 300px;
+    background-color: antiquewhite;
+}
+
+.bias-box {
+    width: 45%;
+    height: 250px;
+    background-color: gray;
+}
+
+.my-info-area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 300px;
+    background-color: plum;
+}
+
+.my-info {
+    width: 90%;
+    height: 250px;
+    background-color: gray;
+}
+
+.sub-info-area {
+    width: 100%;
+    height: 400px;
+    background-color: orange;
+}
+
+.sub-info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 300px;
+    background-color: skyblue;
+}
+
+.info {
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
+    width: 90%;
+    height: 250px;
+    background-color: gray;
+}
+
+.market-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100px;
+    background-color: green;
+}
+
+.market {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60%;
+    height: 50px;
+    background-color: gray;
+    border-radius: 80px;
+}
