@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import Banner from './component/banner';
 import Modal from './component/modal';
 import MyBias from './Container/myBiasContainer';
-import MyPage from './pages/Mypage';
+import MyPage from './pages/MyPage/Mypage';
 import { Routes, Route, Link } from 'react-router-dom';
 import zoom from './img/zoom.png';
 import menu from './img/menu.png';
@@ -14,6 +14,8 @@ import Loundspeaker from './component/loundspeaker';
 import NOVALogin from './pages/NovaLogin/NovaLogin';
 import SelectBias from './component/selectBias/SelectBias';
 import BiasDetail from './pages/BiasDetail/biasDetail';
+import BiasCertify from './pages/BiasCertify/biasCertify';
+import NameCard from './pages/NameCard/nameCard';
 
 function App() {
 
@@ -92,7 +94,10 @@ function App() {
 
   return (
     <Routes>
-      <Route path='/mypage' element={<SelectBias/>}></Route>
+      <Route path='/select_bias' element={<SelectBias/>}></Route>
+      <Route path='/namecard' element={<NameCard/>}></Route>
+      <Route path='/mypage' element={<MyPage/>}></Route>
+      <Route path='/bias_certify' element={<BiasCertify/>}></Route>
       <Route path='/bias_info/user_contribution' element={<BiasDetail/>}></Route>
       <Route path='/novalogin' element={<NOVALogin />}></Route>
       <Route path='/' element={
@@ -114,7 +119,10 @@ function App() {
                   <img src={menu}></img>
                 </button>
                 {/* <Link to='/' className='button'>홈</Link> */}
+                <Link to='/namecard' className='button'>명함</Link>
                 <Link to='/mypage' className='button'>마이페이지</Link>
+                <Link to='/select_bias' className='button'>최애선택</Link>
+                <Link to='/bias_certify' className='button'>최애 인증</Link>
                 {/* <Link to='/data_test' className='button'>테스트페이지</Link> */}
                 {/* <Link to='/mybias' className='button'>최애페이지</Link> */}
               </div>

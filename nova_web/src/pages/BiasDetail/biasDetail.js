@@ -96,22 +96,44 @@ function BiasDetail() {
                         : <></>
                 }
                 {
-                    biasData.nickname.length!==0 ? <div className={`white-title rank-item-box`}>별명 : {biasData.nickname.join(', ')}</div>
+                    biasData.nickname.length !== 0 ? <div className={`white-title rank-item-box`}>별명 : {biasData.nickname.join(', ')}</div>
                         : <></>
                 }
                 {
-                    biasData.country.length!==0 ? <div className={`white-title rank-item-box`}>국적 : {biasData.country.join(', ')}</div>
+                    biasData.country.length !== 0 ? <div className={`white-title rank-item-box`}>국적 : {biasData.country.join(', ')}</div>
                         : <></>
                 }
                 {
-                    biasData.group.length!==0 ? <div className={`white-title rank-item-box`}>그룹 : {biasData.group.join(', ')}</div>
+                    biasData.group.length !== 0 ? <div className={`white-title rank-item-box`}>그룹 : {biasData.group.join(', ')}</div>
                         : <></>
                 }
                 {
                     biasData.agency ? <div className={`white-title rank-item-box`}>소속사 : {biasData.agency}</div>
                         : <></>
                 }
+                <div>
+                    <div className={style['site-address']} >
+                        <a href={biasData.x_account}>X</a>
+                    </div>
+                    <div className={style['site-address']} >
+                        <a href={biasData.insta_account}>instagram</a>
+                    </div>
+                    <div className={style['site-address']} >
+                        <a href={biasData.youtube_account}>youtube</a>
+                    </div>
+                    <div className={style['site-address']} >
+                        <a href={biasData.fan_cafe}>팬카페</a>
+                    </div>
+                    <div className={style['site-address']} >
+                        <a href={biasData.homepage}>홈페이지</a>
+                    </div>
+                    <div className={style['site-address']} >
+                        <a href="">위키</a>
+                    </div>
+                </div>
             </div>
+
+
             <div className={`league ${style['detail-area']}`}>
                 <div className={`white-title rank-item-box`}>리그명(범위) : {biasData.lname}</div>
                 <div className={`white-title rank-item-box`}>현재등수 : {biasData.rank}</div>

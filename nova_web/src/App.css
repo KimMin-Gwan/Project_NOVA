@@ -71,7 +71,7 @@ body {
   margin: 0 auto;
   background-color: #1e1e1e;
   position: relative;
-  z-index: 99;
+  /* z-index: 99; */
   /* min-height: 100vh; */
   /* padding: 20px; */
 }
@@ -799,4 +799,90 @@ body {
   margin-top: 10px;
   margin-right: 20px;
   float: right;
+}
+
+/* ---------------------- */
+.frame {
+  max-width: 500px;
+  margin: 0 auto;
+  background-color: blanchedalmond;
+  /* position: relative; */
+  min-height: 200vh;
+  /* z-index: 99; */
+  /* min-height: 100vh; */
+  /* padding: 20px; */
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: solid black 2px;
+  width: 100%;
+  height: 50px;
+  background-color: blueviolet;
+}
+
+.text-area {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100px;
+  background-color: orange;
+}
+
+.namecard-area {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 400px;
+  background-color: greenyellow;
+}
+
+.namecard {
+  position: relative;
+  border-radius: 10px;
+  width: 90%;
+  height: 350px;
+  background-color: gray;
+  display: flex;
+}
+
+.img-area {
+  flex: 1.5;
+}
+
+.bias-img {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 120px;
+  height: 170px;
+  background-color: brown;
+  border-radius: 10px;
+}
+
+.data-area {
+  flex: 2.5;
+}
+
+.data {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  height: 50px;
+}
+
+.share-area {
+  width: 100%;
+  height: 200px;
+  background-color: white;
+}
+
+.ad-area {
+  width: 100%;
+  height: 200px;
+  background-color: gray;
 }
