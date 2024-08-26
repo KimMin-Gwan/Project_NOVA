@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from view.core_system_view import Core_Service_View
 from view.user_system_view import User_Service_View
 from view.sub_system_view import Sub_Service_View 
+from view.administrator_system_view import Administrator_Service_View
 from view.parsers import Head_Parser
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
@@ -40,9 +41,14 @@ class NOVA_Server:
                                                      endpoint='/sub_system',
                                                    database=database,
                                                    head_parser=head_parser)
+        self.__administrator_system_view = Administrator_Service_View( app=self.__app,
+                                                     endpoint='/administrator_system',
+                                                   database=database,
+                                                   head_parser=head_parser)
         self.__core_system_view()
         self.__user_system_view()
         self.__sub_system_view()
+        self.__administrator_system_view()
 
     def run_server(self, host='127.0.0.1', port=6000):
         uvicorn.run(app=self.__app, host=host, port=port)

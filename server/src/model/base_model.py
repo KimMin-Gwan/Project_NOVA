@@ -108,3 +108,27 @@ class BaseModel(HeaderModel):
             dict_list_data.append(data.get_dict_form_data())
         return dict_list_data
 
+class AdminModel(HeaderModel):
+    def __init__(self, database) -> None:
+        self._database:Local_Database = database
+        self.__key = 'nMjzkWLUCI0GfEPbkTut3qcWSxz2KVFx6jXQT4mVpbIV9CisdweCieYcC9AA3JuOYcPSIaT8ey7V9zSX'
+        super().__init__()
+
+    def check_admin_key(self, request):
+        # uid를 기반으로 user table 데이터와 userbias 데이터를 가지고 올것
+        if self.__key == request.admin_key:
+            return True
+        else:
+            return False
+    
+    def get_response_form_data(self,head_parser):
+        try:
+            body = {
+                "default" : "Default state get_response_form_data func"
+            }
+
+            response = self._get_response_data(head_parser=head_parser, body=body)
+            return response
+
+        except Exception as e:
+            raise CoreControllerLogicError(error_type="response making error | " + str(e))
