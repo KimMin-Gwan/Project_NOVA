@@ -5,17 +5,18 @@ class Administrator_Controller:
         model = ResetLeaguesModel(database=database)
 
         try:
+            #관리자 키 확인
             if not model.check_admin_key(request=requset):
                 return model
-            
+            #json 업로드
             model.upload_data()
-
+            #유저 불러오기
             if not model.set_users():
                 return model
-            
+            #bias 불러오기
             if not model.set_biases():
                 return model
-            
+            #포인트,콤보 초기화
             if not model.reset_point():
                 return model
             

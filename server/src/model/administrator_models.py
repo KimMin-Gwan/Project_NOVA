@@ -22,7 +22,7 @@ class ResetLeaguesModel(AdminModel):
                       aws_secret_access_key=self.__secret_key)
         self.__users = []
         self.__biases = []
-    
+    #json파일 버킷에 업로드
     def upload_data(self):
         try:
             now = datetime.datetime.now()
@@ -34,7 +34,7 @@ class ResetLeaguesModel(AdminModel):
         
         except Exception as e:
             raise CoreControllerLogicError(error_type="upload_league_data | " + str(e))
-        
+    #유저 불러오기
     def set_users(self) -> bool: 
         try:
             user_data = self._database.get_all_data(target="user")
@@ -50,7 +50,7 @@ class ResetLeaguesModel(AdminModel):
             return True
         except Exception as e:
             raise CoreControllerLogicError(error_type="set_leagues | " + str(e))
-    
+    #bias 불러오기
     def set_biases(self) -> bool: 
         try:
             bias_data = self._database.get_all_data(target="bias")
@@ -66,7 +66,7 @@ class ResetLeaguesModel(AdminModel):
             return True
         except Exception as e:
             raise CoreControllerLogicError(error_type="set_leagues | " + str(e))
-        
+    #포인트랑 콤보 초기화 ( 함수 이름 변경 필요 )
     def reset_point(self) -> bool:
         try:
             if not self.__users:

@@ -111,9 +111,11 @@ class BaseModel(HeaderModel):
 class AdminModel(HeaderModel):
     def __init__(self, database) -> None:
         self._database:Local_Database = database
+        #서버에 저장된 관리자 키
         self.__key = 'nMjzkWLUCI0GfEPbkTut3qcWSxz2KVFx6jXQT4mVpbIV9CisdweCieYcC9AA3JuOYcPSIaT8ey7V9zSX'
         super().__init__()
-
+        
+    #관리자 키가 맞는지 확인
     def check_admin_key(self, request):
         # uid를 기반으로 user table 데이터와 userbias 데이터를 가지고 올것
         if self.__key == request.admin_key:
