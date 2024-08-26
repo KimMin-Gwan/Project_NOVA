@@ -8,9 +8,12 @@ class Administrator_Controller:
             if not model.check_admin_key(request=requset):
                 return model
             
-            model.upload_league_data()
+            model.upload_data()
 
-            if not model.set_leagues():
+            if not model.set_users():
+                return model
+            
+            if not model.set_biases():
                 return model
             
             if not model.reset_point():
