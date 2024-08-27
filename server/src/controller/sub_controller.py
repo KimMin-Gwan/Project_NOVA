@@ -1,10 +1,10 @@
 from model import *
 from others import UserNotExist, CustomError
-from controller.jwt_decoder import JWTDecoder, JWTPayload
+from controller.jwt_decoder import JWTManager, JWTPayload
 
 class Sub_Controller:
     def sample_func(self, database:Local_Database, request) -> BaseModel: 
-        jwt_decoder = JWTDecoder()
+        jwt_decoder = JWTManager()
         model = BaseModel(database=database)
         try:
 
@@ -118,7 +118,7 @@ class Sub_Controller:
 
     # 최애 페이지의 지지자 본인의 기여도 정보
     def get_my_contribution(self, database:Local_Database, request) -> MyContributionModel: 
-        jwt_decoder = JWTDecoder()
+        jwt_decoder = JWTManager()
         model = MyContributionModel(database=database)
 
         try:

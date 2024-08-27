@@ -19,6 +19,14 @@ class Core_Service_View(Master_View):
         @self.__app.get(endpoint+'/home')
         def home():
             return 'Hello, This is Root of Core-System Service'
+
+        # 홈화면에 배너 정보
+        @self.__app.get('/home/is_valid')
+        def get_banner(token:Optional[str] = ""):
+            home_controller=Home_Controller()
+            model = home_controller.get_token(database=self.__database,token=token)
+            response = model.get_response_form_data(self._head_parser)
+            return response
         
         # 홈화면에 배너 정보
         @self.__app.get('/home/banner')

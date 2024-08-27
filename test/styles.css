@@ -1,0 +1,116 @@
+body {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f0f0f0; /* 배경색을 원하는 색으로 변경 가능 */
+}
+
+
+.container {
+    width: 500px; /* 너비를 원하는 비율로 설정 */
+    height : 1000px;
+    margin: 0 auto;
+    /*max-width: 1200px; /* 최대 너비를 설정 */
+    background-color: #1E1E1E; /* 배경색을 원하는 색으로 변경 가능 */
+    /*text-align: center; /* 텍스트 가운데 정렬 */
+}
+
+.backword{
+    width: 10px; /* 너비를 원하는 비율로 설정 */
+    height : 12px;
+    margin-left : 10px;
+}
+
+.TopBar{
+    width: 500px; /* 너비를 원하는 비율로 설정 */
+    height : 38px;
+    margin: 0 auto;
+    /*max-width: 1200px; /* 최대 너비를 설정 */
+    background-color: #1E1E1E; /* 배경색을 원하는 색으로 변경 가능 */
+    border-bottom: 2px solid #8F8F8F;
+    text-align: center; /* 텍스트 가운데 정렬 */
+    padding-top: 10px;
+    padding-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.TitleBox{
+    width: 460px;
+    height: 38px;
+    margin-bottom: 14px;
+    color: white
+}
+
+.TitleName{
+    color: white
+    /*text-align: center; /* 텍스트 가운데 정렬 */
+}
+
+.content{
+    width: 500px; /* 너비를 원하는 비율로 설정 */
+    height : 500px;
+    margin: 0 auto;
+    background-color: #2c2c2c; /* 배경색을 원하는 색으로 변경 가능 */
+    /*text-align: center; /* 텍스트 가운데 정렬 */
+    padding-top: 10px
+}
+
+.mainComponent {
+    width: 468px;
+    height: 98px;
+    background-color: #1E1E1E; /* Background color for each component */
+    display: flex;
+    align-items: center;
+    /*justify-content: space-between; */
+    padding: 0 16px;
+    margin-bottom: 4px;
+    justify-content: flex-end; /* Align content to the right */
+}
+
+.bodyText{
+    color: white;
+    font-size: 14px;
+    /*text-align: center; /* 텍스트 가운데 정렬 */
+    margin-right: 26px; /* Add spacing between the text and icon */
+}
+
+.vector{
+    width: 20px;
+    height: 50px;
+    /*text-align: center; /* 텍스트 가운데 정렬 */
+}
+
+.inquiry{
+    width: 500px; /* 너비를 원하는 비율로 설정 */
+    height : 100px;
+    margin: 0 auto;
+    background-color: #2c2c2c; /* 배경색을 원하는 색으로 변경 가능 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row; /* Align icons horizontally */
+    gap: 50px; /* Space between the icons */
+}
+
+.icon_img{
+    width: 40px;
+    height: 40px;
+}
+
+.iconBox{
+    width: 50px;
+    height: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon_name{
+    color: white;
+    text-align: center;
+    margin-top: 5px; /* Space between the icon and the name */
+    font-size: 11px;
+}

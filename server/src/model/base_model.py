@@ -25,10 +25,12 @@ class FindSimilarData:
 class HeaderModel:
     def __init__(self) -> None:
         self._state_code = '500'
+        self._new_token = ""
 
     def _get_response_data(self, head_parser:Head_Parser, body):
         header = head_parser.get_header()
         header['state-code'] = self._state_code
+        header['new_token'] = self._new_token
         form = {
             'header' : header,
             'body' : body
@@ -40,6 +42,10 @@ class HeaderModel:
 
     def set_state_code(self, state_code):
         self._state_code = state_code
+        return
+    
+    def set_token_data(self, new_token):
+        self._new_token = new_token
         return
 
 

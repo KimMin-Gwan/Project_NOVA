@@ -3,6 +3,24 @@ from model import Local_Database
 from others.data_domain import Bias, League
 from others import CoreControllerLogicError
 
+class TokenModel(BaseModel):
+    def __init__(self, database:Local_Database) -> None:
+        super().__init__(database)
+
+    def get_response_form_data(self, head_parser):
+        try:
+            body = {
+                'result' : True
+            }
+
+            response = self._get_response_data(head_parser=head_parser, body=body)
+            return response
+
+        except Exception as e:
+            raise CoreControllerLogicError("response making error | " + e)
+
+
+
 class BannerModel(BaseModel):
     def __init__(self, database:Local_Database) -> None:
         super().__init__(database)

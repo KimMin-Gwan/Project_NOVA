@@ -3,35 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>React with HTML</title>
+    <title>Gradient Background with Border</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Hello, React with HTML!</h1>
-    
-    <!-- 리액트가 동작할 부분 -->
-    <div id="react-root"></div>
-
-    <!-- React 및 Babel CDN 추가 -->
-    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
-    <!-- React 코드 작성 -->
-    <script type="text/babel">
-        function App() {
-            // useState를 사용하여 상태 관리
-            const [count, setCount] = React.useState(0);
-
-            return (
-                <div>
-                    <p>Count: {count}</p>
-                    <button onClick={() => setCount(count + 1)}>Increase</button>
-                </div>
-            );
-        }
-
-        // ReactDOM을 사용하여 리엑트 컴포넌트를 HTML에 렌더링
-        ReactDOM.createRoot(document.getElementById('react-root')).render(<App />);
-    </script>
+    <div class="container">
+        <div class="TopBar">
+            <img src="backword.png" alt="Arrow" class="backword">
+            <div class="TitleBox">
+                <p class ="titleName"> 더보기 </p>
+            </div>
+        </div>
+        <div class="content">
+            <div class="mainComponent">
+                <p class="bodyText">로그인</p>
+                <img src="Vector.png" alt="Arrow" class="vector">
+            </div>
+            <div class="mainComponent">
+                <p class="bodyText">최애 신청하기(네이버 폼)</p>
+                <img src="Vector.png" alt="Arrow" class="vector">
+            </div>
+            <div class="mainComponent">
+                <p class="bodyText">공지사항</p>
+                <img src="Vector.png" alt="Arrow" class="vector">
+            </div>
+            <div class="mainComponent">
+                <p class="bodyText">사업자 정보 및 사용약관</p>
+                <img src="Vector.png" alt="Arrow" class="vector">
+            </div>
+        </div>
+        <div class="inquiry">
+            <div class="iconBox">
+                <img src="x_icon.png" alt="Icon" class="icon_img">
+                <p class="icon_name"> X </p>
+            </div>
+            <div class="iconBox">
+                <img src="discord_icon.png" alt="Icon" class="icon_img">
+                <p class="icon_name"> Discord </p>
+            </div>
+            <div class="iconBox">
+                <img src="insta_icon.png" alt="Icon" class="icon_img">
+                <p class="icon_name"> Instagram </p>
+            </div>
+            <div class="iconBox">
+                <img src="youtube_icon.png" alt="Icon" class="icon_img">
+                <p class="icon_name"> Youtube </p>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
+

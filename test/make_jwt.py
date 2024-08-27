@@ -1,5 +1,5 @@
 import jwt
-import datetime
+from datetime import datetime, timezone, timedelta
 
 # 비밀 키 설정
 secret_key = "your_secret_key"
@@ -10,11 +10,12 @@ headers = {
     "typ": "JWT"
 }
 
-# 페이로드 설정
+# 페이로드
 payload = {
     "email": "randomUser1@naver.com",
-    "iat": datetime.datetime.utcnow(),
-    "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=30)  # 만료 시간 30분
+    "iat": datetime.now(timezone.utc).timestamp(),
+    "exp": (datetime.now(timezone.utc)+ timedelta(seconds=10)).timestamp(),
+    "refresh_exp": (datetime.now(timezone.utc) + timedelta(seconds=60)).timestamp()  # refresh 토큰 만료 시간 (예: 7일)
 }
 
 # 토큰 생성
@@ -22,6 +23,8 @@ token = jwt.encode(payload, secret_key, algorithm="HS256", headers=headers)
 
 # 생성된 토큰 출력
 print(token)
+
+
 
 
 

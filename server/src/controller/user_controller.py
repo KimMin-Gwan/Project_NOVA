@@ -7,7 +7,7 @@ from email.mime.text import MIMEText
 
 class UserController:      
     def sample_func(self, database:Local_Database, request) -> BaseModel: 
-        #jwt_decoder = JWTDecoder()
+        #jwt_decoder = JWTManager()
         
         model = BaseModel(database=database)
         try:

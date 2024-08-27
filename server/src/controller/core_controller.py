@@ -1,21 +1,24 @@
 from model import *
 from others import UserNotExist, CustomError
-from controller.jwt_decoder import JWTDecoder, JWTPayload
+from controller.jwt_decoder import JWTManager, JWTPayload
 
 class Core_Controller:
     def sample_func(self, database:Local_Database, request) -> BaseModel: 
-        jwt_decoder = JWTDecoder()
+        jwt_decoder = JWTManager()
         model = BaseModel(database=database)
         try:
-
             request_payload = jwt_decoder.decode(token=request.token)  # jwt payload(email 정보 포함됨)
+            # 로그인 만료 또는 토큰이 이상하면 그냥 냅다 리턴
+            if not request_payload.result:
+                model.set_state_code("499") # 재 로그인 요청
+                return model
 
             # 유저가 있는지 확인
             if not model.set_user_with_uid(request=request):
                 raise UserNotExist("Can not find User with uid")
         except UserNotExist as e:
             print("Error Catched : ", e)
-            model.set_state_code(e.error_code) # 종합 에러
+            model.set_state_code(e.error_code) # 유저가 없는 치명적인 오류
             return model
         try:
             """
@@ -38,7 +41,7 @@ class Core_Controller:
         
     # 나의 바이어스 정보를 뽑아오는 방법
     def get_my_bias_league(self, database:Local_Database, request): 
-        jwt_decoder = JWTDecoder()
+        jwt_decoder = JWTManager()
         model = LeagueModel(database=database)  # 이건 안쓰지만 데이터 베이서 접속을 위해 사용
         try:
             request_payload = jwt_decoder.decode(token=request.token)  # jwt payload(email 정보 포함됨)
@@ -89,35 +92,6 @@ class Core_Controller:
             return model
         
 
-    # -----------------------------------------------------------------------
-    # 최애 인증 요청 용 컨트롤러 함수
-    def requese_daily_check(self, database:Local_Database, request) -> BaseModel: 
-        model = RequestDailyCheck(database=database)
-        
-        try:
-            # 유저가 있는지 확인
-            if not model.set_user_with_email(request=request):
-                raise UserNotExist("Can not find User with email")
-        except UserNotExist as e:
-            print("Error Catched : ", e)
-            model.set_state_code(e.error_code) # 종합 에러
-            return model
-
-        try:
-            model.request_daily(model._user)
-            model.add_solo_bias_point(model._user.solo_bid)
-            model.add_group_bias_point(model._user.group_bid)
-
-            
-
-        except CustomError as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
-
-        finally:
-            return model
-
-
 #----------check_page ------------------------------------------
     # check page 데이터
     # 여기서 부터는 최애인증을 check라고 정의함
@@ -125,7 +99,7 @@ class Core_Controller:
     #2. 사용자가 팔로우 중인 bias 가 맞는지 확인
     #3. 이미 인증 했는지 확인  
     def get_check_page(self, database:Local_Database, request) -> BaseModel: 
-        jwt_decoder = JWTDecoder()
+        jwt_decoder = JWTManager()
         model = CheckPageModel(database=database)
         try:
             request_payload = jwt_decoder.decode(token=request.token)  # jwt payload(email 정보 포함됨)
@@ -190,7 +164,7 @@ class Core_Controller:
         return model
 
     def try_daily_check(self, database:Local_Database, request) -> BaseModel: 
-        jwt_decoder = JWTDecoder()
+        jwt_decoder = JWTManager()
         model = TryCheckModel(database=database)
         
         try:
@@ -219,11 +193,12 @@ class Core_Controller:
                 model.set_state_code("261") # 종합 에러
                 return model
 
+            # 최애 인증
+            model.try_daily_check()
+
             # 정보 만들기
             model.check_page_info()
 
-            # 최애 인증
-            model.try_daily_check()
             # 네임카드 만들고 업로드
             model.make_name_card()
 
@@ -239,7 +214,7 @@ class Core_Controller:
             return model
 
     def try_special_check(self, database:Local_Database, request) -> BaseModel: 
-        jwt_decoder = JWTDecoder()
+        jwt_decoder = JWTManager()
         model = TrySpecialCheckModel(database=database)
         
         try:
@@ -415,7 +390,7 @@ class Core_Controller:
         
     def chatting(self, database:Local_Database, request):
         model = ChatModel(database=database)
-        jwt_decoder = JWTDecoder()
+        jwt_decoder = JWTManager()
 
         try:
             model.set_chat_data(request=request)  

@@ -145,12 +145,17 @@ class TryCheckModel(CheckPageModel):
             point = 60
             if self._bias.type == "solo":
                 self._bias.point = self._bias.point + point + self._user.solo_combo * 10
-                self._user.solo_combo += 1
+                self._user.solo_point = self._user.solo_point + point + self._user.solo_combo * 10
+                if self._user.solo_combo < 4:
+                    self._user.solo_combo += 1
                 self._user.solo_daily = True
                 self._result = "done"
                 self._save_datas()
             elif self._bias.type == "group":
                 self._bias.point = self._bias.point + point + self._user.group_combo * 10
+                self._user.group_point = self._user.group_point + point + self._user.group_combo * 10
+                if self._user.group_combo < 4:
+                    self._user.group_combo += 1
                 self._user.group_combo += 1
                 self._user.group_daily = True
                 self._result = "done"
@@ -299,10 +304,12 @@ class TrySpecialCheckModel(TryCheckModel):
             point = 20
             self._bias.point += point
             if self._bias.type == "solo":
+                self._user.solo_point += 20
                 self._user.solo_special = True
                 self.__result = "done"
                 self._save_datas()
             elif self._bias.type == "group":
+                self._user.group_point += 20
                 self._user.group_special = True
                 self.__result = "done"
                 self._save_datas()
@@ -374,6 +381,7 @@ class NameCardMaker:
 
         # 2. 바이어스 이미지 받아오기
         self.__s3.download_file('nova-images',f'{bias.bid}.PNG',f'{self.__path}temp_files/{bias.bid}.png')
+        time.sleep(0.1)
         bias_img = cv2.imread(f"{self.__path}temp_files/{bias.bid}.png")
         bias_img = cv2.resize(bias_img, (100, 100))  # 예를 들어 100x100 크기로 리사이즈
 
@@ -434,7 +442,7 @@ class NameCardMaker:
         time.sleep(0.1)
 
         # 디렉토리 내의 모든 파일을 찾음
-        directory_path = self.__path + "/temp_files/"
+        directory_path = self.__path + "temp_files/"
         files = glob.glob(os.path.join(directory_path, '*'))
         for file in files:
             # 파일인지 확인 후 삭제
