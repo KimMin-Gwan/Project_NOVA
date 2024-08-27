@@ -14,7 +14,7 @@ headers = {
 payload = {
     "email": "randomUser1@naver.com",
     "iat": datetime.now(timezone.utc).timestamp(),
-    "exp": (datetime.now(timezone.utc)+ timedelta(seconds=10)).timestamp(),
+    "exp": (datetime.now(timezone.utc)+ timedelta(seconds=30)).timestamp(),
     "refresh_exp": (datetime.now(timezone.utc) + timedelta(seconds=60)).timestamp()  # refresh 토큰 만료 시간 (예: 7일)
 }
 

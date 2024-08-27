@@ -62,7 +62,7 @@ class UserController:
 
         try:
             model.request_login(request=request,user_data=model._user)
-            if not model.get_result:
+            if not model.get_result():
                 return model
             
             model.make_token(request=model._user)

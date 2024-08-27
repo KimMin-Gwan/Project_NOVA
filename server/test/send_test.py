@@ -6,7 +6,7 @@ import pprint
 #PORT = 80
 HOST = '175.106.99.34'
 PORT = 6000
-token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJhbmRvbVVzZXIxQG5hdmVyLmNvbSIsImlhdCI6MTcyNDc3MTQ3MS4xODQzNjIsImV4cCI6MTcyNDc3MTQ4MS4xODQzNjIsInJlZnJlc2hfZXhwIjoxNzI0NzcxNTMxLjE4NDM2Mn0.jUf2fpME_IBSloa5h6XEPgYk_S2S6tfJJg-UkWC9NaM"
+token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJhbmRvbVVzZXIxQG5hdmVyLmNvbSIsImlhdCI6MTcyNDc4MDE3Ni4wNTEzOTMsImV4cCI6MTcyNDc4MDIwNi4wNTEzOTMsInJlZnJlc2hfZXhwIjoxNzI0NzgwMjM2LjA1MTM5M30.j_SZZXd8WmqLwHhDM5GCvjNCktYCwsilESYjJDsXjwY"
 
  #요청을 보낼 URL
  #get
@@ -16,7 +16,9 @@ token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJhbmRvbVVzZXIxQG5hdm
 #url = "http://175.106.99.34/home/show_league?league_name=양자리"  # 리그 랭킹 순위
 #url = "http://175.106.99.34/home/search_bias?bias_name=김"  # bias 검색
 #url = "http://127.0.0.1:6000/home/search_bias?bias_name=김"  # bias 검색
-url = f"http://127.0.0.1:6000/home/is_valid?token={token}"
+#url = f"http://127.0.0.1:6000/home/is_valid?token={token}"
+url = f"http://175.106.99.34/home/is_valid?token={token}"
+
 
 #url = "http://127.0.0.1:6000/nova_check/shared/1001-5678-efgh-1234-2024-08-23"# 공유 페이지
 

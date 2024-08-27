@@ -2,6 +2,7 @@ from model.base_model import BaseModel
 from model import Local_Database
 from others.data_domain import User
 from others import CoreControllerLogicError
+from controller.jwt_decoder import JWTManager
 import jwt
 import datetime
 import uuid
@@ -25,21 +26,8 @@ class LoginModel(BaseModel):
     
     def make_token(self,request):
         try:
-            # 비밀 키 설정
-            secret_key = "your_secret_key"
-            # 헤더 설정
-            headers = {
-                "alg": "HS256",
-                "typ": "JWT"
-            }
-            # 페이로드 설정
-            payload = {
-                "email": request.email,
-                "iat": datetime.datetime.utcnow(),
-                "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=30)  # 만료 시간 30분
-            }
-            # 토큰 생성
-            self.__token = jwt.encode(payload, secret_key, algorithm="HS256", headers=headers) 
+            jwtManager = JWTManager()
+            self.__token = jwtManager.make_token(email=request.email)
 
         except Exception as e:
             raise CoreControllerLogicError(error_type="login make_token | " + str(e))
