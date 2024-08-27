@@ -27,19 +27,18 @@ function League({ url, leagues, isClicked }) {
                 const data = await response.json();
                 setRank(data.body.rank);
                 // console.log(2);
-                console.log('랭킹 데이터 :' , leagues);
+                console.log('랭킹 데이터 :', leagues);
 
-                
+
             }
             catch (error) {
                 console.error('Error fetching data: ', error);
-                
+
             }
         };
         fetchData();
 
-        if(isClicked)
-        {
+        if (isClicked) {
             return setClickedIndex(0)
         }
     }, [url, clickedIndex, leagues, isClicked]);
@@ -49,13 +48,14 @@ function League({ url, leagues, isClicked }) {
             <div className="stars">
                 {
                     leagues.map(function (b, i) {
-                        if(!isClicked){
+                        if (!isClicked) {
                             return (
                                 <div className='행성 ' key={i}>
                                     <button onClick={() => {
                                         setClickedIndex(i);
                                     }
-                                    } className={clickedIndex === i ? 'click-now' : 'non-click'}>{leagues[i]}</button>
+                                    } className={clickedIndex === i ? 'click-now' : 'non-click'}>{leagues[i]}
+                                    </button>
                                     {
                                         clickedIndex === i && (
                                             <div className="icon-box">
@@ -66,7 +66,7 @@ function League({ url, leagues, isClicked }) {
                                 </div>
                             );
                         }
-                        else if(isClicked){
+                        else if (isClicked) {
                             return (
                                 <div className='행성 ' key={i}>
                                     <button onClick={() => {

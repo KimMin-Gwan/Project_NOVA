@@ -4,7 +4,7 @@ import Banner from './component/banner';
 import Modal from './component/modal';
 import MyBias from './Container/myBiasContainer';
 import MyPage from './pages/MyPage/Mypage';
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 import zoom from './img/zoom.png';
 import menu from './img/menu.png';
 import Rank from './component/ranks';
@@ -16,12 +16,23 @@ import SelectBias from './component/selectBias/SelectBias';
 import BiasDetail from './pages/BiasDetail/biasDetail';
 import BiasCertify from './pages/BiasCertify/biasCertify';
 import NameCard from './pages/NameCard/nameCard';
+import { FaSearch, IoMdMenu } from "react-icons/fa";
+import MoreSee from './pages/MoreSee/MoreSee';
 
 function App() {
+
+  // "http://127.0.0.1:6000/home/is_valid?token={token}"
 
   let url = 'http://nova-platform.kr/home/';
   // let url = 'http://127.0.0.1:5000/home/';
   let type = ['solo', 'group'];
+
+
+  let token = localStorage.getItem('jwtToken');
+  // eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InJhbmRvbVVzZXIxQG5hdmVyLmNvbSIsImlhdCI6MTcyNDc4MTg4Mi41ODAxMzMsImV4cCI6MTcyNDc5MjY4Mi41ODAxNTEsInJlZnJlc2hfZXhwIjoxNzI1Mzg2NjgyLjU4MDE2fQ.MX_uGcFVlry5UzzM-6Z1ETvMMrnY0aGjwTP8GyTfJAo
+
+  let [isLogin, setIsLogin] = useState();
+  let [newToken, setnewToken] = useState(token);
 
   let header = {
     "request-type": "default",
@@ -30,51 +41,37 @@ function App() {
     "uid": '1234-abcd-5678',
     "endpoint": "/core_system/",
   }
-  let sample = localStorage.getItem('jwtToken');
 
-  // let jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RVc2VyQG5hdmVyLmNvbSIsImlhdCI6MTcyMzk5NDMzMCwiZXhwIjoxNzIzOTk2MTMwfQ.PWzlMUMKjMrgxc8Yl59-eIQPLP0QasunTnNl487ZWMA'
+  useEffect(() => {
+    if (!token) {
+      console.log('로그인안됨')
+    }
+    else {
+      fetch(url + `is_valid?token=${token}`)
+        .then(response => response.json())
+        .then(data => {
+          JSON.stringify(data);
+          console.log(data.header.new_token);
 
-  // let select_bias_send_data = {
-  //   "header": header,
-  //   "body": {
-  //     'token': jwt,
-  //     'bid': 1001,
-  //   }
-  // }
+          setIsLogin(data.header['state-code']);
+          if (isLogin === '498') {
+            setnewToken(data.header.new_token);
+            localStorage.setItem('jwtToken', isLogin.new_token);
+          }
+          else if (isLogin === '497') {
+            alert('다시 로그인 해주세요.');
+          }
 
-  // let [leagues, setLeague] = useState([]);
-  // let league_copy = [];
+          // window.location.reload();
+        })
 
+    }
+  }, [])
 
-  // useEffect(() => {
-  //   fetch(url + 'league_data?league_type=solo')
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       // league_copy = data.body.leagues[0].lname
-  //       league_copy = data.body.leagues.map(leagues => leagues.lname);
-  //       // console.log(JSON.stringify(league_copy));
-  //       setLeague(league_copy);
-  //       console.log('app화면')
-  //       console.log('리그즈 : ', leagues)
-        
-        
-  //     })
-  // }, [url])
-
-  // let [rank, setRank] = useState([]);
-  // let rank_copy = [];
-  // let profile_url = 'https://kr.object.ncloudstorage.com/nova-images/';
 
   //내 최애 / 전체 선택버튼용
   let [isSoloClicked, setSoloClick] = useState(false);
   let [isGroupClicked, setGroupClick] = useState(false);
-
-
-  // let [isTouched, setTouched] = useState('전체');
-
-  // function handleTouch(value) {
-  //   setTouched(value)
-  // };
 
   function handleSoloToggle() {
     setSoloClick(!isSoloClicked);
@@ -85,44 +82,50 @@ function App() {
   };
 
 
-
   let [showBox, setShowBox] = useState(false);
   let [blackBox, setBlackBox] = useState();
 
 
+  let navigate = useNavigate();
 
 
   return (
     <Routes>
-      <Route path='/select_bias' element={<SelectBias/>}></Route>
-      <Route path='/namecard' element={<NameCard/>}></Route>
-      <Route path='/mypage' element={<MyPage/>}></Route>
-      <Route path='/bias_certify' element={<BiasCertify/>}></Route>
-      <Route path='/bias_info/user_contribution' element={<BiasDetail/>}></Route>
+      <Route path='/more_see' element={<MoreSee />}></Route>
+      <Route path='/select_bias' element={<SelectBias />}></Route>
+      <Route path='/namecard' element={<NameCard />}></Route>
+      <Route path='/mypage' element={<MyPage />}></Route>
+      <Route path='/bias_certify' element={<BiasCertify />}></Route>
+      <Route path='/bias_info/user_contribution' element={<BiasDetail />}></Route>
       <Route path='/novalogin' element={<NOVALogin />}></Route>
       <Route path='/' element={
         <div onClick={() => {
-          if (showBox)
-            {
-              setShowBox(false);
-            };
+          if (showBox) {
+            setShowBox(false);
+          };
         }} className={`container ${blackBox}`}>
 
           <div className="top-area">
             <header className='header'>
-              <div className='logo'>NOVA</div>
+              <div className='logo' onClick={() => {
+                navigate('/');
+              }}>NOVA</div>
               <div className='buttons'>
-                <button>
+                <button className='tool-button'>
                   <img src={zoom}></img>
                 </button>
-                <button>
-                  <img src={menu}></img>
+                <button className='tool-button'>
+                  <img src={menu} onClick={() => {
+                    navigate('/more_see')
+                  }}></img>
                 </button>
                 {/* <Link to='/' className='button'>홈</Link> */}
+                {/* <Link to='/more_see' className='button'>더보기</Link> */}
                 <Link to='/namecard' className='button'>명함</Link>
                 <Link to='/mypage' className='button'>마이페이지</Link>
                 <Link to='/select_bias' className='button'>최애선택</Link>
-                <Link to='/bias_certify' className='button'>최애 인증</Link>
+                <Link to='/bias_certify' className='button'>최애 지지하기</Link>
+                <Link to='/novalogin' className='button'>로그인 페이지</Link>
                 {/* <Link to='/data_test' className='button'>테스트페이지</Link> */}
                 {/* <Link to='/mybias' className='button'>최애페이지</Link> */}
               </div>
@@ -133,7 +136,7 @@ function App() {
 
 
             <section className='my-bias'>
-              <MyBias url={url}></MyBias>
+              <MyBias url={url} token={newToken}></MyBias>
             </section>
           </div>
 
@@ -143,7 +146,7 @@ function App() {
               <div className={`toggle-container ${isSoloClicked ? "" : "active"}`}>
                 <div onClick={() => {
                   handleSoloToggle();
-                 
+
                   // handleTouch('내 최애')
                 }} className={`text ${isSoloClicked ? "" : "active"}`}>내 최애</div>
                 <div onClick={() => {
@@ -154,7 +157,7 @@ function App() {
 
               </div>
             </div>
-            <Meta url={url} isSoloClicked={isSoloClicked} type={type[0]} ></Meta>
+            <Meta url={url} isSoloClicked={isSoloClicked} type={type[0]} token={newToken}></Meta>
 
           </section>
 
@@ -174,7 +177,7 @@ function App() {
 
               </div>
             </div>
-            <Meta url={url}  isGroupClicked={isGroupClicked} type={type[1]}></Meta>
+            <Meta url={url} isGroupClicked={isGroupClicked} type={type[1]} token={newToken}></Meta>
           </section>
 
           <section className="advise"></section>

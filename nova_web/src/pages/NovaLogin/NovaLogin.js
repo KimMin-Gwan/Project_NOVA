@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "./NovaLogin.module.css";
+import style from "./NovaLogin.module.css";
 import back from "../../img/back.png";
 import { useNavigate } from 'react-router-dom';
 
@@ -39,7 +39,7 @@ const NOVALogin = () => {
       );
 
       const result = response.data.body;
-    
+
       console.log(result.resust)
 
       if (result.resust) {
@@ -56,38 +56,41 @@ const NOVALogin = () => {
   };
 
   return (
-    <div className='container'>
-        <div className="Header">
-            <div className="BackBtn">
-                <button>
-                    <img src={back} alt="Back" onClick={() => alert("뒤로가기")}></img>
-                </button>
-            </div>
-            <div className="Top">
-                <h3>로그인</h3>
-            </div>
+    <div className={style.container}>
+      <div className={style.Header}>
+        <div className={style.BackBtn}>
+          <button className="tool-button">
+            <img src={back} alt="Back" className="backword" onClick={() => { 
+              alert("뒤로가기")
+              navigate(-1) }}></img>
+          </button>
         </div>
-        <div className='form'>
-            <label className='label'>아이디</label>
-                <input
-                    type="email"
-                    placeholder="이메일 주소"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className='input'
-                />
-            <label className='label'>비밀번호</label>
-                <input
-                    type="password"
-                    placeholder="비밀번호"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className='input'
-                />
-            <button className='loginButton' onClick={handleLogin}>
-                로그인
-            </button>
+        <div className={style.Top}>
+          <h3>로그인</h3>
         </div>
+      </div>
+      <div className={style.form}>
+        <label className={style.label}>아이디</label>
+        <input
+          type="email"
+          placeholder="이메일 주소"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className={style.input}
+        />
+        <label className='label'>비밀번호</label>
+        <input
+          type="password"
+          placeholder="비밀번호"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className={style.input}
+        />
+        <button className={style.loginButton} onClick={handleLogin}>
+          로그인
+        </button>
+        <div className={style['sign-up']}>회원가입</div>
+      </div>
     </div>
   );
 };

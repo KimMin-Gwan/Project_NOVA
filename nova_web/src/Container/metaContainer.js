@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import League from "../component/league";
 
-function Meta({ url, isSoloClicked, isGroupClicked, type }) {
+function Meta({ url, isSoloClicked, isGroupClicked, type, token }) {
 
     let [leagues, setLeagues] = useState([]);
     let league_copy = [];
@@ -30,38 +30,43 @@ function Meta({ url, isSoloClicked, isGroupClicked, type }) {
     // }
     useEffect(() => {
         {
-            const fetchData = async () => {
-                const response = await fetch(url + 'my_bias_league',
-                    {
-                        method: 'post',
-                        headers: {
-                            "Content-Type": 'application/json',
-                        },
-                        body: JSON.stringify({
-                            "header": header,
-                            "body": {
-                                'token': sample,
-                                'type': type,
-                            }
-                        }),
+            if (!token) {
+                console.log('로그인 안됨')
+            }
+            else {
+                const fetchData = async () => {
+                    const response = await fetch(url + 'my_bias_league',
+                        {
+                            method: 'post',
+                            headers: {
+                                "Content-Type": 'application/json',
+                            },
+                            body: JSON.stringify({
+                                "header": header,
+                                "body": {
+                                    'token': token,
+                                    'type': type,
+                                }
+                            }),
+                        }
+                    );
+                    const data = await response.json();
+                    if (type === 'solo') {
+                        my_solo_league_copy = [data.body.league_data.lname];
+                        setMySoloBiasLeague(my_solo_league_copy);
+                        console.log('solodata: ', mySoloBiasLeague);
                     }
-                );
-                const data = await response.json();
-                if (type === 'solo') {
-                    my_solo_league_copy = [data.body.league_data.lname];
-                    setMySoloBiasLeague(my_solo_league_copy);
-                    console.log('solodata: ', mySoloBiasLeague);
-                }
-                if (type === 'group') {
-                    my_group_league_copy = [data.body.league_data.lname];
-                    setMyGroupBiasLeague(my_group_league_copy);
-                    console.log('group : ', myGroupBiasLeague);
-                }
-            };
+                    if (type === 'group') {
+                        my_group_league_copy = [data.body.league_data.lname];
+                        setMyGroupBiasLeague(my_group_league_copy);
+                        console.log('group : ', myGroupBiasLeague);
+                    }
+                };
 
-            fetchData();
+                fetchData();
+            }
         }
-    }, [url, isGroupClicked])
+    }, [url, isGroupClicked,token])
 
     useEffect(() => {
         fetch(url + `league_data?league_type=${type}`)
@@ -97,7 +102,7 @@ function Meta({ url, isSoloClicked, isGroupClicked, type }) {
     // }
     if (isSoloClicked) {
         {
-            if (mySoloBiasLeague.length === 1 && mySoloBiasLeague[0] === '') {
+            if ((mySoloBiasLeague.length === 1 && mySoloBiasLeague[0] === '') || (token === '' || !token)) {
                 return <div className="setting">최애 설정 필요</div>
             }
             else {
@@ -107,7 +112,7 @@ function Meta({ url, isSoloClicked, isGroupClicked, type }) {
     }
     else if (isGroupClicked) {
         {
-            if (myGroupBiasLeague.length === 1 && myGroupBiasLeague[0] === '') {
+            if ((myGroupBiasLeague.length === 1 && myGroupBiasLeague[0] === '') || (token === '' || !token)) {
                 return <div className="setting">최애 설정 필요</div>
             }
             else {
@@ -117,7 +122,7 @@ function Meta({ url, isSoloClicked, isGroupClicked, type }) {
     }
     else {
         return (
-            <League url={url} leagues={leagues} isClicked={isSoloClicked||isGroupClicked}></League>
+            <League url={url} leagues={leagues} isClicked={isSoloClicked || isGroupClicked}></League>
         )
     }
 }

@@ -84,7 +84,7 @@ function BiasDetail() {
     //타입은 개인과 단체
     return (
         <div className={`container ${style['main-container']}`}>
-            <div className={style["title-area"]}>Title</div>
+            <div className={style["title-area"]}>최애 정보</div>
             <div className={`league ${style['info-box']}`}>
                 <div className={`white-title rank-item-box`}>이름 : {biasData.bname}</div>
                 {

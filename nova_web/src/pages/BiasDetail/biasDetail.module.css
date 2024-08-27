@@ -11,7 +11,10 @@
 
 .title-area {
     color: white;
-    background-color: blue;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px white solid;
     height: 60px;
 }
 

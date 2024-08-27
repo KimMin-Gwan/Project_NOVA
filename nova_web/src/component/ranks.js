@@ -26,7 +26,7 @@ function Ranks({ rank, isClicked }) {
                                     navigate(`/bias_info/user_contribution?bias_id=${rank[i].bid}`)
                                 }}>{rank[i].bname}</div>
                                 <div className="point">{rank[i].point}pt
-                                    <img src={icon}></img>
+                                    <img src={icon} alt='next'></img>
                                 </div>
                             </div>
                         )

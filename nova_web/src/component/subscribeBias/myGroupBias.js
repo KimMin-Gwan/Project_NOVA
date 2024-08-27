@@ -4,12 +4,27 @@ import more from '../../img/more.png';
 import { useNavigate } from 'react-router-dom';
 
 
-function MyGroupBias({ group_bias, bias_url }) {
+function MyGroupBias({ group_bias, bias_url, token }) {
 
     let navigate = useNavigate();
 
     return (
         <div className='left-box'>
+            {
+                (token === '' || !token) && (
+                    <>
+                        <img src={empty}></img>
+                        <div className='box'>
+                            <div className='my-bias-group'>새로운 최애 그룹<br />지지하기</div>
+                        </div>
+                        <div className='more' onClick={() => {
+                            navigate('mypage')
+                        }}>
+                            <img src={plus}></img>
+                        </div>
+                    </>
+                )
+            }
             {group_bias.bid === '' && (
                 <>
                     <img src={empty}></img>

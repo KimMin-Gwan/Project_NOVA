@@ -3,6 +3,7 @@ import style from './biasCertify.module.css';
 import bias from './../../img/bias.png';
 import bias_back from './../../img/bias_back.png';
 import circle from './../../img/circle.png';
+import ProgressBar from './ProgressBar';
 
 function BiasCertify() {
 
@@ -14,15 +15,19 @@ function BiasCertify() {
                 <button onClick={() => {
                     navigate(-1)
                 }}>뒤로</button>
-                <div>나의 최애 인증하기</div>
+                <div>나의 최애 지지하기</div>
             </div>
             <div className={style['certify-container']}>
                 <div className={style['point-area']}>
                     <div className={style['save-point-box']}>
-                        <div className='white-title'>누적 적립 포인트</div>
-                        <div className={style['progress-container']}>
-                            <div className={style['progress-bar']}></div>
+                        <div className={style.point}>
+                            <div>누적 적립 포인트</div>
+                            <div>80%</div>
                         </div>
+                        <ProgressBar />
+                        {/* <div className={style['progress-container']}>
+                            <div className={style['progress-bar']}></div>
+                        </div> */}
                         {/* <progress value={50} min={0} max={100}>22</progress> */}
                     </div>
                 </div>
@@ -37,7 +42,7 @@ function BiasCertify() {
                         <div className={style['bottom-area']}>
                             <div className={style['text-area']}>최애 인증하고 ' '을(를) 응원해요!</div>
                             <div className={style['button-area']}>
-                                <div className={style.buttons}>최애인증</div>
+                                <div className={style.buttons}>특별 인증</div>
                                 <div className={style.buttons}>명함 보기</div>
                             </div>
                         </div>
