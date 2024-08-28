@@ -3,17 +3,10 @@
     margin: 0 auto;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    /* background-color: black; */
-    /* opacity: 0.5; */
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    /* position: relative; */
-    /* position: sticky; */
-    /* min-height: 100vh; */
-    /* position: sticky;
-    bottom: 20px;*/
     z-index: 99; 
     /* padding: 20px; */
     /* overflow: visible; */
@@ -21,12 +14,6 @@
 
 
 .container-speaker {
-    /* position: fixed; */
-    /* top: 0; */
-    /* left: 0; */
-    /* right: auto;
-    bottom: auto; */
-    /* background-color: rgba(0, 0, 0, 0.4); */
     /* transform: translateY(-20px); */
     /* transition: 1s ease; */
     width: 100%; 

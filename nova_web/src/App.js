@@ -51,7 +51,6 @@ function App() {
         .then(response => response.json())
         .then(data => {
           JSON.stringify(data);
-          console.log(data.header.new_token);
 
           setIsLogin(data.header['state-code']);
           if (isLogin === '498') {
@@ -136,7 +135,7 @@ function App() {
 
 
             <section className='my-bias'>
-              <MyBias url={url} token={newToken}></MyBias>
+              <MyBias url={url} token={newToken} showBox={showBox} blackBox={blackBox}></MyBias>
             </section>
           </div>
 

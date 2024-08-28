@@ -5,6 +5,7 @@
 
 .container {
     width: 360px;
+    /* position: fixed; */
     margin: 50px auto;
     background-color: white;
     border-radius: 10px;

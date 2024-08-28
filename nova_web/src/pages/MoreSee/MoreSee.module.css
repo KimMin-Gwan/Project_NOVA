@@ -11,7 +11,7 @@
 }
 
 .container {
-    width: 500px; /* 너비를 원하는 비율로 설정 */
+    max-width: 500px; /* 너비를 원하는 비율로 설정 */
     height : 200vw;
     margin: 0 auto;
     /*max-width: 1200px; /* 최대 너비를 설정 */

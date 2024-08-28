@@ -4,11 +4,53 @@ import more from '../../img/more.png';
 import shadow from '../../img/shadow.png';
 import { Routes, Route, Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import SelectBias from '../selectBias/SelectBias';
 
 
-function MySoloBias({ solo_bias, bias_url, token }) {
+function MySoloBias({  solo_bias, bias_url, token, showBox, blackBox }) {
 
+    let [selectWindow, setSelectWindow] = useState(false);
     let navigate = useNavigate();
+
+    function showSelectModal() {
+        setSelectWindow(true);
+    };
+
+    let header = {
+        "request-type": "default",
+        "client-version": 'v1.0.1',
+        "client-ip": '127.0.0.1',
+        "uid": '1234-abcd-5678',
+        "endpoint": "/user_system/",
+    }
+
+    let send_data = {
+        "header": header,
+        "body": {
+            'token': token,
+            'type': 'solo'
+        }
+    }
+
+    let url = 'http://nova-platform.kr/';
+    let [bias_data, setBiasData] = useState();
+    // useEffect(() => {
+    //     fetch(url + `nova_check/server_info/check_page`, {
+    //         method: 'post',
+    //         headers: {
+    //             "Content-Type": 'application/json',
+    //         },
+    //         body: JSON.stringify(send_data),
+    //     })
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             JSON.stringify(data)
+    //         })
+    // }, [])
+
+
+
 
     return (
         <div className='left-box'>
@@ -20,7 +62,7 @@ function MySoloBias({ solo_bias, bias_url, token }) {
                             <div className='my-bias-group'>새로운 최애 솔로<br />지지하기</div>
                         </div>
                         <div className='more' onClick={() => {
-                            navigate('mypage')
+                            alert('로그인을 해주세요.')
                         }}>
                             <img src={plus} alt=''></img>
                         </div>
@@ -34,10 +76,13 @@ function MySoloBias({ solo_bias, bias_url, token }) {
                         <div className='my-bias-group'>새로운 최애 솔로<br />지지하기</div>
                     </div>
                     <div className='more' onClick={() => {
-                        navigate('mypage')
+                        showSelectModal();
                     }}>
                         <img src={plus} alt=''></img>
                     </div>
+                    {
+                        selectWindow && <SelectBias></SelectBias>
+                    }
                 </>
             )}
             {solo_bias.bid && (
@@ -46,7 +91,22 @@ function MySoloBias({ solo_bias, bias_url, token }) {
                         <img src={bias_url + `${solo_bias.bid}.PNG`} alt="bias" className='img2' />
                     </div>
                     <div className='support' onClick={() => {
-                        navigate(`/bias_certify`)
+                        fetch(url + `nova_check/server_info/check_page`, {
+                            method: 'post',
+                            headers: {
+                                "Content-Type": 'application/json',
+                            },
+                            body: JSON.stringify(send_data),
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                // JSON.stringify(data)
+                                console.log(data.body)
+                                setBiasData(data.body)
+                            });
+                        navigate(`/bias_certify`, {state: { token: token, bias:bias_data.bias, result:bias_data.result, point: bias_data.point,
+                            specialTime: bias_data.special_time
+                        }})
                     }} >지지하기</div>
                     <div className='box'>
                         <div className='my-bias-solo'>나의 최애</div>
@@ -55,7 +115,7 @@ function MySoloBias({ solo_bias, bias_url, token }) {
                         }}>{solo_bias.bname}</div>
                     </div>
                     <div className='more' onClick={() => {
-                        navigate(`/bias_certify`)
+                        navigate(`/bias_info/user_contribution?bias_id=${solo_bias.bid}`)
                     }}>
                         <img src={more} alt=''></img>
                     </div>
