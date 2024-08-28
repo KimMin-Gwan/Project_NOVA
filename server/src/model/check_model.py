@@ -323,7 +323,7 @@ class TrySpecialCheckModel(TryCheckModel):
         self.get_special_check_time()
         now = datetime.datetime.now()
         hour = now.hour
-        hour = 10
+
         if hour in self._special_time:
             return True
         else:
