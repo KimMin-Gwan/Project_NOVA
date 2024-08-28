@@ -221,12 +221,12 @@ class TryCheckModel(CheckPageModel):
         _, month, day = map(int, date_string.split('/'))
 
         # 월을 24시간 기준으로 변환 (0시부터 시작)
-        month_as_hour = (month % 12) * 2
+        month_as_hour = month + 12
 
-        # 일에 따라 시간 조정 (일이 16일보다 작으면 0, 크거나 같으면 1을 추가)
-        adjusted_hour = month_as_hour + (1 if day >= 16 else 0)
+        if month_as_hour == 24:
+            month_as_hour = 0
 
-        return [month % 12, adjusted_hour]
+        return [month, month_as_hour]
     
     # 공유 전용 url
     def get_shared_url(self):
@@ -337,12 +337,12 @@ class TrySpecialCheckModel(TryCheckModel):
         _, month, day = map(int, date_string.split('/'))
 
         # 월을 24시간 기준으로 변환 (0시부터 시작)
-        month_as_hour = (month % 12) * 2
+        month_as_hour = month + 12
 
-        # 일에 따라 시간 조정 (일이 16일보다 작으면 0, 크거나 같으면 1을 추가)
-        adjusted_hour = month_as_hour + (1 if day >= 16 else 0)
+        if month_as_hour == 24:
+            month_as_hour = 0
 
-        return [month % 12, adjusted_hour]
+        return [month, month_as_hour]
 
     def get_response_form_data(self, head_parser):
         try:
