@@ -38,7 +38,7 @@
         "email": "randomUser1@naver.com",
         "password": "sample122",
         "gender": "f",
-        "solo_point": 1890,
+        "solo_point": 2030,
         "group_point": 0,
         "solo_combo": 4,
         "group_combo": 2,
@@ -50,7 +50,7 @@
             "saver": 0
         },
         "solo_daily": true,
-        "solo_special": false,
+        "solo_special": true,
         "group_daily": false,
         "group_special": false,
         "sign": "sample",

@@ -42,8 +42,8 @@ token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJhbmRvbVVzZXIxQG5hdm
 
 #url = "http://127.0.0.1:6000/nova_check/server_info/check_page"  
 #url = "http://175.106.99.34/nova_check/server_info/check_page"  
-url = "http://127.0.0.1:6000/nova_check/server_info/try_daily_check"  # 최애인증
-#url = "http://127.0.0.1:6000/nova_check/server_info/try_special_check"  # 로그인 시도
+#url = "http://127.0.0.1:6000/nova_check/server_info/try_daily_check"  # 최애인증
+url = "http://127.0.0.1:6000/nova_check/server_info/try_special_check"  # 로그인 시도
 #url = "http://175.106.99.34/nova_check/shared/1001-5678-efgh-1234-2024-08-23" # 로그인 시도
 
 #url = "http://127.0.0.1:6000/bias_info/my_contribution"  # 리그 랭킹 순위
