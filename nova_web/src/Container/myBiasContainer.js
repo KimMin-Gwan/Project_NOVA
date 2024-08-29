@@ -32,33 +32,6 @@ function MyBias({ url, token,showBox,blackBox }) {
         }
     }
 
-    // let select_bias_send_data = {
-    //     "header": header,
-    //     "body": {
-    //         'token': sample,
-    //         'bid': 1001,
-    //     }
-    // }
-
-    // useEffect(()=>{
-    //     fetch(url+'try_select_my_bias',
-    //         {
-    //             method: 'POST',
-    //             headers: {
-    //                 "Content-Type": 'application/json',
-    //             },
-    //             body: JSON.stringify(select_bias_send_data),
-    //         }
-    //     )
-    //     .then(response=>response.json())
-    //     .then(data=>{
-    //         supportBiasCopy = data.body;
-    //         // console.log(supportBiasCopy);
-    //         console.log('지지하기 바이어스');
-
-    //     })
-    // },[url])
-
     let my_bias_url = 'https://kr.object.ncloudstorage.com/nova-images/';
 
     useEffect(() => {

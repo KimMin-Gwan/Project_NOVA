@@ -8,13 +8,13 @@ import { useEffect, useState } from 'react';
 import SelectBias from '../selectBias/SelectBias';
 
 
-function MySoloBias({  solo_bias, bias_url, token, showBox, blackBox }) {
+function MySoloBias({ solo_bias, bias_url, token, showBox, blackBox }) {
 
     let [selectWindow, setSelectWindow] = useState(false);
     let navigate = useNavigate();
 
     function showSelectModal() {
-        setSelectWindow(true);
+        setSelectWindow(!selectWindow);
     };
 
     let header = {
@@ -71,18 +71,25 @@ function MySoloBias({  solo_bias, bias_url, token, showBox, blackBox }) {
             }
             {solo_bias.bid === '' && (
                 <>
-                    <img src={empty} alt=''></img>
+                    <img src={empty} alt='' onClick={() => {
+                        showSelectModal();
+                    }}></img>
                     <div className='box'>
                         <div className='my-bias-group'>새로운 최애 솔로<br />지지하기</div>
                     </div>
-                    <div className='more' onClick={() => {
-                        showSelectModal();
-                    }}>
-                        <img src={plus} alt=''></img>
-                    </div>
+
                     {
-                        selectWindow && <SelectBias></SelectBias>
+                        !selectWindow && <div className='more' onClick={() => {
+                            showSelectModal();
+                        }}>
+                            <img src={plus} alt=''></img>
+                        </div>
                     }
+                    {
+                        selectWindow && <SelectBias selectWindow={selectWindow} setSelectWindow={setSelectWindow}></SelectBias>
+                    }
+
+
                 </>
             )}
             {solo_bias.bid && (
@@ -104,9 +111,12 @@ function MySoloBias({  solo_bias, bias_url, token, showBox, blackBox }) {
                                 console.log(data.body)
                                 setBiasData(data.body)
                             });
-                        navigate(`/bias_certify`, {state: { token: token, bias:bias_data.bias, result:bias_data.result, point: bias_data.point,
-                            specialTime: bias_data.special_time
-                        }})
+                        navigate(`/bias_certify`, {
+                            state: {
+                                token: token, bias: bias_data.bias, result: bias_data.result, point: bias_data.point,
+                                specialTime: bias_data.special_time
+                            }
+                        })
                     }} >지지하기</div>
                     <div className='box'>
                         <div className='my-bias-solo'>나의 최애</div>

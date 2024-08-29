@@ -77,6 +77,7 @@ body {
 }
 
 .black-box {
+  /* background-color: blue; */
   background-color: rgba(0, 0, 0, 0.3);
 }
 
@@ -664,6 +665,10 @@ body {
 
 .setting {
   color: white;
+  margin-left: 20px;
+  font-size: 20px;
+  /* background-color: blue; */
+
 }
 
 .select {
@@ -916,4 +921,8 @@ body {
   width: 10px; /* 너비를 원하는 비율로 설정 */
   height : 12px;
   margin-left : 10px;
+}
+
+.nova-info {
+  font-size: 14px;
 }
