@@ -7,6 +7,9 @@ from others import CoreControllerLogicError
 import editdistance
 from jamo import h2j, j2hcj
 
+import boto3
+import datetime
+
 class FindSimilarData:
     def __decompose(self, text:str):
         return ''.join(j2hcj(h2j(text.replace(" ", ""))))
@@ -117,6 +120,18 @@ class BaseModel(HeaderModel):
 class AdminModel(HeaderModel):
     def __init__(self, database) -> None:
         self._database:Local_Database = database
+
+        self._path = './model/local_database/'
+        self.__service_name = 's3'
+        self.__endpoint_url = 'https://kr.object.ncloudstorage.com'
+        self.__region_name = 'kr-standard'
+        self.__access_key = 'eeJ2HV8gE5XTjmrBCi48'
+        self.__secret_key = 'zAGUlUjXMup1aSpG6SudbNDzPEXHITNkEUDcOGnv'
+        self._s3 = boto3.client(self.__service_name,
+                           endpoint_url=self.__endpoint_url,
+                           aws_access_key_id=self.__access_key,
+                      aws_secret_access_key=self.__secret_key)
+        
         #서버에 저장된 관리자 키
         self.__key = 'nMjzkWLUCI0GfEPbkTut3qcWSxz2KVFx6jXQT4mVpbIV9CisdweCieYcC9AA3JuOYcPSIaT8ey7V9zSX'
         super().__init__()
@@ -128,6 +143,10 @@ class AdminModel(HeaderModel):
             return True
         else:
             return False
+    def _upload_data(self, data_type):
+        now = datetime.datetime.now()
+        date = now.strftime('%Y-%m-%d-%H:%M:%S')
+        self._s3.upload_file(f'{self.__path}{data_type}.json', f"nova-{data_type}", f"{data_type}{date}.json")
     
     def get_response_form_data(self,head_parser):
         try:
