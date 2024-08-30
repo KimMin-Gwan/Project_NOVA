@@ -66,7 +66,7 @@ function Meta({ url, isSoloClicked, isGroupClicked, type, token }) {
                 fetchData();
             }
         }
-    }, [url, isGroupClicked,token])
+    }, [url, isGroupClicked, token])
 
     useEffect(() => {
         fetch(url + `league_data?league_type=${type}`)
@@ -76,34 +76,12 @@ function Meta({ url, isSoloClicked, isGroupClicked, type, token }) {
             })
     }, [url])
 
-    // if (type === 'solo') {
-    //     if (isSoloClicked) {
-    //         return (
-    //             <League url={url} leagues={mySoloBiasLeague} isClicked={isSoloClicked}></League>
-    //         )
-    //     }
-    //     else {
-    //         return (
-    //             <League url={url} leagues={leagues} isClicked={isSoloClicked}></League>
-    //         )
-    //     }
-    // }
-    // else if (type === 'group') {
-    //     if (isGroupClicked) {
-    //         return (
-    //             <League url={url} leagues={myGroupBiasLeague} isClicked={isGroupClicked}></League>
-    //         )
-    //     }
-    //     else {
-    //         return (
-    //             <League url={url} leagues={leagues} isClicked={isGroupClicked}></League>
-    //         )
-    // }
-    // }
     if (isSoloClicked) {
         {
             if ((mySoloBiasLeague.length === 1 && mySoloBiasLeague[0] === '') || (token === '' || !token)) {
-                return <div className="setting">최애 설정 필요</div>
+                return (token ? <div className="setting">최애 설정이 필요합니다!</div> :
+                    <div className="setting">로그인이 필요합니다!</div>
+                )
             }
             else {
                 return <League url={url} leagues={mySoloBiasLeague} isClicked={isSoloClicked}></League>
@@ -113,7 +91,9 @@ function Meta({ url, isSoloClicked, isGroupClicked, type, token }) {
     else if (isGroupClicked) {
         {
             if ((myGroupBiasLeague.length === 1 && myGroupBiasLeague[0] === '') || (token === '' || !token)) {
-                return <div className="setting">최애 설정 필요</div>
+                return (token ? <div className="setting">최애 그룹 설정이 필요합니다!</div> :
+                    <div className="setting">로그인이 필요합니다!</div>
+                )
             }
             else {
                 return <League url={url} leagues={myGroupBiasLeague} isClicked={isGroupClicked}></League>

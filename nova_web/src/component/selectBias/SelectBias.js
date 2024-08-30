@@ -1,11 +1,12 @@
 import style from './SelectBias.module.css';
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 
 
-function SelectBias() {
+function SelectBias({selectWindow, setSelectWindow}) {
 
+    let navigate = useNavigate();
     let url = 'http://nova-platform.kr/home/';
     // let url = 'http://127.0.0.1:5000/home/';
 
@@ -46,7 +47,6 @@ function SelectBias() {
                 nameCopy = data.body.biases;
                 setResults(nameCopy);
                 // console.log(results);
-                console.log(1);
             })
 
         // return setSearchName('');
@@ -59,9 +59,12 @@ function SelectBias() {
 
 
     return (
-        <>
+        <div className={style.background}>
             <div className={style.container}>
                 <div className={style.header}>
+                    <button onClick={()=>{
+                        setSelectWindow(false)
+                    }}>뒤로</button>
                     <h1>지지할 최애 선택하기 (개인)</h1>
                     <p>(지지 대상은 변경할 수 없습니다)</p>
                 </div>
@@ -109,9 +112,7 @@ function SelectBias() {
                     }
                 </div>
             </div>
-
-            <Link to='/' className='button'>홈</Link>
-        </>
+        </div>
     )
 }
 

@@ -22,7 +22,7 @@ class CheckPageModel(BaseModel):
         self._combo = 0
         self._point = 0
         self._contribution = 0.0
-        self._result = "default"
+        self._result = "invalid"
 
     # type에 맞는 bias 세팅
     def set_bias(self, request):
@@ -75,6 +75,28 @@ class CheckPageModel(BaseModel):
         except Exception as e:
             raise CoreControllerLogicError(error_type="is_validate_user | " + str(e))
 
+    # 이미 스페셜 체크 했는지 확인해야됨
+    # Override
+    def is_already_special_check(self) -> bool:
+        try:
+            if self._bias.type == "solo":
+                if self._user.solo_special:
+                    self._result = "special done"
+                    return False
+            elif self._bias.type == "group":
+                if self._user.group_special:
+                    self._result = "special done"
+                    return False
+            else: 
+                self._result = "type error"
+                return False
+            
+            #self._result = "valid"
+            return True
+
+        except Exception as e:
+            raise CoreControllerLogicError(error_type="is_validate_user | " + str(e))
+
     # 인증 시도 페이지에 나올 내용 -> 전체 포인트중 현재까지 기여도 퍼센트(소숫점 2자리)
     def check_page_info(self) -> bool:
         total = 1680
@@ -118,11 +140,11 @@ class CheckPageModel(BaseModel):
 class TryCheckModel(CheckPageModel):
     def __init__(self, database:Local_Database) -> None:
         super().__init__(database)
-        self.__name_card_url = ""
+        self._name_card_url = ""
         self._special_time = []
-        self.__name_card = ""
-        self.__shared_url = ""
-        self.__special_check_valid = False
+        self._name_card = ""
+        self._shared_url = ""
+        self._special_check_valid = False
 
     # 부모 클래스로 만들때 사용할 초기화 함수
     def init_with_mother_model(self, model:CheckPageModel):
@@ -132,7 +154,7 @@ class TryCheckModel(CheckPageModel):
         self._point = point
         self._combo = combo
         self._contribution = contribution
-        self._result = "done"
+        self._result = "daily done"
         return
     
     # 중복 최애 인증은 invalid 임
@@ -149,7 +171,7 @@ class TryCheckModel(CheckPageModel):
                 if self._user.solo_combo < 4:
                     self._user.solo_combo += 1
                 self._user.solo_daily = True
-                self._result = "done"
+                self._result = "daily done"
                 self._save_datas()
             elif self._bias.type == "group":
                 self._bias.point = self._bias.point + point + self._user.group_combo * 10
@@ -158,7 +180,7 @@ class TryCheckModel(CheckPageModel):
                     self._user.group_combo += 1
                 self._user.group_combo += 1
                 self._user.group_daily = True
-                self._result = "done"
+                self._result = "daily done"
                 self._save_datas()
             else:
                 self._result = "error"
@@ -185,7 +207,7 @@ class TryCheckModel(CheckPageModel):
     def set_name_card_url(self):
         try:
             name_card_maker = NameCardMaker()
-            self.__name_card_url = name_card_maker.get_name_card_url(bias=self._bias, user=self._user)
+            self._name_card_url = name_card_maker.get_name_card_url(bias=self._bias, user=self._user)
         except Exception as e:
             raise CoreControllerLogicError(error_type="make_name_card | " + str(e))
         return
@@ -194,7 +216,7 @@ class TryCheckModel(CheckPageModel):
     def set_name_card_name(self):
         try:
             name_card_maker = NameCardMaker()
-            self.__name_card = name_card_maker.get_name_card_name(bias=self._bias, user=self._user)
+            self._name_card = name_card_maker.get_name_card_name(bias=self._bias, user=self._user)
         except Exception as e:
             raise CoreControllerLogicError(error_type="make_name_card | " + str(e))
 
@@ -221,17 +243,17 @@ class TryCheckModel(CheckPageModel):
         _, month, day = map(int, date_string.split('/'))
 
         # 월을 24시간 기준으로 변환 (0시부터 시작)
-        month_as_hour = (month % 12) * 2
+        month_as_hour = month + 12
 
-        # 일에 따라 시간 조정 (일이 16일보다 작으면 0, 크거나 같으면 1을 추가)
-        adjusted_hour = month_as_hour + (1 if day >= 16 else 0)
+        if month_as_hour == 24:
+            month_as_hour = 0
 
-        return [month % 12, adjusted_hour]
+        return [month, month_as_hour]
     
     # 공유 전용 url
     def get_shared_url(self):
         try:
-            self.__shared_url = f"http://nova-platform.kr/home_check/shared/{self.__name_card}"
+            self._shared_url = f"http://nova-platform.kr/home_check/shared/{self._name_card}"
             return
         except Exception as e:
             raise CoreControllerLogicError(error_type="get_shared_url | " + str(e))
@@ -240,11 +262,11 @@ class TryCheckModel(CheckPageModel):
     def is_special_time_check(self):
         try:
             if self._bias.type == "solo":
-                self.__special_check_valid = self._user.solo_special
+                self._special_check_valid = self._user.solo_special
             elif self._bias.type == "group":
-                self.__special_check_valid = self._user.group_special
+                self._special_check_valid = self._user.group_special
             else:
-                self.__special_check_valid = False
+                self._special_check_valid = False
                 raise CoreControllerLogicError(error_type="is_special_time_chekc| bias type error")
             return
         except Exception as e:
@@ -255,10 +277,10 @@ class TryCheckModel(CheckPageModel):
             body = {
                 'bias' : self._bias.get_dict_form_data(),   # 이건 팬카페 주소 보려고 보냄
                 #'user' : self._user.get_dict_form_data(),   # 이건 왜 필요한지 모르긴함
-                'shared_url' : self.__shared_url,  # 공유용 url
-                'special_check_valid' : self.__special_check_valid,  # 특별시 인증 가능한지 여부 조사
+                'shared_url' : self._shared_url,  # 공유용 url
+                'special_check_valid' : self._special_check_valid,  # 특별시 인증 가능한지 여부 조사
                 'special_time' : self._special_time,  # 특별시 인증 시간 리스트
-                'name_card_url' : self.__name_card_url, # 명함 사진 ncloud 주소
+                'name_card_url' : self._name_card_url, # 명함 사진 ncloud 주소
                 'point' : self._point,
                 'combo' : self._combo,
                 'contribution' : self._contribution,
@@ -274,29 +296,6 @@ class TryCheckModel(CheckPageModel):
 class TrySpecialCheckModel(TryCheckModel):
     def __init__(self, database:Local_Database) -> None:
         super().__init__(database)
-        self.__result = "default"
-
-    # 이미 스페셜 체크 했는지 확인해야됨
-    # Override
-    def is_already_check(self) -> bool:
-        try:
-            if self._bias.type == "solo":
-                if self._user.solo_special:
-                    self._result = "error"
-                    return False
-            elif self._bias.type == "group":
-                if self._user.group_special:
-                    self._result = "error"
-                    return False
-            else: 
-                self._result = "type error"
-                return False
-            
-            self._result = "valid"
-            return True
-
-        except Exception as e:
-            raise CoreControllerLogicError(error_type="is_validate_user | " + str(e))
 
     # 최애 인증 시도 함수
     def try_special_check(self):
@@ -306,15 +305,15 @@ class TrySpecialCheckModel(TryCheckModel):
             if self._bias.type == "solo":
                 self._user.solo_point += 20
                 self._user.solo_special = True
-                self.__result = "done"
+                self._result = "special done"
                 self._save_datas()
             elif self._bias.type == "group":
                 self._user.group_point += 20
                 self._user.group_special = True
-                self.__result = "done"
+                self._result = "special done"
                 self._save_datas()
             else:
-                self.__result = "error"
+                self._result = "error"
                 raise CoreControllerLogicError(error_type="try_daily_check | bias type error")
         except Exception as e:
             raise CoreControllerLogicError(error_type="set_bias_with_bias_data | " + str(e))
@@ -324,11 +323,11 @@ class TrySpecialCheckModel(TryCheckModel):
         self.get_special_check_time()
         now = datetime.datetime.now()
         hour = now.hour
-        hour = 10
+
         if hour in self._special_time:
             return True
         else:
-            self.__result = "time invalid"
+            self._result = "time invalid"
             return False
         
     # 스페셜 체크가능 시간 리스트 만들기
@@ -337,17 +336,26 @@ class TrySpecialCheckModel(TryCheckModel):
         _, month, day = map(int, date_string.split('/'))
 
         # 월을 24시간 기준으로 변환 (0시부터 시작)
-        month_as_hour = (month % 12) * 2
+        month_as_hour = month + 12
 
-        # 일에 따라 시간 조정 (일이 16일보다 작으면 0, 크거나 같으면 1을 추가)
-        adjusted_hour = month_as_hour + (1 if day >= 16 else 0)
+        if month_as_hour == 24:
+            month_as_hour = 0
 
-        return [month % 12, adjusted_hour]
+        return [month, month_as_hour]
 
     def get_response_form_data(self, head_parser):
         try:
             body = {
-                'result' : self.__result
+                'bias' : self._bias.get_dict_form_data(),   # 이건 팬카페 주소 보려고 보냄
+                #'user' : self._user.get_dict_form_data(),   # 이건 왜 필요한지 모르긴함
+                'shared_url' : self._shared_url,  # 공유용 url
+                'special_check_valid' : self._special_check_valid,  # 특별시 인증 가능한지 여부 조사
+                'special_time' : self._special_time,  # 특별시 인증 시간 리스트
+                'name_card_url' : self._name_card_url, # 명함 사진 ncloud 주소
+                'point' : self._point,
+                'combo' : self._combo,
+                'contribution' : self._contribution,
+                'result' : self._result
             }
 
             response = self._get_response_data(head_parser=head_parser, body=body)
@@ -355,6 +363,9 @@ class TrySpecialCheckModel(TryCheckModel):
 
         except Exception as e:
             raise CoreControllerLogicError("response making error | " + e)
+
+
+
 
 # 명함 제조기
 class NameCardMaker:

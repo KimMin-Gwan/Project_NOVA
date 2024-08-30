@@ -161,6 +161,9 @@ class Core_Controller:
         # 특별시 인증 가능한지도 보고(이미 특별시 찍었는지 확인)
         model.is_special_time_check()
 
+        # 특별시 인증 했는지 확인
+        model.is_already_special_check()
+
         return model
 
     def try_daily_check(self, database:Local_Database, request) -> BaseModel: 
@@ -193,6 +196,7 @@ class Core_Controller:
                 model.set_state_code("261") # 종합 에러
                 return model
 
+
             # 최애 인증
             model.try_daily_check()
 
@@ -201,6 +205,8 @@ class Core_Controller:
 
             # 네임카드 만들고 업로드
             model.make_name_card()
+
+            # 특별시 인증 했는지 확인
 
             # 인증이랑 관련된 내용 만들기
             model = self.__check_response_maker(model=model)
@@ -238,7 +244,7 @@ class Core_Controller:
                 return model
 
             # 이미 체크했는지 확인
-            if not model.is_already_check():
+            if not model.is_already_special_check():
                 model.set_state_code("264") # 이미 체크했는데 또 시도했네
                 return model
 
@@ -249,6 +255,9 @@ class Core_Controller:
 
             model.try_special_check()
             model.set_state_code("267")
+
+            # 인증이랑 관련된 내용 만들기
+            model = self.__check_response_maker(model=model)
 
         except CustomError as e:
             print("Error Catched : ", e.error_type)

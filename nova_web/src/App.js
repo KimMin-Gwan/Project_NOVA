@@ -51,14 +51,14 @@ function App() {
         .then(response => response.json())
         .then(data => {
           JSON.stringify(data);
-          console.log(data.header.new_token);
-
+          console.log("111",data)
           setIsLogin(data.header['state-code']);
           if (isLogin === '498') {
             setnewToken(data.header.new_token);
             localStorage.setItem('jwtToken', isLogin.new_token);
           }
           else if (isLogin === '497') {
+            localStorage.removeItem('jwtToken');
             alert('다시 로그인 해주세요.');
           }
 
@@ -83,7 +83,7 @@ function App() {
 
 
   let [showBox, setShowBox] = useState(false);
-  let [blackBox, setBlackBox] = useState();
+  let [blackBox, setBlackBox] = useState('');
 
 
   let navigate = useNavigate();
@@ -136,7 +136,7 @@ function App() {
 
 
             <section className='my-bias'>
-              <MyBias url={url} token={newToken}></MyBias>
+              <MyBias url={url} token={newToken} showBox={showBox} blackBox={blackBox}></MyBias>
             </section>
           </div>
 
@@ -184,14 +184,16 @@ function App() {
           <FloatingButton showSpeaker={showBox} setShowSpeaker={setShowBox}></FloatingButton>
           <footer className="footer">
             <div>
-              <p>사업명 및 다양한 정보를 etc...</p>
-              <p>주소: 부산 어딘가</p>
-              <p>전화번호: 010-0000-000</p>
+              <p>NOVA</p><br/>
+              <p className='nova-info'>경북 경산시 압량읍 압독2로1길 21, 1층 184</p>
+              <p className='nova-info'>대표: 김민관 | 사업자등록번호: 380-08-03011</p>
+              <p className='nova-info'>통신판매업신고번호: 0000-0000-000000</p>
+              <p className='nova-info'>전화번호: 010-9875-2508 | 이메일:youths0828@nova-platform.kr</p>
             </div>
             <div className="loundspeaker">
               {/* <button>확성기</button> */}
             </div>
-
+            
           </footer>
         </div >
 
