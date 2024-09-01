@@ -1,0 +1,24 @@
+.main-body {
+    margin: 0 auto;
+    height: 200vw;
+    max-width: 500px;
+    background-color: white;
+}
+
+.top-area {
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 2px solid black;
+}
+
+.notice-area {
+    height: max-content;
+}
+
+.notice {
+    height: 80px;
+    margin-bottom: 5px;
+    background-color: gray;
+}

@@ -18,6 +18,7 @@ import BiasCertify from './pages/BiasCertify/biasCertify';
 import NameCard from './pages/NameCard/nameCard';
 import { FaSearch, IoMdMenu } from "react-icons/fa";
 import MoreSee from './pages/MoreSee/MoreSee';
+import Notice from './pages/Notice/Notice';
 
 function App() {
 
@@ -92,6 +93,7 @@ function App() {
   return (
     <Routes>
       <Route path='/more_see' element={<MoreSee />}></Route>
+      <Route path='/notice' element={<Notice />}></Route>
       <Route path='/select_bias' element={<SelectBias />}></Route>
       <Route path='/namecard' element={<NameCard />}></Route>
       <Route path='/mypage' element={<MyPage />}></Route>
@@ -123,8 +125,9 @@ function App() {
                 {/* <Link to='/more_see' className='button'>더보기</Link> */}
                 <Link to='/namecard' className='button'>명함</Link>
                 <Link to='/mypage' className='button'>마이페이지</Link>
-                <Link to='/select_bias' className='button'>최애선택</Link>
-                <Link to='/bias_certify' className='button'>최애 지지하기</Link>
+                {/* <Link to='/select_bias' className='button'>최애선택</Link> */}
+                <Link to='/notice' className='button'>공지사항</Link>
+                {/* <Link to='/bias_certify' className='button'>최애 지지하기</Link> */}
                 <Link to='/novalogin' className='button'>로그인 페이지</Link>
                 {/* <Link to='/data_test' className='button'>테스트페이지</Link> */}
                 {/* <Link to='/mybias' className='button'>최애페이지</Link> */}
