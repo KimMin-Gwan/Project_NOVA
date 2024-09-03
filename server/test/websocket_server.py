@@ -1,7 +1,9 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from websockets.exceptions import ConnectionClosedError
 import uvicorn
 import json
 import jwt
+import time
 
 class TestServer:
     def __init__(self):
@@ -10,9 +12,13 @@ class TestServer:
         self.route()
 
     def route(self):
-        @self.__app.get("/home")
-        def home():
+        @self.__app.get("/get-test")
+        def get_test():
             return "hello world"
+
+        @self.__app.post("/post-test")
+        def post_test(data:dict):
+            return data
 
         @self.__app.websocket('/chatting')
         async def chatting_socket(websocket:WebSocket):
@@ -20,12 +26,17 @@ class TestServer:
             secret_key = "your_secret_key"
             try:
                 while True:
-                    data = await websocket.receive_text()
-                    #converted_data = json.loads(data)
-                    #decoded_payload = jwt.decode(converted_data['token'], secret_key, algorithms=["HS256"]) 
-                    print(data)
-                    #await self.manager.broadcast(f"client text :{data['message']}")
-                    await self.manager.broadcast(f"지지자 {data}")
+                    #data = await websocket.receive_text()
+                    ##converted_data = json.loads(data)
+                    ##decoded_payload = jwt.decode(converted_data['token'], secret_key, algorithms=["HS256"]) 
+                    #print(data)
+                    ##await self.manager.broadcast(f"client text :{data['message']}")
+                    time.sleep(3)
+                    await self.manager.broadcast(f"Hello World")
+
+            except ConnectionClosedError:
+                self.manager.disconnect(websocket)
+                await self.manager.broadcast("client disconnected")
                 
             except WebSocketDisconnect:
                 self.manager.disconnect(websocket)

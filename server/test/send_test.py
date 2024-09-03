@@ -19,6 +19,8 @@ token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJhbmRvbVVzZXIxQG5hdm
 #url = f"http://127.0.0.1:6000/home/is_valid?token={token}"
 #url = f"http://175.106.99.34/home/is_valid?token={token}"
 
+url = f"http://175.106.99.34/chatting_list"
+
 
 #url = "http://127.0.0.1:6000/nova_check/shared/1001-5678-efgh-1234-2024-08-23"# 공유 페이지
 
@@ -43,27 +45,27 @@ token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJhbmRvbVVzZXIxQG5hdm
 #url = "http://127.0.0.1:6000/nova_check/server_info/check_page"  
 #url = "http://175.106.99.34/nova_check/server_info/check_page"  
 #url = "http://127.0.0.1:6000/nova_check/server_info/try_daily_check"  # 최애인증
-url = "http://127.0.0.1:6000/nova_check/server_info/try_special_check"  # 로그인 시도
+#url = "http://127.0.0.1:6000/nova_check/server_info/try_special_check"  # 로그인 시도
 #url = "http://175.106.99.34/nova_check/shared/1001-5678-efgh-1234-2024-08-23" # 로그인 시도
 
 #url = "http://127.0.0.1:6000/bias_info/my_contribution"  # 리그 랭킹 순위
 #url = "http://175.106.99.34/bias_info/my_contribution"  # 리그 랭킹 순위
 
 
- ## GET 요청 보내기
-#response = requests.get(url)
+ # GET 요청 보내기
+response = requests.get(url)
 
-## # 상태 코드 확인
-#print(f"Status Code: {response.status_code}")
+# # 상태 코드 확인
+print(f"Status Code: {response.status_code}")
 
- ## 응답 데이터 (JSON) 출력
-#if response.status_code == 200:
-    #result = response.json()
-    ##result = response.text
-    #pprint.pprint(result)
-#else:
-     #print("Failed to retrieve data")
-#exit()
+ # 응답 데이터 (JSON) 출력
+if response.status_code == 200:
+    result = response.json()
+    #result = response.text
+    pprint.pprint(result)
+else:
+     print("Failed to retrieve data")
+exit()
 
 
 ## make_jwt.py 실행시켜서 token 발급 받을 것
