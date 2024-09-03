@@ -32,6 +32,7 @@ class User(SampleDomain):
                  solo_daily = False, solo_special = False,
                  group_daily = False, group_special = False,
                  sign = "", password = "", select_name_card = "",
+                 solo_daily_check_date = "", group_daily_check_date = "",
                  name_card_list= []
                  ):
         if items == None:
@@ -58,6 +59,8 @@ class User(SampleDomain):
         self.sign = sign
         self.select_name_card = select_name_card
         self.name_card_list = name_card_list
+        self.solo_daily_check_date = solo_daily_check_date
+        self.group_daily_check_date = group_daily_check_date
 
     # database로 부터 받아온 데이터를 사용해 내용 구성
     def make_with_dict(self, dict_data):
@@ -83,6 +86,8 @@ class User(SampleDomain):
             self.sign = dict_data['sign']
             self.select_name_card = dict_data['select_name_card']
             self.name_card_list = dict_data['name_card_list']
+            self.solo_daily_check_date = dict_data['solo_daily_check_date']
+            self.group_daily_check_date = dict_data['group_daily_check_date']
             return
         except Exception as e:
             raise DictMakingError(error_type=e)
@@ -110,7 +115,9 @@ class User(SampleDomain):
             "group_special" :self.group_special,
             "sign" : self.sign,
             "select_name_card" : self.select_name_card,
-            "name_card_list": self.name_card_list
+            "name_card_list": self.name_card_list,
+            "solo_daily_check_date" : self.solo_daily_check_date,
+            "group_daily_check_date" : self.group_daily_check_date
         }
 
 class Item(SampleDomain):
