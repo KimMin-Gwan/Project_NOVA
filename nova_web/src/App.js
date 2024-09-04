@@ -20,6 +20,8 @@ import { FaSearch, IoMdMenu } from "react-icons/fa";
 import MoreSee from './pages/MoreSee/MoreSee';
 import NoticeList from './pages/Notice/NoticeList';
 import Notice from './pages/Notice/Notice';
+import LeaguePage from './pages/LeaguePage/LeaguePage';
+import LeagueDetail from './pages/LeagueDetail/LeagueDetail';
 
 function App() {
 
@@ -94,6 +96,8 @@ function App() {
   return (
     <Routes>
       <Route path='/more_see' element={<MoreSee />}></Route>
+      <Route path='/league' element={<LeaguePage />}></Route>
+      <Route path='/league_detail' element={<LeagueDetail />}></Route>
       <Route path='/notice' element={<Notice />}></Route>
       <Route path='/notice_list' element={<NoticeList />}></Route>
       <Route path='/select_bias' element={<SelectBias />}></Route>
@@ -127,6 +131,8 @@ function App() {
                 {/* <Link to='/more_see' className='button'>더보기</Link> */}
                 <Link to='/namecard' className='button'>명함</Link>
                 <Link to='/mypage' className='button'>마이페이지</Link>
+                <Link to='/league' className='button'>리그페이지</Link>
+                <Link to='/league_detail' className='button'>리그상세페이지</Link>
                 {/* <Link to='/select_bias' className='button'>최애선택</Link> */}
                 <Link to='/notice_list' className='button'>공지사항</Link>
                 {/* <Link to='/bias_certify' className='button'>최애 지지하기</Link> */}
