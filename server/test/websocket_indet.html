@@ -45,6 +45,7 @@
             message.textContent = event.data;
             messages.appendChild(message);
             messages.scrollTop = messages.scrollHeight;  // Scroll to the bottom
+            ws.send(JSON.stringify("hello"));  // JSON 형태로 전송
         };
 
         sendButton.onclick = function() {

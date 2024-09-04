@@ -26,7 +26,8 @@ class TestServer:
             secret_key = "your_secret_key"
             try:
                 while True:
-                    #data = await websocket.receive_text()
+                    data = await websocket.receive_text()
+                    print(data)
                     ##converted_data = json.loads(data)
                     ##decoded_payload = jwt.decode(converted_data['token'], secret_key, algorithms=["HS256"]) 
                     ##await self.manager.broadcast(f"client text :{data['message']}")
