@@ -160,6 +160,7 @@ class Bias(SampleDomain):
         self.fanname = fanname
         self.group_memeber_bids = group_member_bids
 
+
     def make_with_dict(self, dict_data):
         try:
             self.bid = dict_data['bid']
