@@ -29,7 +29,7 @@ class TestServer:
                     #data = await websocket.receive_text()
                     ##converted_data = json.loads(data)
                     ##decoded_payload = jwt.decode(converted_data['token'], secret_key, algorithms=["HS256"]) 
-                    #print(data)
+                    print("sending")
                     ##await self.manager.broadcast(f"client text :{data['message']}")
                     time.sleep(3)
                     await self.manager.broadcast(f"Hello World")
