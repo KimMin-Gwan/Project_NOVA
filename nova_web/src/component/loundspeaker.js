@@ -24,10 +24,11 @@ function Loundspeaker({ chattingData }) {
     //         setChattingData(chattingList);
     //         console.log(chattingData);
     //     })
-    // },[])
+    // },[]
 
     useEffect(() => {
-        const newSocket = new WebSocket('ws://175.106.99.34/chatting'); // 서버 주소를 적절히 변경하세요
+
+        const newSocket = new WebSocket('ws://localhost:4000/chatting'); // 서버 주소를 적절히 변경하세요
 
         newSocket.onopen = () => {
             console.log('WebSocket 연결 성공');
@@ -35,15 +36,18 @@ function Loundspeaker({ chattingData }) {
 
         // 메시지 받는부분
         newSocket.onmessage = (event) => {
+            console.log(event.data);
             setMessages((prevMessages) => {
                 const newMessages = [...prevMessages, { text: event.data, type: 'server-message' }];
+                
                 return newMessages;
             });
+            newSocket.send('dsaddasd');
         };
 
         setSocket(newSocket);
         return () => {
-            //newSocket.close();
+            // newSocket.close();
         };
     }, []);
 
