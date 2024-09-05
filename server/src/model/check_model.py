@@ -1,7 +1,7 @@
 from model.base_model import BaseModel
 from model import Local_Database
 from others.data_domain import User, Bias
-from others import CoreControllerLogicError
+from others import CoreControllerLogicError, CheckManager
 import time
 import datetime
 import boto3
@@ -18,6 +18,7 @@ warnings.filterwarnings("ignore", module='boto3.compat')
 class CheckPageModel(BaseModel):
     def __init__(self, database:Local_Database) -> None:
         super().__init__(database)
+        self._check_manager = CheckManager()
         self._bias = Bias()
         self._combo = 0
         self._point = 0
@@ -57,20 +58,8 @@ class CheckPageModel(BaseModel):
     # 이미 체크 했는지 확인해야됨
     def is_already_check(self) -> bool:
         try:
-            if self._bias.type == "solo":
-                if self._user.solo_daily:
-                    self._result = "done"
-                    return False
-            elif self._bias.type == "group":
-                if self._user.group_daily:
-                    self._result = "done"
-                    return False
-            else: 
-                self._result = "error"
-                return False
-            
-            self._result = "valid"
-            return True
+            result = self._check_manager.is_already_check(user=self._user, bias=self._bias)
+            return result
 
         except Exception as e:
             raise CoreControllerLogicError(error_type="is_validate_user | " + str(e))
@@ -79,27 +68,16 @@ class CheckPageModel(BaseModel):
     # Override
     def is_already_special_check(self) -> bool:
         try:
-            if self._bias.type == "solo":
-                if self._user.solo_special:
-                    self._result = "special done"
-                    return False
-            elif self._bias.type == "group":
-                if self._user.group_special:
-                    self._result = "special done"
-                    return False
-            else: 
-                self._result = "type error"
-                return False
-            
-            #self._result = "valid"
-            return True
+            result = self._check_manager.is_already_special_check(user=self._user,
+                                                                   bias=self._bias)
+            return result
 
         except Exception as e:
             raise CoreControllerLogicError(error_type="is_validate_user | " + str(e))
 
     # 인증 시도 페이지에 나올 내용 -> 전체 포인트중 현재까지 기여도 퍼센트(소숫점 2자리)
     def check_page_info(self) -> bool:
-        total = 1680
+        total = 1580
 
         # 누구 대상인지 확인
         if self._bias.type == "solo":
@@ -162,29 +140,13 @@ class TryCheckModel(CheckPageModel):
         self._result="invalid"
 
     # 최애 인증 시도 함수
-    def try_daily_check(self):
+    def try_daily_check(self, league_manager):
         try:
-            point = 60
-            if self._bias.type == "solo":
-                self._bias.point = self._bias.point + point + self._user.solo_combo * 10
-                self._user.solo_point = self._user.solo_point + point + self._user.solo_combo * 10
-                if self._user.solo_combo < 4:
-                    self._user.solo_combo += 1
-                self._user.solo_daily = True
-                self._result = "daily done"
-                self._save_datas()
-            elif self._bias.type == "group":
-                self._bias.point = self._bias.point + point + self._user.group_combo * 10
-                self._user.group_point = self._user.group_point + point + self._user.group_combo * 10
-                if self._user.group_combo < 4:
-                    self._user.group_combo += 1
-                self._user.group_combo += 1
-                self._user.group_daily = True
-                self._result = "daily done"
-                self._save_datas()
-            else:
-                self._result = "error"
-                raise CoreControllerLogicError(error_type="try_daily_check | bias type error")
+            self._check_manager.try_daily_check(user=self._user,
+                                                  bias=self._bias,
+                                                  league_manager=league_manager)
+            self._result = "daily done"
+            self._save_datas()
         except Exception as e:
             print(e)
             raise CoreControllerLogicError(error_type="try_daily_check | " )
@@ -298,23 +260,13 @@ class TrySpecialCheckModel(TryCheckModel):
         super().__init__(database)
 
     # 최애 인증 시도 함수
-    def try_special_check(self):
+    def try_special_check(self, league_manager):
         try:
-            point = 20
-            self._bias.point += point
-            if self._bias.type == "solo":
-                self._user.solo_point += 20
-                self._user.solo_special = True
-                self._result = "special done"
-                self._save_datas()
-            elif self._bias.type == "group":
-                self._user.group_point += 20
-                self._user.group_special = True
-                self._result = "special done"
-                self._save_datas()
-            else:
-                self._result = "error"
-                raise CoreControllerLogicError(error_type="try_daily_check | bias type error")
+            self._check_manager.try_special_check(user=self._user,
+                                                  bias=self._bias,
+                                                  league_manager=league_manager)
+            self._result = "special done"
+            self._save_datas()
         except Exception as e:
             raise CoreControllerLogicError(error_type="set_bias_with_bias_data | " + str(e))
     
@@ -330,19 +282,6 @@ class TrySpecialCheckModel(TryCheckModel):
             self._result = "time invalid"
             return False
         
-    # 스페셜 체크가능 시간 리스트 만들기
-    def _convert_date_to_time(self, date_string):
-        # 날짜 문자열을 연, 월, 일로 분리
-        _, month, day = map(int, date_string.split('/'))
-
-        # 월을 24시간 기준으로 변환 (0시부터 시작)
-        month_as_hour = month + 12
-
-        if month_as_hour == 24:
-            month_as_hour = 0
-
-        return [month, month_as_hour]
-
     def get_response_form_data(self, head_parser):
         try:
             body = {

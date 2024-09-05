@@ -14,7 +14,7 @@ import time
 
 
 class NOVA_Server:
-    def __init__(self, database) -> None:
+    def __init__(self, database, connection_manager, league_manager) -> None:
         self.__app = FastAPI()
 
         self.__app.add_middleware(
@@ -31,7 +31,10 @@ class NOVA_Server:
         self.__core_system_view = Core_Service_View( app=self.__app,
                                                    endpoint='/core_system',
                                                    database=database,
-                                                   head_parser=head_parser)
+                                                   head_parser=head_parser,
+                                                   connection_manager= connection_manager,
+                                                   league_manager=league_manager,
+                                                   )
         self.__user_system_view = User_Service_View( app=self.__app,
                                                      endpoint='/user_system',
                                                    database=database,

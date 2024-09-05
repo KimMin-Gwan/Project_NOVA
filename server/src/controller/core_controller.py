@@ -1,6 +1,8 @@
 from model import *
 from others import UserNotExist, CustomError
 from controller.jwt_decoder import JWTManager, JWTPayload
+from others import CheckManager
+
 
 class Core_Controller:
     def sample_func(self, database:Local_Database, request) -> BaseModel: 
@@ -144,7 +146,6 @@ class Core_Controller:
         new_model = TryCheckModel(database=database)
         # 일단 초기화 하고
         new_model.init_with_mother_model(model=model)
-
         self.__check_response_maker(model=new_model)
 
         return new_model
@@ -166,7 +167,7 @@ class Core_Controller:
 
         return model
 
-    def try_daily_check(self, database:Local_Database, request) -> BaseModel: 
+    def try_daily_check(self, database:Local_Database, request, league_manager) -> BaseModel: 
         jwt_decoder = JWTManager()
         model = TryCheckModel(database=database)
         
@@ -198,7 +199,7 @@ class Core_Controller:
 
 
             # 최애 인증
-            model.try_daily_check()
+            model.try_daily_check(league_manager=league_manager)
 
             # 정보 만들기
             model.check_page_info()
@@ -219,7 +220,7 @@ class Core_Controller:
         finally:
             return model
 
-    def try_special_check(self, database:Local_Database, request) -> BaseModel: 
+    def try_special_check(self, database:Local_Database, request, league_manager) -> BaseModel: 
         jwt_decoder = JWTManager()
         model = TrySpecialCheckModel(database=database)
         
@@ -253,7 +254,7 @@ class Core_Controller:
                 model.set_state_code("265")
                 return model
 
-            model.try_special_check()
+            model.try_special_check(league_manager=league_manager)
             model.set_state_code("267")
 
             # 인증이랑 관련된 내용 만들기

@@ -1,6 +1,7 @@
 from view import NOVA_Server 
 from view.parsers import Configure_File_Reader
 from model import Local_Database
+from others import ConnectionManager, LeagueManager
 
 
 class Master(Configure_File_Reader):
@@ -12,7 +13,14 @@ class Master(Configure_File_Reader):
 
     def server_start_up(self):
         database = Local_Database() #디비 실행
-        cheese_server = NOVA_Server(database=database)
+        connection_manager = ConnectionManager() # 웹소켓 매니저 실행
+        league_manager = LeagueManager(connection_manager=connection_manager)
+        league_manager.init_league_manager(database=database) # 리그 매니저 초기화
+
+        cheese_server = NOVA_Server(
+            database=database,
+            connection_manager=connection_manager,
+            league_manager=league_manager)
         cheese_server.run_server(self._host, self._port)
         
 if __name__ == '__main__':

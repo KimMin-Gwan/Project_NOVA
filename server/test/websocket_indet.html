@@ -34,7 +34,7 @@
     <button id="sendButton">Send</button>
 
     <script>
-        const ws = new WebSocket('ws://127.0.0.1:4000/chatting');
+        const ws = new WebSocket('ws://127.0.0.1:4000/league_detail/league_data?league_name=폴라리스');
         const messages = document.getElementById('messages');
         const messageInput = document.getElementById('messageInput');
         const sendButton = document.getElementById('sendButton');

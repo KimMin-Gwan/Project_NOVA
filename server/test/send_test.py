@@ -6,7 +6,7 @@ import pprint
 #PORT = 80
 HOST = '175.106.99.34'
 PORT = 6000
-token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJhbmRvbVVzZXIxQG5hdmVyLmNvbSIsImlhdCI6MTcyNDg1Njk1MS4wMTQ0ODgsImV4cCI6MTcyNDg2Nzc1MS4wMTQ0ODgsInJlZnJlc2hfZXhwIjoxNzI1NDYxNzUxLjAxNDQ4OH0.Ir_70iLnTsPUvxSphHe_XDcn2gh6nGgB0mkBbk1phzo"
+token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJhbmRvbVVzZXIxQG5hdmVyLmNvbSIsImlhdCI6MTcyNTU1OTA5OS41MTEyNSwiZXhwIjoxNzI1NTY5ODk5LjUxMTI1LCJyZWZyZXNoX2V4cCI6MTcyNjE2Mzg5OS41MTEyNX0.XY4B-g1KczDowBGuK_fd0a-6lMXlX8o05UHd0Kw4xJc"
 
  #요청을 보낼 URL
  #get
@@ -19,7 +19,7 @@ token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJhbmRvbVVzZXIxQG5hdm
 #url = f"http://127.0.0.1:6000/home/is_valid?token={token}"
 #url = f"http://175.106.99.34/home/is_valid?token={token}"
 
-url = f"http://175.106.99.34/chatting_list"
+#url = f"http://175.106.99.34/chatting_list"
 
 
 #url = "http://127.0.0.1:6000/nova_check/shared/1001-5678-efgh-1234-2024-08-23"# 공유 페이지
@@ -44,7 +44,7 @@ url = f"http://175.106.99.34/chatting_list"
 
 #url = "http://127.0.0.1:6000/nova_check/server_info/check_page"  
 #url = "http://175.106.99.34/nova_check/server_info/check_page"  
-#url = "http://127.0.0.1:6000/nova_check/server_info/try_daily_check"  # 최애인증
+url = "http://127.0.0.1:4000/nova_check/server_info/try_daily_check"  # 최애인증
 #url = "http://127.0.0.1:6000/nova_check/server_info/try_special_check"  # 로그인 시도
 #url = "http://175.106.99.34/nova_check/shared/1001-5678-efgh-1234-2024-08-23" # 로그인 시도
 
@@ -53,19 +53,19 @@ url = f"http://175.106.99.34/chatting_list"
 
 
  # GET 요청 보내기
-response = requests.get(url)
+#response = requests.get(url)
 
-# # 상태 코드 확인
-print(f"Status Code: {response.status_code}")
+## # 상태 코드 확인
+#print(f"Status Code: {response.status_code}")
 
- # 응답 데이터 (JSON) 출력
-if response.status_code == 200:
-    result = response.json()
-    #result = response.text
-    pprint.pprint(result)
-else:
-     print("Failed to retrieve data")
-exit()
+ ## 응답 데이터 (JSON) 출력
+#if response.status_code == 200:
+    #result = response.json()
+    ##result = response.text
+    #pprint.pprint(result)
+#else:
+     #print("Failed to retrieve data")
+#exit()
 
 
 ## make_jwt.py 실행시켜서 token 발급 받을 것

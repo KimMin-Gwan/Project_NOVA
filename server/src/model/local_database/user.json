@@ -26,7 +26,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "5678-efgh-1234",
@@ -35,9 +37,9 @@
         "email": "randomUser1@naver.com",
         "password": "sample122",
         "gender": "f",
-        "solo_point": 2030,
+        "solo_point": 820,
         "group_point": 0,
-        "solo_combo": 4,
+        "solo_combo": 0,
         "group_combo": 2,
         "credit": 0,
         "solo_bid": "1001",
@@ -47,7 +49,7 @@
             "saver": 0
         },
         "solo_daily": true,
-        "solo_special": true,
+        "solo_special": false,
         "group_daily": false,
         "group_special": false,
         "sign": "sample",
@@ -55,7 +57,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "2024/09/06",
+        "group_daily_check_date": ""
     },
     {
         "uid": "abcd-1234-5678",
@@ -85,7 +89,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "ijkl-9876-mnop",
@@ -115,7 +121,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "qrst-6543-uvwx",
@@ -144,7 +152,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "yzab-1357-cdef",
@@ -174,7 +184,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "ghij-2468-klmn",
@@ -203,7 +215,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "opqr-3698-stuv",
@@ -233,7 +247,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "wxyz-7531-abcd",
@@ -262,7 +278,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "mnop-9876-qrst",
@@ -292,7 +310,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "abcd-4321-wxyz",
@@ -322,7 +342,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "efgh-8765-ijkl",
@@ -352,7 +374,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "qrst-2109-uvwx",
@@ -382,7 +406,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "uvwx-1098-yzab",
@@ -412,7 +438,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "klmn-5432-opqr",
@@ -442,7 +470,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "abcd-5678-efgh",
@@ -472,7 +502,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "mnop-1122-wxyz",
@@ -502,7 +534,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "qrst-3344-uvwx",
@@ -532,7 +566,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "yzab-5566-cdef",
@@ -562,7 +598,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "ghij-7788-klmn",
@@ -592,7 +630,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "opqr-9900-stuv",
@@ -622,7 +662,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "abcd-1212-wxyz",
@@ -652,7 +694,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "ijkl-3434-mnop",
@@ -682,7 +726,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "qrst-5656-uvwx",
@@ -712,7 +758,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "uvwx-7878-yzab",
@@ -742,7 +790,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "abcd-9090-efgh",
@@ -772,7 +822,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "mnop-2323-wxyz",
@@ -802,7 +854,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "qrst-4545-uvwx",
@@ -832,7 +886,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "yzab-6767-cdef",
@@ -862,7 +918,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "ghij-8989-klmn",
@@ -892,7 +950,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "opqr-2121-stuv",
@@ -922,7 +982,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "abcd-4343-wxyz",
@@ -952,7 +1014,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "ijkl-6565-mnop",
@@ -982,7 +1046,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "qrst-8787-uvwx",
@@ -1012,7 +1078,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "uvwx-1212-yzab",
@@ -1042,7 +1110,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "abcd-3434-efgh",
@@ -1072,7 +1142,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "mnop-5656-wxyz",
@@ -1102,7 +1174,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "qrst-7878-uvwx",
@@ -1132,7 +1206,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "yzab-9898-cdef",
@@ -1162,7 +1238,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "abcd-1212-klmn",
@@ -1192,7 +1270,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "4321-cdef-8765",
@@ -1222,7 +1302,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "5678-ghij-2345",
@@ -1252,7 +1334,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "7890-klmn-5432",
@@ -1282,7 +1366,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "1234-opqr-9876",
@@ -1312,7 +1398,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "2345-stuv-6543",
@@ -1342,7 +1430,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "3456-wxyz-8765",
@@ -1372,7 +1462,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "5678-abcd-4321",
@@ -1402,7 +1494,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "6789-efgh-5432",
@@ -1432,7 +1526,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "7890-ijkl-6543",
@@ -1462,7 +1558,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "8901-mnop-7654",
@@ -1492,7 +1590,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "9012-qrst-9876",
@@ -1522,7 +1622,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "0123-uvwx-0987",
@@ -1552,7 +1654,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "2345-yzab-8765",
@@ -1582,7 +1686,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "3456-cdef-7654",
@@ -1612,7 +1718,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "4567-ghij-6543",
@@ -1642,7 +1750,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "2345-abcd-6789",
@@ -1672,7 +1782,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "3456-bcde-7890",
@@ -1702,7 +1814,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "4567-cdef-8901",
@@ -1732,7 +1846,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "5678-defg-9012",
@@ -1762,7 +1878,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "6789-efgh-0123",
@@ -1792,7 +1910,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "7890-fghi-1234",
@@ -1822,7 +1942,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "8901-ghij-2345",
@@ -1852,7 +1974,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "9012-hijk-3456",
@@ -1882,7 +2006,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "0123-ijkl-4567",
@@ -1912,7 +2038,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "1234-jklm-5678",
@@ -1942,7 +2070,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "2345-klmn-6789",
@@ -1972,7 +2102,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "3456-lmno-7890",
@@ -2002,7 +2134,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "4567-mnop-8901",
@@ -2032,7 +2166,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "5678-abcd-8901",
@@ -2062,7 +2198,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "6789-bcde-9012",
@@ -2092,7 +2230,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "7890-cdef-0123",
@@ -2122,7 +2262,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "8901-defg-1234",
@@ -2152,7 +2294,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "9012-efgh-2345",
@@ -2182,7 +2326,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "0123-fghi-3456",
@@ -2212,7 +2358,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "1234-ghij-4567",
@@ -2242,7 +2390,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "2345-hijk-5678",
@@ -2272,7 +2422,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "3456-ijkl-6789",
@@ -2302,7 +2454,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "4567-jklm-7890",
@@ -2332,7 +2486,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "5678-klmn-8901",
@@ -2362,7 +2518,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "6789-lmno-9012",
@@ -2392,7 +2550,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "7890-mnop-0123",
@@ -2422,7 +2582,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "8901-nopq-1234",
@@ -2452,7 +2614,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "9012-opqr-2345",
@@ -2482,7 +2646,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "0123-pqrs-3456",
@@ -2512,7 +2678,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "1234-qrst-4567",
@@ -2542,7 +2710,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "2345-rstu-5678",
@@ -2572,7 +2742,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "2345-abcd-6789",
@@ -2602,7 +2774,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "3456-bcde-7890",
@@ -2632,7 +2806,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "4567-cdef-8901",
@@ -2662,7 +2838,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "5678-defg-9012",
@@ -2692,7 +2870,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "6789-efgh-0123",
@@ -2722,7 +2902,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "7890-fghi-1234",
@@ -2752,7 +2934,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "8901-ghij-2345",
@@ -2782,7 +2966,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "9012-hijk-3456",
@@ -2812,7 +2998,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "0123-ijkl-4567",
@@ -2842,7 +3030,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "1234-jklm-5678",
@@ -2872,7 +3062,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "2345-klmn-6789",
@@ -2902,7 +3094,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "3456-lmno-7890",
@@ -2932,7 +3126,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "4567-mnop-8901",
@@ -2962,7 +3158,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "5678-abcd-9012",
@@ -2992,7 +3190,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "6789-bcde-0123",
@@ -3022,7 +3222,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "7890-cdef-1234",
@@ -3052,7 +3254,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "8901-defg-2345",
@@ -3082,7 +3286,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "9012-efgh-3456",
@@ -3112,7 +3318,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "0123-fghi-4567",
@@ -3142,7 +3350,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "1234-ghij-5678",
@@ -3172,7 +3382,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "2345-hijk-6789",
@@ -3202,7 +3414,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "3456-ijkl-7890",
@@ -3232,7 +3446,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "4567-jklm-8901",
@@ -3262,7 +3478,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "5678-klmn-9012",
@@ -3292,7 +3510,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "6789-lmno-0123",
@@ -3322,7 +3542,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "7890-mnop-1234",
@@ -3352,7 +3574,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "8901-nopq-2345",
@@ -3382,7 +3606,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "9012-opqr-3456",
@@ -3412,7 +3638,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "1234-abcd-7890",
@@ -3442,7 +3670,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "2345-bcde-8901",
@@ -3472,7 +3702,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "3456-cdef-9012",
@@ -3502,7 +3734,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "4567-defg-0123",
@@ -3532,7 +3766,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "5678-efgh-1234",
@@ -3562,7 +3798,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "6789-fghi-2345",
@@ -3592,7 +3830,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "7890-ghij-3456",
@@ -3622,7 +3862,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "8901-hijk-4567",
@@ -3652,7 +3894,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "9012-ijkl-5678",
@@ -3682,7 +3926,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "0123-jklm-6789",
@@ -3712,7 +3958,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "1234-klmn-7890",
@@ -3742,7 +3990,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "2345-lmno-8901",
@@ -3772,7 +4022,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "3456-mnop-9012",
@@ -3802,7 +4054,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "4567-nopq-0123",
@@ -3832,7 +4086,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "5678-opqr-1234",
@@ -3862,7 +4118,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "abcd-1234-5678",
@@ -3892,7 +4150,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "bcde-2345-6789",
@@ -3922,7 +4182,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "cdef-3456-7890",
@@ -3952,7 +4214,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "defg-4567-8901",
@@ -3982,7 +4246,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "efgh-5678-9012",
@@ -4012,7 +4278,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "fghi-6789-0123",
@@ -4042,7 +4310,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "ghij-7890-1234",
@@ -4072,7 +4342,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "hijk-8901-2345",
@@ -4102,7 +4374,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "abcd-1234-5678",
@@ -4132,7 +4406,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "bcde-2345-6789",
@@ -4162,7 +4438,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "cdef-3456-7890",
@@ -4192,7 +4470,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "defg-4567-8901",
@@ -4222,7 +4502,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "efgh-5678-9012",
@@ -4252,7 +4534,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "fghi-6789-0123",
@@ -4282,7 +4566,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "ghij-7890-1234",
@@ -4312,7 +4598,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "hijk-8901-2345",
@@ -4342,7 +4630,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "ijkl-9012-3456",
@@ -4372,7 +4662,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "jklm-0123-4567",
@@ -4402,7 +4694,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "abcd-2345-6789",
@@ -4432,7 +4726,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "bcde-3456-7890",
@@ -4462,7 +4758,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "cdef-4567-8901",
@@ -4492,7 +4790,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "defg-5678-9012",
@@ -4522,7 +4822,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "efgh-6789-0123",
@@ -4552,7 +4854,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "fghi-7890-1234",
@@ -4582,7 +4886,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "abcd-5678-1234",
@@ -4612,7 +4918,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "bcde-6789-2345",
@@ -4642,7 +4950,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "cdef-7890-3456",
@@ -4672,7 +4982,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "defg-8901-4567",
@@ -4702,7 +5014,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "efgh-9012-5678",
@@ -4732,7 +5046,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "fghi-0123-6789",
@@ -4762,7 +5078,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "ghij-1234-7890",
@@ -4792,7 +5110,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "hijk-2345-8901",
@@ -4822,7 +5142,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "ijkl-3456-9012",
@@ -4852,7 +5174,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "jklm-4567-0123",
@@ -4882,7 +5206,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "klmn-5678-1234",
@@ -4912,7 +5238,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "lmno-6789-2345",
@@ -4942,7 +5270,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "mnop-7890-3456",
@@ -4972,7 +5302,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "nopq-8901-4567",
@@ -5002,7 +5334,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "opqr-9012-5678",
@@ -5032,7 +5366,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "pqrs-0123-6789",
@@ -5062,7 +5398,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "abcd-7890-1234",
@@ -5092,7 +5430,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "bcde-8901-2345",
@@ -5122,7 +5462,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "cdef-9012-3456",
@@ -5152,7 +5494,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "defg-0123-4567",
@@ -5182,7 +5526,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "efgh-1234-5678",
@@ -5212,7 +5558,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "fghi-2345-6789",
@@ -5242,7 +5590,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "ghij-3456-7890",
@@ -5272,7 +5622,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "abcd-4567-8901",
@@ -5302,7 +5654,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "bcde-5678-9012",
@@ -5332,7 +5686,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "cdef-6789-0123",
@@ -5362,7 +5718,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "defg-7890-1234",
@@ -5392,7 +5750,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "efgh-8901-2345",
@@ -5422,7 +5782,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "fghi-9012-3456",
@@ -5452,7 +5814,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "ghij-0123-4567",
@@ -5482,7 +5846,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "hijk-1234-5678",
@@ -5512,7 +5878,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "ijkl-2345-6789",
@@ -5542,7 +5910,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "jklm-3456-7890",
@@ -5572,7 +5942,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "klmn-4567-8901",
@@ -5602,7 +5974,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "lmno-5678-9012",
@@ -5632,7 +6006,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "abcd-2345-6789",
@@ -5662,7 +6038,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "bcde-3456-7890",
@@ -5692,7 +6070,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "cdef-4567-8901",
@@ -5722,7 +6102,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "defg-5678-9012",
@@ -5752,7 +6134,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "efgh-6789-0123",
@@ -5782,7 +6166,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "fghi-7890-1234",
@@ -5812,7 +6198,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "ghij-8901-2345",
@@ -5842,7 +6230,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "hijk-9012-3456",
@@ -5872,7 +6262,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "ijkl-0123-4567",
@@ -5902,7 +6294,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "jklm-1234-5678",
@@ -5932,7 +6326,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "klmn-2345-6789",
@@ -5962,7 +6358,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "lmno-3456-7890",
@@ -5992,7 +6390,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "abcd-7890-1234",
@@ -6022,7 +6422,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "bcde-8901-2345",
@@ -6052,7 +6454,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "cdef-9012-3456",
@@ -6082,7 +6486,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "1234-abcd-5678",
@@ -6111,7 +6517,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "2345-bcde-6789",
@@ -6140,7 +6548,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "3456-cdef-7890",
@@ -6169,7 +6579,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "4567-def0-8901",
@@ -6198,7 +6610,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "5678-ef01-9012",
@@ -6227,7 +6641,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "6789-f012-0123",
@@ -6256,7 +6672,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "7890-0123-1234",
@@ -6285,7 +6703,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "8901-1234-2345",
@@ -6314,7 +6734,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "9012-2345-3456",
@@ -6343,7 +6765,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "0123-3456-4567",
@@ -6372,7 +6796,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "1234-4567-5678",
@@ -6401,7 +6827,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "2345-5678-6789",
@@ -6430,7 +6858,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "3456-6789-7890",
@@ -6459,7 +6889,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "4567-7890-8901",
@@ -6488,7 +6920,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "1111-aaaa-2222",
@@ -6517,7 +6951,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "2222-bbbb-3333",
@@ -6546,7 +6982,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "3333-cccc-4444",
@@ -6575,7 +7013,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "4444-dddd-5555",
@@ -6604,7 +7044,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "5555-eeee-6666",
@@ -6633,7 +7075,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "6666-ffff-7777",
@@ -6662,7 +7106,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "7777-gggg-8888",
@@ -6691,7 +7137,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "1111-aaaa-2222",
@@ -6720,7 +7168,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "2222-bbbb-3333",
@@ -6749,7 +7199,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "3333-cccc-4444",
@@ -6778,7 +7230,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "4444-dddd-5555",
@@ -6807,7 +7261,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "5555-eeee-6666",
@@ -6836,7 +7292,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "6666-ffff-7777",
@@ -6865,7 +7323,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "7777-gggg-8888",
@@ -6894,7 +7354,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "8888-hhhh-9999",
@@ -6923,7 +7385,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "9999-iiii-0000",
@@ -6952,7 +7416,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "0000-jjjj-1111",
@@ -6981,7 +7447,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "1111-kkkk-2222",
@@ -7010,7 +7478,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "aaaa-1111-bbbb",
@@ -7039,7 +7509,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "bbbb-2222-cccc",
@@ -7068,7 +7540,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "cccc-3333-dddd",
@@ -7097,7 +7571,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "dddd-4444-eeee",
@@ -7126,7 +7602,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "eeee-5555-ffff",
@@ -7155,7 +7633,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "ffff-6666-gggg",
@@ -7184,7 +7664,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "gggg-7777-hhhh",
@@ -7213,7 +7695,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "hhhh-8888-iiii",
@@ -7242,7 +7726,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "iiii-9999-jjjj",
@@ -7271,7 +7757,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "jjjj-0000-kkkk",
@@ -7300,7 +7788,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "aaaa-1111-bbbb",
@@ -7329,7 +7819,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "bbbb-2222-cccc",
@@ -7358,7 +7850,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "cccc-3333-dddd",
@@ -7387,7 +7881,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "dddd-4444-eeee",
@@ -7416,7 +7912,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "eeee-5555-ffff",
@@ -7445,7 +7943,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "ffff-6666-gggg",
@@ -7474,7 +7974,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "gggg-7777-hhhh",
@@ -7503,7 +8005,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "hhhh-8888-iiii",
@@ -7532,7 +8036,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "iiii-9999-jjjj",
@@ -7561,7 +8067,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "jjjj-0000-kkkk",
@@ -7590,7 +8098,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "kkkk-1111-llll",
@@ -7619,7 +8129,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "llll-2222-mmmm",
@@ -7648,7 +8160,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "aaaa-1111-bbbb",
@@ -7677,7 +8191,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "bbbb-2222-cccc",
@@ -7706,7 +8222,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "cccc-3333-dddd",
@@ -7735,7 +8253,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "dddd-4444-eeee",
@@ -7764,7 +8284,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "eeee-5555-ffff",
@@ -7793,7 +8315,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "ffff-6666-gggg",
@@ -7822,7 +8346,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "gggg-7777-hhhh",
@@ -7851,7 +8377,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "hhhh-8888-iiii",
@@ -7880,7 +8408,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "iiii-9999-jjjj",
@@ -7909,7 +8439,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "aaaa-1111-bbbb",
@@ -7938,7 +8470,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "bbbb-2222-cccc",
@@ -7967,7 +8501,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "cccc-3333-dddd",
@@ -7996,7 +8532,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "dddd-4444-eeee",
@@ -8025,7 +8563,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "eeee-5555-ffff",
@@ -8054,7 +8594,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "ffff-6666-gggg",
@@ -8083,7 +8625,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "gggg-7777-hhhh",
@@ -8112,7 +8656,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "hhhh-8888-iiii",
@@ -8141,7 +8687,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "iiii-9999-jjjj",
@@ -8170,7 +8718,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "aaaa-1111-bbbb",
@@ -8199,7 +8749,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "bbbb-2222-cccc",
@@ -8228,7 +8780,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "cccc-3333-dddd",
@@ -8257,7 +8811,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "dddd-4444-eeee",
@@ -8286,7 +8842,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "eeee-5555-ffff",
@@ -8315,7 +8873,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "ffff-6666-gggg",
@@ -8344,7 +8904,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "gggg-7777-hhhh",
@@ -8373,7 +8935,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "hhhh-8888-iiii",
@@ -8402,7 +8966,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "iiii-9999-jjjj",
@@ -8431,7 +8997,9 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     },
     {
         "uid": "jjjj-0000-kkkk",
@@ -8460,6 +9028,8 @@
         "name_card_list": [
             "name_card_1",
             "name_card_2"
-        ]
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": ""
     }
 ]

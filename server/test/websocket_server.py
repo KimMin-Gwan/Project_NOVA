@@ -1,5 +1,6 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from websockets.exceptions import ConnectionClosedError
+from typing import Any, Optional
 import uvicorn
 import json
 import jwt
@@ -21,8 +22,9 @@ class TestServer:
             return data
 
         @self.__app.websocket('/chatting')
-        async def chatting_socket(websocket:WebSocket):
+        async def chatting_socket(websocket:WebSocket, bias_name:Optional[str] = ""):
             await self.manager.connect(websocket)
+            print(bias_name)
             secret_key = "your_secret_key"
             try:
                 while True:

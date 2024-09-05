@@ -1,5 +1,6 @@
 from others.data_domain import User, Bias, League
 from datetime import datetime, timedelta
+from others.league_manager import LeagueManager as LM
 
 
 class CheckManager:
@@ -17,25 +18,25 @@ class CheckManager:
             user.solo_special = False
 
     # 일일 최애 인증 시도
-    def try_daily_check(self, user:User, bias:Bias, league:League, bias_list:list):
+    def try_daily_check(self, user:User, bias:Bias, league_manager:LM):
         point = self._daily_check_update_user(user, bias_type=bias.type)
         bias.point += point  # 바이어스 포인트 업
-        self._sort_rank(league=league, bias_list=bias_list)
+        league_manager.try_update_league(bias=bias)
         return
 
     # 스페셜 최애 인증 시도
-    def try_special_check(self, user:User, bias:Bias, league:League, bias_list:list):
+    def try_special_check(self, user:User, bias:Bias, league_manager:LM):
         point = self._special_check_update_user(user, bias_type=bias.type)
         bias.point += point  # 바이어스 포인트 업
-        self._sort_rank(league=league, bias_list=bias_list)
+        league_manager.try_update_league(bias=bias)
         return
 
     # 콤보 수를 올리기 위해 시간 채크하는 함수
-    def _time_checker(self, user:User, last_check_date:str ) -> bool:
+    def _time_checker(self, last_check_date:str ) -> bool:
         if last_check_date == "":
             return True
         date_object = datetime.strptime(last_check_date, "%Y/%m/%d").date()
-        today = datetime.today()
+        today = datetime.today().date()
         difference = today - date_object
         if difference == timedelta(days=1):
             return True
@@ -95,24 +96,24 @@ class CheckManager:
 
         return result_point
 
-    # 랭크 재정렬 함수
-    def _sort_rank(self, league:League, bias_list:list):
-        sorted_bias_list=sorted(bias_list, key=lambda x:x.point, reverse=False)
+    ## 랭크 재정렬 함수
+    #def _sort_rank(self, league:League, bias_list:list):
+        #sorted_bias_list=sorted(bias_list, key=lambda x:x.point, reverse=False)
 
-        bid_list = []
+        #bid_list = []
 
-        for bias in sorted_bias_list:
-            bid_list.append(bias.bid)
+        #for bias in sorted_bias_list:
+            #bid_list.append(bias.bid)
 
-        league.bid_list = bid_list
-        return
+        #league.bid_list = bid_list
+        #return
 
     # 이미 체크 했는지 확인해야됨
     def is_already_check(self, user:User, bias:Bias) -> bool:
         if bias.type == "solo":
             if user.solo_daily:
                 return False
-        elif self._bias.type == "group":
+        elif bias.type == "group":
             if user.group_daily:
                 return False
         else: 

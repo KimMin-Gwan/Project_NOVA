@@ -4,13 +4,21 @@ from view.master_view import Master_View, RequestHeader
 from view.parsers import Head_Parser
 from controller import Home_Controller, Core_Controller
 from fastapi.responses import HTMLResponse
+from others import ConnectionManager as CM
+from others import LeagueManager as LM
+from websockets.exceptions import ConnectionClosedError
 
 class Core_Service_View(Master_View):
-    def __init__(self, app:FastAPI, endpoint:str, database, head_parser:Head_Parser) -> None:
+    def __init__(self, app:FastAPI, endpoint:str,
+                  database, head_parser:Head_Parser,
+                  connection_manager:CM, league_manager:LM
+                  ) -> None:
         super().__init__(head_parser=head_parser)
         self.__app = app
         self._endpoint = endpoint
         self.__database = database
+        self.__connection_manager=connection_manager
+        self.__league_manager=league_manager
         self.home_route(endpoint)
         self.check_route()
         self.web_chatting_route(endpoint)
@@ -133,7 +141,8 @@ class Core_Service_View(Master_View):
             request = CheckRequest(request=raw_request)
             core_controller=Core_Controller()
             model = core_controller.try_daily_check(database=self.__database,
-                                                             request=request)
+                                                             request=request,
+                                                             league_manager=self.__league_manager)
             response = model.get_response_form_data(self._head_parser)
             return response
 
@@ -143,7 +152,8 @@ class Core_Service_View(Master_View):
             request = CheckRequest(request=raw_request)
             core_controller=Core_Controller()
             model = core_controller.try_special_check(database=self.__database,
-                                                             request=request)
+                                                             request=request,
+                                                             league_manager=self.__league_manager)
             response = model.get_response_form_data(self._head_parser)
             return response
 
@@ -155,7 +165,7 @@ class Core_Service_View(Master_View):
                                                              request=request)
             return html
 
-    def web_chatting_route(self,endpoint:str):
+    def web_chatting_route(self, endpoint:str):
         #채팅서버
         @self.__app.get('/chatting_list')
         def get_chatting_list():
@@ -182,6 +192,27 @@ class Core_Service_View(Master_View):
             except WebSocketDisconnect:
                 self.manager.disconnect(websocket)
             #    await self.manager.broadcast("client disconnected")
+
+        @self.__app.websocket('/league_detail/league_data')
+        async def league_socket(websocket:WebSocket, league_name:Optional[str] = ""):
+            try:
+                print("connection")
+                print(league_name)
+                if league_name == "":
+                    return
+                observer = await self.__connection_manager.connect(lname=league_name,
+                                                                     websocket=websocket,
+                                                                     league_manager=self.__league_manager,
+                                                                     )
+                result = await observer.send_operation()
+                if not result:
+                    self.__connection_manager.disconnect(observer=observer)
+
+            except ConnectionClosedError:
+                self.__connection_manager.disconnect(observer=observer)
+                
+            except WebSocketDisconnect:
+                self.__connection_manager.disconnect(observer=observer)
 
 class SampleRequest(RequestHeader):
     def __init__(self, request) -> None:
