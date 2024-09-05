@@ -22,6 +22,7 @@ import NoticeList from './pages/Notice/NoticeList';
 import Notice from './pages/Notice/Notice';
 import LeaguePage from './pages/LeaguePage/LeaguePage';
 import LeagueDetail from './pages/LeagueDetail/LeagueDetail';
+import Chatting from './pages/Chatting/Chatting.js';
 
 function App() {
 
@@ -97,6 +98,7 @@ function App() {
     <Routes>
       <Route path='/more_see' element={<MoreSee />}></Route>
       <Route path='/league' element={<LeaguePage />}></Route>
+      <Route path='/chatting' element={<Chatting />}></Route>
       <Route path='/league_detail' element={<LeagueDetail />}></Route>
       <Route path='/notice' element={<Notice />}></Route>
       <Route path='/notice_list' element={<NoticeList />}></Route>
@@ -132,6 +134,7 @@ function App() {
                 <Link to='/namecard' className='button'>명함</Link>
                 <Link to='/mypage' className='button'>마이페이지</Link>
                 <Link to='/league' className='button'>리그페이지</Link>
+                <Link to='/chatting' className='button'>채팅페이지</Link>
                 <Link to='/league_detail' className='button'>리그상세페이지</Link>
                 {/* <Link to='/select_bias' className='button'>최애선택</Link> */}
                 <Link to='/notice_list' className='button'>공지사항</Link>

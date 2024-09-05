@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+    <title>WebSocket Chat</title>
+</head>
+
+<body>
+    <canvas id="canvas" width="300" height="300"></canvas>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.141.0/build/three.module.js",
+                "FBXLoader": "https://unpkg.com/three@0.141.0/examples/jsm/loaders/FBXLoader.js",
+                "OrbitControls": "https://unpkg.com/three@0.141.0/examples/jsm/controls/OrbitControls.js"
+            }
+        }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'OrbitControls';
+        import { FBXLoader } from 'FBXLoader';
+
+        // 1. Scene, Renderer, Camera 설정
+        let scene = new THREE.Scene();
+        let renderer = new THREE.WebGLRenderer({
+            canvas: document.querySelector('#canvas'),
+            antialias: true
+        });
+        renderer.outputEncoding = THREE.sRGBEncoding;
+        renderer.setSize(window.innerWidth, window.innerHeight);  // 캔버스 크기 설정
+
+        let camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000); // 원근법 적용된 카메라
+        camera.position.set(0, 2, 10);  // 카메라 위치 설정
+
+        // 2. OrbitControls 설정
+        let controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;  // 부드러운 마우스 제어
+        controls.dampingFactor = 0.05;
+        controls.minDistance = 2;
+        controls.maxDistance = 30;
+
+        // 3. 배경색 및 조명 설정
+        scene.background = new THREE.Color('skyblue');
+        const light = new THREE.DirectionalLight(0xffffff, 1);
+        light.position.set(10, 10, 10).normalize();
+        scene.add(light);
+
+        // 4. FBXLoader로 모델 로드
+        const loader = new FBXLoader();
+        loader.load('./img/shiba/source/1/shiba.FBX', function (object) {
+            scene.add(object);  // 씬에 모델 추가
+            // object.scale.set(0.01, 0.01, 0.01);  // 모델 크기 조정
+
+            // 애니메이션 설정
+            function animate() {
+                requestAnimationFrame(animate);
+                object.rotation.y += 0.01;  // 모델 회전
+                controls.update();  // OrbitControls 업데이트
+                renderer.render(scene, camera);
+            }
+            animate();
+        });
+
+        // 5. 창 크기 변경에 따라 카메라와 캔버스 크기 조정
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+
+</html>
+
+<!-- 마우스 컨트롤
+ - three.js 내의 OribitControl  -->
