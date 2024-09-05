@@ -200,3 +200,28 @@ class Local_Database:
         num_list= len(target_list)
         return num_list
     
+    #데이터 삭제
+    def delete_data_With_id(self,target:str, id:str):
+        try:
+            target_index = -1
+    
+            target_list = self._select_target_list(target=target)
+
+            for i, data in enumerate(target_list):
+                if data[target] == id:
+                    target_index = i
+                    break
+                i+=1
+
+            if target_index == -1:
+                return False
+            
+            target_list.pop(target_index)
+            func = self._select_save_function(target=target)
+            func()
+            return True
+
+        except Exception as e:
+            print(e)
+            raise DatabaseLogicError(error_type="delete_data_with_id error | " + str(e))
+    
