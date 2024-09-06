@@ -23,6 +23,7 @@ import Notice from './pages/Notice/Notice';
 import LeaguePage from './pages/LeaguePage/LeaguePage';
 import LeagueDetail from './pages/LeagueDetail/LeagueDetail';
 import Chatting from './pages/Chatting/Chatting.js';
+import SignUp from './pages/SignUp/SignUp.js';
 
 function App() {
 
@@ -48,7 +49,7 @@ function App() {
   }
 
   useEffect(() => {
-    if (!token) {
+    if (!token || token===undefined) {
       console.log('로그인안됨')
     }
     else {
@@ -64,6 +65,7 @@ function App() {
           }
           else if (isLogin === '497') {
             localStorage.removeItem('jwtToken');
+            console.log("2222: ",data)
             alert('다시 로그인 해주세요.');
           }
 
@@ -97,6 +99,7 @@ function App() {
   return (
     <Routes>
       <Route path='/more_see' element={<MoreSee />}></Route>
+      <Route path='/signup' element={<SignUp />}></Route>
       <Route path='/league' element={<LeaguePage />}></Route>
       <Route path='/chatting' element={<Chatting />}></Route>
       <Route path='/league_detail' element={<LeagueDetail />}></Route>
@@ -132,12 +135,12 @@ function App() {
                 {/* <Link to='/' className='button'>홈</Link> */}
                 {/* <Link to='/more_see' className='button'>더보기</Link> */}
                 <Link to='/namecard' className='button'>명함</Link>
+                <Link to='/signup' className='button'>회원가입</Link>
                 <Link to='/mypage' className='button'>마이페이지</Link>
                 <Link to='/league' className='button'>리그페이지</Link>
                 <Link to='/chatting' className='button'>채팅페이지</Link>
                 <Link to='/league_detail' className='button'>리그상세페이지</Link>
                 {/* <Link to='/select_bias' className='button'>최애선택</Link> */}
-                <Link to='/notice_list' className='button'>공지사항</Link>
                 {/* <Link to='/bias_certify' className='button'>최애 지지하기</Link> */}
                 <Link to='/novalogin' className='button'>로그인 페이지</Link>
                 {/* <Link to='/data_test' className='button'>테스트페이지</Link> */}

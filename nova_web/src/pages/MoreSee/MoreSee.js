@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 function MoreSee() {
 
     let navigate = useNavigate();
+    let tokenCheck = localStorage.getItem('jwtToken');
 
     return (
         <div className={style.font}>
@@ -23,17 +24,24 @@ function MoreSee() {
                     </div>
                 </div>
                 <div class={style.content}>
-                    <div class={style.mainComponent} onClick={()=>{
-                        navigate('/novalogin')
+                    <div class={style.mainComponent} onClick={() => {
+                        if (tokenCheck) {
+                            navigate('/mypage');
+                        }
+                        else {
+                            navigate('/novalogin');
+                        }
                     }}>
-                        <p class={style.bodyText}>로그인</p>
+                        <p class={style.bodyText}>{tokenCheck ? '마이페이지' : '로그인'}</p>
                         <img src={vector} alt="Arrow" class={style.vector} />
                     </div>
                     <div class={style.mainComponent}>
                         <p class={style.bodyText}>최애 신청하기(네이버 폼)</p>
                         <img src={vector} alt="Arrow" class={style.vector} />
                     </div>
-                    <div class={style.mainComponent}>
+                    <div class={style.mainComponent} onClick={() => {
+                        navigate('/notice_list')
+                    }}>
                         <p class={style.bodyText}>공지사항</p>
                         <img src={vector} alt="Arrow" class={style.vector} />
                     </div>
