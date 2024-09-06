@@ -7,10 +7,10 @@ import MyPage from './pages/MyPage/Mypage';
 import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 import zoom from './img/zoom.png';
 import menu from './img/menu.png';
-import Rank from './component/ranks';
-import FloatingButton from './component/floatingbutton';
-import Meta from './Container/metaContainer';
-import Loundspeaker from './component/loundspeaker';
+// import Rank from './component/ranks';
+// import FloatingButton from './component/floatingbutton';
+// import Meta from './Container/metaContainer';
+// import Loundspeaker from './component/loundspeaker';
 import NOVALogin from './pages/NovaLogin/NovaLogin';
 import SelectBias from './component/selectBias/SelectBias';
 import BiasDetail from './pages/BiasDetail/biasDetail';
@@ -22,8 +22,11 @@ import NoticeList from './pages/Notice/NoticeList';
 import Notice from './pages/Notice/Notice';
 import LeaguePage from './pages/LeaguePage/LeaguePage';
 import LeagueDetail from './pages/LeagueDetail/LeagueDetail';
-import Chatting from './pages/Chatting/Chatting.js';
 import SignUp from './pages/SignUp/SignUp.js';
+import FeedPage from './pages/FeedPage/FeedPage.js';
+import Feed from './component/feed.js';
+import InfFeed from './component/infiniteFeed.js';
+
 
 function App() {
 
@@ -49,7 +52,7 @@ function App() {
   }
 
   useEffect(() => {
-    if (!token || token===undefined) {
+    if (!token || token === undefined) {
       console.log('로그인안됨')
     }
     else {
@@ -57,7 +60,7 @@ function App() {
         .then(response => response.json())
         .then(data => {
           JSON.stringify(data);
-          console.log("111",data)
+          console.log("111", data)
           setIsLogin(data.header['state-code']);
           if (isLogin === '498') {
             setnewToken(data.header.new_token);
@@ -65,7 +68,7 @@ function App() {
           }
           else if (isLogin === '497') {
             localStorage.removeItem('jwtToken');
-            console.log("2222: ",data)
+            console.log("2222: ", data)
             alert('다시 로그인 해주세요.');
           }
 
@@ -99,9 +102,9 @@ function App() {
   return (
     <Routes>
       <Route path='/more_see' element={<MoreSee />}></Route>
+      <Route path='/feed_page' element={<FeedPage />}></Route>
       <Route path='/signup' element={<SignUp />}></Route>
       <Route path='/league' element={<LeaguePage />}></Route>
-      <Route path='/chatting' element={<Chatting />}></Route>
       <Route path='/league_detail' element={<LeagueDetail />}></Route>
       <Route path='/notice' element={<Notice />}></Route>
       <Route path='/notice_list' element={<NoticeList />}></Route>
@@ -135,10 +138,10 @@ function App() {
                 {/* <Link to='/' className='button'>홈</Link> */}
                 {/* <Link to='/more_see' className='button'>더보기</Link> */}
                 <Link to='/namecard' className='button'>명함</Link>
+                <Link to='/feed_page' className='button'>피드페이지</Link>
                 <Link to='/signup' className='button'>회원가입</Link>
                 <Link to='/mypage' className='button'>마이페이지</Link>
                 <Link to='/league' className='button'>리그페이지</Link>
-                <Link to='/chatting' className='button'>채팅페이지</Link>
                 <Link to='/league_detail' className='button'>리그상세페이지</Link>
                 {/* <Link to='/select_bias' className='button'>최애선택</Link> */}
                 {/* <Link to='/bias_certify' className='button'>최애 지지하기</Link> */}
@@ -151,13 +154,16 @@ function App() {
 
             <h2 className='authen'>인증하기</h2>
 
-
             <section className='my-bias'>
               <MyBias url={url} token={newToken} showBox={showBox} blackBox={blackBox}></MyBias>
             </section>
           </div>
 
-          <section className="solo-bias-rank">
+          <section>
+            <InfFeed></InfFeed>
+          </section>
+
+          {/* <section className="solo-bias-rank">
             <div className='title-area'>
               <div className="ranking">개인리그 랭킹</div>
               <div className={`toggle-container ${isSoloClicked ? "" : "active"}`}>
@@ -195,23 +201,22 @@ function App() {
               </div>
             </div>
             <Meta url={url} isGroupClicked={isGroupClicked} type={type[1]} token={newToken}></Meta>
-          </section>
+          </section> */}
 
-          <section className="advise"></section>
-          <FloatingButton showSpeaker={showBox} setShowSpeaker={setShowBox}></FloatingButton>
-          <footer className="footer">
+          {/* <section className="advise"></section>
+          <FloatingButton showSpeaker={showBox} setShowSpeaker={setShowBox}></FloatingButton> */}
+          {/* <footer className="footer">
             <div>
-              <p>NOVA</p><br/>
+              <p>NOVA</p><br />
               <p className='nova-info'>경북 경산시 압량읍 압독2로1길 21, 1층 184</p>
               <p className='nova-info'>대표: 김민관 | 사업자등록번호: 380-08-03011</p>
               <p className='nova-info'>통신판매업신고번호: 0000-0000-000000</p>
               <p className='nova-info'>전화번호: 010-9875-2508 | 이메일:youths0828@nova-platform.kr</p>
             </div>
             <div className="loundspeaker">
-              {/* <button>확성기</button> */}
             </div>
-            
-          </footer>
+
+          </footer> */}
         </div >
 
 

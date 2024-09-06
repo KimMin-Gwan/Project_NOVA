@@ -68,9 +68,11 @@ body {
 
 .container {
   max-width: 500px;
+  height: 200vw;
   margin: 0 auto;
   background-color: #1e1e1e;
   position: relative;
+  /* overflow: hidden; */
   /* z-index: 99; */
   /* min-height: 100vh; */
   /* padding: 20px; */
@@ -577,10 +579,13 @@ body {
 .footer {
   /* display: flex; */
   /* height: 200px; */
+  width: 100%;
   justify-content: space-between;
   align-items: center;
   background-color: #eee;
   padding: 10px;
+  position: absolute;
+  bottom: 0px;
 }
 
 .confirm-button {
@@ -925,4 +930,10 @@ body {
 
 .nova-info {
   font-size: 14px;
+}
+
+
+
+.feed-area {
+  
 }
