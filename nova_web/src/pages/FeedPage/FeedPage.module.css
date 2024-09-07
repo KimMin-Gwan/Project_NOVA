@@ -21,14 +21,109 @@
     cursor: pointer;
 }
 
+/* 피드 관련 스타일 */
 .feed {
     margin: 0 auto;
-    background-color: bisque;
+    background-color: #292929;
+    border-radius: 25px;
     width: 450px;
-    height: 200px;
-    color: black;
+    height: 400px;
+    color: white;
     margin-top: 20px;
 }
+
+.info_area {
+    margin-left: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.planet_name {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.planet_name img {
+    width: 40px;
+    height: 40px;
+    margin-right: 7px;
+}
+
+.sup_people {
+    margin-right: 20px;
+}
+
+.title {
+    width: 100%;
+    white-space: normal;
+}
+
+.link_box {
+    margin-left: 20px;
+    background-color: gray;
+    width: 85%;
+    height: 80px;
+    border-radius: 10px;
+}
+
+.link_box h1 {
+    margin: 0;
+    margin-left: 10px;
+    padding-top: 10px;
+}
+
+.link_box h5 {
+    margin: 0;
+    padding: 0;
+    padding-top: 5px;
+    margin-left: 10px;
+}
+
+.button_container {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    height: 200px;
+}
+
+.button_container button {
+    width: 150px;
+    height: 80px;
+    color: white;
+    background-color: blue;
+    border-radius: 15px;
+    box-shadow: 0px 2px 5px black;
+}
+
+.quiz_box {
+    list-style-type: none;
+    /* background-color: blue; */
+    margin: 0 auto;
+    width: 80%;
+    height: 50%;
+    padding: 0;
+    border-radius: 15px;
+}
+
+.quiz_box li {
+    padding: 15px 20px;
+    background-color: seagreen;
+    border: 1px white solid;
+}
+
+.quiz_box li:first-child {
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.quiz_box li:last-child {
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+/*  */
+
 
 .area {
     height: 600px;
@@ -40,6 +135,7 @@
 
 .scroll-area {
     height: 1000px;
+    background-color: blue;
     overflow: scroll;
     scrollbar-width: none;
 }

@@ -26,6 +26,7 @@ import SignUp from './pages/SignUp/SignUp.js';
 import FeedPage from './pages/FeedPage/FeedPage.js';
 import Feed from './component/feed.js';
 import InfFeed from './component/infiniteFeed.js';
+import PlanetList from './pages/PlanetPage/PlanetList.js';
 
 
 function App() {
@@ -102,6 +103,7 @@ function App() {
   return (
     <Routes>
       <Route path='/more_see' element={<MoreSee />}></Route>
+      <Route path='/galaxy' element={<PlanetList />}></Route>
       <Route path='/feed_page' element={<FeedPage />}></Route>
       <Route path='/signup' element={<SignUp />}></Route>
       <Route path='/league' element={<LeaguePage />}></Route>
@@ -138,6 +140,7 @@ function App() {
                 {/* <Link to='/' className='button'>홈</Link> */}
                 {/* <Link to='/more_see' className='button'>더보기</Link> */}
                 <Link to='/namecard' className='button'>명함</Link>
+                <Link to='/galaxy' className='button'>은하페이지</Link>
                 <Link to='/feed_page' className='button'>피드페이지</Link>
                 <Link to='/signup' className='button'>회원가입</Link>
                 <Link to='/mypage' className='button'>마이페이지</Link>
@@ -160,6 +163,7 @@ function App() {
           </div>
 
           <section>
+            <h2 className='satellite-search'>위성 탐색</h2>
             <InfFeed></InfFeed>
           </section>
 

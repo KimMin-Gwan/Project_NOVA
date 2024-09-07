@@ -933,7 +933,14 @@ body {
 }
 
 
-
+/* 피드 영역 */
 .feed-area {
   
+}
+
+.satellite-search {
+  color: white;
+  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
