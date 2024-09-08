@@ -1,44 +1,62 @@
 [
     {
-        "cid": "0",
+        "fid": "0",
         "uid": "1234-abcd-5678",
-        "content": "나 오늘 입덕했다",
-        "date": "2024/08/11"
+        "nickname": "익명 지지자",
+        "title": "글 제목 예시",
+        "body" : "글 내용 예시",
+        "date": "2024/08/11",
+        "fclass" : "card",
+        "class_name": "자랑",
+        "choice" : [],
+        "result" : [],
+        "state" : "y",
+        "attend" : []
     },
     {
-        "cid": "1",
+        "fid": "1",
         "uid": "1234-abcd-5678",
-        "content": "이건 테스트용 체팅입니다",
-        "date": "2024/08/11"
+        "nickname": "익명 바위게",
+        "title": "둘 중 하나 제목 예시",
+        "body" : "둘 중 하나 내용 예시",
+        "date": "2024/08/11",
+        "fclass" : "balance",
+        "class_name": "둘 중 하나",
+        "choice" : ["선택지1", "선택지2"],
+        "result" : [4, 3],
+        "state" : "y",
+        "attend" : [["5678-efgh-1234","abcd-1234-5678","ijkl-9876-mnop","qrst-6543-uvwx"],
+        ["yzab-1357-cdef","ghij-2468-klmn","opqr-3698-stuv"]]
     },
     {
-        "cid": "2",
+        "fid": "2",
         "uid": "1234-abcd-5678",
-        "content": "노바 플랫폼은 이곳입니다",
-        "date": "2024/08/11"
+        "nickname": "오늘은시장을가자",
+        "title": "넷 중 하나 제목 예시",
+        "body" : "넷 중 하나 내용 예시",
+        "date": "2024/08/11",
+        "fclass" : "multiple",
+        "class_name": "넷 중 하나",
+        "choice" : ["선택지1", "선택지2", "선택지3", "선택지4"],
+        "result" : [4, 3, 4, 1],
+        "state" : "y",
+        "attend" : [["5678-efgh-1234","abcd-1234-5678","ijkl-9876-mnop","qrst-6543-uvwx"],
+        ["yzab-1357-cdef","ghij-2468-klmn","opqr-3698-stuv"],
+        ["wxyz-7531-abcd","mnop-9876-qrst","abcd-4321-wxyz","efgh-8765-ijkl"],
+        ["qrst-2109-uvwx"] ]
     },
     {
-        "cid": "3",
+        "fid": "3",
         "uid": "1234-abcd-5678",
-        "content": "확성기는 비싸요",
-        "date": "2024/08/12"
-    },
-    {
-        "cid": "5",
-        "uid": "1234-abcd-5678",
-        "content": "asdf",
-        "date": "2024/32/08/17/24"
-    },
-    {
-        "cid": "6",
-        "uid": "1234-abcd-5678",
-        "content": "safd",
-        "date": "2024/32/08/17/24"
-    },
-    {
-        "cid": "7",
-        "uid": "1234-abcd-5678",
-        "content": "taerwgterw",
-        "date": "2024/32/08/17/24"
+        "nickname": "익명 지지자",
+        "title": "정거장 제목 예시",
+        "body" : "정거장 내용 예시",
+        "date": "2024/08/14",
+        "fclass" : "station",
+        "class_name": "정거장",
+        "choice" : ["사이트이름", "링크 설명", "url"],
+        "result" : [],
+        "state" : "y",
+        "attend" : []
     }
 ]
