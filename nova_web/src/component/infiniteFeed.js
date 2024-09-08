@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import style from './../pages/FeedPage/FeedPage.module.css';
+import Feed from './feed';
 
 export default function InfFeed() {
 
@@ -52,7 +53,7 @@ export default function InfFeed() {
             {
                 testData.map((a, i) => {
                     return (
-                        <div className={style.feed} key={i}>{i}</div>
+                        <Feed key={i} type={a}></Feed>
                     )
                 })
             }
