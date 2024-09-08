@@ -50,9 +50,9 @@ class BiasModify(Admin):
                 elif select == '8':
                     self.__bias.lid = input('lid: ')
                 elif select == '9':
-                    self.__bias.point = int(input('point: '))
+                    self.__bias.point = int(input('point: ') or 0)
                 elif select == '10':
-                    self.__bias.num_user = int(input('num_user: '))
+                    self.__bias.num_user = int(input('num_user: ') or 0)
                 elif select == '11':
                     self.__bias.x_account = input('x_account: ')
                 elif select == '12':

@@ -6,7 +6,7 @@ class Admin():
     def __init__(self) -> None:
         self.__key = 'nMjzkWLUCI0GfEPbkTut3qcWSxz2KVFx6jXQT4mVpbIV9CisdweCieYcC9AA3JuOYcPSIaT8ey7V9zSX'
         #self.__base_url= 'http://175.106.99.34/admin'
-        self.__base_url= 'http://127.0.0.1:6000/admin'
+        self.__base_url= 'http://127.0.0.1:4000/admin'
         # HOST = '175.106.99.34'
         # HOST = '127.0.0.1'
         # PORT = 6000
@@ -20,11 +20,11 @@ class Admin():
     def _check_data(self, data):
         print('완료 전 데이터를 다시 확인해 주세요')
         print(data)
-        print('입력한 데이터가 맞으면 yes 잘못된 데이터가 입력되었을 시 no')
-        control = input()
-        if control == 'yes' or 'YES' or 'Yes':
+        print('입력한 데이터가 맞으면 y 잘못된 데이터가 입력되었을 시 n')
+        control = input('입력: ')
+        if control == 'y':
             return True
-        elif control == 'no' or "NO" or 'No':
+        elif control == 'n':
             return False
         else:
             print('잘못된 응답입니다.')

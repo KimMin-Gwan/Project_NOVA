@@ -17,23 +17,29 @@ class LeagueAdd(Admin):
             print('입력 완료 후 0 입력')
             while True:
                 bid = input('bid : ')
-                bid_list.append(bid)
+                if bid == '':
+                    break
                 if bid == '0':
                     break
+                bid_list.append(bid)
+                
             self.__league.bid_list = bid_list
 
             print('----Set Tier----')
             print('입력 완료 후 0 입력')
             while True:
-                tier = input('tier : ')
-                tiers.append(bid)
-                if tier == '0':
+                tier = int(input('tier : ') or 0)
+                if tier == None:
                     break
+                if tier == 0:
+                    break
+                tiers.append(tier)
+                
             self.__league.tier = tiers
 
-            self.__league.num_bias = int(input('num_bias: '))
-            self.__league.state = input('state: ')
-            self.__league.type =input('type: ')
+            self.__league.num_bias = int(input('num_bias: ') or 0)
+            self.__league.state = input('state(active / inactive): ' or 'inactive')
+            self.__league.type =input('type(solo / group): ' or 'solo')
 
             return True
         except:

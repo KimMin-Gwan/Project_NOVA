@@ -11,7 +11,8 @@ class NameCardModify(Admin):
         self.__namecard.ncid = input('Target NCid: ')
         try:
             while True:
-                select = input('(0)exit / (1)ncname / (2)nccredit \nselect: ')
+                print('(0)exit / (1)ncname / (2)nccredit ')
+                select = input('입력: ')
                 if select == '1' :
                     self.__namecard.ncname = input('ncname: ')
                 elif select == '2':

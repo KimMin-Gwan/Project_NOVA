@@ -67,12 +67,12 @@ class Administrator_Controller:
                 model.add_user()
 
             if type == 'load':
-                model.load_user(request=request)
+                model.load_user(request=request,type='email')
 
             if type == 'modify':
-                model.load_user(request=request)
+                model.load_user(request=request,type='uid')
                 model.set_user_data(request=request)
-                model.modify_user()
+                model.modify_user(request=request)
 
             if type == 'delete':
                 model.delete_user(request=request)

@@ -10,7 +10,7 @@ class NamecardAdd(Admin):
         try:
             #self.__user.ncid = '' #ncid는 서버에서 설정
             self.__namecard.ncname = input('ncname: ')
-            self.__namecard.nccredit = int(input('nccredit: '))
+            self.__namecard.nccredit = int(input('nccredit: ') or '0')
 
 
             return True

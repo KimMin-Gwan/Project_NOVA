@@ -316,7 +316,8 @@ class UserAddRequset(RequestHeader):
         self.credit = data['credit']
         self.solo_bid = data['solo_bid']
         self.group_bid = data['group_bid']
-        self.items = data['items']
+        self.chatting = data['items']['chatting']
+        self.saver = data['items']['saver']
         self.solo_daily = data['solo_daily']
         self.solo_special = data['solo_special']
         self.group_daily = data['group_daily']
@@ -344,7 +345,8 @@ class UserModifyRequset(RequestHeader):
         self.credit = data['credit']
         self.solo_bid = data['solo_bid']
         self.group_bid = data['group_bid']
-        self.items = data['items']
+        self.chatting = data['items']['chatting']
+        self.saver = data['items']['saver']
         self.solo_daily = data['solo_daily']
         self.solo_special = data['solo_special']
         self.group_daily = data['group_daily']
@@ -469,7 +471,7 @@ class BannerAddRequset(RequestHeader):
         body = request['body']
         self.admin_key = body['admin_key']
         data = body['data']
-        print(data)
+        self.baid = data['baid']
         self.ba_url = data['ba_url']
 
 class BannerModifyRequset(RequestHeader):

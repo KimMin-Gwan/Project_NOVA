@@ -8,29 +8,39 @@ class UserAdd(Admin):
         self.__user = User()
     
     def set_data(self):
-        items = Item()
+        #items = Item()
         name_card_list = []
         try:
             #self.__user.uid = '' #uid는 서버에서 설정
-            self.__user.uname = input('uname: ')
-            self.__user.age = int(input('age: '))
-            self.__user.email = input('email: ')
-            self.__user.password = input('password: ')
-            self.__user.gender = input('gender: ')
-            self.__user.solo_point = int(input('solo_point: '))
-            self.__user.group_point = int(input('group_point: '))
-            self.__user.solo_combo = int(input('solo_combo: '))
-            self.__user.group_combo = int(input('group_combo: '))
-            self.__user.credit = int(input('credit: '))
+            print('*필수 입력')
+            print('데이터를 추가 할 필요가 없으면 엔터')
+            self.__user.uname = input('*uname: ')
+            self.__user.age = int(input('*age: '))
+            self.__user.email = input('*email: ')
+            self.__user.password = input('*password: ')
+            self.__user.gender = input('*gender(m/f): ')
+
+            
+            self.__user.solo_point = int(input('solo_point: ') or '0')
+            self.__user.group_point = int(input('group_point: ') or '0')
+            self.__user.solo_combo = int(input('solo_combo: ') or '0')
+            self.__user.group_combo = int(input('group_combo: ') or '0')
+            self.__user.credit = int(input('credit: ') or '0')
+
             self.__user.solo_bid = input('solo_bid: ')
             self.__user.group_bid = input('group_bid: ')
-            items.chatting = input('chatting: ')
-            items.saver = input('saver: ')
-            self.__user.items = items
-            self.__user.solo_daily = input('solo_daily: ')
-            self.__user.solo_special = input('solo_special: ')
-            self.__user.group_daily = input('group_daily: ')
-            self.__user.group_special = input('group_special: ')
+
+            #아이템 설정
+            self.__user.items.chatting = int(input('chatting: ') or '0')
+            self.__user.items.saver = int(input('saver: ') or '0')
+            #self.__user.items = items
+
+            #일일 출석체크인데 이걸 생성때 추가 할 이유가 있을까?
+            # self.__user.solo_daily = input('solo_daily: ') or False
+            # self.__user.solo_special = input('solo_special: ') or False
+            # self.__user.group_daily = input('group_daily: ') or False
+            # self.__user.group_special = input('group_special: ') or False
+
             self.__user.sign = input('sign: ')
             self.__user.select_name_card = input('select_name_card: ')
 
@@ -38,9 +48,12 @@ class UserAdd(Admin):
             print('입력 완료 후 exit 입력')
             while True:
                 name_card = input('name_card : ')
-                name_card_list.append(name_card)
+                if name_card == '':
+                    break
                 if name_card == 'exit':
                     break
+                name_card_list.append(name_card)
+                
             self.__user.name_card_list = name_card_list
 
             return True

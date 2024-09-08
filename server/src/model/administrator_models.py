@@ -1,11 +1,13 @@
 from model.base_model import AdminModel
 from model import Local_Database
-from others.data_domain import League, User, Bias, Chatting, Banner, NameCard
+from others.data_domain import League, User, Bias, Chatting, Banner, NameCard, Item
 from others import CoreControllerLogicError
 
 import boto3
 import datetime
 import uuid
+
+import time
 
 class ResetDatasModel(AdminModel):
     def __init__(self, database:Local_Database) -> None:
@@ -74,7 +76,7 @@ class ResetDatasModel(AdminModel):
                 self._database.modify_data_with_id(target_id='uid',target_data=user.get_dict_form_data())
             
             for bias in self.__biases:
-                bias.point=0
+                bias.point  = 0
                 self._database.modify_data_with_id(target_id='bid',target_data=bias.get_dict_form_data())
 
             self.__set_response()
@@ -117,12 +119,16 @@ class UserEditModel(AdminModel):
         super().__init__(database)
         self.__user = User()
 
-    def load_user(self,request): #load
-        user_data = self._database.get_data_with_id(target='uid', id=request.uid)
+    def load_user(self,request,type): #load
+        if type == 'uid':
+            user_data = self._database.get_data_with_id(target='uid', id=request.uid)
+        if type == 'email':
+            user_data = self._database.get_data_with_key(target='uid',key='email',key_data=request.email)
         self.__user.make_with_dict(user_data)
         return 
         
     def set_user_data(self,request):
+        #item = Item()
         if not request.uname : pass
         else : self.__user.uname = request.uname
         if not request.age : pass
@@ -147,8 +153,14 @@ class UserEditModel(AdminModel):
         else : self.__user.solo_bid = request.solo_bid
         if not request.group_bid : pass
         else : self.__user.group_bid = request.group_bid
-        if not request.items : pass
-        else : self.__user.items = request.items
+
+        #아이템 설정
+        if not request.chatting : pass
+        else : self.__user.item.chatting = request.chatting
+        if not request.chatting : pass
+        else : self.__user.item.saver = request.saver
+        #self.__user.items = item
+
         if not request.solo_daily : pass
         else : self.__user.solo_daily = request.solo_daily
         if not request.solo_special : pass
@@ -175,9 +187,8 @@ class UserEditModel(AdminModel):
         self._database.modify_data_with_id(target_id='uid',target_data=self.__user.get_dict_form_data())
         return
     
-    def delete_user(self,requet):
-        self.__user.uid = requet.uid
-        self._database.modify_data_with_id(target_id='uid',target_data=self.__user.get_dict_form_data())
+    def delete_user(self,request):
+        self._database.delete_data_With_id(target='uid',id=request.uid)
     
     def __generate_uid(self):
         uid = str(uuid.uuid4())
@@ -234,8 +245,7 @@ class NamecardEditModel(AdminModel):
         return
     
     def delete_namecard(self,request):
-        self.__namecard.ncid = request.ncid
-        self._database.modify_data_with_id(target_id='ncid',target_data=self.__namecard.get_dict_form_data())
+        self._database.delete_data_With_id(target='ncid',id=request.ncid)
 
     def get_response_form_data(self, head_parser):
         try:
@@ -285,8 +295,7 @@ class LeagueEditmodel(AdminModel):
         return
     
     def delete_league(self,request):
-        self.__league.lid = request.lid
-        self._database.modify_data_with_id(target_id='lid',target_data=self.__league.get_dict_form_data())
+        self._database.delete_data_With_id(target='lid',id=request.lid)
     
     def get_response_form_data(self, head_parser):
         try:
@@ -308,6 +317,7 @@ class ChatEditModel(AdminModel):
     def load_chat(self,request): #load
         chat_data = self._database.get_data_with_id(target='cid', id=request.cid)
         self.__chat.make_with_dict(chat_data)
+        #self._database.delete_data_With_id(target='cid', id=request.cid) #삭제 만든거 테스트용
         return 
         
     def set_chat_data(self,request):
@@ -330,8 +340,7 @@ class ChatEditModel(AdminModel):
         return
     
     def delete_chat(self,request):
-        self.__chat.cid = request.cid
-        self._database.modify_data_with_id(target_id='cid',target_data=self.__chat.get_dict_form_data())
+        self._database.delete_data_With_id(target='cid',id=request.cid)
     
     def get_response_form_data(self, head_parser):
         try:
@@ -400,16 +409,25 @@ class BiasEditModel(AdminModel):
         else : self.__bias.group_memeber_bids = request.group_member_bids
 
     def add_bias(self): #add
+        num_bias = str(self._database.get_num_list_with_id(target_id='bid'))
+        while True:
+            bid = f'{self.__bias.type}{num_bias}'
+            if self._database.get_data_with_id(target='bid',id=bid):
+                continue
+            else:
+                break
+        self.__bias.bid = bid
         self._database.add_new_data(target_id='bid',new_data=self.__bias.get_dict_form_data())
         return
 
     def modify_bias(self):
+        print('start')
         self._database.modify_data_with_id(target_id='bid',target_data=self.__bias.get_dict_form_data())
+        print('done')
         return
     
     def delete_bias(self,request):
-        self.__bias.bid = request.bid
-        self._database.modify_data_with_id(target_id='bid',target_data=self.__bias.get_dict_form_data())
+        self._database.delete_data_With_id(target='bid',id=request.bid)
     
     def get_response_form_data(self, head_parser):
         try:
@@ -449,8 +467,7 @@ class BannerEditModel(AdminModel):
         return
     
     def delete_banner(self,request):
-        self.__banner.baid = request.baid
-        self._database.modify_data_with_id(target_id='baid',target_data=self.__banner.get_dict_form_data())
+        self._database.delete_data_With_id(target='baid',id=request.baid)
     
     def get_response_form_data(self, head_parser):
         try:

@@ -10,12 +10,13 @@ class UserModify(Admin):
         self.__user = User()
     
     def set_data(self):
-        self.__user.uid = input('Target Uid: ')
-        items = Item()
+        self.__user.uid = input('데이터 수정 대상 Uid: ')
+        #items = Item()
         name_card_list = []
         try:
             while True:
-                select = input('(0)exit / (1)uname / (2)age / (3)email / (4)password / \n(5)gender / (6)solo_point / (7)group_point / (8)solo_combo / (9)group_combo / \n(10)credit / (11)solo_bid / (12)group_bid / (13)items / (14)solo_daily / \n(15)solo_special / (16)group_daily / (17)group_special / (18)sign / (19)select_name_card / \n(20)name_card_list \nselect: ')
+                print('(0)exit / (1)uname / (2)age / (3)email / (4)password / \n(5)gender / (6)solo_point / (7)group_point / (8)solo_combo / (9)group_combo / \n(10)credit / (11)solo_bid / (12)group_bid / (13)items / (14)solo_daily / \n(15)solo_special / (16)group_daily / (17)group_special / (18)sign / (19)select_name_card / \n(20)name_card_list')
+                select = input('입력: ')
                 if select == '1' :
                     self.__user.uname = input('uname: ')
                 elif select == '2' :
@@ -41,29 +42,32 @@ class UserModify(Admin):
                 elif select == '12' :
                     self.__user.group_bid = input('group_bid: ')
                 elif select == '13' :
-                    items.chatting = input('chatting: ')
-                    items.saver = input('saver: ')
-                    self.__user.items = items
+                    self.__user.items.chatting = input('chatting: ')
+                    self.__user.items.saver = input('saver: ')
+                    #self.__user.items = items
                 elif select == '14' :
-                    self.__user.solo_daily = input('solo_daily: ')
+                    self.__user.solo_daily = bool(input('solo_daily(Enter: False): '))
                 elif select == '15' :
-                    self.__user.solo_special = input('solo_special: ')
+                    self.__user.solo_special = bool(input('solo_special(Enter: False): '))
                 elif select == '16' :
-                    self.__user.group_daily = input('group_daily: ')
+                    self.__user.group_daily = bool(input('group_daily(Enter: False): '))
                 elif select == '17' :
-                    self.__user.group_special = input('group_special: ')
+                    self.__user.group_special = bool(input('group_special(Enter: False): '))
                 elif select == '18' :
                     self.__user.sign = input('sign: ')
                 elif select == '19' :
                     self.__user.select_name_card = input('select_name_card: ')
                 elif select == '20' :
                     print('----Set Name Card List----')
-                    print('입력 완료 후 0 입력')
+                    print('입력 완료 후 exit 입력')
                     while True:
                         name_card = input('name_card : ')
-                        name_card_list.append(name_card)
-                        if name_card == '0':
+                        if name_card == '':
                             break
+                        if name_card == 'exit':
+                            break
+                        name_card_list.append(name_card)
+                        
                     self.__user.name_card_list = name_card_list
                     
                 elif select == '0':

@@ -18,26 +18,27 @@ from user.user_add import *
 from user.user_find import *
 from user.user_modify import *
 
-import sys
 
 if __name__ == '__main__':
     while True:
         select_action = input('(0)exit / (1)Data Control / (2)Reset Datas \nEnter: ')
         if select_action == '0':
             break
-        elif select_action == '1': #)Data Control
+        elif select_action == '1': #)데이터 확인 추가 수정 삭제
             while True:
-                select_module = input('(0)exit / (1)User / (2)Namecard / (3)League / (4)Chat / (5)Bias / (6)Banner : ')
+                print('(0)exit / (1)User / (2)Namecard / (3)League / (4)Chat / (5)Bias / (6)Banner')
+                select_module = input('입력: ')
 
                 if select_module == '1': # User
-
-                    select_fun = input('(0)exit / (1)Add / (2) Load / (3)Modify / (4)Delete : ')
+                    print('User')
+                    print('(0)exit / (1)추가 / (2) 특정 유저 정보 가져오기 / (3)수정 / (4)삭제 ')
+                    select_fun = input('입력: ')
                     if select_fun == '1': # Add
                         client = UserAdd()
                         if not client.set_data():
-                            sys.exit()
+                            continue
                         if not client._check_data(client.get_data()):
-                            sys.exit() 
+                            continue 
                         client._request(client.get_data(),endpoint='/user_add')
 
                     elif select_fun == '2': # Load
@@ -47,10 +48,10 @@ if __name__ == '__main__':
 
                     elif select_fun == '3': # Modify
                         client = UserModify()
-                        if not client.set_data():
-                            sys.exit()
+                        if not client.set_data(): #먼저 서버에서 기존의 데이터를 받아오고 그걸 바탕을 수정하도록 해야함
+                            continue
                         if not client._check_data(client.get_data()):
-                            sys.exit() 
+                            continue 
                         client._request(client.get_data(),endpoint='/user_modify')
 
                     elif select_fun == '4': # Delete
@@ -66,13 +67,15 @@ if __name__ == '__main__':
                         continue
                     
                 elif select_module == '2': # Namecard
-                    select_fun = input('(0)exit / (1)Add / (2) Load / (3)Modify / (4)Delete : ')
+                    print('NameCard')
+                    print('(0)exit / (1)추가 / (2) 특정 정보 가져오기 / (3)수정 / (4)삭제 ')
+                    select_fun = input('입력: ')
                     if select_fun == '1': # Add
                         client = NamecardAdd()
                         if not client.set_data():
-                            sys.exit()
+                            continue
                         if not client._check_data(client.get_data()):
-                            sys.exit() 
+                            continue 
                         client._request(client.get_data(),endpoint='/namecard_add')
 
                     elif select_fun == '2': # Load
@@ -83,9 +86,9 @@ if __name__ == '__main__':
                     elif select_fun == '3': # Modify
                         client = NameCardModify()
                         if not client.set_data():
-                            sys.exit()
+                            continue
                         if not client._check_data(client.get_data()):
-                            sys.exit() 
+                            continue 
                         client._request(client.get_data(),endpoint='/namecard_modify')
 
                     elif select_fun == '4': # Delete
@@ -101,13 +104,15 @@ if __name__ == '__main__':
                         continue
 
                 elif select_module == '3': # League
-                    select_fun = input('(0)exit / (1)Add / (2) Load / (3)Modify / (4)Delete : ')
+                    print('League')
+                    print('(0)exit / (1)추가 / (2) 특정 정보 가져오기 / (3)수정 / (4)삭제 ')
+                    select_fun = input('입력: ')
                     if select_fun == '1': # Add
                         client = LeagueAdd()
                         if not client.set_data():
-                            sys.exit()
+                            continue
                         if not client._check_data(client.get_data()):
-                            sys.exit() 
+                            continue 
                         client._request(client.get_data(),endpoint='/league_add')
 
                     elif select_fun == '2': # Load
@@ -118,9 +123,9 @@ if __name__ == '__main__':
                     elif select_fun == '3': # Modify
                         client = LeagueModify()
                         if not client.set_data():
-                            sys.exit()
+                            continue
                         if not client._check_data(client.get_data()):
-                            sys.exit() 
+                            continue 
                         client._request(client.get_data(),endpoint='/league_modify')
 
                     elif select_fun == '4': # Delete
@@ -136,13 +141,15 @@ if __name__ == '__main__':
                         continue
 
                 elif select_module == '4': # Chat
-                    select_fun = input('(0)exit / (1)Add / (2) Load / (3)Modify / (4)Delete : ')
+                    print('Chat')
+                    print('(0)exit / (1)추가 / (2) 특정 정보 가져오기 / (3)수정 / (4)삭제 ')
+                    select_fun = input('입력: ')
                     if select_fun == '1': # Add
                         client = ChatAdd()
                         if not client.set_data():
-                            sys.exit()
+                            continue
                         if not client._check_data(client.get_data()):
-                            sys.exit() 
+                            continue 
                         client._request(client.get_data(),endpoint='/chat_add')
 
                     elif select_fun == '2': # Load
@@ -153,9 +160,9 @@ if __name__ == '__main__':
                     elif select_fun == '3': # Modify
                         client = ChatModify()
                         if not client.set_data():
-                            sys.exit()
+                            continue
                         if not client._check_data(client.get_data()):
-                            sys.exit() 
+                            continue 
                         client._request(client.get_data(),endpoint='/chat_modify')
 
                     elif select_fun == '4': # Delete
@@ -171,13 +178,15 @@ if __name__ == '__main__':
                         continue
 
                 elif select_module == '5': # Bias
-                    select_fun = input('(0)exit / (1)Add / (2) Load / (3)Modify / (4)Delete : ')
+                    print('Bias')
+                    print('(0)exit / (1)추가 / (2) 특정 정보 가져오기 / (3)수정 / (4)삭제 ')
+                    select_fun = input('입력: ')
                     if select_fun == '1': # Add
                         client = BiasAdd()
                         if not client.set_data():
-                            sys.exit()
+                            continue
                         if not client._check_data(client.get_data()):
-                            sys.exit() 
+                            continue 
                         client._request(client.get_data(),endpoint='/bias_add')
 
                     elif select_fun == '2': # Load
@@ -203,13 +212,15 @@ if __name__ == '__main__':
                         continue
 
                 elif select_module == '6': # Banner
-                    select_fun = input('(0)exit / (1)Add / (2) Load / (3)Modify / (4)Delete : ')
+                    print('Banner')
+                    print('(0)exit / (1)추가 / (2) 특정 정보 가져오기 / (3)수정 / (4)삭제 ')
+                    select_fun = input('입력: ')
                     if select_fun == '1': # Add
                         client = BannerAdd()
                         if not client.set_data():
-                            sys.exit()
+                            continue
                         if not client._check_data(client.get_data()):
-                            sys.exit() 
+                            continue 
                         client._request(client.get_data(),endpoint='/banner_add')
 
                     elif select_fun == '2': # Load
