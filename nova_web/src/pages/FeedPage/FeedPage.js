@@ -1,6 +1,7 @@
 import style from './FeedPage.module.css';
 import planet2 from './../../img/planet2.png';
 import { useRef, useState } from 'react';
+import { InputFeed } from '../../component/feed';
 
 export default function FeedPage() {
     const [isDragging, setIsDragging] = useState(false);
@@ -41,7 +42,7 @@ export default function FeedPage() {
     return (
         <div className={style.container}>
             <br />
-            {showFeed.current && <div className={style.feed}>피드 표시 중...</div>}
+            {showFeed.current && <InputFeed></InputFeed>}
 
             <div className={style['img-area']}>
                 <img src={planet2} alt="Planet"

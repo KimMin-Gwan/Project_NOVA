@@ -1,3 +1,6 @@
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import style from './Planet.module.css';
 
 import LeagueCard from '../../component/LeagueCard';
@@ -7,20 +10,26 @@ import planet2 from './../../img/planet2.png';
 import planet3 from './../../img/planet3.png';
 import planet4 from './../../img/planet4.png';
 
+
 export default function PlanetList() {
 
     let nameList = ['정거장 행성', '자랑 행성', '이지선다 행성', '퀴즈 행성'];
     let shortInfo = [
-        '외부 링크 공유', 
-        '덕질 경험 자랑', 
-        '선택하라, 2가지 선택지 중에서', 
+        '외부 링크 공유',
+        '덕질 경험 자랑',
+        '선택하라, 2가지 선택지 중에서',
         '함께 만들고 풀어보는 퀴즈'
     ]
+
+    let navigate = useNavigate();
+
+
 
     return (
         <div className='container'>
             <div className={style['top_area']}>
-                <p>은하계 탐색</p>
+                <div onClick={()=>{navigate(-1)}}>뒤로</div>
+                <div>은하계 탐색</div>
             </div>
             <LeagueCard img={planet1} name={nameList[0]} info={shortInfo[0]}></LeagueCard>
             <LeagueCard img={planet2} name={nameList[1]} info={shortInfo[1]}></LeagueCard>
