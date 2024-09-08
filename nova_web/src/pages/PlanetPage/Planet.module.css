@@ -1,19 +1,22 @@
 .top_area {
     margin: 0 auto;
-    width: 100%;
+    width: 85%;
     height: 100px;
-    background-color: white;
-    /* color: white; */
+    /* background-color: white; */
+    color: white;
     display: flex;
     align-items: center;
-    justify-self: center;
+    justify-content: space-between;
 }
 
 .top_area p {
-    margin: 0 auto;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    /* margin: 0 auto; */
     /* margin: 0; */
     /* padding: 0; */
-    text-align: end;
+    /* text-align: end; */
 }
 
 /* 리그 카드 */

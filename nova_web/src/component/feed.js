@@ -119,3 +119,23 @@ function Text({ name }) {
         </div>
     )
 }
+
+export function InputFeed() {
+    return (
+        <div className={style.feed}>
+            <div className={style['input_title']}>
+                <input type='text' placeholder='글 제목'></input>
+            </div>
+            <div className={style['input_content']}>
+                <div>
+                    <textarea type='text' placeholder='글 내용'></textarea>
+                    <div className={style['submit_area']}>
+                        <button type='submit' className={style['submit_button']}>작성 완료</button>
+                        <h6>타인에게 불편을 줄 수 있는 내용의 게시글은 경고없이 삭제될 수 있습니다.</h6>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    )
+}
