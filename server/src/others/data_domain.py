@@ -315,10 +315,10 @@ class Banner(SampleDomain):
             "ba_url": self.ba_url
         }
 
-class ReceivedChat(SampleDomain):
+
+class Feed(SampleDomain):
     def __init__(self, token="", message=""):
-        self.token = token
-        self.message = message
+        self.fid = fid
 
     def make_with_dict(self, dict_data):
         try:
