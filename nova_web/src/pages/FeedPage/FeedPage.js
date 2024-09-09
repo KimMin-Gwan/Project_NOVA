@@ -1,13 +1,15 @@
 import style from './FeedPage.module.css';
 import planet2 from './../../img/planet2.png';
 import { useRef, useState } from 'react';
-import { InputFeed } from '../../component/feed';
+import Feed, { InputFeed } from '../../component/feed';
 
 export default function FeedPage() {
     const [isDragging, setIsDragging] = useState(false);
     const [dragStartY, setDragStartY] = useState(null);
     const [dragDirection, setDragDirection] = useState(null);
     const showFeed = useRef(false);
+
+    const [slideFeed , setSlideFeed] = useState(false);
 
     function handleMouseDown(e) {
         setIsDragging(true);
@@ -39,6 +41,11 @@ export default function FeedPage() {
         setDragDirection(null);
     };
 
+
+    function onClickBox(){
+        setSlideFeed(!slideFeed);
+    }
+
     return (
         <div className={style.container}>
             <br />
@@ -52,7 +59,17 @@ export default function FeedPage() {
                     onMouseLeave={handleMouseUp}  // 마우스가 영역을 벗어날 때도 처리
                     style={{ cursor: isDragging ? 'grabbing' : 'grab' }} />
             </div>
-            <div className={style.area}>gkgkgk</div>
+            {/* <div className={style.containers}>
+                <div className={style.box1}></div>
+                <div className={style.box2}></div>
+            </div> */}
+            <div className={style.area}>
+                <button onClick={()=>{
+                    onClickBox()
+                }}>클릭</button>
+                <div className={`${style.feed} ${style.feedbox1}`}></div>
+                <div className={`${style.feed} ${style.feedbox2} ${slideFeed ? style.animate : ''}`}></div>
+            </div>
         </div >
     );
 }

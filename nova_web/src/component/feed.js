@@ -3,7 +3,7 @@ import planet1 from './../img/planet1.png';
 import planet2 from './../img/planet2.png';
 import planet3 from './../img/planet3.png';
 import planet4 from './../img/planet4.png';
-import { useRef, useState } from 'react';
+// import { useRef, useState } from 'react';
 
 export default function Feed({ type }) {
 
@@ -42,8 +42,8 @@ export default function Feed({ type }) {
                         <InfoArea img={planet3} name={'이지선다 행성'}></InfoArea>
                         <Text></Text>
                         <div className={style['button_container']}>
-                            <button>갑니다</button>
-                            <button>패스</button>
+                            <button className={style['select_button']}>갑니다</button>
+                            <button className={style['select_button']}>패스</button>
                         </div>
                     </div>
                 )
@@ -122,13 +122,34 @@ function Text({ name }) {
 
 export function InputFeed() {
     return (
-        <div className={style.feed}>
+        <div className={style['input_feed']}>
             <div className={style['input_title']}>
                 <input type='text' placeholder='글 제목'></input>
             </div>
             <div className={style['input_content']}>
-                <div>
+                <div className={style['content_container']}>
+                    {/* 글 내용 박스는 정거장과 퀴즈일때 안보여야 됨 */}
                     <textarea type='text' placeholder='글 내용'></textarea>
+                    {/* 정거장 */}
+                    {/* <div className={style.station}>
+                        <input type='text' placeholder='사이트 이름'></input>
+                        <input type='text' placeholder='링크 설명'></input>
+                        <input type='url' placeholder='링크 주소'></input>
+                    </div> */}
+                    {/* 퀴즈  */}
+                    {/* <div className={style['input_quiz_box']}>
+                        <input type='text' placeholder='목록1'></input>
+                        <input type='text' placeholder='목록2'></input>
+                        <input type='text' placeholder='목록3'></input>
+                        <input type='text' placeholder='목록4'></input>
+                    </div> */}
+                    {/* 이지선다 */}
+                    <div className={style['input_button_container']}>
+                        <input className={style['select_button']} placeholder='선택지1'></input>
+                        <input className={style['select_button']} placeholder='선택지2'></input>
+                    </div>
+                    {/* 일반 */}
+                    {/* <input type='text'></input> */}
                     <div className={style['submit_area']}>
                         <button type='submit' className={style['submit_button']}>작성 완료</button>
                         <h6>타인에게 불편을 줄 수 있는 내용의 게시글은 경고없이 삭제될 수 있습니다.</h6>
