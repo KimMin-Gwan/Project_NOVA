@@ -19,7 +19,14 @@
 .img-area img {
     width: 200px;
     height: 200px;
-    cursor: pointer;
+}
+
+.boxx {
+    margin: 0;
+    box-sizing: border-box;
+    padding-top: 20px;
+    height: 500px;
+    background-color: purple;
 }
 
 /* 피드 관련 스타일 */
@@ -165,7 +172,9 @@
     width: 450px;
     height: 400px;
     color: white;
-    margin-top: 20px;
+    /* margin-top: 20px; */
+    /* opacity: 1;
+    transition: opacity 0.5s ease, transform 0.5s ease; */
 }
 
 .input_title {
@@ -252,7 +261,6 @@
 }
 
 .submit_button {
-
     border: none;
     margin: 0 auto;
     color: white;
@@ -286,8 +294,6 @@
     color: white;
     text-align: center;
 }
-
-
 
 .station {
     width: 100%;
@@ -348,7 +354,8 @@
 
 
 .feedbox1,
-.feedbox2 {
+.feedbox2,
+.feedbox3 {
     width: 380px;
     position: absolute;
     left: 50%;
@@ -360,7 +367,6 @@
 
 .feedbox1 {
     bottom: 30px;
-
 }
 
 .feedbox2 {
@@ -370,7 +376,16 @@
     opacity: 0;  */
 }
 
+.feedbox3 {
+    bottom: 30px;
+}
+
 .animate {
-    transform: translate(-50%, -100px); 
-    opacity: 0; 
+    transform: translate(-50%, -100px);
+    opacity: 0;
+}
+
+.up_animate {
+    transform: translate(-50%, -50px);
+    box-shadow: 0px 2px 6px black;
 }

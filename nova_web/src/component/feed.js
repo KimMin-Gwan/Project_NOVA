@@ -5,8 +5,8 @@ import planet3 from './../img/planet3.png';
 import planet4 from './../img/planet4.png';
 // import { useRef, useState } from 'react';
 
-export default function Feed({ type }) {
-
+export default function Feed({ type, className}) {
+    
     // type별 행성
     // -A: 정거장행성
     // -B: 자랑 행성
@@ -17,8 +17,8 @@ export default function Feed({ type }) {
     return (
         <>
             {
-                type === '1' && (
-                    <div className={style.feed}>
+                 (
+                    <div className={`${style.feed} ${className}`}>
                         <InfoArea img={planet1} name={'정거장 행성'}></InfoArea>
                         <Text name={'정거장 행성'}></Text>
                         <div className={style['link_box']}>
@@ -122,7 +122,7 @@ function Text({ name }) {
 
 export function InputFeed() {
     return (
-        <div className={style['input_feed']}>
+        <div className={`${style['input_feed']}` }>
             <div className={style['input_title']}>
                 <input type='text' placeholder='글 제목'></input>
             </div>

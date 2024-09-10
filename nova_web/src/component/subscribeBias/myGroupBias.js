@@ -59,7 +59,9 @@ function MyGroupBias({ group_bias, bias_url, token }) {
             )}
             {group_bias.bid && (
                 <>
-                    <img src={bias_url + `${group_bias.bid}.PNG`}></img>
+                    <div className='image-container'>
+                        <img src={bias_url + `${group_bias.bid}.PNG`} alt="bias" className='img2' />
+                    </div>
                     <div className='support' onClick={() => {
                         fetch(url + `nova_check/server_info/check_page`, {
                             method: 'post',

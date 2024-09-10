@@ -9,10 +9,10 @@ export default function InfFeed() {
     let [isLoading, setIsLoading] = useState(false);
 
     let [testData, setTestData] = useState([]);
-
+    // 'http://127.0.0.1:4000/new_contents'
     function fetchData() {
         setIsLoading(true);
-        fetch('http://127.0.0.1:4000/new_contents')
+        fetch('http://nova-platform.kr/home/home_feed')
             .then(response => response.json())
             .then(data => {
                 console.log(data);
@@ -53,7 +53,7 @@ export default function InfFeed() {
             {
                 testData.map((a, i) => {
                     return (
-                        <Feed key={i} type={a}></Feed>
+                        <Feed key={i} type={a} className=''></Feed>
                     )
                 })
             }

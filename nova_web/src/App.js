@@ -27,6 +27,7 @@ import FeedPage from './pages/FeedPage/FeedPage.js';
 import Feed from './component/feed.js';
 import InfFeed from './component/infiniteFeed.js';
 import PlanetList from './pages/PlanetPage/PlanetList.js';
+import logo from './img/logo.PNG';
 
 
 function App() {
@@ -127,7 +128,9 @@ function App() {
             <header className='header'>
               <div className='logo' onClick={() => {
                 navigate('/');
-              }}>NOVA</div>
+              }}>
+                <img src={logo}></img>
+              </div>
               <div className='buttons'>
                 <button className='tool-button'>
                   <img src={zoom}></img>

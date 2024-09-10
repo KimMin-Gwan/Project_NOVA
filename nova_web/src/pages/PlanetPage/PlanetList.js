@@ -23,18 +23,34 @@ export default function PlanetList() {
 
     let navigate = useNavigate();
 
+    function handleClick() {
+        navigate('/feed_page');
+    }
 
 
     return (
         <div className='container'>
             <div className={style['top_area']}>
-                <div onClick={()=>{navigate(-1)}}>뒤로</div>
+                <div onClick={() => { navigate(-1) }}>뒤로</div>
                 <div>은하계 탐색</div>
             </div>
-            <LeagueCard img={planet1} name={nameList[0]} info={shortInfo[0]}></LeagueCard>
-            <LeagueCard img={planet2} name={nameList[1]} info={shortInfo[1]}></LeagueCard>
-            <LeagueCard img={planet3} name={nameList[2]} info={shortInfo[2]}></LeagueCard>
-            <LeagueCard img={planet4} name={nameList[3]} info={shortInfo[3]}></LeagueCard>
+            {/* 정거정 행성 */}
+            <div onClick={() => { navigate('/feed_page') }}>
+                <LeagueCard img={planet1} name={nameList[0]} info={shortInfo[0]}></LeagueCard>
+            </div>
+            {/* 자랑 행성 */}
+            <div onClick={() => { navigate('/feed_page') }}>
+                <LeagueCard img={planet2} name={nameList[1]} info={shortInfo[1]}></LeagueCard>
+            </div>
+            {/* 이지선다 행성 */}
+            <div onClick={() => { navigate('/feed_page') }}>
+                <LeagueCard img={planet3} name={nameList[2]} info={shortInfo[2]}></LeagueCard>
+            </div>
+            {/* 퀴즈 행성 */}
+            <div onClick={() => { navigate('/feed_page') }}>
+                <LeagueCard img={planet4} name={nameList[3]} info={shortInfo[3]}></LeagueCard>
+            </div>
+            
             <div className={`${style['league_card']} ${style['rule_box']}`}>
                 <h2>은하 리그 규칙</h2>
                 <h4>로그인 후 사용 가능한 컨텐츠입니다.</h4>
