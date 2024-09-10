@@ -5,13 +5,15 @@
         "nickname": "익명 지지자",
         "title": "글 제목 예시",
         "body" : "글 내용 예시",
-        "date": "2024/08/11",
+        "date": "2024/08/11-06:40:22",
         "fclass" : "card",
         "class_name": "자랑",
         "choice" : [],
         "result" : [],
         "state" : "y",
-        "attend" : []
+        "attend" : [],
+        "comment" : [],
+        "category" : []
     },
     {
         "fid": "1",
@@ -19,14 +21,16 @@
         "nickname": "익명 바위게",
         "title": "둘 중 하나 제목 예시",
         "body" : "둘 중 하나 내용 예시",
-        "date": "2024/08/11",
+        "date": "2024/03/30-21:08:30",
         "fclass" : "balance",
         "class_name": "둘 중 하나",
         "choice" : ["선택지1", "선택지2"],
         "result" : [4, 3],
         "state" : "y",
         "attend" : [["5678-efgh-1234","abcd-1234-5678","ijkl-9876-mnop","qrst-6543-uvwx"],
-        ["yzab-1357-cdef","ghij-2468-klmn","opqr-3698-stuv"]]
+        ["yzab-1357-cdef","ghij-2468-klmn","opqr-3698-stuv"]],
+        "comment" : [],
+        "category" : []
     },
     {
         "fid": "2",
@@ -34,7 +38,7 @@
         "nickname": "오늘은시장을가자",
         "title": "넷 중 하나 제목 예시",
         "body" : "넷 중 하나 내용 예시",
-        "date": "2024/08/11",
+        "date": "2024/05/21-18:23:50",
         "fclass" : "multiple",
         "class_name": "넷 중 하나",
         "choice" : ["선택지1", "선택지2", "선택지3", "선택지4"],
@@ -43,7 +47,9 @@
         "attend" : [["5678-efgh-1234","abcd-1234-5678","ijkl-9876-mnop","qrst-6543-uvwx"],
         ["yzab-1357-cdef","ghij-2468-klmn","opqr-3698-stuv"],
         ["wxyz-7531-abcd","mnop-9876-qrst","abcd-4321-wxyz","efgh-8765-ijkl"],
-        ["qrst-2109-uvwx"] ]
+        ["qrst-2109-uvwx"] ],
+        "comment" : [],
+        "category" : []
     },
     {
         "fid": "3",
@@ -51,12 +57,14 @@
         "nickname": "익명 지지자",
         "title": "정거장 제목 예시",
         "body" : "정거장 내용 예시",
-        "date": "2024/08/14",
+        "date": "2024/02/02-18:40:21",
         "fclass" : "station",
         "class_name": "정거장",
         "choice" : ["사이트이름", "링크 설명", "url"],
         "result" : [],
         "state" : "y",
-        "attend" : []
+        "attend" : [],
+        "comment" : [],
+        "category" : []
     }
 ]

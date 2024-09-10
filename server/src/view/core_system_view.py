@@ -53,6 +53,11 @@ class Core_Service_View(Master_View):
                                                              request=request)
             response = model.get_response_form_data(self._head_parser)
             return response
+        
+        @self.__app.post('/home/home_feed')
+        def new_contentes():
+            data = ["1", "2", "3", "4"]
+            return data
 
         # 회원의 bias의 리그를 받아내는 앤드 포인트 (post)
         @self.__app.post('/home/my_bias_league')

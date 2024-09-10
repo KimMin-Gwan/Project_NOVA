@@ -8,7 +8,7 @@ class Local_Database:
         self.__data_files = {
             'banner_file' : 'banner.json',
             'bias_file' : 'bias.json',
-            'chatting_file' : 'chatting.json',
+            'feed' : 'feed.json',
             'league_file' : 'league.json',
             'name_card_file' : 'name_card.json',
             'user_file' : 'user.json',
@@ -18,12 +18,12 @@ class Local_Database:
     def __read_json(self):
         self.__banner_data = []
         self.__bias_data = []
-        self.__chatting_data = []
+        self.__feed_data = []
         self.__league_data = []
         self.__name_card_data = []
         self.__user_data = []
 
-        data_list = [self.__banner_data, self.__bias_data, self.__chatting_data,
+        data_list = [self.__banner_data, self.__bias_data, self.__feed_data,
                       self.__league_data, self.__name_card_data, self.__user_data]
 
         for file_name, list_data in zip(self.__data_files.values(), data_list):
@@ -50,9 +50,9 @@ class Local_Database:
         return
     
     # 저장하기
-    def __save_chatting_json(self):
-        file_name = self.__data_files['chatting_file']
-        self.__save_json(file_name, self.__chatting_data)
+    def __save_feed_json(self):
+        file_name = self.__data_files['feed_file']
+        self.__save_json(file_name, self.__feed_data)
         return
 
     # 저장하기
@@ -132,8 +132,8 @@ class Local_Database:
             return self.__banner_data
         elif target == "bid" or target == "bias":
             return self.__bias_data
-        elif target == "cid" or target == "chatting":
-            return self.__chatting_data
+        elif target == "fid" or target == "feed":
+            return self.__feed_data
         elif target == "lid" or target == "league":
             return self.__league_data
         elif target == "ncid" or target == "name_card":
@@ -183,8 +183,8 @@ class Local_Database:
             return self.__save_banner_json
         elif target == "bid" or target == "bias":
             return self.__save_bias_json
-        elif target == "cid" or target == "chatting":
-            return self.__save_chatting_json
+        elif target == "fid" or target == "feed":
+            return self.__save_feed_json
         elif target == "lid" or target == "league":
             return self.__save_league_json
         elif target == "ncid" or target == "name_card":
