@@ -54,7 +54,7 @@ class Core_Service_View(Master_View):
             response = model.get_response_form_data(self._head_parser)
             return response
         
-        @self.__app.post('/home/home_feed')
+        @self.__app.get('/home/home_feed')
         def new_contentes():
             data = ["1", "2", "3", "4"]
             return data
