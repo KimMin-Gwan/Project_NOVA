@@ -37,9 +37,19 @@
     align-items: center;
 }
 
-.img_area img {
+/* .img_area img {
     width: 200px;
     height: 200px;
+} */
+
+.planet_img {
+    width: 200px;
+    height: 200px;
+}
+
+.galaxy_img {
+    width: 250px;
+    height: 180px;
 }
 
 .planet_info {

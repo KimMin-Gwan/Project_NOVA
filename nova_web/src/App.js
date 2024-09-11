@@ -28,6 +28,7 @@ import Feed from './component/feed.js';
 import InfFeed from './component/infiniteFeed.js';
 import PlanetList from './pages/PlanetPage/PlanetList.js';
 import logo from './img/logo.PNG';
+import GalaxyList from './pages/GalaxyPage/GalaxyList.js';
 
 
 function App() {
@@ -104,11 +105,12 @@ function App() {
   return (
     <Routes>
       <Route path='/more_see' element={<MoreSee />}></Route>
-      <Route path='/galaxy' element={<PlanetList />}></Route>
+      <Route path='/planet' element={<PlanetList />}></Route>
+      <Route path='/galaxy' element={<GalaxyList />}></Route>
       <Route path='/feed_page' element={<FeedPage />}></Route>
       <Route path='/signup' element={<SignUp />}></Route>
-      <Route path='/league' element={<LeaguePage />}></Route>
-      <Route path='/league_detail' element={<LeagueDetail />}></Route>
+      <Route path='/league_detail' element={<LeaguePage />}></Route>
+      {/* <Route path='/league_detail' element={<LeagueDetail />}></Route> */}
       <Route path='/notice' element={<Notice />}></Route>
       <Route path='/notice_list' element={<NoticeList />}></Route>
       <Route path='/select_bias' element={<SelectBias />}></Route>
@@ -143,12 +145,13 @@ function App() {
                 {/* <Link to='/' className='button'>홈</Link> */}
                 {/* <Link to='/more_see' className='button'>더보기</Link> */}
                 <Link to='/namecard' className='button'>명함</Link>
+                <Link to='/planet' className='button'>행성페이지</Link>
                 <Link to='/galaxy' className='button'>은하페이지</Link>
                 <Link to='/feed_page' className='button'>피드페이지</Link>
                 <Link to='/signup' className='button'>회원가입</Link>
                 <Link to='/mypage' className='button'>마이페이지</Link>
-                <Link to='/league' className='button'>리그페이지</Link>
-                <Link to='/league_detail' className='button'>리그상세페이지</Link>
+                <Link to='/league_detail' className='button'>리그 자세히보기</Link>
+                {/* <Link to='/league_detail' className='button'>리그상세페이지</Link> */}
                 {/* <Link to='/select_bias' className='button'>최애선택</Link> */}
                 {/* <Link to='/bias_certify' className='button'>최애 지지하기</Link> */}
                 <Link to='/novalogin' className='button'>로그인 페이지</Link>

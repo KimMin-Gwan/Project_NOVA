@@ -9,22 +9,28 @@ import { useNavigate } from 'react-router-dom';
 
 function MoreSee() {
 
+    const requestURL = 'https://naver.me/xGImCJSN';
+
+    function handleRequestURL() {
+        window.open(requestURL, '_blank', "noopener, noreferrer");
+    };
+
     let navigate = useNavigate();
     let tokenCheck = localStorage.getItem('jwtToken');
 
     return (
         <div className={style.font}>
-            <div class={style.container}>
-                <div class={style.TopBar}>
-                    <img src={backword} alt="Arrow" class={style.backword} onClick={() => {
+            <div className={style.container}>
+                <div className={style.TopBar}>
+                    <img src={backword} alt="Arrow" className={style.backword} onClick={() => {
                         navigate(-1)
                     }} />
-                    <div class={style.TitleBox}>
-                        <p class={style.titleName}> 더보기 </p>
+                    <div className={style.TitleBox}>
+                        <p className={style.titleName}> 더보기 </p>
                     </div>
                 </div>
-                <div class={style.content}>
-                    <div class={style.mainComponent} onClick={() => {
+                <div className={style.content}>
+                    <div className={style.mainComponent} onClick={() => {
                         if (tokenCheck) {
                             navigate('/mypage');
                         }
@@ -32,40 +38,40 @@ function MoreSee() {
                             navigate('/novalogin');
                         }
                     }}>
-                        <p class={style.bodyText}>{tokenCheck ? '마이페이지' : '로그인'}</p>
-                        <img src={vector} alt="Arrow" class={style.vector} />
+                        <p className={style.bodyText}>{tokenCheck ? '마이페이지' : '로그인'}</p>
+                        <img src={vector} alt="Arrow" className={style.vector} />
                     </div>
-                    <div class={style.mainComponent}>
-                        <p class={style.bodyText}>최애 신청하기(네이버 폼)</p>
-                        <img src={vector} alt="Arrow" class={style.vector} />
+                    <div className={style.mainComponent} onClick={handleRequestURL}>
+                        <p className={style.bodyText}>최애 신청하기(네이버 폼)</p>
+                        <img src={vector} alt="Arrow" className={style.vector} />
                     </div>
-                    <div class={style.mainComponent} onClick={() => {
+                    <div className={style.mainComponent} onClick={() => {
                         navigate('/notice_list')
                     }}>
-                        <p class={style.bodyText}>공지사항</p>
-                        <img src={vector} alt="Arrow" class={style.vector} />
+                        <p className={style.bodyText}>공지사항</p>
+                        <img src={vector} alt="Arrow" className={style.vector} />
                     </div>
-                    <div class={style.mainComponent}>
-                        <p class={style.bodyText}>사업자 정보 및 사용약관</p>
-                        <img src={vector} alt="Arrow" class={style.vector} />
+                    <div className={style.mainComponent}>
+                        <p className={style.bodyText}>사업자 정보 및 사용약관</p>
+                        <img src={vector} alt="Arrow" className={style.vector} />
                     </div>
                 </div>
-                <div class={style.inquiry}>
-                    <div class={style.iconBox}>
-                        <img src={x_icon} alt="Icon" class={style.icon_img} />
-                        <p class={style.icon_name}> X </p>
+                <div className={style.inquiry}>
+                    <div className={style.iconBox}>
+                        <img src={x_icon} alt="Icon" className={style.icon_img} />
+                        <p className={style.icon_name}> X </p>
                     </div>
-                    <div class={style.iconBox}>
-                        <img src={discord_icon} alt="Icon" class={style.icon_img} />
-                        <p class={style.icon_name}> Discord </p>
+                    <div className={style.iconBox}>
+                        <img src={discord_icon} alt="Icon" className={style.icon_img} />
+                        <p className={style.icon_name}> Discord </p>
                     </div>
-                    <div class={style.iconBox}>
-                        <img src={insta_icon} alt="Icon" class={style.icon_img} />
-                        <p class={style.icon_name}> Instagram </p>
+                    <div className={style.iconBox}>
+                        <img src={insta_icon} alt="Icon" className={style.icon_img} />
+                        <p className={style.icon_name}> Instagram </p>
                     </div>
-                    <div class={style.iconBox}>
-                        <img src={youtube_icon} alt="Icon" class={style.icon_img} />
-                        <p class={style.icon_name}> Youtube </p>
+                    <div className={style.iconBox}>
+                        <img src={youtube_icon} alt="Icon" className={style.icon_img} />
+                        <p className={style.icon_name}> Youtube </p>
                     </div>
                 </div>
             </div>

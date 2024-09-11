@@ -1,15 +1,39 @@
+import { useEffect, useState } from 'react';
 import style from './../pages/PlanetPage/Planet.module.css';
 
-export default function LeagueCard({img, name, info}) {
+export default function LeagueCard({ img, name, info, type }) {
+
+    let [imgSize, setImgSize] = useState(null);
+
+    function handleSize(){
+        if( type==='galaxy')
+        {
+            setImgSize(style['galaxy_img']);
+        }
+    };
+
+    useEffect(()=>{
+        handleSize();
+    },[]);
+
 
     return (
         <div className={style['league_card']}>
-            <div className={style['img_area']}>
-                <img src={img}></img>
+            <div className={`${style['img_area']}`}>
+                <img src={img} className={`${style['planet_img']} ${imgSize}`}></img>
             </div>
             <div className={style['planet_info']}>
                 <h3>{name}</h3>
-                <h5>{info}</h5>
+
+                {type === 'planet' && <h5>{info}</h5>}
+                {
+                    type === 'galaxy' && (
+                        <>
+                            <h5>gg</h5>
+                            <h5>gg</h5>
+                        </>
+                    )
+                }
             </div>
         </div>
     )
