@@ -358,21 +358,3 @@ class Banner(SampleDomain):
             "baid": self.baid,
             "ba_url": self.ba_url
         }
-
-
-class Feed(SampleDomain):
-    def __init__(self, token="", message=""):
-        self.fid = fid
-
-    def make_with_dict(self, dict_data):
-        try:
-            self.token = dict_data['token']
-            self.message = dict_data['message']
-        except Exception as e:
-            raise DictMakingError(error_type=e)
-
-    def get_dict_form_data(self):
-        return {
-            "token": self.token,
-            "message": self.message
-        }

@@ -171,13 +171,11 @@ class FeedManager:
         else:
             result = result[:len(result)]
 
-
+    # get 요청에 대한 반환값 조사
     # 유저가 참여한 feed인지 확인할것
     def make_get_data(self, user:User, feeds:list):
         result = []
         for feed in feeds:
-            feed:Feed = feed
-
             # 검열된 feed면 생략
             if feed.state != "y":
                 continue
@@ -189,17 +187,48 @@ class FeedManager:
                     if uid == user.uid:
                         attend = i
 
-            if len(feed.comment) != 0:
-                comment = "아직 작성된 댓글이 없어요"
-            else:
-                comment = feed.comment[-1]
+            comment = self.__get_feed_comment(feed=feed)
 
             feed.attend = attend
             feed.comment = comment
             result.append(feed)
         return result
+    
+    def __get_feed_comment(self, feed:Feed):
+        if len(feed.comment) != 0:
+            comment = "아직 작성된 댓글이 없어요"
+        else:
+            comment = feed.comment[-1]
+        return comment
 
 
+    # feed 와 상호작용
+    def get_feed_result(self, user:User, fid, action) -> Feed:
+        fid_data = self._database.get_data_with_id(target="fid", id=fid)
+        feed = Feed()
+        feed.make_with_dict(fid_data)
+
+        # 참여한 기록이 있는지 확인
+        # 있으면 지우고, 결과값도 하나 줄여야됨
+        target = -1
+        for i, uids in enumerate(feed.attend):
+            for uid in uids:
+                if uid == user.uid:
+                    uids.remove(uid)
+                    target = i
+                    break
+        if target != -1:
+            feed.result[target] -= 1
+
+        # 이제 참여한 데이터를 세팅하고 저장하면됨
+        feed.attend[action].append(user.uid)
+        feed.result[action] += 1
+
+        self._database.modify_data_with_id(target_data="fid",
+                                            target_data=feed.get_dict_form_data())
+        feed.attend = action
+        feed.comment = self.__get_feed_comment(feed=feed)
+        return feed
 
 
 # 이건 뭐냐하면
