@@ -29,6 +29,7 @@ import InfFeed from './component/infiniteFeed.js';
 import PlanetList from './pages/PlanetPage/PlanetList.js';
 import logo from './img/logo.PNG';
 import GalaxyList from './pages/GalaxyPage/GalaxyList.js';
+import DraggableBox from './component/test.js';
 
 
 function App() {
@@ -105,6 +106,7 @@ function App() {
   return (
     <Routes>
       <Route path='/more_see' element={<MoreSee />}></Route>
+      <Route path='/test' element={<DraggableBox />}></Route>
       <Route path='/planet' element={<PlanetList />}></Route>
       <Route path='/galaxy' element={<GalaxyList />}></Route>
       <Route path='/feed_page' element={<FeedPage />}></Route>
@@ -145,6 +147,7 @@ function App() {
                 {/* <Link to='/' className='button'>홈</Link> */}
                 {/* <Link to='/more_see' className='button'>더보기</Link> */}
                 <Link to='/namecard' className='button'>명함</Link>
+                <Link to='/test' className='button'>테스트</Link>
                 <Link to='/planet' className='button'>행성페이지</Link>
                 <Link to='/galaxy' className='button'>은하페이지</Link>
                 <Link to='/feed_page' className='button'>피드페이지</Link>

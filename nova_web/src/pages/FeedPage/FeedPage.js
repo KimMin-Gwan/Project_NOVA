@@ -1,32 +1,29 @@
 import style from './FeedPage.module.css';
+import stylePlanet from './../PlanetPage/Planet.module.css';
+
 import planet2 from './../../img/planet2.png';
 import { useEffect, useRef, useState } from 'react';
 import Feed, { InputFeed } from '../../component/feed';
+import { useNavigate } from 'react-router-dom';
 
 export default function FeedPage() {
     const [isDragging, setIsDragging] = useState(false);
     const [dragStartY, setDragStartY] = useState(null);
     const [dragDirection, setDragDirection] = useState(null);
-    const [planetAnimate, setPlanetAnimate] = useState(false);
-    const showFeed = useRef(false);
+    const [showFeed, setShowFeed] = useState(false);
 
     const [slideFeed, setSlideFeed] = useState(false);
     const [upFeed, setUpFeed] = useState(false);
     const [showNewFeed, setShowNewFeed] = useState(false);
 
+    const inputFeedRef = useRef(null);
 
-    useEffect(() => {
-        const currentScroll = window.scrollY;
-        // document.body.style.overflow = 'hidden';
-        if (currentScroll < 500) {
-            window.scrollTo(0,500);
-        }
+    const [scrollPos, setScrollPos] = useState(0);
 
-        return () => {
-            document.body.style.overflow = '';
-        }
-    }, []);
+    let navigate = useNavigate();
 
+    const [offsetY, setOffsetY] = useState(0);
+    const boxRef = useRef(null);
 
     function handleMouseDown(e) {
         setIsDragging(true);
@@ -38,13 +35,13 @@ export default function FeedPage() {
             const currentY = e.clientY;
             if (currentY > dragStartY) {
                 setDragDirection('down');
-                window.scrollTo(0,0);
-                document.body.style.overflow = '';
-
+                boxRef.current.style.transform = 'translateY(50px)';
+                inputFeedRef.current.style.opacity = 1;
             } else if (currentY < dragStartY) {
                 setDragDirection('up');
-                window.scrollTo(0,500);
-                document.body.style.overflow = 'hidden';
+                boxRef.current.style.transform = 'translateY(-50px)';
+                inputFeedRef.current.style.opacity = 0;
+
             }
         }
     };
@@ -53,17 +50,20 @@ export default function FeedPage() {
         setIsDragging(false);
 
         if (dragDirection === 'down') {
-            showFeed.current = true;  // 아래로 드래그하면 피드 표시
+            setShowFeed(true);
+            // showFeed.current = true;  // 아래로 드래그하면 피드 표시
 
         } else if (dragDirection === 'up') {
-            showFeed.current = false;  // 위로 드래그하면 피드 숨기기
+            setShowFeed(false);
+
+            // showFeed.current = false;  // 위로 드래그하면 피드 숨기기
         }
+        boxRef.current.style.transform = 'translateY(0)';
 
         // 상태 초기화
         setDragStartY(null);
         setDragDirection(null);
     };
-
 
     function onClickBox() {
         setSlideFeed(!slideFeed);
@@ -73,12 +73,17 @@ export default function FeedPage() {
 
     return (
         <div className={style.container}>
-            <div className={style.boxx} style={{ overflowY: 'hidden' }}>
+            <div className={stylePlanet['top_area']}>
+                <div onClick={() => { navigate(-1) }}>뒤로</div>
+                <div>은하계 탐색</div>
+            </div>
+            <div ref={inputFeedRef} className={`${style.boxx} ${showFeed ? '' : style.hidden}`}>
                 <InputFeed></InputFeed>
             </div>
-            <div style={{ overflowY: 'hidden' }}>
-                <div className={style['img-area']}>
+            <div ref={boxRef} className={style.databox}>
+                <div className={style['img-area']} >
                     <img src={planet2} alt="Planet"
+                        className={style.moving}
                         onMouseDown={handleMouseDown}
                         onMouseMove={handleMouseMove}
                         onMouseUp={handleMouseUp}
@@ -87,14 +92,14 @@ export default function FeedPage() {
                 </div>
 
                 <div className={style.area}>
-                    <button onClick={() => {
-                        onClickBox()
-                    }}>클릭</button>
-
                     {showNewFeed && <Feed className={`${style.feedbox3}`}></Feed>}
                     <Feed className={`${style.feedbox1} ${upFeed ? style['up_animate'] : ''}`}></Feed>
                     <Feed className={`${style.feedbox2} ${slideFeed ? style.animate : ''}`}></Feed>
+
                 </div>
+                <button onClick={() => {
+                    onClickBox()
+                }}>클릭</button>
             </div>
         </div >
     );
