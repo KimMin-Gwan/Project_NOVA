@@ -2,9 +2,8 @@ import plus from '../../img/plus.png';
 import empty from '../../img/empty.png';
 import more from '../../img/more.png';
 import shadow from '../../img/shadow.png';
-import { Routes, Route, Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import SelectBias from '../selectBias/SelectBias';
 
 

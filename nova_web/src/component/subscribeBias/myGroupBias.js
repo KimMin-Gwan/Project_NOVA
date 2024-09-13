@@ -3,10 +3,16 @@ import empty from '../../img/empty.png';
 import more from '../../img/more.png';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import SelectBias from '../selectBias/SelectBias';
 
 function MyGroupBias({ group_bias, bias_url, token }) {
 
     let navigate = useNavigate();
+    let [selectWindow, setSelectWindow] = useState(false);
+
+    function showSelectModal() {
+        setSelectWindow(!selectWindow);
+    };
 
     let header = {
         "request-type": "default",
@@ -46,15 +52,24 @@ function MyGroupBias({ group_bias, bias_url, token }) {
             }
             {group_bias.bid === '' && (
                 <>
-                    <img src={empty}></img>
+                    <img src={empty} alt='' onClick={() => {
+                        showSelectModal();
+                    }}></img>
                     <div className='box'>
                         <div className='my-bias-group'>새로운 최애 그룹<br />지지하기</div>
                     </div>
-                    <div className='more' onClick={() => {
-                        navigate('/select_bias')
-                    }}>
-                        <img src={plus}></img>
-                    </div>
+                    {
+
+                        !selectWindow && <div className='more' onClick={() => {
+                            showSelectModal();
+                        }}>
+                            <img src={plus} alt=''></img>
+                        </div>
+
+                    }
+                    {
+                        selectWindow && <SelectBias selectWindow={selectWindow} setSelectWindow={setSelectWindow}></SelectBias>
+                    }
                 </>
             )}
             {group_bias.bid && (

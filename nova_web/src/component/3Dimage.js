@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Stage, useFBX } from '@react-three/drei';
-import modelPath from './../img/shiba/source/1/shiba.FBX';
+import modelPath from './../img/cat_galaxy.fbx';
 
 const RotatingModel = () => {
     const modelRef = useRef();
@@ -11,6 +11,7 @@ const RotatingModel = () => {
     useFrame(() => {
         if (modelRef.current) {
             modelRef.current.rotation.y += 0.01; // Y축을 기준으로 회전
+            // modelRef.current.rotation.z += 0.01; // Y축을 기준으로 회전
         }
     });
 

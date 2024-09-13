@@ -7,6 +7,46 @@ import Feed, { InputFeed } from '../../component/feed';
 import { useNavigate } from 'react-router-dom';
 
 export default function FeedPage() {
+    //피드 드래그
+    const [isFeedDragging, setIsFeedDragging] = useState(false);
+    const [startY, setStartY] = useState(0);
+    const [currentFeedY, setCurrentFeedY] = useState(0);
+
+    function handleFeedMouseDown(e) {
+        setStartY(e.clientY);
+        setIsFeedDragging(true);
+    };
+
+    function handleFeedMouseMove(e) {
+        if (isFeedDragging) {
+            const moveY = e.clientY - startY;
+            setCurrentFeedY(moveY);
+
+            if (moveY < -50) {
+                setSlideFeed(true);
+                setUpFeed(true);
+                setShowNewFeed(true);
+            } 
+            // else {
+            //     setSlideFeed(false);
+            //     setUpFeed(false);
+            //     setShowNewFeed(false);
+            // }
+        }
+    };
+
+    function handleFeedMouseUp() {
+        setIsFeedDragging(false);
+        if (currentFeedY < -50) {
+            setCurrentFeedY(0);
+            // setSlideFeed(true);
+        } else {
+            setCurrentFeedY(100);
+        }
+    };
+
+
+    // 행성 드래그
     const [isDragging, setIsDragging] = useState(false);
     const [dragStartY, setDragStartY] = useState(null);
     const [dragDirection, setDragDirection] = useState(null);
@@ -93,8 +133,13 @@ export default function FeedPage() {
 
                 <div className={style.area}>
                     {showNewFeed && <Feed className={`${style.feedbox3}`}></Feed>}
-                    <Feed className={`${style.feedbox1} ${upFeed ? style['up_animate'] : ''}`}></Feed>
-                    <Feed className={`${style.feedbox2} ${slideFeed ? style.animate : ''}`}></Feed>
+                    <div
+                        onMouseDown={handleFeedMouseDown}
+                        onMouseMove={handleFeedMouseMove}
+                        onMouseUp={handleFeedMouseUp}>
+                        <Feed className={`${style.feedbox1} ${upFeed ? style['up_animate'] : ''}`}></Feed>
+                        <Feed className={`${style.feedbox2} ${slideFeed ? style.animate : ''}`}></Feed>
+                    </div>
 
                 </div>
                 <button onClick={() => {

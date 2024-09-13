@@ -68,7 +68,7 @@ body {
 
 .container {
   max-width: 500px;
-  height: 200vw;
+  /* height: 200vw; */
   margin: 0 auto;
   background-color: #1e1e1e;
   position: relative;

@@ -12,7 +12,17 @@ export default function SignUp() {
                             <br />
                             <label>
                                 <input type='email' name='email' required></input>
-                                <button>인증</button>
+                                <button className={style.authen}>인증</button>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div className={style.box}>
+                        <div className={style.test}>
+                            인증번호
+                            <br />
+                            <label>
+                                <input  name='password' required></input>
                             </label>
                         </div>
                     </div>
@@ -53,10 +63,10 @@ export default function SignUp() {
                             <br />
                             <input type='radio' name='gender1' id='gender1' required></input>
                             <label htmlFor='gender1'>남성</label>
-                            
+
                             <input type='radio' name='gender1' id='gender2' required></input>
                             <label htmlFor='gender2'>여성</label>
-                            
+
                             <input type='radio' name='gender1' id='gender3' required></input>
                             <label htmlFor='gender3'>기타</label>
 
@@ -69,11 +79,18 @@ export default function SignUp() {
                         <div className={style.test}>
                             약관 동의
                             <br />
-                            <label >
-                                <input type='checkbox' name='agree' required></input>
-                            </label>
+                            <div className={style['agree_box']}>
+                                <label>
+                                    <input type='checkbox' name='agree1' required></input>
+                                    (필수) 이용약관 동의
+                                    <br/>
+                                    <input type='checkbox' name='agree2' required></input>
+                                    (필수) 개인정보처리 동의
+                                </label>
+                            </div>
                         </div>
                     </div>
+                    
 
                     <button type='submit'>노바 시작하기</button>
                 </form>
