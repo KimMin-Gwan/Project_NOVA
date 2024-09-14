@@ -1,5 +1,5 @@
 from others.data_domain import Feed, User
-from model import Local_Database
+#from model import Local_Database
 from datetime import datetime
 import string
 import random
@@ -8,7 +8,7 @@ import random
 
 class FeedManager:
     def __init__(self, database) -> None:
-        self._database:Local_Database = database
+        self._database = database
         self._num_feed = 0
         self._managed_feed_list = []
         pass
@@ -35,6 +35,8 @@ class FeedManager:
                                         category=data.category)
             self._num_feed += 1
             self._managed_feed_list.append(managed_feed)
+
+        print(f'INFO<-[      {self._num_feed} NOVA FEED NOW READY.')
         
     def __get_datetime(self, date_str):
         return datetime.strptime(date_str, "%Y/%m/%d-%H:%M:%S")
@@ -107,7 +109,7 @@ class FeedManager:
         new_feed.category = []
         return new_feed
     
-    def get_feed_in_home(self, user, key:int):
+    def get_feed_in_home(self, user:User, key:int):
         target_feed = []
         # 초기에는 -1로 올테니까 가장 최신으로
         if key == -1:
@@ -117,7 +119,7 @@ class FeedManager:
 
         target = -1
         # 지지자의 요청이라면 유사한 내용으로 알고리즘
-        if user == None:
+        if user.uid != "":
             for i, single_feed in enumerate(reversed(self._managed_feed_list)):
                 single_feed:ManagedFeed = single_feed
                 if single_feed.key == key:
@@ -136,11 +138,14 @@ class FeedManager:
 
             target_feed = reversed(self._managed_feed_list[target:])
 
+        result_key = -1
         # 남은 데이터 길이 보고 3개 보낼지 그 이하로 보낼지 생각해야함
         if len(target_feed) > 2:
             target_feed= target_feed[:3]
+            result_key = tareget_feed[2].key
         else:
             target_feed= target_feed[:len(target_feed)]
+            result_key = tareget_feed[len(target_feed)-1].key
 
         target_fid = []
         for single_feed in target_feed:
@@ -155,7 +160,7 @@ class FeedManager:
             result.append(feed)
 
         result = self.make_get_data(user, result)
-        return result
+        return result, result_key
 
     def get_feed_in_fclass(self, user, key:int):
         for i, single_feed in enumerate(reversed(self._managed_feed_list)):
@@ -224,7 +229,7 @@ class FeedManager:
         feed.attend[action].append(user.uid)
         feed.result[action] += 1
 
-        self._database.modify_data_with_id(target_data="fid",
+        self._database.modify_data_with_id(target_id="fid",
                                             target_data=feed.get_dict_form_data())
         feed.attend = action
         feed.comment = self.__get_feed_comment(feed=feed)

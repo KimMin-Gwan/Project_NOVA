@@ -1,17 +1,20 @@
 from typing import Any, Optional
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request
 from view.master_view import Master_View, RequestHeader
 from view.parsers import Head_Parser
-from controller import Home_Controller, Core_Controller
+from view.jwt_decoder import RequestManager
+from controller import Home_Controller, Core_Controller, Feed_Controller
 from fastapi.responses import HTMLResponse
 from others import ConnectionManager as CM
 from others import LeagueManager as LM
+from others import FeedManager as FM
 from websockets.exceptions import ConnectionClosedError
 
 class Core_Service_View(Master_View):
     def __init__(self, app:FastAPI, endpoint:str,
                   database, head_parser:Head_Parser,
-                  connection_manager:CM, league_manager:LM
+                  connection_manager:CM, league_manager:LM,
+                  feed_manager:FM
                   ) -> None:
         super().__init__(head_parser=head_parser)
         self.__app = app
@@ -19,6 +22,7 @@ class Core_Service_View(Master_View):
         self.__database = database
         self.__connection_manager=connection_manager
         self.__league_manager=league_manager
+        self.__feed_manager = feed_manager
         self.home_route(endpoint)
         self.check_route()
         self.web_chatting_route(endpoint)
@@ -30,10 +34,16 @@ class Core_Service_View(Master_View):
 
         # 홈화면에 배너 정보
         @self.__app.get('/home/is_valid')
-        def get_banner(token:Optional[str] = ""):
+        def get_banner(request:Request):
+            request_manager = RequestManager()
+            request_manager.try_view_management(cookies=request.cookies)
+            if not request_manager.jwt_payload.result:
+                raise self._credentials_exception
+
             home_controller=Home_Controller()
-            model = home_controller.get_token(database=self.__database,token=token)
-            response = model.get_response_form_data(self._head_parser)
+            model = home_controller.get_token(database=self.__database)
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
             return response
         
         # 홈화면에 배너 정보
@@ -44,14 +54,41 @@ class Core_Service_View(Master_View):
             response = model.get_response_form_data(self._head_parser)
             return response
         
+        @self.__app.get('/home/feed_data')
+        def get_feed_data(request:Request, key:Optional[int] = None):
+            request_manager = RequestManager()
+            data_payload = HomeFeedRequest(request=key)
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            #if not request_manager.jwt_payload.result:
+                #raise request_manager.credentials_exception
+
+            home_controller=Feed_Controller()
+            model = home_controller.get_home_feed_data(database=self.__database,
+                                                        request=request_manager,
+                                                        feed_manager=self.__feed_manager)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
+        
         # 홈 화면에 최애 정보
         @self.__app.post('/home/my_bias')
-        def get_my_bias(raw_request:dict):
-            request = TokenRequest(request=raw_request)
+        def get_my_bias(raw_request:dict, request:Request):
+            request_manager = RequestManager()
+            data_payload = TokenRequest(request=raw_request)
+
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            # 검사 결과에 없으면 없다는 결과로 가야됨
+            #if not request_manager.jwt_payload.result:
+                #raise self._credentials_exception
+
             home_controller=Home_Controller()
             model = home_controller.get_my_bias_data(database=self.__database,
-                                                             request=request)
-            response = model.get_response_form_data(self._head_parser)
+                                                             request=request_manager)
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+
             return response
         
         @self.__app.get('/home/home_feed')
@@ -225,6 +262,10 @@ class SampleRequest(RequestHeader):
         body = request['body']
         self.uid = body['uid']
         self.date = body['date']
+
+class HomeFeedRequest(RequestHeader):
+    def __init__(self, key) -> None:
+        self.key = key
 
 class LoginRequest(RequestHeader):
     def __init__(self, request) -> None:

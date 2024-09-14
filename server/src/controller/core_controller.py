@@ -1,6 +1,6 @@
 from model import *
 from others import UserNotExist, CustomError
-from controller.jwt_decoder import JWTManager, JWTPayload
+from view.jwt_decoder import JWTManager, JWTPayload
 from others import CheckManager
 
 
@@ -373,58 +373,6 @@ class Core_Controller:
         </html>
         """
         return html
-
-
-
-
-
-#-----------채팅 시스템-----------------------------------------------------------
-#--------------------------------------------------------------------------------
-    def get_chatting_data(self, database:Local_Database):
-        model = ChatListModel(database=database)
-        try:
-            model.set_chat_list()
-            model.set_state_code("200")
-            return model
-
-        except CustomError as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
-
-        except Exception as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
-
-        finally:
-            return model
-        
-    def chatting(self, database:Local_Database, request):
-        model = ChatModel(database=database)
-        jwt_decoder = JWTManager()
-
-        try:
-            model.set_chat_data(request=request)  
-            request_payload = jwt_decoder.decode(token=model.get_chat_data().token)  # jwt payload(email 정보 포함됨)
-
-            # 유저가 있는지 확인       
-            if not model.set_user_with_email(request=request_payload):
-                raise UserNotExist("Can not find User with email")
-        except UserNotExist as e:
-            print("Error Catched : ", e)
-            model.set_state_code(e.error_code) # 종합 에러
-            return model
-
-        try:
-            model.check_item(request=model._user)
-            model.save_chat(request=model._user)
-
-        except CustomError as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
-
-        finally:
-            return model
-        
 
 
 class LeagueRequest():

@@ -1,8 +1,9 @@
 from typing import Any, Optional
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request
 from view.master_view import Master_View, RequestHeader
 from view.parsers import Head_Parser
 from controller import Home_Controller, Core_Controller, UserController
+from view.jwt_decoder import RequestManager
 
 class User_Service_View(Master_View):
     def __init__(self, app:FastAPI, endpoint:str, database, head_parser:Head_Parser,
@@ -25,12 +26,14 @@ class User_Service_View(Master_View):
         #                    -> 'detail' : "실패 사유"
         @self.__app.post('/user_home/try_login')
         def try_login(raw_request:dict):
-            request = LoginRequest(request=raw_request)
+            request_manager = RequestManager()
+            data_payload = LoginRequest(request=raw_request)
+
             user_controller=UserController()
             model = user_controller.try_login(database=self.__database,
-                                              request=request
-                                              )
-            response = model.get_response_form_data(self._head_parser)
+                                              request=data_payload)
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data, token=body_data['token'])
             return response
 
         # 이메일 전송

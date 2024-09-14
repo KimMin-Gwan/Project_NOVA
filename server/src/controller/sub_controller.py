@@ -1,17 +1,12 @@
 from model import *
 from others import UserNotExist, CustomError
-from controller.jwt_decoder import JWTManager, JWTPayload
 
 class Sub_Controller:
     def sample_func(self, database:Local_Database, request) -> BaseModel: 
-        jwt_decoder = JWTManager()
         model = BaseModel(database=database)
         try:
-
-            request_payload = jwt_decoder.decode(token=request.token)  # jwt payload(email 정보 포함됨)
-
             # 유저가 있는지 확인
-            if not model.set_user_with_uid(request=request):
+            if not model.set_user_with_uid(request=request.jwt_payload):
                 raise UserNotExist("Can not find User with uid")
         except UserNotExist as e:
             print("Error Catched : ", e)
@@ -38,7 +33,6 @@ class Sub_Controller:
     # 배너가 없으면 뭘 보여줄래?
     def get_bias_banner(self, database:Local_Database, request) -> BaseModel: 
         model = BiasBannerModel(database=database)
-
         try:
             """
             if not model.set_biases_with_bids():
@@ -118,12 +112,9 @@ class Sub_Controller:
 
     # 최애 페이지의 지지자 본인의 기여도 정보
     def get_my_contribution(self, database:Local_Database, request) -> MyContributionModel: 
-        jwt_decoder = JWTManager()
         model = MyContributionModel(database=database)
-
         try:
-            request_payload = jwt_decoder.decode(token=request.token)  # jwt payload(email 정보 포함됨)
-            if not model.set_user_with_email(request=request_payload):
+            if not model.set_user_with_email(request=request.jwt_payload):
                 raise UserNotExist("Can not find User with uid")
         except UserNotExist as e:
             print("Error Catched : ", e)

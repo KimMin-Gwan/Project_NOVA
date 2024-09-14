@@ -2,7 +2,7 @@ from model.base_model import BaseModel
 from model import Local_Database
 from others.data_domain import User
 from others import CoreControllerLogicError
-from controller.jwt_decoder import JWTManager
+from view.jwt_decoder import JWTManager
 import jwt
 import datetime
 import uuid
