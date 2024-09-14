@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Loundspeaker from "./loundspeaker";
+import NavBar from "./NavBar";
+
 // import "./App.css";
 
 function FloatingButton({ showSpeaker, setShowSpeaker }) {
@@ -8,15 +10,15 @@ function FloatingButton({ showSpeaker, setShowSpeaker }) {
   const [chattingData, setChattingData] = useState([]);
   let chattingList = [];
 
-  useEffect(() => {
-    fetch('http://nova-platform.kr/chatting_list')
-      .then(res => res.json())
-      .then(data => {
-        chattingList = [...data.body.chatting_list];
-        setChattingData(chattingList);
-        console.log(chattingData);
-      })
-  }, [])
+  // useEffect(() => {
+  //   fetch('http://nova-platform.kr/chatting_list')
+  //     .then(res => res.json())
+  //     .then(data => {
+  //       chattingList = [...data.body.chatting_list];
+  //       setChattingData(chattingList);
+  //       console.log(chattingData);
+  //     })
+  // }, [])
 
   const handleClick = () => {
     setShowSpeaker(!showSpeaker);
@@ -32,9 +34,10 @@ function FloatingButton({ showSpeaker, setShowSpeaker }) {
       }
       {
         showSpeaker && (
-          <div>
-            <Loundspeaker chattingData={chattingData}></Loundspeaker>
-          </div>
+          <NavBar></NavBar>
+          // <div>
+            // <Loundspeaker chattingData={chattingData}></Loundspeaker>
+          // </div>
         )
       }
     </>

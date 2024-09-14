@@ -30,6 +30,7 @@ import PlanetList from './pages/PlanetPage/PlanetList.js';
 import logo from './img/logo.PNG';
 import GalaxyList from './pages/GalaxyPage/GalaxyList.js';
 import Box from './component/test.js';
+import NavBar from './component/NavBar.js';
 
 function App() {
 
@@ -105,7 +106,7 @@ function App() {
   return (
     <Routes>
       <Route path='/more_see' element={<MoreSee />}></Route>
-      <Route path='/test' element={<Box />}></Route>
+      <Route path='/test' element={<NavBar />}></Route>
       <Route path='/planet' element={<PlanetList />}></Route>
       <Route path='/galaxy' element={<GalaxyList />}></Route>
       <Route path='/feed_page' element={<FeedPage />}></Route>
@@ -215,8 +216,9 @@ function App() {
             <Meta url={url} isGroupClicked={isGroupClicked} type={type[1]} token={newToken}></Meta>
           </section> */}
 
-          {/* <section className="advise"></section>
-          <FloatingButton showSpeaker={showBox} setShowSpeaker={setShowBox}></FloatingButton> */}
+          {/* <section className="advise"></section> */}
+          {/* <FloatingButton showSpeaker={showBox} setShowSpeaker={setShowBox}></FloatingButton> */}
+          <NavBar></NavBar>
           {/* <footer className="footer">
             <div>
               <p>NOVA</p><br />

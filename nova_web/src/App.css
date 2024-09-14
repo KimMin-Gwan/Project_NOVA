@@ -397,6 +397,7 @@ body {
   justify-content: center;
   /* background-color: #fff000; */
 }
+
 .icon {
   /* text-align: center; */
   /* justify-self: end; */
@@ -476,7 +477,7 @@ body {
   /* overflow: auto; */
   scrollbar-width: none;
   overflow: scroll;
-  
+
   /* padding: 10px; */
 }
 
@@ -496,9 +497,10 @@ body {
 
 .buttons {
   width: 130px;
+  background-color: blue;
   height: 50px;
   display: flex;
-  
+
 }
 
 .buttons img {
@@ -927,10 +929,11 @@ body {
   background-color: gray;
 }
 
-.backword{
-  width: 10px; /* 너비를 원하는 비율로 설정 */
-  height : 12px;
-  margin-left : 10px;
+.backword {
+  width: 10px;
+  /* 너비를 원하는 비율로 설정 */
+  height: 12px;
+  margin-left: 10px;
 }
 
 .nova-info {
@@ -939,13 +942,126 @@ body {
 
 
 /* 피드 영역 */
-.feed-area {
-  
-}
+.feed-area {}
 
 .satellite-search {
   color: white;
   text-align: center;
   padding-top: 10px;
   padding-bottom: 10px;
+}
+
+
+
+
+
+
+.tttt {
+  color: blue;
+  position: absolute;
+  top: 0;
+  width: 1000px;
+  height: 1000px;
+  background-color: brown;
+  z-index: 1000;
+}
+
+
+
+.vertical-navbar {
+  position: fixed;
+  top: 100%;
+  right: -120px;
+  /* left: -120px; 처음엔 숨기기 위해 화면 밖으로 이동 */
+  transform: translateY(-50%);
+  background-color: #333;
+  padding: 10px;
+  border-radius: 20px;
+  transition: left 0.3s ease;
+}
+
+.vertical-navbar.visible {
+  left: 0;
+  /* 버튼 클릭 시 나타나도록 설정 */
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
+  color: white;
+}
+
+.icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: lightgray;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+}
+
+.toggle-button {
+  position: sticky;
+  /* top: 50%; */
+  bottom: 0px;
+  left: 80%;
+  /* right: 200px; */
+  transform: translateY(-50%);
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.toggle-button:hover {
+  background-color: #0056b3;
+}
+
+.nav_button {
+  background-color: blue;
+  width: 50px;
+  height: 50px;
+  border-radius: 100%;
+  position: sticky;
+  /* top: 50%; */
+  /* z-index: 1000; */
+  bottom: 20px;
+  left: 77%;
+  /* float: right; */
+  /* right: 100%; */
+}
+
+.nav_button2,
+.nav_button3 {
+  background-color: blue;
+  width: 50px;
+  height: 50px;
+  border-radius: 100%;
+  position: absolute;
+  bottom: 20px;
+  left: 77%;
+  /* transform: translateY(200); */
+  transition: transform 0.4s ease;
+}
+
+.nav_button2.visible {
+  transform: translateY(-60px);
+}
+
+.nav_button3.visible {
+  /* bottom: 140px; */
+  transform: translateY(-120px);
+  transition-delay: 0.2s;
+}
+
+.visible {
+  /* transform: translateY(-60px); */
+  /* opacity: 1;  */
 }

@@ -33,9 +33,15 @@ const NOVALogin = () => {
 
     try {
       const response = await axios.post(
-        "http://nova-platform.kr/user_home/try_login",
-        // "http://127.0.0.1:5000/user_home/try_login",
-        send_data
+        // "http://nova-platform.kr/user_home/try_login",
+        "http://127.0.0.1:4000/user_home/try_login",
+        send_data,
+        {
+          headers: {
+            "Content-Type": 'application/json',
+          },
+          withCredentials: true
+        }
       );
 
       const result = response.data.body;
@@ -60,9 +66,10 @@ const NOVALogin = () => {
       <div className={style.Header}>
         <div className={style.BackBtn}>
           <button className="tool-button">
-            <img src={back} alt="Back" className="backword" onClick={() => { 
+            <img src={back} alt="Back" className="backword" onClick={() => {
               alert("뒤로가기")
-              navigate(-1) }}></img>
+              navigate(-1)
+            }}></img>
           </button>
         </div>
         <div className={style.Top}>
