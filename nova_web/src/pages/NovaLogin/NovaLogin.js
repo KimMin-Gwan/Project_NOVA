@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import style from "./NovaLogin.module.css";
 import back from "../../img/back.png";
@@ -31,34 +31,58 @@ const NOVALogin = () => {
       },
     };
 
-    try {
-      const response = await axios.post(
-        // "http://nova-platform.kr/user_home/try_login",
-        "http://127.0.0.1:4000/user_home/try_login",
-        send_data,
-        {
-          headers: {
-            "Content-Type": 'application/json',
-          },
-          withCredentials: true
-        }
-      );
+    // "http://nova-platform.kr/user_home/try_login",
 
-      const result = response.data.body;
-
-      console.log(result.resust)
-
-      if (result.resust) {
-        // 로그인 성공 시 JWT 토큰 저장 (예: 로컬 스토리지)
-        localStorage.setItem("jwtToken", result.token);
-        navigate('/')
-      } else {
-        alert("로그인 실패: " + result.detail);
+    fetch("http://127.0.0.1:4000/user_home/try_login",
+      {
+        method: 'post',
+        headers: {
+          "Content-Type": 'application/json',
+        },
+        body: JSON.stringify(send_data),
       }
-    } catch (error) {
-      console.error("로그인 요청 중 오류가 발생했습니다:", error);
-      alert("로그인 중 오류가 발생했습니다.");
-    }
+    )
+      .then(response => response.json())
+      .then(result => {
+        console.log(result.body);
+        // setCheckSupport(result.body.result);
+        // setMyCtb(result.body.my_contribution);
+      })
+
+
+    // .catch(error) {
+    // console.error("로그인 요청 중 오류가 발생했습니다:", error);
+    // console.error('Error:', error.response ? error.response.data : error.message);
+    // alert("로그인 중 오류가 발생했습니다.");
+
+    // try {
+    //   const response = await axios.post(
+    //     "http://127.0.0.1:4000/user_home/try_login",
+    //     send_data,
+    //     {
+    //       headers: {
+    //         "Content-Type": 'application/json',
+    //       },
+    //       withCredentials: true
+    //     }
+    //   );
+
+    // const result = response.data.body;
+
+    // console.log(result.resust)
+
+    // if (result.resust) {
+    //   // 로그인 성공 시 JWT 토큰 저장 (예: 로컬 스토리지)
+    //   localStorage.setItem("jwtToken", result.token);
+    //   navigate('/')
+    // } else {
+    //   alert("로그인 실패: " + result.detail);
+    // }
+    // } catch (error) {
+    //   console.error("로그인 요청 중 오류가 발생했습니다:", error);
+    //   console.error('Error:', error.response ? error.response.data : error.message);
+    //   alert("로그인 중 오류가 발생했습니다.");
+    // }
   };
 
   return (
