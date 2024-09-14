@@ -36,9 +36,26 @@ def home():
             async function testNumberEndpoint() {
                 const number = document.getElementById('numberInput').value;
                 try {
-                    const response = await fetch(`http://127.0.0.1:5000/home/${number}`, {
+                    const response = await fetch(`http://127.0.0.1:4000/user_home/try_login`, {
+                        method: 'POST',
                         mode: 'cors',
-                        credentials: 'include'
+                        credentials: 'include', // 쉼표 추가
+                        headers: {
+                            'Content-Type': 'application/json' // 헤더 추가
+                        },
+                        body: JSON.stringify({
+                            "header" : {
+                                "request-type": "default",
+                                "client-version": "v1.0.1",
+                                "client-ip": "127.0.0.1",
+                                "uid": "1234-abcd-5678",
+                                "endpoint": "/user_system/",
+                                },
+                            "body" : {
+                                "email" : "randomUser2@naver.com", 
+                                "password": "sample122"
+                            }
+                        })
                     });
                     if (!response.ok) {
                         throw new Error('Network response was not ok.');

@@ -17,6 +17,7 @@ class Master_View():
 
 class RequestHeader:
     def __init__(self, request) -> None:
+        print(request)
         header = request['header']
 
         self.request_type = header['request-type']
