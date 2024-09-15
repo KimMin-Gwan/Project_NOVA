@@ -36,8 +36,6 @@ class Core_Service_View(Master_View):
         @self.__app.get('/home/is_valid')
         def get_banner(request:Request):
             request_manager = RequestManager()
-            print(request.cookies)
-            print(type(request.cookies))
             request_manager.try_view_management(cookies=request.cookies)
             if not request_manager.jwt_payload.result:
                 raise self._credentials_exception
@@ -77,6 +75,8 @@ class Core_Service_View(Master_View):
         # 홈 화면에 최애 정보
         @self.__app.get('/home/my_bias')
         def get_my_bias(request:Request):
+            print(request.cookies)
+            print(type(request.cookies))
             request_manager = RequestManager()
             data_payload = DummyRequest()
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
