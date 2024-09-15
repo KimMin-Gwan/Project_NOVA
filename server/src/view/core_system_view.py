@@ -36,6 +36,8 @@ class Core_Service_View(Master_View):
         @self.__app.get('/home/is_valid')
         def get_banner(request:Request):
             request_manager = RequestManager()
+            print(request.cookies)
+            print(type(request.cookies))
             request_manager.try_view_management(cookies=request.cookies)
             if not request_manager.jwt_payload.result:
                 raise self._credentials_exception
@@ -54,7 +56,7 @@ class Core_Service_View(Master_View):
             response = model.get_response_form_data(self._head_parser)
             return response
         
-        @self.__app.get('/home/feed_data')
+        @self.__app.get('/home/home_feed')
         def get_feed_data(request:Request, key:Optional[int] = None):
             request_manager = RequestManager()
             data_payload = HomeFeedRequest(request=key)
@@ -90,10 +92,10 @@ class Core_Service_View(Master_View):
 
             return response
         
-        @self.__app.get('/home/home_feed')
-        def new_contentes():
-            data = ["1", "2", "3", "4"]
-            return data
+        #@self.__app.get('/home/home_feed')
+        #def new_contentes():
+            #data = ["1", "2", "3", "4"]
+            #return data
 
         # 회원의 bias의 리그를 받아내는 앤드 포인트 (post)
         @self.__app.post('/home/my_bias_league')

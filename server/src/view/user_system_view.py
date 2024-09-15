@@ -31,7 +31,6 @@ class User_Service_View(Master_View):
 
         @self.__app.post('/user_home/try_login')
         def try_login(raw_request:dict):
-            print(raw_request)
             request_manager = RequestManager()
             data_payload = LoginRequest(request=raw_request)
 
