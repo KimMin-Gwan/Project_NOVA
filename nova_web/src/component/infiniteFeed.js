@@ -10,9 +10,12 @@ export default function InfFeed() {
 
     let [testData, setTestData] = useState([]);
     // 'http://127.0.0.1:4000/new_contents'
+    // 'http://nova-platform.kr/home/home_feed'
     function fetchData() {
         setIsLoading(true);
-        fetch('http://nova-platform.kr/home/home_feed')
+        fetch('http://127.0.0.1:4000/home/home_feed', {
+            credentials: 'include',
+        })
             .then(response => response.json())
             .then(data => {
                 console.log(data);

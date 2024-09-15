@@ -8,17 +8,11 @@ const NavBar = () => {
     };
 
     return (
-        <>
+        <div className='nav_button_box'>
+            <button className={`nav_button2 ${isVisible ? 'visible' : ''}`}>click2</button>
+            <button className={`nav_button3 ${isVisible ? 'visible' : ''}`}>click3</button>
             <button className='nav_button' onClick={toggleNavBar}>click</button>
-            {
-                isVisible && (
-                    <>
-                        <button className={`nav_button2 ${isVisible ? 'visible' : ''}`}>click2</button>
-                        <button className={`nav_button3 ${isVisible ? 'visible' : ''}`}>click3</button>
-                    </>
-                )
-            }
-        </>
+        </div>
     );
 };
 

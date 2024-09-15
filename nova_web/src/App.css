@@ -1029,11 +1029,12 @@ body {
   width: 50px;
   height: 50px;
   border-radius: 100%;
-  position: sticky;
+  /* margin-top: 5px; */
+  /* position: absolute; */
   /* top: 50%; */
-  /* z-index: 1000; */
-  bottom: 20px;
-  left: 77%;
+  z-index: 522;
+  /* bottom: 20px;
+  left: 62%; */
   /* float: right; */
   /* right: 100%; */
 }
@@ -1041,27 +1042,36 @@ body {
 .nav_button2,
 .nav_button3 {
   background-color: blue;
+  /* margin-top: 5px; */
   width: 50px;
   height: 50px;
   border-radius: 100%;
   position: absolute;
-  bottom: 20px;
-  left: 77%;
-  /* transform: translateY(200); */
+  z-index: -1;
+  /* bottom: 80px; */
+  /* left: 77%; */
+  /* top: 100%; */
+  /* transform: translateY(-120px); */
+  
   transition: transform 0.4s ease;
 }
 
-.nav_button2.visible {
-  transform: translateY(-60px);
+.nav_button2.visible{
+  transform: translateY(-55px);
 }
 
 .nav_button3.visible {
-  /* bottom: 140px; */
-  transform: translateY(-120px);
-  transition-delay: 0.2s;
-}
-
-.visible {
-  /* transform: translateY(-60px); */
+  transform: translateY(-110px);
+  transition-delay: 0.1s;
   /* opacity: 1;  */
 }
+
+.nav_button_box {
+  width: 50px;
+  position: sticky;
+  bottom: 20px;
+  left: 85%;
+  /* display: flex; */
+  /* background-color: greenyellow; */
+}
+

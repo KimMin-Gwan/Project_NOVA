@@ -55,32 +55,32 @@ function App() {
     "endpoint": "/core_system/",
   }
 
-  useEffect(() => {
-    if (!token || token === undefined) {
-      console.log('로그인안됨')
-    }
-    else {
-      fetch(url + `is_valid?token=${token}`)
-        .then(response => response.json())
-        .then(data => {
-          JSON.stringify(data);
-          console.log("111", data)
-          setIsLogin(data.header['state-code']);
-          if (isLogin === '498') {
-            setnewToken(data.header.new_token);
-            localStorage.setItem('jwtToken', isLogin.new_token);
-          }
-          else if (isLogin === '497') {
-            localStorage.removeItem('jwtToken');
-            console.log("2222: ", data)
-            alert('다시 로그인 해주세요.');
-          }
+  // useEffect(() => {
+  //   // if (!token || token === undefined) {
+  //   //   console.log('로그인안됨')
+  //   // }
 
-          // window.location.reload();
-        })
+  //   fetch(url + `is_valid`, {
+  //     credentials: 'include'
+  //   })
+  //     .then(response => response.json())
+  //     .then(data => {
+  //       JSON.stringify(data);
+  //       console.log("111", data)
+  //       setIsLogin(data.header['state-code']);
+  //       if (isLogin === '498') {
+  //         setnewToken(data.header.new_token);
+  //         localStorage.setItem('jwtToken', isLogin.new_token);
+  //       }
+  //       else if (isLogin === '497') {
+  //         localStorage.removeItem('jwtToken');
+  //         console.log("2222: ", data)
+  //         alert('다시 로그인 해주세요.');
+  //       }
 
-    }
-  }, [])
+  //       // window.location.reload();
+  //     })
+  // }, [])
 
 
   //내 최애 / 전체 선택버튼용

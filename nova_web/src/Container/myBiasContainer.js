@@ -21,10 +21,6 @@ function MyBias({ url, token,showBox,blackBox }) {
         "endpoint": "/core_system/",
     }
 
-    // let sample = localStorage.getItem('jwtToken');
-
-    let jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJhbmRvbVVzZXIxQG5hdmVyLmNvbSIsImlhdCI6MTcyNDE3MzUzMiwiZXhwIjoxNzI0MTc1MzMyfQ.FCJV4cO8V62-mBPIoeCtxT-dH_9qkbL8yHdKU9F33lY';
-
     let send_data = {
         "header": header,
         "body": {
@@ -34,30 +30,26 @@ function MyBias({ url, token,showBox,blackBox }) {
 
     let my_bias_url = 'https://kr.object.ncloudstorage.com/nova-images/';
 
-    useEffect(() => {
-        if (!token) {
-            console.log('로그인 안됨')
-        }
-        else {
-            fetch(url + 'my_bias',
-                {
-                    method: 'POST',
-                    headers: {
-                        "Content-Type": 'application/json',
-                    },
-                    body: JSON.stringify(send_data),
-                })
-            .then(response => response.json())
-            .then(data => {
-                solo_bias_copy = data.body.solo_bias;
-                group_bias_copy = data.body.group_bias;
+    // useEffect(() => {
+    //     if (!token) {
+    //         console.log('로그인 안됨')
+    //     }
+    //     else {
+    //         fetch(url + 'my_bias',
+    //             {
+    //                 credentials: 'include'
+    //             })
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             solo_bias_copy = data.body.solo_bias;
+    //             group_bias_copy = data.body.group_bias;
 
-                setSoloBias(solo_bias_copy);
-                setGroupBias(group_bias_copy);
-                console.log('솔로 그룹 바이어스 부분');
-            })
-        }
-    }, [token])
+    //             setSoloBias(solo_bias_copy);
+    //             setGroupBias(group_bias_copy);
+    //             console.log('솔로 그룹 바이어스 부분');
+    //         })
+    //     }
+    // }, [token])
 
     return (
         <>
