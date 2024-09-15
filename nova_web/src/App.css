@@ -496,11 +496,11 @@ body {
 }
 
 .buttons {
-  width: 130px;
-  background-color: blue;
+  width: 80px;
+  /* background-color: blue; */
   height: 50px;
   display: flex;
-
+  /* justify-content: space-around; */
 }
 
 .buttons img {
@@ -1052,11 +1052,11 @@ body {
   /* left: 77%; */
   /* top: 100%; */
   /* transform: translateY(-120px); */
-  
+
   transition: transform 0.4s ease;
 }
 
-.nav_button2.visible{
+.nav_button2.visible {
   transform: translateY(-55px);
 }
 
@@ -1074,4 +1074,3 @@ body {
   /* display: flex; */
   /* background-color: greenyellow; */
 }
-

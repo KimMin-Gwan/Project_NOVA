@@ -1,6 +1,6 @@
 import { Routes, Route, Link } from 'react-router-dom'
-import Loundspeaker from '../../component/loundspeaker';
 import style from './Mypage.module.css';
+import MySoloBias from '../../component/subscribeBias/mySoloBias';
 function MyPage() {
 
 
@@ -8,17 +8,11 @@ function MyPage() {
         <div className={`container ${style['main-container']}`}>
             <div className={`white-title ${style['title-area']}`}>마이페이지</div>
             <div className={style['bias-show-area']}>
-                <div className={style['bias-box']}>
-                    <div className={style['type-area']}>개인</div>
-                    <div className={style['img-box']}>사진</div>
-                    <div className={style['bias-name']}>최애 이름</div>
-                    <div className={style['point-box']}>포인트</div>
-                </div>
-                <div className={style['bias-box']}>
-                    <div className={style['type-area']}>단체</div>
-                    <div className={style['img-box']}>사진</div>
-                    <div className={style['bias-name']}>최애 이름</div>
-                    <div className={style['point-box']}>포인트</div>
+                <div className={style['personal_box']}>
+                    <div>개인</div>
+                    <div>
+                        <MySoloBias></MySoloBias>
+                    </div>
                 </div>
             </div>
             <div className={style['my-info-area']}>

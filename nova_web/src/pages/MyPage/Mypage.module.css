@@ -24,49 +24,12 @@
     background-color: antiquewhite;
 }
 
-.bias-box {
-    width: 45%;
-    height: 250px;
+.personal_box {
+    display: flexbox;
+    width: 95%;
+    height: 90%;
     background-color: gray;
-}
-
-.type-area {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    background-color: blueviolet;
-}
-
-.img-box {
-    margin: 0 auto;
-    margin-top: 5px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 7px;
-    width: 100px;
-    height: 120px;
-    background-color: aquamarine;
-}
-
-.bias-name {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 5px;
-    background-color: yellowgreen;
-}
-
-.point-box {
-    margin: 0 auto;
-    margin-top: 10px;
-    background-color: white;
-    width: 200px;
-    height: 50px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    border-radius: 15px;
 }
 
 .my-info-area {

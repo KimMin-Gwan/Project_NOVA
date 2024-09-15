@@ -15,7 +15,7 @@
     height : 200vw;
     margin: 0 auto;
     /*max-width: 1200px; /* 최대 너비를 설정 */
-    background-color: #1E1E1E; /* 배경색을 원하는 색으로 변경 가능 */
+    background-color: #262626; /* 배경색을 원하는 색으로 변경 가능 */
     /*text-align: center; /* 텍스트 가운데 정렬 */
 }
 
@@ -69,7 +69,7 @@
 .mainComponent {
     width: 468px;
     height: 98px;
-    background-color: #1E1E1E; /* Background color for each component */
+    background-color: #3C3C3C; /* Background color for each component */
     display: flex;
     align-items: center;
     /*justify-content: space-between; */

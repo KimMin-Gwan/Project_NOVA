@@ -90,10 +90,11 @@
 
 .link_box {
     margin-left: 20px;
-    background-color: gray;
+    background-color: #FFFFFF;
     width: 85%;
     height: 80px;
     border-radius: 10px;
+    color: black;
 }
 
 .link_box h1 {
@@ -129,7 +130,7 @@
     width: 150px;
     height: 80px;
     color: white;
-    background-color: blue;
+    background-color: #1B3753;
     border-radius: 15px;
     box-shadow: 0px 2px 5px black;
 }
@@ -146,8 +147,8 @@
 
 .quiz_box li {
     padding: 12px 20px;
-    background-color: seagreen;
-    border: 1px white solid;
+    background-color: #122436;
+    border: 1px #888888 solid;
 }
 
 .quiz_box li:first-child {
@@ -168,7 +169,8 @@
     height: 700px;
     width: 87%;
     transform: translateY(-200px);
-    background-color: yellowgreen;
+    background-color: #7A7A7A;
+    /* opacity: 0.; */
     position: relative;
     /* position: absolute; */
     border-radius: 10px;
@@ -191,7 +193,7 @@
 
 .input_feed {
     margin: 0 auto;
-    background-color: #292929;
+    background-color: #7A7A7A;
     border-radius: 25px;
     width: 450px;
     height: 400px;
@@ -290,7 +292,7 @@
     color: white;
     width: 90%;
     height: 50px;
-    background-color: black;
+    background-color: #1B1B1B;
     border-radius: 10px;
 }
 

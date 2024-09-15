@@ -5,10 +5,10 @@ import Modal from './component/modal';
 import MyBias from './Container/myBiasContainer';
 import MyPage from './pages/MyPage/Mypage';
 import { Routes, Route, Link, useNavigate } from 'react-router-dom';
-import zoom from './img/zoom.png';
+// import zoom from './img/zoom.png';
 import menu from './img/menu.png';
 // import Rank from './component/ranks';
-import FloatingButton from './component/floatingbutton';
+// import FloatingButton from './component/floatingbutton';
 // import Meta from './Container/metaContainer';
 // import Loundspeaker from './component/loundspeaker';
 import NOVALogin from './pages/NovaLogin/NovaLogin';
@@ -137,27 +137,23 @@ function App() {
               </div>
               <div className='buttons'>
                 <button className='tool-button'>
-                  <img src={zoom}></img>
-                </button>
-                <button className='tool-button'>
                   <img src={menu} onClick={() => {
                     navigate('/more_see')
                   }}></img>
                 </button>
                 {/* <Link to='/' className='button'>홈</Link> */}
-                {/* <Link to='/more_see' className='button'>더보기</Link> */}
                 {/* <Link to='/namecard' className='button'>명함</Link> */}
                 <Link to='/test' className='button'>테스트</Link>
                 <Link to='/planet' className='button'>행성페이지</Link>
                 <Link to='/galaxy' className='button'>은하페이지</Link>
                 <Link to='/feed_page' className='button'>피드페이지</Link>
                 <Link to='/signup' className='button'>회원가입</Link>
-                {/* <Link to='/mypage' className='button'>마이페이지</Link> */}
+                <Link to='/mypage' className='button'>마이페이지</Link>
                 <Link to='/league_detail' className='button'>리그 자세히보기</Link>
+                <Link to='/novalogin' className='button'>로그인 페이지</Link>
                 {/* <Link to='/league_detail' className='button'>리그상세페이지</Link> */}
                 {/* <Link to='/select_bias' className='button'>최애선택</Link> */}
-                {/* <Link to='/bias_certify' className='button'>최애 지지하기</Link> */}
-                <Link to='/novalogin' className='button'>로그인 페이지</Link>
+                <Link to='/bias_certify' className='button'>최애 지지하기</Link>
                 {/* <Link to='/data_test' className='button'>테스트페이지</Link> */}
                 {/* <Link to='/mybias' className='button'>최애페이지</Link> */}
               </div>
