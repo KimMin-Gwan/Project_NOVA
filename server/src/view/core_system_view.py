@@ -32,7 +32,7 @@ class Core_Service_View(Master_View):
         def home():
             return 'Hello, This is Root of Core-System Service'
 
-        # 홈화면에 배너 정보
+        # 홈화
         @self.__app.get('/home/is_valid')
         def get_banner(request:Request):
             request_manager = RequestManager()
@@ -73,11 +73,10 @@ class Core_Service_View(Master_View):
 
         
         # 홈 화면에 최애 정보
-        @self.__app.post('/home/my_bias')
-        def get_my_bias(raw_request:dict, request:Request):
+        @self.__app.get('/home/my_bias')
+        def get_my_bias(request:Request):
             request_manager = RequestManager()
-            data_payload = TokenRequest(request=raw_request)
-
+            data_payload = DummyRequest()
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             # 검사 결과에 없으면 없다는 결과로 가야됨
             #if not request_manager.jwt_payload.result:
@@ -255,6 +254,10 @@ class Core_Service_View(Master_View):
                 
             except WebSocketDisconnect:
                 self.__connection_manager.disconnect(observer=observer)
+
+class DummyRequest():
+    def __init__(self) -> None:
+        pass
 
 class SampleRequest(RequestHeader):
     def __init__(self, request) -> None:
