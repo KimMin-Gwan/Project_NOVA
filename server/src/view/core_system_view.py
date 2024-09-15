@@ -56,22 +56,22 @@ class Core_Service_View(Master_View):
             response = model.get_response_form_data(self._head_parser)
             return response
         
-        @self.__app.get('/home/home_feed')
-        def get_feed_data(request:Request, key:Optional[int] = None):
-            request_manager = RequestManager()
-            data_payload = HomeFeedRequest(request=key)
-            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
-            #if not request_manager.jwt_payload.result:
-                #raise request_manager.credentials_exception
+        #@self.__app.get('/home/home_feed')
+        #def get_feed_data(request:Request, key:Optional[int] = None):
+            #request_manager = RequestManager()
+            #data_payload = HomeFeedRequest(request=key)
+            #request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            ##if not request_manager.jwt_payload.result:
+                ##raise request_manager.credentials_exception
 
-            home_controller=Feed_Controller()
-            model = home_controller.get_home_feed_data(database=self.__database,
-                                                        request=request_manager,
-                                                        feed_manager=self.__feed_manager)
+            #home_controller=Feed_Controller()
+            #model = home_controller.get_home_feed_data(database=self.__database,
+                                                        #request=request_manager,
+                                                        #feed_manager=self.__feed_manager)
 
-            body_data = model.get_response_form_data(self._head_parser)
-            response = request_manager.make_json_response(body_data=body_data)
-            return response
+            #body_data = model.get_response_form_data(self._head_parser)
+            #response = request_manager.make_json_response(body_data=body_data)
+            #return response
 
         
         # 홈 화면에 최애 정보
@@ -92,10 +92,10 @@ class Core_Service_View(Master_View):
 
             return response
         
-        #@self.__app.get('/home/home_feed')
-        #def new_contentes():
-            #data = ["1", "2", "3", "4"]
-            #return data
+        @self.__app.get('/home/home_feed')
+        def new_contentes():
+            data = ["1", "2", "3", "4"]
+            return data
 
         # 회원의 bias의 리그를 받아내는 앤드 포인트 (post)
         @self.__app.post('/home/my_bias_league')
