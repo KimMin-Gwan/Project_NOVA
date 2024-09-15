@@ -24,10 +24,11 @@ class User_Service_View(Master_View):
         # 로그인 시도
         # response 포함 정보 -> 'result' : True or False
         #                    -> 'detail' : "실패 사유"
-        @self.__app.post('/user_home/sample')
-        def try_login(raw_request:dict):
-            print(raw_request)
-            return {"result":"result"}
+        @self.__app.get('/user_home/sample')
+        def try_login(request:Request):
+            print(request.cookies)
+
+            return "hello"
 
         @self.__app.post('/user_home/try_login')
         def try_login(raw_request:dict):
