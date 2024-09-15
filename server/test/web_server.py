@@ -71,7 +71,7 @@ def home():
             async function testTargetEndpoint() {
                 const target = document.getElementById('targetInput').value;
                 try {
-                    const response = await fetch(`http://127.0.0.1:5000/hello`, {
+                    const response = await fetch(`http://127.0.0.1:4000/user_home/sample`, {
                         mode: 'cors',
                         credentials: 'include'
                     });
