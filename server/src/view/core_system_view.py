@@ -54,29 +54,9 @@ class Core_Service_View(Master_View):
             response = model.get_response_form_data(self._head_parser)
             return response
         
-        #@self.__app.get('/home/home_feed')
-        #def get_feed_data(request:Request, key:Optional[int] = None):
-            #request_manager = RequestManager()
-            #data_payload = HomeFeedRequest(request=key)
-            #request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
-            ##if not request_manager.jwt_payload.result:
-                ##raise request_manager.credentials_exception
-
-            #home_controller=Feed_Controller()
-            #model = home_controller.get_home_feed_data(database=self.__database,
-                                                        #request=request_manager,
-                                                        #feed_manager=self.__feed_manager)
-
-            #body_data = model.get_response_form_data(self._head_parser)
-            #response = request_manager.make_json_response(body_data=body_data)
-            #return response
-
-        
         # 홈 화면에 최애 정보
         @self.__app.get('/home/my_bias')
         def get_my_bias(request:Request):
-            print(request.cookies)
-            print(type(request.cookies))
             request_manager = RequestManager()
             data_payload = DummyRequest()
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
@@ -89,13 +69,29 @@ class Core_Service_View(Master_View):
                                                              request=request_manager)
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
-
             return response
         
         @self.__app.get('/home/home_feed')
-        def new_contentes():
-            data = ["1", "2", "3", "4"]
-            return data
+        def get_feed_data(request:Request, key:Optional[int] = -1):
+            request_manager = RequestManager()
+            data_payload = HomeFeedRequest(key=key)
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            #if not request_manager.jwt_payload.result:
+                #raise request_manager.credentials_exception
+
+            home_controller=Feed_Controller()
+            model = home_controller.get_home_feed_data(database=self.__database,
+                                                        request=request_manager,
+                                                        feed_manager=self.__feed_manager)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+        
+        #@self.__app.get('/home/home_feed')
+        #def new_contentes():
+            #data = ["1", "2", "3", "4"]
+            #return data
 
         # 회원의 bias의 리그를 받아내는 앤드 포인트 (post)
         @self.__app.post('/home/my_bias_league')
@@ -166,6 +162,85 @@ class Core_Service_View(Master_View):
                                                              #request=request)
             #response = model.get_response_form_data(self._head_parser)
             #return response
+
+    def feed_route(self):
+        # feed의 메타 정보 반환
+        @self.__app.get('/feed_explore/feed_meta_data')
+        def get_feed_data():
+            request_manager = RequestManager()
+            data_payload = GetFeedRequest(fclass=fclass, key=key)
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            #if not request_manager.jwt_payload.result:
+                #raise request_manager.credentials_exception
+
+            home_controller=Feed_Controller()
+            model = home_controller.get_specific_feed_data(database=self.__database,
+                                                        request=request_manager,
+                                                        feed_manager=self.__feed_manager)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
+        # feed 데이터 받아오기( 위성 탐색 페이지에서 특정 fclass를 대상으로)
+        @self.__app.get('/feed_explore/get_feed')
+        def get_feed_data(request:Request, fclass:Optional[str], key:Optional[int] = -1 ):
+            request_manager = RequestManager()
+            data_payload = GetFeedRequest(fclass=fclass, key=key)
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            #if not request_manager.jwt_payload.result:
+                #raise request_manager.credentials_exception
+
+            home_controller=Feed_Controller()
+            model = home_controller.get_specific_feed_data(database=self.__database,
+                                                        request=request_manager,
+                                                        feed_manager=self.__feed_manager)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
+        # feed 랑 상호작용 -> 버튼을 눌렀을 때 ( 홈 또는 위성 탐색 페이지에서 사용)
+        @self.__app.get('/feed_explore/interaction_feed')
+        def get_feed_data(request:Request, fid:Optional[str]):
+            request_manager = RequestManager()
+
+            # 여기서부터 작성할것
+            #data_payload = GetFeedRequest(fid=fid)
+            #request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            ##if not request_manager.jwt_payload.result:
+                ##raise request_manager.credentials_exception
+
+            #home_controller=Feed_Controller()
+            #model = home_controller.get_specific_feed_data(database=self.__database,
+                                                        #request=request_manager,
+                                                        #feed_manager=self.__feed_manager)
+
+            #body_data = model.get_response_form_data(self._head_parser)
+            #response = request_manager.make_json_response(body_data=body_data)
+            #return response
+
+        # feed 를 만들기
+        @self.__app.get('/feed_explore/make_feed')
+        def get_feed_data(request:Request, fid:Optional[str]):
+            request_manager = RequestManager()
+
+            # 여기서부터 작성할것
+            #data_payload = GetFeedRequest(fid=fid)
+            #request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            ##if not request_manager.jwt_payload.result:
+                ##raise request_manager.credentials_exception
+
+            #home_controller=Feed_Controller()
+            #model = home_controller.get_specific_feed_data(database=self.__database,
+                                                        #request=request_manager,
+                                                        #feed_manager=self.__feed_manager)
+
+            #body_data = model.get_response_form_data(self._head_parser)
+            #response = request_manager.make_json_response(body_data=body_data)
+            #return response
+
+
 
     def check_route(self):
         # 최애 인증 페이지
@@ -270,6 +345,11 @@ class SampleRequest(RequestHeader):
 
 class HomeFeedRequest(RequestHeader):
     def __init__(self, key) -> None:
+        self.key = key
+
+class GetFeedRequest(RequestHeader):
+    def __init__(self,fclass, key) -> None:
+        self.fclass = fclass
         self.key = key
 
 class LoginRequest(RequestHeader):

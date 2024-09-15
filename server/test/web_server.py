@@ -1,8 +1,23 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
 import uvicorn
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://127.0.0.1:6000",
+        "http://127.0.0.1:4000",
+        "http://localhost:6000",
+        "http://127.0.0.1:4001",
+        "http://127.0.0.1:3000",
+        "http://localhost:3000"],  # 원격 호스트의 웹소켓 연결을 허용할 도메인 설정
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 @app.get('/', response_class=HTMLResponse)
 def home():
@@ -30,6 +45,12 @@ def home():
             <button onclick="testTargetEndpoint()">Test /home/{target}</button>
         </div>
 
+        <div>
+            <label for="targetInput">Enter a target:</label>
+            <input type="text" id="targetInput" value="example">
+            <button onclick="testThirdEndpoint()">Test /home/{target}</button>
+        </div>
+
         <div id="response"></div>
 
         <script>
@@ -38,7 +59,6 @@ def home():
                 try {
                     const response = await fetch(`http://127.0.0.1:4000/user_home/try_login`, {
                         method: 'POST',
-                        mode: 'cors',
                         credentials: 'include', // 쉼표 추가
                         headers: {
                             'Content-Type': 'application/json' // 헤더 추가
@@ -71,7 +91,25 @@ def home():
             async function testTargetEndpoint() {
                 const target = document.getElementById('targetInput').value;
                 try {
-                    const response = await fetch(`http://127.0.0.1:4000/user_home/sample`, {
+                    const response = await fetch(`http://127.0.0.1:4000/home/my_bias`, {
+                        mode: 'cors',
+                        credentials: 'include'
+                    });
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok.');
+                    }
+                    const data = await response.json();
+                    document.getElementById('response').innerText = JSON.stringify(data, null, 2);
+                } catch (error) {
+                    console.error('Fetch error:', error);
+                    document.getElementById('response').innerText = 'Error occurred: ' + error.message;
+                }
+            }
+
+            async function testThirdEndpoint() {
+                const target = document.getElementById('targetInput').value;
+                try {
+                    const response = await fetch(`http://127.0.0.1:4000/home/home_feed?key=19`, {
                         mode: 'cors',
                         credentials: 'include'
                     });

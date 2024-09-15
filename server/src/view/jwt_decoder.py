@@ -8,14 +8,14 @@ import json
 
 class JWTManager:
     def __init__(self):
-        self.__secret_key = "your_secret_key"
-        self.__argorithms = ["HS256"]
+        self._secret_key = "your_secret_key"
+        self._argorithms = ["HS256"]
 
     # 이건 이제 안씀
     def decode(self, token):
         try:
             # 토큰 디코드
-            decoded_payload = jwt.decode(token, self.__secret_key, algorithms=self.__argorithms)
+            decoded_payload = jwt.decode(token, self._secret_key, algorithms=self._argorithms)
             payload = JWTPayload(result = True , email=decoded_payload['email'],
                                  exp=decoded_payload['exp'], refresh_exp=decoded_payload['refresh_exp'])
         except ExpiredSignatureError:
@@ -29,10 +29,10 @@ class JWTManager:
         new_token = ""
         try:
             # 토큰 디코드
-            decoded_payload = jwt.decode(token, self.__secret_key, algorithms=self.__argorithms)
+            decoded_payload = jwt.decode(token, self._secret_key, algorithms=self._argorithms)
             flag = True
         except ExpiredSignatureError:
-            decoded_payload = jwt.decode(token, self.__secret_key, algorithms=self.__argorithms,
+            decoded_payload = jwt.decode(token, self._secret_key, algorithms=self._argorithms,
                                             options={"verify_exp":False})
             current_time = datetime.now(timezone.utc).timestamp()
             if current_time < datetime.fromtimestamp(decoded_payload["refresh_exp"]).timestamp():
@@ -88,6 +88,7 @@ class JWTPayload:
 # Request를 분석하는 모듈
 class RequestManager(JWTManager):
     def __init__(self):
+        super().__init__()
         self.data_payload= None
         self.jwt_payload = JWTPayload()
         self.new_token = ""

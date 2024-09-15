@@ -109,13 +109,17 @@ class FeedManager:
         new_feed.category = []
         return new_feed
     
-    def get_feed_in_home(self, user:User, key:int):
+    def __make_target_feed(self, user:User, key:int):
         target_feed = []
         # 초기에는 -1로 올테니까 가장 최신으로
         if key == -1:
-            key = self._num_feed
+            key = self._num_feed - 1
         else:
             key = key
+
+        # 출력
+        for f in self._managed_feed_list:
+            f()
 
         target = -1
         # 지지자의 요청이라면 유사한 내용으로 알고리즘
@@ -126,8 +130,6 @@ class FeedManager:
                     target = i
                     break
 
-            tareget_feed = reversed(self._managed_feed_list[target:])
-
         # 일반 유저의 요청이라면 그냥 순서대로
         else:
             for i, single_feed in enumerate(reversed(self._managed_feed_list)):
@@ -135,17 +137,30 @@ class FeedManager:
                 if single_feed.key == key:
                     target = i
                     break
+                
+        self._managed_feed_list[target]()
 
-            target_feed = reversed(self._managed_feed_list[target:])
+        # 메모리상에 올라와있는 목록에서 보내야하는 타겟을 기준으로 아래를 모두 추출
+        if target != 0:
+            for data in self._managed_feed_list[:-target]:
+                data()
+                target_feed.append(data)
+        else:
+            for data in self._managed_feed_list:
+                data()
+                target_feed.append(data)
 
+        return target_feed
+
+    def __set_send_feed(self, target_feed):
         result_key = -1
         # 남은 데이터 길이 보고 3개 보낼지 그 이하로 보낼지 생각해야함
         if len(target_feed) > 2:
-            target_feed= target_feed[:3]
-            result_key = tareget_feed[2].key
+            target_feed= target_feed[-3:]
+            result_key = target_feed[2].key
         else:
             target_feed= target_feed[:len(target_feed)]
-            result_key = tareget_feed[len(target_feed)-1].key
+            result_key = target_feed[len(target_feed)-1].key
 
         target_fid = []
         for single_feed in target_feed:
@@ -154,27 +169,35 @@ class FeedManager:
         feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=target_fid)
 
         result = []
-        for data in feed_datas:
+        for data in reversed(feed_datas):
             feed = Feed()
             feed.make_with_dict(data)
             result.append(feed)
 
+        return result, result_key
+    
+    # 홈 화면에서 feed를 요청하는 상황
+    def get_feed_in_home(self, user:User, key:int):
+        target_feed = self.__make_target_feed(user=user, key=key)
+        result, result_key = self.__set_send_feed(target_feed=target_feed)
         result = self.make_get_data(user, result)
         return result, result_key
+    
+    def __set_target_feed_with_fclass(self, target_feed:list, fclass:str):
+        target = []
 
-    def get_feed_in_fclass(self, user, key:int):
-        for i, single_feed in enumerate(reversed(self._managed_feed_list)):
-            single_feed:ManagedFeed = single_feed
-            if single_feed.key == key:
-                target = i
-                break
+        for single_feed in target_feed:
+            if single_feed.fclass == fclass:
+                target.append(single_feed)
+        return target
 
-        result = reversed(self._managed_feed_list[target:])
-
-        if len(result) > 2:
-            result = result[:3]
-        else:
-            result = result[:len(result)]
+    # 위성 탐색에서 feed데이터를 요청하는 상황
+    def get_feed_in_fclass(self, user:User, key:int, fclass:str):
+        target_feed = self.__make_target_feed(user=user, key=key)
+        target_feed = self.__set_target_feed_with_fclass(target_feed=target_feed, fclass=fclass)
+        result, result_key = self.__set_send_feed(target_feed=target_feed)
+        result = self.make_get_data(user, result)
+        return result, result_key
 
     # get 요청에 대한 반환값 조사
     # 유저가 참여한 feed인지 확인할것
@@ -191,7 +214,6 @@ class FeedManager:
                 for uid in choice:
                     if uid == user.uid:
                         attend = i
-
             comment = self.__get_feed_comment(feed=feed)
 
             feed.attend = attend
@@ -200,14 +222,14 @@ class FeedManager:
         return result
     
     def __get_feed_comment(self, feed:Feed):
-        if len(feed.comment) != 0:
+        if len(feed.comment) == 0:
             comment = "아직 작성된 댓글이 없어요"
         else:
             comment = feed.comment[-1]
         return comment
 
 
-    # feed 와 상호작용
+    # feed 와 상호작용 -> 선택지를 선택하는 경우
     def get_feed_result(self, user:User, fid, action) -> Feed:
         fid_data = self._database.get_data_with_id(target="fid", id=fid)
         feed = Feed()
@@ -253,4 +275,6 @@ class ManagedFeed:
         self.fclass = fclass
         self.category  = []
 
+    def __call__(self):
+        print(f"key: {self.key} | fid: {self.fid} | fclass: {self.fclass} | category: {self.category}")
 
