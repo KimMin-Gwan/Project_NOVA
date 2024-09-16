@@ -309,50 +309,50 @@ class LeagueEditmodel(AdminModel):
         except Exception as e:
             raise CoreControllerLogicError("response making error | " + e)
 
-class ChatEditModel(AdminModel):
-    def __init__(self, database: Local_Database) -> None:
-        super().__init__(database)
-        self.__chat = Chatting()
+# class ChatEditModel(AdminModel):
+#     def __init__(self, database: Local_Database) -> None:
+#         super().__init__(database)
+#         self.__chat = Chatting()
 
-    def load_chat(self,request): #load
-        chat_data = self._database.get_data_with_id(target='cid', id=request.cid)
-        self.__chat.make_with_dict(chat_data)
-        #self._database.delete_data_With_id(target='cid', id=request.cid) #삭제 만든거 테스트용
-        return 
+#     def load_chat(self,request): #load
+#         chat_data = self._database.get_data_with_id(target='cid', id=request.cid)
+#         self.__chat.make_with_dict(chat_data)
+#         #self._database.delete_data_With_id(target='cid', id=request.cid) #삭제 만든거 테스트용
+#         return 
         
-    def set_chat_data(self,request):
-        if not request.cid : pass
-        else : self.__chat.cid = request.cid
-        if not request.uid : pass
-        else : self.__chat.uid = request.uid
-        if not request.content : pass
-        else : self.__chat.content = request.content
-        if not request.date : pass
-        else : self.__chat.date = request.date
+#     def set_chat_data(self,request):
+#         if not request.cid : pass
+#         else : self.__chat.cid = request.cid
+#         if not request.uid : pass
+#         else : self.__chat.uid = request.uid
+#         if not request.content : pass
+#         else : self.__chat.content = request.content
+#         if not request.date : pass
+#         else : self.__chat.date = request.date
 
-    def add_chat(self): #add
-        self.__chat.cid = str(self._database.get_num_list_with_id(target_id='cid')+1)
-        self._database.add_new_data(target_id='cid',new_data=self.__chat.get_dict_form_data())
-        return
+#     def add_chat(self): #add
+#         self.__chat.cid = str(self._database.get_num_list_with_id(target_id='cid')+1)
+#         self._database.add_new_data(target_id='cid',new_data=self.__chat.get_dict_form_data())
+#         return
 
-    def modify_chat(self):
-        self._database.modify_data_with_id(target_id='cid',target_data=self.__chat.get_dict_form_data())
-        return
+#     def modify_chat(self):
+#         self._database.modify_data_with_id(target_id='cid',target_data=self.__chat.get_dict_form_data())
+#         return
     
-    def delete_chat(self,request):
-        self._database.delete_data_With_id(target='cid',id=request.cid)
+#     def delete_chat(self,request):
+#         self._database.delete_data_With_id(target='cid',id=request.cid)
     
-    def get_response_form_data(self, head_parser):
-        try:
-            body = {
-                'response' : self.__chat.get_dict_form_data()
-            }
+#     def get_response_form_data(self, head_parser):
+#         try:
+#             body = {
+#                 'response' : self.__chat.get_dict_form_data()
+#             }
 
-            response = self._get_response_data(head_parser=head_parser, body=body)
-            return response
+#             response = self._get_response_data(head_parser=head_parser, body=body)
+#             return response
 
-        except Exception as e:
-            raise CoreControllerLogicError("response making error | " + e)
+#         except Exception as e:
+#             raise CoreControllerLogicError("response making error | " + e)
 
 class BiasEditModel(AdminModel):
     def __init__(self, database: Local_Database) -> None:
