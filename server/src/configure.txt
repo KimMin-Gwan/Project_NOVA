@@ -1,3 +1,8 @@
 HOST = 127.0.0.1
 PORT = 6000
-VERSION = 0.0.1
+VERSION = 0.9.0
+num_fclass = 4
+fclass1 = [card, 추억, 덕질의기억]
+fclass2 = [multiple, 넷 중 하나, 사지선다]
+fclass3 = [balance, 둘 중 하나, 이지선다]
+fclass4 = [station, 정거장, 외부 링크 공유]
