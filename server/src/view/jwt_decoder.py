@@ -124,8 +124,8 @@ class RequestManager(JWTManager):
                 key="nova_token", 
                 value=self.new_token, 
                 max_age=7*60*60*24,
-                samesite="Lax",  # Changed to 'Lax' for local testing
-                secure=False,  # Local testing; set to True in production
+                samesite="None",  # Changed to 'Lax' for local testing
+                secure=True,  # Local testing; set to True in production
                 httponly=True
             )
 
