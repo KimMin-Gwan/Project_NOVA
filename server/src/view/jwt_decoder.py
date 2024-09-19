@@ -74,7 +74,7 @@ class JWTManager:
             "refresh_exp": (datetime.now(timezone.utc) + timedelta(days=7)).timestamp()  # refresh 토큰 만료 시간 (예: 7일)
         }
 
-        token = jwt.encode(payload, self.__secret_key, algorithm="HS256", headers=headers)
+        token = jwt.encode(payload, self._secret_key, algorithm="HS256", headers=headers)
         return token
 
     
