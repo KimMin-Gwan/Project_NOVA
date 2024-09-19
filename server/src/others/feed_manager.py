@@ -6,6 +6,7 @@ import random
 
 # 피드를 관리하는 장본인
 
+
 class FeedManager:
     def __init__(self, database) -> None:
         self._database = database
@@ -118,8 +119,8 @@ class FeedManager:
             key = key
 
         # 출력
-        for f in self._managed_feed_list:
-            f()
+        #for f in self._managed_feed_list:
+            #f()
 
         target = -1
         # 지지자의 요청이라면 유사한 내용으로 알고리즘
@@ -138,16 +139,16 @@ class FeedManager:
                     target = i
                     break
                 
-        self._managed_feed_list[target]()
+        #self._managed_feed_list[target]() 출력
 
         # 메모리상에 올라와있는 목록에서 보내야하는 타겟을 기준으로 아래를 모두 추출
         if target != 0:
             for data in self._managed_feed_list[:-target]:
-                data()
+                #data()
                 target_feed.append(data)
         else:
             for data in self._managed_feed_list:
-                data()
+                #data()
                 target_feed.append(data)
 
         return target_feed
@@ -157,7 +158,7 @@ class FeedManager:
         # 남은 데이터 길이 보고 3개 보낼지 그 이하로 보낼지 생각해야함
         if len(target_feed) > 2:
             target_feed= target_feed[-3:]
-            result_key = target_feed[2].key
+            result_key = target_feed[0].key
         else:
             target_feed= target_feed[:len(target_feed)]
             result_key = target_feed[len(target_feed)-1].key
@@ -165,7 +166,6 @@ class FeedManager:
         target_fid = []
         for single_feed in target_feed:
             target_fid.append(single_feed.fid)
-
         feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=target_fid)
 
         result = []
@@ -174,6 +174,7 @@ class FeedManager:
             feed.make_with_dict(data)
             result.append(feed)
 
+        result_key = result_key - 1
         return result, result_key
     
     # 홈 화면에서 feed를 요청하는 상황
@@ -266,6 +267,28 @@ class FeedClassAnalist:
     def __init__(self):
         pass
 
+class FeedClassManagement:
+    def __init__(self):
+        self.feedClass
+
+        self._name_data = {
+            "multiple" : "넷 중 하나",
+            "station" : "정거장",
+            "balance" : "둘 중 하나",
+            "card" : "자랑"
+        }
+        
+        self._
+
+
+    def __get_class_name(self, fclass):
+        return self._name_data[fclass]
+    
+
+class FeedClass:
+    def __init__(self, fname, specific, ):
+        self.name = fname
+        self.specific = specific
 
 
 class ManagedFeed:
