@@ -26,6 +26,7 @@ class Core_Service_View(Master_View):
         self.home_route(endpoint)
         self.check_route()
         self.web_chatting_route(endpoint)
+        self.feed_route()
 
     def home_route(self, endpoint:str):
         @self.__app.get(endpoint+'/home')
@@ -166,26 +167,27 @@ class Core_Service_View(Master_View):
     def feed_route(self):
         # feed의 메타 정보 반환
         @self.__app.get('/feed_explore/feed_meta_data')
-        def get_feed_data():
-            request_manager = RequestManager()
-            data_payload = GetFeedRequest(fclass=fclass, key=key)
-            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+        def get_feed_meta_data():
+            #request_manager = RequestManager()
+            #data_payload = DummyRequest()
+            #request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
                 #raise request_manager.credentials_exception
 
             home_controller=Feed_Controller()
-            model = home_controller.get_specific_feed_data(database=self.__database,
-                                                        request=request_manager,
+            model = home_controller.get_feed_meta_data(database=self.__database,
                                                         feed_manager=self.__feed_manager)
 
-            body_data = model.get_response_form_data(self._head_parser)
-            response = request_manager.make_json_response(body_data=body_data)
+            response = model.get_response_form_data(self._head_parser)
+            #response = request_manager.make_json_response(body_data=body_data)
             return response
 
         # feed 데이터 받아오기( 위성 탐색 페이지에서 특정 fclass를 대상으로)
         @self.__app.get('/feed_explore/get_feed')
-        def get_feed_data(request:Request, fclass:Optional[str], key:Optional[int] = -1 ):
+        def get_feed_data(request:Request, fclass:Optional[str] = "", key:Optional[int] = -1 ):
             request_manager = RequestManager()
+            if fclass == "":
+                raise request_manager.get_bad_request_exception()
             data_payload = GetFeedRequest(fclass=fclass, key=key)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
@@ -202,7 +204,7 @@ class Core_Service_View(Master_View):
 
         # feed 랑 상호작용 -> 버튼을 눌렀을 때 ( 홈 또는 위성 탐색 페이지에서 사용)
         @self.__app.get('/feed_explore/interaction_feed')
-        def get_feed_data(request:Request, fid:Optional[str]):
+        def try_interaction_feed(request:Request, fid:Optional[str]):
             request_manager = RequestManager()
 
             # 여기서부터 작성할것

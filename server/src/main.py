@@ -6,6 +6,7 @@ from others import ConnectionManager, LeagueManager,FeedManager
 
 class Master(Configure_File_Reader):
     def __init__(self):
+        super().__init__()
         self._extract_host_port()
         print('INFO<-[      Application startup.')
         print(f'INFO<-[      Application | Welcome to NOVA Server')
@@ -16,7 +17,7 @@ class Master(Configure_File_Reader):
         connection_manager = ConnectionManager() # 웹소켓 매니저 실행
         league_manager = LeagueManager(connection_manager=connection_manager)
         league_manager.init_league_manager(database=database) # 리그 매니저 초기화
-        feed_manager= FeedManager(database=database)
+        feed_manager= FeedManager(database=database, fclasses=self._fclasses)
         feed_manager.init_feed_data()
 
         cheese_server = NOVA_Server(

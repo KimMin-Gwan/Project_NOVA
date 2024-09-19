@@ -8,7 +8,8 @@ import random
 
 
 class FeedManager:
-    def __init__(self, database) -> None:
+    def __init__(self, database, fclasses) -> None:
+        self._feedClassManagement = FeedClassManagement(fclasses=fclasses)
         self._database = database
         self._num_feed = 0
         self._managed_feed_list = []
@@ -45,14 +46,9 @@ class FeedManager:
     def __set_datetime(self):
         return datetime.now().strftime("%Y/%m/%d-%H:%M:%S")
     
+    
     def __get_class_name(self, fclass):
-        name_data = {
-            "multiple" : "넷 중 하나",
-            "station" : "정거장",
-            "balance" : "둘 중 하나",
-            "card" : "자랑"
-        }
-        return name_data[fclass]
+        return self._feedClassManagement.__get_class_name(fclass=fclass)
 
     # 새로운 fid 만들기
     def __make_new_fid(self):
@@ -77,6 +73,8 @@ class FeedManager:
 
         return random_string
 
+    def get_feed_meta_data(self):
+        return self._feedClassManagement.get_fclass_meta_data()
 
     # 새로운 피드 만들기
     def make_new_feed(self, user:User, fclass, choice, title, body):
@@ -267,27 +265,33 @@ class FeedClassAnalist:
     def __init__(self):
         pass
 
+# 이건 피드 메타 정보를 가지고 있는 친구
+# configure.txt 에서 설정 가능함
 class FeedClassManagement:
-    def __init__(self):
-        self.feedClass
+    def __init__(self, fclasses):
+        self._fclasses = self.__set_fclasses(fclasses=fclasses)
 
-        self._name_data = {
-            "multiple" : "넷 중 하나",
-            "station" : "정거장",
-            "balance" : "둘 중 하나",
-            "card" : "자랑"
-        }
-        
-        self._
-
+    # 초기 class들 세팅
+    def __set_fclasses(self, fclasses):
+        result = []
+        for fclass_data in fclasses:
+            fclass = FeedClass(fclass_data[0], fclass_data[1], fclass_data[2])
+            result.append(fclass)
+        return result
 
     def __get_class_name(self, fclass):
-        return self._name_data[fclass]
-    
+        for instance in self._fclasses:
+            if instance.fclass == fclass:
+                return instance.fname
+            
+    def get_fclass_meta_data(self):
+        return self._fclasses
+
 
 class FeedClass:
-    def __init__(self, fname, specific, ):
-        self.name = fname
+    def __init__(self, fclass, fname, specific):
+        self.fclass = fclass
+        self.fname = fname
         self.specific = specific
 
 

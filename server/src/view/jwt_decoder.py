@@ -97,6 +97,14 @@ class RequestManager(JWTManager):
             detail="Could not Validate credentials",
             headers={"WWW-Authenticate" : "Bearer"}
         )
+        self.bad_request_exception= HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Could not Find Page",
+            headers={"WWW-Authenticate" : "Bearer"}
+        )
+
+    def get_bad_request_exception(self):
+        return self.bad_request_exception
 
     def try_view_management(self, data_payload = None, cookies = None) -> Response:
         self.data_payload= data_payload

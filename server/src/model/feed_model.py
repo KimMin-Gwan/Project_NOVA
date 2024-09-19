@@ -1,6 +1,6 @@
 from model.base_model import BaseModel
 from model import Local_Database
-from others.data_domain import Bias, League
+#from others.data_domain import Bias, League
 from others import CoreControllerLogicError,FeedManager 
 
 class FeedModel(BaseModel):
@@ -32,3 +32,36 @@ class FeedModel(BaseModel):
         except Exception as e:
             raise CoreControllerLogicError("response making error | " + e)
 
+
+# feed 의 메타 정보를 보내주는 모델
+class FeedMetaModel(BaseModel):
+    def __init__(self, database:Local_Database) -> None:
+        super().__init__(database)
+        self._feed_meta_data = []
+
+    def set_feed_meta_data(self, feed_manager:FeedManager):
+        self._feeds = feed_manager.get_feed_meta_data()
+        return
+    
+    def __make_send_data(self):
+        result = []
+        for fclass in self._feeds:
+            single_data = {
+                "fname" : fclass.fname,
+                "fclass" : fclass.fclass,
+                "specific" : fclass.specific
+            }
+            result.append(single_data)
+        return result
+
+    def get_response_form_data(self, head_parser):
+        try:
+            body = {
+                'feed_meta_data' : self.__make_send_data(),
+            }
+
+            response = self._get_response_data(head_parser=head_parser, body=body)
+            return response
+
+        except Exception as e:
+            raise CoreControllerLogicError("response making error | " + e)

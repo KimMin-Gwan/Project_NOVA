@@ -1,4 +1,4 @@
-from model import FeedModel, Local_Database
+from model import FeedModel, Local_Database, FeedMetaModel
 from fastapi import HTTPException, status
 from others import CustomError, FeedManager
 
@@ -22,6 +22,23 @@ class Feed_Controller:
         finally:
             return model
             
+    def get_feed_meta_data(self, database:Local_Database,
+                                feed_manager:FeedManager) -> FeedMetaModel:
+        model = FeedMetaModel(database=database)
+        try:
+            model.set_feed_meta_data(feed_manager=feed_manager)
+
+        except CustomError as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
+
+        except Exception as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
+
+        finally:
+            return model
+
     def get_specific_feed_data(self, database:Local_Database,
                                request, feed_manager:FeedManager):
         model = FeedModel(database=database)
