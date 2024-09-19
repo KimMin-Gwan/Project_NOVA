@@ -30,31 +30,26 @@ function MyBias({ url, token,showBox,blackBox }) {
 
     let my_bias_url = 'https://kr.object.ncloudstorage.com/nova-images/';
 
-    // useEffect(() => {
-    //     if (!token) {
-    //         console.log('로그인 안됨')
-    //     }
-    //     else {
-    //         fetch(url + 'my_bias',
-    //             {
-    //                 credentials: 'include'
-    //             })
-    //         .then(response => response.json())
-    //         .then(data => {
-    //             solo_bias_copy = data.body.solo_bias;
-    //             group_bias_copy = data.body.group_bias;
+    useEffect(() => {
+            fetch(url + 'my_bias',
+                {
+                    credentials: 'include'
+                })
+            .then(response => response.json())
+            .then(data => {
+                solo_bias_copy = data.body.solo_bias;
+                group_bias_copy = data.body.group_bias;
 
-    //             setSoloBias(solo_bias_copy);
-    //             setGroupBias(group_bias_copy);
-    //             console.log('솔로 그룹 바이어스 부분');
-    //         })
-    //     }
-    // }, [token])
+                setSoloBias(solo_bias_copy);
+                setGroupBias(group_bias_copy);
+                console.log('솔로 그룹 바이어스 부분');
+            })
+    }, [])
 
     return (
         <>
-            <MySoloBias solo_bias={solo_bias} bias_url={my_bias_url} token={token} showBox={showBox} blackBox={blackBox}></MySoloBias>
-            <MyGroupBias group_bias={group_bias} bias_url={my_bias_url} token={token} showBox={showBox} blackBox={blackBox}></MyGroupBias>
+            <MySoloBias solo_bias={solo_bias} bias_url={my_bias_url} showBox={showBox} blackBox={blackBox}></MySoloBias>
+            <MyGroupBias group_bias={group_bias} bias_url={my_bias_url} showBox={showBox} blackBox={blackBox}></MyGroupBias>
         </>
     )
 }

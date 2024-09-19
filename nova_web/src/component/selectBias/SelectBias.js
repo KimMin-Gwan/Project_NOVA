@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 function SelectBias({selectWindow, setSelectWindow}) {
 
     let navigate = useNavigate();
-    let url = 'http://nova-platform.kr/home/';
+    let url = 'https://nova-platform.kr/home/';
     // let url = 'http://127.0.0.1:5000/home/';
 
     let header = {

@@ -6,23 +6,40 @@ export default function InfFeed() {
 
     const target = useRef(null);
     const observerRef = useRef(null);
-    let [isLoading, setIsLoading] = useState(false);
+    let [isLoading, setIsLoading] = useState(true);
 
-    let [testData, setTestData] = useState([]);
+    let [feedData, setFeedData] = useState([]);
     // 'http://127.0.0.1:4000/new_contents'
     // 'http://nova-platform.kr/home/home_feed'
+
     function fetchData() {
-        setIsLoading(true);
-        fetch('http://127.0.0.1:4000/home/home_feed', {
+        // setIsLoading(true);
+        fetch('https://nova-platform.kr/home/home_feed', {
             credentials: 'include',
         })
             .then(response => response.json())
             .then(data => {
-                console.log(data);
-                setTestData(prevData => [...prevData, ...data]);
+                setFeedData(data.body.feed);
+                console.log(data.body.feed);
+                console.log("1111", feedData);
+                setIsLoading(false);
             })
-            .finally(() => setIsLoading(false));
+        // .finally(() => setIsLoading(false));
     };
+
+    // const fetchData = async () => {
+    //     try {
+    //         const response = await fetch('https://nova-platform.kr/home/home_feed', {
+    //             credentials: 'include',
+    //         });
+    //         const data = await response.json();
+    //         setFeedData(data.body.feed);
+    //         console.log(feedData);
+    //     }
+    //     catch (error) {
+    //         console.error('Error fetching data: ', error);
+    //     }
+    // };
 
     useEffect(() => {
         observerRef.current = new IntersectionObserver((entries) => {
@@ -31,6 +48,7 @@ export default function InfFeed() {
                 if (isLoading) return;
 
                 fetchData();
+                console.log('3333', feedData)
             });
         });
 
@@ -47,19 +65,28 @@ export default function InfFeed() {
 
     useEffect(() => {
         return (
-            setTestData([])
+            setFeedData([])
         )
     }, []);
 
+    if (isLoading) {
+        return <p>데이터 </p>;
+    }
+
+    console.log("2222", feedData);
     return (
         <div className={style['scroll-area']}>
-            {
-                testData.map((a, i) => {
+
+            <Feed className='' feed={feedData} ></Feed>
+            {/* {
+                feedData.map((a, i) => {
+                    console.log(a);
+                    console.log('class', a.fclass);
                     return (
-                        <Feed key={i} type={a} className=''></Feed>
+                        <Feed key={a.fid} className='' feed={a.fclass} ></Feed>
                     )
                 })
-            }
+            } */}
             {isLoading && <p>Loading...</p>}
             <div ref={target} style={{ height: "10px", backgroundColor: 'blue' }}></div>
 

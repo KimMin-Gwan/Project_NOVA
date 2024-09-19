@@ -33,7 +33,7 @@ const NOVALogin = () => {
 
     // "http://127.0.0.1:4000/user_home/try_login"
     // "http://nova-platform.kr/user_home/sample"
-    fetch("http://127.0.0.1:4000/user_home/try_login",
+    fetch("https://nova-platform.kr/user_home/try_login",
       {
         method: 'POST',
         headers: {
@@ -50,7 +50,7 @@ const NOVALogin = () => {
           // 로그인 성공 시 JWT 토큰 저장 (예: 로컬 스토리지)
           // localStorage.setItem("jwtToken", result.token);
           navigate('/')
-        } 
+        }
       })
 
 

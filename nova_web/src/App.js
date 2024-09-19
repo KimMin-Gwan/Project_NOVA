@@ -36,7 +36,7 @@ function App() {
 
   // "http://127.0.0.1:6000/home/is_valid?token={token}"
 
-  let url = 'http://nova-platform.kr/home/';
+  let url = 'https://nova-platform.kr/home/';
   // let url = 'http://127.0.0.1:5000/home/';
   let type = ['solo', 'group'];
 

@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import SelectBias from '../selectBias/SelectBias';
 
-function MyGroupBias({ group_bias, bias_url, token }) {
+function MyGroupBias({ group_bias, bias_url }) {
 
     let navigate = useNavigate();
     let [selectWindow, setSelectWindow] = useState(false);
@@ -25,18 +25,18 @@ function MyGroupBias({ group_bias, bias_url, token }) {
     let send_data = {
         "header": header,
         "body": {
-            'token': token,
+            // 'token': token,
             'type': 'group'
         }
     }
 
-    let url = 'http://nova-platform.kr/';
+    let url = 'https://nova-platform.kr/';
     let [bias_data, setBiasData] = useState();
 
     return (
         <div className='left-box'>
-            {
-                (token === '' || !token) && (
+            {/* {
+                 (
                     <>
                         <img src={empty}></img>
                         <div className='box'>
@@ -49,7 +49,7 @@ function MyGroupBias({ group_bias, bias_url, token }) {
                         </div>
                     </>
                 )
-            }
+            } */}
             {group_bias.bid === '' && (
                 <>
                     <img src={empty} alt='' onClick={() => {
@@ -93,7 +93,7 @@ function MyGroupBias({ group_bias, bias_url, token }) {
                             });
                         navigate(`/bias_certify`, {
                             state: {
-                                token: token, bias: bias_data.bias, result: bias_data.result, point: bias_data.point,
+                                bias: bias_data.bias, result: bias_data.result, point: bias_data.point,
                                 specialTime: bias_data.special_time
                             }
                         })

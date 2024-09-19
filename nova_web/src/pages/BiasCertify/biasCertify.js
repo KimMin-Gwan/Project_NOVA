@@ -13,7 +13,7 @@ function BiasCertify() {
     let location = useLocation();
     let { token, bias, result, point, specialTime } = location.state || {};
 
-    let url = 'http://nova-platform.kr/nova_check/server_info/';
+    let url = 'https://nova-platform.kr/nova_check/server_info/';
 
     let header = {
         "request-type": "default",

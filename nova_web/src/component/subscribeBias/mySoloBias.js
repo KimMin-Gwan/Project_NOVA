@@ -7,7 +7,7 @@ import { useState } from 'react';
 import SelectBias from '../selectBias/SelectBias';
 
 
-function MySoloBias({ solo_bias, bias_url, token, showBox, blackBox }) {
+function MySoloBias({ solo_bias, bias_url, showBox, blackBox }) {
 
     let [selectWindow, setSelectWindow] = useState(false);
     let navigate = useNavigate();
@@ -27,12 +27,12 @@ function MySoloBias({ solo_bias, bias_url, token, showBox, blackBox }) {
     let send_data = {
         "header": header,
         "body": {
-            'token': token,
+            // 'token': token,
             'type': 'solo'
         }
     }
 
-    let url = 'http://nova-platform.kr/';
+    let url = 'https://nova-platform.kr/';
     let [bias_data, setBiasData] = useState();
     // useEffect(() => {
     //     fetch(url + `nova_check/server_info/check_page`, {
@@ -53,8 +53,8 @@ function MySoloBias({ solo_bias, bias_url, token, showBox, blackBox }) {
 
     return (
         <div className='left-box'>
-            {
-                (token === '' || !token) && (
+            {/* {
+                 (
                     <>
                         <img src={empty} alt=''></img>
                         <div className='box'>
@@ -67,7 +67,7 @@ function MySoloBias({ solo_bias, bias_url, token, showBox, blackBox }) {
                         </div>
                     </>
                 )
-            }
+            } */}
             {solo_bias.bid === '' && (
                 <>
                     <img src={empty} alt='' onClick={() => {
@@ -112,7 +112,7 @@ function MySoloBias({ solo_bias, bias_url, token, showBox, blackBox }) {
                             });
                         navigate(`/bias_certify`, {
                             state: {
-                                token: token, bias: bias_data.bias, result: bias_data.result, point: bias_data.point,
+                                bias: bias_data.bias, result: bias_data.result, point: bias_data.point,
                                 specialTime: bias_data.special_time
                             }
                         })
