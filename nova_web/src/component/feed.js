@@ -5,119 +5,102 @@ import planet3 from './../img/planet3.png';
 import planet4 from './../img/planet4.png';
 // import { useRef, useState } from 'react';
 
-export default function Feed({ className, feedData }) {
+export default function Feed({ className, feed }) {
 
-    console.log('no data', feedData);
     return (
         <>
-            {/* <div>${feedData}</div> */}
-            {/* {
-                feedData.map((a, i) => {
-                    console.log(feedData);
-                    if (a.fclass === 'station') {
-                        return (
-                            <div className={`${style.feed} ${className}`}>
-                                <InfoArea img={planet1} name={'정거장 행성'}></InfoArea>
-                                <Text name={'정거장 행성'}></Text>
-                                <div className={style['link_box']}>
-                                    <h1>외부 사이트 링크</h1>
-                                    <h5>큐떱 짧툰 8화</h5>
-                                </div>
+            {
+                //클릭시 링크 이동 수정 필요
+                feed.fclass === 'station' &&
+                (
+                    <div className={`${style.feed} ${className}`}>
+                        <InfoArea img={planet1} name={`${feed.class_name} 행성`} supporter={feed.nickname}></InfoArea>
+                        <Text name={`${feed.class_name} 행성`} title={feed.title}></Text>
+                        <div onClick={
+                            window.open('http://naver.com', '_blank', "noopener, noreferrer")
+                        } className={style['link_box']}>
+                            <h1>{feed.choice[0]}</h1>
+                            <h5>{feed.choice[1]}</h5>
+                        </div>
+                    </div>
+                )
+            }
+            {
+                feed.fclass === 'card' && (
+                    <div className={style.feed}>
+                        <InfoArea img={planet2} name={`${feed.class_name} 행성`} supporter={feed.nickname}></InfoArea>
+                        <Text title={feed.title} data={feed.body}></Text>
+                    </div>
+                )
+            }
+            {
+                feed.fclass === 'balance' && (
+                    <div className={style.feed}>
+                        <InfoArea img={planet3} name={`${feed.class_name} 행성`} supporter={feed.nickname}></InfoArea>
+                        <Text title={feed.title}></Text>
+                        <div className={style['button_container']}>
+                            <button className={style['select_button']}>갑니다</button>
+                            <button className={style['select_button']}>패스</button>
+                        </div>
+                    </div>
+                )
+            }
+            {
+                feed.fclass === 'multiple' && (
+                    <div className={style.feed}>
+                        <InfoArea img={planet4} name={`${feed.class_name} 행성`} supporter={feed.nickname}></InfoArea>
+                        <Text name={'퀴즈 행성'} title={feed.title}></Text>
+                        <ol className={style['quiz_box']}>
+                            {
+                                feed.choice.map((choice, i) => {
+                                    if (feed.attend === 0) {
+                                        return (
+                                            <li key={i}>{i + 1}. {choice}
+                                                <span>{feed.result[i]}</span>
+                                            </li>
+                                        )
+                                    } else {
+                                        <li key={i}>{i + 1}. {choice}</li>
+                                    }
+                                })
+                            }
+                        </ol>
+                    </div>
+                )
+            }
+            {
+                feed.fclass === 'i' && (
+                    <div className={style.feed}>
+                        <div className={style['info_area']}>
+                            <div className={style['planet_name']}>
+                                <img src={planet1}></img>
+                                <p>정거장 행성</p>
                             </div>
-                        )
-                    }
-                    else{
-                        return (
-                            <div>11</div>
-                        )
-                    }
-                })
-            } */}
+                            <p className={style['sup_people']}>익명지지자</p>
+                        </div>
+                        {/* <Text></Text> */}
+                    </div>
+                )
+            }
+            {
+                feed.fclass === 'ad' && (
+                    <div className={style.feed}>
+                        <div className={style['info_area']}>
+                            <div className={style['planet_name']}>
+                                <img src={planet1}></img>
+                                <p>정거장 행성</p>
+                            </div>
+                            <p className={style['sup_people']}>익명지지자</p>
+                        </div>
+                        {/* <Text></Text> */}
+                    </div>
+                )
+            }
         </>
-
-
-
-
-
-        //     feedData === 'station' &&
-        // (
-        // <div className={`${style.feed} ${className}`}>
-        //     <InfoArea img={planet1} name={'정거장 행성'}></InfoArea>
-        //     <Text name={'정거장 행성'}></Text>
-        //     <div className={style['link_box']}>
-        //         <h1>외부 사이트 링크</h1>
-        //         <h5>큐떱 짧툰 8화</h5>
-        //     </div>
-        // </div>
-        // )
-        // }
-        // {
-        //     feedData === 'card' && (
-        //         <div className={style.feed}>
-        //             <InfoArea img={planet2} name={'자랑 행성'}></InfoArea>
-        //             <Text></Text>
-        //         </div>
-        //     )
-        // }
-        // {
-        //     feedData === 'balance' && (
-        //         <div className={style.feed}>
-        //             <InfoArea img={planet3} name={'이지선다 행성'}></InfoArea>
-        //             <Text></Text>
-        //             <div className={style['button_container']}>
-        //                 <button className={style['select_button']}>갑니다</button>
-        //                 <button className={style['select_button']}>패스</button>
-        //             </div>
-        //         </div>
-        //     )
-        // }
-        // {
-        //     feedData === 'multiple' && (
-        //         <div className={style.feed}>
-        //             <InfoArea img={planet4} name={'퀴즈 행성'}></InfoArea>
-        //             <Text name={'퀴즈 행성'}></Text>
-        //             <ol className={style['quiz_box']}>
-        //                 <li>1. 드라마</li>
-        //                 <li>2. Super Nova</li>
-        //                 <li>3. 만찬가</li>
-        //                 <li>4. 여섯번째 여름</li>
-        //             </ol>
-        //         </div>
-        //     )
-        // }
-        // {
-        //     feedData === 'i' && (
-        //         <div className={style.feed}>
-        //             <div className={style['info_area']}>
-        //                 <div className={style['planet_name']}>
-        //                     <img src={planet1}></img>
-        //                     <p>정거장 행성</p>
-        //                 </div>
-        //                 <p className={style['sup_people']}>익명지지자</p>
-        //             </div>
-        //             {/* <Text></Text> */}
-        //         </div>
-        //     )
-        // }
-        // {
-        //     feedData === 'ad' && (
-        //         <div className={style.feed}>
-        //             <div className={style['info_area']}>
-        //                 <div className={style['planet_name']}>
-        //                     <img src={planet1}></img>
-        //                     <p>정거장 행성</p>
-        //                 </div>
-        //                 <p className={style['sup_people']}>익명지지자</p>
-        //             </div>
-        //             {/* <Text></Text> */}
-        //         </div>
-        //     )
-        // }
-
     )
 }
 
-function InfoArea({ img, name }) {
+function InfoArea({ img, name, supporter }) {
 
     return (
         <div className={style['info_area']}>
@@ -125,18 +108,18 @@ function InfoArea({ img, name }) {
                 <img src={img}></img>
                 <p>{name}</p>
             </div>
-            <p className={style['sup_people']}>익명지지자</p>
+            <p className={style['sup_people']}>{supporter}</p>
         </div>
     )
 }
 
-function Text({ name }) {
+function Text({ name, title, data }) {
 
     return (
         <div style={{ marginLeft: '20px' }}>
-            <h1 className={style.title}>글 제목</h1>
+            <h1 className={style.title}>{title}</h1>
             {
-                !name && <p>글 내용</p>
+                !name && <p>{data}</p>
             }
 
         </div>

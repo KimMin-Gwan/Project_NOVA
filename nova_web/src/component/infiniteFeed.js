@@ -20,8 +20,6 @@ export default function InfFeed() {
             .then(response => response.json())
             .then(data => {
                 setFeedData(data.body.feed);
-                console.log(data.body.feed);
-                console.log("1111", feedData);
                 setIsLoading(false);
             })
         // .finally(() => setIsLoading(false));
@@ -48,7 +46,6 @@ export default function InfFeed() {
                 if (isLoading) return;
 
                 fetchData();
-                console.log('3333', feedData)
             });
         });
 
@@ -64,6 +61,7 @@ export default function InfFeed() {
     }, [isLoading]);
 
     useEffect(() => {
+        fetchData();
         return (
             setFeedData([])
         )
@@ -73,20 +71,17 @@ export default function InfFeed() {
         return <p>데이터 </p>;
     }
 
-    console.log("2222", feedData);
     return (
         <div className={style['scroll-area']}>
-
-            <Feed className='' feed={feedData} ></Feed>
-            {/* {
+            {
                 feedData.map((a, i) => {
-                    console.log(a);
-                    console.log('class', a.fclass);
+                    // console.log(a);
+                    // console.log('class', a.fclass);
                     return (
-                        <Feed key={a.fid} className='' feed={a.fclass} ></Feed>
+                        <Feed key={a.fid} className='' feed={a} ></Feed>
                     )
                 })
-            } */}
+            }
             {isLoading && <p>Loading...</p>}
             <div ref={target} style={{ height: "10px", backgroundColor: 'blue' }}></div>
 

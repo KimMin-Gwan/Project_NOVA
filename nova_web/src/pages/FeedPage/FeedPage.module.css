@@ -146,6 +146,8 @@
 }
 
 .quiz_box li {
+    display: flex;
+    justify-content: space-between;
     padding: 12px 20px;
     background-color: #122436;
     border: 1px #888888 solid;
@@ -160,6 +162,8 @@
     border-bottom-left-radius: 15px;
     border-bottom-right-radius: 15px;
 }
+
+
 
 /* 피드 넘어가도록 하는 부분 */
 
