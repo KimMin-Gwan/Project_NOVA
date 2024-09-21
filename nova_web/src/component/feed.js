@@ -14,39 +14,69 @@ export default function Feed({ className, feed }) {
                 feed.fclass === 'station' &&
                 (
                     <div className={`${style.feed} ${className}`}>
-                        <InfoArea img={planet1} name={`${feed.class_name} 행성`} supporter={feed.nickname}></InfoArea>
+                        <InfoArea color={'#78D2C8'} name={`${feed.class_name} 행성`} supporter={feed.nickname}></InfoArea>
                         <Text name={`${feed.class_name} 행성`} title={feed.title}></Text>
                         <div className={style['link_box']}>
                             <h1>{feed.choice[0]}</h1>
                             <h5>{feed.choice[1]}</h5>
                         </div>
+                        
+                        <div style={{ width: '100%', height: '20px' }}></div>
+                        <div className={style.line}>
+                            <div className={style['comment_function']}>
+                                <div>댓글 더보기</div>
+                                <div>신고</div>
+                            </div>
+                            <div>1.6k</div>
+                        </div>
+                        <Comments></Comments>
                     </div>
                 )
             }
             {
                 feed.fclass === 'card' && (
                     <div className={style.feed}>
-                        <InfoArea img={planet2} name={`${feed.class_name} 행성`} supporter={feed.nickname}></InfoArea>
+                        <InfoArea color={'#7960EC'} name={`${feed.class_name} 행성`} supporter={feed.nickname}></InfoArea>
                         <Text title={feed.title} data={feed.body}></Text>
+
+                        <div style={{ width: '100%', height: '50px' }}></div>
+                        <div className={style.line}>
+                            <div className={style['comment_function']}>
+                                <div>댓글 더보기</div>
+                                <div>신고</div>
+                            </div>
+                            <div>1.6k</div>
+                        </div>
+                        <Comments></Comments>
                     </div>
                 )
             }
             {
                 feed.fclass === 'balance' && (
                     <div className={style.feed}>
-                        <InfoArea img={planet3} name={`${feed.class_name} 행성`} supporter={feed.nickname}></InfoArea>
+                        <InfoArea color={'#60E7EC'} name={`${feed.class_name} 행성`} supporter={feed.nickname}></InfoArea>
                         <Text title={feed.title}></Text>
                         <div className={style['button_container']}>
                             <button className={style['select_button']}>갑니다</button>
                             <button className={style['select_button']}>패스</button>
                         </div>
+
+                        {/* <div style={{ width: '100%', height: '20px' }}></div> */}
+                        {/* <div className={style.line}>
+                            <div className={style['comment_function']}>
+                                <div>댓글 더보기</div>
+                                <div>신고</div>
+                            </div>
+                            <div>1.6k</div>
+                        </div>
+                        <Comments></Comments> */}
                     </div>
                 )
             }
             {
                 feed.fclass === 'multiple' && (
                     <div className={style.feed}>
-                        <InfoArea img={planet4} name={`${feed.class_name} 행성`} supporter={feed.nickname}></InfoArea>
+                        <InfoArea color={'#E370D1'} name={`${feed.class_name} 행성`} supporter={feed.nickname}></InfoArea>
                         <Text name={'퀴즈 행성'} title={feed.title}></Text>
                         <ol className={style['quiz_box']}>
                             {
@@ -63,6 +93,15 @@ export default function Feed({ className, feed }) {
                                 })
                             }
                         </ol>
+                        <div style={{ width: '100%', height: '50px' }}></div>
+                        <div className={style.line}>
+                            <div className={style['comment_function']}>
+                                <div>댓글 더보기</div>
+                                <div>신고</div>
+                            </div>
+                            <div>1.6k</div>
+                        </div>
+                        <Comments></Comments>
                     </div>
                 )
             }
@@ -71,10 +110,10 @@ export default function Feed({ className, feed }) {
                     <div className={style.feed}>
                         <div className={style['info_area']}>
                             <div className={style['planet_name']}>
+                                <p className={style['sup_people']}>익명지지자</p>
                                 <img src={planet1}></img>
                                 <p>정거장 행성</p>
                             </div>
-                            <p className={style['sup_people']}>익명지지자</p>
                         </div>
                         {/* <Text></Text> */}
                     </div>
@@ -98,14 +137,16 @@ export default function Feed({ className, feed }) {
     )
 }
 
-function InfoArea({ img, name, supporter }) {
+function InfoArea({color, name, supporter }) {
 
     return (
         <div className={style['info_area']}>
             <div className={style['top_part']}>
                 <div className={style['planet_name']}>
-                    <img src={img}></img>
+                    {/* <img src={img}></img> */}
+                    <div className={style.circle} style={{background:`${color}`}}></div>
                     <p>{name}</p>
+                    <p className={style['write-date']}>24/07/23</p>
                 </div>
                 <p className={style['sup_people']}>{supporter}</p>
             </div>
@@ -123,6 +164,21 @@ function Text({ name, title, data }) {
                 !name && <p>{data}</p>
             }
 
+        </div>
+    )
+}
+
+function Comments({ }) {
+    return (
+        <div className={style['comment_container']}>
+            <div className={style['comment_box']}>
+                <div className={style['comment_support']}>바위게게게게게게</div>
+                <div className={style['comment_data']}>진짜</div>
+            </div>
+            <div className={style['comment_action']}>
+                <input></input>
+                <button>댓글 작성</button>
+            </div>
         </div>
     )
 }

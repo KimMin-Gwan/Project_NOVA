@@ -55,7 +55,12 @@ function MoreSee() {
                         <p className={style.bodyText}>사업자 정보 및 사용약관</p>
                         <img src={vector} alt="Arrow" className={style.vector} />
                     </div>
+                    <div className={style.mainComponent}>
+                        <p className={style.bodyText}>페이지 설정</p>
+                        <img src={vector} alt="Arrow" className={style.vector} />
+                    </div>
                 </div>
+
                 <div className={style.inquiry}>
                     <div className={style.iconBox}>
                         <img src={x_icon} alt="Icon" className={style.icon_img} />

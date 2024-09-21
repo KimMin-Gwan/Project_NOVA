@@ -966,25 +966,6 @@ body {
   z-index: 1000;
 }
 
-
-
-.vertical-navbar {
-  position: fixed;
-  top: 100%;
-  right: -120px;
-  /* left: -120px; 처음엔 숨기기 위해 화면 밖으로 이동 */
-  transform: translateY(-50%);
-  background-color: #333;
-  padding: 10px;
-  border-radius: 20px;
-  transition: left 0.3s ease;
-}
-
-.vertical-navbar.visible {
-  left: 0;
-  /* 버튼 클릭 시 나타나도록 설정 */
-}
-
 .nav-item {
   display: flex;
   align-items: center;
@@ -1086,7 +1067,7 @@ body {
 }
 
 .nav_button_box p{
-  color: white;
+  color: black;
   text-align: center;
   margin-top: 0px;
   margin-bottom: 4px;

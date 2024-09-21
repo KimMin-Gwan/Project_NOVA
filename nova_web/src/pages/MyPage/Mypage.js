@@ -10,9 +10,9 @@ function MyPage() {
             <div className={style['bias-show-area']}>
                 <div className={style['personal_box']}>
                     <div>개인</div>
-                    <div>
-                        <MySoloBias></MySoloBias>
-                    </div>
+                    {/* <div>
+                    </div> */}
+                    <MySoloBias></MySoloBias>
                 </div>
             </div>
             <div className={style['my-info-area']}>

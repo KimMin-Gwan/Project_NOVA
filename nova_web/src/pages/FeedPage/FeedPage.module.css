@@ -54,17 +54,18 @@
 .feed {
     margin: 0 auto;
     background-color: #FFFFFF;
-    border-radius: 25px;
-    width: 400px;
-    height: 350px;
+    /* border-radius: 25px; */
+    width: 500px;
+    /* height: 350px; */
+    height: auto;
     color: black;
-    margin-top: 20px;
+    margin-top: 6px;
 }
 
 .info_area {
     margin: 0 auto;
     width: 95%;
-    border-bottom: 1px solid purple;
+    /* border-bottom: 1px solid purple; */
 }
 
 .top_part {
@@ -72,6 +73,7 @@
     margin-left: 2px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
 .planet_name {
@@ -88,6 +90,20 @@
 
 .sup_people {
     margin-right: 20px;
+}
+
+.circle {
+    margin-right: 5px;
+    width: 15px;
+    height: 15px;
+    border-radius: 100%;
+    /* background-color: ; */
+}
+
+.write-date {
+    margin-left: 10px;
+    font-size: 12px;
+    color: gray;
 }
 
 .title {
@@ -136,10 +152,12 @@
 .select_button {
     width: 150px;
     height: 80px;
+    cursor: pointer;
     color: white;
-    background-color: #403B8F;
+    border: 1px solid gray;
+    background-color: #D2C8F7;
     border-radius: 15px;
-    box-shadow: 0px 2px 5px black;
+    box-shadow: 0px 2px 3px gray;
 }
 
 .quiz_box {
@@ -426,4 +444,77 @@
 .up_animate {
     transform: translate(-50%, -50px);
     box-shadow: 0px 2px 6px black;
+}
+
+.line {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 auto;
+    padding-bottom: 5px;
+    width: 95%;
+    border-bottom: 1px solid gray;
+}
+
+.comment_function {
+    width: 30%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.comment_container {
+    padding-bottom: 20px;
+}
+
+.comment_box {
+    margin: 0 auto;
+    width: 95%;
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+    padding-top: 5px;
+}
+
+.comment_support {
+    /* background-color: blue; */
+    height: auto;
+    width: 115px;
+    margin-right: 20px;
+}
+
+.comment_data {
+    color: gray;
+}
+
+/* .comment_input {
+    margin-top: 10px;
+    width: 100%;
+    height: 30px;
+    border-radius: 100px;
+} */
+
+.comment_action {
+    display: flex;
+    margin: 0 auto;
+    width: 95%;
+    position: relative;
+    margin-top: 10px;
+}
+
+.comment_action input {
+    width: 100%;
+    height: 30px;
+    border-radius: 100px;
+}
+
+.comment_action button {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    bottom: 5px;
+    width: 80px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    color: gray;
+    font-size: 12px;
 }

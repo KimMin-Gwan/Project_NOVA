@@ -9,6 +9,7 @@ export default function InfFeed() {
     let [isLoading, setIsLoading] = useState(true);
 
     let [feedData, setFeedData] = useState([]);
+    let [nextData, setNextData] = useState([]);
     // 'http://127.0.0.1:4000/new_contents'
     // 'http://nova-platform.kr/home/home_feed'
 
@@ -20,6 +21,28 @@ export default function InfFeed() {
             .then(response => response.json())
             .then(data => {
                 setFeedData(data.body.feed);
+                setNextData(data.body.key);
+                setIsLoading(false);
+            })
+        // .finally(() => setIsLoading(false));
+    };
+
+    function fetchPlusData() {
+        // setIsLoading(true);
+        fetch(`https://nova-platform.kr/home/home_feed?key=${nextData}`, {
+            credentials: 'include',
+        })
+            .then(response => response.json())
+            .then(data => {
+                setNextData(data.body.key);
+                setFeedData((prevData) => {
+                    const newData = [...prevData, ...data.body.feed];
+                    return newData;
+                });
+
+                console.log(nextData);
+                console.log(data.body);
+                console.log('333', feedData);
                 setIsLoading(false);
             })
         // .finally(() => setIsLoading(false));
@@ -45,7 +68,8 @@ export default function InfFeed() {
                 if (!entry.isIntersecting) return;
                 if (isLoading) return;
 
-                fetchData();
+                // fetchData();
+                fetchPlusData();
             });
         });
 
@@ -58,13 +82,13 @@ export default function InfFeed() {
                 observerRef.current.unobserve(target.current);
             }
         };
-    }, [isLoading]);
+    }, [isLoading, nextData]);
 
     useEffect(() => {
         fetchData();
-        return (
-            setFeedData([])
-        )
+        return (() => {
+            setFeedData([]);
+        })
     }, []);
 
     if (isLoading) {
@@ -78,7 +102,7 @@ export default function InfFeed() {
                     // console.log(a);
                     // console.log('class', a.fclass);
                     return (
-                        <Feed key={a.fid} className='' feed={a} ></Feed>
+                        <Feed key={i} className='' feed={a} ></Feed>
                     )
                 })
             }
