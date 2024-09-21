@@ -20,17 +20,34 @@ const NavBar = () => {
 
     return (
         <div className='nav_button_box'>
-            <button className={`nav_button2 ${isVisible ? 'visible' : ''}`}
-                onClick={(e) => {
-                    handleNavigate('/planet')
-                    handleStopClick(e)
-                }
-                }>행성</button>
-            <button className={`nav_button3 ${isVisible ? 'visible' : ''}`}
-                onClick={(e) => {
-                    handleNavigate('/galaxy');
-                    handleStopClick(e);
-                }}>은하</button>
+            <div className={`nav-box ${isVisible ? 'visible' : ''}`}>
+                <button className={`nav_button2`}
+                    onClick={(e) => {
+                        handleNavigate('/planet')
+                        handleStopClick(e)
+                    }
+                    }>펀딩</button>
+                <p>펀딩 페이지</p>
+            </div>
+            <div className={`nav-box ${isVisible ? 'visible' : ''}`}>
+                <button className={`nav_button2`}
+                    onClick={(e) => {
+                        handleNavigate('/planet')
+                        handleStopClick(e)
+                    }
+                    }>행성</button>
+                <p>행성 탐색</p>
+            </div>
+            <div className={`nav-box ${isVisible ? 'visible' : ''}`}>
+                <button className={`nav_button3`}
+                    onClick={(e) => {
+                        handleNavigate('/galaxy');
+                        handleStopClick(e);
+                    }}>은하</button>
+                <p>행성 탐색</p>
+            </div>
+
+
             <button className='nav_button' onClick={toggleNavBar}>click</button>
         </div>
     );

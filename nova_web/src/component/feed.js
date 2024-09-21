@@ -16,9 +16,7 @@ export default function Feed({ className, feed }) {
                     <div className={`${style.feed} ${className}`}>
                         <InfoArea img={planet1} name={`${feed.class_name} 행성`} supporter={feed.nickname}></InfoArea>
                         <Text name={`${feed.class_name} 행성`} title={feed.title}></Text>
-                        <div onClick={
-                            window.open('http://naver.com', '_blank', "noopener, noreferrer")
-                        } className={style['link_box']}>
+                        <div className={style['link_box']}>
                             <h1>{feed.choice[0]}</h1>
                             <h5>{feed.choice[1]}</h5>
                         </div>
@@ -104,11 +102,14 @@ function InfoArea({ img, name, supporter }) {
 
     return (
         <div className={style['info_area']}>
-            <div className={style['planet_name']}>
-                <img src={img}></img>
-                <p>{name}</p>
+            <div className={style['top_part']}>
+                <div className={style['planet_name']}>
+                    <img src={img}></img>
+                    <p>{name}</p>
+                </div>
+                <p className={style['sup_people']}>{supporter}</p>
             </div>
-            <p className={style['sup_people']}>{supporter}</p>
+
         </div>
     )
 }

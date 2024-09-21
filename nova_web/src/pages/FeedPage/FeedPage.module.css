@@ -53,16 +53,23 @@
 /* 피드 관련 스타일 */
 .feed {
     margin: 0 auto;
-    background-color: #292929;
+    background-color: #FFFFFF;
     border-radius: 25px;
     width: 400px;
     height: 350px;
-    color: white;
+    color: black;
     margin-top: 20px;
 }
 
 .info_area {
-    margin-left: 20px;
+    margin: 0 auto;
+    width: 95%;
+    border-bottom: 1px solid purple;
+}
+
+.top_part {
+    /* margin-right: -5px; */
+    margin-left: 2px;
     display: flex;
     justify-content: space-between;
 }
@@ -90,11 +97,11 @@
 
 .link_box {
     margin-left: 20px;
-    background-color: #FFFFFF;
+    background-color: #2A2577;
     width: 85%;
     height: 80px;
     border-radius: 10px;
-    color: black;
+    color: white;
 }
 
 .link_box h1 {
@@ -130,7 +137,7 @@
     width: 150px;
     height: 80px;
     color: white;
-    background-color: #1B3753;
+    background-color: #403B8F;
     border-radius: 15px;
     box-shadow: 0px 2px 5px black;
 }
@@ -149,7 +156,8 @@
     display: flex;
     justify-content: space-between;
     padding: 12px 20px;
-    background-color: #122436;
+    background-color: #2A2577;
+    color: white;
     border: 1px #888888 solid;
 }
 
