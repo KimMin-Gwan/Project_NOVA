@@ -9,10 +9,15 @@ function MyPage() {
             <div className={`white-title ${style['title-area']}`}>마이페이지</div>
             <div className={style['bias-show-area']}>
                 <div className={style['personal_box']}>
-                    <div>개인</div>
-                    {/* <div>
-                    </div> */}
-                    <MySoloBias></MySoloBias>
+                    <div className={style['personal_area']}>
+                        <div className={style.personal}>
+                            <div>지지자</div>
+                            <div>우주인 패스 +</div>
+                            <div>화살표</div>
+                        </div>
+                    </div>
+
+                    <div className={style['ticket_info']}></div>
                 </div>
             </div>
             <div className={style['my-info-area']}>

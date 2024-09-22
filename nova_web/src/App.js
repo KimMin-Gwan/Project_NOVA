@@ -34,16 +34,13 @@ import NavBar from './component/NavBar.js';
 
 function App() {
 
-  // "http://127.0.0.1:6000/home/is_valid?token={token}"
-
   let url = 'https://nova-platform.kr/home/';
   // let url = 'http://127.0.0.1:5000/home/';
   let type = ['solo', 'group'];
 
 
   let token = localStorage.getItem('jwtToken');
-  // eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InJhbmRvbVVzZXIxQG5hdmVyLmNvbSIsImlhdCI6MTcyNDc4MTg4Mi41ODAxMzMsImV4cCI6MTcyNDc5MjY4Mi41ODAxNTEsInJlZnJlc2hfZXhwIjoxNzI1Mzg2NjgyLjU4MDE2fQ.MX_uGcFVlry5UzzM-6Z1ETvMMrnY0aGjwTP8GyTfJAo
-
+  
   let [isLogin, setIsLogin] = useState();
   let [newToken, setnewToken] = useState(token);
 
@@ -54,34 +51,6 @@ function App() {
     "uid": '1234-abcd-5678',
     "endpoint": "/core_system/",
   }
-
-  // useEffect(() => {
-  //   // if (!token || token === undefined) {
-  //   //   console.log('로그인안됨')
-  //   // }
-
-  //   fetch(url + `is_valid`, {
-  //     credentials: 'include'
-  //   })
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       JSON.stringify(data);
-  //       console.log("111", data)
-  //       setIsLogin(data.header['state-code']);
-  //       if (isLogin === '498') {
-  //         setnewToken(data.header.new_token);
-  //         localStorage.setItem('jwtToken', isLogin.new_token);
-  //       }
-  //       else if (isLogin === '497') {
-  //         localStorage.removeItem('jwtToken');
-  //         console.log("2222: ", data)
-  //         alert('다시 로그인 해주세요.');
-  //       }
-
-  //       // window.location.reload();
-  //     })
-  // }, [])
-
 
   //내 최애 / 전체 선택버튼용
   let [isSoloClicked, setSoloClick] = useState(false);
@@ -106,7 +75,7 @@ function App() {
   return (
     <Routes>
       <Route path='/more_see' element={<MoreSee />}></Route>
-      <Route path='/test' element={<NavBar />}></Route>
+      <Route path='/test' element={<Box />}></Route>
       <Route path='/planet' element={<PlanetList />}></Route>
       <Route path='/galaxy' element={<GalaxyList />}></Route>
       <Route path='/feed_page' element={<FeedPage />}></Route>
@@ -144,16 +113,16 @@ function App() {
                 {/* <Link to='/' className='button'>홈</Link> */}
                 {/* <Link to='/namecard' className='button'>명함</Link> */}
                 <Link to='/test' className='button'>테스트</Link>
-                <Link to='/planet' className='button'>행성페이지</Link>
+                {/* <Link to='/planet' className='button'>행성페이지</Link>
                 <Link to='/galaxy' className='button'>은하페이지</Link>
                 <Link to='/feed_page' className='button'>피드페이지</Link>
                 <Link to='/signup' className='button'>회원가입</Link>
                 <Link to='/mypage' className='button'>마이페이지</Link>
                 <Link to='/league_detail' className='button'>리그 자세히보기</Link>
-                <Link to='/novalogin' className='button'>로그인 페이지</Link>
+                <Link to='/novalogin' className='button'>로그인 페이지</Link> */}
+                {/* <Link to='/bias_certify' className='button'>최애 지지하기</Link> */}
                 {/* <Link to='/league_detail' className='button'>리그상세페이지</Link> */}
                 {/* <Link to='/select_bias' className='button'>최애선택</Link> */}
-                <Link to='/bias_certify' className='button'>최애 지지하기</Link>
                 {/* <Link to='/data_test' className='button'>테스트페이지</Link> */}
                 {/* <Link to='/mybias' className='button'>최애페이지</Link> */}
               </div>

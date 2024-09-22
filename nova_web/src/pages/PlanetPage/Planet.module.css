@@ -1,3 +1,8 @@
+.feedpage {
+    
+    height: 100%;
+}
+
 .top_area {
     margin: 0 auto;
     width: 85%;
@@ -66,6 +71,7 @@
 
 /* 규칙 */
 .rule_box {
+    padding-bottom: 10px;
     height: auto;
 }
 

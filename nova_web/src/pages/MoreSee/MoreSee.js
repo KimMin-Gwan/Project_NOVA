@@ -29,6 +29,7 @@ function MoreSee() {
                         <p className={style.titleName}> 더보기 </p>
                     </div>
                 </div>
+                
                 <div className={style.content}>
                     <div className={style.mainComponent} onClick={() => {
                         if (tokenCheck) {

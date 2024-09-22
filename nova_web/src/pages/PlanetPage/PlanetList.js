@@ -29,7 +29,7 @@ export default function PlanetList() {
 
 
     return (
-        <div className='container'>
+        <div className={`container ${style.feedpage}`}>
             <div className={style['top_area']}>
                 <div onClick={() => { navigate(-1) }}>뒤로</div>
                 <div>행성 탐색</div>
@@ -58,6 +58,7 @@ export default function PlanetList() {
                 <h4>본 게시글은 인공지능 프로그램에 의해 검열 및 관리되고 있습니다.</h4>
                 <h4 className={style['last_rule']}>홍보와 관련된 내용은 우주 펀딩 페이지를 사용해주세요.</h4>
             </div>
+            <div style={{height:'10px', paddingBottom:'5px'}}></div>
         </div>
     )
 }

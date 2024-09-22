@@ -7,11 +7,13 @@
 } */
 
 .font {
+    
     font-family: "Noto Sans KR", sans-serif;
 }
 
 .container {
-    max-width: 500px; /* 너비를 원하는 비율로 설정 */
+    max-width: 500px;
+     /* 너비를 원하는 비율로 설정 */
     height : 200vw;
     margin: 0 auto;
     /*max-width: 1200px; /* 최대 너비를 설정 */
@@ -27,7 +29,7 @@
 }
 
 .TopBar{
-    width: 500px; /* 너비를 원하는 비율로 설정 */
+    width: 100%; /* 너비를 원하는 비율로 설정 */
     height : 38px;
     margin: 0 auto;
     /*max-width: 1200px; /* 최대 너비를 설정 */
@@ -41,7 +43,7 @@
 }
 
 .TitleBox{
-    width: 460px;
+    width: 100%;
     height: 38px;
     margin-bottom: 14px;
     color: white;
@@ -58,22 +60,22 @@
 }
 
 .content{
-    width: 500px; /* 너비를 원하는 비율로 설정 */
+    width: 100%; 
     height : 500px;
     margin: 0 auto;
-    background-color: #2c2c2c; /* 배경색을 원하는 색으로 변경 가능 */
+    background-color: #2c2c2c;
     /*text-align: center; /* 텍스트 가운데 정렬 */
     padding-top: 10px
 }
 
 .mainComponent {
-    width: 468px;
+    width: 100%;
     height: 98px;
-    background-color: #3C3C3C; /* Background color for each component */
+    background-color: #3C3C3C; 
     display: flex;
     align-items: center;
     /*justify-content: space-between; */
-    padding: 0 16px;
+    /* padding: 0 16px; */
     margin-bottom: 4px;
     cursor: pointer;
     justify-content: flex-end; /* Align content to the right */
@@ -89,11 +91,12 @@
 .vector{
     width: 20px;
     height: 50px;
+    margin-right: 10px;
     /*text-align: center; /* 텍스트 가운데 정렬 */
 }
 
 .inquiry{
-    width: 500px; /* 너비를 원하는 비율로 설정 */
+    width: 100%; /* 너비를 원하는 비율로 설정 */
     height : 100px;
     margin: 0 auto;
     background-color: #2c2c2c; /* 배경색을 원하는 색으로 변경 가능 */

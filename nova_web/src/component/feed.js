@@ -57,8 +57,8 @@ export default function Feed({ className, feed }) {
                         <InfoArea color={'#60E7EC'} name={`${feed.class_name} 행성`} supporter={feed.nickname}></InfoArea>
                         <Text title={feed.title}></Text>
                         <div className={style['button_container']}>
-                            <button className={style['select_button']}>갑니다</button>
-                            <button className={style['select_button']}>패스</button>
+                            <button className={style['select_button']}>{feed.choice[0]}</button>
+                            <button className={style['select_button']}>{feed.choice[1]}</button>
                         </div>
 
                         {/* <div style={{ width: '100%', height: '20px' }}></div> */}
@@ -137,7 +137,7 @@ export default function Feed({ className, feed }) {
     )
 }
 
-function InfoArea({color, name, supporter }) {
+export function InfoArea({color, name, supporter }) {
 
     return (
         <div className={style['info_area']}>
@@ -155,7 +155,7 @@ function InfoArea({color, name, supporter }) {
     )
 }
 
-function Text({ name, title, data }) {
+export function Text({ name, title, data }) {
 
     return (
         <div style={{ marginLeft: '20px' }}>
@@ -168,7 +168,7 @@ function Text({ name, title, data }) {
     )
 }
 
-function Comments({ }) {
+export function Comments({ }) {
     return (
         <div className={style['comment_container']}>
             <div className={style['comment_box']}>
