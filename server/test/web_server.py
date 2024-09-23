@@ -12,7 +12,8 @@ app.add_middleware(
         "http://localhost:6000",
         "http://127.0.0.1:4001",
         "http://127.0.0.1:3000",
-        "http://localhost:3000"],  # 원격 호스트의 웹소켓 연결을 허용할 도메인 설정
+        "http://localhost:3000"
+        ],  # 원격 호스트의 웹소켓 연결을 허용할 도메인 설정
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -91,7 +92,7 @@ def home():
             async function testTargetEndpoint() {
                 const target = document.getElementById('targetInput').value;
                 try {
-                    const response = await fetch(`http://127.0.0.1:4000/home/my_bias`, {
+                    const response = await fetch(`http://127.0.0.1:4000/feed_explore/get_feed?fclass=balance`, {
                         mode: 'cors',
                         credentials: 'include'
                     });
