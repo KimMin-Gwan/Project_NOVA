@@ -8,7 +8,7 @@ class Local_Database:
         self.__data_files = {
             'banner_file' : 'banner.json',
             'bias_file' : 'bias.json',
-            'feed' : 'feed.json',
+            'feed_file' : 'feed.json',
             'league_file' : 'league.json',
             'name_card_file' : 'name_card.json',
             'user_file' : 'user.json',

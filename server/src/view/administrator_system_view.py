@@ -160,42 +160,42 @@ class Administrator_Service_View(Master_View):
             response = model.get_response_form_data(self._head_parser)
             return response
         
-        #chat
-        @self.__app.post('/admin/chat_load')
-        def chat_load(raw_request:dict):
-            request = ChatLoadDeleteRequset(raw_request)
+        # #feed
+        @self.__app.post('/admin/feed_load')
+        def feed_load(raw_request:dict):
+            request = FeedLoadDeleteRequset(raw_request)
             administrator_controller=Administrator_Controller()
-            model = administrator_controller.chat_editor(database=self.__database,
+            model = administrator_controller.feed_editor(database=self.__database,
                                                                  request=request,
                                                                  type='load')
             response = model.get_response_form_data(self._head_parser)
             return response
         
-        @self.__app.post('/admin/chat_add')
-        def chat_add(raw_request:dict):
-            request = ChatAddModifyRequset(raw_request)
+        @self.__app.post('/admin/feed_add')
+        def feed_add(raw_request:dict):
+            request = FeedAddModifyRequset(raw_request)
             administrator_controller=Administrator_Controller()
-            model = administrator_controller.chat_editor(database=self.__database,
+            model = administrator_controller.feed_editor(database=self.__database,
                                                                  request=request,
                                                                  type='add')
             response = model.get_response_form_data(self._head_parser)
             return response
         
-        @self.__app.post('/admin/chat_modify')
-        def chat_modify(raw_request:dict):
-            request = ChatAddModifyRequset(raw_request)
+        @self.__app.post('/admin/feed_modify')
+        def feed_modify(raw_request:dict):
+            request = FeedAddModifyRequset(raw_request)
             administrator_controller=Administrator_Controller()
-            model = administrator_controller.chat_editor(database=self.__database,
+            model = administrator_controller.feed_editor(database=self.__database,
                                                                  request=request,
                                                                  type='modify')
             response = model.get_response_form_data(self._head_parser)
             return response
         
-        @self.__app.post('/admin/chat_delete')
-        def chat_delete(raw_request:dict):
-            request = ChatLoadDeleteRequset(raw_request)
+        @self.__app.post('/admin/feed_delete')
+        def feed_delete(raw_request:dict):
+            request = FeedLoadDeleteRequset(raw_request)
             administrator_controller=Administrator_Controller()
-            model = administrator_controller.chat_editor(database=self.__database,
+            model = administrator_controller.feed_editor(database=self.__database,
                                                                  request=request,
                                                                  type='delete')
             response = model.get_response_form_data(self._head_parser)
@@ -402,24 +402,38 @@ class LeagueAddModifyRequset(RequestHeader):
         self.state = data['state']
         self.type = data['type']
 
-class ChatLoadDeleteRequset(RequestHeader):
+class FeedLoadDeleteRequset(RequestHeader):
     def __init__(self, request) -> None:
         super().__init__(request)
         body = request['body']
         self.admin_key = body['admin_key']
-        self.cid = body['data']
+        self.fid = body['data']
 
-class ChatAddModifyRequset(RequestHeader):
+class FeedAddModifyRequset(RequestHeader):
     def __init__(self, request) -> None:
         super().__init__(request)
         body = request['body']
         self.admin_key = body['admin_key']
         data = body['data']
 
-        self.cid = data['cid']
+        try:
+            self.fid = data['fid']
+        except:
+            pass
+
         self.uid = data['uid']
-        self.content = data['content']
+        self.nickname = data['nickname']
+        self.title = data['title']
+        self.body = data['body']
         self.date = data['date']
+        self.fclass = data['fclass']
+        self.class_name = data['class_name']
+        self.choice = data['choice']
+        self.result = data['result']
+        self.state = data['state'] 
+        self.attend = data['attend']
+        self.category = data['category']
+        self.comment = data['comment']
 
 class BiasLoadDeleteRequset(RequestHeader):
     def __init__(self, request) -> None:

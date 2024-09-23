@@ -1,12 +1,13 @@
 import json
 import requests
 import pprint
+import boto3
 
 class Admin():
     def __init__(self) -> None:
         self.__key = 'nMjzkWLUCI0GfEPbkTut3qcWSxz2KVFx6jXQT4mVpbIV9CisdweCieYcC9AA3JuOYcPSIaT8ey7V9zSX'
         #self.__base_url= 'http://175.106.99.34/admin'
-        self.__base_url= 'http://127.0.0.1:4000/admin'
+        self.__base_url= 'http://127.0.0.1:6000/admin'
         # HOST = '175.106.99.34'
         # HOST = '127.0.0.1'
         # PORT = 6000
@@ -16,7 +17,19 @@ class Admin():
             "client-ip" : '127.0.0.1',
             "uid" : '1234-abcd-5678', 
             "endpoint" : "/administrator_system/", 
-    }
+        }
+
+        self._path = './model/local_database/'
+        self.__service_name = 's3'
+        self.__endpoint_url = 'https://kr.object.ncloudstorage.com'
+        self.__region_name = 'kr-standard'
+        self.__access_key = 'eeJ2HV8gE5XTjmrBCi48'
+        self.__secret_key = 'zAGUlUjXMup1aSpG6SudbNDzPEXHITNkEUDcOGnv'
+        self._s3 = boto3.client(self.__service_name,
+                           endpoint_url=self.__endpoint_url,
+                           aws_access_key_id=self.__access_key,
+                      aws_secret_access_key=self.__secret_key)
+
     def _check_data(self, data):
         print('완료 전 데이터를 다시 확인해 주세요')
         print(data)

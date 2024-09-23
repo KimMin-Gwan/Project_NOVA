@@ -264,28 +264,72 @@ class League(SampleDomain):
             "type":self.type
         }
     
-class Chatting(SampleDomain):
-    def __init__(self, cid="", uid="", content="", date=""):
-        self.cid = cid
+class Feed(SampleDomain):
+    def __init__(self, fid="", uid="", nickname="", title="",
+                 body="", date="", fclass="", class_name="",
+                 choice=None, result=None, state="d", attend=None,
+                 category = None, comment = None):
+        if choice is None:
+            choice = []
+        if result is None:
+            result = []
+        if attend is None:
+            attend = []
+        if category is None:
+            category = []
+        if comment is None:
+            comment = []
+
+        self.fid = fid
         self.uid = uid
-        self.content = content
+        self.nickname = nickname
+        self.title = title
+        self.body = body
         self.date = date
+        self.fclass = fclass
+        self.class_name = class_name
+        self.choice = choice
+        self.result = result
+        self.state = state  # feed 의 상태 
+        self.attend = attend
+        self.category = category
+        self.comment =comment 
 
     def make_with_dict(self, dict_data):
         try:
-            self.cid = dict_data['cid']
+            self.fid = dict_data['fid']
             self.uid = dict_data['uid']
-            self.content = dict_data['content']
+            self.nickname = dict_data['nickname']
+            self.title = dict_data['title']
+            self.body = dict_data['body']
             self.date = dict_data['date']
-        except Exception as e:
-            raise DictMakingError(error_type=e)
+            self.fclass = dict_data['fclass']
+            self.class_name = dict_data['class_name']
+            self.choice = dict_data['choice']
+            self.result = dict_data['result']
+            self.state = dict_data['state']
+            self.attend = dict_data['attend']
+            self.category = dict_data['category']
+            self.comment = dict_data['comment']
+        except KeyError as e:
+            raise DictMakingError(error_type=f"Missing key: {str(e)}")
 
     def get_dict_form_data(self):
         return {
-            "cid": self.cid,
+            "fid": self.fid,
             "uid": self.uid,
-            "content": self.content,
-            "date": self.date
+            "nickname": self.nickname,
+            "title": self.title,
+            "body": self.body,
+            "date": self.date,
+            "fclass": self.fclass,
+            "class_name": self.class_name,
+            "choice": self.choice,
+            "result": self.result,
+            "state": self.state,
+            "attend": self.attend,
+            "category":self.category,
+            "comment":self.comment
         }
     
 
@@ -307,20 +351,3 @@ class Banner(SampleDomain):
             "ba_url": self.ba_url
         }
 
-class ReceivedChat(SampleDomain):
-    def __init__(self, token="", message=""):
-        self.token = token
-        self.message = message
-
-    def make_with_dict(self, dict_data):
-        try:
-            self.token = dict_data['token']
-            self.message = dict_data['message']
-        except Exception as e:
-            raise DictMakingError(error_type=e)
-
-    def get_dict_form_data(self):
-        return {
-            "token": self.token,
-            "message": self.message
-        }

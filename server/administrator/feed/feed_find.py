@@ -1,12 +1,12 @@
 from data.admin import *
 
-class ChatFind(Admin):
+class FeedFind(Admin):
     def __init__(self):
         super().__init__()
-        self.__cid = ''
+        self.__fid = ''
     
     def set_data(self):
-        self.__cid = input('Cid: ')
+        self.__fid = input('Fid: ')
 
     def get_data(self):
-        return self.__cid
+        return self.__fid

@@ -5,9 +5,9 @@ from bias import *
 from bias.bias_add import *
 from bias.bias_find import *
 from bias.bias_modify import *
-from chat.chat_add import *
-from chat.chat_find import *
-from chat.chat_modify import *
+from feed.feed_add import *
+from feed.feed_find import *
+from feed.feed_modify import *
 from league.league_add import *
 from league.league_find import *
 from league.league_modify import *
@@ -21,12 +21,12 @@ from user.user_modify import *
 
 if __name__ == '__main__':
     while True:
-        select_action = input('(0)exit / (1)Data Control / (2)Reset Datas \nEnter: ')
+        select_action = input('(0)exit / (1)Data Control / (2)Bucket Control \nEnter: ')
         if select_action == '0':
             break
         elif select_action == '1': #)데이터 확인 추가 수정 삭제
             while True:
-                print('(0)exit / (1)User / (2)Namecard / (3)League / (4)Chat / (5)Bias / (6)Banner')
+                print('(0)exit / (1)User / (2)Namecard / (3)League / (4)Feed / (5)Bias / (6)Banner')
                 select_module = input('입력: ')
 
                 if select_module == '1': # User
@@ -140,35 +140,35 @@ if __name__ == '__main__':
                         print('Try Again')
                         continue
 
-                elif select_module == '4': # Chat
-                    print('Chat')
+                elif select_module == '4': # Feed)
+                    print('Feed')
                     print('(0)exit / (1)추가 / (2) 특정 정보 가져오기 / (3)수정 / (4)삭제 ')
                     select_fun = input('입력: ')
                     if select_fun == '1': # Add
-                        client = ChatAdd()
+                        client = FeedAdd()
                         if not client.set_data():
                             continue
                         if not client._check_data(client.get_data()):
                             continue 
-                        client._request(client.get_data(),endpoint='/chat_add')
+                        client._request(client.get_data(),endpoint='/feed_add')
 
                     elif select_fun == '2': # Load
-                        client = ChatFind()
+                        client = FeedFind()
                         client.set_data()
-                        client._request(client.get_data(),endpoint='/chat_load')
+                        client._request(client.get_data(),endpoint='/feed_load')
 
                     elif select_fun == '3': # Modify
-                        client = ChatModify()
+                        client = FeedModify()
                         if not client.set_data():
                             continue
                         if not client._check_data(client.get_data()):
                             continue 
-                        client._request(client.get_data(),endpoint='/chat_modify')
+                        client._request(client.get_data(),endpoint='/feed_modify')
 
                     elif select_fun == '4': # Delete
-                        client = ChatFind()
+                        client = FeedFind()
                         client.set_data()
-                        client._request(client.get_data(),endpoint='/chat_delete')
+                        client._request(client.get_data(),endpoint='/feed_delete')
 
                     elif select_module == '0':
                         break
@@ -252,11 +252,11 @@ if __name__ == '__main__':
                     print('Try Again')
                     continue
 
-        elif select_action == '2': #Reset 
+        elif select_action == '2': #Bucket 
             client = Admin()
             data = None
             while True:
-                select_act = input('(0)exit / (1)Reset Point / (2)Reset Daily\nEnter: ')
+                select_act = input('(0)exit / (1)Reset Point \nEnter: ')
                 if select_act == '0':
                     break
                 elif select_act == '1':

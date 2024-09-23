@@ -158,41 +158,41 @@ class Administrator_Controller:
         finally:
             return model
         
-    # def chat_editor(self,database:Local_Database,request,type):
-    #     model = ChatEditModel(database=database)
+    def feed_editor(self,database:Local_Database,request,type):
+        model = FeedEditModel(database=database)
 
-    #     try:
-    #         if not model.check_admin_key(request=request):
-    #             return model
+        try:
+            if not model.check_admin_key(request=request):
+                return model
 
-    #         if not model.check_admin_key(request=request):
-    #             return model
+            if not model.check_admin_key(request=request):
+                return model
 
-    #         if type == 'add':
-    #             model.set_chat_data(request=request)
-    #             model.add_chat()
+            if type == 'add':
+                model.set_feed_data(request=request)
+                model.add_feed()
 
-    #         if type == 'load':
-    #             model.load_chat(request=request)
+            if type == 'load':
+                model.load_feed(request=request)
 
-    #         if type == 'modify':
-    #             model.load_chat(request=request)
-    #             model.set_chat_data(request=request)
-    #             model.modify_chat()
+            if type == 'modify':
+                model.load_feed(request=request)
+                model.set_feed_data(request=request)
+                model.modify_feed()
 
-    #         if type == 'delete':
-    #             model.delete_chat(request=request)
+            if type == 'delete':
+                model.delete_feed(request=request)
 
-    #     except CustomError as e:
-    #         print("Error Catched : ", e.error_type)
-    #         model.set_state_code(e.error_code) # 종합 에러
+        except CustomError as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
 
-    #     except Exception as e:
-    #         print("Error Catched : ", e.error_type)
-    #         model.set_state_code(e.error_code) # 종합 에러
+        except Exception as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
 
-    #     finally:
-    #         return model
+        finally:
+            return model
         
     def bias_editor(self,database:Local_Database,request,type):
         model = BiasEditModel(database=database)

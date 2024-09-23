@@ -6,10 +6,10 @@ from bias import *
 from bias.bias_add import *
 from bias.bias_find import *
 from bias.bias_modify import *
-from chat import *
-from chat.chat_add import *
-from chat.chat_find import *
-from chat.chat_modify import *
+from feed import *
+from feed.feed_add import *
+from feed.feed_find import *
+from feed.feed_modify import *
 from league import *
 from league.league_add import *
 from league.league_find import *
