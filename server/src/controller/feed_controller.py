@@ -46,7 +46,7 @@ class Feed_Controller:
             # 유저가 있으면 세팅
             model.set_user_with_email(request=request.jwt_payload)
             model.set_specific_feed_data(feed_manager=feed_manager,
-                                         datapayload=request.data_payload)
+                                         data_payload=request.data_payload)
 
         except CustomError as e:
             print("Error Catched : ", e.error_type)

@@ -1,5 +1,5 @@
 HOST = 127.0.0.1
-PORT = 6000
+PORT = 4000
 VERSION = 0.9.0
 num_fclass = 4
 fclass1 = [card, 추억, 덕질의기억]

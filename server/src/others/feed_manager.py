@@ -1,8 +1,10 @@
 from others.data_domain import Feed, User
-#from model import Local_Database
+from model import Local_Database
 from datetime import datetime
 import string
 import random
+
+
 
 # 피드를 관리하는 장본인
 
@@ -10,7 +12,7 @@ import random
 class FeedManager:
     def __init__(self, database, fclasses) -> None:
         self._feedClassManagement = FeedClassManagement(fclasses=fclasses)
-        self._database = database
+        self._database:Local_Database = database
         self._num_feed = 0
         self._managed_feed_list = []
         pass
@@ -27,7 +29,7 @@ class FeedManager:
             feed_list.append(feed)
         
         # 데이터를 날짜에 맞춰 정렬
-        sorted_data = sorted(feed_list,key=lambda x:x.date, reverse=True)
+        sorted_data = sorted(feed_list,key=lambda x:x.date, reverse=False)
 
         # 정렬된 데이터를 managed_feed로 만들어 메모리에 보관
         for data in sorted_data:
@@ -192,11 +194,97 @@ class FeedManager:
 
     # 위성 탐색에서 feed데이터를 요청하는 상황
     def get_feed_in_fclass(self, user:User, key:int, fclass:str):
-        target_feed = self.__make_target_feed(user=user, key=key)
-        target_feed = self.__set_target_feed_with_fclass(target_feed=target_feed, fclass=fclass)
-        result, result_key = self.__set_send_feed(target_feed=target_feed)
-        result = self.make_get_data(user, result)
+        # 제일 위에서 하나 뽑고, 다음꺼 하나 더뽑고
+        # key에 맞는 feed 하나 더 뽑아서 넣어주기
+        if user != "":
+            result, result_key = self.short_feed_with_user(user=user,key=key, fclass=fclass)
+        else:
+
+
+        ##target_feed = self.__make_target_feed(user=user, key=key)
+        ##target_feed = self.__set_target_feed_with_fclass(target_feed=target_feed, fclass=fclass)
+        ##result, result_key = self.__set_send_feed(target_feed=target_feed)
+        ##result = self.make_get_data(user, result)
+        ## ------------- 신규 -------------------
+        ## 유저가 로그인 했으면
+        #if user.uid != "":
+            #result_key = 
+            #result=[]
+            #index = 0
+            #user = self._find_managed_user(self, user)
+            #while len(result) > 2:
+                #target_category = self.get_argo(user)
+                #target, index = self.pick_single_feed_with_category(user=user, category=target_category, index=index)
+                #result.append(target)
+        ## 유저가 로그인 안했으면
+        #else:
+            #target_feed = self.__make_target_feed(user=user, key=key)
+            #target_feed = self.__set_target_feed_with_fclass(target_feed=target_feed, fclass=fclass)
+            #result, result_key = self.__set_send_feed(target_feed=target_feed)
+            #result_key += 1
+
+        #result = self.make_get_data(user, result)
         return result, result_key
+
+    def short_feed(self, key, fclass):
+        sample_feed = []
+        # 제일 위에서 하나 뽑고, 다음꺼 하나 더뽑고
+        # key에 맞는 feed 하나 더 뽑아서 넣어주기
+        for i in range(2):
+            present_feed= self.pick_single_feed_with_category(user=user, category=target_category)
+            sample_feed.append(present_feed)
+
+        if key != -1:
+            prev_feed = self._get_single_feed(key=key)
+            sample_feed.append(prev_feed)
+        result_key = sample_feed[0].key
+        result = self.__set_send_feed(target_feed=sample_feed)
+
+        return result, result_key
+
+    def short_feed_with_user(self, user, key, fclass):
+        sample_feed = []
+        # 제일 위에서 하나 뽑고, 다음꺼 하나 더뽑고
+        # key에 맞는 feed 하나 더 뽑아서 넣어주기
+        for i in range(2):
+            target_category = self.get_argo(user)
+            present_feed= self.pick_single_feed_with_category(user=user, category=target_category)
+            sample_feed.append(present_feed)
+
+        if key != -1:
+            prev_feed = self._get_single_feed(key=key)
+            sample_feed.append(prev_feed)
+        result_key = sample_feed[0].key
+        result = self.__set_send_feed(target_feed=sample_feed)
+
+        return result, result_key
+
+
+    def _get_single_managed_feed(self, key = -1, fid = ""):
+        target_feed = None
+        if key != -1:
+            for feed in self._managed_feed_list:
+                if feed.key == key:
+                    target_feed=feed
+        else:
+            for feed in self._managed_feed_list:
+                if feed.fid== fid:
+                    target_feed=feed
+
+
+        target_feed=self._database.get_data_with_id(target="fid",id=fid)
+        return target_feed
+
+    def _get_single_feed(self, key = -1, fid = ""):
+        target_feed = None
+        if key != -1:
+            for feed in self._managed_feed_list:
+                if feed.key == key:
+                    fid = feed.fid
+
+        target_feed=self._database.get_data_with_id(target="fid",id=fid)
+        return target_feed
+
 
     # get 요청에 대한 반환값 조사
     # 유저가 참여한 feed인지 확인할것
@@ -255,6 +343,34 @@ class FeedManager:
         feed.attend = action
         feed.comment = self.__get_feed_comment(feed=feed)
         return feed
+    
+    # 단일 피드 뽑기
+    # 만약 추천순 같이 정렬이 바뀔 일이 있으면
+    # 여기다가 매게변수로 정렬된 리스트를 주면됨
+    #  아니면 걍 내부에서 소팅 돌링 별도의 리스트를 가지고 검색할것
+    def pick_single_feed(self, user):
+        target = None
+        for managed_feed in self._managed_feed_list:
+            managed_feed:ManagedFeed=managed_feed
+            if managed_feed.fid in user.history:
+                continue
+
+    # 이건 카테고리에 있는 단일 피드 뽑는 함수
+    # 뒤집기 어려워서 in range 이터레이터로 동작하고 - 붙혀서 뒤집음
+    # 인덱스를 반환해서 검색하도록 구성함
+    def pick_single_feed_with_category(self, user, category):
+        target = None
+        while True:
+            for managed_feed in self._managed_feed_list:
+                if managed_feed.fid in user.history:
+                    continue
+                target = managed_feed
+            if category in target.category:
+                break
+        if target:
+            user.history.append(target.fid)
+        return target
+
 
 
 # 이건 뭐냐하면
@@ -264,6 +380,14 @@ class FeedManager:
 class FeedClassAnalist:
     def __init__(self):
         pass
+
+    def dice_argo(self, option):
+        len_option = len(option)
+        key =  random.randint(0, 1000)
+        target = key % len_option
+        result = option[target]
+        return result
+
 
 # 이건 피드 메타 정보를 가지고 있는 친구
 # configure.txt 에서 설정 가능함
@@ -304,4 +428,49 @@ class ManagedFeed:
 
     def __call__(self):
         print(f"key: {self.key} | fid: {self.fid} | fclass: {self.fclass} | category: {self.category}")
+
+
+# 메모리에 올려서 관리할 유저
+# 알고리즘에 따라 적절한 피드 제공에 목적을 둠
+class ManagedUserTable:
+    def __init__(self):
+        self.__key = 0
+        self._managed_user_list = []
+
+    # 리스트 보여주기
+    def __call__(self):
+        for user in self._managed_user_list:
+            user()
+
+    # 세션 테이블에서 유저 찾기
+    def find_user(self, user):
+        for i, managed_user in enumerate(self._managed_user_list):
+            if managed_user.uid == user.uid:
+                return i
+        return -1
+    
+    # 유저 데이터 반환
+    def get_user_data(self, index):
+        return self._managed_user_list[index]
+
+    # 테이블에 유저 추가하기
+    def add_user(self, user:User):
+        new_user = ManagedUser(
+            uid = user.uid
+        )
+        
+
+# 유저 특화 시스템 구성을 위한 관리 유저
+class ManagedUser:
+    def __init__(self, uid):
+        self.uid = uid
+        self.option = []
+        self.history = []
+        self.TTL = 0
+
+    def __call__(self):
+        print(f"uid : {self.uid}")
+        print(f"category : {self.category}")
+        print(f"history : {self.history}")
+        print(f"TTL : {self.TTL}")
 
