@@ -12,6 +12,7 @@ class Local_Database:
             'league_file' : 'league.json',
             'name_card_file' : 'name_card.json',
             'user_file' : 'user.json',
+            'managed_user_file' : 'managed_user.json'
         }
         self.__read_json()
 
@@ -22,9 +23,12 @@ class Local_Database:
         self.__league_data = []
         self.__name_card_data = []
         self.__user_data = []
+        self.__managed_user_data = []
 
         data_list = [self.__banner_data, self.__bias_data, self.__feed_data,
-                      self.__league_data, self.__name_card_data, self.__user_data]
+                      self.__league_data, self.__name_card_data, self.__user_data,
+                      self.__managed_user_data
+                      ]
 
         for file_name, list_data in zip(self.__data_files.values(), data_list):
             with open(self.__db_file_path+file_name, 'r',  encoding='utf-8' )as f:
@@ -71,6 +75,12 @@ class Local_Database:
     def __save_bias_json(self):
         file_name = self.__data_files['bias_file']
         self.__save_json(file_name, self.__bias_data)
+        return
+
+    # 저장하기
+    def __save_managed_user_json(self):
+        file_name = self.__data_files['managed_user_file']
+        self.__save_json(file_name, self.__managed_user_data)
         return
 
     # db.get_data_with_key(target="user", key="uname", key_data="minsu")
@@ -140,6 +150,8 @@ class Local_Database:
             return self.__name_card_data
         elif target == "uid" or target == "user":
             return self.__user_data
+        elif target == "muid" or target == "managed_user":
+            return self.__managed_user_data
         else:
             raise DatabaseLogicError("target id did not define")
         
@@ -191,6 +203,8 @@ class Local_Database:
             return self.__save_name_card_json
         elif target == "uid" or target == "user":
             return self.__save_user_json
+        elif target == "muid" or target == "managed_user":
+            return self.__save_managed_user_json
         else:
             raise DatabaseLogicError("target id did not define")
 

@@ -14,11 +14,17 @@ class FeedModel(BaseModel):
         return
 
     def set_specific_feed_data(self, feed_manager:FeedManager, data_payload):
-        print("hello")
         self._feeds, self._key = feed_manager.get_feed_in_fclass(user=self._user,
                                                                   key=data_payload.key,
                                                                   fclass=data_payload.fclass)
         return
+    
+    def try_interact_feed(self, feed_manager:FeedManager, data_payload):
+        self._feeds = feed_manager.try_interaction_feed(user=self._user,
+                                                    fid=data_payload.fid,
+                                                    action=data_payload.action)
+        return
+
 
     def get_response_form_data(self, head_parser):
         try:

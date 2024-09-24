@@ -58,6 +58,7 @@ class BaseModel(HeaderModel):
         self._user = User()  # 이거 고려해야됨
         super().__init__()
 
+
     # 유저의 정보를 검색하는 함수
     def set_user_with_uid(self, request):
         # uid를 기반으로 user table 데이터와 userbias 데이터를 가지고 올것

@@ -26,11 +26,14 @@ def main():
         #print(dict_data)
 
         for data in data_list:
-            data["solo_daily_check_date"] = ""
-            data["group_daily_check_date"] = ""
-            new_data.append(data)
+            sample = {'muid' : data['uid'],
+                      'option' : [],
+                      'history' : []
+                      }
 
-    with open("./../src/model/local_database/user.json", 'w',  encoding='utf-8' )as f:
+            new_data.append(sample)
+
+    with open("./../src/model/local_database/managed_user.json", 'w',  encoding='utf-8' )as f:
         json.dump(new_data, f, ensure_ascii=False, indent=4)
 
 

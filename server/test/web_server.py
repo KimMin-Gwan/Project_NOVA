@@ -92,7 +92,7 @@ def home():
             async function testTargetEndpoint() {
                 const target = document.getElementById('targetInput').value;
                 try {
-                    const response = await fetch(`http://127.0.0.1:4000/feed_explore/get_feed?fclass=balance`, {
+                    const response = await fetch(`http://127.0.0.1:4000/feed_explore/get_feed?fclass=balance&key=9`, {
                         mode: 'cors',
                         credentials: 'include'
                     });
@@ -110,7 +110,7 @@ def home():
             async function testThirdEndpoint() {
                 const target = document.getElementById('targetInput').value;
                 try {
-                    const response = await fetch(`http://127.0.0.1:4000/home/home_feed?key=16`, {
+                    const response = await fetch(`http://127.0.0.1:4000/home/home_feed`, {
                         mode: 'cors',
                         credentials: 'include'
                     });

@@ -273,7 +273,7 @@ class League(SampleDomain):
         }
     
 class Feed(SampleDomain):
-    def __init__(self, fid="", uid="", nickname="", title="",
+    def __init__(self, fid="", uid="", nickname="", star=0,
                  body="", date="", fclass="", class_name="",
                  choice=None, result=None, state="d", attend=None,
                  category = None, comment = None):
@@ -291,7 +291,6 @@ class Feed(SampleDomain):
         self.fid = fid
         self.uid = uid
         self.nickname = nickname
-        self.title = title
         self.body = body
         self.date = date
         self.fclass = fclass
@@ -302,13 +301,13 @@ class Feed(SampleDomain):
         self.attend = attend
         self.category = category
         self.comment =comment 
+        self.star = star
 
     def make_with_dict(self, dict_data):
         try:
             self.fid = dict_data['fid']
             self.uid = dict_data['uid']
             self.nickname = dict_data['nickname']
-            self.title = dict_data['title']
             self.body = dict_data['body']
             self.date = dict_data['date']
             self.fclass = dict_data['fclass']
@@ -319,6 +318,7 @@ class Feed(SampleDomain):
             self.attend = dict_data['attend']
             self.category = dict_data['category']
             self.comment = dict_data['comment']
+            self.star= dict_data['star']
         except KeyError as e:
             raise DictMakingError(error_type=f"Missing key: {str(e)}")
 
@@ -327,7 +327,6 @@ class Feed(SampleDomain):
             "fid": self.fid,
             "uid": self.uid,
             "nickname": self.nickname,
-            "title": self.title,
             "body": self.body,
             "date": self.date,
             "fclass": self.fclass,
@@ -337,7 +336,8 @@ class Feed(SampleDomain):
             "state": self.state,
             "attend": self.attend,
             "category":self.category,
-            "comment":self.comment
+            "comment":self.comment,
+            "star":self.star
         }
 
 

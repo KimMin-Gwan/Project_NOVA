@@ -106,7 +106,7 @@ class RequestManager(JWTManager):
     def get_bad_request_exception(self):
         return self.bad_request_exception
 
-    def try_view_management(self, data_payload = None, cookies = None) -> Response:
+    def try_view_management_need_authorized(self, data_payload = None, cookies = None):
         self.data_payload= data_payload
         try:
             payload, new_token = self.home_decode(token=cookies["nova_token"])
@@ -117,6 +117,18 @@ class RequestManager(JWTManager):
                     headers={"WWW-Authenticate" : "Bearer"})
         self.jwt_payload= payload
         self.new_token = new_token
+
+    def try_view_management(self, data_payload = None, cookies = None):
+        self.data_payload= data_payload
+        try:
+            payload, new_token = self.home_decode(token=cookies["nova_token"])
+            self.jwt_payload= payload
+            self.new_token = new_token
+        except:
+            self.jwt_payload = ""
+            self.new_token = ""
+        finally:
+            return
 
     def make_json_response(self, body_data:dict, token = ""):
         if token != "":

@@ -1,10 +1,8 @@
 from others.data_domain import Feed, User
-from model import Local_Database
-from datetime import datetime
+#from model import Local_Database
+from datetime import datetime, timedelta
 import string
 import random
-
-
 
 # 피드를 관리하는 장본인
 
@@ -12,10 +10,15 @@ import random
 class FeedManager:
     def __init__(self, database, fclasses) -> None:
         self._feedClassManagement = FeedClassManagement(fclasses=fclasses)
-        self._database:Local_Database = database
+        self._database = database
+        self._managed_user_table = ManagedUserTable(database=database)
+        self._feed_class_analist = FeedClassAnalist()
         self._num_feed = 0
         self._managed_feed_list = []
         pass
+
+    def __get_argo(self, user):
+        return self._feed_class_analist.dice_argo(option=user.option)
     
     # 서버 시작 초기에 관리용 피드를 메모리에 올리는 작업
     def init_feed_data(self):
@@ -39,7 +42,6 @@ class FeedManager:
                                         category=data.category)
             self._num_feed += 1
             self._managed_feed_list.append(managed_feed)
-
         print(f'INFO<-[      {self._num_feed} NOVA FEED NOW READY.')
         
     def __get_datetime(self, date_str):
@@ -48,14 +50,12 @@ class FeedManager:
     def __set_datetime(self):
         return datetime.now().strftime("%Y/%m/%d-%H:%M:%S")
     
-    
     def __get_class_name(self, fclass):
         return self._feedClassManagement.__get_class_name(fclass=fclass)
 
     # 새로운 fid 만들기
     def __make_new_fid(self):
         random_string = "default"
-
         # 중북되지 않는 fid 만들기
         while True:
             flag = True 
@@ -110,156 +110,184 @@ class FeedManager:
         new_feed.category = []
         return new_feed
     
-    def __make_target_feed(self, user:User, key:int):
-        target_feed = []
-        # 초기에는 -1로 올테니까 가장 최신으로
-        if key == -1:
-            key = self._num_feed - 1
-        else:
-            key = key
-
-        # 출력
-        #for f in self._managed_feed_list:
-            #f()
-
-        target = -1
-        # 지지자의 요청이라면 유사한 내용으로 알고리즘
-        if user.uid != "":
-            for i, single_feed in enumerate(reversed(self._managed_feed_list)):
-                single_feed:ManagedFeed = single_feed
-                if single_feed.key == key:
-                    target = i
-                    break
-
-        # 일반 유저의 요청이라면 그냥 순서대로
-        else:
-            for i, single_feed in enumerate(reversed(self._managed_feed_list)):
-                single_feed:ManagedFeed = single_feed
-                if single_feed.key == key:
-                    target = i
-                    break
-                
-        #self._managed_feed_list[target]() 출력
-
-        # 메모리상에 올라와있는 목록에서 보내야하는 타겟을 기준으로 아래를 모두 추출
-        if target != 0:
-            for data in self._managed_feed_list[:-target]:
-                #data()
-                target_feed.append(data)
-        else:
-            for data in self._managed_feed_list:
-                #data()
-                target_feed.append(data)
-
-        return target_feed
 
     def __set_send_feed(self, target_feed):
-        result_key = -1
-        # 남은 데이터 길이 보고 3개 보낼지 그 이하로 보낼지 생각해야함
-        if len(target_feed) > 2:
-            target_feed= target_feed[-3:]
-            result_key = target_feed[0].key
-        else:
-            target_feed= target_feed[:len(target_feed)]
-            result_key = target_feed[len(target_feed)-1].key
-
+        result_key = 0
         target_fid = []
         for single_feed in target_feed:
             target_fid.append(single_feed.fid)
         feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=target_fid)
 
         result = []
-        for data in reversed(feed_datas):
+        for data in feed_datas:
             feed = Feed()
             feed.make_with_dict(data)
             result.append(feed)
 
-        result_key = result_key - 1
         return result, result_key
     
     # 홈 화면에서 feed를 요청하는 상황
-    def get_feed_in_home(self, user:User, key:int):
-        target_feed = self.__make_target_feed(user=user, key=key)
-        result, result_key = self.__set_send_feed(target_feed=target_feed)
-        result = self.make_get_data(user, result)
+    def get_feed_in_home(self, user:User, key:int = -4):
+
+        if user.uid != "":
+            managed_user = self._managed_user_table.find_user(user=user)
+            result, result_key = self._get_home_feed_with_user(user=managed_user, key=key)
+            result = self.is_user_interacted(user, result)
+        else:
+            result, result_key = self._get_home_feed(key=key)
+
         return result, result_key
     
-    def __set_target_feed_with_fclass(self, target_feed:list, fclass:str):
-        target = []
+    def _get_home_feed_with_user(self, user, key):
+        sample_feeds = []
+        count = 0
+        while True:
+            if count > 100:
+                break
+            target_category =self.__get_argo(user)
+            #present_feed = self.pick_single_feed_with_category(user=user, category=target_category)
+            single_feed = self.pick_single_feed_with_category(user=user, category=target_category)
+            if single_feed.key == -1:
+                count += 1
+                continue
+            sample_feeds.append(single_feed)
+            result_key = single_feed.key
 
-        for single_feed in target_feed:
-            if single_feed.fclass == fclass:
-                target.append(single_feed)
-        return target
+            if len(sample_feeds) == 3:
+                break
 
+        result, _ = self.__set_send_feed(target_feed=sample_feeds)
+        return result, result_key
+    
+    def _get_home_feed(self, key=-4):
+        sample_feeds = []
+        if key == -4:
+            key = self._num_feed -1
+            single_feed = self._get_single_managed_feed(key=key)
+            sample_feeds.append(single_feed)
+            result_key = single_feed.key
+        count = 0
+        while True:
+            if count > 8:
+                break
+            single_feed = self.pick_single_feed_with_key(key=key)
+            if single_feed.key == -1:
+                count += 1
+                continue
+            sample_feeds.append(single_feed)
+            result_key = single_feed.key
+            key = result_key
+
+            if len(sample_feeds) == 3:
+                break
+
+        result, _ = self.__set_send_feed(target_feed=sample_feeds)
+        return result, result_key
+    
     # 위성 탐색에서 feed데이터를 요청하는 상황
     def get_feed_in_fclass(self, user:User, key:int, fclass:str):
         # 제일 위에서 하나 뽑고, 다음꺼 하나 더뽑고
         # key에 맞는 feed 하나 더 뽑아서 넣어주기
-        if user != "":
-            result, result_key = self.short_feed_with_user(user=user,key=key, fclass=fclass)
+        #for feed in self._managed_feed_list:
+            #feed()
+        if user.uid != "":
+            managed_user = self._managed_user_table.find_user(user=user)
+            result, result_key = self._get_short_feed_with_user(user=managed_user,key=key, fclass=fclass)
+            result = self.is_user_interacted(user, result)
         else:
-
-
-        ##target_feed = self.__make_target_feed(user=user, key=key)
-        ##target_feed = self.__set_target_feed_with_fclass(target_feed=target_feed, fclass=fclass)
-        ##result, result_key = self.__set_send_feed(target_feed=target_feed)
-        ##result = self.make_get_data(user, result)
-        ## ------------- 신규 -------------------
-        ## 유저가 로그인 했으면
-        #if user.uid != "":
-            #result_key = 
-            #result=[]
-            #index = 0
-            #user = self._find_managed_user(self, user)
-            #while len(result) > 2:
-                #target_category = self.get_argo(user)
-                #target, index = self.pick_single_feed_with_category(user=user, category=target_category, index=index)
-                #result.append(target)
-        ## 유저가 로그인 안했으면
-        #else:
-            #target_feed = self.__make_target_feed(user=user, key=key)
-            #target_feed = self.__set_target_feed_with_fclass(target_feed=target_feed, fclass=fclass)
-            #result, result_key = self.__set_send_feed(target_feed=target_feed)
-            #result_key += 1
-
-        #result = self.make_get_data(user, result)
+            result, result_key = self._get_short_feed(key=key, fclass=fclass)
         return result, result_key
 
-    def short_feed(self, key, fclass):
-        sample_feed = []
+    def _get_short_feed(self, key, fclass = "None"):
+        sample_feeds = []
         # 제일 위에서 하나 뽑고, 다음꺼 하나 더뽑고
         # key에 맞는 feed 하나 더 뽑아서 넣어주기
-        for i in range(2):
-            present_feed= self.pick_single_feed_with_category(user=user, category=target_category)
-            sample_feed.append(present_feed)
+        if key == -4:
+            key = self._num_feed - 1
+            while True:
+                single_feed = self._get_single_managed_feed(key=key)
+                if fclass != "None":
+                    if single_feed.fclass != fclass:
+                        key -= 1
+                        continue
+                sample_feeds.append(single_feed)
+                result_key = single_feed.key
+                break
+            #self.__swap_list(sample_feeds)
 
-        if key != -1:
-            prev_feed = self._get_single_feed(key=key)
-            sample_feed.append(prev_feed)
-        result_key = sample_feed[0].key
-        result = self.__set_send_feed(target_feed=sample_feed)
+        single_feed = self.pick_single_feed_with_key(key=key, fclass=fclass)
+        sample_feeds.append(single_feed)
+        result_key = single_feed.key
 
+        result, _ = self.__set_send_feed(target_feed=sample_feeds)
         return result, result_key
 
-    def short_feed_with_user(self, user, key, fclass):
-        sample_feed = []
+    # 숏폼 피드에서 유저데이터가 있을때 데이터를 받아감
+    # result = [지금 볼꺼, 다음볼꺼, 방금 본거]
+    # result_key = 지금 볼꺼.key
+    def _get_short_feed_with_user(self, user, key, fclass):
+        sample_feeds = []
         # 제일 위에서 하나 뽑고, 다음꺼 하나 더뽑고
         # key에 맞는 feed 하나 더 뽑아서 넣어주기
-        for i in range(2):
-            target_category = self.get_argo(user)
-            present_feed= self.pick_single_feed_with_category(user=user, category=target_category)
-            sample_feed.append(present_feed)
+        count = 0
+        while True:
+            if count > 100:
+                break
+            target_category =self.__get_argo(user)
+            present_feed= self.pick_single_feed_with_category(user=user, category=target_category, fclass=fclass)
+            if present_feed.key == -1:
+                count += 1
+                continue
+            sample_feeds.append(present_feed)
+            result_key = present_feed.key
+            break
 
-        if key != -1:
-            prev_feed = self._get_single_feed(key=key)
-            sample_feed.append(prev_feed)
-        result_key = sample_feed[0].key
-        result = self.__set_send_feed(target_feed=sample_feed)
+        if key == -4:
+            count = 0
+            while True:
+                if count > 100:
+                    break
+                target_category =self.__get_argo(user)
+                next_feed = self.pick_single_feed_with_category(user=user, category=target_category, fclass=fclass)
+                if next_feed.key == -1:
+                    count += 1
+                    continue
+                sample_feeds.append(next_feed)
+                result_key = next_feed.key
+                break
+            #self.__swap_list(sample_feeds)
 
+        result, _ = self.__set_send_feed(target_feed=sample_feeds)
         return result, result_key
+    
+    # 두개일때 뒤집기 해주는건데 이건 이제 안씀
+    def __swap_list(self, list_data):
+        temp = list_data[0]
+        list_data[0] = list_data[1]
+        list_data[1] = temp
+        return 
 
+    # fid나 key로 단일 feed 하나만 호출할 때
+    def _get_single_feed(self, key = -1, fid = ""):
+        target_feed = None
+        if key != -1:
+            for feed in self._managed_feed_list:
+                if feed.key == key:
+                    target_feed=feed
+        else:
+            for feed in self._managed_feed_list:
+                if feed.fid== fid:
+                    target_feed=feed
 
+        if not target_feed:
+            target_feed = Feed()
+        else:
+            feed_data=self._database.get_data_with_id(target="fid",id=feed.fid)
+            target_feed = Feed()
+            target_feed.make_with_dict(feed_data)
+        return target_feed
+
+    # fid나 key로 단일 feed 하나만 호출할 때
     def _get_single_managed_feed(self, key = -1, fid = ""):
         target_feed = None
         if key != -1:
@@ -271,24 +299,12 @@ class FeedManager:
                 if feed.fid== fid:
                     target_feed=feed
 
-
-        target_feed=self._database.get_data_with_id(target="fid",id=fid)
+        if not target_feed:
+            target_feed = ManagedFeed(key=-1)
         return target_feed
 
-    def _get_single_feed(self, key = -1, fid = ""):
-        target_feed = None
-        if key != -1:
-            for feed in self._managed_feed_list:
-                if feed.key == key:
-                    fid = feed.fid
-
-        target_feed=self._database.get_data_with_id(target="fid",id=fid)
-        return target_feed
-
-
-    # get 요청에 대한 반환값 조사
     # 유저가 참여한 feed인지 확인할것
-    def make_get_data(self, user:User, feeds:list):
+    def is_user_interacted(self, user:User, feeds:list):
         result = []
         for feed in feeds:
             # 검열된 feed면 생략
@@ -310,14 +326,20 @@ class FeedManager:
     
     def __get_feed_comment(self, feed:Feed):
         if len(feed.comment) == 0:
-            comment = "아직 작성된 댓글이 없어요"
+            comment = {"": "아직 작성된 댓글이 없어요."}
         else:
             comment = feed.comment[-1]
         return comment
 
-
+    def try_interaction_feed(self, user:User, fid:str, action):
+        managed_user:ManagedUser = self._managed_user_table.find_user(user=user)
+        if fid in managed_user.history:
+            managed_user.history.remove(fid)
+        feed = self.__try_interaction_with_feed(user=user, fid=fid, action=action)
+        return [feed]
+        
     # feed 와 상호작용 -> 선택지를 선택하는 경우
-    def get_feed_result(self, user:User, fid, action) -> Feed:
+    def __try_interaction_with_feed(self, user, fid, action):
         fid_data = self._database.get_data_with_id(target="fid", id=fid)
         feed = Feed()
         feed.make_with_dict(fid_data)
@@ -335,8 +357,11 @@ class FeedManager:
             feed.result[target] -= 1
 
         # 이제 참여한 데이터를 세팅하고 저장하면됨
-        feed.attend[action].append(user.uid)
-        feed.result[action] += 1
+        if target != action:
+            feed.attend[action].append(user.uid)
+            feed.result[action] += 1
+        else:
+            action = -1
 
         self._database.modify_data_with_id(target_id="fid",
                                             target_data=feed.get_dict_form_data())
@@ -348,27 +373,48 @@ class FeedManager:
     # 만약 추천순 같이 정렬이 바뀔 일이 있으면
     # 여기다가 매게변수로 정렬된 리스트를 주면됨
     #  아니면 걍 내부에서 소팅 돌링 별도의 리스트를 가지고 검색할것
-    def pick_single_feed(self, user):
+    def pick_single_feed_with_key(self, key, fclass = "None"):
         target = None
-        for managed_feed in self._managed_feed_list:
-            managed_feed:ManagedFeed=managed_feed
-            if managed_feed.fid in user.history:
+        flag = False
+        for managed_feed in reversed(self._managed_feed_list):
+            if managed_feed.key == key:
+                flag = True
                 continue
+            if flag:
+                if fclass == "None":
+                    target = managed_feed
+                    break
+
+                if managed_feed.fclass == fclass:
+                    target = managed_feed
+                    break
+        return target
 
     # 이건 카테고리에 있는 단일 피드 뽑는 함수
-    # 뒤집기 어려워서 in range 이터레이터로 동작하고 - 붙혀서 뒤집음
-    # 인덱스를 반환해서 검색하도록 구성함
-    def pick_single_feed_with_category(self, user, category):
+    def pick_single_feed_with_category(self, user, category, fclass="None"):
         target = None
-        while True:
-            for managed_feed in self._managed_feed_list:
-                if managed_feed.fid in user.history:
+        for managed_feed in reversed(self._managed_feed_list):
+            if fclass != "None":
+                if managed_feed.fclass != fclass:
                     continue
-                target = managed_feed
+            
+            if managed_feed.fid in user.history:
+                continue
+            target = managed_feed
+
+            # 옵션이 하나도 없는 사람은 category를 검사할 수 없음
+            if category == "None":
+                break
+            
+            # 옵션 이 있는 사람은 카테고리 검사 하삼
             if category in target.category:
                 break
+
         if target:
             user.history.append(target.fid)
+        else:
+            # 만약에 category로 찍은 데이터가 없음?
+            target = ManagedFeed(key=-1)
         return target
 
 
@@ -382,6 +428,9 @@ class FeedClassAnalist:
         pass
 
     def dice_argo(self, option):
+        if not len(option):
+            return "None"
+
         len_option = len(option)
         key =  random.randint(0, 1000)
         target = key % len_option
@@ -424,7 +473,7 @@ class ManagedFeed:
         self.key = key
         self.fid = fid
         self.fclass = fclass
-        self.category  = []
+        self.category  = category
 
     def __call__(self):
         print(f"key: {self.key} | fid: {self.fid} | fclass: {self.fclass} | category: {self.category}")
@@ -433,9 +482,10 @@ class ManagedFeed:
 # 메모리에 올려서 관리할 유저
 # 알고리즘에 따라 적절한 피드 제공에 목적을 둠
 class ManagedUserTable:
-    def __init__(self):
-        self.__key = 0
+    def __init__(self, database):
+        self.__key = 0  # ttl 체크용 index key
         self._managed_user_list = []
+        self._database= database
 
     # 리스트 보여주기
     def __call__(self):
@@ -446,31 +496,70 @@ class ManagedUserTable:
     def find_user(self, user):
         for i, managed_user in enumerate(self._managed_user_list):
             if managed_user.uid == user.uid:
-                return i
-        return -1
+                self.__refresh_ttl(index=i)
+                return self.get_user_data(index=i)
+        index = self._add_user(user=user)
+        return self.get_user_data(index)
     
     # 유저 데이터 반환
     def get_user_data(self, index):
         return self._managed_user_list[index]
 
     # 테이블에 유저 추가하기
-    def add_user(self, user:User):
+    def _add_user(self, user:User):
+        managed_user_data = self._database.get_data_with_id(target="muid", id=user.uid)
+
         new_user = ManagedUser(
-            uid = user.uid
+            uid = managed_user_data['muid'],
+            option = managed_user_data['option'],
+            history = managed_user_data['history'],
         )
-        
+
+        index = self.__check_ttl()
+        if index != -1:
+            temp = self._managed_user_list[index]
+            self._database.modify_data_with_id(target_id="muid", target_data=temp.get_dict_form_data())
+            self._managed_user_list[index] = new_user
+        else:
+            self._managed_user_list.append(new_user)
+            index = len(self._managed_user_list) - 1
+        return index
+
+    # 만료되었으면 메모리에서 내릴꺼라서 체크해야됨
+    def __check_ttl(self):
+        index = -1
+        if self.__key == len(self._managed_user_list):
+            self.__key = 0
+
+        for i in range(self.__key, len(self._managed_user_list)):
+            if self._managed_user_list[i].ttl < datetime.now():
+                self.__key = i
+                index = i
+                break
+        return index
+                
+    # ttl 초기화
+    def __refresh_ttl(self, index):
+        self._managed_user_list[index].ttl = datetime.now() + timedelta(seconds=3600)
+        return
 
 # 유저 특화 시스템 구성을 위한 관리 유저
 class ManagedUser:
-    def __init__(self, uid):
+    def __init__(self, uid, option, history):
         self.uid = uid
         self.option = []
         self.history = []
-        self.TTL = 0
+        self.ttl= 0
 
     def __call__(self):
         print(f"uid : {self.uid}")
         print(f"category : {self.category}")
         print(f"history : {self.history}")
-        print(f"TTL : {self.TTL}")
+        print(f"TTL : {self.ttl}")
 
+    def get_dict_form_data(self):
+        return {
+            "muid" : self.uid,
+            "option" : self.option,
+            "history" : self.history,
+        }
