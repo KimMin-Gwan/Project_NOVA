@@ -1,124 +1,186 @@
-.main-container {
-    /* margin: 0 auto; */
-    background-color: black;
-    /* width: 500px; */
-    min-height: 200vh;
-}
-
-.title-area {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    /* background-color: white; */
-    height: 50px;
-    border-bottom: solid white 1px;
-}
-
-.bias-show-area {
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-
-    width: 100%;
-    height: 300px;
-    background-color: antiquewhite;
-}
-
-.personal_box {
-    /* display: inline-flex; */
+.base_box {
+    margin: 0 auto;
     width: 95%;
-    height: 90%;
-    background-color: gray;
-    border-radius: 15px;
+    height: 250px;
+    background-color: white;
+    border-radius: 10px;
+    margin-top: 20px;
 }
 
-.personal_area, .ticket_info {
+.height_auto {
+    height: auto;
+    padding-bottom: 10px;
+}
+
+.base_box h4 {
+    padding: 10px 10px;
+    margin: 0;
+}
+
+.wrap_box {
+    width: 100%;
+    height: 100%;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+}
+
+/* 지지자, 티켓 박스 */
+
+.sup_part {
+    flex: 1;
+    /* background-color: blue; */
+}
+
+.wrap_sup {
+    display: flex;
+    justify-content: space-around;
     align-items: center;
     width: 100%;
-    height: 50%;
-    background-color: blue;
+    height: 70%;
+    /* background-color: blanchedalmond; */
 }
 
-.personal {
-    /* display: flex;
-    justify-content: center;
-    align-items: center; */
-    width: 80%;
-    height: 100px;
-    background-color: aqua;
+.support {
+    /* width: 20%; */
+    /* background-color: blue; */
+    /* margin-left: -20px; */
+    font-size: 30px;
+}
+
+.space_pass {
+    /* align-self: baseline; */
+    /* width: 20%; */
+    /* background-color: blue; */
+    font-size: 14px;
+}
+
+.ticket_part {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    /* background-color: blueviolet; */
 }
 
 .ticket_info {
-    background-color: skyblue;
-}
-.my-info-area {
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
-    width: 100%;
-    height: 300px;
-    background-color: plum;
+    flex: 1;
+    /* background-color: orange; */
+
 }
 
-.my-info {
-    width: 90%;
-    height: 250px;
+.btn_container {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex: 1;
+    /* background-color: yellowgreen; */
+}
+
+.btn_container button {
+    width: 100px;
+    height: 30px;
+    border-radius: 5px;
     background-color: gray;
 }
 
-.info-box {
-    height: 50px;
-    display: flex;
-    justify-content: space-between;
-    text-align: center;
-    background-color: antiquewhite;
+/* 최애 - 개인, 단체 */
+
+.half_box {
+    flex: 1;
 }
 
-.sub-info-area {
-    width: 100%;
-    height: 400px;
-    background-color: orange;
+
+.img_box {
+    width: 170px;
+    height: 200px;
 }
 
-.sub-info {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 300px;
-    background-color: skyblue;
-}
-
-.info {
-    /* display: flex;
-    justify-content: center;
-    align-items: center; */
-    width: 90%;
-    height: 250px;
-    background-color: gray;
-}
-
-.market-button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100px;
-    background-color: green;
-}
-
-.market {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 60%;
-    height: 50px;
-    background-color: gray;
-    border-radius: 80px;
-}
-
-/* .icon-style {
+.img_box img {
     object-fit: cover;
-} */
+}
+
+.text_box {
+    background-color: bisque;
+    width: 90%;
+    /* height: 100%; */
+}
+
+.half_box p {
+    padding: 0px;
+    margin: 0px;
+    margin-bottom: 0px;
+    text-align: end;
+}
+
+.bias_name {
+    padding-top: 0px;
+    margin: 0px;
+    font-size: 32px; 
+    font-weight: 700;
+    text-align: end;
+}
+
+
+
+/* 서비스 */
+
+.grid_container {
+    display: grid;
+    align-items: center;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 50px 50px;
+    column-gap: 10px;
+    row-gap: 10px;
+    padding-left: 10px;
+}
+
+/* 나의 활동 */
+
+.my_activity {
+    height: auto;
+    /* background-color: orange; */
+}
+
+.activity {
+    display: grid;
+    grid-template-columns: 40px 1fr 35px;
+    grid-template-rows: 40px 40px 40px;
+    row-gap: 10px;
+    padding-left: 10px;
+    align-items: center;
+    /* height: 40px; */
+}
+
+.activity_icon {
+    width: 25px;
+    height: 25px;
+}
+
+/* 개인 정보 */
+.personal_info {
+    /* background-color: orange; */
+    height: auto;
+    width: auto;
+}
+
+.info_list {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: repeat(auto-fit, 30px);
+    row-gap: 5px;
+    align-items: center;
+    padding-left: 10px;
+}
+
+.info_items:nth-child(even) {
+    width: 90%;
+    text-align: end;
+}
+
+.info_items:nth-child(odd) {
+    width: auto;
+    padding-left: 10px;
+    font-weight: 700;
+}

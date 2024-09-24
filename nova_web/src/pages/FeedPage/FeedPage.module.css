@@ -14,11 +14,12 @@
     height: 100vh;
     background-color: black;
     color: white;
-    /* overflow: hidden; */
+    overflow: hidden;
     position: relative;
 }
 
 .top_bar_area {
+    /* background-color: black; */
     height: 60px;
 }
 
@@ -543,24 +544,42 @@
 /* 숏폼형태 */
 
 .test {
-    height: 93%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    height: 92%;
+    /* display: flex; */
+    /* justify-content: center;
+    align-items: center; */
     
+    /* overflow: hidden; */
     /* background-color: blueviolet; */
 
 
 }
 
+.short_form {
+    height: 100vh;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .short_form_container {
+    
     margin: 0 auto;
     width: 70%;
     height: 660px;
-    background-color: bisque;
+    background-color: greenyellow;
     border-radius: 10px;
     transition: transform 0.7s ease;
-    transform: translateY(-700px);
+
+}
+
+.button_area {
+    position: absolute;
+    top: 10vh;
+    width: 100%;
+    height: 660px;
+    /* background-color: aquamarine; */
 }
 
 .short_box {
@@ -637,3 +656,45 @@
 .planet_page_button {
     width: 120px;
 }
+
+/* new */
+
+.banner-slider {
+    position: relative;
+    width: 300px; /* 배너의 너비 */
+    height: 100vh; /* 배너의 높이를 화면의 높이에 맞추기 */
+    overflow: hidden;
+    margin: 0 auto; /* X축 중앙에 정렬 */
+    cursor: grab;
+  }
+  
+  /* 배너들이 쌓이는 트랙 */
+  .slider-track {
+    display: flex;
+    flex-direction: column; /* 수직 방향으로 정렬 */
+    transition: transform 0.5s ease;
+  }
+  
+  /* 각 배너의 스타일 */
+  .slider-item {
+    min-height: 100vh; /* 각 박스의 높이를 화면 높이에 맞추기 */
+    width: 100%; /* 배너의 너비는 부모 요소에 맞춤 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 2em;
+    transition: background-color 0.3s ease;
+    user-select: none;
+  }
+  .current-index {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    font-size: 1.2em;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border-radius: 8px;
+  }

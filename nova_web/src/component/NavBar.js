@@ -23,8 +23,8 @@ const NavBar = () => {
             <div className={`nav-box ${isVisible ? 'visible' : ''}`}>
                 <button className={`nav_button2`}
                     onClick={(e) => {
-                        handleNavigate('/planet')
-                        handleStopClick(e)
+                        handleStopClick(e);
+                        handleNavigate('/planet');
                     }
                     }>펀딩</button>
                 <p>펀딩 페이지</p>

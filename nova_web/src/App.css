@@ -66,6 +66,17 @@ body {
   color: white;
 }
 
+.top_area {
+  margin: 0 auto;
+  width: 85%;
+  height: 100px;
+  /* background-color: white; */
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .container {
   max-width: 500px;
   /* height: 200vw; */
@@ -1049,10 +1060,12 @@ body {
 
 .nav-box.visible {
   opacity: 1;
+  pointer-events: auto;
 }
 
 .nav-box {
   opacity: 0;
+  pointer-events: none;
   transition: opacity 0.3s ease-in;
 }
 

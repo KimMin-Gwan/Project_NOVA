@@ -32,6 +32,11 @@ import GalaxyList from './pages/GalaxyPage/GalaxyList.js';
 import Box from './component/test.js';
 import NavBar from './component/NavBar.js';
 
+
+// 401 이면 바이어스 격자 무늬로 띄우기
+// 401 이면 alert - 로그인 필요 문구 띄우기
+
+
 function App() {
 
   let url = 'https://nova-platform.kr/home/';
@@ -91,7 +96,8 @@ function App() {
       <Route path='/bias_info/user_contribution' element={<BiasDetail />}></Route>
       <Route path='/novalogin' element={<NOVALogin />}></Route>
       <Route path='/' element={
-        <div onClick={() => {
+        <div onClick={(e) => {
+          e.stopPropagation();
           if (showBox) {
             setShowBox(false);
           };
@@ -117,9 +123,9 @@ function App() {
                 <Link to='/galaxy' className='button'>은하페이지</Link>
                 <Link to='/feed_page' className='button'>피드페이지</Link>
                 <Link to='/signup' className='button'>회원가입</Link>
-                <Link to='/mypage' className='button'>마이페이지</Link>
                 <Link to='/league_detail' className='button'>리그 자세히보기</Link>
                 <Link to='/novalogin' className='button'>로그인 페이지</Link> */}
+                <Link to='/mypage' className='button'>마이페이지</Link>
                 {/* <Link to='/bias_certify' className='button'>최애 지지하기</Link> */}
                 {/* <Link to='/league_detail' className='button'>리그상세페이지</Link> */}
                 {/* <Link to='/select_bias' className='button'>최애선택</Link> */}
