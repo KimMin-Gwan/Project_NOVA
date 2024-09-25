@@ -40,6 +40,7 @@ class Feed_Controller:
         finally:
             return model
 
+    # 위성 탐색에서 들어오는 요청에 대한 반환값
     def get_specific_feed_data(self, database:Local_Database,
                                request, feed_manager:FeedManager):
         model = FeedModel(database=database)
@@ -61,6 +62,7 @@ class Feed_Controller:
         finally:
             return model
 
+    # 피드 버튼 누르기
     def try_interact_feed(self, database:Local_Database,
                                request, feed_manager:FeedManager):
         model = FeedModel(database=database)
@@ -81,11 +83,110 @@ class Feed_Controller:
         finally:
             return model
 
+    # 피드 버튼 누르기
+    def try_staring_feed(self, database:Local_Database,
+                               request, feed_manager:FeedManager):
+        model = FeedModel(database=database)
+        try:
+            # 유저가 있으면 세팅
+            model.set_user_with_email(request=request.jwt_payload)
+            model.try_staring_feed(feed_manager=feed_manager,
+                                         data_payload=request.data_payload)
 
+        except CustomError as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
 
+        except Exception as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
 
+        finally:
+            return model
 
+    # comment 만들기
+    def try_make_comment(self, database:Local_Database,
+                               request, feed_manager:FeedManager):
+        model = FeedModel(database=database)
+        try:
+            # 유저가 있으면 세팅
+            model.set_user_with_email(request=request.jwt_payload)
+            model.try_make_new_comment(feed_manager=feed_manager,
+                                         data_payload=request.data_payload)
 
+        except CustomError as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
+
+        except Exception as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
+
+        finally:
+            return model
+
+    # comment 만들기
+    def get_all_comment_on_feed(self, database:Local_Database,
+                               request, feed_manager:FeedManager):
+        model = FeedModel(database=database)
+        try:
+            # 유저가 있으면 세팅
+            model.set_user_with_email(request=request.jwt_payload)
+            model.get_all_comment_on_feed(feed_manager=feed_manager,
+                                         data_payload=request.data_payload)
+
+        except CustomError as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
+
+        except Exception as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
+
+        finally:
+            return model
+
+    # comment 지우기
+    def try_remove_comment(self, database:Local_Database,
+                               request, feed_manager:FeedManager):
+        model = FeedModel(database=database)
+        try:
+            # 유저가 있으면 세팅
+            model.set_user_with_email(request=request.jwt_payload)
+            model.try_remove_comment(feed_manager=feed_manager,
+                                         data_payload=request.data_payload)
+
+        except CustomError as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
+
+        except Exception as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
+
+        finally:
+            return model
+
+    # comment 좋아요 누르기
+    def try_like_comment(self, database:Local_Database,
+                               request, feed_manager:FeedManager):
+        model = FeedModel(database=database)
+        try:
+            # 유저가 있으면 세팅
+            model.set_user_with_email(request=request.jwt_payload)
+            model.try_like_comment(feed_manager=feed_manager,
+                                         data_payload=request.data_payload)
+
+        except CustomError as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
+
+        except Exception as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
+
+        finally:
+            return model
 
 
 

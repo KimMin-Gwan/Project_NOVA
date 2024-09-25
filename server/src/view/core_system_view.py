@@ -204,7 +204,7 @@ class Core_Service_View(Master_View):
 
         # feed 랑 상호작용 -> 버튼을 눌렀을 때 ( 홈 또는 위성 탐색 페이지에서 사용)
         @self.__app.get('/feed_explore/interaction_feed')
-        def try_interaction_feed(request:Request, fid:Optional[str], action:Optional[str]):
+        def try_interaction_feed(request:Request, fid:Optional[str], action:Optional[int]):
             request_manager = RequestManager()
 
             data_payload = FeedInteractionRequest(fid=fid, action=action)
@@ -223,19 +223,90 @@ class Core_Service_View(Master_View):
 
         # feed 랑 상호작용 -> 관심별 버튼 
         @self.__app.get('/feed_explore/check_star')
-        def try_check_star(request:Request, fid:Optional[str], action:Optional[str]):
+        def try_check_star(request:Request, fid:Optional[str]):
             request_manager = RequestManager()
 
-            data_payload = FeedInteractionRequest(fid=fid, action=action)
+            data_payload = FeedStaringRequest(fid=fid)
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
             if not request_manager.jwt_payload.result:
                 raise request_manager.credentials_exception
 
             home_controller=Feed_Controller()
-            model = home_controller.try_interact_feed(database=self.__database,
+            model = home_controller.try_staring_feed(database=self.__database,
                                                         request=request_manager,
                                                         feed_manager=self.__feed_manager)
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
 
+        # feed 랑 상호작용 -> 댓글 달기
+        @self.__app.post('/feed_explore/make_comment')
+        def try_make_comment(request:Request, raw_requset:dict):
+            request_manager = RequestManager()
+            data_payload = MakeFeedCommentRequest(request=raw_requset)
+
+            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+            if not request_manager.jwt_payload.result:
+                raise request_manager.credentials_exception
+
+            home_controller=Feed_Controller()
+            model = home_controller.try_make_comment(database=self.__database,
+                                                        request=request_manager,
+                                                        feed_manager=self.__feed_manager)
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
+        # feed 랑 상호작용 -> 댓글 지우기
+        @self.__app.get('/feed_explore/remove_comment')
+        def try_remove_comment(request:Request, fid:Optional[str], cid:Optional[str]):
+            request_manager = RequestManager()
+
+            data_payload = RemoveCommentRequest(fid=fid, cid=cid)
+            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+            if not request_manager.jwt_payload.result:
+                raise request_manager.credentials_exception
+
+            home_controller=Feed_Controller()
+            model = home_controller.try_remove_comment(database=self.__database,
+                                                        request=request_manager,
+                                                        feed_manager=self.__feed_manager)
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
+        # feed 랑 상호작용 -> 댓글 모두보기
+        @self.__app.get('/feed_explore/view_comment')
+        def get_all_comment(request:Request, fid:Optional[str]):
+            request_manager = RequestManager()
+
+            data_payload = FeedStaringRequest(fid=fid)
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            #if not request_manager.jwt_payload.result:
+                #raise request_manager.credentials_exception
+
+            home_controller=Feed_Controller()
+            model = home_controller.get_all_comment_on_feed(database=self.__database,
+                                                        request=request_manager,
+                                                        feed_manager=self.__feed_manager)
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
+        # feed 랑 상호작용 -> 댓글 좋아요 하기
+        @self.__app.get('/feed_explore/like_comment')
+        def try_like_comment(request:Request, fid:Optional[str], cid:Optional[str]):
+            request_manager = RequestManager()
+
+            data_payload = RemoveCommentRequest(fid=fid, cid=cid)
+            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+            if not request_manager.jwt_payload.result:
+                raise request_manager.credentials_exception
+
+            home_controller=Feed_Controller()
+            model = home_controller.try_like_comment(database=self.__database,
+                                                        request=request_manager,
+                                                        feed_manager=self.__feed_manager)
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response
@@ -372,10 +443,26 @@ class GetFeedRequest(RequestHeader):
         self.fclass = fclass
         self.key = key
 
+class RemoveCommentRequest(RequestHeader):
+    def __init__(self,fid,cid) -> None:
+        self.fid=fid 
+        self.cid=cid
+
+class FeedStaringRequest(RequestHeader):
+    def __init__(self,fid) -> None:
+        self.fid=fid 
+
 class FeedInteractionRequest(RequestHeader):
     def __init__(self,fid, action) -> None:
         self.fid=fid 
         self.action = action
+
+class MakeFeedCommentRequest(RequestHeader):
+    def __init__(self, request) -> None:
+        super().__init__(request)
+        body = request['body']
+        self.fid = body['fid']
+        self.body = body['body']
 
 class LoginRequest(RequestHeader):
     def __init__(self, request) -> None:

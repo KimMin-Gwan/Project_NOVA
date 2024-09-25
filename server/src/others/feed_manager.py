@@ -1,4 +1,4 @@
-from others.data_domain import Feed, User
+from others.data_domain import Feed, User, Comment
 #from model import Local_Database
 from datetime import datetime, timedelta
 import string
@@ -49,6 +49,9 @@ class FeedManager:
 
     def __set_datetime(self):
         return datetime.now().strftime("%Y/%m/%d-%H:%M:%S")
+
+    def __get_today_date(self):
+        return datetime.now().strftime("%Y/%m/%d")
     
     def __get_class_name(self, fclass):
         return self._feedClassManagement.__get_class_name(fclass=fclass)
@@ -132,7 +135,9 @@ class FeedManager:
         if user.uid != "":
             managed_user = self._managed_user_table.find_user(user=user)
             result, result_key = self._get_home_feed_with_user(user=managed_user, key=key)
-            result = self.is_user_interacted(user, result)
+            print(managed_user)
+            result = self.is_user_interacted(managed_user, result)
+            print("hello")
         else:
             result, result_key = self._get_home_feed(key=key)
 
@@ -193,7 +198,7 @@ class FeedManager:
         if user.uid != "":
             managed_user = self._managed_user_table.find_user(user=user)
             result, result_key = self._get_short_feed_with_user(user=managed_user,key=key, fclass=fclass)
-            result = self.is_user_interacted(user, result)
+            result = self.is_user_interacted(managed_user, result)
         else:
             result, result_key = self._get_short_feed(key=key, fclass=fclass)
         return result, result_key
@@ -304,7 +309,8 @@ class FeedManager:
         return target_feed
 
     # 유저가 참여한 feed인지 확인할것
-    def is_user_interacted(self, user:User, feeds:list):
+    # 사실상 전송하는 모든 feed는 이 함수를 통함
+    def is_user_interacted(self, user, feeds:list):
         result = []
         for feed in feeds:
             # 검열된 feed면 생략
@@ -317,19 +323,117 @@ class FeedManager:
                 for uid in choice:
                     if uid == user.uid:
                         attend = i
-            comment = self.__get_feed_comment(feed=feed)
+            comment = self.__get_feed_comment(user=user, feed=feed)
 
             feed.attend = attend
             feed.comment = comment
+            # 기본적으로 star_flag는 False
+            if feed.fid in user.star:
+                feed.star_flag = True
+            feed.num_comment = len(feed.comment)
             result.append(feed)
         return result
     
-    def __get_feed_comment(self, feed:Feed):
+    def __get_feed_comment(self, user, feed:Feed):
         if len(feed.comment) == 0:
-            comment = {"": "아직 작성된 댓글이 없어요."}
+            comment = Comment(body="아직 작성된 댓글이 없어요")
+            comment = comment.get_dict_form_data()
         else:
-            comment = feed.comment[-1]
+            #comment = Comment(body="아직 작성된 댓글이 없어요")
+            #comment = comment.get_dict_form_data()
+            cid = feed.comment[-1]
+            comment = self._database.get_data_with_id(target="cid", id=cid)
+            # 기본적으로 owner는 False로 고정
+            if comment['uid'] == user.uid:
+                comment['owner'] = True
         return comment
+
+    def make_new_comment_on_feed(self, user:User, fid, body):
+        managedUser = self._managed_user_table.find_user(user=user)
+        feed_data = self._database.get_data_with_id(target="fid", id=fid)
+        feed = Feed()
+        feed.make_with_dict(dict_data=feed_data)
+
+        cid = fid+"-"+str(len(feed.comment))
+        date = self.__get_today_date()
+        new_comment = Comment(
+            cid=cid, fid=feed.fid, uid=user.uid, 
+            uname=user.uname, body=body, date=date)
+        feed.comment.append(cid)
+        self._database.add_new_data("cid", new_data=new_comment.get_dict_form_data())
+        self._database.modify_data_with_id("fid", target_data=feed.get_dict_form_data())
+
+        result = self.is_user_interacted(user=managedUser, feeds=[feed])
+        return result
+
+    def remove_comment_on_feed(self, user:User, fid, cid):
+        managedUser = self._managed_user_table.find_user(user=user)
+
+        feed_data = self._database.get_data_with_id(target="fid", id=fid)
+        feed = Feed()
+        feed.make_with_dict(dict_data=feed_data)
+
+        comment_data = self._database.get_data_with_id(target="cid", id=cid)
+        comment = Comment()
+        comment.make_with_dict(comment_data)
+
+        if user.uid == comment.uid:
+            feed.comment.remove(cid)
+            self._database.delete_data_With_id(target="cid", id=cid)
+            self._database.modify_data_with_id("fid", target_data=feed.get_dict_form_data())
+
+        result = self.is_user_interacted(user=managedUser, feeds=[feed])
+        return result
+
+    def get_all_comment_on_feed(self, user, fid):
+        feed_data = self._database.get_data_with_id(target="fid", id=fid)
+        feed=Feed()
+        feed.make_with_dict(dict_data=feed_data)
+
+        comments = []
+        comment_datas = self._database.get_datas_with_ids(target_id="cid", ids=feed.comment)
+
+        for comment_data in comment_datas:
+            new_comment = Comment()
+            new_comment.make_with_dict(comment_data)
+            # 기본적으로 owner는 False
+            if new_comment.uid == user.uid:
+                new_comment.owner= True
+            comments.append(new_comment)
+
+        self.__get_comment_liked_info(user=user, comments=comments)
+        return comments
+
+    def __get_comment_liked_info(self, user:User, comments):
+        for comment in comments:
+            if user.uid in comment.like_user:
+                comment.like_user = True
+            else:
+                comment.like_user = False
+        return
+
+    def try_like_comment(self, user:User, fid, cid):
+        managedUser = self._managed_user_table.find_user(user=user)
+
+        feed_data = self._database.get_data_with_id(target="fid", id=fid)
+        feed = Feed()
+        feed.make_with_dict(dict_data=feed_data)
+
+        comment_data = self._database.get_data_with_id(target="cid", id=cid)
+        comment = Comment()
+        comment.make_with_dict(comment_data)
+
+        if user.uid in comment.like_user:
+            comment.like_user.remove(user.uid)
+            comment.like -= 1
+        else:
+            comment.like_user.append(user.uid)
+            comment.like += 1
+
+        self._database.modify_data_with_id("cid", target_data=comment.get_dict_form_data())
+
+        result = self.is_user_interacted(user=managedUser, feeds=[feed])
+        return result
 
     def try_interaction_feed(self, user:User, fid:str, action):
         managed_user:ManagedUser = self._managed_user_table.find_user(user=user)
@@ -366,7 +470,37 @@ class FeedManager:
         self._database.modify_data_with_id(target_id="fid",
                                             target_data=feed.get_dict_form_data())
         feed.attend = action
-        feed.comment = self.__get_feed_comment(feed=feed)
+        feed.comment = self.__get_feed_comment(user=user, feed=feed)
+        return feed
+
+    def try_staring_feed(self, user:User, fid:str):
+        managed_user:ManagedUser = self._managed_user_table.find_user(user=user)
+        if fid in managed_user.history:
+            managed_user.history.remove(fid)
+
+        feed = self.__try_staring_feed(user=managed_user, fid=fid)
+        feed = self.is_user_interacted(managed_user, feeds=[feed])
+        return feed
+
+    # feed 와 상호작용 -> 선택지를 선택하는 경우
+    def __try_staring_feed(self, user, fid):
+        fid_data = self._database.get_data_with_id(target="fid", id=fid)
+        feed = Feed()
+        feed.make_with_dict(fid_data)
+
+        print(feed.fid)
+        print(user.star)
+
+        if feed.fid in user.star:
+            user.star.remove(feed.fid)
+            feed.star -= 1
+        else:
+            user.star.append(feed.fid)
+            feed.star += 1
+
+        self._database.modify_data_with_id(target_id="fid",
+                                            target_data=feed.get_dict_form_data())
+
         return feed
     
     # 단일 피드 뽑기
@@ -469,14 +603,15 @@ class FeedClass:
 
 
 class ManagedFeed:
-    def __init__(self, key, fid ="", fclass="", category = []):
+    def __init__(self, key, fid ="", fclass="", category = [], star=0):
         self.key = key
         self.fid = fid
         self.fclass = fclass
         self.category  = category
+        self.star = star
 
     def __call__(self):
-        print(f"key: {self.key} | fid: {self.fid} | fclass: {self.fclass} | category: {self.category}")
+        print(f"key: {self.key} | fid: {self.fid} | fclass: {self.fclass} | category: {self.category} | star: {self.star}")
 
 
 # 메모리에 올려서 관리할 유저
@@ -513,6 +648,7 @@ class ManagedUserTable:
             uid = managed_user_data['muid'],
             option = managed_user_data['option'],
             history = managed_user_data['history'],
+            star = managed_user_data['star']
         )
 
         index = self.__check_ttl()
@@ -545,11 +681,12 @@ class ManagedUserTable:
 
 # 유저 특화 시스템 구성을 위한 관리 유저
 class ManagedUser:
-    def __init__(self, uid, option, history):
+    def __init__(self, uid="", option=[], history=[], star=[]):
         self.uid = uid
-        self.option = []
-        self.history = []
+        self.option = option
+        self.history = history
         self.ttl= 0
+        self.star= star
 
     def __call__(self):
         print(f"uid : {self.uid}")

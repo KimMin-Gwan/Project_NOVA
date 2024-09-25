@@ -301,7 +301,9 @@ class Feed(SampleDomain):
         self.attend = attend
         self.category = category
         self.comment =comment 
+        self.num_comment = 0
         self.star = star
+        self.star_flag = False
 
     def make_with_dict(self, dict_data):
         try:
@@ -337,7 +339,9 @@ class Feed(SampleDomain):
             "attend": self.attend,
             "category":self.category,
             "comment":self.comment,
-            "star":self.star
+            "num_comment" :self.num_comment,
+            "star":self.star,
+            "star_flag" : self.star_flag
         }
 
 
@@ -357,4 +361,47 @@ class Banner(SampleDomain):
         return {
             "baid": self.baid,
             "ba_url": self.ba_url
+        }
+
+class Comment(SampleDomain):
+    def __init__(self, cid="", fid="", uid="", uname="",
+                 body="", date="", like=0, state="y", like_user=[]):
+        self.cid = cid
+        self.fid = fid
+        self.uid = uid
+        self.uname = uname
+        self.body = body
+        self.date = date
+        self.like = like
+        self.state = state
+        self.like_user = like_user
+        self.num_like_user = len(self.like_user)
+        self.owner = False
+
+    def make_with_dict(self, dict_data):
+        try:
+            self.cid = dict_data['cid']
+            self.fid = dict_data['fid']
+            self.uid = dict_data['uid']
+            self.uname = dict_data['uname']
+            self.body = dict_data['body']
+            self.date = dict_data['date']
+            self.like = dict_data['like']
+            self.state = dict_data['state']
+            self.like_user= dict_data['like_user']
+        except KeyError as e:
+            raise DictMakingError(error_type=f"Missing key: {str(e)}")
+
+    def get_dict_form_data(self):
+        return {
+            "cid": self.cid,
+            "fid": self.fid,
+            "uid": self.uid,
+            "uname": self.uname,
+            "body": self.body,
+            "date": self.date,
+            "like": self.like,
+            "state": self.state,
+            "like_user": self.like_user,
+            "owner" : self.owner
         }

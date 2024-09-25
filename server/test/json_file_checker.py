@@ -15,7 +15,7 @@ def main():
 
     new_data = []
 
-    with open("./../src/model/local_database/user.json", 'r',  encoding='utf-8' )as f:
+    with open("./../src/model/local_database/managed_user.json", 'r',  encoding='utf-8' )as f:
         data_list.extend(json.load(f))
 
         #for bid in dict_data.keys():
@@ -26,12 +26,9 @@ def main():
         #print(dict_data)
 
         for data in data_list:
-            sample = {'muid' : data['uid'],
-                      'option' : [],
-                      'history' : []
-                      }
+            data['star'] = []
 
-            new_data.append(sample)
+            new_data.append(data)
 
     with open("./../src/model/local_database/managed_user.json", 'w',  encoding='utf-8' )as f:
         json.dump(new_data, f, ensure_ascii=False, indent=4)
