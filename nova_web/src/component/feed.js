@@ -5,148 +5,135 @@ import planet3 from './../img/planet3.png';
 import planet4 from './../img/planet4.png';
 // import { useRef, useState } from 'react';
 
-export default function Feed({ className, feed }) {
+export default function Feed({ className, feed, fclass }) {
 
     return (
+
         <>
+
             {
-                //클릭시 링크 이동 수정 필요
-                feed.fclass === 'station' &&
+                feed.fclass === 'card' &&
+                (
+                    <div className={`${style.feed} ${className}`} >
+                        <div>
+                            <InfoArea color={'#7960EC'} name={`${feed.class_name} 행성`} date={feed.date} supporter={`${feed.nickname}`}></InfoArea>
+                            <Text data={feed.body}></Text>
+                        </div>
+                        <div style={{ width: '100%', height: '50px' }}></div>
+                        <div className={style.line}></div>
+                        <Comments></Comments>
+                    </div>
+                )
+            }
+            {
+                feed.fclass === 'multiple' &&
                 (
                     <div className={`${style.feed} ${className}`}>
-                        <InfoArea color={'#78D2C8'} name={`${feed.class_name} 행성`} supporter={feed.nickname}></InfoArea>
-                        <Text name={`${feed.class_name} 행성`} title={feed.title}></Text>
-                        <div className={style['link_box']}>
-                            <h1>{feed.choice[0]}</h1>
-                            <h5>{feed.choice[1]}</h5>
-                        </div>
-                        
-                        <div style={{ width: '100%', height: '20px' }}></div>
-                        <div className={style.line}>
-                            <div className={style['comment_function']}>
-                                <div>댓글 더보기</div>
-                                <div>신고</div>
-                            </div>
-                            <div>1.6k</div>
-                        </div>
-                        <Comments></Comments>
-                    </div>
-                )
-            }
-            {
-                feed.fclass === 'card' && (
-                    <div className={style.feed}>
-                        <InfoArea color={'#7960EC'} name={`${feed.class_name} 행성`} supporter={feed.nickname}></InfoArea>
-                        <Text title={feed.title} data={feed.body}></Text>
+                        <div>
+                            <InfoArea color={'#E370D1'} name={`${feed.class_name} 행성`} date={feed.date} supporter={`${feed.nickname}`}></InfoArea>
+                            <Text data={feed.body}></Text>
 
-                        <div style={{ width: '100%', height: '50px' }}></div>
-                        <div className={style.line}>
-                            <div className={style['comment_function']}>
-                                <div>댓글 더보기</div>
-                                <div>신고</div>
-                            </div>
-                            <div>1.6k</div>
                         </div>
-                        <Comments></Comments>
-                    </div>
-                )
-            }
-            {
-                feed.fclass === 'balance' && (
-                    <div className={style.feed}>
-                        <InfoArea color={'#60E7EC'} name={`${feed.class_name} 행성`} supporter={feed.nickname}></InfoArea>
-                        <Text title={feed.title}></Text>
-                        <div className={style['button_container']}>
-                            <button className={style['select_button']}>{feed.choice[0]}</button>
-                            <button className={style['select_button']}>{feed.choice[1]}</button>
-                        </div>
-
-                        {/* <div style={{ width: '100%', height: '20px' }}></div> */}
-                        {/* <div className={style.line}>
-                            <div className={style['comment_function']}>
-                                <div>댓글 더보기</div>
-                                <div>신고</div>
-                            </div>
-                            <div>1.6k</div>
-                        </div>
-                        <Comments></Comments> */}
-                    </div>
-                )
-            }
-            {
-                feed.fclass === 'multiple' && (
-                    <div className={style.feed}>
-                        <InfoArea color={'#E370D1'} name={`${feed.class_name} 행성`} supporter={feed.nickname}></InfoArea>
-                        <Text name={'퀴즈 행성'} title={feed.title}></Text>
                         <ol className={style['quiz_box']}>
                             {
-                                feed.choice.map((choice, i) => {
-                                    if (feed.attend === 0) {
-                                        return (
-                                            <li key={i}>{i + 1}. {choice}
-                                                <span>{feed.result[i]}</span>
-                                            </li>
-                                        )
-                                    } else {
-                                        <li key={i}>{i + 1}. {choice}</li>
-                                    }
+                                feed.choice.map((choi, i) => {
+                                    return (
+                                        <li key={i}>{i + 1}. {choi}
+                                            <span>{feed.result[i]}</span>
+                                        </li>
+                                        // <li key={i}>{i + 1}. {choice}</li>
+                                    )
                                 })
                             }
                         </ol>
-                        <div style={{ width: '100%', height: '50px' }}></div>
-                        <div className={style.line}>
-                            <div className={style['comment_function']}>
-                                <div>댓글 더보기</div>
-                                <div>신고</div>
-                            </div>
-                            <div>1.6k</div>
-                        </div>
+                        <div style={{ width: '100%', height: '20px' }}></div>
+                        <div className={style.line}></div>
                         <Comments></Comments>
                     </div>
                 )
             }
             {
-                feed.fclass === 'i' && (
-                    <div className={style.feed}>
-                        <div className={style['info_area']}>
-                            <div className={style['planet_name']}>
-                                <p className={style['sup_people']}>익명지지자</p>
-                                <img src={planet1}></img>
-                                <p>정거장 행성</p>
+                feed.fclass === 'balance' &&
+                (
+                    <div className={`${style.feed} ${className}`}>
+                        <div>
+                            <InfoArea color={'#60E7EC'} name={`${feed.class_name} 행성`} date={feed.date} supporter={`${feed.nickname}`}></InfoArea>
+                            <Text data={feed.body}></Text>
+                            <div className={style['button_container']}>
+                                <button className={style['select_button']}>{feed.choice[0]} 결과{feed.result[0]}</button>
+                                <button className={style['select_button']}>{feed.choice[1]} 결과{feed.result[1]}</button>
                             </div>
                         </div>
-                        {/* <Text></Text> */}
+                        <div style={{ width: '100%', height: '20px' }}></div>
+                        <div className={style.line}></div>
+                        <Comments></Comments>
                     </div>
                 )
             }
             {
-                feed.fclass === 'ad' && (
-                    <div className={style.feed}>
-                        <div className={style['info_area']}>
-                            <div className={style['planet_name']}>
-                                <img src={planet1}></img>
-                                <p>정거장 행성</p>
+                feed.fclass === 'station' &&
+                (
+                    <div className={`${style.feed} ${className}`}>
+                        <div>
+                            <InfoArea color={'#78D2C8'} name={`${feed.class_name} 행성`} date={feed.date} supporter={`${feed.nickname}`}></InfoArea>
+                            <Text data={feed.body}></Text>
+                            <div className={style['link_box']}>
+                                <h1>{feed.choice[0]}</h1>
+                                <h5>{feed.choice[1]}</h5>
                             </div>
-                            <p className={style['sup_people']}>익명지지자</p>
                         </div>
-                        {/* <Text></Text> */}
+                        <div style={{ width: '100%', height: '20px' }}></div>
+                        <div className={style.line}></div>
+                        <Comments></Comments>
                     </div>
                 )
             }
         </>
+
+
+        //        
+        //     {
+        //         feed.fclass === 'i' && (
+        //             <div className={style.feed}>
+        //                 <div className={style['info_area']}>
+        //                     <div className={style['planet_name']}>
+        //                         <p className={style['sup_people']}>익명지지자</p>
+        //                         <img src={planet1}></img>
+        //                         <p>정거장 행성</p>
+        //                     </div>
+        //                 </div>
+        //                 {/* <Text></Text> */}
+        //             </div>
+        //         )
+        //     }
+        //     {
+        //         feed.fclass === 'ad' && (
+        //             <div className={style.feed}>
+        //                 <div className={style['info_area']}>
+        //                     <div className={style['planet_name']}>
+        //                         <img src={planet1}></img>
+        //                         <p>정거장 행성</p>
+        //                     </div>
+        //                     <p className={style['sup_people']}>익명지지자</p>
+        //                 </div>
+        //                 {/* <Text></Text> */}
+        //             </div>
+        //         )
+        //     }
+        // </>
     )
 }
 
-export function InfoArea({color, name, supporter }) {
+export function InfoArea({ color, name, date, supporter }) {
 
     return (
         <div className={style['info_area']}>
             <div className={style['top_part']}>
                 <div className={style['planet_name']}>
                     {/* <img src={img}></img> */}
-                    <div className={style.circle} style={{background:`${color}`}}></div>
+                    <div className={style.circle} style={{ background: `${color}` }}></div>
                     <p>{name}</p>
-                    <p className={style['write-date']}>24/07/23</p>
+                    <p className={style['write-date']}>{date}</p>
                 </div>
                 <p className={style['sup_people']}>{supporter}</p>
             </div>
@@ -155,11 +142,10 @@ export function InfoArea({color, name, supporter }) {
     )
 }
 
-export function Text({ name, title, data }) {
+export function Text({ name, data }) {
 
     return (
-        <div style={{ marginLeft: '20px' }}>
-            <h1 className={style.title}>{title}</h1>
+        <div style={{ height: '100px', marginLeft: '20px' }}>
             {
                 !name && <p>{data}</p>
             }

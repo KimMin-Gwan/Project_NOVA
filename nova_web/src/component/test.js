@@ -12,13 +12,9 @@ import { useNavigate } from 'react-router-dom';
 
 
 const Box = () => {
-  const [banners, setBanners] = useState([
-    { id: 1, text: 'First Box', backgroundColor: '#f39c12' },
-    { id: 2, text: 'Second Box', backgroundColor: '#9b59b6' },
-    { id: 3, text: 'Third Box', backgroundColor: '#1abc9c' },
-    { id: 4, text: 'Fourth Box', backgroundColor: '#3498db' },
-    { id: 5, text: 'Fifth Box', backgroundColor: '#e74c3c' }
-  ]);
+  const [banners, setBanners] = useState([]);
+
+  const [nextData, setNextData] = useState(0);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [startY, setStartY] = useState(0);
@@ -65,17 +61,32 @@ const Box = () => {
     }
   };
 
+  function fetchFeed() {
+    fetch('https://nova-platform.kr/feed_explore/get_feed?fclass=balance')
+      .then(response => response.json())
+      .then(data => {
+        console.log("11", data.body.feed);
+        setBanners(data.body.feed);
+        setNextData(data.body.key);
+      })
+  }
+
+  useEffect(() => {
+    fetchFeed();
+  }, [])
+
   // 서버에서 추가 데이터를 받아오는 함수
   const fetchMoreBanners = async () => {
     try {
       // 서버로부터 추가 배너 데이터를 가져옴
-      const response = await fetch('http://127.0.0.1:4000'); // 예시 URL
+      const response = await fetch(`https://nova-platform.kr/feed_explore/get_feed?fclass=balance&key=${nextData}`); // 예시 URL
       const newBanners = await response.json();
-
-      console.log(newBanners)
+      const plusFeed = newBanners.body.feed;
+      setNextData(newBanners.body.key);
+      console.log(plusFeed)
 
       // 기존 배너에 새 배너를 추가
-      setBanners((prevBanners) => [...prevBanners, ...newBanners]);
+      setBanners((prevBanners) => [...prevBanners, ...plusFeed]);
     } catch (error) {
       console.error('Error fetching additional banners:', error);
     }

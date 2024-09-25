@@ -54,18 +54,20 @@ function MyPage() {
                         <div className={style['text_box']}>
                             <p>나의최애</p>
                             <div className={style['bias_name']}>이시연</div>
-                            <div>이번 시즌에 기여한 별가루</div>
-                            <div>1200 pt</div>
-                            <button>펀딩</button>
+                            <div className={style['season_star_dust']}>이번 시즌에 기여한 별가루</div>
+                            <h2>1200 pt</h2>
+                            <button className={style['funding_btn']}>펀딩</button>
                         </div>
                     </div>
                 </div>
-
             </div>
 
 
             <div className={style['base_box']}>
-                <h4>최애-단체</h4>
+                <div className={style['title_box']}>
+                    <h4>최애-단체</h4>
+                    <h6>최애 - 단체는 리그와 펀딩을 하지 않아요.</h6>
+                </div>
                 <div className={style['wrap_box']} style={{ flexDirection: 'row', height: 'auto' }}>
                     <div className={style['half_box']}>
                         <div className={`left-box ${style['img_box']}`}>
@@ -75,11 +77,13 @@ function MyPage() {
                         </div>
                     </div>
                     <div className={style['half_box']}>
-                        <div>나의최애</div>
-                        <div>이시연</div>
-                        <div>이번 시즌에 기여한 별가루</div>
-                        <div>1200 pt</div>
-                        <button>펀딩</button>
+                        <div className={style['text_box']}>
+                            <p>나의최애</p>
+                            <div className={style['bias_name']}>이시연</div>
+                            <div className={style['season_star_dust']}>이번 시즌에 기여한 별가루</div>
+                            <h2>1200 pt</h2>
+                            <button className={style['funding_btn']}>펀딩</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -103,7 +107,7 @@ function MyPage() {
                         <IoIosArrowForward className={style['activity_icon']} />
 
                         <HiOutlineBellAlert className={style['activity_icon']} />
-                        <div>알림</div>
+                        <div>내 알고리즘</div>
                         <IoIosArrowForward className={style['activity_icon']} />
 
                         <HiOutlineBellAlert className={style['activity_icon']} />

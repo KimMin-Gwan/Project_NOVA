@@ -184,7 +184,7 @@
     /* background-color: blue; */
     margin: 0 auto;
     width: 80%;
-    height: 50%;
+    height: 38%;
     padding: 0;
     border-radius: 15px;
 }
@@ -561,6 +561,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    /* background-color: bisque; */
 }
 
 .short_form_container {
@@ -568,7 +569,7 @@
     margin: 0 auto;
     width: 70%;
     height: 660px;
-    background-color: greenyellow;
+    background-color: gray;
     border-radius: 10px;
     transition: transform 0.7s ease;
 

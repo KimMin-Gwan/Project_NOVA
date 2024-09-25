@@ -40,8 +40,8 @@ export default function InfFeed() {
                     return newData;
                 });
 
-                console.log(nextData);
-                console.log(data.body);
+                console.log("111",nextData);
+                console.log("222",data.body);
                 console.log('333', feedData);
                 setIsLoading(false);
             })
