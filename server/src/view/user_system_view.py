@@ -72,7 +72,7 @@ class User_Service_View(Master_View):
 
     def my_page_route(self):
         # feed 랑 상호작용 -> 댓글 좋아요 하기
-        @self.__app.get('/user_home/get_my_data')
+        @self.__app.get('/user_home/my_data')
         def get_my_page(request:Request):
             request_manager = RequestManager()
 
