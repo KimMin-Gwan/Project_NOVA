@@ -373,6 +373,9 @@ class Core_Service_View(Master_View):
             html = core_controller.get_shared_url(database=self.__database,
                                                              request=request)
             return html
+        
+
+
 
     def web_chatting_route(self, endpoint:str):
         #채팅서버
@@ -405,8 +408,6 @@ class Core_Service_View(Master_View):
         @self.__app.websocket('/league_detail/league_data')
         async def league_socket(websocket:WebSocket, league_name:Optional[str] = ""):
             try:
-                print("connection")
-                print(league_name)
                 if league_name == "":
                     return
                 observer = await self.__connection_manager.connect(lname=league_name,

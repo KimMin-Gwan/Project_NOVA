@@ -15,6 +15,7 @@ class User_Service_View(Master_View):
         self.__database = database
         self.__nova_verification = nova_verification
         self.user_route(endpoint)
+        self.my_page_route()
 
     def user_route(self, endpoint:str):
         @self.__app.get(endpoint+'/user')
@@ -68,6 +69,28 @@ class User_Service_View(Master_View):
                                               nova_verification=self.__nova_verification)
             response = model.get_response_form_data(self._head_parser)
             return response
+
+    def my_page_route(self):
+        # feed 랑 상호작용 -> 댓글 좋아요 하기
+        @self.__app.get('/user_page_data/get_my_page')
+        def get_my_page(request:Request):
+            request_manager = RequestManager()
+
+            data_payload = DummyRequest()
+            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+            if not request_manager.jwt_payload.result:
+                raise request_manager.credentials_exception
+
+            home_controller=UserController()
+            model = home_controller.get_user_page(database=self.__database,
+                                                        request=request_manager)
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
+class DummyRequest():
+    def __init__(self) -> None:
+        pass
 
 class LoginRequest(RequestHeader):
     def __init__(self, request) -> None:

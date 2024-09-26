@@ -1,6 +1,6 @@
 from model.base_model import BaseModel
 from model import Local_Database
-from others.data_domain import User
+from others.data_domain import User, Bias
 from others import CoreControllerLogicError
 from view.jwt_decoder import JWTManager
 import jwt
@@ -130,3 +130,38 @@ class SendEmailModel(BaseModel):
             if not self._database.get_data_with_id(target="uid", id=uid):
                 break
         return uid
+   
+class UserPageModel(BaseModel):
+    def __init__(self, database:Local_Database) -> None:
+        super().__init__(database)
+        self.__solo_bias = Bias()
+        self.__group_bias = Bias()
+
+
+    def set_solo_bias(self):
+        bid = self._user.solo_bid
+        if bid != "":
+            bias_data = self._database.get_data_with_id(target="bid", id =bid)
+            self.__solo_bias.make_with_dict(bias_data)
+        return
+
+    def set_group_bias(self):
+        bid = self._user.group_bid
+        if bid != "":
+            bias_data = self._database.get_data_with_id(target="bid", id =bid)
+            self.__group_bias.make_with_dict(bias_data)
+        return
+
+    def get_response_form_data(self, head_parser):
+        try:
+            body = {
+                'user' : self._user.get_dict_form_data(),
+                'solo_bias' : self.__solo_bias.get_dict_form_data(),
+                'group_bias' : self.__group_bias.get_dict_form_data(),
+            }
+
+            response = self._get_response_data(head_parser=head_parser, body=body)
+            return response
+
+        except Exception as e:
+            raise CoreControllerLogicError("response making error | " + e)

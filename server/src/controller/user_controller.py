@@ -133,6 +133,26 @@ class UserController:
 
         finally:
             return model
+    
+    def get_user_page(self, database, request):
+        model = UserPageModel(database=database)
+        try:
+            # 유저가 있으면 세팅
+            model.set_user_with_email(request=request.jwt_payload)
+            model.set_solo_bias()
+            model.set_group_bias()
+
+        except CustomError as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
+
+        except Exception as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
+
+        finally:
+            return model
+
 
 
 # 이메일 전송

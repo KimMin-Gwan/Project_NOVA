@@ -98,7 +98,7 @@ def home():
             async function testTargetEndpoint() {
                 const target = document.getElementById('targetInput').value;
                 try {
-                    const response = await fetch(`http://127.0.0.1:4000/feed_explore/like_comment?fid=2&cid=2-0`, {
+                    const response = await fetch(`http://127.0.0.1:4000/user_page_data/get_my_page`, {
                         mode: 'cors',
                         credentials: 'include'
                     });
