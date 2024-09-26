@@ -71,7 +71,7 @@ class User_Service_View(Master_View):
             return response
 
     def my_page_route(self):
-
+        print('hello')
         #@self.__app.get('/user_home/my_data')
         #def get_my_page(request:Request):
             #request_manager = RequestManager()
