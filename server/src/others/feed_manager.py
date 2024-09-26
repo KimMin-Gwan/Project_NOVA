@@ -135,11 +135,11 @@ class FeedManager:
         if user.uid != "":
             managed_user = self._managed_user_table.find_user(user=user)
             result, result_key = self._get_home_feed_with_user(user=managed_user, key=key)
-            print(managed_user)
             result = self.is_user_interacted(managed_user, result)
-            print("hello")
         else:
             result, result_key = self._get_home_feed(key=key)
+            managed_user = ManagedUser()
+            result = self.is_user_interacted(managed_user, result)
 
         return result, result_key
     
@@ -201,6 +201,8 @@ class FeedManager:
             result = self.is_user_interacted(managed_user, result)
         else:
             result, result_key = self._get_short_feed(key=key, fclass=fclass)
+            managed_user = ManagedUser()
+            result = self.is_user_interacted(managed_user, result)
         return result, result_key
 
     def _get_short_feed(self, key, fclass = "None"):
@@ -309,7 +311,7 @@ class FeedManager:
         return target_feed
 
     # 유저가 참여한 feed인지 확인할것
-    # 사실상 전송하는 모든 feed는 이 함수를 통함
+    # 사실상 User에게 전송하는 모든 feed는 이 함수를 통함
     def is_user_interacted(self, user, feeds:list):
         result = []
         for feed in feeds:
