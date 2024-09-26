@@ -336,34 +336,55 @@ class Core_Service_View(Master_View):
     def check_route(self):
         # 최애 인증 페이지
         @self.__app.post('/nova_check/server_info/check_page')
-        def get_check_page(raw_request:dict):
-            request = CheckRequest(request=raw_request)
+        def get_check_page(request:Request, raw_request:dict):
+            request_manager = RequestManager()
+
+            data_payload= CheckRequest(request=raw_request)
+            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+            if not request_manager.jwt_payload.result:
+                raise request_manager.credentials_exception
+
             core_controller=Core_Controller()
             model = core_controller.get_check_page(database=self.__database,
-                                                             request=request)
-            response = model.get_response_form_data(self._head_parser)
+                                                             request=request_manager)
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
             return response
 
         # 최애 인증 시도 
         @self.__app.post('/nova_check/server_info/try_daily_check')
-        def get_check_page(raw_request:dict):
-            request = CheckRequest(request=raw_request)
+        def get_check_page(request:Request, raw_request:dict):
+            request_manager = RequestManager()
+
+            data_payload= CheckRequest(request=raw_request)
+            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+            if not request_manager.jwt_payload.result:
+                raise request_manager.credentials_exception
+
             core_controller=Core_Controller()
             model = core_controller.try_daily_check(database=self.__database,
-                                                             request=request,
+                                                             request=request_manager,
                                                              league_manager=self.__league_manager)
-            response = model.get_response_form_data(self._head_parser)
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
             return response
 
         # 최애 특별시 인증
         @self.__app.post('/nova_check/server_info/try_special_check')
-        def get_check_page(raw_request:dict):
-            request = CheckRequest(request=raw_request)
+        def get_check_page(request:Request, raw_request:dict):
+            request_manager = RequestManager()
+
+            data_payload= CheckRequest(request=raw_request)
+            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+            if not request_manager.jwt_payload.result:
+                raise request_manager.credentials_exception
+
             core_controller=Core_Controller()
             model = core_controller.try_special_check(database=self.__database,
-                                                             request=request,
+                                                             request=request_manager,
                                                              league_manager=self.__league_manager)
-            response = model.get_response_form_data(self._head_parser)
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
             return response
 
         @self.__app.get('/nova_check/shared/{name_card}', response_class=HTMLResponse)

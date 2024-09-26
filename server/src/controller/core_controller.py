@@ -101,24 +101,11 @@ class Core_Controller:
     #2. 사용자가 팔로우 중인 bias 가 맞는지 확인
     #3. 이미 인증 했는지 확인  
     def get_check_page(self, database:Local_Database, request) -> BaseModel: 
-        jwt_decoder = JWTManager()
         model = CheckPageModel(database=database)
         try:
-            request_payload = jwt_decoder.decode(token=request.token)  # jwt payload(email 정보 포함됨)
-
-            # 유저가 있는지 확인
-            if not model.set_user_with_email(request=request_payload):
-                raise UserNotExist("Can not find User with email")
-
-        except UserNotExist as e:
-            print("Error Catched : ", e)
-            model.set_state_code(e.error_code) # 종합 에러
-            return model
-
-        try:
-
+            model.set_user_with_email(request=request.jwt_payload)
             # 타입에 맞는 bias 세팅
-            model.set_bias(request)
+            model.set_bias(request.data_payload)
 
             model.set_state_code("260")
             
@@ -168,22 +155,11 @@ class Core_Controller:
         return model
 
     def try_daily_check(self, database:Local_Database, request, league_manager) -> BaseModel: 
-        jwt_decoder = JWTManager()
         model = TryCheckModel(database=database)
-        
         try:
-            request_payload = jwt_decoder.decode(token=request.token)  # jwt payload(email 정보 포함됨)
-            # 유저가 있는지 확인
-            if not model.set_user_with_email(request=request_payload):
-                raise UserNotExist("Can not find User with email")
-        except UserNotExist as e:
-            print("Error Catched : ", e)
-            model.set_state_code(e.error_code) # 종합 에러
-            return model
-
-        try:
+            model.set_user_with_email(request=request.jwt_payload)
             # 타입에 맞는 bias 세팅
-            model.set_bias(request)
+            model.set_bias(request.data_payload)
             model.set_state_code("260")
 
             # 유저가 실제로 팔로우 하고 있는지 확인
@@ -221,22 +197,12 @@ class Core_Controller:
             return model
 
     def try_special_check(self, database:Local_Database, request, league_manager) -> BaseModel: 
-        jwt_decoder = JWTManager()
         model = TrySpecialCheckModel(database=database)
         
         try:
-            request_payload = jwt_decoder.decode(token=request.token)  # jwt payload(email 정보 포함됨)
-            # 유저가 있는지 확인
-            if not model.set_user_with_email(request=request_payload):
-                raise UserNotExist("Can not find User with email")
-        except UserNotExist as e:
-            print("Error Catched : ", e)
-            model.set_state_code(e.error_code) # 종합 에러
-            return model
-
-        try:
             # 타입에 맞는 bias 세팅
-            model.set_bias(request)
+            model.set_user_with_email(request=request.jwt_payload)
+            model.set_bias(request.data_payload)
             model.set_state_code("260")
 
             # 유저가 실제로 팔로우 하고 있는지 확인

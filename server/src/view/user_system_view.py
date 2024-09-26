@@ -87,12 +87,32 @@ class User_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
-        #@self.__app.get('/user_home/my_data')
-        #def get_my_page():
-            #return "hello"
+        @self.__app.get('/user_home/change_nickname')
+        def get_my_page(request:Request, index:Optional[int], custom:Optional[str]=""):
+            request_manager = RequestManager()
+
+            data_payload = DummyRequest()
+            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+            if not request_manager.jwt_payload.result:
+                raise request_manager.credentials_exception
+
+            home_controller=UserController()
+            model = home_controller.get_user_page(database=self.__database,
+                                                        request=request_manager)
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
+    
 
 class DummyRequest():
     def __init__(self) -> None:
+        pass
+
+class ChangeNicknameRequest():
+    def __init__(self, index, custom) -> None:
+        self.index = index
+        self.custom =custom
         pass
 
 class LoginRequest(RequestHeader):
