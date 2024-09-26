@@ -102,6 +102,7 @@ function MySoloBias({ solo_bias, bias_url, showBox, blackBox }) {
                             headers: {
                                 "Content-Type": 'application/json',
                             },
+                            credentials: 'include',
                             body: JSON.stringify(send_data),
                         })
                             .then(response => response.json())

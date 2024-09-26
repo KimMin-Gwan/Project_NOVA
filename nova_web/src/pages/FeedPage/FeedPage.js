@@ -6,6 +6,10 @@ import Feed, { InputFeed, InfoArea, Text, Comments } from '../../component/feed'
 
 import style from './FeedPage.module.css';
 import stylePlanet from './../PlanetPage/Planet.module.css';
+import { CiStar } from "react-icons/ci";
+import { TfiCommentAlt } from "react-icons/tfi";
+import { PiShareFatLight } from "react-icons/pi";
+import { MdOutlineReportProblem } from "react-icons/md";
 
 import React, { useState, useEffect, useRef } from 'react';
 // import style from './../pages/FeedPage/FeedPage.module.css';
@@ -75,6 +79,7 @@ const FeedPage = () => {
                 console.log("11", data.body.feed);
                 setBanners(data.body.feed);
                 setNextData(data.body.key);
+                setNumStar([data.body.feed[0].star, data.body.feed[1].star]);
             })
     }
 
@@ -89,11 +94,11 @@ const FeedPage = () => {
             const response = await fetch(`https://nova-platform.kr/feed_explore/get_feed?fclass=${fclass}&key=${nextData}`); // 예시 URL
             const newBanners = await response.json();
             const plusFeed = newBanners.body.feed;
+            const newStar = newBanners.body.feed[0].star;
             setNextData(newBanners.body.key);
-            console.log(plusFeed)
-
             // 기존 배너에 새 배너를 추가
             setBanners((prevBanners) => [...prevBanners, ...plusFeed]);
+            setNumStar(((prevNumStar) => [...prevNumStar, newStar]));
         } catch (error) {
             console.error('Error fetching additional banners:', error);
         }
@@ -108,6 +113,37 @@ const FeedPage = () => {
 
 
     let navigate = useNavigate();
+
+    let [numStar, setNumStar] = useState([]);
+    // let [numComment, setNumComment] = useState([]);
+    // let [isClickedStar, setIsClickedStar] = useState(false);
+
+    function handleCheckStar(fid, index) {
+        // setIsClickedStar(!isClickedStar);
+        fetch(`https://nova-platform.kr/feed_explore/check_star?fid=${fid}`, {
+            credentials: 'include',
+        })
+            .then(response => response.json())
+            .then(data => {
+                setNumStar((prevItems) => {
+                    const newItems = [...prevItems];
+                    newItems[index] = data.body.feed[0].star;
+                    return newItems;
+                });
+                console.log(data.body.feed[0].star);
+                // setNumStar(data.body.feed[0].star);
+                // console.log(numStar);
+            })
+    };
+
+
+    // useEffect(() => {
+
+    //     // fetchStar();
+    //     handleCheckStar();
+    //     console.log('gkgkgkgkgk')
+
+    // }, []);
 
 
 
@@ -137,6 +173,23 @@ const FeedPage = () => {
                         return (
                             <div key={banner.fid} className={style['short_form']}>
                                 <div className={style['button_area']}>
+                                    {/* <div className={style['comment_window']}>
+                                        <div>댓글</div>
+                                        <div className={style.line}></div>
+                                        <div>
+                                            <div>
+                                                <div>지지자</div>
+                                                <div>내용</div>
+                                            </div>
+                                            <div className={style['comment_action']}>
+                                                <input></input>
+                                                <button>댓글 작성</button>
+                                            </div>
+                                        </div>
+                                    </div> */}
+
+
+
                                     <div className={style['short_form_container']}>
                                         <div className={style['short_box']}>
                                             <div className={style['img_circle']}></div>
@@ -149,19 +202,32 @@ const FeedPage = () => {
 
                                         <div className={style['function_button']}>
                                             <div className={style['func_btn']}>
-                                                <button></button>
-                                                <p>{banner.star}</p>
+                                                <button onClick={() => {
+                                                    handleCheckStar(banner.fid, i);
+                                                }}>
+                                                    <CiStar className={style['func_btn_img']} />
+                                                </button>
+                                                
+                                                <p>{numStar[i]}</p>
+
+                                                {/* <p>{banner.star}</p> */}
                                             </div>
                                             <div className={style['func_btn']}>
-                                                <button></button>
+                                                <button>
+                                                    <TfiCommentAlt className={style['func_btn_img']} />
+                                                </button>
                                                 <p>42</p>
                                             </div>
                                             <div className={style['func_btn']}>
-                                                <button></button>
+                                                <button>
+                                                    <PiShareFatLight className={style['func_btn_img']} />
+                                                </button>
                                                 <p>공유</p>
                                             </div>
                                             <div className={style['func_btn']}>
-                                                <button></button>
+                                                <button>
+                                                    <MdOutlineReportProblem className={style['func_btn_img']} />
+                                                </button>
                                                 <p>신고</p>
                                             </div>
                                         </div>

@@ -583,6 +583,16 @@
     /* background-color: aquamarine; */
 }
 
+.comment_window {
+    position: absolute;
+    border-radius: 15px;
+    z-index: 5;
+    top: 44%;
+    width: 100%;
+    height: 370px;
+    background-color: green;
+}
+
 .short_box {
     width: 100%;
     height: auto;
@@ -635,14 +645,24 @@
     text-align: center;
     width: 90%;
     height: 65px;
-    /* background-color: blue; */
+    /* background-color: transparent; */
     margin-bottom: 20px;
 }
 
 .func_btn button {
     width: 100%;
     height: 40px;
-    background-color: blueviolet;
+    background-color: black;
+    border: none;
+    /* background-color: blueviolet; */
+}
+
+.func_btn_img {
+    /* background-color: blueviolet; */
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    color: white;
 }
 
 .func_btn p {

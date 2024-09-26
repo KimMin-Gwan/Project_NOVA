@@ -183,7 +183,7 @@
 .activity {
     display: grid;
     grid-template-columns: 40px 1fr 35px;
-    grid-template-rows: 40px 40px 40px;
+    grid-template-rows: repeat(5, 40px);
     row-gap: 10px;
     padding-left: 10px;
     align-items: center;
