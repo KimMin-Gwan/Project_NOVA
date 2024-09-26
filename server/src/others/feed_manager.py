@@ -489,10 +489,6 @@ class FeedManager:
         fid_data = self._database.get_data_with_id(target="fid", id=fid)
         feed = Feed()
         feed.make_with_dict(fid_data)
-
-        print(feed.fid)
-        print(user.star)
-
         if feed.fid in user.star:
             user.star.remove(feed.fid)
             feed.star -= 1
