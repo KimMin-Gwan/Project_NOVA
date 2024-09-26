@@ -523,14 +523,12 @@ class BiasSelectRequest(RequestHeader):
     def __init__(self, request) -> None:
         super().__init__(request)
         body = request['body']
-        self.token = body['token']
         self.bid = body['bid']
 
 class CheckRequest(RequestHeader):
     def __init__(self, request) -> None:
         super().__init__(request)
         body = request['body']
-        self.token = body['token']
         self.type = body['type']
 
 class ConnectionManager:
