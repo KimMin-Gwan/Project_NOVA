@@ -71,22 +71,26 @@ class User_Service_View(Master_View):
             return response
 
     def my_page_route(self):
-        # feed 랑 상호작용 -> 댓글 좋아요 하기
+
+        #@self.__app.get('/user_home/my_data')
+        #def get_my_page(request:Request):
+            #request_manager = RequestManager()
+
+            #data_payload = DummyRequest()
+            #request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+            #if not request_manager.jwt_payload.result:
+                #raise request_manager.credentials_exception
+
+            #home_controller=UserController()
+            #model = home_controller.get_user_page(database=self.__database,
+                                                        #request=request_manager)
+            #body_data = model.get_response_form_data(self._head_parser)
+            #response = request_manager.make_json_response(body_data=body_data)
+            #return response
+
         @self.__app.get('/user_home/my_data')
-        def get_my_page(request:Request):
-            request_manager = RequestManager()
-
-            data_payload = DummyRequest()
-            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
-            if not request_manager.jwt_payload.result:
-                raise request_manager.credentials_exception
-
-            home_controller=UserController()
-            model = home_controller.get_user_page(database=self.__database,
-                                                        request=request_manager)
-            body_data = model.get_response_form_data(self._head_parser)
-            response = request_manager.make_json_response(body_data=body_data)
-            return response
+        def get_my_page():
+            return "hello"
 
 class DummyRequest():
     def __init__(self) -> None:
