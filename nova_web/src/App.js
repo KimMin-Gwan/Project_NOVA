@@ -27,7 +27,7 @@ import FeedPage from './pages/FeedPage/FeedPage.js';
 import Feed from './component/feed.js';
 import InfFeed from './component/infiniteFeed.js';
 import PlanetList from './pages/PlanetPage/PlanetList.js';
-import logo from './img/logo.PNG';
+import logo from './img/NOVA.png';
 import GalaxyList from './pages/GalaxyPage/GalaxyList.js';
 import Box from './component/test.js';
 import NavBar from './component/NavBar.js';

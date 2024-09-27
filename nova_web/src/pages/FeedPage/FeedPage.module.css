@@ -593,6 +593,25 @@
     background-color: green;
 }
 
+.comment_action form {
+    width: 100%;
+}
+
+.comment_box {
+    background-color: white;
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.comment {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    background-color: #2A2577;
+
+
+}
 .short_box {
     width: 100%;
     height: auto;

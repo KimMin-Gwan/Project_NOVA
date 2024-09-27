@@ -41,7 +41,11 @@ function MyPage() {
         return (
             setIsClicked(false)
         )
-    }, [])
+    }, []);
+
+    function handleMovePage(){
+        navigate('/galaxy')
+    };
 
     return (
         <div className='container'>
@@ -118,6 +122,15 @@ function MyPage() {
                             <div className={style['half_box']}>
                                 <div className={style['text_box']}>
                                     <p>나의최애</p>
+                                    {
+                                        myGroupBias.bname === '' ?
+                                            (
+                                                <div className={style['bias_name']}>아직 최애없음</div>
+                                            ) :
+                                            (
+                                                <div className={style['bias_name']}>{myGroupBias.bname}</div>
+                                            )
+                                    }
                                     <div className={style['bias_name']}>{myGroupBias.bname === '' && '아직 최애없음'}</div>
                                     <div className={style['season_star_dust']}>이번 시즌에 기여한 별가루</div>
                                     <h2>{myData.group_point} pt</h2>
@@ -131,7 +144,7 @@ function MyPage() {
                     <div className={`${style['base_box']} ${style['height_auto']}`}>
                         <h4>서비스</h4>
                         <div className={style['grid_container']}>
-                            <div>은하리그</div>
+                            <div onClick={handleMovePage}>은하리그</div>
                             <div>노바 펀딩</div>
                             <div>노바 재판</div>
                             <div>노바 알고리즘</div>

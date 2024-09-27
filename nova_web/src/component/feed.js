@@ -3,6 +3,7 @@ import planet1 from './../img/planet1.png';
 import planet2 from './../img/planet2.png';
 import planet3 from './../img/planet3.png';
 import planet4 from './../img/planet4.png';
+import { useState } from 'react';
 // import { useRef, useState } from 'react';
 
 export default function Feed({ className, feed, fclass }) {
@@ -156,13 +157,22 @@ export function Text({ name, data }) {
 
 export function Comments({feed }) {
 
-    // function handleCheckComment(fid, index) {
-    //     setNumComment((prevItems) => {
-    //         const newItems = [...prevItems];
-    //         newItems[index] = data.body.feed[0].num_comment;
-    //         return newItems;
-    //     })
-    // }
+    let [numComment, setNumComment] = useState(0);
+
+    function handleCheckComment(fid, index) {
+        fetch(`https://nova-platform.kr/feed_explore/like_comment?fid=${feed.fid}`, {
+            credentials: 'include',
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('1111',data);
+            });
+        // setNumComment((prevItems) => {
+        //     const newItems = [...prevItems];
+        //     newItems[index] = data.body.feed[0].num_comment;
+        //     return newItems;
+        // })
+    }
 
     return (
         <div className={style['comment_container']}>

@@ -79,7 +79,8 @@ const FeedPage = () => {
                 console.log("11", data.body.feed);
                 setBanners(data.body.feed);
                 setNextData(data.body.key);
-                setNumStar([data.body.feed[0].star, data.body.feed[1].star]);
+                // setNumStar([data.body.feed[0].star, data.body.feed[1].star]);
+                // setNumComment([data.body.feed[0].num_comment, data.body.feed[1].num_comment])
             })
     }
 
@@ -94,11 +95,13 @@ const FeedPage = () => {
             const response = await fetch(`https://nova-platform.kr/feed_explore/get_feed?fclass=${fclass}&key=${nextData}`); // 예시 URL
             const newBanners = await response.json();
             const plusFeed = newBanners.body.feed;
-            const newStar = newBanners.body.feed[0].star;
+            // const newStar = newBanners.body.feed[0].star;
+            // const comments = newBanners.body.feed[0].num_comment;
             setNextData(newBanners.body.key);
             // 기존 배너에 새 배너를 추가
             setBanners((prevBanners) => [...prevBanners, ...plusFeed]);
-            setNumStar(((prevNumStar) => [...prevNumStar, newStar]));
+            // setNumStar((prevNumStar) => [...prevNumStar, newStar]);
+            // setNumComment((prevNumComment) => [...prevNumComment, comments])
         } catch (error) {
             console.error('Error fetching additional banners:', error);
         }
@@ -115,8 +118,9 @@ const FeedPage = () => {
     let navigate = useNavigate();
 
     let [numStar, setNumStar] = useState([]);
-    // let [numComment, setNumComment] = useState([]);
+    let [numComment, setNumComment] = useState([]);
     // let [isClickedStar, setIsClickedStar] = useState(false);
+    let [isClickedComment, setIsClickedComment] = useState(false);
 
     function handleCheckStar(fid, index) {
         // setIsClickedStar(!isClickedStar);
@@ -125,17 +129,35 @@ const FeedPage = () => {
         })
             .then(response => response.json())
             .then(data => {
-                setNumStar((prevItems) => {
-                    const newItems = [...prevItems];
-                    newItems[index] = data.body.feed[0].star;
-                    return newItems;
-                });
-                console.log(data.body.feed[0].star);
-                // setNumStar(data.body.feed[0].star);
-                // console.log(numStar);
+                setBanners((prevBanners) => {
+                    return prevBanners.map((banner) => {
+                        return banner.fid === fid ? { ...banner, star: data.body.feed[0].star } : banner
+                    })
+                })
             })
     };
 
+    function handleCheckComment(fid, index) {
+        fetch(`https://nova-platform.kr/feed_explore/like_comment?fid=${fid}`, {
+            credentials: 'include',
+        })
+            .then(response => response.json())
+            .then(data => {
+                setBanners((prevBanners) => {
+                    return prevBanners.map((banner) => {
+                        return banner.fid === fid ? { ...banner, num_comment: data.body.feed[0].num_comment } : banner
+                    })
+                })
+            });
+    }
+
+    function handleShowCommentWindow() {
+        setIsClickedComment(!isClickedComment);
+    };
+
+    // function handleViewComment(){
+
+    // }
 
     // useEffect(() => {
 
@@ -144,7 +166,61 @@ const FeedPage = () => {
     //     console.log('gkgkgkgkgk')
 
     // }, []);
+    let header = {
+        "request-type": "default",
+        "client-version": 'v1.0.1',
+        "client-ip": '127.0.0.1',
+        "uid": '1234-abcd-5678',
+        "endpoint": "/core_system/",
+    }
 
+    let [inputValue, setInputValue] = useState('');
+
+    function handleChange(e) {
+        setInputValue(e.target.value);
+    };
+
+    let [allComments, setAllComments] = useState([]);
+
+    function handleSubmit(fid, event) {
+        event.preventDefault();
+
+        fetch('https://nova-platform.kr/feed_explore/make_comment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                header,
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+                header: header,
+                body: {
+                    fid: `${fid}`,
+                    body: `${inputValue}`
+                }
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+            })
+    }
+
+    function handleShowComment(fid) {
+        fetch(`https://nova-platform.kr/feed_explore/view_comment?fid=${fid}`, {
+            credentials: 'include'
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                setAllComments(data.body.comments);
+                console.log(allComments);
+            })
+    };
+
+    // useEffect(()=>{
+    //     handleShowComment();
+    // },[])
 
 
     return (
@@ -173,20 +249,47 @@ const FeedPage = () => {
                         return (
                             <div key={banner.fid} className={style['short_form']}>
                                 <div className={style['button_area']}>
-                                    {/* <div className={style['comment_window']}>
-                                        <div>댓글</div>
-                                        <div className={style.line}></div>
-                                        <div>
-                                            <div>
-                                                <div>지지자</div>
-                                                <div>내용</div>
+                                    {
+                                        isClickedComment &&
+                                        (
+                                            <div className={style['comment_window']}>
+                                                <div onClick={handleShowCommentWindow}>댓글</div>
+                                                <div className={style.line}></div>
+                                                <div>
+                                                    <div className={style['comment_box']}>
+                                                        {/* <div className={style.comment}>
+                                                            <div>{allComments[1]}</div>
+                                                            <div>{allComments[1]}</div>
+                                                            <div>삭제</div>
+                                                            <div>신고</div>
+                                                            <div>{allComments}</div>
+                                                        </div> */}
+                                                        {/* {
+                                                            allComment.map((comment, i) => {
+                                                                return (
+                                                                    <div key={i}>
+                                                                        <div>{comment.uname}</div>
+                                                                        <div>{comment.body}</div>
+                                                                        <div>삭제</div>
+                                                                        <div>신고</div>
+                                                                        <div>{comment.star}</div>
+                                                                    </div>
+                                                                )
+                                                            })
+                                                        } */}
+
+                                                    </div>
+                                                    <div className={style['comment_action']}>
+                                                        <form onSubmit={(event) => handleSubmit(banner.fid, event)}>
+                                                            <input type='text' value={inputValue} onChange={handleChange}></input>
+                                                            <button type='submit'>댓글 작성</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div className={style['comment_action']}>
-                                                <input></input>
-                                                <button>댓글 작성</button>
-                                            </div>
-                                        </div>
-                                    </div> */}
+                                        )
+                                    }
+
 
 
 
@@ -207,16 +310,19 @@ const FeedPage = () => {
                                                 }}>
                                                     <CiStar className={style['func_btn_img']} />
                                                 </button>
-                                                
-                                                <p>{numStar[i]}</p>
+                                                {/* <p>{numStar[i]}</p> */}
+                                                <p>{banner.star}</p>
 
-                                                {/* <p>{banner.star}</p> */}
                                             </div>
                                             <div className={style['func_btn']}>
-                                                <button>
+                                                <button onClick={() => {
+                                                    handleShowComment(banner.fid);
+                                                    handleShowCommentWindow();
+                                                    // handleCheckComment(banner.fid, i);
+                                                }}>
                                                     <TfiCommentAlt className={style['func_btn_img']} />
                                                 </button>
-                                                <p>42</p>
+                                                <p>{banner.num_comment}</p>
                                             </div>
                                             <div className={style['func_btn']}>
                                                 <button>
@@ -247,6 +353,18 @@ const FeedPage = () => {
 
 export default FeedPage;
 
+// function CommentWindow() {
+    
+//     return (
+//         <div className={style.comment}>
+//             <div>{allComments[0]}</div>
+//             <div>{allComments[0]}</div>
+//             <div>삭제</div>
+//             <div>신고</div>
+//             <div>{allComments[0].star}</div>
+//         </div>
+//     )
+// }
 // import style from './FeedPage.module.css';
 // import stylePlanet from './../PlanetPage/Planet.module.css';
 
