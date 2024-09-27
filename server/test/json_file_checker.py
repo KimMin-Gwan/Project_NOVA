@@ -15,22 +15,16 @@ def main():
 
     new_data = []
 
-    with open("./../src/model/local_database/managed_user.json", 'r',  encoding='utf-8' )as f:
+    with open("./../src/model/local_database/user.json", 'r',  encoding='utf-8' )as f:
         data_list.extend(json.load(f))
 
-        #for bid in dict_data.keys():
-            #for data in data_list:
-                #if data['group_bid'] == bid:
-                    #dict_data[bid] += 1
-
-        #print(dict_data)
 
         for data in data_list:
-            data['star'] = []
+            data['alert'] = []
 
             new_data.append(data)
 
-    with open("./../src/model/local_database/managed_user.json", 'w',  encoding='utf-8' )as f:
+    with open("./../src/model/local_database/user.json", 'w',  encoding='utf-8' )as f:
         json.dump(new_data, f, ensure_ascii=False, indent=4)
 
 

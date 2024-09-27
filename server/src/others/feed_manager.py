@@ -1,4 +1,4 @@
-from others.data_domain import Feed, User, Comment
+from others.data_domain import Feed, User, Comment, ManagedUser
 #from model import Local_Database
 from datetime import datetime, timedelta
 import string
@@ -10,7 +10,7 @@ import random
 class FeedManager:
     def __init__(self, database, fclasses) -> None:
         self._feedClassManagement = FeedClassManagement(fclasses=fclasses)
-        self._database = database
+        self._database= database
         self._managed_user_table = ManagedUserTable(database=database)
         self._feed_class_analist = FeedClassAnalist()
         self._num_feed = 0
@@ -327,12 +327,12 @@ class FeedManager:
                         attend = i
             comment = self.__get_feed_comment(user=user, feed=feed)
 
+            feed.num_comment = len(feed.comment)
             feed.attend = attend
             feed.comment = comment
             # 기본적으로 star_flag는 False
             if feed.fid in user.star:
                 feed.star_flag = True
-            feed.num_comment = len(feed.comment)
             result.append(feed)
         return result
     
@@ -351,7 +351,7 @@ class FeedManager:
         return comment
 
     def make_new_comment_on_feed(self, user:User, fid, body):
-        managedUser = self._managed_user_table.find_user(user=user)
+        managedUser:ManagedUser = self._managed_user_table.find_user(user=user)
         feed_data = self._database.get_data_with_id(target="fid", id=fid)
         feed = Feed()
         feed.make_with_dict(dict_data=feed_data)
@@ -362,6 +362,9 @@ class FeedManager:
             cid=cid, fid=feed.fid, uid=user.uid, 
             uname=user.uname, body=body, date=date)
         feed.comment.append(cid)
+
+        managedUser.my_comment.append(cid)
+
         self._database.add_new_data("cid", new_data=new_comment.get_dict_form_data())
         self._database.modify_data_with_id("fid", target_data=feed.get_dict_form_data())
 
@@ -369,7 +372,7 @@ class FeedManager:
         return result
 
     def remove_comment_on_feed(self, user:User, fid, cid):
-        managedUser = self._managed_user_table.find_user(user=user)
+        managedUser:ManagedUser = self._managed_user_table.find_user(user=user)
 
         feed_data = self._database.get_data_with_id(target="fid", id=fid)
         feed = Feed()
@@ -378,6 +381,8 @@ class FeedManager:
         comment_data = self._database.get_data_with_id(target="cid", id=cid)
         comment = Comment()
         comment.make_with_dict(comment_data)
+
+        managedUser.my_comment.remove(cid)
 
         if user.uid == comment.uid:
             feed.comment.remove(cid)
@@ -441,11 +446,11 @@ class FeedManager:
         managed_user:ManagedUser = self._managed_user_table.find_user(user=user)
         if fid in managed_user.history:
             managed_user.history.remove(fid)
-        feed = self.__try_interaction_with_feed(user=user, fid=fid, action=action)
+        feed = self.__try_interaction_with_feed(user=managed_user, fid=fid, action=action)
         return [feed]
         
     # feed 와 상호작용 -> 선택지를 선택하는 경우
-    def __try_interaction_with_feed(self, user, fid, action):
+    def __try_interaction_with_feed(self, user:ManagedUser, fid, action):
         fid_data = self._database.get_data_with_id(target="fid", id=fid)
         feed = Feed()
         feed.make_with_dict(fid_data)
@@ -459,14 +464,18 @@ class FeedManager:
                     uids.remove(uid)
                     target = i
                     break
+
         if target != -1:
+            user.active_feed.remove(fid)
             feed.result[target] -= 1
 
         # 이제 참여한 데이터를 세팅하고 저장하면됨
         if target != action:
+            user.active_feed.append(fid)
             feed.attend[action].append(user.uid)
             feed.result[action] += 1
         else:
+            user.active_feed.remove(fid)
             action = -1
 
         self._database.modify_data_with_id(target_id="fid",
@@ -548,6 +557,31 @@ class FeedManager:
             # 만약에 category로 찍은 데이터가 없음?
             target = ManagedFeed(key=-1)
         return target
+
+    def get_my_feeds(self, user):
+        managed_user:ManagedUser= self._managed_user_table.find_user(user=user)
+        feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=managed_user.my_feed)
+
+        feeds = []
+        for feed_data in feed_datas:
+            feed = Feed()
+            feed.make_with_dict(feed_data)
+            feeds.append(feed)
+        return feeds
+
+    def get_my_comments(self, user):
+        managed_user:ManagedUser= self._managed_user_table.find_user(user=user)
+        feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=managed_user.my_feed)
+
+        feeds = []
+        for feed_data in feed_datas:
+            feed = Feed()
+            feed.make_with_dict(feed_data)
+            feeds.append(feed)
+        return feeds
+
+
+
 
 
 
@@ -677,24 +711,3 @@ class ManagedUserTable:
         self._managed_user_list[index].ttl = datetime.now() + timedelta(seconds=3600)
         return
 
-# 유저 특화 시스템 구성을 위한 관리 유저
-class ManagedUser:
-    def __init__(self, uid="", option=[], history=[], star=[]):
-        self.uid = uid
-        self.option = option
-        self.history = history
-        self.ttl= 0
-        self.star= star
-
-    def __call__(self):
-        print(f"uid : {self.uid}")
-        print(f"category : {self.category}")
-        print(f"history : {self.history}")
-        print(f"TTL : {self.ttl}")
-
-    def get_dict_form_data(self):
-        return {
-            "muid" : self.uid,
-            "option" : self.option,
-            "history" : self.history,
-        }

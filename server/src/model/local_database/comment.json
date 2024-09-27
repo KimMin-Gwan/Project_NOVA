@@ -34,5 +34,17 @@
             "abcd-1234-5678"
         ],
         "owner": false
+    },
+    {
+        "cid": "2-1",
+        "fid": "2",
+        "uid": "abcd-1234-5678",
+        "uname": "지지자",
+        "body": "댓글 달아볼게요",
+        "date": "2024/09/28",
+        "like": 0,
+        "state": "y",
+        "like_user": [],
+        "owner": false
     }
 ]

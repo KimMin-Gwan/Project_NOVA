@@ -33,8 +33,7 @@ class User(SampleDomain):
                  group_daily = False, group_special = False,
                  sign = "", password = "", select_name_card = "",
                  solo_daily_check_date = "", group_daily_check_date = "",
-                 name_card_list= []
-                 ):
+                 name_card_list= [], alert = []):
         if items == None:
             items = Item()
 
@@ -61,6 +60,7 @@ class User(SampleDomain):
         self.name_card_list = name_card_list
         self.solo_daily_check_date = solo_daily_check_date
         self.group_daily_check_date = group_daily_check_date
+        self.alert = alert
 
     # database로 부터 받아온 데이터를 사용해 내용 구성
     def make_with_dict(self, dict_data):
@@ -88,6 +88,7 @@ class User(SampleDomain):
             self.name_card_list = dict_data['name_card_list']
             self.solo_daily_check_date = dict_data['solo_daily_check_date']
             self.group_daily_check_date = dict_data['group_daily_check_date']
+            self.alert = dict_data['alert']
             return
         except Exception as e:
             raise DictMakingError(error_type=e)
@@ -117,7 +118,8 @@ class User(SampleDomain):
             "select_name_card" : self.select_name_card,
             "name_card_list": self.name_card_list,
             "solo_daily_check_date" : self.solo_daily_check_date,
-            "group_daily_check_date" : self.group_daily_check_date
+            "group_daily_check_date" : self.group_daily_check_date,
+            "alert" : self.alert
         }
 
 class Item(SampleDomain):
@@ -404,4 +406,72 @@ class Comment(SampleDomain):
             "state": self.state,
             "like_user": self.like_user,
             "owner" : self.owner
+        }
+
+# 유저 특화 시스템 구성을 위한 관리 유저
+class ManagedUser:
+    def __init__(self, uid="", option=[], history=[], star=[],
+                 my_feed = [], my_comment = [], active_feed=[]):
+        self.uid = uid
+        self.option = option
+        self.history = history
+        self.ttl= 0
+        self.star= star
+        self.my_feed = my_feed
+        self.my_comment = my_comment
+        self.active_feed = active_feed
+
+    def make_with_dict(self, dict_data):
+        try:
+            self.uid = dict_data['muid']
+            self.option = dict_data['option']
+            self.history = dict_data['history']
+            self.star = dict_data['star']
+            self.my_feed = dict_data['my_feed']
+            self.my_comment = dict_data['my_comment']
+            self.active_feed = dict_data['active_feed']
+        except KeyError as e:
+            raise DictMakingError(error_type=f"Missing key: {str(e)}")
+
+    def __call__(self):
+        print(f"uid : {self.uid}")
+        print(f"history : {self.history}")
+        print(f"TTL : {self.ttl}")
+
+    def get_dict_form_data(self):
+        return {
+            "muid" : self.uid,
+            "option" : self.option,
+            "history" : self.history,
+            "star" : self.star,
+            "my_feed" : self.my_feed,
+            "my_comment" : self.my_comment,
+            "active_feed" :self.active_feed
+        }
+    
+
+# 유저 특화 시스템 구성을 위한 관리 유저
+class Alert:
+    def __init__(self, aid="", uid="", body="", date =""):
+        self.aid = aid
+        self.uid = uid
+        self.body=body
+        self.date=date
+
+
+    def make_with_dict(self, dict_data):
+        try:
+            self.aid = dict_data['aid']
+            self.uid = dict_data['uid']
+            self.body = dict_data['body']
+            self.date = dict_data['date']
+        except KeyError as e:
+            raise DictMakingError(error_type=f"Missing key: {str(e)}")
+
+    def get_dict_form_data(self):
+        return {
+            "aid" : self.aid,
+            "uid" : self.uid,
+            "body" : self.body,
+            "date" : self.date
         }
