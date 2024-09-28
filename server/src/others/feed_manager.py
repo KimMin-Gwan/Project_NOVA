@@ -50,6 +50,9 @@ class FeedManager:
     def __set_datetime(self):
         return datetime.now().strftime("%Y/%m/%d-%H:%M:%S")
 
+    def __set_fid_with_datatime(self):
+        return datetime.now().strftime("%Y%m%d%H%M%S")
+
     def __get_today_date(self):
         return datetime.now().strftime("%Y/%m/%d")
     
@@ -82,11 +85,11 @@ class FeedManager:
         return self._feedClassManagement.get_fclass_meta_data()
 
     # 새로운 피드 만들기
-    def make_new_feed(self, user:User, fclass, choice, title, body):
+    def make_new_feed(self, user:User, fclass, choice, body):
         # 검증을 위한 코드는 이곳에 작성하시오
 
         new_feed = self.__set_new_feed(user, fclass=fclass,
-                                        choice=choice, title=title, body=body)
+                                        choice=choice, body=body)
         self._database.add_new_data(target_id="fid", new_data=new_feed.get_dict_form_data())
         mangaed_feed = ManagedFeed()
         mangaed_feed.fid = new_feed.fid
@@ -95,22 +98,21 @@ class FeedManager:
         mangaed_feed.key = self._num_feed
         self._managed_feed_list.append(mangaed_feed)
         self._num_feed += 1
+        return
 
     # 새로운 피드의 데이터를 추가하여 반환
-    def __set_new_feed(self, user:User, fclass, choice, title, body):
+    def __set_new_feed(self, user:User, fclass, choice, body):
         new_feed = Feed()
         new_feed.fid = self.__make_new_fid()
         new_feed.uid = user.uid
         new_feed.nickname = user.uname
-        new_feed.title = title
         new_feed.body = body
         new_feed.date = self.__set_datetime()
         new_feed.fclass = fclass
         new_feed.class_name = self.__get_class_name(fclass=fclass)
         new_feed.choice = choice
-        new_feed.result = []
         new_feed.state = "y"
-        new_feed.category = []
+        new_feed.category = [] # 여기서 카테고리 추가
         return new_feed
     
 
@@ -356,7 +358,7 @@ class FeedManager:
         feed = Feed()
         feed.make_with_dict(dict_data=feed_data)
 
-        cid = fid+"-"+str(len(feed.comment))
+        cid = fid+"-"+self.__set_fid_with_datatime()
         date = self.__get_today_date()
         new_comment = Comment(
             cid=cid, fid=feed.fid, uid=user.uid, 
