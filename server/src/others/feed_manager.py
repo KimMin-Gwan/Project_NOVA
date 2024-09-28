@@ -442,7 +442,10 @@ class FeedManager:
             comment.like_user.append(user.uid)
             comment.like += 1
 
-        self._database.modify_data_with_id("cid", target_data=comment.get_dict_form_data())
+
+        database_sample = self._database.get_all_data(target = "cid")
+        print(database_sample)
+        #self._database.modify_data_with_id("cid", target_data=comment.get_dict_form_data())
 
         result = self.is_user_interacted(user=managedUser, feeds=[feed])
         return result
