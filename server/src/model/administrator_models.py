@@ -1,6 +1,6 @@
 from model.base_model import AdminModel
 from model import Local_Database
-from others.data_domain import League, User, Bias, Banner, NameCard, Item, Feed
+from others.data_domain import League, User, Bias, Banner, NameCard, Feed
 from others import CoreControllerLogicError
 
 import boto3
