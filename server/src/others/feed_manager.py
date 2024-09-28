@@ -423,8 +423,6 @@ class FeedManager:
         return
 
     def try_like_comment(self, user:User, fid, cid):
-        database_sample = self._database.get_all_data(target = "cid")
-        print(database_sample)
 
         managedUser = self._managed_user_table.find_user(user=user)
 
@@ -435,9 +433,12 @@ class FeedManager:
         database_sample = self._database.get_all_data(target = "cid")
         print(database_sample)
 
-        #comment_data = self._database.get_data_with_id(target="cid", id=cid)
-        #comment = Comment()
-        #comment.make_with_dict(comment_data)
+        comment_data = self._database.get_data_with_id(target="cid", id=cid)
+        comment = Comment()
+        comment.make_with_dict(comment_data)
+
+        database_sample = self._database.get_all_data(target = "cid")
+        print(database_sample)
 
         #print(comment.like_user)
 
