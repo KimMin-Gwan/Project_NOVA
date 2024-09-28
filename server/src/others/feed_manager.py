@@ -444,9 +444,10 @@ class FeedManager:
             print(database_sample)
 
             comment.like_user.append(user.uid)
-        
+       
             print(comment)
             print(comment.like_user)
+            print(comment_data)
 
             comment.like += 1
 
