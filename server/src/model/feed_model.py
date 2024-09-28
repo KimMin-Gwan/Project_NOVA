@@ -56,8 +56,8 @@ class FeedModel(BaseModel):
         self._feeds= feed_manager.try_like_comment( user=self._user,
                                                                fid=data_payload.fid,
                                                                cid=data_payload.cid)
-        self._comments = feed_manager.get_all_comment_on_feed( user=self._user,
-                                                               fid=data_payload.fid)
+        #self._comments = feed_manager.get_all_comment_on_feed( user=self._user,
+                                                               #fid=data_payload.fid)
         return
 
     def get_response_form_data(self, head_parser):
