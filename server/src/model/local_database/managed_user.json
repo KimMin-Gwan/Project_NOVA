@@ -21,10 +21,10 @@
         "muid": "abcd-1234-5678",
         "option": [],
         "history": [],
-        "star": [],
-        "my_feed": [],
-        "my_comment": [],
-        "active_feed": []
+        "star": ["1", "2", "3", "4", "5", "6"],
+        "my_feed": ["1", "2", "3", "4", "5", "6", "7", "8", "9"],
+        "my_comment": ["2-0", "2-1"],
+        "active_feed": ["1","5", "6", "7", "8", "16", "17"]
     },
     {
         "muid": "ijkl-9876-mnop",
@@ -1161,15 +1161,6 @@
         "active_feed": []
     },
     {
-        "muid": "abcd-1234-5678",
-        "option": [],
-        "history": [],
-        "star": [],
-        "my_feed": [],
-        "my_comment": [],
-        "active_feed": []
-    },
-    {
         "muid": "bcde-2345-6789",
         "option": [],
         "history": [],
@@ -1225,15 +1216,6 @@
     },
     {
         "muid": "hijk-8901-2345",
-        "option": [],
-        "history": [],
-        "star": [],
-        "my_feed": [],
-        "my_comment": [],
-        "active_feed": []
-    },
-    {
-        "muid": "abcd-1234-5678",
         "option": [],
         "history": [],
         "star": [],

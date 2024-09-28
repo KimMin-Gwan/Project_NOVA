@@ -6,48 +6,8 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 class UserController:      
-    def sample_func(self, database:Local_Database, request) -> BaseModel: 
-        #jwt_decoder = JWTManager()
-        
-        model = BaseModel(database=database)
-        try:
-            #request_payload = jwt_decoder.decode(token=request.token)  # jwt payload(email 정보 포함됨)
-
-            # 유저가 있는지 확인
-            if not model.set_user_with_uid(request=request):
-                raise UserNotExist("Can not find User with uid")
-        except UserNotExist as e:
-            print("Error Catched : ", e)
-            model.set_state_code(e.error_code) # 종합 에러
-            return model
-
-        try:
-            """
-            if not model.set_biases_with_bids():
-                model.set_state_code("210")
-                return model
-            """
-
-        except CustomError as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
-
-        except Exception as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
-
-        finally:
-            return model
-    # 작성요령
-    # - Model들은 대충 다른 모델들 복붙해서 쓸것
-    # - Model들은 model/user_models.py 안에 모두 작성할것 (3개 다)
-    # - 새로운 데이터 타입 생성 하지 말것
-    # - view/nova_server.py에 작성된 NOVAVerification 읽어볼것
-    # - 최초 커밋에서 코드 변경사항 파악할것
-
         
     # 로그인 시도
-    # 1. 데이터베이스에서 검증
     def try_login(self, database, request):
 
         model = LoginModel(database=database)
@@ -141,6 +101,7 @@ class UserController:
             model.set_user_with_email(request=request.jwt_payload)
             model.set_solo_bias()
             model.set_group_bias()
+            model.set_user_data_with_no_password()
 
         except CustomError as e:
             print("Error Catched : ", e.error_type)
@@ -153,6 +114,136 @@ class UserController:
         finally:
             return model
 
+    def try_change_nickname(self, database, request):
+        model = ChangeNickNameModel(database=database)
+        try:
+            # 유저가 있으면 세팅
+            model.set_user_with_email(request=request.jwt_payload)
+            model.try_change_nickname(request=request.data_payload)
+
+        except CustomError as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
+
+        except Exception as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
+
+        finally:
+            return model
+
+    def try_change_password(self, database, request):
+        model = ChangePasswordModel(database=database)
+        try:
+            # 유저가 있으면 세팅
+            model.set_user_with_email(request=request.jwt_payload)
+            model.try_change_password(request=request.data_payload)
+
+        except CustomError as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
+
+        except Exception as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
+
+        finally:
+            return model
+
+    def get_my_feed(self, database, request, feed_manager):
+        model = MyFeedsModel(database=database)
+        try:
+            # 유저가 있으면 세팅
+            model.set_user_with_email(request=request.jwt_payload)
+            model.get_my_feed(feed_manager=feed_manager,
+                              data_payload=request.data_payload)
+
+        except CustomError as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
+
+        except Exception as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
+
+        finally:
+            return model
+
+    def get_my_comments(self, database, request, feed_manager):
+        model = MyCommentsModel(database=database)
+        try:
+            # 유저가 있으면 세팅
+            model.set_user_with_email(request=request.jwt_payload)
+            model.get_my_comments(feed_manager=feed_manager,
+                                    data_payload=request.data_payload)
+
+        except CustomError as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
+
+        except Exception as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
+
+        finally:
+            return model
+
+    #def get_commented_feed(self, database, request, feed_manager):
+        #model = MyFeedsModel(database=database)
+        #try:
+            ## 유저가 있으면 세팅
+            #model.set_user_with_email(request=request.jwt_payload)
+            #model.get_commented_feed(feed_manager=feed_manager,
+                                    #data_payload=request.data_payload)
+
+        #except CustomError as e:
+            #print("Error Catched : ", e.error_type)
+            #model.set_state_code(e.error_code) # 종합 에러
+
+        #except Exception as e:
+            #print("Error Catched : ", e.error_type)
+            #model.set_state_code(e.error_code) # 종합 에러
+
+        #finally:
+            #return model
+
+    def get_staring_feed(self, database, request, feed_manager):
+        model = MyFeedsModel(database=database)
+        try:
+            # 유저가 있으면 세팅
+            model.set_user_with_email(request=request.jwt_payload)
+            model.get_staring_feed(feed_manager=feed_manager,
+                                    data_payload=request.data_payload)
+
+        except CustomError as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
+
+        except Exception as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
+
+        finally:
+            return model
+
+    def get_interactied_feed(self, database, request, feed_manager):
+        model = MyFeedsModel(database=database)
+        try:
+            # 유저가 있으면 세팅
+            model.set_user_with_email(request=request.jwt_payload)
+            model.get_interactied_feed(feed_manager=feed_manager,
+                                    data_payload=request.data_payload)
+
+        except CustomError as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
+
+        except Exception as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
+
+        finally:
+            return model
 
 
 # 이메일 전송

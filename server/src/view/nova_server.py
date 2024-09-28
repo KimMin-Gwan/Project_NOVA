@@ -47,7 +47,9 @@ class NOVA_Server:
                                                      endpoint='/user_system',
                                                    database=database,
                                                    nova_verification=nova_verification,
-                                                   head_parser=head_parser)
+                                                   head_parser=head_parser,
+                                                   feed_manager=feed_manager
+                                                   )
         self.__sub_system_view = Sub_Service_View( app=self.__app,
                                                      endpoint='/sub_system',
                                                    database=database,

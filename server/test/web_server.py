@@ -116,7 +116,7 @@ def home():
             async function testThirdEndpoint() {
                 const target = document.getElementById('targetInput').value;
                 try {
-                    const response = await fetch(`http://127.0.0.1:4000/home/home_feed`, {
+                    const response = await fetch(`http://127.0.0.1:4000/feed_explore/view_comment?fid=2`, {
                         mode: 'cors',
                         credentials: 'include'
                     });

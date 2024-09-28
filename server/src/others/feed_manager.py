@@ -382,6 +382,7 @@ class FeedManager:
         comment = Comment()
         comment.make_with_dict(comment_data)
 
+        # 이거 지우는거 뭔가 대책이 필요함
         managedUser.my_comment.remove(cid)
 
         if user.uid == comment.uid:
@@ -400,7 +401,7 @@ class FeedManager:
         comments = []
         comment_datas = self._database.get_datas_with_ids(target_id="cid", ids=feed.comment)
 
-        for comment_data in comment_datas:
+        for comment_data in reversed(comment_datas):
             new_comment = Comment()
             new_comment.make_with_dict(comment_data)
             # 기본적으로 owner는 False
@@ -558,32 +559,127 @@ class FeedManager:
             target = ManagedFeed(key=-1)
         return target
 
-    def get_my_feeds(self, user):
+    # 내가 작성한 피드 전체 불러오기
+    def get_my_feeds(self, user, fid):
         managed_user:ManagedUser= self._managed_user_table.find_user(user=user)
         feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=managed_user.my_feed)
 
         feeds = []
-        for feed_data in feed_datas:
+        for i, feed_data in enumerate(reversed(feed_datas)):
             feed = Feed()
             feed.make_with_dict(feed_data)
             feeds.append(feed)
+            if feed.fid == fid:
+                target = i
+
+        if target != -1:
+            feeds = feeds[target:]
+
+        if len(feeds) > 5:
+            feeds[:5]
+
+        feeds = self.is_user_interacted(user=managed_user, feeds=feeds)
+
         return feeds
 
-    def get_my_comments(self, user):
+    # 내가 댓글을 작성한 피드 전부 불러오기
+    #def get_commented_feed(self, user, fid):
+        #managed_user:ManagedUser= self._managed_user_table.find_user(user=user)
+        #print(managed_user.ttl)
+        #comment_datas = self._database.get_datas_with_ids(target_id="cid", ids=managed_user.my_comment)
+        #print(comment_datas)
+        #fid_list = []
+        #for comment_data in comment_datas:
+            #comment = Comment()
+            #comment.make_with_dict(comment_data)
+            #fid_list.append(comment.fid)
+
+        #feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=fid_list)
+
+        #feeds = []
+        #target = -1
+        #for i, feed_data in enumerate(reversed(feed_datas)):
+            #feed = Feed()
+            #feed.make_with_dict(feed_data)
+            #feeds.append(feed)
+            #if feed.fid == fid:
+                #target = i
+
+        #if target != -1:
+            #feeds = feeds[target:]
+
+        #if len(feeds) > 5:
+            #feeds[:5]
+        #return feeds
+
+    # 내가 작성한 댓글 전부 불러오기
+    def get_my_comments(self, user, cid):
         managed_user:ManagedUser= self._managed_user_table.find_user(user=user)
-        feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=managed_user.my_feed)
+        comment_datas = self._database.get_datas_with_ids(target_id="cid", ids=managed_user.my_comment)
+
+        comments = []
+        target = -1
+        for i, comment_data in enumerate(reversed(comment_datas)):
+            comment = Comment()
+            comment.make_with_dict(comment_data)
+            comments.append(comment)
+            if comment.cid == cid:
+                target = i
+
+        if target != -1:
+            comments = comments[target:]
+
+        if len(comments) > 5:
+            comments[:5]
+
+        return comments 
+
+    # 관심 표시한 피드 전부 불러오기
+    def get_stared_feed(self, user, fid):
+        managed_user:ManagedUser= self._managed_user_table.find_user(user=user)
+        feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=managed_user.star)
 
         feeds = []
-        for feed_data in feed_datas:
+        target = -1
+        for i, feed_data in enumerate(reversed(feed_datas)):
             feed = Feed()
             feed.make_with_dict(feed_data)
             feeds.append(feed)
+            if feed.fid == fid:
+                target = i
+
+        if target != -1:
+            feeds = feeds[target:]
+
+        if len(feeds) > 5:
+            feeds[:5]
+
+        feeds = self.is_user_interacted(user=managed_user, feeds=feeds)
+
         return feeds
 
+    # 상호작용한 피드 전부 불러오기
+    def get_interactied_feed(self, user, fid):
+        managed_user:ManagedUser= self._managed_user_table.find_user(user=user)
+        feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=managed_user.active_feed)
 
+        feeds = []
+        target = -1
+        for i, feed_data in enumerate(reversed(feed_datas)):
+            feed = Feed()
+            feed.make_with_dict(feed_data)
+            feeds.append(feed)
+            if feed.fid == fid:
+                target = i
 
+        if target != -1:
+            feeds = feeds[target:]
 
+        if len(feeds) > 5:
+            feeds[:5]
+        feeds = self.is_user_interacted(user=managed_user, feeds=feeds)
 
+        return feeds
 
 # 이건 뭐냐하면
 # fclass 간의 유사도를 판별하여
@@ -676,12 +772,9 @@ class ManagedUserTable:
     def _add_user(self, user:User):
         managed_user_data = self._database.get_data_with_id(target="muid", id=user.uid)
 
-        new_user = ManagedUser(
-            uid = managed_user_data['muid'],
-            option = managed_user_data['option'],
-            history = managed_user_data['history'],
-            star = managed_user_data['star']
-        )
+        new_user = ManagedUser()
+        new_user.make_with_dict(managed_user_data)
+        new_user.ttl = self.__get_new_ttl()
 
         index = self.__check_ttl()
         if index != -1:
@@ -708,6 +801,10 @@ class ManagedUserTable:
                 
     # ttl 초기화
     def __refresh_ttl(self, index):
-        self._managed_user_list[index].ttl = datetime.now() + timedelta(seconds=3600)
+        self._managed_user_list[index].ttl = self.__get_new_ttl()
         return
+    
+    def __get_new_ttl(self):
+        ttl = datetime.now() + timedelta(seconds=3600)
+        return ttl
 

@@ -7,13 +7,14 @@ from view.jwt_decoder import RequestManager
 
 class User_Service_View(Master_View):
     def __init__(self, app:FastAPI, endpoint:str, database, head_parser:Head_Parser,
-                 nova_verification
+                 nova_verification, feed_manager
                  ) -> None:
         super().__init__(head_parser=head_parser)
         self.__app = app
         self._endpoint = endpoint
         self.__database = database
         self.__nova_verification = nova_verification
+        self.__feed_manager = feed_manager
         self.user_route(endpoint)
         self.my_page_route()
 
@@ -21,15 +22,6 @@ class User_Service_View(Master_View):
         @self.__app.get(endpoint+'/user')
         def home():
             return 'Hello, This is User system'
-        
-        # 로그인 시도
-        # response 포함 정보 -> 'result' : True or False
-        #                    -> 'detail' : "실패 사유"
-        @self.__app.get('/user_home/sample')
-        def try_login(request:Request):
-            print(request.cookies)
-
-            return "hello"
 
         @self.__app.post('/user_home/try_login')
         def try_login(raw_request:dict):
@@ -87,68 +79,102 @@ class User_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
+        # 비밀번호 변경하기
+        @self.__app.get('/user_home/try_change_password')
+        def try_change_password(request:Request, raw_request:dict):
+            request_manager = RequestManager()
+
+            data_payload = ChangePasswordRequest(request=raw_request)
+            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+            if not request_manager.jwt_payload.result:
+                raise request_manager.credentials_exception
+
+            home_controller=UserController()
+            model = home_controller.try_change_password(database=self.__database,
+                                                        request=request_manager)
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
         # 닉네임 바꾸기
-        #@self.__app.get('/user_home/change_nickname')
-        #def get_my_page(request:Request, index:Optional[int], custom:Optional[str]=""):
+        @self.__app.get('/user_home/change_nickname')
+        def try_chagne_nickname(request:Request, index:Optional[int], custom:Optional[str]=""):
+            request_manager = RequestManager()
+
+            data_payload  = ChangeNicknameRequest(index=index, custom=custom)
+            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+            if not request_manager.jwt_payload.result:
+                raise request_manager.credentials_exception
+
+            home_controller=UserController()
+            model = home_controller.try_change_nickname(database=self.__database,
+                                                        request=request_manager)
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
+        @self.__app.get('/user_home/get_my_feed')
+        def get_my_feed(request:Request, fid:Optional[str] = ""):
+            request_manager = RequestManager()
+
+            data_payload = MyFeedRequest(fid=fid)
+            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+            if not request_manager.jwt_payload.result:
+                raise request_manager.credentials_exception
+
+            home_controller=UserController()
+            model = home_controller.get_my_feed(database=self.__database,
+                                                        request=request_manager,
+                                                        feed_manager=self.__feed_manager)
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
+        @self.__app.get('/user_home/get_my_comments')
+        def get_my_comment(request:Request, cid:Optional[str] = ""):
+            request_manager = RequestManager()
+
+            data_payload = MyFeedRequest(cid=cid)
+            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+            if not request_manager.jwt_payload.result:
+                raise request_manager.credentials_exception
+
+            home_controller=UserController()
+            model = home_controller.get_my_comments(database=self.__database,
+                                                        request=request_manager,
+                                                        feed_manager=self.__feed_manager)
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
+        #@self.__app.get('/user_home/get_commented_feed')
+        #def get_my_comment(request:Request, fid:Optional[str] = ""):
             #request_manager = RequestManager()
 
-            #data_payload = DummyRequest()
+            #data_payload = MyFeedRequest(fid=fid)
             #request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
                 #raise request_manager.credentials_exception
 
             #home_controller=UserController()
-            #model = home_controller.get_user_page(database=self.__database,
-                                                        #request=request_manager)
+            #model = home_controller.get_commented_feed(database=self.__database,
+                                                        #request=request_manager,
+                                                        #feed_manager=self.__feed_manager)
             #body_data = model.get_response_form_data(self._head_parser)
             #response = request_manager.make_json_response(body_data=body_data)
             #return response
 
-        @self.__app.get('/user_home/get_my_feed')
-        def get_my_page(request:Request):
-            request_manager = RequestManager()
-
-            data_payload = DummyRequest()
-            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
-            if not request_manager.jwt_payload.result:
-                raise request_manager.credentials_exception
-
-            home_controller=UserController()
-            model = home_controller.get_my_feed(database=self.__database,
-                                                        request=request_manager,
-                                                        feed_manager=self.__feed_manager)
-            body_data = model.get_response_form_data(self._head_parser)
-            response = request_manager.make_json_response(body_data=body_data)
-            return response
-
-        @self.__app.get('/user_home/get_my_comment')
-        def get_my_page(request:Request):
-            request_manager = RequestManager()
-
-            data_payload = DummyRequest()
-            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
-            if not request_manager.jwt_payload.result:
-                raise request_manager.credentials_exception
-
-            home_controller=UserController()
-            model = home_controller.get_my_feed(database=self.__database,
-                                                        request=request_manager,
-                                                        feed_manager=self.__feed_manager)
-            body_data = model.get_response_form_data(self._head_parser)
-            response = request_manager.make_json_response(body_data=body_data)
-            return response
-
         @self.__app.get('/user_home/get_stared_feed')
-        def get_my_page(request:Request):
+        def get_stared_feed(request:Request, fid:Optional[str] = ""):
             request_manager = RequestManager()
 
-            data_payload = DummyRequest()
+            data_payload = MyFeedRequest(fid=fid)
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
             if not request_manager.jwt_payload.result:
                 raise request_manager.credentials_exception
 
             home_controller=UserController()
-            model = home_controller.get_stared_feed(database=self.__database,
+            model = home_controller.get_staring_feed(database=self.__database,
                                                         request=request_manager,
                                                         feed_manager=self.__feed_manager)
             body_data = model.get_response_form_data(self._head_parser)
@@ -156,10 +182,10 @@ class User_Service_View(Master_View):
             return response
 
         @self.__app.get('/user_home/get_interactied_feed')
-        def get_my_page(request:Request):
+        def get_interactied_feed(request:Request, fid:Optional[str] = ""):
             request_manager = RequestManager()
 
-            data_payload = DummyRequest()
+            data_payload = MyFeedRequest(fid=fid)
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
             if not request_manager.jwt_payload.result:
                 raise request_manager.credentials_exception
@@ -172,6 +198,21 @@ class User_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
+        @self.__app.get('/user_home/get_my_alert')
+        def get_my_alert(request:Request, aid:Optional[str] = ""):
+            request_manager = RequestManager()
+
+            data_payload = DummyRequest()
+            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+            if not request_manager.jwt_payload.result:
+                raise request_manager.credentials_exception
+
+            home_controller=UserController()
+            model = home_controller.get_my_alert(database=self.__database,
+                                                        request=request_manager)
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
     
 
 class DummyRequest():
@@ -191,6 +232,13 @@ class LoginRequest(RequestHeader):
         self.email = body['email']
         self.password = body['password']
 
+class ChangePasswordRequest(RequestHeader):
+    def __init__(self, request) -> None:
+        super().__init__(request)
+        body = request['body']
+        self.password = body['password']
+        self.new_password= body['new_password']
+
 class EmailSendRequest(RequestHeader):
     def __init__(self, request) -> None:
         super().__init__(request)
@@ -207,3 +255,10 @@ class SignInRequest(RequestHeader):
         self.age = body['age']
         self.gender = body['gender']
 
+class MyFeedRequest():
+    def __init__(self, fid) -> None:
+        self.fid= fid
+
+class MyFeedRequest():
+    def __init__(self, cid) -> None:
+        self.cid=cid 

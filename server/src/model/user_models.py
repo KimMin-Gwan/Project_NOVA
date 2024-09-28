@@ -1,7 +1,7 @@
 from model.base_model import BaseModel
 from model import Local_Database
 from others.data_domain import User, Bias
-from others import CoreControllerLogicError
+from others import CoreControllerLogicError, FeedManager
 from view.jwt_decoder import JWTManager
 import jwt
 import datetime
@@ -152,12 +152,202 @@ class UserPageModel(BaseModel):
             self.__group_bias.make_with_dict(bias_data)
         return
 
+    def set_user_data_with_no_password(self):
+        self._user.password = ""
+        return
+
     def get_response_form_data(self, head_parser):
         try:
             body = {
                 'user' : self._user.get_dict_form_data(),
                 'solo_bias' : self.__solo_bias.get_dict_form_data(),
                 'group_bias' : self.__group_bias.get_dict_form_data(),
+            }
+
+            response = self._get_response_data(head_parser=head_parser, body=body)
+            return response
+
+        except Exception as e:
+            raise CoreControllerLogicError("response making error | " + e)
+
+class MyCommentsModel(BaseModel):
+    def __init__(self, database:Local_Database) -> None:
+        super().__init__(database)
+        self._comments= []
+        self._cid = ""
+
+    def get_my_comments(self, feed_manager:FeedManager, data_payload):
+        self._comments= feed_manager.get_my_comments(user=self._user,
+                                                    cid=data_payload.cid)
+        if len(self._comments) != 0:
+            self._cid= self._comments[-1].cid
+        return
+
+    def get_response_form_data(self, head_parser):
+        try:
+            body = {
+                'comments' : self._make_dict_list_data(list_data=self._comments),
+                "cid" : self._cid
+            }
+
+            response = self._get_response_data(head_parser=head_parser, body=body)
+            return response
+
+        except Exception as e:
+            raise CoreControllerLogicError("response making error | " + e)
+
+class MyFeedsModel(BaseModel):
+    def __init__(self, database:Local_Database) -> None:
+        super().__init__(database)
+        self._feeds = []
+        self._fid = ""
+
+    def get_my_feed(self, feed_manager:FeedManager, data_payload):
+        self._feeds = feed_manager.get_my_feeds(user=self._user,
+                                                fid=data_payload.fid)
+        if len(self._feeds) != 0:
+            self._fid = self._feeds[-1].fid
+        return
+
+    #def get_commented_feed(self, feed_manager:FeedManager, data_payload):
+        #self._feeds = feed_manager.get_commented_feed(user=self._user,
+                                                    #fid=data_payload.fid)
+        #if len(self._feeds) != 0:
+            #self._fid = self._feeds[-1].fid
+
+    def get_staring_feed(self, feed_manager:FeedManager, data_payload):
+        self._feeds = feed_manager.get_stared_feed(user=self._user,
+                                                    fid=data_payload.fid)
+        if len(self._feeds) != 0:
+            self._fid = self._feeds[-1].fid
+        return
+
+    def get_interactied_feed(self, feed_manager:FeedManager, data_payload):
+        self._feeds = feed_manager.get_stared_feed(user=self._user,
+                                                    fid=data_payload.fid)
+        if len(self._feeds) != 0:
+            self._fid = self._feeds[-1].fid
+        return
+
+    def get_response_form_data(self, head_parser):
+        try:
+            body = {
+                'feeds' : self._make_dict_list_data(list_data=self._feeds),
+                "fid" : self._fid
+            }
+
+            response = self._get_response_data(head_parser=head_parser, body=body)
+            return response
+
+        except Exception as e:
+            raise CoreControllerLogicError("response making error | " + e)
+
+class ChangePasswordModel(BaseModel):
+    def __init__(self, database:Local_Database) -> None:
+        super().__init__(database)
+        self._result = False
+        self._detail = "Something goes bad | ERROR = 422"
+
+    # 비밀번호 변경하기
+    def try_change_password(self, data_payload):
+        if self.__check_present_password(present_password=data_payload.password):
+            self.__try_change_password(new_password = data_payload.new_password)
+            self._result = True
+            self._detail = "비밀번호가 변경되었어요"
+            return 
+        else:
+            self._detail = "비밀번호가 틀렸어요"
+            return
+
+    # 현재 비밀번호가 맞는지 체크
+    def __check_present_password(self, present_password):
+        if self._user.password != present_password:
+            return False
+        else:
+            return True
+
+    # 비밀번호 바꾸고 저장하기
+    def __try_change_password(self, new_password):
+        self._user.password = new_password
+        self._database.modify_data_with_id(
+            target_id="uid",
+            target_data=self._user.get_dict_form_data())
+        return 
+
+    def get_response_form_data(self, head_parser):
+        try:
+            body = {
+                'result' : self._result,
+                "detail" : self._detail
+            }
+
+            response = self._get_response_data(head_parser=head_parser, body=body)
+            return response
+
+        except Exception as e:
+            raise CoreControllerLogicError("response making error | " + e)
+
+class ChangeNickNameModel(BaseModel):
+    def __init__(self, database:Local_Database) -> None:
+        super().__init__(database)
+        self._result = False
+        self._detail = "Something goes bad | ERROR = 422"
+
+    # 비밀번호 변경하기
+    def try_change_nickname(self, data_payload):
+        if data_payload.index == 0:
+            self._user.uname = "지지자"
+            self._detail = "지지자로 변경되었습니다"
+            self._result = True
+        elif data_payload.index == 1:
+            if self._user.solo_bid != "":
+                bias_data = self._database.get_data_with_id(target="bid", id=self._user.solo_bid)
+                bias = Bias()
+                bias.make_with_dict(dict_data=bias_data)
+                if len(bias.fanname) == 0:
+                    self._detail = f"{bias.bname}님은 팬명칭이 없어요"
+                    return
+                else:
+                    self._user.uname = bias.fanname[0]
+                    self._detail = f"{self._user.uname}로 변경되었습니다"
+                    self._result =True
+            else:
+                self._detail = "지지하는 개인 최애가 없어요!"
+                return
+        elif data_payload.index == 2:
+            if self._user.group_bid!= "":
+                bias_data = self._database.get_data_with_id(target="bid", id=self._user.group_bid)
+                bias = Bias()
+                bias.make_with_dict(dict_data=bias_data)
+                if len(bias.fanname) == 0:
+                    self._detail = f"{bias.bname}님은 팬명칭이 없어요"
+                    return
+                else:
+                    self._user.uname = bias.fanname[0]
+                    self._detail = f"{self._user.uname}로 변경되었습니다"
+                    self._result =True
+            else:
+                self._detail = "지지하는 그룹 최애가 없어요!"
+                return
+
+        elif data_payload.index == 3:
+            # 지지자가 패스 구독중인지 확인하는 함수가 있어야함
+            if data_payload.custom != "":
+                self._user.uname = data_payload.custom
+            else:
+                self._detail = "최소 1글자 이상의 이름을 사용해야합니다!"
+                return
+
+        self._database.modify_data_with_id(target_id="uid", target_data=self._user.get_dict_form_data())
+        return
+
+
+
+    def get_response_form_data(self, head_parser):
+        try:
+            body = {
+                'result' : self._result,
+                "detail" : self._detail
             }
 
             response = self._get_response_data(head_parser=head_parser, body=body)
