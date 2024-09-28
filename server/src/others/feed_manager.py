@@ -423,28 +423,32 @@ class FeedManager:
         return
 
     def try_like_comment(self, user:User, fid, cid):
+        database_sample = self._database.get_all_data(target = "cid")
+        print(database_sample)
+
         managedUser = self._managed_user_table.find_user(user=user)
 
         feed_data = self._database.get_data_with_id(target="fid", id=fid)
         feed = Feed()
         feed.make_with_dict(dict_data=feed_data)
 
-        comment_data = self._database.get_data_with_id(target="cid", id=cid)
-        comment = Comment()
-        comment.make_with_dict(comment_data)
-
-        print(comment.like_user)
-
-        if user.uid in comment.like_user:
-            comment.like_user.remove(user.uid)
-            comment.like -= 1
-        else:
-            comment.like_user.append(user.uid)
-            comment.like += 1
-
-
         database_sample = self._database.get_all_data(target = "cid")
         print(database_sample)
+
+        #comment_data = self._database.get_data_with_id(target="cid", id=cid)
+        #comment = Comment()
+        #comment.make_with_dict(comment_data)
+
+        #print(comment.like_user)
+
+        #if user.uid in comment.like_user:
+            #comment.like_user.remove(user.uid)
+            #comment.like -= 1
+        #else:
+            #comment.like_user.append(user.uid)
+            #comment.like += 1
+
+
         #self._database.modify_data_with_id("cid", target_data=comment.get_dict_form_data())
 
         result = self.is_user_interacted(user=managedUser, feeds=[feed])
