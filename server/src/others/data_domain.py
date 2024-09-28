@@ -1,5 +1,6 @@
 from typing import Any
 from others.error_lib import DictMakingError
+import copy
 
 # 추상 클래스
 class SampleDomain:
@@ -28,14 +29,12 @@ class User(SampleDomain):
                  email = "", gender = "d" , solo_point = 0, group_point = 0,
                  solo_combo = 0, group_combo = 0,
                  credit = 0, solo_bid = "",
-                 group_bid = "", items = None,
+                 group_bid = "", 
                  solo_daily = False, solo_special = False,
                  group_daily = False, group_special = False,
                  sign = "", password = "", select_name_card = "",
                  solo_daily_check_date = "", group_daily_check_date = "",
                  name_card_list= [], alert = []):
-        if items == None:
-            items = Item()
 
         self.uid = uid
         self.uname = uname
@@ -50,7 +49,6 @@ class User(SampleDomain):
         self.credit = credit
         self.solo_bid = solo_bid
         self.group_bid = group_bid
-        self.items = items
         self.solo_daily = solo_daily
         self.solo_special = solo_special
         self.group_daily = group_daily
@@ -82,13 +80,12 @@ class User(SampleDomain):
             self.solo_special = dict_data['solo_special']
             self.group_daily = dict_data['group_daily']
             self.group_special = dict_data['group_special']
-            self.items = Item(init_data = dict_data['items'])
             self.sign = dict_data['sign']
             self.select_name_card = dict_data['select_name_card']
-            self.name_card_list = dict_data['name_card_list']
+            self.name_card_list = copy.copy(dict_data['name_card_list'])
             self.solo_daily_check_date = dict_data['solo_daily_check_date']
             self.group_daily_check_date = dict_data['group_daily_check_date']
-            self.alert = dict_data['alert']
+            self.alert = copy.copy(dict_data['alert'])
             return
         except Exception as e:
             raise DictMakingError(error_type=e)
@@ -109,7 +106,6 @@ class User(SampleDomain):
             "credit" : self.credit,
             "solo_bid" : self.solo_bid,
             "group_bid" : self.group_bid,
-            "items" : self.items.get_dict_form_data(),
             "solo_daily" :self.solo_daily,
             "solo_special" :self.solo_special,
             "group_daily" :self.group_daily,
@@ -120,17 +116,6 @@ class User(SampleDomain):
             "solo_daily_check_date" : self.solo_daily_check_date,
             "group_daily_check_date" : self.group_daily_check_date,
             "alert" : self.alert
-        }
-
-class Item(SampleDomain):
-    def __init__(self, init_data = {"chatting" : 0, "saver":0}):
-        self.chatting  = init_data["chatting"]
-        self.saver = init_data["saver"]
-
-    def get_dict_form_data(self):
-        return {
-            "chatting" : self.chatting,
-            "saver": self.saver
         }
 
 
@@ -168,11 +153,11 @@ class Bias(SampleDomain):
             self.bid = dict_data['bid']
             self.type = dict_data['type']
             self.bname = dict_data['bname']
-            self.category = dict_data['category']
+            self.category = copy.copy(dict_data['category'])
             self.birthday = dict_data['birthday']
             self.debut = dict_data['debut']
             self.agency = dict_data['agency']
-            self.group = dict_data['group']
+            self.group = copy.copy(dict_data['group'])
             self.lid = dict_data['lid']
             self.point = dict_data['point']
             self.num_user = dict_data['num_user']
@@ -182,10 +167,10 @@ class Bias(SampleDomain):
             self.youtube_account = dict_data['youtube_account']
             self.homepage = dict_data['homepage']
             self.fan_cafe = dict_data['fan_cafe']
-            self.country = dict_data['country']
-            self.nickname = dict_data['nickname']
-            self.fanname = dict_data['fanname']
-            self.group_memeber_bids = dict_data['group_member_bids']
+            self.country = copy.copy(dict_data['country'])
+            self.nickname = copy.copy(dict_data['nickname'])
+            self.fanname = copy.copy(dict_data['fanname'])
+            self.group_memeber_bids = copy.copy(dict_data['group_member_bids'])
         except Exception as e:
             print(e)
             raise DictMakingError(error_type=e)
@@ -255,8 +240,8 @@ class League(SampleDomain):
         try:
             self.lid = dict_data['lid']
             self.lname = dict_data['lname']
-            self.bid_list = dict_data['bid_list']
-            self.tier = dict_data['tier']
+            self.bid_list = copy.copy(dict_data['bid_list'])
+            self.tier = copy.copy(dict_data['tier'])
             self.num_bias = dict_data['num_bias']
             self.state = dict_data['state']
             self.type = dict_data['type']
@@ -316,12 +301,12 @@ class Feed(SampleDomain):
             self.date = dict_data['date']
             self.fclass = dict_data['fclass']
             self.class_name = dict_data['class_name']
-            self.choice = dict_data['choice']
-            self.result = dict_data['result']
+            self.choice = copy.copy(dict_data['choice'])
+            self.result = copy.copy(dict_data['result'])
             self.state = dict_data['state']
-            self.attend = dict_data['attend']
-            self.category = dict_data['category']
-            self.comment = dict_data['comment']
+            self.attend = copy.copy(dict_data['attend'])
+            self.category = copy.copy(dict_data['category'])
+            self.comment = copy.copy(dict_data['comment'])
             self.star= dict_data['star']
         except KeyError as e:
             raise DictMakingError(error_type=f"Missing key: {str(e)}")
@@ -390,7 +375,7 @@ class Comment(SampleDomain):
             self.date = dict_data['date']
             self.like = dict_data['like']
             self.state = dict_data['state']
-            self.like_user= dict_data['like_user']
+            self.like_user= copy.copy(dict_data['like_user'])
         except KeyError as e:
             raise DictMakingError(error_type=f"Missing key: {str(e)}")
 
@@ -424,12 +409,12 @@ class ManagedUser:
     def make_with_dict(self, dict_data):
         try:
             self.uid = dict_data['muid']
-            self.option = dict_data['option']
-            self.history = dict_data['history']
-            self.star = dict_data['star']
-            self.my_feed = dict_data['my_feed']
-            self.my_comment = dict_data['my_comment']
-            self.active_feed = dict_data['active_feed']
+            self.option = copy.copy(dict_data['option'])
+            self.history = copy.copy(dict_data['history'])
+            self.star = copy.copy(dict_data['star'])
+            self.my_feed = copy.copy(dict_data['my_feed'])
+            self.my_comment =copy.copy(dict_data['my_comment'])
+            self.active_feed =copy.copy(dict_data['active_feed'])
         except KeyError as e:
             raise DictMakingError(error_type=f"Missing key: {str(e)}")
 

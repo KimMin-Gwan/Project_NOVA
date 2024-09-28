@@ -440,20 +440,11 @@ class FeedManager:
             comment.like_user.remove(user.uid)
             comment.like -= 1
         else:
-            database_sample = self._database.get_all_data(target = "cid")
-            print(database_sample)
-
             comment.like_user.append(user.uid)
-       
-            print(comment)
-            print(comment.like_user)
-            print(comment_data)
-
             comment.like += 1
 
-        database_sample = self._database.get_all_data(target = "cid")
-        print(database_sample)
-
+        sample = self._database.get_all_data("cid")
+        print(sample)
 
         #self._database.modify_data_with_id("cid", target_data=comment.get_dict_form_data())
 
@@ -511,14 +502,11 @@ class FeedManager:
         feed = self.is_user_interacted(managed_user, feeds=[feed])
         return feed
 
-    # feed 와 상호작용 -> 선택지를 선택하는 경우
+    # feed 와 상호작용 -> 관심 표시
     def __try_staring_feed(self, user, fid):
         fid_data = self._database.get_data_with_id(target="fid", id=fid)
         feed = Feed()
         feed.make_with_dict(fid_data)
-
-        database_sample = self._database.get_all_data(target = "muid")
-        print(database_sample)
 
         if feed.fid in user.star:
             user.star.remove(feed.fid)
@@ -526,9 +514,6 @@ class FeedManager:
         else:
             user.star.append(feed.fid)
             feed.star += 1
-
-        database_sample = self._database.get_all_data(target = "muid")
-        print(database_sample)
 
         self._database.modify_data_with_id(target_id="fid",
                                             target_data=feed.get_dict_form_data())
