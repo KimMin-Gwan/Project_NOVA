@@ -45,7 +45,7 @@ class FeedModel(BaseModel):
         return
 
     def try_remove_comment(self, feed_manager:FeedManager, data_payload):
-        self._comments = feed_manager.remove_comment_on_feed( user=self._user,
+        self._feeds= feed_manager.remove_comment_on_feed( user=self._user,
                                                                fid=data_payload.fid,
                                                                cid=data_payload.cid)
         self._comments = feed_manager.get_all_comment_on_feed( user=self._user,
@@ -53,7 +53,7 @@ class FeedModel(BaseModel):
         return
 
     def try_like_comment(self, feed_manager:FeedManager, data_payload):
-        self._comments = feed_manager.try_like_comment( user=self._user,
+        self._feeds= feed_manager.try_like_comment( user=self._user,
                                                                fid=data_payload.fid,
                                                                cid=data_payload.cid)
         self._comments = feed_manager.get_all_comment_on_feed( user=self._user,
