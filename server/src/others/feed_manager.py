@@ -433,6 +433,8 @@ class FeedManager:
         comment = Comment()
         comment.make_with_dict(comment_data)
 
+        print(comment.like_user)
+
         if user.uid in comment.like_user:
             comment.like_user.remove(user.uid)
             comment.like -= 1
