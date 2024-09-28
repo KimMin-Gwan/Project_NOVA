@@ -55,10 +55,10 @@ class User(SampleDomain):
         self.group_special = group_special
         self.sign = sign
         self.select_name_card = select_name_card
-        self.name_card_list = name_card_list
+        self.name_card_list = copy.copy(name_card_list)
         self.solo_daily_check_date = solo_daily_check_date
         self.group_daily_check_date = group_daily_check_date
-        self.alert = alert
+        self.alert = copy.copy(alert)
 
     # database로 부터 받아온 데이터를 사용해 내용 구성
     def make_with_dict(self, dict_data):
@@ -112,10 +112,10 @@ class User(SampleDomain):
             "group_special" :self.group_special,
             "sign" : self.sign,
             "select_name_card" : self.select_name_card,
-            "name_card_list": self.name_card_list,
+            "name_card_list": copy.copy(self.name_card_list),
             "solo_daily_check_date" : self.solo_daily_check_date,
             "group_daily_check_date" : self.group_daily_check_date,
-            "alert" : self.alert
+            "alert" : copy.copy(self.alert)
         }
 
 
@@ -128,11 +128,11 @@ class Bias(SampleDomain):
         self.bid = bid
         self.type = type
         self.bname = bname
-        self.category = category
+        self.category = copy.copy(category)
         self.birthday = birthday
         self.debut = debut
         self.agency = agency
-        self.group = group
+        self.group = copy.copy(group)
         self.lid = lid
         self.point = point
         self.num_user = num_user
@@ -142,10 +142,10 @@ class Bias(SampleDomain):
         self.youtube_account = youtube_account
         self.homepage = homepage
         self.fan_cafe = fan_cafe
-        self.country = country
-        self.nickname = nickname
-        self.fanname = fanname
-        self.group_memeber_bids = group_member_bids
+        self.country = copy.copy(country)
+        self.nickname = copy.copy(nickname)
+        self.fanname = copy.copy(fanname)
+        self.group_memeber_bids = copy.copy(group_member_bids)
 
 
     def make_with_dict(self, dict_data):
@@ -180,11 +180,11 @@ class Bias(SampleDomain):
             "bid": self.bid,
             "type": self.type,
             "bname": self.bname,
-            "category": self.category,
+            "category": copy.copy(self.category),
             "birthday": self.birthday,
             "debut": self.debut,
             "agency": self.agency,
-            "group": self.group,
+            "group": copy.copy(self.group),
             "lid": self.lid,
             "point": self.point,
             "num_user": self.num_user,
@@ -194,10 +194,10 @@ class Bias(SampleDomain):
             "youtube_account": self.youtube_account,
             "homepage": self.homepage,
             "fan_cafe": self.fan_cafe,
-            "country": self.country,
-            "nickname": self.nickname,
-            'fanname':self.fanname,
-            'group_member_bids':self.group_memeber_bids
+            "country": copy.copy(self.country),
+            "nickname": copy.copy(self.nickname),
+            'fanname':copy.copy(self.fanname),
+            'group_member_bids':copy.copy(self.group_memeber_bids)
         }
 
 
@@ -230,8 +230,8 @@ class League(SampleDomain):
             tier = []
         self.lid = lid
         self.lname = lname
-        self.bid_list = bid_list
-        self.tier = tier
+        self.bid_list = copy.copy(bid_list)
+        self.tier = copy.copy(tier)
         self.num_bias = num_bias
         self.state = state
         self.type=type
@@ -252,8 +252,8 @@ class League(SampleDomain):
         return {
             "lid": self.lid,
             "lname": self.lname,
-            "bid_list": self.bid_list,
-            "tier": self.tier,
+            "bid_list": copy.copy(self.bid_list),
+            "tier": copy.copy(self.tier),
             "num_bias": self.num_bias,
             "state": self.state,
             "type":self.type
@@ -282,12 +282,12 @@ class Feed(SampleDomain):
         self.date = date
         self.fclass = fclass
         self.class_name = class_name
-        self.choice = choice
-        self.result = result
+        self.choice = copy.copy(choice)
+        self.result = copy.copy(result)
         self.state = state  # feed 의 상태 
-        self.attend = attend
-        self.category = category
-        self.comment =comment 
+        self.attend = copy.copy(attend)
+        self.category = copy.copy(category)
+        self.comment = copy.copy(comment)
         self.num_comment = 0
         self.star = star
         self.star_flag = False
@@ -320,12 +320,12 @@ class Feed(SampleDomain):
             "date": self.date,
             "fclass": self.fclass,
             "class_name": self.class_name,
-            "choice": self.choice,
-            "result": self.result,
+            "choice": copy.copy(self.choice),
+            "result": copy.copy(self.result),
             "state": self.state,
-            "attend": self.attend,
-            "category":self.category,
-            "comment":self.comment,
+            "attend": copy.copy(self.attend),
+            "category":copy.copy(self.category),
+            "comment":copy.copy(self.comment),
             "num_comment" :self.num_comment,
             "star":self.star,
             "star_flag" : self.star_flag
@@ -361,7 +361,7 @@ class Comment(SampleDomain):
         self.date = date
         self.like = like
         self.state = state
-        self.like_user = like_user
+        self.like_user = copy.copy(like_user)
         self.num_like_user = len(self.like_user)
         self.owner = False
 
@@ -389,7 +389,7 @@ class Comment(SampleDomain):
             "date": self.date,
             "like": self.like,
             "state": self.state,
-            "like_user": self.like_user,
+            "like_user": copy.copy(self.like_user),
             "owner" : self.owner
         }
 
@@ -398,13 +398,13 @@ class ManagedUser:
     def __init__(self, uid="", option=[], history=[], star=[],
                  my_feed = [], my_comment = [], active_feed=[]):
         self.uid = uid
-        self.option = option
-        self.history = history
+        self.option = copy.copy(option)
+        self.history = copy.copy(history)
         self.ttl= 0
-        self.star= star
-        self.my_feed = my_feed
-        self.my_comment = my_comment
-        self.active_feed = active_feed
+        self.star= copy.copy(star)
+        self.my_feed = copy.copy(my_feed)
+        self.my_comment = copy.copy(my_comment)
+        self.active_feed = copy.copy(active_feed)
 
     def make_with_dict(self, dict_data):
         try:
@@ -426,12 +426,12 @@ class ManagedUser:
     def get_dict_form_data(self):
         return {
             "muid" : self.uid,
-            "option" : self.option,
-            "history" : self.history,
-            "star" : self.star,
-            "my_feed" : self.my_feed,
-            "my_comment" : self.my_comment,
-            "active_feed" :self.active_feed
+            "option" : copy.copy(self.option),
+            "history" : copy.copy(self.history),
+            "star" : copy.copy(self.star),
+            "my_feed" : copy.copy(self.my_feed),
+            "my_comment" : copy.copy(self.my_comment),
+            "active_feed" : copy.copy(self.active_feed)
         }
     
 
