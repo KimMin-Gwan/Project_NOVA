@@ -516,12 +516,19 @@ class FeedManager:
         fid_data = self._database.get_data_with_id(target="fid", id=fid)
         feed = Feed()
         feed.make_with_dict(fid_data)
+
+        database_sample = self._database.get_all_data(target = "muid")
+        print(database_sample)
+
         if feed.fid in user.star:
             user.star.remove(feed.fid)
             feed.star -= 1
         else:
             user.star.append(feed.fid)
             feed.star += 1
+
+        database_sample = self._database.get_all_data(target = "muid")
+        print(database_sample)
 
         self._database.modify_data_with_id(target_id="fid",
                                             target_data=feed.get_dict_form_data())
