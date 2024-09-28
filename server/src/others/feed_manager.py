@@ -442,7 +442,12 @@ class FeedManager:
         else:
             database_sample = self._database.get_all_data(target = "cid")
             print(database_sample)
+
             comment.like_user.append(user.uid)
+        
+            print(comment)
+            print(comment.like_user)
+
             comment.like += 1
 
         database_sample = self._database.get_all_data(target = "cid")
