@@ -435,14 +435,13 @@ class FeedManager:
         comment = Comment()
         comment.make_with_dict(comment_data)
 
-        database_sample = self._database.get_all_data(target = "cid")
-        print(database_sample)
-
 
         if user.uid in comment.like_user:
             comment.like_user.remove(user.uid)
             comment.like -= 1
         else:
+            database_sample = self._database.get_all_data(target = "cid")
+            print(database_sample)
             comment.like_user.append(user.uid)
             comment.like += 1
 
