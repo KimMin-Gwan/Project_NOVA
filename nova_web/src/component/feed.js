@@ -4,6 +4,7 @@ import planet2 from './../img/planet2.png';
 import planet3 from './../img/planet3.png';
 import planet4 from './../img/planet4.png';
 import { useState } from 'react';
+// import {}
 // import { useRef, useState } from 'react';
 
 export default function Feed({ className, feed, fclass }) {
@@ -22,7 +23,7 @@ export default function Feed({ className, feed, fclass }) {
                         </div>
                         <div style={{ width: '100%', height: '50px' }}></div>
                         <div className={style.line}></div>
-                        <Comments feed={feed}></Comments>
+                        {/* <Comments feed={feed}></Comments> */}
                     </div>
                 )
             }
@@ -49,7 +50,7 @@ export default function Feed({ className, feed, fclass }) {
                         </ol>
                         <div style={{ width: '100%', height: '20px' }}></div>
                         <div className={style.line}></div>
-                        <Comments feed={feed}></Comments>
+                        {/* <Comments feed={feed}></Comments> */}
                     </div>
                 )
             }
@@ -67,7 +68,7 @@ export default function Feed({ className, feed, fclass }) {
                         </div>
                         <div style={{ width: '100%', height: '20px' }}></div>
                         <div className={style.line}></div>
-                        <Comments feed={feed}></Comments>
+                        {/* <Comments feed={feed}></Comments> */}
                     </div>
                 )
             }
@@ -85,7 +86,7 @@ export default function Feed({ className, feed, fclass }) {
                         </div>
                         <div style={{ width: '100%', height: '20px' }}></div>
                         <div className={style.line}></div>
-                        <Comments feed={feed}></Comments>
+                        {/* <Comments feed={feed}></Comments> */}
                     </div>
                 )
             }
@@ -155,7 +156,7 @@ export function Text({ name, data }) {
     )
 }
 
-export function Comments({feed }) {
+export function Comments({ feed }) {
 
     let [numComment, setNumComment] = useState(0);
 
@@ -165,7 +166,7 @@ export function Comments({feed }) {
         })
             .then(response => response.json())
             .then(data => {
-                console.log('1111',data);
+                console.log('1111', data);
             });
         // setNumComment((prevItems) => {
         //     const newItems = [...prevItems];
@@ -177,8 +178,8 @@ export function Comments({feed }) {
     return (
         <div className={style['comment_container']}>
             <div className={style['comment_box']}>
-                <div className={style['comment_support']}>바위게게게게게게</div>
-                <div className={style['comment_data']}>진짜</div>
+                <div className={style['comment_support']}>{feed.comment.uname}</div>
+                <div className={style['comment_data']}>{feed.comment.body}</div>
             </div>
             <div className={style['comment_action']}>
                 <input></input>

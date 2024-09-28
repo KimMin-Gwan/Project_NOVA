@@ -43,7 +43,7 @@ function MyPage() {
         )
     }, []);
 
-    function handleMovePage(){
+    function handleMovePage() {
         navigate('/galaxy')
     };
 
@@ -131,7 +131,7 @@ function MyPage() {
                                                 <div className={style['bias_name']}>{myGroupBias.bname}</div>
                                             )
                                     }
-                                    <div className={style['bias_name']}>{myGroupBias.bname === '' && '아직 최애없음'}</div>
+                                    {/* <div className={style['bias_name']}>{myGroupBias.bname === '' && '아직 최애없음'}</div> */}
                                     <div className={style['season_star_dust']}>이번 시즌에 기여한 별가루</div>
                                     <h2>{myData.group_point} pt</h2>
                                     <button className={style['funding_btn']}>펀딩</button>

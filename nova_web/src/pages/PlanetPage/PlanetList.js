@@ -5,10 +5,10 @@ import style from './Planet.module.css';
 
 import LeagueCard from '../../component/LeagueCard';
 
-import planet_img1 from './../../img/planet1.png';
+import planet_img1 from './../../img/card_planet.png';
 import planet_img2 from './../../img/planet2.png';
 import planet_img3 from './../../img/planet3.png';
-import planet_img4 from './../../img/planet4.png';
+import planet_img4 from './../../img/station.png';
 
 
 export default function PlanetList() {

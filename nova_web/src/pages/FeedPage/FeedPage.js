@@ -47,6 +47,7 @@ const FeedPage = () => {
 
         const distance = e.clientY - startY;
         setDragDistance(distance);
+        // setIsClickedComment(false);
         setTranslateY(-currentIndex * window.innerHeight + distance);
     };
 
@@ -56,8 +57,10 @@ const FeedPage = () => {
         const threshold = 100;
         if (dragDistance > threshold && currentIndex > 0) {
             setCurrentIndex(currentIndex - 1);
+            setIsClickedComment(false);
         } else if (dragDistance < -threshold && currentIndex < banners.length - 1) {
             setCurrentIndex(currentIndex + 1);
+            setIsClickedComment(false);
         }
 
         setDragDistance(0);
@@ -67,8 +70,10 @@ const FeedPage = () => {
     const handleWheel = (e) => {
         if (e.deltaY > 0 && currentIndex < banners.length - 1) {
             setCurrentIndex((prevIndex) => prevIndex + 1);
+            setIsClickedComment(false);
         } else if (e.deltaY < 0 && currentIndex > 0) {
             setCurrentIndex((prevIndex) => prevIndex - 1);
+            setIsClickedComment(false);
         }
     };
 
@@ -111,6 +116,7 @@ const FeedPage = () => {
     useEffect(() => {
         if (currentIndex === banners.length - 1) {
             fetchMoreBanners();
+            
         }
     }, [currentIndex]);
 
@@ -137,35 +143,24 @@ const FeedPage = () => {
             })
     };
 
-    function handleCheckComment(fid, index) {
-        fetch(`https://nova-platform.kr/feed_explore/like_comment?fid=${fid}`, {
-            credentials: 'include',
-        })
-            .then(response => response.json())
-            .then(data => {
-                setBanners((prevBanners) => {
-                    return prevBanners.map((banner) => {
-                        return banner.fid === fid ? { ...banner, num_comment: data.body.feed[0].num_comment } : banner
-                    })
-                })
-            });
-    }
+    // function handleCheckComment(fid, index) {
+    //     fetch(`https://nova-platform.kr/feed_explore/like_comment?fid=${fid}`, {
+    //         credentials: 'include',
+    //     })
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             setBanners((prevBanners) => {
+    //                 return prevBanners.map((banner) => {
+    //                     return banner.fid === fid ? { ...banner, num_comment: data.body.feed[0].num_comment } : banner
+    //                 })
+    //             })
+    //         });
+    // }
 
     function handleShowCommentWindow() {
         setIsClickedComment(!isClickedComment);
     };
-
-    // function handleViewComment(){
-
-    // }
-
-    // useEffect(() => {
-
-    //     // fetchStar();
-    //     handleCheckStar();
-    //     console.log('gkgkgkgkgk')
-
-    // }, []);
+ 
     let header = {
         "request-type": "default",
         "client-version": 'v1.0.1',
@@ -180,7 +175,8 @@ const FeedPage = () => {
         setInputValue(e.target.value);
     };
 
-    let [allComments, setAllComments] = useState([]);
+    
+    let [newComments, setNewComments] = useState([]);
 
     function handleSubmit(fid, event) {
         event.preventDefault();
@@ -203,24 +199,86 @@ const FeedPage = () => {
             .then(response => response.json())
             .then(data => {
                 console.log(data);
+                // setNewComments(data.body.comments);
+                setAllComments((prevAllComments)=>{
+                    const newAllComments = [data.body.comments[0], ...prevAllComments];
+                    return newAllComments;
+                })
+                setBanners((prevBanners) => {
+                    return prevBanners.map((banner) => {
+                        return banner.fid === fid ? { ...banner, num_comment: data.body.feed[0].num_comment } : banner
+                    })
+                })
+                setInputValue('');
             })
     }
 
-    function handleShowComment(fid) {
+    let [allComments, setAllComments] = useState([]);
+    let [commentCount, setCommentCount] = useState(0);
+    let [isClickedCommentWindow, setIsClickedCommentWindow] = useState(false);
+
+    function handleShowComment(fid,event) {
+        event.preventDefault();
         fetch(`https://nova-platform.kr/feed_explore/view_comment?fid=${fid}`, {
             credentials: 'include'
         })
             .then(response => response.json())
             .then(data => {
-                console.log(data);
+                console.log("show",data.body);
                 setAllComments(data.body.comments);
-                console.log(allComments);
+                
             })
     };
 
-    // useEffect(()=>{
-    //     handleShowComment();
-    // },[])
+    useEffect(()=>{
+        console.log("pleae",allComments);
+        // handleShowComment();
+    },[allComments]);
+
+    let [isClickedLikeBtn, setIsClickedLikeBtn] = useState(false);
+    let [commentLikes, setCommentLikes] = useState(0);
+    function handleCommentLike(fid, cid, event){
+        event.preventDefault();
+        fetch(`https://nova-platform.kr/feed_explore/like_comment?fid=${fid}&cid=${cid}`,
+            {
+                credentials: 'include'
+            })
+            .then(response=>response.json())
+            .then(data=>{
+                console.log('like', data.body.comments);
+
+                setAllComments((prevAll)=>{
+                    return prevAll.map((comment,i) => {
+                        return comment.cid === cid ? { ...comment, like: data.body.comments[i].like } : comment
+                    })
+                    const newAllComments = [...prevAll]
+                })
+                console.log("244241242414",allComments);
+                setCommentLikes(data.body.comments);
+            })
+    }
+
+    let [isClickedRemoveBtn, setIsClickedRemoveBtn] = useState(false);
+    function handleRemoveComment(fid, cid, event){
+        event.preventDefault();
+        
+        const newAll = allComments.filter((comment)=>comment.cid!==cid);
+        setAllComments(newAll);
+
+
+        fetch(`https://nova-platform.kr/feed_explore/remove_comment?fid=${fid}&cid=${cid}`,
+            {
+                credentials: 'include'
+            })
+            .then(response=>response.json())
+            .then(data=>{
+                console.log('remove',data.body.comments);
+                // setAllComments((prevAll)=>{
+                //     const newAllComments = [data.body.comments];
+                //     return newAllComments;
+                // })
+            })
+    };
 
 
     return (
@@ -255,29 +313,25 @@ const FeedPage = () => {
                                             <div className={style['comment_window']}>
                                                 <div onClick={handleShowCommentWindow}>댓글</div>
                                                 <div className={style.line}></div>
-                                                <div>
-                                                    <div className={style['comment_box']}>
-                                                        {/* <div className={style.comment}>
-                                                            <div>{allComments[1]}</div>
-                                                            <div>{allComments[1]}</div>
-                                                            <div>삭제</div>
-                                                            <div>신고</div>
-                                                            <div>{allComments}</div>
-                                                        </div> */}
-                                                        {/* {
-                                                            allComment.map((comment, i) => {
-                                                                return (
-                                                                    <div key={i}>
-                                                                        <div>{comment.uname}</div>
-                                                                        <div>{comment.body}</div>
-                                                                        <div>삭제</div>
-                                                                        <div>신고</div>
-                                                                        <div>{comment.star}</div>
-                                                                    </div>
-                                                                )
-                                                            })
-                                                        } */}
-
+                                                <div className={style['comment_body']}>
+                                                    <div className={style['comment_box1']}>
+                                                        {
+                                                            allComments.length === 0 ? <div>댓글이 없습니다.</div> :
+                                                            (
+                                                                allComments.map((comment,i)=>{
+                                                                    return(
+                                                                        <div key={comment.cid} className={style['all_comments']} on>
+                                                                            <div>{i}</div>
+                                                                            <div>{comment.uname}</div>
+                                                                            <div>{comment.body}</div>
+                                                                            <div onClick={(event)=>handleRemoveComment(comment.fid, comment.cid, event)}>삭제</div>
+                                                                            <div>신고</div>
+                                                                            <div onClick={(event)=>handleCommentLike(comment.fid, comment.cid, event)}>{comment.like}</div>
+                                                                        </div>      
+                                                                    )
+                                                                })
+                                                             )
+                                                        }
                                                     </div>
                                                     <div className={style['comment_action']}>
                                                         <form onSubmit={(event) => handleSubmit(banner.fid, event)}>
@@ -299,6 +353,12 @@ const FeedPage = () => {
                                             <div style={{ height: '80px' }}></div>
                                             {/* <div className={style['short_feed']}> */}
                                             <Feed className={style['short_feed']} feed={banner} fclass={fclass}></Feed>
+                                            <div className={style['comment_action']}>
+                                                        <form onSubmit={(event) => handleSubmit(banner.fid, event)}>
+                                                            <input type='text' value={inputValue} onChange={handleChange}></input>
+                                                            <button type='submit'>댓글 작성</button>
+                                                        </form>
+                                                    </div>
                                             {/* </div> */}
 
                                         </div>
@@ -315,8 +375,8 @@ const FeedPage = () => {
 
                                             </div>
                                             <div className={style['func_btn']}>
-                                                <button onClick={() => {
-                                                    handleShowComment(banner.fid);
+                                                <button onClick={(event) => {
+                                                    handleShowComment(banner.fid, event);
                                                     handleShowCommentWindow();
                                                     // handleCheckComment(banner.fid, i);
                                                 }}>

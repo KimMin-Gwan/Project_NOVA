@@ -601,9 +601,9 @@ body {
   justify-content: space-between;
   align-items: center;
   background-color: #eee;
-  padding: 10px;
-  position: absolute;
-  bottom: 0px;
+  /* padding: 10px; */
+  /* position: absolute; */
+  /* bottom: 0px; */
 }
 
 .confirm-button {

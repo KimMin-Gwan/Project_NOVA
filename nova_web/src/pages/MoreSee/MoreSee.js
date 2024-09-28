@@ -29,7 +29,7 @@ function MoreSee() {
                         <p className={style.titleName}> 더보기 </p>
                     </div>
                 </div>
-                
+
                 <div className={style.content}>
                     <div className={style.mainComponent} onClick={() => {
                         if (tokenCheck) {
@@ -80,6 +80,19 @@ function MoreSee() {
                         <p className={style.icon_name}> Youtube </p>
                     </div>
                 </div>
+
+                <footer className="footer">
+                    <div>
+                        <p>NOVA</p><br />
+                        <p className='nova-info'>경북 경산시 압량읍 압독2로1길 21, 1층 184</p>
+                        <p className='nova-info'>대표: 김민관 | 사업자등록번호: 380-08-03011</p>
+                        <p className='nova-info'>통신판매업신고번호: 0000-0000-000000</p>
+                        <p className='nova-info'>전화번호: 010-9875-2508 | 이메일:youths0828@nova-platform.kr</p>
+                    </div>
+                    <div className="loundspeaker">
+                    </div>
+
+                </footer>
             </div>
         </div>
     )
