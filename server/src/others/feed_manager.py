@@ -430,8 +430,6 @@ class FeedManager:
         feed = Feed()
         feed.make_with_dict(dict_data=feed_data)
 
-        database_sample = self._database.get_all_data(target = "cid")
-        print(database_sample)
 
         comment_data = self._database.get_data_with_id(target="cid", id=cid)
         comment = Comment()
@@ -440,14 +438,16 @@ class FeedManager:
         database_sample = self._database.get_all_data(target = "cid")
         print(database_sample)
 
-        #print(comment.like_user)
 
-        #if user.uid in comment.like_user:
-            #comment.like_user.remove(user.uid)
-            #comment.like -= 1
-        #else:
-            #comment.like_user.append(user.uid)
-            #comment.like += 1
+        if user.uid in comment.like_user:
+            comment.like_user.remove(user.uid)
+            comment.like -= 1
+        else:
+            comment.like_user.append(user.uid)
+            comment.like += 1
+
+        database_sample = self._database.get_all_data(target = "cid")
+        print(database_sample)
 
 
         #self._database.modify_data_with_id("cid", target_data=comment.get_dict_form_data())
