@@ -22,7 +22,7 @@ export default function SignUp() {
                             인증번호
                             <br />
                             <label>
-                                <input  name='password' required></input>
+                                <input name='password' required></input>
                             </label>
                         </div>
                     </div>
@@ -83,14 +83,16 @@ export default function SignUp() {
                                 <label>
                                     <input type='checkbox' name='agree1' required></input>
                                     (필수) 이용약관 동의
-                                    <br/>
+                                </label>
+                                <br />
+                                <label>
                                     <input type='checkbox' name='agree2' required></input>
                                     (필수) 개인정보처리 동의
                                 </label>
                             </div>
                         </div>
                     </div>
-                    
+
 
                     <button type='submit'>노바 시작하기</button>
                 </form>

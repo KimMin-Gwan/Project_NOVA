@@ -126,15 +126,7 @@ const NOVALogin = () => {
           로그인
         </button>
         <div className={style['sign-up']} onClick={() => {
-          fetch("http://127.0.0.1:4000/user_home/sample",
-            {
-              credentials: 'include',
-            }
-          )
-            .then(response => response.json())
-            .then(result => {
-              console.log(result);
-            })
+          navigate('/signup')
         }}>회원가입</div>
       </div>
     </div>

@@ -31,6 +31,7 @@ import logo from './img/NOVA.png';
 import GalaxyList from './pages/GalaxyPage/GalaxyList.js';
 import Box from './component/test.js';
 import NavBar from './component/NavBar.js';
+import WriteFeed from './pages/WriteFeed/WriteFeed.js';
 
 
 // 401 이면 바이어스 격자 무늬로 띄우기
@@ -79,6 +80,7 @@ function App() {
 
   return (
     <Routes>
+      <Route path='/write_feed' element={<WriteFeed/>}></Route>
       <Route path='/more_see' element={<MoreSee />}></Route>
       <Route path='/test' element={<Box />}></Route>
       <Route path='/planet' element={<PlanetList />}></Route>
@@ -119,6 +121,7 @@ function App() {
                 {/* <Link to='/' className='button'>홈</Link> */}
                 {/* <Link to='/namecard' className='button'>명함</Link> */}
                 <Link to='/test' className='button'>테스트</Link>
+                <Link to='/write_feed' className='button'>글쓰기</Link>
                 {/* <Link to='/planet' className='button'>행성페이지</Link>
                 <Link to='/galaxy' className='button'>은하페이지</Link>
                 <Link to='/feed_page' className='button'>피드페이지</Link>

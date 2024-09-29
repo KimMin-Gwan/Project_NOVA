@@ -9,6 +9,18 @@ import { useState } from 'react';
 
 export default function Feed({ className, feed, fclass }) {
 
+    function handleInteraction(event, fid, action) {
+        event.preventDefault();
+
+        fetch(`https://nova-platform.kr/feed_explore/interaction_feed?fid=${fid}&action=0`, {
+            credentials: 'include'
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+            })
+    }
+
     return (
 
         <>
@@ -62,7 +74,7 @@ export default function Feed({ className, feed, fclass }) {
                             <InfoArea color={'#60E7EC'} name={`${feed.class_name} 행성`} date={feed.date} supporter={`${feed.nickname}`}></InfoArea>
                             <Text data={feed.body}></Text>
                             <div className={style['button_container']}>
-                                <button className={style['select_button']}>{feed.choice[0]} 결과{feed.result[0]}</button>
+                                <button className={style['select_button']} onClick={(event)=>handleInteraction(event, feed.fid)}>{feed.choice[0]} 결과{feed.result[0]}</button>
                                 <button className={style['select_button']}>{feed.choice[1]} 결과{feed.result[1]}</button>
                             </div>
                         </div>
