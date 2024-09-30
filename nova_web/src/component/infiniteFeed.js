@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import style from './../pages/FeedPage/FeedPage.module.css';
-import Feed from './feed';
+import Feed, { Comments } from './feed';
 
 export default function InfFeed() {
 
@@ -40,8 +40,8 @@ export default function InfFeed() {
                     return newData;
                 });
 
-                console.log("111",nextData);
-                console.log("222",data.body);
+                console.log("111", nextData);
+                console.log("222", data.body);
                 console.log('333', feedData);
                 setIsLoading(false);
             })
@@ -102,7 +102,10 @@ export default function InfFeed() {
                     // console.log(a);
                     // console.log('class', a.fclass);
                     return (
-                        <Feed key={i} className='' feed={a} ></Feed>
+                        <>
+                            <Feed key={i} className='' feed={a} func={true}></Feed>
+                            {/* <Comments feed={a}></Comments> */}
+                        </>
                     )
                 })
             }

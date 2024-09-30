@@ -221,3 +221,65 @@
     padding-left: 10px;
     font-weight: 700;
 }
+
+
+/* 비밀번호 관리 */
+.pwd_manage_box {
+    height: auto;
+}
+
+.pwd_box {
+    display: grid;
+    grid-template-columns: 40% 50%;
+    grid-template-rows: repeat(3, 30px);
+    row-gap: 5px;
+    /* margin-bottom: 10px; */
+}
+
+.pwd_box:nth-child(odd) {
+    margin-left: 20px;
+    /* padding-left: 10px; */
+}
+
+.pwd_submit_btn {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    /* background-color: blue; */
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.pwd_submit_btn button {
+    width: 80px;
+    margin-right: 46px;
+}
+
+/* 닉네임 관리 */
+
+.nickname_container {
+    height: auto;
+}
+
+.nickname_box {
+    display: grid;
+    grid-template-columns: 25% 55% 20%;
+    grid-template-rows: repeat(4, 30px);
+    row-gap: 10px;
+}
+
+.nickname_box:nth-child(3n+1) {
+    margin-left: 20px;
+}
+
+.nickname_box> :nth-child(3n+2) {
+    text-align: end;
+    color: gray;
+}
+
+
+.nickname_box> :nth-child(3n) {
+    width: 70px;
+    justify-self: center;
+    border-radius: 5px;
+}

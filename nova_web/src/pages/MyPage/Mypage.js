@@ -43,15 +43,16 @@ function MyPage() {
         )
     }, []);
 
-    function handleMovePage() {
-        navigate('/galaxy')
+    function handleMovePage(e, page) {
+        e.preventDefault()
+        navigate(page)
     };
 
     return (
         <div className='container'>
             <div className='top_area'>
                 <div onClick={() => { navigate(-1) }}>뒤로</div>
-                <div>은하계 탐색</div>
+                <div>마이페이지</div>
             </div>
 
             <div className={style['base_box']}>
@@ -144,7 +145,7 @@ function MyPage() {
                     <div className={`${style['base_box']} ${style['height_auto']}`}>
                         <h4>서비스</h4>
                         <div className={style['grid_container']}>
-                            <div onClick={handleMovePage}>은하리그</div>
+                            <div onClick={(e) => handleMovePage(e, '/galaxy')}>은하리그</div>
                             <div>노바 펀딩</div>
                             <div>노바 재판</div>
                             <div>노바 알고리즘</div>
@@ -157,19 +158,19 @@ function MyPage() {
                             <div className={style.activity}>
                                 <CiEdit className={style['activity_icon']} />
                                 <div>내가 작성한 피드</div>
-                                <IoIosArrowForward className={style['activity_icon']} />
+                                <IoIosArrowForward className={style['activity_icon']} onClick={(e) => { handleMovePage(e, '/my_write_feed') }} />
 
                                 <CiStar className={style['activity_icon']} />
                                 <div>관심 표시한 피드</div>
-                                <IoIosArrowForward className={style['activity_icon']} />
+                                <IoIosArrowForward className={style['activity_icon']} onClick={(e) => { handleMovePage(e, '/my_interest_feed') }} />
 
                                 <TfiCommentAlt className={style['activity_icon']} />
                                 <div>댓글을 작성한 피드</div>
-                                <IoIosArrowForward className={style['activity_icon']} />
+                                <IoIosArrowForward className={style['activity_icon']} onClick={(e) => { handleMovePage(e, '/my_comment_feed') }} />
 
                                 <IoMdCheckmarkCircleOutline className={style['activity_icon']} />
                                 <div>내가 참여한 피드</div>
-                                <IoIosArrowForward className={style['activity_icon']} />
+                                <IoIosArrowForward className={style['activity_icon']} onClick={(e) => { handleMovePage(e, '/my_active_feed') }} />
 
                                 <HiOutlineBellAlert className={style['activity_icon']} />
                                 <div>알림</div>
@@ -207,8 +208,49 @@ function MyPage() {
                             </div>
                         </div>
                     </div>
+
+                    <div className={`${style['base_box']} ${style['height_auto']}`}>
+                        <h4>비밀번호 관리</h4>
+                        <div className={style['pwd_manage_box']}>
+                            <form>
+                                <div className={style['pwd_box']}>
+                                    <div>현재 비밀번호</div>
+                                    <input type='password'></input>
+
+                                    <div>새로운 비밀번호</div>
+                                    <input type='password'></input>
+
+                                    <div>비밀번호 확인</div>
+                                    <input type='password'></input>
+                                </div>
+                                <div className={style['pwd_submit_btn']}>
+                                    <button type='submit'>변경하기</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
                     <div className={`${style['base_box']} ${style['height_auto']}`}>
                         <h4>닉네임</h4>
+                        <div className={style['nickname_container']}>
+                            <div className={style['nickname_box']}>
+                                <div>기본 사용자명</div>
+                                <div>지지자</div>
+                                <button>선택</button>
+
+                                <div>개인 팬덤명</div>
+                                <div>지지자</div>
+                                <button>선택</button>
+
+                                <div>그룹 팬덤명</div>
+                                <div>지지자</div>
+                                <button>선택</button>
+
+                                <div>커스텀 닉네임</div>
+                                <input placeholder='우주인 패스 결제 상품'></input>
+                                <button>선택</button>
+                            </div>
+                        </div>
                     </div>
                     <div className={`${style['base_box']} ${style['height_auto']}`}>
                         <h4>활동 배지</h4>

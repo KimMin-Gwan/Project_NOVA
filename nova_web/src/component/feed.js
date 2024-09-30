@@ -7,7 +7,7 @@ import { useState } from 'react';
 // import {}
 // import { useRef, useState } from 'react';
 
-export default function Feed({ className, feed, fclass }) {
+export default function Feed({ className, feed, func, fclass }) {
 
     function handleInteraction(event, fid, action) {
         event.preventDefault();
@@ -31,11 +31,43 @@ export default function Feed({ className, feed, fclass }) {
                     <div className={`${style.feed} ${className}`} >
                         <div>
                             <InfoArea color={'#7960EC'} name={`${feed.class_name} 행성`} date={feed.date} supporter={`${feed.nickname}`}></InfoArea>
-                            <Text data={feed.body}></Text>
+                            {/* <Text data={feed.body}></Text> */}
+                            <div className={style['more_comments']}>
+                                <div className={style['comments_box']}>
+                                    <div className={style['comment']}>
+                                        <div>익명</div>
+                                        <div>삭제</div>
+                                        <div>신고</div>
+                                        <div>좋아요</div>
+                                    </div>
+                                    <div>내용</div>
+                                </div>
+                                
+                                <div className={style['comments_box']}>
+                                    <div className={style['comment']}>
+                                        <div>익명</div>
+                                        <div>삭제</div>
+                                        <div>신고</div>
+                                        <div>좋아요</div>
+                                    </div>
+                                    <div>내용</div>
+                                </div>
+                            </div>
                         </div>
                         <div style={{ width: '100%', height: '50px' }}></div>
+                        {
+                            func && (
+                                <div className={style['function_box']}>
+                                    <div>댓글 더보기</div>
+                                    <div>본문 보기</div>
+                                    <div>신고</div>
+                                    <div>좋아요</div>
+                                </div>
+                            )
+                        }
+                        
                         <div className={style.line}></div>
-                        {/* <Comments feed={feed}></Comments> */}
+                        <Comments feed={feed}></Comments>
                     </div>
                 )
             }
@@ -62,7 +94,7 @@ export default function Feed({ className, feed, fclass }) {
                         </ol>
                         <div style={{ width: '100%', height: '20px' }}></div>
                         <div className={style.line}></div>
-                        {/* <Comments feed={feed}></Comments> */}
+                        <Comments feed={feed}></Comments>
                     </div>
                 )
             }
@@ -80,7 +112,7 @@ export default function Feed({ className, feed, fclass }) {
                         </div>
                         <div style={{ width: '100%', height: '20px' }}></div>
                         <div className={style.line}></div>
-                        {/* <Comments feed={feed}></Comments> */}
+                        <Comments feed={feed}></Comments>
                     </div>
                 )
             }
@@ -98,7 +130,7 @@ export default function Feed({ className, feed, fclass }) {
                         </div>
                         <div style={{ width: '100%', height: '20px' }}></div>
                         <div className={style.line}></div>
-                        {/* <Comments feed={feed}></Comments> */}
+                        <Comments feed={feed}></Comments>
                     </div>
                 )
             }

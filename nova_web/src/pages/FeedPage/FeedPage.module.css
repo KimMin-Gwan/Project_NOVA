@@ -540,6 +540,14 @@
 }
 
 
+.function_box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
 
 /* 숏폼형태 */
 
@@ -551,8 +559,6 @@
 
     /* overflow: hidden; */
     /* background-color: blueviolet; */
-
-
 }
 
 .short_form {
@@ -810,9 +816,7 @@
     font-weight: 800;
 }
 
-.station_box input:nth-child(2) {
-
-}
+.station_box input:nth-child(2) {}
 
 
 .site_name {
@@ -929,4 +933,26 @@
     background: rgba(0, 0, 0, 0.5);
     padding: 10px;
     border-radius: 8px;
+}
+
+/* 댓글 더보기 */
+.more_comments {
+    margin: 0 auto;
+    margin-top: 10px;
+    width: 80%;
+    height: auto;
+    border-radius: 10px;
+    border: 1px solid gray;
+}
+
+.comments_box {
+    width: 100%;
+    background-color: antiquewhite;
+    margin-bottom: 5px;
+}
+
+.comment {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

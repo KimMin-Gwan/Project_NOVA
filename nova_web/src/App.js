@@ -32,6 +32,10 @@ import GalaxyList from './pages/GalaxyPage/GalaxyList.js';
 import Box from './component/test.js';
 import NavBar from './component/NavBar.js';
 import WriteFeed from './pages/WriteFeed/WriteFeed.js';
+import MyWriteFeed from './pages/MyPage/MyWriteFeed/MyWriteFeed.js';
+import MyInterestFeed from './pages/MyPage/MyInterestFeed/MyInterestFeed.js';
+import MyCommentFeed from './pages/MyPage/MyCommentFeed/MyCommentFeed.js';
+import MyActiveFeed from './pages/MyPage/MyActiveFeed/MyActiveFeed.js';
 
 
 // 401 이면 바이어스 격자 무늬로 띄우기
@@ -46,7 +50,7 @@ function App() {
 
 
   let token = localStorage.getItem('jwtToken');
-  
+
   let [isLogin, setIsLogin] = useState();
   let [newToken, setnewToken] = useState(token);
 
@@ -80,7 +84,7 @@ function App() {
 
   return (
     <Routes>
-      <Route path='/write_feed' element={<WriteFeed/>}></Route>
+      <Route path='/write_feed' element={<WriteFeed />}></Route>
       <Route path='/more_see' element={<MoreSee />}></Route>
       <Route path='/test' element={<Box />}></Route>
       <Route path='/planet' element={<PlanetList />}></Route>
@@ -90,6 +94,10 @@ function App() {
       <Route path='/league_detail' element={<LeaguePage />}></Route>
       {/* <Route path='/league_detail' element={<LeagueDetail />}></Route> */}
       <Route path='/notice' element={<Notice />}></Route>
+      <Route path='/my_write_feed' element={<MyWriteFeed />} />
+      <Route path='/my_interest_feed' element={<MyInterestFeed />} />
+      <Route path='/my_comment_feed' element={<MyCommentFeed />} />
+      <Route path='/my_active_feed' element={<MyActiveFeed/>} />
       <Route path='/notice_list' element={<NoticeList />}></Route>
       <Route path='/select_bias' element={<SelectBias />}></Route>
       <Route path='/namecard' element={<NameCard />}></Route>
@@ -193,7 +201,7 @@ function App() {
           {/* <section className="advise"></section> */}
           {/* <FloatingButton showSpeaker={showBox} setShowSpeaker={setShowBox}></FloatingButton> */}
           <NavBar></NavBar>
-          
+
         </div >
 
 
