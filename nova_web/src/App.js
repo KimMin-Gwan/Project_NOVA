@@ -23,7 +23,7 @@ import Notice from './pages/Notice/Notice';
 import LeaguePage from './pages/LeaguePage/LeaguePage';
 import LeagueDetail from './pages/LeagueDetail/LeagueDetail';
 import SignUp from './pages/SignUp/SignUp.js';
-import FeedPage from './pages/FeedPage/FeedPage.js';
+import FeedPage, { FeedContext, FeedDispatchContext } from './pages/FeedPage/FeedPage.js';
 import Feed from './component/feed.js';
 import InfFeed from './component/infiniteFeed.js';
 import PlanetList from './pages/PlanetPage/PlanetList.js';
@@ -97,7 +97,7 @@ function App() {
       <Route path='/my_write_feed' element={<MyWriteFeed />} />
       <Route path='/my_interest_feed' element={<MyInterestFeed />} />
       <Route path='/my_comment_feed' element={<MyCommentFeed />} />
-      <Route path='/my_active_feed' element={<MyActiveFeed/>} />
+      <Route path='/my_active_feed' element={<MyActiveFeed />} />
       <Route path='/notice_list' element={<NoticeList />}></Route>
       <Route path='/select_bias' element={<SelectBias />}></Route>
       <Route path='/namecard' element={<NameCard />}></Route>

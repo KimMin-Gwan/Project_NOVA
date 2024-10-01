@@ -11,9 +11,13 @@ import { TfiCommentAlt } from "react-icons/tfi";
 import { PiShareFatLight } from "react-icons/pi";
 import { MdOutlineReportProblem } from "react-icons/md";
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, createContext } from 'react';
 // import style from './../pages/FeedPage/FeedPage.module.css';
 import { useLocation, useNavigate } from 'react-router-dom';
+
+
+export const FeedContext = createContext();
+export const FeedDispatchContext = createContext();
 
 const FeedPage = () => {
 
@@ -78,7 +82,7 @@ const FeedPage = () => {
     };
 
     function fetchFeed() {
-        fetch(`https://nova-platform.kr/feed_explore/get_feed?fclass=${fclass}`)
+        fetch(`https://nova-platform.kr/feed_explore/get_feed?fclass=None`)
             .then(response => response.json())
             .then(data => {
                 console.log("11", data.body.feed);
@@ -142,20 +146,6 @@ const FeedPage = () => {
                 })
             })
     };
-
-    // function handleCheckComment(fid, index) {
-    //     fetch(`https://nova-platform.kr/feed_explore/like_comment?fid=${fid}`, {
-    //         credentials: 'include',
-    //     })
-    //         .then(response => response.json())
-    //         .then(data => {
-    //             setBanners((prevBanners) => {
-    //                 return prevBanners.map((banner) => {
-    //                     return banner.fid === fid ? { ...banner, num_comment: data.body.feed[0].num_comment } : banner
-    //                 })
-    //             })
-    //         });
-    // }
 
     function handleShowCommentWindow() {
         setIsClickedComment(!isClickedComment);
@@ -251,7 +241,6 @@ const FeedPage = () => {
                     return prevAll.map((comment,i) => {
                         return comment.cid === cid ? { ...comment, like: data.body.comments[i].like } : comment
                     })
-                    const newAllComments = [...prevAll]
                 })
                 console.log("244241242414",allComments);
                 setCommentLikes(data.body.comments);
@@ -272,11 +261,8 @@ const FeedPage = () => {
             })
             .then(response=>response.json())
             .then(data=>{
-                console.log('remove',data.body.comments);
-                // setAllComments((prevAll)=>{
-                //     const newAllComments = [data.body.comments];
-                //     return newAllComments;
-                // })
+                console.log('remove',data);
+                setAllComments(data.body.comments);
             })
     };
 
@@ -333,32 +319,31 @@ const FeedPage = () => {
                                                              )
                                                         }
                                                     </div>
-                                                    <div className={style['comment_action']}>
+                                                    <Comments isClickedComment={true} feed={banner} setFeedData={setBanners} allComments={allComments} setAllComments={setAllComments}></Comments>
+                                                    {/* <div className={style['comment_action']}>
                                                         <form onSubmit={(event) => handleSubmit(banner.fid, event)}>
                                                             <input type='text' value={inputValue} onChange={handleChange}></input>
                                                             <button type='submit'>댓글 작성</button>
                                                         </form>
-                                                    </div>
+                                                    </div> */}
                                                 </div>
                                             </div>
                                         )
                                     }
-
-
-
 
                                     <div className={style['short_form_container']}>
                                         <div className={style['short_box']}>
                                             <div className={style['img_circle']}></div>
                                             <div style={{ height: '80px' }}></div>
                                             {/* <div className={style['short_feed']}> */}
-                                            <Feed className={style['short_feed']} feed={banner} fclass={fclass}></Feed>
-                                            <div className={style['comment_action']}>
+                                             <Feed className={style['short_feed']} feed={banner} setFeedData={setBanners}></Feed>
+                                             
+                                            {/* <div className={style['comment_action']}>
                                                         <form onSubmit={(event) => handleSubmit(banner.fid, event)}>
                                                             <input type='text' value={inputValue} onChange={handleChange}></input>
                                                             <button type='submit'>댓글 작성</button>
                                                         </form>
-                                                    </div>
+                                                    </div> */}
                                             {/* </div> */}
 
                                         </div>

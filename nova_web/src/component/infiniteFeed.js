@@ -1,6 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import style from './../pages/FeedPage/FeedPage.module.css';
 import Feed, { Comments } from './feed';
+import { FeedContext, FeedDispatchContext } from './../pages/FeedPage/FeedPage.js'
+
 
 export default function InfFeed() {
 
@@ -48,20 +50,6 @@ export default function InfFeed() {
         // .finally(() => setIsLoading(false));
     };
 
-    // const fetchData = async () => {
-    //     try {
-    //         const response = await fetch('https://nova-platform.kr/home/home_feed', {
-    //             credentials: 'include',
-    //         });
-    //         const data = await response.json();
-    //         setFeedData(data.body.feed);
-    //         console.log(feedData);
-    //     }
-    //     catch (error) {
-    //         console.error('Error fetching data: ', error);
-    //     }
-    // };
-
     useEffect(() => {
         observerRef.current = new IntersectionObserver((entries) => {
             entries.forEach((entry) => {
@@ -95,6 +83,16 @@ export default function InfFeed() {
         return <p>데이터 </p>;
     }
 
+    // let [numStar, setNumStar] = useState([]);
+    // let [numComment, setNumComment] = useState([]);
+    // let [isClickedStar, setIsClickedStar] = useState(false);
+    // let [isClickedComment, setIsClickedComment] = useState(false);
+
+    
+
+   
+
+
     return (
         <div className={style['scroll-area']}>
             {
@@ -103,7 +101,7 @@ export default function InfFeed() {
                     // console.log('class', a.fclass);
                     return (
                         <>
-                            <Feed key={i} className='' feed={a} func={true}></Feed>
+                            <Feed key={i} className='' feed={a} func={true} feedData={feedData} setFeedData={setFeedData}></Feed>
                             {/* <Comments feed={a}></Comments> */}
                         </>
                     )
