@@ -245,6 +245,25 @@ class UserController:
         finally:
             return model
 
+    def get_my_alert(self, database, request):
+        model = MyAlertModel(database=database)
+        try:
+            # 유저가 있으면 세팅
+            model.set_user_with_email(request=request.jwt_payload)
+            model.set_alert_data(aid =request.data_payload.aid)
+            model.set_last_aid()
+
+        except CustomError as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
+
+        except Exception as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
+
+        finally:
+            return model
+
 
 # 이메일 전송
 class MailSender:

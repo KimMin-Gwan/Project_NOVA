@@ -312,24 +312,22 @@ class Core_Service_View(Master_View):
             return response
 
         # feed 를 만들기
-        @self.__app.get('/feed_explore/make_feed')
-        def get_feed_data(request:Request, fid:Optional[str]):
+        @self.__app.get('/feed_explore/try_edit_feed')
+        def try_edit_feed(request:Request, raw_request:dict):
             request_manager = RequestManager()
 
-            # 여기서부터 작성할것
-            #data_payload = GetFeedRequest(fid=fid)
-            #request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
-            ##if not request_manager.jwt_payload.result:
-                ##raise request_manager.credentials_exception
+            data_payload = EditFeedRequest(fid=fid, cid=cid)
+            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+            if not request_manager.jwt_payload.result:
+                raise request_manager.credentials_exception
 
-            #home_controller=Feed_Controller()
-            #model = home_controller.get_specific_feed_data(database=self.__database,
-                                                        #request=request_manager,
-                                                        #feed_manager=self.__feed_manager)
-
-            #body_data = model.get_response_form_data(self._head_parser)
-            #response = request_manager.make_json_response(body_data=body_data)
-            #return response
+            home_controller=Feed_Controller()
+            model = home_controller.try_like_comment(database=self.__database,
+                                                        request=request_manager,
+                                                        feed_manager=self.__feed_manager)
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
 
 
 

@@ -134,7 +134,7 @@ class User_Service_View(Master_View):
         def get_my_comment(request:Request, cid:Optional[str] = ""):
             request_manager = RequestManager()
 
-            data_payload = MyFeedRequest(cid=cid)
+            data_payload = MyCommentRequest(cid=cid)
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
             if not request_manager.jwt_payload.result:
                 raise request_manager.credentials_exception
@@ -202,7 +202,7 @@ class User_Service_View(Master_View):
         def get_my_alert(request:Request, aid:Optional[str] = ""):
             request_manager = RequestManager()
 
-            data_payload = DummyRequest()
+            data_payload = MyAlertRequest(aid=aid)
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
             if not request_manager.jwt_payload.result:
                 raise request_manager.credentials_exception
@@ -259,6 +259,10 @@ class MyFeedRequest():
     def __init__(self, fid) -> None:
         self.fid= fid
 
-class MyFeedRequest():
+class MyCommentRequest():
     def __init__(self, cid) -> None:
         self.cid=cid 
+
+class MyAlertRequest():
+    def __init__(self, aid) -> None:
+        self.aid = aid

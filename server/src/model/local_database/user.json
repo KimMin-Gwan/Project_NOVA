@@ -94,7 +94,7 @@
         ],
         "solo_daily_check_date": "",
         "group_daily_check_date": "",
-        "alert": []
+        "alert": ["1", "2", "3"]
     },
     {
         "uid": "ijkl-9876-mnop",

@@ -1,6 +1,6 @@
 from model.base_model import BaseModel
 from model import Local_Database
-from others.data_domain import User, Bias
+from others.data_domain import User, Bias, Alert
 from others import CoreControllerLogicError, FeedManager
 from view.jwt_decoder import JWTManager
 import jwt
@@ -348,6 +348,52 @@ class ChangeNickNameModel(BaseModel):
             body = {
                 'result' : self._result,
                 "detail" : self._detail
+            }
+
+            response = self._get_response_data(head_parser=head_parser, body=body)
+            return response
+
+        except Exception as e:
+            raise CoreControllerLogicError("response making error | " + e)
+        
+
+# feed 의 메타 정보를 보내주는 모델
+class MyAlertModel(BaseModel):
+    def __init__(self, database:Local_Database) -> None:
+        super().__init__(database)
+        self._alerts= []
+        self._aid = -1
+
+    # 알람 정보 세팅
+    def set_alert_data(self, aid):
+        alert_datas = self._database.get_datas_with_ids(target_id="aid", ids=self._user.alert)
+
+        target = -1
+        for i, alert_data in enumerate(reversed(alert_datas)):
+            alert= Alert()
+            alert.make_with_dict(dict_data=alert_data)
+            self._alerts.append(alert)
+            if alert.aid == aid:
+                target = i
+
+        if target != -1:
+            self._alerts = self._alerts[target +1 :]
+
+        if len(self._alerts) > 5:
+            self._alerts = self._alerts[:5]
+        return
+    
+    # 마지막 aid 정보
+    def set_last_aid(self):
+        if len(self._alerts) != 0:
+            self._aid = self._alerts[-1].aid
+        return
+    
+    def get_response_form_data(self, head_parser):
+        try:
+            body = {
+                'alert' : self._make_dict_list_data(list_data=self._alerts),
+                'aid' : self._aid
             }
 
             response = self._get_response_data(head_parser=head_parser, body=body)

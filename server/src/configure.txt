@@ -1,8 +1,9 @@
 HOST = 127.0.0.1
 PORT = 6000
-VERSION = 0.9.321
-num_fclass = 4
-fclass1 = [card, 추억, 덕질의기억]
-fclass2 = [multiple, 넷 중 하나, 사지선다]
-fclass3 = [balance, 둘 중 하나, 이지선다]
-fclass4 = [station, 정거장, 외부 링크 공유]
+VERSION = 0.9.322
+num_fclass = 5
+fclass0 = [None, 랜덤, 밤 하늘을 올려다 보는 것 처럼]
+fclass1 = [card, 추억, 짧은 글로 된 피드]
+fclass2 = [multiple, 이지선다, 간단한 이지선다]
+fclass3 = [balance, 사지선다, 4가지 선택지 중 하나 고르기]
+fclass4 = [station, 문, 노바가 아닌 다른 곳의 좌표]

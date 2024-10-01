@@ -475,13 +475,14 @@ class FeedManager:
             user.active_feed.remove(fid)
             feed.result[target] -= 1
 
+
         # 이제 참여한 데이터를 세팅하고 저장하면됨
         if target != action:
             user.active_feed.append(fid)
             feed.attend[action].append(user.uid)
             feed.result[action] += 1
         else:
-            user.active_feed.remove(fid)
+            #user.active_feed.remove(fid)  # 지울 필요가 없어보임 -> 주석 처리됨
             action = -1
 
         self._database.modify_data_with_id(target_id="fid",
@@ -570,6 +571,7 @@ class FeedManager:
         managed_user:ManagedUser= self._managed_user_table.find_user(user=user)
         feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=managed_user.my_feed)
 
+        target = -1
         feeds = []
         for i, feed_data in enumerate(reversed(feed_datas)):
             feed = Feed()
@@ -578,11 +580,12 @@ class FeedManager:
             if feed.fid == fid:
                 target = i
 
+
         if target != -1:
-            feeds = feeds[target:]
+            feeds = feeds[target+1:]
 
         if len(feeds) > 5:
-            feeds[:5]
+            feeds = feeds[:5]
 
         feeds = self.is_user_interacted(user=managed_user, feeds=feeds)
 
@@ -633,10 +636,10 @@ class FeedManager:
                 target = i
 
         if target != -1:
-            comments = comments[target:]
+            comments = comments[target+1:]
 
         if len(comments) > 5:
-            comments[:5]
+            comments = comments[:5]
 
         return comments 
 
@@ -655,10 +658,10 @@ class FeedManager:
                 target = i
 
         if target != -1:
-            feeds = feeds[target:]
+            feeds = feeds[target+1:]
 
         if len(feeds) > 5:
-            feeds[:5]
+            feeds = feeds[:5]
 
         feeds = self.is_user_interacted(user=managed_user, feeds=feeds)
 
@@ -679,10 +682,10 @@ class FeedManager:
                 target = i
 
         if target != -1:
-            feeds = feeds[target:]
+            feeds = feeds[target + 1:]
 
         if len(feeds) > 5:
-            feeds[:5]
+            feeds = feeds[:5]
         feeds = self.is_user_interacted(user=managed_user, feeds=feeds)
 
         return feeds

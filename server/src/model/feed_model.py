@@ -1,6 +1,6 @@
 from model.base_model import BaseModel
 from model import Local_Database
-#from others.data_domain import Bias, League
+#from others.data_domain import Alert
 from others import CoreControllerLogicError,FeedManager 
 
 class FeedModel(BaseModel):
