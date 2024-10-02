@@ -27,7 +27,6 @@ function MySoloBias({ solo_bias, bias_url, showBox, blackBox }) {
     let send_data = {
         "header": header,
         "body": {
-            // 'token': token,
             'type': 'solo'
         }
     }
@@ -47,7 +46,25 @@ function MySoloBias({ solo_bias, bias_url, showBox, blackBox }) {
     //             JSON.stringify(data)
     //         })
     // }, [])
-
+    async function fetchCheckPoint() {
+        const response = await fetch(url + `nova_check/server_info/check_page`, {
+            method: 'post',
+            headers: {
+                "Content-Type": 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify(send_data),
+        });
+        const data = await response.json();
+        console.log(data.body);
+        setBiasData(data.body);
+        // .then(response => response.json())
+        // .then(data => {
+        //     // JSON.stringify(data)
+        //     console.log(data.body)
+        //     setBiasData(data.body)
+        // });
+    };
 
 
 
@@ -97,20 +114,7 @@ function MySoloBias({ solo_bias, bias_url, showBox, blackBox }) {
                         <img src={bias_url + `${solo_bias.bid}.PNG`} alt="bias" className='img2' />
                     </div>
                     <div className='support' onClick={() => {
-                        fetch(url + `nova_check/server_info/check_page`, {
-                            method: 'post',
-                            headers: {
-                                "Content-Type": 'application/json',
-                            },
-                            credentials: 'include',
-                            body: JSON.stringify(send_data),
-                        })
-                            .then(response => response.json())
-                            .then(data => {
-                                // JSON.stringify(data)
-                                console.log(data.body)
-                                setBiasData(data.body)
-                            });
+                        fetchCheckPoint();
                         navigate(`/bias_certify`, {
                             state: {
                                 bias: bias_data.bias, result: bias_data.result, point: bias_data.point,

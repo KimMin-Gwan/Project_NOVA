@@ -36,6 +36,7 @@ import MyWriteFeed from './pages/MyPage/MyWriteFeed/MyWriteFeed.js';
 import MyInterestFeed from './pages/MyPage/MyInterestFeed/MyInterestFeed.js';
 import MyCommentFeed from './pages/MyPage/MyCommentFeed/MyCommentFeed.js';
 import MyActiveFeed from './pages/MyPage/MyActiveFeed/MyActiveFeed.js';
+import MyAlert from './pages/MyPage/Alert/MyAlert.js';
 
 
 // 401 이면 바이어스 격자 무늬로 띄우기
@@ -98,6 +99,7 @@ function App() {
       <Route path='/my_interest_feed' element={<MyInterestFeed />} />
       <Route path='/my_comment_feed' element={<MyCommentFeed />} />
       <Route path='/my_active_feed' element={<MyActiveFeed />} />
+      <Route path='/my_alerts' element={<MyAlert />} />
       <Route path='/notice_list' element={<NoticeList />}></Route>
       <Route path='/select_bias' element={<SelectBias />}></Route>
       <Route path='/namecard' element={<NameCard />}></Route>

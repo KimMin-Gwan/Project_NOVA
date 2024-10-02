@@ -7,7 +7,7 @@ import { useState } from 'react';
 // import {}
 // import { useRef, useState } from 'react';
 
-export default function Feed({ className, feed, func, feedData, setFeedData }) {
+export default function Feed({ className, feed, func, feedData, setFeedData, img_circle }) {
 
     function handleInteraction(event, fid, action) {
         event.preventDefault();
@@ -118,6 +118,8 @@ export default function Feed({ className, feed, func, feedData, setFeedData }) {
         "endpoint": "/core_system/",
     }
 
+
+
     return (
 
         <>
@@ -126,45 +128,69 @@ export default function Feed({ className, feed, func, feedData, setFeedData }) {
                 (
                     <div className={`${style.feed} ${className}`} >
                         <div>
+                            {
+                                img_circle && <div style={{ height: '80px' }}></div>
+                            }
                             <InfoArea color={'#7960EC'} name={`${feed.class_name} 행성`} date={feed.date} supporter={`${feed.nickname}`}></InfoArea>
                             {
                                 isClickedMoreSee ?
                                     (<div className={style['more_comments']}>
-                                        <div className={style['comments_box']}>
-                                            {
-                                                allComments.length === 0 ? <div>댓글이 없습니다.</div> :
-                                                    (
-                                                        allComments.map((comment, i) => {
-                                                            return (
-                                                                <div key={comment.cid} className={style['comment']} on>
-                                                                    <div>{i}</div>
+
+                                        {allComments.length === 0 ? <div>댓글이 없습니다.</div> :
+                                            (
+                                                allComments.map((comment, i) => {
+                                                    return (
+                                                        <div className={style['comments_box']}>
+                                                            <div key={comment.cid} className={style['comment']}>
+                                                                <div className={style['user_name']}>
                                                                     <div>{comment.uname}</div>
-                                                                    <div>{comment.body}</div>
-                                                                    <div onClick={(event) => handleRemoveComment(comment.fid, comment.cid, event)}>삭제</div>
-                                                                    <div>신고</div>
-                                                                    <div onClick={(event) => handleCommentLike(comment.fid, comment.cid, event)}>{comment.like}</div>
+                                                                    <div className={style['interaction_btn']}>
+                                                                        {
+                                                                            comment.owner ? (<div className={style['delete_btn']} onClick={(event) => handleRemoveComment(comment.fid, comment.cid, event)}>삭제</div>) : (<div className={style['delete_btn']}></div>)
+                                                                        }
+                                                                        <div className={style['report_star_btn']}>
+                                                                            <div>신고</div>
+                                                                            <div onClick={(event) => handleCommentLike(comment.fid, comment.cid, event)}>{comment.like}</div>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
-                                                            )
-                                                        })
+                                                                <div className={style['comment_text']}>{comment.body}</div>
+                                                            </div>
+                                                        </div>
                                                     )
-                                            }
-                                        </div>
-                                    </div>) : <Text data={feed.body}></Text>
+                                                })
+                                            )}
+
+                                    </div>) : <>
+                                        <Text data={feed.body}></Text>
+                                        {
+                                            !img_circle &&
+                                            <div className={style['home_feed_img']}>
+                                                <img src={feed.image[0]} />
+                                            </div>
+                                        }
+
+                                    </>
                             }
                         </div>
                         <div style={{ width: '100%', height: '50px' }}></div>
                         {
                             func && (
                                 <div className={style['function_box']}>
-                                    {
-                                        isClickedMoreSee ? (<div onClick={handleMoreSee}>본문 보기</div>) : (
-                                            <div onClick={(event) => {
-                                                handleMoreSee();
-                                                handleShowComment(feed.fid, event);
-                                            }}>댓글 더보기</div>)
-                                    }
-                                    <div>신고</div>
-                                    <div onClick={(e) => { handleCheckStar(feed.fid, e) }}>좋아요 {feed.star}</div>
+                                    <div className={style['action_btn']}>
+                                        {
+                                            isClickedMoreSee ? (<div className={style['show_body']} onClick={handleMoreSee}>본문 보기</div>) : (
+                                                <>
+                                                    <div onClick={(event) => {
+                                                        handleMoreSee();
+                                                        handleShowComment(feed.fid, event);
+                                                    }}>댓글 더보기</div>
+                                                    <div className={style['report_btn']}>신고</div>
+                                                </>
+                                            )
+                                        }
+                                    </div>
+                                    <div className={style['like_btn']} onClick={(e) => { handleCheckStar(feed.fid, e) }}>좋아요 {feed.star}</div>
                                 </div>
                             )
                         }
@@ -179,32 +205,46 @@ export default function Feed({ className, feed, func, feedData, setFeedData }) {
                 (
                     <div className={`${style.feed} ${className}`}>
                         <div>
+                            {
+                                img_circle && <div style={{ height: '80px' }}></div>
+                            }
                             <InfoArea color={'#E370D1'} name={`${feed.class_name} 행성`} date={feed.date} supporter={`${feed.nickname}`}></InfoArea>
                             {
                                 isClickedMoreSee ?
                                     (<div className={style['more_comments']}>
-                                        <div className={style['comments_box']}>
-                                            {
-                                                allComments.length === 0 ? <div>댓글이 없습니다.</div> :
-                                                    (
-                                                        allComments.map((comment, i) => {
-                                                            return (
-                                                                <div key={comment.cid} className={style['comment']} on>
-                                                                    <div>{i}</div>
+                                        {allComments.length === 0 ? <div>댓글이 없습니다.</div> :
+                                            (
+                                                allComments.map((comment, i) => {
+                                                    return (
+                                                        <div className={style['comments_box']}>
+                                                            <div key={comment.cid} className={style['comment']}>
+                                                                <div className={style['user_name']}>
                                                                     <div>{comment.uname}</div>
-                                                                    <div>{comment.body}</div>
-                                                                    <div onClick={(event) => handleRemoveComment(comment.fid, comment.cid, event)}>삭제</div>
-                                                                    <div>신고</div>
-                                                                    <div onClick={(event) => handleCommentLike(comment.fid, comment.cid, event)}>{comment.like}</div>
+                                                                    <div className={style['interaction_btn']}>
+                                                                        {
+                                                                            comment.owner ? (<div className={style['delete_btn']} onClick={(event) => handleRemoveComment(comment.fid, comment.cid, event)}>삭제</div>) : (<div className={style['delete_btn']}></div>)
+                                                                        }
+                                                                        <div className={style['report_star_btn']}>
+                                                                            <div>신고</div>
+                                                                            <div onClick={(event) => handleCommentLike(comment.fid, comment.cid, event)}>{comment.like}</div>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
-                                                            )
-                                                        })
+                                                                <div className={style['comment_text']}>{comment.body}</div>
+                                                            </div>
+                                                        </div>
                                                     )
-                                            }
-                                        </div>
+                                                })
+                                            )}
                                     </div>) : (
                                         <>
                                             <Text data={feed.body}></Text>
+                                            {
+                                                !img_circle &&
+                                                <div className={style['home_feed_img']}>
+                                                    <img src={feed.image[0]} />
+                                                </div>
+                                            }
                                             <ol className={style['quiz_box']}>
                                                 {
                                                     feed.choice.map((choi, i) => {
@@ -227,15 +267,20 @@ export default function Feed({ className, feed, func, feedData, setFeedData }) {
                         {
                             func && (
                                 <div className={style['function_box']}>
-                                    {
-                                        isClickedMoreSee ? (<div onClick={handleMoreSee}>본문 보기</div>) : (
-                                            <div onClick={(event) => {
-                                                handleMoreSee();
-                                                handleShowComment(feed.fid, event);
-                                            }}>댓글 더보기</div>)
-                                    }
-                                    <div>신고</div>
-                                    <div onClick={(e) => { handleCheckStar(feed.fid, e) }}>좋아요 {feed.star}</div>
+                                    <div className={style['action_btn']}>
+                                        {
+                                            isClickedMoreSee ? (<div className={style['show_body']} onClick={handleMoreSee}>본문 보기</div>) : (
+                                                <>
+                                                    <div onClick={(event) => {
+                                                        handleMoreSee();
+                                                        handleShowComment(feed.fid, event);
+                                                    }}>댓글 더보기</div>
+                                                    <div className={style['report_btn']}>신고</div>
+                                                </>
+                                            )
+                                        }
+                                    </div>
+                                    <div className={style['like_btn']} onClick={(e) => { handleCheckStar(feed.fid, e) }}>좋아요 {feed.star}</div>
                                 </div>
                             )
                         }
@@ -249,33 +294,47 @@ export default function Feed({ className, feed, func, feedData, setFeedData }) {
                 (
                     <div className={`${style.feed} ${className}`}>
                         <div>
+                            {
+                                img_circle && <div style={{ height: '80px' }}></div>
+                            }
                             <InfoArea color={'#60E7EC'} name={`${feed.class_name} 행성`} date={feed.date} supporter={`${feed.nickname}`}></InfoArea>
                             {
                                 isClickedMoreSee ?
                                     (<div className={style['more_comments']}>
-                                        <div className={style['comments_box']}>
-                                            {
-                                                allComments.length === 0 ? <div>댓글이 없습니다.</div> :
-                                                    (
-                                                        allComments.map((comment, i) => {
-                                                            return (
-                                                                <div key={comment.cid} className={style['comment']} on>
-                                                                    <div>{i}</div>
+                                        {allComments.length === 0 ? <div>댓글이 없습니다.</div> :
+                                            (
+                                                allComments.map((comment, i) => {
+                                                    return (
+                                                        <div className={style['comments_box']}>
+                                                            <div key={comment.cid} className={style['comment']}>
+                                                                <div className={style['user_name']}>
                                                                     <div>{comment.uname}</div>
-                                                                    <div>{comment.body}</div>
-                                                                    <div onClick={(event) => handleRemoveComment(comment.fid, comment.cid, event)}>삭제</div>
-                                                                    <div>신고</div>
-                                                                    <div onClick={(event) => handleCommentLike(comment.fid, comment.cid, event)}>{comment.like}</div>
+                                                                    <div className={style['interaction_btn']}>
+                                                                        {
+                                                                            comment.owner ? (<div className={style['delete_btn']} onClick={(event) => handleRemoveComment(comment.fid, comment.cid, event)}>삭제</div>) : (<div className={style['delete_btn']}></div>)
+                                                                        }
+                                                                        <div className={style['report_star_btn']}>
+                                                                            <div>신고</div>
+                                                                            <div onClick={(event) => handleCommentLike(comment.fid, comment.cid, event)}>{comment.like}</div>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
-                                                            )
-                                                        })
+                                                                <div className={style['comment_text']}>{comment.body}</div>
+                                                            </div>
+                                                        </div>
                                                     )
-                                            }
-                                        </div>
+                                                })
+                                            )}
 
                                     </div>) : (
                                         <>
                                             <Text data={feed.body}></Text>
+                                            {
+                                                !img_circle &&
+                                                <div className={style['home_feed_img']}>
+                                                    <img src={feed.image[0]} />
+                                                </div>
+                                            }
                                             <div className={style['button_container']}>
                                                 <button className={style['select_button']} onClick={(event) => handleInteraction(event, feed.fid)}>{feed.choice[0]} 결과{feed.result[0]}</button>
                                                 <button className={style['select_button']}>{feed.choice[1]} 결과{feed.result[1]}</button>
@@ -289,15 +348,20 @@ export default function Feed({ className, feed, func, feedData, setFeedData }) {
                         {
                             func && (
                                 <div className={style['function_box']}>
-                                    {
-                                        isClickedMoreSee ? (<div onClick={handleMoreSee}>본문 보기</div>) : (
-                                            <div onClick={(event) => {
-                                                handleMoreSee();
-                                                handleShowComment(feed.fid, event);
-                                            }}>댓글 더보기</div>)
-                                    }
-                                    <div>신고</div>
-                                    <div onClick={(e) => { handleCheckStar(feed.fid, e) }}>좋아요 {feed.star}</div>
+                                    <div className={style['action_btn']}>
+                                        {
+                                            isClickedMoreSee ? (<div className={style['show_body']} onClick={handleMoreSee}>본문 보기</div>) : (
+                                                <>
+                                                    <div onClick={(event) => {
+                                                        handleMoreSee();
+                                                        handleShowComment(feed.fid, event);
+                                                    }}>댓글 더보기</div>
+                                                    <div className={style['report_btn']}>신고</div>
+                                                </>
+                                            )
+                                        }
+                                    </div>
+                                    <div className={style['like_btn']} onClick={(e) => { handleCheckStar(feed.fid, e) }}>좋아요 {feed.star}</div>
                                 </div>
                             )
                         }
@@ -311,32 +375,48 @@ export default function Feed({ className, feed, func, feedData, setFeedData }) {
                 (
                     <div className={`${style.feed} ${className}`}>
                         <div>
+                            {
+                                img_circle && <div style={{ height: '80px' }}></div>
+                            }
+
                             <InfoArea color={'#78D2C8'} name={`${feed.class_name} 행성`} date={feed.date} supporter={`${feed.nickname}`}></InfoArea>
                             {
                                 isClickedMoreSee ?
                                     (<div className={style['more_comments']}>
-                                        <div className={style['comments_box']}>
-                                            {
-                                                allComments.length === 0 ? <div>댓글이 없습니다.</div> :
-                                                    (
-                                                        allComments.map((comment, i) => {
-                                                            return (
-                                                                <div key={comment.cid} className={style['comment']} on>
-                                                                    <div>{i}</div>
+                                        {allComments.length === 0 ? <div>댓글이 없습니다.</div> :
+                                            (
+                                                allComments.map((comment, i) => {
+                                                    return (
+                                                        <div className={style['comments_box']}>
+                                                            <div key={comment.cid} className={style['comment']}>
+                                                                <div className={style['user_name']}>
                                                                     <div>{comment.uname}</div>
-                                                                    <div>{comment.body}</div>
-                                                                    <div onClick={(event) => handleRemoveComment(comment.fid, comment.cid, event)}>삭제</div>
-                                                                    <div>신고</div>
-                                                                    <div onClick={(event) => handleCommentLike(comment.fid, comment.cid, event)}>{comment.like}</div>
+                                                                    <div className={style['interaction_btn']}>
+                                                                        {
+                                                                            comment.owner ? (<div className={style['delete_btn']} onClick={(event) => handleRemoveComment(comment.fid, comment.cid, event)}>삭제</div>) : (<div className={style['delete_btn']}></div>)
+                                                                        }
+                                                                        <div className={style['report_star_btn']}>
+                                                                            <div>신고</div>
+                                                                            <div onClick={(event) => handleCommentLike(comment.fid, comment.cid, event)}>{comment.like}</div>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
-                                                            )
-                                                        })
+                                                                <div className={style['comment_text']}>{comment.body}</div>
+                                                            </div>
+                                                        </div>
                                                     )
-                                            }
-                                        </div>
+                                                })
+                                            )}
                                     </div>) : (
                                         <>
                                             <Text data={feed.body}></Text>
+                                            {
+                                                !img_circle &&
+                                                <div className={style['home_feed_img']}>
+                                                    <img src={feed.image[0]} />
+                                                </div>
+                                            }
+
                                             <div className={style['link_box']}>
                                                 <h1>{feed.choice[0]}</h1>
                                                 <h5>{feed.choice[1]}</h5>
@@ -350,15 +430,20 @@ export default function Feed({ className, feed, func, feedData, setFeedData }) {
                         {
                             func && (
                                 <div className={style['function_box']}>
-                                    {
-                                        isClickedMoreSee ? (<div onClick={handleMoreSee}>본문 보기</div>) : (
-                                            <div onClick={(event) => {
-                                                handleMoreSee();
-                                                handleShowComment(feed.fid, event);
-                                            }}>댓글 더보기</div>)
-                                    }
-                                    <div>신고</div>
-                                    <div onClick={(e) => { handleCheckStar(feed.fid, e) }}>좋아요 {feed.star}</div>
+                                    <div className={style['action_btn']}>
+                                        {
+                                            isClickedMoreSee ? (<div className={style['show_body']} onClick={handleMoreSee}>본문 보기</div>) : (
+                                                <>
+                                                    <div onClick={(event) => {
+                                                        handleMoreSee();
+                                                        handleShowComment(feed.fid, event);
+                                                    }}>댓글 더보기</div>
+                                                    <div className={style['report_btn']}>신고</div>
+                                                </>
+                                            )
+                                        }
+                                    </div>
+                                    <div className={style['like_btn']} onClick={(e) => { handleCheckStar(feed.fid, e) }}>좋아요 {feed.star}</div>
                                 </div>
                             )
                         }
@@ -367,24 +452,27 @@ export default function Feed({ className, feed, func, feedData, setFeedData }) {
                     </div>
                 )
             }
+
+
+
         </>
 
 
-        //        
-        //     {
-        //         feed.fclass === 'i' && (
-        //             <div className={style.feed}>
-        //                 <div className={style['info_area']}>
-        //                     <div className={style['planet_name']}>
-        //                         <p className={style['sup_people']}>익명지지자</p>
-        //                         <img src={planet1}></img>
-        //                         <p>정거장 행성</p>
-        //                     </div>
-        //                 </div>
-        //                 {/* <Text></Text> */}
+        // {
+
+        //     <div className={style.feed}>
+        //         <div className={style['info_area']}>
+        //             <div className={style['planet_name']}>
+        //                 <p className={style['sup_people']}>익명지지자</p>
+        //                 <img src={planet1}></img>
+        //                 <p>정거장 행성</p>
         //             </div>
-        //         )
-        //     }
+        //         </div>
+        //         {/* <Text></Text> */}
+        //     </div>
+
+        // }
+
         //     {
         //         feed.fclass === 'ad' && (
         //             <div className={style.feed}>
