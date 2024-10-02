@@ -263,7 +263,7 @@ class Feed(SampleDomain):
     def __init__(self, fid="", uid="", nickname="", star=0,
                  body="", date="", fclass="", class_name="",
                  choice=None, result=None, state="d", attend=None,
-                 category = None, comment = None):
+                 category = None, comment = None, image = None):
         if choice is None:
             choice = []
         if result is None:
@@ -274,6 +274,8 @@ class Feed(SampleDomain):
             category = []
         if comment is None:
             comment = []
+        if image is None:
+            image = ["https://kr.object.ncloudstorage.com/nova-feed-images/nova-platform.PNG"]
 
         self.fid = fid
         self.uid = uid
@@ -291,6 +293,7 @@ class Feed(SampleDomain):
         self.num_comment = 0
         self.star = star
         self.star_flag = False
+        self.image = copy.copy(image)
 
     def make_with_dict(self, dict_data):
         try:
@@ -308,6 +311,7 @@ class Feed(SampleDomain):
             self.category = copy.copy(dict_data['category'])
             self.comment = copy.copy(dict_data['comment'])
             self.star= dict_data['star']
+            self.image= copy.copy(dict_data['image'])
         except KeyError as e:
             raise DictMakingError(error_type=f"Missing key: {str(e)}")
 
@@ -328,7 +332,8 @@ class Feed(SampleDomain):
             "comment":copy.copy(self.comment),
             "num_comment" :self.num_comment,
             "star":self.star,
-            "star_flag" : self.star_flag
+            "star_flag" : self.star_flag,
+            "image":copy.copy(self.image)
         }
 
 

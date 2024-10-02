@@ -15,16 +15,16 @@ def main():
 
     new_data = []
 
-    with open("./../src/model/local_database/user.json", 'r',  encoding='utf-8' )as f:
+    with open("./../src/model/local_database/feed.json", 'r',  encoding='utf-8' )as f:
         data_list.extend(json.load(f))
 
 
         for data in data_list:
-            data['alert'] = []
+            data['image'] = ["https://kr.object.ncloudstorage.com/nova-feed-images/sample1.PNG"]
 
             new_data.append(data)
 
-    with open("./../src/model/local_database/user.json", 'w',  encoding='utf-8' )as f:
+    with open("./../src/model/local_database/feed.json", 'w',  encoding='utf-8' )as f:
         json.dump(new_data, f, ensure_ascii=False, indent=4)
 
 

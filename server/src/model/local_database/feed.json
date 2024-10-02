@@ -14,7 +14,10 @@
         "state": "y",
         "attend": [],
         "comment": [],
-        "category": []
+        "category": [],
+        "image": [
+            "https://kr.object.ncloudstorage.com/nova-feed-images/sample1.jfif"
+        ]
     },
     {
         "star": 100,
@@ -48,7 +51,10 @@
             ]
         ],
         "comment": [],
-        "category": []
+        "category": [],
+        "image": [
+            "https://kr.object.ncloudstorage.com/nova-feed-images/sample1.jfif"
+        ]
     },
     {
         "fid": "2",
@@ -98,7 +104,10 @@
         ],
         "num_comment": 0,
         "star": 100,
-        "star_flag": false
+        "star_flag": false,
+        "image": [
+            "https://kr.object.ncloudstorage.com/nova-feed-images/sample1.jfif"
+        ]
     },
     {
         "star": 100,
@@ -118,7 +127,10 @@
         "state": "y",
         "attend": [],
         "comment": [],
-        "category": []
+        "category": [],
+        "image": [
+            "https://kr.object.ncloudstorage.com/nova-feed-images/sample1.jfif"
+        ]
     },
     {
         "star": 100,
@@ -134,7 +146,10 @@
         "state": "y",
         "attend": [],
         "comment": [],
-        "category": []
+        "category": [],
+        "image": [
+            "https://kr.object.ncloudstorage.com/nova-feed-images/sample1.jfif"
+        ]
     },
     {
         "star": 100,
@@ -168,7 +183,10 @@
             ]
         ],
         "comment": [],
-        "category": []
+        "category": [],
+        "image": [
+            "https://kr.object.ncloudstorage.com/nova-feed-images/sample1.jfif"
+        ]
     },
     {
         "star": 100,
@@ -215,7 +233,10 @@
             ]
         ],
         "comment": [],
-        "category": []
+        "category": [],
+        "image": [
+            "https://kr.object.ncloudstorage.com/nova-feed-images/sample1.jfif"
+        ]
     },
     {
         "star": 100,
@@ -249,7 +270,10 @@
             ]
         ],
         "comment": [],
-        "category": []
+        "category": [],
+        "image": [
+            "https://kr.object.ncloudstorage.com/nova-feed-images/sample1.jfif"
+        ]
     },
     {
         "star": 100,
@@ -283,7 +307,9 @@
             ]
         ],
         "comment": [],
-        "category": []
+        "category": [],
+        "image": [
+        ]
     },
     {
         "star": 100,
@@ -303,7 +329,10 @@
         "state": "y",
         "attend": [],
         "comment": [],
-        "category": []
+        "category": [],
+        "image": [
+            "https://kr.object.ncloudstorage.com/nova-feed-images/sample1.jfif"
+        ]
     },
     {
         "star": 100,
@@ -323,7 +352,10 @@
         "state": "y",
         "attend": [],
         "comment": [],
-        "category": []
+        "category": [],
+        "image": [
+            "https://kr.object.ncloudstorage.com/nova-feed-images/sample1.jfif"
+        ]
     },
     {
         "star": 100,
@@ -343,7 +375,9 @@
         "state": "y",
         "attend": [],
         "comment": [],
-        "category": []
+        "category": [],
+        "image": [
+        ]
     },
     {
         "star": 100,
@@ -359,7 +393,9 @@
         "state": "y",
         "attend": [],
         "comment": [],
-        "category": []
+        "category": [],
+        "image": [
+        ]
     },
     {
         "star": 100,
@@ -375,7 +411,10 @@
         "state": "y",
         "attend": [],
         "comment": [],
-        "category": []
+        "category": [],
+        "image": [
+            "https://kr.object.ncloudstorage.com/nova-feed-images/sample1.jfif"
+        ]
     },
     {
         "star": 100,
@@ -391,7 +430,10 @@
         "state": "y",
         "attend": [],
         "comment": [],
-        "category": []
+        "category": [],
+        "image": [
+            "https://kr.object.ncloudstorage.com/nova-feed-images/sample1.jfif"
+        ]
     },
     {
         "star": 100,
@@ -407,7 +449,10 @@
         "state": "y",
         "attend": [],
         "comment": [],
-        "category": []
+        "category": [],
+        "image": [
+            "https://kr.object.ncloudstorage.com/nova-feed-images/sample1.jfif"
+        ]
     },
     {
         "star": 100,
@@ -454,7 +499,10 @@
             ]
         ],
         "comment": [],
-        "category": []
+        "category": [],
+        "image": [
+            "https://kr.object.ncloudstorage.com/nova-feed-images/sample1.jfif"
+        ]
     },
     {
         "star": 100,
@@ -501,7 +549,10 @@
             ]
         ],
         "comment": [],
-        "category": []
+        "category": [],
+        "image": [
+            "https://kr.object.ncloudstorage.com/nova-feed-images/sample1.jfif"
+        ]
     },
     {
         "star": 100,
@@ -521,7 +572,10 @@
         "state": "y",
         "attend": [],
         "comment": [],
-        "category": []
+        "category": [],
+        "image": [
+            "https://kr.object.ncloudstorage.com/nova-feed-images/sample1.jfif"
+        ]
     },
     {
         "star": 100,
@@ -541,6 +595,9 @@
         "state": "y",
         "attend": [],
         "comment": [],
-        "category": []
+        "category": [],
+        "image": [
+            "https://kr.object.ncloudstorage.com/nova-feed-images/sample1.jfif"
+        ]
     }
 ]
