@@ -11,7 +11,7 @@ function BiasCertify() {
     const currentTime = new Date().getHours();
     let navigate = useNavigate();
     let location = useLocation();
-    let { token, bias, result, point, specialTime } = location.state || {};
+    let { bias, result, point, specialTime } = location.state || {};
 
     let url = 'https://nova-platform.kr/nova_check/server_info/';
 
@@ -26,7 +26,6 @@ function BiasCertify() {
     let send_data = {
         "header": header,
         "body": {
-            'token': token,
             'type': bias.type
         }
     }
@@ -215,6 +214,9 @@ function BiasCertify() {
                 <div className={style.advise}>광고 영역</div>
             </div>
         )
+    }
+    else if (bias === undefined) {
+        return (<div>loading</div>)
     }
     else {
         return (<div>ddd</div>

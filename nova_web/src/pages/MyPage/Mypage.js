@@ -165,7 +165,7 @@ function MyPage() {
                                 <IoIosArrowForward className={style['activity_icon']} onClick={(e) => { handleMovePage(e, '/my_interest_feed') }} />
 
                                 <TfiCommentAlt className={style['activity_icon']} />
-                                <div>댓글을 작성한 피드</div>
+                                <div>내가 작성한 댓글</div>
                                 <IoIosArrowForward className={style['activity_icon']} onClick={(e) => { handleMovePage(e, '/my_comment_feed') }} />
 
                                 <IoMdCheckmarkCircleOutline className={style['activity_icon']} />
@@ -174,7 +174,7 @@ function MyPage() {
 
                                 <HiOutlineBellAlert className={style['activity_icon']} />
                                 <div>알림</div>
-                                <IoIosArrowForward className={style['activity_icon']} />
+                                <IoIosArrowForward className={style['activity_icon']} onClick={(e) => { handleMovePage(e, '/my_alerts') }}/>
                             </div>
                         </div>
                     </div>

@@ -310,7 +310,9 @@ const FeedPage = () => {
                                                                             <div>{i}</div>
                                                                             <div>{comment.uname}</div>
                                                                             <div>{comment.body}</div>
-                                                                            <div onClick={(event)=>handleRemoveComment(comment.fid, comment.cid, event)}>삭제</div>
+                                                                            {
+                                                                                comment.owner && (<div onClick={(event) => handleRemoveComment(comment.fid, comment.cid, event)}>삭제</div>)
+                                                                            }                                                
                                                                             <div>신고</div>
                                                                             <div onClick={(event)=>handleCommentLike(comment.fid, comment.cid, event)}>{comment.like}</div>
                                                                         </div>      
@@ -333,10 +335,12 @@ const FeedPage = () => {
 
                                     <div className={style['short_form_container']}>
                                         <div className={style['short_box']}>
-                                            <div className={style['img_circle']}></div>
-                                            <div style={{ height: '80px' }}></div>
+                                            <div className={style['img_circle']}>
+                                                <img src={banner.image[0]} />
+                                            </div>
+                                            <div style={{ height: '110px' }}></div>
                                             {/* <div className={style['short_feed']}> */}
-                                             <Feed className={style['short_feed']} feed={banner} setFeedData={setBanners}></Feed>
+                                             <Feed className={style['short_feed']} feed={banner} setFeedData={setBanners} img_circle={true}></Feed>
                                              
                                             {/* <div className={style['comment_action']}>
                                                         <form onSubmit={(event) => handleSubmit(banner.fid, event)}>

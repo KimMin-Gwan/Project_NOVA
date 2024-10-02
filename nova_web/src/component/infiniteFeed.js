@@ -88,22 +88,19 @@ export default function InfFeed() {
     // let [isClickedStar, setIsClickedStar] = useState(false);
     // let [isClickedComment, setIsClickedComment] = useState(false);
 
-    
 
-   
+
+
 
 
     return (
         <div className={style['scroll-area']}>
             {
-                feedData.map((a, i) => {
+                feedData.map((feed, i) => {
                     // console.log(a);
                     // console.log('class', a.fclass);
                     return (
-                        <>
-                            <Feed key={i} className='' feed={a} func={true} feedData={feedData} setFeedData={setFeedData}></Feed>
-                            {/* <Comments feed={a}></Comments> */}
-                        </>
+                        <Feed key={feed.fid} className='' feed={feed} func={true} feedData={feedData} setFeedData={setFeedData}></Feed>
                     )
                 })
             }
