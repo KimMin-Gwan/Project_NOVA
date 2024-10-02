@@ -1,5 +1,5 @@
 from typing import Any, Optional
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request, File, UploadFile, Form
 from view.master_view import Master_View, RequestHeader
 from view.parsers import Head_Parser
 from view.jwt_decoder import RequestManager
@@ -9,6 +9,7 @@ from others import ConnectionManager as CM
 from others import LeagueManager as LM
 from others import FeedManager as FM
 from websockets.exceptions import ConnectionClosedError
+import json
 
 class Core_Service_View(Master_View):
     def __init__(self, app:FastAPI, endpoint:str,
@@ -311,23 +312,36 @@ class Core_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
-        ## feed 를 만들기
-        #@self.__app.get('/feed_explore/try_edit_feed')
-        #def try_edit_feed(request:Request, raw_request:dict):
-            #request_manager = RequestManager()
+        # feed 를 만들거나 수정하기
+        @self.__app.post('/feed_explore/try_edit_feed')
+        async def try_edit_feed(request:Request, image:UploadFile = File(None), 
+                                jsonData:str = Form(...)):
+            
+            if image is None:
+                image_name = "image_not_exist?"
+                img = None
+            else:
+                image_name = image.filename
+                img = await image.read()
 
-            #data_payload = EditFeedRequest(fid=fid, cid=cid)
-            #request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
-            #if not request_manager.jwt_payload.result:
-                #raise request_manager.credentials_exception
+            raw_request = json.loads(jsonData)
+            request_manager = RequestManager()
 
-            #home_controller=Feed_Controller()
-            #model = home_controller.try_like_comment(database=self.__database,
-                                                        #request=request_manager,
-                                                        #feed_manager=self.__feed_manager)
-            #body_data = model.get_response_form_data(self._head_parser)
-            #response = request_manager.make_json_response(body_data=body_data)
-            #return response
+            data_payload = EditFeedRequest(request=raw_request,
+                                            image_name=image_name,
+                                            image=img)
+            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+            if not request_manager.jwt_payload.result:
+                raise request_manager.credentials_exception
+
+            home_controller=Feed_Controller()
+            model = home_controller.try_edit_feed(database=self.__database,
+                                                        request=request_manager,
+                                                        feed_manager=self.__feed_manager)
+            body_data = model.get_response_form_data(self._head_parser)
+            print(body_data)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
 
 
 
@@ -476,6 +490,17 @@ class FeedInteractionRequest(RequestHeader):
     def __init__(self,fid, action) -> None:
         self.fid=fid 
         self.action = action
+
+class EditFeedRequest(RequestHeader):
+    def __init__(self, request, image_name, image) -> None:
+        super().__init__(request)
+        body = request['body']
+        self.fid = body['fid']
+        self.body = body['body']
+        self.fclass = body ['fclass']
+        self.choice= body['choice']
+        self.image_name = image_name
+        self.image = image
 
 class MakeFeedCommentRequest(RequestHeader):
     def __init__(self, request) -> None:

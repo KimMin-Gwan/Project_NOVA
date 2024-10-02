@@ -170,6 +170,91 @@ def home():
     """
     return html
 
+@app.get('/upload', response_class=HTMLResponse)
+def home():
+    html = """
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Image Upload with JSON</title>
+        </head>
+        <body>
+
+        <h1>Image Upload</h1>
+
+        <!-- 이미지 업로드 폼 -->
+        <form id="uploadForm">
+            <input type="file" id="imageInput" accept="image/*"><br><br>
+            <input type="text" id="titleInput" placeholder="Title"><br><br>
+            <input type="text" id="descriptionInput" placeholder="Description"><br><br>
+            <button type="submit">Upload Image</button>
+        </form>
+
+        <!-- 응답 메시지 출력 -->
+        <p id="message"></p>
+
+        <script>
+        document.getElementById("uploadForm").addEventListener("submit", async function(event) {
+            event.preventDefault();  // 폼의 기본 동작을 막음
+
+            const imageInput = document.getElementById("imageInput");
+            const titleInput = document.getElementById("titleInput");
+            const descriptionInput = document.getElementById("descriptionInput");
+            const messageElement = document.getElementById("message");
+
+            // 파일이 선택되지 않았을 경우 기본 메시지 출력
+            if (!imageInput.files[0]) {
+                messageElement.textContent = "No image selected, using default image.";
+                return;
+            }
+
+            // FormData 객체에 파일과 JSON 데이터를 추가
+            const formData = new FormData();
+            formData.append("image", imageInput.files[0]);
+            formData.append("jsonData", JSON.stringify({
+            header : {
+                "request-type": "default",
+                "client-version": "v1.0.1",
+                "client-ip": "127.0.0.1",
+                "uid": "1234-abcd-5678",
+                "endpoint": "/user_system/",
+                },
+            body: {
+                body : titleInput.value,
+                fid: "",
+                fclass: "balance",
+                choice: ["맞아요", "아니요"]
+                }
+            })); 
+
+            try {
+                // 서버에 POST 요청 보내기
+                const response = await fetch("http://127.0.0.1:4000/feed_explore/try_edit_feed", {
+                    method: "POST",
+                    credentials: 'include', // 쉼표 추가
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    messageElement.textContent = result.message + " Image saved at: " + result.image_path;
+                } else {
+                    messageElement.textContent = "Error: " + result.detail;
+                }
+            } catch (error) {
+                messageElement.textContent = "Upload failed: " + error.message;
+            }
+        });
+        </script>
+
+        </body>
+        </html>
+    """
+    return html
+
 uvicorn.run(app=app, host="127.0.0.1", port =4001)
 
 

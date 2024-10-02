@@ -108,31 +108,36 @@ class FeedMetaModel(BaseModel):
         except Exception as e:
             raise CoreControllerLogicError("response making error | " + e)
 
-# feed 의 메타 정보를 보내주는 모델
+
+# 피드를 생성하거나 수정하는 모델, 삭제에도 사용될 것
 class FeedEditModel(BaseModel):
     def __init__(self, database:Local_Database) -> None:
         super().__init__(database)
         self._result= False
         self._detail = "Somthing goes Bad| Error Code = 422"
 
-    def set_feed_meta_data(self, feed_manager:FeedManager):
-        self._feeds = feed_manager.get_feed_meta_data()
-        return
-    
-    def __make_send_data(self):
-        result = []
-        for fclass in self._feeds:
-            single_data = {
-                "" : fclass.fname,
-            }
-            result.append(single_data)
-        return result
+    def try_edit_feed(self, feed_manager:FeedManager, data_payload):
+        # 만약 fid가 ""가 아니면 수정이나 삭제 요청일것임
+        # 근데 삭제 요청은 여기서 처리 안하니까 반드시 수정일것
+        if data_payload.fid != "":
+            detail, flag = feed_manager.try_modify_feed(
+                user=self._user,
+                data_payload = data_payload)
+        else:
+            detail, flag = feed_manager.try_make_new_feed(
+                user=self._user,
+                data_payload = data_payload)
+
+        self._result = flag
+        self._detail = detail
+
 
     def get_response_form_data(self, head_parser):
         try:
             body = {
-                'feed_meta_data' : self.__make_send_data(),
-            }
+                "result" : self._result,
+                "detail" : self._detail 
+                }
 
             response = self._get_response_data(head_parser=head_parser, body=body)
             return response

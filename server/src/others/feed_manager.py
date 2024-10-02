@@ -3,6 +3,18 @@ from others.data_domain import Feed, User, Comment, ManagedUser
 from datetime import datetime, timedelta
 import string
 import random
+import boto3
+import cv2
+import glob
+import os
+import time
+import numpy as np
+import warnings
+from io import BytesIO
+from PIL import Image
+
+# Boto3의 경고 메시지 무시
+warnings.filterwarnings("ignore", module='boto3.compat')
 
 # 피드를 관리하는 장본인
 
@@ -57,10 +69,10 @@ class FeedManager:
         return datetime.now().strftime("%Y/%m/%d")
     
     def __get_class_name(self, fclass):
-        return self._feedClassManagement.__get_class_name(fclass=fclass)
+        return self._feedClassManagement.get_class_name(fclass=fclass)
 
     # 새로운 fid 만들기
-    def __make_new_fid(self):
+    def __make_new_fid(self, user):
         random_string = "default"
         # 중북되지 않는 fid 만들기
         while True:
@@ -69,41 +81,83 @@ class FeedManager:
             characters = string.ascii_letters + string.digits
 
             # 8자리 랜덤 문자열 생성
-            random_string = ''.join(random.choice(characters) for _ in range(8))
+            random_string = ''.join(random.choice(characters) for _ in range(6))
+
+            fid = user.uid + random_string
 
             for feed in self._managed_feed_list:
-                if feed.fid == random_string:
+                if feed.fid == fid:
                     flag = False
                     break
 
             if flag:
                 break
 
-        return random_string
+        return fid
 
     def get_feed_meta_data(self):
         return self._feedClassManagement.get_fclass_meta_data()
+    
+    def try_modify_feed(self, user, data_payload):
+        print("공사중")
+        pass
 
+    
+    # 피드 새로 만들기
+    def try_make_new_feed(self, user:User, data_payload):
+        managed_user = self._managed_user_table.find_user(user=user)
+
+        # fid 만들기
+        fid = self.__make_new_fid(user=managed_user)
+
+        # 이미지를 업로드 할것
+        image_descriper = ImageDescriper()
+        # 근데 이미지가 없으면 디폴트 이미지로 
+        if data_payload.image_name == "image_not_exist?":
+            image_result, flag = image_descriper.get_default_image_url()
+        else:
+            image_result, flag = image_descriper.try_feed_image_upload(
+                fid=fid, image_name=data_payload.image_name,
+                image=data_payload.image)
+
+        # 이미지 업로드 실패하면
+        if not flag:
+            return image_result, False
+        # 여기서 댓글 허용 같은 부분도 처리해야될것임
+        self.__make_new_feed(user=user,
+                            fid=fid,
+                            fclass=data_payload.fclass,
+                            choice=data_payload.choice,
+                            body=data_payload.body,
+                            image=image_result)
+        
+        #작성한 피드 목록에 넣어주고
+        managed_user.my_feed.append(fid)
+
+        # 끝
+        return "Upload Success", True
+    
     # 새로운 피드 만들기
-    def make_new_feed(self, user:User, fclass, choice, body):
-        # 검증을 위한 코드는 이곳에 작성하시오
+    def __make_new_feed(self, user:User, fid, fclass, choice, body, image):
 
-        new_feed = self.__set_new_feed(user, fclass=fclass,
-                                        choice=choice, body=body)
+        # 검증을 위한 코드는 이곳에 작성하시오
+        new_feed = self.__set_new_feed(user=user, fid=fid, fclass=fclass,
+                                        choice=choice, body=body,
+                                        image=image
+                                        )
         self._database.add_new_data(target_id="fid", new_data=new_feed.get_dict_form_data())
-        mangaed_feed = ManagedFeed()
+        mangaed_feed = ManagedFeed(key=self._num_feed)
         mangaed_feed.fid = new_feed.fid
         mangaed_feed.fclass = new_feed.fclass
         mangaed_feed.category = new_feed.category
-        mangaed_feed.key = self._num_feed
         self._managed_feed_list.append(mangaed_feed)
         self._num_feed += 1
         return
 
     # 새로운 피드의 데이터를 추가하여 반환
-    def __set_new_feed(self, user:User, fclass, choice, body):
+    def __set_new_feed(self, user:User,fid, fclass, choice, body, image):
         new_feed = Feed()
-        new_feed.fid = self.__make_new_fid()
+        new_feed.fid = fid
         new_feed.uid = user.uid
         new_feed.nickname = user.uname
         new_feed.body = body
@@ -113,6 +167,7 @@ class FeedManager:
         new_feed.choice = choice
         new_feed.state = "y"
         new_feed.category = [] # 여기서 카테고리 추가
+        new_feed.image= image
         return new_feed
     
 
@@ -723,7 +778,7 @@ class FeedClassManagement:
             result.append(fclass)
         return result
 
-    def __get_class_name(self, fclass):
+    def get_class_name(self, fclass):
         for instance in self._fclasses:
             if instance.fclass == fclass:
                 return instance.fname
@@ -737,6 +792,11 @@ class FeedClass:
         self.fclass = fclass
         self.fname = fname
         self.specific = specific
+
+    def __call__(self):
+        print("fclass : ", self.fclass )
+        print("fname : ", self.fname)
+        print("specific : ", self.specific)
 
 
 class ManagedFeed:
@@ -816,4 +876,83 @@ class ManagedUserTable:
     def __get_new_ttl(self):
         ttl = datetime.now() + timedelta(seconds=3600)
         return ttl
+
+class ImageDescriper():
+    def __init__(self):
+        self.__path = './model/local_database/feed_temp_image'
+        self.__service_name = 's3'
+        self.__endpoint_url = 'https://kr.object.ncloudstorage.com'
+        self.__region_name = 'kr-standard'
+        self.__access_key = 'eeJ2HV8gE5XTjmrBCi48'
+        self.__secret_key = 'zAGUlUjXMup1aSpG6SudbNDzPEXHITNkEUDcOGnv'
+        self.__s3 = boto3.client(self.__service_name,
+                           endpoint_url=self.__endpoint_url,
+                           aws_access_key_id=self.__access_key,
+                      aws_secret_access_key=self.__secret_key)
+        self.__bucket_name = "nova-feed-images"
+        self.__default_image = "https://kr.object.ncloudstorage.com/nova-feed-images/nova-platform.PNG"
+
+    def _check_image_size(self, img):
+        width, height = img.size
+        if width / height > 3 or height / width > 3:
+            return False
+        else:
+            return True
+    
+    def __set_image_to_byte(self, image):
+        return Image.open(BytesIO(image))
+    
+    def __set_image_to_cv2(self, image):
+        return cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
+    
+    def get_default_image_url(self):
+        return [self.__default_image], True
+
+
+    # 이미지 업로드
+    def try_feed_image_upload(self, fid:str, image_name:str, image):
+        try:
+            byte_img = self.__set_image_to_byte(image=image)
+
+            if not self._check_image_size(img=byte_img):
+                return "image size does not fit in", False
+
+            cv_image = self.__set_image_to_cv2(image=byte_img)
+
+            image_name = f'/{fid}-{image_name}'
+            cv2.imwrite(self.__path+image_name,cv_image)
+
+            self.__s3.upload_file(self.__path+image_name,
+                                    self.__bucket_name ,
+                                    f'{fid}_{image_name}',
+                                    ExtraArgs={'ACL':'public-read'})
+            
+
+            self.delete_temp_image()
+            url = self.__endpoint_url +"/"+ self.__bucket_name + image_name
+
+            return [url], True
+        except Exception as e:
+            print(e)
+            return "Something Goes Bad", False
+
+    # 임시 이미지 파일 지우기
+    def delete_temp_image(self):
+        # 파일이 작성되기 까지 대기 시간
+        time.sleep(0.1)
+
+        # 디렉토리 내의 모든 파일을 찾음
+        files = glob.glob(os.path.join(self.__path, '*'))
+        for file in files:
+            # 파일인지 확인 후 삭제
+            if os.path.isfile(file):
+                os.remove(file)
+        return
+
+
+
+
+
+
+
 
