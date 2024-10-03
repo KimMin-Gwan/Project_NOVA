@@ -32,7 +32,7 @@ const NavBar = () => {
             <div className={`nav-box ${isVisible ? 'visible' : ''}`}>
                 <button className={`nav_button2`}
                     onClick={(e) => {
-                        handleNavigate('/planet')
+                        handleNavigate('/feed_page')
                         handleStopClick(e)
                     }
                     }>행성</button>

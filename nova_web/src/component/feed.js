@@ -9,15 +9,34 @@ import { useState } from 'react';
 
 export default function Feed({ className, feed, func, feedData, setFeedData, img_circle }) {
 
+    // let [isInteraction, setIsInteraction] = useState(false);
+    let [selectedIndex, setSelectedIndex] = useState(null);
+    // let [myAttend, setMyAttend] = useState(null);
+
+    const handleClick = (index) => {
+
+        if (selectedIndex === index) {
+            setSelectedIndex(null);
+        } else {
+            setSelectedIndex(index);
+        }
+    };
+
     function handleInteraction(event, fid, action) {
         event.preventDefault();
 
-        fetch(`https://nova-platform.kr/feed_explore/interaction_feed?fid=${fid}&action=0`, {
+        fetch(`https://nova-platform.kr/feed_explore/interaction_feed?fid=${fid}&action=${action}`, {
             credentials: 'include'
         })
             .then(response => response.json())
             .then(data => {
                 console.log(data);
+                // setMyAttend(data.body.feed[0].attend);
+                setFeedData((prevFeeds) => {
+                    return prevFeeds.map((feed) => {
+                        return feed.fid === fid ? { ...feed, attend: data.body.feed[0].attend, result: data.body.feed[0].result } : feed
+                    })
+                })
             })
     }
 
@@ -110,18 +129,7 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
             })
     }
 
-    let header = {
-        "request-type": "default",
-        "client-version": 'v1.0.1',
-        "client-ip": '127.0.0.1',
-        "uid": '1234-abcd-5678',
-        "endpoint": "/core_system/",
-    }
-
-
-
     return (
-
         <>
             {
                 feed.fclass === 'card' &&
@@ -248,12 +256,29 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                             <ol className={style['quiz_box']}>
                                                 {
                                                     feed.choice.map((choi, i) => {
-                                                        return (
-                                                            <li key={i}>{i + 1}. {choi}
-                                                                <span>{feed.result[i]}</span>
-                                                            </li>
-                                                            // <li key={i}>{i + 1}. {choice}</li>
-                                                        )
+                                                        if (feed.attend === i) {
+
+                                                            return (
+                                                                <li onClick={(e) => {
+                                                                    handleInteraction(e, feed.fid, i)
+                                                                    handleClick(i);
+                                                                }} key={i} style={{ backgroundColor: i === feed.attend ? '#D2C8F7' : 'white' }}>{i + 1}. {choi}
+                                                                    <span>{feed.result[i]}</span>
+                                                                </li>
+                                                            )
+                                                        } else {
+                                                            return (
+                                                                <li onClick={(e) => {
+                                                                    handleInteraction(e, feed.fid, i)
+                                                                    handleClick(i);
+                                                                }} key={i} style={{ backgroundColor: selectedIndex === i ? '#D2C8F7' : 'white' }}>{i + 1}. {choi}
+                                                                    {
+                                                                        feed.attend !== -1 ? <span>{feed.result[i]}</span> : <span></span>
+                                                                    }
+                                                                </li>
+                                                            )
+                                                        }
+                                                        // <li key={i}>{i + 1}. {choice}</li>
                                                     })
                                                 }
                                             </ol>
@@ -336,8 +361,29 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                                 </div>
                                             }
                                             <div className={style['button_container']}>
-                                                <button className={style['select_button']} onClick={(event) => handleInteraction(event, feed.fid)}>{feed.choice[0]} 결과{feed.result[0]}</button>
-                                                <button className={style['select_button']}>{feed.choice[1]} 결과{feed.result[1]}</button>
+                                                {
+                                                    feed.choice.map((sel, i) => {
+                                                        return (
+                                                            <div key={feed.fid + i}>
+                                                                <div>
+                                                                    <button className={style['select_button']} onClick={(event) => {
+                                                                        handleInteraction(event, feed.fid, i)
+                                                                        handleClick(i)
+                                                                    }
+                                                                    } style={{ backgroundColor: i === feed.attend ? '#D2C8F7' : 'white' }}>
+                                                                        {sel} <br />
+                                                                        {
+                                                                            feed.attend !== -1 ? <span>{feed.result[i]}명</span> : <span></span>
+                                                                        }
+                                                                    </button>
+                                                                </div>
+
+                                                            </div>
+                                                            // <button className={style['select_button']}>{feed.choice[1]} 결과{feed.result[1]}</button>
+
+                                                        )
+                                                    })
+                                                }
                                             </div>
                                         </>)
                             }
@@ -582,7 +628,6 @@ export function Comments({ isClickedComment, feed, allComments, setAllComments, 
                         <>
                             <div className={style['comment_support']}>{feed.comment.uname}</div>
                             <div className={style['comment_data']}>{feed.comment.body}</div>
-
                         </>
                     ) :
                         !isClickedComment && (

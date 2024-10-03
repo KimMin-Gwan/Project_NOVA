@@ -88,11 +88,6 @@ export default function InfFeed() {
     // let [isClickedStar, setIsClickedStar] = useState(false);
     // let [isClickedComment, setIsClickedComment] = useState(false);
 
-
-
-
-
-
     return (
         <div className={style['scroll-area']}>
             {
@@ -100,7 +95,7 @@ export default function InfFeed() {
                     // console.log(a);
                     // console.log('class', a.fclass);
                     return (
-                        <Feed key={feed.fid} className='' feed={feed} func={true} feedData={feedData} setFeedData={setFeedData}></Feed>
+                        <Feed key={feed.fid + i} className='' feed={feed} func={true} feedData={feedData} setFeedData={setFeedData}></Feed>
                     )
                 })
             }
