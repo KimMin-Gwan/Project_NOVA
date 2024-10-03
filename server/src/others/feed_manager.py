@@ -504,6 +504,9 @@ class FeedManager:
         return result
 
     def try_interactin_feed(self, user:User, fid:str, action):
+        print(fid)
+        print(action)
+
         managed_user:ManagedUser = self._managed_user_table.find_user(user=user)
         if fid in managed_user.history:
             managed_user.history.remove(fid)
