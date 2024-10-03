@@ -503,7 +503,7 @@ class FeedManager:
         result = self.is_user_interacted(user=managedUser, feeds=[feed])
         return result
 
-    def try_interaction_feed(self, user:User, fid:str, action):
+    def try_interactin_feed(self, user:User, fid:str, action):
         managed_user:ManagedUser = self._managed_user_table.find_user(user=user)
         if fid in managed_user.history:
             managed_user.history.remove(fid)
@@ -929,7 +929,7 @@ class ImageDescriper():
             
 
             self.delete_temp_image()
-            url = self.__endpoint_url +"/"+ self.__bucket_name + image_name
+            url = self.__endpoint_url +"/"+ self.__bucket_name + "/" + fid + "_" + image_name
 
             return [url], True
         except Exception as e:
