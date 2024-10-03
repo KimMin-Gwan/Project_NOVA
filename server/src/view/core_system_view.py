@@ -206,9 +206,6 @@ class Core_Service_View(Master_View):
         # feed 랑 상호작용 -> 버튼을 눌렀을 때 ( 홈 또는 위성 탐색 페이지에서 사용)
         @self.__app.get('/feed_explore/interaction_feed')
         def try_interaction_feed(request:Request, fid:Optional[str], action:Optional[int]):
-            print(fid)
-            print(action)
-
             request_manager = RequestManager()
 
             data_payload = FeedInteractionRequest(fid=fid, action=action)

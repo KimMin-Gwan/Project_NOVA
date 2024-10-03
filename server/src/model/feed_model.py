@@ -21,6 +21,9 @@ class FeedModel(BaseModel):
         return
     
     def try_interact_feed(self, feed_manager:FeedManager, data_payload):
+        print(data_payload.fid)
+        print(data_payload.action)
+
         self._feeds = feed_manager.try_interaction_feed(user=self._user,
                                                     fid=data_payload.fid,
                                                     action=data_payload.action)
