@@ -96,30 +96,28 @@ class FeedManager:
                 break
 
         return fid
+    
+    def try_remove_feed(self, user, data_payload):
+        managedUser = self._managed_user_table.find_user(user=user)
+        
+
+
 
     def get_feed_meta_data(self):
         return self._feedClassManagement.get_fclass_meta_data()
     
+    def check_data_
+    
     def try_modify_feed(self, user, data_payload):
         managed_user = self._managed_user_table.find_user(user=user)
-
-        print(1)
         feed_data=self._database.get_data_with_id(target="fid",id=data_payload.fid)
         feed = Feed()
         feed.make_with_dict(feed_data)
-
-        print(2)
         if feed.uid != managed_user.uid:
             return "NOT_OWNER", False
-        
-        print(3)
         self._database.delete_data_With_id(target="fid", id=feed.fid)
 
-        # 이미지 지우는 로직 있으면 여기다가 추가좀 해야됨
-        print(4)
-
         result, flag = self.try_make_new_feed(user=user, data_payload=data_payload, fid=feed.fid)
-        print(5)
         return result, flag
     
     # 피드 새로 만들기
@@ -274,14 +272,10 @@ class FeedManager:
         #for feed in self._managed_feed_list:
             #feed()
         if user.uid != "":
-            print('im not user')
-            print(user.uid)
             managed_user = self._managed_user_table.find_user(user=user)
             result, result_key = self._get_short_feed_with_user(user=managed_user,key=key, fclass=fclass)
             result = self.is_user_interacted(managed_user, result)
         else:
-            print('im user')
-            print(user.uid)
             result, result_key = self._get_short_feed(key=key, fclass=fclass)
             managed_user = ManagedUser()
             result = self.is_user_interacted(managed_user, result)
@@ -403,17 +397,12 @@ class FeedManager:
 
             # 피드에 참여한 내역이 있는지 확인
             attend = -1
-            print(feed.attend)
-            print(user.uid)
             for i, choice in enumerate(feed.attend):
                 for uid in choice:
-                    print(uid)
                     if uid == user.uid:
-                        print(uid)
                         attend = i
 
             comment = self.__get_feed_comment(user=user, feed=feed)
-            print(attend)
             feed.num_comment = len(feed.comment)
             feed.attend = attend
             feed.comment = comment
