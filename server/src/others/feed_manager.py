@@ -106,7 +106,7 @@ class FeedManager:
     def get_feed_meta_data(self):
         return self._feedClassManagement.get_fclass_meta_data()
     
-    def check_data_
+    #def check_data_
     
     def try_modify_feed(self, user, data_payload):
         managed_user = self._managed_user_table.find_user(user=user)
