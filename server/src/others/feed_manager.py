@@ -508,10 +508,13 @@ class FeedManager:
         print(fid)
         print(action)
         managed_user:ManagedUser = self._managed_user_table.find_user(user=user)
+
+        print("hello")
         if fid in managed_user.history:
             managed_user.history.remove(fid)
+
+        print("hi")
         feed = self.__try_interaction_with_feed(user=managed_user, fid=fid, action=action)
-        print("hello")
 
         return [feed]
         
