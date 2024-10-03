@@ -517,7 +517,6 @@ class FeedManager:
         fid_data = self._database.get_data_with_id(target="fid", id=fid)
         feed = Feed()
         feed.make_with_dict(fid_data)
-        print("1")
 
         # 참여한 기록이 있는지 확인
         # 있으면 지우고, 결과값도 하나 줄여야됨
@@ -526,18 +525,19 @@ class FeedManager:
             for uid in uids:
                 if uid == user.uid:
                     uids.remove(uid)
+                    print(i)
+                    print(uids)
                     target = i
                     break
-        print("2")
 
         if target != -1:
             user.active_feed.remove(fid)
             feed.result[target] -= 1
 
-
-        print("3")
-
         # 이제 참여한 데이터를 세팅하고 저장하면됨
+        print(target)
+        print(action)
+
         if target != action:
             user.active_feed.append(fid)
             feed.attend[action].append(user.uid)
@@ -546,14 +546,13 @@ class FeedManager:
             #user.active_feed.remove(fid)  # 지울 필요가 없어보임 -> 주석 처리됨
             action = -1
 
-        print("4")
         self._database.modify_data_with_id(target_id="fid",
                                             target_data=feed.get_dict_form_data())
-        print("5")
+        
+        print(action)
+
         feed.attend = action
-        print("5")
         feed.comment = self.__get_feed_comment(user=user, feed=feed)
-        print("6")
         return feed
 
     def try_staring_feed(self, user:User, fid:str):
