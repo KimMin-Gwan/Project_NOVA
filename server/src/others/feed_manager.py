@@ -69,7 +69,9 @@ class FeedManager:
         return datetime.now().strftime("%Y/%m/%d")
     
     def __get_class_name(self, fclass):
-        return self._feedClassManagement.get_class_name(fclass=fclass)
+        fname, result = self._feedClassManagement.get_class_name(fclass=fclass)
+        return fname, result
+
 
     # 새로운 fid 만들기
     def __make_new_fid(self, user):
@@ -83,7 +85,7 @@ class FeedManager:
             # 8자리 랜덤 문자열 생성
             random_string = ''.join(random.choice(characters) for _ in range(6))
 
-            fid = user.uid + random_string
+            fid = user.uid + "-" + random_string
 
             for feed in self._managed_feed_list:
                 if feed.fid == fid:
@@ -99,16 +101,35 @@ class FeedManager:
         return self._feedClassManagement.get_fclass_meta_data()
     
     def try_modify_feed(self, user, data_payload):
-        print("공사중")
-        pass
+        managed_user = self._managed_user_table.find_user(user=user)
 
+        print(1)
+        feed_data=self._database.get_data_with_id(target="fid",id=data_payload.fid)
+        feed = Feed()
+        feed.make_with_dict(feed_data)
+
+        print(2)
+        if feed.uid != managed_user.uid:
+            return "NOT_OWNER", False
+        
+        print(3)
+        self._database.delete_data_With_id(target="fid", id=feed.fid)
+
+        # 이미지 지우는 로직 있으면 여기다가 추가좀 해야됨
+        print(4)
+
+        result, flag = self.try_make_new_feed(user=user, data_payload=data_payload, fid=feed.fid)
+        print(5)
+        return result, flag
     
     # 피드 새로 만들기
-    def try_make_new_feed(self, user:User, data_payload):
+    def try_make_new_feed(self, user:User, data_payload, fid = ""):
         managed_user = self._managed_user_table.find_user(user=user)
 
         # fid 만들기
-        fid = self.__make_new_fid(user=managed_user)
+        if fid == "":
+            fid = self.__make_new_fid(user=managed_user)
+
 
         # 이미지를 업로드 할것
         image_descriper = ImageDescriper()
@@ -163,7 +184,7 @@ class FeedManager:
         new_feed.body = body
         new_feed.date = self.__set_datetime()
         new_feed.fclass = fclass
-        new_feed.class_name = self.__get_class_name(fclass=fclass)
+        new_feed.class_name, new_feed.result = self.__get_class_name(fclass=fclass)
         new_feed.choice = choice
         new_feed.state = "y"
         new_feed.category = [] # 여기서 카테고리 추가
@@ -777,29 +798,42 @@ class FeedClassManagement:
     def __set_fclasses(self, fclasses):
         result = []
         for fclass_data in fclasses:
-            fclass = FeedClass(fclass_data[0], fclass_data[1], fclass_data[2])
+            fclass = FeedClass(fclass_data[0], fclass_data[1], fclass_data[2], int(fclass_data[3]))
             result.append(fclass)
         return result
 
     def get_class_name(self, fclass):
+        fname = "None"
+        num_choice = -1
+
         for instance in self._fclasses:
             if instance.fclass == fclass:
-                return instance.fname
+                fname = instance.fname
+                num_choice = instance.num_choice
+                break
+
+        result = []
+        if num_choice != -1:
+            for _ in range(num_choice):
+                result.append(0)
+        return fname, result
             
     def get_fclass_meta_data(self):
         return self._fclasses
 
 
 class FeedClass:
-    def __init__(self, fclass, fname, specific):
+    def __init__(self, fclass, fname, specific, num_choice):
         self.fclass = fclass
         self.fname = fname
         self.specific = specific
+        self.num_choice = num_choice
 
     def __call__(self):
         print("fclass : ", self.fclass )
         print("fname : ", self.fname)
         print("specific : ", self.specific)
+        print("choice : ", self.num_choice)
 
 
 class ManagedFeed:
@@ -828,7 +862,7 @@ class ManagedUserTable:
             user()
 
     # 세션 테이블에서 유저 찾기
-    def find_user(self, user):
+    def find_user(self, user) -> ManagedUser:
         for i, managed_user in enumerate(self._managed_user_list):
             if managed_user.uid == user.uid:
                 self.__refresh_ttl(index=i)
@@ -918,7 +952,7 @@ class ImageDescriper():
             byte_img = self.__set_image_to_byte(image=image)
 
             if not self._check_image_size(img=byte_img):
-                return "image size does not fit in", False
+                return "NOT_FIT_IN", False
 
             cv_image = self.__set_image_to_cv2(image=byte_img)
 

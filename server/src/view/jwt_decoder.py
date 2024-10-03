@@ -100,8 +100,16 @@ class RequestManager(JWTManager):
         self.bad_request_exception= HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Could not Find Page",
-            headers={"WWW-Authenticate" : "Bearer"}
         )
+        self.image_size_exception = HTTPException(
+            status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+            detail="The aspect ratio is over 3:1",
+        )
+        self.system_logic_exception= HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Unprocessable Entity"
+        )
+
 
     def get_bad_request_exception(self):
         return self.bad_request_exception

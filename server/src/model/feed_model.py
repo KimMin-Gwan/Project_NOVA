@@ -130,7 +130,16 @@ class FeedEditModel(BaseModel):
 
         self._result = flag
         self._detail = detail
-
+        return
+    
+    def check_result(self, request_manager):
+        if not self._detail:
+            if self._result == "NOT_FIT_IN":
+                raise request_manager.image_size_exception
+            elif self._result == "NOT_OWNER":
+                raise request_manager.credentials_exception
+            else:
+                raise request_manager.system_logic_exception
 
     def get_response_form_data(self, head_parser):
         try:

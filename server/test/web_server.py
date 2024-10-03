@@ -224,8 +224,8 @@ def home():
             body: {
                 body : titleInput.value,
                 fid: "",
-                fclass: "balance",
-                choice: ["맞아요", "아니요"]
+                fclass: "multiple",
+                choice: ["맞아요", "아니요", "사실 몰라요", "니가 뭘알아"]
                 }
             })); 
 

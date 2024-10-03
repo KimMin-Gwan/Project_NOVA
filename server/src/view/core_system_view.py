@@ -339,11 +339,8 @@ class Core_Service_View(Master_View):
                                                         request=request_manager,
                                                         feed_manager=self.__feed_manager)
             body_data = model.get_response_form_data(self._head_parser)
-            print(body_data)
             response = request_manager.make_json_response(body_data=body_data)
             return response
-
-
 
     def check_route(self):
         # 최애 인증 페이지
@@ -407,8 +404,6 @@ class Core_Service_View(Master_View):
                                                              request=request)
             return html
         
-
-
 
     def web_chatting_route(self, endpoint:str):
         #채팅서버
