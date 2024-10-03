@@ -400,8 +400,10 @@ class FeedManager:
             # 피드에 참여한 내역이 있는지 확인
             attend = -1
             print(feed.attend)
+            print(user.uid)
             for i, choice in enumerate(feed.attend):
                 for uid in choice:
+                    print(uid)
                     if uid == user.uid:
                         print(uid)
                         attend = i
