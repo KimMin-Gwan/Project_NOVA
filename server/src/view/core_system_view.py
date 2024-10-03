@@ -191,8 +191,8 @@ class Core_Service_View(Master_View):
                 raise request_manager.get_bad_request_exception()
             data_payload = GetFeedRequest(fclass=fclass, key=key)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
-            #if not request_manager.jwt_payload.result:
-                #raise request_manager.credentials_exception
+            if not request_manager.jwt_payload.result:
+                raise request_manager.credentials_exception
 
             home_controller=Feed_Controller()
             model = home_controller.get_specific_feed_data(database=self.__database,
