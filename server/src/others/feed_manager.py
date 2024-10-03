@@ -402,9 +402,11 @@ class FeedManager:
             for i, choice in enumerate(feed.attend):
                 for uid in choice:
                     if uid == user.uid:
+                        print(uid)
                         attend = i
-            comment = self.__get_feed_comment(user=user, feed=feed)
 
+            comment = self.__get_feed_comment(user=user, feed=feed)
+            print(attend)
             feed.num_comment = len(feed.comment)
             feed.attend = attend
             feed.comment = comment
