@@ -521,6 +521,8 @@ class FeedManager:
         # 참여한 기록이 있는지 확인
         # 있으면 지우고, 결과값도 하나 줄여야됨
         target = -1
+        print(feed.attend)
+
         for i, uids in enumerate(feed.attend):
             for uid in uids:
                 if uid == user.uid:
