@@ -503,11 +503,16 @@ class FeedManager:
         result = self.is_user_interacted(user=managedUser, feeds=[feed])
         return result
 
-    def try_interactin_feed(self, user:User, fid:str, action):
+    def try_interaction_feed(self, user:User, fid:str, action):
+
+        print(fid)
+        print(action)
         managed_user:ManagedUser = self._managed_user_table.find_user(user=user)
         if fid in managed_user.history:
             managed_user.history.remove(fid)
         feed = self.__try_interaction_with_feed(user=managed_user, fid=fid, action=action)
+        print("hello")
+
         return [feed]
         
     # feed 와 상호작용 -> 선택지를 선택하는 경우
