@@ -47,6 +47,7 @@ class Feed_Controller:
         try:
             # 유저가 있으면 세팅
             if request.jwt_payload != "":
+                print("hello")
                 model.set_user_with_email(request=request.jwt_payload)
             model.set_specific_feed_data(feed_manager=feed_manager,
                                          data_payload=request.data_payload)

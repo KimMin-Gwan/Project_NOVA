@@ -75,6 +75,7 @@ class BaseModel(HeaderModel):
         if not user_data:
             return False
         self._user.make_with_dict(user_data)
+        print(self._user.uid)
         return True
 
     # 가장 근접한 문자열을 찾는 함수
