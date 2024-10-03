@@ -521,14 +521,11 @@ class FeedManager:
         # 참여한 기록이 있는지 확인
         # 있으면 지우고, 결과값도 하나 줄여야됨
         target = -1
-        print(feed.attend)
 
         for i, uids in enumerate(feed.attend):
             for uid in uids:
                 if uid == user.uid:
                     uids.remove(uid)
-                    print(i)
-                    print(uids)
                     target = i
                     break
 
@@ -537,9 +534,6 @@ class FeedManager:
             feed.result[target] -= 1
 
         # 이제 참여한 데이터를 세팅하고 저장하면됨
-        print(target)
-        print(action)
-
         if target != action:
             user.active_feed.append(fid)
             feed.attend[action].append(user.uid)
@@ -551,8 +545,6 @@ class FeedManager:
         self._database.modify_data_with_id(target_id="fid",
                                             target_data=feed.get_dict_form_data())
         
-        print(action)
-
         feed.attend = action
         feed.comment = self.__get_feed_comment(user=user, feed=feed)
         return feed
