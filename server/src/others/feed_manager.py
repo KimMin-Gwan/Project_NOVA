@@ -274,10 +274,14 @@ class FeedManager:
         #for feed in self._managed_feed_list:
             #feed()
         if user.uid != "":
+            print('im not user')
+            print(user.uid)
             managed_user = self._managed_user_table.find_user(user=user)
             result, result_key = self._get_short_feed_with_user(user=managed_user,key=key, fclass=fclass)
             result = self.is_user_interacted(managed_user, result)
         else:
+            print('im user')
+            print(user.uid)
             result, result_key = self._get_short_feed(key=key, fclass=fclass)
             managed_user = ManagedUser()
             result = self.is_user_interacted(managed_user, result)
