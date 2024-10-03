@@ -919,10 +919,10 @@ class ImageDescriper():
 
             cv_image = self.__set_image_to_cv2(image=byte_img)
 
-            image_name = f'/{fid}-{image_name}'
-            cv2.imwrite(self.__path+image_name,cv_image)
+            #image_name = f'/{fid}-{image_name}'
+            cv2.imwrite(self.__path+f'/{fid}_{image_name}',cv_image)
 
-            self.__s3.upload_file(self.__path+image_name,
+            self.__s3.upload_file(self.__path+f'/{fid}_{image_name}',
                                     self.__bucket_name ,
                                     f'{fid}_{image_name}',
                                     ExtraArgs={'ACL':'public-read'})
