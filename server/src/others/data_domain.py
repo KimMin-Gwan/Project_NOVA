@@ -424,7 +424,7 @@ class ManagedUser:
             self.my_comment:list =copy.copy(dict_data['my_comment'])
             self.active_feed:list =copy.copy(dict_data['active_feed'])
             self.feed_key = dict_data['feed_key']
-            self.comment_key = dict_data['commnet_key']
+            self.comment_key = dict_data['comment_key']
         except KeyError as e:
             raise DictMakingError(error_type=f"Missing key: {str(e)}")
 
