@@ -639,7 +639,10 @@ class FeedManager:
     # 이건 카테고리에 있는 단일 피드 뽑는 함수
     def pick_single_feed_with_category(self, user, category, fclass="None"):
         target = None
-        print(self._managed_feed_list)
+
+        for data in self._managed_feed_list:
+            print(data.fid)
+
 
         for managed_feed in reversed(self._managed_feed_list):
             if fclass != "None":
