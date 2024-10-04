@@ -131,6 +131,13 @@ class FeedEditModel(BaseModel):
         self._result = flag
         self._detail = detail
         return
+
+    def try_delete_feed(self, feed_manager:FeedManager, data_payload):
+        detail, flag = feed_manager.try_remove_feed(user=self._user, fid=data_payload.fid)
+
+        self._result = flag
+        self._detail = detail
+        return
     
     def check_result(self, request_manager):
         if not self._detail:

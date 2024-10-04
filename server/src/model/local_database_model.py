@@ -1,5 +1,6 @@
 import json
 from others import DatabaseLogicError
+from copy import copy
 
 
 class Local_Database:
@@ -14,7 +15,9 @@ class Local_Database:
             'user_file' : 'user.json',
             'managed_user_file' : 'managed_user.json',
             'comment_file' : 'comment.json',
-            'alert_file' : 'alert.json'
+            'alert_file' : 'alert.json',
+            'trash_fid_file' : 'trash_fid.json',
+            'trash_cid_file' : 'trash_cid.json'
         }
         self.__read_json()
 
@@ -28,10 +31,14 @@ class Local_Database:
         self.__managed_user_data = []
         self.__comment_data = []
         self.__alert_data = []
+        self.__trash_fid_data = []
+        self.__trash_cid_data = []
+
 
         data_list = [self.__banner_data, self.__bias_data, self.__feed_data,
                       self.__league_data, self.__name_card_data, self.__user_data,
-                      self.__managed_user_data, self.__comment_data, self.__alert_data ]
+                      self.__managed_user_data, self.__comment_data, self.__alert_data,
+                      self.__trash_fid_data, self.__trash_cid_data, ]
 
         for file_name, list_data in zip(self.__data_files.values(), data_list):
             with open(self.__db_file_path+file_name, 'r',  encoding='utf-8' )as f:
@@ -98,6 +105,18 @@ class Local_Database:
         self.__save_json(file_name, self.__alert_data)
         return
 
+    # 저장하기
+    def __save_trash_fid_json(self):
+        file_name = self.__data_files['trash_fid_file']
+        self.__save_json(file_name, self.__trash_fid_data)
+        return
+
+    # 저장하기
+    def __save_trash_cid_json(self):
+        file_name = self.__data_files['trash_cid_file']
+        self.__save_json(file_name, self.__trash_cid_data)
+        return
+
     # db.get_data_with_key(target="user", key="uname", key_data="minsu")
     def get_data_with_key(self, target:str, key:str, key_data:str):
         try:
@@ -151,6 +170,23 @@ class Local_Database:
 
     def get_all_data(self, target):
         return self._select_target_list(target=target)
+    
+    def get_trash_fids(self):
+        return copy(self.__trash_fid_data)
+
+    def get_trash_cids(self):
+        return copy(self.__trash_cid_data)
+
+    def set_trash_fids(self, fids):
+        self.__trash_fid_data = copy(fids)
+        self.__save_trash_fid_json()
+        return 
+
+    def set_trash_cids(self, cids):
+        self.__trash_cid_data = copy(cids)
+        self.__save_trash_cid_json()
+        return 
+
 
     def _select_target_list(self, target:str):
         if target == "baid" or target == "banner":
@@ -254,6 +290,35 @@ class Local_Database:
                 return False
             
             target_list.pop(target_index)
+            func = self._select_save_function(target=target)
+            func()
+            return True
+
+        except Exception as e:
+            print(e)
+            raise DatabaseLogicError(error_type="delete_data_with_id error | " + str(e))
+
+    #데이터 한번에 여러개 삭제
+    def delete_datas_with_ids(self,target:str, ids:str):
+        try:
+            target_indexes = []
+    
+            target_list = self._select_target_list(target=target)
+
+            for i, data in enumerate(target_list):
+                if data[target] in ids:
+                    target_indexes.append(i)
+
+                if len(ids) == len(target_indexes):
+                    break
+
+            # 요청한 삭제 데이터 길이랑 찾은 데이터 길이가 다르면 지우지 말고 걍 실패
+            if len(ids) != len(target_indexes):
+                return False
+            
+            for index in target_indexes:
+                target_list.pop(index)
+
             func = self._select_save_function(target=target)
             func()
             return True

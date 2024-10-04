@@ -401,25 +401,30 @@ class Comment(SampleDomain):
 # 유저 특화 시스템 구성을 위한 관리 유저
 class ManagedUser:
     def __init__(self, uid="", option=[], history=[], star=[],
-                 my_feed = [], my_comment = [], active_feed=[]):
+                 my_feed = [], my_comment = [], active_feed=[],
+                 feed_key = 0, comment_key = 0):
         self.uid = uid
         self.option = copy.copy(option)
-        self.history = copy.copy(history)
+        self.history:list = copy.copy(history)
         self.ttl= 0
-        self.star= copy.copy(star)
-        self.my_feed = copy.copy(my_feed)
-        self.my_comment = copy.copy(my_comment)
-        self.active_feed = copy.copy(active_feed)
+        self.star:list= copy.copy(star)
+        self.my_feed:list= copy.copy(my_feed)
+        self.my_comment:list = copy.copy(my_comment)
+        self.active_feed:list = copy.copy(active_feed)
+        self.feed_key = feed_key
+        self.comment_key = comment_key
 
     def make_with_dict(self, dict_data):
         try:
             self.uid = dict_data['muid']
             self.option = copy.copy(dict_data['option'])
-            self.history = copy.copy(dict_data['history'])
-            self.star = copy.copy(dict_data['star'])
-            self.my_feed = copy.copy(dict_data['my_feed'])
-            self.my_comment =copy.copy(dict_data['my_comment'])
-            self.active_feed =copy.copy(dict_data['active_feed'])
+            self.history:list = copy.copy(dict_data['history'])
+            self.star:list = copy.copy(dict_data['star'])
+            self.my_feed:list = copy.copy(dict_data['my_feed'])
+            self.my_comment:list =copy.copy(dict_data['my_comment'])
+            self.active_feed:list =copy.copy(dict_data['active_feed'])
+            self.feed_key = dict_data['feed_key']
+            self.comment_key = dict_data['commnet_key']
         except KeyError as e:
             raise DictMakingError(error_type=f"Missing key: {str(e)}")
 
@@ -436,7 +441,9 @@ class ManagedUser:
             "star" : copy.copy(self.star),
             "my_feed" : copy.copy(self.my_feed),
             "my_comment" : copy.copy(self.my_comment),
-            "active_feed" : copy.copy(self.active_feed)
+            "active_feed" : copy.copy(self.active_feed),
+            "feed_key" : self.feed_key,
+            "comment_key" : self.comment_key
         }
     
 

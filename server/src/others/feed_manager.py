@@ -97,17 +97,37 @@ class FeedManager:
 
         return fid
     
-    def try_remove_feed(self, user, data_payload):
-        managedUser = self._managed_user_table.find_user(user=user)
-        
+    def try_remove_feed(self, user, fid):
+        managed_user = self._managed_user_table.find_user(user=user)
+        feed_data=self._database.get_data_with_id(target="fid",id=fid)
+        feed = Feed()
+        feed.make_with_dict(feed_data)
+        if feed.uid != managed_user.uid:
+            return "NOT_OWNER", False
 
+        comment_datas = self._database.get_datas_with_ids(target_id="cid", ids=feed.comment)
+        comments = []
+        for comment_data in comment_datas:
+            comment = Comment()
+            comment.make_with_dict(comment_data)
+            comments.append(comment)
 
+        cids = []
+        for c in comments:
+            cids.append(c.cid)
+
+        if not self._database.delete_datas_with_ids(target="cid", ids=cids):
+            return "DATABASE_ERROR", False
+        self._managed_user_table.add_trash_comment_cids(cids=cids)
+
+        if not self._database.delete_data_with_id(target="fid", id=feed.fid):
+            return "DATABASE_ERROR", False
+        self._managed_user_table.add_trash_feed_fid(fid=feed.fid)
+        return "COMPLETE", True
 
     def get_feed_meta_data(self):
         return self._feedClassManagement.get_fclass_meta_data()
-    
-    #def check_data_
-    
+
     def try_modify_feed(self, user, data_payload):
         managed_user = self._managed_user_table.find_user(user=user)
         feed_data=self._database.get_data_with_id(target="fid",id=data_payload.fid)
@@ -619,6 +639,8 @@ class FeedManager:
     # 이건 카테고리에 있는 단일 피드 뽑는 함수
     def pick_single_feed_with_category(self, user, category, fclass="None"):
         target = None
+        print(self._managed_feed_list)
+
         for managed_feed in reversed(self._managed_feed_list):
             if fclass != "None":
                 if managed_feed.fclass != fclass:
@@ -656,7 +678,6 @@ class FeedManager:
             feeds.append(feed)
             if feed.fid == fid:
                 target = i
-
 
         if target != -1:
             feeds = feeds[target+1:]
@@ -853,6 +874,7 @@ class ManagedUserTable:
         self.__key = 0  # ttl 체크용 index key
         self._managed_user_list = []
         self._database= database
+        self.__trash_table = TrashTable(database=database)
 
     # 리스트 보여주기
     def __call__(self):
@@ -870,6 +892,7 @@ class ManagedUserTable:
     
     # 유저 데이터 반환
     def get_user_data(self, index):
+        self.__set_trash_table(self._managed_user_list[index])
         return self._managed_user_list[index]
 
     # 테이블에 유저 추가하기
@@ -911,6 +934,88 @@ class ManagedUserTable:
     def __get_new_ttl(self):
         ttl = datetime.now() + timedelta(seconds=3600)
         return ttl
+    
+    # 유저를 찾을 때 마다 이짓을 반복해야됨
+    # 그럼 효율이 좋을 것이라 판단
+    def __set_trash_table(self, user:ManagedUser):
+        if self.__trash_table.clean_up_managed_user_data(user=user):
+            self._database.modify_data_with_id("muid", target_data=user.get_dict_form_data())
+        return
+
+    def add_trash_feed_fid(self, fid:str):
+        self.__trash_table.add_trash_feed_fid(fid)
+        return
+
+    # 데이터가 삭제되면 추가됨 여긴 리스트로 받아야됨
+    def add_trash_comment_cids(self, cids:list):
+        self.__trash_table.add_trash_comment_cids(cids)
+        return
+
+# 피드 삭제에 대응하기 위한 대책
+# 기존에 삭제 방침은 데이터의 무결성을 유지하기 매우 어려움
+# 특히 star를 표시한 피드와 active_feed, my_comment 등을 제제 하기 어려움
+# 이에 TrashFeedTable과 TrashCommentTable을 만들어 체크하도록 하였음
+
+class TrashTable:
+    def __init__(self, database):
+        self.__trash_feed_fids = []
+        self.__trash_comment_cids = []
+        self.__num_feed_trash = 0
+        self.__num_comment_trash = 0
+        self.__database = database
+        self.__set_init_data(database=database)
+        return
+
+    def __set_init_data(self, database):
+        self.__trash_feed_fids = database.get_trash_fids()
+        self.__trash_comment_cids = database.get_trash_cids()
+        self.__num_feed_trash = len(self.__trash_feed_fids)
+        self.__num_comment_trash = len(self.__trash_comment_cids)
+        return
+
+    # 데이터가 삭제되면 추가됨
+    def add_trash_feed_fid(self, fid:str):
+        self.__trash_feed_fids.append(fid)
+        self.__num_feed_trash += 1
+        self.__database.set_trash_fids(self.__trash_feed_fids)
+        return 
+
+    # 데이터가 삭제되면 추가됨 여긴 리스트로 받아야됨
+    def add_trash_comment_cids(self, cids:list):
+        self.__trash_comment_cids.extend(cids)
+        self.__num_comment_trash += 1
+        self.__database.set_trash_cids(self.__trash_comment_cids)
+        return
+
+    def clean_up_managed_user_data(self, user:ManagedUser):
+        if self.__num_feed_trash == user.feed_key and self.__num_comment_trash == user.comment_key:
+            return False
+        else:
+            user.feed_key += self.__clean_up_feed_data_in_manage_user(user=user)
+            user.comment_key += self.__clean_up_comment_data_in_manage_user(user=user)
+            return True
+
+    def __clean_up_feed_data_in_manage_user(self, user:ManagedUser):
+        count = 0
+        for i in range(user.feed_key, self.__num_feed_trash):
+            if self.__trash_feed_fids[i] in user.star:
+                user.star.remove(self.__trash_feed_fids[i])
+            if self.__trash_feed_fids[i] in user.active_feed:
+                user.active_feed.remove(self.__trash_feed_fids[i])
+            if self.__trash_feed_fids[i] in user.history:
+                user.history.remove(self.__trash_feed_fids[i])
+            if self.__trash_feed_fids[i] in user.my_feed:
+                user.my_feed.remove(self.__trash_feed_fids[i])
+            count += 1
+        return count
+        
+    def __clean_up_comment_data_in_manage_user(self, user:ManagedUser):
+        count = 0
+        for i in range(user.comment_key, self.__num_comment_trash):
+            if self.__trash_comment_cids[i] in user.my_comment:
+                user.my_comment.remove(self.__trash_feed_fids[i])
+        return count
+        
 
 class ImageDescriper():
     def __init__(self):

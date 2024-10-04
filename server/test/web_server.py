@@ -64,7 +64,7 @@ def home():
             async function testNumberEndpoint() {
                 const number = document.getElementById('numberInput').value;
                 try {
-                    const response = await fetch(`http://127.0.0.1:4000/user_home/try_login`, {
+                    const response = await fetch(`https://nova-platform.kr/user_home/try_login`, {
                         method: 'POST',
                         credentials: 'include', // 쉼표 추가
                         headers: {
@@ -231,7 +231,7 @@ def home():
 
             try {
                 // 서버에 POST 요청 보내기
-                const response = await fetch("http://127.0.0.1:4000/feed_explore/try_edit_feed", {
+                const response = await fetch("https://nova-platform.kr/feed_explore/try_edit_feed", {
                     method: "POST",
                     credentials: 'include', // 쉼표 추가
                     body: formData
