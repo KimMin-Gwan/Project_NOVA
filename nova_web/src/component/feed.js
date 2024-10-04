@@ -5,9 +5,15 @@ import planet3 from './../img/planet3.png';
 import planet4 from './../img/planet4.png';
 import { useState } from 'react';
 // import {}
+import { FaStar } from "react-icons/fa";
+
 // import { useRef, useState } from 'react';
 
 export default function Feed({ className, feed, func, feedData, setFeedData, img_circle }) {
+
+    // function handleRequestURL() {
+    //     window.open(requestURL, '_blank', "noopener, noreferrer");
+    // };
 
     // let [isInteraction, setIsInteraction] = useState(false);
     let [selectedIndex, setSelectedIndex] = useState(null);
@@ -48,17 +54,20 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
     };
 
 
+    let [isClickedStar, setIsClickedStar] = useState(false);
+
     function handleCheckStar(fid, e) {
-        e.preventDefault();
-        // setIsClickedStar(!isClickedStar);
+        // e.preventDefault();
+        setIsClickedStar(!isClickedStar);
         fetch(`https://nova-platform.kr/feed_explore/check_star?fid=${fid}`, {
             credentials: 'include',
         })
             .then(response => response.json())
             .then(data => {
+                console.log('clickstar', data)
                 setFeedData((prevFeeds) => {
                     return prevFeeds.map((feed) => {
-                        return feed.fid === fid ? { ...feed, star: data.body.feed[0].star } : feed
+                        return feed.fid === fid ? { ...feed, star_flag: data.body.feed[0].star_flag, star: data.body.feed[0].star } : feed
                     })
                 })
             })
@@ -83,6 +92,7 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
     };
 
     let [isClickedLikeBtn, setIsClickedLikeBtn] = useState(false);
+
     let [commentLikes, setCommentLikes] = useState(0);
 
     // 댓글 좋아요 기능
@@ -98,10 +108,11 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
 
                 setAllComments((prevAll) => {
                     return prevAll.map((comment, i) => {
-                        return comment.cid === cid ? { ...comment, like: data.body.comments[i].like } : comment
+                        return comment.cid === cid ? { ...comment, like: data.body.comments[i].like, like_user: data.body.comments[i].like_user } : comment
                     })
                 })
                 setCommentLikes(data.body.comments);
+
             })
     }
 
@@ -158,7 +169,13 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                                                         }
                                                                         <div className={style['report_star_btn']}>
                                                                             <div>신고</div>
-                                                                            <div onClick={(event) => handleCommentLike(comment.fid, comment.cid, event)}>{comment.like}</div>
+                                                                            <div className={style['star_num']}>
+                                                                                <FaStar style={comment.like_user ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
+                                                                                    onClick={(event) => handleCommentLike(comment.fid, comment.cid, event)} />
+                                                                                <div style={{ marginLeft: '2px' }}>
+                                                                                    {comment.like}
+                                                                                </div>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -198,7 +215,11 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                             )
                                         }
                                     </div>
-                                    <div className={style['like_btn']} onClick={(e) => { handleCheckStar(feed.fid, e) }}>좋아요 {feed.star}</div>
+                                    <div className={style['like_btn']}>
+                                        <FaStar style={feed.star_flag ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
+                                            onClick={(e) => { handleCheckStar(feed.fid, e) }} />
+                                        {feed.star}
+                                    </div>
                                 </div>
                             )
                         }
@@ -234,7 +255,13 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                                                         }
                                                                         <div className={style['report_star_btn']}>
                                                                             <div>신고</div>
-                                                                            <div onClick={(event) => handleCommentLike(comment.fid, comment.cid, event)}>{comment.like}</div>
+                                                                            <div className={style['star_num']}>
+                                                                                <FaStar style={comment.like_user ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
+                                                                                    onClick={(event) => handleCommentLike(comment.fid, comment.cid, event)} />
+                                                                                <div style={{ marginLeft: '2px' }}>
+                                                                                    {comment.like}
+                                                                                </div>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -305,7 +332,11 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                             )
                                         }
                                     </div>
-                                    <div className={style['like_btn']} onClick={(e) => { handleCheckStar(feed.fid, e) }}>좋아요 {feed.star}</div>
+                                    <div className={style['like_btn']}>
+                                        <FaStar style={feed.star_flag ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
+                                            onClick={(e) => { handleCheckStar(feed.fid, e) }} />
+                                        {feed.star}
+                                    </div>
                                 </div>
                             )
                         }
@@ -340,7 +371,13 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                                                         }
                                                                         <div className={style['report_star_btn']}>
                                                                             <div>신고</div>
-                                                                            <div onClick={(event) => handleCommentLike(comment.fid, comment.cid, event)}>{comment.like}</div>
+                                                                            <div className={style['star_num']}>
+                                                                                <FaStar style={comment.like_user ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
+                                                                                    onClick={(event) => handleCommentLike(comment.fid, comment.cid, event)} />
+                                                                                <div style={{ marginLeft: '2px' }}>
+                                                                                    {comment.like}
+                                                                                </div>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -407,7 +444,11 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                             )
                                         }
                                     </div>
-                                    <div className={style['like_btn']} onClick={(e) => { handleCheckStar(feed.fid, e) }}>좋아요 {feed.star}</div>
+                                    <div className={style['like_btn']}>
+                                        <FaStar style={feed.star_flag ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
+                                            onClick={(e) => { handleCheckStar(feed.fid, e) }} />
+                                        {feed.star}
+                                    </div>
                                 </div>
                             )
                         }
@@ -443,7 +484,14 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                                                         }
                                                                         <div className={style['report_star_btn']}>
                                                                             <div>신고</div>
-                                                                            <div onClick={(event) => handleCommentLike(comment.fid, comment.cid, event)}>{comment.like}</div>
+                                                                            <div className={style['star_num']}>
+                                                                                <FaStar style={comment.like_user ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
+                                                                                    onClick={(event) => handleCommentLike(comment.fid, comment.cid, event)} />
+                                                                                <div style={{ marginLeft: '2px' }}>
+                                                                                    {comment.like}
+                                                                                </div>
+                                                                            </div>
+                                                                            {/* <div onClick={(event) => handleCommentLike(comment.fid, comment.cid, event)}>{comment.like}</div> */}
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -463,9 +511,13 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                                 </div>
                                             }
 
-                                            <div className={style['link_box']}>
+                                            <div className={style['link_box']}
+                                                onClick={() => {
+                                                    window.open(feed.choice[2], '_blank', "noopener, noreferrer");
+                                                }}>
                                                 <h1>{feed.choice[0]}</h1>
                                                 <h5>{feed.choice[1]}</h5>
+                                                <h5>{feed.choice[2]}</h5>
                                             </div>
                                         </>
                                     )
@@ -489,7 +541,11 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                             )
                                         }
                                     </div>
-                                    <div className={style['like_btn']} onClick={(e) => { handleCheckStar(feed.fid, e) }}>좋아요 {feed.star}</div>
+                                    <div className={style['like_btn']}>
+                                        <FaStar style={feed.star_flag ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
+                                            onClick={(e) => { handleCheckStar(feed.fid, e) }} />
+                                        {feed.star}
+                                    </div>
                                 </div>
                             )
                         }

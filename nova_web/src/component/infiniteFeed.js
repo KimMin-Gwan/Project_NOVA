@@ -22,6 +22,7 @@ export default function InfFeed() {
         })
             .then(response => response.json())
             .then(data => {
+                console.log('first feed 3개', data.body);
                 setFeedData(data.body.feed);
                 setNextData(data.body.key);
                 setIsLoading(false);

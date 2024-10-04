@@ -11,7 +11,7 @@ import Feed, {
 
 import style from "./FeedPage.module.css";
 import stylePlanet from "./../PlanetPage/Planet.module.css";
-import { CiStar } from "react-icons/ci";
+import { FaStar } from "react-icons/fa";
 import { TfiCommentAlt } from "react-icons/tfi";
 import { PiShareFatLight } from "react-icons/pi";
 import { MdOutlineReportProblem } from "react-icons/md";
@@ -160,7 +160,7 @@ const FeedPage = () => {
         setBanners((prevBanners) => {
           return prevBanners.map((banner) => {
             return banner.fid === fid
-              ? { ...banner, star: data.body.feed[0].star }
+              ? { ...banner, star: data.body.feed[0].star, star_flag: data.body.feed[0].star_flag }
               : banner;
           });
         });
@@ -262,7 +262,7 @@ const FeedPage = () => {
         setAllComments((prevAll) => {
           return prevAll.map((comment, i) => {
             return comment.cid === cid
-              ? { ...comment, like: data.body.comments[i].like }
+              ? { ...comment, like: data.body.comments[i].like, like_user: data.body.comments[i].like_user }
               : comment;
           });
         });
@@ -349,7 +349,13 @@ const FeedPage = () => {
                                       }
                                       <div className={style['report_star_btn']}>
                                         <div>신고</div>
-                                        <div onClick={(event) => handleCommentLike(comment.fid, comment.cid, event)}>{comment.like}</div>
+                                        <div className={style['star_num']}>
+                                          <FaStar style={comment.like_user ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
+                                            onClick={(event) => handleCommentLike(comment.fid, comment.cid, event)} />
+                                          <div style={{ marginLeft: '2px' }}>
+                                            {comment.like}
+                                          </div>
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
@@ -377,7 +383,6 @@ const FeedPage = () => {
                       <img src={banner.image[0]} />
                     </div>
                     <div style={{ height: "110px" }}></div>
-                    {/* <div className={style['short_feed']}> */}
                     <Feed
                       className={style["short_feed"]}
                       feed={banner}
@@ -393,7 +398,8 @@ const FeedPage = () => {
                           handleCheckStar(banner.fid, i);
                         }}
                       >
-                        <CiStar className={style["func_btn_img"]} />
+                        <FaStar className={style["func_btn_img"]} style={banner.star_flag ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }} />
+                        {/* <FaStar className={style["func_btn_img"]} /> */}
                       </button>
                       {/* <p>{numStar[i]}</p> */}
                       <p>{banner.star}</p>
