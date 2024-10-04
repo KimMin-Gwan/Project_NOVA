@@ -640,10 +640,6 @@ class FeedManager:
     def pick_single_feed_with_category(self, user, category, fclass="None"):
         target = None
 
-        for data in self._managed_feed_list:
-            print(data.fid)
-
-
         for managed_feed in reversed(self._managed_feed_list):
             if fclass != "None":
                 if managed_feed.fclass != fclass:
