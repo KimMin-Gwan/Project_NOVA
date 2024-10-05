@@ -116,7 +116,7 @@ class NameCardMaker:
 
         # 5. 배경 이미지 크기를 42% 줄이기
         new_size = (int(img_pil.width * 0.58), int(img_pil.height * 0.58))  # 가로와 세로 70%로 줄임
-        img_pil = img_pil.resize(new_size, Image.ANTIALIAS)
+        img_pil = img_pil.resize(new_size, Image.LANCZOS)
 
         # 텍스트 내용
         text1 = f"{bias.bname}님 오늘도 팬이에요!"
@@ -138,7 +138,7 @@ class NameCardMaker:
 
         check_img = Image.open(f"./check_image.png").convert("RGBA")
         check_img_size = (int(check_img.width * 0.4), int(check_img.height * 0.4))
-        check_img = check_img.resize(check_img_size, Image.ANTIALIAS)
+        check_img = check_img.resize(check_img_size, Image.LANCZOS)
 
         # 6. 이미지에 한글 텍스트 추가 (Pillow 이미지로 처리)
         draw = ImageDraw.Draw(img_pil)
