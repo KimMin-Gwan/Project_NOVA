@@ -1,5 +1,5 @@
 import style from "./MoreSee.module.css";
-import backword from "./../../img/backword.png";
+import backword from "./../../img/back_icon.png";
 import vector from "./../../img/Vector.png";
 import x_icon from "./../../img/x_color.png";
 import discord_icon from "./../../img/discord_color.png";
@@ -44,6 +44,7 @@ function MoreSee() {
           <div className={style.TitleBox}>
             <p className={style.titleName}> 더보기 </p>
           </div>
+          <div className={style.EmptyBox} />
         </div>
 
         <div className={style.content}>

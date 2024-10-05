@@ -13,7 +13,7 @@
 .container {
   max-width: 500px;
   /* 너비를 원하는 비율로 설정 */
-  height: 200vw;
+  height: 90px;
   margin: 0 auto;
   /*max-width: 1200px; /* 최대 너비를 설정 */
   background-color: #eee9fc; /* 배경색을 원하는 색으로 변경 가능 */
@@ -21,7 +21,7 @@
 }
 .TopBar {
   width: 100%; /* 너비를 원하는 비율로 설정 */
-  height: 38px;
+  height: 60px;
   margin: 0 auto;
   /*max-width: 1200px; /* 최대 너비를 설정 */
   background-color: #ffffff; /* 배경색을 원하는 색으로 변경 가능 */
@@ -32,7 +32,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between; /* 좌우 공간을 동일하게 분배 */
-  padding: 10px 15px;
+  padding: 5px 15px;
   box-sizing: border-box;
 }
 .backword {
@@ -42,9 +42,9 @@
 }
 
 .TitleBox {
-  width: 100%;
-  height: 38px;
-  margin-bottom: 15px;
+  position: absolute; /* 절대 위치로 중앙 정렬 */
+  left: 50%; /* 부모의 50% 위치 */
+  transform: translateX(-50%);
   color: white;
 }
 
@@ -65,10 +65,11 @@
   background-color: #ffffff;
   /*text-align: center; /* 텍스트 가운데 정렬 */
   padding-top: 10px;
+  /* box-sizing: border-box; */
 }
 
 .mainComponent {
-  width: calc(50% - 10px); /* 두 개가 한 줄에 오도록 너비 조정 */
+  width: calc(50% - 20px); /* 두 개가 한 줄에 오도록 너비 조정 */
   height: 134px;
   background-color: #cccfff;
   display: flex;
@@ -81,13 +82,13 @@
 }
 
 .fullWidthComponent {
-  width: calc(100% - 20px);
+  width: calc(100% - 40px);
   height: 134px;
-  background-color: #cccfff;
+  background-color: #98a0ff;
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  margin: 10px;
+  margin: 5px 20px;
   border-radius: 15px;
   flex-direction: column;
 }
@@ -95,6 +96,7 @@
 .row {
   display: flex;
   justify-content: space-between;
+  padding: 0 10px;
 }
 
 .bodyText {
