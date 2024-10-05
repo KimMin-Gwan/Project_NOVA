@@ -5,6 +5,8 @@ import time
 import os
 import glob
 import copy
+from PIL import Image, ImageDraw, ImageFont
+import numpy as np
 
 class Bias():
     def __init__(self, bid="", type="", bname="", category=[], birthday="", debut="",
@@ -85,9 +87,6 @@ class Bias():
             'group_member_bids':copy.copy(self.group_memeber_bids)
         }
 
-
-
-# 명함 제조기
 class NameCardMaker:
     def __init__(self):
         self.__path = './model/local_database/'
@@ -101,84 +100,74 @@ class NameCardMaker:
                            aws_access_key_id=self.__access_key,
                       aws_secret_access_key=self.__secret_key)
 
-    def make_name_card(self, bias:Bias, user:User): 
-        # 네임카드 만드는 부분
-        # 네임카드 포함 내용은 아래와 같다
-        # 내용 : user.uid, bias.name, bias.fanname, user.solo_point(group_point), 최애 사진
-        #        user.solo_combo(group_combo), 오늘 날짜 등... 넣고싶은거 아무거나 넣어도댐
-
-        # 1. 백그라운드 이미지  불러오기
-        img = self.__name_card_backgroud_image(user.select_name_card)
+    def make_name_card(self, bias: Bias, user): 
+        # 1. 백그라운드 이미지 불러오기
+        img = self.__name_card_backgroud_image()
 
         # 2. 바이어스 이미지 받아오기
-        self.__s3.download_file('nova-images',f'{bias.bid}.PNG',f'{self.__path}temp_files/{bias.bid}.png')
+        self.__s3.download_file('nova-bias-circle-image', f'{bias.bid}.png', f'./{bias.bid}.png')
         time.sleep(0.1)
-        bias_img = cv2.imread(f"{self.__path}temp_files/{bias.bid}.png")
-        bias_img = cv2.resize(bias_img, (100, 100))  # 예를 들어 100x100 크기로 리사이즈
+        bias_img = cv2.imread(f"./{bias.bid}.png")
+        #bias_img = cv2.resize(bias_img, (100, 100))  # 100x100 크기로 리사이즈
 
-        # 3. 글자 붙혀넣기
-        cv2.putText(img,f"{user.uid}", (300,200), cv2.FONT_HERSHEY_COMPLEX, 1, (0,150,0), 1)   # 중심 위치 300,200인 폰트가 FONT_HERSHEY_COMPLEX인, 크기 1의, 약한 초록색의 ,두께 3인 글씨
-        cv2.putText(img,f"{bias.bname}", (400,400), cv2.FONT_HERSHEY_SIMPLEX, 2, (255,255,255), 1)
-        #이미지 합성
+        # 3. 한글 폰트를 사용해 텍스트를 추가 (Pillow 사용)
+        # OpenCV 이미지를 Pillow 이미지로 변환
+        img_pil = Image.fromarray(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+
+        # 폰트 설정 (나눔고딕 폰트를 사용할 경우)
+        font_path = './NanumGothic-Regular.ttf'  # 나눔고딕 폰트 경로
+        font = ImageFont.truetype(font_path, 40)
+
+        # 이미지에 한글 텍스트 삽입
+        draw = ImageDraw.Draw(img_pil)
+        draw.text((300, 200), f"{bias.bname}님 오늘도 팬이에요!", font=font, fill=(0, 150, 0))  # 한글 텍스트
+        draw.text((400, 400), "2024년 09월 28일 오후 8시에 인증 완료", font=font, fill=(255, 255, 255))  # 날짜 텍스트
+
+        # Pillow 이미지를 다시 OpenCV 이미지로 변환
+        img = cv2.cvtColor(np.array(img_pil), cv2.COLOR_RGB2BGR)
+
+        # 4. 바이어스 이미지 합성 (OpenCV)
         img[100:200, 100:200] = bias_img
 
-        # 4. 이미지 이름 만들기
-        image_name = self.__make_name_url(bias.bid, user.uid)
+        # 5. 이미지 이름 만들기
+        image_name = self.__make_name_url(bias.bid, "test_user")
 
-        # 4. 이미지 저장
-        cv2.imwrite(f'{self.__path}temp_files/{image_name}.png', img)
+        # 6. 이미지 저장
+        cv2.imwrite(f'./{image_name}.png', img)
 
-        # 호출문은 아래와 같음 (날짜는 알아서 모율 내에서 계산할것)
-        # modul.make_name_card(self._bias, self._user)
-        # 5. 이미지 업로드
-        self.__s3.upload_file(f'{self.__path}temp_files/{image_name}.png', "nova-name-card", f"{image_name}.png",ExtraArgs={'ACL':'public-read'})
+        # 7. 이미지 업로드 (S3에 업로드 할 경우)
+        # self.__s3.upload_file(f'{self.__path}temp_files/{image_name}.png', "nova-name-card", f"{image_name}.png", ExtraArgs={'ACL': 'public-read'})
 
-        #name_card_url = f"https://kr.object.ncloudstorage.com/nova-name-card/{card_name}.png"
-        # 함수 반환값을 파일 주소를 반환 할것
-
-        self.delete_temp_image()
+        # 함수 반환값으로 파일 주소를 반환할 수도 있음
         return True
-        # 아래가 실제 사용 예시
-        #self.__name_card_url = modul.get_name_card_url()
 
-    # 명함의 백그라운드 이미지 선택(name_card_id는 user에서 제공)
-    def __name_card_backgroud_image(self, name_card_id):
-        path = self.__path + "name_card/" + "background.png"
+    # 명함의 백그라운드 이미지 선택
+    def __name_card_backgroud_image(self):
+        path = "./background.png"
         img = cv2.imread(path)
         return img
 
     # 명함의 파일 이름 생성기
-    # 네임카드 파일 이름은 bid-uid-날짜
-    # 예시 : 1001-1234-abcd-5678-24-08-21.png
     def __make_name_url(self, bid, uid) -> str:
         now = datetime.datetime.now()
         date = now.strftime('%Y-%m-%d')
         name_card_url = f'{bid}-{uid}-{date}'
         return name_card_url
 
-    # img 이미지 이름 가지고 오기
-    def get_name_card_name(self, bias:Bias, user) -> str:
-        image_name = self.__make_name_url(bias.bid, user.uid)
-        return image_name
-
-    # cloud의 url 가지고 오기
-    def get_name_card_url(self, bias:Bias, user) ->str:
-        image_name = self.get_name_card_name(bias, user)
-        name_card_url = f"{self.__endpoint_url}/nova-name-card/{image_name}.png"
-        return name_card_url
-
     # 임시 이미지 파일 지우기
     def delete_temp_image(self):
-        # 파일이 작성되기 까지 대기 시간
+        # 파일이 작성되기까지 대기 시간
         time.sleep(0.1)
 
         # 디렉토리 내의 모든 파일을 찾음
         directory_path = self.__path + "temp_files/"
         files = glob.glob(os.path.join(directory_path, '*'))
         for file in files:
-            # 파일인지 확인 후 삭제
             if os.path.isfile(file):
                 os.remove(file)
         return
     
 
+name_card_maker = NameCardMaker()
+bias = Bias(bid="1002", bname="고세구")
+name_card_maker.make_name_card(bias=bias, user= None)

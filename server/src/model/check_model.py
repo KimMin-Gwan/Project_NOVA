@@ -150,7 +150,7 @@ class TryCheckModel(CheckPageModel):
                                                   bias=self._bias,
                                                   league_manager=league_manager)
             self._result = "daily done"
-            self._save_datas()
+            #self._save_datas()
         except Exception as e:
             print(e)
             raise CoreControllerLogicError(error_type="try_daily_check | " )
