@@ -7,7 +7,7 @@ import { useState } from 'react';
 import SelectBias from '../selectBias/SelectBias';
 
 
-function MySoloBias({ solo_bias, bias_url, showBox, blackBox }) {
+function MySoloBias({ solo_bias, bias_url, showBox, blackBox, isError }) {
 
     let [selectWindow, setSelectWindow] = useState(false);
     let navigate = useNavigate();
@@ -33,7 +33,7 @@ function MySoloBias({ solo_bias, bias_url, showBox, blackBox }) {
 
     let url = 'https://nova-platform.kr/';
     let [bias_data, setBiasData] = useState();
-    
+
     // async function fetchCheckPoint() {
     //     const response = await fetch(url + `nova_check/server_info/check_page`, {
     //         method: 'post',
@@ -58,6 +58,27 @@ function MySoloBias({ solo_bias, bias_url, showBox, blackBox }) {
 
     return (
         <div className='left-box'>
+            {isError && (
+                <>
+                    <img src={empty} alt='' onClick={() => {
+                        alert('로그인해주세요');
+                    }}></img>
+                    <div className='box'>
+                        <div className='my-bias-group'>새로운 최애 솔로<br />지지하기</div>
+                    </div>
+
+                    {
+                        !selectWindow && <div className='more' onClick={() => {
+                            alert('로그인해주세요');
+                        }}>
+                            <img src={plus} alt=''></img>
+                        </div>
+                    }
+                    {
+                        selectWindow && <SelectBias selectWindow={selectWindow} setSelectWindow={setSelectWindow}></SelectBias>
+                    }
+                </>
+            )}
             {solo_bias.bid === '' && (
                 <>
                     <img src={empty} alt='' onClick={() => {

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import MySoloBias from "../component/subscribeBias/mySoloBias";
 import MyGroupBias from "../component/subscribeBias/myGroupBias";
 
-function MyBias({ url, token,showBox,blackBox }) {
+function MyBias({ url, token, showBox, blackBox }) {
 
     let [solo_bias, setSoloBias] = useState([]);
     let [group_bias, setGroupBias] = useState([]);
@@ -27,15 +27,25 @@ function MyBias({ url, token,showBox,blackBox }) {
     //         'token': token
     //     }
     // }
+    let [isError, setIsError] = useState();
 
     let my_bias_url = 'https://kr.object.ncloudstorage.com/nova-images/';
 
     useEffect(() => {
-            fetch(url + 'my_bias',
-                {
-                    credentials: 'include'
-                })
-            .then(response => response.json())
+        fetch(url + 'my_bias',
+            {
+                credentials: 'include'
+            })
+            .then(response => {
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        setIsError(response.status);
+                    } else {
+                        throw new Error(`status: ${response.status}`)
+                    }
+                }
+                return response.json()
+            })
             .then(data => {
                 solo_bias_copy = data.body.solo_bias;
                 group_bias_copy = data.body.group_bias;
@@ -43,14 +53,18 @@ function MyBias({ url, token,showBox,blackBox }) {
                 setSoloBias(solo_bias_copy);
                 setGroupBias(group_bias_copy);
                 console.log('솔로 그룹 바이어스 부분', data.body);
-                console.log('fasfa',data)
+                console.log('fasfa', data)
             })
+            .catch(error => {
+                console.error('Fetch error:', error);
+                // alert('데이터를 가져오는 중 오류가 발생했습니다. 다시 시도해 주세요.'); // 일반적인 에러 처리
+            });
     }, [])
 
     return (
         <>
-            <MySoloBias solo_bias={solo_bias} bias_url={my_bias_url} showBox={showBox} blackBox={blackBox}></MySoloBias>
-            <MyGroupBias group_bias={group_bias} bias_url={my_bias_url} showBox={showBox} blackBox={blackBox}></MyGroupBias>
+            <MySoloBias solo_bias={solo_bias} bias_url={my_bias_url} showBox={showBox} blackBox={blackBox} isError={isError}></MySoloBias>
+            <MyGroupBias group_bias={group_bias} bias_url={my_bias_url} showBox={showBox} blackBox={blackBox} isError={isError}></MyGroupBias>
         </>
     )
 }

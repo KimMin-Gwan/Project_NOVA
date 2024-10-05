@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import SelectBias from '../selectBias/SelectBias';
 
-function MyGroupBias({ group_bias, bias_url }) {
+function MyGroupBias({ group_bias, bias_url, isError }) {
 
     let navigate = useNavigate();
     let [selectWindow, setSelectWindow] = useState(false);
@@ -35,21 +35,27 @@ function MyGroupBias({ group_bias, bias_url }) {
 
     return (
         <div className='left-box'>
-            {/* {
-                 (
-                    <>
-                        <img src={empty}></img>
-                        <div className='box'>
-                            <div className='my-bias-group'>새로운 최애 그룹<br />지지하기</div>
-                        </div>
-                        <div className='more' onClick={() => {
-                            alert('로그인을 해주세요.')
+            {isError && (
+                <>
+                    <img src={empty} alt='' onClick={() => {
+                        alert('로그인해주세요');
+                    }}></img>
+                    <div className='box'>
+                        <div className='my-bias-group'>새로운 최애 그룹<br />지지하기</div>
+                    </div>
+                    {
+
+                        !selectWindow && <div className='more' onClick={() => {
+                            alert('로그인해주세요');
                         }}>
-                            <img src={plus}></img>
+                            <img src={plus} alt=''></img>
                         </div>
-                    </>
-                )
-            } */}
+                    }
+                    {
+                        selectWindow && <SelectBias selectWindow={selectWindow} setSelectWindow={setSelectWindow}></SelectBias>
+                    }
+                </>
+            )}
             {group_bias.bid === '' && (
                 <>
                     <img src={empty} alt='' onClick={() => {
