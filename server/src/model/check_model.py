@@ -44,7 +44,7 @@ class CheckPageModel(BaseModel):
             raise CoreControllerLogicError(error_type="set_bias | " + str(e))
         
     def set_result_valid(self):
-        self._ressult ="valid"
+        self._result ="valid"
         return
     
     # 유저가 실제로 팔로우 하고 있는지 확인
