@@ -134,7 +134,7 @@ def home():
             async function testForthEndpoint() {
                 const number = document.getElementById('numberInput').value;
                 try {
-                    const response = await fetch(`https://nova-platform.kr/nova_check/server_info/try_daily_check`, {
+                    const response = await fetch(`http://127.0.0.1:4000/nova_check/server_info/try_daily_check`, {
                         method: 'POST',
                         credentials: 'include', // 쉼표 추가
                         headers: {

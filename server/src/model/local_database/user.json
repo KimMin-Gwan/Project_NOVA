@@ -77,7 +77,7 @@
         "credit": 0,
         "solo_bid": "1002",
         "group_bid": "",
-        "solo_daily": true,
+        "solo_daily": false,
         "solo_special": false,
         "group_daily": false,
         "group_special": false,

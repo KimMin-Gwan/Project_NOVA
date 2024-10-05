@@ -88,6 +88,9 @@ class LeagueObserver:
                     # 데이터가 안받아지면 죽이삼 (ack)
                     if not await self.recive_data():
                         break
+                #else:
+                    #await self.send_data("d")
+                #print("??")
 
         except ConnectionClosedError:
             return False
