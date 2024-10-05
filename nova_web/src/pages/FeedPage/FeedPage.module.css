@@ -921,6 +921,10 @@
     object-fit: contain;
 }
 
+.upload_area {
+    background-color: blueviolet;
+}
+
 .function_button {
     position: absolute;
     right: 0px;

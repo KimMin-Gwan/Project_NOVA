@@ -95,11 +95,11 @@ function MySoloBias({ solo_bias, bias_url, showBox, blackBox }) {
                             navigate(`/bias_info/user_contribution?bias_id=${solo_bias.bid}`)
                         }}>{solo_bias.bname}</div>
                     </div>
-                    <div className='more' onClick={() => {
+                    {/* <div className='more' onClick={() => {
                         navigate(`/bias_info/user_contribution?bias_id=${solo_bias.bid}`)
                     }}>
                         <img src={more} alt=''></img>
-                    </div>
+                    </div> */}
                 </>
             )}
         </div>

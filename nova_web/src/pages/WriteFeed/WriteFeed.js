@@ -265,7 +265,7 @@ const WriteFeed = () => {
             <div className={style.test} >
                 <div className={style['short_form_container']}>
                     <div className={style['short_box']}>
-                        <div className={style['img_circle']}>
+                        <div className={`${style['img_circle']} ${style['upload_area']}`}>
                             <input type='file' onChange={handleFileChange}></input>
                         </div>
                         <div style={{ height: '110px' }}></div>
@@ -295,12 +295,53 @@ const WriteFeed = () => {
                                                 </ol>
                                             </div>
                                         )}
+                                        {/* 둘 중 하나 */}
+                                        {
+                                            isClickedBtn === 'balance' && (
+                                                <div>
+                                                    <div className={`${style['button_container']}`}>
+                                                        <input maxLength={10} className={`${style['select_button']} ${style['balance_btn']}`}
+                                                            onChange={(e) => handleChoiceChange(0, e.target.value)}></input>
+                                                        <input maxLength={10} className={`${style['select_button']} ${style['balance_btn']}`}
+                                                            onChange={(e) => handleChoiceChange(1, e.target.value)}></input>
+                                                    </div>
+                                                </div>
+                                            )
+                                        }
+                                        {/* 정거장 */}
+                                        {
+                                            isClickedBtn === 'station' && (
+                                                <div className={style['station_container']}>
+                                                    <div className={style['station_box']}>
+                                                        <input type='text' className={style['site_name']} placeholder='사이트 이름'
+                                                            onChange={(e) => handleChoiceChange(0, e.target.value)}></input>
+                                                        <input type='text' className={style['site_script']} placeholder='설명'
+                                                            onChange={(e) => handleChoiceChange(1, e.target.value)}></input>
+                                                        <input type='url' className={style['site_url']} placeholder='url'
+                                                            onChange={(e) => handleChoiceChange(2, e.target.value)}></input>
+                                                    </div>
+                                                </div>
+                                            )
+                                        }
+                                        {
+                                            isClickedBtn === 'card' && <div></div>
+                                        }
                                     </div>
 
                                     <div className={style['func_part']}>
                                         <div className={style['btn_func_area']}>
+                                            <div className={style['btn_func']}>
+                                                <label>
+                                                    <input type='checkbox'></input>댓글 허용
+                                                </label>
+                                                <label>
+                                                    <input type='checkbox'></input>공유 허용
+                                                </label>
+                                            </div>
                                             <button type='submit'>업로드</button>
                                         </div>
+                                        <div className={style['warning_text']}>타인에게 불편을 줄 수 있는 내용의 게시글은 경고 없이 삭제될 수 있습니다.</div>
+
                                     </div>
                                 </form>
                             </div>

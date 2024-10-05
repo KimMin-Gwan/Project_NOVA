@@ -101,45 +101,70 @@ class NameCardMaker:
                       aws_secret_access_key=self.__secret_key)
 
     def make_name_card(self, bias: Bias, user): 
-        # 1. 백그라운드 이미지 불러오기
+        # 1. 투명한 백그라운드 PNG 이미지 불러오기 (Pillow 이미지로 처리)
         img = self.__name_card_backgroud_image()
 
-        # 2. 바이어스 이미지 받아오기
-        self.__s3.download_file('nova-bias-circle-image', f'{bias.bid}.png', f'./{bias.bid}.png')
-        time.sleep(0.1)
-        bias_img = cv2.imread(f"./{bias.bid}.png")
-        #bias_img = cv2.resize(bias_img, (100, 100))  # 100x100 크기로 리사이즈
+        # 2. 바이어스 이미지 받아오기 (투명한 PNG 파일, Pillow 이미지로 처리)
+        bias_img = Image.open(f"./{bias.bid}.png").convert("RGBA")
 
-        # 3. 한글 폰트를 사용해 텍스트를 추가 (Pillow 사용)
-        # OpenCV 이미지를 Pillow 이미지로 변환
-        img_pil = Image.fromarray(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
-
-        # 폰트 설정 (나눔고딕 폰트를 사용할 경우)
-        font_path = './NanumGothic-Regular.ttf'  # 나눔고딕 폰트 경로
+        # 3. 폰트 설정 (시스템 폰트 경로)
+        font_path = os.path.abspath('./NanumGothic-ExtraBold.ttf')
         font = ImageFont.truetype(font_path, 40)
 
-        # 이미지에 한글 텍스트 삽입
+        # 4. 이미지를 numpy 배열에서 Pillow 이미지로 변환
+        img_pil = Image.fromarray(cv2.cvtColor(img, cv2.COLOR_BGR2RGB)).convert("RGBA")
+
+        # 5. 배경 이미지 크기를 42% 줄이기
+        new_size = (int(img_pil.width * 0.58), int(img_pil.height * 0.58))  # 가로와 세로 70%로 줄임
+        img_pil = img_pil.resize(new_size, Image.LANCZOS)
+
+        # 텍스트 내용
+        text1 = f"{bias.bname}님 오늘도 팬이에요!"
+        text2 = "2024년 09월 28일 오후 8시에 인증 완료"
+        text3 = bias.bname
+
         draw = ImageDraw.Draw(img_pil)
-        draw.text((300, 200), f"{bias.bname}님 오늘도 팬이에요!", font=font, fill=(0, 150, 0))  # 한글 텍스트
-        draw.text((400, 400), "2024년 09월 28일 오후 8시에 인증 완료", font=font, fill=(255, 255, 255))  # 날짜 텍스트
 
-        # Pillow 이미지를 다시 OpenCV 이미지로 변환
-        img = cv2.cvtColor(np.array(img_pil), cv2.COLOR_RGB2BGR)
+        # 텍스트 크기 계산
+        text1_size = draw.textsize(text1, font=font)
 
-        # 4. 바이어스 이미지 합성 (OpenCV)
-        img[100:200, 100:200] = bias_img
+        text3_size = draw.textsize(text3, font=font)
+        text3_x = (img_pil.width - text3_size[0]) // 2
 
-        # 5. 이미지 이름 만들기
-        image_name = self.__make_name_url(bias.bid, "test_user")
+        draw.text((text3_x, 60), text3, font=font, fill=(255, 255, 255, 255))  # RGBA 색상
 
-        # 6. 이미지 저장
-        cv2.imwrite(f'./{image_name}.png', img)
+        # 중앙 위치 계산
+        text1_x = (img_pil.width - text1_size[0]) // 2
 
-        # 7. 이미지 업로드 (S3에 업로드 할 경우)
-        # self.__s3.upload_file(f'{self.__path}temp_files/{image_name}.png', "nova-name-card", f"{image_name}.png", ExtraArgs={'ACL': 'public-read'})
+        check_img = Image.open(f"./check_image.png").convert("RGBA")
+        check_img_size = (int(check_img.width * 0.4), int(check_img.height * 0.4))
+        check_img = check_img.resize(check_img_size, Image.LANCZOS)
 
-        # 함수 반환값으로 파일 주소를 반환할 수도 있음
+        # 6. 이미지에 한글 텍스트 추가 (Pillow 이미지로 처리)
+        draw = ImageDraw.Draw(img_pil)
+        draw.text((text1_x, 750), text1, font=font, fill=(255, 255, 255, 255))  # RGBA 색상
+
+        font_path = os.path.abspath('./NanumGothic-Regular.ttf')
+        font = ImageFont.truetype(font_path, 18)
+        text2_size = draw.textsize(text2, font=font)
+        text2_x = (img_pil.width - text2_size[0]) // 2
+
+        draw.text((text2_x, 800), text2, font=font, fill=(255, 255, 255, 255))
+
+        # 7. 바이어스 이미지를 백그라운드 이미지에 합성 (투명 배경으로 합성)
+        #bias_img_resized = bias_img#.resize((100, 100), Image.ANTIALIAS)
+        img_pil.paste(bias_img, (178, 210), bias_img)  # 투명 배경 처리
+        img_pil.paste(check_img, (300, 540), check_img)  # 투명 배경 처리
+
+        # 8. 이미지를 다시 OpenCV 형식으로 변환하여 저장
+        img = cv2.cvtColor(np.array(img_pil), cv2.COLOR_RGBA2BGR)
+
+        # 9. 이미지 저장 (배경 투명 이미지로 저장)
+        cv2.imwrite(f'./output_name_card.png', img)
+
         return True
+
+
 
     # 명함의 백그라운드 이미지 선택
     def __name_card_backgroud_image(self):
