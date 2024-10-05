@@ -148,6 +148,12 @@
 
 .footer {
   background-color: #eee9fc; /* 원하는 배경색으로 변경 */
-  padding: 20px; /* 여백 추가 (필요 시 조정) */
+  padding: 10px; /* 여백 추가 (필요 시 조정) */
   color: #333; /* 텍스트 색상 조정 (선택 사항) */
+}
+
+.logo_img {
+  width: 25x;
+  height: 25px;
+  margin-left: 5px;
 }
