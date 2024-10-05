@@ -366,9 +366,13 @@ class NameCardMaker:
         draw = ImageDraw.Draw(img_pil)
 
         # 텍스트 크기 계산
-        text1_size = draw.textsize(text1, font=font)
+        #text1_size = draw.textsize(text1, font=font)
+        text1_bbox = draw.textbbox((0, 0), text1, font=font)
+        text1_size = (text1_bbox[2] - text1_bbox[0], text1_bbox[3] - text1_bbox[1])
 
-        text3_size = draw.textsize(text3, font=font)
+        text3_bbox = draw.textbbox((0, 0), text3, font=font)
+        text3_size = (text3_bbox[2] - text3_bbox[0], text3_bbox[3] - text3_bbox[1])
+        #text3_size = draw.textsize(text3, font=font)
         text3_x = (img_pil.width - text3_size[0]) // 2
 
         draw.text((text3_x, 60), text3, font=font, fill=(255, 255, 255, 255))  # RGBA 색상
@@ -387,8 +391,11 @@ class NameCardMaker:
         font_path = os.path.abspath(f'{self.__path}font_files/NanumGothic-Regular.ttf')
         font = ImageFont.truetype(font_path, 18)
 
-        text2_size = draw.textsize(text2, font=font)
+        text2_bbox = draw.textbbox((0, 0), text2, font=font)
+        text2_size = (text2_bbox[2] - text2_bbox[0], text2_bbox[3] - text2_bbox[1])
         text2_x = (img_pil.width - text2_size[0]) // 2
+        #text2_size = draw.textsize(text2, font=font)
+        #text2_x = (img_pil.width - text2_size[0]) // 2
 
         draw.text((text2_x, 800), text2, font=font, fill=(255, 255, 255, 255))
 
