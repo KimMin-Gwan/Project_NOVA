@@ -77,38 +77,15 @@ function MyGroupBias({ group_bias, bias_url }) {
                     <div className='image-container'>
                         <img src={bias_url + `${group_bias.bid}.PNG`} alt="bias" className='img2' />
                     </div>
-                    <div className='support' onClick={() => {
-                        fetch(url + `nova_check/server_info/check_page`, {
-                            method: 'post',
-                            headers: {
-                                "Content-Type": 'application/json',
-                            },
-                            body: JSON.stringify(send_data),
-                        })
-                            .then(response => response.json())
-                            .then(data => {
-                                // JSON.stringify(data)
-                                console.log(data.body)
-                                setBiasData(data.body)
-                            });
-                        navigate(`/bias_certify`, {
-                            state: {
-                                bias: bias_data.bias, result: bias_data.result, point: bias_data.point,
-                                specialTime: bias_data.special_time
-                            }
-                        })
-                    }} >지지하기</div>
                     <div className='box'>
                         <div className='my-bias-solo'>최애 그룹</div>
                         <div className='bias-name' onClick={() => {
                             navigate(`/bias_info/user_contribution?bias_id=${group_bias.bid}`)
                         }}>{group_bias.bname}</div>
                     </div>
-                    <div className='more' onClick={() => {
-                        navigate(`/bias_info/user_contribution?bias_id=${group_bias.bid}`)
-                    }}>
+                    {/* <div className='more'>
                         <img src={more}></img>
-                    </div>
+                    </div> */}
                 </>
             )}
         </div>

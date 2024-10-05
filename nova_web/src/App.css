@@ -1049,6 +1049,13 @@ body {
   /* transition: transform 0.4s ease; */
 }
 
+.btn_img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  color: white;
+}
+
 /* .nav_button2.visible {
   transform: translateY(-55px);
 }
