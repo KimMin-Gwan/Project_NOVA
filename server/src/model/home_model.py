@@ -199,14 +199,9 @@ class LeagueMetaModel(BaseModel):
         self.__leagues = []
 
     # 타입에 맞는 리그 다 찾아야됨
-    def set_league(self, request):
+    def set_league(self, league_manager):
         try:
-            raw_league_datas = self._database.get_all_data(target="lid")
-            for league_data in raw_league_datas:
-                league = League()
-                league.make_with_dict(league_data)
-                if league.type == request.league_type:
-                    self.__leagues.append(league)
+            self.__leagues = league_manager.get_league_meta_data()
 
         except Exception as e:
             raise CoreControllerLogicError(error_type="set_group_leagues | " + str(e))

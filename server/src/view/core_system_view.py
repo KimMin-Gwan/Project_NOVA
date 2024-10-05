@@ -154,24 +154,8 @@ class Core_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
 
             return response
-        
-        #@self.__app.get(endpoint+'/{sample}')
-        #def sample_get(sample:str):
-            #request = sample
-            #core_controller=Core_Controller()
-            #model = core_controller.sample_func(database=self.__database,
-                                                             #request=request)
-            #response = model.get_response_form_data(self._head_parser)
-            #return response
-        
-        #@self.__app.post(endpoint+'/post_sample')
-        #def sample_post(raw_request:dict):
-            #request = SampleRequest(request=raw_request)
-            #core_controller=Core_Controller()
-            #model = core_controller.sample_func(database=self.__database,
-                                                             #request=request)
-            #response = model.get_response_form_data(self._head_parser)
-            #return response
+
+    
 
     def feed_route(self):
         # feed의 메타 정보 반환
@@ -440,6 +424,16 @@ class Core_Service_View(Master_View):
             #except WebSocketDisconnect:
                 #self.manager.disconnect(websocket)
             ##    await self.manager.broadcast("client disconnected")
+
+        # 최애를 검색하는 보편적인 함수
+        # 목적 : 나의 최애 선택하기, 홈화면의 최애 검색 기능
+        #"http://127.0.0.1:6000/home/search_bias?bias_name=김"  # bias 검색
+        @self.__app.get('/league_detail/league_meta_data')
+        def get_league_meta_data():
+            home_controller=Home_Controller()
+            model = home_controller.get_league_meta_data(database=self.__database, league_manager=self.__league_manager)
+            response = model.get_response_form_data(self._head_parser)
+            return response
 
         @self.__app.websocket('/league_detail/league_data')
         async def league_socket(websocket:WebSocket, league_name:Optional[str] = ""):

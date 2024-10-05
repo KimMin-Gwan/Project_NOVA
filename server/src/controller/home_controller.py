@@ -98,11 +98,11 @@ class Home_Controller:
         finally:
             return model
 
-    def get_league_meta_data(self, database:Local_Database, request):
+    def get_league_meta_data(self, database:Local_Database, league_manager):
         model = LeagueMetaModel(database=database)
 
         try:
-            if not model.set_league(request=request):
+            if not model.set_league(league_manager=league_manager):
                 model.set_state_code("265")
 
         except CustomError as e:

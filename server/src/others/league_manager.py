@@ -51,16 +51,8 @@ class LeagueManager:
             message=target_league.get_league_data_ws_form())
         return
 
-    # 리그 일반 정보 제공(일반 요청 처리 용 )
-    def get_league_data(self, lid):
-        target_league = ManagedLeague()
-        for league in self.__managed_leagues:
-            if league.lid == lid:
-                target_league = league
-                break
-        
-        result = target_league.get_league_data_json_form()
-        return result
+    def get_league_meta_data(self):
+        return self.__managed_leagues
 
     # 리그 일반 정보 제공(일반 요청 처리 용 )
     def get_league_data(self, lid):
