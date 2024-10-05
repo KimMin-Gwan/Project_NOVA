@@ -49,7 +49,7 @@
             "chatting": 0,
             "saver": 0
         },
-        "solo_daily": true,
+        "solo_daily": false,
         "solo_special": false,
         "group_daily": false,
         "group_special": false,
