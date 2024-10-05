@@ -81,15 +81,9 @@ class Home_Controller:
         model = SelectBiasModel(database=database)
         try:
             # 유저가 있는지 확인
-            if not model.set_user_with_email(request=request.jwt_payload):
-                raise UserNotExist("Can not find User with uid")
-        except UserNotExist as e:
-            print("Error Catched : ", e)
-            model.set_state_code(e.error_code) # 종합 에러
-            return model
+            model.set_user_with_email(request=request.jwt_payload)
 
-        try:
-            if not model.find_bias(request=request):
+            if not model.find_bias(request=request.data_payload):
                 model.set_state_code("209")
             if not model.set_my_bias():
                 model.set_state_code("210")

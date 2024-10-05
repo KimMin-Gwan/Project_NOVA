@@ -140,11 +140,19 @@ class Core_Service_View(Master_View):
 
         # 나의 최애 선택하기 (취소하기는 없음.... 취소하지 마라)
         @self.__app.post('/home/try_select_my_bias')
-        def try_select_my_bias(raw_request:dict):
-            request = BiasSelectRequest(request=raw_request)
+        def try_select_my_bias(request:Request, raw_request:dict):
+            request_manager = RequestManager()
+
+            data_payload = BiasSelectRequest(request=raw_request)
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            if not request_manager.jwt_payload.result:
+                raise self._credentials_exception
+
             home_controller=Home_Controller()
             model = home_controller.select_bias(database=self.__database, request=request)
-            response = model.get_response_form_data(self._head_parser)
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+
             return response
         
         #@self.__app.get(endpoint+'/{sample}')
