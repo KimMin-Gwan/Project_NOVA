@@ -37,6 +37,7 @@ import MyInterestFeed from './pages/MyPage/MyInterestFeed/MyInterestFeed.js';
 import MyCommentFeed from './pages/MyPage/MyCommentFeed/MyCommentFeed.js';
 import MyActiveFeed from './pages/MyPage/MyActiveFeed/MyActiveFeed.js';
 import MyAlert from './pages/MyPage/Alert/MyAlert.js';
+import Temrs from './pages/Temrs/Temrs.js';
 
 
 // 401 이면 바이어스 격자 무늬로 띄우기
@@ -92,6 +93,7 @@ function App() {
       <Route path='/galaxy' element={<GalaxyList />}></Route>
       <Route path='/feed_page' element={<FeedPage />}></Route>
       <Route path='/signup' element={<SignUp />}></Route>
+      <Route path='/terms_page' element={<Temrs/>}></Route>
       <Route path='/league_detail' element={<LeaguePage />}></Route>
       {/* <Route path='/league_detail' element={<LeagueDetail />}></Route> */}
       <Route path='/notice' element={<Notice />}></Route>
