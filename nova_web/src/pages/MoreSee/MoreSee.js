@@ -13,6 +13,7 @@ import terms_icon from "./../../img/terms_icon.png";
 import logo from "./../../img/logo.PNG";
 
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 function MoreSee() {
   const requestURL = {
@@ -31,7 +32,32 @@ function MoreSee() {
     navigate(url);
   }
   let navigate = useNavigate();
-  let tokenCheck = localStorage.getItem("jwtToken");
+  // let tokenCheck = localStorage.getItem("jwtToken");
+
+  let [isLogin, setIsLogin] = useState();
+  let [isError, setIsError] = useState();
+
+  function handleFetch() {
+
+
+    fetch('https://nova-platform.kr/home/is_valid', {
+      credentials: 'include',
+    })
+      .then(response => {
+        response.json();
+        // console.log('11',response.status)
+        // setIsError(response.status);
+      })
+      .then(data => {
+        console.log(data);
+        setIsLogin(data.body.result);
+
+      })
+  };
+
+  useEffect(() => {
+    handleFetch()
+  }, [])
 
   return (
     <div className={style.font}>
@@ -55,7 +81,7 @@ function MoreSee() {
           <div
             className={style.fullWidthComponent}
             onClick={() => {
-              if (tokenCheck) {
+              if (isLogin) {
                 navigate("/mypage");
               } else {
                 navigate("/novalogin");
@@ -63,7 +89,7 @@ function MoreSee() {
             }}
           >
             <img src={login_icon} alt="Arrow" className={style.vector} />
-            <p className={style.bodyText}>{tokenCheck ? "마이페이지" : "로그인"}</p>
+            <p className={style.bodyText}>{isLogin ? "마이페이지" : "로그인"}</p>
           </div>
 
           <div className={style.row}>
