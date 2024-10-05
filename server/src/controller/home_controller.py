@@ -80,6 +80,7 @@ class Home_Controller:
     def select_bias(self, database:Local_Database, request):
         model = SelectBiasModel(database=database)
         try:
+            print("0")
             # 유저가 있는지 확인
             model.set_user_with_email(request=request.jwt_payload)
             print("1")
