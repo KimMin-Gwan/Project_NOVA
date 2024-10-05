@@ -2,6 +2,8 @@ from model.base_model import BaseModel
 from model import Local_Database
 from others.data_domain import User, Bias
 from others import CoreControllerLogicError, CheckManager
+from PIL import Image, ImageDraw, ImageFont
+import numpy as np
 import time
 import datetime
 import boto3
@@ -331,19 +333,72 @@ class NameCardMaker:
         #        user.solo_combo(group_combo), 오늘 날짜 등... 넣고싶은거 아무거나 넣어도댐
 
         # 1. 백그라운드 이미지  불러오기
-        img = self.__name_card_backgroud_image(user.select_name_card)
+        img = self.__name_card_backgroud_image()
 
         # 2. 바이어스 이미지 받아오기
-        self.__s3.download_file('nova-images',f'{bias.bid}.PNG',f'{self.__path}temp_files/{bias.bid}.png')
+        self.__s3.download_file('nova-bias-circle-image',f'{bias.bid}.png',f'{self.__path}temp_files/{bias.bid}.png')
         time.sleep(0.1)
-        bias_img = cv2.imread(f"{self.__path}temp_files/{bias.bid}.png")
-        bias_img = cv2.resize(bias_img, (100, 100))  # 예를 들어 100x100 크기로 리사이즈
+
+        bias_img = Image.open(f"{self.__path}temp_files/{bias.bid}.png").convert("RGBA")
+
+        # 3. 폰트 설정 (시스템 폰트 경로)
+        font_path = os.path.abspath(f'{self.__path}font_files/NanumGothic-ExtraBold.ttf')
+        font = ImageFont.truetype(font_path, 40)
+
+        # 4. 이미지를 numpy 배열에서 Pillow 이미지로 변환
+        img_pil = Image.fromarray(cv2.cvtColor(img, cv2.COLOR_BGR2RGB)).convert("RGBA")
+
+        # 5. 배경 이미지 크기를 42% 줄이기
+        new_size = (int(img_pil.width * 0.58), int(img_pil.height * 0.58))  # 가로와 세로 70%로 줄임
+        img_pil = img_pil.resize(new_size, Image.ANTIALIAS)
+
+        now = datetime.datetime.now()
+        year = now.strftime('%Y')
+        month= now.strftime('%m')
+        date = now.strftime('%d')
+
+        # 텍스트 내용
+        text1 = f"{bias.bname}님 오늘도 팬이에요!"
+        text2 = f"{year}년 {month}월 {date}일 오후 8시에 인증 완료"
+        text3 = bias.bname
 
         # 3. 글자 붙혀넣기
-        cv2.putText(img,f"{user.uid}", (300,200), cv2.FONT_HERSHEY_COMPLEX, 1, (0,150,0), 1)   # 중심 위치 300,200인 폰트가 FONT_HERSHEY_COMPLEX인, 크기 1의, 약한 초록색의 ,두께 3인 글씨
-        cv2.putText(img,f"{bias.bname}", (400,400), cv2.FONT_HERSHEY_SIMPLEX, 2, (255,255,255), 1)
-        #이미지 합성
-        img[100:200, 100:200] = bias_img
+        draw = ImageDraw.Draw(img_pil)
+
+        # 텍스트 크기 계산
+        text1_size = draw.textsize(text1, font=font)
+
+        text3_size = draw.textsize(text3, font=font)
+        text3_x = (img_pil.width - text3_size[0]) // 2
+
+        draw.text((text3_x, 60), text3, font=font, fill=(255, 255, 255, 255))  # RGBA 색상
+
+        # 중앙 위치 계산
+        text1_x = (img_pil.width - text1_size[0]) // 2
+
+        check_img = Image.open(f"{self.__path}name_card/check_image.png").convert("RGBA")
+        check_img_size = (int(check_img.width * 0.4), int(check_img.height * 0.4))
+        check_img = check_img.resize(check_img_size, Image.ANTIALIAS)
+
+        # 6. 이미지에 한글 텍스트 추가 (Pillow 이미지로 처리)
+        draw = ImageDraw.Draw(img_pil)
+        draw.text((text1_x, 750), text1, font=font, fill=(255, 255, 255, 255))  # RGBA 색상
+
+        font_path = os.path.abspath(f'{self.__path}font_files/NanumGothic-Regular.ttf')
+        font = ImageFont.truetype(font_path, 18)
+
+        text2_size = draw.textsize(text2, font=font)
+        text2_x = (img_pil.width - text2_size[0]) // 2
+
+        draw.text((text2_x, 800), text2, font=font, fill=(255, 255, 255, 255))
+
+        # 7. 바이어스 이미지를 백그라운드 이미지에 합성 (투명 배경으로 합성)
+        #bias_img_resized = bias_img#.resize((100, 100), Image.ANTIALIAS)
+        img_pil.paste(bias_img, (178, 210), bias_img)  # 투명 배경 처리
+        img_pil.paste(check_img, (300, 540), check_img)  # 투명 배경 처리
+
+        # 8. 이미지를 다시 OpenCV 형식으로 변환하여 저장
+        img = cv2.cvtColor(np.array(img_pil), cv2.COLOR_RGBA2BGR)
 
         # 4. 이미지 이름 만들기
         image_name = self.__make_name_url(bias.bid, user.uid)
@@ -365,8 +420,8 @@ class NameCardMaker:
         #self.__name_card_url = modul.get_name_card_url()
 
     # 명함의 백그라운드 이미지 선택(name_card_id는 user에서 제공)
-    def __name_card_backgroud_image(self, name_card_id):
-        path = self.__path + "name_card/" + name_card_id + ".PNG"
+    def __name_card_backgroud_image(self):
+        path = self.__path + "name_card/background.png"
         img = cv2.imread(path)
         return img
 
