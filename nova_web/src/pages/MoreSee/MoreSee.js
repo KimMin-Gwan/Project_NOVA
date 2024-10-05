@@ -14,10 +14,16 @@ import terms_icon from "./../../img/terms_icon.png";
 import { useNavigate } from "react-router-dom";
 
 function MoreSee() {
-  const requestURL = "https://naver.me/xGImCJSN";
+  const requestURL = {
+    x: "https://x.com/sebacheong",
+    discord: "https://discord.com",
+    instagram: "https://www.instagram.com/yth4chg_/profilecard/?igsh=MTRhcDd1NWRpZWo3dw==",
+    youtube: "https://www.youtube.com/channel/UCyvmJ49lux5R1NVlBTJZt2Q",
+    naverform: "https://naver.me/xGImCJSN",
+  };
 
-  function handleRequestURL() {
-    window.open(requestURL, "_blank", "noopener, noreferrer");
+  function handleRequestURL(url) {
+    window.open(url, "_blank", "noopener, noreferrer");
   }
 
   let navigate = useNavigate();
@@ -56,7 +62,7 @@ function MoreSee() {
           </div>
 
           <div className={style.row}>
-            <div className={style.mainComponent} onClick={handleRequestURL}>
+            <div className={style.mainComponent} onClick={() => handleRequestURL(requestURL.naverform)}>
               <img src={fav_icon} alt="Arrow" className={style.vector} />
               <p className={style.bodyText}>최애 신청하기(네이버 폼)</p>
             </div>
@@ -84,19 +90,19 @@ function MoreSee() {
         </div>
 
         <div className={style.inquiry}>
-          <div className={style.iconBox}>
+          <div className={style.iconBox} onClick={() => handleRequestURL(requestURL.x)}>
             <img src={x_icon} alt="x_Icon" className={style.icon_img} />
             <p className={style.icon_name}> X </p>
           </div>
-          <div className={style.iconBox}>
+          <div className={style.iconBox} onClick={() => handleRequestURL(requestURL.discord)}>
             <img src={discord_icon} alt="discord_Icon" className={style.icon_img} />
             <p className={style.icon_name}> Discord </p>
           </div>
-          <div className={style.iconBox}>
+          <div className={style.iconBox} onClick={() => handleRequestURL(requestURL.instagram)}>
             <img src={insta_icon} alt="insta_Icon" className={style.icon_img} />
             <p className={style.icon_name}> Instagram </p>
           </div>
-          <div className={style.iconBox}>
+          <div className={style.iconBox} onClick={() => handleRequestURL(requestURL.youtube)}>
             <img src={youtube_icon} alt="youtube_Icon" className={style.icon_img} />
             <p className={style.icon_name}> Youtube </p>
           </div>
@@ -111,7 +117,6 @@ function MoreSee() {
             <p className="nova-info">통신판매업신고번호: 0000-0000-000000</p>
             <p className="nova-info">전화번호: 010-9875-2508 | 이메일:youths0828@nova-platform.kr</p>
           </div>
-          <div className="loundspeaker"></div>
         </footer>
       </div>
     </div>

@@ -16,7 +16,7 @@
   height: 200vw;
   margin: 0 auto;
   /*max-width: 1200px; /* 최대 너비를 설정 */
-  background-color: #262626; /* 배경색을 원하는 색으로 변경 가능 */
+  background-color: #eee9fc; /* 배경색을 원하는 색으로 변경 가능 */
   /*text-align: center; /* 텍스트 가운데 정렬 */
 }
 .TopBar {
