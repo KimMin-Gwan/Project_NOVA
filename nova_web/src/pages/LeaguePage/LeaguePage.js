@@ -31,7 +31,8 @@ export default function LeaguePage() {
             console.log('dsad', receiveData);
             const splitData = receiveData.split(' ');
             const realData = splitData.map(part => part.split('.'));
-
+            setLeagueData(realData)
+            setLoading(false)
             newSocket.send("ack") //이걸 적으면 정상동작하게됨 ㅋㅋ
         };
         newSocket.addEventListener('error', (error) => {
