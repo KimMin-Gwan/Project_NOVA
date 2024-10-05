@@ -121,6 +121,8 @@ class Core_Controller:
                 model = self._user_already_checked(database=database, model=model)
                 model.set_state_code("261") # 종합 에러
                 return model
+            else:
+                model.set_result_valid()
             
         except CustomError as e:
             print("Error Catched : ", e.error_type)
