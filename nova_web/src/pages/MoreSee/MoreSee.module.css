@@ -7,46 +7,45 @@
 } */
 
 .font {
-    
-    font-family: "Noto Sans KR", sans-serif;
+  font-family: "Noto Sans KR", sans-serif;
 }
 
 .container {
-    max-width: 500px;
-     /* 너비를 원하는 비율로 설정 */
-    height : 200vw;
-    margin: 0 auto;
-    /*max-width: 1200px; /* 최대 너비를 설정 */
-    background-color: #262626; /* 배경색을 원하는 색으로 변경 가능 */
-    /*text-align: center; /* 텍스트 가운데 정렬 */
+  max-width: 500px;
+  /* 너비를 원하는 비율로 설정 */
+  height: 200vw;
+  margin: 0 auto;
+  /*max-width: 1200px; /* 최대 너비를 설정 */
+  background-color: #262626; /* 배경색을 원하는 색으로 변경 가능 */
+  /*text-align: center; /* 텍스트 가운데 정렬 */
+}
+.TopBar {
+  width: 100%; /* 너비를 원하는 비율로 설정 */
+  height: 38px;
+  margin: 0 auto;
+  /*max-width: 1200px; /* 최대 너비를 설정 */
+  background-color: #ffffff; /* 배경색을 원하는 색으로 변경 가능 */
+  border-bottom: 2px solid #ffffff;
+  /* text-align: center; 텍스트 가운데 정렬 */
+  /* padding-top: 10px; */
+  /* padding-bottom: 10px; */
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* 좌우 공간을 동일하게 분배 */
+  padding: 10px 15px;
+  box-sizing: border-box;
+}
+.backword {
+  width: 35x;
+  height: 35px;
+  filter: invert();
 }
 
-.backword{
-    width: 50px;
-    height: 50px;
-    filter: invert();
-    margin-left : 10px;
-}
-
-.TopBar{
-    width: 100%; /* 너비를 원하는 비율로 설정 */
-    height : 38px;
-    margin: 0 auto;
-    /*max-width: 1200px; /* 최대 너비를 설정 */
-    background-color: #1E1E1E; /* 배경색을 원하는 색으로 변경 가능 */
-    border-bottom: 2px solid #8F8F8F;
-    text-align: center; /* 텍스트 가운데 정렬 */
-    padding-top: 10px;
-    padding-bottom: 10px;
-    display: flex;
-    align-items: center;
-}
-
-.TitleBox{
-    width: 100%;
-    height: 38px;
-    margin-bottom: 14px;
-    color: white;
+.TitleBox {
+  width: 100%;
+  height: 38px;
+  margin-bottom: 15px;
+  color: white;
 }
 
 /* .TitleName{
@@ -55,75 +54,98 @@
 } */
 
 .titleName {
-    color: white;
-    text-align: center; 
+  color: black;
+  text-align: center;
 }
 
-.content{
-    width: 100%; 
-    height : 500px;
-    margin: 0 auto;
-    background-color: #2c2c2c;
-    /*text-align: center; /* 텍스트 가운데 정렬 */
-    padding-top: 10px
+.content {
+  width: 100%;
+  height: 500px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  /*text-align: center; /* 텍스트 가운데 정렬 */
+  padding-top: 10px;
 }
 
 .mainComponent {
-    width: 100%;
-    height: 98px;
-    background-color: #3C3C3C; 
-    display: flex;
-    align-items: center;
-    /*justify-content: space-between; */
-    /* padding: 0 16px; */
-    margin-bottom: 4px;
-    cursor: pointer;
-    justify-content: flex-end; /* Align content to the right */
+  width: calc(50% - 10px); /* 두 개가 한 줄에 오도록 너비 조정 */
+  height: 134px;
+  background-color: #cccfff;
+  display: flex;
+  align-items: center;
+  margin: 10px;
+  cursor: pointer;
+  justify-content: flex-end;
+  border-radius: 15px;
+  flex-direction: column;
 }
 
-.bodyText{
-    color: white;
-    font-size: 14px;
-    /*text-align: center; /* 텍스트 가운데 정렬 */
-    margin-right: 26px; /* Add spacing between the text and icon */
+.fullWidthComponent {
+  width: calc(100% - 20px);
+  height: 134px;
+  background-color: #cccfff;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin: 10px;
+  border-radius: 15px;
+  flex-direction: column;
 }
 
-.vector{
-    width: 20px;
-    height: 50px;
-    margin-right: 10px;
-    /*text-align: center; /* 텍스트 가운데 정렬 */
+.row {
+  display: flex;
+  justify-content: space-between;
 }
 
-.inquiry{
-    width: 100%; /* 너비를 원하는 비율로 설정 */
-    height : 100px;
-    margin: 0 auto;
-    background-color: #2c2c2c; /* 배경색을 원하는 색으로 변경 가능 */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: row; /* Align icons horizontally */
-    gap: 50px; /* Space between the icons */
+.bodyText {
+  color: rgb(0, 0, 0);
+  font-size: 14px;
+  text-align: center; /* 텍스트 가운데 정렬 */
+  /*margin-right: 23px; /* Add spacing between the text and icon */
 }
 
-.icon_img{
-    width: 40px;
-    height: 40px;
+.vector {
+  width: 65px;
+  height: 65px;
+  text-align: center;
+  /*margin-right: 10px;*/
 }
 
-.iconBox{
-    width: 50px;
-    height: 50px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+.inquiry {
+  width: 100%; /* 너비를 원하는 비율로 설정 */
+  height: 100px;
+  margin: 0 auto;
+  background-color: #ffffff; /* 배경색을 원하는 색으로 변경 가능 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row; /* Align icons horizontally */
+  gap: 50px; /* Space between the icons */
 }
 
-.icon_name{
-    color: white;
-    text-align: center;
-    margin-top: 5px; /* Space between the icon and the name */
-    font-size: 11px;
+.icon_img {
+  width: 40px;
+  height: 40px;
+}
+
+.iconBox {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon_name {
+  color: rgb(0, 0, 0);
+  text-align: center;
+  margin-top: 5px; /* Space between the icon and the name */
+  font-size: 11px;
+}
+
+.footer {
+  background-color: #eee9fc; /* 원하는 배경색으로 변경 */
+  padding: 20px; /* 여백 추가 (필요 시 조정) */
+  color: #333; /* 텍스트 색상 조정 (선택 사항) */
 }
