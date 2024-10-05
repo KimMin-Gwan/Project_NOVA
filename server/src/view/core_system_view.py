@@ -149,7 +149,7 @@ class Core_Service_View(Master_View):
                 raise self._credentials_exception
 
             home_controller=Home_Controller()
-            model = home_controller.select_bias(database=self.__database, request=request)
+            model = home_controller.select_bias(database=self.__database, request=request_manager)
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
 
