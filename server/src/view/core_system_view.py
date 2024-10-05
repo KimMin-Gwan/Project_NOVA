@@ -131,7 +131,7 @@ class Core_Service_View(Master_View):
         # 목적 : 나의 최애 선택하기, 홈화면의 최애 검색 기능
         #"http://127.0.0.1:6000/home/search_bias?bias_name=김"  # bias 검색
         @self.__app.get('/home/search_bias')
-        def show_leagues(bias_name:Optional[str] = None):
+        def try_search_bias(bias_name:Optional[str] = None):
             request = BiasSearchRequest(bias_name=bias_name)
             home_controller=Home_Controller()
             model = home_controller.search_bias(database=self.__database, request=request)
