@@ -5,17 +5,31 @@ import LeagueCard from '../../component/LeagueCard';
 
 import galaxy1 from './../../img/galaxy1.png';
 import galaxy2 from './../../img/galaxy2.png';
+import { useEffect, useState } from 'react';
 
 
 export default function GalaxyList() {
 
     let galaxyName = ['고양이 은하 리그', '파란 고양이 은하 리그'];
 
+    let [galaxyLeague, setGalaxyLeague] = useState([]);
+
     let navigate = useNavigate();
 
     function handleClick() {
         navigate('/league_detail');
     };
+
+    useEffect(() => {
+        fetch('https://nova-platform.kr/league_detail/league_meta_data', {
+            credentials: 'include'
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('리그 메타 데이터', data);
+                setGalaxyLeague(data.body.leagues);
+            })
+    }, []);
 
     return (
         <div className={`container ${style.feedpage}`}>
@@ -24,11 +38,15 @@ export default function GalaxyList() {
                 <div>은하계 탐색</div>
             </div>
 
+            {
+                galaxyLeague.map((league, i) => {
+                    <div onClick={handleClick}>
+                        <LeagueCard img={galaxy1} name={league.lname} info={league} type='galaxy'></LeagueCard>
+                    </div>
+                })
+            }
             <div onClick={handleClick}>
                 <LeagueCard img={galaxy1} name={galaxyName[0]} info='gkgk' type='galaxy'></LeagueCard>
-            </div>
-            <div onClick={handleClick}>
-                <LeagueCard img={galaxy2} name={galaxyName[1]} info='gkgk' type='galaxy'></LeagueCard>
             </div>
             <div onClick={handleClick}>
                 <LeagueCard img={galaxy2} name={galaxyName[1]} info='gkgk' type='galaxy'></LeagueCard>
@@ -43,7 +61,7 @@ export default function GalaxyList() {
                 <h4>리그는 일요일 자정에 종료되며, 월요일 정오에 시작합니다.</h4>
                 <h4 className={style['last_rule']}>지지자수의 변동과 획득 포인트에 따라 리그가 조정될 수 있습니다.</h4>
             </div>
-            <div style={{height:'10px', paddingBottom:'5px'}}></div>
+            <div style={{ height: '10px', paddingBottom: '5px' }}></div>
         </div>
     )
 }

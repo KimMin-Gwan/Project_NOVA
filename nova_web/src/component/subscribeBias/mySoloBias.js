@@ -33,58 +33,31 @@ function MySoloBias({ solo_bias, bias_url, showBox, blackBox }) {
 
     let url = 'https://nova-platform.kr/';
     let [bias_data, setBiasData] = useState();
-    // useEffect(() => {
-    //     fetch(url + `nova_check/server_info/check_page`, {
+    
+    // async function fetchCheckPoint() {
+    //     const response = await fetch(url + `nova_check/server_info/check_page`, {
     //         method: 'post',
     //         headers: {
     //             "Content-Type": 'application/json',
     //         },
+    //         credentials: 'include',
     //         body: JSON.stringify(send_data),
-    //     })
-    //         .then(response => response.json())
-    //         .then(data => {
-    //             JSON.stringify(data)
-    //         })
-    // }, [])
-    async function fetchCheckPoint() {
-        const response = await fetch(url + `nova_check/server_info/check_page`, {
-            method: 'post',
-            headers: {
-                "Content-Type": 'application/json',
-            },
-            credentials: 'include',
-            body: JSON.stringify(send_data),
-        });
-        const data = await response.json();
-        console.log(data.body);
-        setBiasData(data.body);
-        // .then(response => response.json())
-        // .then(data => {
-        //     // JSON.stringify(data)
-        //     console.log(data.body)
-        //     setBiasData(data.body)
-        // });
-    };
+    //     });
+    //     const data = await response.json();
+    //     console.log('1414141',data.body);
+    //     setBiasData(data.body);
+    //     // .then(response => response.json())
+    //     // .then(data => {
+    //     //     // JSON.stringify(data)
+    //     //     console.log(data.body)
+    //     //     setBiasData(data.body)
+    //     // });
+    // };
 
 
 
     return (
         <div className='left-box'>
-            {/* {
-                 (
-                    <>
-                        <img src={empty} alt=''></img>
-                        <div className='box'>
-                            <div className='my-bias-group'>새로운 최애 솔로<br />지지하기</div>
-                        </div>
-                        <div className='more' onClick={() => {
-                            alert('로그인을 해주세요.')
-                        }}>
-                            <img src={plus} alt=''></img>
-                        </div>
-                    </>
-                )
-            } */}
             {solo_bias.bid === '' && (
                 <>
                     <img src={empty} alt='' onClick={() => {
@@ -114,13 +87,7 @@ function MySoloBias({ solo_bias, bias_url, showBox, blackBox }) {
                         <img src={bias_url + `${solo_bias.bid}.PNG`} alt="bias" className='img2' />
                     </div>
                     <div className='support' onClick={() => {
-                        fetchCheckPoint();
-                        navigate(`/bias_certify`, {
-                            state: {
-                                bias: bias_data.bias, result: bias_data.result, point: bias_data.point,
-                                specialTime: bias_data.special_time
-                            }
-                        })
+                        navigate(`/bias_certify`)
                     }} >지지하기</div>
                     <div className='box'>
                         <div className='my-bias-solo'>나의 최애</div>
@@ -140,3 +107,10 @@ function MySoloBias({ solo_bias, bias_url, showBox, blackBox }) {
 }
 
 export default MySoloBias;
+
+// , {
+//     // state: {
+//     //     bias: bias_data.bias, result: bias_data.result, point: bias_data.point,
+//     //     specialTime: bias_data.special_time
+//     // }
+// }

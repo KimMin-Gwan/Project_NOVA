@@ -29,8 +29,8 @@ export default function LeagueCard({ img, name, info, type }) {
                 {
                     type === 'galaxy' && (
                         <>
-                            <h5>gg</h5>
-                            <h5>gg</h5>
+                            <h5>지지자 범위 : {info.tier}</h5>
+                            <h5>참여 지지자 : {info.num_bias}</h5>
                         </>
                     )
                 }

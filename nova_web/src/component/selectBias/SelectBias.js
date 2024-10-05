@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 
 
-function SelectBias({selectWindow, setSelectWindow}) {
+function SelectBias({ selectWindow, setSelectWindow }) {
 
     let navigate = useNavigate();
     let url = 'https://nova-platform.kr/home/';
@@ -40,7 +40,9 @@ function SelectBias({selectWindow, setSelectWindow}) {
         setSearchName(event.target.value);
     };
     useEffect(() => {
-        fetch(url + `search_bias?bias_name=${searchName}`)
+        fetch(url + `search_bias?bias_name=${searchName}`, {
+            credentials: 'include',
+        })
             .then(result => result.json())
             .then(data => {
                 nameCopy = JSON.stringify(data.body.biases);
@@ -62,7 +64,7 @@ function SelectBias({selectWindow, setSelectWindow}) {
         <div className={style.background}>
             <div className={style.container}>
                 <div className={style.header}>
-                    <button onClick={()=>{
+                    <button onClick={() => {
                         setSelectWindow(false)
                     }}>뒤로</button>
                     <h1>지지할 최애 선택하기 (개인)</h1>
@@ -94,16 +96,15 @@ function SelectBias({selectWindow, setSelectWindow}) {
                                             body: JSON.stringify({
                                                 "header": header,
                                                 "body": {
-                                                    'token': sample,
                                                     'bid': a.bid,
                                                 }
                                             }),
+                                            credentials: 'include',
                                         })
                                             .then(result => result.json())
                                             .then(data => {
                                                 // JSON.stringify(data.body);
-                                                console.log(data.body.result);
-                                                console.log(2);
+                                                console.log(data);
                                             })
                                     }}>&#9825;</button>
                                 </div>

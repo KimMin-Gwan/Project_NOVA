@@ -13,20 +13,20 @@ function MyBias({ url, token,showBox,blackBox }) {
     let [supportBias, setSupportBias] = useState();
     let supportBiasCopy = [];
 
-    let header = {
-        "request-type": "default",
-        "client-version": 'v1.0.1',
-        "client-ip": '127.0.0.1',
-        "uid": '1234-abcd-5678',
-        "endpoint": "/core_system/",
-    }
+    // let header = {
+    //     "request-type": "default",
+    //     "client-version": 'v1.0.1',
+    //     "client-ip": '127.0.0.1',
+    //     "uid": '1234-abcd-5678',
+    //     "endpoint": "/core_system/",
+    // }
 
-    let send_data = {
-        "header": header,
-        "body": {
-            'token': token
-        }
-    }
+    // let send_data = {
+    //     "header": header,
+    //     "body": {
+    //         'token': token
+    //     }
+    // }
 
     let my_bias_url = 'https://kr.object.ncloudstorage.com/nova-images/';
 
@@ -42,7 +42,8 @@ function MyBias({ url, token,showBox,blackBox }) {
 
                 setSoloBias(solo_bias_copy);
                 setGroupBias(group_bias_copy);
-                console.log('솔로 그룹 바이어스 부분');
+                console.log('솔로 그룹 바이어스 부분', data.body);
+                console.log('fasfa',data)
             })
     }, [])
 

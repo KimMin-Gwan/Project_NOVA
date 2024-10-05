@@ -8,9 +8,19 @@ export default function LeaguePage() {
 
     const array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
+    function fetchLeagueData() {
+        fetch('https://nova-platfomr.kr/league_detail/league_data', {
+            credentials: 'include'
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('league_Data', data);
+            });
+    };
+
     return (
         <div className={style.container}>
-            <div className={style.title}>리그 페이지</div>
+            <div className={style.title}>은하리그 페이지</div>
             <div className={style.imgArea}>
                 <ThreeScene></ThreeScene>
             </div>
