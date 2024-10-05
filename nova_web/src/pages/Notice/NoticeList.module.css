@@ -1,30 +1,88 @@
 .main-body {
-    color: white;
-    margin: 0 auto;
-    height: 200vw;
-    max-width: 500px;
-    background-color: #262626;
+  color: white;
+  margin: 0 auto;
+  height: 900px;
+  max-width: 500px;
+  background-color: #ffffff;
 }
 
-.top-area {
-    height: 50px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-bottom: 2px solid black;
+.TopBar {
+  width: 100%; /* 너비를 원하는 비율로 설정 */
+  height: 80px;
+  margin: 0 auto;
+  /*max-width: 1200px; /* 최대 너비를 설정 */
+  background-color: #ffffff; /* 배경색을 원하는 색으로 변경 가능 */
+  border-bottom: 2px solid #ffffff;
+  /* text-align: center; 텍스트 가운데 정렬 */
+  /* padding-top: 10px; */
+  /* padding-bottom: 10px; */
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* 좌우 공간을 동일하게 분배 */
+  padding: 5px 15px;
+  box-sizing: border-box;
 }
 
-.notice-area {
-    height: 100%;
+.backword {
+  width: 35x;
+  height: 35px;
+  filter: invert();
+}
+
+.TitleBox {
+  position: absolute; /* 절대 위치로 중앙 정렬 */
+  left: 50%; /* 부모의 50% 위치 */
+  transform: translateX(-50%);
+  color: white;
+}
+
+.titleName {
+  color: black;
+  text-align: center;
+}
+
+notice-area {
+  height: 100%;
+}
+
+.noticelist {
+  height: 90px;
+  margin-bottom: 5px;
+  background-color: #cccfff;
+  display: flex; /* flexbox 사용 */
+  align-items: center; /* 수직 중앙 정렬 */
+  padding-left: 30px; /* 왼쪽 여백 추가 */
+}
+
+.noticeText {
+  color: black; /* 글자 색상 */
+  font-size: 20px; /* 원하는 글자 크기로 조정 */
+  text-align: left; /* 왼쪽 정렬 */
 }
 
 .notice {
-    height: 80px;
-    margin-bottom: 5px;
-    background-color: #3c3c3c;
+  height: 90px;
+  margin-bottom: 5px;
+  background-color: #eeefff;
+  display: flex; /* flexbox 사용 */
+  align-items: center; /* 수직 중앙 정렬 */
+  padding-left: 30px; /* 왼쪽 여백 추가 */
 }
 
+.date {
+  font-size: 14px; /* 날짜 글자 크기 */
+  color: gray; /* 날짜 색상 */
+  margin: 5px;
+}
 .png-area {
-    height: 100%;
-    background-color: #3c3c3c;
+  height: 750px;
+  background-color: #eeefff;
+  padding: 10px;
+}
+
+.text {
+  color: black; /* 글자 색상 */
+  font-size: 15px; /* 원하는 글자 크기로 조정 */
+  text-align: left;
+  padding-left: 20px;
 }
