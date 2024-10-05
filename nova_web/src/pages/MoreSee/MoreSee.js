@@ -26,6 +26,9 @@ function MoreSee() {
     window.open(url, "_blank", "noopener, noreferrer");
   }
 
+  function handlePage(url) {
+    navigate(url);
+  }
   let navigate = useNavigate();
   let tokenCheck = localStorage.getItem("jwtToken");
 
@@ -70,7 +73,7 @@ function MoreSee() {
             <div
               className={style.mainComponent}
               onClick={() => {
-                navigate("/notice_list");
+                handlePage("/notice_list");
               }}
             >
               <img src={noti_icon} alt="Arrow" className={style.vector} />
@@ -79,10 +82,14 @@ function MoreSee() {
           </div>
 
           <div className={style.row}>
-            <div className={style.mainComponent}>
+            <div className={style.mainComponent}
+              onClick={() => {
+                handlePage("/terms_page");
+              }}>
               <img src={terms_icon} alt="Arrow" className={style.vector} />
               <p className={style.bodyText}>사업자 정보 및 사용약관</p>
             </div>
+
             <div className={style.mainComponent}>
               <img src={set_icon} alt="Arrow" className={style.vector} />
               <p className={style.bodyText}>페이지 설정</p>
