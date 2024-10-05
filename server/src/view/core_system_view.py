@@ -38,9 +38,9 @@ class Core_Service_View(Master_View):
         @self.__app.get('/home/is_valid')
         def get_banner(request:Request):
             request_manager = RequestManager()
-            request_manager.try_view_management(cookies=request.cookies)
-            if not request_manager.jwt_payload.result:
-                raise self._credentials_exception
+            request_manager.try_view_management_need_authorized(cookies=request.cookies)
+            #if not request_manager.jwt_payload.result:
+                #raise self._credentials_exception
 
             home_controller=Home_Controller()
             model = home_controller.get_token(database=self.__database)
