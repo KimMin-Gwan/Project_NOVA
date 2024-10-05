@@ -122,9 +122,7 @@ class Core_Controller:
                 model.set_state_code("261") # 종합 에러
                 return model
             else:
-                print("not checked")
                 model.set_result_valid()
-                print("hello")
             
         except CustomError as e:
             print("Error Catched : ", e.error_type)

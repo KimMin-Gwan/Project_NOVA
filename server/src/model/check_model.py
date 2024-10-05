@@ -104,7 +104,6 @@ class CheckPageModel(BaseModel):
 
     def get_response_form_data(self, head_parser):
         try:
-            print(self._result)
             body = {
                 'bias' : self._bias.get_dict_form_data(),
                 'point' : self._point,
