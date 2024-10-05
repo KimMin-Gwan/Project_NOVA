@@ -68,33 +68,32 @@
         "uname": "지지자",
         "age": "22",
         "email": "randomUser2@naver.com",
+        "password": "sample122",
         "gender": "m",
-        "point": 1000,
+        "solo_point": 1200,
+        "group_point": 0,
+        "solo_combo": 0,
+        "group_combo": 4,
         "credit": 0,
         "solo_bid": "1002",
         "group_bid": "",
-        "items": {
-            "chatting": 0,
-            "saver": 0
-        },
-        "solo_point": 1000,
-        "group_point": 0,
-        "sign": "sample",
-        "password": "sample122",
-        "solo_daily": false,
-        "group_daily": false,
+        "solo_daily": true,
         "solo_special": false,
+        "group_daily": false,
         "group_special": false,
-        "solo_combo": 4,
-        "group_combo": 4,
+        "sign": "sample",
         "select_name_card": "name_card_1",
         "name_card_list": [
             "name_card_1",
             "name_card_2"
         ],
-        "solo_daily_check_date": "",
+        "solo_daily_check_date": "2024/10/06",
         "group_daily_check_date": "",
-        "alert": ["1", "2", "3"]
+        "alert": [
+            "1",
+            "2",
+            "3"
+        ]
     },
     {
         "uid": "ijkl-9876-mnop",

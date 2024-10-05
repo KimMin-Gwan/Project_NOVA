@@ -142,6 +142,10 @@ class ManagedLeague(League):
             m_bias.make_with_dict(bias.get_dict_form_data())
             self.__bias_list.append(m_bias)
 
+        self.__sort_league()
+        return
+
+
     # 리그 메타 정보 접근자 (웹소켓용)
     # lid.lname.num_bias.min.max
     # 데이터의 끝은 /로 표시

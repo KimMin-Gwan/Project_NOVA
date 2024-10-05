@@ -98,7 +98,7 @@ def home():
             async function testTargetEndpoint() {
                 const target = document.getElementById('targetInput').value;
                 try {
-                    const response = await fetch(`http://127.0.0.1:4000/user_home/get_my_alert`, {
+                    const response = await fetch(`http://127.0.0.1:4000/server_info/try_daily_check`, {
                         mode: 'cors',
                         credentials: 'include'
                     });
@@ -134,7 +134,7 @@ def home():
             async function testForthEndpoint() {
                 const number = document.getElementById('numberInput').value;
                 try {
-                    const response = await fetch(`http://127.0.0.1:4000/feed_explore/make_comment`, {
+                    const response = await fetch(`http://127.0.0.1:4000/nova_check/server_info/try_daily_check`, {
                         method: 'POST',
                         credentials: 'include', // 쉼표 추가
                         headers: {
@@ -149,8 +149,7 @@ def home():
                                 "endpoint": "/user_system/",
                                 },
                             "body" : {
-                                "fid" : "2", 
-                                "body": "댓글 달아볼게요"
+                                "type": "solo"
                             }
                         })
                     });
