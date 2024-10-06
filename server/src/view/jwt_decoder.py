@@ -116,7 +116,7 @@ class RequestManager(JWTManager):
             media_type="application/json",
             status_code=status.HTTP_401_UNAUTHORIZED,
         )
-        response.delete_cookie()
+        response.delete_cookie('nova_token')
         return response
 
     # 404

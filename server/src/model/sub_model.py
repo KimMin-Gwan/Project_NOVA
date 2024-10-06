@@ -1,7 +1,7 @@
 from model.base_model import BaseModel
 from model.league_model import LeagueModel
 from model import Local_Database
-from others.data_domain import League, Bias, User
+from others.data_domain import League, Bias, User, Notice
 from others import CoreControllerLogicError
 
 class BiasBannerModel(BaseModel):
@@ -226,30 +226,48 @@ class MyContributionModel(UserContributionModel):
             raise CoreControllerLogicError("response making error | " + e)
         
         
-class NoticeModel(UserContributionModel):
+class NoticeListModel(UserContributionModel):
     def __init__(self, database:Local_Database) -> None:
         super().__init__(database)
-        self.__result = False  # 내가 팔로우 중이면 True
-
-    # 내 최애가 맞는지 확인
-    def is_my_bias(self) -> bool:
-        if self._user.solo_bid == self._bias.bid or self._user.group_bid == self._bias.bid:
-            self.__result = True
-            return True
-        else:
-            return False
+        self.__notice = []
 
     # rank와 point를 포함한 데이터
-    def _get_my_data(self) -> dict:
-        user_data = self._get_dict_user_data_with_rank()
-        dict_user['rank'] = rank
-        return dict_user
+    def get_notice_list(self):
+        notice_datas = self._database.get_all_data(target="nid")
+
+        for notice_data in notice_datas:
+            notice = Notice()
+            notice.get_dict_form_data(notice_data)
+            notice.body = ""
+            self.__notice.append(notice)
 
     def get_response_form_data(self, head_parser):
         try:
             body = {
-                'my_contribution' : self._get_my_data(),
-                'result' : self.__result
+                'notice_list' : self._make_dict_list_data(list_data=self.__notice)
+            }
+
+            response = self._get_response_data(head_parser=head_parser, body=body)
+            return response
+
+        except Exception as e:
+            raise CoreControllerLogicError("response making error | " + e)
+        
+class NoticeModel(UserContributionModel):
+    def __init__(self, database:Local_Database) -> None:
+        super().__init__(database)
+        self.__notice = Notice()
+
+    # rank와 point를 포함한 데이터
+    def get_notice(self, id):
+        notice_data = self._database.get_data_with_id(target="nid", id=id)
+        self.__notice.get_dict_form_data(notice_data)
+        return
+
+    def get_response_form_data(self, head_parser):
+        try:
+            body = {
+                'notice_list' : self._make_dict_list_data(list_data=self.__notice)
             }
 
             response = self._get_response_data(head_parser=head_parser, body=body)
