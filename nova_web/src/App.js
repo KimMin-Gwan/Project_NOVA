@@ -50,6 +50,32 @@ function App() {
   // let url = 'http://127.0.0.1:5000/home/';
   let type = ['solo', 'group'];
 
+  let [isUserState, setIsUserState] = useState(false);
+
+  function handleValidCheck() {
+    fetch("https://nova-platform.kr/home/is_valid", {
+      credentials: "include", // 쿠키를 함께 포함한다는 것
+    })
+      .then((response) => {
+        if (!response.ok) {
+          if (response.status === 401) {
+            setIsUserState(false);
+          } else if (response.status === 200) {
+            setIsUserState(true);
+          } else {
+            throw new Error(`status: ${response.status}`)
+          }
+        }
+        return response.json()
+      })
+      .then((data) => {
+        console.log(data);
+      })
+  }
+
+  useEffect(() => {
+    handleValidCheck()
+  }, []);
 
   let token = localStorage.getItem('jwtToken');
 
@@ -93,11 +119,11 @@ function App() {
       <Route path='/galaxy' element={<GalaxyList />}></Route>
       <Route path='/feed_page' element={<FeedPage />}></Route>
       <Route path='/signup' element={<SignUp />}></Route>
-      <Route path='/terms_page' element={<Temrs/>}></Route>
+      <Route path='/terms_page' element={<Temrs />}></Route>
       <Route path='/league_detail' element={<LeaguePage />}></Route>
       {/* <Route path='/league_detail' element={<LeagueDetail />}></Route> */}
       <Route path="/notice" element={<NoticeList />} />
-        {/* Dynamic Route for Notice Details */}
+      {/* Dynamic Route for Notice Details */}
       <Route path="/notice/:nid" element={<Notice />} />
       <Route path='/my_write_feed' element={<MyWriteFeed />} />
       <Route path='/my_interest_feed' element={<MyInterestFeed />} />
@@ -161,7 +187,7 @@ function App() {
 
           <section>
             <h2 className='satellite-search'>위성 탐색</h2>
-            <InfFeed></InfFeed>
+            <InfFeed isUserState={isUserState}></InfFeed>
           </section>
 
           {/* <section className="solo-bias-rank">

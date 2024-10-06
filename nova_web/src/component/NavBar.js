@@ -6,7 +6,7 @@ import menuBtn_img from './../img/menuBtn.png';
 import galaxy_img from './../img/galaxy.png';
 import shortForm_img from './../img/short_form.png';
 
-const NavBar = () => {
+const NavBar = ({isUserState}) => {
     const [isVisible, setIsVisible] = useState(false);
 
     let navigate = useNavigate();

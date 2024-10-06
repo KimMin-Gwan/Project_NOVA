@@ -1,6 +1,6 @@
 .container {
   max-width: 500px;
-  height: 85vw;
+  height: 200vh;
   margin: 0 auto;
   background-color: #dfdfdf;
   position: relative;
@@ -126,6 +126,7 @@
   border: #dfdfdf;
   font-size: 20px;
   font-weight: 700;
+  cursor: pointer;
 }
 .ticket_wrapper {
   display: flex;
@@ -224,6 +225,7 @@
   font-weight: 700;
   background-color: #dfdfdf;
   border: #dfdfdf;
+  cursor: pointer;
 }
 
 .title_box {
@@ -326,8 +328,8 @@
 .info_list {
   display: grid;
   grid-template-columns: auto 1fr;
-  grid-template-rows: repeat(auto-fit, 30px);
-  row-gap: 5px;
+  grid-template-rows: repeat(auto, 30px);
+  row-gap: 10px;
   align-items: center;
   padding-left: 10px;
 }
@@ -379,6 +381,7 @@
   background-color: #dfdfdf;
   border: #dfdfdf;
   border-radius: 5px;
+  cursor: pointer;
 }
 
 /* 닉네임 관리 */
@@ -415,4 +418,15 @@
   width: 35x;
   height: 35px;
   filter: invert();
+  cursor: pointer;
 }
+
+.cursor {
+  cursor: pointer;
+}
+
+.observe_line {
+  height: 1px;
+  background-color: black;
+}
+

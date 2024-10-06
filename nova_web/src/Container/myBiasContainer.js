@@ -52,8 +52,8 @@ function MyBias({ url, token, showBox, blackBox }) {
 
                 setSoloBias(solo_bias_copy);
                 setGroupBias(group_bias_copy);
-                console.log('솔로 그룹 바이어스 부분', data.body);
-                console.log('fasfa', data)
+                // console.log('솔로 그룹 바이어스 부분', data.body);
+                // console.log('fasfa', data)
             })
             .catch(error => {
                 console.error('Fetch error:', error);

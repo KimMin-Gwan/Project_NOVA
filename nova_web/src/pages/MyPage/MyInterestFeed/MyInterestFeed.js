@@ -92,7 +92,7 @@ export default function MyInterestFeed() {
                     })
                 }
                 {isLoading && <p>Loading...</p>}
-                <div ref={target} style={{ height: "10px", backgroundColor: 'blue' }}></div>
+                <div ref={target} className={style['observe_line']}></div>
 
             </div>
         </div>

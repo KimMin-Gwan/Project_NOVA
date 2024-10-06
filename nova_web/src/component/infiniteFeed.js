@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import style from './../pages/FeedPage/FeedPage.module.css';
 import Feed, { Comments } from './feed';
 
-export default function InfFeed() {
+export default function InfFeed({isUserState}) {
 
     const target = useRef(null);
     const observerRef = useRef(null);
@@ -18,7 +18,7 @@ export default function InfFeed() {
         })
             .then(response => response.json())
             .then(data => {
-                console.log('first feed 3개', data.body);
+                // console.log('first feed 3개', data.body);
                 setFeedData(data.body.feed);
                 setNextData(data.body.key);
                 setIsLoading(false);
@@ -78,7 +78,7 @@ export default function InfFeed() {
             {
                 feedData.map((feed, i) => {
                     return (
-                        <Feed key={feed.fid + i} className='' feed={feed} func={true} feedData={feedData} setFeedData={setFeedData}></Feed>
+                        <Feed key={feed.fid + i} className='' feed={feed} func={true} feedData={feedData} setFeedData={setFeedData} isUserState={isUserState}></Feed>
                     )
                 })
             }

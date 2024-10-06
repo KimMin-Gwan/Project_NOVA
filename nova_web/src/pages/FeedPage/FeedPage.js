@@ -96,6 +96,32 @@ const FeedPage = () => {
   //     event.stopPropagation();
   //   }
   // };
+  let [isUserState, setIsUserState] = useState(false);
+
+  function handleValidCheck() {
+    fetch("https://nova-platform.kr/home/is_valid", {
+      credentials: "include", // 쿠키를 함께 포함한다는 것
+    })
+      .then((response) => {
+        if (!response.ok) {
+          if (response.status === 401) {
+            setIsUserState(false);
+          } else if (response.status === 200) {
+            setIsUserState(true);
+          } else {
+            throw new Error(`status: ${response.status}`)
+          }
+        }
+        return response.json()
+      })
+      .then((data) => {
+        console.log(data);
+      })
+  }
+
+  useEffect(() => {
+    handleValidCheck()
+  }, []);
 
   function fetchFeed() {
     fetch(`https://nova-platform.kr/feed_explore/get_feed?fclass=None`, {
@@ -311,10 +337,20 @@ const FeedPage = () => {
             navigate(-1);
           }}
         />
-        <img src={edit_feed} alt='edit' className={style['write_button']}
-          onClick={() => {
-            navigate('/write_feed')
-          }}></img>
+        {
+          isUserState ? (
+            <img src={edit_feed} alt='edit' className={style['write_button']}
+              onClick={() => {
+                navigate('/write_feed')
+              }}></img>
+          ) : (
+            <img src={edit_feed} alt='edit' className={style['write_button']}
+              onClick={() => {
+                alert('로그인이 필요합니다.')
+              }}></img>
+          )
+        }
+
       </div>
 
       <div
@@ -398,26 +434,39 @@ const FeedPage = () => {
 
                   <div className={style["function_button"]}>
                     <div className={style["func_btn"]}>
-                      <button
-                        onClick={() => {
-                          handleCheckStar(banner.fid, i);
-                        }}
-                      >
-                        <FaStar className={style["func_btn_img"]} style={banner.star_flag ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }} />
-                      </button>
+                      {
+                        isUserState ? (
+                          <button
+                            onClick={() => {
+                              handleCheckStar(banner.fid, i);
+                            }}>
+                            <FaStar className={style["func_btn_img"]} style={banner.star_flag ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }} />
+                          </button>
+                        ) : (
+                          <button onClick={(e) => {
+                            e.preventDefault()
+                            alert('로그인이 필요합니다.');
+                          }}>
+                            <FaStar className={style["func_btn_img"]} style={banner.star_flag ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }} />
+                          </button>
+                        )
+                      }
+
+
                       {/* <p>{numStar[i]}</p> */}
                       <p>{banner.star}</p>
                     </div>
                     <div className={style["func_btn"]}>
+
                       <button
                         onClick={(event) => {
                           handleShowComment(banner.fid, event);
                           handleShowCommentWindow();
                           // handleCheckComment(banner.fid, i);
-                        }}
-                      >
+                        }}>
                         <TfiCommentAlt className={style["func_btn_img"]} />
                       </button>
+
                       <p>{banner.num_comment}</p>
                     </div>
                     <div className={style["func_btn"]}>

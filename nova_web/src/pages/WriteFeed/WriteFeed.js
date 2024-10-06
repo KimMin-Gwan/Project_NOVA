@@ -42,8 +42,8 @@ const WriteFeed = () => {
             body: {
                 body: bodyText, // 입력된 글 본문 반영
                 fid: "",
-                fclass: currentFclass,
-                choice: currentFclass === 'multiple' ? choice : [''], // 4지선다 선택지 반영
+                fclass: fclassName[currentFclass],
+                choice: choice, // 4지선다 선택지 반영
             },
         };
 
@@ -59,7 +59,6 @@ const WriteFeed = () => {
             body: formData,
         })
             .then(response => {
-                console.log(formData);
                 response.json()
             })
             .then(data => {
@@ -79,15 +78,14 @@ const WriteFeed = () => {
     let title = ['줄 글', '사지선다', '이지선다', '외부 좌표'];
     let fclassName = ['card', 'multiple', 'balance', 'station'];
     let [currentTitle, setCurrentTitle] = useState(0);
-    let [currentFclass, setCurrentFclass] = useState('card');
-    // let [writeTitle, setWriteTitle] = useState();
+    let [currentFclass, setCurrentFclass] = useState(0);
 
     function handlePrev() {
         setCurrentTitle((prevIndex) => {
             return (prevIndex === 0 ? title.length - 1 : prevIndex - 1);
         })
         setCurrentFclass((prevIndex) => {
-            return (prevIndex === 0 ? title.length - 1 : prevIndex - 1);
+            return (prevIndex === 0 ? fclassName.length - 1 : prevIndex - 1);
         })
     }
     function handleNext() {
@@ -95,7 +93,7 @@ const WriteFeed = () => {
             return (prevIndex === title.length - 1 ? 0 : prevIndex + 1);
         });
         setCurrentFclass((prevIndex) => {
-            return (prevIndex === title.length - 1 ? 0 : prevIndex + 1);
+            return (prevIndex === fclassName.length - 1 ? 0 : prevIndex + 1);
         });
 
     }
@@ -127,8 +125,8 @@ const WriteFeed = () => {
 
             <div style={{ height: '50px' }}></div>
             <div className={style.test} >
-                <div className={style['short_form_container']}>
-                    <div className={style['short_box']}>
+                <div className={`${style['short_form_container']} ${style['write_form_container']}`}>
+                    <div className={`${style['short_box']} ${style['write_short_box']}`}>
                         <div className={`${style['img_circle']} ${style['upload_area']}`}>
                             <input type='file' onChange={handleFileChange}></input>
                         </div>

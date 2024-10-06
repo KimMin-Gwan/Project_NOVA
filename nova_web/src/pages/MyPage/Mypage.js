@@ -7,6 +7,8 @@ import novaAL_icon from "./../../img/novaAL_icon.png";
 import judge_icon from "./../../img/judge_icon.png";
 import galaxyleague from "./../../img/galaxyleague.png";
 import star_powder from "./../../img/starpowder.png";
+import empty from './../../img/empty.png';
+
 import { TfiCommentAlt } from "react-icons/tfi";
 
 import { CiStar, CiEdit } from "react-icons/ci";
@@ -93,7 +95,7 @@ function MyPage() {
             <div className={style["wrap_sup"]}>
               <div className={style.support}>지지자</div>
               <div className={style.space_pass}>우주인 패스 +</div>
-              <div onClick={handleClick}>{isClicked ? <IoIosArrowBack size={40} /> : <IoIosArrowForward size={40} />}</div>
+              <div onClick={handleClick}>{isClicked ? <IoIosArrowBack size={40} style={{ cursor: 'pointer' }} /> : <IoIosArrowForward size={40} style={{ cursor: 'pointer' }} />}</div>
             </div>
           </div>
           <div className={style["ticket_part"]}>
@@ -121,20 +123,31 @@ function MyPage() {
               <div className={style["half_box"]}>
                 <div className={`left-box ${style["img_box"]}`}>
                   <div className="image-container">
-                    <img src={bias_url + `${mySoloBias.bid}.PNG`} alt="bias" className="img2" />
+                    {
+                      mySoloBias.bid === '' ? <img src={empty} /> :
+                        <img src={bias_url + `${mySoloBias.bid}.PNG`} alt="bias" className="img2" />
+                    }
                   </div>
                 </div>
               </div>
               <div className={style["half_box"]}>
                 <div className={style["text_box"]}>
                   <p>나의최애</p>
-                  <div className={style["bias_name"]}>{mySoloBias.bname}</div>
-                  <div className={style["powder_wrapper"]}>
-                    <img src={star_powder} alt="star_powder" className={style["poweder_box"]} />
-                    <div className={style["season_star_dust"]}>이번 시즌에 기여한 별가루</div>
-                  </div>
-                  <h2>{myData.solo_point} pt</h2>
-                  <button className={style["funding_btn"]}>펀딩</button>
+                  {mySoloBias.bname === "" ? <div className={style["not_name"]}>아직 최애가 없어요</div> : <div className={style["bias_name"]}>{mySoloBias.bname}</div>}
+                  {
+                    myData.solo_bid === '' ? (
+                      <div className={style["support_text"]}>최애를 정하고 지지해보는건 어떨까요?</div>
+                    ) : (
+                      <>
+                        <div className={style["powder_wrapper"]}>
+                          <img src={star_powder} alt="star_powder" className={style["poweder_box"]} />
+                          <div className={style["season_star_dust"]}>이번 시즌에 기여한 별가루</div>
+                        </div>
+                        <h2>{myData.solo_point} pt</h2>
+                        <button className={style["funding_btn"]} disabled>펀딩</button>
+                      </>
+                    )
+                  }
                 </div>
               </div>
             </div>
@@ -149,19 +162,30 @@ function MyPage() {
               <div className={style["half_box"]}>
                 <div className={`left-box ${style["img_box"]}`}>
                   <div className="image-container">
-                    <img src={bias_url + `${myGroupBias.bid}.PNG`} alt="bias" className="img2" />
+                    {
+                      myGroupBias.bid === '' ? <img src={empty} /> :
+                        <img src={bias_url + `${myGroupBias.bid}.PNG`} alt="bias" className="img2" />
+                    }
                   </div>
                 </div>
               </div>
               <div className={style["half_box"]}>
                 <div className={style["text_box"]}>
                   {myGroupBias.bname === "" ? <div className={style["not_name"]}>아직 최애가 없어요</div> : <div className={style["bias_name"]}>{myGroupBias.bname}</div>}
-                  <div className={style["support_text"]}>최애를 정하고 지지해보는건 어떨까요?</div>
-
-                  {/* <div className={style['bias_name']}>{myGroupBias.bname === '' && '아직 최애없음'}</div> */}
-                  {/* <div className={style["season_star_dust"]}>이번 시즌에 기여한 별가루</div> */}
-                  {/* <h2>{myData.group_point} pt</h2> */}
-                  {/* <button className={style["funding_btn"]}>펀딩</button> */}
+                  {
+                    myData.group_bid === '' ? (
+                      <div className={style["support_text"]}>최애를 정하고 지지해보는건 어떨까요?</div>
+                    ) : (
+                      <>
+                        <div className={style["powder_wrapper"]}>
+                          <img src={star_powder} alt="star_powder" className={style["poweder_box"]} />
+                          <div className={style["season_star_dust"]}>이번 시즌에 기여한 별가루</div>
+                        </div>
+                        <h2>{myData.group_point} pt</h2>
+                        <button className={style["funding_btn"]} disabled>펀딩</button>
+                      </>
+                    )
+                  }
                 </div>
               </div>
             </div>
@@ -204,10 +228,11 @@ function MyPage() {
             <h4>나의 활동</h4>
             <div className={style["my_activity"]}>
               <div className={style.activity}>
+
                 <CiEdit className={style["activity_icon"]} />
                 <div>내가 작성한 피드</div>
                 <IoIosArrowForward
-                  className={style["activity_icon"]}
+                  className={`${style["activity_icon"]} ${style.cursor}`}
                   onClick={(e) => {
                     handleMovePage(e, "/my_write_feed");
                   }}
@@ -216,27 +241,27 @@ function MyPage() {
                 <CiStar className={style["activity_icon"]} />
                 <div>관심 표시한 피드</div>
                 <IoIosArrowForward
-                  className={style["activity_icon"]}
+                  className={`${style["activity_icon"]} ${style.cursor}`}
                   onClick={(e) => {
                     handleMovePage(e, "/my_interest_feed");
-                  }}
-                />
-
-                <TfiCommentAlt className={style["activity_icon"]} />
-                <div>내가 작성한 댓글</div>
-                <IoIosArrowForward
-                  className={style["activity_icon"]}
-                  onClick={(e) => {
-                    handleMovePage(e, "/my_comment_feed");
                   }}
                 />
 
                 <IoMdCheckmarkCircleOutline className={style["activity_icon"]} />
                 <div>내가 참여한 피드</div>
                 <IoIosArrowForward
-                  className={style["activity_icon"]}
+                  className={`${style["activity_icon"]} ${style.cursor}`}
                   onClick={(e) => {
                     handleMovePage(e, "/my_active_feed");
+                  }}
+                />
+
+                {/* <TfiCommentAlt className={style["activity_icon"]}/>
+                <div>내가 작성한 댓글</div>
+                <IoIosArrowForward
+                  className={style["activity_icon"]}
+                  onClick={(e) => {
+                    handleMovePage(e, "/my_comment_feed");
                   }}
                 />
 
@@ -247,7 +272,7 @@ function MyPage() {
                   onClick={(e) => {
                     handleMovePage(e, "/my_alerts");
                   }}
-                />
+                /> */}
               </div>
             </div>
           </div>
@@ -315,19 +340,19 @@ function MyPage() {
               <div className={style["nickname_box"]}>
                 <div>기본 사용자명</div>
                 <div>지지자</div>
-                <button>선택</button>
+                <button className={style.cursor}>선택</button>
 
                 <div>개인 팬덤명</div>
                 <div>지지자</div>
-                <button>선택</button>
+                <button className={style.cursor}>선택</button>
 
                 <div>그룹 팬덤명</div>
                 <div>지지자</div>
-                <button>선택</button>
+                <button className={style.cursor}>선택</button>
 
                 <div>커스텀 닉네임</div>
                 <input placeholder="우주인 패스 결제 상품"></input>
-                <button>선택</button>
+                <button className={style.cursor}>선택</button>
               </div>
             </div>
           </div>

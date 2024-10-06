@@ -9,7 +9,7 @@ import { FaStar } from "react-icons/fa";
 
 // import { useRef, useState } from 'react';
 
-export default function Feed({ className, feed, func, feedData, setFeedData, img_circle }) {
+export default function Feed({ className, feed, func, feedData, setFeedData, img_circle, isUserState }) {
 
     // function handleRequestURL() {
     //     window.open(requestURL, '_blank', "noopener, noreferrer");
@@ -34,8 +34,8 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
 
         fetch(`https://nova-platform.kr/feed_explore/interaction_feed?fid=${fid}&action=${action}`, {
             credentials: 'include'
-        })            
-        .then(response => {
+        })
+            .then(response => {
                 if (!response.ok) {
                     if (response.status === 401) {
                         setIsError(response.status);
@@ -71,8 +71,8 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
         setIsClickedStar(!isClickedStar);
         fetch(`https://nova-platform.kr/feed_explore/check_star?fid=${fid}`, {
             credentials: 'include',
-        })           
-        .then(response => {
+        })
+            .then(response => {
                 if (!response.ok) {
                     if (response.status === 401) {
                         setIsError(response.status);
@@ -157,7 +157,7 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
         fetch(`https://nova-platform.kr/feed_explore/remove_comment?fid=${fid}&cid=${cid}`,
             {
                 credentials: 'include'
-            })            
+            })
             .then(response => {
                 if (!response.ok) {
                     if (response.status === 401) {
@@ -207,8 +207,18 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                                                         <div className={style['report_star_btn']}>
                                                                             <div className={style.report}>신고</div>
                                                                             <div className={style['star_num']}>
-                                                                                <FaStar className={style['comment_like']} style={comment.like_user ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
-                                                                                    onClick={(event) => handleCommentLike(comment.fid, comment.cid, event)} />
+                                                                                {
+                                                                                    isUserState ? (
+                                                                                        <FaStar className={style['comment_like']} style={comment.like_user ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
+                                                                                            onClick={(event) => handleCommentLike(comment.fid, comment.cid, event)} />
+                                                                                    ) : (
+                                                                                        <FaStar className={style['comment_like']} style={comment.like_user ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
+                                                                                            onClick={(e) => {
+                                                                                                e.preventDefault()
+                                                                                                alert('로그인을 해주세요.')
+                                                                                            }} />
+                                                                                    )
+                                                                                }
                                                                                 <div style={{ marginLeft: '2px' }}>
                                                                                     {comment.like}
                                                                                 </div>
@@ -254,8 +264,18 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                         }
                                     </div>
                                     <div className={style['like_btn']}>
-                                        <FaStar className={style.like} style={feed.star_flag ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
-                                            onClick={(e) => { handleCheckStar(feed.fid, e) }} />
+                                        {
+                                            isUserState ? (
+                                                <FaStar className={style.like} style={feed.star_flag ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
+                                                    onClick={(e) => { handleCheckStar(feed.fid, e) }} />
+                                            ) : (
+                                                <FaStar className={style.like} style={feed.star_flag ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
+                                                    onClick={(e) => {
+                                                        e.preventDefault()
+                                                        alert('로그인이 필요합니다.')
+                                                    }} />
+                                            )
+                                        }
                                         <div>{feed.star}</div>
                                     </div>
                                 </div>
@@ -263,7 +283,7 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                         }
 
                         <div className={style.line}></div>
-                        <Comments feed={feed} allComments={allComments} setAllComments={setAllComments} setFeedData={setFeedData} ></Comments>
+                        <Comments feed={feed} allComments={allComments} setAllComments={setAllComments} setFeedData={setFeedData} isUserState={isUserState}></Comments>
                     </div>
                 )
             }
@@ -294,8 +314,18 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                                                         <div className={style['report_star_btn']}>
                                                                             <div className={style.report}>신고</div>
                                                                             <div className={style['star_num']}>
-                                                                                <FaStar className={style['comment_like']} style={comment.like_user ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
-                                                                                    onClick={(event) => handleCommentLike(comment.fid, comment.cid, event)} />
+                                                                                {
+                                                                                    isUserState ? (
+                                                                                        <FaStar className={style['comment_like']} style={comment.like_user ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
+                                                                                            onClick={(event) => handleCommentLike(comment.fid, comment.cid, event)} />
+                                                                                    ) : (
+                                                                                        <FaStar className={style['comment_like']} style={comment.like_user ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
+                                                                                            onClick={(e) => {
+                                                                                                e.preventDefault()
+                                                                                                alert('로그인을 해주세요.')
+                                                                                            }} />
+                                                                                    )
+                                                                                }
                                                                                 <div style={{ marginLeft: '2px' }}>
                                                                                     {comment.like}
                                                                                 </div>
@@ -321,26 +351,53 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                             <ol className={style['quiz_box']}>
                                                 {
                                                     feed.choice.map((choi, i) => {
+
                                                         if (feed.attend === i) {
-                                                            return (
-                                                                <li onClick={(e) => {
-                                                                    handleInteraction(e, feed.fid, i)
-                                                                    handleClick(i);
-                                                                }} key={i} style={{ backgroundColor: i === feed.attend ? '#D2C8F7' : 'white' }}>{i + 1}. {choi}
-                                                                    <span>{feed.result[i]}</span>
-                                                                </li>
-                                                            )
+                                                            if (isUserState) {
+                                                                return (
+                                                                    <li onClick={(e) => {
+                                                                        handleInteraction(e, feed.fid, i)
+                                                                        handleClick(i);
+                                                                    }} key={i} style={{ backgroundColor: i === feed.attend ? '#D2C8F7' : 'white' }}>{i + 1}. {choi}
+                                                                        <span>{feed.result[i]}</span>
+                                                                    </li>
+                                                                )
+                                                            } else {
+                                                                return (
+                                                                    <li onClick={(e) => {
+                                                                        e.preventDefault();
+                                                                        alert('로그인이 필요합니다.')
+                                                                    }} key={i} style={{ backgroundColor: i === feed.attend ? '#D2C8F7' : 'white' }}>{i + 1}. {choi}
+                                                                        <span>{feed.result[i]}</span>
+                                                                    </li>
+                                                                )
+                                                            }
+
                                                         } else {
-                                                            return (
-                                                                <li onClick={(e) => {
-                                                                    handleInteraction(e, feed.fid, i)
-                                                                    handleClick(i);
-                                                                }} key={i} style={{ backgroundColor: selectedIndex === i ? '#D2C8F7' : 'white' }}>{i + 1}. {choi}
-                                                                    {
-                                                                        feed.attend !== -1 ? <span>{feed.result[i]}</span> : <span></span>
-                                                                    }
-                                                                </li>
-                                                            )
+                                                            if (isUserState) {
+                                                                return (
+                                                                    <li onClick={(e) => {
+                                                                        handleInteraction(e, feed.fid, i)
+                                                                        handleClick(i);
+                                                                    }} key={i} style={{ backgroundColor: selectedIndex === i ? '#D2C8F7' : 'white' }}>{i + 1}. {choi}
+                                                                        {
+                                                                            feed.attend !== -1 ? <span>{feed.result[i]}</span> : <span></span>
+                                                                        }
+                                                                    </li>
+                                                                )
+                                                            } else {
+                                                                return (
+                                                                    <li onClick={(e) => {
+                                                                        e.preventDefault();
+                                                                        alert('로그인이 필요합니다.')
+                                                                    }} key={i} style={{ backgroundColor: selectedIndex === i ? '#D2C8F7' : 'white' }}>{i + 1}. {choi}
+                                                                        {
+                                                                            feed.attend !== -1 ? <span>{feed.result[i]}</span> : <span></span>
+                                                                        }
+                                                                    </li>
+                                                                )
+                                                            }
+
                                                         }
                                                         // <li key={i}>{i + 1}. {choice}</li>
                                                     })
@@ -371,15 +428,25 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                         }
                                     </div>
                                     <div className={style['like_btn']}>
-                                        <FaStar className={style.like} style={feed.star_flag ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
-                                            onClick={(e) => { handleCheckStar(feed.fid, e) }} />
+                                        {
+                                            isUserState ? (
+                                                <FaStar className={style.like} style={feed.star_flag ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
+                                                    onClick={(e) => { handleCheckStar(feed.fid, e) }} />
+                                            ) : (
+                                                <FaStar className={style.like} style={feed.star_flag ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
+                                                    onClick={(e) => {
+                                                        e.preventDefault()
+                                                        alert('로그인이 필요합니다.')
+                                                    }} />
+                                            )
+                                        }
                                         <div>{feed.star}</div>
                                     </div>
                                 </div>
                             )
                         }
                         <div className={style.line}></div>
-                        <Comments feed={feed} allComments={allComments} setAllComments={setAllComments} setFeedData={setFeedData}></Comments>
+                        <Comments feed={feed} allComments={allComments} setAllComments={setAllComments} setFeedData={setFeedData} isUserState={isUserState}></Comments>
                     </div>
                 )
             }
@@ -410,8 +477,18 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                                                         <div className={style['report_star_btn']}>
                                                                             <div className={style.report}>신고</div>
                                                                             <div className={style['star_num']}>
-                                                                                <FaStar className={style['comment_like']} style={comment.like_user ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
-                                                                                    onClick={(event) => handleCommentLike(comment.fid, comment.cid, event)} />
+                                                                                {
+                                                                                    isUserState ? (
+                                                                                        <FaStar className={style['comment_like']} style={comment.like_user ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
+                                                                                            onClick={(event) => handleCommentLike(comment.fid, comment.cid, event)} />
+                                                                                    ) : (
+                                                                                        <FaStar className={style['comment_like']} style={comment.like_user ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
+                                                                                            onClick={(e) => {
+                                                                                                e.preventDefault()
+                                                                                                alert('로그인을 해주세요.')
+                                                                                            }} />
+                                                                                    )
+                                                                                }
                                                                                 <div style={{ marginLeft: '2px' }}>
                                                                                     {comment.like}
                                                                                 </div>
@@ -441,16 +518,32 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                                         return (
                                                             <div key={feed.fid + i}>
                                                                 <div>
-                                                                    <button className={style['select_button']} onClick={(event) => {
-                                                                        handleInteraction(event, feed.fid, i)
-                                                                        handleClick(i)
+                                                                    {
+                                                                        isUserState ? (
+                                                                            <button className={style['select_button']} onClick={(event) => {
+                                                                                handleInteraction(event, feed.fid, i)
+                                                                                handleClick(i)
+                                                                            }
+                                                                            } style={{ backgroundColor: i === feed.attend ? '#D2C8F7' : 'white' }}>
+                                                                                {sel} <br />
+                                                                                {
+                                                                                    feed.attend !== -1 ? <span>{feed.result[i]}명</span> : <span></span>
+                                                                                }
+                                                                            </button>
+                                                                        ) : (
+                                                                            <button className={style['select_button']} onClick={(e) => {
+                                                                                e.preventDefault();
+                                                                                alert('로그인이 필요합니다.')
+                                                                            }
+                                                                            } style={{ backgroundColor: i === feed.attend ? '#D2C8F7' : 'white' }}>
+                                                                                {sel} <br />
+                                                                                {
+                                                                                    feed.attend !== -1 ? <span>{feed.result[i]}명</span> : <span></span>
+                                                                                }
+                                                                            </button>
+                                                                        )
                                                                     }
-                                                                    } style={{ backgroundColor: i === feed.attend ? '#D2C8F7' : 'white' }}>
-                                                                        {sel} <br />
-                                                                        {
-                                                                            feed.attend !== -1 ? <span>{feed.result[i]}명</span> : <span></span>
-                                                                        }
-                                                                    </button>
+
                                                                 </div>
 
                                                             </div>
@@ -484,15 +577,25 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                         }
                                     </div>
                                     <div className={style['like_btn']}>
-                                        <FaStar className={style.like} style={feed.star_flag ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
-                                            onClick={(e) => { handleCheckStar(feed.fid, e) }} />
+                                        {
+                                            isUserState ? (
+                                                <FaStar className={style.like} style={feed.star_flag ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
+                                                    onClick={(e) => { handleCheckStar(feed.fid, e) }} />
+                                            ) : (
+                                                <FaStar className={style.like} style={feed.star_flag ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
+                                                    onClick={(e) => {
+                                                        e.preventDefault()
+                                                        alert('로그인이 필요합니다.')
+                                                    }} />
+                                            )
+                                        }
                                         <div>{feed.star}</div>
                                     </div>
                                 </div>
                             )
                         }
                         <div className={style.line}></div>
-                        <Comments feed={feed} allComments={allComments} setAllComments={setAllComments} setFeedData={setFeedData}></Comments>
+                        <Comments feed={feed} allComments={allComments} setAllComments={setAllComments} setFeedData={setFeedData} isUserState={isUserState}></Comments>
                     </div>
                 )
             }
@@ -524,8 +627,18 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                                                         <div className={style['report_star_btn']}>
                                                                             <div className={style.report}>신고</div>
                                                                             <div className={style['star_num']}>
-                                                                                <FaStar className={style['comment_like']} style={comment.like_user ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
-                                                                                    onClick={(event) => handleCommentLike(comment.fid, comment.cid, event)} />
+                                                                                {
+                                                                                    isUserState ? (
+                                                                                        <FaStar className={style['comment_like']} style={comment.like_user ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
+                                                                                            onClick={(event) => handleCommentLike(comment.fid, comment.cid, event)} />
+                                                                                    ) : (
+                                                                                        <FaStar className={style['comment_like']} style={comment.like_user ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
+                                                                                            onClick={(e) => {
+                                                                                                e.preventDefault()
+                                                                                                alert('로그인을 해주세요.')
+                                                                                            }} />
+                                                                                    )
+                                                                                }
                                                                                 <div style={{ marginLeft: '2px' }}>
                                                                                     {comment.like}
                                                                                 </div>
@@ -582,15 +695,25 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                         }
                                     </div>
                                     <div className={style['like_btn']}>
-                                        <FaStar className={style.like} style={feed.star_flag ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
-                                            onClick={(e) => { handleCheckStar(feed.fid, e) }} />
+                                        {
+                                            isUserState ? (
+                                                <FaStar className={style.like} style={feed.star_flag ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
+                                                    onClick={(e) => { handleCheckStar(feed.fid, e) }} />
+                                            ) : (
+                                                <FaStar className={style.like} style={feed.star_flag ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
+                                                    onClick={(e) => {
+                                                        e.preventDefault()
+                                                        alert('로그인이 필요합니다.')
+                                                    }} />
+                                            )
+                                        }
                                         <div>{feed.star}</div>
                                     </div>
                                 </div>
                             )
                         }
                         <div className={style.line}></div>
-                        <Comments feed={feed} allComments={allComments} setAllComments={setAllComments} setFeedData={setFeedData}></Comments>
+                        <Comments feed={feed} allComments={allComments} setAllComments={setAllComments} setFeedData={setFeedData} isUserState={isUserState}></Comments>
                     </div>
                 )
             }
@@ -663,7 +786,7 @@ export function Text({ name, data }) {
     )
 }
 
-export function Comments({ isClickedComment, feed, allComments, setAllComments, setFeedData }) {
+export function Comments({ isClickedComment, feed, allComments, setAllComments, setFeedData, isUserState }) {
     let header = {
         "request-type": "default",
         "client-version": 'v1.0.1',
@@ -696,8 +819,8 @@ export function Comments({ isClickedComment, feed, allComments, setAllComments, 
                     body: `${inputValue}`
                 }
             })
-        })            
-        .then(response => {
+        })
+            .then(response => {
                 if (!response.ok) {
                     if (response.status === 401) {
                         setIsError(response.status);
@@ -720,7 +843,7 @@ export function Comments({ isClickedComment, feed, allComments, setAllComments, 
                     })
                 })
                 setInputValue('');
-                console.log('asdjljsdlasdajld', allComments);
+                // console.log('asdjljsdlasdajld', allComments);
             })
     }
 
@@ -745,53 +868,66 @@ export function Comments({ isClickedComment, feed, allComments, setAllComments, 
                 }
             </div>
             <div className={style['comment_action']}>
-                <form onSubmit={(event) => handleSubmit(feed.fid, event)}>
-                    <input type='text' value={inputValue} onChange={handleChange}></input>
-                    <button type='submit'>댓글 작성</button>
-                </form>
+                {
+                    isUserState ? (
+                        <form onSubmit={(event) => handleSubmit(feed.fid, event)}>
+                            <input type='text' value={inputValue} onChange={handleChange}></input>
+                            <button type='submit'>댓글 작성</button>
+                        </form>
+                    ) : (
+                        <form onSubmit={(event) => {
+                            event.preventDefault()
+                            alert('로그인이 필요합니다.')
+                        }}>
+                            <input type='text' value={inputValue} onChange={handleChange}></input>
+                            <button type='submit'>댓글 작성</button>
+                        </form>
+                    )
+                }
+
             </div>
 
         </div>
     )
 }
 
-export function InputFeed() {
-    return (
-        <div className={`${style['input_feed']}`}>
-            <div className={style['input_title']}>
-                <input type='text' placeholder='글 제목'></input>
-            </div>
-            <div className={style['input_content']}>
-                <div className={style['content_container']}>
-                    {/* 글 내용 박스는 정거장과 퀴즈일때 안보여야 됨 */}
-                    <textarea type='text' placeholder='글 내용'></textarea>
-                    {/* 정거장 */}
-                    {/* <div className={style.station}>
-                        <input type='text' placeholder='사이트 이름'></input>
-                        <input type='text' placeholder='링크 설명'></input>
-                        <input type='url' placeholder='링크 주소'></input>
-                    </div> */}
-                    {/* 퀴즈  */}
-                    {/* <div className={style['input_quiz_box']}>
-                        <input type='text' placeholder='목록1'></input>
-                        <input type='text' placeholder='목록2'></input>
-                        <input type='text' placeholder='목록3'></input>
-                        <input type='text' placeholder='목록4'></input>
-                    </div> */}
-                    {/* 이지선다 */}
-                    <div className={style['input_button_container']}>
-                        <input className={style['select_button']} placeholder='선택지1'></input>
-                        <input className={style['select_button']} placeholder='선택지2'></input>
-                    </div>
-                    {/* 일반 */}
-                    {/* <input type='text'></input> */}
-                    <div className={style['submit_area']}>
-                        <button type='submit' className={style['submit_button']}>작성 완료</button>
-                        <h6>타인에게 불편을 줄 수 있는 내용의 게시글은 경고없이 삭제될 수 있습니다.</h6>
-                    </div>
-                </div>
+// export function InputFeed() {
+//     return (
+//         <div className={`${style['input_feed']}`}>
+//             <div className={style['input_title']}>
+//                 <input type='text' placeholder='글 제목'></input>
+//             </div>
+//             <div className={style['input_content']}>
+//                 <div className={style['content_container']}>
+//                     {/* 글 내용 박스는 정거장과 퀴즈일때 안보여야 됨 */}
+//                     <textarea type='text' placeholder='글 내용'></textarea>
+//                     {/* 정거장 */}
+//                     {/* <div className={style.station}>
+//                         <input type='text' placeholder='사이트 이름'></input>
+//                         <input type='text' placeholder='링크 설명'></input>
+//                         <input type='url' placeholder='링크 주소'></input>
+//                     </div> */}
+//                     {/* 퀴즈  */}
+//                     {/* <div className={style['input_quiz_box']}>
+//                         <input type='text' placeholder='목록1'></input>
+//                         <input type='text' placeholder='목록2'></input>
+//                         <input type='text' placeholder='목록3'></input>
+//                         <input type='text' placeholder='목록4'></input>
+//                     </div> */}
+//                     {/* 이지선다 */}
+//                     <div className={style['input_button_container']}>
+//                         <input className={style['select_button']} placeholder='선택지1'></input>
+//                         <input className={style['select_button']} placeholder='선택지2'></input>
+//                     </div>
+//                     {/* 일반 */}
+//                     {/* <input type='text'></input> */}
+//                     <div className={style['submit_area']}>
+//                         <button type='submit' className={style['submit_button']}>작성 완료</button>
+//                         <h6>타인에게 불편을 줄 수 있는 내용의 게시글은 경고없이 삭제될 수 있습니다.</h6>
+//                     </div>
+//                 </div>
 
-            </div>
-        </div>
-    )
-}
+//             </div>
+//         </div>
+//     )
+// }
