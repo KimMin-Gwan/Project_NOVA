@@ -158,8 +158,8 @@ class TryCheckModel(CheckPageModel):
             raise CoreControllerLogicError(error_type="try_daily_check | " )
         
     def _save_datas(self):
-        #self._database.modify_data_with_id(target_id="bid", target_data=self._bias.get_dict_form_data())
-        self._database.modify_data_with_id(target_id="uid", target_data=self._user.get_dict_form_data())
+        self._database.modify_data_with_id(target_id="bid", target_data=self._bias.get_dict_form_data())
+        #self._database.modify_data_with_id(target_id="uid", target_data=self._user.get_dict_form_data())
         return
         
     # 네임카드를 만들고 업로드 하고 url을 name_card로 돌려줘야함
