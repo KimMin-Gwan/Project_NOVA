@@ -113,8 +113,7 @@ class RequestManager(JWTManager):
     # 쿠키 지우는 마법
     def try_clear_cookies(self):
         response = Response(
-            media_type="application/json",
-            status_code=status.HTTP_401_UNAUTHORIZED,
+            status_code=200
         )
         response.delete_cookie('nova_token')
         return response
