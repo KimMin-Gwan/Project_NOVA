@@ -36,7 +36,15 @@ class Core_Service_View(Master_View):
 
         # 홈화
         @self.__app.get('/home/is_valid')
-        def get_banner(request:Request):
+        def is_valid_user(request:Request):
+            
+            try:
+                client_host = request.client.host
+                client_ip = request.headers['x-real-ip']
+                print(f"{client_ip}  -  GET /home/is_valid 200 OK")
+            except:
+                print("Anonymous User Try Contact Us")
+
             request_manager = RequestManager()
             request_manager.try_view_management_need_authorized(cookies=request.cookies)
             #if not request_manager.jwt_payload.result:

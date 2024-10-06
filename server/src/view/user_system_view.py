@@ -23,6 +23,7 @@ class User_Service_View(Master_View):
         def home():
             return 'Hello, This is User system'
 
+        #로그인
         @self.__app.post('/user_home/try_login')
         def try_login(raw_request:dict):
             request_manager = RequestManager()
@@ -34,6 +35,14 @@ class User_Service_View(Master_View):
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data,
                                                            token=body_data['body']['token'])
+            return response
+
+        # 로그아웃
+        @self.__app.post('/user_home/try_logout')
+        def try_login(request:Request):
+            request_manager = RequestManager()
+            request_manager.try_view_management_need_authorized(data_payload=None, cookies=request.cookies)
+            response = request_manager.try_clear_cookies()
             return response
 
         # 이메일 전송
@@ -113,7 +122,8 @@ class User_Service_View(Master_View):
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response
-
+        
+        
         @self.__app.get('/user_home/get_my_feed')
         def get_my_feed(request:Request, fid:Optional[str] = ""):
             request_manager = RequestManager()
