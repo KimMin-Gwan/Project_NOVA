@@ -132,15 +132,15 @@ function App() {
                 </button>
                 {/* <Link to='/' className='button'>홈</Link> */}
                 {/* <Link to='/namecard' className='button'>명함</Link> */}
-                <Link to='/test' className='button'>테스트</Link>
-                <Link to='/write_feed' className='button'>글쓰기</Link>
+                {/* <Link to='/test' className='button'>테스트</Link> */}
+                {/* <Link to='/write_feed' className='button'>글쓰기</Link> */}
                 {/* <Link to='/planet' className='button'>행성페이지</Link>
                 <Link to='/galaxy' className='button'>은하페이지</Link>
                 <Link to='/feed_page' className='button'>피드페이지</Link>
                 <Link to='/signup' className='button'>회원가입</Link>
                 <Link to='/league_detail' className='button'>리그 자세히보기</Link>
                 <Link to='/novalogin' className='button'>로그인 페이지</Link> */}
-                <Link to='/mypage' className='button'>마이페이지</Link>
+                {/* <Link to='/mypage' className='button'>마이페이지</Link> */}
                 {/* <Link to='/bias_certify' className='button'>최애 지지하기</Link> */}
                 {/* <Link to='/league_detail' className='button'>리그상세페이지</Link> */}
                 {/* <Link to='/select_bias' className='button'>최애선택</Link> */}
