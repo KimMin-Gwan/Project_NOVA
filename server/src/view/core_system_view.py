@@ -40,6 +40,7 @@ class Core_Service_View(Master_View):
             
             try:
                 client_host = request.client.host
+                print(f"{client_host}  -  GET /home/is_valid 200 OK")
                 client_ip = request.headers['x-real-ip']
                 print(f"{client_ip}  -  GET /home/is_valid 200 OK")
             except:
