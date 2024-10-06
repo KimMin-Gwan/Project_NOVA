@@ -357,7 +357,7 @@ class NameCardMaker:
         month= now.strftime('%m')
         date = now.strftime('%d')
 
-        hour = now.strftime('%h')
+        hour = now.hour
 
         # 텍스트 내용
         text1 = f"{bias.bname}님 오늘도 팬이에요!"
