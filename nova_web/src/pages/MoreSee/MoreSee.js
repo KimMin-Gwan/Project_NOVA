@@ -11,7 +11,7 @@ import noti_icon from "./../../img/noti_icon.png";
 import login_icon from "./../../img/login_icon.png";
 import mypage_icon from "./../../img/mypage_icon.png";
 import terms_icon from "./../../img/terms_icon.png";
-import logo from "./../../img/logo.PNG";
+import business_logo from "./../../img/business_logo.png";
 
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -158,17 +158,16 @@ function MoreSee() {
 
         <footer className="footer">
           <div className={style.footer}>
-            <p>
-              NOVA
-              <img src={logo} alt="logo_Icon" className={style.logo_img} />
-            </p>
+            <div>
+            <img src={business_logo} alt="logo_Icon" className={style.logo_img} />
+            </div>
             <br />
             <p className="nova-info">경북 경산시 압량읍 압독2로1길 21, 1층 184</p>
             <p className="nova-info">대표: 김민관 | 사업자등록번호: 380-08-03011</p>
             <p className="nova-info">통신판매업신고번호: 0000-0000-000000</p>
             <p className="nova-info">전화번호: 010-9875-2508 | 이메일:youths0828@nova-platform.kr</p>
             <br />
-            <p className="nova-info">사용자 정보</p>
+            <p className="nova-info">사업자 정보</p>
           </div>
         </footer>
       </div>

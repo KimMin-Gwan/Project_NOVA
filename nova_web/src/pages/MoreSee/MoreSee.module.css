@@ -13,7 +13,7 @@
 .container {
   max-width: 500px;
   /* 너비를 원하는 비율로 설정 */
-  height: 90px;
+  height: 90vh;
   margin: 0 auto;
   /*max-width: 1200px; /* 최대 너비를 설정 */
   background-color: #eee9fc; /* 배경색을 원하는 색으로 변경 가능 */
@@ -39,6 +39,7 @@
   width: 35px;
   height: 35px;
   filter: invert();
+  cursor: pointer;
 }
 
 .TitleBox {
@@ -56,6 +57,7 @@
 .titleName {
   color: black;
   text-align: center;
+  font-weight: 600;
 }
 
 .content {
@@ -103,6 +105,7 @@
   color: rgb(0, 0, 0);
   font-size: 14px;
   text-align: center; /* 텍스트 가운데 정렬 */
+  font-weight: 600;
   /*margin-right: 23px; /* Add spacing between the text and icon */
 }
 
@@ -115,7 +118,7 @@
 
 .inquiry {
   width: 100%; /* 너비를 원하는 비율로 설정 */
-  height: 100px;
+  height: 420px;
   margin: 0 auto;
   background-color: #ffffff; /* 배경색을 원하는 색으로 변경 가능 */
   display: flex;
@@ -128,6 +131,7 @@
 .icon_img {
   width: 40px;
   height: 40px;
+  cursor:pointer;
 }
 
 .iconBox {
@@ -144,16 +148,28 @@
   text-align: center;
   margin-top: 5px; /* Space between the icon and the name */
   font-size: 11px;
+  font-weight: 600;
 }
 
 .footer {
   background-color: #eee9fc; /* 원하는 배경색으로 변경 */
   padding: 10px; /* 여백 추가 (필요 시 조정) */
+  line-height: 1.7;
+  font-weight: 500;
   color: #333; /* 텍스트 색상 조정 (선택 사항) */
 }
 
 .logo_img {
-  width: 25x;
-  height: 25px;
+  width: 232px;
+  height: 200px;
   margin-left: 5px;
+}
+
+.nova_project_text{
+  font-size: 20px;
+  font-weight: 700;
+}
+.nova_project_container {
+    display: flex; /* 플렉스 컨테이너 설정 */
+    align-items: center; /* 세로 중앙 정렬 */
 }
