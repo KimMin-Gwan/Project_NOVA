@@ -53,10 +53,10 @@ class User_Service_View(Master_View):
         # response 포함 정보 -> 'result' : True or False
         #                    -> 'detail' : "실패 사유"
         @self.__app.post('/user_home/try_sign_in')
-        def try_sign_in(raw_request:dict):
+        async def try_sign_in(raw_request:dict):
             request = SignInRequest(request=raw_request)
             user_controller=UserController()
-            model = user_controller.try_sign_in(database=self.__database,
+            model = await user_controller.try_sign_in(database=self.__database,
                                                    request = request,
                                               nova_verification=self.__nova_verification)
             response = model.get_response_form_data(self._head_parser)
@@ -80,7 +80,7 @@ class User_Service_View(Master_View):
             return response
 
         # 비밀번호 변경하기
-        @self.__app.get('/user_home/try_change_password')
+        @self.__app.post('/user_home/try_change_password')
         def try_change_password(request:Request, raw_request:dict):
             request_manager = RequestManager()
 
@@ -97,7 +97,7 @@ class User_Service_View(Master_View):
             return response
 
         # 닉네임 바꾸기
-        @self.__app.get('/user_home/change_nickname')
+        @self.__app.get('/user_home/try_change_nickname')
         def try_chagne_nickname(request:Request, index:Optional[int], custom:Optional[str]=""):
             request_manager = RequestManager()
 

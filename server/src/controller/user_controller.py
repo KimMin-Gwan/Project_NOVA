@@ -74,14 +74,14 @@ class UserController:
     # 3. 데이터 베이스 저장( save 함수 쓰면됨)
     # 4. 다 되면 True반환
     # 5. 만약 인증번호 틀리면 False 반환 + 실패 사유 detail에 작성
-    def try_sign_in(self, database, request, nova_verification):
+    async def try_sign_in(self, database, request, nova_verification):
         model = SendEmailModel(database=database)
         try:
-            if not nova_verification.verificate_user(email=request.email, verification_code=request.verification_code):
+            if not await nova_verification.verificate_user(email=request.email, verification_code=request.verification_code):
                 model.set_response()
             else:
                 model.save_user(request=request)
-                model.make_token(request=request)
+                #model.make_token(request=request)
 
         except CustomError as e:
             print("Error Catched : ", e.error_type)
@@ -119,7 +119,7 @@ class UserController:
         try:
             # 유저가 있으면 세팅
             model.set_user_with_email(request=request.jwt_payload)
-            model.try_change_nickname(request=request.data_payload)
+            model.try_change_nickname(data_payload=request.data_payload)
 
         except CustomError as e:
             print("Error Catched : ", e.error_type)
@@ -137,7 +137,8 @@ class UserController:
         try:
             # 유저가 있으면 세팅
             model.set_user_with_email(request=request.jwt_payload)
-            model.try_change_password(request=request.data_payload)
+
+            model.try_change_password(data_payload=request.data_payload)
 
         except CustomError as e:
             print("Error Catched : ", e.error_type)

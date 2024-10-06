@@ -1,6 +1,6 @@
 from model.base_model import BaseModel
 from model import Local_Database
-from others.data_domain import User, Bias, Alert
+from others.data_domain import User, Bias, Alert, ManagedUser
 from others import CoreControllerLogicError, FeedManager
 from view.jwt_decoder import JWTManager
 import jwt
@@ -55,7 +55,7 @@ class SendEmailModel(BaseModel):
         super().__init__(database)
         self.__result = True
         self.__detail = ''
-        self.__token = ''
+        #self.__token = ''
 
     def make_token(self,request):
         try:
@@ -73,7 +73,7 @@ class SendEmailModel(BaseModel):
                 "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=30)  # 만료 시간 30분
             }
             # 토큰 생성
-            self.__token = jwt.encode(payload, secret_key, algorithm="HS256", headers=headers)
+            #self.__token = jwt.encode(payload, secret_key, algorithm="HS256", headers=headers)
 
         except Exception as e:
             raise CoreControllerLogicError(error_type="make_token | " + str(e))
@@ -86,9 +86,14 @@ class SendEmailModel(BaseModel):
                         email=request.email,
                         gender=request.gender,
                         password=request.password)
+            managedUser = ManagedUser(
+                uid=uid
+            )
 
             self._database.add_new_data(target_id="uid",
                                         new_data=user.get_dict_form_data())
+            self._database.add_new_data(target_id="muid",
+                                        new_datai=managedUser.get_dict_form_data())
 
         except Exception as e:
             raise CoreControllerLogicError(error_type="save_response | " + str(e))
@@ -103,7 +108,7 @@ class SendEmailModel(BaseModel):
         try:
             body = {
                 'resust' : self.__result,
-                'token' : self.__token,
+                #'token' : self.__token,
                 'detail' : self.__detail
             }
 
@@ -250,8 +255,11 @@ class ChangePasswordModel(BaseModel):
 
     # 비밀번호 변경하기
     def try_change_password(self, data_payload):
+        print("450")
         if self.__check_present_password(present_password=data_payload.password):
+            print("451")
             self.__try_change_password(new_password = data_payload.new_password)
+            print("452")
             self._result = True
             self._detail = "비밀번호가 변경되었어요"
             return 
@@ -295,6 +303,7 @@ class ChangeNickNameModel(BaseModel):
 
     # 비밀번호 변경하기
     def try_change_nickname(self, data_payload):
+
         if data_payload.index == 0:
             self._user.uname = "지지자"
             self._detail = "지지자로 변경되었습니다"
@@ -334,6 +343,8 @@ class ChangeNickNameModel(BaseModel):
             # 지지자가 패스 구독중인지 확인하는 함수가 있어야함
             if data_payload.custom != "":
                 self._user.uname = data_payload.custom
+                self._detail = f"{self._user.uname}로 변경되었습니다"
+                self._result =True
             else:
                 self._detail = "최소 1글자 이상의 이름을 사용해야합니다!"
                 return
