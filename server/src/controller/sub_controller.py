@@ -28,6 +28,22 @@ class Sub_Controller:
 
         finally:
             return model
+
+    def sample_func(self, database:Local_Database, request) -> BaseModel: 
+        model = BaseModel(database=database)
+        try:
+            model
+
+        except CustomError as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
+
+        except Exception as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
+
+        finally:
+            return model
         
     # 최애 페이지의 배너 정보
     # 배너가 없으면 뭘 보여줄래?

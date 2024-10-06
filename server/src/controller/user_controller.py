@@ -279,7 +279,7 @@ class MailSender:
     def send_email(self, receiver_email, verification_code):
         # 이메일 메시지 구성
         message = MIMEMultipart("alternative")
-        message["Subject"] = "회원가입 인증 코드 테스트"
+        message["Subject"] = "노바 플랫폼 회원 가입 | 보안 코드"
         message["From"] = self.sender_email
         message["To"] = receiver_email
         # HTML 본문 작성 (인증번호 포함)

@@ -224,3 +224,36 @@ class MyContributionModel(UserContributionModel):
 
         except Exception as e:
             raise CoreControllerLogicError("response making error | " + e)
+        
+        
+class NoticeModel(UserContributionModel):
+    def __init__(self, database:Local_Database) -> None:
+        super().__init__(database)
+        self.__result = False  # 내가 팔로우 중이면 True
+
+    # 내 최애가 맞는지 확인
+    def is_my_bias(self) -> bool:
+        if self._user.solo_bid == self._bias.bid or self._user.group_bid == self._bias.bid:
+            self.__result = True
+            return True
+        else:
+            return False
+
+    # rank와 point를 포함한 데이터
+    def _get_my_data(self) -> dict:
+        user_data = self._get_dict_user_data_with_rank()
+        dict_user['rank'] = rank
+        return dict_user
+
+    def get_response_form_data(self, head_parser):
+        try:
+            body = {
+                'my_contribution' : self._get_my_data(),
+                'result' : self.__result
+            }
+
+            response = self._get_response_data(head_parser=head_parser, body=body)
+            return response
+
+        except Exception as e:
+            raise CoreControllerLogicError("response making error | " + e)
