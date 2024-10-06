@@ -512,6 +512,7 @@ class EditFeedRequest(RequestHeader):
         self.image = image
 
         print(self.fclass)
+        print(self.choice)
 
 class MakeFeedCommentRequest(RequestHeader):
     def __init__(self, request) -> None:
