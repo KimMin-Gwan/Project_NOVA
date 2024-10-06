@@ -93,7 +93,7 @@ class SendEmailModel(BaseModel):
             self._database.add_new_data(target_id="uid",
                                         new_data=user.get_dict_form_data())
             self._database.add_new_data(target_id="muid",
-                                        new_datai=managedUser.get_dict_form_data())
+                                        new_data=managedUser.get_dict_form_data())
 
         except Exception as e:
             raise CoreControllerLogicError(error_type="save_response | " + str(e))
