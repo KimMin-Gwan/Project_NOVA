@@ -357,9 +357,11 @@ class NameCardMaker:
         month= now.strftime('%m')
         date = now.strftime('%d')
 
+        hour = now.strftime('%h')
+
         # 텍스트 내용
         text1 = f"{bias.bname}님 오늘도 팬이에요!"
-        text2 = f"{year}년 {month}월 {date}일 오후 8시에 인증 완료"
+        text2 = f"{year}년 {month}월 {date}일 {hour}에 인증 완료"
         text3 = bias.bname
 
         # 3. 글자 붙혀넣기
