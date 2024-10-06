@@ -13,26 +13,18 @@ export default function LeaguePage() {
 
     useEffect(() => {
         const newSocket = new WebSocket('wss://nova-platform.kr/league_detail/league_data?league_name=고양이 은하');
-        //const newSocket = new WebSocket('ws://127.0.0.1:4000/league_detail/league_data?league_name=고양이 은하');
-        //wsRef.current = new WebSocket('ws://127.0.0.1:4000/league_detail/league_data?league_name=고양이 은하');
 
         newSocket.onopen = () => {
             console.log('Connected to the server')
         }
 
-        //newSocket.onmessage = (event) => {
-            //const message = event.data;
-            //setMessages((pre))
-        //}
-
         newSocket.onmessage = (event) => {
             console.log('Message from server:', event.data);
             const receiveData = event.data;
-            console.log('dsad', receiveData);
             const splitData = receiveData.split(' ');
             const realData = splitData.map(part => part.split('.'));
-            setLeagueData(realData)
-            setLoading(false)
+            setLeagueData(realData);
+            setLoading(false);
             newSocket.send("ack") //이걸 적으면 정상동작하게됨 ㅋㅋ
         };
         newSocket.addEventListener('error', (error) => {
@@ -42,17 +34,11 @@ export default function LeaguePage() {
             console.log('close socket');
         };
 
-        //setSocket(newSocket);
-
         return () => {
-            //wsRef.current.close();
             newSocket.close();
         }
     }, [])
 
-    // console.log(leagueData)
-
-    // rank, bid, bname, point
 
     return (
         <div className={style.container}>
@@ -65,7 +51,8 @@ export default function LeaguePage() {
                     leagueData.map((data, i) => {
                         if (data[0] !== '/') {
                             return (
-                                <div className="rank-item-box" key={i}>
+                                <div className="rank-item-box" key={i}
+                                    style={{ transform: 'translateY(10px)' }}>
                                     <p className='rank-num'>{data[0]}</p>
                                     <div className='star'>
                                         <img src={star} />
@@ -79,9 +66,6 @@ export default function LeaguePage() {
                                     </div>
                                 </div>
                             )
-                        }
-                        if (loading) {
-                            <div>loading</div>
                         }
                     })
                 }

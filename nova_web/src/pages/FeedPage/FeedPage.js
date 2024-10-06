@@ -26,8 +26,8 @@ export const FeedDispatchContext = createContext();
 const FeedPage = () => {
   const location = useLocation();
 
-  const queryParams = new URLSearchParams(location.search);
-  const fclass = queryParams.get("fclass");
+  // const queryParams = new URLSearchParams(location.search);
+  // const fclass = queryParams.get("fclass");
 
   const [banners, setBanners] = useState([]);
   const [nextData, setNextData] = useState(0);
@@ -100,6 +100,7 @@ const FeedPage = () => {
       .then((response) => response.json())
       .then((data) => {
         console.log("11", data.body.feed);
+        console.log('faftest',data)
 
         setBanners(data.body.feed);
         setNextData(data.body.key);
@@ -117,7 +118,7 @@ const FeedPage = () => {
     try {
       // 서버로부터 추가 배너 데이터를 가져옴
       const response = await fetch(
-        `https://nova-platform.kr/feed_explore/get_feed?fclass=${fclass}&key=${nextData}`, {
+        `https://nova-platform.kr/feed_explore/get_feed?fclass=None&key=${nextData}`, {
         credentials: 'include'
       }
       ); // 예시 URL
