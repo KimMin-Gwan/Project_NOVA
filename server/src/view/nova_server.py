@@ -8,7 +8,8 @@ import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
 from datetime import datetime, timedelta
 from others import TempUser
-from threading import Thread
+#from threading import Thread
+import asyncio
 import random
 import time
 
@@ -70,9 +71,12 @@ class NOVA_Server:
 class NOVAVerification:
     def __init__(self):
         self.__temp_user = []  # TempUser 
-        # exp 채커
+        #  exp 채커
         #exp_checker = Thread(target=self._check_expiration)
         #exp_checker.start()
+
+        self.loop = asyncio.get_event_loop()
+        self.loop.create_task(self._check_expiration())
     
     def get_temp_user(self):
         for data in self.__temp_user:
@@ -99,7 +103,7 @@ class NOVAVerification:
         return datetime.now() + timedelta(minutes=10)
 
     # 인증 코드와 해당 유저가 일치하는지 검사
-    def verificate_user(self, email, verification_code):
+    async def verificate_user(self, email, verification_code):
         target_user = None
         for user in self.__temp_user:
             if user.email == email:
@@ -122,7 +126,7 @@ class NOVAVerification:
             return False
         
     # 만료시간 체크해서 제거
-    def _check_expiration(self):
+    async def _check_expiration(self):
         while True:
             time.sleep(1)
             for user in self.__temp_user:

@@ -58,6 +58,12 @@ def home():
             <button onclick="testForthEndpoint()">Test /home/{target}</button>
         </div>
 
+        <div>
+            <label for="targetInput">Enter a target:</label>
+            <input type="text" id="targetInput" value="example">
+            <button onclick="testfifthEndpoint()">Test /home/{target}</button>
+        </div>
+
         <div id="response"></div>
 
         <script>
@@ -79,7 +85,7 @@ def home():
                                 "endpoint": "/user_system/",
                                 },
                             "body" : {
-                                "email" : "randomUser2@naver.com", 
+                                "email" : "randomUser8@naver.com", 
                                 "password": "sample122"
                             }
                         })
@@ -98,7 +104,7 @@ def home():
             async function testTargetEndpoint() {
                 const target = document.getElementById('targetInput').value;
                 try {
-                    const response = await fetch(`http://127.0.0.1:4000/server_info/try_daily_check`, {
+                    const response = await fetch(`http://127.0.0.1:4000/user_home/try_change_nickname?index=3&custom=운영자`, {
                         mode: 'cors',
                         credentials: 'include'
                     });
@@ -134,7 +140,7 @@ def home():
             async function testForthEndpoint() {
                 const number = document.getElementById('numberInput').value;
                 try {
-                    const response = await fetch(`http://127.0.0.1:4000/nova_check/server_info/try_daily_check`, {
+                    const response = await fetch(`http://127.0.0.1:4000/user_home/try_change_password`, {
                         method: 'POST',
                         credentials: 'include', // 쉼표 추가
                         headers: {
@@ -149,7 +155,41 @@ def home():
                                 "endpoint": "/user_system/",
                                 },
                             "body" : {
-                                "type": "solo"
+                                "password": "sample122",
+                                "new_password" : "sample123"
+                            }
+                        })
+                    });
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok.');
+                    }
+                    const data = await response.json();
+                    document.getElementById('response').innerText = JSON.stringify(data, null, 2);
+                } catch (error) {
+                    console.error('Fetch error:', error);
+                    document.getElementById('response').innerText = 'Error occurred: ' + error.message;
+                }
+            }
+
+            async function testfifthEndpoint() {
+                const number = document.getElementById('numberInput').value;
+                try {
+                    const response = await fetch(`http://127.0.0.1:4000/user_home/try_send_email`, {
+                        method: 'POST',
+                        credentials: 'include', // 쉼표 추가
+                        headers: {
+                            'Content-Type': 'application/json' // 헤더 추가
+                        },
+                        body: JSON.stringify({
+                            "header" : {
+                                "request-type": "default",
+                                "client-version": "v1.0.1",
+                                "client-ip": "127.0.0.1",
+                                "uid": "1234-abcd-5678",
+                                "endpoint": "/user_system/",
+                                },
+                            "body" : {
+                                "email": "alsrhks2508@naver.com",
                             }
                         })
                     });

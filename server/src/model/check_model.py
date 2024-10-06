@@ -230,9 +230,14 @@ class TryCheckModel(CheckPageModel):
     def is_special_time_check(self):
         try:
             if self._bias.type == "solo":
-                self._special_check_valid = self._user.solo_special
-            elif self._bias.type == "group":
-                self._special_check_valid = self._user.group_special
+                if not self._user.solo_special:
+                    hour = datetime.datetime.now().hour
+                    if int(hour) in self._special_time:
+                        self._special_check_valid = True
+                    else:
+                        self._special_check_valid = False
+                else:
+                    self._special_check_valid = False
             else:
                 self._special_check_valid = False
                 raise CoreControllerLogicError(error_type="is_special_time_chekc| bias type error")

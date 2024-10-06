@@ -1,8 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import style from './../pages/FeedPage/FeedPage.module.css';
 import Feed, { Comments } from './feed';
-import { FeedContext, FeedDispatchContext } from './../pages/FeedPage/FeedPage.js'
-
 
 export default function InfFeed() {
 
@@ -12,8 +10,6 @@ export default function InfFeed() {
 
     let [feedData, setFeedData] = useState([]);
     let [nextData, setNextData] = useState([]);
-    // 'http://127.0.0.1:4000/new_contents'
-    // 'http://nova-platform.kr/home/home_feed'
 
     function fetchData() {
         // setIsLoading(true);
@@ -27,7 +23,6 @@ export default function InfFeed() {
                 setNextData(data.body.key);
                 setIsLoading(false);
             })
-        // .finally(() => setIsLoading(false));
     };
 
     function fetchPlusData() {
@@ -42,13 +37,8 @@ export default function InfFeed() {
                     const newData = [...prevData, ...data.body.feed];
                     return newData;
                 });
-
-                console.log("111", nextData);
-                console.log("222", data.body);
-                console.log('333', feedData);
                 setIsLoading(false);
             })
-        // .finally(() => setIsLoading(false));
     };
 
     useEffect(() => {
@@ -84,24 +74,17 @@ export default function InfFeed() {
         return <p>데이터 </p>;
     }
 
-    // let [numStar, setNumStar] = useState([]);
-    // let [numComment, setNumComment] = useState([]);
-    // let [isClickedStar, setIsClickedStar] = useState(false);
-    // let [isClickedComment, setIsClickedComment] = useState(false);
-
     return (
         <div className={style['scroll-area']}>
             {
                 feedData.map((feed, i) => {
-                    // console.log(a);
-                    // console.log('class', a.fclass);
                     return (
                         <Feed key={feed.fid + i} className='' feed={feed} func={true} feedData={feedData} setFeedData={setFeedData}></Feed>
                     )
                 })
             }
             {isLoading && <p>Loading...</p>}
-            <div ref={target} style={{ height: "10px", backgroundColor: 'blue' }}></div>
+            <div ref={target} style={{ height: "1px", backgroundColor: 'blue' }}></div>
 
         </div>
     )

@@ -11,6 +11,7 @@ export default function LeaguePage() {
     let profile_url = 'https://kr.object.ncloudstorage.com/nova-images/';
     let [loading, setLoading] = useState(true);
 
+
     useEffect(() => {
         const newSocket = new WebSocket('wss://nova-platform.kr/league_detail/league_data?league_name=고양이 은하');
 
@@ -40,6 +41,7 @@ export default function LeaguePage() {
     }, [])
 
 
+
     return (
         <div className={style.container}>
             <div className={style.title}>은하리그 페이지</div>
@@ -51,8 +53,8 @@ export default function LeaguePage() {
                     leagueData.map((data, i) => {
                         if (data[0] !== '/') {
                             return (
-                                <div className="rank-item-box" key={i}
-                                    style={{ transform: 'translateY(10px)' }}>
+                                <div className={`rank-item-box`} key={i}
+                                    >
                                     <p className='rank-num'>{data[0]}</p>
                                     <div className='star'>
                                         <img src={star} />
