@@ -29,10 +29,26 @@ class Sub_Controller:
         finally:
             return model
 
-    def sample_func(self, database:Local_Database, request) -> BaseModel: 
-        model = BaseModel(database=database)
+    def get_notice_list(self, database:Local_Database) -> BaseModel: 
+        model = NoticeListModel(database=database)
         try:
-            model
+            model.get_notice_list()
+
+        except CustomError as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
+
+        except Exception as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
+
+        finally:
+            return model
+
+    def get_notice_detail(self, database:Local_Database, request) -> BaseModel: 
+        model = NoticeModel(database=database)
+        try:
+            model.get_notice(nid = request.nid)
 
         except CustomError as e:
             print("Error Catched : ", e.error_type)

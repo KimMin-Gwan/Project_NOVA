@@ -234,10 +234,9 @@ class NoticeListModel(UserContributionModel):
     # rank와 point를 포함한 데이터
     def get_notice_list(self):
         notice_datas = self._database.get_all_data(target="nid")
-
         for notice_data in notice_datas:
             notice = Notice()
-            notice.get_dict_form_data(notice_data)
+            notice.make_with_dict(notice_data)
             notice.body = ""
             self.__notice.append(notice)
 
@@ -258,16 +257,18 @@ class NoticeModel(UserContributionModel):
         super().__init__(database)
         self.__notice = Notice()
 
-    # rank와 point를 포함한 데이터
-    def get_notice(self, id):
-        notice_data = self._database.get_data_with_id(target="nid", id=id)
-        self.__notice.get_dict_form_data(notice_data)
+    def get_notice(self, nid):
+        notice_data = self._database.get_data_with_id(target="nid", id=nid)
+        if not notice_data:
+            self.__notice.title = "없는 공지사항 입니다"
+        else:
+            self.__notice.make_with_dict(notice_data)
         return
 
     def get_response_form_data(self, head_parser):
         try:
             body = {
-                'notice_list' : self._make_dict_list_data(list_data=self.__notice)
+                'notice' : self.__notice.get_dict_form_data()
             }
 
             response = self._get_response_data(head_parser=head_parser, body=body)

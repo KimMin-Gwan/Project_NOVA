@@ -11,13 +11,22 @@ class Sub_Service_View(Master_View):
         self.__app = app
         self._endpoint = endpoint
         self.__database = database
+        self.notice_route()
         #self.bias_page_route("/bias_info")
 
     def notice_route(self):
         @self.__app.get("/nova_notice/notice_list")
         def get_notice_list():
             sub_controller = Sub_Controller()
-            model = sub_controller.get_notice_list(database=self.__database,)
+            model = sub_controller.get_notice_list(database=self.__database)
+            response = model.get_response_form_data(self._head_parser)
+            return response
+
+        @self.__app.get("/nova_notice/notice_detail")
+        def get_notice_detail(nid:Optional[str]):
+            sub_controller = Sub_Controller()
+            request = NoticeDetailRequest(nid=nid)
+            model = sub_controller.get_notice_detail(database=self.__database, request=request)
             response = model.get_response_form_data(self._head_parser)
             return response
 
@@ -65,6 +74,9 @@ class Sub_Service_View(Master_View):
             #response = model.get_response_form_data(self._head_parser)
             #return response
 
+class NoticeDetailRequest():
+    def __init__(self, nid = None) -> None:
+        self.nid=nid
         
 class BiasPageInfoRequest():
     def __init__(self, bid = None) -> None:
