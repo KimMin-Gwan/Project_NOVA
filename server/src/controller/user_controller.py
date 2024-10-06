@@ -78,7 +78,6 @@ class UserController:
         model = SendEmailModel(database=database)
         try:
             if not await nova_verification.verificate_user(email=request.email, verification_code=request.verification_code):
-                print(type(request.verification_code))
                 model.set_response()
             else:
                 model.save_user(request=request)

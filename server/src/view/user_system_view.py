@@ -38,7 +38,7 @@ class User_Service_View(Master_View):
             return response
 
         # 로그아웃
-        @self.__app.post('/user_home/try_logout')
+        @self.__app.get('/user_home/try_logout')
         def try_login(request:Request):
             request_manager = RequestManager()
             request_manager.try_view_management_need_authorized(data_payload=None, cookies=request.cookies)
