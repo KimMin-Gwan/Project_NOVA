@@ -2,7 +2,7 @@
     {
         "uid": "1234-abcd-5678",
         "uname": "지지자",
-        "age": "25",
+        "age": "29",
         "email": "testUser@naver.com",
         "gender": "m",
         "solo_point": 0,
@@ -34,7 +34,7 @@
     {
         "uid": "5678-efgh-1234",
         "uname": "지지자",
-        "age": "28",
+        "age": "25",
         "email": "randomUser1@naver.com",
         "password": "sample122",
         "gender": "f",
@@ -66,7 +66,7 @@
     {
         "uid": "abcd-1234-5678",
         "uname": "운영자",
-        "age": "22",
+        "age": "28",
         "email": "randomUser2@naver.com",
         "password": "sample122",
         "gender": "m",
@@ -524,7 +524,7 @@
     {
         "uid": "mnop-1122-wxyz",
         "uname": "지지자",
-        "age": "26",
+        "age": "27",
         "email": "randomUser16@naver.com",
         "gender": "f",
         "point": 1020,

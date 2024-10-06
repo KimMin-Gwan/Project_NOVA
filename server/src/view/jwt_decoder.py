@@ -110,10 +110,25 @@ class RequestManager(JWTManager):
             detail="Unprocessable Entity"
         )
 
+    # 쿠키 지우는 마법
+    def try_clear_cookies(self, request:Request):
+        request.cookies.clear()
+        response = Response(
+            content=json.dumps({"result":True}),
+            media_type="application/json",
+            status_code=200
+        )
+        response.delete_cookie(key="nova_token",
+                samesite="None",  # Changed to 'Lax' for local testing
+                secure=True,  # Local testing; set to True in production
+                httponly=True)
+        return response
 
+    # 404
     def get_bad_request_exception(self):
         return self.bad_request_exception
 
+    # 로그인이 필수일때
     def try_view_management_need_authorized(self, data_payload = None, cookies = None):
         self.data_payload= data_payload
         try:
@@ -126,6 +141,7 @@ class RequestManager(JWTManager):
         self.jwt_payload= payload
         self.new_token = new_token
 
+    # 로그인 필수 아닐때
     def try_view_management(self, data_payload = None, cookies = None):
         self.data_payload= data_payload
         try:
@@ -138,6 +154,7 @@ class RequestManager(JWTManager):
         finally:
             return
 
+    # json데이터 보내줘야할때ㅔ response 만드는 곳
     def make_json_response(self, body_data:dict, token = ""):
         if token != "":
             self.new_token = token
