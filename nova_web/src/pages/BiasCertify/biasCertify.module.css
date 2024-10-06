@@ -3,15 +3,26 @@
     background-color: black;
     /* width: 500px; */
     min-height: 200vh;
+
 }
 
 .title-area {
+    position: relative;
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
     /* background-color: white; */
     height: 80px;
     border-bottom: solid white 1px;
+}
+
+.backword {
+    position: absolute;
+    /* top: 100%; */
+    left: 20px;
+    width: 35px;
+    height: 35px;
+    filter: invert();
 }
 
 .certify-container {
@@ -40,7 +51,6 @@
 }
 
 
-
 .area {
     /* position: relative; */
     display: flex;
@@ -58,11 +68,27 @@
     align-items: center; */
     border-radius: 15px;
     /* background: linear-gradient(135deg, #c2a6f0fd, #8cb9fcfe); */
-    background: linear-gradient(135deg, rgba(194, 166, 240, 0.5), rgba(140, 184, 252, 0.5));
+    background: linear-gradient(135deg, #5A5373, #262F3A);
     border: white 1px solid;
     width: 85%;
     height: 90%;
     /* background-color: blueviolet; */
+}
+
+.bias_card > img {
+    text-align: center;
+    width: 75%;
+    height: 90%;
+    object-fit: contain;
+}
+
+.bias_card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    /* background-color: goldenrod; */
 }
 
 .gradient-box {
@@ -80,7 +106,19 @@
     align-items: center;
     width: 100%;
     height: 70px;
+    font-size: 26px;
+    color: white;
     /* background-color: blue; */
+}
+
+
+.name_style {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.star_img {
+    margin-right: 0px;
 }
 
 .img-area {
@@ -89,6 +127,7 @@
     align-items: center;
     width: 100%;
     height: 250px;
+    margin-bottom: 10px;
     /* background-color: burlywood; */
 }
 
@@ -112,18 +151,37 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 220px;
+    width: 350px;
     border-radius: 100%;
-    height: 220px;
+    height: 350px;
+    position: relative;
     /* background-color: wheat; */
 }
 
+.circle>.bias_img {
+    width: 50%;
+    height: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* 중앙 정렬을 위해 변환 */
+}
+
+.circle>.bias_img>img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+
+}
+
 .circle img {
-    /* object-fit: cover; */
+    object-fit: cover;
     /* opacity: 1; */
     /* background-size: cover; */
-    width: 300px;
-    height: 300px;
+    width: 100%;
+    height: 100%;
+    border-radius: 100%;
 }
 
 .save-point-box {
@@ -160,12 +218,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40%;
-    height: 70px;
+    width: 30%;
+    height: 50px;
+    color: white;
     background-image:
-        linear-gradient(135deg, rgba(140, 75, 238, 0.5), rgba(5, 1, 23, 0.111)),
+        linear-gradient(135deg, rgba(74, 32, 138, 0.862), rgba(5, 1, 23, 0.111)),
         linear-gradient(to right, rgba(255, 255, 255, 0.9), rgba(140, 185, 252, 0.132));
-
     border-image-slice: 1;
     background-origin: border-box;
     background-clip: content-box, border-box;
@@ -175,4 +233,22 @@
     width: 100%;
     height: 200px;
     background-color: gray;
+}
+
+.download-btn-area {
+    width: 100%;
+    height: 80px;
+    background-color: #c2a6f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.download-btn-area > button {
+    border-radius: 100px;
+    background-color: black;
+    color: white;
+    width: 150px;
+    height: 50px;
+    cursor: pointer;
 }
