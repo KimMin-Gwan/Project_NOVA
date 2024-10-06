@@ -316,7 +316,7 @@ class Core_Service_View(Master_View):
         # feed 를 만들거나 수정하기
         @self.__app.post('/feed_explore/try_edit_feed')
         async def try_edit_feed(request:Request, image:UploadFile | None = File(None), 
-                                jsonData:str = Form(None)):
+                                jsonData:str | None = Form(None)):
             
             request_manager = RequestManager()
             if image is None:
