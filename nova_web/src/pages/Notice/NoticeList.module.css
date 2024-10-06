@@ -56,7 +56,7 @@ notice-area {
 
 .noticeText {
   color: black; /* 글자 색상 */
-  font-size: 20px; /* 원하는 글자 크기로 조정 */
+  font-size: 16px; /* 원하는 글자 크기로 조정 */
   text-align: left; /* 왼쪽 정렬 */
 }
 
@@ -85,4 +85,12 @@ notice-area {
   font-size: 15px; /* 원하는 글자 크기로 조정 */
   text-align: left;
   padding-left: 20px;
+  line-height: 2;
+  white-space: pre-line;
+}
+
+.noticeDate {
+  font-size: 0.8rem;
+  color: #888; /* Optional: make the date less prominent */
+  margin-left: 10px;
 }
