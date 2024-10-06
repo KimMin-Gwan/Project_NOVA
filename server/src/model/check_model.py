@@ -152,13 +152,13 @@ class TryCheckModel(CheckPageModel):
                                                   bias=self._bias,
                                                   league_manager=league_manager)
             self._result = "daily done"
-            #self._save_datas()
+            self._save_datas()
         except Exception as e:
             print(e)
             raise CoreControllerLogicError(error_type="try_daily_check | " )
         
     def _save_datas(self):
-        self._database.modify_data_with_id(target_id="bid", target_data=self._bias.get_dict_form_data())
+        #self._database.modify_data_with_id(target_id="bid", target_data=self._bias.get_dict_form_data())
         self._database.modify_data_with_id(target_id="uid", target_data=self._user.get_dict_form_data())
         return
         
@@ -361,7 +361,7 @@ class NameCardMaker:
 
         # 텍스트 내용
         text1 = f"{bias.bname}님 오늘도 팬이에요!"
-        text2 = f"{year}년 {month}월 {date}일 {hour}에 인증 완료"
+        text2 = f"{year}년 {month}월 {date}일 {hour}시에 인증 완료"
         text3 = bias.bname
 
         # 3. 글자 붙혀넣기
