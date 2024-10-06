@@ -42,7 +42,7 @@ class User_Service_View(Master_View):
         def try_login(request:Request):
             request_manager = RequestManager()
             request_manager.try_view_management_need_authorized(data_payload=None, cookies=request.cookies)
-            response = request_manager.try_clear_cookies()
+            response = request_manager.try_clear_cookies(request=request)
             return response
 
         # 이메일 전송

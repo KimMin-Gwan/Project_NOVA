@@ -111,11 +111,15 @@ class RequestManager(JWTManager):
         )
 
     # 쿠키 지우는 마법
-    def try_clear_cookies(self):
+    def try_clear_cookies(self, request:Request):
+        request.cookies.clear()
         response = Response(
             status_code=200
         )
-        response.delete_cookie('nova_token')
+        response.delete_cookie(key="nova_token",
+                samesite="None",  # Changed to 'Lax' for local testing
+                secure=True,  # Local testing; set to True in production
+                httponly=True)
         return response
 
     # 404
