@@ -17,6 +17,7 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
 
     // let [isInteraction, setIsInteraction] = useState(false);
     let [selectedIndex, setSelectedIndex] = useState(null);
+    let [isError, setIsError] = useState();
     // let [myAttend, setMyAttend] = useState(null);
 
     const handleClick = (index) => {
@@ -33,8 +34,17 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
 
         fetch(`https://nova-platform.kr/feed_explore/interaction_feed?fid=${fid}&action=${action}`, {
             credentials: 'include'
-        })
-            .then(response => response.json())
+        })            
+        .then(response => {
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        setIsError(response.status);
+                    } else {
+                        throw new Error(`status: ${response.status}`)
+                    }
+                }
+                return response.json()
+            })
             .then(data => {
                 console.log(data);
                 // setMyAttend(data.body.feed[0].attend);
@@ -61,8 +71,17 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
         setIsClickedStar(!isClickedStar);
         fetch(`https://nova-platform.kr/feed_explore/check_star?fid=${fid}`, {
             credentials: 'include',
-        })
-            .then(response => response.json())
+        })           
+        .then(response => {
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        setIsError(response.status);
+                    } else {
+                        throw new Error(`status: ${response.status}`)
+                    }
+                }
+                return response.json()
+            })
             .then(data => {
                 console.log('clickstar', data)
                 setFeedData((prevFeeds) => {
@@ -102,7 +121,16 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
             {
                 credentials: 'include'
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        setIsError(response.status);
+                    } else {
+                        throw new Error(`status: ${response.status}`)
+                    }
+                }
+                return response.json()
+            })
             .then(data => {
                 console.log('like', data.body.comments);
 
@@ -129,8 +157,17 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
         fetch(`https://nova-platform.kr/feed_explore/remove_comment?fid=${fid}&cid=${cid}`,
             {
                 credentials: 'include'
+            })            
+            .then(response => {
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        setIsError(response.status);
+                    } else {
+                        throw new Error(`status: ${response.status}`)
+                    }
+                }
+                return response.json()
             })
-            .then(response => response.json())
             .then(data => {
                 console.log('remove', data.body.comments);
                 // setAllComments((prevAll)=>{
@@ -634,6 +671,7 @@ export function Comments({ isClickedComment, feed, allComments, setAllComments, 
         "uid": '1234-abcd-5678',
         "endpoint": "/core_system/",
     }
+    let [isError, setIsError] = useState();
 
     let [inputValue, setInputValue] = useState('');
 
@@ -658,8 +696,17 @@ export function Comments({ isClickedComment, feed, allComments, setAllComments, 
                     body: `${inputValue}`
                 }
             })
-        })
-            .then(response => response.json())
+        })            
+        .then(response => {
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        setIsError(response.status);
+                    } else {
+                        throw new Error(`status: ${response.status}`)
+                    }
+                }
+                return response.json()
+            })
             .then(data => {
                 console.log(data);
                 // setNewComments(data.body.comments);
