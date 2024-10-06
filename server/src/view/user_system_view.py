@@ -262,7 +262,7 @@ class SignInRequest(RequestHeader):
         body = request['body']
         self.email = body['email']
         self.password= body['password']
-        self.verification_code = body['verification_code']
+        self.verification_code = int(body['verification_code'])
         self.age = body['age']
         self.gender = body['gender']
 

@@ -107,7 +107,7 @@ class SendEmailModel(BaseModel):
     def get_response_form_data(self, head_parser):
         try:
             body = {
-                'resust' : self.__result,
+                'result' : self.__result,
                 #'token' : self.__token,
                 'detail' : self.__detail
             }
