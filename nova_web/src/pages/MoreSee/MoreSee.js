@@ -9,6 +9,7 @@ import set_icon from "./../../img/setting_icon.png";
 import fav_icon from "./../../img/favset_icon.png";
 import noti_icon from "./../../img/noti_icon.png";
 import login_icon from "./../../img/login_icon.png";
+import mypage_icon from "./../../img/mypage_icon.png";
 import terms_icon from "./../../img/terms_icon.png";
 import logo from "./../../img/logo.PNG";
 
@@ -38,26 +39,36 @@ function MoreSee() {
   let [isError, setIsError] = useState();
 
   function handleFetch() {
-
-
-    fetch('https://nova-platform.kr/home/is_valid', {
-      credentials: 'include',
+    fetch("https://nova-platform.kr/home/is_valid", {
+      credentials: "include", // 쿠키를 함께 포함한다는 것
     })
-      .then(response => {
-        response.json();
-        // console.log('11',response.status)
-        // setIsError(response.status);
+      .then((response) => {
+        if (!response.ok) {
+          if (response.status === 401) {
+            setIsError(response.status);
+            setIsLogin(false);
+            return null;
+          } else {
+            throw new Error(`status: ${response.status}`);
+          }
+        }
+        return response.json();
       })
-      .then(data => {
-        console.log(data);
-        setIsLogin(data.body.result);
-
+      .then((data) => {
+        if (data) {
+          console.log(data);
+          setIsLogin(data.body.result);
+        }
       })
-  };
+      .catch((error) => {
+        console.error("Fetch error:", error);
+        setIsError(error.message);
+      });
+  }
 
   useEffect(() => {
-    handleFetch()
-  }, [])
+    handleFetch();
+  }, []);
 
   return (
     <div className={style.font}>
@@ -88,7 +99,7 @@ function MoreSee() {
               }
             }}
           >
-            <img src={login_icon} alt="Arrow" className={style.vector} />
+            <img src={isLogin ? mypage_icon : login_icon} alt="Arrow" className={style.vector} />
             <p className={style.bodyText}>{isLogin ? "마이페이지" : "로그인"}</p>
           </div>
 
