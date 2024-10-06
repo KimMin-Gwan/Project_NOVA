@@ -96,7 +96,9 @@ function App() {
       <Route path='/terms_page' element={<Temrs/>}></Route>
       <Route path='/league_detail' element={<LeaguePage />}></Route>
       {/* <Route path='/league_detail' element={<LeagueDetail />}></Route> */}
-      <Route path='/notice' element={<Notice />}></Route>
+      <Route path="/notice" element={<NoticeList />} />
+        {/* Dynamic Route for Notice Details */}
+      <Route path="/notice/:nid" element={<Notice />} />
       <Route path='/my_write_feed' element={<MyWriteFeed />} />
       <Route path='/my_interest_feed' element={<MyInterestFeed />} />
       <Route path='/my_comment_feed' element={<MyCommentFeed />} />
