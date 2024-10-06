@@ -114,6 +114,8 @@ class RequestManager(JWTManager):
     def try_clear_cookies(self, request:Request):
         request.cookies.clear()
         response = Response(
+            content=json.dumps({"result":True}),
+            media_type="application/json",
             status_code=200
         )
         response.delete_cookie(key="nova_token",
