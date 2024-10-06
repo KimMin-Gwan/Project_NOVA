@@ -96,7 +96,6 @@ const NOVALogin = () => {
         <div className={style.BackBtn}>
           <button className="tool-button">
             <img src={back} alt="Back" className="backword" onClick={() => {
-              alert("뒤로가기")
               navigate(-1)
             }}></img>
           </button>

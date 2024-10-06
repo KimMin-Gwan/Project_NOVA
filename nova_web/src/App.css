@@ -154,8 +154,15 @@ body {
   align-items: center;
   float: left;
   cursor: pointer;
-
 }
+
+.image1{
+  position:absolute;
+  object-fit: cover;
+}
+
+
+
 
 .my-bias {
   width: 100%;

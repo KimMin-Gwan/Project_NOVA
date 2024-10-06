@@ -511,6 +511,8 @@ class EditFeedRequest(RequestHeader):
         self.image_name = image_name
         self.image = image
 
+        print(self.fclass)
+
 class MakeFeedCommentRequest(RequestHeader):
     def __init__(self, request) -> None:
         super().__init__(request)
