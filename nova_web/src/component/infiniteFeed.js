@@ -47,7 +47,6 @@ export default function InfFeed() {
                 if (!entry.isIntersecting) return;
                 if (isLoading) return;
 
-                // fetchData();
                 fetchPlusData();
             });
         });

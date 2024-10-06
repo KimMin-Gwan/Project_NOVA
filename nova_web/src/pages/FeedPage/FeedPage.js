@@ -16,6 +16,10 @@ import { TfiCommentAlt } from "react-icons/tfi";
 import { PiShareFatLight } from "react-icons/pi";
 import { MdOutlineReportProblem } from "react-icons/md";
 
+import edit_feed from './../../img/edit.png';
+import backword from "./../../img/back_icon.png";
+
+
 import React, { useState, useEffect, useRef, createContext } from "react";
 // import style from './../pages/FeedPage/FeedPage.module.css';
 import { useLocation, useNavigate } from "react-router-dom";
@@ -82,16 +86,16 @@ const FeedPage = () => {
     }
   };
 
-  const handleCommentsWheel = (event) => {
-    const element = event.currentTarget;
-    const atTop = element.scrollTop === 0;
-    const atBottom = element.scrollHeight - element.scrollTop === element.clientHeight;
+  // const handleCommentsWheel = (event) => {
+  //   const element = event.currentTarget;
+  //   const atTop = element.scrollTop === 0;
+  //   const atBottom = element.scrollHeight - element.scrollTop === element.clientHeight;
 
-    // 댓글창이 맨 위나 맨 아래에 도달하지 않았을 때만 이벤트 전파를 막음
-    if (!atTop && !atBottom) {
-      event.stopPropagation();
-    }
-  };
+  //   // 댓글창이 맨 위나 맨 아래에 도달하지 않았을 때만 이벤트 전파를 막음
+  //   if (!atTop && !atBottom) {
+  //     event.stopPropagation();
+  //   }
+  // };
 
   function fetchFeed() {
     fetch(`https://nova-platform.kr/feed_explore/get_feed?fclass=None`, {
@@ -99,9 +103,6 @@ const FeedPage = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("11", data.body.feed);
-        console.log('faftest',data)
-
         setBanners(data.body.feed);
         setNextData(data.body.key);
         // setNumStar([data.body.feed[0].star, data.body.feed[1].star]);
@@ -129,7 +130,6 @@ const FeedPage = () => {
       setNextData(newBanners.body.key);
       // 기존 배너에 새 배너를 추가
       setBanners((prevBanners) => [...prevBanners, ...plusFeed]);
-      console.log('fffffffffffffffff', banners);
       // setNumStar((prevNumStar) => [...prevNumStar, newStar]);
       // setNumComment((prevNumComment) => [...prevNumComment, comments])
     } catch (error) {
@@ -188,42 +188,42 @@ const FeedPage = () => {
 
   let [newComments, setNewComments] = useState([]);
 
-  function handleSubmit(fid, event) {
-    event.preventDefault();
+  // function handleSubmit(fid, event) {
+  //   event.preventDefault();
 
-    fetch("https://nova-platform.kr/feed_explore/make_comment", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        header,
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        header: header,
-        body: {
-          fid: `${fid}`,
-          body: `${inputValue}`,
-        },
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        // setNewComments(data.body.comments);
-        setAllComments((prevAllComments) => {
-          const newAllComments = [data.body.comments[0], ...prevAllComments];
-          return newAllComments;
-        });
-        setBanners((prevBanners) => {
-          return prevBanners.map((banner) => {
-            return banner.fid === fid
-              ? { ...banner, num_comment: data.body.feed[0].num_comment }
-              : banner;
-          });
-        });
-        setInputValue("");
-      });
-  }
+  //   fetch("https://nova-platform.kr/feed_explore/make_comment", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       header,
+  //     },
+  //     credentials: "include",
+  //     body: JSON.stringify({
+  //       header: header,
+  //       body: {
+  //         fid: `${fid}`,
+  //         body: `${inputValue}`,
+  //       },
+  //     }),
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       console.log(data);
+  //       // setNewComments(data.body.comments);
+  //       setAllComments((prevAllComments) => {
+  //         const newAllComments = [data.body.comments[0], ...prevAllComments];
+  //         return newAllComments;
+  //       });
+  //       setBanners((prevBanners) => {
+  //         return prevBanners.map((banner) => {
+  //           return banner.fid === fid
+  //             ? { ...banner, num_comment: data.body.feed[0].num_comment }
+  //             : banner;
+  //         });
+  //       });
+  //       setInputValue("");
+  //     });
+  // }
 
   let [allComments, setAllComments] = useState([]);
   let [commentCount, setCommentCount] = useState(0);
@@ -303,14 +303,18 @@ const FeedPage = () => {
       className={style["test_container"]}
     >
       <div className={`${stylePlanet["top_area"]} ${style["top_bar_area"]}`}>
-        <div
+        <img
+          src={backword}
+          alt="Arrow"
+          className={style.backword}
           onClick={() => {
             navigate(-1);
           }}
-        >
-          뒤로
-        </div>
-        <div>은하계 탐색</div>
+        />
+        <img src={edit_feed} alt='edit' className={style['write_button']}
+          onClick={() => {
+            navigate('/write_feed')
+          }}></img>
       </div>
 
       <div
@@ -349,9 +353,9 @@ const FeedPage = () => {
                                         comment.owner ? (<div className={style['delete_btn']} onClick={(event) => handleRemoveComment(comment.fid, comment.cid, event)}>삭제</div>) : (<div className={style['delete_btn']}></div>)
                                       }
                                       <div className={style['report_star_btn']}>
-                                        <div>신고</div>
+                                        <div className={style.report}>신고</div>
                                         <div className={style['star_num']}>
-                                          <FaStar style={comment.like_user ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
+                                          <FaStar className={style['comment_like']} style={comment.like_user ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
                                             onClick={(event) => handleCommentLike(comment.fid, comment.cid, event)} />
                                           <div style={{ marginLeft: '2px' }}>
                                             {comment.like}
@@ -400,7 +404,6 @@ const FeedPage = () => {
                         }}
                       >
                         <FaStar className={style["func_btn_img"]} style={banner.star_flag ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }} />
-                        {/* <FaStar className={style["func_btn_img"]} /> */}
                       </button>
                       {/* <p>{numStar[i]}</p> */}
                       <p>{banner.star}</p>

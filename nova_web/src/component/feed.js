@@ -168,9 +168,9 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                                                             comment.owner ? (<div className={style['delete_btn']} onClick={(event) => handleRemoveComment(comment.fid, comment.cid, event)}>삭제</div>) : (<div className={style['delete_btn']}></div>)
                                                                         }
                                                                         <div className={style['report_star_btn']}>
-                                                                            <div>신고</div>
+                                                                            <div className={style.report}>신고</div>
                                                                             <div className={style['star_num']}>
-                                                                                <FaStar style={comment.like_user ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
+                                                                                <FaStar className={style['comment_like']} style={comment.like_user ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
                                                                                     onClick={(event) => handleCommentLike(comment.fid, comment.cid, event)} />
                                                                                 <div style={{ marginLeft: '2px' }}>
                                                                                     {comment.like}
@@ -206,19 +206,20 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                         {
                                             isClickedMoreSee ? (<div className={style['show_body']} onClick={handleMoreSee}>본문 보기</div>) : (
                                                 <>
-                                                    <div onClick={(event) => {
-                                                        handleMoreSee();
-                                                        handleShowComment(feed.fid, event);
-                                                    }}>댓글 더보기</div>
+                                                    <div className={style['show_body']}
+                                                        onClick={(event) => {
+                                                            handleMoreSee();
+                                                            handleShowComment(feed.fid, event);
+                                                        }}>댓글 더보기</div>
                                                     <div className={style['report_btn']}>신고</div>
                                                 </>
                                             )
                                         }
                                     </div>
                                     <div className={style['like_btn']}>
-                                        <FaStar style={feed.star_flag ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
+                                        <FaStar className={style.like} style={feed.star_flag ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
                                             onClick={(e) => { handleCheckStar(feed.fid, e) }} />
-                                        {feed.star}
+                                        <div>{feed.star}</div>
                                     </div>
                                 </div>
                             )
@@ -254,9 +255,9 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                                                             comment.owner ? (<div className={style['delete_btn']} onClick={(event) => handleRemoveComment(comment.fid, comment.cid, event)}>삭제</div>) : (<div className={style['delete_btn']}></div>)
                                                                         }
                                                                         <div className={style['report_star_btn']}>
-                                                                            <div>신고</div>
+                                                                            <div className={style.report}>신고</div>
                                                                             <div className={style['star_num']}>
-                                                                                <FaStar style={comment.like_user ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
+                                                                                <FaStar className={style['comment_like']} style={comment.like_user ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
                                                                                     onClick={(event) => handleCommentLike(comment.fid, comment.cid, event)} />
                                                                                 <div style={{ marginLeft: '2px' }}>
                                                                                     {comment.like}
@@ -284,7 +285,6 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                                 {
                                                     feed.choice.map((choi, i) => {
                                                         if (feed.attend === i) {
-
                                                             return (
                                                                 <li onClick={(e) => {
                                                                     handleInteraction(e, feed.fid, i)
@@ -323,19 +323,20 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                         {
                                             isClickedMoreSee ? (<div className={style['show_body']} onClick={handleMoreSee}>본문 보기</div>) : (
                                                 <>
-                                                    <div onClick={(event) => {
-                                                        handleMoreSee();
-                                                        handleShowComment(feed.fid, event);
-                                                    }}>댓글 더보기</div>
+                                                    <div className={style['show_body']}
+                                                        onClick={(event) => {
+                                                            handleMoreSee();
+                                                            handleShowComment(feed.fid, event);
+                                                        }}>댓글 더보기</div>
                                                     <div className={style['report_btn']}>신고</div>
                                                 </>
                                             )
                                         }
                                     </div>
                                     <div className={style['like_btn']}>
-                                        <FaStar style={feed.star_flag ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
+                                        <FaStar className={style.like} style={feed.star_flag ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
                                             onClick={(e) => { handleCheckStar(feed.fid, e) }} />
-                                        {feed.star}
+                                        <div>{feed.star}</div>
                                     </div>
                                 </div>
                             )
@@ -370,9 +371,9 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                                                             comment.owner ? (<div className={style['delete_btn']} onClick={(event) => handleRemoveComment(comment.fid, comment.cid, event)}>삭제</div>) : (<div className={style['delete_btn']}></div>)
                                                                         }
                                                                         <div className={style['report_star_btn']}>
-                                                                            <div>신고</div>
+                                                                            <div className={style.report}>신고</div>
                                                                             <div className={style['star_num']}>
-                                                                                <FaStar style={comment.like_user ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
+                                                                                <FaStar className={style['comment_like']} style={comment.like_user ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
                                                                                     onClick={(event) => handleCommentLike(comment.fid, comment.cid, event)} />
                                                                                 <div style={{ marginLeft: '2px' }}>
                                                                                     {comment.like}
@@ -435,19 +436,20 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                         {
                                             isClickedMoreSee ? (<div className={style['show_body']} onClick={handleMoreSee}>본문 보기</div>) : (
                                                 <>
-                                                    <div onClick={(event) => {
-                                                        handleMoreSee();
-                                                        handleShowComment(feed.fid, event);
-                                                    }}>댓글 더보기</div>
+                                                    <div className={style['show_body']}
+                                                        onClick={(event) => {
+                                                            handleMoreSee();
+                                                            handleShowComment(feed.fid, event);
+                                                        }}>댓글 더보기</div>
                                                     <div className={style['report_btn']}>신고</div>
                                                 </>
                                             )
                                         }
                                     </div>
                                     <div className={style['like_btn']}>
-                                        <FaStar style={feed.star_flag ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
+                                        <FaStar className={style.like} style={feed.star_flag ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
                                             onClick={(e) => { handleCheckStar(feed.fid, e) }} />
-                                        {feed.star}
+                                        <div>{feed.star}</div>
                                     </div>
                                 </div>
                             )
@@ -483,9 +485,9 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                                                             comment.owner ? (<div className={style['delete_btn']} onClick={(event) => handleRemoveComment(comment.fid, comment.cid, event)}>삭제</div>) : (<div className={style['delete_btn']}></div>)
                                                                         }
                                                                         <div className={style['report_star_btn']}>
-                                                                            <div>신고</div>
+                                                                            <div className={style.report}>신고</div>
                                                                             <div className={style['star_num']}>
-                                                                                <FaStar style={comment.like_user ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
+                                                                                <FaStar className={style['comment_like']} style={comment.like_user ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
                                                                                     onClick={(event) => handleCommentLike(comment.fid, comment.cid, event)} />
                                                                                 <div style={{ marginLeft: '2px' }}>
                                                                                     {comment.like}
@@ -517,7 +519,7 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                                 }}>
                                                 <h1>{feed.choice[0]}</h1>
                                                 <h5>{feed.choice[1]}</h5>
-                                                <h5>{feed.choice[2]}</h5>
+                                                {/* <h5>{feed.choice[2]}</h5> */}
                                             </div>
                                         </>
                                     )
@@ -532,19 +534,20 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                         {
                                             isClickedMoreSee ? (<div className={style['show_body']} onClick={handleMoreSee}>본문 보기</div>) : (
                                                 <>
-                                                    <div onClick={(event) => {
-                                                        handleMoreSee();
-                                                        handleShowComment(feed.fid, event);
-                                                    }}>댓글 더보기</div>
+                                                    <div className={style['show_body']}
+                                                        onClick={(event) => {
+                                                            handleMoreSee();
+                                                            handleShowComment(feed.fid, event);
+                                                        }}>댓글 더보기</div>
                                                     <div className={style['report_btn']}>신고</div>
                                                 </>
                                             )
                                         }
                                     </div>
                                     <div className={style['like_btn']}>
-                                        <FaStar style={feed.star_flag ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
+                                        <FaStar className={style.like} style={feed.star_flag ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
                                             onClick={(e) => { handleCheckStar(feed.fid, e) }} />
-                                        {feed.star}
+                                        <div>{feed.star}</div>
                                     </div>
                                 </div>
                             )
