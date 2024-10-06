@@ -51,7 +51,6 @@ class User_Service_View(Master_View):
         @self.__app.post('/user_home/try_send_email')
         def try_send_email(raw_request:dict):
             request = EmailSendRequest(request=raw_request)
-            print(request.email)
             user_controller=UserController()
             model = user_controller.try_send_email(database=self.__database,
                                                    request = request,

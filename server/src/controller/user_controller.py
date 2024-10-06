@@ -16,7 +16,6 @@ class UserController:
             if not model.set_user_with_email(request=request):
                 raise UserNotExist("Can not find User with uid")
         except UserNotExist as e:
-            print("Error Catched : ", e)
             model.set_state_code(e.error_code) # 종합 에러
             return model
 
