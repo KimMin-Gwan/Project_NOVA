@@ -227,7 +227,6 @@ class FeedManager:
     
     # 홈 화면에서 feed를 요청하는 상황
     def get_feed_in_home(self, user:User, key:int = -4):
-
         if user.uid != "":
             managed_user = self._managed_user_table.find_user(user=user)
             result, result_key = self._get_home_feed_with_user(user=managed_user, key=key)
@@ -239,7 +238,7 @@ class FeedManager:
 
         return result, result_key
     
-    def _get_home_feed_with_user(self, user, key):
+    def _get_home_feed_with_user(self, user:ManagedUser, key):
         sample_feeds = []
         count = 0
         while True:
@@ -250,6 +249,7 @@ class FeedManager:
             single_feed = self.pick_single_feed_with_category(user=user, category=target_category)
             if single_feed.key == -1:
                 count += 1
+                user.history.clear()
                 continue
             sample_feeds.append(single_feed)
             result_key = single_feed.key
@@ -262,11 +262,12 @@ class FeedManager:
     
     def _get_home_feed(self, key=-4):
         sample_feeds = []
-        if key == -4:
+        if key <= 0:
             key = self._num_feed -1
             single_feed = self._get_single_managed_feed(key=key)
             sample_feeds.append(single_feed)
             result_key = single_feed.key
+
         count = 0
         while True:
             if count > 8:
@@ -274,6 +275,7 @@ class FeedManager:
             single_feed = self.pick_single_feed_with_key(key=key)
             if single_feed.key == -1:
                 count += 1
+                key = self._num_feed - 1
                 continue
             sample_feeds.append(single_feed)
             result_key = single_feed.key
@@ -305,7 +307,7 @@ class FeedManager:
         sample_feeds = []
         # 제일 위에서 하나 뽑고, 다음꺼 하나 더뽑고
         # key에 맞는 feed 하나 더 뽑아서 넣어주기
-        if key == -4:
+        if key <= 0:
             key = self._num_feed - 1
             while True:
                 single_feed = self._get_single_managed_feed(key=key)
@@ -328,11 +330,12 @@ class FeedManager:
     # 숏폼 피드에서 유저데이터가 있을때 데이터를 받아감
     # result = [지금 볼꺼, 다음볼꺼, 방금 본거]
     # result_key = 지금 볼꺼.key
-    def _get_short_feed_with_user(self, user, key, fclass):
+    def _get_short_feed_with_user(self, user:ManagedUser, key, fclass):
         sample_feeds = []
         # 제일 위에서 하나 뽑고, 다음꺼 하나 더뽑고
         # key에 맞는 feed 하나 더 뽑아서 넣어주기
         count = 0
+
         while True:
             if count > 100:
                 break
@@ -340,6 +343,7 @@ class FeedManager:
             present_feed= self.pick_single_feed_with_category(user=user, category=target_category, fclass=fclass)
             if present_feed.key == -1:
                 count += 1
+                user.history.clear()
                 continue
             sample_feeds.append(present_feed)
             result_key = present_feed.key
@@ -354,11 +358,15 @@ class FeedManager:
                 next_feed = self.pick_single_feed_with_category(user=user, category=target_category, fclass=fclass)
                 if next_feed.key == -1:
                     count += 1
+                    user.history.clear()
                     continue
                 sample_feeds.append(next_feed)
                 result_key = next_feed.key
                 break
             #self.__swap_list(sample_feeds)
+
+
+
 
         result, _ = self.__set_send_feed(target_feed=sample_feeds)
         return result, result_key
@@ -644,7 +652,7 @@ class FeedManager:
             if fclass != "None":
                 if managed_feed.fclass != fclass:
                     continue
-            
+
             if managed_feed.fid in user.history:
                 continue
             target = managed_feed

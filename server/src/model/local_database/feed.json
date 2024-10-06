@@ -72,7 +72,7 @@
         ],
         "result": [
             3,
-            4,
+            3,
             4,
             1
         ],
@@ -86,8 +86,7 @@
             [
                 "yzab-1357-cdef",
                 "ghij-2468-klmn",
-                "opqr-3698-stuv",
-                "abcd-1234-5678"
+                "opqr-3698-stuv"
             ],
             [
                 "wxyz-7531-abcd",
