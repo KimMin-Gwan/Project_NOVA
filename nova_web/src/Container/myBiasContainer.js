@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import MySoloBias from "../component/subscribeBias/mySoloBias";
 import MyGroupBias from "../component/subscribeBias/myGroupBias";
 
-function MyBias({ url, token, showBox, blackBox }) {
+function MyBias({ url,  showBox, blackBox }) {
 
     let [solo_bias, setSoloBias] = useState([]);
     let [group_bias, setGroupBias] = useState([]);

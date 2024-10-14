@@ -1,13 +1,4 @@
-import Feed, {
-  InputFeed,
-  InfoArea,
-  Text,
-  Comments,
-} from "../../component/feed";
-
-// import style from './../pages/FeedPage/FeedPage.module.css';
-// import stylePlanet from './../pages/PlanetPage/Planet.module.css';
-// import planet2 from './../img/planet2.png';
+import Feed, { Comments } from "../../component/feed";
 
 import style from "./FeedPage.module.css";
 import stylePlanet from "./../PlanetPage/Planet.module.css";
@@ -18,21 +9,15 @@ import { MdOutlineReportProblem } from "react-icons/md";
 
 import edit_feed from './../../img/edit.png';
 import backword from "./../../img/back_icon.png";
-
+import write from "./../../img/new_feed.png";
 
 import React, { useState, useEffect, useRef, createContext } from "react";
-// import style from './../pages/FeedPage/FeedPage.module.css';
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export const FeedContext = createContext();
 export const FeedDispatchContext = createContext();
 
 const FeedPage = () => {
-  const location = useLocation();
-
-  // const queryParams = new URLSearchParams(location.search);
-  // const fclass = queryParams.get("fclass");
-
   const [banners, setBanners] = useState([]);
   const [nextData, setNextData] = useState(0);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -86,16 +71,6 @@ const FeedPage = () => {
     }
   };
 
-  // const handleCommentsWheel = (event) => {
-  //   const element = event.currentTarget;
-  //   const atTop = element.scrollTop === 0;
-  //   const atBottom = element.scrollHeight - element.scrollTop === element.clientHeight;
-
-  //   // 댓글창이 맨 위나 맨 아래에 도달하지 않았을 때만 이벤트 전파를 막음
-  //   if (!atTop && !atBottom) {
-  //     event.stopPropagation();
-  //   }
-  // };
   let [isUserState, setIsUserState] = useState(false);
 
   function handleValidCheck() {
@@ -131,6 +106,7 @@ const FeedPage = () => {
       .then((data) => {
         setBanners(data.body.feed);
         setNextData(data.body.key);
+        console.log(data)
         // setNumStar([data.body.feed[0].star, data.body.feed[1].star]);
         // setNumComment([data.body.feed[0].num_comment, data.body.feed[1].num_comment])
       });
@@ -213,44 +189,6 @@ const FeedPage = () => {
   }
 
   let [newComments, setNewComments] = useState([]);
-
-  // function handleSubmit(fid, event) {
-  //   event.preventDefault();
-
-  //   fetch("https://nova-platform.kr/feed_explore/make_comment", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       header,
-  //     },
-  //     credentials: "include",
-  //     body: JSON.stringify({
-  //       header: header,
-  //       body: {
-  //         fid: `${fid}`,
-  //         body: `${inputValue}`,
-  //       },
-  //     }),
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       console.log(data);
-  //       // setNewComments(data.body.comments);
-  //       setAllComments((prevAllComments) => {
-  //         const newAllComments = [data.body.comments[0], ...prevAllComments];
-  //         return newAllComments;
-  //       });
-  //       setBanners((prevBanners) => {
-  //         return prevBanners.map((banner) => {
-  //           return banner.fid === fid
-  //             ? { ...banner, num_comment: data.body.feed[0].num_comment }
-  //             : banner;
-  //         });
-  //       });
-  //       setInputValue("");
-  //     });
-  // }
-
   let [allComments, setAllComments] = useState([]);
   let [commentCount, setCommentCount] = useState(0);
   let [isClickedCommentWindow, setIsClickedCommentWindow] = useState(false);
@@ -328,15 +266,7 @@ const FeedPage = () => {
       ref={sliderRef}
       className={style["test_container"]}
     >
-      <div className={`${stylePlanet["top_area"]} ${style["top_bar_area"]}`}>
-        <img
-          src={backword}
-          alt="Arrow"
-          className={style.backword}
-          onClick={() => {
-            navigate(-1);
-          }}
-        />
+      {/* 
         {
           isUserState ? (
             <img src={edit_feed} alt='edit' className={style['write_button']}
@@ -351,10 +281,9 @@ const FeedPage = () => {
           )
         }
 
-      </div>
+      </div> */}
 
-      <div
-        className={style.test}
+      <div className={style['slider-track']}
         style={{
           transform: `translateY(${translateY}px)`,
           transition: isDragging ? "none" : "transform 0.5s ease",
@@ -363,7 +292,68 @@ const FeedPage = () => {
         {banners.map((banner, i) => {
           return (
             <div key={banner.fid} className={style["short_form"]}>
-              <div className={style["button_area"]}>
+              <div className={style['content-box']}>
+                <div className={`${stylePlanet["top_area"]} ${style["top_bar_area"]}`}>
+                  <img src={backword} alt="Arrow" className={style.backword}
+                    onClick={() => {
+                      navigate(-1);
+                    }}
+                  />
+                </div>
+                <div className={style['content-container']}>
+                  <div className={style['sup_info']}>
+                    <div id={style['nick_name']}>{banner.nickname}</div>
+                    <div id={style.date}>{banner.date}</div>
+                  </div>
+
+                  <div className={style['feed-content']}>{banner.body}</div>
+                  <div className={style['image-box']}>이미지</div>
+                  <div className={style['fclass-box']}>상호작용?</div>
+                  <div className={style['comment-box']}>
+                    <Comments isClickedComment={false} feed={banner} setFeedData={setBanners}
+                      allComments={allComments} setAllComments={setAllComments}/>
+                  </div>
+                </div>
+              </div>
+              <div className={style['interaction-box']}>
+                <div className={style['button-box']}>
+                  <div className={style['write-box']}>
+                    <div className={style['btn-box']}>
+                      <img className={style['btn-img']} src={write} alt="글쓰기" />
+                    </div>
+                  </div>
+
+                  <div className={style['not-recommend-box']}>
+                    <div className={`${style['btn-box']}} ${style['not-recommend-btn']}`}>
+                      <img className={style['btn-img']} src={write} alt="추천안함" />
+                      <div>추천안함</div>
+                    </div>
+                  </div>
+
+                  <div className={style['action-box']}>
+                    <div className={style['action-btn']}>
+                      <div className={`${style['btn-box']}} ${style['action-btn-each']}`}>
+                        <img className={style['btn-img']} src={write} alt="관심표시" />
+                        <div>{banner.star}</div>
+                      </div>
+                      <div className={`${style['btn-box']}} ${style['action-btn-each']}`}>
+                        <img className={style['btn-img']} src={write} alt="댓글" />
+                        <div>{banner.num_comment}</div>
+                      </div>
+                      <div className={`${style['btn-box']}} ${style['action-btn-each']}`}>
+                        <img className={style['btn-img']} src={write} alt="공유" />
+                        <div>공유</div>
+                      </div>
+                      <div className={`${style['btn-box']}} ${style['action-btn-each']}`}>
+                        <img className={style['btn-img']} src={write} alt="신고" />
+                        <div>신고</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* <div className={style["button_area"]}>
                 {isClickedComment && (
                   <div className={style["comment_window"]}>
                     <div className={style["comment_top"]}>
@@ -416,9 +406,9 @@ const FeedPage = () => {
                       ></Comments>
                     </div>
                   </div>
-                )}
+                )} */}
 
-                <div className={style["short_form_container"]}>
+              {/* <div className={style["short_form_container"]}>
                   <div className={style["short_box"]}>
                     <div className={style["img_circle"]}>
                       <img src={banner.image[0]} />
@@ -430,10 +420,10 @@ const FeedPage = () => {
                       setFeedData={setBanners}
                       img_circle={true}
                     ></Feed>
-                  </div>
+                  </div> */}
 
-                  <div className={style["function_button"]}>
-                    <div className={style["func_btn"]}>
+              {/* <div className={style["function_button"]}> */}
+              {/* <div className={style["func_btn"]}>
                       {
                         isUserState ? (
                           <button
@@ -453,10 +443,10 @@ const FeedPage = () => {
                       }
 
 
-                      {/* <p>{numStar[i]}</p> */}
+                      <p>{numStar[i]}</p>
                       <p>{banner.star}</p>
-                    </div>
-                    <div className={style["func_btn"]}>
+                    </div> */}
+              {/* <div className={style["func_btn"]}>
 
                       <button
                         onClick={(event) => {
@@ -482,10 +472,10 @@ const FeedPage = () => {
                         />
                       </button>
                       <p>신고</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                    </div> */}
+              {/* </div> */}
+              {/* </div> */}
+              {/* </div> */}
             </div>
           );
         })}

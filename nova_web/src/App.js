@@ -48,7 +48,7 @@ function App() {
 
   let url = 'https://nova-platform.kr/home/';
   // let url = 'http://127.0.0.1:5000/home/';
-  let type = ['solo', 'group'];
+  // let type = ['solo', 'group'];
 
   let [isUserState, setIsUserState] = useState(false);
 
@@ -81,30 +81,30 @@ function App() {
     handleValidCheck()
   }, []);
 
-  let token = localStorage.getItem('jwtToken');
+  // let token = localStorage.getItem('jwtToken');
 
-  let [isLogin, setIsLogin] = useState();
-  let [newToken, setnewToken] = useState(token);
+  // let [isLogin, setIsLogin] = useState();
+  // let [newToken, setnewToken] = useState(token);
 
-  let header = {
-    "request-type": "default",
-    "client-version": 'v1.0.1',
-    "client-ip": '127.0.0.1',
-    "uid": '1234-abcd-5678',
-    "endpoint": "/core_system/",
-  }
+  // let header = {
+  //   "request-type": "default",
+  //   "client-version": 'v1.0.1',
+  //   "client-ip": '127.0.0.1',
+  //   "uid": '1234-abcd-5678',
+  //   "endpoint": "/core_system/",
+  // }
 
   //내 최애 / 전체 선택버튼용
-  let [isSoloClicked, setSoloClick] = useState(false);
-  let [isGroupClicked, setGroupClick] = useState(false);
+  // let [isSoloClicked, setSoloClick] = useState(false);
+  // let [isGroupClicked, setGroupClick] = useState(false);
 
-  function handleSoloToggle() {
-    setSoloClick(!isSoloClicked);
-  };
+  // function handleSoloToggle() {
+  //   setSoloClick(!isSoloClicked);
+  // };
 
-  function handleGroupToggle() {
-    setGroupClick(!isGroupClicked);
-  };
+  // function handleGroupToggle() {
+  //   setGroupClick(!isGroupClicked);
+  // };
 
 
   let [showBox, setShowBox] = useState(false);
@@ -185,7 +185,7 @@ function App() {
             <h2 className='authen'>인증하기</h2>
 
             <section className='my-bias'>
-              <MyBias url={url} token={newToken} showBox={showBox} blackBox={blackBox}></MyBias>
+              <MyBias url={url} showBox={showBox} blackBox={blackBox}></MyBias>
             </section>
           </div>
 
@@ -194,49 +194,6 @@ function App() {
             <InfFeed isUserState={isUserState}></InfFeed>
           </section>
           <NavBar></NavBar>
-
-          {/* <section className="solo-bias-rank">
-            <div className='title-area'>
-              <div className="ranking">개인리그 랭킹</div>
-              <div className={`toggle-container ${isSoloClicked ? "" : "active"}`}>
-                <div onClick={() => {
-                  handleSoloToggle();
-
-                  // handleTouch('내 최애')
-                }} className={`text ${isSoloClicked ? "" : "active"}`}>내 최애</div>
-                <div onClick={() => {
-                  handleSoloToggle();
-                  // handleTouch('전체')
-                }} className={`text ${isSoloClicked ? "active" : ""}`}>전체</div>
-                <div className="toggle-slider"></div>
-
-              </div>
-            </div>
-            <Meta url={url} isSoloClicked={isSoloClicked} type={type[0]} token={newToken}></Meta>
-
-          </section>
-
-          <section className="solo-bias-rank">
-            <div className='title-area'>
-              <div className="ranking">단체리그 랭킹</div>
-              <div className={`toggle-container ${isGroupClicked ? "" : "active"}`}>
-                <div onClick={() => {
-                  handleGroupToggle()
-                  // handleTouch('내 최애')
-                }} className={`text ${isGroupClicked ? "" : "active"}`}>내 최애</div>
-                <div onClick={() => {
-                  handleGroupToggle()
-                  // handleTouch('전체')
-                }} className={`text ${isGroupClicked ? "active" : ""}`}>전체</div>
-                <div className="toggle-slider"></div>
-
-              </div>
-            </div>
-            <Meta url={url} isGroupClicked={isGroupClicked} type={type[1]} token={newToken}></Meta>
-          </section> */}
-
-          {/* <section className="advise"></section> */}
-          {/* <FloatingButton showSpeaker={showBox} setShowSpeaker={setShowBox}></FloatingButton> */}
 
         </div >
 

@@ -1,29 +1,148 @@
-.container {
-    margin: 0 auto;
-    max-width: 500px;
-    height: 200vh;
-    background-color: black;
-    color: white;
-    /* overflow: hidden; */
-    position: relative;
-}
-
 .test_container {
     margin: 0 auto;
     max-width: 500px;
     height: 100vh;
     background-color: black;
-    color: white;
     overflow: hidden;
     position: relative;
 }
 
-.top_bar_area {
-    margin-top: 10px;
-    /* background-color: violet; */
-    height: 60px;
+/* 왼쪽 컨텐츠 영역 */
+.content-box {
+    width: 400px;
+    min-height: 100%;
+    background-color: white;
 }
 
+.top_bar_area {
+    margin-top: 10px;
+    height: 50px;
+    width: 90%;
+    margin-bottom: 10px;
+}
+
+.content-container {
+    /* background-color: blue; */
+    width: 100%;
+    height: 100%;
+    /* margin-left: 20px; */
+}
+
+/* 닉네임 및 날짜 */
+.sup_info {
+    width: 100%;
+    height: 50px;
+}
+
+.sup_info>#nick_name {
+    height: 50%;
+    display: flex;
+    align-items: end;
+    color: black;
+}
+
+.sup_info>#date {
+    color: gray;
+    display: flex;
+}
+
+/* 글 내용 영역 */
+.feed-content {
+    margin-top: 10px;
+    width: 100%;
+    height: 80px;
+    font-weight: 600;
+}
+
+/* 이미지 보이는 곳 */
+.image-box {
+    height: 180px;
+    background-color: #D2C8F7;
+}
+
+.fclass-box {
+    height: 250px;
+    background-color: orange;
+}
+
+/* 댓글 영역 */
+.comment-box {
+}
+
+/* 상호작용 영역 */
+.interaction-box {
+    width: 100px;
+    min-height: 100%;
+    background-color: gray;
+}
+
+.button-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+}
+
+/* 이미지 크기 */
+.btn-img {
+    width: 30px;
+    height: 30px;
+    object-fit: cover;
+}
+
+/* 버튼 공통 속성 */
+.btn-box {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 글쓰기 버튼 */
+.write-box {
+    flex-grow: 1.5;
+    display: flex;
+    justify-content: center;
+}
+
+/* 추천 안 함 버튼 */
+
+.not-recommend-box {
+    flex-grow: 0.5;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.not-recommend-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* 상호작용 버튼 */
+.action-box {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.action-btn {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 80%;
+    gap: 20px;
+}
+
+.action-btn-each {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ///////////////////////// */
 .databox {
     /* background-color: purple; */
     width: 100%;
@@ -605,12 +724,21 @@
 }
 
 .short_form {
-    height: 100vh;
-    position: relative;
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    /* align-items: center; */
+    color: black;
+    /* font-size: 2em; */
+    background-color: blanchedalmond;
+    /* user-select: none; */
+    /* height: 100vh; */
+    /* position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
-    /* background-color: bisque; */
+    background-color: bisque; */
 }
 
 .short_form_container {
@@ -1018,13 +1146,13 @@
     /* 각 박스의 높이를 화면 높이에 맞추기 */
     width: 100%;
     /* 배너의 너비는 부모 요소에 맞춤 */
-    display: flex;
+    display: relative;
     justify-content: center;
     align-items: center;
     color: white;
     font-size: 2em;
-    transition: background-color 0.3s ease;
-    user-select: none;
+    /* transition: background-color 0.3s ease; */
+    /* user-select: none; */
 }
 
 .current-index {
@@ -1215,7 +1343,7 @@
     overflow-x: hidden;
 }
 
-.upload_area > .input[type=file]{
+.upload_area>.input[type=file] {
     width: 100%;
     height: 100%;
     background-color: blue;
