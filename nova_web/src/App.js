@@ -66,6 +66,10 @@ function App() {
             throw new Error(`status: ${response.status}`)
           }
         }
+        else{
+          console.log("로그인  확인")
+          setIsUserState(true);
+        }
         return response.json()
       })
       .then((data) => {
@@ -189,6 +193,7 @@ function App() {
             <h2 className='satellite-search'>위성 탐색</h2>
             <InfFeed isUserState={isUserState}></InfFeed>
           </section>
+          <NavBar></NavBar>
 
           {/* <section className="solo-bias-rank">
             <div className='title-area'>
@@ -232,7 +237,6 @@ function App() {
 
           {/* <section className="advise"></section> */}
           {/* <FloatingButton showSpeaker={showBox} setShowSpeaker={setShowBox}></FloatingButton> */}
-          <NavBar></NavBar>
 
         </div >
 

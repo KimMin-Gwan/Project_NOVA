@@ -764,7 +764,7 @@ export function InfoArea({ color, name, date, supporter }) {
                 <div className={style['planet_name']}>
                     {/* <img src={img}></img> */}
                     <div className={style.circle} style={{ background: `${color}` }}></div>
-                    <p>{name}</p>
+                    {/*<p>{name}</p>*/}
                     <p className={style['write-date']}>{date}</p>
                 </div>
                 <p className={style['sup_people']}>{supporter}</p>
