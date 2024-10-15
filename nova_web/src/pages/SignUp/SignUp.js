@@ -1,240 +1,300 @@
-import { useEffect, useState } from 'react';
-import style from './SignUp.module.css';
-import { useNavigate } from 'react-router-dom';
-
+import { useEffect, useState } from "react";
+import style from "./SignUp.module.css";
+import { useNavigate } from "react-router-dom";
+import backword from "./../../img/back_icon.png";
 export default function SignUp() {
+  let [inputEmail, setInputEmail] = useState("");
+  let [authen, setAuthen] = useState(false);
+  let [code, setCode] = useState("");
+  let [pwd, setPwd] = useState("");
+  let [checkPwd, setCheckPwd] = useState("");
+  let [age, setAge] = useState("");
+  let [gender, setGender] = useState("");
 
-    let [inputEmail, setInputEmail] = useState('');
-    let [authen, setAuthen] = useState(false);
-    let [code, setCode] = useState('')
-    let [pwd, setPwd] = useState('');
-    let [checkPwd, setCheckPwd] = useState('');
-    let [age, setAge] = useState('');
-    let [gender, setGender] = useState('');
+  let [result, setResult] = useState(false);
+  let navigate = useNavigate();
+  const [agree1, setAgree1] = useState(false);
+  const [agree2, setAgree2] = useState(false);
+  const [allAgree, setAllAgree] = useState(false);
+  let [emailError, setEmailError] = useState(false);
+  let [passwordError, setPasswordError] = useState(false);
+  let [passwordMessage, setPasswordMessage] = useState("");
+  let [isCheckPwdFocused, setIsCheckPwdFocused] = useState(false);
+  let [showPassword, setShowPassword] = useState(false);
+  let [showCheckPassword, setShowCheckPassword] = useState(false);
+  let header = {
+    "request-type": "default",
+    "client-version": "v1.0.1",
+    "client-ip": "127.0.0.1",
+    uid: "1234-abcd-5678",
+    endpoint: "/user_system/",
+  };
 
-    let [result, setResult] = useState(false);
-    let navigate = useNavigate();
+  let send_data = {
+    header: header,
+    body: {
+      email: inputEmail,
+    },
+  };
 
-    let header = {
-        "request-type": "default",
-        "client-version": "v1.0.1",
-        "client-ip": "127.0.0.1",
-        "uid": "1234-abcd-5678",
-        "endpoint": "/user_system/",
-    };
+  let signUp_data = {
+    header: header,
+    body: {
+      email: inputEmail,
+      password: pwd,
+      verification_code: code,
+      age: age,
+      gender: gender,
+    },
+  };
 
-    let send_data = {
-        header: header,
-        body: {
-            email: inputEmail
+  function handleInputEmail(e) {
+    const email = e.target.value;
+    setInputEmail(email);
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    setEmailError(!emailRegex.test(email));
+  }
+  function handlePassWord(e) {
+    const password = e.target.value;
+    setPwd(password);
+
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,}$/;
+    const isValid = passwordRegex.test(password);
+
+    setPasswordError(!isValid);
+    setPasswordMessage(isValid ? "" : "대소문자, 숫자, 특수문자를 포함해 10자리 이상이어야 합니다.");
+  }
+
+  function handleCheckPassWord(e) {
+    const confirmPwd = e.target.value;
+    setCheckPwd(confirmPwd);
+
+    if (isCheckPwdFocused) {
+      setPasswordError(confirmPwd !== pwd);
+    }
+  }
+
+  function handleAge(e) {
+    const value = e.target.value;
+    if (/^\d*$/.test(value)) {
+      setAge(value);
+    }
+  }
+  function handleKeyDown(e) {
+    if (!/[0-9]/.test(e.key) && e.key !== "Backspace" && e.key !== "Delete" && e.key !== "Tab") {
+      e.preventDefault();
+    }
+  }
+  function handleGender(e) {
+    setGender(e.target.value);
+  }
+  function handleCode(e) {
+    setCode(e.target.value);
+  }
+
+  useEffect(() => {
+    return setInputEmail("");
+  }, []);
+
+  function fetchAuthenEmail() {
+    fetch(`https://nova-platform.kr/user_home/try_send_email`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify(send_data),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setAuthen(data.body.result);
+      });
+    alert("인증코드가 전송되었습니다");
+  }
+
+  function fetchSignUp() {
+    fetch(`https://nova-platform.kr/user_home/try_sign_in`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify(signUp_data),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        if (data.body.result) {
+          alert("회원가입이 완료되었습니다.");
+          navigate("/novalogin");
         }
-    };
+        // setResult(data.body.result);
+      });
+  }
 
-    let signUp_data = {
-        header: header,
-        body: {
-            email: inputEmail,
-            password: pwd,
-            verification_code: code,
-            age: age,
-            gender: gender,
-        }
-    };
+  function handleSubmit(e) {
+    e.preventDefault();
 
-    function handleInputEmail(e) {
-        setInputEmail(e.target.value);
-    };
-    function handlePassWord(e) {
-        setPwd(e.target.value);
-    };
-    function handleCheckPassWord(e) {
-        setCheckPwd(e.target.value);
-    };
-    function handleAge(e) {
-        setAge(e.target.value)
-    };
-    function handleGender(e) {
-        setGender(e.target.value)
-    };
-    function handleCode(e) {
-        setCode(e.target.value)
-    };
+    if (pwd !== checkPwd) {
+      alert("비밀번호가 같지 않습니다.");
+      return;
+    }
+    fetchSignUp();
+  }
 
-    useEffect(() => {
-        return (
-            setInputEmail('')
-        )
-    }, []);
+  // function handleStart() {
+  //     if (result) {
+  //         alert('회원가입이 완료되었습니다.');
+  //         navigate('/novalogin');
+  //     }
+  // };
+  const handleAllAgreeChange = (e) => {
+    const isChecked = e.target.checked;
+    setAllAgree(isChecked);
+    setAgree1(isChecked);
+    setAgree2(isChecked);
+  };
 
-    function fetchAuthenEmail() {
+  const handleIndividualChange = (e) => {
+    const { name, checked } = e.target;
+    if (name === "agree1") {
+      setAgree1(checked);
+    } else if (name === "agree2") {
+      setAgree2(checked);
+    }
 
-        fetch(`https://nova-platform.kr/user_home/try_send_email`, {
-            headers: {
-                "Content-Type": 'application/json',
-            },
-            method: 'POST',
-            body: JSON.stringify(send_data)
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                setAuthen(data.body.result);
-            })
-        alert('인증코드가 전송되었습니다');
+    setAllAgree(checked && agree2);
+  };
+  return (
+    <div className={style.container}>
+      <div className={style.Topbar}>
+        <img
+          src={backword}
+          alt="Arrow"
+          className={style.backword}
+          onClick={() => {
+            navigate(-1);
+          }}
+        />
+        <div className={style.title}>회원가입</div>
+        <div className={style.EmptyBox} />
+      </div>
+      <div>
+        <form onSubmit={(e) => handleSubmit(e)}>
+          <div className={style.box}>
+            <div className={style.test}>
+              이메일 주소
+              <br />
+              <label>
+                <input type="email" name="email" value={inputEmail} placeholder="testEmail@naver.com" onChange={(e) => handleInputEmail(e)} required className={emailError ? style.error : ""} />
+                <button
+                  className={style.authen}
+                  disabled={!inputEmail}
+                  onClick={() => {
+                    fetchAuthenEmail();
+                  }}
+                >
+                  인증
+                </button>
+                {emailError && <p className={style.errorMessage}>이메일 형식으로 아이디를 입력해주세요.</p>}
+              </label>
+            </div>
+          </div>
 
-    };
+          <div className={style.box}>
+            <div className={style.test}>
+              인증번호
+              <br />
+              <label>
+                <input
+                  name="password"
+                  placeholder="1234"
+                  required
+                  onChange={(e) => {
+                    handleCode(e);
+                  }}
+                ></input>
+              </label>
+            </div>
+          </div>
 
-    function fetchSignUp() {
-        fetch(`https://nova-platform.kr/user_home/try_sign_in`, {
-            headers: {
-                "Content-Type": 'application/json',
-            },
-            method: 'POST',
-            body: JSON.stringify(signUp_data)
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                if (data.body.result) {
-                    alert('회원가입이 완료되었습니다.');
-                    navigate('/novalogin');
-                }
-                // setResult(data.body.result);
-            })
-    };
+          <div className={style.box}>
+            <div className={style.test}>
+              비밀번호
+              <br />
+              <label>
+                <input type={showPassword ? "text" : "password"} name="password" required onChange={(e) => handlePassWord(e)} placeholder="Aabc123456!@" className={passwordError && passwordMessage ? style.error : ""} />
+                <button type="button" onClick={() => setShowPassword(!showPassword)} className={style.toggleButton}>
+                  {showPassword ? "숨기기" : "보기"}
+                </button>
+                {passwordMessage && <p className={style.errorMessage}>{passwordMessage}</p>}
+              </label>
+            </div>
+          </div>
 
-    function handleSubmit(e) {
-        e.preventDefault();
+          <div className={style.box}>
+            <div className={style.test}>
+              비밀번호 확인
+              <br />
+              <label>
+                <input type={showCheckPassword ? "text" : "password"} name="check_pwd" required onChange={(e) => handleCheckPassWord(e)} placeholder="Aabc123456!@" onFocus={() => setIsCheckPwdFocused(true)} className={passwordError && pwd && isCheckPwdFocused ? style.error : ""} />
+                <button type="button" onClick={() => setShowCheckPassword(!showCheckPassword)} className={style.toggleButton}>
+                  {showCheckPassword ? "숨기기" : "보기"}
+                </button>
+                {passwordError && pwd && isCheckPwdFocused && <p className={style.errorMessage}>비밀번호가 일치하지 않습니다.</p>}
+              </label>
+            </div>
+          </div>
 
-        if (pwd !== checkPwd) {
-            alert('비밀번호가 같지 않습니다.');
-            return
-        }
-        fetchSignUp()
-    };
+          <div className={style.box}>
+            <div className={style.test}>
+              나이
+              <br />
+              <label>
+                <input type="text" name="age" value={age} required onChange={handleAge} onKeyDown={handleKeyDown} placeholder="20" />
+              </label>
+            </div>
+          </div>
 
-    // function handleStart() {
-    //     if (result) {
-    //         alert('회원가입이 완료되었습니다.');
-    //         navigate('/novalogin');
-    //     }
-    // };
+          <div className={style.box}>
+            <div className={style.test}>
+              성별
+              <br />
+              <input type="radio" name="gender" id="gender1" required onChange={(e) => handleGender(e)}></input>
+              <label htmlFor="gender1">남성</label>
+              <input type="radio" name="gender" id="gender2" required onChange={(e) => handleGender(e)}></input>
+              <label htmlFor="gender2">여성</label>
+              <input type="radio" name="gender" id="gender3" required onChange={(e) => handleGender(e)}></input>
+              <label htmlFor="gender3">기타</label>
+              <input type="radio" name="gender" id="gender4" required onChange={(e) => handleGender(e)}></input>
+              <label htmlFor="gender4">비공개</label>
+            </div>
+          </div>
 
-
-
-    return (
-        <div className={style.container}>
-            <div className={style.title}>회원가입</div>
-            <div>
-                <form onSubmit={(e) => handleSubmit(e)}>
-                    <div className={style.box}>
-                        <div className={style.test}>
-                            이메일
-                            <br />
-                            <label>
-                                <input type='email' name='email' value={inputEmail}
-                                    onChange={(e) => handleInputEmail(e)}
-                                    required ></input>
-                                <button className={style.authen} disabled={!inputEmail}
-                                    style={{
-                                        background: inputEmail ? '#98A0FF' : '',
-                                        color: inputEmail ? 'white' : ''
-                                    }}
-                                    onClick={() => {
-                                        fetchAuthenEmail()
-                                    }}>인증</button>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div className={style.box}>
-                        <div className={style.test}>
-                            인증번호
-                            <br />
-                            <label>
-                                <input name='password' required onChange={(e) => { handleCode(e) }}></input>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div className={style.box}>
-                        <div className={style.test}>
-                            비밀번호
-                            <br />
-                            <label>
-                                <input type='password' name='password' required
-                                    onChange={(e) => handlePassWord(e)}></input>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div className={style.box}>
-                        <div className={style.test}>
-                            비밀번호 확인
-                            <br />
-                            <label>
-                                <input type='password' name='check_pwd' required
-                                    onChange={(e) => handleCheckPassWord(e)}></input>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div className={style.box}>
-                        <div className={style.test}>
-                            나이
-                            <br />
-                            <label>
-                                <input type='number' name='age' required
-                                    onChange={(e) => handleAge(e)}></input>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div className={style.box}>
-                        <div className={style.test}>
-                            성별
-                            <br />
-                            <input type='radio' name='gender' id='gender1' required
-                                onChange={(e) => handleGender(e)}></input>
-                            <label htmlFor='gender1'>남성</label>
-
-                            <input type='radio' name='gender' id='gender2' required
-                                onChange={(e) => handleGender(e)} ></input>
-                            <label htmlFor='gender2'>여성</label>
-
-                            <input type='radio' name='gender' id='gender3' required
-                                onChange={(e) => handleGender(e)} ></input>
-                            <label htmlFor='gender3'>기타</label>
-
-                            <input type='radio' name='gender' id='gender4' required
-                                onChange={(e) => handleGender(e)} ></input>
-                            <label htmlFor='gender4'>비공개</label>
-                        </div>
-                    </div>
-
-                    <div className={style.box}>
-                        <div className={style.test}>
-                            약관 동의
-                            <br />
-                            <div className={style['agree_box']}>
-                                <label>
-                                    <input type='checkbox' name='agree1' required></input>
-                                    (필수) 이용약관 동의
-                                </label>
-                                <br />
-                                <label>
-                                    <input type='checkbox' name='agree2' required></input>
-                                    (필수) 개인정보처리 동의
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className={style['submit_area']}>
-                        <button type='submit' className={style['submit_btn']}>노바 시작하기</button>
-                    </div>
-                </form>
-            </div >
-        </div >
-    )
+          <div className={style.box}>
+            <div className={style.agree_box}>
+              <label>
+                <input type="checkbox" name="agree1" checked={agree1} onChange={handleIndividualChange} required />
+                (필수) 이용약관 동의
+                <p>상세보기</p>
+              </label>
+              <label>
+                <input type="checkbox" name="agree2" checked={agree2} onChange={handleIndividualChange} required />
+                (필수) 개인정보처리 동의
+                <p>상세보기</p>
+              </label>
+            </div>
+          </div>
+          <div className={style.all_check}>
+            <input type="checkbox" name="all-agree" checked={allAgree} onChange={handleAllAgreeChange} />
+            약관 전체 동의
+          </div>
+          <div className={style["submit_area"]}>
+            <button type="submit" className={style["submit_btn"]}>
+              노바 시작하기
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
 }

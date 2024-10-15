@@ -1,28 +1,49 @@
 .container {
-    margin: 0 auto;
-    max-width: 500px;
-    background-color: white;
-    height: 200vw;
+  margin: 0 auto;
+  max-width: 500px;
+  background-color: white;
+  height: 1000px;
+}
+.Topbar {
+  width: 100%;
+  height: 60px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  border-bottom: 2px solid #ffffff;
+  display: flex;
+  align-items: center; /* 수직 중앙 정렬 */
+  justify-content: flex-start; /* 왼쪽부터 정렬 */
+  padding: 5px 15px;
+  box-sizing: border-box;
+  gap: 10px; /* 아이콘과 타이틀 사이의 간격 */
+}
+
+.backword {
+  width: 35px;
+  height: 35px;
+  filter: invert();
+  cursor: pointer;
 }
 
 .title {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 70px;
-    border-bottom: 1px solid black;
+  color: black;
+  font-weight: 600;
+  text-align: center;
+  flex: 1;
+}
+
+.EmptyBox {
+  width: 30px;
 }
 
 .box {
-    margin: 0 auto;
-    margin-top: 20px;
-    width: 450px;
-    /* height: 120px; */
-    /* background-color: gray; */
-    display: flex;
+  margin: 0 auto;
+  margin-top: 20px;
+  width: 450px;
+  /* height: 120px; */
+  /* background-color: gray; */
+  display: flex;
 }
-
 
 /* .input-area {
     display: flex;
@@ -42,86 +63,133 @@
 } */
 
 .authen {
-    border-radius: 8px;
-    width: 70px;
-    border: none;
-    height: 40px;
-    margin-left: 20px;
-    background-color: #F6F6F6;
+  border-radius: 5px;
+  width: 70px;
+  border: none;
+  height: 45px;
+  margin-left: 15px;
+  background-color: #f6f6f6;
 }
 
 .test {
-    margin: auto;
-    width: 90%;
-    /* height: 100px; */
-    /* background-color: green; */
+  margin: auto;
+  width: 90%;
+  /* height: 100px; */
+  /* background-color: green; */
+}
+.errorMessage {
+  color: red;
+  font-size: 14px;
+  margin-top: 5px;
 }
 
-.test input[type=email]{
-    width: 70%;
+.test input {
+  background-color: #f6f6f6;
+  border-radius: 3px;
+  margin-top: 10px;
+  height: 45px;
+  width: 90%;
+  border: 1px solid #f6f6f6;
+  padding-left: 15px;
+  outline: none;
 }
 
-.test input{
-    background-color: gainsboro;
-    border-radius: 5px;
-    margin-top: 10px;
-    height: 40px;
-    width: 85%;
+.test input:focus {
+  border: 1px solid #98a0ff;
 }
 
-.test input[type=radio] {
-    display: none;
+.test input[type="email"] {
+  width: 70%;
 }
 
-.test input[type=radio] + label {
-    display: inline-flex;
-    cursor: pointer;
-    height: 50px;
-    width: 70px;
-    border-radius: 10px;
-    border: 1px solid #333;
-    line-height: 24px;
-    /* text-align: center; */
-    align-items: center;
-    justify-content: center;
-    margin-right: 10px;
-    margin-top: 10px;
-    font-weight:bold;
-    font-size:13px;
+.test input[type="radio"] {
+  display: none;
 }
 
-.test input[type=radio]:checked + label {
-    background-color: #98A0FF;
-    border: white 1px solid;
-    color: white;
+.test input[type="radio"] + label {
+  display: inline-flex;
+  cursor: pointer;
+  height: 50px;
+  width: 75px;
+  border-radius: 10px;
+  border: 0;
+  line-height: 24px;
+  /* text-align: center; */
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+  margin-top: 10px;
+  font-weight: 500;
+  font-size: 14px;
+  background-color: #f6f6f6;
 }
 
+.test input[type="radio"]:checked + label {
+  background-color: #98a0ff;
+  border: 0;
+  color: white;
+}
+.inputContainer {
+  position: relative;
+}
+.toggleButton {
+  float: right;
+  transform: translateY(-180%);
+  cursor: pointer;
+  border: none;
+  background-color: #f6f6f6;
+  align-self: center;
+  margin-right: 30px;
+}
 .agree_box {
-    margin-top: 10px;
-    border-radius: 10px;
-    width: 100%;
-    height: 120px;
-    background-color: gray;
+  margin-top: 10px;
+  border-radius: 10px;
+  width: 100%;
+  height: 120px;
+  background-color: #f6f6f6;
+  display: flex;
+  flex-direction: column;
+  padding: 0px 20px;
+  font-size: 17px;
+  p {
+    margin-left: auto;
+    font-size: 14px;
+    color: #bbbbbb;
+    cursor: pointer;
+  }
 }
-
-.agree_box input[type=checkbox] {
-    width: 30px;
-    height: 30px;
+.agree_box label {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-top: 7px;
 }
-
+.agree_box input[type="checkbox"],
+.all_check input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin-top: 5px;
+}
+.all_check {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  margin-right: 40px;
+  margin-top: 20px;
+}
 .submit_btn {
-    margin: 0 auto;
-    width: 120px;
-    height: 50px;
-    background-color: #98A0FF;
-    border-radius: 15px;
-    border: none;
-    color: white;
+  margin: 0 auto;
+  width: 120px;
+  height: 50px;
+  background-color: #98a0ff;
+  border-radius: 15px;
+  border: none;
+  color: white;
+  margin-top: 10px;
 }
 
 .submit_area {
-
-    width: 450px;
-    text-align: end;
-    margin-top: 20px;
+  width: 450px;
+  text-align: end;
+  margin-top: 15px;
 }
