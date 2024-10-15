@@ -45,12 +45,14 @@ hr {
 }
 
 .TitleBox {
-  position: absolute; /* 절대 위치로 중앙 정렬 */
-  left: 50%; /* 부모의 50% 위치 */
-  transform: translateX(-50%);
-  color: white;
+  color: black;
+  font-weight: 600;
+  text-align: center;
+  flex: 1;
 }
-
+.EmptyBox {
+  width: 30px;
+}
 /* .TitleName{
     color: white;
     /* text-align: center; /* 텍스트 가운데 정렬 
