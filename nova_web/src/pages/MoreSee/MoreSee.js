@@ -12,7 +12,9 @@ import login_icon from "./../../img/login_icon.png";
 import mypage_icon from "./../../img/mypage_icon.png";
 import terms_icon from "./../../img/terms_icon.png";
 import business_logo from "./../../img/business_logo.png";
-
+import more_icon from "./../../img/Icon.png";
+import nova_league from "./../../img/nova_league.png";
+import nova_funding from "./../../img/nova_funding.png";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
@@ -99,42 +101,46 @@ function MoreSee() {
               }
             }}
           >
-            <img src={isLogin ? mypage_icon : login_icon} alt="Arrow" className={style.vector} />
-            <p className={style.bodyText}>{isLogin ? "마이페이지" : "로그인"}</p>
+            <img src={isLogin ? mypage_icon : login_icon} alt="Arrow" className={style.vector_login} />
+            <p className={style.bodyText_login}>{isLogin ? "마이페이지" : "로그인"}</p>
           </div>
-
+          <hr></hr>
+          <br></br>
           <div className={style.row}>
-            <div className={style.mainComponent} onClick={() => handleRequestURL(requestURL.naverform)}>
+            <div className={style.fullWidthComponent} onClick={() => handlePage("/galaxy")}>
+              <img src={nova_league} alt="Arrow" className={style.vector_login} />
+              <p className={style.nova_text}>노바 리그</p>
+              <p className={style.bodyText_login}>바로가기</p>
+            </div>
+            <div className={style.fullWidthComponent}>
+              <img src={nova_funding} alt="Arrow" className={style.vector_login} />
+              <p className={style.nova_text}>노바 펀딩</p>
+              <p className={style.bodyText_login}>바로가기</p>
+            </div>
+          </div>
+          <hr></hr>
+          <ul className={style.listContainer}>
+            <li className={style.mainComponent} onClick={() => handleRequestURL(requestURL.naverform)}>
               <img src={fav_icon} alt="Arrow" className={style.vector} />
               <p className={style.bodyText}>최애 신청하기(네이버 폼)</p>
-            </div>
-            <div
-              className={style.mainComponent}
-              onClick={() => {
-                handlePage("/notice_list");
-              }}
-            >
+              <img src={more_icon} alt="Arrow" className={style.more_vector} />
+            </li>
+            <li className={style.mainComponent} onClick={() => handlePage("/notice_list")}>
               <img src={noti_icon} alt="Arrow" className={style.vector} />
               <p className={style.bodyText}>공지사항</p>
-            </div>
-          </div>
-
-          <div className={style.row}>
-            <div
-              className={style.mainComponent}
-              onClick={() => {
-                handlePage("/terms_page");
-              }}
-            >
+              <img src={more_icon} alt="Arrow" className={style.more_vector} />
+            </li>
+            <li className={style.mainComponent} onClick={() => handlePage("/terms_page")}>
               <img src={terms_icon} alt="Arrow" className={style.vector} />
               <p className={style.bodyText}>사업자 정보 및 사용약관</p>
-            </div>
-
-            <div className={style.mainComponent}>
+              <img src={more_icon} alt="Arrow" className={style.more_vector} />
+            </li>
+            <li className={style.mainComponent}>
               <img src={set_icon} alt="Arrow" className={style.vector} />
               <p className={style.bodyText}>페이지 설정</p>
-            </div>
-          </div>
+              <img src={more_icon} alt="Arrow" className={style.more_vector} />
+            </li>
+          </ul>
         </div>
 
         <div className={style.inquiry}>
@@ -159,7 +165,7 @@ function MoreSee() {
         <footer className="footer">
           <div className={style.footer}>
             <div>
-            <img src={business_logo} alt="logo_Icon" className={style.logo_img} />
+              <img src={business_logo} alt="logo_Icon" className={style.logo_img} />
             </div>
             <br />
             <p className="nova-info">경북 경산시 압량읍 압독2로1길 21, 1층 184</p>

@@ -9,7 +9,9 @@
 /* .font {
   font-family: "Noto Sans KR", sans-serif;
 } */
-
+hr {
+  opacity: 0.2;
+}
 .container {
   max-width: 500px;
   /* 너비를 원하는 비율로 설정 */
@@ -20,7 +22,7 @@
   /*text-align: center; /* 텍스트 가운데 정렬 */
 }
 .TopBar {
-  width: 100%; /* 너비를 원하는 비율로 설정 */
+  width: 500px; /* 너비를 원하는 비율로 설정 */
   height: 60px;
   margin: 0 auto;
   /*max-width: 1200px; /* 최대 너비를 설정 */
@@ -70,50 +72,84 @@
   /* box-sizing: border-box; */
 }
 
-.mainComponent {
-  width: calc(50% - 20px); /* 두 개가 한 줄에 오도록 너비 조정 */
-  height: 134px;
-  background-color: #cccfff;
-  display: flex;
-  align-items: center;
-  margin: 10px;
-  cursor: pointer;
-  justify-content: flex-end;
-  border-radius: 15px;
-  flex-direction: column;
-}
-
 .fullWidthComponent {
   width: calc(100% - 40px);
   height: 134px;
-  background-color: #98a0ff;
+  background-color: white;
   display: flex;
   align-items: center;
   justify-content: flex-end;
   margin: 5px 20px;
-  border-radius: 15px;
   flex-direction: column;
+
+  .nova_text {
+    margin: 0;
+    margin-top: 5px;
+    margin-bottom: -5px;
+    font-size: 13px;
+  }
 }
 
+.listContainer {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.mainComponent {
+  width: 100%;
+  height: 50px;
+  background-color: white;
+  display: flex;
+  cursor: pointer;
+  justify-content: flex-start;
+  align-items: center;
+  border-bottom: 1px solid rgba(228, 228, 228, 0.2);
+  .more_vector {
+    width: 9px;
+    height: 14px;
+    margin-left: auto;
+    margin-right: 40px;
+  }
+}
+
+.bodyText {
+  color: rgb(0, 0, 0);
+  font-size: 13px;
+  text-align: center; /* 텍스트 가운데 정렬 */
+  font-weight: 100;
+  /*margin-right: 23px; /* Add spacing between the text and icon */
+}
+.bodyText_login {
+  color: rgb(0, 0, 0);
+  font-size: 12px;
+  text-align: center; /* 텍스트 가운데 정렬 */
+  font-weight: 530;
+  border: 1.5px solid #cccfff;
+  border-radius: 5px;
+  padding: 5px 40px;
+}
 .row {
   display: flex;
   justify-content: space-between;
   padding: 0 10px;
 }
-
-.bodyText {
-  color: rgb(0, 0, 0);
-  font-size: 14px;
-  text-align: center; /* 텍스트 가운데 정렬 */
-  font-weight: 600;
-  /*margin-right: 23px; /* Add spacing between the text and icon */
+.vector {
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  margin-top: 5px;
+  /*margin-right: 10px;*/
+  margin: 30px;
 }
 
-.vector {
+.vector_login {
   width: 65px;
   height: 65px;
-  text-align: center;
-  /*margin-right: 10px;*/
+  margin: 0;
 }
 
 .inquiry {
@@ -131,7 +167,7 @@
 .icon_img {
   width: 40px;
   height: 40px;
-  cursor:pointer;
+  cursor: pointer;
 }
 
 .iconBox {
@@ -165,11 +201,11 @@
   margin-left: 5px;
 }
 
-.nova_project_text{
+.nova_project_text {
   font-size: 20px;
   font-weight: 700;
 }
 .nova_project_container {
-    display: flex; /* 플렉스 컨테이너 설정 */
-    align-items: center; /* 세로 중앙 정렬 */
+  display: flex; /* 플렉스 컨테이너 설정 */
+  align-items: center; /* 세로 중앙 정렬 */
 }
