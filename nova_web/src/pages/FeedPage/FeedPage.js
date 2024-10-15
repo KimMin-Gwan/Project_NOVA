@@ -10,6 +10,8 @@ import { MdOutlineReportProblem } from "react-icons/md";
 import edit_feed from './../../img/edit.png';
 import backword from "./../../img/back_icon.png";
 import write from "./../../img/new_feed.png";
+import star from "./../../img/favorite.png";
+
 
 import React, { useState, useEffect, useRef, createContext } from "react";
 import { useNavigate } from "react-router-dom";
@@ -106,7 +108,7 @@ const FeedPage = () => {
       .then((data) => {
         setBanners(data.body.feed);
         setNextData(data.body.key);
-        console.log(data)
+        console.log('fetchfeed', data);
         // setNumStar([data.body.feed[0].star, data.body.feed[1].star]);
         // setNumComment([data.body.feed[0].num_comment, data.body.feed[1].num_comment])
       });
@@ -127,6 +129,7 @@ const FeedPage = () => {
       ); // 예시 URL
       const newBanners = await response.json();
       const plusFeed = newBanners.body.feed;
+      console.log('newBanner', newBanners);
       // const newStar = newBanners.body.feed[0].star;
       // const comments = newBanners.body.feed[0].num_comment;
       setNextData(newBanners.body.key);
@@ -148,13 +151,14 @@ const FeedPage = () => {
 
   let navigate = useNavigate();
 
-  let [numStar, setNumStar] = useState([]);
-  let [numComment, setNumComment] = useState([]);
-  // let [isClickedStar, setIsClickedStar] = useState(false);
+  // let [numStar, setNumStar] = useState([]);
+  // let [numComment, setNumComment] = useState([]);
+  let [isClickedStar, setIsClickedStar] = useState(false);
   let [isClickedComment, setIsClickedComment] = useState(false);
+  // let [starColor, setStarColor] = useState('');
 
   function handleCheckStar(fid, index) {
-    // setIsClickedStar(!isClickedStar);
+    setIsClickedStar(!isClickedStar);
     fetch(`https://nova-platform.kr/feed_explore/check_star?fid=${fid}`, {
       credentials: "include",
     })
@@ -256,6 +260,23 @@ const FeedPage = () => {
       });
   }
 
+  function handleInteraction(event, fid, action) {
+    event.preventDefault();
+
+    fetch(`https://nova-platform.kr/feed_explore/interaction_feed?fid=${fid}&action=${action}`, {
+      credentials: 'include'
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('interactin', data);
+        setBanners((prevFeeds) => {
+          return prevFeeds.map((feed) => {
+            return feed.fid === fid ? { ...feed, attend: data.body.feed[0].attend, result: data.body.feed[0].result } : feed
+          })
+        })
+      })
+  }
+
   return (
     <div
       onMouseDown={handleMouseDown}
@@ -300,26 +321,58 @@ const FeedPage = () => {
                     }}
                   />
                 </div>
+
+                {/* 왼쪽 컨텐츠 */}
                 <div className={style['content-container']}>
+                  {/* {
+                    isClickedComment ? <div>open</div> : <div>close</div>
+                  } */}
                   <div className={style['sup_info']}>
                     <div id={style['nick_name']}>{banner.nickname}</div>
                     <div id={style.date}>{banner.date}</div>
                   </div>
 
+                  <div className={style['modal-container']}>
+                    <div className={style['comment-modal']}>댓글박스</div>
+                  </div>
+
                   <div className={style['feed-content']}>{banner.body}</div>
-                  <div className={style['image-box']}>이미지</div>
-                  <div className={style['fclass-box']}>상호작용?</div>
+
+                  <div className={style['image-box']}>
+                    <div className={style['image-show']}>
+                      <img src={banner.image[0]} alt="이미지" />
+                    </div>
+                  </div>
+                  <div className={style['fclass-box']}>
+                    {
+                      banner.fclass === 'multiple' && <MultiClass feed={banner} handleInteraction={handleInteraction} />
+                    }
+                    {
+                      banner.fclass === 'card' && <CardClass feed={banner} handleInteraction={handleInteraction} />
+                    }
+                    {
+                      banner.fclass === 'balance' && <BalanceClass feed={banner} handleInteraction={handleInteraction} />
+                    }
+                    {
+                      banner.fclass === 'station' && <StationClass feed={banner} />
+                    }
+                  </div>
                   <div className={style['comment-box']}>
                     <Comments isClickedComment={false} feed={banner} setFeedData={setBanners}
-                      allComments={allComments} setAllComments={setAllComments}/>
+                      allComments={allComments} setAllComments={setAllComments} />
                   </div>
                 </div>
               </div>
+
+              {/* 오른쪽 버튼 목록 */}
               <div className={style['interaction-box']}>
                 <div className={style['button-box']}>
                   <div className={style['write-box']}>
                     <div className={style['btn-box']}>
-                      <img className={style['btn-img']} src={write} alt="글쓰기" />
+                      <img className={style['btn-img']} src={write} alt="글쓰기"
+                        onClick={() => {
+                          navigate('/write_feed')
+                        }} />
                     </div>
                   </div>
 
@@ -333,27 +386,123 @@ const FeedPage = () => {
                   <div className={style['action-box']}>
                     <div className={style['action-btn']}>
                       <div className={`${style['btn-box']}} ${style['action-btn-each']}`}>
-                        <img className={style['btn-img']} src={write} alt="관심표시" />
+                        <img className={`${style['btn-img']}`} src={star} alt="관심표시"
+                          onClick={() => {
+                            handleCheckStar(banner.fid, i);
+                          }} />
                         <div>{banner.star}</div>
                       </div>
+
                       <div className={`${style['btn-box']}} ${style['action-btn-each']}`}>
-                        <img className={style['btn-img']} src={write} alt="댓글" />
+                        <img className={style['btn-img']} src={write} alt="댓글"
+                          onClick={(event) => {
+                            handleShowComment(banner.fid, event);
+                            handleShowCommentWindow()
+                          }} />
                         <div>{banner.num_comment}</div>
                       </div>
+
                       <div className={`${style['btn-box']}} ${style['action-btn-each']}`}>
                         <img className={style['btn-img']} src={write} alt="공유" />
                         <div>공유</div>
                       </div>
+
                       <div className={`${style['btn-box']}} ${style['action-btn-each']}`}>
                         <img className={style['btn-img']} src={write} alt="신고" />
                         <div>신고</div>
                       </div>
+
                     </div>
                   </div>
                 </div>
               </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
 
-              {/* <div className={style["button_area"]}>
+export default FeedPage;
+
+function MultiClass({ feed, handleInteraction }) {
+
+  return (
+    <div className={style['fclass-container']}>
+      <ol className={style['quiz_box']}>
+        {
+          feed.choice.map((choi, i) => {
+            return (
+              <li key={feed.fid + i} style={{ backgroundColor: i === feed.attend ? '#D2C8F7' : 'white' }}
+                onClick={(e) => { handleInteraction(e, feed.fid, i) }}>{i + 1}. {choi}
+                <span>{feed.result[i]}</span>
+              </li>
+            )
+          })
+        }
+      </ol>
+    </div>
+  )
+};
+
+function CardClass({ feed, handleInteraction }) {
+
+  return (
+    <div className={style['fclass-container']}>
+      <div className={style['empathy-box']}>
+        <div>축하하기</div>
+        <div>8명</div>
+      </div>
+    </div>
+  )
+};
+
+function BalanceClass({ feed, handleInteraction }) {
+  return (
+    <div className={style['fclass-container']}>
+      <div className={style['balance-box']}>
+        {
+          feed.choice.map((sel, i) => {
+            return (
+              <div key={feed.fid + i} className={style['sel-btn']} style={{ backgroundColor: i === feed.attend ? '#D2C8F7' : 'white' }}
+                onClick={(e) => { handleInteraction(e, feed.fid, i) }}>
+                <div>{sel}</div>
+                <div>{feed.result[i]}명</div>
+              </div>
+            )
+          })
+        }
+      </div>
+    </div>
+  )
+};
+
+function StationClass({ feed }) {
+  return (
+    <div className={style['fclass-container']}>
+      <div className={style['external-box']}
+        onClick={() => {
+          window.open(feed.choice[2], '_blank', "noopener, noreferrer");
+        }}>
+        <div className={style['link-info-box']}>
+          <h1>{feed.choice[0]}</h1>
+          <h5>{feed.choice[1]}</h5>
+        </div>
+      </div>
+    </div>
+  )
+};
+
+
+
+
+
+
+
+
+
+{/* <div className={style["button_area"]}>
                 {isClickedComment && (
                   <div className={style["comment_window"]}>
                     <div className={style["comment_top"]}>
@@ -407,244 +556,8 @@ const FeedPage = () => {
                     </div>
                   </div>
                 )} */}
-
-              {/* <div className={style["short_form_container"]}>
-                  <div className={style["short_box"]}>
-                    <div className={style["img_circle"]}>
-                      <img src={banner.image[0]} />
-                    </div>
-                    <div style={{ height: "110px" }}></div>
-                    <Feed
-                      className={style["short_feed"]}
-                      feed={banner}
-                      setFeedData={setBanners}
-                      img_circle={true}
-                    ></Feed>
-                  </div> */}
-
-              {/* <div className={style["function_button"]}> */}
-              {/* <div className={style["func_btn"]}>
-                      {
-                        isUserState ? (
-                          <button
-                            onClick={() => {
-                              handleCheckStar(banner.fid, i);
-                            }}>
+{/*
+                        <button
                             <FaStar className={style["func_btn_img"]} style={banner.star_flag ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }} />
                           </button>
-                        ) : (
-                          <button onClick={(e) => {
-                            e.preventDefault()
-                            alert('로그인이 필요합니다.');
-                          }}>
-                            <FaStar className={style["func_btn_img"]} style={banner.star_flag ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }} />
-                          </button>
-                        )
-                      }
-
-
-                      <p>{numStar[i]}</p>
-                      <p>{banner.star}</p>
-                    </div> */}
-              {/* <div className={style["func_btn"]}>
-
-                      <button
-                        onClick={(event) => {
-                          handleShowComment(banner.fid, event);
-                          handleShowCommentWindow();
-                          // handleCheckComment(banner.fid, i);
-                        }}>
-                        <TfiCommentAlt className={style["func_btn_img"]} />
-                      </button>
-
-                      <p>{banner.num_comment}</p>
-                    </div>
-                    <div className={style["func_btn"]}>
-                      <button>
-                        <PiShareFatLight className={style["func_btn_img"]} />
-                      </button>
-                      <p>공유</p>
-                    </div>
-                    <div className={style["func_btn"]}>
-                      <button>
-                        <MdOutlineReportProblem
-                          className={style["func_btn_img"]}
-                        />
-                      </button>
-                      <p>신고</p>
-                    </div> */}
-              {/* </div> */}
-              {/* </div> */}
-              {/* </div> */}
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-};
-
-export default FeedPage;
-
-// function CommentWindow() {
-
-//     return (
-//         <div className={style.comment}>
-//             <div>{allComments[0]}</div>
-//             <div>{allComments[0]}</div>
-//             <div>삭제</div>
-//             <div>신고</div>
-//             <div>{allComments[0].star}</div>
-//         </div>
-//     )
-// }
-// import style from './FeedPage.module.css';
-// import stylePlanet from './../PlanetPage/Planet.module.css';
-
-// import planet2 from './../../img/planet2.png';
-// import { useEffect, useRef, useState } from 'react';
-// import Feed, { InputFeed } from '../../component/feed';
-// import { useNavigate } from 'react-router-dom';
-
-// export default function FeedPage() {
-//     //피드 드래그
-//     const [isFeedDragging, setIsFeedDragging] = useState(false);
-//     const [startY, setStartY] = useState(0);
-//     const [currentFeedY, setCurrentFeedY] = useState(0);
-
-//     function handleFeedMouseDown(e) {
-//         setStartY(e.clientY);
-//         setIsFeedDragging(true);
-//     };
-
-//     function handleFeedMouseMove(e) {
-//         if (isFeedDragging) {
-//             const moveY = e.clientY - startY;
-//             setCurrentFeedY(moveY);
-
-//             if (moveY < -50) {
-//                 setSlideFeed(true);
-//                 setUpFeed(true);
-//                 setShowNewFeed(true);
-//             }
-//             // else {
-//             //     setSlideFeed(false);
-//             //     setUpFeed(false);
-//             //     setShowNewFeed(false);
-//             // }
-//         }
-//     };
-
-//     function handleFeedMouseUp() {
-//         setIsFeedDragging(false);
-//         if (currentFeedY < -50) {
-//             setCurrentFeedY(0);
-//             // setSlideFeed(true);
-//         } else {
-//             setCurrentFeedY(100);
-//         }
-//     };
-
-//     // 행성 드래그
-//     const [isDragging, setIsDragging] = useState(false);
-//     const [dragStartY, setDragStartY] = useState(null);
-//     const [dragDirection, setDragDirection] = useState(null);
-//     const [showFeed, setShowFeed] = useState(false);
-
-//     const [slideFeed, setSlideFeed] = useState(false);
-//     const [upFeed, setUpFeed] = useState(false);
-//     const [showNewFeed, setShowNewFeed] = useState(false);
-
-//     const inputFeedRef = useRef(null);
-
-//     const [scrollPos, setScrollPos] = useState(0);
-
-//     let navigate = useNavigate();
-
-//     const [offsetY, setOffsetY] = useState(0);
-//     const boxRef = useRef(null);
-
-//     function handleMouseDown(e) {
-//         setIsDragging(true);
-//         setDragStartY(e.clientY);  // 드래그 시작 Y 좌표 기록
-//     };
-
-//     function handleMouseMove(e) {
-//         if (isDragging && dragStartY !== null) {
-//             const currentY = e.clientY;
-//             if (currentY > dragStartY) {
-//                 setDragDirection('down');
-//                 boxRef.current.style.transform = 'translateY(50px)';
-//                 inputFeedRef.current.style.opacity = 1;
-//             } else if (currentY < dragStartY) {
-//                 setDragDirection('up');
-//                 boxRef.current.style.transform = 'translateY(-50px)';
-//                 inputFeedRef.current.style.opacity = 0;
-
-//             }
-//         }
-//     };
-
-//     function handleMouseUp() {
-//         setIsDragging(false);
-
-//         if (dragDirection === 'down') {
-//             setShowFeed(true);
-//             // showFeed.current = true;  // 아래로 드래그하면 피드 표시
-
-//         } else if (dragDirection === 'up') {
-//             setShowFeed(false);
-
-//             // showFeed.current = false;  // 위로 드래그하면 피드 숨기기
-//         }
-//         boxRef.current.style.transform = 'translateY(0)';
-
-//         // 상태 초기화
-//         setDragStartY(null);
-//         setDragDirection(null);
-//     };
-
-//     function onClickBox() {
-//         setSlideFeed(!slideFeed);
-//         setUpFeed(!upFeed);
-//         setShowNewFeed(!showNewFeed);
-//     }
-
-//     return (
-//         <div className={style.container}>
-//             <div className={stylePlanet['top_area']}>
-//                 <div onClick={() => { navigate(-1) }}>뒤로</div>
-//                 <div>은하계 탐색</div>
-//             </div>
-//             <div ref={inputFeedRef} className={`${style.boxx} ${showFeed ? '' : style.hidden}`}>
-//                 <InputFeed></InputFeed>
-//             </div>
-//             <div ref={boxRef} className={style.databox}>
-//                 <div className={style['img-area']} >
-//                     <img src={planet2} alt="Planet"
-//                         className={style.moving}
-//                         onMouseDown={handleMouseDown}
-//                         onMouseMove={handleMouseMove}
-//                         onMouseUp={handleMouseUp}
-//                         onMouseLeave={handleMouseUp}  // 마우스가 영역을 벗어날 때도 처리
-//                         style={{ cursor: isDragging ? 'grabbing' : 'grab' }} />
-//                 </div>
-
-//                 <div className={style.area}>
-//                     {showNewFeed && <Feed className={`${style.feedbox3}`}></Feed>}
-//                     <div
-//                         onMouseDown={handleFeedMouseDown}
-//                         onMouseMove={handleFeedMouseMove}
-//                         onMouseUp={handleFeedMouseUp}>
-//                         <Feed className={`${style.feedbox1} ${upFeed ? style['up_animate'] : ''}`}></Feed>
-//                         <Feed className={`${style.feedbox2} ${slideFeed ? style.animate : ''}`}></Feed>
-//                     </div>
-
-//                 </div>
-//                 <button onClick={() => {
-//                     onClickBox()
-//                 }}>클릭</button>
-//             </div>
-//         </div >
-//     );
-// }
+                      */}
