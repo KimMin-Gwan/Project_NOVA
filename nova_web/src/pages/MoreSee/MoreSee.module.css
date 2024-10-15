@@ -13,7 +13,7 @@ hr {
   opacity: 0.2;
 }
 .container {
-  max-width: 500px;
+  width: 500px;
   /* 너비를 원하는 비율로 설정 */
   height: 90vh;
   margin: 0 auto;
