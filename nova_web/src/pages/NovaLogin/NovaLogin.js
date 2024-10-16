@@ -112,7 +112,7 @@ const NOVALogin = () => {
         >
           회원 가입
         </button>
-        <div className={style["sign-up"]}>비밀번호 찾기</div>
+        <div className={style["sign-up"]} onClick={()=>{navigate('/find_pw')}}>비밀번호 찾기</div>
       </div>
     </div>
   );
