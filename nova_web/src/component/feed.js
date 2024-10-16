@@ -820,16 +820,7 @@ export function Comments({ isClickedComment, feed, allComments, setAllComments, 
                 }
             })
         })
-            .then(response => {
-                if (!response.ok) {
-                    if (response.status === 401) {
-                        setIsError(response.status);
-                    } else {
-                        throw new Error(`status: ${response.status}`)
-                    }
-                }
-                return response.json()
-            })
+            .then(response => response.json())
             .then(data => {
                 console.log(data);
                 // setNewComments(data.body.comments);
@@ -868,13 +859,12 @@ export function Comments({ isClickedComment, feed, allComments, setAllComments, 
                 }
             </div>
             <div className={style['comment_action']}>
-                {
-                    isUserState ? (
+                
                         <form onSubmit={(event) => handleSubmit(feed.fid, event)}>
                             <input type='text' value={inputValue} onChange={handleChange}></input>
                             <button type='submit'>댓글 작성</button>
                         </form>
-                    ) : (
+                     {/* : (
                         <form onSubmit={(event) => {
                             event.preventDefault()
                             alert('로그인이 필요합니다.')
@@ -883,7 +873,7 @@ export function Comments({ isClickedComment, feed, allComments, setAllComments, 
                             <button type='submit'>댓글 작성</button>
                         </form>
                     )
-                }
+                } */}
 
             </div>
 

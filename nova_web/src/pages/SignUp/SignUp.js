@@ -26,8 +26,8 @@ export default function SignUp() {
     "request-type": "default",
     "client-version": "v1.0.1",
     "client-ip": "127.0.0.1",
-    uid: "1234-abcd-5678",
-    endpoint: "/user_system/",
+    "uid": "1234-abcd-5678",
+    "endpoint": "/user_system/",
   };
 
   let send_data = {
@@ -113,7 +113,7 @@ export default function SignUp() {
   }
 
   function fetchSignUp() {
-    fetch(`https://nova-platform.kr/user_home/try_sign_in`, {
+    fetch(`https://nova-platform.kr/user_home/try_sign_up`, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -126,6 +126,8 @@ export default function SignUp() {
         if (data.body.result) {
           alert("회원가입이 완료되었습니다.");
           navigate("/novalogin");
+        } else {
+          alert("회원가입 실패");
         }
         // setResult(data.body.result);
       });
