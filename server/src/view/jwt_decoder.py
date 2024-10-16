@@ -159,6 +159,8 @@ class RequestManager(JWTManager):
         try:
             payload, new_token = self.home_decode(token=cookies["nova_token"])
             # 임시사용자에게 제한을 줘야햄
+            print(payload.usage)
+
             if payload.usage == "temp":
                 raise HTTPException(
                         status_code=status.HTTP_401_UNAUTHORIZED,
