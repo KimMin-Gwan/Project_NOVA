@@ -10,15 +10,16 @@ import uuid
 class LoginModel(BaseModel):
     def __init__(self, database:Local_Database) -> None:
         super().__init__(database)
-        self.__result = False
+        self.__result = "email"
         self.__token = ''
         self.__detail = '존재하지 않는 이메일 입니다'
 
     def request_login(self,request,user_data):
         try:
             if request.email == user_data.email and request.password == user_data.password:
-                self.__result = True
+                self.__result = "done"
             elif request.password != user_data.password:
+                self.__result = "password"
                 self.__detail = '일치하지 않는 비밀번호 입니다'
 
         except Exception as e:

@@ -18,7 +18,7 @@ class UserController:
             return model
 
         model.request_login(request=request,user_data=model._user)
-        if not model.get_result():
+        if model.get_result() != "done":
             return model
         
         model.make_token(request=model._user)
@@ -69,7 +69,7 @@ class UserController:
                 mailsender.send_email_in_password_find(receiver_email=temp_user.email,verification_code=temp_user.verification_code)
 
             else:
-                model.set_response()
+                model.set_response_in_reverse()
 
         except CustomError as e:
             print("Error Catched : ", e.error_type)
@@ -93,7 +93,7 @@ class UserController:
             raise request.forbidden_exception
 
         # 보안코드가 동일한지 확인
-        if not await nova_verification.verificate_user(email=request.email, verification_code=request.verification_code):
+        if not await nova_verification.verificate_user(email=request.data_payload.email, verification_code=request.verification_code):
             raise request.forbidden_exception
 
         model.make_temp_user_token(request=request.data_payload)
