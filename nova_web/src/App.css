@@ -1,60 +1,3 @@
-/* .App {
-  text-align: center;
-}
-
-.nav-area {
-  background-color: black;
-  color: white;
-  height: 70px;
-  align-items: center;
-  padding: 10px;
-  display: flex;
-}
-.empty{
-  background-color: bisque;
-}
-
-.menu {
-  background-color: aqua;
-  display: flex;
-  text-align: end;
-
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-} */
 body {
   font-family: 'NanumGothic';
   /* font-family: "Noto Sans KR", sans-serif; */
@@ -84,10 +27,6 @@ body {
   margin: 0 auto;
   background-color: #1e1e1e;
   position: relative;
-  /* overflow: hidden; */
-  /* z-index: 99; */
-  /* min-height: 100vh; */
-  /* padding: 20px; */
 }
 
 .black-box {
@@ -156,13 +95,10 @@ body {
   cursor: pointer;
 }
 
-.image1{
-  position:absolute;
+.image1 {
+  position: absolute;
   object-fit: cover;
 }
-
-
-
 
 .my-bias {
   width: 100%;
@@ -1034,8 +970,10 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: transparent; /* 배경이 필요 없으면 투명하게 설정 */
-  border: none; /* 버튼 테두리 없애기 */
+  background-color: transparent;
+  /* 배경이 필요 없으면 투명하게 설정 */
+  border: none;
+  /* 버튼 테두리 없애기 */
 }
 
 .nav_button2 {
@@ -1045,25 +983,35 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: transparent; /* 배경이 필요 없으면 투명하게 설정 */
-  border: none; /* 버튼 테두리 없애기 */
+  background-color: transparent;
+  /* 배경이 필요 없으면 투명하게 설정 */
+  border: none;
+  /* 버튼 테두리 없애기 */
 }
 
 .btn_text {
-  margin-top: 5px; /* 아이콘과 텍스트 사이 간격 */
-  font-size: 10px; /* 텍스트 크기 */
-  color: #666; /* 텍스트 색상 */
-  white-space: nowrap; /* 텍스트가 한 줄로 유지되도록 */
+  margin-top: 5px;
+  /* 아이콘과 텍스트 사이 간격 */
+  font-size: 10px;
+  /* 텍스트 크기 */
+  color: #666;
+  /* 텍스트 색상 */
+  white-space: nowrap;
+  /* 텍스트가 한 줄로 유지되도록 */
   text-align: center;
-  width: 100%; /* 텍스트가 들어갈 공간 확보 */
+  width: 100%;
+  /* 텍스트가 들어갈 공간 확보 */
 
 }
 
 
 .btn_img {
-  width: 100%; /* 이미지가 버튼 크기에 맞춰지도록 */
-  height: auto; /* 비율을 유지하며 크기 조정 */
-  max-width: 40px; /* 이미지가 정사각형이 되도록 최대 너비 설정 */
+  width: 100%;
+  /* 이미지가 버튼 크기에 맞춰지도록 */
+  height: auto;
+  /* 비율을 유지하며 크기 조정 */
+  max-width: 40px;
+  /* 이미지가 정사각형이 되도록 최대 너비 설정 */
   max-height: 40px;
   margin: 0px 0px 0px 7px;
 }
@@ -1112,18 +1060,30 @@ body {
   */
 
 .bottom_bar {
-  width: 500px;
-  height: 60px; /* 바 높이 */
-
+  /* width: 100%; */
+  height: 60px;
+  /* 바 높이 */
   position: fixed;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%); /* 가로 중앙 정렬 */
-  background-color: #fff; /* 원하는 배경색 */
+  bottom: 0px;
+  /* top: 100vh; */
+  left: 0;
+  right: 0;
+  max-width: 500px;
+  margin: 0 auto;
+  background-color: #fff;
   display: flex;
-  justify-content: space-around; /* 버튼들 사이 간격 동일하게 */
+  justify-content: space-around;
   align-items: center;
-  /*border-top: 1.5px solid #ccc; /* 바 상단에 테두리 */
-  padding-bottom: calc(env(safe-area-inset-bottom) + 3px); /* 안전 영역 계산 */
-  overflow: hidden;
+  /* border-top: 1.5px solid #ccc; /* 바 상단에 테두리 */
+  padding-bottom: calc(env(safe-area-inset-bottom) + 3px);
+  /* 안전 영역 계산 */
+  /* overflow: hidden; */
+}
+
+.main-container {
+  width: 600px;
+  /* height: auto; */
+  /* height: 100%; */
+  background-color: green;
+  position: relative;
 }

@@ -52,42 +52,6 @@ const NOVALogin = () => {
           navigate('/')
         }
       })
-
-
-    // .catch(error) {
-    // console.error("로그인 요청 중 오류가 발생했습니다:", error);
-    // console.error('Error:', error.response ? error.response.data : error.message);
-    // alert("로그인 중 오류가 발생했습니다.");
-
-    // try {
-    //   const response = await axios.post(
-    //     "http://127.0.0.1:4000/user_home/try_login",
-    //     send_data,
-    //     {
-    //       headers: {
-    //         "Content-Type": 'application/json',
-    //       },
-    //       withCredentials: true
-    //     }
-    //   );
-
-    // const result = response.data.body;
-
-    // console.log(result.resust)
-
-    // if (result.resust) {
-    //   // 로그인 성공 시 JWT 토큰 저장 (예: 로컬 스토리지)
-    //   // localStorage.setItem("jwtToken", result.token);
-    //   navigate('/')
-    // }
-    // } else {
-    //   alert("로그인 실패: " + result.detail);
-    // }
-    // } catch (error) {
-    //   console.error("로그인 요청 중 오류가 발생했습니다:", error);
-    //   console.error('Error:', error.response ? error.response.data : error.message);
-    //   alert("로그인 중 오류가 발생했습니다.");
-    // }
   };
 
   return (
@@ -104,6 +68,7 @@ const NOVALogin = () => {
           <h3>로그인</h3>
         </div>
       </div>
+      
       <div className={style.form}>
         <label className={style.label}>아이디</label>
         <input

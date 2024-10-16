@@ -7,7 +7,7 @@ import galaxy_img from './../img/galaxy3.png';
 import shortForm_img from './../img/short_form2.png';
 import new_feed from './../img/new_feed2.png';
 
-const NavBar = ({isUserState}) => {
+const NavBar = ({ isUserState }) => {
     const [isVisible, setIsVisible] = useState(false);
 
     let navigate = useNavigate();
@@ -29,7 +29,7 @@ const NavBar = ({isUserState}) => {
             <div className='nav_button_box'>
                 <button className='nav_button' onClick={() => window.location.reload()}>
                     <img src={galaxy_img} className='btn_img' />
-                     <p className='btn_text'>홈</p>
+                    <p className='btn_text'>홈</p>
                 </button>
             </div>
             <div className='nav_button_box'>
@@ -43,8 +43,8 @@ const NavBar = ({isUserState}) => {
                     handleNavigate('/feed_page')
                     handleStopClick(e)
                 }}>
-                <img src={shortForm_img} className='btn_img' />
-                <p className='btn_text'>쇼트폼</p>
+                    <img src={shortForm_img} className='btn_img' />
+                    <p className='btn_text'>쇼트폼</p>
                 </button>
             </div>
         </div>
