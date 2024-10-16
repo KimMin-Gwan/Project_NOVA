@@ -71,7 +71,6 @@ class NOVA_Server:
 class NOVAVerification:
     def __init__(self):
         self.__temp_user = []  # TempUser 
-        self.__password_change_user = []
         #  exp 채커
         #exp_checker = Thread(target=self._check_expiration)
         #exp_checker.start()
@@ -88,6 +87,15 @@ class NOVAVerification:
     def make_new_user(self, email):
         verification_code = self.__make_verification_code()
         exp = self.__make_expiration_time()
+
+        # 중복이 있으면 그거 바꿔서 다시 저장
+        for user in self.__temp_user:
+            if user.email == email:
+                user.verification_cod = verification_code
+                user.exp = exp
+                return user
+
+        # 중복이 아니고 첨하는 거면 새로 만들어서 어팬드
         tempUser = TempUser(email=email,
                              verification_code=verification_code,
                              exp=exp)
