@@ -15,7 +15,7 @@ hr {
 .container {
   width: 500px;
   /* 너비를 원하는 비율로 설정 */
-  height: 90vh;
+  height: 80vh;
   margin: 0 auto;
   /*max-width: 1200px; /* 최대 너비를 설정 */
   background-color: #eee9fc; /* 배경색을 원하는 색으로 변경 가능 */
@@ -156,20 +156,14 @@ hr {
 
 .inquiry {
   width: 100%; /* 너비를 원하는 비율로 설정 */
-  height: 420px;
+  height: 320px;
   margin: 0 auto;
   background-color: #ffffff; /* 배경색을 원하는 색으로 변경 가능 */
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: row; /* Align icons horizontally */
-  gap: 50px; /* Space between the icons */
-}
-
-.icon_img {
-  width: 40px;
-  height: 40px;
-  cursor: pointer;
+  gap: 40px; /* Space between the icons */
 }
 
 .iconBox {
@@ -179,6 +173,11 @@ hr {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+.icon_img {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
 }
 
 .icon_name {
@@ -198,9 +197,13 @@ hr {
 }
 
 .logo_img {
-  width: 232px;
-  height: 200px;
+  width: 110px;
+  height: 90px;
   margin-left: 5px;
+}
+
+.nova_info {
+  font-size: 10px;
 }
 
 .nova_project_text {
