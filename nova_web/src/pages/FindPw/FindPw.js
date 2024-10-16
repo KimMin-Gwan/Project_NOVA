@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import style from "./FindPw.module.css";
 import { useNavigate } from "react-router-dom";
 import backword from "./../../img/back_icon.png";
 
 function FindPw() {
-  let navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [result, setresult] = useState("");
+  const [detail, setDetail] = useState("");
 
+  let navigate = useNavigate();
   const handlePage = (url) => {
     navigate(url);
   };
@@ -22,6 +25,27 @@ function FindPw() {
     endpoint: "/user_system/",
   };
 
+  const send_data = {
+    header: header,
+    body: {
+      email: email,
+    },
+  };
+  fetch("https://nova-platform.kr/user_home/try_find_password_send_email", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(send_data),
+  })
+    .then((response) => response.json())
+    .then((result) => {
+      setresult(result.body.result);
+      setDetail(result.body.detail);
+      if (result.body.result === "done") {
+        navigate("/");
+      }
+    });
   return (
     <div className={style.container}>
       <div className={style.Topbar}>
@@ -33,7 +57,7 @@ function FindPw() {
       <form className={style.form}>
         <p className={style.input_text}>이메일 주소</p>
         <section>
-          <input type="email" name="email" className={style.input} />
+          <input type="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} className={style.input} />
           <button type="button" className={style.button}>
             보안코드 전송
           </button>
