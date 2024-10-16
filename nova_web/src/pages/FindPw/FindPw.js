@@ -17,6 +17,7 @@ function FindPw() {
     handlePage("/find_pw_change");
   };
 
+ 
   const header = {
     "request-type": "default",
     "client-version": "v1.0.1",
@@ -31,21 +32,27 @@ function FindPw() {
       email: email,
     },
   };
-  fetch("https://nova-platform.kr/user_home/try_find_password_send_email", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(send_data),
-  })
-    .then((response) => response.json())
-    .then((result) => {
-      setresult(result.body.result);
-      setDetail(result.body.detail);
-      if (result.body.result === "done") {
-        navigate("/");
-      }
-    });
+
+  const VerifyCode = async () =>{
+
+  useEffect(()=>{
+    fetch("https://nova-platform.kr/user_home/try_find_password_send_email", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(send_data),
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        setresult(result.body.result);
+        setDetail(result.body.detail);
+        if (result.body.result === "done") {
+          navigate("/");
+        }
+      });
+  },[])
+}
   return (
     <div className={style.container}>
       <div className={style.Topbar}>
@@ -58,7 +65,7 @@ function FindPw() {
         <p className={style.input_text}>이메일 주소</p>
         <section>
           <input type="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} className={style.input} />
-          <button type="button" className={style.button}>
+          <button type="button" className={style.button} onClick={VerifyCode}>
             보안코드 전송
           </button>
         </section>
