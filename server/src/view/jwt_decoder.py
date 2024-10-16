@@ -48,8 +48,6 @@ class JWTManager:
             payload["exp"] = datetime.fromtimestamp(decoded_payload["exp"])
             payload["refresh_exp"] = datetime.fromtimestamp(decoded_payload["refresh_exp"])
             payload['usage'] = decoded_payload['usage']
-            
-            print(payload)
             payload = JWTPayload(result = True , email=payload['email'],
                                  exp=payload['exp'], refresh_exp=payload['refresh_exp'],
                                  usage=payload['usage'])
@@ -162,8 +160,6 @@ class RequestManager(JWTManager):
 
             payload, new_token = self.home_decode(token=cookies["nova_token"])
             # 임시사용자에게 제한을 줘야햄
-            print(payload.usage)
-
             if payload.usage == "temp":
                 raise HTTPException(
                         status_code=status.HTTP_401_UNAUTHORIZED,
