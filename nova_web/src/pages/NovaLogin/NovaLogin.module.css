@@ -1,35 +1,40 @@
 .container {
-    max-width: 500px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start; /* 중간이 아닌 위쪽으로 배치 */
-    height: 100vh;
-    background-color: #fff;
-    padding-top: 20px; /* 위쪽에 약간의 여백 추가 */
+  max-width: 500px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* justify-content: flex-start; */
+  /* 중간이 아닌 위쪽으로 배치 */
+  height: 100vh;
+  background-color: #fff;
+  padding-top: 20px;
+  /* 위쪽에 약간의 여백 추가 */
 }
 
-.Header {
-    height: 70px;
-    width: 100%;
-    border-bottom: 1px solid #a5a5a5;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.Top {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-right: 55px;
+.Topbar {
+  width: 100%;
+  height: 60px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  border-bottom: 2px solid #ffffff;
+  display: flex;
+  align-items: center; /* 수직 중앙 정렬 */
+  /* justify-content: flex-start; 왼쪽부터 정렬 */
+  padding: 5px 15px;
+  box-sizing: border-box;
+  gap: 10px; 
+  position: relative;
 }
 
-.BackBtn img {
-    width: 50px;
-    height: 50px;
+.backword {
+  width: 35px;
+  height: 35px;
+  filter: invert();
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  left: 20px;
 }
 
 .backButton {
@@ -47,19 +52,23 @@
 }
 
 .form {
-  width: 400px;
-  max-width: 400px;
+  width: 100%;
+  /* max-width: 400px; */
   margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
   margin-bottom: 20px;
 }
 
-.label {
-    padding-left: 10px;
-    padding-bottom : 10px;
-    font-size: 16px;
-    color: #555;
-}
+/* .label {
+  padding-left: 10px;
+  padding-bottom: 10px;
+  font-size: 16px;
+  color: #555;
+  background-color: pink;
+} */
 
 .input {
   width: 376px;
@@ -73,11 +82,12 @@
 }
 
 .loginButton {
-justify-content: center; /* 중간이 아닌 위쪽으로 배치 */
+  justify-content: center;
+  /* 중간이 아닌 위쪽으로 배치 */
   width: 400px;
   padding: 15px;
   border-radius: 8px;
-  background-color: #000;
+  background-color: #98a0ff;
   color: #fff;
   font-size: 18px;
   cursor: pointer;
@@ -89,4 +99,55 @@ justify-content: center; /* 중간이 아닌 위쪽으로 배치 */
   text-align: center;
   text-decoration-line: underline;
   cursor: pointer;
+}
+
+/*  */
+
+.input-box {
+  margin: auto;
+  width: 100%;
+  /* background-color: blue; */
+}
+
+.input-box input {
+  background-color: #f6f6f6;
+  border-radius: 3px;
+  margin-top: 10px;
+  height: 45px;
+  width: 90%;
+  border: 1px solid #f6f6f6;
+  padding-left: 15px;
+  outline: none;
+  margin-bottom: 10px;
+}
+
+.input-box input:focus {
+  border: 1px solid #98a0ff;
+}
+
+.input-box input[type="email"] {
+  width: 90%;
+}
+
+.box-margin {
+  margin-top: 20px;
+}
+
+.login-box {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.sign-up-btn {
+  background-color: gray;
+}
+
+.errorMessage {
+  color: red;
+  font-size: 14px;
+  /* margin-top: 5px; */
 }
