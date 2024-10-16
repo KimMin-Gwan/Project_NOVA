@@ -47,6 +47,7 @@ class JWTManager:
             payload["email"] = decoded_payload["email"]
             payload["exp"] = datetime.fromtimestamp(decoded_payload["exp"])
             payload["refresh_exp"] = datetime.fromtimestamp(decoded_payload["refresh_exp"])
+            payload['usage'] = decoded_payload['usage']
             
             print(payload)
             payload = JWTPayload(result = True , email=payload['email'],
