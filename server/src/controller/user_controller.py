@@ -93,7 +93,8 @@ class UserController:
             raise request.forbidden_exception
 
         # 보안코드가 동일한지 확인
-        if not await nova_verification.verificate_user(email=request.data_payload.email, verification_code=request.verification_code):
+        if not await nova_verification.verificate_user(email=request.data_payload.email,
+                                                        verification_code=request.data_payload.verification_code):
             raise request.forbidden_exception
 
         model.make_temp_user_token(request=request.data_payload)
