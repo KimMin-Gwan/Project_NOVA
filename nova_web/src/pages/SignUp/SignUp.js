@@ -189,6 +189,10 @@ export default function SignUp() {
                 <button
                   className={style.authen}
                   disabled={!inputEmail}
+                  style={{
+                    background: inputEmail ? "#98A0FF" : "",
+                    color: inputEmail ? "white" : "",
+                  }}
                   onClick={() => {
                     fetchAuthenEmail();
                   }}
@@ -221,7 +225,7 @@ export default function SignUp() {
             <div className={style.test}>
               비밀번호
               <br />
-              <label>
+              <label className={style.inputContainer}>
                 <input type={showPassword ? "text" : "password"} name="password" required onChange={(e) => handlePassWord(e)} placeholder="Aabc123456!@" className={passwordError && passwordMessage ? style.error : ""} />
                 <button type="button" onClick={() => setShowPassword(!showPassword)} className={style.toggleButton}>
                   {showPassword ? "숨기기" : "보기"}
@@ -235,7 +239,7 @@ export default function SignUp() {
             <div className={style.test}>
               비밀번호 확인
               <br />
-              <label>
+              <label className={style.inputContainer}>
                 <input type={showCheckPassword ? "text" : "password"} name="check_pwd" required onChange={(e) => handleCheckPassWord(e)} placeholder="Aabc123456!@" onFocus={() => setIsCheckPwdFocused(true)} className={passwordError && pwd && isCheckPwdFocused ? style.error : ""} />
                 <button type="button" onClick={() => setShowCheckPassword(!showCheckPassword)} className={style.toggleButton}>
                   {showCheckPassword ? "숨기기" : "보기"}
