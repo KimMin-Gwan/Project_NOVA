@@ -1,52 +1,51 @@
-import './App.css';
-import { useEffect, useState } from 'react';
-import Banner from './component/banner';
-import Modal from './component/modal';
-import MyBias from './Container/myBiasContainer';
-import MyPage from './pages/MyPage/Mypage';
-import { Routes, Route, Link, useNavigate } from 'react-router-dom';
+import "./App.css";
+import { useEffect, useState } from "react";
+import Banner from "./component/banner";
+import Modal from "./component/modal";
+import MyBias from "./Container/myBiasContainer";
+import MyPage from "./pages/MyPage/Mypage";
+import { Routes, Route, Link, useNavigate } from "react-router-dom";
 // import zoom from './img/zoom.png';
-import menu from './img/menu.png';
+import menu from "./img/menu.png";
 // import Rank from './component/ranks';
 // import FloatingButton from './component/floatingbutton';
 // import Meta from './Container/metaContainer';
 // import Loundspeaker from './component/loundspeaker';
-import NOVALogin from './pages/NovaLogin/NovaLogin';
-import SelectBias from './component/selectBias/SelectBias';
-import BiasDetail from './pages/BiasDetail/biasDetail';
-import BiasCertify from './pages/BiasCertify/biasCertify';
-import NameCard from './pages/NameCard/nameCard';
+import NOVALogin from "./pages/NovaLogin/NovaLogin";
+import SelectBias from "./component/selectBias/SelectBias";
+import BiasDetail from "./pages/BiasDetail/biasDetail";
+import BiasCertify from "./pages/BiasCertify/biasCertify";
+import NameCard from "./pages/NameCard/nameCard";
 import { FaSearch, IoMdMenu } from "react-icons/fa";
-import MoreSee from './pages/MoreSee/MoreSee';
-import NoticeList from './pages/Notice/NoticeList';
-import Notice from './pages/Notice/Notice';
-import LeaguePage from './pages/LeaguePage/LeaguePage';
-import LeagueDetail from './pages/LeagueDetail/LeagueDetail';
-import SignUp from './pages/SignUp/SignUp.js';
-import FeedPage, { FeedContext, FeedDispatchContext } from './pages/FeedPage/FeedPage.js';
-import Feed from './component/feed.js';
-import InfFeed from './component/infiniteFeed.js';
-import PlanetList from './pages/PlanetPage/PlanetList.js';
-import logo from './img/NOVA.png';
-import GalaxyList from './pages/GalaxyPage/GalaxyList.js';
-import Box from './component/test.js';
-import NavBar from './component/NavBar.js';
-import WriteFeed from './pages/WriteFeed/WriteFeed.js';
-import MyWriteFeed from './pages/MyPage/MyWriteFeed/MyWriteFeed.js';
-import MyInterestFeed from './pages/MyPage/MyInterestFeed/MyInterestFeed.js';
-import MyCommentFeed from './pages/MyPage/MyCommentFeed/MyCommentFeed.js';
-import MyActiveFeed from './pages/MyPage/MyActiveFeed/MyActiveFeed.js';
-import MyAlert from './pages/MyPage/Alert/MyAlert.js';
-import Temrs from './pages/Temrs/Temrs.js';
-
+import MoreSee from "./pages/MoreSee/MoreSee";
+import NoticeList from "./pages/Notice/NoticeList";
+import Notice from "./pages/Notice/Notice";
+import LeaguePage from "./pages/LeaguePage/LeaguePage";
+import LeagueDetail from "./pages/LeagueDetail/LeagueDetail";
+import SignUp from "./pages/SignUp/SignUp.js";
+import FeedPage, { FeedContext, FeedDispatchContext } from "./pages/FeedPage/FeedPage.js";
+import Feed from "./component/feed.js";
+import InfFeed from "./component/infiniteFeed.js";
+import PlanetList from "./pages/PlanetPage/PlanetList.js";
+import logo from "./img/NOVA.png";
+import GalaxyList from "./pages/GalaxyPage/GalaxyList.js";
+import Box from "./component/test.js";
+import NavBar from "./component/NavBar.js";
+import WriteFeed from "./pages/WriteFeed/WriteFeed.js";
+import MyWriteFeed from "./pages/MyPage/MyWriteFeed/MyWriteFeed.js";
+import MyInterestFeed from "./pages/MyPage/MyInterestFeed/MyInterestFeed.js";
+import MyCommentFeed from "./pages/MyPage/MyCommentFeed/MyCommentFeed.js";
+import MyActiveFeed from "./pages/MyPage/MyActiveFeed/MyActiveFeed.js";
+import MyAlert from "./pages/MyPage/Alert/MyAlert.js";
+import Temrs from "./pages/Temrs/Temrs.js";
+import FindPw from "./pages/FindPw/FindPw.js";
+import FindPwChange from "./pages/FindPw/FindPwChange.js";
 
 // 401 이면 바이어스 격자 무늬로 띄우기
 // 401 이면 alert - 로그인 필요 문구 띄우기
 
-
 function App() {
-
-  let url = 'https://nova-platform.kr/home/';
+  let url = "https://nova-platform.kr/home/";
   // let url = 'http://127.0.0.1:5000/home/';
   // let type = ['solo', 'group'];
 
@@ -63,22 +62,21 @@ function App() {
           } else if (response.status === 200) {
             setIsUserState(true);
           } else {
-            throw new Error(`status: ${response.status}`)
+            throw new Error(`status: ${response.status}`);
           }
-        }
-        else {
-          console.log("로그인  확인")
+        } else {
+          console.log("로그인  확인");
           setIsUserState(true);
         }
-        return response.json()
+        return response.json();
       })
       .then((data) => {
         console.log(data);
-      })
+      });
   }
 
   useEffect(() => {
-    handleValidCheck()
+    handleValidCheck();
   }, []);
 
   // let token = localStorage.getItem('jwtToken');
@@ -106,60 +104,70 @@ function App() {
   //   setGroupClick(!isGroupClicked);
   // };
 
-
   let [showBox, setShowBox] = useState(false);
-  let [blackBox, setBlackBox] = useState('');
-
+  let [blackBox, setBlackBox] = useState("");
 
   let navigate = useNavigate();
 
-
   return (
     <Routes>
-      <Route path='/write_feed' element={<WriteFeed />}></Route>
-      <Route path='/more_see' element={<MoreSee />}></Route>
-      <Route path='/test' element={<Box />}></Route>
-      <Route path='/planet' element={<PlanetList />}></Route>
-      <Route path='/galaxy' element={<GalaxyList />}></Route>
-      <Route path='/feed_page' element={<FeedPage />}></Route>
-      <Route path='/signup' element={<SignUp />}></Route>
-      <Route path='/terms_page' element={<Temrs />}></Route>
-      <Route path='/league_detail' element={<LeaguePage />}></Route>
+      <Route path="/write_feed" element={<WriteFeed />}></Route>
+      <Route path="/more_see" element={<MoreSee />}></Route>
+      <Route path="/test" element={<Box />}></Route>
+      <Route path="/planet" element={<PlanetList />}></Route>
+      <Route path="/galaxy" element={<GalaxyList />}></Route>
+      <Route path="/feed_page" element={<FeedPage />}></Route>
+      <Route path="/signup" element={<SignUp />}></Route>
+      <Route path="/terms_page" element={<Temrs />}></Route>
+      <Route path="/league_detail" element={<LeaguePage />}></Route>
       {/* <Route path='/league_detail' element={<LeagueDetail />}></Route> */}
       <Route path="/notice" element={<NoticeList />} />
       {/* Dynamic Route for Notice Details */}
       <Route path="/notice/:nid" element={<Notice />} />
-      <Route path='/my_write_feed' element={<MyWriteFeed />} />
-      <Route path='/my_interest_feed' element={<MyInterestFeed />} />
-      <Route path='/my_comment_feed' element={<MyCommentFeed />} />
-      <Route path='/my_active_feed' element={<MyActiveFeed />} />
-      <Route path='/my_alerts' element={<MyAlert />} />
-      <Route path='/notice_list' element={<NoticeList />}></Route>
-      <Route path='/select_bias' element={<SelectBias />}></Route>
-      <Route path='/namecard' element={<NameCard />}></Route>
-      <Route path='/mypage' element={<MyPage />}></Route>
-      <Route path='/bias_certify' element={<BiasCertify />}></Route>
-      <Route path='/bias_info/user_contribution' element={<BiasDetail />}></Route>
-      <Route path='/novalogin' element={<NOVALogin />}></Route>
-      <Route path='/' element={
-        <div onClick={(e) => {
-          e.stopPropagation();
-          if (showBox) {
-            setShowBox(false);
-          };
-        }} className={`container ${blackBox}`}>
+      <Route path="/my_write_feed" element={<MyWriteFeed />} />
+      <Route path="/my_interest_feed" element={<MyInterestFeed />} />
+      <Route path="/my_comment_feed" element={<MyCommentFeed />} />
+      <Route path="/my_active_feed" element={<MyActiveFeed />} />
+      <Route path="/my_alerts" element={<MyAlert />} />
+      <Route path="/notice_list" element={<NoticeList />}></Route>
+      <Route path="/select_bias" element={<SelectBias />}></Route>
+      <Route path="/namecard" element={<NameCard />}></Route>
+      <Route path="/mypage" element={<MyPage />}></Route>
+      <Route path="/bias_certify" element={<BiasCertify />}></Route>
+      <Route path="/bias_info/user_contribution" element={<BiasDetail />}></Route>
+      <Route path="/novalogin" element={<NOVALogin />}></Route>
+      <Route path="/find_pw" element={<FindPw />}></Route>
+      <Route path="/find_pw_change" element={<FindPwChange />}></Route>
+      <Route
+        path="/"
+        element={
+          <div
+            onClick={(e) => {
+              e.stopPropagation();
+              if (showBox) {
+                setShowBox(false);
+              }
+            }}
+            className={`container ${blackBox}`}
+          >
             <div className="top-area">
-              <header className='header'>
-                <div className='logo' onClick={() => {
-                  navigate('/');
-                }}>
+              <header className="header">
+                <div
+                  className="logo"
+                  onClick={() => {
+                    navigate("/");
+                  }}
+                >
                   <img src={logo}></img>
                 </div>
-                <div className='buttons'>
-                  <button className='tool-button'>
-                    <img src={menu} onClick={() => {
-                      navigate('/more_see')
-                    }}></img>
+                <div className="buttons">
+                  <button className="tool-button">
+                    <img
+                      src={menu}
+                      onClick={() => {
+                        navigate("/more_see");
+                      }}
+                    ></img>
                   </button>
                   {/* <Link to='/' className='button'>홈</Link> */}
                   {/* <Link to='/namecard' className='button'>명함</Link> */}
@@ -181,26 +189,22 @@ function App() {
               </header>
               <Banner url={url}></Banner>
 
-              <h2 className='authen'>인증하기</h2>
+              <h2 className="authen">인증하기</h2>
 
-              <section className='my-bias'>
+              <section className="my-bias">
                 <MyBias url={url} showBox={showBox} blackBox={blackBox}></MyBias>
               </section>
             </div>
 
             <section>
-              <h2 className='satellite-search'>위성 탐색</h2>
+              <h2 className="satellite-search">위성 탐색</h2>
               <InfFeed isUserState={isUserState}></InfFeed>
             </section>
 
-
             <NavBar></NavBar>
-
-        </div >
-
-
-      } />
-
+          </div>
+        }
+      />
     </Routes>
   );
 }

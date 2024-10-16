@@ -113,7 +113,7 @@ export default function SignUp() {
   }
 
   function fetchSignUp() {
-    fetch(`https://nova-platform.kr/user_home/try_sign_in`, {
+    fetch(`https://nova-platform.kr/user_home/try_sign_up`, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -126,6 +126,8 @@ export default function SignUp() {
         if (data.body.result) {
           alert("회원가입이 완료되었습니다.");
           navigate("/novalogin");
+        } else {
+          alert("회원가입 실패");
         }
         // setResult(data.body.result);
       });
