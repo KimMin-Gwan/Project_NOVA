@@ -319,6 +319,15 @@ const FeedPage = () => {
                   <div className={style['modal-container']}>
                     <div className={style['comment-modal']}>댓글박스</div>
                   </div>
+                  {/* 여기까지  */}
+
+
+
+
+
+
+
+
 
                   <div className={style['feed-content']}>{banner.body}</div>
 
