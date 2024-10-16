@@ -172,7 +172,7 @@ function BiasCertify() {
                                     </div>
                                 </div>
                                 <div className={style['bottom-area']}>
-                                    <div className={style['text-area']}>최애 인증하고 '{biasData.bias.nickname.length == 0 ? biasData.bias.bname : biasData.bias.nickname[0]}'을(를) 응원해요!</div>
+                                    <div className={style['text-area']}>최애 인증하고 '{biasData.bias.nickname.length === 0 ? biasData.bias.bname : biasData.bias.nickname[0]}'을(를) 응원해요!</div>
                                     <div className={style['button-area']}>
                                         {
                                             biasData.result === 'valid' &&
@@ -199,7 +199,7 @@ function BiasCertify() {
                 </div>
             </div>
             {
-                 biasData.result === 'special done' || showNameCard && (
+                 (biasData.result === 'special done' || showNameCard) && (
                     <div className={style['download-btn-area']}>
                         <button>다운로드</button>
                     </div>
