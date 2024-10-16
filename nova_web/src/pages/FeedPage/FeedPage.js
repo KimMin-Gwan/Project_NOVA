@@ -1,16 +1,16 @@
-import Feed, { Comments } from "../../component/feed";
+import { Comments } from "../../component/feed";
 
 import style from "./FeedPage.module.css";
 import stylePlanet from "./../PlanetPage/Planet.module.css";
-import { FaStar } from "react-icons/fa";
-import { TfiCommentAlt } from "react-icons/tfi";
-import { PiShareFatLight } from "react-icons/pi";
-import { MdOutlineReportProblem } from "react-icons/md";
+// import { FaStar } from "react-icons/fa";
+// import { TfiCommentAlt } from "react-icons/tfi";
+// import { PiShareFatLight } from "react-icons/pi";
+// import { MdOutlineReportProblem } from "react-icons/md";
 
-import edit_feed from './../../img/edit.png';
 import backword from "./../../img/back_icon.png";
 import write from "./../../img/new_feed.png";
 import star from "./../../img/favorite.png";
+import star_color from "./../../img/favorite_color.png";
 
 
 import React, { useState, useEffect, useRef, createContext } from "react";
@@ -153,12 +153,12 @@ const FeedPage = () => {
 
   // let [numStar, setNumStar] = useState([]);
   // let [numComment, setNumComment] = useState([]);
-  let [isClickedStar, setIsClickedStar] = useState(false);
+  // let [isClickedStar, setIsClickedStar] = useState(false);
   let [isClickedComment, setIsClickedComment] = useState(false);
   // let [starColor, setStarColor] = useState('');
 
   function handleCheckStar(fid, index) {
-    setIsClickedStar(!isClickedStar);
+    // setIsClickedStar(!isClickedStar);
     fetch(`https://nova-platform.kr/feed_explore/check_star?fid=${fid}`, {
       credentials: "include",
     })
@@ -287,23 +287,6 @@ const FeedPage = () => {
       ref={sliderRef}
       className={style["test_container"]}
     >
-      {/* 
-        {
-          isUserState ? (
-            <img src={edit_feed} alt='edit' className={style['write_button']}
-              onClick={() => {
-                navigate('/write_feed')
-              }}></img>
-          ) : (
-            <img src={edit_feed} alt='edit' className={style['write_button']}
-              onClick={() => {
-                alert('로그인이 필요합니다.')
-              }}></img>
-          )
-        }
-
-      </div> */}
-
       <div className={style['slider-track']}
         style={{
           transform: `translateY(${translateY}px)`,
@@ -332,6 +315,7 @@ const FeedPage = () => {
                     <div id={style.date}>{banner.date}</div>
                   </div>
 
+                  {/* 댓글 모달 창 */}
                   <div className={style['modal-container']}>
                     <div className={style['comment-modal']}>댓글박스</div>
                   </div>
@@ -386,7 +370,7 @@ const FeedPage = () => {
                   <div className={style['action-box']}>
                     <div className={style['action-btn']}>
                       <div className={`${style['btn-box']}} ${style['action-btn-each']}`}>
-                        <img className={`${style['btn-img']}`} src={star} alt="관심표시"
+                        <img className={`${style['btn-img']}`} src={banner.star_flag ? star_color : star} alt="관심표시"
                           onClick={() => {
                             handleCheckStar(banner.fid, i);
                           }} />
@@ -493,13 +477,6 @@ function StationClass({ feed }) {
     </div>
   )
 };
-
-
-
-
-
-
-
 
 
 {/* <div className={style["button_area"]}>

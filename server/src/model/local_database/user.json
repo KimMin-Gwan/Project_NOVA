@@ -586,5 +586,33 @@
         "solo_daily_check_date": "",
         "group_daily_check_date": "",
         "alert": []
+    },
+    {
+        "uid": "2508-3knp-2158",
+        "uname": "운영자",
+        "age": "24",
+        "email": "alsrhks2508@yu.ac.kr",
+        "password": "sample123",
+        "gender": "m",
+        "solo_point": 400,
+        "group_point": 0,
+        "solo_combo": 0,
+        "group_combo": 0,
+        "credit": 0,
+        "solo_bid": "1001",
+        "group_bid": "",
+        "solo_daily": false,
+        "solo_special": false,
+        "group_daily": false,
+        "group_special": false,
+        "sign": "sample",
+        "select_name_card": "name_card_1",
+        "name_card_list": [
+            "name_card_1",
+            "name_card_2"
+        ],
+        "solo_daily_check_date": "",
+        "group_daily_check_date": "",
+        "alert": []
     }
 ]
