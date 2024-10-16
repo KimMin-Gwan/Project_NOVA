@@ -49,7 +49,8 @@ class JWTManager:
             payload["refresh_exp"] = datetime.fromtimestamp(decoded_payload["refresh_exp"])
 
             payload = JWTPayload(result = True , email=payload['email'],
-                                 exp=payload['exp'], refresh_exp=payload['refresh_exp'])
+                                 exp=payload['exp'], refresh_exp=payload['refresh_exp'],
+                                 usage=payload['usage'])
         else:
             payload = JWTPayload(result=False)
 
@@ -57,7 +58,7 @@ class JWTManager:
 
 
     # 토큰 제작
-    def make_token(self, email):
+    def make_token(self, email, usage="all"):
         # 헤더 설정
         headers = {
             "alg": "HS256",
@@ -69,6 +70,7 @@ class JWTManager:
         # refresh 7일
         payload = {
             "email": email,
+            "usage" : usage,
             "iat": datetime.now(timezone.utc).timestamp(),
             "exp": (datetime.now(timezone.utc) + timedelta(hours=3)).timestamp(),
             "refresh_exp": (datetime.now(timezone.utc) + timedelta(days=7)).timestamp()  # refresh 토큰 만료 시간 (예: 7일)
@@ -79,9 +81,10 @@ class JWTManager:
 
     
 class JWTPayload:
-    def __init__(self, result=False, email=None, exp=None, refresh_exp=None):
+    def __init__(self, result=False, email=None, exp=None, refresh_exp=None, usage="None"):
         self.result = result
         self.email=email
+        self.usage=usage
         self.exp=exp
         self.refresh_exp=refresh_exp
 
@@ -109,6 +112,10 @@ class RequestManager(JWTManager):
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail="Unprocessable Entity"
         )
+        self.forbidden_exception= HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="403 Forbidden"
+        )
 
     # 쿠키 지우는 마법
     def try_clear_cookies(self, request:Request):
@@ -128,11 +135,35 @@ class RequestManager(JWTManager):
     def get_bad_request_exception(self):
         return self.bad_request_exception
 
+    # 임시 유저의 로그인에서
+    def try_view_management_authorized_with_temp_user(self, data_payload = None, cookies = None):
+        self.data_payload= data_payload
+        try:
+            payload, new_token = self.home_decode(token=cookies["nova_token"])
+            if payload.usage != "temp":
+                raise HTTPException(
+                        status_code=status.HTTP_401_UNAUTHORIZED,
+                        detail="Could not Validate credentials",
+                        headers={"WWW-Authenticate" : "Bearer"})
+        except:
+            raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="Could not Validate credentials",
+                    headers={"WWW-Authenticate" : "Bearer"})
+        self.jwt_payload= payload
+        self.new_token = new_token
+
     # 로그인이 필수일때
     def try_view_management_need_authorized(self, data_payload = None, cookies = None):
         self.data_payload= data_payload
         try:
             payload, new_token = self.home_decode(token=cookies["nova_token"])
+            # 임시사용자에게 제한을 줘야햄
+            if payload.usage == "temp":
+                raise HTTPException(
+                        status_code=status.HTTP_401_UNAUTHORIZED,
+                        detail="Could not Validate credentials",
+                        headers={"WWW-Authenticate" : "Bearer"})
         except:
             raise HTTPException(
                     status_code=status.HTTP_401_UNAUTHORIZED,
@@ -146,8 +177,13 @@ class RequestManager(JWTManager):
         self.data_payload= data_payload
         try:
             payload, new_token = self.home_decode(token=cookies["nova_token"])
-            self.jwt_payload= payload
-            self.new_token = new_token
+            # 임시사용자는 굳이 더 줄 필요없음
+            if payload.usage == "temp":
+                self.jwt_payload = ""
+                self.new_token = ""
+            else:
+                self.jwt_payload= payload
+                self.new_token = new_token
         except:
             self.jwt_payload = ""
             self.new_token = ""
@@ -175,3 +211,21 @@ class RequestManager(JWTManager):
             )
 
         return response
+
+    # 비밀번호 변경하기에서 임시 유저 토큰 지우고 전송 데이터를 세팅
+    def make_json_response_in_password_find(self,request:Request, body_data:dict):
+        request.cookies.clear()
+        response = Response(
+            content=json.dumps(body_data),
+            media_type="application/json",
+            status_code=200
+        )
+
+        response.delete_cookie(key="nova_token",
+                samesite="None",  # Changed to 'Lax' for local testing
+                secure=True,  # Local testing; set to True in production
+                httponly=True)
+
+        return response
+
+# 

@@ -12,14 +12,14 @@ class LoginModel(BaseModel):
         super().__init__(database)
         self.__result = False
         self.__token = ''
-        self.__detail = ''
+        self.__detail = '존재하지 않는 이메일 입니다'
 
     def request_login(self,request,user_data):
         try:
             if request.email == user_data.email and request.password == user_data.password:
                 self.__result = True
             elif request.password != user_data.password:
-                self.__detail = 'worng password'
+                self.__detail = '일치하지 않는 비밀번호 입니다'
 
         except Exception as e:
             raise CoreControllerLogicError(error_type="request_login | " + str(e))
@@ -31,11 +31,20 @@ class LoginModel(BaseModel):
 
         except Exception as e:
             raise CoreControllerLogicError(error_type="login make_token | " + str(e))
+        
+    def set_login_state(self, result):
+        self.__result = result
+        return
+        
+    def make_temp_user_token(self, request):
+        jwtManager = JWTManager()
+        self.__token = jwtManager.make_token(email=request.email, usage="temp")
+        return
 
     def get_response_form_data(self, head_parser):
         try:
             body = {
-                'resust' : self.__result,
+                'result' : self.__result,
                 'detail' : self.__detail,
                 'token' : self.__token
             }
@@ -101,6 +110,14 @@ class SendEmailModel(BaseModel):
     def set_response(self,):
         try:
             self.__result = False
+            self.__detail = "이미 존재하는 이메일 입니다."
+        except Exception as e:
+            raise CoreControllerLogicError(error_type="set_response | " + str(e))
+
+    def set_response_in_reverse(self,):
+        try:
+            self.__result = False
+            self.__detail = "존재하지 않는 이메일 입니다."
         except Exception as e:
             raise CoreControllerLogicError(error_type="set_response | " + str(e))
 
@@ -255,17 +272,21 @@ class ChangePasswordModel(BaseModel):
 
     # 비밀번호 변경하기
     def try_change_password(self, data_payload):
-        print("450")
         if self.__check_present_password(present_password=data_payload.password):
-            print("451")
             self.__try_change_password(new_password = data_payload.new_password)
-            print("452")
             self._result = True
             self._detail = "비밀번호가 변경되었어요"
             return 
         else:
             self._detail = "비밀번호가 틀렸어요"
             return
+        
+    # 비밀번호 변경하기를 임시유저로( 비밀번호 찾기)
+    def try_change_password_with_temp_user(self, data_payload):
+        self.__try_change_password(new_password = data_payload.new_password)
+        self._result = True
+        self._detail = "비밀번호가 변경되었어요"
+
 
     # 현재 비밀번호가 맞는지 체크
     def __check_present_password(self, present_password):

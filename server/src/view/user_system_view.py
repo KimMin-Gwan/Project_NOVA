@@ -58,14 +58,62 @@ class User_Service_View(Master_View):
             response = model.get_response_form_data(self._head_parser)
             return response
 
+        # 비밀번호 찾기에서 이메일 보내기
+        @self.__app.post('/user_home/try_find_password_send_email')
+        def try_find_passwrod_send_email(raw_request:dict):
+            request = EmailSendRequest(request=raw_request)
+            user_controller=UserController()
+            model = user_controller.try_send_email_password(database=self.__database,
+                                                            request = request,
+                                                            nova_verification=self.__nova_verification)
+            response = model.get_response_form_data(self._head_parser)
+            return response
+
+        # 비밀번호 찾기
+        # response 포함 정보 -> 'result' : True or False
+        @self.__app.post('/user_home/try_login_temp_user')
+        async def try_login_temp_user(raw_request:dict):
+            request_manager = RequestManager()
+            request_manager.data_payload = TempLoginRequest(request=raw_request)
+
+            user_controller=UserController()
+            model = await user_controller.try_login_with_temp_user(database=self.__database,
+                                                            request=request_manager,
+                                                            nova_verification=self.__nova_verification)
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data,
+                                                           token=body_data['body']['token'],)
+            return response
+
+        # 임시 로그인 상태에서 비밀번호 변경하기
+        @self.__app.post('/user_home/try_find_password')
+        def try_find_password(request:Request, raw_request:dict):
+            request_manager = RequestManager()
+            data_payload = ChangePasswordRequest(request=raw_request)
+
+            request_manager.try_view_management_authorized_with_temp_user(data_payload=data_payload, cookies=request.cookies)
+            if not request_manager.jwt_payload.result:
+                raise request_manager.credentials_exception
+
+            user_controller=UserController()
+            model = user_controller.try_find_password(database=self.__database,
+                                                            request=request_manager)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            # 임시 유저 토큰을 지워버림
+            response = request_manager.make_json_response_in_password_find(
+                request=request, body_data=body_data)
+            
+            return response
+
         # 회원가입 시도
         # response 포함 정보 -> 'result' : True or False
         #                    -> 'detail' : "실패 사유"
         @self.__app.post('/user_home/try_sign_in')
-        async def try_sign_in(raw_request:dict):
+        async def try_sign_up(raw_request:dict):
             request = SignInRequest(request=raw_request)
             user_controller=UserController()
-            model = await user_controller.try_sign_in(database=self.__database,
+            model = await user_controller.try_sign_up(database=self.__database,
                                                    request = request,
                                               nova_verification=self.__nova_verification)
             response = model.get_response_form_data(self._head_parser)
@@ -241,6 +289,13 @@ class LoginRequest(RequestHeader):
         body = request['body']
         self.email = body['email']
         self.password = body['password']
+
+class TempLoginRequest(RequestHeader):
+    def __init__(self, request) -> None:
+        super().__init__(request)
+        body = request['body']
+        self.email = body['email']
+        self.verification_code = body['verification_code']
 
 class ChangePasswordRequest(RequestHeader):
     def __init__(self, request) -> None:

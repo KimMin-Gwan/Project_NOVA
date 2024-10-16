@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Any, Optional, Union
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request, File, UploadFile, Form
 from view.master_view import Master_View, RequestHeader
 from view.parsers import Head_Parser
@@ -315,9 +315,10 @@ class Core_Service_View(Master_View):
 
         # feed 를 만들거나 수정하기
         @self.__app.post('/feed_explore/try_edit_feed')
-        async def try_edit_feed(request:Request, image:UploadFile | None = File(None), 
-                                jsonData:str | None = Form(None)):
-            
+        async def try_edit_feed(request: Request, image: Union[UploadFile, None] = File(None),
+                        jsonData: Union[str, None] = Form(None)):
+        #async def try_edit_feed(request:Request, image:UploadFile | None = File(None), 
+                                #jsonData:str | None = Form(None)):
             request_manager = RequestManager()
             if image is None:
                 image_name = "image_not_exist?"

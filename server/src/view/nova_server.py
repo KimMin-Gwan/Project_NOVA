@@ -71,6 +71,7 @@ class NOVA_Server:
 class NOVAVerification:
     def __init__(self):
         self.__temp_user = []  # TempUser 
+        self.__password_change_user = []
         #  exp 채커
         #exp_checker = Thread(target=self._check_expiration)
         #exp_checker.start()
@@ -82,8 +83,7 @@ class NOVAVerification:
         for data in self.__temp_user:
             data()
         return
-
-
+    
     # 이메일 인증하는 사람 추가 tempUser 반환
     def make_new_user(self, email):
         verification_code = self.__make_verification_code()
