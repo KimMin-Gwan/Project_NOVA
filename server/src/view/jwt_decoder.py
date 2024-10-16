@@ -47,7 +47,8 @@ class JWTManager:
             payload["email"] = decoded_payload["email"]
             payload["exp"] = datetime.fromtimestamp(decoded_payload["exp"])
             payload["refresh_exp"] = datetime.fromtimestamp(decoded_payload["refresh_exp"])
-
+            
+            print(payload)
             payload = JWTPayload(result = True , email=payload['email'],
                                  exp=payload['exp'], refresh_exp=payload['refresh_exp'],
                                  usage=payload['usage'])
@@ -157,6 +158,7 @@ class RequestManager(JWTManager):
     def try_view_management_need_authorized(self, data_payload = None, cookies = None):
         self.data_payload= data_payload
         try:
+
             payload, new_token = self.home_decode(token=cookies["nova_token"])
             # 임시사용자에게 제한을 줘야햄
             print(payload.usage)
