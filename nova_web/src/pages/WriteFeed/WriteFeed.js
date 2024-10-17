@@ -99,7 +99,7 @@ const WriteFeed = () => {
     }
 
     return (
-        <div className={style['test_container']}>
+        <div className={`${style['test_container']} ${style['container']}`}>
             <div className={`${style['short_form']} ${style['short_form_write']}`}>
                 <div className={`${stylePlanet['top_area']} ${style['top_bar_area']}`}>
                     <img src={backword} alt="Arrow"
@@ -136,14 +136,14 @@ const WriteFeed = () => {
                             ></textarea>
                         </div>
 
-                        <div className={`${style['image-box']} ${style['write-image-box']}`}>
+                        <div className={`${style['write-image-box']}`}>
                             <div className={style['image-show']}>
                                 {/* <img src={back} alt="이미지" /> */}
                                 <input type='file' onChange={handleFileChange}></input>
                             </div>
                         </div>
 
-                        <div className={style['contents_area']}>
+                        <div className={style['fclass-box']}>
                             {/* 4지선다 */}
                             {currentTitle === 1 && (
                                 <MultipleWrite choice={choice} handleChoiceChange={handleChoiceChange} />
@@ -161,11 +161,11 @@ const WriteFeed = () => {
                                 )
                             }
                             {
-                                currentTitle === 0 && <CardWrite/>
+                                currentTitle === 0 && <CardWrite />
                             }
                         </div>
 
-                        <div></div>
+                        <div className={style['divide-line']}></div>
 
                         <div className={style['func_part']}>
                             <div className={style['btn_func_area']}>
@@ -195,10 +195,7 @@ export default WriteFeed;
 function CardWrite() {
     return (
         <div className={style['fclass-container']}>
-            <div className={style['empathy-box']}>
-                <div>축하하기</div>
-                <div>8명</div>
-            </div>
+            <input className={style['empathy-box']} name='content' placeholder='버튼 내용'></input>
         </div>
     )
 }
@@ -208,7 +205,7 @@ function MultipleWrite({ choice, handleChoiceChange }) {
             <ol className={style['one_of_four_list']}>
                 {choice.map((ch, index) => (
                     <li key={index}>
-                        {index + 1}. <input name='select' value={ch} onChange={(e) => handleChoiceChange(index, e.target.value)}></input>
+                        <input name='select' value={ch} onChange={(e) => handleChoiceChange(index, e.target.value)}></input>
                     </li>
                 ))}
             </ol>

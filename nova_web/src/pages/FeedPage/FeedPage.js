@@ -299,14 +299,16 @@ const FeedPage = () => {
                   </div>
 
                   {/* 댓글 모달 창 */}
-                  <div className={style["modal-container"]}>
-                    <div className={style["comment-modal"]}>
-                      <nav className={style["top_bar"]}>댓글 더보기</nav>
-                      <section>
-                        <p>지지자</p>
-                      </section>
-                    </div>
-                  </div>
+                  {isClickedComment && (
+                    <div className={style["modal-container"]}>
+                      <div className={style["comment-modal"]}>
+                        <nav className={style["top_bar"]}>댓글 더보기</nav>
+                        <section>
+                          <p>지지자</p>
+                        </section>
+                      </div>
+                    </div>)
+                  }
                   {/* 여기까지  */}
 
                   <div className={style["feed-content"]}>{banner.body}</div>

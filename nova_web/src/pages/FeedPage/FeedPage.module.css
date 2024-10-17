@@ -7,6 +7,11 @@
   position: relative;
 }
 
+.container {
+  overflow: auto;
+  scrollbar-width: none;
+}
+
 /* 왼쪽 컨텐츠 영역 */
 .content-box {
   width: 400px;
@@ -23,7 +28,8 @@
 
 .content-container {
   /* background-color: blue; */
-  width: 100%;
+  margin: 0 auto;
+  width: 90%;
   height: 100%;
   position: relative;
   /* margin-left: 20px; */
@@ -36,14 +42,14 @@
   /* background-color: gray; */
 }
 
-.sup_info > #nick_name {
+.sup_info>#nick_name {
   height: 50%;
   display: flex;
   align-items: end;
   color: black;
 }
 
-.sup_info > #date {
+.sup_info>#date {
   color: gray;
   display: flex;
 }
@@ -58,8 +64,9 @@
 
 /* 이미지 보이는 곳 */
 .write-image-box {
-  margin: 0 auto;
-  width: 80%;
+  height: 180px;
+  margin-bottom: 50px;
+  width: 100%;
   border: black dotted 5px;
   background-color: #98a0ff;
 }
@@ -77,10 +84,15 @@
   height: 100%;
 }
 
-.image-show > img {
+.image-show>img {
   width: 100%;
   height: 100%;
   object-fit: contain;
+}
+
+.image-show>input[type="file"] {
+  /* margin: 0 auto;
+  background-color: blue; */
 }
 
 /* 각종 컨텐츠 */
@@ -101,7 +113,14 @@
   align-items: center;
 }
 
+.fclass-container>input {
+  text-align: center;
+  border: 1px black solid;
+  border-radius: 5px;
+}
+
 /* 2. 카드(공감)  */
+
 .empathy-box {
   width: 120px;
   height: 60px;
@@ -152,13 +171,13 @@
   /* align-items: center; */
 }
 
-.link-info-box > h1,
+.link-info-box>h1,
 h5 {
   padding: 0px;
   margin: 0px;
 }
 
-.link-info-box > h1 {
+.link-info-box>h1 {
   font-size: 16px;
 }
 
@@ -248,25 +267,25 @@ h5 {
 /* 댓글 모달 창 */
 .modal-container {
   position: absolute;
+  z-index: 999;
   width: 100%;
-  height: 65%;
+  height: 80%;
   display: flex;
   justify-content: center;
-  /* flex: 1; */
-  /* height: calc(100vh - 100px); */
-  background-color: honeydew;
+  /* background-color: honeydew; */
 }
 
 .comment-modal {
   /* position: absolute; */
   /* justify-self: center; */
   /* top: 10vh; */
-  width: 95%;
+  width: 100%;
   /* height: calc(100vh-1vh); */
   background-color: #f2f2f2;
   padding: 5px;
   border-radius: 10px;
   padding-top: 5px;
+
   .top_bar {
     color: #797979;
     text-align: center;
@@ -277,10 +296,29 @@ h5 {
 
 /* ////////////////////////// */
 .write-container {
-  width: 100%;
-  /* height: 100px; */
+  margin: 0 auto;
+  margin-top: 10px;
+  /* margin-left: 25px; */
+  width: 85%;
+  height: 100%;
   /* background-color: aqua; */
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
 }
+
+
+
+
+
+.divide-line {
+  width: 100%;
+  height: 1px;
+  background-color: gray;
+}
+
+
+
 
 /* ///////////////////////// */
 .databox {
@@ -841,6 +879,7 @@ h5 {
 
 .short_form {
   min-height: 100vh;
+  height: 100%;
   width: 100%;
   display: flex;
   /* justify-content: center; */
@@ -963,26 +1002,24 @@ h5 {
   position: relative;
   z-index: 0;
   padding-top: 75px;
-  /* margin-top: 140px; */
-  /* float: left; */
-  /* clear: both; */
 }
 
 .text_body {
   padding-top: 20px;
   /* height: 100px; */
   margin: 0 auto;
-  width: 80%;
+  width: 100%;
   /* background-color: blue; */
-  flex-grow: 0.7;
+  margin-bottom: 30px;
 }
 
 .text_body textarea {
   padding: 0;
   margin: 0;
   padding-top: 5px;
-  padding-left: 5px;
-  width: 98%;
+  /* padding-left: 5px; */
+  width: 100%;
+  height: 200px;
 }
 
 .func_part {
@@ -1005,11 +1042,6 @@ h5 {
   align-items: center;
   height: 50px;
   /* background-color: #2A2577; */
-}
-
-.contents_area {
-  flex-grow: 3;
-  /* background-color: yellow; */
 }
 
 .write_container {
@@ -1143,8 +1175,7 @@ h5 {
   font-weight: 800;
 }
 
-.station_box input:nth-child(2) {
-}
+.station_box input:nth-child(2) {}
 
 .site_name {
   background-color: blue;
@@ -1169,7 +1200,7 @@ h5 {
   text-align: center;
 }
 
-.img_circle > img {
+.img_circle>img {
   width: 100%;
   height: 100%;
   object-fit: contain;
@@ -1450,7 +1481,7 @@ h5 {
   overflow-x: hidden;
 }
 
-.upload_area > .input[type="file"] {
+.upload_area>.input[type="file"] {
   width: 100%;
   height: 100%;
   background-color: blue;
