@@ -12,7 +12,6 @@ import write from "./../../img/new_feed.png";
 import star from "./../../img/favorite.png";
 import star_color from "./../../img/favorite_color.png";
 
-
 import React, { useState, useEffect, useRef, createContext } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -86,29 +85,29 @@ const FeedPage = () => {
           } else if (response.status === 200) {
             setIsUserState(true);
           } else {
-            throw new Error(`status: ${response.status}`)
+            throw new Error(`status: ${response.status}`);
           }
         }
-        return response.json()
+        return response.json();
       })
       .then((data) => {
         console.log(data);
-      })
+      });
   }
 
   useEffect(() => {
-    handleValidCheck()
+    handleValidCheck();
   }, []);
 
   function fetchFeed() {
     fetch(`https://nova-platform.kr/feed_explore/get_feed?fclass=None`, {
-      credentials: 'include'
+      credentials: "include",
     })
       .then((response) => response.json())
       .then((data) => {
         setBanners(data.body.feed);
         setNextData(data.body.key);
-        console.log('fetchfeed', data);
+        console.log("fetchfeed", data);
         // setNumStar([data.body.feed[0].star, data.body.feed[1].star]);
         // setNumComment([data.body.feed[0].num_comment, data.body.feed[1].num_comment])
       });
@@ -122,14 +121,12 @@ const FeedPage = () => {
   const fetchMoreBanners = async () => {
     try {
       // 서버로부터 추가 배너 데이터를 가져옴
-      const response = await fetch(
-        `https://nova-platform.kr/feed_explore/get_feed?fclass=None&key=${nextData}`, {
-        credentials: 'include'
-      }
-      ); // 예시 URL
+      const response = await fetch(`https://nova-platform.kr/feed_explore/get_feed?fclass=None&key=${nextData}`, {
+        credentials: "include",
+      }); // 예시 URL
       const newBanners = await response.json();
       const plusFeed = newBanners.body.feed;
-      console.log('newBanner', newBanners);
+      console.log("newBanner", newBanners);
       // const newStar = newBanners.body.feed[0].star;
       // const comments = newBanners.body.feed[0].num_comment;
       setNextData(newBanners.body.key);
@@ -166,9 +163,7 @@ const FeedPage = () => {
       .then((data) => {
         setBanners((prevBanners) => {
           return prevBanners.map((banner) => {
-            return banner.fid === fid
-              ? { ...banner, star: data.body.feed[0].star, star_flag: data.body.feed[0].star_flag }
-              : banner;
+            return banner.fid === fid ? { ...banner, star: data.body.feed[0].star, star_flag: data.body.feed[0].star_flag } : banner;
           });
         });
       });
@@ -218,21 +213,16 @@ const FeedPage = () => {
   let [commentLikes, setCommentLikes] = useState(0);
   function handleCommentLike(fid, cid, event) {
     event.preventDefault();
-    fetch(
-      `https://nova-platform.kr/feed_explore/like_comment?fid=${fid}&cid=${cid}`,
-      {
-        credentials: "include",
-      }
-    )
+    fetch(`https://nova-platform.kr/feed_explore/like_comment?fid=${fid}&cid=${cid}`, {
+      credentials: "include",
+    })
       .then((response) => response.json())
       .then((data) => {
         console.log("like", data.body.comments);
 
         setAllComments((prevAll) => {
           return prevAll.map((comment, i) => {
-            return comment.cid === cid
-              ? { ...comment, like: data.body.comments[i].like, like_user: data.body.comments[i].like_user }
-              : comment;
+            return comment.cid === cid ? { ...comment, like: data.body.comments[i].like, like_user: data.body.comments[i].like_user } : comment;
           });
         });
         console.log("244241242414", allComments);
@@ -247,12 +237,9 @@ const FeedPage = () => {
     const newAll = allComments.filter((comment) => comment.cid !== cid);
     setAllComments(newAll);
 
-    fetch(
-      `https://nova-platform.kr/feed_explore/remove_comment?fid=${fid}&cid=${cid}`,
-      {
-        credentials: "include",
-      }
-    )
+    fetch(`https://nova-platform.kr/feed_explore/remove_comment?fid=${fid}&cid=${cid}`, {
+      credentials: "include",
+    })
       .then((response) => response.json())
       .then((data) => {
         console.log("remove", data);
@@ -264,30 +251,23 @@ const FeedPage = () => {
     event.preventDefault();
 
     fetch(`https://nova-platform.kr/feed_explore/interaction_feed?fid=${fid}&action=${action}`, {
-      credentials: 'include'
+      credentials: "include",
     })
-      .then(response => response.json())
-      .then(data => {
-        console.log('interactin', data);
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("interactin", data);
         setBanners((prevFeeds) => {
           return prevFeeds.map((feed) => {
-            return feed.fid === fid ? { ...feed, attend: data.body.feed[0].attend, result: data.body.feed[0].result } : feed
-          })
-        })
-      })
+            return feed.fid === fid ? { ...feed, attend: data.body.feed[0].attend, result: data.body.feed[0].result } : feed;
+          });
+        });
+      });
   }
 
   return (
-    <div
-      onMouseDown={handleMouseDown}
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
-      onMouseLeave={handleMouseUp}
-      onWheel={handleWheel}
-      ref={sliderRef}
-      className={style["test_container"]}
-    >
-      <div className={style['slider-track']}
+    <div onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp} onMouseLeave={handleMouseUp} onWheel={handleWheel} ref={sliderRef} className={style["test_container"]}>
+      <div
+        className={style["slider-track"]}
         style={{
           transform: `translateY(${translateY}px)`,
           transition: isDragging ? "none" : "transform 0.5s ease",
@@ -296,9 +276,12 @@ const FeedPage = () => {
         {banners.map((banner, i) => {
           return (
             <div key={banner.fid} className={style["short_form"]}>
-              <div className={style['content-box']}>
+              <div className={style["content-box"]}>
                 <div className={`${stylePlanet["top_area"]} ${style["top_bar_area"]}`}>
-                  <img src={backword} alt="Arrow" className={style.backword}
+                  <img
+                    src={backword}
+                    alt="Arrow"
+                    className={style.backword}
                     onClick={() => {
                       navigate(-1);
                     }}
@@ -306,105 +289,104 @@ const FeedPage = () => {
                 </div>
 
                 {/* 왼쪽 컨텐츠 */}
-                <div className={style['content-container']}>
+                <div className={style["content-container"]}>
                   {/* {
                     isClickedComment ? <div>open</div> : <div>close</div>
                   } */}
-                  <div className={style['sup_info']}>
-                    <div id={style['nick_name']}>{banner.nickname}</div>
+                  <div className={style["sup_info"]}>
+                    <div id={style["nick_name"]}>{banner.nickname}</div>
                     <div id={style.date}>{banner.date}</div>
                   </div>
 
                   {/* 댓글 모달 창 */}
-                  <div className={style['modal-container']}>
-                    <div className={style['comment-modal']}>댓글박스</div>
+                  <div className={style["modal-container"]}>
+                    <div className={style["comment-modal"]}>
+                      <nav className={style["top_bar"]}>댓글 더보기</nav>
+                      <section>
+                        <p>지지자</p>
+                      </section>
+                    </div>
                   </div>
                   {/* 여기까지  */}
 
+                  <div className={style["feed-content"]}>{banner.body}</div>
 
-
-
-
-
-
-
-
-                  <div className={style['feed-content']}>{banner.body}</div>
-
-                  <div className={style['image-box']}>
-                    <div className={style['image-show']}>
+                  <div className={style["image-box"]}>
+                    <div className={style["image-show"]}>
                       <img src={banner.image[0]} alt="이미지" />
                     </div>
                   </div>
-                  <div className={style['fclass-box']}>
-                    {
-                      banner.fclass === 'multiple' && <MultiClass feed={banner} handleInteraction={handleInteraction} />
-                    }
-                    {
-                      banner.fclass === 'card' && <CardClass feed={banner} handleInteraction={handleInteraction} />
-                    }
-                    {
-                      banner.fclass === 'balance' && <BalanceClass feed={banner} handleInteraction={handleInteraction} />
-                    }
-                    {
-                      banner.fclass === 'station' && <StationClass feed={banner} />
-                    }
+                  <div className={style["fclass-box"]}>
+                    {banner.fclass === "multiple" && <MultiClass feed={banner} handleInteraction={handleInteraction} />}
+                    {banner.fclass === "card" && <CardClass feed={banner} handleInteraction={handleInteraction} />}
+                    {banner.fclass === "balance" && <BalanceClass feed={banner} handleInteraction={handleInteraction} />}
+                    {banner.fclass === "station" && <StationClass feed={banner} />}
                   </div>
-                  <div className={style['comment-box']}>
-                    <Comments isClickedComment={false} feed={banner} setFeedData={setBanners}
-                      allComments={allComments} setAllComments={setAllComments} />
+                  <div className={style["comment-box"]}>
+                    <Comments isClickedComment={false} feed={banner} setFeedData={setBanners} allComments={allComments} setAllComments={setAllComments} />
                   </div>
                 </div>
               </div>
 
               {/* 오른쪽 버튼 목록 */}
-              <div className={style['interaction-box']}>
-                <div className={style['button-box']}>
-                  <div className={style['write-box']}>
-                    <div className={style['btn-box']}>
-                      <img className={style['btn-img']} src={write} alt="글쓰기"
+              <div className={style["interaction-box"]}>
+                <div className={style["button-box"]}>
+                  <div className={style["write-box"]}>
+                    <div className={style["btn-box"]}>
+                      <img
+                        className={style["btn-img"]}
+                        src={write}
+                        alt="글쓰기"
                         onClick={() => {
-                          navigate('/write_feed')
-                        }} />
+                          navigate("/write_feed");
+                        }}
+                      />
                     </div>
                   </div>
 
-                  <div className={style['not-recommend-box']}>
-                    <div className={`${style['btn-box']}} ${style['not-recommend-btn']}`}>
-                      <img className={style['btn-img']} src={write} alt="추천안함" />
+                  <div className={style["not-recommend-box"]}>
+                    <div className={`${style["btn-box"]}} ${style["not-recommend-btn"]}`}>
+                      <img className={style["btn-img"]} src={write} alt="추천안함" />
                       <div>추천안함</div>
                     </div>
                   </div>
 
-                  <div className={style['action-box']}>
-                    <div className={style['action-btn']}>
-                      <div className={`${style['btn-box']}} ${style['action-btn-each']}`}>
-                        <img className={`${style['btn-img']}`} src={banner.star_flag ? star_color : star} alt="관심표시"
+                  <div className={style["action-box"]}>
+                    <div className={style["action-btn"]}>
+                      <div className={`${style["btn-box"]}} ${style["action-btn-each"]}`}>
+                        <img
+                          className={`${style["btn-img"]}`}
+                          src={banner.star_flag ? star_color : star}
+                          alt="관심표시"
                           onClick={() => {
                             handleCheckStar(banner.fid, i);
-                          }} />
+                          }}
+                        />
                         <div>{banner.star}</div>
                       </div>
 
-                      <div className={`${style['btn-box']}} ${style['action-btn-each']}`}>
-                        <img className={style['btn-img']} src={write} alt="댓글"
+                      <div className={`${style["btn-box"]}} ${style["action-btn-each"]}`}>
+                        <img
+                          className={style["btn-img"]}
+                          src={write}
+                          alt="댓글"
                           onClick={(event) => {
                             handleShowComment(banner.fid, event);
-                            handleShowCommentWindow()
-                          }} />
+                            handleShowCommentWindow();
+                          }}
+                        />
                         <div>{banner.num_comment}</div>
                       </div>
 
-                      <div className={`${style['btn-box']}} ${style['action-btn-each']}`}>
-                        <img className={style['btn-img']} src={write} alt="공유" />
+                      <div className={`${style["btn-box"]}} ${style["action-btn-each"]}`}>
+                        <img className={style["btn-img"]} src={write} alt="공유" />
                         <div>공유</div>
                       </div>
 
-                      <div className={`${style['btn-box']}} ${style['action-btn-each']}`}>
-                        <img className={style['btn-img']} src={write} alt="신고" />
+                      <div className={`${style["btn-box"]}} ${style["action-btn-each"]}`}>
+                        <img className={style["btn-img"]} src={write} alt="신고" />
                         <div>신고</div>
                       </div>
-
                     </div>
                   </div>
                 </div>
@@ -420,75 +402,83 @@ const FeedPage = () => {
 export default FeedPage;
 
 function MultiClass({ feed, handleInteraction }) {
-
   return (
-    <div className={style['fclass-container']}>
-      <ol className={style['quiz_box']}>
-        {
-          feed.choice.map((choi, i) => {
-            return (
-              <li key={feed.fid + i} style={{ backgroundColor: i === feed.attend ? '#D2C8F7' : 'white' }}
-                onClick={(e) => { handleInteraction(e, feed.fid, i) }}>{i + 1}. {choi}
-                <span>{feed.result[i]}</span>
-              </li>
-            )
-          })
-        }
+    <div className={style["fclass-container"]}>
+      <ol className={style["quiz_box"]}>
+        {feed.choice.map((choi, i) => {
+          return (
+            <li
+              key={feed.fid + i}
+              style={{ backgroundColor: i === feed.attend ? "#D2C8F7" : "white" }}
+              onClick={(e) => {
+                handleInteraction(e, feed.fid, i);
+              }}
+            >
+              {i + 1}. {choi}
+              <span>{feed.result[i]}</span>
+            </li>
+          );
+        })}
       </ol>
     </div>
-  )
-};
+  );
+}
 
 function CardClass({ feed, handleInteraction }) {
-
   return (
-    <div className={style['fclass-container']}>
-      <div className={style['empathy-box']}>
+    <div className={style["fclass-container"]}>
+      <div className={style["empathy-box"]}>
         <div>축하하기</div>
         <div>8명</div>
       </div>
     </div>
-  )
-};
+  );
+}
 
 function BalanceClass({ feed, handleInteraction }) {
   return (
-    <div className={style['fclass-container']}>
-      <div className={style['balance-box']}>
-        {
-          feed.choice.map((sel, i) => {
-            return (
-              <div key={feed.fid + i} className={style['sel-btn']} style={{ backgroundColor: i === feed.attend ? '#D2C8F7' : 'white' }}
-                onClick={(e) => { handleInteraction(e, feed.fid, i) }}>
-                <div>{sel}</div>
-                <div>{feed.result[i]}명</div>
-              </div>
-            )
-          })
-        }
+    <div className={style["fclass-container"]}>
+      <div className={style["balance-box"]}>
+        {feed.choice.map((sel, i) => {
+          return (
+            <div
+              key={feed.fid + i}
+              className={style["sel-btn"]}
+              style={{ backgroundColor: i === feed.attend ? "#D2C8F7" : "white" }}
+              onClick={(e) => {
+                handleInteraction(e, feed.fid, i);
+              }}
+            >
+              <div>{sel}</div>
+              <div>{feed.result[i]}명</div>
+            </div>
+          );
+        })}
       </div>
     </div>
-  )
-};
+  );
+}
 
 function StationClass({ feed }) {
   return (
-    <div className={style['fclass-container']}>
-      <div className={style['external-box']}
+    <div className={style["fclass-container"]}>
+      <div
+        className={style["external-box"]}
         onClick={() => {
-          window.open(feed.choice[2], '_blank', "noopener, noreferrer");
-        }}>
-        <div className={style['link-info-box']}>
+          window.open(feed.choice[2], "_blank", "noopener, noreferrer");
+        }}
+      >
+        <div className={style["link-info-box"]}>
           <h1>{feed.choice[0]}</h1>
           <h5>{feed.choice[1]}</h5>
         </div>
       </div>
     </div>
-  )
-};
+  );
+}
 
-
-{/* <div className={style["button_area"]}>
+{
+  /* <div className={style["button_area"]}>
                 {isClickedComment && (
                   <div className={style["comment_window"]}>
                     <div className={style["comment_top"]}>
@@ -541,9 +531,12 @@ function StationClass({ feed }) {
                       ></Comments>
                     </div>
                   </div>
-                )} */}
-{/*
+                )} */
+}
+{
+  /*
                         <button
                             <FaStar className={style["func_btn_img"]} style={banner.star_flag ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }} />
                           </button>
-                      */}
+                      */
+}
