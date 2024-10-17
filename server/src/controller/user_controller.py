@@ -98,7 +98,7 @@ class UserController:
             raise request.forbidden_exception
 
         model.make_temp_user_token(request=request.data_payload)
-        model.set_login_state(result=True)
+        model.set_login_state(result="done")
 
         return model
 
