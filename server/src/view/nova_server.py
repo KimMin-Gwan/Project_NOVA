@@ -91,7 +91,7 @@ class NOVAVerification:
         # 중복이 있으면 그거 바꿔서 다시 저장
         for user in self.__temp_user:
             if user.email == email:
-                user.verification_cod = verification_code
+                user.verification_code = verification_code
                 user.exp = exp
                 return user
 
