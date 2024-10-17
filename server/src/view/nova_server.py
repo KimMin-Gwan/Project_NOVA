@@ -126,7 +126,7 @@ class NOVAVerification:
             return False
 
         # 인증 번호가 맞으면 임시 유저에서 지우고 True 반환
-        if int(target_user.verification_code) == verification_code:
+        if int(target_user.verification_code) == int(verification_code):
             self.__temp_user.remove(target_user)
             return True
         # 인증 번호가 안맞으면 False 반환
