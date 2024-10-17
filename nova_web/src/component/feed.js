@@ -846,7 +846,7 @@ export function Comments({ isClickedComment, feed, allComments, setAllComments, 
                 {
                     allComments.length === 0 ? (
                         <>
-                            <div className={style['comment_support']}>{feed.comment.uname}</div>
+                            {/* <div className={style['comment_support']}>{feed.comment.uname}</div> */}
                             <div className={style['comment_data']}>{feed.comment.body}</div>
                         </>
                     ) :

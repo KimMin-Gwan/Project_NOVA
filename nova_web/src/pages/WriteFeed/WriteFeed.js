@@ -136,12 +136,12 @@ const WriteFeed = () => {
                             ></textarea>
                         </div>
 
-                        <div className={`${style['write-image-box']}`}>
-                            <div className={style['image-show']}>
+                        {/* <div className={`${style['write-image-box']}`}> */}
+                            {/* <div className={style['image-show']}> */}
                                 {/* <img src={back} alt="이미지" /> */}
-                                <input type='file' onChange={handleFileChange}></input>
-                            </div>
-                        </div>
+                                <input className={`${style['write-image-box']}`} type='file' onChange={handleFileChange}></input>
+                            {/* </div> */}
+                        {/* </div> */}
 
                         <div className={style['fclass-box']}>
                             {/* 4지선다 */}
