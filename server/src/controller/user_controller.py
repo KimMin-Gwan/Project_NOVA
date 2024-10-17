@@ -94,6 +94,9 @@ class UserController:
             raise request.forbidden_exception
         print("1")
         # 보안코드가 동일한지 확인
+        print(request.data_payload.verification_code)
+        print(type(request.data_payload.verification_code))
+
         if not await nova_verification.verificate_user(email=request.data_payload.email,
                                                         verification_code=request.data_payload.verification_code):
             raise request.forbidden_exception
