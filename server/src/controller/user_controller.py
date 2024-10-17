@@ -88,20 +88,14 @@ class UserController:
     async def try_login_with_temp_user(self, database, request, nova_verification):
         model = LoginModel(database=database)
 
-        print("0")
         # 존재하는 이메일인지 확인
         if not model.set_user_with_email(request=request.data_payload):
             raise request.forbidden_exception
-        print("1")
         # 보안코드가 동일한지 확인
-        print(request.data_payload.verification_code)
-        print(type(request.data_payload.verification_code))
 
         if not await nova_verification.verificate_user(email=request.data_payload.email,
                                                         verification_code=request.data_payload.verification_code):
             raise request.forbidden_exception
-        print("2")
-
         model.make_temp_user_token(request=request.data_payload)
         model.set_login_state(result="done")
 
