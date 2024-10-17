@@ -14,7 +14,8 @@
 
 /* 왼쪽 컨텐츠 영역 */
 .content-box {
-  width: 400px;
+  /* flex: 6; */
+  width: 430px;
   min-height: 100%;
   background-color: white;
 }
@@ -37,12 +38,14 @@
 
 /* 닉네임 및 날짜 */
 .sup_info {
+  margin-bottom: 20px;
   width: 100%;
   height: 50px;
   /* background-color: gray; */
 }
 
 .sup_info>#nick_name {
+  margin-bottom: 7px;
   height: 50%;
   display: flex;
   align-items: end;
@@ -59,7 +62,7 @@
   margin-top: 10px;
   width: 100%;
   height: 80px;
-  font-weight: 600;
+  font-weight: 400;
 }
 
 /* 이미지 보이는 곳 */
@@ -91,8 +94,11 @@
 }
 
 .image-show>input[type="file"] {
-  /* margin: 0 auto;
-  background-color: blue; */
+  /* margin: 0 auto; */
+  width: 100px;
+  height: 100px;
+  background-color: blue;
+  
 }
 
 /* 각종 컨텐츠 */
@@ -125,11 +131,13 @@
   width: 120px;
   height: 60px;
   border: 1px gray solid;
+  border-radius: 3px;
   display: flex;
   flex-direction: column;
   gap: 10px;
   justify-content: center;
   align-items: center;
+  font-size: 12px;
 }
 
 /* 3. 이지선다 */
@@ -150,6 +158,8 @@
   gap: 10px;
   justify-content: center;
   align-items: center;
+  font-size: 13px;
+  cursor: pointer;
 }
 
 /* 4. 외부 링크 */
@@ -164,6 +174,7 @@
   height: 100%;
   font-size: 12px;
   margin-left: 15px;
+  padding-left: 10px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -187,9 +198,10 @@ h5 {
 
 /* 상호작용 영역 */
 .interaction-box {
-  width: 100px;
+  /* flex: 1; */
+  width: 70px;
   min-height: 100%;
-  background-color: gray;
+  background-color: #F0F0F0;
 }
 
 .button-box {
@@ -201,9 +213,10 @@ h5 {
 
 /* 이미지 크기 */
 .btn-img {
-  width: 30px;
-  height: 30px;
+  width: 25px;
+  height: 25px;
   object-fit: cover;
+  cursor: pointer;
   /* background-color: yellow; */
 }
 
@@ -219,6 +232,11 @@ h5 {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+#text {
+  margin-top: 5px;
+  font-size: 11px;
 }
 
 /* 글쓰기 버튼 */
@@ -480,6 +498,7 @@ h5 {
   /* height: 100%; */
   padding: 0;
   border-radius: 15px;
+  font-size: 13px;
 }
 
 .quiz_box li {
@@ -491,7 +510,7 @@ h5 {
   color: black;
   border: 1px #888888 solid;
 }
-
+/* 
 .quiz_box li:first-child {
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
@@ -500,7 +519,7 @@ h5 {
 .quiz_box li:last-child {
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
-}
+} */
 
 .quiz_select {
   background-color: #d2c8f7;
@@ -1005,7 +1024,7 @@ h5 {
 }
 
 .text_body {
-  padding-top: 20px;
+  padding-top: 10px;
   /* height: 100px; */
   margin: 0 auto;
   width: 100%;
@@ -1014,11 +1033,12 @@ h5 {
 }
 
 .text_body textarea {
-  padding: 0;
+  /* padding: 0; */
   margin: 0;
-  padding-top: 5px;
+  /* padding-top: 5px; */
+  padding: 12px;
   /* padding-left: 5px; */
-  width: 100%;
+  width: calc(100% - 24px);
   height: 200px;
 }
 
@@ -1079,7 +1099,7 @@ h5 {
   /* display: flex;
     justify-content: space-between;
     align-items: center; */
-  border: 3px solid gray;
+  border: 1px solid #bEbEbE;
   border-radius: 10px;
   background-color: white;
 }

@@ -2,21 +2,18 @@ import { Comments } from "../../component/feed";
 
 import style from "./FeedPage.module.css";
 import stylePlanet from "./../PlanetPage/Planet.module.css";
-// import { FaStar } from "react-icons/fa";
-// import { TfiCommentAlt } from "react-icons/tfi";
-// import { PiShareFatLight } from "react-icons/pi";
-// import { MdOutlineReportProblem } from "react-icons/md";
 
 import backword from "./../../img/back_icon.png";
 import write from "./../../img/new_feed.png";
 import star from "./../../img/favorite.png";
 import star_color from "./../../img/favorite_color.png";
+import comment from "./../../img/comment.png";
+import report from "./../../img/report.png";
+import share from "./../../img/share.png";
+import problem from "./../../img/problem.png";
 
-import React, { useState, useEffect, useRef, createContext } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-
-export const FeedContext = createContext();
-export const FeedDispatchContext = createContext();
 
 const FeedPage = () => {
   const [banners, setBanners] = useState([]);
@@ -348,8 +345,8 @@ const FeedPage = () => {
 
                   <div className={style["not-recommend-box"]}>
                     <div className={`${style["btn-box"]}} ${style["not-recommend-btn"]}`}>
-                      <img className={style["btn-img"]} src={write} alt="추천안함" />
-                      <div>추천안함</div>
+                      <img className={style["btn-img"]} src={problem} alt="추천안함" />
+                      <div id={style.text}>추천안함</div>
                     </div>
                   </div>
 
@@ -364,30 +361,30 @@ const FeedPage = () => {
                             handleCheckStar(banner.fid, i);
                           }}
                         />
-                        <div>{banner.star}</div>
+                        <div id={style.text}>{banner.star}</div>
                       </div>
 
                       <div className={`${style["btn-box"]}} ${style["action-btn-each"]}`}>
                         <img
                           className={style["btn-img"]}
-                          src={write}
+                          src={comment}
                           alt="댓글"
                           onClick={(event) => {
                             handleShowComment(banner.fid, event);
                             handleShowCommentWindow();
                           }}
                         />
-                        <div>{banner.num_comment}</div>
+                        <div id={style.text}>{banner.num_comment}</div>
                       </div>
 
                       <div className={`${style["btn-box"]}} ${style["action-btn-each"]}`}>
-                        <img className={style["btn-img"]} src={write} alt="공유" />
-                        <div>공유</div>
+                        <img className={style["btn-img"]} src={share} alt="공유" />
+                        <div id={style.text}>공유</div>
                       </div>
 
                       <div className={`${style["btn-box"]}} ${style["action-btn-each"]}`}>
-                        <img className={style["btn-img"]} src={write} alt="신고" />
-                        <div>신고</div>
+                        <img className={style["btn-img"]} src={report} alt="신고" />
+                        <div id={style.text}>신고</div>
                       </div>
                     </div>
                   </div>
