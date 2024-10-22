@@ -300,12 +300,20 @@ const FeedPage = () => {
                     <div className={style["modal-container"]}>
                       <div className={style["comment-modal"]}>
                         <nav className={style["top_bar"]}>댓글 더보기</nav>
-                        <section>
-                          <p>지지자</p>
+                        <section className={style["text-section"]}>
+                          <div className={style["text-box"]}>
+                            <p className={style["text-1"]}>지지자</p>
+                            <p className={style["text-2"]}>이런 글 쓰지 마쇼</p>
+                          </div>
+                          <div className={style["icon-box"]}>
+                            <button className={style["button-box"]}>삭제</button>
+                            <button className={style["button-box"]}>신고</button>
+                            <p>별</p>
+                          </div>
                         </section>
                       </div>
-                    </div>)
-                  }
+                    </div>
+                  )}
                   {/* 여기까지  */}
 
                   <div className={style["feed-content"]}>{banner.body}</div>

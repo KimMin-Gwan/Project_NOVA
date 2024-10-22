@@ -44,7 +44,7 @@
   /* background-color: gray; */
 }
 
-.sup_info>#nick_name {
+.sup_info > #nick_name {
   margin-bottom: 7px;
   height: 50%;
   display: flex;
@@ -52,7 +52,7 @@
   color: black;
 }
 
-.sup_info>#date {
+.sup_info > #date {
   color: gray;
   display: flex;
 }
@@ -87,18 +87,17 @@
   height: 100%;
 }
 
-.image-show>img {
+.image-show > img {
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
 
-.image-show>input[type="file"] {
+.image-show > input[type="file"] {
   /* margin: 0 auto; */
   width: 100px;
   height: 100px;
   background-color: blue;
-
 }
 
 /* 각종 컨텐츠 */
@@ -119,7 +118,7 @@
   align-items: center;
 }
 
-.fclass-container>input {
+.fclass-container > input {
   text-align: center;
   border: 1px black solid;
   border-radius: 5px;
@@ -182,13 +181,13 @@
   /* align-items: center; */
 }
 
-.link-info-box>h1,
+.link-info-box > h1,
 h5 {
   padding: 0px;
   margin: 0px;
 }
 
-.link-info-box>h1 {
+.link-info-box > h1 {
   font-size: 16px;
 }
 
@@ -204,7 +203,7 @@ h5 {
   /* flex: 1; */
   width: 70px;
   min-height: 100%;
-  background-color: #F0F0F0;
+  background-color: #f0f0f0;
 }
 
 .button-box {
@@ -295,7 +294,36 @@ h5 {
   justify-content: center;
   /* background-color: honeydew; */
 }
+.text-section {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px;
+}
 
+.text-box {
+  display: flex;
+  flex-direction: column;
+  .text-1 {
+    margin: 2px;
+  }
+  .text-2 {
+    margin: 2px;
+    color: gray;
+  }
+}
+
+.icon-box {
+  display: flex;
+  justify-content: space-between;
+  width: 130px;
+  height: 50%;
+  align-items: center;
+}
+
+.button-box {
+  border: 0;
+  cursor: pointer;
+}
 .comment-modal {
   /* position: absolute; */
   /* justify-self: center; */
@@ -328,18 +356,11 @@ h5 {
   /* align-items: center; */
 }
 
-
-
-
-
 .divide-line {
   width: 100%;
   height: 1px;
   background-color: gray;
 }
-
-
-
 
 /* ///////////////////////// */
 .databox {
@@ -1103,7 +1124,7 @@ h5 {
   /* display: flex;
     justify-content: space-between;
     align-items: center; */
-  border: 1px solid #bEbEbE;
+  border: 1px solid #bebebe;
   border-radius: 10px;
   background-color: white;
 }
@@ -1199,7 +1220,8 @@ h5 {
   font-weight: 800;
 }
 
-.station_box input:nth-child(2) {}
+.station_box input:nth-child(2) {
+}
 
 .site_name {
   background-color: blue;
@@ -1224,7 +1246,7 @@ h5 {
   text-align: center;
 }
 
-.img_circle>img {
+.img_circle > img {
   width: 100%;
   height: 100%;
   object-fit: contain;
@@ -1505,7 +1527,7 @@ h5 {
   overflow-x: hidden;
 }
 
-.upload_area>.input[type="file"] {
+.upload_area > .input[type="file"] {
   width: 100%;
   height: 100%;
   background-color: blue;
