@@ -160,11 +160,13 @@ export default function SignUp() {
     const { name, checked } = e.target;
     if (name === "agree1") {
       setAgree1(checked);
+      setAllAgree(checked && agree2);
     } else if (name === "agree2") {
       setAgree2(checked);
+      setAllAgree(checked && agree1);
     }
 
-    setAllAgree(checked && agree2);
+    
   };
   return (
     <div className={style.container}>

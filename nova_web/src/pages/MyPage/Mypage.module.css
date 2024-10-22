@@ -1,5 +1,5 @@
 .container {
-  width: 500px;
+  max-width: 500px;
   height: 200vh;
   margin: 0 auto;
   background-color: #dfdfdf;
@@ -101,12 +101,20 @@
 }
 
 .ticket_info {
+  margin: auto;
+  width: 85%;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   flex: 1;
-  gap: 260px;
-  margin-left: 25px;
+  /* gap: 260px; */
+  /* margin-right: 50px; */
   /* background-color: orange; */
+}
+
+.ticket_wrapper {
+  display: flex;
+  align-items: center;
 }
 
 .btn_container {
@@ -119,7 +127,7 @@
 }
 
 .btn_container button {
-  width: 190px;
+  width: 40%;
   height: 40px;
   border-radius: 5px;
   background-color: #dfdfdf;
@@ -128,10 +136,6 @@
   font-weight: 700;
   cursor: pointer;
 }
-.ticket_wrapper {
-  display: flex;
-  align-items: center;
-}
 /* 최애 - 개인, 단체 */
 
 .half_box {
@@ -139,7 +143,7 @@
 }
 
 .img_box {
-  width: 170px;
+  width: 70%;
   height: 200px;
   margin-left: 17px;
 }
@@ -163,19 +167,20 @@
 
 .bias_name {
   margin-bottom: 5px;
-  font-size: 28px;
+  font-size: 26px;
   font-weight: 700;
   text-align: end;
-  white-space: nowrap;
+  /* white-space: nowrap; */
 }
 
 .not_name {
-  padding-right: 20px;
+  /* padding-right: 15px; */
   margin-bottom: 5px;
-  font-size: 28px;
+  font-size: 26px;
   font-weight: 700;
   text-align: end;
-  white-space: nowrap;
+  /* white-space: nowrap; */
+  /* background-color: blue; */
 }
 
 .support_text {

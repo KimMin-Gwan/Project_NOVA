@@ -125,7 +125,7 @@ function MyPage() {
                   <div className="image-container">
                     {
                       mySoloBias.bid === '' ? <img src={empty} /> :
-                        <img src={bias_url + `${mySoloBias.bid}.PNG`} alt="bias" className="img2" />
+                        <img src={bias_url + `${mySoloBias.bid}.PNG`} alt="bias" />
                     }
                   </div>
                 </div>
@@ -164,7 +164,7 @@ function MyPage() {
                   <div className="image-container">
                     {
                       myGroupBias.bid === '' ? <img src={empty} /> :
-                        <img src={bias_url + `${myGroupBias.bid}.PNG`} alt="bias" className="img2" />
+                        <img src={bias_url + `${myGroupBias.bid}.PNG`} alt="bias" />
                     }
                   </div>
                 </div>

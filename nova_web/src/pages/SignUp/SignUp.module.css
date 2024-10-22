@@ -1,6 +1,6 @@
 .container {
   margin: 0 auto;
-  width: 500px;
+  max-width: 500px;
   background-color: white;
   height: 1000px;
 }
@@ -40,7 +40,7 @@
 .box {
   margin: 0 auto;
   margin-top: 20px;
-  width: 450px;
+  width: 95%;
   /* height: 120px; */
   /* background-color: gray; */
   display: flex;
@@ -191,7 +191,7 @@
 }
 
 .submit_area {
-  width: 450px;
+  width: 95%;
   text-align: end;
   margin-top: 15px;
 }

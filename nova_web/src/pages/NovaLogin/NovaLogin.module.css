@@ -71,7 +71,7 @@
 } */
 
 .input {
-  width: 376px;
+  width: 100%;
   padding: 12px;
   margin-top: 10px;
   margin-bottom: 24px;
@@ -84,7 +84,7 @@
 .loginButton {
   justify-content: center;
   /* 중간이 아닌 위쪽으로 배치 */
-  width: 400px;
+  width: 80%;
   padding: 15px;
   border-radius: 8px;
   background-color: #98a0ff;
@@ -105,8 +105,9 @@
 
 .input-box {
   margin: auto;
-  width: 100%;
+  width: 85%;
   /* background-color: blue; */
+  margin-bottom: 15px;
 }
 
 .input-box input {
@@ -140,6 +141,7 @@
   justify-content: center;
   align-items: center;
   gap: 20px;
+  /* background-color: blue; */
 }
 
 .sign-up-btn {

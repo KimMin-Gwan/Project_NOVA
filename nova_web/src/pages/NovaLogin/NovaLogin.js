@@ -77,7 +77,7 @@ const NOVALogin = () => {
       </div>
 
       <div className={style.form}>
-        <div className={`${styleSignUp.box}`}>
+        {/* <div className={`${styleSignUp.box}`}> */}
           <div className={style["input-box"]}>
             이메일
             <br />
@@ -86,9 +86,9 @@ const NOVALogin = () => {
             </label>
             {login === "email" && <div className={style.errorMessage}>{detail}</div>}
           </div>
-        </div>
+        {/* </div> */}
 
-        <div className={`${styleSignUp.box} ${style["box-margin"]}`}>
+        {/* <div className={`${styleSignUp.box} ${style["box-margin"]}`}> */}
           <div className={style["input-box"]}>
             비밀번호
             <br />
@@ -97,7 +97,7 @@ const NOVALogin = () => {
             </label>
             {login === "password" && <div className={style.errorMessage}>{detail}</div>}
           </div>
-        </div>
+        {/* </div> */}
       </div>
 
       <div className={style["login-box"]}>
