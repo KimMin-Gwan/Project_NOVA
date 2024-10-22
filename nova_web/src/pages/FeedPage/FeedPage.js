@@ -11,7 +11,7 @@ import comment from "./../../img/comment.png";
 import report from "./../../img/report.png";
 import share from "./../../img/share.png";
 import problem from "./../../img/problem.png";
-
+import likeStar from "./../../img/like_star.png";
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -24,7 +24,7 @@ const FeedPage = () => {
   const [translateY, setTranslateY] = useState(0);
   const [dragDistance, setDragDistance] = useState(0);
   const sliderRef = useRef(null);
-
+  const [count, setCount] = useState(0);
   useEffect(() => {
     setTranslateY(-currentIndex * window.innerHeight);
   }, [currentIndex]);
@@ -71,6 +71,9 @@ const FeedPage = () => {
 
   let [isUserState, setIsUserState] = useState(false);
 
+  const handleClick = () => {
+    setCount(count + 1);
+  };
   function handleValidCheck() {
     fetch("https://nova-platform.kr/home/is_valid", {
       credentials: "include", // 쿠키를 함께 포함한다는 것
@@ -305,10 +308,29 @@ const FeedPage = () => {
                             <p className={style["text-1"]}>지지자</p>
                             <p className={style["text-2"]}>이런 글 쓰지 마쇼</p>
                           </div>
-                          <div className={style["icon-box"]}>
-                            <button className={style["button-box"]}>삭제</button>
-                            <button className={style["button-box"]}>신고</button>
-                            <p>별</p>
+                          <div className={style["icon-modal"]}>
+                            <button className={style["button-modal"]}>삭제</button>
+                            <button className={style["button-modal"]}>신고</button>
+                            <div className={style["star-modal"]}>
+                              <img src={likeStar} alt="clickable" onClick={handleClick} className={style["img-star"]} />
+                              <p>{count}</p>
+                            </div>
+                          </div>
+                        </section>
+                        <section className={style["text-section"]}>
+                          <div className={style["text-box"]}>
+                            <p className={style["text-1"]}>바위게</p>
+                            <p className={style["text-2"]}>국밥 맛있다</p>
+                          </div>
+                          <div className={style["icon-modal"]}>
+                            <button className={style["button-modal"]} style={{ visibility: "hidden" }}>
+                              삭제
+                            </button>
+                            <button className={style["button-modal"]}>신고</button>
+                            <div className={style["star-modal"]}>
+                              <img src={likeStar} alt="clickable" onClick={handleClick} className={style["img-star"]} />
+                              <p>{count}</p>
+                            </div>
                           </div>
                         </section>
                       </div>
