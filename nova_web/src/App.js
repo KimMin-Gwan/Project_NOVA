@@ -199,6 +199,7 @@ function App() {
 
             <section className="content">
               <MainPart/>
+              <MainPart/>
               {/* <h2 className="satellite-search">위성 탐색</h2> */}
               {/* <InfFeed isUserState={isUserState}></InfFeed> */}
             </section>
