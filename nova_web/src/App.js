@@ -40,6 +40,7 @@ import MyAlert from "./pages/MyPage/Alert/MyAlert.js";
 import Temrs from "./pages/Temrs/Temrs.js";
 import FindPw from "./pages/FindPw/FindPw.js";
 import FindPwChange from "./pages/FindPw/FindPwChange.js";
+import MainPart from "./pages/MainPage/MainPart.js";
 
 // 401 이면 바이어스 격자 무늬로 띄우기
 // 401 이면 alert - 로그인 필요 문구 띄우기
@@ -158,12 +159,13 @@ function App() {
                     navigate("/");
                   }}
                 >
-                  <img src={logo}></img>
+                  <img src={logo} alt='logo'></img>
                 </div>
                 <div className="buttons">
                   <button className="tool-button">
                     <img
                       src={menu}
+                      alt="menu"
                       onClick={() => {
                         navigate("/more_see");
                       }}
@@ -183,7 +185,6 @@ function App() {
                   {/* <Link to='/bias_certify' className='button'>최애 지지하기</Link> */}
                   {/* <Link to='/league_detail' className='button'>리그상세페이지</Link> */}
                   {/* <Link to='/select_bias' className='button'>최애선택</Link> */}
-                  {/* <Link to='/data_test' className='button'>테스트페이지</Link> */}
                   {/* <Link to='/mybias' className='button'>최애페이지</Link> */}
                 </div>
               </header>
@@ -196,9 +197,10 @@ function App() {
               </section>
             </div>
 
-            <section>
-              <h2 className="satellite-search">위성 탐색</h2>
-              <InfFeed isUserState={isUserState}></InfFeed>
+            <section className="content">
+              <MainPart/>
+              {/* <h2 className="satellite-search">위성 탐색</h2> */}
+              {/* <InfFeed isUserState={isUserState}></InfFeed> */}
             </section>
 
             <NavBar></NavBar>

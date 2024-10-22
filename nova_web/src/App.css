@@ -23,7 +23,7 @@ body {
 
 .container {
   max-width: 500px;
-  /* height: 200vw; */
+  height: 200vh;
   margin: 0 auto;
   background-color: #1e1e1e;
   position: relative;
@@ -1086,4 +1086,8 @@ body {
   /* height: 100%; */
   background-color: green;
   position: relative;
+}
+
+.content {
+  margin-top: 100px;
 }
