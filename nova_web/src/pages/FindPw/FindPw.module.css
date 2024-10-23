@@ -47,21 +47,24 @@
   flex-direction: column;
   margin: 60px auto;
   width: 70%;
-  transform: translateX(-8%);
 }
 
 .section {
-  margin-bottom: 20px;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
-  width: 120%;
 }
 
 .input_text {
   font-size: 15px;
 }
-
+/* .input_box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+} */
 .input {
   display: block;
   margin-bottom: 10px;
@@ -74,19 +77,18 @@
 
 .button {
   display: block;
-  padding: 12px 80px;
-  margin-top: 20px;
+  width: 90%;
+  padding: 10px;
   border: 0;
   color: white;
   background-color: #98a0ff;
   border-radius: 8px;
   font-size: 15px;
-  transform: translateX(28%);
+  margin-top: 5px;
   cursor: pointer;
 }
 
 .error {
   color: red;
-  margin-top: 10px;
   justify-self: start;
 }

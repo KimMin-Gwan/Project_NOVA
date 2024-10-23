@@ -98,7 +98,7 @@ function FindPwChange() {
       </div>
       <form className={style.form} onSubmit={handleSubmit}>
         <p className={style.input_text}>새로운 비밀번호</p>
-        <section className="section">
+        <section className={style.section}>
           <input
             type="password"
             name="newPassword"
@@ -112,7 +112,7 @@ function FindPwChange() {
           {passwordError && <p style={{ color: "red" }}>{passwordMessage}</p>}
         </section>
         <p className={style.input_text}>비밀번호 확인</p>
-        <section>
+        <section className={style.section}>
           <input type="password" name="confirmPassword" className={style.input} value={confirmPassword} onChange={handleCheckPassword} />
           {errorMessage && <p className={style.error}>{errorMessage}</p>} {/* Show error only if it exists */}
           <button type="submit" className={style.button} onClick={handleChangePW}>

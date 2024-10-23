@@ -90,7 +90,7 @@ function FindPw() {
 
       <form className={style.form}>
         <p className={style.input_text}>이메일 주소</p>
-        <section>
+        <section className={style.section}>
           <input type="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} className={style.input} />
           {!result && <div className={style.error}>{detail}</div>}
           <button type="button" className={style.button} onClick={clickVerifyCode}>
@@ -99,7 +99,7 @@ function FindPw() {
         </section>
 
         <p className={style.input_text}>보안코드</p>
-        <section>
+        <section className={style.section}>
           <input type="text" name="code" value={code} onChange={(e) => setCode(e.target.value)} className={style.input} />
           <button type="button" className={style.button} onClick={handleSecurityCode}>
             보안코드 확인
