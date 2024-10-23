@@ -30,6 +30,14 @@
   flex-grow: 1;
 }
 
+.hashtag-text {
+  background-color: #373737;
+  color: #ffffff;
+  border: 0;
+  border-radius: 10px;
+  padding: 5px 10px;
+}
+
 .main-area {
   flex-grow: 5;
   background-color: slategrey;
@@ -40,6 +48,7 @@
 .feed-box {
   width: 75%;
   height: 70%;
+  max-width: 600px;
   background-color: black;
   border-radius: 5px;
   padding: 20px;
@@ -52,16 +61,17 @@
   display: flex;
   align-items: center;
   height: 30px;
-  justify-content: space-between;
 }
 .profile {
   width: 15px;
   height: 15px;
   background-color: yellow;
   border-radius: 50%;
+  margin-right: 10px;
 }
 .name-text {
   font-size: 15px;
+  margin-right: auto;
 }
 .more-see {
   border: 0;
