@@ -1,7 +1,7 @@
 .wrap-container {
   background-color: gainsboro;
   width: 100%;
-  height: 350px;
+  height: 500px;
   display: flex;
   flex-direction: column;
   color: white;
@@ -104,3 +104,28 @@
   justify-items: flex-end;
   align-self: flex-end;
 }
+
+/* 인기 게시글 */
+.popular-feed {
+  width: 60%;
+  height: 90%;
+  background-color: black;
+}
+
+.img-box {
+  width: 90%;
+  height: 60%;
+  background-color: white;
+  margin: 0 auto;
+  margin-top: 10px;
+  color: black;
+}
+
+/* 급상승 해시태그 */
+.hashtag-box {
+  width: 95%;
+  height: 100%;
+  background-color: #292929;
+  border-radius: 10px;
+}
+

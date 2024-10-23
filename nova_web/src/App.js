@@ -41,6 +41,8 @@ import Temrs from "./pages/Temrs/Temrs.js";
 import FindPw from "./pages/FindPw/FindPw.js";
 import FindPwChange from "./pages/FindPw/FindPwChange.js";
 import MainPart from "./pages/MainPage/MainPart.js";
+import PopularFeed from "./pages/MainPage/PopularFeed.js";
+import IncreaseTag from "./pages/MainPage/IncreaseTag.js";
 
 // 401 이면 바이어스 격자 무늬로 띄우기
 // 401 이면 alert - 로그인 필요 문구 띄우기
@@ -197,11 +199,12 @@ function App() {
               </section>
             </div>
 
-            <section className="content">
+            <section className="contents">
               <MainPart/>
-              <MainPart/>
-              {/* <h2 className="satellite-search">위성 탐색</h2> */}
-              {/* <InfFeed isUserState={isUserState}></InfFeed> */}
+              <PopularFeed/>
+              <IncreaseTag/>
+
+              {/* <MainPart/> */}
             </section>
 
             <NavBar></NavBar>
