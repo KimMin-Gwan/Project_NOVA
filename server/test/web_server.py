@@ -70,7 +70,7 @@ def home():
             async function testNumberEndpoint() {
                 const number = document.getElementById('numberInput').value;
                 try {
-                    const response = await fetch(`https://nova-platform.kr/user_home/try_login`, {
+                    const response = await fetch(`https://nova-platform.kr/user_home/try_find_password_send_email`, {
                         method: 'POST',
                         credentials: 'include', // 쉼표 추가
                         headers: {
@@ -85,7 +85,7 @@ def home():
                                 "endpoint": "/user_system/",
                                 },
                             "body" : {
-                                "email" : "randomUser8@naver.com", 
+                                "email" : "alsrhks2508@yu.ac.kr", 
                                 "password": "sample122"
                             }
                         })
