@@ -65,7 +65,7 @@
 
 .authen {
   border-radius: 5px;
-  width: 70px;
+  width: 15%;
   border: none;
   height: 45px;
   margin-left: 15px;
@@ -111,7 +111,7 @@
   display: inline-flex;
   cursor: pointer;
   height: 50px;
-  width: 75px;
+  width: 20%;
   border-radius: 10px;
   border: 0;
   line-height: 24px;
