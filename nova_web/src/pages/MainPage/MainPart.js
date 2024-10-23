@@ -38,7 +38,8 @@ export default function MainPart() {
           </div>
           <section className={style["text-container"]}>
             <div className={style["tag-text"]}>
-              <span className={style["tag"]}>#시연 #개이뻐요 #나이공개</span>
+              <span className={style["tag"]}>#시연</span>
+              <span className={style["tag"]}>#이쁘다</span>
             </div>
             <div className={style["main-text"]}>젠타 나이 질문이요 젠타 98년생 아닌가요??</div>
           </section>
