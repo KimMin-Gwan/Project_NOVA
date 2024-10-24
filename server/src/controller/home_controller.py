@@ -129,7 +129,7 @@ class Home_Controller:
 
     def get_realtime_best_hashtag(self, database:Local_Database, request) -> HashTagModel:
         model = HashTagModel(database=database)
-        model.set_best_hash_tag()
+        #model.set_best_hash_tag()
         model.set_realtime_best_hash_tag()
 
         return model
