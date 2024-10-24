@@ -15,9 +15,7 @@ class HashTagModel(BaseModel):
         if self._user.uid == "":
             return False
         else:
-            print(self._user.solo_bid)
             bias_data = self._database.get_data_with_id(target="bid", id=self._user.solo_bid)
-            print(bias_data)
             self._bias.make_with_dict(bias_data)
             self._title=self._bias.bname
             return True
@@ -35,7 +33,7 @@ class HashTagModel(BaseModel):
     def get_response_form_data(self, head_parser):
         try:
             body = {
-                "hashtags" : self._make_dict_list_data(list_data=self._hashtags),
+                "hashtags" : self._hashtags,
                 "title" : self._title,
                 "bid" : self._bias.bid
                 }
