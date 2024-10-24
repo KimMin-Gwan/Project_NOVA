@@ -140,7 +140,7 @@ class Core_Service_View(Master_View):
                 #raise request_manager.credentials_exception
 
             home_controller=Feed_Controller()
-            model = home_controller.get_home_feed_data(database=self.__database,
+            model = home_controller.get_home_hot_hashtag_feed(database=self.__database,
                                                         request=request_manager,
                                                         feed_manager=self.__feed_manager)
 
