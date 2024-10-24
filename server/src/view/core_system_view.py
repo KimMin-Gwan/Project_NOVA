@@ -99,6 +99,23 @@ class Core_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
+        @self.__app.get('/home/realtime_hot_feed')
+        def get_feed_data(request:Request, key:Optional[int] = -4):
+            request_manager = RequestManager()
+            data_payload = HomeFeedRequest(key=key)
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            #if not request_manager.jwt_payload.result:
+                #raise request_manager.credentials_exception
+
+            home_controller=Feed_Controller()
+            model = home_controller.get_home_feed_data(database=self.__database,
+                                                        request=request_manager,
+                                                        feed_manager=self.__feed_manager)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
         @self.__app.get('/home/hot_hashtag')
         def get_hot_hashtag(request:Request):
             request_manager = RequestManager()
@@ -115,7 +132,7 @@ class Core_Service_View(Master_View):
             return response
 
         @self.__app.get('/home/hot_hashtag_feed')
-        def get_hot_hashtag_feed(request:Request, hashtag:Optional[int]):
+        def get_hot_hashtag_feed(request:Request, hashtag:Optional[str]):
             request_manager = RequestManager()
             data_payload = HomeHashtagFeedRequest(hashtag=hashtag)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
@@ -131,20 +148,20 @@ class Core_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
         
-        #@self.__app.get('/home/realtime_best_hashtag')
-        #def get_hot_hashtag(request:Request):
-            #request_manager = RequestManager()
-            #data_payload = DummyRequest()
-            #request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
-            ##if not request_manager.jwt_payload.result:
-                ##raise request_manager.credentials_exception
+        @self.__app.get('/home/realtime_best_hashtag')
+        def get_realtime_best_hashtag(request:Request):
+            request_manager = RequestManager()
+            data_payload = DummyRequest()
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            #if not request_manager.jwt_payload.result:
+                #raise request_manager.credentials_exception
 
-            #home_controller=Home_Controller()
-            #model = home_controller.get_hot_hashtag(database=self.__database,
-                                                        #request=request_manager)
-            #body_data = model.get_response_form_data(self._head_parser)
-            #response = request_manager.make_json_response(body_data=body_data)
-            #return response
+            home_controller=Home_Controller()
+            model = home_controller.get_realtime_best_hashtag(database=self.__database,
+                                                        request=request_manager)
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
 
 
         # 최애를 검색하는 보편적인 함수

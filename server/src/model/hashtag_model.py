@@ -27,7 +27,12 @@ class HashTagModel(BaseModel):
         return
 
     def set_best_hash_tag(self):
-        self._hashtags["#에스파", "경민생카", "조슈아생일시", "Mantra", "제니"]
+        self._hashtags = ["#에스파", "경민생카", "조슈아생일시", "Mantra", "제니"]
+        return
+
+    def set_realtime_best_hash_tag(self):
+        self._hashtags = ["#에스파", "#경민생카", "#조슈아생일시", "#Mantra", "#제니",
+                        "#오뱅온", "#지스타", "#숲인방", "#버츄얼하꼬", "#가을야구"]
         return
 
     def get_response_form_data(self, head_parser):
