@@ -117,7 +117,7 @@ class Core_Service_View(Master_View):
         @self.__app.get('/home/hot_hashtag_feed')
         def get_hot_hashtag_feed(request:Request, hashtag:Optional[int]):
             request_manager = RequestManager()
-            data_payload = HomeHashtagFeedRequest()
+            data_payload = HomeHashtagFeedRequest(hashtag=hashtag)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
                 #raise request_manager.credentials_exception
@@ -131,7 +131,7 @@ class Core_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
         
-        #@self.__app.get('/home/hot_hashtag')
+        #@self.__app.get('/home/realtime_best_hashtag')
         #def get_hot_hashtag(request:Request):
             #request_manager = RequestManager()
             #data_payload = DummyRequest()
