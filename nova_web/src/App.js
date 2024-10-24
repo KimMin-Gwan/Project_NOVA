@@ -43,7 +43,6 @@ import FindPwChange from "./pages/FindPw/FindPwChange.js";
 import MainPart from "./pages/MainPage/MainPart.js";
 import PopularFeed from "./pages/MainPage/PopularFeed.js";
 import IncreaseTag from "./pages/MainPage/IncreaseTag.js";
-
 // 401 이면 바이어스 격자 무늬로 띄우기
 // 401 이면 alert - 로그인 필요 문구 띄우기
 
