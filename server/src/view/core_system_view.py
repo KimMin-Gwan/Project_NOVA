@@ -98,43 +98,54 @@ class Core_Service_View(Master_View):
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response
-        
-        #@self.__app.get('/home/home_feed')
-        #def new_contentes():
-            #data = ["1", "2", "3", "4"]
-            #return data
 
-        ## 회원의 bias의 리그를 받아내는 앤드 포인트 (post)
-        #@self.__app.post('/home/my_bias_league')
-        #def my_bias_leagues(raw_request:dict):
-            #request = MyLeagueRequest(request=raw_request)
-            #core_controller=Core_Controller()
-            #model = core_controller.get_my_bias_league(database=self.__database, request=request)
-            #response = model.get_response_form_data(self._head_parser)
-            #return response
+        @self.__app.get('/home/hot_hashtag')
+        def get_hot_hashtag(request:Request):
+            request_manager = RequestManager()
+            data_payload = DummyRequest()
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            #if not request_manager.jwt_payload.result:
+                #raise request_manager.credentials_exception
+
+            home_controller=Home_Controller()
+            model = home_controller.get_hot_hashtag(database=self.__database,
+                                                        request=request_manager)
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
+        @self.__app.get('/home/hot_hashtag_feed')
+        def get_hot_hashtag_feed(request:Request, hashtag:Optional[int]):
+            request_manager = RequestManager()
+            data_payload = HomeHashtagFeedRequest()
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            #if not request_manager.jwt_payload.result:
+                #raise request_manager.credentials_exception
+
+            home_controller=Feed_Controller()
+            model = home_controller.get_home_feed_data(database=self.__database,
+                                                        request=request_manager,
+                                                        feed_manager=self.__feed_manager)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
         
-        ## 메인화면에 전체 리그 보기에서 띄워줄 리그 이름 보내줘야됨
-        ## http://127.0.0.1:6000/home/league_data?league_type=solo
-        #@self.__app.get('/home/league_data')
-        #def show_leagues(league_type:Optional[str] = "solo"):
-            #request = LeagueTypeRequest(league_type=league_type)
+        #@self.__app.get('/home/hot_hashtag')
+        #def get_hot_hashtag(request:Request):
+            #request_manager = RequestManager()
+            #data_payload = DummyRequest()
+            #request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            ##if not request_manager.jwt_payload.result:
+                ##raise request_manager.credentials_exception
+
             #home_controller=Home_Controller()
-            #model = home_controller.get_league_meta_data(database=self.__database, request=request)
-            #response = model.get_response_form_data(self._head_parser)
+            #model = home_controller.get_hot_hashtag(database=self.__database,
+                                                        #request=request_manager)
+            #body_data = model.get_response_form_data(self._head_parser)
+            #response = request_manager.make_json_response(body_data=body_data)
             #return response
 
-        ## 리그 정보를 받아내는 기본적인 함수 (get)
-        ## 리그 정보를 받아내는 방법
-        ## http://127.0.0.1:6000/home/show_league?league_name=시리우스
-        ## http://127.0.0.1:6000/home/show_league?league_id=1001
-        ## http://127.0.0.1:6000/home/show_league?league_name=시리우스&league_id=1001
-        #@self.__app.get('/home/show_league')
-        #def show_leagues(league_name:Optional[str] = None, league_id:Optional[str] = None):
-            #request = LeagueRequest(league_name=league_name, league_id=league_id)
-            #core_controller=Core_Controller()
-            #model = core_controller.get_league(database=self.__database, request=request)
-            #response = model.get_response_form_data(self._head_parser)
-            #return response
 
         # 최애를 검색하는 보편적인 함수
         # 목적 : 나의 최애 선택하기, 홈화면의 최애 검색 기능
@@ -163,26 +174,10 @@ class Core_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
 
             return response
+        
 
-    
 
     def feed_route(self):
-        # feed의 메타 정보 반환
-        @self.__app.get('/feed_explore/feed_meta_data')
-        def get_feed_meta_data():
-            #request_manager = RequestManager()
-            #data_payload = DummyRequest()
-            #request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
-            #if not request_manager.jwt_payload.result:
-                #raise request_manager.credentials_exception
-
-            home_controller=Feed_Controller()
-            model = home_controller.get_feed_meta_data(database=self.__database,
-                                                        feed_manager=self.__feed_manager)
-
-            response = model.get_response_form_data(self._head_parser)
-            #response = request_manager.make_json_response(body_data=body_data)
-            return response
 
         # feed 데이터 받아오기( 위성 탐색 페이지에서 특정 fclass를 대상으로)
         @self.__app.get('/feed_explore/get_feed')
@@ -481,6 +476,10 @@ class SampleRequest(RequestHeader):
 class HomeFeedRequest(RequestHeader):
     def __init__(self, key) -> None:
         self.key = key
+
+class HomeHashtagFeedRequest(RequestHeader):
+    def __init__(self, hashtag) -> None:
+        self.hashtag = hashtag 
 
 class GetFeedRequest(RequestHeader):
     def __init__(self,fclass, key) -> None:

@@ -1,4 +1,4 @@
-from model import BannerModel, HomeBiasModel, BiasSearchModel, Local_Database, SelectBiasModel, LeagueMetaModel, TokenModel
+from model import BannerModel, HomeBiasModel, BiasSearchModel, Local_Database, SelectBiasModel, LeagueMetaModel, TokenModel, HashTagModel
 from others import UserNotExist, CustomError
 #from server.src.view.jwt_decoder import JWTManager, JWTPayload
 #from view import RequestManager
@@ -115,3 +115,15 @@ class Home_Controller:
 
         finally:
             return model
+        
+    # comment 좋아요 누르기
+    def get_hot_hashtag(self, database:Local_Database, request) -> HashTagModel:
+        model = HashTagModel(database=database)
+        model.set_user_with_email(request=request.jwt_payload)
+
+        if model.is_user_login():
+            model.set_bias_hash_tag()
+        else:
+            model.set_best_hash_tag()
+
+        return model

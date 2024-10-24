@@ -5,42 +5,6 @@ from others import CheckManager
 
 
 class Core_Controller:
-    def sample_func(self, database:Local_Database, request) -> BaseModel: 
-        jwt_decoder = JWTManager()
-        model = BaseModel(database=database)
-        try:
-            request_payload = jwt_decoder.decode(token=request.token)  # jwt payload(email 정보 포함됨)
-            # 로그인 만료 또는 토큰이 이상하면 그냥 냅다 리턴
-            if not request_payload.result:
-                model.set_state_code("499") # 재 로그인 요청
-                return model
-
-            # 유저가 있는지 확인
-            if not model.set_user_with_uid(request=request):
-                raise UserNotExist("Can not find User with uid")
-        except UserNotExist as e:
-            print("Error Catched : ", e)
-            model.set_state_code(e.error_code) # 유저가 없는 치명적인 오류
-            return model
-        try:
-            """
-            if not model.set_biases_with_bids():
-                model.set_state_code("210")
-                return model
-            """
-        except CustomError as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
-
-        except Exception as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
-
-        finally:
-            return model
-        
-
-        
     # 나의 바이어스 정보를 뽑아오는 방법
     def get_my_bias_league(self, database:Local_Database, request): 
         jwt_decoder = JWTManager()

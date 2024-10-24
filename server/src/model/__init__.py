@@ -8,3 +8,4 @@ from model.check_model import *
 from model.sub_model import *
 from model.administrator_models import *
 from model.feed_model import *
+from model.hashtag_model import *
