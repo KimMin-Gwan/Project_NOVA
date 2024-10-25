@@ -52,7 +52,7 @@ const SimpleSlider = ({ tagFeed }) => {
     arrows: false,
   };
 
-
+// style안붙은 것은 slider.css에서 수정
 
   return (
     <div className="slider-container">

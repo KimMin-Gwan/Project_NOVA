@@ -199,11 +199,9 @@ function App() {
             </div>
 
             <section className="contents">
-              <MainPart/>
-              <PopularFeed/>
-              <IncreaseTag/>
-
-              {/* <MainPart/> */}
+              <MainPart />
+              <PopularFeed />
+              <IncreaseTag />
             </section>
 
             <NavBar></NavBar>

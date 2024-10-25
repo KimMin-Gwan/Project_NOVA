@@ -23,6 +23,7 @@ export default function MainPart() {
       .then(data => {
         setBias(data.body);
         setBiasTag(data.body.hashtags);
+        console.log('41241515',data)
       })
   };
 
@@ -32,7 +33,7 @@ export default function MainPart() {
     })
       .then(response => response.json())
       .then(data => {
-        console.log(data);
+        console.log("14111",data);
         setTagFeed(data.body.feed);
       })
   }

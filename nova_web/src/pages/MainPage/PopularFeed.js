@@ -33,7 +33,7 @@ export default function PopularFeed() {
         {
           homeFeed.map((feed, i) => {
             return (
-              <div className={style["popular-feed"]}>
+              <div key={i} className={style["popular-feed"]}>
                 <div className={style["img-box"]}>img</div>
                 <div className={style["popular-main"]}>
                   <div className={style["tag-text"]}>
