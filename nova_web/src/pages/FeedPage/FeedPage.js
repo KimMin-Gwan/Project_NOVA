@@ -386,11 +386,37 @@ const FeedPage = () => {
                   <div>#해시태그</div>
                   <div className={style["feed-content"]}>{banner.body}</div>
 
-                  <div className={style["image-box"]}>
-                    <div className={style["image-show"]}>
+                  <div className={style['image-box']}>
+                    <div className={`${style["image-show"]} ${style['one-image']}`}>
                       <img src={banner.image[0]} alt="이미지" />
                     </div>
                   </div>
+
+                  {/* <div className={style["image-box"]}>
+                    <div className={style["image-show"]}>
+                      <img src={banner.image[0]} alt="이미지" />
+                      <img src={banner.image[0]} alt="이미지" />
+                      <img src={banner.image[0]} alt="이미지" />
+                      <img src={banner.image[0]} alt="이미지" />
+                    </div>
+                  </div> */}
+
+                  {/* <div className={style['image-box']}>
+                    <div className={`${style["image-show"]} ${style['two-image']}`}>
+                      <img src={banner.image[0]} alt="이미지" />
+                      <img src={banner.image[0]} alt="이미지" />
+                    </div>
+                  </div> */}
+
+                  {/* <div className={style['image-box']}>
+                    <div className={`${style["image-show"]} ${style['three-image']}`}>
+                      <img src={banner.image[0]} alt="이미지" />
+                      <img src={banner.image[0]} alt="이미지" />
+                      <img src={banner.image[0]} alt="이미지" />
+                    </div>
+                  </div> */}
+
+
                   <div className={style["fclass-box"]}>
                     {banner.fclass === "multiple" && <MultiClass feed={banner} handleInteraction={handleInteraction} />}
                     {banner.fclass === "card" && <CardClass feed={banner} handleInteraction={handleInteraction} />}
