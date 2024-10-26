@@ -43,6 +43,7 @@ import FindPwChange from "./pages/FindPw/FindPwChange.js";
 import MainPart from "./pages/MainPage/MainPart.js";
 import PopularFeed from "./pages/MainPage/PopularFeed.js";
 import IncreaseTag from "./pages/MainPage/IncreaseTag.js";
+import FeedHashList from "./pages/FeedList/FeedHashList.js";
 // 401 이면 바이어스 격자 무늬로 띄우기
 // 401 이면 alert - 로그인 필요 문구 띄우기
 
@@ -140,6 +141,7 @@ function App() {
       <Route path="/novalogin" element={<NOVALogin />}></Route>
       <Route path="/find_pw" element={<FindPw />}></Route>
       <Route path="/find_pw_change" element={<FindPwChange />}></Route>
+      <Route path="/feed_hash_list" element={<FeedHashList />}></Route>
       <Route
         path="/"
         element={
@@ -160,7 +162,7 @@ function App() {
                     navigate("/");
                   }}
                 >
-                  <img src={logo} alt='logo'></img>
+                  <img src={logo} alt="logo"></img>
                 </div>
                 <div className="buttons">
                   <button className="tool-button">
