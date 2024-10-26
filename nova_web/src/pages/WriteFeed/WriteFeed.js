@@ -18,7 +18,7 @@ const WriteFeed = () => {
         "endpoint": "/user_system/",
     };
 
-
+    const [imagePreview, setImagePreview] = useState(null);
 
     const [imageFile, setImageFile] = useState(null);
     const [bodyText, setBodyText] = useState(''); // 글 입력 내용 상태로 저장
@@ -27,11 +27,20 @@ const WriteFeed = () => {
 
     const handleFileChange = (event) => {
         const selectedFile = event.target.files[0];
-        if (selectedFile) {
+
+        if (selectedFile && selectedFile.type.startsWith("image/")) {
             setImageFile(selectedFile);
+            const reader = new FileReader();
+
+            reader.onload = () => {
+                setImagePreview(reader.result);
+            };
+
+            reader.readAsDataURL(selectedFile);
         } else {
+            alert('이미지 파일만 가능');
             setImageFile(null);
-        }
+        };
     };
 
     const handleSubmit = (event) => {
@@ -137,10 +146,17 @@ const WriteFeed = () => {
                         </div>
 
                         {/* <div className={`${style['write-image-box']}`}> */}
-                            {/* <div className={style['image-show']}> */}
-                                {/* <img src={back} alt="이미지" /> */}
-                                <input className={`${style['write-image-box']}`} type='file' onChange={handleFileChange}></input>
-                            {/* </div> */}
+                        {/* <div className={style['image-show']}> */}
+                        {/* <img src={back} alt="이미지" /> */}
+                        <input className={`${style['write-image-box']}`} type='file'
+                            accept='image/*'
+                            src={imagePreview}
+                            onChange={handleFileChange}></input>
+                        {
+                            imagePreview && (<img src={imagePreview} alt="미리보기" />)
+                        }
+                        {/* <input className={`${style['write-image-box']}`} type='file' onChange={handleFileChange}></input> */}
+                        {/* </div> */}
                         {/* </div> */}
 
                         <div className={style['fclass-box']}>
