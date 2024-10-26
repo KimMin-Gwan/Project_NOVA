@@ -104,20 +104,63 @@ function MoreSee() {
             <img src={isLogin ? mypage_icon : login_icon} alt="Arrow" className={style.vector_login} />
             <p className={style.bodyText_login}>{isLogin ? "마이페이지" : "로그인"}</p>
           </div>
+
+          <div className={style["list-bar"]}>노바 플랫폼</div>
           <hr></hr>
+          <ul className={style.listContainer}>
+            <li className={style.mainComponent} onClick={() => handleRequestURL(requestURL.naverform)}>
+              <img src={fav_icon} alt="Arrow" className={style.vector} />
+              <p className={style.bodyText}>전체 피드</p>
+              <img src={more_icon} alt="Arrow" className={style.more_vector} />
+            </li>
+            <li className={style.mainComponent} onClick={() => handlePage("/notice_list")}>
+              <img src={noti_icon} alt="Arrow" className={style.vector} />
+              <p className={style.bodyText}>숏피드</p>
+              <img src={more_icon} alt="Arrow" className={style.more_vector} />
+            </li>
+            <li className={style.mainComponent} onClick={() => handlePage("/terms_page")}>
+              <img src={terms_icon} alt="Arrow" className={style.vector} />
+              <p className={style.bodyText}>최근 인기 피드</p>
+              <img src={more_icon} alt="Arrow" className={style.more_vector} />
+            </li>
+            <li className={style.mainComponent}>
+              <img src={set_icon} alt="Arrow" className={style.vector} />
+              <p className={style.bodyText}>급상승 해시태그</p>
+              <img src={more_icon} alt="Arrow" className={style.more_vector} />
+            </li>
+            <li className={style.mainComponent}>
+              <img src={set_icon} alt="Arrow" className={style.vector} />
+              <p className={style.bodyText}>새로운 피드 작성</p>
+              <img src={more_icon} alt="Arrow" className={style.more_vector} />
+            </li>
+          </ul>
           <br></br>
-          <div className={style.row}>
-            <div className={style.fullWidthComponent} onClick={() => handlePage("/galaxy")}>
-              <img src={nova_league} alt="Arrow" className={style.vector_login} />
-              <p className={style.nova_text}>노바 리그</p>
-              <p className={style.bodyText_login}>바로가기</p>
-            </div>
-            <div className={style.fullWidthComponent}>
-              <img src={nova_funding} alt="Arrow" className={style.vector_login} />
-              <p className={style.nova_text}>노바 펀딩</p>
-              <p className={style.bodyText_login}>바로가기</p>
-            </div>
-          </div>
+          <div className={style["list-bar"]}>노바 펀딩</div>
+          <hr></hr>
+          <ul className={style.listContainer}>
+            <li className={style.mainComponent} onClick={() => handleRequestURL(requestURL.naverform)}>
+              <img src={fav_icon} alt="Arrow" className={style.vector} />
+              <p className={style.bodyText}>최애 펀딩</p>
+              <img src={more_icon} alt="Arrow" className={style.more_vector} />
+            </li>
+            <li className={style.mainComponent} onClick={() => handlePage("/notice_list")}>
+              <img src={noti_icon} alt="Arrow" className={style.vector} />
+              <p className={style.bodyText}>덕질 펀딩</p>
+              <img src={more_icon} alt="Arrow" className={style.more_vector} />
+            </li>
+            <li className={style.mainComponent} onClick={() => handlePage("/terms_page")}>
+              <img src={terms_icon} alt="Arrow" className={style.vector} />
+              <p className={style.bodyText}>이달의 펀딩 목록</p>
+              <img src={more_icon} alt="Arrow" className={style.more_vector} />
+            </li>
+            <li className={style.mainComponent}>
+              <img src={set_icon} alt="Arrow" className={style.vector} />
+              <p className={style.bodyText}>펀딩 가이드</p>
+              <img src={more_icon} alt="Arrow" className={style.more_vector} />
+            </li>
+          </ul>
+          <br></br>
+          <div className={style["list-bar"]}>정보</div>
           <hr></hr>
           <ul className={style.listContainer}>
             <li className={style.mainComponent} onClick={() => handleRequestURL(requestURL.naverform)}>
@@ -132,7 +175,7 @@ function MoreSee() {
             </li>
             <li className={style.mainComponent} onClick={() => handlePage("/terms_page")}>
               <img src={terms_icon} alt="Arrow" className={style.vector} />
-              <p className={style.bodyText}>사업자 정보 및 사용약관</p>
+              <p className={style.bodyText}>이용약관</p>
               <img src={more_icon} alt="Arrow" className={style.more_vector} />
             </li>
             <li className={style.mainComponent}>
