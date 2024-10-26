@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import style from "./MainPart.module.css";
 import SimpleSlider from "../../component/SimpleSlider";
-
+import more_icon from "./../../img/backword.png";
 export default function MainPart() {
   const [isActive, setIsActive] = useState(false); // 버튼의 상태를 관리
 
-  let [bias, setBias] = useState('');
+  let [bias, setBias] = useState("");
   let [biasTag, setBiasTag] = useState([]);
   let [tagFeed, setTagFeed] = useState([]);
-  let [hashTag, setHashTag] = useState('');
+  let [hashTag, setHashTag] = useState("");
 
   const handleClick = () => {
     fetchTagFeed();
@@ -16,33 +16,31 @@ export default function MainPart() {
   };
 
   function fetchHashTag() {
-    fetch('https://nova-platform.kr/home/hot_hashtag', {
-      credentials: 'include',
+    fetch("https://nova-platform.kr/home/hot_hashtag", {
+      credentials: "include",
     })
-      .then(response => response.json())
-      .then(data => {
+      .then((response) => response.json())
+      .then((data) => {
         setBias(data.body);
         setBiasTag(data.body.hashtags);
-        console.log('41241515',data)
-      })
-  };
+        console.log("41241515", data);
+      });
+  }
 
   function fetchTagFeed() {
     fetch(`https://nova-platform.kr/home/hot_hashtag_feed?hashtag=${hashTag}`, {
-      credentials: 'include',
+      credentials: "include",
     })
-      .then(response => response.json())
-      .then(data => {
-        console.log("14111",data);
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("14111", data);
         setTagFeed(data.body.feed);
-      })
+      });
   }
 
   useEffect(() => {
     fetchHashTag();
   }, []);
-
-
 
   return (
     <div className={style["wrap-container"]}>
@@ -50,31 +48,29 @@ export default function MainPart() {
         <div className={style["content-title"]}>
           {/* bid : ''이면 인기 해시태그
   -1이 아니면 [title] 관련 인기 해시트=ㅐ그 */}
-          <header>[ {bias.title} ] 관련 인기 해시태그</header>
-          <div>화살표</div>
+          <header className={style["header-text"]}>[ {bias.title} ] 관련 인기 해시태그</header>
+          <img src={more_icon} className={style["more-icon"]}></img>
         </div>
 
         <div className={style["tag-container"]}>
-          {
-            biasTag.map((tag, i) => {
-              return (
-                <button key={i}
-                  className={style["hashtag-text"]}
-                  onClick={() => {
-                    handleClick()
-                    setHashTag(tag);
-                  }}
-                  style={{
-                    backgroundColor: isActive ? "#D2C8F7" : "#373737",
-                    cursor: "pointer",
-                  }}
-                >
-                  #{tag}
-                </button>
-              )
-            })
-          }
-
+          {biasTag.map((tag, i) => {
+            return (
+              <button
+                key={i}
+                className={style["hashtag-text"]}
+                onClick={() => {
+                  handleClick();
+                  setHashTag(tag);
+                }}
+                style={{
+                  backgroundColor: isActive ? "#D2C8F7" : "#373737",
+                  cursor: "pointer",
+                }}
+              >
+                #{tag}
+              </button>
+            );
+          })}
         </div>
       </div>
 

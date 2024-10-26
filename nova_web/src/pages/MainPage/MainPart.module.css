@@ -25,9 +25,22 @@
   flex-grow: 2;
   width: 95%;
 }
+.header-text {
+  padding: 20px;
+}
 
+.more-icon {
+  width: 13px;
+  transform: scaleX(-1);
+  margin-right: 20px;
+}
 .tag-container {
+  display: flex;
   flex-grow: 1;
+  margin-top: 10px;
+  gap: 30px;
+  overflow-x: auto;
+  white-space: nowrap;
   /* width: 500px; */
   /* overflow: auto; */
 }
@@ -36,8 +49,11 @@
   background-color: #373737;
   color: #ffffff;
   border: 0;
-  border-radius: 10px;
-  padding: 5px 10px;
+  border-radius: 20px;
+  padding: 5px 20px;
+  min-width: 80px;
+
+  flex-shrink: 0;
 }
 
 .main-area {
@@ -84,7 +100,8 @@
 
 .text-container {
   justify-content: start;
-  margin-bottom: 60px;
+  margin-top: 40px;
+  margin-bottom: auto;
 }
 
 .tag-text {
@@ -92,7 +109,7 @@
   gap: 5px;
   .tag {
     color: #6c3bff;
-    font-size: 13px;
+    font-size: 15px;
   }
 }
 
@@ -174,7 +191,6 @@
   text-decoration: underline;
   margin-left: 40px;
 }
-
 
 .feed-container {
   width: 75%;
