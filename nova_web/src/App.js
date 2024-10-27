@@ -44,6 +44,7 @@ import MainPart from "./pages/MainPage/MainPart.js";
 import PopularFeed from "./pages/MainPage/PopularFeed.js";
 import IncreaseTag from "./pages/MainPage/IncreaseTag.js";
 import FeedHashList from "./pages/FeedList/FeedHashList.js";
+import FeedList from "./pages/FeedList/FeedList.js";
 // 401 이면 바이어스 격자 무늬로 띄우기
 // 401 이면 alert - 로그인 필요 문구 띄우기
 
@@ -142,6 +143,7 @@ function App() {
       <Route path="/find_pw" element={<FindPw />}></Route>
       <Route path="/find_pw_change" element={<FindPwChange />}></Route>
       <Route path="/feed_hash_list" element={<FeedHashList />}></Route>
+      <Route path="/feed_list" element={<FeedList />}></Route>
       <Route
         path="/"
         element={
