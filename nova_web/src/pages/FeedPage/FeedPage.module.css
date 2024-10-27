@@ -74,10 +74,46 @@
   background-color: #98a0ff;
 }
 
+/* 이미지 부분 */
+.image-container {
+  width: 100%;
+  height: 25%;
+  /* overflow: hidden; */
+  /* display: flex;
+  flex-direction: row; */
+  /* background-color: #98a0ff; */
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
 .image-box {
   margin-top: 10px;
-  height: 25%;
   margin-bottom: 10px;
+  height: 25%;
+  width: 100%;
+  /* background-color: blue; */
+}
+
+/* 기본 */
+.image-origin {
+  margin: 0 auto;
+  width: 100%;
+  height: 100%;
+}
+
+.image-origin>img{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+/* 5개 이상 이미지 */
+.five-over-image{
+  display: flex;
+  /* background-color: #d2c8f7; */
+  overflow-x: auto;
+  scrollbar-width: none;
 }
 
 /* 4개 이미지 */

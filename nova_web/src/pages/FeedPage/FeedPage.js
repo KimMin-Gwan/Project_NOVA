@@ -296,6 +296,12 @@ const FeedPage = () => {
       });
   }
 
+  let [nowIndex, setNowIndex] = useState(0);
+
+  function handleNext() {
+    setNowIndex((prevIndex) => prevIndex + 1);
+  };
+
   return (
     <div
       onMouseDown={handleMouseDown}
@@ -387,10 +393,23 @@ const FeedPage = () => {
                   <div className={style["feed-content"]}>{banner.body}</div>
 
                   <div className={style['image-box']}>
-                    <div className={`${style["image-show"]} ${style['one-image']}`}>
+                    <div
+                      className={`${style["image-origin"]} ${style['five-over-image']}`}>
+                      <img src={banner.image[0]} alt="이미지" />
+                      <img src={banner.image[0]} alt="이미지" />
+                      <img src={banner.image[0]} alt="이미지" />
+                      <img src={banner.image[0]} alt="이미지" />
+                      <img src={banner.image[0]} alt="이미지" />
                       <img src={banner.image[0]} alt="이미지" />
                     </div>
                   </div>
+
+
+                  {/* <div className={style['image-box']}>
+                    <div className={`${style["image-show"]} ${style['one-image']}`}>
+                      <img src={banner.image[0]} alt="이미지" />
+                    </div>
+                  </div> */}
 
                   {/* <div className={style["image-box"]}>
                     <div className={style["image-show"]}>
