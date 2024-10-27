@@ -4,14 +4,14 @@ import logo from "./../../img/NOVA.png";
 import menu from "./../../img/menu2.png";
 import Feed, { Comments } from "./../../component/feed";
 import { useNavigate } from "react-router-dom";
-export default function FeedHashList(isUserState) {
+export default function FeedList(isUserState) {
   const target = useRef(null);
   const observerRef = useRef(null);
   let [isLoading, setIsLoading] = useState(true);
-  let navigate = useNavigate();
+
   let [feedData, setFeedData] = useState([]);
   let [nextData, setNextData] = useState([]);
-  const [isActive, setIsActive] = useState(false);
+  let navigate = useNavigate();
   function fetchData() {
     // setIsLoading(true);
     fetch("https://nova-platform.kr/home/home_feed", {
@@ -92,10 +92,7 @@ export default function FeedHashList(isUserState) {
           </button>
         </div>
       </header>
-      <div class={style.title}>시연</div>
-      <div className={style["tag-container"]}>
-        <button className={style["hashtag-text"]}># 시연</button>
-      </div>
+      <div class={style.title}>최근 인기피드</div>
       <div className={style["scroll-area"]}>
         {feedData.map((feed, i) => {
           return <Feed key={feed.fid + i} className="" feed={feed} func={true} feedData={feedData} setFeedData={setFeedData} isUserState={isUserState}></Feed>;
