@@ -46,7 +46,6 @@ import IncreaseTag from "./pages/MainPage/IncreaseTag.js";
 import FeedHashList from "./pages/FeedList/FeedHashList.js";
 import FeedList from "./pages/FeedList/FeedList.js";
 import NovaFunding from "./pages/NovaFunding/NovaFunding.js";
-import useWindowDimensions from "./useWindwoDimension.js";
 // 401 이면 바이어스 격자 무늬로 띄우기
 // 401 이면 alert - 로그인 필요 문구 띄우기
 
@@ -115,229 +114,118 @@ function App() {
 
   let navigate = useNavigate();
 
-
-  const queryWidth = useWindowDimensions();
-
-
-  if(queryWidth <1090){
-    return (
-      <Routes>
-        <Route path="/write_feed" element={<WriteFeed />}></Route>
-        <Route path="/more_see" element={<MoreSee />}></Route>
-        <Route path="/test" element={<Box />}></Route>
-        <Route path="/planet" element={<PlanetList />}></Route>
-        <Route path="/galaxy" element={<GalaxyList />}></Route>
-        <Route path="/feed_page" element={<FeedPage />}></Route>
-        <Route path="/signup" element={<SignUp />}></Route>
-        <Route path="/terms_page" element={<Temrs />}></Route>
-        <Route path="/league_detail" element={<LeaguePage />}></Route>
-        {/* <Route path='/league_detail' element={<LeagueDetail />}></Route> */}
-        <Route path="/notice" element={<NoticeList />} />
-        {/* Dynamic Route for Notice Details */}
-        <Route path="/notice/:nid" element={<Notice />} />
-        <Route path="/my_write_feed" element={<MyWriteFeed />} />
-        <Route path="/my_interest_feed" element={<MyInterestFeed />} />
-        <Route path="/my_comment_feed" element={<MyCommentFeed />} />
-        <Route path="/my_active_feed" element={<MyActiveFeed />} />
-        <Route path="/my_alerts" element={<MyAlert />} />
-        <Route path="/notice_list" element={<NoticeList />}></Route>
-        <Route path="/select_bias" element={<SelectBias />}></Route>
-        <Route path="/namecard" element={<NameCard />}></Route>
-        <Route path="/mypage" element={<MyPage />}></Route>
-        <Route path="/bias_certify" element={<BiasCertify />}></Route>
-        <Route path="/bias_info/user_contribution" element={<BiasDetail />}></Route>
-        <Route path="/novalogin" element={<NOVALogin />}></Route>
-        <Route path="/find_pw" element={<FindPw />}></Route>
-        <Route path="/find_pw_change" element={<FindPwChange />}></Route>
-        <Route path="/feed_hash_list" element={<FeedHashList />}></Route>
-        <Route path="/feed_list" element={<FeedList />}></Route>
-        <Route path="/nova_funding" element={<NovaFunding />}></Route>
-        <Route
-          path="/"
-          element={
-            <div className="all-box">
-              <div
-                onClick={(e) => {
-                  e.stopPropagation();
-                  if (showBox) {
-                    setShowBox(false);
-                  }
-                }}
-                className={`container ${blackBox}`}
-              >
-                <div className="top-area">
-                  <header className="header">
-                    <div
-                      className="logo"
-                      onClick={() => {
-                        navigate("/");
-                      }}
-                    >
-                      <img src={logo} alt="logo"></img>
-                    </div>
-                    <div className="buttons">
-                      <button className="tool-button">
-                        <img
-                          src={menu}
-                          alt="menu"
-                          onClick={() => {
-                            navigate("/more_see");
-                          }}
-                        ></img>
-                      </button>
-                      {/* <Link to='/' className='button'>홈</Link> */}
-                      {/* <Link to='/namecard' className='button'>명함</Link> */}
-                      {/* <Link to='/test' className='button'>테스트</Link> */}
-                      {/* <Link to='/write_feed' className='button'>글쓰기</Link> */}
-                      {/* <Link to='/planet' className='button'>행성페이지</Link>
+  return (
+    <Routes>
+      <Route path="/write_feed" element={<WriteFeed />}></Route>
+      <Route path="/more_see" element={<MoreSee />}></Route>
+      <Route path="/test" element={<Box />}></Route>
+      <Route path="/planet" element={<PlanetList />}></Route>
+      <Route path="/galaxy" element={<GalaxyList />}></Route>
+      <Route path="/feed_page" element={<FeedPage />}></Route>
+      <Route path="/signup" element={<SignUp />}></Route>
+      <Route path="/terms_page" element={<Temrs />}></Route>
+      <Route path="/league_detail" element={<LeaguePage />}></Route>
+      {/* <Route path='/league_detail' element={<LeagueDetail />}></Route> */}
+      <Route path="/notice" element={<NoticeList />} />
+      {/* Dynamic Route for Notice Details */}
+      <Route path="/notice/:nid" element={<Notice />} />
+      <Route path="/my_write_feed" element={<MyWriteFeed />} />
+      <Route path="/my_interest_feed" element={<MyInterestFeed />} />
+      <Route path="/my_comment_feed" element={<MyCommentFeed />} />
+      <Route path="/my_active_feed" element={<MyActiveFeed />} />
+      <Route path="/my_alerts" element={<MyAlert />} />
+      <Route path="/notice_list" element={<NoticeList />}></Route>
+      <Route path="/select_bias" element={<SelectBias />}></Route>
+      <Route path="/namecard" element={<NameCard />}></Route>
+      <Route path="/mypage" element={<MyPage />}></Route>
+      <Route path="/bias_certify" element={<BiasCertify />}></Route>
+      <Route path="/bias_info/user_contribution" element={<BiasDetail />}></Route>
+      <Route path="/novalogin" element={<NOVALogin />}></Route>
+      <Route path="/find_pw" element={<FindPw />}></Route>
+      <Route path="/find_pw_change" element={<FindPwChange />}></Route>
+      <Route path="/feed_hash_list" element={<FeedHashList />}></Route>
+      <Route path="/feed_list" element={<FeedList />}></Route>
+      <Route path="/nova_funding" element={<NovaFunding />}></Route>
+      <Route
+        path="/"
+        element={
+          <div className="all-box">
+            <section className="contents com1">
+              <IncreaseTag />
+            </section>
+            <div
+              onClick={(e) => {
+                e.stopPropagation();
+                if (showBox) {
+                  setShowBox(false);
+                }
+              }}
+              className={`container ${blackBox}`}
+            >
+              <div className="top-area">
+                <header className="header">
+                  <div
+                    className="logo"
+                    onClick={() => {
+                      navigate("/");
+                    }}
+                  >
+                    <img src={logo} alt="logo"></img>
+                  </div>
+                  <div className="buttons">
+                    <button className="tool-button">
+                      <img
+                        src={menu}
+                        alt="menu"
+                        onClick={() => {
+                          navigate("/more_see");
+                        }}
+                      ></img>
+                    </button>
+                    {/* <Link to='/' className='button'>홈</Link> */}
+                    {/* <Link to='/namecard' className='button'>명함</Link> */}
+                    {/* <Link to='/test' className='button'>테스트</Link> */}
+                    {/* <Link to='/write_feed' className='button'>글쓰기</Link> */}
+                    {/* <Link to='/planet' className='button'>행성페이지</Link>
                   <Link to='/galaxy' className='button'>은하페이지</Link>
                   <Link to='/feed_page' className='button'>피드페이지</Link>
                   <Link to='/signup' className='button'>회원가입</Link>
                   <Link to='/league_detail' className='button'>리그 자세히보기</Link>
                   <Link to='/novalogin' className='button'>로그인 페이지</Link> */}
-                      {/* <Link to='/mypage' className='button'>마이페이지</Link> */}
-                      {/* <Link to='/bias_certify' className='button'>최애 지지하기</Link> */}
-                      {/* <Link to='/league_detail' className='button'>리그상세페이지</Link> */}
-                      {/* <Link to='/select_bias' className='button'>최애선택</Link> */}
-                      {/* <Link to='/mybias' className='button'>최애페이지</Link> */}
-                    </div>
-                  </header>
-                  <Banner url={url}></Banner>
+                    {/* <Link to='/mypage' className='button'>마이페이지</Link> */}
+                    {/* <Link to='/bias_certify' className='button'>최애 지지하기</Link> */}
+                    {/* <Link to='/league_detail' className='button'>리그상세페이지</Link> */}
+                    {/* <Link to='/select_bias' className='button'>최애선택</Link> */}
+                    {/* <Link to='/mybias' className='button'>최애페이지</Link> */}
+                  </div>
+                </header>
+                <Banner url={url}></Banner>
 
-                  <h2 className="authen">인증하기</h2>
+                <h2 className="authen">인증하기</h2>
 
-                  <section className="my-bias">
-                    <MyBias url={url} showBox={showBox} blackBox={blackBox}></MyBias>
-                  </section>
-                </div>
-
-                <section className="contents">
-                  <MainPart />
-                  <PopularFeed />
-                  <IncreaseTag />
+                <section className="my-bias">
+                  <MyBias url={url} showBox={showBox} blackBox={blackBox}></MyBias>
                 </section>
-
-                <NavBar></NavBar>
               </div>
-            </div>
-          }
-        />
-      </Routes>
-    );
 
-  }else{
-    return (
-      <Routes>
-        <Route path="/write_feed" element={<WriteFeed />}></Route>
-        <Route path="/more_see" element={<MoreSee />}></Route>
-        <Route path="/test" element={<Box />}></Route>
-        <Route path="/planet" element={<PlanetList />}></Route>
-        <Route path="/galaxy" element={<GalaxyList />}></Route>
-        <Route path="/feed_page" element={<FeedPage />}></Route>
-        <Route path="/signup" element={<SignUp />}></Route>
-        <Route path="/terms_page" element={<Temrs />}></Route>
-        <Route path="/league_detail" element={<LeaguePage />}></Route>
-        {/* <Route path='/league_detail' element={<LeagueDetail />}></Route> */}
-        <Route path="/notice" element={<NoticeList />} />
-        {/* Dynamic Route for Notice Details */}
-        <Route path="/notice/:nid" element={<Notice />} />
-        <Route path="/my_write_feed" element={<MyWriteFeed />} />
-        <Route path="/my_interest_feed" element={<MyInterestFeed />} />
-        <Route path="/my_comment_feed" element={<MyCommentFeed />} />
-        <Route path="/my_active_feed" element={<MyActiveFeed />} />
-        <Route path="/my_alerts" element={<MyAlert />} />
-        <Route path="/notice_list" element={<NoticeList />}></Route>
-        <Route path="/select_bias" element={<SelectBias />}></Route>
-        <Route path="/namecard" element={<NameCard />}></Route>
-        <Route path="/mypage" element={<MyPage />}></Route>
-        <Route path="/bias_certify" element={<BiasCertify />}></Route>
-        <Route path="/bias_info/user_contribution" element={<BiasDetail />}></Route>
-        <Route path="/novalogin" element={<NOVALogin />}></Route>
-        <Route path="/find_pw" element={<FindPw />}></Route>
-        <Route path="/find_pw_change" element={<FindPwChange />}></Route>
-        <Route path="/feed_hash_list" element={<FeedHashList />}></Route>
-        <Route path="/feed_list" element={<FeedList />}></Route>
-        <Route path="/nova_funding" element={<NovaFunding />}></Route>
-        <Route
-          path="/"
-          element={
-            <div className="all-box">
               <section className="contents">
+                <MainPart />
+                <PopularFeed />
                 <IncreaseTag />
               </section>
-              <div
-                onClick={(e) => {
-                  e.stopPropagation();
-                  if (showBox) {
-                    setShowBox(false);
-                  }
-                }}
-                className={`container ${blackBox}`}
-              >
-                <div className="top-area">
-                  <header className="header">
-                    <div
-                      className="logo"
-                      onClick={() => {
-                        navigate("/");
-                      }}
-                    >
-                      <img src={logo} alt="logo"></img>
-                    </div>
-                    <div className="buttons">
-                      <button className="tool-button">
-                        <img
-                          src={menu}
-                          alt="menu"
-                          onClick={() => {
-                            navigate("/more_see");
-                          }}
-                        ></img>
-                      </button>
-                      {/* <Link to='/' className='button'>홈</Link> */}
-                      {/* <Link to='/namecard' className='button'>명함</Link> */}
-                      {/* <Link to='/test' className='button'>테스트</Link> */}
-                      {/* <Link to='/write_feed' className='button'>글쓰기</Link> */}
-                      {/* <Link to='/planet' className='button'>행성페이지</Link>
-                  <Link to='/galaxy' className='button'>은하페이지</Link>
-                  <Link to='/feed_page' className='button'>피드페이지</Link>
-                  <Link to='/signup' className='button'>회원가입</Link>
-                  <Link to='/league_detail' className='button'>리그 자세히보기</Link>
-                  <Link to='/novalogin' className='button'>로그인 페이지</Link> */}
-                      {/* <Link to='/mypage' className='button'>마이페이지</Link> */}
-                      {/* <Link to='/bias_certify' className='button'>최애 지지하기</Link> */}
-                      {/* <Link to='/league_detail' className='button'>리그상세페이지</Link> */}
-                      {/* <Link to='/select_bias' className='button'>최애선택</Link> */}
-                      {/* <Link to='/mybias' className='button'>최애페이지</Link> */}
-                    </div>
-                  </header>
-                  <Banner url={url}></Banner>
 
-                  <h2 className="authen">인증하기</h2>
-
-                  <section className="my-bias">
-                    <MyBias url={url} showBox={showBox} blackBox={blackBox}></MyBias>
-                  </section>
-                </div>
-
-                <section className="contents">
-                  <MainPart />
-                  <PopularFeed />
-                  <IncreaseTag />
-                </section>
-
-                <NavBar></NavBar>
-              </div>
-              <section className="contents">
-                <IncreaseTag />
-              </section>
+              <NavBar></NavBar>
             </div>
-          }
-        />
-      </Routes>
-    );
+            <section className="contents com1">
+              <IncreaseTag />
+            </section>
+          </div>
+        }
+      />
+    </Routes>
+  );
 
-    }
 }
+
 
 export default App;
