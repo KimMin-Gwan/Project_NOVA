@@ -55,6 +55,22 @@ function App() {
   // let type = ['solo', 'group'];
 
   let [isUserState, setIsUserState] = useState(false);
+  const getWindowDimensions = () => {
+    const { innerWidth: width, innerHeight: height } = window;
+    return width;
+  };
+
+  const useWindowDimensions = () => {
+    const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
+    useEffect(() => {
+      const handleResize = () => {
+        setWindowDimensions(getWindowDimensions());
+      };
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
+    }, []);
+    return windowDimensions;
+  };
 
   function handleValidCheck() {
     fetch("https://nova-platform.kr/home/is_valid", {
@@ -149,68 +165,76 @@ function App() {
       <Route
         path="/"
         element={
-          <div
-            onClick={(e) => {
-              e.stopPropagation();
-              if (showBox) {
-                setShowBox(false);
-              }
-            }}
-            className={`container ${blackBox}`}
-          >
-            <div className="top-area">
-              <header className="header">
-                <div
-                  className="logo"
-                  onClick={() => {
-                    navigate("/");
-                  }}
-                >
-                  <img src={logo} alt="logo"></img>
-                </div>
-                <div className="buttons">
-                  <button className="tool-button">
-                    <img
-                      src={menu}
-                      alt="menu"
-                      onClick={() => {
-                        navigate("/more_see");
-                      }}
-                    ></img>
-                  </button>
-                  {/* <Link to='/' className='button'>홈</Link> */}
-                  {/* <Link to='/namecard' className='button'>명함</Link> */}
-                  {/* <Link to='/test' className='button'>테스트</Link> */}
-                  {/* <Link to='/write_feed' className='button'>글쓰기</Link> */}
-                  {/* <Link to='/planet' className='button'>행성페이지</Link>
+          <div className="all-box">
+            <section className="contents">
+              <IncreaseTag />
+            </section>
+            <div
+              onClick={(e) => {
+                e.stopPropagation();
+                if (showBox) {
+                  setShowBox(false);
+                }
+              }}
+              className={`container ${blackBox}`}
+            >
+              <div className="top-area">
+                <header className="header">
+                  <div
+                    className="logo"
+                    onClick={() => {
+                      navigate("/");
+                    }}
+                  >
+                    <img src={logo} alt="logo"></img>
+                  </div>
+                  <div className="buttons">
+                    <button className="tool-button">
+                      <img
+                        src={menu}
+                        alt="menu"
+                        onClick={() => {
+                          navigate("/more_see");
+                        }}
+                      ></img>
+                    </button>
+                    {/* <Link to='/' className='button'>홈</Link> */}
+                    {/* <Link to='/namecard' className='button'>명함</Link> */}
+                    {/* <Link to='/test' className='button'>테스트</Link> */}
+                    {/* <Link to='/write_feed' className='button'>글쓰기</Link> */}
+                    {/* <Link to='/planet' className='button'>행성페이지</Link>
                 <Link to='/galaxy' className='button'>은하페이지</Link>
                 <Link to='/feed_page' className='button'>피드페이지</Link>
                 <Link to='/signup' className='button'>회원가입</Link>
                 <Link to='/league_detail' className='button'>리그 자세히보기</Link>
                 <Link to='/novalogin' className='button'>로그인 페이지</Link> */}
-                  {/* <Link to='/mypage' className='button'>마이페이지</Link> */}
-                  {/* <Link to='/bias_certify' className='button'>최애 지지하기</Link> */}
-                  {/* <Link to='/league_detail' className='button'>리그상세페이지</Link> */}
-                  {/* <Link to='/select_bias' className='button'>최애선택</Link> */}
-                  {/* <Link to='/mybias' className='button'>최애페이지</Link> */}
-                </div>
-              </header>
-              <Banner url={url}></Banner>
+                    {/* <Link to='/mypage' className='button'>마이페이지</Link> */}
+                    {/* <Link to='/bias_certify' className='button'>최애 지지하기</Link> */}
+                    {/* <Link to='/league_detail' className='button'>리그상세페이지</Link> */}
+                    {/* <Link to='/select_bias' className='button'>최애선택</Link> */}
+                    {/* <Link to='/mybias' className='button'>최애페이지</Link> */}
+                  </div>
+                </header>
+                <Banner url={url}></Banner>
 
-              <h2 className="authen">인증하기</h2>
+                <h2 className="authen">인증하기</h2>
 
-              <section className="my-bias">
-                <MyBias url={url} showBox={showBox} blackBox={blackBox}></MyBias>
+                <section className="my-bias">
+                  <MyBias url={url} showBox={showBox} blackBox={blackBox}></MyBias>
+                </section>
+              </div>
+
+              <section className="contents">
+                <MainPart />
+                <PopularFeed />
+                <IncreaseTag />
               </section>
-            </div>
 
+              <NavBar></NavBar>
+            </div>
             <section className="contents">
-              <MainPart />
-              <PopularFeed />
               <IncreaseTag />
             </section>
-
-            <NavBar></NavBar>
           </div>
         }
       />
