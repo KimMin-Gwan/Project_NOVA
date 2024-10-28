@@ -26,7 +26,7 @@ class Core_Service_View(Master_View):
         self.__feed_manager = feed_manager
         self.home_route(endpoint)
         self.check_route()
-        self.web_chatting_route(endpoint)
+        #self.web_chatting_route(endpoint)
         self.feed_route()
 
     def home_route(self, endpoint:str):
