@@ -422,62 +422,62 @@ class Core_Service_View(Master_View):
             return html
         
 
-    def web_chatting_route(self, endpoint:str):
-        #채팅서버
-        #@self.__app.get('/chatting_list')
-        #def get_chatting_list():
-            #core_controller=Core_Controller()
-            #model = core_controller.get_chatting_data(database=self.__database,)
+    #def web_chatting_route(self, endpoint:str):
+        ##채팅서버
+        ##@self.__app.get('/chatting_list')
+        ##def get_chatting_list():
+            ##core_controller=Core_Controller()
+            ##model = core_controller.get_chatting_data(database=self.__database,)
+            ##response = model.get_response_form_data(self._head_parser)
+            ##return response
+            
+        ##@self.__app.websocket('/chatting')
+        ##async def chatting_socket(websocket:WebSocket):
+            ##self.manager = ConnectionManager()
+            ##core_controller=Core_Controller()
+            ##await self.manager.connect(websocket)
+            ##try:
+                ##while True:
+                    ###{"token":"token"."message":"msg"}
+                    ##request = await websocket.receive_text()
+                    ##model = core_controller.chatting(database=self.__database, request=request)
+                    ##if model.get_check() == True:
+                        ##await self.manager.broadcast(f"{model._user.uname} :{model.get_chat_data().message}")
+                    ##else:
+                        ##continue
+                
+            ##except WebSocketDisconnect:
+                ##self.manager.disconnect(websocket)
+            ###    await self.manager.broadcast("client disconnected")
+
+        ## 최애를 검색하는 보편적인 함수
+        ## 목적 : 나의 최애 선택하기, 홈화면의 최애 검색 기능
+        ##"http://127.0.0.1:6000/home/search_bias?bias_name=김"  # bias 검색
+        #@self.__app.get('/league_detail/league_meta_data')
+        #def get_league_meta_data():
+            #home_controller=Home_Controller()
+            #model = home_controller.get_league_meta_data(database=self.__database, league_manager=self.__league_manager)
             #response = model.get_response_form_data(self._head_parser)
             #return response
-            
-        #@self.__app.websocket('/chatting')
-        #async def chatting_socket(websocket:WebSocket):
-            #self.manager = ConnectionManager()
-            #core_controller=Core_Controller()
-            #await self.manager.connect(websocket)
+
+        #@self.__app.websocket('/league_detail/league_data')
+        #async def league_socket(websocket:WebSocket, league_name:Optional[str] = ""):
             #try:
-                #while True:
-                    ##{"token":"token"."message":"msg"}
-                    #request = await websocket.receive_text()
-                    #model = core_controller.chatting(database=self.__database, request=request)
-                    #if model.get_check() == True:
-                        #await self.manager.broadcast(f"{model._user.uname} :{model.get_chat_data().message}")
-                    #else:
-                        #continue
+                #if league_name == "":
+                    #return
+                #observer = await self.__connection_manager.connect(lname=league_name,
+                                                                     #websocket=websocket,
+                                                                     #league_manager=self.__league_manager,
+                                                                     #)
+                #result = await observer.send_operation()
+                #if not result:
+                    #self.__connection_manager.disconnect(observer=observer)
+
+            #except ConnectionClosedError:
+                #self.__connection_manager.disconnect(observer=observer)
                 
             #except WebSocketDisconnect:
-                #self.manager.disconnect(websocket)
-            ##    await self.manager.broadcast("client disconnected")
-
-        # 최애를 검색하는 보편적인 함수
-        # 목적 : 나의 최애 선택하기, 홈화면의 최애 검색 기능
-        #"http://127.0.0.1:6000/home/search_bias?bias_name=김"  # bias 검색
-        @self.__app.get('/league_detail/league_meta_data')
-        def get_league_meta_data():
-            home_controller=Home_Controller()
-            model = home_controller.get_league_meta_data(database=self.__database, league_manager=self.__league_manager)
-            response = model.get_response_form_data(self._head_parser)
-            return response
-
-        @self.__app.websocket('/league_detail/league_data')
-        async def league_socket(websocket:WebSocket, league_name:Optional[str] = ""):
-            try:
-                if league_name == "":
-                    return
-                observer = await self.__connection_manager.connect(lname=league_name,
-                                                                     websocket=websocket,
-                                                                     league_manager=self.__league_manager,
-                                                                     )
-                result = await observer.send_operation()
-                if not result:
-                    self.__connection_manager.disconnect(observer=observer)
-
-            except ConnectionClosedError:
-                self.__connection_manager.disconnect(observer=observer)
-                
-            except WebSocketDisconnect:
-                self.__connection_manager.disconnect(observer=observer)
+                #self.__connection_manager.disconnect(observer=observer)
 
 class DummyRequest():
     def __init__(self) -> None:
