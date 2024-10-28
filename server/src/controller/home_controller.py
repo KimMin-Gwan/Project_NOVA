@@ -118,7 +118,9 @@ class Home_Controller:
         
     def get_hot_hashtag(self, database:Local_Database, request) -> HashTagModel:
         model = HashTagModel(database=database)
-        model.set_user_with_email(request=request.jwt_payload)
+
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
 
         if model.is_user_login():
             model.set_bias_hash_tag()
