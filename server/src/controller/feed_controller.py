@@ -27,15 +27,11 @@ class Feed_Controller:
                             request , feed_manager:FeedManager):
         model = FeedModel(database=database)
         try:
-            print("1")
 
             # 유저가 있으면 세팅
             if request.jwt_payload != "":
-                print("2")
                 model.set_user_with_email(request=request.jwt_payload)
-            print("3")
             model.set_home_feed_data(feed_manager=feed_manager, key=-4)
-            print("4")
 
         except CustomError as e:
             print("Error Catched : ", e.error_type)
