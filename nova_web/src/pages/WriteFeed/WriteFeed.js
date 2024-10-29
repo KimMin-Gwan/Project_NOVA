@@ -18,7 +18,8 @@ const WriteFeed = () => {
         "endpoint": "/user_system/",
     };
 
-    const [imagePreview, setImagePreview] = useState(null);
+    const [imagePreview, setImagePreview] = useState([]);
+    const [imageFiles, setImageFiles] = useState([]);
 
     const [imageFile, setImageFile] = useState(null);
     const [bodyText, setBodyText] = useState(''); // 글 입력 내용 상태로 저장
@@ -26,21 +27,38 @@ const WriteFeed = () => {
     // const [isClickedBtn, setIsClickedBtn] = useState('card'); // 버튼 클릭 상태
 
     const handleFileChange = (event) => {
-        const selectedFile = event.target.files[0];
+        // const selectedFile = event.target.files[0];
+        const selectedFile = Array.from(event.target.files);
+        const validFiles = selectedFile.filter((file) =>
+            file.type.startsWith("image/")
+        );
 
-        if (selectedFile && selectedFile.type.startsWith("image/")) {
-            setImageFile(selectedFile);
-            const reader = new FileReader();
+        if (validFiles.length < selectedFile.length) {
+            alert("이미지 파일만 가능")
+        }
 
-            reader.onload = () => {
-                setImagePreview(reader.result);
-            };
+        setImageFiles(validFiles);
 
-            reader.readAsDataURL(selectedFile);
-        } else {
-            alert('이미지 파일만 가능');
-            setImageFile(null);
-        };
+        const previewUrls = validFiles.map((file) => {
+            return URL.createObjectURL(file);
+        });
+
+        setImagePreview(previewUrls);
+        validFiles.forEach(file => URL.revokeObjectURL(file));
+
+        // if (selectedFile && selectedFile.type.startsWith("image/")) {
+        //     setImageFile(selectedFile);
+        //     const reader = new FileReader();
+
+        //     reader.onload = () => {
+        //         setImagePreview(reader.result);
+        //     };
+
+        //     reader.readAsDataURL(selectedFile);
+        // } else {
+        //     alert('이미지 파일만 가능');
+        //     setImageFile(null);
+        // };
     };
 
     const handleSubmit = (event) => {
@@ -57,8 +75,8 @@ const WriteFeed = () => {
         };
 
         const formData = new FormData();
-        if (imageFile) {
-            formData.append('image', imageFile);
+        if (imageFiles) {
+            formData.append('image', imageFiles);
         }
         formData.append('jsonData', JSON.stringify(send_data)); // JSON 데이터 추가
 
@@ -148,13 +166,40 @@ const WriteFeed = () => {
                         {/* <div className={`${style['write-image-box']}`}> */}
                         {/* <div className={style['image-show']}> */}
                         {/* <img src={back} alt="이미지" /> */}
-                        <input className={`${style['write-image-box']}`} type='file'
-                            accept='image/*'
-                            src={imagePreview}
-                            onChange={handleFileChange}></input>
-                        {
+                        <div className={`${style['write-image-box']}`}>
+                            <label className={style['upload_area']} htmlFor={style['upload-file']}>
+                                {/* 업로드 */}
+                                {imagePreview.length === 0 ? (
+                                    <div className={style['upload-text']}>
+                                        <div>이미지 삽입</div>
+                                        <div>PNG, SVG, JPG, WEPG, GIF 등</div>
+                                        <div>!</div>
+                                    </div>
+                                ) :
+                                    (
+                                        imagePreview.map((preview, index) => {
+                                            return (
+                                                <img key={index} src={preview} alt={`preview ${index}`}></img>
+                                            )
+                                        }))
+                                }
+
+                                {/* {imagePreview.length!==0 ?
+                                    <img src={imagePreview} alt='preview'></img> :
+                                    '업로드'
+                                } */}
+                            </label>
+                            <input
+                                id={style['upload-file']}
+                                type='file'
+                                accept='image/*'
+                                multiple
+                                onChange={handleFileChange}></input>
+
+                        </div>
+                        {/* {
                             imagePreview && (<img src={imagePreview} alt="미리보기" />)
-                        }
+                        } */}
                         {/* <input className={`${style['write-image-box']}`} type='file' onChange={handleFileChange}></input> */}
                         {/* </div> */}
                         {/* </div> */}
