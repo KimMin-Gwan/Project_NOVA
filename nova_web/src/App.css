@@ -8,8 +8,7 @@ body {
 
 .all-box {
   display: flex;
-  max-width: 1200px;
-
+  max-width: 1500px;
   margin: 0 auto;
 }
 
@@ -17,7 +16,13 @@ body {
   .com1 {
     display: none;
   }
-}
+
+  .all-box{
+    display: block;
+  }
+
+
+} 
 
 .white-title {
   color: white;
@@ -27,7 +32,7 @@ body {
   margin: 0 auto;
   width: 85%;
   height: 100px;
-  /* background-color: white; */
+  background-color: blue;
   color: white;
   display: flex;
   align-items: center;
@@ -45,7 +50,7 @@ body {
 
 .black-box {
   /* background-color: blue; */
-  background-color: rgba(0, 0, 0, 0.3);
+  /* background-color: rgba(0, 0, 0, 0.3); */
 }
 
 .top-area {
@@ -904,8 +909,7 @@ body {
 }
 
 /* 피드 영역 */
-.feed-area {
-}
+.feed-area {}
 
 .satellite-search {
   color: white;
