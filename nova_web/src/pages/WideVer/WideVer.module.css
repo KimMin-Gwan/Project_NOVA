@@ -1,0 +1,57 @@
+/* 양 옆 넓이 컨테이너 */
+
+.wrap_container {
+  height: 500px;
+  display: flex;
+  flex-direction: column;
+  color: white;
+  margin-bottom: 100px;
+  min-width: 300px;
+  gap: 20px;
+}
+
+/* 바로가기 */
+.direct-box {
+  background-color: #1e1e1e;
+  padding: 10px;
+  border-radius: 5px;
+}
+.direct-list {
+  list-style: none;
+}
+.direct-text {
+  border-bottom: 1px solid currentColor;
+  width: 80%;
+
+  margin-bottom: 15px;
+}
+
+/* 노바 펀딩 바로가기 */
+.go-nova {
+  background: #8d8d8d;
+  color: white;
+  border-radius: 5px;
+}
+
+/* 검색하기 */
+.search-box {
+  background-color: #1e1e1e;
+  padding: 8px;
+  border-radius: 5px;
+}
+.search-bar {
+  display: flex;
+  border: 1px solid white;
+  border-radius: 5px;
+  justify-content: space-between;
+  input {
+    background-color: #1e1e1e;
+    border: 0;
+  }
+}
+
+/* 광고 */
+.ad-container {
+  background-color: #afafaf;
+  color: white;
+}
