@@ -46,6 +46,8 @@ import IncreaseTag from "./pages/MainPage/IncreaseTag.js";
 import FeedHashList from "./pages/FeedList/FeedHashList.js";
 import FeedList from "./pages/FeedList/FeedList.js";
 import NovaFunding from "./pages/NovaFunding/NovaFunding.js";
+import LeftBar from "./pages/WideVer/LeftBar.js";
+import RightBar from "./pages/WideVer/RightBar.js";
 // 401 이면 바이어스 격자 무늬로 띄우기
 // 401 이면 alert - 로그인 필요 문구 띄우기
 
@@ -151,7 +153,7 @@ function App() {
         element={
           <div className="all-box">
             <section className="contents com1">
-              <IncreaseTag />
+              <LeftBar />
             </section>
             <div
               onClick={(e) => {
@@ -211,21 +213,23 @@ function App() {
               <section className="contents">
                 <MainPart />
                 <PopularFeed />
-                <IncreaseTag />
+                <div className="narrow-page">
+                  <IncreaseTag />
+                </div>
               </section>
 
-              <NavBar></NavBar>
+              <div className="narrow-page">
+                <NavBar></NavBar>
+              </div>
             </div>
             <section className="contents com1">
-              <IncreaseTag />
+              <RightBar />
             </section>
           </div>
         }
       />
     </Routes>
   );
-
 }
-
 
 export default App;

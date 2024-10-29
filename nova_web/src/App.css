@@ -13,12 +13,11 @@ body {
   margin: 0 auto;
 }
 
-@media(max-width:1000px) {
+@media (max-width: 1024px) {
   .com1 {
     display: none;
   }
 }
-
 
 .white-title {
   color: white;
@@ -905,7 +904,8 @@ body {
 }
 
 /* 피드 영역 */
-.feed-area {}
+.feed-area {
+}
 
 .satellite-search {
   color: white;
@@ -1086,4 +1086,10 @@ body {
 
 .contents {
   margin-top: 100px;
+}
+
+@media (min-width: 1024px) {
+  .narrow-page {
+    display: none;
+  }
 }
