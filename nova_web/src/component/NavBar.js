@@ -28,23 +28,39 @@ const NavBar = ({ isUserState }) => {
         <div className='bottom_bar'>
             <div className='nav_button_box'>
                 <button className='nav_button' onClick={() => window.location.reload()}>
-                    <img src={galaxy_img} className='btn_img' />
+                    <img src={galaxy_img} alt='home' className='btn_img' />
                     <p className='btn_text'>홈</p>
                 </button>
             </div>
+
             <div className='nav_button_box'>
                 <button className='nav_button'>
-                    <img src={new_feed} className='btn_img' />
-                    <p className='btn_text'>만들기</p>
+                    <img src={new_feed} alt='make' className='btn_img' />
+                    <p className='btn_text'>전체 피드</p>
                 </button>
             </div>
+
+            <div className='nav_button_box'>
+                <button className='nav_button'>
+                    <img src={new_feed} alt='make' className='btn_img' />
+                    <p className='btn_text'>피드 작성</p>
+                </button>
+            </div>
+
+            <div className='nav_button_box'>
+                <button className='nav_button'>
+                    <img src={new_feed} alt='make' className='btn_img' />
+                    <p className='btn_text'>탐색</p>
+                </button>
+            </div>
+
             <div className='nav_button_box'>
                 <button className='nav_button' onClick={(e) => {
                     handleNavigate('/feed_page')
                     handleStopClick(e)
                 }}>
-                    <img src={shortForm_img} className='btn_img' />
-                    <p className='btn_text'>쇼트폼</p>
+                    <img src={shortForm_img} alt='shorts' className='btn_img' />
+                    <p className='btn_text'>숏피드</p>
                 </button>
             </div>
         </div>

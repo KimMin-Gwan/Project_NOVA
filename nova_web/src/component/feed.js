@@ -238,10 +238,48 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                         {
                                             !img_circle &&
                                             <div className={style['home_feed_img']}>
-                                                <img src={feed.image[0]} />
-                                            </div>
-                                        }
+                                                {/* 5개이상 */}
+                                                <div className={style['image-box']}>
+                                                    <div
+                                                        className={`${style["image-origin"]} ${style['five-over-image']}`}>
+                                                        <img src={feed.image[0]} alt="이미지" />
+                                                        <img src={feed.image[0]} alt="이미지" />
+                                                        <img src={feed.image[0]} alt="이미지" />
+                                                        <img src={feed.image[0]} alt="이미지" />
+                                                        <img src={feed.image[0]} alt="이미지" />
+                                                        <img src={feed.image[0]} alt="이미지" />
+                                                    </div>
+                                                </div>
+                                                {/* 1개이미지 */}
+                                                {/* <img src={feed.image[0]} alt='img' /> */}
+                                                {/* 4개이미지 */}
+                                                {/* <div className={style['image-show']}>
+                                                    <img src={feed.image[0]} alt='img'/>
+                                                    <img src={feed.image[0]} alt='img'/>
+                                                    <img src={feed.image[0]} alt='img'/>
+                                                    <img src={feed.image[0]} alt='img'/>
+                                                </div> */}
 
+                                                {/* 3개이미지 */}
+                                                {/* <div className={style['image-box']}>
+                                                    <div className={`${style["image-show"]} ${style['three-image']}`}>
+                                                        <img src={feed.image[0]} alt="이미지" />
+                                                        <img src={feed.image[0]} alt="이미지" />
+                                                        <img src={feed.image[0]} alt="이미지" />
+                                                    </div>
+                                                </div> */}
+
+                                                {/* 2개이미지 */}
+                                                {/* <div className={style['image-box']}>
+                                                    <div className={`${style["image-show"]} ${style['two-image']}`}>
+                                                        <img src={feed.image[0]} alt="이미지" />
+                                                        <img src={feed.image[0]} alt="이미지" />
+                                                    </div>
+                                                </div> */}
+
+                                            </div>
+
+                                        }
                                     </>
                             }
                         </div>
@@ -345,7 +383,45 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                             {
                                                 !img_circle &&
                                                 <div className={style['home_feed_img']}>
-                                                    <img src={feed.image[0]} />
+                                                    {/* 5개이상 */}
+                                                    <div className={style['image-box']}>
+                                                        <div
+                                                            className={`${style["image-origin"]} ${style['five-over-image']}`}>
+                                                            <img src={feed.image[0]} alt="이미지" />
+                                                            <img src={feed.image[0]} alt="이미지" />
+                                                            <img src={feed.image[0]} alt="이미지" />
+                                                            <img src={feed.image[0]} alt="이미지" />
+                                                            <img src={feed.image[0]} alt="이미지" />
+                                                            <img src={feed.image[0]} alt="이미지" />
+                                                        </div>
+                                                    </div>
+                                                    {/* 1개이미지 */}
+                                                    {/* <img src={feed.image[0]} alt='img' /> */}
+                                                    {/* 4개이미지 */}
+                                                    {/* <div className={style['image-show']}>
+                                                    <img src={feed.image[0]} alt='img'/>
+                                                    <img src={feed.image[0]} alt='img'/>
+                                                    <img src={feed.image[0]} alt='img'/>
+                                                    <img src={feed.image[0]} alt='img'/>
+                                                </div> */}
+
+                                                    {/* 3개이미지 */}
+                                                    {/* <div className={style['image-box']}>
+                                                    <div className={`${style["image-show"]} ${style['three-image']}`}>
+                                                        <img src={feed.image[0]} alt="이미지" />
+                                                        <img src={feed.image[0]} alt="이미지" />
+                                                        <img src={feed.image[0]} alt="이미지" />
+                                                    </div>
+                                                </div> */}
+
+                                                    {/* 2개이미지 */}
+                                                    {/* <div className={style['image-box']}>
+                                                    <div className={`${style["image-show"]} ${style['two-image']}`}>
+                                                        <img src={feed.image[0]} alt="이미지" />
+                                                        <img src={feed.image[0]} alt="이미지" />
+                                                    </div>
+                                                </div> */}
+
                                                 </div>
                                             }
                                             <ol className={style['quiz_box']}>
@@ -509,7 +585,45 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                             {
                                                 !img_circle &&
                                                 <div className={style['home_feed_img']}>
-                                                    <img src={feed.image[0]} />
+                                                    {/* 5개이상 */}
+                                                    <div className={style['image-box']}>
+                                                        <div
+                                                            className={`${style["image-origin"]} ${style['five-over-image']}`}>
+                                                            <img src={feed.image[0]} alt="이미지" />
+                                                            <img src={feed.image[0]} alt="이미지" />
+                                                            <img src={feed.image[0]} alt="이미지" />
+                                                            <img src={feed.image[0]} alt="이미지" />
+                                                            <img src={feed.image[0]} alt="이미지" />
+                                                            <img src={feed.image[0]} alt="이미지" />
+                                                        </div>
+                                                    </div>
+                                                    {/* 1개이미지 */}
+                                                    {/* <img src={feed.image[0]} alt='img' /> */}
+                                                    {/* 4개이미지 */}
+                                                    {/* <div className={style['image-show']}>
+                                                    <img src={feed.image[0]} alt='img'/>
+                                                    <img src={feed.image[0]} alt='img'/>
+                                                    <img src={feed.image[0]} alt='img'/>
+                                                    <img src={feed.image[0]} alt='img'/>
+                                                </div> */}
+
+                                                    {/* 3개이미지 */}
+                                                    {/* <div className={style['image-box']}>
+                                                    <div className={`${style["image-show"]} ${style['three-image']}`}>
+                                                        <img src={feed.image[0]} alt="이미지" />
+                                                        <img src={feed.image[0]} alt="이미지" />
+                                                        <img src={feed.image[0]} alt="이미지" />
+                                                    </div>
+                                                </div> */}
+
+                                                    {/* 2개이미지 */}
+                                                    {/* <div className={style['image-box']}>
+                                                    <div className={`${style["image-show"]} ${style['two-image']}`}>
+                                                        <img src={feed.image[0]} alt="이미지" />
+                                                        <img src={feed.image[0]} alt="이미지" />
+                                                    </div>
+                                                </div> */}
+
                                                 </div>
                                             }
                                             <div className={style['button_container']}>
@@ -659,7 +773,45 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                             {
                                                 !img_circle &&
                                                 <div className={style['home_feed_img']}>
-                                                    <img src={feed.image[0]} />
+                                                    {/* 5개이상 */}
+                                                    <div className={style['image-box']}>
+                                                        <div
+                                                            className={`${style["image-origin"]} ${style['five-over-image']}`}>
+                                                            <img src={feed.image[0]} alt="이미지" />
+                                                            <img src={feed.image[0]} alt="이미지" />
+                                                            <img src={feed.image[0]} alt="이미지" />
+                                                            <img src={feed.image[0]} alt="이미지" />
+                                                            <img src={feed.image[0]} alt="이미지" />
+                                                            <img src={feed.image[0]} alt="이미지" />
+                                                        </div>
+                                                    </div>
+                                                    {/* 1개이미지 */}
+                                                    {/* <img src={feed.image[0]} alt='img' /> */}
+                                                    {/* 4개이미지 */}
+                                                    {/* <div className={style['image-show']}>
+                                                    <img src={feed.image[0]} alt='img'/>
+                                                    <img src={feed.image[0]} alt='img'/>
+                                                    <img src={feed.image[0]} alt='img'/>
+                                                    <img src={feed.image[0]} alt='img'/>
+                                                </div> */}
+
+                                                    {/* 3개이미지 */}
+                                                    {/* <div className={style['image-box']}>
+                                                    <div className={`${style["image-show"]} ${style['three-image']}`}>
+                                                        <img src={feed.image[0]} alt="이미지" />
+                                                        <img src={feed.image[0]} alt="이미지" />
+                                                        <img src={feed.image[0]} alt="이미지" />
+                                                    </div>
+                                                </div> */}
+
+                                                    {/* 2개이미지 */}
+                                                    {/* <div className={style['image-box']}>
+                                                    <div className={`${style["image-show"]} ${style['two-image']}`}>
+                                                        <img src={feed.image[0]} alt="이미지" />
+                                                        <img src={feed.image[0]} alt="이미지" />
+                                                    </div>
+                                                </div> */}
+
                                                 </div>
                                             }
 
@@ -721,38 +873,6 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
 
 
         </>
-
-
-        // {
-
-        //     <div className={style.feed}>
-        //         <div className={style['info_area']}>
-        //             <div className={style['planet_name']}>
-        //                 <p className={style['sup_people']}>익명지지자</p>
-        //                 <img src={planet1}></img>
-        //                 <p>정거장 행성</p>
-        //             </div>
-        //         </div>
-        //         {/* <Text></Text> */}
-        //     </div>
-
-        // }
-
-        //     {
-        //         feed.fclass === 'ad' && (
-        //             <div className={style.feed}>
-        //                 <div className={style['info_area']}>
-        //                     <div className={style['planet_name']}>
-        //                         <img src={planet1}></img>
-        //                         <p>정거장 행성</p>
-        //                     </div>
-        //                     <p className={style['sup_people']}>익명지지자</p>
-        //                 </div>
-        //                 {/* <Text></Text> */}
-        //             </div>
-        //         )
-        //     }
-        // </>
     )
 }
 
@@ -859,12 +979,12 @@ export function Comments({ isClickedComment, feed, allComments, setAllComments, 
                 }
             </div>
             <div className={style['comment_action']}>
-                
-                        <form onSubmit={(event) => handleSubmit(feed.fid, event)}>
-                            <input type='text' value={inputValue} onChange={handleChange}></input>
-                            <button type='submit'>댓글 작성</button>
-                        </form>
-                     {/* : (
+
+                <form onSubmit={(event) => handleSubmit(feed.fid, event)}>
+                    <input type='text' value={inputValue} onChange={handleChange}></input>
+                    <button type='submit'>댓글 작성</button>
+                </form>
+                {/* : (
                         <form onSubmit={(event) => {
                             event.preventDefault()
                             alert('로그인이 필요합니다.')
@@ -880,44 +1000,3 @@ export function Comments({ isClickedComment, feed, allComments, setAllComments, 
         </div>
     )
 }
-
-// export function InputFeed() {
-//     return (
-//         <div className={`${style['input_feed']}`}>
-//             <div className={style['input_title']}>
-//                 <input type='text' placeholder='글 제목'></input>
-//             </div>
-//             <div className={style['input_content']}>
-//                 <div className={style['content_container']}>
-//                     {/* 글 내용 박스는 정거장과 퀴즈일때 안보여야 됨 */}
-//                     <textarea type='text' placeholder='글 내용'></textarea>
-//                     {/* 정거장 */}
-//                     {/* <div className={style.station}>
-//                         <input type='text' placeholder='사이트 이름'></input>
-//                         <input type='text' placeholder='링크 설명'></input>
-//                         <input type='url' placeholder='링크 주소'></input>
-//                     </div> */}
-//                     {/* 퀴즈  */}
-//                     {/* <div className={style['input_quiz_box']}>
-//                         <input type='text' placeholder='목록1'></input>
-//                         <input type='text' placeholder='목록2'></input>
-//                         <input type='text' placeholder='목록3'></input>
-//                         <input type='text' placeholder='목록4'></input>
-//                     </div> */}
-//                     {/* 이지선다 */}
-//                     <div className={style['input_button_container']}>
-//                         <input className={style['select_button']} placeholder='선택지1'></input>
-//                         <input className={style['select_button']} placeholder='선택지2'></input>
-//                     </div>
-//                     {/* 일반 */}
-//                     {/* <input type='text'></input> */}
-//                     <div className={style['submit_area']}>
-//                         <button type='submit' className={style['submit_button']}>작성 완료</button>
-//                         <h6>타인에게 불편을 줄 수 있는 내용의 게시글은 경고없이 삭제될 수 있습니다.</h6>
-//                     </div>
-//                 </div>
-
-//             </div>
-//         </div>
-//     )
-// }
