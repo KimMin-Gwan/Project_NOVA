@@ -8,7 +8,7 @@ body {
 
 .all-box {
   display: flex;
-  max-width: 1500px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -17,12 +17,10 @@ body {
     display: none;
   }
 
-  .all-box{
+  .all-box {
     display: block;
   }
-
-
-} 
+}
 
 .white-title {
   color: white;
@@ -56,7 +54,7 @@ body {
 .top-area {
   width: 100%;
   /* height: 400px; */
-  background-color: white;
+  background-color: #eaeeff;
   /* margin: 0 auto; */
   margin-bottom: 20px;
   border-radius: 0 0 5% 5%;
@@ -909,7 +907,8 @@ body {
 }
 
 /* 피드 영역 */
-.feed-area {}
+.feed-area {
+}
 
 .satellite-search {
   color: white;

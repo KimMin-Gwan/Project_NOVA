@@ -65,7 +65,7 @@
 
 .main-area {
   flex-grow: 5;
-  background-color: slategrey;
+  background-color: #212327;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -15,97 +15,94 @@
    */
 
 .slider-container {
-    height: 100%;
-    width: 100%;
-    /* 부모 요소의 너비 설정 */
-    position: relative;
-    /* 자식 요소 배치에 필요한 상대적 위치 설정 */
-    /* background-color: blueviolet; */
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  height: 100%;
+  width: 100%;
+  /* 부모 요소의 너비 설정 */
+  position: relative;
+  /* 자식 요소 배치에 필요한 상대적 위치 설정 */
+  /* background-color: blueviolet; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .slider-items {
-    position: relative;
-    height: 100%;
-    /* background-color: greenyellow; */
-    width: 100%;
-    color: white;
+  position: relative;
+  height: 100%;
+  /* background-color: greenyellow; */
+  width: 100%;
+  color: white;
 }
 
 .slick-slide {
-    position: relative;
-    /* padding-left: 10px; */
-    height: 100%;
-    /* background-color: antiquewhite; */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
+  position: relative;
+  /* padding-left: 10px; */
+  height: 100%;
+  /* background-color: antiquewhite; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .slide-content {
-    margin: 0 auto;
-    position: relative;
-    width: 85%;
-    height: 350px;
-    /* 부모 높이에 맞게 설정 */
-    background-color: black;
-    color: white;
-    border-radius: 15px;
-    padding: 20px;
-    /* 텍스트 색상 */
-    display: flex;
-    flex-direction: column;
-    /* Flexbox를 사용하여 내용 정렬 */
-    /* align-items: center; */
-    /* 수직 중앙 정렬 */
-    /* justify-content: center; */
-    /* 수평 중앙 정렬 */
-
+  margin: 0 auto;
+  position: relative;
+  width: 85%;
+  height: 350px;
+  /* 부모 높이에 맞게 설정 */
+  background-color: #101010;
+  color: white;
+  border-radius: 15px;
+  padding: 20px;
+  /* 텍스트 색상 */
+  display: flex;
+  flex-direction: column;
+  /* Flexbox를 사용하여 내용 정렬 */
+  /* align-items: center; */
+  /* 수직 중앙 정렬 */
+  /* justify-content: center; */
+  /* 수평 중앙 정렬 */
 }
 
 .slide-box {
-    height: 460px;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    /* background-color: yellow; */
+  height: 460px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* background-color: yellow; */
 }
 
 /* 점 컨테이너 */
 .slick-dots {
-    /* color: white; */
-    bottom: 10px; /* 점의 위치 조정 */
-  }
-  
-  /* 각 점 */
-  .slick-dots li {
-    /* color: white; */
-    background-color: white;
-    margin: 0 5px; /* 점 간격 조정 */
-  }
-  
-  /* 활성 점 */
-  .slick-dots li.slick-active button {
-    /* background-color: black; 활성 점 색상 */
-  }
-  
-  /* 비활성 점 */
-  .slick-dots li button {
-    /* background-color: #ccc; 비활성 점 색상 */
-    /* opacity: 0.6; 비활성 점 투명도 */
-  }
-  
-  /* 점 버튼 스타일 */
-  .slick-dots button {
-    border: none; /* 테두리 제거 */
-    width: 12px; /* 점 크기 조정 */
-    height: 12px; /* 점 크기 조정 */
-    border-radius: 50%; /* 둥근 형태 */
-    cursor: pointer; /* 포인터 커서 */
-    background-color: white;
-  }
-  
+  /* color: white; */
+  bottom: 10px; /* 점의 위치 조정 */
+}
+
+/* 각 점 */
+.slick-dots li {
+  /* color: white; */
+  background-color: white;
+  margin: 0 5px; /* 점 간격 조정 */
+}
+
+/* 활성 점 */
+.slick-dots li.slick-active button {
+  /* background-color: black; 활성 점 색상 */
+}
+
+/* 비활성 점 */
+.slick-dots li button {
+  /* background-color: #ccc; 비활성 점 색상 */
+  /* opacity: 0.6; 비활성 점 투명도 */
+}
+
+/* 점 버튼 스타일 */
+.slick-dots button {
+  border: none; /* 테두리 제거 */
+  width: 12px; /* 점 크기 조정 */
+  height: 12px; /* 점 크기 조정 */
+  border-radius: 50%; /* 둥근 형태 */
+  cursor: pointer; /* 포인터 커서 */
+  background-color: white;
+}

@@ -43,6 +43,7 @@ import FindPwChange from "./pages/FindPw/FindPwChange.js";
 import MainPart from "./pages/MainPage/MainPart.js";
 import PopularFeed from "./pages/MainPage/PopularFeed.js";
 import IncreaseTag from "./pages/MainPage/IncreaseTag.js";
+import AllPost from "./pages/MainPage/AllPost.js";
 import FeedHashList from "./pages/FeedList/FeedHashList.js";
 import FeedList from "./pages/FeedList/FeedList.js";
 import NovaFunding from "./pages/NovaFunding/NovaFunding.js";
@@ -216,6 +217,7 @@ function App() {
                 <div className="narrow-page">
                   <IncreaseTag />
                 </div>
+                <AllPost />
               </section>
 
               <div className="narrow-page">

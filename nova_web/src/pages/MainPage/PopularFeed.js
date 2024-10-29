@@ -23,7 +23,7 @@ export default function PopularFeed() {
     <div className={style["wrap-container"]}>
       <div className={style["top-area"]}>
         <div className={style["content-title"]}>
-          <header>최근 인기 게시글</header>
+          <header className={style["header-text"]}>최근 인기 게시글</header>
           <img src={more_icon} className={style["more-icon"]}></img>
         </div>
       </div>

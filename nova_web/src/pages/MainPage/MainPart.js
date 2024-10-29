@@ -63,7 +63,7 @@ export default function MainPart() {
                   setHashTag(tag);
                 }}
                 style={{
-                  backgroundColor: isActive ? "#D2C8F7" : "#373737",
+                  backgroundColor: isActive ? "#051243" : "#373737",
                   cursor: "pointer",
                 }}
               >
