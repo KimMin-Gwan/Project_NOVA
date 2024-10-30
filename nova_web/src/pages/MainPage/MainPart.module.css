@@ -10,7 +10,7 @@
 
 .top-area {
   flex-grow: 1;
-  background-color: black;
+  background-color: #1e1e1e;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -133,6 +133,7 @@
   align-self: flex-end;
 }
 
+/* ------------------ */
 /* 인기 게시글 */
 .popular-feed {
   width: 70%;
@@ -163,6 +164,8 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+/* ----------------- */
 /* 급상승 해시태그 */
 .hashtag-box {
   width: 100%;
@@ -209,4 +212,38 @@
   display: flex;
   flex-flow: column;
   justify-content: space-between;
+}
+
+/* 전체 게시글 */
+.all-list {
+  width: 90%;
+  padding: 0;
+  li {
+    margin-bottom: 20px;
+    display: flex;
+  }
+}
+
+.all-img {
+  width: 100px;
+  height: 100px;
+  background-color: gray;
+}
+
+.all-text {
+  padding-left: 20px;
+  span {
+    color: #6c3bff;
+  }
+  p {
+    width: 90%;
+    margin: 0;
+    font-size: 18px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    word-break: break-word;
+  }
 }
