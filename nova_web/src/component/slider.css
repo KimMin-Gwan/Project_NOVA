@@ -106,3 +106,8 @@
   cursor: pointer; /* 포인터 커서 */
   background-color: white;
 }
+
+.slick-dots li button:before {
+  color: #4194f7 !important;
+  background-color: #fff;
+}
