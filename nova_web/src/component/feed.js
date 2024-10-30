@@ -859,7 +859,7 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                                     }} />
                                             )
                                         }
-                                        <div>{feed.star}</div>
+                                        <div className={style['num_like']}>{feed.star}</div>
                                     </div>
                                 </div>
                             )
@@ -883,7 +883,7 @@ export function InfoArea({ color, name, date, supporter }) {
             <div className={style['top_part']}>
                 <div className={style['planet_name']}>
                     {/* <img src={img}></img> */}
-                    <div className={style.circle} style={{ background: `${color}` }}></div>
+                    {/* <div className={style.circle} style={{ background: `${color}` }}></div> */}
                     {/*<p>{name}</p>*/}
                     <p className={style['write-date']}>{date}</p>
                 </div>
@@ -897,7 +897,7 @@ export function InfoArea({ color, name, date, supporter }) {
 export function Text({ name, data }) {
 
     return (
-        <div style={{ height: '100px', marginLeft: '20px' }}>
+        <div style={{ height: '100px', marginLeft: '20px', color:'#FFFFFF' }}>
             {
                 !name && <p>{data}</p>
             }
