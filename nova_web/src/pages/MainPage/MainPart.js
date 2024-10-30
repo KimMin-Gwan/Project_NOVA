@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import style from "./MainPart.module.css";
 import SimpleSlider from "../../component/SimpleSlider";
 import more_icon from "./../../img/backword.png";
+import { useNavigate } from "react-router-dom";
 export default function MainPart() {
   const [isActive, setIsActive] = useState(false); // 버튼의 상태를 관리
 
@@ -9,7 +10,7 @@ export default function MainPart() {
   let [biasTag, setBiasTag] = useState([]);
   let [tagFeed, setTagFeed] = useState([]);
   let [hashTag, setHashTag] = useState("");
-
+  const navigate = useNavigate();
   const handleClick = () => {
     fetchTagFeed();
     setIsActive((prev) => !prev); // 상태 토글
@@ -49,7 +50,7 @@ export default function MainPart() {
           {/* bid : ''이면 인기 해시태그
   -1이 아니면 [title] 관련 인기 해시트=ㅐ그 */}
           <header className={style["header-text"]}>[ {bias.title} ] 관련 인기 해시태그</header>
-          <img src={more_icon} className={style["more-icon"]}></img>
+          <img src={more_icon} alt="menu" onClick={() => navigate("/feed_hash_list")} className={style["more-icon"]}></img>
         </div>
 
         <div className={style["tag-container"]}>

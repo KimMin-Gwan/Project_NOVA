@@ -54,11 +54,12 @@
 
 /* 노바 펀딩 바로가기 */
 .go-nova {
-  background: #8d8d8d;
-  color: white;
+  background: #eee9fc;
+  color: #1b1b1b;
   border-radius: 10px;
   text-decoration: none;
   padding: 15px;
+  font-weight: 600;
 }
 
 /* 검색하기 */
