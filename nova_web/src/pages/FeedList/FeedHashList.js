@@ -78,7 +78,7 @@ export default function FeedHashList(isUserState) {
     <div className={style.container}>
       <header className={style.header}>
         <div className="logo">
-          <img src={logo} alt="logo" onClick={()=>{
+          <img src={logo} alt="logo" onClick={() => {
             navigate('/')
           }}></img>
         </div>

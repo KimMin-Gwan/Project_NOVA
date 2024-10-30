@@ -41,7 +41,7 @@
 
 .tag-container {
   display: flex;
-  flex-grow: 1;
+  /* flex-grow: 1; */
   gap: 30px;
   overflow-x: auto;
   white-space: nowrap;

@@ -39,7 +39,6 @@ function MoreSee() {
     navigate(url);
   }
   let navigate = useNavigate();
-  // let tokenCheck = localStorage.getItem("jwtToken");
 
   let [isLogin, setIsLogin] = useState();
   let [isError, setIsError] = useState();
@@ -112,17 +111,17 @@ function MoreSee() {
           <div className={style["list-bar"]}>노바 플랫폼</div>
           <hr></hr>
           <ul className={style.listContainer}>
-            <li className={style.mainComponent} onClick={() => handleRequestURL(requestURL.naverform)}>
+            <li className={style.mainComponent} onClick={() => handlePage("/feed_list")}>
               <img src={fav_icon} alt="Arrow" className={style.vector} />
               <p className={style.bodyText}>전체 피드</p>
               <img src={more_icon} alt="Arrow" className={style.more_vector} />
             </li>
-            <li className={style.mainComponent} onClick={() => handlePage("/notice_list")}>
+            <li className={style.mainComponent} onClick={() => handlePage("/feed_page")}>
               <img src={short_feed} alt="Arrow" className={style.vector} />
               <p className={style.bodyText}>숏피드</p>
               <img src={more_icon} alt="Arrow" className={style.more_vector} />
             </li>
-            <li className={style.mainComponent} onClick={() => handlePage("/terms_page")}>
+            <li className={style.mainComponent} onClick={() => handlePage("/feed_list")}>
               <img src={popular_icon} alt="Arrow" className={style.vector} />
               <p className={style.bodyText}>최근 인기 피드</p>
               <img src={more_icon} alt="Arrow" className={style.more_vector} />
@@ -132,7 +131,7 @@ function MoreSee() {
               <p className={style.bodyText}>급상승 해시태그</p>
               <img src={more_icon} alt="Arrow" className={style.more_vector} />
             </li>
-            <li className={style.mainComponent}>
+            <li className={style.mainComponent} onClick={() => handlePage("/write_feed")}>
               <img src={new_feed} alt="Arrow" className={style.vector} />
               <p className={style.bodyText}>새로운 피드 작성</p>
               <img src={more_icon} alt="Arrow" className={style.more_vector} />
@@ -142,17 +141,17 @@ function MoreSee() {
           <div className={style["list-bar"]}>노바 펀딩</div>
           <hr></hr>
           <ul className={style.listContainer}>
-            <li className={style.mainComponent} onClick={() => handleRequestURL(requestURL.naverform)}>
+            <li className={style.mainComponent}>
               <img src={fav_like} alt="Arrow" className={style.vector} />
               <p className={style.bodyText}>최애 펀딩</p>
               <img src={more_icon} alt="Arrow" className={style.more_vector} />
             </li>
-            <li className={style.mainComponent} onClick={() => handlePage("/notice_list")}>
+            <li className={style.mainComponent}>
               <img src={duck_funding} alt="Arrow" className={style.vector} />
               <p className={style.bodyText}>덕질 펀딩</p>
               <img src={more_icon} alt="Arrow" className={style.more_vector} />
             </li>
-            <li className={style.mainComponent} onClick={() => handlePage("/terms_page")}>
+            <li className={style.mainComponent}>
               <img src={month_funding} alt="Arrow" className={style.vector} />
               <p className={style.bodyText}>이달의 펀딩 목록</p>
               <img src={more_icon} alt="Arrow" className={style.more_vector} />

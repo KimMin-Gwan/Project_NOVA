@@ -314,7 +314,7 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                                     }} />
                                             )
                                         }
-                                        <div>{feed.star}</div>
+                                        <div className={style['num_like']}>{feed.star}</div>
                                     </div>
                                 </div>
                             )
@@ -516,7 +516,7 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                                     }} />
                                             )
                                         }
-                                        <div>{feed.star}</div>
+                                        <div className={style['num_like']}>{feed.star}</div>
                                     </div>
                                 </div>
                             )
@@ -703,7 +703,7 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                                     }} />
                                             )
                                         }
-                                        <div>{feed.star}</div>
+                                        <div className={style['num_like']}>{feed.star}</div>
                                     </div>
                                 </div>
                             )
@@ -897,7 +897,7 @@ export function InfoArea({ color, name, date, supporter }) {
 export function Text({ name, data }) {
 
     return (
-        <div style={{ height: '100px', marginLeft: '20px', color:'#FFFFFF' }}>
+        <div style={{ height: '100px', marginLeft: '20px', color: '#FFFFFF' }}>
             {
                 !name && <p>{data}</p>
             }

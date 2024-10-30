@@ -44,7 +44,8 @@
 
 .direct-link {
   color: #dcdcdc;
-  text-decoration: none;
+  cursor: pointer;
+  /* text-decoration: none; */
 }
 
 .icon-text {

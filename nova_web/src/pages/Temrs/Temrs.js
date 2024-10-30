@@ -34,7 +34,7 @@ function Terms() {
         <div
           className={style.noticelist}
           onClick={() => {
-            navigate("/Termslsit");
+            navigate("/Termslist");
           }}
         >
           <span className={style.noticeText}>약관 2</span>

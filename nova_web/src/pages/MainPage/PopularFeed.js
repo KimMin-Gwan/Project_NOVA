@@ -33,19 +33,19 @@ export default function PopularFeed() {
       <div className={`${style["main-area"]} ${style['popular-feed-container']}`}>
         {homeFeed.map((feed, i) => {
           return (
-              <div className={style["popular-feed"]}>
-                <div className={style["img-box"]}>
-                  <img src={`${feed.image}`} alt="img" />
-                </div>
-                <div className={style["popular-main"]}>
-                  <div className={style["tag-text"]}>
-                    <span className={style["tag"]}>#미츄</span>
-                    <span className={style["tag"]}>#아모몽</span>
-                    <span className={style["tag"]}>#미녕이</span>
-                  </div>
-                  <div className={style["popular-text"]}>{feed.body}</div>
-                </div>
+            <div key={i} className={style["popular-feed"]}>
+              <div className={style["img-box"]}>
+                <img src={`${feed.image}`} alt="img" />
               </div>
+              <div className={style["popular-main"]}>
+                <div className={style["tag-text"]}>
+                  <span className={style["tag"]}>#미츄</span>
+                  <span className={style["tag"]}>#아모몽</span>
+                  <span className={style["tag"]}>#미녕이</span>
+                </div>
+                <div className={style["popular-text"]}>{feed.body}</div>
+              </div>
+            </div>
           );
         })}
       </div>

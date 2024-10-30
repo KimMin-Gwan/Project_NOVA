@@ -78,7 +78,9 @@ export default function FeedList(isUserState) {
     <div className={style.container}>
       <header className={style.header}>
         <div className="logo">
-          <img src={logo} alt="logo"></img>
+          <img src={logo} alt="logo" onClick={() => {
+            navigate('/')
+          }}></img>
         </div>
         <div className="buttons">
           <button className="tool-button">
@@ -92,7 +94,7 @@ export default function FeedList(isUserState) {
           </button>
         </div>
       </header>
-      <div class={style.title}>최근 인기피드</div>
+      <div className={style.title}>최근 인기 피드</div>
       <div className={style["scroll-area"]}>
         {feedData.map((feed, i) => {
           return <Feed key={feed.fid + i} className="" feed={feed} func={true} feedData={feedData} setFeedData={setFeedData} isUserState={isUserState}></Feed>;
