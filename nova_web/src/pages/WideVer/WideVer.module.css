@@ -12,7 +12,7 @@
 
 /* 바로가기 */
 .direct-box {
-  background-color: #1e1e1e;
+  background-color: #212327;
   padding: 10px;
   border-radius: 10px;
 }
@@ -27,17 +27,29 @@
   padding-left: 10px;
 }
 
-.direct-list li {
-  border-bottom: 1px solid currentColor;
-  padding: 10px;
-  width: 75%;
+.list-item {
+  border-bottom: 0.2px solid #dcdcdc;
+  padding-bottom: 20px;
+  width: 90%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+/* 마지막 선 없음 */
+.list-item:last-child {
+  border-bottom: none;
 }
 
 .direct-link {
-  color: white;
+  color: #dcdcdc;
   text-decoration: none;
-  margin-bottom: 15px;
-  padding: 20px;
+}
+
+.icon-text {
+  width: 20px;
+  height: 20px;
 }
 
 /* 노바 펀딩 바로가기 */
@@ -51,19 +63,28 @@
 
 /* 검색하기 */
 .search-box {
-  background-color: #1e1e1e;
+  background-color: #212327;
   padding: 8px;
   border-radius: 10px;
 }
 .search-bar {
   display: flex;
-  border: 1px solid white;
+  background-color: white;
   border-radius: 5px;
   padding-block: 5px;
+  padding-inline: 10px;
   justify-content: space-between;
+
   input {
-    background-color: #1e1e1e;
+    background-color: white;
     border: 0;
+    width: 90%;
+  }
+
+  button {
+    background-color: white;
+    border: 0;
+    cursor: pointer;
   }
 }
 .search-memo {
@@ -71,7 +92,12 @@
   display: flex;
   justify-content: space-between;
   padding-inline: 5px;
+
+  p {
+    color: #a1a1a1;
+  }
 }
+
 /* 광고 */
 .ad-container {
   background-color: #afafaf;

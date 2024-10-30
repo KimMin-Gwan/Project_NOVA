@@ -202,7 +202,8 @@ function App() {
                     {/* <Link to='/mybias' className='button'>최애페이지</Link> */}
                   </div>
                 </header>
-                <Banner url={url}></Banner>h<h2 className="authen">인증하기</h2>
+                <Banner url={url}></Banner>
+                <h2 className="authen">인증하기</h2>
                 <section className="my-bias">
                   <MyBias url={url} showBox={showBox} blackBox={blackBox}></MyBias>
                 </section>

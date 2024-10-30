@@ -1,6 +1,5 @@
 import style from "./MoreSee.module.css";
 import backword from "./../../img/back_icon.png";
-import vector from "./../../img/Vector.png";
 import x_icon from "./../../img/x_color.png";
 import discord_icon from "./../../img/discord_color.png";
 import insta_icon from "./../../img/insta_color.png";
@@ -13,11 +12,16 @@ import mypage_icon from "./../../img/mypage_icon.png";
 import terms_icon from "./../../img/terms_icon.png";
 import business_logo from "./../../img/business_logo.png";
 import more_icon from "./../../img/Icon.png";
-import nova_league from "./../../img/nova_league.png";
-import nova_funding from "./../../img/nova_funding.png";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-
+import popular_icon from "./../../img/popular.png";
+import month_funding from "./../../img/month-funding.png";
+import fav_like from "./../../img/fav-like.png";
+import duck_funding from "./../../img/duck-funding.png";
+import new_feed from "./../../img/new-feed.png";
+import guide_icon from "./../../img/guide.png";
+import short_feed from "./../../img/short-feed.png";
+import up_hashtag from "./../../img/up-hashtag.png";
 function MoreSee() {
   const requestURL = {
     x: "https://x.com/sebacheong",
@@ -114,22 +118,22 @@ function MoreSee() {
               <img src={more_icon} alt="Arrow" className={style.more_vector} />
             </li>
             <li className={style.mainComponent} onClick={() => handlePage("/notice_list")}>
-              <img src={noti_icon} alt="Arrow" className={style.vector} />
+              <img src={short_feed} alt="Arrow" className={style.vector} />
               <p className={style.bodyText}>숏피드</p>
               <img src={more_icon} alt="Arrow" className={style.more_vector} />
             </li>
             <li className={style.mainComponent} onClick={() => handlePage("/terms_page")}>
-              <img src={terms_icon} alt="Arrow" className={style.vector} />
+              <img src={popular_icon} alt="Arrow" className={style.vector} />
               <p className={style.bodyText}>최근 인기 피드</p>
               <img src={more_icon} alt="Arrow" className={style.more_vector} />
             </li>
             <li className={style.mainComponent}>
-              <img src={set_icon} alt="Arrow" className={style.vector} />
+              <img src={up_hashtag} alt="Arrow" className={style.vector} />
               <p className={style.bodyText}>급상승 해시태그</p>
               <img src={more_icon} alt="Arrow" className={style.more_vector} />
             </li>
             <li className={style.mainComponent}>
-              <img src={set_icon} alt="Arrow" className={style.vector} />
+              <img src={new_feed} alt="Arrow" className={style.vector} />
               <p className={style.bodyText}>새로운 피드 작성</p>
               <img src={more_icon} alt="Arrow" className={style.more_vector} />
             </li>
@@ -139,22 +143,22 @@ function MoreSee() {
           <hr></hr>
           <ul className={style.listContainer}>
             <li className={style.mainComponent} onClick={() => handleRequestURL(requestURL.naverform)}>
-              <img src={fav_icon} alt="Arrow" className={style.vector} />
+              <img src={fav_like} alt="Arrow" className={style.vector} />
               <p className={style.bodyText}>최애 펀딩</p>
               <img src={more_icon} alt="Arrow" className={style.more_vector} />
             </li>
             <li className={style.mainComponent} onClick={() => handlePage("/notice_list")}>
-              <img src={noti_icon} alt="Arrow" className={style.vector} />
+              <img src={duck_funding} alt="Arrow" className={style.vector} />
               <p className={style.bodyText}>덕질 펀딩</p>
               <img src={more_icon} alt="Arrow" className={style.more_vector} />
             </li>
             <li className={style.mainComponent} onClick={() => handlePage("/terms_page")}>
-              <img src={terms_icon} alt="Arrow" className={style.vector} />
+              <img src={month_funding} alt="Arrow" className={style.vector} />
               <p className={style.bodyText}>이달의 펀딩 목록</p>
               <img src={more_icon} alt="Arrow" className={style.more_vector} />
             </li>
             <li className={style.mainComponent}>
-              <img src={set_icon} alt="Arrow" className={style.vector} />
+              <img src={guide_icon} alt="Arrow" className={style.vector} />
               <p className={style.bodyText}>펀딩 가이드</p>
               <img src={more_icon} alt="Arrow" className={style.more_vector} />
             </li>
