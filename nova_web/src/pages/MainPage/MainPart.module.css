@@ -25,6 +25,7 @@
   flex-grow: 2;
   width: 95%;
 }
+
 .header-text {
   padding: 20px;
   font-size: 20px;
@@ -36,6 +37,7 @@
   transform: scaleX(-1);
   margin-right: 20px;
 }
+
 .tag-container {
   display: flex;
   flex-grow: 1;
@@ -70,6 +72,7 @@
   justify-content: center;
   align-items: center;
 }
+
 .feed-box {
   width: 75%;
   height: 70%;
@@ -87,6 +90,7 @@
   align-items: center;
   height: 30px;
 }
+
 .profile {
   width: 15px;
   height: 15px;
@@ -94,10 +98,12 @@
   border-radius: 50%;
   margin-right: 10px;
 }
+
 .name-text {
   font-size: 15px;
   margin-right: auto;
 }
+
 .more-see {
   border: 0;
   background-color: black;
@@ -114,6 +120,7 @@
 .tag-text {
   display: flex;
   gap: 5px;
+
   .tag {
     color: #6c3bff;
     font-size: 15px;
@@ -135,10 +142,29 @@
 
 /* ------------------ */
 /* 인기 게시글 */
+.popular-feed-container {
+  /* flex-shrink: 0; */
+  overflow-x: auto;
+  scrollbar-width: none;
+  /* display: flex; */
+  gap: 10px;
+}
+
+.popular-feed-wrap {
+  width: 80%;
+  height: 100%;
+  background-color: yellow;
+  flex-shrink: 0;
+  /* overflow-x: auto; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .popular-feed {
   width: 100%;
   height: 90%;
-  background-color: black;
+  background-color: blue;
   border-radius: 10px;
 }
 
@@ -152,7 +178,7 @@
   border-radius: 10px;
 }
 
-.img-box > img {
+.img-box>img {
   width: 100%;
   height: 100%;
   object-fit: contain;
@@ -161,6 +187,7 @@
 .popular-main {
   margin: 15px;
 }
+
 .popular-text {
   font-size: 15px;
   color: #ffffff;
@@ -182,12 +209,14 @@
   display: flex;
   flex-flow: column;
 }
+
 .time-text {
   margin-left: auto;
   margin-right: 10px;
   margin-top: 10px;
   color: #cacaca;
 }
+
 .ranking-container {
   list-style: none;
   padding: 0;
@@ -225,6 +254,7 @@
 .all-list {
   width: 90%;
   padding: 0;
+
   li {
     margin-bottom: 20px;
     display: flex;
@@ -239,9 +269,11 @@
 
 .all-text {
   padding-left: 20px;
+
   span {
     color: #6c3bff;
   }
+
   p {
     width: 90%;
     margin: 0;

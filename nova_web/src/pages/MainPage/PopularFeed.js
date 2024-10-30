@@ -30,24 +30,26 @@ export default function PopularFeed() {
         </div>
       </div>
 
-      <div className={style["main-area"]}>
-        <SimpleSlider homeFeed={homeFeed} />
-        {/* <SimpleSlider tagFeed={tagFeed} /> */}
-        {/* {popularFeed.map((feed, i) => {
+      <div className={`${style["main-area"]} ${style['popular-feed-container']}`}>
+        {homeFeed.map((feed, i) => {
           return (
-            <div key={i} className={style["popular-feed"]}>
-              <div className={style["img-box"]}>img</div>
-              <div className={style["popular-main"]}>
-                <div className={style["tag-text"]}>
-                  <span className={style["tag"]}>#미츄</span>
-                  <span className={style["tag"]}>#아모몽</span>
-                  <span className={style["tag"]}>#미녕이</span>
+            <div key={i} className={style['popular-feed-wrap']}>
+              <div className={style["popular-feed"]}>
+                <div className={style["img-box"]}>
+                  <img src={`${feed.image}`} alt="img" />
                 </div>
-                <div className={style["popular-text"]}>{feed.body}</div>
+                <div className={style["popular-main"]}>
+                  <div className={style["tag-text"]}>
+                    <span className={style["tag"]}>#미츄</span>
+                    <span className={style["tag"]}>#아모몽</span>
+                    <span className={style["tag"]}>#미녕이</span>
+                  </div>
+                  <div className={style["popular-text"]}>{feed.body}</div>
+                </div>
               </div>
             </div>
           );
-        })} */}
+        })}
       </div>
     </div>
   );
