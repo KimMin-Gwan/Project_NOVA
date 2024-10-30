@@ -121,8 +121,8 @@ function App() {
     <Routes>
       <Route path="/write_feed" element={<WriteFeed />}></Route>
       <Route path="/more_see" element={<MoreSee />}></Route>
-      <Route path="/test" element={<Box />}></Route>
-      <Route path="/planet" element={<PlanetList />}></Route>
+      {/* <Route path="/test" element={<Box />}></Route> */}
+      {/* <Route path="/planet" element={<PlanetList />}></Route> */}
       <Route path="/galaxy" element={<GalaxyList />}></Route>
       <Route path="/feed_page" element={<FeedPage />}></Route>
       <Route path="/signup" element={<SignUp />}></Route>
