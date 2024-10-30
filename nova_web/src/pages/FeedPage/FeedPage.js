@@ -11,6 +11,17 @@ import comment from "./../../img/comment.png";
 import report from "./../../img/report.png";
 import share from "./../../img/share.png";
 import problem from "./../../img/problem.png";
+
+import write_gray from "./../../img/write_gray.png";
+import report_gray from "./../../img/report_gray.png";
+import problem_gray from "./../../img/not_gray.png";
+import share_gray from "./../../img/share_gray.png";
+// import like_gray from "./../../img/like_gray.png";
+import comment_gray from "./../../img/comment_gray.png";
+import star_gray from "./../../img/star_gray.png";
+
+
+
 import likeStar from "./../../img/like_star.png";
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
@@ -455,7 +466,7 @@ const FeedPage = () => {
                     <div className={style["btn-box"]}>
                       <img
                         className={style["btn-img"]}
-                        src={write}
+                        src={write_gray}
                         alt="글쓰기"
                         onClick={() => {
                           navigate("/write_feed");
@@ -466,7 +477,7 @@ const FeedPage = () => {
 
                   <div className={style["not-recommend-box"]}>
                     <div className={`${style["btn-box"]}} ${style["not-recommend-btn"]}`}>
-                      <img className={style["btn-img"]} src={problem} alt="추천안함" />
+                      <img className={style["btn-img"]} src={problem_gray} alt="추천안함" />
                       <div id={style.text}>추천안함</div>
                     </div>
                   </div>
@@ -476,7 +487,7 @@ const FeedPage = () => {
                       <div className={`${style["btn-box"]}} ${style["action-btn-each"]}`}>
                         <img
                           className={`${style["btn-img"]}`}
-                          src={banner.star_flag ? star_color : star}
+                          src={banner.star_flag ? star_color : star_gray}
                           alt="관심표시"
                           onClick={() => {
                             handleCheckStar(banner.fid, i);
@@ -488,7 +499,7 @@ const FeedPage = () => {
                       <div className={`${style["btn-box"]}} ${style["action-btn-each"]}`}>
                         <img
                           className={style["btn-img"]}
-                          src={comment}
+                          src={comment_gray}
                           alt="댓글"
                           onClick={(event) => {
                             handleShowComment(banner.fid, event);
@@ -499,12 +510,12 @@ const FeedPage = () => {
                       </div>
 
                       <div className={`${style["btn-box"]}} ${style["action-btn-each"]}`}>
-                        <img className={style["btn-img"]} src={share} alt="공유" />
+                        <img className={style["btn-img"]} src={share_gray} alt="공유" />
                         <div id={style.text}>공유</div>
                       </div>
 
                       <div className={`${style["btn-box"]}} ${style["action-btn-each"]}`}>
-                        <img className={style["btn-img"]} src={report} alt="신고" />
+                        <img className={style["btn-img"]} src={report_gray} alt="신고" />
                         <div id={style.text}>신고</div>
                       </div>
                     </div>
@@ -564,7 +575,7 @@ function BalanceClass({ feed, handleInteraction }) {
             <div
               key={feed.fid + i}
               className={style["sel-btn"]}
-              style={{ backgroundColor: i === feed.attend ? "#D2C8F7" : "white" }}
+              style={{ backgroundColor: i === feed.attend ? "#D2C8F7" : "#5f5f5f" }}
               onClick={(e) => {
                 handleInteraction(e, feed.fid, i);
               }}
