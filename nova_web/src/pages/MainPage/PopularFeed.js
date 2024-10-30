@@ -33,7 +33,6 @@ export default function PopularFeed() {
       <div className={`${style["main-area"]} ${style['popular-feed-container']}`}>
         {homeFeed.map((feed, i) => {
           return (
-            <div key={i} className={style['popular-feed-wrap']}>
               <div className={style["popular-feed"]}>
                 <div className={style["img-box"]}>
                   <img src={`${feed.image}`} alt="img" />
@@ -47,7 +46,6 @@ export default function PopularFeed() {
                   <div className={style["popular-text"]}>{feed.body}</div>
                 </div>
               </div>
-            </div>
           );
         })}
       </div>
