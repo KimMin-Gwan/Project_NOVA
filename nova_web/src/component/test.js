@@ -2,7 +2,7 @@ import Feed, { InputFeed, InfoArea, Text, Comments } from './feed';
 
 // import style from './../pages/FeedPage/FeedPage.module.css';
 import stylePlanet from './../pages/PlanetPage/Planet.module.css';
-import planet2 from './../img/planet2.png';
+// import planet2 from './../img/planet2.png';
 
 import React, { useState, useEffect, useRef } from 'react';
 import style from './../pages/FeedPage/FeedPage.module.css';
