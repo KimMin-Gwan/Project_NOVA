@@ -6,7 +6,7 @@ import MyBias from "./Container/myBiasContainer";
 import MyPage from "./pages/MyPage/Mypage";
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
 // import zoom from './img/zoom.png';
-import menu from "./img/menu.png";
+import menu from "./img/menu-burger.png";
 // import Rank from './component/ranks';
 // import FloatingButton from './component/floatingbutton';
 // import Meta from './Container/metaContainer';

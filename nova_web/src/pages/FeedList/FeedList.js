@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import style from "./FeedHashList.module.css";
 import logo from "./../../img/NOVA.png";
-import menu from "./../../img/menu2.png";
+import menu from "./../../img/menu-burger.png";
 import Feed, { Comments } from "./../../component/feed";
 import { useNavigate } from "react-router-dom";
 export default function FeedList(isUserState) {

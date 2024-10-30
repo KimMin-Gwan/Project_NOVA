@@ -1,6 +1,6 @@
 import style from "./NovaFunding.module.css";
 import logo from "./../../img/NOVA.png";
-import menu from "./../../img/menu2.png";
+import menu from "./../../img/menu-burger.png";
 import more_icon from "./../../img/back.png";
 import { useNavigate } from "react-router-dom";
 export default function NovaFunding() {
