@@ -39,7 +39,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import style from "./../pages/MainPage/MainPart.module.css";
 
-const SimpleSlider = ({ tagFeed }) => {
+const SimpleSlider = ({ tagFeed, homeFeed }) => {
   const settings = {
     className: 'slider-items',
     dots: true,
@@ -51,13 +51,12 @@ const SimpleSlider = ({ tagFeed }) => {
     centerPadding: '0px',
     arrows: false,
   };
-
-// style안붙은 것은 slider.css에서 수정
+  // style안붙은 것은 slider.css에서 수정
 
   return (
     <div className="slider-container">
       <Slider {...settings}>
-        {tagFeed.map((feed, i) => {
+        {tagFeed && tagFeed.map((feed, i) => {
           return (
             <div key={i} className="slick-slide">
               <div className='slide-box'>
@@ -83,10 +82,29 @@ const SimpleSlider = ({ tagFeed }) => {
           )
         })
         }
-
-
-        
-        {/* 추가 슬라이드 */}
+        {homeFeed && homeFeed.map((feed, i) => {
+          return (
+            <div key={i} className="slick-slide">
+              <div className='slide-box'>
+                <div className="slide-content">
+                  <div key={i} className={style["popular-feed"]}>
+                    <div className={style["img-box"]}>
+                      <img src={feed.image} alt='img'/>
+                    </div>
+                    <div className={style["popular-main"]}>
+                      <div className={style["tag-text"]}>
+                        <span className={style["tag"]}>#미츄</span>
+                        <span className={style["tag"]}>#아모몽</span>
+                        <span className={style["tag"]}>#미녕이</span>
+                      </div>
+                      <div className={style["popular-text"]}>{feed.body}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        })}
       </Slider>
     </div>
   );
