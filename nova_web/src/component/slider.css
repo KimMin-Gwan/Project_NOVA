@@ -82,19 +82,22 @@
 /* 각 점 */
 .slick-dots li {
   /* color: white; */
-  background-color: white;
+  background-color: #1e1e1e;
   margin: 0 5px; /* 점 간격 조정 */
 }
 
 /* 활성 점 */
 .slick-dots li.slick-active button {
   /* background-color: black; 활성 점 색상 */
+  background-color: #1e1e1e;
+  border: 0;
 }
 
 /* 비활성 점 */
 .slick-dots li button {
   /* background-color: #ccc; 비활성 점 색상 */
-  /* opacity: 0.6; 비활성 점 투명도 */
+  /* opacity: 0.6; */
+  background-color: #1e1e1e;
 }
 
 /* 점 버튼 스타일 */
@@ -102,12 +105,15 @@
   border: none; /* 테두리 제거 */
   width: 12px; /* 점 크기 조정 */
   height: 12px; /* 점 크기 조정 */
-  border-radius: 50%; /* 둥근 형태 */
   cursor: pointer; /* 포인터 커서 */
-  background-color: white;
+  background-color: #1e1e1e;
 }
 
 .slick-dots li button:before {
   color: #4194f7 !important;
-  background-color: #fff;
+  background-color: #1e1e1e;
+  border: none;
+}
+.slick-dots li button::after {
+  background-color: #1e1e1e;
 }
