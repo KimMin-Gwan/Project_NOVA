@@ -3,6 +3,8 @@ import style_hash from "./../MainPage/MainPart.module.css";
 import galaxy from "./../../img/galaxy.png";
 import { useNavigate } from "react-router-dom";
 import popular_feed from "./../FeedList/FeedList";
+import NovaFunding from "./../NovaFunding/NovaFunding.js";
+import { Link } from "react-router-dom";
 export default function LeftBar() {
   let navigate = useNavigate();
 
@@ -42,9 +44,9 @@ export default function LeftBar() {
           </li>
         </ul>
       </div>
-      <a href="./../" className={style["go-nova"]}>
+      <Link to="/nova_funding" className={style["go-nova"]}>
         노바펀딩 바로가기
-      </a>
+      </Link>
 
       <div className={style["search-box"]}>
         <h4 className={style["wide-text"]}>검색</h4>
