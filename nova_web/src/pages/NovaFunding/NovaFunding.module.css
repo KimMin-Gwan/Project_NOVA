@@ -43,7 +43,7 @@
 }
 .title-box {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
 
   .title-text {
@@ -52,15 +52,14 @@
     margin-bottom: 10px;
   }
 
-  .more-text {
-    margin: 0;
-    margin-bottom: 15px;
-  }
-
   .more-icon {
-    width: 50px;
+    width: 40px;
     transform: scaleX(-1);
   }
+}
+.more-text {
+  margin: 0;
+  margin-bottom: 15px;
 }
 .tag-container {
   display: flex;
@@ -122,6 +121,7 @@
   box-sizing: border-box;
   margin-bottom: 30px;
 }
+
 .best-title {
   text-align: center;
 
@@ -148,6 +148,7 @@
     color: #4f4f4f;
   }
 }
+
 .funding-main {
   display: flex;
   flex-direction: column;
@@ -156,6 +157,7 @@
   min-height: 400px;
   border-radius: 10px;
 }
+
 .album-area {
   text-align: center;
   margin-top: 30px;
@@ -171,17 +173,20 @@
 
 .more-container {
   padding: 0 30px;
+  display: grid;
 }
 
 .more-container > :nth-child(3) {
   text-align: center;
 }
+
 .progress-bar {
   display: flex;
   align-items: center;
   height: 20px;
   gap: 5px;
 }
+
 .more-container progress {
   display: block;
   margin: 0 auto;
@@ -193,6 +198,7 @@
   display: flex;
   justify-self: center;
   background-color: #98a0ff;
+  color: black;
   border: 0;
   border-radius: 5px;
   padding: 3px 60px;
@@ -240,9 +246,12 @@
 }
 .who-text {
   justify-items: flex-start;
-
+  display: grid;
   h4 {
     margin: 0;
+  }
+  p {
+    justify-self: flex-start;
   }
 }
 
@@ -259,7 +268,7 @@
     color: #1c1c1c;
     margin-left: auto;
     border: 0;
-    padding: 3px 30px;
+    padding: 3px 20px;
     border-radius: 5px;
     font-size: 13px;
   }

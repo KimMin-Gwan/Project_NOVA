@@ -31,8 +31,8 @@ export default function NovaFunding() {
         <div className={style["title-box"]}>
           <h2 className={style["title-text"]}>이런 펀딩 프로젝트는 어때요?</h2>
           <img src={more_icon} className={style["more-icon"]}></img>
-          <p className={style["more-text"]}>해시 태그로 찾아보는 펀딩 프로젝트</p>
         </div>
+        <p className={style["more-text"]}>해시 태그로 찾아보는 펀딩 프로젝트</p>
         <div className={style["tag-container"]}>
           <button className={style["hashtag-text"]}># 시연</button>
         </div>
@@ -87,9 +87,8 @@ export default function NovaFunding() {
       <section className={style["recommend-box"]}>
         <div className={style["title-box"]}>
           <h2 className={style["title-text"]}>베스트 프로젝트 모두 보기</h2>
-
-          <p className={style["more-text"]}>지금까지 펀딩된 프로젝트와 투자자들을 알아봐요!</p>
         </div>
+        <p className={style["more-text"]}>지금까지 펀딩된 프로젝트와 투자자들을 알아봐요!</p>
 
         <div className={style["ad-container"]}>
           <div className={style["ad-box"]}>
@@ -194,8 +193,8 @@ export default function NovaFunding() {
         <div className={style["title-box"]}>
           <h2 className={style["title-text"]}>노바 펀딩 알아보기</h2>
           <img src={more_icon} className={style["more-icon"]}></img>
-          <p className={style["more-text"]}>30초만에 알아보는 노바 펀딩</p>
         </div>
+        <p className={style["more-text"]}>30초만에 알아보는 노바 펀딩</p>
 
         <div className={style["ad-container"]}>
           <div className={style["ad-box"]}>
