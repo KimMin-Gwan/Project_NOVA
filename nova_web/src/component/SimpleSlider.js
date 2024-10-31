@@ -33,7 +33,7 @@
 
 // export default SimpleSlider;
 
-import './slider.css';
+import "./slider.css";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -41,14 +41,14 @@ import style from "./../pages/MainPage/MainPart.module.css";
 
 const SimpleSlider = ({ tagFeed }) => {
   const settings = {
-    className: 'slider-items',
+    className: "slider-items",
     dots: true,
     infinite: true,
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
     centerMode: true,
-    centerPadding: '0px',
+    centerPadding: "0px",
     arrows: false,
   };
   // style안붙은 것은 slider.css에서 수정
@@ -56,32 +56,32 @@ const SimpleSlider = ({ tagFeed }) => {
   return (
     <div className="slider-container">
       <Slider {...settings}>
-        {tagFeed && tagFeed.map((feed, i) => {
-          return (
-            <div key={i} className="slick-slide">
-              <div className='slide-box'>
-                <div className="slide-content">
-                  <div className={style["name-container"]}>
-                    <div className={style["profile"]}> </div>
-                    <h2 className={style["name-text"]}>{feed.nickname}</h2>
-                    <button className={style["more-see"]}>더보기</button>
-                  </div>
-
-                  <section className={style["text-container"]}>
-                    <div className={style["tag-text"]}>
-                      <span className={style["tag"]}>#시연</span>
-                      <span className={style["tag"]}>#이쁘다</span>
+        {tagFeed &&
+          tagFeed.map((feed, i) => {
+            return (
+              <div key={i} className="slick-slide">
+                <div className="slide-box">
+                  <div className="slide-content">
+                    <div className={style["name-container"]}>
+                      <div className={style["profile"]}> </div>
+                      <h2 className={style["name-text"]}>{feed.nickname}</h2>
+                      <button className={style["more-see"]}>더보기</button>
                     </div>
-                    <div className={style["main-text"]}>{feed.body}</div>
-                  </section>
 
-                  <footer className={style["like-comment"]}>좋아요 수 댓글 수</footer>
+                    <section className={style["text-container"]}>
+                      <div className={style["tag-text"]}>
+                        <span className={style["tag"]}>#시연</span>
+                        <span className={style["tag"]}>#이쁘다</span>
+                      </div>
+                      <div className={style["main-text"]}>{feed.body}</div>
+                    </section>
+
+                    <footer className={style["like-comment"]}>좋아요 250개 | 댓글 20개</footer>
+                  </div>
                 </div>
               </div>
-            </div>
-          )
-        })
-        }
+            );
+          })}
       </Slider>
     </div>
   );

@@ -30,7 +30,7 @@ export default function PopularFeed() {
         </div>
       </div>
 
-      <div className={`${style["main-area"]} ${style['popular-feed-container']}`}>
+      <div className={`${style["main-area"]} ${style["popular-feed-container"]}`}>
         {homeFeed.map((feed, i) => {
           return (
             <div key={i} className={style["popular-feed"]}>
@@ -44,6 +44,7 @@ export default function PopularFeed() {
                   <span className={style["tag"]}>#미녕이</span>
                 </div>
                 <div className={style["popular-text"]}>{feed.body}</div>
+                <footer className={style["like-comment"]}>좋아요 250개 | 댓글 20개</footer>
               </div>
             </div>
           );
