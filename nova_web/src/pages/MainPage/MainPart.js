@@ -1,19 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import style from "./MainPart.module.css";
 import SimpleSlider from "../../component/SimpleSlider";
 import more_icon from "./../../img/backword.png";
 import { useNavigate } from "react-router-dom";
 export default function MainPart() {
-  const [isActive, setIsActive] = useState(false); // 버튼의 상태를 관리
 
   let [bias, setBias] = useState("");
   let [biasTag, setBiasTag] = useState([]);
   let [tagFeed, setTagFeed] = useState([]);
   let [hashTag, setHashTag] = useState("");
+  let [clickIndex, setClickIndex] = useState(0);
+
   const navigate = useNavigate();
-  const handleClick = () => {
+  const handleClick = (index) => {
     fetchTagFeed();
-    setIsActive((prev) => !prev); // 상태 토글
+    setClickIndex(index);
   };
 
   function fetchHashTag() {
@@ -28,20 +29,23 @@ export default function MainPart() {
       });
   }
 
-  function fetchTagFeed() {
-    fetch(`https://nova-platform.kr/home/hot_hashtag_feed?hashtag=${hashTag}`, {
+  const fetchUrl = `https://nova-platform.kr/home/hot_hashtag_feed?hashtag=${hashTag}`;
+
+  const fetchTagFeed = useCallback(() => {
+    fetch(fetchUrl, {
       credentials: "include",
     })
       .then((response) => response.json())
       .then((data) => {
         console.log("14111", data);
         setTagFeed(data.body.feed);
-      });
-  }
+      })
+  }, [fetchUrl])
 
   useEffect(() => {
     fetchHashTag();
-  }, []);
+    fetchTagFeed();
+  }, [fetchTagFeed]);
 
   return (
     <div className={style["wrap-container"]}>
@@ -60,11 +64,11 @@ export default function MainPart() {
                 key={i}
                 className={style["hashtag-text"]}
                 onClick={() => {
-                  handleClick();
+                  handleClick(i);
                   setHashTag(tag);
                 }}
                 style={{
-                  backgroundColor: isActive ? "#051243" : "#373737",
+                  backgroundColor: clickIndex === i ? "#051243" : "#373737",
                   cursor: "pointer",
                 }}
               >

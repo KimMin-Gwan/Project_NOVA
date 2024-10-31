@@ -78,7 +78,9 @@ export default function FeedHashList(isUserState) {
     <div className={style.container}>
       <header className={style.header}>
         <div className="logo">
-          <img src={logo} alt="logo"></img>
+          <img src={logo} alt="logo" onClick={() => {
+            navigate('/')
+          }}></img>
         </div>
         <div className="buttons">
           <button className="tool-button">
@@ -94,6 +96,7 @@ export default function FeedHashList(isUserState) {
       </header>
       <div class={style.title}>시연</div>
       <div className={style["tag-container"]}>
+        <button className={style["hashtag-text"]}># 시연</button>
         <button className={style["hashtag-text"]}># 시연</button>
       </div>
       <div className={style["scroll-area"]}>
