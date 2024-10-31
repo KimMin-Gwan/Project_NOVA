@@ -250,6 +250,7 @@
   h4 {
     margin: 0;
   }
+
   p {
     justify-self: flex-start;
   }
@@ -263,6 +264,7 @@
   time {
     font-size: 10px;
   }
+
   button {
     background-color: #98a0ff;
     color: #1c1c1c;
