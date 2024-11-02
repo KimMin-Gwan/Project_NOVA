@@ -979,22 +979,10 @@ export function Comments({ isClickedComment, feed, allComments, setAllComments, 
                 }
             </div>
             <div className={style['comment_action']}>
-
                 <form onSubmit={(event) => handleSubmit(feed.fid, event)}>
                     <input type='text' value={inputValue} onChange={handleChange}></input>
                     <button type='submit'>댓글 작성</button>
                 </form>
-                {/* : (
-                        <form onSubmit={(event) => {
-                            event.preventDefault()
-                            alert('로그인이 필요합니다.')
-                        }}>
-                            <input type='text' value={inputValue} onChange={handleChange}></input>
-                            <button type='submit'>댓글 작성</button>
-                        </form>
-                    )
-                } */}
-
             </div>
 
         </div>

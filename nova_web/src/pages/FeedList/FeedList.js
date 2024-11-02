@@ -4,6 +4,7 @@ import logo from "./../../img/NOVA.png";
 import menu from "./../../img/menu-burger.png";
 import Feed, { Comments } from "./../../component/feed";
 import { useNavigate } from "react-router-dom";
+
 export default function FeedList(isUserState) {
   const target = useRef(null);
   const observerRef = useRef(null);

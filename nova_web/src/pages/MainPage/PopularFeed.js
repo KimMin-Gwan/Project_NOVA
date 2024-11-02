@@ -3,6 +3,7 @@ import style from "./MainPart.module.css";
 import more_icon from "./../../img/backword.png";
 import SimpleSlider from "../../component/SimpleSlider";
 import { useNavigate } from "react-router-dom";
+
 export default function PopularFeed() {
   let [homeFeed, setHomeFeed] = useState([]);
   const navigate = useNavigate();
@@ -21,6 +22,10 @@ export default function PopularFeed() {
     fetchHomeFeed();
   }, []);
 
+  function handleNavigate(fid){
+    navigate(`/feed_list/${fid}`)
+  };
+
   return (
     <div className={style["wrap-container"]}>
       <div className={style["top-area"]}>
@@ -33,7 +38,7 @@ export default function PopularFeed() {
       <div className={`${style["main-area"]} ${style["popular-feed-container"]}`}>
         {homeFeed.map((feed, i) => {
           return (
-            <div key={i} className={style["popular-feed"]}>
+            <div key={i} className={style["popular-feed"]} onClick={()=>handleNavigate(feed.fid)}>
               <div className={style["img-box"]}>
                 <img src={`${feed.image}`} alt="img" />
               </div>

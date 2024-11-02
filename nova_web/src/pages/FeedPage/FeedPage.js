@@ -38,6 +38,7 @@ const FeedPage = () => {
   const [translateY, setTranslateY] = useState(0);
   const [dragDistance, setDragDistance] = useState(0);
   const sliderRef = useRef(null);
+
   // const [count, setCount] = useState(0);
   useEffect(() => {
     setTranslateY(-currentIndex * window.innerHeight);
@@ -211,13 +212,13 @@ const FeedPage = () => {
     setIsClickedComment(!isClickedComment);
   }
 
-  // let header = {
-  //   "request-type": "default",
-  //   "client-version": "v1.0.1",
-  //   "client-ip": "127.0.0.1",
-  //   "uid": "1234-abcd-5678",
-  //   "endpoint": "/core_system/",
-  // };
+  let header = {
+    "request-type": "default",
+    "client-version": "v1.0.1",
+    "client-ip": "127.0.0.1",
+    "uid": "1234-abcd-5678",
+    "endpoint": "/core_system/",
+  };
 
   // let [inputValue, setInputValue] = useState("");
 
@@ -259,19 +260,15 @@ const FeedPage = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        // console.log("like", data.body.comments);
-
         setAllComments((prevAll) => {
           return prevAll.map((comment, i) => {
             return comment.cid === cid ? { ...comment, like: data.body.comments[i].like, like_user: data.body.comments[i].like_user } : comment;
           });
         });
-        // console.log("244241242414", allComments);
         // setCommentLikes(data.body.comments);
       });
   }
 
-  // let [isClickedRemoveBtn, setIsClickedRemoveBtn] = useState(false);
   // 댓글 삭제 부분(완료)
   function handleRemoveComment(fid, cid, event) {
     event.preventDefault();
@@ -284,8 +281,12 @@ const FeedPage = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        // console.log("remove", data);
         setAllComments(data.body.comments);
+        setBanners((prevFeeds) => {
+          return prevFeeds.map((feed) => {
+            return feed.fid === fid ? { ...feed, num_comment: data.body.feed[0].num_comment } : feed
+          })
+        })
       });
   }
 
@@ -312,6 +313,49 @@ const FeedPage = () => {
   function handleNext() {
     setNowIndex((prevIndex) => prevIndex + 1);
   };
+
+  // 댓글 더보기에서 댓글입력(완료)
+  let [inputValue, setInputValue] = useState('');
+
+  function handleChange(e) {
+    setInputValue(e.target.value);
+  };
+
+  function handleSubmit(fid, event) {
+    event.preventDefault();
+
+    fetch('https://nova-platform.kr/feed_explore/make_comment', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        header,
+      },
+      credentials: 'include',
+      body: JSON.stringify({
+        header: header,
+        body: {
+          fid: `${fid}`,
+          body: `${inputValue}`
+        }
+      })
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        // setNewComments(data.body.comments);
+        setAllComments((prevAllComments) => {
+          const newAllComments = [data.body.comments[0], ...prevAllComments];
+          return newAllComments;
+        })
+        setBanners((prevFeeds) => {
+          return prevFeeds.map((feed) => {
+            return feed.fid === fid ? { ...feed, num_comment: data.body.feed[0].num_comment } : feed
+          })
+        })
+        setInputValue('');
+      })
+  }
+
 
   return (
     <div
@@ -397,10 +441,10 @@ const FeedPage = () => {
                           )
                         }
                         <div className={`${style['comment_action']} ${style['comment-input']}`}>
-                          {/* <form onSubmit={(event) => handleSubmit(feed.fid, event)}> */}
-                            <input type='text' ></input>
+                          <form onSubmit={(event) => handleSubmit(banner.fid, event)}>
+                            <input type='text' value={inputValue} onChange={handleChange}></input>
                             <button type='submit'>댓글 작성</button>
-                          {/* </form> */}
+                          </form>
                         </div>
 
                       </div>

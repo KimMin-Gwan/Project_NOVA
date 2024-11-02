@@ -124,6 +124,21 @@ const WriteFeed = () => {
         });
 
     }
+    let [inputTag, setInputTag] = useState('');
+    let [plusTag, setPlusTag] = useState('');
+    let [tagList, setTagList] = useState([]);
+
+    function onChangeTag(e) {
+        setInputTag(e.target.value);
+    };
+
+    function onKeyDown(e){
+        if(e.keyCode===32){
+            setPlusTag(`#${inputTag}`);
+            setInputTag('');
+            setTagList([...tagList, plusTag]);
+        }
+    };
 
     return (
         <div className={`${style['test_container']} ${style['container']}`}>
@@ -150,6 +165,19 @@ const WriteFeed = () => {
                     <div className={style['sup_info']}>
                         <div id={style['nick_name']}>지지자</div>
                         <div id={style.date}>2024/02/02</div>
+                    </div>
+                    
+                    <div>
+                        <input type='text'
+                            value={inputTag}
+                            onChange={onChangeTag}
+                            onKeyDown={onKeyDown}
+                        ></input>
+                        {tagList.length!==0 && tagList.map((tag,i)=>{
+                            return(
+                                <div className={style['tag-box']} key={i}>{tag}</div>
+                            )
+                        })}
                     </div>
 
                     <form onSubmit={handleSubmit}>

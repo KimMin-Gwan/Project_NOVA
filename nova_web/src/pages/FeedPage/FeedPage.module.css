@@ -1722,3 +1722,8 @@ h5 {
   bottom: 10px;
   left: 10px;
 }
+
+/* 해시태그 붙이기 테스트*/
+.tag-box {
+  display: flex;
+}

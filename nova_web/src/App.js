@@ -149,6 +149,7 @@ function App() {
       <Route path="/feed_hash_list" element={<FeedHashList />}></Route>
       <Route path="/feed_hash_list/:fid" element={<FeedHashList />}></Route>
       <Route path="/feed_list" element={<FeedList />}></Route>
+      <Route path="/feed_list/:fid" element={<FeedList />}></Route>
       <Route path="/nova_funding" element={<NovaFunding />}></Route>
       <Route
         path="/"
