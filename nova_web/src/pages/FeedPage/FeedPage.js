@@ -396,6 +396,13 @@ const FeedPage = () => {
                             })
                           )
                         }
+                        <div className={`${style['comment_action']} ${style['comment-input']}`}>
+                          {/* <form onSubmit={(event) => handleSubmit(feed.fid, event)}> */}
+                            <input type='text' ></input>
+                            <button type='submit'>댓글 작성</button>
+                          {/* </form> */}
+                        </div>
+
                       </div>
                     </div>
                   )}
@@ -632,11 +639,4 @@ function StationClass({ feed }) {
                     </div>
                   </div>
                 )} */
-}
-{
-  /*
-                        <button
-                            <FaStar className={style["func_btn_img"]} style={banner.star_flag ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }} />
-                          </button>
-                      */
 }

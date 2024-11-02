@@ -455,6 +455,7 @@ h5 {
   flex-direction: column;
 
   .text-1 {
+    color: black;
     margin: 2px;
   }
 
@@ -489,6 +490,7 @@ h5 {
   p {
     margin: 0;
     font-size: 10px;
+    color: black;
   }
 }
 
@@ -1712,4 +1714,11 @@ h5 {
   color: black;
   font-weight: 700;
   overflow-x: hidden;
+}
+
+/* 댓글입력 창 - 댓글더보기에서 */
+.comment-input {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
 }

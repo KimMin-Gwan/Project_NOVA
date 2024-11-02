@@ -38,6 +38,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import style from "./../pages/MainPage/MainPart.module.css";
+import { useNavigate } from "react-router-dom";
 
 const SimpleSlider = ({ tagFeed }) => {
   const settings = {
@@ -52,6 +53,11 @@ const SimpleSlider = ({ tagFeed }) => {
     arrows: false,
   };
   // style안붙은 것은 slider.css에서 수정
+  let navigate = useNavigate();
+
+  function onClickMore(fid){
+    navigate(`/feed_hash_list/${fid}`)
+  };
 
   return (
     <div className="slider-container">
@@ -65,7 +71,7 @@ const SimpleSlider = ({ tagFeed }) => {
                     <div className={style["name-container"]}>
                       <div className={style["profile"]}> </div>
                       <h2 className={style["name-text"]}>{feed.nickname}</h2>
-                      <button className={style["more-see"]}>더보기</button>
+                      <button onClick={()=>onClickMore(feed.fid)} className={style["more-see"]}>더보기</button>
                     </div>
 
                     <section className={style["text-container"]}>

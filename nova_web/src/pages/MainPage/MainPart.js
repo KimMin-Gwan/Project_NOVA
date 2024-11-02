@@ -25,7 +25,6 @@ export default function MainPart() {
       .then((data) => {
         setBias(data.body);
         setBiasTag(data.body.hashtags);
-        console.log("41241515", data);
       });
   }
 
@@ -53,7 +52,13 @@ export default function MainPart() {
         <div className={style["content-title"]}>
           {/* bid : ''이면 인기 해시태그
   -1이 아니면 [title] 관련 인기 해시트=ㅐ그 */}
-          <header className={style["header-text"]}>[ {bias.title} ] 관련 인기 해시태그</header>
+          {
+            bias.bid === '' ? (
+              <header className={style["header-text"]}>인기 해시태그</header>
+            ) : (
+              <header className={style["header-text"]}>[ {bias.title} ] 관련 인기 해시태그</header>
+            )
+          }
           <img src={more_icon} alt="menu" onClick={() => navigate("/feed_hash_list")} className={style["more-icon"]}></img>
         </div>
 
