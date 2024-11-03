@@ -327,10 +327,10 @@ class Core_Service_View(Master_View):
 
         # feed 를 만들거나 수정하기
         @self.__app.post('/feed_explore/try_edit_feed')
-        async def try_edit_feed(request: Request, images: Union[UploadFile, None] = File(None),
-                        jsonData: Union[str, None] = Form(None)):
-        #async def try_edit_feed(request:Request, image:UploadFile | None = File(None), 
-                                #jsonData:str | None = Form(None)):
+        #async def try_edit_feed(request: Request, images: Union[UploadFile, None] = File(None),
+                        #jsonData: Union[str, None] = Form(None)):
+        async def try_edit_feed(request:Request, images:List[UploadFile] | None = File(None), 
+                                jsonData:str | None = Form(None)):
             request_manager = RequestManager()
 
             print(images)
