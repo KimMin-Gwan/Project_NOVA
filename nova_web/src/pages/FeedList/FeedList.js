@@ -41,6 +41,7 @@ export default function FeedList(isUserState) {
           return newData;
         });
         setIsLoading(false);
+        console.log('mor',data)
       });
   }
 

@@ -13,7 +13,6 @@ export default function PopularFeed() {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("11", data);
         setHomeFeed(data.body.feed);
       });
   }
@@ -22,7 +21,7 @@ export default function PopularFeed() {
     fetchHomeFeed();
   }, []);
 
-  function handleNavigate(fid){
+  function handleNavigate(fid) {
     navigate(`/feed_list/${fid}`)
   };
 
@@ -38,18 +37,22 @@ export default function PopularFeed() {
       <div className={`${style["main-area"]} ${style["popular-feed-container"]}`}>
         {homeFeed.map((feed, i) => {
           return (
-            <div key={i} className={style["popular-feed"]} onClick={()=>handleNavigate(feed.fid)}>
+            <div key={i} className={style["popular-feed"]} onClick={() => handleNavigate(feed.fid)}>
               <div className={style["img-box"]}>
                 <img src={`${feed.image}`} alt="img" />
               </div>
               <div className={style["popular-main"]}>
                 <div className={style["tag-text"]}>
-                  <span className={style["tag"]}>#미츄</span>
-                  <span className={style["tag"]}>#아모몽</span>
-                  <span className={style["tag"]}>#미녕이</span>
+                  {
+                    feed.hashtag.map((tag, i) => {
+                      return (
+                        <span key={i} className={style["tag"]}>#{tag}</span>
+                      )
+                    })
+                  }
                 </div>
                 <div className={style["popular-text"]}>{feed.body}</div>
-                <footer className={style["like-comment"]}>좋아요 250개 | 댓글 20개</footer>
+                <footer className={style["like-comment"]}>좋아요 {feed.star}개 | 댓글 {feed.num_comment}개</footer>
               </div>
             </div>
           );

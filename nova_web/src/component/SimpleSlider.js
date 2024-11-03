@@ -55,7 +55,7 @@ const SimpleSlider = ({ tagFeed }) => {
   // style안붙은 것은 slider.css에서 수정
   let navigate = useNavigate();
 
-  function onClickMore(fid){
+  function onClickMore(fid) {
     navigate(`/feed_hash_list/${fid}`)
   };
 
@@ -71,18 +71,23 @@ const SimpleSlider = ({ tagFeed }) => {
                     <div className={style["name-container"]}>
                       <div className={style["profile"]}> </div>
                       <h2 className={style["name-text"]}>{feed.nickname}</h2>
-                      <button onClick={()=>onClickMore(feed.fid)} className={style["more-see"]}>더보기</button>
+                      <button onClick={() => onClickMore(feed.fid)} className={style["more-see"]}>더보기</button>
                     </div>
 
                     <section className={style["text-container"]}>
                       <div className={style["tag-text"]}>
-                        <span className={style["tag"]}>#시연</span>
-                        <span className={style["tag"]}>#이쁘다</span>
+                        {
+                          feed.hashtag.map((tag, i) => {
+                            return (
+                              <span key={i} className={style["tag"]}>#{tag}</span>
+                            )
+                          })
+                        }
                       </div>
                       <div className={style["main-text"]}>{feed.body}</div>
                     </section>
 
-                    <footer className={style["like-comment"]}>좋아요 250개 | 댓글 20개</footer>
+                    <footer className={style["like-comment"]}>좋아요 {feed.star}개 | 댓글 {feed.num_comment}개</footer>
                   </div>
                 </div>
               </div>
