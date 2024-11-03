@@ -336,7 +336,7 @@ class Core_Service_View(Master_View):
             form_data = await request.form()
             image_files = form_data.getlist("images")
             
-            print(type(image_files))
+            print(type(image_files[0]))
 
 
 
