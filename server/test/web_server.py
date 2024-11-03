@@ -70,7 +70,7 @@ def home():
             async function testNumberEndpoint() {
                 const number = document.getElementById('numberInput').value;
                 try {
-                    const response = await fetch(`https://nova-platform.kr/user_home/try_find_password_send_email`, {
+                    const response = await fetch(`http://127.0.0.1:4000/user_home/try_login`, {
                         method: 'POST',
                         credentials: 'include', // 쉼표 추가
                         headers: {
@@ -85,7 +85,7 @@ def home():
                                 "endpoint": "/user_system/",
                                 },
                             "body" : {
-                                "email" : "alsrhks2508@yu.ac.kr", 
+                                "email" : "randomUser2@naver.com", 
                                 "password": "sample122"
                             }
                         })
@@ -225,7 +225,7 @@ def home():
 
         <!-- 이미지 업로드 폼 -->
         <form id="uploadForm">
-            <input type="file" id="imageInput" accept="image/*"><br><br>
+            <input type="file" id="imageInput" accept="image/*" multiple><br><br> <!-- multiple 속성 추가 -->
             <input type="text" id="titleInput" placeholder="Title"><br><br>
             <input type="text" id="descriptionInput" placeholder="Description"><br><br>
             <button type="submit">Upload Image</button>
@@ -243,43 +243,49 @@ def home():
             const descriptionInput = document.getElementById("descriptionInput");
             const messageElement = document.getElementById("message");
 
-            // 파일이 선택되지 않았을 경우 기본 메시지 출력
-            if (!imageInput.files[0]) {
-                messageElement.textContent = "No image selected, using default image.";
+            // FormData 객체에 파일과 JSON 데이터를 추가
+            const formData = new FormData();
+
+            // 여러 파일을 선택했을 때 각각의 파일을 FormData에 추가
+            if (imageInput.files.length > 0) {
+                for (const file of imageInput.files) {
+                    formData.append("images", file); // "images" 키로 여러 파일 추가
+                }
+            } else {
+                messageElement.textContent = "No image selected.";
                 return;
             }
 
-            // FormData 객체에 파일과 JSON 데이터를 추가
-            const formData = new FormData();
-            formData.append("image", imageInput.files[0]);
+            // JSON 데이터 추가
             formData.append("jsonData", JSON.stringify({
-            header : {
-                "request-type": "default",
-                "client-version": "v1.0.1",
-                "client-ip": "127.0.0.1",
-                "uid": "1234-abcd-5678",
-                "endpoint": "/user_system/",
+                header : {
+                    "request-type": "default",
+                    "client-version": "v1.0.1",
+                    "client-ip": "127.0.0.1",
+                    "uid": "1234-abcd-5678",
+                    "endpoint": "/user_system/",
                 },
-            body: {
-                body : titleInput.value,
-                fid: "",
-                fclass: "card",
-                choice: []
+                body: {
+                    body : titleInput.value,
+                    fid: "",
+                    fclass: "card",
+                    choice: [],
+                    hashtag : ["임시", "해시태그", "노바"]
                 }
             })); 
 
             try {
                 // 서버에 POST 요청 보내기
-                const response = await fetch("https://nova-platform.kr/feed_explore/try_edit_feed", {
+                const response = await fetch("http://127.0.0.1:4000/feed_explore/try_edit_feed", {
                     method: "POST",
-                    credentials: 'include', // 쉼표 추가
+                    credentials: 'include',
                     body: formData
                 });
 
                 const result = await response.json();
 
                 if (response.ok) {
-                    messageElement.textContent = result.message + " Image saved at: " + result.image_path;
+                    messageElement.textContent = result.message + " Images saved at: " + result.image_paths.join(", ");
                 } else {
                     messageElement.textContent = "Error: " + result.detail;
                 }
@@ -291,6 +297,7 @@ def home():
 
         </body>
         </html>
+
     """
     return html
 

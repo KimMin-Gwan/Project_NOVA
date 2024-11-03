@@ -263,7 +263,8 @@ class Feed(SampleDomain):
     def __init__(self, fid="", uid="", nickname="", star=0,
                  body="", date="", fclass="", class_name="",
                  choice=None, result=None, state="d", attend=None,
-                 category = None, comment = None, image = None):
+                 category = None, comment = None, image = None,
+                 hashtag = None):
         if choice is None:
             choice = []
         if result is None:
@@ -275,7 +276,9 @@ class Feed(SampleDomain):
         if comment is None:
             comment = []
         if image is None:
-            image = ["https://kr.object.ncloudstorage.com/nova-feed-images/nova-platform.PNG"]
+            image = []
+        if hashtag is None:
+            hashtag = []
 
         self.fid = fid
         self.uid = uid
@@ -294,6 +297,8 @@ class Feed(SampleDomain):
         self.star = star
         self.star_flag = False
         self.image = copy.copy(image)
+        self.hashtag = copy.copy(hashtag)
+        self.num_image = len(self.image)
 
     def make_with_dict(self, dict_data):
         try:
@@ -312,6 +317,9 @@ class Feed(SampleDomain):
             self.comment = copy.copy(dict_data['comment'])
             self.star= dict_data['star']
             self.image= copy.copy(dict_data['image'])
+            self.hashtag = copy.copy(dict_data['hashtag'])
+            self.num_image = len(self.image)
+            self.num_comment = len(self.comment)
         except KeyError as e:
             raise DictMakingError(error_type=f"Missing key: {str(e)}")
 
@@ -333,7 +341,9 @@ class Feed(SampleDomain):
             "num_comment" :self.num_comment,
             "star":self.star,
             "star_flag" : self.star_flag,
-            "image":copy.copy(self.image)
+            "image":copy.copy(self.image),
+            "hashtag":copy.copy(self.hashtag),
+            "num_image": self.num_image
         }
 
 

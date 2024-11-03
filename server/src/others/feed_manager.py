@@ -152,12 +152,14 @@ class FeedManager:
         # 이미지를 업로드 할것
         image_descriper = ImageDescriper()
         # 근데 이미지가 없으면 디폴트 이미지로 
-        if data_payload.image_name == "image_not_exist?":
-            image_result, flag = image_descriper.get_default_image_url()
+        if len(data_payload.image_names) == 0:
+            #image_result, flag = image_descriper.get_default_image_url()
+            image_result = []
+            flag = True
         else:
             image_result, flag = image_descriper.try_feed_image_upload(
-                fid=fid, image_name=data_payload.image_name,
-                image=data_payload.image)
+                fid=fid, image_names=data_payload.image_names,
+                images=data_payload.images)
 
         # 이미지 업로드 실패하면
         if not flag:
@@ -168,7 +170,8 @@ class FeedManager:
                             fclass=data_payload.fclass,
                             choice=data_payload.choice,
                             body=data_payload.body,
-                            image=image_result)
+                            hashtag=data_payload.hashtag,
+                            images=image_result)
         
         #작성한 피드 목록에 넣어주고
         managed_user.my_feed.append(fid)
@@ -177,24 +180,24 @@ class FeedManager:
         return "Upload Success", True
     
     # 새로운 피드 만들기
-    def __make_new_feed(self, user:User, fid, fclass, choice, body, image):
+    def __make_new_feed(self, user:User, fid, fclass, choice, body, hashtag, images):
 
         # 검증을 위한 코드는 이곳에 작성하시오
         new_feed = self.__set_new_feed(user=user, fid=fid, fclass=fclass,
-                                        choice=choice, body=body,
-                                        image=image
-                                        )
+                                        choice=choice, body=body, hashtag=hashtag,
+                                        image=images)
         self._database.add_new_data(target_id="fid", new_data=new_feed.get_dict_form_data())
-        mangaed_feed = ManagedFeed(key=self._num_feed)
-        mangaed_feed.fid = new_feed.fid
-        mangaed_feed.fclass = new_feed.fclass
-        mangaed_feed.category = new_feed.category
-        self._managed_feed_list.append(mangaed_feed)
+        managed_feed = ManagedFeed(key=self._num_feed)
+        managed_feed.fid = new_feed.fid
+        managed_feed.fclass = new_feed.fclass
+        managed_feed.category = new_feed.category
+        managed_feed.hashtag = new_feed.hashtag
+        self._managed_feed_list.append(managed_feed)
         self._num_feed += 1
         return
 
     # 새로운 피드의 데이터를 추가하여 반환
-    def __set_new_feed(self, user:User,fid, fclass, choice, body, image):
+    def __set_new_feed(self, user:User,fid, fclass, choice, body, hashtag, image):
         new_feed = Feed()
         new_feed.fid = fid
         new_feed.uid = user.uid
@@ -207,6 +210,7 @@ class FeedManager:
         new_feed.state = "y"
         new_feed.category = [] # 여기서 카테고리 추가
         new_feed.image= image
+        new_feed.hashtag = hashtag
         return new_feed
     
 
@@ -863,12 +867,13 @@ class FeedClass:
 
 
 class ManagedFeed:
-    def __init__(self, key, fid ="", fclass="", category = [], star=0):
+    def __init__(self, key, fid ="", fclass="", category = [], star=0, hashtag =[]):
         self.key = key
         self.fid = fid
         self.fclass = fclass
         self.category  = category
         self.star = star
+        self.hashtag = hashtag
 
     def __call__(self):
         print(f"key: {self.key} | fid: {self.fid} | fclass: {self.fclass} | category: {self.category} | star: {self.star}")
@@ -1039,46 +1044,64 @@ class ImageDescriper():
         self.__bucket_name = "nova-feed-images"
         self.__default_image = "https://kr.object.ncloudstorage.com/nova-feed-images/nova-platform.PNG"
 
-    def _check_image_size(self, img):
-        width, height = img.size
-        if width / height > 3 or height / width > 3:
-            return False
-        else:
-            return True
+    # 이거 단일 이미지 검사 함수임
+    #def _check_image_size(self, img):
+        #width, height = img.size
+        #if width / height > 3 or height / width > 3:
+            #return False
+        #else:
+            #return True
     
-    def __set_image_to_byte(self, image):
-        return Image.open(BytesIO(image))
-    
-    def __set_image_to_cv2(self, image):
-        return cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
+    def __set_images_to_byte(self, images: list):
+        pil_images = []
+        for image in images:
+            pil_image = Image.open(BytesIO(image))
+            pil_images.append(pil_image)
+        return pil_images
+
+    def __set_images_to_cv2(self, images: list):
+        cv2_images = []
+        for pil_image in images:
+            cv2_image = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR)
+            cv2_images.append(cv2_image)
+        return cv2_images
     
     def get_default_image_url(self):
         return [self.__default_image], True
 
 
     # 이미지 업로드
-    def try_feed_image_upload(self, fid:str, image_name:str, image):
+    def try_feed_image_upload(self, fid:str, image_names:str, images):
         try:
-            byte_img = self.__set_image_to_byte(image=image)
+            byte_img = self.__set_images_to_byte(images=images)
 
-            if not self._check_image_size(img=byte_img):
-                return "NOT_FIT_IN", False
+            #if not self._check_image_size(img=byte_img):
+                #return "NOT_FIT_IN", False
 
-            cv_image = self.__set_image_to_cv2(image=byte_img)
+            cv_image = self.__set_images_to_cv2(images=byte_img)
 
             #image_name = f'/{fid}-{image_name}'
-            cv2.imwrite(self.__path+f'/{fid}_{image_name}',cv_image)
+            
+            for i, image_name in enumerate(image_names):
+                index = str(i)
+                cv2.imwrite(self.__path+f'/{fid}_{index}_{image_name}',cv_image[i])
 
-            self.__s3.upload_file(self.__path+f'/{fid}_{image_name}',
-                                    self.__bucket_name ,
-                                    f'{fid}_{image_name}',
-                                    ExtraArgs={'ACL':'public-read'})
+            for i, image_name in enumerate(image_names):
+                index = str(i)
+                self.__s3.upload_file(self.__path+f'/{fid}_{index}_{image_name}',
+                                        self.__bucket_name ,
+                                        f'{fid}_{index}_{image_name}',
+                                        ExtraArgs={'ACL':'public-read'})
             
 
             self.delete_temp_image()
-            url = self.__endpoint_url +"/"+ self.__bucket_name + "/" + fid + "_" + image_name
+            url = []
 
-            return [url], True
+            for i, image_name in enumerate(image_names):
+                index = str(i)
+                url.append(self.__endpoint_url +"/"+ self.__bucket_name + "/" + fid + "_" + index + "_" + image_name)
+
+            return url, True
         except Exception as e:
             print(e)
             return "Something Goes Bad", False
