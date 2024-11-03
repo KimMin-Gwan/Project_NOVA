@@ -42,7 +42,7 @@
 .tag-container {
   display: flex;
   /* flex-grow: 1; */
-  gap: 30px;
+  gap: 20px;
   overflow-x: auto;
   white-space: nowrap;
   -ms-overflow-style: none;
@@ -64,6 +64,7 @@
   padding: 8px 35px;
   min-width: 80px;
   flex-shrink: 0;
+  margin-left: 15px;
 }
 
 .main-area {
@@ -224,9 +225,19 @@
   text-align: left;
 }
 
+.ranking-img {
+  min-width: 40px;
+}
+.ranking-img > img {
+  object-fit: contain;
+  width: 25px;
+  height: 25px;
+}
+
 .ranking-name {
-  text-decoration: underline;
-  margin-left: 40px;
+  margin-left: 20px;
+  padding-top: 4px;
+  counter-reset: #fafafa;
 }
 
 .feed-container {

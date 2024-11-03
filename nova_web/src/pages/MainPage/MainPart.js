@@ -73,7 +73,7 @@ export default function MainPart() {
                   setHashTag(tag);
                 }}
                 style={{
-                  backgroundColor: clickIndex === i ? "#051243" : "#373737",
+                  backgroundColor: clickIndex === i ? "#98A0FF" : "#373737",
                   cursor: "pointer",
                 }}
               >

@@ -1,6 +1,18 @@
 import { useEffect, useState } from "react";
 import style from "./MainPart.module.css";
 
+import one from './../../img/1.png'
+import two from './../../img/2.png'
+import three from './../../img/3.png'
+import four from './../../img/4.png'
+import five from './../../img/5.png'
+import six from './../../img/6.png'
+import seven from './../../img/7.png'
+import eight from './../../img/8.png'
+import nine from './../../img/9.png'
+import ten from './../../img/10.png'
+
+let imgList = [one, two, three, four, five, six, seven, eight, nine, ten];
 export default function IncreaseTag() {
   let [tagList, setTagList] = useState([]);
 
@@ -17,7 +29,7 @@ export default function IncreaseTag() {
   useEffect(() => {
     fetchTagData();
   }, [])
-  
+
   return (
     <div className={style["wrap-container"]}>
       <div className={style["top-area"]}>
@@ -35,7 +47,9 @@ export default function IncreaseTag() {
               tagList.map((tag, i) => {
                 return (
                   <li key={i} className={style["ranking-box"]}>
-                    <div className={style["ranking"]}>{i+1}위</div>
+                    <div className={style["ranking-img"]}>
+                      <img src={imgList[i]} alt="img"></img>
+                    </div>
                     <div className={style["ranking-name"]}>{tag}</div>
                   </li>
                 )
