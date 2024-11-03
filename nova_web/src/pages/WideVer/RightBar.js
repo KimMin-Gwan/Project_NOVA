@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 export default function RightBar() {
   return (
     <div className={style["wrap_container"]}>
-      <div className={style_hash["hashtag-box"]}>
+      <div className={style["hashtag-box"]}>
         <div className={style["top-bar"]}>
           <header className={style["wide-text"]}>급상승 해시태그</header>
           <span className={style_hash["time-text"]}>13:00 기준</span>
