@@ -211,6 +211,7 @@ class FeedManager:
         new_feed.category = [] # 여기서 카테고리 추가
         new_feed.image= image
         new_feed.hashtag = hashtag
+        new_feed.num_image = len(image)
         return new_feed
     
 
