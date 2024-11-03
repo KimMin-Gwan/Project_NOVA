@@ -206,7 +206,7 @@ class FeedManager:
         new_feed.date = self.__set_datetime()
         new_feed.fclass = fclass
         new_feed.class_name, new_feed.result = self.__get_class_name(fclass=fclass)
-        new_feed.choice = choice
+        new_feed.choice = choice[:len(new_feed.result)]
         new_feed.state = "y"
         new_feed.category = [] # 여기서 카테고리 추가
         new_feed.image= image
@@ -847,6 +847,7 @@ class FeedClassManagement:
         if num_choice != -1:
             for _ in range(num_choice):
                 result.append(0)
+
         return fname, result
             
     def get_fclass_meta_data(self):
