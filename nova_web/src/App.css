@@ -39,7 +39,8 @@ body {
 
 .container {
   max-width: 500px;
-  height: 300vh;
+  min-height: 400vh;
+  height: 100%;
   margin: 0 auto;
   background-color: #1e1e1e;
   position: relative;
@@ -907,8 +908,7 @@ body {
 }
 
 /* 피드 영역 */
-.feed-area {
-}
+.feed-area {}
 
 .satellite-search {
   color: white;
