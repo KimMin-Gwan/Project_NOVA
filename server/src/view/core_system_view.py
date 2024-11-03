@@ -332,6 +332,9 @@ class Core_Service_View(Master_View):
         #async def try_edit_feed(request:Request, image:UploadFile | None = File(None), 
                                 #jsonData:str | None = Form(None)):
             request_manager = RequestManager()
+
+            print(images)
+
             if images is None or len(images) == 0:
                 image_names = []
                 imgs = []
