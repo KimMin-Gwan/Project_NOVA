@@ -66,11 +66,6 @@ const WriteFeed = () => {
             for (let file of imageFiles) {
                 formData.append("images", file); // "images" 키로 여러 파일 추가
             }
-            // imageFiles.forEach((file,index)=>{
-            //     formData.append(`images`, file);
-            // })
-            // formData.append('images', imageFiles);
-            // console.log(imageFiles);
         } 
         formData.append('jsonData', JSON.stringify(send_data)); // JSON 데이터 추가
         

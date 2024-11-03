@@ -104,7 +104,7 @@ export default function FeedHashList(isUserState) {
             </button>
           </div>
         </header>
-        <div class={style.title}>시연</div>
+        <div className={style.title}>시연</div>
         <div className={style["tag-container"]}>
           <button className={style["hashtag-text"]}># 시연</button>
           <button className={style["hashtag-text"]}># 시연</button>

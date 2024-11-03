@@ -177,6 +177,10 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
             })
     }
 
+    function handleRequestURL(url) {
+        window.open(url, "_blank", "noopener, noreferrer");
+    }
+
     return (
         <>
             {
@@ -238,45 +242,86 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                         {
                                             !img_circle &&
                                             <div className={style['home_feed_img']}>
-                                                {/* 5개이상 */}
-                                                <div className={style['image-box']}>
-                                                    <div
-                                                        className={`${style["image-origin"]} ${style['five-over-image']}`}>
-                                                        <img src={feed.image[0]} alt="이미지" />
-                                                        <img src={feed.image[0]} alt="이미지" />
-                                                        <img src={feed.image[0]} alt="이미지" />
-                                                        <img src={feed.image[0]} alt="이미지" />
-                                                        <img src={feed.image[0]} alt="이미지" />
-                                                        <img src={feed.image[0]} alt="이미지" />
-                                                    </div>
-                                                </div>
                                                 {/* 1개이미지 */}
-                                                {/* <img src={feed.image[0]} alt='img' /> */}
-                                                {/* 4개이미지 */}
-                                                {/* <div className={style['image-show']}>
-                                                    <img src={feed.image[0]} alt='img'/>
-                                                    <img src={feed.image[0]} alt='img'/>
-                                                    <img src={feed.image[0]} alt='img'/>
-                                                    <img src={feed.image[0]} alt='img'/>
-                                                </div> */}
-
-                                                {/* 3개이미지 */}
-                                                {/* <div className={style['image-box']}>
-                                                    <div className={`${style["image-show"]} ${style['three-image']}`}>
-                                                        <img src={feed.image[0]} alt="이미지" />
-                                                        <img src={feed.image[0]} alt="이미지" />
-                                                        <img src={feed.image[0]} alt="이미지" />
-                                                    </div>
-                                                </div> */}
-
+                                                {
+                                                    feed.num_image === 1 && (
+                                                        <img
+                                                            style={{ cursor: 'pointer' }}
+                                                            src={feed.image[0]} alt='img'
+                                                            onClick={() => { handleRequestURL(feed.image[0]) }}
+                                                        />
+                                                    )
+                                                }
                                                 {/* 2개이미지 */}
-                                                {/* <div className={style['image-box']}>
-                                                    <div className={`${style["image-show"]} ${style['two-image']}`}>
-                                                        <img src={feed.image[0]} alt="이미지" />
-                                                        <img src={feed.image[0]} alt="이미지" />
-                                                    </div>
-                                                </div> */}
-
+                                                {
+                                                    feed.num_image === 2 && (
+                                                        <div className={style['image-box']}>
+                                                            <div className={`${style["image-show"]} ${style['two-image']}`}>
+                                                                {feed.image.map((img, i) => {
+                                                                    return (
+                                                                        <img
+                                                                            style={{ cursor: 'pointer' }}
+                                                                            key={i} src={img} alt='img'
+                                                                            onClick={() => { handleRequestURL(img) }}
+                                                                        />
+                                                                    )
+                                                                })}
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                }
+                                                {/* 3개이미지 */}
+                                                {
+                                                    feed.num_image === 3 && (
+                                                        <div className={style['image-box']}>
+                                                            <div className={`${style["image-show"]} ${style['three-image']}`}>
+                                                                {feed.image.map((img, i) => {
+                                                                    return (
+                                                                        <img
+                                                                            style={{ cursor: 'pointer' }}
+                                                                            key={i} src={img} alt='img'
+                                                                            onClick={() => { handleRequestURL(img) }}
+                                                                        />
+                                                                    )
+                                                                })}
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                }
+                                                {/* 4개이미지 */}
+                                                {
+                                                    feed.num_image === 4 && (
+                                                        <div className={style['image-show']}>
+                                                            {feed.image.map((img, i) => {
+                                                                return (
+                                                                    <img
+                                                                        style={{ cursor: 'pointer' }}
+                                                                        key={i} src={img} alt='img'
+                                                                        onClick={() => { handleRequestURL(img) }}
+                                                                    />
+                                                                )
+                                                            })}
+                                                        </div>
+                                                    )
+                                                }
+                                                {/* 5개이상 */}
+                                                {
+                                                    feed.num_image >= 5 && (
+                                                        <div className={style['image-box']}>
+                                                            <div className={`${style["image-origin"]} ${style['five-over-image']}`}>
+                                                                {feed.image.map((img, i) => {
+                                                                    return (
+                                                                        <img
+                                                                            style={{ cursor: 'pointer' }}
+                                                                            key={i} src={img} alt='img'
+                                                                            onClick={() => { handleRequestURL(img) }}
+                                                                        />
+                                                                    )
+                                                                })}
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                }
                                             </div>
 
                                         }
@@ -383,44 +428,85 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                             {
                                                 !img_circle &&
                                                 <div className={style['home_feed_img']}>
-                                                    {/* 5개이상 */}
-                                                    <div className={style['image-box']}>
-                                                        <div
-                                                            className={`${style["image-origin"]} ${style['five-over-image']}`}>
-                                                            <img src={feed.image[0]} alt="이미지" />
-                                                            <img src={feed.image[0]} alt="이미지" />
-                                                            <img src={feed.image[0]} alt="이미지" />
-                                                            <img src={feed.image[0]} alt="이미지" />
-                                                            <img src={feed.image[0]} alt="이미지" />
-                                                            <img src={feed.image[0]} alt="이미지" />
-                                                        </div>
-                                                    </div>
                                                     {/* 1개이미지 */}
-                                                    {/* <img src={feed.image[0]} alt='img' /> */}
-                                                    {/* 4개이미지 */}
-                                                    {/* <div className={style['image-show']}>
-                                                    <img src={feed.image[0]} alt='img'/>
-                                                    <img src={feed.image[0]} alt='img'/>
-                                                    <img src={feed.image[0]} alt='img'/>
-                                                    <img src={feed.image[0]} alt='img'/>
-                                                </div> */}
-
-                                                    {/* 3개이미지 */}
-                                                    {/* <div className={style['image-box']}>
-                                                    <div className={`${style["image-show"]} ${style['three-image']}`}>
-                                                        <img src={feed.image[0]} alt="이미지" />
-                                                        <img src={feed.image[0]} alt="이미지" />
-                                                        <img src={feed.image[0]} alt="이미지" />
-                                                    </div>
-                                                </div> */}
-
+                                                    {
+                                                        feed.num_image === 1 && (
+                                                            <img
+                                                                style={{ cursor: 'pointer' }}
+                                                                src={feed.image[0]} alt='img'
+                                                                onClick={() => { handleRequestURL(feed.image[0]) }}
+                                                            />
+                                                        )
+                                                    }
                                                     {/* 2개이미지 */}
-                                                    {/* <div className={style['image-box']}>
-                                                    <div className={`${style["image-show"]} ${style['two-image']}`}>
-                                                        <img src={feed.image[0]} alt="이미지" />
-                                                        <img src={feed.image[0]} alt="이미지" />
-                                                    </div>
-                                                </div> */}
+                                                    {
+                                                        feed.num_image === 2 && (
+                                                            <div className={style['image-box']}>
+                                                                <div className={`${style["image-show"]} ${style['two-image']}`}>
+                                                                    {feed.image.map((img, i) => {
+                                                                        return (
+                                                                            <img
+                                                                                style={{ cursor: 'pointer' }}
+                                                                                key={i} src={img} alt='img'
+                                                                                onClick={() => { handleRequestURL(img) }}
+                                                                            />
+                                                                        )
+                                                                    })}
+                                                                </div>
+                                                            </div>
+                                                        )
+                                                    }
+                                                    {/* 3개이미지 */}
+                                                    {
+                                                        feed.num_image === 3 && (
+                                                            <div className={style['image-box']}>
+                                                                <div className={`${style["image-show"]} ${style['three-image']}`}>
+                                                                    {feed.image.map((img, i) => {
+                                                                        return (
+                                                                            <img
+                                                                                style={{ cursor: 'pointer' }}
+                                                                                key={i} src={img} alt='img'
+                                                                                onClick={() => { handleRequestURL(img) }}
+                                                                            />)
+                                                                    })}
+                                                                </div>
+                                                            </div>
+                                                        )
+                                                    }
+                                                    {/* 4개이미지 */}
+                                                    {
+                                                        feed.num_image === 4 && (
+                                                            <div className={style['image-show']}>
+                                                                {feed.image.map((img, i) => {
+                                                                    return (
+                                                                        <img
+                                                                            style={{ cursor: 'pointer' }}
+                                                                            key={i} src={img} alt='img'
+                                                                            onClick={() => { handleRequestURL(img) }}
+                                                                        />
+                                                                    )
+                                                                })}
+                                                            </div>
+                                                        )
+                                                    }
+                                                    {/* 5개이상 */}
+                                                    {
+                                                        feed.num_image >= 5 && (
+                                                            <div className={style['image-box']}>
+                                                                <div className={`${style["image-origin"]} ${style['five-over-image']}`}>
+                                                                    {feed.image.map((img, i) => {
+                                                                        return (
+                                                                            <img
+                                                                                style={{ cursor: 'pointer' }}
+                                                                                key={i} src={img} alt='img'
+                                                                                onClick={() => { handleRequestURL(img) }}
+                                                                            />
+                                                                        )
+                                                                    })}
+                                                                </div>
+                                                            </div>
+                                                        )
+                                                    }
 
                                                 </div>
                                             }
@@ -585,44 +671,84 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                             {
                                                 !img_circle &&
                                                 <div className={style['home_feed_img']}>
-                                                    {/* 5개이상 */}
-                                                    <div className={style['image-box']}>
-                                                        <div
-                                                            className={`${style["image-origin"]} ${style['five-over-image']}`}>
-                                                            <img src={feed.image[0]} alt="이미지" />
-                                                            <img src={feed.image[0]} alt="이미지" />
-                                                            <img src={feed.image[0]} alt="이미지" />
-                                                            <img src={feed.image[0]} alt="이미지" />
-                                                            <img src={feed.image[0]} alt="이미지" />
-                                                            <img src={feed.image[0]} alt="이미지" />
-                                                        </div>
-                                                    </div>
                                                     {/* 1개이미지 */}
-                                                    {/* <img src={feed.image[0]} alt='img' /> */}
-                                                    {/* 4개이미지 */}
-                                                    {/* <div className={style['image-show']}>
-                                                    <img src={feed.image[0]} alt='img'/>
-                                                    <img src={feed.image[0]} alt='img'/>
-                                                    <img src={feed.image[0]} alt='img'/>
-                                                    <img src={feed.image[0]} alt='img'/>
-                                                </div> */}
-
-                                                    {/* 3개이미지 */}
-                                                    {/* <div className={style['image-box']}>
-                                                    <div className={`${style["image-show"]} ${style['three-image']}`}>
-                                                        <img src={feed.image[0]} alt="이미지" />
-                                                        <img src={feed.image[0]} alt="이미지" />
-                                                        <img src={feed.image[0]} alt="이미지" />
-                                                    </div>
-                                                </div> */}
-
+                                                    {
+                                                        feed.num_image === 1 && (
+                                                            <img
+                                                                style={{ cursor: 'pointer' }}
+                                                                src={feed.image[0]} alt='img'
+                                                                onClick={() => { handleRequestURL(feed.image[0]) }}
+                                                            />
+                                                        )
+                                                    }
                                                     {/* 2개이미지 */}
-                                                    {/* <div className={style['image-box']}>
-                                                    <div className={`${style["image-show"]} ${style['two-image']}`}>
-                                                        <img src={feed.image[0]} alt="이미지" />
-                                                        <img src={feed.image[0]} alt="이미지" />
-                                                    </div>
-                                                </div> */}
+                                                    {
+                                                        feed.num_image === 2 && (
+                                                            <div className={style['image-box']}>
+                                                                <div className={`${style["image-show"]} ${style['two-image']}`}>
+                                                                    {feed.image.map((img, i) => {
+                                                                        return (
+                                                                            <img
+                                                                                style={{ cursor: 'pointer' }}
+                                                                                key={i} src={img} alt='img'
+                                                                                onClick={() => { handleRequestURL(img) }}
+                                                                            />)
+                                                                    })}
+                                                                </div>
+                                                            </div>
+                                                        )
+                                                    }
+                                                    {/* 3개이미지 */}
+                                                    {
+                                                        feed.num_image === 3 && (
+                                                            <div className={style['image-box']}>
+                                                                <div className={`${style["image-show"]} ${style['three-image']}`}>
+                                                                    {feed.image.map((img, i) => {
+                                                                        return (
+                                                                            <img
+                                                                                style={{ cursor: 'pointer' }}
+                                                                                key={i} src={img} alt='img'
+                                                                                onClick={() => { handleRequestURL(img) }}
+                                                                            />)
+                                                                    })}
+                                                                </div>
+                                                            </div>
+                                                        )
+                                                    }
+                                                    {/* 4개이미지 */}
+                                                    {
+                                                        feed.num_image === 4 && (
+                                                            <div className={style['image-show']}>
+                                                                {feed.image.map((img, i) => {
+                                                                    return (
+                                                                        <img
+                                                                            style={{ cursor: 'pointer' }}
+                                                                            key={i} src={img} alt='img'
+                                                                            onClick={() => { handleRequestURL(img) }}
+                                                                        />
+                                                                    )
+                                                                })}
+                                                            </div>
+                                                        )
+                                                    }
+                                                    {/* 5개이상 */}
+                                                    {
+                                                        feed.num_image >= 5 && (
+                                                            <div className={style['image-box']}>
+                                                                <div className={`${style["image-origin"]} ${style['five-over-image']}`}>
+                                                                    {feed.image.map((img, i) => {
+                                                                        return (
+                                                                            <img
+                                                                                style={{ cursor: 'pointer' }}
+                                                                                key={i} src={img} alt='img'
+                                                                                onClick={() => { handleRequestURL(img) }}
+                                                                            />
+                                                                        )
+                                                                    })}
+                                                                </div>
+                                                            </div>
+                                                        )
+                                                    }
 
                                                 </div>
                                             }
@@ -773,45 +899,84 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                             {
                                                 !img_circle &&
                                                 <div className={style['home_feed_img']}>
-                                                    {/* 5개이상 */}
-                                                    <div className={style['image-box']}>
-                                                        <div
-                                                            className={`${style["image-origin"]} ${style['five-over-image']}`}>
-                                                            <img src={feed.image[0]} alt="이미지" />
-                                                            <img src={feed.image[0]} alt="이미지" />
-                                                            <img src={feed.image[0]} alt="이미지" />
-                                                            <img src={feed.image[0]} alt="이미지" />
-                                                            <img src={feed.image[0]} alt="이미지" />
-                                                            <img src={feed.image[0]} alt="이미지" />
-                                                        </div>
-                                                    </div>
                                                     {/* 1개이미지 */}
-                                                    {/* <img src={feed.image[0]} alt='img' /> */}
-                                                    {/* 4개이미지 */}
-                                                    {/* <div className={style['image-show']}>
-                                                    <img src={feed.image[0]} alt='img'/>
-                                                    <img src={feed.image[0]} alt='img'/>
-                                                    <img src={feed.image[0]} alt='img'/>
-                                                    <img src={feed.image[0]} alt='img'/>
-                                                </div> */}
-
-                                                    {/* 3개이미지 */}
-                                                    {/* <div className={style['image-box']}>
-                                                    <div className={`${style["image-show"]} ${style['three-image']}`}>
-                                                        <img src={feed.image[0]} alt="이미지" />
-                                                        <img src={feed.image[0]} alt="이미지" />
-                                                        <img src={feed.image[0]} alt="이미지" />
-                                                    </div>
-                                                </div> */}
-
+                                                    {
+                                                        feed.num_image === 1 && (
+                                                            <img
+                                                                style={{ cursor: 'pointer' }}
+                                                                src={feed.image[0]} alt='img'
+                                                                onClick={() => { handleRequestURL(feed.image[0]) }}
+                                                            />
+                                                        )
+                                                    }
                                                     {/* 2개이미지 */}
-                                                    {/* <div className={style['image-box']}>
-                                                    <div className={`${style["image-show"]} ${style['two-image']}`}>
-                                                        <img src={feed.image[0]} alt="이미지" />
-                                                        <img src={feed.image[0]} alt="이미지" />
-                                                    </div>
-                                                </div> */}
-
+                                                    {
+                                                        feed.num_image === 2 && (
+                                                            <div className={style['image-box']}>
+                                                                <div className={`${style["image-show"]} ${style['two-image']}`}>
+                                                                    {feed.image.map((img, i) => {
+                                                                        return (
+                                                                            <img
+                                                                                style={{ cursor: 'pointer' }}
+                                                                                key={i} src={img} alt='img'
+                                                                                onClick={() => { handleRequestURL(img) }}
+                                                                            />)
+                                                                    })}
+                                                                </div>
+                                                            </div>
+                                                        )
+                                                    }
+                                                    {/* 3개이미지 */}
+                                                    {
+                                                        feed.num_image === 3 && (
+                                                            <div className={style['image-box']}>
+                                                                <div className={`${style["image-show"]} ${style['three-image']}`}>
+                                                                    {feed.image.map((img, i) => {
+                                                                        return (
+                                                                            <img
+                                                                                style={{ cursor: 'pointer' }}
+                                                                                key={i} src={img} alt='img'
+                                                                                onClick={() => { handleRequestURL(img) }}
+                                                                            />)
+                                                                    })}
+                                                                </div>
+                                                            </div>
+                                                        )
+                                                    }
+                                                    {/* 4개이미지 */}
+                                                    {
+                                                        feed.num_image === 4 && (
+                                                            <div className={style['image-show']}>
+                                                                {feed.image.map((img, i) => {
+                                                                    return (
+                                                                        <img
+                                                                            style={{ cursor: 'pointer' }}
+                                                                            key={i} src={img} alt='img'
+                                                                            onClick={() => { handleRequestURL(img) }}
+                                                                        />
+                                                                    )
+                                                                })}
+                                                            </div>
+                                                        )
+                                                    }
+                                                    {/* 5개이상 */}
+                                                    {
+                                                        feed.num_image >= 5 && (
+                                                            <div className={style['image-box']}>
+                                                                <div className={`${style["image-origin"]} ${style['five-over-image']}`}>
+                                                                    {feed.image.map((img, i) => {
+                                                                        return (
+                                                                            <img
+                                                                                style={{ cursor: 'pointer' }}
+                                                                                key={i} src={img} alt='img'
+                                                                                onClick={() => { handleRequestURL(img) }}
+                                                                            />
+                                                                        )
+                                                                    })}
+                                                                </div>
+                                                            </div>
+                                                        )
+                                                    }
                                                 </div>
                                             }
 
