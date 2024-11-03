@@ -17,6 +17,7 @@ export default function IncreaseTag() {
   useEffect(() => {
     fetchTagData();
   }, [])
+  
   return (
     <div className={style["wrap-container"]}>
       <div className={style["top-area"]}>

@@ -445,46 +445,77 @@ const FeedPage = () => {
                   <div>#해시태그</div>
                   <div className={style["feed-content"]}>{banner.body}</div>
 
-                  <div className={style["image-box"]}>
-                    <div className={`${style["image-origin"]} ${style["five-over-image"]}`}>
-                      <img src={banner.image[0]} alt="이미지" />
-                      <img src={banner.image[0]} alt="이미지" />
-                      <img src={banner.image[0]} alt="이미지" />
-                      <img src={banner.image[0]} alt="이미지" />
-                      <img src={banner.image[0]} alt="이미지" />
-                      <img src={banner.image[0]} alt="이미지" />
-                    </div>
-                  </div>
+                  {/* 1개이미지 */}
+                  {
+                    banner.num_image === 1 && (
+                      <div className={style['image-box']}>
+                        <div className={`${style["image-show"]} ${style['one-image']}`}>
+                          <img src={banner.image[0]} alt="이미지" />
+                        </div>
+                      </div>
+                    )
+                  }
 
-                  {/* <div className={style['image-box']}>
-                    <div className={`${style["image-show"]} ${style['one-image']}`}>
-                      <img src={banner.image[0]} alt="이미지" />
-                    </div>
-                  </div> */}
+                  {/* 2개이미지 */}
+                  {
+                    banner.num_image === 2 && (
+                      <div className={style['image-box']}>
+                        <div className={`${style["image-show"]} ${style['two-image']}`}>
+                          {banner.image.map((img, i) => {
+                            return (
+                              <img key={i} src={img} alt="이미지" />
+                            )
+                          })}
+                        </div>
+                      </div>
+                    )
+                  }
 
-                  {/* <div className={style["image-box"]}>
-                    <div className={style["image-show"]}>
-                      <img src={banner.image[0]} alt="이미지" />
-                      <img src={banner.image[0]} alt="이미지" />
-                      <img src={banner.image[0]} alt="이미지" />
-                      <img src={banner.image[0]} alt="이미지" />
-                    </div>
-                  </div> */}
+                  {/* 3개 이미지 */}
+                  {
+                    banner.num_image === 3 && (
+                      <div className={style['image-box']}>
+                        <div className={`${style["image-show"]} ${style['three-image']}`}>
+                          {banner.image.map((img, i) => {
+                            return (
+                              <img key={i} src={img} alt="이미지" />
+                            )
+                          })}
+                        </div>
+                      </div>
+                    )
+                  }
 
-                  {/* <div className={style['image-box']}>
-                    <div className={`${style["image-show"]} ${style['two-image']}`}>
-                      <img src={banner.image[0]} alt="이미지" />
-                      <img src={banner.image[0]} alt="이미지" />
-                    </div>
-                  </div> */}
+                  {/* 4개 이미지 */}
+                  {
+                    banner.num_image === 4 && (
+                      <div className={style["image-box"]}>
+                        <div className={style["image-show"]}>
+                          {banner.image.map((img, i) => {
+                            return (
+                              <img key={i} src={img} alt="이미지" />
+                            )
+                          })}
+                        </div>
+                      </div>
+                    )
+                  }
 
-                  {/* <div className={style['image-box']}>
-                    <div className={`${style["image-show"]} ${style['three-image']}`}>
-                      <img src={banner.image[0]} alt="이미지" />
-                      <img src={banner.image[0]} alt="이미지" />
-                      <img src={banner.image[0]} alt="이미지" />
-                    </div>
-                  </div> */}
+                  {/* 5개 이미지 */}
+                  {
+                    banner.num_image >= 5 && (
+                      <div className={style["image-box"]}>
+                        <div className={`${style["image-origin"]} ${style["five-over-image"]}`}>
+                          {banner.image.map((img, i) => {
+                            return (
+                              <img key={i} src={img} alt="이미지" />
+                            )
+                          })}
+                        </div>
+                      </div>
+                    )
+                  }
+
 
                   <div className={style["fclass-box"]}>
                     {banner.fclass === "multiple" && <MultiClass feed={banner} handleInteraction={handleInteraction} />}
