@@ -334,10 +334,12 @@ class Core_Service_View(Master_View):
             request_manager = RequestManager()
 
             form_data = await request.form()
-            image_files: List[UploadFile] = form_data.getlist("images")
-    
-            image_names = [image.filename for image in images]
-            print("Image filenames:", image_names)
+            image_files = form_data.getlist("images")
+            
+            print(image_files)
+
+            #image_names = [image.filename for image in images]
+            #print("Image filenames:", image_names)
 
             return "hello"
 
