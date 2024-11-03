@@ -57,14 +57,23 @@ const WriteFeed = () => {
                 fid: "",
                 fclass: fclassName[currentFclass],
                 choice: choice, // 4지선다 선택지 반영
+                hashtag: 'test'
             },
         };
 
         const formData = new FormData();
         if (imageFiles) {
-            formData.append('image', imageFiles);
-        }
+            for (let file of imageFiles) {
+                formData.append("images", file); // "images" 키로 여러 파일 추가
+            }
+            // imageFiles.forEach((file,index)=>{
+            //     formData.append(`images`, file);
+            // })
+            // formData.append('images', imageFiles);
+            // console.log(imageFiles);
+        } 
         formData.append('jsonData', JSON.stringify(send_data)); // JSON 데이터 추가
+        
 
         fetch('https://nova-platform.kr/feed_explore/try_edit_feed', {
             method: 'POST',
@@ -118,10 +127,11 @@ const WriteFeed = () => {
         setInputTag(e.target.value);
     };
 
-    function onKeyDown(e){
-        if(e.keyCode===32){
+    function onKeyDown(e) {
+        if (e.keyCode === 32) {
             setPlusTag(`#${inputTag}`);
-            setInputTag('');
+            // setInputTag('');
+            e.target.value = '';
             setTagList([...tagList, plusTag]);
         }
     };
@@ -152,7 +162,7 @@ const WriteFeed = () => {
                         <div id={style['nick_name']}>지지자</div>
                         <div id={style.date}>2024/02/02</div>
                     </div> */}
-                    
+
                     <div className={style['hash-tag-area']}>
                         <div id={style['hashtag']}>해시태그</div>
                         <input type='text'
@@ -161,8 +171,8 @@ const WriteFeed = () => {
                             onKeyDown={onKeyDown}
                             className={style['write-tag']}
                         ></input>
-                        {tagList.length!==0 && tagList.map((tag,i)=>{
-                            return(
+                        {tagList.length !== 0 && tagList.map((tag, i) => {
+                            return (
                                 <div className={style['tag-box']} key={i}>{tag}</div>
                             )
                         })}
@@ -243,8 +253,6 @@ const WriteFeed = () => {
                             }
                         </div>
 
-                        <div className={style['divide-line']}></div>
-
                         <div className={style['func_part']}>
                             <div className={style['btn_func_area']}>
                                 <div className={style['btn_func']}>
@@ -259,7 +267,7 @@ const WriteFeed = () => {
                             </div>
                             <div className={style['warning_text']}>타인에게 불편을 줄 수 있는 내용의 게시글은 경고 없이 삭제될 수 있습니다.</div>
                         </div>
-
+                        <div className={style['empty-box']}></div>
                     </form>
                 </div>
             </div>
