@@ -162,6 +162,23 @@ class Core_Service_View(Master_View):
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response
+        
+        @self.__app.get('/home/all_feed')
+        def get_feed_data(request:Request, key:Optional[int] = -4):
+            request_manager = RequestManager()
+            data_payload = HomeFeedRequest(key=key)
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            #if not request_manager.jwt_payload.result:
+                #raise request_manager.credentials_exception
+
+            home_controller=Feed_Controller()
+            model = home_controller.get_home_feed_data(database=self.__database,
+                                                        request=request_manager,
+                                                        feed_manager=self.__feed_manager)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
 
 
         # 최애를 검색하는 보편적인 함수
