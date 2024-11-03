@@ -352,6 +352,10 @@ const FeedPage = () => {
       });
   }
 
+  function handleRequestURL(url) {
+    window.open(url, "_blank", "noopener, noreferrer");
+  }
+
   return (
     <div onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp} onMouseLeave={handleMouseUp} onWheel={handleWheel} onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd} ref={sliderRef} className={style["test_container"]}>
       <div
@@ -450,7 +454,9 @@ const FeedPage = () => {
                     banner.num_image === 1 && (
                       <div className={style['image-box']}>
                         <div className={`${style["image-show"]} ${style['one-image']}`}>
-                          <img src={banner.image[0]} alt="이미지" />
+                          <img
+                            style={{ cursor: 'pointer' }}
+                            src={banner.image[0]} alt="이미지" onClick={() => { handleRequestURL(banner.image[0]) }} />
                         </div>
                       </div>
                     )
@@ -463,7 +469,9 @@ const FeedPage = () => {
                         <div className={`${style["image-show"]} ${style['two-image']}`}>
                           {banner.image.map((img, i) => {
                             return (
-                              <img key={i} src={img} alt="이미지" />
+                              <img
+                                style={{ cursor: 'pointer' }}
+                                key={i} src={img} alt="이미지" onClick={() => { handleRequestURL(img) }} />
                             )
                           })}
                         </div>
@@ -478,7 +486,9 @@ const FeedPage = () => {
                         <div className={`${style["image-show"]} ${style['three-image']}`}>
                           {banner.image.map((img, i) => {
                             return (
-                              <img key={i} src={img} alt="이미지" />
+                              <img
+                                style={{ cursor: 'pointer' }}
+                                key={i} src={img} alt="이미지" onClick={() => { handleRequestURL(img) }} />
                             )
                           })}
                         </div>
@@ -493,7 +503,9 @@ const FeedPage = () => {
                         <div className={style["image-show"]}>
                           {banner.image.map((img, i) => {
                             return (
-                              <img key={i} src={img} alt="이미지" />
+                              <img
+                                style={{ cursor: 'pointer' }}
+                                key={i} src={img} alt="이미지" onClick={() => { handleRequestURL(img) }} />
                             )
                           })}
                         </div>
@@ -508,7 +520,9 @@ const FeedPage = () => {
                         <div className={`${style["image-origin"]} ${style["five-over-image"]}`}>
                           {banner.image.map((img, i) => {
                             return (
-                              <img key={i} src={img} alt="이미지" />
+                              <img
+                                style={{ cursor: 'pointer' }}
+                                key={i} src={img} alt="이미지" onClick={() => { handleRequestURL(img) }} />
                             )
                           })}
                         </div>
