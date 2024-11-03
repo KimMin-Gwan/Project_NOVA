@@ -1,4 +1,4 @@
-from typing import Any, Optional, Union
+from typing import Any, Optional, Union, List
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request, File, UploadFile, Form
 from view.master_view import Master_View, RequestHeader
 from view.parsers import Head_Parser
@@ -327,17 +327,17 @@ class Core_Service_View(Master_View):
 
         # feed 를 만들거나 수정하기
         @self.__app.post('/feed_explore/try_edit_feed')
-        async def try_edit_feed(request: Request, image: Union[UploadFile, None] = File(None),
+        async def try_edit_feed(request: Request, images: Union[List[UploadFile], None] = File(None),
                         jsonData: Union[str, None] = Form(None)):
         #async def try_edit_feed(request:Request, image:UploadFile | None = File(None), 
                                 #jsonData:str | None = Form(None)):
             request_manager = RequestManager()
-            if image is None:
-                image_name = "image_not_exist?"
-                img = None
+            if images is None or len(images) == 0:
+                image_names = []
+                imgs = []
             else:
-                image_name = image.filename
-                img = await image.read()
+                image_names = [image.filename for image in images]
+                imgs = [await image.read() for image in images]
 
             if jsonData is None:
                 raise request_manager.system_logic_exception
@@ -345,8 +345,8 @@ class Core_Service_View(Master_View):
             raw_request = json.loads(jsonData)
 
             data_payload = EditFeedRequest(request=raw_request,
-                                            image_name=image_name,
-                                            image=img)
+                                            image_names=image_names,
+                                            images=imgs)
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
             if not request_manager.jwt_payload.result:
                 raise request_manager.credentials_exception
@@ -518,15 +518,16 @@ class FeedInteractionRequest(RequestHeader):
         self.action = action
 
 class EditFeedRequest(RequestHeader):
-    def __init__(self, request, image_name, image) -> None:
+    def __init__(self, request, image_names, images) -> None:
         super().__init__(request)
         body = request['body']
         self.fid = body['fid']
         self.body = body['body']
         self.fclass = body ['fclass']
         self.choice= body['choice']
-        self.image_name = image_name
-        self.image = image
+        self.hashtag = body['hashtag']
+        self.image_names = image_names
+        self.images = images
 
 class MakeFeedCommentRequest(RequestHeader):
     def __init__(self, request) -> None:
