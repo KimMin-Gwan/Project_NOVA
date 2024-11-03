@@ -159,19 +159,19 @@
 }
 
 .img-box {
-  width: 100%;
+  width: 90%;
   height: 70%;
-  background-color: white;
   margin: 0 auto;
   margin-top: 10px;
   color: black;
-  border-radius: 10px;
+  border-radius: 5px;
 }
 
 .img-box > img {
+  display: block;
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  border-radius: 5px;
 }
 
 .popular-main {
