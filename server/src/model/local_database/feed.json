@@ -711,33 +711,5 @@
             "노바"
         ],
         "num_image": 0
-    },
-    {
-        "fid": "abcd-1234-5678-qT776N",
-        "uid": "abcd-1234-5678",
-        "nickname": "운영자",
-        "body": "업로드 테스트를 해볼께요2",
-        "date": "2024/11/03-16:52:27",
-        "fclass": "card",
-        "class_name": "추억",
-        "choice": [],
-        "result": [],
-        "state": "y",
-        "attend": [],
-        "category": [],
-        "comment": [],
-        "num_comment": 0,
-        "star": 0,
-        "star_flag": false,
-        "image": [
-            "https://kr.object.ncloudstorage.com/nova-feed-images/abcd-1234-5678-qT776N_0_edit (1).png",
-            "https://kr.object.ncloudstorage.com/nova-feed-images/abcd-1234-5678-qT776N_1_edit.png"
-        ],
-        "hashtag": [
-            "임시",
-            "해시태그",
-            "노바"
-        ],
-        "num_image": 0
     }
 ]
