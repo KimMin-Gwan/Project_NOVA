@@ -14,7 +14,7 @@
 .direct-box {
   background-color: #212327;
   padding: 10px;
-  border-radius: 10px;
+  border-radius: 5px;
 }
 .wide-text {
   font-size: 20px;
@@ -28,7 +28,7 @@
 }
 
 .list-item {
-  border-bottom: 0.2px solid #dcdcdc;
+  border-bottom: 0.2px solid #585858;
   padding-bottom: 20px;
   width: 90%;
   display: flex;
@@ -57,7 +57,7 @@
 .go-nova {
   background: #eee9fc;
   color: #1b1b1b;
-  border-radius: 10px;
+  border-radius: 5px;
   text-decoration: none;
   padding: 15px;
   font-weight: 600;
@@ -67,7 +67,7 @@
 .search-box {
   background-color: #212327;
   padding: 8px;
-  border-radius: 10px;
+  border-radius: 5px;
 }
 .search-bar {
   display: flex;
@@ -111,4 +111,6 @@
 .top-bar {
   display: flex;
   justify-content: space-between;
+  padding-left: 10px;
+  padding-top: 10px;
 }

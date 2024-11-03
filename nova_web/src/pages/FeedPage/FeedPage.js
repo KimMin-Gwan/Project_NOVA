@@ -19,15 +19,14 @@ import share_gray from "./../../img/share_gray.png";
 // import like_gray from "./../../img/like_gray.png";
 import comment_gray from "./../../img/comment_gray.png";
 import star_gray from "./../../img/star_gray.png";
-
-
+import LeftBar from "./../WideVer/LeftBar.js";
+import RightBar from "./../WideVer/RightBar.js";
 
 import likeStar from "./../../img/like_star.png";
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 const FeedPage = () => {
-
   let navigate = useNavigate();
 
   const [banners, setBanners] = useState([]);
@@ -99,7 +98,7 @@ const FeedPage = () => {
     }
 
     setDragDistance(0);
-  }
+  };
 
   // 휠로 배너 변경
   const handleWheel = (e) => {
@@ -113,7 +112,6 @@ const FeedPage = () => {
   };
 
   let [isUserState, setIsUserState] = useState(false);
-
 
   function handleValidCheck() {
     fetch("https://nova-platform.kr/home/is_valid", {
@@ -188,8 +186,6 @@ const FeedPage = () => {
     }
   }, [currentIndex]);
 
-
-
   let [isClickedComment, setIsClickedComment] = useState(false);
 
   // 피드 좋아요 부분(되긴되는데 반복되는 오류가 생김)
@@ -216,8 +212,8 @@ const FeedPage = () => {
     "request-type": "default",
     "client-version": "v1.0.1",
     "client-ip": "127.0.0.1",
-    "uid": "1234-abcd-5678",
-    "endpoint": "/core_system/",
+    uid: "1234-abcd-5678",
+    endpoint: "/core_system/",
   };
 
   // let [inputValue, setInputValue] = useState("");
@@ -284,9 +280,9 @@ const FeedPage = () => {
         setAllComments(data.body.comments);
         setBanners((prevFeeds) => {
           return prevFeeds.map((feed) => {
-            return feed.fid === fid ? { ...feed, num_comment: data.body.feed[0].num_comment } : feed
-          })
-        })
+            return feed.fid === fid ? { ...feed, num_comment: data.body.feed[0].num_comment } : feed;
+          });
+        });
       });
   }
 
@@ -312,63 +308,52 @@ const FeedPage = () => {
 
   function handleNext() {
     setNowIndex((prevIndex) => prevIndex + 1);
-  };
+  }
 
   // 댓글 더보기에서 댓글입력(완료)
-  let [inputValue, setInputValue] = useState('');
+  let [inputValue, setInputValue] = useState("");
 
   function handleChange(e) {
     setInputValue(e.target.value);
-  };
+  }
 
   function handleSubmit(fid, event) {
     event.preventDefault();
 
-    fetch('https://nova-platform.kr/feed_explore/make_comment', {
-      method: 'POST',
+    fetch("https://nova-platform.kr/feed_explore/make_comment", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         header,
       },
-      credentials: 'include',
+      credentials: "include",
       body: JSON.stringify({
         header: header,
         body: {
           fid: `${fid}`,
-          body: `${inputValue}`
-        }
-      })
+          body: `${inputValue}`,
+        },
+      }),
     })
-      .then(response => response.json())
-      .then(data => {
+      .then((response) => response.json())
+      .then((data) => {
         console.log(data);
         // setNewComments(data.body.comments);
         setAllComments((prevAllComments) => {
           const newAllComments = [data.body.comments[0], ...prevAllComments];
           return newAllComments;
-        })
+        });
         setBanners((prevFeeds) => {
           return prevFeeds.map((feed) => {
-            return feed.fid === fid ? { ...feed, num_comment: data.body.feed[0].num_comment } : feed
-          })
-        })
-        setInputValue('');
-      })
+            return feed.fid === fid ? { ...feed, num_comment: data.body.feed[0].num_comment } : feed;
+          });
+        });
+        setInputValue("");
+      });
   }
 
-
   return (
-    <div
-      onMouseDown={handleMouseDown}
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
-      onMouseLeave={handleMouseUp}
-      onWheel={handleWheel}
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
-      ref={sliderRef}
-      className={style["test_container"]}>
+    <div onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp} onMouseLeave={handleMouseUp} onWheel={handleWheel} onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd} ref={sliderRef} className={style["test_container"]}>
       <div
         className={style["slider-track"]}
         style={{
@@ -403,50 +388,56 @@ const FeedPage = () => {
                     <div className={style["modal-container"]}>
                       <div className={style["comment-modal"]}>
                         <nav className={style["top_bar"]}>댓글 더보기</nav>
-                        <nav onClick={handleShowCommentWindow}
-                          className={style["top_bar"]}>닫기</nav>
-                        {
-                          allComments.length === 0 ? <div>댓글이 없습니다.</div> : (
-                            allComments.map((comment, i) => {
-                              return (
-                                <section key={comment.cid} className={style["text-section"]}>
-                                  <div className={style["text-box"]}>
-                                    <p className={style["text-1"]}>{comment.uname}</p>
-                                    <p className={style["text-2"]}>{comment.body}</p>
-                                  </div>
-                                  <div className={style["icon-modal"]}>
-                                    {
-                                      comment.owner ? (
-                                        <button onClick={(e) => {
-                                          handleRemoveComment(comment.fid, comment.cid, e)
-                                        }} className={style["button-modal"]}>삭제</button>
-                                      ) : (
-                                        <button className={style["button-modal"]}></button>
-                                      )
-                                    }
+                        <nav onClick={handleShowCommentWindow} className={style["top_bar"]}>
+                          닫기
+                        </nav>
+                        {allComments.length === 0 ? (
+                          <div>댓글이 없습니다.</div>
+                        ) : (
+                          allComments.map((comment, i) => {
+                            return (
+                              <section key={comment.cid} className={style["text-section"]}>
+                                <div className={style["text-box"]}>
+                                  <p className={style["text-1"]}>{comment.uname}</p>
+                                  <p className={style["text-2"]}>{comment.body}</p>
+                                </div>
+                                <div className={style["icon-modal"]}>
+                                  {comment.owner ? (
+                                    <button
+                                      onClick={(e) => {
+                                        handleRemoveComment(comment.fid, comment.cid, e);
+                                      }}
+                                      className={style["button-modal"]}
+                                    >
+                                      삭제
+                                    </button>
+                                  ) : (
+                                    <button className={style["button-modal"]}></button>
+                                  )}
 
-                                    <button className={style["button-modal"]}>신고</button>
-                                    <div className={style["star-modal"]}>
-                                      <img
-                                        src={comment.like_user ? star_color : star}
-                                        alt="clickable" onClick={(e) => {
-                                          handleCommentLike(comment.fid, comment.cid, e)
-                                        }} className={style["img-star"]} />
-                                      <p>{comment.like}</p>
-                                    </div>
+                                  <button className={style["button-modal"]}>신고</button>
+                                  <div className={style["star-modal"]}>
+                                    <img
+                                      src={comment.like_user ? star_color : star}
+                                      alt="clickable"
+                                      onClick={(e) => {
+                                        handleCommentLike(comment.fid, comment.cid, e);
+                                      }}
+                                      className={style["img-star"]}
+                                    />
+                                    <p>{comment.like}</p>
                                   </div>
-                                </section>
-                              )
-                            })
-                          )
-                        }
-                        <div className={`${style['comment_action']} ${style['comment-input']}`}>
+                                </div>
+                              </section>
+                            );
+                          })
+                        )}
+                        <div className={`${style["comment_action"]} ${style["comment-input"]}`}>
                           <form onSubmit={(event) => handleSubmit(banner.fid, event)}>
-                            <input type='text' value={inputValue} onChange={handleChange}></input>
-                            <button type='submit'>댓글 작성</button>
+                            <input type="text" value={inputValue} onChange={handleChange}></input>
+                            <button type="submit">댓글 작성</button>
                           </form>
                         </div>
-
                       </div>
                     </div>
                   )}
@@ -454,9 +445,8 @@ const FeedPage = () => {
                   <div>#해시태그</div>
                   <div className={style["feed-content"]}>{banner.body}</div>
 
-                  <div className={style['image-box']}>
-                    <div
-                      className={`${style["image-origin"]} ${style['five-over-image']}`}>
+                  <div className={style["image-box"]}>
+                    <div className={`${style["image-origin"]} ${style["five-over-image"]}`}>
                       <img src={banner.image[0]} alt="이미지" />
                       <img src={banner.image[0]} alt="이미지" />
                       <img src={banner.image[0]} alt="이미지" />
@@ -465,7 +455,6 @@ const FeedPage = () => {
                       <img src={banner.image[0]} alt="이미지" />
                     </div>
                   </div>
-
 
                   {/* <div className={style['image-box']}>
                     <div className={`${style["image-show"]} ${style['one-image']}`}>
@@ -496,7 +485,6 @@ const FeedPage = () => {
                       <img src={banner.image[0]} alt="이미지" />
                     </div>
                   </div> */}
-
 
                   <div className={style["fclass-box"]}>
                     {banner.fclass === "multiple" && <MultiClass feed={banner} handleInteraction={handleInteraction} />}
