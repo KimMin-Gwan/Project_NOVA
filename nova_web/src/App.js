@@ -187,7 +187,7 @@ function App() {
                         }}
                       ></img>
                     </button>
-                    
+
                   </div>
                 </header>
                 <Banner url={url}></Banner>

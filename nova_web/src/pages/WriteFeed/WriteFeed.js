@@ -45,20 +45,6 @@ const WriteFeed = () => {
 
         setImagePreview(previewUrls);
         validFiles.forEach(file => URL.revokeObjectURL(file));
-
-        // if (selectedFile && selectedFile.type.startsWith("image/")) {
-        //     setImageFile(selectedFile);
-        //     const reader = new FileReader();
-
-        //     reader.onload = () => {
-        //         setImagePreview(reader.result);
-        //     };
-
-        //     reader.readAsDataURL(selectedFile);
-        // } else {
-        //     alert('이미지 파일만 가능');
-        //     setImageFile(null);
-        // };
     };
 
     const handleSubmit = (event) => {
@@ -162,16 +148,18 @@ const WriteFeed = () => {
                 </div>
 
                 <div className={style['write-container']}>
-                    <div className={style['sup_info']}>
+                    {/* <div className={style['sup_info']}>
                         <div id={style['nick_name']}>지지자</div>
                         <div id={style.date}>2024/02/02</div>
-                    </div>
+                    </div> */}
                     
-                    <div>
+                    <div className={style['hash-tag-area']}>
+                        <div id={style['hashtag']}>해시태그</div>
                         <input type='text'
                             value={inputTag}
                             onChange={onChangeTag}
                             onKeyDown={onKeyDown}
+                            className={style['write-tag']}
                         ></input>
                         {tagList.length!==0 && tagList.map((tag,i)=>{
                             return(
@@ -182,6 +170,7 @@ const WriteFeed = () => {
 
                     <form onSubmit={handleSubmit}>
                         <div className={style['text_body']}>
+                            <div id={style['content']}>본문</div>
                             <textarea
                                 name='body'
                                 placeholder='내용을 입력해주세요'
@@ -266,10 +255,9 @@ const WriteFeed = () => {
                                         <input name='share' type='checkbox'></input>공유 허용
                                     </label>
                                 </div>
-                                <button type='submit'>업로드</button>
+                                <button type='submit' className={style['upload-btn']}>업로드</button>
                             </div>
                             <div className={style['warning_text']}>타인에게 불편을 줄 수 있는 내용의 게시글은 경고 없이 삭제될 수 있습니다.</div>
-                            <div className={style['warning_text']}>제재된 피드의 작성자는 우주재판에서 재판 받는 것에 동의하는 것으로 간주합니다.</div>
                         </div>
 
                     </form>
