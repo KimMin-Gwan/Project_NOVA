@@ -327,7 +327,7 @@ class Core_Service_View(Master_View):
 
         # feed 를 만들거나 수정하기
         @self.__app.post('/feed_explore/try_edit_feed')
-        async def try_edit_feed(request: Request, images: Union[List[UploadFile], None] = File(None),
+        async def try_edit_feed(request: Request, images: Union[UploadFile, None] = File(None),
                         jsonData: Union[str, None] = Form(None)):
         #async def try_edit_feed(request:Request, image:UploadFile | None = File(None), 
                                 #jsonData:str | None = Form(None)):
@@ -335,6 +335,7 @@ class Core_Service_View(Master_View):
 
             print(images)
 
+            return "hello"
             if images is None or len(images) == 0:
                 image_names = []
                 imgs = []
