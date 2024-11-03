@@ -329,7 +329,7 @@ class Core_Service_View(Master_View):
         @self.__app.post('/feed_explore/try_edit_feed')
         #async def try_edit_feed(request: Request, images: Union[UploadFile, None] = File(None),
                         #jsonData: Union[str, None] = Form(None)):
-        async def try_edit_feed(request:Request, images:List[UploadFile] | None = File(None), 
+        async def try_edit_feed(request:Request, images: UploadFile| None = File(None), 
                                 jsonData:str | None = Form(None)):
             request_manager = RequestManager()
 
