@@ -177,6 +177,10 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
             })
     }
 
+    function handleRequestURL(url) {
+        window.open(url, "_blank", "noopener, noreferrer");
+    }
+
     return (
         <>
             {
@@ -241,7 +245,11 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                                 {/* 1개이미지 */}
                                                 {
                                                     feed.num_image === 1 && (
-                                                        <img src={feed.image[0]} alt='img' />
+                                                        <img
+                                                            style={{ cursor: 'pointer' }}
+                                                            src={feed.image[0]} alt='img'
+                                                            onClick={() => { handleRequestURL(feed.image[0]) }}
+                                                        />
                                                     )
                                                 }
                                                 {/* 2개이미지 */}
@@ -251,7 +259,11 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                                             <div className={`${style["image-show"]} ${style['two-image']}`}>
                                                                 {feed.image.map((img, i) => {
                                                                     return (
-                                                                        <img key={i} src={img} alt='img' />
+                                                                        <img
+                                                                            style={{ cursor: 'pointer' }}
+                                                                            key={i} src={img} alt='img'
+                                                                            onClick={() => { handleRequestURL(img) }}
+                                                                        />
                                                                     )
                                                                 })}
                                                             </div>
@@ -265,7 +277,11 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                                             <div className={`${style["image-show"]} ${style['three-image']}`}>
                                                                 {feed.image.map((img, i) => {
                                                                     return (
-                                                                        <img key={i} src={img} alt='img' />
+                                                                        <img
+                                                                            style={{ cursor: 'pointer' }}
+                                                                            key={i} src={img} alt='img'
+                                                                            onClick={() => { handleRequestURL(img) }}
+                                                                        />
                                                                     )
                                                                 })}
                                                             </div>
@@ -278,7 +294,11 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                                         <div className={style['image-show']}>
                                                             {feed.image.map((img, i) => {
                                                                 return (
-                                                                    <img key={i} src={img} alt='img' />
+                                                                    <img
+                                                                        style={{ cursor: 'pointer' }}
+                                                                        key={i} src={img} alt='img'
+                                                                        onClick={() => { handleRequestURL(img) }}
+                                                                    />
                                                                 )
                                                             })}
                                                         </div>
@@ -291,7 +311,11 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                                             <div className={`${style["image-origin"]} ${style['five-over-image']}`}>
                                                                 {feed.image.map((img, i) => {
                                                                     return (
-                                                                        <img key={i} src={img} alt="이미지" />
+                                                                        <img
+                                                                            style={{ cursor: 'pointer' }}
+                                                                            key={i} src={img} alt='img'
+                                                                            onClick={() => { handleRequestURL(img) }}
+                                                                        />
                                                                     )
                                                                 })}
                                                             </div>
@@ -407,7 +431,11 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                                     {/* 1개이미지 */}
                                                     {
                                                         feed.num_image === 1 && (
-                                                            <img src={feed.image[0]} alt='img' />
+                                                            <img
+                                                                style={{ cursor: 'pointer' }}
+                                                                src={feed.image[0]} alt='img'
+                                                                onClick={() => { handleRequestURL(feed.image[0]) }}
+                                                            />
                                                         )
                                                     }
                                                     {/* 2개이미지 */}
@@ -417,7 +445,11 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                                                 <div className={`${style["image-show"]} ${style['two-image']}`}>
                                                                     {feed.image.map((img, i) => {
                                                                         return (
-                                                                            <img key={i} src={img} alt='img' />
+                                                                            <img
+                                                                                style={{ cursor: 'pointer' }}
+                                                                                key={i} src={img} alt='img'
+                                                                                onClick={() => { handleRequestURL(img) }}
+                                                                            />
                                                                         )
                                                                     })}
                                                                 </div>
@@ -431,8 +463,11 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                                                 <div className={`${style["image-show"]} ${style['three-image']}`}>
                                                                     {feed.image.map((img, i) => {
                                                                         return (
-                                                                            <img key={i} src={img} alt='img' />
-                                                                        )
+                                                                            <img
+                                                                                style={{ cursor: 'pointer' }}
+                                                                                key={i} src={img} alt='img'
+                                                                                onClick={() => { handleRequestURL(img) }}
+                                                                            />)
                                                                     })}
                                                                 </div>
                                                             </div>
@@ -444,7 +479,11 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                                             <div className={style['image-show']}>
                                                                 {feed.image.map((img, i) => {
                                                                     return (
-                                                                        <img key={i} src={img} alt='img' />
+                                                                        <img
+                                                                            style={{ cursor: 'pointer' }}
+                                                                            key={i} src={img} alt='img'
+                                                                            onClick={() => { handleRequestURL(img) }}
+                                                                        />
                                                                     )
                                                                 })}
                                                             </div>
@@ -457,7 +496,11 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                                                 <div className={`${style["image-origin"]} ${style['five-over-image']}`}>
                                                                     {feed.image.map((img, i) => {
                                                                         return (
-                                                                            <img key={i} src={img} alt="이미지" />
+                                                                            <img
+                                                                                style={{ cursor: 'pointer' }}
+                                                                                key={i} src={img} alt='img'
+                                                                                onClick={() => { handleRequestURL(img) }}
+                                                                            />
                                                                         )
                                                                     })}
                                                                 </div>
@@ -631,7 +674,11 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                                     {/* 1개이미지 */}
                                                     {
                                                         feed.num_image === 1 && (
-                                                            <img src={feed.image[0]} alt='img' />
+                                                            <img
+                                                                style={{ cursor: 'pointer' }}
+                                                                src={feed.image[0]} alt='img'
+                                                                onClick={() => { handleRequestURL(feed.image[0]) }}
+                                                            />
                                                         )
                                                     }
                                                     {/* 2개이미지 */}
@@ -641,8 +688,11 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                                                 <div className={`${style["image-show"]} ${style['two-image']}`}>
                                                                     {feed.image.map((img, i) => {
                                                                         return (
-                                                                            <img key={i} src={img} alt='img' />
-                                                                        )
+                                                                            <img
+                                                                                style={{ cursor: 'pointer' }}
+                                                                                key={i} src={img} alt='img'
+                                                                                onClick={() => { handleRequestURL(img) }}
+                                                                            />)
                                                                     })}
                                                                 </div>
                                                             </div>
@@ -655,8 +705,11 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                                                 <div className={`${style["image-show"]} ${style['three-image']}`}>
                                                                     {feed.image.map((img, i) => {
                                                                         return (
-                                                                            <img key={i} src={img} alt='img' />
-                                                                        )
+                                                                            <img
+                                                                                style={{ cursor: 'pointer' }}
+                                                                                key={i} src={img} alt='img'
+                                                                                onClick={() => { handleRequestURL(img) }}
+                                                                            />)
                                                                     })}
                                                                 </div>
                                                             </div>
@@ -668,7 +721,11 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                                             <div className={style['image-show']}>
                                                                 {feed.image.map((img, i) => {
                                                                     return (
-                                                                        <img key={i} src={img} alt='img' />
+                                                                        <img
+                                                                            style={{ cursor: 'pointer' }}
+                                                                            key={i} src={img} alt='img'
+                                                                            onClick={() => { handleRequestURL(img) }}
+                                                                        />
                                                                     )
                                                                 })}
                                                             </div>
@@ -681,7 +738,11 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                                                 <div className={`${style["image-origin"]} ${style['five-over-image']}`}>
                                                                     {feed.image.map((img, i) => {
                                                                         return (
-                                                                            <img key={i} src={img} alt="이미지" />
+                                                                            <img
+                                                                                style={{ cursor: 'pointer' }}
+                                                                                key={i} src={img} alt='img'
+                                                                                onClick={() => { handleRequestURL(img) }}
+                                                                            />
                                                                         )
                                                                     })}
                                                                 </div>
@@ -841,7 +902,11 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                                     {/* 1개이미지 */}
                                                     {
                                                         feed.num_image === 1 && (
-                                                            <img src={feed.image[0]} alt='img' />
+                                                            <img
+                                                                style={{ cursor: 'pointer' }}
+                                                                src={feed.image[0]} alt='img'
+                                                                onClick={() => { handleRequestURL(feed.image[0]) }}
+                                                            />
                                                         )
                                                     }
                                                     {/* 2개이미지 */}
@@ -851,8 +916,11 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                                                 <div className={`${style["image-show"]} ${style['two-image']}`}>
                                                                     {feed.image.map((img, i) => {
                                                                         return (
-                                                                            <img key={i} src={img} alt='img' />
-                                                                        )
+                                                                            <img
+                                                                                style={{ cursor: 'pointer' }}
+                                                                                key={i} src={img} alt='img'
+                                                                                onClick={() => { handleRequestURL(img) }}
+                                                                            />)
                                                                     })}
                                                                 </div>
                                                             </div>
@@ -865,8 +933,11 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                                                 <div className={`${style["image-show"]} ${style['three-image']}`}>
                                                                     {feed.image.map((img, i) => {
                                                                         return (
-                                                                            <img key={i} src={img} alt='img' />
-                                                                        )
+                                                                            <img
+                                                                                style={{ cursor: 'pointer' }}
+                                                                                key={i} src={img} alt='img'
+                                                                                onClick={() => { handleRequestURL(img) }}
+                                                                            />)
                                                                     })}
                                                                 </div>
                                                             </div>
@@ -878,7 +949,11 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                                             <div className={style['image-show']}>
                                                                 {feed.image.map((img, i) => {
                                                                     return (
-                                                                        <img key={i} src={img} alt='img' />
+                                                                        <img
+                                                                            style={{ cursor: 'pointer' }}
+                                                                            key={i} src={img} alt='img'
+                                                                            onClick={() => { handleRequestURL(img) }}
+                                                                        />
                                                                     )
                                                                 })}
                                                             </div>
@@ -891,7 +966,11 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                                                                 <div className={`${style["image-origin"]} ${style['five-over-image']}`}>
                                                                     {feed.image.map((img, i) => {
                                                                         return (
-                                                                            <img key={i} src={img} alt="이미지" />
+                                                                            <img
+                                                                                style={{ cursor: 'pointer' }}
+                                                                                key={i} src={img} alt='img'
+                                                                                onClick={() => { handleRequestURL(img) }}
+                                                                            />
                                                                         )
                                                                     })}
                                                                 </div>

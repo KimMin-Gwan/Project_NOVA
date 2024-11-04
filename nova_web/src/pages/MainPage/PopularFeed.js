@@ -39,7 +39,7 @@ export default function PopularFeed() {
           return (
             <div key={i} className={style["popular-feed"]} onClick={() => handleNavigate(feed.fid)}>
               <div className={style["img-box"]}>
-                <img src={`${feed.image}`} alt="img" />
+                <img src={`${feed.image[0]}`} alt="img" />
               </div>
               <div className={style["popular-main"]}>
                 <div className={style["tag-text"]}>
