@@ -1,8 +1,4 @@
 import style from './../pages/FeedPage/FeedPage.module.css';
-// import planet1 from './../img/planet1.png';
-// import planet2 from './../img/planet2.png';
-// import planet3 from './../img/planet3.png';
-// import planet4 from './../img/planet4.png';
 import { useState } from 'react';
 // import {}
 import { FaStar } from "react-icons/fa";

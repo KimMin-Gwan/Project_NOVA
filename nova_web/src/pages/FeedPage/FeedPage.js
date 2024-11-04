@@ -582,7 +582,7 @@ const FeedPage = () => {
 
                       <div className={`${style["btn-box"]}} ${style["action-btn-each"]}`}>
                         <img
-                          className={style["btn-img"]}
+                          className={`${style["btn-img"]} ${style['comment-img']}`}
                           src={comment_gray}
                           alt="댓글"
                           onClick={(event) => {
