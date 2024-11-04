@@ -158,6 +158,7 @@ const WriteFeed = () => {
                   </div>
                 );
               })}
+            <span>글자 수 제한</span>
           </div>
 
           <form onSubmit={handleSubmit}>
