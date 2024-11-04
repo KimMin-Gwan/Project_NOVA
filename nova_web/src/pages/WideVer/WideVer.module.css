@@ -54,13 +54,20 @@
 }
 
 /* 노바 펀딩 바로가기 */
+.nova_direct-box {
+  background-color: #eaeeff;
+  padding: 3px;
+  display: flex;
+  align-items: center;
+  padding-left: 15px;
+  border-radius: 5px;
+}
 .go-nova {
-  background: #eee9fc;
   color: #1b1b1b;
   border-radius: 5px;
   text-decoration: none;
   padding: 15px;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 /* 검색하기 */
@@ -121,4 +128,7 @@
   border-radius: 5px;
   display: flex;
   flex-flow: column;
+}
+.ranking-box-w {
+  margin-block: 10px;
 }
