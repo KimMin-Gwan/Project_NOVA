@@ -30,7 +30,7 @@ export default function PopularFeed() {
       <div className={style["top-area"]}>
         <div className={style["content-title"]}>
           <header className={style["header-text"]}>최근 인기 게시글</header>
-          <img src={more_icon} alt="더보기" onClick={() => navigate("/feed_list")} className={style["more-icon"]}></img>
+          <img src={more_icon} alt="더보기" onClick={() => navigate("/feed_list?type=best")} className={style["more-icon"]}></img>
         </div>
       </div>
 

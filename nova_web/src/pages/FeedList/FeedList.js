@@ -3,10 +3,13 @@ import style from "./FeedHashList.module.css";
 import logo from "./../../img/NOVA.png";
 import menu from "./../../img/menu-burger.png";
 import Feed, { Comments } from "./../../component/feed";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import LeftBar from "./../WideVer/LeftBar.js";
 import RightBar from "./../WideVer/RightBar.js";
 export default function FeedList(isUserState) {
+  const [params] = useSearchParams();
+  const type = params.get('type');
+
   const target = useRef(null);
   const observerRef = useRef(null);
   let [isLoading, setIsLoading] = useState(true);
@@ -41,7 +44,7 @@ export default function FeedList(isUserState) {
           return newData;
         });
         setIsLoading(false);
-        console.log('mor',data)
+        console.log('mor', data)
       });
   }
 
@@ -74,7 +77,7 @@ export default function FeedList(isUserState) {
   }, []);
 
   if (isLoading) {
-    return <p>데이터 </p>;
+    return <p>데이터 불러오는 중</p>;
   }
 
   return (
@@ -105,7 +108,12 @@ export default function FeedList(isUserState) {
             </button>
           </div>
         </header>
-        <div className={style.title}>최근 인기 피드</div>
+        {
+          type === 'all' && <div className={style.title}>전체 피드</div>
+        }
+        {
+          type === 'best' && <div className={style.title}>최근 인기 피드</div>
+        }
         <div className={style["scroll-area"]}>
           {feedData.map((feed, i) => {
             return <Feed key={feed.fid + i} className="" feed={feed} func={true} feedData={feedData} setFeedData={setFeedData} isUserState={isUserState}></Feed>;

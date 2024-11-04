@@ -586,8 +586,8 @@ const FeedPage = () => {
                           src={comment_gray}
                           alt="댓글"
                           onClick={(event) => {
-                            handleShowComment(banner.fid, event);
                             handleShowCommentWindow();
+                            handleShowComment(banner.fid, event);
                           }}
                         />
                         <div id={style.text}>{banner.num_comment}</div>

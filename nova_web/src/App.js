@@ -1,35 +1,22 @@
 import "./App.css";
 import { useEffect, useState } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import Banner from "./component/banner";
-import Modal from "./component/modal";
 import MyBias from "./Container/myBiasContainer";
 import MyPage from "./pages/MyPage/Mypage";
-import { Routes, Route, Link, useNavigate } from "react-router-dom";
-// import zoom from './img/zoom.png';
 import menu from "./img/menu-burger.png";
-// import Rank from './component/ranks';
-// import FloatingButton from './component/floatingbutton';
-// import Meta from './Container/metaContainer';
-// import Loundspeaker from './component/loundspeaker';
 import NOVALogin from "./pages/NovaLogin/NovaLogin";
 import SelectBias from "./component/selectBias/SelectBias";
 import BiasDetail from "./pages/BiasDetail/biasDetail";
 import BiasCertify from "./pages/BiasCertify/biasCertify";
 import NameCard from "./pages/NameCard/nameCard";
-import { FaSearch, IoMdMenu } from "react-icons/fa";
 import MoreSee from "./pages/MoreSee/MoreSee";
 import NoticeList from "./pages/Notice/NoticeList";
 import Notice from "./pages/Notice/Notice";
 import LeaguePage from "./pages/LeaguePage/LeaguePage";
-import LeagueDetail from "./pages/LeagueDetail/LeagueDetail";
 import SignUp from "./pages/SignUp/SignUp.js";
-import FeedPage, { FeedContext, FeedDispatchContext } from "./pages/FeedPage/FeedPage.js";
-import Feed from "./component/feed.js";
-import InfFeed from "./component/infiniteFeed.js";
-import PlanetList from "./pages/PlanetPage/PlanetList.js";
-import logo from "./img/NOVA.png";
+import FeedPage from "./pages/FeedPage/FeedPage.js";
 import GalaxyList from "./pages/GalaxyPage/GalaxyList.js";
-import Box from "./component/test.js";
 import NavBar from "./component/NavBar.js";
 import WriteFeed from "./pages/WriteFeed/WriteFeed.js";
 import MyWriteFeed from "./pages/MyPage/MyWriteFeed/MyWriteFeed.js";
@@ -49,6 +36,8 @@ import FeedList from "./pages/FeedList/FeedList.js";
 import NovaFunding from "./pages/NovaFunding/NovaFunding.js";
 import LeftBar from "./pages/WideVer/LeftBar.js";
 import RightBar from "./pages/WideVer/RightBar.js";
+
+import logo from "./img/NOVA.png";
 // 401 이면 바이어스 격자 무늬로 띄우기
 // 401 이면 alert - 로그인 필요 문구 띄우기
 
@@ -87,31 +76,6 @@ function App() {
     handleValidCheck();
   }, []);
 
-  // let token = localStorage.getItem('jwtToken');
-
-  // let [isLogin, setIsLogin] = useState();
-  // let [newToken, setnewToken] = useState(token);
-
-  // let header = {
-  //   "request-type": "default",
-  //   "client-version": 'v1.0.1',
-  //   "client-ip": '127.0.0.1',
-  //   "uid": '1234-abcd-5678',
-  //   "endpoint": "/core_system/",
-  // }
-
-  //내 최애 / 전체 선택버튼용
-  // let [isSoloClicked, setSoloClick] = useState(false);
-  // let [isGroupClicked, setGroupClick] = useState(false);
-
-  // function handleSoloToggle() {
-  //   setSoloClick(!isSoloClicked);
-  // };
-
-  // function handleGroupToggle() {
-  //   setGroupClick(!isGroupClicked);
-  // };
-
   let [showBox, setShowBox] = useState(false);
   let [blackBox, setBlackBox] = useState("");
 
@@ -121,14 +85,11 @@ function App() {
     <Routes>
       <Route path="/write_feed" element={<WriteFeed />}></Route>
       <Route path="/more_see" element={<MoreSee />}></Route>
-      {/* <Route path="/test" element={<Box />}></Route> */}
-      {/* <Route path="/planet" element={<PlanetList />}></Route> */}
       <Route path="/galaxy" element={<GalaxyList />}></Route>
       <Route path="/feed_page" element={<FeedPage />}></Route>
       <Route path="/signup" element={<SignUp />}></Route>
       <Route path="/terms_page" element={<Temrs />}></Route>
       <Route path="/league_detail" element={<LeaguePage />}></Route>
-      {/* <Route path='/league_detail' element={<LeagueDetail />}></Route> */}
       <Route path="/notice" element={<NoticeList />} />
       {/* Dynamic Route for Notice Details */}
       <Route path="/notice/:nid" element={<Notice />} />
@@ -151,6 +112,9 @@ function App() {
       <Route path="/feed_list" element={<FeedList />}></Route>
       <Route path="/feed_list/:fid" element={<FeedList />}></Route>
       <Route path="/nova_funding" element={<NovaFunding />}></Route>
+      {/* <Route path="/test" element={<Box />}></Route> */}
+      {/* <Route path="/planet" element={<PlanetList />}></Route> */}
+      {/* <Route path='/league_detail' element={<LeagueDetail />}></Route> */}
       <Route
         path="/"
         element={

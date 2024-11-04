@@ -1,13 +1,18 @@
 import { useEffect, useState } from "react";
 import style from "./MainPart.module.css";
 import more_icon from "./../../img/backword.png";
+import { useNavigate } from "react-router-dom";
 export default function AllPost() {
+  let navigate = useNavigate();
+
   return (
     <div className={style["wrap-container"]}>
       <div className={style["top-area"]}>
         <div className={style["content-title"]}>
           <header className={style["header-text"]}>전체 글</header>
-          <img src={more_icon} className={style["more-icon"]}></img>
+          <img src={more_icon} alt="more_icon" className={style["more-icon"]}
+            onClick={() => navigate("/feed_list?type=all")}
+          />
         </div>
         <div className={style["main-area"]}>
           <ul className={style["all-list"]}>
