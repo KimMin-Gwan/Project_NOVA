@@ -112,6 +112,7 @@ function App() {
       <Route path="/feed_list" element={<FeedList />}></Route>
       <Route path="/feed_list/:fid" element={<FeedList />}></Route>
       <Route path="/nova_funding" element={<NovaFunding />}></Route>
+      <Route path="*" element={<div>404 Error</div>}></Route>
       {/* <Route path="/test" element={<Box />}></Route> */}
       {/* <Route path="/planet" element={<PlanetList />}></Route> */}
       {/* <Route path='/league_detail' element={<LeagueDetail />}></Route> */}

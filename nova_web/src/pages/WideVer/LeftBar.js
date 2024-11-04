@@ -34,7 +34,7 @@ export default function LeftBar() {
           <li className={style["list-item"]}>
             <img src={all_icon} alt="전체 피드" className={style["icon-text"]}></img>
             <div className={style["direct-link"]} onClick={() => {
-              handleNavigate('/')
+              handleNavigate('/feed_list?type=all')
             }}>
               전체 피드
             </div>
@@ -58,7 +58,7 @@ export default function LeftBar() {
           <li className={style["list-item"]}>
             <img src={popular_icon} alt="popular" className={style["icon-text"]}></img>
             <div className={style["direct-link"]} onClick={() => {
-              handleNavigate('/feed_list')
+              handleNavigate('/feed_list?type=best')
             }}>
               인기 피드
             </div>
