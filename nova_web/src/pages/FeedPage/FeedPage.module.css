@@ -27,6 +27,12 @@
   height: 50px;
   width: 90%;
   margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.top_bar_area p {
+  margin: auto;
 }
 
 .content-container {
@@ -41,12 +47,14 @@
 /* 해시태그 영역 */
 .hash-tag-area {
   width: 100%;
-  height: 5%;
+  height: 20%;
   margin-bottom: 40px;
 }
 
-.hash-tag-area>#hashtag {
-  color: #ffffff;
+.hash-tag-area > #hashtag {
+  color: #5f5f5f;
+  font-size: 13px;
+  margin-bottom: 5px;
 }
 
 .write-tag {
@@ -54,7 +62,8 @@
   color: white;
   width: 100%;
   height: 100%;
-  border-radius: 5px;
+  border-radius: 6px;
+  border: 1px solid #bebebe;
 }
 
 /* 닉네임 및 날짜 */
@@ -65,7 +74,7 @@
   /* background-color: gray; */
 }
 
-.sup_info>#nick_name {
+.sup_info > #nick_name {
   margin-bottom: 7px;
   height: 50%;
   display: flex;
@@ -73,7 +82,7 @@
   color: #ffffff;
 }
 
-.sup_info>#date {
+.sup_info > #date {
   color: gray;
   display: flex;
 }
@@ -89,7 +98,7 @@
 /* 이미지 보이는 곳 */
 .write-image-box {
   height: 150px;
-  margin-bottom: 50px;
+  margin-bottom: 10px;
   width: 100%;
   border: black dotted 5px;
   background-color: #98a0ff;
@@ -100,7 +109,7 @@
   align-items: start;
 }
 
-.upload_area>img {
+.upload_area > img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -158,7 +167,7 @@
   height: 100%;
 }
 
-.image-origin>img {
+.image-origin > img {
   width: 100%;
   height: 100%;
   object-fit: contain;
@@ -186,25 +195,25 @@
   place-content: center;
 }
 
-.image-show>img {
+.image-show > img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.image-show>img:nth-of-type(1) {
+.image-show > img:nth-of-type(1) {
   border-top-left-radius: 5px;
 }
 
-.image-show>img:nth-of-type(2) {
+.image-show > img:nth-of-type(2) {
   border-top-right-radius: 5px;
 }
 
-.image-show>img:nth-of-type(3) {
+.image-show > img:nth-of-type(3) {
   border-bottom-left-radius: 5px;
 }
 
-.image-show>img:nth-of-type(4) {
+.image-show > img:nth-of-type(4) {
   border-bottom-right-radius: 5px;
 }
 
@@ -213,7 +222,7 @@
   display: flex;
 }
 
-.one-image>img {
+.one-image > img {
   object-fit: contain;
 }
 
@@ -240,7 +249,7 @@
   /* background-color: blue; */
 }
 
-.three-image>img:nth-of-type(1) {
+.three-image > img:nth-of-type(1) {
   grid-area: img1;
   grid-row-start: 1;
   grid-row-end: 3;
@@ -248,12 +257,12 @@
   border-bottom-left-radius: 5px;
 }
 
-.three-image>img:nth-of-type(2) {
+.three-image > img:nth-of-type(2) {
   grid-area: img2;
   background-color: green;
 }
 
-.three-image>img:nth-of-type(3) {
+.three-image > img:nth-of-type(3) {
   grid-area: img3;
   background-color: red;
   border-bottom-left-radius: 0px;
@@ -261,7 +270,7 @@
 }
 
 /* 입력 페이지 */
-.image-show>input[type="file"] {
+.image-show > input[type="file"] {
   /* margin: 0 auto; */
   width: 100px;
   height: 100px;
@@ -271,8 +280,10 @@
 /* 각종 컨텐츠 */
 
 .fclass-box {
-  height: 25%;
+  height: 200px;
   width: 100%;
+  display: flex;
+  align-items: center;
   /* background-color: orange; */
 }
 
@@ -286,7 +297,7 @@
   align-items: center;
 }
 
-.fclass-container>input {
+.fclass-container > input {
   text-align: center;
   border: 1px black solid;
   border-radius: 5px;
@@ -296,7 +307,7 @@
 
 .empathy-box {
   width: 120px;
-  height: 60px;
+  height: 70px;
   border: 1px gray solid;
   border-radius: 3px;
   display: flex;
@@ -305,8 +316,12 @@
   justify-content: center;
   align-items: center;
   font-size: 12px;
+  background-color: #868686;
 }
-
+.empathy-box::placeholder {
+  color: #3a3a3a;
+  font-size: 15px;
+}
 /* 3. 이지선다 */
 .balance-box {
   width: 100%;
@@ -329,7 +344,7 @@
   cursor: pointer;
 }
 
-/* 4. 외부 링크 */
+/* 4. 외부 링크 (station)*/
 .external-box {
   width: 85%;
   height: 60px;
@@ -349,13 +364,13 @@
   /* align-items: center; */
 }
 
-.link-info-box>h1,
+.link-info-box > h1,
 h5 {
   padding: 0px;
   margin: 0px;
 }
 
-.link-info-box>h1 {
+.link-info-box > h1 {
   font-size: 16px;
 }
 
@@ -538,8 +553,8 @@ h5 {
   margin: 0 auto;
   margin-top: 10px;
   /* margin-left: 25px; */
-  width: 85%;
-  height: 100%;
+  width: 80%;
+  height: 1000px;
   /* background-color: aqua; */
   display: flex;
   flex-direction: column;
@@ -693,8 +708,11 @@ h5 {
 .button_container {
   display: flex;
   justify-content: space-evenly;
+  gap: 15px;
+  width: 100%;
   align-items: center;
-  height: 200px;
+  min-height: 200px;
+  /* background-color: yellow; */
 }
 
 .select_button {
@@ -702,10 +720,10 @@ h5 {
   height: 80px;
   cursor: pointer;
   color: black;
-  border: 1px solid gray;
+  border: 1px solid #ababab;
   background-color: white;
-  border-radius: 15px;
-  box-shadow: 0px 2px 3px gray;
+  border-radius: 5px;
+  /* box-shadow: 0px 2px 3px gray; */
 }
 
 .quiz_box {
@@ -1264,8 +1282,10 @@ h5 {
   margin-bottom: 30px;
 }
 
-.text_body>#content {
-  color: #ffffff;
+.text_body > #content {
+  color: #5f5f5f;
+  font-size: 13px;
+  margin-bottom: 5px;
 }
 
 .text_body textarea {
@@ -1277,6 +1297,7 @@ h5 {
   /* padding-left: 5px; */
   width: calc(100% - 24px);
   height: 200px;
+  border: 1px solid #bebebe;
 }
 
 .func_part {
@@ -1288,6 +1309,7 @@ h5 {
 .btn_func {
   /* height: 50px; */
   /* background-color: lightcoral; */
+  margin-right: auto;
 }
 
 .btn_func label {
@@ -1297,9 +1319,10 @@ h5 {
 
 .btn_func_area {
   display: flex;
-  justify-content: space-around;
   align-items: center;
   height: 50px;
+  width: 90%;
+  padding-inline: 15px;
   /* background-color: #2A2577; */
 }
 
@@ -1350,9 +1373,11 @@ h5 {
 
   /* border-radius: 15px; */
   padding: 0;
-  width: 80%;
-  height: 70%;
+  width: 90%;
+  height: 80%;
   /* background-color: greenyellow; */
+  display: flex;
+  align-items: center;
 }
 
 .one_of_four_list {
@@ -1366,16 +1391,16 @@ h5 {
 
 .one_of_four_list li {
   /* display: flex; */
-  padding: 12px 10px;
-  /* background-color: goldenrod; */
+  padding: 5px 15px;
+  background-color: #868686;
   /* height: 100%; */
   /* padding: 10px; */
-  border: 1px black solid;
+  border: 2px #8f8f8f solid;
 }
 
 .one_of_four_list li:first-child {
-  border-top-left-radius: 15px;
-  border-top-right-radius: 15px;
+  /* border-top-left-radius: 15px;
+  border-top-right-radius: 15px; */
   border-bottom: 0.8px;
 }
 
@@ -1385,35 +1410,59 @@ h5 {
 
 .one_of_four_list li:last-child {
   border-top: 0.8px;
-  border-bottom-left-radius: 15px;
-  border-bottom-right-radius: 15px;
+  /* border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px; */
+}
+
+.one_of_four_list input {
+  width: 98%;
+  background-color: #868686;
+  border: 0;
+  height: 30px;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.one_of_four_list input::placeholder {
+  color: #3a3a3a;
+  font-size: 12px;
 }
 
 /* 둘 중 하나 */
 
 .balance_btn {
-  margin-top: 20px;
   text-align: center;
-  width: 120px;
+  width: 40%;
+  height: 60px;
   cursor: text;
   color: black;
+  background-color: #868686;
+  border: 1px solid #ababab;
 }
-
+.balance_btn::placeholder {
+  color: #3a3a3a;
+}
+.balance_btn:focus {
+  outline: none;
+}
 /* 정거장 */
 .station_container {
-  margin-top: 30px;
+  /* margin-top: 30px; */
   /* background-color: blue; */
 }
 
 .station_box {
   /* margin-left: 20px; */
   margin: 0 auto;
-  background-color: white;
+  background-color: #909090;
   width: 85%;
   height: 100px;
   border-radius: 10px;
   color: black;
   border: 1px black solid;
+  padding: 5px 10px;
 }
 
 .station_box input {
@@ -1435,7 +1484,9 @@ h5 {
   font-weight: 800;
 }
 
-.station_box input:nth-child(2) {}
+.station_box input:nth-child(2) {
+  text-decoration: none;
+}
 
 .site_name {
   background-color: blue;
@@ -1460,7 +1511,7 @@ h5 {
   text-align: center;
 }
 
-.img_circle>img {
+.img_circle > img {
   width: 100%;
   height: 100%;
   object-fit: contain;
@@ -1727,23 +1778,22 @@ h5 {
 .order_btn {
   width: 25px;
   height: 25px;
-  filter: invert();
+
   margin-left: 10px;
   margin-right: 10px;
 }
 
 .fclass_btn {
-  width: 100%;
-  height: 50px;
   /* background-color: blue; */
   display: flex;
   justify-content: space-between;
+  color: #98a0ff;
   align-items: center;
-  color: black;
-  font-weight: 700;
-  overflow-x: hidden;
+  width: 100%;
 }
-
+.fclass_btn img.order_btn:nth-of-type(2) {
+  transform: scaleX(-1);
+}
 /* 댓글입력 창 - 댓글더보기에서 */
 .comment-input {
   position: absolute;
