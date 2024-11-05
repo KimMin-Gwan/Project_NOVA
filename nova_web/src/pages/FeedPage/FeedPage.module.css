@@ -1332,6 +1332,7 @@ h5 {
   border: 1px solid #bebebe;
 }
 
+/* 하단 댓글허용 등등 스타일 */
 .func_part {
   flex-grow: 0.3;
   /* width: 100%; */
@@ -1342,6 +1343,7 @@ h5 {
   /* height: 50px; */
   /* background-color: lightcoral; */
   margin-right: auto;
+  display: flex;
 }
 
 .btn_func label {
@@ -1357,6 +1359,34 @@ h5 {
   padding-inline: 15px;
   /* background-color: #2A2577; */
 }
+
+/* .custom-checkbox {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.custom-checkbox input[type="checkbox"] {
+  display: none;
+}
+
+.custom-checkbox:before {
+  content: "";
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #98a0ff;
+  border-radius: 4px;
+  margin-right: 8px;
+  transition: background 0.3s, border-color 0.3s;
+}
+
+.custom-checkbox input[type="checkbox"]:checked + span {
+  background: #98a0ff;
+  border-color: #98a0ff;
+} */
+
+/* ------------------ */
 
 .write_container {
   width: 100%;

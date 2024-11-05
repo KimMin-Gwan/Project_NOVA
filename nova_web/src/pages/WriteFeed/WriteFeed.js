@@ -259,10 +259,10 @@ const WriteFeed = () => {
         <div className={style["func_part"]}>
           <div className={style["btn_func_area"]}>
             <div className={style["btn_func"]}>
-              <label>
+              <label class={style["custom-checkbox"]}>
                 <input name="comment" type="checkbox"></input>댓글 허용
               </label>
-              <label>
+              <label class={style["custom-checkbox"]}>
                 <input name="share" type="checkbox"></input>공유 허용
               </label>
             </div>
