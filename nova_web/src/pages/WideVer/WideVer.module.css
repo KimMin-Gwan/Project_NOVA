@@ -130,5 +130,5 @@
   flex-flow: column;
 }
 .ranking-box-w {
-  margin-block: 10px;
+  margin-block: 10px !important;
 }

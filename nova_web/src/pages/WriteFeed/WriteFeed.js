@@ -24,7 +24,8 @@ const WriteFeed = () => {
   const [bodyText, setBodyText] = useState(""); // 글 입력 내용 상태로 저장
   const [choice, setChoice] = useState(["", "", "", ""]); // 선택지 4개 상태로 저장
   // const [isClickedBtn, setIsClickedBtn] = useState('card'); // 버튼 클릭 상태
-
+  let [inputTagCount, setInputTagCount] = useState(0); //글자수
+  let [inputBodyCount, setInputBodyCount] = useState(0); //글자수
   const handleFileChange = (event) => {
     // const selectedFile = event.target.files[0];
     const selectedFile = Array.from(event.target.files);
@@ -114,18 +115,43 @@ const WriteFeed = () => {
   let [tagList, setTagList] = useState([]);
 
   function onChangeTag(e) {
-    setInputTag(e.target.value);
-  }
+    const inputText = e.target.value;
 
-  function onKeyDown(e) {
-    if (e.keyCode === 32) {
-      setPlusTag(`#${inputTag}`);
-      // setInputTag('');
-      e.target.value = "";
-      setTagList([...tagList, plusTag]);
+    // 첫 글자가 #이면 제외하고 저장
+    const processedText = inputText.startsWith("#") ? inputText.slice(1) : inputText;
+    if (processedText.length <= 4) {
+      setInputTag(processedText);
+      setInputTagCount(processedText.length); // 글자 수 업데이트
     }
   }
 
+  function onKeyDown(e) {
+    if (e.key === "Enter") {
+      // Enter 키로 태그 추가
+      if (inputTag && inputTagCount <= 4) {
+        // 해시태그가 최대 글자 수 이내일 때만 추가
+        setTagList([...tagList, `#${inputTag}`]); // 태그 목록에 추가
+        setInputTag(""); // 입력 필드 초기화
+        setInputTagCount(0); // 글자 수 초기화
+      }
+      e.preventDefault(); // 기본 Enter 동작 방지 (예: 줄바꿈)
+    }
+  }
+
+  const onDeleteTag = (index) => {
+    // 현재 해시태그 리스트에서 삭제할 인덱스를 기준으로 필터링
+    const updatedTags = tagList.filter((_, i) => i !== index);
+    setTagList(updatedTags); // 업데이트된 해시태그 리스트를 상태에 설정
+  };
+
+  function onChangeBody(e) {
+    const inputText = e.target.value;
+
+    if (inputText.length <= 300) {
+      setBodyText(e.target.value);
+      setInputBodyCount(e.target.value.length);
+    }
+  }
   return (
     <div className={`${style["test_container"]} ${style["container"]}`}>
       <div className={`${style["short_form"]} ${style["short_form_write"]}`}>
@@ -147,18 +173,29 @@ const WriteFeed = () => {
                         <div id={style.date}>2024/02/02</div>
                     </div> */}
 
-          <div className={style["hash-tag-area"]}>
-            <div id={style["hashtag"]}>해시태그</div>
-            <input type="text" value={inputTag} onChange={onChangeTag} onKeyDown={onKeyDown} className={style["write-tag"]}></input>
-            {tagList.length !== 0 &&
-              tagList.map((tag, i) => {
-                return (
-                  <div className={style["tag-box"]} key={i}>
-                    {tag}
-                  </div>
-                );
-              })}
-            <span>글자 수 제한</span>
+          <div className={style["boxbox"]}>
+            <div className={style["hash-tag-area"]}>
+              <div id={style["hashtag"]}>해시태그</div>
+              <div className={style["tag-container"]}>
+                {tagList.length !== 0 &&
+                  tagList.map((tag, i) => (
+                    <div className={style["tag-box"]} key={i}>
+                      {tag}
+                      <button onClick={() => onDeleteTag(i)} className={style["delete-tag"]}>
+                        &times; {/* 삭제 아이콘 */}
+                      </button>
+                    </div>
+                  ))}
+              </div>
+              <input
+                type="text"
+                value={`#${inputTag}`} // #이 붙은 상태로 보여줌
+                onChange={onChangeTag}
+                onKeyDown={onKeyDown}
+                className={style["write-tag"]}
+              />
+              <span className={style["count-text"]}>{inputTagCount}/4</span>
+            </div>
           </div>
 
           <form onSubmit={handleSubmit}>
@@ -169,8 +206,9 @@ const WriteFeed = () => {
                 placeholder="내용을 입력해주세요"
                 className={style["write_body"]}
                 value={bodyText}
-                onChange={(e) => setBodyText(e.target.value)} // 본문 내용 상태 업데이트
+                onChange={onChangeBody} // 본문 내용 상태 업데이트
               ></textarea>
+              <span className={style["count-text"]}>{inputBodyCount}/300</span>
             </div>
 
             {/* <div className={`${style['write-image-box']}`}> */}
@@ -181,9 +219,8 @@ const WriteFeed = () => {
                 {/* 업로드 */}
                 {imagePreview.length === 0 ? (
                   <div className={style["upload-text"]}>
-                    <div>이미지 삽입</div>
+                    <span>이미지 삽입</span>
                     <div>PNG, SVG, JPG, WEPG, GIF 등</div>
-                    <div>!</div>
                   </div>
                 ) : (
                   imagePreview.map((preview, index) => {

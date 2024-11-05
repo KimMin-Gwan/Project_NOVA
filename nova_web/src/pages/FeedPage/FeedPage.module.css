@@ -44,14 +44,27 @@
   /* margin-left: 20px; */
 }
 
+/* 글자수 세기 스타일 */
+.count-text {
+  color: #bebebe;
+  font-size: 14px;
+  width: 100%;
+  text-align: right;
+  display: inline-block;
+}
+
 /* 해시태그 영역 */
+.boxbox {
+  height: 200px;
+}
+
 .hash-tag-area {
   width: 100%;
-  height: 20%;
+  height: 40%;
   margin-bottom: 40px;
 }
 
-.hash-tag-area>#hashtag {
+.hash-tag-area > #hashtag {
   color: #5f5f5f;
   font-size: 13px;
   margin-bottom: 5px;
@@ -74,7 +87,7 @@
   /* background-color: gray; */
 }
 
-.sup_info>#nick_name {
+.sup_info > #nick_name {
   margin-bottom: 7px;
   height: 50%;
   display: flex;
@@ -82,7 +95,7 @@
   color: #ffffff;
 }
 
-.sup_info>#date {
+.sup_info > #date {
   color: gray;
   display: flex;
 }
@@ -100,7 +113,7 @@
   height: 150px;
   margin-bottom: 10px;
   width: 100%;
-  border: black dotted 5px;
+  border: black dotted 3px;
   background-color: #98a0ff;
   overflow-x: auto;
   scrollbar-width: none;
@@ -109,7 +122,7 @@
   align-items: start;
 }
 
-.upload_area>img {
+.upload_area > img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -138,6 +151,10 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  span {
+    font-size: 30px;
+  }
 }
 
 /* 이미지 부분 */
@@ -167,7 +184,7 @@
   height: 100%;
 }
 
-.image-origin>img {
+.image-origin > img {
   width: 100%;
   height: 100%;
   object-fit: contain;
@@ -202,25 +219,25 @@
   place-content: center;
 }
 
-.image-show>img {
+.image-show > img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.image-show>img:nth-of-type(1) {
+.image-show > img:nth-of-type(1) {
   border-top-left-radius: 5px;
 }
 
-.image-show>img:nth-of-type(2) {
+.image-show > img:nth-of-type(2) {
   border-top-right-radius: 5px;
 }
 
-.image-show>img:nth-of-type(3) {
+.image-show > img:nth-of-type(3) {
   border-bottom-left-radius: 5px;
 }
 
-.image-show>img:nth-of-type(4) {
+.image-show > img:nth-of-type(4) {
   border-bottom-right-radius: 5px;
 }
 
@@ -229,7 +246,7 @@
   display: flex;
 }
 
-.one-image>img {
+.one-image > img {
   object-fit: contain;
 }
 
@@ -256,7 +273,7 @@
   /* background-color: blue; */
 }
 
-.three-image>img:nth-of-type(1) {
+.three-image > img:nth-of-type(1) {
   grid-area: img1;
   grid-row-start: 1;
   grid-row-end: 3;
@@ -264,12 +281,12 @@
   border-bottom-left-radius: 5px;
 }
 
-.three-image>img:nth-of-type(2) {
+.three-image > img:nth-of-type(2) {
   grid-area: img2;
   background-color: green;
 }
 
-.three-image>img:nth-of-type(3) {
+.three-image > img:nth-of-type(3) {
   grid-area: img3;
   background-color: red;
   border-bottom-left-radius: 0px;
@@ -277,7 +294,7 @@
 }
 
 /* 입력 페이지 */
-.image-show>input[type="file"] {
+.image-show > input[type="file"] {
   /* margin: 0 auto; */
   width: 100px;
   height: 100px;
@@ -304,7 +321,7 @@
   align-items: center;
 }
 
-.fclass-container>input {
+.fclass-container > input {
   text-align: center;
   border: 1px black solid;
   border-radius: 5px;
@@ -373,13 +390,13 @@
   /* align-items: center; */
 }
 
-.link-info-box>h1,
+.link-info-box > h1,
 h5 {
   padding: 0px;
   margin: 0px;
 }
 
-.link-info-box>h1 {
+.link-info-box > h1 {
   font-size: 16px;
 }
 
@@ -568,7 +585,7 @@ h5 {
   margin-top: 10px;
   /* margin-left: 25px; */
   width: 80%;
-  height: 1000px;
+  height: 200vh;
   /* background-color: aqua; */
   display: flex;
   flex-direction: column;
@@ -1288,6 +1305,7 @@ h5 {
 }
 
 .text_body {
+  margin-top: 20px;
   padding-top: 10px;
   /* height: 100px; */
   margin: 0 auto;
@@ -1296,7 +1314,7 @@ h5 {
   margin-bottom: 30px;
 }
 
-.text_body>#content {
+.text_body > #content {
   color: #5f5f5f;
   font-size: 13px;
   margin-bottom: 5px;
@@ -1528,7 +1546,7 @@ h5 {
   text-align: center;
 }
 
-.img_circle>img {
+.img_circle > img {
   width: 100%;
   height: 100%;
   object-fit: contain;
@@ -1820,9 +1838,30 @@ h5 {
   left: 10px;
 }
 
-/* 해시태그 붙이기 테스트*/
-.tag-box {
+/* 해시태그 붙이고 삭제 테스트*/
+.tag-container {
   display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.tag-box {
+  background-color: #98a0ff; /* 해시태그 배경색 */
+  color: white; /* 글자 색상 */
+  border-radius: 4px; /* 모서리 둥글게 */
+  padding: 2px 5px; /* 패딩 추가 */
+  margin-right: 5px; /* 해시태그 사이 간격 */
+  margin-bottom: 5px;
+  display: inline-block;
+}
+
+.delete-tag {
+  background: none;
+  border: none;
+  color: black;
+  cursor: pointer;
+  margin-left: 5px;
+  font-size: 1.2em;
 }
 
 /* 업로드 버튼 */
