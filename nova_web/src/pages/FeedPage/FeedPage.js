@@ -357,7 +357,9 @@ const FeedPage = () => {
   }
 
   return (
-    <div onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp} onMouseLeave={handleMouseUp} onWheel={handleWheel} onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd} ref={sliderRef} className={style["test_container"]}>
+    <div onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp} onMouseLeave={handleMouseUp} onWheel={handleWheel} onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd} ref={sliderRef}
+      className={style["test_container"]}
+    >
       <div
         className={style["slider-track"]}
         style={{
@@ -367,7 +369,9 @@ const FeedPage = () => {
       >
         {banners.map((banner, i) => {
           return (
-            <div key={banner.fid} className={style["short_form"]}>
+            <div key={banner.fid} className={style["short_form"]}
+            // style={{height:`${height}px`}}
+            >
               <div className={style["content-box"]}>
                 <div className={`${stylePlanet["top_area"]} ${style["top_bar_area"]}`}>
                   <img
@@ -380,11 +384,12 @@ const FeedPage = () => {
                   />
                 </div>
 
+
                 {/* 왼쪽 컨텐츠 */}
                 <div className={style["content-container"]}>
                   <div className={style["sup_info"]}>
-                    <div id={style["nick_name"]}>{banner.nickname}</div>
-                    <div id={style.date}>{banner.date}</div>
+                    <div className={style["nick_name"]}>{banner.nickname}</div>
+                    <div className={style.date}>{banner.date}</div>
                   </div>
 
                   {/* 댓글 모달 창 */}
@@ -446,7 +451,7 @@ const FeedPage = () => {
                     </div>
                   )}
                   {/* 여기까지  */}
-                  <div>#해시태그</div>
+                  <div className={style['hashtag-box']}>#해시태그</div>
                   <div className={style["feed-content"]}>{banner.body}</div>
 
                   {/* 1개이미지 */}
@@ -466,7 +471,7 @@ const FeedPage = () => {
                   {
                     banner.num_image === 2 && (
                       <div className={style['image-box']}>
-                        <div className={`${style["image-show"]} ${style['two-image']}`}>
+                        <div className={` ${style['two-image']}`}>
                           {banner.image.map((img, i) => {
                             return (
                               <img
@@ -609,8 +614,8 @@ const FeedPage = () => {
             </div>
           );
         })}
-      </div>
-    </div>
+      </div >
+    </div >
   );
 };
 
@@ -690,30 +695,4 @@ function StationClass({ feed }) {
       </div>
     </div>
   );
-}
-
-{
-  /* <div className={style["button_area"]}>
-                {isClickedComment && (
-                  <div className={style["comment_window"]}>
-                    <div className={style["comment_top"]}>
-                      <div className={style['close_btn']} onClick={handleShowCommentWindow}>닫기</div>
-                      <div className={style["gray_bar"]}></div>
-                      <div>댓글</div>
-                    </div>
-                    <div className={style.line}></div>
-
-                    <div className={style["comment_body"]}>
-                      <div onWheel={(e) => { e.stopPropagation() }} className={style["comment_box1"]}>
-                    
-                      <Comments
-                        isClickedComment={true}
-                        feed={banner}
-                        setFeedData={setBanners}
-                        allComments={allComments}
-                        setAllComments={setAllComments}
-                      ></Comments>
-                    </div>
-                  </div>
-                )} */
 }
