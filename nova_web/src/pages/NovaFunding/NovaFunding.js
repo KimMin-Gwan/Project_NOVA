@@ -5,6 +5,11 @@ import more_icon from "./../../img/back.png";
 import { useNavigate } from "react-router-dom";
 export default function NovaFunding() {
   let navigate = useNavigate();
+
+  function handleLinkClick(url) {
+    navigate(url);
+  }
+
   return (
     <div className={style.container}>
       <header className={style.header}>
@@ -17,7 +22,7 @@ export default function NovaFunding() {
               src={menu}
               alt="menu"
               onClick={() => {
-                navigate("/more_see");
+                handleLinkClick("/more_see");
               }}
             ></img>
           </button>
@@ -62,7 +67,7 @@ export default function NovaFunding() {
         <div className={style["best-title"]}>
           <div className={style["top-title"]}>
             <h4>진행 중인 최애펀딩</h4>
-            <a>더보기</a>
+            <a onClick={() => handleLinkClick("/like_funding")}>더보기</a>
           </div>
           <p>최애가 직접 만드는 펀딩 프로젝트</p>
         </div>

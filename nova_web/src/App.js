@@ -36,6 +36,7 @@ import FeedList from "./pages/FeedList/FeedList.js";
 import NovaFunding from "./pages/NovaFunding/NovaFunding.js";
 import LeftBar from "./pages/WideVer/LeftBar.js";
 import RightBar from "./pages/WideVer/RightBar.js";
+import LikeFunding from "./pages/NovaFunding/LikeFunding/LikeFunding.js";
 
 import logo from "./img/NOVA.png";
 // 401 이면 바이어스 격자 무늬로 띄우기
@@ -112,6 +113,7 @@ function App() {
       <Route path="/feed_list" element={<FeedList />}></Route>
       <Route path="/feed_list/:fid" element={<FeedList />}></Route>
       <Route path="/nova_funding" element={<NovaFunding />}></Route>
+      <Route path="/like_funding" element={<LikeFunding />}></Route>
       <Route path="*" element={<div>404 Error</div>}></Route>
       {/* <Route path="/test" element={<Box />}></Route> */}
       {/* <Route path="/planet" element={<PlanetList />}></Route> */}
@@ -152,7 +154,6 @@ function App() {
                         }}
                       ></img>
                     </button>
-
                   </div>
                 </header>
                 <Banner url={url}></Banner>

@@ -139,6 +139,7 @@
   .top-title a {
     position: absolute;
     right: 0;
+    cursor: pointer;
   }
 
   p {
