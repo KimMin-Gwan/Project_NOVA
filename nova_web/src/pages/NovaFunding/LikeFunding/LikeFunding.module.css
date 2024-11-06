@@ -6,7 +6,7 @@
   align-items: center;
   justify-content: flex-start;
   height: 200vh;
-  background-color: #eeebf6;
+  background-color: #ffffff;
 }
 /* top-bar  */
 .Topbar {
@@ -134,6 +134,7 @@
   font-size: 15px;
   color: #6c6c6c;
 }
+
 /* 상품소개 페이지  */
 .product-box {
   height: 800px;
@@ -141,4 +142,50 @@
   border-block: 1px solid #dcdcdc;
   margin-top: 5px;
   background-color: #ebebeb;
+}
+
+/* 노바 플랫폼 관련 박스 */
+.nova-platform-box {
+  border: 2px solid #6f6f6f;
+  width: 85%;
+  margin: 20px 0;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.box-title {
+  display: flex;
+  align-items: center;
+
+  img {
+    width: 25px;
+    height: 25px;
+  }
+  h3 {
+    font-weight: 300;
+    font-size: 17px;
+    margin-left: 5px;
+    margin-block: 0;
+  }
+}
+
+.nova_box-text {
+  font-size: 12px;
+  color: #575757;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.nova-button {
+  background-color: white;
+  border: 1px solid #eee9fc;
+  border-radius: 5px;
+  width: 45%;
+  color: #575757;
+  font-size: 12px;
+  padding-block: 5px;
+  cursor: pointer;
 }

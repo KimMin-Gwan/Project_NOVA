@@ -1,6 +1,7 @@
 import style from "./LikeFunding.module.css";
 import backword from "./../../../img/back_icon.png";
 import { useNavigate } from "react-router-dom";
+import nova_icon from "./../../../img/nova_icon.png";
 export default function LikeFunding() {
   let navigate = useNavigate();
 
@@ -51,6 +52,23 @@ export default function LikeFunding() {
         <div className={style["grid-item"]}>쇼케이스 자동응모</div>
       </div>
       <div className={style["product-box"]}>상품 소개 페이지</div>
+
+      <section className={style["nova-platform-box"]}>
+        <div className={style["box-title"]}>
+          <img src={nova_icon}></img>
+          <h3>노바 플랫폼에서 해당 펀딩을 이야기 해봐요!</h3>
+        </div>
+        <p className={style["nova_box-text"]}>
+          #언네임 태그를 붙히며 숏피드를 작성해 보는 건 어떨까요??<br></br>혹시 모르죠..숨겨진 혜택이 있을지도!
+        </p>
+
+        <div className={style["button-container"]}>
+          <button className={style["nova-button"]}>관련 글보기</button>
+          <button className={style["nova-button"]} onClick={() => handleLinkClick("/")}>
+            노바 플랫폼 바로가기
+          </button>
+        </div>
+      </section>
     </div>
   );
 }
