@@ -3,7 +3,7 @@
   max-width: 500px;
   /* min-height: 100vh; */
   height: 100vh;
-  background-color: #2c2c2c;
+  /* background-color: #2c2c2c; */
   overflow: hidden;
   position: relative;
 }
@@ -435,6 +435,7 @@ h5 {
   /* flex: 1; */
   width: 70px;
   min-height: 100%;
+  /* background-color: blue; */
   background-color: #101010;
   color: #a19b8f;
 }
@@ -1208,6 +1209,8 @@ h5 {
   width: 100%;
   display: flex;
   color: black;
+  border: 1px solid #2c2c2c;
+  box-sizing: border-box;
   /* background-color: blanchedalmond; */
 }
 
