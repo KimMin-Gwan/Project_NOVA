@@ -1,9 +1,9 @@
 body {
-  font-family: "NanumGothic";
-  /* font-family: "Noto Sans KR", sans-serif; */
+  /* font-family: "NanumGothic"; */
+  font-family: "Noto Sans KR", sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #444444;
+  background-color: #111;
 }
 
 .all-box {
