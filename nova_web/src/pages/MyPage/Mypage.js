@@ -7,7 +7,7 @@ import novaAL_icon from "./../../img/novaAL_icon.png";
 import judge_icon from "./../../img/judge_icon.png";
 import galaxyleague from "./../../img/galaxyleague.png";
 import star_powder from "./../../img/starpowder.png";
-import empty from './../../img/empty.png';
+import empty from "./../../img/empty.png";
 
 import { TfiCommentAlt } from "react-icons/tfi";
 
@@ -95,7 +95,7 @@ function MyPage() {
             <div className={style["wrap_sup"]}>
               <div className={style.support}>지지자</div>
               <div className={style.space_pass}>우주인 패스 +</div>
-              <div onClick={handleClick}>{isClicked ? <IoIosArrowBack size={40} style={{ cursor: 'pointer' }} /> : <IoIosArrowForward size={40} style={{ cursor: 'pointer' }} />}</div>
+              <div onClick={handleClick}>{isClicked ? <IoIosArrowBack size={40} style={{ cursor: "pointer" }} /> : <IoIosArrowForward size={40} style={{ cursor: "pointer" }} />}</div>
             </div>
           </div>
           <div className={style["ticket_part"]}>
@@ -122,32 +122,27 @@ function MyPage() {
             <div className={style["wrap_box"]} style={{ flexDirection: "row", height: "auto" }}>
               <div className={style["half_box"]}>
                 <div className={`left-box ${style["img_box"]}`}>
-                  <div className="image-container">
-                    {
-                      mySoloBias.bid === '' ? <img src={empty} /> :
-                        <img src={bias_url + `${mySoloBias.bid}.PNG`} alt="bias" />
-                    }
-                  </div>
+                  <div className="image-container">{mySoloBias.bid === "" ? <img src={empty} /> : <img src={bias_url + `${mySoloBias.bid}.PNG`} alt="bias" />}</div>
                 </div>
               </div>
               <div className={style["half_box"]}>
                 <div className={style["text_box"]}>
                   <p>나의최애</p>
                   {mySoloBias.bname === "" ? <div className={style["not_name"]}>아직 최애가 없어요</div> : <div className={style["bias_name"]}>{mySoloBias.bname}</div>}
-                  {
-                    myData.solo_bid === '' ? (
-                      <div className={style["support_text"]}>최애를 정하고 지지해보는건 어떨까요?</div>
-                    ) : (
-                      <>
-                        <div className={style["powder_wrapper"]}>
-                          <img src={star_powder} alt="star_powder" className={style["poweder_box"]} />
-                          <div className={style["season_star_dust"]}>이번 시즌에 기여한 별가루</div>
-                        </div>
-                        <h2>{myData.solo_point} pt</h2>
-                        <button className={style["funding_btn"]} disabled>펀딩</button>
-                      </>
-                    )
-                  }
+                  {myData.solo_bid === "" ? (
+                    <div className={style["support_text"]}>최애를 정하고 지지해보는건 어떨까요?</div>
+                  ) : (
+                    <>
+                      <div className={style["powder_wrapper"]}>
+                        <img src={star_powder} alt="star_powder" className={style["poweder_box"]} />
+                        <div className={style["season_star_dust"]}>이번 시즌에 기여한 별가루</div>
+                      </div>
+                      <h2>{myData.solo_point} pt</h2>
+                      <button className={style["funding_btn"]} disabled>
+                        펀딩
+                      </button>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
@@ -155,37 +150,31 @@ function MyPage() {
 
           <div className={style["base_box"]}>
             <div className={style["title_box"]}>
-              <h4>최애-단체</h4>
-              <h6>최애 - 단체는 리그와 펀딩을 하지 않아요.</h6>
+              <h4>차애</h4>
             </div>
             <div className={style["wrap_box"]} style={{ flexDirection: "row", height: "auto" }}>
               <div className={style["half_box"]}>
                 <div className={`left-box ${style["img_box"]}`}>
-                  <div className="image-container">
-                    {
-                      myGroupBias.bid === '' ? <img src={empty} /> :
-                        <img src={bias_url + `${myGroupBias.bid}.PNG`} alt="bias" />
-                    }
-                  </div>
+                  <div className="image-container">{myGroupBias.bid === "" ? <img src={empty} /> : <img src={bias_url + `${myGroupBias.bid}.PNG`} alt="bias" />}</div>
                 </div>
               </div>
               <div className={style["half_box"]}>
                 <div className={style["text_box"]}>
-                  {myGroupBias.bname === "" ? <div className={style["not_name"]}>아직 최애가 없어요</div> : <div className={style["bias_name"]}>{myGroupBias.bname}</div>}
-                  {
-                    myData.group_bid === '' ? (
-                      <div className={style["support_text"]}>최애를 정하고 지지해보는건 어떨까요?</div>
-                    ) : (
-                      <>
-                        <div className={style["powder_wrapper"]}>
-                          <img src={star_powder} alt="star_powder" className={style["poweder_box"]} />
-                          <div className={style["season_star_dust"]}>이번 시즌에 기여한 별가루</div>
-                        </div>
-                        <h2>{myData.group_point} pt</h2>
-                        <button className={style["funding_btn"]} disabled>펀딩</button>
-                      </>
-                    )
-                  }
+                  {myGroupBias.bname === "" ? <div className={style["not_name"]}>아직 차애가 없어요</div> : <div className={style["bias_name"]}>{myGroupBias.bname}</div>}
+                  {myData.group_bid === "" ? (
+                    <div className={style["support_text"]}>차애를 정하고 지지해보는건 어떨까요?</div>
+                  ) : (
+                    <>
+                      <div className={style["powder_wrapper"]}>
+                        <img src={star_powder} alt="star_powder" className={style["poweder_box"]} />
+                        <div className={style["season_star_dust"]}>이번 시즌에 기여한 별가루</div>
+                      </div>
+                      <h2>{myData.group_point} pt</h2>
+                      <button className={style["funding_btn"]} disabled>
+                        펀딩
+                      </button>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
@@ -228,7 +217,6 @@ function MyPage() {
             <h4>나의 활동</h4>
             <div className={style["my_activity"]}>
               <div className={style.activity}>
-
                 <CiEdit className={style["activity_icon"]} />
                 <div>내가 작성한 피드</div>
                 <IoIosArrowForward
