@@ -43,37 +43,37 @@ function MoreSee() {
   let [isLogin, setIsLogin] = useState();
   let [isError, setIsError] = useState();
 
-  function handleFetch() {
-    fetch("https://nova-platform.kr/home/is_valid", {
-      credentials: "include", // 쿠키를 함께 포함한다는 것
-    })
-      .then((response) => {
-        if (!response.ok) {
-          if (response.status === 401) {
-            setIsError(response.status);
-            setIsLogin(false);
-            return null;
-          } else {
-            throw new Error(`status: ${response.status}`);
-          }
-        }
-        return response.json();
-      })
-      .then((data) => {
-        if (data) {
-          console.log(data);
-          setIsLogin(data.body.result);
-        }
-      })
-      .catch((error) => {
-        console.error("Fetch error:", error);
-        setIsError(error.message);
-      });
-  }
+  // function handleFetch() {
+  //   fetch("https://nova-platform.kr/home/is_valid", {
+  //     credentials: "include", // 쿠키를 함께 포함한다는 것
+  //   })
+  //     .then((response) => {
+  //       if (!response.ok) {
+  //         if (response.status === 401) {
+  //           setIsError(response.status);
+  //           setIsLogin(false);
+  //           return null;
+  //         } else {
+  //           throw new Error(`status: ${response.status}`);
+  //         }
+  //       }
+  //       return response.json();
+  //     })
+  //     .then((data) => {
+  //       if (data) {
+  //         console.log(data);
+  //         setIsLogin(data.body.result);
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error("Fetch error:", error);
+  //       setIsError(error.message);
+  //     });
+  // }
 
-  useEffect(() => {
-    handleFetch();
-  }, []);
+  // useEffect(() => {
+  //   handleFetch();
+  // }, []);
 
   return (
     <div className={style.font}>
