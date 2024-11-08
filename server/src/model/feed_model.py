@@ -60,6 +60,7 @@ class FeedModel(BaseModel):
                                                                fid=data_payload.fid)
         return
 
+
     def get_response_form_data(self, head_parser):
         try:
             body = {
