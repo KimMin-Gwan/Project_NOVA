@@ -82,6 +82,20 @@ function App() {
 
   let navigate = useNavigate();
 
+  // 다크모드 버튼이 눌리면 바뀌도록
+  // true면 다크모드 , false면 컬러
+  let [changeMode, setChangeMode] = useState(true);
+  let [brightMode, setBrightMode] = useState('');
+  function handleChangeMode() {
+    if(changeMode){
+      setBrightMode('');
+      setChangeMode(false);
+    }else{
+      setBrightMode('bright-mode');
+      setChangeMode(true);
+    }
+  }
+
   return (
     <Routes>
       <Route path="/write_feed" element={<WriteFeed />}></Route>
@@ -121,7 +135,7 @@ function App() {
       <Route
         path="/"
         element={
-          <div className="all-box">
+          <div className={`all-box ${brightMode}`}>
             <section className="contents com1">
               <LeftBar />
             </section>
@@ -144,6 +158,9 @@ function App() {
                   >
                     <img src={logo} alt="logo"></img>
                   </div>
+                  <button className={`change-btn ${brightMode}`}
+                    onClick={handleChangeMode}
+                  >다크모드 버튼</button>
                   <div className="buttons">
                     <button className="tool-button">
                       <img
