@@ -6,14 +6,21 @@ body {
   background-color: #111;
 }
 
- /* 다크 모드 버튼 */ 
+/* 다크 모드 버튼 */
 .change-btn {
   height: 50px;
 }
 
-.bright-mode {
+/* 라이트모드 */
+body.bright-mode {
   background-color: #eeebf6;
-  color: yellow;
+  color: #000000;
+}
+
+/* 다크모드 */
+body.dark-mode {
+  background-color: #1e1e1e;
+  color: #303030;
 }
 
 .all-box {

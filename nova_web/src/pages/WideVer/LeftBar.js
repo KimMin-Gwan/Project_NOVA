@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 // import popular_feed from "./../FeedList/FeedList";
 // import NovaFunding from "./../NovaFunding/NovaFunding.js";
 import { Link } from "react-router-dom";
-export default function LeftBar() {
+export default function LeftBar({ brightMode }) {
   let navigate = useNavigate();
 
   function handleNavigate(page) {
@@ -18,14 +18,14 @@ export default function LeftBar() {
   }
 
   return (
-    <div className={style["wrap_container"]}>
-      <div className={style["direct-box"]}>
+    <div className={`${style["wrap_container"]} ${brightMode === "dark" ? style["dark-mode"] : style["light-mode"]}`}>
+      <div className={`${style["direct-box"]} ${brightMode === "dark" ? style["dark-mode"] : style["light-mode"]}`}>
         <h4 className={style["wide-text"]}>바로가기</h4>
         <ul className={style["direct-list"]}>
           <li className={style["list-item"]}>
             <img src={home_icon} alt="home" className={style["icon-text"]}></img>
             <div
-              className={style["direct-link"]}
+              className={`${style["direct-link"]} ${brightMode === "dark" ? style["dark-mode"] : style["light-mode"]}`}
               onClick={() => {
                 handleNavigate("/");
               }}
@@ -36,7 +36,7 @@ export default function LeftBar() {
           <li className={style["list-item"]}>
             <img src={all_icon} alt="전체 피드" className={style["icon-text"]}></img>
             <div
-              className={style["direct-link"]}
+              className={`${style["direct-link"]} ${brightMode === "dark" ? style["dark-mode"] : style["light-mode"]}`}
               onClick={() => {
                 handleNavigate("/");
               }}
@@ -47,7 +47,7 @@ export default function LeftBar() {
           <li className={style["list-item"]}>
             <img src={short_icon} alt="short_feed" className={style["icon-text"]}></img>
             <div
-              className={style["direct-link"]}
+              className={`${style["direct-link"]} ${brightMode === "dark" ? style["dark-mode"] : style["light-mode"]}`}
               onClick={() => {
                 handleNavigate("/feed_page");
               }}
@@ -58,7 +58,7 @@ export default function LeftBar() {
           <li className={style["list-item"]}>
             <img src={feed_write} alt="write" className={style["icon-text"]}></img>
             <div
-              className={style["direct-link"]}
+              className={`${style["direct-link"]} ${brightMode === "dark" ? style["dark-mode"] : style["light-mode"]}`}
               onClick={() => {
                 handleNavigate("/write_feed");
               }}
@@ -69,7 +69,7 @@ export default function LeftBar() {
           <li className={style["list-item"]}>
             <img src={popular_icon} alt="popular" className={style["icon-text"]}></img>
             <div
-              className={style["direct-link"]}
+              className={`${style["direct-link"]} ${brightMode === "dark" ? style["dark-mode"] : style["light-mode"]}`}
               onClick={() => {
                 handleNavigate("/feed_list");
               }}

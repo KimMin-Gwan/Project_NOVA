@@ -132,3 +132,20 @@
 .ranking-box-w {
   margin-block: 10px !important;
 }
+
+/* 다크모드 라이트모드  */
+.dark-mode {
+  color: #ffffff;
+}
+
+.light-mode {
+  color: #000000;
+}
+
+.direct-box.light-mode {
+  background-color: #eaeeff;
+  border: 1px solid #000000;
+}
+.direct-link.light-mode {
+  color: #1b1b1b;
+}

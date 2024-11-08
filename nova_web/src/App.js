@@ -84,17 +84,34 @@ function App() {
 
   // 다크모드 버튼이 눌리면 바뀌도록
   // true면 다크모드 , false면 컬러
-  let [changeMode, setChangeMode] = useState(true);
-  let [brightMode, setBrightMode] = useState('');
-  function handleChangeMode() {
-    if(changeMode){
-      setBrightMode('');
-      setChangeMode(false);
-    }else{
-      setBrightMode('bright-mode');
-      setChangeMode(true);
-    }
-  }
+  // let [changeMode, setChangeMode] = useState(true);
+  // let [brightMode, setBrightMode] = useState("");
+  // function handleChangeMode() {
+  //   if (changeMode) {
+  //     setBrightMode("");
+  //     setChangeMode(false);
+  //   } else {
+  //     setBrightMode("bright-mode");
+  //     setChangeMode(true);
+  //   }
+  // }
+
+  // 초기 상태를 localStorage에서 불러오거나 기본값으로 설정
+  const [brightMode, setBrightMode] = useState(() => {
+    return localStorage.getItem("brightMode") || "bright"; // 기본값은 'bright'
+  });
+
+  // 다크 모드 전환 함수
+  const handleChangeMode = () => {
+    const newMode = brightMode === "dark" ? "bright" : "dark";
+    setBrightMode(newMode);
+    localStorage.setItem("brightMode", newMode); // 상태를 localStorage에 저장
+  };
+
+  // brightMode 상태가 변경될 때마다 body 클래스 업데이트
+  useEffect(() => {
+    document.body.className = brightMode === "dark" ? "dark-mode" : "bright-mode";
+  }, [brightMode]);
 
   return (
     <Routes>
@@ -137,7 +154,7 @@ function App() {
         element={
           <div className={`all-box ${brightMode}`}>
             <section className="contents com1">
-              <LeftBar />
+              <LeftBar brightMode={brightMode} />
             </section>
             <div
               onClick={(e) => {
@@ -158,9 +175,9 @@ function App() {
                   >
                     <img src={logo} alt="logo"></img>
                   </div>
-                  <button className={`change-btn ${brightMode}`}
-                    onClick={handleChangeMode}
-                  >다크모드 버튼</button>
+                  <button className="change-btn" onClick={handleChangeMode}>
+                    {brightMode === "dark" ? "라이트모드로 전환" : "다크모드로 전환"}
+                  </button>
                   <div className="buttons">
                     <button className="tool-button">
                       <img
