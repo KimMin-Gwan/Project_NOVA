@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import style from "./MainPart.module.css";
 import more_icon from "./../../img/backword.png";
-import SimpleSlider from "../../component/SimpleSlider";
 import { useNavigate } from "react-router-dom";
 
 export default function PopularFeed() {
@@ -25,6 +24,26 @@ export default function PopularFeed() {
     navigate(`/feed_list/${fid}`)
   };
 
+  let scrollRef = useRef(null);
+  let [isDrag, setIsDrag] = useState(false);
+  let [dragStart, setDragStart] = useState('');
+
+  function onMouseDown(e){
+    e.preventDefault();
+    setIsDrag(true);
+    setDragStart(e.pageX + scrollRef.current.scrollLeft);
+  };
+
+  function onMouseUp(e){
+    setIsDrag(false);
+  };
+
+  function onMouseMove(e){
+    if(isDrag){
+      scrollRef.current.scrollLeft = dragStart - e.pageX;
+    }
+  };
+
   return (
     <div className={style["wrap-container"]}>
       <div className={style["top-area"]}>
@@ -34,7 +53,11 @@ export default function PopularFeed() {
         </div>
       </div>
 
-      <div className={`${style["main-area"]} ${style["popular-feed-container"]}`}>
+      <div className={`${style["main-area"]} ${style["popular-feed-container"]}`}
+        ref={scrollRef}
+        onMouseDown={onMouseDown}
+        onMouseMove={onMouseMove}
+        onMouseUp={onMouseUp}>
         {homeFeed.map((feed, i) => {
           return (
             <div key={i} className={style["popular-feed"]} onClick={() => handleNavigate(feed.fid)}>
