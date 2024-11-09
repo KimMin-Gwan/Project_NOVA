@@ -4,15 +4,50 @@ from view.master_view import Master_View, RequestHeader
 from view.parsers import Head_Parser
 from controller import Sub_Controller
 from fastapi.responses import HTMLResponse
+from others import FeedSearchEngine
+from pprint import pprint
 
 class Sub_Service_View(Master_View):
-    def __init__(self, app:FastAPI, endpoint:str, database, head_parser:Head_Parser) -> None:
+    def __init__(self, app:FastAPI, endpoint:str, database, head_parser:Head_Parser,
+                 feed_search_engine:FeedSearchEngine) -> None:
         super().__init__(head_parser=head_parser)
         self.__app = app
         self._endpoint = endpoint
         self.__database = database
+        self.__feed_search_engine=feed_search_engine
         self.notice_route()
         #self.bias_page_route("/bias_info")
+        self.test_route()
+
+
+
+    def test_route(self):
+        @self.__app.get("/testing/try_get_feed")
+        def try_get_feed():
+
+            result = "default"
+            result_index = "index"
+
+            # 여기다가 조건을 작성
+
+            target_type = "uname"
+            target = "버튜버"
+            num_feed= 10
+            index = 240
+
+            # 여기서 만든 함수 실행
+            result , result_index = self.__feed_search_engine.try_serach_feed(target_type=target_type, target = target, num_feed=num_feed, index=index)
+            #result , result_index = self.__feed_search_engine.try_get_feed_in_recent(search_type ="today", num_feed= 6, index=-2)
+            
+
+            # 여기서 결과 확인
+            result()
+            pprint(result_index)
+
+            return True
+        
+
+
 
     def notice_route(self):
         @self.__app.get("/nova_notice/notice_list")
