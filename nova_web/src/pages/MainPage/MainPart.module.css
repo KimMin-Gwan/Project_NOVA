@@ -218,6 +218,7 @@
 .ranking-box {
   display: flex;
   margin: 20px;
+  align-items: center;
 }
 
 .ranking {
@@ -236,8 +237,9 @@
 
 .ranking-name {
   margin-left: 20px;
-  padding-top: 4px;
+
   counter-reset: #fafafa;
+  align-self: center;
 }
 
 .feed-container {
@@ -288,4 +290,19 @@
     word-break: break-word;
     margin-bottom: 30px;
   }
+}
+
+/* --------------- */
+/* 라이트모드 스타일 */
+
+.top-area.bright-mode {
+  background-color: #f8f8f8;
+  color: black;
+}
+/* 최근 인기 게시글 */
+.main-area.bright-mode {
+  background-color: #eeebf6;
+}
+.popular-text.bright-mode {
+  color: #1f1f1f;
 }

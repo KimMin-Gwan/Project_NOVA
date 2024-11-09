@@ -14,7 +14,7 @@ import nine from "./../../img/9.png";
 import ten from "./../../img/10.png";
 let imgList = [one, two, three, four, five, six, seven, eight, nine, ten];
 
-export default function RightBar() {
+export default function RightBar({ brightMode }) {
   let [tagList, setTagList] = useState([]);
 
   function fetchTagData() {
@@ -33,7 +33,7 @@ export default function RightBar() {
 
   return (
     <div className={style["wrap_container"]}>
-      <div className={style["hashtag-box"]}>
+      <div className={`${style["hashtag-box"]} ${brightMode === "dark" ? style["dark-mode"] : style["light-mode"]}`}>
         <div className={style["top-bar"]}>
           <header className={style["wide-text"]}>급상승 해시태그</header>
           <span className={style_hash["time-text"]}>13:00 기준</span>

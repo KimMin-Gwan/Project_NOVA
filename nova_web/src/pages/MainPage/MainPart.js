@@ -3,8 +3,8 @@ import style from "./MainPart.module.css";
 import SimpleSlider from "../../component/SimpleSlider";
 import more_icon from "./../../img/backword.png";
 import { useNavigate } from "react-router-dom";
-export default function MainPart() {
-
+import { getModeClass } from "./../../App.js";
+export default function MainPart({ brightMode }) {
   let [bias, setBias] = useState("");
   let [biasTag, setBiasTag] = useState([]);
   let [tagFeed, setTagFeed] = useState([]);
@@ -38,8 +38,8 @@ export default function MainPart() {
       .then((data) => {
         console.log("14111", data);
         setTagFeed(data.body.feed);
-      })
-  }, [fetchUrl])
+      });
+  }, [fetchUrl]);
 
   useEffect(() => {
     fetchHashTag();
@@ -48,45 +48,39 @@ export default function MainPart() {
 
   let scrollRef = useRef(null);
   let [isDrag, setIsDrag] = useState(false);
-  let [dragStart, setDragStart] = useState('');
+  let [dragStart, setDragStart] = useState("");
 
   function onMouseDown(e) {
     e.preventDefault();
     setIsDrag(true);
     setDragStart(e.pageX + scrollRef.current.scrollLeft);
-  };
+  }
 
   function onMouseUp(e) {
     setIsDrag(false);
-  };
+  }
 
   function onMouseMove(e) {
     if (isDrag) {
       scrollRef.current.scrollLeft = dragStart - e.pageX;
     }
-  };
+  }
 
+  const [mode, setMode] = useState(brightMode); // 초기 상태는 부모로부터 받은 brightMode 값
+  useEffect(() => {
+    setMode(brightMode); // brightMode 값이 바뀔 때마다 mode 업데이트
+  }, [brightMode]);
   return (
-    <div className={style["wrap-container"]}>
-      <div className={style["top-area"]}>
+    <div className={`${style["wrap-container"]} ${style[getModeClass(mode)]}`}>
+      <div className={`${style["top-area"]} ${style[getModeClass(mode)]}`}>
         <div className={style["content-title"]}>
           {/* bid : ''이면 인기 해시태그
   -1이 아니면 [title] 관련 인기 해시트=ㅐ그 */}
-          {
-            bias.bid === '' ? (
-              <header className={style["header-text"]}>인기 해시태그</header>
-            ) : (
-              <header className={style["header-text"]}>[ {bias.title} ] 관련 인기 해시태그</header>
-            )
-          }
+          {bias.bid === "" ? <header className={style["header-text"]}>인기 해시태그</header> : <header className={style["header-text"]}>[ {bias.title} ] 관련 인기 해시태그</header>}
           <img src={more_icon} alt="menu" onClick={() => navigate("/feed_hash_list")} className={style["more-icon"]}></img>
         </div>
 
-        <div className={style["tag-container"]} ref={scrollRef}
-          onMouseDown={onMouseDown}
-          onMouseMove={onMouseMove}
-          onMouseUp={onMouseUp}
-        >
+        <div className={style["tag-container"]} ref={scrollRef} onMouseDown={onMouseDown} onMouseMove={onMouseMove} onMouseUp={onMouseUp}>
           {biasTag.map((tag, i) => {
             return (
               <button
