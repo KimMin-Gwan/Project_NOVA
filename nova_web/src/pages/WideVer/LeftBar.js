@@ -87,7 +87,7 @@ export default function LeftBar({ brightMode }) {
         </Link>
       </div>
 
-      <div className={style["search-box"]}>
+      <div className={`${style["search-box"]} ${brightMode === "dark" ? style["dark-mode"] : style["light-mode"]}`}>
         <h4 className={style["wide-text"]}>검색</h4>
         <div className={style["search-bar"]}>
           <input></input>

@@ -57,6 +57,7 @@
   /* 텍스트 색상 */
   display: flex;
   flex-direction: column;
+  border: 1px solid #e9e9e9;
   /* Flexbox를 사용하여 내용 정렬 */
   /* align-items: center; */
   /* 수직 중앙 정렬 */

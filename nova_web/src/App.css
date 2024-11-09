@@ -19,7 +19,7 @@ body.bright-mode {
 
 /* 다크모드 */
 body.dark-mode {
-  background-color: #1e1e1e;
+  background-color: #111;
   color: #303030;
 }
 
@@ -1118,4 +1118,10 @@ body.dark-mode {
   .narrow-page {
     display: none;
   }
+}
+
+/* --------------- */
+/* 라이트모드 스타일 */
+.container.bright-mode {
+  background-color: #f8f8f8;
 }

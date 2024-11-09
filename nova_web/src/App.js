@@ -41,7 +41,10 @@ import LikeFunding from "./pages/NovaFunding/LikeFunding/LikeFunding.js";
 import logo from "./img/NOVA.png";
 // 401 이면 바이어스 격자 무늬로 띄우기
 // 401 이면 alert - 로그인 필요 문구 띄우기
-
+// 다크 모드 클래스 반환 함수
+export function getModeClass(mode) {
+  return mode === "dark" ? "dark-mode" : "bright-mode";
+}
 function App() {
   let url = "https://nova-platform.kr/home/";
   // let url = 'http://127.0.0.1:5000/home/';
@@ -152,7 +155,7 @@ function App() {
       <Route
         path="/"
         element={
-          <div className={`all-box ${brightMode}`}>
+          <div className="all-box">
             <section className="contents com1">
               <LeftBar brightMode={brightMode} />
             </section>
@@ -163,7 +166,7 @@ function App() {
                   setShowBox(false);
                 }
               }}
-              className={`container ${blackBox}`}
+              className={`container ${blackBox} ${getModeClass(brightMode)}`}
             >
               <div className="top-area">
                 <header className="header">
@@ -198,8 +201,8 @@ function App() {
               </div>
 
               <section className="contents">
-                <MainPart />
-                <PopularFeed />
+                <MainPart brightMode={brightMode} />
+                <PopularFeed brightMode={brightMode} />
                 <div className="narrow-page">
                   <IncreaseTag />
                 </div>
@@ -211,7 +214,7 @@ function App() {
               </div>
             </div>
             <section className="contents com1">
-              <RightBar />
+              <RightBar brightMode={brightMode} />
             </section>
           </div>
         }

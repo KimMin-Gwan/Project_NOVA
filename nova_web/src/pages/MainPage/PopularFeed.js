@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import style from "./MainPart.module.css";
 import more_icon from "./../../img/backword.png";
 import { useNavigate } from "react-router-dom";
-
-export default function PopularFeed() {
+import { getModeClass } from "./../../App.js";
+export default function PopularFeed({ brightMode }) {
   let [homeFeed, setHomeFeed] = useState([]);
   const navigate = useNavigate();
   function fetchHomeFeed() {
@@ -21,43 +21,42 @@ export default function PopularFeed() {
   }, []);
 
   function handleNavigate(fid) {
-    navigate(`/feed_list/${fid}`)
-  };
+    navigate(`/feed_list/${fid}`);
+  }
 
   let scrollRef = useRef(null);
   let [isDrag, setIsDrag] = useState(false);
-  let [dragStart, setDragStart] = useState('');
+  let [dragStart, setDragStart] = useState("");
 
-  function onMouseDown(e){
+  function onMouseDown(e) {
     e.preventDefault();
     setIsDrag(true);
     setDragStart(e.pageX + scrollRef.current.scrollLeft);
-  };
+  }
 
-  function onMouseUp(e){
+  function onMouseUp(e) {
     setIsDrag(false);
-  };
+  }
 
-  function onMouseMove(e){
-    if(isDrag){
+  function onMouseMove(e) {
+    if (isDrag) {
       scrollRef.current.scrollLeft = dragStart - e.pageX;
     }
-  };
-
+  }
+  const [mode, setMode] = useState(brightMode); // 초기 상태는 부모로부터 받은 brightMode 값
+  useEffect(() => {
+    setMode(brightMode); // brightMode 값이 바뀔 때마다 mode 업데이트
+  }, [brightMode]);
   return (
     <div className={style["wrap-container"]}>
-      <div className={style["top-area"]}>
+      <div className={`${style["top-area"]} ${style[getModeClass(mode)]}`}>
         <div className={style["content-title"]}>
           <header className={style["header-text"]}>최근 인기 게시글</header>
           <img src={more_icon} alt="더보기" onClick={() => navigate("/feed_list?type=best")} className={style["more-icon"]}></img>
         </div>
       </div>
 
-      <div className={`${style["main-area"]} ${style["popular-feed-container"]}`}
-        ref={scrollRef}
-        onMouseDown={onMouseDown}
-        onMouseMove={onMouseMove}
-        onMouseUp={onMouseUp}>
+      <div className={`${style["main-area"]} ${style["popular-feed-container"]} ${style[getModeClass(mode)]}`} ref={scrollRef} onMouseDown={onMouseDown} onMouseMove={onMouseMove} onMouseUp={onMouseUp}>
         {homeFeed.map((feed, i) => {
           return (
             <div key={i} className={style["popular-feed"]} onClick={() => handleNavigate(feed.fid)}>
@@ -66,16 +65,18 @@ export default function PopularFeed() {
               </div>
               <div className={style["popular-main"]}>
                 <div className={style["tag-text"]}>
-                  {
-                    feed.hashtag.map((tag, i) => {
-                      return (
-                        <span key={i} className={style["tag"]}>#{tag}</span>
-                      )
-                    })
-                  }
+                  {feed.hashtag.map((tag, i) => {
+                    return (
+                      <span key={i} className={style["tag"]}>
+                        #{tag}
+                      </span>
+                    );
+                  })}
                 </div>
-                <div className={style["popular-text"]}>{feed.body}</div>
-                <footer className={style["like-comment"]}>좋아요 {feed.star}개 | 댓글 {feed.num_comment}개</footer>
+                <div className={`${style["popular-text"]} ${style[getModeClass(mode)]}`}>{feed.body}</div>
+                <footer className={style["like-comment"]}>
+                  좋아요 {feed.star}개 | 댓글 {feed.num_comment}개
+                </footer>
               </div>
             </div>
           );
