@@ -11,9 +11,9 @@ import seven from "./../../img/7.png";
 import eight from "./../../img/8.png";
 import nine from "./../../img/9.png";
 import ten from "./../../img/10.png";
-
+import { getModeClass } from "./../../App.js";
 let imgList = [one, two, three, four, five, six, seven, eight, nine, ten];
-export default function IncreaseTag() {
+export default function IncreaseTag({ brightMode }) {
   let [tagList, setTagList] = useState([]);
 
   function fetchTagData() {
@@ -29,18 +29,21 @@ export default function IncreaseTag() {
   useEffect(() => {
     fetchTagData();
   }, []);
-
+  const [mode, setMode] = useState(brightMode); // 초기 상태는 부모로부터 받은 brightMode 값
+  useEffect(() => {
+    setMode(brightMode); // brightMode 값이 바뀔 때마다 mode 업데이트
+  }, [brightMode]);
   return (
     <div className={style["wrap-container"]}>
-      <div className={style["top-area"]}>
+      <div className={`${style["top-area"]} ${style[getModeClass(mode)]}`}>
         <div className={style["content-title"]}>
           <header className={style["header-text"]}>급상승 해시태그</header>
           {/* <div>화살표</div> */}
         </div>
       </div>
 
-      <div className={style["main-area"]}>
-        <div className={style["hashtag-box"]}>
+      <div className={`${style["main-area"]} ${style[getModeClass(mode)]}`}>
+        <div className={`${style["hashtag-box"]} ${style[getModeClass(mode)]}`}>
           <span className={style["time-text"]}>13:00 기준</span>
           <ol className={style["ranking-container"]}>
             {tagList.map((tag, i) => {

@@ -187,7 +187,7 @@
   color: #ffffff;
   margin-top: 5px;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -203,6 +203,7 @@
   border-radius: 10px;
   display: flex;
   flex-flow: column;
+  padding-bottom: 10px;
 }
 
 .time-text {
@@ -240,9 +241,9 @@
 
 .ranking-name {
   margin-left: 20px;
-
   counter-reset: #fafafa;
   align-self: center;
+  text-decoration: underline;
 }
 
 .feed-container {
@@ -311,6 +312,7 @@
   color: black;
   text-shadow: 0 0 1px white;
 }
+
 /* --------------- */
 /* 라이트모드 스타일 */
 
@@ -318,10 +320,36 @@
   background-color: #f8f8f8;
   color: black;
 }
+.more-see.bright-mode {
+  background-color: #f4f4f4;
+}
+/* 관련 인기 해시태그 */
+.hashtag-text.bright-mode {
+  background-color: #cccfff;
+}
+
 /* 최근 인기 게시글 */
 .main-area.bright-mode {
   background-color: #eeebf6;
 }
 .popular-text.bright-mode {
   color: #1f1f1f;
+}
+.popular-feed.bright-mode {
+  background-color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); /* 수평, 수직, 블러, 색상 */
+}
+/* 전체 글 */
+.main-area.all-main-area.bright-mode {
+  background-color: #f8f8f8;
+}
+.all-list.bright-mode {
+  li {
+    background-color: #eeebf6;
+  }
+}
+/* width 작을 때 급상승 해시태그 */
+.hashtag-box.bright-mode {
+  background-color: #eeebf6;
+  color: #1b1b1b;
 }

@@ -2,18 +2,21 @@ import { useEffect, useState } from "react";
 import style from "./MainPart.module.css";
 import more_icon from "./../../img/backword.png";
 import { useNavigate } from "react-router-dom";
-export default function AllPost() {
+import { getModeClass } from "./../../App.js";
+export default function AllPost({ brightMode }) {
   let navigate = useNavigate();
-
+  const [mode, setMode] = useState(brightMode); // 초기 상태는 부모로부터 받은 brightMode 값
+  useEffect(() => {
+    setMode(brightMode); // brightMode 값이 바뀔 때마다 mode 업데이트
+  }, [brightMode]);
   return (
     <div className={style["wrap-container"]}>
-      <div className={style["top-area"]}>
+      <div className={`${style["top-area"]} ${style[getModeClass(mode)]}`}>
         <div className={style["content-title"]}>
           <header className={style["header-text"]}>전체 글</header>
-          <img src={more_icon} alt="more_icon" className={style["more-icon"]} onClick={() => navigate("/feed_list?type=all")} />
         </div>
-        <div className={`${style["main-area"]} ${style["all-main-area"]}`}>
-          <ul className={style["all-list"]}>
+        <div className={`${style["main-area"]} ${style["all-main-area"]} ${style[getModeClass(mode)]}`}>
+          <ul className={`${style["all-list"]} ${style[getModeClass(mode)]}`}>
             <li>
               <div className={style["all-img"]}>이미지</div>
               <div className={style["all-text"]}>
@@ -55,7 +58,9 @@ export default function AllPost() {
               </div>
             </li>
           </ul>
-          <button className={style["all_see-button"]}>전체보기</button>
+          <button onClick={() => navigate("/feed_list?type=all")} className={style["all_see-button"]}>
+            전체보기
+          </button>
         </div>
       </div>
     </div>

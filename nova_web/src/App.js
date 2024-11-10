@@ -206,14 +206,14 @@ function App() {
                 <MainPart brightMode={brightMode} />
                 <PopularFeed brightMode={brightMode} />
                 <div className="narrow-page">
-                  <IncreaseTag />
+                  <IncreaseTag brightMode={brightMode} />
                 </div>
                 <Week100 brightMode={brightMode} />
-                <AllPost />
+                <AllPost brightMode={brightMode} />
               </section>
 
               <div className="narrow-page">
-                <NavBar></NavBar>
+                <NavBar brightMode={brightMode}></NavBar>
               </div>
             </div>
             <section className="contents com1">

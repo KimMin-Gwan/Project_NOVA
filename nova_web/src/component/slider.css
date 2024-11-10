@@ -118,3 +118,9 @@
 .slick-dots li button::after {
   background-color: #1e1e1e;
 }
+/* 라이트 모드 */
+.slide-content.bright-mode {
+  background-color: #f4f4f4;
+  color: #232323;
+  border: 1px solid #2b2d33;
+}

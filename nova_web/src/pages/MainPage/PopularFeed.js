@@ -47,6 +47,7 @@ export default function PopularFeed({ brightMode }) {
   useEffect(() => {
     setMode(brightMode); // brightMode 값이 바뀔 때마다 mode 업데이트
   }, [brightMode]);
+
   return (
     <div className={style["wrap-container"]}>
       <div className={`${style["top-area"]} ${style[getModeClass(mode)]}`}>
@@ -59,7 +60,7 @@ export default function PopularFeed({ brightMode }) {
       <div className={`${style["main-area"]} ${style["popular-feed-container"]} ${style[getModeClass(mode)]}`} ref={scrollRef} onMouseDown={onMouseDown} onMouseMove={onMouseMove} onMouseUp={onMouseUp}>
         {homeFeed.map((feed, i) => {
           return (
-            <div key={i} className={style["popular-feed"]} onClick={() => handleNavigate(feed.fid)}>
+            <div key={i} className={`${style["popular-feed"]} ${style[getModeClass(mode)]}`} onClick={() => handleNavigate(feed.fid)}>
               <div className={style["img-box"]}>
                 <img src={`${feed.image[0]}`} alt="img" />
               </div>

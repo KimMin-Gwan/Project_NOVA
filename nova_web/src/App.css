@@ -1125,3 +1125,6 @@ body.dark-mode {
 .container.bright-mode {
   background-color: #f8f8f8;
 }
+.bottom_bar.bright-mode {
+  background-color: #eeebf6;
+}
