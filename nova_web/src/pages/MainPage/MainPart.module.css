@@ -69,7 +69,7 @@
 
 .main-area {
   flex-grow: 5;
-  background-color: #212327;
+  background-color: #292929;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -255,13 +255,18 @@
 }
 
 /* 전체 게시글 */
+.all-main-area {
+  flex-direction: column;
+}
 .all-list {
   width: 90%;
   padding: 0;
 
   li {
-    margin-bottom: 20px;
+    margin-bottom: 5px;
     display: flex;
+    background-color: #212327;
+    padding: 20px;
   }
 }
 
@@ -292,6 +297,17 @@
   }
 }
 
+.all_see-button {
+  width: 85%;
+  align-self: center;
+  background-color: #ddd1f2;
+  border: 2px solid #7e60b1;
+  padding-block: 10px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+  color: black;
+  text-shadow: 0 0 1px white;
+}
 /* --------------- */
 /* 라이트모드 스타일 */
 
