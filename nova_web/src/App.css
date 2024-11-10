@@ -1110,9 +1110,9 @@ body.dark-mode {
   position: relative;
 }
 
-.contents {
+/* .contents {
   margin-top: 100px;
-}
+} */
 
 @media (min-width: 1024px) {
   .narrow-page {

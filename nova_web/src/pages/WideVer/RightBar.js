@@ -1,55 +1,33 @@
 import style from "./WideVer.module.css";
-import style_hash from "./../MainPage/MainPart.module.css";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import one from "./../../img/1.png";
-import two from "./../../img/2.png";
-import three from "./../../img/3.png";
-import four from "./../../img/4.png";
-import five from "./../../img/5.png";
-import six from "./../../img/6.png";
-import seven from "./../../img/7.png";
-import eight from "./../../img/8.png";
-import nine from "./../../img/9.png";
-import ten from "./../../img/10.png";
-let imgList = [one, two, three, four, five, six, seven, eight, nine, ten];
+
+import direct_icon from "./../../img/direct_icon.png";
+import search_icon from "./../../img/search_icon.png";
+import { Link } from "react-router-dom";
 
 export default function RightBar({ brightMode }) {
-  let [tagList, setTagList] = useState([]);
-
-  function fetchTagData() {
-    fetch("https://nova-platform.kr/home/realtime_best_hashtag", {
-      credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setTagList(data.body.hashtags);
-      });
-  }
-
-  useEffect(() => {
-    fetchTagData();
-  }, []);
-
   return (
     <div className={style["wrap_container"]}>
-      <div className={`${style["hashtag-box"]} ${brightMode === "dark" ? style["dark-mode"] : style["light-mode"]}`}>
-        <div className={style["top-bar"]}>
-          <header className={style["wide-text"]}>급상승 해시태그</header>
-          <span className={style_hash["time-text"]}>13:00 기준</span>
+      <div className={`${style["search-box"]} ${brightMode === "dark" ? style["dark-mode"] : style["light-mode"]}`}>
+        <h4 className={style["wide-text"]}>검색</h4>
+        <div className={style["search-bar"]}>
+          <input></input>
+          <button>
+            <img src={search_icon} className={style["icon-text"]}></img>
+          </button>
         </div>
-        <ol className={style_hash["ranking-container"]}>
-          {tagList.map((tag, i) => {
-            return (
-              <li key={i} className={`${style_hash["ranking-box"]} ${style["ranking-box-w"]}`}>
-                <div className={style_hash["ranking-img"]}>
-                  <img src={imgList[i]} alt="img"></img>
-                </div>
-                <div className={style_hash["ranking-name"]}>{tag}</div>
-              </li>
-            );
-          })}
-        </ol>
+        <span className={style["search-memo"]}>
+          <p>검색기록</p>
+          <p>X</p>
+        </span>
+      </div>
+
+      <div className={style["nova_direct-box"]}>
+        <img src={direct_icon} alt="노바펀딩 바로가기" className={style["icon-text"]}></img>
+        <Link to="/nova_funding" className={style["go-nova"]}>
+          노바펀딩 바로가기
+        </Link>
       </div>
 
       <div className={style["ad-container"]}>광고</div>

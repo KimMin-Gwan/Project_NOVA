@@ -1,7 +1,7 @@
 /* 양 옆 넓이 컨테이너 */
 
 .wrap_container {
-  height: 500px;
+  height: 100%;
   display: flex;
   flex-direction: column;
   color: white;
@@ -78,6 +78,7 @@
   padding: 8px;
   border-radius: 5px;
   border: 1px solid #6a6a6a;
+  height: 500px;
 }
 .search-bar {
   display: flex;
@@ -114,7 +115,7 @@
 .ad-container {
   background-color: #afafaf;
   color: white;
-  padding-bottom: 200px;
+  height: 600px;
 }
 
 /* 급상승 해시태그 */
@@ -126,7 +127,7 @@
 }
 .hashtag-box {
   width: 100%;
-  height: 100%;
+  height: 460px;
   background-color: #212327;
   border-radius: 5px;
   display: flex;
