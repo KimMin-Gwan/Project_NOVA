@@ -110,8 +110,10 @@
   background-color: #1e1e1e;
 }
 
-.slick-dots li button:before {
+/* 여기가 색 변경되는 부분 */
+.slick-dots li button::before {
   color: #4194f7 !important;
+  /* background-color: #1e1e1e; */
   background-color: #1e1e1e;
   border: none;
 }
