@@ -43,7 +43,7 @@ class FeedSearchEngine:
     # result , index = try_serach_feed(target_type="uname", target = "바위게", num_feed=10, index=240):
     def try_serach_feed(self, target_type="default", target = "", num_feed=1, index=-2):
 
-        result = []
+        result_fid = []
         result_index = -2
 
         # 해시태그로 검색한 피드 요청
@@ -59,9 +59,7 @@ class FeedSearchEngine:
         # uname으로 검색한 피드 (유저 이름)
         elif target_type == "uname":
             # 아래의 코드는 샘플이며 원하는 상태에 따라 다시 작성
-            #result, result_index = self.__search_manager.search_feed_with_user(user=target, num_feed=num_feed, index=index)
-
-            result, result_index = self.__search_manager.sample_data()
+            result_fid, result_index = self.__search_manager.search_feed_with_uname(uname=target, num_feed=num_feed, index=index)
 
         #elif target_type == "string":
             #result, key = self.__search_manager.search_feed_with_string(string=target, key=key)
@@ -69,7 +67,7 @@ class FeedSearchEngine:
             print("default 가 입력됨")
             pass
             
-        return result, result_index
+        return result_fid, result_index
 
     # search_type -> 검색하는 조건
     # 조건명 : (recent -> 단순한 최신순, today -> 24시간 이내 좋아요 순, weekly -> 168시간 이내 좋아요 순, like-> 단순 좋아요 순)
@@ -233,7 +231,7 @@ class SearchManager:
     # 코드를 작성하는 도중에는 주석을 해제하여 LocalDatabase 함수를 자동완성하고
     # 실행할때는 다시 주석처리하여 사용할것
     #def __init__(self, database:Local_Database, feed_algorithm : FeedAlgorithm):
-    def __init__(self, database, feed_algorithm : FeedAlgorithm):
+    def __init__(self, database, feed_algorithm=None):
         self.__database = database
         self.__feed_algorithm=feed_algorithm
     
@@ -263,7 +261,7 @@ class SearchManager:
         for single_feed in feeds:
             managed_feed = ManagedFeed(fid=single_feed.fid,
                                         like=single_feed.star,
-                                        date=self.__get_datetime(single_feed.date),
+                                        date=self.__get_date_str_to_object(single_feed.date),
                                         hashtag=copy(single_feed.hashtag),
                                         uname=single_feed.nickname
                                         )
@@ -271,6 +269,8 @@ class SearchManager:
             self.__feed_table.append(managed_feed)
 
         # 리턴되면 위에서 잠시 보관한 피드 데이터는 사라지고 self.__feed_table에 ManagedFeed들만 남음
+
+        self.__feed_table = sorted(self.__feed_table, key=lambda x:x.date, reverse=True)
 
         num_feed = str(len(self.__feed_table))
         print(f'INFO<-[      {num_feed} NOVA FEED IN SEARCH ENGINE NOW READY.')
@@ -368,19 +368,21 @@ class SearchManager:
 
         count = 0
         if search_type == "all":
-            for i, managed_feed in enumerate(search_range):
+            for i, managed_feed in enumerate(reversed(search_range)):
+                ii = len(self.__feed_table) - 1 - i
                 if count == num_feed:
                     break
 
                 result_fid.append(managed_feed.fid)
                 # result_index 업데이트
-                result_index = index - 1 - i  # 실제 self.__feed_table에서의 인덱스 계산
+                result_index = index - 1 - ii # 실제 self.__feed_table에서의 인덱스 계산
                 count += 1
 
 
         elif search_type == "best":
             managed_feed:ManagedFeed = managed_feed
             for i, managed_feed in enumerate(search_range):
+                ii = len(self.__feed_table) - 1 - i
                 if count == num_feed:
                     break
                 
@@ -389,7 +391,7 @@ class SearchManager:
 
                 result_fid.append(managed_feed.fid)
                 # result_index 업데이트
-                result_index = index - 1 - i  # 실제 self.__feed_table에서의 인덱스 계산
+                result_index = index - 1 - ii # 실제 self.__feed_table에서의 인덱스 계산
                 count += 1
 
         return result_fid, result_index
@@ -397,7 +399,7 @@ class SearchManager:
     
         
     #type likes, time
-    def search_feed_with_hashtag(self, hashtag, search_type="likes", num_feed=10, index=-1) -> list:
+    def search_feed_with_hashtag(self, hashtag, num_feed=10, index=-1) -> list:
         result_fid = []
         result_index = -3
 
@@ -411,7 +413,8 @@ class SearchManager:
 
         count = 0
 
-        for i, managed_feed in enumerate(search_range):
+        for i, managed_feed in enumerate(reversed(search_range)):
+            ii = len(self.__feed_table) - 1 - i
             if count == num_feed:
                 break
 
@@ -421,28 +424,56 @@ class SearchManager:
             result_fid.append(managed_feed.fid)
 
             # result_index 업데이트
-            result_index = index - 1 - i  # 실제 self.__feed_table에서의 인덱스 계산
+            result_index = index - 1 - ii  # 실제 self.__feed_table에서의 인덱스 계산
             count += 1
 
         return result_fid, result_index
 
 
-    def search_feed_with_fid(self, fid, search_type="likes", num_feed=1, index=-1) -> list:
+    def search_feed_with_fid(self, fid, num_feed=1, index=-1) -> list:
         result_fid = []
-        for managed_feed in self.__feed_table:
+        for i, managed_feed in enumerate(reversed(self.__feed_table)):
+            index = len(self.__feed_table) - 1 - i
+            if managed_feed.fid == fid:
+                result_fid.append(managed_feed.fid)
+                break
 
-        # ??
-        return  self.__feed_algorithm.get_feed_with_fid(fid,num_feed)
+        return  result_fid, index
 
-    def search_feed_with_user(self, user, num_feed=10) -> list:   #User가 작성한 피드 돌려주는거? 
-        return  self.__feed_algorithm.get_feed_with_user(user,num_feed)
+    def search_feed_with_uname(self, uname, num_feed=1, index=-1) -> list:
+        result_fid = []
+        result_index = -3
 
-    def search_feed_with_string(self, string, num_feed=10) -> list:   #본문 내용을 가지고 찾는거같음
-        return self.__feed_algorithm.get_feed_with_string(string,num_feed)
+        if index == -1:
+            index = len(self.__feed_table)
+
+        search_range = self.__feed_table[:index][::-1]
+
+        if index < 0 or index > len(self.__feed_table):
+            return result_fid, -3
+
+        count = 0
+
+        for i, managed_feed in enumerate(reversed(search_range)):
+            ii = len(self.__feed_table) - 1 - i
+
+            if count == num_feed:
+                break
+
+            if uname != managed_feed.uname:
+                continue
+
+            result_fid.append(managed_feed.fid)
+
+            # result_index 업데이트
+            result_index = index - 1 - ii  # 실제 self.__feed_table에서의 인덱스 계산
+            count += 1
+
+        return result_fid, result_index
+
+    #def search_feed_with_string(self, string, num_feed=10) -> list:   #본문 내용을 가지고 찾는거같음
+        #return self.__feed_algorithm.get_feed_with_string(string,num_feed)
     
-    def sample_data(self):
-        return self.__feed_table[0], -1
-
 # --------------------------------------------------------------------------------------------
 
 # 이건 아직 만지지 말것 ------------------------------------------------------------------------
