@@ -27,11 +27,13 @@ export default function PopularFeed({ brightMode }) {
   let scrollRef = useRef(null);
   let [isDrag, setIsDrag] = useState(false);
   let [dragStart, setDragStart] = useState("");
+  let [hasDragged, setHasDragged] = useState(false);
 
   function onMouseDown(e) {
     e.preventDefault();
     setIsDrag(true);
     setDragStart(e.pageX + scrollRef.current.scrollLeft);
+    setHasDragged(false); //드래그 여부 초기화
   }
 
   function onMouseUp(e) {
@@ -41,8 +43,16 @@ export default function PopularFeed({ brightMode }) {
   function onMouseMove(e) {
     if (isDrag) {
       scrollRef.current.scrollLeft = dragStart - e.pageX;
+      setHasDragged(true); //드래그 발생 표시
     }
   }
+
+  function handleFeedClick(fid) {
+    if (!hasDragged) {
+      handleNavigate(fid);
+    }
+  }
+
   const [mode, setMode] = useState(brightMode); // 초기 상태는 부모로부터 받은 brightMode 값
   useEffect(() => {
     setMode(brightMode); // brightMode 값이 바뀔 때마다 mode 업데이트
@@ -64,7 +74,8 @@ export default function PopularFeed({ brightMode }) {
         onMouseUp={onMouseUp}>
         {homeFeed.map((feed, i) => {
           return (
-            <div key={i} className={`${style["popular-feed"]} ${style[getModeClass(mode)]}`} onClick={() => handleNavigate(feed.fid)}>
+            <div key={i} className={`${style["popular-feed"]} ${style[getModeClass(mode)]}`} 
+            onClick={() => handleFeedClick(feed.fid)}>
               <div className={style["img-box"]}>
                 <img src={`${feed.image[0]}`} alt="img" />
               </div>

@@ -49,11 +49,13 @@ export default function MainPart({ brightMode }) {
   let scrollRef = useRef(null);
   let [isDrag, setIsDrag] = useState(false);
   let [dragStart, setDragStart] = useState("");
+  let [hasDragged, setHasDragged] = useState(false);
 
   function onMouseDown(e) {
     e.preventDefault();
     setIsDrag(true);
     setDragStart(e.pageX + scrollRef.current.scrollLeft);
+    setHasDragged(false);
   }
 
   function onMouseUp(e) {
@@ -63,6 +65,13 @@ export default function MainPart({ brightMode }) {
   function onMouseMove(e) {
     if (isDrag) {
       scrollRef.current.scrollLeft = dragStart - e.pageX;
+      setHasDragged(true);
+    }
+  }
+
+  function handleTagClick(index) {
+    if (!hasDragged) {
+      handleClick(index);
     }
   }
 
@@ -88,7 +97,7 @@ export default function MainPart({ brightMode }) {
                 key={i}
                 className={style["hashtag-text"]}
                 onClick={() => {
-                  handleClick(i);
+                  handleTagClick(i);
                   setHashTag(tag);
                 }}
                 style={{
