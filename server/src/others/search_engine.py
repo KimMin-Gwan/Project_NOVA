@@ -49,12 +49,12 @@ class FeedSearchEngine:
         # 해시태그로 검색한 피드 요청
         if target_type == "hashtag":   
             # 아래의 코드는 샘플이며 원하는 상태에 따라 다시 작성
-            result, result_index = self.__search_manager.search_feed_with_hashtag(hashtag=target, num_feed=num_feed, index=index)
+            result_fid, result_index = self.__search_manager.search_feed_with_hashtag(hashtag=target, num_feed=num_feed, index=index)
 
         # fid로 검색한 피드 (피드 아이디)
         elif target_type == "fid":
             # 아래의 코드는 샘플이며 원하는 상태에 따라 다시 작성
-            result, result_index = self.__search_manager.search_feed_with_fid(fid=target, num_feed=num_feed, index=index)
+            result_fid, result_index = self.__search_manager.search_feed_with_fid(fid=target, num_feed=num_feed, index=index)
         
         # uname으로 검색한 피드 (유저 이름)
         elif target_type == "uname":
@@ -83,8 +83,8 @@ class FeedSearchEngine:
     # 예시 || 주간 Top100 페이지에서 사용자가 스크롤을 내려 주간 탑 100의 두번째 요청을 넣음
     # result , index = try_get_feed_in_recent(search_type ="weekly", num_feed= 10, index=320):
 
-    def try_get_feed_in_recent(self, search_type="recent", num_feed=1, index=-2):
-        result = []
+    def try_get_feed_in_recent(self, search_type="recent", num_feed=1, index=-1):
+        result_fid = []
         result_index = -2
 
         # 여기서 조건에 따른 검색을 해야함
@@ -94,24 +94,28 @@ class FeedSearchEngine:
         # 1. 단순히 최신순 검색 ( 모든 피드 보기 기능 )
         if search_type == "recent":
             # 아래의 코드는 샘플이며 원하는 상태에 따라 다시 작성
-            result, result_index = self.__search_manager.find_feed_in_feed_table(condition="recent",  num_feed=num_feed, index=index)
+            result_fid, result_index = self.__search_manager.try_get_feed_with_target_hour(
+                search_type="all", num_feed=num_feed, target_hour=-1, index=index)
 
         # 2. 24시간 이내에 좋아요가 30개 이상인 피드 ( 오늘의 인기 게시글 기능 )
         elif search_type == "today":
             # 아래의 코드는 샘플이며 원하는 상태에 따라 다시 작성
-            result, result_index = self.__search_manager.find_feed_in_feed_table(condition="today")
+            result_fid, result_index = self.__search_manager.try_get_feed_with_target_hour(
+                search_type="best", num_feed=num_feed, target_hour=24, index=index)
 
         # 3. 168시간 이내에 좋아요 순 ( 주간 Top 100 기능 )
         elif search_type == "weekly":
             # 아래의 코드는 샘플이며 원하는 상태에 따라 다시 작성
-            result, result_index = self.__search_manager.find_feed_in_feed_table(index=index)
+            result_fid, result_index = self.__search_manager.try_get_feed_with_target_hour(
+                search_type="best", num_feed=num_feed, target_hour=168, index=index)
 
         # 4. 좋아요가 30개 이상인 피드들을 최신순으로 나열 ( 베스트 피드  기능)
         elif search_type == "like":
             # 아래의 코드는 샘플이며 원하는 상태에 따라 다시 작성
-            result, result_index = self.__search_manager.find_feed_in_feed_table(index=index)
+            result_fid, result_index = self.__search_manager.try_get_feed_with_target_hour(
+                search_type="best", num_feed=num_feed, target_hour=-1, index=index)
 
-        return result, result_index
+        return result_fid, result_index
 
     # ------------------------------------------------------------------------------------------------------------
     # 여기는 아직 하지 말것
@@ -339,7 +343,6 @@ class SearchManager:
 
         for i, managed_feed in enumerate(reversed(self.__feed_table)):
             index = len(self.__feed_table) - 1 - i
-            managed_feed:ManagedFeed = managed_feed
             object_date = self.__get_date_str_to_object(str_date=managed_feed.date)
             if self.__get_time_diff(target_time=object_date, target_hour=target_hour):
                 continue
@@ -351,33 +354,90 @@ class SearchManager:
 
     # 목표시간을 바탕으로 피드를 찾느 ㄴ함수
     # search_type == "all", "best"
-    def try_get_feed_with_target_our(self, search_type="all", target_hour=1):
-        target_index = self.__find_target_index(target_hour=target_hour)
+    def try_get_feed_with_target_hour(self, search_type="all", num_feed=4, target_hour=1, index=-2):
+        result_fid = []
+        result_index = -3
 
+        if index == -1:
+            index = len(self.__feed_table)
+
+        if target_hour > 0 :
+            target_index = self.__find_target_index(target_hour=target_hour)
+        else:
+            target_index = 0
+
+        search_range = self.__feed_table[target_index:index][::-1]
+
+        if index < target_index  or index > len(self.__feed_table):
+            return result_fid, -3
+
+
+        count = 0
         if search_type == "all":
-            search_range = self.__feed_table[target_index: len(self.__feed_table)][::-1]
+            for i, managed_feed in enumerate(search_range):
+                if count == num_feed:
+                    break
+
+                result_fid.append(managed_feed.fid)
+                # result_index 업데이트
+                result_index = index - 1 - i  # 실제 self.__feed_table에서의 인덱스 계산
+                count += 1
+
 
         elif search_type == "best":
-            get_target_index = self.__find_target_index(target_hour=target_hour)
+            managed_feed:ManagedFeed = managed_feed
+            for i, managed_feed in enumerate(search_range):
+                if count == num_feed:
+                    break
+                
+                if managed_feed.like < 30:
+                    continue
 
+                result_fid.append(managed_feed.fid)
+                # result_index 업데이트
+                result_index = index - 1 - i  # 실제 self.__feed_table에서의 인덱스 계산
+                count += 1
 
-
-
-
+        return result_fid, result_index
+    
+    
         
     #type likes, time
-    def search_feed_with_hashtag(self, hashtag,search_type="likes", num_feed=10) -> list:
-        
-        #hash tag로 찾는건데
-        #1. 해쉬태그로 좋아요많은순으로
-        #2. 해쉬태그로 최신순으로
-        #3. 
-        if search_type=="likes":
-            return self.__feed_algorithm.get_feed_hashtag_with_likes(hashtag,num_feed)  #list만 return
-        #elif search_type=="time":
-            #return self.__feed_algorithm.get_feed_hashtag_with_times(여기에 몇번 index까지 했는지,hashtag,num_feed)   #list, index
+    def search_feed_with_hashtag(self, hashtag, search_type="likes", num_feed=10, index=-1) -> list:
+        result_fid = []
+        result_index = -3
 
-    def search_feed_with_fid(self, fid, num_feed=10) -> list:   #feed id로 return해주는거 더보기 같음  아마num=1이 맞는거같은데
+        if index == -1:
+            index = len(self.__feed_table)
+
+        search_range = self.__feed_table[:index][::-1]
+
+        if index < 0 or index > len(self.__feed_table):
+            return result_fid, -3
+
+        count = 0
+
+        for i, managed_feed in enumerate(search_range):
+            if count == num_feed:
+                break
+
+            if hashtag not in managed_feed.hashtag:
+                continue
+
+            result_fid.append(managed_feed.fid)
+
+            # result_index 업데이트
+            result_index = index - 1 - i  # 실제 self.__feed_table에서의 인덱스 계산
+            count += 1
+
+        return result_fid, result_index
+
+
+    def search_feed_with_fid(self, fid, search_type="likes", num_feed=1, index=-1) -> list:
+        result_fid = []
+        for managed_feed in self.__feed_table:
+
+
         return  self.__feed_algorithm.get_feed_with_fid(fid,num_feed)
 
     def search_feed_with_user(self, user, num_feed=10) -> list:   #User가 작성한 피드 돌려주는거? 
