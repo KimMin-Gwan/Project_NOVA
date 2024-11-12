@@ -57,7 +57,11 @@ export default function PopularFeed({ brightMode }) {
         </div>
       </div>
 
-      <div className={`${style["main-area"]} ${style["popular-feed-container"]} ${style[getModeClass(mode)]}`} ref={scrollRef} onMouseDown={onMouseDown} onMouseMove={onMouseMove} onMouseUp={onMouseUp}>
+      <div className={`${style["main-area"]} ${style["popular-feed-container"]} ${style[getModeClass(mode)]}`}
+        ref={scrollRef}
+        onMouseDown={onMouseDown}
+        onMouseMove={onMouseMove}
+        onMouseUp={onMouseUp}>
         {homeFeed.map((feed, i) => {
           return (
             <div key={i} className={`${style["popular-feed"]} ${style[getModeClass(mode)]}`} onClick={() => handleNavigate(feed.fid)}>
