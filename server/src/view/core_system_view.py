@@ -181,6 +181,12 @@ class Core_Service_View(Master_View):
             return response
 
 
+
+
+
+
+
+
         # 최애를 검색하는 보편적인 함수
         # 목적 : 나의 최애 선택하기, 홈화면의 최애 검색 기능
         #"http://127.0.0.1:6000/home/search_bias?bias_name=김"  # bias 검색

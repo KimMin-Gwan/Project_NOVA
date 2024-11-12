@@ -2,7 +2,7 @@ import pandas as pd
 
 from copy import copy
 from others.data_domain import Feed
-import  datetime 
+from datetime import  datetime, timedelta
 
 
 # 검색엔진이 해야하는일
@@ -116,28 +116,28 @@ class FeedSearchEngine:
     # ------------------------------------------------------------------------------------------------------------
     # 여기는 아직 하지 말것
     # 목적 : 추천하는 해시태그 제공, 실시간 트랜드 해시태그 제공
-    #def try_get_hashtags(self, num_hashtag,target_type="default", user=None, bias=None):
-        #result = []
+    def try_get_hashtags(self, num_hashtag,target_type="default", user=None, bias=None):
+        result = []
 
-        #if target_type == "default":
-            #result = self.__recommand_manager.get_best_hashtags(num_hashtag=num_hashtag)
-        #elif target_type == "all":
-            #result = self.__recommand_manager.get_recommand_hashtags(user, bias, num_hashtag)
+        if target_type == "default":
+            result = self.__recommand_manager.get_best_hashtags(num_hashtag=num_hashtag)
+        elif target_type == "all":
+            result = self.__recommand_manager.get_recommand_hashtags(user, bias, num_hashtag)
 
-        #return result
+        return result
 
     # 여기도 아직 하지 말것 
     # 목적 : 숏피드에서 다음 피드 제공 받기
-    #def try_recommand_feed(self, num_hashtag,target_type="default", feed=None, user=None, bias=None):
-        #result = []
+    def try_recommand_feed(self, num_hashtag,target_type="default", feed=None, user=None, bias=None):
+        result = []
 
-        #if target_type == "short":
+        if target_type == "short":
             
-            #result = self.__recommand_manager.get_next_feeds(feed, user, num_hashtag)
-        #elif target_type == "best":
-            #result = self.__recommand_manager.get_recommand_hashtags(user, bias, num_hashtag)
+            result = self.__recommand_manager.get_next_feeds(feed, user, num_hashtag)
+        elif target_type == "best":
+            result = self.__recommand_manager.get_recommand_hashtags(user, bias, num_hashtag)
 
-        #return result 
+        return result 
     # ------------------------------------------------------------------------------------------------------------
 
 
@@ -152,112 +152,11 @@ case 1) 첫 page에서 HASH TAG로 좋아요 순으로 보여줘야함
 
 
 # 여기는 신대홍이 만드는 피드 알고리즘 부분
-# 주환형이 작성해야 하는 부분은 아래쪽에 SearchManager 부분과 위쪽의 SearchEngine 부분
-# 따라서 작성한 코드의 부분적 이주가 필요함
 
 class FeedAlgorithm:
     def __init__(self, database):
         self.__now_all_feed=[]
         self.__database=database 
-        self.__find_feed=[]
-        self.__batch_size=[7,31,91,180,360,720]  #그이후는 시작일짜로 ...
-        self.__date_format = "%Y/%m/%d-%H:%M:%S"
-
-    def get_all_feed(self):
-        self.__now_all_feed=self.__database.get_all_data(target="fid")
-    
-    #start_index는 이전에 내가 return해준index - num_of_feed , 그래야 이어서 돌려줌 
-    def get_feed_hashtag_with_times(self,start_index, hashtag:str,num_of_feed=10) :   #맨처음 화면에서 HashTag누르면 실행되는곳, 최신순으로 알맞는 데이터 return 해준다.
-        feed_data=[]
-        #그냥 HashTag , FEED ID -> Table 있으면 SELECT * FROM FEED ID where HASHTAG = hashtag 
-        #이 데이터로 FEED INDEX 가져오면 참좋은데 
-        
-        self.get_all_feed()  #실행되면 update   
-        for item in self.__now_all_feed:
-            if hashtag not in item["hashtag"] :
-                continue
-            else:
-                feed_data.append(item)
-                
-        if start_index<=num_of_feed:
-            return (feed_data[start_index:0:-1] ,0)  #FEED_DATA (list)  , INDEX(0)  
-        else:
-            return (feed_data[start_index:start_index-num_of_feed:-1],start_index-num_of_feed)
-    
-    
-    def get_feed_hashtag_with_likes(self,hashtag:str,num_of_feed=10):  #가장 첫 page에서 hash tag눌렀을때 보여줘야할곳 
-        feed_data=[]
-        self.get_all_feed()
-        now_batch_index=0
-        now_time=datetime.now()
-        while True:
-            if(now_batch_index==len(self.__batch_size)):
-                #끝까지 갔는데도 안나오면 그냥 return하자
-                #혹시라도 While문 계속 돌수도 있으니까
-                feed_data=sorted(feed_data,key = lambda x : x[1], reverse=True)
-                break
-            
-            for item in self.__now_all_feed:
-                if hashtag not in item["hashtag"]:  #해쉬태그 없으면 pass
-                    continue
-                #날짜 형식  안맞는거같아서 바꾸공
-                post_date =datetime.datetime.strptime(item["date"],self.__date_fromat)
-                #차이나는 만큼 
-                delta_days=now_time-post_date
-
-                if delta_days<self.__batch_size[now_batch_index]:
-                    like_between_day=item["star"]/(delta_days+1)  #같은 시간이면 divided 0 임
-                    feed_data.append(like_between_day)
-                    
-                if len(feed_data)>=num_of_feed:
-                    feed_data=sorted(feed_data,key = lambda x : x[1], reverse=True)[:num_of_feed]
-                    break
-                else:
-                    now_batch_index+=1
-        return feed_data
-    
-    
-    def get_feed_with_fid(self,fid,num_of_feed=1) :  #더보기 기능?
-        self.get_all_feed()
-        feed_data=[]
-        for item in self.__now_all_feed:
-            if fid == item["fid"]:
-                feed_data.append(item)
-                break
-        return feed_data
-    
-    
-    
-    
-    def get_feed_with_user(self,uid,num_of_feed=10):  #유저가 작성한 최신순으로
-        self.get_all_feed()
-        feed_data=[]
-        feed_num=0
-        for item in reversed(self.__now_all_feed):
-            if uid==item["uid"]:
-                feed_data.append(item)
-                feed_num+=1
-            if feed_num==num_of_feed:
-                break
-
-
-        return feed_data
-    
-    
-    
-    def get_feed_with_string(self,string,num_of_feeds=10) :  #본문 내용 검색
-        self.get_all_feed()
-        feed_data=[]
-        feed_num=0
-        for item in reversed(self.__now_all_feed):
-            if string in item["body"]:
-                feed_data.append(item)
-                feed_num+=1
-            if feed_num==num_of_feeds:
-                break
-        return feed_data
-    
-    
 
 
 # 이게 검색에 따른 피드를 제공하는 클래스
@@ -379,9 +278,6 @@ class SearchManager:
         print(f'INFO<-[      {num_feed} NOVA FEED IN SEARCH ENGINE NOW READY.')
         return 
 
-    def __get_datetime(self, date_str):
-        return datetime.datetime.strptime(date_str, "%Y/%m/%d-%H:%M:%S")
-
 
     # 이런 함수를 미리 만들어서 쓰면 좋음
     # 아래는 예시 
@@ -412,6 +308,61 @@ class SearchManager:
         # 저장
         self.__database.modify_data_with_id(target_id="fid", target_data=feed.get_dict_form_data())
         return
+    
+    def __get_datetime_now(self):
+        now = datetime.now()
+        return now
+
+    # string to datetime
+    def __get_date_str_to_object(self, str_date):
+        date_obj = datetime.strptime(str_date, "%Y/%m/%d-%H:%M:%S")
+        return date_obj
+
+    # datetime to string
+    def __get_date_object_to_str(self, object:datetime):
+        formatted_str = object.strftime("%Y/%m/%d-%H:%M:%S")
+        return formatted_str
+
+    # 시간 차이를 분석하는 함수
+    # target_hour : 1, 24, 168
+    def __get_time_diff(self, target_time, reference_time=datetime.now(),
+                       target_hour=2) -> bool:
+        time_diff = abs(target_time - reference_time)
+
+        # 차이가 2시간 이상인지 확인
+        return time_diff >= timedelta(hours=target_hour)
+
+    # 시간 차이를 바탕으로 정해진 시간대 내의 피드 정보 구하기
+    # target_hour : 1, 24, 168
+    def __find_target_index(self, target_hour=1):
+        target_index = -1
+
+        for i, managed_feed in enumerate(reversed(self.__feed_table)):
+            index = len(self.__feed_table) - 1 - i
+            managed_feed:ManagedFeed = managed_feed
+            object_date = self.__get_date_str_to_object(str_date=managed_feed.date)
+            if self.__get_time_diff(target_time=object_date, target_hour=target_hour):
+                continue
+            else:
+                target_index = index
+                break
+
+        return target_index
+
+    # 목표시간을 바탕으로 피드를 찾느 ㄴ함수
+    # search_type == "all", "best"
+    def try_get_feed_with_target_our(self, search_type="all", target_hour=1):
+        target_index = self.__find_target_index(target_hour=target_hour)
+
+        if search_type == "all":
+            search_range = self.__feed_table[target_index: len(self.__feed_table)][::-1]
+
+        elif search_type == "best":
+            get_target_index = self.__find_target_index(target_hour=target_hour)
+
+
+
+
 
         
     #type likes, time
