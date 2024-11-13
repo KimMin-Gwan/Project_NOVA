@@ -43,7 +43,8 @@ class NOVA_Server:
                                                    head_parser=head_parser,
                                                    connection_manager= connection_manager,
                                                    league_manager=league_manager,
-                                                   feed_manager=feed_manager
+                                                   feed_manager=feed_manager,
+                                                   feed_search_engine=feed_search_engine
                                                    )
         self.__user_system_view = User_Service_View( app=self.__app,
                                                      endpoint='/user_system',

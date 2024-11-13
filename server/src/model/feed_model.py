@@ -20,7 +20,21 @@ class FeedModel(BaseModel):
                         target_type="default", target="", num_feed=1, index=-1):
 
         fid_list, self._key = feed_search_engine.try_search_feed(
-            target_type=target_type, target=target, num_feed=num_feed, index=-1)
+            target_type=target_type, target=target, num_feed=num_feed, index=index)
+        
+        feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=fid_list)
+
+        for feed_data in feed_datas:
+            feed = Feed()
+            feed.make_with_dict(feed_data)
+            self._feeds.append(feed)
+
+        self._feeds = self._is_user_interacted(user=self._user, feeds=self._feeds)
+        return
+
+    def set_today_best_feed(self, feed_search_engine:FeedSearchEngine, index=-1, num_feed=4):
+        fid_list, self._key = feed_search_engine.try_get_feed_in_recent(
+            search_type="today", num_feed=num_feed, index=index)
         
         feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=fid_list)
 
@@ -31,6 +45,35 @@ class FeedModel(BaseModel):
 
         self._feeds = self.__is_user_interacted(user=self._user, feeds=self._feeds)
         return
+
+    def set_weekly_best_feed(self, feed_search_engine:FeedSearchEngine, index=-1, num_feed=4):
+        fid_list, self._key = feed_search_engine.try_get_feed_in_recent(
+            search_type="weekly", num_feed=num_feed, index=index)
+        
+        feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=fid_list)
+
+        for feed_data in feed_datas:
+            feed = Feed()
+            feed.make_with_dict(feed_data)
+            self._feeds.append(feed)
+
+        self._feeds = self._is_user_interacted(user=self._user, feeds=self._feeds)
+        return
+
+    def set_all_feed(self, feed_search_engine:FeedSearchEngine, index=-1, num_feed=4):
+        fid_list, self._key = feed_search_engine.try_get_feed_in_recent(
+            search_type="recent", num_feed=num_feed, index=index)
+        
+        feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=fid_list)
+
+        for feed_data in feed_datas:
+            feed = Feed()
+            feed.make_with_dict(feed_data)
+            self._feeds.append(feed)
+
+        self._feeds = self._is_user_interacted(user=self._user, feeds=self._feeds)
+        return
+
 
     def set_specific_feed_data(self, feed_manager:FeedManager, data_payload):
         self._feeds, self._key = feed_manager.get_feed_in_fclass(user=self._user,
@@ -80,7 +123,7 @@ class FeedModel(BaseModel):
     
     # 유저가 참여한 feed인지 확인할것
     # 사실상 User에게 전송하는 모든 feed는 이 함수를 통함
-    def __is_user_interacted(self, user, feeds:list):
+    def _is_user_interacted(self, user, feeds:list):
         result = []
         for feed in feeds:
             # 검열된 feed면 생략
@@ -132,6 +175,11 @@ class FeedModel(BaseModel):
 
         except Exception as e:
             raise CoreControllerLogicError("response making error | " + e)
+        
+
+
+
+
 
 
 # feed 의 메타 정보를 보내주는 모델
@@ -213,6 +261,70 @@ class FeedEditModel(BaseModel):
                 "result" : self._result,
                 "detail" : self._detail 
                 }
+
+            response = self._get_response_data(head_parser=head_parser, body=body)
+            return response
+
+        except Exception as e:
+            raise CoreControllerLogicError("response making error | " + e)
+
+class FeedSearchModel(FeedModel):
+    def __init__(self, database:Local_Database) -> None:
+        super().__init__(database)
+        self._hashtag_feed= []
+        self._uname_feed= []
+
+    def try_search_feed(self, feed_search_engine:FeedSearchEngine,
+                        target="", num_feed=1, index=-1):
+
+        hashtag_feed_fid, self._key = feed_search_engine.try_search_feed(
+            target_type="hashtag", target=target, num_feed=num_feed, index=index)
+
+        user_feed_fid, self._key = feed_search_engine.try_search_feed(
+            target_type="uname", target=target, num_feed=num_feed, index=index)
+        
+        hashtag_feed_data = self._database.get_datas_with_ids(target_id="fid", ids=hashtag_feed_fid)
+        user_feed_fid = self._database.get_datas_with_ids(target_id="fid", ids=user_feed_fid)
+
+        for feed_data1 in hashtag_feed_data:
+            feed = Feed()
+            feed.make_with_dict(feed_data1)
+            self._hashtag_feed.append(feed)
+
+        for feed_data2 in user_feed_fid:
+            feed = Feed()
+            feed.make_with_dict(feed_data2)
+            self._uname_feed.append(feed)
+
+        self._hashtag_feed = self._is_user_interacted(user=self._user, feeds=self._hashtag_feed)
+        self._uname_feed = self._is_user_interacted(user=self._user, feeds=self._uname_feed)
+
+        return
+
+    def try_search_feed_with_hashtag(self, feed_search_engine:FeedSearchEngine,
+                                    target="", num_feed=1, index=-1):
+
+        hashtag_feed_fid, self._key = feed_search_engine.try_search_feed(
+            target_type="hashtag", target=target, num_feed=num_feed, index=index)
+
+        hashtag_feed_data = self._database.get_datas_with_ids(target_id="fid", ids=hashtag_feed_fid)
+
+        for feed_data in hashtag_feed_data:
+            feed = Feed()
+            feed.make_with_dict(feed_data)
+            self._hashtag_feed.append(feed)
+
+        self._hashtag_feed = self._is_user_interacted(user=self._user, feeds=self._hashtag_feed)
+        return
+
+    def get_response_form_data(self, head_parser):
+        try:
+            body = {
+                'hashtag_feed' : self._make_dict_list_data(list_data=self._hashtag_feed),
+                'uname_feed' : self._make_dict_list_data(list_data=self._uname_feed),
+                'key' : self._key,
+                'comments' : self._make_dict_list_data(list_data=self._comments)
+            }
 
             response = self._get_response_data(head_parser=head_parser, body=body)
             return response
