@@ -8,7 +8,7 @@ import LeftBar from "./../WideVer/LeftBar.js";
 import RightBar from "./../WideVer/RightBar.js";
 export default function FeedList(isUserState) {
   const [params] = useSearchParams();
-  const type = params.get('type');
+  const type = params.get("type");
 
   const target = useRef(null);
   const observerRef = useRef(null);
@@ -19,7 +19,7 @@ export default function FeedList(isUserState) {
   let navigate = useNavigate();
   function fetchData() {
     // setIsLoading(true);
-    fetch("https://nova-platform.kr/home/home_feed", {
+    fetch("https://nova-platform.kr/feed_explore/today_best", {
       credentials: "include",
     })
       .then((response) => response.json())
@@ -33,7 +33,7 @@ export default function FeedList(isUserState) {
 
   function fetchPlusData() {
     // setIsLoading(true);
-    fetch(`https://nova-platform.kr/home/home_feed?key=${nextData}`, {
+    fetch(`https://nova-platform.kr/feed_explore/today_best?key=${nextData}`, {
       credentials: "include",
     })
       .then((response) => response.json())
@@ -44,7 +44,7 @@ export default function FeedList(isUserState) {
           return newData;
         });
         setIsLoading(false);
-        console.log('mor', data)
+        console.log("mor", data);
       });
   }
 
@@ -108,12 +108,8 @@ export default function FeedList(isUserState) {
             </button>
           </div>
         </header>
-        {
-          type === 'all' && <div className={style.title}>전체 피드</div>
-        }
-        {
-          type === 'best' && <div className={style.title}>최근 인기 피드</div>
-        }
+        {type === "all" && <div className={style.title}>전체 피드</div>}
+        {type === "best" && <div className={style.title}>최근 인기 피드</div>}
         <div className={style["scroll-area"]}>
           {feedData.map((feed, i) => {
             return <Feed key={feed.fid + i} className="" feed={feed} func={true} feedData={feedData} setFeedData={setFeedData} isUserState={isUserState}></Feed>;
