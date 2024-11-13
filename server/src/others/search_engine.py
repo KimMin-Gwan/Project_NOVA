@@ -368,7 +368,6 @@ class SearchManager:
     # target_hour : 1, 24, 168
     def __find_target_index(self, target_hour=1):
         target_index = -1
-        print(5)
 
         for i, managed_feed in enumerate(reversed(self.__feed_table)):
             index = len(self.__feed_table) - 1 - i
@@ -376,14 +375,12 @@ class SearchManager:
             if managed_feed.fid == "":
                 continue
 
-
             if self.__get_time_diff(target_time=managed_feed.date, target_hour=target_hour):
                 continue
             else:
                 target_index = index
                 break
 
-        print(6)
         return target_index
 
     # 목표시간을 바탕으로 피드를 찾느 ㄴ함수
