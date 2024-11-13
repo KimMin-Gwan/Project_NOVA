@@ -12,23 +12,8 @@ export default function Week100({ brightMode }) {
   let [clickIndex, setClickIndex] = useState(0);
 
   const navigate = useNavigate();
-  const handleClick = (index) => {
-    fetchTagFeed();
-    setClickIndex(index);
-  };
 
-  function fetchHashTag() {
-    fetch("https://nova-platform.kr/home/hot_hashtag", {
-      credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setBias(data.body);
-        setBiasTag(data.body.hashtags);
-      });
-  }
-
-  const fetchUrl = `https://nova-platform.kr/home/search_feed_with_hashtag?hashtag=${hashTag}`;
+  const fetchUrl = `https://nova-platform.kr/home/weekly_best`;
 
   const fetchTagFeed = useCallback(() => {
     fetch(fetchUrl, {
@@ -36,35 +21,14 @@ export default function Week100({ brightMode }) {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("14111", data);
         setTagFeed(data.body.feed);
       });
   }, [fetchUrl]);
 
   useEffect(() => {
-    fetchHashTag();
+    // fetchHashTag();
     fetchTagFeed();
   }, [fetchTagFeed]);
-
-  let scrollRef = useRef(null);
-  let [isDrag, setIsDrag] = useState(false);
-  let [dragStart, setDragStart] = useState("");
-
-  function onMouseDown(e) {
-    e.preventDefault();
-    setIsDrag(true);
-    setDragStart(e.pageX + scrollRef.current.scrollLeft);
-  }
-
-  function onMouseUp(e) {
-    setIsDrag(false);
-  }
-
-  function onMouseMove(e) {
-    if (isDrag) {
-      scrollRef.current.scrollLeft = dragStart - e.pageX;
-    }
-  }
 
   const [mode, setMode] = useState(brightMode); // 초기 상태는 부모로부터 받은 brightMode 값
   useEffect(() => {

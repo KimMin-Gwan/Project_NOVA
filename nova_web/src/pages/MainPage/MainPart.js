@@ -37,6 +37,7 @@ export default function MainPart({ brightMode }) {
       .then((response) => response.json())
       .then((data) => {
         setTagFeed(data.body.feed);
+        console.log('data', data)
       });
   }, [fetchUrl]);
 
