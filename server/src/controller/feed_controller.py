@@ -134,13 +134,11 @@ class Feed_Controller:
             # 유저가 있으면 세팅
             if request.jwt_payload != "":
                 model.set_user_with_email(request=request.jwt_payload)
-            print("1")
             model.set_feed_data(feed_search_engine=feed_search_engine,
                                 target_type="hashtag",
                                 target=request.data_payload.hashtag,
                                 num_feed=num_feed,
                                 index=request.data_payload.key,)
-            print("2")
 
         except CustomError as e:
             print("Error Catched : ", e.error_type)
