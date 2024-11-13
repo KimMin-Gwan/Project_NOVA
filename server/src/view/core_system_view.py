@@ -10,6 +10,7 @@ from others import LeagueManager as LM
 from others import FeedManager as FM
 from others import FeedSearchEngine as FSE
 from websockets.exceptions import ConnectionClosedError
+from pprint import pprint
 import json
 
 class Core_Service_View(Master_View):
@@ -162,6 +163,7 @@ class Core_Service_View(Master_View):
                                                         num_feed=5)
 
             body_data = model.get_response_form_data(self._head_parser)
+            pprint(body_data)
             response = request_manager.make_json_response(body_data=body_data)
             return response
         
