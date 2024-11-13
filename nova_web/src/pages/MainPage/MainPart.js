@@ -69,9 +69,10 @@ export default function MainPart({ brightMode }) {
     }
   }
 
-  function handleTagClick(index) {
+  function handleTagClick(index, tag) {
     if (!hasDragged) {
       handleClick(index);
+      setHashTag(tag);
     }
   }
 
@@ -97,8 +98,7 @@ export default function MainPart({ brightMode }) {
                 key={i}
                 className={style["hashtag-text"]}
                 onClick={() => {
-                  handleTagClick(i);
-                  setHashTag(tag);
+                  handleTagClick(i, tag);
                 }}
                 style={{
                   backgroundColor: clickIndex === i ? "#98A0FF" : getModeClass(mode) === "bright-mode" ? "#CCCFFF" : "#373737",
