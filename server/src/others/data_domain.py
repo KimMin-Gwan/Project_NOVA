@@ -236,7 +236,7 @@ class League(SampleDomain):
         }
     
 class Feed(SampleDomain):
-    def __init__(self, fid="", uid="", nickname="", star=0,
+    def __init__(self, fid="", uid="", nickname="", star=60,
                  body="", date="", fclass="", class_name="",
                  choice=None, result=None, state="d", attend=None,
                  category = None, comment = None, image = None,
