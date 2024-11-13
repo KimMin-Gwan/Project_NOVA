@@ -557,12 +557,688 @@ class RecommandManager:
 
 
 
+# 오류 에러 처리 클래스
+class NodeNotExistError(Exception):
+    pass
+class NodeAlreadyExistError(Exception):
+    pass
+class EdgeAlreadyExistError(Exception):
+    pass
+class EdgeNotExistError(Exception):
+    pass
+class HashTableNodeAlreadyExistError(Exception):
+    pass
+class HashTableNodeNotExistError(Exception):
+    pass
+class NodetypeInputError(Exception):
+    pass
 
-# 여기는 신대홍이 만드는 피드 알고리즘 부분
+# Edge 수도코드
+# class Edge
+#   __init__(target_node, gen_time_str):
+#       self.target_node = target_node
+#       self.get_time_str = gen_time_str        # 생성된 시간 string
+#
+#   equal(other) 오버로딩
+#       조건: target_node와 Edge안에 있는 Target_node가 일치하는지 확인
+#   sorted(other)
+#       조건: generated time이 가장 최신순인 것이 먼저 오도록 하게 함
+#           이 때, 값비교 시 timedelta값이 더 큰 쪽이 최신의 것이 됨.
+#   weight():
+#       시간차를 계산하는 함수
+#   __calculate_timestamp():
+#       current_time = datetime.now()
+#       gen_time = datetime 객체로 만들어진 gen_time_str
+#       return (current_time - gen_time).total_second()
+#
+#   get_target_node():
+#       return target_node
+#
+
+# 노드 엣지 클래스
+class Edge:
+    def __init__(self, target_node, gen_time):
+        self.target_node = target_node # 타겟 노드 저장
+        self.gen_time_str = gen_time # 엣지의 생성 시간
+
+        # 이 엣지는 Feed-User 의  경우, 좋아요(star)를 누른 시간을 가지게 됨
+        # Feed-Hashtag 의 경우, Feed 생성 시간을 이어 받게됨.
+
+    # 동일한 엣지인지 서로 비교 해야함.
+    # 만약 향하는 노드가 같다면
+    def __eq__(self, other):
+        return self.target_node == other.target_node
+
+    # 날짜가 더 최신의 edge 순으로 정렬
+    def __lt__(self, other):
+        gen_time_self = datetime.strptime(self.gen_time_str, "%Y-%m-%d %H:%M:%S")
+        gen_time_other = datetime.strptime(other.gen_time_str, "%Y-%m-%d %H:%M:%S")
+        return gen_time_self > gen_time_other
+
+    # 출력 포맷
+    def __str__(self):
+        return 'Edge({}, {})'.format(self.target_node.get_id(), self.gen_time_str)
+
+    # 내부함수로 구현함. 초 단위로 계산함
+    def weight(self):
+        return self.__calculate_timestamp()
+
+    # 향하고 있는 타겟 노드 얻기
+    def get_target_node(self):
+        return self.target_node
+
+    # 내부 함수로 정의된 가중치 부여 함수 (매업데이트 되는것보다 제때 구하는 걸로)
+    def __calculate_timestamp(self):
+        # 왜인지는 모르겠지만, 현재 시간을 포맷에 맞게 변환하는데, datetime → str → datetime으로 변환해야 함.
+        current_time_str = datetime.now().strftime("%Y/%m/%d-%H:%M:%S")
+        current_time = datetime.strptime(current_time_str, "%Y/%m/%d-%H:%M:%S")
+        gen_time = datetime.strptime(self.gen_time_str,"%Y/%m/%d-%H:%M:%S")
+
+        # datetime 연산 시 timedelta값 반환
+        time_difference = current_time - gen_time
+        return time_difference.total_seconds() # timedelta 값을 초 단위로 변환하여 제공
+
+# BaseNode 수도코드
+# class BaseNoe
+#     initalize_varialbes
+#           edges = {}      # 필요한 엣지를 담음
+#           node_type 노드 타입 : 노드의 타입을 정의함. 엣지를 담을 때, 공통된 노드만을 담게하기 위해서 넣음
+#
+#   공통된 함수들 중, 추가, 삭제, 엣지 찾기를 내부함수로 구현
+#   1. __add_edge(target_node, gen_time_str):
+#         node_type = target_node.node_type
+#         edge = Edge(target_node, gen_time_str)  # 엣지 생성
+#         edges[node_type].append(edge)
+#
+#     2. __remove_edge(target_node):
+#         node_type = target_node.node_type
+#
+#         # 엣지를 찾아냄
+#         for edge in self.edges[node_type]:
+#             if target_node == edge.get_target_node():
+#                 self.edges[node_type] = self.edges[node_type](without this edge)
+#                 return
+#
+#     3. __find_edge(target_node):
+#         #단순히 엣지를 찾는 함수임
+#         node_type = target_node.node_type
+#
+#         for edge in self.edges[node_type]:
+#             if target_node == edge.get_target_node():
+#                 return edge
+#         return None
+#     4. get_weight(target_node):
+#           타겟노드까지 향하는 엣지의 가중치를 얻음.
+#         target_edge = self.__find_edge(target_node)
+#         return target_edge.weight()
+# Graph 베이스 노드 클래스
+class BaseNode:
+    def __init__(self, node_type):
+        self.edges = {}     # 엣지 해시 테이블
+        self.node_type = node_type  # 노드 타입  -> 중요함. 이게 엣지를 담는 위치를 정해준다
+
+    #    # Iterator 정의
+    #   def __iter__(self):
+    #        return iter(self.edges)
+
+    # Edge 추가 함수
+    # node_type 필요 함.
+    def __add_edge(self,  target_node, gen_time_str):
+        node_type = target_node.node_type
+        # 엣지를 담는 곳이 잘못 되었다면 False 를 반환
+        # 상속받은 클래스에서 Edge 키를 정의 했기에 가능함
+        if node_type not in self.edges:
+            return False
+
+        edge = Edge(target_node=target_node, gen_time=gen_time_str)            # 엣지 생성
+        # 엣지가 존재하는 것만으로 판단하여 생성할 것인지 아닌지를 판단
+        if edge not in self.edges[node_type]:
+            self.edges[node_type].append(edge)                                 # 엣지 담기
+            return True
+        return False
+
+    # Edge 제거 함수
+    def __remove_edge(self,  target_node):
+        # 리스트 컴프리헨션으로 작성하여, 조금 더 빠른 반복문 실행으로 만들었음
+        # 실상 성능의 차이는 좀 적긴하다.
+        node_type = target_node.node_type
+        # 엣지를 담은 장소가 잘못되어있다면 바로 턴
+        if node_type not in self.edges:
+            return False
+
+        # 엣지 찾기
+        for edge in self.edges[node_type]:
+            if target_node == edge.get_target_node():
+                self.edges[node_type] = [edge_2 for edge_2 in self.edges[node_type] if edge_2.get_target_node() == target_node]
+                return True
+        return False
+
+    # 이웃한 노드의 엣지 찾기
+    def __find_edge(self, target_node):
+        node_type = target_node.node_type
+        # 엣지를 담은 곳이 잘못되어있음.
+        if node_type not in self.edges:
+            return None
+
+        for edge in self.edges[node_type]:
+            if target_node == edge.get_target_node():
+                return edge
+        return None
+
+    # 오버 라이딩용
+    def request_delete_all_edge_to_me(self):
+        pass
+
+    # 엣지 가중치 획득
+    def get_weight(self, target_node):
+        target_edge = self.__find_edge(target_node)
+        if target_edge is None:
+            return None
+        return target_edge.weight()
+
+    # 노드 삭제 시. edge까지 전부 삭제
+    def __del__(self):
+        self.edges.clear()
+
+# class UserNode
+#
+# 1. initialize_variables(uid)
+# super().__init__()
+# uid = uid
+# edges["feed"] = []  #  노드 타입에 대한 엣지리스트를 정의
+#
+# 2. iterator 생성
+# return iter(edges["feed"])
+#
+# 3. 노드 일치성 판단.
+# 기록된 id가 완전히 동일한지 판단함.
+# return self.uid == other.get_id()	# 다른 모든 노드들도 똑같이 get_id()라는 함수를 만듦.
+
+# 4. 아이디 얻기
+# 다른 하위 클래스에서도 똑같은 함수를 만들어 둚.
+# return uid
+#
+# 5. 엣지 추가 add_edge (내부 함수로 동작)
+# return self.__add_edge(target_node, gen_time_str)
+#
+# 6. 엣지 삭제 remove_edge (내부 함수로 동작)
+# return self.__remove_edge(target_node)
+#
+# 7. 엣지 삭제 요청 request_delete_edge_to_me()
+# 나로 향하는 엣지들을 타겟 노드에게 전부 삭제시켜 달라고 요청하는 함수
+# for edge in edges["feed"]:
+#     edge.get_target_node().remove_edge(self)
+
+# 유저 노드
+class UserNode(BaseNode):
+    def __init__(self, uid):
+        super().__init__("user")
+        self.uid = uid
+        self.edges["feed"] = [] # 엣지 리스트를 따로 생성한다. 중요하다
+
+    # 엣지 리스트 반복자를 생성
+    def __iter__(self):
+        return iter(self.edges["feed"])
+
+    # 노드의 일치성 판단. 이는 기록된 id를 가지고 판단
+    def __eq__(self, other):
+        return self.uid == other.get_id()
+
+    # 노드 출력 포맷
+    def __str__(self):
+        return 'Node({}, {})'.format(self.get_id(), self.node_type)
+
+    # 유저 아이디 얻기
+    def get_id(self):
+        return self.uid
+
+    # 엣지 추가
+    def add_edge(self, target_node, gen_time_str):
+        # 이 작업이 True, False를 반환하기에 이렇게 함.
+        return self.__add_edge(target_node, gen_time_str)
+
+    # 엣지 삭제, 이 작업은 나의 엣지만 없애는 작업. 상대노드꺼는 그래프에서 작업
+    def remove_edge(self, target_node):
+        # 노드 타입이 Feed 일 때만 수행
+        return self.__remove_edge(target_node)
+
+    # 내게 연결된 모든 엣지를 없애달라고 요청하는 작업
+    def request_delete_all_edge_to_me(self):
+        for edge in self:
+            edge.get_target_node().remove_edge(self)
+
+# class HashNode
+#
+# 1. initialize_variables(hid)
+# super().__init__()
+# hid = hid
+# edges["feed"] = []  #  노드 타입에 대한 엣지리스트를 정의
+#
+# 2. iterator 생성
+# return iter(edges["feed"])
+#
+# 3. 노드 일치성 판단.
+# 기록된 id가 완전히 동일한지 판단함.
+# return self.hid == other.get_id()	# 다른 모든 노드들도 똑같이 get_id()라는 함수를 만듦.
+
+# 4. 아이디 얻기
+# 다른 하위 클래스에서도 똑같은 함수를 만들어 둚.
+# return hid
+#
+# 5. 엣지 추가 add_edge (내부 함수로 동작)
+# return self.__add_edge(target_node, gen_time_str)
+#
+# 6. 엣지 삭제 remove_edge (내부 함수로 동작)
+# return self.__remove_edge(target_node)
+#
+# 7. 엣지 삭제 요청 request_delete_edge_to_me()
+# 나로 향하는 엣지들을 타겟 노드에게 전부 삭제시켜 달라고 요청하는 함수
+# for edge in edges["feed"]:
+#     edge.get_target_node().remove_edge(self)
+
+# 해시태그 노드
+class HashNode(BaseNode):
+    def __init__(self, hid):
+        super().__init__("hashtag")
+        self.hid = hid          # 해시태그 아이디, 문자열이 된다.
+        self.edges["feed"] = []
+
+    # 엣지 리스트 순회 반복자
+    def __iter__(self):
+        return iter(self.edges["feed"])
+
+    # 노드 일치성 판단. 기록된 id를 통해 판단
+    def __eq__(self, other):
+        return self.hid == other.get_id()
+
+    # 노드 출력 포맷
+    def __str__(self):
+        return 'Node({}, {})'.format(self.get_id(), self.node_type)
+
+    # 아이디 반환 함수
+    def get_id(self):
+        return self.hid
+
+    # 엣지 추가
+    def add_edge(self, target_node, gen_time_str):
+        return self.__add_edge(target_node, gen_time_str) # 엣지 추가
+
+    # 엣지 삭제, 이 작업은 나의 엣지만 없애는 작업. 상대노드꺼는 그래프에서 작업
+    def remove_edge(self, target_node):
+        return self.__remove_edge(target_node)
+
+    # 내게 연결된 모든 엣지를 없애달라고 요청하는 작업
+    def request_delete_all_edge_to_me(self):
+        for edge in self:
+            edge.get_target_node().remove_edge(self) # 자신의 노드를 보낸다.
+
+# class FeedNode
+#
+# 1. initialize_variables(fid)
+#     super().__init__()
+#     fid = fid
+#     edges["user"] = []  #  노드 타입에 대한 엣지리스트를 정의
+#     edges["hashtag"] = []
+#
+# 2. iterator 생성
+#     2-1. 유저 엣지에 대한 iterator
+#       return iter(edges["user"])
+#     2-2. 해시태그 엣지에 대한 iterator
+#       return iter(edges["hashtag"]
+#
+# 3. 노드 일치성 판단.
+#       기록된 id가 완전히 동일한지 판단함.
+#     return self.hid == other.get_id()	# 다른 모든 노드들도 똑같이 get_id()라는 함수를 만듦.
+#
+# 4. 아이디 얻기
+# 다른 하위 클래스에서도 똑같은 함수를 만들어 둚.
+#     return fid
+#
+# 5. 엣지 추가 add_edge (내부 함수로 동작)
+#    return self.__add_edge(target_node, gen_time_str)
+#
+# 6. 엣지 삭제 remove_edge (내부 함수로 동작)
+#     return self.__remove_edge(target_node)
+#
+# 7. 엣지 삭제 요청 request_delete_edge_to_me()
+#       나로 향하는 엣지들을 타겟 노드에게 전부 삭제시켜 달라고 요청하는 함수
+#     for edge in edges["user"]:
+#         edge.get_target_node().remove_edge(self)
+#     for edge in edges["hashtag"]:
+#         edge.get_target_node().remove_edge(self)
+
+# 피드 노드
+class FeedNode(BaseNode):
+    def __init__(self, fid):
+        super().__init__("feed") # 상속
+        self.fid = fid          # Feed id
+        self.edges["user"] = []
+        self.edges["hashtag"] = []
+
+    # 노드 일치 비교
+    def __eq__(self, other):
+        return self.fid == other.get_id()
+
+    # 노드 출력 포맷
+    def __str__(self):
+        return 'Node({}, {})'.format(self.get_id(), self.node_type)
+
+    # 각각의 엣지 리스트 반복자를 정의
+    def iter_user(self):
+        return iter(self.edges["user"])
+    def iter_hashtag(self):
+        return iter(self.edges["hashtag"])
+
+    # 노드 아이디 얻기
+    def get_id(self):
+        return self.fid
+
+    # 엣지 추가
+    def add_edge(self, target_node, gen_time_str):
+        return self.__add_edge(target_node,gen_time_str)
+
+    # 엣지 삭제
+    def remove_edge(self, target_node):
+        return self.__remove_edge(target_node)
+
+    # 내게 연결된 모든 엣지를 없애달라고 요청하는 작업
+    def request_delete_all_edge_to_me(self):
+        for edge in self.iter_user():
+            edge.get_target_node().remove_edge(self)
+        for edge in self.iter_hashtag():
+            edge.get_target_node().remove_edge(self)
+
+# class FeedChaosGraph
+#     1. initalize_variables
+#         self.nodes = {}
+#         self.nodes["user"] = []
+#         self.nodes["hashtag"] = []
+#         self.nodes["feed"] = []
+#
+#     2. iterator 정의
+#         return iter(self.nodes[nodetype])
+#
+#     3. 생성된 노드 찾기 (node_id 필요)
+#         for node in self.nodes[node_type]:
+#             if node.get_id() == node_id
+#                 return node
+#
+#     4. 노드 추가하기
+#         1. 노드타입 제대로 들어왔는지 확인
+#             if node_type not in self.nodes:
+#                 raise error
+#         2. 노드가 이미 존재하는 지
+#             if find_node is not None:
+#                 raise error
+#     3. 노드 생성
+#         노드타입에 맞게 대응되는 노드를 생성
+#
+#         self.nodes[node_type].append(node)
+#         return node
+#     5. 노드 삭제하기
+#         1. 노드가 들어있는지 확인
+#         2. 노드와 연결 되어있는 edge들을 전부 끊어내기
+#             node.request_delete_all_edge_to_me()
+#         3. 마지막으로 자신을 삭제함. 이 때 엣지들은 전부 가비지 컬렉팅 됨
+#
+#     6. 엣지 추가하기 (source_node, target_node)
+#         1. 노드들이 존재하는지 확인
+#         2. 노드들에 대해 엣지 추가를 함
+#         source -> target
+#         target -> source
+#
+#     7. 엣지 삭제하기 (개별 삭제)
+#         1. 노드 존재 확인
+#         2. 소스 <-> 타겟 엣지 삭제
+#         source -> target
+#         target -> source
+#
+#
+#     8. Initalize_node(feed_table, user_table):
+#         for user in user_table:
+#             user_node 생성
+#
+#         for feed in feed_table:
+#             각 feed의 id, feed 생성시간, hashtag 리스트들을 얻음
+#             fid를 이용해서 feed node 생성
+#
+#             해시태그 노드 추가 및 Edge 생성
+#             for hashtag in hashtags:
+#                 hash_node 생성
+#                 edge (feed -> hashnode) 생성
+#                 edge (hash -> feed) 생성
+#             작성자 유저 노드와 feed 노드 간 엣지 형성
+#             edge(user -> feed)
+#             edge(feed -> user)
+#
+#     9. feed_recommend_user(start_fid, max_user_find=10, max_feed_find=5):
+#         1. 시작하는 노드를 찾아냄
+#         2. 시작한 노드에서 뻗어나가는 엣지들을 찾아냄
+#         3. 가장 최신의 엣지순서대로 정렬한 후, 상위 10개만 잡아냄
+#         4. 그 엣지들을 잇는 User들에게 이어진 Feed 노드 엣지 집합 찾아냄
+#         5. 그 Feed 엣지들도 다시 최신의 순서대로 정렬 후, 상위 5개 만 집어내서
+#         5-1. 이 때, source노드에서 이어진 edge는 제외해야한다.
+#         6. 결과 리스트에 담음. 이 때, fid만 담아내어, 나중에 언제든지 참조하기 편하게 한다.
+#         return recommend_list
+#
+#     10. feed_recommend_hash(start_fid, max_hashtags=4, max_feed_find=10):
+#         1. 시작노드 찾아냄
+#         2. 시작노드에서 뻗어나간 해시태그 엣지들을 찾음
+#         3. 기준은 해시태그에 연결되어 있는 Feed들이 많은 순으로 정렬해서 상위 4개 정도 뽑아 옴
+#         4. 연결된 해시태그가 가장 최신으로 연결된 랜덤 Feed 10개 까지 뽑아온다.
+#         똑같이, 자신에게 붙은 edge는 제외한다.
+#         5. recommend_list에 담고, 반환
+#         return recommend_list
+# 피드-유저-해시태그 통합 그래프
+class FeedChaosGraph:
+    def __init__(self):
+        self.nodes = {}
+        self.nodes["user"] = []
+        self.nodes["hashtag"] = []
+        self.nodes["feed"] = []
+
+    def iter_nodes(self, node_type):
+        return iter(self.nodes[node_type])
+
+    # 생성 되어있는 노드 찾기
+    def find_node(self, node_type, node_id):
+        for already_node in self.iter_nodes(node_type):
+            if already_node.get_id() == node_id:
+                return already_node
+        return None
+
+    # 노드 추가
+    def add_node(self, node_type, node_id):
+        try :
+            # 노드의 타입이 제대로 입력이 되어있는지 확인
+            if node_type not in self.nodes:
+                raise NodetypeInputError("Node type is not valid")
+
+            # 노드의 존재 여부 확인
+            if self.find_node(node_type, node_id) is not None:
+                raise NodeAlreadyExistError("Node is already exists")
+
+            node = None
+            # 노드 생성
+            if node_type == "user":
+                node = UserNode(node_id)
+            elif node_type == "hashtag":
+                node = HashNode(node_id)
+            elif node_type == "feed":
+                node = FeedNode(node_id)
+
+            # 노드 추가
+            if node is not None:
+                self.nodes[node_type].append(node)
+
+            return node
+
+        except NodeAlreadyExistError as e:
+            print(e)
+            return None
+        except NodetypeInputError as e:
+            print(e)
+            return None
+
+    # 노드 삭제
+    def remove_node(self, node_type, node_id):
+        try:
+            for node in self.iter_nodes(node_type):
+                # 해당하는 노드를 발견했다면
+                if node.get_id() == node_id:
+                    # 자신에게 존재하는 인접노드에게 연결된 엣지들을 삭제요청
+                    node.request_delete_all_edge_to_me()
+                    # 자신이 제거되면서 자신에게서 출발하는 모든 엣지가 가비지 컬렉팅으로 사라짐
+                    self.nodes[node_type].remove(node)
+                    print("Remove Complete")
+            raise NodeNotExistError("Node is not exist")
+
+        except NodeNotExistError as e:
+            print(e)
+
+    # 엣지 추가
+    def add_edge(self, source_node, target_node, gen_time_str):
+        try:
+            source_type = source_node.node_type
+            target_type = target_node.node_type
+
+            if source_node not in self.nodes[source_type]:
+                raise NodeNotExistError("Source node is not exist")
+            if target_node not in self.nodes[target_type]:
+                raise NodeNotExistError("Target node is not exist")
+
+            source_success = source_node.add_edge(target_node, gen_time_str)
+            target_success = target_node.add_edge(source_node, gen_time_str)
+
+            if source_success and target_success:
+                print("Success Add Edge.")
+
+        except NodeNotExistError as e:
+            print(e)
+
+    # 엣지 삭제
+    def remove_edge(self, source_node, target_node):
+        try:
+            source_type = source_node.node_type
+            target_type = target_node.node_type
+
+            if source_node not in self.nodes[source_type]:
+                raise NodeNotExistError("Source node is not exist")
+            if target_node not in self.nodes[target_type]:
+                raise NodeNotExistError("Target node is not exist")
+
+            source_success = source_node.remove_edge(target_node)
+            target_success = target_node.remove_edge(source_node)
+
+            if source_success and target_success:
+                print("Success Remove Edge.")
+
+        except NodeNotExistError as e:
+            print(e)
+
+    def initialize_graph_nodes(self,feed_table, user_table):
+        for user in user_table:
+            uid = user.uid
+            self.add_node("user", uid)
+
+        for feed in feed_table:
+            fid = feed.fid
+            hashtags = feed.hashtag
+
+            feed_node = self.add_node("feed", fid)
+            for hashtag in hashtags:
+                hash_node = self.add_node("hashtag", hashtag)
+                self.add_edge(feed_node, hash_node, feed.gen_time_str)
+                self.add_edge(hash_node, feed_node, feed.gen_time_str)
+
+            user_node = self.find_node("user", feed.uid)
+            self.add_edge(user_node, feed_node, feed.gen_time_str)
+            self.add_edge(feed_node, user_node, feed.gen_time_str)
+
+    # 피드-유저 사이에서 찾아내는 유사한 피드 (수정필)
+    def feed_recommend_by_user(self, start_fid, max_user_find=10, max_feed_find=5):
+        # 가장 먼저, Feed를 확인
+        recommend_list = []
+        user_queue = []
+
+        # feed 노드 확인
+        feed_node = self.find_node("feed", start_fid)
+        # 각 연결된 유저 edge를 찾음
+        sorted_edges_latest_related = sorted(feed_node.edges["user"])[:max_user_find]
+        # 그 중, 가장 최근에 Feed에 관심을 가진(좋아요를 누른) 유저들 10명을 추려냄
+        for edge in sorted_edges_latest_related:
+            user_queue.append(edge.target_node)
+
+        # 이제, 그 유저들과 연결된 Feed를 담아내는 과정
+        for user_node in user_queue:
+            # 최신 순으로 정렬된 엣지 중에서, 최대 5개의 feed들을 가져올 것
+            sorted_edges_latest_relate_feed = sorted(user_node.edges["feed"])[:max_feed_find]
+            for edge in sorted_edges_latest_relate_feed:
+                # 가져온 Edge에서 Feed id를 추출하여 recommend_list에 담음
+                related_feed_id = edge.get_target_node().get_id()
+                recommend_list.append(related_feed_id)
+
+        return recommend_list
+
+    # 피드-해시태그 사이에서 찾아내는 유사한 피드 (수정필)
+    def feed_recommend_by_hashtag(self, start_fid, max_hash=4, max_feed_find=10):
+        recommend_list = []
+        hash_queue = []
+
+        # Feed node 확인
+        feed_node = self.find_node("feed", start_fid)
+        # 각 연결된 hash노드 엣지를 찾아냄
+        sorted_edges_latest_related_hash = sorted(feed_node.edges["hashtag"])[:max_hash]
+        # 여기서 이제 해시태그 노드들을 얻어냄
+        for edge in sorted_edges_latest_related_hash:
+            hash_queue.append(edge.target_node)
+
+        # 다시, 해시노드와 연관된 Feed와 연결된 엣지를 찾아냄
+        for hash_node in hash_queue:
+            # 최신 순으로 정렬된 edge들을 가져옴
+            sorted_edges_latest_related_feed = sorted(hash_node.edges["feed"])[:max_feed_find]
+            for edge in sorted_edges_latest_related_feed:
+                # 가져온 Feed Edge에서 feed id를 추출해 recommend_list를 다음
+                related_feed_id = edge.get_target_node().get_id()
+                recommend_list.append(related_feed_id)
+
+        return recommend_list
 
 class FeedAlgorithm:
     def __init__(self, database):
         self.__now_all_feed=[]
-        self.__database=database 
+        self.__database=database
+        self.feed_chaos_graph = FeedChaosGraph()
+        self.__feed_table = []
+        self.__user_table = []
+        self.__hashtag_table = []
+
+    def __initialize_feed_table(self, database):
+        # 먼저 피드 데이터를 DB에서 불러오고
+        feed_datas = database.get_all_data(target="fid")
+
+        # 불러온 피드들은 객체화 시켜준다음 잠시 보관
+        for feed_data in feed_datas:
+            feed = Feed()
+            feed.make_with_dict(dict_data=feed_data)
+            self.__feed_table.append(feed)
+
+
+    def __initialize_user_table(self, database):
+        # 유저 데이터를 불러온 후
+        user_datas = database.get_all_data(target="uid")
+
+        # 불러온 유저데이터 객체화
+        for user_data in user_datas:
+            user = User()
+            user.make_with_dict(dict_data=user_data)
+            self.__user_table.append(user)
+
+    def initialize_graph(self):
+        self.feed_chaos_graph.initialize_graph_nodes(feed_table=self.__feed_table, user_table=self.__user_table)
+
+    def print_graph_all_nodes(self):
+        print(self.feed_chaos_graph.nodes)
+
 
 
