@@ -286,7 +286,7 @@ class Local_Database:
         return num_list
     
     #데이터 삭제
-    def delete_data_With_id(self,target:str, id:str):
+    def delete_data_with_id(self,target:str, id:str):
         try:
             target_index = -1
     

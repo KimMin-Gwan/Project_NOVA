@@ -25,16 +25,11 @@ class TempUser:
         return
 
 class User(SampleDomain):
-    def __init__(self, uid = "", uname = "지지자", age=14, 
-                 email = "", gender = "d" , solo_point = 0, group_point = 0,
-                 solo_combo = 0, group_combo = 0,
-                 credit = 0, solo_bid = "",
-                 group_bid = "", 
-                 solo_daily = False, solo_special = False,
-                 group_daily = False, group_special = False,
-                 sign = "", password = "", select_name_card = "",
-                 solo_daily_check_date = "", group_daily_check_date = "",
-                 name_card_list= [], alert = []):
+    def __init__(self, uid = "", uname = "지지자", age=0, 
+                 email = "", gender = "d" ,
+                 credit = 0, solo_bid = "", group_bid = "", 
+                 password = "", alert= [], like=[], my_comment=[],
+                 my_feed = [], active_feed = [], feed_history = []):
 
         self.uid = uid
         self.uname = uname
@@ -42,23 +37,16 @@ class User(SampleDomain):
         self.email = email
         self.password = password
         self.gender = gender
-        self.solo_point = solo_point
-        self.group_point = group_point
-        self.solo_combo = solo_combo
-        self.group_combo = group_combo
-        self.credit = credit
         self.solo_bid = solo_bid
         self.group_bid = group_bid
-        self.solo_daily = solo_daily
-        self.solo_special = solo_special
-        self.group_daily = group_daily
-        self.group_special = group_special
-        self.sign = sign
-        self.select_name_card = select_name_card
-        self.name_card_list = copy.copy(name_card_list)
-        self.solo_daily_check_date = solo_daily_check_date
-        self.group_daily_check_date = group_daily_check_date
-        self.alert = copy.copy(alert)
+        self.credit = credit
+        self.alert:list = copy.copy(alert)
+        self.like:list = copy.copy(like)
+        self.my_comment:list = copy.copy(my_comment)
+        self.my_feed:list = copy.copy(my_feed)
+        self.active_feed:list = copy.copy(active_feed)
+        self.feed_history:list = copy.copy(feed_history)
+
 
     # database로 부터 받아온 데이터를 사용해 내용 구성
     def make_with_dict(self, dict_data):
@@ -71,21 +59,13 @@ class User(SampleDomain):
             self.gender= dict_data['gender']
             self.solo_bid = dict_data['solo_bid']
             self.group_bid = dict_data['group_bid']
-            self.solo_point = dict_data['solo_point']
-            self.group_point = dict_data['group_point']
-            self.solo_combo= dict_data['solo_combo']
-            self.group_combo= dict_data['group_combo']
             self.credit= dict_data['credit']
-            self.solo_daily = dict_data['solo_daily']
-            self.solo_special = dict_data['solo_special']
-            self.group_daily = dict_data['group_daily']
-            self.group_special = dict_data['group_special']
-            self.sign = dict_data['sign']
-            self.select_name_card = dict_data['select_name_card']
-            self.name_card_list = copy.copy(dict_data['name_card_list'])
-            self.solo_daily_check_date = dict_data['solo_daily_check_date']
-            self.group_daily_check_date = dict_data['group_daily_check_date']
             self.alert = copy.copy(dict_data['alert'])
+            self.like = copy.copy(dict_data["like"])
+            self.my_comment = copy.copy(dict_data["my_comment"])
+            self.my_feed = copy.copy(dict_data["my_feed"])
+            self.active_feed = copy.copy(dict_data["active_feed"])
+            self.feed_history = copy.copy(dict_data["feed_history"])
             return
         except Exception as e:
             raise DictMakingError(error_type=e)
@@ -99,23 +79,15 @@ class User(SampleDomain):
             "email" : self.email,
             "password" : self.password,
             "gender" : self.gender,
-            "solo_point" : self.solo_point,
-            "group_point" : self.group_point,
-            "solo_combo" : self.solo_combo,
-            "group_combo" : self.group_combo,
             "credit" : self.credit,
             "solo_bid" : self.solo_bid,
             "group_bid" : self.group_bid,
-            "solo_daily" :self.solo_daily,
-            "solo_special" :self.solo_special,
-            "group_daily" :self.group_daily,
-            "group_special" :self.group_special,
-            "sign" : self.sign,
-            "select_name_card" : self.select_name_card,
-            "name_card_list": copy.copy(self.name_card_list),
-            "solo_daily_check_date" : self.solo_daily_check_date,
-            "group_daily_check_date" : self.group_daily_check_date,
-            "alert" : copy.copy(self.alert)
+            "alert" : copy.copy(self.alert),
+            "like" : copy.copy(self.like),
+            "my_comment" : copy.copy(self.my_comment),
+            "my_feed" : copy.copy(self.my_feed),
+            "active_feed" : copy.copy(self.active_feed),
+            "feed_history" : copy.copy(self.feed_history)
         }
 
 

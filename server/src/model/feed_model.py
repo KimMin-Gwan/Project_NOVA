@@ -1,7 +1,9 @@
 from model.base_model import BaseModel
 from model import Local_Database
 #from others.data_domain import Alert
-from others import CoreControllerLogicError,FeedManager 
+from others import CoreControllerLogicError,FeedManager, FeedSearchEngine
+from others import Comment, Feed
+
 
 class FeedModel(BaseModel):
     def __init__(self, database:Local_Database) -> None:
@@ -12,6 +14,22 @@ class FeedModel(BaseModel):
 
     def set_home_feed_data(self, feed_manager:FeedManager, key= -1):
         self._feeds, self._key = feed_manager.get_feed_in_home(user=self._user, key=key)
+        return
+
+    def set_feed_data(self, feed_search_engine:FeedSearchEngine,
+                        target_type="default", target="", num_feed=1, index=-1):
+
+        fid_list, self._key = feed_search_engine.try_search_feed(
+            target_type=target_type, target=target, num_feed=num_feed, index=-1)
+        
+        feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=fid_list)
+
+        for feed_data in feed_datas:
+            feed = Feed()
+            feed.make_with_dict(feed_data)
+            self._feeds.append(feed)
+
+        self._feeds = self.__is_user_interacted(user=self._user, feeds=self._feeds)
         return
 
     def set_specific_feed_data(self, feed_manager:FeedManager, data_payload):
@@ -59,7 +77,47 @@ class FeedModel(BaseModel):
         self._comments = feed_manager.get_all_comment_on_feed( user=self._user,
                                                                fid=data_payload.fid)
         return
+    
+    # 유저가 참여한 feed인지 확인할것
+    # 사실상 User에게 전송하는 모든 feed는 이 함수를 통함
+    def __is_user_interacted(self, user, feeds:list):
+        result = []
+        for feed in feeds:
+            # 검열된 feed면 생략
+            if feed.state != "y":
+                continue
 
+            # 피드에 참여한 내역이 있는지 확인
+            attend = -1
+            for i, choice in enumerate(feed.attend):
+                for uid in choice:
+                    if uid == user.uid:
+                        attend = i
+
+            comment = self.__get_feed_comment(user=user, feed=feed)
+            feed.num_comment = len(feed.comment)
+            feed.attend = attend
+            feed.comment = comment
+            # 기본적으로 star_flag는 False
+            if feed.fid in user.star:
+                feed.star_flag = True
+            result.append(feed)
+        return result
+
+    def __get_feed_comment(self, user, feed:Feed):
+        if len(feed.comment) == 0:
+            comment = Comment(body="아직 작성된 댓글이 없어요")
+            comment = comment.get_dict_form_data()
+        else:
+            #comment = Comment(body="아직 작성된 댓글이 없어요")
+            #comment = comment.get_dict_form_data()
+            cid = feed.comment[-1]
+            comment = self._database.get_data_with_id(target="cid", id=cid)
+            # 기본적으로 owner는 False로 고정
+            if comment['uid'] == user.uid:
+                comment['owner'] = True
+        return comment
+    
 
     def get_response_form_data(self, head_parser):
         try:

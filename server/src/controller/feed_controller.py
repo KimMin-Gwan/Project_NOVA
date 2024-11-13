@@ -31,7 +31,32 @@ class Feed_Controller:
             # 유저가 있으면 세팅
             if request.jwt_payload != "":
                 model.set_user_with_email(request=request.jwt_payload)
-            model.set_home_feed_data(feed_manager=feed_manager, key=-4)
+            model.set_feed_data(
+                target_type="hashtag", target=request.data_payload.target,
+                num_feed=4, index= request.data_payload.key)
+
+        except CustomError as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
+
+        except Exception as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
+
+        finally:
+            return model           
+
+    def get_home_hot_hashtag_feed(self, database:Local_Database,
+                            request , feed_manager:FeedManager):
+        model = FeedModel(database=database)
+        try:
+
+            # 유저가 있으면 세팅
+            if request.jwt_payload != "":
+                model.set_user_with_email(request=request.jwt_payload)
+            model.set_feed_data(
+                target_type="hashtag", target=request.data_payload.target,
+                num_feed=4, index= request.data_payload.key)
 
         except CustomError as e:
             print("Error Catched : ", e.error_type)

@@ -1,5 +1,6 @@
 from others.data_domain import Feed, User, Comment, ManagedUser
-#from model import Local_Database
+from others.search_engine import FeedSearchEngine
+from model import Local_Database
 from datetime import datetime, timedelta
 import string
 import random
@@ -20,11 +21,13 @@ warnings.filterwarnings("ignore", module='boto3.compat')
 
 
 class FeedManager:
-    def __init__(self, database, fclasses) -> None:
+    def __init__(self, database, fclasses, feed_search_engine) -> None:
         self._feedClassManagement = FeedClassManagement(fclasses=fclasses)
-        self._database= database
-        self._managed_user_table = ManagedUserTable(database=database)
+        self._database:Local_Database= database
+        #self._database= database
+        #self._managed_user_table = ManagedUserTable(database=database)
         self._feed_class_analist = FeedClassAnalist()
+        self._feed_search_engine:FeedSearchEngine = feed_search_engine
         self._num_feed = 0
         self._managed_feed_list = []
         pass
@@ -74,11 +77,10 @@ class FeedManager:
 
 
     # 새로운 fid 만들기
-    def __make_new_fid(self, user):
+    def __make_new_fid(self, user:User):
         random_string = "default"
         # 중북되지 않는 fid 만들기
         while True:
-            flag = True 
             # 사용할 문자들: 대문자, 소문자, 숫자
             characters = string.ascii_letters + string.digits
 
@@ -87,22 +89,17 @@ class FeedManager:
 
             fid = user.uid + "-" + random_string
 
-            for feed in self._managed_feed_list:
-                if feed.fid == fid:
-                    flag = False
-                    break
-
-            if flag:
+            if self._feed_search_engine.try_search_managed_feed(fid=fid):
+                continue
+            else:
                 break
-
         return fid
     
-    def try_remove_feed(self, user, fid):
-        managed_user = self._managed_user_table.find_user(user=user)
+    def try_remove_feed(self, user:User, fid):
         feed_data=self._database.get_data_with_id(target="fid",id=fid)
         feed = Feed()
         feed.make_with_dict(feed_data)
-        if feed.uid != managed_user.uid:
+        if feed.uid != user.uid:
             return "NOT_OWNER", False
 
         comment_datas = self._database.get_datas_with_ids(target_id="cid", ids=feed.comment)
@@ -118,35 +115,31 @@ class FeedManager:
 
         if not self._database.delete_datas_with_ids(target="cid", ids=cids):
             return "DATABASE_ERROR", False
-        self._managed_user_table.add_trash_comment_cids(cids=cids)
 
         if not self._database.delete_data_with_id(target="fid", id=feed.fid):
             return "DATABASE_ERROR", False
-        self._managed_user_table.add_trash_feed_fid(fid=feed.fid)
+
         return "COMPLETE", True
 
     def get_feed_meta_data(self):
         return self._feedClassManagement.get_fclass_meta_data()
 
-    def try_modify_feed(self, user, data_payload):
-        managed_user = self._managed_user_table.find_user(user=user)
+    def try_modify_feed(self, user:User, data_payload):
         feed_data=self._database.get_data_with_id(target="fid",id=data_payload.fid)
         feed = Feed()
         feed.make_with_dict(feed_data)
-        if feed.uid != managed_user.uid:
+        if feed.uid != user.uid:
             return "NOT_OWNER", False
-        self._database.delete_data_With_id(target="fid", id=feed.fid)
+        self._database.delete_data_with_id(target="fid", id=feed.fid)
 
         result, flag = self.try_make_new_feed(user=user, data_payload=data_payload, fid=feed.fid)
         return result, flag
     
     # 피드 새로 만들기
     def try_make_new_feed(self, user:User, data_payload, fid = ""):
-        managed_user = self._managed_user_table.find_user(user=user)
-
         # fid 만들기
         if fid == "":
-            fid = self.__make_new_fid(user=managed_user)
+            fid = self.__make_new_fid(user=user)
 
 
         # 이미지를 업로드 할것
@@ -174,7 +167,8 @@ class FeedManager:
                             images=image_result)
         
         #작성한 피드 목록에 넣어주고
-        managed_user.my_feed.append(fid)
+        user.my_feed.append(fid)
+        self._database.modify_data_with_id(target_id="uid", target_data=user.get_dict_form_data())
 
         # 끝
         return "Upload Success", True
@@ -187,13 +181,8 @@ class FeedManager:
                                         choice=choice, body=body, hashtag=hashtag,
                                         image=images)
         self._database.add_new_data(target_id="fid", new_data=new_feed.get_dict_form_data())
-        managed_feed = ManagedFeed(key=self._num_feed)
-        managed_feed.fid = new_feed.fid
-        managed_feed.fclass = new_feed.fclass
-        managed_feed.category = new_feed.category
-        managed_feed.hashtag = new_feed.hashtag
-        self._managed_feed_list.append(managed_feed)
-        self._num_feed += 1
+
+        self._feed_search_engine.try_make_new_managed_feed(feed=new_feed)
         return
 
     # 새로운 피드의 데이터를 추가하여 반환
@@ -460,7 +449,6 @@ class FeedManager:
         return comment
 
     def make_new_comment_on_feed(self, user:User, fid, body):
-        managedUser:ManagedUser = self._managed_user_table.find_user(user=user)
         feed_data = self._database.get_data_with_id(target="fid", id=fid)
         feed = Feed()
         feed.make_with_dict(dict_data=feed_data)
@@ -472,34 +460,36 @@ class FeedManager:
             uname=user.uname, body=body, date=date)
         feed.comment.append(cid)
 
-        managedUser.my_comment.append(cid)
+        user.my_comment.append(cid)
 
         self._database.add_new_data("cid", new_data=new_comment.get_dict_form_data())
         self._database.modify_data_with_id("fid", target_data=feed.get_dict_form_data())
 
-        result = self.is_user_interacted(user=managedUser, feeds=[feed])
+        result = self.is_user_interacted(user=user, feeds=[feed])
         return result
 
     def remove_comment_on_feed(self, user:User, fid, cid):
-        managedUser:ManagedUser = self._managed_user_table.find_user(user=user)
+        comment_data = self._database.get_data_with_id(target="cid", id=cid)
+        comment = Comment()
+        comment.make_with_dict(comment_data)
 
         feed_data = self._database.get_data_with_id(target="fid", id=fid)
         feed = Feed()
         feed.make_with_dict(dict_data=feed_data)
 
-        comment_data = self._database.get_data_with_id(target="cid", id=cid)
-        comment = Comment()
-        comment.make_with_dict(comment_data)
+        if user.uid != comment.uid:
+            result = self.is_user_interacted(user=user, feeds=[feed])
+            return result
 
         # 이거 지우는거 뭔가 대책이 필요함
-        managedUser.my_comment.remove(cid)
+        user.my_comment.remove(cid)
 
-        if user.uid == comment.uid:
-            feed.comment.remove(cid)
-            self._database.delete_data_With_id(target="cid", id=cid)
-            self._database.modify_data_with_id("fid", target_data=feed.get_dict_form_data())
+        feed.comment.remove(cid)
+        self._database.delete_data_with_id(target="cid", id=cid)
+        self._database.modify_data_with_id("fid", target_data=feed.get_dict_form_data())
+        self._database.modify_data_with_id("uid", target_data=user.get_dict_form_data())
 
-        result = self.is_user_interacted(user=managedUser, feeds=[feed])
+        result = self.is_user_interacted(user=user, feeds=[feed])
         return result
 
     def get_all_comment_on_feed(self, user, fid):
@@ -530,9 +520,6 @@ class FeedManager:
         return
 
     def try_like_comment(self, user:User, fid, cid):
-
-        managedUser = self._managed_user_table.find_user(user=user)
-
         feed_data = self._database.get_data_with_id(target="fid", id=fid)
         feed = Feed()
         feed.make_with_dict(dict_data=feed_data)
@@ -552,20 +539,16 @@ class FeedManager:
 
         self._database.modify_data_with_id("cid", target_data=comment.get_dict_form_data())
 
-        result = self.is_user_interacted(user=managedUser, feeds=[feed])
+        result = self.is_user_interacted(user=user, feeds=[feed])
         return result
 
     def try_interaction_feed(self, user:User, fid:str, action):
-        managed_user:ManagedUser = self._managed_user_table.find_user(user=user)
-
-        if fid in managed_user.history:
-            managed_user.history.remove(fid)
-        feed = self.__try_interaction_with_feed(user=managed_user, fid=fid, action=action)
+        feed = self.__try_interaction_with_feed(user=user, fid=fid, action=action)
 
         return [feed]
         
     # feed 와 상호작용 -> 선택지를 선택하는 경우
-    def __try_interaction_with_feed(self, user:ManagedUser, fid, action):
+    def __try_interaction_with_feed(self, user:User, fid, action):
         fid_data = self._database.get_data_with_id(target="fid", id=fid)
         feed = Feed()
         feed.make_with_dict(fid_data)
@@ -596,35 +579,35 @@ class FeedManager:
 
         self._database.modify_data_with_id(target_id="fid",
                                             target_data=feed.get_dict_form_data())
+        self._database.modify_data_with_id(target_id="uid",
+                                            target_data=user.get_dict_form_data())
         
         feed.attend = action
         feed.comment = self.__get_feed_comment(user=user, feed=feed)
         return feed
 
     def try_staring_feed(self, user:User, fid:str):
-        managed_user:ManagedUser = self._managed_user_table.find_user(user=user)
-        if fid in managed_user.history:
-            managed_user.history.remove(fid)
-
-        feed = self.__try_staring_feed(user=managed_user, fid=fid)
-        feed = self.is_user_interacted(managed_user, feeds=[feed])
+        feed = self.__try_staring_feed(user=user, fid=fid)
+        feed = self.is_user_interacted(user, feeds=[feed])
         return feed
 
     # feed 와 상호작용 -> 관심 표시
-    def __try_staring_feed(self, user, fid):
-        fid_data = self._database.get_data_with_id(target="fid", id=fid)
+    def __try_staring_feed(self, user:User, fid):
+        feed_data = self._database.get_data_with_id(target="fid", id=fid)
         feed = Feed()
-        feed.make_with_dict(fid_data)
+        feed.make_with_dict(feed_data)
 
         if feed.fid in user.star:
-            user.star.remove(feed.fid)
+            user.like.remove(feed.fid)
             feed.star -= 1
         else:
-            user.star.append(feed.fid)
+            user.like.append(feed.fid)
             feed.star += 1
 
         self._database.modify_data_with_id(target_id="fid",
                                             target_data=feed.get_dict_form_data())
+        self._database.modify_data_with_id(target_id="uid",
+                                            target_data=user.get_dict_form_data())
 
         return feed
     
@@ -733,8 +716,7 @@ class FeedManager:
 
     # 내가 작성한 댓글 전부 불러오기
     def get_my_comments(self, user, cid):
-        managed_user:ManagedUser= self._managed_user_table.find_user(user=user)
-        comment_datas = self._database.get_datas_with_ids(target_id="cid", ids=managed_user.my_comment)
+        comment_datas = self._database.get_datas_with_ids(target_id="cid", ids=user.my_comment)
 
         comments = []
         target = -1
@@ -754,9 +736,8 @@ class FeedManager:
         return comments 
 
     # 관심 표시한 피드 전부 불러오기
-    def get_stared_feed(self, user, fid):
-        managed_user:ManagedUser= self._managed_user_table.find_user(user=user)
-        feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=managed_user.star)
+    def get_stared_feed(self, user:User, fid):
+        feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=user.like)
 
         feeds = []
         target = -1
@@ -773,14 +754,13 @@ class FeedManager:
         if len(feeds) > 5:
             feeds = feeds[:5]
 
-        feeds = self.is_user_interacted(user=managed_user, feeds=feeds)
+        feeds = self.is_user_interacted(user=user, feeds=feeds)
 
         return feeds
 
     # 상호작용한 피드 전부 불러오기
-    def get_interactied_feed(self, user, fid):
-        managed_user:ManagedUser= self._managed_user_table.find_user(user=user)
-        feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=managed_user.active_feed)
+    def get_interactied_feed(self, user:User, fid):
+        feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=user.active_feed)
 
         feeds = []
         target = -1
@@ -796,7 +776,7 @@ class FeedManager:
 
         if len(feeds) > 5:
             feeds = feeds[:5]
-        feeds = self.is_user_interacted(user=managed_user, feeds=feeds)
+        feeds = self.is_user_interacted(user=user, feeds=feeds)
 
         return feeds
 

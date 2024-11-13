@@ -1,5 +1,5 @@
 import pandas as pd
-
+from bintrees import AVLTree
 from copy import copy
 from others.data_domain import Feed
 from datetime import  datetime, timedelta
@@ -21,6 +21,16 @@ class FeedSearchEngine:
         self.__recommand_manager = RecommandManager(database=database,feed_algorithm=self.__feed_algorithm)
         self.db=database
 
+    # 피드 매니저가 관리중인 피드를 보기 위해 만든 함수
+    def try_search_managed_feed(self, fid):
+        return self.__search_manager.try_search_managed_feed(fid=fid)
+    
+    # 새로운  관리 피드를 추가하는 함수
+    def try_make_new_managed_feed(self, feed):
+        # 알고리즘에도 추가해야되ㅏㅁ
+        self.__search_manager.try_make_new_managed_feed(feed)
+
+        return
 
     # 이 함수가 핵심 -> feed 데이터를 요청하면 주기 위한 함수
     # target_type -> feed 검색을 하기 위한 key값
@@ -41,7 +51,7 @@ class FeedSearchEngine:
 
     # 예시 ||  [바위게] 라는 이름을 가진 작성자로 10개의 피드를 요청하는데 이번이 두번 째 요청
     # result , index = try_serach_feed(target_type="uname", target = "바위게", num_feed=10, index=240):
-    def try_serach_feed(self, target_type="default", target = "", num_feed=1, index=-2):
+    def try_search_feed(self, target_type="default", target = "", num_feed=1, index=-2):
 
         result_fid = []
         result_index = -2
@@ -236,14 +246,19 @@ class SearchManager:
         self.__feed_algorithm=feed_algorithm
     
         self.__feed_table = [] # 최신 기준으로 쌓이는 피드 스택 | 인덱스를 활용할 것
+        self.__feed_avltree = AVLTree()
 
         # best_feed_table이 필요한가? 필요없는거 같은데?
         self.__best_feed_table = [] # 좋아요가 30개 이상인 피드 테이블 | 최신 기준 
 
         # 테이블 초기화
         self.__init_feed_table(database=database)
+        self.__init_feed_avltree()
 
-
+    def __init_feed_avltree(self):
+        for feed in self.__feed_table:
+            self.__feed_avltree.insert(feed.fid, feed)
+        print(f'INFO<-[      NOVA FEED AVLTREE IN SEARCH ENGINE NOW READY.')
 
     # 테이블 초기화 함수
     def __init_feed_table(self, database):
@@ -275,6 +290,24 @@ class SearchManager:
         num_feed = str(len(self.__feed_table))
         print(f'INFO<-[      {num_feed} NOVA FEED IN SEARCH ENGINE NOW READY.')
         return 
+    
+    def try_make_new_managed_feed(self, feed:Feed):
+        managed_feed = ManagedFeed(
+            fid=feed.fid,
+            like=feed.star,
+            date=feed.date,
+            uname=feed.nickname,
+            hashtag=feed.hashtag)
+
+        self.__feed_table.append(managed_feed)
+        self.__feed_avltree.insert(managed_feed.fid, managed_feed)
+        return
+
+    # 피드 매니저에서 사용가능하게 만든 검색 기능
+    def try_search_managed_feed(self, fid):
+        target = self.__feed_avltree.get(key=fid)
+        return target
+
 
 
     # 이런 함수를 미리 만들어서 쓰면 좋음
@@ -289,22 +322,23 @@ class SearchManager:
         return self.__feed_table[:index]
 
 
-    # 예시 3 | 특정 피드를 업데이트하여 다시 저장하는 함수
-    def __modify_feed(self, managed_feed:ManagedFeed, ):
-        # DB에서 원본 Feed 데이터 찾기
-
-        feed_data = self.__database.get_data_with_id(target="fid", id=managed_feed.fid)
-        feed = Feed()
-        feed.make_with_dict(dict_data=feed_data)
+    # 피드 테이블을 수정하는 함수
+    def modify_feed_table(self, feed:Feed, ):
+        # managed_feed를 찾아야됨
+        managed_feed:ManagedFeed = self.__feed_avltree.get(feed.fid)
 
         # managed_feed가 가진 데이터로 원본 데이터를 변경
-        feed.star = managed_feed.like
-        feed.date = managed_feed.date
-        feed.hashtag = copy(managed_feed.hashtag)
-        feed.nickname = managed_feed.uname
-
-        # 저장
-        self.__database.modify_data_with_id(target_id="fid", target_data=feed.get_dict_form_data())
+        managed_feed.date = feed.date
+        managed_feed.hashtag = feed.hashtag
+        managed_feed.like = feed.star
+        managed_feed.uname = feed.nickname
+        return
+    
+    # 삭제하는 함수. 피드가  삭제되면 None으로 바뀔것
+    def remove_feed(self, feed:Feed):
+        managed_feed = self.__feed_avltree.get(key=feed.fid)
+        managed_feed = ManagedFeed()
+        self.__feed_avltree.remove(key=feed.fid)
         return
     
     def __get_datetime_now(self):
@@ -337,7 +371,12 @@ class SearchManager:
 
         for i, managed_feed in enumerate(reversed(self.__feed_table)):
             index = len(self.__feed_table) - 1 - i
+            # 삭제된 피드는 None으로 표시될것이라서
+            if managed_feed.fid == "":
+                continue
+
             object_date = self.__get_date_str_to_object(str_date=managed_feed.date)
+
             if self.__get_time_diff(target_time=object_date, target_hour=target_hour):
                 continue
             else:
@@ -372,6 +411,10 @@ class SearchManager:
                 ii = len(self.__feed_table) - 1 - i
                 if count == num_feed:
                     break
+                
+                # 삭제된 피드는 None으로 표시될것이라서
+                if managed_feed.fid == "":
+                    continue
 
                 result_fid.append(managed_feed.fid)
                 # result_index 업데이트
@@ -380,11 +423,14 @@ class SearchManager:
 
 
         elif search_type == "best":
-            managed_feed:ManagedFeed = managed_feed
             for i, managed_feed in enumerate(search_range):
                 ii = len(self.__feed_table) - 1 - i
                 if count == num_feed:
                     break
+
+                # 삭제된 피드는 None으로 표시될것이라서
+                if managed_feed.fid == "":
+                    continue
                 
                 if managed_feed.like < 30:
                     continue
@@ -417,6 +463,10 @@ class SearchManager:
             ii = len(self.__feed_table) - 1 - i
             if count == num_feed:
                 break
+
+            # 삭제된 피드는 None으로 표시될것이라서
+            if managed_feed.fid == "":
+                continue
 
             if hashtag not in managed_feed.hashtag:
                 continue
@@ -459,6 +509,10 @@ class SearchManager:
 
             if count == num_feed:
                 break
+
+            # 삭제된 피드는 None으로 표시될것이라서
+            if managed_feed.fid == "":
+                continue
 
             if uname != managed_feed.uname:
                 continue
@@ -511,3 +565,5 @@ class FeedAlgorithm:
     def __init__(self, database):
         self.__now_all_feed=[]
         self.__database=database 
+
+

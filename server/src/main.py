@@ -18,7 +18,8 @@ class Master(Configure_File_Reader):
         #league_manager = LeagueManager(connection_manager=connection_manager)
         #league_manager.init_league_manager(database=database) # 리그 매니저 초기화
         feed_search_engine = FeedSearchEngine(database=database)
-        feed_manager= FeedManager(database=database, fclasses=self._fclasses)
+        feed_manager= FeedManager(database=database, fclasses=self._fclasses,
+                                  feed_search_engine=feed_search_engine)
         feed_manager.init_feed_data()
 
 
