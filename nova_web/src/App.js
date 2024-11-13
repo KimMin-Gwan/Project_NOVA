@@ -201,14 +201,18 @@ function App() {
                   <MyBias url={url} showBox={showBox} blackBox={blackBox}></MyBias>
                 </section>
               </div>
-
+              <hr className={`hr-line ${getModeClass(brightMode)}`}></hr>
               <section className="contents">
                 <MainPart brightMode={brightMode} />
+                <hr className={`hr-line ${getModeClass(brightMode)}`}></hr>
                 <PopularFeed brightMode={brightMode} />
+                <hr className={`hr-line ${getModeClass(brightMode)}`}></hr>
                 <div className="narrow-page">
                   <IncreaseTag brightMode={brightMode} />
                 </div>
+
                 <Week100 brightMode={brightMode} />
+                <hr className={`hr-line ${getModeClass(brightMode)}`}></hr>
                 <AllPost brightMode={brightMode} />
               </section>
 

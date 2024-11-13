@@ -63,19 +63,14 @@ export default function PopularFeed({ brightMode }) {
       <div className={`${style["top-area"]} ${style[getModeClass(mode)]}`}>
         <div className={style["content-title"]}>
           <header className={style["header-text"]}>최근 인기 게시글</header>
-          <img src={more_icon} alt="더보기" onClick={() => navigate("/feed_list?type=best")} className={style["more-icon"]}></img>
+          <img src={more_icon} alt="더보기" onClick={() => navigate("/feed_list?type=best")} className={`${style["more-icon"]} ${style[getModeClass(mode)]}`}></img>
         </div>
       </div>
 
-      <div className={`${style["main-area"]} ${style["popular-feed-container"]} ${style[getModeClass(mode)]}`}
-        ref={scrollRef}
-        onMouseDown={onMouseDown}
-        onMouseMove={onMouseMove}
-        onMouseUp={onMouseUp}>
+      <div className={`${style["main-area"]} ${style["popular-feed-container"]} ${style[getModeClass(mode)]}`} ref={scrollRef} onMouseDown={onMouseDown} onMouseMove={onMouseMove} onMouseUp={onMouseUp}>
         {homeFeed.map((feed, i) => {
           return (
-            <div key={i} className={`${style["popular-feed"]} ${style[getModeClass(mode)]}`} 
-            onClick={() => handleFeedClick(feed.fid)}>
+            <div key={i} className={`${style["popular-feed"]} ${style[getModeClass(mode)]}`} onClick={() => handleFeedClick(feed.fid)}>
               <div className={style["img-box"]}>
                 <img src={`${feed.image[0]}`} alt="img" />
               </div>

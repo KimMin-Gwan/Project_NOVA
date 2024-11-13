@@ -87,7 +87,7 @@ export default function MainPart({ brightMode }) {
           {/* bid : ''이면 인기 해시태그
   -1이 아니면 [title] 관련 인기 해시트=ㅐ그 */}
           {bias.bid === "" ? <header className={style["header-text"]}>인기 해시태그</header> : <header className={style["header-text"]}>[ {bias.title} ] 관련 인기 해시태그</header>}
-          <img src={more_icon} alt="menu" onClick={() => navigate("/feed_hash_list")} className={style["more-icon"]}></img>
+          <img src={more_icon} alt="menu" onClick={() => navigate("/feed_hash_list")} className={`${style["more-icon"]} ${style[getModeClass(mode)]}`}></img>
         </div>
 
         <div className={style["tag-container"]} ref={scrollRef} onMouseDown={onMouseDown} onMouseMove={onMouseMove} onMouseUp={onMouseUp}>

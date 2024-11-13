@@ -34,7 +34,7 @@ export default function IncreaseTag({ brightMode }) {
     setMode(brightMode); // brightMode 값이 바뀔 때마다 mode 업데이트
   }, [brightMode]);
   return (
-    <div className={style["wrap-container"]}>
+    <div className={style["wrap-container"]} style={{ marginBottom: "100px" }}>
       <div className={`${style["top-area"]} ${style[getModeClass(mode)]}`}>
         <div className={style["content-title"]}>
           <header className={style["header-text"]}>급상승 해시태그</header>
@@ -59,6 +59,7 @@ export default function IncreaseTag({ brightMode }) {
           </ol>
         </div>
       </div>
+      <hr className={`hr-line ${getModeClass(brightMode)}`}></hr>
     </div>
   );
 }

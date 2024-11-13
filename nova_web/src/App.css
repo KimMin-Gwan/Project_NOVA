@@ -23,6 +23,11 @@ body.dark-mode {
   color: #303030;
 }
 
+.hr-line {
+  border: 6px solid #292929;
+  opacity: 1;
+}
+
 .all-box {
   display: flex;
   max-width: 1150px;
@@ -1127,4 +1132,9 @@ body.dark-mode {
 }
 .bottom_bar.bright-mode {
   background-color: #eeebf6;
+}
+
+/* 선 */
+.hr-line.bright-mode {
+  border-color: #eaeeff;
 }
