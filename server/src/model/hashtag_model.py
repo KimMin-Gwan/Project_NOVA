@@ -15,12 +15,12 @@ class HashTagModel(BaseModel):
         if self._user.uid == "":
             return False
         else:
-            if self._user.solo_bid != "":
-                bias_data = self._database.get_data_with_id(target="bid", id=self._user.solo_bid)
-                self._bias.make_with_dict(bias_data)
-                self._title=self._bias.bname
-            else:
-                self.set_best_hash_tag()
+            #if self._user.solo_bid != "":
+                #bias_data = self._database.get_data_with_id(target="bid", id=self._user.solo_bid)
+                #self._bias.make_with_dict(bias_data)
+                #self._title=self._bias.bname
+            #else:
+            self.set_best_hash_tag()
             return True
 
     def set_bias_hash_tag(self):
