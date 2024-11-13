@@ -7,7 +7,7 @@ export default function PopularFeed({ brightMode }) {
   let [homeFeed, setHomeFeed] = useState([]);
   const navigate = useNavigate();
   function fetchHomeFeed() {
-    fetch(`https://nova-platform.kr/home/home_feed`, {
+    fetch(`https://nova-platform.kr/home/today_best`, {
       credentials: "include",
     })
       .then((response) => response.json())
