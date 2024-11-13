@@ -388,6 +388,7 @@ class SearchManager:
     # 목표시간을 바탕으로 피드를 찾느 ㄴ함수
     # search_type == "all", "best"
     def try_get_feed_with_target_hour(self, search_type="all", num_feed=4, target_hour=1, index=-2):
+        print("nova")
         result_fid = []
         result_index = -3
 
