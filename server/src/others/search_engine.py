@@ -388,23 +388,27 @@ class SearchManager:
     # 목표시간을 바탕으로 피드를 찾느 ㄴ함수
     # search_type == "all", "best"
     def try_get_feed_with_target_hour(self, search_type="all", num_feed=4, target_hour=1, index=-2):
-        print("nova")
         result_fid = []
         result_index = -3
 
+        print(1)
+
         if index == -1:
             index = len(self.__feed_table)
+        print(2)
 
         if target_hour > 0 :
             target_index = self.__find_target_index(target_hour=target_hour)
         else:
             target_index = 0
 
+        print(3)
         search_range = self.__feed_table[target_index:index][::-1]
 
         if index < target_index  or index > len(self.__feed_table):
             return result_fid, -3
 
+        print(4)
 
         count = 0
         if search_type == "all":
@@ -440,6 +444,7 @@ class SearchManager:
                 # result_index 업데이트
                 result_index = index - 1 - ii # 실제 self.__feed_table에서의 인덱스 계산
                 count += 1
+        print(5)
 
         return result_fid, result_index
     
