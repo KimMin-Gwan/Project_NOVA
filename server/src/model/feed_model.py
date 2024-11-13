@@ -33,10 +33,12 @@ class FeedModel(BaseModel):
         return
 
     def set_today_best_feed(self, feed_search_engine:FeedSearchEngine, index=-1, num_feed=4):
+        print('hello')
         fid_list, self._key = feed_search_engine.try_get_feed_in_recent(
             search_type="today", num_feed=num_feed, index=index)
 
         print(fid_list)
+        print('wolrd')
 
         feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=fid_list)
 
