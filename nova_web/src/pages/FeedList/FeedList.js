@@ -19,33 +19,62 @@ export default function FeedList(isUserState) {
   let navigate = useNavigate();
   function fetchData() {
     // setIsLoading(true);
-    fetch("https://nova-platform.kr/feed_explore/today_best", {
-      credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        // console.log('first feed 3개', data.body);
-        setFeedData(data.body.feed);
-        setNextData(data.body.key);
-        setIsLoading(false);
-      });
+    if (type === 'best') {
+      fetch("https://nova-platform.kr/feed_explore/today_best", {
+        credentials: "include",
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          // console.log('first feed 3개', data.body);
+          setFeedData(data.body.feed);
+          setNextData(data.body.key);
+          setIsLoading(false);
+        });
+    } else if (type === 'all') {
+      fetch("https://nova-platform.kr/feed_explore/all_feed", {
+        credentials: "include",
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          // console.log('first feed 3개', data.body);
+          setFeedData(data.body.feed);
+          setNextData(data.body.key);
+          setIsLoading(false);
+        });
+    }
   }
 
   function fetchPlusData() {
     // setIsLoading(true);
-    fetch(`https://nova-platform.kr/feed_explore/today_best?key=${nextData}`, {
-      credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setNextData(data.body.key);
-        setFeedData((prevData) => {
-          const newData = [...prevData, ...data.body.feed];
-          return newData;
+    if (type === 'best') {
+      fetch(`https://nova-platform.kr/feed_explore/today_best?key=${nextData}`, {
+        credentials: "include",
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          setNextData(data.body.key);
+          setFeedData((prevData) => {
+            const newData = [...prevData, ...data.body.feed];
+            return newData;
+          });
+          setIsLoading(false);
+          console.log("mor", data);
         });
-        setIsLoading(false);
-        console.log("mor", data);
-      });
+    } else if (type === 'all') {
+      fetch(`https://nova-platform.kr/feed_explore/all_feed?key=${nextData}`, {
+        credentials: "include",
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          setNextData(data.body.key);
+          setFeedData((prevData) => {
+            const newData = [...prevData, ...data.body.feed];
+            return newData;
+          });
+          setIsLoading(false);
+          console.log("mor", data);
+        });
+    }
   }
 
   useEffect(() => {
