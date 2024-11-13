@@ -369,6 +369,7 @@ class SearchManager:
     def __find_target_index(self, target_hour=1):
         target_index = -1
 
+        print(5)
         for i, managed_feed in enumerate(reversed(self.__feed_table)):
             index = len(self.__feed_table) - 1 - i
             # 삭제된 피드는 None으로 표시될것이라서
@@ -382,6 +383,7 @@ class SearchManager:
             else:
                 target_index = index
                 break
+        print(6)
 
         return target_index
 
@@ -391,24 +393,20 @@ class SearchManager:
         result_fid = []
         result_index = -3
 
-        print(1)
 
         if index == -1:
             index = len(self.__feed_table)
-        print(2)
 
         if target_hour > 0 :
             target_index = self.__find_target_index(target_hour=target_hour)
         else:
             target_index = 0
 
-        print(3)
         search_range = self.__feed_table[target_index:index][::-1]
 
         if index < target_index  or index > len(self.__feed_table):
             return result_fid, -3
 
-        print(4)
 
         count = 0
         if search_type == "all":
@@ -444,7 +442,6 @@ class SearchManager:
                 # result_index 업데이트
                 result_index = index - 1 - ii # 실제 self.__feed_table에서의 인덱스 계산
                 count += 1
-        print(5)
 
         return result_fid, result_index
     
