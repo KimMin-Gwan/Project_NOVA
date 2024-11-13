@@ -44,6 +44,7 @@ def main():
             dict_data["active_feed"] = []
             dict_data["feed_history"] = []
             dict_data["my_feed"] = []
+            dict_data["feed_search_history"] = []
 
             new_data.append(dict_data)
 

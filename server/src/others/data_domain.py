@@ -29,7 +29,8 @@ class User(SampleDomain):
                  email = "", gender = "d" ,
                  credit = 0, solo_bid = "", group_bid = "", 
                  password = "", alert= [], like=[], my_comment=[],
-                 my_feed = [], active_feed = [], feed_history = []):
+                 my_feed = [], active_feed = [], feed_history = [],
+                 feed_search_history=[]):
 
         self.uid = uid
         self.uname = uname
@@ -46,6 +47,7 @@ class User(SampleDomain):
         self.my_feed:list = copy.copy(my_feed)
         self.active_feed:list = copy.copy(active_feed)
         self.feed_history:list = copy.copy(feed_history)
+        self.feed_search_history:list =copy.copy(feed_search_history)
 
 
     # database로 부터 받아온 데이터를 사용해 내용 구성
@@ -66,6 +68,7 @@ class User(SampleDomain):
             self.my_feed = copy.copy(dict_data["my_feed"])
             self.active_feed = copy.copy(dict_data["active_feed"])
             self.feed_history = copy.copy(dict_data["feed_history"])
+            self.feed_search_history = copy.copy(dict_data["feed_search_history"])
             return
         except Exception as e:
             raise DictMakingError(error_type=e)
@@ -87,7 +90,8 @@ class User(SampleDomain):
             "my_comment" : copy.copy(self.my_comment),
             "my_feed" : copy.copy(self.my_feed),
             "active_feed" : copy.copy(self.active_feed),
-            "feed_history" : copy.copy(self.feed_history)
+            "feed_history" : copy.copy(self.feed_history),
+            "feed_search_history" : copy.copy(self.feed_search_history)
         }
 
 

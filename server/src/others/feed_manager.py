@@ -1,6 +1,6 @@
 from others.data_domain import Feed, User, Comment, ManagedUser
 from others.search_engine import FeedSearchEngine
-from model import Local_Database
+#from model import Local_Database
 from datetime import datetime, timedelta
 import string
 import random
@@ -23,8 +23,8 @@ warnings.filterwarnings("ignore", module='boto3.compat')
 class FeedManager:
     def __init__(self, database, fclasses, feed_search_engine) -> None:
         self._feedClassManagement = FeedClassManagement(fclasses=fclasses)
-        self._database:Local_Database= database
-        #self._database= database
+        #self._database:Local_Database= database
+        self._database= database
         #self._managed_user_table = ManagedUserTable(database=database)
         self._feed_class_analist = FeedClassAnalist()
         self._feed_search_engine:FeedSearchEngine = feed_search_engine

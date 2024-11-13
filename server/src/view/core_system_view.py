@@ -8,6 +8,7 @@ from fastapi.responses import HTMLResponse
 from others import ConnectionManager as CM
 from others import LeagueManager as LM
 from others import FeedManager as FM
+from others import FeedSearchEngine as FSE
 from websockets.exceptions import ConnectionClosedError
 import json
 
@@ -15,8 +16,7 @@ class Core_Service_View(Master_View):
     def __init__(self, app:FastAPI, endpoint:str,
                   database, head_parser:Head_Parser,
                   connection_manager:CM, league_manager:LM,
-                  feed_manager:FM
-                  ) -> None:
+                  feed_manager:FM , feed_search_engine:FSE) -> None:
         super().__init__(head_parser=head_parser)
         self.__app = app
         self._endpoint = endpoint
@@ -24,6 +24,7 @@ class Core_Service_View(Master_View):
         self.__connection_manager=connection_manager
         self.__league_manager=league_manager
         self.__feed_manager = feed_manager
+        self.__feed_search_engine = feed_search_engine
         self.home_route(endpoint)
         self.check_route()
         #self.web_chatting_route(endpoint)
@@ -131,23 +132,6 @@ class Core_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
-        @self.__app.get('/home/hot_hashtag_feed')
-        def get_hot_hashtag_feed(request:Request, hashtag:Optional[str]):
-            request_manager = RequestManager()
-            data_payload = HomeHashtagFeedRequest(hashtag=hashtag)
-            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
-            #if not request_manager.jwt_payload.result:
-                #raise request_manager.credentials_exception
-
-            home_controller=Feed_Controller()
-            model = home_controller.get_home_hot_hashtag_feed(database=self.__database,
-                                                        request=request_manager,
-                                                        feed_manager=self.__feed_manager)
-
-            body_data = model.get_response_form_data(self._head_parser)
-            response = request_manager.make_json_response(body_data=body_data)
-            return response
-        
         @self.__app.get('/home/realtime_best_hashtag')
         def get_realtime_best_hashtag(request:Request):
             request_manager = RequestManager()
@@ -162,29 +146,82 @@ class Core_Service_View(Master_View):
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response
+
+        @self.__app.get('/home/search_feed_with_hashtag')
+        def get_hot_hashtag_feed(request:Request, hashtag:Optional[str]):
+            request_manager = RequestManager()
+            data_payload = HashtagFeedRequest(hashtag=hashtag)
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            #if not request_manager.jwt_payload.result:
+                #raise request_manager.credentials_exception
+
+            home_controller=Feed_Controller()
+            model = home_controller.get_feed_with_hashtag(database=self.__database,
+                                                        request=request_manager,
+                                                        feed_search_engine=self.__feed_search_engine,
+                                                        num_feed=5)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
         
         @self.__app.get('/home/all_feed')
-        def get_feed_data(request:Request, key:Optional[int] = -4):
+        def get_feed_data(request:Request, key:Optional[int] = -1):
             request_manager = RequestManager()
             data_payload = HomeFeedRequest(key=key)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
                 #raise request_manager.credentials_exception
 
-            home_controller=Feed_Controller()
-            model = home_controller.get_home_feed_data(database=self.__database,
-                                                        request=request_manager,
-                                                        feed_manager=self.__feed_manager)
+            feed_controller =Feed_Controller()
+            model = feed_controller.get_all_feed(database=self.__database,
+                                                request=request_manager,
+                                                feed_search_engine=self.__feed_search_engine,
+                                                num_feed=6)
 
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
+        # 오늘의 인기 게시글
+        @self.__app.get('/home/today_best')
+        def get_feed_data(request:Request, key:Optional[int] = -1):
+            request_manager = RequestManager()
+            data_payload = HomeFeedRequest(key=-1)
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            #if not request_manager.jwt_payload.result:
+                #raise request_manager.credentials_exception
 
+            feed_controller=Feed_Controller()
+            model = feed_controller.get_today_best(database=self.__database,
+                                                    request=request_manager,
+                                                    feed_search_engine=self.__feed_search_engine,
+                                                    num_feed=4)
 
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
 
+        # 주간 베스트 피드
+        @self.__app.get('/home/weekly_best')
+        def get_feed_data(request:Request, key:Optional[int] = -1):
+            request_manager = RequestManager()
+            data_payload = HomeFeedRequest(key=-1)
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            #if not request_manager.jwt_payload.result:
+                #raise request_manager.credentials_exception
 
+            feed_controller=Feed_Controller()
+            model = feed_controller.get_weekly_best(database=self.__database,
+                                                    request=request_manager,
+                                                    feed_search_engine=self.__feed_search_engine,
+                                                    num_feed=4)
 
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
+        
 
 
         # 최애를 검색하는 보편적인 함수
@@ -216,8 +253,91 @@ class Core_Service_View(Master_View):
             return response
         
 
-
     def feed_route(self):
+        # 해쉬 태그로 검색
+
+        # 키워드로 검색
+
+        # 검색 히스토리 요청
+
+        # 검색 히스토리 지우기
+
+
+        @self.__app.get('/feed_explore/search_feed_with_hashtag')
+        def search_feed_with_hashtag(request:Request, hashtag:Optional[str], key:Optional[int] = -1):
+            request_manager = RequestManager()
+            data_payload = HashtagFeedRequest(hashtag=hashtag)
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            #if not request_manager.jwt_payload.result:
+                #raise request_manager.credentials_exception
+
+            home_controller=Feed_Controller()
+            model = home_controller.get_feed_with_hashtag(database=self.__database,
+                                                        request=request_manager,
+                                                        feed_search_engine=self.__feed_search_engine,
+                                                        num_feed=5)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+        
+        @self.__app.get('/feed_explore/all_feed')
+        def get_all_feed_in_search(request:Request, key:Optional[int] = -1):
+            request_manager = RequestManager()
+            data_payload = HomeFeedRequest(key=key)
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            #if not request_manager.jwt_payload.result:
+                #raise request_manager.credentials_exception
+
+            feed_controller =Feed_Controller()
+            model = feed_controller.get_all_feed(database=self.__database,
+                                                request=request_manager,
+                                                feed_search_engine=self.__feed_search_engine,
+                                                num_feed=3)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
+        # 오늘의 인기 게시글
+        @self.__app.get('/feed_explore/today_best')
+        def get_today_best_in_search(request:Request, key:Optional[int] = -1):
+            request_manager = RequestManager()
+            data_payload = HomeFeedRequest(key=key)
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            #if not request_manager.jwt_payload.result:
+                #raise request_manager.credentials_exception
+
+            feed_controller=Feed_Controller()
+            model = feed_controller.get_today_best(database=self.__database,
+                                                    request=request_manager,
+                                                    feed_search_engine=self.__feed_search_engine,
+                                                    num_feed=4)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
+        # 주간 베스트 피드
+        @self.__app.get('/feed_explore/weekly_best')
+        def get_weelky_best_in_search(request:Request, key:Optional[int] = -1):
+            request_manager = RequestManager()
+            data_payload = HomeFeedRequest(key=key)
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            #if not request_manager.jwt_payload.result:
+                #raise request_manager.credentials_exception
+
+            feed_controller=Feed_Controller()
+            model = feed_controller.get_weekly_best(database=self.__database,
+                                                    request=request_manager,
+                                                    feed_search_engine=self.__feed_search_engine,
+                                                    num_feed=4)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
+
 
         # feed 데이터 받아오기( 위성 탐색 페이지에서 특정 fclass를 대상으로)
         @self.__app.get('/feed_explore/get_feed')
@@ -522,9 +642,10 @@ class HomeFeedRequest(RequestHeader):
     def __init__(self, key) -> None:
         self.key = key
 
-class HomeHashtagFeedRequest(RequestHeader):
-    def __init__(self, hashtag) -> None:
+class HashtagFeedRequest(RequestHeader):
+    def __init__(self, hashtag, key=-1) -> None:
         self.hashtag = hashtag 
+        self.key = key
 
 class GetFeedRequest(RequestHeader):
     def __init__(self,fclass, key) -> None:

@@ -14,7 +14,8 @@
         "my_comment": [],
         "active_feed": [],
         "feed_history": [],
-        "my_feed": []
+        "my_feed": [],
+        "feed_search_history": []
     },
     {
         "uid": "5678-efgh-1234",
@@ -31,7 +32,8 @@
         "my_comment": [],
         "active_feed": [],
         "feed_history": [],
-        "my_feed": []
+        "my_feed": [],
+        "feed_search_history": []
     },
     {
         "uid": "abcd-1234-5678",
@@ -48,7 +50,8 @@
         "my_comment": [],
         "active_feed": [],
         "feed_history": [],
-        "my_feed": []
+        "my_feed": [],
+        "feed_search_history": []
     },
     {
         "uid": "ijkl-9876-mnop",
@@ -65,7 +68,8 @@
         "my_comment": [],
         "active_feed": [],
         "feed_history": [],
-        "my_feed": []
+        "my_feed": [],
+        "feed_search_history": []
     },
     {
         "uid": "qrst-6543-uvwx",
@@ -82,7 +86,8 @@
         "my_comment": [],
         "active_feed": [],
         "feed_history": [],
-        "my_feed": []
+        "my_feed": [],
+        "feed_search_history": []
     },
     {
         "uid": "yzab-1357-cdef",
@@ -99,7 +104,8 @@
         "my_comment": [],
         "active_feed": [],
         "feed_history": [],
-        "my_feed": []
+        "my_feed": [],
+        "feed_search_history": []
     },
     {
         "uid": "ghij-2468-klmn",
@@ -116,7 +122,8 @@
         "my_comment": [],
         "active_feed": [],
         "feed_history": [],
-        "my_feed": []
+        "my_feed": [],
+        "feed_search_history": []
     },
     {
         "uid": "opqr-3698-stuv",
@@ -133,7 +140,8 @@
         "my_comment": [],
         "active_feed": [],
         "feed_history": [],
-        "my_feed": []
+        "my_feed": [],
+        "feed_search_history": []
     },
     {
         "uid": "wxyz-7531-abcd",
@@ -150,7 +158,8 @@
         "my_comment": [],
         "active_feed": [],
         "feed_history": [],
-        "my_feed": []
+        "my_feed": [],
+        "feed_search_history": []
     },
     {
         "uid": "mnop-9876-qrst",
@@ -167,7 +176,8 @@
         "my_comment": [],
         "active_feed": [],
         "feed_history": [],
-        "my_feed": []
+        "my_feed": [],
+        "feed_search_history": []
     },
     {
         "uid": "abcd-4321-wxyz",
@@ -184,7 +194,8 @@
         "my_comment": [],
         "active_feed": [],
         "feed_history": [],
-        "my_feed": []
+        "my_feed": [],
+        "feed_search_history": []
     },
     {
         "uid": "efgh-8765-ijkl",
@@ -201,7 +212,8 @@
         "my_comment": [],
         "active_feed": [],
         "feed_history": [],
-        "my_feed": []
+        "my_feed": [],
+        "feed_search_history": []
     },
     {
         "uid": "qrst-2109-uvwx",
@@ -218,7 +230,8 @@
         "my_comment": [],
         "active_feed": [],
         "feed_history": [],
-        "my_feed": []
+        "my_feed": [],
+        "feed_search_history": []
     },
     {
         "uid": "uvwx-1098-yzab",
@@ -235,7 +248,8 @@
         "my_comment": [],
         "active_feed": [],
         "feed_history": [],
-        "my_feed": []
+        "my_feed": [],
+        "feed_search_history": []
     },
     {
         "uid": "klmn-5432-opqr",
@@ -252,7 +266,8 @@
         "my_comment": [],
         "active_feed": [],
         "feed_history": [],
-        "my_feed": []
+        "my_feed": [],
+        "feed_search_history": []
     },
     {
         "uid": "abcd-5678-efgh",
@@ -269,7 +284,8 @@
         "my_comment": [],
         "active_feed": [],
         "feed_history": [],
-        "my_feed": []
+        "my_feed": [],
+        "feed_search_history": []
     },
     {
         "uid": "mnop-1122-wxyz",
@@ -286,7 +302,8 @@
         "my_comment": [],
         "active_feed": [],
         "feed_history": [],
-        "my_feed": []
+        "my_feed": [],
+        "feed_search_history": []
     },
     {
         "uid": "qrst-3344-uvwx",
@@ -303,7 +320,8 @@
         "my_comment": [],
         "active_feed": [],
         "feed_history": [],
-        "my_feed": []
+        "my_feed": [],
+        "feed_search_history": []
     },
     {
         "uid": "2508-3knp-2158",
@@ -320,6 +338,7 @@
         "my_comment": [],
         "active_feed": [],
         "feed_history": [],
-        "my_feed": []
+        "my_feed": [],
+        "feed_search_history": []
     }
 ]
