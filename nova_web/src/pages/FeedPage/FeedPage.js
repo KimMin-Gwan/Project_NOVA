@@ -27,6 +27,7 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 const FeedPage = () => {
+
   let navigate = useNavigate();
 
   const [banners, setBanners] = useState([]);
@@ -147,9 +148,6 @@ const FeedPage = () => {
       .then((data) => {
         setBanners(data.body.feed);
         setNextData(data.body.key);
-        // console.log("fetchfeed", data);
-        // setNumStar([data.body.feed[0].star, data.body.feed[1].star]);
-        // setNumComment([data.body.feed[0].num_comment, data.body.feed[1].num_comment])
       });
   }
 
@@ -166,14 +164,9 @@ const FeedPage = () => {
       }); // 예시 URL
       const newBanners = await response.json();
       const plusFeed = newBanners.body.feed;
-      // console.log("newBanner", newBanners);
-      // const newStar = newBanners.body.feed[0].star;
-      // const comments = newBanners.body.feed[0].num_comment;
       setNextData(newBanners.body.key);
       // 기존 배너에 새 배너를 추가
       setBanners((prevBanners) => [...prevBanners, ...plusFeed]);
-      // setNumStar((prevNumStar) => [...prevNumStar, newStar]);
-      // setNumComment((prevNumComment) => [...prevNumComment, comments])
     } catch (error) {
       console.error("Error fetching additional banners:", error);
     }
