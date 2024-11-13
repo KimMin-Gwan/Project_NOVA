@@ -170,7 +170,7 @@ function App() {
               }}
               className={`container ${blackBox} ${getModeClass(brightMode)}`}
             >
-              <div className="top-area">
+              <div className={`top-area ${getModeClass(brightMode)}`}>
                 <header className="header">
                   <div
                     className="logo"
@@ -178,7 +178,7 @@ function App() {
                       navigate("/");
                     }}
                   >
-                    <img src={logo} alt="logo"></img>
+                    <img src={logo} alt="logo" className={`logo-st ${getModeClass(brightMode)}`}></img>
                   </div>
                   <button className="change-btn" onClick={handleChangeMode}>
                     {brightMode === "dark" ? "라이트모드로 전환" : "다크모드로 전환"}
@@ -188,6 +188,7 @@ function App() {
                       <img
                         src={menu}
                         alt="menu"
+                        className={`logo-st ${getModeClass(brightMode)}`}
                         onClick={() => {
                           navigate("/more_see");
                         }}
@@ -196,7 +197,7 @@ function App() {
                   </div>
                 </header>
                 <Banner url={url}></Banner>
-                <h2 className="authen">인증하기</h2>
+                <h2 className={`authen ${getModeClass(brightMode)}`}>최애 / 차애</h2>
                 <section className="my-bias">
                   <MyBias url={url} showBox={showBox} blackBox={blackBox}></MyBias>
                 </section>

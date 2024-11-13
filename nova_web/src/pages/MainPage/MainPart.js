@@ -101,7 +101,8 @@ export default function MainPart({ brightMode }) {
                   handleTagClick(i, tag);
                 }}
                 style={{
-                  backgroundColor: clickIndex === i ? "#98A0FF" : getModeClass(mode) === "bright-mode" ? "#CCCFFF" : "#373737",
+                  backgroundColor: clickIndex === i ? (getModeClass(mode) === "bright-mode" ? "#98A0FF" : "#051243") : getModeClass(mode) === "bright-mode" ? "#CCCFFF" : "#373737",
+
                   cursor: "pointer",
                 }}
               >

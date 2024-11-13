@@ -77,7 +77,7 @@ body.dark-mode {
 .top-area {
   width: 100%;
   /* height: 400px; */
-  background-color: #eaeeff;
+  background-color: #000000;
   /* margin: 0 auto; */
   margin-bottom: 20px;
   border-radius: 0 0 5% 5%;
@@ -303,7 +303,9 @@ body.dark-mode {
 }
 
 .authen {
-  margin-left: 20px;
+  color: #303030;
+
+  text-align: center;
 }
 
 .box {
@@ -1133,7 +1135,16 @@ body.dark-mode {
 .bottom_bar.bright-mode {
   background-color: #eeebf6;
 }
-
+/* 제일 위 */
+.top-area.bright-mode {
+  background-color: #eaeeff;
+}
+.logo-st.dark-mode {
+  filter: invert(100%);
+}
+.authen.dark-mode {
+  color: white;
+}
 /* 선 */
 .hr-line.bright-mode {
   border-color: #eaeeff;
