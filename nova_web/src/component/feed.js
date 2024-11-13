@@ -2,6 +2,8 @@ import style from './../pages/FeedPage/FeedPage.module.css';
 import { useState } from 'react';
 // import {}
 import { FaStar } from "react-icons/fa";
+import star from "./../img/favorite.png";
+import star_color from "./../img/favorite_color.png";
 
 // import { useRef, useState } from 'react';
 
@@ -90,9 +92,6 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
 
 
     let [allComments, setAllComments] = useState([]);
-    let [commentCount, setCommentCount] = useState(0);
-    let [isClickedCommentWindow, setIsClickedCommentWindow] = useState(false);
-
     // 댓글 보기
     function handleShowComment(fid, event) {
         event.preventDefault();
@@ -141,8 +140,6 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
     }
 
     // 댓글 삭제 기능
-    let [isClickedRemoveBtn, setIsClickedRemoveBtn] = useState(false);
-
     function handleRemoveComment(fid, cid, event) {
         event.preventDefault();
 
@@ -172,6 +169,53 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                 // })
             })
     }
+    let header = {
+        "request-type": "default",
+        "client-version": 'v1.0.1',
+        "client-ip": '127.0.0.1',
+        "uid": '1234-abcd-5678',
+        "endpoint": "/core_system/",
+    }
+
+    let [inputValue, setInputValue] = useState('');
+    function handleChange(e) {
+        setInputValue(e.target.value);
+    }
+
+    function handleSubmit(fid, event) {
+        event.preventDefault();
+
+        fetch("https://nova-platform.kr/feed_explore/make_comment", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                header,
+            },
+            credentials: "include",
+            body: JSON.stringify({
+                header: header,
+                body: {
+                    fid: `${fid}`,
+                    body: `${inputValue}`,
+                },
+            }),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data);
+                // setNewComments(data.body.comments);
+                setAllComments((prevAllComments) => {
+                    const newAllComments = [data.body.comments[0], ...prevAllComments];
+                    return newAllComments;
+                });
+                setFeedData((prevFeeds) => {
+                    return prevFeeds.map((feed) => {
+                        return feed.fid === fid ? { ...feed, num_comment: data.body.feed[0].num_comment } : feed;
+                    });
+                });
+                setInputValue("");
+            });
+    }
 
     function handleRequestURL(url) {
         window.open(url, "_blank", "noopener, noreferrer");
@@ -190,50 +234,62 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                             <InfoArea color={'#7960EC'} name={`${feed.class_name} 행성`} date={feed.date} supporter={`${feed.nickname}`}></InfoArea>
                             {
                                 isClickedMoreSee ?
-                                    (<div className={style['more_comments']}>
-
-                                        {allComments.length === 0 ? <div>댓글이 없습니다.</div> :
-                                            (
+                                    <div className={`${style["modal-container"]} ${style['feed-comment-modal']}`}>
+                                        <div className={style["comment-modal"]}>
+                                            <nav className={style["top_bar"]}>댓글 더보기</nav>
+                                            <nav onClick={handleMoreSee} className={style["top_bar"]}>
+                                                닫기
+                                            </nav>
+                                            {allComments.length === 0 ? (
+                                                <div>댓글이 없습니다.</div>
+                                            ) : (
                                                 allComments.map((comment, i) => {
                                                     return (
-                                                        <div className={style['comments_box']}>
-                                                            <div key={comment.cid} className={style['comment']}>
-                                                                <div className={style['user_name']}>
-                                                                    <div>{comment.uname}</div>
-                                                                    <div className={style['interaction_btn']}>
-                                                                        {
-                                                                            comment.owner ? (<div className={style['delete_btn']} onClick={(event) => handleRemoveComment(comment.fid, comment.cid, event)}>삭제</div>) : (<div className={style['delete_btn']}></div>)
-                                                                        }
-                                                                        <div className={style['report_star_btn']}>
-                                                                            <div className={style.report}>신고</div>
-                                                                            <div className={style['star_num']}>
-                                                                                {
-                                                                                    isUserState ? (
-                                                                                        <FaStar className={style['comment_like']} style={comment.like_user ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
-                                                                                            onClick={(event) => handleCommentLike(comment.fid, comment.cid, event)} />
-                                                                                    ) : (
-                                                                                        <FaStar className={style['comment_like']} style={comment.like_user ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
-                                                                                            onClick={(e) => {
-                                                                                                e.preventDefault()
-                                                                                                alert('로그인을 해주세요.')
-                                                                                            }} />
-                                                                                    )
-                                                                                }
-                                                                                <div style={{ marginLeft: '2px' }}>
-                                                                                    {comment.like}
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div className={style['comment_text']}>{comment.body}</div>
+                                                        <section key={comment.cid} className={style["text-section"]}>
+                                                            <div className={style["text-box"]}>
+                                                                <p className={style["text-1"]}>{comment.uname}</p>
+                                                                <p className={style["text-2"]}>{comment.body}</p>
                                                             </div>
-                                                        </div>
-                                                    )
+                                                            <div className={style["icon-modal"]}>
+                                                                {comment.owner ? (
+                                                                    <button
+                                                                        onClick={(e) => {
+                                                                            handleRemoveComment(comment.fid, comment.cid, e);
+                                                                        }}
+                                                                        className={style["button-modal"]}
+                                                                    >
+                                                                        삭제
+                                                                    </button>
+                                                                ) : (
+                                                                    <button className={style["button-modal"]}></button>
+                                                                )}
+
+                                                                <button className={style["button-modal"]}>신고</button>
+                                                                <div className={style["star-modal"]}>
+                                                                    <img
+                                                                        src={comment.like_user ? star_color : star}
+                                                                        alt="clickable"
+                                                                        onClick={(e) => {
+                                                                            handleCommentLike(comment.fid, comment.cid, e);
+                                                                        }}
+                                                                        className={style["img-star"]}
+                                                                    />
+                                                                    <p>{comment.like}</p>
+                                                                </div>
+                                                            </div>
+                                                        </section>
+                                                    );
                                                 })
                                             )}
-
-                                    </div>) : <>
+                                            <div className={`${style["comment_action"]} ${style["comment-input"]}`}>
+                                                <form onSubmit={(event) => handleSubmit(feed.fid, event)}>
+                                                    <input type="text" value={inputValue} onChange={handleChange}></input>
+                                                    <button type="submit">댓글 작성</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    : <>
                                         <Text data={feed.body}></Text>
                                         {
                                             !img_circle &&
@@ -377,48 +433,62 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                             <InfoArea color={'#E370D1'} name={`${feed.class_name} 행성`} date={feed.date} supporter={`${feed.nickname}`}></InfoArea>
                             {
                                 isClickedMoreSee ?
-                                    (<div className={style['more_comments']}>
-                                        {allComments.length === 0 ? <div>댓글이 없습니다.</div> :
-                                            (
+                                    <div className={`${style["modal-container"]} ${style['feed-comment-modal']}`}>
+                                        <div className={style["comment-modal"]}>
+                                            <nav className={style["top_bar"]}>댓글 더보기</nav>
+                                            <nav onClick={handleMoreSee} className={style["top_bar"]}>
+                                                닫기
+                                            </nav>
+                                            {allComments.length === 0 ? (
+                                                <div>댓글이 없습니다.</div>
+                                            ) : (
                                                 allComments.map((comment, i) => {
                                                     return (
-                                                        <div className={style['comments_box']}>
-                                                            <div key={comment.cid} className={style['comment']}>
-                                                                <div className={style['user_name']}>
-                                                                    <div>{comment.uname}</div>
-                                                                    <div className={style['interaction_btn']}>
-                                                                        {
-                                                                            comment.owner ? (<div className={style['delete_btn']} onClick={(event) => handleRemoveComment(comment.fid, comment.cid, event)}>삭제</div>) : (<div className={style['delete_btn']}></div>)
-                                                                        }
-                                                                        <div className={style['report_star_btn']}>
-                                                                            <div className={style.report}>신고</div>
-                                                                            <div className={style['star_num']}>
-                                                                                {
-                                                                                    isUserState ? (
-                                                                                        <FaStar className={style['comment_like']} style={comment.like_user ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
-                                                                                            onClick={(event) => handleCommentLike(comment.fid, comment.cid, event)} />
-                                                                                    ) : (
-                                                                                        <FaStar className={style['comment_like']} style={comment.like_user ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
-                                                                                            onClick={(e) => {
-                                                                                                e.preventDefault()
-                                                                                                alert('로그인을 해주세요.')
-                                                                                            }} />
-                                                                                    )
-                                                                                }
-                                                                                <div style={{ marginLeft: '2px' }}>
-                                                                                    {comment.like}
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div className={style['comment_text']}>{comment.body}</div>
+                                                        <section key={comment.cid} className={style["text-section"]}>
+                                                            <div className={style["text-box"]}>
+                                                                <p className={style["text-1"]}>{comment.uname}</p>
+                                                                <p className={style["text-2"]}>{comment.body}</p>
                                                             </div>
-                                                        </div>
-                                                    )
+                                                            <div className={style["icon-modal"]}>
+                                                                {comment.owner ? (
+                                                                    <button
+                                                                        onClick={(e) => {
+                                                                            handleRemoveComment(comment.fid, comment.cid, e);
+                                                                        }}
+                                                                        className={style["button-modal"]}
+                                                                    >
+                                                                        삭제
+                                                                    </button>
+                                                                ) : (
+                                                                    <button className={style["button-modal"]}></button>
+                                                                )}
+
+                                                                <button className={style["button-modal"]}>신고</button>
+                                                                <div className={style["star-modal"]}>
+                                                                    <img
+                                                                        src={comment.like_user ? star_color : star}
+                                                                        alt="clickable"
+                                                                        onClick={(e) => {
+                                                                            handleCommentLike(comment.fid, comment.cid, e);
+                                                                        }}
+                                                                        className={style["img-star"]}
+                                                                    />
+                                                                    <p>{comment.like}</p>
+                                                                </div>
+                                                            </div>
+                                                        </section>
+                                                    );
                                                 })
                                             )}
-                                    </div>) : (
+                                            <div className={`${style["comment_action"]} ${style["comment-input"]}`}>
+                                                <form onSubmit={(event) => handleSubmit(feed.fid, event)}>
+                                                    <input type="text" value={inputValue} onChange={handleChange}></input>
+                                                    <button type="submit">댓글 작성</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    : (
                                         <>
                                             <Text data={feed.body}></Text>
                                             {
@@ -619,49 +689,62 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                             <InfoArea color={'#60E7EC'} name={`${feed.class_name} 행성`} date={feed.date} supporter={`${feed.nickname}`}></InfoArea>
                             {
                                 isClickedMoreSee ?
-                                    (<div className={style['more_comments']}>
-                                        {allComments.length === 0 ? <div>댓글이 없습니다.</div> :
-                                            (
+                                    <div className={`${style["modal-container"]} ${style['feed-comment-modal']}`}>
+                                        <div className={style["comment-modal"]}>
+                                            <nav className={style["top_bar"]}>댓글 더보기</nav>
+                                            <nav onClick={handleMoreSee} className={style["top_bar"]}>
+                                                닫기
+                                            </nav>
+                                            {allComments.length === 0 ? (
+                                                <div>댓글이 없습니다.</div>
+                                            ) : (
                                                 allComments.map((comment, i) => {
                                                     return (
-                                                        <div className={style['comments_box']}>
-                                                            <div key={comment.cid} className={style['comment']}>
-                                                                <div className={style['user_name']}>
-                                                                    <div>{comment.uname}</div>
-                                                                    <div className={style['interaction_btn']}>
-                                                                        {
-                                                                            comment.owner ? (<div className={style['delete_btn']} onClick={(event) => handleRemoveComment(comment.fid, comment.cid, event)}>삭제</div>) : (<div className={style['delete_btn']}></div>)
-                                                                        }
-                                                                        <div className={style['report_star_btn']}>
-                                                                            <div className={style.report}>신고</div>
-                                                                            <div className={style['star_num']}>
-                                                                                {
-                                                                                    isUserState ? (
-                                                                                        <FaStar className={style['comment_like']} style={comment.like_user ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
-                                                                                            onClick={(event) => handleCommentLike(comment.fid, comment.cid, event)} />
-                                                                                    ) : (
-                                                                                        <FaStar className={style['comment_like']} style={comment.like_user ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
-                                                                                            onClick={(e) => {
-                                                                                                e.preventDefault()
-                                                                                                alert('로그인을 해주세요.')
-                                                                                            }} />
-                                                                                    )
-                                                                                }
-                                                                                <div style={{ marginLeft: '2px' }}>
-                                                                                    {comment.like}
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div className={style['comment_text']}>{comment.body}</div>
+                                                        <section key={comment.cid} className={style["text-section"]}>
+                                                            <div className={style["text-box"]}>
+                                                                <p className={style["text-1"]}>{comment.uname}</p>
+                                                                <p className={style["text-2"]}>{comment.body}</p>
                                                             </div>
-                                                        </div>
-                                                    )
+                                                            <div className={style["icon-modal"]}>
+                                                                {comment.owner ? (
+                                                                    <button
+                                                                        onClick={(e) => {
+                                                                            handleRemoveComment(comment.fid, comment.cid, e);
+                                                                        }}
+                                                                        className={style["button-modal"]}
+                                                                    >
+                                                                        삭제
+                                                                    </button>
+                                                                ) : (
+                                                                    <button className={style["button-modal"]}></button>
+                                                                )}
+
+                                                                <button className={style["button-modal"]}>신고</button>
+                                                                <div className={style["star-modal"]}>
+                                                                    <img
+                                                                        src={comment.like_user ? star_color : star}
+                                                                        alt="clickable"
+                                                                        onClick={(e) => {
+                                                                            handleCommentLike(comment.fid, comment.cid, e);
+                                                                        }}
+                                                                        className={style["img-star"]}
+                                                                    />
+                                                                    <p>{comment.like}</p>
+                                                                </div>
+                                                            </div>
+                                                        </section>
+                                                    );
                                                 })
                                             )}
-
-                                    </div>) : (
+                                            <div className={`${style["comment_action"]} ${style["comment-input"]}`}>
+                                                <form onSubmit={(event) => handleSubmit(feed.fid, event)}>
+                                                    <input type="text" value={inputValue} onChange={handleChange}></input>
+                                                    <button type="submit">댓글 작성</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    : (
                                         <>
                                             <Text data={feed.body}></Text>
                                             {
@@ -847,49 +930,104 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                             <InfoArea color={'#78D2C8'} name={`${feed.class_name} 행성`} date={feed.date} supporter={`${feed.nickname}`}></InfoArea>
                             {
                                 isClickedMoreSee ?
-                                    (<div className={style['more_comments']}>
-                                        {allComments.length === 0 ? <div>댓글이 없습니다.</div> :
-                                            (
+                                    <div className={`${style["modal-container"]} ${style['feed-comment-modal']}`}>
+                                        <div className={style["comment-modal"]}>
+                                            <nav className={style["top_bar"]}>댓글 더보기</nav>
+                                            <nav onClick={handleMoreSee} className={style["top_bar"]}>
+                                                닫기
+                                            </nav>
+                                            {allComments.length === 0 ? (
+                                                <div>댓글이 없습니다.</div>
+                                            ) : (
                                                 allComments.map((comment, i) => {
                                                     return (
-                                                        <div className={style['comments_box']}>
-                                                            <div key={comment.cid} className={style['comment']}>
-                                                                <div className={style['user_name']}>
-                                                                    <div>{comment.uname}</div>
-                                                                    <div className={style['interaction_btn']}>
-                                                                        {
-                                                                            comment.owner ? (<div className={style['delete_btn']} onClick={(event) => handleRemoveComment(comment.fid, comment.cid, event)}>삭제</div>) : (<div className={style['delete_btn']}></div>)
-                                                                        }
-                                                                        <div className={style['report_star_btn']}>
-                                                                            <div className={style.report}>신고</div>
-                                                                            <div className={style['star_num']}>
-                                                                                {
-                                                                                    isUserState ? (
-                                                                                        <FaStar className={style['comment_like']} style={comment.like_user ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
-                                                                                            onClick={(event) => handleCommentLike(comment.fid, comment.cid, event)} />
-                                                                                    ) : (
-                                                                                        <FaStar className={style['comment_like']} style={comment.like_user ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
-                                                                                            onClick={(e) => {
-                                                                                                e.preventDefault()
-                                                                                                alert('로그인을 해주세요.')
-                                                                                            }} />
-                                                                                    )
-                                                                                }
-                                                                                <div style={{ marginLeft: '2px' }}>
-                                                                                    {comment.like}
-                                                                                </div>
-                                                                            </div>
-                                                                            {/* <div onClick={(event) => handleCommentLike(comment.fid, comment.cid, event)}>{comment.like}</div> */}
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div className={style['comment_text']}>{comment.body}</div>
+                                                        <section key={comment.cid} className={style["text-section"]}>
+                                                            <div className={style["text-box"]}>
+                                                                <p className={style["text-1"]}>{comment.uname}</p>
+                                                                <p className={style["text-2"]}>{comment.body}</p>
                                                             </div>
-                                                        </div>
-                                                    )
+                                                            <div className={style["icon-modal"]}>
+                                                                {comment.owner ? (
+                                                                    <button
+                                                                        onClick={(e) => {
+                                                                            handleRemoveComment(comment.fid, comment.cid, e);
+                                                                        }}
+                                                                        className={style["button-modal"]}
+                                                                    >
+                                                                        삭제
+                                                                    </button>
+                                                                ) : (
+                                                                    <button className={style["button-modal"]}></button>
+                                                                )}
+
+                                                                <button className={style["button-modal"]}>신고</button>
+                                                                <div className={style["star-modal"]}>
+                                                                    <img
+                                                                        src={comment.like_user ? star_color : star}
+                                                                        alt="clickable"
+                                                                        onClick={(e) => {
+                                                                            handleCommentLike(comment.fid, comment.cid, e);
+                                                                        }}
+                                                                        className={style["img-star"]}
+                                                                    />
+                                                                    <p>{comment.like}</p>
+                                                                </div>
+                                                            </div>
+                                                        </section>
+                                                    );
                                                 })
                                             )}
-                                    </div>) : (
+                                            <div className={`${style["comment_action"]} ${style["comment-input"]}`}>
+                                                <form onSubmit={(event) => handleSubmit(feed.fid, event)}>
+                                                    <input type="text" value={inputValue} onChange={handleChange}></input>
+                                                    <button type="submit">댓글 작성</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    // (<div className={style['more_comments']}>
+                                    //     {allComments.length === 0 ? <div>댓글이 없습니다.</div> :
+                                    //         (
+                                    //             allComments.map((comment, i) => {
+                                    //                 return (
+                                    //                     <div className={style['comments_box']}>
+                                    //                         <div key={comment.cid} className={style['comment']}>
+                                    //                             <div className={style['user_name']}>
+                                    //                                 <div>{comment.uname}</div>
+                                    //                                 <div className={style['interaction_btn']}>
+                                    //                                     {
+                                    //                                         comment.owner ? (<div className={style['delete_btn']} onClick={(event) => handleRemoveComment(comment.fid, comment.cid, event)}>삭제</div>) : (<div className={style['delete_btn']}></div>)
+                                    //                                     }
+                                    //                                     <div className={style['report_star_btn']}>
+                                    //                                         <div className={style.report}>신고</div>
+                                    //                                         <div className={style['star_num']}>
+                                    //                                             {
+                                    //                                                 isUserState ? (
+                                    //                                                     <FaStar className={style['comment_like']} style={comment.like_user ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
+                                    //                                                         onClick={(event) => handleCommentLike(comment.fid, comment.cid, event)} />
+                                    //                                                 ) : (
+                                    //                                                     <FaStar className={style['comment_like']} style={comment.like_user ? { fill: 'yellow' } : { fill: 'white', stroke: 'black', strokeWidth: '25' }}
+                                    //                                                         onClick={(e) => {
+                                    //                                                             e.preventDefault()
+                                    //                                                             alert('로그인을 해주세요.')
+                                    //                                                         }} />
+                                    //                                                 )
+                                    //                                             }
+                                    //                                             <div style={{ marginLeft: '2px' }}>
+                                    //                                                 {comment.like}
+                                    //                                             </div>
+                                    //                                         </div>
+                                    //                                     </div>
+                                    //                                 </div>
+                                    //                             </div>
+                                    //                             <div className={style['comment_text']}>{comment.body}</div>
+                                    //                         </div>
+                                    //                     </div>
+                                    //                 )
+                                    //             })
+                                    //         )}
+                                    // </div>) 
+                                    : (
                                         <>
                                             <Text data={feed.body}></Text>
                                             {
@@ -1068,6 +1206,8 @@ export function Text({ name, data }) {
 }
 
 export function Comments({ isClickedComment, feed, allComments, setAllComments, setFeedData, isUserState }) {
+    let [isError, setIsError] = useState();
+
     let header = {
         "request-type": "default",
         "client-version": 'v1.0.1',
@@ -1075,7 +1215,6 @@ export function Comments({ isClickedComment, feed, allComments, setAllComments, 
         "uid": '1234-abcd-5678',
         "endpoint": "/core_system/",
     }
-    let [isError, setIsError] = useState();
 
     let [inputValue, setInputValue] = useState('');
 

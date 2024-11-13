@@ -535,6 +535,15 @@ h5 {
   /* background-color: honeydew; */
 }
 
+.feed-comment-modal {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1000px;
+  width: 100%;
+}
+
 .text-section {
   display: flex;
   justify-content: space-between;
@@ -682,6 +691,7 @@ h5 {
   color: black;
   margin-top: 6px;
   border-radius: 10px;
+  position: relative;
 }
 
 .info_area {
