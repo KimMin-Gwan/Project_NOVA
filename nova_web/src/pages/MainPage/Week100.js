@@ -28,7 +28,7 @@ export default function Week100({ brightMode }) {
       });
   }
 
-  const fetchUrl = `https://nova-platform.kr/home/hot_hashtag_feed?hashtag=${hashTag}`;
+  const fetchUrl = `https://nova-platform.kr/home/search_feed_with_hashtag?hashtag=${hashTag}`;
 
   const fetchTagFeed = useCallback(() => {
     fetch(fetchUrl, {

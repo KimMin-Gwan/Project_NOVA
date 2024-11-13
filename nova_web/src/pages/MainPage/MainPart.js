@@ -28,7 +28,7 @@ export default function MainPart({ brightMode }) {
       });
   }
 
-  const fetchUrl = `https://nova-platform.kr/home/hot_hashtag_feed?hashtag=${hashTag}`;
+  const fetchUrl = `https://nova-platform.kr/home/search_feed_with_hashtag?hashtag=${hashTag}`;
 
   const fetchTagFeed = useCallback(() => {
     fetch(fetchUrl, {
@@ -36,7 +36,6 @@ export default function MainPart({ brightMode }) {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("14111", data);
         setTagFeed(data.body.feed);
       });
   }, [fetchUrl]);
