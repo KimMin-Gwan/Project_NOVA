@@ -55,7 +55,7 @@ const WriteFeed = () => {
         fid: "",
         fclass: fclassName[currentFclass],
         choice: choice, // 4지선다 선택지 반영
-        hashtag: "test",
+        hashtag: tagList,
       },
     };
 
@@ -168,11 +168,6 @@ const WriteFeed = () => {
         </div>
 
         <div className={style["write-container"]}>
-          {/* <div className={style['sup_info']}>
-                        <div id={style['nick_name']}>지지자</div>
-                        <div id={style.date}>2024/02/02</div>
-                    </div> */}
-
           <div className={style["boxbox"]}>
             <div className={style["hash-tag-area"]}>
               <div id={style["hashtag"]}>해시태그</div>
@@ -254,23 +249,23 @@ const WriteFeed = () => {
               </div>
               <img className={style["order_btn"]} src={back} alt="next" onClick={handleNext}></img>
             </div>
-          </form>
-        </div>
-        <div className={style["func_part"]}>
-          <div className={style["btn_func_area"]}>
-            <div className={style["btn_func"]}>
-              <label class={style["custom-checkbox"]}>
-                <input name="comment" type="checkbox"></input>댓글 허용
-              </label>
-              <label class={style["custom-checkbox"]}>
-                <input name="share" type="checkbox"></input>공유 허용
-              </label>
+            <div className={style["func_part"]}>
+              <div className={style["btn_func_area"]}>
+                <div className={style["btn_func"]}>
+                  <label className={style["custom-checkbox"]}>
+                    <input name="comment" type="checkbox"></input>댓글 허용
+                  </label>
+                  <label className={style["custom-checkbox"]}>
+                    <input name="share" type="checkbox"></input>공유 허용
+                  </label>
+                </div>
+                <button type="submit" className={style["upload-btn"]}>
+                  업로드
+                </button>
+              </div>
+              <div className={style["warning_text"]}>타인에게 불편을 줄 수 있는 내용의 게시글은 경고 없이 삭제될 수 있습니다.</div>
             </div>
-            <button type="submit" className={style["upload-btn"]}>
-              업로드
-            </button>
-          </div>
-          <div className={style["warning_text"]}>타인에게 불편을 줄 수 있는 내용의 게시글은 경고 없이 삭제될 수 있습니다.</div>
+          </form>
         </div>
         <div className={style["empty-box"]}></div>
       </div>
