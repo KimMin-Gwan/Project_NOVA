@@ -14,15 +14,17 @@
   + 기획
     + 김민관 (COO)
     + 박세빈 (CMO)
-    + 김민정 (Project Manage)
     + 이현성 (CFO)
   + 디자인
     + 김수민 (AD)
   + 개발
     + 전성훈 (CTO)
     + 양승준 (WP)
-    + 최세영 (Backend Developer)
-    + 정현규 (Front Developer)
+    + 김나은 (FD)
+    + 신대홍 (BD)
+  + 조언
+    + YU ANTL
+
 
 ## 상세
  - type : Web Application
@@ -30,7 +32,6 @@
  - Framework : FastAPI
  - ASGI : uvicorn
  - Web Server : Nginx
- - Platform : http1.1
  
 ## 개발 공지
  - 문제 발생 및 해결 시 Issue에 개시
