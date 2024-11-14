@@ -24,7 +24,10 @@
   color: white;
   font-size: 25px;
   font-weight: 600;
-  padding: 20px;
+
+  width: 100%;
+  padding-block: 20px;
+  text-align: center;
 }
 
 .tag-container {
@@ -33,7 +36,8 @@
   width: 100%;
   margin-bottom: 10px;
   white-space: nowrap;
-
+  overflow-x: auto;
+  scrollbar-width: none;
   /* width: 500px; */
   /* overflow: auto; */
   margin-bottom: 10px;
@@ -50,4 +54,14 @@
   flex-shrink: 0;
   margin-left: 10px;
   cursor: pointer;
+}
+/* ----라이트 모드 ----- */
+.bright-mode {
+  background-color: white;
+}
+.container.bright-mode {
+  background-color: rgb(112, 112, 112);
+}
+.title.bright-mode {
+  color: #303030;
 }
