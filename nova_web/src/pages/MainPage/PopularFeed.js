@@ -63,7 +63,15 @@ export default function PopularFeed({ brightMode }) {
       <div className={`${style["top-area"]} ${style[getModeClass(mode)]}`}>
         <div className={style["content-title"]}>
           <header className={style["header-text"]}>최근 인기 게시글</header>
-          <img src={more_icon} alt="더보기" onClick={() => navigate("/feed_list?type=best")} className={`${style["more-icon"]} ${style[getModeClass(mode)]}`}></img>
+          <img
+            src={more_icon}
+            alt="더보기"
+            onClick={() => {
+              const brightModeValue = localStorage.getItem("brightMode");
+              navigate(`/feed_list?type=best&brightMode=${brightModeValue}`);
+            }}
+            className={`${style["more-icon"]} ${style[getModeClass(mode)]}`}
+          ></img>
         </div>
       </div>
 

@@ -6,6 +6,7 @@ import Feed, { Comments } from "./../../component/feed";
 import LeftBar from "./../WideVer/LeftBar.js";
 import RightBar from "./../WideVer/RightBar.js";
 import { useNavigate } from "react-router-dom";
+import { getModeClass } from "./../../App.js";
 export default function FeedHashList(isUserState) {
   const target = useRef(null);
   const observerRef = useRef(null);
@@ -14,6 +15,9 @@ export default function FeedHashList(isUserState) {
   let [feedData, setFeedData] = useState([]);
   let [nextData, setNextData] = useState([]);
   const [isActive, setIsActive] = useState(false);
+  const initialMode = localStorage.getItem("brightMode") === "true";
+  const [brightMode, setBrightMode] = useState(initialMode);
+
   function fetchData() {
     // setIsLoading(true);
     fetch("https://nova-platform.kr/home/home_feed", {
@@ -71,6 +75,10 @@ export default function FeedHashList(isUserState) {
       setFeedData([]);
     };
   }, []);
+  useEffect(() => {
+    // 모드가 변경되면 localStorage에 업데이트
+    localStorage.setItem("brightMode", brightMode);
+  }, [brightMode]);
 
   if (isLoading) {
     return <p>데이터 </p>;
