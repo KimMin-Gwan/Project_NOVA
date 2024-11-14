@@ -78,7 +78,13 @@ const SimpleSlider = ({ tagFeed, brightMode }) => {
                     <div className={style["name-container"]}>
                       <div className={style["profile"]}> </div>
                       <h2 className={style["name-text"]}>{feed.nickname}</h2>
-                      <button onClick={() => onClickMore(feed.fid)} className={`${style["more-see"]} ${style[getModeClass(mode)]}`}>
+                      <button
+                        onClick={() => {
+                          const brightModeValue = localStorage.getItem("brightMode");
+                          onClickMore(feed.fid, brightModeValue);
+                        }}
+                        className={`${style["more-see"]} ${style[getModeClass(mode)]}`}
+                      >
                         더보기
                       </button>
                     </div>
