@@ -1823,7 +1823,7 @@ h5 {
 }
 
 .num_like {
-  color: #ffffff;
+  color: #787878;
 }
 
 .like {
@@ -1952,4 +1952,19 @@ h5 {
 
 .empty-box {
   height: 30px;
+}
+
+/* --------라이트모드------- */
+.comment-box.bright-mode {
+  background-color: #ffffff;
+  border: 1px solid #787878;
+}
+.feed-text.bright-mode {
+  color: black;
+}
+.comment-write.bright-mode {
+  color: black;
+}
+.line.bright-mode {
+  border-color: #d2c8f7;
 }

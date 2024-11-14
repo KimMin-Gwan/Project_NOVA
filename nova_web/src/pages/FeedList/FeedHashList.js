@@ -171,7 +171,7 @@ export default function FeedHashList(isUserState) {
         </div>
         <div className={style["scroll-area"]}>
           {feedData.map((feed, i) => {
-            return <Feed key={feed.fid + i} className={`${style[getModeClass(mode)]}`} feed={feed} func={true} feedData={feedData} setFeedData={setFeedData} isUserState={isUserState}></Feed>;
+            return <Feed key={feed.fid + i} className={`${style["feed-box"]} ${style[getModeClass(mode)]}`} feed={feed} func={true} feedData={feedData} setFeedData={setFeedData} isUserState={isUserState}></Feed>;
           })}
           {isLoading && <p>Loading...</p>}
           <div ref={target} style={{ height: "1px", backgroundColor: "blue" }}></div>

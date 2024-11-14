@@ -58,7 +58,7 @@
   cursor: pointer;
 }
 /* ----라이트 모드 ----- */
-.bright-mode {
+.feed-box.bright-mode {
   background-color: white;
   color: #000000;
 }
@@ -67,4 +67,8 @@
 }
 .title.bright-mode {
   color: #303030;
+  background-color: #ffffff;
+}
+.tag-container.bright-mode {
+  background-color: #ffffff;
 }
