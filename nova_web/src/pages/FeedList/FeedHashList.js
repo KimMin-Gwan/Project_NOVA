@@ -14,35 +14,47 @@ export default function FeedHashList(isUserState) {
   let [feedData, setFeedData] = useState([]);
   let [nextData, setNextData] = useState([]);
   const [isActive, setIsActive] = useState(false);
-  function fetchData() {
+  let [hashTags, setHashTags] = useState([]);
+  let [tag, setTag] = useState('');
+  let [clickIndex, setClickIndex] = useState(0);
+
+  function fetchHashTagData() {
     // setIsLoading(true);
-    fetch("https://nova-platform.kr/home/home_feed", {
+    fetch("https://nova-platform.kr/home/hot_hashtag", {
       credentials: "include",
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("first feed 3개", data.body);
-        setFeedData(data.body.feed);
-        setNextData(data.body.key);
-        setIsLoading(false);
+        console.log("first feed 3개", data);
+        setHashTags(data.body.hashtags);
+        // setFeedData(data.body.feed);
+        // setNextData(data.body.key);
+        // setIsLoading(false);
       });
   }
 
+  // let fetchUrl = `https://nova-platform.kr/feed_explore/search_feed_with_hashtag?hashtag=${}&key=${}`
+
   function fetchPlusData() {
     // setIsLoading(true);
-    fetch(`https://nova-platform.kr/home/home_feed?key=${nextData}`, {
+    fetch(`https://nova-platform.kr/feed_explore/search_feed_with_hashtag?hashtag=임시`, {
       credentials: "include",
     })
       .then((response) => response.json())
       .then((data) => {
-        setNextData(data.body.key);
-        setFeedData((prevData) => {
-          const newData = [...prevData, ...data.body.feed];
-          return newData;
-        });
+        console.log('1241', data)
+        setFeedData(data.body.feed);
+        // setNextData(data.body.key);
+        // setFeedData((prevData) => {
+        //   const newData = [...prevData, ...data.body.feed];
+        //   return newData;
+        // });
         setIsLoading(false);
       });
   }
+  // useEffect(() => {
+  //   fetchPlusData()
+  // }, [])
 
   useEffect(() => {
     observerRef.current = new IntersectionObserver((entries) => {
@@ -66,15 +78,52 @@ export default function FeedHashList(isUserState) {
   }, [isLoading, nextData]);
 
   useEffect(() => {
-    fetchData();
-    return () => {
-      setFeedData([]);
-    };
+    fetchHashTagData();
+    // return () => {
+    //   setFeedData([]);
+    // };
   }, []);
+
+  function handleClickTag(index) {
+    fetchPlusData()
+    setClickIndex(index);
+  };
+  let scrollRef = useRef(null);
+  let [isDrag, setIsDrag] = useState(false);
+  let [dragStart, setDragStart] = useState("");
+  let [hasDragged, setHasDragged] = useState(false);
+
+  function onMouseDown(e) {
+    e.preventDefault();
+    setIsDrag(true);
+    setDragStart(e.pageX + scrollRef.current.scrollLeft);
+    setHasDragged(false);
+  }
+
+  function onMouseUp(e) {
+    setIsDrag(false);
+  }
+
+  function onMouseMove(e) {
+    if (isDrag) {
+      scrollRef.current.scrollLeft = dragStart - e.pageX;
+      setHasDragged(true);
+    }
+  }
+
+  function handleTagClick(index, tag) {
+    if (!hasDragged) {
+      handleClickTag(index);
+      setTag(tag);
+    }
+  }
+
 
   if (isLoading) {
     return <p>데이터 </p>;
   }
+
+
 
   return (
     <div className="all-box">
@@ -105,9 +154,21 @@ export default function FeedHashList(isUserState) {
           </div>
         </header>
         <div className={style.title}>시연</div>
-        <div className={style["tag-container"]}>
-          <button className={style["hashtag-text"]}># 시연</button>
-          <button className={style["hashtag-text"]}># 시연</button>
+        <div ref={scrollRef}
+          onMouseDown={onMouseDown}
+          onMouseMove={onMouseMove}
+          onMouseUp={onMouseUp}
+          className={style["tag-container"]}>
+          {
+            hashTags.map((tag, i) => {
+              return (
+                <button key={i}
+                  style={{ background: clickIndex === i ? 'purple' : 'black' }}
+                  onClick={() => handleTagClick(i, tag)}
+                  className={style["hashtag-text"]}>#{tag}</button>
+              )
+            })
+          }
         </div>
         <div className={style["scroll-area"]}>
           {feedData.map((feed, i) => {
