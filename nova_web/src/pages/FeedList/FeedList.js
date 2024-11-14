@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, useLocation } from "react";
 import style from "./FeedHashList.module.css";
 import logo from "./../../img/NOVA.png";
 import menu from "./../../img/menu-burger.png";
@@ -6,6 +6,7 @@ import Feed, { Comments } from "./../../component/feed";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import LeftBar from "./../WideVer/LeftBar.js";
 import RightBar from "./../WideVer/RightBar.js";
+import { getModeClass } from "./../../App.js";
 export default function FeedList(isUserState) {
   const [params] = useSearchParams();
   const type = params.get("type");
@@ -16,10 +17,15 @@ export default function FeedList(isUserState) {
 
   let [feedData, setFeedData] = useState([]);
   let [nextData, setNextData] = useState([]);
+
+  const brightModeFromUrl = params.get("brightMode");
+
+  const initialMode = brightModeFromUrl || localStorage.getItem("brightMode") || "bright"; // URL에서 가져오고, 없으면 로컬 스토리지에서 가져옴
+  const [mode, setMode] = useState(initialMode);
   let navigate = useNavigate();
   function fetchData() {
     // setIsLoading(true);
-    if (type === 'best') {
+    if (type === "best") {
       fetch("https://nova-platform.kr/feed_explore/today_best", {
         credentials: "include",
       })
@@ -30,7 +36,7 @@ export default function FeedList(isUserState) {
           setNextData(data.body.key);
           setIsLoading(false);
         });
-    } else if (type === 'all') {
+    } else if (type === "all") {
       fetch("https://nova-platform.kr/feed_explore/all_feed", {
         credentials: "include",
       })
@@ -46,7 +52,7 @@ export default function FeedList(isUserState) {
 
   function fetchPlusData() {
     // setIsLoading(true);
-    if (type === 'best') {
+    if (type === "best") {
       fetch(`https://nova-platform.kr/feed_explore/today_best?key=${nextData}`, {
         credentials: "include",
       })
@@ -60,7 +66,7 @@ export default function FeedList(isUserState) {
           setIsLoading(false);
           console.log("mor", data);
         });
-    } else if (type === 'all') {
+    } else if (type === "all") {
       fetch(`https://nova-platform.kr/feed_explore/all_feed?key=${nextData}`, {
         credentials: "include",
       })
@@ -104,7 +110,10 @@ export default function FeedList(isUserState) {
       setFeedData([]);
     };
   }, []);
-
+  useEffect(() => {
+    // mode가 변경될 때만 localStorage에 저장
+    localStorage.setItem("brightMode", mode);
+  }, [mode]);
   if (isLoading) {
     return <p>데이터 불러오는 중</p>;
   }
@@ -114,7 +123,7 @@ export default function FeedList(isUserState) {
       <section className="contents com1">
         <LeftBar />
       </section>
-      <div className={style.container}>
+      <div className={`${style["container"]} ${style[getModeClass(mode)]}`}>
         <header className={style.header}>
           <div className="logo">
             <img
@@ -137,11 +146,11 @@ export default function FeedList(isUserState) {
             </button>
           </div>
         </header>
-        {type === "all" && <div className={style.title}>전체 피드</div>}
-        {type === "best" && <div className={style.title}>최근 인기 피드</div>}
+        {type === "all" && <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>전체 피드</div>}
+        {type === "best" && <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>최근 인기 피드</div>}
         <div className={style["scroll-area"]}>
           {feedData.map((feed, i) => {
-            return <Feed key={feed.fid + i} className="" feed={feed} func={true} feedData={feedData} setFeedData={setFeedData} isUserState={isUserState}></Feed>;
+            return <Feed key={feed.fid + i} className={`${style[getModeClass(mode)]}`} feed={feed} func={true} feedData={feedData} setFeedData={setFeedData} isUserState={isUserState}></Feed>;
           })}
           {isLoading && <p>Loading...</p>}
           <div ref={target} style={{ height: "1px", backgroundColor: "blue" }}></div>
