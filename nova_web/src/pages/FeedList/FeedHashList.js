@@ -15,13 +15,12 @@ export default function FeedHashList(isUserState) {
   let [feedData, setFeedData] = useState([]);
   let [nextData, setNextData] = useState([]);
   const [isActive, setIsActive] = useState(false);
-  const initialMode = localStorage.getItem("brightMode") === "true";
-  const [brightMode, setBrightMode] = useState(initialMode);
-
-  function fetchData() {
   let [hashTags, setHashTags] = useState([]);
   let [tag, setTag] = useState('');
   let [clickIndex, setClickIndex] = useState(0);
+
+  const initialMode = localStorage.getItem("brightMode") === "true";
+  const [brightMode, setBrightMode] = useState(initialMode);
 
   function fetchHashTagData() {
     // setIsLoading(true);
@@ -34,11 +33,11 @@ export default function FeedHashList(isUserState) {
         setHashTags(data.body.hashtags);
         // setFeedData(data.body.feed);
         // setNextData(data.body.key);
-        // setIsLoading(false);
+        setIsLoading(false);
       });
   }
 
-  // let fetchUrl = `https://nova-platform.kr/feed_explore/search_feed_with_hashtag?hashtag=${}&key=${}`
+  // let fetchUrl = `https://nova-platform.kr/feed_explore/search_feed_with_hashtag?hashtag=${tag}&key=${}`
 
   function fetchPlusData() {
     // setIsLoading(true);
