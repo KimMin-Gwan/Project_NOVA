@@ -119,7 +119,7 @@ const WriteFeed = () => {
 
     // 첫 글자가 #이면 제외하고 저장
     const processedText = inputText.startsWith("#") ? inputText.slice(1) : inputText;
-    if (processedText.length <= 4) {
+    if (processedText.length <= 12) {
       setInputTag(processedText);
       setInputTagCount(processedText.length); // 글자 수 업데이트
     }
@@ -128,7 +128,7 @@ const WriteFeed = () => {
   function onKeyDown(e) {
     if (e.key === "Enter") {
       // Enter 키로 태그 추가
-      if (inputTag && inputTagCount <= 4) {
+      if (inputTag && inputTagCount <= 12) {
         // 해시태그가 최대 글자 수 이내일 때만 추가
         setTagList([...tagList, `#${inputTag}`]); // 태그 목록에 추가
         setInputTag(""); // 입력 필드 초기화
@@ -152,6 +152,16 @@ const WriteFeed = () => {
       setInputBodyCount(e.target.value.length);
     }
   }
+
+  const [showImageModal, setShowImageModal] = useState(false);
+  const [showChoiceModal, setShowChoiceModal] = useState(false);
+
+  const handleImageModalOpen = () => setShowImageModal(true);
+  const handleChoiceModalOpen = () => setShowChoiceModal(true);
+  const closeModal = () => {
+    setShowImageModal(false);
+    setShowChoiceModal(false);
+  };
   return (
     <div className={`${style["test_container"]} ${style["container"]}`}>
       <div className={`${style["short_form"]} ${style["short_form_write"]}`}>
@@ -170,7 +180,16 @@ const WriteFeed = () => {
         <div className={style["write-container"]}>
           <div className={style["boxbox"]}>
             <div className={style["hash-tag-area"]}>
-              <div id={style["hashtag"]}>해시태그</div>
+              <div id={style["hashtag"]}>제목(해시태그)</div>
+
+              <input
+                type="text"
+                value={`#${inputTag}`} // #이 붙은 상태로 보여줌
+                onChange={onChangeTag}
+                onKeyDown={onKeyDown}
+                className={style["write-tag"]}
+              />
+              <span className={style["count-text"]}>{inputTagCount}/12</span>
               <div className={style["tag-container"]}>
                 {tagList.length !== 0 &&
                   tagList.map((tag, i) => (
@@ -182,14 +201,6 @@ const WriteFeed = () => {
                     </div>
                   ))}
               </div>
-              <input
-                type="text"
-                value={`#${inputTag}`} // #이 붙은 상태로 보여줌
-                onChange={onChangeTag}
-                onKeyDown={onKeyDown}
-                className={style["write-tag"]}
-              />
-              <span className={style["count-text"]}>{inputTagCount}/4</span>
             </div>
           </div>
 
@@ -209,46 +220,50 @@ const WriteFeed = () => {
             {/* <div className={`${style['write-image-box']}`}> */}
             {/* <div className={style['image-show']}> */}
             {/* <img src={back} alt="이미지" /> */}
-            <div className={`${style["write-image-box"]}`}>
-              <label className={style["upload_area"]} htmlFor={style["upload-file"]}>
-                {/* 업로드 */}
-                {imagePreview.length === 0 ? (
-                  <div className={style["upload-text"]}>
-                    <span>이미지 삽입</span>
-                    <div>PNG, SVG, JPG, WEPG, GIF 등</div>
-                  </div>
-                ) : (
-                  imagePreview.map((preview, index) => {
-                    return <img key={index} src={preview} alt={`preview ${index}`}></img>;
-                  })
-                )}
 
-                {/* {imagePreview.length!==0 ?
-                                    <img src={imagePreview} alt='preview'></img> :
-                                    '업로드'
-                                } */}
-              </label>
-              <input id={style["upload-file"]} type="file" accept="image/*" multiple onChange={handleFileChange}></input>
-            </div>
-            {/* {
-                            imagePreview && (<img src={imagePreview} alt="미리보기" />)
-                        } */}
-            {/* <input className={`${style['write-image-box']}`} type='file' onChange={handleFileChange}></input> */}
-            {/* </div> */}
-            {/* </div> */}
-            <div className={style["fclass_btn"]}>
-              <img className={style["order_btn"]} src={back} alt="prev" onClick={handlePrev}></img>
-              <div className={style["fclass-box"]}>
-                {/* 4지선다 */}
-                {currentTitle === 1 && <MultipleWrite choice={choice} handleChoiceChange={handleChoiceChange} />}
-                {/* 둘 중 하나 */}
-                {currentTitle === 2 && <BalanceWrite handleChoiceChange={handleChoiceChange} />}
-                {/* 정거장 */}
-                {currentTitle === 3 && <StationWrite handleChoiceChange={handleChoiceChange} />}
-                {currentTitle === 0 && <CardWrite />}
+            {/*모달 열기*/}
+            <button onClick={handleImageModalOpen}>이미지 편집</button>
+
+            <button onClick={handleChoiceModalOpen}>선택지 편집</button>
+
+            {/* 이미지 편집 모달 */}
+            <Modal show={showImageModal} closeModal={closeModal} title="이미지 편집">
+              {/* 이미지 관련 편집 내용 */}
+              <div className={`${style["write-image-box"]}`}>
+                <label className={style["upload_area"]} htmlFor={style["upload-file"]}>
+                  {/* 업로드 */}
+                  {imagePreview.length === 0 ? (
+                    <div className={style["upload-text"]}>
+                      <span>이미지 삽입</span>
+                      <div>PNG, SVG, JPG, WEPG, GIF 등</div>
+                    </div>
+                  ) : (
+                    imagePreview.map((preview, index) => {
+                      return <img key={index} src={preview} alt={`preview ${index}`} />;
+                    })
+                  )}
+                </label>
+                <input id={style["upload-file"]} type="file" accept="image/*" multiple onChange={handleFileChange}></input>
               </div>
-              <img className={style["order_btn"]} src={back} alt="next" onClick={handleNext}></img>
-            </div>
+            </Modal>
+
+            {/* 선택지 편집 모달 */}
+            <Modal show={showChoiceModal} closeModal={closeModal} title="선택지 편집">
+              {/* 선택지 편집 관련 내용 */}
+              <div className={style["fclass_btn"]}>
+                <img className={style["order_btn"]} src={back} alt="prev" onClick={handlePrev}></img>
+                <div className={style["fclass-box"]}>
+                  {/* 4지선다 */}
+                  {currentTitle === 1 && <MultipleWrite choice={choice} handleChoiceChange={handleChoiceChange} />}
+                  {/* 둘 중 하나 */}
+                  {currentTitle === 2 && <BalanceWrite handleChoiceChange={handleChoiceChange} />}
+                  {/* 정거장 */}
+                  {currentTitle === 3 && <StationWrite handleChoiceChange={handleChoiceChange} />}
+                  {currentTitle === 0 && <CardWrite />}
+                </div>
+                <img className={style["order_btn"]} src={back} alt="next" onClick={handleNext}></img>
+              </div>
+            </Modal>
             <div className={style["func_part"]}>
               <div className={style["btn_func_area"]}>
                 <div className={style["btn_func"]}>
@@ -314,3 +329,17 @@ function StationWrite({ handleChoiceChange }) {
     </div>
   );
 }
+
+const Modal = ({ show, closeModal, title, children }) => {
+  if (!show) return null;
+
+  return (
+    <div className={style["modal-overlay"]} onClick={closeModal}>
+      <div className={style["modal-content"]} onClick={(e) => e.stopPropagation()}>
+        <p className={style["modal-title"]}>{title}</p>
+        {children}
+        <button onClick={closeModal}>닫기</button>
+      </div>
+    </div>
+  );
+};

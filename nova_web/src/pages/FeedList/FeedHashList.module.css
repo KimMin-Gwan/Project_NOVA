@@ -42,6 +42,8 @@
   /* overflow: auto; */
   margin-bottom: 10px;
   justify-content: start;
+  padding-bottom: 15px;
+  height: 100%;
 }
 
 .hashtag-text {
@@ -56,12 +58,17 @@
   cursor: pointer;
 }
 /* ----라이트 모드 ----- */
-.bright-mode {
+.feed-box.bright-mode {
   background-color: white;
+  color: #000000;
 }
 .container.bright-mode {
   background-color: rgb(112, 112, 112);
 }
 .title.bright-mode {
   color: #303030;
+  background-color: #ffffff;
+}
+.tag-container.bright-mode {
+  background-color: #ffffff;
 }

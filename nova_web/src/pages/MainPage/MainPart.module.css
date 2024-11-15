@@ -282,8 +282,8 @@
 }
 
 .all-img > img {
-  width: 100%;
-  height: 100%;
+  width: 100px;
+  height: 100px;
   object-fit: cover;
 }
 
@@ -292,6 +292,8 @@
 
   span {
     color: #6c3bff;
+
+    height: 1em;
   }
 
   p {
@@ -306,8 +308,13 @@
     word-break: break-word;
     margin-bottom: 30px;
   }
+  .like-comment {
+    margin-top: auto;
+  }
 }
-
+.all-text_container {
+  height: 80px;
+}
 .all_see-button {
   width: 85%;
   align-self: center;
