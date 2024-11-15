@@ -10,7 +10,7 @@
         "group_bid": "",
         "password": "sample122",
         "alert": [],
-        "like": [],
+        "like": ["fid=date"],
         "my_comment": [],
         "active_feed": [],
         "feed_history": [],

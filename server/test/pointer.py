@@ -80,11 +80,33 @@ class FeedAlgo:
             feed_list.append(user)
 
         for single_feed in feed_list:
-            self.add_feed_node(fid=single_feed.fid, date=single_feed.date, 
-                          hashtag=single_feed.hashtag, uid=single_feed.uid)
+            self.add_feed_node(feed=single_feed)
 
         return
 
+    def modify_user_node(self, user:User):
+        user_node = self.user_node_avltree.get(uid)
+        feed_node_list = []
+
+        for like_id in user.like:
+            # 스프릿할것
+            fid = "fid"
+            date = "date"
+            # date를 datetime 객체로 바꿀것 
+
+            feed_node = self.feed_node_avltree.get(fid)
+
+            # 이미 커넥트 되어있다면 안해도됨
+            self.graph.connect_user_with_feed(feed_node, user_node, date=date)
+
+            feed_node_list.append(feed_node)
+
+        # 근데 리스트에 없는데 연결된 피드가 있음<
+        # 그럼 그 연결을 지우는 절차가 있어야됨
+        self.graph.clear_user_node_with_edge(user_node, feed_node_list)
+
+
+        return
 
 
     def add_feed_node(self, feed:Feed):
@@ -94,15 +116,15 @@ class FeedAlgo:
         hash_nodes = self.graph.add_hash_node(feed_node, feed.hashtag, feed.date)
 
 
-        self.graph.connect_feed_with_hash(feed_node, hash_nodes)
+        self.graph.connect_feed_with_hash(feed_node, hash_nodes, feed.date)
         self.feed_node_avltree.insert(key=fid, value = feed_node)
 
         for hash_node in hash_nodes:
             self.hash_node_avltree.insert(key=hash_node.hashtag, value = hash_node)
 
-        user_node = self.user_node_avltree.get(uid)
+        user_node = self.user_node_avltree.get(feed.uid)
 
-        self.graph.connect_user_with_feed(feed_node, user_node)
+        self.graph.connect_user_with_feed(feed_node, user_node, date=feed.date)
         return True
 
     def add_user_node(self, uid):
