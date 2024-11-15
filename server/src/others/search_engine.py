@@ -1,7 +1,7 @@
 import pandas as pd
 from bintrees import AVLTree
 from copy import copy
-from others.data_domain import Feed
+from others.data_domain import Feed, User
 from datetime import  datetime, timedelta
 
 
@@ -19,7 +19,16 @@ class FeedSearchEngine:
         self.__search_manager = SearchManager(database=database, feed_algorithm=self.__feed_algorithm)
 
         self.__recommand_manager = RecommandManager(database=database,feed_algorithm=self.__feed_algorithm)
-        self.db=database
+        self.__database=database
+
+    def try_test_graph_recommnad_system(self, fid):
+        feed = self.__database.get_data_with_id(target="fid", id=fid)
+        #result = self.__feed_algorithm.find_recommend_feed(start_fid=feed.fid)
+        result = "2"
+
+        return result
+
+
 
     # 피드 매니저가 관리중인 피드를 보기 위해 만든 함수
     def try_search_managed_feed(self, fid):
@@ -555,8 +564,6 @@ class RecommandManager:
 # --------------------------------------------------------------------------------------------
 
 
-
-
 # 오류 에러 처리 클래스
 class NodeNotExistError(Exception):
     pass
@@ -601,7 +608,7 @@ class Edge:
         self.target_node = target_node # 타겟 노드 저장
         self.gen_time_str = gen_time # 엣지의 생성 시간
 
-        # 이 엣지는 Feed-User 의  경우, 좋아요(star)를 누른 시간을 가지게 됨
+        # 이 엣지는 Feed-User 의 경우, 좋아요(star)를 누른 시간, Feed를 작성한 시간을 가지게 됨
         # Feed-Hashtag 의 경우, Feed 생성 시간을 이어 받게됨.
 
     # 동일한 엣지인지 서로 비교 해야함.
@@ -948,6 +955,7 @@ class FeedNode(BaseNode):
         for edge in self.iter_hashtag():
             edge.get_target_node().remove_edge(self)
 
+
 # class FeedChaosGraph
 #     1. initalize_variables
 #         self.nodes = {}
@@ -1041,10 +1049,11 @@ class FeedChaosGraph:
         return iter(self.nodes[node_type])
 
     # 생성 되어있는 노드 찾기
-    def find_node(self, node_type, node_id):
-        for already_node in self.iter_nodes(node_type):
-            if already_node.get_id() == node_id:
-                return already_node
+    def find_node(self, node_id):
+        for node_type in self.nodes.keys():
+            for already_node in self.iter_nodes(node_type):
+                if already_node.get_id() == node_id:
+                    return already_node
         return None
 
     # 노드 추가
@@ -1055,7 +1064,7 @@ class FeedChaosGraph:
                 raise NodetypeInputError("Node type is not valid")
 
             # 노드의 존재 여부 확인
-            if self.find_node(node_type, node_id) is not None:
+            if self.find_node(node_id) is not None:
                 raise NodeAlreadyExistError("Node is already exists")
 
             node = None
@@ -1151,7 +1160,7 @@ class FeedChaosGraph:
                 self.add_edge(feed_node, hash_node, feed.gen_time_str)
                 self.add_edge(hash_node, feed_node, feed.gen_time_str)
 
-            user_node = self.find_node("user", feed.uid)
+            user_node = self.find_node(feed.uid)
             self.add_edge(user_node, feed_node, feed.gen_time_str)
             self.add_edge(feed_node, user_node, feed.gen_time_str)
 
@@ -1162,7 +1171,7 @@ class FeedChaosGraph:
         user_queue = []
 
         # feed 노드 확인
-        feed_node = self.find_node("feed", start_fid)
+        feed_node = self.find_node(start_fid)
         # 각 연결된 유저 edge를 찾음
         sorted_edges_latest_related = sorted(feed_node.edges["user"])[:max_user_find]
         # 그 중, 가장 최근에 Feed에 관심을 가진(좋아요를 누른) 유저들 10명을 추려냄
@@ -1186,7 +1195,7 @@ class FeedChaosGraph:
         hash_queue = []
 
         # Feed node 확인
-        feed_node = self.find_node("feed", start_fid)
+        feed_node = self.find_node( start_fid)
         # 각 연결된 hash노드 엣지를 찾아냄
         sorted_edges_latest_related_hash = sorted(feed_node.edges["hashtag"])[:max_hash]
         # 여기서 이제 해시태그 노드들을 얻어냄
@@ -1204,16 +1213,74 @@ class FeedChaosGraph:
 
         return recommend_list
 
+#
+# class FeedAlgorithm:
+#     Feed 추천을 위해 만들어진 알고리즘을 담는 곳
+#     여기서는 그래프와 데이터들을 담고 있음
+#     __init__(database):
+#     db = database
+#     feed_table = []
+#     user_table = []
+#     hash_table = set()
+#     __feed_chaos_graph = FeedChaosGraph()
+#
+#     initialize_now_all_feed(db)
+#     initialize_user_table(db)
+#     initialize_graph()
+#
+#     1. initialize_all_feeds(database):
+#         1) 데이터들을 모두 객체화함
+#         2) 데이터들을 모두 테이블에 담는다.
+#         3) 데이터에 담긴 해시들을 꺼내서 set()에 담는다.
+#
+#     2. initialize_user_table(database):
+#         1) 유저 데이터들을 모두 불러와서 객체화
+#         2) 유저 테이블에 담는다.
+#
+#     3. initialize_graph(self):
+#         graph_initialize화를 함.
+#
+#     4. graph_nodes_print():
+#         print(self.__feed_chaos_graph.nodes)
+#
+#     5. graph_add_feed_node(feed):
+#         1) 피드테이블에 새롭게 생긴 피드를 추가
+#         2) 피드 노드를 생성하고, 그래프에 추가한다.
+#         3) 피드에 저장된 해시태그마다 테이블에 담고, 해시태그 노드를 만들어낸다.
+#         4) 글을 작성한 유저 노드를 찾아서 엣지를 연결한다. (이 때, 유저 노드가 없으면 실패)
+#
+#     6. graph_add_user_node(user):
+#         1) 유저테이블에 있는지 확인
+#         2) 없으면 노드를 만들어 붙임
+#
+#
+#     7. Graph_remove_node(node_id):
+#         1) 먼저 id를 통해 일치하는 노드들을 찾는다.
+#         2) 노드를 삭제한다.
+#         3) 노드타입에 따라 테이블도 삭제
+#
+#     8. Graph_remove_edge(source_id, target_id):
+#         1) 노드 찾기 (소스노드, 타겟노드)
+#         2) 엣지 삭제
+#
+#     9. find_recommend_feed(start_fid):
+#         1) 유저-feed 관계를 바탕으로 한 리스트 추출
+#         2) 해시태그-feed 관계를 바탕으로 한 리스트 추출
+
 class FeedAlgorithm:
     def __init__(self, database):
-        self.__now_all_feed=[]
-        self.__database=database
-        self.feed_chaos_graph = FeedChaosGraph()
-        self.__feed_table = []
-        self.__user_table = []
-        self.__hashtag_table = []
+        #self.__now_all_feed=[]
+        #self.__database=database
+        #self.__feed_table=[]
+        #self.__user_table=[]
+        #self.__hashtag_table= set()
+        #self.__feed_chaos_graph = FeedChaosGraph()
+        #self.__initialize_now_all_feed(database=self.__database)
+        #self.__initialize_user_table(database=self.__database)
+        #self.__initialize_graph()
+        return
 
-    def __initialize_feed_table(self, database):
+    def __initialize_now_all_feed(self, database):
         # 먼저 피드 데이터를 DB에서 불러오고
         feed_datas = database.get_all_data(target="fid")
 
@@ -1221,8 +1288,11 @@ class FeedAlgorithm:
         for feed_data in feed_datas:
             feed = Feed()
             feed.make_with_dict(dict_data=feed_data)
+            hashtags = feed.hashtag
+            # 중복되는 태그들은 전부 없어지고 하나만 남는다.
+            for hashtag in hashtags:
+                self.__hashtag_table.add(hashtag)
             self.__feed_table.append(feed)
-
 
     def __initialize_user_table(self, database):
         # 유저 데이터를 불러온 후
@@ -1234,11 +1304,95 @@ class FeedAlgorithm:
             user.make_with_dict(dict_data=user_data)
             self.__user_table.append(user)
 
-    def initialize_graph(self):
-        self.feed_chaos_graph.initialize_graph_nodes(feed_table=self.__feed_table, user_table=self.__user_table)
+    def __initialize_graph(self):
+        self.__feed_chaos_graph.initialize_graph_nodes(feed_table=self.__feed_table, user_table=self.__user_table)
 
+
+    # 그래프 출력
     def print_graph_all_nodes(self):
-        print(self.feed_chaos_graph.nodes)
+        print(self.__feed_chaos_graph.nodes)
 
 
+    def graph_add_feed_node(self, feed:Feed):
+        # 피드 노드가 이미 존재한다면
+        if feed in self.__feed_table:
+            return False
 
+        # feed 노드를 만들어서 그래프에 추가
+        feed_node = self.__feed_chaos_graph.add_node("feed", feed.fid)
+        uid_written_feed = feed.uid
+        gen_time = feed.date
+
+        # Feed에 연결된 해시태그 노드들을 만든다.
+        hashtags = feed.hashtag
+        for hashtag in hashtags:
+            self.__hashtag_table.add(hashtag)
+            self.__feed_chaos_graph.add_node("hashtag", hashtag)
+            self.__feed_chaos_graph.add_edge(source_node=feed.hashtag, target_node=hashtag, gen_time_str=gen_time)
+
+        # 유저를 찾아서 feed-user 엣지를 이어본다
+        user_node = self.__feed_chaos_graph.find_node(uid_written_feed)
+        if user_node is None:
+            print("there is not written_user in feed_chaos_graph")
+            return False
+        self.__feed_chaos_graph.add_edge(source_node=feed_node, target_node=user_node, gen_time_str=gen_time)
+        return True
+
+    # 유저 노드 추가
+    def graph_add_user_node(self, user:User):
+        if user in self.__user_table:
+            return False
+        self.__feed_chaos_graph.add_node("user", user.uid)
+        return True
+
+    # 그래프 노드 삭제
+    def graph_remove_node(self, node_id):
+        # 삭제할 노드를 찾는다.
+        remove_want_node = self.__feed_chaos_graph.find_node(node_id)
+        # 노드를 못찾으면 false 반환
+        if remove_want_node is None:
+            return False
+        # 노드 삭제
+        node_type = remove_want_node.node_type
+        self.__feed_chaos_graph.remove_node(node_type=node_type, node_id=node_id)
+
+        # 테이블 에서도 삭제 해야 함
+        if node_type == "feed":
+            for feed in self.__feed_table:
+                if feed.fid == node_id:
+                    self.__feed_table.pop(self.__feed_table.index(feed))
+                    break
+        elif node_type == "hashtag":
+            self.__hashtag_table.remove(node_id)
+
+        elif node_type == "user":
+            for user in self.__user_table:
+                if user.uid == node_id:
+                    self.__user_table.pop(self.__user_table.index(user))
+                    break
+
+        return True
+
+    # 엣지 삭제
+    def graph_remove_edge(self, source_id, target_id):
+        source_node = self.__feed_chaos_graph.find_node(source_id)
+        target_node = self.__feed_chaos_graph.find_node(target_id)
+
+        #만약에 두 노드 중 하나라도 못 찾으면
+        if source_node is None or target_node is None:
+            return False
+
+        # 엣지 삭제
+        self.__feed_chaos_graph.remove_edge(source_node, target_node)
+        return True
+
+    # 추천 피드 찾기
+    def find_recommend_feed(self, start_fid):
+        # 유저-feed 간 관계(시간)을 통해서 찾음.
+        user_recommend_list = self.__feed_chaos_graph.feed_recommend_by_user(start_fid)
+        # 해시태그-feed 간 관계(추가된 시간)
+        hashtag_recommend_list = self.__feed_chaos_graph.feed_recommend_by_hashtag(start_fid)
+
+        result = list(set(user_recommend_list + hashtag_recommend_list))
+
+        return result

@@ -34,25 +34,20 @@ class Sub_Service_View(Master_View):
             target = "버튜버"
             num_feed= 10
             index = 240
+            fid = 10
 
             # 여기서 만든 함수 실행
             #result , result_index = self.__feed_search_engine.try_get_feed_in_recent(target_type=target_type, target = target, num_feed=num_feed, index=index)
             #result , result_index = self.__feed_search_engine.try_get_feed_in_recent(search_type ="today", num_feed= 6, index=-2)
             
-            result , result_index = self.__feed_search_engine.try_get_feed_in_recent(
-                search_type="recent", num_feed=6, index=-1)
+            result = self.__feed_search_engine.try_test_graph_recommnad_system(
+                fid=fid)
+               
 
 
             feed_data = self.__database.get_datas_with_ids(target_id="fid", ids=result)
 
-
-            # 여기서 결과 확인
-
-            for feed in feed_data:
-                print(feed['date'])
-
-            #print(feed_data)
-            pprint(result_index)
+            pprint(feed_data)
 
             return True
         

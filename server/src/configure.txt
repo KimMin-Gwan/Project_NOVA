@@ -1,5 +1,5 @@
 HOST = 127.0.0.1
-PORT = 6000
+PORT = 4000
 VERSION = 0.9.6
 num_fclass = 5
 fclass0 = [None, 랜덤, 밤 하늘을 올려다 보는 것 처럼, -1]
