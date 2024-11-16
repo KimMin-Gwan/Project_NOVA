@@ -465,7 +465,8 @@ h5 {
 
 .star-img {
   /* filter: invert(53%) sepia(1%) saturate(0%) hue-rotate(213deg) brightness(94%) contrast(88%); */
-  filter: invert(98%) sepia(98%) saturate(7495%) hue-rotate(356deg) brightness(102%) contrast(104%);
+  filter: invert(98%) sepia(98%) saturate(7495%) hue-rotate(356deg)
+    brightness(102%) contrast(104%);
 }
 
 /* 버튼 공통 속성 */
@@ -541,7 +542,7 @@ h5 {
   left: 0;
   right: 0;
   bottom: 0;
-  height: 1000px;
+  height: 700px;
   width: 100%;
 }
 
