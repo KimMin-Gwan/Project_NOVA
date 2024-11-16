@@ -1,0 +1,52 @@
+[
+  {
+    "star": 100,
+    "fid": "33",
+    "uid": "abcd-1234-5678",
+    "nickname": "바위게",
+    "body": "과징금 크악! 바로 리부트 정상화 OUT!, 민심 돌리기 들어가는 신 창 섭",
+    "date": "2024/11/01-08:32:25",
+    "fclass": "card",
+    "class_name": "자랑",
+    "choice": [],
+    "result": [],
+    "state": "y",
+    "attend": [],
+    "comment": [],
+    "category": [],
+    "image": [
+      "https://kr.object.ncloudstorage.com/nova-feed-images/%EC%9D%B4%EC%8B%9C%EC%97%B0-%EC%8B%9C%EC%97%B0%20%281%29.gif",
+      "https://kr.object.ncloudstorage.com/nova-feed-images/%EC%B5%B82.gif"
+    ],
+    "hashtag": [
+      "God",
+      "Chang",
+      "Sub"
+    ]
+  },
+
+  {
+    "star": 100,
+    "fid": "34",
+    "uid": "asd0-19xd-a223",
+    "nickname": "피터",
+    "body": "내가 없다면 이 세상은 어떻게 될까?",
+    "date": "2024/11/12-12:13:45",
+    "fclass": "card",
+    "class_name": "자랑",
+    "choice": [],
+    "result": [],
+    "state": "y",
+    "attend": [],
+    "comment": [],
+    "category": [],
+    "image": [
+      "https://kr.object.ncloudstorage.com/nova-feed-images/%EC%9D%B4%EC%8B%9C%EC%97%B0-%EC%8B%9C%EC%97%B0%20%281%29.gif",
+      "https://kr.object.ncloudstorage.com/nova-feed-images/%EC%B5%B82.gif"
+    ],
+    "hashtag": [
+      "NewWork",
+      "Spider Man"
+    ]
+  }
+]

@@ -1,3 +1,6 @@
+from email.policy import default
+from time import sleep
+
 import pandas as pd
 from bintrees import AVLTree
 from copy import copy
@@ -158,7 +161,65 @@ class FeedSearchEngine:
 
         return result
 
+    # ----------------------------------------------------------------------------------------------------------
+    # feed algorithm 테스트용
+    #
 
+    # 1. 그래프 호출
+    # 2. 노드 얻기
+    # 3. 유저 노드 추가
+    # 4. Feed 노드 추가 (Hash까지 추가)
+    # 5. 유저 지우기
+    # 6. Feed 지우기
+    # 7. Feed 좋아요 누르기
+    # 8. Feed 좋아요 헤제하기
+
+    def try_graph_call(self):
+        print(self.__feed_algorithm)
+
+    def try_get_user_node_call(self):
+        pprint(self.__feed_algorithm.get_user_nodes())
+
+    def try_get_feed_node_call(self):
+        pprint(self.__feed_algorithm.get_feed_nodes())
+
+    def try_get_hash_node_call(self):
+        pprint(self.__feed_algorithm.get_hash_nodes())
+
+    def try_add_user(self, user:User):
+        # 받은 유저 추가
+        result = self.__feed_algorithm.add_user_node(user)
+
+        if result:
+            return True
+        return False
+
+    def try_remove_user(self, uid):
+        result = self.__feed_algorithm.remove_user_node(uid)
+
+        if result:
+            return True
+        return False
+
+    def try_add_feed(self, feed:Feed):
+        result = self.__feed_algorithm.add_feed_node(feed)
+
+        return result
+
+    def try_remove_feed(self, fid):
+        result = self.__feed_algorithm.remove_feed_node(fid)
+        return result
+
+    def try_like_feed(self, fid, uid, like_time):
+        result = self.__feed_algorithm.connect_feed_like_user(fid=fid, uid=uid, like_time=like_time)
+        return result
+
+    def try_dislike_feed(self, fid, uid):
+        result = self.__feed_algorithm.disconnect_feed_like_user(fid=fid, uid=uid)
+        return result
+
+    def try_modify_hash(self, fid, new_hashtags):
+        return
     # ------------------------------------------------------------------------------------------------------------
 
 
@@ -710,7 +771,8 @@ class BaseNode:
         # 엣지 찾기
         for edge in self.edges[node_type]:
             if target_node == edge.get_target_node():
-                self.edges[node_type] = [edge_2 for edge_2 in self.edges[node_type] if edge_2.get_target_node() == target_node]
+                self.edges[node_type].remove(edge)
+                # self.edges[node_type] = [edge_2 for edge_2 in self.edges[node_type] if edge_2.get_target_node() == target_node]
                 return True
         return False
 
@@ -1007,6 +1069,7 @@ class FeedChaosGraph:
 
         for edge in edge_list:
             if edge.get_target_node() == target_node:
+                print("found")
                 return True
         return False
 
@@ -1167,8 +1230,11 @@ class FeedChaosGraph:
 #           hash_avltree = AVLTree()
 #           __initialize_graph()
 #
-#     __call__():
-#           pprint(INFO)
+#     __str__():
+#         출력 포맷 설정
+#
+#     get_nodes_list():
+#         노드에 대한 정보 공개
 #
 #     1. initialize_all_feeds(database):
 #         1) 데이터들을 모두 객체화함
@@ -1210,15 +1276,27 @@ class FeedChaosGraph:
 #         2) 해시태그-feed 관계를 바탕으로 한 리스트 추출
 class FeedAlgorithm:
     def __init__(self, database):
-        self.feed_chaos_graph = FeedChaosGraph()
-        self.feed_node_avltree = AVLTree()
-        self.user_node_avltree = AVLTree()
-        self.hash_node_avltree = AVLTree()
+        self.__feed_chaos_graph = FeedChaosGraph()
+        self.__feed_node_avltree = AVLTree()
+        self.__user_node_avltree = AVLTree()
+        self.__hash_node_avltree = AVLTree()
         self.__initialize_graph(database=database)
 
-    def __call__(self):
-        all_node_feeds = len(self.feed_node_avltree) + len(self.user_node_avltree) + len(self.hash_node_avltree)
-        print(f'INFO<-[    {all_node_feeds} nodes in NOVA Graph IN SEARCH ENGINE NOW READY')
+    def __str__(self):
+        all_node_feeds = len(self.__feed_node_avltree) + len(self.__user_node_avltree) + len(self.__hash_node_avltree)
+        return (f"INFO<-[    {all_node_feeds} nodes in NOVA Graph IN SEARCH ENGINE NOW READY\n" +
+                f"             {list(self.__feed_node_avltree.values())} feed node in Graph.\n" +
+                f"             {list(self.__user_node_avltree.values())} user node in Graph.\n" +
+                f"             {list(self.__hash_node_avltree.values())} hash node in Graph.\n" )
+
+    def get_user_nodes(self):
+        return list(self.__user_node_avltree.values())
+
+    def get_feed_nodes(self):
+        return list(self.__feed_node_avltree.values())
+
+    def get_hash_nodes(self):
+        return list(self.__hash_node_avltree.values())
 
     def __initialize_graph(self, database):
         user_datas = database.get_all_data(target="uid")
@@ -1246,12 +1324,12 @@ class FeedAlgorithm:
         for feed in feed_list:
             self.add_feed_node(feed)
 
-        all_node_feeds = len(self.feed_node_avltree) + len(self.user_node_avltree) + len(self.hash_node_avltree)
+        all_node_feeds = len(self.__feed_node_avltree) + len(self.__user_node_avltree) + len(self.__hash_node_avltree)
         print(f'INFO<-[      {all_node_feeds} nodes in NOVA Graph IN SEARCH ENGINE NOW READY')
 
-        print(f"             {len(self.feed_node_avltree)} feed node in Graph.")
-        print(f"             {len(self.user_node_avltree)} user node in Graph.")
-        print(f"             {len(self.hash_node_avltree)} hash node in Graph.")
+        print(f"             {list(self.__feed_node_avltree.values())} feed node in Graph.")
+        print(f"             {list(self.__user_node_avltree.values())} user node in Graph.")
+        print(f"             {list(self.__hash_node_avltree.values())} hash node in Graph.")
 
         return
 
@@ -1260,76 +1338,101 @@ class FeedAlgorithm:
         hash_nodes = []
         for hashtag in hashtags:
             # 해시 태그 마다 노드를 생성
-            hash_node = self.feed_chaos_graph.add_node(node_type="hashtag", node_id=hashtag, tree=self.hash_node_avltree)
+            hash_node = self.__feed_chaos_graph.add_node(node_type="hashtag", node_id=hashtag, tree=self.__hash_node_avltree)
             # 반환할 노드
             hash_nodes.append(hash_node)
         return hash_nodes
 
-    # 유저 노드 추가
+    # 유저 노드 추가 (테스트 O)
     def add_user_node(self, user:User):
+        if self.__user_node_avltree.get(key=user.uid):
+            return False
+
         # 이미 노드가 트리에 존재 함 -> 노드 객체가 전부 포인터로 이루어져 있어서 트리, 그래프 모두 있음
-        user_node = self.feed_chaos_graph.add_node(node_type="user", node_id=user.uid, tree=self.user_node_avltree)
+        user_node = self.__feed_chaos_graph.add_node(node_type="user", node_id=user.uid, tree=self.__user_node_avltree)
         return user_node
 
     # Feed 노드 추가
     def add_feed_node(self, feed:Feed):
+        if self.__feed_node_avltree.get(key=feed.fid):
+            return "case1"
+
         hashtags = feed.hashtag     # feed에 담긴 해시태그
-        gen_time = feed.date
+        gen_time = datetime.strptime(feed.date, '%Y/%m/%d-%H:%M:%S')
 
         # 피드 노드 생성
-        feed_node = self.feed_chaos_graph.add_node(node_type="feed", node_id=feed.fid, tree=self.feed_node_avltree)
-        # 해시 노드 생성
+        feed_node = self.__feed_chaos_graph.add_node(node_type="feed", node_id=feed.fid, tree=self.__feed_node_avltree)
+        # 해시 노드 생성 (해시 노드들은 생성이 될 때, 이미 존재하는 노드들이라면 그 노드를 반환함
         hash_nodes = self.__add_hash_nodes(hashtags=hashtags)
 
         # Feed - 해시노드 간 edge 생성
-        self.feed_chaos_graph.connect_feed_with_hashs(feed_node=feed_node, hash_nodes=hash_nodes, date=gen_time)
+        self.__feed_chaos_graph.connect_feed_with_hashs(feed_node=feed_node, hash_nodes=hash_nodes, date=gen_time)
 
-        user_node = self.user_node_avltree.get(feed.uid)
+
+        if feed.uid not in self.__user_node_avltree:
+            return "case2"
+        user_node = self.__user_node_avltree.get(feed.uid)
+
         # 작성한 글쓴이와 Feed 연결
-        self.feed_chaos_graph.connect_feed_with_user(feed_node=feed_node, user_node=user_node, date=gen_time)
+        self.__feed_chaos_graph.connect_feed_with_user(feed_node=feed_node, user_node=user_node, date=gen_time)
 
-        return feed_node
+        return "case success"
 
     # Feed 노드 삭제
     def remove_feed_node(self, fid):
-        feed_node = self.feed_node_avltree.get(key=fid)
-        self.feed_chaos_graph.remove_node(node=feed_node, tree=self.feed_node_avltree)
+        # 해당하는 Feed가 존재히지 않는 경우, False를 반환
+        feed_node = self.__feed_node_avltree.get(key=fid)
+        if not feed_node:
+            return False
+        return self.__feed_chaos_graph.remove_node(node=feed_node, tree=self.__feed_node_avltree)
 
     # 유저 노드 삭제
     def remove_user_node(self, uid):
-        user_node = self.user_node_avltree.get(key=uid)
-        self.feed_chaos_graph.remove_node(node=user_node, tree=self.user_node_avltree)
+        # 만약 uid에 해당하는 노드가 존재하지 않는다면 삭제할 수 없으니 False를 반한
+        user_node = self.__user_node_avltree.get(key=uid)
+        if not user_node:
+            return False
+        return self.__feed_chaos_graph.remove_node(node=user_node, tree=self.__user_node_avltree)
 
     # feed_node 해시 태그 수정
     def modify_feed_node(self, feed:Feed):
-        feed_node = self.feed_node_avltree.get(key=feed.fid)
+        if feed.id not in self.__feed_node_avltree:
+            return False
+
+        feed_node = self.__feed_node_avltree.get(key=feed.fid)
         new_hashtags = feed.hashtag
+        feed_date = datetime.strptime(feed.date, '%Y/%m/%d-%H:%M:%S')
 
         new_hash_nodes = self.__add_hash_nodes(hashtags=new_hashtags)
-        self.feed_chaos_graph.connect_feed_with_hashs(feed_node=feed_node, hash_nodes=new_hash_nodes, date=feed.date)
+        self.__feed_chaos_graph.connect_feed_with_hashs(feed_node=feed_node, hash_nodes=new_hash_nodes, date=feed_date)
 
         # 새롭게 연결된 새로운 해시노드들과 비교하여 옛날의 해시태그의 엣지들을 끊어내는 작업
-        self.feed_chaos_graph.sync_feed_with_hashs(feed_node=feed_node, new_hash_nodes=new_hash_nodes)
+        self.__feed_chaos_graph.sync_feed_with_hashs(feed_node=feed_node, new_hash_nodes=new_hash_nodes)
+
+        return True
 
     # 좋아요를 누른 게시글과 유저 잇기
     def connect_feed_like_user(self, uid, fid, like_time):
-        user_node = self.user_node_avltree.get(key=uid)
-        feed_node = self.feed_node_avltree.get(key=fid)
+        if uid not in self.__user_node_avltree or fid not in self.__feed_node_avltree:
+            return False
+        user_node = self.__user_node_avltree.get(key=uid)
+        feed_node = self.__feed_node_avltree.get(key=fid)
 
-        self.feed_chaos_graph.connect_feed_with_user(feed_node=feed_node, user_node=user_node, date=like_time)
+        self.__feed_chaos_graph.connect_feed_with_user(feed_node=feed_node, user_node=user_node, date=like_time)
+        return True
 
     # 좋아요를 해제한 게시글과 유저 엣지 제거
     def disconnect_feed_like_user(self, uid, fid):
-        user_node = self.user_node_avltree.get(key=uid)
-        feed_node = self.feed_node_avltree.get(key=fid)
+        user_node = self.__user_node_avltree.get(key=uid)
+        feed_node = self.__feed_node_avltree.get(key=fid)
 
-        self.feed_chaos_graph.disconnect_feed_with_user(feed_node=feed_node, user_node=user_node)
+        return self.__feed_chaos_graph.disconnect_feed_with_user(feed_node=feed_node, user_node=user_node)
 
     # 추천 feed를 찾아줌
     def recommend_next_feed(self, start_feed:Feed, history:list):
-        start_feed_node = self.feed_node_avltree.get(key=start_feed.fid)
-        user_feed_recommend_list = self.feed_chaos_graph.feed_recommend_by_user(start_node=start_feed_node)
-        hash_feed_recommend_list = self.feed_chaos_graph.feed_recommend_by_hashtag(start_node=start_feed.fid)
+        start_feed_node = self.__feed_node_avltree.get(key=start_feed.fid)
+        user_feed_recommend_list = self.__feed_chaos_graph.feed_recommend_by_user(start_node=start_feed_node)
+        hash_feed_recommend_list = self.__feed_chaos_graph.feed_recommend_by_hashtag(start_node=start_feed.fid)
 
         result_fid_list = user_feed_recommend_list + hash_feed_recommend_list
 

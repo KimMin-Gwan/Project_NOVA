@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Any, Optional
 from fastapi import FastAPI
 from view.master_view import Master_View, RequestHeader
@@ -5,7 +6,13 @@ from view.parsers import Head_Parser
 from controller import Sub_Controller
 from fastapi.responses import HTMLResponse
 from others import FeedSearchEngine
+from others.data_domain import Feed, User
 from pprint import pprint
+
+
+import os
+
+import json
 
 class Sub_Service_View(Master_View):
     def __init__(self, app:FastAPI, endpoint:str, database, head_parser:Head_Parser,
@@ -20,6 +27,13 @@ class Sub_Service_View(Master_View):
         self.test_route()
 
 
+        # feed algorithm test
+        self.user_add_test()
+        self.user_remove_test()
+        self.feed_add_test()
+        self.feed_remove_test()
+        self.like_feed_test()
+        self.dislike_feed_test()
 
     def test_route(self):
         @self.__app.get("/testing/try_get_feed")
@@ -51,6 +65,99 @@ class Sub_Service_View(Master_View):
 
             return True
         
+    def user_add_test(self):
+        @self.__app.get("/testing/try_add_user")
+        def try_add_user(user_data_url:str):
+            with open(user_data_url, 'r', encoding='utf-8') as f:
+                user_data = json.load(f)
+
+            user_list = []
+            for user in user_data:
+                test_user = User()
+                test_user.make_with_dict(dict_data=user)
+                user_list.append(test_user)
+
+            self.__feed_search_engine.try_graph_call()
+
+            for single_user in user_list:
+                result = self.__feed_search_engine.try_add_user(single_user)
+                if result:
+                    print(f"'{single_user.uid}' successfully added")
+                else:
+                    print(f"'{single_user.uid}' is already exist")
+            self.__feed_search_engine.try_graph_call()
+            return True
+
+    def user_remove_test(self):
+        @self.__app.get("/testing/try_remove_user")
+        def try_remove_user(target_uid:str):
+            if self.__feed_search_engine.try_remove_user(target_uid):
+                print(f'{target_uid} successfully removed')
+            else:
+                print(f'{target_uid} is not exist')
+
+            self.__feed_search_engine.try_graph_call()
+            return True
+
+    def feed_add_test(self):
+        @self.__app.get("/testing/try_add_feed")
+        def try_add_feed(feed_data_url:str):
+            with open(feed_data_url, 'r', encoding='utf-8') as f:
+                feed_data = json.load(f)
+
+            feed_list = []
+            for feed in feed_data:
+                test_feed = Feed()
+                test_feed.make_with_dict(dict_data=feed)
+                feed_list.append(test_feed)
+
+            self.__feed_search_engine.try_graph_call()
+
+            for single_feed in feed_list:
+                result = self.__feed_search_engine.try_add_feed(single_feed)
+                if result == "case success":
+                    print(f'{single_feed.fid} successfully added')
+                elif result == "case1":
+                    print(f'{single_feed.fid} is already exist')
+                elif result == "case2":
+                    print(f'{single_feed.fid} successfully add, but user does not exist')
+
+            self.__feed_search_engine.try_graph_call()
+            return True
+
+    def feed_remove_test(self):
+        @self.__app.get("/testing/try_remove_feed")
+        def try_remove_feed(target_fid:str):
+            if self.__feed_search_engine.try_remove_feed(target_fid):
+                print(f'{target_fid} successfully removed')
+            else:
+                print(f'{target_fid} is not exist')
+
+            self.__feed_search_engine.try_graph_call()
+            return True
+
+    def like_feed_test(self):
+        @self.__app.get("/testing/try_like_feed")
+        def try_like_feed(fid:str, uid:str):
+            like_time_str = datetime.now().strftime("%Y/%m/%d-%H:%M:%S")
+            like_time = datetime.strptime(like_time_str, '%Y/%m/%d-%H:%M:%S')
+
+            if self.__feed_search_engine.try_like_feed(fid, uid, like_time):
+                print(f'{fid} - {uid} like successfully connected')
+            else:
+                print(f'{fid} - {uid} like not connect')
+
+            return True
+
+    def dislike_feed_test(self):
+        @self.__app.get("/testing/try_dislike_feed")
+        def try_dislike_feed(fid:str, uid:str):
+            if self.__feed_search_engine.try_dislike_feed(fid, uid):
+                print(f'{fid} - {uid} like successfully disconnected')
+            else:
+                print(f'{fid} - {uid} like not connected')
+
+            return True
 
 
 

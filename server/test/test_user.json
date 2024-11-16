@@ -1,0 +1,58 @@
+[
+  {
+    "uid": "asd0-19xd-a223",
+    "uname": "피터 파커",
+    "age": "18",
+    "email": "spiderman123@gmail.com",
+    "gender": "m",
+    "credit": 0,
+    "solo_bid": "",
+    "group_bid": "",
+    "password": "sample122",
+    "alert": [],
+    "like": ["fid=date"],
+    "my_comment": [],
+    "active_feed": [],
+    "feed_history": [],
+    "my_feed": [],
+    "feed_search_history": []
+  },
+
+  {
+    "uid": "iskx-ks10-s2nk",
+    "uname": "스티븐",
+    "age": "23",
+    "email": "steven43@gmail.com",
+    "gender": "m",
+    "credit": 0,
+    "solo_bid": "",
+    "group_bid": "",
+    "password": "sample122",
+    "alert": [],
+    "like": ["fid=date"],
+    "my_comment": [],
+    "active_feed": [],
+    "feed_history": [],
+    "my_feed": [],
+    "feed_search_history": []
+  },
+
+  {
+    "uid": "lkni-dl2v-12ei",
+    "uname": "지지자2",
+    "age": "23",
+    "email": "randomuser010@gmail.com",
+    "gender": "m",
+    "credit": 0,
+    "solo_bid": "",
+    "group_bid": "",
+    "password": "sample122",
+    "alert": [],
+    "like": ["fid=date"],
+    "my_comment": [],
+    "active_feed": [],
+    "feed_history": [],
+    "my_feed": [],
+    "feed_search_history": []
+  }
+]

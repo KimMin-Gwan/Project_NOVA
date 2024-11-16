@@ -21,7 +21,7 @@ from bintrees import AVLTree
 tree = AVLTree()
 
 class Edge:
-        self.user_node_avltree
+        self.__user_node_avltree
     def __init__(self):
         self.
 
