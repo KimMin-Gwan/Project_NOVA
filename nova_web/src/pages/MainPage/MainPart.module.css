@@ -327,7 +327,11 @@
   cursor: pointer;
   text-shadow: 0 0 1px white;
 }
-
+@media (max-width: 1024px) {
+  .all_see-button {
+    margin-bottom: 70px;
+  }
+}
 /* --------------- */
 /* 라이트모드 스타일 */
 

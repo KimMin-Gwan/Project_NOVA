@@ -3,8 +3,10 @@ import { useNavigate } from "react-router-dom";
 import style from "./../FeedPage/FeedPage.module.css";
 import stylePlanet from "./../PlanetPage/Planet.module.css";
 import backword from "./../../img/back_icon.png";
-import forward from "./../../img/Icon.png";
+
 import back from "./../../img/write_vector1.png";
+import select from "./../../img/select-icon.png";
+import img from "./../../img/img-icon.png";
 
 const WriteFeed = () => {
   const navigate = useNavigate();
@@ -222,9 +224,17 @@ const WriteFeed = () => {
             {/* <img src={back} alt="이미지" /> */}
 
             {/*모달 열기*/}
-            <button onClick={handleImageModalOpen}>이미지 편집</button>
+            <div className={style["click-icon"]}>
+              <div className={style["icon-box"]} onClick={handleImageModalOpen}>
+                <img src={img} alt="이미지 편집" />
+                <span>이미지 편집</span>
+              </div>
 
-            <button onClick={handleChoiceModalOpen}>선택지 편집</button>
+              <div className={style["icon-box"]} onClick={handleChoiceModalOpen}>
+                <img src={select} alt="선택지 편집" />
+                <span>선택지 편집</span>
+              </div>
+            </div>
 
             {/* 이미지 편집 모달 */}
             <Modal show={showImageModal} closeModal={closeModal} title="이미지 편집">
@@ -264,6 +274,7 @@ const WriteFeed = () => {
                 <img className={style["order_btn"]} src={back} alt="next" onClick={handleNext}></img>
               </div>
             </Modal>
+            <hr></hr>
             <div className={style["func_part"]}>
               <div className={style["btn_func_area"]}>
                 <div className={style["btn_func"]}>

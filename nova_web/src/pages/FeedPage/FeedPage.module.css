@@ -48,7 +48,7 @@
 
 /* 글자수 세기 스타일 */
 .count-text {
-  color: #bebebe;
+  color: #5e5e5e;
   font-size: 14px;
   width: 100%;
   text-align: right;
@@ -57,7 +57,7 @@
 
 /* 해시태그 영역 */
 .boxbox {
-  height: 100px;
+  height: 150px;
 }
 
 .hash-tag-area {
@@ -76,7 +76,7 @@
   background-color: #111;
   color: #898989;
   width: 95%;
-  height: 50%;
+  height: 70%;
   margin-inline: 5px;
   border: none;
   border-bottom: 1px solid white;
@@ -126,8 +126,8 @@
   height: 150px;
   margin-bottom: 10px;
   width: 100%;
-  border: black dotted 3px;
-  background-color: #98a0ff;
+  border: white dotted 1px;
+  background-color: #000000;
   overflow-x: auto;
   scrollbar-width: none;
   display: flex;
@@ -167,6 +167,10 @@
 
   span {
     font-size: 30px;
+    color: white;
+  }
+  div {
+    color: white;
   }
 }
 
@@ -342,7 +346,7 @@
 
 .fclass-container > input {
   text-align: center;
-  border: 1px black solid;
+  border: 1px white solid;
   border-radius: 5px;
 }
 
@@ -359,11 +363,11 @@
   justify-content: center;
   align-items: center;
   font-size: 12px;
-  background-color: #868686;
+  background-color: #000000;
 }
 
 .empathy-box::placeholder {
-  color: #3a3a3a;
+  color: white;
   font-size: 15px;
 }
 
@@ -465,8 +469,7 @@ h5 {
 
 .star-img {
   /* filter: invert(53%) sepia(1%) saturate(0%) hue-rotate(213deg) brightness(94%) contrast(88%); */
-  filter: invert(98%) sepia(98%) saturate(7495%) hue-rotate(356deg)
-    brightness(102%) contrast(104%);
+  filter: invert(98%) sepia(98%) saturate(7495%) hue-rotate(356deg) brightness(102%) contrast(104%);
 }
 
 /* 버튼 공통 속성 */
@@ -621,7 +624,7 @@ h5 {
   margin-top: 10px;
   /* margin-left: 25px; */
   width: 95%;
-  height: 200vh;
+  height: 1000px;
   /* background-color: aqua; */
   display: flex;
   flex-direction: column;
@@ -629,6 +632,12 @@ h5 {
   border: 1px solid #bebebe;
   padding: 10px;
   border-radius: 5px;
+  hr {
+    height: 3px;
+    background-color: white;
+    border: none;
+    opacity: 1;
+  }
 }
 
 .divide-line {
@@ -786,7 +795,7 @@ h5 {
   gap: 15px;
   width: 100%;
   align-items: center;
-  min-height: 200px;
+  min-height: 100px;
   /* background-color: yellow; */
 }
 
@@ -1360,6 +1369,7 @@ h5 {
   width: 100%;
   /* background-color: blue; */
   margin-bottom: 30px;
+  border-bottom: 1px solid #bebebe;
 }
 
 .text_body > #content {
@@ -1376,10 +1386,30 @@ h5 {
   padding: 12px;
   /* padding-left: 5px; */
   width: calc(100% - 24px);
-  height: 400px;
+  height: 450px;
   border: 0;
+  outline: none;
 }
-
+/* 이미지편집과 선택지편집 스타일 */
+.click-icon {
+  display: flex;
+  justify-content: space-evenly;
+}
+.icon-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  img {
+    width: 30px;
+    height: 30px;
+  }
+  span {
+    color: #ffffff;
+    font-size: 12px;
+    margin-block: 12px;
+  }
+}
 /* 하단 댓글허용 등등 스타일 */
 .func_part {
   flex-grow: 0.3;
@@ -1447,6 +1477,8 @@ h5 {
 .warning_text {
   text-align: center;
   font-size: 12px;
+  color: white;
+  margin-top: 20px;
 }
 
 .write_feed {
@@ -1502,7 +1534,7 @@ h5 {
 .one_of_four_list li {
   /* display: flex; */
   padding: 5px 15px;
-  background-color: #868686;
+  background-color: #000000;
   /* height: 100%; */
   /* padding: 10px; */
   border: 2px #8f8f8f solid;
@@ -1526,7 +1558,7 @@ h5 {
 
 .one_of_four_list input {
   width: 98%;
-  background-color: #868686;
+  background-color: #000000;
   border: 0;
   height: 30px;
 
@@ -1536,7 +1568,7 @@ h5 {
 }
 
 .one_of_four_list input::placeholder {
-  color: #3a3a3a;
+  color: white;
   font-size: 12px;
 }
 
@@ -1548,12 +1580,12 @@ h5 {
   height: 60px;
   cursor: text;
   color: black;
-  background-color: #868686;
+  background-color: #000000;
   border: 1px solid #ababab;
 }
 
 .balance_btn::placeholder {
-  color: #3a3a3a;
+  color: white;
 }
 
 .balance_btn:focus {
@@ -1569,12 +1601,12 @@ h5 {
 .station_box {
   /* margin-left: 20px; */
   margin: 0 auto;
-  background-color: #909090;
+  background-color: #000000;
   width: 85%;
   height: 100px;
   border-radius: 10px;
-  color: black;
-  border: 1px black solid;
+  color: white;
+  border: 1px white solid;
   padding: 5px 10px;
 }
 
@@ -1588,7 +1620,7 @@ h5 {
 }
 
 .station_box input::placeholder {
-  color: black;
+  color: white;
   text-decoration: underline;
 }
 
@@ -1976,15 +2008,16 @@ h5 {
   padding: 10px;
   border-radius: 8px;
   width: 80%;
-  max-width: 400px;
+  max-width: 450px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 100px;
 }
 
 /* 모달을 클릭한 곳만 닫히지 않도록 처리 */
 .modal-content button {
   margin-top: 10px;
   padding: 10px;
-  background-color: #007bff;
+  background-color: #98a0ff;
   color: white;
   border: none;
   border-radius: 4px;
@@ -1996,7 +2029,7 @@ h5 {
   text-align: center;
 }
 .modal-content button:hover {
-  background-color: #0056b3;
+  background-color: #6f7bff;
 }
 /* --------라이트모드------- */
 .comment-box.bright-mode {
