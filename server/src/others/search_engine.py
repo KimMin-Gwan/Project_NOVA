@@ -1542,7 +1542,7 @@ class FeedAlgorithm:
     def recommend_next_feed(self, start_fid:str, history:list):
         start_feed_node = self.__feed_node_avltree.get(key=start_fid)
         user_feed_recommend_list = self.__feed_chaos_graph.feed_recommend_by_user(start_node=start_feed_node)
-        hash_feed_recommend_list = self.__feed_chaos_graph.feed_recommend_by_hashtag(start_node=start_fid)
+        hash_feed_recommend_list = self.__feed_chaos_graph.feed_recommend_by_hashtag(start_node=start_feed_node)
 
         result_fid_list = user_feed_recommend_list + hash_feed_recommend_list
 
