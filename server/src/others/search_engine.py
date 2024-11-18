@@ -437,12 +437,9 @@ class SearchManager:
     # 시간 차이를 바탕으로 정해진 시간대 내의 피드 정보 구하기
     # target_hour : 1, 24, 168
     def __find_target_index(self, target_hour=1):
-        print(target_hour)
+        target_index = len(self.__feed_table)
 
-        
-        target_index = -1
-
-        for i, managed_feed in enumerate(reversed(self.__feed_table)):
+        for i, managed_feed in enumerate(self.__feed_table):
             index = len(self.__feed_table) - 1 - i
             # 삭제된 피드는 None으로 표시될것이라서
             if managed_feed.fid == "":
@@ -462,7 +459,7 @@ class SearchManager:
         result_fid = []
         result_index = -3
 
-        if index == -1:
+        if index == -1 or index == -2:
             index = len(self.__feed_table)
 
         if target_hour > 0 :
