@@ -429,8 +429,6 @@ class SearchManager:
                        target_hour=2) -> bool:
         time_diff = abs(target_time - reference_time)
 
-        print(f"taget_time: {target_time}, target_diff : {time_diff} ")
-
         # 차이가 2시간 이상인지 확인
         return time_diff >= timedelta(hours=target_hour)
 
@@ -468,16 +466,13 @@ class SearchManager:
         else:
             target_index = 0
 
-        print(f"target_index : {target_index} | index : {index}")
         search_range = self.__feed_table[target_index:index][::-1]
-        #search_range = self.__feed_table[target_index:index]
 
         if index < target_index  or index > len(self.__feed_table):
             return result_fid, -3
 
 
         count = 0
-        #print(len(search_range))
 
         if search_type == "all":
             for i, managed_feed in enumerate(search_range):
@@ -495,17 +490,12 @@ class SearchManager:
 
 
         elif search_type == "best":
-            print("monitor --------------------------------------------------------------")
-            for i, feed_data in enumerate(self.__feed_table):
-                print(f"index : {i}  | date : {feed_data.date} | hashtag : {feed_data.hashtag}")
-            print("monitor --------------------------------------------------------------")
-
-            for data in search_range:
-                print(data.date)
-            
+            #print("monitor --------------------------------------------------------------")
+            #for i, feed_data in enumerate(self.__feed_table):
+                #print(f"index : {i}  | date : {feed_data.date} | hashtag : {feed_data.hashtag}")
+            #print("monitor --------------------------------------------------------------")
 
             for i, managed_feed in enumerate(search_range):
-                #ii = len(self.__feed_table) - 1 - i
                 if count == num_feed:
                     break
 
