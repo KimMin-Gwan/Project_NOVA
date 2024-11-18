@@ -1540,6 +1540,8 @@ class FeedAlgorithm:
 
     # 추천 feed를 찾아줌
     def recommend_next_feed(self, start_fid:str, history:list):
+
+        print(start_fid)
         start_feed_node = self.__feed_node_avltree.get(key=start_fid)
         user_feed_recommend_list = self.__feed_chaos_graph.feed_recommend_by_user(start_node=start_feed_node)
         hash_feed_recommend_list = self.__feed_chaos_graph.feed_recommend_by_hashtag(start_node=start_feed_node)
