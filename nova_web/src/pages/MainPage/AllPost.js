@@ -37,11 +37,7 @@ export default function AllPost({ brightMode }) {
         <div className={style["content-title"]}>
           <header className={style["header-text"]}>전체 글</header>
         </div>
-        <div
-          className={`${style["main-area"]} ${style["all-main-area"]} ${
-            style[getModeClass(mode)]
-          }`}
-        >
+        <div className={`${style["main-area"]} ${style["all-main-area"]} ${style[getModeClass(mode)]}`}>
           <ul className={`${style["all-list"]} ${style[getModeClass(mode)]}`}>
             {feeds.map((feed, i) => {
               return (
@@ -64,10 +60,7 @@ export default function AllPost({ brightMode }) {
               );
             })}
           </ul>
-          <button
-            onClick={() => navigate("/feed_list?type=all")}
-            className={style["all_see-button"]}
-          >
+          <button onClick={() => navigate("/feed_list?type=all")} className={style["all_see-button"]}>
             더보기
           </button>
         </div>

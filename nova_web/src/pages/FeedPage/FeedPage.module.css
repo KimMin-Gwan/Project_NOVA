@@ -1249,7 +1249,6 @@ h5 {
 .short_form_write {
   flex-direction: column;
   height: 100%;
-  border: none;
 }
 
 .short_form_container {
@@ -2046,4 +2045,7 @@ h5 {
 }
 .line.bright-mode {
   border-color: #d2c8f7;
+}
+.write_container.bright-mode {
+  background-color: white;
 }

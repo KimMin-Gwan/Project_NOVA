@@ -129,7 +129,7 @@ function App() {
       <Route path="/notice" element={<NoticeList />} />
       {/* Dynamic Route for Notice Details */}
       <Route path="/notice/:nid" element={<Notice />} />
-      <Route path="/my_write_feed" element={<MyWriteFeed />} />
+      <Route path="/my_write_feed" element={<MyWriteFeed brightMode={brightMode} />} />
       <Route path="/my_interest_feed" element={<MyInterestFeed />} />
       <Route path="/my_comment_feed" element={<MyCommentFeed />} />
       <Route path="/my_active_feed" element={<MyActiveFeed />} />
@@ -145,7 +145,7 @@ function App() {
       <Route path="/find_pw_change" element={<FindPwChange />}></Route>
       <Route path="/feed_hash_list" element={<FeedHashList />}></Route>
       <Route path="/feed_hash_list/:fid" element={<FeedHashList />}></Route>
-      <Route path="/feed_list" element={<FeedList />}></Route>
+      <Route path="/feed_list" element={<FeedList brightMode={brightMode} />}></Route>
       <Route path="/feed_list/:fid" element={<FeedList />}></Route>
       <Route path="/nova_funding" element={<NovaFunding />}></Route>
       <Route path="/like_funding" element={<LikeFunding />}></Route>

@@ -8,7 +8,7 @@ import back from "./../../img/write_vector1.png";
 import select from "./../../img/select-icon.png";
 import img from "./../../img/img-icon.png";
 import { getModeClass } from "./../../App.js";
-const WriteFeed = () => {
+const WriteFeed = ({ brightmode }) => {
   const navigate = useNavigate();
 
   let header = {
@@ -165,14 +165,9 @@ const WriteFeed = () => {
     setShowChoiceModal(false);
   };
   const [mode, setMode] = useState(() => {
-    return localStorage.getItem("brightMode") === "true";
+    // 로컬 스토리지에서 가져온 값이 있으면 그것을, 없으면 'bright'로 초기화
+    return localStorage.getItem("brightMode") || "bright";
   });
-
-  useEffect(() => {
-    // mode가 변경될 때만 localStorage에 저장
-    localStorage.setItem("brightMode", mode);
-  }, [mode]);
-
   return (
     <div className={`${style["test_container"]} ${style["container"]}`}>
       <div className={`${style["short_form"]} ${style["short_form_write"]}`}>
