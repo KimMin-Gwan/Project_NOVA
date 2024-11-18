@@ -698,7 +698,7 @@ class RecommandManager:
                     now_data=hashtag_node.trend["now"],
                     prev_data=hashtag_node.trend["prev"],
                     num_feed=len(hashtag_node.edges["feed"]))
-
+                print(new_weight)
                 # 안에 값을 최신화
                 hashtag_node.weight = new_weight
                 hashtag_node.trend["prev"] = hashtag_node.trend["now"]
