@@ -18,7 +18,6 @@ class FeedModel(BaseModel):
         return
     
 
-
     def set_feed_data(self, feed_search_engine:FeedSearchEngine,
                         target_type="default", target="", num_feed=1, index=-1):
 
@@ -282,8 +281,6 @@ class FeedSearchModel(FeedModel):
         self.__history = []
 
     def set_recommand_feed(self, feed_search_engine:FeedSearchEngine, fid:str, history:list):
-        pprint("hello")
-        pprint(fid)
         fid = feed_search_engine.try_recommand_feed( fid=fid, history=history)
         
         history.append(fid)
@@ -305,10 +302,7 @@ class FeedSearchModel(FeedModel):
             self.__history.append(str(fid))
             second_fid = feed_search_engine.try_recommand_feed(fid=str(fid),
                                                   history=self.__history)
-            
-            print(str(fid))
-            print(second_fid)
-
+            self.__history.append(second_fid)
             feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=[str(fid), second_fid])
             for feed_data in feed_datas:
                 feed = Feed()
