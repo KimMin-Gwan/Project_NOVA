@@ -58,7 +58,7 @@ const SimpleSlider = ({ tagFeed, brightMode }) => {
   let navigate = useNavigate();
 
   function onClickMore(fid) {
-    navigate(`/feed_hash_list/${fid}`);
+    navigate(`/feed_page?fid=${fid}`);
   }
 
   const [mode, setMode] = useState(brightMode); // 초기 상태는 부모로부터 받은 brightMode 값
@@ -80,10 +80,13 @@ const SimpleSlider = ({ tagFeed, brightMode }) => {
                       <h2 className={style["name-text"]}>{feed.nickname}</h2>
                       <button
                         onClick={() => {
-                          const brightModeValue = localStorage.getItem("brightMode");
+                          const brightModeValue =
+                            localStorage.getItem("brightMode");
                           onClickMore(feed.fid, brightModeValue);
                         }}
-                        className={`${style["more-see"]} ${style[getModeClass(mode)]}`}
+                        className={`${style["more-see"]} ${
+                          style[getModeClass(mode)]
+                        }`}
                       >
                         더보기
                       </button>

@@ -27,17 +27,25 @@ export default function AllPost({ brightMode }) {
     fetchFeed();
   }, []);
 
+  function onClick(fid) {
+    navigate(`/feed_page?fid=${fid}`);
+  }
+
   return (
     <div className={style["wrap-container"]}>
       <div className={`${style["top-area"]} ${style[getModeClass(mode)]}`}>
         <div className={style["content-title"]}>
           <header className={style["header-text"]}>전체 글</header>
         </div>
-        <div className={`${style["main-area"]} ${style["all-main-area"]} ${style[getModeClass(mode)]}`}>
+        <div
+          className={`${style["main-area"]} ${style["all-main-area"]} ${
+            style[getModeClass(mode)]
+          }`}
+        >
           <ul className={`${style["all-list"]} ${style[getModeClass(mode)]}`}>
             {feeds.map((feed, i) => {
               return (
-                <li key={feed.fid}>
+                <li key={feed.fid} onClick={() => onClick(feed.fid)}>
                   <div className={style["all-img"]}>
                     <img src={feed.image[0]} alt="이미지" />
                   </div>
@@ -56,7 +64,10 @@ export default function AllPost({ brightMode }) {
               );
             })}
           </ul>
-          <button onClick={() => navigate("/feed_list?type=all")} className={style["all_see-button"]}>
+          <button
+            onClick={() => navigate("/feed_list?type=all")}
+            className={style["all_see-button"]}
+          >
             더보기
           </button>
         </div>
