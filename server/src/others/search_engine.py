@@ -727,6 +727,7 @@ class RecommandManager:
                 print(2)
                 for user_edge in user_node.edges:
                     print(3)
+                    print(user_edge.target_node)
                     feed_node:FeedNode = user_edge.target_node
                     print(feed_node)
                     for feed_edge in feed_node.edges:
