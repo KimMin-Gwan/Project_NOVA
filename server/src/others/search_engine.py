@@ -493,9 +493,9 @@ class SearchManager:
                     print("fuck  u")
                     break
                 
-                ## 삭제된 피드는 None으로 표시될것이라서
-                #if managed_feed.fid == "":
-                    #continue
+                # 삭제된 피드는 None으로 표시될것이라서
+                if managed_feed.fid == "":
+                    continue
 
                 #result_fid.append(managed_feed.fid)
                 ## result_index 업데이트
