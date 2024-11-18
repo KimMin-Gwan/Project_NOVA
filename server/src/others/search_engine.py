@@ -677,7 +677,7 @@ class RecommandManager:
 
     def __check_trend_hashtag_algo(self, weight=0, now_data=0, prev_data=0, num_feed=0):
         next_weight = weight + ((now_data - prev_data) / (num_feed ** 0.5)) * 0.9
-
+        print(next_weight)
         # 새로운 정규화: 상한선 기반 축소 (threshold=0.5, reduction factor=0.1)
         # signoid 함수
         threshold = 0.5
@@ -698,7 +698,6 @@ class RecommandManager:
                     now_data=hashtag_node.trend["now"],
                     prev_data=hashtag_node.trend["prev"],
                     num_feed=len(hashtag_node.edges["feed"]))
-                print(new_weight)
                 # 안에 값을 최신화
                 hashtag_node.weight = new_weight
                 hashtag_node.trend["prev"] = hashtag_node.trend["now"]
