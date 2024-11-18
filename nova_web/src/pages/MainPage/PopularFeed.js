@@ -21,7 +21,7 @@ export default function PopularFeed({ brightMode }) {
   }, []);
 
   function handleNavigate(fid) {
-    navigate(`/feed_list/${fid}`);
+    navigate(`/feed_page?fid=${fid}`);
   }
 
   let scrollRef = useRef(null);

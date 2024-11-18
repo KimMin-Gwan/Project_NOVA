@@ -25,6 +25,7 @@ export default function MainPart({ brightMode }) {
       .then((data) => {
         setBias(data.body);
         setBiasTag(data.body.hashtags);
+        console.log("hottt", data);
       });
   }
 
