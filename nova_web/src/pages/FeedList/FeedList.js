@@ -20,8 +20,7 @@ export default function FeedList(isUserState) {
 
   const brightModeFromUrl = params.get("brightMode");
 
-  const initialMode =
-    brightModeFromUrl || localStorage.getItem("brightMode") || "bright"; // URL에서 가져오고, 없으면 로컬 스토리지에서 가져옴
+  const initialMode = brightModeFromUrl || localStorage.getItem("brightMode") || "bright"; // URL에서 가져오고, 없으면 로컬 스토리지에서 가져옴
   const [mode, setMode] = useState(initialMode);
   let navigate = useNavigate();
 
@@ -150,7 +149,7 @@ export default function FeedList(isUserState) {
   return (
     <div className="all-box">
       <section className="contents com1">
-        <LeftBar />
+        <LeftBar brightMode={mode} />
       </section>
       <div className={`${style["container"]} ${style[getModeClass(mode)]}`}>
         <header className={style.header}>
@@ -175,44 +174,19 @@ export default function FeedList(isUserState) {
             </button>
           </div>
         </header>
-        {type === "all" && (
-          <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>
-            전체 피드
-          </div>
-        )}
-        {type === "best" && (
-          <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>
-            오늘의 베스트 피드
-          </div>
-        )}
-        {type === "weekly_best" && (
-          <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>
-            주간 베스트 피드
-          </div>
-        )}
+        {type === "all" && <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>전체 피드</div>}
+        {type === "best" && <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>오늘의 베스트 피드</div>}
+        {type === "weekly_best" && <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>주간 베스트 피드</div>}
         <div className={style["scroll-area"]}>
           {feedData.map((feed, i) => {
-            return (
-              <Feed
-                key={feed.fid + i}
-                className={`${style["feed-box"]} ${style[getModeClass(mode)]}`}
-                feed={feed}
-                func={true}
-                feedData={feedData}
-                setFeedData={setFeedData}
-                isUserState={isUserState}
-              ></Feed>
-            );
+            return <Feed key={feed.fid + i} className={`${style["feed-box"]} ${style[getModeClass(mode)]}`} feed={feed} func={true} feedData={feedData} setFeedData={setFeedData} isUserState={isUserState}></Feed>;
           })}
           {isLoading && <p>Loading...</p>}
-          <div
-            ref={target}
-            style={{ height: "1px", backgroundColor: "blue" }}
-          ></div>
+          <div ref={target} style={{ height: "1px", backgroundColor: "blue" }}></div>
         </div>
       </div>
       <section className="contents com1">
-        <RightBar />
+        <RightBar brightMode={mode} />
       </section>
     </div>
   );

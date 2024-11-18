@@ -134,7 +134,7 @@ export default function FeedHashList(isUserState) {
   return (
     <div className="all-box">
       <section className="contents com1">
-        <LeftBar />
+        <LeftBar brightMode={mode} />
       </section>
       <div className={`${style["container"]} ${style[getModeClass(mode)]}`}>
         <header className={style.header}>
@@ -178,7 +178,7 @@ export default function FeedHashList(isUserState) {
         </div>
       </div>
       <section className="contents com1">
-        <RightBar />
+        <RightBar brightMode={mode} />
       </section>
     </div>
   );
