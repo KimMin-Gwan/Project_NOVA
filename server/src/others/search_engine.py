@@ -708,6 +708,8 @@ class RecommandManager:
 
             count = 0
             hashtag_rank = sorted(hashtag_rank, key=lambda x:x.weight, reverse=True)
+            print(hashtag_rank)
+
             for hash_node in hashtag_rank:
                 if count == 10:
                     break
