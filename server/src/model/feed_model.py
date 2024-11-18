@@ -290,8 +290,8 @@ class FeedSearchModel(FeedModel):
 
         feed = Feed()
         feed.make_with_dict(feed_data)
-        self._feeds.append(feed)
-        self._feeds = self._is_user_interacted(user=self._user, feeds=self._feeds)
+        self.__feed.append(feed)
+        self.__feed = self._is_user_interacted(user=self._user, feeds=self.__feed)
         return
 
     def try_search_feed_with_fid(self, feed_search_engine:FeedSearchEngine, fid=""):
@@ -312,34 +312,6 @@ class FeedSearchModel(FeedModel):
             self.__feed = self._is_user_interacted(user=self._user, feeds=self.__feed)
 
         return
-
-    def try_search_feed(self, feed_search_engine:FeedSearchEngine,
-                        target="", num_feed=1, index=-1):
-
-        hashtag_feed_fid, self._key = feed_search_engine.try_search_feed(
-            target_type="hashtag", target=target, num_feed=num_feed, index=index)
-
-        user_feed_fid, self._key = feed_search_engine.try_search_feed(
-            target_type="uname", target=target, num_feed=num_feed, index=index)
-        
-        hashtag_feed_data = self._database.get_datas_with_ids(target_id="fid", ids=hashtag_feed_fid)
-        user_feed_fid = self._database.get_datas_with_ids(target_id="fid", ids=user_feed_fid)
-
-        for feed_data1 in hashtag_feed_data:
-            feed = Feed()
-            feed.make_with_dict(feed_data1)
-            self._hashtag_feed.append(feed)
-
-        for feed_data2 in user_feed_fid:
-            feed = Feed()
-            feed.make_with_dict(feed_data2)
-            self._uname_feed.append(feed)
-
-        self._hashtag_feed = self._is_user_interacted(user=self._user, feeds=self._hashtag_feed)
-        self._uname_feed = self._is_user_interacted(user=self._user, feeds=self._uname_feed)
-
-        return
-
 
     def try_search_feed(self, feed_search_engine:FeedSearchEngine,
                         target="", num_feed=1, index=-1):
