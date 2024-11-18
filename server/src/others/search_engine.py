@@ -753,8 +753,10 @@ class RecommandManager:
                 current_time = time.time()
                 if hasattr(self, 'last_computed_time'):
                     time_diff = (current_time - self.last_computed_time) / 3600  # 시간 단위로 계산
+                    print("no")
                 else:
                     self.last_computed_time = current_time
+                    print("fucktgou")
                 time_diff = 0
         except KeyboardInterrupt:
             print("Shutting down due to KeyboardInterrupt.")
