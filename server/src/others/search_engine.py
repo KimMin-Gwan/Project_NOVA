@@ -470,6 +470,7 @@ class SearchManager:
         else:
             target_index = 0
 
+        print(f"target_index : {target_index} | index : {index}")
         search_range = self.__feed_table[target_index:index][::-1]
         #search_range = self.__feed_table[target_index:index]
 
