@@ -708,13 +708,12 @@ class RecommandManager:
 
             count = 0
             hashtag_rank = sorted(hashtag_rank, key=lambda x:x.weight, reverse=False)
-
+            print(hashtag_rank)
             for hash_node in hashtag_rank:
                 if count == 10:
                     break
                 self.hashtags.append(hash_node.hid)
                 count += 1
-            print("hello?")
         except Exception as e:
             print(e)
 
