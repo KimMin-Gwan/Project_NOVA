@@ -1248,6 +1248,8 @@ h5 {
 
 .short_form_write {
   flex-direction: column;
+  height: 100%;
+  border: none;
 }
 
 .short_form_container {

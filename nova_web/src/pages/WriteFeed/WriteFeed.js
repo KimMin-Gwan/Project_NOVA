@@ -7,7 +7,7 @@ import backword from "./../../img/back_icon.png";
 import back from "./../../img/write_vector1.png";
 import select from "./../../img/select-icon.png";
 import img from "./../../img/img-icon.png";
-
+import { getModeClass } from "./../../App.js";
 const WriteFeed = () => {
   const navigate = useNavigate();
 
@@ -164,6 +164,15 @@ const WriteFeed = () => {
     setShowImageModal(false);
     setShowChoiceModal(false);
   };
+  const [mode, setMode] = useState(() => {
+    return localStorage.getItem("brightMode") === "true";
+  });
+
+  useEffect(() => {
+    // mode가 변경될 때만 localStorage에 저장
+    localStorage.setItem("brightMode", mode);
+  }, [mode]);
+
   return (
     <div className={`${style["test_container"]} ${style["container"]}`}>
       <div className={`${style["short_form"]} ${style["short_form_write"]}`}>
@@ -179,7 +188,7 @@ const WriteFeed = () => {
           <p>새로운 이야기를 시작해요!</p>
         </div>
 
-        <div className={style["write-container"]}>
+        <div className={`${style["write_container"]} ${style[getModeClass(mode)]}`}>
           <div className={style["boxbox"]}>
             <div className={style["hash-tag-area"]}>
               <div id={style["hashtag"]}>제목(해시태그)</div>

@@ -40,7 +40,6 @@ export default function Week100({ brightMode }) {
       <div className={`${style["top-area"]} ${style[getModeClass(mode)]}`}>
         <div className={style["content-title"]}>
           <header className={style["header-text"]}>주간 TOP 100</header>
-          <img src={more_icon} alt="menu" onClick={() => navigate("/feed_hash_list")} className={style["more-icon"]}></img>
         </div>
       </div>
 
