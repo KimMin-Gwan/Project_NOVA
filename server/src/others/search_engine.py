@@ -624,7 +624,6 @@ class RecommandManager:
             users.append(user)
 
         for single_bias in biases:
-            print(single_bias)
             user_nodes = []
             for single_user in users:
                 single_user:User = single_user
@@ -639,6 +638,7 @@ class RecommandManager:
             managed_bias = ManagedBias(bid=single_bias.bid, user_nodes=user_nodes)
             # avl트리에 넣어주면됨
             self.__bias_avltree.insert(key=single_bias.bid, value=managed_bias)
+            print(self.__bias_avltree.get(key=single_bias.bid).bid)
 
 
     # 실시간 트랜드 해시태그 제공
@@ -648,6 +648,7 @@ class RecommandManager:
     # 사용자에게 어울릴만한 해시태그 리스트 제공
     def get_user_recommand_hashtags(self, bid):
         result = []
+        print(bid)
         managed_bias = self.__bias_avltree.get(key=bid)
         print("hello")
         print(managed_bias)
