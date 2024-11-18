@@ -676,6 +676,9 @@ class RecommandManager:
 
 
     def __check_trend_hashtag_algo(self, weight=0, now_data=0, prev_data=0, num_feed=0):
+        if now_data == 0 and prev_data == 0 and weight == 0:
+            now_data = num_feed
+
         next_weight = weight + ((now_data - prev_data) / (num_feed ** 0.5)) * 0.9
         print(next_weight)
         # 새로운 정규화: 상한선 기반 축소 (threshold=0.5, reduction factor=0.1)
