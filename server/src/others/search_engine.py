@@ -740,6 +740,7 @@ class RecommandManager:
                 # time_diff 계산
                 time_diff = 1
 
+                print(time_diff)
                 # 만약 마지막으로 연산한지 1시간이 지났으며 다시 연산
                 if time_diff > 1:
                     self.__total_hashtag_setting()
