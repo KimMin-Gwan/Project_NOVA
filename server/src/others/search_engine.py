@@ -728,8 +728,7 @@ class RecommandManager:
                     for user_edge in user_node.edges['feed']:
                         print(3)
                         feed_node:FeedNode = user_edge.target_node
-                        for feed_edge in feed_node.edges['hash']:
-                            print(4)
+                        for feed_edge in feed_node.edges['hashtag']:
                             hash_node:HashNode = feed_edge.target_node
                             hash_nodes.append(hash_node)
 
