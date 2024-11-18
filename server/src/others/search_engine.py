@@ -475,7 +475,8 @@ class SearchManager:
         count = 0
         if search_type == "all":
             for i, managed_feed in enumerate(reversed(search_range)):
-                ii = len(self.__feed_table) - 1 - i
+                print(managed_feed.date)
+
                 if count == num_feed:
                     break
                 
@@ -609,37 +610,15 @@ class RecommandManager:
     def get_best_hashtags(self, num_hashtag=10) -> list:
         return 
 
-    # 숏피드에서 다음 피드 요청
-    def get_next_feeds(self, feed, user, num_feed=1) -> list:
-        return 
+    def get_user_recommand_hashtags(self, uid, num_hashtag=4):
+
+        return
 
     # 실시간 트랜드 해시태그 제공
     def get_recommand_hashtags(self, user, bias, num_hashtag=4) -> list:
         return 
 
 
-# --------------------------------------------------------------------------------------------
-
-
-
-# 이건 사용자에게 맞는 데이터를 주려고 만든거
-
-class RecommandManager:
-    def __init__(self, database,feed_algorithm):
-        self.__database = database
-        self.__feed_algorithm = feed_algorithm
-
-    # 사용자에게 어울릴만한 해시태그 리스트 제공
-    def get_best_hashtags(self, num_hashtag=10) -> list:
-        return 
-
-    # 숏피드에서 다음 피드 요청
-    def get_next_feeds(self, feed, user, num_feed=1) -> list:
-        return 
-
-    # 실시간 트랜드 해시태그 제공
-    def get_recommand_hashtags(self, user, bias, num_hashtag=4) -> list:
-        return 
 
 
 # --------------------------------------------------------------------------------------------
