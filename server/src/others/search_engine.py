@@ -624,6 +624,7 @@ class RecommandManager:
             users.append(user)
 
         for single_bias in biases:
+            print(single_bias)
             user_nodes = []
             for single_user in users:
                 single_user:User = single_user
