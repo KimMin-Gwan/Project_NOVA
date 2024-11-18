@@ -688,6 +688,7 @@ class RecommandManager:
     
     def __total_hashtag_setting(self):
         try:
+            print("hello?")
             hashtag_rank = []
             hashtag_nodes = self.__feed_algorithm.get_hash_nodes()
             for hashtag_node in hashtag_nodes:
