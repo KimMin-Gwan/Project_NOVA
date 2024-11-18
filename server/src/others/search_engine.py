@@ -730,12 +730,12 @@ class RecommandManager:
                         hash_nodes.append(hash_node)
 
             hash_nodes = sorted(hash_nodes, key=lambda x:x.weight, reverse=False)
-            print(hash_nodes)
             managed_bias.trend_hashtags = hash_node[:4]
 
     async def check_trend_hashtag(self):
         try:
             while True:
+                print("hello?")
                 # time_diff 계산
                 time_diff = 1
 
@@ -746,7 +746,7 @@ class RecommandManager:
                     self.last_computed_time = current_time
                 # 시간 간격이 1시간 미만인 경우
                 else:
-                    await asyncio.sleep(10)  # 너무 자주 루프를 돌지 않도록 대기
+                    await asyncio.sleep(1)  # 너무 자주 루프를 돌지 않도록 대기
 
                 current_time = time.time()
                 if hasattr(self, 'last_computed_time'):
