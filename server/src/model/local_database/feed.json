@@ -139,7 +139,7 @@
         "uid": "abcd-1234-5678",
         "nickname": "익명 지지자",
         "body": "정거장 내용 예시",
-        "date": "2024/02/02-18:40:21",
+        "date": "2024/11/18-05:40:21",
         "fclass": "station",
         "class_name": "정거장",
         "choice": [
@@ -609,7 +609,7 @@
         "uid": "1234-abcd-5678",
         "nickname": "지지자",
         "body": "운동 루틴좀 정해주삼",
-        "date": "2024/03/29-18:23:50",
+        "date": "2024/11/17-18:23:50",
         "fclass": "multiple",
         "class_name": "넷 중 하나",
         "choice": [
@@ -662,7 +662,7 @@
         "uid": "1234-abcd-5678",
         "nickname": "버니즈",
         "body": "진짜 레전드다 ",
-        "date": "2024/09/11-18:40:21",
+        "date": "2024/11/18-11:40:21",
         "fclass": "station",
         "class_name": "정거장",
         "choice": [
