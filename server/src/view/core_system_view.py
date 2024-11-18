@@ -331,6 +331,7 @@ class Core_Service_View(Master_View):
         def get_next_feed(request:Request, raw_request:dict):
             request_manager = RequestManager()
             data_payload = ShortFeedRecommendRequest(request=raw_request)
+            print(data_payload)
 
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
