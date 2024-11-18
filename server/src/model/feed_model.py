@@ -146,7 +146,7 @@ class FeedModel(BaseModel):
             feed.attend = attend
             feed.comment = comment
             # 기본적으로 star_flag는 False
-            if feed.fid in user.star:
+            if feed.fid in user.like:
                 feed.star_flag = True
             result.append(feed)
         return result
