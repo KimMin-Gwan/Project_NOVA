@@ -680,7 +680,6 @@ class RecommandManager:
             now_data = num_feed
 
         next_weight = weight + ((now_data - prev_data) / (num_feed ** 0.5)) * 0.9
-        print(next_weight)
         # 새로운 정규화: 상한선 기반 축소 (threshold=0.5, reduction factor=0.1)
         # signoid 함수
         threshold = 0.5
@@ -710,15 +709,12 @@ class RecommandManager:
 
             count = 0
             hashtag_rank = sorted(hashtag_rank, key=lambda x:x.weight, reverse=True)
-            print(hashtag_rank)
 
             for hash_node in hashtag_rank:
                 if count == 10:
                     break
                 self.hashtags.append(hash_node.hid)
                 count += 1
-
-            print(self.hashtags)
         except Exception as e:
             print(e)
 
