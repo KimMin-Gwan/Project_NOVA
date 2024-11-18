@@ -480,7 +480,7 @@ class SearchManager:
             print(search_range)
 
             for data in search_range:
-                print(data:date)
+                print(data.date)
 
 
             for i, managed_feed in enumerate(reversed(search_range)):
