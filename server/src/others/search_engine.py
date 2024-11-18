@@ -429,12 +429,17 @@ class SearchManager:
                        target_hour=2) -> bool:
         time_diff = abs(target_time - reference_time)
 
+        print(f"taget_time: {target_time}, target_diff : {time_diff} ")
+
         # 차이가 2시간 이상인지 확인
         return time_diff >= timedelta(hours=target_hour)
 
     # 시간 차이를 바탕으로 정해진 시간대 내의 피드 정보 구하기
     # target_hour : 1, 24, 168
     def __find_target_index(self, target_hour=1):
+        print(target_hour)
+
+        
         target_index = -1
 
         for i, managed_feed in enumerate(reversed(self.__feed_table)):
@@ -457,11 +462,6 @@ class SearchManager:
         result_fid = []
         result_index = -3
 
-
-        if search_type == "best":
-            print("target_hour : ", target_hour)
-
-    
         if index == -1:
             index = len(self.__feed_table)
 
