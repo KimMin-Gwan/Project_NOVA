@@ -2,17 +2,19 @@ from view import NOVA_Server
 from view.parsers import Configure_File_Reader
 from model import Local_Database
 from others import ConnectionManager, LeagueManager,FeedManager, FeedSearchEngine
-
+import asyncio
+from uvicorn import run
 
 class Master(Configure_File_Reader):
     def __init__(self):
         super().__init__()
         self._extract_host_port()
+        #self.abstract_loop = asyncio.get_event_loop()
         print('INFO<-[      Application startup.')
         print(f'INFO<-[      Application | Welcome to NOVA Server')
         print(f'INFO<-[      Application | Version : v{self._version}')
 
-    def server_start_up(self):
+    async def server_start_up(self):
         database = Local_Database() #디비 실행
         #connection_manager = ConnectionManager() # 웹소켓 매니저 실행
         #league_manager = LeagueManager(connection_manager=connection_manager)
@@ -23,16 +25,33 @@ class Master(Configure_File_Reader):
         feed_manager.init_feed_data()
 
 
-        cheese_server = NOVA_Server(
+        nova_server = NOVA_Server(
             database=database,
             connection_manager=None,
             league_manager=None,
             feed_manager=feed_manager,
             feed_search_engine=feed_search_engine
             )
-        cheese_server.run_server(self._host, self._port)
+        
+        #app = nova_server.get_app()
+
+        loop = asyncio.get_event_loop()
+        uvicorn_task = loop.run_in_executor(None, nova_server.run_server, self._host, self._port)
+        #uvicorn_task = asyncio.create_task(nova_server.run_server(host=self._host, port=self._port))
+        feed_search_task = feed_search_engine.make_task()()
+        verification_task = nova_server.make_task()()
+
+        try:
+            await asyncio.gather(
+                uvicorn_task,
+                feed_search_task,
+                verification_task
+            )
+        except:
+            print("Server is shutting down gracefully...")
+
         
 if __name__ == '__main__':
     server_master = Master()
-    server_master.server_start_up()
+    asyncio.run(server_master.server_start_up())
 

@@ -26,6 +26,9 @@ class FeedSearchEngine:
         self.__recommand_manager = RecommandManager(database=database,feed_algorithm=self.__feed_algorithm)
         self.__database=database
 
+    def make_task(self):
+        return self.__recommand_manager.make_task()
+
     def try_test_graph_recommnad_system(self, fid):
         feed = self.__database.get_data_with_id(target="fid", id=fid)
         #result = self.__feed_algorithm.find_recommend_feed(start_fid=feed.fid)
@@ -614,9 +617,11 @@ class RecommandManager:
         self.__bias_avltree = AVLTree()
         self.__init__bias_avltree()
         self.hashtags = []
-        self.loop =asyncio.get_event_loop()
-        print(self.loop)
-        self.loop.create_task(self.check_trend_hashtag())
+        #asyncio.get_event_loop()
+        #self.loop.create_task(self.check_trend_hashtag())
+
+    def make_task(self):
+        return self.check_trend_hashtag
 
 
     def __init__bias_avltree(self):
@@ -728,29 +733,28 @@ class RecommandManager:
             managed_bias.trend_hashtags = hash_node[:4]
 
     async def check_trend_hashtag(self):
-        print("hello??")
-        while True:
-            print("???????")
-            # time_diff 계산
-            time_diff = 1
+        try:
+            while True:
+                # time_diff 계산
+                time_diff = 1
 
-            # 만약 마지막으로 연산한지 1시간이 지났으며 다시 연산
-            if time_diff > 1:
-                print("im here")
-                self.__total_hashtag_setting()
-                self.__bais_hashtag_setting()
-                self.last_computed_time = current_time
-            # 시간 간격이 1시간 미만인 경우
-            else:
-                print("im sleeping")
-                await asyncio.sleep(10)  # 너무 자주 루프를 돌지 않도록 대기
+                # 만약 마지막으로 연산한지 1시간이 지났으며 다시 연산
+                if time_diff > 1:
+                    self.__total_hashtag_setting()
+                    self.__bais_hashtag_setting()
+                    self.last_computed_time = current_time
+                # 시간 간격이 1시간 미만인 경우
+                else:
+                    await asyncio.sleep(10)  # 너무 자주 루프를 돌지 않도록 대기
 
-            current_time = time.time()
-            if hasattr(self, 'last_computed_time'):
-                time_diff = (current_time - self.last_computed_time) / 3600  # 시간 단위로 계산
-            else:
-                self.last_computed_time = current_time
-                time_diff = 0
+                current_time = time.time()
+                if hasattr(self, 'last_computed_time'):
+                    time_diff = (current_time - self.last_computed_time) / 3600  # 시간 단위로 계산
+                else:
+                    self.last_computed_time = current_time
+                    time_diff = 0
+        except KeyboardInterrupt:
+            print("Shutting down due to KeyboardInterrupt.")
 
                 
 # --------------------------------------------------------------------------------------------

@@ -35,7 +35,7 @@ class NOVA_Server:
         )
 
         head_parser = Head_Parser()
-        nova_verification = NOVAVerification()
+        self.nova_verification = NOVAVerification()
 
         self.__core_system_view = Core_Service_View( app=self.__app,
                                                    endpoint='/core_system',
@@ -49,7 +49,7 @@ class NOVA_Server:
         self.__user_system_view = User_Service_View( app=self.__app,
                                                      endpoint='/user_system',
                                                    database=database,
-                                                   nova_verification=nova_verification,
+                                                   nova_verification=self.nova_verification,
                                                    head_parser=head_parser,
                                                    feed_manager=feed_manager
                                                    )
@@ -68,6 +68,12 @@ class NOVA_Server:
         self.__sub_system_view()
         self.__administrator_system_view()
 
+    def make_task(self):
+        return self.nova_verification.make_task()
+
+    def get_app(self):
+        return self.__app
+
     def run_server(self, host='127.0.0.1', port=6000):
         uvicorn.run(app=self.__app, host=host, port=port)
 
@@ -79,9 +85,8 @@ class NOVAVerification:
         #exp_checker = Thread(target=self._check_expiration)
         #exp_checker.start()
 
-    async def make_task(self, loop):
-        self.loop = asyncio.get_event_loop()
-        await self.loop.create_task(self._check_expiration())
+    def make_task(self):
+        return self.check_expiration
     
     def get_temp_user(self):
         for data in self.__temp_user:
@@ -139,13 +144,15 @@ class NOVAVerification:
             return False
         
     # 만료시간 체크해서 제거
-    async def _check_expiration(self):
-        print("hello?")
-        while True:
-            time.sleep(1)
-            for user in self.__temp_user:
-                if datetime.now() > user.exp:
-                    self.__temp_user.remove(user)
-            
+    async def check_expiration(self):
+        try:
+            while True:
+                await asyncio.sleep(1)
+                for user in self.__temp_user:
+                    if datetime.now() > user.exp:
+                        self.__temp_user.remove(user)
+        except KeyboardInterrupt:
+            print("Shutting down due to KeyboardInterrupt.")
+
 
 
