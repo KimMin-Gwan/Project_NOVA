@@ -8,6 +8,7 @@ from copy import copy
 from others.data_domain import Feed, User, Bias
 from datetime import  datetime, timedelta
 from pprint import pprint
+import random
 
 # 검색엔진이 해야하는일
 
@@ -41,8 +42,13 @@ class FeedSearchEngine:
         # 알고리즘에도 추가해야되ㅏㅁ
         self.__search_manager.try_make_new_managed_feed(feed)
         self.try_add_feed(feed=feed)
-
         return
+    
+    def try_get_random_feed(self):
+        
+        random_number = random.randint(0, 20)
+
+
 
     # 이 함수가 핵심 -> feed 데이터를 요청하면 주기 위한 함수
     # target_type -> feed 검색을 하기 위한 key값
@@ -1541,7 +1547,6 @@ class FeedAlgorithm:
     # 추천 feed를 찾아줌
     def recommend_next_feed(self, start_fid:str, history:list):
 
-        print(start_fid)
         start_feed_node = self.__feed_node_avltree.get(key=start_fid)
         user_feed_recommend_list = self.__feed_chaos_graph.feed_recommend_by_user(start_node=start_feed_node)
         hash_feed_recommend_list = self.__feed_chaos_graph.feed_recommend_by_hashtag(start_node=start_feed_node)
