@@ -1,7 +1,7 @@
 from model.base_model import BaseModel
 from model import Local_Database
 #from others.data_domain import Alert
-from others import CoreControllerLogicError,FeedManager, Bias
+from others import CoreControllerLogicError,FeedManager, Bias, FeedSearchEngine
 
 
 class HashTagModel(BaseModel):
@@ -15,27 +15,21 @@ class HashTagModel(BaseModel):
         if self._user.uid == "":
             return False
         else:
-            #if self._user.solo_bid != "":
-                #bias_data = self._database.get_data_with_id(target="bid", id=self._user.solo_bid)
-                #self._bias.make_with_dict(bias_data)
-                #self._title=self._bias.bname
-            #else:
-            self.set_best_hash_tag()
+            bias_data = self._database.get_data_with_id(target="bid", id=self._bias.bid)
+            self._bias.make_with_dict(bias_data)
+            self._title=self._bias.bname
             return True
 
-    def set_bias_hash_tag(self):
-        self._hashtags.extend(self._bias.bname)
-        self._hashtags.extend(self._bias.fanname)
-        self._hashtags.extend(self._bias.nickname)
+    def set_best_hash_tag(self, feed_search_engine:FeedSearchEngine):
+        self._hashtags = feed_search_engine.get_recommnad_hashtag(bid=self._bias.bid)
         return
 
-    def set_best_hash_tag(self):
-        self._hashtags = ["QWER", "잡담", "일상", "테스트", "Youtube"]
-        return
+    def set_realtime_best_hash_tag(self, feed_search_engine:FeedSearchEngine, num_hashtag):
+        self._hashtags =feed_search_engine.get_best_hashtag(num_hashtag=num_hashtag)
 
-    def set_realtime_best_hash_tag(self):
-        self._hashtags = ["에스파", "경민생카", "조슈아생일시", "Mantra", "제니",
-                        "오뱅온", "지스타", "숲인방", "버츄얼하꼬", "가을야구"]
+        #self._hashtags = ["에스파", "경민생카", "조슈아생일시", "Mantra", "제니",
+                        #"오뱅온", "지스타", "숲인방", "버츄얼하꼬", "가을야구"]
+
         return
 
     def get_response_form_data(self, head_parser):

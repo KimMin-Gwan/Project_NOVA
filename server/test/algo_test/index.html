@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-time Multi-Case Graph</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <canvas id="myChart" width="400" height="200"></canvas>
+    <script>
+        const ctx = document.getElementById('myChart').getContext('2d');
+
+        // Initialize Chart.js
+        const myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: []  // 데이터를 비워두고 시작
+            },
+            options: {
+                responsive: true,
+                animation: false,
+                scales: {
+                    x: { title: { display: true, text: 'Steps' } },
+                    y: { beginAtZero: true, title: { display: true, text: 'Value' } }
+                }
+            }
+        });
+
+        const socket = new WebSocket('ws://localhost:5000/data');
+
+        // Handle incoming data
+        let currentTestCase = '';
+
+        socket.onmessage = function (event) {
+            const data = JSON.parse(event.data);
+
+            // New test case detected
+            if (currentTestCase !== data.test_case) {
+                currentTestCase = data.test_case;
+
+                // Add a new dataset for the new test case
+                myChart.data.datasets.push({
+                    label: `Test Case: ${currentTestCase}`,
+                    data: [],
+                    borderColor: getRandomColor(),
+                    borderWidth: 2,
+                    fill: false,
+                });
+                myChart.update();
+            }
+
+            // Update chart with new data for the current test case
+            const dataset = myChart.data.datasets.find(ds => ds.label === `Test Case: ${currentTestCase}`);
+            dataset.data.push(data.value);
+            myChart.data.labels.push(`Step ${data.step}`);
+            myChart.update();
+        };
+
+        socket.onopen = () => console.log('WebSocket connected');
+        socket.onerror = (error) => console.error('WebSocket error:', error);
+        socket.onclose = () => console.log('WebSocket connection closed');
+
+        // Utility function to generate random color for each dataset
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+    </script>
+</body>
+</html>

@@ -116,22 +116,22 @@ class Home_Controller:
         finally:
             return model
         
-    def get_hot_hashtag(self, database:Local_Database, request) -> HashTagModel:
+    def get_hot_hashtag(self, database:Local_Database, request, feed_search_engine) -> HashTagModel:
         model = HashTagModel(database=database)
 
         if request.jwt_payload != "":
             model.set_user_with_email(request=request.jwt_payload)
 
         if model.is_user_login():
-            model.set_bias_hash_tag()
+            model.set_realtime_best_hash_tag(feed_search_engine=feed_search_engine, num_hashtag=4)
         else:
-            model.set_best_hash_tag()
+            model.set_best_hash_tag(feed_search_engine=feed_search_engine)
 
         return model
 
-    def get_realtime_best_hashtag(self, database:Local_Database, request) -> HashTagModel:
+    def get_realtime_best_hashtag(self, database:Local_Database, request,feed_search_engine) -> HashTagModel:
         model = HashTagModel(database=database)
         #model.set_best_hash_tag()
-        model.set_realtime_best_hash_tag()
+        model.set_realtime_best_hash_tag(feed_search_engine=feed_search_engine, num_hashtag=10)
 
         return model

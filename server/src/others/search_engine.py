@@ -1,10 +1,11 @@
 from email.policy import default
 from time import sleep
-
+import time
+import asyncio
 import pandas as pd
 from bintrees import AVLTree
 from copy import copy
-from others.data_domain import Feed, User
+from others.data_domain import Feed, User, Bias
 from datetime import  datetime, timedelta
 from pprint import pprint
 
@@ -39,6 +40,7 @@ class FeedSearchEngine:
     def try_make_new_managed_feed(self, feed):
         # 알고리즘에도 추가해야되ㅏㅁ
         self.__search_manager.try_make_new_managed_feed(feed)
+        self.try_add_feed(feed=feed)
 
         return
 
@@ -135,31 +137,18 @@ class FeedSearchEngine:
 
         return result_fid, result_index
 
-    # ------------------------------------------------------------------------------------------------------------
-    # 여기는 아직 하지 말것
-    # 목적 : 추천하는 해시태그 제공, 실시간 트랜드 해시태그 제공
-    def try_get_hashtags(self, num_hashtag,target_type="default", user=None, bias=None):
-        result = []
-
-        if target_type == "default":
-            result = self.__recommand_manager.get_best_hashtags(num_hashtag=num_hashtag)
-        elif target_type == "all":
-            result = self.__recommand_manager.get_recommand_hashtags(user, bias, num_hashtag)
-
-        return result
-
     # 여기도 아직 하지 말것 
     # 목적 : 숏피드에서 다음 피드 제공 받기
-    def try_recommand_feed(self, num_hashtag,target_type="default", feed=None, user=None, bias=None):
-        result = []
+    def try_recommand_feed(self, fid:str, history:list):
+        fid = self.__recommand_manager.get_recommand_feed(fid=fid, history=history)
+        return fid
+    # ------------------------------------------------------------------------------------
+    def get_best_hashtag(self, num_hashtag=10):
+        return self.__recommand_manager.get_best_hashtags(num_hashtag=num_hashtag)
 
-        if target_type == "short":
-            
-            result = self.__recommand_manager.get_next_feeds(feed, user, num_hashtag)
-        elif target_type == "best":
-            result = self.__recommand_manager.get_recommand_hashtags(user, bias, num_hashtag)
+    def get_recommnad_hashtag(self, bid:str):
+        return self.__recommand_manager.get_user_recommand_hashtags(bid=bid)
 
-        return result
 
     # ----------------------------------------------------------------------------------------------------------
     # feed algorithm 테스트용
@@ -599,31 +588,154 @@ class SearchManager:
     
 # --------------------------------------------------------------------------------------------
 
-# 이건 아직 만지지 말것 ------------------------------------------------------------------------
+class ManagedBias:
+    def __init__(self, bid, user_nodes):
+        self.bid = bid
+        self.trand_hashtags = []
+        self.user_nodes = user_nodes
 
 
 # 이건 사용자에게 맞는 데이터를 주려고 만든거
 
 class RecommandManager:
-    def __init__(self, database,feed_algorithm):
+    def __init__(self, database, feed_algorithm):
         self.__database = database
-        self.__feed_algorithm = feed_algorithm
+        self.__feed_algorithm:FeedAlgorithm = feed_algorithm
+        self.__bias_avltree = AVLTree()
+        self.__init__bias_avltree()
+        self.hashtags = []
+        self.loop =asyncio.get_event_loop()
+        self.loop.create_task(self.__check_trend_hashtag())
 
-    # 사용자에게 어울릴만한 해시태그 리스트 제공
-    def get_best_hashtags(self, num_hashtag=10) -> list:
-        return 
+    def __init__bias_avltree(self):
+        biases = []
+        users = []
+        bias_datas = self.__database.get_all_data(target="bid")
+        user_datas = self.__database.get_all_data(target="uid")
 
-    def get_user_recommand_hashtags(self, uid, num_hashtag=4):
+        for bias_data in bias_datas:
+            bias = Bias()
+            bias.make_with_dict(bias_data)
+            biases.append(bias)
 
-        return
+        for user_data in user_datas:
+            user = User()
+            user.make_with_dict(user_data)
+            users.append(user)
+
+        for single_bias in biases:
+            user_nodes = []
+            for single_user in users:
+                single_user:User = single_user
+                # bias를 팔로우하는 유저를 찾아서 노드 연결해야됨
+                if single_user.solo_bid == single_bias.bid or single_user.group_bid == single_bias.bid:
+                    user_node = self.__feed_algorithm.get_user_node_with_uid(uid=single_user.uid)
+                    # 못찾으면 예외처리할것
+                    if user_node:
+                        user_nodes.append(user_node)
+
+            # 이제 관리될 바이어스를 만들고 연결한다음
+            managed_bias = ManagedBias(bid=single_bias.bid, user_nodes=user_nodes)
+            # avl트리에 넣어주면됨
+            self.__bias_avltree.insert(key=bias.bid, value=managed_bias)
+
 
     # 실시간 트랜드 해시태그 제공
-    def get_recommand_hashtags(self, user, bias, num_hashtag=4) -> list:
-        return 
+    def get_best_hashtags(self, num_hashtag=10) -> list:
+        return self.hashtags[0:num_hashtag]
+
+    # 사용자에게 어울릴만한 해시태그 리스트 제공
+    def get_user_recommand_hashtags(self, bid):
+        result = []
+        managed_bias = self.__bias_avltree.get(key=bid)
+        for hashtag in managed_bias.trend_hashtag:
+            result.append(hashtag.hid)
+        return result
+    
+    def get_recommand_feed(self, fid:str, history:list):
+        fid = self.__feed_algorithm.recommend_next_feed(start_fid=fid, history=history)
+        return  fid
 
 
+    def __check_trend_hashtag_algo(self, weight=0, now_data=0, prev_data=0, num_feed=0):
+        next_weight = weight + ((now_data - prev_data) / (num_feed ** 0.5)) * 0.9
 
+        # 새로운 정규화: 상한선 기반 축소 (threshold=0.5, reduction factor=0.1)
+        # signoid 함수
+        threshold = 0.5
+        if next_weight > threshold:
+            next_weight = threshold + (next_weight - threshold) * 0.1
 
+        return max(next_weight, 0)
+    
+    def __total_hashtag_setting(self):
+        hashtag_rank = []
+        hashtag_nodes = self.__feed_algorithm.get_hash_nodes()
+        for hashtag_node in hashtag_nodes:
+            hashtag_node: HashNode = hashtag_node
+
+            new_weight = self.__check_trend_hashtag_algo(
+                weight=hashtag_node.weight,
+                now_data=hashtag_node.trend["now"],
+                prev_data=hashtag_node.trend["prev"],
+                num_feed=len(hashtag_node.edges["feed"]))
+
+            # 안에 값을 최신화
+            hashtag_node.weight = new_weight
+            hashtag_node.trend["prev"] = hashtag_node.trend["now"]
+            hashtag_node.trend["now"] = 0
+
+            hashtag_rank.append(hashtag_node)
+
+        count = 0
+        hashtag_rank = sorted(hashtag_rank, key=lambda x:x.weight, reverse=False)
+
+        for hash_node in hashtag_rank:
+            if count == 10:
+                break
+            self.hashtags.append(hash_node.hid)
+            count += 1
+
+    def __bais_hashtag_setting(self):
+        managed_bias_list = list(self.__bias_avltree.values())
+        for managed_bias in managed_bias_list:
+            hash_nodes = []
+
+            managed_bias:ManagedBias = managed_bias
+
+            # 대충 그래프 타고 들어가서 해시태그 전부다 찾아내는 함수
+            for user_node in managed_bias.user_nodes:
+                for user_edge in user_node.edges:
+                    feed_node:FeedNode = user_edge.target_node
+                    for feed_edge in feed_node.edges:
+                        hash_node:HashNode = feed_edge.target_node
+                        hash_nodes.append(hash_node)
+
+            hash_nodes = sorted(hash_nodes, key=lambda x:x.weight, reverse=False)
+            managed_bias.trand_hashtags = hash_node[:4]
+
+    async def __check_trend_hashtag(self):
+        while True:
+            # time_diff 계산
+            time_diff = 1
+
+            # 만약 마지막으로 연산한지 1시간이 지났으며 다시 연산
+            if time_diff > 1:
+                self.__total_hashtag_setting()
+                self.__bais_hashtag_setting()
+                self.last_computed_time = current_time
+            # 시간 간격이 1시간 미만인 경우
+            else:
+                await asyncio.sleep(10)  # 너무 자주 루프를 돌지 않도록 대기
+
+            current_time = time.time()
+            if hasattr(self, 'last_computed_time'):
+                time_diff = (current_time - self.last_computed_time) / 3600  # 시간 단위로 계산
+            else:
+                self.last_computed_time = current_time
+                time_diff = 0
+
+                
 # --------------------------------------------------------------------------------------------
 
 # Edge 수도코드
@@ -857,6 +969,11 @@ class HashNode(BaseNode):
         super().__init__("hashtag")
         self.hid = hid          # 해시태그 아이디, 문자열이 된다.
         self.edges["feed"] = []
+        self.weight = 0
+        self.trend= {
+            "now":0,
+            "prev":0
+        }
 
     # 노드 일치성 판단. 기록된 id를 통해 판단
     def __eq__(self, other):
@@ -1271,6 +1388,10 @@ class FeedAlgorithm:
                 f"             {list(self.__user_node_avltree.values())} user node in Graph.\n" +
                 f"             {list(self.__hash_node_avltree.values())} hash node in Graph.\n" )
 
+    # uid로 유저 노드 찾기
+    def get_user_node_with_uid(self, uid:str):
+        return self.__user_node_avltree.get(key=uid)
+
     def get_user_nodes(self):
         return list(self.__user_node_avltree.values())
 
@@ -1411,10 +1532,10 @@ class FeedAlgorithm:
         return self.__feed_chaos_graph.disconnect_feed_with_user(feed_node=feed_node, user_node=user_node)
 
     # 추천 feed를 찾아줌
-    def recommend_next_feed(self, start_feed:Feed, history:list):
-        start_feed_node = self.__feed_node_avltree.get(key=start_feed.fid)
+    def recommend_next_feed(self, start_fid:str, history:list):
+        start_feed_node = self.__feed_node_avltree.get(key=start_fid)
         user_feed_recommend_list = self.__feed_chaos_graph.feed_recommend_by_user(start_node=start_feed_node)
-        hash_feed_recommend_list = self.__feed_chaos_graph.feed_recommend_by_hashtag(start_node=start_feed.fid)
+        hash_feed_recommend_list = self.__feed_chaos_graph.feed_recommend_by_hashtag(start_node=start_fid)
 
         result_fid_list = user_feed_recommend_list + hash_feed_recommend_list
 
