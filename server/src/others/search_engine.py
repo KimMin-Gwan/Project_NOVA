@@ -725,13 +725,10 @@ class RecommandManager:
                 print(1)
                 # 대충 그래프 타고 들어가서 해시태그 전부다 찾아내는 함수
                 for user_node in managed_bias.user_nodes:
-                    print(2)
-                    for user_edge in user_node.edges:
+                    for user_edge in user_node.edges['feed']:
                         print(3)
-                        print(user_edge)
                         feed_node:FeedNode = user_edge.target_node
-                        print(feed_node)
-                        for feed_edge in feed_node.edges:
+                        for feed_edge in feed_node.edges['hash']:
                             print(4)
                             hash_node:HashNode = feed_edge.target_node
                             hash_nodes.append(hash_node)
