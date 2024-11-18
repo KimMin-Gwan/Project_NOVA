@@ -716,6 +716,7 @@ class RecommandManager:
 
     def __bais_hashtag_setting(self):
         managed_bias_list = list(self.__bias_avltree.values())
+        print("hello?")
         for managed_bias in managed_bias_list:
             hash_nodes = []
 
@@ -729,13 +730,13 @@ class RecommandManager:
                         hash_node:HashNode = feed_edge.target_node
                         hash_nodes.append(hash_node)
 
+            print(hash_nodes)
             hash_nodes = sorted(hash_nodes, key=lambda x:x.weight, reverse=False)
             managed_bias.trend_hashtags = hash_node[:4]
 
     async def check_trend_hashtag(self):
         try:
             while True:
-                print("hello?")
                 # time_diff 계산
                 time_diff = 1
 
