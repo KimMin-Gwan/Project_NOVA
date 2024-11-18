@@ -23,6 +23,8 @@ class HashTagModel(BaseModel):
             return True
 
     def set_best_hash_tag(self, feed_search_engine:FeedSearchEngine):
+        print(self._bias.bid)
+
         self._hashtags = feed_search_engine.get_recommnad_hashtag(bid=self._bias.bid)
         return
 
