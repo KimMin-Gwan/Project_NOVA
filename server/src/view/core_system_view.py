@@ -320,7 +320,7 @@ class Core_Service_View(Master_View):
             feed_controller =Feed_Controller()
             model = feed_controller.try_search_in_fid(database=self.__database,
                                                         request=request_manager,
-                                                        feed_manager=self.__feed_manager)
+                                                        feed_search_engine=self.__feed_search_engine)
 
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
