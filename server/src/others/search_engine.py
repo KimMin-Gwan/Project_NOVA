@@ -484,7 +484,9 @@ class SearchManager:
                 print(data.date)
 
 
-            for i, managed_feed in enumerate(reversed(search_range)):
+            for i, managed_feed in enumerate(search_range):
+                print("hello")
+
                 print(managed_feed.date)
 
                 if count == num_feed:
