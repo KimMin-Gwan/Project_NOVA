@@ -604,8 +604,11 @@ class RecommandManager:
         self.__bias_avltree = AVLTree()
         self.__init__bias_avltree()
         self.hashtags = []
+        print(0)
         self.loop =asyncio.get_event_loop()
+        print(1)
         self.loop.create_task(self.__check_trend_hashtag())
+        print(2)
 
     def __init__bias_avltree(self):
         biases = []
