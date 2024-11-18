@@ -1009,11 +1009,11 @@ class HashNode(BaseNode):
 
     # 노드 출력 포맷
     def __str__(self):
-        return 'Node({}, {})'.format(self.get_id(), self.node_type)
+        return 'Node({}, {}, {})'.format(self.get_id(), self.node_type, self.weight)
 
     # 리스트 전체 출력 포맷
     def __repr__(self):
-        return 'Node({}, {})'.format(self.get_id(), self.node_type)
+        return 'Node({}, {}, {})'.format(self.get_id(), self.node_type, self.weight)
 
     # 아이디 반환 함수
     def get_id(self):
