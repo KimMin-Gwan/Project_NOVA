@@ -457,6 +457,10 @@ class SearchManager:
         result_fid = []
         result_index = -3
 
+
+        if search_type == "best":
+            print("target_hour : ", target_hour)
+
     
         if index == -1:
             index = len(self.__feed_table)
@@ -492,11 +496,11 @@ class SearchManager:
 
 
         elif search_type == "best":
-            
             print("monitor --------------------------------------------------------------")
             for i, feed_data in enumerate(self.__feed_table):
                 print(f"index : {i}  | date : {feed_data.date} | hashtag : {feed_data.hashtag}")
             print("monitor --------------------------------------------------------------")
+
             for data in search_range:
                 print(data.date)
             
