@@ -489,18 +489,18 @@ class SearchManager:
 
                 print(managed_feed.date)
 
-                if count == num_feed:
-                    print("fuck  u")
-                    break
+                #if count == num_feed:
+                    #print("fuck  u")
+                    #break
                 
-                # 삭제된 피드는 None으로 표시될것이라서
-                if managed_feed.fid == "":
-                    continue
+                ## 삭제된 피드는 None으로 표시될것이라서
+                #if managed_feed.fid == "":
+                    #continue
 
-                result_fid.append(managed_feed.fid)
-                # result_index 업데이트
-                result_index = index - 1 - ii # 실제 self.__feed_table에서의 인덱스 계산
-                count += 1
+                #result_fid.append(managed_feed.fid)
+                ## result_index 업데이트
+                #result_index = index - 1 - ii # 실제 self.__feed_table에서의 인덱스 계산
+                #count += 1
 
 
         elif search_type == "best":
