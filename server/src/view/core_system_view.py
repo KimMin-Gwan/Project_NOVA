@@ -668,7 +668,7 @@ class ShortFeedRecommendRequest(RequestHeader):
         super().__init__(request)
         body = request['body']
         self.fid = body['fid']
-        self.body = body['history']
+        self.history = body['history']
 
 class MakeFeedCommentRequest(RequestHeader):
     def __init__(self, request) -> None:
