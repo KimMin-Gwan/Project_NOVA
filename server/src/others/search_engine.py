@@ -715,29 +715,32 @@ class RecommandManager:
             count += 1
 
     def __bais_hashtag_setting(self):
-        managed_bias_list = list(self.__bias_avltree.values())
-        for managed_bias in managed_bias_list:
-            hash_nodes = []
+        try:
+            managed_bias_list = list(self.__bias_avltree.values())
+            for managed_bias in managed_bias_list:
+                hash_nodes = []
 
-            managed_bias:ManagedBias = managed_bias
+                managed_bias:ManagedBias = managed_bias
 
-            print(1)
-            # 대충 그래프 타고 들어가서 해시태그 전부다 찾아내는 함수
-            for user_node in managed_bias.user_nodes:
-                print(2)
-                for user_edge in user_node.edges:
-                    print(3)
-                    print(user_edge)
-                    feed_node:FeedNode = user_edge.target_node
-                    print(feed_node)
-                    for feed_edge in feed_node.edges:
-                        print(4)
-                        hash_node:HashNode = feed_edge.target_node
-                        hash_nodes.append(hash_node)
+                print(1)
+                # 대충 그래프 타고 들어가서 해시태그 전부다 찾아내는 함수
+                for user_node in managed_bias.user_nodes:
+                    print(2)
+                    for user_edge in user_node.edges:
+                        print(3)
+                        print(user_edge)
+                        feed_node:FeedNode = user_edge.target_node
+                        print(feed_node)
+                        for feed_edge in feed_node.edges:
+                            print(4)
+                            hash_node:HashNode = feed_edge.target_node
+                            hash_nodes.append(hash_node)
 
-            print(hash_nodes)
-            hash_nodes = sorted(hash_nodes, key=lambda x:x.weight, reverse=False)
-            managed_bias.trend_hashtags = hash_node[:4]
+                print(hash_nodes)
+                hash_nodes = sorted(hash_nodes, key=lambda x:x.weight, reverse=False)
+                managed_bias.trend_hashtags = hash_node[:4]
+        except Exception as e:
+            print(e)
 
     async def check_trend_hashtag(self):
         try:
