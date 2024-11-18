@@ -730,6 +730,7 @@ class RecommandManager:
                         hash_nodes.append(hash_node)
 
             hash_nodes = sorted(hash_nodes, key=lambda x:x.weight, reverse=False)
+            print(hash_nodes)
             managed_bias.trend_hashtags = hash_node[:4]
 
     async def check_trend_hashtag(self):
