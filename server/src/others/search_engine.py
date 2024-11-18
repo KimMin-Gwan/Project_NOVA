@@ -605,7 +605,7 @@ class RecommandManager:
         self.__init__bias_avltree()
         self.hashtags = []
         self.loop =asyncio.get_event_loop()
-        self.loop.create_task(self.__check_trend_hashtag())
+        self.loop.create_task(self.check_trend_hashtag())
 
     def __init__bias_avltree(self):
         biases = []
@@ -715,7 +715,7 @@ class RecommandManager:
             hash_nodes = sorted(hash_nodes, key=lambda x:x.weight, reverse=False)
             managed_bias.trend_hashtags = hash_node[:4]
 
-    async def __check_trend_hashtag(self):
+    async def check_trend_hashtag(self):
         print("hello??")
         while True:
             print("???????")
