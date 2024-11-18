@@ -309,7 +309,7 @@ class FeedSearchModel(FeedModel):
                 feed.make_with_dict(dict_data=feed_data)
                 self.__feed.append(feed)
 
-            self.__feed = self._is_user_interacted(user=self._user, feeds=[self.__feed])[0]
+            self.__feed = self._is_user_interacted(user=self._user, feeds=self.__feed)
 
         return
 
