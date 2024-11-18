@@ -736,13 +736,13 @@ class RecommandManager:
 
     async def check_trend_hashtag(self):
         try:
+            time_diff = 1
             while True:
                 # time_diff 계산
-                time_diff = 1
 
-                print(time_diff)
                 # 만약 마지막으로 연산한지 1시간이 지났으며 다시 연산
                 if time_diff > 1:
+                    print("ok gay")
                     self.__total_hashtag_setting()
                     self.__bais_hashtag_setting()
                     self.last_computed_time = current_time
@@ -753,10 +753,8 @@ class RecommandManager:
                 current_time = time.time()
                 if hasattr(self, 'last_computed_time'):
                     time_diff = (current_time - self.last_computed_time) / 3600  # 시간 단위로 계산
-                    print("no")
                 else:
                     self.last_computed_time = current_time
-                    print("fucktgou")
                 time_diff = 0
         except KeyboardInterrupt:
             print("Shutting down due to KeyboardInterrupt.")
