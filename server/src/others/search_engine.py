@@ -707,7 +707,7 @@ class RecommandManager:
                 hashtag_rank.append(hashtag_node)
 
             count = 0
-            hashtag_rank = sorted(hashtag_rank, key=lambda x:x.weight, reverse=False)
+            hashtag_rank = sorted(hashtag_rank, key=lambda x:x.weight, reverse=True)
             for hash_node in hashtag_rank:
                 if count == 10:
                     break
