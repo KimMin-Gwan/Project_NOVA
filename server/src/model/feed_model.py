@@ -380,7 +380,7 @@ class FeedSearchModel(FeedModel):
             body = {
                 'hashtag_feed' : self._make_dict_list_data(list_data=self._hashtag_feed),
                 'uname_feed' : self._make_dict_list_data(list_data=self._uname_feed),
-                'single_feed' : self.__single_feed.get_dict_form_data(),
+                'feed' : self.__single_feed.get_dict_form_data(),
                 'history' : self.__history,
                 'key' : self._key,
                 'comments' : self._make_dict_list_data(list_data=self._comments)
