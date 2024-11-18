@@ -277,7 +277,7 @@ class FeedSearchModel(FeedModel):
         super().__init__(database)
         self._hashtag_feed= []
         self._uname_feed= []
-        self.__single_feed = Feed()
+        self.__feed = []
         self.__history = []
 
     def set_recommand_feed(self, feed_search_engine:FeedSearchEngine, fid:str, history:list):
@@ -299,9 +299,18 @@ class FeedSearchModel(FeedModel):
             print("fid가 없음 추천받아야됨")
             return
         else:
-            feed_data = self._database.get_data_with_id(target="fid", id=str(fid))
-            self.__single_feed.make_with_dict(dict_data=feed_data)
-            self.__single_feed = self._is_user_interacted(user=self._user, feeds=[self.__single_feed])[0]
+            self.__history.append(str(fid))
+            second_fid = feed_search_engine.try_recommand_feed(fid=str(fid),
+                                                  history=self.__history)
+
+            feed_datas = self._database.get_datas_with_ids(target="fid", ids=[str(fid), second_fid])
+            for feed_data in feed_datas:
+                feed = Feed()
+                feed.make_with_dict(dict_data=feed_data)
+                self.__feed.append(feed)
+
+            self.__feed = self._is_user_interacted(user=self._user, feeds=[self.__feed])[0]
+
         return
 
     def try_search_feed(self, feed_search_engine:FeedSearchEngine,
@@ -380,7 +389,7 @@ class FeedSearchModel(FeedModel):
             body = {
                 'hashtag_feed' : self._make_dict_list_data(list_data=self._hashtag_feed),
                 'uname_feed' : self._make_dict_list_data(list_data=self._uname_feed),
-                'feed' : self.__single_feed.get_dict_form_data(),
+                'feed' : self._make_dict_list_data(list_data=self.__feed),
                 'history' : self.__history,
                 'key' : self._key,
                 'comments' : self._make_dict_list_data(list_data=self._comments)
