@@ -123,9 +123,9 @@ class Home_Controller:
             model.set_user_with_email(request=request.jwt_payload)
 
         if model.is_user_login():
-            model.set_realtime_best_hash_tag(feed_search_engine=feed_search_engine, num_hashtag=4)
-        else:
             model.set_best_hash_tag(feed_search_engine=feed_search_engine)
+        else:
+            model.set_realtime_best_hash_tag(feed_search_engine=feed_search_engine, num_hashtag=4)
 
         return model
 

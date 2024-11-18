@@ -147,6 +147,7 @@ class FeedSearchEngine:
         return self.__recommand_manager.get_best_hashtags(num_hashtag=num_hashtag)
 
     def get_recommnad_hashtag(self, bid:str):
+        print(":fuckyou")
         return self.__recommand_manager.get_user_recommand_hashtags(bid=bid)
 
 

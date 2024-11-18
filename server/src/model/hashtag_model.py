@@ -18,6 +18,7 @@ class HashTagModel(BaseModel):
             
             bias_data = self._database.get_data_with_id(target="bid", id=self._user.solo_bid)
             if not bias_data:
+                print("no bias data")
                 return False
             self._bias.make_with_dict(bias_data)
             self._title=self._bias.bname
