@@ -473,11 +473,12 @@ class SearchManager:
 
 
         count = 0
-        print(num_feed)
-        print(len(search_range))
+        #print(num_feed)
+        #print(len(search_range))
 
         if search_type == "all":
             for i, managed_feed in enumerate(reversed(search_range)):
+                print(managed_feed.date)
 
                 if count == num_feed:
                     break
@@ -494,8 +495,6 @@ class SearchManager:
 
         elif search_type == "best":
             for i, managed_feed in enumerate(search_range):
-                #print(managed_feed.date)
-                print(i)
                 ii = len(self.__feed_table) - 1 - i
                 if count == num_feed:
                     break
