@@ -1435,11 +1435,11 @@ class FeedAlgorithm:
             self.add_feed_node(feed)
 
         all_node_feeds = len(self.__feed_node_avltree) + len(self.__user_node_avltree) + len(self.__hash_node_avltree)
-        print(f'INFO<-[      {all_node_feeds} nodes in NOVA Graph IN SEARCH ENGINE NOW READY')
+        #print(f'INFO<-[      {all_node_feeds} nodes in NOVA Graph IN SEARCH ENGINE NOW READY')
 
-        print(f"             {list(self.__feed_node_avltree.values())} feed node in Graph.")
-        print(f"             {list(self.__user_node_avltree.values())} user node in Graph.")
-        print(f"             {list(self.__hash_node_avltree.values())} hash node in Graph.")
+        #$print(f"             {list(self.__feed_node_avltree.values())} feed node in Graph.")
+        #$print(f"             {list(self.__user_node_avltree.values())} user node in Graph.")
+        #$print(f"             {list(self.__hash_node_avltree.values())} hash node in Graph.")
 
         return
 
