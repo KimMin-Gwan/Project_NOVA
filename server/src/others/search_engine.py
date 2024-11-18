@@ -446,7 +446,6 @@ class SearchManager:
             if self.__get_time_diff(target_time=managed_feed.date, target_hour=target_hour):
                 continue
             else:
-                print("founded feed : ", i)
                 target_index = i
                 break
 
@@ -543,7 +542,7 @@ class SearchManager:
             result_fid.append(managed_feed.fid)
 
             # result_index 업데이트
-            result_index = index - 1 - ii  # 실제 self.__feed_table에서의 인덱스 계산
+            result_index = index - 1 - i  # 실제 self.__feed_table에서의 인덱스 계산
             count += 1
 
         return result_fid, result_index
