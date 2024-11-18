@@ -648,6 +648,9 @@ class RecommandManager:
     def get_user_recommand_hashtags(self, bid):
         result = []
         managed_bias = self.__bias_avltree.get(key=bid)
+        print("hello")
+        print(managed_bias)
+        print("world")
         for hashtag in managed_bias.trend_hashtags:
             result.append(hashtag.hid)
         return result
