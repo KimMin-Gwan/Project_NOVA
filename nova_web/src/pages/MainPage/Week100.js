@@ -45,7 +45,7 @@ export default function Week100({ brightMode }) {
             alt="더보기"
             onClick={() => {
               const brightModeValue = localStorage.getItem("brightMode");
-              navigate(`/feed_list?type=best`);
+              navigate(`/feed_list?type=weekly_best`);
             }}
             className={`${style["more-icon"]} ${style[getModeClass(mode)]}`}
           ></img>

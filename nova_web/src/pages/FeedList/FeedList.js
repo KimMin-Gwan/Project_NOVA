@@ -51,6 +51,17 @@ export default function FeedList(isUserState) {
           setNextData(data.body.key);
           setIsLoading(false);
         });
+    } else if (type === "weekly_best") {
+      fetch(`${FETCH_URL}weekly_best`, {
+        credentials: "include",
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          // console.log('first feed 3개', data.body);
+          setFeedData(data.body.feed);
+          setNextData(data.body.key);
+          setIsLoading(false);
+        });
     }
   }
 
@@ -72,6 +83,20 @@ export default function FeedList(isUserState) {
         });
     } else if (type === "all") {
       fetch(`${FETCH_URL}all_feed?key=${nextData}`, {
+        credentials: "include",
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          setNextData(data.body.key);
+          setFeedData((prevData) => {
+            const newData = [...prevData, ...data.body.feed];
+            return newData;
+          });
+          setIsLoading(false);
+          console.log("mor", data);
+        });
+    } else if (type === "weekly_best") {
+      fetch(`${FETCH_URL}weekly_best?key=${nextData}`, {
         credentials: "include",
       })
         .then((response) => response.json())
@@ -158,6 +183,11 @@ export default function FeedList(isUserState) {
         {type === "best" && (
           <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>
             오늘의 베스트 피드
+          </div>
+        )}
+        {type === "weekly_best" && (
+          <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>
+            주간 베스트 피드
           </div>
         )}
         <div className={style["scroll-area"]}>
