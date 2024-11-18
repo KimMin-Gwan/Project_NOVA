@@ -637,7 +637,7 @@ class RecommandManager:
             # 이제 관리될 바이어스를 만들고 연결한다음
             managed_bias = ManagedBias(bid=single_bias.bid, user_nodes=user_nodes)
             # avl트리에 넣어주면됨
-            self.__bias_avltree.insert(key=bias.bid, value=managed_bias)
+            self.__bias_avltree.insert(key=single_bias.bid, value=managed_bias)
 
 
     # 실시간 트랜드 해시태그 제공
