@@ -592,7 +592,7 @@ class SearchManager:
 class ManagedBias:
     def __init__(self, bid, user_nodes):
         self.bid = bid
-        self.trand_hashtags = []
+        self.trend_hashtags = []
         self.user_nodes = user_nodes
 
 
@@ -717,7 +717,7 @@ class RecommandManager:
                         hash_nodes.append(hash_node)
 
             hash_nodes = sorted(hash_nodes, key=lambda x:x.weight, reverse=False)
-            managed_bias.trand_hashtags = hash_node[:4]
+            managed_bias.trend_hashtags = hash_node[:4]
 
     async def __check_trend_hashtag(self):
         while True:
