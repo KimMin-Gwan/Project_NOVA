@@ -448,6 +448,7 @@ class SearchManager:
             if self.__get_time_diff(target_time=managed_feed.date, target_hour=target_hour):
                 continue
             else:
+                print("founded feed : ", i)
                 target_index = i
                 break
 
