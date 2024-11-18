@@ -3,6 +3,20 @@ from fastapi import HTTPException, status
 from others import CustomError, FeedManager, FeedSearchEngine
 
 class Feed_Controller:
+    # fid를 통한 피드 검색
+    def try_search_in_fid(self, database:Local_Database,
+                        request, feed_search_engine: FeedSearchEngine,
+                        num_feed= 1):
+        model = FeedSearchModel(database=database)
+        # 유저가 있으면 세팅
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
+        model.try_search_feed_with_fid(feed_search_engine=feed_search_engine,
+                                        fid=request.data_payload.fid)
+
+        return model
+    
+
     # 키워드를 통한 피드 검색
     def try_search_in_keyword(self, database:Local_Database,
                         request, feed_search_engine: FeedSearchEngine,
@@ -152,48 +166,21 @@ class Feed_Controller:
             return model
 
 
-    def get_home_feed_data(self, database:Local_Database,
-                            request , feed_manager:FeedManager):
-        model = FeedModel(database=database)
-        try:
-            # 유저가 있으면 세팅
-            if request.jwt_payload != "":
-                model.set_user_with_email(request=request.jwt_payload)
-            model.set_home_feed_data(feed_manager=feed_manager, key=request.data_payload.key)
 
-        except CustomError as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
+    # 숏피드에서 다음 피드 요청할 때
+    def get_feed_with_recommand(self, database:Local_Database,
+                        request, feed_search_engine: FeedSearchEngine):
+        model = FeedSearchModel(database=database)
 
-        except Exception as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
+        # 유저가 있으면 세팅
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
 
-        finally:
-            return model
+        model.set_recommand_feed(feed_search_engine,
+                                fid=request.data_payload.fid,
+                                history=request.data_payload.history)
+        return model
 
-    def get_home_hot_hashtag_feed(self, database:Local_Database,
-                            request , feed_manager:FeedManager):
-        model = FeedModel(database=database)
-        try:
-
-            # 유저가 있으면 세팅
-            if request.jwt_payload != "":
-                model.set_user_with_email(request=request.jwt_payload)
-            model.set_feed_data(
-                target_type="hashtag", target=request.data_payload.target,
-                num_feed=4, index= request.data_payload.key)
-
-        except CustomError as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
-
-        except Exception as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
-
-        finally:
-            return model           
 
     def get_home_hot_hashtag_feed(self, database:Local_Database,
                             request , feed_manager:FeedManager):
@@ -218,6 +205,28 @@ class Feed_Controller:
         finally:
             return model           
         
+
+
+    # 예전에 쓰던거
+    def get_home_feed_data(self, database:Local_Database,
+                            request , feed_manager:FeedManager):
+        model = FeedModel(database=database)
+        try:
+            # 유저가 있으면 세팅
+            if request.jwt_payload != "":
+                model.set_user_with_email(request=request.jwt_payload)
+            model.set_home_feed_data(feed_manager=feed_manager, key=request.data_payload.key)
+
+        except CustomError as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
+
+        except Exception as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
+
+        finally:
+            return model
 
     # 위성 탐색에서 들어오는 요청에 대한 반환값
     def get_specific_feed_data(self, database:Local_Database,

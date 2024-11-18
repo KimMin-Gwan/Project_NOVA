@@ -15,6 +15,8 @@ class FeedModel(BaseModel):
     def set_home_feed_data(self, feed_manager:FeedManager, key= -1):
         self._feeds, self._key = feed_manager.get_feed_in_home(user=self._user, key=key)
         return
+    
+
 
     def set_feed_data(self, feed_search_engine:FeedSearchEngine,
                         target_type="default", target="", num_feed=1, index=-1):
@@ -73,6 +75,8 @@ class FeedModel(BaseModel):
 
         self._feeds = self._is_user_interacted(user=self._user, feeds=self._feeds)
         return
+    
+
 
 
     def set_specific_feed_data(self, feed_manager:FeedManager, data_payload):
@@ -273,6 +277,60 @@ class FeedSearchModel(FeedModel):
         super().__init__(database)
         self._hashtag_feed= []
         self._uname_feed= []
+        self.__single_feed = Feed()
+        self.__history = []
+
+    def set_recommand_feed(self, feed_search_engine:FeedSearchEngine, fid:str, history:list):
+        fid = feed_search_engine.try_recommand_feed( fid=fid, history=history)
+        
+        history.append(fid)
+        self.__history = history
+        
+        feed_data = self._database.get_data_with_id(target="fid", id=fid)
+
+        feed = Feed()
+        feed.make_with_dict(feed_data)
+        self._feeds.append(feed)
+        self._feeds = self._is_user_interacted(user=self._user, feeds=self._feeds)
+        return
+
+    def try_search_feed_with_fid(self, feed_search_engine:FeedSearchEngine, fid=""):
+        if fid == "":
+            print("fid가 없음 추천받아야됨")
+            return
+        else:
+            feed_data = self._database.get_data_with_id(target="fid", id=fid)
+            self.__single_feed.make_with_dict(dict_data=feed_data)
+            self.__single_feed = self._is_user_interacted(user=self._user, feeds=[self.__single_feed])[0]
+        return
+
+    def try_search_feed(self, feed_search_engine:FeedSearchEngine,
+                        target="", num_feed=1, index=-1):
+
+        hashtag_feed_fid, self._key = feed_search_engine.try_search_feed(
+            target_type="hashtag", target=target, num_feed=num_feed, index=index)
+
+        user_feed_fid, self._key = feed_search_engine.try_search_feed(
+            target_type="uname", target=target, num_feed=num_feed, index=index)
+        
+        hashtag_feed_data = self._database.get_datas_with_ids(target_id="fid", ids=hashtag_feed_fid)
+        user_feed_fid = self._database.get_datas_with_ids(target_id="fid", ids=user_feed_fid)
+
+        for feed_data1 in hashtag_feed_data:
+            feed = Feed()
+            feed.make_with_dict(feed_data1)
+            self._hashtag_feed.append(feed)
+
+        for feed_data2 in user_feed_fid:
+            feed = Feed()
+            feed.make_with_dict(feed_data2)
+            self._uname_feed.append(feed)
+
+        self._hashtag_feed = self._is_user_interacted(user=self._user, feeds=self._hashtag_feed)
+        self._uname_feed = self._is_user_interacted(user=self._user, feeds=self._uname_feed)
+
+        return
+
 
     def try_search_feed(self, feed_search_engine:FeedSearchEngine,
                         target="", num_feed=1, index=-1):
@@ -322,6 +380,8 @@ class FeedSearchModel(FeedModel):
             body = {
                 'hashtag_feed' : self._make_dict_list_data(list_data=self._hashtag_feed),
                 'uname_feed' : self._make_dict_list_data(list_data=self._uname_feed),
+                'single_feed' : self.__single_feed.get_dict_form_data(),
+                'history' : self.__history,
                 'key' : self._key,
                 'comments' : self._make_dict_list_data(list_data=self._comments)
             }

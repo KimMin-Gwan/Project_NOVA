@@ -83,40 +83,6 @@ class Core_Service_View(Master_View):
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response
-        
-        @self.__app.get('/home/home_feed')
-        def get_feed_data(request:Request, key:Optional[int] = -4):
-            request_manager = RequestManager()
-            data_payload = HomeFeedRequest(key=key)
-            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
-            #if not request_manager.jwt_payload.result:
-                #raise request_manager.credentials_exception
-
-            home_controller=Feed_Controller()
-            model = home_controller.get_home_feed_data(database=self.__database,
-                                                        request=request_manager,
-                                                        feed_manager=self.__feed_manager)
-
-            body_data = model.get_response_form_data(self._head_parser)
-            response = request_manager.make_json_response(body_data=body_data)
-            return response
-
-        @self.__app.get('/home/realtime_hot_feed')
-        def get_feed_data(request:Request, key:Optional[int] = -4):
-            request_manager = RequestManager()
-            data_payload = HomeFeedRequest(key=key)
-            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
-            #if not request_manager.jwt_payload.result:
-                #raise request_manager.credentials_exception
-
-            home_controller=Feed_Controller()
-            model = home_controller.get_home_feed_data(database=self.__database,
-                                                        request=request_manager,
-                                                        feed_manager=self.__feed_manager)
-
-            body_data = model.get_response_form_data(self._head_parser)
-            response = request_manager.make_json_response(body_data=body_data)
-            return response
 
         @self.__app.get('/home/hot_hashtag')
         def get_hot_hashtag(request:Request):
@@ -342,20 +308,36 @@ class Core_Service_View(Master_View):
             return response
 
 
-
-        # feed 데이터 받아오기( 위성 탐색 페이지에서 특정 fclass를 대상으로)
+        # 숏피드에서 맨처음에 feed 데이터를 fid로 검색하기
         @self.__app.get('/feed_explore/get_feed')
-        def get_feed_data(request:Request, fclass:Optional[str] = "", key:Optional[int] = -4 ):
+        def get_feed_data(request:Request, fid:Optional[int]="" ):
             request_manager = RequestManager()
-            if fclass == "":
-                raise request_manager.get_bad_request_exception()
-            data_payload = GetFeedRequest(fclass=fclass, key=key)
+            data_payload = GetFeedRequest(fid=fid)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
                 #raise request_manager.credentials_exception
 
-            home_controller=Feed_Controller()
-            model = home_controller.get_specific_feed_data(database=self.__database,
+            feed_controller =Feed_Controller()
+            model = feed_controller.try_search_in_fid(database=self.__database,
+                                                        request=request_manager,
+                                                        feed_manager=self.__feed_manager)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+        
+        # 숏 피드에서 다음 피드를 요청할 때
+        @self.__app.post('/feed_explore/get_next_feed')
+        def get_feed_data(request:Request, raw_request:dict):
+            request_manager = RequestManager()
+            data_payload = ShortFeedRecommendRequest(request=raw_request)
+
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            #if not request_manager.jwt_payload.result:
+                #raise request_manager.credentials_exception
+
+            feed_controller=Feed_Controller()
+            model = feed_controller.get_feed_with_recommand(database=self.__database,
                                                         request=request_manager,
                                                         feed_manager=self.__feed_manager)
 
@@ -652,9 +634,8 @@ class HashtagFeedRequest(RequestHeader):
         self.key = key
 
 class GetFeedRequest(RequestHeader):
-    def __init__(self,fclass, key) -> None:
-        self.fclass = fclass
-        self.key = key
+    def __init__(self, fid) -> None:
+        self.fid= fid
 
 class RemoveCommentRequest(RequestHeader):
     def __init__(self,fid,cid) -> None:
@@ -681,6 +662,13 @@ class EditFeedRequest(RequestHeader):
         self.hashtag = body['hashtag']
         self.image_names = image_names
         self.images = images
+        
+class ShortFeedRecommendRequest(RequestHeader):
+    def __init__(self, request) -> None:
+        super().__init__(request)
+        body = request['body']
+        self.fid = body['fid']
+        self.body = body['history']
 
 class MakeFeedCommentRequest(RequestHeader):
     def __init__(self, request) -> None:

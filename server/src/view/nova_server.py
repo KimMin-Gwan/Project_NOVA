@@ -79,10 +79,8 @@ class NOVAVerification:
         #exp_checker = Thread(target=self._check_expiration)
         #exp_checker.start()
 
+    async def make_task(self, loop):
         self.loop = asyncio.get_event_loop()
-        self.make_task()
-
-    async def make_task(self):
         await self.loop.create_task(self._check_expiration())
     
     def get_temp_user(self):
