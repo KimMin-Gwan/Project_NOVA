@@ -478,6 +478,11 @@ class SearchManager:
         if search_type == "all":
             print(num_feed)
             print(search_range)
+
+            for data in search_range:
+                print(data:date)
+
+
             for i, managed_feed in enumerate(reversed(search_range)):
                 print(managed_feed.date)
 
