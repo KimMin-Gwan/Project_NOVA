@@ -18,14 +18,12 @@ class HashTagModel(BaseModel):
             
             bias_data = self._database.get_data_with_id(target="bid", id=self._user.solo_bid)
             if not bias_data:
-                print("no bias data")
                 return False
             self._bias.make_with_dict(bias_data)
             self._title=self._bias.bname
             return True
 
     def set_best_hash_tag(self, feed_search_engine:FeedSearchEngine):
-        print(self._bias.bid)
 
         self._hashtags = feed_search_engine.get_recommnad_hashtag(bid=self._bias.bid)
         return

@@ -147,7 +147,6 @@ class FeedSearchEngine:
         return self.__recommand_manager.get_best_hashtags(num_hashtag=num_hashtag)
 
     def get_recommnad_hashtag(self, bid:str):
-        print(":fuckyou")
         return self.__recommand_manager.get_user_recommand_hashtags(bid=bid)
 
 
@@ -647,11 +646,8 @@ class RecommandManager:
 
     # 사용자에게 어울릴만한 해시태그 리스트 제공
     def get_user_recommand_hashtags(self, bid):
-        print("hello")
         result = []
         managed_bias:ManagedBias = self.__bias_avltree.get(key=bid)
-        print(managed_bias)
-        print(managed_bias.trend_hashtags)
 
         for hashtag in managed_bias.trend_hashtags:
             result.append(hashtag.hid)
@@ -726,11 +722,13 @@ class RecommandManager:
 
             # 만약 마지막으로 연산한지 1시간이 지났으며 다시 연산
             if time_diff > 1:
+                print("im here")
                 self.__total_hashtag_setting()
                 self.__bais_hashtag_setting()
                 self.last_computed_time = current_time
             # 시간 간격이 1시간 미만인 경우
             else:
+                print("im sleeping")
                 await asyncio.sleep(10)  # 너무 자주 루프를 돌지 않도록 대기
 
             current_time = time.time()
