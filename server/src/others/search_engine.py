@@ -457,8 +457,6 @@ class SearchManager:
         result_fid = []
         result_index = -3
 
-        for i, feed_data in enumerate(self.__feed_table):
-            print(f"index : {i}  | date : {feed_data.date} | hashtag : {feed_data.hashtag}")
     
         if index == -1:
             index = len(self.__feed_table)
@@ -494,12 +492,17 @@ class SearchManager:
 
 
         elif search_type == "best":
+            
+            print("monitor --------------------------------------------------------------")
+            for i, feed_data in enumerate(self.__feed_table):
+                print(f"index : {i}  | date : {feed_data.date} | hashtag : {feed_data.hashtag}")
+            print("monitor --------------------------------------------------------------")
             for data in search_range:
                 print(data.date)
             
 
             for i, managed_feed in enumerate(search_range):
-                ii = len(self.__feed_table) - 1 - i
+                #ii = len(self.__feed_table) - 1 - i
                 if count == num_feed:
                     break
 
@@ -512,7 +515,7 @@ class SearchManager:
 
                 result_fid.append(managed_feed.fid)
                 # result_index 업데이트
-                result_index = index - 1 - ii # 실제 self.__feed_table에서의 인덱스 계산
+                result_index = index - 1 - i # 실제 self.__feed_table에서의 인덱스 계산
                 count += 1
 
         return result_fid, result_index
