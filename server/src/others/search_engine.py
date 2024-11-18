@@ -44,10 +44,9 @@ class FeedSearchEngine:
         self.try_add_feed(feed=feed)
         return
     
-    def try_get_random_feed(self):
+    def try_get_random_feed(self) -> str:
+        return self.__search_manager.try_get_random_feed()
         
-        random_number = random.randint(0, 20)
-
 
 
     # 이 함수가 핵심 -> feed 데이터를 요청하면 주기 위한 함수
@@ -356,6 +355,11 @@ class SearchManager:
         print(f'INFO<-[      {num_feed} NOVA FEED IN SEARCH ENGINE NOW READY.')
         return 
     
+    def try_get_random_feed(self):
+        random_index = random.randint(0, len(self.__feed_table)-1)
+        return self.__feed_table[random_index].fid
+        
+
     def try_make_new_managed_feed(self, feed:Feed):
         managed_feed = ManagedFeed(
             fid=feed.fid,

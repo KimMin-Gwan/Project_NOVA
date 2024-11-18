@@ -282,10 +282,8 @@ class FeedSearchModel(FeedModel):
 
     def set_recommand_feed(self, feed_search_engine:FeedSearchEngine, fid:str, history:list):
         fid = feed_search_engine.try_recommand_feed( fid=fid, history=history)
-        print("find feed :", fid)
         history.append(fid)
         self.__history = history
-        print("history :", self.__history)
         
         feed_data = self._database.get_data_with_id(target="fid", id=fid)
 
@@ -297,21 +295,19 @@ class FeedSearchModel(FeedModel):
 
     def try_search_feed_with_fid(self, feed_search_engine:FeedSearchEngine, fid=""):
         if fid == "":
-            #feed_search_engine.get
+            fid=feed_search_engine.try_get_random_feed()
 
-            return
-        else:
-            self.__history.append(str(fid))
-            second_fid = feed_search_engine.try_recommand_feed(fid=str(fid),
-                                                  history=self.__history)
-            self.__history.append(second_fid)
-            feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=[str(fid), second_fid])
-            for feed_data in feed_datas:
-                feed = Feed()
-                feed.make_with_dict(dict_data=feed_data)
-                self.__feed.append(feed)
+        self.__history.append(str(fid))
+        second_fid = feed_search_engine.try_recommand_feed(fid=str(fid),
+                                                history=self.__history)
+        self.__history.append(second_fid)
+        feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=[str(fid), second_fid])
+        for feed_data in feed_datas:
+            feed = Feed()
+            feed.make_with_dict(dict_data=feed_data)
+            self.__feed.append(feed)
 
-            self.__feed = self._is_user_interacted(user=self._user, feeds=self.__feed)
+        self.__feed = self._is_user_interacted(user=self._user, feeds=self.__feed)
 
         return
 
