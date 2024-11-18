@@ -722,20 +722,17 @@ class RecommandManager:
 
                 managed_bias:ManagedBias = managed_bias
 
-                print(1)
                 # 대충 그래프 타고 들어가서 해시태그 전부다 찾아내는 함수
                 for user_node in managed_bias.user_nodes:
                     for user_edge in user_node.edges['feed']:
-                        print(3)
                         feed_node:FeedNode = user_edge.target_node
                         for feed_edge in feed_node.edges['hashtag']:
-                            print(feed_edge.target_node)
                             hash_node:HashNode = feed_edge.target_node
                             hash_nodes.append(hash_node)
 
-            #print(hash_nodes)
-            hash_nodes = sorted(hash_nodes, key=lambda x:x.weight, reverse=False)
-            managed_bias.trend_hashtags = hash_nodes[:4]
+                print(hash_nodes)
+                hash_nodes = sorted(hash_nodes, key=lambda x:x.weight, reverse=False)
+                managed_bias.trend_hashtags = hash_nodes[:4]
         except Exception as e:
             print(e)
 
