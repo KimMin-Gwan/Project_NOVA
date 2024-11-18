@@ -122,7 +122,7 @@ function App() {
       <Route path="/write_feed" element={<WriteFeed />}></Route>
       <Route path="/more_see" element={<MoreSee />}></Route>
       <Route path="/galaxy" element={<GalaxyList />}></Route>
-      <Route path="/feed_page" element={<FeedPage />}></Route>
+      <Route path="/feed_page" element={<FeedPage brightMode={brightMode} />}></Route>
       <Route path="/signup" element={<SignUp />}></Route>
       <Route path="/terms_page" element={<Temrs />}></Route>
       <Route path="/league_detail" element={<LeaguePage />}></Route>

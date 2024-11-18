@@ -2046,6 +2046,27 @@ h5 {
 .line.bright-mode {
   border-color: #d2c8f7;
 }
+
+/* 피드 작성 페이지  */
 .write_container.bright-mode {
   background-color: white;
+}
+/* 숏피드 페이지 */
+.short_form.bright-mode {
+  border: 0;
+}
+.content-box.bright-mode {
+  background-color: white;
+}
+.nick_name.bright-mode {
+  color: black;
+}
+.hashtag-box.bright-mode {
+  color: #9f80ff;
+}
+.feed-content.bright-mode {
+  color: black;
+}
+.interaction-box.bright-mode {
+  background-color: #f0f0f0;
 }

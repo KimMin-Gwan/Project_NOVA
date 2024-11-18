@@ -25,8 +25,9 @@ import RightBar from "./../WideVer/RightBar.js";
 import likeStar from "./../../img/like_star.png";
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { getModeClass } from "./../../App.js";
 
-const FeedPage = () => {
+const FeedPage = ({ brightmode }) => {
   let navigate = useNavigate();
   const [params] = useSearchParams();
   const FID = params.get("fid");
@@ -41,7 +42,10 @@ const FeedPage = () => {
   const sliderRef = useRef(null);
 
   let [history, setHistory] = useState([]);
-
+  const [mode, setMode] = useState(() => {
+    // 로컬 스토리지에서 가져온 값이 있으면 그것을, 없으면 'bright'로 초기화
+    return localStorage.getItem("brightMode") || "bright";
+  });
   // const [count, setCount] = useState(0);
   useEffect(() => {
     setTranslateY(-currentIndex * window.innerHeight);
@@ -144,12 +148,9 @@ const FeedPage = () => {
 
   // 피드 데이터 받기
   async function fetchFeed() {
-    await fetch(
-      `https://nova-platform.kr/feed_explore/get_feed?fid=${FID ? FID : ""}`,
-      {
-        credentials: "include",
-      }
-    )
+    await fetch(`https://nova-platform.kr/feed_explore/get_feed?fid=${FID ? FID : ""}`, {
+      credentials: "include",
+    })
       .then((response) => response.json())
       .then((data) => {
         setBanners(data.body.feed);
@@ -169,24 +170,21 @@ const FeedPage = () => {
     try {
       // 서버로부터 추가 배너 데이터를 가져옴
       console.log(currentIndex);
-      const response = await fetch(
-        `https://nova-platform.kr/feed_explore/get_next_feed`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            header,
+      const response = await fetch(`https://nova-platform.kr/feed_explore/get_next_feed`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          header,
+        },
+        body: JSON.stringify({
+          header: header,
+          body: {
+            fid: banners[currentIndex].fid,
+            history: history,
           },
-          body: JSON.stringify({
-            header: header,
-            body: {
-              fid: banners[currentIndex].fid,
-              history: history,
-            },
-          }),
-          credentials: "include",
-        }
-      ); // 예시 URL
+        }),
+        credentials: "include",
+      }); // 예시 URL
       const newBanners = await response.json();
       console.log("e", newBanners);
       setHistory(newBanners.body.history);
@@ -277,12 +275,9 @@ const FeedPage = () => {
   // 댓글 좋아요 부분(완료)
   function handleCommentLike(fid, cid, event) {
     event.preventDefault();
-    fetch(
-      `https://nova-platform.kr/feed_explore/like_comment?fid=${fid}&cid=${cid}`,
-      {
-        credentials: "include",
-      }
-    )
+    fetch(`https://nova-platform.kr/feed_explore/like_comment?fid=${fid}&cid=${cid}`, {
+      credentials: "include",
+    })
       .then((response) => response.json())
       .then((data) => {
         setAllComments((prevAll) => {
@@ -307,20 +302,15 @@ const FeedPage = () => {
     const newAll = allComments.filter((comment) => comment.cid !== cid);
     setAllComments(newAll);
 
-    fetch(
-      `https://nova-platform.kr/feed_explore/remove_comment?fid=${fid}&cid=${cid}`,
-      {
-        credentials: "include",
-      }
-    )
+    fetch(`https://nova-platform.kr/feed_explore/remove_comment?fid=${fid}&cid=${cid}`, {
+      credentials: "include",
+    })
       .then((response) => response.json())
       .then((data) => {
         setAllComments(data.body.comments);
         setBanners((prevFeeds) => {
           return prevFeeds.map((feed) => {
-            return feed.fid === fid
-              ? { ...feed, num_comment: data.body.feed[0].num_comment }
-              : feed;
+            return feed.fid === fid ? { ...feed, num_comment: data.body.feed[0].num_comment } : feed;
           });
         });
       });
@@ -330,12 +320,9 @@ const FeedPage = () => {
   function handleInteraction(event, fid, action) {
     event.preventDefault();
 
-    fetch(
-      `https://nova-platform.kr/feed_explore/interaction_feed?fid=${fid}&action=${action}`,
-      {
-        credentials: "include",
-      }
-    )
+    fetch(`https://nova-platform.kr/feed_explore/interaction_feed?fid=${fid}&action=${action}`, {
+      credentials: "include",
+    })
       .then((response) => response.json())
       .then((data) => {
         // console.log("interactin", data);
@@ -394,9 +381,7 @@ const FeedPage = () => {
         });
         setBanners((prevFeeds) => {
           return prevFeeds.map((feed) => {
-            return feed.fid === fid
-              ? { ...feed, num_comment: data.body.feed[0].num_comment }
-              : feed;
+            return feed.fid === fid ? { ...feed, num_comment: data.body.feed[0].num_comment } : feed;
           });
         });
         setInputValue("");
@@ -408,18 +393,7 @@ const FeedPage = () => {
   }
 
   return (
-    <div
-      onMouseDown={handleMouseDown}
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
-      onMouseLeave={handleMouseUp}
-      onWheel={handleWheel}
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
-      ref={sliderRef}
-      className={style["test_container"]}
-    >
+    <div onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp} onMouseLeave={handleMouseUp} onWheel={handleWheel} onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd} ref={sliderRef} className={style["test_container"]}>
       <div
         className={style["slider-track"]}
         style={{
@@ -431,13 +405,11 @@ const FeedPage = () => {
           return (
             <div
               key={banner.fid}
-              className={style["short_form"]}
+              className={`${style["short_form"]} ${style[getModeClass(mode)]}`}
               // style={{height:`${height}px`}}
             >
-              <div className={style["content-box"]}>
-                <div
-                  className={`${stylePlanet["top_area"]} ${style["top_bar_area"]}`}
-                >
+              <div className={`${style["content-box"]} ${style[getModeClass(mode)]}`}>
+                <div className={`${stylePlanet["top_area"]} ${style["top_bar_area"]}`}>
                   <img
                     src={backword}
                     alt="Arrow"
@@ -451,7 +423,7 @@ const FeedPage = () => {
                 {/* 왼쪽 컨텐츠 */}
                 <div className={style["content-container"]}>
                   <div className={style["sup_info"]}>
-                    <div className={style["nick_name"]}>{banner.nickname}</div>
+                    <div className={`${style["nick_name"]} ${style[getModeClass(mode)]}`}>{banner.nickname}</div>
                     <div className={style.date}>{banner.date}</div>
                   </div>
 
@@ -460,10 +432,7 @@ const FeedPage = () => {
                     <div className={style["modal-container"]}>
                       <div className={style["comment-modal"]}>
                         <nav className={style["top_bar"]}>댓글 더보기</nav>
-                        <nav
-                          onClick={handleShowCommentWindow}
-                          className={style["top_bar"]}
-                        >
+                        <nav onClick={handleShowCommentWindow} className={style["top_bar"]}>
                           닫기
                         </nav>
                         {allComments.length === 0 ? (
@@ -471,53 +440,32 @@ const FeedPage = () => {
                         ) : (
                           allComments.map((comment, i) => {
                             return (
-                              <section
-                                key={comment.cid}
-                                className={style["text-section"]}
-                              >
+                              <section key={comment.cid} className={style["text-section"]}>
                                 <div className={style["text-box"]}>
-                                  <p className={style["text-1"]}>
-                                    {comment.uname}
-                                  </p>
-                                  <p className={style["text-2"]}>
-                                    {comment.body}
-                                  </p>
+                                  <p className={style["text-1"]}>{comment.uname}</p>
+                                  <p className={style["text-2"]}>{comment.body}</p>
                                 </div>
                                 <div className={style["icon-modal"]}>
                                   {comment.owner ? (
                                     <button
                                       onClick={(e) => {
-                                        handleRemoveComment(
-                                          comment.fid,
-                                          comment.cid,
-                                          e
-                                        );
+                                        handleRemoveComment(comment.fid, comment.cid, e);
                                       }}
                                       className={style["button-modal"]}
                                     >
                                       삭제
                                     </button>
                                   ) : (
-                                    <button
-                                      className={style["button-modal"]}
-                                    ></button>
+                                    <button className={style["button-modal"]}></button>
                                   )}
 
-                                  <button className={style["button-modal"]}>
-                                    신고
-                                  </button>
+                                  <button className={style["button-modal"]}>신고</button>
                                   <div className={style["star-modal"]}>
                                     <img
-                                      src={
-                                        comment.like_user ? star_color : star
-                                      }
+                                      src={comment.like_user ? star_color : star}
                                       alt="clickable"
                                       onClick={(e) => {
-                                        handleCommentLike(
-                                          comment.fid,
-                                          comment.cid,
-                                          e
-                                        );
+                                        handleCommentLike(comment.fid, comment.cid, e);
                                       }}
                                       className={style["img-star"]}
                                     />
@@ -528,19 +476,9 @@ const FeedPage = () => {
                             );
                           })
                         )}
-                        <div
-                          className={`${style["comment_action"]} ${style["comment-input"]}`}
-                        >
-                          <form
-                            onSubmit={(event) =>
-                              handleSubmit(banner.fid, event)
-                            }
-                          >
-                            <input
-                              type="text"
-                              value={inputValue}
-                              onChange={handleChange}
-                            ></input>
+                        <div className={`${style["comment_action"]} ${style["comment-input"]}`}>
+                          <form onSubmit={(event) => handleSubmit(banner.fid, event)}>
+                            <input type="text" value={inputValue} onChange={handleChange}></input>
                             <button type="submit">댓글 작성</button>
                           </form>
                         </div>
@@ -548,15 +486,13 @@ const FeedPage = () => {
                     </div>
                   )}
                   {/* 여기까지  */}
-                  <div className={style["hashtag-box"]}>#해시태그</div>
-                  <div className={style["feed-content"]}>{banner.body}</div>
+                  <div className={`${style["hashtag-box"]} ${style[getModeClass(mode)]}`}>#해시태그</div>
+                  <div className={`${style["feed-content"]} ${style[getModeClass(mode)]}`}>{banner.body}</div>
 
                   {/* 1개이미지 */}
                   {banner.num_image === 1 && (
                     <div className={style["image-box"]}>
-                      <div
-                        className={`${style["image-show"]} ${style["one-image"]}`}
-                      >
+                      <div className={`${style["image-show"]} ${style["one-image"]}`}>
                         <img
                           style={{ cursor: "pointer" }}
                           src={banner.image[0]}
@@ -593,9 +529,7 @@ const FeedPage = () => {
                   {/* 3개 이미지 */}
                   {banner.num_image === 3 && (
                     <div className={style["image-box"]}>
-                      <div
-                        className={`${style["image-show"]} ${style["three-image"]}`}
-                      >
+                      <div className={`${style["image-show"]} ${style["three-image"]}`}>
                         {banner.image.map((img, i) => {
                           return (
                             <img
@@ -637,9 +571,7 @@ const FeedPage = () => {
                   {/* 5개 이미지 */}
                   {banner.num_image >= 5 && (
                     <div className={style["image-box"]}>
-                      <div
-                        className={`${style["image-origin"]} ${style["five-over-image"]}`}
-                      >
+                      <div className={`${style["image-origin"]} ${style["five-over-image"]}`}>
                         {banner.image.map((img, i) => {
                           return (
                             <img
@@ -658,42 +590,19 @@ const FeedPage = () => {
                   )}
 
                   <div className={style["fclass-box"]}>
-                    {banner.fclass === "multiple" && (
-                      <MultiClass
-                        feed={banner}
-                        handleInteraction={handleInteraction}
-                      />
-                    )}
-                    {banner.fclass === "card" && (
-                      <CardClass
-                        feed={banner}
-                        handleInteraction={handleInteraction}
-                      />
-                    )}
-                    {banner.fclass === "balance" && (
-                      <BalanceClass
-                        feed={banner}
-                        handleInteraction={handleInteraction}
-                      />
-                    )}
-                    {banner.fclass === "station" && (
-                      <StationClass feed={banner} />
-                    )}
+                    {banner.fclass === "multiple" && <MultiClass feed={banner} handleInteraction={handleInteraction} />}
+                    {banner.fclass === "card" && <CardClass feed={banner} handleInteraction={handleInteraction} />}
+                    {banner.fclass === "balance" && <BalanceClass feed={banner} handleInteraction={handleInteraction} />}
+                    {banner.fclass === "station" && <StationClass feed={banner} />}
                   </div>
                   <div className={style["comment-box"]}>
-                    <Comments
-                      isClickedComment={false}
-                      feed={banner}
-                      setFeedData={setBanners}
-                      allComments={allComments}
-                      setAllComments={setAllComments}
-                    />
+                    <Comments isClickedComment={false} feed={banner} setFeedData={setBanners} allComments={allComments} setAllComments={setAllComments} />
                   </div>
                 </div>
               </div>
 
               {/* 오른쪽 버튼 목록 */}
-              <div className={style["interaction-box"]}>
+              <div className={`${style["interaction-box"]} ${style[getModeClass(mode)]}`}>
                 <div className={style["button-box"]}>
                   <div className={style["write-box"]}>
                     <div className={style["btn-box"]}>
@@ -709,23 +618,15 @@ const FeedPage = () => {
                   </div>
 
                   <div className={style["not-recommend-box"]}>
-                    <div
-                      className={`${style["btn-box"]}} ${style["not-recommend-btn"]}`}
-                    >
-                      <img
-                        className={style["btn-img"]}
-                        src={problem_gray}
-                        alt="추천안함"
-                      />
+                    <div className={`${style["btn-box"]}} ${style["not-recommend-btn"]}`}>
+                      <img className={style["btn-img"]} src={problem_gray} alt="추천안함" />
                       <div id={style.text}>추천안함</div>
                     </div>
                   </div>
 
                   <div className={style["action-box"]}>
                     <div className={style["action-btn"]}>
-                      <div
-                        className={`${style["btn-box"]}} ${style["action-btn-each"]}`}
-                      >
+                      <div className={`${style["btn-box"]}} ${style["action-btn-each"]}`}>
                         <img
                           className={`${style["btn-img"]}`}
                           src={banner.star_flag ? star_color : star_gray}
@@ -737,9 +638,7 @@ const FeedPage = () => {
                         <div id={style.text}>{banner.star}</div>
                       </div>
 
-                      <div
-                        className={`${style["btn-box"]}} ${style["action-btn-each"]}`}
-                      >
+                      <div className={`${style["btn-box"]}} ${style["action-btn-each"]}`}>
                         <img
                           className={`${style["btn-img"]} ${style["comment-img"]}`}
                           src={comment_gray}
@@ -752,25 +651,13 @@ const FeedPage = () => {
                         <div id={style.text}>{banner.num_comment}</div>
                       </div>
 
-                      <div
-                        className={`${style["btn-box"]}} ${style["action-btn-each"]}`}
-                      >
-                        <img
-                          className={style["btn-img"]}
-                          src={share_gray}
-                          alt="공유"
-                        />
+                      <div className={`${style["btn-box"]}} ${style["action-btn-each"]}`}>
+                        <img className={style["btn-img"]} src={share_gray} alt="공유" />
                         <div id={style.text}>공유</div>
                       </div>
 
-                      <div
-                        className={`${style["btn-box"]}} ${style["action-btn-each"]}`}
-                      >
-                        <img
-                          className={style["btn-img"]}
-                          src={report_gray}
-                          alt="신고"
-                        />
+                      <div className={`${style["btn-box"]}} ${style["action-btn-each"]}`}>
+                        <img className={style["btn-img"]} src={report_gray} alt="신고" />
                         <div id={style.text}>신고</div>
                       </div>
                     </div>
