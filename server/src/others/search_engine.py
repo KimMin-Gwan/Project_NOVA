@@ -687,32 +687,35 @@ class RecommandManager:
         return max(next_weight, 0)
     
     def __total_hashtag_setting(self):
-        hashtag_rank = []
-        hashtag_nodes = self.__feed_algorithm.get_hash_nodes()
-        for hashtag_node in hashtag_nodes:
-            hashtag_node: HashNode = hashtag_node
+        try:
+            hashtag_rank = []
+            hashtag_nodes = self.__feed_algorithm.get_hash_nodes()
+            for hashtag_node in hashtag_nodes:
+                hashtag_node: HashNode = hashtag_node
 
-            new_weight = self.__check_trend_hashtag_algo(
-                weight=hashtag_node.weight,
-                now_data=hashtag_node.trend["now"],
-                prev_data=hashtag_node.trend["prev"],
-                num_feed=len(hashtag_node.edges["feed"]))
+                new_weight = self.__check_trend_hashtag_algo(
+                    weight=hashtag_node.weight,
+                    now_data=hashtag_node.trend["now"],
+                    prev_data=hashtag_node.trend["prev"],
+                    num_feed=len(hashtag_node.edges["feed"]))
 
-            # 안에 값을 최신화
-            hashtag_node.weight = new_weight
-            hashtag_node.trend["prev"] = hashtag_node.trend["now"]
-            hashtag_node.trend["now"] = 0
+                # 안에 값을 최신화
+                hashtag_node.weight = new_weight
+                hashtag_node.trend["prev"] = hashtag_node.trend["now"]
+                hashtag_node.trend["now"] = 0
 
-            hashtag_rank.append(hashtag_node)
+                hashtag_rank.append(hashtag_node)
 
-        count = 0
-        hashtag_rank = sorted(hashtag_rank, key=lambda x:x.weight, reverse=False)
+            count = 0
+            hashtag_rank = sorted(hashtag_rank, key=lambda x:x.weight, reverse=False)
 
-        for hash_node in hashtag_rank:
-            if count == 10:
-                break
-            self.hashtags.append(hash_node.hid)
-            count += 1
+            for hash_node in hashtag_rank:
+                if count == 10:
+                    break
+                self.hashtags.append(hash_node.hid)
+                count += 1
+        except Exception as e:
+            print(e)
 
     def __bais_hashtag_setting(self):
         try:
@@ -730,7 +733,6 @@ class RecommandManager:
                             hash_node:HashNode = feed_edge.target_node
                             hash_nodes.append(hash_node)
 
-                print(hash_nodes)
                 hash_nodes = sorted(hash_nodes, key=lambda x:x.weight, reverse=False)
                 managed_bias.trend_hashtags = hash_nodes[:4]
         except Exception as e:
@@ -743,7 +745,6 @@ class RecommandManager:
                 # time_diff 계산
 
                 # 만약 마지막으로 연산한지 1시간이 지났으며 다시 연산
-                print(time_diff)
                 if time_diff >= 1:
                     self.__total_hashtag_setting()
                     self.__bais_hashtag_setting()
