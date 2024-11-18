@@ -647,7 +647,10 @@ class RecommandManager:
     # 사용자에게 어울릴만한 해시태그 리스트 제공
     def get_user_recommand_hashtags(self, bid):
         result = []
-        managed_bias = self.__bias_avltree.get(key=bid)
+        managed_bias:ManagedBias = self.__bias_avltree.get(key=bid)
+        print(managed_bias)
+        print(managed_bias.trand_hashtags)
+
         for hashtag in managed_bias.trend_hashtags:
             result.append(hashtag.hid)
         return result
