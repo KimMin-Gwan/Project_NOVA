@@ -474,6 +474,7 @@ class SearchManager:
 
         count = 0
         print(num_feed)
+        print(search_range)
 
         if search_type == "all":
             for i, managed_feed in enumerate(reversed(search_range)):
