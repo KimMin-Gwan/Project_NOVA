@@ -282,9 +282,10 @@ class FeedSearchModel(FeedModel):
 
     def set_recommand_feed(self, feed_search_engine:FeedSearchEngine, fid:str, history:list):
         fid = feed_search_engine.try_recommand_feed( fid=fid, history=history)
-        print("find feed:", fid)
+        print("find feed :", fid)
         history.append(fid)
         self.__history = history
+        print("history :", self.__history)
         
         feed_data = self._database.get_data_with_id(target="fid", id=fid)
 
