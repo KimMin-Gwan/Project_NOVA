@@ -311,6 +311,7 @@ class Core_Service_View(Master_View):
         # 숏피드에서 맨처음에 feed 데이터를 fid로 검색하기
         @self.__app.get('/feed_explore/get_feed')
         def get_feed_data(request:Request, fid:Optional[int]="" ):
+            print(fid)
             request_manager = RequestManager()
             data_payload = GetFeedRequest(fid=fid)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
@@ -323,12 +324,14 @@ class Core_Service_View(Master_View):
                                                         feed_search_engine=self.__feed_search_engine)
 
             body_data = model.get_response_form_data(self._head_parser)
+            pprint(body_data)
             response = request_manager.make_json_response(body_data=body_data)
             return response
         
         # 숏 피드에서 다음 피드를 요청할 때
         @self.__app.post('/feed_explore/get_next_feed')
         def get_next_feed(request:Request, raw_request:dict):
+            pprint(raw_request)
             request_manager = RequestManager()
             data_payload = ShortFeedRecommendRequest(request=raw_request)
 
@@ -342,6 +345,7 @@ class Core_Service_View(Master_View):
                                                         feed_search_engine=self.__feed_search_engine)
 
             body_data = model.get_response_form_data(self._head_parser)
+            pprint(body_data)
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
