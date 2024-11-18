@@ -3,6 +3,7 @@ from model import Local_Database
 #from others.data_domain import Alert
 from others import CoreControllerLogicError,FeedManager, FeedSearchEngine
 from others import Comment, Feed
+from pprint import pprint
 
 
 class FeedModel(BaseModel):
@@ -281,8 +282,8 @@ class FeedSearchModel(FeedModel):
         self.__history = []
 
     def set_recommand_feed(self, feed_search_engine:FeedSearchEngine, fid:str, history:list):
-        print("hello")
-        print(fid)
+        pprint("hello")
+        pprint(fid)
         fid = feed_search_engine.try_recommand_feed( fid=fid, history=history)
         
         history.append(fid)
