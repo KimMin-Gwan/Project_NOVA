@@ -40,6 +40,15 @@ export default function Week100({ brightMode }) {
       <div className={`${style["top-area"]} ${style[getModeClass(mode)]}`}>
         <div className={style["content-title"]}>
           <header className={style["header-text"]}>주간 TOP 100</header>
+          <img
+            src={more_icon}
+            alt="더보기"
+            onClick={() => {
+              const brightModeValue = localStorage.getItem("brightMode");
+              navigate(`/feed_list?type=best&brightMode=${brightModeValue}`);
+            }}
+            className={`${style["more-icon"]} ${style[getModeClass(mode)]}`}
+          ></img>
         </div>
       </div>
 

@@ -62,7 +62,7 @@ export default function PopularFeed({ brightMode }) {
     <div className={style["wrap-container"]}>
       <div className={`${style["top-area"]} ${style[getModeClass(mode)]}`}>
         <div className={style["content-title"]}>
-          <header className={style["header-text"]}>최근 인기 게시글</header>
+          <header className={style["header-text"]}>오늘의 베스트 피드</header>
           <img
             src={more_icon}
             alt="더보기"

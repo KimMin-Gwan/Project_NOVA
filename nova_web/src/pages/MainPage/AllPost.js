@@ -57,7 +57,7 @@ export default function AllPost({ brightMode }) {
             })}
           </ul>
           <button onClick={() => navigate("/feed_list?type=all")} className={style["all_see-button"]}>
-            전체보기
+            더보기
           </button>
         </div>
       </div>

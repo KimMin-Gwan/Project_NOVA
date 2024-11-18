@@ -147,7 +147,7 @@ export default function FeedList(isUserState) {
           </div>
         </header>
         {type === "all" && <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>전체 피드</div>}
-        {type === "best" && <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>최근 인기 피드</div>}
+        {type === "best" && <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>오늘의 베스트 피드</div>}
         <div className={style["scroll-area"]}>
           {feedData.map((feed, i) => {
             return <Feed key={feed.fid + i} className={`${style["feed-box"]} ${style[getModeClass(mode)]}`} feed={feed} func={true} feedData={feedData} setFeedData={setFeedData} isUserState={isUserState}></Feed>;
