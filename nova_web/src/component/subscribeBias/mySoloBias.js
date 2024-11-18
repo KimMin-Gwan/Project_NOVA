@@ -81,7 +81,12 @@ function MySoloBias({ solo_bias, bias_url, showBox, blackBox, isError }) {
               <img src={plus} alt=""></img>
             </div>
           )}
-          {selectWindow && <SelectBias selectWindow={selectWindow} setSelectWindow={setSelectWindow}></SelectBias>}
+          {selectWindow && (
+            <SelectBias
+              selectWindow={selectWindow}
+              setSelectWindow={setSelectWindow}
+            ></SelectBias>
+          )}
         </>
       )}
       {solo_bias.bid === "" && (
@@ -111,25 +116,27 @@ function MySoloBias({ solo_bias, bias_url, showBox, blackBox, isError }) {
               <img src={plus} alt=""></img>
             </div>
           )}
-          {selectWindow && <SelectBias selectWindow={selectWindow} setSelectWindow={setSelectWindow}></SelectBias>}
+          {selectWindow && (
+            <SelectBias
+              selectWindow={selectWindow}
+              setSelectWindow={setSelectWindow}
+            ></SelectBias>
+          )}
         </>
       )}
       {solo_bias.bid && (
         <>
           <div className="image-container">
-            <img src={bias_url + `${solo_bias.bid}.PNG`} alt="bias" className="img2" />
+            <img
+              src={bias_url + `${solo_bias.bid}.PNG`}
+              alt="bias"
+              className="img2"
+            />
           </div>
 
           <div className="box">
             <div className="my-bias-solo">나의 최애</div>
-            <div
-              className="bias-name"
-              onClick={() => {
-                navigate(`/bias_info/user_contribution?bias_id=${solo_bias.bid}`);
-              }}
-            >
-              {solo_bias.bname}
-            </div>
+            <div className="bias-name">{solo_bias.bname}</div>
           </div>
           {/* <div className='more' onClick={() => {
                         navigate(`/bias_info/user_contribution?bias_id=${solo_bias.bid}`)

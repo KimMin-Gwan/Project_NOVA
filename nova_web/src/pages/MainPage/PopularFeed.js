@@ -67,18 +67,32 @@ export default function PopularFeed({ brightMode }) {
             src={more_icon}
             alt="더보기"
             onClick={() => {
-              const brightModeValue = localStorage.getItem("brightMode");
-              navigate(`/feed_list?type=best&brightMode=${brightModeValue}`);
+              // const brightModeValue = localStorage.getItem("brightMode");
+              navigate(`/feed_list?type=best`);
             }}
             className={`${style["more-icon"]} ${style[getModeClass(mode)]}`}
           ></img>
         </div>
       </div>
 
-      <div className={`${style["main-area"]} ${style["popular-feed-container"]} ${style[getModeClass(mode)]}`} ref={scrollRef} onMouseDown={onMouseDown} onMouseMove={onMouseMove} onMouseUp={onMouseUp}>
+      <div
+        className={`${style["main-area"]} ${style["popular-feed-container"]} ${
+          style[getModeClass(mode)]
+        }`}
+        ref={scrollRef}
+        onMouseDown={onMouseDown}
+        onMouseMove={onMouseMove}
+        onMouseUp={onMouseUp}
+      >
         {homeFeed.map((feed, i) => {
           return (
-            <div key={i} className={`${style["popular-feed"]} ${style[getModeClass(mode)]}`} onClick={() => handleFeedClick(feed.fid)}>
+            <div
+              key={i}
+              className={`${style["popular-feed"]} ${
+                style[getModeClass(mode)]
+              }`}
+              onClick={() => handleFeedClick(feed.fid)}
+            >
               <div className={style["img-box"]}>
                 <img src={`${feed.image[0]}`} alt="img" />
               </div>
@@ -92,7 +106,13 @@ export default function PopularFeed({ brightMode }) {
                     );
                   })}
                 </div>
-                <div className={`${style["popular-text"]} ${style[getModeClass(mode)]}`}>{feed.body}</div>
+                <div
+                  className={`${style["popular-text"]} ${
+                    style[getModeClass(mode)]
+                  }`}
+                >
+                  {feed.body}
+                </div>
                 <footer className={style["like-comment"]}>
                   좋아요 {feed.star}개 | 댓글 {feed.num_comment}개
                 </footer>

@@ -37,7 +37,7 @@ export default function MainPart({ brightMode }) {
       .then((response) => response.json())
       .then((data) => {
         setTagFeed(data.body.feed);
-        console.log('data', data)
+        console.log("data", data);
       });
   }, [fetchUrl]);
 
@@ -87,11 +87,28 @@ export default function MainPart({ brightMode }) {
         <div className={style["content-title"]}>
           {/* bid : ''이면 인기 해시태그
   -1이 아니면 [title] 관련 인기 해시트=ㅐ그 */}
-          {bias.bid === "" ? <header className={style["header-text"]}>인기 해시태그</header> : <header className={style["header-text"]}>[ {bias.title} ] 관련 인기 해시태그</header>}
-          <img src={more_icon} alt="menu" onClick={() => navigate("/feed_hash_list")} className={`${style["more-icon"]} ${style[getModeClass(mode)]}`}></img>
+          {bias.bid === "" ? (
+            <header className={style["header-text"]}>인기 해시태그</header>
+          ) : (
+            <header className={style["header-text"]}>
+              [ {bias.title} ] 관련 인기 해시태그
+            </header>
+          )}
+          <img
+            src={more_icon}
+            alt="menu"
+            onClick={() => navigate("/feed_hash_list")}
+            className={`${style["more-icon"]} ${style[getModeClass(mode)]}`}
+          ></img>
         </div>
 
-        <div className={style["tag-container"]} ref={scrollRef} onMouseDown={onMouseDown} onMouseMove={onMouseMove} onMouseUp={onMouseUp}>
+        <div
+          className={style["tag-container"]}
+          ref={scrollRef}
+          onMouseDown={onMouseDown}
+          onMouseMove={onMouseMove}
+          onMouseUp={onMouseUp}
+        >
           {biasTag.map((tag, i) => {
             return (
               <button
@@ -101,7 +118,14 @@ export default function MainPart({ brightMode }) {
                   handleTagClick(i, tag);
                 }}
                 style={{
-                  backgroundColor: clickIndex === i ? (getModeClass(mode) === "bright-mode" ? "#98A0FF" : "#051243") : getModeClass(mode) === "bright-mode" ? "#CCCFFF" : "#373737",
+                  backgroundColor:
+                    clickIndex === i
+                      ? getModeClass(mode) === "bright-mode"
+                        ? "#98A0FF"
+                        : "#051243"
+                      : getModeClass(mode) === "bright-mode"
+                      ? "#CCCFFF"
+                      : "#373737",
 
                   cursor: "pointer",
                 }}

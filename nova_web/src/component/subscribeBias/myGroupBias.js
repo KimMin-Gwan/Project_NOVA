@@ -60,7 +60,12 @@ function MyGroupBias({ group_bias, bias_url, isError }) {
               <img src={plus} alt=""></img>
             </div>
           )}
-          {selectWindow && <SelectBias selectWindow={selectWindow} setSelectWindow={setSelectWindow}></SelectBias>}
+          {selectWindow && (
+            <SelectBias
+              selectWindow={selectWindow}
+              setSelectWindow={setSelectWindow}
+            ></SelectBias>
+          )}
         </>
       )}
       {group_bias.bid === "" && (
@@ -89,24 +94,26 @@ function MyGroupBias({ group_bias, bias_url, isError }) {
               <img src={plus} alt=""></img>
             </div>
           )}
-          {selectWindow && <SelectBias selectWindow={selectWindow} setSelectWindow={setSelectWindow}></SelectBias>}
+          {selectWindow && (
+            <SelectBias
+              selectWindow={selectWindow}
+              setSelectWindow={setSelectWindow}
+            ></SelectBias>
+          )}
         </>
       )}
       {group_bias.bid && (
         <>
           <div className="image-container">
-            <img src={bias_url + `${group_bias.bid}.PNG`} alt="bias" className="img2" />
+            <img
+              src={bias_url + `${group_bias.bid}.PNG`}
+              alt="bias"
+              className="img2"
+            />
           </div>
           <div className="box">
             <div className="my-bias-solo">최애 그룹</div>
-            <div
-              className="bias-name"
-              onClick={() => {
-                navigate(`/bias_info/user_contribution?bias_id=${group_bias.bid}`);
-              }}
-            >
-              {group_bias.bname}
-            </div>
+            <div className="bias-name">{group_bias.bname}</div>
           </div>
           {/* <div className='more'>
                         <img src={more}></img>

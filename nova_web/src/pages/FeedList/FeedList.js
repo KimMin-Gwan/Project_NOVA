@@ -20,13 +20,17 @@ export default function FeedList(isUserState) {
 
   const brightModeFromUrl = params.get("brightMode");
 
-  const initialMode = brightModeFromUrl || localStorage.getItem("brightMode") || "bright"; // URL에서 가져오고, 없으면 로컬 스토리지에서 가져옴
+  const initialMode =
+    brightModeFromUrl || localStorage.getItem("brightMode") || "bright"; // URL에서 가져오고, 없으면 로컬 스토리지에서 가져옴
   const [mode, setMode] = useState(initialMode);
   let navigate = useNavigate();
+
+  const FETCH_URL = "https://nova-platform.kr/feed_explore/";
+
   function fetchData() {
     // setIsLoading(true);
     if (type === "best") {
-      fetch("https://nova-platform.kr/feed_explore/today_best", {
+      fetch(`${FETCH_URL}today_best`, {
         credentials: "include",
       })
         .then((response) => response.json())
@@ -37,7 +41,7 @@ export default function FeedList(isUserState) {
           setIsLoading(false);
         });
     } else if (type === "all") {
-      fetch("https://nova-platform.kr/feed_explore/all_feed", {
+      fetch(`${FETCH_URL}all_feed`, {
         credentials: "include",
       })
         .then((response) => response.json())
@@ -53,7 +57,7 @@ export default function FeedList(isUserState) {
   function fetchPlusData() {
     // setIsLoading(true);
     if (type === "best") {
-      fetch(`https://nova-platform.kr/feed_explore/today_best?key=${nextData}`, {
+      fetch(`${FETCH_URL}today_best?key=${nextData}`, {
         credentials: "include",
       })
         .then((response) => response.json())
@@ -67,7 +71,7 @@ export default function FeedList(isUserState) {
           console.log("mor", data);
         });
     } else if (type === "all") {
-      fetch(`https://nova-platform.kr/feed_explore/all_feed?key=${nextData}`, {
+      fetch(`${FETCH_URL}all_feed?key=${nextData}`, {
         credentials: "include",
       })
         .then((response) => response.json())
@@ -146,14 +150,35 @@ export default function FeedList(isUserState) {
             </button>
           </div>
         </header>
-        {type === "all" && <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>전체 피드</div>}
-        {type === "best" && <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>오늘의 베스트 피드</div>}
+        {type === "all" && (
+          <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>
+            전체 피드
+          </div>
+        )}
+        {type === "best" && (
+          <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>
+            오늘의 베스트 피드
+          </div>
+        )}
         <div className={style["scroll-area"]}>
           {feedData.map((feed, i) => {
-            return <Feed key={feed.fid + i} className={`${style["feed-box"]} ${style[getModeClass(mode)]}`} feed={feed} func={true} feedData={feedData} setFeedData={setFeedData} isUserState={isUserState}></Feed>;
+            return (
+              <Feed
+                key={feed.fid + i}
+                className={`${style["feed-box"]} ${style[getModeClass(mode)]}`}
+                feed={feed}
+                func={true}
+                feedData={feedData}
+                setFeedData={setFeedData}
+                isUserState={isUserState}
+              ></Feed>
+            );
           })}
           {isLoading && <p>Loading...</p>}
-          <div ref={target} style={{ height: "1px", backgroundColor: "blue" }}></div>
+          <div
+            ref={target}
+            style={{ height: "1px", backgroundColor: "blue" }}
+          ></div>
         </div>
       </div>
       <section className="contents com1">
