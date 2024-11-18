@@ -481,6 +481,7 @@ class SearchManager:
                 print(managed_feed.date)
 
                 if count == num_feed:
+                    print(i)
                     break
                 
                 # 삭제된 피드는 None으로 표시될것이라서
