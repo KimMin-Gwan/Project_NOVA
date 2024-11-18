@@ -73,13 +73,16 @@ class NOVA_Server:
 
 
 class NOVAVerification:
-    async def __init__(self):
+    def __init__(self):
         self.__temp_user = []  # TempUser 
         #  exp 채커
         #exp_checker = Thread(target=self._check_expiration)
         #exp_checker.start()
 
         self.loop = asyncio.get_event_loop()
+        self.make_task()
+
+    async def make_task(self):
         await self.loop.create_task(self._check_expiration())
     
     def get_temp_user(self):
