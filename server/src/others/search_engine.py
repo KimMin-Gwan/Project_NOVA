@@ -755,7 +755,7 @@ class RecommandManager:
                     time_diff = (current_time - self.last_computed_time) / 3600  # 시간 단위로 계산
                 else:
                     self.last_computed_time = current_time
-                    time_diff = 0
+                time_diff = 0
         except KeyboardInterrupt:
             print("Shutting down due to KeyboardInterrupt.")
 
