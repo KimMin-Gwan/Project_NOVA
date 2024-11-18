@@ -477,18 +477,7 @@ class SearchManager:
         #print(len(search_range))
 
         if search_type == "all":
-            print(num_feed)
-            print(search_range)
-
-            for data in search_range:
-                print(data.date)
-
-
             for i, managed_feed in enumerate(search_range):
-                print("hello")
-
-                print(managed_feed.date)
-
                 if count == num_feed:
                     print("fuck  u")
                     break
@@ -497,9 +486,9 @@ class SearchManager:
                 if managed_feed.fid == "":
                     continue
 
-                #result_fid.append(managed_feed.fid)
-                ## result_index 업데이트
-                #result_index = index - 1 - ii # 실제 self.__feed_table에서의 인덱스 계산
+                result_fid.append(managed_feed.fid)
+                # result_index 업데이트
+                result_index = index - 1 - i # 실제 self.__feed_table에서의 인덱스 계산
                 count += 1
 
 
