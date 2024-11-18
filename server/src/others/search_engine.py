@@ -716,7 +716,7 @@ class RecommandManager:
 
     def __bais_hashtag_setting(self):
         managed_bias_list = list(self.__bias_avltree.values())
-        print("hello?")
+        print(managed_bias_list)
         for managed_bias in managed_bias_list:
             hash_nodes = []
 
@@ -743,7 +743,6 @@ class RecommandManager:
                 # 만약 마지막으로 연산한지 1시간이 지났으며 다시 연산
                 print(time_diff)
                 if time_diff >= 1:
-                    print("ok gay")
                     self.__total_hashtag_setting()
                     self.__bais_hashtag_setting()
                     self.last_computed_time = current_time
