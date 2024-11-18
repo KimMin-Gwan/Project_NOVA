@@ -47,7 +47,7 @@ class Master(Configure_File_Reader):
                 feed_search_task,
                 verification_task
             )
-        except:
+        except KeyboardInterrupt:
             print("Server is shutting down gracefully...")
 
         
