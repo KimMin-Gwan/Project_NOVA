@@ -439,8 +439,8 @@ class SearchManager:
     def __find_target_index(self, target_hour=1):
         target_index = len(self.__feed_table)
 
+
         for i, managed_feed in enumerate(self.__feed_table):
-            index = len(self.__feed_table) - 1 - i
             # 삭제된 피드는 None으로 표시될것이라서
             if managed_feed.fid == "":
                 continue
@@ -448,7 +448,7 @@ class SearchManager:
             if self.__get_time_diff(target_time=managed_feed.date, target_hour=target_hour):
                 continue
             else:
-                target_index = index
+                target_index = i
                 break
 
         return target_index
@@ -537,8 +537,8 @@ class SearchManager:
 
         count = 0
 
-        for i, managed_feed in enumerate(reversed(search_range)):
-            ii = len(self.__feed_table) - 1 - i
+        for i, managed_feed in enumerate(search_range):
+            #ii = len(self.__feed_table) - 1 - i
             if count == num_feed:
                 break
 
@@ -560,10 +560,12 @@ class SearchManager:
 
     def search_feed_with_fid(self, fid, num_feed=1, index=-1) -> list:
         result_fid = []
-        for i, managed_feed in enumerate(reversed(self.__feed_table)):
-            index = len(self.__feed_table) - 1 - i
+        index = -1
+        for i, managed_feed in enumerate(self.__feed_table):
+            #index = len(self.__feed_table) - 1 - i
             if managed_feed.fid == fid:
                 result_fid.append(managed_feed.fid)
+                index = i
                 break
 
         return  result_fid, index
@@ -582,8 +584,7 @@ class SearchManager:
 
         count = 0
 
-        for i, managed_feed in enumerate(reversed(search_range)):
-            ii = len(self.__feed_table) - 1 - i
+        for i, managed_feed in enumerate(search_range):
 
             if count == num_feed:
                 break
@@ -598,7 +599,7 @@ class SearchManager:
             result_fid.append(managed_feed.fid)
 
             # result_index 업데이트
-            result_index = index - 1 - ii  # 실제 self.__feed_table에서의 인덱스 계산
+            result_index = index - 1 - i  # 실제 self.__feed_table에서의 인덱스 계산
             count += 1
 
         return result_fid, result_index
