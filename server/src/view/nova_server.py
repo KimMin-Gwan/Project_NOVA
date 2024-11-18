@@ -142,6 +142,7 @@ class NOVAVerification:
         
     # 만료시간 체크해서 제거
     async def _check_expiration(self):
+        print("hello?")
         while True:
             time.sleep(1)
             for user in self.__temp_user:
