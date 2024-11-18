@@ -299,7 +299,7 @@ class FeedSearchModel(FeedModel):
             print("fid가 없음 추천받아야됨")
             return
         else:
-            feed_data = self._database.get_data_with_id(target="fid", id=fid)
+            feed_data = self._database.get_data_with_id(target="fid", id=str(fid))
             self.__single_feed.make_with_dict(dict_data=feed_data)
             self.__single_feed = self._is_user_interacted(user=self._user, feeds=[self.__single_feed])[0]
         return
