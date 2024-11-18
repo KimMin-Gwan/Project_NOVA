@@ -355,7 +355,7 @@ class SearchManager:
 
         # 리턴되면 위에서 잠시 보관한 피드 데이터는 사라지고 self.__feed_table에 ManagedFeed들만 남음
 
-        self.__feed_table = sorted(self.__feed_table, key=lambda x:x.date, reverse=True)
+        self.__feed_table = sorted(self.__feed_table, key=lambda x:x.date, reverse=False)
 
         num_feed = str(len(self.__feed_table))
         print(f'INFO<-[      {num_feed} NOVA FEED IN SEARCH ENGINE NOW READY.')
@@ -468,8 +468,8 @@ class SearchManager:
         else:
             target_index = 0
 
-        #search_range = self.__feed_table[target_index:index][::-1]
-        search_range = self.__feed_table[target_index:index]
+        search_range = self.__feed_table[target_index:index][::-1]
+        #search_range = self.__feed_table[target_index:index]
 
         if index < target_index  or index > len(self.__feed_table):
             return result_fid, -3
