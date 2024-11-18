@@ -479,7 +479,6 @@ class SearchManager:
         if search_type == "all":
             for i, managed_feed in enumerate(search_range):
                 if count == num_feed:
-                    print("fuck  u")
                     break
                 
                 # 삭제된 피드는 None으로 표시될것이라서
@@ -493,6 +492,10 @@ class SearchManager:
 
 
         elif search_type == "best":
+            for data in search_range:
+                print(data.date)
+            
+
             for i, managed_feed in enumerate(search_range):
                 ii = len(self.__feed_table) - 1 - i
                 if count == num_feed:
