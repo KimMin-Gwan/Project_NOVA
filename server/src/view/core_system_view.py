@@ -310,7 +310,7 @@ class Core_Service_View(Master_View):
 
         # 숏피드에서 맨처음에 feed 데이터를 fid로 검색하기
         @self.__app.get('/feed_explore/get_feed')
-        def get_feed_data(request:Request, fid:Optional[int]="" ):
+        def get_feed_data(request:Request, fid:Optional[str]="" ):
             print(fid)
             request_manager = RequestManager()
             data_payload = GetFeedRequest(fid=fid)
