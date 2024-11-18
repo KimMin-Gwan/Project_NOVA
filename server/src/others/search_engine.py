@@ -716,15 +716,17 @@ class RecommandManager:
 
     def __bais_hashtag_setting(self):
         managed_bias_list = list(self.__bias_avltree.values())
-        print(managed_bias_list)
         for managed_bias in managed_bias_list:
             hash_nodes = []
 
             managed_bias:ManagedBias = managed_bias
 
+            print(1)
             # 대충 그래프 타고 들어가서 해시태그 전부다 찾아내는 함수
             for user_node in managed_bias.user_nodes:
+                print(2)
                 for user_edge in user_node.edges:
+                    print(3)
                     feed_node:FeedNode = user_edge.target_node
                     for feed_edge in feed_node.edges:
                         hash_node:HashNode = feed_edge.target_node
