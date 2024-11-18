@@ -282,7 +282,7 @@ class FeedSearchModel(FeedModel):
 
     def set_recommand_feed(self, feed_search_engine:FeedSearchEngine, fid:str, history:list):
         fid = feed_search_engine.try_recommand_feed( fid=fid, history=history)
-        
+        print("find feed:", fid)
         history.append(fid)
         self.__history = history
         
@@ -296,7 +296,8 @@ class FeedSearchModel(FeedModel):
 
     def try_search_feed_with_fid(self, feed_search_engine:FeedSearchEngine, fid=""):
         if fid == "":
-            print("fid가 없음 추천받아야됨")
+            #feed_search_engine.get
+
             return
         else:
             self.__history.append(str(fid))
