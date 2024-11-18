@@ -1390,10 +1390,10 @@ class FeedAlgorithm:
 
     def __str__(self):
         all_node_feeds = len(self.__feed_node_avltree) + len(self.__user_node_avltree) + len(self.__hash_node_avltree)
-        return (f"INFO<-[    {all_node_feeds} nodes in NOVA Graph IN SEARCH ENGINE NOW READY\n" +
-                f"             {list(self.__feed_node_avltree.values())} feed node in Graph.\n" +
-                f"             {list(self.__user_node_avltree.values())} user node in Graph.\n" +
-                f"             {list(self.__hash_node_avltree.values())} hash node in Graph.\n" )
+        return (f"INFO<-[    {all_node_feeds} nodes in NOVA Graph IN SEARCH ENGINE NOW READY\n")
+                #f"             {list(self.__feed_node_avltree.values())} feed node in Graph.\n" +
+                #f"             {list(self.__user_node_avltree.values())} user node in Graph.\n" +
+                #f"             {list(self.__hash_node_avltree.values())} hash node in Graph.\n" )
 
     # uid로 유저 노드 찾기
     def get_user_node_with_uid(self, uid:str):
