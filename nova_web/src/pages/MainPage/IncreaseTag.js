@@ -23,6 +23,7 @@ export default function IncreaseTag({ brightMode }) {
       .then((response) => response.json())
       .then((data) => {
         setTagList(data.body.hashtags);
+        console.log("dataaaa", data);
       });
   }
 
