@@ -457,7 +457,9 @@ class SearchManager:
         result_fid = []
         result_index = -3
 
-
+        for i, feed_data in enumerate(self.__feed_table):
+            print(f"index : {i}  | date : {feed_data.date}")
+    
         if index == -1:
             index = len(self.__feed_table)
 
