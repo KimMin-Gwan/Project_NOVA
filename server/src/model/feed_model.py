@@ -281,6 +281,8 @@ class FeedSearchModel(FeedModel):
         self.__history = []
 
     def set_recommand_feed(self, feed_search_engine:FeedSearchEngine, fid:str, history:list):
+        print("hello")
+        print(fid)
         fid = feed_search_engine.try_recommand_feed( fid=fid, history=history)
         
         history.append(fid)
