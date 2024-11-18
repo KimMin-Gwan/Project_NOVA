@@ -302,6 +302,9 @@ class FeedSearchModel(FeedModel):
             self.__history.append(str(fid))
             second_fid = feed_search_engine.try_recommand_feed(fid=str(fid),
                                                   history=self.__history)
+            
+            print(str(fid))
+            print(second_fid)
 
             feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=[str(fid), second_fid])
             for feed_data in feed_datas:
