@@ -25,13 +25,12 @@ export default function MainPart({ brightMode }) {
       .then((data) => {
         setBias(data.body);
         setBiasTag(data.body.hashtags);
-        console.log("hottt", data);
       });
   }
 
-  const fetchUrl = `https://nova-platform.kr/home/search_feed_with_hashtag?hashtag=${hashTag}`;
+  let fetchUrl = `https://nova-platform.kr/home/search_feed_with_hashtag?hashtag=${hashTag}`;
 
-  const fetchTagFeed = useCallback(() => {
+  const fetchTagFeed = () => {
     fetch(fetchUrl, {
       credentials: "include",
     })
@@ -40,12 +39,12 @@ export default function MainPart({ brightMode }) {
         setTagFeed(data.body.feed);
         console.log("data", data);
       });
-  }, [fetchUrl]);
+  };
 
   useEffect(() => {
     fetchHashTag();
     fetchTagFeed();
-  }, [fetchTagFeed]);
+  }, []);
 
   let scrollRef = useRef(null);
   let [isDrag, setIsDrag] = useState(false);

@@ -543,11 +543,12 @@ h5 {
 
 .feed-comment-modal {
   top: 0;
-  left: 0;
-  right: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0 auto;
   bottom: 0;
   height: 700px;
-  width: 100%;
+  width: 90%;
 }
 
 .text-section {
