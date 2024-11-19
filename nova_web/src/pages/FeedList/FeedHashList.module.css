@@ -57,6 +57,12 @@
   margin-left: 10px;
   cursor: pointer;
 }
+.feed-box {
+  width: 100%;
+}
+.scroll-area {
+  width: 100%;
+}
 /* ----라이트 모드 ----- */
 .feed-box.bright-mode {
   background-color: white;

@@ -714,6 +714,12 @@ h5 {
   margin-top: 6px;
   border-radius: 10px;
   position: relative;
+  min-width: 500px;
+}
+@media (max-width: 500px) {
+  .feed {
+    min-width: 100%;
+  }
 }
 
 .info_area {
@@ -875,7 +881,7 @@ h5 {
 
 .scroll-area {
   /* height: 1000px; */
-  width: 100%;
+  width: 150%;
   /* background-color: blue; */
   overflow: scroll;
   scrollbar-width: none;
