@@ -1,7 +1,7 @@
 from model.base_model import BaseModel
 from model import Local_Database
 from others.data_domain import Bias, League
-from others import CoreControllerLogicError
+from others import CoreControllerLogicError, FeedSearchEngine
 
 class TokenModel(BaseModel):
     def __init__(self, database:Local_Database) -> None:
@@ -154,7 +154,7 @@ class SelectBiasModel(BaseModel):
         return True
     
     # 내 최애를 누구로 할지 최종 결정하는 부분
-    def set_my_bias(self):
+    def set_my_bias(self, feed_search_engine:FeedSearchEngine):
         try:
             flag = False
             # 솔로인지 그룹인지 확인해야됨
@@ -173,7 +173,8 @@ class SelectBiasModel(BaseModel):
             
             if flag:
                 self._database.modify_data_with_id(target_id="uid", target_data=self._user.get_dict_form_data())
-
+            
+            feed_search_engine.add_new_user_to_bias(bid=self.__bias.bid, uid=self._user.uid)
             self.__result = True
 
         except Exception as e:

@@ -93,6 +93,9 @@ class Core_Service_View(Master_View):
                 #raise request_manager.credentials_exception
 
             home_controller=Home_Controller()
+
+            # 만약 인기 해시태그의 리스트가 0이면 어떻게 다른걸 해야됨!!
+
             model = home_controller.get_hot_hashtag(database=self.__database,
                                                         request=request_manager,
                                                         feed_search_engine=self.__feed_search_engine)
@@ -213,7 +216,9 @@ class Core_Service_View(Master_View):
                 raise self._credentials_exception
 
             home_controller=Home_Controller()
-            model = home_controller.select_bias(database=self.__database, request=request_manager)
+            model = home_controller.select_bias(database=self.__database,
+                                                 request=request_manager,
+                                                 feed_search_engine=self.__feed_search_engine)
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
 

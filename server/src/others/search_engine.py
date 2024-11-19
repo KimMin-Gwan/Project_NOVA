@@ -36,6 +36,13 @@ class FeedSearchEngine:
 
         return result
 
+    # 새롭게 최애를 지정했을 때 연결하는 시스템
+    # 근데 이거 잘생각해보면 최애 지정하기 전에 쓴 글들은 해시태그에 반영되어야 하는가?
+    def add_new_user_to_bias(self, bid:str, uid:str):
+        self.__recommand_manager.add_new_user_to_bias(bid=bid, uid=uid)
+        return
+        
+
     # 피드 매니저가 관리중인 피드를 보기 위해 만든 함수
     def try_search_managed_feed(self, fid):
         return self.__search_manager.try_search_managed_feed(fid=fid)
@@ -602,10 +609,10 @@ class SearchManager:
 # --------------------------------------------------------------------------------------------
 
 class ManagedBias:
-    def __init__(self, bid, user_nodes):
+    def __init__(self, bid, user_nodes:list):
         self.bid = bid
         self.trend_hashtags = []
-        self.user_nodes = user_nodes
+        self.user_nodes:list = user_nodes
 
 
 # 이건 사용자에게 맞는 데이터를 주려고 만든거
@@ -656,6 +663,13 @@ class RecommandManager:
             # avl트리에 넣어주면됨
             self.__bias_avltree.insert(key=single_bias.bid, value=managed_bias)
 
+    # 새롭게 최애를 지정했을 때 연결하는 시스템
+    # 근데 이거 잘생각해보면 최애 지정하기 전에 쓴 글들은 해시태그에 반영되어야 하는가?
+    def add_new_user_to_bias(self, bid:str, uid:str):
+        managed_bias:ManagedBias = self.__bias_avltree.get(key=bid)
+        user_node = self.__feed_algorithm.get_user_node_with_uid(uid=uid)
+        managed_bias.user_nodes.append(user_node)
+        return 
 
     # 실시간 트랜드 해시태그 제공
     def get_best_hashtags(self, num_hashtag=10) -> list:

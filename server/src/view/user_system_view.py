@@ -33,6 +33,7 @@ class User_Service_View(Master_View):
             model = user_controller.try_login(database=self.__database,
                                               request=data_payload)
             body_data = model.get_response_form_data(self._head_parser)
+            print(body_data)
             response = request_manager.make_json_response(body_data=body_data,
                                                            token=body_data['body']['token'])
             return response

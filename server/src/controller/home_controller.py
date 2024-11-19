@@ -77,14 +77,14 @@ class Home_Controller:
         finally:
             return model
 
-    def select_bias(self, database:Local_Database, request):
+    def select_bias(self, database:Local_Database, request, feed_search_engine):
         model = SelectBiasModel(database=database)
         try:
             # 유저가 있는지 확인
             model.set_user_with_email(request=request.jwt_payload)
             if not model.find_bias(request=request.data_payload):
                 model.set_state_code("209")
-            if not model.set_my_bias():
+            if not model.set_my_bias(feed_search_engine=feed_search_engine):
                 model.set_state_code("210")
 
         except CustomError as e:
