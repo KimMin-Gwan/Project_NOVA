@@ -190,6 +190,8 @@ class FeedManager:
 
     # 새로운 피드의 데이터를 추가하여 반환
     def __set_new_feed(self, user:User,fid, fclass, choice, body, hashtag, image):
+        temp_list = [[], [], [], []]
+
         new_feed = Feed()
         new_feed.fid = fid
         new_feed.uid = user.uid
@@ -199,6 +201,7 @@ class FeedManager:
         new_feed.fclass = fclass
         new_feed.class_name, new_feed.result = self.__get_class_name(fclass=fclass)
         new_feed.choice = choice[:len(new_feed.result)]
+        new_feed.attend = temp_list[:len(new_feed.result)]
         new_feed.state = "y"
         new_feed.category = [] # 여기서 카테고리 추가
         new_feed.image= image
