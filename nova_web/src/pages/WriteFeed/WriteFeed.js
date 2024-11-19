@@ -132,7 +132,7 @@ const WriteFeed = ({ brightmode }) => {
       // Enter 키로 태그 추가
       if (inputTag && inputTagCount <= 12) {
         // 해시태그가 최대 글자 수 이내일 때만 추가
-        setTagList([...tagList, `#${inputTag}`]); // 태그 목록에 추가
+        setTagList([...tagList, `${inputTag}`]); // 태그 목록에 추가
         setInputTag(""); // 입력 필드 초기화
         setInputTagCount(0); // 글자 수 초기화
       }
@@ -170,7 +170,11 @@ const WriteFeed = ({ brightmode }) => {
   });
   return (
     <div className={`${style["test_container"]} ${style["container"]}`}>
-      <div className={`${style["short_form"]} ${style["short_form_write"]} ${style[getModeClass(mode)]}`}>
+      <div
+        className={`${style["short_form"]} ${style["short_form_write"]} ${
+          style[getModeClass(mode)]
+        }`}
+      >
         <div className={`${stylePlanet["top_area"]} ${style["top_bar_area"]}`}>
           <img
             src={backword}
@@ -201,7 +205,7 @@ const WriteFeed = ({ brightmode }) => {
                   {tagList.length !== 0 &&
                     tagList.map((tag, i) => (
                       <div className={style["tag-box"]} key={i}>
-                        {tag}
+                        #{tag}
                         <button onClick={() => onDeleteTag(i)} className={style["delete-tag"]}>
                           &times; {/* 삭제 아이콘 */}
                         </button>
@@ -258,7 +262,13 @@ const WriteFeed = ({ brightmode }) => {
                     })
                   )}
                 </label>
-                <input id={style["upload-file"]} type="file" accept="image/*" multiple onChange={handleFileChange}></input>
+                <input
+                  id={style["upload-file"]}
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={handleFileChange}
+                ></input>
               </div>
             </Modal>
 
@@ -266,17 +276,29 @@ const WriteFeed = ({ brightmode }) => {
             <Modal show={showChoiceModal} closeModal={closeModal} title="선택지 편집">
               {/* 선택지 편집 관련 내용 */}
               <div className={style["fclass_btn"]}>
-                <img className={style["order_btn"]} src={back} alt="prev" onClick={handlePrev}></img>
+                <img
+                  className={style["order_btn"]}
+                  src={back}
+                  alt="prev"
+                  onClick={handlePrev}
+                ></img>
                 <div className={style["fclass-box"]}>
                   {/* 4지선다 */}
-                  {currentTitle === 1 && <MultipleWrite choice={choice} handleChoiceChange={handleChoiceChange} />}
+                  {currentTitle === 1 && (
+                    <MultipleWrite choice={choice} handleChoiceChange={handleChoiceChange} />
+                  )}
                   {/* 둘 중 하나 */}
                   {currentTitle === 2 && <BalanceWrite handleChoiceChange={handleChoiceChange} />}
                   {/* 정거장 */}
                   {currentTitle === 3 && <StationWrite handleChoiceChange={handleChoiceChange} />}
                   {currentTitle === 0 && <CardWrite />}
                 </div>
-                <img className={style["order_btn"]} src={back} alt="next" onClick={handleNext}></img>
+                <img
+                  className={style["order_btn"]}
+                  src={back}
+                  alt="next"
+                  onClick={handleNext}
+                ></img>
               </div>
             </Modal>
             <hr className={`${style["line_write"]} ${style[getModeClass(mode)]}`}></hr>
@@ -294,7 +316,9 @@ const WriteFeed = ({ brightmode }) => {
                   업로드
                 </button>
               </div>
-              <div className={style["warning_text"]}>타인에게 불편을 줄 수 있는 내용의 게시글은 경고 없이 삭제될 수 있습니다.</div>
+              <div className={style["warning_text"]}>
+                타인에게 불편을 줄 수 있는 내용의 게시글은 경고 없이 삭제될 수 있습니다.
+              </div>
             </div>
           </form>
         </div>
@@ -326,7 +350,12 @@ function MultipleWrite({ choice, handleChoiceChange }) {
       <ol className={style["one_of_four_list"]}>
         {choice.map((ch, index) => (
           <li key={index}>
-            <input name="select" value={ch} onChange={(e) => handleChoiceChange(index, e.target.value)} placeholder={`${index + 1}. 선택지${index + 1}`}></input>
+            <input
+              name="select"
+              value={ch}
+              onChange={(e) => handleChoiceChange(index, e.target.value)}
+              placeholder={`${index + 1}. 선택지${index + 1}`}
+            ></input>
           </li>
         ))}
       </ol>
@@ -339,8 +368,20 @@ function BalanceWrite({ handleChoiceChange }) {
   });
   return (
     <div className={`${style["button_container"]} ${style[getModeClass(mode)]}`}>
-      <input name="balance" maxLength={10} placeholder="버튼 내용" className={`${style["select_button"]} ${style["balance_btn"]}`} onChange={(e) => handleChoiceChange(0, e.target.value)}></input>
-      <input name="balance" maxLength={10} placeholder="버튼 내용" className={`${style["select_button"]} ${style["balance_btn"]}`} onChange={(e) => handleChoiceChange(1, e.target.value)}></input>
+      <input
+        name="balance"
+        maxLength={10}
+        placeholder="버튼 내용"
+        className={`${style["select_button"]} ${style["balance_btn"]}`}
+        onChange={(e) => handleChoiceChange(0, e.target.value)}
+      ></input>
+      <input
+        name="balance"
+        maxLength={10}
+        placeholder="버튼 내용"
+        className={`${style["select_button"]} ${style["balance_btn"]}`}
+        onChange={(e) => handleChoiceChange(1, e.target.value)}
+      ></input>
     </div>
   );
 }
@@ -351,9 +392,27 @@ function StationWrite({ handleChoiceChange }) {
   return (
     <div className={`${style["station_container"]} ${style[getModeClass(mode)]}`}>
       <div className={style["station_box"]}>
-        <input name="site_name" type="text" className={style["site_name"]} placeholder="사이트 이름" onChange={(e) => handleChoiceChange(0, e.target.value)}></input>
-        <input name="script" type="text" className={style["site_script"]} placeholder="설명" onChange={(e) => handleChoiceChange(1, e.target.value)}></input>
-        <input name="url" type="url" className={style["site_url"]} placeholder="url" onChange={(e) => handleChoiceChange(2, e.target.value)}></input>
+        <input
+          name="site_name"
+          type="text"
+          className={style["site_name"]}
+          placeholder="사이트 이름"
+          onChange={(e) => handleChoiceChange(0, e.target.value)}
+        ></input>
+        <input
+          name="script"
+          type="text"
+          className={style["site_script"]}
+          placeholder="설명"
+          onChange={(e) => handleChoiceChange(1, e.target.value)}
+        ></input>
+        <input
+          name="url"
+          type="url"
+          className={style["site_url"]}
+          placeholder="url"
+          onChange={(e) => handleChoiceChange(2, e.target.value)}
+        ></input>
       </div>
     </div>
   );
