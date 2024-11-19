@@ -213,7 +213,6 @@ class FeedSearchEngine:
 
     def try_dislike_feed(self, fid, uid):
         result = self.__feed_algorithm.disconnect_feed_like_user(fid=fid, uid=uid)
-        print("???")
         return result
 
     def try_modify_hash(self, fid, new_hashtags):
