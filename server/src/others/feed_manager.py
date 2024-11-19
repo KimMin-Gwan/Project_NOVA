@@ -153,7 +153,8 @@ class FeedManager:
             image_result, flag = image_descriper.try_feed_image_upload(
                 fid=fid, image_names=data_payload.image_names,
                 images=data_payload.images)
-
+        print(image_result)
+        print(flag)
         # 이미지 업로드 실패하면
         if not flag:
             return image_result, False
