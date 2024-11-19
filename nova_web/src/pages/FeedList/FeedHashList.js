@@ -19,6 +19,7 @@ export default function FeedHashList(isUserState) {
   let [tag, setTag] = useState("");
   let [isClickedTag, setIsClickedTag] = useState(null);
   let [clickIndex, setClickIndex] = useState(0);
+  let [biasData, setBiasData] = useState(null);
   const [params] = useSearchParams();
   const brightModeFromUrl = params.get("brightMode");
 
@@ -36,6 +37,7 @@ export default function FeedHashList(isUserState) {
         setHashTags(data.body.hashtags);
         // setFeedData(data.body.feed);
         // setNextData(data.body.key);
+        setBiasData(data.body);
         setIsLoading(false);
         setIsClickedTag(data.body.hashtags[0]);
       });
@@ -51,6 +53,7 @@ export default function FeedHashList(isUserState) {
       .then((response) => response.json())
       .then((data) => {
         setFeedData(data.body.feed);
+
         // setNextData(data.body.key);
         // setFeedData((prevData) => {
         //   const newData = [...prevData, ...data.body.feed];
@@ -160,7 +163,9 @@ export default function FeedHashList(isUserState) {
             </button>
           </div>
         </header>
-        <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>시연</div>
+        <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>
+          {biasData.title ? biasData.title : "인기 해시태그"}
+        </div>
         <div
           ref={scrollRef}
           onMouseDown={onMouseDown}
