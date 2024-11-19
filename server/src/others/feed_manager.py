@@ -599,39 +599,30 @@ class FeedManager:
         feed = Feed()
         feed.make_with_dict(feed_data)
 
-        print(1)
         flag = False
         # fidNdate = fid=date
+
+
         for fidNdate in user.like:
             fidNdate:str = fidNdate
             target_fid = fidNdate.split('=')[0]
             if target_fid == feed.fid:
+                user.like.remove(fidNdate)
                 flag=True
                 break
-        print(2)
         
         date = datetime.now()
         str_fid_n_date = feed.fid + "=" + self.__set_datetime()
-        print(3)
-        try:
-            if flag:
-                print("im here")
-                self._feed_search_engine.try_dislike_feed(fid=feed.fid, uid=user.uid)
-                print("test Seccess")
-                print(user.like)
-                user.like.remove(str_fid_n_date)
-                print("hello?")
-                feed.star -= 1
-                print(4)
-            else:
-                self._feed_search_engine.try_like_feed(fid=feed.fid, uid=user.uid, like_time=date)
-                user.like.append(str_fid_n_date)
-                feed.star += 1
-                print(5)
-        except Exception as e:
-            print(e)
 
-        print(6)
+        if flag:
+            self._feed_search_engine.try_dislike_feed(fid=feed.fid, uid=user.uid)
+            #user.like.remove(str_fid_n_date)
+            feed.star -= 1
+        else:
+            self._feed_search_engine.try_like_feed(fid=feed.fid, uid=user.uid, like_time=date)
+            user.like.append(str_fid_n_date)
+            feed.star += 1
+
         self._database.modify_data_with_id(target_id="fid",
                                             target_data=feed.get_dict_form_data())
         self._database.modify_data_with_id(target_id="uid",
