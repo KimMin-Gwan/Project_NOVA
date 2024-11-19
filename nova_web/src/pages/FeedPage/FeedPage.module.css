@@ -2063,6 +2063,7 @@ h5 {
 .comment-box.bright-mode {
   background-color: #ffffff;
   border: 1px solid #787878;
+  color: black;
 }
 .feed-text.bright-mode {
   color: black;
