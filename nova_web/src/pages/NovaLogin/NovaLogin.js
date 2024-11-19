@@ -55,6 +55,12 @@ const NOVALogin = () => {
       });
   };
 
+  function onKeyDown(event) {
+    if (event.key === "Enter") {
+      handleLogin();
+    }
+  }
+
   useEffect(() => {
     return () => {
       setLogin("");
@@ -78,25 +84,40 @@ const NOVALogin = () => {
 
       <div className={style.form}>
         {/* <div className={`${styleSignUp.box}`}> */}
-          <div className={style["input-box"]}>
-            이메일
-            <br />
-            <label>
-              <input type="email" placeholder="이메일 주소" value={email} onChange={(e) => setEmail(e.target.value)} className={style.input} />
-            </label>
-            {login === "email" && <div className={style.errorMessage}>{detail}</div>}
-          </div>
+        <div className={style["input-box"]}>
+          이메일
+          <br />
+          <label>
+            <input
+              type="email"
+              placeholder="이메일 주소"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className={style.input}
+            />
+          </label>
+          {login === "email" && <div className={style.errorMessage}>{detail}</div>}
+        </div>
         {/* </div> */}
 
         {/* <div className={`${styleSignUp.box} ${style["box-margin"]}`}> */}
-          <div className={style["input-box"]}>
-            비밀번호
-            <br />
-            <label>
-              <input type="password" placeholder="비밀번호" value={password} onChange={(e) => setPassword(e.target.value)} className={style.input} />
-            </label>
-            {login === "password" && <div className={style.errorMessage}>{detail}</div>}
-          </div>
+        <div className={style["input-box"]}>
+          비밀번호
+          <br />
+          <label>
+            <input
+              type="password"
+              placeholder="비밀번호"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className={style.input}
+              onKeyDown={(e) => {
+                onKeyDown(e);
+              }}
+            />
+          </label>
+          {login === "password" && <div className={style.errorMessage}>{detail}</div>}
+        </div>
         {/* </div> */}
       </div>
 
@@ -112,7 +133,14 @@ const NOVALogin = () => {
         >
           회원 가입
         </button>
-        <div className={style["sign-up"]} onClick={()=>{navigate('/find_pw')}}>비밀번호 찾기</div>
+        <div
+          className={style["sign-up"]}
+          onClick={() => {
+            navigate("/find_pw");
+          }}
+        >
+          비밀번호 찾기
+        </div>
       </div>
     </div>
   );
