@@ -1295,8 +1295,11 @@ class FeedChaosGraph:
 
     # 유저 노드와 Feed 노드 간 연결을 끊음
     def disconnect_feed_with_user(self, feed_node, user_node):
+        print("kkk")
         if self.__find_edge(feed_node, user_node):
+            print("sss")
             self.__remove_edge(feed_node, user_node)
+            print("nnn")
             return True
         return False
 
@@ -1556,7 +1559,7 @@ class FeedAlgorithm:
     def disconnect_feed_like_user(self, uid, fid):
         user_node = self.__user_node_avltree.get(key=uid)
         feed_node = self.__feed_node_avltree.get(key=fid)
-
+        print("git here?")
         return self.__feed_chaos_graph.disconnect_feed_with_user(feed_node=feed_node, user_node=user_node)
 
     # 추천 feed를 찾아줌
