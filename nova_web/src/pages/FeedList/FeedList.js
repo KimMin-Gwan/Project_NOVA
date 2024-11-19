@@ -56,7 +56,7 @@ export default function FeedList(isUserState) {
       })
         .then((response) => response.json())
         .then((data) => {
-          // console.log('first feed 3개', data.body);
+          // console.log("first feed 3개", data);
           setFeedData(data.body.feed);
           setNextData(data.body.key);
           setIsLoading(false);
@@ -174,12 +174,28 @@ export default function FeedList(isUserState) {
             </button>
           </div>
         </header>
-        {type === "all" && <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>전체 피드</div>}
-        {type === "best" && <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>오늘의 베스트 피드</div>}
-        {type === "weekly_best" && <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>주간 베스트 피드</div>}
+        {type === "all" && (
+          <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>전체 피드</div>
+        )}
+        {type === "best" && (
+          <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>오늘의 베스트 피드</div>
+        )}
+        {type === "weekly_best" && (
+          <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>주간 베스트 피드</div>
+        )}
         <div className={style["scroll-area"]}>
           {feedData.map((feed, i) => {
-            return <Feed key={feed.fid + i} className={`${style["feed-box"]} ${style[getModeClass(mode)]}`} feed={feed} func={true} feedData={feedData} setFeedData={setFeedData} isUserState={isUserState}></Feed>;
+            return (
+              <Feed
+                key={feed.fid + i}
+                className={`${style["feed-box"]} ${style[getModeClass(mode)]}`}
+                feed={feed}
+                func={true}
+                feedData={feedData}
+                setFeedData={setFeedData}
+                isUserState={isUserState}
+              ></Feed>
+            );
           })}
           {isLoading && <p>Loading...</p>}
           <div ref={target} style={{ height: "1px", backgroundColor: "blue" }}></div>

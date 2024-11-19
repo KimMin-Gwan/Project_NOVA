@@ -310,7 +310,9 @@ const FeedPage = ({ brightmode }) => {
         setAllComments(data.body.comments);
         setBanners((prevFeeds) => {
           return prevFeeds.map((feed) => {
-            return feed.fid === fid ? { ...feed, num_comment: data.body.feed[0].num_comment } : feed;
+            return feed.fid === fid
+              ? { ...feed, num_comment: data.body.feed[0].num_comment }
+              : feed;
           });
         });
       });
@@ -381,7 +383,9 @@ const FeedPage = ({ brightmode }) => {
         });
         setBanners((prevFeeds) => {
           return prevFeeds.map((feed) => {
-            return feed.fid === fid ? { ...feed, num_comment: data.body.feed[0].num_comment } : feed;
+            return feed.fid === fid
+              ? { ...feed, num_comment: data.body.feed[0].num_comment }
+              : feed;
           });
         });
         setInputValue("");
@@ -393,7 +397,18 @@ const FeedPage = ({ brightmode }) => {
   }
 
   return (
-    <div onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp} onMouseLeave={handleMouseUp} onWheel={handleWheel} onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd} ref={sliderRef} className={style["test_container"]}>
+    <div
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
+      onMouseLeave={handleMouseUp}
+      onWheel={handleWheel}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+      ref={sliderRef}
+      className={style["test_container"]}
+    >
       <div
         className={style["slider-track"]}
         style={{
@@ -423,7 +438,9 @@ const FeedPage = ({ brightmode }) => {
                 {/* 왼쪽 컨텐츠 */}
                 <div className={style["content-container"]}>
                   <div className={style["sup_info"]}>
-                    <div className={`${style["nick_name"]} ${style[getModeClass(mode)]}`}>{banner.nickname}</div>
+                    <div className={`${style["nick_name"]} ${style[getModeClass(mode)]}`}>
+                      {banner.nickname}
+                    </div>
                     <div className={style.date}>{banner.date}</div>
                   </div>
 
@@ -431,7 +448,9 @@ const FeedPage = ({ brightmode }) => {
                   {isClickedComment && (
                     <div className={style["modal-container"]}>
                       <div className={style["comment-modal"]}>
-                        <nav className={`${style["comment-modal"]} ${style[getModeClass(mode)]}`}>댓글 더보기</nav>
+                        <nav className={`${style["comment-modal"]} ${style[getModeClass(mode)]}`}>
+                          댓글 더보기
+                        </nav>
                         <nav onClick={handleShowCommentWindow} className={style["top_bar"]}>
                           X
                         </nav>
@@ -486,8 +505,20 @@ const FeedPage = ({ brightmode }) => {
                     </div>
                   )}
                   {/* 여기까지  */}
-                  <div className={`${style["hashtag-box"]} ${style[getModeClass(mode)]}`}>#해시태그</div>
-                  <div className={`${style["feed-content"]} ${style[getModeClass(mode)]}`}>{banner.body}</div>
+                  {banner.hashtag.map((tag, i) => {
+                    return (
+                      <span
+                        key={tag + i}
+                        className={`${style["hashtag-box"]} ${style[getModeClass(mode)]}`}
+                      >
+                        #{tag}
+                      </span>
+                    );
+                  })}
+
+                  <div className={`${style["feed-content"]} ${style[getModeClass(mode)]}`}>
+                    {banner.body}
+                  </div>
 
                   {/* 1개이미지 */}
                   {banner.num_image === 1 && (
@@ -590,13 +621,25 @@ const FeedPage = ({ brightmode }) => {
                   )}
 
                   <div className={style["fclass-box"]}>
-                    {banner.fclass === "multiple" && <MultiClass feed={banner} handleInteraction={handleInteraction} />}
-                    {banner.fclass === "card" && <CardClass feed={banner} handleInteraction={handleInteraction} />}
-                    {banner.fclass === "balance" && <BalanceClass feed={banner} handleInteraction={handleInteraction} />}
+                    {banner.fclass === "multiple" && (
+                      <MultiClass feed={banner} handleInteraction={handleInteraction} />
+                    )}
+                    {banner.fclass === "card" && (
+                      <CardClass feed={banner} handleInteraction={handleInteraction} />
+                    )}
+                    {banner.fclass === "balance" && (
+                      <BalanceClass feed={banner} handleInteraction={handleInteraction} />
+                    )}
                     {banner.fclass === "station" && <StationClass feed={banner} />}
                   </div>
                   <div className={style["comment-box"]}>
-                    <Comments isClickedComment={false} feed={banner} setFeedData={setBanners} allComments={allComments} setAllComments={setAllComments} />
+                    <Comments
+                      isClickedComment={false}
+                      feed={banner}
+                      setFeedData={setBanners}
+                      allComments={allComments}
+                      setAllComments={setAllComments}
+                    />
                   </div>
                 </div>
               </div>
