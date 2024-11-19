@@ -212,7 +212,17 @@ const FeedPage = ({ brightmode }) => {
     fetch(`https://nova-platform.kr/feed_explore/check_star?fid=${fid}`, {
       credentials: "include",
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          if (response.status === 401) {
+            // setIsError(response.status);
+            navigate("/novalogin");
+          } else {
+            throw new Error(`status: ${response.status}`);
+          }
+        }
+        return response.json();
+      })
       .then((data) => {
         setBanners((prevBanners) => {
           return prevBanners.map((banner) => {
@@ -278,7 +288,17 @@ const FeedPage = ({ brightmode }) => {
     fetch(`https://nova-platform.kr/feed_explore/like_comment?fid=${fid}&cid=${cid}`, {
       credentials: "include",
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          if (response.status === 401) {
+            // setIsError(response.status);
+            navigate("/novalogin");
+          } else {
+            throw new Error(`status: ${response.status}`);
+          }
+        }
+        return response.json();
+      })
       .then((data) => {
         setAllComments((prevAll) => {
           return prevAll.map((comment, i) => {
@@ -305,7 +325,17 @@ const FeedPage = ({ brightmode }) => {
     fetch(`https://nova-platform.kr/feed_explore/remove_comment?fid=${fid}&cid=${cid}`, {
       credentials: "include",
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          if (response.status === 401) {
+            // setIsError(response.status);
+            navigate("/novalogin");
+          } else {
+            throw new Error(`status: ${response.status}`);
+          }
+        }
+        return response.json();
+      })
       .then((data) => {
         setAllComments(data.body.comments);
         setBanners((prevFeeds) => {
@@ -325,7 +355,17 @@ const FeedPage = ({ brightmode }) => {
     fetch(`https://nova-platform.kr/feed_explore/interaction_feed?fid=${fid}&action=${action}`, {
       credentials: "include",
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          if (response.status === 401) {
+            // setIsError(response.status);
+            navigate("/novalogin");
+          } else {
+            throw new Error(`status: ${response.status}`);
+          }
+        }
+        return response.json();
+      })
       .then((data) => {
         // console.log("interactin", data);
         setBanners((prevFeeds) => {
@@ -373,7 +413,17 @@ const FeedPage = ({ brightmode }) => {
         },
       }),
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          if (response.status === 401) {
+            // setIsError(response.status);
+            navigate("/novalogin");
+          } else {
+            throw new Error(`status: ${response.status}`);
+          }
+        }
+        return response.json();
+      })
       .then((data) => {
         console.log(data);
         // setNewComments(data.body.comments);

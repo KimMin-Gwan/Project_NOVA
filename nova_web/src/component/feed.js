@@ -5,6 +5,7 @@ import { FaStar } from "react-icons/fa";
 import star from "./../img/favorite.png";
 import star_color from "./../img/favorite_color.png";
 import { getModeClass } from "./../App.js";
+import { useNavigate } from "react-router-dom";
 
 // import { useRef, useState } from 'react';
 export function useBrightMode() {
@@ -38,6 +39,7 @@ export default function Feed({
   let [selectedIndex, setSelectedIndex] = useState(null);
   let [isError, setIsError] = useState();
   // let [myAttend, setMyAttend] = useState(null);
+  let navigate = useNavigate();
 
   const handleClick = (index) => {
     if (selectedIndex === index) {
@@ -57,6 +59,7 @@ export default function Feed({
         if (!response.ok) {
           if (response.status === 401) {
             setIsError(response.status);
+            navigate("/novalogin");
           } else {
             throw new Error(`status: ${response.status}`);
           }
@@ -95,6 +98,7 @@ export default function Feed({
         if (!response.ok) {
           if (response.status === 401) {
             setIsError(response.status);
+            navigate("/novalogin");
           } else {
             throw new Error(`status: ${response.status}`);
           }
@@ -141,6 +145,7 @@ export default function Feed({
         if (!response.ok) {
           if (response.status === 401) {
             setIsError(response.status);
+            navigate("/novalogin");
           } else {
             throw new Error(`status: ${response.status}`);
           }
@@ -148,8 +153,6 @@ export default function Feed({
         return response.json();
       })
       .then((data) => {
-        console.log("like", data.body.comments);
-
         setAllComments((prevAll) => {
           return prevAll.map((comment, i) => {
             return comment.cid === cid
@@ -179,6 +182,7 @@ export default function Feed({
         if (!response.ok) {
           if (response.status === 401) {
             setIsError(response.status);
+            navigate("/novalogin");
           } else {
             throw new Error(`status: ${response.status}`);
           }
@@ -224,7 +228,17 @@ export default function Feed({
         },
       }),
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          if (response.status === 401) {
+            setIsError(response.status);
+            navigate("/novalogin");
+          } else {
+            throw new Error(`status: ${response.status}`);
+          }
+        }
+        return response.json();
+      })
       .then((data) => {
         console.log(data);
         // setNewComments(data.body.comments);
@@ -1438,6 +1452,7 @@ export function Comments({
   isUserState,
 }) {
   let [isError, setIsError] = useState();
+  let navigate = useNavigate();
 
   let header = {
     "request-type": "default",
@@ -1471,7 +1486,17 @@ export function Comments({
         },
       }),
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          if (response.status === 401) {
+            setIsError(response.status);
+            navigate("/novalogin");
+          } else {
+            throw new Error(`status: ${response.status}`);
+          }
+        }
+        return response.json();
+      })
       .then((data) => {
         console.log(data);
         // setNewComments(data.body.comments);
