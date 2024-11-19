@@ -63,8 +63,8 @@ class Home_Controller:
         model = BiasSearchModel(database=database)
 
         try:
-            #if not model.try_search_bias(request=request):
-            model.set_state_code("210")
+            if not model.try_search_bias(request=request):
+                model.set_state_code("210")
 
         except CustomError as e:
             print("Error Catched : ", e.error_type)
