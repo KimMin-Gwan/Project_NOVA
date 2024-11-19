@@ -574,7 +574,7 @@ h5 {
 
   .text-2 {
     margin: 2px;
-    color: gray;
+    color: white;
   }
 }
 
@@ -611,15 +611,15 @@ h5 {
   /* position: absolute; */
   /* justify-self: center; */
   /* top: 10vh; */
-  width: 100%;
+  width: 90%;
   /* height: calc(100vh-1vh); */
-  background-color: #f2f2f2;
+  background-color: #868686;
   padding: 5px;
   border-radius: 10px;
   padding-top: 5px;
 
   .top_bar {
-    color: #797979;
+    color: white;
     text-align: center;
     padding: 5px;
     border-bottom: 1px solid #dbdbdb;
@@ -2184,4 +2184,23 @@ h5 {
 }
 .interaction-box.bright-mode {
   background-color: #f0f0f0;
+  img {
+    filter: invert(1);
+  }
+  #text {
+    color: #000000;
+  }
+}
+/* 버튼들 */
+.fclass-container.bright-mode {
+  h1,
+  h5 {
+    color: black;
+  }
+
+  .empathy-box {
+    div {
+      color: #000000;
+    }
+  }
 }

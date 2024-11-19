@@ -431,9 +431,9 @@ const FeedPage = ({ brightmode }) => {
                   {isClickedComment && (
                     <div className={style["modal-container"]}>
                       <div className={style["comment-modal"]}>
-                        <nav className={style["top_bar"]}>댓글 더보기</nav>
+                        <nav className={`${style["comment-modal"]} ${style[getModeClass(mode)]}`}>댓글 더보기</nav>
                         <nav onClick={handleShowCommentWindow} className={style["top_bar"]}>
-                          닫기
+                          X
                         </nav>
                         {allComments.length === 0 ? (
                           <div>댓글이 없습니다.</div>
@@ -617,7 +617,7 @@ const FeedPage = ({ brightmode }) => {
                     </div>
                   </div>
 
-                  <div className={style["not-recommend-box"]}>
+                  <div className={`${style["not-recommend-box"]} ${style[getModeClass(mode)]}`}>
                     <div className={`${style["btn-box"]}} ${style["not-recommend-btn"]}`}>
                       <img className={style["btn-img"]} src={problem_gray} alt="추천안함" />
                       <div id={style.text}>추천안함</div>
@@ -700,8 +700,11 @@ function MultiClass({ feed, handleInteraction }) {
 }
 
 function CardClass({ feed, handleInteraction }) {
+  const [mode, setMode] = useState(() => {
+    return localStorage.getItem("brightMode") || "bright";
+  });
   return (
-    <div className={style["fclass-container"]}>
+    <div className={`${style["fclass-container"]} ${style[getModeClass(mode)]}`}>
       <div className={style["empathy-box"]}>
         <div>축하하기</div>
         <div>8명</div>
@@ -737,8 +740,11 @@ function BalanceClass({ feed, handleInteraction }) {
 }
 
 function StationClass({ feed }) {
+  const [mode, setMode] = useState(() => {
+    return localStorage.getItem("brightMode") || "bright";
+  });
   return (
-    <div className={style["fclass-container"]}>
+    <div className={`${style["fclass-container"]} ${style[getModeClass(mode)]}`}>
       <div
         className={style["external-box"]}
         onClick={() => {
