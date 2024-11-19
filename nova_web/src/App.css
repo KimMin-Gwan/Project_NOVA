@@ -8,7 +8,13 @@ body {
 
 /* 다크 모드 버튼 */
 .change-btn {
+  display: inline-block;
   height: 50px;
+  background-color: transparent;
+  border: 0;
+  font-size: 20px;
+  color: #767676;
+  cursor: pointer;
 }
 
 /* 라이트모드 */

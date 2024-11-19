@@ -178,18 +178,14 @@ function App() {
                       navigate("/");
                     }}
                   >
-                    <img
-                      src={logo}
-                      alt="logo"
-                      className={`logo-st ${getModeClass(brightMode)}`}
-                    ></img>
+                    <img src={logo} alt="logo" className={`logo-st ${getModeClass(brightMode)}`}></img>
                   </div>
 
                   <div className="buttons">
-                    <button className="change-btn" onClick={handleChangeMode}>
-                      {brightMode === "dark" ? "라이트모드로 전환" : "다크모드로 전환"}
-                    </button>
                     <button className="tool-button">
+                      <button className="change-btn" onClick={handleChangeMode}>
+                        {brightMode === "dark" ? "☀️ Light" : "🌑 Dark"}
+                      </button>
                       <img
                         src={menu}
                         alt="menu"
