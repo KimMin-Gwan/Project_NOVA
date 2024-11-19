@@ -356,6 +356,7 @@
   text-align: center;
   border: 1px white solid;
   border-radius: 5px;
+  color: white;
 }
 
 /* 2. 카드(공감)  */
@@ -1586,7 +1587,7 @@ h5 {
   background-color: #000000;
   border: 0;
   height: 30px;
-
+  color: white;
   &:focus {
     outline: none;
   }
@@ -1607,6 +1608,7 @@ h5 {
   color: black;
   background-color: #000000;
   border: 1px solid #ababab;
+  color: white;
 }
 
 .balance_btn::placeholder {
@@ -1642,6 +1644,7 @@ h5 {
   border: none;
   background-color: transparent;
   outline: none;
+  color: white;
 }
 
 .station_box input::placeholder {
@@ -2140,6 +2143,7 @@ h5 {
 .fclass-container.bright-mode {
   .empathy-box {
     background-color: white;
+    color: black;
   }
   .empathy-box::placeholder {
     color: black;
@@ -2153,6 +2157,7 @@ h5 {
     }
     input {
       background-color: white;
+      color: black;
     }
   }
   input::placeholder {
@@ -2164,6 +2169,7 @@ h5 {
 .button_container.bright-mode {
   .balance_btn {
     background-color: white;
+    color: black;
     &::placeholder {
       color: #000000;
     }
@@ -2173,6 +2179,10 @@ h5 {
 .station_container.bright-mode {
   .station_box {
     background-color: white;
+
+    input {
+      color: black;
+    }
     input::placeholder {
       color: #000000;
     }
