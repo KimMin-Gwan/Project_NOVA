@@ -351,6 +351,8 @@ class Core_Service_View(Master_View):
         @self.__app.get('/feed_explore/interaction_feed')
         def try_interaction_feed(request:Request, fid:Optional[str], action:Optional[int]):
             request_manager = RequestManager()
+            print(action)
+            print(fid)
 
             data_payload = FeedInteractionRequest(fid=fid, action=action)
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
@@ -363,7 +365,7 @@ class Core_Service_View(Master_View):
                                                         feed_manager=self.__feed_manager)
             
             body_data = model.get_response_form_data(self._head_parser)
-            print(body_data)
+            pprint(body_data)
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
