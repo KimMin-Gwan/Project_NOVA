@@ -8,14 +8,14 @@ export default function MainPart({ brightMode }) {
   let [bias, setBias] = useState("");
   let [biasTag, setBiasTag] = useState([]);
   let [tagFeed, setTagFeed] = useState([]);
-  let [hashTag, setHashTag] = useState("");
+  let [hashTag, setHashTag] = useState(null);
   let [clickIndex, setClickIndex] = useState(0);
 
   const navigate = useNavigate();
-  const handleClick = (index) => {
-    fetchTagFeed();
-    setClickIndex(index);
-  };
+  // const handleClick = (index) => {
+  //   // fetchTagFeed();
+  //   setClickIndex(index);
+  // };
 
   function fetchHashTag() {
     fetch("https://nova-platform.kr/home/hot_hashtag", {
@@ -25,13 +25,14 @@ export default function MainPart({ brightMode }) {
       .then((data) => {
         setBias(data.body);
         setBiasTag(data.body.hashtags);
+        setHashTag(data.body.hashtags[0]);
       });
   }
 
-  let fetchUrl = `https://nova-platform.kr/home/search_feed_with_hashtag?hashtag=${hashTag}`;
+  // const fetchUrl = `https://nova-platform.kr/home/search_feed_with_hashtag?hashtag=${hashTag}`;
 
-  const fetchTagFeed = () => {
-    fetch(fetchUrl, {
+  const fetchTagFeed = (tag) => {
+    fetch(`https://nova-platform.kr/home/search_feed_with_hashtag?hashtag=${tag}`, {
       credentials: "include",
     })
       .then((response) => response.json())
@@ -43,8 +44,13 @@ export default function MainPart({ brightMode }) {
 
   useEffect(() => {
     fetchHashTag();
-    fetchTagFeed();
   }, []);
+
+  useEffect(() => {
+    if (hashTag) {
+      fetchTagFeed(hashTag);
+    }
+  }, [hashTag]);
 
   let scrollRef = useRef(null);
   let [isDrag, setIsDrag] = useState(false);
@@ -71,8 +77,9 @@ export default function MainPart({ brightMode }) {
 
   function handleTagClick(index, tag) {
     if (!hasDragged) {
-      handleClick(index);
+      // handleClick(index);
       setHashTag(tag);
+      fetchTagFeed(tag);
     }
   }
 
@@ -90,9 +97,7 @@ export default function MainPart({ brightMode }) {
           {bias.bid === "" ? (
             <header className={style["header-text"]}>인기 해시태그</header>
           ) : (
-            <header className={style["header-text"]}>
-              [ {bias.title} ] 관련 인기 해시태그
-            </header>
+            <header className={style["header-text"]}>[ {bias.title} ] 관련 인기 해시태그</header>
           )}
           <img
             src={more_icon}
@@ -119,7 +124,7 @@ export default function MainPart({ brightMode }) {
                 }}
                 style={{
                   backgroundColor:
-                    clickIndex === i
+                    hashTag === tag
                       ? getModeClass(mode) === "bright-mode"
                         ? "#98A0FF"
                         : "#051243"
