@@ -1556,7 +1556,6 @@ class FeedAlgorithm:
     def disconnect_feed_like_user(self, uid, fid):
         user_node = self.__user_node_avltree.get(key=uid)
         feed_node = self.__feed_node_avltree.get(key=fid)
-
         return self.__feed_chaos_graph.disconnect_feed_with_user(feed_node=feed_node, user_node=user_node)
 
     # 추천 feed를 찾아줌
