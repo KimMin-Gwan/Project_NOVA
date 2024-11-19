@@ -201,7 +201,7 @@ export default function FeedHashList(isUserState) {
             );
           })}
           {isLoading && <p>Loading...</p>}
-          <div ref={target} style={{ height: "1px", backgroundColor: "blue" }}></div>
+          <div ref={target} style={{ height: "1px" }}></div>
         </div>
       </div>
       <section className="contents com1">
