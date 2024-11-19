@@ -100,27 +100,33 @@ function App() {
   //   }
   // }
 
-  // 초기 상태를 localStorage에서 불러오거나 기본값으로 설정
+  // // 초기 상태를 localStorage에서 불러오거나 기본값으로 설정
+  // const [brightMode, setBrightMode] = useState(() => {
+  //   return localStorage.getItem("brightMode") || "bright"; // 기본값은 'bright'
+  // });
+
+  // // 다크 모드 전환 함수
+  // const handleChangeMode = () => {
+  //   const newMode = brightMode === "dark" ? "bright" : "dark";
+  //   setBrightMode(newMode);
+  //   localStorage.setItem("brightMode", newMode); // 상태를 localStorage에 저장
+  // };
+
+  // // brightMode 상태가 변경될 때마다 body 클래스 업데이트
+  // useEffect(() => {
+  //   document.body.className = brightMode === "dark" ? "dark-mode" : "bright-mode";
+  // }, [brightMode]);
   const [brightMode, setBrightMode] = useState(() => {
     return localStorage.getItem("brightMode") || "bright"; // 기본값은 'bright'
   });
 
-  // 다크 모드 전환 함수
-  const handleChangeMode = () => {
-    const newMode = brightMode === "dark" ? "bright" : "dark";
-    setBrightMode(newMode);
-    localStorage.setItem("brightMode", newMode); // 상태를 localStorage에 저장
+  const handleModeChange = (newMode) => {
+    setBrightMode(newMode); // MoreSee에서 전달받은 상태 업데이트
   };
-
-  // brightMode 상태가 변경될 때마다 body 클래스 업데이트
-  useEffect(() => {
-    document.body.className = brightMode === "dark" ? "dark-mode" : "bright-mode";
-  }, [brightMode]);
-
   return (
     <Routes>
       <Route path="/write_feed" element={<WriteFeed />}></Route>
-      <Route path="/more_see" element={<MoreSee />}></Route>
+      <Route path="/more_see" element={<MoreSee onModeChange={handleModeChange} />}></Route>
       <Route path="/galaxy" element={<GalaxyList />}></Route>
       <Route path="/feed_page" element={<FeedPage brightMode={brightMode} />}></Route>
       <Route path="/signup" element={<SignUp />}></Route>
@@ -183,9 +189,6 @@ function App() {
 
                   <div className="buttons">
                     <button className="tool-button">
-                      <button className="change-btn" onClick={handleChangeMode}>
-                        {brightMode === "dark" ? "☀️ Light" : "🌑 Dark"}
-                      </button>
                       <img
                         src={menu}
                         alt="menu"

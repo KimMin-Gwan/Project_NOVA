@@ -22,7 +22,7 @@ import new_feed from "./../../img/new-feed.png";
 import guide_icon from "./../../img/guide.png";
 import short_feed from "./../../img/short-feed.png";
 import up_hashtag from "./../../img/up-hashtag.png";
-function MoreSee() {
+function MoreSee({ onModeChange }) {
   const requestURL = {
     x: "https://x.com/sebacheong",
     discord: "https://discord.com",
@@ -74,7 +74,20 @@ function MoreSee() {
   useEffect(() => {
     handleFetch();
   }, []);
+  const [brightMode, setBrightMode] = useState(() => {
+    return localStorage.getItem("brightMode") || "bright"; // 기본값은 'bright'
+  });
 
+  const handleChangeMode = () => {
+    const newMode = brightMode === "dark" ? "bright" : "dark";
+    setBrightMode(newMode);
+    localStorage.setItem("brightMode", newMode); // 상태를 localStorage에 저장
+    onModeChange(newMode); // 부모 컴포넌트에 변경된 상태 전달
+  };
+
+  useEffect(() => {
+    document.body.className = brightMode === "dark" ? "dark-mode" : "bright-mode";
+  }, [brightMode]);
   return (
     <div className={style.font}>
       <div className={style.container}>
@@ -183,7 +196,9 @@ function MoreSee() {
             </li>
             <li className={style.mainComponent}>
               <img src={set_icon} alt="Arrow" className={style.vector} />
-              <p className={style.bodyText}>페이지 설정</p>
+              <p className={style.bodyText} onClick={handleChangeMode}>
+                {brightMode === "dark" ? "☀️ Light" : "🌑 Dark"}
+              </p>
               <img src={more_icon} alt="Arrow" className={style.more_vector} />
             </li>
           </ul>
