@@ -45,14 +45,24 @@ export default function LeftBar({ brightMode }) {
   }
 
   return (
-    <div className={`${style["wrap_container"]} ${brightMode === "dark" ? style["dark-mode"] : style["light-mode"]}`}>
-      <div className={`${style["direct-box"]} ${brightMode === "dark" ? style["dark-mode"] : style["light-mode"]}`}>
+    <div
+      className={`${style["wrap_container"]} ${
+        brightMode === "dark" ? style["dark-mode"] : style["light-mode"]
+      }`}
+    >
+      <div
+        className={`${style["direct-box"]} ${
+          brightMode === "dark" ? style["dark-mode"] : style["light-mode"]
+        }`}
+      >
         <h4 className={style["wide-text"]}>바로가기</h4>
         <ul className={style["direct-list"]}>
           <li className={style["list-item"]}>
             <img src={home_icon} alt="home" className={style["icon-text"]}></img>
             <div
-              className={`${style["direct-link"]} ${brightMode === "dark" ? style["dark-mode"] : style["light-mode"]}`}
+              className={`${style["direct-link"]} ${
+                brightMode === "dark" ? style["dark-mode"] : style["light-mode"]
+              }`}
               onClick={() => {
                 handleNavigate("/");
               }}
@@ -63,9 +73,11 @@ export default function LeftBar({ brightMode }) {
           <li className={style["list-item"]}>
             <img src={all_icon} alt="전체 피드" className={style["icon-text"]}></img>
             <div
-              className={`${style["direct-link"]} ${brightMode === "dark" ? style["dark-mode"] : style["light-mode"]}`}
+              className={`${style["direct-link"]} ${
+                brightMode === "dark" ? style["dark-mode"] : style["light-mode"]
+              }`}
               onClick={() => {
-                handleNavigate("/");
+                handleNavigate("/feed_list?type=all");
               }}
             >
               전체 피드
@@ -74,7 +86,9 @@ export default function LeftBar({ brightMode }) {
           <li className={style["list-item"]}>
             <img src={short_icon} alt="short_feed" className={style["icon-text"]}></img>
             <div
-              className={`${style["direct-link"]} ${brightMode === "dark" ? style["dark-mode"] : style["light-mode"]}`}
+              className={`${style["direct-link"]} ${
+                brightMode === "dark" ? style["dark-mode"] : style["light-mode"]
+              }`}
               onClick={() => {
                 handleNavigate("/feed_page");
               }}
@@ -85,7 +99,9 @@ export default function LeftBar({ brightMode }) {
           <li className={style["list-item"]}>
             <img src={feed_write} alt="write" className={style["icon-text"]}></img>
             <div
-              className={`${style["direct-link"]} ${brightMode === "dark" ? style["dark-mode"] : style["light-mode"]}`}
+              className={`${style["direct-link"]} ${
+                brightMode === "dark" ? style["dark-mode"] : style["light-mode"]
+              }`}
               onClick={() => {
                 handleNavigate("/write_feed");
               }}
@@ -96,18 +112,24 @@ export default function LeftBar({ brightMode }) {
           <li className={style["list-item"]}>
             <img src={popular_icon} alt="popular" className={style["icon-text"]}></img>
             <div
-              className={`${style["direct-link"]} ${brightMode === "dark" ? style["dark-mode"] : style["light-mode"]}`}
+              className={`${style["direct-link"]} ${
+                brightMode === "dark" ? style["dark-mode"] : style["light-mode"]
+              }`}
               onClick={() => {
-                handleNavigate("/feed_list");
+                handleNavigate("/feed_list?type=weekly_best");
               }}
             >
-              인기 피드
+              주간 TOP 100
             </div>
           </li>
         </ul>
       </div>
 
-      <div className={`${style["hashtag-box"]} ${brightMode === "dark" ? style["dark-mode"] : style["light-mode"]}`}>
+      <div
+        className={`${style["hashtag-box"]} ${
+          brightMode === "dark" ? style["dark-mode"] : style["light-mode"]
+        }`}
+      >
         <div className={style["top-bar"]}>
           <header className={style["wide-text"]}>급상승 해시태그</header>
           <span className={style_hash["time-text"]}>13:00 기준</span>

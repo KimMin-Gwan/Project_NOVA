@@ -44,7 +44,13 @@ const NavBar = ({ isUserState, brightMode }) => {
       </div>
 
       <div className="nav_button_box">
-        <button className="nav_button">
+        <button
+          className="nav_button"
+          onClick={(e) => {
+            handleNavigate("/feed_list?type=all");
+            handleStopClick(e);
+          }}
+        >
           <img src={menu3} alt="make" className="btn_img" />
           <p className="btn_text">전체 피드</p>
         </button>
