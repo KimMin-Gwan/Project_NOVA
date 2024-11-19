@@ -174,7 +174,8 @@ function MyPage() {
               </div>
             </div>
           </div>
-
+            
+        {/*           
           <div className={`${style["base_box"]} ${style["height_auto"]}`}>
             <h4>서비스</h4>
             <div className={style["grid_container_right"]}>
@@ -206,7 +207,7 @@ function MyPage() {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
 
           <div className={`${style["base_box"]} ${style["height_auto"]}`}>
             <h4>나의 활동</h4>
