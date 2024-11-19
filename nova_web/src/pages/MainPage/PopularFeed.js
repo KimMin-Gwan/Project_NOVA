@@ -94,7 +94,7 @@ export default function PopularFeed({ brightMode }) {
               onClick={() => handleFeedClick(feed.fid)}
             >
               <div className={style["img-box"]}>
-                <img src={`${feed.image[0]}`} alt="img" />
+                <img src={feed.image.length > 0 ? feed.image[0] : "https://kr.object.ncloudstorage.com/nova-feed-images/nova-platform.PNG"} alt="이미지" />
               </div>
               <div className={style["popular-main"]}>
                 <div className={style["tag-text"]}>

@@ -43,12 +43,12 @@ export default function AllPost({ brightMode }) {
               return (
                 <li key={feed.fid} onClick={() => onClick(feed.fid)}>
                   <div className={style["all-img"]}>
-                    <img src={feed.image[0]} alt="이미지" />
+                    <img src={feed.image.length > 0 ? feed.image[0] : "https://kr.object.ncloudstorage.com/nova-feed-images/nova-platform.PNG"} alt="이미지" />
                   </div>
                   <div className={style["all-text"]}>
                     <div className={style["all-text_container"]}>
                       {feed.hashtag.map((tag, i) => {
-                        return <span key={i}>{tag}</span>;
+                        return <span key={i}>#{tag}</span>;
                       })}
                       <p>{feed.body}</p>
                     </div>

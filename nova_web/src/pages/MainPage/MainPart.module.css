@@ -293,7 +293,7 @@
 
   span {
     color: #6c3bff;
-
+    padding-right: 10px;
     height: 1em;
   }
 
@@ -316,6 +316,7 @@
 .all-text_container {
   height: 80px;
 }
+
 .all_see-button {
   width: 85%;
   align-self: center;

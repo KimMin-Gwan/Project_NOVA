@@ -121,14 +121,14 @@ function MoreSee() {
               <p className={style.bodyText}>숏피드</p>
               <img src={more_icon} alt="Arrow" className={style.more_vector} />
             </li>
-            <li className={style.mainComponent} onClick={() => handlePage("/feed_list")}>
+            <li className={style.mainComponent} onClick={() => handlePage("/feed_list?type=best")}>
               <img src={popular_icon} alt="Arrow" className={style.vector} />
-              <p className={style.bodyText}>최근 인기 피드</p>
+              <p className={style.bodyText}>오늘의 베스트 피드</p>
               <img src={more_icon} alt="Arrow" className={style.more_vector} />
             </li>
-            <li className={style.mainComponent}>
+            <li className={style.mainComponent} onClick={() => handlePage("/feed_list?type=weekly_best")}>
               <img src={up_hashtag} alt="Arrow" className={style.vector} />
-              <p className={style.bodyText}>급상승 해시태그</p>
+              <p className={style.bodyText}>주간 TOP 100</p>
               <img src={more_icon} alt="Arrow" className={style.more_vector} />
             </li>
             <li className={style.mainComponent} onClick={() => handlePage("/write_feed")}>

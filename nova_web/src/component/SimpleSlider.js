@@ -43,10 +43,12 @@ import React, { useEffect, useState } from "react";
 
 import { getModeClass } from "./../App.js";
 const SimpleSlider = ({ tagFeed, brightMode }) => {
+  const showMaxCnt = 1;
+
   const settings = {
     className: "slider-items",
     dots: true,
-    infinite: true,
+    infinite: tagFeed.length > showMaxCnt,
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
