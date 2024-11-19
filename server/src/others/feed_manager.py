@@ -614,8 +614,11 @@ class FeedManager:
         str_fid_n_date = feed.fid + "=" + self.__set_datetime()
         print(3)
         if flag:
+            print("im here")
             self._feed_search_engine.try_dislike_feed(fid=feed.fid, uid=user.uid)
+            print(user.like)
             user.like.remove(str_fid_n_date)
+            print("hello?")
             feed.star -= 1
             print(4)
         else:
