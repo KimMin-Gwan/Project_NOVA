@@ -135,12 +135,7 @@ function MyPage() {
                     <>
                       <div className={style["powder_wrapper"]}>
                         <img src={star_powder} alt="star_powder" className={style["poweder_box"]} />
-                        <div className={style["season_star_dust"]}>이번 시즌에 기여한 별가루</div>
                       </div>
-                      <h2>{myData.solo_point} pt</h2>
-                      <button className={style["funding_btn"]} disabled>
-                        펀딩
-                      </button>
                     </>
                   )}
                 </div>
@@ -179,7 +174,8 @@ function MyPage() {
               </div>
             </div>
           </div>
-
+            
+        {/*           
           <div className={`${style["base_box"]} ${style["height_auto"]}`}>
             <h4>서비스</h4>
             <div className={style["grid_container_right"]}>
@@ -211,7 +207,7 @@ function MyPage() {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
 
           <div className={`${style["base_box"]} ${style["height_auto"]}`}>
             <h4>나의 활동</h4>
