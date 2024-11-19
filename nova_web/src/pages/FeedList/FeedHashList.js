@@ -17,6 +17,7 @@ export default function FeedHashList(isUserState) {
   const [isActive, setIsActive] = useState(false);
   let [hashTags, setHashTags] = useState([]);
   let [tag, setTag] = useState("");
+  let [isClickedTag, setIsClickedTag] = useState(null);
   let [clickIndex, setClickIndex] = useState(0);
   const [params] = useSearchParams();
   const brightModeFromUrl = params.get("brightMode");
@@ -36,19 +37,19 @@ export default function FeedHashList(isUserState) {
         // setFeedData(data.body.feed);
         // setNextData(data.body.key);
         setIsLoading(false);
+        setIsClickedTag(data.body.hashtags[0]);
       });
   }
 
   // let fetchUrl = `https://nova-platform.kr/feed_explore/search_feed_with_hashtag?hashtag=${tag}&key=${}`
 
-  function fetchPlusData() {
+  function fetchPlusData(tag) {
     // setIsLoading(true);
-    fetch(`https://nova-platform.kr/feed_explore/search_feed_with_hashtag?hashtag=임시`, {
+    fetch(`https://nova-platform.kr/feed_explore/search_feed_with_hashtag?hashtag=${tag}`, {
       credentials: "include",
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("1241", data);
         setFeedData(data.body.feed);
         // setNextData(data.body.key);
         // setFeedData((prevData) => {
@@ -58,9 +59,6 @@ export default function FeedHashList(isUserState) {
         setIsLoading(false);
       });
   }
-  // useEffect(() => {
-  //   fetchPlusData()
-  // }, [])
 
   useEffect(() => {
     observerRef.current = new IntersectionObserver((entries) => {
@@ -85,15 +83,17 @@ export default function FeedHashList(isUserState) {
 
   useEffect(() => {
     fetchHashTagData();
-    // return () => {
-    //   setFeedData([]);
-    // };
   }, []);
 
-  function handleClickTag(index) {
-    fetchPlusData();
-    setClickIndex(index);
-  }
+  useEffect(() => {
+    fetchPlusData(isClickedTag);
+  }, [isClickedTag]);
+
+  // function handleClickTag(index, tag) {
+  //   // fetchPlusData();
+  //   // setClickIndex(index);
+  //   setIsClickedTag(tag);
+  // }
   let scrollRef = useRef(null);
   let [isDrag, setIsDrag] = useState(false);
   let [dragStart, setDragStart] = useState("");
@@ -119,8 +119,9 @@ export default function FeedHashList(isUserState) {
 
   function handleTagClick(index, tag) {
     if (!hasDragged) {
-      handleClickTag(index);
-      setTag(tag);
+      // handleClickTag(index);
+      // setTag(tag);
+      setIsClickedTag(tag);
     }
   }
   useEffect(() => {
@@ -160,10 +161,21 @@ export default function FeedHashList(isUserState) {
           </div>
         </header>
         <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>시연</div>
-        <div ref={scrollRef} onMouseDown={onMouseDown} onMouseMove={onMouseMove} onMouseUp={onMouseUp} className={`${style["tag-container"]} ${style[getModeClass(mode)]}`}>
+        <div
+          ref={scrollRef}
+          onMouseDown={onMouseDown}
+          onMouseMove={onMouseMove}
+          onMouseUp={onMouseUp}
+          className={`${style["tag-container"]} ${style[getModeClass(mode)]}`}
+        >
           {hashTags.map((tag, i) => {
             return (
-              <button key={i} style={{ background: clickIndex === i ? "purple" : "black" }} onClick={() => handleTagClick(i, tag)} className={style["hashtag-text"]}>
+              <button
+                key={i}
+                style={{ background: isClickedTag === tag ? "purple" : "black" }}
+                onClick={() => handleTagClick(i, tag)}
+                className={style["hashtag-text"]}
+              >
                 #{tag}
               </button>
             );
@@ -171,7 +183,17 @@ export default function FeedHashList(isUserState) {
         </div>
         <div className={style["scroll-area"]}>
           {feedData.map((feed, i) => {
-            return <Feed key={feed.fid + i} className={`${style["feed-box"]} ${style[getModeClass(mode)]}`} feed={feed} func={true} feedData={feedData} setFeedData={setFeedData} isUserState={isUserState}></Feed>;
+            return (
+              <Feed
+                key={feed.fid + i}
+                className={`${style["feed-box"]} ${style[getModeClass(mode)]}`}
+                feed={feed}
+                func={true}
+                feedData={feedData}
+                setFeedData={setFeedData}
+                isUserState={isUserState}
+              ></Feed>
+            );
           })}
           {isLoading && <p>Loading...</p>}
           <div ref={target} style={{ height: "1px", backgroundColor: "blue" }}></div>
