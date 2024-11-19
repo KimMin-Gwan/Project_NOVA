@@ -1415,7 +1415,6 @@ export function Text({ data, hashtag }) {
 
     return [mode, setMode];
   }
-  console.log("ddd", hashtag);
   return (
     <div>
       {hashtag.map((tag, i) => {
