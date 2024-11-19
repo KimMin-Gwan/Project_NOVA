@@ -61,10 +61,7 @@ function MyGroupBias({ group_bias, bias_url, isError }) {
             </div>
           )}
           {selectWindow && (
-            <SelectBias
-              selectWindow={selectWindow}
-              setSelectWindow={setSelectWindow}
-            ></SelectBias>
+            <SelectBias selectWindow={selectWindow} setSelectWindow={setSelectWindow}></SelectBias>
           )}
         </>
       )}
@@ -95,24 +92,17 @@ function MyGroupBias({ group_bias, bias_url, isError }) {
             </div>
           )}
           {selectWindow && (
-            <SelectBias
-              selectWindow={selectWindow}
-              setSelectWindow={setSelectWindow}
-            ></SelectBias>
+            <SelectBias selectWindow={selectWindow} setSelectWindow={setSelectWindow}></SelectBias>
           )}
         </>
       )}
       {group_bias.bid && (
         <>
           <div className="image-container">
-            <img
-              src={bias_url + `${group_bias.bid}.PNG`}
-              alt="bias"
-              className="img2"
-            />
+            <img src={bias_url + `${group_bias.bid}.PNG`} alt="bias" className="img2" />
           </div>
           <div className="box">
-            <div className="my-bias-solo">최애 그룹</div>
+            <div className="my-bias-solo">나의 차애</div>
             <div className="bias-name">{group_bias.bname}</div>
           </div>
           {/* <div className='more'>
