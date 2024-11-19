@@ -14,7 +14,7 @@ login_data = {
         "endpoint": ""
     },
     "body": {
-        "email": "randoumUser2@naver.com",
+        "email": "randomUser2@naver.com",
         "password": "sample122"
     }
 }
@@ -40,3 +40,8 @@ if response.status_code == 200:
     print("로그인 성공:", response.json())
 else:
     print("로그인 실패:", response.status_code, response.text)
+
+
+
+
+
