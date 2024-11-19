@@ -79,7 +79,7 @@ export default function MainPart({ brightMode }) {
     if (!hasDragged) {
       // handleClick(index);
       setHashTag(tag);
-      fetchTagFeed(tag);
+      // fetchTagFeed(tag);
     }
   }
 
