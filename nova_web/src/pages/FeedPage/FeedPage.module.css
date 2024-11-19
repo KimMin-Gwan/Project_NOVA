@@ -54,7 +54,14 @@
   text-align: right;
   display: inline-block;
 }
-
+/* 해시태그 본문 스타일 */
+.input-area {
+  background-color: #000000;
+  padding: 10px;
+  margin-bottom: 30px;
+  border: 1px solid white;
+  border-radius: 5px;
+}
 /* 해시태그 영역 */
 .boxbox {
   height: 150px;
@@ -68,12 +75,12 @@
 
 .hash-tag-area > #hashtag {
   color: white;
-  font-size: 15px;
+  font-size: 16px;
   margin-bottom: 5px;
 }
 
 .write-tag {
-  background-color: #111;
+  background-color: #000000;
   color: #898989;
   width: 95%;
   height: 70%;
@@ -469,8 +476,7 @@ h5 {
 
 .star-img {
   /* filter: invert(53%) sepia(1%) saturate(0%) hue-rotate(213deg) brightness(94%) contrast(88%); */
-  filter: invert(98%) sepia(98%) saturate(7495%) hue-rotate(356deg)
-    brightness(102%) contrast(104%);
+  filter: invert(98%) sepia(98%) saturate(7495%) hue-rotate(356deg) brightness(102%) contrast(104%);
 }
 
 /* 버튼 공통 속성 */
@@ -1250,7 +1256,8 @@ h5 {
 
 .short_form_write {
   flex-direction: column;
-  height: 100%;
+  height: 110vh;
+  background-color: #131313;
 }
 
 .short_form_container {
@@ -1372,19 +1379,18 @@ h5 {
   width: 100%;
   /* background-color: blue; */
   margin-bottom: 30px;
-  border-bottom: 1px solid #bebebe;
 }
 
 .text_body > #content {
   color: white;
-  font-size: 13px;
+  font-size: 16px;
   margin-bottom: 5px;
 }
 
 .text_body textarea {
   /* padding: 0; */
   margin: 0;
-  background-color: #111;
+  background-color: #000000;
   /* padding-top: 5px; */
   padding: 12px;
   /* padding-left: 5px; */
@@ -1440,7 +1446,11 @@ h5 {
   padding-inline: 15px;
   /* background-color: #2A2577; */
 }
-
+.line_write {
+  opacity: 1;
+  height: 2px;
+  background-color: white;
+}
 /* .custom-checkbox {
   display: flex;
   align-items: center;
@@ -2051,7 +2061,110 @@ h5 {
 
 /* 피드 작성 페이지  */
 .write_container.bright-mode {
-  background-color: white;
+  .warning_text {
+    color: #000000;
+  }
+}
+.short_form_write.bright-mode {
+  background-color: #eaeeff;
+  p {
+    color: #000000;
+  }
+}
+.input-area.bright-mode {
+  background-color: #ffffff;
+  border-color: #bebebe;
+  #hashtag {
+    color: #000000;
+  }
+  .write-tag {
+    border-color: #cccccc;
+    background-color: #ffffff;
+  }
+
+  #content {
+    color: #000000;
+  }
+  .text_body textarea {
+    background-color: #ffffff;
+  }
+  .write_body {
+    color: #000000;
+  }
+}
+/* 이미지편집 선택지 편집 */
+.click-icon.bright-mode {
+  img {
+    filter: invert();
+  }
+  span {
+    color: black;
+  }
+}
+.line_write.bright-mode {
+  background-color: #ffffff;
+  border: 1px solid white;
+}
+
+/* 모달 창 */
+.modal-overlay.bright-mode {
+  .modal-content {
+    background-color: #e3e7f9;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.25);
+  }
+}
+.write-image-box.bright-mode {
+  background-color: #ffffff;
+  span {
+    color: #000000;
+  }
+  .upload-text {
+    div {
+      color: #000000;
+    }
+  }
+}
+/* 버튼 하나 */
+.fclass-container.bright-mode {
+  .empathy-box {
+    background-color: white;
+  }
+  .empathy-box::placeholder {
+    color: black;
+  }
+}
+/* 4지선다 */
+.one_of_four_area.bright-mode {
+  .one_of_four_list {
+    li {
+      background-color: white;
+    }
+    input {
+      background-color: white;
+    }
+  }
+  input::placeholder {
+    color: black;
+  }
+}
+
+/* 버튼 두개 */
+.button_container.bright-mode {
+  .balance_btn {
+    background-color: white;
+    &::placeholder {
+      color: #000000;
+    }
+  }
+}
+/* 사이트 링크 */
+.station_container.bright-mode {
+  .station_box {
+    background-color: white;
+    input::placeholder {
+      color: #000000;
+    }
+  }
 }
 /* 숏피드 페이지 */
 .short_form.bright-mode {
@@ -2071,8 +2184,4 @@ h5 {
 }
 .interaction-box.bright-mode {
   background-color: #f0f0f0;
-}
-
-.input-area {
-  /* background-color: blue; */
 }
