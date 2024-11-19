@@ -170,6 +170,7 @@ class FeedManager:
         user.my_feed.append(fid)
         self._database.modify_data_with_id(target_id="uid", target_data=user.get_dict_form_data())
 
+
         # 끝
         return "Upload Success", True
     
@@ -183,6 +184,7 @@ class FeedManager:
         self._database.add_new_data(target_id="fid", new_data=new_feed.get_dict_form_data())
 
         self._feed_search_engine.try_make_new_managed_feed(feed=new_feed)
+        self._feed_search_engine.try_add_feed(feed=new_feed)
         return
 
     # 새로운 피드의 데이터를 추가하여 반환
@@ -429,7 +431,7 @@ class FeedManager:
             feed.attend = attend
             feed.comment = comment
             # 기본적으로 star_flag는 False
-            if feed.fid in user.star:
+            if feed.fid in user.like:
                 feed.star_flag = True
             result.append(feed)
         return result
@@ -597,11 +599,25 @@ class FeedManager:
         feed = Feed()
         feed.make_with_dict(feed_data)
 
-        if feed.fid in user.star:
-            user.like.remove(feed.fid)
+        flag = False
+        # fidNdate = fid=date
+        for fidNdate in user.like:
+            fidNdate:str = fidNdate
+            target_fid = fidNdate.split('=')[0]
+            if target_fid == feed.fid:
+                flag=True
+                break
+        
+        date = datetime.now()
+        str_fid_n_date = feed.fid + "=" + self.__set_datetime()
+
+        if flag:
+            self._feed_search_engine.try_dislike_feed(fid=feed.fid, uid=user.uid)
+            user.like.remove(str_fid_n_date)
             feed.star -= 1
         else:
-            user.like.append(feed.fid)
+            self._feed_search_engine.try_like_feed(fid=feed.fid, uid=user.uid, like_time=date)
+            user.like.append(str_fid_n_date)
             feed.star += 1
 
         self._database.modify_data_with_id(target_id="fid",

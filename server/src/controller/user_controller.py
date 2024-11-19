@@ -129,13 +129,13 @@ class UserController:
     # 3. 데이터 베이스 저장( save 함수 쓰면됨)
     # 4. 다 되면 True반환
     # 5. 만약 인증번호 틀리면 False 반환 + 실패 사유 detail에 작성
-    async def try_sign_up(self, database, request, nova_verification):
+    async def try_sign_up(self, database, request, nova_verification, feed_search_engine):
         model = SendEmailModel(database=database)
         try:
             if not await nova_verification.verificate_user(email=request.email, verification_code=request.verification_code):
                 model.set_response()
             else:
-                model.save_user(request=request)
+                model.save_user(request=request, feed_search_engine=feed_search_engine)
                 #model.make_token(request=request)
 
         except CustomError as e:

@@ -7,14 +7,14 @@ from view.jwt_decoder import RequestManager
 
 class User_Service_View(Master_View):
     def __init__(self, app:FastAPI, endpoint:str, database, head_parser:Head_Parser,
-                 nova_verification, feed_manager
-                 ) -> None:
+                 nova_verification, feed_manager, feed_search_engine) -> None:
         super().__init__(head_parser=head_parser)
         self.__app = app
         self._endpoint = endpoint
         self.__database = database
         self.__nova_verification = nova_verification
         self.__feed_manager = feed_manager
+        self.__feed_search_engine = feed_search_engine
         self.user_route(endpoint)
         self.my_page_route()
 
@@ -115,7 +115,9 @@ class User_Service_View(Master_View):
             user_controller=UserController()
             model = await user_controller.try_sign_up(database=self.__database,
                                                    request = request,
-                                              nova_verification=self.__nova_verification)
+                                              nova_verification=self.__nova_verification,
+                                              feed_search_engine=self.__feed_search_engine
+                                              )
             response = model.get_response_form_data(self._head_parser)
             return response
 

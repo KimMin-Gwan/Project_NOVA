@@ -1,7 +1,7 @@
 from model.base_model import BaseModel
 from model import Local_Database
 from others.data_domain import User, Bias, Alert, ManagedUser
-from others import CoreControllerLogicError, FeedManager
+from others import CoreControllerLogicError, FeedManager, FeedSearchEngine
 from view.jwt_decoder import JWTManager
 import jwt
 import datetime
@@ -88,7 +88,7 @@ class SendEmailModel(BaseModel):
         except Exception as e:
             raise CoreControllerLogicError(error_type="make_token | " + str(e))
         
-    def save_user(self,request):
+    def save_user(self,request, feed_search_engine:FeedSearchEngine):
         try:
             uid = self.__make_uid()
             user = User(uid=uid,
@@ -102,8 +102,11 @@ class SendEmailModel(BaseModel):
 
             self._database.add_new_data(target_id="uid",
                                         new_data=user.get_dict_form_data())
-            self._database.add_new_data(target_id="muid",
-                                        new_data=managedUser.get_dict_form_data())
+            
+            feed_search_engine.try_add_user(user=user)
+            #self._database.add_new_data(target_id="muid",
+                                        #new_data=managedUser.get_dict_form_data())
+
 
         except Exception as e:
             raise CoreControllerLogicError(error_type="save_response | " + str(e))
