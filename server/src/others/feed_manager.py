@@ -613,19 +613,23 @@ class FeedManager:
         date = datetime.now()
         str_fid_n_date = feed.fid + "=" + self.__set_datetime()
         print(3)
-        if flag:
-            print("im here")
-            self._feed_search_engine.try_dislike_feed(fid=feed.fid, uid=user.uid)
-            print(user.like)
-            user.like.remove(str_fid_n_date)
-            print("hello?")
-            feed.star -= 1
-            print(4)
-        else:
-            self._feed_search_engine.try_like_feed(fid=feed.fid, uid=user.uid, like_time=date)
-            user.like.append(str_fid_n_date)
-            feed.star += 1
-            print(5)
+        try:
+            if flag:
+                print("im here")
+                self._feed_search_engine.try_dislike_feed(fid=feed.fid, uid=user.uid)
+                print("test Seccess")
+                print(user.like)
+                user.like.remove(str_fid_n_date)
+                print("hello?")
+                feed.star -= 1
+                print(4)
+            else:
+                self._feed_search_engine.try_like_feed(fid=feed.fid, uid=user.uid, like_time=date)
+                user.like.append(str_fid_n_date)
+                feed.star += 1
+                print(5)
+        except Exception as e:
+            print(e)
 
         print(6)
         self._database.modify_data_with_id(target_id="fid",
