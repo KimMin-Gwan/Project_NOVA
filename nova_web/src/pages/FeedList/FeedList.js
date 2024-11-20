@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState, useLocation } from "react";
 import style from "./FeedHashList.module.css";
-import logo from "./../../img/NOVA.png";
+import logo from "./../../img/NOVA_Platform.png";
 import menu from "./../../img/menu-burger.png";
 import Feed, { Comments } from "./../../component/feed";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -174,28 +174,12 @@ export default function FeedList(isUserState) {
             </button>
           </div>
         </header>
-        {type === "all" && (
-          <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>전체 피드</div>
-        )}
-        {type === "best" && (
-          <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>오늘의 베스트 피드</div>
-        )}
-        {type === "weekly_best" && (
-          <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>주간 베스트 피드</div>
-        )}
+        {type === "all" && <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>전체 피드</div>}
+        {type === "best" && <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>오늘의 베스트 피드</div>}
+        {type === "weekly_best" && <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>주간 베스트 피드</div>}
         <div className={style["scroll-area"]}>
           {feedData.map((feed, i) => {
-            return (
-              <Feed
-                key={feed.fid + i}
-                className={`${style["feed-box"]} ${style[getModeClass(mode)]}`}
-                feed={feed}
-                func={true}
-                feedData={feedData}
-                setFeedData={setFeedData}
-                isUserState={isUserState}
-              ></Feed>
-            );
+            return <Feed key={feed.fid + i} className={`${style["feed-box"]} ${style[getModeClass(mode)]}`} feed={feed} func={true} feedData={feedData} setFeedData={setFeedData} isUserState={isUserState}></Feed>;
           })}
           {isLoading && <p>Loading...</p>}
           <div ref={target} style={{ height: "1px" }}></div>

@@ -97,7 +97,7 @@ body.dark-mode {
   margin-bottom: 20px;
   padding-top: 10px;
   border-bottom: 1px solid #b2b2b2;
-  padding-bottom: 20px;
+  padding-bottom: 10px;
 }
 
 .logo {
@@ -109,7 +109,7 @@ body.dark-mode {
 }
 
 .logo img {
-  width: 100px;
+  width: 260px;
   /* height: 50px; */
 }
 

@@ -39,7 +39,7 @@ import RightBar from "./pages/WideVer/RightBar.js";
 import LikeFunding from "./pages/NovaFunding/LikeFunding/LikeFunding.js";
 import Week100 from "./pages/MainPage/Week100.js";
 
-import logo from "./img/NOVA.png";
+import logo from "./img/NOVA_Platform.png";
 // 401 이면 바이어스 격자 무늬로 띄우기
 // 401 이면 alert - 로그인 필요 문구 띄우기
 // 다크 모드 클래스 반환 함수
