@@ -821,7 +821,7 @@ h5 {
 }
 
 .select_button {
-  width: 150px;
+  width: 120%;
   height: 80px;
   cursor: pointer;
   color: black;
