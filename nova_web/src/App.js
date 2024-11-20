@@ -113,12 +113,12 @@ function App() {
   // };
 
   // // brightMode 상태가 변경될 때마다 body 클래스 업데이트
-  // useEffect(() => {
-  //   document.body.className = brightMode === "dark" ? "dark-mode" : "bright-mode";
-  // }, [brightMode]);
   const [brightMode, setBrightMode] = useState(() => {
     return localStorage.getItem("brightMode") || "bright"; // 기본값은 'bright'
   });
+  useEffect(() => {
+    document.body.className = brightMode === "dark" ? "dark-mode" : "bright-mode";
+  }, [brightMode]);
 
   const handleModeChange = (newMode) => {
     setBrightMode(newMode); // MoreSee에서 전달받은 상태 업데이트

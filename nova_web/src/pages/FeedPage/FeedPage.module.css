@@ -591,6 +591,9 @@ h5 {
 .button-modal {
   border: 0;
   cursor: pointer;
+  background-color: transparent;
+  color: #cacaca;
+  font-size: 12px;
 }
 
 .star-modal {
@@ -613,7 +616,7 @@ h5 {
   /* position: absolute; */
   /* justify-self: center; */
   /* top: 10vh; */
-  width: 90%;
+  width: 100%;
   /* height: calc(100vh-1vh); */
   background-color: #868686;
   padding: 5px;
@@ -623,11 +626,23 @@ h5 {
   .top_bar {
     color: white;
     text-align: center;
-    padding: 5px;
-    border-bottom: 1px solid #dbdbdb;
+    cursor: pointer;
+    margin-left: auto;
+    margin-right: 15px;
   }
 }
-
+.comment-more-see {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 10px 0;
+  border-bottom: 1px solid #dbdbdb;
+}
+.comment-more-see nav:first-child {
+  flex-grow: 1;
+  text-align: center;
+}
 /* ////////////////////////// */
 .write-container {
   margin: 0 auto;
@@ -1194,6 +1209,7 @@ h5 {
   color: white;
   background-color: #787878;
   border: 0;
+  box-shadow: inset 0px 2px 5px rgb(0 0 0 / 19%);
 }
 
 .comment_action button {
@@ -2190,6 +2206,7 @@ h5 {
     }
   }
 }
+
 /* 숏피드 페이지 */
 .short_form.bright-mode {
   border: 0;
@@ -2227,4 +2244,38 @@ h5 {
       color: #000000;
     }
   }
+}
+
+/* 모달 창 라이트 */
+.modal-container.bright-mode {
+  .comment-modal {
+    background-color: #f2f2f2;
+  }
+  .comment-more-see {
+    border-color: #dbdbdb;
+
+    nav {
+      color: #797979;
+    }
+  }
+  .not-comment {
+    color: #797979;
+  }
+  .comment_action input {
+    background-color: #ffffff;
+    color: #797979;
+  }
+  .comment_action button {
+    color: #797979;
+  }
+  .text-2 {
+    color: #797979;
+  }
+  .button-modal {
+    color: #797979;
+  }
+}
+/* 댓글 닉네임 */
+.comment_support.bright-mode {
+  color: #121212;
 }
