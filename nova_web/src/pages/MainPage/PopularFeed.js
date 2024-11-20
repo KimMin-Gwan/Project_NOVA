@@ -59,7 +59,7 @@ export default function PopularFeed({ brightMode }) {
   }, [brightMode]);
 
   return (
-    <div className={style["wrap-container"]}>
+    <div className={`${style["wrap-container"]} ${style[getModeClass(mode)]}`}>
       <div className={`${style["top-area"]} ${style[getModeClass(mode)]}`}>
         <div className={style["content-title"]}>
           <header className={style["header-text"]}>오늘의 베스트 피드</header>
@@ -75,24 +75,10 @@ export default function PopularFeed({ brightMode }) {
         </div>
       </div>
 
-      <div
-        className={`${style["main-area"]} ${style["popular-feed-container"]} ${
-          style[getModeClass(mode)]
-        }`}
-        ref={scrollRef}
-        onMouseDown={onMouseDown}
-        onMouseMove={onMouseMove}
-        onMouseUp={onMouseUp}
-      >
+      <div className={`${style["main-area"]} ${style["popular-feed-container"]} ${style[getModeClass(mode)]}`} ref={scrollRef} onMouseDown={onMouseDown} onMouseMove={onMouseMove} onMouseUp={onMouseUp}>
         {homeFeed.map((feed, i) => {
           return (
-            <div
-              key={i}
-              className={`${style["popular-feed"]} ${
-                style[getModeClass(mode)]
-              }`}
-              onClick={() => handleFeedClick(feed.fid)}
-            >
+            <div key={i} className={`${style["popular-feed"]} ${style[getModeClass(mode)]}`} onClick={() => handleFeedClick(feed.fid)}>
               <div className={style["img-box"]}>
                 <img src={feed.image.length > 0 ? feed.image[0] : "https://kr.object.ncloudstorage.com/nova-feed-images/nova-platform.PNG"} alt="이미지" />
               </div>
@@ -106,13 +92,7 @@ export default function PopularFeed({ brightMode }) {
                     );
                   })}
                 </div>
-                <div
-                  className={`${style["popular-text"]} ${
-                    style[getModeClass(mode)]
-                  }`}
-                >
-                  {feed.body}
-                </div>
+                <div className={`${style["popular-text"]} ${style[getModeClass(mode)]}`}>{feed.body}</div>
                 <footer className={style["like-comment"]}>
                   좋아요 {feed.star}개 | 댓글 {feed.num_comment}개
                 </footer>
