@@ -194,11 +194,9 @@ function MoreSee({ onModeChange }) {
               <p className={style.bodyText}>이용약관</p>
               <img src={more_icon} alt="Arrow" className={style.more_vector} />
             </li>
-            <li className={style.mainComponent}>
+            <li className={style.mainComponent} onClick={handleChangeMode}>
               <img src={set_icon} alt="Arrow" className={style.vector} />
-              <p className={style.bodyText} onClick={handleChangeMode}>
-                {brightMode === "dark" ? "☀️ Light" : "🌑 Dark"}
-              </p>
+              <p className={style.bodyText}>{brightMode === "dark" ? "☀️ Light" : "🌑 Dark"}</p>
               <img src={more_icon} alt="Arrow" className={style.more_vector} />
             </li>
           </ul>

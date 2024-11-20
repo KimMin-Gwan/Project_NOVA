@@ -69,7 +69,7 @@ const SimpleSlider = ({ tagFeed, brightMode }) => {
   }, [brightMode]);
 
   return (
-    <div className="slider-container">
+    <div className={`slider-container ${brightMode === "dark" ? "dark-mode" : "bright-mode"}`}>
       <Slider {...settings}>
         {tagFeed &&
           tagFeed.map((feed, i) => {
