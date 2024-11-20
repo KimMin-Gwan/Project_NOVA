@@ -1,11 +1,10 @@
 import plus from "../../img/plus.png";
-import empty from "../../img/empty.png";
-import more from "../../img/more.png";
-import shadow from "../../img/shadow.png";
+import empty_light from "../../img/empty_color.png";
+import empty_dark from "../../img/empty_dark.png";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SelectBias from "../selectBias/SelectBias";
-
+import { getModeClass } from "./../../App.js";
 function MySoloBias({ solo_bias, bias_url, showBox, blackBox, isError }) {
   let [selectWindow, setSelectWindow] = useState(false);
   let navigate = useNavigate();
@@ -51,6 +50,16 @@ function MySoloBias({ solo_bias, bias_url, showBox, blackBox, isError }) {
   //     //     setBiasData(data.body)
   //     // });
   // };
+  const [mode, setMode] = useState("bright");
+
+  useEffect(() => {
+    const storedMode = localStorage.getItem("brightMode");
+    if (storedMode) {
+      setMode(storedMode);
+    }
+  }, []);
+
+  const empty = mode === "dark" ? empty_dark : empty_light;
 
   return (
     <div className="left-box">
@@ -64,8 +73,8 @@ function MySoloBias({ solo_bias, bias_url, showBox, blackBox, isError }) {
             }}
           ></img>
           <div className="box">
-            <div className="my-bias-group">
-              새로운 최애 솔로
+            <div className={`my-bias-group ${getModeClass(mode)}`}>
+              새로운 최애
               <br />
               지지하기
             </div>
@@ -81,12 +90,7 @@ function MySoloBias({ solo_bias, bias_url, showBox, blackBox, isError }) {
               <img src={plus} alt=""></img>
             </div>
           )}
-          {selectWindow && (
-            <SelectBias
-              selectWindow={selectWindow}
-              setSelectWindow={setSelectWindow}
-            ></SelectBias>
-          )}
+          {selectWindow && <SelectBias selectWindow={selectWindow} setSelectWindow={setSelectWindow}></SelectBias>}
         </>
       )}
       {solo_bias.bid === "" && (
@@ -100,7 +104,7 @@ function MySoloBias({ solo_bias, bias_url, showBox, blackBox, isError }) {
           ></img>
           <div className="box">
             <div className="my-bias-group">
-              새로운 최애 솔로
+              새로운 최애
               <br />
               지지하기
             </div>
@@ -116,22 +120,13 @@ function MySoloBias({ solo_bias, bias_url, showBox, blackBox, isError }) {
               <img src={plus} alt=""></img>
             </div>
           )}
-          {selectWindow && (
-            <SelectBias
-              selectWindow={selectWindow}
-              setSelectWindow={setSelectWindow}
-            ></SelectBias>
-          )}
+          {selectWindow && <SelectBias selectWindow={selectWindow} setSelectWindow={setSelectWindow}></SelectBias>}
         </>
       )}
       {solo_bias.bid && (
         <>
           <div className="image-container">
-            <img
-              src={bias_url + `${solo_bias.bid}.PNG`}
-              alt="bias"
-              className="img2"
-            />
+            <img src={bias_url + `${solo_bias.bid}.PNG`} alt="bias" className="img2" />
           </div>
 
           <div className="box">

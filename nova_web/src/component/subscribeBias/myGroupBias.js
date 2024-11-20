@@ -1,10 +1,11 @@
 import plus from "../../img/plus.png";
-import empty from "../../img/empty.png";
+import empty_light from "../../img/empty_color.png";
+import empty_dark from "../../img/empty_dark.png";
 import more from "../../img/more.png";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SelectBias from "../selectBias/SelectBias";
-
+import { getModeClass } from "./../../App.js";
 function MyGroupBias({ group_bias, bias_url, isError }) {
   let navigate = useNavigate();
   let [selectWindow, setSelectWindow] = useState(false);
@@ -31,7 +32,16 @@ function MyGroupBias({ group_bias, bias_url, isError }) {
 
   let url = "https://nova-platform.kr/";
   let [bias_data, setBiasData] = useState();
+  const [mode, setMode] = useState("bright");
 
+  useEffect(() => {
+    const storedMode = localStorage.getItem("brightMode");
+    if (storedMode) {
+      setMode(storedMode);
+    }
+  }, []);
+
+  const empty = mode === "dark" ? empty_dark : empty_light;
   return (
     <div className="left-box">
       {isError && (
@@ -44,7 +54,7 @@ function MyGroupBias({ group_bias, bias_url, isError }) {
             }}
           ></img>
           <div className="box">
-            <div className="my-bias-group">
+            <div className={`my-bias-group ${getModeClass(mode)}`}>
               새로운 차애
               <br />
               지지하기
@@ -60,9 +70,7 @@ function MyGroupBias({ group_bias, bias_url, isError }) {
               <img src={plus} alt=""></img>
             </div>
           )}
-          {selectWindow && (
-            <SelectBias selectWindow={selectWindow} setSelectWindow={setSelectWindow}></SelectBias>
-          )}
+          {selectWindow && <SelectBias selectWindow={selectWindow} setSelectWindow={setSelectWindow}></SelectBias>}
         </>
       )}
       {group_bias.bid === "" && (
@@ -91,9 +99,7 @@ function MyGroupBias({ group_bias, bias_url, isError }) {
               <img src={plus} alt=""></img>
             </div>
           )}
-          {selectWindow && (
-            <SelectBias selectWindow={selectWindow} setSelectWindow={setSelectWindow}></SelectBias>
-          )}
+          {selectWindow && <SelectBias selectWindow={selectWindow} setSelectWindow={setSelectWindow}></SelectBias>}
         </>
       )}
       {group_bias.bid && (

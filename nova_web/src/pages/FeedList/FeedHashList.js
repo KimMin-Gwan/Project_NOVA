@@ -167,7 +167,16 @@ export default function FeedHashList(isUserState) {
         <div ref={scrollRef} onMouseDown={onMouseDown} onMouseMove={onMouseMove} onMouseUp={onMouseUp} className={`${style["tag-container"]} ${style[getModeClass(mode)]}`}>
           {hashTags.map((tag, i) => {
             return (
-              <button key={i} style={{ background: isClickedTag === tag ? "purple" : "black" }} onClick={() => handleTagClick(i, tag)} className={style["hashtag-text"]}>
+              <button
+                key={i}
+                style={{
+                  background: isClickedTag === tag ? (getModeClass(mode) === "bright-mode" ? "#98A0FF" : "#051243") : getModeClass(mode) === "bright-mode" ? "#CCCFFF" : "#373737",
+
+                  cursor: "pointer",
+                }}
+                onClick={() => handleTagClick(i, tag)}
+                className={style["hashtag-text"]}
+              >
                 #{tag}
               </button>
             );

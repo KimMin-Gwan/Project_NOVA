@@ -201,7 +201,10 @@ function App() {
                   </div>
                 </header>
                 <Banner url={url}></Banner>
-                <h2 className={`authen ${getModeClass(brightMode)}`}>최애 / 차애</h2>
+                <h2 className={`authen ${getModeClass(brightMode)}`}>
+                  <p>최애</p>
+                  <p>차애</p>
+                </h2>
                 <section className="my-bias">
                   <MyBias url={url} showBox={showBox} blackBox={blackBox}></MyBias>
                 </section>

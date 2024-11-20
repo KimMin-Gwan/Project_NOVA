@@ -310,8 +310,11 @@ body.dark-mode {
 
 .authen {
   color: #303030;
-
-  text-align: center;
+  display: flex;
+  justify-content: space-around;
+  p {
+    margin: 0;
+  }
 }
 
 .box {
@@ -335,7 +338,7 @@ body.dark-mode {
   font-size: 22px;
   font-weight: 600;
   text-align: start;
-  color: black;
+  color: white;
   position: relative;
   /* Ensure it's positioned correctly */
   z-index: 3;
@@ -1143,6 +1146,7 @@ body.dark-mode {
 .bottom_bar.bright-mode {
   background-color: #eeebf6;
 }
+
 /* 제일 위 */
 .top-area.bright-mode {
   background-color: #eaeeff;
@@ -1156,4 +1160,8 @@ body.dark-mode {
 /* 선 */
 .hr-line.bright-mode {
   border-color: #eaeeff;
+}
+/* 최애차애 선택 */
+.my-bias-group.bright-mode {
+  color: #8c8c8c;
 }
