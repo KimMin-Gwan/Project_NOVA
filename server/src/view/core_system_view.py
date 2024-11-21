@@ -238,7 +238,7 @@ class Core_Service_View(Master_View):
         @self.__app.get('/feed_explore/search_feed_with_hashtag')
         def search_feed_with_hashtag(request:Request, hashtag:Optional[str], key:Optional[int] = -1):
             request_manager = RequestManager()
-            data_payload = HashtagFeedRequest(hashtag=hashtag)
+            data_payload = HashtagFeedRequest(hashtag=hashtag, key=key)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
                 #raise request_manager.credentials_exception

@@ -181,11 +181,6 @@ class FeedModel(BaseModel):
             raise CoreControllerLogicError("response making error | " + e)
         
 
-
-
-
-
-
 # feed 의 메타 정보를 보내주는 모델
 class FeedMetaModel(BaseModel):
     def __init__(self, database:Local_Database) -> None:
