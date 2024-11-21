@@ -10,6 +10,7 @@ import { getModeClass } from "./../../App.js";
 export default function FeedList(isUserState) {
   const [params] = useSearchParams();
   const type = params.get("type");
+  const keyword = params.get("keyword");
 
   const target = useRef(null);
   const observerRef = useRef(null);
@@ -142,8 +143,13 @@ export default function FeedList(isUserState) {
     // mode가 변경될 때만 localStorage에 저장
     localStorage.setItem("brightMode", mode);
   }, [mode]);
+
   if (isLoading) {
     return <p>데이터 불러오는 중</p>;
+  }
+
+  if (keyword) {
+    return <p>{keyword}</p>;
   }
 
   return (
@@ -174,12 +180,31 @@ export default function FeedList(isUserState) {
             </button>
           </div>
         </header>
-        {type === "all" && <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>전체 피드</div>}
-        {type === "best" && <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>오늘의 베스트 피드</div>}
-        {type === "weekly_best" && <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>주간 베스트 피드</div>}
+        {type === "all" && (
+          <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>전체 피드</div>
+        )}
+        {type === "best" && (
+          <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>오늘의 베스트 피드</div>
+        )}
+        {type === "weekly_best" && (
+          <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>주간 베스트 피드</div>
+        )}
+        {keyword === "헤이" && (
+          <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>헤이 피드</div>
+        )}
         <div className={style["scroll-area"]}>
           {feedData.map((feed, i) => {
-            return <Feed key={feed.fid + i} className={`${style["feed-box"]} ${style[getModeClass(mode)]}`} feed={feed} func={true} feedData={feedData} setFeedData={setFeedData} isUserState={isUserState}></Feed>;
+            return (
+              <Feed
+                key={feed.fid + i}
+                className={`${style["feed-box"]} ${style[getModeClass(mode)]}`}
+                feed={feed}
+                func={true}
+                feedData={feedData}
+                setFeedData={setFeedData}
+                isUserState={isUserState}
+              ></Feed>
+            );
           })}
           {isLoading && <p>Loading...</p>}
           <div ref={target} style={{ height: "1px" }}></div>

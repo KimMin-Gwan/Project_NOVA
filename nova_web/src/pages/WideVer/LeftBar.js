@@ -57,67 +57,77 @@ export default function LeftBar({ brightMode }) {
       >
         <h4 className={style["wide-text"]}>바로가기</h4>
         <ul className={style["direct-list"]}>
-          <li className={style["list-item"]}>
+          <li
+            className={style["list-item"]}
+            onClick={() => {
+              handleNavigate("/");
+            }}
+          >
             <img src={home_icon} alt="home" className={style["icon-text"]}></img>
             <div
               className={`${style["direct-link"]} ${
                 brightMode === "dark" ? style["dark-mode"] : style["light-mode"]
               }`}
-              onClick={() => {
-                handleNavigate("/");
-              }}
             >
               플랫폼 홈
             </div>
           </li>
-          <li className={style["list-item"]}>
+          <li
+            className={style["list-item"]}
+            onClick={() => {
+              handleNavigate("/feed_list?type=all");
+            }}
+          >
             <img src={all_icon} alt="전체 피드" className={style["icon-text"]}></img>
             <div
               className={`${style["direct-link"]} ${
                 brightMode === "dark" ? style["dark-mode"] : style["light-mode"]
               }`}
-              onClick={() => {
-                handleNavigate("/feed_list?type=all");
-              }}
             >
               전체 피드
             </div>
           </li>
-          <li className={style["list-item"]}>
+          <li
+            className={style["list-item"]}
+            onClick={() => {
+              handleNavigate("/feed_page");
+            }}
+          >
             <img src={short_icon} alt="short_feed" className={style["icon-text"]}></img>
             <div
               className={`${style["direct-link"]} ${
                 brightMode === "dark" ? style["dark-mode"] : style["light-mode"]
               }`}
-              onClick={() => {
-                handleNavigate("/feed_page");
-              }}
             >
               숏피드
             </div>
           </li>
-          <li className={style["list-item"]}>
+          <li
+            className={style["list-item"]}
+            onClick={() => {
+              handleNavigate("/write_feed");
+            }}
+          >
             <img src={feed_write} alt="write" className={style["icon-text"]}></img>
             <div
               className={`${style["direct-link"]} ${
                 brightMode === "dark" ? style["dark-mode"] : style["light-mode"]
               }`}
-              onClick={() => {
-                handleNavigate("/write_feed");
-              }}
             >
               피드 작성
             </div>
           </li>
-          <li className={style["list-item"]}>
+          <li
+            className={style["list-item"]}
+            onClick={() => {
+              handleNavigate("/feed_list?type=weekly_best");
+            }}
+          >
             <img src={popular_icon} alt="popular" className={style["icon-text"]}></img>
             <div
               className={`${style["direct-link"]} ${
                 brightMode === "dark" ? style["dark-mode"] : style["light-mode"]
               }`}
-              onClick={() => {
-                handleNavigate("/feed_list?type=weekly_best");
-              }}
             >
               주간 TOP 100
             </div>

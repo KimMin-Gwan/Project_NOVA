@@ -184,7 +184,11 @@ function App() {
                       navigate("/");
                     }}
                   >
-                    <img src={logo} alt="logo" className={`logo-st ${getModeClass(brightMode)}`}></img>
+                    <img
+                      src={logo}
+                      alt="logo"
+                      className={`logo-st ${getModeClass(brightMode)}`}
+                    ></img>
                   </div>
 
                   <div className="buttons">

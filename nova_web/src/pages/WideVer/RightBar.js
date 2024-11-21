@@ -7,13 +7,22 @@ import search_icon from "./../../img/search_icon.png";
 import { Link } from "react-router-dom";
 
 export default function RightBar({ brightMode }) {
+  let navigate = useNavigate();
+
+  function handleNavigate() {
+    navigate("/feed_list/search_feed?keyword=헤이");
+  }
   return (
     <div className={style["wrap_container"]}>
-      <div className={`${style["search-box"]} ${brightMode === "dark" ? style["dark-mode"] : style["light-mode"]}`}>
+      <div
+        className={`${style["search-box"]} ${
+          brightMode === "dark" ? style["dark-mode"] : style["light-mode"]
+        }`}
+      >
         <h4 className={style["wide-text"]}>검색</h4>
         <div className={style["search-bar"]}>
           <input></input>
-          <button>
+          <button onClick={handleNavigate}>
             <img src={search_icon} className={style["icon-text"]}></img>
           </button>
         </div>

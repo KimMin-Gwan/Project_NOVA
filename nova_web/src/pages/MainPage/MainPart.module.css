@@ -7,6 +7,10 @@
   color: white;
 }
 
+.allpost-container {
+  height: auto;
+}
+
 .top-area {
   flex-grow: 1;
   background-color: #1e1e1e;

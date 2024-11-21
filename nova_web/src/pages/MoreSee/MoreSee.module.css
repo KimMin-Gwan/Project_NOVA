@@ -142,6 +142,7 @@ hr {
   padding: 5px 30px;
   box-sizing: border-box;
   max-width: 200px;
+  cursor: pointer;
 }
 .row {
   display: flex;
