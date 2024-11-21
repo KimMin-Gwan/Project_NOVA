@@ -476,8 +476,6 @@ class SearchManager:
 
         search_range = self.__feed_table[target_index:index][::-1]
 
-        print(search_range)
-
         if index < target_index  or index > len(self.__feed_table):
             return result_fid, -3
 
