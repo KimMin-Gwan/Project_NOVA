@@ -8,9 +8,25 @@ import { Link } from "react-router-dom";
 
 export default function RightBar({ brightMode }) {
   let navigate = useNavigate();
+  let [searchWord, setSearchWord] = useState("");
 
   function handleNavigate() {
-    navigate("/feed_list/search_feed?keyword=헤이");
+    if (!searchWord) {
+      navigate("/");
+    } else {
+      navigate(`/feed_list/search_feed?keyword=${searchWord}`);
+      setSearchWord("");
+    }
+  }
+
+  function onKeyDown(event) {
+    if (event.key === "Enter") {
+      handleNavigate();
+    }
+  }
+
+  function onChangeSearchWord(e) {
+    setSearchWord(e.target.value);
   }
   return (
     <div className={style["wrap_container"]}>
@@ -21,7 +37,12 @@ export default function RightBar({ brightMode }) {
       >
         <h4 className={style["wide-text"]}>검색</h4>
         <div className={style["search-bar"]}>
-          <input></input>
+          <input
+            type="text"
+            value={searchWord}
+            onChange={onChangeSearchWord}
+            onKeyDown={onKeyDown}
+          ></input>
           <button onClick={handleNavigate}>
             <img src={search_icon} className={style["icon-text"]}></img>
           </button>

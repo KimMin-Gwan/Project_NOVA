@@ -13,13 +13,14 @@ export default function FeedHashList(isUserState) {
   let [isLoading, setIsLoading] = useState(true);
   let navigate = useNavigate();
   let [feedData, setFeedData] = useState([]);
-  let [nextData, setNextData] = useState([]);
+  let [nextData, setNextData] = useState(-1);
   const [isActive, setIsActive] = useState(false);
   let [hashTags, setHashTags] = useState([]);
   let [tag, setTag] = useState("");
   let [isClickedTag, setIsClickedTag] = useState(null);
   let [clickIndex, setClickIndex] = useState(0);
   let [biasData, setBiasData] = useState(null);
+  let [tagFeed, setTagFeed] = useState([]);
   const [params] = useSearchParams();
   const brightModeFromUrl = params.get("brightMode");
 
@@ -33,7 +34,7 @@ export default function FeedHashList(isUserState) {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("first feed 3개", data);
+        // console.log("first feed 3개", data);
         setHashTags(data.body.hashtags);
         // setFeedData(data.body.feed);
         // setNextData(data.body.key);
@@ -43,25 +44,49 @@ export default function FeedHashList(isUserState) {
       });
   }
 
-  // let fetchUrl = `https://nova-platform.kr/feed_explore/search_feed_with_hashtag?hashtag=${tag}&key=${}`
-
-  function fetchPlusData(tag) {
+  function fetchTagFeed(tag) {
     // setIsLoading(true);
-    fetch(`https://nova-platform.kr/feed_explore/search_feed_with_hashtag?hashtag=${tag}`, {
+    fetch(`https://nova-platform.kr/feed_explore/search_feed_with_hashtag?hashtag=${tag}&key=-1`, {
       credentials: "include",
     })
       .then((response) => response.json())
       .then((data) => {
+        console.log("first feed 3개", data.body);
+        setTagFeed(data.body.feed);
+        // setBiasData(data.body);
         setFeedData(data.body.feed);
-
-        // setNextData(data.body.key);
-        // setFeedData((prevData) => {
-        //   const newData = [...prevData, ...data.body.feed];
-        //   return newData;
-        // });
-        setIsLoading(false);
+        setNextData(data.body.key);
+        // setIsLoading(false);
       });
   }
+
+  // let fetchUrl = `https://nova-platform.kr/feed_explore/search_feed_with_hashtag?hashtag=${tag}&key=${}`
+
+  function fetchPlusData() {
+    // setIsLoading(true);
+    fetch(
+      `https://nova-platform.kr/feed_explore/search_feed_with_hashtag?hashtag=${isClickedTag}&key=${nextData}`,
+      {
+        credentials: "include",
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        // setFeedData(data.body.feed);
+        // setBiasData(data.body);
+        console.log("dasds", data);
+        // setIsLoading(false);
+      });
+  }
+  useEffect(() => {
+    fetchHashTagData();
+  }, []);
+
+  useEffect(() => {
+    if (isClickedTag) {
+      fetchTagFeed(isClickedTag);
+    }
+  }, [isClickedTag]);
 
   useEffect(() => {
     observerRef.current = new IntersectionObserver((entries) => {
@@ -69,7 +94,9 @@ export default function FeedHashList(isUserState) {
         if (!entry.isIntersecting) return;
         if (isLoading) return;
 
-        fetchPlusData();
+        if (nextData !== -1) {
+          fetchPlusData();
+        }
       });
     });
 
@@ -84,13 +111,9 @@ export default function FeedHashList(isUserState) {
     };
   }, [isLoading, nextData]);
 
-  useEffect(() => {
-    fetchHashTagData();
-  }, []);
-
-  useEffect(() => {
-    fetchPlusData(isClickedTag);
-  }, [isClickedTag]);
+  // useEffect(() => {
+  //   fetchPlusData(isClickedTag);
+  // }, [isClickedTag]);
 
   // function handleClickTag(index, tag) {
   //   // fetchPlusData();
@@ -163,14 +186,29 @@ export default function FeedHashList(isUserState) {
             </button>
           </div>
         </header>
-        <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>{biasData.title ? biasData.title : "인기 해시태그"}</div>
-        <div ref={scrollRef} onMouseDown={onMouseDown} onMouseMove={onMouseMove} onMouseUp={onMouseUp} className={`${style["tag-container"]} ${style[getModeClass(mode)]}`}>
+        <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>
+          {biasData.title ? biasData.title : "인기 해시태그"}
+        </div>
+        <div
+          ref={scrollRef}
+          onMouseDown={onMouseDown}
+          onMouseMove={onMouseMove}
+          onMouseUp={onMouseUp}
+          className={`${style["tag-container"]} ${style[getModeClass(mode)]}`}
+        >
           {hashTags.map((tag, i) => {
             return (
               <button
                 key={i}
                 style={{
-                  background: isClickedTag === tag ? (getModeClass(mode) === "bright-mode" ? "#98A0FF" : "#051243") : getModeClass(mode) === "bright-mode" ? "#CCCFFF" : "#373737",
+                  background:
+                    isClickedTag === tag
+                      ? getModeClass(mode) === "bright-mode"
+                        ? "#98A0FF"
+                        : "#051243"
+                      : getModeClass(mode) === "bright-mode"
+                      ? "#CCCFFF"
+                      : "#373737",
 
                   cursor: "pointer",
                 }}
@@ -184,7 +222,17 @@ export default function FeedHashList(isUserState) {
         </div>
         <div className={style["scroll-area"]}>
           {feedData.map((feed, i) => {
-            return <Feed key={feed.fid + i} className={`${style["feed-box"]} ${style[getModeClass(mode)]}`} feed={feed} func={true} feedData={feedData} setFeedData={setFeedData} isUserState={isUserState}></Feed>;
+            return (
+              <Feed
+                key={feed.fid + i}
+                className={`${style["feed-box"]} ${style[getModeClass(mode)]}`}
+                feed={feed}
+                func={true}
+                feedData={feedData}
+                setFeedData={setFeedData}
+                isUserState={isUserState}
+              ></Feed>
+            );
           })}
           {isLoading && <p>Loading...</p>}
           <div ref={target} style={{ height: "1px" }}></div>

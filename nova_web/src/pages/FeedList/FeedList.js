@@ -26,7 +26,7 @@ export default function FeedList(isUserState) {
   let navigate = useNavigate();
 
   const FETCH_URL = "https://nova-platform.kr/feed_explore/";
-
+  // fetch(`https://nova-platform.kr/feed_explore/search_feed_with_hashtag?hashtag=${tag}`, {
   function fetchData() {
     // setIsLoading(true);
     if (type === "best") {
@@ -58,6 +58,16 @@ export default function FeedList(isUserState) {
         .then((response) => response.json())
         .then((data) => {
           // console.log("first feed 3개", data);
+          setFeedData(data.body.feed);
+          setNextData(data.body.key);
+          setIsLoading(false);
+        });
+    }
+
+    if (keyword) {
+      fetch(`${FETCH_URL}search_feed_with_hashtag?hashtag=${keyword}&key=-1`)
+        .then((response) => response.json())
+        .then((data) => {
           setFeedData(data.body.feed);
           setNextData(data.body.key);
           setIsLoading(false);
@@ -110,6 +120,22 @@ export default function FeedList(isUserState) {
           console.log("mor", data);
         });
     }
+
+    if (keyword) {
+      fetch(`${FETCH_URL}search_feed_with_hashtag?hashtag=${keyword}&key=${nextData}`, {
+        credentials: "include",
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          setNextData(data.body.key);
+          setFeedData((prevData) => {
+            const newData = [...prevData, ...data.body.feed];
+            return newData;
+          });
+          setIsLoading(false);
+          console.log("mor", data);
+        });
+    }
   }
 
   useEffect(() => {
@@ -138,7 +164,8 @@ export default function FeedList(isUserState) {
     return () => {
       setFeedData([]);
     };
-  }, []);
+  }, [keyword]);
+
   useEffect(() => {
     // mode가 변경될 때만 localStorage에 저장
     localStorage.setItem("brightMode", mode);
@@ -146,10 +173,6 @@ export default function FeedList(isUserState) {
 
   if (isLoading) {
     return <p>데이터 불러오는 중</p>;
-  }
-
-  if (keyword) {
-    return <p>{keyword}</p>;
   }
 
   return (
@@ -189,8 +212,8 @@ export default function FeedList(isUserState) {
         {type === "weekly_best" && (
           <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>주간 베스트 피드</div>
         )}
-        {keyword === "헤이" && (
-          <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>헤이 피드</div>
+        {keyword && (
+          <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>{keyword}</div>
         )}
         <div className={style["scroll-area"]}>
           {feedData.map((feed, i) => {
