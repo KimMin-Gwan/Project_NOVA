@@ -22,6 +22,7 @@ import new_feed from "./../../img/new-feed.png";
 import guide_icon from "./../../img/guide.png";
 import short_feed from "./../../img/short-feed.png";
 import up_hashtag from "./../../img/up-hashtag.png";
+import { getModeClass } from "./../../App.js";
 function MoreSee({ onModeChange }) {
   const requestURL = {
     x: "https://x.com/sebacheong",
@@ -90,7 +91,7 @@ function MoreSee({ onModeChange }) {
   }, [brightMode]);
   return (
     <div className={style.font}>
-      <div className={style.container}>
+      <div className={`${style["container"]} ${style[getModeClass(brightMode)]}`}>
         <div className={style.TopBar}>
           <img
             src={backword}
@@ -196,7 +197,7 @@ function MoreSee({ onModeChange }) {
             </li>
             <li className={style.mainComponent} onClick={handleChangeMode}>
               <img src={set_icon} alt="Arrow" className={style.vector} />
-              <p className={style.bodyText}>{brightMode === "dark" ? "☀️ Light" : "🌑 Dark"}</p>
+              <p className={style.bodyText}>{brightMode === "dark" ? "☀️ Light Mode" : "🌑 Dark Mode"}</p>
               <img src={more_icon} alt="Arrow" className={style.more_vector} />
             </li>
           </ul>

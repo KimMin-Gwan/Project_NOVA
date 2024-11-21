@@ -15,7 +15,7 @@ hr {
 .container {
   max-width: 500px;
   /* 너비를 원하는 비율로 설정 */
-  height: 200vh;
+  height: 170vh;
   margin: 0 auto;
   /*max-width: 1200px; /* 최대 너비를 설정 */
   background-color: #eee9fc; /* 배경색을 원하는 색으로 변경 가능 */
@@ -224,4 +224,60 @@ hr {
 .nova_project_container {
   display: flex; /* 플렉스 컨테이너 설정 */
   align-items: center; /* 세로 중앙 정렬 */
+}
+
+/* 더보기만 반대로 다크 모드로 설정 */
+:root {
+  --bg-dark-color: #1e1e1e;
+  --font-dark-color: #ffffff;
+  --bar-dark-color: #0d0d0d;
+}
+.container.dark-mode {
+  .TopBar {
+    background-color: var(--bg-dark-color);
+    border-color: var(--bg-dark-color);
+  }
+  .content {
+    background-color: var(--bg-dark-color);
+  }
+  .bodyText_login {
+    color: var(--font-dark-color);
+    background-color: #000000;
+  }
+  .fullWidthComponent {
+    background-color: var(--bg-dark-color);
+  }
+  .titleName {
+    color: var(--font-dark-color);
+  }
+  .vector_login {
+    filter: invert();
+  }
+  .list-bar {
+    background-color: var(--bar-dark-color);
+  }
+  .mainComponent {
+    background-color: var(--bg-dark-color);
+  }
+  .vector {
+    filter: invert();
+  }
+  .bodyText {
+    color: var(--font-dark-color);
+  }
+  .inquiry {
+    background-color: var(--bg-dark-color);
+  }
+  .icon_name {
+    color: var(--font-dark-color);
+  }
+  .footer {
+    background-color: #090909;
+  }
+  .logo_img {
+    filter: invert(0.5);
+  }
+  .nova_info {
+    color: #6c6c6c;
+  }
 }
