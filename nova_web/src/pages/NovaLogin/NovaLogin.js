@@ -6,8 +6,8 @@ import styleSignUp from "./../SignUp/SignUp.module.css";
 import backword from "./../../img/back_icon.png";
 
 import { useNavigate } from "react-router-dom";
-
-const NOVALogin = () => {
+import { getModeClass } from "./../../App.js";
+const NOVALogin = ({ brightmode }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [login, setLogin] = useState("");
@@ -67,9 +67,12 @@ const NOVALogin = () => {
       setDetail("");
     };
   }, []);
-
+  const [mode, setMode] = useState(() => {
+    // 로컬 스토리지에서 가져온 값이 있으면 그것을, 없으면 'bright'로 초기화
+    return localStorage.getItem("brightMode") || "bright";
+  });
   return (
-    <div className={style.container}>
+    <div className={`${style["container"]} ${style[getModeClass(mode)]}`}>
       <div className={style.Topbar}>
         <img
           src={backword}
@@ -88,13 +91,7 @@ const NOVALogin = () => {
           이메일
           <br />
           <label>
-            <input
-              type="email"
-              placeholder="이메일 주소"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className={style.input}
-            />
+            <input type="email" placeholder="이메일 주소" value={email} onChange={(e) => setEmail(e.target.value)} className={style.input} />
           </label>
           {login === "email" && <div className={style.errorMessage}>{detail}</div>}
         </div>

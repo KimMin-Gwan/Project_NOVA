@@ -146,7 +146,7 @@ function App() {
       <Route path="/mypage" element={<MyPage />}></Route>
       <Route path="/bias_certify" element={<BiasCertify />}></Route>
       <Route path="/bias_info/user_contribution" element={<BiasDetail />}></Route>
-      <Route path="/novalogin" element={<NOVALogin />}></Route>
+      <Route path="/novalogin" element={<NOVALogin brightMode={brightMode} />}></Route>
       <Route path="/find_pw" element={<FindPw />}></Route>
       <Route path="/find_pw_change" element={<FindPwChange />}></Route>
       <Route path="/feed_hash_list" element={<FeedHashList />}></Route>
@@ -184,11 +184,7 @@ function App() {
                       navigate("/");
                     }}
                   >
-                    <img
-                      src={logo}
-                      alt="logo"
-                      className={`logo-st ${getModeClass(brightMode)}`}
-                    ></img>
+                    <img src={logo} alt="logo" className={`logo-st ${getModeClass(brightMode)}`}></img>
                   </div>
 
                   <div className="buttons">
