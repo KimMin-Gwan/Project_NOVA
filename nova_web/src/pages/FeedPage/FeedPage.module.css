@@ -121,6 +121,7 @@
   align-items: center;
   margin-right: 5px;
   color: #7960ec;
+  cursor: pointer;
 }
 
 /* 글 내용 영역 */
@@ -375,12 +376,13 @@
   align-items: center;
   font-size: 12px;
   background-color: #000000;
+  color: white;
 }
 
-.empathy-box::placeholder {
+/* .empathy-box::placeholder {
   color: white;
   font-size: 15px;
-}
+} */
 
 /* 3. 이지선다 */
 .balance-box {
@@ -780,6 +782,7 @@ h5 {
   /* height: 100px; */
   margin-left: 20px;
   color: #9f80ff;
+  cursor: pointer;
 }
 .circle {
   margin-right: 5px;
@@ -1969,7 +1972,7 @@ h5 {
 .order_btn {
   width: 25px;
   height: 25px;
-
+  cursor: pointer;
   margin-left: 10px;
   margin-right: 10px;
 }

@@ -337,7 +337,9 @@ function CardWrite() {
 
   return (
     <div className={`${style["fclass-container"]} ${style[getModeClass(mode)]}`}>
-      <input className={style["empathy-box"]} name="content" placeholder="버튼 내용"></input>
+      <div className={style["empathy-box"]} name="content">
+        선택지 없음
+      </div>
     </div>
   );
 }

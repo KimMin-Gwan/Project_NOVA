@@ -42,6 +42,11 @@ const FeedPage = ({ brightmode }) => {
   const sliderRef = useRef(null);
 
   let [history, setHistory] = useState([]);
+
+  function onClickTag(tag) {
+    navigate(`/feed_list?keyword=${tag}`);
+  }
+
   const [mode, setMode] = useState(() => {
     // 로컬 스토리지에서 가져온 값이 있으면 그것을, 없으면 'bright'로 초기화
     return localStorage.getItem("brightMode") || "bright";
@@ -155,21 +160,20 @@ const FeedPage = ({ brightmode }) => {
       .then((data) => {
         setBanners(data.body.feed);
         setNextData(data.body.key);
-        console.log("da", data);
+        // console.log("da", data);
         setHistory(data.body.history);
       });
   }
 
   useEffect(() => {
     fetchFeed();
-    console.log("1111", banners);
+    // console.log("1111", banners);
   }, []);
 
   // 서버에서 추가 데이터를 받아오는 함수
   const fetchMoreBanners = async (currentIndex) => {
     try {
       // 서버로부터 추가 배너 데이터를 가져옴
-      console.log(currentIndex);
       const response = await fetch(`https://nova-platform.kr/feed_explore/get_next_feed`, {
         method: "POST",
         headers: {
@@ -186,7 +190,6 @@ const FeedPage = ({ brightmode }) => {
         credentials: "include",
       }); // 예시 URL
       const newBanners = await response.json();
-      console.log("e", newBanners);
       setHistory(newBanners.body.history);
       const plusFeed = newBanners.body.feed;
       setNextData(newBanners.body.key);
@@ -340,7 +343,9 @@ const FeedPage = ({ brightmode }) => {
         setAllComments(data.body.comments);
         setBanners((prevFeeds) => {
           return prevFeeds.map((feed) => {
-            return feed.fid === fid ? { ...feed, num_comment: data.body.feed[0].num_comment } : feed;
+            return feed.fid === fid
+              ? { ...feed, num_comment: data.body.feed[0].num_comment }
+              : feed;
           });
         });
       });
@@ -365,7 +370,7 @@ const FeedPage = ({ brightmode }) => {
         return response.json();
       })
       .then((data) => {
-        // console.log("interactin", data);
+        console.log("interactin", data);
         setBanners((prevFeeds) => {
           return prevFeeds.map((feed) => {
             return feed.fid === fid
@@ -431,7 +436,9 @@ const FeedPage = ({ brightmode }) => {
         });
         setBanners((prevFeeds) => {
           return prevFeeds.map((feed) => {
-            return feed.fid === fid ? { ...feed, num_comment: data.body.feed[0].num_comment } : feed;
+            return feed.fid === fid
+              ? { ...feed, num_comment: data.body.feed[0].num_comment }
+              : feed;
           });
         });
         setInputValue("");
@@ -443,7 +450,18 @@ const FeedPage = ({ brightmode }) => {
   }
 
   return (
-    <div onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp} onMouseLeave={handleMouseUp} onWheel={handleWheel} onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd} ref={sliderRef} className={style["test_container"]}>
+    <div
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
+      onMouseLeave={handleMouseUp}
+      onWheel={handleWheel}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+      ref={sliderRef}
+      className={style["test_container"]}
+    >
       <div
         className={style["slider-track"]}
         style={{
@@ -473,7 +491,9 @@ const FeedPage = ({ brightmode }) => {
                 {/* 왼쪽 컨텐츠 */}
                 <div className={style["content-container"]}>
                   <div className={style["sup_info"]}>
-                    <div className={`${style["nick_name"]} ${style[getModeClass(mode)]}`}>{banner.nickname}</div>
+                    <div className={`${style["nick_name"]} ${style[getModeClass(mode)]}`}>
+                      {banner.nickname}
+                    </div>
                     <div className={style.date}>{banner.date}</div>
                   </div>
 
@@ -540,13 +560,19 @@ const FeedPage = ({ brightmode }) => {
                   {/* 여기까지  */}
                   {banner.hashtag.map((tag, i) => {
                     return (
-                      <span key={tag + i} className={`${style["hashtag-box"]} ${style[getModeClass(mode)]}`}>
+                      <span
+                        key={tag + i}
+                        className={`${style["hashtag-box"]} ${style[getModeClass(mode)]}`}
+                        onClick={() => onClickTag(tag)}
+                      >
                         #{tag}
                       </span>
                     );
                   })}
 
-                  <div className={`${style["feed-content"]} ${style[getModeClass(mode)]}`}>{banner.body}</div>
+                  <div className={`${style["feed-content"]} ${style[getModeClass(mode)]}`}>
+                    {banner.body}
+                  </div>
 
                   {/* 1개이미지 */}
                   {banner.num_image === 1 && (
@@ -649,13 +675,25 @@ const FeedPage = ({ brightmode }) => {
                   )}
 
                   <div className={style["fclass-box"]}>
-                    {banner.fclass === "multiple" && <MultiClass feed={banner} handleInteraction={handleInteraction} />}
-                    {banner.fclass === "card" && <CardClass feed={banner} handleInteraction={handleInteraction} />}
-                    {banner.fclass === "balance" && <BalanceClass feed={banner} handleInteraction={handleInteraction} />}
+                    {banner.fclass === "multiple" && (
+                      <MultiClass feed={banner} handleInteraction={handleInteraction} />
+                    )}
+                    {banner.fclass === "card" && (
+                      <CardClass feed={banner} handleInteraction={handleInteraction} />
+                    )}
+                    {banner.fclass === "balance" && (
+                      <BalanceClass feed={banner} handleInteraction={handleInteraction} />
+                    )}
                     {banner.fclass === "station" && <StationClass feed={banner} />}
                   </div>
                   <div className={style["comment-box"]}>
-                    <Comments isClickedComment={false} feed={banner} setFeedData={setBanners} allComments={allComments} setAllComments={setAllComments} />
+                    <Comments
+                      isClickedComment={false}
+                      feed={banner}
+                      setFeedData={setBanners}
+                      allComments={allComments}
+                      setAllComments={setAllComments}
+                    />
                   </div>
                 </div>
               </div>
@@ -749,7 +787,7 @@ function MultiClass({ feed, handleInteraction }) {
               }}
             >
               {i + 1}. {choi}
-              <span>{feed.result[i]}</span>
+              {feed.attend !== -1 ? <span>{feed.result[i]}</span> : <span></span>}
             </li>
           );
         })}
@@ -764,10 +802,10 @@ function CardClass({ feed, handleInteraction }) {
   });
   return (
     <div className={`${style["fclass-container"]} ${style[getModeClass(mode)]}`}>
-      <div className={style["empathy-box"]}>
-        <div>축하하기</div>
-        <div>8명</div>
-      </div>
+      {/* //   <div className={style["empathy-box"]}>
+    //     <div>축하하기</div>
+    //     <div>8명</div>
+    //   </div> */}
     </div>
   );
 }
@@ -789,7 +827,7 @@ function BalanceClass({ feed, handleInteraction }) {
               }}
             >
               <div>{sel}</div>
-              <div>{feed.result[i]}명</div>
+              {feed.attend !== -1 ? <div>{feed.result[i]}명</div> : <div></div>}
             </div>
           );
         })}

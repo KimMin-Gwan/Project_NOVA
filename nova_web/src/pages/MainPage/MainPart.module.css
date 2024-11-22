@@ -249,6 +249,7 @@
   counter-reset: #fafafa;
   align-self: center;
   text-decoration: underline;
+  cursor: pointer;
 }
 
 .feed-container {

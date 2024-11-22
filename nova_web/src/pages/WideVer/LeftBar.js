@@ -40,8 +40,9 @@ export default function LeftBar({ brightMode }) {
   useEffect(() => {
     fetchTagData();
   }, []);
+
   function handleNavigate(page) {
-    navigate(page); // "/about" 페이지로 이동
+    navigate(page);
   }
 
   return (
@@ -151,7 +152,12 @@ export default function LeftBar({ brightMode }) {
                 <div className={style_hash["ranking-img"]}>
                   <img src={imgList[i]} alt="img"></img>
                 </div>
-                <div className={style_hash["ranking-name"]}>{tag}</div>
+                <div
+                  className={style_hash["ranking-name"]}
+                  onClick={() => handleNavigate(`/feed_list?keyword=${tag}`)}
+                >
+                  {tag}
+                </div>
               </li>
             );
           })}

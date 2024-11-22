@@ -12,9 +12,12 @@ import eight from "./../../img/8.png";
 import nine from "./../../img/9.png";
 import ten from "./../../img/10.png";
 import { getModeClass } from "./../../App.js";
+import { useNavigate } from "react-router-dom";
 let imgList = [one, two, three, four, five, six, seven, eight, nine, ten];
+
 export default function IncreaseTag({ brightMode }) {
   let [tagList, setTagList] = useState([]);
+  let navigate = useNavigate();
 
   function fetchTagData() {
     fetch("https://nova-platform.kr/home/realtime_best_hashtag", {
@@ -34,12 +37,19 @@ export default function IncreaseTag({ brightMode }) {
   useEffect(() => {
     setMode(brightMode); // brightMode 값이 바뀔 때마다 mode 업데이트
   }, [brightMode]);
+
+  function onClickTag(tag) {
+    navigate(`/feed_list?keyword=${tag}`);
+  }
+
   return (
-    <div className={`${style["wrap-container"]} ${style[getModeClass(mode)]}`} style={{ marginBottom: "100px" }}>
+    <div
+      className={`${style["wrap-container"]} ${style[getModeClass(mode)]}`}
+      style={{ marginBottom: "100px" }}
+    >
       <div className={`${style["top-area"]} ${style[getModeClass(mode)]}`}>
         <div className={style["content-title"]}>
           <header className={style["header-text"]}>급상승 해시태그</header>
-          {/* <div>화살표</div> */}
         </div>
       </div>
 
@@ -53,7 +63,9 @@ export default function IncreaseTag({ brightMode }) {
                   <div className={style["ranking-img"]}>
                     <img src={imgList[i]} alt="img"></img>
                   </div>
-                  <div className={style["ranking-name"]}>{tag}</div>
+                  <div className={style["ranking-name"]} onClick={() => onClickTag(tag)}>
+                    {tag}
+                  </div>
                 </li>
               );
             })}

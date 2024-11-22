@@ -22,7 +22,15 @@ export function useBrightMode() {
 
   return [mode, setMode];
 }
-export default function Feed({ className, feed, func, feedData, setFeedData, img_circle, isUserState }) {
+export default function Feed({
+  className,
+  feed,
+  func,
+  feedData,
+  setFeedData,
+  img_circle,
+  isUserState,
+}) {
   // function handleRequestURL() {
   //     window.open(requestURL, '_blank', "noopener, noreferrer");
   // };
@@ -63,7 +71,9 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
         // setMyAttend(data.body.feed[0].attend);
         setFeedData((prevFeeds) => {
           return prevFeeds.map((feed) => {
-            return feed.fid === fid ? { ...feed, attend: data.body.feed[0].attend, result: data.body.feed[0].result } : feed;
+            return feed.fid === fid
+              ? { ...feed, attend: data.body.feed[0].attend, result: data.body.feed[0].result }
+              : feed;
           });
         });
       });
@@ -99,7 +109,9 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
         console.log("clickstar", data);
         setFeedData((prevFeeds) => {
           return prevFeeds.map((feed) => {
-            return feed.fid === fid ? { ...feed, star_flag: data.body.feed[0].star_flag, star: data.body.feed[0].star } : feed;
+            return feed.fid === fid
+              ? { ...feed, star_flag: data.body.feed[0].star_flag, star: data.body.feed[0].star }
+              : feed;
           });
         });
       });
@@ -236,7 +248,9 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
         });
         setFeedData((prevFeeds) => {
           return prevFeeds.map((feed) => {
-            return feed.fid === fid ? { ...feed, num_comment: data.body.feed[0].num_comment } : feed;
+            return feed.fid === fid
+              ? { ...feed, num_comment: data.body.feed[0].num_comment }
+              : feed;
           });
         });
         setInputValue("");
@@ -267,7 +281,12 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
         <div className={`${style.feed} ${className} `}>
           <div>
             {img_circle && <div style={{ height: "80px" }}></div>}
-            <InfoArea color={"#7960EC"} name={`${feed.class_name} 행성`} date={feed.date} supporter={`${feed.nickname}`}></InfoArea>
+            <InfoArea
+              color={"#7960EC"}
+              name={`${feed.class_name} 행성`}
+              date={feed.date}
+              supporter={`${feed.nickname}`}
+            ></InfoArea>
             {isClickedMoreSee ? (
               <div className={`${style["modal-container"]} ${style["feed-comment-modal"]}`}>
                 <div className={style["comment-modal"]}>
@@ -318,8 +337,16 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                   )}
                   <div className={`${style["comment_action"]} ${style["comment-input"]}`}>
                     <form onSubmit={(event) => handleSubmit(feed.fid, event)}>
-                      <input type="text" value={inputValue} onChange={handleChange} className={` ${style["comment-box"]} ${style[getModeClass(mode)]}`}></input>
-                      <button type="submit" className={` ${style["comment-write"]} ${style[getModeClass(mode)]}`}>
+                      <input
+                        type="text"
+                        value={inputValue}
+                        onChange={handleChange}
+                        className={` ${style["comment-box"]} ${style[getModeClass(mode)]}`}
+                      ></input>
+                      <button
+                        type="submit"
+                        className={` ${style["comment-write"]} ${style[getModeClass(mode)]}`}
+                      >
                         댓글 작성
                       </button>
                     </form>
@@ -452,7 +479,11 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                 {isUserState ? (
                   <FaStar
                     className={style.like}
-                    style={feed.star_flag ? { fill: "yellow" } : { fill: "white", stroke: "black", strokeWidth: "25" }}
+                    style={
+                      feed.star_flag
+                        ? { fill: "yellow" }
+                        : { fill: "white", stroke: "black", strokeWidth: "25" }
+                    }
                     onClick={(e) => {
                       handleCheckStar(feed.fid, e);
                     }}
@@ -460,7 +491,11 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                 ) : (
                   <FaStar
                     className={style.like}
-                    style={feed.star_flag ? { fill: "yellow" } : { fill: "white", stroke: "black", strokeWidth: "25" }}
+                    style={
+                      feed.star_flag
+                        ? { fill: "yellow" }
+                        : { fill: "white", stroke: "black", strokeWidth: "25" }
+                    }
                     onClick={(e) => {
                       e.preventDefault();
                       alert("로그인이 필요합니다.");
@@ -473,14 +508,25 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
           )}
 
           <div className={` ${style["line"]} ${style[getModeClass(mode)]}`}></div>
-          <Comments feed={feed} allComments={allComments} setAllComments={setAllComments} setFeedData={setFeedData} isUserState={isUserState}></Comments>
+          <Comments
+            feed={feed}
+            allComments={allComments}
+            setAllComments={setAllComments}
+            setFeedData={setFeedData}
+            isUserState={isUserState}
+          ></Comments>
         </div>
       )}
       {feed.fclass === "multiple" && (
         <div className={`${style.feed} ${className}`}>
           <div>
             {img_circle && <div style={{ height: "80px" }}></div>}
-            <InfoArea color={"#E370D1"} name={`${feed.class_name} 행성`} date={feed.date} supporter={`${feed.nickname}`}></InfoArea>
+            <InfoArea
+              color={"#E370D1"}
+              name={`${feed.class_name} 행성`}
+              date={feed.date}
+              supporter={`${feed.nickname}`}
+            ></InfoArea>
             {isClickedMoreSee ? (
               <div className={`${style["modal-container"]} ${style["feed-comment-modal"]}`}>
                 <div className={style["comment-modal"]}>
@@ -531,8 +577,16 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                   )}
                   <div className={`${style["comment_action"]} ${style["comment-input"]}`}>
                     <form onSubmit={(event) => handleSubmit(feed.fid, event)}>
-                      <input type="text" value={inputValue} onChange={handleChange} className={` ${style["comment-box"]} ${style[getModeClass(mode)]}`}></input>
-                      <button type="submit" className={` ${style["comment-write"]} ${style[getModeClass(mode)]}`}>
+                      <input
+                        type="text"
+                        value={inputValue}
+                        onChange={handleChange}
+                        className={` ${style["comment-box"]} ${style[getModeClass(mode)]}`}
+                      ></input>
+                      <button
+                        type="submit"
+                        className={` ${style["comment-write"]} ${style[getModeClass(mode)]}`}
+                      >
                         댓글 작성
                       </button>
                     </form>
@@ -733,7 +787,11 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                 {isUserState ? (
                   <FaStar
                     className={style.like}
-                    style={feed.star_flag ? { fill: "yellow" } : { fill: "white", stroke: "black", strokeWidth: "25" }}
+                    style={
+                      feed.star_flag
+                        ? { fill: "yellow" }
+                        : { fill: "white", stroke: "black", strokeWidth: "25" }
+                    }
                     onClick={(e) => {
                       handleCheckStar(feed.fid, e);
                     }}
@@ -741,7 +799,11 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                 ) : (
                   <FaStar
                     className={style.like}
-                    style={feed.star_flag ? { fill: "yellow" } : { fill: "white", stroke: "black", strokeWidth: "25" }}
+                    style={
+                      feed.star_flag
+                        ? { fill: "yellow" }
+                        : { fill: "white", stroke: "black", strokeWidth: "25" }
+                    }
                     onClick={(e) => {
                       e.preventDefault();
                       alert("로그인이 필요합니다.");
@@ -753,14 +815,25 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
             </div>
           )}
           <div className={` ${style["line"]} ${style[getModeClass(mode)]}`}></div>
-          <Comments feed={feed} allComments={allComments} setAllComments={setAllComments} setFeedData={setFeedData} isUserState={isUserState}></Comments>
+          <Comments
+            feed={feed}
+            allComments={allComments}
+            setAllComments={setAllComments}
+            setFeedData={setFeedData}
+            isUserState={isUserState}
+          ></Comments>
         </div>
       )}
       {feed.fclass === "balance" && (
         <div className={`${style.feed} ${className}`}>
           <div>
             {img_circle && <div style={{ height: "80px" }}></div>}
-            <InfoArea color={"#60E7EC"} name={`${feed.class_name} 행성`} date={feed.date} supporter={`${feed.nickname}`}></InfoArea>
+            <InfoArea
+              color={"#60E7EC"}
+              name={`${feed.class_name} 행성`}
+              date={feed.date}
+              supporter={`${feed.nickname}`}
+            ></InfoArea>
             {isClickedMoreSee ? (
               <div className={`${style["modal-container"]} ${style["feed-comment-modal"]}`}>
                 <div className={style["comment-modal"]}>
@@ -811,8 +884,16 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                   )}
                   <div className={`${style["comment_action"]} ${style["comment-input"]}`}>
                     <form onSubmit={(event) => handleSubmit(feed.fid, event)}>
-                      <input type="text" value={inputValue} onChange={handleChange} className={` ${style["comment-box"]} ${style[getModeClass(mode)]}`}></input>
-                      <button type="submit" className={` ${style["comment-write"]} ${style[getModeClass(mode)]}`}>
+                      <input
+                        type="text"
+                        value={inputValue}
+                        onChange={handleChange}
+                        className={` ${style["comment-box"]} ${style[getModeClass(mode)]}`}
+                      ></input>
+                      <button
+                        type="submit"
+                        className={` ${style["comment-write"]} ${style[getModeClass(mode)]}`}
+                      >
                         댓글 작성
                       </button>
                     </form>
@@ -982,7 +1063,11 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                 {isUserState ? (
                   <FaStar
                     className={style.like}
-                    style={feed.star_flag ? { fill: "yellow" } : { fill: "white", stroke: "black", strokeWidth: "25" }}
+                    style={
+                      feed.star_flag
+                        ? { fill: "yellow" }
+                        : { fill: "white", stroke: "black", strokeWidth: "25" }
+                    }
                     onClick={(e) => {
                       handleCheckStar(feed.fid, e);
                     }}
@@ -990,7 +1075,11 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                 ) : (
                   <FaStar
                     className={style.like}
-                    style={feed.star_flag ? { fill: "yellow" } : { fill: "white", stroke: "black", strokeWidth: "25" }}
+                    style={
+                      feed.star_flag
+                        ? { fill: "yellow" }
+                        : { fill: "white", stroke: "black", strokeWidth: "25" }
+                    }
                     onClick={(e) => {
                       e.preventDefault();
                       alert("로그인이 필요합니다.");
@@ -1002,7 +1091,13 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
             </div>
           )}
           <div className={` ${style["line"]} ${style[getModeClass(mode)]}`}></div>
-          <Comments feed={feed} allComments={allComments} setAllComments={setAllComments} setFeedData={setFeedData} isUserState={isUserState}></Comments>
+          <Comments
+            feed={feed}
+            allComments={allComments}
+            setAllComments={setAllComments}
+            setFeedData={setFeedData}
+            isUserState={isUserState}
+          ></Comments>
         </div>
       )}
       {feed.fclass === "station" && (
@@ -1010,7 +1105,12 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
           <div>
             {img_circle && <div style={{ height: "80px" }}></div>}
 
-            <InfoArea color={"#78D2C8"} name={`${feed.class_name} 행성`} date={feed.date} supporter={`${feed.nickname}`}></InfoArea>
+            <InfoArea
+              color={"#78D2C8"}
+              name={`${feed.class_name} 행성`}
+              date={feed.date}
+              supporter={`${feed.nickname}`}
+            ></InfoArea>
             {isClickedMoreSee ? (
               <div className={`${style["modal-container"]} ${style["feed-comment-modal"]}`}>
                 <div className={style["comment-modal"]}>
@@ -1061,8 +1161,16 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                   )}
                   <div className={`${style["comment_action"]} ${style["comment-input"]}`}>
                     <form onSubmit={(event) => handleSubmit(feed.fid, event)}>
-                      <input type="text" value={inputValue} onChange={handleChange} className={` ${style["comment-box"]} ${style[getModeClass(mode)]}`}></input>
-                      <button type="submit" className={` ${style["comment-write"]} ${style[getModeClass(mode)]}`}>
+                      <input
+                        type="text"
+                        value={inputValue}
+                        onChange={handleChange}
+                        className={` ${style["comment-box"]} ${style[getModeClass(mode)]}`}
+                      ></input>
+                      <button
+                        type="submit"
+                        className={` ${style["comment-write"]} ${style[getModeClass(mode)]}`}
+                      >
                         댓글 작성
                       </button>
                     </form>
@@ -1248,7 +1356,11 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                 {isUserState ? (
                   <FaStar
                     className={style.like}
-                    style={feed.star_flag ? { fill: "yellow" } : { fill: "white", stroke: "black", strokeWidth: "25" }}
+                    style={
+                      feed.star_flag
+                        ? { fill: "yellow" }
+                        : { fill: "white", stroke: "black", strokeWidth: "25" }
+                    }
                     onClick={(e) => {
                       handleCheckStar(feed.fid, e);
                     }}
@@ -1256,7 +1368,11 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
                 ) : (
                   <FaStar
                     className={style.like}
-                    style={feed.star_flag ? { fill: "yellow" } : { fill: "white", stroke: "black", strokeWidth: "25" }}
+                    style={
+                      feed.star_flag
+                        ? { fill: "yellow" }
+                        : { fill: "white", stroke: "black", strokeWidth: "25" }
+                    }
                     onClick={(e) => {
                       e.preventDefault();
                       alert("로그인이 필요합니다.");
@@ -1268,7 +1384,13 @@ export default function Feed({ className, feed, func, feedData, setFeedData, img
             </div>
           )}
           <div className={` ${style["line"]} ${style[getModeClass(mode)]}`}></div>
-          <Comments feed={feed} allComments={allComments} setAllComments={setAllComments} setFeedData={setFeedData} isUserState={isUserState}></Comments>
+          <Comments
+            feed={feed}
+            allComments={allComments}
+            setAllComments={setAllComments}
+            setFeedData={setFeedData}
+            isUserState={isUserState}
+          ></Comments>
         </div>
       )}
     </>
@@ -1293,6 +1415,12 @@ export function InfoArea({ color, name, date, supporter }) {
 
 export function Text({ data, hashtag }) {
   const [mode, setMode] = useBrightMode();
+  let navigate = useNavigate();
+
+  function onClickTag(tag) {
+    navigate(`/feed_list?keyword=${tag}`);
+  }
+
   function useBrightMode() {
     const params = new URLSearchParams(window.location.search);
     const brightModeFromUrl = params.get("brightMode");
@@ -1311,7 +1439,11 @@ export function Text({ data, hashtag }) {
     <div>
       {hashtag.map((tag, i) => {
         return (
-          <span className={`${style["tag-text"]} ${style[getModeClass(mode)]}`} key={i}>
+          <span
+            className={`${style["tag-text"]} ${style[getModeClass(mode)]}`}
+            key={i}
+            onClick={() => onClickTag(tag)}
+          >
             #{tag}
           </span>
         );
@@ -1321,7 +1453,14 @@ export function Text({ data, hashtag }) {
   );
 }
 
-export function Comments({ isClickedComment, feed, allComments, setAllComments, setFeedData, isUserState }) {
+export function Comments({
+  isClickedComment,
+  feed,
+  allComments,
+  setAllComments,
+  setFeedData,
+  isUserState,
+}) {
   let [isError, setIsError] = useState();
   let navigate = useNavigate();
 
@@ -1377,7 +1516,9 @@ export function Comments({ isClickedComment, feed, allComments, setAllComments, 
         });
         setFeedData((prevFeeds) => {
           return prevFeeds.map((feed) => {
-            return feed.fid === fid ? { ...feed, num_comment: data.body.feed[0].num_comment } : feed;
+            return feed.fid === fid
+              ? { ...feed, num_comment: data.body.feed[0].num_comment }
+              : feed;
           });
         });
         setInputValue("");
@@ -1410,7 +1551,9 @@ export function Comments({ isClickedComment, feed, allComments, setAllComments, 
         ) : (
           !isClickedComment && (
             <>
-              <div className={`${style["comment_support"]} ${style[getModeClass(mode)]}`}>{allComments[0].uname}</div>
+              <div className={`${style["comment_support"]} ${style[getModeClass(mode)]}`}>
+                {allComments[0].uname}
+              </div>
               <div className={style["comment_data"]}>{allComments[0].body}</div>
             </>
           )
@@ -1418,8 +1561,16 @@ export function Comments({ isClickedComment, feed, allComments, setAllComments, 
       </div>
       <div className={style["comment_action"]}>
         <form onSubmit={(event) => handleSubmit(feed.fid, event)}>
-          <input type="text" value={inputValue} onChange={handleChange} className={` ${style["comment-box"]} ${style[getModeClass(mode)]}`}></input>
-          <button type="submit" className={` ${style["comment-write"]} ${style[getModeClass(mode)]}`}>
+          <input
+            type="text"
+            value={inputValue}
+            onChange={handleChange}
+            className={` ${style["comment-box"]} ${style[getModeClass(mode)]}`}
+          ></input>
+          <button
+            type="submit"
+            className={` ${style["comment-write"]} ${style[getModeClass(mode)]}`}
+          >
             댓글 작성
           </button>
         </form>
