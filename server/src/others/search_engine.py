@@ -1009,7 +1009,9 @@ class HashNode(BaseNode):
         super().__init__("hashtag")
         self.hid = hid          # 해시태그 아이디, 문자열이 된다.
         self.edges["feed"] = []
-        self.weight = 0
+
+        # 추가된 해시태그의 사용량 체크
+        self.weight = 0         #
         self.trend= {
             "now":0,
             "prev":0
@@ -1756,10 +1758,10 @@ class FeedAlgorithm:
         # 15개 정도의 무작위 Feed를 추출해내서 추천 Feed 리스트에 담음
         # AVLTree에서 뽑아서 씀
 
-        random_feed_samples = self.__
+        random_feed_samples = self.__random_feed_sample()
 
         # Feed를 찾은 리스트들을 모두 합함.
-        result_fid_list = user_feed_recommend_list + hash_feed_recommend_list + me_feed_recommend_list + ranking_feed_recommend_list
+        result_fid_list = user_feed_recommend_list + hash_feed_recommend_list + me_feed_recommend_list + ranking_feed_recommend_list + random_feed_samples
 
         # 히스토리에 존재하는 피드, 즉, 이전, 현재까지 본 모든 Feed들을 제외해야함
         for fid in result_fid_list:
