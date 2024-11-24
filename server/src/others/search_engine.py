@@ -713,9 +713,11 @@ class RecommandManager:
                     prev_data=hashtag_node.trend["prev"],
                     num_feed=len(hashtag_node.edges["feed"]))
                 # 안에 값을 최신화
-                hashtag_node.weight = new_weight
-                hashtag_node.trend["prev"] = hashtag_node.trend["now"]
-                hashtag_node.trend["now"] = 0
+                hashtag_node.weight_update(new_weight=new_weight)
+
+                # hashtag_node.weight = new_weight
+                # hashtag_node.trend["prev"] = hashtag_node.trend["now"]
+                # hashtag_node.trend["now"] = 0
 
                 hashtag_rank.append(hashtag_node)
 
@@ -761,7 +763,7 @@ class RecommandManager:
                 if time_diff >= 1:
                     self.__total_hashtag_setting()
                     self.__bais_hashtag_setting()
-                    self.last_computed_time = current_time
+                    self.last_computed_time = current_time      # 이거 오류안남? current_time 생성위치가 밑에 있는데 없는 변수 만드는 거 아니냐.
                 # 시간 간격이 1시간 미만인 경우
                 else:
                     await asyncio.sleep(1)  # 너무 자주 루프를 돌지 않도록 대기
@@ -1011,10 +1013,10 @@ class HashNode(BaseNode):
         self.edges["feed"] = []
 
         # 추가된 해시태그의 사용량 체크
-        self.weight = 0         #
+        self.weight = 0         # Ranking에 사용되는 값인데 계산하는 함수가 따로 있음
         self.trend= {
-            "now":0,
-            "prev":0
+            "now":0,            # 기준시간 ~ 1시간까지의 사용량 체크
+            "prev":0            # 1시간 후 ~ 2시간 후 사용량 체크. 이전의 사용량 체크
         }
 
     # 노드 일치성 판단. 기록된 id를 통해 판단
@@ -1032,6 +1034,19 @@ class HashNode(BaseNode):
     # 아이디 반환 함수
     def get_id(self):
         return self.hid
+
+    # Weight를 업 시킴
+    # 글을 작성하는 시점 = Weight 중, now가 증가하는 시점
+    # Feed를 수정하여, 새로운 해시태그가 생성될 때에도 이 함수가 적용
+    def weight_up(self):
+        self.trend["now"] += 1
+
+    # Weight의 상태가 업데이트.
+    # Weight는 Recommend Manager에서 업데이트됨
+    def weight_update(self, new_weight):
+        self.weight = new_weight
+        self.trend["prev"] = self.trend["now"]
+        self.trend["now"] = 0
 
     # 엣지 추가
     def add_edge(self, target_node, gen_time:datetime):
@@ -1458,7 +1473,6 @@ class FeedChaosGraph:
 
         return list(recommend_list)
 
-
     # HashTag 랭킹에 관해 Feed를 추출하는 시스템
     # Feed 해시태그 랭킹에 집계된 Hash태그들과 연결된 Feed들을 무작위로 추첨
     # noinspection pymethodmaybestatic
@@ -1596,9 +1610,15 @@ class FeedAlgorithm:
         hash_nodes = []
         for hashtag in hashtags:
             # 해시 태그 마다 노드를 생성
+            # 중요한 점 : 노드가 이미 생성되어있으면, 기존의 노드를 반환 받음
             hash_node = self.__feed_chaos_graph.add_node(node_type="hashtag", node_id=hashtag, tree=self.__hash_node_avltree)
+
+            # hashtag의 사용량을 갱신
+            hash_node.weight_up()
+
             # 반환할 노드
             hash_nodes.append(hash_node)
+
         return hash_nodes
 
     # Feed 중 랜덤하게 샘플을 골라서
@@ -1699,7 +1719,6 @@ class FeedAlgorithm:
         user_node = self.__user_node_avltree.get(key=uid)
         feed_node = self.__feed_node_avltree.get(key=fid)
         return self.__feed_chaos_graph.disconnect_feed_with_user(feed_node=feed_node, user_node=user_node)
-
 
     # 추천 feed를 찾아줌
     def recommend_next_feed(self, start_fid:str, mine_uid:str, hashtag_ranking:list, history:list):
