@@ -339,3 +339,8 @@ class Local_Database:
             print(e)
             raise DatabaseLogicError(error_type="delete_data_with_id error | " + str(e))
     
+
+# 실제로 사용할 몽고 디비
+class Mongo_Database(Local_Database):
+    def __init__(self):
+        pass

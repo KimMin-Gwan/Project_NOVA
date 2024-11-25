@@ -1,10 +1,9 @@
 import json
 from others import DatabaseLogicError
 from copy import copy
-
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
-
+from pymongo.collection import Collection
 
 '''
 class Local_Database:
@@ -352,7 +351,6 @@ class Local_Database:
         self.__client = MongoClient(self.__uri, server_api=ServerApi('1'))
         self.__db = self.__client.NovaDB    #사용 할 때 DB이름에 맞게 변경 필요
         self.collection_list = []
-        self.__collection = None
 
         # self.__db_file_path = './model/local_database/'
 
@@ -398,24 +396,24 @@ class Local_Database:
     #             list_data.extend(json.load(f))
 
     def __set_collection(self,collection) -> None:
-        self.__collection = self.__db[f'{collection}']
-        return
+        return self.__db[f'{collection}']
+
     #저장(업로드)
-    def __upload_one(self,document) -> None:
-        self.__collection.insert_one(document=document)
+    def __upload_one(self,document, collection:Collection) -> None:
+        return collection.insert_one(document=document)
     #(찾기)
-    def __find_one(self,document) -> None:
-        return self.__collection.find_one(document,{'_id':False})
+    def __find_one(self,document, collection:Collection) -> None:
+        return collection.find_one(document,{'_id':False})
     #수정
-    def __update_one(self,document) -> None:
-        self.__collection.update_one(document=document)
+    def __update_one(self,document, collection:Collection) -> None:
+        return collection.update_one(document=document)
     #삭제
-    def __delete_one(self,document) -> None:
-        self.__collection.delete_one(document=document)
+    def __delete_one(self,document, collection:Collection) -> None:
+        return collection.delete_one(document=document)
 
     def __save_json(self, file_name, data):
-        self.__set_collection(collection=file_name)
-        self.__upload_one(document=data)
+        collection = self.__set_collection(collection=file_name)
+        self.__upload_one(document=data, collection=collection)
         # path = self.__db_file_path
         # with open(path+file_name, 'w', encoding='utf-8') as f:
         #     json.dump(data, f, ensure_ascii=False, indent=4)
@@ -749,3 +747,6 @@ class Local_Database:
             print(e)
             raise DatabaseLogicError(error_type="delete_data_with_id error | " + str(e))
     
+
+
+

@@ -1,6 +1,6 @@
 from view import NOVA_Server 
 from view.parsers import Configure_File_Reader
-from model import Local_Database
+from model import Local_Database, Mongo_Database
 from others import ConnectionManager, LeagueManager,FeedManager, FeedSearchEngine
 import asyncio
 from uvicorn import run
@@ -16,6 +16,8 @@ class Master(Configure_File_Reader):
 
     async def server_start_up(self):
         database = Local_Database() #디비 실행
+        #database = Mongo_Database() #디비 실행
+
         #connection_manager = ConnectionManager() # 웹소켓 매니저 실행
         #league_manager = LeagueManager(connection_manager=connection_manager)
         #league_manager.init_league_manager(database=database) # 리그 매니저 초기화
