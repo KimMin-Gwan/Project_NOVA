@@ -756,6 +756,7 @@ class RecommandManager:
     async def check_trend_hashtag(self):
         try:
             time_diff = 1
+            current_time = time.time()
             while True:
                 # time_diff 계산
 
@@ -763,10 +764,13 @@ class RecommandManager:
                 if time_diff >= 1:
                     self.__total_hashtag_setting()
                     self.__bais_hashtag_setting()
-                    self.last_computed_time = current_time      # 이거 오류안남? current_time 생성위치가 밑에 있는데 없는 변수 만드는 거 아니냐.
+                    # 이거 오류안남? current_time 생성위치가 밑에 있는데 없는 변수 만드는 거 아니냐.
+                    # 그러네 이거 왜 오류 안났냐 왜 서버에서는 정상동작 하는건데...
+
+                    self.last_computed_time = current_time     
                 # 시간 간격이 1시간 미만인 경우
                 else:
-                    await asyncio.sleep(1)  # 너무 자주 루프를 돌지 않도록 대기
+                    await asyncio.sleep(60)  # 너무 자주 루프를 돌지 않도록 대기
 
                 current_time = time.time()
                 if hasattr(self, 'last_computed_time'):
@@ -774,6 +778,7 @@ class RecommandManager:
                 else:
                     self.last_computed_time = current_time
                 time_diff = 0
+
         except KeyboardInterrupt:
             print("Shutting down due to KeyboardInterrupt.")
 

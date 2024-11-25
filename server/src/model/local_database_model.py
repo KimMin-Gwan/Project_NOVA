@@ -21,7 +21,8 @@ class Local_Database:
             'alert_file' : 'alert.json',
             'trash_fid_file' : 'trash_fid.json',
             'trash_cid_file' : 'trash_cid.json',
-            'notice_file' : 'notice.json'
+            'notice_file' : 'notice.json',
+            'project_file' : 'project.json'
         }
         self.__read_json()
 
@@ -38,12 +39,14 @@ class Local_Database:
         self.__trash_fid_data = []
         self.__trash_cid_data = []
         self.__notice_data = []
+        self.__project_data = []
 
 
         data_list = [self.__banner_data, self.__bias_data, self.__feed_data,
                       self.__league_data, self.__name_card_data, self.__user_data,
                       self.__managed_user_data, self.__comment_data, self.__alert_data,
-                      self.__trash_fid_data, self.__trash_cid_data, self.__notice_data ]
+                      self.__trash_fid_data, self.__trash_cid_data, self.__notice_data,
+                      self.__project_data ]
 
         for file_name, list_data in zip(self.__data_files.values(), data_list):
             with open(self.__db_file_path+file_name, 'r',  encoding='utf-8' )as f:
@@ -126,6 +129,12 @@ class Local_Database:
     def __save_notice_json(self):
         file_name = self.__data_files['notice_file']
         self.__save_json(file_name, self.__notice_data)
+        return
+
+    # 저장하기
+    def __save_project_json(self):
+        file_name = self.__data_files['project_file']
+        self.__save_json(file_name, self.__project_data)
         return
 
     # db.get_data_with_key(target="user", key="uname", key_data="minsu")
@@ -220,6 +229,8 @@ class Local_Database:
             return self.__alert_data
         elif target == "nid" or target == "notice":
             return self.__notice_data
+        elif target == "pid" or target == "project":
+            return self.__project_data
         else:
             raise DatabaseLogicError("target id did not define")
         
@@ -279,6 +290,8 @@ class Local_Database:
             return self.__save_alert_json
         elif target == "nid" or target == "notice":
             return self.__save_notice_json
+        elif target == "pid" or target == "project":
+            return self.__save_project_json
         else:
             raise DatabaseLogicError("target id did not define")
 
@@ -470,6 +483,8 @@ class Mongo_Database(Local_Database):
             return "alert"
         elif target == "nid" or target == "notice":
             return "notice"
+        elif target == "pid" or target == "project":
+            return "project"
         else:
             raise DatabaseLogicError("target id did not define")
         

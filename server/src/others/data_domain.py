@@ -483,3 +483,57 @@ class Notice:
             "title" : self.title,
             "body" : self.body
         }
+    
+class Project:
+    def __init__(self, pid="", pname="", uid="", uname="", user_info="",
+                 make_date="", expire_date="", head_image=[], body_image=[],
+                 now_progress=0, goal_progress=0):
+        self.pid = pid
+        self.pname = pname
+        self.uid = uid
+        self.uname = uname
+        self.user_info = user_info
+        self.make_date = make_date
+        self.expire_date = expire_date
+        self.head_image = head_image
+        self.body_image = body_image
+        self.now_progress = now_progress
+        self.goal_progress = goal_progress
+        self.int_progress = 0 # 이건 달성 퍼센트임
+
+        # 아마 밑에 추가될 내용은 결제 관련인데
+        # 결제는 걍 미침... 새로 데이터 도메인 파는게 답임
+        # 최애 펀딩인지 덕질 펀딩인지 구분하는거랑
+        # 후원 펀딩인지 참여 펀딩인지 구분도 해야됨
+
+    def make_with_dict(self, dict_data):
+        try:
+            self.pid = dict_data['pid']
+            self.pname = dict_data['pname']
+            self.uid = dict_data['uid']
+            self.uname = dict_data['uname']
+            self.user_info = dict_data['user_info']
+            self.make_date = dict_data['make_date']
+            self.expire_date = dict_data['expire_date']
+            self.head_image = copy.copy(dict_data['head_image'])
+            self.body_image = copy.copy(dict_data['body_image'])
+            self.now_progress = dict_data['now_progress']
+            self.goal_progress = dict_data['goal_progress']
+        except KeyError as e:
+            raise DictMakingError(error_type=f"Missing key: {str(e)}")
+
+    def get_dict_form_data(self):
+        return {
+            "pid": self.pid,
+            "pname": self.pname,
+            "uid": self.uid,
+            "uname": self.uname,
+            "user_info": self.user_info,
+            "make_date": self.make_date,
+            "expire_date": self.expire_date,
+            "head_image": copy.copy(self.head_image),
+            "body_image": copy.copy(self.body_image),
+            "now_progress": self.now_progress,
+            "goal_progress": self.goal_progress,
+            "int_progress" : self.int_progress
+        }

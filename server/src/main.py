@@ -1,7 +1,8 @@
 from view import NOVA_Server 
 from view.parsers import Configure_File_Reader
 from model import Local_Database, Mongo_Database
-from others import ConnectionManager, LeagueManager,FeedManager, FeedSearchEngine
+#from others import ConnectionManager, LeagueManager
+from others import FeedManager, FeedSearchEngine, FundingProjectManager
 import asyncio
 from uvicorn import run
 
@@ -15,8 +16,8 @@ class Master(Configure_File_Reader):
         print(f'INFO<-[      Application | Version : v{self._version}')
 
     async def server_start_up(self):
-        #database = Local_Database() #디비 실행
-        database = Mongo_Database() #디비 실행
+        database = Local_Database() #디비 실행
+        #database = Mongo_Database() #디비 실행
 
         #connection_manager = ConnectionManager() # 웹소켓 매니저 실행
         #league_manager = LeagueManager(connection_manager=connection_manager)
@@ -26,13 +27,15 @@ class Master(Configure_File_Reader):
                                   feed_search_engine=feed_search_engine)
         feed_manager.init_feed_data()
 
+        funding_project_manager = FundingProjectManager(database=database)
 
         nova_server = NOVA_Server(
             database=database,
             connection_manager=None,
             league_manager=None,
             feed_manager=feed_manager,
-            feed_search_engine=feed_search_engine
+            feed_search_engine=feed_search_engine,
+            funding_project_manager=funding_project_manager
             )
         
         #app = nova_server.get_app()

@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from view.core_system_view import Core_Service_View
 from view.user_system_view import User_Service_View
 from view.sub_system_view import Sub_Service_View 
+from view.funding_system_view import Funding_Service_View
 from view.administrator_system_view import Administrator_Service_View
 from view.parsers import Head_Parser
 import uvicorn
@@ -11,12 +12,12 @@ from others import TempUser
 #from threading import Thread
 import asyncio
 import random
-import time
-
 
 class NOVA_Server:
     def __init__(self, database, connection_manager,
-                  league_manager, feed_manager, feed_search_engine) -> None:
+                  league_manager, feed_manager, feed_search_engine,
+                  funding_project_manager
+                  ) -> None:
         self.__app = FastAPI()
 
         self.__app.add_middleware(
@@ -59,6 +60,12 @@ class NOVA_Server:
                                                    database=database,
                                                    head_parser=head_parser,
                                                    feed_search_engine=feed_search_engine
+                                                   )
+        self.__sub_system_view = Funding_Service_View( app=self.__app,
+                                                     endpoint='/nova_fund_system',
+                                                   database=database,
+                                                   head_parser=head_parser,
+                                                   funding_project_manager=funding_project_manager
                                                    )
         self.__administrator_system_view = Administrator_Service_View( app=self.__app,
                                                      endpoint='/administrator_system',
