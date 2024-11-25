@@ -2,6 +2,9 @@ import json
 from others import DatabaseLogicError
 from copy import copy
 
+from pymongo.mongo_client import MongoClient
+from pymongo.server_api import ServerApi
+from pymongo.collection import Collection
 
 class Local_Database:
     def __init__(self) -> None:
@@ -342,5 +345,188 @@ class Local_Database:
 
 # 실제로 사용할 몽고 디비
 class Mongo_Database(Local_Database):
-    def __init__(self):
-        pass
+    def __init__(self) -> None:
+        #MongoDB연결 uri
+        self.__uri = "mongodb+srv://admin:nova-db-password-43te7wuhbgi8we@nova-cluster.kz63a.mongodb.net/?retryWrites=true&w=majority&appName=Nova-Cluster"
+        # Create a new client and connect to the server
+        self.__client = MongoClient(self.__uri, server_api=ServerApi('1'))
+        self.__db = self.__client.NovaDB    #사용 할 때 DB이름에 맞게 변경 필요
+        self.collection_list = []
+
+    def __set_collection(self,collection) -> None:
+        return self.__db[f'{collection}']
+
+    #저장(업로드)
+    def __upload_one(self,document, collection:Collection) -> None:
+        collection.insert_one(document=document)
+        return
+    #(찾기)
+    def __find_one(self,document, collection:Collection) -> None:
+        return collection.find_one(document,{'_id':False})
+    #수정
+    def __update_one(self,document,data , collection:Collection) -> None:
+        collection.update_one(document,{'$set':data})
+        return
+    #삭제
+    def __delete_one(self,document, collection:Collection) -> None:
+        collection.delete_one(document=document)
+        return
+
+    # def __save_json(self, file_name, data):
+    #     collection = self.__set_collection(collection=file_name)
+    #     self.__upload_one(document=data, collection=collection)
+    #     return
+
+    def get_data_with_key(self, target:str, key:str, key_data:str):
+        try:
+            collection_name = self._select_target_list(target=target)
+            selected_collection = self.__set_collection(collection=collection_name)
+            find_data = self.__find_one({f'{key}':f'{key_data}'}, collection=selected_collection)
+
+            return find_data
+        except Exception as e:
+            raise DatabaseLogicError("get_data_with_key error | " + str(e))
+
+    # db.get_datas_with_key(target="user", key="uname", key_datas=["minsu", "minzi"])
+    def get_datas_with_key(self, target:str, key:str, key_datas:list):
+        try:
+            collection_name = self._select_target_list(target=target)
+            selected_collection = self.__set_collection(collection=collection_name)
+            find_datas = []
+            for key_data in key_datas:
+                find_datas.append(self.__find_one({f'{key}':f'{key_data}'}, collection=selected_collection))
+
+            return find_datas
+        except Exception as e:
+            raise DatabaseLogicError("get_datas_with_key error | " + str(e))
+        
+
+    # db.get_data_with_id(target="uid", id="1001")
+    def get_data_with_id(self, target:str, id:str):
+        try:
+            collection_name = self._select_target_list(target=target)
+            selected_collection = self.__set_collection(collection=collection_name)
+            
+            find_data = self.__find_one({f'{target}':f'{id}'},collection=selected_collection)
+
+            return find_data
+        except Exception as e:
+            raise DatabaseLogicError("get_data_with_id error | " + str(e))
+
+    # db.get_datas_with_ids(target="uid", ids=["1001", "1002"])
+    def get_datas_with_ids(self, target_id:str, ids:list):
+        try:
+            collection_name = self._select_target_list(target=target_id)
+            selected_collection = self.__set_collection(collection=collection_name)
+
+            find_datas = []
+            for id in ids:
+                find_datas.append(self.__find_one({f'{target_id}':f'{id}'},collection=selected_collection))
+
+            return find_datas
+        except Exception as e:
+            raise DatabaseLogicError("get_datas_with_ids error | " + str(e))
+
+    def get_all_data(self, target):
+        collection_name = self._select_target_list(target=target)
+        selected_collection = self.__set_collection(collection=collection_name)
+        return list(selected_collection.find({},{'_id':False}))
+    
+    def get_trash_fids(self):
+        return copy(self.__trash_fid_data)
+
+    def get_trash_cids(self):
+        return copy(self.__trash_cid_data)
+
+    def set_trash_fids(self, fids):
+        self.__trash_fid_data = copy(fids)
+        #self.__save_trash_fid_json()
+        return 
+
+    def set_trash_cids(self, cids):
+        self.__trash_cid_data = copy(cids)
+        #self.__save_trash_cid_json()
+        return 
+
+
+    def _select_target_list(self, target:str):
+        if target == "baid" or target == "banner":
+            return "banner"
+        elif target == "bid" or target == "bias":
+            return "bias"
+        elif target == "fid" or target == "feed":
+            return "feed"
+        elif target == "lid" or target == "league":
+            return "league"
+        elif target == "ncid" or target == "name_card":
+            return "name_card"
+        elif target == "uid" or target == "user":
+            return "user"
+        elif target == "muid" or target == "managed_user":
+            return "managed_user"
+        elif target == "cid" or target == "comment":
+            return "comment"
+        elif target == "aid" or target == "alert":
+            return "alert"
+        elif target == "nid" or target == "notice":
+            return "notice"
+        else:
+            raise DatabaseLogicError("target id did not define")
+        
+    # db.modify_data_with_id(target="uid", target_data={key: value})
+    def modify_data_with_id(self, target_id, target_data:dict):
+        try:
+            collection_name = self._select_target_list(target=target_id)
+            selected_collection = self.__set_collection(collection=collection_name)
+            
+            self.__update_one({f'{target_id}':f'{target_data[target_id]}'},data=target_data,collection=selected_collection)
+            return True
+
+        except Exception as e:
+            print(e)
+            raise DatabaseLogicError(error_type="modifiy_data_with_id error | " + str(e))
+
+
+    def add_new_data(self, target_id:str, new_data:dict):
+        try:
+            collection = self._select_target_list(target=target_id)
+            self.__save_json(file_name=collection,data=new_data)
+
+        except Exception as e:
+            raise DatabaseLogicError("add_new_data error | " + str(e))
+        return True
+    
+    def get_num_list_with_id(self, target_id:str):
+        collection_name = self._select_target_list(target=target_id)
+        selected_collection = self.__set_collection(collection=collection_name)
+        num_list= len(list(selected_collection.find({},{'_id':False})))
+        return num_list
+    
+    #데이터 삭제
+    def delete_data_with_id(self,target:str, id:str):
+        try:
+            collection_name = self._select_target_list(target=target)
+            selected_collection = self.__set_collection(collection=collection_name)
+            self.__delete_one(document={f'{target}':f'{id}'},collection=selected_collection)
+
+            return True
+
+        except Exception as e:
+            print(e)
+            raise DatabaseLogicError(error_type="delete_data_with_id error | " + str(e))
+
+    #데이터 한번에 여러개 삭제
+    def delete_datas_with_ids(self,target:str, ids:str):
+        try:
+            collection_name = self._select_target_list(target=target)
+            selected_collection = self.__set_collection(collection=collection_name)
+
+            for id in ids:
+                self.__delete_one(document={f'{target}':f'{id}'},collection=selected_collection)
+
+            return True
+
+        except Exception as e:
+            print(e)
+            raise DatabaseLogicError(error_type="delete_data_with_id error | " + str(e))
+    

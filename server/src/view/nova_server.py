@@ -15,7 +15,7 @@ import time
 
 
 class NOVA_Server:
-    def __init__(self, database:Local_Database, connection_manager,
+    def __init__(self, database, connection_manager,
                   league_manager, feed_manager, feed_search_engine) -> None:
         self.__app = FastAPI()
 

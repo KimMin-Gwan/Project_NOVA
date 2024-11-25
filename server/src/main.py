@@ -15,8 +15,8 @@ class Master(Configure_File_Reader):
         print(f'INFO<-[      Application | Version : v{self._version}')
 
     async def server_start_up(self):
-        database = Local_Database() #디비 실행
-        #database = Mongo_Database() #디비 실행
+        #database = Local_Database() #디비 실행
+        database = Mongo_Database() #디비 실행
 
         #connection_manager = ConnectionManager() # 웹소켓 매니저 실행
         #league_manager = LeagueManager(connection_manager=connection_manager)
