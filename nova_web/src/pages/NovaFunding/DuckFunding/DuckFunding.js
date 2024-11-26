@@ -3,12 +3,20 @@ import backword from "./../../../img/back_icon.png";
 import more_icon from "./../../../img/backword.png";
 
 import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 export default function DuckFunding() {
   let navigate = useNavigate();
+  const [activeButton, setActiveButton] = useState(null);
+  const buttonLabels = ["프로젝트 추천", "참여 프로젝트", "모금 프로젝트"];
+
 
   function handleLinkClick(url) {
     navigate(url);
   }
+
+  const handleButtonClick = (index) => {
+    setActiveButton(index);
+  };
 
   return (
     <div className={style.container}>
@@ -20,7 +28,7 @@ export default function DuckFunding() {
      
       <section className={style["success-funding"]}>
        <div className={style["content-title"]}>
-          <header className={style["header-text"]}>오늘의 베스트 피드</header>
+          <header className={style["header-text"]}>이미 목표 달성에 성공한 프로젝트</header>
           <div>전체보기</div>
         </div>
 
@@ -60,19 +68,19 @@ export default function DuckFunding() {
             <div className={style["img"]}>이미지</div>
             <p className={style["ad-title"]}>이시연 생일 축하 학동역 광고</p>
             <p>24/10/26 일까지</p>
-            <p>72% 달성했어요</p>
+            <p>72% 달성</p>
           </div>
           <div className={style["ad-box"]}>
             <div className={style["img"]}>이미지</div>
             <p className={style["ad-title"]}>이시연 생일 축하 학동역 광고</p>
             <p>24/10/26 일까지</p>
-            <p>72% 달성했어요</p>
+            <p>72% 달성</p>
           </div>
           <div className={style["ad-box"]}>
             <div className={style["img"]}>이미지</div>
             <p className={style["ad-title"]}>이시연 생일 축하 학동역 광고</p>
             <p>24/10/26 일까지</p>
-            <p>72% 달성했어요</p>
+            <p>72% 달성</p>
           </div>
         </div>
       </section>
@@ -83,6 +91,19 @@ export default function DuckFunding() {
           <header className={style["header-text"]}>덕질 펀딩 프로젝트</header>
           
         </div>
+        <div className={style["recommend-project"]}>
+      {buttonLabels.map((label, index) => (
+        <button
+          key={index}
+          className={`${style["recommend-button"]} ${
+            activeButton === index ? style.active : ""
+          }`}
+          onClick={() => handleButtonClick(index)}
+        >
+          {label}
+        </button>
+      ))}
+    </div>
       </section>
 
       <section className={`${style["success-funding"]} ${style["interest-funding"]}`}>
@@ -95,39 +116,19 @@ export default function DuckFunding() {
             <div className={style["img"]}>이미지</div>
             <p className={style["ad-title"]}>이시연 생일 축하 학동역 광고</p>
             <p>24/10/26 일까지</p>
-            <p>72% 달성했어요</p>
+            <p>72% 달성</p>
           </div>
           <div className={style["ad-box"]}>
             <div className={style["img"]}>이미지</div>
             <p className={style["ad-title"]}>이시연 생일 축하 학동역 광고</p>
             <p>24/10/26 일까지</p>
-            <p>72% 달성했어요</p>
+            <p>72% 달성</p>
           </div>
           <div className={style["ad-box"]}>
             <div className={style["img"]}>이미지</div>
             <p className={style["ad-title"]}>이시연 생일 축하 학동역 광고</p>
             <p>24/10/26 일까지</p>
-            <p>72% 달성했어요</p>
-          </div>
-        </div>
-        <div className={style["ad-container"]}>
-          <div className={style["ad-box"]}>
-            <div className={style["img"]}>이미지</div>
-            <p className={style["ad-title"]}>이시연 생일 축하 학동역 광고</p>
-            <p>24/10/26 일까지</p>
-            <p>72% 달성했어요</p>
-          </div>
-          <div className={style["ad-box"]}>
-            <div className={style["img"]}>이미지</div>
-            <p className={style["ad-title"]}>이시연 생일 축하 학동역 광고</p>
-            <p>24/10/26 일까지</p>
-            <p>72% 달성했어요</p>
-          </div>
-          <div className={style["ad-box"]}>
-            <div className={style["img"]}>이미지</div>
-            <p className={style["ad-title"]}>이시연 생일 축하 학동역 광고</p>
-            <p>24/10/26 일까지</p>
-            <p>72% 달성했어요</p>
+            <p>72% 달성</p>
           </div>
         </div>
         <div className={style["ad-container"]}>
@@ -135,19 +136,39 @@ export default function DuckFunding() {
             <div className={style["img"]}>이미지</div>
             <p className={style["ad-title"]}>이시연 생일 축하 학동역 광고</p>
             <p>24/10/26 일까지</p>
-            <p>72% 달성했어요</p>
+            <p>72% 달성</p>
           </div>
           <div className={style["ad-box"]}>
             <div className={style["img"]}>이미지</div>
             <p className={style["ad-title"]}>이시연 생일 축하 학동역 광고</p>
             <p>24/10/26 일까지</p>
-            <p>72% 달성했어요</p>
+            <p>72% 달성</p>
           </div>
           <div className={style["ad-box"]}>
             <div className={style["img"]}>이미지</div>
             <p className={style["ad-title"]}>이시연 생일 축하 학동역 광고</p>
             <p>24/10/26 일까지</p>
-            <p>72% 달성했어요</p>
+            <p>72% 달성</p>
+          </div>
+        </div>
+        <div className={style["ad-container"]}>
+          <div className={style["ad-box"]}>
+            <div className={style["img"]}>이미지</div>
+            <p className={style["ad-title"]}>이시연 생일 축하 학동역 광고</p>
+            <p>24/10/26 일까지</p>
+            <p>72% 달성</p>
+          </div>
+          <div className={style["ad-box"]}>
+            <div className={style["img"]}>이미지</div>
+            <p className={style["ad-title"]}>이시연 생일 축하 학동역 광고</p>
+            <p>24/10/26 일까지</p>
+            <p>72% 달성</p>
+          </div>
+          <div className={style["ad-box"]}>
+            <div className={style["img"]}>이미지</div>
+            <p className={style["ad-title"]}>이시연 생일 축하 학동역 광고</p>
+            <p>24/10/26 일까지</p>
+            <p>72% 달성</p>
           </div>
         </div>
 

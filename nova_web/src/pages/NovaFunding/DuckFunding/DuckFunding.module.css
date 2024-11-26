@@ -45,7 +45,7 @@
   background-color: #fff;
   width:100%;
   margin-top:5px;
-  
+  padding-bottom:10px;
 }
 
 .content-title {
@@ -79,7 +79,7 @@
 
   .best-img {
     background-color: gray;
-    height: 150px;
+    height: 170px;
   
   }
   p {
@@ -142,10 +142,54 @@
 
 
 /* 덕질 펀딩 프로젝트 */
+.recommend-project {
+  display: flex;
+  justify-content: space-around;
+  gap: 16px;
+}
 
+.recommend-button {
+  width: 100px;
+  height: 100px;
+  border: none;
+  border-radius: 8px;
+  background-color: #D3E6FB;
+  cursor: pointer;
+  transition: box-shadow 0.3s, background-color 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 700;
+  color: #333;
+  padding: 8px;
+  box-shadow: 0 0 0 4px transparent;
+}
+
+.recommend-button.active {
+  box-shadow: 0 0 0 4px #8EBFF5; /* 파란색 간격 추가 */
+  background-color: #BFDFFC; /* 클릭 시 배경 색상 변경 (선택 사항) */
+}
+
+
+.recommend-button:hover {
+  border-color: lightgray;
+}
 
 
 /* 마감 임박 프로젝트 */
 .interest-funding{
   margin:0
+}
+.more-button{
+  width: 90%;
+  display: flex;
+  justify-self: center;
+  justify-content: center;
+  padding-block: 10px;
+  border-radius: 20px;
+  background-color: #fff;
+  color:#797979;
+  border-color: #A6A6A6;
 }
