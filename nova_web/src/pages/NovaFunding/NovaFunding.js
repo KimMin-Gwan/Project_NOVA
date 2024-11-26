@@ -1,5 +1,5 @@
 import style from "./NovaFunding.module.css";
-import logo from "./../../img/NOVA.png";
+import logo from "./../../img/NOVA_Funding_logo.png";
 import menu from "./../../img/menu-burger.png";
 import more_icon from "./../../img/back.png";
 import { useNavigate } from "react-router-dom";
@@ -223,7 +223,7 @@ export default function NovaFunding() {
         <div className={style["best-title"]}>
           <div className={style["top-title"]}>
             <h4>진행 중인 덕질 펀딩</h4>
-            <a>더보기</a>
+            <a href="/duck_funding">더보기</a>
           </div>
           <p>누구나 팬 활동을 다같이 하고 싶다면!</p>
           <ul className={style["open-container"]}>
