@@ -3,12 +3,105 @@ import logo from "./../../img/NOVA.png";
 import menu from "./../../img/menu-burger.png";
 import more_icon from "./../../img/back.png";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 export default function NovaFunding() {
   let navigate = useNavigate();
+
+  let [hashTags, setHashTags] = useState([]);
+  let [fundProjects, setFundProjects] = useState([]);
+  let [biasProjects, setBiasProjects] = useState([]);
+  let [bestProjects, setBestProjects] = useState([]);
+  let [numProjects, setNumProjects] = useState(0);
+  let [fanProjects, setFanProjects] = useState([]);
+  let [fundingInfo, setFundingInfo] = useState({});
 
   function handleLinkClick(url) {
     navigate(url);
   }
+
+  function fetchTag() {
+    fetch(`https://nova-platform.kr/nova_fund_system/home/get_recommand_tag`, {
+      credentials: "include",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setHashTags(data.body.tag);
+      });
+  }
+
+  useEffect(() => {
+    fetchTag();
+  }, []);
+
+  function fetchTagData(tag) {
+    fetch(`https://nova-platform.kr/nova_fund_system/home/get_project_as_tag?tag=${tag}`, {
+      credentials: "include",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setFundProjects(data.body.project);
+      });
+  }
+
+  function onClickTag(tag) {
+    fetchTagData(tag);
+  }
+
+  function fetchBiasProj() {
+    fetch(`https://nova-platform.kr/nova_fund_system/home/get_bias_project`, {
+      credentials: "include",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("fff", data);
+        setBiasProjects(data.body.project);
+      });
+  }
+
+  useEffect(() => {
+    fetchBiasProj();
+  }, []);
+
+  function fetchBestProject() {
+    fetch(`https://nova-platform.kr/nova_fund_system/home/best_funding_section`)
+      .then((response) => response.json())
+      .then((data) => {
+        // setBestProjects(data.body.project);
+        setNumProjects(data.body.num_project);
+      });
+  }
+
+  useEffect(() => {
+    fetchBestProject();
+  }, []);
+
+  function fetchFanProj() {
+    fetch(`https://nova-platform.kr/nova_fund_system/home/get_bias_project`, {
+      credentials: "include",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setFanProjects(data.body.project);
+      });
+  }
+
+  useEffect(() => {
+    fetchFanProj();
+  }, []);
+
+  function fetchFundingInfo() {
+    fetch(`https://nova-platform.kr/nova_fund_system/home/get_nova_funding_info`)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("rrr", data);
+        setFundingInfo(data.body);
+        // setBestProjects(data.body.project);
+      });
+  }
+
+  useEffect(() => {
+    fetchFundingInfo();
+  }, []);
 
   return (
     <div className={style.container}>
@@ -39,27 +132,33 @@ export default function NovaFunding() {
         </div>
         <p className={style["more-text"]}>해시 태그로 찾아보는 펀딩 프로젝트</p>
         <div className={style["tag-container"]}>
-          <button className={style["hashtag-text"]}># 시연</button>
+          {hashTags.map((tag, i) => {
+            return (
+              <button
+                key={i}
+                className={style["hashtag-text"]}
+                onClick={() => {
+                  onClickTag(tag);
+                }}
+              >
+                #{tag}
+              </button>
+            );
+          })}
         </div>
         <div className={style["ad-container"]}>
-          <div className={style["ad-box"]}>
-            <div className={style["img"]}>이미지</div>
-            <p className={style["ad-title"]}>이시연 생일 축하 학동역 광고</p>
-            <p>24/10/26 일까지</p>
-            <p>72% 달성했어요</p>
-          </div>
-          <div className={style["ad-box"]}>
-            <div className={style["img"]}>이미지</div>
-            <p className={style["ad-title"]}>이시연 생일 축하 학동역 광고</p>
-            <p>24/10/26 일까지</p>
-            <p>72% 달성했어요</p>
-          </div>
-          <div className={style["ad-box"]}>
-            <div className={style["img"]}>이미지</div>
-            <p className={style["ad-title"]}>이시연 생일 축하 학동역 광고</p>
-            <p>24/10/26 일까지</p>
-            <p>72% 달성했어요</p>
-          </div>
+          {fundProjects.map((project, i) => {
+            return (
+              <div key={project.pid} className={style["ad-box"]}>
+                <div className={style["img"]}>
+                  <img src={`${project.head_image[0]}`} />
+                </div>
+                <p className={style["ad-title"]}>{project.pname}</p>
+                <p>{project.expire_date} 일까지</p>
+                <p>{project.int_progress}% 달성했어요</p>
+              </div>
+            );
+          })}
         </div>
       </section>
 
@@ -71,22 +170,28 @@ export default function NovaFunding() {
           </div>
           <p>최애가 직접 만드는 펀딩 프로젝트</p>
         </div>
-        <div className={style["funding-main"]}>
-          <div className={style["album-area"]}>
-            <div className={style["album-img"]}>앨범표지</div>
-            <p>신인 남자 아이돌 [언네임] 1집 앨범 펀딩</p>
-          </div>
-          <div className={style["more-container"]}>
-            <p>별별 티켓 | 180,000개</p>
-            <p>펀딩 가능 기간 | 24/05/16 까지</p>
-            <p>87,500개 투자됨</p>
-            <div className={style["progress-bar"]}>
-              <progress value="70" max="100"></progress>
-              <p>70%</p>
+        {biasProjects.map((project, i) => {
+          return (
+            <div key={project.pid + i} className={style["funding-main"]}>
+              <div className={style["album-area"]}>
+                <div className={style["album-img"]}>
+                  <img src={`${project.head_image[0]}`} />
+                </div>
+                <p>{project.pname}</p>
+              </div>
+              <div className={style["more-container"]}>
+                <p>별별 티켓 | {project.goal_progress}개</p>
+                <p>펀딩 가능 기간 | {project.expire_date} 까지</p>
+                <p>{project.now_progress}개 투자됨</p>
+                <div className={style["progress-bar"]}>
+                  <progress value="70" max="100"></progress>
+                  <p>{project.int_progress}%</p>
+                </div>
+                <button>자세히보기</button>
+              </div>
             </div>
-            <button>자세히보기</button>
-          </div>
-        </div>
+          );
+        })}
       </section>
 
       <section className={style["recommend-box"]}>
@@ -112,7 +217,7 @@ export default function NovaFunding() {
             <div className={style["img"]}>이미지</div>
             <p className={style["ad-title"]}>프로젝트 펀딩 순위</p>
 
-            <p>72% 달성했어요</p>
+            <p>총 {numProjects}개의 프로젝트가 있어요.</p>
           </div>
         </div>
       </section>
@@ -120,76 +225,30 @@ export default function NovaFunding() {
       <section className={style["open-funding"]}>
         <div className={style["best-title"]}>
           <div className={style["top-title"]}>
-            <h4>진행 중인 오픈펀딩</h4>
+            <h4>진행 중인 덕질 펀딩</h4>
             <a>더보기</a>
           </div>
           <p>누구나 팬 활동을 다같이 하고 싶다면!</p>
           <ul className={style["open-container"]}>
-            <li className={style["open-box"]}>
-              <div className={style["open-img"]}>이미지</div>
-              <div className={style["text-area"]}>
-                <div className={style["who-text"]}>
-                  <h4>이시연 생일 카페 펀딩</h4>
-                  <p>바위게</p>
-                </div>
-                <footer className={style["footer-line"]}>
-                  <time>24/10/12까지</time>
-                  <button>자세히 보기</button>
-                </footer>
-              </div>
-            </li>
-            <li className={style["open-box"]}>
-              <div className={style["open-img"]}>이미지</div>
-              <div className={style["text-area"]}>
-                <div className={style["who-text"]}>
-                  <h4>이시연 생일 카페 펀딩</h4>
-                  <p>바위게</p>
-                </div>
-                <footer className={style["footer-line"]}>
-                  <time>24/10/12까지</time>
-                  <button>자세히 보기</button>
-                </footer>
-              </div>
-            </li>
-            <li className={style["open-box"]}>
-              <div className={style["open-img"]}>이미지</div>
-              <div className={style["text-area"]}>
-                <div className={style["who-text"]}>
-                  <h4>이시연 생일 카페 펀딩</h4>
-                  <p>바위게</p>
-                </div>
-                <footer className={style["footer-line"]}>
-                  <time>24/10/12까지</time>
-                  <button>자세히 보기</button>
-                </footer>
-              </div>
-            </li>
-            <li className={style["open-box"]}>
-              <div className={style["open-img"]}>이미지</div>
-              <div className={style["text-area"]}>
-                <div className={style["who-text"]}>
-                  <h4>이시연 생일 카페 펀딩</h4>
-                  <p>바위게</p>
-                </div>
-                <footer className={style["footer-line"]}>
-                  <time>24/10/12까지</time>
-                  <button>자세히 보기</button>
-                </footer>
-              </div>
-            </li>
-            <li className={style["open-box"]}>
-              <div className={style["open-img"]}>이미지</div>
-              <div className={style["text-area"]}>
-                <div className={style["who-text"]}>
-                  <h4>이시연 생일 카페 펀딩</h4>
-                  <p>바위게</p>
-                </div>
-                <footer className={style["footer-line"]}>
-                  <time>24/10/12까지</time>
-                  <button>자세히 보기</button>
-                </footer>
-              </div>
-            </li>
+            {fanProjects.map((project, i) => {
+              return (
+                <li key={project.pid * i} className={style["open-box"]}>
+                  <div className={style["open-img"]}>
+                    <img src={`${project.head_image[0]}`} />
+                  </div>
+                  <div className={style["text-area"]}>
+                    <div className={style["who-text"]}>
+                      <h4>{project.pname}</h4>
+                      <p>{project.uname}</p>
+                    </div>
+                    <footer className={style["footer-line"]}>
+                      <time>{project.expire_date}까지</time>
+                      <button>자세히 보기</button>
+                    </footer>
+                  </div>
+                </li>
+              );
+            })}
           </ul>
         </div>
       </section>
@@ -206,19 +265,19 @@ export default function NovaFunding() {
             <div className={style["img"]}>이미지</div>
             <p className={style["ad-title"]}>프로젝트 펀딩 순위</p>
 
-            <p>72% 달성했어요</p>
+            <p>{fundingInfo.bias_funding_view}명이 읽었어요!</p>
           </div>
           <div className={style["ad-box"]}>
             <div className={style["img"]}>이미지</div>
             <p className={style["ad-title"]}>프로젝트 펀딩 순위</p>
 
-            <p>72% 달성했어요</p>
+            <p>{fundingInfo.fan_funding_view}명이 읽었어요!</p>
           </div>
           <div className={style["ad-box"]}>
             <div className={style["img"]}>이미지</div>
             <p className={style["ad-title"]}>프로젝트 펀딩 순위</p>
 
-            <p>72% 달성했어요</p>
+            <p>{fundingInfo.good_funding_view}명이 읽었어요!</p>
           </div>
         </div>
 
