@@ -53,7 +53,6 @@ export default function NovaFunding() {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("fff", data);
         setBiasProjects(data.body.project);
       });
   }
@@ -93,9 +92,7 @@ export default function NovaFunding() {
     fetch(`https://nova-platform.kr/nova_fund_system/home/get_nova_funding_info`)
       .then((response) => response.json())
       .then((data) => {
-        console.log("rrr", data);
         setFundingInfo(data.body);
-        // setBestProjects(data.body.project);
       });
   }
 
