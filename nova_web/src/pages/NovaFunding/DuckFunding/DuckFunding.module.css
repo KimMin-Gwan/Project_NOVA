@@ -193,3 +193,12 @@
   color:#797979;
   border-color: #A6A6A6;
 }
+
+
+/* 성공한 프로젝트 전체보기 */
+.success-funding{
+  .more-button{
+    margin-block: 10px;
+    margin-top: 40px;
+  }
+}
