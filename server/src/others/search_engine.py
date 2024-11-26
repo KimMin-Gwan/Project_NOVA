@@ -154,8 +154,8 @@ class FeedSearchEngine:
 
     # 여기도 아직 하지 말것 
     # 목적 : 숏피드에서 다음 피드 제공 받기
-    def try_recommand_feed(self, fid:str, history:list):
-        fid = self.__recommand_manager.get_recommand_feed(fid=fid, history=history)
+    def try_recommand_feed(self, fid:str, history:list, user:User):
+        fid = self.__recommand_manager.get_recommand_feed(fid=fid, history=history, user=user)
         return fid
     # ------------------------------------------------------------------------------------
     def get_best_hashtag(self, num_hashtag=10):
@@ -682,8 +682,15 @@ class RecommandManager:
             result.append(hashtag.hid)
         return result
     
-    def get_recommand_feed(self, fid:str, history:list):
-        fid = self.__feed_algorithm.recommend_next_feed(start_fid=fid, history=history)
+    def get_recommand_feed(self, fid:str, history:list, user:User):
+        hashtag_ranking_list = self.get_best_hashtags() # 해시태그 랭킹 리스트
+        logined_user_uid = user.uid # 현재 로그인된 유저의 uid
+        fid = self.__feed_algorithm.recommend_next_feed(
+            start_fid=fid,
+            history=history,
+            mine_uid=logined_user_uid,
+            hashtag_ranking=hashtag_ranking_list
+            )
         return  fid
 
 
