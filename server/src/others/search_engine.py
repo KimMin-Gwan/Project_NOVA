@@ -154,15 +154,16 @@ class FeedSearchEngine:
 
     # 여기도 아직 하지 말것 
     # 목적 : 숏피드에서 다음 피드 제공 받기
-    def try_recommand_feed(self, fid:str, history:list, user:User):
-        fid = self.__recommand_manager.get_recommand_feed(fid=fid, history=history, user=user)
+    # 오타 리팩터링 하세요. (recommend)
+    def try_recommend_feed(self, fid:str, history:list, user:User):
+        fid = self.__recommand_manager.get_recommend_feed(fid=fid, history=history, user=user)
         return fid
     # ------------------------------------------------------------------------------------
     def get_best_hashtag(self, num_hashtag=10):
         return self.__recommand_manager.get_best_hashtags(num_hashtag=num_hashtag)
 
-    def get_recommnad_hashtag(self, bid:str):
-        return self.__recommand_manager.get_user_recommand_hashtags(bid=bid)
+    def get_recommend_hashtag(self, bid:str):
+        return self.__recommand_manager.get_user_recommend_hashtags(bid=bid)
 
 
     # ----------------------------------------------------------------------------------------------------------
@@ -674,7 +675,7 @@ class RecommandManager:
         return self.hashtags[0:num_hashtag]
 
     # 사용자에게 어울릴만한 해시태그 리스트 제공
-    def get_user_recommand_hashtags(self, bid):
+    def get_user_recommend_hashtags(self, bid):
         result = []
         managed_bias:ManagedBias = self.__bias_avltree.get(key=bid)
 
@@ -682,7 +683,7 @@ class RecommandManager:
             result.append(hashtag.hid)
         return result
     
-    def get_recommand_feed(self, fid:str, history:list, user:User):
+    def get_recommend_feed(self, fid:str, history:list, user:User):
         hashtag_ranking_list = self.get_best_hashtags() # 해시태그 랭킹 리스트
         logined_user_uid = user.uid # 현재 로그인된 유저의 uid
         fid = self.__feed_algorithm.recommend_next_feed(
@@ -946,7 +947,6 @@ class BaseNode:
     #             return edge
     #     return None
     #
-
 
     # 노드 삭제 시. edge까지 전부 삭제
     def __del__(self):
@@ -1349,7 +1349,7 @@ class FeedChaosGraph:
     # 피드-유저 사이에서 찾아내는 유사한 피드
 
     # 1단계 : 유저 상위 10명 집계
-    # 2단계 : 유저 담기. 방문한 Feed_id 집계 : set()
+    # 2단계 : 유저 담기. 방문한 Feed_id 집계 : list()
     #	가장 중요한 건, 글쓴이에 대해서는 집계하지 않는다.
     #
     # 3단계 : 첫번째 줄에서 유저에 대한 feed 집계. 중복을 고려해 10개로 늘리고.
@@ -1445,17 +1445,16 @@ class FeedChaosGraph:
     #   따라서, Feed에 좋아요를 남긴 유저들을 모음.
     # 3단계 : 이렇게 해서 모인 유저들에 따라, 좋아요한 Feed를 담음. 이 때, 내가 좋아요를 남겨서 찾아온 Feed에 대해서는 담지않음
 
-    # noinspection pymethodmaybestatic
+    # noinspection PyMethodMayBeStatic
     def feed_recommend_by_me(self, watch_me:UserNode, max_like=10, max_related_user=4, max_feed_find=5):
         # 중복된 Feed를 방지하기 위해서
         recommend_list = set()
         visited_like_feeds = []
         # 내가 좋아한 Feed들에 대해 같은 유저가 다른 2개의 Feed들도 동시에 좋아할 수 있음
-        like_user_queue = set()
-
-        like_user_queue.add(watch_me)
-
-
+        # visited like_user_queue는 user가 변할수 있는 노드이기 떄문에 set() 사용x
+        # 오류가 발생한 부분, unhashable Error
+        # 잘못된 Set()의 사용이 불러온 오류임.
+        like_user_queue = [watch_me]
 
         # 최대 10개 의 좋아요한 Feed나, 작성한 feed에 대한 리스트를 불러옴
         sorted_edges_latest_like_feed = sorted(watch_me.edges["feed"])[:max_like]
@@ -1470,8 +1469,9 @@ class FeedChaosGraph:
             sorted_edge_feed_like_user = sorted(visited_feed.edges["user"])[:max_related_user]
             for edge in sorted_edge_feed_like_user:
                 # 시작된 본인만 아니라면 모두 OK
-                if edge.target_node.get_id() != watch_me.get_id():
-                    like_user_queue.add(edge.target_node)
+                # 리스트에 이미 UserNode가 담겨있는 상태라면, 담지 않아도 된다.
+                if edge.target_node.get_id() != watch_me.get_id() and edge.target_node not in like_user_queue:
+                    like_user_queue.append(edge.target_node)
 
 
         # 골라낸 유저 중
@@ -1487,7 +1487,7 @@ class FeedChaosGraph:
 
     # HashTag 랭킹에 관해 Feed를 추출하는 시스템
     # Feed 해시태그 랭킹에 집계된 Hash태그들과 연결된 Feed들을 무작위로 추첨
-    # noinspection pymethodmaybestatic
+    # noinspection PyMethodMayBeStatic
     def feed_recommend_by_ranking(self, hashtag_rank:list, top_n_hashtags=5, max_feed_find=6):
         hashtag_top_n = hashtag_rank[:top_n_hashtags]
         recommend_list = set()
