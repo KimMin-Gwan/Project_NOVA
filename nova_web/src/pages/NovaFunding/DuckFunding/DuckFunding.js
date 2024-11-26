@@ -29,7 +29,7 @@ export default function DuckFunding() {
       <section className={style["success-funding"]}>
        <div className={style["content-title"]}>
           <header className={style["header-text"]}>이미 목표 달성에 성공한 프로젝트</header>
-          <a>전체보기</a>
+          <a href="/success_funding">전체보기</a>
         </div>
 
         <div className={style["best-container"]}>
