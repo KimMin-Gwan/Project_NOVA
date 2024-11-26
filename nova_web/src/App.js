@@ -38,6 +38,7 @@ import LeftBar from "./pages/WideVer/LeftBar.js";
 import RightBar from "./pages/WideVer/RightBar.js";
 import LikeFunding from "./pages/NovaFunding/LikeFunding/LikeFunding.js";
 import Week100 from "./pages/MainPage/Week100.js";
+import DuckFunding from "./pages/NovaFunding/DuckFunding/DuckFunding.js";
 
 import logo from "./img/NOVA_Platform.png";
 // 401 이면 바이어스 격자 무늬로 띄우기
@@ -156,6 +157,7 @@ function App() {
       <Route path="/nova_funding" element={<NovaFunding />}></Route>
       <Route path="/like_funding" element={<LikeFunding />}></Route>
       <Route path="/week100" element={<Week100 />}></Route>
+      <Route path="/duck_funding" element={<DuckFunding />}></Route>
       <Route path="*" element={<div>404 Error</div>}></Route>
       {/* <Route path="/test" element={<Box />}></Route> */}
       {/* <Route path="/planet" element={<PlanetList />}></Route> */}
