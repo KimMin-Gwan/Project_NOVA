@@ -29,7 +29,7 @@ export default function DuckFunding() {
       <section className={style["success-funding"]}>
        <div className={style["content-title"]}>
           <header className={style["header-text"]}>이미 목표 달성에 성공한 프로젝트</header>
-          <div>전체보기</div>
+          <a>전체보기</a>
         </div>
 
         <div className={style["best-container"]}>
@@ -60,7 +60,7 @@ export default function DuckFunding() {
       <section className={style["success-funding"]}>
       <div className={style["content-title"]}>
           <header className={style["header-text"]}>마감임박 프로젝트</header>
-          <div>전체보기</div>
+          <a>전체보기</a>
         </div>
 
         <div className={style["ad-container"]}>
@@ -109,7 +109,7 @@ export default function DuckFunding() {
       <section className={`${style["success-funding"]} ${style["interest-funding"]}`}>
       <div className={style["content-title"]}>
           <header className={style["header-text"]}>마감임박 프로젝트</header>
-          <div>전체보기</div>
+          <a>전체보기</a>
         </div>
         <div className={style["ad-container"]}>
           <div className={style["ad-box"]}>
