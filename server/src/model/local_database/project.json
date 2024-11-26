@@ -7,7 +7,7 @@
         "user_info": "http://www.naver.com",
         "make_date": "2024/11/25",
         "expire_date": "2025/11/26",
-        "head_image": [""],
+        "head_image": ["https://kr.object.ncloudstorage.com/nova-project-image/1.png"],
         "body_image": [],
         "now_progress": 12400,
         "goal_progress": 150000
@@ -20,7 +20,7 @@
         "user_info": "http://www.naver.com",
         "make_date": "2024/11/25",
         "expire_date": "2025/11/26",
-        "head_image": [""],
+        "head_image": ["https://kr.object.ncloudstorage.com/nova-project-image/2.png"],
         "body_image": [],
         "now_progress": 14300,
         "goal_progress": 123000
@@ -33,7 +33,7 @@
         "user_info": "http://www.naver.com",
         "make_date": "2024/11/20",
         "expire_date": "2025/11/21",
-        "head_image": [""],
+        "head_image": ["https://kr.object.ncloudstorage.com/nova-project-image/3.png"],
         "body_image": [],
         "now_progress": 8000,
         "goal_progress": 10000
@@ -46,7 +46,7 @@
         "user_info": "http://www.naver.com",
         "make_date": "2024/11/18",
         "expire_date": "2025/11/19",
-        "head_image": [""],
+        "head_image": ["https://kr.object.ncloudstorage.com/nova-project-image/4.png"],
         "body_image": [],
         "now_progress": 450,
         "goal_progress": 5000
@@ -59,7 +59,7 @@
         "user_info": "http://www.naver.com",
         "make_date": "2024/11/22",
         "expire_date": "2025/11/23",
-        "head_image": [""],
+        "head_image": ["https://kr.object.ncloudstorage.com/nova-project-image/5.png"],
         "body_image": [],
         "now_progress": 1300,
         "goal_progress": 15000
@@ -72,7 +72,7 @@
         "user_info": "http://www.naver.com",
         "make_date": "2024/11/19",
         "expire_date": "2025/11/20",
-        "head_image": [""],
+        "head_image": ["https://kr.object.ncloudstorage.com/nova-project-image/6.png"],
         "body_image": [],
         "now_progress": 8000,
         "goal_progress": 20000
@@ -85,7 +85,7 @@
         "user_info": "http://www.naver.com",
         "make_date": "2024/11/23",
         "expire_date": "2025/11/24",
-        "head_image": [""],
+        "head_image": ["https://kr.object.ncloudstorage.com/nova-project-image/7.png"],
         "body_image": [],
         "now_progress": 500,
         "goal_progress": 1000
