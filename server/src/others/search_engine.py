@@ -1488,12 +1488,13 @@ class FeedChaosGraph:
     # HashTag 랭킹에 관해 Feed를 추출하는 시스템
     # Feed 해시태그 랭킹에 집계된 Hash태그들과 연결된 Feed들을 무작위로 추첨
     # noinspection PyMethodMayBeStatic
-    def feed_recommand_by_ranking(self, hashtag_rank:list, top_n_hashtags=5, max_feed_find=6):
+    def feed_recommand_by_ranking(self, hash_tree:AVLTree, hashtag_rank:list, top_n_hashtags=5, max_feed_find=6):
         hashtag_top_n = hashtag_rank[:top_n_hashtags]
         recommand_list = set()
 
         for hashtag in hashtag_top_n:
-            sorted_edge = sorted(hashtag.edges["feed"])[:max_feed_find]
+            hash_node = hash_tree.get(key=hashtag)
+            sorted_edge = sorted(hash_node.edges["feed"])[:max_feed_find]
             for edge in sorted_edge:
                 recommand_list.add(edge.target_node.get_id())
 
@@ -1782,7 +1783,10 @@ class FeedAlgorithm:
         me_feed_recommand_list = self.__feed_chaos_graph.feed_recommand_by_me(watch_me=my_user_node)
 
         # 6. 해시태그 랭킹에 대한 추천
-        ranking_feed_recommand_list = self.__feed_chaos_graph.feed_recommand_by_ranking(hashtag_rank=hashtag_ranking)
+        ranking_feed_recommand_list = self.__feed_chaos_graph.feed_recommand_by_ranking(
+            hash_tree=self.__hash_node_avltree,
+            hashtag_rank=hashtag_ranking
+            )
 
 
         # 7. 완전 무작위 Feed List 추출.
