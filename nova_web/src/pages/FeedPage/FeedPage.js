@@ -714,8 +714,8 @@ const FeedPage = ({ brightmode }) => {
                     </div>
                   </div>
 
-                  <div className={`${style["not-recommend-box"]} ${style[getModeClass(mode)]}`}>
-                    <div className={`${style["btn-box"]}} ${style["not-recommend-btn"]}`}>
+                  <div className={`${style["not-recommand-box"]} ${style[getModeClass(mode)]}`}>
+                    <div className={`${style["btn-box"]}} ${style["not-recommand-btn"]}`}>
                       <img className={style["btn-img"]} src={problem_gray} alt="추천안함" />
                       <div id={style.text}>추천안함</div>
                     </div>

@@ -91,11 +91,11 @@ export default function DuckFunding() {
           <header className={style["header-text"]}>덕질 펀딩 프로젝트</header>
           
         </div>
-        <div className={style["recommend-project"]}>
+        <div className={style["recommand-project"]}>
       {buttonLabels.map((label, index) => (
         <button
           key={index}
-          className={`${style["recommend-button"]} ${
+          className={`${style["recommand-button"]} ${
             activeButton === index ? style.active : ""
           }`}
           onClick={() => handleButtonClick(index)}

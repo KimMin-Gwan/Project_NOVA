@@ -122,7 +122,7 @@ export default function NovaFunding() {
         이미지박스
         <div className={style["arrow-icon"]}>화살표</div>
       </div>
-      <section className={style["recommend-box"]}>
+      <section className={style["recommand-box"]}>
         <div className={style["title-box"]}>
           <h2 className={style["title-text"]}>이런 펀딩 프로젝트는 어때요?</h2>
           <img src={more_icon} className={style["more-icon"]}></img>
@@ -191,7 +191,7 @@ export default function NovaFunding() {
         })}
       </section>
 
-      <section className={style["recommend-box"]}>
+      <section className={style["recommand-box"]}>
         <div className={style["title-box"]}>
           <h2 className={style["title-text"]}>베스트 프로젝트 모두 보기</h2>
         </div>
