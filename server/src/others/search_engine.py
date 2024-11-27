@@ -1493,7 +1493,7 @@ class FeedChaosGraph:
         recommand_list = set()
 
         for hashtag in hashtag_top_n:
-            sorted_edge = sorted(hashtag.edges["hashtag"])[:max_feed_find]
+            sorted_edge = sorted(hashtag.edges["feed"])[:max_feed_find]
             for edge in sorted_edge:
                 recommand_list.add(edge.target_node.get_id())
 
