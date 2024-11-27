@@ -756,7 +756,7 @@ class RecommandManager:
                             hash_node:HashNode = feed_edge.target_node
                             hash_nodes.append(hash_node)
 
-                hash_nodes = sorted(hash_nodes, key=lambda x:x.weight, reverse=False)
+                hash_nodes = sorted(hash_nodes, key=lambda x:x.weight, reverse=True)
                 managed_bias.trend_hashtags = hash_nodes[:4]
         except Exception as e:
             print(e)
