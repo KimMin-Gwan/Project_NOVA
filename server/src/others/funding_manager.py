@@ -10,8 +10,9 @@
 
 # 위 시스템은 모두 각각의 클래스로 구분될 것임
 
-#from model import Local_Database
+from model import Local_Database
 from others.data_domain import Project
+from bintrees import AVLTree
 
 class FundingProjectManager:
     def __init__(self, database):
@@ -38,3 +39,79 @@ class FundingProjectManager:
     # 아니 ㄹㅇ 파이썬 버전을 올려야하나? 나 왜 3.7.9 냐
     # 서버랑 버전이  안 맞아서 점점 더 두려워진다...
     # 가상환경 구축을 왜 하는지 알 수 있는 대목
+
+
+# 관리를 위한 프로젝트 데이터 도메인
+
+class ManagedProject:
+    def __init__(self, pid="", pname="", uid="", progress="",
+                 expire_date="", make_date=""):
+        self.pid = pid  # 프로젝트 아이디
+        # 이거 필요한가? 
+        self.pname = pname # 프로젝트 이름  
+        self.uid = uid   # 유저 아이디
+        self.progress =progress # 달성률
+        self.expire_date = expire_date
+        self.make_date = make_date
+
+
+class ProjectSearchEngine:
+    def __init__(self, database):
+        self.__database:Local_Database = database
+
+        self.__project_table = []  # 최신 기준으로  정렬
+        self.__project_avltree = AVLTree()  # 검색을 위한 트리
+
+    # 테이블 초기화 함수
+    def __init_table(self, database:Local_Database):
+        # 데이터 만들기
+        project_datas = database.get_all_data(target="pid")
+        projects = []
+        for project_data in project_datas:
+            project = Project()
+            project.make_with_dict(project_data)
+            projects.append(project)
+
+        # 관리용 프로젝트 생성
+        for single_project in projects:
+            managed_project = self.__set_new_manage_project(project=single_project)
+            # 테이블에도ㅓㅓ 넣고
+            # avltree에도 넣어야됨
+
+            self.__project_avltree.insert(key=managed_project.pid, value=managed_project)
+            self.__project_table.append(managed_project)
+
+        num_project = len(self.__project_table)
+
+        print(f'INFO<-[      {num_project} NOVA FEED IN SEARCH ENGINE NOW READY.')
+        return
+
+    # 새로운 관리용 프로젝트 만들기
+    def __set_new_manage_project(self, project:Project):
+            managed_project = ManagedProject()
+            managed_project.pid = project.pid
+            managed_project.uid = project.uid
+            managed_project.pname = project.pname
+            managed_project.progress = project.int_progress
+            managed_project.make_date = project.make_date
+            managed_project.expire_date = project.expire_date
+            return managed_project
+
+
+    # 1. 프로젝트 이름으로 검색하기
+    def try_get_project_with_pname(self, pname):
+        return
+    
+    # 2. 프로젝트 작성자로 검색하기
+    def try_get_project_with_uname(self, uname):
+        return
+
+
+
+    
+
+
+
+            
+
+

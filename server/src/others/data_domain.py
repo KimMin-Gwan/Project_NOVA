@@ -537,3 +537,60 @@ class Project:
             "goal_progress": self.goal_progress,
             "int_progress" : self.int_progress
         }
+
+class ProjectSales:
+    def __init__(self, psid="", pid="", psname="", price=0, detail=None,
+                 quantity=0, num_sales=0, tags=None):
+        if detail is None:
+            detail = []
+        if tags is None:
+            tags = []
+        self.psid = psid
+        self.pid = pid
+        self.psname = psname
+        self.price = price
+        self.detail:list = copy.copy(detail)
+        self.quantity = quantity
+        self.num_sales = num_sales
+        self.tags:list = copy.copy(tags)
+
+    def make_with_dict(self, dict_data):
+        try:
+            self.psid = dict_data['psid']
+            self.pid = dict_data['pid']
+            self.psname = dict_data['psname']
+            self.price = dict_data['price']
+            self.detail:list = copy.copy(dict_data['detail'])
+            self.quantity = dict_data['quantity']
+            self.num_sales = dict_data['num_sales']
+            self.tags:list = copy.copy(dict_data['tags'])
+        except KeyError as e:
+            raise ValueError(f"Missing key: {str(e)}")
+
+    def __call__(self):
+        print(f"psid: {self.psid}")
+        print(f"pid: {self.pid}")
+        print(f"psname: {self.psname}")
+        print(f"price: {self.price}")
+        print(f"detail: {self.detail}")
+        print(f"quantity: {self.quantity}")
+        print(f"num_sales: {self.num_sales}")
+        print(f"tags: {self.tags}")
+
+    def get_dict_form_data(self):
+        return {
+            "psid": self.psid,
+            "pid": self.pid,
+            "psname": self.psname,
+            "price": self.price,
+            "detail": copy.copy(self.detail),
+            "quantity": self.quantity,
+            "num_sales": self.num_sales,
+            "tags": copy.copy(self.tags)
+        }
+    
+class ProjectPurchase:
+    def __init__(self, ppid="", pid="", psid="", uid="",
+                 count=0, total=0, unit_price=0, purchase_date=""
+                 ):
+        self.ppid
