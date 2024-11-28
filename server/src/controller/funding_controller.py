@@ -32,7 +32,7 @@ class Funding_Controller:
         return model
 
     # 홈화면에서 맞춤 태그 제공
-    def get_recommand_tag(self,
+    def get_recommend_tag(self,
         database:Local_Database,
         request,
         funding_project_manager:FundingProjectManager,

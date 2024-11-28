@@ -275,8 +275,8 @@ class FeedSearchModel(FeedModel):
         self.__feed = []
         self.__history = []
 
-    def set_recommand_feed(self, feed_search_engine:FeedSearchEngine, fid:str, history:list):
-        fid = feed_search_engine.try_recommand_feed(fid=fid, history=history, user=self._user)
+    def set_recommend_feed(self, feed_search_engine:FeedSearchEngine, fid:str, history:list):
+        fid = feed_search_engine.try_recommend_feed(fid=fid, history=history, user=self._user)
         history.append(fid)
         self.__history = history
         
@@ -293,7 +293,7 @@ class FeedSearchModel(FeedModel):
             fid=feed_search_engine.try_get_random_feed()
 
         self.__history.append(str(fid))
-        second_fid = feed_search_engine.try_recommand_feed(fid=str(fid),
+        second_fid = feed_search_engine.try_recommend_feed(fid=str(fid),
                                                 history=self.__history,
                                                 user=self._user
                                                 )

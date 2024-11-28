@@ -23,15 +23,15 @@ class FeedSearchEngine:
         self.__feed_algorithm= FeedAlgorithm(database=database)
         self.__search_manager = SearchManager(database=database, feed_algorithm=self.__feed_algorithm)
 
-        self.__recommand_manager = RecommandManager(database=database,feed_algorithm=self.__feed_algorithm)
+        self.__recommend_manager = recommendManager(database=database,feed_algorithm=self.__feed_algorithm)
         self.__database=database
 
     def make_task(self):
-        return self.__recommand_manager.make_task()
+        return self.__recommend_manager.make_task()
 
     def try_test_graph_recommnad_system(self, fid):
         feed = self.__database.get_data_with_id(target="fid", id=fid)
-        #result = self.__feed_algorithm.find_recommand_feed(start_fid=feed.fid)
+        #result = self.__feed_algorithm.find_recommend_feed(start_fid=feed.fid)
         result = "2"
 
         return result
@@ -39,7 +39,7 @@ class FeedSearchEngine:
     # 새롭게 최애를 지정했을 때 연결하는 시스템
     # 근데 이거 잘생각해보면 최애 지정하기 전에 쓴 글들은 해시태그에 반영되어야 하는가?
     def add_new_user_to_bias(self, bid:str, uid:str):
-        self.__recommand_manager.add_new_user_to_bias(bid=bid, uid=uid)
+        self.__recommend_manager.add_new_user_to_bias(bid=bid, uid=uid)
         return
         
 
@@ -154,16 +154,27 @@ class FeedSearchEngine:
 
     # 여기도 아직 하지 말것 
     # 목적 : 숏피드에서 다음 피드 제공 받기
-    # 오타 리팩터링 하세요. (recommand)
-    def try_recommand_feed(self, fid:str, history:list, user:User):
-        fid = self.__recommand_manager.get_recommand_feed(fid=fid, history=history, user=user)
+    def try_recommend_feed(self, fid:str, history:list, user:User):
+        # 유저 비로그인 시 데이터가 처리가 어떻게 되는지 알아야 할듯
+        # 그래야 여기에 If문을 통한 로직을 추가하던가, 아니면 기존 로직에서 바꾸든가를 알 수 있을듯
+        # 근데 이미 비로그인 유저에 대한 로직을 만들긴 했음
+
+        # if User is logined:
+        fid = self.__recommend_manager.get_recommend_feed(fid=fid,
+                                                          history=history,
+                                                          user=user
+                                                          )
+
+        # else
+        # fid = self.__recommend_manager.get_recommend_feed_not_login(fid=fid, history=history)
         return fid
+
     # ------------------------------------------------------------------------------------
     def get_best_hashtag(self, num_hashtag=10):
-        return self.__recommand_manager.get_best_hashtags(num_hashtag=num_hashtag)
+        return self.__recommend_manager.get_best_hashtags(num_hashtag=num_hashtag)
 
-    def get_recommand_hashtag(self, bid:str):
-        return self.__recommand_manager.get_user_recommand_hashtags(bid=bid)
+    def get_recommend_hashtag(self, bid:str):
+        return self.__recommend_manager.get_user_recommend_hashtags(bid=bid)
 
 
     # ----------------------------------------------------------------------------------------------------------
@@ -521,7 +532,7 @@ class SearchManager:
         return result_fid, result_index
     
     #type likes, time
-    def search_feed_with_hashtag(self, hashtag, num_feed=10, index=-1) -> list:
+    def search_feed_with_hashtag(self, hashtag, num_feed=10, index=-1) -> tuple:
         result_fid = []
         result_index = -3
 
@@ -556,7 +567,7 @@ class SearchManager:
         return result_fid, result_index
 
 
-    def search_feed_with_fid(self, fid, num_feed=1, index=-1) -> list:
+    def search_feed_with_fid(self, fid, num_feed=1, index=-1) -> tuple:
         result_fid = []
         index = -1
         for i, managed_feed in enumerate(self.__feed_table):
@@ -568,7 +579,7 @@ class SearchManager:
 
         return  result_fid, index
 
-    def search_feed_with_uname(self, uname, num_feed=1, index=-1) -> list:
+    def search_feed_with_uname(self, uname, num_feed=1, index=-1) -> tuple:
         result_fid = []
         result_index = -3
 
@@ -616,7 +627,7 @@ class ManagedBias:
 
 # 이건 사용자에게 맞는 데이터를 주려고 만든거
 
-class RecommandManager:
+class recommendManager:
     def __init__(self, database, feed_algorithm):
         self.__database = database
         self.__feed_algorithm:FeedAlgorithm = feed_algorithm
@@ -675,7 +686,7 @@ class RecommandManager:
         return self.hashtags[0:num_hashtag]
 
     # 사용자에게 어울릴만한 해시태그 리스트 제공
-    def get_user_recommand_hashtags(self, bid):
+    def get_user_recommend_hashtags(self, bid):
         result = []
         managed_bias:ManagedBias = self.__bias_avltree.get(key=bid)
 
@@ -683,17 +694,27 @@ class RecommandManager:
             result.append(hashtag.hid)
         return result
     
-    def get_recommand_feed(self, fid:str, history:list, user:User):
+    def get_recommend_feed(self, fid:str, history:list, user:User):
         hashtag_ranking_list = self.get_best_hashtags() # 해시태그 랭킹 리스트
         logined_user_uid = user.uid # 현재 로그인된 유저의 uid
-        fid = self.__feed_algorithm.recommand_next_feed(
+        fid = self.__feed_algorithm.recommend_next_feed(
             start_fid=fid,
             history=history,
             mine_uid=logined_user_uid,
             hashtag_ranking=hashtag_ranking_list
             )
-        return  fid
+        return fid
 
+    # 비로그인 유저를 위한 로직
+    def get_recommend_feed_not_login(self, fid:str, history:list):
+        hashtag_ranking_list = self.get_best_hashtags() # 해시태그 랭킹 리스트
+        # 비로그인을 위한 로직
+        fid = self.__feed_algorithm.recommend_next_feed_not_login(
+            start_fid=fid,
+            history=history,
+            hashtag_ranking=hashtag_ranking_list
+        )
+        return fid
 
     def __check_trend_hashtag_algo(self, weight=0, now_data=0, prev_data=0, num_feed=0):
         if now_data == 0 and prev_data == 0 and weight == 0:
@@ -1054,7 +1075,7 @@ class HashNode(BaseNode):
         self.trend["now"] += 1
 
     # Weight의 상태가 업데이트.
-    # Weight는 recommand Manager에서 업데이트됨
+    # Weight는 recommend Manager에서 업데이트됨
     def weight_update(self, new_weight):
         self.weight = new_weight
         self.trend["prev"] = self.trend["now"]
@@ -1194,7 +1215,7 @@ class FeedNode(BaseNode):
 #     13. disconnect_feed_with_user(피드, 유저 노드):
 #         엣지 삭제
 #
-#     14. feed_recommand_user(start_fid, max_user_find=10, max_feed_find=5):
+#     14. feed_recommend_user(start_fid, max_user_find=10, max_feed_find=5):
 #         1. 시작하는 노드를 찾아냄
 #         2. 시작한 노드에서 뻗어나가는 엣지들을 찾아냄
 #         3. 가장 최신의 엣지순서대로 정렬한 후, 상위 10개만 잡아냄
@@ -1202,16 +1223,16 @@ class FeedNode(BaseNode):
 #         5. 그 Feed 엣지들도 다시 최신의 순서대로 정렬 후, 상위 5개 만 집어내서
 #         5-1. 이 때, source노드에서 이어진 edge는 제외해야한다.
 #         6. 결과 리스트에 담음. 이 때, fid만 담아내어, 나중에 언제든지 참조하기 편하게 한다.
-#         return recommand_list
+#         return recommend_list
 #
-#     15. feed_recommand_hash(start_fid, max_hashtags=4, max_feed_find=10):
+#     15. feed_recommend_hash(start_fid, max_hashtags=4, max_feed_find=10):
 #         1. 시작노드 찾아냄
 #         2. 시작노드에서 뻗어나간 해시태그 엣지들을 찾음
 #         3. 기준은 해시태그에 연결되어 있는 Feed들이 많은 순으로 정렬해서 상위 4개 정도 뽑아 옴
 #         4. 연결된 해시태그가 가장 최신으로 연결된 랜덤 Feed 10개 까지 뽑아온다.
 #         똑같이, 자신에게 붙은 edge는 제외한다.
-#         5. recommand_list에 담고, 반환
-#         return recommand_list
+#         5. recommend_list에 담고, 반환
+#         return recommend_list
 
 # 피드-유저-해시태그 통합 그래프
 class FeedChaosGraph:
@@ -1363,12 +1384,12 @@ class FeedChaosGraph:
     #		# 어짜피 set()을 사용하기 때문에, 중복은 알아서 없어짐
     #		related_fid = edge.target.id()
     #		if not in visited_feed:
-    #			recommand_list.append(related_fid)
+    #			recommend_list.append(related_fid)
     #
     # noinspection PyMethodMayBeStatic
-    def feed_recommand_by_like_user(self, start_node:FeedNode, max_user_find=10, max_feed_find=8):
+    def feed_recommend_by_like_user(self, start_node:FeedNode, max_user_find=10, max_feed_find=8):
         # 가장 먼저, Feed를 확인
-        recommand_list = set()
+        recommend_list = set()
         user_queue = []
 
 
@@ -1386,15 +1407,15 @@ class FeedChaosGraph:
             # 최신 순으로 정렬된 엣지 중에서, 최대 5개의 feed들을 가져올 것
             sorted_edges_latest_relate_feed = sorted(user_node.edges["feed"])[:max_feed_find]
             for edge in sorted_edges_latest_relate_feed:
-                # 가져온 Edge에서 Feed id를 추출하여 recommand_list에 담음
+                # 가져온 Edge에서 Feed id를 추출하여 recommend_list에 담음
                 related_feed_id = edge.get_target_node().get_id()
-                recommand_list.add(related_feed_id)
+                recommend_list.add(related_feed_id)
 
 
-        # 시작Feed가 다시 추천리스트에 들어가는 것을 방지하기 위해 recommand_list에서 삭제 진행
-        recommand_list.discard(start_node.fid)   # discard 쓰는 이유 (set()에 있을수도 있고, 없을 수도 있음. GPT 피셜임)
+        # 시작Feed가 다시 추천리스트에 들어가는 것을 방지하기 위해 recommend_list에서 삭제 진행
+        recommend_list.discard(start_node.fid)   # discard 쓰는 이유 (set()에 있을수도 있고, 없을 수도 있음. GPT 피셜임)
 
-        return list(recommand_list)
+        return list(recommend_list)
 
     # 피드-해시태그 사이에서 찾아내는 유사한 피드
 
@@ -1408,13 +1429,13 @@ class FeedChaosGraph:
     #	sorted_edges = sorted(hash_node.edges["feed"])[:max_feed]
     #	for edge in sorted_edges:
     #		related_fid = edge.target.id()
-    #		recommand_list.add(related_fid)
+    #		recommend_list.add(related_fid)
     #
     # 4단계 : 내가 본 Feed는 전부 쳐내야함.
 
     # noinspection PyMethodMayBeStatic
-    def feed_recommand_by_hashtag(self, start_node:FeedNode, max_hash=4, max_feed_find=5):
-        recommand_list = set()
+    def feed_recommend_by_hashtag(self, start_node:FeedNode, max_hash=4, max_feed_find=5):
+        recommend_list = set()
         hash_queue = []
 
         # 각 연결된 hash노드 엣지를 찾아냄
@@ -1429,14 +1450,14 @@ class FeedChaosGraph:
             # 최신 순으로 정렬된 edge들을 가져옴
             sorted_edges_latest_related_feed = sorted(hash_node.edges["feed"])[:max_feed_find]
             for edge in sorted_edges_latest_related_feed:
-                # 가져온 Feed Edge에서 feed id를 추출해 recommand_list를 다음
+                # 가져온 Feed Edge에서 feed id를 추출해 recommend_list를 다음
                 related_feed_id = edge.get_target_node().get_id()
-                recommand_list.add(related_feed_id)
+                recommend_list.add(related_feed_id)
 
-        # 시작Feed가 다시 추천리스트에 들어가는 것을 방지하기 위해 recommand_list에서 삭제 진행
-        recommand_list.discard(start_node.fid)   # discard 쓰는 이유 (set()에 있을수도 있고, 없을 수도 있음. GPT 피셜임)
+        # 시작Feed가 다시 추천리스트에 들어가는 것을 방지하기 위해 recommend_list에서 삭제 진행
+        recommend_list.discard(start_node.fid)   # discard 쓰는 이유 (set()에 있을수도 있고, 없을 수도 있음. GPT 피셜임)
 
-        return list(recommand_list)
+        return list(recommend_list)
 
     # User의 좋아요에 따라 Feed를 추천하는 시스템
 
@@ -1446,9 +1467,9 @@ class FeedChaosGraph:
     # 3단계 : 이렇게 해서 모인 유저들에 따라, 좋아요한 Feed를 담음. 이 때, 내가 좋아요를 남겨서 찾아온 Feed에 대해서는 담지않음
 
     # noinspection PyMethodMayBeStatic
-    def feed_recommand_by_me(self, watch_me:UserNode, max_like=10, max_related_user=4, max_feed_find=5):
+    def feed_recommend_by_me(self, watch_me:UserNode, max_like=10, max_related_user=4, max_feed_find=5):
         # 중복된 Feed를 방지하기 위해서
-        recommand_list = set()
+        recommend_list = set()
         visited_like_feeds = []
         # 내가 좋아한 Feed들에 대해 같은 유저가 다른 2개의 Feed들도 동시에 좋아할 수 있음
         # visited like_user_queue는 user가 변할수 있는 노드이기 떄문에 set() 사용x
@@ -1481,23 +1502,23 @@ class FeedChaosGraph:
             for edge in sorted_edge_like_feed:
                 if edge.target_node not in visited_like_feeds:
                     related_fid = edge.target_node.get_id()
-                    recommand_list.add(related_fid)
+                    recommend_list.add(related_fid)
 
-        return list(recommand_list)
+        return list(recommend_list)
 
     # HashTag 랭킹에 관해 Feed를 추출하는 시스템
     # Feed 해시태그 랭킹에 집계된 Hash태그들과 연결된 Feed들을 무작위로 추첨
     # noinspection PyMethodMayBeStatic
-    def feed_recommand_by_ranking(self, hashtag_rank:list, top_n_hashtags=5, max_feed_find=6):
+    def feed_recommend_by_ranking(self, hashtag_rank:list, top_n_hashtags=5, max_feed_find=6):
         hashtag_top_n = hashtag_rank[:top_n_hashtags]
-        recommand_list = set()
+        recommend_list = set()
 
         for hashtag in hashtag_top_n:
             sorted_edge = sorted(hashtag.edges["feed"])[:max_feed_find]
             for edge in sorted_edge:
-                recommand_list.add(edge.target_node.get_id())
+                recommend_list.add(edge.target_node.get_id())
 
-        return list(recommand_list)
+        return list(recommend_list)
 
 #
 # class FeedAlgorithm:
@@ -1551,7 +1572,7 @@ class FeedChaosGraph:
 #         1) 노드 찾기 (소스노드, 타겟노드)
 #         2) 엣지 삭제
 #
-#     9. find_recommand_feed(start_fid):
+#     9. find_recommend_feed(start_fid):
 #         1) 유저-feed 관계를 바탕으로 한 리스트 추출
 #         2) 해시태그-feed 관계를 바탕으로 한 리스트 추출
 class FeedAlgorithm:
@@ -1733,7 +1754,7 @@ class FeedAlgorithm:
         return self.__feed_chaos_graph.disconnect_feed_with_user(feed_node=feed_node, user_node=user_node)
 
     # 추천 feed를 찾아줌
-    def recommand_next_feed(self, start_fid:str, mine_uid:str, hashtag_ranking:list, history:list):
+    def recommend_next_feed(self, start_fid:str, mine_uid:str, hashtag_ranking:list, history:list):
 
         # 추천 Feed를 찾을 때, 다음의 경우를 고려했어야 했음.
         # 문제점 : 노드에 연결된 엣지가 부득이하게 하나만 존재하는 경우
@@ -1771,18 +1792,18 @@ class FeedAlgorithm:
 
         # User-Feed 간의 관계를 이용해 찾음
         # Hash-Feed 간의 관계를 이용해 찾음
-        user_feed_recommand_list = self.__feed_chaos_graph.feed_recommand_by_like_user(start_node=start_feed_node)
-        hash_feed_recommand_list = self.__feed_chaos_graph.feed_recommand_by_hashtag(start_node=start_feed_node)
+        user_feed_recommend_list = self.__feed_chaos_graph.feed_recommend_by_like_user(start_node=start_feed_node)
+        hash_feed_recommend_list = self.__feed_chaos_graph.feed_recommend_by_hashtag(start_node=start_feed_node)
 
         # 5에 대한 경우.
         # User가 Like했던 Feed들을 중심으로 찾음
         # 매가의 중심은 현재 Feed를 보고 있는 "나"라는 점.
 
         my_user_node = self.__user_node_avltree.get(mine_uid)
-        me_feed_recommand_list = self.__feed_chaos_graph.feed_recommand_by_me(watch_me=my_user_node)
+        me_feed_recommend_list = self.__feed_chaos_graph.feed_recommend_by_me(watch_me=my_user_node)
 
         # 6. 해시태그 랭킹에 대한 추천
-        ranking_feed_recommand_list = self.__feed_chaos_graph.feed_recommand_by_ranking(hashtag_rank=hashtag_ranking)
+        ranking_feed_recommend_list = self.__feed_chaos_graph.feed_recommend_by_ranking(hashtag_rank=hashtag_ranking)
 
 
         # 7. 완전 무작위 Feed List 추출.
@@ -1792,7 +1813,7 @@ class FeedAlgorithm:
         random_feed_samples = self.__random_feed_sample()
 
         # Feed를 찾은 리스트들을 모두 합함.
-        result_fid_list = user_feed_recommand_list + hash_feed_recommand_list + me_feed_recommand_list + ranking_feed_recommand_list + random_feed_samples
+        result_fid_list = user_feed_recommend_list + hash_feed_recommend_list + me_feed_recommend_list + ranking_feed_recommend_list + random_feed_samples
 
         # 히스토리에 존재하는 피드, 즉, 이전, 현재까지 본 모든 Feed들을 제외해야함
         for fid in result_fid_list:
@@ -1801,4 +1822,32 @@ class FeedAlgorithm:
 
         return None
 
+    def recommend_next_feed_not_login(self, start_fid:str, hashtag_ranking:list, history:list):
+        # User 개인적인 정보를 활용할 수 없음. 따라서, Feed에 관해서만 추천을 뽑아내야함.
+        # 1. Feed - User 간의 관계를 이용한 추출
+        # 2. Feed - HashTag 간의 관계를 이용한 추출
+        # 3. Hashtag 랭킹에 대해 Feed 추출
+        # 4. 무작위 해시태그 20개 추출
 
+        start_feed_node = self.__feed_node_avltree.get(key=start_fid)
+
+        # User-Feed 간의 관계를 이용해 찾음
+        # Hash-Feed 간의 관계를 이용해 찾음
+        user_feed_recommend_list = self.__feed_chaos_graph.feed_recommend_by_like_user(start_node=start_feed_node)
+        hash_feed_recommend_list = self.__feed_chaos_graph.feed_recommend_by_hashtag(start_node=start_feed_node)
+
+        # 6. 해시태그 랭킹에 대한 추천
+        ranking_feed_recommend_list = self.__feed_chaos_graph.feed_recommend_by_ranking(hashtag_rank=hashtag_ranking)
+
+        # 15개 정도의 무작위 Feed를 추출해내서 추천 Feed 리스트에 담음
+        random_feed_samples = self.__random_feed_sample()
+
+        # Feed를 찾은 리스트들을 모두 합함.
+        result_fid_list = user_feed_recommend_list + hash_feed_recommend_list + ranking_feed_recommend_list + random_feed_samples
+
+        # 히스토리에 존재하는 피드, 즉, 이전, 현재까지 본 모든 Feed들을 제외해야함
+        for fid in result_fid_list:
+            if fid not in history:
+                return fid
+
+        return None

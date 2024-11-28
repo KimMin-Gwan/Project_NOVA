@@ -135,7 +135,7 @@ class FeedAlgo:
         feed_node = self.feed_node_avltree.get(key=feed.fid)
 
 
-    def recommand_next_feed(self, feed:Feed, history:list):
+    def recommend_next_feed(self, feed:Feed, history:list):
         # 1. 유저와 피드 간의 관계
         # 2. 해시태그와 피드 간의 관계
 
