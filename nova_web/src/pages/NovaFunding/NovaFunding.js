@@ -4,6 +4,7 @@ import menu from "./../../img/menu-burger.png";
 import more_icon from "./../../img/back.png";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import FundingSlider from "../../component/FundingSlider";
 export default function NovaFunding() {
   let navigate = useNavigate();
 
@@ -75,7 +76,7 @@ export default function NovaFunding() {
   }, []);
 
   function fetchFanProj() {
-    fetch(`https://nova-platform.kr/nova_fund_system/home/get_bias_project`, {
+    fetch(`https://nova-platform.kr/nova_fund_system/home/get_fan_funding`, {
       credentials: "include",
     })
       .then((response) => response.json())
@@ -167,7 +168,7 @@ export default function NovaFunding() {
           </div>
           <p>최애가 직접 만드는 펀딩 프로젝트</p>
         </div>
-        {biasProjects.map((project, i) => {
+        {/* {biasProjects.map((project, i) => {
           return (
             <div key={project.pid + i} className={style["funding-main"]}>
               <div className={style["album-area"]}>
@@ -188,7 +189,8 @@ export default function NovaFunding() {
               </div>
             </div>
           );
-        })}
+        })} */}
+        <FundingSlider biasProjects={biasProjects} />
       </section>
 
       <section className={style["recommand-box"]}>

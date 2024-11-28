@@ -41,6 +41,7 @@ import Week100 from "./pages/MainPage/Week100.js";
 import DuckFunding from "./pages/NovaFunding/DuckFunding/DuckFunding.js";
 import SuccessFunding from "./pages/NovaFunding/DuckFunding/SuccessFunding.js";
 import RankingFunding from "./pages/NovaFunding/FundingRanking/FundingRanking.js";
+import OpenRanking from "./pages/NovaFunding/FundingRanking/OpenRanking.js";
 
 import logo from "./img/NOVA_Platform.png";
 // 401 이면 바이어스 격자 무늬로 띄우기
@@ -162,6 +163,7 @@ function App() {
       <Route path="/duck_funding" element={<DuckFunding />}></Route>
       <Route path="/success_funding" element={<SuccessFunding />}></Route>
       <Route path="/funding_ranking" element={<RankingFunding />}></Route>
+      <Route path="/open_ranking" element={<OpenRanking />}></Route>
       <Route path="*" element={<div>404 Error</div>}></Route>
       {/* <Route path="/test" element={<Box />}></Route> */}
       {/* <Route path="/planet" element={<PlanetList />}></Route> */}
@@ -207,15 +209,11 @@ function App() {
                   </div>
                 </header>
                 <Banner url={url}></Banner>
-                <h2 className={`authen ${getModeClass(brightMode)}`}>
-                  <p>최애</p>
-                  <p>차애</p>
-                </h2>
+
                 <section className="my-bias">
                   <MyBias url={url} showBox={showBox} blackBox={blackBox}></MyBias>
                 </section>
               </div>
-              <hr className={`hr-line ${getModeClass(brightMode)}`}></hr>
               <section className="contents">
                 <MainPart brightMode={brightMode} />
                 <hr className={`hr-line ${getModeClass(brightMode)}`}></hr>
