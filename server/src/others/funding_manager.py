@@ -6,7 +6,7 @@
 # 1. 검색 요청에 대한 검색결과 반환 -> ProjectSearchEngine
 # 2. 새로운 프로젝트 작성에 대한 도움 -> MakeNewProejctManager
 # 3. 프로젝트 후원에 대한 모든 행동 -> ProjectInvesingManager
-# 4. 프로젝트 추천 및 통계 시스템  ->  ProjectrecommendManager
+# 4. 프로젝트 추천 및 통계 시스템  ->  ProjectRecommandManager
 
 # 위 시스템은 모두 각각의 클래스로 구분될 것임
 
@@ -22,7 +22,7 @@ class FundingProjectManager:
         #self.__project_search_engine = ProjectSearchEngine()
         #self.__make_new_project_manager = MakeNewProjectManage()
         #self.__project_investing_mananger = ProjectInverstingManager()
-        #self.__project_recommend_manager = ProjectrecommendManager()
+        #self.__project_recommand_manager = ProjectRecommandManager()
 
     # 테스트용으로 사용되는 프로젝트 임시 반환 함수(갯수만큼 드림)
     def get_sample_project(self, num_project):
@@ -45,7 +45,7 @@ class FundingProjectManager:
 
 class ManagedProject:
     def __init__(self, pid="", pname="", uid="", progress="",
-                 expire_date="", make_date=""):
+                 expire_date="", make_date="", ptype="default"):
         self.pid = pid  # 프로젝트 아이디
         # 이거 필요한가? 
         self.pname = pname # 프로젝트 이름  
@@ -53,6 +53,7 @@ class ManagedProject:
         self.progress =progress # 달성률
         self.expire_date = expire_date
         self.make_date = make_date
+        self.ptype = ptype
 
 
 class ProjectSearchEngine:
@@ -61,6 +62,7 @@ class ProjectSearchEngine:
 
         self.__project_table = []  # 최신 기준으로  정렬
         self.__project_avltree = AVLTree()  # 검색을 위한 트리
+        self.__endpoint = 0  # 이건 아직 펀딩중인 프로젝트의 마지막 엔드 포인트
 
     # 테이블 초기화 함수
     def __init_table(self, database:Local_Database):
@@ -98,14 +100,79 @@ class ProjectSearchEngine:
             return managed_project
 
 
-    # 1. 프로젝트 이름으로 검색하기
-    def try_get_project_with_pname(self, pname):
-        return
-    
-    # 2. 프로젝트 작성자로 검색하기
-    def try_get_project_with_uname(self, uname):
-        return
+    # 1. 프로젝트 이름으로 검색하기 -> 단일
+    def try_get_project_with_pname(self, pname, ptype="all", num_project=1, index=-1):
+        result_pid = []
+        result_index= -1
 
+        if index == -1:
+            index = len(self.__project_table)
+
+        search_range = self.__project_table[:index][::-1]
+
+        if index < 0 or index > len(self.__project_table):
+            return result_pid, -3
+
+        count = 0
+
+        for i, managed_project in enumerate(search_range):
+            managed_project:ManagedProject = managed_project
+
+            if count == num_project:
+                break
+
+            if ptype == "all":
+                if managed_project.pname == pname:
+                    result_pid.append(managed_project.pid)
+                else:
+                    continue
+            else:
+                if managed_project.ptype == ptype:
+                    if managed_project.pname == pname:
+                        result_pid.append(managed_project.pid)
+                    else:
+                        continue
+                else:
+                    continue
+
+            result_index = index - 1 - i  # 실제 self.__feed_table에서의 인덱스 계산
+            count += 1
+
+        return result_pid, result_index
+
+    # 2. 프로젝트 최신순위로 검색
+    def try_get_project_with_uname(self, ptype="all", num_project=1, index=-1):
+        result_pid = []
+        result_index= -1
+
+        if index == -1:
+            index = len(self.__project_table)
+
+        search_range = self.__project_table[:index][::-1]
+
+        if index < 0 or index > len(self.__project_table):
+            return result_pid, -3
+
+        count = 0
+
+        for i, managed_project in enumerate(search_range):
+            managed_project:ManagedProject = managed_project
+
+            if count == num_project:
+                break
+
+            if ptype == "all":
+                result_pid.append(managed_project.pid)
+            else:
+                if managed_project.ptype == ptype:
+                    result_pid.append(managed_project.pid)
+                else:
+                    continue
+
+            result_index = index - 1 - i  # 실제 self.__feed_table에서의 인덱스 계산
+            count += 1
+
+        return result_pid, result_index
 
 
     
