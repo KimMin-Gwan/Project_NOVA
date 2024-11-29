@@ -37,6 +37,11 @@
   gap: 10px;
   cursor: pointer;
   margin-bottom: 10px;
+
+  &:hover {
+    transition: 0.2s;
+    background-color: #fff;
+  }
 }
 
 /* 마지막 선 없음 */
