@@ -6,7 +6,7 @@
 # 1. 검색 요청에 대한 검색결과 반환 -> ProjectSearchEngine
 # 2. 새로운 프로젝트 작성에 대한 도움 -> MakeNewProejctManager
 # 3. 프로젝트 후원에 대한 모든 행동 -> ProjectInvesingManager
-# 4. 프로젝트 추천 및 통계 시스템  ->  ProjectrecommendManager
+# 4. 프로젝트 추천 및 통계 시스템  ->  ProjectrecommandManager
 
 # 위 시스템은 모두 각각의 클래스로 구분될 것임
 
@@ -22,7 +22,7 @@ class FundingProjectManager:
         #self.__project_search_engine = ProjectSearchEngine()
         #self.__make_new_project_manager = MakeNewProjectManage()
         #self.__project_investing_mananger = ProjectInverstingManager()
-        #self.__project_recommend_manager = ProjectrecommendManager()
+        #self.__project_recommand_manager = ProjectrecommandManager()
 
     # 테스트용으로 사용되는 프로젝트 임시 반환 함수(갯수만큼 드림)
     def get_sample_project(self, num_project):

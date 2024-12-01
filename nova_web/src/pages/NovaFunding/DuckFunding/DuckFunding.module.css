@@ -142,13 +142,13 @@
 
 
 /* 덕질 펀딩 프로젝트 */
-.recommend-project {
+.recommand-project {
   display: flex;
   justify-content: space-around;
   gap: 16px;
 }
 
-.recommend-button {
+.recommand-button {
   width: 100px;
   height: 100px;
   border: none;
@@ -167,13 +167,13 @@
   box-shadow: 0 0 0 4px transparent;
 }
 
-.recommend-button.active {
+.recommand-button.active {
   box-shadow: 0 0 0 4px #8EBFF5; /* 파란색 간격 추가 */
   background-color: #BFDFFC; /* 클릭 시 배경 색상 변경 (선택 사항) */
 }
 
 
-.recommend-button:hover {
+.recommand-button:hover {
   border-color: lightgray;
 }
 

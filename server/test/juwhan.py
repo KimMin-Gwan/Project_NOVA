@@ -75,13 +75,13 @@ def try_dislike_feed():
     result = requests.get(url="http://127.0.0.1:6000/testing/try_dislike_feed",params=params)
     print(result)
 
-def try_recommend_feed():
+def try_recommand_feed():
     params = {
         'fid' : ''
 
     }
 
-    result = requests.get(url="http://127.0.0.1:6000/testing/try_recommend_feed",params=params)
+    result = requests.get(url="http://127.0.0.1:6000/testing/try_recommand_feed",params=params)
     print(result)
 # try_add_user_test()
 # try_delete_user_test()
