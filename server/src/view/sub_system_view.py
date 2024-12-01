@@ -159,14 +159,14 @@ class Sub_Service_View(Master_View):
 
             return True
 
-    def recommand_feed_test(self):
-        @self.__app.get("/testing/try_recommand_feed")
-        def try_recommand_feed(fid:str, test_user:User, history:list):
-            recommanded_fid = self.__feed_search_engine.try_recommand_feed(fid, history, test_user)
-            if recommanded_fid:
-                print(f'successfully recommand, fid = {recommanded_fid}')
+    def recommend_feed_test(self):
+        @self.__app.get("/testing/try_recommend_feed")
+        def try_recommend_feed(fid:str, test_user:User, history:list):
+            recommended_fid = self.__feed_search_engine.try_recommend_feed(fid, history, test_user)
+            if recommended_fid:
+                print(f'successfully recommend, fid = {recommended_fid}')
             else:
-                print(f"feed doesn't recommand..")
+                print(f"feed doesn't recommend..")
 
             return True
 

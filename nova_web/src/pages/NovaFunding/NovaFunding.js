@@ -21,7 +21,7 @@ export default function NovaFunding() {
   }
 
   function fetchTag() {
-    fetch(`https://nova-platform.kr/nova_fund_system/home/get_recommand_tag`, {
+    fetch(`https://nova-platform.kr/nova_fund_system/home/get_recommend_tag`, {
       credentials: "include",
     })
       .then((response) => response.json())

@@ -54,8 +54,8 @@ class Funding_Service_View(Master_View):
             return response
 
         # 홈에서 추천 tag 받기
-        @self.__app.get('/nova_fund_system/home/get_recommand_tag')
-        def get_home_recommand_tag(request:Request):
+        @self.__app.get('/nova_fund_system/home/get_recommend_tag')
+        def get_home_recommend_tag(request:Request):
             request_manager = RequestManager()
             data_payload = ProjectGetRequset()
 
@@ -64,7 +64,7 @@ class Funding_Service_View(Master_View):
                 #raise request_manager.credentials_exception
 
             funding_controller =Funding_Controller()
-            model = funding_controller.get_recommand_tag(
+            model = funding_controller.get_recommend_tag(
                 database=self.__database,
                 request=request_manager,
                 funding_project_manager=self.__funding_project_manager,
@@ -165,7 +165,7 @@ class Funding_Service_View(Master_View):
 
         #------------------------ 프로젝트 리스트 페이지에서 요청 ----------------------------
 
-        @self.__app.get('/nova_fund_system/project_list/get_recommand_funding')
+        @self.__app.get('/nova_fund_system/project_list/get_recommend_funding')
         def get_project_list(request:Request, key:Optional[str]="" ):
             request_manager = RequestManager()
             data_payload = ProjectGetRequset(key=key)
@@ -199,7 +199,7 @@ class Funding_Service_View(Master_View):
                 #raise request_manager.credentials_exception
 
             feed_controller=()
-            model = feed_controller.get_feed_with_recommand(database=self.__database,
+            model = feed_controller.get_feed_with_recommend(database=self.__database,
                                                         request=request_manager,
                                                         feed_search_engine=self.__feed_search_engine)
 
