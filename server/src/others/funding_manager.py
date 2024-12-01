@@ -109,13 +109,9 @@ class ProjectSearchEngine:
         for i, managed_project in enumerate(self.__project_table[::-1]):
             managed_project:ManagedProject = managed_project
             if managed_project.expire_date > now:
-                print(now)
                 index = i
         # 유효 기간이 끝난 데이터가 있는 제일 끝 데이터를 쓸것
         self.__endpoint = index 
-
-        print(self.__project_table[::-1][index].pname)
-
         print(f'INFO<-[      {num_project} NOVA PROJECT IN SEARCH ENGINE NOW READY.')
         print(f"INFO<-[      {self.__endpoint} IS THE LAST PROJECT THAT WORKING")
         return
