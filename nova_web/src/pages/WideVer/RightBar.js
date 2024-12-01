@@ -9,15 +9,26 @@ import { Link } from "react-router-dom";
 export default function RightBar({ brightMode }) {
   let navigate = useNavigate();
   let [searchWord, setSearchWord] = useState("");
+  let [searchHistory, setSearchHistory] = useState(storeSearchHistory);
+
+  function storeSearchHistory() {
+    const searchHistory = localStorage.getItem("history");
+    return searchHistory ? JSON.parse(searchHistory) : [];
+  }
 
   function handleNavigate() {
     if (!searchWord) {
       navigate("/");
     } else {
       navigate(`/feed_list/search_feed?keyword=${searchWord}`);
+      setSearchHistory([...searchHistory, searchWord]);
       setSearchWord("");
     }
   }
+
+  useEffect(() => {
+    localStorage.setItem("history", JSON.stringify(searchHistory));
+  }, [searchHistory]);
 
   function onKeyDown(event) {
     if (event.key === "Enter") {
@@ -28,6 +39,12 @@ export default function RightBar({ brightMode }) {
   function onChangeSearchWord(e) {
     setSearchWord(e.target.value);
   }
+
+  function onDeleteHistory() {
+    localStorage.removeItem("history");
+    setSearchHistory([]);
+  }
+
   return (
     <div className={style["wrap_container"]}>
       <div
@@ -49,8 +66,12 @@ export default function RightBar({ brightMode }) {
         </div>
         <span className={style["search-memo"]}>
           <p>검색기록</p>
-          <p>X</p>
+          <p onClick={onDeleteHistory}>X</p>
         </span>
+        {searchHistory.length > 0 &&
+          searchHistory.map((history, i) => {
+            return <div>{history}</div>;
+          })}
       </div>
 
       <div className={style["nova_direct-box"]}>
