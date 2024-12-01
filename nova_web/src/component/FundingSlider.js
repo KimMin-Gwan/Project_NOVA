@@ -2,11 +2,13 @@ import "./slider.css";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import style from "./../pages/MainPage/MainPart.module.css";
+import s_style from "./FundingSlider.module.css";
+import style from "./../pages/NovaFunding/NovaFunding.module.css";
 import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 
 import { getModeClass } from "./../App.js";
+import ProgressBar from "./ProgressBar.js";
 const FundingSlider = ({ biasProjects, brightMode }) => {
   const showMaxCnt = 1;
 
@@ -34,14 +36,18 @@ const FundingSlider = ({ biasProjects, brightMode }) => {
   }, [brightMode]);
 
   return (
-    <div className={`slider-container ${brightMode === "dark" ? "dark-mode" : "bright-mode"}`}>
+    <div
+      className={`${s_style["slider-container"]} ${
+        brightMode === "dark" ? "dark-mode" : "bright-mode"
+      }`}
+    >
       <Slider {...settings}>
         {biasProjects.map((project, i) => {
           return (
             <div key={project.pid + i} className={style["funding-main"]}>
               {/*  
               {style["album-area"]}*/}
-              <div className="slide-box">
+              <div className={` ${style["album-area"]}`}>
                 <div className={style["album-img"]}>
                   <img src={`${project.head_image[0]}`} />
                 </div>
@@ -52,7 +58,8 @@ const FundingSlider = ({ biasProjects, brightMode }) => {
                 <p>펀딩 가능 기간 | {project.expire_date} 까지</p>
                 <p>{project.now_progress}개 투자됨</p>
                 <div className={style["progress-bar"]}>
-                  <progress value="70" max="100"></progress>
+                  <ProgressBar point={project.int_progress} />
+                  {/* <progress value="70" max="100"></progress> */}
                   <p>{project.int_progress}%</p>
                 </div>
                 <button>자세히보기</button>
