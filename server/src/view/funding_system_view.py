@@ -163,9 +163,10 @@ class Funding_Service_View(Master_View):
             body_data = model.get_response_form_data(self._head_parser)
             return body_data
 
-        #------------------------ 프로젝트 리스트 페이지에서 요청 ----------------------------
+        #------------------------ 프로젝트 덕질 프로젝트 페이지에서 요청 ----------------------------
 
-        @self.__app.get('/nova_fund_system/project_list/get_recommand_funding')
+        # 1. 이미 목표 달성에 성공한 프로젝트
+        @self.__app.get('/nova_fund_system/fan_project/achieve_the_goal')
         def get_project_list(request:Request, key:Optional[str]="" ):
             request_manager = RequestManager()
             data_payload = ProjectGetRequset(key=key)
@@ -179,11 +180,203 @@ class Funding_Service_View(Master_View):
                 database=self.__database,
                 request=request_manager,
                 funding_project_manager=self.__funding_project_manager,
-                num_project=4)
+                num_project=3)
 
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response
+        
+        # 2. 마감 임박 프로젝트
+        @self.__app.get('/nova_fund_system/fan_project/soon_expire')
+        def get_project_list(request:Request):
+            request_manager = RequestManager()
+            data_payload = ProjectGetRequset()
+
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            #if not request_manager.jwt_payload.result:
+                #raise request_manager.credentials_exception
+
+            funding_controller =Funding_Controller()
+            model = funding_controller.get_sample_project(
+                database=self.__database,
+                request=request_manager,
+                funding_project_manager=self.__funding_project_manager,
+                num_project=3)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
+        # 3. 추천 프로젝트 -> 최신순
+        @self.__app.get('/nova_fund_system/fan_project/recommand_project')
+        def get_project_list(request:Request):
+            request_manager = RequestManager()
+            data_payload = ProjectGetRequset()
+
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            #if not request_manager.jwt_payload.result:
+                #raise request_manager.credentials_exception
+
+            funding_controller =Funding_Controller()
+            model = funding_controller.get_sample_project(
+                database=self.__database,
+                request=request_manager,
+                funding_project_manager=self.__funding_project_manager,
+                num_project=6)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
+        # 4. 참여 프로젝트
+        @self.__app.get('/nova_fund_system/fan_project/funding_project')
+        def get_project_list(request:Request):
+            request_manager = RequestManager()
+            data_payload = ProjectGetRequset()
+
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            #if not request_manager.jwt_payload.result:
+                #raise request_manager.credentials_exception
+
+            funding_controller =Funding_Controller()
+            model = funding_controller.get_sample_project(
+                database=self.__database,
+                request=request_manager,
+                funding_project_manager=self.__funding_project_manager,
+                num_project=6)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
+        # 5. 모금 프로젝트
+        @self.__app.get('/nova_fund_system/fan_project/donation_project')
+        def get_project_list(request:Request):
+            request_manager = RequestManager()
+            data_payload = ProjectGetRequset()
+
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            #if not request_manager.jwt_payload.result:
+                #raise request_manager.credentials_exception
+
+            funding_controller =Funding_Controller()
+            model = funding_controller.get_sample_project(
+                database=self.__database,
+                request=request_manager,
+                funding_project_manager=self.__funding_project_manager,
+                num_project=6)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
+        # ----- 여기는 덕질프로젝트에서 전쳅보기하면 줄 거 -------------
+
+        # 1. 이미 목표 달성에 성공한 프로젝트
+        @self.__app.get('/nova_fund_system/fan_project_list/achieve_the_goal')
+        def get_project_list(request:Request, key:Optional[str]="" ):
+            request_manager = RequestManager()
+            data_payload = ProjectGetRequset(key=key)
+
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            #if not request_manager.jwt_payload.result:
+                #raise request_manager.credentials_exception
+
+            funding_controller =Funding_Controller()
+            model = funding_controller.get_sample_project(
+                database=self.__database,
+                request=request_manager,
+                funding_project_manager=self.__funding_project_manager,
+                num_project=10)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+        
+        # 2. 마감 임박 프로젝트
+        @self.__app.get('/nova_fund_system/fan_project_list/soon_expire')
+        def get_project_list(request:Request, key:Optional[str]="" ):
+            request_manager = RequestManager()
+            data_payload = ProjectGetRequset(key=key)
+
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            #if not request_manager.jwt_payload.result:
+                #raise request_manager.credentials_exception
+
+            funding_controller =Funding_Controller()
+            model = funding_controller.get_sample_project(
+                database=self.__database,
+                request=request_manager,
+                funding_project_manager=self.__funding_project_manager,
+                num_project=10)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
+        # 3. 추천 프로젝트 -> 최신순
+        @self.__app.get('/nova_fund_system/fan_project_list/recommand_project')
+        def get_project_list(request:Request, key:Optional[str]="" ):
+            request_manager = RequestManager()
+            data_payload = ProjectGetRequset(key=key)
+
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            #if not request_manager.jwt_payload.result:
+                #raise request_manager.credentials_exception
+
+            funding_controller =Funding_Controller()
+            model = funding_controller.get_sample_project(
+                database=self.__database,
+                request=request_manager,
+                funding_project_manager=self.__funding_project_manager,
+                num_project=10)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
+        # 4. 참여 프로젝트
+        @self.__app.get('/nova_fund_system/fan_project_list/funding_project')
+        def get_project_list(request:Request, key:Optional[str]="" ):
+            request_manager = RequestManager()
+            data_payload = ProjectGetRequset(key=key)
+
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            #if not request_manager.jwt_payload.result:
+                #raise request_manager.credentials_exception
+
+            funding_controller =Funding_Controller()
+            model = funding_controller.get_sample_project(
+                database=self.__database,
+                request=request_manager,
+                funding_project_manager=self.__funding_project_manager,
+                num_project=10)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
+        # 5. 모금 프로젝트
+        @self.__app.get('/nova_fund_system/fan_project_list/donation_project')
+        def get_project_list(request:Request, key:Optional[str]="" ):
+            request_manager = RequestManager()
+            data_payload = ProjectGetRequset(key=key)
+
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            #if not request_manager.jwt_payload.result:
+                #raise request_manager.credentials_exception
+
+            funding_controller =Funding_Controller()
+            model = funding_controller.get_sample_project(
+                database=self.__database,
+                request=request_manager,
+                funding_project_manager=self.__funding_project_manager,
+                num_project=10)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
         
     def post_route(self, endpoint:str):
         # 새로운 프로젝트를 요청할 때 넣는 요청

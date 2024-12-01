@@ -5,12 +5,14 @@
         "uid": "4133-afgh-1565",
         "uname": "QWER갤러리",
         "user_info": "http://www.naver.com",
-        "make_date": "2024/11/25",
-        "expire_date": "2025/11/26",
+        "make_date": "2024/10/20",
+        "expire_date": "2024/11/20",
         "head_image": ["https://kr.object.ncloudstorage.com/nova-project-image/1.png"],
         "body_image": [],
         "now_progress": 12400,
-        "goal_progress": 150000
+        "goal_progress": 150000,
+        "ptype": "fan",
+        "ftype": "donate"
     },
     {
         "pid": "2",
@@ -18,12 +20,14 @@
         "uid": "4133-afgh-1565",
         "uname": "언네임",
         "user_info": "http://www.naver.com",
-        "make_date": "2024/11/25",
-        "expire_date": "2025/11/26",
+        "make_date": "2024/10/24",
+        "expire_date": "2024/11/24",
         "head_image": ["https://kr.object.ncloudstorage.com/nova-project-image/2.png"],
         "body_image": [],
         "now_progress": 14300,
-        "goal_progress": 123000
+        "goal_progress": 123000,
+        "ptype": "bias",
+        "ftype": "attend"
     },
     {
         "pid": "3",
@@ -31,12 +35,14 @@
         "uid": "4133-afgh-1565",
         "uname": "바위게",
         "user_info": "http://www.naver.com",
-        "make_date": "2024/11/20",
-        "expire_date": "2025/11/21",
+        "make_date": "2024/10/30",
+        "expire_date": "2024/11/30",
         "head_image": ["https://kr.object.ncloudstorage.com/nova-project-image/3.png"],
         "body_image": [],
         "now_progress": 8000,
-        "goal_progress": 10000
+        "goal_progress": 10000,
+        "ptype": "fan",
+        "ftype": "attend"
     },
     {
         "pid": "4",
@@ -45,11 +51,13 @@
         "uname": "천유정",
         "user_info": "http://www.naver.com",
         "make_date": "2024/11/18",
-        "expire_date": "2025/11/19",
+        "expire_date": "2024/12/18",
         "head_image": ["https://kr.object.ncloudstorage.com/nova-project-image/4.png"],
         "body_image": [],
         "now_progress": 450,
-        "goal_progress": 5000
+        "goal_progress": 5000,
+        "ptype": "bias",
+        "ftype": "attend"
     },
     {
         "pid": "5",
@@ -57,12 +65,14 @@
         "uid": "4133-afgh-1565",
         "uname": "잉친이",
         "user_info": "http://www.naver.com",
-        "make_date": "2024/11/22",
-        "expire_date": "2025/11/23",
+        "make_date": "2024/11/20",
+        "expire_date": "2024/12/20",
         "head_image": ["https://kr.object.ncloudstorage.com/nova-project-image/5.png"],
         "body_image": [],
         "now_progress": 1300,
-        "goal_progress": 15000
+        "goal_progress": 15000,
+        "ptype": "bias",
+        "ftype": "attend"
     },
     {
         "pid": "6",
@@ -70,12 +80,14 @@
         "uid": "4133-afgh-1565",
         "uname": "임영웅 공식 팬클럽",
         "user_info": "http://www.naver.com",
-        "make_date": "2024/11/19",
-        "expire_date": "2025/11/20",
+        "make_date": "2024/11/25",
+        "expire_date": "2024/12/20",
         "head_image": ["https://kr.object.ncloudstorage.com/nova-project-image/6.png"],
         "body_image": [],
         "now_progress": 8000,
-        "goal_progress": 20000
+        "goal_progress": 20000,
+        "ptype": "fan",
+        "ftype": "donate"
     },
     {
         "pid": "7",
@@ -83,11 +95,13 @@
         "uid": "4133-afgh-1565",
         "uname": "유애나",
         "user_info": "http://www.naver.com",
-        "make_date": "2024/11/23",
-        "expire_date": "2025/11/24",
+        "make_date": "2024/11/26",
+        "expire_date": "2024/12/26",
         "head_image": ["https://kr.object.ncloudstorage.com/nova-project-image/7.png"],
         "body_image": [],
         "now_progress": 500,
-        "goal_progress": 1000
+        "goal_progress": 1000,
+        "ptype": "fan",
+        "ftype": "donate"
     }
 ]

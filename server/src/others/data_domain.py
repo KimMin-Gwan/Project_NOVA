@@ -487,7 +487,7 @@ class Notice:
 class Project:
     def __init__(self, pid="", pname="", uid="", uname="", user_info="",
                  make_date="", expire_date="", head_image=[], body_image=[],
-                 now_progress=0, goal_progress=0):
+                 now_progress=0, goal_progress=0, ptype = "", ftype=""):
         self.pid = pid
         self.pname = pname
         self.uid = uid
@@ -500,6 +500,8 @@ class Project:
         self.now_progress = now_progress
         self.goal_progress = goal_progress
         self.int_progress = 0 # 이건 달성 퍼센트임
+        self.ptype = ptype
+        self.ftype = ftype
 
         # 아마 밑에 추가될 내용은 결제 관련인데
         # 결제는 걍 미침... 새로 데이터 도메인 파는게 답임
@@ -519,6 +521,8 @@ class Project:
             self.body_image = copy.copy(dict_data['body_image'])
             self.now_progress = dict_data['now_progress']
             self.goal_progress = dict_data['goal_progress']
+            self.ptype = dict_data['ptype']
+            self.ftype = dict_data['ftype']
         except KeyError as e:
             raise DictMakingError(error_type=f"Missing key: {str(e)}")
 
@@ -535,7 +539,9 @@ class Project:
             "body_image": copy.copy(self.body_image),
             "now_progress": self.now_progress,
             "goal_progress": self.goal_progress,
-            "int_progress" : self.int_progress
+            "int_progress" : self.int_progress,
+            "ptype" : self.ptype,
+            "ftype" : self.ftype
         }
 
 class ProjectSales:
@@ -593,4 +599,4 @@ class ProjectPurchase:
     def __init__(self, ppid="", pid="", psid="", uid="",
                  count=0, total=0, unit_price=0, purchase_date=""
                  ):
-        self.ppid
+        self.ppid = ppid
