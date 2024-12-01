@@ -159,13 +159,11 @@ class FeedSearchEngine:
         # 그래야 여기에 If문을 통한 로직을 추가하던가, 아니면 기존 로직에서 바꾸든가를 알 수 있을듯
         # 근데 이미 비로그인 유저에 대한 로직을 만들긴 했음
 
-        # if User is logined:
         fid = self.__recommend_manager.get_recommend_feed(fid=fid,
                                                           history=history,
                                                           user=user
                                                           )
 
-        # else
         # fid = self.__recommend_manager.get_recommend_feed_not_login(fid=fid, history=history)
         return fid
 
@@ -1470,6 +1468,10 @@ class FeedChaosGraph:
 
     # noinspection PyMethodMayBeStatic
     def feed_recommend_by_me(self, watch_me:UserNode, max_like=10, max_related_user=4, max_feed_find=5):
+        # 비로그인 유저는 빈 리스트를 반환
+        if watch_me.get_id() == "":
+            return []
+
 
         # 중복된 Feed를 방지하기 위해서
         recommend_list = set()
@@ -1611,6 +1613,10 @@ class FeedAlgorithm:
         feed_datas = database.get_all_data(target="fid")
         user_list = []
         feed_list = []
+
+        # 빈 유저를 생성 후, 추가하는 과정
+        null_user = User()
+        self.add_user_node(null_user)
 
         # 유저 데이터 문자열 딕셔너리 -> User() 변환
         for user_data in user_datas:
@@ -1817,36 +1823,6 @@ class FeedAlgorithm:
 
         # Feed를 찾은 리스트들을 모두 합함.
         result_fid_list = user_feed_recommend_list + hash_feed_recommend_list + me_feed_recommend_list + ranking_feed_recommend_list + random_feed_samples
-
-        # 히스토리에 존재하는 피드, 즉, 이전, 현재까지 본 모든 Feed들을 제외해야함
-        for fid in result_fid_list:
-            if fid not in history:
-                return fid
-
-        return None
-
-    def recommend_next_feed_not_login(self, start_fid:str, hashtag_ranking:list, history:list):
-        # User 개인적인 정보를 활용할 수 없음. 따라서, Feed에 관해서만 추천을 뽑아내야함.
-        # 1. Feed - User 간의 관계를 이용한 추출
-        # 2. Feed - HashTag 간의 관계를 이용한 추출
-        # 3. Hashtag 랭킹에 대해 Feed 추출
-        # 4. 무작위 해시태그 20개 추출
-
-        start_feed_node = self.__feed_node_avltree.get(key=start_fid)
-
-        # User-Feed 간의 관계를 이용해 찾음
-        # Hash-Feed 간의 관계를 이용해 찾음
-        user_feed_recommend_list = self.__feed_chaos_graph.feed_recommend_by_like_user(start_node=start_feed_node)
-        hash_feed_recommend_list = self.__feed_chaos_graph.feed_recommend_by_hashtag(start_node=start_feed_node)
-
-        # 6. 해시태그 랭킹에 대한 추천
-        ranking_feed_recommend_list = self.__feed_chaos_graph.feed_recommend_by_ranking(hashtag_rank=hashtag_ranking)
-
-        # 15개 정도의 무작위 Feed를 추출해내서 추천 Feed 리스트에 담음
-        random_feed_samples = self.__random_feed_sample()
-
-        # Feed를 찾은 리스트들을 모두 합함.
-        result_fid_list = user_feed_recommend_list + hash_feed_recommend_list + ranking_feed_recommend_list + random_feed_samples
 
         # 히스토리에 존재하는 피드, 즉, 이전, 현재까지 본 모든 Feed들을 제외해야함
         for fid in result_fid_list:
