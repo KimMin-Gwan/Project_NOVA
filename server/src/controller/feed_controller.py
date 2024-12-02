@@ -168,7 +168,7 @@ class Feed_Controller:
 
 
     # 숏피드에서 다음 피드 요청할 때
-    def get_feed_with_recommand(self, database:Local_Database,
+    def get_feed_with_recommend(self, database:Local_Database,
                         request, feed_search_engine: FeedSearchEngine):
         model = FeedSearchModel(database=database)
 
@@ -176,7 +176,7 @@ class Feed_Controller:
         if request.jwt_payload != "":
             model.set_user_with_email(request=request.jwt_payload)
 
-        model.set_recommand_feed(feed_search_engine,
+        model.set_recommend_feed(feed_search_engine,
                                 fid=request.data_payload.fid,
                                 history=request.data_payload.history)
         return model

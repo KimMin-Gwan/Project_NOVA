@@ -54,8 +54,8 @@ class Funding_Service_View(Master_View):
             return response
 
         # 홈에서 추천 tag 받기
-        @self.__app.get('/nova_fund_system/home/get_recommand_tag')
-        def get_home_recommand_tag(request:Request):
+        @self.__app.get('/nova_fund_system/home/get_recommend_tag')
+        def get_home_recommend_tag(request:Request):
             request_manager = RequestManager()
             data_payload = ProjectGetRequset()
 
@@ -64,7 +64,7 @@ class Funding_Service_View(Master_View):
                 #raise request_manager.credentials_exception
 
             funding_controller =Funding_Controller()
-            model = funding_controller.get_recommand_tag(
+            model = funding_controller.get_recommend_tag(
                 database=self.__database,
                 request=request_manager,
                 funding_project_manager=self.__funding_project_manager,
@@ -208,7 +208,7 @@ class Funding_Service_View(Master_View):
             return response
 
         # 3. 추천 프로젝트 -> 최신순
-        @self.__app.get('/nova_fund_system/fan_project/recommand_project')
+        @self.__app.get('/nova_fund_system/fan_project/recommend_project')
         def get_project_list(request:Request):
             request_manager = RequestManager()
             data_payload = ProjectGetRequset()
@@ -315,7 +315,7 @@ class Funding_Service_View(Master_View):
             return response
 
         # 3. 추천 프로젝트 -> 최신순
-        @self.__app.get('/nova_fund_system/fan_project_list/recommand_project')
+        @self.__app.get('/nova_fund_system/fan_project_list/recommend_project')
         def get_project_list(request:Request, key:Optional[str]="" ):
             request_manager = RequestManager()
             data_payload = ProjectGetRequset(key=key)
@@ -392,7 +392,7 @@ class Funding_Service_View(Master_View):
                 #raise request_manager.credentials_exception
 
             feed_controller=()
-            model = feed_controller.get_feed_with_recommand(database=self.__database,
+            model = feed_controller.get_feed_with_recommend(database=self.__database,
                                                         request=request_manager,
                                                         feed_search_engine=self.__feed_search_engine)
 

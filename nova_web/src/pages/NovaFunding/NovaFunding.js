@@ -21,7 +21,7 @@ export default function NovaFunding() {
   }
 
   function fetchTag() {
-    fetch(`https://nova-platform.kr/nova_fund_system/home/get_recommand_tag`, {
+    fetch(`https://nova-platform.kr/nova_fund_system/home/get_recommend_tag`, {
       credentials: "include",
     })
       .then((response) => response.json())
@@ -123,7 +123,7 @@ export default function NovaFunding() {
         이미지박스
         <div className={style["arrow-icon"]}>화살표</div>
       </div>
-      <section className={style["recommand-box"]}>
+      <section className={style["recommend-box"]}>
         <div className={style["title-box"]}>
           <h2 className={style["title-text"]}>이런 펀딩 프로젝트는 어때요?</h2>
           <img src={more_icon} className={style["more-icon"]}></img>
@@ -193,7 +193,7 @@ export default function NovaFunding() {
         <FundingSlider biasProjects={biasProjects} />
       </section>
 
-      <section className={style["recommand-box"]}>
+      <section className={style["recommend-box"]}>
         <div className={style["title-box"]}>
           <h2 className={style["title-text"]}>베스트 프로젝트 모두 보기</h2>
         </div>
