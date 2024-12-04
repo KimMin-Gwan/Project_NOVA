@@ -162,7 +162,7 @@ function App() {
       <Route path="/like_funding" element={<LikeFunding />}></Route>
       <Route path="/week100" element={<Week100 />}></Route>
       <Route path="/duck_funding" element={<DuckFunding />}></Route>
-      <Route path="/success_funding" element={<SuccessFunding />}></Route>
+      <Route path="/funding_project/:type" element={<SuccessFunding />}></Route>
       <Route path="/funding_ranking" element={<RankingFunding />}></Route>
       <Route path="/open_ranking" element={<OpenRanking />}></Route>
       <Route path="/moresee_funding" element={<MoreSeeFunding />}></Route>
@@ -194,7 +194,11 @@ function App() {
                       navigate("/");
                     }}
                   >
-                    <img src={logo} alt="logo" className={`logo-st ${getModeClass(brightMode)}`}></img>
+                    <img
+                      src={logo}
+                      alt="logo"
+                      className={`logo-st ${getModeClass(brightMode)}`}
+                    ></img>
                   </div>
 
                   <div className="buttons">

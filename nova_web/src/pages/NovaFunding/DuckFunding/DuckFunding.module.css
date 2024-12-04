@@ -39,13 +39,12 @@
   width: 30px;
 }
 
-
 /* 이미 목표 달성에 성공한 프로젝트 */
-.success-funding{
+.success-funding {
   background-color: #fff;
-  width:100%;
-  margin-top:5px;
-  padding-bottom:10px;
+  width: 100%;
+  margin-top: 5px;
+  padding-bottom: 10px;
 }
 
 .content-title {
@@ -59,7 +58,7 @@
 }
 
 .header-text {
-  padding-block:10px;
+  padding-block: 10px;
   font-size: 20px;
   font-weight: 600;
 }
@@ -67,24 +66,28 @@
 .best-container {
   display: grid;
   grid-template-columns: repeat(2, 1fr); /* 2열 */
-  gap: 20px; 
+  gap: 20px;
   column-gap: 30px;
   width: 90%;
-  margin: 0 auto; 
-  justify-content: center; 
+  margin: 0 auto;
+  justify-content: center;
   align-content: center;
 }
 .best-box {
   width: 100%;
-
   .best-img {
     background-color: gray;
     height: 170px;
-  
   }
   p {
     margin: 0;
   }
+}
+
+.best-img > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .best-title {
@@ -99,10 +102,8 @@
   padding-top: 2px;
 }
 .best-box p:nth-of-type(3) {
-  color: #5B44E7; 
+  color: #5b44e7;
 }
-
-
 
 /* 마감 임박 프로젝트 */
 .ad-container {
@@ -114,7 +115,7 @@
 .ad-box {
   width: 30%;
 
-  .img {
+  .soon-img {
     background-color: gray;
     height: 130px;
     border-radius: 5px;
@@ -122,6 +123,12 @@
   p {
     margin: 0;
   }
+}
+
+.soon-img > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .ad-title {
@@ -137,9 +144,8 @@
 }
 
 .ad-box p:nth-of-type(3) {
-  color: #5B44E7; 
+  color: #5b44e7;
 }
-
 
 /* 덕질 펀딩 프로젝트 */
 .recommend-project {
@@ -153,7 +159,7 @@
   height: 100px;
   border: none;
   border-radius: 8px;
-  background-color: #D3E6FB;
+  background-color: #d3e6fb;
   cursor: pointer;
   transition: box-shadow 0.3s, background-color 0.3s;
   display: flex;
@@ -168,21 +174,19 @@
 }
 
 .recommend-button.active {
-  box-shadow: 0 0 0 4px #8EBFF5; /* 파란색 간격 추가 */
-  background-color: #BFDFFC; /* 클릭 시 배경 색상 변경 (선택 사항) */
+  box-shadow: 0 0 0 4px #8ebff5; /* 파란색 간격 추가 */
+  background-color: #bfdffc; /* 클릭 시 배경 색상 변경 (선택 사항) */
 }
-
 
 .recommend-button:hover {
   border-color: lightgray;
 }
 
-
 /* 마감 임박 프로젝트 */
-.interest-funding{
-  margin:0
+.interest-funding {
+  margin: 0;
 }
-.more-button{
+.more-button {
   width: 90%;
   display: flex;
   justify-self: center;
@@ -190,14 +194,13 @@
   padding-block: 10px;
   border-radius: 20px;
   background-color: #fff;
-  color:#797979;
-  border-color: #A6A6A6;
+  color: #797979;
+  border-color: #a6a6a6;
 }
 
-
 /* 성공한 프로젝트 전체보기 */
-.success-funding{
-  .more-button{
+.success-funding {
+  .more-button {
     margin-block: 10px;
     margin-top: 40px;
   }

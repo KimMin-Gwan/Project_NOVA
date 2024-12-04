@@ -142,7 +142,7 @@
     font-size: 20px;
   }
 
-  .top-title a {
+  .top-title div {
     position: absolute;
     right: 0;
     cursor: pointer;
