@@ -142,10 +142,11 @@
     font-size: 20px;
   }
 
-  .top-title div {
+  .top-title a {
     position: absolute;
     right: 0;
     cursor: pointer;
+    text-decoration: underline;
   }
 
   p {

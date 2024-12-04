@@ -229,7 +229,7 @@ export default function NovaFunding() {
         <div className={style["best-title"]}>
           <div className={style["top-title"]}>
             <h4>진행 중인 덕질 펀딩</h4>
-            <div onClick={() => handleLinkClick("/duck_funding")}>더보기</div>
+            <a onClick={() => handleLinkClick("/duck_funding")}>더보기</a>
           </div>
           <p>누구나 팬 활동을 다같이 하고 싶다면!</p>
           <ul className={style["open-container"]}>
