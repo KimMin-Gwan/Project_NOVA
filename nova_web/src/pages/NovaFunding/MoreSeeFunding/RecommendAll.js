@@ -10,7 +10,7 @@ export default function RecommendAll() {
     navigate(url);
   }
   return (
-    <div className={style_sub.container}>
+    <div className={`${style_sub.container} ${style["container"]}`}>
       <header className={style_sub.Topbar}>
         <img src={backword} alt="Arrow" className={style_sub.backword} onClick={() => handleLinkClick(-1)} />
         <div className={style_sub.title}>최애펀딩</div>
