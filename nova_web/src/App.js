@@ -43,6 +43,7 @@ import SuccessFunding from "./pages/NovaFunding/DuckFunding/SuccessFunding.js";
 import RankingFunding from "./pages/NovaFunding/FundingRanking/FundingRanking.js";
 import OpenRanking from "./pages/NovaFunding/FundingRanking/OpenRanking.js";
 import MoreSeeFunding from "./pages/NovaFunding/MoreSeeFunding/MoreSeeFunding.js";
+import RecommendAll from "./pages/NovaFunding/MoreSeeFunding/RecommendAll.js";
 
 import logo from "./img/NOVA_Platform.png";
 // 401 이면 바이어스 격자 무늬로 띄우기
@@ -166,6 +167,7 @@ function App() {
       <Route path="/funding_ranking" element={<RankingFunding />}></Route>
       <Route path="/open_ranking" element={<OpenRanking />}></Route>
       <Route path="/moresee_funding" element={<MoreSeeFunding />}></Route>
+      <Route path="/recommend_all" element={<RecommendAll />}></Route>
       <Route path="*" element={<div>404 Error</div>}></Route>
       {/* <Route path="/test" element={<Box />}></Route> */}
       {/* <Route path="/planet" element={<PlanetList />}></Route> */}
@@ -194,11 +196,7 @@ function App() {
                       navigate("/");
                     }}
                   >
-                    <img
-                      src={logo}
-                      alt="logo"
-                      className={`logo-st ${getModeClass(brightMode)}`}
-                    ></img>
+                    <img src={logo} alt="logo" className={`logo-st ${getModeClass(brightMode)}`}></img>
                   </div>
 
                   <div className="buttons">

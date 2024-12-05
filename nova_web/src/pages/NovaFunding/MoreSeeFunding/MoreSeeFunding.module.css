@@ -175,3 +175,16 @@
   background-color: #e0e7f0;
   opacity: 1;
 }
+
+/* 전체보기 페이지 */
+.moresee_button {
+  display: flex;
+  justify-self: center;
+  justify-content: center;
+  background-color: #fff;
+  border: 1px solid #a6a6a6;
+  color: #797979;
+  padding: 10px;
+  border-radius: 20px;
+  width: 80%;
+}
