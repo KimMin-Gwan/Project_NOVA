@@ -4,6 +4,8 @@ from view.master_view import Master_View, RequestHeader
 from view.parsers import Head_Parser
 from controller import Funding_Controller
 from view.jwt_decoder import RequestManager
+from typing import Any, Optional, Union, List
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request, File, UploadFile, Form
 
 class Funding_Service_View(Master_View):
     def __init__(self, app:FastAPI, endpoint:str, database, head_parser:Head_Parser,
@@ -385,7 +387,7 @@ class Funding_Service_View(Master_View):
         @self.__app.post('/nova_fund_system/make_new_project')
         def try_make_new_project(request:Request, raw_request:dict):
             request_manager = RequestManager()
-            data_payload = MakeNewProjectRequest(request=raw_request)
+            data_payload = DummyRequest(request=raw_request)
 
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
@@ -400,6 +402,31 @@ class Funding_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
             
+        # feed 를 만들거나 수정하기
+        @self.__app.post('/feed_explore/try_edit_feed')
+        async def try_edit_feed(request: Request, image: Union[UploadFile, None] = File(None)):
+            request_manager = RequestManager()
+
+            if image is None:
+                raise request_manager.bad_request_exception
+
+            data_payload = ImageUploadRequest(image=image)
+            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+            if not request_manager.jwt_payload.result:
+                raise request_manager.credentials_exception
+
+            funding_controller=Funding_Controller()
+
+            model = funding_controller.try_upload_new_project(
+                database=self.__database,
+                request=request_manager,
+                funding_project_manager=self.__funding_project_manager,)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+        
+        
 
 class MakeNewProjectRequest(RequestHeader):
     def __init__(self, request) -> None:
@@ -420,6 +447,10 @@ class MyFeedRequest():
 class DummyRequest():
     def __init__(self) -> None:
         pass
+
+class ImageUploadRequest():
+    def __init__(self, image) -> None:
+        self.image = image
 
 class ProjectGetRequset():
     def __init__(self, key=-1) -> None:

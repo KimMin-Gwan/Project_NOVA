@@ -7,7 +7,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://127.0.0.1:5000", "http://127.0.0.1:4001"], # Allow all origins for testing purposes
+    allow_origins=["http://127.0.0.1:3000", "http://127.0.0.1:4001", "http://localhost:4000"], # Allow all origins for testing purposes
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -16,6 +16,11 @@ app.add_middleware(
 def get_jwt_from_cookie(request: Request):
     jwt_token = request.cookies.get("session_id")
     return jwt_token
+
+@app.post("/test_upload")
+def home_number(dict_data: dict):
+    print(dict_data)
+    return "okay"
 
 @app.get("/home/{number}")
 def home_number(number: int):

@@ -124,3 +124,14 @@ class Funding_Controller:
         # 프로젝트 성공 사례의 횟수를 받아와야됨
 
         return model
+    
+    def try_upload_new_project(self,
+        database:Local_Database, 
+        request,
+        funding_project_manager:FundingProjectManager
+        ):
+        model = EditProjectModel()
+
+        
+
+

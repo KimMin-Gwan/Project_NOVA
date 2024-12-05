@@ -486,7 +486,7 @@ class Notice:
     
 class Project:
     def __init__(self, pid="", pname="", uid="", uname="", user_info="",
-                 make_date="", expire_date="", head_image=[], body_image=[],
+                 make_date="", expire_date="", head_image=[], body_url="",
                  now_progress=0, goal_progress=0, ptype = "", ftype=""):
         self.pid = pid
         self.pname = pname
@@ -496,7 +496,7 @@ class Project:
         self.make_date = make_date
         self.expire_date = expire_date
         self.head_image = head_image
-        self.body_image = body_image
+        self.body_url = body_url
         self.now_progress = now_progress
         self.goal_progress = goal_progress
         self.int_progress = 0 # 이건 달성 퍼센트임
@@ -518,7 +518,7 @@ class Project:
             self.make_date = dict_data['make_date']
             self.expire_date = dict_data['expire_date']
             self.head_image = copy.copy(dict_data['head_image'])
-            self.body_image = copy.copy(dict_data['body_image'])
+            self.body_url = dict_data['body_url']
             self.now_progress = dict_data['now_progress']
             self.goal_progress = dict_data['goal_progress']
             self.ptype = dict_data['ptype']
@@ -536,7 +536,7 @@ class Project:
             "make_date": self.make_date,
             "expire_date": self.expire_date,
             "head_image": copy.copy(self.head_image),
-            "body_image": copy.copy(self.body_image),
+            "body_url": self.body_url,
             "now_progress": self.now_progress,
             "goal_progress": self.goal_progress,
             "int_progress" : self.int_progress,

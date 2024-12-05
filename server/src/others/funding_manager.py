@@ -21,7 +21,7 @@ class FundingProjectManager:
         self.__database = database
 
         self.__project_search_engine = ProjectSearchEngine(database=database)
-        #self.__make_new_project_manager = MakeNewProjectManage()
+        self.__storage_connection = ObjectStorageConnection()
         #self.__project_investing_mananger = ProjectInverstingManager()
         #self.__project_recommend_manager = ProjectrecommendManager()
 
@@ -37,16 +37,18 @@ class FundingProjectManager:
 
         return projects[:num_project]
     
-    # 아니 ㄹㅇ 파이썬 버전을 올려야하나? 나 왜 3.7.9 냐
-    # 서버랑 버전이  안 맞아서 점점 더 두려워진다...
-    # 가상환경 구축을 왜 하는지 알 수 있는 대목
+    def get_project_body_data(self, pid):
+        return
+    
+
 
 
 # 관리를 위한 프로젝트 데이터 도메인
 
 class ManagedProject:
     def __init__(self, pid="", pname="", uid="", progress="",
-                 expire_date="", make_date="", ptype="default", ftype=""):
+                 expire_date="", make_date="", ptype="default", ftype="",
+                 body_url= ""):
         self.pid = pid  # 프로젝트 아이디
         # 이거 필요한가? 
         self.pname = pname # 프로젝트 이름  
@@ -56,7 +58,7 @@ class ManagedProject:
         self.make_date = make_date
         self.ptype = ptype # 최애 or 덕질
         self.ftype = ftype # 모금 or 참여
-
+        self.body_url =body_url 
 
 class ProjectSearchEngine:
     def __init__(self, database):
@@ -127,8 +129,12 @@ class ProjectSearchEngine:
             managed_project.expire_date = self.__get_date_str_to_object(project.expire_date)
             managed_project.ptype = project.ptype
             managed_project.ftype = project.ftype
+            managed_project.body_url = project.body_url
             return managed_project
 
+    # 0. 프로젝트 ID로 검색하기 -> 단일
+    def try_get_project_with_pid(self, pid):
+        return self.__project_avltree.get(key=pid)
 
     # 1. 프로젝트 이름으로 검색하기 -> 단일
     # 이건 유사도 검사해서 나오게 세팅해야됨
