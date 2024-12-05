@@ -2,7 +2,9 @@
   --sg-color: #5b44e7;
   --wh-color: white;
 }
-
+.container {
+  height: 100%;
+}
 .Topbar {
   position: relative;
   width: 100%;
@@ -107,13 +109,16 @@
   }
   ul {
     list-style: none;
+    padding: 0;
+  }
+  li {
     padding-left: 20px;
   }
 }
 
 .project-list {
   display: flex;
-  margin-block: 20px;
+  margin-block: 15px;
 
   .pj-img {
     background: gray;
@@ -124,7 +129,7 @@
 .pj-des {
   margin-left: 20px;
   position: relative;
-  width: 60%;
+  width: 70%;
   p {
     margin: 0;
   }
@@ -162,4 +167,11 @@
     font-weight: 600;
     font-size: 12px;
   }
+}
+
+.hr-style {
+  border: none;
+  height: 3px;
+  background-color: #e0e7f0;
+  opacity: 1;
 }

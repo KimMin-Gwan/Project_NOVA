@@ -39,7 +39,7 @@ export default function MoreSeeFunding() {
   }
 
   return (
-    <div className={style_sub.container}>
+    <div className={`${style_sub.container} ${style["container"]}`}>
       <header
         className={style.Topbar}
         style={{
@@ -66,7 +66,7 @@ export default function MoreSeeFunding() {
           <header className={style_sub["header-text"]}>추천하는 프로젝트</header>
           <div onClick={() => handleLinkClick("/")}>전체보기</div>
         </div>
-
+        <hr className={style["hr-style"]} />
         <ul>
           <li>
             <div className={style["project-list"]}>
@@ -81,6 +81,7 @@ export default function MoreSeeFunding() {
               </div>
             </div>
           </li>
+          <hr className={style["hr-style"]} />
           <li>
             <div className={style["project-list"]}>
               <div className={style["pj-img"]}>이미지</div>
@@ -94,6 +95,7 @@ export default function MoreSeeFunding() {
               </div>
             </div>
           </li>
+          <hr className={style["hr-style"]} />
           <li>
             <div className={style["project-list"]}>
               <div className={style["pj-img"]}>이미지</div>
@@ -107,6 +109,58 @@ export default function MoreSeeFunding() {
               </div>
             </div>
           </li>
+          <hr className={style["hr-style"]} />
+        </ul>
+      </section>
+      <section className={`${style_sub["success-funding"]} ${style["success-funding"]}`}>
+        <div className={`${style_sub["content-title"]} ${style["content-title"]}`}>
+          <header className={style_sub["header-text"]}>진행중인 프로젝트</header>
+          <div onClick={() => handleLinkClick("/")}>전체보기</div>
+        </div>
+        <hr className={style["hr-style"]} />
+        <ul>
+          <li>
+            <div className={style["project-list"]}>
+              <div className={style["pj-img"]}>이미지</div>
+              <div className={style["pj-des"]}>
+                <p>참여형</p>
+                <h4>하꼬 버트버 키링 굿즈 제작 프로젝트</h4>
+                <p>천유정</p>
+                <p>12월 30일까지</p>
+                <p>80% 달성</p>
+                <button>상세정보</button>
+              </div>
+            </div>
+          </li>
+          <hr className={style["hr-style"]} />
+          <li>
+            <div className={style["project-list"]}>
+              <div className={style["pj-img"]}>이미지</div>
+              <div className={style["pj-des"]}>
+                <p>참여형</p>
+                <h4>하꼬 버트버 키링 굿즈 제작 프로젝트</h4>
+                <p>천유정</p>
+                <p>12월 30일까지</p>
+                <p>80% 달성</p>
+                <button>상세정보</button>
+              </div>
+            </div>
+          </li>
+          <hr className={style["hr-style"]} />
+          <li>
+            <div className={style["project-list"]}>
+              <div className={style["pj-img"]}>이미지</div>
+              <div className={style["pj-des"]}>
+                <p>참여형</p>
+                <h4>하꼬 버트버 키링 굿즈 제작 프로젝트</h4>
+                <p>천유정</p>
+                <p>12월 30일까지</p>
+                <p>80% 달성</p>
+                <button>상세정보</button>
+              </div>
+            </div>
+          </li>
+          <hr className={style["hr-style"]} />
         </ul>
       </section>
     </div>
