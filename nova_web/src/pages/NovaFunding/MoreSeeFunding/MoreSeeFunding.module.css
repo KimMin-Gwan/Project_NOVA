@@ -1,10 +1,15 @@
+:root {
+  --sg-color: #5b44e7;
+  --wh-color: white;
+}
+
 .Topbar {
   position: relative;
   width: 100%;
   height: 300px;
   margin: 0 auto;
-  background-color: #ffffff;
-  border-bottom: 2px solid #ffffff;
+  background-color: var(--wh-color);
+
   display: flex;
   align-items: start;
   justify-content: flex-start;
@@ -25,42 +30,42 @@
 
   h3 {
     font-size: 23px;
-    color: white;
+    color: var(--wh-color);
     margin: 0;
   }
 
   p {
     margin: 0;
     font-size: 12px;
-    color: white;
+    color: var(--wh-color);
     margin-block: 5px;
   }
   button {
     margin-top: 5px;
     border: 0;
-    padding: 5px 10px;
+    padding: 5px 12px;
     border-radius: 2px;
     color: #262626;
     font-weight: 600;
-    font-size: 13px;
+    font-size: 12px;
   }
 }
 .new-fav {
   margin: 0;
   margin-top: auto;
-  color: white;
+  color: var(--wh-color);
   z-index: 2;
   font-size: 14px;
 }
 .new-list {
   width: 100%;
-  height: 300px;
+  height: 280px;
   background: #e0e7f0;
   padding-inline: 5px;
 
   .new-img {
     background-color: gray;
-    height: 240px;
+    height: 220px;
   }
 
   .new-title {
@@ -68,11 +73,12 @@
   }
   span {
     color: #595959;
+    font-size: 15px;
   }
 
   p {
     margin: 0;
-    color: #5b44e7;
+    color: var(--sg-color);
     font-size: 12px;
   }
 }
@@ -85,10 +91,74 @@
   height: 100%;
   z-index: 1;
   pointer-events: none;
-  opacity: 0.5;
 }
 
 .SliderContainer {
   width: 100%;
   overflow: hidden;
+}
+
+/*추천하는 프로젝트 */
+.success-funding {
+  margin: 0;
+  padding-top: 20px;
+  .content-title {
+    padding-block: 0;
+  }
+  ul {
+    list-style: none;
+  }
+}
+
+.project-list {
+  display: flex;
+  margin-block: 20px;
+
+  .pj-img {
+    background: gray;
+    width: 120px;
+    height: 160px;
+  }
+}
+.pj-des {
+  margin-left: 20px;
+  position: relative;
+  width: 60%;
+  p {
+    margin: 0;
+  }
+  h4 {
+    margin: 0;
+    margin-bottom: 5px;
+  }
+  & p:nth-of-type(1) {
+    color: var(--sg-color);
+    font-size: 12px;
+  }
+  & p:nth-of-type(2) {
+    color: #595959;
+    font-size: 13px;
+  }
+  & p:nth-of-type(3) {
+    color: #a3a3a3;
+    font-size: 13px;
+  }
+  & p:nth-of-type(4) {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--sg-color);
+    position: absolute;
+    bottom: 20px;
+  }
+  button {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    border: 0;
+    padding: 5px 12px;
+    border-radius: 2px;
+    color: #262626;
+    font-weight: 600;
+    font-size: 12px;
+  }
 }
