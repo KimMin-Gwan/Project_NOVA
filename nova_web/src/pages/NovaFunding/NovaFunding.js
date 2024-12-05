@@ -117,7 +117,7 @@ export default function NovaFunding() {
               src={menu}
               alt="menu"
               onClick={() => {
-                handleLinkClick("/more_see");
+                handleLinkClick("/moresee_funding");
               }}
             ></img>
           </button>
