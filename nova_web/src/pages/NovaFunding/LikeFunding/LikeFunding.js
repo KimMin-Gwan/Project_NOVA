@@ -8,14 +8,11 @@ import { Editor } from "@toast-ui/react-editor";
 import { Viewer } from "@toast-ui/react-editor";
 import { useEffect, useState } from "react";
 
-function ContentsViewer({ contents }) {
-  return <Viewer initialValue={contents || ""} />;
-}
-
 export default function LikeFunding() {
   let navigate = useNavigate();
 
   let [contents, setContents] = useState("");
+  let [projectInfo, setProjectInfo] = useState({});
 
   function handleLinkClick(url) {
     navigate(url);
@@ -25,7 +22,8 @@ export default function LikeFunding() {
     await fetch("https://nova-platform.kr/nova_fund_system/project_detail?pid=5")
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        console.log(data.body.project);
+        setProjectInfo(data.body.project);
         setContents(data.body.project_body_data);
       });
   }
@@ -48,11 +46,13 @@ export default function LikeFunding() {
       </header>
 
       <section className={style.artist_info}>
-        <div className={style.artist_img}>이미지</div>
+        <div className={style.artist_img}>
+          <img src={projectInfo.head_image[0]} />
+        </div>
         <section className={style.info}>
           <div className={style.artist_nav}>
             <div>이미지</div>
-            <h3>언네임</h3>
+            <h3>{projectInfo.uname}</h3>
             <button>자세히</button>
           </div>
           <div className={style.hashtag_box}>
@@ -61,16 +61,12 @@ export default function LikeFunding() {
           </div>
           <hr></hr>
           <div className={style.artist_exp}>
-            <h4>[데뷔 앨범] 언네임 신곡 앨범 펀딩</h4>
-            <div className={style.exp_text}>
-              진용진님의프로젝트로 인기를 끌었던 데뷔조의 3인방이 언네임으로 돌아옵니다. <br></br>
-              진짜 아이돌이 되어 여러분의 가슴을 뜨겁게 만들어줄 언네임의앨범을 가장 먼저
-              만나보세요!
-            </div>
+            <h4>{projectInfo.pname}</h4>
+            <div className={style.exp_text}>{projectInfo.introduce}</div>
           </div>
           <div className={style.funding_condition}>
-            <p>120명 참여</p>
-            <span>별별티켓 400,000개 달성</span>
+            <p>{projectInfo.num_participants}명 참여</p>
+            <span>별별티켓 {projectInfo.goal_progress}개 달성</span>
           </div>
         </section>
         <hr />
