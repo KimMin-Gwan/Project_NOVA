@@ -137,7 +137,7 @@
 
 /* 상품소개 페이지  */
 .product-box {
-  height: 800px;
+  /* height: 800px; */
   width: 100%;
   border-block: 1px solid #dcdcdc;
   margin-top: 5px;
