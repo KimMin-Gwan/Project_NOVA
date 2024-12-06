@@ -55,8 +55,8 @@ class ObjectStorageConnection:
 
         url = self.__endpoint + pid + ".html"
         response = get(url=url)
-        #html_content = response.content.decode("utf-8")
-        html_content = response.content
+        html_content = response.content.decode("utf-8")
+        #html_content = response.content
         return html_content
 
 
