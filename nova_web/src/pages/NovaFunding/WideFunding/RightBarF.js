@@ -1,10 +1,8 @@
 import style_sub from "./../../WideVer/WideVer.module.css";
+import style_sub2 from "./../NovaFunding.module.css"
 import style from "./WideFunding.module.css";
-import popular_icon from "./../../../img/polular_feed.png";
-import feed_write from "./../../../img/feed_write.png";
-import home_icon from "./../../../img/home_icon.png";
-import all_icon from "./../../../img/all_icon.png";
-import short_icon from "./../../../img/short_icon.png";
+import more_icon from "./../../../img/back.png";
+
 
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -33,59 +31,72 @@ export default function RightBarF() {
   }
 
   return (
-    <div className={`${style_sub["wrap_container"]} `}>
-      <div className={`${style_sub["direct-box"]} `}>
-        <h4 className={style_sub["wide-text"]}>바로가기</h4>
-        <ul className={style_sub["direct-list"]}>
-          <li
-            className={style_sub["list-item"]}
-            onClick={() => {
-              handleNavigate("/");
-            }}
-          >
-            <img src={home_icon} alt="home" className={style_sub["icon-text"]}></img>
-            <div className={`${style_sub["direct-link"]} `}>플랫폼 홈</div>
-          </li>
-          <li
-            className={style_sub["list-item"]}
-            onClick={() => {
-              handleNavigate("/feed_list?type=all");
-            }}
-          >
-            <img src={all_icon} alt="전체 피드" className={style_sub["icon-text"]}></img>
-            <div className={`${style_sub["direct-link"]} `}>전체 피드</div>
-          </li>
-          <li
-            className={style_sub["list-item"]}
-            onClick={() => {
-              handleNavigate("/feed_page");
-            }}
-          >
-            <img src={short_icon} alt="short_feed" className={style_sub["icon-text"]}></img>
-            <div className={`${style_sub["direct-link"]} `}>숏피드</div>
-          </li>
-          <li
-            className={style_sub["list-item"]}
-            onClick={() => {
-              handleNavigate("/write_feed");
-            }}
-          >
-            <img src={feed_write} alt="write" className={style_sub["icon-text"]}></img>
-            <div className={`${style_sub["direct-link"]} `}>피드 작성</div>
-          </li>
-          <li
-            className={style_sub["list-item"]}
-            onClick={() => {
-              handleNavigate("/feed_list?type=weekly_best");
-            }}
-          >
-            <img src={popular_icon} alt="popular" className={style_sub["icon-text"]}></img>
-            <div className={`${style_sub["direct-link"]} `}>주간 TOP 100</div>
-          </li>
-        </ul>
+    <div className={`${style_sub["wrap_container"]} ${style["wrap_container"]}`}>
 
-        
-      </div>
+      <section className={`${style_sub2["recommend-box"]} ${style["recommend-box"]}`}>
+          <div className={style_sub2["title-box"]}>
+            <h2 className={style_sub2["title-text"]}>베스트 프로젝트 모두 보기</h2>
+          </div>
+          <p className={style_sub2["more-text"]}>지금까지 펀딩된 프로젝트와 투자자들을 알아봐요!</p>
+
+          <div className={style_sub2["ad-container"]}>
+            <div className={style_sub2["ad-box"]}>
+              <div className={style_sub2["img"]}>이미지</div>
+              <p className={style_sub2["ad-title"]}>프로젝트 펀딩 순위</p>
+
+              <p>72% 달성했어요</p>
+            </div>
+            <div className={style_sub2["ad-box"]}>
+              <div className={style_sub2["img"]}>이미지</div>
+              <p className={style_sub["ad-title"]}>프로젝트 펀딩 순위</p>
+
+              <p>72% 달성했어요</p>
+            </div>
+            <div className={style_sub2["ad-box"]}>
+              <div className={style_sub2["img"]}>이미지</div>
+              <p className={style_sub2["ad-title"]}>프로젝트 펀딩 순위</p>
+
+              <p>총 10개의 프로젝트가 있어요.</p>
+            </div>
+          </div>
+        </section>
+        <section className={style_sub2["notice-nova"]}>
+          <div className={style_sub2["title-box"]}>
+            <h2 className={style_sub2["title-text"]}>노바 펀딩 알아보기</h2>
+            <img src={more_icon} className={style_sub2["more-icon"]}></img>
+          </div>
+          <p className={style_sub2["more-text"]}>30초만에 알아보는 노바 펀딩</p>
+
+          <div className={style_sub2["ad-container"]}>
+            <div className={style_sub2["ad-box"]}>
+              <div className={style_sub2["img"]}>이미지</div>
+              <p className={style_sub2["ad-title"]}>프로젝트 펀딩 순위</p>
+
+              <p>10명이 읽었어요!</p>
+            </div>
+            <div className={style_sub2["ad-box"]}>
+              <div className={style_sub2["img"]}>이미지</div>
+              <p className={style_sub2["ad-title"]}>프로젝트 펀딩 순위</p>
+
+              <p>1명이 읽었어요!</p>
+            </div>
+            <div className={style_sub2["ad-box"]}>
+              <div className={style_sub2["img"]}>이미지</div>
+              <p className={style_sub2["ad-title"]}>프로젝트 펀딩 순위</p>
+
+              <p>1명이 읽었어요!</p>
+            </div>
+          </div>
+
+          <div className={style_sub2["footer-area"]}>
+            <div className={style_sub2["area-box"]}>참여한 펀딩</div>
+            <div className={style_sub2["area-box"]}>
+              펀딩 신청<br></br>
+            </div>
+          </div>
+
+          <div className={style_sub2["last-project"]}>지난 펀딩 프로젝트</div>
+        </section>
     </div>
   );
 }

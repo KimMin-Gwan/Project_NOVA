@@ -203,7 +203,7 @@ export default function NovaFunding({ brightmode }) {
           <FundingSlider biasProjects={biasProjects} />
         </section>
 
-        <section className={style["recommend-box"]}>
+        <section className={`${style["recommend-box"]} ${style["dis"]}`}>
           <div className={style["title-box"]}>
             <h2 className={style["title-text"]}>베스트 프로젝트 모두 보기</h2>
           </div>

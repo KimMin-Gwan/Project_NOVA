@@ -1,0 +1,46 @@
+.wrap_container{
+
+}
+
+.search-box {
+  background-color: #000000;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #6a6a6a;
+  height: 500px;
+}
+.search-bar {
+  display: flex;
+  background-color: white;
+  border-radius: 5px;
+  padding-block: 5px;
+  padding-inline: 10px;
+  justify-content: space-between;
+  border: 1px solid #000000;
+  input {
+    background-color: white;
+    border: 0;
+    width: 90%;
+  }
+
+  button {
+    background-color: white;
+    border: 0;
+    cursor: pointer;
+  }
+}
+.search-memo {
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  padding-inline: 5px;
+
+  p {
+    color: #a1a1a1;
+  }
+}
+
+.icon-text {
+  width: 20px;
+  height: 20px;
+}

@@ -6,11 +6,12 @@ import home_icon from "./../../../img/home_icon.png";
 import all_icon from "./../../../img/all_icon.png";
 import short_icon from "./../../../img/short_icon.png";
 import direct_icon from "./../../../img/direct_icon.png";
+import search_icon from "./../../../img/search_icon.png";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-export default function LeftBarF() {
+export default function LeftBarF({brightMode}) {
   let navigate = useNavigate();
 
   let [tagList, setTagList] = useState([]);
@@ -91,6 +92,28 @@ export default function LeftBarF() {
         <Link to="/nova_funding" className={style_sub["go-nova"]}>
           노바펀딩 바로가기
         </Link>
+      </div>
+
+      <div
+        className={`${style["search-box"]} ${
+          brightMode === "dark" ? style["dark-mode"] : style["light-mode"]
+        }`}
+      >
+        <h4 className={style["wide-text"]}>검색</h4>
+        <div className={style["search-bar"]}>
+          <input
+            type="text"
+           
+          ></input>
+          <button onClick={handleNavigate}>
+            <img src={search_icon} className={style["icon-text"]}></img>
+          </button>
+        </div>
+        <span className={style["search-memo"]}>
+          <p>검색기록</p>
+         
+        </span>
+        
       </div>
 
     </div>
