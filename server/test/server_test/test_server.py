@@ -4,8 +4,8 @@ import requests
 session = requests.Session()
 
 # 로그인 정보
-#login_url = "https://nova-platform.kr/user_home/try_login"
-login_url = "http://127.0.0.1:4000/user_home/try_login"
+login_url = "https://nova-platform.kr/user_home/try_login"
+#login_url = "http://127.0.0.1:4000/user_home/try_login"
 login_data = {
     "header": {  # 빈 값이라도 정확히 포함해야 함
         "request-type": "",
@@ -31,7 +31,8 @@ else:
 
 
 
-test_url = "http://127.0.0.1:4000/nova_fund_system/project_detail?pid=5"
+#test_url = "http://127.0.0.1:4000/nova_fund_system/project_detail?pid=5"
+test_url = "https://nova-platform.kr/nova_fund_system/project_detail?pid=5"
 
 # 로그인 요청
 response = session.get(test_url)
