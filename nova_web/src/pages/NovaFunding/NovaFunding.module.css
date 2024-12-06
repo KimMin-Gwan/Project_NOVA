@@ -1,3 +1,9 @@
+/* 와이드버전 */
+.widever-style {
+  display: flex;
+  max-width: 1150px;
+  margin: 0 auto;
+}
 /* Topbar */
 .container {
   max-width: 500px;
