@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Chat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        #messages {
+            width: 80%;
+            height: 300px;
+            border: 1px solid #ccc;
+            overflow-y: scroll;
+            margin-bottom: 10px;
+        }
+        #messageInput {
+            width: 80%;
+        }
+    </style>
+</head>
+<body>
+    <h1>WebSocket Chat</h1>
+    <div id="messages"></div>
+    <input id="messageInput" type="text" placeholder="Enter your message">
+    <button id="sendButton">Send</button>
+
+    <script>
+        const ws = new WebSocket('wss://nova-platform.kr/league_detail/league_data?league_name=고양이 은하');
+        const messages = document.getElementById('messages');
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+        const token = 'your-token-string';  // 임의의 토큰 값 설정
+
+        ws.onmessage = function(event) {
+            const message = document.createElement('div');
+            message.textContent = event.data;
+            messages.appendChild(message);
+            messages.scrollTop = messages.scrollHeight;  // Scroll to the bottom
+            ws.send(JSON.stringify("hello"));  // JSON 형태로 전송
+        };
+
+        sendButton.onclick = function() {
+            const messageText = messageInput.value;
+            if (messageText) {
+                const message = {
+                    token: token,  // 토큰 값
+                    message: messageText  // 입력된 메시지
+                };
+                ws.send(JSON.stringify(message));  // JSON 형태로 전송
+                messageInput.value = '';
+            }
+        };
+
+        messageInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                sendButton.click();
+            }
+        });
+    </script>
+</body>
+</html>

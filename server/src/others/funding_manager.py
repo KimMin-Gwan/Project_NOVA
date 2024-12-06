@@ -14,6 +14,7 @@
 from others.data_domain import Project
 from bintrees import AVLTree
 from datetime import datetime
+from requests import get
 
 class FundingProjectManager:
     def __init__(self, database):
@@ -36,10 +37,26 @@ class FundingProjectManager:
             projects.append(project)
 
         return projects[:num_project]
-    
+
+    # 프로젝트 바디 데이터를 GET 하는 함수
     def get_project_body_data(self, pid):
-        return
+        body_data = self.__storage_connection.get_project_body(pid=pid)
+        return body_data
     
+
+
+class ObjectStorageConnection:
+    def __init__(self):
+        self.__endpoint = "https://kr.object.ncloudstorage.com/nova-project-image/"
+
+    def get_project_body(self, pid):
+        
+        pid = "5"
+
+        url = self.__endpoint + pid + ".html"
+        response = get(url=url)
+        html_content = response.content.decode("utf-8")
+        return html_content
 
 
 
@@ -320,8 +337,4 @@ class ProjectSearchEngine:
             count += 1
 
         return result_pid, result_index
-
-
-            
-
 

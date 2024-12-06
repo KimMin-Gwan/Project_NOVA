@@ -8,6 +8,44 @@ class ProjectBanner:
     def __init__(self):
         pass
 
+# 프로젝트 디테일 요청에 사용되는 모델
+class ProjectDetailModel(BaseModel):
+    def __init__(self, database:Local_Database) -> None:
+        super().__init__(database)
+        self.__project = Project()
+        self.__project_body_data= None
+        self.__owner = False
+
+    def get_project_meta_data(self, pid):
+        project_data = self._database.get_data_with_id(target='pid', id=pid)
+
+        if project_data:
+            self.__project.make_with_dict(dict_data=project_data)
+        else:
+            return False
+        return True
+    
+    def get_project_body_data(self, project_manager:FundingProjectManager, pid=""):
+        if pid == "":
+            self.__project_body_data = project_manager.get_project_body_data(self.__project.pid)
+        else:
+            self.__project_body_data = project_manager.get_project_body_data(pid)
+
+        if self.__project_body_data:
+            return True
+        else:
+            return False
+
+    def get_response_form_data(self, head_parser):
+        body = {
+            'project' : self.__project.get_dict_form_data(),
+            'project_body_data' : self.__project_body_data,
+            'isowner': self.__owner
+        }
+
+        response = self._get_response_data(head_parser=head_parser, body=body)
+        return response
+
 class FundingProjectBannerModel(BaseModel):
     def __init__(self, database:Local_Database) -> None:
         super().__init__(database)
@@ -156,46 +194,6 @@ class EditProjectModel(BaseModel):
     def get_response_form_data(self, head_parser):
         body = {
             'result' : self.__result,
-        }
-
-        response = self._get_response_data(head_parser=head_parser, body=body)
-        return response
-    
-class PojectDetailModel(BaseModel):
-    def __init__(self, database:Local_Database) -> None:
-        super().__init__(database)
-        self.__project = Project()
-        self.__project_body_data= None
-        self.__owner = False
-
-    def get_project_meta_data(self, pid):
-        project_data = self._database.get_data_with_id(target='pid', id=pid)
-
-        if project_data:
-            self.__project.make_with_dict(dict_data=project_data)
-        else:
-            return False
-        return True
-    
-    def get_proejct_meta_data(self, project_manager, pid=""):
-        if pid == "":
-            self.__project_body_data = project_manager.get_project_body_data(self.__project.pid)
-        else:
-            self.__project_body_data = project_manager.get_project_body_data(pid)
-
-        if self.__project_body_data:
-            return True
-        else:
-            return False
-
-
-
-
-    def get_response_form_data(self, head_parser):
-        body = {
-            'project' : self.__project.get_dict_form_data(),
-            'project_body_data' : self.__project_body_data,
-            'isowner': self.__owner
         }
 
         response = self._get_response_data(head_parser=head_parser, body=body)

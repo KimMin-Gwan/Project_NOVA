@@ -12,7 +12,9 @@
         "now_progress": 12400,
         "goal_progress": 150000,
         "ptype": "fan",
-        "ftype": "donate"
+        "ftype": "donate",
+        "introduce" : "설명글 예시",
+        "num_participants" : 120
     },
     {
         "pid": "2",
@@ -27,7 +29,9 @@
         "now_progress": 14300,
         "goal_progress": 123000,
         "ptype": "bias",
-        "ftype": "attend"
+        "ftype": "attend",
+        "introduce" : "설명글 예시",
+        "num_participants" : 120
     },
     {
         "pid": "3",
@@ -42,7 +46,9 @@
         "now_progress": 8000,
         "goal_progress": 10000,
         "ptype": "fan",
-        "ftype": "attend"
+        "ftype": "attend",
+        "introduce" : "설명글 예시",
+        "num_participants" : 120
     },
     {
         "pid": "4",
@@ -57,7 +63,9 @@
         "now_progress": 450,
         "goal_progress": 5000,
         "ptype": "bias",
-        "ftype": "attend"
+        "ftype": "attend",
+        "introduce" : "설명글 예시",
+        "num_participants" : 120
     },
     {
         "pid": "5",
@@ -72,7 +80,9 @@
         "now_progress": 1300,
         "goal_progress": 15000,
         "ptype": "bias",
-        "ftype": "attend"
+        "ftype": "attend",
+        "introduce" : "설명글 예시",
+        "num_participants" : 120
     },
     {
         "pid": "6",
@@ -87,7 +97,9 @@
         "now_progress": 8000,
         "goal_progress": 20000,
         "ptype": "fan",
-        "ftype": "donate"
+        "ftype": "donate",
+        "introduce" : "설명글 예시",
+        "num_participants" : 120
     },
     {
         "pid": "7",
@@ -102,6 +114,8 @@
         "now_progress": 500,
         "goal_progress": 1000,
         "ptype": "fan",
-        "ftype": "donate"
+        "ftype": "donate",
+        "introduce" : "설명글 예시",
+        "num_participants" : 120
     }
 ]

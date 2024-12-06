@@ -131,7 +131,18 @@ class Funding_Controller:
         funding_project_manager:FundingProjectManager
         ):
         model = EditProjectModel()
-
         
+    def get_project_detail(self,
+        database:Local_Database, 
+        request,
+        funding_project_manager:FundingProjectManager
+        ) -> BaseModel:
 
+        model = ProjectDetailModel(database=database)
+
+        if model.get_project_meta_data(request.data_payload.pid):
+            model.get_project_body_data(project_manager=funding_project_manager)
+
+        return model
+    
 
