@@ -306,6 +306,10 @@
   }
 
   & p:nth-of-type(2) {
+    color: #434dff;
+    margin-left: 10px;
+  }
+  & p:nth-of-type(3) {
     margin-left: auto;
     color: #434dff;
   }

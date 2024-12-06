@@ -145,6 +145,23 @@ export default function LikeFunding() {
         <div className={style["select_funding"]}>
           <div>
             <p>[얼리버드] 1집 데뷔 앨범</p>
+            <p>600개 한정 수량</p>
+            <p>1,300개</p>
+          </div>
+          <ul className={style["funding-list"]}>
+            <li>
+              언네임 데뷔앨범 1개
+              <ul>
+                <li>언네임 데뷔 특전 1세트</li>
+              </ul>
+            </li>
+          </ul>
+          <button>선택하기</button>
+        </div>
+        <div className={style["select_funding"]}>
+          <div>
+            <p>[얼리버드] 1집 데뷔 앨범</p>
+            <p>600개 한정 수량</p>
             <p>1,300개</p>
           </div>
           <ul className={style["funding-list"]}>
