@@ -5,7 +5,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  height: 200vh;
+  height: 250vh;
   background-color: #ffffff;
 }
 /* top-bar  */
@@ -188,4 +188,142 @@
   font-size: 12px;
   padding-block: 5px;
   cursor: pointer;
+}
+
+/* 후원 프로젝트 */
+
+.support_pj {
+  width: 90%;
+}
+
+.hold_ticket {
+  border: 1px solid #8e8e8e;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px;
+  div {
+    display: flex;
+    justify-content: end;
+    font-weight: 600;
+    color: #947df0;
+    margin-bottom: 10px;
+    p {
+      margin: 0;
+      color: black;
+      margin-right: 10px;
+    }
+    input {
+      background-color: #f1f1f1;
+      border: 0;
+      border-radius: 5px;
+      margin-right: 5px;
+    }
+  }
+  button {
+    display: flex;
+    justify-content: end;
+    justify-self: end;
+    background-color: white;
+    border: 1px solid #f4f1fd;
+    padding: 5px 15px;
+    border-radius: 5px;
+  }
+}
+
+.button-style {
+  display: flex;
+  gap: 10px;
+  & button:nth-of-type(2) {
+    background-color: #eee9fc;
+    border: 0;
+  }
+}
+
+.donater {
+  width: 80%;
+  text-align: center;
+  ul {
+    list-style: none;
+    padding: 0;
+    border: 2px solid #8e8e8e;
+    border-radius: 5px;
+    li {
+      display: flex;
+      width: 100%;
+      border-bottom: 1px solid #e1e1e1;
+
+      p {
+        color: #575757;
+        font-size: 13px;
+      }
+      & p:nth-of-type(1) {
+        color: #434dff;
+        margin-right: 10px;
+        margin-left: 10px;
+      }
+
+      & p:nth-of-type(3) {
+        margin-left: auto;
+        margin-right: 10px;
+      }
+    }
+    button {
+      width: 80%;
+      margin-block: 10px;
+      padding-block: 5px;
+      background-color: white;
+      border: 1px solid #eee9fc;
+      border-radius: 5px;
+      color: #575757;
+    }
+  }
+}
+
+.hr-style {
+  border: none;
+  height: 3px;
+  background-color: #e0e7f0;
+  opacity: 1;
+}
+
+/* 참여프로젝트 */
+.select_funding {
+  border: 1px solid #8e8e8e;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.select_funding > div {
+  display: flex;
+
+  p {
+    margin: 0;
+    font-size: 14px;
+  }
+
+  & p:nth-of-type(2) {
+    margin-left: auto;
+    color: #434dff;
+  }
+}
+
+button {
+  align-self: flex-end;
+  background-color: white;
+  border-radius: 5px;
+  border: 1px solid #eee9fc;
+  padding: 5px 15px;
+}
+
+.funding-list {
+  li {
+    font-size: 14px;
+  }
+  ul {
+    padding-left: 10px;
+  }
 }

@@ -69,6 +69,95 @@ export default function LikeFunding() {
           </button>
         </div>
       </section>
+
+      <section className={style["support_pj"]}>
+        <p>후원 프로젝트</p>
+        <div className={style["hold_ticket"]}>
+          <div>
+            <p>보유 별별 티켓</p>
+            <input type="text" />개
+          </div>
+          <button>티켓 추가 구매</button>
+        </div>
+        <div className={style["hold_ticket"]}>
+          <div>
+            <p>이름</p>
+            <input type="text" />
+          </div>
+          <div>
+            <p>지원 금액</p>
+            <input type="text" />개
+          </div>
+
+          <div className={style["button-style"]}>
+            <button>지원내역</button>
+            <button>지원하기</button>
+          </div>
+        </div>
+      </section>
+      <hr className={style["hr-style"]} />
+      <section className={style["donater"]}>
+        도네이터 목록
+        <ul>
+          <li>
+            <p>40%</p>
+            <p>닉네임1</p>
+            <p>100,000원</p>
+          </li>
+          <li>
+            <p>40%</p>
+            <p>닉네임1</p>
+            <p>100,000원</p>
+          </li>
+          <li>
+            <p>40%</p>
+            <p>닉네임1</p>
+            <p>100,000원</p>
+          </li>
+          <li>
+            <p>40%</p>
+            <p>닉네임1</p>
+            <p>100,000원</p>
+          </li>
+          <li>
+            <p>40%</p>
+            <p>닉네임1</p>
+            <p>100,000원</p>
+          </li>
+          <li>
+            <p>40%</p>
+            <p>닉네임1</p>
+            <p>100,000원</p>
+          </li>
+          <button>참여자 모두 보기</button>
+        </ul>
+      </section>
+
+      <section className={style["support_pj"]}>
+        <p>참여 프로젝트</p>
+        <div className={style["hold_ticket"]}>
+          <div>
+            <p>보유 별별 티켓</p>
+            <input type="text" />개
+          </div>
+          <button>티켓 추가 구매</button>
+        </div>
+        <div className={style["select_funding"]}>
+          <div>
+            <p>[얼리버드] 1집 데뷔 앨범</p>
+            <p>1,300개</p>
+          </div>
+          <ul className={style["funding-list"]}>
+            <li>
+              언네임 데뷔앨범 1개
+              <ul>
+                <li>언네임 데뷔 특전 1세트</li>
+              </ul>
+            </li>
+          </ul>
+          <button>선택하기</button>
+        </div>
+      </section>
     </div>
   );
 }
