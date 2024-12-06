@@ -92,6 +92,7 @@ export default function LeftBarF() {
           노바펀딩 바로가기
         </Link>
       </div>
+
     </div>
   );
 }

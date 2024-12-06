@@ -159,7 +159,7 @@ function App() {
       <Route path="/feed_hash_list/:fid" element={<FeedHashList />}></Route>
       <Route path="/feed_list" element={<FeedList brightMode={brightMode} />}></Route>
       <Route path="/feed_list/:fid" element={<FeedList />}></Route>
-      <Route path="/nova_funding" element={<NovaFunding />}></Route>
+      <Route path="/nova_funding" element={<NovaFunding brightMode={brightMode} />}></Route>
       <Route path="/like_funding" element={<LikeFunding />}></Route>
       <Route path="/week100" element={<Week100 />}></Route>
       <Route path="/duck_funding" element={<DuckFunding />}></Route>

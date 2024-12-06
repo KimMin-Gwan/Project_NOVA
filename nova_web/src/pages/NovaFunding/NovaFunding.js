@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import FundingSlider from "../../component/FundingSlider";
 import LeftBar from "./WideFunding/LeftBarF.js";
 import RightBar from "./WideFunding/RightBarF.js";
-export default function NovaFunding() {
+export default function NovaFunding({ brightmode }) {
   let navigate = useNavigate();
 
   let [hashTags, setHashTags] = useState([]);
@@ -123,7 +123,7 @@ export default function NovaFunding() {
                 src={menu}
                 alt="menu"
                 onClick={() => {
-                  handleLinkClick("/moresee_funding");
+                  handleLinkClick("/more_see");
                 }}
               ></img>
             </button>
