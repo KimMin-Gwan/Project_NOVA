@@ -109,6 +109,7 @@ export default function NovaFunding({ brightmode }) {
 
   return (
     <div className={style["widever-style"]}>
+      <div className={style["empty-box"]}></div>
       <section className="contents com1">
         <LeftBar />
       </section>
@@ -262,7 +263,7 @@ export default function NovaFunding({ brightmode }) {
           </div>
         </section>
 
-        <section className={style["notice-nova"]}>
+        <section className={`${style["notice-nova"]} ${style["dis"]}`}>
           <div className={style["title-box"]}>
             <h2 className={style["title-text"]}>노바 펀딩 알아보기</h2>
             <img src={more_icon} className={style["more-icon"]}></img>

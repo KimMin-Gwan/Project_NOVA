@@ -1,10 +1,21 @@
 /* 와이드버전 */
 .widever-style {
   display: flex;
-  max-width: 1300px;
+  max-width: 1350px;
   margin: 0 auto;
 
 }
+.empty-box{
+width: 100px;
+}
+
+@media (max-width: 1024px){
+
+  .empty-box{
+    display: none;
+  }
+}
+
 /* Topbar */
 .container {
 
@@ -336,16 +347,15 @@
   padding: 10px;
   border-radius: 10px;
   font-weight: 600;
+  margin-bottom: 10px;
 }
 
 
 /* 와이드 */
-@media (max-width: 1024px) {
+@media (min-width: 1024px) {
  .dis{
   display: none;
  }
 
- .notice-nova{
-  display: none;
- }
+
 }

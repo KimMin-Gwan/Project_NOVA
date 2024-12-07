@@ -1,7 +1,17 @@
-.wrap_container{
-
+:root{
+  --bg-color:#EAEEFF;
+  --black:black;
 }
 
+.wrap_container{
+
+  max-width: 400px;
+
+  h2,p{
+  color:black
+}
+}
+/* 왼쪽 */
 .search-box {
   background-color: #000000;
   padding: 8px;
@@ -43,4 +53,36 @@
 .icon-text {
   width: 20px;
   height: 20px;
+}
+
+
+/* 오른쪽 */
+.recommend-box{
+  background-color:var(--bg-color) ;
+  border: 1px solid black;
+  border-radius: 5px;
+  .ad-container{
+    height: 200px;
+  }
+}
+
+
+.notice-nova{
+  background-color: transparent;
+  min-height: 0;
+  background-color:var(--bg-color) ;
+  border: 1px solid black;
+  border-radius: 5px;
+  .ad-container{
+    height: 200px;
+  }
+}
+
+.my-funding{
+  
+  div{
+    color:var(--black)
+  }
+
+ 
 }
