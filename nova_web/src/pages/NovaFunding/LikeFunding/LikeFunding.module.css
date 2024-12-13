@@ -322,11 +322,11 @@
 }
 
 button {
-  align-self: flex-end;
+  /* align-self: flex-end; */
   background-color: white;
   border-radius: 5px;
   border: 1px solid #eee9fc;
-  padding: 5px 15px;
+  /* padding: 5px 15px; */
 }
 
 .funding-list {

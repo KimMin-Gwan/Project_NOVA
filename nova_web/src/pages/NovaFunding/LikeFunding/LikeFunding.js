@@ -22,7 +22,7 @@ export default function LikeFunding() {
     await fetch("https://nova-platform.kr/nova_fund_system/project_detail?pid=5")
       .then((response) => response.json())
       .then((data) => {
-        console.log(data.body.project);
+        console.log("111", data.body.project);
         setProjectInfo(data.body.project);
         setContents(data.body.project_body_data);
       });
@@ -47,7 +47,7 @@ export default function LikeFunding() {
 
       <section className={style.artist_info}>
         <div className={style.artist_img}>
-          <img src={projectInfo.head_image[0]} />
+          <img src={projectInfo.head_image} />
         </div>
         <section className={style.info}>
           <div className={style.artist_nav}>

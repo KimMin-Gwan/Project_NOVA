@@ -82,7 +82,7 @@
 }
 
 .loginButton {
-  justify-content: center;
+  /* justify-content: center; */
   /* 중간이 아닌 위쪽으로 배치 */
   width: 80%;
   padding: 15px;
