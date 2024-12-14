@@ -81,7 +81,7 @@ class Funding_Service_View(Master_View):
         @self.__app.get('/nova_fund_system/home/get_project_as_tag')
         def get_home_project_as_tag(request:Request, tag:Optional[str]=""):
             request_manager = RequestManager()
-            data_payload = ProjectGetRequset()
+            data_payload = ProjectWithTagRequset(tag=tag)
 
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
@@ -509,3 +509,8 @@ class ProjectGetRequset():
 class ProjectDetailRequest():
     def __init__(self, pid) -> None:
         self.pid=pid
+
+class ProjectWithTagRequset():
+    def __init__(self, tag="") -> None:
+        self.tag=tag
+

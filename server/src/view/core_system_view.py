@@ -119,10 +119,14 @@ class Core_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
+        # /home/search_feed_with_hashtag?hashtag=뭐
         @self.__app.get('/home/search_feed_with_hashtag')
         def get_hot_hashtag_feed(request:Request, hashtag:Optional[str]):
+
             request_manager = RequestManager()
+
             data_payload = HashtagFeedRequest(hashtag=hashtag)
+
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
                 #raise request_manager.credentials_exception
@@ -136,6 +140,7 @@ class Core_Service_View(Master_View):
             body_data = model.get_response_form_data(self._head_parser)
             #pprint(body_data)
             response = request_manager.make_json_response(body_data=body_data)
+
             return response
         
         @self.__app.get('/home/all_feed')
@@ -327,6 +332,8 @@ class Core_Service_View(Master_View):
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response
+        
+
         
         # 숏 피드에서 다음 피드를 요청할 때
         @self.__app.post('/feed_explore/get_next_feed')

@@ -81,6 +81,20 @@ class FundingProjectModel(BaseModel):
         self._project = self._set_progress(project_list=self._project)
         return
 
+    def get_project_with_tag(self, funing_project_manager:FundingProjectManager):
+        pids = funing_project_manager.get_project_with_tag()
+
+        project_datas = self._database.get_datas_with_ids(target_id="pid", ids="pids")
+
+        for project_data in project_datas:
+            project = Project()
+            project.make_with_dict(project_data)
+            self._project.append(project)
+
+        return
+
+
+
     # 유저가 참여한 프로젝트 인지 확인할것
     # 유저가 참여한 프로젝트인지 확인할 필요가 있을 때 이 함수를 통할 것
     def _is_user_interacted(self, user, project:list):

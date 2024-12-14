@@ -367,3 +367,50 @@ class FeedSearchModel(FeedModel):
 
         except Exception as e:
             raise CoreControllerLogicError("response making error | " + e)
+        
+
+# 피드를 생성하거나 수정하는 모델, 삭제에도 사용될 것
+class CustomModel(BaseModel):
+    def __init__(self, database:Local_Database) -> None:
+        super().__init__(database)
+
+        self.__feed = Feed()
+        self.__feeds = [Feed(), Feed()]
+
+
+    def get_feed_data(self, data_payload):
+        feed_data = self._database.get_data_with_id(target="fid", id=data_payload.fid)
+
+        self.__feed.make_with_dict(dict_data=feed_data)
+        return
+
+    def set_feeds_data(self, data_payload):
+        feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=data_payload.fids)
+
+        for feed_data in feed_datas:
+            feed = Feed()
+            feed.make_with_dict(dict_data=feed_data)
+            self.__feeds.append(feed)
+        return
+
+    def get_feed_data_with_hashtag(self, data_payload, search_engine):
+        fid = search_engine.get_fid_with_hashtag(hashtag = data_payload.hashtag)
+
+        feed_data = self._database.get_data_with_id(target="fid", id=data_payload.fid)
+
+        self.__feed.make_with_dict(dict_data=feed_data)
+        return
+
+
+    def get_response_form_data(self, head_parser):
+        try:
+            body = {
+                "feed" : self.__feed.get_dict_form_data(),
+                "result" : self._make_dict_list_data(list_data=self.__feeds),
+                }
+
+            response = self._get_response_data(head_parser=head_parser, body=body)
+            return response
+
+        except Exception as e:
+            raise CoreControllerLogicError("response making error | " + e)

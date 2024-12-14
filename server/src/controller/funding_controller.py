@@ -145,4 +145,18 @@ class Funding_Controller:
 
         return model
     
+    def get_project_with_tag(self,
+        database:Local_Database, 
+        request,
+        funding_project_manager:FundingProjectManager,
+        num_project = 3
+        ):
 
+        model = FundingProjectModel(database=database)
+
+        model.get_project_with_tag(funing_project_manager=funding_project_manager,
+                                   tag = request.data_payload.tag,
+                                   num_project=num_project
+                                   )
+        
+        return model
