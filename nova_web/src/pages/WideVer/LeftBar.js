@@ -56,7 +56,7 @@ export default function LeftBar({ brightMode }) {
           brightMode === "dark" ? style["dark-mode"] : style["light-mode"]
         }`}
       >
-        <h4 className={style["wide-text"]}>바로가기</h4>
+        {/* <h4 className={style["wide-text"]}>바로가기</h4> */}
         <ul className={style["direct-list"]}>
           <li
             className={style["list-item"]}
@@ -143,7 +143,7 @@ export default function LeftBar({ brightMode }) {
       >
         <div className={style["top-bar"]}>
           <header className={style["wide-text"]}>급상승 해시태그</header>
-          <span className={style_hash["time-text"]}>13:00 기준</span>
+          {/* <span className={style_hash["time-text"]}>13:00 기준</span> */}
         </div>
         <ol className={style_hash["ranking-container"]}>
           {tagList.map((tag, i) => {

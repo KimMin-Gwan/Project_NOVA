@@ -70,9 +70,15 @@ const NavBar = ({ isUserState, brightMode }) => {
       </div>
 
       <div className="nav_button_box">
-        <button className="nav_button">
+        <button
+          className="nav_button"
+          onClick={(e) => {
+            handleNavigate("/nova_funding");
+            handleStopClick(e);
+          }}
+        >
           <img src={search} alt="make" className="btn_img" />
-          <p className="btn_text">탐색</p>
+          <p className="btn_text">펀딩</p>
         </button>
       </div>
 

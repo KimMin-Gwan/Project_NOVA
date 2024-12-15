@@ -52,7 +52,7 @@ export default function RightBar({ brightMode }) {
           brightMode === "dark" ? style["dark-mode"] : style["light-mode"]
         }`}
       >
-        <h4 className={style["wide-text"]}>검색</h4>
+        {/* <h4 className={style["wide-text"]}>검색</h4> */}
         <div className={style["search-bar"]}>
           <input
             type="text"

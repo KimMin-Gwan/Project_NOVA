@@ -76,21 +76,17 @@ const SimpleSlider = ({ tagFeed, brightMode }) => {
             return (
               <div key={i} className="slick-slide">
                 <div className="slide-box">
-                  <div className={`slide-content ${getModeClass(mode)}`}>
+                  <div
+                    className={`slide-content ${getModeClass(mode)}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      onClickMore(feed.fid);
+                    }}
+                  >
                     <div className={style["name-container"]}>
-                      <div className={style["profile"]}> </div>
+                      {/* <div className={style["profile"]}> </div> */}
                       <h2 className={style["name-text"]}>{feed.nickname}</h2>
-                      <button
-                        onClick={() => {
-                          const brightModeValue = localStorage.getItem("brightMode");
-                          onClickMore(feed.fid, brightModeValue);
-                        }}
-                        className={`${style["more-see"]} ${style[getModeClass(mode)]}`}
-                      >
-                        더보기
-                      </button>
                     </div>
-
                     <section className={style["text-container"]}>
                       <div className={style["tag-text"]}>
                         {feed.hashtag.map((tag, i) => {
@@ -103,7 +99,6 @@ const SimpleSlider = ({ tagFeed, brightMode }) => {
                       </div>
                       <div className={style["main-text"]}>{feed.body}</div>
                     </section>
-
                     <footer className={style["like-comment"]}>
                       좋아요 {feed.star}개 | 댓글 {feed.num_comment}개
                     </footer>
