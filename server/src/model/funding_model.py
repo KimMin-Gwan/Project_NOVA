@@ -131,7 +131,7 @@ class FundingProjectModel(BaseModel):
         return
 
     # 덕질 펀딩 프로젝트 중, 목표를 달성한 프로젝트 반환
-    def get_done_project(
+    def get_done_projects(
             self,
             funding_project_manager:FundingProjectManager,
             num_project:int
