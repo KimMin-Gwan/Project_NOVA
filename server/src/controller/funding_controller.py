@@ -3,8 +3,6 @@ from model import Local_Database, BaseModel
 from fastapi import HTTPException, status
 from others import FundingProjectManager
 
-from src.model.funding_model import FundingProjectModel
-
 
 class Funding_Controller:
     # 홈화면에서 맞춤 태그 제공
