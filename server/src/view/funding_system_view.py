@@ -154,7 +154,7 @@ class Funding_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
-        # 진행 중
+        # FIN
         # 베스트 프로젝트 모두 보기에서 필요한 데이터
         # 다른건 없고 [프로젝트 성공 사례의 횟수] 이걸 주면되는듯
         @self.__app.get('/nova_fund_system/home/best_funding_section')

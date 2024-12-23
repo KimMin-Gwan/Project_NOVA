@@ -75,6 +75,24 @@ class FundingProjectManager:
 
         return projects_sorted[:num_project]
 
+    def get_projects_best(self):
+        project_datas = self.__database.get_all_data(target="pid")
+        projects = []
+        filtered_projects = []
+
+        for project_data in project_datas:
+            project = Project()
+            project.make_with_dict(project_data)
+            projects.append(project)
+
+        # 프로젝트들 중 성공한 프로젝트들을 반환함
+        # 성공한 기준은 목표금액과 현재 펀딩액을 비교해, 펀딩액이 목표액을 넘긴 경우를 반환함
+        for project in projects:
+            if project.now_progress >= project.goal_progress:
+                filtered_projects.append(project)
+
+        return filtered_projects
+
 # 건들지 않음
 # Project Body (프로젝트 상세보기 화면 받아옴)
 class ObjectStorageConnection:

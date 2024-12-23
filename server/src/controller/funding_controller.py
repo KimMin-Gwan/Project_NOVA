@@ -102,7 +102,8 @@ class Funding_Controller:
     # 다른건 없고 [프로젝트 성공 사례의 횟수] 이걸 주면되는듯
     def get_best_funding_section(self,
         database:Local_Database,
-        funding_project_manager:FundingProjectManager
+        request,
+        funding_project_manager:FundingProjectManager,
     ) -> BaseModel:
 
         model = HomeBestFundingSectionModel(database=database)
@@ -112,6 +113,11 @@ class Funding_Controller:
         # 유저가 있으면 세팅
         if request.jwt_payload != "":
             model.set_user_with_email(request=request.jwt_payload)
+
+        # 성공한 프로젝트 사례 횟수를 가져온다.
+        model.get_best_funding_section(
+            funding_project_manager=funding_project_manager,
+        )
 
         return model
 

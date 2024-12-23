@@ -159,7 +159,6 @@ class FundingProjectModel(BaseModel):
         return project_list
 
 
-
     def get_response_form_data(self, head_parser):
         body = {
             'project' : self._make_dict_list_data(list_data=self._project),
@@ -207,12 +206,12 @@ class HomeBestFundingSectionModel(BaseModel):
     def get_best_funding_projects(
             self,
             funding_project_manager:FundingProjectManager,
-            num_project:int,
     ) -> BaseModel:
 
-        # self._project = self.
-        return
+        self._projects = funding_project_manager.get_projects_best()
+        self._num_project = len(self._projects)
 
+        return
 
 # 홈화면의 노바 펀딩 알아보기에서 줄것
 # 1. 최애 펀딩 알아보기 조회수
