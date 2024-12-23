@@ -136,7 +136,7 @@ class FundingProjectModel(BaseModel):
             funding_project_manager:FundingProjectManager,
             num_project:int
     ):
-        self._project = funding_project_manager.get_done_projects_with_fan(num_project=num_project)
+        self._project = funding_project_manager.get_done_projects(num_project=num_project)
         self._project = self._set_progress(project_list=self._project)
 
         return
