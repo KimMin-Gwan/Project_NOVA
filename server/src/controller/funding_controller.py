@@ -109,7 +109,7 @@ class Funding_Controller:
 
         # 프로젝트 성공 사례의 횟수를 받아와야됨
 
-        model.get_best_funding_section(
+        model.get_best_funding_projects(
             funding_project_manager=funding_project_manager,
         )
 
