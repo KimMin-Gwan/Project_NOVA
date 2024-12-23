@@ -60,7 +60,7 @@ class Funding_Service_View(Master_View):
         @self.__app.get('/nova_fund_system/home/get_recommend_tag')
         def get_home_recommend_tag(request:Request):
             request_manager = RequestManager()
-            data_payload = ProjectGetRequset()
+            data_payload = ProjectGetRequest()
 
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
@@ -77,18 +77,22 @@ class Funding_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
-        # 홈에서 추천 태그로 프로젝트 받기
+        # 홈에서 추천 태그로 프로젝트 받기, Sample
         @self.__app.get('/nova_fund_system/home/get_project_as_tag')
         def get_home_project_as_tag(request:Request, tag:Optional[str]=""):
             request_manager = RequestManager()
-            data_payload = ProjectWithTagRequset(tag=tag)
+            data_payload = ProjectWithTagRequest(tag=tag)       # 데이터를 받아온 리퀘스트 데이터
 
+            # 쿠키를 통해 데이터를 뜯는 과정
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
                 #raise request_manager.credentials_exception
 
+
             funding_controller =Funding_Controller()
-            model = funding_controller.get_sample_project(
+            # 태그를 통해 프로젝트를 찾으러 감.
+            # 이 부분은 아직 안 됨. 나중에 다시 들어온다.
+            model = funding_controller.get_project_with_tag(
                 database=self.__database,
                 request=request_manager,
                 funding_project_manager=self.__funding_project_manager,
@@ -98,39 +102,49 @@ class Funding_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
-        # 홈에서 최애 펀딩 프로젝트 받기
+        # 홈에서 최애 펀딩 프로젝트 받기, FIN
         @self.__app.get('/nova_fund_system/home/get_bias_project')
         def get_home_bias_project(request:Request):
-            request_manager = RequestManager()
-            data_payload = ProjectGetRequset()
+            # 홈에서 최애의 펀딩 프로젝트를 얻어내야한다.
+            # 단순히 모든 최애들 프로젝트 중 가장 최신의 것만 얻으면 된다.
+            # 그러면, INPUT = X, OUTPUT : 입력받은 최애의 프로젝트 데이터
 
+            request_manager = RequestManager()
+            data_payload = ProjectGetRequest()
+
+            # 단순히 최애들의 프로젝트를 띄우고 싶음. 따라서, 로그인 정보는 불필요함
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
-            #if not request_manager.jwt_payload.result:
-                #raise request_manager.credentials_exception
+            # if not request_manager.jwt_payload.result:
+            #     raise request_manager.credentials_exception
 
             funding_controller =Funding_Controller()
-            model = funding_controller.get_sample_project(
+            # 컨트롤러에 요청하여 받아온다
+            model = funding_controller.get_home_bias_project(
                 database=self.__database,
                 request=request_manager,
                 funding_project_manager=self.__funding_project_manager,
                 num_project=3)
 
+            # 리스폰스 데이터를 제작한다
             body_data = model.get_response_form_data(self._head_parser)
+            # 리퀘스트에 대응하는 리스폰스 제작
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
-        # 홈에서 덕질 펀딩 프로젝트 받기
+        # 홈에서 덕질 펀딩 프로젝트 받기, FIN
         @self.__app.get('/nova_fund_system/home/get_fan_funding')
-        def get_home_fan_funding(request:Request):
+        def get_home_fan_project(request:Request):
+            # 최애의 펀딩시스템과 일맥상통 한다.
+            # 그러면 똑같은 방법으로 시동한다.
             request_manager = RequestManager()
-            data_payload = ProjectGetRequset()
+            data_payload = ProjectGetRequest()
 
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
                 #raise request_manager.credentials_exception
 
             funding_controller =Funding_Controller()
-            model = funding_controller.get_sample_project(
+            model = funding_controller.get_home_fan_project(
                 database=self.__database,
                 request=request_manager,
                 funding_project_manager=self.__funding_project_manager,
@@ -172,7 +186,7 @@ class Funding_Service_View(Master_View):
         @self.__app.get('/nova_fund_system/fan_project/achieve_the_goal')
         def get_project_list(request:Request, key:Optional[str]="" ):
             request_manager = RequestManager()
-            data_payload = ProjectGetRequset(key=key)
+            data_payload = ProjectGetRequest(key=key)
 
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
@@ -193,7 +207,7 @@ class Funding_Service_View(Master_View):
         @self.__app.get('/nova_fund_system/fan_project/soon_expire')
         def get_project_list(request:Request):
             request_manager = RequestManager()
-            data_payload = ProjectGetRequset()
+            data_payload = ProjectGetRequest()
 
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
@@ -214,7 +228,7 @@ class Funding_Service_View(Master_View):
         @self.__app.get('/nova_fund_system/fan_project/recommend_project')
         def get_project_list(request:Request):
             request_manager = RequestManager()
-            data_payload = ProjectGetRequset()
+            data_payload = ProjectGetRequest()
 
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
@@ -235,7 +249,7 @@ class Funding_Service_View(Master_View):
         @self.__app.get('/nova_fund_system/fan_project/funding_project')
         def get_project_list(request:Request):
             request_manager = RequestManager()
-            data_payload = ProjectGetRequset()
+            data_payload = ProjectGetRequest()
 
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
@@ -256,7 +270,7 @@ class Funding_Service_View(Master_View):
         @self.__app.get('/nova_fund_system/fan_project/donation_project')
         def get_project_list(request:Request):
             request_manager = RequestManager()
-            data_payload = ProjectGetRequset()
+            data_payload = ProjectGetRequest()
 
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
@@ -279,7 +293,7 @@ class Funding_Service_View(Master_View):
         @self.__app.get('/nova_fund_system/fan_project_list/achieve_the_goal')
         def get_project_list(request:Request, key:Optional[str]="" ):
             request_manager = RequestManager()
-            data_payload = ProjectGetRequset(key=key)
+            data_payload = ProjectGetRequest(key=key)
 
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
@@ -300,7 +314,7 @@ class Funding_Service_View(Master_View):
         @self.__app.get('/nova_fund_system/fan_project_list/soon_expire')
         def get_project_list(request:Request, key:Optional[str]="" ):
             request_manager = RequestManager()
-            data_payload = ProjectGetRequset(key=key)
+            data_payload = ProjectGetRequest(key=key)
 
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
@@ -321,7 +335,7 @@ class Funding_Service_View(Master_View):
         @self.__app.get('/nova_fund_system/fan_project_list/recommend_project')
         def get_project_list(request:Request, key:Optional[str]="" ):
             request_manager = RequestManager()
-            data_payload = ProjectGetRequset(key=key)
+            data_payload = ProjectGetRequest(key=key)
 
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
@@ -342,7 +356,7 @@ class Funding_Service_View(Master_View):
         @self.__app.get('/nova_fund_system/fan_project_list/funding_project')
         def get_project_list(request:Request, key:Optional[str]="" ):
             request_manager = RequestManager()
-            data_payload = ProjectGetRequset(key=key)
+            data_payload = ProjectGetRequest(key=key)
 
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
@@ -363,7 +377,7 @@ class Funding_Service_View(Master_View):
         @self.__app.get('/nova_fund_system/fan_project_list/donation_project')
         def get_project_list(request:Request, key:Optional[str]="" ):
             request_manager = RequestManager()
-            data_payload = ProjectGetRequset(key=key)
+            data_payload = ProjectGetRequest(key=key)
 
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
@@ -481,11 +495,9 @@ class MakeNewProjectRequest(RequestHeader):
         self.age = body['age']
         self.gender = body['gender']
 
-
 class MyFeedRequest():
     def __init__(self, fid) -> None:
         self.fid= fid
-
 
 class DummyRequest():
     def __init__(self) -> None:
@@ -502,7 +514,7 @@ class ProjectEditRequest():
         self.images =images
         self.image_names = image_names
 
-class ProjectGetRequset():
+class ProjectGetRequest():
     def __init__(self, key=-1) -> None:
         self.key=key
 
@@ -510,7 +522,10 @@ class ProjectDetailRequest():
     def __init__(self, pid) -> None:
         self.pid=pid
 
-class ProjectWithTagRequset():
+class ProjectWithTagRequest():
     def __init__(self, tag="") -> None:
         self.tag=tag
 
+class ProjectWithBiasRequest():
+    def __init__(self, bias="") -> None:
+        self.bias=bias

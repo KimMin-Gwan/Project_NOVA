@@ -192,7 +192,7 @@ class RequestManager(JWTManager):
         finally:
             return
 
-    # json데이터 보내줘야할때ㅔ response 만드는 곳
+    # json데이터 보내줘야할 때 response 만드는 곳
     def make_json_response(self, body_data:dict, token = ""):
         if token != "":
             self.new_token = token

@@ -81,8 +81,15 @@ class FundingProjectModel(BaseModel):
         self._project = self._set_progress(project_list=self._project)
         return
 
-    def get_project_with_tag(self, funing_project_manager:FundingProjectManager):
-        pids = funing_project_manager.get_project_with_tag()
+    # 태그를 통해 프로젝트를 가져온다
+    # 미완성 부분이므로, 아직은 패스
+    def get_project_with_tag(
+            self,
+            funding_project_manager:FundingProjectManager,
+            tag:str,
+            num_project
+    ):
+        # pids = funding_project_manager.get_project_with_tag()
 
         project_datas = self._database.get_datas_with_ids(target_id="pid", ids="pids")
 
@@ -90,6 +97,32 @@ class FundingProjectModel(BaseModel):
             project = Project()
             project.make_with_dict(project_data)
             self._project.append(project)
+
+        self._set_progress(project_list=self._project)
+
+        return
+
+    def get_project_with_bias(
+            self,
+            funding_project_manager:FundingProjectManager,
+            num_project:int
+    ):
+        # 최애의 프로젝트들 가장 최근 것들 3개 들고 옴
+        self._project = funding_project_manager.get_projects_by_bias(num_project=num_project)
+        # 참여율 계산
+        self._project = self._set_progress(project_list=self._project)
+
+        return
+
+    def get_project_with_fan(
+            self,
+            funding_project_manager:FundingProjectManager,
+            num_project:int
+    ):
+        # 팬들의 프로젝트들 가장 최근 것들 3개 들고 옴
+        self._project = funding_project_manager.get_projects_by_fan(num_project=num_project)
+        # 참여율 계산
+        self._project = self._set_progress(project_list=self._project)
 
         return
 
@@ -121,6 +154,8 @@ class FundingProjectModel(BaseModel):
 
         return project_list
 
+
+
     def get_response_form_data(self, head_parser):
         body = {
             'project' : self._make_dict_list_data(list_data=self._project),
@@ -149,13 +184,13 @@ class FundingProjectTagModel(BaseModel):
         response = self._get_response_data(head_parser=head_parser, body=body)
         return response
 
-
 # 베스트 프로젝트 모두 보기에서 필요한 데이터
 # 다른건 없고 [프로젝트 성공 사례의 횟수] 이걸 주면되는듯
 class HomeBestFundingSectionModel(BaseModel):
     def __init__(self, database:Local_Database) -> None:
         super().__init__(database)
         self._num_project = 12
+        self._projects = []
 
     def get_response_form_data(self, head_parser):
         body = {
@@ -164,6 +199,14 @@ class HomeBestFundingSectionModel(BaseModel):
 
         response = self._get_response_data(head_parser=head_parser, body=body)
         return response
+
+    def get_best_funding_projects(
+            self,
+            num_project:int,
+    ) -> BaseModel:
+
+        # self._project = self.
+        return
 
 
 # 홈화면의 노바 펀딩 알아보기에서 줄것
@@ -212,3 +255,5 @@ class EditProjectModel(BaseModel):
 
         response = self._get_response_data(head_parser=head_parser, body=body)
         return response
+
+

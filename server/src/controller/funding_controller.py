@@ -3,6 +3,9 @@ from model import Local_Database, BaseModel
 from fastapi import HTTPException, status
 from others import FundingProjectManager
 
+from src.model.funding_model import FundingProjectModel
+
+
 class Funding_Controller:
     # 홈화면에서 맞춤 태그 제공
     def get_home_banner(self,
@@ -102,11 +105,16 @@ class Funding_Controller:
     # 다른건 없고 [프로젝트 성공 사례의 횟수] 이걸 주면되는듯
     def get_best_funding_section(self,
         database:Local_Database,
-        funding_project_manager:FundingProjectManager):
+        funding_project_manager:FundingProjectManager
+    ) -> BaseModel:
 
         model = HomeBestFundingSectionModel(database=database)
 
         # 프로젝트 성공 사례의 횟수를 받아와야됨
+
+        # 유저가 있으면 세팅
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
 
         return model
 
@@ -144,7 +152,8 @@ class Funding_Controller:
             model.get_project_body_data(project_manager=funding_project_manager)
 
         return model
-    
+
+    # Tag를 통해 프로젝트를 찾으러 가는 매니저
     def get_project_with_tag(self,
         database:Local_Database, 
         request,
@@ -152,11 +161,64 @@ class Funding_Controller:
         num_project = 3
         ):
 
+        # 모델을 정의
         model = FundingProjectModel(database=database)
 
-        model.get_project_with_tag(funing_project_manager=funding_project_manager,
+        # 모델에서 프로젝트를 반환받음
+        model.get_project_with_tag(funding_project_manager=funding_project_manager,
                                    tag = request.data_payload.tag,
                                    num_project=num_project
                                    )
         
+        return model
+
+    # 추천 프로젝트 제공
+    def get_home_bias_project(
+            self,
+            database:Local_Database,
+            request,
+            funding_project_manager:FundingProjectManager,
+            num_project=1
+    ) -> BaseModel:
+
+        model = FundingProjectModel(database=database)
+
+        # 유저가 있으면 세팅
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
+
+        # 최애들의 프로젝트들을 끌고오되, num_project 개수만큼 끌고 온다.
+        model.get_project_with_bias(
+            funding_project_manager=funding_project_manager,
+            num_project=num_project,
+        )
+        ## 해야되는일 여기 적으면 됨
+        #model.try_search_feed_with_fid(
+        #funding_project_manager=funding_project_manager,
+        #fid=request.data_payload.fid,
+        #num_project=num_project)
+
+
+        return model
+
+    def get_home_fan_project(
+            self,
+            database:Local_Database,
+            request,
+            funding_project_manager:FundingProjectManager,
+            num_project=1
+    )-> BaseModel:
+
+        model = FundingProjectModel(database=database)
+
+        # 유저가 있으면 세팅
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
+
+        # 최애들의 프로젝트들을 끌고오되, num_project 개수만큼 끌고 온다.
+        model.get_project_with_fan(
+            funding_project_manager=funding_project_manager,
+            num_project=num_project,
+        )
+
         return model

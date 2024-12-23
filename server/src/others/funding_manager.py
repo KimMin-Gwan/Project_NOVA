@@ -42,8 +42,38 @@ class FundingProjectManager:
     def get_project_body_data(self, pid):
         body_data = self.__storage_connection.get_project_body(pid=pid)
         return body_data
-    
 
+    # 미완성부분
+    def get_projects_with_tags(self, tag:str, num_project):
+        project_datas = self.__database.get_all_data(target="pid")
+
+    def get_projects_by_bias(self, num_project):
+        project_datas = self.__database.get_datas_with_key(target_id="pid", key="ptype", key_datas=["bias"])
+        projects = []
+
+        for project_data in project_datas:
+            project = Project()
+            project.make_with_dict(project_data)
+            projects.append(project)
+
+        # 가장 최근에 생성 된 프로젝트들은 PID가 가장 크다. 따라서, 시간 순 정렬을 PID로 할 수있다.
+        projects_sorted = sorted(projects, key=lambda p: p.pid, reverse=True)
+
+        return projects_sorted[:num_project]
+
+    def get_projects_by_fan(self, num_project):
+        project_datas = self.__database.get_datas_with_key(target_id="pid", key="ptype", key_datas=["fan"])
+        projects = []
+
+        for project_data in project_datas:
+            project = Project()
+            project.make_with_dict(project_data)
+            projects.append(project)
+
+        # 가장 최근에 생성 된 프로젝트들은 PID가 가장 크다. 따라서, 시간 순 정렬을 PID로 할 수있다.
+        projects_sorted = sorted(projects, key=lambda p: p.pid, reverse=True)
+
+        return
 
 class ObjectStorageConnection:
     def __init__(self):
