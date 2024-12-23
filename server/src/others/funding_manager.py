@@ -48,7 +48,7 @@ class FundingProjectManager:
         project_datas = self.__database.get_all_data(target="pid")
 
     def get_projects_by_bias(self, num_project):
-        project_datas = self.__database.get_datas_with_key(target_id="pid", key="ptype", key_datas=["bias"])
+        project_datas = self.__database.get_datas_with_key(target="pid", key="ptype", key_datas=["bias"])
         projects = []
 
         for project_data in project_datas:
@@ -62,7 +62,7 @@ class FundingProjectManager:
         return projects_sorted[:num_project]
 
     def get_projects_by_fan(self, num_project):
-        project_datas = self.__database.get_datas_with_key(target_id="pid", key="ptype", key_datas=["fan"])
+        project_datas = self.__database.get_datas_with_key(target="pid", key="ptype", key_datas=["fan"])
         projects = []
 
         for project_data in project_datas:
@@ -75,6 +75,8 @@ class FundingProjectManager:
 
         return
 
+# 건들지 않음
+# Project Body (프로젝트 상세보기 화면 받아옴)
 class ObjectStorageConnection:
     def __init__(self):
         self.__endpoint = "https://kr.object.ncloudstorage.com/nova-project-image/"
@@ -92,7 +94,6 @@ class ObjectStorageConnection:
 
 
 # 관리를 위한 프로젝트 데이터 도메인
-
 class ManagedProject:
     def __init__(self, pid="", pname="", uid="", progress="",
                  expire_date="", make_date="", ptype="default", ftype="",

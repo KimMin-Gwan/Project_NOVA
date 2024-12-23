@@ -76,7 +76,11 @@ class FundingProjectModel(BaseModel):
         self._project = []
         self._key = -1
 
-    def get_sample_project(self, num_project, funding_project_manager:FundingProjectManager):
+    def get_sample_project(
+            self,
+            num_project,
+            funding_project_manager:FundingProjectManager
+    ):
         self._project = funding_project_manager.get_sample_project(num_project=num_project)
         self._project = self._set_progress(project_list=self._project)
         return
@@ -202,6 +206,7 @@ class HomeBestFundingSectionModel(BaseModel):
 
     def get_best_funding_projects(
             self,
+            funding_project_manager:FundingProjectManager,
             num_project:int,
     ) -> BaseModel:
 
