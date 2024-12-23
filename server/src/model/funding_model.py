@@ -131,23 +131,12 @@ class FundingProjectModel(BaseModel):
         return
 
     # 덕질 펀딩 프로젝트 중, 목표를 달성한 프로젝트 반환
-    def get_done_project_with_fan(
+    def get_done_project(
             self,
             funding_project_manager:FundingProjectManager,
             num_project:int
     ):
         self._project = funding_project_manager.get_done_projects_with_fan(num_project=num_project)
-        self._project = self._set_progress(project_list=self._project)
-
-        return
-
-    # 최애 펀딩 프로젝트 중, 목표를 달성한 프로젝트 반환
-    def get_done_project_with_bias(
-            self,
-            funding_project_manager:FundingProjectManager,
-            num_project:int
-    ):
-        self._project = funding_project_manager.get_done_projects_with_bias(num_project=num_project)
         self._project = self._set_progress(project_list=self._project)
 
         return
