@@ -167,7 +167,8 @@ class Funding_Service_View(Master_View):
             body_data = model.get_response_form_data(self._head_parser)
             return body_data
 
-        # 홈화면의 노바 펀딩 알아보기에서 줄것
+        # 이부분은 다른 페이지가 필요하니까 아직
+        # 홈화면의 노바 펀딩 알아보기에서 줄것은
         # 1. 최애 펀딩 알아보기 조회수
         # 2. 일반 펀딩 알아보기 조회수
         # 3. 성공하는 펀딩 기술 조회수
@@ -183,7 +184,9 @@ class Funding_Service_View(Master_View):
 
         #------------------------ 프로젝트 덕질 프로젝트 페이지에서 요청 ----------------------------
 
+        # 확인
         # 1. 이미 목표 달성에 성공한 프로젝트
+        # 이는 미리보기 형태로, 보여줄 개수가 정해져있다.
         @self.__app.get('/nova_fund_system/fan_project/achieve_the_goal')
         def get_project_list(request:Request, key:Optional[str]="" ):
             request_manager = RequestManager()
@@ -194,7 +197,7 @@ class Funding_Service_View(Master_View):
                 #raise request_manager.credentials_exception
 
             funding_controller =Funding_Controller()
-            model = funding_controller.get_sample_project(
+            model = funding_controller.get_done_project(
                 database=self.__database,
                 request=request_manager,
                 funding_project_manager=self.__funding_project_manager,

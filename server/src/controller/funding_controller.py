@@ -204,6 +204,7 @@ class Funding_Controller:
 
         return model
 
+    # 홈 화면에 팬 펀딩 프로젝트 표시
     def get_home_fan_project(
             self,
             database:Local_Database,
@@ -220,6 +221,27 @@ class Funding_Controller:
 
         # 최애들의 프로젝트들을 끌고오되, num_project 개수만큼 끌고 온다.
         model.get_project_with_fan(
+            funding_project_manager=funding_project_manager,
+            num_project=num_project,
+        )
+
+        return model
+
+    # 펀딩 프로젝트에서 마감된 프로젝트 보기
+    def get_done_project(
+            self,
+            database:Local_Database,
+            request,
+            funding_project_manager:FundingProjectManager,
+            num_project=8
+    )-> BaseModel:
+        model = FundingProjectModel(database=database)
+
+        # 유저가 있으면 세팅
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
+
+        model.get_done_projects(
             funding_project_manager=funding_project_manager,
             num_project=num_project,
         )

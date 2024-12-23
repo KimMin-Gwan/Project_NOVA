@@ -78,20 +78,57 @@ class FundingProjectManager:
     def get_projects_best(self):
         project_datas = self.__database.get_all_data(target="pid")
         projects = []
-        filtered_projects = []
 
         for project_data in project_datas:
             project = Project()
             project.make_with_dict(project_data)
-            projects.append(project)
 
-        # 프로젝트들 중 성공한 프로젝트들을 반환함
-        # 성공한 기준은 목표금액과 현재 펀딩액을 비교해, 펀딩액이 목표액을 넘긴 경우를 반환함
-        for project in projects:
+            # 프로젝트들 중 성공한 프로젝트들을 반환함
+            # 성공한 기준은 목표금액과 현재 펀딩액을 비교해, 펀딩액이 목표액을 넘긴 경우를 반환함
             if project.now_progress >= project.goal_progress:
-                filtered_projects.append(project)
+                projects.append(project)
 
-        return filtered_projects
+        return projects
+
+    # 완료된 펀딩 프로젝트 표시
+    def get_done_projects(self, num_project):
+        # 가지고 있는 모든 프로젝트들을 들고와서
+        project_datas = self.__database.get_all_data(target="pid")
+        projects = []
+
+        # 프로젝트가 목표가 달성되어 있는지 확인
+        for project_data in project_datas:
+            project = Project()
+            project.make_with_dict(project_data)
+
+            # 프로젝트가 목표 달성되었는지 확인
+            if project.now_progress >= project.goal_progress:
+                projects.append(project)
+
+        # 가장 최근에 생성 된 프로젝트들은 PID가 가장 크다. 따라서, 시간 순 정렬을 PID로 할 수있다.
+        projects_sorted = sorted(projects, key=lambda p: p.pid, reverse=True)
+
+        return projects_sorted[:num_project]
+
+
+    # def get_done_projects_with_bias(self, num_project):
+    #     # 팬들이 만든 프로젝트를 모듀 들고와서
+    #     project_datas = self.__database.get_datas_with_key(target="pid", key="ptype", key_datas=["bias"])
+    #     projects = []
+    #
+    #     for project_data in project_datas:
+    #         project = Project()
+    #         project.make_with_dict(project_data)
+    #
+    #         # 프로젝트가 목표 달성되었는지 확인
+    #         if project.now_progress >= project.goal_progress:
+    #             projects.append(project)
+    #
+    #     # 가장 최근에 생성 된 프로젝트들은 PID가 가장 크다. 따라서, 시간 순 정렬을 PID로 할 수있다.
+    #     projects_sorted = sorted(projects, key=lambda p: p.pid, reverse=True)
+    #
+    #     return projects_sorted[:num_project]
+
 
 # 건들지 않음
 # Project Body (프로젝트 상세보기 화면 받아옴)

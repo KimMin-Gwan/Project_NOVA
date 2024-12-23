@@ -109,13 +109,49 @@
         "user_info": "http://www.naver.com",
         "make_date": "2024/11/26",
         "expire_date": "2024/12/26",
-        "head_image": ["https://kr.object.ncloudstorage.com/nova-project-image/7.PNG"],
+        "head_image": [
+            "https://kr.object.ncloudstorage.com/nova-project-image/7.PNG"
+        ],
         "body_url": "",
         "now_progress": 500,
         "goal_progress": 1000,
         "ptype": "fan",
         "ftype": "donate",
-        "introduce" : "설명글 예시",
-        "num_participants" : 120
+        "introduce": "설명글 예시",
+        "num_participants": 120
+    },
+    {
+        "pid": "8",
+        "pname": "여자친구 10주년 복귀 기념 굿즈 펀딩",
+        "uid": "4133-afgh-1565",
+        "uname": "BUDDY 공식",
+        "user_info": "http://www.naver.com",
+        "make_date": "2024/12/3",
+        "expire_date": "2025/1/15",
+        "head_image": [],
+        "body_url": "",
+        "now_progress": 20000,
+        "goal_progress": 20000,
+        "ptype": "fan",
+        "ftype": "donate",
+        "introduce": "설명글 예시",
+        "num_participants": 120
+    },
+    {
+        "pid": "9",
+        "pname": "용원게이는 정말 유명한 게이임",
+        "uid": "4133-afgh-1565",
+        "uname": "DEEP♂DARK♂FANTASY",
+        "user_info": "http://www.naver.com",
+        "make_date": "2024/12/3",
+        "expire_date": "2025/12/25",
+        "head_image": [],
+        "body_url": "",
+        "now_progress": 15000,
+        "goal_progress": 10000,
+        "ptype": "fan",
+        "ftype": "donate",
+        "introduce": "설명글 예시",
+        "num_participants": 120
     }
 ]
