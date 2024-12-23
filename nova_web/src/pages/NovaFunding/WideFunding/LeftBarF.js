@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-export default function LeftBarF({brightMode}) {
+export default function LeftBarF({ brightMode }) {
   let navigate = useNavigate();
 
   let [tagList, setTagList] = useState([]);
@@ -89,8 +89,8 @@ export default function LeftBarF({brightMode}) {
 
       <div className={style_sub["nova_direct-box"]}>
         <img src={direct_icon} alt="노바펀딩 바로가기" className={style_sub["icon-text"]}></img>
-        <Link to="/nova_funding" className={style_sub["go-nova"]}>
-          노바펀딩 바로가기
+        <Link to="/" className={style_sub["go-nova"]}>
+          노바 플랫폼 바로가기
         </Link>
       </div>
 
@@ -101,21 +101,15 @@ export default function LeftBarF({brightMode}) {
       >
         <h4 className={style["wide-text"]}>검색</h4>
         <div className={style["search-bar"]}>
-          <input
-            type="text"
-           
-          ></input>
+          <input type="text"></input>
           <button onClick={handleNavigate}>
             <img src={search_icon} className={style["icon-text"]}></img>
           </button>
         </div>
         <span className={style["search-memo"]}>
           <p>검색기록</p>
-         
         </span>
-        
       </div>
-
     </div>
   );
 }

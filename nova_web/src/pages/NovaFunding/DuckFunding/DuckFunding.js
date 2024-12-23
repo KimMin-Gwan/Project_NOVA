@@ -173,10 +173,10 @@ export default function DuckFunding() {
             전체보기
           </div>
         </div>
-        <div className={style["ad-container"]}>
+        <div className={style["projects"]}>
           {clickProject.map((project, i) => {
             return (
-              <div key={project.pid} className={style["ad-box"]}>
+              <div key={project.pid} className={style["project-box"]}>
                 <div className={style["soon-img"]}>
                   <img src={project.head_image[0]} />
                 </div>

@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import FundingSlider from "../../component/FundingSlider";
 import LeftBar from "./WideFunding/LeftBarF.js";
 import RightBar from "./WideFunding/RightBarF.js";
+import LeftBarF from "./WideFunding/LeftBarF.js";
 export default function NovaFunding({ brightmode }) {
   let navigate = useNavigate();
 
@@ -111,7 +112,7 @@ export default function NovaFunding({ brightmode }) {
     <div className={style["widever-style"]}>
       <div className={style["empty-box"]}></div>
       <section className="contents com1">
-        <LeftBar />
+        <LeftBarF />
       </section>
       <div className={style.container}>
         <header className={style.header}>

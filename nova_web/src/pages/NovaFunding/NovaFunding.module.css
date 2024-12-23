@@ -3,22 +3,19 @@
   display: flex;
   max-width: 1350px;
   margin: 0 auto;
-
 }
-.empty-box{
-width: 100px;
+.empty-box {
+  width: 100px;
 }
 
-@media (max-width: 1024px){
-
-  .empty-box{
+@media (max-width: 1024px) {
+  .empty-box {
     display: none;
   }
 }
 
 /* Topbar */
 .container {
-
   max-width: 500px;
   margin: 0 auto;
   display: flex;
@@ -350,12 +347,14 @@ width: 100px;
   margin-bottom: 10px;
 }
 
-
 /* 와이드 */
 @media (min-width: 1024px) {
- .dis{
-  display: none;
- }
+  .dis {
+    display: none;
+  }
+}
 
-
+/* 버튼 */
+.moresee-btn {
+  cursor: pointer;
 }

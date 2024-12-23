@@ -62,7 +62,7 @@ const FundingSlider = ({ biasProjects, brightMode }) => {
                   {/* <progress value="70" max="100"></progress> */}
                   <p>{project.int_progress}%</p>
                 </div>
-                <button>자세히보기</button>
+                <button className={style["moresee-btn"]}>자세히보기</button>
               </div>
             </div>
           );
