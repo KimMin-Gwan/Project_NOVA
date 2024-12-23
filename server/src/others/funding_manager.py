@@ -73,7 +73,7 @@ class FundingProjectManager:
         # 가장 최근에 생성 된 프로젝트들은 PID가 가장 크다. 따라서, 시간 순 정렬을 PID로 할 수있다.
         projects_sorted = sorted(projects, key=lambda p: p.pid, reverse=True)
 
-        return
+        return projects_sorted[:num_project]
 
 # 건들지 않음
 # Project Body (프로젝트 상세보기 화면 받아옴)
