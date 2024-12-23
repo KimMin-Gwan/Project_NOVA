@@ -179,3 +179,11 @@
   background-color: #eaeeff;
   border: 1px solid #000000;
 }
+
+/* 검색기록 */
+.search-history {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

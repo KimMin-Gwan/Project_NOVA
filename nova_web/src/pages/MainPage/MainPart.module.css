@@ -247,7 +247,7 @@
 .ranking-name {
   margin-left: 20px;
   counter-reset: #fafafa;
-  align-self: center;
+  align-self: flex-start;
   text-decoration: underline;
   cursor: pointer;
 }
