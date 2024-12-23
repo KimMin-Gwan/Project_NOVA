@@ -11,6 +11,7 @@ import { getModeClass } from "./../../App.js";
 const WriteFeed = ({ brightmode }) => {
   const navigate = useNavigate();
 
+  let [isLogined, setIsLogined] = useState(false);
   let header = {
     "request-type": "default",
     "client-version": "v1.0.1",
@@ -76,6 +77,12 @@ const WriteFeed = ({ brightmode }) => {
     })
       .then((response) => {
         response.json();
+        // console.log("231", response);
+        if (response.state !== 200) {
+          setIsLogined(false);
+        } else {
+          setIsLogined(true);
+        }
       })
       .then((data) => {
         console.log(data);
@@ -152,6 +159,16 @@ const WriteFeed = ({ brightmode }) => {
     if (inputText.length <= 300) {
       setBodyText(e.target.value);
       setInputBodyCount(e.target.value.length);
+    }
+  }
+
+  function onClickUpload() {
+    if (isLogined) {
+      alert("업로드가 완료되었습니다.");
+      navigate(-1);
+    } else {
+      alert("로그인이 필요합니다.");
+      navigate("/");
     }
   }
 
@@ -312,7 +329,7 @@ const WriteFeed = ({ brightmode }) => {
                     <input name="share" type="checkbox"></input>공유 허용
                   </label>
                 </div>
-                <button type="submit" className={style["upload-btn"]}>
+                <button type="submit" className={style["upload-btn"]} onClick={onClickUpload}>
                   업로드
                 </button>
               </div>
