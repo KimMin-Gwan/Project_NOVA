@@ -154,7 +154,7 @@ class Funding_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
-        # FIN
+        # 확인필요
         # 베스트 프로젝트 모두 보기에서 필요한 데이터
         # 다른건 없고 [프로젝트 성공 사례의 횟수] 이걸 주면되는듯
         @self.__app.get('/nova_fund_system/home/best_funding_section')
@@ -184,7 +184,7 @@ class Funding_Service_View(Master_View):
 
         #------------------------ 프로젝트 덕질 프로젝트 페이지에서 요청 ----------------------------
 
-        # 확인
+        # 확인, FIN
         # 1. 이미 목표 달성에 성공한 프로젝트
         # 이는 미리보기 형태로, 보여줄 개수가 정해져있다.
         @self.__app.get('/nova_fund_system/fan_project/achieve_the_goal')
