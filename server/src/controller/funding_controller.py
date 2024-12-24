@@ -213,7 +213,7 @@ class Funding_Controller:
         if request.jwt_payload != "":
             model.set_user_with_email(request=request.jwt_payload)
 
-        # 최애들의 프로젝트들을 끌고오되, num_project 개수만큼 끌고 온다.
+        # 팬들의 프로젝트들을 끌고오되, num_project 개수만큼 끌고 온다.
         model.get_project_with_fan(
             funding_project_manager=funding_project_manager,
             num_project=num_project,

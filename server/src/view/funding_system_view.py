@@ -399,8 +399,6 @@ class Funding_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
         
-
-
         # 프로젝트 디테일 요청
         @self.__app.get('/nova_fund_system/project_detail')
         def get_project_list(request:Request, pid:Optional[str]="" ):
