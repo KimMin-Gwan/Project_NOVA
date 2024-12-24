@@ -170,5 +170,41 @@
         "ftype": "donate",
         "introduce": "설명글 예시",
         "num_participants": 120
+    },
+    {
+        "pid": "10",
+        "pname": "QWER 마젠타 굿즈 펀딩",
+        "uid": "4133-afgh-1565",
+        "uname": "DEEP♂DARK♂FANTASY",
+        "user_info": "http://www.naver.com",
+        "make_date": "2024/12/21",
+        "expire_date": "2025/1/31",
+        "head_image": [
+            "https://kr.object.ncloudstorage.com/nova-project-image/4.png"
+        ],
+        "body_url": "",
+        "now_progress": 13500,
+        "goal_progress": 10000,
+        "ptype": "fan",
+        "ftype": "donate",
+        "introduce": "설명글 예시",
+        "num_participants": 120
+    },
+    {
+        "pid": "11",
+        "pname": "녹두로 교수님의 마리오/몬스터 헌터 강습회(팬미팅)",
+        "uid": "4133-afgh-1565",
+        "uname": "선고와수리",
+        "user_info": "http://www.naver.com",
+        "make_date": "2024/12/23",
+        "expire_date": "2025/2/4",
+        "head_image": ["https://kr.object.ncloudstorage.com/nova-project-image/4.png"],
+        "body_url": "",
+        "now_progress": 1230,
+        "goal_progress": 10000,
+        "ptype": "fan",
+        "ftype": "donate",
+        "introduce": "설명글 예시",
+        "num_participants": 120
     }
 ]
