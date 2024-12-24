@@ -184,7 +184,7 @@ class Funding_Service_View(Master_View):
 
         #------------------------ 프로젝트 덕질 프로젝트 페이지에서 요청 ----------------------------
 
-        # 확인, NearDoneProject모델로 교체하여 진행했기 때문에 재확인 필수
+        # FIN
         # 1. 이미 목표 달성에 성공한 프로젝트
         # 이는 미리보기 형태로, 보여줄 개수가 정해져있다.
         @self.__app.get('/nova_fund_system/fan_project/achieve_the_goal')
@@ -201,14 +201,14 @@ class Funding_Service_View(Master_View):
                 database=self.__database,
                 request=request_manager,
                 funding_project_manager=self.__funding_project_manager,
-                num_project=4)
+                num_project=2)
 
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
 
-        # 2. 마감 임박 프로젝트, 확인 필요
+        # 2. 마감 임박 프로젝트, FIN
         @self.__app.get('/nova_fund_system/fan_project/soon_expire')
         def get_project_list(request:Request):
             request_manager = RequestManager()
@@ -292,7 +292,7 @@ class Funding_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
-        # ----- 여기는 덕질프로젝트에서 전쳅보기하면 줄 거 -------------
+        # ----- 여기는 덕질프로젝트에서 전체보기하면 줄 거 -------------
 
         # 1. 이미 목표 달성에 성공한 프로젝트
         @self.__app.get('/nova_fund_system/fan_project_list/achieve_the_goal')
@@ -305,11 +305,11 @@ class Funding_Service_View(Master_View):
                 #raise request_manager.credentials_exception
 
             funding_controller =Funding_Controller()
-            model = funding_controller.get_sample_project(
+            model = funding_controller.get_done_project(
                 database=self.__database,
                 request=request_manager,
                 funding_project_manager=self.__funding_project_manager,
-                num_project=10)
+                num_project=-1)
 
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
@@ -326,11 +326,11 @@ class Funding_Service_View(Master_View):
                 #raise request_manager.credentials_exception
 
             funding_controller =Funding_Controller()
-            model = funding_controller.get_sample_project(
+            model = funding_controller.get_near_deadline_project(
                 database=self.__database,
                 request=request_manager,
                 funding_project_manager=self.__funding_project_manager,
-                num_project=10)
+                num_project=-1)
 
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
@@ -422,7 +422,6 @@ class Funding_Service_View(Master_View):
             return response
 
 
-        
     def post_route(self, endpoint:str):
         # 새로운 프로젝트를 요청할 때 넣는 요청
         # 작성한 글을 받는 부분이 따로 있어야될것같음

@@ -121,6 +121,9 @@ class FundingProjectManager:
         # 이렇게 가져온 성공한 프로젝트는 가장 최근의 날짜를 가진 것이 먼저오도록 한다.
         projects_sorted = sorted(result_list, key=lambda p: p.pid, reverse=True)
 
+        # num_project의 개수가 -1이라면 찾은 값 모두를 들고와야 한다.
+        if num_project == -1:
+            return projects_sorted
         return projects_sorted[:num_project]
 
     def get_near_projects(self, num_project):
@@ -139,6 +142,10 @@ class FundingProjectManager:
         # 프로젝트 종료 날짜가 아직 멀었다면, 값이 크다
         # 여기서, 날짜가 가장 빨리오는 순서대로 해야한다.
         projects_sorted = sorted(projects, key=lambda p: datetime.strptime(p.expire_date, "%Y/%m/%d").date())
+
+
+        if num_project == -1:
+            return projects_sorted
 
         return projects_sorted[:num_project]
 

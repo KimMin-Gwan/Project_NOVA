@@ -227,7 +227,7 @@ class Funding_Controller:
             database:Local_Database,
             request,
             funding_project_manager:FundingProjectManager,
-            num_project=4
+            num_project
     )-> BaseModel:
         model = NearOrDoneProjectModel(database=database)
 
@@ -247,7 +247,7 @@ class Funding_Controller:
             database:Local_Database,
             request,
             funding_project_manager:FundingProjectManager,
-            num_project=4,
+            num_project,
     ):
         model = NearOrDoneProjectModel(database=database)
 
