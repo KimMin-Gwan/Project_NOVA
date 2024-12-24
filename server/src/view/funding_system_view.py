@@ -36,7 +36,7 @@ class Funding_Service_View(Master_View):
             body_data = model.get_response_form_data(self._head_parser)
             return body_data
         
-        # 홈에서 프로젝트 배너들 받기
+        # 홈에서 프로젝트 배너들 받기, 이미 완료됨
         @self.__app.get('/nova_fund_system/home/banner')
         def get_home_banner(request:Request):
             request_manager = RequestManager()
