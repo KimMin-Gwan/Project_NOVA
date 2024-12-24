@@ -28,7 +28,7 @@ class FundingProjectManager:
 
     def _calculate_deadline(self, project):
         deadline_diff = datetime.strptime(project.expire_date, "%Y/%m/%d").date() - date.today()
-        print(deadline_diff.days)
+        # print(deadline_diff.days)
         return deadline_diff.days
 
     # 테스트용으로 사용되는 프로젝트 임시 반환 함수(갯수만큼 드림)
