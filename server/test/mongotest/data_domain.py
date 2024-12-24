@@ -26,7 +26,7 @@ class TempUser:
 class User(SampleDomain):
     def __init__(self, uid = "", uname = "지지자", age=0, 
                  email = "", gender = "d" ,
-                 credit = 0, solo_bid = "", group_bid = "", 
+                 credit = 0, bids=[],
                  password = "", alert= [], like=[], my_comment=[],
                  my_feed = [], active_feed = [], feed_history = [],
                  feed_search_history=[]):
@@ -37,8 +37,7 @@ class User(SampleDomain):
         self.email = email
         self.password = password
         self.gender = gender
-        self.solo_bid = solo_bid
-        self.group_bid = group_bid
+        self.bids:list = copy.copy(bids)
         self.credit = credit
         self.alert:list = copy.copy(alert)
         self.like:list = copy.copy(like)
@@ -58,8 +57,7 @@ class User(SampleDomain):
             self.email= dict_data['email']
             self.password = dict_data['password']
             self.gender= dict_data['gender']
-            self.solo_bid = dict_data['solo_bid']
-            self.group_bid = dict_data['group_bid']
+            self.bids = copy.copy(dict_data['bids'])
             self.credit= dict_data['credit']
             self.alert = copy.copy(dict_data['alert'])
             self.like = copy.copy(dict_data["like"])
@@ -82,8 +80,7 @@ class User(SampleDomain):
             "password" : self.password,
             "gender" : self.gender,
             "credit" : self.credit,
-            "solo_bid" : self.solo_bid,
-            "group_bid" : self.group_bid,
+            "bids" : copy.copy(self.bids),
             "alert" : copy.copy(self.alert),
             "like" : copy.copy(self.like),
             "my_comment" : copy.copy(self.my_comment),

@@ -660,7 +660,7 @@ class recommendManager:
             for single_user in users:
                 single_user:User = single_user
                 # bias를 팔로우하는 유저를 찾아서 노드 연결해야됨
-                if single_user.solo_bid == single_bias.bid or single_user.group_bid == single_bias.bid:
+                if single_bias.bid in single_user.bids:
                     user_node = self.__feed_algorithm.get_user_node_with_uid(uid=single_user.uid)
                     # 못찾으면 예외처리할것
                     if user_node:

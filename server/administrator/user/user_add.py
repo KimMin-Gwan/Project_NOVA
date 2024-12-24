@@ -27,8 +27,7 @@ class UserAdd(Admin):
             self.__user.group_combo = int(input('group_combo: ') or '0')
             self.__user.credit = int(input('credit: ') or '0')
 
-            self.__user.solo_bid = input('solo_bid: ')
-            self.__user.group_bid = input('group_bid: ')
+            self.__user.bids = input('bids: ')
 
             #아이템 설정
             self.__user.items.chatting = int(input('chatting: ') or '0')

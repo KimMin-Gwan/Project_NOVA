@@ -27,8 +27,7 @@ class User(SampleDomain):
     def __init__(self, uid = "", uname = "", age=14, 
                  email = "", gender = "d" , solo_point = 0, group_point = 0,
                  solo_combo = 0, group_combo = 0,
-                 credit = 0, solo_bid = "",
-                 group_bid = "", items = None,
+                 credit = 0, bids=[], items = None,
                  solo_daily = False, solo_special = False,
                  group_daily = False, group_special = False,
                  sign = "", password = "", select_name_card = "",
@@ -48,8 +47,7 @@ class User(SampleDomain):
         self.solo_combo = solo_combo
         self.group_combo = group_combo
         self.credit = credit
-        self.solo_bid = solo_bid
-        self.group_bid = group_bid
+        self.bids = bids
         self.items = items
         self.solo_daily = solo_daily
         self.solo_special = solo_special
@@ -68,8 +66,7 @@ class User(SampleDomain):
             self.email= dict_data['email']
             self.password = dict_data['password']
             self.gender= dict_data['gender']
-            self.solo_bid = dict_data['solo_bid']
-            self.group_bid = dict_data['group_bid']
+            self.bids=dict_data['bids']
             self.solo_point = dict_data['solo_point']
             self.group_point = dict_data['group_point']
             self.solo_combo= dict_data['solo_combo']
@@ -101,8 +98,7 @@ class User(SampleDomain):
             "solo_combo" : self.solo_combo,
             "group_combo" : self.group_combo,
             "credit" : self.credit,
-            "solo_bid" : self.solo_bid,
-            "group_bid" : self.group_bid,
+            "bids":self.bids,
             "items" : self.items.get_dict_form_data(),
             "solo_daily" :self.solo_daily,
             "solo_special" :self.solo_special,

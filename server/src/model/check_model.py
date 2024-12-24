@@ -52,7 +52,7 @@ class CheckPageModel(BaseModel):
     # 유저가 실제로 팔로우 하고 있는지 확인
     def is_validate_user(self) -> bool:
         try:
-            if self._user.solo_bid == self._bias.bid or self._user.group_bid == self._bias.bid:
+            if self._bias.bid in self._user.bids:
                 return True
             else:
                 # 팔로우 안하고 있으면 invalid 반환

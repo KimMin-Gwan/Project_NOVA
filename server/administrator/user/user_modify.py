@@ -15,7 +15,7 @@ class UserModify(Admin):
         name_card_list = []
         try:
             while True:
-                print('(0)exit / (1)uname / (2)age / (3)email / (4)password / \n(5)gender / (6)solo_point / (7)group_point / (8)solo_combo / (9)group_combo / \n(10)credit / (11)solo_bid / (12)group_bid / (13)items / (14)solo_daily / \n(15)solo_special / (16)group_daily / (17)group_special / (18)sign / (19)select_name_card / \n(20)name_card_list')
+                print('(0)exit / (1)uname / (2)age / (3)email / (4)password / \n(5)gender / (6)solo_point / (7)group_point / (8)solo_combo / (9)group_combo / \n(10)credit / (11)bids / (13)items / (14)solo_daily / \n(15)solo_special / (16)group_daily / (17)group_special / (18)sign / (19)select_name_card / \n(20)name_card_list')
                 select = input('입력: ')
                 if select == '1' :
                     self.__user.uname = input('uname: ')
@@ -38,9 +38,7 @@ class UserModify(Admin):
                 elif select == '10' :
                     self.__user.credit = int(input('credit: '))
                 elif select == '11' :
-                    self.__user.solo_bid = input('solo_bid: ')
-                elif select == '12' :
-                    self.__user.group_bid = input('group_bid: ')
+                    self.__user.bids = input('bids: ')
                 elif select == '13' :
                     self.__user.items.chatting = input('chatting: ')
                     self.__user.items.saver = input('saver: ')

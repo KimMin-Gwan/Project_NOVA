@@ -13,6 +13,7 @@ import numpy as np
 import warnings
 from io import BytesIO
 from PIL import Image
+import imageio
 
 # Boto3의 경고 메시지 무시
 warnings.filterwarnings("ignore", module='boto3.compat')
@@ -1038,6 +1039,104 @@ class TrashTable:
         return count
         
 
+#class ImageDescriper():
+    #def __init__(self):
+        #self.__path = './model/local_database/feed_temp_image'
+        #self.__service_name = 's3'
+        #self.__endpoint_url = 'https://kr.object.ncloudstorage.com'
+        #self.__region_name = 'kr-standard'
+        #self.__access_key = 'eeJ2HV8gE5XTjmrBCi48'
+        #self.__secret_key = 'zAGUlUjXMup1aSpG6SudbNDzPEXHITNkEUDcOGnv'
+        #self.__s3 = boto3.client(self.__service_name,
+                           #endpoint_url=self.__endpoint_url,
+                           #aws_access_key_id=self.__access_key,
+                      #aws_secret_access_key=self.__secret_key)
+        #self.__bucket_name = "nova-feed-images"
+        #self.__default_image = "https://kr.object.ncloudstorage.com/nova-feed-images/nova-platform.PNG"
+
+    ## 이거 단일 이미지 검사 함수임
+    ##def _check_image_size(self, img):
+        ##width, height = img.size
+        ##if width / height > 3 or height / width > 3:
+            ##return False
+        ##else:
+            ##return True
+    
+    #def __set_images_to_byte(self, images: list):
+        #pil_images = []
+        #for image in images:
+            #pil_image = Image.open(BytesIO(image))
+            #pil_images.append(pil_image)
+        #return pil_images
+
+    #def __set_images_to_cv2(self, images: list):
+        #cv2_images = []
+        #for pil_image in images:
+            #cv2_image = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR)
+            #cv2_images.append(cv2_image)
+        #return cv2_images
+    
+    #def get_default_image_url(self):
+        #return [self.__default_image], True
+
+    #def __process_gif_with_imageio(self, image: bytes):
+        #try:
+            #gif_images = imageio.mimread(image)
+            #cv2_images = [cv2.cvtColor(frame, cv2.COLOR_RGB2BGR) for frame in gif_images]
+            #return cv2_images
+        #except Exception as e:
+            #print(f"Error processing GIF with imageio: {e}")
+            #return []
+
+    ## 이미지 업로드
+    #def try_feed_image_upload(self, fid:str, image_names:str, images):
+        #try:
+            #byte_img = self.__set_images_to_byte(images=images)
+
+            ##if not self._check_image_size(img=byte_img):
+                ##return "NOT_FIT_IN", False
+
+            #cv_image = self.__set_images_to_cv2(images=byte_img)
+
+            ##image_name = f'/{fid}-{image_name}'
+            
+            #for i, image_name in enumerate(image_names):
+                #index = str(i)
+                #cv2.imwrite(self.__path+f'/{fid}_{index}_{image_name}',cv_image[i])
+
+            #for i, image_name in enumerate(image_names):
+                #index = str(i)
+                #self.__s3.upload_file(self.__path+f'/{fid}_{index}_{image_name}',
+                                        #self.__bucket_name ,
+                                        #f'{fid}_{index}_{image_name}',
+                                        #ExtraArgs={'ACL':'public-read'})
+            
+
+            #self.delete_temp_image()
+            #url = []
+
+            #for i, image_name in enumerate(image_names):
+                #index = str(i)
+                #url.append(self.__endpoint_url +"/"+ self.__bucket_name + "/" + fid + "_" + index + "_" + image_name)
+
+            #return url, True
+        #except Exception as e:
+            #print(e)
+            #return "Something Goes Bad", False
+
+    ## 임시 이미지 파일 지우기
+    #def delete_temp_image(self):
+        ## 파일이 작성되기 까지 대기 시간
+        #time.sleep(0.1)
+
+        ## 디렉토리 내의 모든 파일을 찾음
+        #files = glob.glob(os.path.join(self.__path, '*'))
+        #for file in files:
+            ## 파일인지 확인 후 삭제
+            #if os.path.isfile(file):
+                #os.remove(file)
+        #return
+    
 class ImageDescriper():
     def __init__(self):
         self.__path = './model/local_database/feed_temp_image'
@@ -1047,83 +1146,86 @@ class ImageDescriper():
         self.__access_key = 'eeJ2HV8gE5XTjmrBCi48'
         self.__secret_key = 'zAGUlUjXMup1aSpG6SudbNDzPEXHITNkEUDcOGnv'
         self.__s3 = boto3.client(self.__service_name,
-                           endpoint_url=self.__endpoint_url,
-                           aws_access_key_id=self.__access_key,
-                      aws_secret_access_key=self.__secret_key)
+                                 endpoint_url=self.__endpoint_url,
+                                 aws_access_key_id=self.__access_key,
+                                 aws_secret_access_key=self.__secret_key)
         self.__bucket_name = "nova-feed-images"
         self.__default_image = "https://kr.object.ncloudstorage.com/nova-feed-images/nova-platform.PNG"
 
-    # 이거 단일 이미지 검사 함수임
-    #def _check_image_size(self, img):
-        #width, height = img.size
-        #if width / height > 3 or height / width > 3:
-            #return False
-        #else:
-            #return True
-    
     def __set_images_to_byte(self, images: list):
         pil_images = []
         for image in images:
-            pil_image = Image.open(BytesIO(image))
-            pil_images.append(pil_image)
+            try:
+                pil_image = Image.open(BytesIO(image))
+                pil_images.append(pil_image)
+            except Exception as e:
+                print(f"Error opening image with PIL: {e}")
         return pil_images
 
     def __set_images_to_cv2(self, images: list):
         cv2_images = []
         for pil_image in images:
-            cv2_image = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR)
-            cv2_images.append(cv2_image)
+            try:
+                cv2_image = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR)
+                cv2_images.append(cv2_image)
+            except Exception as e:
+                print(f"Error converting PIL to CV2: {e}")
         return cv2_images
-    
+
+    def __process_gif_with_imageio(self, image: bytes):
+        try:
+            gif_images = imageio.mimread(image)
+            cv2_images = [cv2.cvtColor(frame, cv2.COLOR_RGB2BGR) for frame in gif_images]
+            return cv2_images
+        except Exception as e:
+            print(f"Error processing GIF with imageio: {e}")
+            return []
+
     def get_default_image_url(self):
         return [self.__default_image], True
 
-
-    # 이미지 업로드
-    def try_feed_image_upload(self, fid:str, image_names:str, images):
+    def try_feed_image_upload(self, fid: str, image_names: list, images):
         try:
-            byte_img = self.__set_images_to_byte(images=images)
+            urls = []
 
-            #if not self._check_image_size(img=byte_img):
-                #return "NOT_FIT_IN", False
-
-            cv_image = self.__set_images_to_cv2(images=byte_img)
-
-            #image_name = f'/{fid}-{image_name}'
-            
-            for i, image_name in enumerate(image_names):
-                index = str(i)
-                cv2.imwrite(self.__path+f'/{fid}_{index}_{image_name}',cv_image[i])
-
-            for i, image_name in enumerate(image_names):
-                index = str(i)
-                self.__s3.upload_file(self.__path+f'/{fid}_{index}_{image_name}',
-                                        self.__bucket_name ,
-                                        f'{fid}_{index}_{image_name}',
-                                        ExtraArgs={'ACL':'public-read'})
-            
+            for i, image in enumerate(images):
+                try:
+                    image_name:str = image_names[i]
+                    # Check if GIF or other unsupported formats
+                    if image_name.lower().endswith('.gif'):
+                        cv2_images = self.__process_gif_with_imageio(image)
+                        for idx, cv_image in enumerate(cv2_images):
+                            temp_path = f"{self.__path}/{fid}_{idx}_{image_name.replace('.gif', f'_{idx}.jpg')}"
+                            cv2.imwrite(temp_path, cv_image)
+                            self.__s3.upload_file(temp_path,
+                                                  self.__bucket_name,
+                                                  f"{fid}_{idx}_{image_name.replace('.gif', f'_{idx}.jpg')}",
+                                                  ExtraArgs={'ACL': 'public-read'})
+                            urls.append(f"{self.__endpoint_url}/{self.__bucket_name}/{fid}_{idx}_{image_name.replace('.gif', f'_{idx}.jpg')}")
+                    else:
+                        # Process other formats
+                        pil_image = Image.open(BytesIO(image))
+                        temp_path = f"{self.__path}/{fid}_{image_name}"
+                        pil_image.save(temp_path)
+                        self.__s3.upload_file(temp_path,
+                                              self.__bucket_name,
+                                              f"{fid}_{image_name}",
+                                              ExtraArgs={'ACL': 'public-read'})
+                        urls.append(f"{self.__endpoint_url}/{self.__bucket_name}/{fid}_{image_name}")
+                except Exception as e:
+                    print(f"Error processing image {image_names[i]}: {e}")
 
             self.delete_temp_image()
-            url = []
+            return urls, True
 
-            for i, image_name in enumerate(image_names):
-                index = str(i)
-                url.append(self.__endpoint_url +"/"+ self.__bucket_name + "/" + fid + "_" + index + "_" + image_name)
-
-            return url, True
         except Exception as e:
-            print(e)
+            print(f"Error in try_feed_image_upload: {e}")
             return "Something Goes Bad", False
 
-    # 임시 이미지 파일 지우기
     def delete_temp_image(self):
-        # 파일이 작성되기 까지 대기 시간
         time.sleep(0.1)
-
-        # 디렉토리 내의 모든 파일을 찾음
         files = glob.glob(os.path.join(self.__path, '*'))
         for file in files:
-            # 파일인지 확인 후 삭제
             if os.path.isfile(file):
                 os.remove(file)
         return

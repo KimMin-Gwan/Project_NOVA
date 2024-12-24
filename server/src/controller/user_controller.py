@@ -154,8 +154,7 @@ class UserController:
         try:
             # 유저가 있으면 세팅
             model.set_user_with_email(request=request.jwt_payload)
-            model.set_solo_bias()
-            model.set_group_bias()
+            model.set_bias_datas()
             model.set_user_data_with_no_password()
 
         except CustomError as e:

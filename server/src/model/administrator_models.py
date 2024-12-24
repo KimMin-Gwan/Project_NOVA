@@ -149,10 +149,8 @@ class UserEditModel(AdminModel):
         else : self.__user.group_combo = request.group_combo
         if not request.credit : pass
         else : self.__user.credit = request.credit
-        if not request.solo_bid : pass
-        else : self.__user.solo_bid = request.solo_bid
-        if not request.group_bid : pass
-        else : self.__user.group_bid = request.group_bid
+        if not request.bids: pass
+        else : self.__user.bids = request.bids
 
         #아이템 설정
         if not request.chatting : pass

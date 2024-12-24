@@ -160,22 +160,17 @@ class SendEmailModel(BaseModel):
 class UserPageModel(BaseModel):
     def __init__(self, database:Local_Database) -> None:
         super().__init__(database)
-        self.__solo_bias = Bias()
-        self.__group_bias = Bias()
+        self.__biases = []
 
 
-    def set_solo_bias(self):
-        bid = self._user.solo_bid
-        if bid != "":
-            bias_data = self._database.get_data_with_id(target="bid", id =bid)
-            self.__solo_bias.make_with_dict(bias_data)
-        return
-
-    def set_group_bias(self):
-        bid = self._user.group_bid
-        if bid != "":
-            bias_data = self._database.get_data_with_id(target="bid", id =bid)
-            self.__group_bias.make_with_dict(bias_data)
+    def set_bias_datas(self):
+        bids = self._user.bids
+        if len(self._user.bids):
+            bias_datas = self._database.get_datas_with_ids(target_id="bid", ids=bids)
+            for bias_data in bias_datas:
+                bias = Bias()
+                bias.make_with_dict(bias_data)
+                self.__biases.append(bias)
         return
 
     def set_user_data_with_no_password(self):
@@ -333,9 +328,9 @@ class ChangeNickNameModel(BaseModel):
             self._user.uname = "지지자"
             self._detail = "지지자로 변경되었습니다"
             self._result = True
-        elif data_payload.index == 1:
-            if self._user.solo_bid != "":
-                bias_data = self._database.get_data_with_id(target="bid", id=self._user.solo_bid)
+        else:
+            if len(self._user.bids):
+                bias_data = self._database.get_data_with_id(target="bid", id=self._user.bids[data_payload.index - 1])
                 bias = Bias()
                 bias.make_with_dict(dict_data=bias_data)
                 if len(bias.fanname) == 0:
@@ -346,32 +341,7 @@ class ChangeNickNameModel(BaseModel):
                     self._detail = f"{self._user.uname}로 변경되었습니다"
                     self._result =True
             else:
-                self._detail = "지지하는 개인 최애가 없어요!"
-                return
-        elif data_payload.index == 2:
-            if self._user.group_bid!= "":
-                bias_data = self._database.get_data_with_id(target="bid", id=self._user.group_bid)
-                bias = Bias()
-                bias.make_with_dict(dict_data=bias_data)
-                if len(bias.fanname) == 0:
-                    self._detail = f"{bias.bname}님은 팬명칭이 없어요"
-                    return
-                else:
-                    self._user.uname = bias.fanname[0]
-                    self._detail = f"{self._user.uname}로 변경되었습니다"
-                    self._result =True
-            else:
-                self._detail = "지지하는 그룹 최애가 없어요!"
-                return
-
-        elif data_payload.index == 3:
-            # 지지자가 패스 구독중인지 확인하는 함수가 있어야함
-            if data_payload.custom != "":
-                self._user.uname = data_payload.custom
-                self._detail = f"{self._user.uname}로 변경되었습니다"
-                self._result =True
-            else:
-                self._detail = "최소 1글자 이상의 이름을 사용해야합니다!"
+                self._detail = "지지하는 최애가 없어요!"
                 return
 
         self._database.modify_data_with_id(target_id="uid", target_data=self._user.get_dict_form_data())

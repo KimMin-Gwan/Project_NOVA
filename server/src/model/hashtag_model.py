@@ -9,39 +9,43 @@ class HashTagModel(BaseModel):
         super().__init__(database)
         self._hashtags = []
         self._bias = Bias()
-        self._title = ""
+        self._bids = self._user.bids
 
+    # 로그인 확인 함수
     def is_user_login(self):
         if self._user.uid == "":
             return False
         else:
-            
-            bias_data = self._database.get_data_with_id(target="bid", id=self._user.solo_bid)
+            self.set_bias()
+            return True
+    
+    # 바이어스 데이터 구성
+    def set_bias(self):
+        if len(self._user.bids):
+
+            # 지금은 어쩔 수 없이 bid를 하나만 세팅함
+            # 나중에 고쳐야됨
+            bias_data = self._database.get_data_with_id(target="bid", id=self._user.bids[0])
             if not bias_data:
                 return False
             self._bias.make_with_dict(bias_data)
-            self._title=self._bias.bname
             return True
+        else:
+            return False
 
     def set_best_hash_tag(self, feed_search_engine:FeedSearchEngine):
-
         self._hashtags = feed_search_engine.get_recommend_hashtag(bid=self._bias.bid)
         return
 
     def set_realtime_best_hash_tag(self, feed_search_engine:FeedSearchEngine, num_hashtag):
         self._hashtags =feed_search_engine.get_best_hashtag(num_hashtag=num_hashtag)
-
-        #self._hashtags = ["에스파", "경민생카", "조슈아생일시", "Mantra", "제니",
-                        #"오뱅온", "지스타", "숲인방", "버츄얼하꼬", "가을야구"]
-
         return
 
     def get_response_form_data(self, head_parser):
         try:
             body = {
                 "hashtags" : self._hashtags,
-                "title" : self._title,
-                "bid" : self._bias.bid
+                "bid_list" : self._bias.bid
                 }
 
             response = self._get_response_data(head_parser=head_parser, body=body)

@@ -48,40 +48,23 @@ class BannerModel(BaseModel):
 class HomeBiasModel(BaseModel):
     def __init__(self, database:Local_Database) -> None:
         super().__init__(database)
-        self.__solo_bias= Bias()
-        self.__group_bias = Bias()
+        self.__bias_list = []
 
-    # 솔로 바이어스 세팅
-    def set_solo_bias_with_bid(self):
-        if self._user.solo_bid == "":  # 팔로우한 바이어스 없으면 false 반환
-            return False
-        
-        raw_solo_bias = self._database.get_data_with_id(target="bid", id=self._user.solo_bid)
+    # 바이어스 데이터를 모두 받아와서 만들기
+    def set_bias_list(self):
+        bias_datas = self._database.get_datas_with_ids(target_id="bid", ids=self._user.bids)
 
-        if not raw_solo_bias:  # 바이어스 정보가 유실되어있으면 false 반환
-            return False
+        for bias_data in bias_datas:
+            bias = Bias()
+            bias.make_with_dict(bias_data)
+            self.__bias_list.append(bias)
 
-        self.__solo_bias.make_with_dict(raw_solo_bias)
         return
-
-    # 그룹 바이어스 세팅
-    def set_group_bias_with_bid(self):
-        if self._user.group_bid == "":# 팔로우한 바이어스 없으면 false 반환
-            return False
-        
-        raw_group_bias = self._database.get_data_with_id(target="bid", id=self._user.group_bid)
-
-        if not raw_group_bias: # 바이어스 정보가 유실되어있으면 false 반환
-            return False
-
-        self.__group_bias.make_with_dict(raw_group_bias)
-
 
     def get_response_form_data(self, head_parser):
         try:
             body = {
-                'solo_bias' : self.__solo_bias.get_dict_form_data(),
-                'group_bias' : self.__group_bias.get_dict_form_data()
+                "bias_list" : self._make_dict_list_data(list_data=self.__bias_list)
             }
 
             response = self._get_response_data(head_parser=head_parser, body=body)
@@ -156,24 +139,12 @@ class SelectBiasModel(BaseModel):
     # 내 최애를 누구로 할지 최종 결정하는 부분
     def set_my_bias(self, feed_search_engine:FeedSearchEngine):
         try:
-            flag = False
-            # 솔로인지 그룹인지 확인해야됨
-            if self.__bias.type == "solo":
-                if self._user.solo_bid == "":
-                    self._user.solo_bid = self.__bias.bid
-                    flag = True
-                else:  # 이미 있는데 선택해? 죽임
-                    return flag
+            if self.__bias.bid in self._user.bids:
+                self._user.bids.remove(self.__bias.bid)
             else:
-                if self._user.group_bid== "":  # 정상 성택
-                    self._user.group_bid= self.__bias.bid
-                    flag = True
-                else:  # 이미 있는데 선택을 왜하냐고
-                    return flag 
-            
-            if flag:
-                self._database.modify_data_with_id(target_id="uid", target_data=self._user.get_dict_form_data())
-            
+                self._user.bids.append(self.__bias.bid)
+
+            self._database.modify_data_with_id(target_id="uid", target_data=self._user.get_dict_form_data())
             feed_search_engine.add_new_user_to_bias(bid=self.__bias.bid, uid=self._user.uid)
             self.__result = True
 

@@ -104,6 +104,9 @@ class UserContributionModel(BaseModel):
     # 유저 정보 받아오기
     def set_user_datas(self):
 
+
+        # solo_bid 같은건 없어졌는데 왜 여기 있음?
+
         if self._bias.type == "solo":
             user_datas = self._database.get_datas_with_key(target="uid", key="solo_bid", key_datas=[self._bias.bid])
         elif self._bias.type == "group":
@@ -190,7 +193,7 @@ class MyContributionModel(UserContributionModel):
 
     # 내 최애가 맞는지 확인
     def is_my_bias(self) -> bool:
-        if self._user.solo_bid == self._bias.bid or self._user.group_bid == self._bias.bid:
+        if self._bias.bid in self._user.bids:
             self.__result = True
             return True
         else:
