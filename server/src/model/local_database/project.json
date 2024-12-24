@@ -149,8 +149,8 @@
         "body_url": "",
         "now_progress": 20000,
         "goal_progress": 20000,
-        "ptype": "fan",
-        "ftype": "donate",
+        "ptype": "bias",
+        "ftype": "attend",
         "introduce": "설명글 예시",
         "num_participants": 120
     },
@@ -173,7 +173,7 @@
     },
     {
         "pid": "10",
-        "pname": "QWER 마젠타 굿즈 펀딩",
+        "pname": "QWER 마젠타 팬 굿즈 펀딩",
         "uid": "4133-afgh-1565",
         "uname": "DEEP♂DARK♂FANTASY",
         "user_info": "http://www.naver.com",
@@ -186,7 +186,7 @@
         "now_progress": 13500,
         "goal_progress": 10000,
         "ptype": "fan",
-        "ftype": "donate",
+        "ftype": "attend",
         "introduce": "설명글 예시",
         "num_participants": 120
     },
@@ -203,7 +203,7 @@
         "now_progress": 1230,
         "goal_progress": 10000,
         "ptype": "fan",
-        "ftype": "donate",
+        "ftype": "attend",
         "introduce": "설명글 예시",
         "num_participants": 120
     }
