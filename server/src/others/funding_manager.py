@@ -62,7 +62,8 @@ class FundingProjectManager:
             projects.append(project)
 
         # 가장 최근에 생성 된 프로젝트들은 PID가 가장 크다. 따라서, 시간 순 정렬을 PID로 할 수있다.
-        projects_sorted = sorted(projects, key=lambda p: p.pid, reverse=True)
+        # project에 기재된 정보는 모두 문자열이므로 형변환을 취해야한다.
+        projects_sorted = sorted(projects, key=lambda p: int(p.pid), reverse=True)
 
         return projects_sorted[:num_project]
 
@@ -76,7 +77,8 @@ class FundingProjectManager:
             projects.append(project)
 
         # 가장 최근에 생성 된 프로젝트들은 PID가 가장 크다. 따라서, 시간 순 정렬을 PID로 할 수있다.
-        projects_sorted = sorted(projects, key=lambda p: p.pid, reverse=True)
+        # project에 기재된 정보는 모두 문자열이므로 형변환을 취해야한다.
+        projects_sorted = sorted(projects, key=lambda p: int(p.pid), reverse=True)
 
         return projects_sorted[:num_project]
 
