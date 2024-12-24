@@ -242,7 +242,7 @@ class Funding_Controller:
 
         return model
 
-    def get_near_project(
+    def get_near_deadline_project(
             self,
             database:Local_Database,
             request,
