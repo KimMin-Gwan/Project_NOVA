@@ -294,6 +294,7 @@ class Funding_Service_View(Master_View):
 
         # ----- 여기는 덕질프로젝트에서 전체보기하면 줄 거 -------------
 
+        # FIN, 근데, 이거 프론트엔드 링크가 잘못되어있어서 확인을 못했음
         # 1. 이미 목표 달성에 성공한 프로젝트
         @self.__app.get('/nova_fund_system/fan_project_list/achieve_the_goal')
         def get_project_list(request:Request, key:Optional[str]="" ):
@@ -314,7 +315,8 @@ class Funding_Service_View(Master_View):
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response
-        
+
+        # FIN, 위와 동일
         # 2. 마감 임박 프로젝트
         @self.__app.get('/nova_fund_system/fan_project_list/soon_expire')
         def get_project_list(request:Request, key:Optional[str]="" ):
