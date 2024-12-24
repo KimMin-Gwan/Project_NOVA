@@ -42,13 +42,13 @@ import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 
 import { getModeClass } from "./../App.js";
-const SimpleSlider = ({ tagFeed, brightMode }) => {
+const SimpleSlider = ({ feedData, brightMode }) => {
   const showMaxCnt = 1;
 
   const settings = {
     className: "slider-items",
     dots: true,
-    infinite: tagFeed.length > showMaxCnt,
+    infinite: feedData.length > showMaxCnt,
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
@@ -71,8 +71,8 @@ const SimpleSlider = ({ tagFeed, brightMode }) => {
   return (
     <div className={`slider-container ${brightMode === "dark" ? "dark-mode" : "bright-mode"}`}>
       <Slider {...settings}>
-        {tagFeed &&
-          tagFeed.map((feed, i) => {
+        {feedData &&
+          feedData.map((feed, i) => {
             return (
               <div key={i} className="slick-slide">
                 <div className="slide-box">
@@ -80,7 +80,7 @@ const SimpleSlider = ({ tagFeed, brightMode }) => {
                     className={`slide-content ${getModeClass(mode)}`}
                     onClick={(e) => {
                       e.preventDefault();
-                      onClickMore(feed.fid);
+                      // onClickMore(feed.fid);
                     }}
                   >
                     <div className={style["name-container"]}>

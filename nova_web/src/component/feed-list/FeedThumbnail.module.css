@@ -1,0 +1,33 @@
+.FeedThumbnail {
+  width: 100%;
+  margin-bottom: 50px;
+}
+
+.FeedThumbnail .title-section {
+  width: 100%;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  color: white;
+}
+
+.title-section > div {
+  display: flex;
+}
+
+.title-section .title {
+  margin-left: 20px;
+  justify-content: start;
+}
+
+.title-section .more-icon {
+  flex: 1;
+  justify-content: end;
+  margin-right: 20px;
+  cursor: pointer;
+}
+
+.more-icon img {
+  width: 15px;
+}
