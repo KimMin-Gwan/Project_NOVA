@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 
 export default function FeedThumbnail({ title, feedData, brightMode }) {
   let navigate = useNavigate();
-
   const [mode, setMode] = useState(brightMode); // 초기 상태는 부모로부터 받은 brightMode 값
 
   useEffect(() => {

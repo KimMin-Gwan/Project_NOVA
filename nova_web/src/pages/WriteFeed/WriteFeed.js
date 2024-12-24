@@ -11,7 +11,7 @@ import { getModeClass } from "./../../App.js";
 const WriteFeed = ({ brightmode }) => {
   const navigate = useNavigate();
 
-  let [isLogined, setIsLogined] = useState(false);
+  // let [isLogined, setIsLogined] = useState(false);
   let header = {
     "request-type": "default",
     "client-version": "v1.0.1",
@@ -19,6 +19,32 @@ const WriteFeed = ({ brightmode }) => {
     uid: "1234-abcd-5678",
     endpoint: "/user_system/",
   };
+
+  let [isUserState, setIsUserState] = useState(false);
+  function handleValidCheck() {
+    fetch("https://nova-platform.kr/home/is_valid", {
+      credentials: "include",
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          setIsUserState(true);
+        } else {
+          setIsUserState(false);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        setIsUserState(false);
+      });
+  }
+
+  useEffect(() => {
+    handleValidCheck();
+  }, []);
 
   const [imagePreview, setImagePreview] = useState([]);
   const [imageFiles, setImageFiles] = useState([]);
@@ -77,12 +103,6 @@ const WriteFeed = ({ brightmode }) => {
     })
       .then((response) => {
         response.json();
-        // console.log("231", response);
-        if (response.state !== 200) {
-          setIsLogined(false);
-        } else {
-          setIsLogined(true);
-        }
       })
       .then((data) => {
         console.log(data);
@@ -163,7 +183,7 @@ const WriteFeed = ({ brightmode }) => {
   }
 
   function onClickUpload() {
-    if (isLogined) {
+    if (isUserState) {
       alert("업로드가 완료되었습니다.");
       navigate(-1);
     } else {

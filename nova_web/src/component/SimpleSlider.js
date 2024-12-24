@@ -44,7 +44,6 @@ import React, { useEffect, useState } from "react";
 import { getModeClass } from "./../App.js";
 const SimpleSlider = ({ feedData, brightMode }) => {
   const showMaxCnt = 1;
-
   const settings = {
     className: "slider-items",
     dots: true,
@@ -71,7 +70,7 @@ const SimpleSlider = ({ feedData, brightMode }) => {
   return (
     <div className={`slider-container ${brightMode === "dark" ? "dark-mode" : "bright-mode"}`}>
       <Slider {...settings}>
-        {feedData &&
+        {feedData.length !== 0 &&
           feedData.map((feed, i) => {
             return (
               <div key={i} className="slick-slide">

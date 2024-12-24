@@ -47,6 +47,7 @@ import RecommendAll from "./pages/NovaFunding/MoreSeeFunding/RecommendAll.js";
 
 import logo from "./img/NOVA_Platform.png";
 import FeedThumbnail from "./component/feed-list/FeedThumbnail.js";
+import useFetchData from "./hooks/useFetchData.js";
 // 401 이면 바이어스 격자 무늬로 띄우기
 // 401 이면 alert - 로그인 필요 문구 띄우기
 // 다크 모드 클래스 반환 함수
@@ -56,40 +57,10 @@ export function getModeClass(mode) {
 function App() {
   const URL = "https://nova-platform.kr/home/";
   // let url = 'http://127.0.0.1:5000/home/';
-  // const navigate = useNavigate();
 
   let [isUserState, setIsUserState] = useState(false);
-
-  let [todayBestFeed, setTodayBestFeed] = useState([]);
-  function fetchTodayBestFeed() {
-    fetch(`${URL}today_best`, {
-      credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setTodayBestFeed(data.body.feed);
-      });
-  }
-
-  useEffect(() => {
-    fetchTodayBestFeed();
-  }, []);
-
-  let [weeklyFeed, setWeeklyFeed] = useState([]);
-
-  function fetchWeeklyFeed() {
-    fetch(`${URL}weekly_best`, {
-      credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setWeeklyFeed(data.body.feed);
-      });
-  }
-
-  useEffect(() => {
-    fetchWeeklyFeed();
-  }, []);
+  let todayBestFeed = useFetchData(`${URL}today_best`);
+  let weeklyFeed = useFetchData(`${URL}weekly_best`);
 
   function handleValidCheck() {
     fetch("https://nova-platform.kr/home/is_valid", {
@@ -105,13 +76,13 @@ function App() {
             throw new Error(`status: ${response.status}`);
           }
         } else {
-          console.log("로그인  확인");
+          // console.log("로그인  확인");
           setIsUserState(true);
         }
         return response.json();
       })
       .then((data) => {
-        console.log(data);
+        // console.log(data);
       });
   }
 
