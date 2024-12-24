@@ -30,7 +30,7 @@ class FundingProjectManager:
         now_date = date.today()
 
         deadline_diff = now_date - datetime.strptime(project.expire_date, "%Y/%m/%d").date()
-
+        print(deadline_diff.days)
         return deadline_diff.days
 
     # 테스트용으로 사용되는 프로젝트 임시 반환 함수(갯수만큼 드림)
