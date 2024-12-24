@@ -133,12 +133,12 @@ class FundingProjectManager:
             project = Project()
             project.make_with_dict(project_data)
             # 현재 프로젝트 중, 이미 목표가 달성한 프로젝트에 대해서는 제외한다.
-            if self._calculate_deadline(project) < 0:
+            if self._calculate_deadline(project) >= 0:
                 projects.append(project)
 
         # 프로젝트 종료 날짜가 아직 멀었다면, 값이 크다
         # 여기서, 날짜가 가장 빨리오는 순서대로 해야한다.
-        projects_sorted = sorted(projects, key=lambda p: datetime.strptime(p.expire_date, "%Y/%m/%d").date())
+        projects_sorted = sorted(projects, key=lambda p: datetime.strptime(p.expire_date, "%Y/%m/%d").date(), reverse=True)
 
         return projects_sorted[:num_project]
 
