@@ -13,9 +13,8 @@
 #from model import Local_Database
 from others.data_domain import Project
 from bintrees import AVLTree
-from datetime import datetime
 from requests import get
-from datetime import date
+from datetime import date, datetime
 
 class FundingProjectManager:
     def __init__(self, database):
@@ -30,7 +29,7 @@ class FundingProjectManager:
     def _calculate_deadline(self, project):
         now_date = date.today()
 
-        deadline_diff = now_date - project.expire_date
+        deadline_diff = now_date - datetime.strptime(project.expire_date, "%Y/%m/%d")
 
         return deadline_diff.days
 
