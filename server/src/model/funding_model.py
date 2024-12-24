@@ -3,7 +3,7 @@ from model import Local_Database
 #from others.data_domain import Alert
 from others import FundingProjectManager, Project
 from pprint import pprint
-from datetime import date
+from datetime import date, datetime
 
 class ProjectBanner:
     def __init__(self):
@@ -282,7 +282,7 @@ class NearOrDoneProjectModel(BaseModel):
 
         # 프로젝트가 들어있는 순서대로 계산되게 되므로 서로 같은 인덱스 번호를 가지게 된다.
         for project in self._project:
-            deadline_diff = now_date - project.expire_date
+            deadline_diff = now_date - datetime.strptime(project.expire_date,"%Y/%m/%d").date()
             self._deadline_list.append(deadline_diff.days)
 
     # 참여도에 대한 백분율 조사

@@ -29,7 +29,7 @@ class FundingProjectManager:
     def _calculate_deadline(self, project):
         now_date = date.today()
 
-        deadline_diff = now_date - datetime.strptime(project.expire_date, "%Y/%m/%d")
+        deadline_diff = now_date - datetime.strptime(project.expire_date, "%Y/%m/%d").date()
 
         return deadline_diff.days
 
