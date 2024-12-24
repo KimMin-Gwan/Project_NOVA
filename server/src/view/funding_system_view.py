@@ -201,7 +201,7 @@ class Funding_Service_View(Master_View):
                 database=self.__database,
                 request=request_manager,
                 funding_project_manager=self.__funding_project_manager,
-                num_project=3)
+                num_project=4)
 
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
