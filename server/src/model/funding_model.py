@@ -137,8 +137,8 @@ class FundingProjectModel(BaseModel):
         result = project
         return result
 
-    # 참여도에 대한 백불율 조사
-    # 지금은 integaer 값이 나옴
+    # 참여도에 대한 백분율 조사
+    # 지금은 integer 값이 나옴
     # 필요하면 round로 하삼
     def _set_progress(self, project_list:list):
         for project in project_list:
@@ -284,6 +284,26 @@ class NearOrDoneProjectModel(BaseModel):
         for project in self._project:
             deadline_diff = now_date - project.expire_date
             self._deadline_list.append(deadline_diff.days)
+
+    # 참여도에 대한 백분율 조사
+    # 지금은 integer 값이 나옴
+    # 필요하면 round로 하삼
+    def _set_progress(self, project_list:list):
+        for project in project_list:
+            project:Project = project
+
+            now = project.now_progress
+            goal = project.goal_progress
+
+            if goal > 0:
+                percentage = int((now/goal) * 100)
+                #percentage = round((now/goal) * 100, 2)
+            else:
+                percentage = 0
+
+            project.int_progress = percentage
+
+        return project_list
 
     # 덕질 펀딩 프로젝트 중, 목표를 달성한 프로젝트 반환
     def get_done_projects(
