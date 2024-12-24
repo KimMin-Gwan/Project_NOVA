@@ -269,7 +269,7 @@ class NearOrDoneProjectModel(BaseModel):
     def get_response_form_data(self, head_parser):
         body = {
             'project' : self._make_dict_list_data(list_data=self._project),
-            'deadlines' : self._make_dict_list_data(list_data=self._deadline_list),
+            'deadlines' :self._deadline_list,
             'key' : self._key
         }
 
