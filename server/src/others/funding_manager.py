@@ -102,37 +102,47 @@ class FundingProjectManager:
         # 가지고 있는 모든 프로젝트들을 들고와서
         project_datas = self.__database.get_all_data(target="pid")
         projects = []
+        result_list = []
 
-        # 프로젝트가 목표가 달성되어 있는지 확인
+        # 프로젝트가 목표가 달성되어 있는지 확인, 펀딩 목표금액을 달성한 상태에서 펀딩이 마감되면 목표 달성이라고 판정한다.
+        # 즉, 펀딩이 마감된 프로젝트만 선별해야한다.
         for project_data in project_datas:
             project = Project()
             project.make_with_dict(project_data)
 
-            # 프로젝트가 목표 달성되었는지 확인
-            if project.now_progress >= project.goal_progress:
+            # 프로젝트가 남은 기한이 음수인지 확인. 당일까지는 계속 열어둘 것으로 한다. 만약 시간까지 고려한다면 이게 바뀌게 되겠지
+            # 현재는 펀딩이 마감된 프로젝트만 골라야하므로, 음수만 고려하는 방안으로 작성함
+            if self._calculate_deadline(project) < 0:
                 projects.append(project)
 
-        # 가장 최근에 생성 된 프로젝트들은 PID가 가장 크다. 따라서, 시간 순 정렬을 PID로 할 수있다.
-        projects_sorted = sorted(projects, key=lambda p: p.pid, reverse=True)
+        # 프로젝트 펀딩이 목표금액을 넘긴 경우를 찾아온다.
+        for proj in projects:
+            if proj.now_progress >= proj.goal_progress:
+                result_list.append(proj)
+
+        # 이렇게 가져온 성공한 프로젝트는 가장 최근의 날짜를 가진 것이 먼저오도록 한다.
+        projects_sorted = sorted(result_list, key=lambda p: p.pid, reverse=True)
 
         return projects_sorted[:num_project]
 
     def get_near_projects(self, num_project):
         project_datas = self.__database.get_all_data(target="pid")
         projects = []
+        result_list = []
 
-        # 프로젝트가 목표가 달성되어 있는지 확인
+        # 마감이 끝나지 않았는지 확인하여 프로젝트를 추가한다. (날짜가 지난 프로젝트들은 모두 꺼내면 안된다.)
         for project_data in project_datas:
             project = Project()
             project.make_with_dict(project_data)
-
-            # 프로젝트 기한이 얼마 남았는지 확인 (일주일 이내로 남았다면)
-            if self._calculate_deadline(project) < 7:
+            # 현재 프로젝트 중, 이미 목표가 달성한 프로젝트에 대해서는 제외한다.
+            if self._calculate_deadline(project) < 0:
                 projects.append(project)
 
-        project_sorted = sorted(projects, key=lambda p: p.pid, reverse=True)
+        # 프로젝트 종료 날짜가 아직 멀었다면, 값이 크다
+        # 여기서, 날짜가 가장 빨리오는 순서대로 해야한다.
+        projects_sorted = sorted(projects, key=lambda p: datetime.strptime(p.expire_date, "%Y/%m/%d").date())
 
-        return project_sorted[:num_project]
+        return projects_sorted[:num_project]
 
 # 건들지 않음
 # Project Body (프로젝트 상세보기 화면 받아옴)
