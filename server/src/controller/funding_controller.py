@@ -3,6 +3,8 @@ from model import Local_Database, BaseModel
 from fastapi import HTTPException, status
 from others import FundingProjectManager
 
+from src.model.funding_model import NearOrDoneProjectModel
+
 
 class Funding_Controller:
     # 홈화면에서 맞춤 태그 제공
@@ -228,9 +230,9 @@ class Funding_Controller:
             database:Local_Database,
             request,
             funding_project_manager:FundingProjectManager,
-            num_project=8
+            num_project=4
     )-> BaseModel:
-        model = DoneProjectModel(database=database)
+        model = NearOrDoneProjectModel(database=database)
 
         # 유저가 있으면 세팅
         if request.jwt_payload != "":
@@ -239,6 +241,26 @@ class Funding_Controller:
         model.get_done_projects(
             funding_project_manager=funding_project_manager,
             num_project=num_project,
+        )
+
+        return model
+
+    def get_near_project(
+            self,
+            database:Local_Database,
+            request,
+            funding_project_manager:FundingProjectManager,
+            num_project=4,
+    ):
+        model = NearOrDoneProjectModel(database=database)
+
+        # 유저가 있으면 세팅
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
+
+        model.get_near_project(
+            funding_project_manager=funding_project_manager,
+            num_project=num_project
         )
 
         return model

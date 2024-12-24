@@ -15,6 +15,7 @@ from others.data_domain import Project
 from bintrees import AVLTree
 from datetime import datetime
 from requests import get
+from datetime import date
 
 class FundingProjectManager:
     def __init__(self, database):
@@ -25,6 +26,13 @@ class FundingProjectManager:
         self.__storage_connection = ObjectStorageConnection()
         #self.__project_investing_mananger = ProjectInverstingManager()
         #self.__project_recommend_manager = ProjectrecommendManager()
+
+    def _calculate_deadline(self, project):
+        now_date = date.today()
+
+        deadline_diff = now_date - project.expire_date
+
+        return deadline_diff.days
 
     # 테스트용으로 사용되는 프로젝트 임시 반환 함수(갯수만큼 드림)
     def get_sample_project(self, num_project):
@@ -109,6 +117,23 @@ class FundingProjectManager:
         projects_sorted = sorted(projects, key=lambda p: p.pid, reverse=True)
 
         return projects_sorted[:num_project]
+
+    def get_near_projects(self, num_project):
+        project_datas = self.__database.get_all_data(target="pid")
+        projects = []
+
+        # 프로젝트가 목표가 달성되어 있는지 확인
+        for project_data in project_datas:
+            project = Project()
+            project.make_with_dict(project_data)
+
+            # 프로젝트 기한이 얼마 남았는지 확인 (일주일 이내로 남았다면)
+            if self._calculate_deadline(project) < 7:
+                projects.append(project)
+
+        project_sorted = sorted(projects, key=lambda p: p.pid, reverse=True)
+
+        return project_sorted[:num_project]
 
 # 건들지 않음
 # Project Body (프로젝트 상세보기 화면 받아옴)
