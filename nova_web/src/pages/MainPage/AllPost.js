@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import style from "./MainPart.module.css";
-import more_icon from "./../../img/backword.png";
+import more_icon from "../../img/Icon.png";
 import { useNavigate } from "react-router-dom";
 import { getModeClass } from "./../../App.js";
 export default function AllPost({ brightMode }) {

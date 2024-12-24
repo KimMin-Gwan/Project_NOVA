@@ -46,6 +46,7 @@ import MoreSeeFunding from "./pages/NovaFunding/MoreSeeFunding/MoreSeeFunding.js
 import RecommendAll from "./pages/NovaFunding/MoreSeeFunding/RecommendAll.js";
 
 import logo from "./img/NOVA_Platform.png";
+import FeedThumbnail from "./component/feed-list/FeedThumbnail.js";
 // 401 이면 바이어스 격자 무늬로 띄우기
 // 401 이면 alert - 로그인 필요 문구 띄우기
 // 다크 모드 클래스 반환 함수
@@ -53,11 +54,42 @@ export function getModeClass(mode) {
   return mode === "dark" ? "dark-mode" : "bright-mode";
 }
 function App() {
-  let url = "https://nova-platform.kr/home/";
+  const URL = "https://nova-platform.kr/home/";
   // let url = 'http://127.0.0.1:5000/home/';
-  // let type = ['solo', 'group'];
+  // const navigate = useNavigate();
 
   let [isUserState, setIsUserState] = useState(false);
+
+  let [todayBestFeed, setTodayBestFeed] = useState([]);
+  function fetchTodayBestFeed() {
+    fetch(`${URL}today_best`, {
+      credentials: "include",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setTodayBestFeed(data.body.feed);
+      });
+  }
+
+  useEffect(() => {
+    fetchTodayBestFeed();
+  }, []);
+
+  let [weeklyFeed, setWeeklyFeed] = useState([]);
+
+  function fetchWeeklyFeed() {
+    fetch(`${URL}weekly_best`, {
+      credentials: "include",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setWeeklyFeed(data.body.feed);
+      });
+  }
+
+  useEffect(() => {
+    fetchWeeklyFeed();
+  }, []);
 
   function handleValidCheck() {
     fetch("https://nova-platform.kr/home/is_valid", {
@@ -176,9 +208,9 @@ function App() {
         path="/"
         element={
           <div className="all-box">
-            <section className="contents com1">
+            {/* <section className="contents com1">
               <LeftBar brightMode={brightMode} />
-            </section>
+            </section> */}
             <div
               onClick={(e) => {
                 e.stopPropagation();
@@ -196,7 +228,11 @@ function App() {
                       navigate("/");
                     }}
                   >
-                    <img src={logo} alt="logo" className={`logo-st ${getModeClass(brightMode)}`}></img>
+                    <img
+                      src={logo}
+                      alt="logo"
+                      className={`logo-st ${getModeClass(brightMode)}`}
+                    ></img>
                   </div>
 
                   <div className="buttons">
@@ -212,23 +248,31 @@ function App() {
                     </button>
                   </div>
                 </header>
-                <Banner url={url}></Banner>
+                <Banner url={URL}></Banner>
 
                 <section className="my-bias">
-                  <MyBias url={url} showBox={showBox} blackBox={blackBox}></MyBias>
+                  <MyBias url={URL} showBox={showBox} blackBox={blackBox}></MyBias>
                 </section>
               </div>
               <section className="contents">
-                <MainPart brightMode={brightMode} />
-                <hr className={`hr-line ${getModeClass(brightMode)}`}></hr>
-                <PopularFeed brightMode={brightMode} />
-                <hr className={`hr-line ${getModeClass(brightMode)}`}></hr>
-                <div className="narrow-page">
+                {/* <MainPart brightMode={brightMode} /> */}
+                {/* <PopularFeed brightMode={brightMode} /> */}
+                {/* <div className="narrow-page">
                   <IncreaseTag brightMode={brightMode} />
-                </div>
+                </div> */}
+                {/* <Week100 brightMode={brightMode} /> */}
+                {/* <hr className={`hr-line ${getModeClass(brightMode)}`}></hr> */}
 
-                <Week100 brightMode={brightMode} />
-                <hr className={`hr-line ${getModeClass(brightMode)}`}></hr>
+                <FeedThumbnail
+                  title={"오늘의 베스트 피드"}
+                  feedData={todayBestFeed}
+                  brightMode={brightMode}
+                />
+                <FeedThumbnail
+                  title={"주간 TOP 100"}
+                  feedData={weeklyFeed}
+                  brightMode={brightMode}
+                />
                 <AllPost brightMode={brightMode} />
               </section>
 
@@ -236,9 +280,9 @@ function App() {
                 <NavBar brightMode={brightMode}></NavBar>
               </div>
             </div>
-            <section className="contents com1">
+            {/* <section className="contents com1">
               <RightBar brightMode={brightMode} />
-            </section>
+            </section> */}
           </div>
         }
       />
