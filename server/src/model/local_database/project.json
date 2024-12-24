@@ -11,7 +11,7 @@
         "body_url": "",
         "now_progress": 12400,
         "goal_progress": 150000,
-        "ptype": "fan",
+        "ptype": "fan",s
         "ftype": "donate",
         "introduce" : "설명글 예시",
         "num_participants" : 120
@@ -35,7 +35,7 @@
     },
     {
         "pid": "3",
-        "pname": "",
+        "pname": "신인 남자 아이돌 [언네임] 1집 앨범 펀딩",
         "uid": "4133-afgh-1565",
         "uname": "언네임",
         "user_info": "http://www.naver.com",
