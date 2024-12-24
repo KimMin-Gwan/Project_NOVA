@@ -138,7 +138,7 @@ class FundingProjectManager:
 
         # 프로젝트 종료 날짜가 아직 멀었다면, 값이 크다
         # 여기서, 날짜가 가장 빨리오는 순서대로 해야한다.
-        projects_sorted = sorted(projects, key=lambda p: datetime.strptime(p.expire_date, "%Y/%m/%d").date(), reverse=True)
+        projects_sorted = sorted(projects, key=lambda p: datetime.strptime(p.expire_date, "%Y/%m/%d").date())
 
         return projects_sorted[:num_project]
 
