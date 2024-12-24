@@ -270,4 +270,18 @@ class EditProjectModel(BaseModel):
         response = self._get_response_data(head_parser=head_parser, body=body)
         return response
 
+class DoneProjectModel(BaseModel):
+    def __init__(self, database:Local_Database) -> None:
+        super().__init__(database)
+        self._project = []
+        self._key = -1
+        `
 
+    def get_response_form_data(self, head_parser):
+        body = {
+            'project' : self._make_dict_list_data(list_data=self._project),
+            'key' : self._key
+        }
+
+        response = self._get_response_data(head_parser=head_parser, body=body)
+        return response
