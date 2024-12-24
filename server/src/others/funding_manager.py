@@ -52,6 +52,7 @@ class FundingProjectManager:
     def get_projects_with_tags(self, tag:str, num_project):
         project_datas = self.__database.get_all_data(target="pid")
 
+    # 최애의 펀딩 프로젝트들을 가져옴
     def get_projects_by_bias(self, num_project):
         project_datas = self.__database.get_datas_with_key(target="pid", key="ptype", key_datas=["bias"])
         projects = []
@@ -67,6 +68,7 @@ class FundingProjectManager:
 
         return projects_sorted[:num_project]
 
+    # 팬들의 펀딩 프로젝트들을 가져옴
     def get_projects_by_fan(self, num_project):
         project_datas = self.__database.get_datas_with_key(target="pid", key="ptype", key_datas=["fan"])
         projects = []
@@ -82,6 +84,7 @@ class FundingProjectManager:
 
         return projects_sorted[:num_project]
 
+    # 가장 인기가 많은 프로젝트들을 가져옴
     def get_projects_best(self):
         project_datas = self.__database.get_all_data(target="pid")
         projects = []
@@ -128,6 +131,7 @@ class FundingProjectManager:
             return projects_sorted
         return projects_sorted[:num_project]
 
+    # 마감기한이 별로 남지 않은 프로젝트 표시
     def get_near_projects(self, num_project):
         project_datas = self.__database.get_all_data(target="pid")
         projects = []
