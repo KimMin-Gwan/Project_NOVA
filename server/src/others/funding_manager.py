@@ -110,26 +110,6 @@ class FundingProjectManager:
 
         return projects_sorted[:num_project]
 
-
-    # def get_done_projects_with_bias(self, num_project):
-    #     # 팬들이 만든 프로젝트를 모듀 들고와서
-    #     project_datas = self.__database.get_datas_with_key(target="pid", key="ptype", key_datas=["bias"])
-    #     projects = []
-    #
-    #     for project_data in project_datas:
-    #         project = Project()
-    #         project.make_with_dict(project_data)
-    #
-    #         # 프로젝트가 목표 달성되었는지 확인
-    #         if project.now_progress >= project.goal_progress:
-    #             projects.append(project)
-    #
-    #     # 가장 최근에 생성 된 프로젝트들은 PID가 가장 크다. 따라서, 시간 순 정렬을 PID로 할 수있다.
-    #     projects_sorted = sorted(projects, key=lambda p: p.pid, reverse=True)
-    #
-    #     return projects_sorted[:num_project]
-
-
 # 건들지 않음
 # Project Body (프로젝트 상세보기 화면 받아옴)
 class ObjectStorageConnection:

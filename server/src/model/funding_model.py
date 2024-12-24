@@ -3,6 +3,7 @@ from model import Local_Database
 #from others.data_domain import Alert
 from others import FundingProjectManager, Project
 from pprint import pprint
+from datetime import date
 
 class ProjectBanner:
     def __init__(self):
@@ -129,18 +130,6 @@ class FundingProjectModel(BaseModel):
         self._project = self._set_progress(project_list=self._project)
 
         return
-
-    # 덕질 펀딩 프로젝트 중, 목표를 달성한 프로젝트 반환
-    def get_done_projects(
-            self,
-            funding_project_manager:FundingProjectManager,
-            num_project:int
-    ):
-        self._project = funding_project_manager.get_done_projects(num_project=num_project)
-        self._project = self._set_progress(project_list=self._project)
-
-        return
-
 
     # 유저가 참여한 프로젝트 인지 확인할것
     # 유저가 참여한 프로젝트인지 확인할 필요가 있을 때 이 함수를 통할 것
@@ -270,4 +259,41 @@ class EditProjectModel(BaseModel):
         response = self._get_response_data(head_parser=head_parser, body=body)
         return response
 
+# 완료된 프로젝트들을 추출해서 요청에 Response를 위한 모델
+class DoneProjectModel(BaseModel):
+    def __init__(self, database:Local_Database) -> None:
+        super().__init__(database)
+        self._project = []
+        self._deadline_list = []
+        self._key = -1
 
+    def get_response_form_data(self, head_parser):
+        body = {
+            'project' : self._make_dict_list_data(list_data=self._project),
+            'deadlines' : self._make_dict_list_data(list_data=self._deadline_list),
+            'key' : self._key
+        }
+
+        response = self._get_response_data(head_parser=head_parser, body=body)
+        return response
+
+    # 꺼내온 프로젝트의 남은 기한 계산 하는 함수
+    def _calculate_deadline(self):
+        now_date = date.today()
+
+        # 프로젝트가 들어있는 순서대로 계산되게 되므로 서로 같은 인덱스 번호를 가지게 된다.
+        for project in self._project:
+            deadline_diff = now_date - project.goal_progress
+            self._deadline_list.append(deadline_diff.days)
+
+    # 덕질 펀딩 프로젝트 중, 목표를 달성한 프로젝트 반환
+    def get_done_projects(
+            self,
+            funding_project_manager:FundingProjectManager,
+            num_project:int
+    ):
+        self._project = funding_project_manager.get_done_projects(num_project=num_project)
+        self._project = self._set_progress(project_list=self._project)
+        self._calculate_deadline()
+
+        return
