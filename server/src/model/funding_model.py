@@ -157,7 +157,6 @@ class FundingProjectModel(BaseModel):
 
         return project_list
 
-
     def get_response_form_data(self, head_parser):
         body = {
             'project' : self._make_dict_list_data(list_data=self._project),
@@ -260,7 +259,7 @@ class EditProjectModel(BaseModel):
         return response
 
 # 완료된 프로젝트들을 추출해서 요청에 Response를 위한 모델
-class DoneProjectModel(BaseModel):
+class NearOrDoneProjectModel(BaseModel):
     def __init__(self, database:Local_Database) -> None:
         super().__init__(database)
         self._project = []
@@ -283,7 +282,7 @@ class DoneProjectModel(BaseModel):
 
         # 프로젝트가 들어있는 순서대로 계산되게 되므로 서로 같은 인덱스 번호를 가지게 된다.
         for project in self._project:
-            deadline_diff = now_date - project.goal_progress
+            deadline_diff = now_date - project.expire_date
             self._deadline_list.append(deadline_diff.days)
 
     # 덕질 펀딩 프로젝트 중, 목표를 달성한 프로젝트 반환
@@ -293,6 +292,17 @@ class DoneProjectModel(BaseModel):
             num_project:int
     ):
         self._project = funding_project_manager.get_done_projects(num_project=num_project)
+        self._project = self._set_progress(project_list=self._project)
+        self._calculate_deadline()
+
+        return
+
+    def get_near_projects(
+            self,
+            funding_project_manager:FundingProjectManager,
+            num_project:int
+    ):
+        self._project = funding_project_manager.get_near_projects(num_project=num_project)
         self._project = self._set_progress(project_list=self._project)
         self._calculate_deadline()
 
