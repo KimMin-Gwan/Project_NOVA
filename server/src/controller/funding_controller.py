@@ -255,7 +255,7 @@ class Funding_Controller:
         if request.jwt_payload != "":
             model.set_user_with_email(request=request.jwt_payload)
 
-        model.get_near_project(
+        model.get_near_projects(
             funding_project_manager=funding_project_manager,
             num_project=num_project
         )
