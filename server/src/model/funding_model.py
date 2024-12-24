@@ -278,11 +278,9 @@ class NearOrDoneProjectModel(BaseModel):
 
     # 꺼내온 프로젝트의 남은 기한 계산 하는 함수
     def _calculate_deadline(self):
-        now_date = date.today()
-
         # 프로젝트가 들어있는 순서대로 계산되게 되므로 서로 같은 인덱스 번호를 가지게 된다.
         for project in self._project:
-            deadline_diff = now_date - datetime.strptime(project.expire_date,"%Y/%m/%d").date()
+            deadline_diff = datetime.strptime(project.expire_date,"%Y/%m/%d").date() - date.today()
             self._deadline_list.append(deadline_diff.days)
 
     # 참여도에 대한 백분율 조사

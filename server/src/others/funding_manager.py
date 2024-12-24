@@ -27,9 +27,7 @@ class FundingProjectManager:
         #self.__project_recommend_manager = ProjectrecommendManager()
 
     def _calculate_deadline(self, project):
-        now_date = date.today()
-
-        deadline_diff = now_date - datetime.strptime(project.expire_date, "%Y/%m/%d").date()
+        deadline_diff = datetime.strptime(project.expire_date, "%Y/%m/%d").date() - date.today()
         print(deadline_diff.days)
         return deadline_diff.days
 
