@@ -238,6 +238,7 @@ function App() {
                   title={"오늘의 베스트 피드"}
                   feedData={todayBestFeed}
                   brightMode={brightMode}
+                  hasSearchBox
                 />
                 <FeedThumbnail
                   title={"주간 TOP 100"}
