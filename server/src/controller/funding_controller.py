@@ -3,6 +3,7 @@ from model import Local_Database, BaseModel
 from fastapi import HTTPException, status
 from others import FundingProjectManager
 
+
 class Funding_Controller:
     # 홈화면에서 맞춤 태그 제공
     def get_home_banner(self,
@@ -229,7 +230,7 @@ class Funding_Controller:
             funding_project_manager:FundingProjectManager,
             num_project=8
     )-> BaseModel:
-        model = FundingProjectModel(database=database)
+        model = DoneProjectModel(database=database)
 
         # 유저가 있으면 세팅
         if request.jwt_payload != "":
