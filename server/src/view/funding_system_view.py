@@ -456,7 +456,6 @@ class Funding_Service_View(Master_View):
             return response
 
         # 12/26 추가
-
         # 최애 펀딩 페이지 최상단 - 신규 최애 펀딩
         @self.__app.get('/nova_fund_system/bias_project/new_bias_project')
         def new_bias_project(request:Request, key:Optional[str]="" ):
