@@ -438,6 +438,118 @@ class Funding_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
+        # 12/26 추가
+
+        # 최애 펀딩 페이지 최상단 - 신규 최애 펀딩
+        @self.__app.get('/nova_fund_system/bias_project/new_bias_project')
+        def new_bias_project(request:Request, key:Optional[str]="" ):
+            request_manager = RequestManager()
+            data_payload = DummyRequest()
+
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            #if not request_manager.jwt_payload.result:
+                #raise request_manager.credentials_exception
+
+            funding_controller = Funding_Controller()
+            model = funding_controller.get_new_bias_project(
+                database=self.__database,
+                request=request_manager,
+                funding_project_manager=self.__funding_project_manager,
+                num_project=6)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
+        # 최애 페이지 중단 - 추천하는 프로젝트 (3개)
+        # if ftype == "donate" : 달성률 100%이하 and 100%에 근접
+        # elif ftype == "attend" : 달성률 100% 초과
+        @self.__app.get('/nova_fund_system/bias_project/recommend_project')
+        def home_recommend_project(request:Request):
+            request_manager = RequestManager()
+            data_payload = DummyRequest()
+
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            #if not request_manager.jwt_payload.result:
+                #raise request_manager.credentials_exception
+
+            funding_controller = Funding_Controller()
+            model = funding_controller.get_recommend_bias_project(
+                database=self.__database,
+                request=request_manager,
+                funding_project_manager=self.__funding_project_manager,
+                num_project=3)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
+        # 최애 페이지 하단 - 진행중인 프로젝트(3개)
+        # 마감일 순으로, 가장 마감에 임박한 프로젝트 부터 노출
+        @self.__app.get('/nova_fund_system/bias_project/all_project')
+        def home_all_project(request:Request):
+            request_manager = RequestManager()
+            data_payload = DummyRequest()
+
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            #if not request_manager.jwt_payload.result:
+                #raise request_manager.credentials_exception
+
+            funding_controller = Funding_Controller()
+            model = funding_controller.get_all_bias_project(
+                database=self.__database,
+                request=request_manager,
+                funding_project_manager=self.__funding_project_manager,
+                num_project=3)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
+        # 최애 프로젝트 리스트 페이지- 추천하는 프로젝트( 요청당 6개)
+        # if ftype == "donate" : 달성률 100%이하 and 100%에 근접
+        # elif ftype == "attend" : 달성률 100% 초과
+        @self.__app.get('/nova_fund_system/bias_project_list/recommend_project')
+        def recommend_project_list(request:Request, key:Optional[str]=""):
+            request_manager = RequestManager()
+            data_payload = ProjectGetRequest(key=key)
+
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            #if not request_manager.jwt_payload.result:
+                #raise request_manager.credentials_exception
+
+            funding_controller = Funding_Controller()
+            model = funding_controller.get_recommend_bias_project(
+                database=self.__database,
+                request=request_manager,
+                funding_project_manager=self.__funding_project_manager,
+                num_project=6)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
+        # 최애 프로젝트 리스트 페이지- 진행중인 프로젝트( 요청당 6개)
+        # 마감일 순으로, 가장 마감에 임박한 프로젝트 부터 노출
+        @self.__app.get('/nova_fund_system/bias_project_list/all_project')
+        def all_project_list(request:Request, key:Optional[str]=""):
+            request_manager = RequestManager()
+            data_payload = ProjectGetRequest(key=key)
+
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            #if not request_manager.jwt_payload.result:
+                #raise request_manager.credentials_exception
+
+            funding_controller = Funding_Controller()
+            model = funding_controller.get_all_bias_project(
+                database=self.__database,
+                request=request_manager,
+                funding_project_manager=self.__funding_project_manager,
+                num_project=6)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
 
     def post_route(self, endpoint:str):
         # 새로운 프로젝트를 요청할 때 넣는 요청
