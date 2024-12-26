@@ -3,8 +3,6 @@ from model import Local_Database, BaseModel
 from fastapi import HTTPException, status
 from others import FundingProjectManager
 
-
-
 class Funding_Controller:
     # 홈화면에서 맞춤 태그 제공
     def get_home_banner(self,
@@ -329,6 +327,51 @@ class Funding_Controller:
             funding_project_manager=funding_project_manager,
             num_project=num_project,
             ptype=ptype
+        )
+
+        return model
+
+    def get_new_bias_project(
+            self,
+            database:Local_Database,
+            request,
+            funding_project_manager:FundingProjectManager,
+            num_project,
+            ptype
+    ) -> BaseModel:
+
+        model = FundingProjectModel(database=database)
+
+        # 유저가 있으면 세팅
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
+
+        model.get_new_projects(
+            funding_project_manager=funding_project_manager,
+            num_project=num_project,
+            ptype=ptype
+        )
+
+        return model
+
+    def get_recommend_project(
+            self,
+            database:Local_Database,
+            request,
+            funding_project_manager:FundingProjectManager,
+            num_project,
+            ptype:str
+    ) -> BaseModel:
+        model = FundingProjectModel(database=database)
+
+        # 유저가 있으면 세팅
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
+
+        model.get_recommend_projects(
+            funding_project_manager=funding_project_manager,
+            num_project=num_project,
+            ptype="bias"
         )
 
         return model

@@ -54,9 +54,9 @@ class FundingProjectManager:
     def get_projects_with_tags(self, tag:str, num_project):
         project_datas = self.__database.get_all_data(target="pid")
 
-    # 최애의 펀딩 프로젝트들을 가져옴
-    def get_projects_by_bias(self, num_project):
-        project_datas = self.__database.get_datas_with_key(target="pid", key="ptype", key_datas=["bias"])
+    # ptype에 따라서 구분이 가능, 최애의 프로젝트와 팬들의 프로젝트
+    def get_projects_by_ptype(self, num_project, ptype:str):
+        project_datas = self.__database.get_datas_with_key(target="pid", key="ptype", key_datas=[ptype])
         projects = []
 
         for project_data in project_datas:
@@ -72,23 +72,68 @@ class FundingProjectManager:
             return projects_sorted
         return projects_sorted[:num_project]
 
-    # 팬들의 펀딩 프로젝트들을 가져옴
-    def get_projects_by_fan(self, num_project):
-        project_datas = self.__database.get_datas_with_key(target="pid", key="ptype", key_datas=["fan"])
+    # # 최애의 펀딩 프로젝트들을 가져옴
+    # def get_projects_by_bias(self, num_project):
+    #     project_datas = self.__database.get_datas_with_key(target="pid", key="ptype", key_datas=["bias"])
+    #     projects = []
+    #
+    #     for project_data in project_datas:
+    #         project = Project()
+    #         project.make_with_dict(project_data)
+    #         projects.append(project)
+    #
+    #     # 가장 최근에 생성 된 프로젝트들은 PID가 가장 크다. 따라서, 시간 순 정렬을 PID로 할 수있다.
+    #     # project에 기재된 정보는 모두 문자열이므로 형변환을 취해야한다.
+    #     projects_sorted = sorted(projects, key=lambda p: int(p.pid), reverse=True)
+    #
+    #     if num_project == -1:
+    #         return projects_sorted
+    #     return projects_sorted[:num_project]
+    #
+    # # 팬들의 펀딩 프로젝트들을 가져옴
+    # def get_projects_by_fan(self, num_project):
+    #     project_datas = self.__database.get_datas_with_key(target="pid", key="ptype", key_datas=["fan"])
+    #     projects = []
+    #
+    #     for project_data in project_datas:
+    #         project = Project()
+    #         project.make_with_dict(project_data)
+    #         projects.append(project)
+    #
+    #     # 가장 최근에 생성 된 프로젝트들은 PID가 가장 크다. 따라서, 시간 순 정렬을 PID로 할 수있다.
+    #     # project에 기재된 정보는 모두 문자열이므로 형변환을 취해야한다.
+    #     projects_sorted = sorted(projects, key=lambda p: int(p.pid), reverse=True)
+    #
+    #     if num_project == -1:
+    #         return projects_sorted
+    #     return projects_sorted[:num_project]
+
+    # 최근에 올라온 신규 프로젝트들을 가져옴
+    def get_new_project(self, num_project, ptype):
+        project_datas = self.__database.get_datas_with_key(target="pid", key="ptype", key_datas=[ptype])
         projects = []
 
         for project_data in project_datas:
             project = Project()
             project.make_with_dict(project_data)
-            projects.append(project)
 
-        # 가장 최근에 생성 된 프로젝트들은 PID가 가장 크다. 따라서, 시간 순 정렬을 PID로 할 수있다.
-        # project에 기재된 정보는 모두 문자열이므로 형변환을 취해야한다.
+            # 생성일자가 기준일(현재시간)에서 일주일 이내의 프로젝트만 들고 옴.
+            if (date.today() - datetime.strptime(project.make_date, "%Y/%m/%d").date()).days < 14:
+                projects.append(project)
+
+        # 최신 순으로 정렬함
         projects_sorted = sorted(projects, key=lambda p: int(p.pid), reverse=True)
 
         if num_project == -1:
             return projects_sorted
         return projects_sorted[:num_project]
+
+    def get_recommend_project(self, num_project, ptype):
+        project_data = self.__database.get_datas_with_key(target="pid", key="ptype", key_datas=[ptype])
+        projects = []
+
+        return
+
 
     # 가장 인기가 많은 프로젝트들을 가져옴
     def get_projects_best(self):

@@ -113,7 +113,7 @@ class FundingProjectModel(BaseModel):
             num_project:int
     ):
         # 최애의 프로젝트들 가장 최근 것들 3개 들고 옴
-        self._project = funding_project_manager.get_projects_by_bias(num_project=num_project)
+        self._project = funding_project_manager.get_projects_by_ptype(num_project=num_project, ptype="bias")
         # 참여율 계산
         self._project = self._set_progress(project_list=self._project)
 
@@ -125,7 +125,7 @@ class FundingProjectModel(BaseModel):
             num_project:int
     ):
         # 팬들의 프로젝트들 가장 최근 것들 3개 들고 옴
-        self._project = funding_project_manager.get_projects_by_fan(num_project=num_project)
+        self._project = funding_project_manager.get_projects_by_ptype(num_project=num_project, ptype="fan")
         # 참여율 계산
         self._project = self._set_progress(project_list=self._project)
 
@@ -167,6 +167,27 @@ class FundingProjectModel(BaseModel):
         response = self._get_response_data(head_parser=head_parser, body=body)
         return response
 
+    def get_new_project(
+            self,
+            funding_project_manager:FundingProjectManager,
+            num_project:int,
+            ptype:str
+    ):
+        self._project = funding_project_manager.get_new_project(num_project=num_project, ptype=ptype)
+        self._project = self._set_progress(project_list=self._project)
+
+        return
+
+    def get_recommend_projects(
+            self,
+            funding_project_manager:FundingProjectManager,
+            num_project:int,
+            ptype:str
+    ):
+        self._project = funding_project_manager.get_recommend_projects(num_project=num_project, ptype=ptype)
+        self._project = self._set_progress(project_list=self._project)
+
+        return
 
 # 이건 펀딩 프로젝트에서 맞춤 태그 줄때 쓰는거
 class FundingProjectTagModel(BaseModel):
