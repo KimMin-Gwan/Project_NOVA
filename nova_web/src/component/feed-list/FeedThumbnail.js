@@ -3,10 +3,19 @@ import SimpleSlider from "../SimpleSlider";
 import style from "./FeedThumbnail.module.css";
 import more_icon from "../../img/Icon.png";
 import search_icon from "./../../img/search_icon.png";
+import pin from "./../../img/pin.png";
 
 import { useNavigate } from "react-router-dom";
 
-export default function FeedThumbnail({ title, feedData, brightMode, hasSearchBox }) {
+export default function FeedThumbnail({
+  title,
+  feedData,
+  brightMode,
+  hasSearchBox,
+  children,
+  allPost,
+  endPoint,
+}) {
   let navigate = useNavigate();
   const [mode, setMode] = useState(brightMode); // 초기 상태는 부모로부터 받은 brightMode 값
 
@@ -17,11 +26,16 @@ export default function FeedThumbnail({ title, feedData, brightMode, hasSearchBo
   return (
     <section className={style["FeedThumbnail"]}>
       <div className={style["title-section"]}>
-        <div className={style["title"]}>📌 {title}</div>
+        <div className={style["title"]}>
+          📌 {title}
+          {/* <img src={pin} /> */}
+        </div>
         <div className={`${style["more-icon"]}`}>
-          <img src={more_icon} alt="더보기" onClick={() => navigate("/feed_hash_list")}></img>
+          <img src={more_icon} alt="더보기" onClick={() => navigate(endPoint)}></img>
         </div>
       </div>
+
+      {children}
 
       {hasSearchBox && (
         <div className={style["search-section"]}>
@@ -37,7 +51,8 @@ export default function FeedThumbnail({ title, feedData, brightMode, hasSearchBo
         </div>
       )}
 
-      <SimpleSlider feedData={feedData} brightMode={brightMode} />
+      {allPost}
+      {!allPost && <SimpleSlider feedData={feedData} brightMode={brightMode} />}
     </section>
   );
 }

@@ -22,6 +22,10 @@
 .title-section .title {
   margin-left: 20px;
   justify-content: start;
+
+  img {
+    object-fit: cover;
+  }
 }
 
 .title-section .more-icon {

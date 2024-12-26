@@ -82,10 +82,20 @@ const SimpleSlider = ({ feedData, brightMode }) => {
                       // onClickMore(feed.fid);
                     }}
                   >
-                    <div className={style["name-container"]}>
-                      {/* <div className={style["profile"]}> </div> */}
-                      <h2 className={style["name-text"]}>{feed.nickname}</h2>
+                    {/* <div className={style["name-container"]}> */}
+                    {/* <div className={style["profile"]}> </div> */}
+                    {/* </div> */}
+                    <div className={style["img-container"]}>
+                      <img
+                        src={
+                          feed.image.length > 0
+                            ? feed.image[0]
+                            : "https://kr.object.ncloudstorage.com/nova-feed-images/nova-platform.PNG"
+                        }
+                        alt="이미지"
+                      />
                     </div>
+
                     <section className={style["text-container"]}>
                       <div className={style["tag-text"]}>
                         {feed.hashtag.map((tag, i) => {

@@ -48,7 +48,7 @@
   margin: 0 auto;
   position: relative;
   width: 85%;
-  height: 250px;
+  /* height: 250px; */
   /* 부모 높이에 맞게 설정 */
   background-color: #101010;
   color: white;
@@ -67,7 +67,7 @@
 }
 
 .slide-box {
-  height: 300px;
+  /* height: 300px; */
   width: 100%;
   display: flex;
   justify-content: center;

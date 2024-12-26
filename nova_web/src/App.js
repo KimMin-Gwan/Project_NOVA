@@ -61,6 +61,24 @@ function App() {
   let [isUserState, setIsUserState] = useState(false);
   let todayBestFeed = useFetchData(`${URL}today_best`);
   let weeklyFeed = useFetchData(`${URL}weekly_best`);
+  let allFeed = useFetchData(`${URL}/all_feed`);
+
+  let bias_url = "https://kr.object.ncloudstorage.com/nova-images/";
+
+  let [myBias, setMyBias] = useState([]);
+
+  useEffect(() => {
+    fetch(URL + "my_bias", {
+      credentials: "include",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setMyBias(data.body.bias_list);
+      })
+      .catch((error) => {
+        console.error("Fetch error:", error);
+      });
+  }, []);
 
   function handleValidCheck() {
     fetch("https://nova-platform.kr/home/is_valid", {
@@ -94,6 +112,8 @@ function App() {
   let [blackBox, setBlackBox] = useState("");
 
   let navigate = useNavigate();
+
+  function toNavigate() {}
 
   // 다크모드 버튼이 눌리면 바뀌도록
   // true면 다크모드 , false면 컬러
@@ -219,8 +239,31 @@ function App() {
                     </button>
                   </div>
                 </header>
+                <h4 className="main-title">최애가 가장 빛날 수 있는 공간</h4>
+
                 <Banner url={URL}></Banner>
 
+                <FeedThumbnail
+                  title={"주간 TOP 100"}
+                  feedData={weeklyFeed}
+                  brightMode={brightMode}
+                  children={
+                    <div className="bias-container">
+                      <div className="bias-wrapper">
+                        {myBias.map((bias, i) => {
+                          return (
+                            <div key={bias.bid} className="bias-info">
+                              <div className="bias-box">
+                                <img src={bias_url + `${bias.bid}.PNG`} alt="bias" />
+                              </div>
+                              <div className="bias-name">{bias.bname}</div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  }
+                />
                 {/* <section className="my-bias">
                   <MyBias url={URL} showBox={showBox} blackBox={blackBox}></MyBias>
                 </section> */}
@@ -239,13 +282,23 @@ function App() {
                   feedData={todayBestFeed}
                   brightMode={brightMode}
                   hasSearchBox
+                  endPoint={`/feed_list?type=best`}
                 />
                 <FeedThumbnail
                   title={"주간 TOP 100"}
                   feedData={weeklyFeed}
                   brightMode={brightMode}
+                  endPoint={`/feed_list?type=weekly_best`}
                 />
-                <AllPost brightMode={brightMode} />
+
+                <FeedThumbnail
+                  title={"전체 글"}
+                  feedData={allFeed}
+                  brightMode={brightMode}
+                  allPost={<AllPost />}
+                  endPoint={"/feed_list?type=all"}
+                />
+                {/* <AllPost brightMode={brightMode} /> */}
               </section>
 
               <div className="narrow-page">

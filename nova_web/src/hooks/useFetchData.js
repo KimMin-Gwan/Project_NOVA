@@ -9,7 +9,7 @@ export default function useFetchData(url) {
     await fetch(url, { credentials: "include" })
       .then((response) => response.json())
       .then((data) => {
-        // console.log("data", data);
+        console.log("data", data);
         setData(data.body.feed);
         setLoading(false);
       });
