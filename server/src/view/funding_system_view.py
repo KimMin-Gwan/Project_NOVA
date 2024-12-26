@@ -103,6 +103,7 @@ class Funding_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
+        # 12월 23일 작업
         # 홈에서 최애 펀딩 프로젝트 받기, FIN
         @self.__app.get('/nova_fund_system/home/get_bias_project')
         def get_home_bias_project(request:Request):
@@ -132,6 +133,7 @@ class Funding_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
+        # 12월 23일 작업
         # 홈에서 덕질 펀딩 프로젝트 받기, FIN
         @self.__app.get('/nova_fund_system/home/get_fan_funding')
         def get_home_fan_project(request:Request):
@@ -155,6 +157,7 @@ class Funding_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
+        # 12월 23일 작업
         # FIN
         # 베스트 프로젝트 모두 보기에서 필요한 데이터
         # 다른건 없고 [프로젝트 성공 사례의 횟수] 이걸 주면되는듯
@@ -185,6 +188,7 @@ class Funding_Service_View(Master_View):
 
         #------------------------ 프로젝트 덕질 프로젝트 페이지에서 요청 ----------------------------
 
+        # 12월 24일 작업
         # FIN
         # 1. 이미 목표 달성에 성공한 프로젝트
         # 이는 미리보기 형태로, 보여줄 개수가 정해져있다.
@@ -208,8 +212,9 @@ class Funding_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
-
-        # 2. 마감 임박 프로젝트, FIN
+        # 12월 24일 작업
+        # FIN
+        # 2. 마감 임박 프로젝트
         @self.__app.get('/nova_fund_system/fan_project/soon_expire')
         def get_near_deadline_project_list(request:Request):
             request_manager = RequestManager()
@@ -251,6 +256,7 @@ class Funding_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
+        # 12월 26일 작업
         # FIN, ERROR 있는데 여기와는 무관함. 같은 컨트롤러 함수를 쓰는데 전체보기에서는 문제가 없음
         # 4. 참여 프로젝트
         @self.__app.get('/nova_fund_system/fan_project/funding_project')
@@ -273,6 +279,7 @@ class Funding_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
+        # 12월 26일 작업
         # FIN,  ERROR 있는데 여기와는 무관함. 같은 컨트롤러 함수를 쓰는데 전체보기에서는 문제가 없음
         # 5. 모금 프로젝트
         @self.__app.get('/nova_fund_system/fan_project/donation_project')
@@ -297,7 +304,8 @@ class Funding_Service_View(Master_View):
 
         # ----- 여기는 덕질프로젝트에서 전체보기하면 줄 거 -------------
 
-        # FIN, 근데, 이거 프론트엔드 링크가 잘못되어있어서 확인을 못했음
+        # 12월 24일 작업
+        # FIN
         # 1. 이미 목표 달성에 성공한 프로젝트
         @self.__app.get('/nova_fund_system/fan_project_list/achieve_the_goal')
         def get_done_project_list_all(request:Request, key:Optional[str]="" ):
@@ -319,7 +327,8 @@ class Funding_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
-        # FIN, 위와 동일
+        # 12월 24일 작업
+        # FIN
         # 2. 마감 임박 프로젝트
         @self.__app.get('/nova_fund_system/fan_project_list/soon_expire')
         def get_near_deadline_project_list_all(request:Request, key:Optional[str]="" ):
@@ -362,6 +371,7 @@ class Funding_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
+        # 12월 26일 작업
         # FIN
         # 4. 참여 프로젝트
         @self.__app.get('/nova_fund_system/fan_project_list/funding_project')
@@ -384,6 +394,7 @@ class Funding_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
+        # 12월 26일 작업
         # FIN
         # 5. 모금 프로젝트
         @self.__app.get('/nova_fund_system/fan_project_list/donation_project')
