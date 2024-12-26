@@ -261,7 +261,7 @@ class Funding_Service_View(Master_View):
             return response
 
         # 12월 26일 작업
-        # FIN, ERROR 있는데 여기와는 무관함. 같은 컨트롤러 함수를 쓰는데 전체보기에서는 문제가 없음
+        # FIN,
         # 4. 참여 프로젝트
         @self.__app.get('/nova_fund_system/fan_project/funding_project')
         def get_attend_project_list(request:Request):
@@ -286,7 +286,7 @@ class Funding_Service_View(Master_View):
             return response
 
         # 12월 26일 작업
-        # FIN,  ERROR 있는데 여기와는 무관함. 같은 컨트롤러 함수를 쓰는데 전체보기에서는 문제가 없음
+        # FIN,
         # 5. 모금 프로젝트
         @self.__app.get('/nova_fund_system/fan_project/donation_project')
         def get_donate_project_list(request:Request):
@@ -455,8 +455,11 @@ class Funding_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
+
+# ---------------------------------- 최애의 펀딩 프로젝트 관련 ----------------------------------
+
         # 12/26 추가
-        # FIN
+        # FIN, 확인 필요
         # 최애 펀딩 페이지 최상단 - 신규 최애 펀딩
         @self.__app.get('/nova_fund_system/bias_project/new_bias_project')
         def new_bias_project(request:Request, key:Optional[str]="" ):
@@ -478,6 +481,7 @@ class Funding_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
+        # FIN, 확인필요
         # 최애 페이지 중단 - 추천하는 프로젝트 (3개)
         # if ftype == "donate" : 달성률 100%이하 and 100%에 근접
         # elif ftype == "attend" : 달성률 100% 초과
@@ -491,17 +495,19 @@ class Funding_Service_View(Master_View):
                 #raise request_manager.credentials_exception
 
             funding_controller = Funding_Controller()
-            model = funding_controller.get_recommend_bias_project(
+            model = funding_controller.get_recommend_project(
                 database=self.__database,
                 request=request_manager,
                 funding_project_manager=self.__funding_project_manager,
-                num_project=3)
+                num_project=3,
+                ptype="bias",
+            )
 
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
-        # FIN
+        # FIN, 확인 필요
         # 최애 페이지 하단 - 진행중인 프로젝트(3개)
         # 마감일 순으로, 가장 마감에 임박한 프로젝트 부터 노출
         @self.__app.get('/nova_fund_system/bias_project/all_project')
@@ -514,20 +520,20 @@ class Funding_Service_View(Master_View):
                 #raise request_manager.credentials_exception
 
             funding_controller = Funding_Controller()
-            model = funding_controller.get_near_deadline_project(
+            model = funding_controller.get_nearby_deadline_project_ptype(
                 database=self.__database,
                 request=request_manager,
                 funding_project_manager=self.__funding_project_manager,
                 num_project=3,
-                ptype="fan"
+                ptype="bias"
             )
 
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
-
-        # 최애 프로젝트 리스트 페이지- 추천하는 프로젝트( 요청당 6개)
+        # half FIN, 페이지 번호의 존재 유무 판단
+        # 최애 프로젝트 리스트 페이지- 추천하는 프로젝트(요청당 6개)
         # if ftype == "donate" : 달성률 100%이하 and 100%에 근접
         # elif ftype == "attend" : 달성률 100% 초과
         @self.__app.get('/nova_fund_system/bias_project_list/recommend_project')
@@ -544,13 +550,16 @@ class Funding_Service_View(Master_View):
                 database=self.__database,
                 request=request_manager,
                 funding_project_manager=self.__funding_project_manager,
-                num_project=6)
+                num_project=-1,
+                ptype="bias",
+            )
 
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
-        # 최애 프로젝트 리스트 페이지- 진행중인 프로젝트( 요청당 6개)
+        # half FIN, 페이지 번호의 존재 유무 확인.
+        # 최애 프로젝트 리스트 페이지- 진행중인 프로젝트(요청당 6개)
         # 마감일 순으로, 가장 마감에 임박한 프로젝트 부터 노출
         @self.__app.get('/nova_fund_system/bias_project_list/all_project')
         def all_project_list(request:Request, key:Optional[str]=""):
@@ -562,11 +571,13 @@ class Funding_Service_View(Master_View):
                 #raise request_manager.credentials_exception
 
             funding_controller = Funding_Controller()
-            model = funding_controller.get_all_bias_project(
+            model = funding_controller.get_nearby_deadline_project_ptype(
                 database=self.__database,
                 request=request_manager,
                 funding_project_manager=self.__funding_project_manager,
-                num_project=6)
+                num_project=6,
+                ptype="bias",
+            )
 
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)

@@ -119,6 +119,7 @@ class FundingProjectModel(BaseModel):
 
         return
 
+    #
     def get_project_with_fan(
             self,
             funding_project_manager:FundingProjectManager,
@@ -131,6 +132,28 @@ class FundingProjectModel(BaseModel):
 
         return
 
+    # 추천하는 프로젝트들을 들고 올 때,
+    def get_recommend_projects(
+            self,
+            funding_project_manager:FundingProjectManager,
+            num_project:int,
+            ptype:str
+    ):
+        self._project = funding_project_manager.get_recommend_projects(num_project=num_project, ptype=ptype)
+        self._project = self._set_progress(project_list=self._project)
+
+        return
+
+    def get_nearby_deadline_ptype_projects(
+            self,
+            funding_project_manager:FundingProjectManager,
+            num_project:int,
+            ptype:str
+    ):
+        self._project = funding_project_manager.get_all_projects_deadline_sort_ptype(num_project=num_project, ptype=ptype)
+        self._project = self._set_progress(project_list=self._project)
+
+        return
 
     # 유저가 참여한 프로젝트 인지 확인할것
     # 유저가 참여한 프로젝트인지 확인할 필요가 있을 때 이 함수를 통할 것
@@ -178,16 +201,7 @@ class FundingProjectModel(BaseModel):
 
         return
 
-    def get_recommend_projects(
-            self,
-            funding_project_manager:FundingProjectManager,
-            num_project:int,
-            ptype:str
-    ):
-        self._project = funding_project_manager.get_recommend_projects(num_project=num_project, ptype=ptype)
-        self._project = self._set_progress(project_list=self._project)
 
-        return
 
 # 이건 펀딩 프로젝트에서 맞춤 태그 줄때 쓰는거
 class FundingProjectTagModel(BaseModel):

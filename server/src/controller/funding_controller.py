@@ -3,6 +3,7 @@ from model import Local_Database, BaseModel
 from fastapi import HTTPException, status
 from others import FundingProjectManager
 
+
 class Funding_Controller:
     # 홈화면에서 맞춤 태그 제공
     def get_home_banner(self,
@@ -240,6 +241,32 @@ class Funding_Controller:
 
         return model
 
+    # 진행중인 프로젝트들을 모두 끌고와서 마감 기한에 맞춰 정렬하는 로직
+    # ptype(bias, fan) 입맛 별로 끌고 올 수 있음
+    def get_nearby_deadline_project_ptype(
+            self,
+            database:Local_Database,
+            request,
+            funding_project_manager:FundingProjectManager,
+            num_project,
+            ptype:str,
+    ) -> BaseModel:
+
+        model = FundingProjectModel(database=database)
+
+        # 유저가 있으면 세팅
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
+
+        # 팬들의 프로젝트들을 끌고오되, num_project 개수만큼 끌고 온다.
+        model.get_nearby_deadline_ptype_projects(
+            funding_project_manager=funding_project_manager,
+            num_project=num_project,
+            ptype=ptype
+        )
+
+        return model
+
     # 펀딩 프로젝트에서 마감된 프로젝트 보기
     def get_done_project(
             self,
@@ -247,7 +274,7 @@ class Funding_Controller:
             request,
             funding_project_manager:FundingProjectManager,
             num_project,
-            ptype
+            ptype:str,
     )-> BaseModel:
         model = DeadlineAddedProjectModel(database=database)
 
@@ -269,7 +296,7 @@ class Funding_Controller:
             request,
             funding_project_manager:FundingProjectManager,
             num_project,
-            ptype
+            ptype:str,
     ) -> BaseModel:
         model = DeadlineAddedProjectModel(database=database)
 
@@ -292,7 +319,7 @@ class Funding_Controller:
             request,
             funding_project_manager:FundingProjectManager,
             num_project,
-            ptype
+            ptype:str,
     ) -> BaseModel:
         model = DeadlineAddedProjectModel(database=database)
 
@@ -371,7 +398,7 @@ class Funding_Controller:
         model.get_recommend_projects(
             funding_project_manager=funding_project_manager,
             num_project=num_project,
-            ptype="bias"
+            ptype=ptype
         )
 
         return model
