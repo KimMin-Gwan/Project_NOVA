@@ -117,6 +117,8 @@ class Funding_Controller:
             num_project=num_project
         )
 
+        return model
+
     # 베스트 프로젝트 모두 보기에서 필요한 데이터
     # 다른건 없고 [프로젝트 성공 사례의 횟수] 이걸 주면되는듯
     def get_best_funding_section(self,
