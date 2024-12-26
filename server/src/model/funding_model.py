@@ -284,6 +284,17 @@ class DeadlineAddedProjectModel(BaseModel):
             deadline_diff = datetime.strptime(project.expire_date,"%Y/%m/%d").date() - date.today()
             self._deadline_list.append(deadline_diff.days)
 
+    def get_deadline_sample_project(
+            self,
+            funding_project_manager:FundingProjectManager,
+            num_project:int
+    ):
+        self._project = funding_project_manager.get_sample_project(num_project=num_project)
+        self._project = self._set_progress(project_list=self._project)
+        self._calculate_deadline()
+
+        return
+
     # 참여도에 대한 백분율 조사
     # 지금은 integer 값이 나옴
     # 필요하면 round로 하삼

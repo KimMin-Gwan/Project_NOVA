@@ -3,6 +3,8 @@ from model import Local_Database, BaseModel
 from fastapi import HTTPException, status
 from others import FundingProjectManager
 
+
+
 class Funding_Controller:
     # 홈화면에서 맞춤 태그 제공
     def get_home_banner(self,
@@ -97,7 +99,23 @@ class Funding_Controller:
             )
 
         return model
-    
+
+    def get_deadline_sample_project(
+            self,
+            database:Local_Database,
+            request,
+            funding_project_manager:FundingProjectManager,
+            num_project=1
+    ) -> BaseModel:
+        model = DeadlineAddedProjectModel
+
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
+
+        model.get_deadline_sample_project(
+
+        )
+
     # 베스트 프로젝트 모두 보기에서 필요한 데이터
     # 다른건 없고 [프로젝트 성공 사례의 횟수] 이걸 주면되는듯
     def get_best_funding_section(self,
@@ -156,7 +174,7 @@ class Funding_Controller:
         request,
         funding_project_manager:FundingProjectManager,
         num_project = 3
-        ):
+    ) -> BaseModel:
 
         # 모델을 정의
         model = FundingProjectModel(database=database)

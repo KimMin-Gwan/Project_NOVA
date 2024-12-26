@@ -41,6 +41,8 @@ class FundingProjectManager:
             project.make_with_dict(dict_data=project_data)
             projects.append(project)
 
+        if num_project == -1:
+            return projects
         return projects[:num_project]
 
     # 프로젝트 바디 데이터를 GET 하는 함수
