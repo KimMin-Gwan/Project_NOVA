@@ -263,7 +263,7 @@ class Funding_Service_View(Master_View):
                 #raise request_manager.credentials_exception
 
             funding_controller =Funding_Controller()
-            model = funding_controller.get_attend_funding_project(
+            model = funding_controller.get_sample_project(
                 database=self.__database,
                 request=request_manager,
                 funding_project_manager=self.__funding_project_manager,
@@ -285,7 +285,7 @@ class Funding_Service_View(Master_View):
                 #raise request_manager.credentials_exception
 
             funding_controller =Funding_Controller()
-            model = funding_controller.get_donate_funding_project(
+            model = funding_controller.get_sample_project(
                 database=self.__database,
                 request=request_manager,
                 funding_project_manager=self.__funding_project_manager,
