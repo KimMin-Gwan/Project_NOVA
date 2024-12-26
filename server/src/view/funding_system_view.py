@@ -210,7 +210,7 @@ class Funding_Service_View(Master_View):
 
         # 2. 마감 임박 프로젝트, FIN
         @self.__app.get('/nova_fund_system/fan_project/soon_expire')
-        def get_project_list(request:Request):
+        def get_near_deadline_project_list(request:Request):
             request_manager = RequestManager()
             data_payload = ProjectGetRequest()
 
@@ -252,7 +252,7 @@ class Funding_Service_View(Master_View):
 
         # 4. 참여 프로젝트
         @self.__app.get('/nova_fund_system/fan_project/funding_project')
-        def get_project_list(request:Request):
+        def get_attend_project_list(request:Request):
             request_manager = RequestManager()
             data_payload = ProjectGetRequest()
 
@@ -261,7 +261,7 @@ class Funding_Service_View(Master_View):
                 #raise request_manager.credentials_exception
 
             funding_controller =Funding_Controller()
-            model = funding_controller.get_sample_project(
+            model = funding_controller.get_attend_funding_project(
                 database=self.__database,
                 request=request_manager,
                 funding_project_manager=self.__funding_project_manager,
@@ -273,7 +273,7 @@ class Funding_Service_View(Master_View):
 
         # 5. 모금 프로젝트
         @self.__app.get('/nova_fund_system/fan_project/donation_project')
-        def get_project_list(request:Request):
+        def get_donate_project_list(request:Request):
             request_manager = RequestManager()
             data_payload = ProjectGetRequest()
 
@@ -282,7 +282,7 @@ class Funding_Service_View(Master_View):
                 #raise request_manager.credentials_exception
 
             funding_controller =Funding_Controller()
-            model = funding_controller.get_sample_project(
+            model = funding_controller.get_donate_funding_project(
                 database=self.__database,
                 request=request_manager,
                 funding_project_manager=self.__funding_project_manager,
@@ -297,7 +297,7 @@ class Funding_Service_View(Master_View):
         # FIN, 근데, 이거 프론트엔드 링크가 잘못되어있어서 확인을 못했음
         # 1. 이미 목표 달성에 성공한 프로젝트
         @self.__app.get('/nova_fund_system/fan_project_list/achieve_the_goal')
-        def get_project_list(request:Request, key:Optional[str]="" ):
+        def get_done_project_list_all(request:Request, key:Optional[str]="" ):
             request_manager = RequestManager()
             data_payload = ProjectGetRequest(key=key)
 
@@ -319,7 +319,7 @@ class Funding_Service_View(Master_View):
         # FIN, 위와 동일
         # 2. 마감 임박 프로젝트
         @self.__app.get('/nova_fund_system/fan_project_list/soon_expire')
-        def get_project_list(request:Request, key:Optional[str]="" ):
+        def get_near_deadline_project_list_all(request:Request, key:Optional[str]="" ):
             request_manager = RequestManager()
             data_payload = ProjectGetRequest(key=key)
 

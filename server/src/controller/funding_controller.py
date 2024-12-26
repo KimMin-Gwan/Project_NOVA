@@ -248,7 +248,7 @@ class Funding_Controller:
             request,
             funding_project_manager:FundingProjectManager,
             num_project,
-    ):
+    ) -> BaseModel:
         model = NearOrDoneProjectModel(database=database)
 
         # 유저가 있으면 세팅
@@ -256,6 +256,46 @@ class Funding_Controller:
             model.set_user_with_email(request=request.jwt_payload)
 
         model.get_near_projects(
+            funding_project_manager=funding_project_manager,
+            num_project=num_project
+        )
+
+        return model
+
+    def get_attend_funding_project(
+            self,
+            database:Local_Database,
+            request,
+            funding_project_manager:FundingProjectManager,
+            num_project,
+    ) -> BaseModel:
+        model = FundingProjectModel(database=database)
+
+        # 유저가 있으면 세팅
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
+
+        model.get_attend_projects(
+            funding_project_manager=funding_project_manager,
+            num_project=num_project
+        )
+
+        return model
+
+    def get_donate_funding_project(
+            self,
+            database:Local_Database,
+            request,
+            funding_project_manager:FundingProjectManager,
+            num_project,
+    ) -> BaseModel:
+        model = FundingProjectModel(database=database)
+
+        # 유저가 있으면 세팅
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
+
+        model.get_donate_projects(
             funding_project_manager=funding_project_manager,
             num_project=num_project
         )

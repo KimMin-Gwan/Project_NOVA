@@ -131,6 +131,26 @@ class FundingProjectModel(BaseModel):
 
         return
 
+    def get_attend_project(
+            self,
+            funding_project_manager:FundingProjectManager,
+            num_project:int
+    ):
+        self._project = funding_project_manager.get_attend_funding_project(num_project=num_project)
+        self._project = self._set_progress(project_list=self._project)
+
+        return
+
+    def get_donate_project(
+            self,
+            funding_project_manager:FundingProjectManager,
+            num_project:int
+    ):
+        self._project = funding_project_manager.get_donate_funding_project(num_project=num_project)
+        self._project = self._set_progress(project_list=self._project)
+
+        return
+
     # 유저가 참여한 프로젝트 인지 확인할것
     # 유저가 참여한 프로젝트인지 확인할 필요가 있을 때 이 함수를 통할 것
     def _is_user_interacted(self, user, project:list):

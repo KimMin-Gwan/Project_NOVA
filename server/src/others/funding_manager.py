@@ -66,6 +66,8 @@ class FundingProjectManager:
         # project에 기재된 정보는 모두 문자열이므로 형변환을 취해야한다.
         projects_sorted = sorted(projects, key=lambda p: int(p.pid), reverse=True)
 
+        if num_project == -1:
+            return projects_sorted
         return projects_sorted[:num_project]
 
     # 팬들의 펀딩 프로젝트들을 가져옴
@@ -82,6 +84,8 @@ class FundingProjectManager:
         # project에 기재된 정보는 모두 문자열이므로 형변환을 취해야한다.
         projects_sorted = sorted(projects, key=lambda p: int(p.pid), reverse=True)
 
+        if num_project == -1:
+            return projects_sorted
         return projects_sorted[:num_project]
 
     # 가장 인기가 많은 프로젝트들을 가져옴
@@ -152,6 +156,42 @@ class FundingProjectManager:
         if num_project == -1:
             return projects_sorted
 
+        return projects_sorted[:num_project]
+
+    # 참여형 프로젝트 표시
+    def get_attend_funding_project(self, num_project):
+        project_datas = self.__database.get_datas_with_key(target="pid", key="ftype", key_datas=["attend"])
+        projects = []
+
+        for project_data in project_datas:
+            project = Project()
+            project.make_with_dict(project_data)
+            projects.append(project)
+
+        # 가장 최근에 만들어진 Project가 먼저 오도록 한다.
+        # 가장 최근에 생성된 프로젝트는 PID로 정렬이 가능하다.
+        projects_sorted = sorted(projects, key=lambda p: int(p.pid), reverse=True)
+
+        if num_project == -1:
+            return projects_sorted
+        return projects_sorted[:num_project]
+
+    # 후원형 프로젝트 표시
+    def get_donate_funding_project(self, num_project):
+        project_datas = self.__database.get_datas_with_key(target="pid", key="ftype", key_datas=["donate"])
+        projects = []
+
+        for project_data in project_datas:
+            project = Project()
+            project.make_with_dict(project_data)
+            projects.append(project)
+
+        # 가장 최근에 만들어진 Project가 먼저 오도록 한다.
+        # 가장 최근에 생성된 프로젝트는 PID로 정렬이 가능하다.
+        projects_sorted = sorted(projects, key=lambda p: int(p.pid), reverse=True)
+
+        if num_project == -1:
+            return projects_sorted
         return projects_sorted[:num_project]
 
 # 건들지 않음
