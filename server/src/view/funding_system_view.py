@@ -385,7 +385,7 @@ class Funding_Service_View(Master_View):
             return response
 
         # 확인 필요
-        # 5. 모금 프로젝트, 확인 필요
+        # 5. 모금 프로젝트
         @self.__app.get('/nova_fund_system/fan_project_list/donation_project')
         def get_donate_project_list_all(request:Request, key:Optional[str]="" ):
             request_manager = RequestManager()
@@ -396,7 +396,7 @@ class Funding_Service_View(Master_View):
                 #raise request_manager.credentials_exception
 
             funding_controller =Funding_Controller()
-            model = funding_controller.get_sample_project(
+            model = funding_controller.get_donate_funding_project(
                 database=self.__database,
                 request=request_manager,
                 funding_project_manager=self.__funding_project_manager,
