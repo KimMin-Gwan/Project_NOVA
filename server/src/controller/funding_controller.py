@@ -229,7 +229,7 @@ class Funding_Controller:
             funding_project_manager:FundingProjectManager,
             num_project
     )-> BaseModel:
-        model = NearOrDoneProjectModel(database=database)
+        model = DeadlineAddedProjectModel(database=database)
 
         # 유저가 있으면 세팅
         if request.jwt_payload != "":
@@ -249,7 +249,7 @@ class Funding_Controller:
             funding_project_manager:FundingProjectManager,
             num_project,
     ) -> BaseModel:
-        model = NearOrDoneProjectModel(database=database)
+        model = DeadlineAddedProjectModel(database=database)
 
         # 유저가 있으면 세팅
         if request.jwt_payload != "":
@@ -269,7 +269,7 @@ class Funding_Controller:
             funding_project_manager:FundingProjectManager,
             num_project,
     ) -> BaseModel:
-        model = FundingProjectModel(database=database)
+        model = DeadlineAddedProjectModel(database=database)
 
         # 유저가 있으면 세팅
         if request.jwt_payload != "":
@@ -289,7 +289,7 @@ class Funding_Controller:
             funding_project_manager:FundingProjectManager,
             num_project,
     ) -> BaseModel:
-        model = FundingProjectModel(database=database)
+        model = DeadlineAddedProjectModel(database=database)
 
         # 유저가 있으면 세팅
         if request.jwt_payload != "":
