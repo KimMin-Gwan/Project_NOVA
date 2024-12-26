@@ -78,7 +78,7 @@ class Funding_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
-        # 홈에서 추천 태그로 프로젝트 받기, Sample
+        # 홈에서 추천 태그로 프로젝트 받기, sample, 완성해야함
         @self.__app.get('/nova_fund_system/home/get_project_as_tag')
         def get_home_project_as_tag(request:Request, tag:Optional[str]=""):
             request_manager = RequestManager()
