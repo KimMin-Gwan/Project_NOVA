@@ -66,6 +66,8 @@ function App() {
   let bias_url = "https://kr.object.ncloudstorage.com/nova-images/";
 
   let [myBias, setMyBias] = useState([]);
+  const defaultBoxes = 4;
+  const totalBiasBoxes = Math.max(defaultBoxes, myBias.length);
 
   useEffect(() => {
     fetch(URL + "my_bias", {
@@ -250,13 +252,24 @@ function App() {
                   children={
                     <div className="bias-container">
                       <div className="bias-wrapper">
-                        {myBias.map((bias, i) => {
+                        {/* {myBias.map((bias, i) => {
                           return (
                             <div key={bias.bid} className="bias-info">
                               <div className="bias-box">
                                 <img src={bias_url + `${bias.bid}.PNG`} alt="bias" />
                               </div>
-                              <div className="bias-name">{bias.bname}</div>
+                              <div className="b-name">{bias.bname}</div>
+                            </div>
+                          );
+                        })} */}
+                        {Array.from({ length: totalBiasBoxes }).map((_, i) => {
+                          const bias = myBias[i];
+                          return (
+                            <div key={i} className="bias-info">
+                              <div className="bias-box">
+                                {bias && <img src={bias_url + `${bias.bid}.PNG`} alt="bias" />}
+                              </div>
+                              <div className="b-name">{bias?.bname || <span>&nbsp;</span>}</div>
                             </div>
                           );
                         })}
@@ -268,6 +281,11 @@ function App() {
                   <MyBias url={URL} showBox={showBox} blackBox={blackBox}></MyBias>
                 </section> */}
               </div>
+
+              <section>
+                <div className="rt-ranking">{"<실시간랭킹>"}들어갈 와이어프레임</div>
+              </section>
+
               <section className="contents">
                 {/* <MainPart brightMode={brightMode} /> */}
                 {/* <PopularFeed brightMode={brightMode} /> */}

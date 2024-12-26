@@ -1196,7 +1196,7 @@ body.dark-mode {
   justify-content: center;
   align-items: center;
   /* background-color: blue; */
-  .bias-name {
+  .b-name {
     font-size: 14px;
     margin-top: 5px;
     color: white;
@@ -1206,6 +1206,8 @@ body.dark-mode {
 .bias-box {
   width: 100px;
   height: 100px;
+  background-color: gray;
+  border-radius: 10px;
 
   img {
     width: 100%;
@@ -1213,4 +1215,14 @@ body.dark-mode {
     object-fit: cover;
     border-radius: 10px;
   }
+}
+
+/* 실시간 랭킹 */
+.rt-ranking {
+  margin: 0 auto;
+  width: 95%;
+  padding: 15px 0;
+  background-color: black;
+  color: white;
+  text-align: center;
 }
