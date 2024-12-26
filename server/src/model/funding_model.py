@@ -319,9 +319,10 @@ class DeadlineAddedProjectModel(BaseModel):
     def get_done_projects(
             self,
             funding_project_manager:FundingProjectManager,
-            num_project:int
+            num_project:int,
+            ptype:str
     ):
-        self._project = funding_project_manager.get_done_projects(num_project=num_project)
+        self._project = funding_project_manager.get_done_projects(num_project=num_project, ptype=ptype)
         self._project = self._set_progress(project_list=self._project)
         self._calculate_deadline()
 
@@ -330,9 +331,10 @@ class DeadlineAddedProjectModel(BaseModel):
     def get_near_projects(
             self,
             funding_project_manager:FundingProjectManager,
-            num_project:int
+            num_project:int,
+            ptype:str
     ):
-        self._project = funding_project_manager.get_near_projects(num_project=num_project)
+        self._project = funding_project_manager.get_near_projects(num_project=num_project, ptype=ptype)
         self._project = self._set_progress(project_list=self._project)
         self._calculate_deadline()
 
@@ -341,9 +343,10 @@ class DeadlineAddedProjectModel(BaseModel):
     def get_attend_projects(
             self,
             funding_project_manager:FundingProjectManager,
-            num_project:int
+            num_project:int,
+            ptype:str
     ):
-        self._project = funding_project_manager.get_attend_funding_project(num_project=num_project)
+        self._project = funding_project_manager.get_attend_funding_project(num_project=num_project, ptype=ptype)
         self._project = self._set_progress(project_list=self._project)
         self._calculate_deadline()
 
@@ -352,9 +355,10 @@ class DeadlineAddedProjectModel(BaseModel):
     def get_donate_projects(
             self,
             funding_project_manager:FundingProjectManager,
-            num_project:int
+            num_project:int,
+            ptype:str
     ):
-        self._project = funding_project_manager.get_donate_funding_project(num_project=num_project)
+        self._project = funding_project_manager.get_donate_funding_project(num_project=num_project, ptype=ptype)
         self._project = self._set_progress(project_list=self._project)
         self._calculate_deadline()
 

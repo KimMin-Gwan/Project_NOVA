@@ -107,7 +107,7 @@ class FundingProjectManager:
         return projects
 
     # 완료된 펀딩 프로젝트 표시
-    def get_done_projects(self, num_project):
+    def get_done_projects(self, num_project, ptype:str):
         # 가지고 있는 모든 프로젝트들을 들고와서
         project_datas = self.__database.get_all_data(target="pid")
         projects = []
@@ -121,8 +121,9 @@ class FundingProjectManager:
 
             # 프로젝트가 남은 기한이 음수인지 확인. 당일까지는 계속 열어둘 것으로 한다. 만약 시간까지 고려한다면 이게 바뀌게 되겠지
             # 현재는 펀딩이 마감된 프로젝트만 골라야하므로, 음수만 고려하는 방안으로 작성함
-            if self._calculate_deadline(project) < 0:
-                projects.append(project)
+            if project.ptype == ptype:
+                if self._calculate_deadline(project) < 0:
+                    projects.append(project)
 
         # 프로젝트 펀딩이 목표금액을 넘긴 경우를 찾아온다.
         for proj in projects:
@@ -138,7 +139,7 @@ class FundingProjectManager:
         return projects_sorted[:num_project]
 
     # 마감기한이 별로 남지 않은 프로젝트 표시
-    def get_near_projects(self, num_project):
+    def get_near_projects(self, num_project, ptype:str):
         project_datas = self.__database.get_all_data(target="pid")
         projects = []
         result_list = []
@@ -148,8 +149,10 @@ class FundingProjectManager:
             project = Project()
             project.make_with_dict(project_data)
             # 현재 프로젝트 중, 이미 목표가 달성한 프로젝트에 대해서는 제외한다.
-            if self._calculate_deadline(project) >= 0:
-                projects.append(project)
+            # 얼마 남지 않은 프로젝트들을 표시
+            if project.ptype == ptype:
+                if 0 <= self._calculate_deadline(project) < 30:
+                    projects.append(project)
 
         # 프로젝트 종료 날짜가 아직 멀었다면, 값이 크다
         # 여기서, 날짜가 가장 빨리오는 순서대로 해야한다.
@@ -161,14 +164,15 @@ class FundingProjectManager:
         return projects_sorted[:num_project]
 
     # 참여형 프로젝트 표시
-    def get_attend_funding_project(self, num_project):
+    def get_attend_funding_project(self, num_project:int, ptype:str):
         project_datas = self.__database.get_datas_with_key(target="pid", key="ftype", key_datas=["attend"])
         projects = []
 
         for project_data in project_datas:
             project = Project()
             project.make_with_dict(project_data)
-            projects.append(project)
+            if project.ptype == ptype:
+                projects.append(project)
 
         # 가장 최근에 만들어진 Project가 먼저 오도록 한다.
         # 가장 최근에 생성된 프로젝트는 PID로 정렬이 가능하다.
@@ -179,14 +183,15 @@ class FundingProjectManager:
         return projects_sorted[:num_project]
 
     # 후원형 프로젝트 표시
-    def get_donate_funding_project(self, num_project):
+    def get_donate_funding_project(self, num_project:int , ptype:str):
         project_datas = self.__database.get_datas_with_key(target="pid", key="ftype", key_datas=["donate"])
         projects = []
 
         for project_data in project_datas:
             project = Project()
             project.make_with_dict(project_data)
-            projects.append(project)
+            if project.ptype == ptype:
+                projects.append(project)
 
         # 가장 최근에 만들어진 Project가 먼저 오도록 한다.
         # 가장 최근에 생성된 프로젝트는 PID로 정렬이 가능하다.
