@@ -35,8 +35,9 @@ class Funding_Service_View(Master_View):
 
             body_data = model.get_response_form_data(self._head_parser)
             return body_data
-        
-        # 홈에서 프로젝트 배너들 받기, 이미 완료됨
+
+        # Already Finished
+        # 홈에서 프로젝트 배너들 받기
         @self.__app.get('/nova_fund_system/home/banner')
         def get_home_banner(request:Request):
             request_manager = RequestManager()
@@ -250,6 +251,7 @@ class Funding_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
+        # 확인 필요
         # 4. 참여 프로젝트
         @self.__app.get('/nova_fund_system/fan_project/funding_project')
         def get_attend_project_list(request:Request):
@@ -271,6 +273,7 @@ class Funding_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
+        # 확인 필요
         # 5. 모금 프로젝트
         @self.__app.get('/nova_fund_system/fan_project/donation_project')
         def get_donate_project_list(request:Request):
@@ -359,9 +362,10 @@ class Funding_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
+        # 확인 필요
         # 4. 참여 프로젝트
         @self.__app.get('/nova_fund_system/fan_project_list/funding_project')
-        def get_project_list(request:Request, key:Optional[str]="" ):
+        def get_attend_project_list_all(request:Request, key:Optional[str]="" ):
             request_manager = RequestManager()
             data_payload = ProjectGetRequest(key=key)
 
@@ -370,19 +374,20 @@ class Funding_Service_View(Master_View):
                 #raise request_manager.credentials_exception
 
             funding_controller =Funding_Controller()
-            model = funding_controller.get_sample_project(
+            model = funding_controller.get_attend_funding_project(
                 database=self.__database,
                 request=request_manager,
                 funding_project_manager=self.__funding_project_manager,
-                num_project=10)
+                num_project=-1)
 
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
-        # 5. 모금 프로젝트
+        # 확인 필요
+        # 5. 모금 프로젝트, 확인 필요
         @self.__app.get('/nova_fund_system/fan_project_list/donation_project')
-        def get_project_list(request:Request, key:Optional[str]="" ):
+        def get_donate_project_list_all(request:Request, key:Optional[str]="" ):
             request_manager = RequestManager()
             data_payload = ProjectGetRequest(key=key)
 
@@ -395,15 +400,16 @@ class Funding_Service_View(Master_View):
                 database=self.__database,
                 request=request_manager,
                 funding_project_manager=self.__funding_project_manager,
-                num_project=10)
+                num_project=-1)
 
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response
-        
-        # 프로젝트 디테일 요청
+
+        # Already Finished
+        # 프로젝트 디테일 요청,
         @self.__app.get('/nova_fund_system/project_detail')
-        def get_project_list(request:Request, pid:Optional[str]="" ):
+        def get_project_detail_body(request:Request, pid:Optional[str]="" ):
             request_manager = RequestManager()
             data_payload = ProjectDetailRequest(pid=pid)
 
