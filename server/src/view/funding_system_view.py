@@ -251,7 +251,7 @@ class Funding_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
-        # 확인 필요
+        # FIN, ERROR 있는데 여기와는 무관함. 같은 컨트롤러 함수를 쓰는데 전체보기에서는 문제가 없음
         # 4. 참여 프로젝트
         @self.__app.get('/nova_fund_system/fan_project/funding_project')
         def get_attend_project_list(request:Request):
@@ -273,7 +273,7 @@ class Funding_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
-        # 확인 필요
+        # FIN,  ERROR 있는데 여기와는 무관함. 같은 컨트롤러 함수를 쓰는데 전체보기에서는 문제가 없음
         # 5. 모금 프로젝트
         @self.__app.get('/nova_fund_system/fan_project/donation_project')
         def get_donate_project_list(request:Request):
@@ -362,7 +362,7 @@ class Funding_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
-        # 확인 필요
+        # FIN
         # 4. 참여 프로젝트
         @self.__app.get('/nova_fund_system/fan_project_list/funding_project')
         def get_attend_project_list_all(request:Request, key:Optional[str]="" ):
@@ -384,7 +384,7 @@ class Funding_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
-        # 확인 필요
+        # FIN
         # 5. 모금 프로젝트
         @self.__app.get('/nova_fund_system/fan_project_list/donation_project')
         def get_donate_project_list_all(request:Request, key:Optional[str]="" ):
