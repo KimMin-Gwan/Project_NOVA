@@ -248,7 +248,8 @@ class Funding_Controller:
             database:Local_Database,
             request,
             funding_project_manager:FundingProjectManager,
-            num_project
+            num_project,
+            ptype
     )-> BaseModel:
         model = DeadlineAddedProjectModel(database=database)
 
@@ -259,6 +260,7 @@ class Funding_Controller:
         model.get_done_projects(
             funding_project_manager=funding_project_manager,
             num_project=num_project,
+            ptype=ptype
         )
 
         return model
@@ -269,6 +271,7 @@ class Funding_Controller:
             request,
             funding_project_manager:FundingProjectManager,
             num_project,
+            ptype
     ) -> BaseModel:
         model = DeadlineAddedProjectModel(database=database)
 
@@ -278,17 +281,20 @@ class Funding_Controller:
 
         model.get_near_projects(
             funding_project_manager=funding_project_manager,
-            num_project=num_project
+            num_project=num_project,
+            ptype=ptype
         )
 
         return model
 
+    # 참여형 프로젝트를 가져옴
     def get_attend_funding_project(
             self,
             database:Local_Database,
             request,
             funding_project_manager:FundingProjectManager,
             num_project,
+            ptype
     ) -> BaseModel:
         model = DeadlineAddedProjectModel(database=database)
 
@@ -298,17 +304,20 @@ class Funding_Controller:
 
         model.get_attend_projects(
             funding_project_manager=funding_project_manager,
-            num_project=num_project
+            num_project=num_project,
+            ptype=ptype
         )
 
         return model
 
+    # 후원형 프로젝트를 가져옴
     def get_donate_funding_project(
             self,
             database:Local_Database,
             request,
             funding_project_manager:FundingProjectManager,
             num_project,
+            ptype
     ) -> BaseModel:
         model = DeadlineAddedProjectModel(database=database)
 
@@ -318,7 +327,8 @@ class Funding_Controller:
 
         model.get_donate_projects(
             funding_project_manager=funding_project_manager,
-            num_project=num_project
+            num_project=num_project,
+            ptype=ptype
         )
 
         return model
