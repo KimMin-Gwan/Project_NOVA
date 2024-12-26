@@ -113,7 +113,8 @@ class Funding_Controller:
             model.set_user_with_email(request=request.jwt_payload)
 
         model.get_deadline_sample_project(
-
+            funding_project_manager=funding_project_manager,
+            num_project=num_project
         )
 
     # 베스트 프로젝트 모두 보기에서 필요한 데이터
