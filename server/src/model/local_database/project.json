@@ -202,7 +202,7 @@
         "body_url": "",
         "now_progress": 1230,
         "goal_progress": 10000,
-        "ptype": "fan",
+        "ptype": "bias",
         "ftype": "attend",
         "introduce": "설명글 예시",
         "num_participants": 120
