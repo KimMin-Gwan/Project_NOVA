@@ -221,9 +221,9 @@ function App() {
                 </header>
                 <Banner url={URL}></Banner>
 
-                <section className="my-bias">
+                {/* <section className="my-bias">
                   <MyBias url={URL} showBox={showBox} blackBox={blackBox}></MyBias>
-                </section>
+                </section> */}
               </div>
               <section className="contents">
                 {/* <MainPart brightMode={brightMode} /> */}
