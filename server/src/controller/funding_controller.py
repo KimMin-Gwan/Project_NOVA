@@ -107,7 +107,7 @@ class Funding_Controller:
             funding_project_manager:FundingProjectManager,
             num_project=1
     ) -> BaseModel:
-        model = DeadlineAddedProjectModel
+        model = DeadlineAddedProjectModel(database=database)
 
         if request.jwt_payload != "":
             model.set_user_with_email(request=request.jwt_payload)
