@@ -131,7 +131,7 @@ class FundingProjectModel(BaseModel):
 
         return
 
-    def get_attend_project(
+    def get_attend_projects(
             self,
             funding_project_manager:FundingProjectManager,
             num_project:int
@@ -141,7 +141,7 @@ class FundingProjectModel(BaseModel):
 
         return
 
-    def get_donate_project(
+    def get_donate_projects(
             self,
             funding_project_manager:FundingProjectManager,
             num_project:int
