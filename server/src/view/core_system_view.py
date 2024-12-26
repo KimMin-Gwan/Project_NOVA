@@ -210,7 +210,7 @@ class Core_Service_View(Master_View):
             response = model.get_response_form_data(self._head_parser)
             return response
 
-        # 나의 최애 선택하기 (취소하기는 없음.... 취소하지 마라)
+        # 나의 최애 선택하기 (다시 누르면 취소하기됨0)
         @self.__app.post('/home/try_select_my_bias')
         def try_select_my_bias(request:Request, raw_request:dict):
             request_manager = RequestManager()
@@ -228,18 +228,47 @@ class Core_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
 
             return response
-        
 
     def feed_route(self):
-        # 해쉬 태그로 검색
+        # 피드 자세히 보기 (피드 페이지)의 피드 데이터
+        @self.__app.get('/feed_explore/feed_detail/feed_data')
+        def get_feed_detail(request:Request, fid:Optional[str]):
+            request_manager = RequestManager()
+            data_payload = GetFeedRequest(fid=fid)
 
-        # 키워드로 검색
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            #if not request_manager.jwt_payload.result:
+                #raise request_manager.credentials_exception
 
-        # 검색 히스토리 요청
+            feed_controller=Feed_Controller()
+            model = feed_controller.get_specific_feed_data(database=self.__database,
+                                                        request=request_manager)
 
-        # 검색 히스토리 지우기
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
 
+        # 피드 자세히 보기의 댓글 데이터
+        @self.__app.get('/feed_explore/feed_detail/comment_data')
+        def get_feed_detail(request:Request, fid:Optional[str]):
+            request_manager = RequestManager()
+            data_payload = GetFeedRequest(fid=fid)
 
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            #if not request_manager.jwt_payload.result:
+                #raise request_manager.credentials_exception
+
+            feed_controller=Feed_Controller()
+            model = feed_controller.get_specific_comment_data(database=self.__database,
+                                                        request=request_manager,
+                                                        feed_search_engine=self.__feed_search_engine,
+                                                        num_feed=5)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
+        # 해시태그로 검색
         @self.__app.get('/feed_explore/search_feed_with_hashtag')
         def search_feed_with_hashtag(request:Request, hashtag:Optional[str], key:Optional[int] = -1):
             request_manager = RequestManager()
@@ -258,6 +287,7 @@ class Core_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
         
+        # 전체 피드 제공
         @self.__app.get('/feed_explore/all_feed')
         def get_all_feed_in_search(request:Request, key:Optional[int] = -1):
             request_manager = RequestManager()

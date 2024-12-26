@@ -141,11 +141,12 @@ class SelectBiasModel(BaseModel):
         try:
             if self.__bias.bid in self._user.bids:
                 self._user.bids.remove(self.__bias.bid)
+                feed_search_engine.add_new_user_to_bias(bid=self.__bias.bid, uid=self._user.uid)
             else:
                 self._user.bids.append(self.__bias.bid)
+                feed_search_engine.remove_user_to_bias(bid=self.__bias.bid, uid=self._user.uid)
 
             self._database.modify_data_with_id(target_id="uid", target_data=self._user.get_dict_form_data())
-            feed_search_engine.add_new_user_to_bias(bid=self.__bias.bid, uid=self._user.uid)
             self.__result = True
 
         except Exception as e:

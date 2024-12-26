@@ -41,7 +41,10 @@ class FeedSearchEngine:
     def add_new_user_to_bias(self, bid:str, uid:str):
         self.__recommend_manager.add_new_user_to_bias(bid=bid, uid=uid)
         return
-        
+    
+    def remove_user_to_bias(self, bid:str, uid:str):
+        self.__recommend_manager.remove_user_to_bias(bid=bid, uid=uid)
+        return
 
     # 피드 매니저가 관리중인 피드를 보기 위해 만든 함수
     def try_search_managed_feed(self, fid):
@@ -678,6 +681,12 @@ class recommendManager:
         user_node = self.__feed_algorithm.get_user_node_with_uid(uid=uid)
         managed_bias.user_nodes.append(user_node)
         return 
+    
+    def remove_user_to_bias(self, bid:str, uid:str):
+        managed_bias:ManagedBias = self.__bias_avltree.get(key=bid)
+        user_node = self.__feed_algorithm.get_user_node_with_uid(uid=uid)
+        managed_bias.user_nodes.remove(user_node)
+        return
 
     # 실시간 트랜드 해시태그 제공
     def get_best_hashtags(self, num_hashtag=10) -> list:

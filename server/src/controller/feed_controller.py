@@ -207,48 +207,39 @@ class Feed_Controller:
         
 
 
-    # 예전에 쓰던거
-    def get_home_feed_data(self, database:Local_Database,
-                            request , feed_manager:FeedManager):
-        model = FeedModel(database=database)
-        try:
-            # 유저가 있으면 세팅
-            if request.jwt_payload != "":
-                model.set_user_with_email(request=request.jwt_payload)
-            model.set_home_feed_data(feed_manager=feed_manager, key=request.data_payload.key)
+    ## 예전에 쓰던거
+    #def get_home_feed_data(self, database:Local_Database,
+                            #request , feed_manager:FeedManager):
+        #model = FeedModel(database=database)
+        #try:
+            ## 유저가 있으면 세팅
+            #if request.jwt_payload != "":
+                #model.set_user_with_email(request=request.jwt_payload)
+            #model.set_home_feed_data(feed_manager=feed_manager, key=request.data_payload.key)
 
-        except CustomError as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
+        #except CustomError as e:
+            #print("Error Catched : ", e.error_type)
+            #model.set_state_code(e.error_code) # 종합 에러
 
-        except Exception as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
+        #except Exception as e:
+            #print("Error Catched : ", e.error_type)
+            #model.set_state_code(e.error_code) # 종합 에러
 
-        finally:
-            return model
+        #finally:
+            #return model
 
-    # 위성 탐색에서 들어오는 요청에 대한 반환값
+    # 피드 자세히 보기
     def get_specific_feed_data(self, database:Local_Database,
-                               request, feed_manager:FeedManager):
+                               request):
         model = FeedModel(database=database)
-        try:
-            # 유저가 있으면 세팅
-            if request.jwt_payload != "":
-                model.set_user_with_email(request=request.jwt_payload)
-            model.set_specific_feed_data(feed_manager=feed_manager,
-                                         data_payload=request.data_payload)
 
-        except CustomError as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
+        # 유저가 있으면 세팅
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
 
-        except Exception as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
+        model.set_specific_feed_data(data_payload=request.data_payload)
 
-        finally:
-            return model
+        return model
 
     # 피드 상호작용 누르기
     def try_interact_feed(self, database:Local_Database,

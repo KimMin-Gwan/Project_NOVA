@@ -378,26 +378,26 @@ class FeedManager:
         list_data[0] = list_data[1]
         list_data[1] = temp
         return 
-
+    
     # fid나 key로 단일 feed 하나만 호출할 때
-    def _get_single_feed(self, key = -1, fid = ""):
-        target_feed = None
-        if key != -1:
-            for feed in self._managed_feed_list:
-                if feed.key == key:
-                    target_feed=feed
-        else:
-            for feed in self._managed_feed_list:
-                if feed.fid== fid:
-                    target_feed=feed
+    #def _get_single_feed(self, key = -1, fid = ""):
+        #target_feed = None
+        #if key != -1:
+            #for feed in self._managed_feed_list:
+                #if feed.key == key:
+                    #target_feed=feed
+        #else:
+            #for feed in self._managed_feed_list:
+                #if feed.fid== fid:
+                    #target_feed=feed
 
-        if not target_feed:
-            target_feed = Feed()
-        else:
-            feed_data=self._database.get_data_with_id(target="fid",id=feed.fid)
-            target_feed = Feed()
-            target_feed.make_with_dict(feed_data)
-        return target_feed
+        #if not target_feed:
+            #target_feed = Feed()
+        #else:
+            #feed_data=self._database.get_data_with_id(target="fid",id=feed.fid)
+            #target_feed = Feed()
+            #target_feed.make_with_dict(feed_data)
+        #return target_feed
 
     # fid나 key로 단일 feed 하나만 호출할 때
     def _get_single_managed_feed(self, key = -1, fid = ""):
