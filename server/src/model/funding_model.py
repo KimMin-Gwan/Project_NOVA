@@ -139,7 +139,7 @@ class FundingProjectModel(BaseModel):
             num_project:int,
             ptype:str
     ):
-        self._project = funding_project_manager.get_recommend_projects(num_project=num_project, ptype=ptype)
+        self._project = funding_project_manager.get_recommend_project(num_project=num_project, ptype=ptype)
         self._project = self._set_progress(project_list=self._project)
 
         return
