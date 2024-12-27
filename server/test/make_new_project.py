@@ -35,6 +35,16 @@ def save_html(request: dict):
     with open(file_path, "w", encoding="utf-8") as file:
         file.write(html_content)
     
+    # 0. fid 만들기 fid.html
+    # 1. boto3에 저 파일을 저장함
+    # 2. 경로 url을 만들기
+    # 3. 만들어낸 경로 url을 포함한 새로운 Feed 데이터를 만들어
+    # 4. 만들어낸 Feed 데이터를 DB에 저장함
+    # 5. 임시 html파일을 지움
+    # 6. 새로운 Feed 데이터를 알고리즘에 등록함
+    # 7. 위 동작들이 정상적으로 동작했음을 리턴
+
+
     return {"message": "File saved successfully", "file_path": file_path}
 
 if __name__ == "__main__":

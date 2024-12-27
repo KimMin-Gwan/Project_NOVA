@@ -94,6 +94,7 @@ class FeedManager:
                 continue
             else:
                 break
+
         return fid
     
     def try_remove_feed(self, user:User, fid):
@@ -1195,11 +1196,11 @@ class ImageDescriper():
                     if image_name.lower().endswith('.gif'):
                         cv2_images = self.__process_gif_with_imageio(image)
                         for idx, cv_image in enumerate(cv2_images):
-                            temp_path = f"{self.__path}/{fid}_{idx}_{image_name.replace('.gif', f'_{idx}.jpg')}"
+                            temp_path = f"{self.__path}/{fid}_{idx}_{image_name.replace('.gif', f'_{idx}.gif')}"
                             cv2.imwrite(temp_path, cv_image)
                             self.__s3.upload_file(temp_path,
                                                   self.__bucket_name,
-                                                  f"{fid}_{idx}_{image_name.replace('.gif', f'_{idx}.jpg')}",
+                                                  f"{fid}_{idx}_{image_name.replace('.gif', f'_{idx}.gif')}",
                                                   ExtraArgs={'ACL': 'public-read'})
                             urls.append(f"{self.__endpoint_url}/{self.__bucket_name}/{fid}_{idx}_{image_name.replace('.gif', f'_{idx}.jpg')}")
                     else:
