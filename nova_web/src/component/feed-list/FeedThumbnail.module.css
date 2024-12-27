@@ -17,6 +17,7 @@
 
 .title-section > div {
   display: flex;
+  align-items: center;
 }
 
 .title-section .title {
@@ -24,7 +25,10 @@
   justify-content: start;
 
   img {
+    margin-right: 5px;
     object-fit: cover;
+    width: 14px;
+    height: 14px;
   }
 }
 
