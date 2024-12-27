@@ -46,6 +46,7 @@ import BiasFunding from "./pages/NovaFunding/BiasFunding/BiasFunding.js";
 import RecommendAll from "./pages/NovaFunding/BiasFunding/MoreProjects.js";
 
 import logo from "./img/NOVA_Platform.png";
+import logo2 from "./img/logo2.png";
 import FeedThumbnail from "./component/feed-list/FeedThumbnail.js";
 import useFetchData from "./hooks/useFetchData.js";
 import MoreProjects from "./pages/NovaFunding/BiasFunding/MoreProjects.js";
@@ -223,7 +224,7 @@ function App() {
                     }}
                   >
                     <img
-                      src={logo}
+                      src={logo2}
                       alt="logo"
                       className={`logo-st ${getModeClass(brightMode)}`}
                     ></img>

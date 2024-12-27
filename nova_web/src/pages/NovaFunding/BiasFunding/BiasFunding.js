@@ -121,14 +121,13 @@ export default function BiasFunding() {
         </section>
         <p className={style["new-fav"]}>신규 최애 펀딩 프로젝트</p>
       </div>
+
       <div className={style.SliderContainer}>
         <div className={style["new-list"]}>
-          <div className={style["new-img"]}>
-            <img src={newProjects[1].head_image[0]} />
-          </div>
+          <div className={style["new-img"]}>{/* <img src={newProjects[1].head_image[0]} /> */}</div>
 
           <div className={style["new-title"]}>
-            <span>{newProjects[1].pname}</span>
+            {/* <span>{newProjects[1].pname}</span> */}
             <p>후원형</p>
           </div>
         </div>
@@ -145,7 +144,7 @@ export default function BiasFunding() {
       {/* </div> */}
       {/* // </div>; */}
       {/* // })} */}
-      {/* </Slider> */} */}
+      {/* </Slider> */}
       <section className={`${style_sub["success-funding"]} ${style["success-funding"]}`}>
         <div className={`${style_sub["content-title"]} ${style["content-title"]}`}>
           <header className={style_sub["header-text"]}>추천하는 프로젝트</header>
