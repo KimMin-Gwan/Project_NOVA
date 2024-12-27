@@ -85,6 +85,7 @@ const SimpleSlider = ({ feedData, brightMode }) => {
                     {/* <div className={style["name-container"]}> */}
                     {/* <div className={style["profile"]}> </div> */}
                     {/* </div> */}
+
                     <div className={style["img-container"]}>
                       <img
                         src={
