@@ -98,6 +98,7 @@ hr {
   padding: 10px;
   padding-left: 20px;
   margin-bottom: 15px;
+  cursor: pointer;
 }
 .listContainer {
   list-style-type: none;

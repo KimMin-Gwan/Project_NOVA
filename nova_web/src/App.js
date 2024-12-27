@@ -42,12 +42,13 @@ import DuckFunding from "./pages/NovaFunding/DuckFunding/DuckFunding.js";
 import SuccessFunding from "./pages/NovaFunding/DuckFunding/SuccessFunding.js";
 import RankingFunding from "./pages/NovaFunding/FundingRanking/FundingRanking.js";
 import OpenRanking from "./pages/NovaFunding/FundingRanking/OpenRanking.js";
-import MoreSeeFunding from "./pages/NovaFunding/MoreSeeFunding/MoreSeeFunding.js";
-import RecommendAll from "./pages/NovaFunding/MoreSeeFunding/RecommendAll.js";
+import BiasFunding from "./pages/NovaFunding/BiasFunding/BiasFunding.js";
+import RecommendAll from "./pages/NovaFunding/BiasFunding/MoreProjects.js";
 
 import logo from "./img/NOVA_Platform.png";
 import FeedThumbnail from "./component/feed-list/FeedThumbnail.js";
 import useFetchData from "./hooks/useFetchData.js";
+import MoreProjects from "./pages/NovaFunding/BiasFunding/MoreProjects.js";
 // 401 이면 바이어스 격자 무늬로 띄우기
 // 401 이면 alert - 로그인 필요 문구 띄우기
 // 다크 모드 클래스 반환 함수
@@ -191,8 +192,8 @@ function App() {
       <Route path="/funding_project/:type" element={<SuccessFunding />}></Route>
       <Route path="/funding_ranking" element={<RankingFunding />}></Route>
       <Route path="/open_ranking" element={<OpenRanking />}></Route>
-      <Route path="/moresee_funding" element={<MoreSeeFunding />}></Route>
-      <Route path="/recommend_all" element={<RecommendAll />}></Route>
+      <Route path="/bias_funding" element={<BiasFunding />}></Route>
+      <Route path="/bias_funding/:type" element={<MoreProjects />}></Route>
       <Route path="*" element={<div>404 Error</div>}></Route>
       {/* <Route path="/test" element={<Box />}></Route> */}
       {/* <Route path="/planet" element={<PlanetList />}></Route> */}

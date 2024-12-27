@@ -126,7 +126,13 @@ function MoreSee({ onModeChange }) {
             <p className={style.bodyText_login}>{isLogin ? "마이페이지" : "로그인"}</p>
           </div>
 
-          <div className={style["list-bar"]} onClick={navigate("/")}>
+          <div
+            className={style["list-bar"]}
+            onClick={(e) => {
+              e.preventDefault();
+              navigate("/");
+            }}
+          >
             노바 플랫폼
           </div>
           <hr></hr>

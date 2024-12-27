@@ -108,12 +108,29 @@ export default function NovaFunding({ brightmode }) {
     fetchFundingInfo();
   }, []);
 
+  let [newProjects, setNewProjects] = useState([]);
+
+  function fetchNewProject() {
+    fetch(`https://nova-platform.kr/nova_fund_system/bias_project/new_bias_project`, {
+      credentials: "include",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setNewProjects(data.body.project);
+      });
+  }
+
+  useEffect(() => {
+    fetchNewProject();
+  }, []);
+
   return (
     <div className={style["widever-style"]}>
       <div className={style["empty-box"]}></div>
-      <section className="contents com1">
+      {/* <section className="contents com1">
         <LeftBarF />
-      </section>
+      </section> */}
       <div className={style.container}>
         <header className={style.header}>
           <div className="logo">
@@ -176,7 +193,8 @@ export default function NovaFunding({ brightmode }) {
           <div className={style["best-title"]}>
             <div className={style["top-title"]}>
               <h4>진행 중인 최애펀딩</h4>
-              <a onClick={() => handleLinkClick("/like_funding")}>더보기</a>
+              {/* <a onClick={() => handleLinkClick("/like_funding")}>더보기</a> */}
+              <a onClick={() => handleLinkClick("/bias_funding")}>더보기</a>
             </div>
             <p>최애가 직접 만드는 펀딩 프로젝트</p>
           </div>
@@ -302,9 +320,9 @@ export default function NovaFunding({ brightmode }) {
           <div className={style["last-project"]}>지난 펀딩 프로젝트</div>
         </section>
       </div>
-      <section className="contents com1">
+      {/* <section className="contents com1">
         <RightBar />
-      </section>
+      </section> */}
     </div>
   );
 }
