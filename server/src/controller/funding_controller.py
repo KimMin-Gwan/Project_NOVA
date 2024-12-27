@@ -364,7 +364,6 @@ class Funding_Controller:
             request,
             funding_project_manager:FundingProjectManager,
             num_project,
-            ptype
     ) -> BaseModel:
 
         model = FundingProjectModel(database=database)
@@ -376,7 +375,7 @@ class Funding_Controller:
         model.get_new_projects(
             funding_project_manager=funding_project_manager,
             num_project=num_project,
-            ptype=ptype
+            ptype="bias"
         )
 
         return model

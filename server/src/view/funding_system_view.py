@@ -481,7 +481,7 @@ class Funding_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
-        # FIN, 확인필요
+        # FIN
         # 최애 페이지 중단 - 추천하는 프로젝트 (3개)
         # if ftype == "donate" : 달성률 100%이하 and 100%에 근접
         # elif ftype == "attend" : 달성률 100% 초과
