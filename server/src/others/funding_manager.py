@@ -26,6 +26,28 @@ class FundingProjectManager:
         #self.__project_investing_mananger = ProjectInverstingManager()
         #self.__project_recommend_manager = ProjectrecommendManager()
 
+    def __project_object_maker(self, project_datas):
+        projects = []
+
+        for project_data in project_datas:
+            project = Project()
+            project.make_with_dict(project_data)
+            projects.append(project)
+
+        return projects
+
+    def __return_project_list(self, projects, sort_opt, num_projects):
+        projects_sorted = projects
+
+        if sort_opt == "pid":
+            projects_sorted = sorted(projects, key=lambda p: int(p.pid), reverse=True)
+        elif sort_opt == "expire_date":
+            projects_sorted = sorted(projects, key=lambda p: datetime.strptime(p.expire_date, "%Y/%m/%d").date())
+
+        if num_projects == -1:
+            return projects_sorted
+        return projects_sorted[:num_projects]
+
     def _calculate_deadline(self, project):
         deadline_diff = datetime.strptime(project.expire_date, "%Y/%m/%d").date() - date.today()
         # print(deadline_diff.days)
@@ -39,16 +61,9 @@ class FundingProjectManager:
     # 테스트용으로 사용되는 프로젝트 임시 반환 함수(갯수만큼 드림)
     def get_sample_project(self, num_project):
         project_datas = self.__database.get_all_data(target="pid")
-        projects = []
+        projects = self.__project_object_maker(project_datas)
 
-        for project_data in project_datas:
-            project = Project()
-            project.make_with_dict(dict_data=project_data)
-            projects.append(project)
-
-        if num_project == -1:
-            return projects
-        return projects[:num_project]
+        return self.__return_project_list(projects=projects,sort_opt="", num_projects=num_project)
 
     # 프로젝트 바디 데이터를 GET 하는 함수
     def get_project_body_data(self, pid):
@@ -62,53 +77,48 @@ class FundingProjectManager:
     # ptype에 따라서 구분이 가능, 최애의 프로젝트와 팬들의 프로젝트
     def get_projects_by_ptype(self, num_project, ptype:str):
         project_datas = self.__database.get_datas_with_key(target="pid", key="ptype", key_datas=[ptype])
-        projects = []
-
-        for project_data in project_datas:
-            project = Project()
-            project.make_with_dict(project_data)
-            projects.append(project)
+        projects = self.__project_object_maker(project_datas)
 
         # 가장 최근에 생성 된 프로젝트들은 PID가 가장 크다. 따라서, 시간 순 정렬을 PID로 할 수있다.
         # project에 기재된 정보는 모두 문자열이므로 형변환을 취해야한다.
-        projects_sorted = sorted(projects, key=lambda p: int(p.pid), reverse=True)
+        return self.__return_project_list(projects=projects,sort_opt="pid", num_projects=num_project)
 
-        if num_project == -1:
-            return projects_sorted
-        return projects_sorted[:num_project]
 
     # 최근에 올라온 신규 프로젝트들을 가져옴
     def get_new_project(self, num_project, ptype):
         project_datas = self.__database.get_datas_with_key(target="pid", key="ptype", key_datas=[ptype])
-        projects = []
+        projects = self.__project_object_maker(project_datas)
+        result_list = []
 
-        for project_data in project_datas:
-            project = Project()
-            project.make_with_dict(project_data)
-
-            # 생성일자가 기준일(현재시간)에서 일주일 이내의 프로젝트만 들고 옴.
+        for project in projects:
             if (date.today() - datetime.strptime(project.make_date, "%Y/%m/%d").date()).days < 14:
-                projects.append(project)
+                result_list.append(project)
 
-        # 최신 순으로 정렬함
-        projects_sorted = sorted(projects, key=lambda p: int(p.pid), reverse=True)
+        return self.__return_project_list(projects=projects,sort_opt="pid", num_projects=num_project)
 
-        if num_project == -1:
-            return projects_sorted
-        return projects_sorted[:num_project]
+        # projects = []
+        #
+        # for project_data in project_datas:
+        #     project = Project()
+        #     project.make_with_dict(project_data)
+        #
+        #     # 생성일자가 기준일(현재시간)에서 일주일 이내의 프로젝트만 들고 옴.
+        #     if (date.today() - datetime.strptime(project.make_date, "%Y/%m/%d").date()).days < 14:
+        #         projects.append(project)
+        #
+        # # 최신 순으로 정렬함
+        # projects_sorted = sorted(projects, key=lambda p: int(p.pid), reverse=True)
+        #
+        # if num_project == -1:
+        #     return projects_sorted
+        # return projects_sorted[:num_project]
 
     # 추천하는 프로젝트들을 들고와서 가져옴
     def get_recommend_project(self, num_project, ptype):
         project_data = self.__database.get_datas_with_key(target="pid", key="ptype", key_datas=[ptype])
-        projects = []
+        projects = self.__project_object_maker(project_data)
 
         result_list = []
-        # 먼저 최애의 펀딩 프로젝트들 부터 모두 모은다.
-        for project_data in project_data:
-            project = Project()
-            project.make_with_dict(project_data)
-            projects.append(project)
-
         for project in projects:
             # 첫 번째, ftype이 donate일 때, 달성률이 100%에 근접한 결과만 뽑아내야함
             if project.ftype == "donate":
@@ -122,141 +132,104 @@ class FundingProjectManager:
                     result_list.append(project)
 
         # 마지막, PID가 최신인 순으로 정렬을 하는 것이 좋겠다.
-        projects_sorted = sorted(result_list, key=lambda p: int(p.pid), reverse=True)
-
-        if num_project == -1:
-            return projects_sorted
-        #
-        return projects_sorted[:num_project]
+        return self.__return_project_list(projects=projects,sort_opt="pid", num_projects=num_project)
 
     # 마감기한이 임박한 프로젝트들로 정렬해서 프로젝트들을 들고 옴
+
     def get_all_projects_deadline_sort_ptype(self, num_project, ptype):
         project_datas = self.__database.get_datas_with_key(target="pid", key="ptype", key_datas=[ptype])
-        projects = []
+        projects = self.__project_object_maker(project_datas)
+        result_list = []
 
-        for project_data in project_datas:
-            project = Project()
-            project.make_with_dict(project_data)
+        for project in projects:
             # 현재 프로젝트 중, 이미 목표가 달성한 프로젝트에 대해서는 제외한다.
             if 0 <= self._calculate_deadline(project):
-                projects.append(project)
+                result_list.append(project)
 
         # 마감일에 임박한 기준으로 정렬해야 함.
         # 여기서, 날짜가 가장 빨리오는 순서대로 해야한다.
-        projects_sorted = sorted(projects, key=lambda p: datetime.strptime(p.expire_date, "%Y/%m/%d").date())
-
-        if num_project == -1:
-            return projects_sorted
-        return projects_sorted[:num_project]
+        return self.__return_project_list(projects=projects,sort_opt="expire_date", num_projects=num_project)
 
     # 가장 인기가 많은 프로젝트들을 가져옴
+
     def get_projects_best(self):
         project_datas = self.__database.get_all_data(target="pid")
-        projects = []
+        projects = self.__project_object_maker(project_datas)
+        result_list = []
 
-        for project_data in project_datas:
-            project = Project()
-            project.make_with_dict(project_data)
-
+        for project in projects:
             # 프로젝트들 중 성공한 프로젝트들을 반환함
             # 성공한 기준은 목표금액과 현재 펀딩액을 비교해, 펀딩액이 목표액을 넘긴 경우를 반환함
             if project.now_progress >= project.goal_progress:
-                projects.append(project)
+                result_list.append(project)
 
-        return projects
+        return self.__return_project_list(projects=projects,sort_opt="", num_projects=-1)
 
     # 완료된 펀딩 프로젝트 표시
     def get_done_projects(self, num_project, ptype:str):
         # 가지고 있는 모든 프로젝트들을 들고와서
         project_datas = self.__database.get_all_data(target="pid")
-        projects = []
+        projects = self.__project_object_maker(project_datas)
         result_list = []
 
         # 프로젝트가 목표가 달성되어 있는지 확인, 펀딩 목표금액을 달성한 상태에서 펀딩이 마감되면 목표 달성이라고 판정한다.
         # 즉, 펀딩이 마감된 프로젝트만 선별해야한다.
-        for project_data in project_datas:
-            project = Project()
-            project.make_with_dict(project_data)
-
+        for project in projects:
             # 프로젝트가 남은 기한이 음수인지 확인. 당일까지는 계속 열어둘 것으로 한다. 만약 시간까지 고려한다면 이게 바뀌게 되겠지
             # 현재는 펀딩이 마감된 프로젝트만 골라야하므로, 음수만 고려하는 방안으로 작성함
+            # 프로젝트 펀딩이 목표금액을 넘긴 경우를 찾아온다.
             if project.ptype == ptype:
-                if self._calculate_deadline(project) < 0:
-                    projects.append(project)
-
-        # 프로젝트 펀딩이 목표금액을 넘긴 경우를 찾아온다.
-        for proj in projects:
-            if proj.now_progress >= proj.goal_progress:
-                result_list.append(proj)
+                if self._calculate_deadline(project) < 0 and project.now_progress >= project.goal_progress:
+                    result_list.append(project)
 
         # 이렇게 가져온 성공한 프로젝트는 가장 최근의 날짜를 가진 것이 먼저오도록 한다.
-        projects_sorted = sorted(result_list, key=lambda p: int(p.pid), reverse=True)
-
-        # num_project의 개수가 -1이라면 찾은 값 모두를 들고와야 한다.
-        if num_project == -1:
-            return projects_sorted
-        return projects_sorted[:num_project]
+        return self.__return_project_list(projects=projects,sort_opt="pid", num_projects=num_project)
 
     # 마감기한이 별로 남지 않은 프로젝트 표시
     def get_near_projects(self, num_project, ptype:str):
         project_datas = self.__database.get_datas_with_key(target="pid", key="ptype", key_datas=[ptype])
-        projects = []
+        projects = self.__project_object_maker(project_datas)
+        result_list = []
 
         # 마감이 끝나지 않았는지 확인하여 프로젝트를 추가한다. (날짜가 지난 프로젝트들은 모두 꺼내면 안된다.)
-        for project_data in project_datas:
-            project = Project()
-            project.make_with_dict(project_data)
+        for proj in projects:
             # 현재 프로젝트 중, 이미 목표가 달성한 프로젝트에 대해서는 제외한다.
             # 얼마 남지 않은 프로젝트들을 표시
-            if 0 <= self._calculate_deadline(project) < 30:
-                projects.append(project)
+            if 0 <= self._calculate_deadline(proj) < 30:
+                result_list.append(proj)
 
         # 프로젝트 종료 날짜가 아직 멀었다면, 값이 크다
         # 여기서, 날짜가 가장 빨리오는 순서대로 해야한다.
-        projects_sorted = sorted(projects, key=lambda p: datetime.strptime(p.expire_date, "%Y/%m/%d").date())
-
-        if num_project == -1:
-            return projects_sorted
-
-        return projects_sorted[:num_project]
+        return self.__return_project_list(projects=projects,sort_opt="expire_date", num_projects=num_project)
 
     # 참여형 프로젝트 표시
     def get_attend_funding_project(self, num_project:int, ptype:str):
         project_datas = self.__database.get_datas_with_key(target="pid", key="ftype", key_datas=["attend"])
-        projects = []
+        projects = self.__project_object_maker(project_datas)
+        result_list = []
 
-        for project_data in project_datas:
-            project = Project()
-            project.make_with_dict(project_data)
-            if project.ptype == ptype:
-                projects.append(project)
+        for proj in projects:
+            if proj.ptype == ptype:
+                result_list.append(proj)
 
         # 가장 최근에 만들어진 Project가 먼저 오도록 한다.
         # 가장 최근에 생성된 프로젝트는 PID로 정렬이 가능하다.
-        projects_sorted = sorted(projects, key=lambda p: int(p.pid), reverse=True)
-
-        if num_project == -1:
-            return projects_sorted
-        return projects_sorted[:num_project]
+        return self.__return_project_list(projects=projects,sort_opt="pid", num_projects=num_project)
 
     # 후원형 프로젝트 표시
     def get_donate_funding_project(self, num_project:int , ptype:str):
         project_datas = self.__database.get_datas_with_key(target="pid", key="ftype", key_datas=["donate"])
-        projects = []
+        projects = self.__project_object_maker(project_datas)
+        result_list = []
 
-        for project_data in project_datas:
-            project = Project()
-            project.make_with_dict(project_data)
-            if project.ptype == ptype:
-                projects.append(project)
+        for proj in projects:
+            if proj.ptype == ptype:
+                result_list.append(proj)
 
         # 가장 최근에 만들어진 Project가 먼저 오도록 한다.
         # 가장 최근에 생성된 프로젝트는 PID로 정렬이 가능하다.
-        projects_sorted = sorted(projects, key=lambda p: int(p.pid), reverse=True)
+        return self.__return_project_list(projects=projects,sort_opt="pid", num_projects=num_project)
 
-        if num_project == -1:
-            return projects_sorted
-        return projects_sorted[:num_project]
 
 # 건들지 않음
 # Project Body (프로젝트 상세보기 화면 받아옴)
