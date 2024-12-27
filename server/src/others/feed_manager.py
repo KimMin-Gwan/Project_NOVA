@@ -1197,6 +1197,7 @@ class ImageDescriper():
                         cv2_images = self.__process_gif_with_imageio(image)
                         for idx, cv_image in enumerate(cv2_images):
                             temp_path = f"{self.__path}/{fid}_{idx}_{image_name.replace('.gif', f'_{idx}.gif')}"
+                                
                             cv2.imwrite(temp_path, cv_image)
                             self.__s3.upload_file(temp_path,
                                                   self.__bucket_name,
