@@ -21,9 +21,6 @@ export default function AllPost({ brightMode }) {
   return (
     <div className={`${style["wrap-container"]} ${style["allpost-container"]}`}>
       <div className={`${style["top-area"]} ${style[getModeClass(mode)]}`}>
-        {/* <div className={style["content-title"]}>
-          <header className={style["header-text"]}>전체 글</header>
-        </div> */}
         {/* ${style[getModeClass(mode)]} */}
         <div className={`${style["main-area"]} ${style["all-main-area"]} `}>
           <ul className={`${style["all-list"]} `}>
@@ -48,9 +45,6 @@ export default function AllPost({ brightMode }) {
                       })}
                       <p>{feed.body}</p>
                     </div>
-                    {/* <footer className={style["like-comment"]}>
-                      좋아요 {feed.star}개 | 댓글 {feed.num_comment}개
-                    </footer> */}
                   </div>
                 </li>
               );

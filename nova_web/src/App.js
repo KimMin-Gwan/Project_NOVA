@@ -246,22 +246,12 @@ function App() {
                 <Banner url={URL}></Banner>
 
                 <FeedThumbnail
-                  title={"주간 TOP 100"}
+                  title={"내가 가장 보고싶은 최애"}
                   feedData={weeklyFeed}
                   brightMode={brightMode}
                   children={
                     <div className="bias-container">
                       <div className="bias-wrapper">
-                        {/* {myBias.map((bias, i) => {
-                          return (
-                            <div key={bias.bid} className="bias-info">
-                              <div className="bias-box">
-                                <img src={bias_url + `${bias.bid}.PNG`} alt="bias" />
-                              </div>
-                              <div className="b-name">{bias.bname}</div>
-                            </div>
-                          );
-                        })} */}
                         {Array.from({ length: totalBiasBoxes }).map((_, i) => {
                           const bias = myBias[i];
                           return (

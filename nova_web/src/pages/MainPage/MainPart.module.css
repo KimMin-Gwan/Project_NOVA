@@ -273,10 +273,11 @@
   padding: 0;
 
   li {
-    margin-bottom: 5px;
+    /* margin-bottom: 5px; */
     display: flex;
-    background-color: #212327;
+    background-color: #101010;
     padding: 20px;
+    border: 0.8px solid #a4a4a4;
     color: white;
     cursor: pointer;
   }

@@ -118,11 +118,17 @@ function MoreSee({ onModeChange }) {
               }
             }}
           >
-            <img src={isLogin ? mypage_icon : login_icon} alt="Arrow" className={style.vector_login} />
+            <img
+              src={isLogin ? mypage_icon : login_icon}
+              alt="Arrow"
+              className={style.vector_login}
+            />
             <p className={style.bodyText_login}>{isLogin ? "마이페이지" : "로그인"}</p>
           </div>
 
-          <div className={style["list-bar"]}>노바 플랫폼</div>
+          <div className={style["list-bar"]} onClick={navigate("/")}>
+            노바 플랫폼
+          </div>
           <hr></hr>
           <ul className={style.listContainer}>
             <li className={style.mainComponent} onClick={() => handlePage("/feed_list")}>
@@ -140,7 +146,10 @@ function MoreSee({ onModeChange }) {
               <p className={style.bodyText}>오늘의 베스트 피드</p>
               <img src={more_icon} alt="Arrow" className={style.more_vector} />
             </li>
-            <li className={style.mainComponent} onClick={() => handlePage("/feed_list?type=weekly_best")}>
+            <li
+              className={style.mainComponent}
+              onClick={() => handlePage("/feed_list?type=weekly_best")}
+            >
               <img src={up_hashtag} alt="Arrow" className={style.vector} />
               <p className={style.bodyText}>주간 TOP 100</p>
               <img src={more_icon} alt="Arrow" className={style.more_vector} />
@@ -152,7 +161,15 @@ function MoreSee({ onModeChange }) {
             </li>
           </ul>
           <br></br>
-          <div className={style["list-bar"]}>노바 펀딩</div>
+          <div
+            className={style["list-bar"]}
+            onClick={(e) => {
+              e.preventDefault();
+              navigate("/nova_funding");
+            }}
+          >
+            노바 펀딩
+          </div>
           <hr></hr>
           <ul className={style.listContainer}>
             <li className={style.mainComponent}>
@@ -180,7 +197,10 @@ function MoreSee({ onModeChange }) {
           <div className={style["list-bar"]}>정보</div>
           <hr></hr>
           <ul className={style.listContainer}>
-            <li className={style.mainComponent} onClick={() => handleRequestURL(requestURL.naverform)}>
+            <li
+              className={style.mainComponent}
+              onClick={() => handleRequestURL(requestURL.naverform)}
+            >
               <img src={fav_icon} alt="Arrow" className={style.vector} />
               <p className={style.bodyText}>최애 신청하기(네이버 폼)</p>
               <img src={more_icon} alt="Arrow" className={style.more_vector} />
@@ -197,7 +217,9 @@ function MoreSee({ onModeChange }) {
             </li>
             <li className={style.mainComponent} onClick={handleChangeMode}>
               <img src={set_icon} alt="Arrow" className={style.vector} />
-              <p className={style.bodyText}>{brightMode === "dark" ? "☀️ Light Mode" : "🌑 Dark Mode"}</p>
+              <p className={style.bodyText}>
+                {brightMode === "dark" ? "☀️ Light Mode" : "🌑 Dark Mode"}
+              </p>
               <img src={more_icon} alt="Arrow" className={style.more_vector} />
             </li>
           </ul>
@@ -229,7 +251,9 @@ function MoreSee({ onModeChange }) {
           <p className={style.nova_info}>경북 경산시 압량읍 압독2로1길 21, 1층 184</p>
           <p className={style.nova_info}>대표: 김민관 | 사업자등록번호: 380-08-03011</p>
           {/* <p className="nova-info">통신판매업신고번호: 0000-0000-000000</p> */}
-          <p className={style.nova_info}>전화번호: 010-9875-2508 | 이메일:youths0828@nova-platform.kr</p>
+          <p className={style.nova_info}>
+            전화번호: 010-9875-2508 | 이메일:youths0828@nova-platform.kr
+          </p>
           <p className={style.nova_info}>사업자 정보</p>
         </footer>
       </div>
