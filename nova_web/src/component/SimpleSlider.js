@@ -42,7 +42,7 @@ import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 
 import { getModeClass } from "./../App.js";
-const SimpleSlider = ({ feedData, brightMode }) => {
+const SimpleSlider = ({ feedData, brightMode, type }) => {
   const showMaxCnt = 1;
   const settings = {
     className: "slider-items",
@@ -82,20 +82,24 @@ const SimpleSlider = ({ feedData, brightMode }) => {
                       // onClickMore(feed.fid);
                     }}
                   >
-                    {/* <div className={style["name-container"]}> */}
-                    {/* <div className={style["profile"]}> </div> */}
-                    {/* </div> */}
+                    {type === "bias" && (
+                      <div className={style["name-container"]}>
+                        <div className={style["profile"]}>{feed.nickname}</div>
+                      </div>
+                    )}
 
-                    <div className={style["img-container"]}>
-                      <img
-                        src={
-                          feed.image.length > 0
-                            ? feed.image[0]
-                            : "https://kr.object.ncloudstorage.com/nova-feed-images/nova-platform.PNG"
-                        }
-                        alt="이미지"
-                      />
-                    </div>
+                    {!type && (
+                      <div className={style["img-container"]}>
+                        <img
+                          src={
+                            feed.image.length > 0
+                              ? feed.image[0]
+                              : "https://kr.object.ncloudstorage.com/nova-feed-images/nova-platform.PNG"
+                          }
+                          alt="이미지"
+                        />
+                      </div>
+                    )}
 
                     <section className={style["text-container"]}>
                       <div className={style["tag-text"]}>

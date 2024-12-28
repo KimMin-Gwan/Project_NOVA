@@ -96,13 +96,8 @@
   height: 30px;
 }
 
-.profile {
-  width: 15px;
-  height: 15px;
-  background-color: yellow;
-  border-radius: 50%;
-  margin-right: 10px;
-}
+/* .profile {
+} */
 
 .name-text {
   font-size: 15px;

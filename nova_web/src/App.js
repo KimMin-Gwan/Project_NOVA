@@ -251,6 +251,7 @@ function App() {
                   title={"내가 가장 보고싶은 최애"}
                   feedData={weeklyFeed}
                   brightMode={brightMode}
+                  type={"bias"}
                   children={
                     <div className="bias-container">
                       <div className="bias-wrapper">

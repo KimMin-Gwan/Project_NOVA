@@ -11,6 +11,7 @@ export default function FeedThumbnail({
   title,
   feedData,
   brightMode,
+  type,
   hasSearchBox,
   children,
   allPost,
@@ -52,7 +53,11 @@ export default function FeedThumbnail({
       )}
 
       {allPost}
-      {!allPost && <SimpleSlider feedData={feedData} brightMode={brightMode} />}
+      {allPost ? null : type === "bias" ? (
+        <SimpleSlider feedData={feedData} brightMode={brightMode} type={type} />
+      ) : (
+        <SimpleSlider feedData={feedData} brightMode={brightMode} />
+      )}
     </section>
   );
 }

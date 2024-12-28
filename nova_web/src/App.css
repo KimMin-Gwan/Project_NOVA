@@ -115,7 +115,7 @@ body.dark-mode {
 }
 
 .logo img {
-  width: 260px;
+  width: 150px;
   /* height: 50px; */
 }
 
@@ -1161,7 +1161,7 @@ body.dark-mode {
   background-color: #eaeeff;
 }
 .logo-st.dark-mode {
-  filter: invert(100%);
+  /* filter: invert(100%); */
 }
 .authen.dark-mode {
   color: white;
