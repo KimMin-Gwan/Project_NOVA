@@ -19,8 +19,8 @@ export default function BiasFunding() {
   };
   let [isLoading, setIsLoading] = useState(true);
   let [newProjects, setNewProjects] = useState([]);
-  const numberOfBoxes = 6;
-  let totalBoxes = Math.max(numberOfBoxes, newProjects.length);
+  const numberOfBoxes = 4;
+  let totalBoxes = Math.max(numberOfBoxes, newProjects.length - 1);
   const boxes = [];
 
   async function fetchNewProject() {
@@ -71,20 +71,21 @@ export default function BiasFunding() {
     fetchAllProject();
   }, []);
 
-  // for (let i = 1; i <= numberOfBoxes; i++) {
-  //   boxes.push(
-  //     <div className={style["new-list"]} key={i}>
-  //       <div className={style["new-img"]}>
-  //         <img src={newProjects[i].head_image[0]} />
-  //       </div>
+  for (let i = 1; i <= totalBoxes; i++) {
+    const projects = newProjects[i];
+    boxes.push(
+      <div className={style["new-list"]} key={i}>
+        <div className={style["new-img"]}>
+          {projects && <img src={projects.head_image[0]} alt="img" />}
+        </div>
 
-  //       <div className={style["new-title"]}>
-  //         <span>{newProjects[i].pname}</span>
-  //         <p>후원형</p>
-  //       </div>
-  //     </div>
-  //   );
-  // }
+        <div className={style["new-title"]}>
+          <span>{projects?.pname}</span>
+          <p>{projects?.ftype === "attend" ? "참여형" : "후원형"}</p>
+        </div>
+      </div>
+    );
+  }
 
   let navigate = useNavigate();
 
@@ -123,28 +124,18 @@ export default function BiasFunding() {
       </div>
 
       <div className={style.SliderContainer}>
-        <div className={style["new-list"]}>
-          <div className={style["new-img"]}>{/* <img src={newProjects[1].head_image[0]} /> */}</div>
-
-          <div className={style["new-title"]}>
-            {/* <span>{newProjects[1].pname}</span> */}
-            <p>후원형</p>
-          </div>
-        </div>
+        {/* <div className={style["new-list"]}>
+          <div className={style["new-img"]}>{/* <img src={newProjects[1].head_image[0]} /> */}
+        <Slider {...settings}>{boxes}</Slider>
       </div>
-      {/* <Slider {...settings}>
-            {Array.from({ length: totalBoxes }).map((_, i) => {
-              <div className={style["new-list"]} key={i}>
-                <div className={style["new-img"]}>
-                  {/* <img src={newProjects[i].head_image[0]} /> */}
-      {/* </div> */}
-      {/* // <div className={style["new-title"]}> */}
-      {/* <span>{newProjects[i].pname}</span> */}
+
+      {/* <div className={style["new-title"]}>
+            {/* <span>{newProjects[1].pname}</span> */}
       {/* <p>후원형</p> */}
       {/* </div> */}
-      {/* // </div>; */}
-      {/* // })} */}
-      {/* </Slider> */}
+      {/* </div> */}
+      {/* // </div> */}
+
       <section className={`${style_sub["success-funding"]} ${style["success-funding"]}`}>
         <div className={`${style_sub["content-title"]} ${style["content-title"]}`}>
           <header className={style_sub["header-text"]}>추천하는 프로젝트</header>
