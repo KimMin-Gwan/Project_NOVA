@@ -248,7 +248,11 @@ function App() {
                 <Banner url={URL}></Banner>
 
                 <FeedThumbnail
-                  title={"내가 가장 보고싶은 최애"}
+                  title={
+                    <>
+                      내가 가장 보고싶은 <span className="title-color">최애</span>
+                    </>
+                  }
                   feedData={weeklyFeed}
                   brightMode={brightMode}
                   type={"bias"}
@@ -289,14 +293,22 @@ function App() {
                 {/* <hr className={`hr-line ${getModeClass(brightMode)}`}></hr> */}
 
                 <FeedThumbnail
-                  title={"오늘의 베스트 피드"}
+                  title={
+                    <>
+                      오늘의 베스트 <span className="title-color">피드</span>
+                    </>
+                  }
                   feedData={todayBestFeed}
                   brightMode={brightMode}
                   hasSearchBox
                   endPoint={`/feed_list?type=best`}
                 />
                 <FeedThumbnail
-                  title={"주간 TOP 100"}
+                  title={
+                    <>
+                      주간 <span className="title-color">TOP 100</span>
+                    </>
+                  }
                   feedData={weeklyFeed}
                   brightMode={brightMode}
                   endPoint={`/feed_list?type=weekly_best`}

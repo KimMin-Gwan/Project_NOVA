@@ -11,6 +11,11 @@ body {
   margin-left: 10px;
 }
 
+.title-color {
+  margin-left: 5px;
+  color: #0076ee;
+}
+
 /* 다크 모드 버튼 */
 .change-btn {
   display: inline-block;
