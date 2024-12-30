@@ -1210,7 +1210,7 @@ class ImageDescriper():
 
 
                         temp_path = f"{self.__path}/{fid}_{image_name}"
-                        imageio.mimsave(url=temp_path, ims=gif_file_frames,
+                        imageio.mimsave(uri=temp_path, ims=gif_file_frames,
                                         format="gif",duration=0.1, loop=0
                                         )
                         # 파일이 제대로 생성되는지 확인이 필요하다.
