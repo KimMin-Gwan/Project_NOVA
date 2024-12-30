@@ -1194,6 +1194,7 @@ class ImageDescriper():
                     image_name:str = image_names[i]
                     # Check if GIF or other unsupported formats
                     if image_name.lower().endswith('.gif'):
+                        # 걍 gif 이미지 통째로 저장하는걸로 해★결
                         gif_file_frames = imageio.mimread(image)
                         temp_path = f"{self.__path}/{fid}_{image_name}"
                         imageio.mimsave(temp_path, gif_file_frames, format="gif", loop=0)
