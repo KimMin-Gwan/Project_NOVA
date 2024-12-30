@@ -1196,7 +1196,7 @@ class ImageDescriper():
                     if image_name.lower().endswith('.gif'):
                         gif_file_frames = imageio.mimread(image)
                         temp_path = f"{self.__path}/{fid}_{image_name}"
-                        imageio.mimsave(temp_path, gif_file_frames)
+                        imageio.mimsave(temp_path, gif_file_frames, format="gif", loop=0)
 
                         self.__s3.upload_file(temp_path,
                                               self.__bucket_name,
