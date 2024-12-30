@@ -1204,10 +1204,9 @@ class ImageDescriper():
                     # Check if GIF or other unsupported formats
                     if image_name.lower().endswith('.gif'):
                         # 걍 gif 이미지 통째로 저장하는걸로 해★결
-
-
                         # PIL를 이용해서 쇼부를 본다
                         gif_file = Image.open(image)
+                        print("open image")
                         temp_path = f"{self.__path}/{fid}_{image_name}"
 
                         gif_file.save(
