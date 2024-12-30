@@ -327,7 +327,7 @@ class Core_Service_View(Master_View):
 
         # 주간 베스트 피드
         @self.__app.get('/feed_explore/weekly_best')
-        def get_weelky_best_in_search(request:Request, key:Optional[int] = -1):
+        def get_weekly_best_in_search(request:Request, key:Optional[int] = -1):
             request_manager = RequestManager()
             data_payload = HomeFeedRequest(key=key)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
