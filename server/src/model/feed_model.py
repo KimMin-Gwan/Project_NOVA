@@ -45,7 +45,7 @@ class FeedModel(BaseModel):
             feed.make_with_dict(feed_data)
             self._feeds.append(feed)
 
-        self._feeds = self.__is_user_interacted(user=self._user, feeds=self._feeds)
+        self._feeds = self._is_user_interacted(user=self._user, feeds=self._feeds)
         return
 
     def set_weekly_best_feed(self, feed_search_engine:FeedSearchEngine, index=-1, num_feed=4):
