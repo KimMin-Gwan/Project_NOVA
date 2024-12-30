@@ -201,7 +201,7 @@ class FundingProjectModel(BaseModel):
             ptype:str,
             page:int=-1
     ):
-        self._project = funding_project_manager.get_new_project(num_project=num_project, ptype=ptype)
+        self._project = funding_project_manager.get_new_project(num_project=num_project, ptype=ptype, page=page)
         self._project = self._set_progress(project_list=self._project)
 
         return
