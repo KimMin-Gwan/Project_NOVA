@@ -2285,3 +2285,101 @@ h5 {
 .comment_support.bright-mode {
   color: #121212;
 }
+
+/* 2024/12/30 */
+/* 피드 레이아웃 수정본 */
+.wrapper-container {
+  width: 100%;
+  background-color: white;
+  color: black;
+  margin-bottom: 15px;
+  border: 1px 0px solid gray;
+}
+
+.user-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.body-container {
+  padding: 0px 20px;
+  /* height: 100px; */
+
+  .body-hashtag {
+    color: #9f80ff;
+    padding-bottom: 20px;
+
+    span {
+      margin-right: 10px;
+    }
+  }
+
+  .body-content {
+    font-weight: bold;
+  }
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  align-items: center;
+}
+
+.button-box1 {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.action-button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  /* justify-content: center; */
+
+  button {
+    all: unset;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    img {
+      width: 20px;
+      height: 20px;
+      object-fit: cover;
+    }
+  }
+}
+
+/* 옵션 선택 */
+.option-container {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 0px;
+  justify-content: center;
+  /* align-items: center; */
+
+  .option {
+    cursor: pointer;
+    width: 100%;
+    border-radius: 15px;
+    padding: 15px;
+    background-color: blue;
+  }
+}
+
+/* 퀴즈 선택 */
+.quiz-container {
+  padding: 10px;
+  list-style-type: none;
+
+  li {
+    padding: 10px;
+    border-radius: 15px;
+    border: 1px solid gray;
+    margin-bottom: 5px;
+  }
+}
