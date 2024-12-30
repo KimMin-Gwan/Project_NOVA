@@ -6,7 +6,8 @@ import star from "./../img/favorite.png";
 import star_color from "./../img/favorite_color.png";
 import { getModeClass } from "./../App.js";
 import { useNavigate } from "react-router-dom";
-
+import ProgressBar from "./ProgressBar.js";
+import comment from "./../img/comment.png";
 // import { useRef, useState } from 'react';
 export function useBrightMode() {
   const params = new URLSearchParams(window.location.search);
@@ -277,246 +278,247 @@ export default function Feed({
   }
   return (
     <>
-      {feed.fclass === "card" && (
-        <div className={`${style.feed} ${className} `}>
-          <div>
-            {img_circle && <div style={{ height: "80px" }}></div>}
-            <InfoArea
-              color={"#7960EC"}
-              name={`${feed.class_name} 행성`}
-              date={feed.date}
-              supporter={`${feed.nickname}`}
-            ></InfoArea>
-            {isClickedMoreSee ? (
-              <div className={`${style["modal-container"]} ${style["feed-comment-modal"]}`}>
-                <div className={style["comment-modal"]}>
-                  <nav className={style["top_bar"]}>댓글 더보기</nav>
-                  <nav onClick={handleMoreSee} className={style["top_bar"]}>
-                    닫기
-                  </nav>
-                  {allComments.length === 0 ? (
-                    <div>댓글이 없습니다.</div>
-                  ) : (
-                    allComments.map((comment, i) => {
-                      return (
-                        <section key={comment.cid} className={style["text-section"]}>
-                          <div className={style["text-box"]}>
-                            <p className={style["text-1"]}>{comment.uname}</p>
-                            <p className={style["text-2"]}>{comment.body}</p>
-                          </div>
-                          <div className={style["icon-modal"]}>
-                            {comment.owner ? (
-                              <button
-                                onClick={(e) => {
-                                  handleRemoveComment(comment.fid, comment.cid, e);
-                                }}
-                                className={style["button-modal"]}
-                              >
-                                삭제
-                              </button>
-                            ) : (
-                              <button className={style["button-modal"]}></button>
-                            )}
-
-                            <button className={style["button-modal"]}>신고</button>
-                            <div className={style["star-modal"]}>
-                              <img
-                                src={comment.like_user ? star_color : star}
-                                alt="clickable"
-                                onClick={(e) => {
-                                  handleCommentLike(comment.fid, comment.cid, e);
-                                }}
-                                className={style["img-star"]}
-                              />
-                              <p>{comment.like}</p>
-                            </div>
-                          </div>
-                        </section>
-                      );
-                    })
-                  )}
-                  <div className={`${style["comment_action"]} ${style["comment-input"]}`}>
-                    <form onSubmit={(event) => handleSubmit(feed.fid, event)}>
-                      <input
-                        type="text"
-                        value={inputValue}
-                        onChange={handleChange}
-                        className={` ${style["comment-box"]} ${style[getModeClass(mode)]}`}
-                      ></input>
-                      <button
-                        type="submit"
-                        className={` ${style["comment-write"]} ${style[getModeClass(mode)]}`}
-                      >
-                        댓글 작성
-                      </button>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <>
-                <Text data={feed.body} hashtag={feed.hashtag}></Text>
-                {!img_circle && (
-                  <div className={style["home_feed_img"]}>
-                    {/* 1개이미지 */}
-                    {feed.num_image === 1 && (
-                      <img
-                        style={{ cursor: "pointer" }}
-                        src={feed.image[0]}
-                        alt="img"
-                        onClick={() => {
-                          handleRequestURL(feed.image[0]);
-                        }}
-                      />
-                    )}
-                    {/* 2개이미지 */}
-                    {feed.num_image === 2 && (
-                      <div className={style["image-box"]}>
-                        <div className={`${style["image-show"]} ${style["two-image"]}`}>
-                          {feed.image.map((img, i) => {
-                            return (
-                              <img
-                                style={{ cursor: "pointer" }}
-                                key={i}
-                                src={img}
-                                alt="img"
-                                onClick={() => {
-                                  handleRequestURL(img);
-                                }}
-                              />
-                            );
-                          })}
-                        </div>
-                      </div>
-                    )}
-                    {/* 3개이미지 */}
-                    {feed.num_image === 3 && (
-                      <div className={style["image-box"]}>
-                        <div className={`${style["image-show"]} ${style["three-image"]}`}>
-                          {feed.image.map((img, i) => {
-                            return (
-                              <img
-                                style={{ cursor: "pointer" }}
-                                key={i}
-                                src={img}
-                                alt="img"
-                                onClick={() => {
-                                  handleRequestURL(img);
-                                }}
-                              />
-                            );
-                          })}
-                        </div>
-                      </div>
-                    )}
-                    {/* 4개이미지 */}
-                    {feed.num_image === 4 && (
-                      <div className={style["image-show"]}>
-                        {feed.image.map((img, i) => {
-                          return (
-                            <img
-                              style={{ cursor: "pointer" }}
-                              key={i}
-                              src={img}
-                              alt="img"
-                              onClick={() => {
-                                handleRequestURL(img);
-                              }}
-                            />
-                          );
-                        })}
-                      </div>
-                    )}
-                    {/* 5개이상 */}
-                    {feed.num_image >= 5 && (
-                      <div className={style["image-box"]}>
-                        <div className={`${style["image-origin"]} ${style["five-over-image"]}`}>
-                          {feed.image.map((img, i) => {
-                            return (
-                              <img
-                                style={{ cursor: "pointer" }}
-                                key={i}
-                                src={img}
-                                alt="img"
-                                onClick={() => {
-                                  handleRequestURL(img);
-                                }}
-                              />
-                            );
-                          })}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </>
-            )}
-          </div>
-          <div style={{ width: "100%", height: "50px" }}></div>
-          {func && (
-            <div className={style["function_box"]}>
-              <div className={style["action_btn"]}>
-                {isClickedMoreSee ? (
-                  <div className={style["show_body"]} onClick={handleMoreSee}>
-                    본문 보기
-                  </div>
-                ) : (
-                  <>
-                    <div
-                      className={style["show_body"]}
-                      onClick={(event) => {
-                        handleMoreSee();
-                        handleShowComment(feed.fid, event);
-                      }}
-                    >
-                      댓글 더보기
-                    </div>
-                    <div className={style["report_btn"]}>신고</div>
-                  </>
-                )}
-              </div>
-              <div className={style["like_btn"]}>
-                {isUserState ? (
-                  <FaStar
-                    className={style.like}
-                    style={
-                      feed.star_flag
-                        ? { fill: "yellow" }
-                        : { fill: "white", stroke: "black", strokeWidth: "25" }
-                    }
-                    onClick={(e) => {
-                      handleCheckStar(feed.fid, e);
-                    }}
-                  />
-                ) : (
-                  <FaStar
-                    className={style.like}
-                    style={
-                      feed.star_flag
-                        ? { fill: "yellow" }
-                        : { fill: "white", stroke: "black", strokeWidth: "25" }
-                    }
-                    onClick={(e) => {
-                      e.preventDefault();
-                      alert("로그인이 필요합니다.");
-                    }}
-                  />
-                )}
-                <div className={style["num_like"]}>{feed.star}</div>
-              </div>
-            </div>
-          )}
-
-          <div className={` ${style["line"]} ${style[getModeClass(mode)]}`}></div>
-          <Comments
-            feed={feed}
-            allComments={allComments}
-            setAllComments={setAllComments}
-            setFeedData={setFeedData}
-            isUserState={isUserState}
-          ></Comments>
-        </div>
-      )}
+      <ContentFeed feed={feed} handleCheckStar={handleCheckStar} />
+      {
+        // feed.fclass === "card" &&
+        //   <div className={`${style.feed} ${className} `}>
+        //     <div>
+        //       {img_circle && <div style={{ height: "80px" }}></div>}
+        //       <InfoArea
+        //         color={"#7960EC"}
+        //         name={`${feed.class_name} 행성`}
+        //         date={feed.date}
+        //         supporter={`${feed.nickname}`}
+        //       ></InfoArea>
+        //       {isClickedMoreSee ? (
+        //         <div className={`${style["modal-container"]} ${style["feed-comment-modal"]}`}>
+        //           <div className={style["comment-modal"]}>
+        //             <nav className={style["top_bar"]}>댓글 더보기</nav>
+        //             <nav onClick={handleMoreSee} className={style["top_bar"]}>
+        //               닫기
+        //             </nav>
+        //             {allComments.length === 0 ? (
+        //               <div>댓글이 없습니다.</div>
+        //             ) : (
+        //               allComments.map((comment, i) => {
+        //                 return (
+        //                   <section key={comment.cid} className={style["text-section"]}>
+        //                     <div className={style["text-box"]}>
+        //                       <p className={style["text-1"]}>{comment.uname}</p>
+        //                       <p className={style["text-2"]}>{comment.body}</p>
+        //                     </div>
+        //                     <div className={style["icon-modal"]}>
+        //                       {comment.owner ? (
+        //                         <button
+        //                           onClick={(e) => {
+        //                             handleRemoveComment(comment.fid, comment.cid, e);
+        //                           }}
+        //                           className={style["button-modal"]}
+        //                         >
+        //                           삭제
+        //                         </button>
+        //                       ) : (
+        //                         <button className={style["button-modal"]}></button>
+        //                       )}
+        //                       <button className={style["button-modal"]}>신고</button>
+        //                       <div className={style["star-modal"]}>
+        //                         <img
+        //                           src={comment.like_user ? star_color : star}
+        //                           alt="clickable"
+        //                           onClick={(e) => {
+        //                             handleCommentLike(comment.fid, comment.cid, e);
+        //                           }}
+        //                           className={style["img-star"]}
+        //                         />
+        //                         <p>{comment.like}</p>
+        //                       </div>
+        //                     </div>
+        //                   </section>
+        //                 );
+        //               })
+        //             )}
+        //             <div className={`${style["comment_action"]} ${style["comment-input"]}`}>
+        //               <form onSubmit={(event) => handleSubmit(feed.fid, event)}>
+        //                 <input
+        //                   type="text"
+        //                   value={inputValue}
+        //                   onChange={handleChange}
+        //                   className={` ${style["comment-box"]} ${style[getModeClass(mode)]}`}
+        //                 ></input>
+        //                 <button
+        //                   type="submit"
+        //                   className={` ${style["comment-write"]} ${style[getModeClass(mode)]}`}
+        //                 >
+        //                   댓글 작성
+        //                 </button>
+        //               </form>
+        //             </div>
+        //           </div>
+        //         </div>
+        //       ) : (
+        //         <>
+        //           <Text data={feed.body} hashtag={feed.hashtag}></Text>
+        //           {!img_circle && (
+        //             <div className={style["home_feed_img"]}>
+        //               {/* 1개이미지 */}
+        //               {feed.num_image === 1 && (
+        //                 <img
+        //                   style={{ cursor: "pointer" }}
+        //                   src={feed.image[0]}
+        //                   alt="img"
+        //                   onClick={() => {
+        //                     handleRequestURL(feed.image[0]);
+        //                   }}
+        //                 />
+        //               )}
+        //               {/* 2개이미지 */}
+        //               {feed.num_image === 2 && (
+        //                 <div className={style["image-box"]}>
+        //                   <div className={`${style["image-show"]} ${style["two-image"]}`}>
+        //                     {feed.image.map((img, i) => {
+        //                       return (
+        //                         <img
+        //                           style={{ cursor: "pointer" }}
+        //                           key={i}
+        //                           src={img}
+        //                           alt="img"
+        //                           onClick={() => {
+        //                             handleRequestURL(img);
+        //                           }}
+        //                         />
+        //                       );
+        //                     })}
+        //                   </div>
+        //                 </div>
+        //               )}
+        //               {/* 3개이미지 */}
+        //               {feed.num_image === 3 && (
+        //                 <div className={style["image-box"]}>
+        //                   <div className={`${style["image-show"]} ${style["three-image"]}`}>
+        //                     {feed.image.map((img, i) => {
+        //                       return (
+        //                         <img
+        //                           style={{ cursor: "pointer" }}
+        //                           key={i}
+        //                           src={img}
+        //                           alt="img"
+        //                           onClick={() => {
+        //                             handleRequestURL(img);
+        //                           }}
+        //                         />
+        //                       );
+        //                     })}
+        //                   </div>
+        //                 </div>
+        //               )}
+        //               {/* 4개이미지 */}
+        //               {feed.num_image === 4 && (
+        //                 <div className={style["image-show"]}>
+        //                   {feed.image.map((img, i) => {
+        //                     return (
+        //                       <img
+        //                         style={{ cursor: "pointer" }}
+        //                         key={i}
+        //                         src={img}
+        //                         alt="img"
+        //                         onClick={() => {
+        //                           handleRequestURL(img);
+        //                         }}
+        //                       />
+        //                     );
+        //                   })}
+        //                 </div>
+        //               )}
+        //               {/* 5개이상 */}
+        //               {feed.num_image >= 5 && (
+        //                 <div className={style["image-box"]}>
+        //                   <div className={`${style["image-origin"]} ${style["five-over-image"]}`}>
+        //                     {feed.image.map((img, i) => {
+        //                       return (
+        //                         <img
+        //                           style={{ cursor: "pointer" }}
+        //                           key={i}
+        //                           src={img}
+        //                           alt="img"
+        //                           onClick={() => {
+        //                             handleRequestURL(img);
+        //                           }}
+        //                         />
+        //                       );
+        //                     })}
+        //                   </div>
+        //                 </div>
+        //               )}
+        //             </div>
+        //           )}
+        //         </>
+        //       )}
+        //     </div>
+        //     <div style={{ width: "100%", height: "50px" }}></div>
+        //     {func && (
+        //       <div className={style["function_box"]}>
+        //         <div className={style["action_btn"]}>
+        //           {isClickedMoreSee ? (
+        //             <div className={style["show_body"]} onClick={handleMoreSee}>
+        //               본문 보기
+        //             </div>
+        //           ) : (
+        //             <>
+        //               <div
+        //                 className={style["show_body"]}
+        //                 onClick={(event) => {
+        //                   handleMoreSee();
+        //                   handleShowComment(feed.fid, event);
+        //                 }}
+        //               >
+        //                 댓글 더보기
+        //               </div>
+        //               <div className={style["report_btn"]}>신고</div>
+        //             </>
+        //           )}
+        //         </div>
+        //         <div className={style["like_btn"]}>
+        //           {isUserState ? (
+        //             <FaStar
+        //               className={style.like}
+        //               style={
+        //                 feed.star_flag
+        //                   ? { fill: "yellow" }
+        //                   : { fill: "white", stroke: "black", strokeWidth: "25" }
+        //               }
+        //               onClick={(e) => {
+        //                 handleCheckStar(feed.fid, e);
+        //               }}
+        //             />
+        //           ) : (
+        //             <FaStar
+        //               className={style.like}
+        //               style={
+        //                 feed.star_flag
+        //                   ? { fill: "yellow" }
+        //                   : { fill: "white", stroke: "black", strokeWidth: "25" }
+        //               }
+        //               onClick={(e) => {
+        //                 e.preventDefault();
+        //                 alert("로그인이 필요합니다.");
+        //               }}
+        //             />
+        //           )}
+        //           <div className={style["num_like"]}>{feed.star}</div>
+        //         </div>
+        //       </div>
+        //     )}
+        //     <div className={` ${style["line"]} ${style[getModeClass(mode)]}`}></div>
+        //     {/* <Comments
+        //       feed={feed}
+        //       allComments={allComments}
+        //       setAllComments={setAllComments}
+        //       setFeedData={setFeedData}
+        //       isUserState={isUserState}
+        //     ></Comments> */}
+        //   </div>
+        // )}
+      }
       {feed.fclass === "multiple" && (
         <div className={`${style.feed} ${className}`}>
           <div>
@@ -815,13 +817,13 @@ export default function Feed({
             </div>
           )}
           <div className={` ${style["line"]} ${style[getModeClass(mode)]}`}></div>
-          <Comments
+          {/* <Comments
             feed={feed}
             allComments={allComments}
             setAllComments={setAllComments}
             setFeedData={setFeedData}
             isUserState={isUserState}
-          ></Comments>
+          ></Comments> */}
         </div>
       )}
       {feed.fclass === "balance" && (
@@ -1091,13 +1093,13 @@ export default function Feed({
             </div>
           )}
           <div className={` ${style["line"]} ${style[getModeClass(mode)]}`}></div>
-          <Comments
+          {/* <Comments
             feed={feed}
             allComments={allComments}
             setAllComments={setAllComments}
             setFeedData={setFeedData}
             isUserState={isUserState}
-          ></Comments>
+          ></Comments> */}
         </div>
       )}
       {feed.fclass === "station" && (
@@ -1384,13 +1386,13 @@ export default function Feed({
             </div>
           )}
           <div className={` ${style["line"]} ${style[getModeClass(mode)]}`}></div>
-          <Comments
+          {/* <Comments
             feed={feed}
             allComments={allComments}
             setAllComments={setAllComments}
             setFeedData={setFeedData}
             isUserState={isUserState}
-          ></Comments>
+          ></Comments> */}
         </div>
       )}
     </>
@@ -1578,3 +1580,195 @@ export function Comments({
     </div>
   );
 }
+
+// 내용 별 피드 박스
+
+function ContentFeed({ feed, handleCheckStar }) {
+  return (
+    <div className={style["wrapper-container"]}>
+      <div className={style["user-container"]}>
+        <div>{feed.date}</div>
+        <div>{feed.nickname}</div>
+      </div>
+
+      <div className={style["body-container"]}>
+        <div className={style["body-hashtag"]}>
+          {feed.hashtag.map((tag, i) => {
+            return <span key={i}>#{tag}</span>;
+          })}
+        </div>
+        <div className={style["body-content"]}>{feed.body}</div>
+        {feed.fclass === "balance" && <SelectOption feed={feed} />}
+        {feed.fclass === "multiple" && <QuizOption feed={feed} />}
+      </div>
+
+      <div className={style["button-container"]}>
+        <div>신고</div>
+        <div className={style["button-box1"]}>
+          <div className={style["action-button"]}>
+            <button
+              onClick={(e) => {
+                handleCheckStar(feed.fid, e);
+              }}
+            >
+              <img src={star} alt="star-icon" />
+            </button>
+            <span>{feed.star}</span>
+          </div>
+
+          <div className={style["action-button"]}>
+            <button>
+              <img src={comment} alt="comment-icon" />
+            </button>
+            <span>{feed.num_comment}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SelectOption({ feed }) {
+  return (
+    <div className={style["option-container"]}>
+      {/* <ProgressBar point={50} type={"feed"} /> */}
+      {feed.choice.map((option, i) => {
+        return (
+          <button key={i} className={style["option"]}>
+            {option}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+function QuizOption({ feed }) {
+  return (
+    <ol className={style["quiz-container"]}>
+      {feed.choice.map((option, i) => {
+        return (
+          <li key={i} style={{ backgroundColor: "#D2C8F7" }}>
+            {i + 1}. {option}
+          </li>
+        );
+      })}
+    </ol>
+  );
+}
+
+{
+  /* <ol className={style["quiz_box"]}>
+                  {feed.choice.map((choi, i) => {
+                    if (feed.attend === i) {
+                      if (isUserState) {
+                        return (
+                          <li
+                            onClick={(e) => {
+                              handleInteraction(e, feed.fid, i);
+                              handleClick(i);
+                            }}
+                            key={i}
+                            style={{ backgroundColor: i === feed.attend ? "#D2C8F7" : "white" }}
+                          >
+                            {i + 1}. {choi}
+                            <span>{feed.result[i]}</span>
+                          </li>
+                        );
+                      } */
+}
+
+// 이미지 갯수 별 레이아웃
+// {!img_circle && (
+//   <div className={style["home_feed_img"]}>
+//     {/* 1개이미지 */}
+//     {feed.num_image === 1 && (
+//       <img
+//         style={{ cursor: "pointer" }}
+//         src={feed.image[0]}
+//         alt="img"
+//         onClick={() => {
+//           handleRequestURL(feed.image[0]);
+//         }}
+//       />
+//     )}
+//     {/* 2개이미지 */}
+//     {feed.num_image === 2 && (
+//       <div className={style["image-box"]}>
+//         <div className={`${style["image-show"]} ${style["two-image"]}`}>
+//           {feed.image.map((img, i) => {
+//             return (
+//               <img
+//                 style={{ cursor: "pointer" }}
+//                 key={i}
+//                 src={img}
+//                 alt="img"
+//                 onClick={() => {
+//                   handleRequestURL(img);
+//                 }}
+//               />
+//             );
+//           })}
+//         </div>
+//       </div>
+//     )}
+//     {/* 3개이미지 */}
+//     {feed.num_image === 3 && (
+//       <div className={style["image-box"]}>
+//         <div className={`${style["image-show"]} ${style["three-image"]}`}>
+//           {feed.image.map((img, i) => {
+//             return (
+//               <img
+//                 style={{ cursor: "pointer" }}
+//                 key={i}
+//                 src={img}
+//                 alt="img"
+//                 onClick={() => {
+//                   handleRequestURL(img);
+//                 }}
+//               />
+//             );
+//           })}
+//         </div>
+//       </div>
+//     )}
+//     {/* 4개이미지 */}
+//     {feed.num_image === 4 && (
+//       <div className={style["image-show"]}>
+//         {feed.image.map((img, i) => {
+//           return (
+//             <img
+//               style={{ cursor: "pointer" }}
+//               key={i}
+//               src={img}
+//               alt="img"
+//               onClick={() => {
+//                 handleRequestURL(img);
+//               }}
+//             />
+//           );
+//         })}
+//       </div>
+//     )}
+//     {/* 5개이상 */}
+//     {feed.num_image >= 5 && (
+//       <div className={style["image-box"]}>
+//         <div className={`${style["image-origin"]} ${style["five-over-image"]}`}>
+//           {feed.image.map((img, i) => {
+//             return (
+//               <img
+//                 style={{ cursor: "pointer" }}
+//                 key={i}
+//                 src={img}
+//                 alt="img"
+//                 onClick={() => {
+//                   handleRequestURL(img);
+//                 }}
+//               />
+//             );
+//           })}
+//         </div>
+//       </div>
+//     )}
+//   </div>
+// )}

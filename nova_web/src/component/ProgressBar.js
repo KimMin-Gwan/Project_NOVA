@@ -1,15 +1,15 @@
 import { useState } from "react";
 import style from "./ProgressBar.module.css";
 
-function ProgressBar({ point }) {
+function ProgressBar({ point, type }) {
   let [value, setValue] = useState(0);
 
-  function updateValue(point) {
-    setValue(point);
+  function updateValue(p) {
+    setValue(p);
   }
 
   return (
-    <div className={style["progress-container"]}>
+    <div className={`${style["progress-container"]} ${style[`progress-container-${type}`]}`}>
       <div
         className={style["progress-bar"]}
         style={{ width: `${point}%` }}

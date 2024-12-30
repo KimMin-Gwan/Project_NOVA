@@ -50,6 +50,7 @@ import logo2 from "./img/logo2.png";
 import FeedThumbnail from "./component/feed-list/FeedThumbnail.js";
 import useFetchData from "./hooks/useFetchData.js";
 import MoreProjects from "./pages/NovaFunding/BiasFunding/MoreProjects.js";
+import BiasBoxes from "./component/BiasBoxes.js";
 // 401 이면 바이어스 격자 무늬로 띄우기
 // 401 이면 alert - 로그인 필요 문구 띄우기
 // 다크 모드 클래스 반환 함수
@@ -256,23 +257,7 @@ function App() {
                   feedData={weeklyFeed}
                   brightMode={brightMode}
                   type={"bias"}
-                  children={
-                    <div className="bias-container">
-                      <div className="bias-wrapper">
-                        {Array.from({ length: totalBiasBoxes }).map((_, i) => {
-                          const bias = myBias[i];
-                          return (
-                            <div key={i} className="bias-info">
-                              <div className="bias-box">
-                                {bias && <img src={bias_url + `${bias.bid}.PNG`} alt="bias" />}
-                              </div>
-                              <div className="b-name">{bias?.bname || <span>&nbsp;</span>}</div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  }
+                  children={<BiasBoxes />}
                 />
                 {/* <section className="my-bias">
                   <MyBias url={URL} showBox={showBox} blackBox={blackBox}></MyBias>

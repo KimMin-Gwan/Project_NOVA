@@ -35,7 +35,7 @@ export default function FeedList(isUserState) {
       })
         .then((response) => response.json())
         .then((data) => {
-          // console.log('first feed 3개', data.body);
+          console.log("first feed 3개", data.body);
           setFeedData(data.body.feed);
           setNextData(data.body.key);
           setIsLoading(false);
@@ -46,7 +46,7 @@ export default function FeedList(isUserState) {
       })
         .then((response) => response.json())
         .then((data) => {
-          // console.log('first feed 3개', data.body);
+          console.log("first feed 3개", data.body);
           setFeedData(data.body.feed);
           setNextData(data.body.key);
           setIsLoading(false);
@@ -89,7 +89,7 @@ export default function FeedList(isUserState) {
             return newData;
           });
           setIsLoading(false);
-          console.log("mor", data);
+          console.log("more", data);
         });
     } else if (type === "all") {
       fetch(`${FETCH_URL}all_feed?key=${nextData}`, {
@@ -103,7 +103,7 @@ export default function FeedList(isUserState) {
             return newData;
           });
           setIsLoading(false);
-          console.log("mor", data);
+          console.log("mor1", data);
         });
     } else if (type === "weekly_best") {
       fetch(`${FETCH_URL}weekly_best?key=${nextData}`, {
@@ -117,7 +117,7 @@ export default function FeedList(isUserState) {
             return newData;
           });
           setIsLoading(false);
-          console.log("mor", data);
+          console.log("mor2", data);
         });
     }
 
