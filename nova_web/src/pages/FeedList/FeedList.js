@@ -9,6 +9,7 @@ import RightBar from "./../WideVer/RightBar.js";
 import { getModeClass } from "./../../App.js";
 import BiasBoxes from "../../component/BiasBoxes.js";
 import SearchBox from "../../component/SearchBox.js";
+import KeywordBox from "../../component/keyword/KeywordBox.js";
 export default function FeedList(isUserState) {
   const [params] = useSearchParams();
   const type = params.get("type");
@@ -214,7 +215,8 @@ export default function FeedList(isUserState) {
           // <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>오늘의 베스트 피드</div>
         )}
         {type === "weekly_best" && (
-          <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>주간 베스트 피드</div>
+          <KeywordBox title={"인기 급상승"} subTitle={"오늘의 키워드"} />
+          // <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>주간 베스트 피드</div>
         )}
         {keyword && (
           <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>{keyword}</div>
