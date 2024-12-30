@@ -401,3 +401,146 @@ class Funding_Controller:
         )
 
         return model
+
+
+#------------------------------------------------------------------------------------------------
+    # 임시 페이징 기법적용 함수들 만약 페이지가 확정되고 실제 동작이 확인되면
+    # 원본들과 통합할 예정
+
+    def get_done_project_page(
+            self,
+            database:Local_Database,
+            request,
+            funding_project_manager:FundingProjectManager,
+            num_project,
+            ptype:str,
+    ) -> BaseModel:
+        model = DeadlineAddedProjectModel(database=database)
+
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
+
+        request_page_num = request.data_payload.page
+        model.get_done_projects(
+            funding_project_manager=funding_project_manager,
+            num_project=num_project,
+            ptype=ptype,
+            page=request_page_num
+        )
+
+        return model
+
+    def get_near_deadline_project_page(
+            self,
+            database:Local_Database,
+            request,
+            funding_project_manager:FundingProjectManager,
+            num_project,
+            ptype:str,
+    ) -> BaseModel:
+        model = DeadlineAddedProjectModel(database=database)
+
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
+
+        request_page_num = request.data_payload.page
+        model.get_near_deadline_projects(
+            funding_project_manager=funding_project_manager,
+            num_project=num_project,
+            ptype=ptype,
+            page=request_page_num
+        )
+
+        return model
+
+    def get_attend_funding_project_page(
+            self,
+            database:Local_Database,
+            request,
+            funding_project_manager:FundingProjectManager,
+            num_project,
+            ptype:str
+    ) -> BaseModel:
+        model = DeadlineAddedProjectModel(database=database)
+
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
+        request_page_num = request.data_payload.page
+        model.get_attend_projects(
+            funding_project_manager=funding_project_manager,
+            num_project=num_project,
+            ptype=ptype,
+            page=request_page_num
+        )
+
+        return model
+
+    def get_donate_funding_project_page(
+            self,
+            database:Local_Database,
+            request,
+            funding_project_manager:FundingProjectManager,
+            num_project,
+            ptype:str
+    ) -> BaseModel:
+        model = DeadlineAddedProjectModel(database=database)
+
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
+
+        request_page_num = request.data_payload.page
+        model.get_donate_projects(
+            funding_project_manager=funding_project_manager,
+            num_project=num_project,
+            ptype=ptype,
+            page=request_page_num
+        )
+
+        return model
+
+    def get_recommend_project_page(
+            self,
+            database:Local_Database,
+            request,
+            funding_project_manager:FundingProjectManager,
+            num_project,
+            ptype:str
+    ) -> BaseModel:
+        model = FundingProjectModel(database=database)
+
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
+
+        request_page_num = request.data_payload.page
+        model.get_recommend_projects(
+            funding_project_manager=funding_project_manager,
+            num_project=num_project,
+            ptype=ptype,
+            page=request_page_num
+        )
+
+        return model
+
+    def get_nearby_deadline_project_ptype_page(
+            self,
+            database:Local_Database,
+            request,
+            funding_project_manager:FundingProjectManager,
+            num_project,
+            ptype:str
+    ) -> BaseModel:
+        model = FundingProjectModel(database=database)
+
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
+
+        request_page_num = request.data_payload.page
+        model.get_near_deadline_projects(
+            funding_project_manager=funding_project_manager,
+            num_project=num_project,
+            ptype=ptype,
+            page=request_page_num
+        )
+
+        return model
+

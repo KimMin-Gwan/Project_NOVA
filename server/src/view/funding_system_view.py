@@ -319,12 +319,22 @@ class Funding_Service_View(Master_View):
         def get_done_project_list_all(request:Request, key:Optional[str]="" ):
             request_manager = RequestManager()
             data_payload = ProjectGetRequest(key=key)
+            # data_payload = ProjectPageGetRequest(page=key)
+
 
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
                 #raise request_manager.credentials_exception
 
             funding_controller =Funding_Controller()
+            # model = funding_controller.get_done_project_page(
+            #     database=self.__database,
+            #     request=request_manager,
+            #     funding_project_manager=self.__funding_project_manager,
+            #     num_project=6,
+            #     ptype="fan"
+            # )
+
             model = funding_controller.get_done_project(
                 database=self.__database,
                 request=request_manager,
@@ -344,12 +354,21 @@ class Funding_Service_View(Master_View):
         def get_near_deadline_project_list_all(request:Request, key:Optional[str]="" ):
             request_manager = RequestManager()
             data_payload = ProjectGetRequest(key=key)
+            # data_payload = ProjectPageGetRequest(page=key)
 
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
                 #raise request_manager.credentials_exception
 
             funding_controller =Funding_Controller()
+            # model = funding_controller.get_near_deadline_project_page(
+            #     database=self.__database,
+            #     request=request_manager,
+            #     funding_project_manager=self.__funding_project_manager,
+            #     num_project=6,
+            #     ptype="fan"
+            # )
+
             model = funding_controller.get_near_deadline_project(
                 database=self.__database,
                 request=request_manager,
@@ -391,12 +410,21 @@ class Funding_Service_View(Master_View):
         def get_attend_project_list_all(request:Request, key:Optional[str]="" ):
             request_manager = RequestManager()
             data_payload = ProjectGetRequest(key=key)
+            # data_payload = ProjectPageGetRequest(page=key)
 
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
                 #raise request_manager.credentials_exception
 
             funding_controller =Funding_Controller()
+            # model = funding_controller.get_attend_funding_project_page(
+            #     database=self.__database,
+            #     request=request_manager,
+            #     funding_project_manager=self.__funding_project_manager,
+            #     num_project=6,
+            #     ptype="fan"
+            # )
+
             model = funding_controller.get_attend_funding_project(
                 database=self.__database,
                 request=request_manager,
@@ -416,12 +444,21 @@ class Funding_Service_View(Master_View):
         def get_donate_project_list_all(request:Request, key:Optional[str]="" ):
             request_manager = RequestManager()
             data_payload = ProjectGetRequest(key=key)
+            data_payload = ProjectPageGetRequest(page=key)
 
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
                 #raise request_manager.credentials_exception
 
             funding_controller =Funding_Controller()
+            # model = funding_controller.get_donate_funding_project(
+            #     database=self.__database,
+            #     request=request_manager,
+            #     funding_project_manager=self.__funding_project_manager,
+            #     num_project=6,
+            #     ptype="fan"
+            # )
+
             model = funding_controller.get_donate_funding_project(
                 database=self.__database,
                 request=request_manager,
@@ -539,6 +576,8 @@ class Funding_Service_View(Master_View):
         @self.__app.get('/nova_fund_system/bias_project_list/recommend_project')
         def recommend_project_list(request:Request, key:Optional[str]=""):
             request_manager = RequestManager()
+
+            # data_payload = ProjectPageGetRequest(page=key)
             data_payload = ProjectGetRequest(key=key)
 
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
@@ -546,6 +585,14 @@ class Funding_Service_View(Master_View):
                 #raise request_manager.credentials_exception
 
             funding_controller = Funding_Controller()
+            # model = funding_controller.get_recommend_project_page(
+            #     database=self.__database,
+            #     request=request_manager,
+            #     funding_project_manager=self.__funding_project_manager,
+            #     num_project=6,
+            #     ptype="bias"
+            # )
+
             model = funding_controller.get_recommend_project(
                 database=self.__database,
                 request=request_manager,
@@ -565,17 +612,27 @@ class Funding_Service_View(Master_View):
         def all_project_list(request:Request, key:Optional[str]=""):
             request_manager = RequestManager()
             data_payload = ProjectGetRequest(key=key)
+            # data_payload = ProjectPageGetRequest(page=key)
 
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
                 #raise request_manager.credentials_exception
 
             funding_controller = Funding_Controller()
-            model = funding_controller.get_nearby_deadline_project_ptype(
+
+            # model = funding_controller.get_nearby_deadline_project_ptype_page(
+            #     database=self.__database,
+            #     request=request_manager,
+            #     funding_project_manager=self.__funding_project_manager,
+            #     num_project=6,
+            #     ptype="bias",
+            # )
+
+            model = funding_controller.get_nearby_deadline_projaect_ptype(
                 database=self.__database,
                 request=request_manager,
                 funding_project_manager=self.__funding_project_manager,
-                num_project=6,
+                num_project=-1,
                 ptype="bias",
             )
 
@@ -682,6 +739,12 @@ class ProjectEditRequest():
 class ProjectGetRequest():
     def __init__(self, key=-1) -> None:
         self.key=key
+
+# 프로젝트 전체보기 시, 리퀘스트
+class ProjectPageGetRequest():
+    def __init__(self, page=1) -> None:
+        self.page=int(page)
+
 
 class ProjectDetailRequest():
     def __init__(self, pid) -> None:

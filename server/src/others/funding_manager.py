@@ -36,7 +36,7 @@ class FundingProjectManager:
 
         return projects
 
-    def __return_project_list(self, projects, sort_opt, num_projects):
+    def __return_project_list(self, projects, sort_opt, num_projects, page):
         projects_sorted = projects
 
         if sort_opt == "pid":
@@ -44,9 +44,15 @@ class FundingProjectManager:
         elif sort_opt == "expire_date":
             projects_sorted = sorted(projects, key=lambda p: datetime.strptime(p.expire_date, "%Y/%m/%d").date())
 
-        if num_projects == -1:
-            return projects_sorted
-        return projects_sorted[:num_projects]
+
+        if page != -1:
+            return projects_sorted[(page - 1) * num_projects: page * num_projects]
+        # Page num is available
+        else:
+            if num_projects == -1:
+                return projects_sorted
+            return projects_sorted[:num_projects]
+
 
     def _calculate_deadline(self, project):
         deadline_diff = datetime.strptime(project.expire_date, "%Y/%m/%d").date() - date.today()
@@ -63,7 +69,7 @@ class FundingProjectManager:
         project_datas = self.__database.get_all_data(target="pid")
         projects = self.__project_object_maker(project_datas)
 
-        return self.__return_project_list(projects=projects,sort_opt="", num_projects=num_project)
+        return self.__return_project_list(projects=projects,sort_opt="", num_projects=num_project, page=-1)
 
     # 프로젝트 바디 데이터를 GET 하는 함수
     def get_project_body_data(self, pid):
@@ -75,17 +81,16 @@ class FundingProjectManager:
         project_datas = self.__database.get_all_data(target="pid")
 
     # ptype에 따라서 구분이 가능, 최애의 프로젝트와 팬들의 프로젝트
-    def get_projects_by_ptype(self, num_project, ptype:str):
+    def get_projects_by_ptype(self, num_project:int, ptype:str, page:int):
         project_datas = self.__database.get_datas_with_key(target="pid", key="ptype", key_datas=[ptype])
         projects = self.__project_object_maker(project_datas)
 
         # 가장 최근에 생성 된 프로젝트들은 PID가 가장 크다. 따라서, 시간 순 정렬을 PID로 할 수있다.
         # project에 기재된 정보는 모두 문자열이므로 형변환을 취해야한다.
-        return self.__return_project_list(projects=projects,sort_opt="pid", num_projects=num_project)
-
+        return self.__return_project_list(projects=projects,sort_opt="pid", num_projects=num_project, page=page)
 
     # 최근에 올라온 신규 프로젝트들을 가져옴
-    def get_new_project(self, num_project, ptype):
+    def get_new_project(self, num_project:int, ptype:str, page:int):
         project_datas = self.__database.get_datas_with_key(target="pid", key="ptype", key_datas=[ptype])
         projects = self.__project_object_maker(project_datas)
         result_list = []
@@ -94,7 +99,7 @@ class FundingProjectManager:
             if (date.today() - datetime.strptime(project.make_date, "%Y/%m/%d").date()).days < 14:
                 result_list.append(project)
 
-        return self.__return_project_list(projects=projects,sort_opt="pid", num_projects=num_project)
+        return self.__return_project_list(projects=projects,sort_opt="pid", num_projects=num_project,page=page)
 
         # projects = []
         #
@@ -114,7 +119,7 @@ class FundingProjectManager:
         # return projects_sorted[:num_project]
 
     # 추천하는 프로젝트들을 들고와서 가져옴
-    def get_recommend_project(self, num_project, ptype):
+    def get_recommend_project(self, num_project:int, ptype:str, page:int):
         project_data = self.__database.get_datas_with_key(target="pid", key="ptype", key_datas=[ptype])
         projects = self.__project_object_maker(project_data)
 
@@ -132,11 +137,10 @@ class FundingProjectManager:
                     result_list.append(project)
 
         # 마지막, PID가 최신인 순으로 정렬을 하는 것이 좋겠다.
-        return self.__return_project_list(projects=projects,sort_opt="pid", num_projects=num_project)
+        return self.__return_project_list(projects=projects,sort_opt="pid", num_projects=num_project, page=page)
 
     # 마감기한이 임박한 프로젝트들로 정렬해서 프로젝트들을 들고 옴
-
-    def get_all_projects_deadline_sort_ptype(self, num_project, ptype):
+    def get_all_projects_deadline_sort_ptype(self, num_project:int, ptype:str, page:int=-1):
         project_datas = self.__database.get_datas_with_key(target="pid", key="ptype", key_datas=[ptype])
         projects = self.__project_object_maker(project_datas)
         result_list = []
@@ -148,11 +152,11 @@ class FundingProjectManager:
 
         # 마감일에 임박한 기준으로 정렬해야 함.
         # 여기서, 날짜가 가장 빨리오는 순서대로 해야한다.
-        return self.__return_project_list(projects=projects,sort_opt="expire_date", num_projects=num_project)
+        return self.__return_project_list(projects=projects,sort_opt="expire_date", num_projects=num_project, page=page)
 
     # 가장 인기가 많은 프로젝트들을 가져옴
 
-    def get_projects_best(self):
+    def get_projects_best(self, page:int=-1):
         project_datas = self.__database.get_all_data(target="pid")
         projects = self.__project_object_maker(project_datas)
         result_list = []
@@ -163,10 +167,10 @@ class FundingProjectManager:
             if project.now_progress >= project.goal_progress:
                 result_list.append(project)
 
-        return self.__return_project_list(projects=projects,sort_opt="", num_projects=-1)
+        return self.__return_project_list(projects=projects,sort_opt="", num_projects=-1, page=page)
 
     # 완료된 펀딩 프로젝트 표시
-    def get_done_projects(self, num_project, ptype:str):
+    def get_done_projects(self, num_project, ptype:str, page:int):
         # 가지고 있는 모든 프로젝트들을 들고와서
         project_datas = self.__database.get_all_data(target="pid")
         projects = self.__project_object_maker(project_datas)
@@ -183,10 +187,10 @@ class FundingProjectManager:
                     result_list.append(project)
 
         # 이렇게 가져온 성공한 프로젝트는 가장 최근의 날짜를 가진 것이 먼저오도록 한다.
-        return self.__return_project_list(projects=projects,sort_opt="pid", num_projects=num_project)
+        return self.__return_project_list(projects=projects,sort_opt="pid", num_projects=num_project, page=page)
 
     # 마감기한이 별로 남지 않은 프로젝트 표시
-    def get_near_projects(self, num_project, ptype:str):
+    def get_near_projects(self, num_project, ptype:str, page:int):
         project_datas = self.__database.get_datas_with_key(target="pid", key="ptype", key_datas=[ptype])
         projects = self.__project_object_maker(project_datas)
         result_list = []
@@ -200,10 +204,10 @@ class FundingProjectManager:
 
         # 프로젝트 종료 날짜가 아직 멀었다면, 값이 크다
         # 여기서, 날짜가 가장 빨리오는 순서대로 해야한다.
-        return self.__return_project_list(projects=projects,sort_opt="expire_date", num_projects=num_project)
+        return self.__return_project_list(projects=projects,sort_opt="expire_date", num_projects=num_project, page=page)
 
     # 참여형 프로젝트 표시
-    def get_attend_funding_project(self, num_project:int, ptype:str):
+    def get_attend_funding_project(self, num_project:int, ptype:str, page:int):
         project_datas = self.__database.get_datas_with_key(target="pid", key="ftype", key_datas=["attend"])
         projects = self.__project_object_maker(project_datas)
         result_list = []
@@ -214,10 +218,10 @@ class FundingProjectManager:
 
         # 가장 최근에 만들어진 Project가 먼저 오도록 한다.
         # 가장 최근에 생성된 프로젝트는 PID로 정렬이 가능하다.
-        return self.__return_project_list(projects=projects,sort_opt="pid", num_projects=num_project)
+        return self.__return_project_list(projects=projects,sort_opt="pid", num_projects=num_project, page=page)
 
     # 후원형 프로젝트 표시
-    def get_donate_funding_project(self, num_project:int , ptype:str):
+    def get_donate_funding_project(self, num_project:int , ptype:str, page:int):
         project_datas = self.__database.get_datas_with_key(target="pid", key="ftype", key_datas=["donate"])
         projects = self.__project_object_maker(project_datas)
         result_list = []
@@ -228,7 +232,7 @@ class FundingProjectManager:
 
         # 가장 최근에 만들어진 Project가 먼저 오도록 한다.
         # 가장 최근에 생성된 프로젝트는 PID로 정렬이 가능하다.
-        return self.__return_project_list(projects=projects,sort_opt="pid", num_projects=num_project)
+        return self.__return_project_list(projects=projects,sort_opt="pid", num_projects=num_project,page=page)
 
 
 # 건들지 않음

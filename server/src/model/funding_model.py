@@ -110,10 +110,11 @@ class FundingProjectModel(BaseModel):
     def get_project_with_bias(
             self,
             funding_project_manager:FundingProjectManager,
-            num_project:int
+            num_project:int,
+            page:int=-1
     ):
         # 최애의 프로젝트들 가장 최근 것들 3개 들고 옴
-        self._project = funding_project_manager.get_projects_by_ptype(num_project=num_project, ptype="bias")
+        self._project = funding_project_manager.get_projects_by_ptype(num_project=num_project, ptype="bias",page=page)
         # 참여율 계산
         self._project = self._set_progress(project_list=self._project)
 
@@ -123,10 +124,11 @@ class FundingProjectModel(BaseModel):
     def get_project_with_fan(
             self,
             funding_project_manager:FundingProjectManager,
-            num_project:int
+            num_project:int,
+            page:int=-1
     ):
         # 팬들의 프로젝트들 가장 최근 것들 3개 들고 옴
-        self._project = funding_project_manager.get_projects_by_ptype(num_project=num_project, ptype="fan")
+        self._project = funding_project_manager.get_projects_by_ptype(num_project=num_project, ptype="fan", page=page)
         # 참여율 계산
         self._project = self._set_progress(project_list=self._project)
 
@@ -137,9 +139,10 @@ class FundingProjectModel(BaseModel):
             self,
             funding_project_manager:FundingProjectManager,
             num_project:int,
-            ptype:str
+            ptype:str,
+            page:int=-1
     ):
-        self._project = funding_project_manager.get_recommend_project(num_project=num_project, ptype=ptype)
+        self._project = funding_project_manager.get_recommend_project(num_project=num_project, ptype=ptype, page=page)
         self._project = self._set_progress(project_list=self._project)
 
         return
@@ -148,9 +151,10 @@ class FundingProjectModel(BaseModel):
             self,
             funding_project_manager:FundingProjectManager,
             num_project:int,
-            ptype:str
+            ptype:str,
+            page:int=-1
     ):
-        self._project = funding_project_manager.get_all_projects_deadline_sort_ptype(num_project=num_project, ptype=ptype)
+        self._project = funding_project_manager.get_all_projects_deadline_sort_ptype(num_project=num_project, ptype=ptype, page=page)
         self._project = self._set_progress(project_list=self._project)
 
         return
@@ -194,7 +198,8 @@ class FundingProjectModel(BaseModel):
             self,
             funding_project_manager:FundingProjectManager,
             num_project:int,
-            ptype:str
+            ptype:str,
+            page:int=-1
     ):
         self._project = funding_project_manager.get_new_project(num_project=num_project, ptype=ptype)
         self._project = self._set_progress(project_list=self._project)
@@ -355,9 +360,10 @@ class DeadlineAddedProjectModel(BaseModel):
             self,
             funding_project_manager:FundingProjectManager,
             num_project:int,
-            ptype:str
+            ptype:str,
+            page:int=-1
     ):
-        self._project = funding_project_manager.get_done_projects(num_project=num_project, ptype=ptype)
+        self._project = funding_project_manager.get_done_projects(num_project=num_project, ptype=ptype, page=page)
         self._project = self._set_progress(project_list=self._project)
         self._calculate_deadline()
 
@@ -367,9 +373,10 @@ class DeadlineAddedProjectModel(BaseModel):
             self,
             funding_project_manager:FundingProjectManager,
             num_project:int,
-            ptype:str
+            ptype:str,
+            page:int=-1
     ):
-        self._project = funding_project_manager.get_near_projects(num_project=num_project, ptype=ptype)
+        self._project = funding_project_manager.get_near_projects(num_project=num_project, ptype=ptype, page=page)
         self._project = self._set_progress(project_list=self._project)
         self._calculate_deadline()
 
@@ -379,9 +386,10 @@ class DeadlineAddedProjectModel(BaseModel):
             self,
             funding_project_manager:FundingProjectManager,
             num_project:int,
-            ptype:str
+            ptype:str,
+            page:int=-1
     ):
-        self._project = funding_project_manager.get_attend_funding_project(num_project=num_project, ptype=ptype)
+        self._project = funding_project_manager.get_attend_funding_project(num_project=num_project, ptype=ptype,page=page)
         self._project = self._set_progress(project_list=self._project)
         self._calculate_deadline()
 
@@ -391,9 +399,10 @@ class DeadlineAddedProjectModel(BaseModel):
             self,
             funding_project_manager:FundingProjectManager,
             num_project:int,
-            ptype:str
+            ptype:str,
+            page:int=-1
     ):
-        self._project = funding_project_manager.get_donate_funding_project(num_project=num_project, ptype=ptype)
+        self._project = funding_project_manager.get_donate_funding_project(num_project=num_project, ptype=ptype, page=page)
         self._project = self._set_progress(project_list=self._project)
         self._calculate_deadline()
 
