@@ -1207,11 +1207,11 @@ class ImageDescriper():
                         # gif_cv2_frames = self.__process_gif_with_imageio(image)
                         # gif_file_frames = self.__process_cv2img_to_gif(gif_cv2_frames)
                         gif_file_frames = imageio.mimread(image)
-                        meta_data = imageio.get_reader(image).meta  # 메타데이터 가져오기
+
 
                         temp_path = f"{self.__path}/{fid}_{image_name}"
                         imageio.mimsave(url=temp_path, ims=gif_file_frames,
-                                        format="gif",duration=meta_data.get("duration", 0.1), loop=0
+                                        format="gif",duration=0.1, loop=0
                                         )
 
                         self.__s3.upload_file(temp_path,
