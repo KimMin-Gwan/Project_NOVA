@@ -1213,6 +1213,9 @@ class ImageDescriper():
                         imageio.mimsave(url=temp_path, ims=gif_file_frames,
                                         format="gif",duration=0.1, loop=0
                                         )
+                        # 파일이 제대로 생성되는지 확인이 필요하다.
+                        if not os.path.exists(temp_path):
+                            print(f"GIF 파일 생성 실패: {temp_path}")
 
                         self.__s3.upload_file(temp_path,
                                               self.__bucket_name,
