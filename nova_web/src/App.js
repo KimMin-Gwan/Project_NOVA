@@ -258,6 +258,7 @@ function App() {
                   brightMode={brightMode}
                   type={"bias"}
                   children={<BiasBoxes />}
+                  endPoint={`/feed_list?type=all`}
                 />
                 {/* <section className="my-bias">
                   <MyBias url={URL} showBox={showBox} blackBox={blackBox}></MyBias>

@@ -7,6 +7,8 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import LeftBar from "./../WideVer/LeftBar.js";
 import RightBar from "./../WideVer/RightBar.js";
 import { getModeClass } from "./../../App.js";
+import BiasBoxes from "../../component/BiasBoxes.js";
+import SearchBox from "../../component/SearchBox.js";
 export default function FeedList(isUserState) {
   const [params] = useSearchParams();
   const type = params.get("type");
@@ -177,9 +179,9 @@ export default function FeedList(isUserState) {
 
   return (
     <div className="all-box">
-      <section className="contents com1">
+      {/* <section className="contents com1">
         <LeftBar brightMode={mode} />
-      </section>
+      </section> */}
       <div className={`${style["container"]} ${style[getModeClass(mode)]}`}>
         <header className={style.header}>
           <div className="logo">
@@ -204,10 +206,12 @@ export default function FeedList(isUserState) {
           </div>
         </header>
         {type === "all" && (
-          <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>전체 피드</div>
+          <BiasBoxes />
+          // <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>전체 피드</div>
         )}
         {type === "best" && (
-          <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>오늘의 베스트 피드</div>
+          <SearchBox />
+          // <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>오늘의 베스트 피드</div>
         )}
         {type === "weekly_best" && (
           <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>주간 베스트 피드</div>
@@ -233,9 +237,9 @@ export default function FeedList(isUserState) {
           <div ref={target} style={{ height: "1px" }}></div>
         </div>
       </div>
-      <section className="contents com1">
+      {/* <section className="contents com1">
         <RightBar brightMode={mode} />
-      </section>
+      </section> */}
     </div>
   );
 }

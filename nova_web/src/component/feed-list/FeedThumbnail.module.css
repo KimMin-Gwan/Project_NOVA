@@ -44,7 +44,7 @@
 }
 
 /* 검색박스 */
-.FeedThumbnail .search-section {
+.search-section {
   width: 100%;
   display: flex;
   margin-top: 10px;

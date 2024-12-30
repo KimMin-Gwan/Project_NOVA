@@ -6,6 +6,7 @@ import search_icon from "./../../img/search_icon.png";
 import pin from "./../../img/pin.png";
 
 import { useNavigate } from "react-router-dom";
+import SearchBox from "../SearchBox";
 
 export default function FeedThumbnail({
   title,
@@ -38,19 +39,7 @@ export default function FeedThumbnail({
 
       {children}
 
-      {hasSearchBox && (
-        <div className={style["search-section"]}>
-          <input
-            id="search-box"
-            className={style["search-box"]}
-            type="text"
-            placeholder="보고 싶은 최애를 검색해보세요"
-          ></input>
-          <button className={style["search-btn"]}>
-            <img src={search_icon}></img>
-          </button>
-        </div>
-      )}
+      {hasSearchBox && <SearchBox />}
 
       {allPost}
       {allPost ? null : type === "bias" ? (
