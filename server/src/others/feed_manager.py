@@ -1206,7 +1206,6 @@ class ImageDescriper():
                         # 걍 gif 이미지 통째로 저장하는걸로 해★결
                         # PIL를 이용해서 쇼부를 본다
                         gif_file = Image.open(BytesIO(image))
-                        # print(f"open image")
                         temp_path = f"{self.__path}/{fid}_{image_name}"
 
                         gif_file.save(
@@ -1216,22 +1215,6 @@ class ImageDescriper():
                             duration=gif_file.info.get("duration", 100)  # 원본 지속 시간 유지
                         )
 
-                        if not os.path.exists(temp_path):
-                            print(f"GIF 파일 생성 실패: {temp_path}")
-
-
-
-
-                        # # gif_cv2_frames = self.__process_gif_with_imageio(image)
-                        # # gif_file_frames = self.__process_cv2img_to_gif(gif_cv2_frames)
-                        # gif_file_frames = imageio.mimread(image)
-                        #
-                        #
-                        # temp_path = f"{self.__path}/{fid}_{image_name}"
-                        # imageio.mimsave(uri=temp_path, ims=gif_file_frames,
-                        #                 format="gif",duration=0.1, loop=0
-                        #                 )
-                        # # 파일이 제대로 생성되는지 확인이 필요하다.
                         # if not os.path.exists(temp_path):
                         #     print(f"GIF 파일 생성 실패: {temp_path}")
 
@@ -1241,16 +1224,6 @@ class ImageDescriper():
                                               ExtraArgs={'ACL': 'public-read'})
                         urls.append(f"{self.__endpoint_url}/{self.__bucket_name}/{fid}_{image_name}")
 
-                        # cv2_images = self.__process_gif_with_imageio(image)
-                        # for idx, cv_image in enumerate(cv2_images):
-                        #     temp_path = f"{self.__path}/{fid}_{idx}_{image_name.replace('.gif', f'_{idx}.gif')}"
-                        #
-                        #     cv2.imwrite(temp_path, cv_image)
-                        #     self.__s3.upload_file(temp_path,
-                        #                           self.__bucket_name,
-                        #                           f"{fid}_{idx}_{image_name.replace('.gif', f'_{idx}.gif')}",
-                        #                           ExtraArgs={'ACL': 'public-read'})
-                        #     urls.append(f"{self.__endpoint_url}/{self.__bucket_name}/{fid}_{idx}_{image_name.replace('.gif', f'_{idx}.jpg')}")
                     else:
                         # Process other formats
                         pil_image = Image.open(BytesIO(image))
