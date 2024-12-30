@@ -1204,18 +1204,37 @@ class ImageDescriper():
                     # Check if GIF or other unsupported formats
                     if image_name.lower().endswith('.gif'):
                         # 걍 gif 이미지 통째로 저장하는걸로 해★결
-                        # gif_cv2_frames = self.__process_gif_with_imageio(image)
-                        # gif_file_frames = self.__process_cv2img_to_gif(gif_cv2_frames)
-                        gif_file_frames = imageio.mimread(image)
 
 
+                        # PIL를 이용해서 쇼부를 본다
+                        gif_file = Image.open(image)
                         temp_path = f"{self.__path}/{fid}_{image_name}"
-                        imageio.mimsave(uri=temp_path, ims=gif_file_frames,
-                                        format="gif",duration=0.1, loop=0
-                                        )
-                        # 파일이 제대로 생성되는지 확인이 필요하다.
+
+                        gif_file.save(
+                            temp_path,
+                            save_all=True,
+                            loop=gif_file.info.get("loop", 0),         # 원본 루프 설정 유지
+                            duration=gif_file.info.get("duration", 100)  # 원본 지속 시간 유지
+                        )
+
                         if not os.path.exists(temp_path):
                             print(f"GIF 파일 생성 실패: {temp_path}")
+
+
+
+
+                        # # gif_cv2_frames = self.__process_gif_with_imageio(image)
+                        # # gif_file_frames = self.__process_cv2img_to_gif(gif_cv2_frames)
+                        # gif_file_frames = imageio.mimread(image)
+                        #
+                        #
+                        # temp_path = f"{self.__path}/{fid}_{image_name}"
+                        # imageio.mimsave(uri=temp_path, ims=gif_file_frames,
+                        #                 format="gif",duration=0.1, loop=0
+                        #                 )
+                        # # 파일이 제대로 생성되는지 확인이 필요하다.
+                        # if not os.path.exists(temp_path):
+                        #     print(f"GIF 파일 생성 실패: {temp_path}")
 
                         self.__s3.upload_file(temp_path,
                                               self.__bucket_name,
