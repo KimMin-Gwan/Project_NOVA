@@ -1182,6 +1182,15 @@ class ImageDescriper():
             print(f"Error processing GIF with imageio: {e}")
             return []
 
+    def __process_cv2img_to_gif(self, cv2_images: list):
+        try:
+            gif_images = [cv2.cvtColor(frame, cv2.COLOR_BGR2RGB) for frame in cv2_images]
+            return gif_images
+
+        except Exception as e:
+            print(f"Error processing GIF with imageio: {e}")
+            return []
+
     def get_default_image_url(self):
         return [self.__default_image], True
 
@@ -1195,8 +1204,9 @@ class ImageDescriper():
                     # Check if GIF or other unsupported formats
                     if image_name.lower().endswith('.gif'):
                         # 걍 gif 이미지 통째로 저장하는걸로 해★결
-                        # gif_cv2_frames = self.__process_gif_with_imageio(image)
-                        gif_file_frames = imageio.mimread(image)
+                        gif_cv2_frames = self.__process_gif_with_imageio(image)
+                        gif_file_frames = self.__process_cv2img_to_gif(gif_cv2_frames)
+                        #gif_file_frames = imageio.mimread(image)
 
                         temp_path = f"{self.__path}/{fid}_{image_name}"
                         imageio.mimsave(temp_path, gif_file_frames, format="gif", loop=0)
