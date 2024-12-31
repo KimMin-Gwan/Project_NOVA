@@ -1,6 +1,5 @@
 import style from "./../pages/FeedPage/FeedPage.module.css";
 import { useState, useEffect } from "react";
-// import {}
 import { FaStar } from "react-icons/fa";
 import star from "./../img/favorite.png";
 import star_color from "./../img/favorite_color.png";
@@ -1583,9 +1582,17 @@ export function Comments({
 
 // 내용 별 피드 박스
 
-function ContentFeed({ feed, handleCheckStar }) {
+export function ContentFeed({ feed, handleCheckStar }) {
+  let navigate = useNavigate();
+
   return (
-    <div className={style["wrapper-container"]}>
+    <div
+      className={style["wrapper-container"]}
+      onClick={(e) => {
+        e.preventDefault();
+        navigate(`/feed_detail/${feed.fid}`);
+      }}
+    >
       <div className={style["user-container"]}>
         <div>{feed.date}</div>
         <div>{feed.nickname}</div>
@@ -1608,6 +1615,7 @@ function ContentFeed({ feed, handleCheckStar }) {
           <div className={style["action-button"]}>
             <button
               onClick={(e) => {
+                e.stopPropagation();
                 handleCheckStar(feed.fid, e);
               }}
             >
@@ -1634,7 +1642,7 @@ function SelectOption({ feed }) {
       {/* <ProgressBar point={50} type={"feed"} /> */}
       {feed.choice.map((option, i) => {
         return (
-          <button key={i} className={style["option"]}>
+          <button key={i} className={style["option"]} onClick={(e) => e.stopPropagation()}>
             {option}
           </button>
         );
@@ -1648,7 +1656,7 @@ function QuizOption({ feed }) {
     <ol className={style["quiz-container"]}>
       {feed.choice.map((option, i) => {
         return (
-          <li key={i} style={{ backgroundColor: "#D2C8F7" }}>
+          <li key={i} style={{ backgroundColor: "#D2C8F7" }} onClick={(e) => e.stopPropagation()}>
             {i + 1}. {option}
           </li>
         );

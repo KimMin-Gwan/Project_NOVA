@@ -9,6 +9,8 @@
 .title-container {
   padding: 5px 20px;
   font-size: 24px;
+  color: white;
+  margin-bottom: 10px;
 }
 
 .sub-title {
@@ -21,14 +23,14 @@
   display: flex;
   overflow-x: auto;
   scrollbar-width: none;
-  background-color: burlywood;
+  /* background-color: burlywood; */
   gap: 15px;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 .tags-wrapper {
   display: flex;
   gap: 15px;
-  transform: translateX(-50%);
+  /* animation: tagScroll 3s linear infinite; */
 }
 
 .tags {
