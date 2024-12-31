@@ -21,7 +21,7 @@ warnings.filterwarnings("ignore", module='boto3.compat')
 # 피드를 관리하는 장본인
 
 
-class FeedManager:
+class OldFeedManager:
     def __init__(self, database, fclasses, feed_search_engine) -> None:
         self._feedClassManagement = FeedClassManagement(fclasses=fclasses)
         #self._database:Local_Database= database
@@ -31,7 +31,6 @@ class FeedManager:
         self._feed_search_engine:FeedSearchEngine = feed_search_engine
         self._num_feed = 0
         self._managed_feed_list = []
-        pass
 
     def __get_argo(self, user):
         return self._feed_class_analist.dice_argo(option=user.option)
@@ -1253,8 +1252,25 @@ class ImageDescriper():
 
 
 
+class FeedManager:
+    def __init__(self, database, fclasses, feed_search_engine) -> None:
+        self._feedClassManagement = FeedClassManagement(fclasses=fclasses)
+        #self._database:Local_Database= database
+        self._database= database
+        #self._managed_user_table = ManagedUserTable(database=database)
+        self._feed_class_analist = FeedClassAnalist()
+        self._feed_search_engine:FeedSearchEngine = feed_search_engine
+        self._num_feed = 0
+        self._managed_feed_list = []
 
 
+    # 1. interaction 수행
 
+    # 2. 피드 좋아요
 
+    # 3. 댓글 작성 삭제 좋아요
+
+    # 4. 피드 작성 수정 삭제
+
+    
 

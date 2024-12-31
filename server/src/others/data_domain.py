@@ -231,68 +231,54 @@ class League(SampleDomain):
             "state": self.state,
             "type":self.type
         }
-    
+
 class Feed(SampleDomain):
-    def __init__(self, fid="", uid="", nickname="", star=60,
-                 body="", date="", fclass="", class_name="",
-                 choice=None, result=None, state="d", attend=None,
-                 category = None, comment = None, image = None,
-                 hashtag = None):
-        if choice is None:
-            choice = []
-        if result is None:
-            result = []
-        if attend is None:
-            attend = []
-        if category is None:
-            category = []
-        if comment is None:
-            comment = []
+    def __init__(self, fid="", uid="", body="", fclass="", date="",
+                 display=1, star=0, image=None, hashtag=None,
+                 comment=None, iid=""):
         if image is None:
             image = []
         if hashtag is None:
             hashtag = []
-
+        if comment is None:
+            comment = []
+            
         self.fid = fid
         self.uid = uid
-        self.nickname = nickname
         self.body = body
-        self.date = date
         self.fclass = fclass
-        self.class_name = class_name
-        self.choice = copy.copy(choice)
-        self.result = copy.copy(result)
-        self.state = state  # feed 의 상태 
-        self.attend = copy.copy(attend)
-        self.category = copy.copy(category)
-        self.comment = copy.copy(comment)
-        self.num_comment = 0
+        self.display = display
+        self.date = date
         self.star = star
-        self.star_flag = False
         self.image = copy.copy(image)
         self.hashtag = copy.copy(hashtag)
+        self.comment = copy.copy(comment)
+        self.iid = iid  # interaction id
+
+        self.num_comment = len(self.comment)
         self.num_image = len(self.image)
+        self.star_flag = False
+        self.nickname = ""
+
 
     def make_with_dict(self, dict_data):
         try:
-            self.fid = dict_data['fid']
-            self.uid = dict_data['uid']
-            self.nickname = dict_data['nickname']
-            self.body = dict_data['body']
-            self.date = dict_data['date']
-            self.fclass = dict_data['fclass']
-            self.class_name = dict_data['class_name']
-            self.choice = copy.copy(dict_data['choice'])
-            self.result = copy.copy(dict_data['result'])
-            self.state = dict_data['state']
-            self.attend = copy.copy(dict_data['attend'])
-            self.category = copy.copy(dict_data['category'])
-            self.comment = copy.copy(dict_data['comment'])
-            self.star= dict_data['star']
-            self.image= copy.copy(dict_data['image'])
-            self.hashtag = copy.copy(dict_data['hashtag'])
-            self.num_image = len(self.image)
+            self.fid = dict_data["fid"]
+            self.uid = dict_data["uid"]
+            self.body = dict_data["body"]
+            self.fclass = dict_data["fclass"]
+            self.display = dict_data["display"]
+            self.date = dict_data["date"]
+            self.star = dict_data["star"]
+            self.image = copy.copy(dict_data["image"])
+            self.hashtag = copy.copy(dict_data["hashtag"])
+            self.comment = copy.copy(dict_data["comment"])
+            self.iid = dict_data["iid"]
+
             self.num_comment = len(self.comment)
+            self.num_image = len(self.image)
+            self.star_flag = False
+            self.nickname = ""
         except KeyError as e:
             raise DictMakingError(error_type=f"Missing key: {str(e)}")
 
@@ -300,23 +286,20 @@ class Feed(SampleDomain):
         return {
             "fid": self.fid,
             "uid": self.uid,
-            "nickname": self.nickname,
             "body": self.body,
-            "date": self.date,
             "fclass": self.fclass,
-            "class_name": self.class_name,
-            "choice": copy.copy(self.choice),
-            "result": copy.copy(self.result),
-            "state": self.state,
-            "attend": copy.copy(self.attend),
-            "category":copy.copy(self.category),
-            "comment":copy.copy(self.comment),
-            "num_comment" :self.num_comment,
-            "star":self.star,
-            "star_flag" : self.star_flag,
-            "image":copy.copy(self.image),
-            "hashtag":copy.copy(self.hashtag),
-            "num_image": self.num_image
+            "display": self.display,
+            "date" : self.date,
+            "star": self.star,
+            "image": copy.copy(self.image),
+            "hashtag": copy.copy(self.hashtag),
+            "comment": copy.copy(self.comment),
+            "iid": self.iid,
+
+            "num_comment":self.num_comment,
+            "num_image":self.num_image,
+            "star_flag":self.star_flag,
+            "nickname" : self.nickname
         }
 
 
@@ -351,7 +334,9 @@ class Comment(SampleDomain):
         self.state = state
         self.like_user = copy.copy(like_user)
         self.num_like_user = len(self.like_user)
+
         self.owner = False
+        self.mention = ""
 
     def make_with_dict(self, dict_data):
         try:
