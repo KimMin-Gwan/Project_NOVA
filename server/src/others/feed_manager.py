@@ -13,6 +13,7 @@ import numpy as np
 import warnings
 from io import BytesIO
 from PIL import Image
+import re
 import imageio
 
 # Boto3의 경고 메시지 무시
@@ -1262,6 +1263,148 @@ class FeedManager:
         self._feed_search_engine:FeedSearchEngine = feed_search_engine
         self._num_feed = 0
         self._managed_feed_list = []
+
+    def __get_datetime(self, date_str):
+        return datetime.strptime(date_str, "%Y/%m/%d-%H:%M:%S")
+
+    def __set_datetime(self):
+        return datetime.now().strftime("%Y/%m/%d-%H:%M:%S")
+
+    def __get_today_date(self):
+        return datetime.now().strftime("%Y/%m/%d")
+
+#----------------------------Feed 좋아요 누르기----------------------------------------
+    # 유저가 참여한 feed인지 확인할것
+    # 사실상 User에게 전송하는 모든 feed는 이 함수를 통함
+    def _is_user_interacted(self, user, feeds:list):
+        result = []
+        for feed in feeds:
+            # 검열된 feed면 생략
+            if feed.state != "y":
+                continue
+
+            # 피드에 참여한 내역이 있는지 확인
+            attend = -1
+            for i, choice in enumerate(feed.attend):
+                for uid in choice:
+                    if uid == user.uid:
+                        attend = i
+
+            comment = self.__get_feed_comment(user=user, feed=feed)
+            feed.num_comment = len(feed.comment)
+            feed.attend = attend
+            feed.comment = comment
+            # 기본적으로 star_flag는 False
+            if feed.fid in user.like:
+                feed.star_flag = True
+            result.append(feed)
+        return result
+
+    # Feed에 좋아요를 눌렀을 때의 작용
+    def try_staring_feed(self, user:User, fid:str):
+        feed = self.__try_staring_feed(user=user, fid=fid)
+        feed = self._is_user_interacted(user, feeds=[feed])
+        return feed
+
+    # feed 와 상호작용 -> 관심 표시
+    def __try_staring_feed(self, user:User, fid):
+        feed_data = self._database.get_data_with_id(target="fid", id=fid)
+        feed = Feed()
+        feed.make_with_dict(feed_data)
+
+        flag = False
+        # fidNdate = "fid=date"
+
+        for fid_n_date in user.like:
+            # 문자열 변환
+            fid_n_date:str = fid_n_date
+            # 현재 Feed를 얻음
+            target_fid = fid_n_date.split('=')[0]
+            # 왜이랬는지 생각해봤더니 지울때 또 반복문 돌리니까 이렇게 한 거네
+            if target_fid == feed.fid:
+                user.like.remove(fid_n_date)
+                flag=True
+                break
+
+        date = datetime.now()
+        str_fid_n_date = feed.fid + "=" + self.__set_datetime()
+
+        if flag:
+            self._feed_search_engine.try_dislike_feed(fid=feed.fid, uid=user.uid)
+            #user.like.remove(str_fid_n_date)
+            feed.star -= 1
+        else:
+            self._feed_search_engine.try_like_feed(fid=feed.fid, uid=user.uid, like_time=date)
+            user.like.append(str_fid_n_date)
+            feed.star += 1
+
+        self._database.modify_data_with_id(target_id="fid",
+                                           target_data=feed.get_dict_form_data())
+        self._database.modify_data_with_id(target_id="uid",
+                                           target_data=user.get_dict_form_data())
+
+        return feed
+
+
+
+#---------------------------댓글 기능---------------------------------------------------------
+    # 멘션한 유저를 찾아내자
+    def _extract_mention_data(self, body):
+        # 정규식으로 찾음, 이메일 형식도 가져올수 있는 문제가 있어 정규식을 더 정교하게 설정
+        match = re.search(r'@(\w+)(?!\.\w+)', body)
+        # 매칭 실패시
+        if match:
+            return match.group(1)
+        return ""
+
+    # 댓글 작성
+    def make_new_comment_on_feed(self, user:User, fid, body):
+        feed_data = self._database.get_data_with_id(target="fid", id=fid)
+        feed = Feed()
+        feed.make_with_dict(dict_data=feed_data)
+
+        cid = fid+"-"+self.__set_datetime()+"-comment"
+        date = self.__get_today_date()
+        mention = self._extract_mention_data(body)
+
+        # 새로운 댓글을 작성함. 이 때, mention 데이터는 body 데이터를 이용해서 알아내야 한다.
+        new_comment = Comment(
+            cid=cid, fid=feed.fid, uid=user.uid,
+            uname=user.uname, body=body, date=date)
+        feed.comment.append(cid)
+
+        user.my_comment.append(cid)
+
+        self._database.add_new_data("cid", new_data=new_comment.get_dict_form_data())
+        self._database.modify_data_with_id("fid", target_data=feed.get_dict_form_data())
+
+        result = self._is_user_interacted(user=user, feeds=[feed])
+        return result
+
+    # 대댓글 작성
+
+    # 댓글에 좋아요를 누르는 기능
+    def try_like_comment(self, user:User, fid, cid):
+        feed_data = self._database.get_data_with_id(target="fid", id=fid)
+        feed = Feed()
+        feed.make_with_dict(dict_data=feed_data)
+
+        comment_data = self._database.get_data_with_id(target="cid", id=cid)
+        comment = Comment()
+        comment.make_with_dict(comment_data)
+
+        if user.uid in comment.like_user:
+            comment.like_user.remove(user.uid)
+            comment.like -= 1
+        else:
+            comment.like_user.append(user.uid)
+            comment.like += 1
+
+        self._database.modify_data_with_id("cid", target_data=comment.get_dict_form_data())
+
+        result = self._is_user_interacted(user=user, feeds=[feed])
+        return result
+
 
 
     # 1. interaction 수행
