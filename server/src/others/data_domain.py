@@ -302,6 +302,40 @@ class Feed(SampleDomain):
             "nickname" : self.nickname
         }
 
+class Interaction(SampleDomain):
+    def __init__(self, iid="", fid="", choice=[],
+                 attend=[]):
+        self.iid=iid
+        self.fid=fid
+        self.choice=choice
+        self.attend=attend  # 2차원배열
+
+        self.num_choice = len(self.choice)
+        self.result = [len(sublist) for sublist in self.attend] # 참여자 수
+
+        self.my_attend = -1  # 내가 선택한 정보 (-1 이면 참여 안한거임)
+
+    def make_with_dict(self, dict_data):
+        try:
+            self.iid = dict_data['iid']
+            self.fid = dict_data['fid']
+            self.choice = dict_data['choice']
+            self.attend = dict_data['attend']
+
+            self.num_choice = len(self.choice)
+            self.result = [len(sublist) for sublist in self.attend] # 참여자 수
+        except Exception as e:
+            raise DictMakingError(error_type=e)
+
+    def get_dict_form_data(self):
+        return {
+            "iid":self.iid,
+            "fid":self.fid,
+            "choice":self.choice,
+            "result":self.result,
+            "num_choice":self.num_choice,
+            "my_attend":self.my_attend,
+        }
 
 class Banner(SampleDomain):
     def __init__(self, baid="", ba_url=""):

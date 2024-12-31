@@ -2,7 +2,7 @@ from model.base_model import BaseModel
 from model import Local_Database
 #from others.data_domain import Alert
 from others import CoreControllerLogicError,FeedManager, FeedSearchEngine
-from others import Comment, Feed
+from others import Comment, Feed, User, Interaction
 from pprint import pprint
 
 
@@ -12,6 +12,8 @@ class FeedModel(BaseModel):
         self._feeds = []
         self._key = -1
         self._comments = []
+        self._interactions = []
+        self._send_data = []
 
     def set_home_feed_data(self, feed_manager:FeedManager, key= -1):
         self._feeds, self._key = feed_manager.get_feed_in_home(user=self._user, key=key)
@@ -117,48 +119,118 @@ class FeedModel(BaseModel):
                                                                fid=data_payload.fid)
         return
     
-    # 유저가 참여한 feed인지 확인할것
-    # 사실상 User에게 전송하는 모든 feed는 이 함수를 통함
-    def _is_user_interacted(self, user, feeds:list):
-        result = []
-        for feed in feeds:
 
-            feed:Feed =feed
-            # 검열된 feed면 생략
-            if feed.state != "y":
+    # 피드 내용을 다듬어서 전송가능한 형태로 세팅
+    def _set_feed_json_data(self, user, feeds:list, feed_manager:FeedManager):
+        users = []
+        uids=[]
+        for single_feed in feeds:
+            single_feed:Feed = single_feed
+            uids.append(single_feed.uid)
+
+        user_datas = self._database.get_datas_with_ids(target_id="uid", ids=uids)
+
+        for user_data in user_datas:
+            user = User()
+            user.make_with_dict(user_data)
+            users.append(user_data)
+
+        for feed, user in zip(feeds, users):
+            # 노출 현황 이 1 이하면 죽어야됨
+            # 0: 삭제됨 1 : 비공개 2: 차단 3: 댓글 작성 X 4 : 정상(전체 공개)
+            if feed.display < 3:
                 continue
+            
+            # 롱폼은 바디 데이터를 받아야됨
+            if feed.fclass != "short":
+                feed.body = feed_manager.get_body_html(feed.body)
 
-            # 피드에 참여한 내역이 있는지 확인
-            attend = -1
-            for i, choice in enumerate(feed.attend):
-                for uid in choice:
-                    if uid == user.uid:
-                        attend = i
-
-            comment = self.__get_feed_comment(user=user, feed=feed)
-
+            # comment 길이 & image 길이
             feed.num_comment = len(feed.comment)
-            feed.attend = attend
-            feed.comment = comment
-            # 기본적으로 star_flag는 False
+            feed.num_image = len(feed.image)
+
+            # 좋아요를 누를 전적
             if feed.fid in user.like:
                 feed.star_flag = True
-            result.append(feed)
-        return result
 
-    def __get_feed_comment(self, user, feed:Feed):
-        if len(feed.comment) == 0:
-            comment = Comment(body="아직 작성된 댓글이 없어요")
-            comment = comment.get_dict_form_data()
-        else:
+            # 피드 작성자 이름
+            feed.nickname = user.uname
+        return
+    
+    # 상호작용에서 내가 상호작용한 내용이 있는지 검토하는 부분
+    def _set_feed_interactied(self, user, interactions:list):
+        for interaction in zip(interactions):
+            for i, uid in enumerate(interaction.attend):
+                if uid == user.uid:
+                    interaction.my_attend = i
+        return
+
+    # 전송 데이터 만들기
+    def __set_send_data_feed_interaction_comment(self):
+        for feed, comment in zip(self._feeds, self._comments):
+            feed:Feed = feed
+            comment:Comment = comment
+
+            # 0: 삭제됨 1 : 비공개 2: 차단 3: 댓글 작성 X 4 : 정상(전체 공개)
+            if feed.display < 3:
+                continue
+
+            interaction = Interaction()
+            for single_interaction in self._interactions:
+                if single_interaction.fid == feed.fid:
+                    interaction = single_interaction
+
+            dict_data={}
+            dict_data['feed'] = feed.get_dict_form_data()
+            dict_data['comment'] = comment.get_dict_form_data()
+            dict_data['interaction'] = interaction.get_dict_form_data()
+
+            self._send_data.append(dict_data)
+        return
+
+    
+    ## 유저가 참여한 feed인지 확인할것
+    ## 사실상 User에게 전송하는 모든 feed는 이 함수를 통함
+    #def _is_user_interacted(self, user, feeds:list):
+        #result = []
+        #for feed in feeds:
+
+            #feed:Feed =feed
+            ## 검열된 feed면 생략
+            #if feed.state != "y":
+                #continue
+
+            ## 피드에 참여한 내역이 있는지 확인
+            #attend = -1
+            #for i, choice in enumerate(feed.attend):
+                #for uid in choice:
+                    #if uid == user.uid:
+                        #attend = i
+
+            #comment = self.__get_feed_comment(user=user, feed=feed)
+
+            #feed.num_comment = len(feed.comment)
+            #feed.attend = attend
+            #feed.comment = comment
+            ## 기본적으로 star_flag는 False
+            #if feed.fid in user.like:
+                #feed.star_flag = True
+            #result.append(feed)
+        #return result
+
+    #def __get_feed_comment(self, user, feed:Feed):
+        #if len(feed.comment) == 0:
             #comment = Comment(body="아직 작성된 댓글이 없어요")
             #comment = comment.get_dict_form_data()
-            cid = feed.comment[-1]
-            comment = self._database.get_data_with_id(target="cid", id=cid)
-            # 기본적으로 owner는 False로 고정
-            if comment['uid'] == user.uid:
-                comment['owner'] = True
-        return comment
+        #else:
+            ##comment = Comment(body="아직 작성된 댓글이 없어요")
+            ##comment = comment.get_dict_form_data()
+            #cid = feed.comment[-1]
+            #comment = self._database.get_data_with_id(target="cid", id=cid)
+            ## 기본적으로 owner는 False로 고정
+            #if comment['uid'] == user.uid:
+                #comment['owner'] = True
+        #return comment
     
 
     def get_response_form_data(self, head_parser):
@@ -166,7 +238,8 @@ class FeedModel(BaseModel):
             body = {
                 'feed' : self._make_dict_list_data(list_data=self._feeds),
                 'key' : self._key,
-                'comments' : self._make_dict_list_data(list_data=self._comments)
+                'comments' : self._make_dict_list_data(list_data=self._comments),
+                'send_data' : self._send_data
             }
 
             response = self._get_response_data(head_parser=head_parser, body=body)
