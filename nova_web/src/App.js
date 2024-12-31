@@ -51,6 +51,8 @@ import FeedThumbnail from "./component/feed-list/FeedThumbnail.js";
 import useFetchData from "./hooks/useFetchData.js";
 import MoreProjects from "./pages/NovaFunding/BiasFunding/MoreProjects.js";
 import BiasBoxes from "./component/BiasBoxes.js";
+import { ContentFeed } from "./component/feed.js";
+import FeedDetail from "./pages/FeedDetail/FeedDetail.js";
 // 401 이면 바이어스 격자 무늬로 띄우기
 // 401 이면 alert - 로그인 필요 문구 띄우기
 // 다크 모드 클래스 반환 함수
@@ -113,38 +115,30 @@ function App() {
     handleValidCheck();
   }, []);
 
+  let [tagList, setTagList] = useState([]);
+
+  let copy = [];
+  function fetchTagData() {
+    fetch("https://nova-platform.kr/home/realtime_best_hashtag", {
+      credentials: "include",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setTagList(data.body.hashtags);
+        copy = data.body.hashtags;
+      });
+  }
+
+  useEffect(() => {
+    fetchTagData();
+  }, []);
+
   let [showBox, setShowBox] = useState(false);
   let [blackBox, setBlackBox] = useState("");
 
   let navigate = useNavigate();
 
-  function toNavigate() {}
-
-  // 다크모드 버튼이 눌리면 바뀌도록
-  // true면 다크모드 , false면 컬러
-  // let [changeMode, setChangeMode] = useState(true);
-  // let [brightMode, setBrightMode] = useState("");
-  // function handleChangeMode() {
-  //   if (changeMode) {
-  //     setBrightMode("");
-  //     setChangeMode(false);
-  //   } else {
-  //     setBrightMode("bright-mode");
-  //     setChangeMode(true);
-  //   }
-  // }
-
-  // // 초기 상태를 localStorage에서 불러오거나 기본값으로 설정
-  // const [brightMode, setBrightMode] = useState(() => {
-  //   return localStorage.getItem("brightMode") || "bright"; // 기본값은 'bright'
-  // });
-
-  // // 다크 모드 전환 함수
-  // const handleChangeMode = () => {
-  //   const newMode = brightMode === "dark" ? "bright" : "dark";
-  //   setBrightMode(newMode);
-  //   localStorage.setItem("brightMode", newMode); // 상태를 localStorage에 저장
-  // };
+  function animationTag() {}
 
   // // brightMode 상태가 변경될 때마다 body 클래스 업데이트
   const [brightMode, setBrightMode] = useState(() => {
@@ -187,6 +181,7 @@ function App() {
       <Route path="/feed_hash_list/:fid" element={<FeedHashList />}></Route>
       <Route path="/feed_list" element={<FeedList brightMode={brightMode} />}></Route>
       <Route path="/feed_list/:fid" element={<FeedList />}></Route>
+      <Route path="/feed_detail/:fid" element={<FeedDetail />}></Route>
       <Route path="/nova_funding" element={<NovaFunding brightMode={brightMode} />}></Route>
       <Route path="/like_funding" element={<LikeFunding />}></Route>
       <Route path="/week100" element={<Week100 />}></Route>
@@ -204,9 +199,9 @@ function App() {
         path="/"
         element={
           <div className="all-box">
-            {/* <section className="contents com1">
+            <section className="contents com1">
               <LeftBar brightMode={brightMode} />
-            </section> */}
+            </section>
             <div
               onClick={(e) => {
                 e.stopPropagation();
@@ -266,7 +261,7 @@ function App() {
               </div>
 
               <section>
-                <div className="rt-ranking">{"<실시간랭킹>"}들어갈 와이어프레임</div>
+                <div className="rt-ranking ">실시간 랭킹</div>
               </section>
 
               <section className="contents">
