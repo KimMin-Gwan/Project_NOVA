@@ -67,6 +67,10 @@ export default function FeedDetail({ feed }) {
             <div className={style["action-container"]}>상호작용</div>
           </div>
         </div>
+
+        <div className={style["input-container"]}>
+          <input type="text" id={style["comment"]} placeholder="당신의 생각을 남겨보세요" />
+        </div>
         {/* <div className={style["comment-box"]}>
           <div className={style["comment-wrapper"]}>
             <div className={style["comment-user"]}>

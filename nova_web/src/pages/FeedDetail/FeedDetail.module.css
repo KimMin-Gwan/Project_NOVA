@@ -53,3 +53,24 @@
 .action-container {
   text-align: end;
 }
+
+.input-container {
+  width: 100%;
+  margin-top: 15px;
+
+  padding-bottom: 15px;
+  #comment {
+    width: 90%;
+    padding: 10px 0px;
+    display: flex;
+    margin: 0 auto;
+    border-radius: 20px;
+    border: none;
+    background-color: gray;
+  }
+
+  #comment::placeholder {
+    padding: 20px;
+    color: white;
+  }
+}
