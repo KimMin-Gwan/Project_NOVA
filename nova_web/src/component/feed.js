@@ -1590,7 +1590,7 @@ export function ContentFeed({ feed, handleCheckStar }) {
       className={style["wrapper-container"]}
       onClick={(e) => {
         e.preventDefault();
-        navigate(`/feed_detail/${feed.fid}`);
+        navigate(`/feed_detail/${feed.fid}`, { state: { commentClick: false } });
       }}
     >
       <div className={style["user-container"]}>
@@ -1625,7 +1625,12 @@ export function ContentFeed({ feed, handleCheckStar }) {
           </div>
 
           <div className={style["action-button"]}>
-            <button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate(`/feed_detail/${feed.fid}`, { state: { commentClick: true } });
+              }}
+            >
               <img src={comment} alt="comment-icon" />
             </button>
             <span>{feed.num_comment}</span>

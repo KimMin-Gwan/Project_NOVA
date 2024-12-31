@@ -7,11 +7,17 @@ import backword from "./../../img/back_icon.png";
 
 import { useNavigate } from "react-router-dom";
 import { getModeClass } from "./../../App.js";
+import { useRef } from "react";
 const NOVALogin = ({ brightmode }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [login, setLogin] = useState("");
   const [detail, setDetail] = useState("");
+  let emailRef = useRef(null);
+
+  useEffect(() => {
+    emailRef.current.focus();
+  }, []);
 
   const navigate = useNavigate();
   const handleLogin = async () => {
@@ -91,7 +97,14 @@ const NOVALogin = ({ brightmode }) => {
           이메일
           <br />
           <label>
-            <input type="email" placeholder="이메일 주소" value={email} onChange={(e) => setEmail(e.target.value)} className={style.input} />
+            <input
+              ref={emailRef}
+              type="email"
+              placeholder="이메일 주소"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className={style.input}
+            />
           </label>
           {login === "email" && <div className={style.errorMessage}>{detail}</div>}
         </div>

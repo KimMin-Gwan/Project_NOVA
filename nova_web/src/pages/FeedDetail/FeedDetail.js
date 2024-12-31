@@ -1,18 +1,32 @@
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { ContentFeed } from "../../component/feed";
 import { useState } from "react";
 import { useEffect } from "react";
 import style from "./FeedDetail.module.css";
+import { useRef } from "react";
 
 export default function FeedDetail({ feed }) {
   let navigate = useNavigate();
   let { fid } = useParams();
 
-  //   const [params] = useSearchParams();
-  //   const FID = params.get("fid");
+  let location = useLocation();
+  let { state } = location;
+  const [isLoading, setIsLoading] = useState(true); // 로딩 상태 관리
+
+  let commentRef = useRef(null);
+  useEffect(() => {
+    //     // isLoading이 false일 때만 focus()가 실행되도록
+    if (!isLoading && commentRef.current && state.commentClick) {
+      //       // 렌더링이 완료된 후 focus를 지연시킴
+      //       setTimeout(() => {
+      commentRef.current.focus();
+      //       }, 0); // 0초 후 실행
+    }
+  }, [isLoading]);
+  //   //   const [params] = useSearchParams();
+  //   //   const FID = params.get("fid");
 
   let [feedData, setFeedData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true); // 로딩 상태 관리
 
   async function fetchFeed() {
     await fetch(`https://nova-platform.kr/feed_explore/get_feed?fid=${fid}`, {
@@ -69,7 +83,12 @@ export default function FeedDetail({ feed }) {
         </div>
 
         <div className={style["input-container"]}>
-          <input type="text" id={style["comment"]} placeholder="당신의 생각을 남겨보세요" />
+          <input
+            ref={commentRef}
+            type="text"
+            id={style["comment"]}
+            placeholder="당신의 생각을 남겨보세요"
+          />
         </div>
         {/* <div className={style["comment-box"]}>
           <div className={style["comment-wrapper"]}>
