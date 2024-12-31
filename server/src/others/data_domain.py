@@ -323,7 +323,7 @@ class Banner(SampleDomain):
 
 class Comment(SampleDomain):
     def __init__(self, cid="", fid="", uid="", uname="",
-                 body="", date="", like=0, state="y", like_user=[]):
+                 body="", date="", like=0, state="y", like_user=[], mention=""):
         self.cid = cid
         self.fid = fid
         self.uid = uid
@@ -336,7 +336,7 @@ class Comment(SampleDomain):
         self.num_like_user = len(self.like_user)
 
         self.owner = False
-        self.mention = ""
+        self.mention = mention
 
     def make_with_dict(self, dict_data):
         try:
