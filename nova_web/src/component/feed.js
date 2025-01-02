@@ -1605,6 +1605,13 @@ export function ContentFeed({ feed, handleCheckStar }) {
           })}
         </div>
         <div className={style["body-content"]}>{feed.body}</div>
+        {feed.image.length > 0 ? (
+          <div className={style["image-container"]}>
+            <img src={feed.image} alt="image" />
+          </div>
+        ) : (
+          <div></div>
+        )}
         {feed.fclass === "balance" && <SelectOption feed={feed} />}
         {feed.fclass === "multiple" && <QuizOption feed={feed} />}
       </div>
