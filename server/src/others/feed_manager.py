@@ -1733,6 +1733,12 @@ class FeedManager:
 
         return feeds
 
+
+
+
+
+
+
     # 1. interaction 수행
 
     # 2. 피드 작성 수정 삭제
