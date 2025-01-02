@@ -131,8 +131,9 @@ class FeedModel(BaseModel):
     # 1. 댓글 달기 -> 2. 댓글 달고나서 전체 댓글 데이터만 제공
     # 파라미터 수정 필요 
     def try_make_new_comment(self, feed_manager:FeedManager, data_payload):
-        feed_manager.make_new_comment_on_feed(user=self._user,
+        feed_manager.try_make_comment_on_feed(user=self._user,
                                             fid=data_payload.fid,
+                                            target_cid=data_payload.target_cid,
                                             body=data_payload.body)
         self._comments = feed_manager.get_all_comment_on_feed( user=self._user,
                                                                fid=data_payload.fid)
@@ -151,7 +152,8 @@ class FeedModel(BaseModel):
     def try_remove_comment(self, feed_manager:FeedManager, data_payload):
         detail, result = feed_manager.remove_comment_on_feed( user=self._user,
                                                                fid=data_payload.fid,
-                                                               cid=data_payload.cid)
+                                                               cid=data_payload.cid
+                                                               )
         self._comments = feed_manager.get_all_comment_on_feed( user=self._user,
                                                                fid=data_payload.fid)
         return

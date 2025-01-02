@@ -72,6 +72,7 @@ class Core_Service_View(Master_View):
         def get_my_bias(request:Request):
             request_manager = RequestManager()
             data_payload = DummyRequest()
+            print(request.cookies)
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
             # 검사 결과에 없으면 없다는 결과로 가야됨
             #if not request_manager.jwt_payload.result:
@@ -260,10 +261,8 @@ class Core_Service_View(Master_View):
                 #raise request_manager.credentials_exception
 
             feed_controller =Feed_Controller(feed_manager=self.__feed_manager)
-            model = feed_controller.get_specific_comment_data(database=self.__database,
-                                                        request=request_manager,
-                                                        feed_search_engine=self.__feed_search_engine,
-                                                        num_feed=5)
+            model = feed_controller.get_all_comment_on_feed(database=self.__database,
+                                                        request=request_manager)
 
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
@@ -470,8 +469,7 @@ class Core_Service_View(Master_View):
 
             feed_controller =Feed_Controller(feed_manager=self.__feed_manager)
             model = feed_controller.get_all_comment_on_feed(database=self.__database,
-                                                        request=request_manager,
-                                                        feed_manager=self.__feed_manager)
+                                                        request=request_manager)
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response
@@ -716,6 +714,7 @@ class MakeFeedCommentRequest(RequestHeader):
         body = request['body']
         self.fid = body['fid']
         self.body = body['body']
+        self.target_cid = body['target_cid']
 
 class LoginRequest(RequestHeader):
     def __init__(self, request) -> None:

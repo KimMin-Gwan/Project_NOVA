@@ -261,7 +261,8 @@ class Feed_Controller:
         model = FeedModel(database=database)
         try:
             # 유저가 있으면 세팅
-            model.set_user_with_email(request=request.jwt_payload)
+            if request.jwt_payload != "":
+                model.set_user_with_email(request=request.jwt_payload)
             model.try_interact_feed(feed_manager=feed_manager,
                                          data_payload=request.data_payload)
 
@@ -282,7 +283,8 @@ class Feed_Controller:
         model = FeedModel(database=database)
         try:
             # 유저가 있으면 세팅
-            model.set_user_with_email(request=request.jwt_payload)
+            if request.jwt_payload != "":
+                model.set_user_with_email(request=request.jwt_payload)
             model.try_staring_feed(feed_manager=feed_manager,
                                          data_payload=request.data_payload)
 
@@ -303,7 +305,8 @@ class Feed_Controller:
         model = FeedModel(database=database)
         try:
             # 유저가 있으면 세팅
-            model.set_user_with_email(request=request.jwt_payload)
+            if request.jwt_payload != "":
+                model.set_user_with_email(request=request.jwt_payload)
             model.try_make_new_comment(feed_manager=feed_manager,
                                          data_payload=request.data_payload)
 
@@ -320,12 +323,13 @@ class Feed_Controller:
 
     # comment 모두 요청
     def get_all_comment_on_feed(self, database:Local_Database,
-                               request, feed_manager:FeedManager):
+                               request):
         model = FeedModel(database=database)
         try:
             # 유저가 있으면 세팅
-            model.set_user_with_email(request=request.jwt_payload)
-            model.get_all_comment_on_feed(feed_manager=feed_manager,
+            if request.jwt_payload != "":
+                model.set_user_with_email(request=request.jwt_payload)
+            model.get_all_comment_on_feed(feed_manager=self.__feed_manager,
                                          data_payload=request.data_payload)
 
         except CustomError as e:
@@ -345,7 +349,8 @@ class Feed_Controller:
         model = FeedModel(database=database)
         try:
             # 유저가 있으면 세팅
-            model.set_user_with_email(request=request.jwt_payload)
+            if request.jwt_payload != "":
+                model.set_user_with_email(request=request.jwt_payload)
             model.try_remove_comment(feed_manager=feed_manager,
                                          data_payload=request.data_payload)
 
@@ -366,7 +371,8 @@ class Feed_Controller:
         model = FeedModel(database=database)
         try:
             # 유저가 있으면 세팅
-            model.set_user_with_email(request=request.jwt_payload)
+            if request.jwt_payload != "":
+                model.set_user_with_email(request=request.jwt_payload)
             model.try_like_comment(feed_manager=feed_manager,
                                          data_payload=request.data_payload)
 
@@ -385,7 +391,10 @@ class Feed_Controller:
     def try_edit_feed(self, database:Local_Database,
                                request, feed_manager:FeedManager) -> FeedEditModel:
         model = FeedEditModel(database=database)
-        model.set_user_with_email(request=request.jwt_payload)
+
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
+
         model.try_edit_feed(feed_manager=feed_manager,
                                         data_payload=request.data_payload)
         model.check_result(request_manager=request)

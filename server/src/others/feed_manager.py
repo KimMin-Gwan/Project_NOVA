@@ -1554,8 +1554,8 @@ class FeedManager:
         return "Update Success",True
 
     # 댓글 삭제
-    def remove_comment_on_feed(self, user:User, fid, target_cid):
-        comment_data = self._database.get_data_with_id(target="cid", id=target_cid)
+    def remove_comment_on_feed(self, user:User, fid, cid):
+        comment_data = self._database.get_data_with_id(target="cid", id=cid)
         comment = Comment()
         comment.make_with_dict(comment_data)
 
@@ -1570,8 +1570,8 @@ class FeedManager:
 
         # 이거 지우는거 뭔가 대책이 필요함
         # 댓글 삭제할 떄, FEED의 경우와 동일하게 DB에서 삭제하지 않고, 상태만 업데이트하고, 작성 목록에서만 삭제하면 됨.
-        user.my_comment.remove(target_cid)
-        feed.comment.remove(target_cid)
+        user.my_comment.remove(cid)
+        feed.comment.remove(cid)
         # self._database.delete_data_with_id(target="cid", id=target_cid)
 
         # 데이터 업데이트

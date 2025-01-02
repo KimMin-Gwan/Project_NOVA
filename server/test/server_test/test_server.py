@@ -32,19 +32,24 @@ else:
 
 fid = "6063-qfgh-2540-3URvvc"
 
-test_url = f"http://127.0.0.1:4000/feed_explore/feed_detail/feed_data?fid={fid}"
+test_url = f"http://127.0.0.1:4000/feed_explore/feed_detail/comment_data?fid={fid}"
 #test_url = "https://nova-platform.kr/nova_fund_system/project_detail?pid=5"
 
-# 로그인 요청
-response = session.get(test_url)
 
-# 로그인 성공 여부 확인
+print("????")
+# 쿠키 확인
+print("Cookies after login:", session.cookies.get_dict()) 
+print("????")
+
+
+# 헤더 포함 요청 테스트
+response = session.get(test_url, cookies=session.cookies.get_dict())
+
+# 결과 확인
 if response.status_code == 200:
     pprint(response.json())
 else:
     print("실패:", response.status_code, response.text)
-
-
 
 
 
