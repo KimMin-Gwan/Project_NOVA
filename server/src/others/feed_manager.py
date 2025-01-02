@@ -1672,7 +1672,6 @@ class FeedManager:
         feed = Feed()
         feed.make_with_dict(fid_data)
 
-
         try:
             iid = feed.iid
             interaction_data = self._database.get_data_with_id(target="iid", id=iid)
@@ -1733,7 +1732,7 @@ class FeedManager:
 
         return feeds
 
-
+    def __make_new_interaction(self, fid, ):
 
 
 
