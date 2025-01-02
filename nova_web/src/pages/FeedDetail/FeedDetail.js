@@ -5,6 +5,9 @@ import { useEffect } from "react";
 import style from "./FeedDetail.module.css";
 import { useRef } from "react";
 
+import back from "./../../img/backword.png";
+import star from "./../../img/favorite.png";
+
 export default function FeedDetail({ feed }) {
   let navigate = useNavigate();
   let { fid } = useParams();
@@ -55,7 +58,10 @@ export default function FeedDetail({ feed }) {
   return (
     <div className={style["FeedDetail"]}>
       <div className={style["top-container"]} onClick={onClickNav}>
-        뒤로
+        <button className={style["back-button"]}>
+          <img src={back} />
+          <span>뒤로</span>
+        </button>
       </div>
 
       <div>
@@ -72,24 +78,32 @@ export default function FeedDetail({ feed }) {
         <div className={style["comment-box"]}>
           <div className={style["comment-wrapper"]}>
             <div className={style["comment-user"]}>
-              <div>{feedData[0].comment.uname}</div>
-              <div>{feedData[0].comment.date}</div>
+              <div>
+                {feedData[0].comment.uname}
+                <span>{feedData[0].comment.date}</span>
+              </div>
               <div>신고</div>
             </div>
 
             <div className={style["comment-content"]}>{feedData[0].comment.body}</div>
-            <div className={style["action-container"]}>상호작용</div>
+            <div className={style["action-container"]}>
+              <div className={style["button-box1"]}>
+                <div className={style["action-button"]}>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      // handleCheckStar(feed.fid, e);
+                    }}
+                  >
+                    <img src={star} alt="star-icon" />
+                  </button>
+                  <span>0</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div className={style["input-container"]}>
-          <input
-            ref={commentRef}
-            type="text"
-            id={style["comment"]}
-            placeholder="당신의 생각을 남겨보세요"
-          />
-        </div>
         {/* <div className={style["comment-box"]}>
           <div className={style["comment-wrapper"]}>
             <div className={style["comment-user"]}>
@@ -102,6 +116,14 @@ export default function FeedDetail({ feed }) {
             <div className={style["action-container"]}>상호작용</div>
           </div>
         </div> */}
+      </div>
+      <div className={style["input-container"]}>
+        <input
+          ref={commentRef}
+          type="text"
+          id={style["comment"]}
+          placeholder="당신의 생각을 남겨보세요"
+        />
       </div>
     </div>
   );

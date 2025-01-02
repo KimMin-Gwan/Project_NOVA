@@ -93,3 +93,32 @@
 .tag-container.bright-mode {
   background-color: #ffffff;
 }
+
+/* 검색 박스 */
+.search-section {
+  width: 100%;
+}
+
+.search-filter {
+  display: flex;
+  margin: 0 auto;
+  justify-content: space-between;
+  width: 90%;
+  margin-top: -10px;
+  margin-bottom: 10px;
+
+  button {
+    min-width: 55px;
+    padding: 5px 10px;
+    cursor: pointer;
+    border: 1px solid #359aff;
+  }
+}
+
+.sort-btn-container {
+  display: flex;
+
+  button {
+    margin-left: 5px;
+  }
+}
