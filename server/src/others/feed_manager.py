@@ -1253,8 +1253,6 @@ class ImageDescriper():
                 os.remove(file)
         return
 
-
-
 class FeedManager:
     def __init__(self, database, fclasses, feed_search_engine) -> None:
         self._feedClassManagement = FeedClassManagement(fclasses=fclasses)
@@ -1426,46 +1424,10 @@ class FeedManager:
         return "COMPLETE", True
 
 #------------------------------Feed 좋아요 누르기----------------------------------------------
-    # 유저가 참여한 feed인지 확인할것
-    # 사실상 User에게 전송하는 모든 feed는 이 함수를 통함
-    # 이거 수정 해야하는 부분. IID에 맞춰서 업데이트 작업이 필요함.
-    def _is_user_interacted(self, user, feeds:list):
-        result = []
-        for feed in feeds:
-            # 검열된 feed면 생략
-            if feed.state != "y":
-                continue
-
-            # 피드에 참여한 내역이 있는지 확인
-            attend = -1
-            feed_iid = feed.iid
-
-            interaction_data = self._database.get_data_with_id(target="iid",id=feed_iid)
-            interaction = Interaction()
-            interaction.make_with_dict(interaction_data)
-
-            for i, choice in enumerate(interaction.attend):
-                for uid in choice:
-                    if uid == user.uid:
-                        attend = i
-
-            comment = self.__get_feed_comment(user=user, fid=feed.fid)
-
-            feed.num_comment = len(feed.comment)
-            feed.attend = attend
-            feed.comment = comment
-
-            # 기본적으로 star_flag는 False
-            if feed.fid in user.like:
-                feed.star_flag = True
-
-            result.append(feed)
-        return result
 
     # Feed에 좋아요를 눌렀을 때의 작용
     def try_staring_feed(self, user:User, fid:str):
         feed = self.__try_staring_feed(user=user, fid=fid)
-        feed = self._is_user_interacted(user, feeds=[feed])
         return feed
 
     # feed 와 상호작용 -> 관심 표시
@@ -1507,152 +1469,10 @@ class FeedManager:
 
         return feed
 
-#------------------------------------홈에 피드를 보여주는 기능------------------------------------
-    # 홈에 보낼 Feed를 보내주기 위해 피드데이터를 만들어서 리턴하는 함수
-    def __set_send_feed(self, target_feed):
-        result_key = 0
-        target_fid = []
-        for single_feed in target_feed:
-            target_fid.append(single_feed.fid)
-        feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=target_fid)
-
-        result = []
-        for data in feed_datas:
-            feed = Feed()
-            feed.make_with_dict(data)
-            result.append(feed)
-
-        return result, result_key
-
-    # 홈 화면에서 feed를 요청하는 상황
-    def get_feed_in_home(self, user:User, key:int = -4):
-        if user.uid != "":
-            managed_user = self._managed_user_table.find_user(user=user)
-            result, result_key = self._get_home_feed_with_user(user=managed_user, key=key)
-            result = self._is_user_interacted(managed_user, result)
-        else:
-            result, result_key = self._get_home_feed(key=key)
-            managed_user = ManagedUser()
-            result = self._is_user_interacted(managed_user, result)
-
-        return result, result_key
-
-    def _get_home_feed_with_user(self, user:ManagedUser, key):
-        sample_feeds = []
-        count = 0
-        while True:
-            if count > 100:
-                break
-            target_category =self.__get_argo(user)
-            #present_feed = self.pick_single_feed_with_category(user=user, category=target_category)
-            single_feed = self.pick_single_feed_with_category(user=user, category=target_category)
-            if single_feed.key == -1:
-                count += 1
-                user.history.clear()
-                continue
-            sample_feeds.append(single_feed)
-            result_key = single_feed.key
-
-            if len(sample_feeds) == 3:
-                break
-
-        result, _ = self.__set_send_feed(target_feed=sample_feeds)
-        return result, result_key
-
-    def _get_home_feed(self, key=-4):
-        sample_feeds = []
-        if key <= 0:
-            key = self._num_feed -1
-            single_feed = self._get_single_managed_feed(key=key)
-            sample_feeds.append(single_feed)
-            result_key = single_feed.key
-
-        count = 0
-        while True:
-            if count > 8:
-                break
-            single_feed = self.pick_single_feed_with_key(key=key)
-            if single_feed.key == -1:
-                count += 1
-                key = self._num_feed - 1
-                continue
-            sample_feeds.append(single_feed)
-            result_key = single_feed.key
-            key = result_key
-
-            if len(sample_feeds) == 3:
-                break
-
-        result, _ = self.__set_send_feed(target_feed=sample_feeds)
-        return result, result_key
-
-    # fid나 key로 단일 feed 하나만 호출할 때
-    def _get_single_managed_feed(self, key = -1, fid = ""):
-        target_feed = None
-        if key != -1:
-            for feed in self._managed_feed_list:
-                if feed.key == key:
-                    target_feed=feed
-        else:
-            for feed in self._managed_feed_list:
-                if feed.fid== fid:
-                    target_feed=feed
-
-        if not target_feed:
-            target_feed = ManagedFeed(key=-1)
-        return target_feed
-
-    # 단일 피드 뽑기
-    # 만약 추천순 같이 정렬이 바뀔 일이 있으면
-    # 여기다가 매게변수로 정렬된 리스트를 주면됨
-    #  아니면 걍 내부에서 소팅 돌링 별도의 리스트를 가지고 검색할것
-    def pick_single_feed_with_key(self, key, fclass = "None"):
-        target = None
-        flag = False
-        for managed_feed in reversed(self._managed_feed_list):
-            if managed_feed.key == key:
-                flag = True
-                continue
-            if flag:
-                if fclass == "None":
-                    target = managed_feed
-                    break
-
-                if managed_feed.fclass == fclass:
-                    target = managed_feed
-                    break
-        return target
-
-    # 이건 카테고리에 있는 단일 피드 뽑는 함수
-    def pick_single_feed_with_category(self, user, category, fclass="None"):
-        target = None
-
-        for managed_feed in reversed(self._managed_feed_list):
-            if fclass != "None":
-                if managed_feed.fclass != fclass:
-                    continue
-
-            if managed_feed.fid in user.history:
-                continue
-            target = managed_feed
-
-            # 옵션이 하나도 없는 사람은 category를 검사할 수 없음
-            if category == "None":
-                break
-
-            # 옵션 이 있는 사람은 카테고리 검사 하삼
-            if category in target.category:
-                break
-
-        if target:
-            user.history.append(target.fid)
-        else:
-            # 만약에 category로 찍은 데이터가 없음?
-            target = ManagedFeed(key=-1)
-        return target
 
 #-----------------------------------댓글 기능--------------------------------------------------
     # 댓글 좋아요를 누른 정보를 가져옴
+    # 내가 좋아요를 누를 댓글인지 플래그를 올리는 함수
     # 이거 왜 이해 안되노??? 내가 멍청한가
     def __get_comment_liked_info(self, user:User, comments):
         for comment in comments:
@@ -1661,19 +1481,6 @@ class FeedManager:
             else:
                 comment.like_user = False
         return
-
-    # Feed에 작성된 나의 댓글을 확인한다.
-    def __get_feed_comment(self, user, feed:Feed):
-        if len(feed.comment) == 0:
-            comment = Comment(body="아직 작성된 댓글이 없어요")
-            comment = comment.get_dict_form_data()
-        else:
-            cid = feed.comment[-1]
-            comment = self._database.get_data_with_id(target="cid", id=cid)
-            # 기본적으로 owner는 False로 고정
-            if comment['uid'] == user.uid:
-                comment['owner'] = True
-        return comment
 
     # 멘션한 유저를 찾아내자
     def _extract_mention_data(self, body):
@@ -1690,23 +1497,24 @@ class FeedManager:
         feed = Feed()
         feed.make_with_dict(dict_data=feed_data)
 
-        cid = fid+"-"+self.__set_datetime()+"-comment"
+
+        # 중복되면 사고가 일어남
+        cid = fid+"-"+self.__set_datetime()
         date = self.__get_today_date()
         mention = self._extract_mention_data(body)
 
         # 새로운 댓글을 작성함. 이 때, mention 데이터는 body 데이터를 이용해서 알아내야 한다.
         new_comment = Comment(
             cid=cid, fid=feed.fid, uid=user.uid,
-            uname=user.uname, body=body, date=date)
+            uname=user.uname, body=body, date=date, mention=mention)
         feed.comment.append(cid)
 
         user.my_comment.append(cid)
 
         self._database.add_new_data("cid", new_data=new_comment.get_dict_form_data())
         self._database.modify_data_with_id("fid", target_data=feed.get_dict_form_data())
-
-        result = self._is_user_interacted(user=user, feeds=[feed])
-        return result
+        self._database.modify_data_with_id("uid", target_data=user.get_dict_form_data())
+        return
 
     # 대댓글 작성
     # 대댓글 기능에서 대댓글과 일반 댓글을 구분할 수 있는 방법이 있을까?
@@ -1736,10 +1544,7 @@ class FeedManager:
 
         self._database.add_new_data("cid", new_data=new_comment.get_dict_form_data())
         self._database.modify_data_with_id("fid", target_data=feed.get_dict_form_data())
-
-        result = self._is_user_interacted(user=user, feeds=[feed])
-
-        return result
+        return 
 
     # 댓글 수정
     # Feed에 저장된 CID는 따로 수정 대상이 아니므로, 따로 fid를 파라미터로 가져오지 않는다.
@@ -1772,8 +1577,7 @@ class FeedManager:
 
         # 어 내 댓글 아니다.
         if user.uid != comment.uid:
-            result = self._is_user_interacted(user=user, feeds=[feed])
-            return result
+            return 
 
         # 이거 지우는거 뭔가 대책이 필요함
         # 댓글 삭제할 떄, FEED의 경우와 동일하게 DB에서 삭제하지 않고, 상태만 업데이트하고, 작성 목록에서만 삭제하면 됨.
@@ -1785,8 +1589,7 @@ class FeedManager:
         self._database.modify_data_with_id("fid", target_data=feed.get_dict_form_data())
         self._database.modify_data_with_id("uid", target_data=user.get_dict_form_data())
 
-        result = self._is_user_interacted(user=user, feeds=[feed])
-        return result
+        return 
 
     # 댓글에 좋아요를 누르는 기능
     def try_like_comment(self, user:User, fid, cid):
@@ -1807,8 +1610,7 @@ class FeedManager:
 
         self._database.modify_data_with_id("cid", target_data=comment.get_dict_form_data())
 
-        result = self._is_user_interacted(user=user, feeds=[feed])
-        return result
+        return 
 
     # Feed에 있는 모든 댓글들을 모두 가져와야 함.
     def get_all_comment_on_feed(self, user, fid):

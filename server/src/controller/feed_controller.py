@@ -3,6 +3,9 @@ from fastapi import HTTPException, status
 from others import CustomError, FeedManager, FeedSearchEngine
 
 class Feed_Controller:
+    def __init__(self, feed_manager:FeedManager):
+        self.__feed_manager = feed_manager
+
     # fid를 통한 피드 검색
     def try_search_in_fid(self, database:Local_Database,
                         request, feed_search_engine: FeedSearchEngine,

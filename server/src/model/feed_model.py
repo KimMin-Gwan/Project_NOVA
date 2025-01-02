@@ -19,6 +19,16 @@ class FeedModel(BaseModel):
         self._feeds, self._key = feed_manager.get_feed_in_home(user=self._user, key=key)
         return
     
+    def set_single_feed_data(self, fid:str, feed_manager:FeedManager):
+        feed_data = self._database.get_data_with_id(target="fid", id=fid)
+
+        feed = Feed()
+        feed.make_with_dict(feed_data)
+
+        
+
+
+        return
 
     def set_feed_data(self, feed_search_engine:FeedSearchEngine,
                         target_type="default", target="", num_feed=1, index=-1):
@@ -33,7 +43,9 @@ class FeedModel(BaseModel):
             feed.make_with_dict(feed_data)
             self._feeds.append(feed)
 
-        self._feeds = self._is_user_interacted(user=self._user, feeds=self._feeds)
+        #self._feeds = self._is_user_interacted(user=self._user, feeds=self._feeds)
+
+        self.__set_send_data(feeds=self._feeds)
         return
 
     def set_today_best_feed(self, feed_search_engine:FeedSearchEngine, index=-1, num_feed=4):
@@ -47,7 +59,10 @@ class FeedModel(BaseModel):
             feed.make_with_dict(feed_data)
             self._feeds.append(feed)
 
-        self._feeds = self._is_user_interacted(user=self._user, feeds=self._feeds)
+
+
+        #self._feeds = self._is_user_interacted(user=self._user, feeds=self._feeds)
+        self.__set_send_data()
         return
 
     def set_weekly_best_feed(self, feed_search_engine:FeedSearchEngine, index=-1, num_feed=4):
@@ -61,7 +76,8 @@ class FeedModel(BaseModel):
             feed.make_with_dict(feed_data)
             self._feeds.append(feed)
 
-        self._feeds = self._is_user_interacted(user=self._user, feeds=self._feeds)
+        #self._feeds = self._is_user_interacted(user=self._user, feeds=self._feeds)
+        self.__set_send_data()
         return
 
     def set_all_feed(self, feed_search_engine:FeedSearchEngine, index=-1, num_feed=4):
@@ -75,7 +91,8 @@ class FeedModel(BaseModel):
             feed.make_with_dict(feed_data)
             self._feeds.append(feed)
 
-        self._feeds = self._is_user_interacted(user=self._user, feeds=self._feeds)
+        #self._feeds = self._is_user_interacted(user=self._user, feeds=self._feeds)
+        self.__set_send_data()
         return
     
     
@@ -85,26 +102,38 @@ class FeedModel(BaseModel):
                                                     action=data_payload.action)
         return
 
+    # 좋아요 누르기
+    # 완료
     def try_staring_feed(self, feed_manager:FeedManager, data_payload):
-        self._feeds = feed_manager.try_staring_feed(user=self._user,
-                                                    fid=data_payload.fid)
+        feeds = feed_manager.try_staring_feed(user=self._user,
+                                                fid=data_payload.fid)
+        
+        self._feeds = self._set_feed_json_data(feeds=feeds, feed_manager=feed_manager)
         return
 
+    # 댓글 새로 달기
+    # 1. 댓글 달기 -> 2. 댓글 달고나서 전체 댓글 데이터만 제공
+    # 완료
     def try_make_new_comment(self, feed_manager:FeedManager, data_payload):
-        self._feeds = feed_manager.make_new_comment_on_feed(user=self._user,
-                                                    fid=data_payload.fid,
-                                                    body=data_payload.body)
+        feed_manager.make_new_comment_on_feed(user=self._user,
+                                            fid=data_payload.fid,
+                                            body=data_payload.body)
         self._comments = feed_manager.get_all_comment_on_feed( user=self._user,
                                                                fid=data_payload.fid)
         return
 
+    # 댓글 불러오기
+    # 단일 feed에 맞는 댓글 전체 불러오기
     def get_all_comment_on_feed(self, feed_manager:FeedManager, data_payload):
         self._comments = feed_manager.get_all_comment_on_feed( user=self._user,
                                                                fid=data_payload.fid)
         return
 
+    # 댓글 지우기
+    # 1. 댓글 지우기 -> 전체 댓글 데이터 제공
+    # 완료
     def try_remove_comment(self, feed_manager:FeedManager, data_payload):
-        self._feeds= feed_manager.remove_comment_on_feed( user=self._user,
+        detail, result = feed_manager.remove_comment_on_feed( user=self._user,
                                                                fid=data_payload.fid,
                                                                cid=data_payload.cid)
         self._comments = feed_manager.get_all_comment_on_feed( user=self._user,
@@ -113,8 +142,8 @@ class FeedModel(BaseModel):
 
     def try_like_comment(self, feed_manager:FeedManager, data_payload):
         self._feeds= feed_manager.try_like_comment( user=self._user,
-                                                               fid=data_payload.fid,
-                                                               cid=data_payload.cid)
+                                                fid=data_payload.fid,
+                                                cid=data_payload.cid)
         self._comments = feed_manager.get_all_comment_on_feed( user=self._user,
                                                                fid=data_payload.fid)
         return
@@ -166,27 +195,28 @@ class FeedModel(BaseModel):
         return
 
     # 전송 데이터 만들기
-    def __set_send_data_feed_interaction_comment(self):
-        for feed, comment in zip(self._feeds, self._comments):
+    # feed 데이터와 interaction을 모두 줘야하는 경우에만 사용
+    def __set_send_data(self, feeds:list, interactions:list):
+        send_data = []
+
+        for feed in feeds:
             feed:Feed = feed
-            comment:Comment = comment
 
             # 0: 삭제됨 1 : 비공개 2: 차단 3: 댓글 작성 X 4 : 정상(전체 공개)
             if feed.display < 3:
                 continue
 
             interaction = Interaction()
-            for single_interaction in self._interactions:
+            for single_interaction in interactions:
                 if single_interaction.fid == feed.fid:
                     interaction = single_interaction
 
             dict_data={}
             dict_data['feed'] = feed.get_dict_form_data()
-            dict_data['comment'] = comment.get_dict_form_data()
             dict_data['interaction'] = interaction.get_dict_form_data()
 
-            self._send_data.append(dict_data)
-        return
+            send_data.append(dict_data)
+        return send_data
 
     
     ## 유저가 참여한 feed인지 확인할것
@@ -354,7 +384,8 @@ class FeedSearchModel(FeedModel):
         feed = Feed()
         feed.make_with_dict(feed_data)
         self.__feed.append(feed)
-        self.__feed = self._is_user_interacted(user=self._user, feeds=self.__feed)
+        #self.__feed = self._is_user_interacted(user=self._user, feeds=self.__feed)
+        self._send_data = self.__set_send_data(self._feeds, comments=[], interactions=[])
         return
 
     def try_search_feed_with_fid(self, feed_search_engine:FeedSearchEngine, fid=""):
@@ -373,7 +404,8 @@ class FeedSearchModel(FeedModel):
             feed.make_with_dict(dict_data=feed_data)
             self.__feed.append(feed)
 
-        self.__feed = self._is_user_interacted(user=self._user, feeds=self.__feed)
+        #self.__feed = self._is_user_interacted(user=self._user, feeds=self.__feed)
+        self.__set_send_data()
 
         return
 

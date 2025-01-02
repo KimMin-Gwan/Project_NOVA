@@ -1,9 +1,13 @@
 from model import BannerModel, HomeBiasModel, BiasSearchModel, Local_Database, SelectBiasModel, LeagueMetaModel, TokenModel, HashTagModel
-from others import UserNotExist, CustomError
+from others import UserNotExist, CustomError, FeedManager
 #from server.src.view.jwt_decoder import JWTManager, JWTPayload
 #from view import RequestManager
 
 class Home_Controller:
+    def __init__(self, feed_manager = None):
+        self.__feed_manager:FeedManager = feed_manager
+
+
     # banner 데이터 요청
     def get_banner_data(self, database:Local_Database) -> BannerModel: 
         model = BannerModel(database=database)
@@ -126,7 +130,7 @@ class Home_Controller:
 
         return model
 
-    def get_realtime_best_hashtag(self, database:Local_Database, request,feed_search_engine) -> HashTagModel:
+    def get_realtime_best_hashtag(self, database:Local_Database, request, feed_search_engine) -> HashTagModel:
         model = HashTagModel(database=database)
         #model.set_best_hash_tag()
         model.set_realtime_best_hash_tag(feed_search_engine=feed_search_engine, num_hashtag=10)

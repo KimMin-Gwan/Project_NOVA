@@ -92,7 +92,7 @@ class Core_Service_View(Master_View):
             #if not request_manager.jwt_payload.result:
                 #raise request_manager.credentials_exception
 
-            home_controller=Home_Controller()
+            home_controller=Home_Controller(feed_manager=self.__feed_manager)
 
             # 만약 인기 해시태그의 리스트가 0이면 어떻게 다른걸 해야됨!!
 
@@ -111,7 +111,7 @@ class Core_Service_View(Master_View):
             #if not request_manager.jwt_payload.result:
                 #raise request_manager.credentials_exception
 
-            home_controller=Home_Controller()
+            home_controller=Home_Controller(feed_manager=self.__feed_manager)
             model = home_controller.get_realtime_best_hashtag(database=self.__database,
                                                         request=request_manager,
                                                         feed_search_engine=self.__feed_search_engine)
@@ -131,7 +131,7 @@ class Core_Service_View(Master_View):
             #if not request_manager.jwt_payload.result:
                 #raise request_manager.credentials_exception
 
-            home_controller=Feed_Controller()
+            home_controller=Feed_Controller(feed_manager=self.__feed_manager)
             model = home_controller.get_feed_with_hashtag(database=self.__database,
                                                         request=request_manager,
                                                         feed_search_engine=self.__feed_search_engine,
@@ -151,7 +151,7 @@ class Core_Service_View(Master_View):
             #if not request_manager.jwt_payload.result:
                 #raise request_manager.credentials_exception
 
-            feed_controller =Feed_Controller()
+            feed_controller =Feed_Controller(feed_manager=self.__feed_manager)
             model = feed_controller.get_all_feed(database=self.__database,
                                                 request=request_manager,
                                                 feed_search_engine=self.__feed_search_engine,
@@ -170,7 +170,7 @@ class Core_Service_View(Master_View):
             #if not request_manager.jwt_payload.result:
                 #raise request_manager.credentials_exception
 
-            feed_controller=Feed_Controller()
+            feed_controller =Feed_Controller(feed_manager=self.__feed_manager)
             model = feed_controller.get_today_best(database=self.__database,
                                                     request=request_manager,
                                                     feed_search_engine=self.__feed_search_engine,
@@ -189,7 +189,7 @@ class Core_Service_View(Master_View):
             #if not request_manager.jwt_payload.result:
                 #raise request_manager.credentials_exception
 
-            feed_controller=Feed_Controller()
+            feed_controller =Feed_Controller(feed_manager=self.__feed_manager)
             model = feed_controller.get_weekly_best(database=self.__database,
                                                     request=request_manager,
                                                     feed_search_engine=self.__feed_search_engine,
@@ -230,6 +230,7 @@ class Core_Service_View(Master_View):
             return response
 
     def feed_route(self):
+
         # 피드 자세히 보기 (피드 페이지)의 피드 데이터
         @self.__app.get('/feed_explore/feed_detail/feed_data')
         def get_feed_detail(request:Request, fid:Optional[str]):
@@ -240,7 +241,7 @@ class Core_Service_View(Master_View):
             #if not request_manager.jwt_payload.result:
                 #raise request_manager.credentials_exception
 
-            feed_controller=Feed_Controller()
+            feed_controller =Feed_Controller(feed_manager=self.__feed_manager)
             model = feed_controller.get_specific_feed_data(database=self.__database,
                                                         request=request_manager)
 
@@ -258,7 +259,7 @@ class Core_Service_View(Master_View):
             #if not request_manager.jwt_payload.result:
                 #raise request_manager.credentials_exception
 
-            feed_controller=Feed_Controller()
+            feed_controller =Feed_Controller(feed_manager=self.__feed_manager)
             model = feed_controller.get_specific_comment_data(database=self.__database,
                                                         request=request_manager,
                                                         feed_search_engine=self.__feed_search_engine,
@@ -277,8 +278,8 @@ class Core_Service_View(Master_View):
             #if not request_manager.jwt_payload.result:
                 #raise request_manager.credentials_exception
 
-            home_controller=Feed_Controller()
-            model = home_controller.get_feed_with_hashtag(database=self.__database,
+            feed_controller =Feed_Controller(feed_manager=self.__feed_manager)
+            model = feed_controller.get_feed_with_hashtag(database=self.__database,
                                                         request=request_manager,
                                                         feed_search_engine=self.__feed_search_engine,
                                                         num_feed=5)
@@ -296,7 +297,7 @@ class Core_Service_View(Master_View):
             #if not request_manager.jwt_payload.result:
                 #raise request_manager.credentials_exception
 
-            feed_controller =Feed_Controller()
+            feed_controller =Feed_Controller(feed_manager=self.__feed_manager)
             model = feed_controller.get_all_feed(database=self.__database,
                                                 request=request_manager,
                                                 feed_search_engine=self.__feed_search_engine,
@@ -315,7 +316,7 @@ class Core_Service_View(Master_View):
             #if not request_manager.jwt_payload.result:
                 #raise request_manager.credentials_exception
 
-            feed_controller=Feed_Controller()
+            feed_controller =Feed_Controller(feed_manager=self.__feed_manager)
             model = feed_controller.get_today_best(database=self.__database,
                                                     request=request_manager,
                                                     feed_search_engine=self.__feed_search_engine,
@@ -334,7 +335,7 @@ class Core_Service_View(Master_View):
             #if not request_manager.jwt_payload.result:
                 #raise request_manager.credentials_exception
 
-            feed_controller=Feed_Controller()
+            feed_controller =Feed_Controller(feed_manager=self.__feed_manager)
             model = feed_controller.get_weekly_best(database=self.__database,
                                                     request=request_manager,
                                                     feed_search_engine=self.__feed_search_engine,
@@ -354,7 +355,7 @@ class Core_Service_View(Master_View):
             #if not request_manager.jwt_payload.result:
                 #raise request_manager.credentials_exception
 
-            feed_controller =Feed_Controller()
+            feed_controller =Feed_Controller(feed_manager=self.__feed_manager)
             model = feed_controller.try_search_in_fid(database=self.__database,
                                                         request=request_manager,
                                                         feed_search_engine=self.__feed_search_engine)
@@ -375,7 +376,7 @@ class Core_Service_View(Master_View):
             #if not request_manager.jwt_payload.result:
                 #raise request_manager.credentials_exception
 
-            feed_controller=Feed_Controller()
+            feed_controller =Feed_Controller(feed_manager=self.__feed_manager)
             model = feed_controller.get_feed_with_recommend(database=self.__database,
                                                         request=request_manager,
                                                         feed_search_engine=self.__feed_search_engine)
@@ -393,8 +394,8 @@ class Core_Service_View(Master_View):
             if not request_manager.jwt_payload.result:
                 raise request_manager.credentials_exception
 
-            home_controller=Feed_Controller()
-            model = home_controller.try_interact_feed(database=self.__database,
+            feed_controller =Feed_Controller(feed_manager=self.__feed_manager)
+            model = feed_controller.try_interact_feed(database=self.__database,
                                                         request=request_manager,
                                                         feed_manager=self.__feed_manager)
             
@@ -412,8 +413,8 @@ class Core_Service_View(Master_View):
             if not request_manager.jwt_payload.result:
                 raise request_manager.credentials_exception
 
-            home_controller=Feed_Controller()
-            model = home_controller.try_staring_feed(database=self.__database,
+            feed_controller =Feed_Controller(feed_manager=self.__feed_manager)
+            model = feed_controller.try_staring_feed(database=self.__database,
                                                         request=request_manager,
                                                         feed_manager=self.__feed_manager)
             
@@ -431,8 +432,8 @@ class Core_Service_View(Master_View):
             if not request_manager.jwt_payload.result:
                 raise request_manager.credentials_exception
 
-            home_controller=Feed_Controller()
-            model = home_controller.try_make_comment(database=self.__database,
+            feed_controller =Feed_Controller(feed_manager=self.__feed_manager)
+            model = feed_controller.try_make_comment(database=self.__database,
                                                         request=request_manager,
                                                         feed_manager=self.__feed_manager)
             body_data = model.get_response_form_data(self._head_parser)
@@ -449,8 +450,8 @@ class Core_Service_View(Master_View):
             if not request_manager.jwt_payload.result:
                 raise request_manager.credentials_exception
 
-            home_controller=Feed_Controller()
-            model = home_controller.try_remove_comment(database=self.__database,
+            feed_controller =Feed_Controller(feed_manager=self.__feed_manager)
+            model = feed_controller.try_remove_comment(database=self.__database,
                                                         request=request_manager,
                                                         feed_manager=self.__feed_manager)
             body_data = model.get_response_form_data(self._head_parser)
@@ -467,8 +468,8 @@ class Core_Service_View(Master_View):
             #if not request_manager.jwt_payload.result:
                 #raise request_manager.credentials_exception
 
-            home_controller=Feed_Controller()
-            model = home_controller.get_all_comment_on_feed(database=self.__database,
+            feed_controller =Feed_Controller(feed_manager=self.__feed_manager)
+            model = feed_controller.get_all_comment_on_feed(database=self.__database,
                                                         request=request_manager,
                                                         feed_manager=self.__feed_manager)
             body_data = model.get_response_form_data(self._head_parser)
@@ -485,8 +486,8 @@ class Core_Service_View(Master_View):
             if not request_manager.jwt_payload.result:
                 raise request_manager.credentials_exception
 
-            home_controller=Feed_Controller()
-            model = home_controller.try_like_comment(database=self.__database,
+            feed_controller =Feed_Controller(feed_manager=self.__feed_manager)
+            model = feed_controller.try_like_comment(database=self.__database,
                                                         request=request_manager,
                                                         feed_manager=self.__feed_manager)
             body_data = model.get_response_form_data(self._head_parser)
@@ -524,8 +525,8 @@ class Core_Service_View(Master_View):
             if not request_manager.jwt_payload.result:
                 raise request_manager.credentials_exception
 
-            home_controller=Feed_Controller()
-            model = home_controller.try_edit_feed(database=self.__database,
+            feed_controller =Feed_Controller(feed_manager=self.__feed_manager)
+            model = feed_controller.try_edit_feed(database=self.__database,
                                                         request=request_manager,
                                                         feed_manager=self.__feed_manager)
             body_data = model.get_response_form_data(self._head_parser)
