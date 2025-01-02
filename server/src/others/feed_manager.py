@@ -1,3 +1,5 @@
+from platform import uname
+
 from others.data_domain import Feed, User, Comment, ManagedUser
 from others.search_engine import FeedSearchEngine
 #from model import Local_Database
@@ -1423,6 +1425,27 @@ class FeedManager:
 
         return "COMPLETE", True
 
+    # 내가 작성한 피드 전체 불러오기, 페이징
+    def get_my_feeds(self, user, fid):
+        feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=user.my_feed)
+
+        target = -1
+        feeds = []
+        for i, feed_data in enumerate(reversed(feed_datas)):
+            feed = Feed()
+            feed.make_with_dict(feed_data)
+            feeds.append(feed)
+            if feed.fid == fid:
+                target = i
+
+        if target != -1:
+            feeds = feeds[target+1:]
+
+        if len(feeds) > 5:
+            feeds = feeds[:5]
+
+        return feeds
+
 #------------------------------Feed 좋아요 누르기----------------------------------------------
 
     # Feed에 좋아요를 눌렀을 때의 작용
@@ -1469,11 +1492,9 @@ class FeedManager:
 
         return feed
 
-
 #-----------------------------------댓글 기능--------------------------------------------------
     # 댓글 좋아요를 누른 정보를 가져옴
     # 내가 좋아요를 누를 댓글인지 플래그를 올리는 함수
-    # 이거 왜 이해 안되노??? 내가 멍청한가
     def __get_comment_liked_info(self, user:User, comments):
         for comment in comments:
             if user.uid in comment.like_user:
@@ -1491,60 +1512,32 @@ class FeedManager:
             return match.group(1)
         return ""
 
-    # 댓글 작성
-    def make_new_comment_on_feed(self, user:User, fid, body):
+    # 댓글, 대댓글 작성 함수
+    def try_make_comment_on_feed(self, user:User, fid, target_cid, body):
+        # FEED 데이터 불러오기
         feed_data = self._database.get_data_with_id(target="fid", id=fid)
         feed = Feed()
-        feed.make_with_dict(dict_data=feed_data)
+        feed.make_with_dict(feed_data)
 
-
-        # 중복되면 사고가 일어남
-        cid = fid+"-"+self.__set_datetime()
+        # CID 만들기, 중복이 있을 가능성 있음
+        # 일단 __set_datetime()쓰면 cid 분리 시, -때문에 분리가 이상하게 됨. 그래서 FID 만들 때랑 동일한 시간제작방식 사용
+        cid = fid+"-"+self.__set_fid_with_datatime()
         date = self.__get_today_date()
         mention = self._extract_mention_data(body)
 
-        # 새로운 댓글을 작성함. 이 때, mention 데이터는 body 데이터를 이용해서 알아내야 한다.
+        # 타겟 CID도 Comment 객체 멤버로 담아버림. CID 너무 길어지기도 하고, 프론트에서 작업을 안시키게 함.
         new_comment = Comment(
-            cid=cid, fid=feed.fid, uid=user.uid,
-            uname=user.uname, body=body, date=date, mention=mention)
+            cid=cid, fid=feed.fid, uid=user.uid, uname=user.uname,
+            body=body, date=date, mention=mention, target_cid=target_cid
+        )
+        # Feed에 comment(리스트)에 담음, 자신이 쓴 댓글도 첨가한다.
         feed.comment.append(cid)
-
         user.my_comment.append(cid)
 
         self._database.add_new_data("cid", new_data=new_comment.get_dict_form_data())
         self._database.modify_data_with_id("fid", target_data=feed.get_dict_form_data())
         self._database.modify_data_with_id("uid", target_data=user.get_dict_form_data())
         return
-
-    # 대댓글 작성
-    # 대댓글 기능에서 대댓글과 일반 댓글을 구분할 수 있는 방법이 있을까?
-    #   1. 댓글 Object에 새로운 (target_cid?) 멤버를 추가한다. (이 것은 아마 너 쪽에서 딱히 마음에 안들어할 듯)
-    #   2. 어느 CID에 답글임을 알 수 있게 정보를 추가하자. (CID@target_CID)
-    #       이 부분은 CID 길이가 2배가 됨. 너무 길어져
-    #   3. CID를 공유하되, Reply 순서의 정보를 추가하자. (target_CID@reply1)
-    #       이 방식은, CID에 Date가 달라지게 된다.
-    # 일단 2번의 방식으로 해볼까? 이 방식을 가정하고 만들어볼게
-    def make_reply_comment_on_feed(self, user:User, fid, target_cid, body):
-        feed_data = self._database.get_data_with_id(target="fid", id=fid)
-        feed = Feed()
-        feed.make_with_dict(dict_data=feed_data)
-
-        cid = fid+"-"+self.__set_fid_with_datatime()+"@"+target_cid
-        date = self.__get_today_date()
-
-        # 대댓글과 일반 댓글의 큰 차이를 보이는 부분. 대댓글에서 답글을 보낼 때, MENTION을 이용한다.
-        mention = self._extract_mention_data(body)
-
-        new_comment = Comment(
-            cid=cid, fid=feed.fid, uid=user.uid,
-            uname=user.uname, body=body, date=date, mention=mention)
-
-        feed.comment.append(cid)
-        user.my_comment.append(cid)
-
-        self._database.add_new_data("cid", new_data=new_comment.get_dict_form_data())
-        self._database.modify_data_with_id("fid", target_data=feed.get_dict_form_data())
-        return 
 
     # 댓글 수정
     # Feed에 저장된 CID는 따로 수정 대상이 아니므로, 따로 fid를 파라미터로 가져오지 않는다.
@@ -1592,6 +1585,8 @@ class FeedManager:
         return 
 
     # 댓글에 좋아요를 누르는 기능
+
+    # 댓글 좋아요 표시
     def try_like_comment(self, user:User, fid, cid):
         feed_data = self._database.get_data_with_id(target="fid", id=fid)
         feed = Feed()
@@ -1613,6 +1608,8 @@ class FeedManager:
         return 
 
     # Feed에 있는 모든 댓글들을 모두 가져와야 함.
+
+    # 피드 안에 있는 모든 Comment를 가져옴.
     def get_all_comment_on_feed(self, user, fid):
         feed_data = self._database.get_data_with_id(target="fid", id=fid)
         feed=Feed()
@@ -1662,10 +1659,79 @@ class FeedManager:
 
         return comments
 
-#-----------------------------------------------------------------------------------------------
+#---------------------------------interaction 수행 관련------------------------------------------------------
+    # FEED 상호작용
+    def try_interaction_feed(self, user:User, fid:str, action):
+        feed = self.__try_interaction_with_feed(user=user, fid=fid, action=action)
+        return [feed]
+
+    # feed 와 상호작용 -> 선택지를 선택하는 경우
+    # interaction 객체에 맞게 수정했음.
+    def __try_interaction_with_feed(self, user:User, fid, action):
+        fid_data = self._database.get_data_with_id(target="fid", id=fid)
+        feed = Feed()
+        feed.make_with_dict(fid_data)
 
 
+        try:
+            iid = feed.iid
+            interaction_data = self._database.get_data_with_id(target="iid", id=iid)
+            interaction = Interaction()
+            interaction.make_with_dict(interaction_data)
 
+            # 참여한 기록이 있는지 확인
+            # 있으면 지우고, 결과값도 하나 줄여야됨
+
+            target = -1
+            for i, uids in enumerate(interaction.attend):
+                for uid in uids:
+                    if uid == user.uid:
+                        uids.remove(uid)
+                        target = i
+                        break
+
+            if target != -1:
+                user.active_feed.remove(fid)
+                interaction.result[target] -= 1
+
+            # 이제 참여한 데이터를 세팅하고 저장하면됨
+            if target != action:
+                user.active_feed.append(fid)
+                interaction.attend[action].append(user.uid)
+                interaction.result[action] += 1
+
+            else:
+                #user.active_feed.remove(fid)  # 지울 필요가 없어보임 -> 주석 처리됨
+                action = -1
+
+            self._database.modify_data_with_id(target_id="iid", target_data=interaction.get_dict_form_data())
+            self._database.modify_data_with_id(target_id="uid", target_data=user.get_dict_form_data())
+
+        except Exception as e:
+            print(e)
+        finally:
+            return feed
+
+    # 상호 작용한 피드 전부 불러오기
+    def get_interacted_feed(self, user:User, fid):
+        feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=user.active_feed)
+        feeds = []
+
+        target = -1
+        for i, feed_data in enumerate(reversed(feed_datas)):
+            feed = Feed()
+            feed.make_with_dict(feed_data)
+            feeds.append(feed)
+            if feed.fid == fid:
+                target = i
+
+        if target != -1:
+            feeds = feeds[target + 1:]
+
+        if len(feeds) > 5:
+            feeds = feeds[:5]
+
+        return feeds
 
     # 1. interaction 수행
 
