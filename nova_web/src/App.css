@@ -57,6 +57,7 @@ body.dark-mode {
   display: flex;
   max-width: 1150px;
   margin: 0 auto;
+  overflow: hidden;
 }
 
 @media (max-width: 1024px) {

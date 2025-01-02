@@ -10,6 +10,7 @@ import { getModeClass } from "./../../App.js";
 import BiasBoxes from "../../component/BiasBoxes.js";
 import SearchBox from "../../component/SearchBox.js";
 import KeywordBox from "../../component/keyword/KeywordBox.js";
+import FilterModal from "../../component/FilterModal/FilterModal.js";
 export default function FeedList(isUserState) {
   const [params] = useSearchParams();
   const type = params.get("type");
@@ -17,6 +18,9 @@ export default function FeedList(isUserState) {
 
   const target = useRef(null);
   const observerRef = useRef(null);
+
+  let [isFilterClicked, setIsFilterClicked] = useState(false);
+
   let [isLoading, setIsLoading] = useState(true);
 
   let [feedData, setFeedData] = useState([]);
@@ -174,6 +178,16 @@ export default function FeedList(isUserState) {
     localStorage.setItem("brightMode", mode);
   }, [mode]);
 
+  function onClickFilterButton() {
+    setIsFilterClicked(!isFilterClicked);
+  }
+
+  if (isFilterClicked) {
+    document.body.style.overflow = "hidden";
+  } else {
+    document.body.style.overflow = "auto";
+  }
+
   if (isLoading) {
     return <p>데이터 불러오는 중</p>;
   }
@@ -214,7 +228,7 @@ export default function FeedList(isUserState) {
           <div className={style["search-section"]}>
             <SearchBox />
             <div className={style["search-filter"]}>
-              <button>필터순</button>
+              <button onClick={onClickFilterButton}>필터순</button>
               <div className={style["sort-btn-container"]}>
                 <button>최신순</button>
                 <button>랜덤순</button>
@@ -245,6 +259,14 @@ export default function FeedList(isUserState) {
             );
           })}
           {isLoading && <p>Loading...</p>}
+          {isFilterClicked && (
+            // <div className={style["filter-modal"]}>
+            <FilterModal
+              isFilterClicked={isFilterClicked}
+              onClickFilterButton={onClickFilterButton}
+            />
+            // {/* </div> */}
+          )}
           <div ref={target} style={{ height: "1px" }}></div>
         </div>
       </div>

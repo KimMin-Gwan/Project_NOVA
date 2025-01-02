@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function BiasBoxes() {
   const URL = "https://nova-platform.kr/home/";
@@ -7,6 +7,29 @@ export default function BiasBoxes() {
   let [myBias, setMyBias] = useState([]);
   const defaultBoxes = 4;
   const totalBiasBoxes = Math.max(defaultBoxes, myBias.length);
+
+  let scrollRef = useRef(null);
+  let [isDrag, setIsDrag] = useState(false);
+  let [dragStart, setDragStart] = useState("");
+  let [hasDragged, setHasDragged] = useState(false);
+
+  function onMouseDown(e) {
+    e.preventDefault();
+    setIsDrag(true);
+    setDragStart(e.pageX + scrollRef.current.scrollLeft);
+    setHasDragged(false);
+  }
+
+  function onMouseUp(e) {
+    setIsDrag(false);
+  }
+
+  function onMouseMove(e) {
+    if (isDrag) {
+      scrollRef.current.scrollLeft = dragStart - e.pageX;
+      setHasDragged(true);
+    }
+  }
 
   useEffect(() => {
     fetch(URL + "my_bias", {
@@ -22,7 +45,13 @@ export default function BiasBoxes() {
   }, []);
 
   return (
-    <div className="bias-container">
+    <div
+      ref={scrollRef}
+      onMouseDown={onMouseDown}
+      onMouseMove={onMouseMove}
+      onMouseUp={onMouseUp}
+      className="bias-container"
+    >
       <div className="bias-wrapper">
         {Array.from({ length: totalBiasBoxes }).map((_, i) => {
           const bias = myBias[i];

@@ -47,6 +47,49 @@ export default function FeedDetail({ feed }) {
     fetchFeed();
   }, []);
 
+  let [isClickedStar, setIsClickedStar] = useState(false);
+
+  function handleCheckStar(fid, e) {
+    // e.preventDefault();
+    setIsClickedStar(!isClickedStar);
+    fetch(`https://nova-platform.kr/feed_explore/check_star?fid=${fid}`, {
+      credentials: "include",
+    })
+      .then((response) => {
+        if (!response.ok) {
+          if (response.status === 401) {
+            navigate("/novalogin");
+          } else {
+            throw new Error(`status: ${response.status}`);
+          }
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("clickstar", data);
+        setFeedData((prevFeeds) => {
+          return prevFeeds.map((feed) => {
+            return feed.fid === fid
+              ? { ...feed, star_flag: data.body.feed[0].star_flag, star: data.body.feed[0].star }
+              : feed;
+          });
+        });
+      });
+  }
+
+  let [commentValue, setCommentValue] = useState("");
+
+  function onChangeComment(e) {
+    console.log(e.target.value);
+    setCommentValue(e.target.value);
+  }
+
+  function onKeyDownEnter(e) {
+    if (e.key === "Enter") {
+      setCommentValue("");
+    }
+  }
+
   function onClickNav() {
     navigate(-1);
   }
@@ -65,7 +108,7 @@ export default function FeedDetail({ feed }) {
       </div>
 
       <div>
-        <ContentFeed feed={feedData[0]} />
+        <ContentFeed feed={feedData[0]} handleCheckStar={handleCheckStar} />
       </div>
 
       <div className={style["comment-container"]}>
@@ -122,7 +165,10 @@ export default function FeedDetail({ feed }) {
           ref={commentRef}
           type="text"
           id={style["comment"]}
-          placeholder="당신의 생각을 남겨보세요"
+          value={commentValue}
+          onChange={onChangeComment}
+          onKeyDown={onKeyDownEnter}
+          placeholder="당신의 생각을 남겨보세요."
         />
       </div>
     </div>

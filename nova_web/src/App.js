@@ -54,6 +54,7 @@ import BiasBoxes from "./component/BiasBoxes.js";
 import { ContentFeed } from "./component/feed.js";
 import FeedDetail from "./pages/FeedDetail/FeedDetail.js";
 import TestRef from "./component/TestRef.js";
+import FilterModal from "./component/FilterModal/FilterModal.js";
 // 401 이면 바이어스 격자 무늬로 띄우기
 // 401 이면 alert - 로그인 필요 문구 띄우기
 // 다크 모드 클래스 반환 함수
@@ -192,7 +193,7 @@ function App() {
       <Route path="/open_ranking" element={<OpenRanking />}></Route>
       <Route path="/bias_funding" element={<BiasFunding />}></Route>
       <Route path="/bias_funding/:type" element={<MoreProjects />}></Route>
-      <Route path="/test" element={<TestRef />}></Route>
+      <Route path="/test" element={<FilterModal />}></Route>
       <Route path="*" element={<div>404 Error</div>}></Route>
       {/* <Route path="/test" element={<Box />}></Route> */}
       {/* <Route path="/planet" element={<PlanetList />}></Route> */}
@@ -227,6 +228,8 @@ function App() {
                       className={`logo-st ${getModeClass(brightMode)}`}
                     ></img>
                   </div>
+                  <Link to="/test">테스트</Link>
+
                   <div className="buttons">
                     <button className="tool-button">
                       <img
