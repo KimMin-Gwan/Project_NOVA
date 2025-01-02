@@ -25,8 +25,6 @@ class Master(Configure_File_Reader):
         feed_search_engine = FeedSearchEngine(database=database)
         feed_manager= FeedManager(database=database, fclasses=self._fclasses,
                                   feed_search_engine=feed_search_engine)
-        feed_manager.init_feed_data()
-
         funding_project_manager = FundingProjectManager(database=database)
 
         nova_server = NOVA_Server(

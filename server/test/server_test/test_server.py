@@ -1,4 +1,5 @@
 import requests
+from pprint import pprint
 
 # 세션 생성
 session = requests.Session()
@@ -29,17 +30,17 @@ if response.status_code == 200:
 else:
     print("로그인 실패:", response.status_code, response.text)
 
+fid = "6063-qfgh-2540-3URvvc"
 
-
-#test_url = "http://127.0.0.1:4000/nova_fund_system/project_detail?pid=5"
-test_url = "https://nova-platform.kr/nova_fund_system/project_detail?pid=5"
+test_url = f"http://127.0.0.1:4000/feed_explore/feed_detail/feed_data?fid={fid}"
+#test_url = "https://nova-platform.kr/nova_fund_system/project_detail?pid=5"
 
 # 로그인 요청
 response = session.get(test_url)
 
 # 로그인 성공 여부 확인
 if response.status_code == 200:
-    print("성공:", response.json())
+    pprint(response.json())
 else:
     print("실패:", response.status_code, response.text)
 

@@ -1,4 +1,4 @@
-from model import FeedModel, Local_Database, FeedMetaModel, FeedEditModel, FeedSearchModel
+from model import FeedModel, Local_Database, FeedEditModel, FeedSearchModel
 from fastapi import HTTPException, status
 from others import CustomError, FeedManager, FeedSearchEngine
 
@@ -15,6 +15,7 @@ class Feed_Controller:
         if request.jwt_payload != "":
             model.set_user_with_email(request=request.jwt_payload)
         model.try_search_feed_with_fid(feed_search_engine=feed_search_engine,
+                                       feed_manager=self.__feed_manager,
                                         fid=request.data_payload.fid)
 
         return model
@@ -30,6 +31,7 @@ class Feed_Controller:
             if request.jwt_payload != "":
                 model.set_user_with_email(request=request.jwt_payload)
             model.try_search_feed(feed_search_engine=feed_search_engine,
+                                  feed_manager=self.__feed_manager,
                                 target=request.data_payload.keyword,
                                 num_feed=num_feed)
 
@@ -54,9 +56,10 @@ class Feed_Controller:
             if request.jwt_payload != "":
                 model.set_user_with_email(request=request.jwt_payload)
             model.try_search_feed_with_hashtag(feed_search_engine=feed_search_engine,
-                                target=request.data_payload.hashtag,
-                                index=request.data_payload.key,
-                                num_feed=num_feed)
+                                               feed_manager=self.__feed_manager,
+                                                target=request.data_payload.hashtag,
+                                                index=request.data_payload.key,
+                                                num_feed=num_feed)
 
         except CustomError as e:
             print("Error Catched : ", e.error_type)
@@ -79,6 +82,7 @@ class Feed_Controller:
             if request.jwt_payload != "":
                 model.set_user_with_email(request=request.jwt_payload)
             model.set_today_best_feed(feed_search_engine=feed_search_engine,
+                                        feed_manager=self.__feed_manager,
                                         index=request.data_payload.key,
                                        num_feed=num_feed)
 
@@ -103,6 +107,7 @@ class Feed_Controller:
             if request.jwt_payload != "":
                 model.set_user_with_email(request=request.jwt_payload)
             model.set_weekly_best_feed(feed_search_engine=feed_search_engine,
+                                       feed_manager=self.__feed_manager,
                                         index=request.data_payload.key,
                                        num_feed=num_feed)
 
@@ -127,6 +132,7 @@ class Feed_Controller:
             if request.jwt_payload != "":
                 model.set_user_with_email(request=request.jwt_payload)
             model.set_all_feed(feed_search_engine=feed_search_engine,
+                               feed_manager=self.__feed_manager,
                                         index=request.data_payload.key,
                                        num_feed=num_feed)
 
@@ -155,7 +161,9 @@ class Feed_Controller:
                                 target_type="hashtag",
                                 target=request.data_payload.hashtag,
                                 num_feed=num_feed,
-                                index=request.data_payload.key,)
+                                index=request.data_payload.key,
+                                feed_manager=self.__feed_manager
+                                )
 
         except CustomError as e:
             print("Error Catched : ", e.error_type)
@@ -181,7 +189,9 @@ class Feed_Controller:
 
         model.set_recommend_feed(feed_search_engine,
                                 fid=request.data_payload.fid,
-                                history=request.data_payload.history)
+                                history=request.data_payload.history,
+                                feed_manager=self.__feed_manager
+                                )
         return model
 
 
@@ -195,6 +205,7 @@ class Feed_Controller:
                 model.set_user_with_email(request=request.jwt_payload)
             model.set_feed_data(
                 target_type="hashtag", target=request.data_payload.target,
+                feed_manager=self.__feed_manager,
                 num_feed=4, index= request.data_payload.key)
 
         except CustomError as e:
@@ -240,7 +251,7 @@ class Feed_Controller:
         if request.jwt_payload != "":
             model.set_user_with_email(request=request.jwt_payload)
 
-        model.set_specific_feed_data(data_payload=request.data_payload)
+        model.set_single_feed_data(fid=request.data_payload.fid, feed_manager=self.__feed_manager)
 
         return model
 

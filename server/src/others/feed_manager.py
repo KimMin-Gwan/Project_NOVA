@@ -1,6 +1,4 @@
-from platform import uname
-
-from others.data_domain import Feed, User, Comment, ManagedUser
+from others.data_domain import Feed, User, Comment, ManagedUser, Interaction
 from others.search_engine import FeedSearchEngine
 #from model import Local_Database
 from datetime import datetime, timedelta
@@ -17,8 +15,6 @@ from io import BytesIO
 from PIL import Image
 import re
 import imageio
-
-from src.others.data_domain import Interaction
 
 # Boto3의 경고 메시지 무시
 warnings.filterwarnings("ignore", module='boto3.compat')

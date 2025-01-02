@@ -193,7 +193,7 @@ function App() {
       <Route path="/open_ranking" element={<OpenRanking />}></Route>
       <Route path="/bias_funding" element={<BiasFunding />}></Route>
       <Route path="/bias_funding/:type" element={<MoreProjects />}></Route>
-      <Route path="/test" element={<FilterModal />}></Route>
+      <Route path="/test" element={<TestRef />}></Route>
       <Route path="*" element={<div>404 Error</div>}></Route>
       {/* <Route path="/test" element={<Box />}></Route> */}
       {/* <Route path="/planet" element={<PlanetList />}></Route> */}

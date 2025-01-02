@@ -272,7 +272,7 @@ class Feed(SampleDomain):
             self.star = dict_data["star"]
             self.image = copy.copy(dict_data["image"])
             self.hashtag = copy.copy(dict_data["hashtag"])
-            self.comment = copy.copy(dict_data["comment"])
+            self.comment = copy.copy(dict_data["cid"])
             self.iid = dict_data["iid"]
 
             self.num_comment = len(self.comment)
@@ -280,6 +280,7 @@ class Feed(SampleDomain):
             self.star_flag = False
             self.nickname = ""
         except KeyError as e:
+            print(e)
             raise DictMakingError(error_type=f"Missing key: {str(e)}")
 
     def get_dict_form_data(self):
