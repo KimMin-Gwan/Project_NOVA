@@ -14,6 +14,18 @@
   padding: 10px 20px;
 }
 
+.back-button {
+  all: unset;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+
+  img {
+    filter: invert(1);
+    margin-right: 5px;
+  }
+}
+
 /* 댓글 목록 */
 .comment-container {
   /* display: flex; */
@@ -44,6 +56,11 @@
   display: flex;
   justify-content: space-between;
   margin-bottom: 10px;
+
+  span {
+    margin-left: 10px;
+    color: gray;
+  }
 }
 
 .comment-content {
@@ -51,7 +68,35 @@
 }
 
 .action-container {
-  text-align: end;
+  display: flex;
+  justify-content: end;
+}
+
+.button-box1 {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.action-button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  /* justify-content: center; */
+
+  button {
+    all: unset;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    img {
+      width: 20px;
+      height: 20px;
+      object-fit: cover;
+    }
+  }
 }
 
 .input-container {

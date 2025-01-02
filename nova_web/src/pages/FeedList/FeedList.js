@@ -211,7 +211,16 @@ export default function FeedList(isUserState) {
           // <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>전체 피드</div>
         )}
         {type === "best" && (
-          <SearchBox />
+          <div className={style["search-section"]}>
+            <SearchBox />
+            <div className={style["search-filter"]}>
+              <button>필터순</button>
+              <div className={style["sort-btn-container"]}>
+                <button>최신순</button>
+                <button>랜덤순</button>
+              </div>
+            </div>
+          </div>
           // <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>오늘의 베스트 피드</div>
         )}
         {type === "weekly_best" && (

@@ -227,7 +227,6 @@ function App() {
                       className={`logo-st ${getModeClass(brightMode)}`}
                     ></img>
                   </div>
-                  <Link to={"/test"}>test</Link>
                   <div className="buttons">
                     <button className="tool-button">
                       <img
