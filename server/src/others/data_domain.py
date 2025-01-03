@@ -355,8 +355,9 @@ class FeedLink(SampleDomain):
 
     def get_dict_form_data(self):
         return {
-            "baid": self.baid,
-            "ba_url": self.ba_url
+            "lid": self.lid,
+            "lname": self.lname,
+            "url": self.ur
         }
 
 class Banner(SampleDomain):
@@ -388,7 +389,7 @@ class Comment(SampleDomain):
         self.date = date
         self.like = like
         self.state = state
-        self.like_user = copy.copy(like_user)
+        self.like_user:list = copy.copy(like_user)
         self.num_like_user = len(self.like_user)
 
         self.target_cid = target_cid            # 대댓글을 달 위치 cid

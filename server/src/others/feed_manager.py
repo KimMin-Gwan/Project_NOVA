@@ -1,7 +1,8 @@
 import copy
 
-from others.data_domain import Feed, User, Comment, ManagedUser, Interaction
+from others.data_domain import Feed, User, Comment, ManagedUser, Interaction, FeedLink
 from others.search_engine import FeedSearchEngine
+from others.object_storage_connector import ObjectStorageConnection
 #from model import Local_Database
 from datetime import datetime, timedelta
 import string
@@ -1256,6 +1257,7 @@ class ImageDescriper():
             if os.path.isfile(file):
                 os.remove(file)
         return
+    
 
 class FeedManager:
     def __init__(self, database, fclasses, feed_search_engine) -> None:
@@ -1316,18 +1318,29 @@ class FeedManager:
         self._feed_search_engine.try_make_new_managed_feed(feed=new_feed)
         self._feed_search_engine.try_add_feed(feed=new_feed)
         return
+    
+    # 링크 만들기
+    def _make_new_link(self, fid,  link_data):
+        lid = self.__make_new_iid()
+        feed_link = FeedLink(lid=lid, lname=link_data["lname"], url=link_data["url"])
+        self._database.add_new_data(target_id="iid", new_data=feed_link.get_dict_form_data())
+        return
 
     # 새로운 피드의 데이터를 추가하여 반환
     def __set_new_feed(self, user:User,fid, fclass, choice, body, hashtag, image, link, bid):
-        # interaction 만들고 iid 받아오는 함수 호출
-        #iid = self._make_new_interaction(fid=fid, choice=choice)
-        iid = "temp"
+        # 인터액션이 있으면 작업할것
+        if len(choice) > 0:
+            iid = self.try_make_new_interaction(fid=fid, choice=choice)
+        else:
+            iid = ""
 
-        # link가 있으면 link도 넣어주면됨
+        # link가 있다면 작업할 것
+        if link:
+            lid = self._make_new_link(fid=fid, link_data=link)
+        else:
+            lid = ""
 
-        #lid = self._make_new_link(fid=fid, link=link)
-        lid = "temp"
-
+        # 새로운 피드 만들어지는 곳
         new_feed = Feed()
         new_feed.fid = fid
         new_feed.uid = user.uid
@@ -1341,8 +1354,8 @@ class FeedManager:
         new_feed.iid = iid
         new_feed.lid = lid
         new_feed.bid = bid
-
         return new_feed
+    
 
     # FEED 클래스를 반환하는 함수
     def __get_class_name(self, fclass):
@@ -1355,33 +1368,59 @@ class FeedManager:
         if fid == "":
             fid = self.__make_new_fid(user=user)
 
-        # 이미지를 업로드 할것
-        image_descriper = ImageDescriper()
-        # 근데 이미지가 없으면 디폴트 이미지로
-        if len(data_payload.image_names) == 0:
-            #image_result, flag = image_descriper.get_default_image_url()
-            image_result = []
-            flag = True
-        else:
-            image_result, flag = image_descriper.try_feed_image_upload(
-                fid=fid, image_names=data_payload.image_names,
-                images=data_payload.images)
-        # 이미지 업로드 실패하면
-        if not flag:
-            return image_result, False
+        if data_payload.fclass == "short":
+            # 이미지를 업로드 할것
+            image_descriper = ImageDescriper()
+            # 근데 이미지가 없으면 디폴트 이미지로
+            if len(data_payload.image_names) == 0:
+                #image_result, flag = image_descriper.get_default_image_url()
+                image_result = []
+                flag = True
+            else:
+                image_result, flag = image_descriper.try_feed_image_upload(
+                    fid=fid, image_names=data_payload.image_names,
+                    images=data_payload.images)
+            # 이미지 업로드 실패하면
+            if not flag:
+                return image_result, False
 
+            # 여기서 댓글 허용 같은 부분도 처리해야될 것임
+            self.__make_new_feed(user=user,
+                                fid=fid,
+                                fclass=data_payload.fclass,
+                                choice=data_payload.choice,
+                                body=data_payload.body,
+                                hashtag=data_payload.hashtag,
+                                images=image_result,
+                                link=data_payload.link,
+                                bid=data_payload.bid
+                                )
 
-        # 여기서 댓글 허용 같은 부분도 처리해야될 것임
-        self.__make_new_feed(user=user,
-                             fid=fid,
-                             fclass=data_payload.fclass,
-                             choice=data_payload.choice,
-                             body=data_payload.body,
-                             hashtag=data_payload.hashtag,
-                             images=image_result,
-                             link=data_payload.link,
-                             bid=data_payload.bid
-                             )
+        # 롱폼의 경우 작성된 html을 올리고 저장하면됨
+        # 이때 body 데이터는 url로 되어야함
+        # 대신 전송될 때는 body데이터가 html로 다시 복구되어 전송되어야함
+        elif data_payload.fclass == "long":
+            connector = ObjectStorageConnection()
+            # 1. 전송된 body데이터를 확인
+            if data_payload.body:
+            # 2. body데이터를 오브젝트 스토리지에 저장
+                body = connector.make_new_feed_body_data(fid = fid, body=body)
+            else:
+                body = " "
+
+            # 3. url을 body로 지정
+
+            # 여기서 댓글 허용 같은 부분도 처리해야될 것임
+            self.__make_new_feed(user=user,
+                                fid=fid,
+                                fclass=data_payload.fclass,
+                                choice=data_payload.choice,
+                                body=body,
+                                hashtag=data_payload.hashtag,
+                                images=[],
+                                link=data_payload.link,
+                                bid=data_payload.bid
+                                )
 
         #작성한 피드 목록에 넣어주고
         user.my_feed.append(fid)
@@ -1704,9 +1743,10 @@ class FeedManager:
 
     # INTERACTION 만들기
     def try_make_new_interaction(self, fid, choice:list):
-        fid = self._database.modify_data_with_id("fid", target_data=fid)
-        feed = Feed()
-        feed.make_with_dict(fid)
+        # modify 의미가 없음
+        #fid = self._database.modify_data_with_id("fid", target_data=fid)
+        #feed = Feed()
+        #feed.make_with_dict(fid)
 
         # 혹시 몰라서 예외처리 남김
         if len(choice) == 0:

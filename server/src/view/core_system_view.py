@@ -249,7 +249,6 @@ class Core_Service_View(Master_View):
                                                  feed_search_engine=self.__feed_search_engine)
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
-
             return response
 
     def feed_route(self):

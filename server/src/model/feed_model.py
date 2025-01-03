@@ -1,7 +1,7 @@
 from model.base_model import BaseModel
 from model import Local_Database
 #from others.data_domain import Alert
-from others import CoreControllerLogicError,FeedManager, FeedSearchEngine
+from others import CoreControllerLogicError,FeedManager, FeedSearchEngine, ObjectStorageConnection
 from others import Comment, Feed, User, Interaction
 from pprint import pprint
 
@@ -192,7 +192,7 @@ class FeedModel(BaseModel):
             
             # 롱폼은 바디 데이터를 받아야됨
             if feed.fclass != "short":
-                feed.body = feed_manager.get_body_html(feed.body)
+                feed.body = ObjectStorageConnection().get_feed_body(fid = feed.fid)
 
             # comment 길이 & image 길이
             feed.num_comment = len(feed.comment)

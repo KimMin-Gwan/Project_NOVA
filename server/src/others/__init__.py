@@ -6,3 +6,4 @@ from others.socket_manager import *
 from others.feed_manager import *
 from others.search_engine import *
 from others.funding_manager import *
+from others.object_storage_connector import *
