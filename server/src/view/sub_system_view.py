@@ -188,6 +188,15 @@ class Sub_Service_View(Master_View):
             response = model.get_response_form_data(self._head_parser)
             return response
 
+        @self.__app.post('/nova_sub_system/image_tag')
+        def get_image_tag(raw_request:dict):
+            data_payload = ImageTagRequest(request=raw_request)
+            sub_controller =Sub_Controller()
+
+            model = sub_controller.try_get_image_tag(database=self.__database,
+                                                data_payload=data_payload)
+            response = model.get_response_form_data(self._head_parser)
+            return response
 
     #def bias_page_route(self, endpoint:str):
         #@self.__app.get(endpoint+'/home')
@@ -248,5 +257,9 @@ class MyContributionRequest(RequestHeader):
         self.token = body['token']
         self.bid = body['bid']
 
-
+class ImageTagRequest(RequestHeader):
+    def __init__(self, request) -> None:
+        super().__init__(request)
+        body = request['body']
+        self.url = body['url']
 
