@@ -1,11 +1,21 @@
 import Slider from "react-slick";
 import style from "./KeywordBox.module.css";
+import { useEffect, useState } from "react";
 
 export default function KeywordBox({ title, subTitle }) {
-  const data = ["t", "ta", "tags", "tags", "tags", "tags", "tags", "tags", "tags", "tagssss"];
-  const copyFirst = data[0];
-  const last = data[data.length - 1];
-  const copy = [copyFirst, ...data, last];
+  let [bestTags, setBestTags] = useState([]);
+
+  function fetchBestTag() {
+    fetch(`https://nova-platform.kr/home/realtime_best_hashtag`, { credentials: "include" })
+      .then((response) => response.json())
+      .then((data) => {
+        setBestTags(data.body.hashtags);
+      });
+  }
+
+  useEffect(() => {
+    fetchBestTag();
+  }, []);
 
   return (
     <div className={style["keyword-container"]}>
@@ -15,10 +25,10 @@ export default function KeywordBox({ title, subTitle }) {
 
       <div className={style["tags-container"]}>
         <div className={style["tags-wrapper"]}>
-          {copy.map((datas, i) => {
+          {bestTags.map((tag, i) => {
             return (
               <div key={i} className={style["tags"]}>
-                #{datas}
+                #{tag}
               </div>
             );
           })}

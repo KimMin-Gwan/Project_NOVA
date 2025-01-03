@@ -68,7 +68,7 @@ function App() {
   let [isUserState, setIsUserState] = useState(false);
   let todayBestFeed = useFetchData(`${URL}today_best`);
   let weeklyFeed = useFetchData(`${URL}weekly_best`);
-  let allFeed = useFetchData(`${URL}/all_feed`);
+  let allFeed = useFetchData(`${URL}all_feed`);
 
   let bias_url = "https://kr.object.ncloudstorage.com/nova-images/";
 
@@ -228,7 +228,7 @@ function App() {
                       className={`logo-st ${getModeClass(brightMode)}`}
                     ></img>
                   </div>
-                  <Link to="/test">테스트</Link>
+                  {/* <Link to="/test">테스트</Link> */}
 
                   <div className="buttons">
                     <button className="tool-button">
@@ -303,7 +303,7 @@ function App() {
                   title={"전체 글"}
                   feedData={allFeed}
                   brightMode={brightMode}
-                  allPost={<AllPost />}
+                  allPost={<AllPost allFeed={allFeed} />}
                   endPoint={"/feed_list?type=all"}
                 />
                 {/* <AllPost brightMode={brightMode} /> */}

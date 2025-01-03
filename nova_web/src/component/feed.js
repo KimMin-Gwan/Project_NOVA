@@ -1494,6 +1494,7 @@ export function Comments({
         body: {
           fid: `${feed.fid}`,
           body: `${inputValue}`,
+          target_cid: "",
         },
       }),
     })

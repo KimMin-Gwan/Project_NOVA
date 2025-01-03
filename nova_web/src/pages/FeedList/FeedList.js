@@ -43,7 +43,7 @@ export default function FeedList(isUserState) {
         .then((response) => response.json())
         .then((data) => {
           console.log("first feed 3개", data.body);
-          setFeedData(data.body.feed);
+          setFeedData(data.body.send_data);
           setNextData(data.body.key);
           setIsLoading(false);
         });
@@ -54,7 +54,7 @@ export default function FeedList(isUserState) {
         .then((response) => response.json())
         .then((data) => {
           console.log("first feed 3개", data.body);
-          setFeedData(data.body.feed);
+          setFeedData(data.body.send_data);
           setNextData(data.body.key);
           setIsLoading(false);
         });
@@ -65,7 +65,7 @@ export default function FeedList(isUserState) {
         .then((response) => response.json())
         .then((data) => {
           // console.log("first feed 3개", data);
-          setFeedData(data.body.feed);
+          setFeedData(data.body.send_data);
           setNextData(data.body.key);
           setIsLoading(false);
         });
@@ -75,7 +75,7 @@ export default function FeedList(isUserState) {
       fetch(`${FETCH_URL}search_feed_with_hashtag?hashtag=${keyword}&key=-1`)
         .then((response) => response.json())
         .then((data) => {
-          setFeedData(data.body.feed);
+          setFeedData(data.body.send_data);
           setNextData(data.body.key);
           setIsLoading(false);
         });
@@ -92,7 +92,7 @@ export default function FeedList(isUserState) {
         .then((data) => {
           setNextData(data.body.key);
           setFeedData((prevData) => {
-            const newData = [...prevData, ...data.body.feed];
+            const newData = [...prevData, ...data.body.send_data];
             return newData;
           });
           setIsLoading(false);
@@ -106,7 +106,7 @@ export default function FeedList(isUserState) {
         .then((data) => {
           setNextData(data.body.key);
           setFeedData((prevData) => {
-            const newData = [...prevData, ...data.body.feed];
+            const newData = [...prevData, ...data.body.send_data];
             return newData;
           });
           setIsLoading(false);
@@ -120,7 +120,7 @@ export default function FeedList(isUserState) {
         .then((data) => {
           setNextData(data.body.key);
           setFeedData((prevData) => {
-            const newData = [...prevData, ...data.body.feed];
+            const newData = [...prevData, ...data.body.send_data];
             return newData;
           });
           setIsLoading(false);
@@ -136,7 +136,7 @@ export default function FeedList(isUserState) {
         .then((data) => {
           setNextData(data.body.key);
           setFeedData((prevData) => {
-            const newData = [...prevData, ...data.body.feed];
+            const newData = [...prevData, ...data.body.send_data];
             return newData;
           });
           setIsLoading(false);
@@ -248,9 +248,9 @@ export default function FeedList(isUserState) {
           {feedData.map((feed, i) => {
             return (
               <Feed
-                key={feed.fid + i}
+                key={feed.feed.fid + i}
                 className={`${style["feed-box"]} ${style[getModeClass(mode)]}`}
-                feed={feed}
+                feed={feed.feed}
                 func={true}
                 feedData={feedData}
                 setFeedData={setFeedData}

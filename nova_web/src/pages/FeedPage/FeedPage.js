@@ -413,6 +413,7 @@ const FeedPage = ({ brightmode }) => {
         body: {
           fid: `${fid}`,
           body: `${inputValue}`,
+          target_cid: "",
         },
       }),
     })
@@ -428,19 +429,19 @@ const FeedPage = ({ brightmode }) => {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
+        console.log("fasfas", data);
         // setNewComments(data.body.comments);
         setAllComments((prevAllComments) => {
           const newAllComments = [data.body.comments[0], ...prevAllComments];
           return newAllComments;
         });
-        setBanners((prevFeeds) => {
-          return prevFeeds.map((feed) => {
-            return feed.fid === fid
-              ? { ...feed, num_comment: data.body.feed[0].num_comment }
-              : feed;
-          });
-        });
+        // setBanners((prevFeeds) => {
+        //   return prevFeeds.map((feed) => {
+        //     return feed.fid === fid
+        //       ? { ...feed, num_comment: data.body.feed[0].num_comment }
+        //       : feed;
+        //   });
+        // });
         setInputValue("");
       });
   }
