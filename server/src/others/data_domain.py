@@ -48,7 +48,6 @@ class User(SampleDomain):
         self.feed_history:list = copy.copy(feed_history)
         self.feed_search_history:list =copy.copy(feed_search_history)
 
-
     # database로 부터 받아온 데이터를 사용해 내용 구성
     def make_with_dict(self, dict_data):
         try:
@@ -90,8 +89,6 @@ class User(SampleDomain):
             "feed_history" : copy.copy(self.feed_history),
             "feed_search_history" : copy.copy(self.feed_search_history)
         }
-
-
 
 class Bias(SampleDomain):
     def __init__(self, bid="", type="", bname="", category=[], birthday="", debut="",
@@ -172,7 +169,6 @@ class Bias(SampleDomain):
             'fanname':copy.copy(self.fanname),
             'group_member_bids':copy.copy(self.group_memeber_bids)
         }
-
 
 class NameCard(SampleDomain):
     def __init__(self, ncid="", ncname="", nccredit=0):
@@ -326,9 +322,8 @@ class Interaction(SampleDomain):
         try:
             self.iid = dict_data['iid']
             self.fid = dict_data['fid']
-            self.choice = dict_data['choice']
-            self.attend = dict_data['attend']
-
+            self.choice = copy.copy(dict_data["choice"])
+            self.attend = copy.copy(dict_data["attend"])
             self.num_choice = len(self.choice)
             self.result = [len(sublist) for sublist in self.attend] # 참여자 수
         except Exception as e:

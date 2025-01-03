@@ -1,3 +1,5 @@
+import copy
+
 from others.data_domain import Feed, User, Comment, ManagedUser, Interaction
 from others.search_engine import FeedSearchEngine
 #from model import Local_Database
@@ -104,6 +106,9 @@ class OldFeedManager:
         if feed.uid != user.uid:
             return "NOT_OWNER", False
 
+        iid = feed.iid
+
+
         comment_datas = self._database.get_datas_with_ids(target_id="cid", ids=feed.comment)
         comments = []
         for comment_data in comment_datas:
@@ -132,6 +137,7 @@ class OldFeedManager:
         feed.make_with_dict(feed_data)
         if feed.uid != user.uid:
             return "NOT_OWNER", False
+
         self._database.delete_data_with_id(target="fid", id=feed.fid)
 
         result, flag = self.try_make_new_feed(user=user, data_payload=data_payload, fid=feed.fid)
@@ -1656,7 +1662,89 @@ class FeedManager:
         return comments
 
 #---------------------------------interaction 수행 관련------------------------------------------------------
-    # FEED 상호작용
+    # IID를 만드는 곳
+    def __make_new_iid(self):
+        random_string = "default"
+
+        # 사용할 문자 : FID와 비슷하게 대문자, 소문자, 숫자
+        characters = string.ascii_letters + string.digits
+
+        # 랜덤 문자열 7자리 생성 (단, 앞자리는 Interaction임을 알도록 붙여야함.)
+        random_string = 'i'+''.join(random.choice(characters) for _ in range(6))
+
+        # FID가 이미 고유번호라 중복이 되어도 따로 상관없겠지?
+        # iid = iid고유
+        iid = random_string
+
+        return iid
+
+    # 기본 뼈대 : FEED 만드는 함수 참고
+    def _make_new_interaction(self, iid, fid, choice:list):
+        user_attend_list = list([] for _ in choice)
+        new_interaction = Interaction()
+
+        iid_dict = dict()
+        iid_dict['iid'] = iid
+        iid_dict['fid'] = fid
+        iid_dict['choice'] = copy.copy(choice)
+        iid_dict['attend'] = copy.copy(user_attend_list)
+
+        new_interaction.make_with_dict(iid_dict)
+
+        return new_interaction
+
+    # INTERACTION 만들기
+    def try_make_new_interaction(self, fid, choice:list):
+        fid = self._database.modify_data_with_id("fid", target_data=fid)
+        feed = Feed()
+        feed.make_with_dict(fid)
+
+        # 혹시 몰라서 예외처리 남김
+        if len(choice) == 0:
+            return "No Choice", False
+
+            # iid 만들기
+        new_iid = self.__make_new_iid()
+
+        new_interaction = self._make_new_interaction(iid=new_iid, fid=fid, choice=choice)
+
+        self._database.add_new_data(target_id="iid", target_data=new_interaction.get_dict_form_data())
+        # 음.. 따로 더 저장할게 있나요? 검토좀
+
+        return "Upload Success", True
+
+    # INTERACTION 수정, 근데 이거 필요한지는 모르겠음.
+
+    # Choice를 선택한 순간, USER 정보가 저장되는데, choice를 수정하면 그 선택지는 날려야할 것 같으니까.
+    # 그리고 이거 움직일려면 Try_modify_Feed랑 같이 움직여야 하는데
+    # 일단 잠시만 그 부분은 컨펌 이후에 진행하겠음
+    def try_modify_interaction(self, fid, iid, new_choice:list):
+        interaction_data = self._database.get_data_with_id(target="iid", id=iid)
+        interaction = Interaction()
+        interaction.make_with_dict(interaction_data)
+
+        self._database.delete_datas_with_id(target="iid", id=iid)
+        result, flag = self.try_make_new_interaction(fid=fid, choice=new_choice)
+
+        return result, flag
+
+    # 데이터베이스에서 삭제
+    def try_remove_interaction(self, fid):
+        feed_data = self._database.get_data_with_id(target="fid", id=fid)
+        feed = Feed()
+        feed.make_with_dict(feed_data)
+
+        # 데이터베이스에서 삭제
+        if not self._database.delete_datas_with_id(target="iid", id=feed.iid):
+            return "DATABASE_ERROR", False
+
+        # iid가 REMOVE되어서 FEED도 수정함.
+        feed.iid = ""
+        self._database.modify_data_with_id(target="fid", target_data=feed.get_dict_form_data())
+
+        return "COMPLETE", True
+
+    # FEED 상호 작용
     def try_interaction_feed(self, user:User, fid:str, action):
         feed = self.__try_interaction_with_feed(user=user, fid=fid, action=action)
         return [feed]
@@ -1727,9 +1815,6 @@ class FeedManager:
             feeds = feeds[:5]
 
         return feeds
-
-    def __make_new_interaction(self, fid, ):
-        return
 
 
 
