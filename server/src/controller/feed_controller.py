@@ -148,7 +148,7 @@ class Feed_Controller:
             return model
         
 
-    # 해시태그로 피드 검색하기
+    # bid로 피드 검색하기
     def get_feed_with_bid(self, database:Local_Database,
                         request, feed_search_engine: FeedSearchEngine,
                         num_feed= 4):

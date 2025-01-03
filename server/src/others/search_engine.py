@@ -10,6 +10,9 @@ from datetime import  datetime, timedelta
 from pprint import pprint
 import random
 
+from pymongo import database
+
+
 # 검색엔진이 해야하는일
 
 # 1. 키워드를 통한 피드 검색
@@ -22,8 +25,8 @@ class FeedSearchEngine:
     def __init__(self, database):
         self.__feed_algorithm= FeedAlgorithm(database=database)
         self.__search_manager = SearchManager(database=database, feed_algorithm=self.__feed_algorithm)
-
         self.__recommend_manager = recommendManager(database=database,feed_algorithm=self.__feed_algorithm)
+        self.__filter_manager = FilteringManager(database=database, feed_algorithm=self.__feed_algorithm)
         self.__database=database
 
     def make_task(self):
@@ -237,8 +240,8 @@ class FeedSearchEngine:
 
     def try_modify_hash(self, fid, new_hashtags):
         return
-    # ------------------------------------------------------------------------------------------------------------
 
+    # ------------------------------------------------------------------------------------------------------------
 
 """
 case 1) 첫 page에서 HASH TAG로 좋아요 순으로 보여줘야함
@@ -316,7 +319,6 @@ class ManagedFeed:
         print("uname: ", self.uname)
         print("hashtag: ", self.hashtag)
 
- 
 # LocalDatabase의 import 문제로 아래 코드는 정상동작 하지 않으니
 # 코드를 작성하는 도중에는 주석을 해제하여 LocalDatabase 함수를 자동완성하고
 # 실행할때는 다시 주석처리하여 사용할것
@@ -381,7 +383,6 @@ class SearchManager:
     def try_get_random_feed(self):
         random_index = random.randint(0, len(self.__feed_table)-1)
         return self.__feed_table[random_index].fid
-        
 
     def try_make_new_managed_feed(self, feed:Feed):
         managed_feed = ManagedFeed(
@@ -629,9 +630,7 @@ class ManagedBias:
         self.trend_hashtags = []
         self.user_nodes:list = user_nodes
 
-
 # 이건 사용자에게 맞는 데이터를 주려고 만든거
-
 class recommendManager:
     def __init__(self, database, feed_algorithm):
         self.__database = database
@@ -824,7 +823,117 @@ class recommendManager:
         except KeyboardInterrupt:
             print("Shutting down due to KeyboardInterrupt.")
 
-                
+class FilteringManager:
+    def __init__(self, database, feed_algorithm):
+        self.__database = database
+        self.__feed_algorithm:FeedAlgorithm = feed_algorithm
+        self.__feed_avltree = AVLTree()
+        self.__feed_table =  [] # 최신 기준으로 쌓을 Feed Table
+        self.__bias_avltree = AVLTree()
+
+        self.__init_feed_table()
+        self.__init_feed_avltree()
+        self.__init__bias_avltree()
+
+#------------------------------------------------------------------------------------
+    def __get_datetime_now(self):
+        now = datetime.now()
+        return now
+
+    # string to datetime
+    def __get_date_str_to_object(self, str_date):
+        date_obj = datetime.strptime(str_date, "%Y/%m/%d-%H:%M:%S")
+        return date_obj
+
+    # datetime to string
+    def __get_date_object_to_str(self, object:datetime):
+        formatted_str = object.strftime("%Y/%m/%d-%H:%M:%S")
+        return formatted_str
+
+    def __init_feed_table(self):
+        feeds = []
+        feed_datas = self.__database.get_all_data(target="fid")
+
+        for feed_data in feed_datas:
+            feed = Feed()
+            feed.make_with_dict(dictionary=feed_data)
+            feeds.append(feed)
+
+        # Managed Feed 형태로 보관
+        for single_feed in feeds:
+            managed_feed = ManagedFeed(fid=single_feed.fid,
+                                       like=single_feed.star,
+                                       date=self.__get_date_str_to_object(single_feed.date),
+                                       hashtag=copy(single_feed.hashtag),
+                                       uname=single_feed.nickname,
+                                       bid=single_feed.bid
+                                       )
+            # 보관
+            self.__feed_table.append(managed_feed)
+
+        # 리턴되면 Feed들이 없어지고 알아서 Managed Feed만 남으니 OK
+        # 정렬은 항상 최신순으로
+        self.__feed_table = sorted(self.__feed_table, key=lambda x:x.date, reverse=True)
+        num_feed = str(len(self.__feed_table))
+        print(f'INFO<-[      {num_feed} NOVA FEED IN SEARCH ENGINE NOW READY.')
+
+        return
+
+    def __init_feed_avltree(self):
+        for feed in self.__feed_table:
+            self.__feed_avltree.insert(feed.fid, feed)
+        print(f'INFO<-[      NOVA FEED AVLTREE IN FILTERING MANAGER NOW READY.')
+
+    def __init__bias_avltree(self):
+        biases = []
+        users = []
+        bias_datas = self.__database.get_all_data(target="bid")
+        user_datas = self.__database.get_all_data(target="uid")
+
+        for bias_data in bias_datas:
+            bias = Bias()
+            bias.make_with_dict(dictionary=bias_data)
+            biases.append(bias)
+
+        for user_data in user_datas:
+            user = User()
+            user.make_with_dict(dictionary=user_data)
+            users.append(user)
+
+        for single_bias in biases:
+            user_nodes = []
+            for single_user in users:
+                single_user: User = single_user
+                if single_bias.bid in single_user.bids:
+                    user_node = self.__feed_algorithm.get_user_node_with_uid(uid=single_user.uid)
+                    if user_node:
+                        user_nodes.append(user_node)
+            managed_bias = ManagedBias(bid=single_bias.bid, user_nodes=user_nodes)
+
+            self.__bias_avltree.insert(key=single_bias.fid, value=managed_bias)
+
+#------------------------------------------------------------------------------------
+    def filtering_community(self, bids:list):
+        # Search Engine에 들어가기 전에 BID 리스트를 검사할거임
+        # BID 리스트 요소는 1개가 될 수 있고, 아니면 선택을 하지않아서 여러개가 될 수 있음.
+        bid_filtering_fids = []
+
+        for managed_feed in self.__feed_table:
+            if managed_feed.bid in bids:
+                bid_filtering_fids.append(managed_feed.fid)
+
+        return bid_filtering_fids
+
+    def _filter_single_option_feed(self, feed_list, option):
+        result = []
+        for feed in feed_list:
+            if option == "long":
+                if feed.fclass == ""
+
+    def filter_options_feeds(self, options:list):
+
+
+
 # --------------------------------------------------------------------------------------------
 
 # Edge 수도코드
