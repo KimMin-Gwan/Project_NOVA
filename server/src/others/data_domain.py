@@ -235,7 +235,7 @@ class League(SampleDomain):
 class Feed(SampleDomain):
     def __init__(self, fid="", uid="", body="", fclass="", date="",
                  display=1, star=0, image=None, hashtag=None,
-                 comment=None, iid=""):
+                 comment=None, iid="", lid="", bid=""):
         if image is None:
             image = []
         if hashtag is None:
@@ -254,6 +254,8 @@ class Feed(SampleDomain):
         self.hashtag = copy.copy(hashtag)
         self.comment = copy.copy(comment)
         self.iid = iid  # interaction id
+        self.lid = lid  # link id
+        self.bid = bid  # bias id
 
         self.num_comment = len(self.comment)
         self.num_image = len(self.image)
@@ -274,6 +276,8 @@ class Feed(SampleDomain):
             self.hashtag = copy.copy(dict_data["hashtag"])
             self.comment = copy.copy(dict_data["cid"])
             self.iid = dict_data["iid"]
+            self.lid = dict_data["lid"]
+            self.bid = dict_data["bid"]
 
             self.num_comment = len(self.comment)
             self.num_image = len(self.image)
@@ -294,8 +298,10 @@ class Feed(SampleDomain):
             "star": self.star,
             "image": copy.copy(self.image),
             "hashtag": copy.copy(self.hashtag),
-            "comment": copy.copy(self.comment),
+            "cid": copy.copy(self.comment),
             "iid": self.iid,
+            "lid": self.lid,
+            "bid": self.bid,
 
             "num_comment":self.num_comment,
             "num_image":self.num_image,
@@ -336,6 +342,26 @@ class Interaction(SampleDomain):
             "result":self.result,
             "num_choice":self.num_choice,
             "my_attend":self.my_attend,
+        }
+
+class FeedLink(SampleDomain):
+    def __init__(self, lid="", lname="", url=""):
+        self.lid = lid
+        self.lname= lname
+        self.url = url 
+
+    def make_with_dict(self, dict_data):
+        try:
+            self.lid = dict_data['lid']
+            self.lname = dict_data['lname']
+            self.url = dict_data['url']
+        except Exception as e:
+            raise DictMakingError(error_type=e)
+
+    def get_dict_form_data(self):
+        return {
+            "baid": self.baid,
+            "ba_url": self.ba_url
         }
 
 class Banner(SampleDomain):
