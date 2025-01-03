@@ -4,6 +4,23 @@ export default function BiasBoxes() {
   const URL = "https://nova-platform.kr/home/";
   let bias_url = "https://kr.object.ncloudstorage.com/nova-images/";
 
+  function fetchBiasData() {
+    fetch(`${URL}my_bias`, {
+      credentials: "include",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setMyBias(data.body.bias_list);
+      })
+      .catch((error) => {
+        console.error("Fetch error:", error);
+      });
+  }
+
+  useEffect(() => {
+    fetchBiasData();
+  }, []);
+
   let [myBias, setMyBias] = useState([]);
   const defaultBoxes = 4;
   const totalBiasBoxes = Math.max(defaultBoxes, myBias.length);
@@ -30,19 +47,6 @@ export default function BiasBoxes() {
       setHasDragged(true);
     }
   }
-
-  useEffect(() => {
-    fetch(URL + "my_bias", {
-      credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setMyBias(data.body.bias_list);
-      })
-      .catch((error) => {
-        console.error("Fetch error:", error);
-      });
-  }, []);
 
   return (
     <div

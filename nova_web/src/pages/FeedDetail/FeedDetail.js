@@ -30,14 +30,15 @@ export default function FeedDetail({ feed }) {
   //   //   const FID = params.get("fid");
 
   let [feedData, setFeedData] = useState([]);
+  let [comments, setComments] = useState([]);
 
   async function fetchFeed() {
-    await fetch(`https://nova-platform.kr/feed_explore/get_feed?fid=${fid}`, {
+    await fetch(`https://nova-platform.kr/feed_explore/feed_detail/feed_data?fid=${fid}`, {
       credentials: "include",
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        console.log("detail", data);
         setFeedData(data.body.feed);
         setIsLoading(false);
       });
@@ -45,6 +46,22 @@ export default function FeedDetail({ feed }) {
 
   useEffect(() => {
     fetchFeed();
+  }, [comments]);
+
+  async function fetchFeedComment() {
+    await fetch(`https://nova-platform.kr/feed_explore/feed_detail/comment_data?fid=${fid}`, {
+      credentials: "include",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setComments(data.body.comments);
+        setIsLoading(false);
+      });
+  }
+
+  useEffect(() => {
+    fetchFeedComment();
   }, []);
 
   let [isClickedStar, setIsClickedStar] = useState(false);
@@ -80,14 +97,48 @@ export default function FeedDetail({ feed }) {
   let [commentValue, setCommentValue] = useState("");
 
   function onChangeComment(e) {
-    console.log(e.target.value);
     setCommentValue(e.target.value);
   }
 
   function onKeyDownEnter(e) {
     if (e.key === "Enter") {
+      fetchMakeComment();
       setCommentValue("");
     }
+  }
+
+  let header = {
+    "request-type": "default",
+    "client-version": "v1.0.1",
+    "client-ip": "127.0.0.1",
+    uid: "1234-abcd-5678",
+    endpoint: "/core_system/",
+  };
+
+  async function fetchMakeComment() {
+    await fetch("https://nova-platform.kr/feed_explore/make_comment", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        header,
+      },
+      body: JSON.stringify({
+        header: header,
+        body: {
+          fid: `${fid}`,
+          body: `${commentValue}`,
+          target_cid: "",
+        },
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("make", data);
+        setComments((prevComments) => {
+          return [data.body.comments[0], ...prevComments];
+        });
+      });
   }
 
   function onClickNav() {
@@ -118,47 +169,39 @@ export default function FeedDetail({ feed }) {
         </div>
 
         {/* 댓글 각각 */}
-        <div className={style["comment-box"]}>
-          <div className={style["comment-wrapper"]}>
-            <div className={style["comment-user"]}>
-              <div>
-                {feedData[0].comment.uname}
-                <span>{feedData[0].comment.date}</span>
-              </div>
-              <div>신고</div>
-            </div>
+        {comments.length !== 0 &&
+          comments.map((comment, i) => {
+            return (
+              <div key={comment.cid} className={style["comment-box"]}>
+                <div className={style["comment-wrapper"]}>
+                  <div className={style["comment-user"]}>
+                    <div>
+                      {comment.uname}
+                      <span>{comment.date}</span>
+                    </div>
+                    <div>신고</div>
+                  </div>
 
-            <div className={style["comment-content"]}>{feedData[0].comment.body}</div>
-            <div className={style["action-container"]}>
-              <div className={style["button-box1"]}>
-                <div className={style["action-button"]}>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      // handleCheckStar(feed.fid, e);
-                    }}
-                  >
-                    <img src={star} alt="star-icon" />
-                  </button>
-                  <span>0</span>
+                  <div className={style["comment-content"]}>{comment.body}</div>
+                  <div className={style["action-container"]}>
+                    <div className={style["button-box1"]}>
+                      <div className={style["action-button"]}>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            // handleCheckStar(feed.fid, e);
+                          }}
+                        >
+                          <img src={star} alt="star-icon" />
+                        </button>
+                        <span></span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-
-        {/* <div className={style["comment-box"]}>
-          <div className={style["comment-wrapper"]}>
-            <div className={style["comment-user"]}>
-              <div>{feedData[0].comment.uname}</div>
-              <div>{feedData[0].comment.date}</div>
-              <div>신고</div>
-            </div>
-
-            <div className={style["comment-content"]}>{feedData[0].comment.body}</div>
-            <div className={style["action-container"]}>상호작용</div>
-          </div>
-        </div> */}
+            );
+          })}
       </div>
       <div className={style["input-container"]}>
         <input

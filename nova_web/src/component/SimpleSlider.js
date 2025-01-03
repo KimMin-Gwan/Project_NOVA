@@ -84,7 +84,7 @@ const SimpleSlider = ({ feedData, brightMode, type }) => {
                   >
                     {type === "bias" && (
                       <div className={style["name-container"]}>
-                        <div className={style["profile"]}>{feed.nickname}</div>
+                        <div className={style["profile"]}>{feed.feed.nickname}</div>
                       </div>
                     )}
 
@@ -92,8 +92,8 @@ const SimpleSlider = ({ feedData, brightMode, type }) => {
                       <div className={style["img-container"]}>
                         <img
                           src={
-                            feed.image.length > 0
-                              ? feed.image[0]
+                            feed.feed.image.length > 0
+                              ? feed.feed.image[0]
                               : "https://kr.object.ncloudstorage.com/nova-feed-images/nova-platform.PNG"
                           }
                           alt="이미지"
@@ -103,7 +103,7 @@ const SimpleSlider = ({ feedData, brightMode, type }) => {
 
                     <section className={style["text-container"]}>
                       <div className={style["tag-text"]}>
-                        {feed.hashtag.map((tag, i) => {
+                        {feed.feed.hashtag.map((tag, i) => {
                           return (
                             <span key={i} className={style["tag"]}>
                               #{tag}
@@ -111,10 +111,10 @@ const SimpleSlider = ({ feedData, brightMode, type }) => {
                           );
                         })}
                       </div>
-                      <div className={style["main-text"]}>{feed.body}</div>
+                      <div className={style["main-text"]}>{feed.feed.body}</div>
                     </section>
                     <footer className={style["like-comment"]}>
-                      좋아요 {feed.star}개 | 댓글 {feed.num_comment}개
+                      좋아요 {feed.feed.star}개 | 댓글 {feed.feed.num_comment}개
                     </footer>
                   </div>
                 </div>
