@@ -1306,11 +1306,11 @@ class FeedManager:
 
     # 새로운 피드 만들기
     # 실제로 피드를 만들고, 서치 엔진에 추가하는 부분이다.
-    def __make_new_feed(self, user:User, fid, fclass, choice, body, hashtag, images):
+    def __make_new_feed(self, user:User, fid, fclass, choice, body, hashtag, images, link, bid):
         # 검증을 위한 코드는 이곳에 작성하시오
         new_feed = self.__set_new_feed(user=user, fid=fid, fclass=fclass,
                                        choice=choice, body=body, hashtag=hashtag,
-                                       image=images)
+                                       image=images, link=link, bid=bid)
         self._database.add_new_data(target_id="fid", new_data=new_feed.get_dict_form_data())
 
         self._feed_search_engine.try_make_new_managed_feed(feed=new_feed)
@@ -1318,8 +1318,15 @@ class FeedManager:
         return
 
     # 새로운 피드의 데이터를 추가하여 반환
-    def __set_new_feed(self, user:User,fid, fclass, choice, body, hashtag, image):
-        temp_list = [[], [], [], []]
+    def __set_new_feed(self, user:User,fid, fclass, choice, body, hashtag, image, link, bid):
+        # interaction 만들고 iid 받아오는 함수 호출
+        #iid = self._make_new_interaction(fid=fid, choice=choice)
+        iid = "temp"
+
+        # link가 있으면 link도 넣어주면됨
+
+        #lid = self._make_new_link(fid=fid, link=link)
+        lid = "temp"
 
         new_feed = Feed()
         new_feed.fid = fid
@@ -1328,14 +1335,13 @@ class FeedManager:
         new_feed.body = body
         new_feed.date = self.__set_datetime()
         new_feed.fclass = fclass
-        new_feed.class_name, new_feed.result = self.__get_class_name(fclass=fclass)
-        new_feed.choice = choice[:len(new_feed.result)]
-        new_feed.attend = temp_list[:len(new_feed.result)]
-        new_feed.state = "y"
-        new_feed.category = [] # 여기서 카테고리 추가
         new_feed.image= image
         new_feed.hashtag = hashtag
         new_feed.num_image = len(image)
+        new_feed.iid = iid
+        new_feed.lid = lid
+        new_feed.bid = bid
+
         return new_feed
 
     # FEED 클래스를 반환하는 함수
@@ -1372,7 +1378,10 @@ class FeedManager:
                              choice=data_payload.choice,
                              body=data_payload.body,
                              hashtag=data_payload.hashtag,
-                             images=image_result)
+                             images=image_result,
+                             link=data_payload.link,
+                             bid=data_payload.bid
+                             )
 
         #작성한 피드 목록에 넣어주고
         user.my_feed.append(fid)

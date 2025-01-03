@@ -141,7 +141,29 @@ class Core_Service_View(Master_View):
             body_data = model.get_response_form_data(self._head_parser)
             #pprint(body_data)
             response = request_manager.make_json_response(body_data=body_data)
+            return response
 
+        # /home/search_feed_with_bid?bid=뭐
+        @self.__app.get('/home/search_feed_with_bid')
+        def get_feed_with_bid(request:Request, bid:Optional[str]=""):
+
+            request_manager = RequestManager()
+
+            data_payload = GetFeedBidRequest(bid=bid)
+
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            #if not request_manager.jwt_payload.result:
+                #raise request_manager.credentials_exception
+
+            home_controller=Feed_Controller(feed_manager=self.__feed_manager)
+            model = home_controller.get_feed_with_bid(database=self.__database,
+                                                        request=request_manager,
+                                                        feed_search_engine=self.__feed_search_engine,
+                                                        num_feed=5)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            #pprint(body_data)
+            response = request_manager.make_json_response(body_data=body_data)
             return response
         
         @self.__app.get('/home/all_feed')
@@ -284,6 +306,29 @@ class Core_Service_View(Master_View):
                                                         num_feed=5)
 
             body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
+        # /home/search_feed_with_bid?bid=뭐
+        @self.__app.get('/feed_explore/search_feed_with_bid')
+        def search_feed_with_bid(request:Request, bid:Optional[str]="", key:Optional[int] = -1):
+
+            request_manager = RequestManager()
+
+            data_payload = GetFeedBidRequest(bid=bid, key=key)
+
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            #if not request_manager.jwt_payload.result:
+                #raise request_manager.credentials_exception
+
+            home_controller=Feed_Controller(feed_manager=self.__feed_manager)
+            model = home_controller.get_feed_with_bid(database=self.__database,
+                                                        request=request_manager,
+                                                        feed_search_engine=self.__feed_search_engine,
+                                                        num_feed=3)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            #pprint(body_data)
             response = request_manager.make_json_response(body_data=body_data)
             return response
         
@@ -671,6 +716,11 @@ class HashtagFeedRequest(RequestHeader):
         self.hashtag = hashtag 
         self.key = key
 
+class GetFeedBidRequest(RequestHeader):
+    def __init__(self, bid, key=-1) -> None:
+        self.bid =bid 
+        self.key=key
+
 class GetFeedRequest(RequestHeader):
     def __init__(self, fid) -> None:
         self.fid= fid
@@ -695,9 +745,11 @@ class EditFeedRequest(RequestHeader):
         body = request['body']
         self.fid = body['fid']
         self.body = body['body']
-        self.fclass = body ['fclass']
+        self.fclass = body['fclass']
         self.choice= body['choice']
         self.hashtag = body['hashtag']
+        self.link = body['link']
+        self.bid = body['bid']
         self.image_names = image_names
         self.images = images
         

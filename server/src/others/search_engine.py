@@ -300,12 +300,13 @@ FeedSearchEngine의 인터페이스가 요구하는 요청 값의 공통점을 �
 # 클래스 목적 : 피드를 검색하거나, 조건에 맞는 피드를 제공하기 위함
 
 class ManagedFeed:
-    def __init__(self, fid="", like=0, date=None, uname="", hashtag=[]):
+    def __init__(self, fid="", like=0, date=None, uname="", hashtag=[], bid=""):
         self.fid=fid
         self.like=like
         self.date=date
         self.uname = uname
         self.hashtag = hashtag
+        self.bid = bid
 
     # 무슨 데이터인지 출력해보기
     def __call__(self):
@@ -363,7 +364,8 @@ class SearchManager:
                                         like=single_feed.star,
                                         date=self.__get_date_str_to_object(single_feed.date),
                                         hashtag=copy(single_feed.hashtag),
-                                        uname=single_feed.nickname
+                                        uname=single_feed.nickname,
+                                        bid=single_feed.bid
                                         )
             # 보관
             self.__feed_table.append(managed_feed)
@@ -387,7 +389,9 @@ class SearchManager:
             like=feed.star,
             date=feed.date,
             uname=feed.nickname,
-            hashtag=feed.hashtag)
+            hashtag=feed.hashtag,
+            bid=feed.bid
+            )
 
         self.__feed_table.append(managed_feed)
         self.__feed_avltree.insert(managed_feed.fid, managed_feed)

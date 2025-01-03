@@ -272,8 +272,8 @@ class Feed(SampleDomain):
             self.hashtag = copy.copy(dict_data["hashtag"])
             self.comment = copy.copy(dict_data["cid"])
             self.iid = dict_data["iid"]
-            #self.lid = dict_data["lid"]
-            #self.bid = dict_data["bid"]
+            self.lid = dict_data["lid"]
+            self.bid = dict_data["bid"]
 
             self.num_comment = len(self.comment)
             self.num_image = len(self.image)

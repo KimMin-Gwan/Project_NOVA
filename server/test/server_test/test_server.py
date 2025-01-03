@@ -32,8 +32,8 @@ else:
 
 fid = "6063-qfgh-2540-3URvvc"
 
-test_url = f"http://127.0.0.1:4000/feed_explore/feed_detail/comment_data?fid={fid}"
-#test_url = "https://nova-platform.kr/nova_fund_system/project_detail?pid=5"
+#test_url = f"http://127.0.0.1:4000/home/weekly_best"
+test_url = "https://nova-platform.kr/home/weekly_best"
 
 
 print("????")

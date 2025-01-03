@@ -146,6 +146,38 @@ class Feed_Controller:
 
         finally:
             return model
+        
+
+    # 해시태그로 피드 검색하기
+    def get_feed_with_bid(self, database:Local_Database,
+                        request, feed_search_engine: FeedSearchEngine,
+                        num_feed= 4):
+        model = FeedModel(database=database)
+
+        try:
+            # 유저가 있으면 세팅
+            if request.jwt_payload != "":
+                model.set_user_with_email(request=request.jwt_payload)
+            model.set_feed_data(feed_search_engine=feed_search_engine,
+                                target_type="bid",
+                                target=request.data_payload.bid,
+                                num_feed=num_feed,
+                                index=request.data_payload.key,
+                                feed_manager=self.__feed_manager
+                                )
+
+        except CustomError as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
+
+        except Exception as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
+
+        finally:
+            return model
+
+
 
     # 해시태그로 피드 검색하기
     def get_feed_with_hashtag(self, database:Local_Database,

@@ -27,21 +27,10 @@ def main():
 
 
         for data in data_list:
-            dict_data = {}
+            data["bid"] = ""
+            data["lid"] = ""
 
-            dict_data['fid'] = data['fid']
-            dict_data['uid'] = data['uid']
-            dict_data['body'] = data['body']
-            dict_data['fclass'] = "short"
-            dict_data['display'] = 4
-            dict_data['date'] = data['date']
-            dict_data['nickname'] =data['nickname']
-            dict_data['star'] = data['star']
-            dict_data['image'] = data['image']
-            dict_data['hashtag'] = data['hashtag']
-            dict_data['cid'] = []
-            dict_data['iid'] = ""
-            new_data.append(dict_data)
+            new_data.append(data)
 
 
     with open("./../src/model/local_database/feed.json", 'w',  encoding='utf-8' )as f:
