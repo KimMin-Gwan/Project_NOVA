@@ -33,7 +33,6 @@ export default function FeedList(isUserState) {
   let navigate = useNavigate();
 
   const FETCH_URL = "https://nova-platform.kr/feed_explore/";
-  // fetch(`https://nova-platform.kr/feed_explore/search_feed_with_hashtag?hashtag=${tag}`, {
   function fetchData() {
     // setIsLoading(true);
     if (type === "best") {
@@ -237,8 +236,19 @@ export default function FeedList(isUserState) {
             </button>
           </div>
         </header>
+        {type == "all" && <BiasBoxes />}
         {type === "all" && (
-          <BiasBoxes />
+          // <BiasBoxes />
+          <div className={style["search-section"]}>
+            <SearchBox />
+            <div className={style["search-filter"]}>
+              <button onClick={onClickFilterButton}>필터순</button>
+              <div className={style["sort-btn-container"]}>
+                <button>최신순</button>
+                <button>랜덤순</button>
+              </div>
+            </div>
+          </div>
           // <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>전체 피드</div>
         )}
         {type === "best" && (
@@ -247,16 +257,7 @@ export default function FeedList(isUserState) {
             subTitle={"오늘의 키워드"}
             onClickTagButton={onClickTag}
           />
-          // <div className={style["search-section"]}>
-          //   <SearchBox />
-          //   <div className={style["search-filter"]}>
-          //     <button onClick={onClickFilterButton}>필터순</button>
-          //     <div className={style["sort-btn-container"]}>
-          //       <button>최신순</button>
-          //       <button>랜덤순</button>
-          //     </div>
-          //   </div>
-          // </div>
+
           // <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>오늘의 베스트 피드</div>
         )}
         {type === "weekly_best" && (
