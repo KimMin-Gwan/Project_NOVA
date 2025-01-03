@@ -82,6 +82,23 @@ export default function FeedList(isUserState) {
     }
   }
 
+  function fetchFeedWithTag(tag) {
+    fetch(`${FETCH_URL}search_feed_with_hashtag?hashtag=${tag}&key=-1`, {
+      credentials: "include",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("tag", data);
+        setFeedData(data.body.send_data);
+        setNextData(data.body.key);
+        setIsLoading(false);
+      });
+  }
+
+  function onClickTag(tag) {
+    fetchFeedWithTag(tag);
+  }
+
   function fetchPlusData() {
     // setIsLoading(true);
     if (type === "best") {
@@ -225,20 +242,29 @@ export default function FeedList(isUserState) {
           // <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>전체 피드</div>
         )}
         {type === "best" && (
-          <div className={style["search-section"]}>
-            <SearchBox />
-            <div className={style["search-filter"]}>
-              <button onClick={onClickFilterButton}>필터순</button>
-              <div className={style["sort-btn-container"]}>
-                <button>최신순</button>
-                <button>랜덤순</button>
-              </div>
-            </div>
-          </div>
+          <KeywordBox
+            title={"인기 급상승"}
+            subTitle={"오늘의 키워드"}
+            onClickTagButton={onClickTag}
+          />
+          // <div className={style["search-section"]}>
+          //   <SearchBox />
+          //   <div className={style["search-filter"]}>
+          //     <button onClick={onClickFilterButton}>필터순</button>
+          //     <div className={style["sort-btn-container"]}>
+          //       <button>최신순</button>
+          //       <button>랜덤순</button>
+          //     </div>
+          //   </div>
+          // </div>
           // <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>오늘의 베스트 피드</div>
         )}
         {type === "weekly_best" && (
-          <KeywordBox title={"인기 급상승"} subTitle={"오늘의 키워드"} />
+          <KeywordBox
+            title={"많은 사랑을 받은"}
+            subTitle={"이번주 키워드"}
+            onClickTagButton={onClickTag}
+          />
           // <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>주간 베스트 피드</div>
         )}
         {keyword && (
