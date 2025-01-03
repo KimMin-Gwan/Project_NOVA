@@ -252,7 +252,6 @@ class Core_Service_View(Master_View):
             return response
 
     def feed_route(self):
-
         # 피드 자세히 보기 (피드 페이지)의 피드 데이터
         @self.__app.get('/feed_explore/feed_detail/feed_data')
         def get_feed_detail(request:Request, fid:Optional[str]):
@@ -638,6 +637,8 @@ class Core_Service_View(Master_View):
             return html
         
 
+
+
     #def web_chatting_route(self, endpoint:str):
         ##채팅서버
         ##@self.__app.get('/chatting_list')
@@ -811,6 +812,7 @@ class CheckRequest(RequestHeader):
         super().__init__(request)
         body = request['body']
         self.type = body['type']
+
 
 class ConnectionManager:
     def __init__(self):

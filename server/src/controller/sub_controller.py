@@ -29,6 +29,13 @@ class Sub_Controller:
         finally:
             return model
 
+    def try_get_image_tag(self, database:Local_Database, data_payload) -> BaseModel: 
+        model = ImageTagModel(database=database)
+
+        model.get_image(url = data_payload.url)
+
+        return model
+
     def get_notice_list(self, database:Local_Database) -> BaseModel: 
         model = NoticeListModel(database=database)
         try:
