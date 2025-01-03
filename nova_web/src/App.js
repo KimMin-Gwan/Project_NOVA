@@ -195,7 +195,6 @@ function App() {
       <Route path="/bias_funding/:type" element={<MoreProjects />}></Route>
       <Route path="/test" element={<TestRef />}></Route>
       <Route path="*" element={<div>404 Error</div>}></Route>
-      {/* <Route path="/test" element={<Box />}></Route> */}
       {/* <Route path="/planet" element={<PlanetList />}></Route> */}
       {/* <Route path='/league_detail' element={<LeagueDetail />}></Route> */}
       <Route
