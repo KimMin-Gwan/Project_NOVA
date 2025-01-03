@@ -29,7 +29,7 @@
 }
 .tags-wrapper {
   display: flex;
-  gap: 15px;
+  gap: 10px;
   /* animation: tagScroll 3s linear infinite; */
 }
 
@@ -38,5 +38,12 @@
   text-align: center;
   padding: 10px 10px;
   border-radius: 100px;
+  margin-left: 10px;
   background-color: white;
+  cursor: pointer;
+}
+
+.click-tag {
+  background-color: #7960ec;
+  color: white;
 }
