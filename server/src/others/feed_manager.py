@@ -1679,7 +1679,7 @@ class FeedManager:
         return iid
 
     # 기본 뼈대 : FEED 만드는 함수 참고
-    def __make_new_interaction(self, iid, fid, choice:list):
+    def _make_new_interaction(self, iid, fid, choice:list):
         user_attend_list = list([] for _ in choice)
         new_interaction = Interaction()
 
@@ -1706,7 +1706,7 @@ class FeedManager:
             # iid 만들기
         new_iid = self.__make_new_iid()
 
-        new_interaction = self.__make_new_interaction(iid=new_iid, fid=fid, choice=choice)
+        new_interaction = self._make_new_interaction(iid=new_iid, fid=fid, choice=choice)
 
         self._database.add_new_data(target_id="iid", target_data=new_interaction.get_dict_form_data())
         # 음.. 따로 더 저장할게 있나요? 검토좀
