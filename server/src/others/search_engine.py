@@ -29,7 +29,7 @@ class FeedSearchEngine:
     def make_task(self):
         return self.__recommend_manager.make_task()
 
-    def try_test_graph_recommnad_system(self, fid):
+    def try_test_graph_recommend_system(self, fid):
         feed = self.__database.get_data_with_id(target="fid", id=fid)
         #result = self.__feed_algorithm.find_recommend_feed(start_fid=feed.fid)
         result = "2"

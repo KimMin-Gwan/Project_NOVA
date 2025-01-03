@@ -54,7 +54,7 @@ class Sub_Service_View(Master_View):
             #result , result_index = self.__feed_search_engine.try_get_feed_in_recent(target_type=target_type, target = target, num_feed=num_feed, index=index)
             #result , result_index = self.__feed_search_engine.try_get_feed_in_recent(search_type ="today", num_feed= 6, index=-2)
             
-            result = self.__feed_search_engine.try_test_graph_recommnad_system(
+            result = self.__feed_search_engine.try_test_graph_recommend_system(
                 fid=fid)
                
 
