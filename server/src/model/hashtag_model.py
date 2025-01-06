@@ -34,7 +34,7 @@ class HashTagModel(BaseModel):
             return False
 
     def set_best_hash_tag(self, feed_search_engine:FeedSearchEngine):
-        self._hashtags = feed_search_engine.get_recommend_hashtag(bid=self._bias.bid)
+        self._hashtags = feed_search_engine.get_recommend_hashtag(bids=self._bids)
         return
 
     def set_realtime_best_hash_tag(self, feed_search_engine:FeedSearchEngine, num_hashtag):
