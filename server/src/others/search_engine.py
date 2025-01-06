@@ -179,7 +179,7 @@ class FeedSearchEngine:
         # self.__managed_feed_table = ManagedFeedTable(database=database)
         self.__search_manager = SearchManager(database=database, feed_algorithm=self.__feed_algorithm)
         self.__recommend_manager = RecommendManager(database=database,feed_algorithm=self.__feed_algorithm)
-        # self.__filter_manager = FilteringManager(database=database, feed_algorithm=self.__feed_algorithm)
+        self.__filter_manager = FilteringManager(database=database, feed_algorithm=self.__feed_algorithm)
         self.__database=database
 
     def make_task(self):
@@ -1016,12 +1016,12 @@ class FilteringManager:
 
         for bias_data in bias_datas:
             bias = Bias()
-            bias.make_with_dict(dictionary=bias_data)
+            bias.make_with_dict(dict_data=bias_data)
             biases.append(bias)
 
         for user_data in user_datas:
             user = User()
-            user.make_with_dict(dictionary=user_data)
+            user.make_with_dict(dict_data=user_data)
             users.append(user)
 
         for single_bias in biases:
@@ -1034,7 +1034,7 @@ class FilteringManager:
                         user_nodes.append(user_node)
             managed_bias = ManagedBias(bid=single_bias.bid, user_nodes=user_nodes)
 
-            self.__bias_avltree.insert(key=single_bias.fid, value=managed_bias)
+            self.__bias_avltree.insert(key=single_bias.bid, value=managed_bias)
 
 #------------------------------------------------------------------------------------
     # BID로 필터링 하는 작업 수행
