@@ -33,42 +33,70 @@ import random
 
 # 클래스 목적 : 피드를 검색하거나, 조건에 맞는 피드를 제공하기 위함
 class ManagedFeed:
-    def __init__(self, fid="", like=0, date=None, uname="", hashtag=[], bid=""):
+    def __init__(self, fid="", like=0, date=None, uname="", fclass="",
+                 hashtag=[], bid="", iid="", num_images=0):
         self.fid=fid
+        self.fclass = fclass
         self.like=like
         self.date=date
         self.uname = uname
         self.hashtag = hashtag
         self.bid = bid
+        self.iid = iid
+        self.num_images = num_images
 
     # 무슨 데이터인지 출력해보기
     def __call__(self):
         print("fid : ", self.fid)
+        print("fclass: ", self.fclass)
         print("like : ", self.like)
         print("date: ", self.date)
         print("uname: ", self.uname)
         print("hashtag: ", self.hashtag)
+        print("bid: ", self.bid)
+        print("iid: ", self.iid)
+        print("num_images: ", self.num_images)
+
+    def to_dict(self):
+        return {
+            "fid": self.fid,
+            "fclass": self.fclass,
+            "like": self.like,
+            "date": self.date,
+            "uname": self.uname,
+            "hashtag": self.hashtag,
+            "bid": self.bid,
+            "iid": self.iid,
+            "num_images": self.num_images
+        }
 
 # 이거는 Bias 테이블에 들어가게 되는 Bias 자료형
-# 데이터베이스에 받아서 만들어진다
+# 데이터베이스에 받아서 만들어진다.
 class ManagedBias:
     def __init__(self, bid, user_nodes:list):
         self.bid = bid
         self.trend_hashtags = []
         self.user_nodes:list = user_nodes
 
-#--------------------------------------------------------------------------------------------------
+    def to_dict(self):
+        return {
+            "bid": self.bid,
+            "trend_hashtags": self.trend_hashtags,
+        }
 
 # ManagedFeed 테이블 클래스.
 # 기존의 SearchEngine 에서는 각 Manager마다 각기 정의된 ManagedTable을 가졌는데
 # 너무 복잡해짐에 따라, 통합하기로 결정. 클래스화 시킵니다.
-class ManagedFeedTable:
-    def __init__(self, database):
+class ManagedFeedBiasTable:
+    def __init__(self, database, feed_algorithm):
         self.__database = database
+        self.__feed_algorithm = feed_algorithm
         self.__feed_table =[]
         self.__feed_avltree = AVLTree()
+        self.__bias_avltree = AVLTree()
 
         self.__init_feed_table()
+        self.__init_bias_tree()
 
     def __get_datetime_now(self):
         now = datetime.now()
@@ -127,11 +155,14 @@ class ManagedFeedTable:
         # 잠시 보관한 피드 데이터에서 필요한 정보만 뽑아서 ManagedFeed 객체 생성
         for single_feed in feeds:
             managed_feed = ManagedFeed(fid=single_feed.fid,
+                                       fclass=single_feed.fclass,
                                        like=single_feed.star,
                                        date=self.__get_date_str_to_object(single_feed.date),
                                        hashtag=copy(single_feed.hashtag),
                                        uname=single_feed.nickname,
-                                       bid=single_feed.bid
+                                       bid=single_feed.bid,
+                                       iid=single_feed.iid,
+                                       num_images=len(single_feed.image)
                                        )
             # 보관
             self.__feed_table.append(managed_feed)
@@ -150,8 +181,69 @@ class ManagedFeedTable:
             self.__feed_avltree.insert(feed.fid, feed)
         print(f'INFO<-[      NOVA FEED AVLTREE IN SEARCH ENGINE NOW READY.')
 
-    #---------------------------------------------------------------------------------------------
+    # Bias Tree 설정
+    def __init_bias_tree(self):
+        biases = []
+        users = []
+        bias_datas = self.__database.get_all_data(target="bid")
+        user_datas = self.__database.get_all_data(target="uid")
 
+        for bias_data in bias_datas:
+            bias = Bias()
+            bias.make_with_dict(bias_data)
+            biases.append(bias)
+
+        for user_data in user_datas:
+            user = User()
+            user.make_with_dict(user_data)
+            users.append(user)
+
+        for single_bias in biases:
+            user_nodes = []
+            for single_user in users:
+                single_user:User = single_user
+                # bias를 팔로우하는 유저를 찾아서 노드 연결해야됨
+                if single_bias.bid in single_user.bids:
+                    user_node = self.__feed_algorithm.get_user_node_with_uid(uid=single_user.uid)
+                    # 못찾 으면 예외 처리할 것
+                    if user_node:
+                        user_nodes.append(user_node)
+
+            # 이제 관리될 바이어스를 만들고 연결한다음
+            managed_bias = ManagedBias(bid=single_bias.bid, user_nodes=user_nodes)
+            # avl트리에 넣어주면됨
+            self.__bias_avltree.insert(key=single_bias.bid, value=managed_bias)
+
+        return
+
+    # Feed list DataFrame화
+    def __dataframing_feed_list(self):
+        # ManagedFeed들은 객체이므로, 딕셔너리화 시켜서 리스트로 만든다.
+        managed_feed_dict_list = [managed_feed.to_dict() for managed_feed in self.__feed_table]
+        feed_df = pd.DataFrame(managed_feed_dict_list)
+        return feed_df
+
+    #---------------------------------------------------------------------------------------------
+    def len_feed_table(self):
+        # Feed Table의 길이 구하기
+        return len(self.__feed_table)
+
+    # 새로운 ManagedFeed를 추가함
+    def make_new_managed_feed(self, feed:Feed):
+        managed_feed = ManagedFeed(
+            fid=feed.fid,
+            like=feed.star,
+            date=feed.date,
+            uname=feed.nickname,
+            hashtag=feed.hashtag,
+            bid=feed.bid
+        )
+
+        self.__feed_table.append(managed_feed)
+        self.__feed_avltree.insert(managed_feed.fid, managed_feed)
+        return
+
+    # ManagedFeedTable을 수정, 새로운 Feed가 들어왔기 때문
     def modify_feed_table(self, feed:Feed):
         # 피드 테이블을 수정하는 함수
         # managed_feed를 찾아야 됨
@@ -164,6 +256,7 @@ class ManagedFeedTable:
         managed_feed.uname = feed.nickname
         return
 
+    # ManagedFeed가 삭제되었기 때문에, 테이블과 트리에서도 삭제시킴
     def remove_feed(self, feed:Feed):
         # 삭제하는 함수. 피드가  삭제되면 None으로 바뀔것
         managed_feed = self.__feed_avltree.get(key=feed.fid)
@@ -171,15 +264,147 @@ class ManagedFeedTable:
         self.__feed_avltree.remove(key=feed.fid)
         return
 
+    # 랜덤한 Feed 하나 추출
+    def get_random_feed(self):
+        random_index = random.randint(0, len(self.__feed_table)-1)
+        return self.__feed_table[random_index].fid
+
+    # 타겟범위내의 Feed를 반환
+    def get_feeds_target_range(self, index, target_index=0):
+        return self.__feed_table[target_index:index][::-1]
+
+    # 시간 차이를 바탕으로 정해진 시간대 내의 피드 정보 구하기
+    # target_hour : 1, 24, 168
+    def find_target_index(self, target_hour=1):
+        target_index = len(self.__feed_table)
+
+        for i, managed_feed in enumerate(self.__feed_table):
+            # 삭제된 피드는 None으로 표시될것이라서
+            if managed_feed.fid == "":
+                continue
+
+            if self.__get_time_diff(target_time=managed_feed.date, target_hour=target_hour):
+                continue
+            else:
+                target_index = i
+                break
+
+        return target_index
+
+    # Managed Feed 찾기
+    def search_managed_feed(self, fid):
+        return self.__feed_avltree.get(key=fid)
+
+    # 키, 옵션을 통해 Feed를 찾음
+    def search_feed_with_key_and_option(self, option:str, key:str="", num_feed=10, index=-1) -> tuple:
+        result_fid = []
+        result_index = -3
+
+        if index == -1:
+            index = self.len_feed_table()
+
+            # target_index default 값은 0
+        search_range = self.get_feeds_target_range(index=index)
+        # search_range = self.__feed_table[:index][::-1]
+
+        if index < 0 or index > self.len_feed_table():
+            return result_fid, -3
+
+        count = 0
+        for i, managed_feed in enumerate(search_range):
+            #i = len(self.__feed_table) - 1 - i
+            # count로 이미 다 살펴 봤다면
+            if count == num_feed:
+                break
+
+            # 삭제된 피드는 None으로 표시될것이라서
+            if managed_feed.fid == "":
+                continue
+
+            if option == "hashtag":
+                # 찾는 해시태그가 아님
+                if key not in managed_feed.hashtag:
+                    continue
+            elif option == "uname":
+                if key not in managed_feed.uname:
+                    continue
+            elif option == "fid":
+                if key == managed_feed.fid:
+                    result_fid.append(managed_feed)
+                    result_index = i
+                    break
+
+            result_fid.append(managed_feed.fid)
+
+            # result_index 업데이트
+            # 마지막 index 발견
+            result_index = index - 1 - i  # 실제 self.__feed_table에서의 인덱스 계산
+            count += 1
+
+        return result_fid, result_index
+
+    # 바이어스 커뮤니티에 따라 Feed를 분류함
+    # 데이터프레임 활용
+    def filtering_bias_community(self, bids:list):
+        feeds_df = self.__dataframing_feed_list()
+
+        # Feed DF 중, bids안에 포함된 feed들만 반환함. 아직은 데이터프레임화 되어있음
+        filtered_feeds_df = feeds_df[feeds_df['bid'].isin(bids)]
+
+        # 필터링된 Feed들의 리스트를 반환
+        return filtered_feeds_df['fid'].tolist()
+
+    #---------------------------------------------------------------------------------------------
+
+    # 최애의 정보 하나 반환
+    def get_managed_bias(self, bid):
+        return self.__bias_avltree.get(key=bid, default=None)
+
+    def get_bias_list(self):
+        return list(self.__bias_avltree.values())
+
+    def get_liked_biases(self, bids):
+        result = []
+        for bid in bids:
+            if bid in self.__bias_avltree:
+                result.append(self.__bias_avltree.get(key=bid, default=None))
+
+        return result
+
+    # 새롭게 최애를 지정했을 때 연결하는 시스템
+    # 근데 이거 잘생각해보면 최애 지정하기 전에 쓴 글들은 해시태그에 반영되어야 하는가?
+    def add_new_user_to_bias(self, bid:str, uid:str):
+        managed_bias:ManagedBias = self.__bias_avltree.get(key=bid)
+        user_node = self.__feed_algorithm.get_user_node_with_uid(uid=uid)
+        managed_bias.user_nodes.append(user_node)
+        return
+
+    # 최애 연결 끊기
+    def remove_user_to_bias(self, bid:str, uid:str):
+        managed_bias:ManagedBias = self.__bias_avltree.get(key=bid)
+        user_node = self.__feed_algorithm.get_user_node_with_uid(uid=uid)
+        managed_bias.user_nodes.remove(user_node)
+        return
+
+    #---------------------------------------------------------------------------------------------
+
+    # def realtime_trending_hashtag(self, ):
+
+#--------------------------------------------------------------------------------------------------
 
 # 아래는 검색 엔진
 class FeedSearchEngine:
     def __init__(self, database):
         self.__feed_algorithm= FeedAlgorithm(database=database)
-        # self.__managed_feed_table = ManagedFeedTable(database=database)
-        self.__search_manager = SearchManager(database=database, feed_algorithm=self.__feed_algorithm)
-        self.__recommend_manager = RecommendManager(database=database,feed_algorithm=self.__feed_algorithm)
-        self.__filter_manager = FilteringManager(database=database, feed_algorithm=self.__feed_algorithm)
+        self.__managed_feed_bias_table = ManagedFeedBiasTable(database=database, feed_algorithm=self.__feed_algorithm)
+
+        self.__search_manager = SearchManager(database=database, feed_algorithm=self.__feed_algorithm,
+                                              managed_feed_bias_table=self.__managed_feed_bias_table)
+        self.__recommend_manager = RecommendManager(database=database,feed_algorithm=self.__feed_algorithm,
+                                                    managed_feed_bias_table=self.__managed_feed_bias_table)
+        self.__filter_manager = FilteringManager(database=database, feed_algorithm=self.__feed_algorithm,
+                                                 managed_feed_bias_table=self.__managed_feed_bias_table)
+
         self.__database=database
 
     def make_task(self):
@@ -195,11 +420,11 @@ class FeedSearchEngine:
     # 새롭게 최애를 지정했을 때 연결하는 시스템
     # 근데 이거 잘생각해보면 최애 지정하기 전에 쓴 글들은 해시태그에 반영되어야 하는가?
     def add_new_user_to_bias(self, bid:str, uid:str):
-        self.__recommend_manager.add_new_user_to_bias(bid=bid, uid=uid)
+        self.__managed_feed_bias_table.add_new_user_to_bias(bid=bid, uid=uid)
         return
     
     def remove_user_to_bias(self, bid:str, uid:str):
-        self.__recommend_manager.remove_user_to_bias(bid=bid, uid=uid)
+        self.__managed_feed_bias_table.remove_user_to_bias(bid=bid, uid=uid)
         return
 
     # 피드 매니저가 관리중인 피드를 보기 위해 만든 함수
@@ -215,8 +440,6 @@ class FeedSearchEngine:
     
     def try_get_random_feed(self) -> str:
         return self.__search_manager.try_get_random_feed()
-        
-
 
     # 이 함수가 핵심 -> feed 데이터를 요청하면 주기 위한 함수
     # target_type -> feed 검색을 하기 위한 key값
@@ -330,8 +553,8 @@ class FeedSearchEngine:
     def get_best_hashtag(self, num_hashtag=10):
         return self.__recommend_manager.get_best_hashtags(num_hashtag=num_hashtag)
 
-    def get_recommend_hashtag(self, bid:str):
-        return self.__recommend_manager.get_user_recommend_hashtags(bid=bid)
+    def get_recommend_hashtag(self, bids):
+        return self.__recommend_manager.get_user_recommend_hashtags(bids=bids)
 
 
     # ----------------------------------------------------------------------------------------------------------
@@ -446,178 +669,136 @@ FeedSearchEngine의 인터페이스가 요구하는 요청 값의 공통점을 �
 
 """
 
+# --------------------------------------------------------------------------------------------
 
+# 서치 매니저
 class SearchManager:
     # LocalDatabase의 import 문제로 아래 코드는 정상동작 하지 않으니
     # 코드를 작성하는 도중에는 주석을 해제하여 LocalDatabase 함수를 자동완성하고
     # 실행할때는 다시 주석처리하여 사용할것
     #def __init__(self, database:Local_Database, feed_algorithm : FeedAlgorithm):
-    def __init__(self, database, feed_algorithm=None):
+    def __init__(self, database, feed_algorithm=None, managed_feed_bias_table:ManagedFeedBiasTable=None):
         self.__database = database
         self.__feed_algorithm=feed_algorithm
+        self.__managed_feed_bias_table=managed_feed_bias_table
     
-        self.__feed_table = [] # 최신 기준으로 쌓이는 피드 스택 | 인덱스를 활용할 것
-        self.__feed_avltree = AVLTree()
 
         # best_feed_table이 필요한가? 필요없는거 같은데?
         self.__best_feed_table = [] # 좋아요가 30개 이상인 피드 테이블 | 최신 기준 
 
+        # self.__feed_table = [] # 최신 기준으로 쌓이는 피드 스택 | 인덱스를 활용할 것
+        # self.__feed_avltree = AVLTree()
+
         # 테이블 초기화
-        self.__init_feed_table(database=database)
-        self.__init_feed_avltree()
+        # self.__init_feed_table(database=database)
+        # self.__init_feed_avltree()
 
-    def __init_feed_avltree(self):
-        for feed in self.__feed_table:
-            self.__feed_avltree.insert(feed.fid, feed)
-        print(f'INFO<-[      NOVA FEED AVLTREE IN SEARCH ENGINE NOW READY.')
-
-    # 테이블 초기화 함수
-    def __init_feed_table(self, database):
-        feeds = []
-        # 먼저 피드 데이터를 DB에서 불러오고
-        feed_datas = database.get_all_data(target="fid")
-
-        # 불러온 피드들은 객체화 시켜준다음 잠시 보관
-        for feed_data in feed_datas:
-            feed = Feed()
-            feed.make_with_dict(dict_data=feed_data)
-            feeds.append(feed)
-
-        # 잠시 보관한 피드 데이터에서 필요한 정보만 뽑아서 ManagedFeed 객체 생성
-        for single_feed in feeds:
-            managed_feed = ManagedFeed(fid=single_feed.fid,
-                                        like=single_feed.star,
-                                        date=self.__get_date_str_to_object(single_feed.date),
-                                        hashtag=copy(single_feed.hashtag),
-                                        uname=single_feed.nickname,
-                                        bid=single_feed.bid
-                                        )
-            # 보관
-            self.__feed_table.append(managed_feed)
-
-        # 리턴되면 위에서 잠시 보관한 피드 데이터는 사라지고 self.__feed_table에 ManagedFeed들만 남음
-
-        self.__feed_table = sorted(self.__feed_table, key=lambda x:x.date, reverse=False)
-
-        num_feed = str(len(self.__feed_table))
-        print(f'INFO<-[      {num_feed} NOVA FEED IN SEARCH ENGINE NOW READY.')
-        return 
-    
     def try_get_random_feed(self):
-        random_index = random.randint(0, len(self.__feed_table)-1)
-        return self.__feed_table[random_index].fid
+        return self.__managed_feed_bias_table.get_random_feed()
 
     def try_make_new_managed_feed(self, feed:Feed):
-        managed_feed = ManagedFeed(
-            fid=feed.fid,
-            like=feed.star,
-            date=feed.date,
-            uname=feed.nickname,
-            hashtag=feed.hashtag,
-            bid=feed.bid
-            )
-
-        self.__feed_table.append(managed_feed)
-        self.__feed_avltree.insert(managed_feed.fid, managed_feed)
+        self.__managed_feed_bias_table.make_new_managed_feed(feed)
         return
 
     # 피드 매니저에서 사용가능하게 만든 검색 기능
     def try_search_managed_feed(self, fid):
-        target = self.__feed_avltree.get(key=fid)
-        return target
+        return self.__managed_feed_bias_table.search_managed_feed(fid)
 
     # 이런 함수를 미리 만들어서 쓰면 좋음
     # 아래는 예시 
 
-    # 예시 1 | 특정 인덱스의 피드를 뽑아오기
-    def __get_feed_data_in_index(self, index):
-        return self.__feed_table[index]
+    # # 예시 1 | 특정 인덱스의 피드를 뽑아오기
+    # def __get_feed_data_in_index(self, index):
+    #     return self.__feed_table[index]
+    #
+    # # 예시 2 | 특정 인덱스 아래의 피드를 모두 뽑아오기
+    # def __get_feed_from_index_to_everything(self, index):
+    #     return self.__feed_table[:index]
+    #
 
-    # 예시 2 | 특정 인덱스 아래의 피드를 모두 뽑아오기
-    def __get_feed_from_index_to_everything(self, index):
-        return self.__feed_table[:index]
+    # =========================================================================
+    # # 피드 테이블을 수정하는 함수
+    # def modify_feed_table(self, feed:Feed):
+    #     # managed_feed를 찾아야됨
+    #     managed_feed:ManagedFeed = self.__feed_avltree.get(feed.fid)
+    #
+    #     # managed_feed가 가진 데이터로 원본 데이터를 변경
+    #     managed_feed.date = feed.date
+    #     managed_feed.hashtag = feed.hashtag
+    #     managed_feed.like = feed.star
+    #     managed_feed.uname = feed.nickname
+    #     return
+    #
+    # # 삭제하는 함수. 피드가  삭제되면 None으로 바뀔것
+    # def remove_feed(self, feed:Feed):
+    #     managed_feed = self.__feed_avltree.get(key=feed.fid)
+    #     managed_feed = ManagedFeed()
+    #     self.__feed_avltree.remove(key=feed.fid)
+    #     return
+    #
+    # def __get_datetime_now(self):
+    #     now = datetime.now()
+    #     return now
+    #
+    # # string to datetime
+    # def __get_date_str_to_object(self, str_date):
+    #     date_obj = datetime.strptime(str_date, "%Y/%m/%d-%H:%M:%S")
+    #     return date_obj
+    #
+    # # datetime to string
+    # def __get_date_object_to_str(self, object:datetime):
+    #     formatted_str = object.strftime("%Y/%m/%d-%H:%M:%S")
+    #     return formatted_str
+    #
+    # # 시간 차이를 분석하는 함수
+    # # target_hour : 1, 24, 168
+    # def __get_time_diff(self, target_time, reference_time=datetime.now(),
+    #                    target_hour=2) -> bool:
+    #     time_diff = abs(target_time - reference_time)
+    #
+    #     # 차이가 2시간 이상인지 확인
+    #     return time_diff >= timedelta(hours=target_hour)
+    #
+    # # 시간 차이를 바탕으로 정해진 시간대 내의 피드 정보 구하기
+    # # target_hour : 1, 24, 168
+    # def __find_target_index(self, target_hour=1):
+    #     target_index = len(self.__feed_table)
+    #
+    #     for i, managed_feed in enumerate(self.__feed_table):
+    #         # 삭제된 피드는 None으로 표시될것이라서
+    #         if managed_feed.fid == "":
+    #             continue
+    #
+    #         if self.__get_time_diff(target_time=managed_feed.date, target_hour=target_hour):
+    #             continue
+    #         else:
+    #             target_index = i
+    #             break
+    #
+    #     return target_index
+    #
+    # =========================================================================
 
-
-    # 피드 테이블을 수정하는 함수
-    def modify_feed_table(self, feed:Feed, ):
-        # managed_feed를 찾아야됨
-        managed_feed:ManagedFeed = self.__feed_avltree.get(feed.fid)
-
-        # managed_feed가 가진 데이터로 원본 데이터를 변경
-        managed_feed.date = feed.date
-        managed_feed.hashtag = feed.hashtag
-        managed_feed.like = feed.star
-        managed_feed.uname = feed.nickname
-        return
-    
-    # 삭제하는 함수. 피드가  삭제되면 None으로 바뀔것
-    def remove_feed(self, feed:Feed):
-        managed_feed = self.__feed_avltree.get(key=feed.fid)
-        managed_feed = ManagedFeed()
-        self.__feed_avltree.remove(key=feed.fid)
-        return
-
-    def __get_datetime_now(self):
-        now = datetime.now()
-        return now
-
-    # string to datetime
-    def __get_date_str_to_object(self, str_date):
-        date_obj = datetime.strptime(str_date, "%Y/%m/%d-%H:%M:%S")
-        return date_obj
-
-    # datetime to string
-    def __get_date_object_to_str(self, object:datetime):
-        formatted_str = object.strftime("%Y/%m/%d-%H:%M:%S")
-        return formatted_str
-
-    # 시간 차이를 분석하는 함수
-    # target_hour : 1, 24, 168
-    def __get_time_diff(self, target_time, reference_time=datetime.now(),
-                       target_hour=2) -> bool:
-        time_diff = abs(target_time - reference_time)
-
-        # 차이가 2시간 이상인지 확인
-        return time_diff >= timedelta(hours=target_hour)
-
-    # 시간 차이를 바탕으로 정해진 시간대 내의 피드 정보 구하기
-    # target_hour : 1, 24, 168
-    def __find_target_index(self, target_hour=1):
-        target_index = len(self.__feed_table)
-
-
-        for i, managed_feed in enumerate(self.__feed_table):
-            # 삭제된 피드는 None으로 표시될것이라서
-            if managed_feed.fid == "":
-                continue
-
-            if self.__get_time_diff(target_time=managed_feed.date, target_hour=target_hour):
-                continue
-            else:
-                target_index = i
-                break
-
-        return target_index
-
-    # 목표시간을 바탕으로 피드를 찾느 ㄴ함수
+    # 목표시간을 바탕으로 피드를 찾는 함수
     # search_type == "all", "best"
     def try_get_feed_with_target_hour(self, search_type="all", num_feed=4, target_hour=1, index=-2):
         result_fid = []
         result_index = -3
+        feed_table_len = self.__managed_feed_bias_table.len_feed_table()
 
         if index == -1 or index == -2:
-            index = len(self.__feed_table)
+            index = feed_table_len
 
         if target_hour > 0 :
-            target_index = self.__find_target_index(target_hour=target_hour)
+            target_index = self.__managed_feed_bias_table.find_target_index(target_hour=target_hour)
         else:
             target_index = 0
 
-        search_range = self.__feed_table[target_index:index][::-1]
+        search_range = self.__managed_feed_bias_table.get_feeds_target_range(index=index, target_index=target_index)
+        # search_range = self.__feed_table[target_index:index][::-1]
 
-        if index < target_index  or index > len(self.__feed_table):
+        if index < target_index  or index > feed_table_len:
             return result_fid, -3
-
 
         count = 0
 
@@ -662,195 +843,45 @@ class SearchManager:
     
     #type likes, time
     def search_feed_with_hashtag(self, hashtag, num_feed=10, index=-1) -> tuple:
-        result_fid = []
-        result_index = -3
-
-        if index == -1:
-            index = len(self.__feed_table)
-
-        search_range = self.__feed_table[:index][::-1]
-
-        if index < 0 or index > len(self.__feed_table):
-            return result_fid, -3
-
-        count = 0
-
-        for i, managed_feed in enumerate(search_range):
-            #ii = len(self.__feed_table) - 1 - i
-            if count == num_feed:
-                break
-
-            # 삭제된 피드는 None으로 표시될것이라서
-            if managed_feed.fid == "":
-                continue
-
-            if hashtag not in managed_feed.hashtag:
-                continue
-
-            result_fid.append(managed_feed.fid)
-
-            # result_index 업데이트
-            result_index = index - 1 - i  # 실제 self.__feed_table에서의 인덱스 계산
-            count += 1
-
+        result_fid, result_index = self.__managed_feed_bias_table.search_feed_with_key_and_option(
+            option="hashtag",
+            key=hashtag,
+            num_feed=num_feed,
+            index=index
+        )
         return result_fid, result_index
 
-
     def search_feed_with_fid(self, fid, num_feed=1, index=-1) -> tuple:
-        result_fid = []
-        index = -1
-        for i, managed_feed in enumerate(self.__feed_table):
-            #index = len(self.__feed_table) - 1 - i
-            if managed_feed.fid == fid:
-                result_fid.append(managed_feed.fid)
-                index = i
-                break
-
-        return  result_fid, index
+        result_fid, result_index = self.__managed_feed_bias_table.search_feed_with_key_and_option(
+            option="fid",
+            key=fid,
+            num_feed=num_feed,
+            index=index
+        )
+        return result_fid, result_index
 
     def search_feed_with_uname(self, uname, num_feed=1, index=-1) -> tuple:
-        result_fid = []
-        result_index = -3
-
-        if index == -1:
-            index = len(self.__feed_table)
-
-        search_range = self.__feed_table[:index][::-1]
-
-        if index < 0 or index > len(self.__feed_table):
-            return result_fid, -3
-
-        count = 0
-
-        for i, managed_feed in enumerate(search_range):
-
-            if count == num_feed:
-                break
-
-            # 삭제된 피드는 None으로 표시될것이라서
-            if managed_feed.fid == "":
-                continue
-
-            if uname != managed_feed.uname:
-                continue
-
-            result_fid.append(managed_feed.fid)
-
-            # result_index 업데이트
-            result_index = index - 1 - i  # 실제 self.__feed_table에서의 인덱스 계산
-            count += 1
-
+        result_fid, result_index = self.__managed_feed_bias_table.search_feed_with_key_and_option(
+            option="uname",
+            key=uname,
+            num_feed=num_feed,
+            index=index
+        )
         return result_fid, result_index
 
     #def search_feed_with_string(self, string, num_feed=10) -> list:   #본문 내용을 가지고 찾는거같음
         #return self.__feed_algorithm.get_feed_with_string(string,num_feed)
-    
-# --------------------------------------------------------------------------------------------
 
 # 이건 사용자에게 맞는 데이터를 주려고 만든거
 class RecommendManager:
-    def __init__(self, database, feed_algorithm):
+    def __init__(self, database, feed_algorithm=None, managed_feed_bias_table:ManagedFeedBiasTable=None):
         self.__database = database
         self.__feed_algorithm:FeedAlgorithm = feed_algorithm
-        self.__bias_avltree = AVLTree()
-        self.__init__bias_avltree()
+        self.__managed_feed_bias_table=managed_feed_bias_table
+
         self.hashtags = []
         #asyncio.get_event_loop()
         #self.loop.create_task(self.check_trend_hashtag())
-
-    def make_task(self):
-        return self.check_trend_hashtag
-
-    def __init__bias_avltree(self):
-        biases = []
-        users = []
-        bias_datas = self.__database.get_all_data(target="bid")
-        user_datas = self.__database.get_all_data(target="uid")
-
-        for bias_data in bias_datas:
-            bias = Bias()
-            bias.make_with_dict(bias_data)
-            biases.append(bias)
-
-        for user_data in user_datas:
-            user = User()
-            user.make_with_dict(user_data)
-            users.append(user)
-
-        for single_bias in biases:
-            user_nodes = []
-            for single_user in users:
-                single_user:User = single_user
-                # bias를 팔로우하는 유저를 찾아서 노드 연결해야됨
-                if single_bias.bid in single_user.bids:
-                    user_node = self.__feed_algorithm.get_user_node_with_uid(uid=single_user.uid)
-                    # 못찾으면 예외처리할것
-                    if user_node:
-                        user_nodes.append(user_node)
-
-            # 이제 관리될 바이어스를 만들고 연결한다음
-            managed_bias = ManagedBias(bid=single_bias.bid, user_nodes=user_nodes)
-            # avl트리에 넣어주면됨
-            self.__bias_avltree.insert(key=single_bias.bid, value=managed_bias)
-
-    # 새롭게 최애를 지정했을 때 연결하는 시스템
-    # 근데 이거 잘생각해보면 최애 지정하기 전에 쓴 글들은 해시태그에 반영되어야 하는가?
-    def add_new_user_to_bias(self, bid:str, uid:str):
-        managed_bias:ManagedBias = self.__bias_avltree.get(key=bid)
-        user_node = self.__feed_algorithm.get_user_node_with_uid(uid=uid)
-        managed_bias.user_nodes.append(user_node)
-        return 
-    
-    def remove_user_to_bias(self, bid:str, uid:str):
-        managed_bias:ManagedBias = self.__bias_avltree.get(key=bid)
-        user_node = self.__feed_algorithm.get_user_node_with_uid(uid=uid)
-        managed_bias.user_nodes.remove(user_node)
-        return
-
-    # 실시간 트랜드 해시태그 제공
-    # 급상승 해시태그 정의 : 단기간에 해시태그가 엄청 올라옴
-    # 기준 시간) 1시간내에 올라온 글 중 해시태그가 가장 많이 달린 해시태그를 얻어야함
-    # 그러면 기준시간은 어떻게 지정하나? -> 알아서 지정되겠지만, 정각을 기준으로 실행되겠지
-    # 그러하면 한시간 내에 올라온 Feed들을 모두 모집하고, 데이터프레임화 시켜서 살펴보면 빠를지도
-
-    def get_best_hashtags(self, num_hashtag=10) -> list:
-        result = []
-
-
-        return self.hashtags[0:num_hashtag]
-
-    # 사용자에게 어울릴만한 해시태그 리스트 제공
-    def get_user_recommend_hashtags(self, bid):
-        result = []
-        managed_bias:ManagedBias = self.__bias_avltree.get(key=bid)
-
-        for hashtag in managed_bias.trend_hashtags:
-            result.append(hashtag.hid)
-        return result
-    
-    def get_recommend_feed(self, fid:str, history:list, user:User):
-        hashtag_ranking_list = self.get_best_hashtags() # 해시태그 랭킹 리스트
-        logined_user_uid = user.uid # 현재 로그인된 유저의 uid
-        # 로그인이 되지 않은 유저는 uid를 ""를 반환함
-
-        fid = self.__feed_algorithm.recommend_next_feed(
-            start_fid=fid,
-            history=history,
-            mine_uid=logined_user_uid,
-            hashtag_ranking=hashtag_ranking_list
-            )
-        return fid
-
-    # # 비로그인 유저를 위한 로직
-    # def get_recommend_feed_not_login(self, fid:str, history:list):
-    #     hashtag_ranking_list = self.get_best_hashtags() # 해시태그 랭킹 리스트
-    #     # 비로그인을 위한 로직
-    #     fid = self.__feed_algorithm.recommend_next_feed_not_login(
-    #         start_fid=fid,
-    #         history=history,
-    #         hashtag_ranking=hashtag_ranking_list
-    #     )
-    #     return fid
 
     def __check_trend_hashtag_algo(self, weight=0, now_data=0, prev_data=0, num_feed=0):
         if now_data == 0 and prev_data == 0 and weight == 0:
@@ -864,7 +895,7 @@ class RecommendManager:
             next_weight = threshold + (next_weight - threshold) * 0.1
 
         return max(next_weight, 0)
-    
+
     def __total_hashtag_setting(self):
         try:
             hashtag_rank = []
@@ -899,7 +930,7 @@ class RecommendManager:
 
     def __bias_hashtag_setting(self):
         try:
-            managed_bias_list = list(self.__bias_avltree.values())
+            managed_bias_list = self.__managed_feed_bias_table.get_bias_list()
             for managed_bias in managed_bias_list:
                 hash_nodes = []
 
@@ -932,8 +963,8 @@ class RecommendManager:
                     # 이거 오류안남? current_time 생성위치가 밑에 있는데 없는 변수 만드는 거 아니냐.
                     # 그러네 이거 왜 오류 안났냐 왜 서버에서는 정상동작 하는건데...
 
-                    self.last_computed_time = current_time     
-                # 시간 간격이 1시간 미만인 경우
+                    self.last_computed_time = current_time
+                    # 시간 간격이 1시간 미만인 경우
                 else:
                     await asyncio.sleep(60)  # 너무 자주 루프를 돌지 않도록 대기
 
@@ -947,152 +978,191 @@ class RecommendManager:
         except KeyboardInterrupt:
             print("Shutting down due to KeyboardInterrupt.")
 
+    def make_task(self):
+        return self.check_trend_hashtag
+
+    # 실시간 트랜드 해시태그 제공
+    # 급상승 해시태그 정의 : 단기간에 해시태그가 엄청 올라옴
+    # 기준 시간) 1시간내에 올라온 글 중 해시태그가 가장 많이 달린 해시태그를 얻어야함
+    # 그러면 기준시간은 어떻게 지정하나? -> 알아서 지정되겠지만, 정각을 기준으로 실행되겠지
+    # 그러하면 한시간 내에 올라온 Feed들을 모두 모집하고, 데이터프레임화 시켜서 살펴보면 빠를지도
+    def get_best_hashtags(self, num_hashtag=10) -> list:
+        return self.hashtags[0:num_hashtag]
+
+    # 사용자에게 어울릴만한 해시태그 리스트 제공
+    def get_user_recommend_hashtags(self, bids):
+        result = []
+
+        like_bias_list = self.__managed_feed_bias_table.get_liked_biases(bids)
+
+        for managed_bias in like_bias_list:
+            for hashtag in managed_bias.trend_hashtags:
+                result.append(hashtag)
+
+        result_set = set(result)
+
+        return list(result_set)
+    
+    def get_recommend_feed(self, fid:str, history:list, user:User):
+        hashtag_ranking_list = self.get_best_hashtags() # 해시태그 랭킹 리스트
+        logined_user_uid = user.uid # 현재 로그인된 유저의 uid
+        # 로그인이 되지 않은 유저는 uid를 ""를 반환함
+
+        fid = self.__feed_algorithm.recommend_next_feed(
+            start_fid=fid,
+            history=history,
+            mine_uid=logined_user_uid,
+            hashtag_ranking=hashtag_ranking_list
+            )
+        return fid
+
+    # # 비로그인 유저를 위한 로직
+    # def get_recommend_feed_not_login(self, fid:str, history:list):
+    #     hashtag_ranking_list = self.get_best_hashtags() # 해시태그 랭킹 리스트
+    #     # 비로그인을 위한 로직
+    #     fid = self.__feed_algorithm.recommend_next_feed_not_login(
+    #         start_fid=fid,
+    #         history=history,
+    #         hashtag_ranking=hashtag_ranking_list
+    #     )
+    #     return fid
+
+# 필터링 매니저
 class FilteringManager:
-    def __init__(self, database, feed_algorithm):
+    def __init__(self, database, feed_algorithm=None, managed_feed_bias_table:ManagedFeedBiasTable=None):
         self.__database = database
         self.__feed_algorithm:FeedAlgorithm = feed_algorithm
-        self.__feed_avltree = AVLTree()
-        self.__feed_table =  [] # 최신 기준으로 쌓을 Feed Table
-        self.__bias_avltree = AVLTree()
-
-        self.__init_feed_table()
-        self.__init_feed_avltree()
-        self.__init__bias_avltree()
+        self.__managed_feed_bias_table=managed_feed_bias_table
 
 #------------------------------------------------------------------------------------
-    def __get_datetime_now(self):
-        now = datetime.now()
-        return now
-
-    # string to datetime
-    def __get_date_str_to_object(self, str_date):
-        date_obj = datetime.strptime(str_date, "%Y/%m/%d-%H:%M:%S")
-        return date_obj
-
-    # datetime to string
-    def __get_date_object_to_str(self, object:datetime):
-        formatted_str = object.strftime("%Y/%m/%d-%H:%M:%S")
-        return formatted_str
-
-    def __init_feed_table(self):
-        feeds = []
-        feed_datas = self.__database.get_all_data(target="fid")
-
-        for feed_data in feed_datas:
-            feed = Feed()
-            feed.make_with_dict(dict_data=feed_data)
-            feeds.append(feed)
-
-        # Managed Feed 형태로 보관
-        for single_feed in feeds:
-            managed_feed = ManagedFeed(fid=single_feed.fid,
-                                       like=single_feed.star,
-                                       date=self.__get_date_str_to_object(single_feed.date),
-                                       hashtag=copy(single_feed.hashtag),
-                                       uname=single_feed.nickname,
-                                       bid=single_feed.bid
-                                       )
-            # 보관
-            self.__feed_table.append(managed_feed)
-
-        # 리턴되면 Feed들이 없어지고 알아서 Managed Feed만 남으니 OK
-        # 정렬은 항상 최신순으로
-        self.__feed_table = sorted(self.__feed_table, key=lambda x:x.date, reverse=True)
-        num_feed = str(len(self.__feed_table))
-        print(f'INFO<-[      {num_feed} NOVA FEED IN SEARCH ENGINE NOW READY.')
-
-        return
-
-    def __init_feed_avltree(self):
-        for feed in self.__feed_table:
-            self.__feed_avltree.insert(feed.fid, feed)
-        print(f'INFO<-[      NOVA FEED AVLTREE IN FILTERING MANAGER NOW READY.')
-
-    def __init__bias_avltree(self):
-        biases = []
-        users = []
-        bias_datas = self.__database.get_all_data(target="bid")
-        user_datas = self.__database.get_all_data(target="uid")
-
-        for bias_data in bias_datas:
-            bias = Bias()
-            bias.make_with_dict(dict_data=bias_data)
-            biases.append(bias)
-
-        for user_data in user_datas:
-            user = User()
-            user.make_with_dict(dict_data=user_data)
-            users.append(user)
-
-        for single_bias in biases:
-            user_nodes = []
-            for single_user in users:
-                single_user: User = single_user
-                if single_bias.bid in single_user.bids:
-                    user_node = self.__feed_algorithm.get_user_node_with_uid(uid=single_user.uid)
-                    if user_node:
-                        user_nodes.append(user_node)
-            managed_bias = ManagedBias(bid=single_bias.bid, user_nodes=user_nodes)
-
-            self.__bias_avltree.insert(key=single_bias.bid, value=managed_bias)
+    # def __get_datetime_now(self):
+    #     now = datetime.now()
+    #     return now
+    #
+    # # string to datetime
+    # def __get_date_str_to_object(self, str_date):
+    #     date_obj = datetime.strptime(str_date, "%Y/%m/%d-%H:%M:%S")
+    #     return date_obj
+    #
+    # # datetime to string
+    # def __get_date_object_to_str(self, object:datetime):
+    #     formatted_str = object.strftime("%Y/%m/%d-%H:%M:%S")
+    #     return formatted_str
+    #
+    # def __init_feed_table(self):
+    #     feeds = []
+    #     feed_datas = self.__database.get_all_data(target="fid")
+    #
+    #     for feed_data in feed_datas:
+    #         feed = Feed()
+    #         feed.make_with_dict(dict_data=feed_data)
+    #         feeds.append(feed)
+    #
+    #     # Managed Feed 형태로 보관
+    #     for single_feed in feeds:
+    #         managed_feed = ManagedFeed(fid=single_feed.fid,
+    #                                    like=single_feed.star,
+    #                                    date=self.__get_date_str_to_object(single_feed.date),
+    #                                    hashtag=copy(single_feed.hashtag),
+    #                                    uname=single_feed.nickname,
+    #                                    bid=single_feed.bid
+    #                                    )
+    #         # 보관
+    #         self.__feed_table.append(managed_feed)
+    #
+    #     # 리턴되면 Feed들이 없어지고 알아서 Managed Feed만 남으니 OK
+    #     # 정렬은 항상 최신순으로
+    #     self.__feed_table = sorted(self.__feed_table, key=lambda x:x.date, reverse=True)
+    #     num_feed = str(len(self.__feed_table))
+    #     print(f'INFO<-[      {num_feed} NOVA FEED IN SEARCH ENGINE NOW READY.')
+    #
+    #     return
+    #
+    # def __init_feed_avltree(self):
+    #     for feed in self.__feed_table:
+    #         self.__feed_avltree.insert(feed.fid, feed)
+    #     print(f'INFO<-[      NOVA FEED AVLTREE IN FILTERING MANAGER NOW READY.')
+    #
+    # def __init__bias_avltree(self):
+    #     biases = []
+    #     users = []
+    #     bias_datas = self.__database.get_all_data(target="bid")
+    #     user_datas = self.__database.get_all_data(target="uid")
+    #
+    #     for bias_data in bias_datas:
+    #         bias = Bias()
+    #         bias.make_with_dict(dict_data=bias_data)
+    #         biases.append(bias)
+    #
+    #     for user_data in user_datas:
+    #         user = User()
+    #         user.make_with_dict(dict_data=user_data)
+    #         users.append(user)
+    #
+    #     for single_bias in biases:
+    #         user_nodes = []
+    #         for single_user in users:
+    #             single_user: User = single_user
+    #             if single_bias.bid in single_user.bids:
+    #                 user_node = self.__feed_algorithm.get_user_node_with_uid(uid=single_user.uid)
+    #                 if user_node:
+    #                     user_nodes.append(user_node)
+    #         managed_bias = ManagedBias(bid=single_bias.bid, user_nodes=user_nodes)
+    #
+    #         self.__bias_avltree.insert(key=single_bias.bid, value=managed_bias)
 
 #------------------------------------------------------------------------------------
     # BID로 필터링 하는 작업 수행
     def filtering_community(self, bids:list):
         # Search Engine에 들어가기 전에 BID 리스트를 검사할거임
-        # BID 리스트 요소는 1개가 될 수 있고, 아니면 선택을 하지않아서 여러 개가 될 수 있음.
-        bid_filtering_fids = []
+        # BID 리스트 요소는 1개가 될 수 있고, 아니면 선택을 하지 않아서 여러 개가 될 수 있음.
+        return self.__managed_feed_bias_table.filtering_bias_community(bids=bids)
 
-        for managed_feed in self.__feed_table:
-            if managed_feed.bid in bids:
-                bid_filtering_fids.append(managed_feed.fid)
-
-        return bid_filtering_fids
-
-    # 전체 게시글 중 필터링
-    def _filter_single_option_feed(self, feed_list, option):
-        result = []
-        for feed in feed_list:
-            # 롱폼 / 숏폼
-            if option == "long":
-                if feed.fclass == "long":
-                    result.append(feed)
-            if option == "short":
-                if feed.fclass == "short":
-                    result.append(feed)
-            if option == "choice":
-                if feed.iid != "":
-                    result.append(feed)
-            if option == "quiz":
-                if feed.iid != "":
-                    continue
-            if option == "funding":
-                continue
-            if option == "picture":
-                if len(feed.image) != 0:
-                    result.append(feed)
-
-        return result
-
-    # 필터링된 Feed중 Fid만 추출하는 부분
-    def _extract_fid_in_feed_list(self, feed_list):
-        result = []
-
-        for feed in feed_list:
-            result.append(feed.fid)
-
-        return result
-
-    # 피드를 필터링하는 함수
-    def filter_options_feeds(self, options:list):
-        result = copy(self.__feed_table)
-
-        for option in options:
-            result = self._filter_single_option_feed(result, option)
-
-        result = self._extract_fid_in_feed_list(result)
-
-        return result
+    # # 이거 아직 안 됨
+    # # 전체 게시글 중 필터링
+    # def _filter_single_option_feed(self, feed_list, option):
+    #     result = []
+    #     for feed in feed_list:
+    #         # 롱폼 / 숏폼
+    #         if option == "long":
+    #             if feed.fclass == "long":
+    #                 result.append(feed)
+    #         if option == "short":
+    #             if feed.fclass == "short":
+    #                 result.append(feed)
+    #         if option == "choice":
+    #             if feed.iid != "":
+    #                 result.append(feed)
+    #         if option == "quiz":
+    #             if feed.iid != "":
+    #                 continue
+    #         if option == "funding":
+    #             continue
+    #         if option == "picture":
+    #             if len(feed.image) != 0:
+    #                 result.append(feed)
+    #
+    #     return result
+    #
+    # # 필터링된 Feed중 Fid만 추출하는 부분
+    # def _extract_fid_in_feed_list(self, feed_list):
+    #     result = []
+    #
+    #     for feed in feed_list:
+    #         result.append(feed.fid)
+    #
+    #     return result
+    #
+    # # 피드를 필터링하는 함수
+    # def filter_options_feeds(self, options:list):
+    #     result = copy(self.__feed_table)
+    #
+    #     for option in options:
+    #         result = self._filter_single_option_feed(result, option)
+    #
+    #     result = self._extract_fid_in_feed_list(result)
+    #
+    #     return result
 
 # --------------------------------------------------------------------------------------------
 
