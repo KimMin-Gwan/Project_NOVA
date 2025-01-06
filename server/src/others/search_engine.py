@@ -296,6 +296,7 @@ class ManagedFeedBiasTable:
         return self.__feed_avltree.get(key=fid)
 
     # 키, 옵션을 통해 Feed를 찾음
+    # 페이징기법을 적용했음. 역순페이징을 사용함.
     def search_feed_with_key_and_option(self, option:str, key:str="", num_feed=10, index=-1) -> tuple:
         result_fid = []
         result_index = -3
@@ -328,11 +329,16 @@ class ManagedFeedBiasTable:
             elif option == "uname":
                 if key not in managed_feed.uname:
                     continue
+            elif option == "bid":
+                if key != managed_feed.bid:
+                    continue
+
             elif option == "fid":
                 if key == managed_feed.fid:
                     result_fid.append(managed_feed)
                     result_index = i
                     break
+
 
             result_fid.append(managed_feed.fid)
 
@@ -479,6 +485,10 @@ class FeedSearchEngine:
         elif target_type == "uname":
             # 아래의 코드는 샘플이며 원하는 상태에 따라 다시 작성
             result_fid, result_index = self.__search_manager.search_feed_with_uname(uname=target, num_feed=num_feed, index=index)
+
+        # bid로 검색한 피드 (최애의 ID)
+        elif target_type == "bid":
+            result_fid, result_index = self.__search_manager.search_feed_with_bid(bid=target, num_feed=num_feed, index=index)
 
         #elif target_type == "string":
             #result, key = self.__search_manager.search_feed_with_string(string=target, key=key)
@@ -869,6 +879,14 @@ class SearchManager:
         )
         return result_fid, result_index
 
+    def search_feed_with_bid(self, bid, num_feed=10, index=-1) -> tuple:
+        result_fid, result_index = self.__managed_feed_bias_table.search_feed_with_key_and_option(
+            option="bid",
+            key=bid,
+            num_feed=num_feed,
+            index=index,
+        )
+        return result_fid, result_index
     #def search_feed_with_string(self, string, num_feed=10) -> list:   #본문 내용을 가지고 찾는거같음
         #return self.__feed_algorithm.get_feed_with_string(string,num_feed)
 
