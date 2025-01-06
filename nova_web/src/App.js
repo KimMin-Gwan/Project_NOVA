@@ -1,5 +1,5 @@
 import "./App.css";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Routes, Route, useNavigate, Link } from "react-router-dom";
 import Banner from "./component/banner";
 import MyBias from "./Container/myBiasContainer";
@@ -55,8 +55,7 @@ import { ContentFeed } from "./component/feed.js";
 import FeedDetail from "./pages/FeedDetail/FeedDetail.js";
 import TestRef from "./component/TestRef.js";
 import FilterModal from "./component/FilterModal/FilterModal.js";
-// 401 이면 바이어스 격자 무늬로 띄우기
-// 401 이면 alert - 로그인 필요 문구 띄우기
+
 // 다크 모드 클래스 반환 함수
 export function getModeClass(mode) {
   return mode === "dark" ? "dark-mode" : "bright-mode";
@@ -119,7 +118,6 @@ function App() {
 
   let [tagList, setTagList] = useState([]);
 
-  let copy = [];
   function fetchTagData() {
     fetch("https://nova-platform.kr/home/realtime_best_hashtag", {
       credentials: "include",
@@ -127,7 +125,6 @@ function App() {
       .then((response) => response.json())
       .then((data) => {
         setTagList(data.body.hashtags);
-        copy = data.body.hashtags;
       });
   }
 
@@ -135,12 +132,34 @@ function App() {
     fetchTagData();
   }, []);
 
+  const ulRef = useRef(null);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (ulRef.current) {
+        ulRef.current.style.transitionDuration = "400ms";
+        ulRef.current.style.marginTop = "-50px";
+
+        setTimeout(() => {
+          if (ulRef.current) {
+            ulRef.current.style.transitionDuration = "";
+            ulRef.current.style.marginTop = "";
+            // 첫 번째 요소를 400ms 후에 뒤로 보냅니다.
+            ulRef.current.appendChild(ulRef.current.querySelector("li:first-child"));
+          }
+        }, 400);
+      }
+    }, 2000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
   let [showBox, setShowBox] = useState(false);
   let [blackBox, setBlackBox] = useState("");
 
   let navigate = useNavigate();
-
-  function animationTag() {}
 
   // // brightMode 상태가 변경될 때마다 body 클래스 업데이트
   const [brightMode, setBrightMode] = useState(() => {
@@ -227,7 +246,7 @@ function App() {
                       className={`logo-st ${getModeClass(brightMode)}`}
                     ></img>
                   </div>
-                  {/* <Link to="/test">테스트</Link> */}
+                  <Link to="/test">테스트</Link>
 
                   <div className="buttons">
                     <button className="tool-button">
@@ -265,6 +284,11 @@ function App() {
 
               <section>
                 <div className="rt-ranking ">실시간 랭킹</div>
+                {/* <ul ref={ulRef} className="rt-ranking ">
+                  {tagList.map((tag, i) => {
+                    return <li key={i}>{tag}</li>;
+                  })}
+                </ul> */}
               </section>
 
               <section className="contents">

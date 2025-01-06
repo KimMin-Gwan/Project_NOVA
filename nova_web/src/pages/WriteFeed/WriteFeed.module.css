@@ -1,0 +1,171 @@
+.WriteFeed {
+  max-width: 500px;
+  width: 100%;
+  margin: 0 auto;
+  min-height: 100vh;
+  background-color: #f1f7ff;
+  position: relative;
+}
+
+.top_container {
+  display: flex;
+  padding: 20px;
+  justify-content: space-between;
+}
+
+.hashtag_container {
+  background-color: white;
+  /* height: 50px; */
+  padding: 20px;
+  margin-bottom: 15px;
+}
+
+.input-container {
+  display: flex;
+
+  .input-hashtag {
+    background-color: white;
+    color: #898989;
+    width: 80%;
+    height: 70%;
+    margin-inline: 5px;
+    border: none;
+    border-bottom: 1px solid gray;
+  }
+}
+
+.content_container {
+  padding: 20px;
+  background-color: white;
+  height: 500px;
+
+  .write_body {
+    padding: 0;
+    padding-top: 5px;
+    padding-left: 5px;
+    width: 95%;
+    height: 100px;
+    border-radius: 10px;
+    resize: none;
+    color: black;
+  }
+}
+
+.alert_message {
+  color: black;
+}
+
+.content_button {
+  background-color: white;
+  position: sticky;
+  /* z-index: 999; */
+  display: flex;
+  justify-content: start;
+  margin: 0 auto;
+  width: 100%;
+  bottom: 0px;
+  left: 0px;
+
+  button {
+    all: unset;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: gray;
+    /* padding: 5px; */
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+  }
+}
+
+/* 모달 창 css */
+.wrapper-container {
+  /* width: 100%; */
+  height: 100vh;
+  position: fixed;
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  background-color: rgba(0, 0, 0, 0.5);
+  /* background-color: blue; */
+}
+
+.modal-container {
+  max-width: 500px;
+  width: 100%;
+  /* height: 500px; */
+  margin: 0 auto;
+  background-color: white;
+
+  .modal-title {
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+}
+
+.image-container {
+  height: 300px;
+}
+
+#image-file[type="file"] {
+  display: none;
+}
+
+.input-image {
+  margin: 0 auto;
+  width: 90%;
+  height: 70px;
+  display: flex;
+  background-color: white;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border: dotted 1px blue;
+  margin-bottom: 10px;
+}
+
+.preview-container {
+  margin: 0 auto;
+  width: 90%;
+  height: 70px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px dotted blue;
+
+  .preview-image {
+    width: 50px;
+    height: 50px;
+
+    img {
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+    }
+  }
+}
+
+.modal-buttons {
+  padding: 20px;
+  display: flex;
+
+  button {
+    padding: 10px;
+    margin-right: 10px;
+  }
+
+  .close_button {
+    width: 30%;
+  }
+
+  .apply_button {
+    width: 70%;
+  }
+}

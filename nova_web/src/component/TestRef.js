@@ -18,17 +18,6 @@ export default function TestRef() {
     fetchTagData();
   }, []);
 
-  // const [position, setPosition] = useState(0);
-  // let [items, setItems] = useState([]);
-
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setPosition((prevPosition) => prevPosition - 50); // 50px씩 위로 이동
-  //   }, 2000); // 2초마다 실행
-
-  //   return () => clearInterval(interval);
-  // }, [position]);
-
   const ulRef = useRef(null);
 
   useEffect(() => {
@@ -58,11 +47,7 @@ export default function TestRef() {
       <ul ref={ulRef} className="test-box">
         {tagList.map((tag, i) => {
           return (
-            <li
-              className="test-container"
-              key={i}
-              // style={{ transform: `translateY(${position}px)` }}
-            >
+            <li className="test-container" key={i}>
               {tag}
             </li>
           );
