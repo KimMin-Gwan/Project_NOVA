@@ -254,6 +254,7 @@ class Feed_Controller:
 
 
     ## 예전에 쓰던거
+
     #def get_home_feed_data(self, database:Local_Database,
                             #request , feed_manager:FeedManager):
         #model = FeedModel(database=database)

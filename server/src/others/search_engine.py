@@ -1,3 +1,15 @@
+# 검색엔진이 해야하는일
+
+# 1. 키워드를 통한 피드 검색
+# 2. 특정 피드 다음으로 제시할 피드 검색
+# 3. 피드 분석 및 최신화
+# 4. 추천 피드 제공
+
+# LocalDatabase의 import 문제로 아래 코드는 정상동작 하지 않으니
+# 코드를 작성하는 도중에는 주석을 해제하여 LocalDatabase 함수를 자동완성하고
+# 실행할때는 다시 주석처리하여 사용할것
+#from model import Local_Database
+
 from email.policy import default
 from time import sleep
 import time
@@ -10,22 +22,155 @@ from datetime import  datetime, timedelta
 from pprint import pprint
 import random
 
-from pymongo import database
+#--------------------------------------------------------------------------------------------------
+
+# 이건 아래에 피드 테이블에 들어가야되는 피드 자료형
+# 데이터 베이스에서 피드 데이터 받아서 만들꺼임
+# 필요한 데이터는 언제든 추가가능
+
+# 이게 검색에 따른 피드를 제공하는 클래스
+# 위에 FeedAlgorithm에서 작성한 내용을 가지고 와도됨
+
+# 클래스 목적 : 피드를 검색하거나, 조건에 맞는 피드를 제공하기 위함
+class ManagedFeed:
+    def __init__(self, fid="", like=0, date=None, uname="", hashtag=[], bid=""):
+        self.fid=fid
+        self.like=like
+        self.date=date
+        self.uname = uname
+        self.hashtag = hashtag
+        self.bid = bid
+
+    # 무슨 데이터인지 출력해보기
+    def __call__(self):
+        print("fid : ", self.fid)
+        print("like : ", self.like)
+        print("date: ", self.date)
+        print("uname: ", self.uname)
+        print("hashtag: ", self.hashtag)
+
+# 이거는 Bias 테이블에 들어가게 되는 Bias 자료형
+# 데이터베이스에 받아서 만들어진다
+class ManagedBias:
+    def __init__(self, bid, user_nodes:list):
+        self.bid = bid
+        self.trend_hashtags = []
+        self.user_nodes:list = user_nodes
+
+#--------------------------------------------------------------------------------------------------
+
+# ManagedFeed 테이블 클래스.
+# 기존의 SearchEngine 에서는 각 Manager마다 각기 정의된 ManagedTable을 가졌는데
+# 너무 복잡해짐에 따라, 통합하기로 결정. 클래스화 시킵니다.
+class ManagedFeedTable:
+    def __init__(self, database):
+        self.__database = database
+        self.__feed_table =[]
+        self.__feed_avltree = AVLTree()
+
+        self.__init_feed_table()
+
+    def __get_datetime_now(self):
+        now = datetime.now()
+        return now
+
+    # string to datetime
+    def __get_date_str_to_object(self, str_date):
+        date_obj = datetime.strptime(str_date, "%Y/%m/%d-%H:%M:%S")
+        return date_obj
+
+    # datetime to string
+    def __get_date_object_to_str(self, object:datetime):
+        formatted_str = object.strftime("%Y/%m/%d-%H:%M:%S")
+        return formatted_str
+
+    # 시간 차이를 분석하는 함수
+    # target_hour : 1, 24, 168
+    def __get_time_diff(self, target_time, reference_time=datetime.now(),
+                        target_hour=2) -> bool:
+        time_diff = abs(target_time - reference_time)
+
+        # 차이가 2시간 이상인지 확인
+        return time_diff >= timedelta(hours=target_hour)
+
+    # 시간 차이를 바탕으로 정해진 시간대 내의 피드 정보 구하기
+    # target_hour : 1, 24, 168
+    def __find_target_index(self, target_hour=1):
+        target_index = len(self.__feed_table)
 
 
-# 검색엔진이 해야하는일
+        for i, managed_feed in enumerate(self.__feed_table):
+            # 삭제된 피드는 None으로 표시될것이라서
+            if managed_feed.fid == "":
+                continue
 
-# 1. 키워드를 통한 피드 검색
-# 2. 특정 피드 다음으로 제시할 피드 검색
-# 3. 피드 분석 및 최신화
-# 4. 추천 피드 제공
+            if self.__get_time_diff(target_time=managed_feed.date, target_hour=target_hour):
+                continue
+            else:
+                target_index = i
+                break
+
+        return target_index
+
+    # Initialize 테이블
+    def __init_feed_table(self):
+        feeds = []
+        # 먼저 피드 데이터를 DB에서 불러오고
+        feed_datas = self.__database.get_all_data(target="fid")
+
+        # 불러온 피드들은 객체화 시켜준다음 잠시 보관
+        for feed_data in feed_datas:
+            feed = Feed()
+            feed.make_with_dict(dict_data=feed_data)
+            feeds.append(feed)
+
+        # 잠시 보관한 피드 데이터에서 필요한 정보만 뽑아서 ManagedFeed 객체 생성
+        for single_feed in feeds:
+            managed_feed = ManagedFeed(fid=single_feed.fid,
+                                       like=single_feed.star,
+                                       date=self.__get_date_str_to_object(single_feed.date),
+                                       hashtag=copy(single_feed.hashtag),
+                                       uname=single_feed.nickname,
+                                       bid=single_feed.bid
+                                       )
+            # 보관
+            self.__feed_table.append(managed_feed)
+
+        # 리턴되면 위에서 잠시 보관한 피드 데이터는 사라지고 self.__feed_table에 ManagedFeed들만 남음
+
+        self.__feed_table = sorted(self.__feed_table, key=lambda x:x.date, reverse=False)
+
+        num_feed = str(len(self.__feed_table))
+        print(f'INFO<-[      {num_feed} NOVA FEED IN SEARCH ENGINE NOW READY.')
+        return
+
+    # Feed_avltree 설정
+    def __init_feed_avltree(self):
+        for feed in self.__feed_table:
+            self.__feed_avltree.insert(feed.fid, feed)
+        print(f'INFO<-[      NOVA FEED AVLTREE IN SEARCH ENGINE NOW READY.')
+
+    #---------------------------------------------------------------------------------------------
+
+    def modify_feed_table(self, feed:Feed, ):
+        # 피드 테이블을 수정하는 함수
+        # managed_feed를 찾아야 됨
+        managed_feed:ManagedFeed = self.__feed_avltree.get(feed.fid)
+
+        # managed_feed가 가진 데이터로 원본 데이터를 변경
+        managed_feed.date = feed.date
+        managed_feed.hashtag = feed.hashtag
+        managed_feed.like = feed.star
+        managed_feed.uname = feed.nickname
+        return
+
 
 # 아래는 검색 엔진
 class FeedSearchEngine:
     def __init__(self, database):
         self.__feed_algorithm= FeedAlgorithm(database=database)
         self.__search_manager = SearchManager(database=database, feed_algorithm=self.__feed_algorithm)
-        self.__recommend_manager = recommendManager(database=database,feed_algorithm=self.__feed_algorithm)
+        self.__recommend_manager = RecommendManager(database=database,feed_algorithm=self.__feed_algorithm)
         self.__filter_manager = FilteringManager(database=database, feed_algorithm=self.__feed_algorithm)
         self.__database=database
 
@@ -293,36 +438,6 @@ FeedSearchEngine의 인터페이스가 요구하는 요청 값의 공통점을 �
 
 """
 
-# 이건 아래에 피드 테이블에 들어가야되는 피드 자료형
-# 데이터 베이스에서 피드 데이터 받아서 만들꺼임
-# 필요한 데이터는 언제든 추가가능
-
-# 이게 검색에 따른 피드를 제공하는 클래스
-# 위에 FeedAlgorithm에서 작성한 내용을 가지고 와도됨
-
-# 클래스 목적 : 피드를 검색하거나, 조건에 맞는 피드를 제공하기 위함
-
-class ManagedFeed:
-    def __init__(self, fid="", like=0, date=None, uname="", hashtag=[], bid=""):
-        self.fid=fid
-        self.like=like
-        self.date=date
-        self.uname = uname
-        self.hashtag = hashtag
-        self.bid = bid
-
-    # 무슨 데이터인지 출력해보기
-    def __call__(self):
-        print("fid : ", self.fid)
-        print("like : ", self.like)
-        print("date: ", self.date)
-        print("uname: ", self.uname)
-        print("hashtag: ", self.hashtag)
-
-# LocalDatabase의 import 문제로 아래 코드는 정상동작 하지 않으니
-# 코드를 작성하는 도중에는 주석을 해제하여 LocalDatabase 함수를 자동완성하고
-# 실행할때는 다시 주석처리하여 사용할것
-#from model import Local_Database
 
 class SearchManager:
     # LocalDatabase의 import 문제로 아래 코드는 정상동작 하지 않으니
@@ -624,14 +739,8 @@ class SearchManager:
     
 # --------------------------------------------------------------------------------------------
 
-class ManagedBias:
-    def __init__(self, bid, user_nodes:list):
-        self.bid = bid
-        self.trend_hashtags = []
-        self.user_nodes:list = user_nodes
-
 # 이건 사용자에게 맞는 데이터를 주려고 만든거
-class recommendManager:
+class RecommendManager:
     def __init__(self, database, feed_algorithm):
         self.__database = database
         self.__feed_algorithm:FeedAlgorithm = feed_algorithm
@@ -643,7 +752,6 @@ class recommendManager:
 
     def make_task(self):
         return self.check_trend_hashtag
-
 
     def __init__bias_avltree(self):
         biases = []
@@ -692,7 +800,15 @@ class recommendManager:
         return
 
     # 실시간 트랜드 해시태그 제공
+    # 급상승 해시태그 정의 : 단기간에 해시태그가 엄청 올라옴
+    # 기준 시간) 1시간내에 올라온 글 중 해시태그가 가장 많이 달린 해시태그를 얻어야함
+    # 그러면 기준시간은 어떻게 지정하나? -> 알아서 지정되겠지만, 정각을 기준으로 실행되겠지
+    # 그러하면 한시간 내에 올라온 Feed들을 모두 모집하고, 데이터프레임화 시켜서 살펴보면 빠를지도
+
     def get_best_hashtags(self, num_hashtag=10) -> list:
+        result = []
+
+
         return self.hashtags[0:num_hashtag]
 
     # 사용자에게 어울릴만한 해시태그 리스트 제공
@@ -773,7 +889,7 @@ class recommendManager:
         except Exception as e:
             print(e)
 
-    def __bais_hashtag_setting(self):
+    def __bias_hashtag_setting(self):
         try:
             managed_bias_list = list(self.__bias_avltree.values())
             for managed_bias in managed_bias_list:
@@ -804,7 +920,7 @@ class recommendManager:
                 # 만약 마지막으로 연산한지 1시간이 지났으며 다시 연산
                 if time_diff >= 1:
                     self.__total_hashtag_setting()
-                    self.__bais_hashtag_setting()
+                    self.__bias_hashtag_setting()
                     # 이거 오류안남? current_time 생성위치가 밑에 있는데 없는 변수 만드는 거 아니냐.
                     # 그러네 이거 왜 오류 안났냐 왜 서버에서는 정상동작 하는건데...
 
@@ -913,9 +1029,10 @@ class FilteringManager:
             self.__bias_avltree.insert(key=single_bias.fid, value=managed_bias)
 
 #------------------------------------------------------------------------------------
+    # BID로 필터링 하는 작업 수행
     def filtering_community(self, bids:list):
         # Search Engine에 들어가기 전에 BID 리스트를 검사할거임
-        # BID 리스트 요소는 1개가 될 수 있고, 아니면 선택을 하지않아서 여러개가 될 수 있음.
+        # BID 리스트 요소는 1개가 될 수 있고, 아니면 선택을 하지않아서 여러 개가 될 수 있음.
         bid_filtering_fids = []
 
         for managed_feed in self.__feed_table:
@@ -924,15 +1041,50 @@ class FilteringManager:
 
         return bid_filtering_fids
 
+    # 전체 게시글 중 필터링
     def _filter_single_option_feed(self, feed_list, option):
         result = []
         for feed in feed_list:
+            # 롱폼 / 숏폼
             if option == "long":
-                if feed.fclass == ""
+                if feed.fclass == "long":
+                    result.append(feed)
+            if option == "short":
+                if feed.fclass == "short":
+                    result.append(feed)
+            if option == "choice":
+                if feed.iid != "":
+                    result.append(feed)
+            if option == "quiz":
+                if feed.iid != "":
+                    continue
+            if option == "funding":
+                continue
+            if option == "picture":
+                if len(feed.image) != 0:
+                    result.append(feed)
 
+        return result
+
+    # 필터링된 Feed중 Fid만 추출하는 부분
+    def _extract_fid_in_feed_list(self, feed_list):
+        result = []
+
+        for feed in feed_list:
+            result.append(feed.fid)
+
+        return result
+
+    # 피드를 필터링하는 함수
     def filter_options_feeds(self, options:list):
+        result = copy(self.__feed_table)
 
+        for option in options:
+            result = self._filter_single_option_feed(result, option)
 
+        result = self._extract_fid_in_feed_list(result)
+
+        return result
 
 # --------------------------------------------------------------------------------------------
 
