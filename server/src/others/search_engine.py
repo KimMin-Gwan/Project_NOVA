@@ -883,7 +883,7 @@ class RecommendManager:
         #asyncio.get_event_loop()
         #self.loop.create_task(self.check_trend_hashtag())
 
-    def __check_trend_hashtag_algo(self, weight=0, now_data=0, prev_data=0, num_feed=0):
+    def __check_trend_hashtag_algo(self, weight=0, now_data=0, prev_data=0, num_feed=1):
         if now_data == 0 and prev_data == 0 and weight == 0:
             now_data = num_feed
 
