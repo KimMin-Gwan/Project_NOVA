@@ -152,7 +152,7 @@ class ManagedFeedTable:
 
     #---------------------------------------------------------------------------------------------
 
-    def modify_feed_table(self, feed:Feed, ):
+    def modify_feed_table(self, feed:Feed):
         # 피드 테이블을 수정하는 함수
         # managed_feed를 찾아야 됨
         managed_feed:ManagedFeed = self.__feed_avltree.get(feed.fid)
@@ -164,14 +164,22 @@ class ManagedFeedTable:
         managed_feed.uname = feed.nickname
         return
 
+    def remove_feed(self, feed:Feed):
+        # 삭제하는 함수. 피드가  삭제되면 None으로 바뀔것
+        managed_feed = self.__feed_avltree.get(key=feed.fid)
+        managed_feed = ManagedFeed()
+        self.__feed_avltree.remove(key=feed.fid)
+        return
+
 
 # 아래는 검색 엔진
 class FeedSearchEngine:
     def __init__(self, database):
         self.__feed_algorithm= FeedAlgorithm(database=database)
+        # self.__managed_feed_table = ManagedFeedTable(database=database)
         self.__search_manager = SearchManager(database=database, feed_algorithm=self.__feed_algorithm)
         self.__recommend_manager = RecommendManager(database=database,feed_algorithm=self.__feed_algorithm)
-        self.__filter_manager = FilteringManager(database=database, feed_algorithm=self.__feed_algorithm)
+        # self.__filter_manager = FilteringManager(database=database, feed_algorithm=self.__feed_algorithm)
         self.__database=database
 
     def make_task(self):
@@ -548,7 +556,7 @@ class SearchManager:
         managed_feed = ManagedFeed()
         self.__feed_avltree.remove(key=feed.fid)
         return
-    
+
     def __get_datetime_now(self):
         now = datetime.now()
         return now
