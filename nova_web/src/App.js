@@ -132,29 +132,39 @@ function App() {
     fetchTagData();
   }, []);
 
-  const ulRef = useRef(null);
+  // const ulRef = useRef(null);
+
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     if (ulRef.current) {
+  //       ulRef.current.style.transitionDuration = "400ms";
+  //       ulRef.current.style.marginTop = "-50px";
+
+  //       setTimeout(() => {
+  //         if (ulRef.current) {
+  //           ulRef.current.style.transitionDuration = "";
+  //           ulRef.current.style.marginTop = "";
+  //           // 첫 번째 요소를 400ms 후에 뒤로 보냅니다.
+  //           ulRef.current.appendChild(ulRef.current.querySelector("li:first-child"));
+  //         }
+  //       }, 400);
+  //     }
+  //   }, 2000);
+
+  //   return () => {
+  //     clearInterval(interval);
+  //   };
+  // }, []);
+  const [currentIndex, setCurrentIndex] = useState(0); // 현재 표시 중인 태그 인덱스
+  const intervalTime = 2000; // 2초마다 태그 변경
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (ulRef.current) {
-        ulRef.current.style.transitionDuration = "400ms";
-        ulRef.current.style.marginTop = "-50px";
+    const timer = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex === tagList.length - 1 ? 0 : prevIndex + 1));
+    }, intervalTime);
 
-        setTimeout(() => {
-          if (ulRef.current) {
-            ulRef.current.style.transitionDuration = "";
-            ulRef.current.style.marginTop = "";
-            // 첫 번째 요소를 400ms 후에 뒤로 보냅니다.
-            ulRef.current.appendChild(ulRef.current.querySelector("li:first-child"));
-          }
-        }, 400);
-      }
-    }, 2000);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
+    return () => clearInterval(timer); // 컴포넌트 언마운트 시 타이머 정리
+  }, [tagList]);
 
   let [showBox, setShowBox] = useState(false);
   let [blackBox, setBlackBox] = useState("");
@@ -246,7 +256,7 @@ function App() {
                       className={`logo-st ${getModeClass(brightMode)}`}
                     ></img>
                   </div>
-                  <Link to="/test">테스트</Link>
+                  {/* <Link to="/test">테스트</Link> */}
 
                   <div className="buttons">
                     <button className="tool-button">
@@ -283,12 +293,20 @@ function App() {
               </div>
 
               <section>
-                <div className="rt-ranking ">실시간 랭킹</div>
-                {/* <ul ref={ulRef} className="rt-ranking ">
+                <ul className="rt-ranking ">
                   {tagList.map((tag, i) => {
-                    return <li key={i}>{tag}</li>;
+                    return (
+                      <li
+                        key={i}
+                        style={{
+                          display: i === currentIndex ? "flex" : "none",
+                        }}
+                      >
+                        {i + 1}. {tag}
+                      </li>
+                    );
                   })}
-                </ul> */}
+                </ul>
               </section>
 
               <section className="contents">
