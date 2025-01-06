@@ -980,7 +980,7 @@ class FilteringManager:
 
         for feed_data in feed_datas:
             feed = Feed()
-            feed.make_with_dict(dictionary=feed_data)
+            feed.make_with_dict(dict_data=feed_data)
             feeds.append(feed)
 
         # Managed Feed 형태로 보관
