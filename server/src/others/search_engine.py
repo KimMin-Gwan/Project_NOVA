@@ -94,6 +94,7 @@ class ManagedFeedBiasTable:
         self.__database = database
         self.__feed_algorithm = feed_algorithm
         self.__feed_table =[]
+        self.__feed_df = pd.DataFrame()
         self.__feed_avltree = AVLTree()
         self.__bias_avltree = AVLTree()
 
@@ -172,9 +173,12 @@ class ManagedFeedBiasTable:
         # 리턴되면 위에서 잠시 보관한 피드 데이터는 사라지고 self.__feed_table에 ManagedFeed들만 남음
 
         self.__feed_table = sorted(self.__feed_table, key=lambda x:x.date, reverse=False)
+        self.__feed_df = self.__dataframing_feed_list()
 
         num_feed = str(len(self.__feed_table))
         print(f'INFO<-[      {num_feed} NOVA FEED IN SEARCH ENGINE NOW READY.')
+        print(f'INFO<-[      {num_feed} NOVA FEED DATAFRAME IN SEARCH ENGINE NOW READY.')
+
         return
 
     # Feed_avltree 설정
@@ -225,6 +229,25 @@ class ManagedFeedBiasTable:
         feed_df = pd.DataFrame(managed_feed_dict_list)
         return feed_df
 
+    def __add_new_data_in_df(self, managed_feed):
+        new_data = pd.DataFrame(managed_feed.to_dict())
+        self.__feed_df = pd.concat([self.__feed_df, new_data], ignore_index=True)
+        self.__feed_df = self.__feed_df.sort_values(by='date', ascending=False).reset_index(drop=True)
+        return
+
+    def __modify_data_in_df(self, new_managed_feed):
+        new_data = new_managed_feed.to_dict()
+        # fid는 고유값이므로, 하나밖에 안 나옴
+        update_index = self.__feed_df.index[self.__feed_df['fid'] == new_managed_feed.fid].tolist()[0]
+        self.__feed_df.loc[update_index] = new_data
+
+        return
+
+    def __remove_data_in_df(self, fid):
+        remove_index = self.__feed_df.index[self.__feed_df['fid'] == fid].tolist()[0]
+        self.__feed_df = self.__feed_df.drop(index=remove_index).reset_index(drop=True)
+        return
+
     #---------------------------------------------------------------------------------------------
     def len_feed_table(self):
         # Feed Table의 길이 구하기
@@ -243,6 +266,9 @@ class ManagedFeedBiasTable:
 
         self.__feed_table.append(managed_feed)
         self.__feed_avltree.insert(managed_feed.fid, managed_feed)
+        # 데이터 프레임 추가
+        self.__add_new_data_in_df(managed_feed)
+
         return
 
     # ManagedFeedTable을 수정, 새로운 Feed가 들어왔기 때문
@@ -256,6 +282,10 @@ class ManagedFeedBiasTable:
         managed_feed.hashtag = feed.hashtag
         managed_feed.like = feed.star
         managed_feed.uname = feed.nickname
+
+        # dataframe도 업데이트
+        self.__modify_data_in_df(managed_feed)
+
         return
 
     # ManagedFeed가 삭제되었기 때문에, 테이블과 트리에서도 삭제시킴
@@ -264,6 +294,8 @@ class ManagedFeedBiasTable:
         managed_feed = self.__feed_avltree.get(key=feed.fid)
         managed_feed = ManagedFeed()
         self.__feed_avltree.remove(key=feed.fid)
+        # dataframe 삭제
+        self.__remove_data_in_df(fid=feed.fid)
         return
 
     # 랜덤한 Feed 하나 추출
@@ -292,8 +324,6 @@ class ManagedFeedBiasTable:
                 break
 
         return target_index
-
-
 
     # Managed Feed 찾기
     def search_managed_feed(self, fid):
@@ -356,10 +386,8 @@ class ManagedFeedBiasTable:
     # 바이어스 커뮤니티에 따라 Feed를 분류함
     # 데이터프레임 활용
     def filtering_bias_community(self, bids:list):
-        feeds_df = self.__dataframing_feed_list()
-
-        # Feed DF 중, bids안에 포함된 feed들만 반환함. 아직은 데이터프레임화 되어있음
-        filtered_feeds_df = feeds_df[feeds_df['bid'].isin(bids)]
+        # Feed DF 중, bids안에 포함된 feed들만 반환함.
+        filtered_feeds_df = self.__feed_df[self.__feed_df['bid'].isin(bids)]
 
         # 필터링된 Feed들의 리스트를 반환
         return filtered_feeds_df['fid'].tolist()
