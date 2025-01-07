@@ -116,7 +116,13 @@ class Home_Controller:
 
         finally:
             return model
-        
+
+    def get_realtime_best_hashtag(self, database:Local_Database, request, feed_search_engine) -> HashTagModel:
+        model = HashTagModel(database=database)
+        # model.set_best_hash_tag()
+        model.set_realtime_best_hashtag(feed_search_engine=feed_search_engine, num_hashtag=10)
+
+        return model
     def get_hot_hashtag(self, database:Local_Database, request, feed_search_engine) -> HashTagModel:
         model = HashTagModel(database=database)
 
@@ -126,7 +132,7 @@ class Home_Controller:
         if model.is_user_login():
             model.set_best_hashtag(feed_search_engine=feed_search_engine)
         else:
-            model.set_realtime_best_hashtag(feed_search_engine=feed_search_engine, target_type="", num_hashtags=10)
+            model.set_realtime_best_hashtag(feed_search_engine=feed_search_engine, num_hashtags=10)
         return model
 
     def get_today_best_hashtag(self, database:Local_Database, request, feed_search_engine) -> HashTagModel:
