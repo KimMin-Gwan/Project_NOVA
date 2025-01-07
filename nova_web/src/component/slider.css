@@ -53,7 +53,7 @@
   background-color: #101010;
   color: white;
   border-radius: 15px;
-  padding: 20px;
+  padding: 22px;
   cursor: pointer;
   /* 텍스트 색상 */
   display: flex;
@@ -123,22 +123,23 @@
 }
 /* 라이트 모드 */
 .slide-content.bright-mode {
-  background-color: #f4f4f4;
+  background-color: #ffffff;
   color: #232323;
-  border: 1px solid #2b2d33;
+  border: 1px solid #e4e9ee;
+  height: 433px;
 }
 .bright-mode {
   .slick-dots li {
-    background-color: #f8f8f8;
+    background-color: #ffffff;
   }
   .slick-dots li button::before {
-    background-color: #f8f8f8;
+    background-color: #ffffff;
   }
 
   .slick-dots li.slick-active button {
-    background-color: #f8f8f8;
+    background-color: #ffffff;
   }
   .slick-dots li button {
-    background-color: #f8f8f8;
+    background-color: #ffffff;
   }
 }
