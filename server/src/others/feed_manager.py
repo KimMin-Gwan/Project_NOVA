@@ -1757,7 +1757,7 @@ class FeedManager:
 
         new_interaction = self._make_new_interaction(iid=new_iid, fid=fid, choice=choice)
 
-        self._database.add_new_data(target_id="iid", target_data=new_interaction.get_dict_form_data())
+        self._database.add_new_data(target_id="iid", new_data=new_interaction.get_dict_form_data())
         # 음.. 따로 더 저장할게 있나요? 검토좀
 
         return "Upload Success", True
