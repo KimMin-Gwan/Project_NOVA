@@ -366,7 +366,7 @@ class ManagedFeedBiasTable:
     def get_managed_bias(self, bid):
         return self.__bias_avltree.get(key=bid, default=None)
 
-    def get_bias_list(self):
+    def get_all_managed_bias(self):
         return list(self.__bias_avltree.values())
 
     def get_liked_biases(self, bids):
@@ -887,7 +887,8 @@ class SearchManager:
             index=index,
         )
         return result_fid, result_index
-    #def search_feed_with_string(self, string, num_feed=10) -> list:   #본문 내용을 가지고 찾는거같음
+
+    # def search_feed_with_string(self, string, num_feed=10) -> list: #본문 내용을 가지고 찾는거같음
         #return self.__feed_algorithm.get_feed_with_string(string,num_feed)
 
 # 이건 사용자에게 맞는 데이터를 주려고 만든거
@@ -901,6 +902,7 @@ class RecommendManager:
         #asyncio.get_event_loop()
         #self.loop.create_task(self.check_trend_hashtag())
 
+    # 해시태그 랭킹을 위해
     def __check_trend_hashtag_algo(self, weight=0, now_data=0, prev_data=0, num_feed=1):
         if now_data == 0 and prev_data == 0 and weight == 0:
             now_data = num_feed
@@ -948,7 +950,7 @@ class RecommendManager:
 
     def __bias_hashtag_setting(self):
         try:
-            managed_bias_list = self.__managed_feed_bias_table.get_bias_list()
+            managed_bias_list = self.__managed_feed_bias_table.get_all_managed_bias()
             for managed_bias in managed_bias_list:
                 hash_nodes = []
 
@@ -1005,6 +1007,8 @@ class RecommendManager:
     # 그러면 기준시간은 어떻게 지정하나? -> 알아서 지정되겠지만, 정각을 기준으로 실행되겠지
     # 그러하면 한시간 내에 올라온 Feed들을 모두 모집하고, 데이터프레임화 시켜서 살펴보면 빠를지도
     def get_best_hashtags(self, num_hashtag=10) -> list:
+
+
         return self.hashtags[0:num_hashtag]
 
     # 사용자에게 어울릴만한 해시태그 리스트 제공
