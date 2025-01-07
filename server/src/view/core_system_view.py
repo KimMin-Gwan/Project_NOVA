@@ -72,7 +72,6 @@ class Core_Service_View(Master_View):
         def get_my_bias(request:Request):
             request_manager = RequestManager()
             data_payload = DummyRequest()
-            print(request.cookies)
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
             # 검사 결과에 없으면 없다는 결과로 가야됨
             #if not request_manager.jwt_payload.result:
