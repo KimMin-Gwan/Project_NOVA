@@ -192,3 +192,33 @@
   border: 1px solid gray;
   cursor: pointer;
 }
+
+/* 좌표 모달 */
+
+.link-box {
+  width: 80%;
+  padding: 20px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid gray;
+}
+
+.link-input-container {
+  margin: 0 auto;
+  display: flex;
+  width: 80%;
+  padding: 20px;
+  border: 1px dotted blue;
+
+  .link-input {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+
+    input {
+      padding: 10px;
+    }
+  }
+}
