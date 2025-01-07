@@ -22,6 +22,7 @@
 
 .input-container {
   display: flex;
+  margin-top: 10px;
 
   .input-hashtag {
     background-color: white;
@@ -32,6 +33,10 @@
     border: none;
     border-bottom: 1px solid gray;
   }
+
+  /* input::placeholder {
+    color: gray;
+  } */
 }
 
 .content_container {

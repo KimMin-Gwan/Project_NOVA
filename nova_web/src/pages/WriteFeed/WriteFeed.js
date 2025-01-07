@@ -111,8 +111,9 @@ const WriteFeed = ({ brightmode }) => {
         fclass: "",
         choice: choice, // 4지선다 선택지 반영
         hashtag: tagList,
-        bid: "",
         link: "",
+        bid: "",
+        image_names: "",
       },
     };
 
