@@ -68,7 +68,7 @@ const WriteFeed = ({ brightmode }) => {
 
   const [imageFile, setImageFile] = useState(null);
   const [bodyText, setBodyText] = useState(""); // 글 입력 내용 상태로 저장
-  const [choice, setChoice] = useState(["", "", "", ""]); // 선택지 4개 상태로 저장
+  const [choice, setChoice] = useState([]); // 선택지 4개 상태로 저장
   let [inputTagCount, setInputTagCount] = useState(0); //글자수
   let [inputBodyCount, setInputBodyCount] = useState(0); //글자수
 
