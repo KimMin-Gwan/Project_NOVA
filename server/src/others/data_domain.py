@@ -215,7 +215,7 @@ class League(SampleDomain):
 
 class Feed(SampleDomain):
     def __init__(self, fid="", uid="", body="", fclass="", date="",
-                 display=1, star=0, image=None, hashtag=None,
+                 display=4, star=0, image=None, hashtag=None,
                  comment=None, iid="", lid="", bid=""):
         if image is None:
             image = []
