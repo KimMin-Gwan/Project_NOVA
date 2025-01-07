@@ -1329,7 +1329,7 @@ class FeedManager:
     # 새로운 피드의 데이터를 추가하여 반환
     def __set_new_feed(self, user:User,fid, fclass, choice, body, hashtag, image, link, bid):
         # 인터액션이 있으면 작업할것
-        if len(choice) > 0:
+        if len(choice) > 1:
             iid, _ = self.try_make_new_interaction(fid=fid, choice=choice)
         else:
             iid = ""
