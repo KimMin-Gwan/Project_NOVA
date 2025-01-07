@@ -108,7 +108,7 @@ const WriteFeed = ({ brightmode }) => {
       body: {
         body: bodyText, // 입력된 글 본문 반영
         fid: "",
-        fclass: "",
+        fclass: "short",
         choice: choice, // 4지선다 선택지 반영
         hashtag: tagList,
         link: "",
