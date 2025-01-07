@@ -1,9 +1,10 @@
 [
     {
         "bid": "1001",
-        "type": "solo",
         "bname": "이시연",
         "category": [
+            "K-Pop",
+            "걸그룹",
             "아티스트"
         ],
         "birthday": "2000/05/16",
@@ -12,8 +13,6 @@
         "group": [
             "QWER"
         ],
-        "lid": "1001",
-        "point": 9715,
         "num_user": 15,
         "x_account": "https://x.com/siyo_min",
         "insta_account": "https://www.instagram.com/siyo.co.kr/",
@@ -24,23 +23,19 @@
         "country": [
             "대한민국"
         ],
-        "nickname": [
-            "시요밍",
-            "시쪽이",
-            "명창햄찌"
-        ],
         "fanname": [
             "바위게"
-        ],
-        "group_member_bids": []
+        ]
     },
     {
         "bid": "1002",
-        "type": "solo",
         "bname": "고세구",
         "category": [
+            "K-Pop",
+            "SOOP",
             "버튜버",
-            "아티스트"
+            "아티스트",
+            "걸그룹"
         ],
         "birthday": "",
         "debut": "2021/12/17",
@@ -48,8 +43,6 @@
         "group": [
             "이세계아이돌"
         ],
-        "lid": "1001",
-        "point": 6700,
         "num_user": 10,
         "x_account": "https://x.com/gosegu486385",
         "insta_account": "https://www.instagram.com/gosegu_official",
@@ -60,20 +53,16 @@
         "country": [
             "대한민국"
         ],
-        "nickname": [
-            "세구세구",
-            "고양이"
-        ],
         "fanname": [
             "세균단"
-        ],
-        "group_member_bids": []
+        ]
     },
     {
         "bid": "1003",
-        "type": "solo",
         "bname": "하니",
         "category": [
+            "K-Pop",
+            "걸그룹",
             "아티스트"
         ],
         "birthday": "2004/10/06",
@@ -82,8 +71,6 @@
         "group": [
             "NewJeans"
         ],
-        "lid": "1001",
-        "point": 10630,
         "num_user": 14,
         "x_account": "https://x.com/NewJeans_ADOR",
         "insta_account": "https://www.instagram.com/newjeans_official/",
@@ -95,19 +82,15 @@
             "호주",
             "베트남"
         ],
-        "nickname": [
-            "팜하니"
-        ],
         "fanname": [
             "버니즈"
-        ],
-        "group_member_bids": []
+        ]
     },
     {
         "bid": "1004",
-        "type": "solo",
         "bname": "우정잉",
         "category": [
+            "SOOP",
             "크리에이터",
             "스트리머"
         ],
@@ -118,8 +101,6 @@
             "잉가문",
             "잉굴랜드"
         ],
-        "lid": "1001",
-        "point": 9900,
         "num_user": 15,
         "x_account": "",
         "insta_account": "https://www.instagram.com/friendshiping94",
@@ -130,14 +111,8 @@
         "country": [
             "대한민국"
         ],
-        "nickname": [
-            "독구타련",
-            "우엉징",
-            "볼살대마왕"
-        ],
         "fanname": [
             "잉친이"
-        ],
-        "group_member_bids": []
+        ]
     }
 ]

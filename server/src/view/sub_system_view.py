@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import Any, Optional
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from view.jwt_decoder import RequestManager
 from view.master_view import Master_View, RequestHeader
 from view.parsers import Head_Parser
 from controller import Sub_Controller
@@ -198,6 +199,74 @@ class Sub_Service_View(Master_View):
             response = model.get_response_form_data(self._head_parser)
             return response
 
+
+    def bias_setting_route(self):
+        # 바이어스를 String 으로 검색
+        @self.__app.get('/nova_sub_system/try_search_bias')
+        def try_search_bias(request:Request, bname:Optional[int] = -1):
+            request_manager = RequestManager()
+            
+            data_payload = BiasSearchRequest(bname=bname)
+            
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            #if not request_manager.jwt_payload.result:
+                #raise request_manager.credentials_exception
+
+            sub_controller=Sub_Controller()
+            model = sub_controller.try_search_bias(database=self.__database,
+                                                request=request_manager,
+                                                feed_search_engine=self.__feed_search_engine
+                                                )
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response        
+        
+        # 바이어스 선택 또는 취소
+        @self.__app.post('/nova_sub_system/try_select_my_bias')
+        def try_select_my_bias(request:Request, raw_request:dict):
+            request_manager = RequestManager()
+
+            data_payload = BiasSelectRequest(request=raw_request)
+            request_manager.try_view_management_authorized_with_temp_user(data_payload=data_payload, cookies=request.cookies)
+            if not request_manager.jwt_payload.result:
+                raise self._credentials_exception
+
+            sub_controller=Sub_Controller()
+            model = sub_controller.try_select_bias(database=self.__database,
+                                                 request=request_manager,
+                                                 feed_search_engine=self.__feed_search_engine)
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
+        # Bias Follow 페이지에 노출될 Bias를 분류에 따라 노출
+        @self.__app.get('/nova_sub_system/get_bias_follow_page_data')
+        def try_get_bias_follow_page_data():
+            sub_controller=Sub_Controller()
+            model = sub_controller.try_get_bias_follow_page(database=self.__database)
+            body_data = model.get_response_form_data(self._head_parser)
+            return body_data
+        
+        # 바이어스를 카테고리로 검색
+        @self.__app.get('/nova_sub_system/try_search_bias_with_category')
+        def try_search_bias_with_category(request:Request, category:Optional[str]):
+            request_manager = RequestManager()
+
+            data_payload = BiasWithCategoryRequest(category=category)
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+
+            sub_controller=Sub_Controller()
+            model = sub_controller.try_search_bias_with_category(database=self.__database,
+                                                                request=request_manager)
+            
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
+        
+
+
     #def bias_page_route(self, endpoint:str):
         #@self.__app.get(endpoint+'/home')
         #def home():
@@ -241,6 +310,14 @@ class Sub_Service_View(Master_View):
             #response = model.get_response_form_data(self._head_parser)
             #return response
 
+class DummyRequest():
+    def __init__(self) -> None:
+        pass
+        
+class BiasWithCategoryRequest():
+    def __init__(self, category) -> None:
+        self.category=category
+        
 class NoticeDetailRequest():
     def __init__(self, nid = None) -> None:
         self.nid=nid
@@ -249,6 +326,9 @@ class BiasPageInfoRequest():
     def __init__(self, bid = None) -> None:
         self.bid=bid  
 
+class BiasSearchRequest():
+    def __init__(self, bname) -> None:
+        self.bname=bname
 
 class MyContributionRequest(RequestHeader):
     def __init__(self, request) -> None:
@@ -263,3 +343,8 @@ class ImageTagRequest(RequestHeader):
         body = request['body']
         self.url = body['url']
 
+class BiasSelectRequest(RequestHeader):
+    def __init__(self, request) -> None:
+        super().__init__(request)
+        body = request['body']
+        self.bid = body['bid']

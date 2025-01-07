@@ -76,41 +76,70 @@ class HomeBiasModel(BaseModel):
 class BiasSearchModel(BaseModel):
     def __init__(self, database:Local_Database) -> None:
         super().__init__(database)
-        self.__biases = []
-
-    def try_search_bias(self, request):
-        try:
-            bias_list = []
-
-            dict_bias_list = self._database.get_all_data(target="bias")
+        self._biases = []
+        
+    # 바이어스 전체 데이터 세팅
+    def set_biases(self):
+        bias_datas = self._database.get_all_data(target="bias")
+        
+        for bias_data in bias_datas:
+            bias = Bias()
+            bias.make_with_dict(dict_data=bias_data)
+            self._biases.append(bias)
             
-            for bias_data in dict_bias_list:
+        if len(self._biases):
+            return True
+        else:
+            return False
+            
+    
+    def try_search_bias_with_category(self, category:str, biases=[]):
+        self._biases=self._try_search_bias_with_category(category=category, biases=biases)
+        return
+        
+    # 카테고리를 바탕으로 검색 -> 반드시 set_biases가 선행해도됨
+    def _try_search_bias_with_category(self, category:str, biases=[]):
+        result = []
+        
+        if len(biases):
+            for bias in biases:
+                if category in bias.category:
+                    result.append(bias)
+        else:
+            for bias in self._biases:
+                if category in bias.category:
+                    result.append(bias)
+                    
+        return result
+
+    def try_search_bias(self, bname, feed_search_engine):
+        # ManagedBias 전체 호출
+        managed_bias_list = feed_search_engine.get_all_managed_bias()
+
+        # 코사인 유사도 평가를 통한 가장 비슷한 이름 검색
+        result:list = self._search_similar_data(data_list=managed_bias_list,
+                                    key_word=bname, key_attr="bname")
+            
+        # 검색 결과가 있으면 데이터 베이스에서 찾아서 보내줌
+        if result:
+            bids = []
+                
+            # ManagedBias에서 bid 추출
+            for managed_bias in result:
+                bids.append(managed_bias.bid)
+                    
+            # 검색 후 만들기
+            bias_datas = self._database.get_datas_with_ids(target_id="bid", ids=bids)
+            for bias_data in bias_datas:
                 bias = Bias()
                 bias.make_with_dict(bias_data)
-                bias_list.append(bias)
-
-            result:list = self._search_similar_data(data_list=bias_list,
-                                       key_word=request.bias_name, key_attr="bname")
-            
-            self.__biases = result
-            #self.__set_biases(bias_data_list=result)
-
-        except Exception as e:
-            raise CoreControllerLogicError(error_type="set_search_bias| " + str(e))
-        
-        return
-
-    def __set_biases(self, bias_data_list):
-        for bias_data in bias_data_list:
-            bias = Bias()
-            bias.make_with_dict(bias_data)
-            self.__biases.append(bias)
+                self._biases.append(bias)
         return
 
     def get_response_form_data(self, head_parser):
         try:
             body = {
-                'biases' : self._make_dict_list_data(list_data=self.__biases)
+                'biases' : self._make_dict_list_data(list_data=self._biases)
             }
 
             response = self._get_response_data(head_parser=head_parser, body=body)
@@ -125,9 +154,9 @@ class SelectBiasModel(BaseModel):
         self.__bias= Bias()
         self.__result = False
 
-    def find_bias(self, request):
+    def find_bias(self, bid):
         try:
-            raw_bias_data = self._database.get_data_with_id(target="bid", id=request.bid)
+            raw_bias_data = self._database.get_data_with_id(target="bid", id=bid)
             if not raw_bias_data:
                 return False
             self.__bias.make_with_dict(raw_bias_data)
@@ -138,19 +167,16 @@ class SelectBiasModel(BaseModel):
     
     # 내 최애를 누구로 할지 최종 결정하는 부분
     def set_my_bias(self, feed_search_engine:FeedSearchEngine):
-        try:
-            if self.__bias.bid in self._user.bids:
-                self._user.bids.remove(self.__bias.bid)
-                feed_search_engine.add_new_user_to_bias(bid=self.__bias.bid, uid=self._user.uid)
-            else:
-                self._user.bids.append(self.__bias.bid)
-                feed_search_engine.remove_user_to_bias(bid=self.__bias.bid, uid=self._user.uid)
+        if self.__bias.bid in self._user.bids:
+            self._user.bids.remove(self.__bias.bid)
+            feed_search_engine.add_new_user_to_bias(bid=self.__bias.bid, uid=self._user.uid)
+        else:
+            self._user.bids.append(self.__bias.bid)
+            feed_search_engine.remove_user_to_bias(bid=self.__bias.bid, uid=self._user.uid)
 
-            self._database.modify_data_with_id(target_id="uid", target_data=self._user.get_dict_form_data())
-            self.__result = True
+        self._database.modify_data_with_id(target_id="uid", target_data=self._user.get_dict_form_data())
+        self.__result = True
 
-        except Exception as e:
-            raise CoreControllerLogicError(error_type="set_my_bias| " + str(e))
         return True
 
 
@@ -184,6 +210,37 @@ class LeagueMetaModel(BaseModel):
         try:
             body = {
                 'leagues' : self._make_dict_list_data(list_data=self.__leagues)
+            }
+
+            response = self._get_response_data(head_parser=head_parser, body=body)
+            return response
+
+        except Exception as e:
+            raise CoreControllerLogicError("response making error | " + e)
+        
+class BiasFollowPageModel(BiasSearchModel):
+    def __init__(self, database:Local_Database) -> None:
+        super().__init__(database)
+        self.__chzzk= []
+        self.__soop= []
+        self.__artist= []
+        self.__youtube= []
+        
+    def try_get_bias_follow_page_data(self):
+        self.__chzzk = self._try_search_bias_with_category(category="치지직")
+        self.__soop = self._try_search_bias_with_category(category="SOOP")
+        self.__artist= self._try_search_bias_with_category(category="아티스트")
+        self.__youtube= self._try_search_bias_with_category(category="크리에이터")
+        return
+
+
+    def get_response_form_data(self, head_parser):
+        try:
+            body = {
+                'chzzk' : self._make_dict_list_data(list_data=self.__chzzk),
+                'soop' : self._make_dict_list_data(list_data=self.__soop),
+                'artist' : self._make_dict_list_data(list_data=self.__artist),
+                'youtube' : self._make_dict_list_data(list_data=self.__youtube)
             }
 
             response = self._get_response_data(head_parser=head_parser, body=body)

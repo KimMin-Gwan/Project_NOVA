@@ -191,7 +191,49 @@ class Sub_Controller:
         finally:
             return model
 
+    def try_select_bias(self, database:Local_Database, request, feed_search_engine):
+        model = SelectBiasModel(database=database)
+        try:
+            # 유저가 있는지 확인
+            model.set_user_with_email(request=request.jwt_payload)
+            
+            if model.find_bias(request=request.data_payload.bid):
+                model.set_my_bias(feed_search_engine=feed_search_engine)
 
-        
+        except CustomError as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
 
+        except Exception as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
+
+        finally:
+            return model
+    
+    # bias를 문자열로 검색
+    def try_search_bias(self, database:Local_Database, request,
+                                    feed_search_engine,): 
+        model = BiasSearchModel(database=database)
+
+        model.try_search_bias(bname=request.bname, feed_search_engine=feed_search_engine)
+
+        return model
         
+    # bias follow페이지에 노출될 최애들의 리스트
+    def try_get_bias_follow_page(self, database:Local_Database):
+        model = BiasFollowPageModel(database=database)
+
+        if model.set_biases():
+            model.try_get_bias_follow_page_data()
+
+        return model
+    
+    # bias follow페이지에 노출될 최애들의 리스트
+    def try_search_bias_with_category(self, database:Local_Database, request):
+        model = BiasSearchModel(database=database)
+
+        if model.set_biases():
+            model.try_search_bias_with_category(category=request.data_payload.category)
+
+        return model

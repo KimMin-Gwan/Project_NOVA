@@ -91,20 +91,17 @@ class User(SampleDomain):
         }
 
 class Bias(SampleDomain):
-    def __init__(self, bid="", type="", bname="", category=[], birthday="", debut="",
-                 agency="", group=[], lid="", point=0, num_user=0, x_account="",
+    def __init__(self, bid="",bname="", category=[], birthday="", debut="",
+                 agency="", group=[], num_user=0, x_account="",
                  insta_account="", tiktok_account="", youtube_account="", homepage="",
-                 fan_cafe="", country=[], nickname=[], fanname = [], group_member_bids=[]):
+                 fan_cafe="", country=[], fanname = []):
         self.bid = bid
-        self.type = type
         self.bname = bname
         self.category = copy.copy(category)
         self.birthday = birthday
         self.debut = debut
         self.agency = agency
         self.group = copy.copy(group)
-        self.lid = lid
-        self.point = point
         self.num_user = num_user
         self.x_account = x_account
         self.insta_account = insta_account
@@ -113,23 +110,18 @@ class Bias(SampleDomain):
         self.homepage = homepage
         self.fan_cafe = fan_cafe
         self.country = copy.copy(country)
-        self.nickname = copy.copy(nickname)
         self.fanname = copy.copy(fanname)
-        self.group_memeber_bids = copy.copy(group_member_bids)
 
 
     def make_with_dict(self, dict_data):
         try:
             self.bid = dict_data['bid']
-            self.type = dict_data['type']
             self.bname = dict_data['bname']
             self.category = copy.copy(dict_data['category'])
             self.birthday = dict_data['birthday']
             self.debut = dict_data['debut']
             self.agency = dict_data['agency']
             self.group = copy.copy(dict_data['group'])
-            self.lid = dict_data['lid']
-            self.point = dict_data['point']
             self.num_user = dict_data['num_user']
             self.x_account = dict_data['x_account']
             self.insta_account = dict_data['insta_account']
@@ -138,9 +130,7 @@ class Bias(SampleDomain):
             self.homepage = dict_data['homepage']
             self.fan_cafe = dict_data['fan_cafe']
             self.country = copy.copy(dict_data['country'])
-            self.nickname = copy.copy(dict_data['nickname'])
             self.fanname = copy.copy(dict_data['fanname'])
-            self.group_memeber_bids = copy.copy(dict_data['group_member_bids'])
         except Exception as e:
             print(e)
             raise DictMakingError(error_type=e)
@@ -148,15 +138,12 @@ class Bias(SampleDomain):
     def get_dict_form_data(self):
         return {
             "bid": self.bid,
-            "type": self.type,
             "bname": self.bname,
             "category": copy.copy(self.category),
             "birthday": self.birthday,
             "debut": self.debut,
             "agency": self.agency,
             "group": copy.copy(self.group),
-            "lid": self.lid,
-            "point": self.point,
             "num_user": self.num_user,
             "x_account": self.x_account,
             "insta_account": self.insta_account,
@@ -165,9 +152,7 @@ class Bias(SampleDomain):
             "homepage": self.homepage,
             "fan_cafe": self.fan_cafe,
             "country": copy.copy(self.country),
-            "nickname": copy.copy(self.nickname),
             'fanname':copy.copy(self.fanname),
-            'group_member_bids':copy.copy(self.group_memeber_bids)
         }
 
 class NameCard(SampleDomain):
