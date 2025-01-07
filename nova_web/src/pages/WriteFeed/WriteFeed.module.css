@@ -139,6 +139,7 @@
   justify-content: space-between;
   align-items: center;
   border: 1px dotted blue;
+  margin-bottom: 10px;
 
   .preview-image {
     width: 50px;
@@ -168,4 +169,26 @@
   .apply_button {
     width: 70%;
   }
+}
+
+/* 투표 모달 */
+#vote-option[type="text"] {
+  all: unset;
+  width: 80%;
+  display: flex;
+  margin: 0 auto;
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid gray;
+  margin-bottom: 10px;
+}
+
+.option-box {
+  width: 80%;
+  display: flex;
+  margin: 0 auto;
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid gray;
+  cursor: pointer;
 }

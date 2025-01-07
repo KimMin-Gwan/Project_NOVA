@@ -158,13 +158,13 @@ function App() {
   const [currentIndex, setCurrentIndex] = useState(0); // 현재 표시 중인 태그 인덱스
   const intervalTime = 2000; // 2초마다 태그 변경
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex === tagList.length - 1 ? 0 : prevIndex + 1));
-    }, intervalTime);
+  // useEffect(() => {
+  //   const timer = setInterval(() => {
+  //     setCurrentIndex((prevIndex) => (prevIndex === tagList.length - 1 ? 0 : prevIndex + 1));
+  //   }, intervalTime);
 
-    return () => clearInterval(timer); // 컴포넌트 언마운트 시 타이머 정리
-  }, [tagList]);
+  //   return () => clearInterval(timer); // 컴포넌트 언마운트 시 타이머 정리
+  // }, [tagList]);
 
   let [showBox, setShowBox] = useState(false);
   let [blackBox, setBlackBox] = useState("");

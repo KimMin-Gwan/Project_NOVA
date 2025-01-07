@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 // import style from "./../FeedPage/FeedPage.module.css";
 import style from "./WriteFeed.module.css";
 // import stylePlanet from "./../PlanetPage/Planet.module.css";
@@ -69,6 +69,11 @@ const WriteFeed = ({ brightmode }) => {
   // const [isClickedBtn, setIsClickedBtn] = useState('card'); // 버튼 클릭 상태
   let [inputTagCount, setInputTagCount] = useState(0); //글자수
   let [inputBodyCount, setInputBodyCount] = useState(0); //글자수
+
+  let [createOptions, setCreateOptions] = useState(0);
+  function onClickAdd() {
+    setCreateOptions(createOptions + 1);
+  }
   const handleFileChange = (event) => {
     // const selectedFile = event.target.files[0];
     const selectedFile = Array.from(event.target.files);
@@ -99,6 +104,8 @@ const WriteFeed = ({ brightmode }) => {
         fclass: fclassName[currentFclass],
         choice: choice, // 4지선다 선택지 반영
         hashtag: tagList,
+        bid: undefined,
+        link: undefined,
       },
     };
 
@@ -153,6 +160,7 @@ const WriteFeed = ({ brightmode }) => {
       return prevIndex === fclassName.length - 1 ? 0 : prevIndex + 1;
     });
   }
+
   let [inputTag, setInputTag] = useState("");
   let [plusTag, setPlusTag] = useState("");
   let [tagList, setTagList] = useState([]);
@@ -199,7 +207,7 @@ const WriteFeed = ({ brightmode }) => {
   function onClickUpload() {
     if (isUserState) {
       alert("업로드가 완료되었습니다.");
-      navigate(-1);
+      // navigate(-1);
     } else {
       alert("로그인이 필요합니다.");
       navigate("/");
@@ -282,13 +290,46 @@ const WriteFeed = ({ brightmode }) => {
         <p className={style["alert_message"]}>숏 피드 게시글은 작성 후 24시간 동안 노출됩니다.</p>
 
         <div className={style["content_button"]}>
-          <button onClick={onClickModal}>이미지</button>
-          <button onClick={onClickVoteModal}>투표</button>
-          <button>링크</button>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onClickModal();
+            }}
+          >
+            이미지
+          </button>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onClickVoteModal();
+            }}
+          >
+            투표
+          </button>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
+            링크
+          </button>
         </div>
       </div>
-      {showModal && <Modal onClickModal={onClickModal} />}
-      {showVoteModal && <VoteModal onClickModal={onClickVoteModal} />}
+      {showModal && (
+        <Modal
+          onClickModal={onClickModal}
+          handleFileChange={handleFileChange}
+          imagePreview={imagePreview}
+        />
+      )}
+      {showVoteModal && (
+        <VoteModal
+          onClickModal={onClickVoteModal}
+          createOptions={createOptions}
+          onClickAdd={onClickAdd}
+          handleChoiceChange={handleChoiceChange}
+        />
+      )}
     </form>
   );
   //     <div className={`${style["test_container"]} ${style["container"]}`}>
@@ -538,33 +579,21 @@ export default WriteFeed;
 //   );
 // }
 
-const Modal = ({ show, closeModal, title, children, onClickModal }) => {
+const Modal = ({
+  show,
+  closeModal,
+  title,
+  children,
+  onClickModal,
+  handleFileChange,
+  imagePreview,
+}) => {
   const [mode, setMode] = useState(() => {
     return localStorage.getItem("brightMode") || "bright";
   });
 
-  let [imageFile, setImageFile] = useState();
-  const [imagePreview, setImagePreview] = useState([]);
-  // const [imageFiles, setImageFiles] = useState([]);
-  // if (!show) return null;
-  const handleFileChange = (event) => {
-    // const selectedFile = event.target.files[0];
-    const selectedFile = Array.from(event.target.files);
-    const validFiles = selectedFile.filter((file) => file.type.startsWith("image/"));
-
-    if (validFiles.length < selectedFile.length) {
-      alert("이미지 파일만 가능");
-    }
-
-    setImageFile(validFiles);
-
-    const previewUrls = validFiles.map((file) => {
-      return URL.createObjectURL(file);
-    });
-
-    setImagePreview(previewUrls);
-    validFiles.forEach((file) => URL.revokeObjectURL(file));
-  };
+  let fileRef = useRef();
+  console.log(fileRef);
 
   return (
     <div className={style["wrapper-container"]}>
@@ -575,10 +604,12 @@ const Modal = ({ show, closeModal, title, children, onClickModal }) => {
             이미지를 추가하려면 여기를 클릭하세요
           </label>
           <input
+            ref={fileRef}
             id={style["image-file"]}
             name="image"
             type="file"
             accept="image/*"
+            multiple
             onChange={handleFileChange}
           />
           {imagePreview.length !== 0 &&
@@ -586,7 +617,7 @@ const Modal = ({ show, closeModal, title, children, onClickModal }) => {
               return (
                 <div key={index} className={style["preview-container"]}>
                   <div>닫기</div>
-                  <div>file</div>
+                  {/* <div>{fileRef.current.files[0].name}</div> */}
                   <div className={style["preview-image"]}>
                     <img key={index} src={preview} />
                   </div>
@@ -605,16 +636,30 @@ const Modal = ({ show, closeModal, title, children, onClickModal }) => {
   );
 };
 
-function VoteModal({ onClickModal }) {
+function VoteModal({ onClickModal, createOptions, onClickAdd, handleChoiceChange }) {
+  let optionRef = useRef(0);
+
   return (
     <div className={style["wrapper-container"]}>
       <div className={style["modal-container"]}>
         <div className={style["modal-title"]}>투표 추가</div>
         <div className={style["image-container"]}>
-          <label htmlFor={style["image-file"]} className={style["input-image"]}>
+          {Array.from({ length: createOptions }).map((option, i) => {
+            return (
+              <input
+                key={i}
+                ref={optionRef}
+                id={style["vote-option"]}
+                name="option"
+                type="text"
+                placeholder="이곳을 눌러 수정"
+                onChange={handleChoiceChange}
+              />
+            );
+          })}
+          <div className={style["option-box"]} onClick={onClickAdd}>
             선택지를 추가하려면 여기를 클릭하세요
-          </label>
-          <input id={style["image-file"]} name="option" type="text" />
+          </div>
         </div>
         <div className={style["modal-buttons"]}>
           <button className={style["close_button"]} onClick={onClickModal}>
