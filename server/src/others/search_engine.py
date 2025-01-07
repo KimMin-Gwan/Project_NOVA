@@ -22,6 +22,8 @@ from datetime import  datetime, timedelta
 from pprint import pprint
 import random
 
+from collections import Counter
+
 #--------------------------------------------------------------------------------------------------
 
 # 이건 아래에 피드 테이블에 들어가야되는 피드 자료형
@@ -290,6 +292,8 @@ class ManagedFeedBiasTable:
                 break
 
         return target_index
+
+
 
     # Managed Feed 찾기
     def search_managed_feed(self, fid):
@@ -560,6 +564,24 @@ class FeedSearchEngine:
         return fid
 
     # ------------------------------------------------------------------------------------
+    def get_spiked_hashtags(self, target_type="today", num_hashtags=10) -> list:
+        result_hashtags = []
+
+        # 오늘의 급상승 해시태그
+        if target_type == "today":
+            result_hashtags = self.__recommend_manager.get_spiked_hashtags_in_hours(
+                num_hashtag=num_hashtags,target_hours=24)
+        # 이번 주의 급상승 해시태그
+        elif target_type == "weekly":
+            result_hashtags = self.__recommend_manager.get_spiked_hashtags_in_hours(
+                num_hashtag=num_hashtags, target_hours=168)
+        # 이번 달의 급상승 해시태그, 안쓸지도 모르지만 일단 만들어봤음.
+        elif target_type == "monthly":
+            result_hashtags = self.__recommend_manager.get_spiked_hashtags_in_hours(
+                num_hashtag=num_hashtags, target_hours=720)
+
+        return result_hashtags
+
     def get_best_hashtag(self, num_hashtag=10):
         return self.__recommend_manager.get_best_hashtags(num_hashtag=num_hashtag)
 
@@ -715,7 +737,7 @@ class SearchManager:
         return self.__managed_feed_bias_table.search_managed_feed(fid)
 
     # 이런 함수를 미리 만들어서 쓰면 좋음
-    # 아래는 예시 
+    # 아래는 예시
 
     # # 예시 1 | 특정 인덱스의 피드를 뽑아오기
     # def __get_feed_data_in_index(self, index):
@@ -804,6 +826,7 @@ class SearchManager:
         else:
             target_index = 0
 
+        # 이거는 페이징 기법이 적용되어있음.
         search_range = self.__managed_feed_bias_table.get_feeds_target_range(index=index, target_index=target_index)
         # search_range = self.__feed_table[target_index:index][::-1]
 
@@ -902,7 +925,8 @@ class RecommendManager:
         #asyncio.get_event_loop()
         #self.loop.create_task(self.check_trend_hashtag())
 
-    # 해시태그 랭킹을 위해
+    # 해시태그 랭킹을 위해 사용하는 랭킹 스코어링 알고리즘
+    # 시그모이드를 기반으로 함.
     def __check_trend_hashtag_algo(self, weight=0, now_data=0, prev_data=0, num_feed=1):
         if now_data == 0 and prev_data == 0 and weight == 0:
             now_data = num_feed
@@ -969,6 +993,7 @@ class RecommendManager:
         except Exception as e:
             print(e)
 
+    # 매 시간마다 갱신되는 비동기성 함수
     async def check_trend_hashtag(self):
         try:
             time_diff = 1
@@ -1006,9 +1031,35 @@ class RecommendManager:
     # 기준 시간) 1시간내에 올라온 글 중 해시태그가 가장 많이 달린 해시태그를 얻어야함
     # 그러면 기준시간은 어떻게 지정하나? -> 알아서 지정되겠지만, 정각을 기준으로 실행되겠지
     # 그러하면 한시간 내에 올라온 Feed들을 모두 모집하고, 데이터프레임화 시켜서 살펴보면 빠를지도
+
+        # 근데, 내가할 건 주간, 일간 게시글이다. 시간 당 베스트는 지금 표본의 개수가 절대적으로 부족하기 때문에
+        # 아직은 시행이 불가능하다.
+    def get_spiked_hashtags_in_hours(self, num_hashtag=10, target_hours=1) -> list:
+        # 시간 내에 올라온 모든 글을 긁어온다.
+        index = self.__managed_feed_bias_table.len_feed_table()
+
+        if target_hours > 0 :
+            target_index = self.__managed_feed_bias_table.find_target_index(target_hour=target_hours)
+        else:
+            target_index = 0
+
+        # managed_feeds_in_hours = self.__feed_table[target_index
+        managed_feeds_in_hours = self.__managed_feed_bias_table.get_feeds_target_range(index=index, target_index=target_index)
+        list_of_hashtags_in_hours = []
+
+        for managed_feed in managed_feeds_in_hours:
+            for hashtags in managed_feed.hashtags:
+                # 해시태그 리스트를 가져오므로, 빈 리스트에 Extend로 이어 붙임.
+                list_of_hashtags_in_hours.extend(hashtags)
+
+        # 카운팅 후, 내림차순 정렬되서, 해시태그만 뽑아옴
+        counting_hashtags = Counter(list_of_hashtags_in_hours)
+        sorted_list_of_hashtag_count = [hashtag for hashtag, count in counting_hashtags.most_common()]
+
+        return sorted_list_of_hashtag_count[0:num_hashtag]
+
+    # 실시간 트랜드 해시태그 제공
     def get_best_hashtags(self, num_hashtag=10) -> list:
-
-
         return self.hashtags[0:num_hashtag]
 
     # 사용자에게 어울릴만한 해시태그 리스트 제공

@@ -124,15 +124,59 @@ class Home_Controller:
             model.set_user_with_email(request=request.jwt_payload)
 
         if model.is_user_login():
-            model.set_best_hash_tag(feed_search_engine=feed_search_engine)
+            model.set_best_hashtag(feed_search_engine=feed_search_engine)
         else:
-            model.set_realtime_best_hash_tag(feed_search_engine=feed_search_engine, num_hashtag=4)
-
+            model.set_realtime_best_hashtag(feed_search_engine=feed_search_engine, target_type="", num_hashtags=10)
         return model
 
-    def get_realtime_best_hashtag(self, database:Local_Database, request, feed_search_engine) -> HashTagModel:
+    def get_today_best_hashtag(self, database:Local_Database, request, feed_search_engine) -> HashTagModel:
         model = HashTagModel(database=database)
-        #model.set_best_hash_tag()
-        model.set_realtime_best_hash_tag(feed_search_engine=feed_search_engine, num_hashtag=10)
 
-        return model
+        try:
+            if request.jwt_payload != "":
+                model.set_user_with_email(request=request.jwt_payload)
+
+            model.set_today_best_hashtag(feed_search_engine=feed_search_engine, num_hashtags=10)
+
+        except CustomError as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code)
+        except Exception as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code)
+
+        finally:
+            return model
+
+    def get_weekly_best_hashtag(self, database:Local_Database, request, feed_search_engine) -> HashTagModel:
+        model = HashTagModel(database=database)
+        try:
+            if request.jwt_payload != "":
+                model.set_user_with_email(request=request.jwt_payload)
+            model.set_weekly_best_hashtag(feed_search_engine=feed_search_engine)
+
+        except CustomError as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code)
+        except Exception as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code)
+        finally:
+            return model
+
+    def get_monthly_best_hashtag(self, database:Local_Database, request, feed_search_engine) -> HashTagModel:
+        model = HashTagModel(database=database)
+        try:
+            if request.jwt_payload != "":
+                model.set_user_with_email(request=request.jwt_payload)
+            model.set_monthly_best_hashtag(feed_search_engine=feed_search_engine)
+
+        except CustomError as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code)
+        except Exception as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code)
+
+        finally:
+            return model

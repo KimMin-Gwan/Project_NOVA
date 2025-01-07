@@ -120,6 +120,46 @@ class Core_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
+        # 검토 좀요 (이거 새로 다뺌, 임시 루트이므로 검토 중요)
+        @self.__app.get('/home/today_spiked_hot_hashtag')
+        def get_today_hot_hashtag(request:Request):
+            request_manager = RequestManager()
+            data_payload = DummyRequest()
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+
+            # if not request_manager.jwt_payload.result:
+            #     raise request_manager.credentials_exception
+            home_controller=Home_Controller(feed_manager=self.__feed_manager)
+            model = home_controller.get_today_best_hashtag(database=self.__database,
+                                                           request=request_manager,
+                                                           feed_search_engine=self.__feed_search_engine)
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+
+            return response
+
+        # 이거 까지
+        @self.__app.get('/home/weekly_spiked_hot_hashtag')
+        def get_weekly_hot_hashtag(request:Request):
+            request_manager = RequestManager()
+            data_payload = DummyRequest()
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+
+            # if not request_manager.jwt_payload.result:
+            #     raise request_manager.credentials_exception
+            home_controller=Home_Controller(feed_manager=self.__feed_manager)
+            model = home_controller.get_weekly_best_hashtag(database=self.__database,
+                                                            request=request_manager,
+                                                            feed_search_engine=self.__feed_search_engine)
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+
+            return response
+
+
+
+
+
         # /home/search_feed_with_hashtag?hashtag=뭐
         @self.__app.get('/home/search_feed_with_hashtag')
         def get_hot_hashtag_feed(request:Request, hashtag:Optional[str]):

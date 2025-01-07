@@ -33,13 +33,29 @@ class HashTagModel(BaseModel):
         else:
             return False
 
-    def set_best_hash_tag(self, feed_search_engine:FeedSearchEngine):
+    # 유저 추천 해시태그
+    def set_best_hashtag(self, feed_search_engine:FeedSearchEngine):
         self._hashtags = feed_search_engine.get_recommend_hashtag(bids=self._bids)
         return
+
+    # 실시간/오늘의/이번 주/이달의 급상승 해시태그 인터페이스
+    def set_today_best_hashtag(self, feed_search_engine:FeedSearchEngine, num_hashtags):
+        self._hashtags = feed_search_engine.get_spiked_hashtags(target_type="today", num_hashtags=num_hashtags)
+        return
+
+    def set_weekly_best_hashtag(self, feed_search_engine:FeedSearchEngine, num_hashtags):
+        self._hashtags = feed_search_engine.get_spiked_hashtags(target_type="weekly", num_hashtags=num_hashtags)
+        return
+
+    def set_monthly_best_hashtag(self, feed_search_engine:FeedSearchEngine, num_hashtags):
+        self._hashtags = feed_search_engine.get_spiked_hashtags(target_type="monthly", num_hashtags=num_hashtags)
+        return
+
 
     def set_realtime_best_hash_tag(self, feed_search_engine:FeedSearchEngine, num_hashtag):
         self._hashtags =feed_search_engine.get_best_hashtag(num_hashtag=num_hashtag)
         return
+
 
     def get_response_form_data(self, head_parser):
         try:
