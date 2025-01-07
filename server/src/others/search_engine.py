@@ -258,7 +258,7 @@ class ManagedFeedBiasTable:
         managed_feed = ManagedFeed(
             fid=feed.fid,
             like=feed.star,
-            date=feed.date,
+            date=self.__get_date_str_to_object(feed.date),
             uname=feed.nickname,
             hashtag=feed.hashtag,
             bid=feed.bid
