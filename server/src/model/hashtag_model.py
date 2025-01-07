@@ -52,7 +52,7 @@ class HashTagModel(BaseModel):
         return
 
 
-    def set_realtime_best_hash_tag(self, feed_search_engine:FeedSearchEngine, num_hashtag):
+    def set_realtime_best_hashtag(self, feed_search_engine:FeedSearchEngine, num_hashtag):
         self._hashtags =feed_search_engine.get_best_hashtag(num_hashtag=num_hashtag)
         return
 
