@@ -1330,7 +1330,7 @@ class FeedManager:
     def __set_new_feed(self, user:User,fid, fclass, choice, body, hashtag, image, link, bid):
         # 인터액션이 있으면 작업할것
         if len(choice) > 0:
-            iid = self.try_make_new_interaction(fid=fid, choice=choice)
+            iid, _ = self.try_make_new_interaction(fid=fid, choice=choice)
         else:
             iid = ""
 
@@ -1760,7 +1760,7 @@ class FeedManager:
         self._database.add_new_data(target_id="iid", new_data=new_interaction.get_dict_form_data())
         # 음.. 따로 더 저장할게 있나요? 검토좀
 
-        return "Upload Success", True
+        return new_interaction.iid, True
 
     # INTERACTION 수정, 근데 이거 필요한지는 모르겠음.
 
