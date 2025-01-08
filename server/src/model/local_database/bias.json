@@ -14,6 +14,10 @@
             "QWER"
         ],
         "num_user": 15,
+        "board_type": [
+            "자유게시판",
+            "팬아트"
+        ],
         "x_account": "https://x.com/siyo_min",
         "insta_account": "https://www.instagram.com/siyo.co.kr/",
         "tiktok_account": "https://www.tiktok.com/@siyoming___qwer",
@@ -44,6 +48,10 @@
             "이세계아이돌"
         ],
         "num_user": 10,
+        "board_type": [
+            "자유게시판",
+            "팬아트"
+        ],
         "x_account": "https://x.com/gosegu486385",
         "insta_account": "https://www.instagram.com/gosegu_official",
         "tiktok_account": "",
@@ -72,6 +80,10 @@
             "NewJeans"
         ],
         "num_user": 14,
+        "board_type": [
+            "자유게시판",
+            "팬아트"
+        ],
         "x_account": "https://x.com/NewJeans_ADOR",
         "insta_account": "https://www.instagram.com/newjeans_official/",
         "tiktok_account": "https://www.tiktok.com/@newjeans_official",
@@ -102,6 +114,10 @@
             "잉굴랜드"
         ],
         "num_user": 15,
+        "board_type": [
+            "자유게시판",
+            "팬아트"
+        ],
         "x_account": "",
         "insta_account": "https://www.instagram.com/friendshiping94",
         "tiktok_account": "https://www.tiktok.com/@ujeonging",

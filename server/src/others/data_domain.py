@@ -94,7 +94,7 @@ class Bias(SampleDomain):
     def __init__(self, bid="",bname="", category=[], birthday="", debut="",
                  agency="", group=[], num_user=0, x_account="",
                  insta_account="", tiktok_account="", youtube_account="", homepage="",
-                 fan_cafe="", country=[], fanname = []):
+                 fan_cafe="", country=[], fanname = [], board_type=[]):
         self.bid = bid
         self.bname = bname
         self.category = copy.copy(category)
@@ -103,6 +103,7 @@ class Bias(SampleDomain):
         self.agency = agency
         self.group = copy.copy(group)
         self.num_user = num_user
+        self.board_type = board_type
         self.x_account = x_account
         self.insta_account = insta_account
         self.tiktok_account = tiktok_account
@@ -123,6 +124,7 @@ class Bias(SampleDomain):
             self.agency = dict_data['agency']
             self.group = copy.copy(dict_data['group'])
             self.num_user = dict_data['num_user']
+            self.board_type = copy.copy(dict_data['board_type'])
             self.x_account = dict_data['x_account']
             self.insta_account = dict_data['insta_account']
             self.tiktok_account = dict_data['tiktok_account']
@@ -215,7 +217,7 @@ class League(SampleDomain):
 
 class Feed(SampleDomain):
     def __init__(self, fid="", uid="", body="", fclass="", date="",
-                 display=4, star=60, image=None, hashtag=None,
+                 display=4, star=60, board_type="", image=None, hashtag=None,
                  comment=None, iid="", lid="", bid=""):
         if image is None:
             image = []
@@ -231,6 +233,7 @@ class Feed(SampleDomain):
         self.display = display
         self.date = date
         self.star = star
+        self.board_type = board_type
         self.image = copy.copy(image)
         self.hashtag = copy.copy(hashtag)
         self.comment = copy.copy(comment)
@@ -253,6 +256,7 @@ class Feed(SampleDomain):
             self.display = dict_data["display"]
             self.date = dict_data["date"]
             self.star = dict_data["star"]
+            self.board_type = dict_data["board_type"]
             self.image = copy.copy(dict_data["image"])
             self.hashtag = copy.copy(dict_data["hashtag"])
             self.comment = copy.copy(dict_data["cid"])
