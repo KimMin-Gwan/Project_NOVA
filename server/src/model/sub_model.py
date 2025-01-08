@@ -189,8 +189,6 @@ class UserContributionModel(BaseModel):
         except Exception as e:
             raise CoreControllerLogicError("response making error | " + e)
         
-
-        
 class MyContributionModel(UserContributionModel):
     def __init__(self, database:Local_Database) -> None:
         super().__init__(database)
@@ -232,7 +230,6 @@ class MyContributionModel(UserContributionModel):
 
         except Exception as e:
             raise CoreControllerLogicError("response making error | " + e)
-        
         
 class NoticeListModel(UserContributionModel):
     def __init__(self, database:Local_Database) -> None:
