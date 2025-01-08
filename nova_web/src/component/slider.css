@@ -143,3 +143,8 @@
     background-color: #ffffff;
   }
 }
+/*  */
+/*피드만 높이가 짧게 */
+.slide-content.custom-height {
+  height: 271px;
+}

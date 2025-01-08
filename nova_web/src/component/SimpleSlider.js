@@ -42,7 +42,7 @@ import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 
 import { getModeClass } from "./../App.js";
-const SimpleSlider = ({ feedData, brightMode, type }) => {
+const SimpleSlider = ({ feedData, brightMode, type, className }) => {
   const showMaxCnt = 1;
   const settings = {
     className: "slider-items",
@@ -76,7 +76,7 @@ const SimpleSlider = ({ feedData, brightMode, type }) => {
               <div key={i} className="slick-slide">
                 <div className="slide-box">
                   <div
-                    className={`slide-content ${getModeClass(mode)}`}
+                    className={`slide-content ${getModeClass(mode)} ${className || ""}`}
                     onClick={(e) => {
                       e.preventDefault();
                       // onClickMore(feed.fid);
@@ -90,14 +90,7 @@ const SimpleSlider = ({ feedData, brightMode, type }) => {
 
                     {!type && (
                       <div className={style["img-container"]}>
-                        <img
-                          src={
-                            feed.feed.image.length > 0
-                              ? feed.feed.image[0]
-                              : "https://kr.object.ncloudstorage.com/nova-feed-images/nova-platform.PNG"
-                          }
-                          alt="이미지"
-                        />
+                        <img src={feed.feed.image.length > 0 ? feed.feed.image[0] : "https://kr.object.ncloudstorage.com/nova-feed-images/nova-platform.PNG"} alt="이미지" />
                       </div>
                     )}
 

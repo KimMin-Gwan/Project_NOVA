@@ -250,11 +250,7 @@ function App() {
                       navigate("/");
                     }}
                   >
-                    <img
-                      src={logo2}
-                      alt="logo"
-                      className={`logo-st ${getModeClass(brightMode)}`}
-                    ></img>
+                    <img src={logo2} alt="logo" className={`logo-st ${getModeClass(brightMode)}`}></img>
                   </div>
                   {/* <Link to="/test">테스트</Link> */}
 
@@ -286,6 +282,7 @@ function App() {
                   type={"bias"}
                   children={<BiasBoxes />}
                   endPoint={`/feed_list?type=all`}
+                  customClassName="custom-height"
                 />
                 {/* <section className="my-bias">
                   <MyBias url={URL} showBox={showBox} blackBox={blackBox}></MyBias>
@@ -340,13 +337,7 @@ function App() {
                   endPoint={`/feed_list?type=weekly_best`}
                 />
 
-                <FeedThumbnail
-                  title={"전체 글"}
-                  feedData={allFeed}
-                  brightMode={brightMode}
-                  allPost={<AllPost allFeed={allFeed} />}
-                  endPoint={"/feed_list?type=all"}
-                />
+                <FeedThumbnail title={"전체 글"} feedData={allFeed} brightMode={brightMode} allPost={<AllPost allFeed={allFeed} />} endPoint={"/feed_list?type=all"} />
                 {/* <AllPost brightMode={brightMode} /> */}
               </section>
 
