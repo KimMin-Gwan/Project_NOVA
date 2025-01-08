@@ -14,7 +14,7 @@
             "QWER"
         ],
         "num_user": 15,
-        "board_type": [
+        "board_types": [
             "자유게시판",
             "팬아트"
         ],
@@ -48,7 +48,7 @@
             "이세계아이돌"
         ],
         "num_user": 10,
-        "board_type": [
+        "board_types": [
             "자유게시판",
             "팬아트"
         ],
@@ -80,7 +80,7 @@
             "NewJeans"
         ],
         "num_user": 14,
-        "board_type": [
+        "board_types": [
             "자유게시판",
             "팬아트"
         ],
@@ -114,7 +114,7 @@
             "잉굴랜드"
         ],
         "num_user": 15,
-        "board_type": [
+        "board_types": [
             "자유게시판",
             "팬아트"
         ],
