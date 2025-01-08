@@ -36,13 +36,14 @@ from collections import Counter
 # 클래스 목적 : 피드를 검색하거나, 조건에 맞는 피드를 제공하기 위함
 class ManagedFeed:
     def __init__(self, fid="", like=0, date=None, uname="", fclass="",
-                 hashtag=[], bid="", iid="", num_images=0):
+                 board_type="", hashtag=[], bid="", iid="", num_images=0):
         self.fid=fid
         self.fclass = fclass
         self.like=like
         self.date=date
         self.uname = uname
         self.hashtag = hashtag
+        self.board_type = board_type
         self.bid = bid
         self.iid = iid
         self.num_images = num_images
@@ -55,6 +56,7 @@ class ManagedFeed:
         print("date: ", self.date)
         print("uname: ", self.uname)
         print("hashtag: ", self.hashtag)
+        print("board_type: ", self.board_type)
         print("bid: ", self.bid)
         print("iid: ", self.iid)
         print("num_images: ", self.num_images)
@@ -67,6 +69,7 @@ class ManagedFeed:
             "date": self.date,
             "uname": self.uname,
             "hashtag": self.hashtag,
+            "board_type": self.board_type,
             "bid": self.bid,
             "iid": self.iid,
             "num_images": self.num_images
@@ -75,15 +78,17 @@ class ManagedFeed:
 # 이거는 Bias 테이블에 들어가게 되는 Bias 자료형
 # 데이터베이스에 받아서 만들어진다.
 class ManagedBias:
-    def __init__(self, bid, user_nodes:list):
+    def __init__(self, bid, user_nodes:list, board_types:list):
         self.bid = bid
         self.trend_hashtags = []
         self.user_nodes:list = user_nodes
+        self.board_types:list = board_types
 
     def to_dict(self):
         return {
             "bid": self.bid,
             "trend_hashtags": self.trend_hashtags,
+            "board_types": copy(self.board_types)
         }
 
 # ManagedFeed 테이블 클래스.
@@ -163,6 +168,7 @@ class ManagedFeedBiasTable:
                                        date=self.__get_date_str_to_object(single_feed.date),
                                        hashtag=copy(single_feed.hashtag),
                                        uname=single_feed.nickname,
+                                       board_type=single_feed.board_type,
                                        bid=single_feed.bid,
                                        iid=single_feed.iid,
                                        num_images=len(single_feed.image)
@@ -216,7 +222,7 @@ class ManagedFeedBiasTable:
                         user_nodes.append(user_node)
 
             # 이제 관리될 바이어스를 만들고 연결한다음
-            managed_bias = ManagedBias(bid=single_bias.bid, user_nodes=user_nodes)
+            managed_bias = ManagedBias(bid=single_bias.bid, user_nodes=user_nodes, board_types=single_bias.board_types)
             # avl트리에 넣어주면됨
             self.__bias_avltree.insert(key=single_bias.bid, value=managed_bias)
 
@@ -257,11 +263,15 @@ class ManagedFeedBiasTable:
     def make_new_managed_feed(self, feed:Feed):
         managed_feed = ManagedFeed(
             fid=feed.fid,
+            fclass=feed.fclass,
             like=feed.star,
             date=self.__get_date_str_to_object(feed.date),
             uname=feed.nickname,
             hashtag=feed.hashtag,
-            bid=feed.bid
+            board_type=feed.board_type, # 이거 추가됨
+            bid=feed.bid,
+            iid=feed.iid,
+            num_images=feed.num_images
         )
 
         self.__feed_table.append(managed_feed)
@@ -391,6 +401,11 @@ class ManagedFeedBiasTable:
 
         # 필터링된 Feed들의 리스트를 반환
         return filtered_feeds_df['fid'].tolist()
+
+    def filtering_community_board(self, board_type:str):
+        filtered_feeds_df = self.__feed_df[self.__feed_df['board_type'].isin(board_type)]
+        return filtered_feeds_df['fid'].tolist()
+
 
     #---------------------------------------------------------------------------------------------
 
@@ -1219,6 +1234,9 @@ class FilteringManager:
         # BID 리스트 요소는 1개가 될 수 있고, 아니면 선택을 하지 않아서 여러 개가 될 수 있음.
         return self.__managed_feed_bias_table.filtering_bias_community(bids=bids)
 
+    def filtering_board_community(self, board_type:str):
+        # 게시판 타입마다 필터링하는 함수.
+        return self.__managed_feed_bias_table.filtering_community_board(board_type=board_type)
     # # 이거 아직 안 됨
     # # 전체 게시글 중 필터링
     # def _filter_single_option_feed(self, feed_list, option):

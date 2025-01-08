@@ -1308,11 +1308,11 @@ class FeedManager:
 
     # 새로운 피드 만들기
     # 실제로 피드를 만들고, 서치 엔진에 추가하는 부분이다.
-    def __make_new_feed(self, user:User, fid, fclass, choice, body, hashtag, images, link, bid):
+    def __make_new_feed(self, user:User, fid, fclass, choice, body, hashtag, board_type, images, link, bid):
         # 검증을 위한 코드는 이곳에 작성하시오
         new_feed = self.__set_new_feed(user=user, fid=fid, fclass=fclass,
                                        choice=choice, body=body, hashtag=hashtag,
-                                       image=images, link=link, bid=bid)
+                                       board_type=board_type, image=images, link=link, bid=bid)
         self._database.add_new_data(target_id="fid", new_data=new_feed.get_dict_form_data())
 
         self._feed_search_engine.try_make_new_managed_feed(feed=new_feed)
@@ -1327,7 +1327,7 @@ class FeedManager:
         return
 
     # 새로운 피드의 데이터를 추가하여 반환
-    def __set_new_feed(self, user:User,fid, fclass, choice, body, hashtag, image, link, bid):
+    def __set_new_feed(self, user:User,fid, fclass, choice, body, hashtag, board_type, image, link, bid):
         # 인터액션이 있으면 작업할것
         if len(choice) > 1:
             iid, _ = self.try_make_new_interaction(fid=fid, choice=choice)
@@ -1348,6 +1348,7 @@ class FeedManager:
         new_feed.body = body
         new_feed.date = self.__set_datetime()
         new_feed.fclass = fclass
+        new_feed.board_type = board_type
         new_feed.image= image
         new_feed.hashtag = hashtag
         new_feed.num_image = len(image)
@@ -1391,6 +1392,7 @@ class FeedManager:
                                 choice=data_payload.choice,
                                 body=data_payload.body,
                                 hashtag=data_payload.hashtag,
+                                board_type="자유게시판", # 이거, 게시판 타입 분리하는거, 나중에 프론트엔드에서 게시판타입을 받아오면 그 때, 데이터가 바뀐다.
                                 images=image_result,
                                 link=data_payload.link,
                                 bid=data_payload.bid
@@ -1417,6 +1419,7 @@ class FeedManager:
                                 choice=data_payload.choice,
                                 body=body,
                                 hashtag=data_payload.hashtag,
+                                board_type="자유게시판", # 이거도, 게시판 타입 받아야 함
                                 images=[],
                                 link=data_payload.link,
                                 bid=data_payload.bid
