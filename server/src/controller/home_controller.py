@@ -123,6 +123,7 @@ class Home_Controller:
         model.set_realtime_best_hashtag(feed_search_engine=feed_search_engine, num_hashtag=10)
 
         return model
+
     def get_hot_hashtag(self, database:Local_Database, request, feed_search_engine) -> HashTagModel:
         model = HashTagModel(database=database)
 
