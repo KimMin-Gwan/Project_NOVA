@@ -36,16 +36,27 @@ class FeedModel(BaseModel):
         feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=fid_list)
 
         feeds = []
+        iids = []
 
         for feed_data in feed_datas:
             feed = Feed()
             feed.make_with_dict(feed_data)
             feeds.append(feed)
+            if feed.iid != "":
+                iids.append(feed.iid)
 
         self._set_feed_json_data(user=self._user, feeds=feeds, feed_manager=feed_manager)
-
+        
+        interaction_datas = self._database.get_datas_with_ids(target_id="iid", ids=iids)
+        interactions = []
+        
+        for interaction_data in interaction_datas:
+            interaction = Interaction()
+            interaction.make_with_dict()
+            interactions.append(interaction)
+            
         # 인터엑션 넣을 필요 있음
-        self._send_data = self.__set_send_data(feeds=feeds)
+        self._send_data = self.__set_send_data(feeds=feeds, interactions=interactions)
         return
 
     def set_today_best_feed(self, feed_search_engine:FeedSearchEngine, feed_manager,
@@ -56,16 +67,27 @@ class FeedModel(BaseModel):
         feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=fid_list)
 
         feeds = []
+        iids = []
 
         for feed_data in feed_datas:
             feed = Feed()
             feed.make_with_dict(feed_data)
             feeds.append(feed)
+            if feed.iid != "":
+                iids.append(feed.iid)
 
         self._set_feed_json_data(user=self._user, feeds=feeds, feed_manager=feed_manager)
-
+        
+        interaction_datas = self._database.get_datas_with_ids(target_id="iid", ids=iids)
+        interactions = []
+        
+        for interaction_data in interaction_datas:
+            interaction = Interaction()
+            interaction.make_with_dict()
+            interactions.append(interaction)
+            
         # 인터엑션 넣을 필요 있음
-        self._send_data = self.__set_send_data(feeds=feeds)
+        self._send_data = self.__set_send_data(feeds=feeds, interactions=interactions)
         return
 
     def set_weekly_best_feed(self, feed_search_engine:FeedSearchEngine, feed_manager,
@@ -76,16 +98,27 @@ class FeedModel(BaseModel):
         feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=fid_list)
 
         feeds = []
+        iids = []
 
         for feed_data in feed_datas:
             feed = Feed()
             feed.make_with_dict(feed_data)
             feeds.append(feed)
+            if feed.iid != "":
+                iids.append(feed.iid)
 
         self._set_feed_json_data(user=self._user, feeds=feeds, feed_manager=feed_manager)
-
+        
+        interaction_datas = self._database.get_datas_with_ids(target_id="iid", ids=iids)
+        interactions = []
+        
+        for interaction_data in interaction_datas:
+            interaction = Interaction()
+            interaction.make_with_dict()
+            interactions.append(interaction)
+            
         # 인터엑션 넣을 필요 있음
-        self._send_data = self.__set_send_data(feeds=feeds)
+        self._send_data = self.__set_send_data(feeds=feeds, interactions=interactions)
         return
 
     def set_all_feed(self, feed_search_engine:FeedSearchEngine, feed_manager,
@@ -96,16 +129,27 @@ class FeedModel(BaseModel):
         feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=fid_list)
 
         feeds = []
+        iids = []
 
         for feed_data in feed_datas:
             feed = Feed()
             feed.make_with_dict(feed_data)
             feeds.append(feed)
+            if feed.iid != "":
+                iids.append(feed.iid)
 
-        self._set_feed_json_data(user=self._user, feeds=self._feeds, feed_manager=feed_manager)
-
+        self._set_feed_json_data(user=self._user, feeds=feeds, feed_manager=feed_manager)
+        
+        interaction_datas = self._database.get_datas_with_ids(target_id="iid", ids=iids)
+        interactions = []
+        
+        for interaction_data in interaction_datas:
+            interaction = Interaction()
+            interaction.make_with_dict()
+            interactions.append(interaction)
+            
         # 인터엑션 넣을 필요 있음
-        self._send_data = self.__set_send_data(feeds=feeds)
+        self._send_data = self.__set_send_data(feeds=feeds, interactions=interactions)
         return
     
 
@@ -193,8 +237,6 @@ class FeedModel(BaseModel):
             # 롱폼은 바디 데이터를 받아야됨
             if feed.fclass != "short":
                 feed.body = ObjectStorageConnection().get_feed_body(fid = feed.fid)
-                #feed.body = "did not work this shit bitch"
-                #print(feed.body)
 
             
             # comment 길이 & image 길이
@@ -208,16 +250,14 @@ class FeedModel(BaseModel):
             # 피드 작성자 이름
             # 나중에 nickname으로 바꿀것
             feed.nickname = wuser.uname
-        #print("여기 동작하긴 했나?>")
             
         return
     
     # 상호작용에서 내가 상호작용한 내용이 있는지 검토하는 부분
-    def _set_feed_interactied(self, user, interactions:list):
-        for interaction in zip(interactions):
-            for i, uid in enumerate(interaction.attend):
-                if uid == user.uid:
-                    interaction.my_attend = i
+    def _set_feed_interactied(self, user, interaction):
+        for i, uid in enumerate(interaction.attend):
+            if uid == user.uid:
+                interaction.my_attend = i
         return
 
     # 전송 데이터 만들기
@@ -234,8 +274,10 @@ class FeedModel(BaseModel):
 
             interaction = Interaction()
             for single_interaction in interactions:
-                if single_interaction.fid == feed.fid:
+                if single_interaction.iid == feed.iid:
                     interaction = single_interaction
+                    self._set_feed_interactied(self._user, interaction=single_interaction)
+                    
 
             dict_data={}
             dict_data['feed'] = feed.get_dict_form_data()
