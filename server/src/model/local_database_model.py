@@ -187,6 +187,8 @@ class Local_Database:
     def get_datas_with_ids(self, target_id:str, ids:list):
         try:
             list_data = self._select_target_list(target=target_id)
+            if target_id == "iid":
+                print(list_data)
             find_datas = []
             for id in ids:
                 for data in list_data:
