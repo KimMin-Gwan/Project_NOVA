@@ -195,8 +195,11 @@ class Local_Database:
                 for data in list_data:
                     if id == data[target_id]:
                         find_datas.append(data)
+                        
+            print("this mother fuckin shit did not work")
             return find_datas
         except Exception as e:
+            print(e)
             raise DatabaseLogicError("get_datas_with_ids error | " + str(e))
 
     def get_all_data(self, target):
