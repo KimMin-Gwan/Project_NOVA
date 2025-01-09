@@ -7,6 +7,7 @@ import { getModeClass } from "./../App.js";
 import { useNavigate } from "react-router-dom";
 import ProgressBar from "./ProgressBar.js";
 import comment from "./../img/comment.png";
+import { Viewer } from "@toast-ui/react-editor";
 // import { useRef, useState } from 'react';
 export function useBrightMode() {
   const params = new URLSearchParams(window.location.search);
@@ -1605,7 +1606,7 @@ export function ContentFeed({ feed, handleCheckStar }) {
             return <span key={i}>#{tag}</span>;
           })}
         </div>
-        <div className={style["body-content"]}>{feed.body}</div>
+        {feed.fclass === "short" && <div className={style["body-content"]}>{feed.body}</div>}
         {feed.image.length > 0 ? (
           <div className={style["image-container"]}>
             <img src={feed.image} alt="image" />
@@ -1615,6 +1616,7 @@ export function ContentFeed({ feed, handleCheckStar }) {
         )}
         {feed.fclass === "balance" && <SelectOption feed={feed} />}
         {feed.fclass === "multiple" && <QuizOption feed={feed} />}
+        {feed.fclass === "long" && <Viewer initialValue={feed.body} />}
       </div>
 
       <div className={style["button-container"]}>
@@ -1645,6 +1647,7 @@ export function ContentFeed({ feed, handleCheckStar }) {
           </div>
         </div>
       </div>
+      {feed.fclass === "long" && <div className={style["long-form-container"]}>1</div>}
     </div>
   );
 }

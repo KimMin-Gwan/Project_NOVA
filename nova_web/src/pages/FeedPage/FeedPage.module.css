@@ -2301,6 +2301,7 @@ h5 {
   color: black;
   margin-bottom: 15px;
   border: 1px 0px solid gray;
+  position: relative;
 }
 
 .user-container {
@@ -2389,4 +2390,13 @@ h5 {
     border: 1px solid gray;
     margin-bottom: 5px;
   }
+}
+
+/* 롱폼 */
+.long-form-container {
+  width: 100%;
+  height: 40%;
+  background-color: blue;
+  position: absolute;
+  bottom: 0px;
 }
