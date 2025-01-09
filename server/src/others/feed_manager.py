@@ -1406,7 +1406,7 @@ class FeedManager:
             # 1. 전송된 body데이터를 확인
             if data_payload.body:
             # 2. body데이터를 오브젝트 스토리지에 저장
-                body = connector.make_new_feed_body_data(fid = fid, body=body)
+                body = connector.make_new_feed_body_data(fid = fid, body=data_payload.body)
             else:
                 body = " "
 
