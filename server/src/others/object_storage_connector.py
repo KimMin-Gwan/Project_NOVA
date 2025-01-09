@@ -12,6 +12,7 @@ class ObjectStorageConnection:
         self.__project_bucket = "nova-project-image"
         self.__feed_bucket= "nova-feed-project-body"
 
+    # 오브젝트 스토리지와 연결할때는 이것을 실행해야함
     def __init_boto3(self):
         self.__service_name = 's3'
         self.__endpoint_url = 'https://kr.object.ncloudstorage.com'
