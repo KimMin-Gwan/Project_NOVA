@@ -10,7 +10,7 @@ import os
 class ObjectStorageConnection:
     def __init__(self):
         self.__project_bucket = "nova-project-image"
-        self.__feed_bucket= "feed-project-body"
+        self.__feed_bucket= "nova-feed-project-body"
 
     def __init_boto3(self):
         self.__service_name = 's3'
