@@ -25,6 +25,9 @@ class FeedModel(BaseModel):
 
         # 포인터로 동작함
         self._set_feed_json_data(user=self._user, feeds=self._feeds, feed_manager=feed_manager)
+        
+        pprint(feed.get_dict_form_data())
+        
         return
 
     def set_feed_data(self, feed_search_engine:FeedSearchEngine, feed_manager,
@@ -140,19 +143,15 @@ class FeedModel(BaseModel):
 
         self._set_feed_json_data(user=self._user, feeds=feeds, feed_manager=feed_manager)
         
-        print("1")
         
         interaction_datas = self._database.get_datas_with_ids(target_id="iid", ids=iids)
-        print("2")
         interactions = []
         
-        print("3")
         
         for interaction_data in interaction_datas:
             interaction = Interaction()
             interaction.make_with_dict(interaction_data)
             interactions.append(interaction)
-        print(4)
             
         # 인터엑션 넣을 필요 있음
         self._send_data = self.__set_send_data(feeds=feeds, interactions=interactions)
