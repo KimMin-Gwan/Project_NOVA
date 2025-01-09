@@ -318,6 +318,7 @@ class Interaction(SampleDomain):
             self.num_choice = len(self.choice)
             self.result = [len(sublist) for sublist in self.attend] # 참여자 수
         except Exception as e:
+            print(e)
             raise DictMakingError(error_type=e)
 
     def get_dict_form_data(self):
