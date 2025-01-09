@@ -233,11 +233,14 @@ class FeedModel(BaseModel):
             user.make_with_dict(user_data)
             users.append(user)
 
+        print("1")
+        
         for feed, wuser in zip(feeds, users):
             # 노출 현황 이 1 이하면 죽어야됨
             # 0: 삭제됨 1 : 비공개 2: 차단 3: 댓글 작성 X 4 : 정상(전체 공개)
             if feed.display < 3:
                 continue
+            print("2")
             
             # 롱폼은 바디 데이터를 받아야됨
             if feed.fclass != "short":
@@ -248,6 +251,7 @@ class FeedModel(BaseModel):
             feed.num_comment = len(feed.comment)
             feed.num_image = len(feed.image)
 
+            print(3)
             # 좋아요를 누를 전적
             if feed.fid in user.like:
                 feed.star_flag = True
