@@ -37,6 +37,8 @@ class ObjectStorageConnection:
     def get_feed_body(self, fid):
         target_url = self.__endpoint_url + "/" + self.__feed_bucket + fid + ".html"
         response = get(url=target_url)
+        print("??")
+        print(response)
         html_content = response.content.decode("utf-8")
         #html_content = response.content
         
