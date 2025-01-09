@@ -348,7 +348,7 @@ class FeedLink(SampleDomain):
         return {
             "lid": self.lid,
             "lname": self.lname,
-            "url": self.ur
+            "url": self.url
         }
 
 class Banner(SampleDomain):
