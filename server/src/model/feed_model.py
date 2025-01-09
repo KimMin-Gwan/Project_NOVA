@@ -152,9 +152,11 @@ class FeedModel(BaseModel):
             interaction = Interaction()
             interaction.make_with_dict(interaction_data)
             interactions.append(interaction)
+        print(4)
             
         # 인터엑션 넣을 필요 있음
         self._send_data = self.__set_send_data(feeds=feeds, interactions=interactions)
+        print(5)
         return
     
 
