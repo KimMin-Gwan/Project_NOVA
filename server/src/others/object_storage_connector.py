@@ -36,6 +36,7 @@ class ObjectStorageConnection:
     # 피드 바디 데이터 불러오는 부분
     def get_feed_body(self, fid):
         target_url = self.__endpoint_url + "/" + self.__feed_bucket + fid + ".html"
+        print("why this code did not works shit ")
         response = get(url=target_url)
         print("??")
         print(response)
