@@ -314,11 +314,10 @@ class Interaction(SampleDomain):
             self.iid = dict_data['iid']
             self.fid = dict_data['fid']
             self.choice = copy.copy(dict_data["choice"])
-            self.attend = copy.copy(dict_data["my_attend"])
+            self.attend = copy.copy(dict_data["attend"])
             self.num_choice = len(self.choice)
             self.result = [len(sublist) for sublist in self.attend] # 참여자 수
         except Exception as e:
-            print(e)
             raise DictMakingError(error_type=e)
 
     def get_dict_form_data(self):
@@ -327,6 +326,7 @@ class Interaction(SampleDomain):
             "fid":self.fid,
             "choice":self.choice,
             "result":self.result,
+            "attend":self.attend,
             "num_choice":self.num_choice,
             "my_attend":self.my_attend,
         }
