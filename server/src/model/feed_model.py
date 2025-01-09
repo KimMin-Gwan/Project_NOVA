@@ -208,6 +208,8 @@ class FeedModel(BaseModel):
             # 피드 작성자 이름
             # 나중에 nickname으로 바꿀것
             feed.nickname = wuser.uname
+        print("여기 동작하긴 했나?>")
+            
         return
     
     # 상호작용에서 내가 상호작용한 내용이 있는지 검토하는 부분
