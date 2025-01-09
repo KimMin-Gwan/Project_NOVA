@@ -12,6 +12,9 @@ import BiasBoxes from "../../component/BiasBoxes.js";
 import SearchBox from "../../component/SearchBox.js";
 import KeywordBox from "../../component/keyword/KeywordBox.js";
 import FilterModal from "../../component/FilterModal/FilterModal.js";
+import { Viewer } from "@toast-ui/react-editor";
+import "@toast-ui/editor/dist/toastui-editor-viewer.css";
+
 export default function FeedList(isUserState) {
   const [params] = useSearchParams();
   const type = params.get("type");
@@ -21,7 +24,7 @@ export default function FeedList(isUserState) {
   const observerRef = useRef(null);
 
   let [isFilterClicked, setIsFilterClicked] = useState(false);
-
+  let [contents, setContents] = useState("");
   let [isLoading, setIsLoading] = useState(true);
 
   let [feedData, setFeedData] = useState([]);
@@ -253,23 +256,45 @@ export default function FeedList(isUserState) {
           // <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>전체 피드</div>
         )}
         {type === "best" && (
-          <KeywordBox title={"인기 급상승"} subTitle={"오늘의 키워드"} onClickTagButton={onClickTag} />
-
+          <KeywordBox
+            title={"인기 급상승"}
+            subTitle={"오늘의 키워드"}
+            onClickTagButton={onClickTag}
+          />
           // <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>오늘의 베스트 피드</div>
         )}
         {type === "weekly_best" && (
-          <KeywordBox title={"많은 사랑을 받은"} subTitle={"이번주 키워드"} onClickTagButton={onClickTag} />
+          <KeywordBox
+            title={"많은 사랑을 받은"}
+            subTitle={"이번주 키워드"}
+            onClickTagButton={onClickTag}
+          />
           // <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>주간 베스트 피드</div>
         )}
-        {keyword && <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>{keyword}</div>}
+        {keyword && (
+          <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>{keyword}</div>
+        )}
         <div className={style["scroll-area"]}>
           {feedData.map((feed, i) => {
-            return <Feed key={feed.feed.fid + i} className={`${style["feed-box"]} ${style[getModeClass(mode)]}`} feed={feed.feed} func={true} feedData={feedData} setFeedData={setFeedData} isUserState={isUserState}></Feed>;
+            return (
+              <Feed
+                key={feed.feed.fid + i}
+                className={`${style["feed-box"]} ${style[getModeClass(mode)]}`}
+                feed={feed.feed}
+                func={true}
+                feedData={feedData}
+                setFeedData={setFeedData}
+                isUserState={isUserState}
+              ></Feed>
+            );
           })}
           {isLoading && <p>Loading...</p>}
           {isFilterClicked && (
             // <div className={style["filter-modal"]}>
-            <FilterModal isFilterClicked={isFilterClicked} onClickFilterButton={onClickFilterButton} />
+            <FilterModal
+              isFilterClicked={isFilterClicked}
+              onClickFilterButton={onClickFilterButton}
+            />
             // {/* </div> */}
           )}
           <div ref={target} style={{ height: "1px" }}></div>
