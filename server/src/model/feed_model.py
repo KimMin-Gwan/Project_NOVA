@@ -193,8 +193,8 @@ class FeedModel(BaseModel):
             # 롱폼은 바디 데이터를 받아야됨
             if feed.fclass != "short":
                 feed.body = ObjectStorageConnection().get_feed_body(fid = feed.fid)
-                feed.body = "did not work this shit bitch"
-                print(feed.body)
+                #feed.body = "did not work this shit bitch"
+                #print(feed.body)
 
             
             # comment 길이 & image 길이
