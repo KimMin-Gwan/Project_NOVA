@@ -1620,11 +1620,7 @@ export function ContentFeed({ feed, handleCheckStar }) {
         )}
         {feed.fclass === "balance" && <SelectOption feed={feed} />}
         {feed.fclass === "multiple" && <QuizOption feed={feed} />}
-        {feed.fclass === "long" && (
-          // <div className={style["hidden"]}>
-          <Viewer initialValue={feed.body} />
-          // </div>
-        )}
+        {feed.fclass === "long" && <Viewer initialValue={feed.body} />}
       </div>
 
       <div className={style["button-container"]}>
@@ -1655,7 +1651,7 @@ export function ContentFeed({ feed, handleCheckStar }) {
           </div>
         </div>
       </div>
-      {feed.fclass === "long" && <div className={style["long-form-container"]}>1</div>}
+      {feed.fclass === "long" && <div className={style["long-form-container"]}></div>}
     </div>
   );
 }
