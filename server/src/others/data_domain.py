@@ -94,7 +94,7 @@ class Bias(SampleDomain):
     def __init__(self, bid="",bname="", category=[], birthday="", debut="",
                  agency="", group=[], num_user=0, x_account="",
                  insta_account="", tiktok_account="", youtube_account="", homepage="",
-                 fan_cafe="", country=[], fanname = [], board_type=[]):
+                 fan_cafe="", country=[], fanname = [], board_types=[]):
         self.bid = bid
         self.bname = bname
         self.category = copy.copy(category)
@@ -103,7 +103,7 @@ class Bias(SampleDomain):
         self.agency = agency
         self.group = copy.copy(group)
         self.num_user = num_user
-        self.board_type = board_type
+        self.board_types = board_types
         self.x_account = x_account
         self.insta_account = insta_account
         self.tiktok_account = tiktok_account
@@ -124,7 +124,7 @@ class Bias(SampleDomain):
             self.agency = dict_data['agency']
             self.group = copy.copy(dict_data['group'])
             self.num_user = dict_data['num_user']
-            self.board_type = copy.copy(dict_data['board_type'])
+            self.board_types = copy.copy(dict_data['board_types'])
             self.x_account = dict_data['x_account']
             self.insta_account = dict_data['insta_account']
             self.tiktok_account = dict_data['tiktok_account']
@@ -147,6 +147,7 @@ class Bias(SampleDomain):
             "agency": self.agency,
             "group": copy.copy(self.group),
             "num_user": self.num_user,
+            "board_types": copy.copy(self.board_types),
             "x_account": self.x_account,
             "insta_account": self.insta_account,
             "tiktok_account": self.tiktok_account,
