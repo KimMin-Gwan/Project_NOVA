@@ -282,6 +282,7 @@ class Feed(SampleDomain):
             "display": self.display,
             "date" : self.date,
             "star": self.star,
+            "board_type" :self.board_type,
             "image": copy.copy(self.image),
             "hashtag": copy.copy(self.hashtag),
             "cid": copy.copy(self.comment),
