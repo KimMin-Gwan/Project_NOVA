@@ -14,17 +14,13 @@ class Local_Database:
             'banner_file' : 'banner.json',
             'bias_file' : 'bias.json',
             'feed_file' : 'feed.json',
-            'league_file' : 'league.json',
-            'name_card_file' : 'name_card.json',
             'user_file' : 'user.json',
-            'managed_user_file' : 'managed_user.json',
             'comment_file' : 'comment.json',
             'alert_file' : 'alert.json',
-            'trash_fid_file' : 'trash_fid.json',
-            'trash_cid_file' : 'trash_cid.json',
             'notice_file' : 'notice.json',
             'project_file' : 'project.json',
-            'interaction_file' : 'interaction.json'
+            'interaction_file' : 'interaction.json',
+            'feed_link_file' : 'feed_link.json'
         }
         self.__read_json()
 
@@ -32,24 +28,18 @@ class Local_Database:
         self.__banner_data = []
         self.__bias_data = []
         self.__feed_data = []
-        self.__league_data = []
-        self.__name_card_data = []
         self.__user_data = []
-        self.__managed_user_data = []
         self.__comment_data = []
         self.__alert_data = []
-        self.__trash_fid_data = []
-        self.__trash_cid_data = []
         self.__notice_data = []
         self.__project_data = []
         self.__interaction_data= []
+        self.__feed_link_data = []
 
 
-        data_list = [self.__banner_data, self.__bias_data, self.__feed_data,
-                      self.__league_data, self.__name_card_data, self.__user_data,
-                      self.__managed_user_data, self.__comment_data, self.__alert_data,
-                      self.__trash_fid_data, self.__trash_cid_data, self.__notice_data,
-                      self.__project_data, self.__interaction_data ]
+        data_list = [self.__banner_data, self.__bias_data, self.__feed_data, self.__user_data,
+                     self.__comment_data, self.__alert_data, self.__notice_data,
+                    self.__project_data, self.__interaction_data, self.__feed_link_data]
 
         for file_name, list_data in zip(self.__data_files.values(), data_list):
             with open(self.__db_file_path+file_name, 'r',  encoding='utf-8' )as f:
@@ -62,18 +52,6 @@ class Local_Database:
             json.dump(data, f, ensure_ascii=False, indent=4)
         return
 
-    # 저장하기
-    def __save_name_card_json(self):
-        file_name = self.__data_files['name_card_file']
-        self.__save_json(file_name, self.__name_card_data)
-        return
-
-    # 저장하기
-    def __save_league_json(self):
-        file_name = self.__data_files['league_file']
-        self.__save_json(file_name, self.__league_data)
-        return
-    
     # 저장하기
     def __save_feed_json(self):
         file_name = self.__data_files['feed_file']
@@ -98,11 +76,6 @@ class Local_Database:
         self.__save_json(file_name, self.__bias_data)
         return
 
-    # 저장하기
-    def __save_managed_user_json(self):
-        file_name = self.__data_files['managed_user_file']
-        self.__save_json(file_name, self.__managed_user_data)
-        return
 
     # 저장하기
     def __save_comment_json(self):
@@ -114,18 +87,6 @@ class Local_Database:
     def __save_alert_json(self):
         file_name = self.__data_files['alert_file']
         self.__save_json(file_name, self.__alert_data)
-        return
-
-    # 저장하기
-    def __save_trash_fid_json(self):
-        file_name = self.__data_files['trash_fid_file']
-        self.__save_json(file_name, self.__trash_fid_data)
-        return
-
-    # 저장하기
-    def __save_trash_cid_json(self):
-        file_name = self.__data_files['trash_cid_file']
-        self.__save_json(file_name, self.__trash_cid_data)
         return
 
     # 저장하기
@@ -144,6 +105,12 @@ class Local_Database:
     def __save_interaction_json(self):
         file_name = self.__data_files['interaction_file']
         self.__save_json(file_name, self.__interaction_data)
+        return
+    
+    # 저장하기
+    def __save_feed_link_json(self):
+        file_name = self.__data_files['feed_link_file']
+        self.__save_json(file_name, self.__feed_link_data)
         return
 
     # db.get_data_with_key(target="user", key="uname", key_data="minsu")
@@ -205,22 +172,6 @@ class Local_Database:
     def get_all_data(self, target):
         return self._select_target_list(target=target)
     
-    def get_trash_fids(self):
-        return copy(self.__trash_fid_data)
-
-    def get_trash_cids(self):
-        return copy(self.__trash_cid_data)
-
-    def set_trash_fids(self, fids):
-        self.__trash_fid_data = copy(fids)
-        self.__save_trash_fid_json()
-        return 
-
-    def set_trash_cids(self, cids):
-        self.__trash_cid_data = copy(cids)
-        self.__save_trash_cid_json()
-        return 
-
 
     def _select_target_list(self, target:str):
         if target == "baid" or target == "banner":
@@ -229,14 +180,8 @@ class Local_Database:
             return self.__bias_data
         elif target == "fid" or target == "feed":
             return self.__feed_data
-        elif target == "lid" or target == "league":
-            return self.__league_data
-        elif target == "ncid" or target == "name_card":
-            return self.__name_card_data
         elif target == "uid" or target == "user":
             return self.__user_data
-        elif target == "muid" or target == "managed_user":
-            return self.__managed_user_data
         elif target == "cid" or target == "comment":
             return self.__comment_data
         elif target == "aid" or target == "alert":
@@ -247,6 +192,8 @@ class Local_Database:
             return self.__project_data
         elif target == "iid" or target == "interaction":
             return self.__interaction_data
+        elif target == "lid" or target == "feed_link":
+            return self.__feed_link_data
         else:
             raise DatabaseLogicError("target id did not define")
         
@@ -292,14 +239,8 @@ class Local_Database:
             return self.__save_bias_json
         elif target == "fid" or target == "feed":
             return self.__save_feed_json
-        elif target == "lid" or target == "league":
-            return self.__save_league_json
-        elif target == "ncid" or target == "name_card":
-            return self.__save_name_card_json
         elif target == "uid" or target == "user":
             return self.__save_user_json
-        elif target == "muid" or target == "managed_user":
-            return self.__save_managed_user_json
         elif target == "cid" or target == "comment":
             return self.__save_comment_json
         elif target == "aid" or target == "alert":
@@ -310,6 +251,8 @@ class Local_Database:
             return self.__save_project_json
         elif target == "iid" or target == "interaction":
             return self.__save_interaction_json
+        elif target == "lid" or target == "feed_link":
+            return self.__save_feed_link_json
         else:
             raise DatabaseLogicError("target id did not define")
 

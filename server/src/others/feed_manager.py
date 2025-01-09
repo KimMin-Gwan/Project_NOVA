@@ -1323,7 +1323,7 @@ class FeedManager:
     def _make_new_link(self, fid,  link_data):
         lid = self.__make_new_iid()
         feed_link = FeedLink(lid=lid, lname=link_data["lname"], url=link_data["url"])
-        self._database.add_new_data(target_id="iid", new_data=feed_link.get_dict_form_data())
+        self._database.add_new_data(target_id="lid", new_data=feed_link.get_dict_form_data())
         return
 
     # 새로운 피드의 데이터를 추가하여 반환
