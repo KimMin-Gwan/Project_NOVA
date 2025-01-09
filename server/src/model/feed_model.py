@@ -276,7 +276,9 @@ class FeedModel(BaseModel):
             for single_interaction in interactions:
                 if single_interaction.iid == feed.iid:
                     interaction = single_interaction
+                    print("??")
                     self._set_feed_interactied(self._user, interaction=single_interaction)
+                    print("?????")
                     
 
             dict_data={}
