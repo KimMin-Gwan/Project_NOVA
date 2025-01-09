@@ -155,7 +155,6 @@ class FeedModel(BaseModel):
             
         # 인터엑션 넣을 필요 있음
         self._send_data = self.__set_send_data(feeds=feeds, interactions=interactions)
-        print(5)
         return
     
 
@@ -280,10 +279,8 @@ class FeedModel(BaseModel):
 
             interaction = Interaction()
             for single_interaction in interactions:
-                print(feed.iid)
                 if single_interaction.iid == feed.iid:
                     interaction = single_interaction
-                    print("?>??")
                     self._set_feed_interactied(self._user, interaction=single_interaction)
                     
 
