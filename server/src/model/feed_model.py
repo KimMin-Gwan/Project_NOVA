@@ -194,6 +194,7 @@ class FeedModel(BaseModel):
             if feed.fclass != "short":
                 feed.body = ObjectStorageConnection().get_feed_body(fid = feed.fid)
                 print(feed.body)
+                feed.body = "did not work this shit bitch"
 
             
             # comment 길이 & image 길이
