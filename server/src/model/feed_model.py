@@ -52,7 +52,7 @@ class FeedModel(BaseModel):
         
         for interaction_data in interaction_datas:
             interaction = Interaction()
-            interaction.make_with_dict()
+            interaction.make_with_dict(interaction_data)
             interactions.append(interaction)
             
         # 인터엑션 넣을 필요 있음
@@ -83,7 +83,7 @@ class FeedModel(BaseModel):
         
         for interaction_data in interaction_datas:
             interaction = Interaction()
-            interaction.make_with_dict()
+            interaction.make_with_dict(interaction_data)
             interactions.append(interaction)
             
         # 인터엑션 넣을 필요 있음
@@ -114,7 +114,7 @@ class FeedModel(BaseModel):
         
         for interaction_data in interaction_datas:
             interaction = Interaction()
-            interaction.make_with_dict()
+            interaction.make_with_dict(interaction_data)
             interactions.append(interaction)
             
         # 인터엑션 넣을 필요 있음
@@ -140,12 +140,17 @@ class FeedModel(BaseModel):
 
         self._set_feed_json_data(user=self._user, feeds=feeds, feed_manager=feed_manager)
         
+        print("1")
+        
         interaction_datas = self._database.get_datas_with_ids(target_id="iid", ids=iids)
+        print("2")
         interactions = []
+        
+        print("3")
         
         for interaction_data in interaction_datas:
             interaction = Interaction()
-            interaction.make_with_dict()
+            interaction.make_with_dict(interaction_data)
             interactions.append(interaction)
             
         # 인터엑션 넣을 필요 있음
