@@ -39,6 +39,8 @@ class ObjectStorageConnection:
         response = get(url=target_url)
         html_content = response.content.decode("utf-8")
         #html_content = response.content
+        
+        print(html_content)
         return html_content
     
     # 피드 바디 데이터 만들기
