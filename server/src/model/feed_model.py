@@ -26,8 +26,6 @@ class FeedModel(BaseModel):
         # 포인터로 동작함
         self._set_feed_json_data(user=self._user, feeds=self._feeds, feed_manager=feed_manager)
         
-        pprint(feed.get_dict_form_data())
-        
         return
 
     def set_feed_data(self, feed_search_engine:FeedSearchEngine, feed_manager,
