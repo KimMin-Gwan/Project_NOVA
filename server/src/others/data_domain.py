@@ -314,7 +314,7 @@ class Interaction(SampleDomain):
             self.iid = dict_data['iid']
             self.fid = dict_data['fid']
             self.choice = copy.copy(dict_data["choice"])
-            self.attend = copy.copy(dict_data["attend"])
+            self.attend = copy.copy(dict_data["my_attend"])
             self.num_choice = len(self.choice)
             self.result = [len(sublist) for sublist in self.attend] # 참여자 수
         except Exception as e:
