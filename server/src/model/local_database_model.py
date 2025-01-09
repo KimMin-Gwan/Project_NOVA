@@ -5,6 +5,7 @@ from copy import copy
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from pymongo.collection import Collection
+from pprint import pprint
 
 class Local_Database:
     def __init__(self) -> None:
@@ -188,7 +189,7 @@ class Local_Database:
         try:
             list_data = self._select_target_list(target=target_id)
             if target_id == "iid":
-                print(list_data)
+                pprint(list_data)
             find_datas = []
             for id in ids:
                 for data in list_data:
