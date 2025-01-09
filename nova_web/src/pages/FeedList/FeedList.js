@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState, useLocation } from "react";
 import style from "./FeedHashList.module.css";
 import logo from "./../../img/NOVA_Platform.png";
+import logo2 from "./../../img/logo2.png";
 import menu from "./../../img/menu-burger.png";
 import Feed, { Comments } from "./../../component/feed";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -217,7 +218,7 @@ export default function FeedList(isUserState) {
         <header className={style.header}>
           <div className="logo">
             <img
-              src={logo}
+              src={logo2}
               alt="logo"
               onClick={() => {
                 navigate("/");
@@ -252,46 +253,23 @@ export default function FeedList(isUserState) {
           // <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>전체 피드</div>
         )}
         {type === "best" && (
-          <KeywordBox
-            title={"인기 급상승"}
-            subTitle={"오늘의 키워드"}
-            onClickTagButton={onClickTag}
-          />
+          <KeywordBox title={"인기 급상승"} subTitle={"오늘의 키워드"} onClickTagButton={onClickTag} />
 
           // <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>오늘의 베스트 피드</div>
         )}
         {type === "weekly_best" && (
-          <KeywordBox
-            title={"많은 사랑을 받은"}
-            subTitle={"이번주 키워드"}
-            onClickTagButton={onClickTag}
-          />
+          <KeywordBox title={"많은 사랑을 받은"} subTitle={"이번주 키워드"} onClickTagButton={onClickTag} />
           // <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>주간 베스트 피드</div>
         )}
-        {keyword && (
-          <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>{keyword}</div>
-        )}
+        {keyword && <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>{keyword}</div>}
         <div className={style["scroll-area"]}>
           {feedData.map((feed, i) => {
-            return (
-              <Feed
-                key={feed.feed.fid + i}
-                className={`${style["feed-box"]} ${style[getModeClass(mode)]}`}
-                feed={feed.feed}
-                func={true}
-                feedData={feedData}
-                setFeedData={setFeedData}
-                isUserState={isUserState}
-              ></Feed>
-            );
+            return <Feed key={feed.feed.fid + i} className={`${style["feed-box"]} ${style[getModeClass(mode)]}`} feed={feed.feed} func={true} feedData={feedData} setFeedData={setFeedData} isUserState={isUserState}></Feed>;
           })}
           {isLoading && <p>Loading...</p>}
           {isFilterClicked && (
             // <div className={style["filter-modal"]}>
-            <FilterModal
-              isFilterClicked={isFilterClicked}
-              onClickFilterButton={onClickFilterButton}
-            />
+            <FilterModal isFilterClicked={isFilterClicked} onClickFilterButton={onClickFilterButton} />
             // {/* </div> */}
           )}
           <div ref={target} style={{ height: "1px" }}></div>

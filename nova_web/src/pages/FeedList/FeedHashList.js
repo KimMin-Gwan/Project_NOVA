@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import style from "./FeedHashList.module.css";
 import logo from "./../../img/NOVA_Platform.png";
+import logo2 from "./../../img/logo2.png";
 import menu from "./../../img/menu-burger.png";
 import Feed, { Comments } from "./../../component/feed";
 import LeftBar from "./../WideVer/LeftBar.js";
@@ -64,12 +65,9 @@ export default function FeedHashList(isUserState) {
 
   function fetchPlusData() {
     // setIsLoading(true);
-    fetch(
-      `https://nova-platform.kr/feed_explore/search_feed_with_hashtag?hashtag=${isClickedTag}&key=${nextData}`,
-      {
-        credentials: "include",
-      }
-    )
+    fetch(`https://nova-platform.kr/feed_explore/search_feed_with_hashtag?hashtag=${isClickedTag}&key=${nextData}`, {
+      credentials: "include",
+    })
       .then((response) => response.json())
       .then((data) => {
         // setFeedData(data.body.feed);
@@ -167,7 +165,7 @@ export default function FeedHashList(isUserState) {
         <header className={style.header}>
           <div className="logo">
             <img
-              src={logo}
+              src={logo2}
               alt="logo"
               onClick={() => {
                 navigate("/");
@@ -186,29 +184,14 @@ export default function FeedHashList(isUserState) {
             </button>
           </div>
         </header>
-        <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>
-          {biasData.title ? biasData.title : "인기 해시태그"}
-        </div>
-        <div
-          ref={scrollRef}
-          onMouseDown={onMouseDown}
-          onMouseMove={onMouseMove}
-          onMouseUp={onMouseUp}
-          className={`${style["tag-container"]} ${style[getModeClass(mode)]}`}
-        >
+        <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>{biasData.title ? biasData.title : "인기 해시태그"}</div>
+        <div ref={scrollRef} onMouseDown={onMouseDown} onMouseMove={onMouseMove} onMouseUp={onMouseUp} className={`${style["tag-container"]} ${style[getModeClass(mode)]}`}>
           {hashTags.map((tag, i) => {
             return (
               <button
                 key={i}
                 style={{
-                  background:
-                    isClickedTag === tag
-                      ? getModeClass(mode) === "bright-mode"
-                        ? "#98A0FF"
-                        : "#051243"
-                      : getModeClass(mode) === "bright-mode"
-                      ? "#CCCFFF"
-                      : "#373737",
+                  background: isClickedTag === tag ? (getModeClass(mode) === "bright-mode" ? "#98A0FF" : "#051243") : getModeClass(mode) === "bright-mode" ? "#CCCFFF" : "#373737",
 
                   cursor: "pointer",
                 }}
@@ -222,17 +205,7 @@ export default function FeedHashList(isUserState) {
         </div>
         <div className={style["scroll-area"]}>
           {feedData.map((feed, i) => {
-            return (
-              <Feed
-                key={feed.fid + i}
-                className={`${style["feed-box"]} ${style[getModeClass(mode)]}`}
-                feed={feed}
-                func={true}
-                feedData={feedData}
-                setFeedData={setFeedData}
-                isUserState={isUserState}
-              ></Feed>
-            );
+            return <Feed key={feed.fid + i} className={`${style["feed-box"]} ${style[getModeClass(mode)]}`} feed={feed} func={true} feedData={feedData} setFeedData={setFeedData} isUserState={isUserState}></Feed>;
           })}
           {isLoading && <p>Loading...</p>}
           <div ref={target} style={{ height: "1px" }}></div>
