@@ -18,16 +18,13 @@ export default function FeedDetail({ feed }) {
 
   let commentRef = useRef(null);
   useEffect(() => {
-    //     // isLoading이 false일 때만 focus()가 실행되도록
     if (!isLoading && commentRef.current && state.commentClick) {
+      commentRef.current.focus();
       //       // 렌더링이 완료된 후 focus를 지연시킴
       //       setTimeout(() => {
-      commentRef.current.focus();
       //       }, 0); // 0초 후 실행
     }
   }, [isLoading]);
-  //   //   const [params] = useSearchParams();
-  //   //   const FID = params.get("fid");
 
   let [feedData, setFeedData] = useState([]);
   let [comments, setComments] = useState([]);
@@ -39,14 +36,14 @@ export default function FeedDetail({ feed }) {
       .then((response) => response.json())
       .then((data) => {
         console.log("detail", data);
-        setFeedData(data.body.feed);
+        setFeedData(data.body.feed[0]);
         setIsLoading(false);
       });
   }
 
   useEffect(() => {
     fetchFeed();
-  }, [comments]);
+  }, [comments, fid]);
 
   async function fetchFeedComment() {
     await fetch(`https://nova-platform.kr/feed_explore/feed_detail/comment_data?fid=${fid}`, {
@@ -54,7 +51,7 @@ export default function FeedDetail({ feed }) {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        console.log("comment", data);
         setComments(data.body.comments);
         setIsLoading(false);
       });
@@ -66,10 +63,10 @@ export default function FeedDetail({ feed }) {
 
   let [isClickedStar, setIsClickedStar] = useState(false);
 
-  function handleCheckStar(fid, e) {
+  async function handleCheckStar(fid, e) {
     // e.preventDefault();
     setIsClickedStar(!isClickedStar);
-    fetch(`https://nova-platform.kr/feed_explore/check_star?fid=${fid}`, {
+    await fetch(`https://nova-platform.kr/feed_explore/check_star?fid=${fid}`, {
       credentials: "include",
     })
       .then((response) => {
@@ -159,13 +156,13 @@ export default function FeedDetail({ feed }) {
       </div>
 
       <div>
-        <ContentFeed feed={feedData[0]} handleCheckStar={handleCheckStar} />
+        <ContentFeed feed={feedData} handleCheckStar={handleCheckStar} />
       </div>
 
       <div className={style["comment-container"]}>
         <div className={style["title-box"]}>
           <div>댓글</div>
-          <div>총 {feedData && feedData[0].num_comment}건</div>
+          <div>총 {feedData && feedData.num_comment}건</div>
         </div>
 
         {/* 댓글 각각 */}

@@ -1586,7 +1586,9 @@ export function Comments({
 
 export function ContentFeed({ feed, handleCheckStar }) {
   let navigate = useNavigate();
-
+  if (!feed) {
+    return <div>loading 중</div>;
+  }
   return (
     <div
       className={style["wrapper-container"]}
@@ -1606,12 +1608,13 @@ export function ContentFeed({ feed, handleCheckStar }) {
         }`}
       >
         <div className={style["body-hashtag"]}>
-          {feed.hashtag.map((tag, i) => {
-            return <span key={i}>#{tag}</span>;
-          })}
+          {feed?.hashtag?.length !== 0 &&
+            feed?.hashtag?.map((tag, i) => {
+              return <span key={i}>#{tag}</span>;
+            })}
         </div>
         {feed.fclass === "short" && <div className={style["body-content"]}>{feed.body}</div>}
-        {feed.image.length > 0 ? (
+        {feed.image?.length > 0 ? (
           <div className={style["image-container"]}>
             <img src={feed.image} alt="image" />
           </div>
