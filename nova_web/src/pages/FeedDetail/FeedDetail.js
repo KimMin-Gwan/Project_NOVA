@@ -165,7 +165,7 @@ export default function FeedDetail({ feed }) {
       <div className={style["comment-container"]}>
         <div className={style["title-box"]}>
           <div>댓글</div>
-          <div>총 {feedData[0].num_comment}건</div>
+          <div>총 {feedData && feedData[0].num_comment}건</div>
         </div>
 
         {/* 댓글 각각 */}

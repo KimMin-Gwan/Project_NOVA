@@ -1600,7 +1600,11 @@ export function ContentFeed({ feed, handleCheckStar }) {
         <div>{feed.nickname}</div>
       </div>
 
-      <div className={style["body-container"]}>
+      <div
+        className={`${style["body-container"]} ${
+          feed.fclass === "long" ? style["long-form-hidden"] : ""
+        }`}
+      >
         <div className={style["body-hashtag"]}>
           {feed.hashtag.map((tag, i) => {
             return <span key={i}>#{tag}</span>;
@@ -1616,7 +1620,11 @@ export function ContentFeed({ feed, handleCheckStar }) {
         )}
         {feed.fclass === "balance" && <SelectOption feed={feed} />}
         {feed.fclass === "multiple" && <QuizOption feed={feed} />}
-        {feed.fclass === "long" && <Viewer initialValue={feed.body} />}
+        {feed.fclass === "long" && (
+          // <div className={style["hidden"]}>
+          <Viewer initialValue={feed.body} />
+          // </div>
+        )}
       </div>
 
       <div className={style["button-container"]}>

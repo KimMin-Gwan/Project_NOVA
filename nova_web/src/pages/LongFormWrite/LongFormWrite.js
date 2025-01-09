@@ -6,6 +6,7 @@ import { Editor } from "@toast-ui/react-editor";
 
 import "@toast-ui/editor/dist/toastui-editor.css";
 import EditorBox from "../../component/EditorBox";
+import { LinkModal, Modal, VoteModal } from "../WriteFeed/WriteFeed";
 
 export default function LongFormWrite() {
   const navigate = useNavigate();
@@ -15,7 +16,9 @@ export default function LongFormWrite() {
   let [showLinkModal, setShowLinkModal] = useState(false);
   let [linkTitle, setLinkTitle] = useState("");
   let [linkUrl, setLinkUrl] = useState("");
+  let [linkList, setLinkList] = useState([]);
   let [longData, setLongData] = useState();
+  let [biasId, setBiasId] = useState();
 
   function onClickModal() {
     setShowModal(!showModal);
@@ -114,8 +117,8 @@ export default function LongFormWrite() {
         fclass: "long",
         choice: choice, // 4지선다 선택지 반영
         hashtag: tagList,
-        link: "",
-        bid: "",
+        link: { lname: linkTitle, url: linkUrl },
+        bid: biasId,
         image_names: "",
       },
     };
@@ -252,7 +255,7 @@ export default function LongFormWrite() {
       </div>
       <div>
         <div>커뮤니티 선택</div>
-        <BiasBoxes />
+        <BiasBoxes setBiasId={setBiasId} />
       </div>
       <div className={style["hashtag_container"]}>
         <div>제목(해시태그)</div>
@@ -298,7 +301,7 @@ export default function LongFormWrite() {
         /> */}
       </div>
       <p className={style["alert_message"]}>숏 피드 게시글은 작성 후 24시간 동안 노출됩니다.</p>
-      {/* <div className={style["content_button"]}>
+      <div className={style["content_button"]}>
         <button
           onClick={(e) => {
             e.stopPropagation();
@@ -323,7 +326,39 @@ export default function LongFormWrite() {
         >
           링크
         </button>
-      </div> */}
+      </div>
+      {showModal && (
+        <Modal
+          onClickModal={onClickModal}
+          handleFileChange={handleFileChange}
+          imagePreview={imagePreview}
+        />
+      )}
+      {showVoteModal && (
+        <VoteModal
+          onClickModal={onClickVoteModal}
+          createOptions={createOptions}
+          onClickAdd={onClickAdd}
+          handleChoiceChange={handleChoiceChange}
+          choice={choice}
+          setChoice={setChoice}
+        />
+      )}
+      {showLinkModal && (
+        <LinkModal
+          onClickModal={onClickLinkModal}
+          link={urlLink}
+          setLink={setUrlLink}
+          numLink={numLink}
+          linkTitle={linkTitle}
+          linkUrl={linkUrl}
+          setLinkTitle={setLinkTitle}
+          setLinkUrl={setLinkUrl}
+          onClickAdd={onClickAddLink}
+          handleLinkChange={handleLinkChange}
+          linkList={linkList}
+        />
+      )}
     </div>
   );
 }

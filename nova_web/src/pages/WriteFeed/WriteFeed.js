@@ -643,7 +643,7 @@ export default WriteFeed;
 //   );
 // }
 
-const Modal = ({
+export const Modal = ({
   show,
   closeModal,
   title,
@@ -709,7 +709,7 @@ const Modal = ({
   );
 };
 
-function VoteModal({
+export function VoteModal({
   onClickModal,
   createOptions,
   onClickAdd,
@@ -756,7 +756,7 @@ function VoteModal({
   );
 }
 
-function LinkModal({
+export function LinkModal({
   onClickModal,
   setLinkTitle,
   setLinkUrl,

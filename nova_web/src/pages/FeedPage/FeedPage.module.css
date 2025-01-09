@@ -2312,7 +2312,6 @@ h5 {
 
 .body-container {
   padding: 0px 20px;
-  /* height: 100px; */
 
   .body-hashtag {
     color: #9f80ff;
@@ -2399,4 +2398,9 @@ h5 {
   background-color: blue;
   position: absolute;
   bottom: 0px;
+}
+
+.long-form-hidden {
+  max-height: 500px;
+  overflow: hidden;
 }

@@ -21,7 +21,7 @@ export default function EditorBox({ setLongData }) {
       ref={editorRef}
       initialValue="hello react editor world!"
       previewStyle="vertical"
-      height="600px"
+      height="300px"
       initialEditType="wysiwyg"
       useCommandShortcut={false}
       plugins={[colorSyntax]}
