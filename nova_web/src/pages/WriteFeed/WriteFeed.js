@@ -17,6 +17,14 @@ const WriteFeed = ({ brightmode }) => {
   let [showModal, setShowModal] = useState(false);
   let [showVoteModal, setShowVoteModal] = useState(false);
   let [showLinkModal, setShowLinkModal] = useState(false);
+  let [linkTitle, setLinkTitle] = useState("");
+  let [linkUrl, setLinkUrl] = useState("");
+  let [linkList, setLinkList] = useState([]);
+  let [biasId, setBiasId] = useState();
+  // useEffect(() => {
+  //   setLinkList([{ name: linkTitle, url: linkUrl }]);
+  //   console.log("linklist");
+  // }, [linkTitle, linkUrl]);
 
   function onClickModal() {
     setShowModal(!showModal);
@@ -72,12 +80,19 @@ const WriteFeed = ({ brightmode }) => {
   let [inputTagCount, setInputTagCount] = useState(0); //글자수
   let [inputBodyCount, setInputBodyCount] = useState(0); //글자수
 
+  let [urlLink, setUrlLink] = useState([{ name: "", url: "" }]);
   let [numLink, setNumLink] = useState(0);
   let [createOptions, setCreateOptions] = useState(0);
 
   function onClickAddLink() {
     setNumLink(numLink + 1);
+    // setLinkList((items) => [...items, linkTitle]);
+    let newLink = { title: linkTitle, url: linkUrl };
+    setLinkList([...linkList, newLink]);
+    setLinkTitle("");
+    setLinkUrl("");
   }
+
   function onClickAdd() {
     setCreateOptions(createOptions + 1);
   }
@@ -111,8 +126,8 @@ const WriteFeed = ({ brightmode }) => {
         fclass: "short",
         choice: choice, // 4지선다 선택지 반영
         hashtag: tagList,
-        link: "",
-        bid: "",
+        link: { lname: linkTitle, url: linkUrl },
+        bid: biasId,
         image_names: "",
       },
     };
@@ -146,6 +161,8 @@ const WriteFeed = ({ brightmode }) => {
     newChoices[index] = value;
     setChoice(newChoices); // 4지선다 선택지 업데이트
   };
+
+  function handleLinkChange() {}
 
   let title = ["줄 글", "사지선다", "이지선다", "외부 좌표"];
   let fclassName = ["card", "multiple", "balance", "station"];
@@ -263,7 +280,7 @@ const WriteFeed = ({ brightmode }) => {
 
       <div>
         <div>커뮤니티 선택</div>
-        <BiasBoxes />
+        <BiasBoxes setBiasId={setBiasId} />
       </div>
 
       <div className={style["hashtag_container"]}>
@@ -358,10 +375,16 @@ const WriteFeed = ({ brightmode }) => {
       {showLinkModal && (
         <LinkModal
           onClickModal={onClickLinkModal}
-          link={link}
-          setLink={setLink}
+          link={urlLink}
+          setLink={setUrlLink}
           numLink={numLink}
+          linkTitle={linkTitle}
+          linkUrl={linkUrl}
+          setLinkTitle={setLinkTitle}
+          setLinkUrl={setLinkUrl}
           onClickAdd={onClickAddLink}
+          handleLinkChange={handleLinkChange}
+          linkList={linkList}
         />
       )}
     </div>
@@ -733,25 +756,33 @@ function VoteModal({
   );
 }
 
-function LinkModal({ onClickModal, link, setLink, numLink, onClickAdd, handleChoiceChange }) {
-  let optionRef = useRef(0);
-  let [linkTitle, setLinkTitle] = useState("");
-  let [linkUrl, setLinkUrl] = useState("");
-
-  function onChangeLinkTitle(e) {
-    setLinkTitle(e.target.value);
-  }
-
-  function onChangeLinkUrl(e) {
-    setLinkUrl(e.target.value);
-  }
-
+function LinkModal({
+  onClickModal,
+  setLinkTitle,
+  setLinkUrl,
+  linkTitle,
+  linkUrl,
+  numLink,
+  onClickAdd,
+  linkList,
+}) {
   return (
     <div className={style["wrapper-container"]}>
       <div className={style["modal-container"]}>
         <div className={style["modal-title"]}>좌표 추가</div>
         <div className={style["image-container"]}>
-          {Array.from({ length: numLink }).map((item, i) => {
+          {linkList.length > 0 &&
+            linkList.map((link, i) => {
+              return (
+                <div key={i} className={style["link-box"]}>
+                  <div>닫기</div>
+                  <div>{link.title}</div>
+                  <div>{link.url}</div>
+                </div>
+              );
+            })}
+          {/* {Array.from({ length: numLink }).map((item, i) => {
+            // const data = linkList[i];
             return (
               <div key={i} className={style["link-box"]}>
                 <div>닫기</div>
@@ -759,7 +790,7 @@ function LinkModal({ onClickModal, link, setLink, numLink, onClickAdd, handleCho
                 <div>{linkUrl}</div>
               </div>
             );
-          })}
+          })} */}
         </div>
 
         <div className={style["link-input-container"]}>
@@ -767,13 +798,13 @@ function LinkModal({ onClickModal, link, setLink, numLink, onClickAdd, handleCho
             <input
               type="text"
               value={linkTitle}
-              onChange={onChangeLinkTitle}
+              onChange={(e) => setLinkTitle(e.target.value)}
               placeholder="좌표 이름"
             />
             <input
               type="url"
-              // value={linkUrl}
-              onChange={onChangeLinkUrl}
+              value={linkUrl}
+              onChange={(e) => setLinkUrl(e.target.value)}
               placeholder="이곳을 클릭해서 URL을 추가하세요"
             />
           </div>
@@ -781,7 +812,12 @@ function LinkModal({ onClickModal, link, setLink, numLink, onClickAdd, handleCho
         </div>
 
         <div className={style["modal-buttons"]}>
-          <button className={style["close_button"]} onClick={onClickModal}>
+          <button
+            className={style["close_button"]}
+            onClick={() => {
+              onClickModal();
+            }}
+          >
             닫기
           </button>
           <button className={style["apply_button"]}>적용</button>

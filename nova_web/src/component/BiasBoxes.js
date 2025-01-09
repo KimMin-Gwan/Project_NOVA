@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-export default function BiasBoxes() {
+export default function BiasBoxes({ setBiasId }) {
   const URL = "https://nova-platform.kr/home/";
   let bias_url = "https://kr.object.ncloudstorage.com/nova-images/";
 
@@ -20,6 +20,10 @@ export default function BiasBoxes() {
   useEffect(() => {
     fetchBiasData();
   }, []);
+
+  function onClickBiasId(bid) {
+    setBiasId(bid);
+  }
 
   let [myBias, setMyBias] = useState([]);
   const defaultBoxes = 4;
@@ -62,7 +66,13 @@ export default function BiasBoxes() {
           return (
             <div key={i} className="bias-info">
               <div className="bias-box">
-                {bias && <img src={bias_url + `${bias.bid}.PNG`} alt="bias" />}
+                {bias && (
+                  <img
+                    src={bias_url + `${bias.bid}.PNG`}
+                    alt="bias"
+                    onClick={() => onClickBiasId(bias.bid)}
+                  />
+                )}
               </div>
               <div className="b-name">{bias?.bname || <span>&nbsp;</span>}</div>
             </div>

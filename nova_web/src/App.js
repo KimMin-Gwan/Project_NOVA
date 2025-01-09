@@ -55,6 +55,7 @@ import { ContentFeed } from "./component/feed.js";
 import FeedDetail from "./pages/FeedDetail/FeedDetail.js";
 import TestRef from "./component/TestRef.js";
 import FilterModal from "./component/FilterModal/FilterModal.js";
+import LongFormWrite from "./pages/LongFormWrite/LongFormWrite.js";
 
 // 다크 모드 클래스 반환 함수
 export function getModeClass(mode) {
@@ -157,7 +158,7 @@ function App() {
   // }, []);
   const [currentIndex, setCurrentIndex] = useState(0); // 현재 표시 중인 태그 인덱스
   const intervalTime = 2000; // 2초마다 태그 변경
-
+  let [biasId, setBiasId] = useState();
   // useEffect(() => {
   //   const timer = setInterval(() => {
   //     setCurrentIndex((prevIndex) => (prevIndex === tagList.length - 1 ? 0 : prevIndex + 1));
@@ -222,7 +223,7 @@ function App() {
       <Route path="/open_ranking" element={<OpenRanking />}></Route>
       <Route path="/bias_funding" element={<BiasFunding />}></Route>
       <Route path="/bias_funding/:type" element={<MoreProjects />}></Route>
-      <Route path="/test" element={<TestRef />}></Route>
+      <Route path="/test" element={<LongFormWrite />}></Route>
       <Route path="*" element={<div>404 Error</div>}></Route>
       {/* <Route path="/planet" element={<PlanetList />}></Route> */}
       {/* <Route path='/league_detail' element={<LeagueDetail />}></Route> */}
@@ -250,9 +251,13 @@ function App() {
                       navigate("/");
                     }}
                   >
-                    <img src={logo2} alt="logo" className={`logo-st ${getModeClass(brightMode)}`}></img>
+                    <img
+                      src={logo2}
+                      alt="logo"
+                      className={`logo-st ${getModeClass(brightMode)}`}
+                    ></img>
                   </div>
-                  {/* <Link to="/test">테스트</Link> */}
+                  <Link to="/test">롱폼작성 페이지지</Link>
 
                   <div className="buttons">
                     <button className="tool-button">
@@ -280,7 +285,7 @@ function App() {
                   feedData={weeklyFeed}
                   brightMode={brightMode}
                   type={"bias"}
-                  children={<BiasBoxes />}
+                  children={<BiasBoxes setBiasId={setBiasId} />}
                   endPoint={`/feed_list?type=all`}
                   customClassName="custom-height"
                 />
@@ -337,7 +342,13 @@ function App() {
                   endPoint={`/feed_list?type=weekly_best`}
                 />
 
-                <FeedThumbnail title={"전체 글"} feedData={allFeed} brightMode={brightMode} allPost={<AllPost allFeed={allFeed} />} endPoint={"/feed_list?type=all"} />
+                <FeedThumbnail
+                  title={"전체 글"}
+                  feedData={allFeed}
+                  brightMode={brightMode}
+                  allPost={<AllPost allFeed={allFeed} />}
+                  endPoint={"/feed_list?type=all"}
+                />
                 {/* <AllPost brightMode={brightMode} /> */}
               </section>
 
