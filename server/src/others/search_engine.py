@@ -393,20 +393,6 @@ class ManagedFeedBiasTable:
 
         return result_fid, result_index
 
-    # 바이어스 커뮤니티에 따라 Feed를 분류함
-    # 데이터프레임 활용
-    def filtering_bias_community(self, bids:list):
-        # Feed DF 중, bids안에 포함된 feed들만 반환함.
-        filtered_feeds_df = self.__feed_df[self.__feed_df['bid'].isin(bids)]
-
-        # 필터링된 Feed들의 리스트를 반환
-        return filtered_feeds_df['fid'].tolist()
-
-    def filtering_community_board(self, board_type:str):
-        filtered_feeds_df = self.__feed_df[self.__feed_df['board_type'].isin(board_type)]
-        return filtered_feeds_df['fid'].tolist()
-
-
     #---------------------------------------------------------------------------------------------
 
     # 최애의 정보 하나 반환
@@ -440,6 +426,56 @@ class ManagedFeedBiasTable:
         return
 
     #---------------------------------------------------------------------------------------------
+    # 바이어스 커뮤니티에 따라 Feed를 분류함
+    # 데이터프레임 활용
+    def __paging_list_df(self, fid_list, fid, page_size):
+        # 이미 Date 최신순으로 정렬되어서 맨처음이 젤 최신의 글임
+        start_index = fid_list.index(fid)  # 타겟으로 잡은 구간부터, 불러오기
+        paging_fid_list = fid_list[start_index:]        # 페이징으로 짜르기
+        # 만약 자른 리스트가 페이지를 넘어간다면 짤라야한다
+        if len(paging_fid_list) > page_size:
+            paging_fid_list = paging_fid_list[:page_size]
+
+        return paging_fid_list
+
+    def filtering_bias_community(self, bids:list, last_fid, page_size:int):
+        # Feed DF 중, bids안에 포함된 feed들만 반환함.
+        filtered_feeds_df = self.__feed_df[self.__feed_df['bid'].isin(bids)]
+        # 필터링된 Feed들의 리스트를 반환, 페이징기법을 적용한다
+        return self.__paging_list_df(fid_list=filtered_feeds_df['fid'].tolist(),
+                                     fid=last_fid, page_size=page_size)
+
+    def filtering_community_board(self, last_fid:str, page_size:int, bid:str, board_type:str):
+        # 게시판 분리하여 필터링
+        # 이 때, BID를 통한 필터링도 같이 선행되어야 함.
+        filtered_feeds_df = self.__feed_df[(self.__feed_df['bid'] == bid) & (self.__feed_df['board_type'] == board_type)]
+        return self.__paging_list_df(fid_list=filtered_feeds_df['fid'].tolist(),
+                                     fid=last_fid, page_size=page_size)
+
+    def filtering_choice_feed(self, last_fid:str, page_size:int):
+        # 투표 글만 필터링
+        filtered_feeds_df = self.__feed_df[self.__feed_df['iid'] != ""]
+        return self.__paging_list_df(fid_list=filtered_feeds_df['fid'].tolist(),
+                                     fid=last_fid, page_size=page_size)
+
+    def filtering_image_in_feed(self, last_fid:str, page_size:int):
+        # 이미지 있는 Feed들만 골라서 뱉음
+        filtered_feeds_df = self.__feed_df[self.__feed_df['num_images'] > 0]
+        return self.__paging_list_df(fid_list=filtered_feeds_df['fid'].tolist(),
+                                     fid=last_fid, page_size=page_size)
+
+    def filtering_staring_feed(self, stars:int, last_fid:str, page_size:int):
+        # 추천수가 일정 수 이상인 피드만 걸러줌
+        filtered_feeds_df = self.__feed_df[self.__feed_df['stars'] > stars]
+        return self.__paging_list_df(fid_list=filtered_feeds_df['fid'].tolist(),
+                                     fid=last_fid, page_size=page_size)
+
+    def filtering_nickname_feed(self, nickname:str, last_fid:str, page_size:int):
+        # 닉네임으로 Feed를 검색하는 기능
+        filtered_feeds_df = self.__feed_df[self.__feed_df['nickname'] == nickname]
+        return self.__paging_list_df(fid_list=filtered_feeds_df['fid'].tolist(),
+                                     fid=last_fid, page_size=page_size)
+
 
     # def realtime_trending_hashtag(self, ):
 
@@ -1151,92 +1187,24 @@ class FilteringManager:
         self.__managed_feed_bias_table=managed_feed_bias_table
 
 #------------------------------------------------------------------------------------
-    # def __get_datetime_now(self):
-    #     now = datetime.now()
-    #     return now
-    #
-    # # string to datetime
-    # def __get_date_str_to_object(self, str_date):
-    #     date_obj = datetime.strptime(str_date, "%Y/%m/%d-%H:%M:%S")
-    #     return date_obj
-    #
-    # # datetime to string
-    # def __get_date_object_to_str(self, object:datetime):
-    #     formatted_str = object.strftime("%Y/%m/%d-%H:%M:%S")
-    #     return formatted_str
-    #
-    # def __init_feed_table(self):
-    #     feeds = []
-    #     feed_datas = self.__database.get_all_data(target="fid")
-    #
-    #     for feed_data in feed_datas:
-    #         feed = Feed()
-    #         feed.make_with_dict(dict_data=feed_data)
-    #         feeds.append(feed)
-    #
-    #     # Managed Feed 형태로 보관
-    #     for single_feed in feeds:
-    #         managed_feed = ManagedFeed(fid=single_feed.fid,
-    #                                    like=single_feed.star,
-    #                                    date=self.__get_date_str_to_object(single_feed.date),
-    #                                    hashtag=copy(single_feed.hashtag),
-    #                                    uname=single_feed.nickname,
-    #                                    bid=single_feed.bid
-    #                                    )
-    #         # 보관
-    #         self.__feed_table.append(managed_feed)
-    #
-    #     # 리턴되면 Feed들이 없어지고 알아서 Managed Feed만 남으니 OK
-    #     # 정렬은 항상 최신순으로
-    #     self.__feed_table = sorted(self.__feed_table, key=lambda x:x.date, reverse=True)
-    #     num_feed = str(len(self.__feed_table))
-    #     print(f'INFO<-[      {num_feed} NOVA FEED IN SEARCH ENGINE NOW READY.')
-    #
-    #     return
-    #
-    # def __init_feed_avltree(self):
-    #     for feed in self.__feed_table:
-    #         self.__feed_avltree.insert(feed.fid, feed)
-    #     print(f'INFO<-[      NOVA FEED AVLTREE IN FILTERING MANAGER NOW READY.')
-    #
-    # def __init__bias_avltree(self):
-    #     biases = []
-    #     users = []
-    #     bias_datas = self.__database.get_all_data(target="bid")
-    #     user_datas = self.__database.get_all_data(target="uid")
-    #
-    #     for bias_data in bias_datas:
-    #         bias = Bias()
-    #         bias.make_with_dict(dict_data=bias_data)
-    #         biases.append(bias)
-    #
-    #     for user_data in user_datas:
-    #         user = User()
-    #         user.make_with_dict(dict_data=user_data)
-    #         users.append(user)
-    #
-    #     for single_bias in biases:
-    #         user_nodes = []
-    #         for single_user in users:
-    #             single_user: User = single_user
-    #             if single_bias.bid in single_user.bids:
-    #                 user_node = self.__feed_algorithm.get_user_node_with_uid(uid=single_user.uid)
-    #                 if user_node:
-    #                     user_nodes.append(user_node)
-    #         managed_bias = ManagedBias(bid=single_bias.bid, user_nodes=user_nodes)
-    #
-    #         self.__bias_avltree.insert(key=single_bias.bid, value=managed_bias)
-
-#------------------------------------------------------------------------------------
     # BID로 필터링 하는 작업 수행
-    def filtering_community(self, bids:list):
+    def filtering_community(self, page_size, last_fid, bids:list):
         # Search Engine에 들어가기 전에 BID 리스트를 검사할거임
         # BID 리스트 요소는 1개가 될 수 있고, 아니면 선택을 하지 않아서 여러 개가 될 수 있음.
-        return self.__managed_feed_bias_table.filtering_bias_community(bids=bids)
+        return self.__managed_feed_bias_table.filtering_bias_community(bids=bids, last_fid=last_fid, page_size=page_size)
 
-    def filtering_board_community(self, board_type:str):
+    def filtering_board_community(self, bid:str, board_type:str, last_fid:str, page_size:int):
         # 게시판 타입마다 필터링하는 함수.
-        return self.__managed_feed_bias_table.filtering_community_board(board_type=board_type)
+        self.__managed_feed_bias_table.filtering_community_board(bid=bid, board_type=board_type, last_fid=last_fid, page_size=page_size)
+
+    def filtering_choice_feed(self, last_fid:str, page_size:int):
+        # 게시판 중, 투표가 있는 Feed만 필터링
+        return self.__managed_feed_bias_table.filtering_choice_feed()
+
+    def filtering_image_in_feed(self):
+        # 게시판 글 중, 이미지만 있는 글들만 필터링
+        return self.__managed_feed_bias_table.filtering_image_in_feed()
+
     # # 이거 아직 안 됨
     # # 전체 게시글 중 필터링
     # def _filter_single_option_feed(self, feed_list, option):
