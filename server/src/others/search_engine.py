@@ -271,7 +271,7 @@ class ManagedFeedBiasTable:
             board_type=feed.board_type, # 이거 추가됨
             bid=feed.bid,
             iid=feed.iid,
-            num_images=feed.num_images
+            num_images=feed.num_image
         )
 
         self.__feed_table.append(managed_feed)
