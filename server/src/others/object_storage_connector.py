@@ -51,7 +51,7 @@ class ObjectStorageConnection:
         file_path = path + file_name
 
         # HTML 파일로 저장
-        with open(file_path, "w", encoding="utf-9") as file:
+        with open(file_path, "w", encoding="utf-8") as file:
             file.write(body)
 
         self.__s3.upload_file(file_path,
