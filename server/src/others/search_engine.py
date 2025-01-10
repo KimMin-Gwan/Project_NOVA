@@ -428,9 +428,12 @@ class ManagedFeedBiasTable:
     #---------------------------------------------------------------------------------------------
     # 바이어스 커뮤니티에 따라 Feed를 분류함
     # 데이터프레임 활용
-    def __paging_list_df(self, fid_list:list, fid, page_size):
+    def __paging_list_df(self, fid_list, fid, page_size):
         # 이미 Date 최신순으로 정렬되어서 맨처음이 젤 최신의 글임
-        start_index = fid_list.index(fid)  # 타겟으로 잡은 구간부터, 불러오기
+        start_index = 0
+        if fid != "":
+            start_index = fid_list.index(fid)  # 타겟으로 잡은 구간부터, 불러오기
+
         paging_fid_list = fid_list[start_index:]        # 페이징으로 짜르기
         # 만약 자른 리스트가 페이지를 넘어간다면 짤라야한다
         if len(paging_fid_list) > page_size:
@@ -505,6 +508,13 @@ class FeedSearchEngine:
 
     def make_task(self):
         return self.__recommend_manager.make_task()
+
+    def try_test_graph_recommend_system(self, fid):
+        feed = self.__database.get_data_with_id(target="fid", id=fid)
+        #result = self.__feed_algorithm.find_recommend_feed(start_fid=feed.fid)
+        result = "2"
+
+        return result
 
     # 새롭게 최애를 지정했을 때 연결하는 시스템
     # 근데 이거 잘생각해보면 최애 지정하기 전에 쓴 글들은 해시태그에 반영되어야 하는가?
@@ -626,42 +636,6 @@ class FeedSearchEngine:
                 search_type="best", num_feed=num_feed, target_hour=-1, index=index)
 
         return result_fid, result_index
-    
-    
-    # 최애 페이지에서 요청
-    def try_feed_with_bid_n_filtering(self, target_bids:list[str]=[""], board_type="default",
-                                      page_size=1, last_fid="", search_type="default"
-                                      ):
-        
-        last_fid = ""
-        result = []
-        
-        # 선택 없음 상태에서 요청
-        if search_type == "default":
-            result = self.__filter_manager.filtering_community(page_size=page_size, last_fid=last_fid, bids=target_bids)
-        
-        # bias만 선택했을 때 요청
-        elif search_type == "just_bias":
-            result = self.__filter_manager.filtering_community(page_size=page_size, last_fid=last_fid, bids=target_bids)
-            
-        # bias를 선택하지 않고 board만 선택했을 때 요청
-        # 이것만 추가되면됨 -> bid 말고 bids (list) 로 변경
-        elif search_type == "board_only":
-            result = self.__filter_manager.filtering_board_community(bid=target_bids, board_type=board_type,
-                                                                     last_fid=last_fid, page_size=page_size)
-            
-        # bias와 board를 모두 선택했들 때 요청
-        elif search_type == "bias_and_board":
-            result = self.__filter_manager.filtering_board_community(bid=target_bids[0], board_type=board_type,
-                                                                     last_fid=last_fid, page_size=page_size)
-        
-        # 마지막 feed의 fid 반환
-        if result:
-            last_fid = result[-1]
-            
-        return result, last_fid
-        
-    
 
     # 여기도 아직 하지 말것 
     # 목적 : 숏피드에서 다음 피드 제공 받기
@@ -1224,22 +1198,22 @@ class FilteringManager:
 
 #------------------------------------------------------------------------------------
     # BID로 필터링 하는 작업 수행
-    def filtering_community(self, page_size, last_fid, bids:list):
+    def filtering_community(self, page_size, bids:list, last_fid=""):
         # Search Engine에 들어가기 전에 BID 리스트를 검사할거임
         # BID 리스트 요소는 1개가 될 수 있고, 아니면 선택을 하지 않아서 여러 개가 될 수 있음.
         return self.__managed_feed_bias_table.filtering_bias_community(bids=bids, last_fid=last_fid, page_size=page_size)
 
-    def filtering_board_community(self, bid:str, board_type:str, last_fid:str, page_size:int):
+    def filtering_board_community(self, bid:str, board_type:str, page_size:int, last_fid:str=""):
         # 게시판 타입마다 필터링하는 함수.
         self.__managed_feed_bias_table.filtering_community_board(bid=bid, board_type=board_type, last_fid=last_fid, page_size=page_size)
 
-    def filtering_choice_feed(self, bid:str, board_type:str, last_fid:str, page_size:int):
+    def filtering_choice_feed(self, bid:str, board_type:str, page_size:int, last_fid:str=""):
         # 게시판 중, 투표가 있는 Feed만 필터링
-        return self.__managed_feed_bias_table.filtering_choice_feed(last_fid=last_fid, page_size=page_size)
+        return self.__managed_feed_bias_table.filtering_choice_feed(bid=bid, board_type=board_type, last_fid=last_fid, page_size=page_size)
 
-    def filtering_image_in_feed(self, bid:str, board_type:str, last_fid:str, page_size:int):
+    def filtering_image_in_feed(self, bid:str, board_type:str, page_size:int, last_fid:str=""):
         # 게시판 글 중, 이미지만 있는 글들만 필터링
-        return self.__managed_feed_bias_table.filtering_image_in_feed(last_fid=last_fid, page_size=page_size)
+        return self.__managed_feed_bias_table.filtering_image_in_feed(lbid=bid, board_type=board_type, last_fid=last_fid, page_size=page_size)
 
     # # 이거 아직 안 됨
     # # 전체 게시글 중 필터링
