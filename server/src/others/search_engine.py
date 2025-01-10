@@ -177,7 +177,7 @@ class ManagedFeedBiasTable:
             self.__feed_table.append(managed_feed)
 
         # 리턴되면 위에서 잠시 보관한 피드 데이터는 사라지고 self.__feed_table에 ManagedFeed들만 남음
-
+        # 최신이 가장 밑으로 오지만, 데이터프레임만 최신 내림차순으로 정렬할 것
         self.__feed_table = sorted(self.__feed_table, key=lambda x:x.date, reverse=False)
         self.__feed_df = self.__dataframing_feed_list()
 
@@ -233,6 +233,9 @@ class ManagedFeedBiasTable:
         # ManagedFeed들은 객체이므로, 딕셔너리화 시켜서 리스트로 만든다.
         managed_feed_dict_list = [managed_feed.to_dict() for managed_feed in self.__feed_table]
         feed_df = pd.DataFrame(managed_feed_dict_list)
+        # 데이터프레임을 정렬함
+        feed_df = feed_df.sort_values(by='date', ascending=False).reset_index(drop=True)
+
         return feed_df
 
     def __add_new_data_in_df(self, managed_feed):
@@ -654,7 +657,12 @@ class FeedSearchEngine:
         # bias만 선택했을 때 요청
         elif search_type == "just_bias":
             result = self.__filter_manager.filtering_community(page_size=page_size, last_fid=last_fid, bids=target_bids)
-            
+
+        # 야 이건 Bias 선택안하면 Board는 전체로만 나와야하는거 아니냐
+        # Bias마다 Board가 다 달라지는거라고 생각했는ㄷ
+
+
+
         # bias를 선택하지 않고 board만 선택했을 때 요청
         # 이것만 추가되면됨 -> bid 말고 bids (list) 로 변경
         elif search_type == "board_only":
@@ -1241,7 +1249,7 @@ class FilteringManager:
 
     def filtering_board_community(self, bid:str, board_type:str, page_size:int, last_fid:str=""):
         # 게시판 타입마다 필터링하는 함수.
-        self.__managed_feed_bias_table.filtering_community_board(bid=bid, board_type=board_type, last_fid=last_fid, page_size=page_size)
+        return self.__managed_feed_bias_table.filtering_community_board(bid=bid, board_type=board_type, last_fid=last_fid, page_size=page_size)
 
     def filtering_choice_feed(self, bid:str, board_type:str, page_size:int, last_fid:str=""):
         # 게시판 중, 투표가 있는 Feed만 필터링
@@ -1249,7 +1257,7 @@ class FilteringManager:
 
     def filtering_image_in_feed(self, bid:str, board_type:str, page_size:int, last_fid:str=""):
         # 게시판 글 중, 이미지만 있는 글들만 필터링
-        return self.__managed_feed_bias_table.filtering_image_in_feed(lbid=bid, board_type=board_type, last_fid=last_fid, page_size=page_size)
+        return self.__managed_feed_bias_table.filtering_image_in_feed(bid=bid, board_type=board_type, last_fid=last_fid, page_size=page_size)
 
     # # 이거 아직 안 됨
     # # 전체 게시글 중 필터링
