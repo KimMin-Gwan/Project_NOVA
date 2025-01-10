@@ -428,9 +428,10 @@ class ManagedFeedBiasTable:
     #---------------------------------------------------------------------------------------------
     # 바이어스 커뮤니티에 따라 Feed를 분류함
     # 데이터프레임 활용
-    def __paging_list_df(self, fid_list, fid, page_size):
+    def __paging_list_df(self, fid_list:list, fid, page_size):
         # 이미 Date 최신순으로 정렬되어서 맨처음이 젤 최신의 글임
         start_index = 0
+        
         if fid != "":
             start_index = fid_list.index(fid)  # 타겟으로 잡은 구간부터, 불러오기
 
@@ -636,6 +637,41 @@ class FeedSearchEngine:
                 search_type="best", num_feed=num_feed, target_hour=-1, index=index)
 
         return result_fid, result_index
+    
+       
+    # 최애 페이지에서 요청
+    def try_feed_with_bid_n_filtering(self, target_bids:list[str]=[""], board_type="default",
+                                      page_size=1, last_fid="", search_type="default"
+                                      ):
+        
+        last_fid = ""
+        result = []
+        
+        # 선택 없음 상태에서 요청
+        if search_type == "default":
+            result = self.__filter_manager.filtering_community(page_size=page_size, last_fid=last_fid, bids=target_bids)
+        
+        # bias만 선택했을 때 요청
+        elif search_type == "just_bias":
+            result = self.__filter_manager.filtering_community(page_size=page_size, last_fid=last_fid, bids=target_bids)
+            
+        # bias를 선택하지 않고 board만 선택했을 때 요청
+        # 이것만 추가되면됨 -> bid 말고 bids (list) 로 변경
+        elif search_type == "board_only":
+            result = self.__filter_manager.filtering_board_community(bid=target_bids, board_type=board_type,
+                                                                     last_fid=last_fid, page_size=page_size)
+            
+        # bias와 board를 모두 선택했들 때 요청
+        elif search_type == "bias_and_board":
+            result = self.__filter_manager.filtering_board_community(bid=target_bids[0], board_type=board_type,
+                                                                     last_fid=last_fid, page_size=page_size)
+        
+        # 마지막 feed의 fid 반환
+        if result:
+            last_fid = result[-1]
+            
+        return result, last_fid
+        
 
     # 여기도 아직 하지 말것 
     # 목적 : 숏피드에서 다음 피드 제공 받기
