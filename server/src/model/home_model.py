@@ -28,7 +28,7 @@ class BannerModel(BaseModel):
 
     def set_banner_data(self):
         try:
-            self.__banner = self._database.get_all_data(target="not_my_work")
+            self.__banner = self._database.get_all_data(target="banner")
 
         except Exception as e:
             raise CoreControllerLogicError(error_type="set_group_leagues | " + str(e))

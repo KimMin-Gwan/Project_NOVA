@@ -498,11 +498,14 @@ class Alert:
 
 # 유저 특화 시스템 구성을 위한 관리 유저
 class Notice:
-    def __init__(self, nid="", date="", title="", body=""):
+    def __init__(self, nid="", date="", title="", body="", bid="", displayOpt=False):
         self.nid = nid 
         self.date =date 
         self.title=title
         self.body=body
+        self.bid = bid
+        self.bname = ""
+        self.displayOpt = False
 
     def make_with_dict(self, dict_data):
         try:
@@ -510,15 +513,20 @@ class Notice:
             self.date= dict_data['date']
             self.title= dict_data['title']
             self.body = dict_data['body']
+            self.bid= dict_data['bid']
+            self.displayOpt = dict_data['displayOpt']
         except KeyError as e:
             raise DictMakingError(error_type=f"Missing key: {str(e)}")
+        return
 
     def get_dict_form_data(self):
         return {
             "nid" : self.nid,
             "date" : self.date,
             "title" : self.title,
-            "body" : self.body
+            "body" : self.body,
+            "bid" : self.bid,
+            "bname" : self.bname
         }
     
 class Project:

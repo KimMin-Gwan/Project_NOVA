@@ -427,7 +427,6 @@ class Core_Service_View(Master_View):
         @self.__app.post('/feed_explore/feed_with_community')
         def get_feed_with_community(request:Request, raw_request:dict):
             request_manager = RequestManager()
-            pprint(raw_request)
             data_payload = CommunityRequest(request=raw_request)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 

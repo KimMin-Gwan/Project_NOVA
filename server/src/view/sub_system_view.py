@@ -198,7 +198,18 @@ class Sub_Service_View(Master_View):
                                                 data_payload=data_payload)
             response = model.get_response_form_data(self._head_parser)
             return response
-
+        
+        # 최신에 사용중인 최애 기반 커뮤니티 리스트에 나올 공지
+        @self.__app.post('/nova_sub_system/image_tag')
+        def try_get_sample_notice(raw_request:dict, bid:Optional[str]):
+            data_payload = NoticeSampleRequest(bid=bid)
+            
+            sub_controller =Sub_Controller()
+            model = sub_controller.try_get_notice_sample(database=self.__database,
+                                                        data_payload=data_payload)
+            response = model.get_response_form_data(self._head_parser)
+            return response
+        
 
     def bias_setting_route(self):
         # 바이어스를 String 으로 검색
@@ -321,6 +332,10 @@ class BiasWithCategoryRequest():
 class NoticeDetailRequest():
     def __init__(self, nid = None) -> None:
         self.nid=nid
+        
+class NoticeSampleRequest():
+    def __init__(self, bid=None) -> None:
+        self.bid=bid
         
 class BiasPageInfoRequest():
     def __init__(self, bid = None) -> None:

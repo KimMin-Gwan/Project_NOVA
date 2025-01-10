@@ -28,7 +28,22 @@ class Sub_Controller:
 
         finally:
             return model
-
+    
+    # 최애 기반 커뮤니티 페이지에서 노출될 공지시항 리스트
+    def try_get_notice_sample(self, database:Local_Database, data_payload) -> BaseModel: 
+        model = NoticeModel(database=database)
+        
+        # 1. bid가 선택되었는지 확인
+        # 만약 bid가 선택되었다면 -> bid 포함된 공지 리스트 
+        # bid가 없다면 -> bid가 포함되지 않은 공지 리스트
+    
+        model.set_base_notice_data()
+        model.set_bias_notice_data(bid=data_payload.bid)
+        model.set_none_bias_notice_data()
+        
+        model.set_send_notice_data()
+        return model
+        
     def try_get_image_tag(self, database:Local_Database, data_payload) -> BaseModel: 
         model = ImageTagModel(database=database)
 
