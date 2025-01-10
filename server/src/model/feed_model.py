@@ -472,14 +472,14 @@ class CommunityFeedModel(FeedModel):
         # bias를 선택하지 않았을 때
         if bid == "":
             fid_list, self.__last_fid = feed_search_engine.try_feed_with_bid_n_filtering(
-                target_bids=self._user.bids, page_size=1,
+                target_bids=self._user.bids, page_size=5,
                 last_fid=last_fid, search_type="default",
             )
         
         # bias를 선택했을 때
         else:
             fid_list, self.__last_fid = feed_search_engine.try_feed_with_bid_n_filtering(
-                target_bids=[bid], page_size=1, 
+                target_bids=[bid], page_size=5, 
                 last_fid=last_fid, search_type="just_bias",
             )
     
