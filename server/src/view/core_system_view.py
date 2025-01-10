@@ -761,7 +761,7 @@ class CommunityRequest(RequestHeader):
         super().__init__(request)
         body = request['body']
         self.bid = body['bid']
-        self.board = body['board']
+        self.board_type = body['board']
         self.last_fid = body['last_fid']
 
 class HomeFeedRequest(RequestHeader):
