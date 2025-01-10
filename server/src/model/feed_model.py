@@ -205,7 +205,6 @@ class FeedModel(BaseModel):
         for i, attend in enumerate(interaction.attend):
             for uid in attend:
                 if uid == user.uid:
-                    print(uid)
                     interaction.my_attend = i
         return
 
