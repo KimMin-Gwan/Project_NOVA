@@ -98,12 +98,14 @@ class FeedModel(BaseModel):
                                                     fid=data_payload.fid,
                                                     action=data_payload.action)
         
+        print(0)
         if self._feeds:
             interaction_data = self._database.get_data_with_id(target="iid", id=self._feeds[0].iid)
             self._interaction = Interaction()
             self._interaction.make_with_dict(dict_data=interaction_data)
-            
+        print(1)
         self._set_feed_interactied(user=self._user, interaction=self._interaction)
+        print(2)
         
         self._set_feed_json_data(user=self._user, feeds=self._feeds, feed_manager=feed_manager)
         return
@@ -204,6 +206,7 @@ class FeedModel(BaseModel):
     def _set_feed_interactied(self, user, interaction):
         for i, uid in enumerate(interaction.attend):
             if uid == user.uid:
+                print(uid)
                 interaction.my_attend = i
         return
 
