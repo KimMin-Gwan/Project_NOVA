@@ -452,33 +452,40 @@ class ManagedFeedBiasTable:
         return self.__paging_list_df(fid_list=filtered_feeds_df['fid'].tolist(),
                                      fid=last_fid, page_size=page_size)
 
-    def filtering_choice_feed(self, last_fid:str, page_size:int):
+    def filtering_choice_feed(self, bid:str, board_type:str, last_fid:str, page_size:int):
         # 투표 글만 필터링
         filtered_feeds_df = self.__feed_df[self.__feed_df['iid'] != ""]
+        # 게시판 필터링
+        filtered_feeds_df = filtered_feeds_df[(filtered_feeds_df['bid'] == bid) & (filtered_feeds_df['board_type'] == board_type)]
         return self.__paging_list_df(fid_list=filtered_feeds_df['fid'].tolist(),
                                      fid=last_fid, page_size=page_size)
 
-    def filtering_image_in_feed(self, last_fid:str, page_size:int):
+    def filtering_image_in_feed(self, bid:str, board_type:str, last_fid:str, page_size:int):
         # 이미지 있는 Feed들만 골라서 뱉음
         filtered_feeds_df = self.__feed_df[self.__feed_df['num_images'] > 0]
+        # 게시판 필터링
+        filtered_feeds_df = filtered_feeds_df[(filtered_feeds_df['bid'] == bid) & (filtered_feeds_df['board_type'] == board_type)]
         return self.__paging_list_df(fid_list=filtered_feeds_df['fid'].tolist(),
                                      fid=last_fid, page_size=page_size)
 
-    def filtering_staring_feed(self, stars:int, last_fid:str, page_size:int):
+    def filtering_staring_feed(self, stars:int, bid:str, board_type:str, last_fid:str, page_size:int):
         # 추천수가 일정 수 이상인 피드만 걸러줌
         filtered_feeds_df = self.__feed_df[self.__feed_df['stars'] > stars]
+        # 게시판 필터링
+        filtered_feeds_df = filtered_feeds_df[(filtered_feeds_df['bid'] == bid) & (filtered_feeds_df['board_type'] == board_type)]
         return self.__paging_list_df(fid_list=filtered_feeds_df['fid'].tolist(),
                                      fid=last_fid, page_size=page_size)
 
-    def filtering_nickname_feed(self, nickname:str, last_fid:str, page_size:int):
+    def filtering_nickname_feed(self, nickname:str, bid:str, board_type:str, last_fid:str, page_size:int):
         # 닉네임으로 Feed를 검색하는 기능
         filtered_feeds_df = self.__feed_df[self.__feed_df['nickname'] == nickname]
+        # 게시판 필터링
+        filtered_feeds_df = filtered_feeds_df[(filtered_feeds_df['bid'] == bid) & (filtered_feeds_df['board_type'] == board_type)]
         return self.__paging_list_df(fid_list=filtered_feeds_df['fid'].tolist(),
                                      fid=last_fid, page_size=page_size)
 
 
     # def realtime_trending_hashtag(self, ):
-
 #--------------------------------------------------------------------------------------------------
 
 # 아래는 검색 엔진
@@ -1197,13 +1204,13 @@ class FilteringManager:
         # 게시판 타입마다 필터링하는 함수.
         self.__managed_feed_bias_table.filtering_community_board(bid=bid, board_type=board_type, last_fid=last_fid, page_size=page_size)
 
-    def filtering_choice_feed(self, last_fid:str, page_size:int):
+    def filtering_choice_feed(self, bid:str, board_type:str, last_fid:str, page_size:int):
         # 게시판 중, 투표가 있는 Feed만 필터링
-        return self.__managed_feed_bias_table.filtering_choice_feed()
+        return self.__managed_feed_bias_table.filtering_choice_feed(last_fid=last_fid, page_size=page_size)
 
-    def filtering_image_in_feed(self):
+    def filtering_image_in_feed(self, bid:str, board_type:str, last_fid:str, page_size:int):
         # 게시판 글 중, 이미지만 있는 글들만 필터링
-        return self.__managed_feed_bias_table.filtering_image_in_feed()
+        return self.__managed_feed_bias_table.filtering_image_in_feed(last_fid=last_fid, page_size=page_size)
 
     # # 이거 아직 안 됨
     # # 전체 게시글 중 필터링
