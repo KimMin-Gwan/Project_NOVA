@@ -145,6 +145,25 @@
 }
 /*  */
 /*피드만 높이가 짧게 */
-.slide-content.custom-height {
-  height: 271px;
+
+.slider-container.custom-height {
+  .slide-content {
+    height: 271px;
+  }
+  .slick-dots {
+    background-color: #f1f7ff;
+    padding-block: 8px;
+    bottom: -41px;
+  }
+
+  .slick-dots li button::before {
+    background-color: #f1f7ff;
+  }
+
+  .slick-dots li.slick-active button {
+    background-color: #f1f7ff;
+  }
+  .slick-dots li button {
+    background-color: #f1f7ff;
+  }
 }

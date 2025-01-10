@@ -68,7 +68,7 @@ const SimpleSlider = ({ feedData, brightMode, type, className }) => {
   }, [brightMode]);
 
   return (
-    <div className={`slider-container ${brightMode === "dark" ? "dark-mode" : "bright-mode"}`}>
+    <div className={`slider-container ${brightMode === "dark" ? "dark-mode" : "bright-mode"} ${className || ""}`}>
       <Slider {...settings}>
         {feedData.length !== 0 &&
           feedData.map((feed, i) => {
@@ -76,7 +76,7 @@ const SimpleSlider = ({ feedData, brightMode, type, className }) => {
               <div key={i} className="slick-slide">
                 <div className="slide-box">
                   <div
-                    className={`slide-content ${getModeClass(mode)} ${className || ""}`}
+                    className={`slide-content ${getModeClass(mode)}`}
                     onClick={(e) => {
                       e.preventDefault();
                       // onClickMore(feed.fid);
