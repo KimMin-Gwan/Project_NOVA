@@ -12,7 +12,7 @@ class FeedModel(BaseModel):
         self._feeds = []
         self._key = -1
         self._comments = []
-        self._interactions = []
+        self._interactions = Interaction()
         self._send_data = []
     
     # 단일 피드 데이터 전송
@@ -100,10 +100,10 @@ class FeedModel(BaseModel):
         
         if self._feeds:
             interaction_data = self._database.get_data_with_id(target="iid", id=self._feeds[0].iid)
-            interaction = Interaction()
-            interaction.make_with_dict(dict_data=interaction_data)
+            self._interaction = Interaction()
+            self._interaction.make_with_dict(dict_data=interaction_data)
             
-        self._set_feed_interactied(user=self._user, interaction=[interaction])
+        self._set_feed_interactied(user=self._user, interaction=[self._interaction])
         
         self._set_feed_json_data(user=self._user, feeds=self._feeds, feed_manager=feed_manager)
         return
@@ -282,6 +282,7 @@ class FeedModel(BaseModel):
             body = {
                 'feed' : self._make_dict_list_data(list_data=self._feeds),
                 'key' : self._key,
+                'interaction' :self._interaction.get_dict_form_data(),
                 'comments' : self._make_dict_list_data(list_data=self._comments),
                 'send_data' : self._send_data
             }
