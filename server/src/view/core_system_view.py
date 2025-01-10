@@ -424,7 +424,7 @@ class Core_Service_View(Master_View):
             return response
         
         # Bias 기반 커뮤니티 피드
-        @self.__app.get('/feed_explore/feed_with_community')
+        @self.__app.post('/feed_explore/feed_with_community')
         def get_feed_with_community(request:Request, raw_request:dict):
             request_manager = RequestManager()
             data_payload = CommunityRequest(request=raw_request)
