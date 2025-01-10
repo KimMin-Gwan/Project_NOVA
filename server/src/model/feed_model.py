@@ -515,7 +515,7 @@ class CommunityFeedModel(FeedModel):
     def get_response_form_data(self, head_parser):
         try:
             body = {
-                'send_data' : self._make_dict_list_data(list_data=self._send_data),
+                'send_data' : self._send_data,
                 'last_fid' : self.__last_fid
             }
 
