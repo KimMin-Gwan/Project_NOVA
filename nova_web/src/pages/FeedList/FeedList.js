@@ -47,12 +47,11 @@ export default function FeedList(isUserState) {
   const [mode, setMode] = useState(initialMode);
   let navigate = useNavigate();
 
-  const FETCH_URL = "https://nova-platform.kr/feed_explore/";
-  function fetchData() {
+  function fetchBiasCategoryData(bid) {
     let send_data = {
       header: header,
       body: {
-        bid: "",
+        bid: bid || "",
         board: "",
         last_fid: "",
       },
@@ -74,16 +73,24 @@ export default function FeedList(isUserState) {
           setNextData(data.body.last_fid);
           setIsLoading(false);
         });
-    } else if (type === "best") {
+    }
+  }
+
+  useEffect(() => {
+    fetchBiasCategoryData();
+  }, []);
+
+  const FETCH_URL = "https://nova-platform.kr/feed_explore/";
+  function fetchData() {
+    if (type === "best") {
       fetch(`${FETCH_URL}today_best`, {
         credentials: "include",
       })
         .then((response) => response.json())
         .then((data) => {
           console.log("first feed 3개", data.body);
-          setFeedData(data.body.send_data.map((feed, i) => feed));
-          console.log(data.body.send_data[0].interaction);
-          setFeedInteraction(data.body.send_data.map((interaction, i) => interaction));
+          setFeedData(data.body.send_data);
+          // setFeedInteraction(data.body.send_data.map((interaction, i) => interaction));
           setNextData(data.body.key);
           setIsLoading(false);
         });
@@ -95,6 +102,7 @@ export default function FeedList(isUserState) {
         .then((data) => {
           console.log("first feed 3개", data.body);
           setFeedData(data.body.send_data);
+          // setFeedInteraction(data.body.send_data.map((interaction, i) => interaction));
           setNextData(data.body.key);
           setIsLoading(false);
         });
@@ -130,6 +138,8 @@ export default function FeedList(isUserState) {
       .then((data) => {
         console.log("tag", data);
         setFeedData(data.body.send_data);
+        // setFeedInteraction(data.body.send_data.map((interaction, i) => interaction));
+
         setNextData(data.body.key);
         setIsLoading(false);
       });
@@ -166,6 +176,14 @@ export default function FeedList(isUserState) {
             const newData = [...prevData, ...data.body.send_data];
             return newData;
           });
+          // setFeedInteraction(data.body.send_data.map((interaction, i) => interaction));
+          // setFeedInteraction((prevData) => {
+          //   const newData = [
+          //     ...prevData,
+          //     ...data.body.send_data.map((interaction, i) => interaction),
+          //   ];
+          //   return newData;
+          // });
           setIsLoading(false);
           console.log("mor1", data);
         });
@@ -202,6 +220,54 @@ export default function FeedList(isUserState) {
     }
   }
 
+  let [isError, setIsError] = useState();
+  async function handleInteraction(event, fid, action) {
+    event.preventDefault();
+    setIsLoading(true);
+    await fetch(
+      `https://nova-platform.kr/feed_explore/interaction_feed?fid=${fid}&action=${action}`,
+      {
+        credentials: "include",
+      }
+    )
+      .then((response) => {
+        if (!response.ok) {
+          if (response.status === 401) {
+            setIsError(response.status);
+            navigate("/novalogin");
+          } else {
+            throw new Error(`status: ${response.status}`);
+          }
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+        console.log("클릭 ", feedData.feed); //배열이라 안나오는듯
+        console.log("상호작용 전 피드 데이터", feedData); //여기선 다 나옴
+        // setFeedData((prevFeeds) => {
+        //   return prevFeeds.map((feed, i) =>
+        //     feed.interaction.fid === fid
+        //       ? {
+        //           ...feed.interaction,
+        //           attend: data.body.interaction.attend,
+        //           result: data.body.interaction.result,
+        //         }
+        //       : feed.interaction
+        //   );
+        // });
+        // setMyAttend(data.body.feed[0].attend);
+        // setFeedInteraction(data.body.interaction);
+        setFeedData((prevFeeds) => {
+          return prevFeeds.map((feed) => {
+            return feed.feed.fid === fid && { ...feed, interaction: data.body.interaction };
+          });
+        });
+        console.log("상호작용 후 피드 데이터", feedData); //변경되지 않음, 왜?
+        setIsLoading(false);
+      });
+  }
+
   useEffect(() => {
     observerRef.current = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
@@ -225,6 +291,7 @@ export default function FeedList(isUserState) {
 
   useEffect(() => {
     fetchData();
+
     return () => {
       setFeedData([]);
     };
@@ -277,7 +344,9 @@ export default function FeedList(isUserState) {
             </button>
           </div>
         </header>
-        {type == "bias" && <BiasBoxes setBiasId={setBiasId} />}
+        {type == "bias" && (
+          <BiasBoxes setBiasId={setBiasId} fetchBiasCategoryData={fetchBiasCategoryData} />
+        )}
         {type === "all" && (
           // <BiasBoxes />
           <div className={style["search-section"]}>
@@ -314,6 +383,15 @@ export default function FeedList(isUserState) {
         <div className={style["scroll-area"]}>
           {feedData &&
             feedData.map((feed, i) => {
+              if (!feed.feed) {
+                console.log("erororo");
+                console.log(feed.feed);
+                return null;
+              } else if (!feed.feed.fid) {
+                console.log("qoqoqoqoqo");
+                return null;
+              }
+
               return (
                 <Feed
                   key={feed.feed.fid}
@@ -325,6 +403,7 @@ export default function FeedList(isUserState) {
                   feedInteraction={feedInteraction}
                   setFeedData={setFeedData}
                   isUserState={isUserState}
+                  handleInteraction={handleInteraction}
                 ></Feed>
               );
             })}

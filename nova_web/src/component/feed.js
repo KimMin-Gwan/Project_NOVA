@@ -33,6 +33,7 @@ export default function Feed({
   setFeedData,
   img_circle,
   isUserState,
+  handleInteraction,
 }) {
   // function handleRequestURL() {
   //     window.open(requestURL, '_blank', "noopener, noreferrer");
@@ -52,51 +53,51 @@ export default function Feed({
     }
   };
 
-  function handleInteraction(event, fid, action) {
-    event.preventDefault();
-    console.log("fid", fid);
+  // function handleInteraction(event, fid, action) {
+  //   event.preventDefault();
+  //   console.log("fid", fid);
 
-    fetch(`https://nova-platform.kr/feed_explore/interaction_feed?fid=${fid}&action=${action}`, {
-      credentials: "include",
-    })
-      .then((response) => {
-        if (!response.ok) {
-          if (response.status === 401) {
-            setIsError(response.status);
-            navigate("/novalogin");
-          } else {
-            throw new Error(`status: ${response.status}`);
-          }
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log(data);
-        // setFeedData((prevFeeds) => {
-        //   return prevFeeds.map((feed, i) =>
-        //     feed.interaction.fid === fid
-        //       ? {
-        //           ...feed.interaction,
-        //           attend: data.body.interaction.attend,
-        //           result: data.body.interaction.result,
-        //         }
-        //       : feed.interaction
-        //   );
-        // });
-        // setMyAttend(data.body.feed[0].attend);
-        // setFeedData((prevFeeds) => {
-        //   return prevFeeds.map((feed) => {
-        //     return feed.feed.fid === fid
-        //       ? {
-        //           ...feed.interaction,
-        //           attend: data.body.interaction.attend,
-        //           result: data.body.interaction.result,
-        //         }
-        //       : feed.interaction;
-        //   });
-        // });
-      });
-  }
+  //   fetch(`https://nova-platform.kr/feed_explore/interaction_feed?fid=${fid}&action=${action}`, {
+  //     credentials: "include",
+  //   })
+  //     .then((response) => {
+  //       if (!response.ok) {
+  //         if (response.status === 401) {
+  //           setIsError(response.status);
+  //           navigate("/novalogin");
+  //         } else {
+  //           throw new Error(`status: ${response.status}`);
+  //         }
+  //       }
+  //       return response.json();
+  //     })
+  //     .then((data) => {
+  //       console.log(data);
+  //       // setFeedData((prevFeeds) => {
+  //       //   return prevFeeds.map((feed, i) =>
+  //       //     feed.interaction.fid === fid
+  //       //       ? {
+  //       //           ...feed.interaction,
+  //       //           attend: data.body.interaction.attend,
+  //       //           result: data.body.interaction.result,
+  //       //         }
+  //       //       : feed.interaction
+  //       //   );
+  //       // });
+  //       // setMyAttend(data.body.feed[0].attend);
+  //       setFeedData((prevFeeds) => {
+  //         return prevFeeds.map((feed) => {
+  //           return feed.interaction.fid === fid
+  //             ? {
+  //                 ...feed.interaction,
+  //                 attend: data.body.interaction.attend,
+  //                 result: data.body.interaction.result,
+  //               }
+  //             : feed.interaction;
+  //         });
+  //       });
+  //     });
+  // }
   // 댓글 더보기 - 본문 보기
   let [isClickedMoreSee, setIsClickedMoreSee] = useState(false);
 
