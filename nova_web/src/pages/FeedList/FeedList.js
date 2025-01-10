@@ -31,6 +31,16 @@ export default function FeedList(isUserState) {
   let [feedInteraction, setFeedInteraction] = useState([]);
   let [nextData, setNextData] = useState([]);
 
+  let [biasId, setBiasId] = useState();
+
+  let header = {
+    "request-type": "default",
+    "client-version": "v1.0.1",
+    "client-ip": "127.0.0.1",
+    uid: "1234-abcd-5678",
+    endpoint: "/user_system/",
+  };
+
   const brightModeFromUrl = params.get("brightMode");
 
   const initialMode = brightModeFromUrl || localStorage.getItem("brightMode") || "bright"; // URL에서 가져오고, 없으면 로컬 스토리지에서 가져옴
@@ -39,15 +49,41 @@ export default function FeedList(isUserState) {
 
   const FETCH_URL = "https://nova-platform.kr/feed_explore/";
   function fetchData() {
+    let send_data = {
+      header: header,
+      body: {
+        bid: "",
+        board: "",
+        last_fid: "",
+      },
+    };
     // setIsLoading(true);
-    if (type === "best") {
+    if (type === "bias") {
+      fetch(`${FETCH_URL}feed_with_community`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(send_data),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("first bias data", data);
+          setFeedData(data.body.send_data);
+          setNextData(data.body.last_fid);
+          setIsLoading(false);
+        });
+    } else if (type === "best") {
       fetch(`${FETCH_URL}today_best`, {
         credentials: "include",
       })
         .then((response) => response.json())
         .then((data) => {
           console.log("first feed 3개", data.body);
-          setFeedData(data.body.send_data);
+          setFeedData(data.body.send_data.map((feed, i) => feed));
+          console.log(data.body.send_data[0].interaction);
+          setFeedInteraction(data.body.send_data.map((interaction, i) => interaction));
           setNextData(data.body.key);
           setIsLoading(false);
         });
@@ -241,7 +277,7 @@ export default function FeedList(isUserState) {
             </button>
           </div>
         </header>
-        {type == "all" && <BiasBoxes />}
+        {type == "bias" && <BiasBoxes setBiasId={setBiasId} />}
         {type === "all" && (
           // <BiasBoxes />
           <div className={style["search-section"]}>
@@ -276,20 +312,22 @@ export default function FeedList(isUserState) {
           <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>{keyword}</div>
         )}
         <div className={style["scroll-area"]}>
-          {feedData.map((feed, i) => {
-            return (
-              <Feed
-                key={feed.feed.fid + i}
-                className={`${style["feed-box"]} ${style[getModeClass(mode)]}`}
-                feed={feed.feed}
-                func={true}
-                feedData={feedData}
-                interaction={feed.interaction}
-                setFeedData={setFeedData}
-                isUserState={isUserState}
-              ></Feed>
-            );
-          })}
+          {feedData &&
+            feedData.map((feed, i) => {
+              return (
+                <Feed
+                  key={feed.feed.fid}
+                  className={`${style["feed-box"]} ${style[getModeClass(mode)]}`}
+                  feed={feed.feed}
+                  func={true}
+                  feedData={feedData}
+                  interaction={feed.interaction}
+                  feedInteraction={feedInteraction}
+                  setFeedData={setFeedData}
+                  isUserState={isUserState}
+                ></Feed>
+              );
+            })}
           {isLoading && <p>Loading...</p>}
           {isFilterClicked && (
             // <div className={style["filter-modal"]}>

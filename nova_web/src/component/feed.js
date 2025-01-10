@@ -29,6 +29,7 @@ export default function Feed({
   func,
   feedData,
   interaction,
+  feedInteraction,
   setFeedData,
   img_circle,
   isUserState,
@@ -53,6 +54,7 @@ export default function Feed({
 
   function handleInteraction(event, fid, action) {
     event.preventDefault();
+    console.log("fid", fid);
 
     fetch(`https://nova-platform.kr/feed_explore/interaction_feed?fid=${fid}&action=${action}`, {
       credentials: "include",
@@ -70,17 +72,31 @@ export default function Feed({
       })
       .then((data) => {
         console.log(data);
+        // setFeedData((prevFeeds) => {
+        //   return prevFeeds.map((feed, i) =>
+        //     feed.interaction.fid === fid
+        //       ? {
+        //           ...feed.interaction,
+        //           attend: data.body.interaction.attend,
+        //           result: data.body.interaction.result,
+        //         }
+        //       : feed.interaction
+        //   );
+        // });
         // setMyAttend(data.body.feed[0].attend);
-        setFeedData((prevFeeds) => {
-          return prevFeeds.map((feed) => {
-            return feed.fid === fid
-              ? { ...feed, attend: data.body.feed[0].attend, result: data.body.feed[0].result }
-              : feed;
-          });
-        });
+        // setFeedData((prevFeeds) => {
+        //   return prevFeeds.map((feed) => {
+        //     return feed.feed.fid === fid
+        //       ? {
+        //           ...feed.interaction,
+        //           attend: data.body.interaction.attend,
+        //           result: data.body.interaction.result,
+        //         }
+        //       : feed.interaction;
+        //   });
+        // });
       });
   }
-
   // 댓글 더보기 - 본문 보기
   let [isClickedMoreSee, setIsClickedMoreSee] = useState(false);
 
@@ -279,247 +295,14 @@ export default function Feed({
   }
   return (
     <>
-      <ContentFeed feed={feed} interaction={interaction} handleCheckStar={handleCheckStar} />
-      {
-        // feed.fclass === "card" &&
-        //   <div className={`${style.feed} ${className} `}>
-        //     <div>
-        //       {img_circle && <div style={{ height: "80px" }}></div>}
-        //       <InfoArea
-        //         color={"#7960EC"}
-        //         name={`${feed.class_name} 행성`}
-        //         date={feed.date}
-        //         supporter={`${feed.nickname}`}
-        //       ></InfoArea>
-        //       {isClickedMoreSee ? (
-        //         <div className={`${style["modal-container"]} ${style["feed-comment-modal"]}`}>
-        //           <div className={style["comment-modal"]}>
-        //             <nav className={style["top_bar"]}>댓글 더보기</nav>
-        //             <nav onClick={handleMoreSee} className={style["top_bar"]}>
-        //               닫기
-        //             </nav>
-        //             {allComments.length === 0 ? (
-        //               <div>댓글이 없습니다.</div>
-        //             ) : (
-        //               allComments.map((comment, i) => {
-        //                 return (
-        //                   <section key={comment.cid} className={style["text-section"]}>
-        //                     <div className={style["text-box"]}>
-        //                       <p className={style["text-1"]}>{comment.uname}</p>
-        //                       <p className={style["text-2"]}>{comment.body}</p>
-        //                     </div>
-        //                     <div className={style["icon-modal"]}>
-        //                       {comment.owner ? (
-        //                         <button
-        //                           onClick={(e) => {
-        //                             handleRemoveComment(comment.fid, comment.cid, e);
-        //                           }}
-        //                           className={style["button-modal"]}
-        //                         >
-        //                           삭제
-        //                         </button>
-        //                       ) : (
-        //                         <button className={style["button-modal"]}></button>
-        //                       )}
-        //                       <button className={style["button-modal"]}>신고</button>
-        //                       <div className={style["star-modal"]}>
-        //                         <img
-        //                           src={comment.like_user ? star_color : star}
-        //                           alt="clickable"
-        //                           onClick={(e) => {
-        //                             handleCommentLike(comment.fid, comment.cid, e);
-        //                           }}
-        //                           className={style["img-star"]}
-        //                         />
-        //                         <p>{comment.like}</p>
-        //                       </div>
-        //                     </div>
-        //                   </section>
-        //                 );
-        //               })
-        //             )}
-        //             <div className={`${style["comment_action"]} ${style["comment-input"]}`}>
-        //               <form onSubmit={(event) => handleSubmit(feed.fid, event)}>
-        //                 <input
-        //                   type="text"
-        //                   value={inputValue}
-        //                   onChange={handleChange}
-        //                   className={` ${style["comment-box"]} ${style[getModeClass(mode)]}`}
-        //                 ></input>
-        //                 <button
-        //                   type="submit"
-        //                   className={` ${style["comment-write"]} ${style[getModeClass(mode)]}`}
-        //                 >
-        //                   댓글 작성
-        //                 </button>
-        //               </form>
-        //             </div>
-        //           </div>
-        //         </div>
-        //       ) : (
-        //         <>
-        //           <Text data={feed.body} hashtag={feed.hashtag}></Text>
-        //           {!img_circle && (
-        //             <div className={style["home_feed_img"]}>
-        //               {/* 1개이미지 */}
-        //               {feed.num_image === 1 && (
-        //                 <img
-        //                   style={{ cursor: "pointer" }}
-        //                   src={feed.image[0]}
-        //                   alt="img"
-        //                   onClick={() => {
-        //                     handleRequestURL(feed.image[0]);
-        //                   }}
-        //                 />
-        //               )}
-        //               {/* 2개이미지 */}
-        //               {feed.num_image === 2 && (
-        //                 <div className={style["image-box"]}>
-        //                   <div className={`${style["image-show"]} ${style["two-image"]}`}>
-        //                     {feed.image.map((img, i) => {
-        //                       return (
-        //                         <img
-        //                           style={{ cursor: "pointer" }}
-        //                           key={i}
-        //                           src={img}
-        //                           alt="img"
-        //                           onClick={() => {
-        //                             handleRequestURL(img);
-        //                           }}
-        //                         />
-        //                       );
-        //                     })}
-        //                   </div>
-        //                 </div>
-        //               )}
-        //               {/* 3개이미지 */}
-        //               {feed.num_image === 3 && (
-        //                 <div className={style["image-box"]}>
-        //                   <div className={`${style["image-show"]} ${style["three-image"]}`}>
-        //                     {feed.image.map((img, i) => {
-        //                       return (
-        //                         <img
-        //                           style={{ cursor: "pointer" }}
-        //                           key={i}
-        //                           src={img}
-        //                           alt="img"
-        //                           onClick={() => {
-        //                             handleRequestURL(img);
-        //                           }}
-        //                         />
-        //                       );
-        //                     })}
-        //                   </div>
-        //                 </div>
-        //               )}
-        //               {/* 4개이미지 */}
-        //               {feed.num_image === 4 && (
-        //                 <div className={style["image-show"]}>
-        //                   {feed.image.map((img, i) => {
-        //                     return (
-        //                       <img
-        //                         style={{ cursor: "pointer" }}
-        //                         key={i}
-        //                         src={img}
-        //                         alt="img"
-        //                         onClick={() => {
-        //                           handleRequestURL(img);
-        //                         }}
-        //                       />
-        //                     );
-        //                   })}
-        //                 </div>
-        //               )}
-        //               {/* 5개이상 */}
-        //               {feed.num_image >= 5 && (
-        //                 <div className={style["image-box"]}>
-        //                   <div className={`${style["image-origin"]} ${style["five-over-image"]}`}>
-        //                     {feed.image.map((img, i) => {
-        //                       return (
-        //                         <img
-        //                           style={{ cursor: "pointer" }}
-        //                           key={i}
-        //                           src={img}
-        //                           alt="img"
-        //                           onClick={() => {
-        //                             handleRequestURL(img);
-        //                           }}
-        //                         />
-        //                       );
-        //                     })}
-        //                   </div>
-        //                 </div>
-        //               )}
-        //             </div>
-        //           )}
-        //         </>
-        //       )}
-        //     </div>
-        //     <div style={{ width: "100%", height: "50px" }}></div>
-        //     {func && (
-        //       <div className={style["function_box"]}>
-        //         <div className={style["action_btn"]}>
-        //           {isClickedMoreSee ? (
-        //             <div className={style["show_body"]} onClick={handleMoreSee}>
-        //               본문 보기
-        //             </div>
-        //           ) : (
-        //             <>
-        //               <div
-        //                 className={style["show_body"]}
-        //                 onClick={(event) => {
-        //                   handleMoreSee();
-        //                   handleShowComment(feed.fid, event);
-        //                 }}
-        //               >
-        //                 댓글 더보기
-        //               </div>
-        //               <div className={style["report_btn"]}>신고</div>
-        //             </>
-        //           )}
-        //         </div>
-        //         <div className={style["like_btn"]}>
-        //           {isUserState ? (
-        //             <FaStar
-        //               className={style.like}
-        //               style={
-        //                 feed.star_flag
-        //                   ? { fill: "yellow" }
-        //                   : { fill: "white", stroke: "black", strokeWidth: "25" }
-        //               }
-        //               onClick={(e) => {
-        //                 handleCheckStar(feed.fid, e);
-        //               }}
-        //             />
-        //           ) : (
-        //             <FaStar
-        //               className={style.like}
-        //               style={
-        //                 feed.star_flag
-        //                   ? { fill: "yellow" }
-        //                   : { fill: "white", stroke: "black", strokeWidth: "25" }
-        //               }
-        //               onClick={(e) => {
-        //                 e.preventDefault();
-        //                 alert("로그인이 필요합니다.");
-        //               }}
-        //             />
-        //           )}
-        //           <div className={style["num_like"]}>{feed.star}</div>
-        //         </div>
-        //       </div>
-        //     )}
-        //     <div className={` ${style["line"]} ${style[getModeClass(mode)]}`}></div>
-        //     {/* <Comments
-        //       feed={feed}
-        //       allComments={allComments}
-        //       setAllComments={setAllComments}
-        //       setFeedData={setFeedData}
-        //       isUserState={isUserState}
-        //     ></Comments> */}
-        //   </div>
-        // )}
-      }
+      <ContentFeed
+        feed={feed}
+        interaction={interaction}
+        feedInteraction={feedInteraction}
+        handleCheckStar={handleCheckStar}
+        handleInteraction={handleInteraction}
+      />
+
       {feed.fclass === "multiple" && (
         <div className={`${style.feed} ${className}`}>
           <div>
@@ -1585,8 +1368,15 @@ export function Comments({
 
 // 내용 별 피드 박스
 
-export function ContentFeed({ feed, interaction, handleCheckStar }) {
+export function ContentFeed({
+  feed,
+  interaction,
+  feedInteraction,
+  handleCheckStar,
+  handleInteraction,
+}) {
   let navigate = useNavigate();
+
   if (!feed) {
     return <div>loading 중</div>;
   }
@@ -1622,8 +1412,10 @@ export function ContentFeed({ feed, interaction, handleCheckStar }) {
         ) : (
           <div></div>
         )}
-        {feed.fclass === "balance" && <SelectOption feed={feed} />}
-        {feed.fclass === "multiple" && <QuizOption feed={feed} />}
+        {/* {feed.fclass === "short" && <SelectOption feed={feed} interaction={interaction} />} */}
+        {feed.fclass === "short" && (
+          <QuizOption feed={feed} interaction={interaction} handleInteraction={handleInteraction} />
+        )}
         {feed.fclass === "long" && <Viewer initialValue={feed.body} />}
       </div>
 
@@ -1655,12 +1447,23 @@ export function ContentFeed({ feed, interaction, handleCheckStar }) {
           </div>
         </div>
       </div>
-      {feed.fclass === "long" && (
-        <div className={style["long-form-container"]}>
+      {feed.fclass === "long" && interaction && (
+        <div
+          className={style["long-form-container"]}
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+        >
           <div className={style["action-container"]}>
             {interaction.choice.map((option, i) => {
               return (
-                <div key={i} className={style["action-box"]}>
+                <div
+                  key={i}
+                  className={style["action-box"]}
+                  onClick={(e) => {
+                    handleInteraction(e, feed.fid, i);
+                  }}
+                >
                   <div
                     className={style["action-result"]}
                     style={{ width: `${interaction.result[i]}%` }}
@@ -1708,11 +1511,11 @@ export function ContentFeed({ feed, interaction, handleCheckStar }) {
   );
 }
 
-function SelectOption({ feed }) {
+function SelectOption({ feed, feedInteraction }) {
   return (
     <div className={style["option-container"]}>
       {/* <ProgressBar point={50} type={"feed"} /> */}
-      {feed.choice.map((option, i) => {
+      {feedInteraction.choice.map((option, i) => {
         return (
           <button key={i} className={style["option"]} onClick={(e) => e.stopPropagation()}>
             {option}
@@ -1723,13 +1526,20 @@ function SelectOption({ feed }) {
   );
 }
 
-function QuizOption({ feed }) {
+function QuizOption({ feed, interaction, handleInteraction }) {
   return (
     <ol className={style["quiz-container"]}>
-      {feed.choice.map((option, i) => {
+      {interaction.choice.map((option, i) => {
         return (
-          <li key={i} style={{ backgroundColor: "#D2C8F7" }} onClick={(e) => e.stopPropagation()}>
-            {i + 1}. {option}
+          <li
+            key={i}
+            style={{ backgroundColor: "#D2C8F7" }}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleInteraction(e, interaction.fid, i);
+            }}
+          >
+            {i + 1}. {option} / {interaction.result[i]}
           </li>
         );
       })}
