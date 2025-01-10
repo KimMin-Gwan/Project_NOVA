@@ -11,6 +11,7 @@ class ObjectStorageConnection:
     def __init__(self):
         self.__project_bucket = "nova-project-image"
         self.__feed_bucket= "nova-feed-project-body"
+        self.__notice_bucket= "nova-notice-body"
 
     # 오브젝트 스토리지와 연결할때는 이것을 실행해야함
     def __init_boto3(self):
@@ -26,6 +27,7 @@ class ObjectStorageConnection:
 
     # 프로젝트 바디 부분 불러오는 부분
     def get_project_body(self, pid):
+        self.__init_boto3()
         
         pid = "5"
         target_url = self.__project_endpoint + pid + ".html"
@@ -43,10 +45,18 @@ class ObjectStorageConnection:
         #html_content = response.content
         return html_content
     
+    # 피드 바디 데이터 불러오는 부분
+    def get_notice_body(self, nid):
+        self.__init_boto3()
+        target_url = self.__endpoint_url + "/" + self.__notice_bucket + "/" + nid + ".html"
+        response = get(url=target_url)
+        html_content = response.content.decode("utf-8")
+        #html_content = response.content
+        return html_content
+    
     # 피드 바디 데이터 만들기
     def make_new_feed_body_data(self, fid, body):
         self.__init_boto3()
-
         # 파일 이름 생성 (e.g., saved_file.html)
         path = './model/local_database/feed_temp_file/'
         file_name = f"{fid}.html"
