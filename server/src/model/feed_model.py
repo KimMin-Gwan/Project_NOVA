@@ -12,7 +12,7 @@ class FeedModel(BaseModel):
         self._feeds = []
         self._key = -1
         self._comments = []
-        self._interactions = Interaction()
+        self._interaction = Interaction()
         self._send_data = []
     
     # 단일 피드 데이터 전송
