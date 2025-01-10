@@ -422,6 +422,22 @@ class Core_Service_View(Master_View):
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response
+        
+        # Bias 기반 커뮤니티 피드
+        @self.__app.get('/feed_explore/feed_with_community')
+        def get_feed_with_community(request:Request, raw_request:dict):
+            request_manager = RequestManager()
+            data_payload = CommunityRequest(request=raw_request)
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+
+            feed_controller =Feed_Controller(feed_manager=self.__feed_manager)
+            model = feed_controller.get_feed_in_bias_feed_page(database=self.__database,
+                                                    request=request_manager,
+                                                    feed_search_engine=self.__feed_search_engine)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
 
         # 숏피드에서 맨처음에 feed 데이터를 fid로 검색하기
         @self.__app.get('/feed_explore/get_feed')
@@ -739,6 +755,14 @@ class SampleRequest(RequestHeader):
         body = request['body']
         self.uid = body['uid']
         self.date = body['date']
+        
+class CommunityRequest(RequestHeader):
+    def __init__(self, request) -> None:
+        super().__init__(request)
+        body = request['body']
+        self.bid = body['bid']
+        self.board = body['board']
+        self.last_fid = body['last_fid']
 
 class HomeFeedRequest(RequestHeader):
     def __init__(self, key) -> None:

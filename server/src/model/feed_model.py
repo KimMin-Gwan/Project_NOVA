@@ -25,8 +25,37 @@ class FeedModel(BaseModel):
 
         # 포인터로 동작함
         self._set_feed_json_data(user=self._user, feeds=self._feeds, feed_manager=feed_manager)
-        
         return
+    
+    # send_data를 만들때 사용하는 함수임
+    def _make_feed_data_n_interaction_data(self, feed_manager, fid_list):
+        feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=fid_list)
+
+        feeds = []
+        iids = []
+
+        for feed_data in feed_datas:
+            feed = Feed()
+            feed.make_with_dict(feed_data)
+            feeds.append(feed)
+            if feed.iid != "":
+                iids.append(feed.iid)
+
+        self._set_feed_json_data(user=self._user, feeds=feeds, feed_manager=feed_manager)
+        
+        interaction_datas = self._database.get_datas_with_ids(target_id="iid", ids=iids)
+        interactions = []
+        
+        for interaction_data in interaction_datas:
+            interaction = Interaction()
+            interaction.make_with_dict(interaction_data)
+            interactions.append(interaction)
+            
+        # 인터엑션 넣을 필요 있음
+        send_data = self.__set_send_data(feeds=feeds, interactions=interactions)
+        
+        return send_data
+        
 
     def set_feed_data(self, feed_search_engine:FeedSearchEngine, feed_manager,
                         target_type="default", target="", num_feed=1, index=-1):
@@ -34,30 +63,7 @@ class FeedModel(BaseModel):
         fid_list, self._key = feed_search_engine.try_search_feed(
             target_type=target_type, target=target, num_feed=num_feed, index=index)
         
-        feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=fid_list)
-
-        feeds = []
-        iids = []
-
-        for feed_data in feed_datas:
-            feed = Feed()
-            feed.make_with_dict(feed_data)
-            feeds.append(feed)
-            if feed.iid != "":
-                iids.append(feed.iid)
-
-        self._set_feed_json_data(user=self._user, feeds=feeds, feed_manager=feed_manager)
-        
-        interaction_datas = self._database.get_datas_with_ids(target_id="iid", ids=iids)
-        interactions = []
-        
-        for interaction_data in interaction_datas:
-            interaction = Interaction()
-            interaction.make_with_dict(interaction_data)
-            interactions.append(interaction)
-            
-        # 인터엑션 넣을 필요 있음
-        self._send_data = self.__set_send_data(feeds=feeds, interactions=interactions)
+        self._send_data = self._make_feed_data_n_interaction_data(feed_manager=feed_manager, fid_list=fid_list)
         return
 
     def set_today_best_feed(self, feed_search_engine:FeedSearchEngine, feed_manager,
@@ -65,30 +71,7 @@ class FeedModel(BaseModel):
         fid_list, self._key = feed_search_engine.try_get_feed_in_recent(
             search_type="today", num_feed=num_feed, index=index)
 
-        feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=fid_list)
-
-        feeds = []
-        iids = []
-
-        for feed_data in feed_datas:
-            feed = Feed()
-            feed.make_with_dict(feed_data)
-            feeds.append(feed)
-            if feed.iid != "":
-                iids.append(feed.iid)
-
-        self._set_feed_json_data(user=self._user, feeds=feeds, feed_manager=feed_manager)
-        
-        interaction_datas = self._database.get_datas_with_ids(target_id="iid", ids=iids)
-        interactions = []
-        
-        for interaction_data in interaction_datas:
-            interaction = Interaction()
-            interaction.make_with_dict(interaction_data)
-            interactions.append(interaction)
-            
-        # 인터엑션 넣을 필요 있음
-        self._send_data = self.__set_send_data(feeds=feeds, interactions=interactions)
+        self._send_data = self._make_feed_data_n_interaction_data(feed_manager=feed_manager, fid_list=fid_list)
         return
 
     def set_weekly_best_feed(self, feed_search_engine:FeedSearchEngine, feed_manager,
@@ -96,30 +79,7 @@ class FeedModel(BaseModel):
         fid_list, self._key = feed_search_engine.try_get_feed_in_recent(
             search_type="weekly", num_feed=num_feed, index=index)
         
-        feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=fid_list)
-
-        feeds = []
-        iids = []
-
-        for feed_data in feed_datas:
-            feed = Feed()
-            feed.make_with_dict(feed_data)
-            feeds.append(feed)
-            if feed.iid != "":
-                iids.append(feed.iid)
-
-        self._set_feed_json_data(user=self._user, feeds=feeds, feed_manager=feed_manager)
-        
-        interaction_datas = self._database.get_datas_with_ids(target_id="iid", ids=iids)
-        interactions = []
-        
-        for interaction_data in interaction_datas:
-            interaction = Interaction()
-            interaction.make_with_dict(interaction_data)
-            interactions.append(interaction)
-            
-        # 인터엑션 넣을 필요 있음
-        self._send_data = self.__set_send_data(feeds=feeds, interactions=interactions)
+        self._send_data = self._make_feed_data_n_interaction_data(feed_manager=feed_manager, fid_list=fid_list)
         return
 
     def set_all_feed(self, feed_search_engine:FeedSearchEngine, feed_manager,
@@ -127,32 +87,7 @@ class FeedModel(BaseModel):
         fid_list, self._key = feed_search_engine.try_get_feed_in_recent(
             search_type="recent", num_feed=num_feed, index=index)
         
-        feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=fid_list)
-
-        feeds = []
-        iids = []
-
-        for feed_data in feed_datas:
-            feed = Feed()
-            feed.make_with_dict(feed_data)
-            feeds.append(feed)
-            if feed.iid != "":
-                iids.append(feed.iid)
-
-        self._set_feed_json_data(user=self._user, feeds=feeds, feed_manager=feed_manager)
-        
-        
-        interaction_datas = self._database.get_datas_with_ids(target_id="iid", ids=iids)
-        interactions = []
-        
-        
-        for interaction_data in interaction_datas:
-            interaction = Interaction()
-            interaction.make_with_dict(interaction_data)
-            interactions.append(interaction)
-            
-        # 인터엑션 넣을 필요 있음
-        self._send_data = self.__set_send_data(feeds=feeds, interactions=interactions)
+        self._send_data = self._make_feed_data_n_interaction_data(feed_manager=feed_manager, fid_list=fid_list)
         return
     
 
@@ -162,6 +97,14 @@ class FeedModel(BaseModel):
         self._feeds = feed_manager.try_interaction_feed(user=self._user,
                                                     fid=data_payload.fid,
                                                     action=data_payload.action)
+        
+        if self._feeds:
+            interaction_data = self._database.get_data_with_id(target="iid", id=self._feeds[0].iid)
+            interaction = Interaction()
+            interaction.make_with_dict(dict_data=interaction_data)
+            
+        self._set_feed_interactied(user=self._user, interaction=[interaction])
+        
         self._set_feed_json_data(user=self._user, feeds=self._feeds, feed_manager=feed_manager)
         return
 
@@ -170,6 +113,7 @@ class FeedModel(BaseModel):
     def try_staring_feed(self, feed_manager:FeedManager, data_payload):
         self._feeds = feed_manager.try_staring_feed(user=self._user,
                                                 fid=data_payload.fid)
+        
         
         self._set_feed_json_data(user=self._user, feeds=self._feeds, feed_manager=feed_manager)
         return
@@ -513,3 +457,71 @@ class FeedSearchModel(FeedModel):
         except Exception as e:
             raise CoreControllerLogicError("response making error | " + e)
         
+        
+class CommunityFeedModel(FeedModel):
+    def __init__(self, database:Local_Database) -> None:
+        super().__init__(database)
+        self.__last_fid = ""
+        
+    # 단순히 bid만 요청했을 때
+    def try_search_feed_with_bid(self, bid:str, last_fid:str, feed_search_engine:FeedSearchEngine,
+                                 feed_manager:FeedManager):
+        
+        # bias를 선택하지 않았을 때
+        if bid == "":
+            fid_list, self.__last_fid = feed_search_engine.try_feed_with_bid_n_filtering(
+                target_bids=self._user.bids, page_size=1,
+                last_fid=last_fid, search_type="default",
+            )
+        
+        # bias를 선택했을 때
+        else:
+            fid_list, self.__last_fid = feed_search_engine.try_feed_with_bid_n_filtering(
+                target_bids=[bid], page_size=1, 
+                last_fid=last_fid, search_type="just_bias",
+            )
+    
+        # 보낼 데이터 만들어 주기
+        self._send_data = self._make_feed_data_n_interaction_data(feed_manager=feed_manager, fid_list=fid_list)
+        return 
+        
+    # community와 board_type을 함께 요청했을 때
+    def try_search_feed_with_bid_n_board_type(self, bid:str, last_fid:str,
+                                             board_type:str,
+                                             feed_search_engine:FeedSearchEngine,
+                                             feed_manager:FeedManager
+                                             ):
+        
+        # bias를 선택하지 않았을 때
+        if bid =="":
+            fid_list, self.__last_fid = feed_search_engine.try_feed_with_bid_n_filtering(
+                target_bids=self._user.bids, board_type=board_type,
+                page_size=1, last_fid=last_fid, search_type="bias_and_board",
+            )
+        
+        # bias를 선택했을 때
+        else:
+            fid_list, self.__last_fid = feed_search_engine.try_feed_with_bid_n_filtering(
+                target_bids=[bid], board_type=board_type,
+                page_size=1, last_fid=last_fid, search_type="bias_and_board",
+            )
+        
+        # 보낼 데이터 만들어 주기
+        self._send_data = self._make_feed_data_n_interaction_data(feed_manager=feed_manager, fid_list=fid_list)
+        return 
+
+    def get_response_form_data(self, head_parser):
+        try:
+            body = {
+                'send_data' : self._make_dict_list_data(list_data=self._send_data),
+                'last_fid' : self.__last_fid
+            }
+
+            response = self._get_response_data(head_parser=head_parser, body=body)
+            return response
+
+        except Exception as e:
+            raise CoreControllerLogicError("response making error | " + e)
+        
+        
+            

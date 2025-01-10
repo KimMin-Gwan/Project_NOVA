@@ -5,7 +5,6 @@ from others import CheckManager
 
 
 class Core_Controller:
-
     # league 데이터를 뽑아오는 보편적인 함수
     def get_league(self, database:Local_Database, request) -> BaseModel: 
         model = LeagueModel(database=database)
