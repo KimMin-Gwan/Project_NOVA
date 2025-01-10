@@ -205,10 +205,11 @@ class FeedModel(BaseModel):
     # 상호작용에서 내가 상호작용한 내용이 있는지 검토하는 부분
     def _set_feed_interactied(self, user, interaction:Interaction):
         pprint(interaction.get_dict_form_data())
-        for i, uid in enumerate(interaction.attend):
-            if uid == user.uid:
-                print(uid)
-                interaction.my_attend = i
+        for i, attend in enumerate(interaction.attend):
+            for uid in attend:
+                if uid == user.uid:
+                    print(uid)
+                    interaction.my_attend = i
         return
 
     # 전송 데이터 만들기
