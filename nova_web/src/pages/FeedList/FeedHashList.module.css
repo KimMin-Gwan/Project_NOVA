@@ -80,9 +80,9 @@
   color: #000000;
 }
 .container.bright-mode {
-  background-color: #eaeeff;
+  background-color: #f1f7ff;
   .header {
-    background-color: #eaeeff;
+    background-color: #f1f7ff;
     img {
       filter: none;
     }

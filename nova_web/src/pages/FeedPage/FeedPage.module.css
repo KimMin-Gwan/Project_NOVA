@@ -2308,6 +2308,10 @@ h5 {
   display: flex;
   justify-content: space-between;
   padding: 20px;
+  div {
+    font-size: 12px;
+    color: #797979;
+  }
 }
 
 .body-container {
@@ -2332,6 +2336,10 @@ h5 {
   justify-content: space-between;
   padding: 20px;
   align-items: center;
+  div {
+    font-size: 12px;
+    color: #797979;
+  }
 }
 
 .button-box1 {
@@ -2408,6 +2416,7 @@ h5 {
 
 .action-box {
   width: 80%;
+  height: 37px;
   cursor: pointer;
   margin: 0 auto;
   position: relative;
@@ -2421,13 +2430,12 @@ h5 {
 }
 
 .action-result {
-  height: 100%;
   width: 100%;
-  padding: 20px;
+  padding: 9px 20px;
   border-radius: 15px;
   margin: 0;
   box-sizing: content-box;
-  background-color: skyblue;
+  background-color: #dbeaff;
 }
 
 .action-points {

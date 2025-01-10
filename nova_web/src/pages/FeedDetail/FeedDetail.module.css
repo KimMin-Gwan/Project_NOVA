@@ -19,10 +19,10 @@
   cursor: pointer;
   display: flex;
   align-items: center;
-
   img {
     filter: invert(1);
-    margin-right: 5px;
+    margin-right: 10px;
+    width: 13px;
   }
 }
 
@@ -105,17 +105,17 @@
 
   padding-bottom: 15px;
   #comment {
-    width: 90%;
+    width: 95%;
     padding: 10px 0px;
     display: flex;
     margin: 0 auto;
     border-radius: 20px;
     border: none;
-    background-color: gray;
+    background-color: #ededed;
   }
 
   #comment::placeholder {
     padding: 20px;
-    color: white;
+    color: #ababab;
   }
 }
