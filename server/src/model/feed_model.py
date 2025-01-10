@@ -103,7 +103,7 @@ class FeedModel(BaseModel):
             self._interaction = Interaction()
             self._interaction.make_with_dict(dict_data=interaction_data)
             
-        self._set_feed_interactied(user=self._user, interaction=[self._interaction])
+        self._set_feed_interactied(user=self._user, interaction=self._interaction)
         
         self._set_feed_json_data(user=self._user, feeds=self._feeds, feed_manager=feed_manager)
         return
