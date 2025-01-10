@@ -71,6 +71,3 @@ class NoticeModel(BaseModel):
         self._notices = sorted(self._notices, key=lambda n:datetime.strptime(n.date, "%Y/%m/%d"))
         self._notices = self._paging_notices(self._notices, num_notices, last_nid)
         return
-
-
-    def
