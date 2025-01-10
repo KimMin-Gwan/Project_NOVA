@@ -28,6 +28,7 @@ export default function FeedList(isUserState) {
   let [isLoading, setIsLoading] = useState(true);
 
   let [feedData, setFeedData] = useState([]);
+  let [feedInteraction, setFeedInteraction] = useState([]);
   let [nextData, setNextData] = useState([]);
 
   const brightModeFromUrl = params.get("brightMode");
@@ -283,6 +284,7 @@ export default function FeedList(isUserState) {
                 feed={feed.feed}
                 func={true}
                 feedData={feedData}
+                interaction={feed.interaction}
                 setFeedData={setFeedData}
                 isUserState={isUserState}
               ></Feed>

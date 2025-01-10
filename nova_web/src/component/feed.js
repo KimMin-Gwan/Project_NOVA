@@ -28,6 +28,7 @@ export default function Feed({
   feed,
   func,
   feedData,
+  interaction,
   setFeedData,
   img_circle,
   isUserState,
@@ -278,7 +279,7 @@ export default function Feed({
   }
   return (
     <>
-      <ContentFeed feed={feed} handleCheckStar={handleCheckStar} />
+      <ContentFeed feed={feed} interaction={interaction} handleCheckStar={handleCheckStar} />
       {
         // feed.fclass === "card" &&
         //   <div className={`${style.feed} ${className} `}>
@@ -1584,7 +1585,7 @@ export function Comments({
 
 // 내용 별 피드 박스
 
-export function ContentFeed({ feed, handleCheckStar }) {
+export function ContentFeed({ feed, interaction, handleCheckStar }) {
   let navigate = useNavigate();
   if (!feed) {
     return <div>loading 중</div>;
@@ -1654,7 +1655,55 @@ export function ContentFeed({ feed, handleCheckStar }) {
           </div>
         </div>
       </div>
-      {feed.fclass === "long" && <div className={style["long-form-container"]}></div>}
+      {feed.fclass === "long" && (
+        <div className={style["long-form-container"]}>
+          <div className={style["action-container"]}>
+            {interaction.choice.map((option, i) => {
+              return (
+                <div key={i} className={style["action-box"]}>
+                  <div
+                    className={style["action-result"]}
+                    style={{ width: `${interaction.result[i]}%` }}
+                  >
+                    {option}
+                  </div>
+
+                  <div className={style["action-points"]}>{interaction.result[i]}%</div>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className={style["button-container"]}>
+            <div>신고</div>
+            <div className={style["button-box1"]}>
+              <div className={style["action-button"]}>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleCheckStar(feed.fid, e);
+                  }}
+                >
+                  <img src={star} alt="star-icon" />
+                </button>
+                <span>{feed.star}</span>
+              </div>
+
+              <div className={style["action-button"]}>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate(`/feed_detail/${feed.fid}`, { state: { commentClick: true } });
+                  }}
+                >
+                  <img src={comment} alt="comment-icon" />
+                </button>
+                <span>{feed.num_comment}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

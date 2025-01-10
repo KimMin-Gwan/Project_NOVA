@@ -224,6 +224,7 @@ function App() {
       <Route path="/bias_funding" element={<BiasFunding />}></Route>
       <Route path="/bias_funding/:type" element={<MoreProjects />}></Route>
       <Route path="/test" element={<LongFormWrite />}></Route>
+      <Route path="/test1" element={<TestRef />}></Route>
       <Route path="*" element={<div>404 Error</div>}></Route>
       {/* <Route path="/planet" element={<PlanetList />}></Route> */}
       {/* <Route path='/league_detail' element={<LeagueDetail />}></Route> */}
@@ -258,6 +259,7 @@ function App() {
                     ></img>
                   </div>
                   <Link to="/test">롱폼작성 페이지지</Link>
+                  <Link to="/test1">test page</Link>
 
                   <div className="buttons">
                     <button className="tool-button">
