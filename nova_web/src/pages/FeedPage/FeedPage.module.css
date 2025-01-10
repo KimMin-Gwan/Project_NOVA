@@ -2374,7 +2374,7 @@ h5 {
     width: 100%;
     border-radius: 15px;
     padding: 15px;
-    background-color: blue;
+    background-color: #d2c8f7;
   }
 }
 
@@ -2408,6 +2408,7 @@ h5 {
 
 .action-box {
   width: 80%;
+  cursor: pointer;
   margin: 0 auto;
   position: relative;
   display: flex;

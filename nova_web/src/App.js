@@ -288,7 +288,7 @@ function App() {
                   brightMode={brightMode}
                   type={"bias"}
                   children={<BiasBoxes setBiasId={setBiasId} />}
-                  endPoint={`/feed_list?type=all`}
+                  endPoint={`/feed_list?type=bias`}
                   customClassName="custom-height"
                 />
                 {/* <section className="my-bias">
