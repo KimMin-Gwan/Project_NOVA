@@ -347,8 +347,6 @@ class FeedModel(BaseModel):
 
         except Exception as e:
             raise CoreControllerLogicError("response making error | " + e)
-        
-
 
 # 피드를 생성하거나 수정하는 모델, 삭제에도 사용될 것
 class FeedEditModel(BaseModel):
