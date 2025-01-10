@@ -1830,10 +1830,12 @@ class FeedManager:
                 interaction.result[target] -= 1
 
             # 이제 참여한 데이터를 세팅하고 저장하면됨
+            print("action : ", action)
             if target != action:
                 user.active_feed.append(fid)
                 interaction.attend[action].append(user.uid)
                 interaction.result[action] += 1
+                print("new : ", interaction.get_dict_form_data())
 
             else:
                 #user.active_feed.remove(fid)  # 지울 필요가 없어보임 -> 주석 처리됨
