@@ -242,28 +242,13 @@ export default function FeedList(isUserState) {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
-        console.log("클릭 ", feedData.feed); //배열이라 안나오는듯
-        console.log("상호작용 전 피드 데이터", feedData); //여기선 다 나옴
-        // setFeedData((prevFeeds) => {
-        //   return prevFeeds.map((feed, i) =>
-        //     feed.interaction.fid === fid
-        //       ? {
-        //           ...feed.interaction,
-        //           attend: data.body.interaction.attend,
-        //           result: data.body.interaction.result,
-        //         }
-        //       : feed.interaction
-        //   );
-        // });
-        // setMyAttend(data.body.feed[0].attend);
-        // setFeedInteraction(data.body.interaction);
         setFeedData((prevFeeds) => {
-          return prevFeeds.map((feed) => {
-            return feed.feed.fid === fid && { ...feed, interaction: data.body.interaction };
+          const updatedFeeds = prevFeeds.map((feed) => {
+            return feed.feed.fid === fid ? { ...feed, interaction: data.body.interaction } : feed;
           });
+
+          return updatedFeeds;
         });
-        console.log("상호작용 후 피드 데이터", feedData); //변경되지 않음, 왜?
         setIsLoading(false);
       });
   }
@@ -383,15 +368,6 @@ export default function FeedList(isUserState) {
         <div className={style["scroll-area"]}>
           {feedData &&
             feedData.map((feed, i) => {
-              if (!feed.feed) {
-                console.log("erororo");
-                console.log(feed.feed);
-                return null;
-              } else if (!feed.feed.fid) {
-                console.log("qoqoqoqoqo");
-                return null;
-              }
-
               return (
                 <Feed
                   key={feed.feed.fid}
