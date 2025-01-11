@@ -1,19 +1,19 @@
-import { useEffect, useMemo, useRef, useState, useLocation } from "react";
-import style from "./FeedHashList.module.css";
+import "@toast-ui/editor/dist/toastui-editor-viewer.css";
+import { Viewer } from "@toast-ui/react-editor";
+import { useEffect, useLocation, useMemo, useRef, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import BiasBoxes from "../../component/BiasBoxes.js";
+import FilterModal from "../../component/FilterModal/FilterModal.js";
+import SearchBox from "../../component/SearchBox.js";
+import KeywordBox from "../../component/keyword/KeywordBox.js";
+import { getModeClass } from "./../../App.js";
+import Feed, { Comments } from "./../../component/feed";
 import logo from "./../../img/NOVA_Platform.png";
 import logo2 from "./../../img/logo2.png";
 import menu from "./../../img/menu-burger.png";
-import Feed, { Comments } from "./../../component/feed";
-import { useNavigate, useSearchParams } from "react-router-dom";
 import LeftBar from "./../WideVer/LeftBar.js";
 import RightBar from "./../WideVer/RightBar.js";
-import { getModeClass } from "./../../App.js";
-import BiasBoxes from "../../component/BiasBoxes.js";
-import SearchBox from "../../component/SearchBox.js";
-import KeywordBox from "../../component/keyword/KeywordBox.js";
-import FilterModal from "../../component/FilterModal/FilterModal.js";
-import { Viewer } from "@toast-ui/react-editor";
-import "@toast-ui/editor/dist/toastui-editor-viewer.css";
+import style from "./FeedHashList.module.css";
 
 export default function FeedList(isUserState) {
   const [params] = useSearchParams();
@@ -223,7 +223,7 @@ export default function FeedList(isUserState) {
   let [isError, setIsError] = useState();
   async function handleInteraction(event, fid, action) {
     event.preventDefault();
-    setIsLoading(true);
+    // setIsLoading(true);
     await fetch(
       `https://nova-platform.kr/feed_explore/interaction_feed?fid=${fid}&action=${action}`,
       {
