@@ -1,6 +1,9 @@
 from model import *
 from others import UserNotExist, CustomError
 
+from src.model.notice_model import NoticeModel
+
+
 class Sub_Controller:
     def sample_func(self, database:Local_Database, request) -> BaseModel: 
         model = BaseModel(database=database)
@@ -33,28 +36,37 @@ class Sub_Controller:
     def try_get_notice_sample(self, database:Local_Database, data_payload) -> BaseModel: 
         model = NoticeModel(database=database)
         
-        # 1. bid가 선택되었는지 확인
-        # 만약 bid가 선택되었다면 -> bid 포함된 공지 리스트 
+        # bid가 선택되었는지 확인
+        # 만약 bid가 선택되었다면 -> bid 포함된 공지 리스트
         # bid가 없다면 -> bid가 포함되지 않은 공지 리스트
-    
-        model.set_base_notice_data()
-        model.set_bias_notice_data(bid=data_payload.bid)
-        model.set_none_bias_notice_data()
-        
-        model.set_send_notice_data()
+        model.set_base_notices_data()
+
+        # 2. BIAS 전용 공지와, 전체용 공지를 나누는 작업
+        # BIAS가 선택되지 않았을 경우, BID가 ""로 들어가게 될것이다.
+        # BID가 없는경우라면, NOTICE_FOR_BIAS 찾는 과정에서 BID를 통한 BIAS찾기에서 값이 없을 것(BID=""인 BIAS는 없으니까)
+        model.set_bias_notices_data(bid=data_payload.bid)
+        model.set_none_bias_notices_data()
+
+        # 전송 데이터를 만드는 과정
+        model.set_send_notice_data(last_nid=data_payload.last_nid)
         return model
-        
-    def try_get_image_tag(self, database:Local_Database, data_payload) -> BaseModel: 
+
+    def try_get_image_tag(self, database:Local_Database, data_payload) -> BaseModel:
         model = ImageTagModel(database=database)
 
         model.get_image(url = data_payload.url)
 
         return model
 
-    def get_notice_list(self, database:Local_Database) -> BaseModel: 
-        model = NoticeListModel(database=database)
+    # SubModel에 있는 Notice 모델과 NoticeListModel의 기능을 notice_model의 NoticeModel에 통합을 시킴
+    # 나누는 이유가 없어보여서 통합 했음.
+    def get_notice_list(self, database:Local_Database) -> BaseModel:
+        # model = NoticeListModel(database=database)
+        model = NoticeModel(database=database)
+
         try:
             model.get_notice_list()
+            model.set_send_notice_data_for_details()
 
         except CustomError as e:
             print("Error Catched : ", e.error_type)
@@ -65,12 +77,14 @@ class Sub_Controller:
             model.set_state_code(e.error_code) # 종합 에러
 
         finally:
+
             return model
 
     def get_notice_detail(self, database:Local_Database, request) -> BaseModel: 
         model = NoticeModel(database=database)
         try:
             model.get_notice(nid = request.nid)
+            model.set_send_notice_data_for_details()
 
         except CustomError as e:
             print("Error Catched : ", e.error_type)
