@@ -452,6 +452,11 @@ class ManagedFeedBiasTable:
         return self.__paging_list_df(fid_list=filtered_feeds_df['fid'].tolist(),
                                      fid=last_fid, page_size=page_size)
 
+    def filtering_board_without_bid(self, last_fid:str, page_size:int, board_type:str):
+        filtered_feeds_df = self.__feed_df[(self.__feed_df['board_type'] == board_type)]
+        return self.__paging_list_df(fid_list=filtered_feeds_df['fid'].tolist(),
+                                     fid=last_fid, page_size=page_size)
+
     def filtering_community_board(self, last_fid:str, page_size:int, bid:str, board_type:str):
         # 게시판 분리하여 필터링
         # 이 때, BID를 통한 필터링도 같이 선행되어야 함.
@@ -646,8 +651,6 @@ class FeedSearchEngine:
     def try_feed_with_bid_n_filtering(self, target_bids:list[str]=[""], board_type="default",
                                       page_size=1, last_fid="", search_type="default"
                                       ):
-        
-        last_fid = ""
         result = []
         
         # 선택 없음 상태에서 요청
@@ -661,12 +664,10 @@ class FeedSearchEngine:
         # 야 이건 Bias 선택안하면 Board는 전체로만 나와야하는거 아니냐
         # Bias마다 Board가 다 달라지는거라고 생각했는ㄷ
 
-
-
         # bias를 선택하지 않고 board만 선택했을 때 요청
         # 이것만 추가되면됨 -> bid 말고 bids (list) 로 변경
         elif search_type == "board_only":
-            result = self.__filter_manager.filtering_board_community(bid=target_bids, board_type=board_type,
+            result = self.__filter_manager.filtering_board_no_bid(board_type=board_type,
                                                                      last_fid=last_fid, page_size=page_size)
             
         # bias와 board를 모두 선택했들 때 요청
@@ -1246,6 +1247,9 @@ class FilteringManager:
         # Search Engine에 들어가기 전에 BID 리스트를 검사할거임
         # BID 리스트 요소는 1개가 될 수 있고, 아니면 선택을 하지 않아서 여러 개가 될 수 있음.
         return self.__managed_feed_bias_table.filtering_bias_community(bids=bids, last_fid=last_fid, page_size=page_size)
+
+    def filtering_board_no_bid(self, board_type:str, page_size:int, last_fid=""):
+        return self.__managed_feed_bias_table.filtering_board_without_bid(board_type=board_type, page_size=page_size, last_fid=last_fid)
 
     def filtering_board_community(self, bid:str, board_type:str, page_size:int, last_fid:str=""):
         # 게시판 타입마다 필터링하는 함수.
