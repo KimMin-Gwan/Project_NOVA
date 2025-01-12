@@ -44,6 +44,7 @@ import RankingFunding from "./pages/NovaFunding/FundingRanking/FundingRanking.js
 import OpenRanking from "./pages/NovaFunding/FundingRanking/OpenRanking.js";
 import BiasFunding from "./pages/NovaFunding/BiasFunding/BiasFunding.js";
 import RecommendAll from "./pages/NovaFunding/BiasFunding/MoreProjects.js";
+import FollowPage from "./pages/FollowPage/FollowPage.js";
 
 import logo from "./img/NOVA_Platform.png";
 import logo2 from "./img/logo2.png";
@@ -222,6 +223,7 @@ function App() {
       <Route path="/funding_ranking" element={<RankingFunding />}></Route>
       <Route path="/open_ranking" element={<OpenRanking />}></Route>
       <Route path="/bias_funding" element={<BiasFunding />}></Route>
+      <Route path="/follow_page" element={<FollowPage />}></Route>
       <Route path="/bias_funding/:type" element={<MoreProjects />}></Route>
       <Route path="/test" element={<LongFormWrite />}></Route>
       <Route path="/test1" element={<TestRef />}></Route>
@@ -252,11 +254,7 @@ function App() {
                       navigate("/");
                     }}
                   >
-                    <img
-                      src={logo2}
-                      alt="logo"
-                      className={`logo-st ${getModeClass(brightMode)}`}
-                    ></img>
+                    <img src={logo2} alt="logo" className={`logo-st ${getModeClass(brightMode)}`}></img>
                   </div>
                   <Link to="/test">롱폼작성 페이지지</Link>
                   <Link to="/test1">test page</Link>
@@ -344,13 +342,7 @@ function App() {
                   endPoint={`/feed_list?type=weekly_best`}
                 />
 
-                <FeedThumbnail
-                  title={"전체 글"}
-                  feedData={allFeed}
-                  brightMode={brightMode}
-                  allPost={<AllPost allFeed={allFeed} />}
-                  endPoint={"/feed_list?type=all"}
-                />
+                <FeedThumbnail title={"전체 글"} feedData={allFeed} brightMode={brightMode} allPost={<AllPost allFeed={allFeed} />} endPoint={"/feed_list?type=all"} />
                 {/* <AllPost brightMode={brightMode} /> */}
               </section>
 
