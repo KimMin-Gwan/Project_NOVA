@@ -57,6 +57,7 @@ import FeedDetail from "./pages/FeedDetail/FeedDetail.js";
 import TestRef from "./component/TestRef.js";
 import FilterModal from "./component/FilterModal/FilterModal.js";
 import LongFormWrite from "./pages/LongFormWrite/LongFormWrite.js";
+import NoticeBox from "./component/NoticeBox/index.js";
 
 // 다크 모드 클래스 반환 함수
 export function getModeClass(mode) {
@@ -178,7 +179,8 @@ function App() {
     return localStorage.getItem("brightMode") || "bright"; // 기본값은 'bright'
   });
   useEffect(() => {
-    document.body.className = brightMode === "dark" ? "dark-mode" : "bright-mode";
+    document.body.className =
+      brightMode === "dark" ? "dark-mode" : "bright-mode";
   }, [brightMode]);
 
   const handleModeChange = (newMode) => {
@@ -187,16 +189,25 @@ function App() {
   return (
     <Routes>
       <Route path="/write_feed" element={<WriteFeed />}></Route>
-      <Route path="/more_see" element={<MoreSee onModeChange={handleModeChange} />}></Route>
+      <Route
+        path="/more_see"
+        element={<MoreSee onModeChange={handleModeChange} />}
+      ></Route>
       <Route path="/galaxy" element={<GalaxyList />}></Route>
-      <Route path="/feed_page" element={<FeedPage brightMode={brightMode} />}></Route>
+      <Route
+        path="/feed_page"
+        element={<FeedPage brightMode={brightMode} />}
+      ></Route>
       <Route path="/signup" element={<SignUp />}></Route>
       <Route path="/terms_page" element={<Temrs />}></Route>
       <Route path="/league_detail" element={<LeaguePage />}></Route>
       <Route path="/notice" element={<NoticeList />} />
       {/* Dynamic Route for Notice Details */}
       <Route path="/notice/:nid" element={<Notice />} />
-      <Route path="/my_write_feed" element={<MyWriteFeed brightMode={brightMode} />} />
+      <Route
+        path="/my_write_feed"
+        element={<MyWriteFeed brightMode={brightMode} />}
+      />
       <Route path="/my_interest_feed" element={<MyInterestFeed />} />
       <Route path="/my_comment_feed" element={<MyCommentFeed />} />
       <Route path="/my_active_feed" element={<MyActiveFeed />} />
@@ -206,16 +217,28 @@ function App() {
       <Route path="/namecard" element={<NameCard />}></Route>
       <Route path="/mypage" element={<MyPage />}></Route>
       <Route path="/bias_certify" element={<BiasCertify />}></Route>
-      <Route path="/bias_info/user_contribution" element={<BiasDetail />}></Route>
-      <Route path="/novalogin" element={<NOVALogin brightMode={brightMode} />}></Route>
+      <Route
+        path="/bias_info/user_contribution"
+        element={<BiasDetail />}
+      ></Route>
+      <Route
+        path="/novalogin"
+        element={<NOVALogin brightMode={brightMode} />}
+      ></Route>
       <Route path="/find_pw" element={<FindPw />}></Route>
       <Route path="/find_pw_change" element={<FindPwChange />}></Route>
       <Route path="/feed_hash_list" element={<FeedHashList />}></Route>
       <Route path="/feed_hash_list/:fid" element={<FeedHashList />}></Route>
-      <Route path="/feed_list" element={<FeedList brightMode={brightMode} />}></Route>
+      <Route
+        path="/feed_list"
+        element={<FeedList brightMode={brightMode} />}
+      ></Route>
       <Route path="/feed_list/:fid" element={<FeedList />}></Route>
       <Route path="/feed_detail/:fid" element={<FeedDetail />}></Route>
-      <Route path="/nova_funding" element={<NovaFunding brightMode={brightMode} />}></Route>
+      <Route
+        path="/nova_funding"
+        element={<NovaFunding brightMode={brightMode} />}
+      ></Route>
       <Route path="/like_funding" element={<LikeFunding />}></Route>
       <Route path="/week100" element={<Week100 />}></Route>
       <Route path="/duck_funding" element={<DuckFunding />}></Route>
@@ -226,7 +249,7 @@ function App() {
       <Route path="/follow_page" element={<FollowPage />}></Route>
       <Route path="/bias_funding/:type" element={<MoreProjects />}></Route>
       <Route path="/test" element={<LongFormWrite />}></Route>
-      <Route path="/test1" element={<TestRef />}></Route>
+      <Route path="/test1" element={<NoticeBox />}></Route>
       <Route path="*" element={<div>404 Error</div>}></Route>
       {/* <Route path="/planet" element={<PlanetList />}></Route> */}
       {/* <Route path='/league_detail' element={<LeagueDetail />}></Route> */}
@@ -254,7 +277,11 @@ function App() {
                       navigate("/");
                     }}
                   >
-                    <img src={logo2} alt="logo" className={`logo-st ${getModeClass(brightMode)}`}></img>
+                    <img
+                      src={logo2}
+                      alt="logo"
+                      className={`logo-st ${getModeClass(brightMode)}`}
+                    ></img>
                   </div>
                   <Link to="/test">롱폼작성 페이지지</Link>
                   <Link to="/test1">test page</Link>
@@ -279,7 +306,8 @@ function App() {
                 <FeedThumbnail
                   title={
                     <>
-                      내가 가장 보고싶은 <span className="title-color">최애</span>
+                      내가 가장 보고싶은{" "}
+                      <span className="title-color">최애</span>
                     </>
                   }
                   feedData={weeklyFeed}
@@ -342,7 +370,13 @@ function App() {
                   endPoint={`/feed_list?type=weekly_best`}
                 />
 
-                <FeedThumbnail title={"전체 글"} feedData={allFeed} brightMode={brightMode} allPost={<AllPost allFeed={allFeed} />} endPoint={"/feed_list?type=all"} />
+                <FeedThumbnail
+                  title={"전체 글"}
+                  feedData={allFeed}
+                  brightMode={brightMode}
+                  allPost={<AllPost allFeed={allFeed} />}
+                  endPoint={"/feed_list?type=all"}
+                />
                 {/* <AllPost brightMode={brightMode} /> */}
               </section>
 

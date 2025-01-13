@@ -4,43 +4,19 @@ import ProgressBar from "./ProgressBar";
 
 export default function TestRef() {
   return (
-    <div className={"long-form-container"}>
-      <div className="action-container">
-        <div className="action-box">
-          <div className="action-result" style={{ width: "100%" }}>
-            갑니다
+    <div className="notice-container">
+      <div>
+        <div className="notice-box">
+          <div className="notice-img">
+            <img alt="img" />
           </div>
-          <div className="action-points">%</div>
-        </div>
 
-        <div className="action-box">
-          <div className="action-result" style={{ width: "10%" }}>
-            갑니다
+          <div className="notice-content">
+            <b>게시글 작성할 때 요zzzz령</b>
+            <p>전체 공지사항</p>
           </div>
-          <div className="action-points">%</div>
-        </div>
-
-        <div className="action-box">
-          <div className="action-result" style={{ width: "100%" }}></div>
-          <div className="action-points">%</div>
-        </div>
-
-        <div className="action-box">
-          <div className="action-result" style={{ width: "100%" }}></div>
-          <div className="action-points">%</div>
         </div>
       </div>
-
-      {/* 
-          <div className="action-result" style={{ width: "100%" }}>
-            <div className="action-points">%</div>1
-        </div>
-        <ProgressBar />
-
-        <div className={"action-box"}>
-          22
-        </div>
-      <div></div> */}
     </div>
   );
 }

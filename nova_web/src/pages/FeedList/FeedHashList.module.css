@@ -95,7 +95,14 @@
 .tag-container.bright-mode {
   background-color: #ffffff;
 }
-
+/* 최애 박스 */
+.bias-section {
+  width: 100%;
+}
+/* 키워드 박스 */
+.keyword-section {
+  width: 100%;
+}
 /* 검색 박스 */
 .search-section {
   width: 100%;
@@ -132,4 +139,26 @@
   bottom: 0px;
   left: 0px;
   background-color: rgba(0, 0, 0, 0.5);
+}
+
+.category-info {
+  display: flex;
+  gap: 5px;
+  width: 100%;
+  color: gray;
+  padding: 20px;
+  border-top: 1px solid rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+
+  h4 {
+    /* all: unset; */
+    margin: 0px;
+  }
+
+  p {
+    all: unset;
+    display: flex;
+    align-items: last baseline;
+    font-size: 12px;
+  }
 }

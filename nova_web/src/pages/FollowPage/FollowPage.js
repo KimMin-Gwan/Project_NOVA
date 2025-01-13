@@ -17,7 +17,8 @@ export default function FollowPage() {
   let [biasId, setBiasId] = useState();
 
   const brightModeFromUrl = params.get("brightMode");
-  const initialMode = brightModeFromUrl || localStorage.getItem("brightMode") || "bright"; // URL에서 가져오고, 없으면 로컬 스토리지에서 가져옴
+  const initialMode =
+    brightModeFromUrl || localStorage.getItem("brightMode") || "bright"; // URL에서 가져오고, 없으면 로컬 스토리지에서 가져옴
   const [mode, setMode] = useState(initialMode);
 
   let [feedData, setFeedData] = useState([]);
@@ -84,12 +85,18 @@ export default function FollowPage() {
           <h4>
             <b>팔로우</b> 중인 최애
           </h4>
-          <BiasBoxes setBiasId={setBiasId} fetchBiasCategoryData={fetchBiasCategoryData} />
+          <BiasBoxes
+            setBiasId={setBiasId}
+            fetchBiasCategoryData={fetchBiasCategoryData}
+          />
         </div>
 
         <div className={style["search-fac"]}>
           <div className={style["search-box"]}>
-            <input type="text" placeholder="팔로우 하고 싶은 최애를 검색해보세요" />
+            <input
+              type="text"
+              placeholder="팔로우 하고 싶은 최애를 검색해보세요"
+            />
             <img src={search_icon} alt="검색바" />
           </div>
 
@@ -151,7 +158,10 @@ export default function FollowPage() {
 
           {isModalOpen && (
             <div className={style["modal-overlay"]} onClick={closeModal}>
-              <div className={style["modal"]} onClick={(e) => e.stopPropagation()}>
+              <div
+                className={style["modal"]}
+                onClick={(e) => e.stopPropagation()}
+              >
                 <button onClick={openModal} className={style["streamer-img"]}>
                   <div>이미지</div>
                 </button>
