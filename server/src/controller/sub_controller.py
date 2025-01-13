@@ -1,8 +1,6 @@
 from model import *
 from others import UserNotExist, CustomError
 
-from src.model.sub_model import CommunitySideBoxModel
-
 
 class Sub_Controller:
     def sample_func(self, database:Local_Database, request) -> BaseModel: 
@@ -268,13 +266,13 @@ class Sub_Controller:
         return model
 
 
-    def try_get_side_box_menu(self, database:Local_Database, request):
+    def try_get_community_side_box(self, database:Local_Database, data_payload):
         model = CommunitySideBoxModel(database=database)
 
         try:
             # 유저가 있는지 확인
-            model.get_boards_of_bias_community(bid=request.bid)
-            model.get_urls_of_bias(bid=request.bid)
+            model.get_boards_of_bias_community(bid=data_payload.bid)
+            model.get_urls_of_bias(bid=data_payload.bid)
 
             return model
         except CustomError as e:

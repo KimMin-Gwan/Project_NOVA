@@ -214,7 +214,7 @@ class Sub_Service_View(Master_View):
     def bias_setting_route(self):
         # 바이어스를 String 으로 검색
         @self.__app.get('/nova_sub_system/try_search_bias')
-        def try_search_bias(request:Request, bname:Optional[int] = -1):
+        def try_search_bias(request:Request, bname:Optional[str] = -1):
             request_manager = RequestManager()
             
             data_payload = BiasSearchRequest(bname=bname)
@@ -279,18 +279,14 @@ class Sub_Service_View(Master_View):
         # 사이드박스에서 각 BIAS별 설정된 Board_type(게시판들)과, BIAS의 플랫폼, 인스타 등 주소를 보내야 함.
         # 펀딩부분은 뭐.. 프론트에서 URL로 이어주겠죠?
         @self.__app.get('/nova_sub_system/try_get_community_side_box')
-        def try_get_community_side_box(request:Request, bid:Optional[int] = -1):
-            request_manager = RequestManager()
-
+        def try_get_community_side_box(bid:Optional[str] = ""):
             data_payload = CommunitySideBoxRequest(bid=bid)
-            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
             sub_controller=Sub_Controller()
             model = sub_controller.try_get_community_side_box(database=self.__database,
-                                                              request=request_manager)
+                                                              data_payload=data_payload)
             body_data = model.get_response_form_data(self._head_parser)
-            response = request_manager.make_json_response(body_data=body_data)
-            return response
+            return body_data
 
     #def bias_page_route(self, endpoint:str):
         #@self.__app.get(endpoint+'/home')

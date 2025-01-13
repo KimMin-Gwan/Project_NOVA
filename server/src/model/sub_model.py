@@ -366,8 +366,8 @@ class CommunitySideBoxModel(BaseModel):
     def get_response_form_data(self, head_parser):
         try:
             body = {
-                'urls' : copy.copy(self._url),
-                'boards' : copy.copy(self._boards)
+                'urls' : self.__urls,
+                'boards' : self._boards
             }
 
             response = self._get_response_data(head_parser=head_parser, body=body)
