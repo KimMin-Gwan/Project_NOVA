@@ -116,7 +116,6 @@ class FeedModel(BaseModel):
         
         
         self._set_feed_json_data(user=self._user, feeds=self._feeds, feed_manager=feed_manager)
-        pprint(self._feeds[0].get_dict_form_data())
         return
 
     # 댓글 새로 달기
@@ -190,6 +189,8 @@ class FeedModel(BaseModel):
             # comment 길이 & image 길이
             feed.num_comment = len(feed.comment)
             feed.num_image = len(feed.image)
+
+            pprint(user.get_dict_form_data())
 
             # 좋아요를 누를 전적
             if feed.fid in user.like:
