@@ -193,8 +193,11 @@ class FeedModel(BaseModel):
             pprint(user.get_dict_form_data())
 
             # 좋아요를 누를 전적
-            if feed.fid in user.like:
-                feed.star_flag = True
+            
+            for fid_n_date in user.like:
+                target_fid = fid_n_date.split('=')[0]
+                if target_fid == feed.fid:
+                    feed.star_flag = True
 
             # 피드 작성자 이름
             # 나중에 nickname으로 바꿀것
