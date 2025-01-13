@@ -180,8 +180,7 @@ function App() {
     return localStorage.getItem("brightMode") || "bright"; // 기본값은 'bright'
   });
   useEffect(() => {
-    document.body.className =
-      brightMode === "dark" ? "dark-mode" : "bright-mode";
+    document.body.className = brightMode === "dark" ? "dark-mode" : "bright-mode";
   }, [brightMode]);
 
   const handleModeChange = (newMode) => {
@@ -189,71 +188,68 @@ function App() {
   };
   return (
     <Routes>
-      <Route path="/write_feed" element={<WriteFeed />}></Route>
+      {/* 더보기 페이지 / 마이페이지 */}
       <Route
         path="/more_see"
         element={<MoreSee onModeChange={handleModeChange} />}
       ></Route>
-      <Route path="/galaxy" element={<GalaxyList />}></Route>
-      <Route
-        path="/feed_page"
-        element={<FeedPage brightMode={brightMode} />}
-      ></Route>
-      <Route path="/signup" element={<SignUp />}></Route>
-      <Route path="/terms_page" element={<Temrs />}></Route>
-      <Route path="/league_detail" element={<LeaguePage />}></Route>
-      <Route path="/notice" element={<NoticeList />} />
-      {/* Dynamic Route for Notice Details */}
-      <Route path="/notice/:nid" element={<Notice />} />
-      <Route
-        path="/my_write_feed"
-        element={<MyWriteFeed brightMode={brightMode} />}
-      />
-      <Route path="/my_interest_feed" element={<MyInterestFeed />} />
-      <Route path="/my_comment_feed" element={<MyCommentFeed />} />
-      <Route path="/my_active_feed" element={<MyActiveFeed />} />
-      <Route path="/my_alerts" element={<MyAlert />} />
-      <Route path="/notice_list" element={<NoticeList />}></Route>
-      <Route path="/select_bias" element={<SelectBias />}></Route>
-      <Route path="/namecard" element={<NameCard />}></Route>
       <Route path="/mypage" element={<MyPage />}></Route>
-      <Route path="/bias_certify" element={<BiasCertify />}></Route>
-      <Route
-        path="/bias_info/user_contribution"
-        element={<BiasDetail />}
-      ></Route>
-      <Route
-        path="/novalogin"
-        element={<NOVALogin brightMode={brightMode} />}
-      ></Route>
+
+      {/* 로그인 및 비밀번호 및 회원가입 */}
+      <Route path="/novalogin" element={<NOVALogin brightMode={brightMode} />}></Route>
       <Route path="/find_pw" element={<FindPw />}></Route>
       <Route path="/find_pw_change" element={<FindPwChange />}></Route>
+      <Route path="/signup" element={<SignUp />}></Route>
+
+      {/* 이용약관 및 공지사항 */}
+      <Route path="/terms_page" element={<Temrs />}></Route>
+      <Route path="/notice_list" element={<NoticeList />}></Route>
+      <Route path="/notice" element={<NoticeList />} />
+      <Route path="/notice/:nid" element={<Notice />} />
+
+      {/* 피드 페이지 */}
+      <Route path="/feed_page" element={<FeedPage brightMode={brightMode} />}></Route>
+      <Route path="/write_feed" element={<WriteFeed />}></Route>
+      <Route path="/select_bias" element={<SelectBias />}></Route>
       <Route path="/feed_hash_list" element={<FeedHashList />}></Route>
       <Route path="/feed_hash_list/:fid" element={<FeedHashList />}></Route>
-      <Route
-        path="/feed_list"
-        element={<FeedList brightMode={brightMode} />}
-      ></Route>
+      <Route path="/feed_list" element={<FeedList brightMode={brightMode} />}></Route>
       <Route path="/feed_list/:fid" element={<FeedList />}></Route>
       <Route path="/feed_detail/:fid" element={<FeedDetail />}></Route>
+      <Route path="/follow_page" element={<FollowPage />}></Route>
+
+      {/* 펀딩 페이지 목록 */}
       <Route
         path="/nova_funding"
         element={<NovaFunding brightMode={brightMode} />}
       ></Route>
       <Route path="/like_funding" element={<LikeFunding />}></Route>
-      <Route path="/week100" element={<Week100 />}></Route>
       <Route path="/duck_funding" element={<DuckFunding />}></Route>
       <Route path="/funding_project/:type" element={<SuccessFunding />}></Route>
       <Route path="/funding_ranking" element={<RankingFunding />}></Route>
       <Route path="/open_ranking" element={<OpenRanking />}></Route>
       <Route path="/bias_funding" element={<BiasFunding />}></Route>
-      <Route path="/follow_page" element={<FollowPage />}></Route>
       <Route path="/bias_funding/:type" element={<MoreProjects />}></Route>
       <Route path="/test" element={<LongFormWrite />}></Route>
       <Route path="/test1" element={<CategoryModal />}></Route>
       <Route path="*" element={<div>404 Error</div>}></Route>
+
+      {/* 미사용 페이지지 */}
       {/* <Route path="/planet" element={<PlanetList />}></Route> */}
       {/* <Route path='/league_detail' element={<LeagueDetail />}></Route> */}
+      {/* <Route path="/namecard" element={<NameCard />}></Route> */}
+      {/* <Route path="/bias_certify" element={<BiasCertify />}></Route> */}
+      {/* <Route path="/bias_info/user_contribution" element={<BiasDetail />}></Route> */}
+      {/* <Route path="/my_write_feed" element={<MyWriteFeed brightMode={brightMode} />}/> */}
+      {/* <Route path="/my_comment_feed" element={<MyCommentFeed />} /> */}
+      {/* <Route path="/my_active_feed" element={<MyActiveFeed />} /> */}
+      {/* <Route path="/my_alerts" element={<MyAlert />} /> */}
+      {/* <Route path="/week100" element={<Week100 />}></Route> */}
+      {/* <Route path="/my_interest_feed" element={<MyInterestFeed />} /> */}
+      {/* <Route path="/galaxy" element={<GalaxyList />}></Route> */}
+      {/* <Route path="/league_detail" element={<LeaguePage />}></Route> */}
+
+      {/* 홈 화면면 */}
       <Route
         path="/"
         element={
@@ -307,8 +303,7 @@ function App() {
                 <FeedThumbnail
                   title={
                     <>
-                      내가 가장 보고싶은{" "}
-                      <span className="title-color">최애</span>
+                      내가 가장 보고싶은 <span className="title-color">최애</span>
                     </>
                   }
                   feedData={weeklyFeed}
