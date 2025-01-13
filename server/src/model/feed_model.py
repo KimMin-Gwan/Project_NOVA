@@ -505,7 +505,7 @@ class CommunityFeedModel(FeedModel):
         if bid =="":
             fid_list, self.__last_fid = feed_search_engine.try_feed_with_bid_n_filtering(
                 target_bids=self._user.bids, board_type=board_type,
-                page_size=5, last_fid=last_fid, search_type="bias_only",
+                page_size=5, last_fid=last_fid, search_type="board_only",
             )
         
         # bias를 선택했을 때
