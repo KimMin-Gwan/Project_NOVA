@@ -190,8 +190,6 @@ class FeedModel(BaseModel):
             feed.num_comment = len(feed.comment)
             feed.num_image = len(feed.image)
 
-            pprint(user.get_dict_form_data())
-
             # 좋아요를 누를 전적
             
             for fid_n_date in user.like:
