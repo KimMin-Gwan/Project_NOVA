@@ -409,7 +409,7 @@ class CommunitySideBoxModel(BaseModel):
             self.__urls["FlexTV"] = self.__bias.homepage
         # 카카오티비. 구 다음팟 티비
         elif "kakao" in self.__bias.homepage:
-            self.__urls["KakaoTV"] = self.__bias.__homepage
+            self.__urls["KakaoTV"] = self.__bias.homepage
         # 트위치. 망했지만 넣긴하는게 맞음. 해외시청자가 주인 방송인들은 아직 잔류하는 듯
         elif "twitch" in self.__bias.homepage:
             self.__urls["Twitch"] = self.__bias.homepage
