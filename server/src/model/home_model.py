@@ -248,5 +248,3 @@ class BiasFollowPageModel(BiasSearchModel):
 
         except Exception as e:
             raise CoreControllerLogicError("response making error | " + e)
-
-class
