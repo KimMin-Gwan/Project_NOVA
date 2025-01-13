@@ -1589,7 +1589,7 @@ export function ContentFeed({
                 handleCheckStar(feed.fid, e);
               }}
             >
-              <img src={star} alt="star-icon" />
+              <img src={feed.star_flag ? star_color : star} alt="star-icon" />
             </button>
             <span>{feed.star}</span>
           </div>
@@ -1702,20 +1702,21 @@ function SelectOption({ feed, feedInteraction }) {
 function QuizOption({ feed, interaction, handleInteraction }) {
   return (
     <ol className={style["quiz-container"]}>
-      {interaction.choice.map((option, i) => {
-        return (
-          <li
-            key={i}
-            style={{ backgroundColor: "#D2C8F7" }}
-            onClick={(e) => {
-              e.stopPropagation();
-              handleInteraction(e, interaction.fid, i);
-            }}
-          >
-            {i + 1}. {option} / {interaction.result[i]}
-          </li>
-        );
-      })}
+      {interaction &&
+        interaction.choice.map((option, i) => {
+          return (
+            <li
+              key={i}
+              style={{ backgroundColor: "#D2C8F7" }}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleInteraction(e, interaction.fid, i);
+              }}
+            >
+              {i + 1}. {option} / {interaction.result[i]}
+            </li>
+          );
+        })}
     </ol>
   );
 }
