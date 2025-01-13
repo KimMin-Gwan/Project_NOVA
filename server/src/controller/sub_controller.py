@@ -1,9 +1,6 @@
 from model import *
 from others import UserNotExist, CustomError
 
-from src.model.notice_model import NoticeModel
-
-
 class Sub_Controller:
     def sample_func(self, database:Local_Database, request) -> BaseModel: 
         model = BaseModel(database=database)
