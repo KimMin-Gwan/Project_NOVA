@@ -14,8 +14,8 @@ import menu from "./../../img/menu-burger.png";
 import LeftBar from "./../WideVer/LeftBar.js";
 import RightBar from "./../WideVer/RightBar.js";
 import style from "./FeedHashList.module.css";
-import NoticeBox from "../../component/NoticeBox/index.js";
-import CategoryModal from "../../component/CategoryModal/index.js";
+import NoticeBox from "../../component/NoticeBox/NoticeBox.js";
+import CategoryModal from "../../component/CategoryModal/CategoryModal.js";
 
 export default function FeedList(isUserState) {
   const [params] = useSearchParams();
@@ -34,6 +34,7 @@ export default function FeedList(isUserState) {
   let [nextData, setNextData] = useState([]);
 
   let [biasId, setBiasId] = useState();
+  let [board, setBoard] = useState("팬아트");
 
   let header = {
     "request-type": "default",
@@ -55,7 +56,7 @@ export default function FeedList(isUserState) {
       header: header,
       body: {
         bid: bid || "",
-        board: "",
+        board: board || "",
         last_fid: "",
       },
     };
@@ -81,7 +82,7 @@ export default function FeedList(isUserState) {
 
   useEffect(() => {
     fetchBiasCategoryData();
-  }, []);
+  }, [board]);
 
   const FETCH_URL = "https://nova-platform.kr/feed_explore/";
   function fetchData() {

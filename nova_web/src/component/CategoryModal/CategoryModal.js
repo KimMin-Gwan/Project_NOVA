@@ -1,11 +1,11 @@
-import Board from "../Board";
+import Board from "../Board/Board";
 import "./index.css";
 
 export default function CategoryModal({ onClickCategory }) {
   return (
     <div
       className="CategoryModal"
-      onClick={(e) => {
+      onClick={() => {
         onClickCategory();
       }}
     >
