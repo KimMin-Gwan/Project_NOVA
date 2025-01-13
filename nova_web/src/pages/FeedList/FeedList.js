@@ -15,6 +15,7 @@ import LeftBar from "./../WideVer/LeftBar.js";
 import RightBar from "./../WideVer/RightBar.js";
 import style from "./FeedHashList.module.css";
 import NoticeBox from "../../component/NoticeBox/index.js";
+import CategoryModal from "../../component/CategoryModal/index.js";
 
 export default function FeedList(isUserState) {
   const [params] = useSearchParams();
@@ -289,6 +290,12 @@ export default function FeedList(isUserState) {
     };
   }, [keyword]);
 
+  let [isOpendCategory, setIsOpendCategory] = useState(false);
+
+  function onClickCategory() {
+    setIsOpendCategory(!isOpendCategory);
+  }
+
   useEffect(() => {
     // mode가 변경될 때만 localStorage에 저장
     localStorage.setItem("brightMode", mode);
@@ -345,8 +352,11 @@ export default function FeedList(isUserState) {
             <NoticeBox />
             <div className={style["category-info"]}>
               <h4>모든 게시글</h4>
-              <p>카테고리 변경</p>
+              <p onClick={onClickCategory}>카테고리 변경</p>
             </div>
+            {isOpendCategory && (
+              <CategoryModal onClickCategory={onClickCategory} />
+            )}
           </div>
         )}
         {type === "all" && (

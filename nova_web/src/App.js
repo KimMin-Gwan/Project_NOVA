@@ -58,6 +58,7 @@ import TestRef from "./component/TestRef.js";
 import FilterModal from "./component/FilterModal/FilterModal.js";
 import LongFormWrite from "./pages/LongFormWrite/LongFormWrite.js";
 import NoticeBox from "./component/NoticeBox/index.js";
+import CategoryModal from "./component/CategoryModal/index.js";
 
 // 다크 모드 클래스 반환 함수
 export function getModeClass(mode) {
@@ -249,7 +250,7 @@ function App() {
       <Route path="/follow_page" element={<FollowPage />}></Route>
       <Route path="/bias_funding/:type" element={<MoreProjects />}></Route>
       <Route path="/test" element={<LongFormWrite />}></Route>
-      <Route path="/test1" element={<NoticeBox />}></Route>
+      <Route path="/test1" element={<CategoryModal />}></Route>
       <Route path="*" element={<div>404 Error</div>}></Route>
       {/* <Route path="/planet" element={<PlanetList />}></Route> */}
       {/* <Route path='/league_detail' element={<LeagueDetail />}></Route> */}
