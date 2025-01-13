@@ -61,7 +61,7 @@ class NOVA_Server:
                                                    head_parser=head_parser,
                                                    feed_search_engine=feed_search_engine
                                                    )
-        self.__sub_system_view = Funding_Service_View( app=self.__app,
+        self.__funding_system_view = Funding_Service_View( app=self.__app,
                                                      endpoint='/nova_fund_system',
                                                    database=database,
                                                    head_parser=head_parser,
@@ -74,6 +74,7 @@ class NOVA_Server:
         self.__core_system_view()
         self.__user_system_view()
         self.__sub_system_view()
+        self.__funding_system_view()
         self.__administrator_system_view()
 
     def make_task(self):
