@@ -47,7 +47,27 @@ class Feed_Controller:
                 feed_manager=self.__feed_manager)
 
         return model
-    
+
+    # 임시 인터페이스, 만약 2차 필터링 옵션이 확정난다면 이 기능이 확장됩니다.
+    # 계획) 옵션들을 모두 받아와서 옵션에 맞게 필터링을 여러번 거치고, 가져옵니다.
+    def get_feed_in_bias_community_filtered(self, database:Local_Database,
+                                            request, feed_search_engine: FeedSearchEngine):
+        model = CommunityFeedModel(database=database)
+
+        # 유저가 있으면 세팅
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
+
+        model.try_search_feed_with_filtering_fclass(
+            bid = request.data_payload.bid,
+            last_fid = request.data_payload.last_fid,
+            board_type = request.data_payload.board_type,
+            fclass = request.data_payload.fclass,
+            feed_search_engine=feed_search_engine,
+            feed_manager=self.__feed_manager,
+        )
+
+        return model
 
     # 키워드를 통한 피드 검색
     def try_search_in_keyword(self, database:Local_Database,

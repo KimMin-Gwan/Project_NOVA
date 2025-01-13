@@ -471,8 +471,10 @@ class CommunityFeedModel(FeedModel):
         self.__last_fid = ""
         
     # 단순히 bid만 요청했을 때
-    def try_search_feed_with_bid(self, bid:str, last_fid:str, feed_search_engine:FeedSearchEngine,
-                                 feed_manager:FeedManager):
+    def try_search_feed_with_bid(self, bid:str, last_fid:str,
+                                 feed_search_engine:FeedSearchEngine,
+                                 feed_manager:FeedManager
+                                 ):
         
         # bias를 선택하지 않았을 때
         if bid == "":
@@ -484,7 +486,7 @@ class CommunityFeedModel(FeedModel):
         # bias를 선택했을 때
         else:
             fid_list, self.__last_fid = feed_search_engine.try_feed_with_bid_n_filtering(
-                target_bids=[bid], page_size=5, 
+                target_bids=[bid], page_size=5,
                 last_fid=last_fid, search_type="just_bias",
             )
     
@@ -496,14 +498,14 @@ class CommunityFeedModel(FeedModel):
     def try_search_feed_with_bid_n_board_type(self, bid:str, last_fid:str,
                                              board_type:str,
                                              feed_search_engine:FeedSearchEngine,
-                                             feed_manager:FeedManager
+                                             feed_manager:FeedManager,
                                              ):
         
         # bias를 선택하지 않았을 때
         if bid =="":
             fid_list, self.__last_fid = feed_search_engine.try_feed_with_bid_n_filtering(
                 target_bids=self._user.bids, board_type=board_type,
-                page_size=5, last_fid=last_fid, search_type="bias_and_board",
+                page_size=5, last_fid=last_fid, search_type="bias_only",
             )
         
         # bias를 선택했을 때
@@ -515,7 +517,39 @@ class CommunityFeedModel(FeedModel):
         
         # 보낼 데이터 만들어 주기
         self._send_data = self._make_feed_data_n_interaction_data(feed_manager=feed_manager, fid_list=fid_list)
-        return 
+        return
+
+    def try_search_feed_with_filtering_fclass(self, bid:str, board_type:str, last_fid:str, fcalss:str, feed_search_engine:FeedSearchEngine,
+                                              feed_manager, page_size=5):
+        # 1차 필터링. 이 때, 필터링 시 페이징을 하지않는다.
+
+        # Board_type 미 지정 시, BID만 관여
+        if board_type == "" :
+            if bid == "":
+                fid_list, _ = feed_search_engine.try_feed_with_bid_n_filter(
+                    target_bids=self._user.bids, last_fid=last_fid, search_type="default"
+                )
+            else:
+                fid_list, _ = feed_search_engine.try_feed_with_bid_n_filter(
+                    target_bids=[bid], last_fid=last_fid, search_type="just_bias"
+                )
+        # Board_type 지정 시,
+        else:
+            if bid == "":
+                fid_list, _ = feed_search_engine.try_feed_with_bid_n_filter(
+                    target_bids=self._user.bids, last_fid=last_fid, search_type="bias_only",
+                )
+            else:
+                fid_list, _ = feed_search_engine.try_feed_with_bid_n_filter(
+                    target_bids=[bid], last_fid=last_fid, search_type="bias_and_board"
+                )
+
+        # 2차 필터링.
+        fid_list, self.__last_fid = feed_search_engine.try_feed_filtering_with_class(fid_list=fid_list, fcalss=fcalss,
+                                                                                     page_size=page_size, last_fid=last_fid )
+
+        self._send_data = self._make_feed_data_n_interaction_data(feed_manager=feed_manager, fid_list=fid_list)
+        return
 
     def get_response_form_data(self, head_parser):
         try:

@@ -102,8 +102,7 @@ class NoticeModel(BaseModel):
         self.simple_notice.append(notice)
 
 
-    # 보낼 데이터 만들기            
-
+    # 보낼 데이터 만들기
     def get_notice_list(self):
     # rank와 point를 포함한 데이터
         notice_datas = self._database.get_all_data(target="nid")

@@ -434,6 +434,10 @@ class ManagedFeedBiasTable:
     def __paging_list_df(self, fid_list:list, fid, page_size):
         # 이미 Date 최신순으로 정렬되어서 맨처음이 젤 최신의 글임
         start_index = 0
+
+        # 페이징을 하지 않음
+        if page_size == -1:
+            return fid_list
         
         if fid != "":
             start_index = fid_list.index(fid)  # 타겟으로 잡은 구간부터, 불러오기
@@ -452,6 +456,7 @@ class ManagedFeedBiasTable:
         return self.__paging_list_df(fid_list=filtered_feeds_df['fid'].tolist(),
                                      fid=last_fid, page_size=page_size)
 
+    # Board만 선택
     def filtering_board_without_bid(self, last_fid:str, page_size:int, board_type:str):
         filtered_feeds_df = self.__feed_df[(self.__feed_df['board_type'] == board_type)]
         return self.__paging_list_df(fid_list=filtered_feeds_df['fid'].tolist(),
@@ -480,24 +485,38 @@ class ManagedFeedBiasTable:
         return self.__paging_list_df(fid_list=filtered_feeds_df['fid'].tolist(),
                                      fid=last_fid, page_size=page_size)
 
-    def filtering_staring_feed(self, stars:int, bid:str, board_type:str, last_fid:str, page_size:int):
+#---------------------------------------------------------------------------------------------------------------------------------------
+    # 여기서는 게시판 필터링을 거친 후, 추가적인 필터링을 위해 필터링된 FID리스트를 받고, 2차 필터링을 실시하는 곳입니다.
+    def filtering_fclass_feed(self, fid_list:list, fclass:str, last_fid:str, page_size:int):
+        # 2차 게시판 필터링. Long Form인지, Short Form인지, 그리고, Board_type도 관여하게 됨.
+        fid_list_df = self.__feed_df[self.__feed_df['fid'].isin(fid_list)]
+        # DF 내에서 다시 한번 더, 결과를 가져옴.
+        filtered_feeds_df = fid_list_df[fid_list_df['fclass'] == fclass]
+        return self.__paging_list_df(fid_list=filtered_feeds_df['fid'].tolist(),
+                                     fid=last_fid, page_size=page_size)
+
+        # filtered_feeds_df = self.__feed_df[(self.__feed_df['fclass'] == fclass) & (self.__feed_df['board_type'] == board_type)]
+        # return self.__paging_list_df(fid_list=filtered_feeds_df['fid'].tolist(),
+        #                              fid=last_fid, page_size=page_size)
+
+    def filtering_staring_feed(self, fid_list:list, stars:int, last_fid:str, page_size:int):
+        # 2차 게시판 필터링. 추천 수에 관여함.
+        fid_list_df = self.__feed_df[self.__feed_df['fid'].isin(fid_list)]
         # 추천수가 일정 수 이상인 피드만 걸러줌
-        filtered_feeds_df = self.__feed_df[self.__feed_df['stars'] > stars]
-        # 게시판 필터링
-        filtered_feeds_df = filtered_feeds_df[(filtered_feeds_df['bid'] == bid) & (filtered_feeds_df['board_type'] == board_type)]
+        filtered_feeds_df = fid_list_df[fid_list_df['stars'] > stars]
+
         return self.__paging_list_df(fid_list=filtered_feeds_df['fid'].tolist(),
                                      fid=last_fid, page_size=page_size)
 
-    def filtering_nickname_feed(self, nickname:str, bid:str, board_type:str, last_fid:str, page_size:int):
+    def filtering_nickname_feed(self, fid_list:list, nickname:str, last_fid:str, page_size:int):
+        # 2차 게시판 필터링. 글쓴이 필터링에 관여합니다
+        fid_list_df = self.__feed_df[self.__feed_df['fid'].isin(fid_list)]
+
         # 닉네임으로 Feed를 검색하는 기능
-        filtered_feeds_df = self.__feed_df[self.__feed_df['nickname'] == nickname]
-        # 게시판 필터링
-        filtered_feeds_df = filtered_feeds_df[(filtered_feeds_df['bid'] == bid) & (filtered_feeds_df['board_type'] == board_type)]
+        filtered_feeds_df = fid_list_df[fid_list_df['nickname'] == nickname]
         return self.__paging_list_df(fid_list=filtered_feeds_df['fid'].tolist(),
                                      fid=last_fid, page_size=page_size)
 
-
-    # def realtime_trending_hashtag(self, ):
 #--------------------------------------------------------------------------------------------------
 
 # 아래는 검색 엔진
@@ -649,7 +668,7 @@ class FeedSearchEngine:
        
     # 최애 페이지에서 요청
     def try_feed_with_bid_n_filtering(self, target_bids:list[str]=[""], board_type="default",
-                                      page_size=1, last_fid="", search_type="default"
+                                      page_size=-1, last_fid="", search_type="default"
                                       ):
         result = []
         
@@ -680,7 +699,17 @@ class FeedSearchEngine:
             last_fid = result[-1]
             
         return result, last_fid
-        
+
+    def try_feed_filtering_with_class(self, fid_list:list, fclass="all", page_size=-1, last_fid=""):
+
+        result = []
+        result_last_fid = ""
+
+        # 기능 통합 가능성이 있음.
+        if fclass == "long" or fclass == "short":
+            result, result_last_fid = self.__filter_manager.filtering_feed_type_in_result_feeds(fid_list=fid_list, fclass=fclass,
+                                                                                                last_fid=last_fid, page_size=page_size)
+        return result, result_last_fid
 
     # 여기도 아직 하지 말것 
     # 목적 : 숏피드에서 다음 피드 제공 받기
@@ -1262,6 +1291,10 @@ class FilteringManager:
     def filtering_image_in_feed(self, bid:str, board_type:str, page_size:int, last_fid:str=""):
         # 게시판 글 중, 이미지만 있는 글들만 필터링
         return self.__managed_feed_bias_table.filtering_image_in_feed(bid=bid, board_type=board_type, last_fid=last_fid, page_size=page_size)
+
+    def filtering_feed_type_in_result_feeds(self, fid_list:list, fclass:str, page_size:int, last_fid:str=""):
+        return self.__managed_feed_bias_table.filtering_fclass_feed(fid_list=fid_list, fclass=fclass, last_fid=last_fid, page_size=page_size)
+
 
     # # 이거 아직 안 됨
     # # 전체 게시글 중 필터링
