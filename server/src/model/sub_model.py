@@ -382,9 +382,8 @@ class CommunitySideBoxModel(BaseModel):
         bias_data = self._database.get_data_with_id(target='bid', id=bid)
         
         if bias_data:
-            bias = Bias()
-            bias.make_with_dict(bias_data)
-            self._boards = copy.copy(bias.board_types)
+            self.__bias.make_with_dict(bias_data)
+            self._boards = copy.copy(self.__bias.board_types)
             return True
         else:
             return False
