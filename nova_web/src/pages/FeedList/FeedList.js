@@ -34,7 +34,7 @@ export default function FeedList(isUserState) {
   let [nextData, setNextData] = useState([]);
 
   let [biasId, setBiasId] = useState();
-  let [board, setBoard] = useState("팬아트");
+  let [board, setBoard] = useState("자유게시판");
 
   let header = {
     "request-type": "default",
@@ -82,6 +82,7 @@ export default function FeedList(isUserState) {
 
   useEffect(() => {
     fetchBiasCategoryData();
+    console.log(biasId, board);
   }, [board]);
 
   const FETCH_URL = "https://nova-platform.kr/feed_explore/";
