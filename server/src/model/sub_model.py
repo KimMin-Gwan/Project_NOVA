@@ -359,7 +359,7 @@ class ImageTagModel(BaseModel):
 
 class CommunitySideBoxModel(BaseModel):
     def __init__(self, database):
-        super.__init__(database)
+        super().__init__(database)
         self.__urls = {}
         self._boards = []
 
@@ -377,14 +377,14 @@ class CommunitySideBoxModel(BaseModel):
             raise CoreControllerLogicError("response making error | " + e)
 
     def get_boards_of_bias_community(self, bid):
-        bias_data = self._database.get_data_with_id(target='bias', id=bid)
+        bias_data = self._database.get_data_with_id(target='bid', id=bid)
         bias = Bias()
         bias.make_with_dict(bias_data)
 
         self._boards = copy.copy(bias.board_types)
 
     def get_urls_of_bias(self, bid):
-        bias_data = self._database.get_data_with_id(target='bias', id=bid)
+        bias_data = self._database.get_data_with_id(target='bid', id=bid)
         bias = Bias()
         bias.make_with_dict(bias_data)
 

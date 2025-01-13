@@ -10,7 +10,6 @@ from others import FeedSearchEngine
 from others.data_domain import Feed, User
 from pprint import pprint
 
-
 import os
 
 import json
@@ -26,7 +25,7 @@ class Sub_Service_View(Master_View):
         self.notice_route()
         #self.bias_page_route("/bias_info")
         self.test_route()
-
+        self.bias_setting_route()
 
         # feed algorithm test
         self.user_add_test()
