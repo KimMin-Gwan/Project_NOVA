@@ -419,9 +419,9 @@ class CommunitySideBoxModel(BaseModel):
         # 팬카페 패턴
 
         if "naver" in bias.fan_cafe:
-            self.__urls["네이버카페"] = bias.fan_cafe
+            self.__urls["Naver"] = bias.fan_cafe
         elif "daum" in bias.fan_cafe:
-            self.__urls["다음카페"] = bias.fan_cafe
+            self.__urls["Daum"] = bias.fan_cafe
         # 팬카페는 3가지 경우에 대해서만 하겠음
         # 팬심은 안넣습니다.
         else:
