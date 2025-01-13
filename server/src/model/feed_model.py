@@ -499,8 +499,6 @@ class CommunityFeedModel(FeedModel):
                                              feed_manager:FeedManager,
                                              ):
         
-        print("board_type : ", board_type)
-        
         # bias를 선택하지 않았을 때
         if bid =="":
             fid_list, self.__last_fid = feed_search_engine.try_feed_with_bid_n_filtering(
