@@ -360,12 +360,14 @@ class ImageTagModel(BaseModel):
 class CommunitySideBoxModel(BaseModel):
     def __init__(self, database):
         super().__init__(database)
+        self.__bias = Bias()
         self.__urls = {}
         self._boards = []
 
     def get_response_form_data(self, head_parser):
         try:
             body = {
+                'bname' : self.__bias.bname,
                 'urls' : self.__urls,
                 'boards' : self._boards
             }
@@ -378,54 +380,55 @@ class CommunitySideBoxModel(BaseModel):
 
     def get_boards_of_bias_community(self, bid):
         bias_data = self._database.get_data_with_id(target='bid', id=bid)
-        bias = Bias()
-        bias.make_with_dict(bias_data)
+        
+        if bias_data:
+            bias = Bias()
+            bias.make_with_dict(bias_data)
+            self._boards = copy.copy(bias.board_types)
+            return True
+        else:
+            return False
+        
 
-        self._boards = copy.copy(bias.board_types)
-
-    def get_urls_of_bias(self, bid):
-        bias_data = self._database.get_data_with_id(target='bid', id=bid)
-        bias = Bias()
-        bias.make_with_dict(bias_data)
-
+    def get_urls_of_bias(self):
         # URL 패턴. 고정된 패턴들을 포함합니다.
-        self.__urls["X"] = bias.x_account
-        self.__urls["Instagram"] =  bias.insta_account
-        self.__urls["TikTok"]=  bias.tiktok_account
-        self.__urls["Youtube"] = bias.youtube_account
+        self.__urls["X"] = self.__bias.x_account
+        self.__urls["Instagram"] =  self.__bias.insta_account
+        self.__urls["TikTok"]=  self.__bias.tiktok_account
+        self.__urls["Youtube"] = self.__bias.youtube_account
 
         # 홈페이지 패턴, 주요한 곳들을 추가했음. 팝콘, 팬더는 일부러 안넣음 만약 넣어야한다면 넣겠다.
 
         # 치지직
-        if "chzzk" in bias.homepage:
-            self.__urls["Chzzk"] = bias.homepage
+        if "chzzk" in self.__bias.homepage:
+            self.__urls["Chzzk"] = self.__bias.homepage
         # SOOP, 구 아프리카티비
-        elif "soop" in bias.homepage or "afreecatv" in bias.homepage:
-            self.__urls["SOOP"] = bias.homepage
+        elif "soop" in self.__bias.homepage or "afreecatv" in self.__bias.homepage:
+            self.__urls["SOOP"] = self.__bias.homepage
         # 플렉스 티비. 여기 여캠 비중 압도적인 신생 플랫폼
-        elif "flextv" in bias.homepage:
-            self.__urls["FlexTV"] = bias.homepage
+        elif "flextv" in self.__bias.homepage:
+            self.__urls["FlexTV"] = self.__bias.homepage
         # 카카오티비. 구 다음팟 티비
-        elif "kakao" in bias.homepage:
-            self.__urls["KakaoTV"] = bias.homepage
+        elif "kakao" in self.__bias.homepage:
+            self.__urls["KakaoTV"] = self.__bias.__homepage
         # 트위치. 망했지만 넣긴하는게 맞음. 해외시청자가 주인 방송인들은 아직 잔류하는 듯
-        elif "twitch" in bias.homepage:
-            self.__urls["Twitch"] = bias.homepage
+        elif "twitch" in self.__bias.homepage:
+            self.__urls["Twitch"] = self.__bias.homepage
 
         # 나머지 플랫폼 : Default로 두겠음
         else:
-            self.__urls["Default"] = bias.homepage
+            self.__urls["Default"] = self.__bias.homepage
 
         # 팬카페 패턴
 
-        if "naver" in bias.fan_cafe:
-            self.__urls["Naver"] = bias.fan_cafe
-        elif "daum" in bias.fan_cafe:
-            self.__urls["Daum"] = bias.fan_cafe
+        if "naver" in self.__bias.fan_cafe:
+            self.__urls["Naver"] = self.__bias.fan_cafe
+        elif "daum" in self.__bias.fan_cafe:
+            self.__urls["Daum"] = self.__bias.fan_cafe
         # 팬카페는 3가지 경우에 대해서만 하겠음
         # 팬심은 안넣습니다.
         else:
-            self.__urls["Default"] = bias.fan_cafe
+            self.__urls["Default"] = self.__bias.fan_cafe
 
         # 마지막. 키 순회하면서 ""인 값들을 모두 쳐냄
         for key in list(self.__urls.keys()):

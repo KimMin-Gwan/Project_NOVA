@@ -246,6 +246,7 @@ class Feed(SampleDomain):
         self.num_image = len(self.image)
         self.star_flag = False
         self.nickname = ""
+        self.raw_body = body
 
 
     def make_with_dict(self, dict_data):
@@ -289,6 +290,7 @@ class Feed(SampleDomain):
             "iid": self.iid,
             "lid": self.lid,
             "bid": self.bid,
+            "raw_body" : self.raw_body,
 
             "num_comment":self.num_comment,
             "num_image":self.num_image,

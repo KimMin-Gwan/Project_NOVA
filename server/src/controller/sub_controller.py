@@ -269,19 +269,12 @@ class Sub_Controller:
     def try_get_community_side_box(self, database:Local_Database, data_payload):
         model = CommunitySideBoxModel(database=database)
 
-        try:
-            # 유저가 있는지 확인
-            model.get_boards_of_bias_community(bid=data_payload.bid)
-            model.get_urls_of_bias(bid=data_payload.bid)
+        # 유저가 있는지 확인
+        if model.get_boards_of_bias_community(bid=data_payload.bid):
+            model.get_urls_of_bias()
 
-            return model
-        except CustomError as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
+        return model
 
-        except Exception as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
 
 
 

@@ -1793,7 +1793,6 @@ class FeedChaosGraph:
 
         for edge in edge_list:
             if edge.get_target_node() == target_node:
-                print("found")
                 return True
         return False
 
