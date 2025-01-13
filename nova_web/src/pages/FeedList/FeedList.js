@@ -14,6 +14,7 @@ import menu from "./../../img/menu-burger.png";
 import LeftBar from "./../WideVer/LeftBar.js";
 import RightBar from "./../WideVer/RightBar.js";
 import style from "./FeedHashList.module.css";
+import NoticeBox from "../../component/NoticeBox/index.js";
 
 export default function FeedList(isUserState) {
   const [params] = useSearchParams();
@@ -43,7 +44,8 @@ export default function FeedList(isUserState) {
 
   const brightModeFromUrl = params.get("brightMode");
 
-  const initialMode = brightModeFromUrl || localStorage.getItem("brightMode") || "bright"; // URL에서 가져오고, 없으면 로컬 스토리지에서 가져옴
+  const initialMode =
+    brightModeFromUrl || localStorage.getItem("brightMode") || "bright"; // URL에서 가져오고, 없으면 로컬 스토리지에서 가져옴
   const [mode, setMode] = useState(initialMode);
   let navigate = useNavigate();
 
@@ -204,9 +206,12 @@ export default function FeedList(isUserState) {
     }
 
     if (keyword) {
-      fetch(`${FETCH_URL}search_feed_with_hashtag?hashtag=${keyword}&key=${nextData}`, {
-        credentials: "include",
-      })
+      fetch(
+        `${FETCH_URL}search_feed_with_hashtag?hashtag=${keyword}&key=${nextData}`,
+        {
+          credentials: "include",
+        }
+      )
         .then((response) => response.json())
         .then((data) => {
           setNextData(data.body.key);
@@ -244,7 +249,9 @@ export default function FeedList(isUserState) {
       .then((data) => {
         setFeedData((prevFeeds) => {
           const updatedFeeds = prevFeeds.map((feed) => {
-            return feed.feed.fid === fid ? { ...feed, interaction: data.body.interaction } : feed;
+            return feed.feed.fid === fid
+              ? { ...feed, interaction: data.body.interaction }
+              : feed;
           });
 
           return updatedFeeds;
@@ -330,7 +337,17 @@ export default function FeedList(isUserState) {
           </div>
         </header>
         {type == "bias" && (
-          <BiasBoxes setBiasId={setBiasId} fetchBiasCategoryData={fetchBiasCategoryData} />
+          <div className={style["bias-section"]}>
+            <BiasBoxes
+              setBiasId={setBiasId}
+              fetchBiasCategoryData={fetchBiasCategoryData}
+            />
+            <NoticeBox />
+            <div className={style["category-info"]}>
+              <h4>모든 게시글</h4>
+              <p>카테고리 변경</p>
+            </div>
+          </div>
         )}
         {type === "all" && (
           // <BiasBoxes />
@@ -347,23 +364,29 @@ export default function FeedList(isUserState) {
           // <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>전체 피드</div>
         )}
         {type === "best" && (
-          <KeywordBox
-            title={"인기 급상승"}
-            subTitle={"오늘의 키워드"}
-            onClickTagButton={onClickTag}
-          />
+          <div className={style["keyword-section"]}>
+            <KeywordBox
+              title={"인기 급상승"}
+              subTitle={"오늘의 키워드"}
+              onClickTagButton={onClickTag}
+            />
+          </div>
           // <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>오늘의 베스트 피드</div>
         )}
         {type === "weekly_best" && (
-          <KeywordBox
-            title={"많은 사랑을 받은"}
-            subTitle={"이번주 키워드"}
-            onClickTagButton={onClickTag}
-          />
+          <div className={style["keyword-section"]}>
+            <KeywordBox
+              title={"많은 사랑을 받은"}
+              subTitle={"이번주 키워드"}
+              onClickTagButton={onClickTag}
+            />
+          </div>
           // <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>주간 베스트 피드</div>
         )}
         {keyword && (
-          <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>{keyword}</div>
+          <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>
+            {keyword}
+          </div>
         )}
         <div className={style["scroll-area"]}>
           {feedData &&
@@ -371,7 +394,9 @@ export default function FeedList(isUserState) {
               return (
                 <Feed
                   key={feed.feed.fid}
-                  className={`${style["feed-box"]} ${style[getModeClass(mode)]}`}
+                  className={`${style["feed-box"]} ${
+                    style[getModeClass(mode)]
+                  }`}
                   feed={feed.feed}
                   func={true}
                   feedData={feedData}

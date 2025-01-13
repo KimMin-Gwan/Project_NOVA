@@ -1,0 +1,35 @@
+.NoticeBox {
+  display: flex;
+  gap: 10px;
+}
+
+.notice-container {
+  overflow-x: scroll;
+  scrollbar-width: none;
+}
+
+.notice-wrapper {
+  margin-left: 10px;
+  margin-bottom: 20px;
+}
+.notice-box {
+  width: 150px;
+  height: 150px;
+  border-radius: 10px;
+  background-color: white;
+}
+
+.notice-img {
+  height: 80px;
+}
+
+.notice-content {
+  background-color: skyblue;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+
+  height: 70px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
