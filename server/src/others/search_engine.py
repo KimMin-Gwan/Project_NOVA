@@ -695,8 +695,6 @@ class FeedSearchEngine:
                                                                      last_fid=last_fid, page_size=page_size)
         
         
-        print(result)
-        
         # 마지막 feed의 fid 반환
         if result:
             last_fid = result[-1]
