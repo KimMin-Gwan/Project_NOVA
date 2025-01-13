@@ -43,7 +43,6 @@ export default function FeedDetail({ feed }) {
     )
       .then((response) => response.json())
       .then((data) => {
-        console.log("detail", data);
         setFeedData(data.body.feed[0]);
         setIsLoading(false);
       });
@@ -62,7 +61,6 @@ export default function FeedDetail({ feed }) {
     )
       .then((response) => response.json())
       .then((data) => {
-        console.log("comment", data);
         setComments(data.body.comments);
         setIsLoading(false);
       });
@@ -91,17 +89,14 @@ export default function FeedDetail({ feed }) {
         return response.json();
       })
       .then((data) => {
-        console.log("clickstar", data);
-        setFeedData((prevFeeds) => {
-          return prevFeeds.map((feed) => {
-            return feed.fid === fid
-              ? {
-                  ...feed,
-                  star_flag: data.body.feed[0].star_flag,
-                  star: data.body.feed[0].star,
-                }
-              : feed;
-          });
+        setFeedData((prevData) => {
+          return prevData.fid === fid
+            ? {
+                ...prevData,
+                star: data.body.feed[0].star,
+                star_flag: data.body.feed[0].star_flag,
+              }
+            : prevData;
         });
       });
   }
