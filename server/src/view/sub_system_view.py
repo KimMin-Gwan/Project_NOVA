@@ -275,8 +275,22 @@ class Sub_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
-        
+        # 임시 URL주소. 바꾸면 됨
+        # 사이드박스에서 각 BIAS별 설정된 Board_type(게시판들)과, BIAS의 플랫폼, 인스타 등 주소를 보내야 함.
+        # 펀딩부분은 뭐.. 프론트에서 URL로 이어주겠죠?
+        @self.__app.get('/nova_sub_system/try_get_community_side_box')
+        def try_get_community_side_box(request:Request, bid:Optional[int] = -1):
+            request_manager = RequestManager()
 
+            data_payload = CommunitySideBoxRequest(bid=bid)
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+
+            sub_controller=Sub_Controller()
+            model = sub_controller.try_get_community_side_box(database=self.__database,
+                                                              request=request_manager)
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
 
     #def bias_page_route(self, endpoint:str):
         #@self.__app.get(endpoint+'/home')
@@ -364,3 +378,7 @@ class BiasSelectRequest(RequestHeader):
         super().__init__(request)
         body = request['body']
         self.bid = body['bid']
+
+class CommunitySideBoxRequest(RequestHeader):
+    def __init__(self, bid) -> None:
+        self.bid=bid
