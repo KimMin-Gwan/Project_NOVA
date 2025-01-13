@@ -1,4 +1,9 @@
-import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import {
+  useLocation,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { ContentFeed } from "../../component/feed";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -30,9 +35,12 @@ export default function FeedDetail({ feed }) {
   let [comments, setComments] = useState([]);
 
   async function fetchFeed() {
-    await fetch(`https://nova-platform.kr/feed_explore/feed_detail/feed_data?fid=${fid}`, {
-      credentials: "include",
-    })
+    await fetch(
+      `https://nova-platform.kr/feed_explore/feed_detail/feed_data?fid=${fid}`,
+      {
+        credentials: "include",
+      }
+    )
       .then((response) => response.json())
       .then((data) => {
         console.log("detail", data);
@@ -46,9 +54,12 @@ export default function FeedDetail({ feed }) {
   }, [comments, fid]);
 
   async function fetchFeedComment() {
-    await fetch(`https://nova-platform.kr/feed_explore/feed_detail/comment_data?fid=${fid}`, {
-      credentials: "include",
-    })
+    await fetch(
+      `https://nova-platform.kr/feed_explore/feed_detail/comment_data?fid=${fid}`,
+      {
+        credentials: "include",
+      }
+    )
       .then((response) => response.json())
       .then((data) => {
         console.log("comment", data);
@@ -84,7 +95,11 @@ export default function FeedDetail({ feed }) {
         setFeedData((prevFeeds) => {
           return prevFeeds.map((feed) => {
             return feed.fid === fid
-              ? { ...feed, star_flag: data.body.feed[0].star_flag, star: data.body.feed[0].star }
+              ? {
+                  ...feed,
+                  star_flag: data.body.feed[0].star_flag,
+                  star: data.body.feed[0].star,
+                }
               : feed;
           });
         });

@@ -13,7 +13,8 @@ export function useBrightMode() {
   const params = new URLSearchParams(window.location.search);
   const brightModeFromUrl = params.get("brightMode");
 
-  const initialMode = brightModeFromUrl || localStorage.getItem("brightMode") || "bright";
+  const initialMode =
+    brightModeFromUrl || localStorage.getItem("brightMode") || "bright";
 
   const [mode, setMode] = useState(initialMode);
 
@@ -125,11 +126,13 @@ export default function Feed({
         return response.json();
       })
       .then((data) => {
-        console.log("clickstar", data);
         setFeedData((prevFeeds) => {
           return prevFeeds.map((feed) => {
-            return feed.fid === fid
-              ? { ...feed, star_flag: data.body.feed[0].star_flag, star: data.body.feed[0].star }
+            return feed.feed.fid === fid
+              ? {
+                  ...feed,
+                  feed: data.body.feed[0],
+                }
               : feed;
           });
         });
@@ -157,9 +160,12 @@ export default function Feed({
   // 댓글 좋아요 기능
   function handleCommentLike(fid, cid, event) {
     event.preventDefault();
-    fetch(`https://nova-platform.kr/feed_explore/like_comment?fid=${fid}&cid=${cid}`, {
-      credentials: "include",
-    })
+    fetch(
+      `https://nova-platform.kr/feed_explore/like_comment?fid=${fid}&cid=${cid}`,
+      {
+        credentials: "include",
+      }
+    )
       .then((response) => {
         if (!response.ok) {
           if (response.status === 401) {
@@ -194,9 +200,12 @@ export default function Feed({
     const newAll = allComments.filter((comment) => comment.cid !== cid);
     setAllComments(newAll);
 
-    fetch(`https://nova-platform.kr/feed_explore/remove_comment?fid=${fid}&cid=${cid}`, {
-      credentials: "include",
-    })
+    fetch(
+      `https://nova-platform.kr/feed_explore/remove_comment?fid=${fid}&cid=${cid}`,
+      {
+        credentials: "include",
+      }
+    )
       .then((response) => {
         if (!response.ok) {
           if (response.status === 401) {
@@ -284,7 +293,8 @@ export default function Feed({
     const params = new URLSearchParams(window.location.search);
     const brightModeFromUrl = params.get("brightMode");
 
-    const initialMode = brightModeFromUrl || localStorage.getItem("brightMode") || "bright";
+    const initialMode =
+      brightModeFromUrl || localStorage.getItem("brightMode") || "bright";
 
     const [mode, setMode] = useState(initialMode);
 
@@ -315,7 +325,9 @@ export default function Feed({
               supporter={`${feed.nickname}`}
             ></InfoArea>
             {isClickedMoreSee ? (
-              <div className={`${style["modal-container"]} ${style["feed-comment-modal"]}`}>
+              <div
+                className={`${style["modal-container"]} ${style["feed-comment-modal"]}`}
+              >
                 <div className={style["comment-modal"]}>
                   <nav className={style["top_bar"]}>댓글 더보기</nav>
                   <nav onClick={handleMoreSee} className={style["top_bar"]}>
@@ -326,7 +338,10 @@ export default function Feed({
                   ) : (
                     allComments.map((comment, i) => {
                       return (
-                        <section key={comment.cid} className={style["text-section"]}>
+                        <section
+                          key={comment.cid}
+                          className={style["text-section"]}
+                        >
                           <div className={style["text-box"]}>
                             <p className={style["text-1"]}>{comment.uname}</p>
                             <p className={style["text-2"]}>{comment.body}</p>
@@ -335,23 +350,35 @@ export default function Feed({
                             {comment.owner ? (
                               <button
                                 onClick={(e) => {
-                                  handleRemoveComment(comment.fid, comment.cid, e);
+                                  handleRemoveComment(
+                                    comment.fid,
+                                    comment.cid,
+                                    e
+                                  );
                                 }}
                                 className={style["button-modal"]}
                               >
                                 삭제
                               </button>
                             ) : (
-                              <button className={style["button-modal"]}></button>
+                              <button
+                                className={style["button-modal"]}
+                              ></button>
                             )}
 
-                            <button className={style["button-modal"]}>신고</button>
+                            <button className={style["button-modal"]}>
+                              신고
+                            </button>
                             <div className={style["star-modal"]}>
                               <img
                                 src={comment.like_user ? star_color : star}
                                 alt="clickable"
                                 onClick={(e) => {
-                                  handleCommentLike(comment.fid, comment.cid, e);
+                                  handleCommentLike(
+                                    comment.fid,
+                                    comment.cid,
+                                    e
+                                  );
                                 }}
                                 className={style["img-star"]}
                               />
@@ -362,17 +389,23 @@ export default function Feed({
                       );
                     })
                   )}
-                  <div className={`${style["comment_action"]} ${style["comment-input"]}`}>
+                  <div
+                    className={`${style["comment_action"]} ${style["comment-input"]}`}
+                  >
                     <form onSubmit={(event) => handleSubmit(feed.fid, event)}>
                       <input
                         type="text"
                         value={inputValue}
                         onChange={handleChange}
-                        className={` ${style["comment-box"]} ${style[getModeClass(mode)]}`}
+                        className={` ${style["comment-box"]} ${
+                          style[getModeClass(mode)]
+                        }`}
                       ></input>
                       <button
                         type="submit"
-                        className={` ${style["comment-write"]} ${style[getModeClass(mode)]}`}
+                        className={` ${style["comment-write"]} ${
+                          style[getModeClass(mode)]
+                        }`}
                       >
                         댓글 작성
                       </button>
@@ -399,7 +432,9 @@ export default function Feed({
                     {/* 2개이미지 */}
                     {feed.num_image === 2 && (
                       <div className={style["image-box"]}>
-                        <div className={`${style["image-show"]} ${style["two-image"]}`}>
+                        <div
+                          className={`${style["image-show"]} ${style["two-image"]}`}
+                        >
                           {feed.image.map((img, i) => {
                             return (
                               <img
@@ -419,7 +454,9 @@ export default function Feed({
                     {/* 3개이미지 */}
                     {feed.num_image === 3 && (
                       <div className={style["image-box"]}>
-                        <div className={`${style["image-show"]} ${style["three-image"]}`}>
+                        <div
+                          className={`${style["image-show"]} ${style["three-image"]}`}
+                        >
                           {feed.image.map((img, i) => {
                             return (
                               <img
@@ -457,7 +494,9 @@ export default function Feed({
                     {/* 5개이상 */}
                     {feed.num_image >= 5 && (
                       <div className={style["image-box"]}>
-                        <div className={`${style["image-origin"]} ${style["five-over-image"]}`}>
+                        <div
+                          className={`${style["image-origin"]} ${style["five-over-image"]}`}
+                        >
                           {feed.image.map((img, i) => {
                             return (
                               <img
@@ -487,7 +526,10 @@ export default function Feed({
                               handleClick(i);
                             }}
                             key={i}
-                            style={{ backgroundColor: i === feed.attend ? "#D2C8F7" : "white" }}
+                            style={{
+                              backgroundColor:
+                                i === feed.attend ? "#D2C8F7" : "white",
+                            }}
                           >
                             {i + 1}. {choi}
                             <span>{feed.result[i]}</span>
@@ -501,7 +543,10 @@ export default function Feed({
                               alert("로그인이 필요합니다.");
                             }}
                             key={i}
-                            style={{ backgroundColor: i === feed.attend ? "#D2C8F7" : "white" }}
+                            style={{
+                              backgroundColor:
+                                i === feed.attend ? "#D2C8F7" : "white",
+                            }}
                           >
                             {i + 1}. {choi}
                             <span>{feed.result[i]}</span>
@@ -517,10 +562,17 @@ export default function Feed({
                               handleClick(i);
                             }}
                             key={i}
-                            style={{ backgroundColor: selectedIndex === i ? "#D2C8F7" : "white" }}
+                            style={{
+                              backgroundColor:
+                                selectedIndex === i ? "#D2C8F7" : "white",
+                            }}
                           >
                             {i + 1}. {choi}
-                            {feed.attend !== -1 ? <span>{feed.result[i]}</span> : <span></span>}
+                            {feed.attend !== -1 ? (
+                              <span>{feed.result[i]}</span>
+                            ) : (
+                              <span></span>
+                            )}
                           </li>
                         );
                       } else {
@@ -531,10 +583,17 @@ export default function Feed({
                               alert("로그인이 필요합니다.");
                             }}
                             key={i}
-                            style={{ backgroundColor: selectedIndex === i ? "#D2C8F7" : "white" }}
+                            style={{
+                              backgroundColor:
+                                selectedIndex === i ? "#D2C8F7" : "white",
+                            }}
                           >
                             {i + 1}. {choi}
-                            {feed.attend !== -1 ? <span>{feed.result[i]}</span> : <span></span>}
+                            {feed.attend !== -1 ? (
+                              <span>{feed.result[i]}</span>
+                            ) : (
+                              <span></span>
+                            )}
                           </li>
                         );
                       }
@@ -601,7 +660,9 @@ export default function Feed({
               </div>
             </div>
           )}
-          <div className={` ${style["line"]} ${style[getModeClass(mode)]}`}></div>
+          <div
+            className={` ${style["line"]} ${style[getModeClass(mode)]}`}
+          ></div>
           {/* <Comments
             feed={feed}
             allComments={allComments}
@@ -622,7 +683,9 @@ export default function Feed({
               supporter={`${feed.nickname}`}
             ></InfoArea>
             {isClickedMoreSee ? (
-              <div className={`${style["modal-container"]} ${style["feed-comment-modal"]}`}>
+              <div
+                className={`${style["modal-container"]} ${style["feed-comment-modal"]}`}
+              >
                 <div className={style["comment-modal"]}>
                   <nav className={style["top_bar"]}>댓글 더보기</nav>
                   <nav onClick={handleMoreSee} className={style["top_bar"]}>
@@ -633,7 +696,10 @@ export default function Feed({
                   ) : (
                     allComments.map((comment, i) => {
                       return (
-                        <section key={comment.cid} className={style["text-section"]}>
+                        <section
+                          key={comment.cid}
+                          className={style["text-section"]}
+                        >
                           <div className={style["text-box"]}>
                             <p className={style["text-1"]}>{comment.uname}</p>
                             <p className={style["text-2"]}>{comment.body}</p>
@@ -642,23 +708,35 @@ export default function Feed({
                             {comment.owner ? (
                               <button
                                 onClick={(e) => {
-                                  handleRemoveComment(comment.fid, comment.cid, e);
+                                  handleRemoveComment(
+                                    comment.fid,
+                                    comment.cid,
+                                    e
+                                  );
                                 }}
                                 className={style["button-modal"]}
                               >
                                 삭제
                               </button>
                             ) : (
-                              <button className={style["button-modal"]}></button>
+                              <button
+                                className={style["button-modal"]}
+                              ></button>
                             )}
 
-                            <button className={style["button-modal"]}>신고</button>
+                            <button className={style["button-modal"]}>
+                              신고
+                            </button>
                             <div className={style["star-modal"]}>
                               <img
                                 src={comment.like_user ? star_color : star}
                                 alt="clickable"
                                 onClick={(e) => {
-                                  handleCommentLike(comment.fid, comment.cid, e);
+                                  handleCommentLike(
+                                    comment.fid,
+                                    comment.cid,
+                                    e
+                                  );
                                 }}
                                 className={style["img-star"]}
                               />
@@ -669,17 +747,23 @@ export default function Feed({
                       );
                     })
                   )}
-                  <div className={`${style["comment_action"]} ${style["comment-input"]}`}>
+                  <div
+                    className={`${style["comment_action"]} ${style["comment-input"]}`}
+                  >
                     <form onSubmit={(event) => handleSubmit(feed.fid, event)}>
                       <input
                         type="text"
                         value={inputValue}
                         onChange={handleChange}
-                        className={` ${style["comment-box"]} ${style[getModeClass(mode)]}`}
+                        className={` ${style["comment-box"]} ${
+                          style[getModeClass(mode)]
+                        }`}
                       ></input>
                       <button
                         type="submit"
-                        className={` ${style["comment-write"]} ${style[getModeClass(mode)]}`}
+                        className={` ${style["comment-write"]} ${
+                          style[getModeClass(mode)]
+                        }`}
                       >
                         댓글 작성
                       </button>
@@ -706,7 +790,9 @@ export default function Feed({
                     {/* 2개이미지 */}
                     {feed.num_image === 2 && (
                       <div className={style["image-box"]}>
-                        <div className={`${style["image-show"]} ${style["two-image"]}`}>
+                        <div
+                          className={`${style["image-show"]} ${style["two-image"]}`}
+                        >
                           {feed.image.map((img, i) => {
                             return (
                               <img
@@ -726,7 +812,9 @@ export default function Feed({
                     {/* 3개이미지 */}
                     {feed.num_image === 3 && (
                       <div className={style["image-box"]}>
-                        <div className={`${style["image-show"]} ${style["three-image"]}`}>
+                        <div
+                          className={`${style["image-show"]} ${style["three-image"]}`}
+                        >
                           {feed.image.map((img, i) => {
                             return (
                               <img
@@ -764,7 +852,9 @@ export default function Feed({
                     {/* 5개이상 */}
                     {feed.num_image >= 5 && (
                       <div className={style["image-box"]}>
-                        <div className={`${style["image-origin"]} ${style["five-over-image"]}`}>
+                        <div
+                          className={`${style["image-origin"]} ${style["five-over-image"]}`}
+                        >
                           {feed.image.map((img, i) => {
                             return (
                               <img
@@ -795,10 +885,17 @@ export default function Feed({
                                 handleInteraction(event, feed.fid, i);
                                 handleClick(i);
                               }}
-                              style={{ backgroundColor: i === feed.attend ? "#D2C8F7" : "white" }}
+                              style={{
+                                backgroundColor:
+                                  i === feed.attend ? "#D2C8F7" : "white",
+                              }}
                             >
                               {sel} <br />
-                              {feed.attend !== -1 ? <span>{feed.result[i]}명</span> : <span></span>}
+                              {feed.attend !== -1 ? (
+                                <span>{feed.result[i]}명</span>
+                              ) : (
+                                <span></span>
+                              )}
                             </button>
                           ) : (
                             <button
@@ -807,10 +904,17 @@ export default function Feed({
                                 e.preventDefault();
                                 alert("로그인이 필요합니다.");
                               }}
-                              style={{ backgroundColor: i === feed.attend ? "#D2C8F7" : "white" }}
+                              style={{
+                                backgroundColor:
+                                  i === feed.attend ? "#D2C8F7" : "white",
+                              }}
                             >
                               {sel} <br />
-                              {feed.attend !== -1 ? <span>{feed.result[i]}명</span> : <span></span>}
+                              {feed.attend !== -1 ? (
+                                <span>{feed.result[i]}명</span>
+                              ) : (
+                                <span></span>
+                              )}
                             </button>
                           )}
                         </div>
@@ -877,7 +981,9 @@ export default function Feed({
               </div>
             </div>
           )}
-          <div className={` ${style["line"]} ${style[getModeClass(mode)]}`}></div>
+          <div
+            className={` ${style["line"]} ${style[getModeClass(mode)]}`}
+          ></div>
           {/* <Comments
             feed={feed}
             allComments={allComments}
@@ -899,7 +1005,9 @@ export default function Feed({
               supporter={`${feed.nickname}`}
             ></InfoArea>
             {isClickedMoreSee ? (
-              <div className={`${style["modal-container"]} ${style["feed-comment-modal"]}`}>
+              <div
+                className={`${style["modal-container"]} ${style["feed-comment-modal"]}`}
+              >
                 <div className={style["comment-modal"]}>
                   <nav className={style["top_bar"]}>댓글 더보기</nav>
                   <nav onClick={handleMoreSee} className={style["top_bar"]}>
@@ -910,7 +1018,10 @@ export default function Feed({
                   ) : (
                     allComments.map((comment, i) => {
                       return (
-                        <section key={comment.cid} className={style["text-section"]}>
+                        <section
+                          key={comment.cid}
+                          className={style["text-section"]}
+                        >
                           <div className={style["text-box"]}>
                             <p className={style["text-1"]}>{comment.uname}</p>
                             <p className={style["text-2"]}>{comment.body}</p>
@@ -919,23 +1030,35 @@ export default function Feed({
                             {comment.owner ? (
                               <button
                                 onClick={(e) => {
-                                  handleRemoveComment(comment.fid, comment.cid, e);
+                                  handleRemoveComment(
+                                    comment.fid,
+                                    comment.cid,
+                                    e
+                                  );
                                 }}
                                 className={style["button-modal"]}
                               >
                                 삭제
                               </button>
                             ) : (
-                              <button className={style["button-modal"]}></button>
+                              <button
+                                className={style["button-modal"]}
+                              ></button>
                             )}
 
-                            <button className={style["button-modal"]}>신고</button>
+                            <button className={style["button-modal"]}>
+                              신고
+                            </button>
                             <div className={style["star-modal"]}>
                               <img
                                 src={comment.like_user ? star_color : star}
                                 alt="clickable"
                                 onClick={(e) => {
-                                  handleCommentLike(comment.fid, comment.cid, e);
+                                  handleCommentLike(
+                                    comment.fid,
+                                    comment.cid,
+                                    e
+                                  );
                                 }}
                                 className={style["img-star"]}
                               />
@@ -946,17 +1069,23 @@ export default function Feed({
                       );
                     })
                   )}
-                  <div className={`${style["comment_action"]} ${style["comment-input"]}`}>
+                  <div
+                    className={`${style["comment_action"]} ${style["comment-input"]}`}
+                  >
                     <form onSubmit={(event) => handleSubmit(feed.fid, event)}>
                       <input
                         type="text"
                         value={inputValue}
                         onChange={handleChange}
-                        className={` ${style["comment-box"]} ${style[getModeClass(mode)]}`}
+                        className={` ${style["comment-box"]} ${
+                          style[getModeClass(mode)]
+                        }`}
                       ></input>
                       <button
                         type="submit"
-                        className={` ${style["comment-write"]} ${style[getModeClass(mode)]}`}
+                        className={` ${style["comment-write"]} ${
+                          style[getModeClass(mode)]
+                        }`}
                       >
                         댓글 작성
                       </button>
@@ -1025,7 +1154,9 @@ export default function Feed({
                     {/* 2개이미지 */}
                     {feed.num_image === 2 && (
                       <div className={style["image-box"]}>
-                        <div className={`${style["image-show"]} ${style["two-image"]}`}>
+                        <div
+                          className={`${style["image-show"]} ${style["two-image"]}`}
+                        >
                           {feed.image.map((img, i) => {
                             return (
                               <img
@@ -1045,7 +1176,9 @@ export default function Feed({
                     {/* 3개이미지 */}
                     {feed.num_image === 3 && (
                       <div className={style["image-box"]}>
-                        <div className={`${style["image-show"]} ${style["three-image"]}`}>
+                        <div
+                          className={`${style["image-show"]} ${style["three-image"]}`}
+                        >
                           {feed.image.map((img, i) => {
                             return (
                               <img
@@ -1083,7 +1216,9 @@ export default function Feed({
                     {/* 5개이상 */}
                     {feed.num_image >= 5 && (
                       <div className={style["image-box"]}>
-                        <div className={`${style["image-origin"]} ${style["five-over-image"]}`}>
+                        <div
+                          className={`${style["image-origin"]} ${style["five-over-image"]}`}
+                        >
                           {feed.image.map((img, i) => {
                             return (
                               <img
@@ -1106,7 +1241,11 @@ export default function Feed({
                 <div
                   className={style["link_box"]}
                   onClick={() => {
-                    window.open(feed.choice[2], "_blank", "noopener, noreferrer");
+                    window.open(
+                      feed.choice[2],
+                      "_blank",
+                      "noopener, noreferrer"
+                    );
                   }}
                 >
                   <h1>{feed.choice[0]}</h1>
@@ -1170,7 +1309,9 @@ export default function Feed({
               </div>
             </div>
           )}
-          <div className={` ${style["line"]} ${style[getModeClass(mode)]}`}></div>
+          <div
+            className={` ${style["line"]} ${style[getModeClass(mode)]}`}
+          ></div>
           {/* <Comments
             feed={feed}
             allComments={allComments}
@@ -1212,7 +1353,8 @@ export function Text({ data, hashtag }) {
     const params = new URLSearchParams(window.location.search);
     const brightModeFromUrl = params.get("brightMode");
 
-    const initialMode = brightModeFromUrl || localStorage.getItem("brightMode") || "bright";
+    const initialMode =
+      brightModeFromUrl || localStorage.getItem("brightMode") || "bright";
 
     const [mode, setMode] = useState(initialMode);
 
@@ -1235,7 +1377,9 @@ export function Text({ data, hashtag }) {
           </span>
         );
       })}
-      <div className={`${style["feed-text"]} ${style[getModeClass(mode)]}`}>{<p>{data}</p>}</div>
+      <div className={`${style["feed-text"]} ${style[getModeClass(mode)]}`}>
+        {<p>{data}</p>}
+      </div>
     </div>
   );
 }
@@ -1318,7 +1462,8 @@ export function Comments({
     const params = new URLSearchParams(window.location.search);
     const brightModeFromUrl = params.get("brightMode");
 
-    const initialMode = brightModeFromUrl || localStorage.getItem("brightMode") || "bright";
+    const initialMode =
+      brightModeFromUrl || localStorage.getItem("brightMode") || "bright";
 
     const [mode, setMode] = useState(initialMode);
 
@@ -1339,7 +1484,11 @@ export function Comments({
         ) : (
           !isClickedComment && (
             <>
-              <div className={`${style["comment_support"]} ${style[getModeClass(mode)]}`}>
+              <div
+                className={`${style["comment_support"]} ${
+                  style[getModeClass(mode)]
+                }`}
+              >
                 {allComments[0].uname}
               </div>
               <div className={style["comment_data"]}>{allComments[0].body}</div>
@@ -1357,7 +1506,9 @@ export function Comments({
           ></input>
           <button
             type="submit"
-            className={` ${style["comment-write"]} ${style[getModeClass(mode)]}`}
+            className={` ${style["comment-write"]} ${
+              style[getModeClass(mode)]
+            }`}
           >
             댓글 작성
           </button>
@@ -1386,7 +1537,9 @@ export function ContentFeed({
       className={style["wrapper-container"]}
       onClick={(e) => {
         e.preventDefault();
-        navigate(`/feed_detail/${feed.fid}`, { state: { commentClick: false } });
+        navigate(`/feed_detail/${feed.fid}`, {
+          state: { commentClick: false },
+        });
       }}
     >
       <div className={style["user-container"]}>
@@ -1405,7 +1558,9 @@ export function ContentFeed({
               return <span key={i}>#{tag}</span>;
             })}
         </div>
-        {feed.fclass === "short" && <div className={style["body-content"]}>{feed.body}</div>}
+        {feed.fclass === "short" && (
+          <div className={style["body-content"]}>{feed.body}</div>
+        )}
         {feed.image?.length > 0 ? (
           <div className={style["image-container"]}>
             <img src={feed.image} alt="image" />
@@ -1415,7 +1570,11 @@ export function ContentFeed({
         )}
         {/* {feed.fclass === "short" && <SelectOption feed={feed} interaction={interaction} />} */}
         {feed.fclass === "short" && (
-          <QuizOption feed={feed} interaction={interaction} handleInteraction={handleInteraction} />
+          <QuizOption
+            feed={feed}
+            interaction={interaction}
+            handleInteraction={handleInteraction}
+          />
         )}
         {feed.fclass === "long" && <Viewer initialValue={feed.body} />}
       </div>
@@ -1439,7 +1598,9 @@ export function ContentFeed({
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                navigate(`/feed_detail/${feed.fid}`, { state: { commentClick: true } });
+                navigate(`/feed_detail/${feed.fid}`, {
+                  state: { commentClick: true },
+                });
               }}
             >
               <img src={comment} alt="comment-icon" />
@@ -1472,7 +1633,9 @@ export function ContentFeed({
                     {option}
                   </div>
 
-                  <div className={style["action-points"]}>{interaction.result[i]}%</div>
+                  <div className={style["action-points"]}>
+                    {interaction.result[i]}%
+                  </div>
                 </div>
               );
             })}
@@ -1488,7 +1651,10 @@ export function ContentFeed({
                     handleCheckStar(feed.fid, e);
                   }}
                 >
-                  <img src={star} alt="star-icon" />
+                  <img
+                    src={feed.star_flag ? star_color : star}
+                    alt="star-icon"
+                  />
                 </button>
                 <span>{feed.star}</span>
               </div>
@@ -1497,7 +1663,9 @@ export function ContentFeed({
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    navigate(`/feed_detail/${feed.fid}`, { state: { commentClick: true } });
+                    navigate(`/feed_detail/${feed.fid}`, {
+                      state: { commentClick: true },
+                    });
                   }}
                 >
                   <img src={comment} alt="comment-icon" />
@@ -1518,7 +1686,11 @@ function SelectOption({ feed, feedInteraction }) {
       {/* <ProgressBar point={50} type={"feed"} /> */}
       {feedInteraction.choice.map((option, i) => {
         return (
-          <button key={i} className={style["option"]} onClick={(e) => e.stopPropagation()}>
+          <button
+            key={i}
+            className={style["option"]}
+            onClick={(e) => e.stopPropagation()}
+          >
             {option}
           </button>
         );
