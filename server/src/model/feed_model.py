@@ -116,8 +116,6 @@ class FeedModel(BaseModel):
         
         
         self._set_feed_json_data(user=self._user, feeds=self._feeds, feed_manager=feed_manager)
-        
-        pprint(self._feeds[0].get_dict_form_data())
         return
 
     # 댓글 새로 달기
@@ -475,6 +473,8 @@ class CommunityFeedModel(FeedModel):
                                  feed_search_engine:FeedSearchEngine,
                                  feed_manager:FeedManager
                                  ):
+        
+        print("bid : ", bid)
         
         # bias를 선택하지 않았을 때
         if bid == "":

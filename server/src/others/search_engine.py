@@ -694,6 +694,9 @@ class FeedSearchEngine:
             result = self.__filter_manager.filtering_board_community(bid=target_bids[0], board_type=board_type,
                                                                      last_fid=last_fid, page_size=page_size)
         
+        
+        print(result)
+        
         # 마지막 feed의 fid 반환
         if result:
             last_fid = result[-1]
