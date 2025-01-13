@@ -3,6 +3,8 @@ import boto3
 import time
 import glob
 import os
+from bs4 import BeautifulSoup
+
 
 
 # 건들지 않음
@@ -83,4 +85,20 @@ class ObjectStorageConnection:
             if os.path.isfile(file):
                 os.remove(file)
         return
+
+    # 오브젝트 바디 커넥트에서 데이터를 분리하는 함수
+    # raw_data = String화 되어 파싱 된 것. <p> tag~
+    def extract_body_n_image(self, raw_data:str):
+        soup = BeautifulSoup(raw_data, "html.parser")
+
+        p_text = soup.p.text.strip()
+
+        # <img> 태그의 모든 src 속성 가져오기
+        # ImageBase64 코드의 형태로 저장됨
+        img_srcs = [img["src"] for img in soup.find_all("img")]
+
+        return p_text, img_srcs
+        # response.raise_for_status()
+
+
 
