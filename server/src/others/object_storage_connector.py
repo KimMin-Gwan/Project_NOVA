@@ -91,13 +91,13 @@ class ObjectStorageConnection:
     def extract_body_n_image(self, raw_data:str):
         soup = BeautifulSoup(raw_data, "html.parser")
 
-        p_text = soup.p.text.strip()
+        body = soup.p.text.strip()
 
         # <img> 태그의 모든 src 속성 가져오기
         # ImageBase64 코드의 형태로 저장됨
-        img_srcs = [img["src"] for img in soup.find_all("img")]
+        imgs = [img["src"] for img in soup.find_all("img")]
 
-        return p_text, img_srcs
+        return body, imgs
         # response.raise_for_status()
 
 
