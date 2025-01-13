@@ -200,9 +200,9 @@ class Sub_Service_View(Master_View):
             return response
         
         # 최신에 사용중인 최애 기반 커뮤니티 리스트에 나올 공지
-        @self.__app.post('/nova_sub_system/image_tag')
-        def try_get_sample_notice(raw_request:dict, bid:Optional[str]):
-            data_payload = NoticeSampleRequest(bid=bid)
+        @self.__app.get('/nova_sub_system/sample_notice')
+        def try_get_sample_notice(bid:Optional[str]="", last_nid:Optional[str]=""):
+            data_payload = NoticeSampleRequest(bid=bid, last_nid=last_nid)
             
             sub_controller =Sub_Controller()
             model = sub_controller.try_get_notice_sample(database=self.__database,
@@ -334,8 +334,9 @@ class NoticeDetailRequest():
         self.nid=nid
         
 class NoticeSampleRequest():
-    def __init__(self, bid=None) -> None:
+    def __init__(self, bid="", last_nid="") -> None:
         self.bid=bid
+        self.last_nid=last_nid
         
 class BiasPageInfoRequest():
     def __init__(self, bid = None) -> None:

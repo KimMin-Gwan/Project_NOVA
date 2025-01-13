@@ -59,8 +59,13 @@ class NoticeModel(BaseModel):
             return
 
         bias_data = self._database.get_data_with_id(target="bid", id=bid)
-        bias = Bias()
-        bias.make_with_dict(bias_data)
+        
+        if bias_data:
+            bias = Bias()
+            bias.make_with_dict(bias_data)
+            
+        else:
+            return
         
         for notice in self._notices:
             
@@ -119,9 +124,11 @@ class NoticeModel(BaseModel):
         # paging_notices = self._paging_notices(notices=self._notices, last_nid=last_nid)
         
         # for notice in paging_notices:
-        for notice in self._notices:
-            body_data = ObjectStorageConnection().get_notice_body(nid=notice.nid)
-            notice.body = body_data
+        
+        # 당장에는 주석처리
+        #for notice in self._notices:
+            #body_data = ObjectStorageConnection().get_notice_body(nid=notice.nid)
+            #notice.body = body_data
             
         return
 
@@ -133,9 +140,11 @@ class NoticeModel(BaseModel):
         # paging_notices = self._paging_notices(notices=self._notices, last_nid=last_nid)
 
         # for notice in paging_notices:
-        for notice in self._notices:
-            body_data = ObjectStorageConnection().get_notice_body(nid=notice.nid)
-            notice.body = body_data
+        
+        # 당장에는 주석처리
+        #for notice in self._notices:
+            #body_data = ObjectStorageConnection().get_notice_body(nid=notice.nid)
+            #notice.body = body_data
 
         return
         
