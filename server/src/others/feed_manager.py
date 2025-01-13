@@ -1505,7 +1505,6 @@ class FeedManager:
     # Feed에 좋아요를 눌렀을 때의 작용
     def try_staring_feed(self, user:User, fid:str):
         feed = self.__try_staring_feed(user=user, fid=fid)
-        pprint(feed)
         return [feed]
 
     # feed 와 상호작용 -> 관심 표시
