@@ -46,8 +46,7 @@ export default function FeedList(isUserState) {
 
   const brightModeFromUrl = params.get("brightMode");
 
-  const initialMode =
-    brightModeFromUrl || localStorage.getItem("brightMode") || "bright"; // URL에서 가져오고, 없으면 로컬 스토리지에서 가져옴
+  const initialMode = brightModeFromUrl || localStorage.getItem("brightMode") || "bright"; // URL에서 가져오고, 없으면 로컬 스토리지에서 가져옴
   const [mode, setMode] = useState(initialMode);
   let navigate = useNavigate();
 
@@ -209,12 +208,9 @@ export default function FeedList(isUserState) {
     }
 
     if (keyword) {
-      fetch(
-        `${FETCH_URL}search_feed_with_hashtag?hashtag=${keyword}&key=${nextData}`,
-        {
-          credentials: "include",
-        }
-      )
+      fetch(`${FETCH_URL}search_feed_with_hashtag?hashtag=${keyword}&key=${nextData}`, {
+        credentials: "include",
+      })
         .then((response) => response.json())
         .then((data) => {
           setNextData(data.body.key);
@@ -354,10 +350,14 @@ export default function FeedList(isUserState) {
             <NoticeBox />
             <div className={style["category-info"]}>
               <h4>모든 게시글</h4>
-              <p onClick={onClickCategory}>카테고리 변경</p>
+              {biasId && <p onClick={onClickCategory}>카테고리 변경</p>}
             </div>
             {isOpendCategory && (
-              <CategoryModal onClickCategory={onClickCategory} />
+              <CategoryModal
+                onClickCategory={onClickCategory}
+                biasId={biasId}
+                setBoard={setBoard}
+              />
             )}
           </div>
         )}
@@ -406,9 +406,7 @@ export default function FeedList(isUserState) {
               return (
                 <Feed
                   key={feed.feed.fid}
-                  className={`${style["feed-box"]} ${
-                    style[getModeClass(mode)]
-                  }`}
+                  className={`${style["feed-box"]} ${style[getModeClass(mode)]}`}
                   feed={feed.feed}
                   func={true}
                   feedData={feedData}

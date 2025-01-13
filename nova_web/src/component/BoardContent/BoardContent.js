@@ -1,11 +1,19 @@
 import "./index.css";
 
-export default function BoardContent() {
+export default function BoardContent({ boardData, setBoard }) {
+  function onClickBoard(i) {
+    setBoard(boardData.boards[i]);
+  }
   return (
     <ul className="Board_content">
-      <li>공지사항</li>
-      <li>자유게시판</li>
-      <li>팬아트</li>
+      {boardData &&
+        boardData.boards.map((data, i) => {
+          return (
+            <li key={i} onClick={() => onClickBoard(i)}>
+              {data}
+            </li>
+          );
+        })}
     </ul>
   );
 }
