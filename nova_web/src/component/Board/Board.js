@@ -1,11 +1,8 @@
-import BoardContent from "../BoardContent";
-import BoardTitle from "../BoardTitle";
+import BoardContent from "../BoardContent/BoardContent";
+import BoardTitle from "../BoardTitle/BoardTitle";
 import "./index.css";
 
 export default function Board() {
-  {
-    /* board */
-  }
   return (
     <div className="Board">
       <BoardTitle>게시판 목록</BoardTitle>

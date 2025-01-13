@@ -57,8 +57,8 @@ import FeedDetail from "./pages/FeedDetail/FeedDetail.js";
 import TestRef from "./component/TestRef.js";
 import FilterModal from "./component/FilterModal/FilterModal.js";
 import LongFormWrite from "./pages/LongFormWrite/LongFormWrite.js";
-import NoticeBox from "./component/NoticeBox/index.js";
-import CategoryModal from "./component/CategoryModal/index.js";
+import NoticeBox from "./component/NoticeBox/NoticeBox.js";
+import CategoryModal from "./component/CategoryModal/CategoryModal.js";
 
 // 다크 모드 클래스 반환 함수
 export function getModeClass(mode) {

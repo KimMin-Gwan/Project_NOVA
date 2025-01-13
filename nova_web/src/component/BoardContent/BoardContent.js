@@ -1,9 +1,6 @@
 import "./index.css";
 
 export default function BoardContent() {
-  {
-    /* board */
-  }
   return (
     <ul className="Board_content">
       <li>공지사항</li>

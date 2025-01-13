@@ -1,4 +1,3 @@
-import Board from "../Board";
 import "./index.css";
 
 export default function BoardTitle({ children }) {
