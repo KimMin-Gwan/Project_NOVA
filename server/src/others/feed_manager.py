@@ -1537,7 +1537,6 @@ class FeedManager:
         else:
             self._feed_search_engine.try_like_feed(fid=feed.fid, uid=user.uid, like_time=date)
             user.like.append(str_fid_n_date)
-            pprint(user.get_dict_form_data())
             feed.star += 1
 
         self._database.modify_data_with_id(target_id="fid",
