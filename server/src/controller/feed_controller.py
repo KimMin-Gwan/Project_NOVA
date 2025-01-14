@@ -50,21 +50,43 @@ class Feed_Controller:
 
     # 임시 인터페이스, 만약 2차 필터링 옵션이 확정난다면 이 기능이 확장됩니다.
     # 계획) 옵션들을 모두 받아와서 옵션에 맞게 필터링을 여러번 거치고, 가져옵니다.
-    def get_feed_in_bias_community_filtered(self, database:Local_Database,
-                                            request, feed_search_engine: FeedSearchEngine):
+    # def get_feed_in_bias_community_filtered(self, database:Local_Database,
+    #                                         request, feed_search_engine: FeedSearchEngine):
+    #     model = CommunityFeedModel(database=database)
+    #
+    #     # 유저가 있으면 세팅
+    #     if request.jwt_payload != "":
+    #         model.set_user_with_email(request=request.jwt_payload)
+    #
+    #     model.try_search_feed_with_filtering_fclass(
+    #         bid = request.data_payload.bid,
+    #         last_fid = request.data_payload.last_fid,
+    #         board_type = request.data_payload.board_type,
+    #         fclass = request.data_payload.fclass,
+    #         feed_search_engine=feed_search_engine,
+    #         feed_manager=self.__feed_manager,
+    #     )
+    #
+    #     return model
+
+    # 필터링 인터페이스
+    # 옵션들을 모두 받아와서 여러번 필터링을 거치게 됩니다.
+    # Long 필터링, Short 필터링 모두 키는 베타테스팅까지 고려하긴했습니다.
+    # 이게 SQL 쿼리였다면.. 걍 걸러내는데
+    def try_filtering_feeds_with_options(self, database:Local_Database, request, feed_search_engine: FeedSearchEngine):
         model = CommunityFeedModel(database=database)
 
         # 유저가 있으면 세팅
         if request.jwt_payload != "":
             model.set_user_with_email(request=request.jwt_payload)
 
-        model.try_search_feed_with_filtering_fclass(
-            bid = request.data_payload.bid,
+        model.try_filtering_feed_with_options(
+            bid=request.data_payload.bid,
             last_fid = request.data_payload.last_fid,
             board_type = request.data_payload.board_type,
-            fclass = request.data_payload.fclass,
             feed_search_engine=feed_search_engine,
             feed_manager=self.__feed_manager,
+            options=request.data_payload.options
         )
 
         return model

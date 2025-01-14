@@ -439,6 +439,24 @@ class Core_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
+        # 임시 인터페이스.
+        # 필터링 옵션을 통해 글들을 필터링 합니다.
+        # 1차 필터링 (위 함수로 동작된 결과)를 끌고오지 않고, 이 함수에서 새롭게 시동합니다.
+        # 1차 필터링 (BIAS, 커뮤니티 필터링), 2차 필터링 (옵션 필터링)으로 최종적으로 선별된 Feed를 반환합니다.
+        @self.__app.get('/feed_explore/feed_filtering_with_options')
+        def get_feed_filtering_with_options(request:Request, raw_request:dict):
+            request_manager = RequestManager()
+            data_payload = CommunityFilteredRequest(request=raw_request)
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+
+            feed_controller =Feed_Controller(feed_manager=self.__feed_manager)
+            model = feed_controller.try_filtering_feeds_with_options(database=self.__database,
+                                                                        request=request_manager,
+                                                                        feed_search_engine=self.__feed_search_engine)
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
         # 숏피드에서 맨처음에 feed 데이터를 fid로 검색하기
         @self.__app.get('/feed_explore/get_feed')
         def get_feed_data(request:Request, fid:Optional[str]="" ):
@@ -763,6 +781,11 @@ class CommunityRequest(RequestHeader):
         self.bid = body['bid']
         self.board_type = body['board']
         self.last_fid = body['last_fid']
+
+class CommunityFilteredRequest(CommunityRequest):
+    def __init__(self, request) -> None:
+        super().__init__(request)
+        self.options = request['options']
 
 class HomeFeedRequest(RequestHeader):
     def __init__(self, key) -> None:
