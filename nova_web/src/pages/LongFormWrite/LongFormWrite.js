@@ -118,7 +118,7 @@ export default function LongFormWrite() {
         choice: choice, // 4지선다 선택지 반영
         hashtag: tagList,
         link: { lname: linkTitle, url: linkUrl },
-        bid: biasId,
+        bid: biasId || "",
         image_names: "",
       },
     };
@@ -300,7 +300,9 @@ export default function LongFormWrite() {
           onChange={onChangeBody}
         /> */}
       </div>
-      <p className={style["alert_message"]}>숏 피드 게시글은 작성 후 24시간 동안 노출됩니다.</p>
+      <p className={style["alert_message"]}>
+        숏 피드 게시글은 작성 후 24시간 동안 노출됩니다.
+      </p>
       <div className={style["content_button"]}>
         <button
           onClick={(e) => {

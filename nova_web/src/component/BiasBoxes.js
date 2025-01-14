@@ -72,7 +72,7 @@ export default function BiasBoxes({ setBiasId, fetchBiasCategoryData }) {
                     alt="bias"
                     onClick={() => {
                       onClickBiasId(bias.bid);
-                      fetchBiasCategoryData(bias.bid);
+                      fetchBiasCategoryData && fetchBiasCategoryData(bias.bid);
                     }}
                   />
                 )}

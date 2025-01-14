@@ -1469,7 +1469,7 @@ export function ContentFeed({
         {feed.fclass === "short" && (
           <div className={style["body-content"]}>{feed.body}</div>
         )}
-        {feed.image?.length > 0 ? (
+        {feed.image?.length > 0 && feed.fclass === "short" ? (
           <div className={style["image-container"]}>
             <img src={feed.image[0]} alt="image" />
           </div>
@@ -1484,7 +1484,7 @@ export function ContentFeed({
             handleInteraction={handleInteraction}
           />
         )}
-        {feed.fclass === "long" && <Viewer initialValue={feed.body} />}
+        {feed.fclass === "long" && <Viewer initialValue={feed.raw_body} />}
       </div>
 
       <div className={style["button-container"]}>
