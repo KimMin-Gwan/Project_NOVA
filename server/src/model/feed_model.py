@@ -195,7 +195,7 @@ class FeedModel(BaseModel):
 
             # 좋아요를 누를 전적
             
-            for fid_n_date in user.like:
+            for fid_n_date in wuser.like:
                 target_fid = fid_n_date.split('=')[0]
                 print(f"target_fid : {target_fid}  |   feed.fid : {feed.fid}")
                 if target_fid == feed.fid:
