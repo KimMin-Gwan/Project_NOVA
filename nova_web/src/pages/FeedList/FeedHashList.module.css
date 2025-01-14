@@ -148,8 +148,7 @@
   width: 100%;
   color: gray;
   padding: 20px;
-  border-top: 1px solid rgba(0, 0, 0, 0.3);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  border-block: 0.2px solid #d2d2d269;
 
   h4 {
     /* all: unset; */
