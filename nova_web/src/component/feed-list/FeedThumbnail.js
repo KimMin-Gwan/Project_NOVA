@@ -8,7 +8,17 @@ import pin from "./../../img/pin.png";
 import { useNavigate } from "react-router-dom";
 import SearchBox from "../SearchBox";
 
-export default function FeedThumbnail({ title, feedData, brightMode, type, hasSearchBox, children, allPost, endPoint, customClassName }) {
+export default function FeedThumbnail({
+  title,
+  feedData,
+  brightMode,
+  type,
+  hasSearchBox,
+  children,
+  allPost,
+  endPoint,
+  customClassName,
+}) {
   let navigate = useNavigate();
   const [mode, setMode] = useState(brightMode); // 초기 상태는 부모로부터 받은 brightMode 값
 
@@ -30,10 +40,19 @@ export default function FeedThumbnail({ title, feedData, brightMode, type, hasSe
 
       {children}
 
-      {hasSearchBox && <SearchBox />}
+      {/* {hasSearchBox && <SearchBox />} */}
 
       {allPost}
-      {allPost ? null : type === "bias" ? <SimpleSlider feedData={feedData} brightMode={brightMode} type={type} className={customClassName || ""} /> : <SimpleSlider feedData={feedData} brightMode={brightMode} />}
+      {allPost ? null : type === "bias" ? (
+        <SimpleSlider
+          feedData={feedData}
+          brightMode={brightMode}
+          type={type}
+          className={customClassName || ""}
+        />
+      ) : (
+        <SimpleSlider feedData={feedData} brightMode={brightMode} />
+      )}
     </section>
   );
 }

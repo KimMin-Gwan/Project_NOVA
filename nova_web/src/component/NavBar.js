@@ -37,13 +37,6 @@ const NavBar = ({ isUserState, brightMode }) => {
   return (
     <div className={`bottom_bar ${getModeClass(mode)}`}>
       <div className="nav_button_box">
-        <button className="nav_button" onClick={() => window.location.reload()}>
-          <img src={home_icon} alt="home" className="btn_img" />
-          <p className="btn_text">홈</p>
-        </button>
-      </div>
-
-      <div className="nav_button_box">
         <button
           className="nav_button"
           onClick={(e) => {
@@ -52,7 +45,7 @@ const NavBar = ({ isUserState, brightMode }) => {
           }}
         >
           <img src={menu3} alt="make" className="btn_img" />
-          <p className="btn_text">전체 피드</p>
+          <p className="btn_text">넘기는 형태</p>
         </button>
       </div>
 
@@ -86,12 +79,12 @@ const NavBar = ({ isUserState, brightMode }) => {
         <button
           className="nav_button"
           onClick={(e) => {
-            handleNavigate("/feed_page");
+            handleNavigate("/more_see");
             handleStopClick(e);
           }}
         >
           <img src={shortForm_img} alt="shorts" className="btn_img" />
-          <p className="btn_text">숏피드</p>
+          <p className="btn_text">더보기</p>
         </button>
       </div>
     </div>

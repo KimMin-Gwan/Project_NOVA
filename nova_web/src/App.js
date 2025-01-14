@@ -59,6 +59,7 @@ import FilterModal from "./component/FilterModal/FilterModal.js";
 import LongFormWrite from "./pages/LongFormWrite/LongFormWrite.js";
 import NoticeBox from "./component/NoticeBox/NoticeBox.js";
 import CategoryModal from "./component/CategoryModal/CategoryModal.js";
+import SearchBox from "./component/SearchBox.js";
 
 // 다크 모드 클래스 반환 함수
 export function getModeClass(mode) {
@@ -278,6 +279,7 @@ function App() {
                     </button>
                   </div>
                 </header>
+                <SearchBox />
                 <h4 className="main-title">최애가 가장 빛날 수 있는 공간</h4>
 
                 <Banner url={URL}></Banner>
@@ -285,7 +287,7 @@ function App() {
                 <FeedThumbnail
                   title={
                     <>
-                      내가 가장 보고싶은 <span className="title-color">최애</span>
+                      <span className="title-color">최애 </span>몰아보기
                     </>
                   }
                   feedData={weeklyFeed}

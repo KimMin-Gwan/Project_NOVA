@@ -27,6 +27,7 @@ body {
 .title-color {
   margin-left: 5px;
   color: #0076ee;
+  white-space: pre;
 }
 
 /* 다크 모드 버튼 */
