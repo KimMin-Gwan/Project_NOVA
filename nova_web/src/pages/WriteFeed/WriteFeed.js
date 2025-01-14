@@ -25,6 +25,7 @@ const WriteFeed = ({ brightmode }) => {
   //   setLinkList([{ name: linkTitle, url: linkUrl }]);
   //   console.log("linklist");
   // }, [linkTitle, linkUrl]);
+  let [numImg, setNumImg] = useState(0);
 
   function onClickModal() {
     setShowModal(!showModal);
@@ -96,8 +97,17 @@ const WriteFeed = ({ brightmode }) => {
   function onClickAdd() {
     setCreateOptions(createOptions + 1);
   }
+
+  let [currentFileName, setCurrentFileName] = useState([]);
+
   const handleFileChange = (event) => {
-    // const selectedFile = event.target.files[0];
+    const files = Array.from(event.target.files);
+    const names = files.map((file) => file.name);
+    if (names) {
+      setCurrentFileName(names);
+    } else {
+      setCurrentFileName([""]);
+    }
     const selectedFile = Array.from(event.target.files);
     const validFiles = selectedFile.filter((file) => file.type.startsWith("image/"));
 
@@ -105,13 +115,13 @@ const WriteFeed = ({ brightmode }) => {
       alert("이미지 파일만 가능");
     }
 
-    setImageFiles(validFiles);
+    setImageFiles((prevFiles) => [...prevFiles, ...validFiles]);
 
     const previewUrls = validFiles.map((file) => {
       return URL.createObjectURL(file);
     });
 
-    setImagePreview(previewUrls);
+    setImagePreview((prevUrls) => [...prevUrls, ...previewUrls]);
     validFiles.forEach((file) => URL.revokeObjectURL(file));
   };
 
@@ -362,6 +372,8 @@ const WriteFeed = ({ brightmode }) => {
           onClickModal={onClickModal}
           handleFileChange={handleFileChange}
           imagePreview={imagePreview}
+          currentFileName={currentFileName}
+          imageFiles={imageFiles}
         />
       )}
       {showVoteModal && (
@@ -404,6 +416,8 @@ export const Modal = ({
   onClickModal,
   handleFileChange,
   imagePreview,
+  currentFileName,
+  imageFiles,
 }) => {
   const [mode, setMode] = useState(() => {
     return localStorage.getItem("brightMode") || "bright";
@@ -436,14 +450,16 @@ export const Modal = ({
             type="file"
             accept="image/*"
             multiple
-            onChange={handleFileChange}
+            onChange={(e) => {
+              handleFileChange(e);
+            }}
           />
           {imagePreview.length !== 0 &&
             imagePreview.map((preview, index) => {
               return (
                 <div key={index} className={style["preview-container"]}>
                   <div>닫기</div>
-                  {/* <div>{fileRef.current.files[index].name}</div> */}
+                  <div>{imageFiles[index].name}</div>
                   <div className={style["preview-image"]}>
                     <img key={index} src={preview} />
                   </div>
@@ -459,7 +475,9 @@ export const Modal = ({
             className={`${style["apply_button"]} ${
               imagePreview.length > 0 ? style["apply_button_on"] : ""
             }`}
-            onClick={onClickModal}
+            onClick={() => {
+              onClickModal();
+            }}
             disabled={imagePreview.length === 0}
           >
             적용
@@ -502,9 +520,11 @@ export function VoteModal({
               />
             );
           })}
-          <div className={style["option-box"]} onClick={onClickAdd}>
-            선택지를 추가하려면 여기를 클릭하세요
-          </div>
+          {createOptions < 4 && (
+            <div className={style["option-box"]} onClick={onClickAdd}>
+              선택지를 추가하려면 여기를 클릭하세요
+            </div>
+          )}
         </div>
         <div className={style["modal-buttons"]}>
           <button className={style["close_button"]} onClick={onClickModal}>
@@ -539,7 +559,7 @@ export function LinkModal({
     <div className={style["wrapper-container"]}>
       <div className={style["modal-container"]}>
         <div className={style["modal-title"]}>좌표 추가</div>
-        <div className={style["image-container"]}>
+        <div className={style["link-box-container"]}>
           {linkList.length > 0 &&
             linkList.map((link, i) => {
               return (
@@ -550,16 +570,6 @@ export function LinkModal({
                 </div>
               );
             })}
-          {/* {Array.from({ length: numLink }).map((item, i) => {
-            // const data = linkList[i];
-            return (
-              <div key={i} className={style["link-box"]}>
-                <div>닫기</div>
-                <div>{linkTitle}</div>
-                <div>{linkUrl}</div>
-              </div>
-            );
-          })} */}
         </div>
 
         <div className={style["link-input-container"]}>

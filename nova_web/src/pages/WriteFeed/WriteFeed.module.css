@@ -103,8 +103,9 @@
 
 .modal-container {
   max-width: 500px;
+  /* overflow-y: scroll; */
   width: 100%;
-  /* height: 500px; */
+  height: 500px;
   margin: 0 auto;
   background-color: white;
 
@@ -117,8 +118,14 @@
   }
 }
 
+.link-box-container {
+  height: 200px;
+}
+
 .image-container {
   height: 300px;
+  overflow-y: scroll;
+  scrollbar-width: none;
 }
 
 #image-file[type="file"] {
