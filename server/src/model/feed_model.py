@@ -162,7 +162,7 @@ class FeedModel(BaseModel):
     # 피드 내용을 다듬어서 전송가능한 형태로 세팅
     # 포인터로 동작함
     def _set_feed_json_data(self, user, feeds:list):
-        users = []
+        wusers = []
         uids=[]
         for single_feed in feeds:
             single_feed:Feed = single_feed
@@ -171,11 +171,11 @@ class FeedModel(BaseModel):
         user_datas = self._database.get_datas_with_ids(target_id="uid", ids=uids)
 
         for user_data in user_datas:
-            user = User()
-            user.make_with_dict(user_data)
-            users.append(user)
+            single_user = User()
+            single_user.make_with_dict(user_data)
+            wusers.append(single_user)
 
-        for feed, wuser in zip(feeds, users):
+        for feed, wuser in zip(feeds, wusers):
             # 노출 현황 이 1 이하면 죽어야됨
             # 0: 삭제됨 1 : 비공개 2: 차단 3: 댓글 작성 X 4 : 정상(전체 공개)
             if feed.display < 3:
@@ -196,7 +196,7 @@ class FeedModel(BaseModel):
             # 좋아요를 누를 전적
             
             print(f"who am i? : {wuser.uid}")
-            for fid_n_date in wuser.like:
+            for fid_n_date in user.like:
                 target_fid = fid_n_date.split('=')[0]
                 print(f"target_fid : {target_fid}  |   feed.fid : {feed.fid}")
                 if target_fid == feed.fid:
