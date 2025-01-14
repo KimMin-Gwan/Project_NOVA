@@ -57,6 +57,8 @@
 }
 
 .alert_message {
+  padding: 10px 0;
+  text-align: center;
   color: black;
 }
 
@@ -174,6 +176,11 @@
   .apply_button {
     width: 70%;
   }
+
+  .apply_button_on {
+    background-color: #f1f7ff;
+    border: 1px solid #359aff;
+  }
 }
 
 /* 투표 모달 */
@@ -225,5 +232,11 @@
     input {
       padding: 10px;
     }
+  }
+}
+
+.bias-section {
+  .title {
+    padding: 10px;
   }
 }
