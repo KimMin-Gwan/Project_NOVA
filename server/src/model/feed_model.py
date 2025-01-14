@@ -24,7 +24,7 @@ class FeedModel(BaseModel):
         self._feeds.append(feed)
 
         # 포인터로 동작함
-        self._set_feed_json_data(user=self._user, feeds=self._feeds, feed_manager=feed_manager)
+        self._set_feed_json_data(user=self._user, feeds=self._feeds)
         return
     
     # send_data를 만들때 사용하는 함수임
@@ -41,7 +41,7 @@ class FeedModel(BaseModel):
             if feed.iid != "":
                 iids.append(feed.iid)
 
-        self._set_feed_json_data(user=self._user, feeds=feeds, feed_manager=feed_manager)
+        self._set_feed_json_data(user=self._user, feeds=feeds)
         
         interaction_datas = self._database.get_datas_with_ids(target_id="iid", ids=iids)
         interactions = []
@@ -105,7 +105,7 @@ class FeedModel(BaseModel):
             
         self._set_feed_interactied(user=self._user, interaction=self._interaction)
         
-        self._set_feed_json_data(user=self._user, feeds=self._feeds, feed_manager=feed_manager)
+        self._set_feed_json_data(user=self._user, feeds=self._feeds)
         return
 
     # 좋아요 누르기
@@ -115,7 +115,7 @@ class FeedModel(BaseModel):
                                                 fid=data_payload.fid)
         
         
-        self._set_feed_json_data(user=self._user, feeds=self._feeds, feed_manager=feed_manager)
+        self._set_feed_json_data(user=self._user, feeds=self._feeds)
         return
 
     # 댓글 새로 달기
@@ -161,7 +161,7 @@ class FeedModel(BaseModel):
 
     # 피드 내용을 다듬어서 전송가능한 형태로 세팅
     # 포인터로 동작함
-    def _set_feed_json_data(self, user, feeds:list, feed_manager:FeedManager):
+    def _set_feed_json_data(self, user, feeds:list):
         users = []
         uids=[]
         for single_feed in feeds:
@@ -183,8 +183,11 @@ class FeedModel(BaseModel):
             
             # 롱폼은 바디 데이터를 받아야됨
             if feed.fclass != "short":
-                feed.body = ObjectStorageConnection().get_feed_body(fid = feed.fid)
+                feed.raw_body = ObjectStorageConnection().get_feed_body(fid = feed.fid)
+                feed.body, feed.image = ObjectStorageConnection().extract_body_n_image(raw_data=feed.raw_body)
 
+            else:
+                feed.raw_body = feed.body
             
             # comment 길이 & image 길이
             feed.num_comment = len(feed.comment)
@@ -194,6 +197,7 @@ class FeedModel(BaseModel):
             
             for fid_n_date in user.like:
                 target_fid = fid_n_date.split('=')[0]
+                print(f"target_fid : {target_fid}  |   feed.fid : {feed.fid}")
                 if target_fid == feed.fid:
                     feed.star_flag = True
 
@@ -368,7 +372,7 @@ class FeedSearchModel(FeedModel):
         feed = Feed()
         feed.make_with_dict(feed_data)
 
-        self._set_feed_json_data(user=self._user, feeds=[feed], feed_manager=feed_manager)
+        self._set_feed_json_data(user=self._user, feeds=[feed])
 
         # 인터엑션 넣을 필요 있음
         self._send_data = self.__set_send_data(feeds=[feed])
@@ -392,7 +396,7 @@ class FeedSearchModel(FeedModel):
             self.__feed.append(feed)
 
         # 인터엑션은 별도라 여기 포함 안됨
-        self._set_feed_json_data(user=self._user, feeds=self.__feed, feed_manager=feed_manager)
+        self._set_feed_json_data(user=self._user, feeds=self.__feed)
         return
 
     def try_search_feed(self, feed_search_engine:FeedSearchEngine, feed_manager,
@@ -419,8 +423,8 @@ class FeedSearchModel(FeedModel):
 
 
 
-        self._set_feed_json_data(user=self._user, feeds=self._hashtag_feed, feed_manager=feed_manager)
-        self._set_feed_json_data(user=self._user, feeds=self._uname_feed, feed_manager=feed_manager)
+        self._set_feed_json_data(user=self._user, feeds=self._hashtag_feed )
+        self._set_feed_json_data(user=self._user, feeds=self._uname_feed)
 
         return
 
