@@ -136,39 +136,21 @@ function App() {
     fetchTagData();
   }, []);
 
-  // const ulRef = useRef(null);
-
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     if (ulRef.current) {
-  //       ulRef.current.style.transitionDuration = "400ms";
-  //       ulRef.current.style.marginTop = "-50px";
-
-  //       setTimeout(() => {
-  //         if (ulRef.current) {
-  //           ulRef.current.style.transitionDuration = "";
-  //           ulRef.current.style.marginTop = "";
-  //           // 첫 번째 요소를 400ms 후에 뒤로 보냅니다.
-  //           ulRef.current.appendChild(ulRef.current.querySelector("li:first-child"));
-  //         }
-  //       }, 400);
-  //     }
-  //   }, 2000);
-
-  //   return () => {
-  //     clearInterval(interval);
-  //   };
-  // }, []);
   const [currentIndex, setCurrentIndex] = useState(0); // 현재 표시 중인 태그 인덱스
-  const intervalTime = 2000; // 2초마다 태그 변경
+  const intervalTime = 3000; // 2초마다 태그 변경
   let [biasId, setBiasId] = useState();
+
   // useEffect(() => {
   //   const timer = setInterval(() => {
-  //     setCurrentIndex((prevIndex) => (prevIndex === tagList.length - 1 ? 0 : prevIndex + 1));
-  //   }, intervalTime);
+  //     setCurrentIndex((prevIndex) => {
+  //       const nextIndex = (prevIndex + 1) % tagList.length;
+  //       return nextIndex;
+  //     }, intervalTime);
 
+  //     return clearInterval(timer);
+  //   }, 3000);
   //   return () => clearInterval(timer); // 컴포넌트 언마운트 시 타이머 정리
-  // }, [tagList]);
+  // });
 
   let [showBox, setShowBox] = useState(false);
   let [blackBox, setBlackBox] = useState("");
