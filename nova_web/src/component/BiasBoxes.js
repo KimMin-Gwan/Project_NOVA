@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-export default function BiasBoxes({ setBiasId, fetchBiasCategoryData }) {
+export default function BiasBoxes({ setBiasId, fetchBiasCategoryData, writeCommunity }) {
   const URL = "https://nova-platform.kr/home/";
   let bias_url = "https://kr.object.ncloudstorage.com/nova-images/";
 
@@ -61,6 +61,26 @@ export default function BiasBoxes({ setBiasId, fetchBiasCategoryData }) {
       className="bias-container"
     >
       <div className="bias-wrapper">
+        {writeCommunity && (
+          <div className="bias-info">
+            <div className="bias-box">
+              <div
+                className="non-bias"
+                onClick={() => {
+                  // onClickBiasId(bias.bid);
+                  // fetchBiasCategoryData && fetchBiasCategoryData(bias.bid);
+                }}
+              >
+                선택 없음
+              </div>
+            </div>
+            <div className="b-name">
+              {" "}
+              <span>&nbsp;</span>
+            </div>
+          </div>
+        )}
+
         {Array.from({ length: totalBiasBoxes }).map((_, i) => {
           const bias = myBias[i];
           return (

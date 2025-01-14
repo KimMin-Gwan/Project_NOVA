@@ -213,11 +213,13 @@ function App() {
       <Route path="/open_ranking" element={<OpenRanking />}></Route>
       <Route path="/bias_funding" element={<BiasFunding />}></Route>
       <Route path="/bias_funding/:type" element={<MoreProjects />}></Route>
+
+      {/* 테스트 페이지 및 에러 페이지 */}
       <Route path="/test" element={<LongFormWrite />}></Route>
       <Route path="/test1" element={<CategoryModal />}></Route>
       <Route path="*" element={<div>404 Error</div>}></Route>
 
-      {/* 미사용 페이지지 */}
+      {/* 미사용 페이지 */}
       {/* <Route path="/planet" element={<PlanetList />}></Route> */}
       {/* <Route path='/league_detail' element={<LeagueDetail />}></Route> */}
       {/* <Route path="/namecard" element={<NameCard />}></Route> */}
@@ -232,7 +234,7 @@ function App() {
       {/* <Route path="/galaxy" element={<GalaxyList />}></Route> */}
       {/* <Route path="/league_detail" element={<LeaguePage />}></Route> */}
 
-      {/* 홈 화면면 */}
+      {/* 홈 화면 */}
       <Route
         path="/"
         element={
@@ -266,7 +268,7 @@ function App() {
                   <Link to="/test">롱폼작성 페이지지</Link>
                   <Link to="/test1">test page</Link>
 
-                  <div className="buttons">
+                  {/* <div className="buttons">
                     <button className="tool-button">
                       <img
                         src={menu}
@@ -277,7 +279,7 @@ function App() {
                         }}
                       ></img>
                     </button>
-                  </div>
+                  </div> */}
                 </header>
                 <SearchBox />
                 <h4 className="main-title">최애가 가장 빛날 수 있는 공간</h4>

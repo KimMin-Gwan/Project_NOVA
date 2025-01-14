@@ -255,7 +255,7 @@ export default function LongFormWrite() {
       </div>
       <div>
         <div>커뮤니티 선택</div>
-        <BiasBoxes setBiasId={setBiasId} />
+        <BiasBoxes setBiasId={setBiasId} writeCommunity />
       </div>
       <div className={style["hashtag_container"]}>
         <div>제목(해시태그)</div>
@@ -301,7 +301,7 @@ export default function LongFormWrite() {
         /> */}
       </div>
       <p className={style["alert_message"]}>
-        숏 피드 게시글은 작성 후 24시간 동안 노출됩니다.
+        타인에게 불편을 줄 수 있는 내용의 개시 글은 경고 없이 삭제 될 수 있습니다.
       </p>
       <div className={style["content_button"]}>
         <button

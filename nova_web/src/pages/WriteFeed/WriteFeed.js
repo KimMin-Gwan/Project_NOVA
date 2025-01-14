@@ -290,7 +290,7 @@ const WriteFeed = ({ brightmode }) => {
 
       <section className={style["bias-section"]}>
         <div className={style["title"]}>커뮤니티 선택</div>
-        <BiasBoxes setBiasId={setBiasId} />
+        <BiasBoxes setBiasId={setBiasId} writeCommunity />
       </section>
 
       <div className={style["hashtag_container"]}>
