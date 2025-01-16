@@ -428,49 +428,56 @@ class ManagedFeedBiasTable:
         managed_bias.user_nodes.remove(user_node)
         return
 
-    #---------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------
+    def filtering_bias_community(self, bids:list, board_type:str):
+        filtered_feeds_df = self.__feed_df[self.__feed_df['bid'].isin(bids)]
+        if board_type != "":
+            filtered_feeds_df = filtered_feeds_df[filtered_feeds_df['board_type'] == board_type]
+        return filtered_feeds_df['fid'].tolist()
+
+#---------------------------------------------------------------------------------------------
     # 바이어스 커뮤니티에 따라 Feed를 분류함
     # 데이터프레임 활용
-    def __paging_list_df(self, fid_list:list, fid, page_size):
-        # 이미 Date 최신순으로 정렬되어서 맨처음이 젤 최신의 글임
-        start_index = 0
-
-        # 페이징을 하지 않음
-        if page_size == -1:
-            return fid_list
-        
-        if fid != "":
-            start_index = fid_list.index(fid)  # 타겟으로 잡은 구간부터, 불러오기
-
-        paging_fid_list = fid_list[start_index:]        # 페이징으로 짜르기
-        # 만약 자른 리스트가 페이지를 넘어간다면 짤라야한다
-        if len(paging_fid_list) > page_size:
-            paging_fid_list = paging_fid_list[:page_size]
-
-        return paging_fid_list
-
-    def filtering_bias_community(self, bids:list, last_fid, page_size:int):
-        # Feed DF 중, bids안에 포함된 feed들만 반환함.
-        filtered_feeds_df = self.__feed_df[self.__feed_df['bid'].isin(bids)]
-        # 필터링된 Feed들의 리스트를 반환, 페이징기법을 적용한다
-        return self.__paging_list_df(fid_list=filtered_feeds_df['fid'].tolist(),
-                                     fid=last_fid, page_size=page_size)
-
-    # Board만 선택
-    def filtering_board_without_bid(self, last_fid:str, page_size:int, board_type:str):
-        filtered_feeds_df = self.__feed_df[(self.__feed_df['board_type'] == board_type)]
-        return self.__paging_list_df(fid_list=filtered_feeds_df['fid'].tolist(),
-                                     fid=last_fid, page_size=page_size)
-
-    def filtering_community_board(self, last_fid:str, page_size:int, bid:str, board_type:str):
-        # 게시판 분리하여 필터링
-        # 이 때, BID를 통한 필터링도 같이 선행되어야 함.
-        filtered_feeds_df = self.__feed_df[(self.__feed_df['bid'] == bid) & (self.__feed_df['board_type'] == board_type)]
-        return self.__paging_list_df(fid_list=filtered_feeds_df['fid'].tolist(),
-                                     fid=last_fid, page_size=page_size)
+    # def __paging_list_df(self, fid_list:list, fid, page_size):
+    #     # 이미 Date 최신순으로 정렬되어서 맨처음이 젤 최신의 글임
+    #     start_index = 0
+    #
+    #     # 페이징을 하지 않음
+    #     if page_size == -1:
+    #         return fid_list
+    #
+    #     if fid != "":
+    #         start_index = fid_list.index(fid)  # 타겟으로 잡은 구간부터, 불러오기
+    #
+    #     paging_fid_list = fid_list[start_index:]        # 페이징으로 짜르기
+    #     # 만약 자른 리스트가 페이지를 넘어간다면 짤라야한다
+    #     if len(paging_fid_list) > page_size:
+    #         paging_fid_list = paging_fid_list[:page_size]
+    #
+    #     return paging_fid_list
+    #
+    # def filtering_bias_community(self, bids:list, last_fid, page_size:int):
+    #     # Feed DF 중, bids안에 포함된 feed들만 반환함.
+    #     filtered_feeds_df = self.__feed_df[self.__feed_df['bid'].isin(bids)]
+    #     # 필터링된 Feed들의 리스트를 반환, 페이징기법을 적용한다
+    #     return self.__paging_list_df(fid_list=filtered_feeds_df['fid'].tolist(),
+    #                                  fid=last_fid, page_size=page_size)
+    #
+    # # Board만 선택
+    # def filtering_board_without_bid(self, last_fid:str, page_size:int, board_type:str):
+    #     filtered_feeds_df = self.__feed_df[(self.__feed_df['board_type'] == board_type)]
+    #     return self.__paging_list_df(fid_list=filtered_feeds_df['fid'].tolist(),
+    #                                  fid=last_fid, page_size=page_size)
+    #
+    # def filtering_community_board(self, last_fid:str, page_size:int, bid:str, board_type:str):
+    #     # 게시판 분리하여 필터링
+    #     # 이 때, BID를 통한 필터링도 같이 선행되어야 함.
+    #     filtered_feeds_df = self.__feed_df[(self.__feed_df['bid'] == bid) & (self.__feed_df['board_type'] == board_type)]
+    #     return self.__paging_list_df(fid_list=filtered_feeds_df['fid'].tolist(),
+    #                                  fid=last_fid, page_size=page_size)
 #---------------------------------------------------------------------------------------------------------------------
     # 여기서는 추가적인 필터링을 위해 필터링된 FID리스트를 받고, 2차 필터링을 실시하는 곳입니다.
-    def filtering_fclass_feed_new(self, fid_list:list, fclass:str) -> list:
+    def filtering_fclass_feed(self, fid_list:list, fclass:str) -> list:
         fid_list_df = self.__feed_df[(self.__feed_df['fid'] == fid_list)]
         # Filtering 시, 다음의 값을 유의
         # fclass == ""인 경우, 모든 경우를 가져옵니다. 어짜피 AD는 Notice의 경우로 들어가니까 상관없겠지요.
@@ -479,7 +486,7 @@ class ManagedFeedBiasTable:
             return filtered_feeds_df['fid'].tolist()
         return fid_list_df['fid'].tolist()
 
-    def filtering_category_feed_new(self, fid_list:list, category:str) -> list:
+    def filtering_category_feed(self, fid_list:list, category:str) -> list:
         fid_list_df = self.__feed_df[(self.__feed_df['fid'] == fid_list)]
         # Filtering 시, 다음의 값을 유의
         # category == ""인 경우, 모든 경우를 가져옵니다. 똑같이 AD는 현재 아예 다른 모델을 사용하므로... 고려대상에서 제외합니다.
@@ -488,62 +495,6 @@ class ManagedFeedBiasTable:
             return filtered_feeds_df['fid'].tolist()
 
 #---------------------------------------------------------------------------------------------------------------------------------------
-
-
-
-    def filtering_fclass_feed(self, fid_list:list, fclass:str, last_fid:str, page_size:int):
-        # 2차 게시판 필터링. Long Form인지, Short Form인지 나누게 됩니다.
-        fid_list_df = self.__feed_df[self.__feed_df['fid'].isin(fid_list)]
-        # DF 내에서 다시 한번 더, 결과를 가져옴.
-        filtered_feeds_df = fid_list_df[fid_list_df['fclass'] == fclass]
-        return self.__paging_list_df(fid_list=filtered_feeds_df['fid'].tolist(),
-                                     fid=last_fid, page_size=page_size)
-
-    def filtering_staring_feed(self, fid_list:list, stars:int, last_fid:str, page_size:int):
-        # 2차 게시판 필터링. 추천 수에 관여함.
-        fid_list_df = self.__feed_df[self.__feed_df['fid'].isin(fid_list)]
-        # 추천수가 일정 수 이상인 피드만 걸러줌
-        filtered_feeds_df = fid_list_df[fid_list_df['stars'] > stars]
-
-        return self.__paging_list_df(fid_list=filtered_feeds_df['fid'].tolist(),
-                                     fid=last_fid, page_size=page_size)
-
-    def filtering_nickname_feed(self, fid_list:list, nickname:str, last_fid:str, page_size:int):
-        # 2차 게시판 필터링. 글쓴이 필터링에 관여합니다
-        fid_list_df = self.__feed_df[self.__feed_df['fid'].isin(fid_list)]
-
-        # 닉네임으로 Feed를 검색하는 기능
-        filtered_feeds_df = fid_list_df[fid_list_df['nickname'] == nickname]
-        return self.__paging_list_df(fid_list=filtered_feeds_df['fid'].tolist(),
-                                     fid=last_fid, page_size=page_size)
-
-    def filtering_choice_feed(self, fid_list:list, last_fid:str, page_size:int):
-        # 2차 게시판 필터링. 투표 글 필터링에 관여합니다
-        fid_list_df = self.__feed_df[self.__feed_df['fid'].isin(fid_list)]
-        # iid가 존재하는 Feed만 걸러 줌
-        filtered_feeds_df = fid_list_df[fid_list_df['iid'] != ""]
-
-        return self.__paging_list_df(fid_list=filtered_feeds_df['fid'].tolist(),
-                                     fid=last_fid, page_size=page_size)
-
-    def filtering_image_in_feed(self, fid_list:list, last_fid:str, page_size:int):
-        # 2차 게시판 필터링. 이미지가 같이 있는 피드 필터링에 관여합니다
-        fid_list_df = self.__feed_df[self.__feed_df['fid'].isin(fid_list)]
-        # iid가 존재하는 Feed만 걸러 줌
-        filtered_feeds_df = fid_list_df[fid_list_df['num_images'] > 0]
-
-        return self.__paging_list_df(fid_list=filtered_feeds_df['fid'].tolist(),
-                                     fid=last_fid, page_size=page_size)
-
-    def filtering_category_feed(self, fid_list: list, option:str, page_size:int, last_fid:str):
-        # 2차게시판 필터링, 카테고리
-        fid_list_df = self.__feed_df[self.__feed_df['fid'].isin(fid_list)]
-        filtered_feeds_df = fid_list_df[fid_list_df['board_type'] == option]
-
-        return self.__paging_list_df(fid_list=filtered_feeds_df['fid'].tolist(),
-                                     fid=last_fid, page_size=page_size)
-
-#--------------------------------------------------------------------------------------------------
 
 # 아래는 검색 엔진
 class FeedSearchEngine:
@@ -695,57 +646,74 @@ class FeedSearchEngine:
         # 옵션과 키에 따라 필터링이 나뉘어진다.
         return self.__filter_manager.filtering_feed_option_and_key(fid_list=fid_list, option=option, keys=keys)
 
+    # 최애 페이지에서 요청
+    def try_feed_with_bid_n_filtering(self, target_bids:list[str]=[""], category=""):
+        return self.__filter_manager.filtering_community(bids=target_bids, category=category)
+
+        # elif search_type == "just_bias":
+        #     fid_list = self.__filter_manager.filtering_community(bids=target_bids)
+        #
+        # elif search_type == "board_only":
+        #     fid_list = self.__filter_manager.filtering_board_no_bid(board_type=board_type)
+        #
+        # elif search_type == "bias_and_board":
+        #     fid_list = self.__filter_manager.filtering_board_community(bid=target_bids[0], board_type=board_type)
+        #
+        # return fid_list
+
+    # def try_feed_with_bid_n_filtering(self, target_bids:list[str]=[""], category="", search_type="default"):
+    #     fid_list = []
+    #
+    #     if search_type == "default":
+    #         fid_list = self.__filter_manager.filtering_community(bids=target_bids)
+    #
+    #     elif search_type == "just_bias":
+    #         fid_list = self.__filter_manager.filtering_community(bids=target_bids)
+    #
+    #     elif search_type == "board_only":
+    #         fid_list = self.__filter_manager.filtering_board_no_bid(board_type=board_type)
+    #
+    #     elif search_type == "bias_and_board":
+    #         fid_list = self.__filter_manager.filtering_board_community(bid=target_bids[0], board_type=board_type)
+    #
+    #     return fid_list
+
+
 
 #---------------------주의! 이 함수들은 쳐낼 예정입니다. 필터링 옵션의 확정에 따라 함수를 새로 만들었습니다.---------------------------------------
     # 최애 페이지에서 요청
-    def try_feed_with_bid_n_filtering(self, target_bids:list[str]=[""], board_type="default",
-                                      page_size=-1, last_fid="", search_type="default"
-                                      ):
-        result = []
-        
-        # 선택 없음 상태에서 요청
-        if search_type == "default":
-            result = self.__filter_manager.filtering_community(page_size=page_size, last_fid=last_fid, bids=target_bids)
-        
-        # bias만 선택했을 때 요청
-        elif search_type == "just_bias":
-            result = self.__filter_manager.filtering_community(page_size=page_size, last_fid=last_fid, bids=target_bids)
-
-        # 야 이건 Bias 선택안하면 Board는 전체로만 나와야하는거 아니냐
-        # Bias마다 Board가 다 달라지는거라고 생각했는ㄷ
-
-        # bias를 선택하지 않고 board만 선택했을 때 요청
-        # 이것만 추가되면됨 -> bid 말고 bids (list) 로 변경
-        elif search_type == "board_only":
-            result = self.__filter_manager.filtering_board_no_bid(board_type=board_type,
-                                                                     last_fid=last_fid, page_size=page_size)
-            
-        # bias와 board를 모두 선택했들 때 요청
-        elif search_type == "bias_and_board":
-            result = self.__filter_manager.filtering_board_community(bid=target_bids[0], board_type=board_type,
-                                                                     last_fid=last_fid, page_size=page_size)
-
-        # 마지막 feed의 fid 반환
-        if result:
-            last_fid = result[-1]
-            
-        return result, last_fid
-
-    # def try_feed_filtering_with_class(self, fid_list:list, fclass="all", page_size=-1, last_fid=""):
-    #
+    # def try_feed_with_bid_n_filtering(self, target_bids:list[str]=[""], board_type="default",
+    #                                   page_size=-1, last_fid="", search_type="default"
+    #                                   ):
     #     result = []
-    #     result_last_fid = ""
     #
-    #     # 기능 통합 가능성이 있음.
-    #     if fclass == "long" or fclass == "short":
-    #         result, result_last_fid = self.__filter_manager.filtering_feed_type_in_result_feeds(fid_list=fid_list, fclass=fclass,
-    #                                                                                             last_fid=last_fid, page_size=page_size)
-    #     return result, result_last_fid
-
-    def try_filtering_feed_with_option(self, fid_list:list, option:str , page_size=-1, last_fid=""):
-        # Return 값은 결과리스트와 Last_FID
-        return self.__filter_manager.filtering_feed_options(first_filtered_fid_list=fid_list, options=options,
-                                                            page_size=page_size, last_fid=last_fid)
+    #     # 선택 없음 상태에서 요청
+    #     if search_type == "default":
+    #         result = self.__filter_manager.filtering_community(page_size=page_size, last_fid=last_fid, bids=target_bids)
+    #
+    #     # bias만 선택했을 때 요청
+    #     elif search_type == "just_bias":
+    #         result = self.__filter_manager.filtering_community(page_size=page_size, last_fid=last_fid, bids=target_bids)
+    #
+    #     # 야 이건 Bias 선택안하면 Board는 전체로만 나와야하는거 아니냐
+    #     # Bias마다 Board가 다 달라지는거라고 생각했는ㄷ
+    #
+    #     # bias를 선택하지 않고 board만 선택했을 때 요청
+    #     # 이것만 추가되면됨 -> bid 말고 bids (list) 로 변경
+    #     elif search_type == "board_only":
+    #         result = self.__filter_manager.filtering_board_no_bid(board_type=board_type,
+    #                                                                  last_fid=last_fid, page_size=page_size)
+    #
+    #     # bias와 board를 모두 선택했들 때 요청
+    #     elif search_type == "bias_and_board":
+    #         result = self.__filter_manager.filtering_board_community(bid=target_bids[0], board_type=board_type,
+    #                                                                  last_fid=last_fid, page_size=page_size)
+    #
+    #     # 마지막 feed의 fid 반환
+    #     if result:
+    #         last_fid = result[-1]
+    #
+    #     return result, last_fid
 
 #-----------------------------------------------------------------------------------------------------------
 
@@ -1332,156 +1300,37 @@ class FilteringManager:
         if option == "fclass":
             # 키가 하나밖에 없기 때문에.. keys[0]만으로 판별해야한다.
             # Fclass == ""인 경우, Managed_Feed_table에서 처리하도록 하였음
-            return self.__managed_feed_bias_table.filtering_fclass_feed_new(fid_list=fid_list, fclass=keys[0])
+            return self.__managed_feed_bias_table.filtering_fclass_feed(fid_list=fid_list, fclass=keys[0])
 
         elif option == "category":
             # 구분하기 쉽도록 하였음. 또한, category가 []인 상태라면 뒤에 나올 반복문 자체가 동작하지 않는다.
             # 따라서 미리 선언을 한상태로 있는다.
             filtered_fid_list = fid_list
             for key in keys:
-                filtered_fid_list = self.__managed_feed_bias_table.filtering_category_feed_new(fid_list=filtered_fid_list, category=key)
+                filtered_fid_list = self.__managed_feed_bias_table.filtering_category_feed(fid_list=filtered_fid_list, category=key)
 
             # 필터링이 끝나면 반환
             return filtered_fid_list
 
+    # BID로 필터링 하는 작업 수행, 카테고리별 필터링도 진행 됨
+    def filtering_community(self, bids:list, category:str):
+        return self.__managed_feed_bias_table.filtering_bias_community(bids=bids, board_type=category)
+
 #------------------------------------------------------------------------------------
-    # BID로 필터링 하는 작업 수행
-    def filtering_community(self, page_size, bids:list, last_fid=""):
-        # Search Engine에 들어가기 전에 BID 리스트를 검사할거임
-        # BID 리스트 요소는 1개가 될 수 있고, 아니면 선택을 하지 않아서 여러 개가 될 수 있음.
-        return self.__managed_feed_bias_table.filtering_bias_community(bids=bids, last_fid=last_fid, page_size=page_size)
-
-    def filtering_board_no_bid(self, board_type:str, page_size:int, last_fid=""):
-        return self.__managed_feed_bias_table.filtering_board_without_bid(board_type=board_type, page_size=page_size, last_fid=last_fid)
-
-    def filtering_board_community(self, bid:str, board_type:str, page_size:int, last_fid:str=""):
-        # 게시판 타입마다 필터링하는 함수.
-        return self.__managed_feed_bias_table.filtering_community_board(bid=bid, board_type=board_type, last_fid=last_fid, page_size=page_size)
+    #
+    # def filtering_community(self, page_size, bids:list, last_fid=""):
+    #     # Search Engine에 들어가기 전에 BID 리스트를 검사할거임
+    #     # BID 리스트 요소는 1개가 될 수 있고, 아니면 선택을 하지 않아서 여러 개가 될 수 있음.
+    #     return self.__managed_feed_bias_table.filtering_bias_community(bids=bids, last_fid=last_fid, page_size=page_size)
+    #
+    # def filtering_board_no_bid(self, board_type:str, page_size:int, last_fid=""):
+    #     return self.__managed_feed_bias_table.filtering_board_without_bid(board_type=board_type, page_size=page_size, last_fid=last_fid)
+    #
+    # def filtering_board_community(self, bid:str, board_type:str, page_size:int, last_fid:str=""):
+    #     # 게시판 타입마다 필터링하는 함수.
+    #     return self.__managed_feed_bias_table.filtering_community_board(bid=bid, board_type=board_type, last_fid=last_fid, page_size=page_size)
 
 #---------------------------------------------------------------------------------------------
-
-    def _filtering_feed_type_in_result_feeds(self, fid_list:list, fclass:str, page_size:int, last_fid:str=""):
-        return self.__managed_feed_bias_table.filtering_fclass_feed(fid_list=fid_list, fclass=fclass, last_fid=last_fid, page_size=page_size)
-
-    def _filtering_feed_star_in_result_feeds(self, fid_list:list, page_size:int, stars:int=10, last_fid:str="" ):
-        return self.__managed_feed_bias_table.filtering_staring_feed(fid_list=fid_list, stars=stars, last_fid=last_fid, page_size=page_size)
-
-    def _filtering_feed_with_image_in_result_feeds(self,fid_list:list, page_size:int, last_fid:str=""):
-        return self.__managed_feed_bias_table.filtering_image_in_feed(fid_list=fid_list, page_size=page_size, last_fid=last_fid)
-
-    def _filtering_feed_with_interact_in_result_feeds(self, fid_list:list, page_size:int, last_fid:str=""):
-        return self.__managed_feed_bias_table.filtering_choice_feed(fid_list=fid_list, page_size=page_size, last_fid=last_fid)
-
-    def _filtering_feed_with_category_in_result_feeds(self, fid_list:list, option:str, page_size:int, last_fid:str=""):
-        if "AD" in option:
-            notice_datas = self.__database.get_all_data(target="nid")
-            nid_list = []
-
-            for notice_data in notice_datas:
-                notice = Notice()
-                notice.make_with_dict(notice_data)
-                if notice.bid == "" or notice.bid == bid:
-                    nid_list.append(notice.nid)
-
-            return  nid_list
-
-        # Board_type
-        else :
-            self.__managed_feed_bias_table.filtering_category_feed(fid_list=fid_list, option=option, page_size=page_size, last_fid=last_fid)
-
-
-
-
-
-
-
-    def filtering_feed_options(self, first_filtered_fid_list:list, options:list, page_size:int, last_fid:str=""):
-        result_list = copy(first_filtered_fid_list)
-
-        if len(options) == 0:
-            # No Filtering Option
-            return self.__paging_list(fid_list=first_filtered_fid_list, fid=last_fid, page_size=page_size)
-
-
-        # 옵션 선택지 옵션의 분류를 구분할 수 있는 선택지를 주자
-        # 게시글 종류 선택 시 (xxx-category, xxx-category 이런식으로)
-
-        for option in options:
-            if option == "long" or option == "short":
-                result_list = self._filtering_feed_type_in_result_feeds(fid_list=result_list, fclass=option,
-                                                                        page_size=page_size, last_fid=last_fid)
-            elif 'category' in option :
-                result_list = self._filtering_feed_with_category_in_result_feeds(fid_list=result_list, option=option,
-                                                                            page_size=page_size, last_fid=last_fid)
-
-            # if option == "long" or option == "short":
-            #     temp_list = self._filtering_feed_type_in_result_feeds(fid_list=first_filtered_fid_list, fclass=option, page_size=-1)
-            # elif option == "star":
-            #     temp_list = self._filtering_feed_star_in_result_feeds(fid_list=first_filtered_fid_list, page_size=-1)
-            # elif option == "interact":
-            #     temp_list = self._filtering_feed_with_interact_in_result_feeds(fid_list=first_filtered_fid_list, page_size=-1)
-            # elif option == "image":
-            #     temp_list = self._filtering_feed_with_image_in_result_feeds(fid_list=first_filtered_fid_list, page_size=-1)
-
-            # 중복이 생긴 FID가 있을 것이다.
-
-        # FID 중복 제거 작업
-        # no_dupli_list = []
-        # for fid in result_list:
-        #     if fid not in no_dupli_list:
-        #         no_dupli_list.append(fid)
-        #
-        # no_dupli_list = list(OrderedDict.fromkeys(result_list))
-
-        # Return 값은 Paging된 리스트와, 마지막 FID
-        return self.__paging_list(fid_list=result_list, page_size=page_size, fid=last_fid)
-
-
-    # # 이거 아직 안 됨
-    # # 전체 게시글 중 필터링
-    # def _filter_single_option_feed(self, feed_list, option):
-    #     result = []
-    #     for feed in feed_list:
-    #         # 롱폼 / 숏폼
-    #         if option == "long":
-    #             if feed.fclass == "long":
-    #                 result.append(feed)
-    #         if option == "short":
-    #             if feed.fclass == "short":
-    #                 result.append(feed)
-    #         if option == "choice":
-    #             if feed.iid != "":
-    #                 result.append(feed)
-    #         if option == "quiz":
-    #             if feed.iid != "":
-    #                 continue
-    #         if option == "funding":
-    #             continue
-    #         if option == "picture":
-    #             if len(feed.image) != 0:
-    #                 result.append(feed)
-    #
-    #     return result
-    #
-    # # 필터링된 Feed중 Fid만 추출하는 부분
-    # def _extract_fid_in_feed_list(self, feed_list):
-    #     result = []
-    #
-    #     for feed in feed_list:
-    #         result.append(feed.fid)
-    #
-    #     return result
-    #
-    # # 피드를 필터링하는 함수
-    # def filter_options_feeds(self, options:list):
-    #     result = copy(self.__feed_table)
-    #
-    #     for option in options:
-    #         result = self._filter_single_option_feed(result, option)
-    #
-    #     result = self._extract_fid_in_feed_list(result)
-    #
-    #     return result
 
 # --------------------------------------------------------------------------------------------
 
