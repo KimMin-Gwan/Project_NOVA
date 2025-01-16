@@ -77,6 +77,38 @@ function App() {
   let todayBestFeed = useFetchData(`${URL}today_best`);
   let weeklyFeed = useFetchData(`${URL}weekly_best`);
   let allFeed = useFetchData(`${URL}all_feed`);
+  // let [allFeed, setAllFeed] = useState([]);
+  // let header = {
+  //   "request-type": "default",
+  //   "client-version": "v1.0.1",
+  //   "client-ip": "127.0.0.1",
+  //   uid: "1234-abcd-5678",
+  //   endpoint: "/user_system/",
+  // };
+  // let send_form = {
+  //   header: header,
+  //   body: {
+  //     key: 0,
+  //     category: "",
+  //     fclass: "",
+  //   },
+  // };
+
+  // function fetchAllFeed() {
+  //   fetch("https://nova-platform.kr/feed_explore/all_feed", {
+  //     method: "POST",
+  //     credentials: "include",
+  //     body: JSON.stringify(send_form),
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       console.log("all", data);
+  //     });
+  // }
+
+  // useEffect(() => {
+  //   fetchAllFeed();
+  // }, []);
 
   let bias_url = "https://kr.object.ncloudstorage.com/nova-images/";
 

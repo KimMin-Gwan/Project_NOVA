@@ -22,7 +22,7 @@ export default function FilterModal({ isFilterClicked, onClickFilterButton }) {
             <button>자유 게시판</button>
             <button>팬아트</button>
             <button>유머 게시판</button>
-            <button>전체</button>
+            <button className="clicked_button">전체</button>
           </div>
         </div>
 
