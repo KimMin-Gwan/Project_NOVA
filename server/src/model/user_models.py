@@ -191,6 +191,35 @@ class UserPageModel(BaseModel):
         except Exception as e:
             raise CoreControllerLogicError("response making error | " + e)
 
+# class MyFeedsModel(BaseModel):
+#     def __init__(self, database:Local_Database) -> None:
+#         super().__init__(database)
+#         self._feeds = []
+#         self._fid = ""
+#
+#     def get_response_form_data(self, head_parser):
+#         try:
+#             body = {
+#                 "feeds" : self._make_dict_list_data(list_data=self._feeds),
+#                 "fid" : self._fid
+#             }
+#
+#             response = self._get_response_data(head_parser=head_parser, body=body)
+#             return response
+#
+#         except Exception as e:
+#             raise CoreControllerLogicError("response making error | " + e)
+#
+#     def get_my_feeds(self, feed_manager:FeedManager, data_payload):
+#         self._feeds = feed_manager.get_my_feeds(user= self._user,
+#                                                  fid = data_payload.fid)
+#         if len(self._feeds) != 0 :
+#             self._fid = self._feeds[-1].fid
+#
+#         return
+#
+# class MyFavoriteModel(BaseModel):
+
 class MyCommentsModel(BaseModel):
     def __init__(self, database:Local_Database) -> None:
         super().__init__(database)
@@ -202,6 +231,7 @@ class MyCommentsModel(BaseModel):
                                                     cid=data_payload.cid)
         if len(self._comments) != 0:
             self._cid= self._comments[-1].cid
+
         return
 
     def get_response_form_data(self, head_parser):

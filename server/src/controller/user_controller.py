@@ -225,51 +225,13 @@ class UserController:
         finally:
             return model
 
-    def get_my_comments(self, database, request, feed_manager):
-        model = MyCommentsModel(database=database)
-        try:
-            # 유저가 있으면 세팅
-            model.set_user_with_email(request=request.jwt_payload)
-            model.get_my_comments(feed_manager=feed_manager,
-                                    data_payload=request.data_payload)
-
-        except CustomError as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
-
-        except Exception as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
-
-        finally:
-            return model
-
-    #def get_commented_feed(self, database, request, feed_manager):
-        #model = MyFeedsModel(database=database)
-        #try:
-            ## 유저가 있으면 세팅
-            #model.set_user_with_email(request=request.jwt_payload)
-            #model.get_commented_feed(feed_manager=feed_manager,
-                                    #data_payload=request.data_payload)
-
-        #except CustomError as e:
-            #print("Error Catched : ", e.error_type)
-            #model.set_state_code(e.error_code) # 종합 에러
-
-        #except Exception as e:
-            #print("Error Catched : ", e.error_type)
-            #model.set_state_code(e.error_code) # 종합 에러
-
-        #finally:
-            #return model
-
     def get_staring_feed(self, database, request, feed_manager):
         model = MyFeedsModel(database=database)
         try:
             # 유저가 있으면 세팅
             model.set_user_with_email(request=request.jwt_payload)
             model.get_staring_feed(feed_manager=feed_manager,
-                                    data_payload=request.data_payload)
+                                   data_payload=request.data_payload)
 
         except CustomError as e:
             print("Error Catched : ", e.error_type)
@@ -288,6 +250,25 @@ class UserController:
             # 유저가 있으면 세팅
             model.set_user_with_email(request=request.jwt_payload)
             model.get_interactied_feed(feed_manager=feed_manager,
+                                       data_payload=request.data_payload)
+
+        except CustomError as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
+
+        except Exception as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
+
+        finally:
+            return model
+
+    def get_my_comments(self, database, request, feed_manager):
+        model = MyCommentsModel(database=database)
+        try:
+            # 유저가 있으면 세팅
+            model.set_user_with_email(request=request.jwt_payload)
+            model.get_my_comments(feed_manager=feed_manager,
                                     data_payload=request.data_payload)
 
         except CustomError as e:
