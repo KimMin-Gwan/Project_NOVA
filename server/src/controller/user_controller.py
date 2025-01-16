@@ -209,7 +209,7 @@ class UserController:
     def get_my_feed(self, database, request, feed_manager):
         model = MyFeedsModel(database=database)
         try:
-            # 유저가 있으면 세팅
+            # 유저가 있으면 세팅함
             model.set_user_with_email(request=request.jwt_payload)
             model.get_my_feed(feed_manager=feed_manager,
                               data_payload=request.data_payload)

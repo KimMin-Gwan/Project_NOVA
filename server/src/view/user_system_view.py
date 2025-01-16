@@ -172,7 +172,7 @@ class User_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
         
-        
+        # 내가 쓴 글
         @self.__app.get('/user_home/get_my_feed')
         def get_my_feed(request:Request, fid:Optional[str] = ""):
             request_manager = RequestManager()
@@ -190,6 +190,7 @@ class User_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
+        # 내가 좋아요 한 거
         @self.__app.get('/user_home/get_stared_feed')
         def get_stared_feed(request:Request, fid:Optional[str] = ""):
             request_manager = RequestManager()
@@ -207,6 +208,7 @@ class User_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
+        # 내가 상호작용한 거
         @self.__app.get('/user_home/get_interactied_feed')
         def get_interactied_feed(request:Request, fid:Optional[str] = ""):
             request_manager = RequestManager()
@@ -224,6 +226,7 @@ class User_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
+        # 내 댓글
         @self.__app.get('/user_home/get_my_comments')
         def get_my_comment(request:Request, cid:Optional[str] = ""):
             request_manager = RequestManager()
@@ -240,24 +243,6 @@ class User_Service_View(Master_View):
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response
-
-        #@self.__app.get('/user_home/get_commented_feed')
-        #def get_my_comment(request:Request, fid:Optional[str] = ""):
-            #request_manager = RequestManager()
-
-            #data_payload = MyFeedRequest(fid=fid)
-            #request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
-            #if not request_manager.jwt_payload.result:
-                #raise request_manager.credentials_exception
-
-            #home_controller=UserController()
-            #model = home_controller.get_commented_feed(database=self.__database,
-                                                        #request=request_manager,
-                                                        #feed_manager=self.__feed_manager)
-            #body_data = model.get_response_form_data(self._head_parser)
-            #response = request_manager.make_json_response(body_data=body_data)
-            #return response
-
 
         @self.__app.get('/user_home/get_my_alert')
         def get_my_alert(request:Request, aid:Optional[str] = ""):
