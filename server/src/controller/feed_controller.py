@@ -69,27 +69,7 @@ class Feed_Controller:
     #
     #     return model
 
-    # 필터링 인터페이스
-    # 옵션들을 모두 받아와서 여러번 필터링을 거치게 됩니다.
-    # Long 필터링, Short 필터링 모두 키는 베타테스팅까지 고려하긴했습니다.
-    # 이게 SQL 쿼리였다면.. 걍 걸러내는데
-    def try_filtering_feeds_with_options(self, database:Local_Database, request, feed_search_engine: FeedSearchEngine):
-        model = CommunityFeedModel(database=database)
 
-        # 유저가 있으면 세팅
-        if request.jwt_payload != "":
-            model.set_user_with_email(request=request.jwt_payload)
-
-        model.try_filtering_feed_with_options(
-            bid=request.data_payload.bid,
-            last_fid = request.data_payload.last_fid,
-            board_type = request.data_payload.board_type,
-            feed_search_engine=feed_search_engine,
-            feed_manager=self.__feed_manager,
-            options=request.data_payload.options
-        )
-
-        return model
 
     # 키워드를 통한 피드 검색
     def try_search_in_keyword(self, database:Local_Database,
@@ -159,20 +139,56 @@ class Feed_Controller:
         
     # 전체 개시글(최신순)
     def get_all_feed(self, database:Local_Database,
-                        request, feed_search_engine: FeedSearchEngine,
-                        num_feed= 4):
-        model = FeedModel(database=database)
+                        request, feed_search_engine: FeedSearchEngine, num_feed=4):
+
+        options = request.data_payload.options
+
+        if not options:
+            model = FeedModel(database=database)
         
-        # 유저가 있으면 세팅
-        if request.jwt_payload != "":
-            model.set_user_with_email(request=request.jwt_payload)
-        model.set_all_feed(feed_search_engine=feed_search_engine,
-                            feed_manager=self.__feed_manager,
-                                    index=request.data_payload.key,
-                                    num_feed=num_feed)
+            # 유저가 있으면 세팅
+            if request.jwt_payload != "":
+                model.set_user_with_email(request=request.jwt_payload)
+
+            model.set_all_feed(feed_search_engine=feed_search_engine, feed_manager=self.__feed_manager,
+                               index=request.data_payload.key, num_feed=num_feed)
+        else:
+            model = CommunityFeedModel(database=database)
+
+            # 유저가 있으면 세팅
+            if request.jwt_payload != "":
+                model.set_user_with_email(request=request.jwt_payload)
+
+            model.try_filtering_feeds_with_options(
+                feed_search_engine=feed_search_engine,
+                feed_manager=self.__feed_manager,
+                bid = request.data_payload.bid,
+                last_fid = request.data_payload.last_fid,
+            )
 
         return model
-        
+
+    # 필터링 인터페이스
+    # 옵션들을 모두 받아와서 여러번 필터링을 거치게 됩니다.
+    # Long 필터링, Short 필터링 모두 키는 베타테스팅까지 고려하긴했습니다.
+    # 이게 SQL 쿼리였다면.. 걍 걸러내는데
+    # def try_filtering_feeds_with_options(self, database:Local_Database, request, feed_search_engine: FeedSearchEngine):
+    #     model = CommunityFeedModel(database=database)
+    #
+    #     # 유저가 있으면 세팅
+    #     if request.jwt_payload != "":
+    #         model.set_user_with_email(request=request.jwt_payload)
+    #
+    #     model.try_filtering_feed_with_options(
+    #         bid=request.data_payload.bid,
+    #         last_fid = request.data_payload.last_fid,
+    #         board_type = request.data_payload.board_type,
+    #         feed_search_engine=feed_search_engine,
+    #         feed_manager=self.__feed_manager,
+    #         options=request.data_payload.options
+    #     )
+    #
+    #     return model
 
     # bid로 피드 검색하기
     def get_feed_with_bid(self, database:Local_Database,

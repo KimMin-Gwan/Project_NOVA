@@ -450,9 +450,12 @@ class Core_Service_View(Master_View):
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
             feed_controller =Feed_Controller(feed_manager=self.__feed_manager)
-            model = feed_controller.try_filtering_feeds_with_options(database=self.__database,
-                                                                        request=request_manager,
-                                                                        feed_search_engine=self.__feed_search_engine)
+            # get_all_feed와 혼용할 계획
+            model = feed_controller.get_all_feed(database=self.__database,
+                                                request=request_manager,
+                                                feed_search_engine=self.__feed_search_engine)
+
+
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response
@@ -790,6 +793,7 @@ class CommunityFilteredRequest(CommunityRequest):
 class HomeFeedRequest(RequestHeader):
     def __init__(self, key) -> None:
         self.key = key
+        self.options = False
 
 class HashtagFeedRequest(RequestHeader):
     def __init__(self, hashtag, key=-1) -> None:

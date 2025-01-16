@@ -17,7 +17,7 @@ import asyncio
 import pandas as pd
 from bintrees import AVLTree
 from copy import copy
-from others.data_domain import Feed, User, Bias
+from others.data_domain import Feed, User, Bias, Notice
 from datetime import  datetime, timedelta
 from pprint import pprint
 import random
@@ -519,6 +519,14 @@ class ManagedFeedBiasTable:
         fid_list_df = self.__feed_df[self.__feed_df['fid'].isin(fid_list)]
         # iid가 존재하는 Feed만 걸러 줌
         filtered_feeds_df = fid_list_df[fid_list_df['num_images'] > 0]
+
+        return self.__paging_list_df(fid_list=filtered_feeds_df['fid'].tolist(),
+                                     fid=last_fid, page_size=page_size)
+
+    def filtering_category_feed(self, fid_list: list, option:str, page_size:int, last_fid:str):
+        # 2차게시판 필터링, 카테고리
+        fid_list_df = self.__feed_df[self.__feed_df['fid'].isin(fid_list)]
+        filtered_feeds_df = fid_list_df[fid_list_df['board_type'] == option]
 
         return self.__paging_list_df(fid_list=filtered_feeds_df['fid'].tolist(),
                                      fid=last_fid, page_size=page_size)
@@ -1326,38 +1334,64 @@ class FilteringManager:
     def _filtering_feed_with_interact_in_result_feeds(self, fid_list:list, page_size:int, last_fid:str=""):
         return self.__managed_feed_bias_table.filtering_choice_feed(fid_list=fid_list, page_size=page_size, last_fid=last_fid)
 
+    def _filtering_feed_with_category_in_result_feeds(self, fid_list:list, option:str, page_size:int, last_fid:str=""):
+        if "AD" in option:
+            notice_datas = self.__database.get_all_data(target="nid")
+            nid_list = []
+
+            for notice_data in notice_datas:
+                notice = Notice()
+                notice.make_with_dict(notice_data)
+                if notice.bid == "" or notice.bid == bid:
+                    nid_list.append(notice.nid)
+
+            return  nid_list
+
+        # Board_type
+        else :
+            self.__managed_feed_bias_table.filtering_category_feed(fid_list=fid_list, option=option, page_size=page_size, last_fid=last_fid)
+
+
     def filtering_feed_options(self, first_filtered_fid_list:list, options:list, page_size:int, last_fid:str=""):
-        temp_list = []
-        result_list = []
+        result_list = copy(first_filtered_fid_list)
 
         if len(options) == 0:
             # No Filtering Option
             return self.__paging_list(fid_list=first_filtered_fid_list, fid=last_fid, page_size=page_size)
 
 
+        # 옵션 선택지 옵션의 분류를 구분할 수 있는 선택지를 주자
+        # 게시글 종류 선택 시 (xxx-category, xxx-category 이런식으로)
+
         for option in options:
             if option == "long" or option == "short":
-                temp_list = self._filtering_feed_type_in_result_feeds(fid_list=first_filtered_fid_list, fclass=option, page_size=-1)
-            elif option == "star":
-                temp_list = self._filtering_feed_star_in_result_feeds(fid_list=first_filtered_fid_list, page_size=-1)
-            elif option == "interact":
-                temp_list = self._filtering_feed_with_interact_in_result_feeds(fid_list=first_filtered_fid_list, page_size=-1)
-            elif option == "image":
-                temp_list = self._filtering_feed_with_image_in_result_feeds(fid_list=first_filtered_fid_list, page_size=-1)
+                result_list = self._filtering_feed_type_in_result_feeds(fid_list=result_list, fclass=option,
+                                                                        page_size=page_size, last_fid=last_fid)
+            elif 'category' in option :
+                result_list = self._filtering_feed_with_category_in_result_feeds(fid_list=result_list, option=option,
+                                                                            page_size=page_size, last_fid=last_fid)
+
+            # if option == "long" or option == "short":
+            #     temp_list = self._filtering_feed_type_in_result_feeds(fid_list=first_filtered_fid_list, fclass=option, page_size=-1)
+            # elif option == "star":
+            #     temp_list = self._filtering_feed_star_in_result_feeds(fid_list=first_filtered_fid_list, page_size=-1)
+            # elif option == "interact":
+            #     temp_list = self._filtering_feed_with_interact_in_result_feeds(fid_list=first_filtered_fid_list, page_size=-1)
+            # elif option == "image":
+            #     temp_list = self._filtering_feed_with_image_in_result_feeds(fid_list=first_filtered_fid_list, page_size=-1)
 
             # 중복이 생긴 FID가 있을 것이다.
-            result_list.extend(temp_list)
 
         # FID 중복 제거 작업
         # no_dupli_list = []
         # for fid in result_list:
         #     if fid not in no_dupli_list:
         #         no_dupli_list.append(fid)
-
-        no_dupli_list = list(OrderedDict.fromkeys(result_list))
+        #
+        # no_dupli_list = list(OrderedDict.fromkeys(result_list))
 
         # Return 값은 Paging된 리스트와, 마지막 FID
-        return self.__paging_list(fid_list=no_dupli_list, page_size=page_size, fid=last_fid)
+        return self.__paging_list(fid_list=result_list, page_size=page_size, fid=last_fid)
 
 
     # # 이거 아직 안 됨
