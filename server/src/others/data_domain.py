@@ -219,7 +219,7 @@ class League(SampleDomain):
 class Feed(SampleDomain):
     def __init__(self, fid="", uid="", body="", fclass="", date="",
                  display=4, star=60, board_type="", image=None, hashtag=None,
-                 comment=None, iid="", lid="", bid=""):
+                 comment=None, iid="", lid="", bid="", raw_body =""):
         if image is None:
             image = []
         if hashtag is None:
@@ -241,12 +241,12 @@ class Feed(SampleDomain):
         self.iid = iid  # interaction id
         self.lid = lid  # link id
         self.bid = bid  # bias id
+        self.raw_body = raw_body
 
         self.num_comment = len(self.comment)
         self.num_image = len(self.image)
         self.star_flag = False
         self.nickname = ""
-        self.raw_body = body
 
 
     def make_with_dict(self, dict_data):
@@ -265,6 +265,7 @@ class Feed(SampleDomain):
             self.iid = dict_data["iid"]
             self.lid = dict_data["lid"]
             self.bid = dict_data["bid"]
+            self.raw_body = dict_data["raw_body"]
 
             self.num_comment = len(self.comment)
             self.num_image = len(self.image)

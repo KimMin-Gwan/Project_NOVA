@@ -184,7 +184,7 @@ class FeedModel(BaseModel):
             # 롱폼은 바디 데이터를 받아야됨
             if feed.fclass != "short":
                 feed.raw_body = ObjectStorageConnection().get_feed_body(fid = feed.fid)
-                feed.body, feed.image = ObjectStorageConnection().extract_body_n_image(raw_data=feed.raw_body)
+                _, feed.image = ObjectStorageConnection().extract_body_n_image(raw_data=feed.raw_body)
 
             else:
                 feed.raw_body = feed.body

@@ -130,5 +130,68 @@
         "fanname": [
             "잉친이"
         ]
+    },
+    {
+        "bid": "1005",
+        "bname": "한결",
+        "category": [
+            "SOOP",
+            "크리에이터",
+            "스트리머",
+            "버튜버",
+            "아티스트"
+        ],
+        "birthday": "2002/07/30",
+        "debut": "2022/08/13",
+        "agency": "AKaiV Studio",
+        "group": [
+        ],
+        "num_user": 0,
+        "board_types": [
+            "자유게시판",
+            "팬아트"
+        ],
+        "x_account": "",
+        "insta_account": "https://www.instagram.com/hangyeol8008/",
+        "tiktok_account": "",
+        "youtube_account": "https://www.youtube.com/@hangyeol8008",
+        "homepage": "https://ch.sooplive.co.kr/kaksjak0730",
+        "fan_cafe": "https://cafe.naver.com/godanssity",
+        "country": [
+            "대한민국"
+        ],
+        "fanname": [
+            "단결이"
+        ]
+    },
+    {
+        "bid": "1006",
+        "bname": "도비비",
+        "category": [
+            "아티스트",
+            "싱어송라이터",
+            "유튜버"
+        ],
+        "birthday": "0000/01/16",
+        "debut": "2021/01/24",
+        "agency": "",
+        "group": [
+        ],
+        "num_user": 0,
+        "board_types": [
+            "자유게시판",
+            "팬아트"
+        ],
+        "x_account": "",
+        "insta_account": "https://www.instagram.com/dovlvl/",
+        "tiktok_account": "https://www.tiktok.com/@dovlvl?_t=8ij1NbxXVTu&_r=1",
+        "youtube_account": "https://www.youtube.com/@Dovivi",
+        "homepage": "https://www.youtube.com/@Dovivi",
+        "fan_cafe": "",
+        "country": [
+            "대한민국"
+        ],
+        "fanname": [
+        ]
     }
 ]

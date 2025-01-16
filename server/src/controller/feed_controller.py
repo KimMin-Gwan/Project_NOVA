@@ -156,8 +156,8 @@ class Feed_Controller:
     def get_all_feed_filtered(self, database:Local_Database,
                               request, feed_search_engine: FeedSearchEngine,
                               num_feed=4):
-
-        model =
+        pass
+        #model =
 
     # 필터링 인터페이스
     # 옵션들을 모두 받아와서 여러번 필터링을 거치게 됩니다.

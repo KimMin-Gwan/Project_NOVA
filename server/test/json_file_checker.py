@@ -27,8 +27,11 @@ def main():
 
 
         for data in data_list:
-            data["bid"] = ""
-            data["lid"] = ""
+            if data['fclass'] == "long":
+                data["raw_body"] = data['body']
+                data['body'] = "개편 이전의 테스트 용도의 본문 내용 ( 실제 내용과 다름 )"
+            else:
+                data["raw_body"] = ""
 
             new_data.append(data)
 

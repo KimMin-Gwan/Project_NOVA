@@ -1310,11 +1310,12 @@ class FeedManager:
 
     # 새로운 피드 만들기
     # 실제로 피드를 만들고, 서치 엔진에 추가하는 부분이다.
-    def __make_new_feed(self, user:User, fid, fclass, choice, body, hashtag, board_type, images, link, bid):
+    def __make_new_feed(self, user:User, fid, fclass, choice, body, hashtag,
+                        board_type, images, link, bid, raw_body=""):
         # 검증을 위한 코드는 이곳에 작성하시오
         new_feed = self.__set_new_feed(user=user, fid=fid, fclass=fclass,
                                        choice=choice, body=body, hashtag=hashtag,
-                                       board_type=board_type, image=images, link=link, bid=bid)
+                                       board_type=board_type, image=images, link=link, bid=bid, raw_body=raw_body)
         self._database.add_new_data(target_id="fid", new_data=new_feed.get_dict_form_data())
 
         self._feed_search_engine.try_make_new_managed_feed(feed=new_feed)
@@ -1329,7 +1330,8 @@ class FeedManager:
         return
 
     # 새로운 피드의 데이터를 추가하여 반환
-    def __set_new_feed(self, user:User,fid, fclass, choice, body, hashtag, board_type, image, link, bid):
+    def __set_new_feed(self, user:User,fid, fclass, choice, body, hashtag,
+                       board_type, image, link, bid, raw_body):
         # 인터액션이 있으면 작업할것
         if len(choice) > 1:
             iid, _ = self.try_make_new_interaction(fid=fid, choice=choice)
@@ -1357,6 +1359,7 @@ class FeedManager:
         new_feed.iid = iid
         new_feed.lid = lid
         new_feed.bid = bid
+        new_feed.raw_body = raw_body
         return new_feed
     
 
@@ -1408,7 +1411,9 @@ class FeedManager:
             # 1. 전송된 body데이터를 확인
             if data_payload.body:
             # 2. body데이터를 오브젝트 스토리지에 저장
-                body = connector.make_new_feed_body_data(fid = fid, body=data_payload.body)
+                url = connector.make_new_feed_body_data(fid = fid, body=data_payload.body)
+                body, _ = connector.extract_body_n_image(raw_data=data_payload.body)
+                
             else:
                 body = " "
 
@@ -1424,7 +1429,8 @@ class FeedManager:
                                 board_type="자유게시판", # 이거도, 게시판 타입 받아야 함
                                 images=[],
                                 link=data_payload.link,
-                                bid=data_payload.bid
+                                bid=data_payload.bid,
+                                raw_body = url
                                 )
 
         #작성한 피드 목록에 넣어주고
