@@ -365,7 +365,7 @@ class FeedSearchModel(FeedModel):
         fid = feed_search_engine.try_recommend_feed(fid=fid, history=history, user=self._user)
 
         self.__history = history.append(fid)
-        
+
         feed_data = self._database.get_data_with_id(target="fid", id=fid)
 
         feed = Feed()
@@ -406,7 +406,7 @@ class FeedSearchModel(FeedModel):
 
         user_feed_fid, self._key = feed_search_engine.try_search_feed(
             target_type="uname", target=target, num_feed=num_feed, index=index)
-        
+
         hashtag_feed_data = self._database.get_datas_with_ids(target_id="fid", ids=hashtag_feed_fid)
         user_feed_fid = self._database.get_datas_with_ids(target_id="fid", ids=user_feed_fid)
 
@@ -442,7 +442,7 @@ class FeedSearchModel(FeedModel):
             feed.make_with_dict(feed_data)
             feeds.append(feed)
 
-        self._set_feed_json_data(user=self._user, feeds=feeds, feed_manager=feed_manager)
+        self._set_feed_json_data(user=self._user, feeds=feeds)
 
         # 인터엑션 필요
         self._send_data = self.__set_send_data(feeds=feeds)
@@ -464,8 +464,36 @@ class FeedSearchModel(FeedModel):
 
         except Exception as e:
             raise CoreControllerLogicError("response making error | " + e)
-        
-        
+
+class FilteredFeedModel(FeedModel):
+    def __init__(self, database:Local_Database):
+        super().__init__(database)
+
+    def try_filtered_feed_with_options(self,
+                                       feed_search_engine:FeedSearchEngine,
+                                       feed_manager:FeedManager,
+                                       category:list,
+                                       fclass:str="",
+                                       last_fid:str=""
+                                       ):
+
+        # 필터링 전 Feeds 들을 가져옵니다.
+        # 모든 Feed를 가져온 다음. 게시글을 하나하나씩 쳐내는 방식을 씁니다.
+        fid_list = feed_manager.get_all_fids()
+
+        # 1차 필터링 : FClass를 통한 분류를 먼저 진행합니다.
+        #   왜 FClass 부터 먼저 진행하나요? -> 간단한 것부터 먼저 분류합니다.
+        #
+        fid_list = feed_search_engine.try_filtered_feed_with_options(fid_list=fid_list, option="fclass", keys=[fclass])
+
+        # 2차 필터링 : Category 별 분류를 진행합니다.
+        # AD의 경우, 생각중
+        fid_list = feed_search_engine.try_filtered_feed_with_options(fid_list=fid_list, option="category", keys=category)
+
+        # 마지막, 분류가 끝이 났으면 페이징을 진행합니다.
+        self._feeds, self._key = feed_manager.paging_fid_list(fid_list=fid_list, last_fid=last_fid)
+
+
 class CommunityFeedModel(FeedModel):
     def __init__(self, database:Local_Database) -> None:
         super().__init__(database)
@@ -526,7 +554,6 @@ class CommunityFeedModel(FeedModel):
                                         feed_search_engine:FeedSearchEngine, feed_manager:FeedManager):
         fid_list = []
 
-
         # 1차 필터링
         # Board_type이 필터링 옵션으로 들어갔기 때문에 커뮤니티 분리만 시킵니다, BID만 관여
         if board_type == "" :
@@ -558,6 +585,5 @@ class CommunityFeedModel(FeedModel):
 
         except Exception as e:
             raise CoreControllerLogicError("response making error | " + e)
-        
-        
-            
+
+

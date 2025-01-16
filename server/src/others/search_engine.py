@@ -468,19 +468,31 @@ class ManagedFeedBiasTable:
         filtered_feeds_df = self.__feed_df[(self.__feed_df['bid'] == bid) & (self.__feed_df['board_type'] == board_type)]
         return self.__paging_list_df(fid_list=filtered_feeds_df['fid'].tolist(),
                                      fid=last_fid, page_size=page_size)
+#---------------------------------------------------------------------------------------------------------------------
+    # 여기서는 추가적인 필터링을 위해 필터링된 FID리스트를 받고, 2차 필터링을 실시하는 곳입니다.
+    def filtering_fclass_feed_new(self, fid_list:list, fclass:str) -> list:
+        fid_list_df = self.__feed_df[(self.__feed_df['fid'] == fid_list)]
+        # Filtering 시, 다음의 값을 유의
+        # fclass == ""인 경우, 모든 경우를 가져옵니다. 어짜피 AD는 Notice의 경우로 들어가니까 상관없겠지요.
+        if fclass != "":
+            filtered_feeds_df = fid_list_df[(self.__feed_df['fclass'] == fclass)]
+            return filtered_feeds_df['fid'].tolist()
+        return fid_list_df['fid'].tolist()
 
-    # def filtering_image_in_feed(self, bid:str, board_type:str, last_fid:str, page_size:int):
-    #     # 이미지 있는 Feed들만 골라서 뱉음
-    #     filtered_feeds_df = self.__feed_df[self.__feed_df['num_images'] > 0]
-    #     # 게시판 필터링
-    #     filtered_feeds_df = filtered_feeds_df[(filtered_feeds_df['bid'] == bid) & (filtered_feeds_df['board_type'] == board_type)]
-    #     return self.__paging_list_df(fid_list=filtered_feeds_df['fid'].tolist(),
-    #                                  fid=last_fid, page_size=page_size)
+    def filtering_category_feed_new(self, fid_list:list, category:str) -> list:
+        fid_list_df = self.__feed_df[(self.__feed_df['fid'] == fid_list)]
+        # Filtering 시, 다음의 값을 유의
+        # category == ""인 경우, 모든 경우를 가져옵니다. 똑같이 AD는 현재 아예 다른 모델을 사용하므로... 고려대상에서 제외합니다.
+        if category != "":
+            filtered_feeds_df = fid_list_df[(self.__feed_df['board_type'] == category)]
+            return filtered_feeds_df['fid'].tolist()
 
 #---------------------------------------------------------------------------------------------------------------------------------------
-    # 여기서는 게시판 필터링을 거친 후, 추가적인 필터링을 위해 필터링된 FID리스트를 받고, 2차 필터링을 실시하는 곳입니다.
+
+
+
     def filtering_fclass_feed(self, fid_list:list, fclass:str, last_fid:str, page_size:int):
-        # 2차 게시판 필터링. Long Form인지, Short Form인지, 그리고, Board_type도 관여하게 됨.
+        # 2차 게시판 필터링. Long Form인지, Short Form인지 나누게 됩니다.
         fid_list_df = self.__feed_df[self.__feed_df['fid'].isin(fid_list)]
         # DF 내에서 다시 한번 더, 결과를 가져옴.
         filtered_feeds_df = fid_list_df[fid_list_df['fclass'] == fclass]
@@ -678,8 +690,13 @@ class FeedSearchEngine:
                 search_type="best", num_feed=num_feed, target_hour=-1, index=index)
 
         return result_fid, result_index
-    
-       
+
+    def try_filtering_feed_with_option(self, fid_list:list, option:str, keys:list):
+        # 옵션과 키에 따라 필터링이 나뉘어진다.
+        return self.__filter_manager.filtering_feed_option_and_key(fid_list=fid_list, option=option, keys=keys)
+
+
+#---------------------주의! 이 함수들은 쳐낼 예정입니다. 필터링 옵션의 확정에 따라 함수를 새로 만들었습니다.---------------------------------------
     # 최애 페이지에서 요청
     def try_feed_with_bid_n_filtering(self, target_bids:list[str]=[""], board_type="default",
                                       page_size=-1, last_fid="", search_type="default"
@@ -725,12 +742,14 @@ class FeedSearchEngine:
     #                                                                                             last_fid=last_fid, page_size=page_size)
     #     return result, result_last_fid
 
-    def try_filtering_feed_with_options(self, fid_list:list, options:list, page_size=-1, last_fid=""):
+    def try_filtering_feed_with_option(self, fid_list:list, option:str , page_size=-1, last_fid=""):
         # Return 값은 결과리스트와 Last_FID
         return self.__filter_manager.filtering_feed_options(first_filtered_fid_list=fid_list, options=options,
                                                             page_size=page_size, last_fid=last_fid)
 
 #-----------------------------------------------------------------------------------------------------------
+
+
 
     # 여기도 아직 하지 말것 
     # 목적 : 숏피드에서 다음 피드 제공 받기
@@ -1288,21 +1307,8 @@ class FilteringManager:
         self.__feed_algorithm:FeedAlgorithm = feed_algorithm
         self.__managed_feed_bias_table=managed_feed_bias_table
 
-#------------------------------------------------------------------------------------
-    # BID로 필터링 하는 작업 수행
-    def filtering_community(self, page_size, bids:list, last_fid=""):
-        # Search Engine에 들어가기 전에 BID 리스트를 검사할거임
-        # BID 리스트 요소는 1개가 될 수 있고, 아니면 선택을 하지 않아서 여러 개가 될 수 있음.
-        return self.__managed_feed_bias_table.filtering_bias_community(bids=bids, last_fid=last_fid, page_size=page_size)
+#--------------------실제로 사용하게 될 구간입니다. 필터링 옵션이 확정났기 때문에 이렇게 새로만듭니다----------------------------------------------
 
-    def filtering_board_no_bid(self, board_type:str, page_size:int, last_fid=""):
-        return self.__managed_feed_bias_table.filtering_board_without_bid(board_type=board_type, page_size=page_size, last_fid=last_fid)
-
-    def filtering_board_community(self, bid:str, board_type:str, page_size:int, last_fid:str=""):
-        # 게시판 타입마다 필터링하는 함수.
-        return self.__managed_feed_bias_table.filtering_community_board(bid=bid, board_type=board_type, last_fid=last_fid, page_size=page_size)
-
-#---------------------------------------------------------------------------------------------
     def __paging_list(self, fid_list:list, fid, page_size):
         # 이미 Date 최신순으로 정렬되어서 맨처음이 젤 최신의 글임
         start_index = 0
@@ -1321,6 +1327,38 @@ class FilteringManager:
 
         # Paging Fid List, Last_fid
         return paging_fid_list, paging_fid_list[-1]
+
+    def filtering_feed_option_and_key(self, fid_list:list, option:str, keys:list):
+        if option == "fclass":
+            # 키가 하나밖에 없기 때문에.. keys[0]만으로 판별해야한다.
+            # Fclass == ""인 경우, Managed_Feed_table에서 처리하도록 하였음
+            return self.__managed_feed_bias_table.filtering_fclass_feed_new(fid_list=fid_list, fclass=keys[0])
+
+        elif option == "category":
+            # 구분하기 쉽도록 하였음. 또한, category가 []인 상태라면 뒤에 나올 반복문 자체가 동작하지 않는다.
+            # 따라서 미리 선언을 한상태로 있는다.
+            filtered_fid_list = fid_list
+            for key in keys:
+                filtered_fid_list = self.__managed_feed_bias_table.filtering_category_feed_new(fid_list=filtered_fid_list, category=key)
+
+            # 필터링이 끝나면 반환
+            return filtered_fid_list
+
+#------------------------------------------------------------------------------------
+    # BID로 필터링 하는 작업 수행
+    def filtering_community(self, page_size, bids:list, last_fid=""):
+        # Search Engine에 들어가기 전에 BID 리스트를 검사할거임
+        # BID 리스트 요소는 1개가 될 수 있고, 아니면 선택을 하지 않아서 여러 개가 될 수 있음.
+        return self.__managed_feed_bias_table.filtering_bias_community(bids=bids, last_fid=last_fid, page_size=page_size)
+
+    def filtering_board_no_bid(self, board_type:str, page_size:int, last_fid=""):
+        return self.__managed_feed_bias_table.filtering_board_without_bid(board_type=board_type, page_size=page_size, last_fid=last_fid)
+
+    def filtering_board_community(self, bid:str, board_type:str, page_size:int, last_fid:str=""):
+        # 게시판 타입마다 필터링하는 함수.
+        return self.__managed_feed_bias_table.filtering_community_board(bid=bid, board_type=board_type, last_fid=last_fid, page_size=page_size)
+
+#---------------------------------------------------------------------------------------------
 
     def _filtering_feed_type_in_result_feeds(self, fid_list:list, fclass:str, page_size:int, last_fid:str=""):
         return self.__managed_feed_bias_table.filtering_fclass_feed(fid_list=fid_list, fclass=fclass, last_fid=last_fid, page_size=page_size)
@@ -1350,6 +1388,11 @@ class FilteringManager:
         # Board_type
         else :
             self.__managed_feed_bias_table.filtering_category_feed(fid_list=fid_list, option=option, page_size=page_size, last_fid=last_fid)
+
+
+
+
+
 
 
     def filtering_feed_options(self, first_filtered_fid_list:list, options:list, page_size:int, last_fid:str=""):

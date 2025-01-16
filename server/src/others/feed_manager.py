@@ -781,6 +781,7 @@ class OldFeedManager:
             feed = Feed()
             feed.make_with_dict(feed_data)
             feeds.append(feed)
+            # Target Feed ID를 만나면 페이징을 위해 타겟을 입력한다.
             if feed.fid == fid:
                 target = i
 
@@ -1500,6 +1501,15 @@ class FeedManager:
 
         return feeds
 
+    def get_all_fids(self):
+        feed_datas = self._database.get_all_data(target_id="fid")
+        fid_list = []
+
+        for feed_data in feed_datas:
+            fid_list.append(feed_data["fid"])
+
+        return fid_list
+
 #------------------------------Feed 좋아요 누르기----------------------------------------------
 
     # Feed에 좋아요를 눌렀을 때의 작용
@@ -1869,8 +1879,20 @@ class FeedManager:
 
         return feeds
 
+#------------------------------------------------------------------------------------------------------------
+    def paging_fid_list(self, fid_list:list, last_index:int, page_size=5):
+        # 최신순으로 정렬된 상태로 Fid_list를 받아오기 때문에, 인덱스 번호가 빠를수록 최신의 것
+        # 만약에 페이지 사이즈보다 더 짧은 경우도 있을 수 있기에 먼저 정해놓는다.
+        # 이러면 페이징된 리스트의 길이에 상관없이, 인덱스를 알아낼 수 있을 것
+        paging_list = fid_list[last_index:]
+        last_index_next = fid_list.index(fid_list[-1])
 
+        # 만약 페이지 사이즈를 넘었다면 표시할 개수만큼 짜르고, last_index를 재설정한다.
+        if len(paging_list) > page_size:
+            paging_list = paging_list[:page_size]
+            last_index_next = fid_list.index(fid_list[last_index+page_size])
 
+        return paging_list, last_index_next
 
     # 1. interaction 수행
 

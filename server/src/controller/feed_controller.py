@@ -137,36 +137,27 @@ class Feed_Controller:
 
         return model
         
-    # 전체 개시글(최신순)
+    # 전체 개시글(최신순) # 롤백 했음
     def get_all_feed(self, database:Local_Database,
-                        request, feed_search_engine: FeedSearchEngine, num_feed=4):
+                     request, feed_search_engine: FeedSearchEngine,
+                     num_feed= 4):
+        model = FeedModel(database=database)
 
-        options = request.data_payload.options
-
-        if not options:
-            model = FeedModel(database=database)
-        
-            # 유저가 있으면 세팅
-            if request.jwt_payload != "":
-                model.set_user_with_email(request=request.jwt_payload)
-
-            model.set_all_feed(feed_search_engine=feed_search_engine, feed_manager=self.__feed_manager,
-                               index=request.data_payload.key, num_feed=num_feed)
-        else:
-            model = CommunityFeedModel(database=database)
-
-            # 유저가 있으면 세팅
-            if request.jwt_payload != "":
-                model.set_user_with_email(request=request.jwt_payload)
-
-            model.try_filtering_feeds_with_options(
-                feed_search_engine=feed_search_engine,
-                feed_manager=self.__feed_manager,
-                bid = request.data_payload.bid,
-                last_fid = request.data_payload.last_fid,
-            )
+        # 유저가 있으면 세팅
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
+        model.set_all_feed(feed_search_engine=feed_search_engine,
+                           feed_manager=self.__feed_manager,
+                           index=request.data_payload.key,
+                           num_feed=num_feed)
 
         return model
+
+    def get_all_feed_filtered(self, database:Local_Database,
+                              request, feed_search_engine: FeedSearchEngine,
+                              num_feed=4):
+
+        model =
 
     # 필터링 인터페이스
     # 옵션들을 모두 받아와서 여러번 필터링을 거치게 됩니다.
