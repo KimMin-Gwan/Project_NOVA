@@ -367,10 +367,10 @@ class Core_Service_View(Master_View):
             return response
         
         # 전체 피드 제공
-        @self.__app.get('/feed_explore/all_feed')
-        def get_all_feed_in_search(request:Request, key:Optional[int] = -1):
+        @self.__app.post('/feed_explore/all_feed')
+        def get_all_feed_in_search(request:Request, raw_request:dict):
             request_manager = RequestManager()
-            data_payload = HomeFeedRequest(key=key)
+            data_payload = AllFeedRequest(request=raw_request)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
                 #raise request_manager.credentials_exception
@@ -788,12 +788,20 @@ class CommunityRequest(RequestHeader):
 class CommunityFilteredRequest(CommunityRequest):
     def __init__(self, request) -> None:
         super().__init__(request)
-        self.options = request['options']
+        body = request['body']
+        self.options = body['options']
 
 class HomeFeedRequest(RequestHeader):
     def __init__(self, key) -> None:
         self.key = key
-        self.options = False
+        
+class AllFeedRequest(RequestHeader):
+    def __init__(self, request) -> None:
+        super().__init__(request)
+        body = request['body']
+        self.category = body['category']
+        self.fclass= body['fclass']
+        self.key= body['key']
 
 class HashtagFeedRequest(RequestHeader):
     def __init__(self, hashtag, key=-1) -> None:
