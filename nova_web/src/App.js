@@ -401,6 +401,7 @@ function App() {
                 />
                 {/* <AllPost brightMode={brightMode} /> */}
               </section>
+              <NavBar brightMode={brightMode}></NavBar>
 
               <div className="narrow-page">
                 <NavBar brightMode={brightMode}></NavBar>
