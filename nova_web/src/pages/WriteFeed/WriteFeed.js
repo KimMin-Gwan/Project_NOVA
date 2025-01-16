@@ -5,6 +5,7 @@ import style from "./WriteFeed.module.css";
 // import stylePlanet from "./../PlanetPage/Planet.module.css";
 import backword from "./../../img/back_icon.png";
 
+import tags from "./../../img/tags.png";
 import back from "./../../img/write_vector1.png";
 import select from "./../../img/select-icon.png";
 import img from "./../../img/img-icon.png";
@@ -225,6 +226,17 @@ const WriteFeed = ({ brightmode }) => {
     }
   }
 
+  function onClickCheck(e) {
+    e.stopPropagation();
+    if (inputTag && inputTagCount <= 12) {
+      // 해시태그가 최대 글자 수 이내일 때만 추가
+      setTagList([...tagList, `${inputTag}`]); // 태그 목록에 추가
+      setInputTag(""); // 입력 필드 초기화
+      setInputTagCount(0); // 글자 수 초기화
+    }
+    e.preventDefault();
+  }
+
   const onDeleteTag = (index) => {
     // 현재 해시태그 리스트에서 삭제할 인덱스를 기준으로 필터링
     const updatedTags = tagList.filter((_, i) => i !== index);
@@ -305,14 +317,19 @@ const WriteFeed = ({ brightmode }) => {
             className={style["input-hashtag"]}
           />
           <button
+            className={style["check-button"]}
             onClick={(e) => {
-              e.stopPropagation();
+              onClickCheck(e);
             }}
           >
             확인
           </button>
         </div>
+        <span className={style["count-text"]}>{inputTagCount}/12</span>
         <div className={style["tag-container"]}>
+          <div className={style["tag-icon-box"]}>
+            <img src={tags} alt="tag" />
+          </div>
           {tagList.length !== 0 &&
             tagList.map((tag, i) => (
               <div className={style["tag-box"]} key={i}>
@@ -327,7 +344,7 @@ const WriteFeed = ({ brightmode }) => {
       </div>
 
       <div className={style["content_container"]}>
-        <div>본문</div>
+        <div className={style["content-title"]}>본문</div>
         <textarea
           className={style["write_body"]}
           name="body"
@@ -335,6 +352,7 @@ const WriteFeed = ({ brightmode }) => {
           value={bodyText}
           onChange={onChangeBody}
         />
+        <span className={style["count-text"]}>{inputBodyCount}/300</span>
       </div>
 
       <p className={style["alert_message"]}>

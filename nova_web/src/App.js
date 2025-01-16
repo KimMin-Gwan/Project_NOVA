@@ -46,6 +46,10 @@ import BiasFunding from "./pages/NovaFunding/BiasFunding/BiasFunding.js";
 import RecommendAll from "./pages/NovaFunding/BiasFunding/MoreProjects.js";
 import FollowPage from "./pages/FollowPage/FollowPage.js";
 
+import all_post from "./img/all_post.png";
+import best from "./img/best.png";
+import new_pin from "./img/new_pin.png";
+import hashtag from "./img/hashtag.png";
 import logo from "./img/NOVA_Platform.png";
 import logo2 from "./img/logo2.png";
 import FeedThumbnail from "./component/feed-list/FeedThumbnail.js";
@@ -292,6 +296,7 @@ function App() {
                       <span className="title-color">최애 </span>몰아보기
                     </>
                   }
+                  img_src={new_pin}
                   feedData={weeklyFeed}
                   brightMode={brightMode}
                   type={"bias"}
@@ -336,6 +341,7 @@ function App() {
                       오늘의 베스트 <span className="title-color">피드</span>
                     </>
                   }
+                  img_src={best}
                   feedData={todayBestFeed}
                   brightMode={brightMode}
                   hasSearchBox
@@ -347,6 +353,7 @@ function App() {
                       주간 <span className="title-color">TOP 100</span>
                     </>
                   }
+                  img_src={best}
                   feedData={weeklyFeed}
                   brightMode={brightMode}
                   endPoint={`/feed_list?type=weekly_best`}
@@ -354,6 +361,7 @@ function App() {
 
                 <FeedThumbnail
                   title={"전체 글"}
+                  img_src={all_post}
                   feedData={allFeed}
                   brightMode={brightMode}
                   allPost={<AllPost allFeed={allFeed} />}

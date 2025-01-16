@@ -10,6 +10,7 @@ import SearchBox from "../SearchBox";
 
 export default function FeedThumbnail({
   title,
+  img_src,
   feedData,
   brightMode,
   type,
@@ -30,7 +31,7 @@ export default function FeedThumbnail({
     <section className={style["FeedThumbnail"]}>
       <div className={style["title-section"]}>
         <div className={style["title"]}>
-          <img src={pin} />
+          <img src={img_src} />
           {title}
         </div>
         <div className={`${style["more-icon"]}`}>

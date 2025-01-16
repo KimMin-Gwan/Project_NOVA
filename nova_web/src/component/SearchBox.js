@@ -8,7 +8,7 @@ export default function SearchBox() {
         id="search-box"
         className={style["search-box"]}
         type="text"
-        placeholder="보고 싶은 최애를 검색해보세요"
+        placeholder="인기 게시글 검색"
       ></input>
       <button className={style["search-btn"]}>
         <img src={search_icon}></img>

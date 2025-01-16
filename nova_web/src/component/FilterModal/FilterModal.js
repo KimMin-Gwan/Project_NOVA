@@ -16,7 +16,7 @@ export default function FilterModal({ isFilterClicked, onClickFilterButton }) {
         </div>
 
         <div className="FilterModal_kind">
-          <div>게시글 종류</div>
+          <h5>게시글 종류</h5>
           <div className="button_container">
             <button>공지사항</button>
             <button>자유 게시판</button>
@@ -27,7 +27,7 @@ export default function FilterModal({ isFilterClicked, onClickFilterButton }) {
         </div>
 
         <div className="FilterModal_kind">
-          <div>컨텐츠 종류</div>
+          <h5>컨텐츠 종류</h5>
           <div className="button_container">
             <button>모멘트</button>
             <button>포스트</button>
