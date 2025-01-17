@@ -58,7 +58,6 @@ class LoginModel(BaseModel):
     
     def get_result(self):
         return self.__result
-    
 
 class SendEmailModel(BaseModel):
     def __init__(self, database:Local_Database) -> None:
@@ -209,25 +208,18 @@ class UserPageModel(BaseModel):
         except Exception as e:
             raise CoreControllerLogicError("response making error | " + e)
 
+# 통일성을 위해 Comment 까지 재편 합니다.
 class MyCommentsModel(BaseModel):
-    def __init__(self, database:Local_Database) -> None:
+    def __init__(self, database:Local_Database ) -> None:
         super().__init__(database)
-        self._comments= []
-        self._cid = ""
-
-    def get_my_comments(self, feed_manager:FeedManager, data_payload):
-        self._comments= feed_manager.get_my_comments(user=self._user,
-                                                    cid=data_payload.cid)
-        if len(self._comments) != 0:
-            self._cid= self._comments[-1].cid
-
-        return
+        self._comments = []
+        self._key = -1
 
     def get_response_form_data(self, head_parser):
         try:
             body = {
                 'comments' : self._make_dict_list_data(list_data=self._comments),
-                "cid" : self._cid
+                "key" : self._key
             }
 
             response = self._get_response_data(head_parser=head_parser, body=body)
@@ -235,6 +227,12 @@ class MyCommentsModel(BaseModel):
 
         except Exception as e:
             raise CoreControllerLogicError("response making error | " + e)
+
+    def get_my_comments(self, feed_manager:FeedManager, last_index:int=-1):
+        self._comments = feed_manager.get_my_comments_new(user=self._user)
+        self._comments, self._key = feed_manager.paging_fid_list(fid_list=self._comments, last_index=last_index, page_size=3)
+
+        return
 
 class MyFeedsModel(BaseModel):
     def __init__(self, database:Local_Database) -> None:
@@ -280,48 +278,6 @@ class MyFeedsModel(BaseModel):
         self._feeds, self._key = feed_manager.paging_fid_list(fid_list=self._feeds, last_index=last_index, page_size=3)
 
         return
-
-
-
-class MyFeedsModel(BaseModel):
-    def __init__(self, database:Local_Database) -> None:
-        super().__init__(database)
-        self._feeds = []
-        self._fid = ""
-
-    def get_my_feed(self, feed_manager:FeedManager, data_payload):
-        self._feeds = feed_manager.get_my_feeds(user=self._user,
-                                                fid=data_payload.fid)
-        if len(self._feeds) != 0:
-            self._fid = self._feeds[-1].fid
-        return
-
-    def get_staring_feed(self, feed_manager:FeedManager, data_payload):
-        self._feeds = feed_manager.get_stared_feed(user=self._user,
-                                                    fid=data_payload.fid)
-        if len(self._feeds) != 0:
-            self._fid = self._feeds[-1].fid
-        return
-
-    def get_interacted_feed(self, feed_manager:FeedManager, data_payload):
-        self._feeds = feed_manager.get_interacted_feed(user=self._user,
-                                                    fid=data_payload.fid)
-        if len(self._feeds) != 0:
-            self._fid = self._feeds[-1].fid
-        return
-
-    def get_response_form_data(self, head_parser):
-        try:
-            body = {
-                'feeds' : self._make_dict_list_data(list_data=self._feeds),
-                "fid" : self._fid
-            }
-
-            response = self._get_response_data(head_parser=head_parser, body=body)
-            return response
-
-        except Exception as e:
-            raise CoreControllerLogicError("response making error | " + e)
 
 class ChangePasswordModel(BaseModel):
     def __init__(self, database:Local_Database) -> None:
@@ -421,8 +377,78 @@ class ChangeNickNameModel(BaseModel):
 
         except Exception as e:
             raise CoreControllerLogicError("response making error | " + e)
-        
 
+
+class MyCommentsModel(BaseModel):
+    def __init__(self, database:Local_Database) -> None:
+        super().__init__(database)
+        self._comments= []
+        self._cid = ""
+
+
+
+    def get_my_comments(self, feed_manager:FeedManager, data_payload):
+        self._comments= feed_manager.get_my_comments(user=self._user,
+                                                     cid=data_payload.cid)
+        if len(self._comments) != 0:
+            self._cid= self._comments[-1].cid
+
+        return
+
+    def get_response_form_data(self, head_parser):
+        try:
+            body = {
+                'comments' : self._make_dict_list_data(list_data=self._comments),
+                "cid" : self._cid
+            }
+
+            response = self._get_response_data(head_parser=head_parser, body=body)
+            return response
+
+        except Exception as e:
+            raise CoreControllerLogicError("response making error | " + e)
+
+class MyFeedsModel(BaseModel):
+    def __init__(self, database:Local_Database) -> None:
+        super().__init__(database)
+        self._feeds = []
+        self._fid = ""
+
+    def get_my_feed(self, feed_manager:FeedManager, data_payload):
+        self._feeds = feed_manager.get_my_feeds(user=self._user,
+                                                fid=data_payload.fid)
+        if len(self._feeds) != 0:
+            self._fid = self._feeds[-1].fid
+        return
+
+    def get_staring_feed(self, feed_manager:FeedManager, data_payload):
+        self._feeds = feed_manager.get_stared_feed(user=self._user,
+                                                   fid=data_payload.fid)
+        if len(self._feeds) != 0:
+            self._fid = self._feeds[-1].fid
+        return
+
+    def get_interacted_feed(self, feed_manager:FeedManager, data_payload):
+        self._feeds = feed_manager.get_interacted_feed(user=self._user,
+                                                       fid=data_payload.fid)
+        if len(self._feeds) != 0:
+            self._fid = self._feeds[-1].fid
+        return
+
+    def get_response_form_data(self, head_parser):
+        try:
+            body = {
+                'feeds' : self._make_dict_list_data(list_data=self._feeds),
+                "fid" : self._fid
+            }
+
+            response = self._get_response_data(head_parser=head_parser, body=body)
+            return response
+
+        except Exception as e:
+            raise CoreControllerLogicError("response making error | " + e)
+
+# 이거 안쓴다고 해서 한번 주석처리 해야함
 # feed 의 메타 정보를 보내주는 모델
 class MyAlertModel(BaseModel):
     def __init__(self, database:Local_Database) -> None:

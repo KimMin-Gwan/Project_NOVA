@@ -1753,6 +1753,19 @@ class FeedManager:
         return comments
 
     # 내가 작성한 댓글 전부 불러오기
+    # 페이징 기법은 새롭게 재편하기 떄문에 여기서 페이징을 하지않습니다.
+    def get_my_comments_new(self, user):
+        comment_datas = self._database.get_datas_with_ids(target_id="cid", ids=user.my_comment)
+        comments = []
+
+        for _, comment_data in comment_datas:
+            comment = Comment()
+            comment.make_with_dict(comment_data)
+            comments.append(comment)
+
+        return comments
+
+    # 내가 작성한 댓글 전부 불러오기
     # 왜 CID가 있는지 생각했더니 페이징기법인거 이제 이해됨.
     # 나중에 Funding 프로젝트 페이징 기법 시, 참고해야지.
     def get_my_comments(self, user, cid):

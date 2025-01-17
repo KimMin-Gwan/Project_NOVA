@@ -6,9 +6,8 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from fastapi import HTTPException, status
 
-
-
 class UserController:
+
         
     # 로그인 시도
     def try_login(self, database, request):
@@ -34,7 +33,6 @@ class UserController:
     # 4. 이메일 보내는건 아래에 작성된 이메일 보내기 클래스 사용
     # 5. 이메일 전송 완료되면 True 반환
     # 6. 이미 있는 email이면 False 반환
-
     def try_send_email(self, database, request, nova_verification):
         model = SendEmailModel(database=database)
         try:
@@ -123,8 +121,6 @@ class UserController:
         finally:
             return model
 
-
-
     # 회원가입 시도
     # 1. 인증번호 맞는지 확인
     # 2. 맞으면 데이터 베이스에 새로운 유저 생성해서
@@ -193,13 +189,12 @@ class UserController:
         finally:
             return model
 
-    def get_my_comments(self, database, request, feed_manager):
+    def try_get_my_comments(self, database, request, feed_manager):
         model = MyCommentsModel(database=database)
         try:
-            # 유저가 있으면 세팅
             model.set_user_with_email(request=request.jwt_payload)
             model.get_my_comments(feed_manager=feed_manager,
-                                  data_payload=request.data_payload)
+                                  last_index=request.data_payload.key)
 
         except CustomError as e:
             print("Error Catched : ", e.error_type)
@@ -211,25 +206,6 @@ class UserController:
 
         finally:
             return model
-    # # 구형
-    # def get_user_page(self, database, request):
-    #     model = UserPageModel(database=database)
-    #     try:
-    #         # 유저가 있으면 세팅
-    #         model.set_user_with_email(request=request.jwt_payload)
-    #         model.set_bias_datas()
-    #         model.set_user_data_with_no_password()
-    #
-    #     except CustomError as e:
-    #         print("Error Catched : ", e.error_type)
-    #         model.set_state_code(e.error_code) # 종합 에러
-    #
-    #     except Exception as e:
-    #         print("Error Catched : ", e.error_type)
-    #         model.set_state_code(e.error_code) # 종합 에러
-    #
-    #     finally:
-    #         return model
 
     def try_change_nickname(self, database, request):
         model = ChangeNickNameModel(database=database)
@@ -269,6 +245,43 @@ class UserController:
         finally:
             return model
 
+    # def get_my_comments(self, database, request, feed_manager):
+    #     model = MyCommentsModel(database=database)
+    #     try:
+    #         # 유저가 있으면 세팅
+    #         model.set_user_with_email(request=request.jwt_payload)
+    #         model.get_my_comments(feed_manager=feed_manager,
+    #                               data_payload=request.data_payload)
+    #
+    #     except CustomError as e:
+    #         print("Error Catched : ", e.error_type)
+    #         model.set_state_code(e.error_code) # 종합 에러
+    #
+    #     except Exception as e:
+    #         print("Error Catched : ", e.error_type)
+    #         model.set_state_code(e.error_code) # 종합 에러
+    #
+    #     finally:
+    #         return model
+    # # 구형
+    # def get_user_page(self, database, request):
+    #     model = UserPageModel(database=database)
+    #     try:
+    #         # 유저가 있으면 세팅
+    #         model.set_user_with_email(request=request.jwt_payload)
+    #         model.set_bias_datas()
+    #         model.set_user_data_with_no_password()
+    #
+    #     except CustomError as e:
+    #         print("Error Catched : ", e.error_type)
+    #         model.set_state_code(e.error_code) # 종합 에러
+    #
+    #     except Exception as e:
+    #         print("Error Catched : ", e.error_type)
+    #         model.set_state_code(e.error_code) # 종합 에러
+    #
+    #     finally:
+    #         return model
     # # 구형
     # def get_my_feed(self, database, request, feed_manager):
     #     model = MyFeedsModel(database=database)
@@ -346,7 +359,6 @@ class UserController:
     #
     #     finally:
     #         return model
-
 
 # 이메일 전송
 class MailSender:
