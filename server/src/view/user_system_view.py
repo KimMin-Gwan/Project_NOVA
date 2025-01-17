@@ -17,7 +17,7 @@ class User_Service_View(Master_View):
         self.__feed_search_engine = feed_search_engine
         self.user_route(endpoint)
         self.my_page_route()
-        self.new_page_route()
+        self.new_my_page_route()
 
     def user_route(self, endpoint:str):
         @self.__app.get(endpoint+'/user')
