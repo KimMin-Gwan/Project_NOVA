@@ -478,7 +478,7 @@ class ManagedFeedBiasTable:
 #---------------------------------------------------------------------------------------------------------------------
     # 여기서는 추가적인 필터링을 위해 필터링된 FID리스트를 받고, 2차 필터링을 실시하는 곳입니다.
     def filtering_fclass_feed(self, fid_list:list, fclass:str) -> list:
-        fid_list_df = self.__feed_df[(self.__feed_df['fid'] == fid_list)]
+        fid_list_df = self.__feed_df[(self.__feed_df['fid'].isin(fid_list))]
         # Filtering 시, 다음의 값을 유의
         # fclass == ""인 경우, 모든 경우를 가져옵니다. 어짜피 AD는 Notice의 경우로 들어가니까 상관없겠지요.
         if fclass != "":
@@ -487,7 +487,7 @@ class ManagedFeedBiasTable:
         return fid_list_df['fid'].tolist()
 
     def filtering_category_feed(self, fid_list:list, category:str) -> list:
-        fid_list_df = self.__feed_df[(self.__feed_df['fid'] == fid_list)]
+        fid_list_df = self.__feed_df[(self.__feed_df['fid'].isin(fid_list))]
         # Filtering 시, 다음의 값을 유의
         # category == ""인 경우, 모든 경우를 가져옵니다. 똑같이 AD는 현재 아예 다른 모델을 사용하므로... 고려대상에서 제외합니다.
         if category != "":
