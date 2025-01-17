@@ -6,7 +6,9 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from fastapi import HTTPException, status
 
-class UserController:      
+
+
+class UserController:
         
     # 로그인 시도
     def try_login(self, database, request):
@@ -148,7 +150,18 @@ class UserController:
 
         finally:
             return model
-    
+
+    def try_get_user_page(self, database, request):
+        model = UserPageModel(database=database)
+
+        self._user:User()
+        try:
+            model.set_user_with_email(request=request.jwt_payload)
+            model.get_user_data()
+
+
+
+    # 구형
     def get_user_page(self, database, request):
         model = UserPageModel(database=database)
         try:

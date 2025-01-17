@@ -162,6 +162,11 @@ class UserPageModel(BaseModel):
         super().__init__(database)
         self.__biases = []
 
+        self._num_long_feeds = 0
+        self._num_short_feeds = 0
+        self._num_like_feeds = 0
+        self._num_comments = 0
+
 
     def set_bias_datas(self):
         bids = self._user.bids
@@ -177,6 +182,9 @@ class UserPageModel(BaseModel):
         self._user.password = ""
         return
 
+    def get_user_data(self, user:User):
+
+
     def get_response_form_data(self, head_parser):
         try:
             body = {
@@ -189,35 +197,6 @@ class UserPageModel(BaseModel):
 
         except Exception as e:
             raise CoreControllerLogicError("response making error | " + e)
-
-# class MyFeedsModel(BaseModel):
-#     def __init__(self, database:Local_Database) -> None:
-#         super().__init__(database)
-#         self._feeds = []
-#         self._fid = ""
-#
-#     def get_response_form_data(self, head_parser):
-#         try:
-#             body = {
-#                 "feeds" : self._make_dict_list_data(list_data=self._feeds),
-#                 "fid" : self._fid
-#             }
-#
-#             response = self._get_response_data(head_parser=head_parser, body=body)
-#             return response
-#
-#         except Exception as e:
-#             raise CoreControllerLogicError("response making error | " + e)
-#
-#     def get_my_feeds(self, feed_manager:FeedManager, data_payload):
-#         self._feeds = feed_manager.get_my_feeds(user= self._user,
-#                                                  fid = data_payload.fid)
-#         if len(self._feeds) != 0 :
-#             self._fid = self._feeds[-1].fid
-#
-#         return
-#
-# class MyFavoriteModel(BaseModel):
 
 class MyCommentsModel(BaseModel):
     def __init__(self, database:Local_Database) -> None:

@@ -40,6 +40,12 @@ class User(SampleDomain):
         self.gender = gender
         self.bids:list = copy.copy(bids)
         self.credit = credit
+
+        self.num_long_post:int = 0
+        self.num_short_post:int = 0
+        self.num_like_post:int = 0
+        self.num_comment_post:int = 0
+
         self.alert:list = copy.copy(alert)
         self.like:list = copy.copy(like)
         self.my_comment:list = copy.copy(my_comment)
@@ -59,6 +65,11 @@ class User(SampleDomain):
             self.gender= dict_data['gender']
             self.bids = copy.copy(dict_data['bids'])
             self.credit= dict_data['credit']
+            self.num_long_post = dict_data['num_long_post']
+            self.num_short_post = dict_data['num_short_post']
+            self.num_like_post = dict_data['num_like_post']
+            self.num_comment_post = dict_data['num_comment_post']
+
             self.alert = copy.copy(dict_data['alert'])
             self.like = copy.copy(dict_data["like"])
             self.my_comment = copy.copy(dict_data["my_comment"])
@@ -81,6 +92,11 @@ class User(SampleDomain):
             "gender" : self.gender,
             "credit" : self.credit,
             "bids" : copy.copy(self.bids),
+            "num_long_post" : self.num_long_post,
+            "num_short_post" : self.num_short_post,
+            "num_like_post" : self.num_like_post,
+            "num_comment_post" : self.num_comment_post,
+
             "alert" : copy.copy(self.alert),
             "like" : copy.copy(self.like),
             "my_comment" : copy.copy(self.my_comment),
