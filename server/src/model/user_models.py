@@ -161,12 +161,12 @@ class UserPageModel(BaseModel):
     def __init__(self, database:Local_Database) -> None:
         super().__init__(database)
         self.__biases = []
-
-        self._num_long_feeds = 0
-        self._num_short_feeds = 0
-        self._num_like_feeds = 0
-        self._num_comments = 0
-
+        self._uname = ""
+        self._uid = ""
+        self._num_long_feed = 0
+        self._num_short_feed = 0
+        self._num_like = 0
+        self._num_comment = 0
 
     def set_bias_datas(self):
         bids = self._user.bids
@@ -183,13 +183,24 @@ class UserPageModel(BaseModel):
         return
 
     def get_user_data(self, user:User):
+        self._uname = user.uname
+        self._uid = user.uid
+        self._num_long_feed = user.num_long_feeds
+        self._num_short_feed = user.num_short_feeds
+        self._num_like = len(user.like)
+        self._num_comment = len(user.my_comment)
 
+        return
 
     def get_response_form_data(self, head_parser):
         try:
             body = {
-                'user' : self._user.get_dict_form_data(),
-                'biases' : self.__biases # 솔로, 그룹 나뉘던걸 수정해야함. 근데 이거 어캐수정하
+                'uname' : self._uname,
+                'uid' : self._uid,
+                'num_long_feed' : self._num_long_feed,
+                'num_short_feed' : self._num_short_feed,
+                'num_like' : self._num_like,
+                'num_comment' : self._num_comment
             }
 
             response = self._get_response_data(head_parser=head_parser, body=body)
@@ -224,6 +235,47 @@ class MyCommentsModel(BaseModel):
 
         except Exception as e:
             raise CoreControllerLogicError("response making error | " + e)
+
+class MyFeedsModel(BaseModel):
+    def __init__(self, database:Local_Database) -> None:
+        super.__init__(database)
+        self._feeds = []
+        self._key = -1
+
+    def get_response_form_data(self, head_parser):
+        try:
+            body = {
+                'feeds' : self._make_dict_list_data(list_data=self._feeds),
+                "key" : self._key
+            }
+
+            response = self._get_response_data(head_parser=head_parser, body=body)
+            return response
+
+        except Exception as e:
+            raise CoreControllerLogicError("response making error | " + e)
+
+    def get_my_long_feeds(self, feed_manager:FeedManager, last_index:int=-1):
+        # 이게 가능한게, 리스트에서, 인덱스로만 사용해서 참조 하기 때문에 이거 써도 된다.
+        self._feeds = feed_manager.get_my_long_feeds(user=self._user)
+        self._feeds, self._key = feed_manager.paging_fid_list(fid_list=self._feeds, last_index=last_index, page_size=3)
+
+        return
+
+    def get_my_short_feeds(self, feed_manager:FeedManager, last_index:int=-1):
+        # 이게 가능한게, 리스트에서, 인덱스로만 사용해서 참조 하기 때문에 이거 써도 된다.
+        self._feeds = feed_manager.get_my_short_feeds(user=self._user)
+        self._feeds, self._key = feed_manager.paging_fid_list(fid_list=self._feeds, last_index=last_index, page_size=3)
+
+        return
+
+    # 덜 만듦
+    # def get_liked_feeds(self, feed_manager:FeedManager, last_index:int=-1):
+    #     self._feeds = feed_manager.get_stared_feed(user=self._user,
+    #                                                fid=data_payload.fid)
+    #     if len(self._feeds) != 0:
+    #         self._fid = self._feeds[-1].fid
+    #     return
 
 class MyFeedsModel(BaseModel):
     def __init__(self, database:Local_Database) -> None:

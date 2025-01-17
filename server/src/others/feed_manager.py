@@ -769,7 +769,8 @@ class OldFeedManager:
         if len(comments) > 5:
             comments = comments[:5]
 
-        return comments 
+        return comments
+
 
     # 관심 표시한 피드 전부 불러오기
     def get_stared_feed(self, user:User, fid):
@@ -1485,6 +1486,45 @@ class FeedManager:
             return "DATABASE_ERROR", False
 
         return "COMPLETE", True
+
+    def get_my_long_feeds(self, user:User):
+        feed_datas = self._database.get_datas_with_ids(target="fid", ids=user.my_feed)
+        feeds = []
+
+        for _, feed_data in enumerate(reversed(feed_datas)):
+            feed = Feed()
+            feed.make_with_dict(feed_data)
+            if feed.fclass == "long":
+                feeds.append(feed)
+
+        return feeds
+
+    def get_my_short_feeds(self, user:User):
+        feed_datas = self._database.get_data_with_ids(target="fid", ids=user.my_feed)
+        feeds = []
+
+        for _, feed_data in enumerate(reversed(feed_datas)):
+            feed = Feed()
+            feed.make_with_dict(feed_data)
+            if feed.fclass == "short":
+                feeds.append(feed)
+
+        return feeds
+
+    def get_liked_feeds(self, user:User):
+        # "fid=시간" -> "fid"
+        liked_fid_data = [liked_feed.split('=')[0] for liked_feed in user.like]
+
+        feed_datas = self._database.get_datas_with_ids(target="fid", ids=liked_fid_data)
+        feeds = []
+
+        # 마지막이 좋아요 최신 순이라 리버스해야함.
+        for _, feed_datas in enumerate(reversed(feed_datas)):
+            feed = Feed()
+            feed.make_with_dict(feed_datas)
+            feeds.append(feed)
+
+        return feeds
 
     # 내가 작성한 피드 전체 불러오기, 페이징
     def get_my_feeds(self, user, fid):
