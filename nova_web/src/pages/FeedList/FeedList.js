@@ -269,6 +269,8 @@ export default function FeedList(isUserState) {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
         if (isLoading) return;
+        
+        console.log("???????")
 
         fetchAllFeed();
         fetchPlusData();
