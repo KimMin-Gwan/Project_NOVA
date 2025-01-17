@@ -22,12 +22,6 @@
         "my_feed": [
             "4133-afgh-1565-tYzPYe",
             "4133-afgh-1565-5AUtfJ",
-            "4133-afgh-1565-NAP6gh",
-            "4133-afgh-1565-wWlahY",
-            "4133-afgh-1565-8LrSCg",
-            "4133-afgh-1565-8q1cl3",
-            "4133-afgh-1565-9oxRtd",
-            "4133-afgh-1565-0hHLpI",
             "4133-afgh-1565-GW3Fh4",
             "4133-afgh-1565-AOBlzy",
             "4133-afgh-1565-IIASGj",
@@ -37,7 +31,9 @@
             "6063-qfgh-2540-xan9FT"
         ],
         "feed_history": [],
-        "feed_search_history": []
+        "feed_search_history": [],
+        "num_long_feed": 3,
+        "num_short_feed": 3
     },
     {
         "uid": "6063-qfgh-2540",
@@ -194,7 +190,9 @@
             "6063-qfgh-2540-zSd9f5"
         ],
         "feed_history": [],
-        "feed_search_history": []
+        "feed_search_history": [],
+        "num_long_feed": 2,
+        "num_short_feed": 31
     },
     {
         "uid": "1829-pfgh-6016",
@@ -221,7 +219,9 @@
         ],
         "active_feed": [],
         "feed_history": [],
-        "feed_search_history": []
+        "feed_search_history": [],
+        "num_long_feed": 0,
+        "num_short_feed": 7
     },
     {
         "uid": "8670-yfgh-5978",
@@ -294,7 +294,9 @@
         ],
         "active_feed": [],
         "feed_history": [],
-        "feed_search_history": []
+        "feed_search_history": [],
+        "num_long_feed": 0,
+        "num_short_feed": 23
     },
     {
         "uid": "7696-tfgh-5369",
@@ -337,7 +339,9 @@
         ],
         "active_feed": [],
         "feed_history": [],
-        "feed_search_history": []
+        "feed_search_history": [],
+        "num_long_feed": 3,
+        "num_short_feed": 14
     },
     {
         "uid": "9926-cfgh-5298",
@@ -363,7 +367,9 @@
         ],
         "active_feed": [],
         "feed_history": [],
-        "feed_search_history": []
+        "feed_search_history": [],
+        "num_long_feed": 1,
+        "num_short_feed": 2
     },
     {
         "uid": "4716-rfgh-2380",
@@ -396,7 +402,9 @@
         ],
         "active_feed": [],
         "feed_history": [],
-        "feed_search_history": []
+        "feed_search_history": [],
+        "num_long_feed": 0,
+        "num_short_feed": 2
     },
     {
         "uid": "4301-ffgh-3535",
@@ -425,7 +433,9 @@
         ],
         "active_feed": [],
         "feed_history": [],
-        "feed_search_history": []
+        "feed_search_history": [],
+        "num_long_feed": 0,
+        "num_short_feed": 6
     },
     {
         "uid": "5496-bfgh-5314",
@@ -465,7 +475,9 @@
             "8670-yfgh-5978-DJkIvP"
         ],
         "feed_history": [],
-        "feed_search_history": []
+        "feed_search_history": [],
+        "num_long_feed": 0,
+        "num_short_feed": 9
     },
     {
         "uid": "9978-zfgh-5569",
@@ -498,7 +510,9 @@
         "my_feed": [],
         "active_feed": [],
         "feed_history": [],
-        "feed_search_history": []
+        "feed_search_history": [],
+        "num_long_feed": 0,
+        "num_short_feed": 9
     },
     {
         "uid": "9113-ganp-ga49",
@@ -512,13 +526,14 @@
             "1005"
         ],
         "alert": [],
-        "like": [
-        ],
+        "like": [],
         "my_comment": [],
         "my_feed": [],
         "active_feed": [],
         "feed_history": [],
-        "feed_search_history": []
+        "feed_search_history": [],
+        "num_long_feed": 0,
+        "num_short_feed": 0
     },
     {
         "uid": "0000-0000-0000",
@@ -528,15 +543,15 @@
         "password": "sample122",
         "gender": "m",
         "credit": 0,
-        "bids": [
-        ],
+        "bids": [],
         "alert": [],
-        "like": [
-        ],
+        "like": [],
         "my_comment": [],
         "my_feed": [],
         "active_feed": [],
         "feed_history": [],
-        "feed_search_history": []
+        "feed_search_history": [],
+        "num_long_feed": 0,
+        "num_short_feed": 0
     }
 ]

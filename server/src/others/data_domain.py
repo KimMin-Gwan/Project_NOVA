@@ -27,7 +27,7 @@ class TempUser:
 class User(SampleDomain):
     def __init__(self, uid = "", uname = "지지자", age=0, 
                  email = "", gender = "d" ,
-                 credit = 0, bids=[],
+                 credit = 0, bids=[], num_long_feed=0, num_short_feed=0,
                  password = "", alert= [], like=[], my_comment=[],
                  my_feed = [], active_feed = [], feed_history = [],
                  feed_search_history=[]):
@@ -40,11 +40,8 @@ class User(SampleDomain):
         self.gender = gender
         self.bids:list = copy.copy(bids)
         self.credit = credit
-
-        self.num_long_post:int = 0
-        self.num_short_post:int = 0
-        self.num_like_post:int = 0
-        self.num_comment_post:int = 0
+        self.num_long_feed:int = num_long_feed
+        self.num_short_feed:int = num_short_feed
 
         self.alert:list = copy.copy(alert)
         self.like:list = copy.copy(like)
@@ -65,10 +62,8 @@ class User(SampleDomain):
             self.gender= dict_data['gender']
             self.bids = copy.copy(dict_data['bids'])
             self.credit= dict_data['credit']
-            self.num_long_post = dict_data['num_long_post']
-            self.num_short_post = dict_data['num_short_post']
-            self.num_like_post = dict_data['num_like_post']
-            self.num_comment_post = dict_data['num_comment_post']
+            self.num_long_feed = dict_data['num_long_feed']
+            self.num_short_feed = dict_data['num_short_feed']
 
             self.alert = copy.copy(dict_data['alert'])
             self.like = copy.copy(dict_data["like"])
@@ -92,10 +87,8 @@ class User(SampleDomain):
             "gender" : self.gender,
             "credit" : self.credit,
             "bids" : copy.copy(self.bids),
-            "num_long_post" : self.num_long_post,
-            "num_short_post" : self.num_short_post,
-            "num_like_post" : self.num_like_post,
-            "num_comment_post" : self.num_comment_post,
+            "num_long_feed" : self.num_long_feed,
+            "num_short_feed" : self.num_short_feed,
 
             "alert" : copy.copy(self.alert),
             "like" : copy.copy(self.like),
