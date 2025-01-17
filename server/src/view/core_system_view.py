@@ -366,25 +366,33 @@ class Core_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
         
-        # 전체 피드 제공
+        
         @self.__app.post('/feed_explore/all_feed')
-        def get_all_feed_in_search(request:Request, raw_request:dict):
-            request_manager = RequestManager()
+        def test(raw_request:dict):
             pprint(raw_request)
-            data_payload = AllFeedRequest(request=raw_request)
-            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
-            #if not request_manager.jwt_payload.result:
-                #raise request_manager.credentials_exception
+            return
+        
+        
+        
+        ## 전체 피드 제공
+        #@self.__app.post('/feed_explore/all_feed')
+        #def get_all_feed_in_search(request:Request, raw_request:dict):
+            #request_manager = RequestManager()
+            
+            #data_payload = AllFeedRequest(request=raw_request)
+            #request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            ##if not request_manager.jwt_payload.result:
+                ##raise request_manager.credentials_exception
 
-            feed_controller =Feed_Controller(feed_manager=self.__feed_manager)
-            model = feed_controller.get_all_feed_filtered(database=self.__database,
-                                                request=request_manager,
-                                                feed_search_engine=self.__feed_search_engine,
-                                                num_feed=3)
+            #feed_controller =Feed_Controller(feed_manager=self.__feed_manager)
+            #model = feed_controller.get_all_feed_filtered(database=self.__database,
+                                                #request=request_manager,
+                                                #feed_search_engine=self.__feed_search_engine,
+                                                #num_feed=3)
 
-            body_data = model.get_response_form_data(self._head_parser)
-            response = request_manager.make_json_response(body_data=body_data)
-            return response
+            #body_data = model.get_response_form_data(self._head_parser)
+            #response = request_manager.make_json_response(body_data=body_data)
+            #return response
 
         # 오늘의 인기 게시글
         @self.__app.get('/feed_explore/today_best')
