@@ -778,20 +778,20 @@ class SampleRequest(RequestHeader):
         body = request['body']
         self.uid = body['uid']
         self.date = body['date']
-        
+
 class CommunityRequest(RequestHeader):
     def __init__(self, request) -> None:
         super().__init__(request)
         body = request['body']
         self.bid = body['bid']
-        self.board_type = body['board']
-        self.last_fid = body['last_fid']
+        self.category = body['board']
+        self.key = body['key'] # 미안해요. 승준님님. 이거 보내주세요. 얘는 페이지의 마지막 인덱스 번호에요.
 
-class CommunityFilteredRequest(CommunityRequest):
-    def __init__(self, request) -> None:
-        super().__init__(request)
-        body = request['body']
-        self.options = body['options']
+# class CommunityFilteredRequest(CommunityRequest):
+#     def __init__(self, request) -> None:
+#         super().__init__(request)
+#         body = request['body']
+#         self.options = body['options']
 
 class HomeFeedRequest(RequestHeader):
     def __init__(self, key) -> None:
