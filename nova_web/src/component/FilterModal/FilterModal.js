@@ -14,22 +14,27 @@ export default function FilterModal({
     {
       id: 0,
       value: "공지사항",
+      name: "공지사항",
     },
     {
       id: 1,
       value: "자유게시판",
+      name: "자유게시판",
     },
     {
       id: 2,
       value: "팬아트",
+      name: "팬아트",
     },
     {
       id: 3,
       value: "유머게시판",
+      name: "유머게시판",
     },
     {
       id: 4,
-      value: "전체",
+      value: "",
+      name: "전체",
     },
   ];
 
@@ -93,7 +98,7 @@ export default function FilterModal({
                   key={data.id}
                   onClick={() => onClickFilterBoard(i)}
                 >
-                  {data.value}
+                  {data.name}
                 </button>
               );
             })}
