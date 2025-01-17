@@ -84,6 +84,32 @@ export default function FeedList(isUserState) {
     console.log(biasId, board);
   }, [board]);
 
+  let [allFeed, setAllFeed] = useState([]);
+  let send_form = {
+    header: header,
+    body: {
+      key: 0,
+      category: "",
+      fclass: "",
+    },
+  };
+
+  // function fetchAllFeed() {
+  //   fetch("https://nova-platform.kr/feed_explore/all_feed", {
+  //     method: "POST",
+  //     credentials: "include",
+  //     body: JSON.stringify(send_form),
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       console.log("all", data);
+  //     });
+  // }
+
+  // useEffect(() => {
+  //   fetchAllFeed();
+  // }, []);
+
   const FETCH_URL = "https://nova-platform.kr/feed_explore/";
   function fetchData() {
     if (type === "best") {
@@ -100,11 +126,13 @@ export default function FeedList(isUserState) {
         });
     } else if (type === "all") {
       fetch(`${FETCH_URL}all_feed`, {
+        method: "POST",
         credentials: "include",
+        body: JSON.stringify(send_form),
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log("first feed 3개", data.body);
+          console.log("all feed first feed 3개", data.body);
           setFeedData(data.body.send_data);
           // setFeedInteraction(data.body.send_data.map((interaction, i) => interaction));
           setNextData(data.body.key);
