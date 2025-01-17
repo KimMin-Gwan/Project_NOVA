@@ -1706,7 +1706,7 @@ class FeedManager:
 
     # 내가 작성한 댓글 전부 불러오기
     # 페이징 기법은 새롭게 재편하기 떄문에 여기서 페이징을 하지않습니다.
-    def get_my_comments_new(self, user):
+    def get_my_comments(self, user):
         comment_datas = self._database.get_datas_with_ids(target_id="cid", ids=user.my_comment)
         comments = []
 
