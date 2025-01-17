@@ -1893,7 +1893,10 @@ class FeedManager:
 
         paging_list = fid_list[last_index + 1:]
 
-        last_index_next = fid_list.index(fid_list[::-1])
+        # 예외 처리
+        last_index_next = -1
+        if len(fid_list) != 0:
+            last_index_next = fid_list.index(fid_list[-1])
 
         # 만약 페이지 사이즈를 넘었다면 표시할 개수만큼 짜르고, last_index를 재설정한다.
         if len(paging_list) > page_size:
