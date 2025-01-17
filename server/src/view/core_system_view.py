@@ -368,8 +368,9 @@ class Core_Service_View(Master_View):
         
         
         @self.__app.post('/feed_explore/all_feed')
-        def test():
-            print("hlleo")
+        def test(raw_request:dict):
+            pprint(raw_request)
+            
             return
         
         
