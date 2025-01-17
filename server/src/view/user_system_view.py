@@ -17,7 +17,7 @@ class User_Service_View(Master_View):
         self.__feed_manager = feed_manager
         self.__feed_search_engine = feed_search_engine
         self.user_route(endpoint)
-        self.my_page_route()
+        # self.my_page_route()
         self.new_my_page_route()
 
     def user_route(self, endpoint:str):
@@ -124,148 +124,148 @@ class User_Service_View(Master_View):
             return response
 
 #---------------------------------구 형------------------------------------------------------------------------
-    def my_page_route(self):
-        # @self.__app.get('/user_home/my_data')
-        # def get_my_page(request:Request):
-        #     request_manager = RequestManager()
-        #
-        #     data_payload = DummyRequest()
-        #     request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
-        #     if not request_manager.jwt_payload.result:
-        #         raise request_manager.credentials_exception
-        #
-        #     home_controller=UserController()
-        #     model = home_controller.get_user_page(database=self.__database,
-        #                                                 request=request_manager)
-        #     body_data = model.get_response_form_data(self._head_parser)
-        #     response = request_manager.make_json_response(body_data=body_data)
-        #     return response
-        #
-        # 비밀번호 변경하기
-        @self.__app.post('/user_home/try_change_password')
-        def try_change_password(request:Request, raw_request:dict):
-            request_manager = RequestManager()
-
-            data_payload = ChangePasswordRequest(request=raw_request)
-            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
-            if not request_manager.jwt_payload.result:
-                raise request_manager.credentials_exception
-
-            home_controller=UserController()
-            model = home_controller.try_change_password(database=self.__database,
-                                                        request=request_manager)
-            body_data = model.get_response_form_data(self._head_parser)
-            response = request_manager.make_json_response(body_data=body_data)
-            return response
-
-        # 닉네임 바꾸기
-        @self.__app.get('/user_home/try_change_nickname')
-        def try_chagne_nickname(request:Request, index:Optional[int], custom:Optional[str]=""):
-            request_manager = RequestManager()
-
-            data_payload  = ChangeNicknameRequest(index=index, custom=custom)
-            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
-            if not request_manager.jwt_payload.result:
-                raise request_manager.credentials_exception
-
-            home_controller=UserController()
-            model = home_controller.try_change_nickname(database=self.__database,
-                                                        request=request_manager)
-            body_data = model.get_response_form_data(self._head_parser)
-            response = request_manager.make_json_response(body_data=body_data)
-            return response
-
-        # 종류가 나뉘어진다.
-        # 포스트 (Long), 모멘트(Short)를 따로둡니다. (인터페이스를 분리할까 고민 중)
-        # 댓글은 이미 동작이 O, 좋아요는 좋아요한 것만 뜨게
-
-        # 내가 쓴 글
-        @self.__app.get('/user_home/get_my_feed')
-        def get_my_feed(request:Request, fid:Optional[str] = ""):
-            request_manager = RequestManager()
-
-            data_payload = MyFeedRequest(fid=fid)
-            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
-            if not request_manager.jwt_payload.result:
-                raise request_manager.credentials_exception
-
-            # home_controller=UserController()
-            # # model = home_controller.get_my_feed(database=self.__database,
-            # #                                             request=request_manager,
-            # #                                             feed_manager=self.__feed_manager)
-            # body_data = model.get_response_form_data(self._head_parser)
-            response = request_manager.make_json_response(body_data=body_data)
-            return response
-
-        # 내가 좋아요 한 거
-        @self.__app.get('/user_home/get_stared_feed')
-        def get_stared_feed(request:Request, fid:Optional[str] = ""):
-            request_manager = RequestManager()
-
-            data_payload = MyFeedRequest(fid=fid)
-            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
-            if not request_manager.jwt_payload.result:
-                raise request_manager.credentials_exception
-
-            # home_controller=UserController()
-            # model = home_controller.get_staring_feed(database=self.__database,
-            #                                          request=request_manager,
-            #                                          feed_manager=self.__feed_manager)
-            # body_data = model.get_response_form_data(self._head_parser)
-            response = request_manager.make_json_response(body_data=body_data)
-            return response
-
-        # 내가 상호작용한 거
-        # @self.__app.get('/user_home/get_interactied_feed')
-        # def get_interactied_feed(request:Request, fid:Optional[str] = ""):
-        #     request_manager = RequestManager()
-        #
-        #     data_payload = MyFeedRequest(fid=fid)
-        #     request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
-        #     if not request_manager.jwt_payload.result:
-        #         raise request_manager.credentials_exception
-        #
-        #     home_controller=UserController()
-        #     model = home_controller.get_interacted_feed(database=self.__database,
-        #                                                  request=request_manager,
-        #                                                  feed_manager=self.__feed_manager)
-        #     body_data = model.get_response_form_data(self._head_parser)
-        #     response = request_manager.make_json_response(body_data=body_data)
-        #     return response
-
-        # 내 댓글
-        @self.__app.get('/user_home/get_my_comments')
-        def get_my_comment(request:Request, cid:Optional[str] = ""):
-            request_manager = RequestManager()
-
-            data_payload = MyCommentRequest(cid=cid)
-            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
-            if not request_manager.jwt_payload.result:
-                raise request_manager.credentials_exception
-
-            home_controller=UserController()
-            model = home_controller.get_my_comments(database=self.__database,
-                                                        request=request_manager,
-                                                        feed_manager=self.__feed_manager)
-            body_data = model.get_response_form_data(self._head_parser)
-            response = request_manager.make_json_response(body_data=body_data)
-            return response
-
-        # @self.__app.get('/user_home/get_my_alert')
-        # def get_my_alert(request:Request, aid:Optional[str] = ""):
-        #     request_manager = RequestManager()
-        #
-        #     data_payload = MyAlertRequest(aid=aid)
-        #     request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
-        #     if not request_manager.jwt_payload.result:
-        #         raise request_manager.credentials_exception
-        #
-        #     home_controller=UserController()
-        #     model = home_controller.get_my_alert(database=self.__database,
-        #                                                 request=request_manager)
-        #     body_data = model.get_response_form_data(self._head_parser)
-        #     response = request_manager.make_json_response(body_data=body_data)
-        #     return response
+    # def my_page_route(self):
+    #     # @self.__app.get('/user_home/my_data')
+    #     # def get_my_page(request:Request):
+    #     #     request_manager = RequestManager()
+    #     #
+    #     #     data_payload = DummyRequest()
+    #     #     request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+    #     #     if not request_manager.jwt_payload.result:
+    #     #         raise request_manager.credentials_exception
+    #     #
+    #     #     home_controller=UserController()
+    #     #     model = home_controller.get_user_page(database=self.__database,
+    #     #                                                 request=request_manager)
+    #     #     body_data = model.get_response_form_data(self._head_parser)
+    #     #     response = request_manager.make_json_response(body_data=body_data)
+    #     #     return response
+    #     #
+    #     # 비밀번호 변경하기
+    #     @self.__app.post('/user_home/try_change_password')
+    #     def try_change_password(request:Request, raw_request:dict):
+    #         request_manager = RequestManager()
+    #
+    #         data_payload = ChangePasswordRequest(request=raw_request)
+    #         request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+    #         if not request_manager.jwt_payload.result:
+    #             raise request_manager.credentials_exception
+    #
+    #         home_controller=UserController()
+    #         model = home_controller.try_change_password(database=self.__database,
+    #                                                     request=request_manager)
+    #         body_data = model.get_response_form_data(self._head_parser)
+    #         response = request_manager.make_json_response(body_data=body_data)
+    #         return response
+    #
+    #     # 닉네임 바꾸기
+    #     @self.__app.get('/user_home/try_change_nickname')
+    #     def try_chagne_nickname(request:Request, index:Optional[int], custom:Optional[str]=""):
+    #         request_manager = RequestManager()
+    #
+    #         data_payload  = ChangeNicknameRequest(index=index, custom=custom)
+    #         request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+    #         if not request_manager.jwt_payload.result:
+    #             raise request_manager.credentials_exception
+    #
+    #         home_controller=UserController()
+    #         model = home_controller.try_change_nickname(database=self.__database,
+    #                                                     request=request_manager)
+    #         body_data = model.get_response_form_data(self._head_parser)
+    #         response = request_manager.make_json_response(body_data=body_data)
+    #         return response
+    #
+    #     # 종류가 나뉘어진다.
+    #     # 포스트 (Long), 모멘트(Short)를 따로둡니다. (인터페이스를 분리할까 고민 중)
+    #     # 댓글은 이미 동작이 O, 좋아요는 좋아요한 것만 뜨게
+    #
+    #     # 내가 쓴 글
+    #     @self.__app.get('/user_home/get_my_feed')
+    #     def get_my_feed(request:Request, fid:Optional[str] = ""):
+    #         request_manager = RequestManager()
+    #
+    #         data_payload = MyFeedRequest(fid=fid)
+    #         request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+    #         if not request_manager.jwt_payload.result:
+    #             raise request_manager.credentials_exception
+    #
+    #         # home_controller=UserController()
+    #         # # model = home_controller.get_my_feed(database=self.__database,
+    #         # #                                             request=request_manager,
+    #         # #                                             feed_manager=self.__feed_manager)
+    #         # body_data = model.get_response_form_data(self._head_parser)
+    #         response = request_manager.make_json_response(body_data=body_data)
+    #         return response
+    #
+    #     # 내가 좋아요 한 거
+    #     @self.__app.get('/user_home/get_stared_feed')
+    #     def get_stared_feed(request:Request, fid:Optional[str] = ""):
+    #         request_manager = RequestManager()
+    #
+    #         data_payload = MyFeedRequest(fid=fid)
+    #         request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+    #         if not request_manager.jwt_payload.result:
+    #             raise request_manager.credentials_exception
+    #
+    #         # home_controller=UserController()
+    #         # model = home_controller.get_staring_feed(database=self.__database,
+    #         #                                          request=request_manager,
+    #         #                                          feed_manager=self.__feed_manager)
+    #         # body_data = model.get_response_form_data(self._head_parser)
+    #         response = request_manager.make_json_response(body_data=body_data)
+    #         return response
+    #
+    #     # 내가 상호작용한 거
+    #     # @self.__app.get('/user_home/get_interactied_feed')
+    #     # def get_interactied_feed(request:Request, fid:Optional[str] = ""):
+    #     #     request_manager = RequestManager()
+    #     #
+    #     #     data_payload = MyFeedRequest(fid=fid)
+    #     #     request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+    #     #     if not request_manager.jwt_payload.result:
+    #     #         raise request_manager.credentials_exception
+    #     #
+    #     #     home_controller=UserController()
+    #     #     model = home_controller.get_interacted_feed(database=self.__database,
+    #     #                                                  request=request_manager,
+    #     #                                                  feed_manager=self.__feed_manager)
+    #     #     body_data = model.get_response_form_data(self._head_parser)
+    #     #     response = request_manager.make_json_response(body_data=body_data)
+    #     #     return response
+    #
+    #     # 내 댓글
+    #     @self.__app.get('/user_home/get_my_comments')
+    #     def get_my_comment(request:Request, cid:Optional[str] = ""):
+    #         request_manager = RequestManager()
+    #
+    #         data_payload = MyCommentRequest(cid=cid)
+    #         request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+    #         if not request_manager.jwt_payload.result:
+    #             raise request_manager.credentials_exception
+    #
+    #         home_controller=UserController()
+    #         model = home_controller.get_my_comments(database=self.__database,
+    #                                                     request=request_manager,
+    #                                                     feed_manager=self.__feed_manager)
+    #         body_data = model.get_response_form_data(self._head_parser)
+    #         response = request_manager.make_json_response(body_data=body_data)
+    #         return response
+    #
+    #     # @self.__app.get('/user_home/get_my_alert')
+    #     # def get_my_alert(request:Request, aid:Optional[str] = ""):
+    #     #     request_manager = RequestManager()
+    #     #
+    #     #     data_payload = MyAlertRequest(aid=aid)
+    #     #     request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+    #     #     if not request_manager.jwt_payload.result:
+    #     #         raise request_manager.credentials_exception
+    #     #
+    #     #     home_controller=UserController()
+    #     #     model = home_controller.get_my_alert(database=self.__database,
+    #     #                                                 request=request_manager)
+    #     #     body_data = model.get_response_form_data(self._head_parser)
+    #     #     response = request_manager.make_json_response(body_data=body_data)
+    #     #     return response
 
 #----------------------------------------신형(만)--------------------------------------------------
     def new_my_page_route(self):
@@ -284,8 +284,9 @@ class User_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
+        # 타입에 맞게 Feed들을 반환하는
         @self.__app.get('/user_home/get_my_feed')
-        def try_get_my_feeds(request:Request, raw_request:dict):
+        def try_get_my_feeds_type(request:Request, raw_request:dict):
             request_manager = RequestManager()
             data_payload = MyFeedsRequest(request=raw_request)
 
@@ -301,7 +302,7 @@ class User_Service_View(Master_View):
 
         # 내 댓글
         @self.__app.get('/user_home/get_my_comments')
-        def get_my_comment(request:Request, cid:Optional[str] = ""):
+        def try_get_my_comment(request:Request, cid:Optional[str] = ""):
             request_manager = RequestManager()
 
             data_payload = MyCommentRequest(cid=cid)
@@ -336,7 +337,7 @@ class User_Service_View(Master_View):
 
         # 닉네임 바꾸기
         @self.__app.get('/user_home/try_change_nickname')
-        def try_chagne_nickname(request:Request, index:Optional[int], custom:Optional[str]=""):
+        def try_change_nickname(request:Request, index:Optional[int], custom:Optional[str]=""):
             request_manager = RequestManager()
 
             data_payload  = ChangeNicknameRequest(index=index, custom=custom)
@@ -350,12 +351,6 @@ class User_Service_View(Master_View):
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response
-
-        # 종류가 나뉘어진다.
-        # 포스트 (Long), 모멘트(Short)를 따로둡니다. (인터페이스를 분리할까 고민 중)
-        # 댓글은 이미 동작이 O, 좋아요는 좋아요한 것만 뜨게
-
-
 
 class DummyRequest():
     def __init__(self) -> None:

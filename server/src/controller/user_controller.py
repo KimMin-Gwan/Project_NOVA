@@ -147,6 +147,7 @@ class UserController:
         finally:
             return model
 
+    # 유저 페이지 맨 처음에 띄울 것
     def try_get_user_page(self, database, request):
         model = UserPageModel(database=database)
 
@@ -165,6 +166,7 @@ class UserController:
         finally:
             return model
 
+    # 타입별 Feed 불러오기
     def try_get_my_feeds_with_type(self, database, request, feed_manager):
         model = MyFeedsModel(database=database)
 
@@ -189,6 +191,7 @@ class UserController:
         finally:
             return model
 
+    # 댓글 데이터 불러오기
     def try_get_my_comments(self, database, request, feed_manager):
         model = MyCommentsModel(database=database)
         try:
@@ -207,6 +210,7 @@ class UserController:
         finally:
             return model
 
+    # 닉네임 변경
     def try_change_nickname(self, database, request):
         model = ChangeNickNameModel(database=database)
         try:

@@ -1768,30 +1768,30 @@ class FeedManager:
     # 내가 작성한 댓글 전부 불러오기
     # 왜 CID가 있는지 생각했더니 페이징기법인거 이제 이해됨.
     # 나중에 Funding 프로젝트 페이징 기법 시, 참고해야지.
-    def get_my_comments(self, user, cid):
-        # 댓글 데이터를 불러옴
-        # 내가 작성한 댓글의 CID를 참고해서 불러옴
-        comment_datas = self._database.get_datas_with_ids(target_id="cid", ids=user.my_comment)
-
-        comments = []
-        target = -1
-        # 왜 REVERSE? 최신순으로 가져오겠다.
-        for i, comment_data in enumerate(reversed(comment_datas)):
-            comment = Comment()
-            comment.make_with_dict(comment_data)
-            comments.append(comment)
-            # 페이징 기법 때문에 타겟을 가져와야 함.
-            if comment.cid == cid:
-                target = i
-        # 타겟으로 잡은 구간부터, 불러오기
-        if target != -1:
-            comments = comments[target+1:]
-
-        # 만약 댓글이 많다면? 5개씩 끊어보자 (모바일 환경이니까)
-        if len(comments) > 5:
-            comments = comments[:5]
-
-        return comments
+    # def get_my_comments(self, user, cid):
+    #     # 댓글 데이터를 불러옴
+    #     # 내가 작성한 댓글의 CID를 참고해서 불러옴
+    #     comment_datas = self._database.get_datas_with_ids(target_id="cid", ids=user.my_comment)
+    #
+    #     comments = []
+    #     target = -1
+    #     # 왜 REVERSE? 최신순으로 가져오겠다.
+    #     for i, comment_data in enumerate(reversed(comment_datas)):
+    #         comment = Comment()
+    #         comment.make_with_dict(comment_data)
+    #         comments.append(comment)
+    #         # 페이징 기법 때문에 타겟을 가져와야 함.
+    #         if comment.cid == cid:
+    #             target = i
+    #     # 타겟으로 잡은 구간부터, 불러오기
+    #     if target != -1:
+    #         comments = comments[target+1:]
+    #
+    #     # 만약 댓글이 많다면? 5개씩 끊어보자 (모바일 환경이니까)
+    #     if len(comments) > 5:
+    #         comments = comments[:5]
+    #
+    #     return comments
 
 #---------------------------------interaction 수행 관련------------------------------------------------------
     # IID를 만드는 곳
@@ -1971,15 +1971,3 @@ class FeedManager:
             last_index_next = fid_list.index(fid_list[last_index + page_size])
 
         return paging_list, last_index_next
-
-    # 1. interaction 수행
-
-    # 2. 피드 작성 수정 삭제
-
-    # 3. 피드 좋아요
-
-    # 4. 댓글 작성 삭제 좋아요
-
-
-    
-
