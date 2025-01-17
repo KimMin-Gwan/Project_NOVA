@@ -1306,7 +1306,7 @@ class FilteringManager:
             # 구분하기 쉽도록 하였음. 또한, category가 []인 상태라면 뒤에 나올 반복문 자체가 동작하지 않는다.
             # 따라서 미리 선언을 한상태로 있는다.
             filtered_fid_list = fid_list
-            pprint(keys)
+            # pprint(keys)
             for key in keys:
                 filtered_fid_list = self.__managed_feed_bias_table.filtering_category_feed(fid_list=filtered_fid_list, category=key)
 
