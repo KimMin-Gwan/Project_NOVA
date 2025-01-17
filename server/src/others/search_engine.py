@@ -642,9 +642,9 @@ class FeedSearchEngine:
 
         return result_fid, result_index
 
-    def try_filtering_feed_with_option(self, fid_list:list, option:str, keys:list):
+    def try_filtered_feed_with_option(self, fid_list:list, option:str, keys:list):
         # 옵션과 키에 따라 필터링이 나뉘어진다.
-        return self.__filter_manager.filtering_feed_option_and_key(fid_list=fid_list, option=option, keys=keys)
+        return self.__filter_manager.filtered_feed_option_and_key(fid_list=fid_list, option=option, keys=keys)
 
     # 최애 페이지에서 요청
     def try_feed_with_bid_n_filtering(self, target_bids:list[str]=[""], category=""):
