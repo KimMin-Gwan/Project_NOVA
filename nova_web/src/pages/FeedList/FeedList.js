@@ -31,7 +31,7 @@ export default function FeedList(isUserState) {
 
   let [feedData, setFeedData] = useState([]);
   let [feedInteraction, setFeedInteraction] = useState([]);
-  let [nextData, setNextData] = useState([]);
+  let [nextData, setNextData] = useState(-1);
 
   let [biasId, setBiasId] = useState();
   let [board, setBoard] = useState("자유게시판");
@@ -88,27 +88,11 @@ export default function FeedList(isUserState) {
   let send_form = {
     header: header,
     body: {
-      key: 0,
-      category: "",
+      key: nextData,
+      category: [],
       fclass: "",
     },
   };
-
-  // function fetchAllFeed() {
-  //   fetch("https://nova-platform.kr/feed_explore/all_feed", {
-  //     method: "POST",
-  //     credentials: "include",
-  //     body: JSON.stringify(send_form),
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       console.log("all", data);
-  //     });
-  // }
-
-  // useEffect(() => {
-  //   fetchAllFeed();
-  // }, []);
 
   const FETCH_URL = "https://nova-platform.kr/feed_explore/";
   function fetchData() {
@@ -128,6 +112,9 @@ export default function FeedList(isUserState) {
       fetch(`${FETCH_URL}all_feed`, {
         method: "POST",
         credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify(send_form),
       })
         .then((response) => response.json())
@@ -197,29 +184,31 @@ export default function FeedList(isUserState) {
           setIsLoading(false);
           console.log("more", data);
         });
-    } else if (type === "all") {
-      fetch(`${FETCH_URL}all_feed?key=${nextData}`, {
-        credentials: "include",
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          setNextData(data.body.key);
-          setFeedData((prevData) => {
-            const newData = [...prevData, ...data.body.send_data];
-            return newData;
-          });
-          // setFeedInteraction(data.body.send_data.map((interaction, i) => interaction));
-          // setFeedInteraction((prevData) => {
-          //   const newData = [
-          //     ...prevData,
-          //     ...data.body.send_data.map((interaction, i) => interaction),
-          //   ];
-          //   return newData;
-          // });
-          setIsLoading(false);
-          console.log("mor1", data);
-        });
-    } else if (type === "weekly_best") {
+    }
+    // else if (type === "all") {
+    //   fetch(`${FETCH_URL}all_feed?key=${nextData}`, {
+    //     credentials: "include",
+    //   })
+    //     .then((response) => response.json())
+    //     .then((data) => {
+    //       setNextData(data.body.key);
+    //       setFeedData((prevData) => {
+    //         const newData = [...prevData, ...data.body.send_data];
+    //         return newData;
+    //       });
+    // setFeedInteraction(data.body.send_data.map((interaction, i) => interaction));
+    // setFeedInteraction((prevData) => {
+    //   const newData = [
+    //     ...prevData,
+    //     ...data.body.send_data.map((interaction, i) => interaction),
+    //   ];
+    //   return newData;
+    // });
+    //   setIsLoading(false);
+    //   console.log("mor1", data);
+    // });
+    // }
+    else if (type === "weekly_best") {
       fetch(`${FETCH_URL}weekly_best?key=${nextData}`, {
         credentials: "include",
       })
