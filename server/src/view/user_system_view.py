@@ -214,13 +214,15 @@ class DummyRequest():
 class MyFeedsRequest(RequestHeader):
     def __init__(self, request) -> None:
         super().__init__(request)
-        self.type = request['type']
-        self.key = request['key']
+        body = request['body']
+        self.type = body['type']
+        self.key = body['key']
 
 class MyCommentsRequest(RequestHeader):
     def __init__(self, request) -> None:
         super().__init__(request)
-        self.key = request['key']
+        body = request['body']
+        self.key = body['key']
 
 class ChangeNicknameRequest():
     def __init__(self, index, custom) -> None:
