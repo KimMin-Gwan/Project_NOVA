@@ -448,7 +448,7 @@ class FilteredFeedModel(FeedModel):
         # AD의 경우, 생각중
         fid_list = feed_search_engine.try_filtered_feed_with_option(fid_list=fid_list, option="category", keys=category)
 
-        pprint(fid_list)
+        # pprint(fid_list)
         # 마지막, 분류가 끝이 났으면 페이징을 진행합니다.
         fid_list, self._key = feed_manager.paging_fid_list(fid_list=fid_list, last_index=last_index, page_size=num_feed)
 
