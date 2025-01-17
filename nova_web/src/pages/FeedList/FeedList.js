@@ -98,8 +98,11 @@ export default function FeedList(isUserState) {
       fclass: filterFclass || "",
     },
   };
-  async function fetchAllFeed(nextData) {
+  async function fetchAllFeed() {
     if (type === "all" || isClickedFetch) {
+      if (isClickedFetch) {
+        setNextData(-1);
+      }
       await fetch(`${FETCH_URL}all_feed`, {
         method: "POST",
         credentials: "include",
@@ -116,6 +119,7 @@ export default function FeedList(isUserState) {
           setNextData(data.body.key);
           setIsLoading(false);
           setFeedData(data.body.send_data);
+          setIsClickedFetch(false);
           // setFeedData((prevData) => {
           //   const newData = [...prevData, ...data.body.send_data];
           //   return newData;
