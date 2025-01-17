@@ -1487,6 +1487,7 @@ class FeedManager:
 
         return "COMPLETE", True
 
+    # Post( 롱 피드)만 가져오는 거
     def get_my_long_feeds(self, user:User):
         feed_datas = self._database.get_datas_with_ids(target="fid", ids=user.my_feed)
         feeds = []
@@ -1499,6 +1500,7 @@ class FeedManager:
 
         return feeds
 
+    # Moment(숏 피드)만 가져오는 거
     def get_my_short_feeds(self, user:User):
         feed_datas = self._database.get_data_with_ids(target="fid", ids=user.my_feed)
         feeds = []
@@ -1511,6 +1513,7 @@ class FeedManager:
 
         return feeds
 
+    # 내가 좋아요를 누른 Feed만 가져오는 거
     def get_liked_feeds(self, user:User):
         # "fid=시간" -> "fid"
         liked_fid_data = [liked_feed.split('=')[0] for liked_feed in user.like]
@@ -1526,6 +1529,7 @@ class FeedManager:
 
         return feeds
 
+    # 상호작용한 Feed만 가져오기
     def get_interacted_feed(self, user:User):
         feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=user.active_feed)
         feeds = []
@@ -1537,27 +1541,7 @@ class FeedManager:
 
         return feeds
 
-    # 내가 작성한 피드 전체 불러오기, 페이징
-    def get_my_feeds(self, user, fid):
-        feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=user.my_feed)
-
-        target = -1
-        feeds = []
-        for i, feed_data in enumerate(reversed(feed_datas)):
-            feed = Feed()
-            feed.make_with_dict(feed_data)
-            feeds.append(feed)
-            if feed.fid == fid:
-                target = i
-
-        if target != -1:
-            feeds = feeds[target+1:]
-
-        if len(feeds) > 5:
-            feeds = feeds[:5]
-
-        return feeds
-
+    # 모든 Feed fid를 가져옵니다.
     def get_all_fids(self):
         feed_datas = self._database.get_all_data(target="fid")
         fid_list = []
@@ -1566,6 +1550,28 @@ class FeedManager:
             fid_list.append(feed_data["fid"])
 
         return fid_list
+
+    # 내가 작성한 피드 전체 불러오기, 페이징
+    # def get_my_feeds(self, user, fid):
+    #     feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=user.my_feed)
+    #
+    #     target = -1
+    #     feeds = []
+    #     for i, feed_data in enumerate(reversed(feed_datas)):
+    #         feed = Feed()
+    #         feed.make_with_dict(feed_data)
+    #         feeds.append(feed)
+    #         if feed.fid == fid:
+    #             target = i
+    #
+    #     if target != -1:
+    #         feeds = feeds[target+1:]
+    #
+    #     if len(feeds) > 5:
+    #         feeds = feeds[:5]
+    #
+    #     return feeds
+
 
 #------------------------------Feed 좋아요 누르기----------------------------------------------
 
