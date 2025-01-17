@@ -181,7 +181,7 @@ class UserPageModel(BaseModel):
         try:
             body = {
                 'user' : self._user.get_dict_form_data(),
-                'biases' : self.__biases # 솔로, 그룹 나뉘던걸 수정해야함
+                'biases' : self.__biases # 솔로, 그룹 나뉘던걸 수정해야함. 근데 이거 어캐수정하
             }
 
             response = self._get_response_data(head_parser=head_parser, body=body)
