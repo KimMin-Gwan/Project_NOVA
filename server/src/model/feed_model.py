@@ -437,6 +437,7 @@ class FilteredFeedModel(FeedModel):
         # 필터링 전 Feeds 들을 가져옵니다.
         # 모든 Feed를 가져온 다음. 게시글을 하나하나씩 쳐내는 방식을 씁니다.
         fid_list = feed_manager.get_all_fids()
+        pprint(fid_list)
 
         # 1차 필터링 : FClass를 통한 분류를 먼저 진행합니다.
         #   왜 FClass 부터 먼저 진행하나요? -> 간단한 것부터 먼저 분류합니다.
@@ -447,7 +448,7 @@ class FilteredFeedModel(FeedModel):
         # AD의 경우, 생각중
         fid_list = feed_search_engine.try_filtered_feed_with_option(fid_list=fid_list, option="category", keys=category)
 
-        pprint(fid_list)
+        # pprint(fid_list)
         # 마지막, 분류가 끝이 났으면 페이징을 진행합니다.
         fid_list, self._key = feed_manager.paging_fid_list(fid_list=fid_list, last_index=last_index, page_size=num_feed)
 
