@@ -24,8 +24,7 @@ from pprint import pprint
 warnings.filterwarnings("ignore", module='boto3.compat')
 
 # 피드를 관리하는 장본인
-
-
+# 얘 이거 삭제해도 되는거 아니니
 class OldFeedManager:
     def __init__(self, database, fclasses, feed_search_engine) -> None:
         self._feedClassManagement = FeedClassManagement(fclasses=fclasses)
@@ -720,36 +719,6 @@ class OldFeedManager:
 
         return feeds
 
-    # 내가 댓글을 작성한 피드 전부 불러오기
-    #def get_commented_feed(self, user, fid):
-        #managed_user:ManagedUser= self._managed_user_table.find_user(user=user)
-        #print(managed_user.ttl)
-        #comment_datas = self._database.get_datas_with_ids(target_id="cid", ids=managed_user.my_comment)
-        #print(comment_datas)
-        #fid_list = []
-        #for comment_data in comment_datas:
-            #comment = Comment()
-            #comment.make_with_dict(comment_data)
-            #fid_list.append(comment.fid)
-
-        #feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=fid_list)
-
-        #feeds = []
-        #target = -1
-        #for i, feed_data in enumerate(reversed(feed_datas)):
-            #feed = Feed()
-            #feed.make_with_dict(feed_data)
-            #feeds.append(feed)
-            #if feed.fid == fid:
-                #target = i
-
-        #if target != -1:
-            #feeds = feeds[target:]
-
-        #if len(feeds) > 5:
-            #feeds[:5]
-        #return feeds
-
     # 내가 작성한 댓글 전부 불러오기
     def get_my_comments(self, user, cid):
         comment_datas = self._database.get_datas_with_ids(target_id="cid", ids=user.my_comment)
@@ -770,7 +739,6 @@ class OldFeedManager:
             comments = comments[:5]
 
         return comments
-
 
     # 관심 표시한 피드 전부 불러오기
     def get_stared_feed(self, user:User, fid):
@@ -1551,28 +1519,6 @@ class FeedManager:
 
         return fid_list
 
-    # 내가 작성한 피드 전체 불러오기, 페이징
-    # def get_my_feeds(self, user, fid):
-    #     feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=user.my_feed)
-    #
-    #     target = -1
-    #     feeds = []
-    #     for i, feed_data in enumerate(reversed(feed_datas)):
-    #         feed = Feed()
-    #         feed.make_with_dict(feed_data)
-    #         feeds.append(feed)
-    #         if feed.fid == fid:
-    #             target = i
-    #
-    #     if target != -1:
-    #         feeds = feeds[target+1:]
-    #
-    #     if len(feeds) > 5:
-    #         feeds = feeds[:5]
-    #
-    #     return feeds
-
-
 #------------------------------Feed 좋아요 누르기----------------------------------------------
 
     # Feed에 좋아요를 눌렀을 때의 작용
@@ -1771,34 +1717,6 @@ class FeedManager:
 
         return comments
 
-    # 내가 작성한 댓글 전부 불러오기
-    # 왜 CID가 있는지 생각했더니 페이징기법인거 이제 이해됨.
-    # 나중에 Funding 프로젝트 페이징 기법 시, 참고해야지.
-    # def get_my_comments(self, user, cid):
-    #     # 댓글 데이터를 불러옴
-    #     # 내가 작성한 댓글의 CID를 참고해서 불러옴
-    #     comment_datas = self._database.get_datas_with_ids(target_id="cid", ids=user.my_comment)
-    #
-    #     comments = []
-    #     target = -1
-    #     # 왜 REVERSE? 최신순으로 가져오겠다.
-    #     for i, comment_data in enumerate(reversed(comment_datas)):
-    #         comment = Comment()
-    #         comment.make_with_dict(comment_data)
-    #         comments.append(comment)
-    #         # 페이징 기법 때문에 타겟을 가져와야 함.
-    #         if comment.cid == cid:
-    #             target = i
-    #     # 타겟으로 잡은 구간부터, 불러오기
-    #     if target != -1:
-    #         comments = comments[target+1:]
-    #
-    #     # 만약 댓글이 많다면? 5개씩 끊어보자 (모바일 환경이니까)
-    #     if len(comments) > 5:
-    #         comments = comments[:5]
-    #
-    #     return comments
-
 #---------------------------------interaction 수행 관련------------------------------------------------------
     # IID를 만드는 곳
     def __make_new_iid(self):
@@ -1933,29 +1851,6 @@ class FeedManager:
             print(e)
         finally:
             return feed
-
-
-
-    # 상호 작용한 피드 전부 불러오기
-    # def get_interacted_feed(self, user:User, fid):
-    #     feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=user.active_feed)
-    #     feeds = []
-    #
-    #     target = -1
-    #     for i, feed_data in enumerate(reversed(feed_datas)):
-    #         feed = Feed()
-    #         feed.make_with_dict(feed_data)
-    #         feeds.append(feed)
-    #         if feed.fid == fid:
-    #             target = i
-    #
-    #     if target != -1:
-    #         feeds = feeds[target + 1:]
-    #
-    #     if len(feeds) > 5:
-    #         feeds = feeds[:5]
-    #
-    #     return feeds
 
 #------------------------------------------------------------------------------------------------------------
     def paging_fid_list(self, fid_list:list, last_index:int, page_size=5):
