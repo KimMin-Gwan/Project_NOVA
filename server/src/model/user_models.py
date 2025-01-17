@@ -267,8 +267,8 @@ class MyFeedsModel(BaseModel):
             self._fid = self._feeds[-1].fid
         return
 
-    def get_interactied_feed(self, feed_manager:FeedManager, data_payload):
-        self._feeds = feed_manager.get_stared_feed(user=self._user,
+    def get_interacted_feed(self, feed_manager:FeedManager, data_payload):
+        self._feeds = feed_manager.get_interacted_feed(user=self._user,
                                                     fid=data_payload.fid)
         if len(self._feeds) != 0:
             self._fid = self._feeds[-1].fid

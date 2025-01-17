@@ -244,12 +244,12 @@ class UserController:
         finally:
             return model
 
-    def get_interactied_feed(self, database, request, feed_manager):
+    def get_interacted_feed(self, database, request, feed_manager):
         model = MyFeedsModel(database=database)
         try:
             # 유저가 있으면 세팅
             model.set_user_with_email(request=request.jwt_payload)
-            model.get_interactied_feed(feed_manager=feed_manager,
+            model.get_interacted_feed(feed_manager=feed_manager,
                                        data_payload=request.data_payload)
 
         except CustomError as e:

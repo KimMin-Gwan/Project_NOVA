@@ -219,7 +219,7 @@ class User_Service_View(Master_View):
                 raise request_manager.credentials_exception
 
             home_controller=UserController()
-            model = home_controller.get_interactied_feed(database=self.__database,
+            model = home_controller.get_interacted_feed(database=self.__database,
                                                          request=request_manager,
                                                          feed_manager=self.__feed_manager)
             body_data = model.get_response_form_data(self._head_parser)
