@@ -89,7 +89,7 @@ function App() {
     header: header,
     body: {
       key: -1,
-      category: ["유머게시판"],
+      category: ["자유게시판"],
       fclass: "short",
     },
   };
