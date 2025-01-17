@@ -1296,7 +1296,7 @@ class FilteringManager:
         # Paging Fid List, Last_fid
         return paging_fid_list, paging_fid_list[-1]
 
-    def filtering_feed_option_and_key(self, fid_list:list, option:str, keys:list):
+    def filtered_feed_option_and_key(self, fid_list:list, option:str, keys:list):
         if option == "fclass":
             # 키가 하나밖에 없기 때문에.. keys[0]만으로 판별해야한다.
             # Fclass == ""인 경우, Managed_Feed_table에서 처리하도록 하였음
