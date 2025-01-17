@@ -210,6 +210,28 @@ export default function FeedList(isUserState) {
           setIsLoading(false);
           console.log("mor2", data);
         });
+    } else if (type === "all" || isClickedFetch) {
+      fetch(`${FETCH_URL}all_feed`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(send_form),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("all feed first feed 3개", data.body);
+          // setFeedData(data.body.send_data);
+          // setFeedInteraction(data.body.send_data.map((interaction, i) => interaction));
+          setNextData(data.body.key);
+          setIsLoading(false);
+          // setFeedData(data.body.send_data);
+          setFeedData((prevData) => {
+            const newData = [...prevData, ...data.body.send_data];
+            return newData;
+          });
+        });
     }
 
     if (keyword) {
@@ -269,10 +291,10 @@ export default function FeedList(isUserState) {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
         if (isLoading) return;
-        
-        console.log("???????")
 
-        fetchAllFeed();
+        // console.log("???????");
+
+        // fetchAllFeed();
         fetchPlusData();
       });
     });
