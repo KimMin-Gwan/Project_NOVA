@@ -1508,7 +1508,7 @@ class FeedManager:
         return feeds
 
     def get_all_fids(self):
-        feed_datas = self._database.get_all_data(target_id="fid")
+        feed_datas = self._database.get_all_data(target="fid")
         fid_list = []
 
         for feed_data in feed_datas:
