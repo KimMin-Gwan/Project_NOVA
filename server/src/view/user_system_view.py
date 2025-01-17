@@ -173,6 +173,23 @@ class User_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
+        # 프로필 수정 표시 탭
+        @self.__app.get('/user_home/get_my_profile_data')
+        def try_get_my_profile(request:Request):
+            request_manager = RequestManager()
+
+            data_payload = DummyRequest()
+            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+            if not request_manager.jwt_payload.result:
+                raise request_manager.credentials_exception
+
+            user_controller = UserController()
+            model = user_controller.try_get_my_profile(database=self.__database,
+                                                       request=request_manager)
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
         # 비밀번호 변경하기
         @self.__app.post('/user_home/try_change_password')
         def try_change_password(request:Request, raw_request:dict):
@@ -206,6 +223,7 @@ class User_Service_View(Master_View):
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response
+
 
 class DummyRequest():
     def __init__(self) -> None:

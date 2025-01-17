@@ -210,6 +210,24 @@ class UserController:
         finally:
             return model
 
+    def try_get_my_profile(self, database, request):
+        model = MyProfileModel(database=database)
+
+        try:
+            model.set_user_with_email(request=request.jwt_payload)
+            model.get_my_profile()
+
+        except CustomError as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
+
+        except Exception as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code) # 종합 에러
+
+        finally:
+            return model
+
     # 닉네임 변경
     def try_change_nickname(self, database, request):
         model = ChangeNickNameModel(database=database)

@@ -279,6 +279,40 @@ class MyFeedsModel(BaseModel):
 
         return
 
+class MyProfileModel(BaseModel):
+    def __init__(self, database:Local_Database) -> None:
+        super().__init__(database)
+        self._uname = ""
+        self._uid = ""
+        self._email = ""
+        self._age = ""
+        self._gender = ""
+
+    def get_response_form_data(self, head_parser):
+        try:
+            body = {
+                'uname' : self._uname,
+                'uid': self._uid,
+                "email": self._email,
+                "age": self._age,
+                "gender": self._gender
+            }
+
+            response = self._get_response_data(head_parser=head_parser, body=body)
+            return response
+
+        except Exception as e:
+            raise CoreControllerLogicError("response making error | " + e)
+
+    def get_my_profile(self):
+        self._uname = self._user.uname
+        self._uid = self._user.uid
+        self._email = self._user.email
+        self._age = self._user.age
+        self._gender = self._user.gender
+
+        return
+
 class ChangePasswordModel(BaseModel):
     def __init__(self, database:Local_Database) -> None:
         super().__init__(database)
@@ -377,119 +411,3 @@ class ChangeNickNameModel(BaseModel):
 
         except Exception as e:
             raise CoreControllerLogicError("response making error | " + e)
-
-
-# class MyCommentsModel(BaseModel):
-#     def __init__(self, database:Local_Database) -> None:
-#         super().__init__(database)
-#         self._comments= []
-#         self._cid = ""
-#
-#
-#
-#     def get_my_comments(self, feed_manager:FeedManager, data_payload):
-#         self._comments= feed_manager.get_my_comments(user=self._user,
-#                                                      cid=data_payload.cid)
-#         if len(self._comments) != 0:
-#             self._cid= self._comments[-1].cid
-#
-#         return
-#
-#     def get_response_form_data(self, head_parser):
-#         try:
-#             body = {
-#                 'comments' : self._make_dict_list_data(list_data=self._comments),
-#                 "cid" : self._cid
-#             }
-#
-#             response = self._get_response_data(head_parser=head_parser, body=body)
-#             return response
-#
-#         except Exception as e:
-#             raise CoreControllerLogicError("response making error | " + e)
-#
-# class MyFeedsModel(BaseModel):
-#     def __init__(self, database:Local_Database) -> None:
-#         super().__init__(database)
-#         self._feeds = []
-#         self._fid = ""
-#
-#     def get_my_feed(self, feed_manager:FeedManager, data_payload):
-#         self._feeds = feed_manager.get_my_feeds(user=self._user,
-#                                                 fid=data_payload.fid)
-#         if len(self._feeds) != 0:
-#             self._fid = self._feeds[-1].fid
-#         return
-#
-#     def get_staring_feed(self, feed_manager:FeedManager, data_payload):
-#         self._feeds = feed_manager.get_stared_feed(user=self._user,
-#                                                    fid=data_payload.fid)
-#         if len(self._feeds) != 0:
-#             self._fid = self._feeds[-1].fid
-#         return
-#
-#     def get_interacted_feed(self, feed_manager:FeedManager, data_payload):
-#         self._feeds = feed_manager.get_interacted_feed(user=self._user,
-#                                                        fid=data_payload.fid)
-#         if len(self._feeds) != 0:
-#             self._fid = self._feeds[-1].fid
-#         return
-#
-#     def get_response_form_data(self, head_parser):
-#         try:
-#             body = {
-#                 'feeds' : self._make_dict_list_data(list_data=self._feeds),
-#                 "fid" : self._fid
-#             }
-#
-#             response = self._get_response_data(head_parser=head_parser, body=body)
-#             return response
-#
-#         except Exception as e:
-#             raise CoreControllerLogicError("response making error | " + e)
-#
-# # 이거 안쓴다고 해서 한번 주석처리 해야함
-# # feed 의 메타 정보를 보내주는 모델
-# class MyAlertModel(BaseModel):
-#     def __init__(self, database:Local_Database) -> None:
-#         super().__init__(database)
-#         self._alerts= []
-#         self._aid = -1
-#
-#     # 알람 정보 세팅
-#     def set_alert_data(self, aid):
-#         alert_datas = self._database.get_datas_with_ids(target_id="aid", ids=self._user.alert)
-#
-#         target = -1
-#         for i, alert_data in enumerate(reversed(alert_datas)):
-#             alert= Alert()
-#             alert.make_with_dict(dict_data=alert_data)
-#             self._alerts.append(alert)
-#             if alert.aid == aid:
-#                 target = i
-#
-#         if target != -1:
-#             self._alerts = self._alerts[target +1 :]
-#
-#         if len(self._alerts) > 5:
-#             self._alerts = self._alerts[:5]
-#         return
-#
-#     # 마지막 aid 정보
-#     def set_last_aid(self):
-#         if len(self._alerts) != 0:
-#             self._aid = self._alerts[-1].aid
-#         return
-#
-#     def get_response_form_data(self, head_parser):
-#         try:
-#             body = {
-#                 'alert' : self._make_dict_list_data(list_data=self._alerts),
-#                 'aid' : self._aid
-#             }
-#
-#             response = self._get_response_data(head_parser=head_parser, body=body)
-#             return response
-#
-#         except Exception as e:
-#             raise CoreControllerLogicError("response making error | " + e)
