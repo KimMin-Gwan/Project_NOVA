@@ -95,20 +95,9 @@ export default function FeedList(isUserState) {
   };
 
   const FETCH_URL = "https://nova-platform.kr/feed_explore/";
-  function fetchData() {
-    if (type === "best") {
-      fetch(`${FETCH_URL}today_best`, {
-        credentials: "include",
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("first feed 3개", data.body);
-          setFeedData(data.body.send_data);
-          // setFeedInteraction(data.body.send_data.map((interaction, i) => interaction));
-          setNextData(data.body.key);
-          setIsLoading(false);
-        });
-    } else if (type === "all") {
+
+  function fetchAllFeed() {
+    if (type === "all") {
       fetch(`${FETCH_URL}all_feed`, {
         method: "POST",
         credentials: "include",
@@ -120,6 +109,26 @@ export default function FeedList(isUserState) {
         .then((response) => response.json())
         .then((data) => {
           console.log("all feed first feed 3개", data.body);
+          // setFeedData(data.body.send_data);
+          // setFeedInteraction(data.body.send_data.map((interaction, i) => interaction));
+          setNextData(data.body.key);
+          setIsLoading(false);
+          setFeedData((prevData) => {
+            const newData = [...prevData, ...data.body.send_data];
+            return newData;
+          });
+        });
+    }
+  }
+
+  function fetchData() {
+    if (type === "best") {
+      fetch(`${FETCH_URL}today_best`, {
+        credentials: "include",
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("first feed 3개", data.body);
           setFeedData(data.body.send_data);
           // setFeedInteraction(data.body.send_data.map((interaction, i) => interaction));
           setNextData(data.body.key);
@@ -185,7 +194,7 @@ export default function FeedList(isUserState) {
           console.log("more", data);
         });
     }
-    // else if (type === "all") {
+    //  else if (type === "all") {
     //   fetch(`${FETCH_URL}all_feed?key=${nextData}`, {
     //     credentials: "include",
     //   })
@@ -196,17 +205,17 @@ export default function FeedList(isUserState) {
     //         const newData = [...prevData, ...data.body.send_data];
     //         return newData;
     //       });
-    // setFeedInteraction(data.body.send_data.map((interaction, i) => interaction));
-    // setFeedInteraction((prevData) => {
-    //   const newData = [
-    //     ...prevData,
-    //     ...data.body.send_data.map((interaction, i) => interaction),
-    //   ];
-    //   return newData;
-    // });
-    //   setIsLoading(false);
-    //   console.log("mor1", data);
-    // });
+    //       setFeedInteraction(data.body.send_data.map((interaction, i) => interaction));
+    //       setFeedInteraction((prevData) => {
+    //         const newData = [
+    //           ...prevData,
+    //           ...data.body.send_data.map((interaction, i) => interaction),
+    //         ];
+    //         return newData;
+    //       });
+    //       setIsLoading(false);
+    //       console.log("mor1", data);
+    //     });
     // }
     else if (type === "weekly_best") {
       fetch(`${FETCH_URL}weekly_best?key=${nextData}`, {
@@ -282,6 +291,7 @@ export default function FeedList(isUserState) {
         if (!entry.isIntersecting) return;
         if (isLoading) return;
 
+        fetchAllFeed();
         fetchPlusData();
       });
     });
@@ -299,6 +309,7 @@ export default function FeedList(isUserState) {
 
   useEffect(() => {
     fetchData();
+    fetchAllFeed();
 
     return () => {
       setFeedData([]);
