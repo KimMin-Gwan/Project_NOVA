@@ -9,6 +9,7 @@ export default function FilterModal({
   setFilterFclass,
   fetchAllFeed,
   setIsClickedFetch,
+  setNextData,
 }) {
   let FilterData = [
     {
@@ -131,6 +132,7 @@ export default function FilterModal({
             onClick={() => {
               setIsClickedFetch(true);
               fetchAllFeed();
+              setNextData(-1);
             }}
           >
             적용

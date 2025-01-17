@@ -94,7 +94,7 @@ export default function FeedList(isUserState) {
     header: header,
     body: {
       key: nextData,
-      category: filterCategory || [],
+      category: filterCategory || [""],
       fclass: filterFclass || "",
     },
   };
@@ -459,6 +459,7 @@ export default function FeedList(isUserState) {
               setFilterFclass={setFilterFclass}
               fetchAllFeed={fetchAllFeed}
               setIsClickedFetch={setIsClickedFetch}
+              setNextData={setNextData}
             />
             // {/* </div> */}
           )}
