@@ -84,21 +84,23 @@ export default function FeedList(isUserState) {
     console.log(biasId, board);
   }, [board]);
 
+  let [filterCategory, setFilterCategory] = useState([]);
+  let [filterFclass, setFilterFclass] = useState("");
+  let [isClickedFetch, setIsClickedFetch] = useState(false);
   let [allFeed, setAllFeed] = useState([]);
+  const FETCH_URL = "https://nova-platform.kr/feed_explore/";
+
   let send_form = {
     header: header,
     body: {
       key: nextData,
-      category: [],
-      fclass: "",
+      category: filterCategory || [],
+      fclass: filterFclass || "",
     },
   };
-
-  const FETCH_URL = "https://nova-platform.kr/feed_explore/";
-
-  function fetchAllFeed() {
-    if (type === "all") {
-      fetch(`${FETCH_URL}all_feed`, {
+  async function fetchAllFeed(nextData) {
+    if (type === "all" || isClickedFetch) {
+      await fetch(`${FETCH_URL}all_feed`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -113,10 +115,11 @@ export default function FeedList(isUserState) {
           // setFeedInteraction(data.body.send_data.map((interaction, i) => interaction));
           setNextData(data.body.key);
           setIsLoading(false);
-          setFeedData((prevData) => {
-            const newData = [...prevData, ...data.body.send_data];
-            return newData;
-          });
+          setFeedData(data.body.send_data);
+          // setFeedData((prevData) => {
+          //   const newData = [...prevData, ...data.body.send_data];
+          //   return newData;
+          // });
         });
     }
   }
@@ -193,31 +196,7 @@ export default function FeedList(isUserState) {
           setIsLoading(false);
           console.log("more", data);
         });
-    }
-    //  else if (type === "all") {
-    //   fetch(`${FETCH_URL}all_feed?key=${nextData}`, {
-    //     credentials: "include",
-    //   })
-    //     .then((response) => response.json())
-    //     .then((data) => {
-    //       setNextData(data.body.key);
-    //       setFeedData((prevData) => {
-    //         const newData = [...prevData, ...data.body.send_data];
-    //         return newData;
-    //       });
-    //       setFeedInteraction(data.body.send_data.map((interaction, i) => interaction));
-    //       setFeedInteraction((prevData) => {
-    //         const newData = [
-    //           ...prevData,
-    //           ...data.body.send_data.map((interaction, i) => interaction),
-    //         ];
-    //         return newData;
-    //       });
-    //       setIsLoading(false);
-    //       console.log("mor1", data);
-    //     });
-    // }
-    else if (type === "weekly_best") {
+    } else if (type === "weekly_best") {
       fetch(`${FETCH_URL}weekly_best?key=${nextData}`, {
         credentials: "include",
       })
@@ -452,6 +431,10 @@ export default function FeedList(isUserState) {
             <FilterModal
               isFilterClicked={isFilterClicked}
               onClickFilterButton={onClickFilterButton}
+              setFilterCategory={setFilterCategory}
+              setFilterFclass={setFilterFclass}
+              fetchAllFeed={fetchAllFeed}
+              setIsClickedFetch={setIsClickedFetch}
             />
             // {/* </div> */}
           )}
