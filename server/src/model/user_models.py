@@ -182,13 +182,13 @@ class UserPageModel(BaseModel):
         self._user.password = ""
         return
 
-    def get_user_data(self, user:User):
-        self._uname = user.uname
-        self._uid = user.uid
-        self._num_long_feed = user.num_long_feeds
-        self._num_short_feed = user.num_short_feeds
-        self._num_like = len(user.like)
-        self._num_comment = len(user.my_comment)
+    def get_user_data(self):
+        self._uname = self._user.uname
+        self._uid = self._user.uid
+        self._num_long_feed = self._user.num_long_feeds
+        self._num_short_feed = self._user.num_short_feeds
+        self._num_like = len(self._user.like)
+        self._num_comment = len(self._user.my_comment)
 
         return
 
@@ -269,13 +269,19 @@ class MyFeedsModel(BaseModel):
 
         return
 
-    # 덜 만듦
-    # def get_liked_feeds(self, feed_manager:FeedManager, last_index:int=-1):
-    #     self._feeds = feed_manager.get_stared_feed(user=self._user,
-    #                                                fid=data_payload.fid)
-    #     if len(self._feeds) != 0:
-    #         self._fid = self._feeds[-1].fid
-    #     return
+    def get_liked_feeds(self, feed_manager:FeedManager, last_index:int=-1):
+        self._feeds = feed_manager.get_liked_feeds(user=self._user)
+        self._feeds, self._key = feed_manager.paging_fid_list(fid_list=self._feeds, last_index=last_index, page_size=3)
+
+        return
+
+    def get_interacted_feeds(self, feed_manager:FeedManager, last_index:int=-1):
+        self._feeds = feed_manager.get_interacted_feeds(user=self._user)
+        self._feeds, self._key = feed_manager.paging_fid_list(fid_list=self._feeds, last_index=last_index, page_size=3)
+
+        return
+
+
 
 class MyFeedsModel(BaseModel):
     def __init__(self, database:Local_Database) -> None:

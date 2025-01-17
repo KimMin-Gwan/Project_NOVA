@@ -1526,6 +1526,17 @@ class FeedManager:
 
         return feeds
 
+    def get_interacted_feed(self, user:User):
+        feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=user.active_feed)
+        feeds = []
+
+        for i, feed_data in enumerate(reversed(feed_datas)):
+            feed = Feed()
+            feed.make_with_dict(feed_data)
+            feeds.append(feed)
+
+        return feeds
+
     # 내가 작성한 피드 전체 불러오기, 페이징
     def get_my_feeds(self, user, fid):
         feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=user.my_feed)
@@ -1904,26 +1915,28 @@ class FeedManager:
         finally:
             return feed
 
+
+
     # 상호 작용한 피드 전부 불러오기
-    def get_interacted_feed(self, user:User, fid):
-        feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=user.active_feed)
-        feeds = []
-
-        target = -1
-        for i, feed_data in enumerate(reversed(feed_datas)):
-            feed = Feed()
-            feed.make_with_dict(feed_data)
-            feeds.append(feed)
-            if feed.fid == fid:
-                target = i
-
-        if target != -1:
-            feeds = feeds[target + 1:]
-
-        if len(feeds) > 5:
-            feeds = feeds[:5]
-
-        return feeds
+    # def get_interacted_feed(self, user:User, fid):
+    #     feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=user.active_feed)
+    #     feeds = []
+    #
+    #     target = -1
+    #     for i, feed_data in enumerate(reversed(feed_datas)):
+    #         feed = Feed()
+    #         feed.make_with_dict(feed_data)
+    #         feeds.append(feed)
+    #         if feed.fid == fid:
+    #             target = i
+    #
+    #     if target != -1:
+    #         feeds = feeds[target + 1:]
+    #
+    #     if len(feeds) > 5:
+    #         feeds = feeds[:5]
+    #
+    #     return feeds
 
 #------------------------------------------------------------------------------------------------------------
     def paging_fid_list(self, fid_list:list, last_index:int, page_size=5):
