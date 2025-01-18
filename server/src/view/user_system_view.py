@@ -190,6 +190,7 @@ class User_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
+
         # 비밀번호 변경하기
         @self.__app.post('/user_home/try_change_password')
         def try_change_password(request:Request, raw_request:dict):
@@ -209,10 +210,10 @@ class User_Service_View(Master_View):
 
         # 닉네임 바꾸기
         @self.__app.get('/user_home/try_change_nickname')
-        def try_change_nickname(request:Request, index:Optional[int], custom:Optional[str]=""):
+        def try_change_nickname(request:Request, raw_request:dict):
             request_manager = RequestManager()
 
-            data_payload  = ChangeNicknameRequest(index=index, custom=custom)
+            data_payload  = ChangeNicknameRequest(request=raw_request)
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
             if not request_manager.jwt_payload.result:
                 raise request_manager.credentials_exception
@@ -242,11 +243,20 @@ class MyCommentsRequest(RequestHeader):
         body = request['body']
         self.key = body['key']
 
-class ChangeNicknameRequest():
-    def __init__(self, index, custom) -> None:
-        self.index = index
-        self.custom =custom
-        pass
+class ChangePasswordRequest(RequestHeader):
+    def __init__(self, request) -> None:
+        super().__init__(request)
+        body = request['body']
+        self.password = body['password']
+        self.new_password= body['new_password']
+
+class ChangeNicknameRequest(RequestHeader):
+    def __init__(self, request) -> None:
+        super().__init__(request)
+        body = request['body']
+        self.new_uname = body['uname']
+
+
 
 class LoginRequest(RequestHeader):
     def __init__(self, request) -> None:
@@ -262,12 +272,6 @@ class TempLoginRequest(RequestHeader):
         self.email = body['email']
         self.verification_code = body['verification_code']
 
-class ChangePasswordRequest(RequestHeader):
-    def __init__(self, request) -> None:
-        super().__init__(request)
-        body = request['body']
-        self.password = body['password']
-        self.new_password= body['new_password']
 
 class EmailSendRequest(RequestHeader):
     def __init__(self, request) -> None:

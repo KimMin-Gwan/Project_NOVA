@@ -330,7 +330,7 @@ class ChangePasswordModel(BaseModel):
             self._detail = "비밀번호가 틀렸어요"
             return
         
-    # 비밀번호 변경하기를 임시유저로( 비밀번호 찾기)
+    # 비밀번호 변경하기를 임시유저로 ( 비밀번호 찾기)
     def try_change_password_with_temp_user(self, data_payload):
         self.__try_change_password(new_password = data_payload.new_password)
         self._result = True
@@ -369,41 +369,36 @@ class ChangeNickNameModel(BaseModel):
     def __init__(self, database:Local_Database) -> None:
         super().__init__(database)
         self._result = False
-        self._detail = "Something goes bad | ERROR = 422"
+        self._uname = ""
 
-    # 비밀번호 변경하기
-    def try_change_nickname(self, data_payload):
-
-        if data_payload.index == 0:
-            self._user.uname = "지지자"
-            self._detail = "지지자로 변경되었습니다"
-            self._result = True
+    # 달라진 닉네임인지 체크하는 곳
+    def __check_new_nickname(self, new_uname:str):
+        if self._user.uname != new_uname :
+            return True
         else:
-            if len(self._user.bids):
-                bias_data = self._database.get_data_with_id(target="bid", id=self._user.bids[data_payload.index - 1])
-                bias = Bias()
-                bias.make_with_dict(dict_data=bias_data)
-                if len(bias.fanname) == 0:
-                    self._detail = f"{bias.bname}님은 팬명칭이 없어요"
-                    return
-                else:
-                    self._user.uname = bias.fanname[0]
-                    self._detail = f"{self._user.uname}로 변경되었습니다"
-                    self._result =True
-            else:
-                self._detail = "지지하는 최애가 없어요!"
-                return
+            return False
 
+    def __change_nickname(self, new_uname:str):
+        # 바꾸게 되면 데이터베이스를 수정합니다.
+        self._uname = new_uname
         self._database.modify_data_with_id(target_id="uid", target_data=self._user.get_dict_form_data())
+
+    # 닉네임 변경하기
+    def try_change_nickname(self, new_uname:str):
+        # check uname, 변동사항이 없으면 False를 반환
+        self._uname = self._user.uname
+
+        if self.__check_new_nickname(new_uname):
+            self.__change_nickname(new_uname)
+            self._result = True
+
         return
-
-
 
     def get_response_form_data(self, head_parser):
         try:
             body = {
                 'result' : self._result,
-                "detail" : self._detail
+                "uname" : self._uname
             }
 
             response = self._get_response_data(head_parser=head_parser, body=body)
@@ -411,3 +406,48 @@ class ChangeNickNameModel(BaseModel):
 
         except Exception as e:
             raise CoreControllerLogicError("response making error | " + e)
+
+# class ChangeNickNameModel(BaseModel):
+#     def __init__(self, database:Local_Database) -> None:
+#         super().__init__(database)
+#         self._result = False
+#         self._detail = "Something goes bad | ERROR = 422"
+#
+#     # 닉네임 변경하기
+#     def try_change_nickname(self, data_payload):
+#
+#         if data_payload.index == 0:
+#             self._user.uname = "지지자"
+#             self._detail = "지지자로 변경되었습니다"
+#             self._result = True
+#         else:
+#             if len(self._user.bids):
+#                 bias_data = self._database.get_data_with_id(target="bid", id=self._user.bids[data_payload.index - 1])
+#                 bias = Bias()
+#                 bias.make_with_dict(dict_data=bias_data)
+#                 if len(bias.fanname) == 0:
+#                     self._detail = f"{bias.bname}님은 팬명칭이 없어요"
+#                     return
+#                 else:
+#                     self._user.uname = bias.fanname[0]
+#                     self._detail = f"{self._user.uname}로 변경되었습니다"
+#                     self._result =True
+#             else:
+#                 self._detail = "지지하는 최애가 없어요!"
+#                 return
+#
+#         self._database.modify_data_with_id(target_id="uid", target_data=self._user.get_dict_form_data())
+#         return
+#
+#     def get_response_form_data(self, head_parser):
+#         try:
+#             body = {
+#                 'result' : self._result,
+#                 "detail" : self._detail
+#             }
+#
+#             response = self._get_response_data(head_parser=head_parser, body=body)
+#             return response
+#
+#         except Exception as e:
+#             raise CoreControllerLogicError("response making error | " + e)
