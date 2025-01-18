@@ -256,8 +256,6 @@ class ChangeNicknameRequest(RequestHeader):
         body = request['body']
         self.new_uname = body['uname']
 
-
-
 class LoginRequest(RequestHeader):
     def __init__(self, request) -> None:
         super().__init__(request)
