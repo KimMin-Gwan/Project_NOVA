@@ -53,7 +53,7 @@ const NavBar = ({ isUserState, brightMode }) => {
         <button
           className="nav_button"
           onClick={(e) => {
-            handleNavigate("/write_feed");
+            handleNavigate("/write_feed/short");
             handleStopClick(e);
           }}
         >

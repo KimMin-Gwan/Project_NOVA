@@ -64,6 +64,13 @@ import LongFormWrite from "./pages/LongFormWrite/LongFormWrite.js";
 import NoticeBox from "./component/NoticeBox/NoticeBox.js";
 import CategoryModal from "./component/CategoryModal/CategoryModal.js";
 import SearchBox from "./component/SearchBox.js";
+import Write from "./pages/Write/index.js";
+
+import { Editor } from "@toast-ui/react-editor";
+import "@toast-ui/editor/dist/toastui-editor.css";
+import "tui-color-picker/dist/tui-color-picker.css";
+import "@toast-ui/editor/dist/i18n/ko-kr";
+import "@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css";
 
 // 다크 모드 클래스 반환 함수
 export function getModeClass(mode) {
@@ -231,7 +238,9 @@ function App() {
 
       {/* 피드 페이지 */}
       <Route path="/feed_page" element={<FeedPage brightMode={brightMode} />}></Route>
-      <Route path="/write_feed" element={<WriteFeed />}></Route>
+      <Route path="/write_feed" element={<Write />}>
+        <Route path=":type" element={<Write />}></Route>
+      </Route>
       <Route path="/select_bias" element={<SelectBias />}></Route>
       <Route path="/feed_hash_list" element={<FeedHashList />}></Route>
       <Route path="/feed_hash_list/:fid" element={<FeedHashList />}></Route>
@@ -255,7 +264,7 @@ function App() {
 
       {/* 테스트 페이지 및 에러 페이지 */}
       <Route path="/test" element={<LongFormWrite />}></Route>
-      <Route path="/test1" element={<CategoryModal />}></Route>
+      <Route path="/test1" element={<Editor />}></Route>
       <Route path="*" element={<div>404 Error</div>}></Route>
 
       {/* 미사용 페이지 */}
@@ -304,7 +313,7 @@ function App() {
                       className={`logo-st ${getModeClass(brightMode)}`}
                     ></img>
                   </div>
-                  <Link to="/test">롱폼작성 페이지지</Link>
+                  <Link to="/write_feed/long">롱폼작성 페이지지</Link>
                   <Link to="/test1">test page</Link>
 
                   {/* <div className="buttons">

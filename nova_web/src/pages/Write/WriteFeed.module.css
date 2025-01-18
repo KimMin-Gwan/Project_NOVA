@@ -1,0 +1,320 @@
+.WriteFeed {
+  max-width: 500px;
+  width: 100%;
+  margin: 0 auto;
+  min-height: 100vh;
+  background-color: #f1f7ff;
+  position: relative;
+}
+
+.top_container {
+  display: flex;
+  padding: 20px;
+  justify-content: space-between;
+}
+
+.hashtag_container {
+  background-color: white;
+  /* height: 50px; */
+  padding: 20px;
+  margin-bottom: 15px;
+}
+.tag-container {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+  /* background-color: blue; */
+}
+
+.tag-icon-box {
+  width: 30px;
+  height: 30px;
+  /* background-color: yellow; */
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.tag-box {
+  background-color: #98a0ff;
+  color: white;
+  padding: 2px 5px;
+  margin-left: 5px;
+  margin-right: 5px;
+  /* margin-bottom: 5px; */
+  display: flex;
+  align-items: center;
+  height: 20px;
+  font-size: 15px;
+}
+
+.delete-tag {
+  background: none;
+  border: none;
+  color: black;
+  cursor: pointer;
+  margin-left: 5px;
+  font-size: 1.2em;
+}
+
+.input-container {
+  display: flex;
+  margin-top: 10px;
+  align-items: center;
+  /* input::placeholder {
+    color: gray;
+    } */
+  position: relative;
+}
+.input-hashtag {
+  background-color: white;
+  color: #898989;
+  width: 100%;
+  height: 70%;
+  margin-inline: 5px;
+  padding: 5px;
+  border: none;
+  border-bottom: 1px solid gray;
+}
+
+.check-button {
+  position: absolute;
+  right: 6px;
+  bottom: 3px;
+}
+
+.content_container {
+  padding: 20px;
+  background-color: white;
+  height: 500px;
+  display: flex;
+  flex-direction: column;
+
+  .content-title {
+    height: 20px;
+  }
+
+  .write_body {
+    all: unset;
+    /* background-color: blue; */
+    border: none;
+    padding: 0;
+    padding-top: 10px;
+    padding-left: 3px;
+    width: 95%;
+    flex: 1;
+    /* height: 100%; */
+    border-radius: 10px;
+    resize: none;
+    color: black;
+  }
+}
+
+.count-text {
+  color: #5e5e5e;
+  font-size: 16px;
+  width: 100%;
+  text-align: right;
+  display: inline-block;
+}
+.alert_message {
+  padding: 10px 0;
+  text-align: center;
+  color: black;
+}
+
+.content_button {
+  background-color: white;
+  position: sticky;
+  /* z-index: 999; */
+  display: flex;
+  justify-content: start;
+  margin: 0 auto;
+  width: 100%;
+  bottom: 0px;
+  left: 0px;
+  gap: 20px;
+
+  button {
+    all: unset;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: gray;
+    /* padding: 20px; */
+    width: 50px;
+    height: 50px;
+    /* margin-right: 10px; */
+  }
+
+  button:first-child {
+    margin-left: 20px;
+  }
+}
+
+/* 모달 창 css */
+.wrapper-container {
+  /* width: 100%; */
+  height: 100vh;
+  position: fixed;
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  z-index: 1002;
+  background-color: rgba(0, 0, 0, 0.5);
+  /* background-color: blue; */
+}
+
+.modal-container {
+  max-width: 500px;
+  /* overflow-y: scroll; */
+  width: 100%;
+  height: 500px;
+  margin: 0 auto;
+  background-color: white;
+
+  .modal-title {
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+}
+
+.link-box-container {
+  height: 200px;
+}
+
+.image-container {
+  height: 300px;
+  overflow-y: scroll;
+  scrollbar-width: none;
+}
+
+#image-file[type="file"] {
+  display: none;
+}
+
+.input-image {
+  margin: 0 auto;
+  width: 90%;
+  height: 70px;
+  display: flex;
+  background-color: white;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border: dotted 1px blue;
+  margin-bottom: 10px;
+}
+
+.preview-container {
+  margin: 0 auto;
+  width: 90%;
+  height: 70px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px dotted blue;
+  margin-bottom: 10px;
+
+  .preview-image {
+    width: 50px;
+    height: 50px;
+
+    img {
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+    }
+  }
+}
+
+.modal-buttons {
+  padding: 20px;
+  display: flex;
+
+  button {
+    padding: 10px;
+    margin-right: 10px;
+  }
+
+  .close_button {
+    width: 30%;
+  }
+
+  .apply_button {
+    width: 70%;
+  }
+
+  .apply_button_on {
+    background-color: #f1f7ff;
+    border: 1px solid #359aff;
+  }
+}
+
+/* 투표 모달 */
+#vote-option[type="text"] {
+  all: unset;
+  width: 80%;
+  display: flex;
+  margin: 0 auto;
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid gray;
+  margin-bottom: 10px;
+}
+
+.option-box {
+  width: 80%;
+  display: flex;
+  margin: 0 auto;
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid gray;
+  cursor: pointer;
+}
+
+/* 좌표 모달 */
+
+.link-box {
+  width: 80%;
+  padding: 20px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid gray;
+}
+
+.link-input-container {
+  margin: 0 auto;
+  display: flex;
+  width: 80%;
+  padding: 20px;
+  border: 1px dotted blue;
+
+  .link-input {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+
+    input {
+      padding: 10px;
+    }
+  }
+}
+
+.bias-section {
+  .title {
+    padding: 10px 20px;
+  }
+}

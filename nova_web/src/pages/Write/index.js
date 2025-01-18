@@ -11,10 +11,10 @@ import select from "./../../img/select-icon.png";
 import img from "./../../img/img-icon.png";
 import { getModeClass } from "./../../App.js";
 import BiasBoxes from "../../component/BiasBoxes.js";
+import EditorBox from "../../component/EditorBox.js";
 // import { Editor } from "@toast-ui/react-editor/index.js";
-const WriteFeed = ({ brightmode }) => {
+const Write = ({ brightmode }) => {
   const params = useParams();
-
   const type = params.type;
   const navigate = useNavigate();
 
@@ -24,6 +24,8 @@ const WriteFeed = ({ brightmode }) => {
   let [linkTitle, setLinkTitle] = useState("");
   let [linkUrl, setLinkUrl] = useState("");
   let [linkList, setLinkList] = useState([]);
+  let [longData, setLongData] = useState();
+
   let [biasId, setBiasId] = useState();
   // useEffect(() => {
   //   setLinkList([{ name: linkTitle, url: linkUrl }]);
@@ -135,9 +137,9 @@ const WriteFeed = ({ brightmode }) => {
     const send_data = {
       header: header,
       body: {
-        body: bodyText, // 입력된 글 본문 반영
+        body: bodyText || longData, // 입력된 글 본문 반영
         fid: "",
-        fclass: "short",
+        fclass: type,
         choice: choice, // 4지선다 선택지 반영
         hashtag: tagList,
         link: { lname: linkTitle, url: linkUrl },
@@ -178,32 +180,32 @@ const WriteFeed = ({ brightmode }) => {
 
   function handleLinkChange() {}
 
-  let title = ["줄 글", "사지선다", "이지선다", "외부 좌표"];
-  let fclassName = ["card", "multiple", "balance", "station"];
-  let [currentTitle, setCurrentTitle] = useState(0);
-  let [currentFclass, setCurrentFclass] = useState(0);
+  //   let title = ["줄 글", "사지선다", "이지선다", "외부 좌표"];
+  //   let fclassName = ["card", "multiple", "balance", "station"];
+  //   let [currentTitle, setCurrentTitle] = useState(0);
+  //   let [currentFclass, setCurrentFclass] = useState(0);
 
-  function handlePrev() {
-    setCurrentTitle((prevIndex) => {
-      return prevIndex === 0 ? title.length - 1 : prevIndex - 1;
-    });
-    setCurrentFclass((prevIndex) => {
-      return prevIndex === 0 ? fclassName.length - 1 : prevIndex - 1;
-    });
-  }
-  function handleNext() {
-    setCurrentTitle((prevIndex) => {
-      return prevIndex === title.length - 1 ? 0 : prevIndex + 1;
-    });
-    setCurrentFclass((prevIndex) => {
-      return prevIndex === fclassName.length - 1 ? 0 : prevIndex + 1;
-    });
-  }
+  //   function handlePrev() {
+  //     setCurrentTitle((prevIndex) => {
+  //       return prevIndex === 0 ? title.length - 1 : prevIndex - 1;
+  //     });
+  //     setCurrentFclass((prevIndex) => {
+  //       return prevIndex === 0 ? fclassName.length - 1 : prevIndex - 1;
+  //     });
+  //   }
+  //   function handleNext() {
+  //     setCurrentTitle((prevIndex) => {
+  //       return prevIndex === title.length - 1 ? 0 : prevIndex + 1;
+  //     });
+  //     setCurrentFclass((prevIndex) => {
+  //       return prevIndex === fclassName.length - 1 ? 0 : prevIndex + 1;
+  //     });
+  //   }
+  //   let [plusTag, setPlusTag] = useState("");
+  //   let [link, setLink] = useState([]);
 
   let [inputTag, setInputTag] = useState("");
-  let [plusTag, setPlusTag] = useState("");
   let [tagList, setTagList] = useState([]);
-  let [link, setLink] = useState([]);
 
   function onChangeTag(e) {
     const inputText = e.target.value;
@@ -265,15 +267,15 @@ const WriteFeed = ({ brightmode }) => {
     }
   }
 
-  const [showImageModal, setShowImageModal] = useState(false);
-  const [showChoiceModal, setShowChoiceModal] = useState(false);
+  //   const [showImageModal, setShowImageModal] = useState(false);
+  //   const [showChoiceModal, setShowChoiceModal] = useState(false);
 
-  const handleImageModalOpen = () => setShowImageModal(true);
-  const handleChoiceModalOpen = () => setShowChoiceModal(true);
-  const closeModal = () => {
-    setShowImageModal(false);
-    setShowChoiceModal(false);
-  };
+  //   const handleImageModalOpen = () => setShowImageModal(true);
+  //   const handleChoiceModalOpen = () => setShowChoiceModal(true);
+  //   const closeModal = () => {
+  //     setShowImageModal(false);
+  //     setShowChoiceModal(false);
+  //   };
   const [mode, setMode] = useState(() => {
     // 로컬 스토리지에서 가져온 값이 있으면 그것을, 없으면 'bright'로 초기화
     return localStorage.getItem("brightMode") || "bright";
@@ -290,6 +292,8 @@ const WriteFeed = ({ brightmode }) => {
           취소
         </p>
         {type === "long" && <p>롱 피드 작성</p>}
+        {type === "short" && <p>숏 피드 작성</p>}
+
         <p
           type="submit"
           onClick={(e) => {
@@ -348,19 +352,32 @@ const WriteFeed = ({ brightmode }) => {
 
       <div className={style["content_container"]}>
         <div className={style["content-title"]}>본문</div>
-        <textarea
-          className={style["write_body"]}
-          name="body"
-          placeholder="내용을 입력해주세요"
-          value={bodyText}
-          onChange={onChangeBody}
-        />
-        <span className={style["count-text"]}>{inputBodyCount}/300</span>
+        {type === "short" && (
+          <>
+            <textarea
+              className={style["write_body"]}
+              name="body"
+              placeholder="내용을 입력해주세요"
+              value={bodyText}
+              onChange={onChangeBody}
+            />
+            <span className={style["count-text"]}>{inputBodyCount}/300</span>
+          </>
+        )}
+
+        {type === "long" && <EditorBox setLongData={setLongData} />}
       </div>
 
-      <p className={style["alert_message"]}>
-        숏 피드 게시글은 작성 후 24시간 동안 노출됩니다.
-      </p>
+      {type === "short" && (
+        <p className={style["alert_message"]}>
+          숏 피드 게시글은 작성 후 24시간 동안 노출됩니다.
+        </p>
+      )}
+      {type === "long" && (
+        <p className={style["alert_message"]}>
+          타인에게 불편을 줄 수 있는 내용의 개시 글은 경고 없이 삭제 될 수 있습니다.
+        </p>
+      )}
 
       <div className={style["content_button"]}>
         <button
@@ -427,7 +444,7 @@ const WriteFeed = ({ brightmode }) => {
   );
 };
 
-export default WriteFeed;
+export default Write;
 
 export const Modal = ({
   show,
