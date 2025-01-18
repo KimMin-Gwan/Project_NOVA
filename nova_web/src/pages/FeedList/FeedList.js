@@ -56,7 +56,7 @@ export default function FeedList(isUserState) {
       body: {
         bid: bid || "",
         board: board || "",
-        last_fid: "",
+        key: -1,
       },
     };
     // setIsLoading(true);
@@ -73,7 +73,7 @@ export default function FeedList(isUserState) {
         .then((data) => {
           console.log("first bias data", data);
           setFeedData(data.body.send_data);
-          setNextData(data.body.last_fid);
+          setNextData(data.body.key);
           setIsLoading(false);
         });
     }
