@@ -384,12 +384,12 @@ class ChangeNickNameModel(BaseModel):
         self._database.modify_data_with_id(target_id="uid", target_data=self._user.get_dict_form_data())
 
     # 닉네임 변경하기
-    def try_change_nickname(self, new_uname:str):
+    def try_change_nickname(self, data_payload):
         # check uname, 변동사항이 없으면 False를 반환
         self._uname = self._user.uname
 
-        if self.__check_new_nickname(new_uname):
-            self.__change_nickname(new_uname)
+        if self.__check_new_nickname(data_payload.new_uname):
+            self.__change_nickname(data_payload.new_uname)
             self._result = True
 
         return
@@ -407,47 +407,24 @@ class ChangeNickNameModel(BaseModel):
         except Exception as e:
             raise CoreControllerLogicError("response making error | " + e)
 
-# class ChangeNickNameModel(BaseModel):
-#     def __init__(self, database:Local_Database) -> None:
-#         super().__init__(database)
-#         self._result = False
-#         self._detail = "Something goes bad | ERROR = 422"
-#
-#     # 닉네임 변경하기
-#     def try_change_nickname(self, data_payload):
-#
-#         if data_payload.index == 0:
-#             self._user.uname = "지지자"
-#             self._detail = "지지자로 변경되었습니다"
-#             self._result = True
-#         else:
-#             if len(self._user.bids):
-#                 bias_data = self._database.get_data_with_id(target="bid", id=self._user.bids[data_payload.index - 1])
-#                 bias = Bias()
-#                 bias.make_with_dict(dict_data=bias_data)
-#                 if len(bias.fanname) == 0:
-#                     self._detail = f"{bias.bname}님은 팬명칭이 없어요"
-#                     return
-#                 else:
-#                     self._user.uname = bias.fanname[0]
-#                     self._detail = f"{self._user.uname}로 변경되었습니다"
-#                     self._result =True
-#             else:
-#                 self._detail = "지지하는 최애가 없어요!"
-#                 return
-#
-#         self._database.modify_data_with_id(target_id="uid", target_data=self._user.get_dict_form_data())
-#         return
-#
-#     def get_response_form_data(self, head_parser):
-#         try:
-#             body = {
-#                 'result' : self._result,
-#                 "detail" : self._detail
-#             }
-#
-#             response = self._get_response_data(head_parser=head_parser, body=body)
-#             return response
-#
-#         except Exception as e:
-#             raise CoreControllerLogicError("response making error | " + e)
+class ChangeProfilePhotoModel(BaseModel):
+    def __init__(self, database:Local_Database) -> None:
+        super().__init__(database)
+        self._result = False
+
+    def get_response_form_data(self, head_parser):
+        try:
+            body = {
+                'result' : self._result,
+            }
+
+            response = self._get_response_data(head_parser=head_parser, body=body)
+            return response
+
+        except Exception as e:
+            raise CoreControllerLogicError("response making error | " + e)
+
+    # 아직 안됨
+    def try_change_profile_photo(self, data_payload):
+        self._result = True
+        return
