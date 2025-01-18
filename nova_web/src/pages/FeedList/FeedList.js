@@ -90,19 +90,48 @@ export default function FeedList(isUserState) {
   let [allFeed, setAllFeed] = useState([]);
   const FETCH_URL = "https://nova-platform.kr/feed_explore/";
 
-  let send_form = {
-    header: header,
-    body: {
-      key: nextData,
-      category: filterCategory || [""],
-      fclass: filterFclass || "",
-    },
-  };
-  async function fetchAllFeed() {
+  //let send_form = {
+    //header: header,
+    //body: {
+      //key: nextData,
+      //category: filterCategory || [""],
+      //fclass: filterFclass || "",
+    //},
+  //};
+
+  function onClickApplyButton1(){
+    console.log("hello?")
+    setNextData(-1)
+    console.log(nextData)
+    console.log("bitch")
+  }
+
+  async function fetchAllFeed(clickedFetch) {
+
+    let updatedNextData = -1
+    
+    //  만약 적용 버튼을 누르면 -1로 세팅
+    if (clickedFetch) {
+      updatedNextData = -1
+      setNextData(-1);
+    }
+    // 그게 아닌 상황에서는 기존의 nextData 를 사용
+    else{
+      updatedNextData = nextData
+    }
+    
+    // 지역변수로 사용하기로함
+    let send_form = {
+      header: header,
+      body: {
+        key: updatedNextData, // 여기에서  사용됨
+        category: filterCategory || [""],
+        fclass: filterFclass || "",
+        },
+    };
+
     if (type === "all" || isClickedFetch) {
-      if (isClickedFetch) {
-        setNextData(-1);
-      }
+      console.log("ma nigga")
       await fetch(`${FETCH_URL}all_feed`, {
         method: "POST",
         credentials: "include",
@@ -119,7 +148,6 @@ export default function FeedList(isUserState) {
           setNextData(data.body.key);
           setIsLoading(false);
           setFeedData(data.body.send_data);
-          setIsClickedFetch(false);
           // setFeedData((prevData) => {
           //   const newData = [...prevData, ...data.body.send_data];
           //   return newData;
@@ -215,6 +243,18 @@ export default function FeedList(isUserState) {
           console.log("mor2", data);
         });
     } else if (type === "all" || isClickedFetch) {
+      
+      // 지역 변수 데이터로 활용하기로함
+      let send_form = {
+        header: header,
+        body: {
+          key: nextData,
+          category: filterCategory || [""],
+          fclass: filterFclass || "",
+          },
+      };
+
+
       fetch(`${FETCH_URL}all_feed`, {
         method: "POST",
         credentials: "include",
@@ -316,7 +356,7 @@ export default function FeedList(isUserState) {
 
   useEffect(() => {
     fetchData();
-    fetchAllFeed();
+    fetchAllFeed(false);
 
     return () => {
       setFeedData([]);
@@ -462,7 +502,7 @@ export default function FeedList(isUserState) {
               setFilterCategory={setFilterCategory}
               setFilterFclass={setFilterFclass}
               fetchAllFeed={fetchAllFeed}
-              setIsClickedFetch={setIsClickedFetch}
+              onClickApplyButton1={onClickApplyButton1}
               setNextData={setNextData}
             />
             // {/* </div> */}

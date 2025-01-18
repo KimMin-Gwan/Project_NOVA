@@ -8,7 +8,7 @@ export default function FilterModal({
   setFilterCategory,
   setFilterFclass,
   fetchAllFeed,
-  setIsClickedFetch,
+  onClickApplyButton1,
   setNextData,
 }) {
   let FilterData = [
@@ -45,6 +45,8 @@ export default function FilterModal({
     { id: 2, value: "", name: "전체" },
   ];
 
+  let boolData = [true, false]
+
   let [isClickedFilterBoard, setIsClickedFilterBoard] = useState([]);
   let [isClickedFilterContent, setIsClickedFilterContent] = useState(0);
 
@@ -73,6 +75,12 @@ export default function FilterModal({
     setIsClickedFilterContent(i);
     setFilterFclass(ContentData[i].value);
   }
+
+  function onClickApplyButton2() {
+    onClickApplyButton1()
+    fetchAllFeed(true);
+  }
+
 
   return (
     <div className="wrapper-container" onClick={onClickFilterButton}>
@@ -129,10 +137,7 @@ export default function FilterModal({
           </button>
           <button
             className="apply_button"
-            onClick={() => {
-              setIsClickedFetch(true);
-              fetchAllFeed();
-            }}
+            onClick={() => { onClickApplyButton2()}}
           >
             적용
           </button>
