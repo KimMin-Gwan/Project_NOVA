@@ -431,7 +431,6 @@ class Core_Service_View(Master_View):
         def get_feed_with_community(request:Request, raw_request:dict):
             request_manager = RequestManager()
             
-            pprint(raw_request)
             data_payload = CommunityRequest(request=raw_request)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
@@ -788,7 +787,7 @@ class CommunityRequest(RequestHeader):
         body = request['body']
         self.bid = body['bid']
         self.category = body['board']
-        self.key = body['key'] # 미안해요. 승준님님. 이거 보내주세요. 얘는 페이지의 마지막 인덱스 번호에요.
+        self.key:int = body['key'] # 미안해요. 승준님님. 이거 보내주세요. 얘는 페이지의 마지막 인덱스 번호에요.
 
 # class CommunityFilteredRequest(CommunityRequest):
 #     def __init__(self, request) -> None:
