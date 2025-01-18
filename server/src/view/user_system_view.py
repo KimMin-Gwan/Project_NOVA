@@ -270,7 +270,6 @@ class TempLoginRequest(RequestHeader):
         self.email = body['email']
         self.verification_code = body['verification_code']
 
-
 class EmailSendRequest(RequestHeader):
     def __init__(self, request) -> None:
         super().__init__(request)
