@@ -181,7 +181,6 @@ class Feed_Controller:
         return model
 
 
-
     # 해시태그로 피드 검색하기
     def get_feed_with_hashtag(self, database:Local_Database,
                         request, feed_search_engine: FeedSearchEngine,
@@ -200,8 +199,6 @@ class Feed_Controller:
                             )
         return model
 
-
-
     # 숏피드에서 다음 피드 요청할 때
     def get_feed_with_recommend(self, database:Local_Database,
                         request, feed_search_engine: FeedSearchEngine):
@@ -218,7 +215,6 @@ class Feed_Controller:
                                 )
         return model
 
-
     def get_home_hot_hashtag_feed(self, database:Local_Database,
                             request , feed_manager:FeedManager):
         model = FeedModel(database=database)
@@ -230,10 +226,7 @@ class Feed_Controller:
             feed_manager=self.__feed_manager,
             num_feed=4, index= request.data_payload.key)
 
-
-        return model           
-        
-
+        return model
 
     ## 예전에 쓰던거
 

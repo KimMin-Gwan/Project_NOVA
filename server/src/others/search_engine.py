@@ -1297,6 +1297,17 @@ class FilteringManager:
         # Paging Fid List, Last_fid
         return paging_fid_list, paging_fid_list[-1]
 
+    def _filtering_notices_list(self):
+        notice_datas = self.__database.get_all_data(target="notice")
+        notices = []
+
+        for notice_data in notice_datas:
+            notice = Notice()
+            notice.make_with_dict(notice_data)
+            notices.append(notice)
+
+        return notices
+
     def filtered_feed_option_and_key(self, fid_list:list, option:str, keys:list):
         if option == "fclass":
             # 키가 하나밖에 없기 때문에.. keys[0]만으로 판별해야한다.
@@ -1307,10 +1318,16 @@ class FilteringManager:
             # 구분하기 쉽도록 하였음. 또한, category가 []인 상태라면 뒤에 나올 반복문 자체가 동작하지 않는다.
             # 따라서 미리 선언을 한상태로 있는다.
             filtered_fid_list = fid_list
+            notice_list = []
             # pprint(keys)
             for key in keys:
+                # 공지 게시판은 공지만 가져온다.
+                if key == "notice":
+                    notice_list = self._filtering_notices_list()
                 filtered_fid_list = self.__managed_feed_bias_table.filtering_category_feed(fid_list=filtered_fid_list, category=key)
 
+            # 여기서, 아마 합쳐야 할 것 같은데 어찌하면 좋을까.
+                # 공지는 맨 위에 뜨게 해야할까. 아님 어떻게...? What do you want?
             # 필터링이 끝나면 반환
             return filtered_fid_list
 
