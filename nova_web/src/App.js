@@ -313,8 +313,8 @@ function App() {
                       className={`logo-st ${getModeClass(brightMode)}`}
                     ></img>
                   </div>
-                  <Link to="/write_feed/long">롱폼작성 페이지지</Link>
-                  <Link to="/test1">test page</Link>
+                  {/* <Link to="/write_feed/long">롱폼작성 페이지지</Link>
+                  <Link to="/test1">test page</Link> */}
 
                   {/* <div className="buttons">
                     <button className="tool-button">
