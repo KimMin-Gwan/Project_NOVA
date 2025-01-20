@@ -9,6 +9,11 @@
     margin-bottom: 10px;
     padding-left: 20px;
   }
+
+  li:hover {
+    cursor: pointer;
+    color: #0056b3; /* 호버 시 색상 변경 */
+  }
 }
 
 .LinkBox {

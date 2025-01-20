@@ -48,7 +48,10 @@ export default function Board({ boardData, setBoard }) {
       </div>
 
       <BoardTitle>노바 펀딩</BoardTitle>
-      <BoardContent />
+      <ul className="Board_content">
+        <li>공식 판매 굿즈</li>
+        <li>펀딩 상품</li>
+      </ul>
     </div>
   );
 }
