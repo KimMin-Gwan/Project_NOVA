@@ -1,6 +1,6 @@
 import style from "./FilterModal.module.css";
 import "./FilterModal.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function FilterModal({
   isFilterClicked,
@@ -45,21 +45,18 @@ export default function FilterModal({
     { id: 2, value: "", name: "전체" },
   ];
 
-  let boolData = [true, false]
-
-  let [isClickedFilterBoard, setIsClickedFilterBoard] = useState([]);
-  let [isClickedFilterContent, setIsClickedFilterContent] = useState(0);
+  let [isClickedFilterBoard, setIsClickedFilterBoard] = useState([4]);
+  let [isClickedFilterContent, setIsClickedFilterContent] = useState(2);
 
   function onClickFilterBoard(i) {
     setIsClickedFilterBoard((prev) => {
-      // return i === 4 ? [i] : [...prev, i];
-
       if (prev.includes(i)) {
         return prev.filter((item) => item !== i);
       }
       return i === 4 ? [i] : [...prev.filter((item) => item !== 4), i];
     });
-    console.log(isClickedFilterBoard);
+    // console.log(isClickedFilterBoard);
+
     setFilterCategory((prev) => {
       const data = FilterData[i].value;
 
@@ -70,17 +67,38 @@ export default function FilterModal({
         ? [data]
         : [...prev.filter((item) => item !== FilterData[4].value), data];
     });
+
+    const selectBoard = [...isClickedFilterBoard, i];
+    let uniqueBoard;
+    if (i === 4) {
+      uniqueBoard = [4];
+    } else {
+      uniqueBoard = selectBoard.filter((item) => item !== 4);
+      uniqueBoard = [...new Set(uniqueBoard)];
+    }
+    localStorage.setItem("board", JSON.stringify(uniqueBoard));
   }
+
+  useEffect(() => {
+    let boardData = JSON.parse(localStorage.getItem("board"));
+    setIsClickedFilterBoard(boardData);
+
+    let contentData = JSON.parse(localStorage.getItem("content"));
+    setIsClickedFilterContent(contentData);
+  }, []);
+
   function onClickFilterContent(i) {
     setIsClickedFilterContent(i);
     setFilterFclass(ContentData[i].value);
+    const selectContent = i;
+    localStorage.setItem("content", JSON.stringify(selectContent));
   }
 
   function onClickApplyButton2() {
-    onClickApplyButton1()
+    onClickApplyButton1();
     fetchAllFeed(true);
+    onClickFilterButton();
   }
-
 
   return (
     <div className="wrapper-container" onClick={onClickFilterButton}>
@@ -137,7 +155,9 @@ export default function FilterModal({
           </button>
           <button
             className="apply_button"
-            onClick={() => { onClickApplyButton2()}}
+            onClick={() => {
+              onClickApplyButton2();
+            }}
           >
             적용
           </button>
