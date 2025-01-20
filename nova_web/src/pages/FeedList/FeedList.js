@@ -16,6 +16,7 @@ import RightBar from "./../WideVer/RightBar.js";
 import style from "./FeedHashList.module.css";
 import NoticeBox from "../../component/NoticeBox/NoticeBox.js";
 import CategoryModal from "../../component/CategoryModal/CategoryModal.js";
+import NoneFeed from "../../component/NoneFeed/NoneFeed.js";
 
 export default function FeedList(isUserState) {
   const [params] = useSearchParams();
@@ -100,10 +101,8 @@ export default function FeedList(isUserState) {
   //};
 
   function onClickApplyButton1() {
-    console.log("hello?");
     setNextData(-1);
     console.log(nextData);
-    console.log("bitch");
   }
 
   async function fetchAllFeed(clickedFetch) {
@@ -130,7 +129,6 @@ export default function FeedList(isUserState) {
     };
 
     if (type === "all" || isClickedFetch) {
-      console.log("ma nigga");
       await fetch(`${FETCH_URL}all_feed`, {
         method: "POST",
         credentials: "include",
@@ -333,8 +331,6 @@ export default function FeedList(isUserState) {
         if (!entry.isIntersecting) return;
         if (isLoading) return;
 
-        // console.log("???????");
-
         // fetchAllFeed();
         fetchPlusData();
       });
@@ -473,7 +469,7 @@ export default function FeedList(isUserState) {
           </div>
         )}
         <div className={style["scroll-area"]}>
-          {feedData &&
+          {feedData.length > 0 ? (
             feedData.map((feed, i) => {
               return (
                 <Feed
@@ -489,7 +485,10 @@ export default function FeedList(isUserState) {
                   handleInteraction={handleInteraction}
                 ></Feed>
               );
-            })}
+            })
+          ) : (
+            <NoneFeed />
+          )}
           {isLoading && <p>Loading...</p>}
           {isFilterClicked && (
             // <div className={style["filter-modal"]}>

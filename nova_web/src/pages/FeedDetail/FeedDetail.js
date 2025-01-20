@@ -1,9 +1,4 @@
-import {
-  useLocation,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from "react-router-dom";
+import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { ContentFeed } from "../../component/feed";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -33,6 +28,7 @@ export default function FeedDetail({ feed }) {
 
   let [feedData, setFeedData] = useState([]);
   let [comments, setComments] = useState([]);
+  let [interaction, setInteraction] = useState();
 
   async function fetchFeed() {
     await fetch(
@@ -43,6 +39,8 @@ export default function FeedDetail({ feed }) {
     )
       .then((response) => response.json())
       .then((data) => {
+        console.log("detail", data);
+        setInteraction(data.body.interaction);
         setFeedData(data.body.feed[0]);
         setIsLoading(false);
       });
@@ -166,7 +164,11 @@ export default function FeedDetail({ feed }) {
       </div>
 
       <div>
-        <ContentFeed feed={feedData} handleCheckStar={handleCheckStar} />
+        <ContentFeed
+          feed={feedData}
+          interaction={interaction}
+          handleCheckStar={handleCheckStar}
+        />
       </div>
 
       <div className={style["comment-container"]}>
