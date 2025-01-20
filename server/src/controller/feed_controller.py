@@ -228,6 +228,23 @@ class Feed_Controller:
 
         return model
 
+    def search_feed_with_keyword(self, database:Local_Database,
+                                 request, feed_search_engine:FeedSearchEngine,
+                                 num_feed=15):
+        model = FeedSearchModel(database=database)
+
+        # 유저 세팅
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
+
+        model.try_search_feed_with_keyword(
+            keyword=request.data_payload.keyword,
+            feed_search_engine=feed_search_engine,
+            num_feeds = num_feed,
+        )
+
+        return model
+
     ## 예전에 쓰던거
 
     #def get_home_feed_data(self, database:Local_Database,

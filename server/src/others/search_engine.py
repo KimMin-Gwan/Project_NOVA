@@ -36,7 +36,7 @@ from collections import Counter, OrderedDict
 # 클래스 목적 : 피드를 검색하거나, 조건에 맞는 피드를 제공하기 위함
 class ManagedFeed:
     def __init__(self, fid="", like=0, date=None, uname="", fclass="",
-                 board_type="", hashtag=[], bid="", iid="", num_images=0):
+                 board_type="", hashtag=[], body="", bid="", iid="", num_images=0):
         self.fid=fid
         self.fclass = fclass
         self.like=like
@@ -44,6 +44,7 @@ class ManagedFeed:
         self.uname = uname
         self.hashtag = hashtag
         self.board_type = board_type
+        self.body = body
         self.bid = bid
         self.iid = iid
         self.num_images = num_images
@@ -57,6 +58,7 @@ class ManagedFeed:
         print("uname: ", self.uname)
         print("hashtag: ", self.hashtag)
         print("board_type: ", self.board_type)
+        print("body: ", self.body)
         print("bid: ", self.bid)
         print("iid: ", self.iid)
         print("num_images: ", self.num_images)
@@ -70,6 +72,7 @@ class ManagedFeed:
             "uname": self.uname,
             "hashtag": self.hashtag,
             "board_type": self.board_type,
+            "body": self.body,
             "bid": self.bid,
             "iid": self.iid,
             "num_images": self.num_images
@@ -589,8 +592,12 @@ class FeedSearchEngine:
         elif target_type == "bid":
             result_fid, result_index = self.__search_manager.search_feed_with_bid(bid=target, num_feed=num_feed, index=index)
 
+        elif target_type == "keyword":
+
         #elif target_type == "string":
             #result, key = self.__search_manager.search_feed_with_string(string=target, key=key)
+
+
         else:
             print("default 가 입력됨")
             pass
@@ -651,74 +658,7 @@ class FeedSearchEngine:
     def try_feed_with_bid_n_filtering(self, target_bids:list[str]=[""], category=""):
         return self.__filter_manager.filtering_community(bids=target_bids, category=category)
 
-        # elif search_type == "just_bias":
-        #     fid_list = self.__filter_manager.filtering_community(bids=target_bids)
-        #
-        # elif search_type == "board_only":
-        #     fid_list = self.__filter_manager.filtering_board_no_bid(board_type=board_type)
-        #
-        # elif search_type == "bias_and_board":
-        #     fid_list = self.__filter_manager.filtering_board_community(bid=target_bids[0], board_type=board_type)
-        #
-        # return fid_list
-
-    # def try_feed_with_bid_n_filtering(self, target_bids:list[str]=[""], category="", search_type="default"):
-    #     fid_list = []
-    #
-    #     if search_type == "default":
-    #         fid_list = self.__filter_manager.filtering_community(bids=target_bids)
-    #
-    #     elif search_type == "just_bias":
-    #         fid_list = self.__filter_manager.filtering_community(bids=target_bids)
-    #
-    #     elif search_type == "board_only":
-    #         fid_list = self.__filter_manager.filtering_board_no_bid(board_type=board_type)
-    #
-    #     elif search_type == "bias_and_board":
-    #         fid_list = self.__filter_manager.filtering_board_community(bid=target_bids[0], board_type=board_type)
-    #
-    #     return fid_list
-
-
-
-#---------------------주의! 이 함수들은 쳐낼 예정입니다. 필터링 옵션의 확정에 따라 함수를 새로 만들었습니다.---------------------------------------
-    # 최애 페이지에서 요청
-    # def try_feed_with_bid_n_filtering(self, target_bids:list[str]=[""], board_type="default",
-    #                                   page_size=-1, last_fid="", search_type="default"
-    #                                   ):
-    #     result = []
-    #
-    #     # 선택 없음 상태에서 요청
-    #     if search_type == "default":
-    #         result = self.__filter_manager.filtering_community(page_size=page_size, last_fid=last_fid, bids=target_bids)
-    #
-    #     # bias만 선택했을 때 요청
-    #     elif search_type == "just_bias":
-    #         result = self.__filter_manager.filtering_community(page_size=page_size, last_fid=last_fid, bids=target_bids)
-    #
-    #     # 야 이건 Bias 선택안하면 Board는 전체로만 나와야하는거 아니냐
-    #     # Bias마다 Board가 다 달라지는거라고 생각했는ㄷ
-    #
-    #     # bias를 선택하지 않고 board만 선택했을 때 요청
-    #     # 이것만 추가되면됨 -> bid 말고 bids (list) 로 변경
-    #     elif search_type == "board_only":
-    #         result = self.__filter_manager.filtering_board_no_bid(board_type=board_type,
-    #                                                                  last_fid=last_fid, page_size=page_size)
-    #
-    #     # bias와 board를 모두 선택했들 때 요청
-    #     elif search_type == "bias_and_board":
-    #         result = self.__filter_manager.filtering_board_community(bid=target_bids[0], board_type=board_type,
-    #                                                                  last_fid=last_fid, page_size=page_size)
-    #
-    #     # 마지막 feed의 fid 반환
-    #     if result:
-    #         last_fid = result[-1]
-    #
-    #     return result, last_fid
-
 #-----------------------------------------------------------------------------------------------------------
-
-
 
     # 여기도 아직 하지 말것 
     # 목적 : 숏피드에서 다음 피드 제공 받기
@@ -1334,22 +1274,6 @@ class FilteringManager:
     # BID로 필터링 하는 작업 수행, 카테고리별 필터링도 진행 됨
     def filtering_community(self, bids:list, category:str):
         return self.__managed_feed_bias_table.filtering_bias_community(bids=bids, board_type=category)
-
-#------------------------------------------------------------------------------------
-    #
-    # def filtering_community(self, page_size, bids:list, last_fid=""):
-    #     # Search Engine에 들어가기 전에 BID 리스트를 검사할거임
-    #     # BID 리스트 요소는 1개가 될 수 있고, 아니면 선택을 하지 않아서 여러 개가 될 수 있음.
-    #     return self.__managed_feed_bias_table.filtering_bias_community(bids=bids, last_fid=last_fid, page_size=page_size)
-    #
-    # def filtering_board_no_bid(self, board_type:str, page_size:int, last_fid=""):
-    #     return self.__managed_feed_bias_table.filtering_board_without_bid(board_type=board_type, page_size=page_size, last_fid=last_fid)
-    #
-    # def filtering_board_community(self, bid:str, board_type:str, page_size:int, last_fid:str=""):
-    #     # 게시판 타입마다 필터링하는 함수.
-    #     return self.__managed_feed_bias_table.filtering_community_board(bid=bid, board_type=board_type, last_fid=last_fid, page_size=page_size)
-
-#---------------------------------------------------------------------------------------------
 
 # --------------------------------------------------------------------------------------------
 

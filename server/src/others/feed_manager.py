@@ -1872,3 +1872,5 @@ class FeedManager:
             last_index_next = fid_list.index(fid_list[last_index + page_size])
 
         return paging_list, last_index_next
+
+#-------------------------------------------------------------------------------------------------------------

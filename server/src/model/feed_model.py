@@ -404,6 +404,10 @@ class FeedSearchModel(FeedModel):
         self._send_data = self.__set_send_data(feeds=feeds)
         return
 
+    def try_search_feed_with_keyword(self, feed_search_engine:FeedSearchEngine,
+                                    target="", num_feed=1):
+        searched_fid_list = feed_search_engine.try_search_feed_with_keyword(keyword=target)
+
     def get_response_form_data(self, head_parser):
         try:
             body = {
