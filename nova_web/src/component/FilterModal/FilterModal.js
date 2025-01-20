@@ -81,10 +81,11 @@ export default function FilterModal({
 
   useEffect(() => {
     let boardData = JSON.parse(localStorage.getItem("board"));
-    setIsClickedFilterBoard(boardData);
-
     let contentData = JSON.parse(localStorage.getItem("content"));
-    setIsClickedFilterContent(contentData);
+    if (boardData || contentData) {
+      setIsClickedFilterBoard(boardData);
+      setIsClickedFilterContent(contentData);
+    }
   }, []);
 
   function onClickFilterContent(i) {
