@@ -264,7 +264,7 @@ function App() {
 
       {/* 테스트 페이지 및 에러 페이지 */}
       <Route path="/test" element={<LongFormWrite />}></Route>
-      <Route path="/test1" element={<Editor />}></Route>
+      <Route path="/test1" element={<NavBar />}></Route>
       <Route path="*" element={<div>404 Error</div>}></Route>
 
       {/* 미사용 페이지 */}

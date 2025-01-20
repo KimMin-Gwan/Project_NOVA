@@ -1147,6 +1147,32 @@ body.dark-mode {
   /* overflow: hidden; */
 }
 
+.write_select {
+  position: absolute;
+  /* width: 100px; */
+  /* padding: 10px; */
+  height: 100px;
+  background-color: white;
+  bottom: 70px;
+  display: flex;
+  gap: 10px;
+  border-radius: 5px;
+  padding: 5px 5px 10px;
+  align-items: flex-start;
+  justify-content: space-evenly;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 60%, 65% 60%, 50% 100%, 35% 60%, 0 60%);
+  div {
+    height: 50px;
+    width: 50px;
+    /* background-color: gray; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    cursor: pointer;
+  }
+}
+
 .main-container {
   width: 600px;
   /* height: auto; */

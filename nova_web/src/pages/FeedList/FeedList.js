@@ -91,35 +91,34 @@ export default function FeedList(isUserState) {
   const FETCH_URL = "https://nova-platform.kr/feed_explore/";
 
   //let send_form = {
-    //header: header,
-    //body: {
-      //key: nextData,
-      //category: filterCategory || [""],
-      //fclass: filterFclass || "",
-    //},
+  //header: header,
+  //body: {
+  //key: nextData,
+  //category: filterCategory || [""],
+  //fclass: filterFclass || "",
+  //},
   //};
 
-  function onClickApplyButton1(){
-    console.log("hello?")
-    setNextData(-1)
-    console.log(nextData)
-    console.log("bitch")
+  function onClickApplyButton1() {
+    console.log("hello?");
+    setNextData(-1);
+    console.log(nextData);
+    console.log("bitch");
   }
 
   async function fetchAllFeed(clickedFetch) {
+    let updatedNextData = -1;
 
-    let updatedNextData = -1
-    
     //  만약 적용 버튼을 누르면 -1로 세팅
     if (clickedFetch) {
-      updatedNextData = -1
+      updatedNextData = -1;
       setNextData(-1);
     }
     // 그게 아닌 상황에서는 기존의 nextData 를 사용
-    else{
-      updatedNextData = nextData
+    else {
+      updatedNextData = nextData;
     }
-    
+
     // 지역변수로 사용하기로함
     let send_form = {
       header: header,
@@ -127,11 +126,11 @@ export default function FeedList(isUserState) {
         key: updatedNextData, // 여기에서  사용됨
         category: filterCategory || [""],
         fclass: filterFclass || "",
-        },
+      },
     };
 
     if (type === "all" || isClickedFetch) {
-      console.log("ma nigga")
+      console.log("ma nigga");
       await fetch(`${FETCH_URL}all_feed`, {
         method: "POST",
         credentials: "include",
@@ -243,7 +242,6 @@ export default function FeedList(isUserState) {
           console.log("mor2", data);
         });
     } else if (type === "all" || isClickedFetch) {
-      
       // 지역 변수 데이터로 활용하기로함
       let send_form = {
         header: header,
@@ -251,9 +249,8 @@ export default function FeedList(isUserState) {
           key: nextData,
           category: filterCategory || [""],
           fclass: filterFclass || "",
-          },
+        },
       };
-
 
       fetch(`${FETCH_URL}all_feed`, {
         method: "POST",
@@ -361,7 +358,7 @@ export default function FeedList(isUserState) {
     return () => {
       setFeedData([]);
     };
-  }, [keyword]);
+  }, []);
 
   let [isOpendCategory, setIsOpendCategory] = useState(false);
 
@@ -416,7 +413,7 @@ export default function FeedList(isUserState) {
             </button>
           </div>
         </header>
-        {type == "bias" && (
+        {type === "bias" && (
           <div className={style["bias-section"]}>
             <BiasBoxes
               setBiasId={setBiasId}

@@ -6,6 +6,8 @@ import menuBtn_img from "./../img/menuBtn.png";
 import galaxy_img from "./../img/galaxy3.png";
 import shortForm_img from "./../img/short_form2.png";
 import new_feed from "./../img/new_feed2.png";
+import moment from "./../img/moment_img.png";
+import post from "./../img/post_img.png";
 
 import home_icon from "./../img/home_icon.png";
 import menu3 from "./../img/menu3.png";
@@ -18,8 +20,10 @@ const NavBar = ({ isUserState, brightMode }) => {
 
   let navigate = useNavigate();
 
-  const toggleNavBar = () => {
-    setIsVisible(!isVisible);
+  let [writeOptions, setWriteOptions] = useState(false);
+
+  const onClickWrite = () => {
+    setWriteOptions(!writeOptions);
   };
 
   function handleNavigate(path) {
@@ -49,11 +53,35 @@ const NavBar = ({ isUserState, brightMode }) => {
         </button>
       </div>
 
-      <div className="nav_button_box">
+      <div className="nav_button_box write_button_hover">
+        {writeOptions && (
+          <div className="write_select">
+            <div
+              onClick={() => {
+                handleNavigate("/write_feed/short");
+              }}
+            >
+              <div className="img-box">
+                <img src={moment} alt="moment" />
+              </div>
+              모멘트
+            </div>
+            <div
+              onClick={() => {
+                handleNavigate("/write_feed/long");
+              }}
+            >
+              <div className="img-box">
+                <img src={post} alt="post" />
+              </div>
+              포스트
+            </div>
+          </div>
+        )}
         <button
           className="nav_button"
           onClick={(e) => {
-            handleNavigate("/write_feed/short");
+            onClickWrite();
             handleStopClick(e);
           }}
         >
