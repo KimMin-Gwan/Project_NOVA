@@ -4,6 +4,13 @@
   margin: 0 auto;
   background-color: #f1f7ff;
   position: relative;
+
+  li,
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
 }
 
 .backword {
@@ -14,6 +21,10 @@
   width: 100%; /* 너비를 원하는 비율로 설정 */
   height: 30px;
   padding: 10px 15px;
+  margin-bottom: 40px;
+  p {
+    color: #797979;
+  }
 }
 
 .logout_box {
@@ -23,9 +34,82 @@
   background-color: white;
   border-radius: 10px;
   margin-top: 15px;
-
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
+}
+
+.user-container {
+  position: relative;
+
+  .user-name {
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    padding-bottom: 63px;
+    z-index: 2;
+    & h3 {
+      font-size: 25px;
+      font-weight: 400;
+      margin-bottom: 0;
+    }
+
+    & img {
+      width: 40px;
+      height: 40px;
+      position: absolute;
+      right: 0px;
+      margin-right: 20px;
+    }
+  }
+
+  .user-info {
+    background-color: white;
+    & ul {
+      display: flex;
+      padding-inline: 20px;
+      justify-content: center;
+
+      & li {
+        width: 100%;
+
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        & b {
+          font-size: 24px;
+        }
+        & p {
+          font-size: 14px;
+          color: #585858;
+          margin-top: 5px;
+        }
+      }
+    }
+  }
+}
+
+.info-list {
+  .post-list {
+    display: flex;
+    background-color: #fff;
+
+    .post {
+      cursor: pointer;
+      margin: 10px 0;
+      transition: border-bottom 0.3s ease;
+      padding-inline: 18px;
+      margin: 0;
+      p {
+        margin-block: 15px;
+        padding-bottom: 4px;
+      }
+    }
+
+    .post.active p {
+      border-bottom: 3px solid #1082f4;
+    }
+  }
 }

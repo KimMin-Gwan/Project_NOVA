@@ -4,6 +4,7 @@ import { Routes, Route, useNavigate, Link } from "react-router-dom";
 import Banner from "./component/banner";
 import MyBias from "./Container/myBiasContainer";
 import MyPage from "./pages/MyPage/Mypage";
+import MyPageEdit from "./pages/MyPage/MypageEdit";
 import menu from "./img/menu-burger.png";
 import NOVALogin from "./pages/NovaLogin/NovaLogin";
 import SelectBias from "./component/selectBias/SelectBias";
@@ -228,11 +229,9 @@ function App() {
   return (
     <Routes>
       {/* 더보기 페이지 / 마이페이지 */}
-      <Route
-        path="/more_see"
-        element={<MoreSee onModeChange={handleModeChange} />}
-      ></Route>
+      <Route path="/more_see" element={<MoreSee onModeChange={handleModeChange} />}></Route>
       <Route path="/mypage" element={<MyPage />}></Route>
+      <Route path="/mypage_edit" element={<MyPageEdit />}></Route>
 
       {/* 로그인 및 비밀번호 및 회원가입 */}
       <Route path="/novalogin" element={<NOVALogin brightMode={brightMode} />}></Route>
@@ -261,10 +260,7 @@ function App() {
       <Route path="/search" element={<SearchPage />}></Route>
 
       {/* 펀딩 페이지 목록 */}
-      <Route
-        path="/nova_funding"
-        element={<NovaFunding brightMode={brightMode} />}
-      ></Route>
+      <Route path="/nova_funding" element={<NovaFunding brightMode={brightMode} />}></Route>
       <Route path="/like_funding" element={<LikeFunding />}></Route>
       <Route path="/duck_funding" element={<DuckFunding />}></Route>
       <Route path="/funding_project/:type" element={<SuccessFunding />}></Route>
@@ -318,11 +314,7 @@ function App() {
                       navigate("/");
                     }}
                   >
-                    <img
-                      src={logo2}
-                      alt="logo"
-                      className={`logo-st ${getModeClass(brightMode)}`}
-                    ></img>
+                    <img src={logo2} alt="logo" className={`logo-st ${getModeClass(brightMode)}`}></img>
                   </div>
                   {/* <Link to="/write_feed/long">롱폼작성 페이지지</Link>
                   <Link to="/test1">test page</Link> */}
@@ -403,14 +395,7 @@ function App() {
                   endPoint={`/feed_list?type=weekly_best`}
                 />
 
-                <FeedThumbnail
-                  title={"전체 글"}
-                  img_src={all_post}
-                  feedData={allFeed}
-                  brightMode={brightMode}
-                  allPost={<AllPost allFeed={allFeed} />}
-                  endPoint={"/feed_list?type=all"}
-                />
+                <FeedThumbnail title={"전체 글"} img_src={all_post} feedData={allFeed} brightMode={brightMode} allPost={<AllPost allFeed={allFeed} />} endPoint={"/feed_list?type=all"} />
                 {/* <AllPost brightMode={brightMode} /> */}
               </section>
               <NavBar brightMode={brightMode}></NavBar>

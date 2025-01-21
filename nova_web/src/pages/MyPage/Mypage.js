@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 import style from "./Mypage.module.css";
 import backword from "./../../img/back_icon.png";
-
+import MyEdit from "./../MyPage/MypageEdit";
 function MyPage() {
   let navigate = useNavigate();
 
@@ -10,28 +11,11 @@ function MyPage() {
     navigate(page);
   }
 
-  const handleLogout = (e) => {
-    e.preventDefault();
-    fetch("https://nova-platform.kr/user_home/try_logout", {
-      credentials: "include",
-    })
-      .then((response) => {
-        if (!response.ok) {
-          return response.text().then((text) => {
-            throw new Error(`Error: ${response.status}, ${text}`);
-          });
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log(data);
-        navigate("/");
-      })
-      .catch((error) => {
-        console.error("Logout error:", error);
-      });
-  };
+  const [activeIndex, setActiveIndex] = useState(null);
 
+  const handleClick = (index) => {
+    setActiveIndex(index);
+  };
   return (
     <div className={style.container}>
       <div className={style.top_area}>
@@ -44,30 +28,48 @@ function MyPage() {
           뒤로
         </p>
       </div>
-      <div>이미지</div>
-      <div>
-        <section>
-          <h3>사용자 이름</h3> <img src={backword} alt="" />
-        </section>
-        <section>
-          <ul>
-            <li>
-              <p>23</p>
-              <p>포스트</p>
-            </li>
-          </ul>
-        </section>
-        <section>
-          <ul>
-            <li>
-              <p>23</p>
-              <p>포스트</p>
-            </li>
-          </ul>
-        </section>
-      </div>
-      <div className={`${style["logout_box"]}`} onClick={handleLogout} style={{ cursor: "pointer" }}>
-        로그아웃
+      <div className={style["user-container"]}>
+        <div className={style["user-img"]}>이미지</div>
+        <div>
+          <section className={style["user-name"]}>
+            <h3>사용자 이름</h3>{" "}
+            <img
+              src={backword}
+              alt=""
+              onClick={(e) => handleMovePage(e, "/mypage_edit")} // 클릭 시 /yourPage로 이동
+              style={{ cursor: "pointer" }}
+            />
+          </section>
+          <section className={style["user-info"]}>
+            <ul>
+              <li>
+                <b>23</b>
+                <p>포스트</p>
+              </li>
+              <li>
+                <b>23</b>
+                <p>포스트</p>
+              </li>
+              <li>
+                <b>23</b>
+                <p>포스트</p>
+              </li>
+              <li>
+                <b>23</b>
+                <p>포스트</p>
+              </li>
+            </ul>
+          </section>
+          <section className={style["info-list"]}>
+            <ul className={style["post-list"]}>
+              {["포스트", "모멘트", "좋아요", "댓글"].map((post, index) => (
+                <li key={index} className={`${style.post} ${activeIndex === index ? style.active : ""}`} onClick={() => handleClick(index)}>
+                  <p>{post}</p>
+                </li>
+              ))}
+            </ul>
+          </section>
+        </div>
       </div>
     </div>
   );
