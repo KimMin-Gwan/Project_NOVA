@@ -6,7 +6,7 @@ const useTagStore = create((set) => ({
   loading: false,
   error: null,
 
-  fetchData: async () => {
+  fetchTagList: async () => {
     set({ loading: true, error: null });
     try {
       const res = await getTagList();

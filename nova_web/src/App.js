@@ -183,10 +183,10 @@ function App() {
   //     });
   //   }
 
-  let { tagList, loading, fetchData } = useTagStore();
+  let { tagList, loading, fetchTagList } = useTagStore();
 
   useEffect(() => {
-    fetchData();
+    fetchTagList();
     // fetchTagData();
     // getTagList().then((data) => {
     //   setTagList(data.body.hashtags);

@@ -10,10 +10,10 @@ export default function SearchPage() {
   let navigate = useNavigate();
   //   let [tagList, setTagList] = useState([]);
 
-  let { tagList, loading, error, fetchData } = useTagStore();
+  let { tagList, loading, error, fetchTagList } = useTagStore();
 
   useEffect(() => {
-    fetchData();
+    fetchTagList();
     // getTagList().then((data) => {
     //   setTagList(data.body.hashtags);
     // });
