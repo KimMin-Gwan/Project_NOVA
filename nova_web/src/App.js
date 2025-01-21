@@ -73,6 +73,7 @@ import "@toast-ui/editor/dist/i18n/ko-kr";
 import "@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css";
 import SearchPage from "./pages/SearchPage/SearchPage.js";
 import getTagList from "./services/getTagList.js";
+import useTagStore from "./stores/tagList/useTagStore.js";
 
 // 다크 모드 클래스 반환 함수
 export function getModeClass(mode) {
@@ -169,7 +170,7 @@ function App() {
     handleValidCheck();
   }, []);
 
-  let [tagList, setTagList] = useState([]);
+  // let [tagList, setTagList] = useState([]);
 
   // console.log("ada", tagLists);
   // function fetchTagData() {
@@ -182,11 +183,14 @@ function App() {
   //     });
   //   }
 
+  let { tagList, loading, fetchData } = useTagStore();
+
   useEffect(() => {
+    fetchData();
     // fetchTagData();
-    getTagList().then((data) => {
-      setTagList(data.body.hashtags);
-    });
+    // getTagList().then((data) => {
+    //   setTagList(data.body.hashtags);
+    // });
   }, []);
 
   const [currentIndex, setCurrentIndex] = useState(0); // 현재 표시 중인 태그 인덱스

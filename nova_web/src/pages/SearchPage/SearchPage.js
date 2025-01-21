@@ -18,6 +18,10 @@ export default function SearchPage() {
     //   setTagList(data.body.hashtags);
     // });
   }, []);
+
+  if (loading) {
+    return <div>loading...</div>;
+  }
   return (
     <div className="container">
       <header className="header">
