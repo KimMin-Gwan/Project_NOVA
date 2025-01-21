@@ -594,7 +594,8 @@ class FeedSearchEngine:
 
         elif target_type == "keyword":
 
-        #elif target_type == "string":
+        elif target_type == "string":
+            pass
             #result, key = self.__search_manager.search_feed_with_string(string=target, key=key)
 
 
