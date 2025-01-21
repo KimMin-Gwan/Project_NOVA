@@ -593,9 +593,8 @@ class FeedSearchEngine:
             result_fid, result_index = self.__search_manager.search_feed_with_bid(bid=target, num_feed=num_feed, index=index)
 
         elif target_type == "keyword":
-
-        elif target_type == "string":
             pass
+        # elif target_type == "string":
             #result, key = self.__search_manager.search_feed_with_string(string=target, key=key)
 
 
