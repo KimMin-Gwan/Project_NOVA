@@ -1,4 +1,4 @@
-from model import FeedModel, Local_Database, FeedEditModel, FeedSearchModel, FilteredFeedModel
+from model import FeedModel, Local_Database, FeedEditModel, FeedSearchModel, FilteredFeedModel, FeedSearchModelNew
 from fastapi import HTTPException, status
 from others import CustomError, FeedManager, FeedSearchEngine
 
@@ -231,7 +231,7 @@ class Feed_Controller:
     def search_feed_with_keyword(self, database:Local_Database,
                                  request, feed_search_engine:FeedSearchEngine,
                                  num_feed=15):
-        model = FeedSearchModel(database=database)
+        model = FeedSearchModelNew(database=database)
 
         # 유저 세팅
         if request.jwt_payload != "":
