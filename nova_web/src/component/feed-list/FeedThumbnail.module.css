@@ -48,21 +48,24 @@
 .search-section {
   width: 100%;
   display: flex;
-  margin-block: 20px;
+  margin-bottom: 20px;
+  /* margin-block: 20px; */
   position: relative;
+  cursor: pointer;
 
   .search-box {
     margin: 0 auto;
     width: 85%;
+    color: #1a80e6;
     padding: 15px;
     border-radius: 10px;
     background-color: #f1f7ff;
     border: 1px solid #359aff;
   }
 
-  .search-box::placeholder {
+  /* .search-box::placeholder {
     color: #1a80e6;
-  }
+  } */
 
   .search-btn {
     position: absolute;
