@@ -7,6 +7,7 @@ import { useRef } from "react";
 
 import back from "./../../img/backword.png";
 import star from "./../../img/favorite.png";
+import FilterModal from "../../component/FilterModal/FilterModal";
 
 export default function FeedDetail({ feed }) {
   let navigate = useNavigate();
@@ -59,6 +60,7 @@ export default function FeedDetail({ feed }) {
     )
       .then((response) => response.json())
       .then((data) => {
+        console.log("comment all", data);
         setComments(data.body.comments);
         setIsLoading(false);
       });
@@ -102,7 +104,25 @@ export default function FeedDetail({ feed }) {
   let [commentValue, setCommentValue] = useState("");
 
   function onChangeComment(e) {
+    // if (commentId) {
+    //   setCommentValue(commentId + e.target.value);
+    // }
+    //   setCommentValue((prev)=>{
+    //     if(prev.includes('@')){
+
+    //       return e.target.value
+    //     }else {
+
+    //   }
+    // }
     setCommentValue(e.target.value);
+    // setCommentValue((prev) => {
+    //   if (prev.includes("@")) {
+    //     return prev + e.target.value;
+    //   } else {
+    //     return e.target.value;
+    //   }
+    // });
   }
 
   function onKeyDownEnter(e) {
@@ -133,7 +153,7 @@ export default function FeedDetail({ feed }) {
         body: {
           fid: `${fid}`,
           body: `${commentValue}`,
-          target_cid: "",
+          target_cid: commentId,
         },
       }),
     })
@@ -143,8 +163,17 @@ export default function FeedDetail({ feed }) {
         setComments((prevComments) => {
           return [data.body.comments[0], ...prevComments];
         });
+        setCommentId("");
       });
   }
+
+  let [commentId, setCommentId] = useState("");
+
+  const onClickComment = (cid, uname) => {
+    setCommentId(cid);
+    setCommentValue(`@${uname} `);
+    commentRef.current.focus();
+  };
 
   function onClickNav() {
     navigate(-1);
@@ -180,9 +209,19 @@ export default function FeedDetail({ feed }) {
         {/* 댓글 각각 */}
         {comments.length !== 0 &&
           comments.map((comment, i) => {
+            const [firstWord, ...restWords] = comment.body.split(" ");
             return (
-              <div key={comment.cid} className={style["comment-box"]}>
-                <div className={style["comment-wrapper"]}>
+              <div
+                key={comment.cid}
+                className={`${style["comment-box"]} `}
+                onClick={() => {
+                  onClickComment(comment.cid, comment.uname);
+                }}
+              >
+                <div
+                  className={`${style["comment-wrapper"]}
+                ${comment.target_cid && style["comment-recomment"]}`}
+                >
                   <div className={style["comment-user"]}>
                     <div>
                       {comment.uname}
@@ -191,7 +230,12 @@ export default function FeedDetail({ feed }) {
                     <div>신고</div>
                   </div>
 
-                  <div className={style["comment-content"]}>{comment.body}</div>
+                  <div className={style["comment-content"]}>
+                    <span style={{ color: comment.mention ? "#2C59CD" : "black" }}>
+                      {firstWord}{" "}
+                    </span>
+                    {restWords.join("")}
+                  </div>
                   <div className={style["action-container"]}>
                     <div className={style["button-box1"]}>
                       <div className={style["action-button"]}>
@@ -211,6 +255,7 @@ export default function FeedDetail({ feed }) {
               </div>
             );
           })}
+        {comments.target_cid && <div>헤이</div>}
       </div>
       <div className={style["input-container"]}>
         <input
