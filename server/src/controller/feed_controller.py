@@ -238,7 +238,7 @@ class Feed_Controller:
             model.set_user_with_email(request=request.jwt_payload)
 
         model.try_search_feed_with_keyword(
-            keyword=request.data_payload.keyword,
+            target=request.data_payload.keyword,
             feed_search_engine=feed_search_engine,
             num_feeds = num_feed,
         )

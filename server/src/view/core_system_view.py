@@ -367,10 +367,10 @@ class Core_Service_View(Master_View):
             return response
 
         @self.__app.get('/feed_explore/search_feed_with_keyword')
-        def search_with_keyword(request:Request, raw_request:dict):
+        def search_with_keyword(request:Request, key:Optional[int]=-1, keyword:Optional[str]=""):
             request_manager = RequestManager()
 
-            data_payload = KeywordSearchRequest(request=raw_request)
+            data_payload = KeywordSearchRequest(key=key, keyword=keyword)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
             feed_controller =Feed_Controller(feed_manager=self.__feed_manager)
@@ -825,11 +825,9 @@ class AllFeedRequest(RequestHeader):
         self.key= body['key']
 
 class KeywordSearchRequest(RequestHeader):
-    def __init__(self, request) -> None:
-        super().__init__(request)
-        body = request['body']
-        self.key = body['key']
-        self.keywords = body['keywords']
+    def __init__(self, key, keyword) -> None:
+        self.key = key
+        self.keyword = keyword
 
 class HashtagFeedRequest(RequestHeader):
     def __init__(self, hashtag, key=-1) -> None:
