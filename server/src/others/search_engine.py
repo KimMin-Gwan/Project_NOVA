@@ -17,11 +17,12 @@ import asyncio
 import pandas as pd
 from bintrees import AVLTree
 from copy import copy
-from others.data_domain import Feed, User, Bias, Notice
+from others.data_domain import Feed, User, Bias, Notice, Comment
 from datetime import  datetime, timedelta
 from pprint import pprint
 import random
 from collections import Counter, OrderedDict
+
 
 
 #--------------------------------------------------------------------------------------------------
@@ -172,6 +173,7 @@ class ManagedFeedBiasTable:
                                        hashtag=copy(single_feed.hashtag),
                                        uname=single_feed.nickname,
                                        board_type=single_feed.board_type,
+                                       body=single_feed.body,
                                        bid=single_feed.bid,
                                        iid=single_feed.iid,
                                        num_images=len(single_feed.image)
@@ -275,6 +277,7 @@ class ManagedFeedBiasTable:
             uname=feed.nickname,
             hashtag=feed.hashtag,
             board_type=feed.board_type, # 이거 추가됨
+            body=feed.body,
             bid=feed.bid,
             iid=feed.iid,
             num_images=feed.num_image
@@ -296,6 +299,7 @@ class ManagedFeedBiasTable:
         # managed_feed가 가진 데이터로 원본 데이터를 변경
         managed_feed.date = feed.date
         managed_feed.hashtag = feed.hashtag
+        managed_feed.body = feed.body
         managed_feed.like = feed.star
         managed_feed.uname = feed.nickname
 
@@ -399,6 +403,28 @@ class ManagedFeedBiasTable:
 
         return result_fid, result_index
 
+    def search_feeds_with_key_n_option(self, key:str, option):
+        # Nan값의 경우, False 처리.
+        # 대소문자를 구분하지 않음
+        searched_df = self.__feed_df
+
+        if option == "keyword":
+            # 키워드를 통한 서치
+            searched_df = self.__feed_df[self.__feed_df["body"].str.contains(key, case=False, na=False)]
+        elif option == "hashtag":
+            # 해시태그 리스트 안에 들어있는 해시태그들 중 하나만 있어도 찾는다.
+            searched_df = self.__feed_df[self.__feed_df["hashtag"].apply(lambda hashtag: key in hashtag)]
+        elif option == "uname":
+            # 닉네임 서치
+            searched_df = self.__feed_df[self.__feed_df["uname"] == key]
+        elif option == "bid":
+            # bid 서치
+            searched_df = self.__feed_df[self.__feed_df["bid"] == key]
+        elif option == "fid":
+            # fid 서치
+            searched_df = self.__feed_df[self.__feed_df["fid"] == key]
+
+        return searched_df['fid'].tolist()
     #---------------------------------------------------------------------------------------------
 
     # 최애의 정보 하나 반환
@@ -438,47 +464,6 @@ class ManagedFeedBiasTable:
             filtered_feeds_df = filtered_feeds_df[filtered_feeds_df['board_type'] == board_type]
         return filtered_feeds_df['fid'].tolist()
 
-#---------------------------------------------------------------------------------------------
-    # 바이어스 커뮤니티에 따라 Feed를 분류함
-    # 데이터프레임 활용
-    # def __paging_list_df(self, fid_list:list, fid, page_size):
-    #     # 이미 Date 최신순으로 정렬되어서 맨처음이 젤 최신의 글임
-    #     start_index = 0
-    #
-    #     # 페이징을 하지 않음
-    #     if page_size == -1:
-    #         return fid_list
-    #
-    #     if fid != "":
-    #         start_index = fid_list.index(fid)  # 타겟으로 잡은 구간부터, 불러오기
-    #
-    #     paging_fid_list = fid_list[start_index:]        # 페이징으로 짜르기
-    #     # 만약 자른 리스트가 페이지를 넘어간다면 짤라야한다
-    #     if len(paging_fid_list) > page_size:
-    #         paging_fid_list = paging_fid_list[:page_size]
-    #
-    #     return paging_fid_list
-    #
-    # def filtering_bias_community(self, bids:list, last_fid, page_size:int):
-    #     # Feed DF 중, bids안에 포함된 feed들만 반환함.
-    #     filtered_feeds_df = self.__feed_df[self.__feed_df['bid'].isin(bids)]
-    #     # 필터링된 Feed들의 리스트를 반환, 페이징기법을 적용한다
-    #     return self.__paging_list_df(fid_list=filtered_feeds_df['fid'].tolist(),
-    #                                  fid=last_fid, page_size=page_size)
-    #
-    # # Board만 선택
-    # def filtering_board_without_bid(self, last_fid:str, page_size:int, board_type:str):
-    #     filtered_feeds_df = self.__feed_df[(self.__feed_df['board_type'] == board_type)]
-    #     return self.__paging_list_df(fid_list=filtered_feeds_df['fid'].tolist(),
-    #                                  fid=last_fid, page_size=page_size)
-    #
-    # def filtering_community_board(self, last_fid:str, page_size:int, bid:str, board_type:str):
-    #     # 게시판 분리하여 필터링
-    #     # 이 때, BID를 통한 필터링도 같이 선행되어야 함.
-    #     filtered_feeds_df = self.__feed_df[(self.__feed_df['bid'] == bid) & (self.__feed_df['board_type'] == board_type)]
-    #     return self.__paging_list_df(fid_list=filtered_feeds_df['fid'].tolist(),
-    #                                  fid=last_fid, page_size=page_size)
-#---------------------------------------------------------------------------------------------------------------------
     # 여기서는 추가적인 필터링을 위해 필터링된 FID리스트를 받고, 2차 필터링을 실시하는 곳입니다.
     def filtering_fclass_feed(self, fid_list:list, fclass:str) -> list:
         fid_list_df = self.__feed_df[(self.__feed_df['fid'].isin(fid_list))]
@@ -568,6 +553,31 @@ class FeedSearchEngine:
 
     # 예시 ||  [바위게] 라는 이름을 가진 작성자로 10개의 피드를 요청하는데 이번이 두번 째 요청
     # result , index = try_serach_feed(target_type="uname", target = "바위게", num_feed=10, index=240):
+
+    def try_search_feed_new(self, target_type="default", target=""):
+        result_fid = []
+
+        if target_type == "hashtag":
+            result_fid = self.__search_manager.search_feeds_with_hashtag_new(hashtag=target)
+        elif target_type == "fid":
+            result_fid = self.__search_manager.search_feeds_with_fid_new(fid=target)
+        elif target_type == "uname":
+            result_fid = self.__search_manager.search_feeds_with_uname_new(uname=target)
+        elif target_type == "bid":
+            result_fid = self.__search_manager.search_feeds_with_bid_new(bid=target)
+        elif target_type == "keyword":
+            result_fid = self.__search_manager.search_feeds_with_keyword_new(keyword=target)
+
+        else:
+            print("default 가 입력됨")
+            pass
+
+        return result_fid
+
+    def try_search_comment_new(self, target=""):
+        result_cid = self.__search_manager.search_comments_with_keyword_new(keyword=target)
+        return result_cid
+
     def try_search_feed(self, target_type="default", target = "", num_feed=1, index=-2):
 
         result_fid = []
@@ -601,7 +611,7 @@ class FeedSearchEngine:
         else:
             print("default 가 입력됨")
             pass
-            
+
         return result_fid, result_index
 
     # search_type -> 검색하는 조건
@@ -1020,8 +1030,44 @@ class SearchManager:
         )
         return result_fid, result_index
 
+#--------------------------------------------------------------------------------------------------------------------
+
+    def search_feeds_with_hashtag_new(self, hashtag:str):
+        fid_list = self.__managed_feed_bias_table.search_feeds_with_key_n_option(key=hashtag, option="hashtag")
+        return fid_list
+
+    def search_feeds_with_keyword_new(self, keyword: str):
+        fid_list = self.__managed_feed_bias_table.search_feeds_with_key_n_option(key=keyword, option="keyword")
+        return fid_list
+
+    def search_feeds_with_uname_new(self, uname: str):
+        fid_list = self.__managed_feed_bias_table.search_feeds_with_key_n_option(key=uname, option="keyword")
+        return fid_list
+
+    def search_feeds_with_bid_new(self, bid: str):
+        fid_list = self.__managed_feed_bias_table.search_feeds_with_key_n_option(key=bid, option="keyword")
+        return fid_list
+
+    def search_feeds_with_fid_new(self, fid: str):
+        fid_list = self.__managed_feed_bias_table.search_feeds_with_key_n_option(key=fid, option="keyword")
+        return fid_list
+
+    # 댓글 검색
+    def search_comments_with_keyword_new(self, keyword: str):
+        comment_datas = self.__database.get_all_data(target="comment")
+        result_cids = []
+
+        for comment_data in comment_datas:
+            comment=Comment()
+            comment.make_with_dict(comment_data)
+            if keyword in comment.body:
+                result_cids.append(comment.cid)
+
+        return result_cids
+
+
     # def search_feed_with_string(self, string, num_feed=10) -> list: #본문 내용을 가지고 찾는거같음
-        #return self.__feed_algorithm.get_feed_with_string(string,num_feed)
+    #return self.__feed_algorithm.get_feed_with_string(string,num_feed)
 
 # 이건 사용자에게 맞는 데이터를 주려고 만든거
 class RecommendManager:

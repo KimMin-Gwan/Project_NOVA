@@ -55,7 +55,8 @@ class FeedModel(BaseModel):
         send_data = self.__set_send_data(feeds=feeds, interactions=interactions)
         
         return send_data
-        
+
+
 
     def set_feed_data(self, feed_search_engine:FeedSearchEngine, feed_manager,
                         target_type="default", target="", num_feed=1, index=-1):
@@ -308,6 +309,73 @@ class FeedEditModel(BaseModel):
         except Exception as e:
             raise CoreControllerLogicError("response making error | " + e)
 
+class FeedSearchModelNew(FeedModel):
+    def __init__(self, database:Local_Database) -> None:
+        super().__init__(database)
+        self.__history = []
+
+    def _make_comment_data(self, cid_list):
+        comment_datas = self._database.get_data_with_ids(target_id="cid", ids=cid_list)
+        comments = []
+
+        for comment_data in comment_datas:
+            comment=Comment()
+            comment.make_with_dict(comment_data)
+            comments.append(comment)
+
+        return comments
+
+
+    def try_search_feed_with_keyword(self, feed_search_engine:FeedSearchEngine,
+                                     feed_manager:FeedManager, target="", last_index=-1, num_feed=8):
+        searched_fid_list = feed_search_engine.try_search_feed_new(target_type="keyword", target=target)
+
+        # 페이징
+        searched_fid_list, self._key = feed_manager.paging_fid_list(fid_list=searched_fid_list,
+                                                                    last_index=last_index,
+                                                                    page_size=num_feed)
+
+        self._send_data = self._make_feed_data_n_interaction_data(feed_manager=feed_manager,fid_list=searched_fid_list)
+
+        return
+
+    def try_search_feed_with_uname(self, feed_search_engine:FeedSearchEngine,
+                                   feed_manager:FeedManager, target="", last_index=-1, num_feed=8):
+        searched_fid_list = feed_search_engine.try_search_feed_new(target_type="uname", target=target)
+        # 페이징
+        searched_fid_list, self._key = feed_manager.paging_fid_list(fid_list=searched_fid_list,
+                                                                    last_index=last_index,
+                                                                    page_size=num_feed)
+
+        self._send_data = self._make_feed_data_n_interaction_data(feed_manager=feed_manager,fid_list=searched_fid_list)
+
+        return
+
+    def try_search_comment_with_keyword(self, feed_search_engine:FeedSearchEngine,
+                                        feed_manager:FeedManager, target="", last_index=-1, num_feed=8):
+        search_cid_list = feed_search_engine.try_search_comment_new(target=target)
+
+        search_cid_list, self._key = feed_manager.paging_fid_list(fid_list=search_cid_list,
+                                                                  last_index=last_index,
+                                                                  page_size=num_feed)
+
+        self._send_data = self._make_comment_data(cid_list=search_cid_list)
+
+        return
+
+    def get_response_form_data(self, head_parser):
+        try:
+            body = {
+                'send_data' : self._send_data,
+                'key' : self._key
+            }
+
+            response = self._get_response_data(head_parser=head_parser, body=body)
+            return response
+
+        except Exception as e:
+            raise CoreControllerLogicError("response making error | " + e)
+
 class FeedSearchModel(FeedModel):
     def __init__(self, database:Local_Database) -> None:
         super().__init__(database)
@@ -405,8 +473,18 @@ class FeedSearchModel(FeedModel):
         return
 
     def try_search_feed_with_keyword(self, feed_search_engine:FeedSearchEngine,
-                                    target="", num_feed=1):
-        searched_fid_list = feed_search_engine.try_search_feed_with_keyword(keyword=target)
+                                     feed_manager:FeedManager, target="", last_index=-1, num_feed=1):
+        searched_fid_list = feed_search_engine.try_search_feed_new(target_type="keyword", target=target)
+
+        # 페이징
+        searched_fid_list, self._key = feed_manager.paging_fid_list(fid_list=searched_fid_list,
+                                                                    last_index=last_index,
+                                                                    page_size=num_feed)
+
+        self._send_data = self._make_feed_data_n_interaction_data(feed_manager=feed_manager,
+                                                                  fid_list=searched_fid_list)
+        return
+
 
     def get_response_form_data(self, head_parser):
         try:

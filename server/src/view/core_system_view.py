@@ -365,11 +365,29 @@ class Core_Service_View(Master_View):
             #pprint(body_data)
             response = request_manager.make_json_response(body_data=body_data)
             return response
-        
-        
+
+        @self.__app.get('/feed_explore/search_feed_with_keyword')
+        def search_with_keyword(request:Request, raw_request:dict):
+            request_manager = RequestManager()
+
+            data_payload = KeywordSearchRequest(request=raw_request)
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+
+            feed_controller =Feed_Controller(feed_manager=self.__feed_manager)
+            model = feed_controller.search_feed_with_keyword(database=self.__database,
+                                                             request=request_manager,
+                                                             feed_search_engine=self.__feed_search_engine,
+                                                             num_feed=6)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+
+            return response
+
+
         # 전체 피드 제공
         @self.__app.post('/feed_explore/all_feed')
-        def get_all_feed_in_search(request:Request, raw_request:dict):
+        def get_all_feed_filtering(request:Request, raw_request:dict):
             request_manager = RequestManager()
             
             data_payload = AllFeedRequest(request=raw_request)
@@ -806,6 +824,13 @@ class AllFeedRequest(RequestHeader):
         self.fclass= body['fclass']
         self.key= body['key']
 
+class KeywordSearchRequest(RequestHeader):
+    def __init__(self, request) -> None:
+        super().__init__(request)
+        body = request['body']
+        self.key = body['key']
+        self.keywords = body['keywords']
+
 class HashtagFeedRequest(RequestHeader):
     def __init__(self, hashtag, key=-1) -> None:
         self.hashtag = hashtag 
@@ -893,7 +918,7 @@ class LeagueRequest():
 
 class BiasSearchRequest():
     def __init__(self, bias_name= None) -> None:
-        self.bias_name =bias_name 
+        self.bias_name =bias_name
 
 
 class BiasSelectRequest(RequestHeader):
