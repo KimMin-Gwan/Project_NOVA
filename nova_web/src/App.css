@@ -98,7 +98,7 @@ body.dark-mode {
   min-height: 100vh;
   height: auto;
   margin: 0 auto;
-  background-color: #1e1e1e;
+  background-color: white;
   position: relative;
   border: 1px white solid;
   /* margin-bottom: 20px; */

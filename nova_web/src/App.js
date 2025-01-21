@@ -71,6 +71,8 @@ import "@toast-ui/editor/dist/toastui-editor.css";
 import "tui-color-picker/dist/tui-color-picker.css";
 import "@toast-ui/editor/dist/i18n/ko-kr";
 import "@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css";
+import SearchPage from "./pages/SearchPage/SearchPage.js";
+import getTagList from "./services/getTagList.js";
 
 // 다크 모드 클래스 반환 함수
 export function getModeClass(mode) {
@@ -169,18 +171,22 @@ function App() {
 
   let [tagList, setTagList] = useState([]);
 
-  function fetchTagData() {
-    fetch("https://nova-platform.kr/home/realtime_best_hashtag", {
-      credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setTagList(data.body.hashtags);
-      });
-  }
+  // console.log("ada", tagLists);
+  // function fetchTagData() {
+  //   fetch("https://nova-platform.kr/home/realtime_best_hashtag", {
+  //     credentials: "include",
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       setTagList(data.body.hashtags);
+  //     });
+  //   }
 
   useEffect(() => {
-    fetchTagData();
+    // fetchTagData();
+    getTagList().then((data) => {
+      setTagList(data.body.hashtags);
+    });
   }, []);
 
   const [currentIndex, setCurrentIndex] = useState(0); // 현재 표시 중인 태그 인덱스
@@ -248,6 +254,7 @@ function App() {
       <Route path="/feed_list/:fid" element={<FeedList />}></Route>
       <Route path="/feed_detail/:fid" element={<FeedDetail />}></Route>
       <Route path="/follow_page" element={<FollowPage />}></Route>
+      <Route path="/search" element={<SearchPage />}></Route>
 
       {/* 펀딩 페이지 목록 */}
       <Route
@@ -315,19 +322,6 @@ function App() {
                   </div>
                   {/* <Link to="/write_feed/long">롱폼작성 페이지지</Link>
                   <Link to="/test1">test page</Link> */}
-
-                  {/* <div className="buttons">
-                    <button className="tool-button">
-                      <img
-                        src={menu}
-                        alt="menu"
-                        className={`logo-st ${getModeClass(brightMode)}`}
-                        onClick={() => {
-                          navigate("/more_see");
-                        }}
-                      ></img>
-                    </button>
-                  </div> */}
                 </header>
                 <SearchBox />
                 <h4 className="main-title">최애가 가장 빛날 수 있는 공간</h4>
