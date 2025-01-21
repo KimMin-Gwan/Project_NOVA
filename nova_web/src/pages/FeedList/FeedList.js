@@ -435,10 +435,10 @@ export default function FeedList(isUserState) {
             <SearchBox />
             <div className={style["search-filter"]}>
               <button onClick={onClickFilterButton}>필터순</button>
-              <div className={style["sort-btn-container"]}>
+              {/* <div className={style["sort-btn-container"]}>
                 <button>최신순</button>
                 <button>랜덤순</button>
-              </div>
+              </div> */}
             </div>
           </div>
           // <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>전체 피드</div>
