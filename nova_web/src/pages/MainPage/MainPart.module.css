@@ -94,6 +94,7 @@
   display: flex;
   align-items: center;
   height: 30px;
+  margin-left:7px;
 }
 
 /* .profile {
@@ -114,6 +115,7 @@
 .text-container {
   justify-content: start;
   margin-top: 30px;
+  margin-left: 7px;
   margin-bottom: auto;
 }
 
@@ -124,6 +126,7 @@
   .tag {
     color: #3621d0;
     font-size: 14px;
+    font-weight: 100;
   }
 }
 
@@ -131,6 +134,7 @@
   font-size: 14px;
   margin-top: 10px;
   overflow-wrap: break-word;
+  font-weight: 400;
 }
 
 .like-comment {

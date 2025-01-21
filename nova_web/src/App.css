@@ -22,12 +22,16 @@ body {
   margin: 0;
   margin-left: 20px;
   margin-bottom: 14px;
+  text-shadow: 0px 4px 4px rgb(0, 0, 0, 0.25);
+  font-weight: 300;
 }
+
 
 .title-color {
   margin-left: 5px;
   color: #0076ee;
   white-space: pre;
+  font-weight: 700;
 }
 
 /* 다크 모드 버튼 */
@@ -80,8 +84,7 @@ body.dark-mode {
 }
 
 .top_area {
-  margin: 0 auto;
-  width: 85%;
+  width: 100%;
   height: 100px;
   background-color: blue;
   color: white;

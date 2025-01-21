@@ -332,7 +332,9 @@ function App() {
                 <SearchBox />
                 <h4 className="main-title">최애가 가장 빛날 수 있는 공간</h4>
 
-                <Banner url={URL}></Banner>
+                <div className="banner-box">
+                  <Banner url={URL}></Banner>
+                </div>
 
                 <FeedThumbnail
                   title={
