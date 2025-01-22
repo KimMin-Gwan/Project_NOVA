@@ -412,7 +412,7 @@ class Feed_Controller:
         finally:
             return model
 
-    # comment 좋아요 누르기
+    # Feed 편집
     def try_edit_feed(self, database:Local_Database,
                                request, feed_manager:FeedManager) -> FeedEditModel:
         model = FeedEditModel(database=database)
@@ -422,6 +422,19 @@ class Feed_Controller:
 
         model.try_edit_feed(feed_manager=feed_manager,
                                         data_payload=request.data_payload)
+        model.check_result(request_manager=request)
+
+        return model
+
+    def try_remove_feed(self, database:Local_Database,
+                        request, feed_manager:FeedManager) -> FeedEditModel:
+
+        model = FeedEditModel(database=database)
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
+
+        model.try_remove_feed(feed_manager=feed_manager,
+                              data_payload=request.data_payload)
         model.check_result(request_manager=request)
 
         return model
