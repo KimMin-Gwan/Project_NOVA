@@ -42,7 +42,7 @@
   div {
     /* background-color: gray; */
     margin: 0 auto;
-    width: 80%;
+    /* width: 80%; */
   }
 }
 .search-tag-box {
@@ -60,4 +60,11 @@
   border-radius: 20px;
   background-color: blue;
   width: 75px;
+}
+
+.tag-list {
+  display: grid;
+  /* grid-template-rows: repeat(1, 50px); */
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 10px;
 }

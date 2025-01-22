@@ -75,6 +75,7 @@ import "@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-sy
 import SearchPage from "./pages/SearchPage/SearchPage.js";
 import getTagList from "./services/getTagList.js";
 import useTagStore from "./stores/tagList/useTagStore.js";
+import SearchResultPage from "./pages/SearchResultPage/SearchResultPage.js";
 
 // 다크 모드 클래스 반환 함수
 export function getModeClass(mode) {
@@ -258,6 +259,7 @@ function App() {
       <Route path="/feed_detail/:fid" element={<FeedDetail />}></Route>
       <Route path="/follow_page" element={<FollowPage />}></Route>
       <Route path="/search" element={<SearchPage />}></Route>
+      <Route path="/search_result" element={<SearchResultPage />}></Route>
 
       {/* 펀딩 페이지 목록 */}
       <Route path="/nova_funding" element={<NovaFunding brightMode={brightMode} />}></Route>
@@ -314,7 +316,11 @@ function App() {
                       navigate("/");
                     }}
                   >
-                    <img src={logo2} alt="logo" className={`logo-st ${getModeClass(brightMode)}`}></img>
+                    <img
+                      src={logo2}
+                      alt="logo"
+                      className={`logo-st ${getModeClass(brightMode)}`}
+                    ></img>
                   </div>
                   {/* <Link to="/write_feed/long">롱폼작성 페이지지</Link>
                   <Link to="/test1">test page</Link> */}
@@ -395,7 +401,14 @@ function App() {
                   endPoint={`/feed_list?type=weekly_best`}
                 />
 
-                <FeedThumbnail title={"전체 글"} img_src={all_post} feedData={allFeed} brightMode={brightMode} allPost={<AllPost allFeed={allFeed} />} endPoint={"/feed_list?type=all"} />
+                <FeedThumbnail
+                  title={"전체 글"}
+                  img_src={all_post}
+                  feedData={allFeed}
+                  brightMode={brightMode}
+                  allPost={<AllPost allFeed={allFeed} />}
+                  endPoint={"/feed_list?type=all"}
+                />
                 {/* <AllPost brightMode={brightMode} /> */}
               </section>
               <NavBar brightMode={brightMode}></NavBar>

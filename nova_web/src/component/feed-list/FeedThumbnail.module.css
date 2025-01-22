@@ -63,9 +63,9 @@
     border: 1px solid #359aff;
   }
 
-  /* .search-box::placeholder {
+  .search-box::placeholder {
     color: #1a80e6;
-  } */
+  }
 
   .search-btn {
     position: absolute;

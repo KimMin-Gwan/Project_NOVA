@@ -19,6 +19,10 @@ export default function SearchPage() {
     // });
   }, []);
 
+  function onClickSearch() {
+    navigate("/search_result");
+  }
+
   if (loading) {
     return <div>loading...</div>;
   }
@@ -38,27 +42,40 @@ export default function SearchPage() {
         <div className="back">
           <img src={back} />
         </div>
-        <SearchBox className="search" />
+        <SearchBox type="search" onClickSearch={onClickSearch} />
       </div>
 
       <section className="search-category">
         <h3>최근 검색어</h3>
         <div className="search-tag-box">
           <button className="search-tag">전한길</button>
-          <button className="search-tag">전한길</button>
         </div>
       </section>
 
       <section className="search-category">
-        <h3>인기 검색어</h3>
-        <div>버튼</div>
+        <h3>추천 검색어</h3>
+        <div className="search-tag-box">
+          {/* <div className="search-tag">버튼</div>
+          <div className="search-tag">버튼</div>
+          <div className="search-tag">버튼</div> */}
+          <button className="search-tag">전한길</button>
+          <button className="search-tag">전한길</button>
+          <button className="search-tag">전한길</button>
+        </div>
+        {/* <button className="search-tag">전한길</button> */}
       </section>
 
       <section className="search-category">
         <h3>실시간 트렌드</h3>
-        {tagList.map((tag, i) => {
-          return <div key={i}>{tag}</div>;
-        })}
+        <ul className="tag-list">
+          {tagList.map((tag, i) => {
+            return (
+              <li>
+                {i + 1} {tag}
+              </li>
+            );
+          })}
+        </ul>
       </section>
     </div>
   );

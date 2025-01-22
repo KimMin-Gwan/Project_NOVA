@@ -2,17 +2,35 @@ import { useNavigate } from "react-router-dom";
 import search_icon from "./../img/search_icon.png";
 import style from "./feed-list/FeedThumbnail.module.css";
 
-export default function SearchBox() {
+export default function SearchBox({ type, onClickSearch }) {
   let navigate = useNavigate();
+
+  function onClickSearchBtn(e) {
+    e.stopPropagation();
+    if (type === "search" || onClickSearch) {
+      onClickSearch();
+    }
+  }
   return (
     <div
       className={style["search-section"]}
-      onClick={() => {
+      onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
         navigate("/search");
       }}
     >
-      <div className={style["search-box"]}>인기 게시글 검색</div>
-      <button className={style["search-btn"]}>
+      {type === "search" ? (
+        <input className={style["search-box"]} placeholder="인기 게시글 검색" type="text"></input>
+      ) : (
+        <div className={style["search-box"]}>인기 게시글 검색</div>
+      )}
+      <button
+        className={style["search-btn"]}
+        onClick={(e) => {
+          onClickSearchBtn(e);
+        }}
+      >
         <img src={search_icon}></img>
       </button>
     </div>
