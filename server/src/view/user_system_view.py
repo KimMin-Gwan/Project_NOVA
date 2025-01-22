@@ -242,8 +242,6 @@ class User_Service_View(Master_View):
 
             return response
 
-
-
 class DummyRequest():
     def __init__(self) -> None:
         pass
