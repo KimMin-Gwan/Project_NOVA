@@ -21,7 +21,7 @@
   width: 100%; /* 너비를 원하는 비율로 설정 */
   height: 30px;
   padding: 10px 15px;
-  margin-bottom: 40px;
+
   p {
     color: #797979;
   }
@@ -30,18 +30,32 @@
 .logout_box {
   margin: 0 auto;
   width: 95%;
-  height: 50px;
-  background-color: white;
-  border-radius: 10px;
-  margin-top: 15px;
+  height: 32px;
+  background-color: #f27b7b;
+  color: white;
+  border-radius: 6px;
+  margin-top: 65px;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
 }
 
+/* 마이페이지 */
 .user-container {
+  margin-top: 60px;
   position: relative;
+
+  .user-img {
+    position: relative;
+    background: gray;
+    border-radius: 50%;
+    width: 190px;
+    height: 190px;
+    z-index: 1;
+    justify-self: center;
+    border: 1px solid #1082f4;
+  }
 
   .user-name {
     background-color: white;
@@ -50,6 +64,7 @@
     position: relative;
     padding-bottom: 63px;
     z-index: 2;
+    margin-top: -40px;
     & h3 {
       font-size: 25px;
       font-weight: 400;
@@ -67,10 +82,12 @@
 
   .user-info {
     background-color: white;
+
     & ul {
       display: flex;
       padding-inline: 20px;
       justify-content: center;
+      padding-bottom: 37px;
 
       & li {
         width: 100%;
@@ -84,7 +101,7 @@
         & p {
           font-size: 14px;
           color: #585858;
-          margin-top: 5px;
+          margin-block: 5px 0;
         }
       }
     }
@@ -93,8 +110,11 @@
 
 .info-list {
   .post-list {
+    border-top: 1px solid #1082f48c;
     display: flex;
     background-color: #fff;
+    padding-inline: 16px;
+
     li,
     ul {
       list-style: none;
@@ -108,14 +128,122 @@
       transition: border-bottom 0.3s ease;
       padding-inline: 18px;
       margin: 0;
-      p {
+
+      & button {
         margin-block: 15px;
+        padding: 0;
         padding-bottom: 4px;
+        border: 0;
+        border-radius: 0;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
       }
     }
 
-    .post.active p {
+    .post.active button {
       border-bottom: 3px solid #1082f4;
+    }
+  }
+}
+
+/* 프로필 편집 */
+.edit-container {
+  background-color: #fff;
+
+  .profile-section {
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    gap: 22px;
+
+    .user-img-edit {
+      height: 150px;
+      width: 150px;
+      border-radius: 50%;
+      border: 1px solid #1082f4;
+    }
+
+    & button {
+      font-size: 14px;
+      background-color: #f1f7ff;
+      border: 1px solid #1082f4;
+      padding: 5px 16px;
+      cursor: pointer;
+    }
+  }
+
+  /*  닉네임 비밀번호 변경 개인 정보 */
+  & h3 {
+    font-size: 15px;
+  }
+
+  /* input 스타일 */
+  .input-st {
+    width: 100%;
+    border: 0;
+    border-bottom: 1px solid #1082f4;
+    padding-block: 5px;
+
+    &::placeholder {
+      font-size: 14px;
+      color: black;
+      padding-inline: 8px;
+    }
+
+    &:focus {
+      border: 0;
+    }
+  }
+
+  /* input 정보 이름 */
+  .input-name {
+    font-size: 14px;
+  }
+
+  /* 프로필 정보 */
+  .profile-info {
+    margin-inline: 28px;
+
+    .change-button {
+      font-size: 12px;
+      background-color: #f1f7ff;
+      border: 1px solid #1082f4;
+      padding: 3px 14px;
+      cursor: pointer;
+    }
+
+    .user-name-input {
+      position: relative;
+
+      .change-button {
+        position: absolute;
+        right: 0;
+        bottom: 5px;
+      }
+    }
+
+    .pw-change {
+      position: relative;
+      display: flex;
+      flex-flow: column;
+      gap: 16px;
+
+      .change-button {
+        position: absolute;
+        right: 0;
+        bottom: -30px;
+      }
+    }
+  }
+
+  /* 개인정보 */
+  .user-info {
+    margin-inline: 28px;
+
+    & h3 {
+      margin-top: 44px;
     }
   }
 }

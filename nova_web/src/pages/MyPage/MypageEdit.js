@@ -27,13 +27,8 @@ function MyPage() {
       });
   };
 
-  const [activeIndex, setActiveIndex] = useState(null);
-
-  const handleClick = (index) => {
-    setActiveIndex(index);
-  };
   return (
-    <div className={style.container}>
+    <div className={`${style["container"]} ${style["edit-container"]}`}>
       <div className={style.top_area}>
         <p
           className={style.backword}
@@ -44,38 +39,42 @@ function MyPage() {
           뒤로
         </p>
       </div>
-      <div className={style["user-img-edit"]}>이미지</div>
-      <button>프로필 사진 변경</button>
+      <section className={style["profile-section"]}>
+        <div className={style["user-img-edit"]}>이미지</div>
+        <button>프로필 사진 변경</button>
+      </section>
 
-      <section>
+      <section className={style["profile-info"]}>
         <h3>프로필 정보</h3>
-        <p>닉네임</p>
-        <input type="text" placeholder="사용자 이름" />
-        <button>변경</button>
-
-        <p>비밀번호 변경</p>
-        <div>
-          <input type="text" placeholder="기존 비밀번호" />
-          <input type="text" placeholder="새로운 비밀번호" />
-          <input type="text" placeholder="비밀번호 확인" />
+        <p className={style["input-name"]}>닉네임</p>
+        <div class={style["user-name-input"]}>
+          <input className={style["input-st"]} type="text" placeholder="사용자 이름" />
+          <button className={style["change-button"]}>변경</button>
         </div>
-        <button>변경</button>
+
+        <p className={style["input-name"]}> 비밀번호 변경</p>
+        <div className={style["pw-change"]}>
+          <input className={style["input-st"]} type="text" placeholder="기존 비밀번호" />
+          <input className={style["input-st"]} type="text" placeholder="새로운 비밀번호" />
+          <input className={style["input-st"]} type="text" placeholder="비밀번호 확인" />
+          <button className={style["change-button"]}>변경</button>
+        </div>
       </section>
 
-      <section>
+      <section className={style["user-info"]}>
         <h3>개인정보</h3>
-        <p>uid</p>
-        <input type="text" placeholder="1234-1234-1234" />
-        <p>email</p>
-        <input type="text" placeholder="asd@naver.com" />
-        <p>나이</p>
-        <input type="text" placeholder="24살" />
-        <p>성별별</p>
-        <input type="text" placeholder="남성" />
+        <p className={style["input-name"]}>uid</p>
+        <input className={style["input-st"]} type="text" placeholder="1234-1234-1234" />
+        <p className={style["input-name"]}>email</p>
+        <input className={style["input-st"]} type="text" placeholder="asd@naver.com" />
+        <p className={style["input-name"]}>나이</p>
+        <input className={style["input-st"]} type="text" placeholder="24살" />
+        <p className={style["input-name"]}>성별</p>
+        <input className={style["input-st"]} type="text" placeholder="남성" />
       </section>
-      <div className={`${style["logout_box"]}`} onClick={handleLogout} style={{ cursor: "pointer" }}>
+      <button className={`${style["logout_box"]}`} onClick={handleLogout} style={{ cursor: "pointer" }}>
         로그아웃
-      </div>
+      </button>
     </div>
   );
 }

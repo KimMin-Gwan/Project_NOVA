@@ -64,7 +64,7 @@ function MyPage() {
             <ul className={style["post-list"]}>
               {["포스트", "모멘트", "좋아요", "댓글"].map((post, index) => (
                 <li key={index} className={`${style.post} ${activeIndex === index ? style.active : ""}`} onClick={() => handleClick(index)}>
-                  <p>{post}</p>
+                  <button>{post}</button>
                 </li>
               ))}
             </ul>
