@@ -300,7 +300,6 @@ class FeedEditModel(BaseModel):
         try:
             body = {
                 "result" : self._result,
-                "detail" : self._detail 
                 }
 
             response = self._get_response_data(head_parser=head_parser, body=body)
