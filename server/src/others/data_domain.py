@@ -240,6 +240,12 @@ class Feed(SampleDomain):
         self.uid = uid
         self.body = body
         self.fclass = fclass
+        # 디스플레이 옵션
+        #   0 : 삭제
+        #   1 : 비공개
+        #   2 : 차단
+        #   3 : 댓글 작성 비활성화
+        #   4 : 전체 공개
         self.display = display
         self.date = date
         self.star = star
@@ -480,7 +486,6 @@ class ManagedUser:
             "feed_key" : self.feed_key,
             "comment_key" : self.comment_key
         }
-    
 
 # 유저 특화 시스템 구성을 위한 관리 유저
 class Alert:
