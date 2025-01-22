@@ -34,6 +34,16 @@ from collections import Counter, OrderedDict
 # 이게 검색에 따른 피드를 제공하는 클래스
 # 위에 FeedAlgorithm에서 작성한 내용을 가지고 와도됨
 
+# 임시로 사용할 검색어 저장 및 활용 클래스입니다.
+class Keyword:
+    def __init__(self, keyword=""):
+        self.keyword = keyword
+        self.count = 0
+        self.trend = {
+            "now" : 0,
+            "prev" : 0
+        }
+
 # 클래스 목적 : 피드를 검색하거나, 조건에 맞는 피드를 제공하기 위함
 class ManagedFeed:
     def __init__(self, fid="", like=0, date=None, uname="", fclass="",
@@ -1302,15 +1312,19 @@ class FilteringManager:
 
         elif option == "category":
             # 구분하기 쉽도록 하였음. 또한, category가 []인 상태라면 뒤에 나올 반복문 자체가 동작하지 않는다.
-            # 따라서 미리 선언을 한상태로 있는다.
-            filtered_fid_list = fid_list
-            notice_list = []
+            filtered_fid_list = []
+            # category = []인 경우. 1차 필터링을 거친 것을 그대로 반환
+            if len(keys) <= 0:
+                filtered_fid_list = fid_list
             # pprint(keys)
             for key in keys:
                 # 공지 게시판은 공지만 가져온다.
                 if key == "notice":
                     notice_list = self._filtering_notices_list()
-                filtered_fid_list = self.__managed_feed_bias_table.filtering_category_feed(fid_list=filtered_fid_list, category=key)
+                    # filtered_fid_list.extend(notice_list)
+                # 로직에 오류가 있었음. 게시판을 계속 필터링하는 것이 아닌 분류한다는 개념으로 갔으면 나았는데
+                temp_list = self.__managed_feed_bias_table.filtering_category_feed(fid_list=filtered_fid_list, category=key)
+                filtered_fid_list.extend(temp_list)
 
             # 여기서, 아마 합쳐야 할 것 같은데 어찌하면 좋을까.
                 # 공지는 맨 위에 뜨게 해야할까. 아님 어떻게...? What do you want?

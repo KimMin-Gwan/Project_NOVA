@@ -1425,6 +1425,29 @@ class FeedManager:
         result, flag = self.try_make_new_feed(user=user, data_payload=data_payload, fid=feed.fid)
         return result, flag
 
+    def try_remove_feed_new(self, user:User, fid):
+        feed_data=self._database.get_data_with_id(target="fid",id=fid)
+        feed = Feed()
+        feed.make_with_dict(feed_data)
+
+        if feed.uid != user.uid:
+            return "NOT_OWNER", False
+
+        # 댓글도 남기고, Feed도 삭제하지 않는다. 다만, Display 옵션을 따로 두어
+        # 삭제해도 데이터베이스 안에 남기도록 한다.
+
+        # 디스플레이 옵션
+        #   0 : 삭제
+        #   1 : 비공개
+        #   2 : 차단
+        #   3 : 댓글 작성 비활성화
+        #   4 : 전체 공개
+        # 디스플레이 옵션을 수정한 후, Feed를 수정한다.
+        feed.display = 0
+        self._database.modify_data_with_id(target_id="fid", target_data=feed.get_dict_form_data())
+
+        return "COMPLETE", True
+
     # FEED 삭제
     def try_remove_feed(self, user:User, fid):
         feed_data=self._database.get_data_with_id(target="fid",id=fid)

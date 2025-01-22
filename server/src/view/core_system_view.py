@@ -665,6 +665,25 @@ class Core_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
+        @self.__app.post('feed_explore/try_remove_feed')
+        def try_remove_feed(request:Request, fid:Optional[str]):
+            request_manager = RequestManager()
+            data_payload = DeleteFeedRequest(fid=fid)
+
+            # 로그인이 되어있지 않으면, 그 글을 삭제할 수 없음
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            if not request_manager.jwt_payload.result:
+                raise request_manager.credentials_exception
+
+            feed_controller =Feed_Controller(feed_manager=self.__feed_manager)
+            model = feed_controller.try_remove_feed(database=self.__database,
+                                                    request=request_manager,
+                                                    feed_manager=self.__feed_manager)
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
+
     def check_route(self):
         # 최애 인증 페이지
         @self.__app.post('/nova_check/server_info/check_page')
@@ -856,6 +875,10 @@ class FeedInteractionRequest(RequestHeader):
     def __init__(self,fid, action) -> None:
         self.fid=fid 
         self.action = action
+
+class DeleteFeedRequest(RequestHeader):
+    def __init__(self,fid) -> None:
+        self.fid=fid
 
 class EditFeedRequest(RequestHeader):
     def __init__(self, request, image_names, images) -> None:
