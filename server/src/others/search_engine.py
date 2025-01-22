@@ -34,6 +34,16 @@ from collections import Counter, OrderedDict
 # 이게 검색에 따른 피드를 제공하는 클래스
 # 위에 FeedAlgorithm에서 작성한 내용을 가지고 와도됨
 
+# 임시로 사용할 검색어 저장 및 활용 클래스입니다.
+class Keyword:
+    def __init__(self, keyword=""):
+        self.keyword = keyword
+        self.count = 0
+        self.trend = {
+            "now" : 0,
+            "prev" : 0
+        }
+
 # 클래스 목적 : 피드를 검색하거나, 조건에 맞는 피드를 제공하기 위함
 class ManagedFeed:
     def __init__(self, fid="", like=0, date=None, uname="", fclass="",
