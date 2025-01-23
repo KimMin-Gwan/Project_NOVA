@@ -1236,7 +1236,7 @@ class RecommendManager:
         counting_hashtags = Counter(list_of_hashtags_in_hours)
         sorted_list_of_hashtag_count = [hashtag for hashtag, count in counting_hashtags.most_common()]
 
-        pprint("출력 테스트 : ")
+        pprint("출력 테스트 : " + str(target_hours))
         pprint(sorted_list_of_hashtag_count)
 
         return sorted_list_of_hashtag_count[0:num_hashtag]
