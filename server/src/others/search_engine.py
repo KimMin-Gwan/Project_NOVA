@@ -1228,7 +1228,7 @@ class RecommendManager:
         for managed_feed in managed_feeds_in_hours:
             for hashtag in managed_feed.hashtag:
                 # 해시태그 리스트를 가져오므로, 빈 리스트에 Extend로 이어 붙임.
-                list_of_hashtags_in_hours.extend(hashtag)
+                list_of_hashtags_in_hours.append(hashtag)
 
         pprint(self.__managed_feed_bias_table.get_managed_feed_test())
 
