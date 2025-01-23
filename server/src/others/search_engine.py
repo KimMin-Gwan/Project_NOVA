@@ -274,7 +274,7 @@ class ManagedFeedBiasTable:
 
     #---------------------------------------------------------------------------------------------
     def get_managed_feed_test(self):
-        return self.__feed_table[0].to_dict()
+        return self.__feed_table[2].to_dict()
 
     def len_feed_table(self):
         # Feed Table의 길이 구하기
