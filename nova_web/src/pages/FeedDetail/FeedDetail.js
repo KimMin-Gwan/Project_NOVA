@@ -8,6 +8,7 @@ import { useRef } from "react";
 import back from "./../../img/backword.png";
 import star from "./../../img/favorite.png";
 import FilterModal from "../../component/FilterModal/FilterModal";
+import axios from "axios";
 
 export default function FeedDetail({ feed }) {
   let navigate = useNavigate();
@@ -32,12 +33,9 @@ export default function FeedDetail({ feed }) {
   let [interaction, setInteraction] = useState();
 
   async function fetchFeed() {
-    await fetch(
-      `https://nova-platform.kr/feed_explore/feed_detail/feed_data?fid=${fid}`,
-      {
-        credentials: "include",
-      }
-    )
+    await fetch(`https://nova-platform.kr/feed_explore/feed_detail/feed_data?fid=${fid}`, {
+      credentials: "include",
+    })
       .then((response) => response.json())
       .then((data) => {
         console.log("detail", data);
@@ -52,12 +50,9 @@ export default function FeedDetail({ feed }) {
   }, [comments, fid]);
 
   async function fetchFeedComment() {
-    await fetch(
-      `https://nova-platform.kr/feed_explore/feed_detail/comment_data?fid=${fid}`,
-      {
-        credentials: "include",
-      }
-    )
+    await fetch(`https://nova-platform.kr/feed_explore/feed_detail/comment_data?fid=${fid}`, {
+      credentials: "include",
+    })
       .then((response) => response.json())
       .then((data) => {
         console.log("comment all", data);
@@ -179,6 +174,16 @@ export default function FeedDetail({ feed }) {
     navigate(-1);
   }
 
+  function fetchRemoveFeed() {
+    axios
+      .get(`https://nova-platform.kr/feed_explore/try_remove_feed?fid=${fid}`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        console.log(res.data);
+      });
+  }
+
   if (isLoading) {
     return <div>Loading</div>;
   }
@@ -187,17 +192,25 @@ export default function FeedDetail({ feed }) {
     <div className={style["FeedDetail"]}>
       <div className={style["top-container"]} onClick={onClickNav}>
         <button className={style["back-button"]}>
-          <img src={back} />
+          <img src={back} alt="back" />
           <span>뒤로</span>
         </button>
+        {feedData.is_owner && (
+          <button className={style["back-button"]}>
+            <img src={back} />
+            <span
+              onClick={() => {
+                fetchRemoveFeed();
+              }}
+            >
+              삭제(더보기버튼예정)
+            </span>
+          </button>
+        )}
       </div>
 
       <div>
-        <ContentFeed
-          feed={feedData}
-          interaction={interaction}
-          handleCheckStar={handleCheckStar}
-        />
+        <ContentFeed feed={feedData} interaction={interaction} handleCheckStar={handleCheckStar} />
       </div>
 
       <div className={style["comment-container"]}>

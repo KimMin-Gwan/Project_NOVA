@@ -13,6 +13,48 @@ export default function SearchPage() {
 
   let { tagList, loading, error, fetchTagList } = useTagStore();
 
+  let [searchWord, setSearchWord] = useState("");
+  let [searchHistory, setSearchHistory] = useState([]);
+
+  function handleNavigate() {
+    if (!searchWord) {
+      navigate("/");
+    } else {
+      // navigate(`/feed_list/search_feed?keyword=${searchWord}`);
+      const updateHistory = [...searchHistory, searchWord];
+      setSearchHistory(updateHistory);
+      localStorage.setItem("history", JSON.stringify(updateHistory));
+      setSearchWord("");
+    }
+  }
+
+  useEffect(() => {
+    let historyList = JSON.parse(localStorage.getItem("history")) || [];
+    setSearchHistory(historyList);
+  }, []);
+
+  function onKeyDown(event) {
+    if (event.key === "Enter") {
+      handleNavigate();
+    }
+  }
+
+  function onChangeSearchWord(e) {
+    setSearchWord(e.target.value);
+  }
+
+  function onDeleteAllHistory() {
+    localStorage.removeItem("history");
+    setSearchHistory([]);
+  }
+
+  function onDeleteHistoryItem(index) {
+    const updateList = searchHistory.filter((item, i) => i !== index);
+    // searchList = JSON.parse(searchList);
+    setSearchHistory(updateList);
+    localStorage.setItem("history", JSON.stringify(updateList));
+  }
+
   useEffect(() => {
     fetchTagList();
     // getTagList().then((data) => {
@@ -59,16 +101,45 @@ export default function SearchPage() {
         </div>
       </header>
       <div className="top-bar">
-        <div className="back">
+        <div
+          className="back"
+          onClick={() => {
+            navigate(-1);
+          }}
+        >
           <img src={back} />
         </div>
-        <SearchBox type="search" onClickSearch={onClickSearch} />
+        <SearchBox
+          type="search"
+          value={searchWord}
+          onClickSearch={onClickSearch}
+          onChangeSearchWord={onChangeSearchWord}
+          onKeyDown={onKeyDown}
+        />
       </div>
 
       <section className="search-category">
         <h3>최근 검색어</h3>
         <div className="search-tag-box">
-          <button className="search-tag">전한길</button>
+          <p onClick={onDeleteAllHistory}>X</p>
+
+          {searchHistory.length > 0 &&
+            searchHistory.map((history, i) => {
+              return (
+                <>
+                  <button key={i} className="search-tag">
+                    {history}
+                  </button>
+                  <p
+                    onClick={() => {
+                      onDeleteHistoryItem(i);
+                    }}
+                  >
+                    X
+                  </p>
+                </>
+              );
+            })}
         </div>
       </section>
 
@@ -78,9 +149,7 @@ export default function SearchPage() {
           {/* <div className="search-tag">버튼</div>
           <div className="search-tag">버튼</div>
           <div className="search-tag">버튼</div> */}
-          <button className="search-tag">전한길</button>
-          <button className="search-tag">전한길</button>
-          <button className="search-tag">전한길</button>
+          <button className="search-tag">채현찌</button>
         </div>
         {/* <button className="search-tag">전한길</button> */}
       </section>

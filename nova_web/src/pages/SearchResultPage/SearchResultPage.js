@@ -11,7 +11,7 @@ import Feed from "../../component/feed";
 
 export default function SearchResultPage() {
   let navigate = useNavigate();
-
+  let [isLoading, setIsLoading] = useState(true);
   function handleMovePage(e, page) {
     e.preventDefault();
     navigate(page);
@@ -33,11 +33,18 @@ export default function SearchResultPage() {
       .then((res) => {
         setFeedData(res.data.body.send_data);
         console.log(res.data);
+        setIsLoading(false);
       });
   }
   useEffect(() => {
     fetchSearchKeyword();
+    console.log(feedData);
   }, []);
+
+  if (isLoading) {
+    return <div>loading...</div>;
+  }
+
   return (
     <div className="container">
       <header className="header">
@@ -51,25 +58,32 @@ export default function SearchResultPage() {
         </div>
       </header>
       <div className="top-bar">
-        <div className="back">
+        <div
+          className="back"
+          onClick={() => {
+            navigate(-1);
+          }}
+        >
           <img src={back} />
         </div>
         <SearchBox type="search" />
-        <section className={style["info-list"]}>
-          <ul className={style["post-list"]}>
-            {["포스트", "모멘트", "좋아요", "댓글"].map((post, index) => (
-              <li
-                key={index}
-                className={`${style.post} ${activeIndex === index ? style.active : ""}`}
-                onClick={() => handleClick(index)}
-              >
-                <p>{post}</p>
-              </li>
-            ))}
-          </ul>
-        </section>
-        <Feed feed={feedData} />
       </div>
+      <section className={style["info-list"]}>
+        <ul className={style["post-list"]}>
+          {["포스트", "모멘트", "좋아요", "댓글"].map((post, index) => (
+            <li
+              key={index}
+              className={`${style.post} ${activeIndex === index ? style.active : ""}`}
+              onClick={() => handleClick(index)}
+            >
+              <p>{post}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+      {feedData.map((feed, i) => {
+        return <Feed key={feed.fid} feed={feed.feed} />;
+      })}
     </div>
   );
 }
