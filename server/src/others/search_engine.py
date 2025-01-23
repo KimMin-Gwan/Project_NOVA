@@ -1230,10 +1230,10 @@ class RecommendManager:
                 # 해시태그 리스트를 가져오므로, 빈 리스트에 Extend로 이어 붙임.
                 list_of_hashtags_in_hours.append(hashtag)
 
-        pprint(self.__managed_feed_bias_table.get_managed_feed_test())
+        # pprint(self.__managed_feed_bias_table.get_managed_feed_test())
 
-        pprint("출력 테스트 :  잠시 생략")
-        # pprint(list_of_hashtags_in_hours)
+        pprint("출력 테스트 : ")
+        pprint(list_of_hashtags_in_hours)
 
         # 카운팅 후, 내림차순 정렬되서, 해시태그만 뽑아옴
         counting_hashtags = Counter(list_of_hashtags_in_hours)
