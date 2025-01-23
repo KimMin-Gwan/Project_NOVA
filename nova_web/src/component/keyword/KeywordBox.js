@@ -3,48 +3,58 @@ import style from "./KeywordBox.module.css";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 
-export default function KeywordBox({ title, subTitle, onClickTagButton }) {
+export default function KeywordBox({ type, title, subTitle, onClickTagButton }) {
   let [bestTags, setBestTags] = useState([]);
+  let [isLoading, setIsLoading] = useState(true);
+  console.log(type);
 
-  function fetchBestTag() {
-    fetch(`https://nova-platform.kr/home/realtime_best_hashtag`, { credentials: "include" })
-      .then((response) => response.json())
-      .then((data) => {
-        setBestTags(data.body.hashtags);
-      });
-  }
+  // function fetchBestTag() {
+  //   fetch(`https://nova-platform.kr/home/realtime_best_hashtag`, { credentials: "include" })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       setBestTags(data.body.hashtags);
+  //     });
+  // }
 
-  useEffect(() => {
-    fetchBestTag();
-  }, []);
+  // useEffect(() => {
+  //   fetchBestTag();
+  // }, []);
 
-  function fetchTodayBest() {
-    fetch("https://nova-platform.kr/home/today_spiked_hot_hashtag", {
+  async function fetchTodayBest() {
+    await fetch("https://nova-platform.kr/home/today_spiked_hot_hashtag", {
       credentials: "include",
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        setBestTags(data.body.hashtags);
+        setIsLoading(false);
+        console.log("today", data);
       });
   }
 
   useEffect(() => {
-    fetchTodayBest();
+    if (type === "today") {
+      fetchTodayBest();
+    } else if (type === "weekly") {
+      fetchWeeklyBest();
+    }
   }, []);
 
-  function fetchWeeklyBest() {
-    axios
+  async function fetchWeeklyBest() {
+    await axios
       .get("https://nova-platform.kr/home/weekly_spiked_hot_hashtag", {
         withCredentials: true,
       })
       .then((res) => {
+        setBestTags(res.data.body.hashtags);
+        setIsLoading(false);
         console.log("ddd", res.data);
       });
   }
 
-  useEffect(() => {
-    fetchWeeklyBest();
-  }, []);
+  // useEffect(() => {
+
+  // }, []);
 
   let scrollRef = useRef(null);
   let [isDrag, setIsDrag] = useState(false);

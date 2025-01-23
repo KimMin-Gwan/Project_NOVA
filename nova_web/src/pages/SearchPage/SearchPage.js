@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import getTagList from "../../services/getTagList";
 import useTagStore from "../../stores/tagList/useTagStore";
+import axios from "axios";
 export default function SearchPage() {
   let navigate = useNavigate();
   //   let [tagList, setTagList] = useState([]);
@@ -18,6 +19,25 @@ export default function SearchPage() {
     //   setTagList(data.body.hashtags);
     // });
   }, []);
+
+  // function fetchRecommendKeyword() {
+  //   fetch("https://nova-platform.kr/home_search/get_recommend_keyword", {
+  //     credentials: "include",
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       console.log(data);
+  //     });
+  //   // axios
+  //   //   .get("https://nova-platform.kr/home_search/get_recommend_keyword", {
+  //   //     withCredentials: true,
+  //   //   })
+  //   //   .then((res) => console.log(res.data));
+  // }
+
+  // useEffect(() => {
+  //   fetchRecommendKeyword();
+  // }, []);
 
   function onClickSearch() {
     navigate("/search_result");
@@ -70,7 +90,7 @@ export default function SearchPage() {
         <ul className="tag-list">
           {tagList.map((tag, i) => {
             return (
-              <li>
+              <li key={i}>
                 {i + 1} {tag}
               </li>
             );

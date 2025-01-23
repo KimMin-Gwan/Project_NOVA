@@ -1,11 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import SearchBox from "../../component/SearchBox";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import back from "./../../img/backword.png";
 import logo2 from "../../img/logo2.png";
-
+import "./index.css";
 import style from "./../MyPage/Mypage.module.css";
-import "./../SearchPage/index.css";
+import axios from "axios";
+import FeedList from "../FeedList/FeedList";
+import Feed from "../../component/feed";
 
 export default function SearchResultPage() {
   let navigate = useNavigate();
@@ -20,6 +22,22 @@ export default function SearchResultPage() {
   const handleClick = (index) => {
     setActiveIndex(index);
   };
+
+  let [feedData, setFeedData] = useState([]);
+
+  function fetchSearchKeyword() {
+    axios
+      .get(`https://nova-platform.kr/feed_explore/search_feed_with_keyword?keyword=시연&key=-1`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        setFeedData(res.data.body.send_data);
+        console.log(res.data);
+      });
+  }
+  useEffect(() => {
+    fetchSearchKeyword();
+  }, []);
   return (
     <div className="container">
       <header className="header">
@@ -50,6 +68,7 @@ export default function SearchResultPage() {
             ))}
           </ul>
         </section>
+        <Feed feed={feedData} />
       </div>
     </div>
   );

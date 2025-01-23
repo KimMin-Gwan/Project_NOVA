@@ -314,9 +314,7 @@ export default function FeedList(isUserState) {
       .then((data) => {
         setFeedData((prevFeeds) => {
           const updatedFeeds = prevFeeds.map((feed) => {
-            return feed.feed.fid === fid
-              ? { ...feed, interaction: data.body.interaction }
-              : feed;
+            return feed.feed.fid === fid ? { ...feed, interaction: data.body.interaction } : feed;
           });
 
           return updatedFeeds;
@@ -411,10 +409,7 @@ export default function FeedList(isUserState) {
         </header>
         {type === "bias" && (
           <div className={style["bias-section"]}>
-            <BiasBoxes
-              setBiasId={setBiasId}
-              fetchBiasCategoryData={fetchBiasCategoryData}
-            />
+            <BiasBoxes setBiasId={setBiasId} fetchBiasCategoryData={fetchBiasCategoryData} />
             <NoticeBox />
             <div className={style["category-info"]}>
               <h4>모든 게시글</h4>
@@ -446,6 +441,7 @@ export default function FeedList(isUserState) {
         {type === "best" && (
           <div className={style["keyword-section"]}>
             <KeywordBox
+              type={"today"}
               title={"인기 급상승"}
               subTitle={"오늘의 키워드"}
               onClickTagButton={onClickTag}
@@ -456,6 +452,7 @@ export default function FeedList(isUserState) {
         {type === "weekly_best" && (
           <div className={style["keyword-section"]}>
             <KeywordBox
+              type={"weekly"}
               title={"많은 사랑을 받은"}
               subTitle={"이번주 키워드"}
               onClickTagButton={onClickTag}
@@ -464,9 +461,7 @@ export default function FeedList(isUserState) {
           // <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>주간 베스트 피드</div>
         )}
         {keyword && (
-          <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>
-            {keyword}
-          </div>
+          <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>{keyword}</div>
         )}
         <div className={style["scroll-area"]}>
           {feedData.length > 0 ? (
