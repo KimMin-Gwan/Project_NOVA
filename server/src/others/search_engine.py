@@ -273,6 +273,9 @@ class ManagedFeedBiasTable:
         return
 
     #---------------------------------------------------------------------------------------------
+    def get_managed_feed_test(self):
+        return self.__feed_table[2].to_dict()
+
     def len_feed_table(self):
         # Feed Table의 길이 구하기
         return len(self.__feed_table)
@@ -1225,14 +1228,16 @@ class RecommendManager:
         for managed_feed in managed_feeds_in_hours:
             for hashtag in managed_feed.hashtag:
                 # 해시태그 리스트를 가져오므로, 빈 리스트에 Extend로 이어 붙임.
-                list_of_hashtags_in_hours.extend(hashtag)
+                list_of_hashtags_in_hours.append(hashtag)
 
-        pprint("출력 테스트 : ")
-        pprint(list_of_hashtags_in_hours)
+        # pprint(self.__managed_feed_bias_table.get_managed_feed_test())
 
         # 카운팅 후, 내림차순 정렬되서, 해시태그만 뽑아옴
         counting_hashtags = Counter(list_of_hashtags_in_hours)
         sorted_list_of_hashtag_count = [hashtag for hashtag, count in counting_hashtags.most_common()]
+
+        pprint("출력 테스트 : ")
+        pprint(sorted_list_of_hashtag_count)
 
         return sorted_list_of_hashtag_count[0:num_hashtag]
 
