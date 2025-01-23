@@ -168,7 +168,7 @@ class User_Service_View(Master_View):
                 raise request_manager.credentials_exception
 
             user_controller=UserController()
-            model = user_controller.get_my_comments(database=self.__database,
+            model = user_controller.try_get_my_comments(database=self.__database,
                                                     request=request_manager,
                                                     feed_manager=self.__feed_manager)
             body_data = model.get_response_form_data(self._head_parser)
@@ -230,8 +230,13 @@ class User_Service_View(Master_View):
         @self.__app.post('/user_home/try_change_profile_photo')
         def try_change_profile_photo(request:Request, image:Union[UploadFile, None] = File(None)):
             request_manager = RequestManager()
-
-            data_payload = ChangeProfilePhotoRequest(image=image)
+            
+            if image is None:
+                image_name = ""
+            else:
+                image_name = image.filename
+        
+            data_payload = ChangeProfilePhotoRequest(image=image, image_name=image_name)
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
             if not request_manager.jwt_payload.result:
                 raise request_manager.credentials_exception
@@ -275,8 +280,9 @@ class ChangeNicknameRequest(RequestHeader):
         self.new_uname = body['uname']
 
 class ChangeProfilePhotoRequest(RequestHeader):
-    def __init__(self, image) -> None:
+    def __init__(self, image, image_name) -> None:
         self.image = image
+        self.image_name =image_name
 
 class LoginRequest(RequestHeader):
     def __init__(self, request) -> None:

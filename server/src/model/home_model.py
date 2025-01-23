@@ -2,6 +2,7 @@ from model.base_model import BaseModel
 from model import Local_Database
 from others.data_domain import Bias, League
 from others import CoreControllerLogicError, FeedSearchEngine
+from random import sample
 
 class TokenModel(BaseModel):
     def __init__(self, database:Local_Database) -> None:
@@ -49,17 +50,43 @@ class HomeBiasModel(BaseModel):
     def __init__(self, database:Local_Database) -> None:
         super().__init__(database)
         self.__bias_list = []
+        
+    def set_random_bias(self):
+        bias_datas = self._database.get_all_data(target="bid")
+        
+        num_bias = len(bias_datas)
+        
+        if num_bias >= 1 or num_bias < 4:
+            random_index = sample(range(num_bias), 1)
+        elif num_bias >= 4 and num_bias < 10: 
+            random_index = sample(range(num_bias), 2)
+        elif num_bias >= 10 and num_bias < 20:
+            random_index = sample(range(num_bias), 3)
+        elif num_bias >= 20:
+            random_index = sample(range(num_bias), 4)
+        else:
+            return
+        
+        for index in random_index:
+            bias = Bias()
+            bias.make_with_dict(bias_datas[index])
+            self.__bias_list.append(bias)
+            
+        return
 
     # 바이어스 데이터를 모두 받아와서 만들기
     def set_bias_list(self):
-        bias_datas = self._database.get_datas_with_ids(target_id="bid", ids=self._user.bids)
+        if self._user.bids:
+            bias_datas = self._database.get_datas_with_ids(target_id="bid", ids=self._user.bids)
 
-        for bias_data in bias_datas:
-            bias = Bias()
-            bias.make_with_dict(bias_data)
-            self.__bias_list.append(bias)
-
+            for bias_data in bias_datas:
+                bias = Bias()
+                bias.make_with_dict(bias_data)
+                self.__bias_list.append(bias)
+        else:
+            self.set_random_bias()
         return
+        
 
     def get_response_form_data(self, head_parser):
         try:

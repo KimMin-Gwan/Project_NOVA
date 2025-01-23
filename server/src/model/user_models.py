@@ -1,7 +1,7 @@
 from model.base_model import BaseModel
 from model import Local_Database
 from others.data_domain import User, Bias, Alert, ManagedUser
-from others import CoreControllerLogicError, FeedManager, FeedSearchEngine
+from others import CoreControllerLogicError, FeedManager, FeedSearchEngine, ObjectStorageConnection
 from view.jwt_decoder import JWTManager
 import jwt
 import datetime
@@ -411,11 +411,13 @@ class ChangeProfilePhotoModel(BaseModel):
     def __init__(self, database:Local_Database) -> None:
         super().__init__(database)
         self._result = False
+        self._detail = "업로드에 문제가 있음"
 
     def get_response_form_data(self, head_parser):
         try:
             body = {
                 'result' : self._result,
+                'detail' : self._detail
             }
 
             response = self._get_response_data(head_parser=head_parser, body=body)
@@ -426,5 +428,17 @@ class ChangeProfilePhotoModel(BaseModel):
 
     # 아직 안됨
     def try_change_profile_photo(self, data_payload):
-        self._result = True
+          
+        connector = ObjectStorageConnection()
+        result = connector.make_new_profile_image(uid=self._user.uid,
+                                         image=data_payload.image,
+                                         image_name=data_payload.image_name
+                                         )
+        
+        if not result:
+            self._detail = "허용되지 않은 확장자를 사용"
+        else:
+            self._result = True
+            self._detail = "업로드 성공"
+        
         return

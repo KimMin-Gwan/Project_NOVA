@@ -1,9 +1,5 @@
 from model import BannerModel, HomeBiasModel, BiasSearchModel, Local_Database, SelectBiasModel, LeagueMetaModel, TokenModel, HashTagModel
-from model import RecommendKeywordModel
 from others import UserNotExist, CustomError, FeedManager
-
-
-
 #from server.src.view.jwt_decoder import JWTManager, JWTPayload
 #from view import RequestManager
 
@@ -15,21 +11,8 @@ class Home_Controller:
     # banner 데이터 요청
     def get_banner_data(self, database:Local_Database) -> BannerModel: 
         model = BannerModel(database=database)
-        try:
-            model.set_banner_data()
-            model.set_state_code("204")
-            return model
-
-        except CustomError as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
-
-        except Exception as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
-
-        finally:
-            return model
+        model.set_banner_data()
+        return model
         
     # 홈 화면에서 토큰 발급  시도하는동작
     def get_token(self, database:Local_Database) -> TokenModel: 
@@ -39,30 +22,16 @@ class Home_Controller:
     # 홈 화면의 bias 정보 
     def get_my_bias_data(self, database:Local_Database, request) -> HomeBiasModel: 
         model = HomeBiasModel(database=database)
-        try:
-            # 유저가 있는지 확인
 
-            if not model.set_user_with_email(request=request.jwt_payload):
-                raise UserNotExist("Can not find User with email")
-        except UserNotExist as e:
-            print("Error Catched : ", e)
-            model.set_state_code(e.error_code) # 종합 에러
-            return model
-
-        try:
+        # 유저가 있으면 그 유저의 bias_list로 세팅
+        if model.set_user_with_email(request=request.jwt_payload):
             model.set_bias_list()
-
-
-        except CustomError as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
-
-        except Exception as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
-
-        finally:
-            return model
+        # 유저가 아니면 랜덤하게
+        else:
+            model.set_random_bias()
+            
+        
+        return model
 
     def search_bias(self, database:Local_Database, request):
         model = BiasSearchModel(database=database)
@@ -175,23 +144,3 @@ class Home_Controller:
 
         finally:
             return model
-
-    # 컨트롤러에서 진행하는 추천키워드 뽑기
-    # 아직은 주간 추천 해시태그를 내보냄.
-    def get_recommend_keywords(self, database:Local_Database, request, feed_search_engine) -> RecommendKeywordModel:
-        model = RecommendKeywordModel(database=database)
-        try:
-            if request.jwt_payload != "":
-                model.set_user_with_email(request=request.jwt_payload)
-            model.get_recommend_keywords(feed_search_engine=feed_search_engine)
-        except CustomError as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code)
-        except Exception as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code)
-
-        finally:
-            return model
-
-

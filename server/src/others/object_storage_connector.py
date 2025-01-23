@@ -4,6 +4,8 @@ import time
 import glob
 import os
 from bs4 import BeautifulSoup
+from PIL import Image
+from io import BytesIO
 
 
 
@@ -14,6 +16,7 @@ class ObjectStorageConnection:
         self.__project_bucket = "nova-project-image"
         self.__feed_bucket= "nova-feed-project-body"
         self.__notice_bucket= "nova-notice-body"
+        self.__profile_bucket= "nova-profile-bucket"
 
     # 오브젝트 스토리지와 연결할때는 이것을 실행해야함
     def __init_boto3(self):
@@ -54,6 +57,34 @@ class ObjectStorageConnection:
         html_content = response.content.decode("utf-8")
         #html_content = response.content
         return html_content
+    
+    def make_new_profile_image(self, uid:str, image_name:str, image):
+        
+        # 자주 사용되는 이미지 확장자들
+        valid_extensions = ['.png', '.jpg', '.jpeg', '.PNG']  
+    
+        # 이미지 확장자가 주어진 확장자 중 하나인지 검사
+        if not any(image_name.lower().endswith(ext) for ext in valid_extensions):
+            return False
+            
+        self.__init_boto3()
+        
+        path = './model/local_database/temp_profile_image/'
+        file_name = f"{uid}.html"
+        
+        pil_image = Image.open(BytesIO(image))
+        file_path = path + file_name
+        
+        pil_image.save(file_path)
+        
+        self.__s3.upload_file(  file_path,
+                                self.__profile_bucket,
+                                file_name,
+                                ExtraArgs={'ACL': 'public-read'})
+        
+        self.delete_temp_file(path)
+        return True
+        
     
     # 피드 바디 데이터 만들기
     def make_new_feed_body_data(self, fid, body):
@@ -99,6 +130,4 @@ class ObjectStorageConnection:
 
         return body, imgs
         # response.raise_for_status()
-
-
 
