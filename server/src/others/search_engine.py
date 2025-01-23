@@ -503,6 +503,7 @@ class ManagedFeedBiasTable:
         # fclass == ""인 경우, 모든 경우를 가져옵니다. 어짜피 AD는 Notice의 경우로 들어가니까 상관없겠지요.
         if categories[0] != "":
             filtered_feeds_df = fid_list_df[(fid_list_df['board_type'].isin(categories))]
+            pprint(filtered_feeds_df)
             return filtered_feeds_df['fid'].tolist()
         return fid_list_df['fid'].tolist()
 
@@ -1399,7 +1400,8 @@ class FilteringManager:
             #     filtered_fid_list.extend(notice_list)
             #     keys.remove("공지사항")
             else:
-                temp_list = self.__managed_feed_bias_table.filtering_category_feed(fid_list=fid_list, category=keys[0])
+                temp_list = self.__managed_feed_bias_table.filtering_categories_feed_new(fid_list=fid_list, categories=keys)
+
                 filtered_fid_list.extend(temp_list)
             return filtered_fid_list
 
