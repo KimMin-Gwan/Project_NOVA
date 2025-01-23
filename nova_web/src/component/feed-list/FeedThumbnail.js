@@ -7,6 +7,7 @@ import pin from "./../../img/pin.png";
 
 import { useNavigate } from "react-router-dom";
 import SearchBox from "../SearchBox";
+import NoneFeed from "../NoneFeed/NoneFeed";
 
 export default function FeedThumbnail({
   title,

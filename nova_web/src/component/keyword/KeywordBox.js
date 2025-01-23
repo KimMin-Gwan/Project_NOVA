@@ -1,6 +1,7 @@
 import Slider from "react-slick";
 import style from "./KeywordBox.module.css";
 import { useEffect, useRef, useState } from "react";
+import axios from "axios";
 
 export default function KeywordBox({ title, subTitle, onClickTagButton }) {
   let [bestTags, setBestTags] = useState([]);
@@ -15,6 +16,34 @@ export default function KeywordBox({ title, subTitle, onClickTagButton }) {
 
   useEffect(() => {
     fetchBestTag();
+  }, []);
+
+  function fetchTodayBest() {
+    fetch("https://nova-platform.kr/home/today_spiked_hot_hashtag", {
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+      });
+  }
+
+  useEffect(() => {
+    fetchTodayBest();
+  }, []);
+
+  function fetchWeeklyBest() {
+    axios
+      .get("https://nova-platform.kr/home/weekly_spiked_hot_hashtag", {
+        withCredentials: true,
+      })
+      .then((res) => {
+        console.log("ddd", res.data);
+      });
+  }
+
+  useEffect(() => {
+    fetchWeeklyBest();
   }, []);
 
   let scrollRef = useRef(null);
