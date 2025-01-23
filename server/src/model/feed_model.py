@@ -326,6 +326,9 @@ class FeedSearchModelNew(FeedModel):
 
         return comments
 
+    def save_keyword(self, feed_search_engine:FeedSearchEngine, target=""):
+        feed_search_engine.try_save_keyword_data(keyword=target)
+        return
 
     def try_search_feed_with_keyword(self, feed_search_engine:FeedSearchEngine,
                                      feed_manager:FeedManager, target="", last_index=-1, num_feed=8):

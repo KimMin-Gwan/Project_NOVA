@@ -237,6 +237,12 @@ class Feed_Controller:
         if request.jwt_payload != "":
             model.set_user_with_email(request=request.jwt_payload)
 
+        # 키워드 데이터를 저장하는 로직. 현재는 pass 상태로 있습니다.
+        # 데이터 도메인에다가 추가된다면 만들겁니다.
+        model.save_keyword(
+            target=request.data_payload.keyword,
+            feed_search_engine=feed_search_engine,
+        )
         model.try_search_feed_with_keyword(
             target=request.data_payload.keyword,
             last_index=request.data_payload.key,

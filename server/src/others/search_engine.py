@@ -682,7 +682,6 @@ class FeedSearchEngine:
         return self.__filter_manager.filtering_community(bids=target_bids, category=category)
 
 #-----------------------------------------------------------------------------------------------------------
-
     # 여기도 아직 하지 말것 
     # 목적 : 숏피드에서 다음 피드 제공 받기
     def try_recommend_feed(self, fid:str, history:list, user:User):
@@ -731,7 +730,9 @@ class FeedSearchEngine:
     def get_recommend_hashtag(self, bids):
         return self.__recommend_manager.get_user_recommend_hashtags(bids=bids)
 
-
+    #------------------------------------------------------------------------------------------------
+    def try_save_keyword_data(self, keyword:str):
+        pass
     # ----------------------------------------------------------------------------------------------------------
     # feed algorithm 테스트용
     #
