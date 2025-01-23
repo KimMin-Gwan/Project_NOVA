@@ -1378,9 +1378,13 @@ class FilteringManager:
         elif option == "category":
             # 구분하기 쉽도록 하였음. 또한, category가 []인 상태라면 뒤에 나올 반복문 자체가 동작하지 않는다.
             # category = []인 경우. 1차 필터링을 거친 것을 그대로 반환
-            pprint(bool(keys))
 
-            filtered_fid_list = fid_list
+            filtered_fid_list = []
+
+            # 조건문을 추가했음
+            if len(keys) <= 0 or keys[0] == "":
+                filtered_fid_list = fid_list
+
             # pprint(keys)
             for key in keys:
                 # 공지 게시판은 공지만 가져온다.
