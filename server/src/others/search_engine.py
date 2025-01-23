@@ -1232,12 +1232,12 @@ class RecommendManager:
 
         # pprint(self.__managed_feed_bias_table.get_managed_feed_test())
 
-        pprint("출력 테스트 : ")
-        pprint(list_of_hashtags_in_hours)
-
         # 카운팅 후, 내림차순 정렬되서, 해시태그만 뽑아옴
         counting_hashtags = Counter(list_of_hashtags_in_hours)
         sorted_list_of_hashtag_count = [hashtag for hashtag, count in counting_hashtags.most_common()]
+
+        pprint("출력 테스트 : ")
+        pprint(sorted_list_of_hashtag_count)
 
         return sorted_list_of_hashtag_count[0:num_hashtag]
 
