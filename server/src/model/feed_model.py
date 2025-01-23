@@ -204,7 +204,7 @@ class FeedModel(BaseModel):
             # 피드 작성자 이름
             # 나중에 nickname으로 바꿀것
             feed.nickname = wuser.uname
-            if wuser.uid == feed.uid:
+            if user.uid == feed.uid:
                 feed.is_owner = True
             
         return
