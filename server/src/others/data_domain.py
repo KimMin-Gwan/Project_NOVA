@@ -262,6 +262,7 @@ class Feed(SampleDomain):
         self.num_image = len(self.image)
         self.star_flag = False
         self.nickname = ""
+        self.is_owner = False
 
 
     def make_with_dict(self, dict_data):
@@ -311,7 +312,8 @@ class Feed(SampleDomain):
             "num_comment":self.num_comment,
             "num_image":self.num_image,
             "star_flag":self.star_flag,
-            "nickname" : self.nickname
+            "nickname" : self.nickname,
+            "is_owner" : self.is_owner
         }
 
 class Interaction(SampleDomain):

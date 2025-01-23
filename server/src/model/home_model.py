@@ -266,8 +266,10 @@ class RecommendKeywordModel(BaseModel):
         except Exception as e:
             raise CoreControllerLogicError("response making error | " + e)
 
+    # 추천 키워드를 가져옴.
+    # 지금은 주간 추천 해시태그를 반환받음
     def get_recommend_keywords(self, feed_search_engine:FeedSearchEngine):
-        self.__keywords = feed_search_engine.get_recommend_keyword()
+        self.__keywords = feed_search_engine.try_get_recommend_keyword()
 
         return
 

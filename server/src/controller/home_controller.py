@@ -176,6 +176,8 @@ class Home_Controller:
         finally:
             return model
 
+    # 컨트롤러에서 진행하는 추천키워드 뽑기
+    # 아직은 주간 추천 해시태그를 내보냄.
     def get_recommend_keywords(self, database:Local_Database, request, feed_search_engine) -> RecommendKeywordModel:
         model = RecommendKeywordModel(database=database)
         try:

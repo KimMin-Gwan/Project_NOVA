@@ -696,7 +696,7 @@ class FeedSearchEngine:
         return fid
 
     # # 추천 키워드
-    def try_recommend_keyword(self, num_keywords=10):
+    def try_get_recommend_keyword(self, num_keywords=10):
         # 저장된 키워드가 없는 현재는.. 추천 해시태그를 전해줄까.
         # 일단 로직만 넣었음. 이후에 검색어가 쌓여서 분석이 된다면 이제 넣을거야.
         keywords = []
