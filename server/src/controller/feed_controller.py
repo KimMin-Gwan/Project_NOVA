@@ -239,6 +239,7 @@ class Feed_Controller:
 
         model.try_search_feed_with_keyword(
             target=request.data_payload.keyword,
+            last_index=request.data_payload.key,
             feed_search_engine=feed_search_engine,
             num_feeds = num_feed,
         )
