@@ -465,6 +465,9 @@ class Core_Service_View(Master_View):
             request_manager = RequestManager()
             
             data_payload = CommunityRequest(request=raw_request)
+            
+            pprint(raw_request)
+            
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
             feed_controller =Feed_Controller(feed_manager=self.__feed_manager)
