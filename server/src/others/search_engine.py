@@ -1399,7 +1399,7 @@ class FilteringManager:
             #     filtered_fid_list.extend(notice_list)
             #     keys.remove("공지사항")
             else:
-                temp_list = self.__managed_feed_bias_table.filtering_category_feed(fid_list=fid_list, category=keys[0])
+                temp_list = self.__managed_feed_bias_table.filtering_categories_feed_new(fid_list=fid_list, categories=keys)
                 filtered_fid_list.extend(temp_list)
             return filtered_fid_list
 
