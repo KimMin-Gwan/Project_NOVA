@@ -692,6 +692,16 @@ class FeedSearchEngine:
         # fid = self.__recommend_manager.get_recommend_feed_not_login(fid=fid, history=history)
         return fid
 
+    # # 추천 키워드
+    # def try_recommend_keyword(self, num_keywords=15):
+    #     # 저장된 키워드가 없는 현재는.. 추천 해시태그를 전해줄까
+    #     keywords = []
+    #     # keywords = self.__recommend_manager.get_recommend_keyword()
+    #     keywords = self.__recommend_manager.get_spiked_hashtags_in_hours(
+    #         num_hashtag=num_keywords, target_hours=168
+    #     )
+    #     return keywords
+
     # ------------------------------------------------------------------------------------
     def get_spiked_hashtags(self, target_type="today", num_hashtags=10) -> list:
         result_hashtags = []
@@ -1216,6 +1226,9 @@ class RecommendManager:
             for hashtags in managed_feed.hashtags:
                 # 해시태그 리스트를 가져오므로, 빈 리스트에 Extend로 이어 붙임.
                 list_of_hashtags_in_hours.extend(hashtags)
+
+        pprint("출력 테스트 : ")
+        pprint(list_of_hashtags_in_hours)
 
         # 카운팅 후, 내림차순 정렬되서, 해시태그만 뽑아옴
         counting_hashtags = Counter(list_of_hashtags_in_hours)
