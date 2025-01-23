@@ -1385,14 +1385,15 @@ class FilteringManager:
             if len(keys) <= 0 or keys[0] == "":
                 filtered_fid_list = fid_list
 
-            pprint(keys)
+            # pprint(keys)
             for key in keys:
                 # 공지 게시판은 공지만 가져온다.
-                if key == "notice":
+                if key == "공지사항":
                     notice_list = self._filtering_notices_list()
                     # filtered_fid_list.extend(notice_list)
                 # 로직에 오류가 있었음. 게시판을 계속 필터링하는 것이 아닌 분류한다는 개념으로 갔으면 나았는데
                 temp_list = self.__managed_feed_bias_table.filtering_category_feed(fid_list=filtered_fid_list, category=key)
+                pprint(temp_list)
                 filtered_fid_list.extend(temp_list)
 
             # 여기서, 아마 합쳐야 할 것 같은데 어찌하면 좋을까.
