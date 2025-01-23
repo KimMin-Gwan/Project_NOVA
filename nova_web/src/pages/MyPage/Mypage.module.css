@@ -157,6 +157,7 @@
     justify-content: center;
     align-items: center;
     gap: 22px;
+    margin-bottom: 38px;
 
     .user-img-edit {
       height: 150px;
@@ -185,21 +186,22 @@
     border: 0;
     border-bottom: 1px solid #1082f4;
     padding-block: 5px;
+    padding-left: 10px;
 
     &::placeholder {
       font-size: 14px;
-      color: black;
-      padding-inline: 8px;
+      color: #303030;
     }
 
     &:focus {
-      border: 0;
+      outline: none;
     }
   }
 
   /* input 정보 이름 */
   .input-name {
     font-size: 14px;
+    color: #303030;
   }
 
   /* 프로필 정보 */
@@ -244,6 +246,10 @@
 
     & h3 {
       margin-top: 44px;
+    }
+
+    .input-name {
+      margin-bottom: 8px;
     }
   }
 }

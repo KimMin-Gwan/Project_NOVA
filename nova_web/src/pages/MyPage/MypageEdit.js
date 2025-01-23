@@ -77,10 +77,7 @@ function MyPage() {
       </div>
       <section className={style["profile-section"]}>
         <div className={style["user-img-edit"]}>
-          <img
-            src={`https://kr.object.ncloudstorage.com/nova-user-profile/${myProfile.uid}.png`}
-            alt="profile"
-          />
+          <img src={`https://kr.object.ncloudstorage.com/nova-user-profile/${myProfile.uid}.png`} alt="profile" />
         </div>
         <button>프로필 사진 변경</button>
       </section>
@@ -105,19 +102,15 @@ function MyPage() {
       <section className={style["user-info"]}>
         <h3>개인정보</h3>
         <p className={style["input-name"]}>uid</p>
-        <input className={style["input-st"]} type="text" placeholder="1234-1234-1234" />
+        <input className={style["input-st"]} type="text" placeholder="1234-1234-1234" readOnly />
         <p className={style["input-name"]}>email</p>
-        <input className={style["input-st"]} type="text" placeholder="asd@naver.com" />
+        <input className={style["input-st"]} type="text" placeholder="asd@naver.com" readOnly />
         <p className={style["input-name"]}>나이</p>
-        <input className={style["input-st"]} type="text" placeholder="24살" />
+        <input className={style["input-st"]} type="text" placeholder="24살" readOnly />
         <p className={style["input-name"]}>성별</p>
-        <input className={style["input-st"]} type="text" placeholder="남성" />
+        <input className={style["input-st"]} type="text" placeholder="남성" readOnly />
       </section>
-      <button
-        className={`${style["logout_box"]}`}
-        onClick={handleLogout}
-        style={{ cursor: "pointer" }}
-      >
+      <button className={`${style["logout_box"]}`} onClick={handleLogout} style={{ cursor: "pointer" }}>
         로그아웃
       </button>
     </div>
