@@ -496,8 +496,8 @@ class ManagedFeedBiasTable:
         # Filtering 시, 다음의 값을 유의
         # category == ""인 경우, 모든 경우를 가져옵니다. 똑같이 AD는 현재 아예 다른 모델을 사용하므로... 고려대상에서 제외합니다.
         if category != "" :
-            pprint(fid_list_df)
             filtered_feeds_df = fid_list_df[(fid_list_df['board_type'] == category)]
+            # pprint(filtered_feeds_df)
             return filtered_feeds_df['fid'].tolist()
         return fid_list_df['fid'].tolist()
 
@@ -507,7 +507,7 @@ class ManagedFeedBiasTable:
         # fclass == ""인 경우, 모든 경우를 가져옵니다. 어짜피 AD는 Notice의 경우로 들어가니까 상관없겠지요.
         if categories[0] != "":
             filtered_feeds_df = fid_list_df[(fid_list_df['board_type'].isin(categories))]
-            pprint(filtered_feeds_df)
+            # pprint(filtered_feeds_df)
             return filtered_feeds_df['fid'].tolist()
         return fid_list_df['fid'].tolist()
 
