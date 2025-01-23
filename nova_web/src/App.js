@@ -89,6 +89,29 @@ function App() {
   let todayBestFeed = useFetchData(`${URL}today_best`);
   let weeklyFeed = useFetchData(`${URL}weekly_best`);
   let allFeed = useFetchData(`${URL}all_feed`);
+  // let bias_url = "https://kr.object.ncloudstorage.com/nova-images/";
+  let [isLoading, setIsLoading] = useState(true);
+
+  // let [myBias, setMyBias] = useState([]);
+
+  // async function fetchBiasData() {
+  //   await fetch(`${URL}my_bias`, {
+  //     credentials: "include",
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       console.log("bias_data", data);
+  //       setMyBias(data.body.bias_list);
+  //       setIsLoading(false);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Fetch error:", error);
+  //     });
+  // }
+
+  // useEffect(() => {
+  //   fetchBiasData();
+  // }, []);
   // let [allFeed, setAllFeed] = useState([]);
   // let header = {
   //   "request-type": "default",
@@ -138,6 +161,8 @@ function App() {
       .then((response) => response.json())
       .then((data) => {
         setMyBias(data.body.bias_list);
+        setIsLoading(false);
+        console.log("bias_list", data);
       })
       .catch((error) => {
         console.error("Fetch error:", error);
@@ -338,6 +363,7 @@ function App() {
                       <span className="title-color">최애 </span>몰아보기
                     </>
                   }
+                  biasList={myBias}
                   img_src={new_pin}
                   feedData={weeklyFeed}
                   brightMode={brightMode}

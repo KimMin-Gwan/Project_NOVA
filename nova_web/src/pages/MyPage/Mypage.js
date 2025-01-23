@@ -37,6 +37,7 @@ function MyPage() {
       .then((res) => {
         console.log("feeed", res.data);
         setIsLoading(false);
+        // 받은 데이터 출력 해야됨
       });
   }
 

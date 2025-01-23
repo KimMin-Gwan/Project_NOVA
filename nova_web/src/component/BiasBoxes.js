@@ -3,14 +3,17 @@ import { useEffect, useRef, useState } from "react";
 export default function BiasBoxes({ setBiasId, fetchBiasCategoryData, writeCommunity }) {
   const URL = "https://nova-platform.kr/home/";
   let bias_url = "https://kr.object.ncloudstorage.com/nova-images/";
+  let [isLoading, setIsLoading] = useState(true);
 
-  function fetchBiasData() {
-    fetch(`${URL}my_bias`, {
+  async function fetchBiasData() {
+    await fetch(`${URL}my_bias`, {
       credentials: "include",
     })
       .then((response) => response.json())
       .then((data) => {
+        console.log("bias_data", data);
         setMyBias(data.body.bias_list);
+        setIsLoading(false);
       })
       .catch((error) => {
         console.error("Fetch error:", error);
@@ -50,6 +53,10 @@ export default function BiasBoxes({ setBiasId, fetchBiasCategoryData, writeCommu
       scrollRef.current.scrollLeft = dragStart - e.pageX;
       setHasDragged(true);
     }
+  }
+
+  if (isLoading) {
+    return <div>loading...</div>;
   }
 
   return (

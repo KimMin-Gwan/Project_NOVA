@@ -27,7 +27,7 @@ export default function SearchResultPage() {
 
   function fetchSearchKeyword() {
     axios
-      .get(`https://nova-platform.kr/feed_explore/search_feed_with_keyword?keyword=시연&key=-1`, {
+      .get(`https://nova-platform.kr/feed_explore/search_feed_with_keyword?keyword=하니&key=-1`, {
         withCredentials: true,
       })
       .then((res) => {

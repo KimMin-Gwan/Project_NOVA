@@ -51,18 +51,18 @@ export default function FeedList(isUserState) {
   const [mode, setMode] = useState(initialMode);
   let navigate = useNavigate();
 
-  function fetchBiasCategoryData(bid) {
+  async function fetchBiasCategoryData(bid) {
     let send_data = {
       header: header,
       body: {
-        bid: bid || "",
+        bids: [bid],
         board: board || "",
         key: -1,
       },
     };
     // setIsLoading(true);
     if (type === "bias") {
-      fetch(`${FETCH_URL}feed_with_community`, {
+      await fetch(`${FETCH_URL}feed_with_community`, {
         method: "POST",
         credentials: "include",
         headers: {

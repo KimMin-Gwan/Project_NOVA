@@ -16,6 +16,7 @@ export default function FeedThumbnail({
   brightMode,
   type,
   hasSearchBox,
+  biasList,
   children,
   allPost,
   endPoint,

@@ -121,7 +121,7 @@ export default function SearchPage() {
       <section className="search-category">
         <h3>최근 검색어</h3>
         <div className="search-tag-box">
-          <p onClick={onDeleteAllHistory}>X</p>
+          {/* <p onClick={onDeleteAllHistory}>X</p> */}
 
           {searchHistory.length > 0 &&
             searchHistory.map((history, i) => {
