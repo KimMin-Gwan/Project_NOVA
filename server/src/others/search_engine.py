@@ -46,10 +46,11 @@ class Keyword:
 
 # 클래스 목적 : 피드를 검색하거나, 조건에 맞는 피드를 제공하기 위함
 class ManagedFeed:
-    def __init__(self, fid="", like=0, date=None, uname="", fclass="",
+    def __init__(self, fid="", like=0, date=None, uname="", fclass="", display=4,
                  board_type="", hashtag=[], body="", bid="", iid="", num_images=0):
         self.fid=fid
         self.fclass = fclass
+        self.display = display
         self.like=like
         self.date=date
         self.uname = uname
@@ -64,6 +65,7 @@ class ManagedFeed:
     def __call__(self):
         print("fid : ", self.fid)
         print("fclass: ", self.fclass)
+        print("display: ", self.display)
         print("like : ", self.like)
         print("date: ", self.date)
         print("uname: ", self.uname)
@@ -78,6 +80,7 @@ class ManagedFeed:
         return {
             "fid": self.fid,
             "fclass": self.fclass,
+            "display": self.display,
             "like": self.like,
             "date": self.date,
             "uname": self.uname,
@@ -178,6 +181,7 @@ class ManagedFeedBiasTable:
         for single_feed in feeds:
             managed_feed = ManagedFeed(fid=single_feed.fid,
                                        fclass=single_feed.fclass,
+                                       display=single_feed.display,
                                        like=single_feed.star,
                                        date=self.__get_date_str_to_object(single_feed.date),
                                        hashtag=copy(single_feed.hashtag),
@@ -996,8 +1000,10 @@ class SearchManager:
                     break
                 
                 # 삭제된 피드는 None으로 표시될것이라서
-                if managed_feed.fid == "":
+                if managed_feed.display < 3:
                     continue
+                # if managed_feed.fid == "":
+                #     continue
 
                 result_fid.append(managed_feed.fid)
                 # result_index 업데이트
