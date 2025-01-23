@@ -326,6 +326,9 @@ class FeedSearchModelNew(FeedModel):
 
         return comments
 
+    def save_keyword(self, feed_search_engine:FeedSearchEngine, target=""):
+        feed_search_engine.try_save_keyword_data(keyword=target)
+        return
 
     def try_search_feed_with_keyword(self, feed_search_engine:FeedSearchEngine,
                                      feed_manager:FeedManager, target="", last_index=-1, num_feed=8):
@@ -520,6 +523,9 @@ class FilteredFeedModel(FeedModel):
         # 필터링 전 Feeds 들을 가져옵니다.
         # 모든 Feed를 가져온 다음. 게시글을 하나하나씩 쳐내는 방식을 씁니다.
         fid_list = feed_manager.get_all_fids()
+
+        pprint(category)
+        pprint(fclass)
 
         # 1차 필터링 : FClass를 통한 분류를 먼저 진행합니다.
         #   왜 FClass 부터 먼저 진행하나요? -> 간단한 것부터 먼저 분류합니다.
