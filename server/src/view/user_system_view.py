@@ -1,5 +1,5 @@
-from typing import Any, Optional
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request
+from typing import Any, Optional, Union
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request, UploadFile, File
 from view.master_view import Master_View, RequestHeader
 from view.parsers import Head_Parser
 from controller import Home_Controller, Core_Controller, UserController
@@ -141,16 +141,18 @@ class User_Service_View(Master_View):
 
         # 타입에 맞게 Feed들을 반환하는
         @self.__app.get('/user_home/get_my_feed')
-        def try_get_my_feeds_type(request:Request, raw_request:dict):
+        def try_get_my_feeds_type(request:Request, type:Optional[str]="post", key:Optional[int]=-1):
             request_manager = RequestManager()
-            data_payload = MyFeedsRequest(request=raw_request)
+            data_payload = MyFeedsRequest(type=type, key=key)
 
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
             if not request_manager.jwt_payload.result:
                 raise request_manager.credentials_exception
 
             user_controller = UserController()
-            model = user_controller.try_get_my_feeds_with_type(database=self.__database,request=request_manager)
+            model = user_controller.try_get_my_feeds_with_type(database=self.__database,
+                                                               request=request_manager,
+                                                               feed_manager=self.__feed_manager)
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response
@@ -226,10 +228,10 @@ class User_Service_View(Master_View):
 
         # 프로필사진 바꾸기
         @self.__app.post('/user_home/try_change_profile_photo')
-        def try_change_profile_photo(request:Request, raw_request:dict):
+        def try_change_profile_photo(request:Request, image:Union[UploadFile, None] = File(None)):
             request_manager = RequestManager()
 
-            data_payload = ChangeProfilePhotoRequest(request=raw_request)
+            data_payload = ChangeProfilePhotoRequest(image=image)
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
             if not request_manager.jwt_payload.result:
                 raise request_manager.credentials_exception
@@ -241,17 +243,17 @@ class User_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
 
             return response
+        
+        
 
 class DummyRequest():
     def __init__(self) -> None:
         pass
 
 class MyFeedsRequest(RequestHeader):
-    def __init__(self, request) -> None:
-        super().__init__(request)
-        body = request['body']
-        self.type = body['type']
-        self.key = body['key']
+    def __init__(self, type, key) -> None:
+        self.type = type
+        self.key = key
 
 class MyCommentsRequest(RequestHeader):
     def __init__(self, request) -> None:
@@ -273,10 +275,8 @@ class ChangeNicknameRequest(RequestHeader):
         self.new_uname = body['uname']
 
 class ChangeProfilePhotoRequest(RequestHeader):
-    def __init__(self, request) -> None:
-        super().__init__(request)
-        body = request['body']
-        self.new_photo = body['new_photo']
+    def __init__(self, image) -> None:
+        self.image = image
 
 class LoginRequest(RequestHeader):
     def __init__(self, request) -> None:

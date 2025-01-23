@@ -170,26 +170,16 @@ class UserController:
     def try_get_my_feeds_with_type(self, database, request, feed_manager):
         model = MyFeedsModel(database=database)
 
-        try:
-            # 유저가 있으면 세팅함
-            model.set_user_with_email(request=request.jwt_payload)
-            if request.data_payload.type == "post":
-                model.get_my_long_feeds(feed_manager=feed_manager, last_index=request.data_payload.key)
-            elif request.data_payload.type == "moment":
-                model.get_my_short_feeds(feed_manager=feed_manager, last_index=request.data_payload.key)
-            elif request.data_payload.type == "like":
-                model.get_liked_feeds(feed_manager=feed_manager, last_index=request.data_payload.key)
+        # 유저가 있으면 세팅함
+        model.set_user_with_email(request=request.jwt_payload)
+        if request.data_payload.type == "post":
+            model.get_my_long_feeds(feed_manager=feed_manager, last_index=request.data_payload.key)
+        elif request.data_payload.type == "moment":
+            model.get_my_short_feeds(feed_manager=feed_manager, last_index=request.data_payload.key)
+        elif request.data_payload.type == "like":
+            model.get_liked_feeds(feed_manager=feed_manager, last_index=request.data_payload.key)
 
-        except CustomError as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
-
-        except Exception as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
-
-        finally:
-            return model
+        return model
 
     # 댓글 데이터 불러오기
     def try_get_my_comments(self, database, request, feed_manager):
