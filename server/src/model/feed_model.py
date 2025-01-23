@@ -525,6 +525,7 @@ class FilteredFeedModel(FeedModel):
         fid_list = feed_manager.get_all_fids()
 
         pprint(category)
+        pprint(fclass)
 
         # 1차 필터링 : FClass를 통한 분류를 먼저 진행합니다.
         #   왜 FClass 부터 먼저 진행하나요? -> 간단한 것부터 먼저 분류합니다.
