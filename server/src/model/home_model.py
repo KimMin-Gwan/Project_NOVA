@@ -248,3 +248,25 @@ class BiasFollowPageModel(BiasSearchModel):
 
         except Exception as e:
             raise CoreControllerLogicError("response making error | " + e)
+
+class RecommendKeywordModel(BaseModel):
+    def __init__(self, database:Local_Database) -> None:
+        super().__init__(database)
+        self.__keywords = []
+
+    def get_response_form_data(self, head_parser):
+        try:
+            body = {
+                'keywords' : self._make_dict_list_data(list_data=self.__chzzk),
+            }
+
+            response = self._get_response_data(head_parser=head_parser, body=body)
+            return response
+
+        except Exception as e:
+            raise CoreControllerLogicError("response making error | " + e)
+
+    def get_recommend_keyword(self, feed_search_engine:FeedSearchEngine):
+        self.__keywords = feed_search_engine.get_recommend_keyword()
+
+
