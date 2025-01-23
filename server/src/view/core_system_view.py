@@ -671,7 +671,7 @@ class Core_Service_View(Master_View):
             data_payload = DeleteFeedRequest(fid=fid)
 
             # 로그인이 되어있지 않으면, 그 글을 삭제할 수 없음
-            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
             if not request_manager.jwt_payload.result:
                 raise request_manager.credentials_exception
 
