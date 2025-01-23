@@ -6,7 +6,6 @@ import axios from "axios";
 export default function KeywordBox({ type, title, subTitle, onClickTagButton }) {
   let [bestTags, setBestTags] = useState([]);
   let [isLoading, setIsLoading] = useState(true);
-  console.log(type);
 
   // function fetchBestTag() {
   //   fetch(`https://nova-platform.kr/home/realtime_best_hashtag`, { credentials: "include" })
@@ -19,38 +18,57 @@ export default function KeywordBox({ type, title, subTitle, onClickTagButton }) 
   // useEffect(() => {
   //   fetchBestTag();
   // }, []);
-
-  async function fetchTodayBest() {
-    await fetch("https://nova-platform.kr/home/today_spiked_hot_hashtag", {
-      credentials: "include",
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setBestTags(data.body.hashtags);
-        setIsLoading(false);
-        console.log("today", data);
-      });
+  async function fetchHashTags() {
+    if (type === "today") {
+      await fetch("https://nova-platform.kr/home/today_spiked_hot_hashtag", {
+        credentials: "include",
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setBestTags(data.body.hashtags);
+          setIsLoading(false);
+          console.log("today", data);
+        });
+    } else if (type === "weekly") {
+      await axios
+        .get("https://nova-platform.kr/home/weekly_spiked_hot_hashtag", {
+          withCredentials: true,
+        })
+        .then((res) => {
+          setBestTags(res.data.body.hashtags);
+          setIsLoading(false);
+          console.log("ddd", res.data);
+        });
+    }
   }
+
+  // async function fetchTodayBest() {
+  //   await fetch("https://nova-platform.kr/home/today_spiked_hot_hashtag", {
+  //     credentials: "include",
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       setBestTags(data.body.hashtags);
+  //       setIsLoading(false);
+  //       console.log("today", data);
+  //     });
+  // }
 
   useEffect(() => {
-    if (type === "today") {
-      fetchTodayBest();
-    } else if (type === "weekly") {
-      fetchWeeklyBest();
-    }
+    fetchHashTags();
   }, []);
 
-  async function fetchWeeklyBest() {
-    await axios
-      .get("https://nova-platform.kr/home/weekly_spiked_hot_hashtag", {
-        withCredentials: true,
-      })
-      .then((res) => {
-        setBestTags(res.data.body.hashtags);
-        setIsLoading(false);
-        console.log("ddd", res.data);
-      });
-  }
+  // async function fetchWeeklyBest() {
+  //   await axios
+  //     .get("https://nova-platform.kr/home/weekly_spiked_hot_hashtag", {
+  //       withCredentials: true,
+  //     })
+  //     .then((res) => {
+  //       setBestTags(res.data.body.hashtags);
+  //       setIsLoading(false);
+  //       console.log("ddd", res.data);
+  //     });
+  // }
 
   // useEffect(() => {
 
