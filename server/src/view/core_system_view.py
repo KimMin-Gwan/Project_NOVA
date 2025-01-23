@@ -681,7 +681,7 @@ class Core_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
-        @self.__app.get('feed_explore/try_remove_feed')
+        @self.__app.get('/feed_explore/try_remove_feed')
         def try_remove_feed(request:Request, fid:Optional[str]):
             request_manager = RequestManager()
             data_payload = DeleteFeedRequest(fid=fid)
@@ -698,6 +698,7 @@ class Core_Service_View(Master_View):
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response
+            return "hello world"
 
 
     def check_route(self):
