@@ -524,6 +524,8 @@ class FilteredFeedModel(FeedModel):
         # 모든 Feed를 가져온 다음. 게시글을 하나하나씩 쳐내는 방식을 씁니다.
         fid_list = feed_manager.get_all_fids()
 
+        pprint(category)
+
         # 1차 필터링 : FClass를 통한 분류를 먼저 진행합니다.
         #   왜 FClass 부터 먼저 진행하나요? -> 간단한 것부터 먼저 분류합니다.
         #
