@@ -497,6 +497,15 @@ class ManagedFeedBiasTable:
             return filtered_feeds_df['fid'].tolist()
         return fid_list_df['fid'].tolist()
 
+    def filtering_categories_feed_new(self, fid_list:list, categories:list):
+        fid_list_df = self.__feed_df[(self.__feed_df['fid'].isin(fid_list))]
+        # Filtering 시, 다음의 값을 유의
+        # fclass == ""인 경우, 모든 경우를 가져옵니다. 어짜피 AD는 Notice의 경우로 들어가니까 상관없겠지요.
+        if categories[0] != "":
+            filtered_feeds_df = fid_list_df[(fid_list_df['board_type'].isin(categories))]
+            return filtered_feeds_df['fid'].tolist()
+        return fid_list_df['fid'].tolist()
+
 #---------------------------------------------------------------------------------------------------------------------------------------
 
 # 아래는 검색 엔진
@@ -1381,26 +1390,35 @@ class FilteringManager:
             # category = []인 경우. 1차 필터링을 거친 것을 그대로 반환
 
             filtered_fid_list = []
-            #
             # 조건문을 추가했음
             if len(keys) <= 0 or keys[0] == "":
                 filtered_fid_list = fid_list
 
-            # pprint(keys)
-            for key in keys:
-                # 공지 게시판은 공지만 가져온다.
-                if key == "공지사항":
-                    notice_list = self._filtering_notices_list()
-                    # filtered_fid_list.extend(notice_list)
-                # 로직에 오류가 있었음. 게시판을 계속 필터링하는 것이 아닌 분류한다는 개념으로 갔으면 나았는데
-                temp_list = self.__managed_feed_bias_table.filtering_category_feed(fid_list=fid_list, category=key)
-                # pprint(temp_list)
+            # if "공지사항" in keys:
+            #     notice_list = self._filtering_notices_list()
+            #     filtered_fid_list.extend(notice_list)
+            #     keys.remove("공지사항")
+            else:
+                temp_list = self.__managed_feed_bias_table.filtering_category_feed(fid_list=fid_list, category=keys[0])
                 filtered_fid_list.extend(temp_list)
-
-            # 여기서, 아마 합쳐야 할 것 같은데 어찌하면 좋을까.
-                # 공지는 맨 위에 뜨게 해야할까. 아님 어떻게...? What do you want?
-            # 필터링이 끝나면 반환
             return filtered_fid_list
+
+            # # pprint(keys)
+            # for key in keys:
+            #     # 공지 게시판은 공지만 가져온다.
+            #     if key == "공지사항":
+            #         notice_list = self._filtering_notices_list()
+            #         # filtered_fid_list.extend(notice_list)
+            #     # 로직에 오류가 있었음. 게시판을 계속 필터링하는 것이 아닌 분류한다는 개념으로 갔으면 나았는데
+            #     # 아 여기서 망했구나
+            #     temp_list = self.__managed_feed_bias_table.filtering_category_feed(fid_list=fid_list, category=key)
+            #     # pprint(temp_list)
+            #     filtered_fid_list.extend(temp_list)
+            #
+            # # 여기서, 아마 합쳐야 할 것 같은데 어찌하면 좋을까.
+            #     # 공지는 맨 위에 뜨게 해야할까. 아님 어떻게...? What do you want?
+            # # 필터링이 끝나면 반환
+            # return filtered_fid_list
 
     # BID로 필터링 하는 작업 수행, 카테고리별 필터링도 진행 됨
     def filtering_community(self, bids:list, category:str):
