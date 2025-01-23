@@ -241,7 +241,7 @@ class Feed_Controller:
             target=request.data_payload.keyword,
             last_index=request.data_payload.key,
             feed_search_engine=feed_search_engine,
-            num_feeds = num_feed,
+            num_feed=num_feed,
         )
 
         return model
