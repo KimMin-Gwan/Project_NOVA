@@ -1493,7 +1493,7 @@ class FeedManager:
 
     # Moment(숏 피드)만 가져오는 거
     def get_my_short_feeds(self, user:User):
-        feed_datas = self._database.get_data_with_ids(target="fid", ids=user.my_feed)
+        feed_datas = self._database.get_data_with_ids(target_id="fid", ids=user.my_feed)
         feeds = []
 
         for _, feed_data in enumerate(reversed(feed_datas)):
@@ -1509,7 +1509,7 @@ class FeedManager:
         # "fid=시간" -> "fid"
         liked_fid_data = [liked_feed.split('=')[0] for liked_feed in user.like]
 
-        feed_datas = self._database.get_datas_with_ids(target="fid", ids=liked_fid_data)
+        feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=liked_fid_data)
         feeds = []
 
         # 마지막이 좋아요 최신 순이라 리버스해야함.
