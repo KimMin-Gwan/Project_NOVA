@@ -1,5 +1,9 @@
 from model import BannerModel, HomeBiasModel, BiasSearchModel, Local_Database, SelectBiasModel, LeagueMetaModel, TokenModel, HashTagModel
 from others import UserNotExist, CustomError, FeedManager
+
+from src.model.home_model import RecommendKeywordModel
+
+
 #from server.src.view.jwt_decoder import JWTManager, JWTPayload
 #from view import RequestManager
 
@@ -145,3 +149,21 @@ class Home_Controller:
 
         finally:
             return model
+
+    def get_recommend_keyword(self, database:Local_Database, request, feed_search_engine) -> RecommendKeywordModel:
+        model = RecommendKeywordModel(database=database)
+        try:
+            if request.jwt_payload != "":
+                model.set_user_with_email(request=request.jwt_payload)
+            model.get_recommend_keywords(feed_search_engine=feed_search_engine)
+
+        except CustomError as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code)
+        except Exception as e:
+            print("Error Catched : ", e.error_type)
+            model.set_state_code(e.error_code)
+
+        finally:
+            return model
+
