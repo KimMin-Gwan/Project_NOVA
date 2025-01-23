@@ -1223,9 +1223,9 @@ class RecommendManager:
         list_of_hashtags_in_hours = []
 
         for managed_feed in managed_feeds_in_hours:
-            for hashtags in managed_feed.hashtags:
+            for hashtag in managed_feed.hashtag:
                 # 해시태그 리스트를 가져오므로, 빈 리스트에 Extend로 이어 붙임.
-                list_of_hashtags_in_hours.extend(hashtags)
+                list_of_hashtags_in_hours.extend(hashtag)
 
         pprint("출력 테스트 : ")
         pprint(list_of_hashtags_in_hours)
