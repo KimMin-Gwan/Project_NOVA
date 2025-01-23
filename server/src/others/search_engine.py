@@ -1385,7 +1385,7 @@ class FilteringManager:
             if len(keys) <= 0 or keys[0] == "":
                 filtered_fid_list = fid_list
 
-            # pprint(keys)
+            pprint(keys)
             for key in keys:
                 # 공지 게시판은 공지만 가져온다.
                 if key == "notice":
