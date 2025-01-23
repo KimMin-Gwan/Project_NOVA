@@ -531,13 +531,11 @@ class FilteredFeedModel(FeedModel):
         #   왜 FClass 부터 먼저 진행하나요? -> 간단한 것부터 먼저 분류합니다.
         #
         fid_list = feed_search_engine.try_filtered_feed_with_option(fid_list=fid_list, option="fclass", keys=[fclass])
-        # pprint(fid_list[:5])
 
         # 2차 필터링 : Category 별 분류를 진행합니다.
         # AD의 경우, 생각중
         fid_list = feed_search_engine.try_filtered_feed_with_option(fid_list=fid_list, option="category", keys=category)
 
-        # pprint(fid_list[:5])
         # 마지막, 분류가 끝이 났으면 페이징을 진행합니다.
         fid_list, self._key = feed_manager.paging_fid_list(fid_list=fid_list, last_index=last_index, page_size=num_feed)
 
@@ -559,10 +557,7 @@ class FilteredFeedModel(FeedModel):
         # 기본 : category == "" (선택하지않음). BID 커뮤니티에 있는 게시글 중 카테고리 필터링을 거치지 않는다
         #       선택 시, 추가로 카테고리 필터링을 거치게됨
 
-        if bid: 
-            fid_list = feed_search_engine.try_feed_with_bid_n_filtering(target_bids=self._user.bids, category=category)
-        else:
-            fid_list = feed_search_engine.try_feed_with_bid_n_filtering(target_bids=bids, category=category)
+        fid_list = feed_search_engine.try_feed_with_bid_n_filtering(target_bids=bids, category=category)
 
         fid_list, self._key = feed_manager.paging_fid_list(fid_list=fid_list, last_index=last_index, page_size=num_feed)
 
