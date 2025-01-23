@@ -236,7 +236,7 @@ class MyCommentsModel(BaseModel):
 
 class MyFeedsModel(BaseModel):
     def __init__(self, database:Local_Database) -> None:
-        super.__init__(database)
+        super().__init__(database)
         self._feeds = []
         self._key = -1
 
