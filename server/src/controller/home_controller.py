@@ -24,7 +24,8 @@ class Home_Controller:
         model = HomeBiasModel(database=database)
 
         # 유저가 있으면 그 유저의 bias_list로 세팅
-        if model.set_user_with_email(request=request.jwt_payload):
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
             model.set_bias_list()
         # 유저가 아니면 랜덤하게
         else:
