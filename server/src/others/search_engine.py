@@ -696,14 +696,15 @@ class FeedSearchEngine:
         return fid
 
     # # 추천 키워드
-    # def try_recommend_keyword(self, num_keywords=15):
-    #     # 저장된 키워드가 없는 현재는.. 추천 해시태그를 전해줄까
-    #     keywords = []
-    #     # keywords = self.__recommend_manager.get_recommend_keyword()
-    #     keywords = self.__recommend_manager.get_spiked_hashtags_in_hours(
-    #         num_hashtag=num_keywords, target_hours=168
-    #     )
-    #     return keywords
+    def try_recommend_keyword(self, num_keywords=10):
+        # 저장된 키워드가 없는 현재는.. 추천 해시태그를 전해줄까.
+        # 일단 로직만 넣었음. 이후에 검색어가 쌓여서 분석이 된다면 이제 넣을거야.
+        keywords = []
+        # keywords = self.__recommend_manager.get_recommend_keyword(num_keywords=num_keywords)
+        keywords = self.__recommend_manager.get_spiked_hashtags_in_hours(
+            num_hashtag=num_keywords, target_hours=168
+        )
+        return keywords
 
     # ------------------------------------------------------------------------------------
     def get_spiked_hashtags(self, target_type="today", num_hashtags=10) -> list:
@@ -1100,6 +1101,9 @@ class RecommendManager:
         self.__managed_feed_bias_table=managed_feed_bias_table
 
         self.hashtags = []
+
+        # 이거 나중에 쓸거긴 함. 키워드 쌓이면 활성화 시키자
+        self.keywords = []
         #asyncio.get_event_loop()
         #self.loop.create_task(self.check_trend_hashtag())
 
@@ -1171,6 +1175,10 @@ class RecommendManager:
         except Exception as e:
             print(e)
 
+    def __total_keyword_setting(self):
+        pass
+
+
     # 매 시간마다 갱신되는 비동기성 함수
     async def check_trend_hashtag(self):
         try:
@@ -1198,6 +1206,31 @@ class RecommendManager:
                     self.last_computed_time = current_time
                 time_diff = 0
 
+        except KeyboardInterrupt:
+            print("Shutting down due to KeyboardInterrupt.")
+
+    # 키워드 실시간 트렌드 계산 비동기함수
+    # 아직 키워드 관련해서 생성된 게 없어서 일단 냅둡니다.
+    # 활성화시키지 마세요
+    async def check_trend_keyword(self):
+        try:
+            time_diff = 1
+            current_time = time.time()
+            while True:
+                # time_diff 계산
+                if time_diff >= 1:
+                    # self.__total_keyword_setting()
+
+                    self.last_computed_time = current_time
+                else:
+                    await asyncio.sleep(60)
+
+                current_time = time.time()
+                if hasattr(self, 'last_computed_time'):
+                    time_diff = (current_time - self.last_computed_time) / 3600 # 시간 단위로 계산
+                else:
+                    self.last_computed_time = current_time
+                time_diff = 0
         except KeyboardInterrupt:
             print("Shutting down due to KeyboardInterrupt.")
 
@@ -1243,7 +1276,15 @@ class RecommendManager:
 
     # 실시간 트랜드 해시태그 제공
     def get_best_hashtags(self, num_hashtag=10) -> list:
+        if len(self.hashtags) < num_hashtag:
+            return self.hashtags
         return self.hashtags[0:num_hashtag]
+
+    # 실시간 추천 검색어 제공
+    def get_trend_keywords(self, num_keywords=10) -> list:
+        if  len(self.keywords) < num_keywords:
+            return self.keywords
+        return self.keywords[0:num_keywords]
 
     # 사용자에게 어울릴만한 해시태그 리스트 제공
     def get_user_recommend_hashtags(self, bids):
@@ -1271,6 +1312,11 @@ class RecommendManager:
             hashtag_ranking=hashtag_ranking_list
             )
         return fid
+
+    def get_recommend_keyword(self, num_keywords:int):
+        trend_keyword_list = self.get_trend_keywords()
+        return trend_keyword_list
+
 
     # # 비로그인 유저를 위한 로직
     # def get_recommend_feed_not_login(self, fid:str, history:list):

@@ -155,7 +155,6 @@ class Core_Service_View(Master_View):
 
             return response
 
-
         # /home/search_feed_with_hashtag?hashtag=뭐
         @self.__app.get('/home/search_feed_with_hashtag')
         def get_hot_hashtag_feed(request:Request, hashtag:Optional[str]):
@@ -201,7 +200,24 @@ class Core_Service_View(Master_View):
             #pprint(body_data)
             response = request_manager.make_json_response(body_data=body_data)
             return response
-        
+
+        # 추천 키워드 시스템.
+        # 현재는 일부러 주간 핫태그를 내보내도록 했습니다.
+        @self.__app.get('/home_search/get_recommend_keyword')
+        def get_recommend_keyword(request:Request):
+            request_manager = RequestManager()
+            data_payload = DummyRequest()
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+
+            home_controller = Home_Controller(feed_manager=self.__feed_manager)
+            model = home_controller.get_recommend_keyword(database=self.__database,
+                                                          request=request_manager,
+                                                          feed_search_engine=self.__feed_search_engine,
+                                                          num_feed=10)
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
         @self.__app.get('/home/all_feed')
         def get_feed_data(request:Request, key:Optional[int] = -1):
             request_manager = RequestManager()

@@ -257,7 +257,7 @@ class RecommendKeywordModel(BaseModel):
     def get_response_form_data(self, head_parser):
         try:
             body = {
-                'keywords' : self._make_dict_list_data(list_data=self.__chzzk),
+                'keywords' : self._make_dict_list_data(list_data=self.__keywords),
             }
 
             response = self._get_response_data(head_parser=head_parser, body=body)
@@ -266,7 +266,9 @@ class RecommendKeywordModel(BaseModel):
         except Exception as e:
             raise CoreControllerLogicError("response making error | " + e)
 
-    def get_recommend_keyword(self, feed_search_engine:FeedSearchEngine):
+    def get_recommend_keywords(self, feed_search_engine:FeedSearchEngine):
         self.__keywords = feed_search_engine.get_recommend_keyword()
+
+        return
 
 
