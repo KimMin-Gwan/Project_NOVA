@@ -70,7 +70,7 @@ class ObjectStorageConnection:
         self.__init_boto3()
         
         path = './model/local_database/temp_profile_image/'
-        file_name = f"{uid}.html"
+        file_name = f"{uid}.png"
         
         pil_image = Image.open(BytesIO(image))
         file_path = path + file_name
