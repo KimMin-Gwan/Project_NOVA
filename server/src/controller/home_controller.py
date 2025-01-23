@@ -151,7 +151,7 @@ class Home_Controller:
         if request.jwt_payload != "":
             model.set_user_with_email(request=request.jwt_payload)
             
-        model.set_weekly_best_hashtag(feed_search_engine=feed_search_engine)
+        model.set_weekly_best_hashtag(feed_search_engine=feed_search_engine, num_hashtags=10)
 
         return model
 
@@ -160,7 +160,7 @@ class Home_Controller:
         try:
             if request.jwt_payload != "":
                 model.set_user_with_email(request=request.jwt_payload)
-            model.set_monthly_best_hashtag(feed_search_engine=feed_search_engine)
+            model.set_monthly_best_hashtag(feed_search_engine=feed_search_engine, num_hashtags=10)
 
         except CustomError as e:
             print("Error Catched : ", e.error_type)
