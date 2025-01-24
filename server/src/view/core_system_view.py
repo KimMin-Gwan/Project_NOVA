@@ -85,14 +85,6 @@ class Core_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             
             
-            print(model.get_bias_list())
-            
-            # 쿠키에 넣어서 보내주자
-            response = TempCookieManager().make_new_temp_cookie(key="bids",
-                                                     value=model.get_bias_list(),
-                                                     response=response
-                                                     )
-            
             return response
 
         @self.__app.get('/home/hot_hashtag')
@@ -476,13 +468,8 @@ class Core_Service_View(Master_View):
         def get_feed_with_community(request:Request, raw_request:dict):
             request_manager = RequestManager()
             
-            time.sleep(1)
-            # 쿠키에  들어있는 bid 리스트를 뽑아 줄 것
-            cookie_bid_list = TempCookieManager().get_temp_cookie(key="bids", request=request)
-            
-            print("cookie", cookie_bid_list)
             # 데이터 페이로드에도 bid 리스트를 넣어야됨
-            data_payload = CommunityRequest(request=raw_request, cookie_bid_list=cookie_bid_list)
+            data_payload = CommunityRequest(request=raw_request)
             
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
@@ -861,7 +848,6 @@ class CommunityRequest(RequestHeader):
         self.bids = body['bids']
         self.category = body['board']
         self.key:int = body['key'] # 미안해요. 승준님님. 이거 보내주세요. 얘는 페이지의 마지막 인덱스 번호에요.
-        self.cookie_bid_list = cookie_bid_list
 
 # class CommunityFilteredRequest(CommunityRequest):
 #     def __init__(self, request) -> None:
