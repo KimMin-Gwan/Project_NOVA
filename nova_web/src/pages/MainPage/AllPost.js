@@ -16,16 +16,14 @@ export default function AllPost({ brightMode, allFeed }) {
   // let allFeed = useFetchData("https://nova-platform.kr/home/all_feed");
 
   function onClick(fid) {
-    navigate(`/feed_page?fid=${fid}`);
+    navigate(`/feed_detail/${fid}`);
   }
 
   return (
     <div className={`${style["wrap-container"]} ${style["allpost-container"]}`}>
       <div className={`${style["top-area"]} ${style[getModeClass(mode)]}`}>
-        {/* ${style[getModeClass(mode)]} */}
         <div className={`${style["main-area"]} ${style["all-main-area"]} `}>
           <ul className={`${style["all-list"]} `}>
-            {/* ${style[getModeClass(mode)]} */}
             {allFeed.map((feed, i) => {
               return (
                 <li key={feed.feed.fid} onClick={() => onClick(feed.feed.fid)}>

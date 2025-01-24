@@ -13,6 +13,8 @@ import axios from "axios";
 export default function FeedDetail({ feed }) {
   let navigate = useNavigate();
   let { fid } = useParams();
+  // let [searchParams] = useSearchParams();
+  // let fid = searchParams.get("fid");
 
   let location = useLocation();
   let { state } = location;

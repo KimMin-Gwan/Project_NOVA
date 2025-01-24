@@ -1,7 +1,7 @@
-import axios from "axios";
+import mainApi from "./apis/mainApi";
 
 function getTagList() {
-  return axios
+  return mainApi
     .get("https://nova-platform.kr/home/realtime_best_hashtag", {
       withCredentials: true,
     })

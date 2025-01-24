@@ -1,22 +1,23 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import mainApi from "../services/apis/mainApi";
 
 function Banner({ url }) {
   let [currentBanner, setBanner] = useState(0);
   let [images, setImage] = useState([]);
-  //
-  // let url = 'http://nova-platform.kr/home/banner';
-  // let data = { token: '토큰 정보'}
 
   useEffect(() => {
     let copy = [];
-    fetch(url + "banner")
-      .then((response) => response.json())
-      .then((data) => {
-        copy = data.body.banner.map((banner) => banner.ba_url);
-        // copy = [data.body.banner[0].ba_url, data.body.banner[1].ba_url];
-        setImage(copy);
-      });
+    mainApi.get("/home/banner").then((res) => {
+      copy = res.data.body.banner.map((banner) => banner.ba_url);
+      setImage(copy);
+    });
+    // fetch(url + "banner")
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     copy = data.body.banner.map((banner) => banner.ba_url);
+    //     // copy = [data.body.banner[0].ba_url, data.body.banner[1].ba_url];
+    //     setImage(copy);
+    //   });
 
     let a = setInterval(() => {
       setBanner((prevIndex) => {
@@ -27,9 +28,8 @@ function Banner({ url }) {
 
     return () => {
       clearInterval(a);
-      // setImage([copy[0]]);
     };
-  }, [url]);
+  }, []);
 
   return (
     <section className="banner">
@@ -41,13 +41,6 @@ function Banner({ url }) {
             </div>
           );
         })}
-
-        {/* <div className="image-box">
-          <img className="image1" src={images[currentBanner]}></img>
-        </div> */}
-        {/* <div className="image-box">
-          <img className="image2" src={url}></img>
-        </div> */}
       </div>
     </section>
   );

@@ -1,82 +1,56 @@
 import "./App.css";
-import { useEffect, useRef, useState } from "react";
-import { Routes, Route, useNavigate, Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import Banner from "./component/banner";
-import MyBias from "./Container/myBiasContainer";
 import MyPage from "./pages/MyPage/Mypage";
 import MyPageEdit from "./pages/MyPage/MypageEdit";
-import menu from "./img/menu-burger.png";
 import NOVALogin from "./pages/NovaLogin/NovaLogin";
 import SelectBias from "./component/selectBias/SelectBias";
-import BiasDetail from "./pages/BiasDetail/biasDetail";
-import BiasCertify from "./pages/BiasCertify/biasCertify";
-import NameCard from "./pages/NameCard/nameCard";
 import MoreSee from "./pages/MoreSee/MoreSee";
 import NoticeList from "./pages/Notice/NoticeList";
 import Notice from "./pages/Notice/Notice";
-import LeaguePage from "./pages/LeaguePage/LeaguePage";
 import SignUp from "./pages/SignUp/SignUp.js";
-import FeedPage from "./pages/FeedPage/FeedPage.js";
-import GalaxyList from "./pages/GalaxyPage/GalaxyList.js";
 import NavBar from "./component/NavBar.js";
-import WriteFeed from "./pages/WriteFeed/WriteFeed.js";
-import MyWriteFeed from "./pages/MyPage/MyWriteFeed/MyWriteFeed.js";
-import MyInterestFeed from "./pages/MyPage/MyInterestFeed/MyInterestFeed.js";
-import MyCommentFeed from "./pages/MyPage/MyCommentFeed/MyCommentFeed.js";
-import MyActiveFeed from "./pages/MyPage/MyActiveFeed/MyActiveFeed.js";
-import MyAlert from "./pages/MyPage/Alert/MyAlert.js";
 import Temrs from "./pages/Temrs/Temrs.js";
 import FindPw from "./pages/FindPw/FindPw.js";
 import FindPwChange from "./pages/FindPw/FindPwChange.js";
-import MainPart from "./pages/MainPage/MainPart.js";
-import PopularFeed from "./pages/MainPage/PopularFeed.js";
-import IncreaseTag from "./pages/MainPage/IncreaseTag.js";
 import AllPost from "./pages/MainPage/AllPost.js";
-import FeedHashList from "./pages/FeedList/FeedHashList.js";
 import FeedList from "./pages/FeedList/FeedList.js";
 import NovaFunding from "./pages/NovaFunding/NovaFunding.js";
-import LeftBar from "./pages/WideVer/LeftBar.js";
-import RightBar from "./pages/WideVer/RightBar.js";
 import LikeFunding from "./pages/NovaFunding/LikeFunding/LikeFunding.js";
-import Week100 from "./pages/MainPage/Week100.js";
 import DuckFunding from "./pages/NovaFunding/DuckFunding/DuckFunding.js";
 import SuccessFunding from "./pages/NovaFunding/DuckFunding/SuccessFunding.js";
 import RankingFunding from "./pages/NovaFunding/FundingRanking/FundingRanking.js";
 import OpenRanking from "./pages/NovaFunding/FundingRanking/OpenRanking.js";
 import BiasFunding from "./pages/NovaFunding/BiasFunding/BiasFunding.js";
-import RecommendAll from "./pages/NovaFunding/BiasFunding/MoreProjects.js";
 import FollowPage from "./pages/FollowPage/FollowPage.js";
 
 import all_post from "./img/all_post.png";
 import best from "./img/best.png";
 import new_pin from "./img/new_pin.png";
-import hashtag from "./img/hashtag.png";
-import logo from "./img/NOVA_Platform.png";
 import logo2 from "./img/logo2.png";
+import logo from "./img/NOVA_Platform.png";
+import hashtag from "./img/hashtag.png";
+
 import FeedThumbnail from "./component/feed-list/FeedThumbnail.js";
 import useFetchData from "./hooks/useFetchData.js";
 import MoreProjects from "./pages/NovaFunding/BiasFunding/MoreProjects.js";
 import BiasBoxes from "./component/BiasBoxes.js";
-import { ContentFeed } from "./component/feed.js";
 import FeedDetail from "./pages/FeedDetail/FeedDetail.js";
-import TestRef from "./component/TestRef.js";
-import FilterModal from "./component/FilterModal/FilterModal.js";
 import LongFormWrite from "./pages/LongFormWrite/LongFormWrite.js";
-import NoticeBox from "./component/NoticeBox/NoticeBox.js";
-import CategoryModal from "./component/CategoryModal/CategoryModal.js";
 import SearchBox from "./component/SearchBox.js";
 import Write from "./pages/Write/index.js";
-
-import { Editor } from "@toast-ui/react-editor";
-import "@toast-ui/editor/dist/toastui-editor.css";
-import "tui-color-picker/dist/tui-color-picker.css";
-import "@toast-ui/editor/dist/i18n/ko-kr";
-import "@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css";
 import SearchPage from "./pages/SearchPage/SearchPage.js";
-import getTagList from "./services/getTagList.js";
 import useTagStore from "./stores/tagList/useTagStore.js";
 import SearchResultPage from "./pages/SearchResultPage/SearchResultPage.js";
 import useBiasStore from "./stores/BiasList/useBiasStore.js";
+
+import { ContentFeed } from "./component/feed.js";
+import TestRef from "./component/TestRef.js";
+import FilterModal from "./component/FilterModal/FilterModal.js";
+import NoticeBox from "./component/NoticeBox/NoticeBox.js";
+import CategoryModal from "./component/CategoryModal/CategoryModal.js";
+import getTagList from "./services/getTagList.js";
 
 // 다크 모드 클래스 반환 함수
 export function getModeClass(mode) {
@@ -84,149 +58,60 @@ export function getModeClass(mode) {
 }
 function App() {
   const URL = "https://nova-platform.kr/home/";
-  // let url = 'http://127.0.0.1:5000/home/';
-
-  let [isUserState, setIsUserState] = useState(false);
-  let todayBestFeed = useFetchData(`${URL}today_best`);
-  let weeklyFeed = useFetchData(`${URL}weekly_best`);
-  let allFeed = useFetchData(`${URL}all_feed`);
   // let bias_url = "https://kr.object.ncloudstorage.com/nova-images/";
-  let [isLoading, setIsLoading] = useState(true);
 
-  // let [myBias, setMyBias] = useState([]);
+  let navigate = useNavigate();
+  let [isUserState, setIsUserState] = useState(false);
+  let todayBestFeed = useFetchData(`/home/today_best`);
+  let weeklyFeed = useFetchData(`/home/weekly_best`);
+  let allFeed = useFetchData(`/home/all_feed`);
 
-  // async function fetchBiasData() {
-  //   await fetch(`${URL}my_bias`, {
-  //     credentials: "include",
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       console.log("bias_data", data);
-  //       setMyBias(data.body.bias_list);
-  //       setIsLoading(false);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Fetch error:", error);
-  //     });
-  // }
-
-  // useEffect(() => {
-  //   fetchBiasData();
-  // }, []);
-  // let [allFeed, setAllFeed] = useState([]);
-  // let header = {
-  //   "request-type": "default",
-  //   "client-version": "v1.0.1",
-  //   "client-ip": "127.0.0.1",
-  //   uid: "1234-abcd-5678",
-  //   endpoint: "/user_system/",
-  // };
-  // let send_form = {
-  //   header: header,
-  //   body: {
-  //     key: -1,
-  //     category: ["자유게시판"],
-  //     fclass: "short",
-  //   },
-  // };
-
-  // function fetchAllFeed() {
-  //   fetch("https://nova-platform.kr/feed_explore/all_feed", {
-  //     method: "POST",
-  //     credentials: "include",
-  // headers: {
-  //   "Content-Type": "application/json",
-  // },
-  //     body: JSON.stringify(send_form),
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       console.log("all", data);
-  //     });
-  // }
-
-  // useEffect(() => {
-  //   fetchAllFeed();
-  // }, []);
-
-  let bias_url = "https://kr.object.ncloudstorage.com/nova-images/";
-
-  let [myBias, setMyBias] = useState([]);
   let { biasList, fetchBiasList } = useBiasStore();
-  const defaultBoxes = 4;
-  const totalBiasBoxes = Math.max(defaultBoxes, biasList.length);
-
-  useEffect(() => {
-    fetchBiasList();
-    // fetch(URL + "my_bias", {
-    //   credentials: "include",
-    // })
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     setMyBias(data.body.bias_list);
-    //     setIsLoading(false);
-    //     console.log("bias_list", data);
-    //   })
-    //   .catch((error) => {
-    //     console.error("Fetch error:", error);
-    //   });
-  }, []);
-
-  function handleValidCheck() {
-    fetch("https://nova-platform.kr/home/is_valid", {
-      credentials: "include", // 쿠키를 함께 포함한다는 것
-    })
-      .then((response) => {
-        if (!response.ok) {
-          if (response.status === 401) {
-            setIsUserState(false);
-          } else if (response.status === 200) {
-            setIsUserState(true);
-          } else {
-            throw new Error(`status: ${response.status}`);
-          }
-        } else {
-          // console.log("로그인  확인");
-          setIsUserState(true);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        // console.log(data);
-      });
-  }
-
-  useEffect(() => {
-    handleValidCheck();
-  }, []);
-
-  // let [tagList, setTagList] = useState([]);
-
-  // console.log("ada", tagLists);
-  // function fetchTagData() {
-  //   fetch("https://nova-platform.kr/home/realtime_best_hashtag", {
-  //     credentials: "include",
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       setTagList(data.body.hashtags);
-  //     });
-  //   }
-
   let { tagList, loading, fetchTagList } = useTagStore();
 
+  // 최애 리스트 받아오기
+  useEffect(() => {
+    fetchBiasList();
+  }, []);
+
+  // 실시간 랭킹 받아오기
   useEffect(() => {
     fetchTagList();
-    // fetchTagData();
-    // getTagList().then((data) => {
-    //   setTagList(data.body.hashtags);
-    // });
   }, []);
+
+  // function handleValidCheck() {
+  //   fetch("https://nova-platform.kr/home/is_valid", {
+  //     credentials: "include", // 쿠키를 함께 포함한다는 것
+  //   })
+  //     .then((response) => {
+  //       if (!response.ok) {
+  //         if (response.status === 401) {
+  //           setIsUserState(false);
+  //         } else if (response.status === 200) {
+  //           setIsUserState(true);
+  //         } else {
+  //           throw new Error(`status: ${response.status}`);
+  //         }
+  //       } else {
+  //         // console.log("로그인  확인");
+  //         setIsUserState(true);
+  //       }
+  //       return response.json();
+  //     })
+  //     .then((data) => {
+  //       // console.log(data);
+  //     });
+  // }
+
+  // useEffect(() => {
+  //   handleValidCheck();
+  // }, []);
 
   const [currentIndex, setCurrentIndex] = useState(0); // 현재 표시 중인 태그 인덱스
   const intervalTime = 3000; // 2초마다 태그 변경
   let [biasId, setBiasId] = useState();
 
+  // 실시간 랭킹 동작(꺼놓음)
   // useEffect(() => {
   //   const timer = setInterval(() => {
   //     setCurrentIndex((prevIndex) => {
@@ -242,8 +127,6 @@ function App() {
   let [showBox, setShowBox] = useState(false);
   let [blackBox, setBlackBox] = useState("");
 
-  let navigate = useNavigate();
-
   // // brightMode 상태가 변경될 때마다 body 클래스 업데이트
   const [brightMode, setBrightMode] = useState(() => {
     return localStorage.getItem("brightMode") || "bright"; // 기본값은 'bright'
@@ -255,6 +138,10 @@ function App() {
   const handleModeChange = (newMode) => {
     setBrightMode(newMode); // MoreSee에서 전달받은 상태 업데이트
   };
+
+  if (loading) {
+    return <div>loading...</div>;
+  }
   return (
     <Routes>
       {/* 더보기 페이지 / 마이페이지 */}
@@ -276,12 +163,12 @@ function App() {
 
       {/* 피드 페이지 */}
       {/* <Route path="/feed_page" element={<FeedPage brightMode={brightMode} />}></Route> */}
+      {/* <Route path="/feed_hash_list" element={<FeedHashList />}></Route> */}
+      {/* <Route path="/feed_hash_list/:fid" element={<FeedHashList />}></Route> */}
       <Route path="/write_feed" element={<Write />}>
         <Route path=":type" element={<Write />}></Route>
       </Route>
       <Route path="/select_bias" element={<SelectBias />}></Route>
-      <Route path="/feed_hash_list" element={<FeedHashList />}></Route>
-      <Route path="/feed_hash_list/:fid" element={<FeedHashList />}></Route>
       <Route path="/feed_list" element={<FeedList brightMode={brightMode} />}></Route>
       <Route path="/feed_list/:fid" element={<FeedList />}></Route>
       <Route path="/feed_detail/:fid" element={<FeedDetail />}></Route>
@@ -352,8 +239,6 @@ function App() {
                       className={`logo-st ${getModeClass(brightMode)}`}
                     ></img>
                   </div>
-                  {/* <Link to="/write_feed/long">롱폼작성 페이지지</Link>
-                  <Link to="/test1">test page</Link> */}
                 </header>
                 <SearchBox />
                 <h4 className="main-title">최애가 가장 빛날 수 있는 공간</h4>
@@ -377,9 +262,6 @@ function App() {
                   endPoint={`/feed_list?type=bias`}
                   customClassName="custom-height"
                 />
-                {/* <section className="my-bias">
-                  <MyBias url={URL} showBox={showBox} blackBox={blackBox}></MyBias>
-                </section> */}
               </div>
 
               <section>
@@ -400,14 +282,6 @@ function App() {
               </section>
 
               <section className="contents">
-                {/* <MainPart brightMode={brightMode} /> */}
-                {/* <PopularFeed brightMode={brightMode} /> */}
-                {/* <div className="narrow-page">
-                  <IncreaseTag brightMode={brightMode} />
-                </div> */}
-                {/* <Week100 brightMode={brightMode} /> */}
-                {/* <hr className={`hr-line ${getModeClass(brightMode)}`}></hr> */}
-
                 <FeedThumbnail
                   title={
                     <>
@@ -440,17 +314,13 @@ function App() {
                   allPost={<AllPost allFeed={allFeed} />}
                   endPoint={"/feed_list?type=all"}
                 />
-                {/* <AllPost brightMode={brightMode} /> */}
               </section>
               <NavBar brightMode={brightMode}></NavBar>
 
-              <div className="narrow-page">
+              {/* <div className="narrow-page">
                 <NavBar brightMode={brightMode}></NavBar>
-              </div>
+              </div> */}
             </div>
-            {/* <section className="contents com1">
-              <RightBar brightMode={brightMode} />
-            </section> */}
           </div>
         }
       />

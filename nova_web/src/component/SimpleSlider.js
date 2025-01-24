@@ -59,7 +59,7 @@ const SimpleSlider = ({ feedData, brightMode, type, className }) => {
   let navigate = useNavigate();
 
   function onClickMore(fid) {
-    navigate(`/feed_page?fid=${fid}`);
+    navigate(`/feed_detail/${fid}`);
   }
 
   const [mode, setMode] = useState(brightMode); // 초기 상태는 부모로부터 받은 brightMode 값
@@ -68,7 +68,11 @@ const SimpleSlider = ({ feedData, brightMode, type, className }) => {
   }, [brightMode]);
 
   return (
-    <div className={`slider-container ${brightMode === "dark" ? "dark-mode" : "bright-mode"} ${className || ""}`}>
+    <div
+      className={`slider-container ${brightMode === "dark" ? "dark-mode" : "bright-mode"} ${
+        className || ""
+      }`}
+    >
       <Slider {...settings}>
         {feedData.length !== 0 &&
           feedData.map((feed, i) => {
@@ -79,7 +83,7 @@ const SimpleSlider = ({ feedData, brightMode, type, className }) => {
                     className={`slide-content ${getModeClass(mode)}`}
                     onClick={(e) => {
                       e.preventDefault();
-                      // onClickMore(feed.fid);
+                      onClickMore(feed.fid);
                     }}
                   >
                     {type === "bias" && (
@@ -90,7 +94,14 @@ const SimpleSlider = ({ feedData, brightMode, type, className }) => {
 
                     {!type && (
                       <div className={style["img-container"]}>
-                        <img src={feed.feed.image.length > 0 ? feed.feed.image[0] : "https://kr.object.ncloudstorage.com/nova-feed-images/nova-platform.PNG"} alt="이미지" />
+                        <img
+                          src={
+                            feed.feed.image.length > 0
+                              ? feed.feed.image[0]
+                              : "https://kr.object.ncloudstorage.com/nova-feed-images/nova-platform.PNG"
+                          }
+                          alt="이미지"
+                        />
                       </div>
                     )}
 

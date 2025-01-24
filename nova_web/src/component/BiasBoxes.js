@@ -4,24 +4,8 @@ import useBiasStore from "../stores/BiasList/useBiasStore";
 export default function BiasBoxes({ setBiasId, fetchBiasCategoryData, writeCommunity }) {
   const URL = "https://nova-platform.kr/home/";
   let bias_url = "https://kr.object.ncloudstorage.com/nova-images/";
-  let [isLoading, setIsLoading] = useState(true);
 
   let { biasList, loading, fetchBiasList } = useBiasStore();
-  // async function fetchBiasData() {
-  //   await fetch(`${URL}my_bias`, {
-  //     credentials: "include",
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       console.log("bias_data", data);
-  //       setMyBias(data.body.bias_list);
-  //       setIsLoading(false);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Fetch error:", error);
-  //     });
-  // }
-  // fetchBiasData();
 
   // useEffect(() => {
   //   fetchBiasList();
@@ -31,7 +15,6 @@ export default function BiasBoxes({ setBiasId, fetchBiasCategoryData, writeCommu
     setBiasId(bid);
   }
 
-  let [myBias, setMyBias] = useState([]);
   const defaultBoxes = 4;
   const totalBiasBoxes = Math.max(defaultBoxes, biasList.length);
 
@@ -85,7 +68,6 @@ export default function BiasBoxes({ setBiasId, fetchBiasCategoryData, writeCommu
               </div>
             </div>
             <div className="b-name">
-              {" "}
               <span>&nbsp;</span>
             </div>
           </div>
