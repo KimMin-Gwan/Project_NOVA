@@ -9,7 +9,9 @@ function MyPage() {
   let [nickname, setNickname] = useState("");
   let [password, setPassword] = useState("");
   let [newPassword, setNewPassword] = useState("");
+  let [myProfile, setMyProfile] = useState();
 
+  let [newNickname, setNewNickname] = useState("");
   let header = {
     "request-type": "default",
     "client-version": "v1.0.1",
@@ -21,7 +23,7 @@ function MyPage() {
   async function fetchChangeNickname() {
     await axios
       .post(
-        `https://nova-platform.kr/user_home/try_change_uname`,
+        `https://nova-platform.kr/user_home/try_change_nickname`,
         {
           header: header,
           body: {
@@ -37,6 +39,9 @@ function MyPage() {
       )
       .then((res) => {
         console.log(res.data);
+        if (res.data.body.result) {
+          setNewNickname(res.data.body.uname);
+        }
       });
   }
 
@@ -98,8 +103,6 @@ function MyPage() {
         console.error("Logout error:", error);
       });
   };
-
-  let [myProfile, setMyProfile] = useState();
 
   async function fetchEditProfile() {
     await fetch("https://nova-platform.kr/user_home/get_my_profile_data", {
