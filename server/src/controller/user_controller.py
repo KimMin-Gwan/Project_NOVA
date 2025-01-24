@@ -222,21 +222,12 @@ class UserController:
     # 닉네임 변경
     def try_change_nickname(self, database, request):
         model = ChangeNickNameModel(database=database)
-        try:
-            # 유저가 있으면 세팅
-            model.set_user_with_email(request=request.jwt_payload)
-            model.try_change_nickname(data_payload=request.data_payload)
+        
+        # 유저가 있으면 세팅
+        model.set_user_with_email(request=request.jwt_payload)
+        model.try_change_nickname(data_payload=request.data_payload)
 
-        except CustomError as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
-
-        except Exception as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
-
-        finally:
-            return model
+        return model
 
     # 비밀번호 변경하기
     def try_change_password(self, database, request):
