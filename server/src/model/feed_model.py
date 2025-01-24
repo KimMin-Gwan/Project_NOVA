@@ -510,6 +510,11 @@ class FeedSearchModel(FeedModel):
 class FilteredFeedModel(FeedModel):
     def __init__(self, database:Local_Database):
         super().__init__(database)
+        
+    def is_bids_data_empty(self, data_payload):
+        if not data_payload.bids:
+            data_payload.bids = data_payload.cookie_bid_list
+        return
 
     def try_filtered_feed_with_options(self,
                                        feed_search_engine:FeedSearchEngine,

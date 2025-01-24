@@ -230,4 +230,40 @@ class RequestManager(JWTManager):
 
         return response
 
-# 
+
+# 임시로 사용이 필요한 cookie를 만들 때 사용하는 클래스
+# cookie는 4KB의 용량 제한이 있으므로 유의해서 사용할 것
+class TempCookieManager():
+    # 반드시 RequestManager에서 response를 받아서 실행할 것
+    # response = request_manager.make_json_response()
+    def make_new_temp_cookie(self, key:str, value, response:Response):
+        response.set_cookie(
+            key=key, 
+            value=value,
+            max_age=7*60*24,
+            samesite="None",  # Changed to 'Lax' for local testing
+            secure=True,  # Local testing; set to True in production
+            httponly=True
+        )
+        return response
+    
+    # 쿠키 뽑기
+    def get_temp_cookie(self, key, request:Request):
+        return request.cookies[key]
+    
+    # 쿠키를 락온해서 해치우는 마법
+    def try_clear_cookies(self, key, request:Request):
+        
+        # 사실 락온 되는지 잘 모름... 걍 다 지워질듯
+        request.cookies.clear()
+        response = Response(
+            content=json.dumps({"result":True}),
+            media_type="application/json",
+            status_code=200
+        )
+        
+        response.delete_cookie(key=key,
+                samesite="None",  # Changed to 'Lax' for local testing
+                secure=True,  # Local testing; set to True in production
+                httponly=True)
+        return response

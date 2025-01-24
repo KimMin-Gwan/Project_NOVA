@@ -2,7 +2,7 @@ from typing import Any, Optional, Union, List
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request, File, UploadFile, Form
 from view.master_view import Master_View, RequestHeader
 from view.parsers import Head_Parser
-from view.jwt_decoder import RequestManager
+from view.jwt_decoder import RequestManager, TempCookieManager
 from controller import Home_Controller, Core_Controller, Feed_Controller
 from fastapi.responses import HTMLResponse
 from others import ConnectionManager as CM
@@ -82,6 +82,12 @@ class Core_Service_View(Master_View):
                                                              request=request_manager)
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
+            
+            # 쿠키에 넣어서 보내주자
+            response = TempCookieManager().make_new_temp_cookie(key="bids",
+                                                     value=model.get_bias_list(),
+                                                     response=response
+                                                     )
             return response
 
         @self.__app.get('/home/hot_hashtag')
@@ -462,10 +468,11 @@ class Core_Service_View(Master_View):
         @self.__app.post('/feed_explore/feed_with_community')
         def get_feed_with_community(request:Request, raw_request:dict):
             request_manager = RequestManager()
+            # 쿠키에  들어있는 bid 리스트를 뽑아 줄 것
+            cookie_bid_list = TempCookieManager().get_temp_cookie(key="bids", request=request)
             
-            data_payload = CommunityRequest(request=raw_request)
-            
-            pprint(raw_request)
+            # 데이터 페이로드에도 bid 리스트를 넣어야됨
+            data_payload = CommunityRequest(request=raw_request, cookie_bid_list=cookie_bid_list)
             
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
@@ -836,13 +843,15 @@ class SampleRequest(RequestHeader):
         self.uid = body['uid']
         self.date = body['date']
 
+# Request 아종 같은거라서 이건 재사용 금지
 class CommunityRequest(RequestHeader):
-    def __init__(self, request) -> None:
+    def __init__(self, request, cookie_bid_list) -> None:
         super().__init__(request)
         body = request['body']
         self.bids = body['bids']
         self.category = body['board']
         self.key:int = body['key'] # 미안해요. 승준님님. 이거 보내주세요. 얘는 페이지의 마지막 인덱스 번호에요.
+        self.cookie_bid_list = cookie_bid_list
 
 # class CommunityFilteredRequest(CommunityRequest):
 #     def __init__(self, request) -> None:
