@@ -328,6 +328,7 @@ class FeedSearchModelNew(FeedModel):
 
     def try_search_feed_with_hashtag(self, feed_search_engine:FeedSearchEngine,
                                      feed_manager:FeedManager, target="", last_index=-1, num_feed=8):
+        pprint(target)
         searched_fid_list = feed_search_engine.try_search_feed_new(target_type="hashtag", target=target)
 
         # 페이징
