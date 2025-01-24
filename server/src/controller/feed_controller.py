@@ -30,7 +30,7 @@ class Feed_Controller:
         if request.jwt_payload != "":
             model.set_user_with_email(request=request.jwt_payload)
             
-        model.is_bids_data_empty(data_payload=request.data_payload)
+        #model.is_bids_data_empty(data_payload=request.data_payload)
 
         model.try_filtered_feed_community(
             feed_search_engine=feed_search_engine,
