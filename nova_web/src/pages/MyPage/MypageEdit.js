@@ -6,6 +6,76 @@ import axios from "axios";
 function MyPage() {
   let navigate = useNavigate();
   let [isLoading, setIsLoading] = useState(true);
+  let [nickname, setNickname] = useState("");
+  let [password, setPassword] = useState("");
+  let [newPassword, setNewPassword] = useState("");
+
+  let header = {
+    "request-type": "default",
+    "client-version": "v1.0.1",
+    "client-ip": "127.0.0.1",
+    uid: "1234-abcd-5678",
+    endpoint: "/core_system/",
+  };
+
+  async function fetchChangeNickname() {
+    await axios
+      .post(
+        `https://nova-platform.kr/user_home/try_change_uname`,
+        {
+          header: header,
+          body: {
+            uname: nickname,
+          },
+        },
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
+      });
+  }
+
+  async function fetchPasswordChange() {
+    await axios
+      .post(
+        "https://nova-platform.kr/user_home/try_change_password",
+        {
+          header: header,
+          body: {
+            password: password,
+            new_password: newPassword,
+          },
+        },
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
+        if (!res.data.body.result) {
+          alert(res.data.body.detail);
+        }
+      });
+  }
+
+  function onChangeNickname(e) {
+    setNickname(e.target.value);
+  }
+
+  function onChangePassword(e) {
+    setPassword(e.target.value);
+  }
+  function onChangeNewPassword(e) {
+    setNewPassword(e.target.value);
+  }
 
   const handleLogout = (e) => {
     e.preventDefault();
@@ -31,18 +101,6 @@ function MyPage() {
 
   let [myProfile, setMyProfile] = useState();
 
-  // async function fetchEditProfile() {
-  //   await axios
-  //     .get("https://nova-platform.kr/user_home/get_my_profile_data", {
-  //       withCredentials: true,
-  //     })
-  //     .then((res) => {
-  //       console.log("profile", res.data);
-  //       setMyProfile(res.data.body);
-  //       setIsLoading(false);
-  //     });
-  // }
-
   async function fetchEditProfile() {
     await fetch("https://nova-platform.kr/user_home/get_my_profile_data", {
       credentials: "include",
@@ -51,6 +109,7 @@ function MyPage() {
       .then((data) => {
         setMyProfile(data.body);
         setIsLoading(false);
+        // console.log(data);
       });
   }
 
@@ -77,7 +136,10 @@ function MyPage() {
       </div>
       <section className={style["profile-section"]}>
         <div className={style["user-img-edit"]}>
-          <img src={`https://kr.object.ncloudstorage.com/nova-user-profile/${myProfile.uid}.png`} alt="profile" />
+          <img
+            src={`https://kr.object.ncloudstorage.com/nova-user-profile/${myProfile.uid}.png`}
+            alt="profile"
+          />
         </div>
         <button>프로필 사진 변경</button>
       </section>
@@ -86,16 +148,49 @@ function MyPage() {
         <h3>프로필 정보</h3>
         <p className={style["input-name"]}>닉네임</p>
         <div className={style["user-name-input"]}>
-          <input className={style["input-st"]} type="text" placeholder={myProfile.uname} />
-          <button className={style["change-button"]}>변경</button>
+          <input
+            className={style["input-st"]}
+            type="text"
+            value={nickname}
+            onChange={(e) => {
+              onChangeNickname(e);
+            }}
+            placeholder={myProfile.uname}
+          />
+          <button
+            className={style["change-button"]}
+            onClick={(e) => {
+              fetchChangeNickname();
+            }}
+          >
+            변경
+          </button>
         </div>
 
         <p className={style["input-name"]}> 비밀번호 변경</p>
         <div className={style["pw-change"]}>
-          <input className={style["input-st"]} type="text" placeholder="기존 비밀번호" />
-          <input className={style["input-st"]} type="text" placeholder="새로운 비밀번호" />
+          <input
+            className={style["input-st"]}
+            type="text"
+            value={password}
+            onChange={(e) => {
+              onChangePassword(e);
+            }}
+            placeholder="기존 비밀번호"
+          />
+          <input
+            className={style["input-st"]}
+            value={newPassword}
+            onChange={(e) => {
+              onChangeNewPassword(e);
+            }}
+            type="text"
+            placeholder="새로운 비밀번호"
+          />
           <input className={style["input-st"]} type="text" placeholder="비밀번호 확인" />
-          <button className={style["change-button"]}>변경</button>
+          <button className={style["change-button"]} onClick={fetchPasswordChange}>
+            변경
+          </button>
         </div>
       </section>
 
@@ -110,7 +205,11 @@ function MyPage() {
         <p className={style["input-name"]}>성별</p>
         <input className={style["input-st"]} type="text" placeholder="남성" readOnly />
       </section>
-      <button className={`${style["logout_box"]}`} onClick={handleLogout} style={{ cursor: "pointer" }}>
+      <button
+        className={`${style["logout_box"]}`}
+        onClick={handleLogout}
+        style={{ cursor: "pointer" }}
+      >
         로그아웃
       </button>
     </div>

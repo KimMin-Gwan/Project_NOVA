@@ -76,6 +76,7 @@ import SearchPage from "./pages/SearchPage/SearchPage.js";
 import getTagList from "./services/getTagList.js";
 import useTagStore from "./stores/tagList/useTagStore.js";
 import SearchResultPage from "./pages/SearchResultPage/SearchResultPage.js";
+import useBiasStore from "./stores/BiasList/useBiasStore.js";
 
 // 다크 모드 클래스 반환 함수
 export function getModeClass(mode) {
@@ -151,22 +152,24 @@ function App() {
   let bias_url = "https://kr.object.ncloudstorage.com/nova-images/";
 
   let [myBias, setMyBias] = useState([]);
+  let { biasList, fetchBiasList } = useBiasStore();
   const defaultBoxes = 4;
-  const totalBiasBoxes = Math.max(defaultBoxes, myBias.length);
+  const totalBiasBoxes = Math.max(defaultBoxes, biasList.length);
 
   useEffect(() => {
-    fetch(URL + "my_bias", {
-      credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setMyBias(data.body.bias_list);
-        setIsLoading(false);
-        console.log("bias_list", data);
-      })
-      .catch((error) => {
-        console.error("Fetch error:", error);
-      });
+    fetchBiasList();
+    // fetch(URL + "my_bias", {
+    //   credentials: "include",
+    // })
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     setMyBias(data.body.bias_list);
+    //     setIsLoading(false);
+    //     console.log("bias_list", data);
+    //   })
+    //   .catch((error) => {
+    //     console.error("Fetch error:", error);
+    //   });
   }, []);
 
   function handleValidCheck() {
@@ -283,6 +286,8 @@ function App() {
       <Route path="/feed_list/:fid" element={<FeedList />}></Route>
       <Route path="/feed_detail/:fid" element={<FeedDetail />}></Route>
       <Route path="/follow_page" element={<FollowPage />}></Route>
+
+      {/* 검색 페이지 */}
       <Route path="/search" element={<SearchPage />}></Route>
       <Route path="/search_result" element={<SearchResultPage />}></Route>
 
@@ -363,7 +368,7 @@ function App() {
                       <span className="title-color">최애 </span>몰아보기
                     </>
                   }
-                  biasList={myBias}
+                  biasList={biasList}
                   img_src={new_pin}
                   feedData={weeklyFeed}
                   brightMode={brightMode}
