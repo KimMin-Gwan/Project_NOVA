@@ -57,23 +57,19 @@ export default function FeedList(isUserState) {
     return item.bid;
   });
 
-  console.log("bidss", bids);
-  // useEffect(() => {
-  //   console.log("fetchtest", fetchBiasList());
-  // }, []);
-  // console.log("biasLIst", biasList);
+  // console.log("bidss", bids);
 
   async function fetchBiasCategoryData(bid) {
     let send_data = {
       header: header,
       body: {
-        bids: [bids] || [],
+        bids: [bids] || [bid] || [],
         board: board || "",
         key: -1,
       },
     };
 
-    console.log("asdadasd", send_data);
+    // console.log("asdadasd", send_data);
     // setIsLoading(true);
     if (type === "bias") {
       await fetch(`${FETCH_URL}feed_with_community`, {
@@ -409,7 +405,7 @@ export default function FeedList(isUserState) {
               }}
             ></img>
           </div>
-          <div className="buttons">
+          {/* <div className="buttons">
             <button className="tool-button">
               <img
                 src={menu}
@@ -419,7 +415,7 @@ export default function FeedList(isUserState) {
                 }}
               ></img>
             </button>
-          </div>
+          </div> */}
         </header>
         {type === "bias" && (
           <div className={style["bias-section"]}>
@@ -439,7 +435,6 @@ export default function FeedList(isUserState) {
           </div>
         )}
         {type === "all" && (
-          // <BiasBoxes />
           <div className={style["search-section"]}>
             <SearchBox />
             <div className={style["search-filter"]}>
@@ -461,7 +456,6 @@ export default function FeedList(isUserState) {
               onClickTagButton={onClickTag}
             />
           </div>
-          // <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>오늘의 베스트 피드</div>
         )}
         {type === "weekly_best" && (
           <div className={style["keyword-section"]}>
@@ -472,7 +466,6 @@ export default function FeedList(isUserState) {
               onClickTagButton={onClickTag}
             />
           </div>
-          // <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>주간 베스트 피드</div>
         )}
         {keyword && (
           <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>{keyword}</div>
@@ -515,9 +508,6 @@ export default function FeedList(isUserState) {
           <div ref={target} style={{ height: "1px" }}></div>
         </div>
       </div>
-      {/* <section className="contents com1">
-        <RightBar brightMode={mode} />
-      </section> */}
     </div>
   );
 }

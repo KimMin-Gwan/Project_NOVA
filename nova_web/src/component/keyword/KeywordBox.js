@@ -37,42 +37,14 @@ export default function KeywordBox({ type, title, subTitle, onClickTagButton }) 
         .then((res) => {
           setBestTags(res.data.body.hashtags);
           setIsLoading(false);
-          console.log("ddd", res.data);
+          console.log("weekly", res.data);
         });
     }
   }
 
-  // async function fetchTodayBest() {
-  //   await fetch("https://nova-platform.kr/home/today_spiked_hot_hashtag", {
-  //     credentials: "include",
-  //   })
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       setBestTags(data.body.hashtags);
-  //       setIsLoading(false);
-  //       console.log("today", data);
-  //     });
-  // }
-
   useEffect(() => {
     fetchHashTags();
   }, []);
-
-  // async function fetchWeeklyBest() {
-  //   await axios
-  //     .get("https://nova-platform.kr/home/weekly_spiked_hot_hashtag", {
-  //       withCredentials: true,
-  //     })
-  //     .then((res) => {
-  //       setBestTags(res.data.body.hashtags);
-  //       setIsLoading(false);
-  //       console.log("ddd", res.data);
-  //     });
-  // }
-
-  // useEffect(() => {
-
-  // }, []);
 
   let scrollRef = useRef(null);
   let [isDrag, setIsDrag] = useState(false);
@@ -150,15 +122,6 @@ export default function KeywordBox({ type, title, subTitle, onClickTagButton }) 
           })}
         </div>
       </div>
-      {/* <div className={style["tags-container"]}>
-        <div className={style["tags-wrapper"]}>
-          <div className={style["tags"]}>tags</div>
-          <div className={style["tags"]}>tags</div>
-          <div className={style["tags"]}>tagddddds</div>
-          <div className={style["tags"]}>tagddddds</div>
-          <div className={style["tags"]}>tagddddddddddddddddssssss</div>
-        </div>
-      </div> */}
     </div>
   );
 }

@@ -213,9 +213,6 @@ function App() {
         path="/"
         element={
           <div className="all-box">
-            {/* <section className="contents com1">
-              <LeftBar brightMode={brightMode} />
-            </section> */}
             <div
               onClick={(e) => {
                 e.stopPropagation();

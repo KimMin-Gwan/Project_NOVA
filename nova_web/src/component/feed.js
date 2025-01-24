@@ -24,35 +24,63 @@ export function useBrightMode() {
   return [mode, setMode];
 }
 export default function Feed({
-  className,
   feed,
   func,
   feedData,
   interaction,
   feedInteraction,
   setFeedData,
-  img_circle,
   isUserState,
   handleInteraction,
 }) {
+  let navigate = useNavigate();
+  let [isError, setIsError] = useState();
+  // let [myAttend, setMyAttend] = useState(null);
+  let [isClickedStar, setIsClickedStar] = useState(false);
+
+  function handleCheckStar(fid, e) {
+    // e.preventDefault();
+    setIsClickedStar(!isClickedStar);
+    fetch(`https://nova-platform.kr/feed_explore/check_star?fid=${fid}`, {
+      credentials: "include",
+    })
+      .then((response) => {
+        if (!response.ok) {
+          if (response.status === 401) {
+            setIsError(response.status);
+            navigate("/novalogin");
+          } else {
+            throw new Error(`status: ${response.status}`);
+          }
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setFeedData((prevFeeds) => {
+          return prevFeeds.map((feed) => {
+            return feed.feed.fid === fid
+              ? {
+                  ...feed,
+                  feed: data.body.feed[0],
+                }
+              : feed;
+          });
+        });
+      });
+  }
   // function handleRequestURL() {
   //     window.open(requestURL, '_blank', "noopener, noreferrer");
   // };
 
   // let [isInteraction, setIsInteraction] = useState(false);
-  let [selectedIndex, setSelectedIndex] = useState(null);
-  let [isError, setIsError] = useState();
-  // let [myAttend, setMyAttend] = useState(null);
-  let navigate = useNavigate();
-
-  const handleClick = (index) => {
-    if (selectedIndex === index) {
-      setSelectedIndex(null);
-    } else {
-      setSelectedIndex(index);
-    }
-  };
-
+  // let [selectedIndex, setSelectedIndex] = useState(null);
+  // const handleClick = (index) => {
+  //   if (selectedIndex === index) {
+  //     setSelectedIndex(null);
+  //   } else {
+  //     setSelectedIndex(index);
+  //   }
+  // };
   // function handleInteraction(event, fid, action) {
   //   event.preventDefault();
   //   console.log("fid", fid);
@@ -99,203 +127,170 @@ export default function Feed({
   //     });
   // }
   // 댓글 더보기 - 본문 보기
-  let [isClickedMoreSee, setIsClickedMoreSee] = useState(false);
+  // let [isClickedMoreSee, setIsClickedMoreSee] = useState(false);
 
-  function handleMoreSee() {
-    setIsClickedMoreSee(!isClickedMoreSee);
-  }
+  // function handleMoreSee() {
+  //   setIsClickedMoreSee(!isClickedMoreSee);
+  // }
 
-  let [isClickedStar, setIsClickedStar] = useState(false);
-
-  function handleCheckStar(fid, e) {
-    // e.preventDefault();
-    setIsClickedStar(!isClickedStar);
-    fetch(`https://nova-platform.kr/feed_explore/check_star?fid=${fid}`, {
-      credentials: "include",
-    })
-      .then((response) => {
-        if (!response.ok) {
-          if (response.status === 401) {
-            setIsError(response.status);
-            navigate("/novalogin");
-          } else {
-            throw new Error(`status: ${response.status}`);
-          }
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setFeedData((prevFeeds) => {
-          return prevFeeds.map((feed) => {
-            return feed.feed.fid === fid
-              ? {
-                  ...feed,
-                  feed: data.body.feed[0],
-                }
-              : feed;
-          });
-        });
-      });
-  }
-
-  let [allComments, setAllComments] = useState([]);
+  // let [allComments, setAllComments] = useState([]);
   // 댓글 보기
-  function handleShowComment(fid, event) {
-    event.preventDefault();
-    fetch(`https://nova-platform.kr/feed_explore/view_comment?fid=${fid}`, {
-      credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("show", data.body);
-        setAllComments(data.body.comments);
-      });
-  }
+  // function handleShowComment(fid, event) {
+  //   event.preventDefault();
+  //   fetch(`https://nova-platform.kr/feed_explore/view_comment?fid=${fid}`, {
+  //     credentials: "include",
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       console.log("show", data.body);
+  //       setAllComments(data.body.comments);
+  //     });
+  // }
 
-  let [isClickedLikeBtn, setIsClickedLikeBtn] = useState(false);
+  // let [isClickedLikeBtn, setIsClickedLikeBtn] = useState(false);
 
-  let [commentLikes, setCommentLikes] = useState(0);
+  // let [commentLikes, setCommentLikes] = useState(0);
 
   // 댓글 좋아요 기능
-  function handleCommentLike(fid, cid, event) {
-    event.preventDefault();
-    fetch(`https://nova-platform.kr/feed_explore/like_comment?fid=${fid}&cid=${cid}`, {
-      credentials: "include",
-    })
-      .then((response) => {
-        if (!response.ok) {
-          if (response.status === 401) {
-            setIsError(response.status);
-            navigate("/novalogin");
-          } else {
-            throw new Error(`status: ${response.status}`);
-          }
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setAllComments((prevAll) => {
-          return prevAll.map((comment, i) => {
-            return comment.cid === cid
-              ? {
-                  ...comment,
-                  like: data.body.comments[i].like,
-                  like_user: data.body.comments[i].like_user,
-                }
-              : comment;
-          });
-        });
-        setCommentLikes(data.body.comments);
-      });
-  }
+  // function handleCommentLike(fid, cid, event) {
+  //   event.preventDefault();
+  //   fetch(`https://nova-platform.kr/feed_explore/like_comment?fid=${fid}&cid=${cid}`, {
+  //     credentials: "include",
+  //   })
+  //     .then((response) => {
+  //       if (!response.ok) {
+  //         if (response.status === 401) {
+  //           setIsError(response.status);
+  //           navigate("/novalogin");
+  //         } else {
+  //           throw new Error(`status: ${response.status}`);
+  //         }
+  //       }
+  //       return response.json();
+  //     })
+  //     .then((data) => {
+  //       setAllComments((prevAll) => {
+  //         return prevAll.map((comment, i) => {
+  //           return comment.cid === cid
+  //             ? {
+  //                 ...comment,
+  //                 like: data.body.comments[i].like,
+  //                 like_user: data.body.comments[i].like_user,
+  //               }
+  //             : comment;
+  //         });
+  //       });
+  //       setCommentLikes(data.body.comments);
+  //     });
+  // }
 
   // 댓글 삭제 기능
-  function handleRemoveComment(fid, cid, event) {
-    event.preventDefault();
+  // function handleRemoveComment(fid, cid, event) {
+  //   event.preventDefault();
 
-    const newAll = allComments.filter((comment) => comment.cid !== cid);
-    setAllComments(newAll);
+  //   const newAll = allComments.filter((comment) => comment.cid !== cid);
+  //   setAllComments(newAll);
 
-    fetch(`https://nova-platform.kr/feed_explore/remove_comment?fid=${fid}&cid=${cid}`, {
-      credentials: "include",
-    })
-      .then((response) => {
-        if (!response.ok) {
-          if (response.status === 401) {
-            setIsError(response.status);
-            navigate("/novalogin");
-          } else {
-            throw new Error(`status: ${response.status}`);
-          }
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("remove", data.body.comments);
-        // setAllComments((prevAll)=>{
-        //     const newAllComments = [data.body.comments];
-        //     return newAllComments;
-        // })
-      });
-  }
-  let header = {
-    "request-type": "default",
-    "client-version": "v1.0.1",
-    "client-ip": "127.0.0.1",
-    uid: "1234-abcd-5678",
-    endpoint: "/core_system/",
-  };
+  //   fetch(`https://nova-platform.kr/feed_explore/remove_comment?fid=${fid}&cid=${cid}`, {
+  //     credentials: "include",
+  //   })
+  //     .then((response) => {
+  //       if (!response.ok) {
+  //         if (response.status === 401) {
+  //           setIsError(response.status);
+  //           navigate("/novalogin");
+  //         } else {
+  //           throw new Error(`status: ${response.status}`);
+  //         }
+  //       }
+  //       return response.json();
+  //     })
+  //     .then((data) => {
+  //       console.log("remove", data.body.comments);
+  //       // setAllComments((prevAll)=>{
+  //       //     const newAllComments = [data.body.comments];
+  //       //     return newAllComments;
+  //       // })
+  //     });
+  // }
+  // let header = {
+  //   "request-type": "default",
+  //   "client-version": "v1.0.1",
+  //   "client-ip": "127.0.0.1",
+  //   uid: "1234-abcd-5678",
+  //   endpoint: "/core_system/",
+  // };
 
-  let [inputValue, setInputValue] = useState("");
-  function handleChange(e) {
-    setInputValue(e.target.value);
-  }
+  // let [inputValue, setInputValue] = useState("");
+  // function handleChange(e) {
+  //   setInputValue(e.target.value);
+  // }
 
-  function handleSubmit(fid, event) {
-    event.preventDefault();
+  // function handleSubmit(fid, event) {
+  //   event.preventDefault();
 
-    fetch("https://nova-platform.kr/feed_explore/make_comment", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        header,
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        header: header,
-        body: {
-          fid: `${fid}`,
-          body: `${inputValue}`,
-        },
-      }),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          if (response.status === 401) {
-            setIsError(response.status);
-            navigate("/novalogin");
-          } else {
-            throw new Error(`status: ${response.status}`);
-          }
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log(data);
-        // setNewComments(data.body.comments);
-        setAllComments((prevAllComments) => {
-          const newAllComments = [data.body.comments[0], ...prevAllComments];
-          return newAllComments;
-        });
-        setFeedData((prevFeeds) => {
-          return prevFeeds.map((feed) => {
-            return feed.fid === fid
-              ? { ...feed, num_comment: data.body.feed[0].num_comment }
-              : feed;
-          });
-        });
-        setInputValue("");
-      });
-  }
+  //   fetch("https://nova-platform.kr/feed_explore/make_comment", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       header,
+  //     },
+  //     credentials: "include",
+  //     body: JSON.stringify({
+  //       header: header,
+  //       body: {
+  //         fid: `${fid}`,
+  //         body: `${inputValue}`,
+  //       },
+  //     }),
+  //   })
+  //     .then((response) => {
+  //       if (!response.ok) {
+  //         if (response.status === 401) {
+  //           setIsError(response.status);
+  //           navigate("/novalogin");
+  //         } else {
+  //           throw new Error(`status: ${response.status}`);
+  //         }
+  //       }
+  //       return response.json();
+  //     })
+  //     .then((data) => {
+  //       console.log(data);
+  //       // setNewComments(data.body.comments);
+  //       setAllComments((prevAllComments) => {
+  //         const newAllComments = [data.body.comments[0], ...prevAllComments];
+  //         return newAllComments;
+  //       });
+  //       setFeedData((prevFeeds) => {
+  //         return prevFeeds.map((feed) => {
+  //           return feed.fid === fid
+  //             ? { ...feed, num_comment: data.body.feed[0].num_comment }
+  //             : feed;
+  //         });
+  //       });
+  //       setInputValue("");
+  //     });
+  // }
 
-  function handleRequestURL(url) {
-    window.open(url, "_blank", "noopener, noreferrer");
-  }
-  const [mode, setMode] = useBrightMode();
-  function useBrightMode() {
-    const params = new URLSearchParams(window.location.search);
-    const brightModeFromUrl = params.get("brightMode");
+  // function handleRequestURL(url) {
+  //   window.open(url, "_blank", "noopener, noreferrer");
+  // }
+  // const [mode, setMode] = useBrightMode();
+  // function useBrightMode() {
+  //   const params = new URLSearchParams(window.location.search);
+  //   const brightModeFromUrl = params.get("brightMode");
 
-    const initialMode = brightModeFromUrl || localStorage.getItem("brightMode") || "bright";
+  //   const initialMode = brightModeFromUrl || localStorage.getItem("brightMode") || "bright";
 
-    const [mode, setMode] = useState(initialMode);
+  //   const [mode, setMode] = useState(initialMode);
 
-    useEffect(() => {
-      localStorage.setItem("brightMode", mode);
-    }, [mode]);
+  //   useEffect(() => {
+  //     localStorage.setItem("brightMode", mode);
+  //   }, [mode]);
 
-    return [mode, setMode];
-  }
+  //   return [mode, setMode];
+  // }
   return (
     <>
       <ContentFeed
@@ -644,21 +639,6 @@ export function ContentFeed({
   );
 }
 
-function SelectOption({ feed, feedInteraction }) {
-  return (
-    <div className={style["option-container"]}>
-      {/* <ProgressBar point={50} type={"feed"} /> */}
-      {feedInteraction.choice.map((option, i) => {
-        return (
-          <button key={i} className={style["option"]} onClick={(e) => e.stopPropagation()}>
-            {option}
-          </button>
-        );
-      })}
-    </div>
-  );
-}
-
 function QuizOption({ feed, interaction, handleInteraction }) {
   return (
     <ol className={style["quiz-container"]}>
@@ -680,6 +660,20 @@ function QuizOption({ feed, interaction, handleInteraction }) {
     </ol>
   );
 }
+// function SelectOption({ feed, feedInteraction }) {
+//   return (
+//     <div className={style["option-container"]}>
+//       {/* <ProgressBar point={50} type={"feed"} /> */}
+//       {feedInteraction.choice.map((option, i) => {
+//         return (
+//           <button key={i} className={style["option"]} onClick={(e) => e.stopPropagation()}>
+//             {option}
+//           </button>
+//         );
+//       })}
+//     </div>
+//   );
+// }
 
 {
   /* <ol className={style["quiz_box"]}>
