@@ -85,7 +85,7 @@ class Core_Service_View(Master_View):
             
             # 쿠키에 넣어서 보내주자
             response = TempCookieManager().make_new_temp_cookie(key="bids",
-                                                     value=model.get_bias_list(),
+                                                     value=model.get_bid_list(),
                                                      response=response
                                                      )
             return response
