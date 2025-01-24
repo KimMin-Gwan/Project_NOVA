@@ -49,7 +49,8 @@ export default function SearchPage() {
     setSearchHistory([]);
   }
 
-  function onDeleteHistoryItem(index) {
+  function onDeleteHistoryItem(e, index) {
+    e.stopPropagation();
     const updateList = searchHistory.filter((item, i) => i !== index);
     // searchList = JSON.parse(searchList);
     setSearchHistory(updateList);
@@ -82,8 +83,12 @@ export default function SearchPage() {
   //   fetchRecommendKeyword();
   // }, []);
 
-  function onClickSearch() {
-    navigate(`/search_result/?keyword=${searchWord}`);
+  function onClickSearch(history) {
+    if (history) {
+      navigate(`/search_result/?keyword=${history}`);
+    } else {
+      navigate(`/search_result/?keyword=${searchWord}`);
+    }
   }
 
   if (loading) {
@@ -105,7 +110,7 @@ export default function SearchPage() {
         <div
           className="back"
           onClick={() => {
-            navigate(-1);
+            navigate("/");
           }}
         >
           <img src={back} />
@@ -127,12 +132,18 @@ export default function SearchPage() {
             {searchHistory.length > 0 &&
               searchHistory.map((history, i) => {
                 return (
-                  <button key={i} className="search-tag searched-tag">
+                  <button
+                    key={i}
+                    className="search-tag searched-tag"
+                    onClick={(e) => {
+                      onClickSearch(history);
+                    }}
+                  >
                     {history}
                     <p
                       className="delete-tag"
-                      onClick={() => {
-                        onDeleteHistoryItem(i);
+                      onClick={(e) => {
+                        onDeleteHistoryItem(e, i);
                       }}
                     >
                       X

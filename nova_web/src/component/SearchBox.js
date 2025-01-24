@@ -23,7 +23,9 @@ export default function SearchBox({
       onClick={(e) => {
         e.preventDefault();
         e.stopPropagation();
-        navigate("/search");
+        {
+          !type && navigate("/search");
+        }
       }}
     >
       {type === "search" ? (
