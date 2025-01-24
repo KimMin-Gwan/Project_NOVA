@@ -407,6 +407,7 @@ class ChangeNickNameModel(BaseModel):
         self._uname = new_uname
         print(5)
         self._database.modify_data_with_id(target_id="uid", target_data=self._user.get_dict_form_data())
+        print(6)
 
     # 닉네임 변경하기
     def try_change_nickname(self, data_payload):
