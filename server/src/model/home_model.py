@@ -51,8 +51,11 @@ class HomeBiasModel(BaseModel):
         super().__init__(database)
         self.__bias_list = []
         
-    def get_bias_list(self):
-        return self.__bias_list
+    def get_bid_list(self):
+        bid_list = []
+        for bias in self.__bias_list:
+            bid_list.append(bias.bid)
+        return bid_list
         
     def set_random_bias(self):
         bias_datas = self._database.get_all_data(target="bid")
