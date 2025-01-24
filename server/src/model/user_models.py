@@ -403,15 +403,20 @@ class ChangeNickNameModel(BaseModel):
 
     def __change_nickname(self, new_uname:str):
         # 바꾸게 되면 데이터베이스를 수정합니다.
+        print(4)
         self._uname = new_uname
+        print(5)
         self._database.modify_data_with_id(target_id="uid", target_data=self._user.get_dict_form_data())
 
     # 닉네임 변경하기
     def try_change_nickname(self, data_payload):
+        print(1)
         # check uname, 변동사항이 없으면 False를 반환
         self._uname = self._user.uname
 
+        print(2)
         if self.__check_new_nickname(data_payload.new_uname):
+            print(3)
             self.__change_nickname(data_payload.new_uname)
             self._result = True
 
