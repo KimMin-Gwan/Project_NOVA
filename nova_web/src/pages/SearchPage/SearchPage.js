@@ -123,48 +123,43 @@ export default function SearchPage() {
       <section className="search-category">
         <h3>최근 검색어</h3>
         <div className="search-tag-box">
-          {searchHistory.length > 0 &&
-            searchHistory.map((history, i) => {
-              return (
-                <button key={i} className="search-tag searched-tag">
-                  {history}
-                  <p>X</p>
-                </button>
-                // <div >
-                /* <p
-                    onClick={() => {
-                      onDeleteHistoryItem(i);
-                    }}
-                  >
-                    X
-                  </p> */
-                // </div>
-              );
-            })}
+          <div className="search-box-wrapper">
+            {searchHistory.length > 0 &&
+              searchHistory.map((history, i) => {
+                return (
+                  <button key={i} className="search-tag searched-tag">
+                    {history}
+                    <p
+                      className="delete-tag"
+                      onClick={() => {
+                        onDeleteHistoryItem(i);
+                      }}
+                    >
+                      X
+                    </p>
+                  </button>
+                );
+              })}
+          </div>
         </div>
       </section>
 
       <section className="search-category">
         <h3>추천 검색어</h3>
         <div className="search-tag-box">
-          {/* <div className="search-tag">버튼</div>
-          <div className="search-tag">버튼</div>
-          <div className="search-tag">버튼</div> */}
-          <button className="search-tag">하이</button>
-          <button className="search-tag">하이</button>
+          <div className="search-box-wrapper">
+            <button className="search-tag">하이</button>
+            <button className="search-tag">하이</button>
+          </div>
         </div>
-        {/* <button className="search-tag">전한길</button> */}
       </section>
 
       <section className="search-category">
         <h3>실시간 트렌드</h3>
-        <ul className="tag-list">
+
+        <ul class="tag-list">
           {tagList.map((tag, i) => {
-            return (
-              <li key={i}>
-                {i + 1} {tag}
-              </li>
-            );
+            return <li key={i}>{tag}</li>;
           })}
         </ul>
       </section>

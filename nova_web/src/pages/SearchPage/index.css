@@ -33,7 +33,7 @@
 
 .search-category {
   width: 100%;
-  border: 1px solid black;
+  /* border: 1px solid black; */
 
   h3 {
     padding-left: 10px;
@@ -46,8 +46,7 @@
   }
 }
 .search-tag-box {
-  display: flex;
-  gap: 10px;
+  /* display: flex; */
 }
 .search-tag {
   /* all: unset; */
@@ -58,18 +57,46 @@
   height: 30px;
 
   border-radius: 20px;
-  background-color: green;
+  background-color: #d4e7ff;
+  border: 1px solid #b9d8ff;
   min-width: 75px;
+}
+.delete-tag {
+  margin-left: 11px;
+}
+
+.search-box-wrapper {
+  width: 90%;
+  /* margin-left: 38px; */
+  padding-bottom: 12px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  overflow: hidden;
+  scrollbar-width: none;
 }
 
 .searched-tag {
+  background-color: #ffffff;
   min-width: 85px;
-  justify-content: space-between;
 }
 
 .tag-list {
   display: grid;
-  /* grid-template-rows: repeat(1, 50px); */
   grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  grid-auto-flow: column;
   grid-gap: 10px;
+
+  li {
+    list-style: decimal;
+  }
+}
+
+.tag-item {
+  background-color: #f0f0f0;
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #ddd;
+  border-radius: 5px;
 }

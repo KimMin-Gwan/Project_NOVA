@@ -578,7 +578,7 @@ export function ContentFeed({
           </div>
         </div>
       </div>
-      {feed.fclass === "long" && interaction.choice.length > 0 && (
+      {feed.fclass === "long" && interaction?.choice?.length > 0 && (
         <div
           className={style["long-form-container"]}
           onClick={(e) => {
