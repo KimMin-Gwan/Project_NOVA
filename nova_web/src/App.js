@@ -157,7 +157,7 @@ function App() {
   const totalBiasBoxes = Math.max(defaultBoxes, biasList.length);
 
   useEffect(() => {
-    // fetchBiasList();
+    fetchBiasList();
     // fetch(URL + "my_bias", {
     //   credentials: "include",
     // })
@@ -373,7 +373,7 @@ function App() {
                   feedData={weeklyFeed}
                   brightMode={brightMode}
                   type={"bias"}
-                  children={<BiasBoxes setBiasId={setBiasId} />}
+                  children={<BiasBoxes setBiasId={setBiasId} biasList={biasList} />}
                   endPoint={`/feed_list?type=bias`}
                   customClassName="custom-height"
                 />

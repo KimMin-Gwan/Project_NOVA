@@ -21,11 +21,11 @@ export default function BiasBoxes({ setBiasId, fetchBiasCategoryData, writeCommu
   //       console.error("Fetch error:", error);
   //     });
   // }
+  // fetchBiasData();
 
-  useEffect(() => {
-    fetchBiasList();
-    // fetchBiasData();
-  }, []);
+  // useEffect(() => {
+  //   fetchBiasList();
+  // }, []);
 
   function onClickBiasId(bid) {
     setBiasId(bid);
