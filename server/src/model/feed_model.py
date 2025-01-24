@@ -56,8 +56,6 @@ class FeedModel(BaseModel):
         
         return send_data
 
-
-
     def set_feed_data(self, feed_search_engine:FeedSearchEngine, feed_manager,
                         target_type="default", target="", num_feed=1, index=-1):
 
@@ -91,7 +89,6 @@ class FeedModel(BaseModel):
         self._send_data = self._make_feed_data_n_interaction_data(feed_manager=feed_manager, fid_list=fid_list)
         return
     
-
     # 상호작용하기
     # 만들어야됨 
     def try_interact_feed(self, feed_manager:FeedManager, data_payload):
@@ -159,7 +156,6 @@ class FeedModel(BaseModel):
                                                                fid=data_payload.fid)
         return
     
-
     # 피드 내용을 다듬어서 전송가능한 형태로 세팅
     # 포인터로 동작함
     def _set_feed_json_data(self, user, feeds:list):
@@ -402,8 +398,10 @@ class FeedSearchModelNew(FeedModel):
     def get_response_form_data(self, head_parser):
         try:
             body = {
+                'feed' : self._feeds,
+                'comments' : self._comments,
+                'key' : self._key,
                 'send_data' : self._send_data,
-                'key' : self._key
             }
 
             response = self._get_response_data(head_parser=head_parser, body=body)

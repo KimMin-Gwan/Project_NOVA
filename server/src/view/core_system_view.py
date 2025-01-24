@@ -362,6 +362,7 @@ class Core_Service_View(Master_View):
             model = feed_controller.get_feed_with_hashtag(database=self.__database,
                                                         request=request_manager,
                                                         feed_search_engine=self.__feed_search_engine,
+                                                        feed_manager=self.__feed_manager,
                                                         num_feed=5)
 
             body_data = model.get_response_form_data(self._head_parser)
