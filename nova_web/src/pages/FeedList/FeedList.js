@@ -17,6 +17,7 @@ import style from "./FeedHashList.module.css";
 import NoticeBox from "../../component/NoticeBox/NoticeBox.js";
 import CategoryModal from "../../component/CategoryModal/CategoryModal.js";
 import NoneFeed from "../../component/NoneFeed/NoneFeed.js";
+import useBiasStore from "../../stores/BiasList/useBiasStore.js";
 
 export default function FeedList(isUserState) {
   const [params] = useSearchParams();
@@ -51,6 +52,17 @@ export default function FeedList(isUserState) {
   const [mode, setMode] = useState(initialMode);
   let navigate = useNavigate();
 
+  // let { biasList, fetchBiasList } = useBiasStore();
+  // let bids = biasList.map((item, i) => {
+  //   return item.bid;
+  // });
+
+  // console.log("bidss", bids);
+  // useEffect(() => {
+  //   console.log("fetchtest", fetchBiasList());
+  // }, []);
+  // console.log("biasLIst", biasList);
+
   async function fetchBiasCategoryData(bid) {
     let send_data = {
       header: header,
@@ -60,6 +72,8 @@ export default function FeedList(isUserState) {
         key: -1,
       },
     };
+
+    console.log("asdadasd", send_data);
     // setIsLoading(true);
     if (type === "bias") {
       await fetch(`${FETCH_URL}feed_with_community`, {
