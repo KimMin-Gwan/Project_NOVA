@@ -15,11 +15,11 @@ h2 {
 }
 
 .modal-title {
-  font-size : 16px;
+  font-size: 16px;
   font-weight: 700;
-  padding-left : 14px;
-  padding-top : 20px;
-  padding-bottom : 20px;
+  padding-left: 14px;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .modal-container {
@@ -38,11 +38,10 @@ h2 {
   /* background-color: aqua; */
   margin: 0 auto;
   padding-left: 16px;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding-block: 5px;
   width: 85%;
   border-radius: 100px;
-  border: 0.6px solid #7A7A7A;
+  border: 0.6px solid #7a7a7a;
 }
 
 .Board_content {
@@ -54,7 +53,15 @@ h2 {
 
   li {
     margin-bottom: 10px;
-    padding-left: 20px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+
+    img {
+      width: 18px;
+      height: 18px;
+      margin-right: 5px;
+    }
   }
 }
 .LinkBox_container {
@@ -63,7 +70,7 @@ h2 {
 .LinkBox {
   width: 70px;
   height: 70px;
-  background-color: gray;
+  background-color: #dceef1;
   display: flex;
   flex-direction: column;
   /* justify-content: center; */

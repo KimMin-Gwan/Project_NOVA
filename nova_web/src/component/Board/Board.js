@@ -1,6 +1,7 @@
 import BoardContent from "../BoardContent/BoardContent";
 import BoardTitle from "../BoardTitle/BoardTitle";
 import "./index.css";
+import chat from "../../img/chatLight.png";
 
 export default function Board({ boardData, setBoard }) {
   function handleRequestURL(url) {
@@ -15,10 +16,7 @@ export default function Board({ boardData, setBoard }) {
       <BoardTitle>외부 링크</BoardTitle>
       {/* link box */}
       <div className="LinkBox_container">
-        <div
-          className="LinkBox"
-          onClick={() => handleRequestURL(boardData.urls.Instagram)}
-        >
+        <div className="LinkBox" onClick={() => handleRequestURL(boardData.urls.Instagram)}>
           <div className="LinkBox_img">
             <img src={boardData.urls.Instagram} alt="img" />
           </div>
@@ -49,8 +47,14 @@ export default function Board({ boardData, setBoard }) {
 
       <BoardTitle>노바 펀딩</BoardTitle>
       <ul className="Board_content">
-        <li>공식 판매 굿즈</li>
-        <li>펀딩 상품</li>
+        <li>
+          <img src={chat} alt="" />
+          공식 판매 굿즈
+        </li>
+        <li>
+          <img src={chat} alt="" />
+          펀딩 상품
+        </li>
       </ul>
     </div>
   );

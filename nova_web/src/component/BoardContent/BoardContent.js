@@ -1,4 +1,5 @@
 import "./index.css";
+import chat from "../../img/chatLight.png";
 
 export default function BoardContent({ boardData, setBoard }) {
   function onClickBoard(i) {
@@ -10,6 +11,7 @@ export default function BoardContent({ boardData, setBoard }) {
         boardData.boards.map((data, i) => {
           return (
             <li key={i} onClick={() => onClickBoard(i)}>
+              <img src={chat} alt="차트" />
               {data}
             </li>
           );
