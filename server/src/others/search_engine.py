@@ -716,7 +716,7 @@ class FeedSearchEngine:
         keywords = []
         # keywords = self.__recommend_manager.get_recommend_keyword(num_keywords=num_keywords)
         keywords = self.__recommend_manager.get_spiked_hashtags_in_hours(
-            num_hashtag=num_keywords, target_hours=168
+            num_hashtag=num_keywords, target_hours=720
         )
         return keywords
 
