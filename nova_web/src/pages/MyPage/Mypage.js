@@ -77,7 +77,7 @@ function MyPage() {
       <div className={style["user-container"]}>
         <div className={style["user-img"]}>
           <img
-            src={`https://kr.object.ncloudstorage.com/nova-user-profile/${myData.uid}.png`}
+            src={`https://kr.object.ncloudstorage.com/nova-user-profile/${myData?.uid}.png`}
             alt="img"
           />
         </div>
