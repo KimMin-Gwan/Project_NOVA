@@ -84,12 +84,14 @@ class Core_Service_View(Master_View):
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             
+            
+            print(model.get_bias_list())
+            
             # 쿠키에 넣어서 보내주자
             response = TempCookieManager().make_new_temp_cookie(key="bids",
                                                      value=model.get_bid_list(),
                                                      response=response
                                                      )
-            print(model.get_bid_list())
             
             return response
 
