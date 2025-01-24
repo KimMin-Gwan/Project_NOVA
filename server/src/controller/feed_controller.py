@@ -192,6 +192,15 @@ class Feed_Controller:
         # 유저가 있으면 세팅
         if request.jwt_payload != "":
             model.set_user_with_email(request=request.jwt_payload)
+
+        # model.try_search_feed_with_hashtag(
+        #     feed_search_engine=feed_search_engine,
+        #     feed_manager=self.__feed_manager,
+        #     target=request.data_payload.hashtag,
+        #     index=request.data_payload.key,
+        #     num_feed=num_feed,
+        # )
+
         model.set_feed_data(feed_search_engine=feed_search_engine,
                             target_type="hashtag",
                             target=request.data_payload.hashtag,

@@ -139,7 +139,7 @@ class User_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
-        # 타입에 맞게 Feed들을 반환하는
+        # 타입에 맞게 Feed들을 반환하는 내가쓴 글 찾기
         @self.__app.get('/user_home/get_my_feed')
         def try_get_my_feeds_type(request:Request, type:Optional[str]="post", key:Optional[int]=-1):
             request_manager = RequestManager()
@@ -192,7 +192,7 @@ class User_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
-        # 비밀번호 변경하기
+        # 패스워드 변경하기
         @self.__app.post('/user_home/try_change_password')
         def try_change_password(request:Request, raw_request:dict):
             request_manager = RequestManager()
@@ -226,7 +226,7 @@ class User_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
-        # 프로필사진 바꾸기
+        # 프로필 사진 바꾸기
         @self.__app.post('/user_home/try_change_profile_photo')
         def try_change_profile_photo(request:Request, image:Union[UploadFile, None] = File(None)):
             request_manager = RequestManager()

@@ -109,7 +109,7 @@ function MyPage() {
       .then((data) => {
         setMyProfile(data.body);
         setIsLoading(false);
-        // console.log(data);
+        console.log(data);
       });
   }
 
@@ -197,13 +197,23 @@ function MyPage() {
       <section className={style["user-info"]}>
         <h3>개인정보</h3>
         <p className={style["input-name"]}>uid</p>
-        <input className={style["input-st"]} type="text" placeholder="1234-1234-1234" readOnly />
+        <input className={style["input-st"]} type="text" placeholder={myProfile.uid} readOnly />
         <p className={style["input-name"]}>email</p>
-        <input className={style["input-st"]} type="text" placeholder="asd@naver.com" readOnly />
+        <input className={style["input-st"]} type="text" placeholder={myProfile.email} readOnly />
         <p className={style["input-name"]}>나이</p>
-        <input className={style["input-st"]} type="text" placeholder="24살" readOnly />
+        <input
+          className={style["input-st"]}
+          type="text"
+          placeholder={`${myProfile.age}살`}
+          readOnly
+        />
         <p className={style["input-name"]}>성별</p>
-        <input className={style["input-st"]} type="text" placeholder="남성" readOnly />
+        <input
+          className={style["input-st"]}
+          type="text"
+          placeholder={myProfile.gender === "f" ? "여성" : "남성"}
+          readOnly
+        />
       </section>
       <button
         className={`${style["logout_box"]}`}

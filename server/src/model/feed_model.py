@@ -416,6 +416,9 @@ class FeedSearchModel(FeedModel):
                                                 user=self._user,
                                                 )
         self.__history.append(second_fid)
+
+        # pprint(self.__history)
+
         feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=[str(fid), second_fid])
         for feed_data in feed_datas:
             feed = Feed()
