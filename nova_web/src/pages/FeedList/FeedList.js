@@ -52,12 +52,12 @@ export default function FeedList(isUserState) {
   const [mode, setMode] = useState(initialMode);
   let navigate = useNavigate();
 
-  // let { biasList, fetchBiasList } = useBiasStore();
-  // let bids = biasList.map((item, i) => {
-  //   return item.bid;
-  // });
+  let { biasList, fetchBiasList } = useBiasStore();
+  let bids = biasList.map((item, i) => {
+    return item.bid;
+  });
 
-  // console.log("bidss", bids);
+  console.log("bidss", bids);
   // useEffect(() => {
   //   console.log("fetchtest", fetchBiasList());
   // }, []);
@@ -67,7 +67,7 @@ export default function FeedList(isUserState) {
     let send_data = {
       header: header,
       body: {
-        bids: [bid],
+        bids: [bids] || [],
         board: board || "",
         key: -1,
       },

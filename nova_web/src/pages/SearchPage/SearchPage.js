@@ -4,9 +4,9 @@ import back from "./../../img/backword.png";
 import logo2 from "../../img/logo2.png";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import getTagList from "../../services/getTagList";
+// import getTagList from "../../services/getTagList";
+// import axios from "axios";
 import useTagStore from "../../stores/tagList/useTagStore";
-import axios from "axios";
 export default function SearchPage() {
   let navigate = useNavigate();
   //   let [tagList, setTagList] = useState([]);
@@ -118,25 +118,27 @@ export default function SearchPage() {
           onKeyDown={onKeyDown}
         />
       </div>
+      {/* <p onClick={onDeleteAllHistory}>X</p> */}
 
       <section className="search-category">
         <h3>최근 검색어</h3>
         <div className="search-tag-box">
-          {/* <p onClick={onDeleteAllHistory}>X</p> */}
-
           {searchHistory.length > 0 &&
             searchHistory.map((history, i) => {
               return (
-                <div key={i}>
-                  <button className="search-tag">{history}</button>
-                  <p
+                <button key={i} className="search-tag searched-tag">
+                  {history}
+                  <p>X</p>
+                </button>
+                // <div >
+                /* <p
                     onClick={() => {
                       onDeleteHistoryItem(i);
                     }}
                   >
                     X
-                  </p>
-                </div>
+                  </p> */
+                // </div>
               );
             })}
         </div>
@@ -148,7 +150,8 @@ export default function SearchPage() {
           {/* <div className="search-tag">버튼</div>
           <div className="search-tag">버튼</div>
           <div className="search-tag">버튼</div> */}
-          <button className="search-tag">채현찌</button>
+          <button className="search-tag">하이</button>
+          <button className="search-tag">하이</button>
         </div>
         {/* <button className="search-tag">전한길</button> */}
       </section>

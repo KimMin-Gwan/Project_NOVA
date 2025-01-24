@@ -50,7 +50,7 @@
   gap: 10px;
 }
 .search-tag {
-  all: unset;
+  /* all: unset; */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -58,8 +58,13 @@
   height: 30px;
 
   border-radius: 20px;
-  background-color: blue;
-  width: 75px;
+  background-color: green;
+  min-width: 75px;
+}
+
+.searched-tag {
+  min-width: 85px;
+  justify-content: space-between;
 }
 
 .tag-list {

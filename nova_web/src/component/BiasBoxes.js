@@ -1,27 +1,30 @@
 import { useEffect, useRef, useState } from "react";
+import useBiasStore from "../stores/BiasList/useBiasStore";
 
 export default function BiasBoxes({ setBiasId, fetchBiasCategoryData, writeCommunity }) {
   const URL = "https://nova-platform.kr/home/";
   let bias_url = "https://kr.object.ncloudstorage.com/nova-images/";
   let [isLoading, setIsLoading] = useState(true);
 
-  async function fetchBiasData() {
-    await fetch(`${URL}my_bias`, {
-      credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("bias_data", data);
-        setMyBias(data.body.bias_list);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.error("Fetch error:", error);
-      });
-  }
+  let { biasList, loading, fetchBiasList } = useBiasStore();
+  // async function fetchBiasData() {
+  //   await fetch(`${URL}my_bias`, {
+  //     credentials: "include",
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       console.log("bias_data", data);
+  //       setMyBias(data.body.bias_list);
+  //       setIsLoading(false);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Fetch error:", error);
+  //     });
+  // }
 
   useEffect(() => {
-    fetchBiasData();
+    fetchBiasList();
+    // fetchBiasData();
   }, []);
 
   function onClickBiasId(bid) {
@@ -30,7 +33,7 @@ export default function BiasBoxes({ setBiasId, fetchBiasCategoryData, writeCommu
 
   let [myBias, setMyBias] = useState([]);
   const defaultBoxes = 4;
-  const totalBiasBoxes = Math.max(defaultBoxes, myBias.length);
+  const totalBiasBoxes = Math.max(defaultBoxes, biasList.length);
 
   let scrollRef = useRef(null);
   let [isDrag, setIsDrag] = useState(false);
@@ -55,7 +58,7 @@ export default function BiasBoxes({ setBiasId, fetchBiasCategoryData, writeCommu
     }
   }
 
-  if (isLoading) {
+  if (loading) {
     return <div>loading...</div>;
   }
 
@@ -89,7 +92,7 @@ export default function BiasBoxes({ setBiasId, fetchBiasCategoryData, writeCommu
         )}
 
         {Array.from({ length: totalBiasBoxes }).map((_, i) => {
-          const bias = myBias[i];
+          const bias = biasList[i];
           return (
             <div key={i} className="bias-info">
               <div className="bias-box">
