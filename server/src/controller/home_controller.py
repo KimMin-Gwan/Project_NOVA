@@ -1,7 +1,5 @@
-from model import BannerModel, HomeBiasModel, BiasSearchModel, Local_Database, SelectBiasModel, LeagueMetaModel, TokenModel, HashTagModel
+from model import BannerModel, HomeBiasModel, BiasSearchModel, Local_Database, SelectBiasModel, LeagueMetaModel, TokenModel, HashTagModel, RecommendKeywordModel
 from others import UserNotExist, CustomError, FeedManager
-
-from src.model.home_model import RecommendKeywordModel
 
 
 #from server.src.view.jwt_decoder import JWTManager, JWTPayload
