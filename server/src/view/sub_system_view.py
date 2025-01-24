@@ -171,7 +171,6 @@ class Sub_Service_View(Master_View):
             return True
 
 
-
     def notice_route(self):
         @self.__app.get("/nova_notice/notice_list")
         def get_notice_list():
