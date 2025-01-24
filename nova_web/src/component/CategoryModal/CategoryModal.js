@@ -36,7 +36,7 @@ export default function CategoryModal({ onClickCategory, biasId, setBoard }) {
       }}
     >
       <div className="modal-container" onClick={(e) => e.stopPropagation()}>
-        <h2>{boardData.bname}님의 팬들을 위한 게시판</h2>
+        <div className="modal-title">{boardData.bname}님의 팬들을 위한 게시판</div>
         <Board boardData={boardData} setBoard={setBoard} />
       </div>
     </div>
