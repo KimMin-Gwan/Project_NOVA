@@ -472,7 +472,7 @@ class Core_Service_View(Master_View):
         def get_feed_with_community(request:Request, raw_request:dict):
             request_manager = RequestManager()
             
-            time.sleep(0.01)
+            time.sleep(1)
             # 쿠키에  들어있는 bid 리스트를 뽑아 줄 것
             cookie_bid_list = TempCookieManager().get_temp_cookie(key="bids", request=request)
             
