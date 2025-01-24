@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import SearchBox from "../../component/SearchBox";
 import { useEffect, useState } from "react";
 import back from "./../../img/backword.png";
@@ -10,6 +10,10 @@ import FeedList from "../FeedList/FeedList";
 import Feed from "../../component/feed";
 
 export default function SearchResultPage() {
+  // let params = useParams();
+  let [searchParams] = useSearchParams();
+  let keyword = searchParams.get("keyword");
+  // let keyword = params.keyword;
   let navigate = useNavigate();
   let [isLoading, setIsLoading] = useState(true);
   function handleMovePage(e, page) {
@@ -18,6 +22,7 @@ export default function SearchResultPage() {
   }
 
   const [activeIndex, setActiveIndex] = useState(null);
+  let [nextKey, setNextKey] = useState(-1);
 
   const handleClick = (index) => {
     setActiveIndex(index);
@@ -27,13 +32,17 @@ export default function SearchResultPage() {
 
   function fetchSearchKeyword() {
     axios
-      .get(`https://nova-platform.kr/feed_explore/search_feed_with_keyword?keyword=하니&key=-1`, {
-        withCredentials: true,
-      })
+      .get(
+        `https://nova-platform.kr/feed_explore/search_feed_with_keyword?keyword=${keyword}&key=${nextKey}`,
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         setFeedData(res.data.body.send_data);
         console.log(res.data);
         setIsLoading(false);
+        setNextKey(res.data.body.key);
       });
   }
   useEffect(() => {
@@ -82,7 +91,7 @@ export default function SearchResultPage() {
         </ul>
       </section>
       {feedData.map((feed, i) => {
-        return <Feed key={feed.fid} feed={feed.feed} />;
+        return <Feed key={feed.feed.fid} feed={feed.feed} />;
       })}
     </div>
   );

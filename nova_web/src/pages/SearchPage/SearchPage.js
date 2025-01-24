@@ -17,15 +17,16 @@ export default function SearchPage() {
   let [searchHistory, setSearchHistory] = useState([]);
 
   function handleNavigate() {
-    if (!searchWord) {
-      navigate("/");
-    } else {
-      // navigate(`/feed_list/search_feed?keyword=${searchWord}`);
-      const updateHistory = [...searchHistory, searchWord];
-      setSearchHistory(updateHistory);
-      localStorage.setItem("history", JSON.stringify(updateHistory));
-      setSearchWord("");
-    }
+    // if (!searchWord) {
+    //   navigate("/");
+    // } else {
+    // navigate(`/feed_list/search_feed?keyword=${searchWord}`);
+    const updateHistory = [...searchHistory, searchWord];
+    setSearchHistory(updateHistory);
+    localStorage.setItem("history", JSON.stringify(updateHistory));
+    navigate(`/search_result/?keyword=${searchWord}`);
+    setSearchWord("");
+    // }
   }
 
   useEffect(() => {
@@ -82,7 +83,7 @@ export default function SearchPage() {
   // }, []);
 
   function onClickSearch() {
-    navigate("/search_result");
+    navigate(`/search_result/?keyword=${searchWord}`);
   }
 
   if (loading) {
@@ -126,10 +127,8 @@ export default function SearchPage() {
           {searchHistory.length > 0 &&
             searchHistory.map((history, i) => {
               return (
-                <>
-                  <button key={i} className="search-tag">
-                    {history}
-                  </button>
+                <div key={i}>
+                  <button className="search-tag">{history}</button>
                   <p
                     onClick={() => {
                       onDeleteHistoryItem(i);
@@ -137,7 +136,7 @@ export default function SearchPage() {
                   >
                     X
                   </p>
-                </>
+                </div>
               );
             })}
         </div>
