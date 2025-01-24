@@ -148,11 +148,13 @@ class Home_Controller:
         finally:
             return model
 
+    # 추천 검색어 시스템. 현재는 주간 핫 해시태그들만 보여줌
     def get_recommend_keyword(self, database:Local_Database, request, feed_search_engine) -> RecommendKeywordModel:
         model = RecommendKeywordModel(database=database)
         try:
             if request.jwt_payload != "":
                 model.set_user_with_email(request=request.jwt_payload)
+            # 작동하는 함수는 현재 주간 핫 해시태그들을 보여줍니다
             model.get_recommend_keywords(feed_search_engine=feed_search_engine)
 
         except CustomError as e:
