@@ -89,6 +89,8 @@ class Core_Service_View(Master_View):
                                                      value=model.get_bid_list(),
                                                      response=response
                                                      )
+            print(model.get_bid_list())
+            
             return response
 
         @self.__app.get('/home/hot_hashtag')
