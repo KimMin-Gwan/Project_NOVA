@@ -12,6 +12,7 @@ from others import FeedSearchEngine as FSE
 from websockets.exceptions import ConnectionClosedError
 from pprint import pprint
 import json
+import time
 
 class Core_Service_View(Master_View):
     def __init__(self, app:FastAPI, endpoint:str,
@@ -468,8 +469,11 @@ class Core_Service_View(Master_View):
         @self.__app.post('/feed_explore/feed_with_community')
         def get_feed_with_community(request:Request, raw_request:dict):
             request_manager = RequestManager()
+            
+            time.sleep(0.01)
             # 쿠키에  들어있는 bid 리스트를 뽑아 줄 것
             cookie_bid_list = TempCookieManager().get_temp_cookie(key="bids", request=request)
+            
             print("cookie", cookie_bid_list)
             # 데이터 페이로드에도 bid 리스트를 넣어야됨
             data_payload = CommunityRequest(request=raw_request, cookie_bid_list=cookie_bid_list)
