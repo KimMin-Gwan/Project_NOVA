@@ -47,7 +47,6 @@ export default function SearchResultPage() {
   }
   useEffect(() => {
     fetchSearchKeyword();
-    console.log(feedData);
   }, []);
 
   if (isLoading) {
