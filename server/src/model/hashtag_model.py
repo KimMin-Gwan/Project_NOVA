@@ -2,6 +2,7 @@ from model.base_model import BaseModel
 from model import Local_Database
 #from others.data_domain import Alert
 from others import CoreControllerLogicError,FeedManager, Bias, FeedSearchEngine
+from pprint import pprint
 
 
 class HashTagModel(BaseModel):
@@ -41,6 +42,7 @@ class HashTagModel(BaseModel):
     # 실시간/오늘의/이번 주/이달의 급상승 해시태그 인터페이스
     def set_today_best_hashtag(self, feed_search_engine:FeedSearchEngine, num_hashtags):
         self._hashtags = feed_search_engine.get_spiked_hashtags(target_type="today", num_hashtags=num_hashtags)
+        pprint(self._hashtags)
         return
 
     def set_weekly_best_hashtag(self, feed_search_engine:FeedSearchEngine, num_hashtags):
