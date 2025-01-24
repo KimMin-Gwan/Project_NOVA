@@ -185,7 +185,7 @@ class Feed_Controller:
     def get_feed_with_hashtag(self, database:Local_Database,
                         request, feed_search_engine: FeedSearchEngine,
                         num_feed= 4):
-        model = FeedModel(database=database)
+        model = FeedSearchModel(database=database)
 
         # 유저가 있으면 세팅
         if request.jwt_payload != "":
