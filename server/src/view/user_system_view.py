@@ -210,7 +210,7 @@ class User_Service_View(Master_View):
             return response
 
         # 닉네임 바꾸기
-        @self.__app.get('/user_home/try_change_nickname')
+        @self.__app.post('/user_home/try_change_nickname')
         def try_change_nickname(request:Request, raw_request:dict):
             request_manager = RequestManager()
 
