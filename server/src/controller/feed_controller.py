@@ -182,34 +182,6 @@ class Feed_Controller:
 
         return model
 
-
-    # 해시태그로 피드 검색하기
-    def get_feed_with_hashtag(self, database:Local_Database,
-                        request, feed_search_engine: FeedSearchEngine,
-                        num_feed= 4):
-        model = FeedModel(database=database)
-
-        # 유저가 있으면 세팅
-        if request.jwt_payload != "":
-            model.set_user_with_email(request=request.jwt_payload)
-
-        # model.try_search_feed_with_hashtag(
-        #     feed_search_engine=feed_search_engine,
-        #     feed_manager=self.__feed_manager,
-        #     target=request.data_payload.hashtag,
-        #     index=request.data_payload.key,
-        #     num_feed=num_feed,
-        # )
-
-        model.set_feed_data(feed_search_engine=feed_search_engine,
-                            target_type="hashtag",
-                            target=request.data_payload.hashtag,
-                            num_feed=num_feed,
-                            index=request.data_payload.key,
-                            feed_manager=self.__feed_manager
-                            )
-        return model
-
     # 숏피드에서 다음 피드 요청할 때
     def get_feed_with_recommend(self, database:Local_Database,
                         request, feed_search_engine: FeedSearchEngine):
@@ -239,6 +211,33 @@ class Feed_Controller:
 
         return model
 
+    # 해시태그로 피드 검색하기
+    def get_feed_with_hashtag(self, database:Local_Database,
+                              request, feed_search_engine: FeedSearchEngine,
+                              feed_manager: FeedManager,
+                              num_feed= 4):
+        # model = FeedModel(database=database)
+        model = FeedSearchModelNew(database=database)
+
+        # 유저가 있으면 세팅
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
+
+        model.try_search_feed_with_hashtag(feed_search_engine=feed_search_engine,
+                                           feed_manager=feed_manager,
+                                           target=request.data_payload.hashtag,
+                                           last_index=request.data_payload.key,
+                                           num_feed=num_feed
+                                           )
+
+        # model.set_feed_data(feed_search_engine=feed_search_engine,
+        #                     target_type="hashtag",
+        #                     target=request.data_payload.hashtag,
+        #                     num_feed=num_feed,
+        #                     index=request.data_payload.key,
+        #                     feed_manager=self.__feed_manager
+        #                     )
+        return model
     def search_feed_with_keyword(self, database:Local_Database,
                                  request, feed_search_engine:FeedSearchEngine,
                                  num_feed=15):

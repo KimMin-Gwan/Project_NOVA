@@ -583,24 +583,24 @@ class FeedSearchEngine:
     # result , index = try_serach_feed(target_type="uname", target = "바위게", num_feed=10, index=240):
 
     def try_search_feed_new(self, target_type="default", target=""):
-        result_fid = []
+        fid_list = []
 
         if target_type == "hashtag":
-            result_fid = self.__search_manager.search_feeds_with_hashtag_new(hashtag=target)
+            fid_list = self.__search_manager.search_feeds_with_hashtag_new(hashtag=target)
         elif target_type == "fid":
-            result_fid = self.__search_manager.search_feeds_with_fid_new(fid=target)
+            fid_list = self.__search_manager.search_feeds_with_fid_new(fid=target)
         elif target_type == "uname":
-            result_fid = self.__search_manager.search_feeds_with_uname_new(uname=target)
+            fid_list = self.__search_manager.search_feeds_with_uname_new(uname=target)
         elif target_type == "bid":
-            result_fid = self.__search_manager.search_feeds_with_bid_new(bid=target)
+            fid_list = self.__search_manager.search_feeds_with_bid_new(bid=target)
         elif target_type == "keyword":
-            result_fid = self.__search_manager.search_feeds_with_keyword_new(keyword=target)
+            fid_list = self.__search_manager.search_feeds_with_keyword_new(keyword=target)
 
         else:
             print("default 가 입력됨")
             pass
 
-        return result_fid
+        return fid_list
 
     def try_search_comment_new(self, target=""):
         result_cid = self.__search_manager.search_comments_with_keyword_new(keyword=target)

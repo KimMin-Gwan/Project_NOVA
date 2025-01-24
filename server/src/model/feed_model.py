@@ -330,6 +330,18 @@ class FeedSearchModelNew(FeedModel):
         feed_search_engine.try_save_keyword_data(keyword=target)
         return
 
+    def try_search_feed_with_hashtag(self, feed_search_engine:FeedSearchEngine,
+                                     feed_manager:FeedManager, target="", last_index=-1, num_feed=8):
+        searched_fid_list = feed_search_engine.try_search_feed_new(target_type="hashtag", target=target)
+
+        # 페이징
+        searched_fid_list, self._key = feed_manager.paging_fid_list(fid_list=searched_fid_list,
+                                                                    last_index=last_index,
+                                                                    page_size=num_feed)
+
+        self._send_data = self._make_feed_data_n_interaction_data(feed_manager=feed_manager, fid_list=searched_fid_list)
+        return
+
     def try_search_feed_with_keyword(self, feed_search_engine:FeedSearchEngine,
                                      feed_manager:FeedManager, target="", last_index=-1, num_feed=8):
         searched_fid_list = feed_search_engine.try_search_feed_new(target_type="keyword", target=target)
@@ -353,6 +365,26 @@ class FeedSearchModelNew(FeedModel):
 
         self._send_data = self._make_feed_data_n_interaction_data(feed_manager=feed_manager,fid_list=searched_fid_list)
 
+        return
+
+    def try_search_feed_with_bid(self, feed_search_engine:FeedSearchEngine,
+                                 feed_manager:FeedManager, target="", last_index=-1, num_feed=8):
+        searched_fid_list = feed_search_engine.try_search_feed_new(target_type="bid", target=target)
+        # 페이징
+        searched_fid_list, self._key = feed_manager.paging_fid_list(fid_list=searched_fid_list,
+                                                                    last_index=last_index,
+                                                                    page_size=num_feed)
+        self._send_data = self._make_feed_data_n_interaction_data(feed_manager=feed_manager, fid_list=searched_fid_list)
+        return
+
+    def try_search_feed_with_fid(self, feed_search_engine:FeedSearchEngine,
+                                 feed_manager:FeedManager, target="", last_index=-1, num_feed=8):
+        searched_fid_list = feed_search_engine.try_search_feed_new(target_type="fid", target=target)
+        # 페이징
+        searched_fid_list, self._key = feed_manager.paging_fid_list(fid_list=searched_fid_list,
+                                                                    last_index=last_index,
+                                                                    page_size=num_feed)
+        self._send_data = self._make_feed_data_n_interaction_data(feed_manager=feed_manager, fid_list=searched_fid_list)
         return
 
     def try_search_comment_with_keyword(self, feed_search_engine:FeedSearchEngine,
