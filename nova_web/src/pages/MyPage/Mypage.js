@@ -10,6 +10,7 @@ function MyPage() {
 
   let [isLoading, setIsLoading] = useState(true);
   let [myData, setMyData] = useState();
+  let [myFeed, setMyFeed] = useState([]);
 
   async function fetchMyPage() {
     await axios
@@ -37,6 +38,7 @@ function MyPage() {
       .then((res) => {
         console.log("feeed", res.data);
         setIsLoading(false);
+        setMyFeed(res.data.body.feeds);
         // 받은 데이터 출력 해야됨
       });
   }
@@ -122,7 +124,9 @@ function MyPage() {
               ))}
             </ul>
           </section>
-          {/* <Feed feed={}/> */}
+          {/* {myFeed.map((feed, i) => {
+            return <Feed key={i} feed={feed} />;
+          })} */}
         </div>
       </div>
     </div>
