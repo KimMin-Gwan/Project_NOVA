@@ -842,7 +842,7 @@ class SampleRequest(RequestHeader):
 
 # Request 아종 같은거라서 이건 재사용 금지
 class CommunityRequest(RequestHeader):
-    def __init__(self, request, cookie_bid_list) -> None:
+    def __init__(self, request) -> None:
         super().__init__(request)
         body = request['body']
         self.bids = body['bids']
