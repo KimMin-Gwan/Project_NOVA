@@ -470,7 +470,7 @@ class Core_Service_View(Master_View):
             request_manager = RequestManager()
             # 쿠키에  들어있는 bid 리스트를 뽑아 줄 것
             cookie_bid_list = TempCookieManager().get_temp_cookie(key="bids", request=request)
-            pprint(cookie_bid_list)
+            print("cookie", cookie_bid_list)
             # 데이터 페이로드에도 bid 리스트를 넣어야됨
             data_payload = CommunityRequest(request=raw_request, cookie_bid_list=cookie_bid_list)
             
