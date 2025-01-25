@@ -57,9 +57,6 @@ export function getModeClass(mode) {
   return mode === "dark" ? "dark-mode" : "bright-mode";
 }
 function App() {
-  const URL = "https://nova-platform.kr/home/";
-  // let bias_url = "https://kr.object.ncloudstorage.com/nova-images/";
-
   let navigate = useNavigate();
   let [isUserState, setIsUserState] = useState(false);
   let todayBestFeed = useFetchData(`/home/today_best`);
@@ -241,7 +238,7 @@ function App() {
                 <h4 className="main-title">최애가 가장 빛날 수 있는 공간</h4>
 
                 <div className="banner-box">
-                  <Banner url={URL}></Banner>
+                  <Banner></Banner>
                 </div>
 
                 <FeedThumbnail

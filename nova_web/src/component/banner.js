@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import mainApi from "../services/apis/mainApi";
 
-function Banner({ url }) {
+function Banner() {
   let [currentBanner, setBanner] = useState(0);
   let [images, setImage] = useState([]);
 
