@@ -1,6 +1,6 @@
-import axios from "axios";
 import { create } from "zustand";
 import getTagList from "../../services/getTagList";
+
 const useTagStore = create((set) => ({
   tagList: [],
   loading: false,

@@ -1,4 +1,4 @@
-import style from "./FilterModal.module.css";
+// import style from "./FilterModal.module.css";
 import "./FilterModal.css";
 import { useEffect, useState } from "react";
 
@@ -63,9 +63,7 @@ export default function FilterModal({
       if (prev.includes(data)) {
         return prev.filter((item) => item !== i);
       }
-      return i === 4
-        ? [data]
-        : [...prev.filter((item) => item !== FilterData[4].value), data];
+      return i === 4 ? [data] : [...prev.filter((item) => item !== FilterData[4].value), data];
     });
 
     const selectBoard = [...isClickedFilterBoard, i];
@@ -120,9 +118,7 @@ export default function FilterModal({
             {FilterData.map((data, i) => {
               return (
                 <button
-                  className={`${
-                    isClickedFilterBoard.includes(i) ? "clicked_button" : ""
-                  }`}
+                  className={`${isClickedFilterBoard.includes(i) ? "clicked_button" : ""}`}
                   key={data.id}
                   onClick={() => onClickFilterBoard(i)}
                 >

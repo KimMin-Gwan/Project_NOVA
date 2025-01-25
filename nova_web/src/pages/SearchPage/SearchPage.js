@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 // import getTagList from "../../services/getTagList";
 // import axios from "axios";
-import useTagStore from "../../stores/tagList/useTagStore";
+import useTagStore from "../../stores/TagStore/useTagStore";
 export default function SearchPage() {
   let navigate = useNavigate();
   //   let [tagList, setTagList] = useState([]);
@@ -56,10 +56,6 @@ export default function SearchPage() {
     setSearchHistory(updateList);
     localStorage.setItem("history", JSON.stringify(updateList));
   }
-
-  // useEffect(() => {
-  //   fetchTagList();
-  // }, []);
 
   // function fetchRecommendKeyword() {
   //   fetch("https://nova-platform.kr/home_search/get_recommend_keyword", {

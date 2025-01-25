@@ -7,17 +7,6 @@ export default function KeywordBox({ type, title, subTitle, onClickTagButton }) 
   let [bestTags, setBestTags] = useState([]);
   let [isLoading, setIsLoading] = useState(true);
 
-  // function fetchBestTag() {
-  //   fetch(`https://nova-platform.kr/home/realtime_best_hashtag`, { credentials: "include" })
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       setBestTags(data.body.hashtags);
-  //     });
-  // }
-
-  // useEffect(() => {
-  //   fetchBestTag();
-  // }, []);
   async function fetchHashTags() {
     if (type === "today") {
       await fetch("https://nova-platform.kr/home/today_spiked_hot_hashtag", {
@@ -79,21 +68,6 @@ export default function KeywordBox({ type, title, subTitle, onClickTagButton }) 
       onClickTagButton(index);
     }
   }
-
-  // function fetchFeedWithTag() {
-  //   fetch(
-  //     `https://nova-platform.kr/feed_explore/search_feed_with_hashtag?hashtag=${keyword}&key=-1`,
-  //     {
-  //       credentials: "include",
-  //     }
-  //   )
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       setFeedData(data.body.send_data);
-  //       setNextData(data.body.key);
-  //       setIsLoading(false);
-  //     });
-  // }
 
   return (
     <div className={style["keyword-container"]}>

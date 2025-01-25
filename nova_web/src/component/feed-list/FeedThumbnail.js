@@ -1,12 +1,8 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import SimpleSlider from "../SimpleSlider";
 import style from "./FeedThumbnail.module.css";
 import more_icon from "../../img/Icon.png";
-import search_icon from "./../../img/search_icon.png";
-import pin from "./../../img/pin.png";
-
-import { useNavigate } from "react-router-dom";
-import SearchBox from "../SearchBox";
 import NoneFeed from "../NoneFeed/NoneFeed";
 
 export default function FeedThumbnail({
@@ -15,8 +11,6 @@ export default function FeedThumbnail({
   feedData,
   brightMode,
   type,
-  hasSearchBox,
-  biasList,
   children,
   allPost,
   endPoint,
@@ -42,8 +36,6 @@ export default function FeedThumbnail({
       </div>
 
       {children}
-
-      {/* {hasSearchBox && <SearchBox />} */}
 
       {allPost}
       {allPost ? null : type === "bias" ? (

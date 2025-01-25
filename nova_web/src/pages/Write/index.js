@@ -180,26 +180,6 @@ const Write = ({ brightmode }) => {
 
   function handleLinkChange() {}
 
-  //   let title = ["줄 글", "사지선다", "이지선다", "외부 좌표"];
-  //   let fclassName = ["card", "multiple", "balance", "station"];
-  //   let [currentTitle, setCurrentTitle] = useState(0);
-  //   let [currentFclass, setCurrentFclass] = useState(0);
-
-  //   function handlePrev() {
-  //     setCurrentTitle((prevIndex) => {
-  //       return prevIndex === 0 ? title.length - 1 : prevIndex - 1;
-  //     });
-  //     setCurrentFclass((prevIndex) => {
-  //       return prevIndex === 0 ? fclassName.length - 1 : prevIndex - 1;
-  //     });
-  //   }
-  //   function handleNext() {
-  //     setCurrentTitle((prevIndex) => {
-  //       return prevIndex === title.length - 1 ? 0 : prevIndex + 1;
-  //     });
-  //     setCurrentFclass((prevIndex) => {
-  //       return prevIndex === fclassName.length - 1 ? 0 : prevIndex + 1;
-  //     });
   //   }
   //   let [plusTag, setPlusTag] = useState("");
   //   let [link, setLink] = useState([]);
@@ -267,15 +247,6 @@ const Write = ({ brightmode }) => {
     }
   }
 
-  //   const [showImageModal, setShowImageModal] = useState(false);
-  //   const [showChoiceModal, setShowChoiceModal] = useState(false);
-
-  //   const handleImageModalOpen = () => setShowImageModal(true);
-  //   const handleChoiceModalOpen = () => setShowChoiceModal(true);
-  //   const closeModal = () => {
-  //     setShowImageModal(false);
-  //     setShowChoiceModal(false);
-  //   };
   const [mode, setMode] = useState(() => {
     // 로컬 스토리지에서 가져온 값이 있으면 그것을, 없으면 'bright'로 초기화
     return localStorage.getItem("brightMode") || "bright";
@@ -369,9 +340,7 @@ const Write = ({ brightmode }) => {
       </div>
 
       {type === "short" && (
-        <p className={style["alert_message"]}>
-          숏 피드 게시글은 작성 후 24시간 동안 노출됩니다.
-        </p>
+        <p className={style["alert_message"]}>숏 피드 게시글은 작성 후 24시간 동안 노출됩니다.</p>
       )}
       {type === "long" && (
         <p className={style["alert_message"]}>

@@ -2,9 +2,8 @@ import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import style from "./Mypage.module.css";
 import backword from "./../../img/back_icon.png";
-import MyEdit from "./../MyPage/MypageEdit";
-import axios from "axios";
-import Feed from "../../component/feed";
+import mainApi from "../../services/apis/mainApi";
+
 function MyPage() {
   let navigate = useNavigate();
 
@@ -13,34 +12,24 @@ function MyPage() {
   let [myFeed, setMyFeed] = useState([]);
 
   async function fetchMyPage() {
-    await axios
-      .get("https://nova-platform.kr/user_home/get_my_page_data", {
-        withCredentials: true,
-      })
-      .then((res) => {
-        console.log("my", res.data);
-        setMyData(res.data.body);
-        setIsLoading(false);
-      });
+    await mainApi.get("user_home/get_my_page_data").then((res) => {
+      console.log("my", res.data);
+      setMyData(res.data.body);
+      setIsLoading(false);
+    });
   }
-
-  // let img = `https://kr.object.ncloudstorage.com/nova-user-profile/${myData?.uid}.png`;
 
   useEffect(() => {
     fetchMyPage();
   }, []);
 
   async function fetchMyFeed() {
-    await axios
-      .get(`https://nova-platform.kr/user_home/get_my_feed?type=post&key=-1`, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        console.log("feeed", res.data);
-        setIsLoading(false);
-        setMyFeed(res.data.body.feeds);
-        // 받은 데이터 출력 해야됨
-      });
+    await mainApi.get(`user_home/get_my_feed?type=post&key=-1`).then((res) => {
+      console.log("feeed", res.data);
+      setIsLoading(false);
+      setMyFeed(res.data.body.feeds);
+      // 받은 데이터 출력 해야됨
+    });
   }
 
   useEffect(() => {

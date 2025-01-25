@@ -17,7 +17,7 @@ import style from "./FeedHashList.module.css";
 import NoticeBox from "../../component/NoticeBox/NoticeBox.js";
 import CategoryModal from "../../component/CategoryModal/CategoryModal.js";
 import NoneFeed from "../../component/NoneFeed/NoneFeed.js";
-import useBiasStore from "../../stores/BiasList/useBiasStore.js";
+import useBiasStore from "../../stores/BiasStore/useBiasStore.js";
 
 export default function FeedList(isUserState) {
   const [params] = useSearchParams();
@@ -405,17 +405,6 @@ export default function FeedList(isUserState) {
               }}
             ></img>
           </div>
-          {/* <div className="buttons">
-            <button className="tool-button">
-              <img
-                src={menu}
-                alt="menu"
-                onClick={() => {
-                  navigate("/more_see");
-                }}
-              ></img>
-            </button>
-          </div> */}
         </header>
         {type === "bias" && (
           <div className={style["bias-section"]}>

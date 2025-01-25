@@ -1,8 +1,0 @@
-.box11 {
-  transition: transform 0.3s ease-in-out;
-  transform: translateY(100px); /* 처음 위치 */
-}
-
-.box11.up {
-  transform: translateY(0px); /* 위로 올라간 상태 */
-}

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import useBiasStore from "../stores/BiasList/useBiasStore";
+import useBiasStore from "../stores/BiasStore/useBiasStore";
 
 export default function BiasBoxes({ setBiasId, fetchBiasCategoryData, writeCommunity }) {
   const URL = "https://nova-platform.kr/home/";

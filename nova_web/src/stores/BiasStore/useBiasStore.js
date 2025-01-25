@@ -1,6 +1,4 @@
-import axios from "axios";
 import { create } from "zustand";
-import getTagList from "../../services/getTagList";
 import getBiasList from "../../services/getBiasList";
 const useBiasStore = create((set) => ({
   biasList: [],

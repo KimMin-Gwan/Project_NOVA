@@ -5,7 +5,6 @@ import Banner from "./component/banner";
 import MyPage from "./pages/MyPage/Mypage";
 import MyPageEdit from "./pages/MyPage/MypageEdit";
 import NOVALogin from "./pages/NovaLogin/NovaLogin";
-import SelectBias from "./component/selectBias/SelectBias";
 import MoreSee from "./pages/MoreSee/MoreSee";
 import NoticeList from "./pages/Notice/NoticeList";
 import Notice from "./pages/Notice/Notice";
@@ -41,16 +40,9 @@ import LongFormWrite from "./pages/LongFormWrite/LongFormWrite.js";
 import SearchBox from "./component/SearchBox.js";
 import Write from "./pages/Write/index.js";
 import SearchPage from "./pages/SearchPage/SearchPage.js";
-import useTagStore from "./stores/tagList/useTagStore.js";
+import useTagStore from "./stores/TagStore/useTagStore.js";
 import SearchResultPage from "./pages/SearchResultPage/SearchResultPage.js";
-import useBiasStore from "./stores/BiasList/useBiasStore.js";
-
-import { ContentFeed } from "./component/feed.js";
-import TestRef from "./component/TestRef.js";
-import FilterModal from "./component/FilterModal/FilterModal.js";
-import NoticeBox from "./component/NoticeBox/NoticeBox.js";
-import CategoryModal from "./component/CategoryModal/CategoryModal.js";
-import getTagList from "./services/getTagList.js";
+import useBiasStore from "./stores/BiasStore/useBiasStore.js";
 
 // 다크 모드 클래스 반환 함수
 export function getModeClass(mode) {
@@ -121,9 +113,6 @@ function App() {
   //   return () => clearInterval(timer); // 컴포넌트 언마운트 시 타이머 정리
   // });
 
-  let [showBox, setShowBox] = useState(false);
-  let [blackBox, setBlackBox] = useState("");
-
   // // brightMode 상태가 변경될 때마다 body 클래스 업데이트
   const [brightMode, setBrightMode] = useState(() => {
     return localStorage.getItem("brightMode") || "bright"; // 기본값은 'bright'
@@ -162,10 +151,10 @@ function App() {
       {/* <Route path="/feed_page" element={<FeedPage brightMode={brightMode} />}></Route> */}
       {/* <Route path="/feed_hash_list" element={<FeedHashList />}></Route> */}
       {/* <Route path="/feed_hash_list/:fid" element={<FeedHashList />}></Route> */}
+      {/* <Route path="/select_bias" element={<SelectBias />}></Route> */}
       <Route path="/write_feed" element={<Write />}>
         <Route path=":type" element={<Write />}></Route>
       </Route>
-      <Route path="/select_bias" element={<SelectBias />}></Route>
       <Route path="/feed_list" element={<FeedList brightMode={brightMode} />}></Route>
       <Route path="/feed_list/:fid" element={<FeedList />}></Route>
       <Route path="/feed_detail/:fid" element={<FeedDetail />}></Route>
@@ -191,34 +180,19 @@ function App() {
       <Route path="*" element={<div>404 Error</div>}></Route>
 
       {/* 미사용 페이지 */}
-      {/* <Route path="/planet" element={<PlanetList />}></Route> */}
-      {/* <Route path='/league_detail' element={<LeagueDetail />}></Route> */}
-      {/* <Route path="/namecard" element={<NameCard />}></Route> */}
-      {/* <Route path="/bias_certify" element={<BiasCertify />}></Route> */}
       {/* <Route path="/bias_info/user_contribution" element={<BiasDetail />}></Route> */}
       {/* <Route path="/my_write_feed" element={<MyWriteFeed brightMode={brightMode} />}/> */}
       {/* <Route path="/my_comment_feed" element={<MyCommentFeed />} /> */}
       {/* <Route path="/my_active_feed" element={<MyActiveFeed />} /> */}
       {/* <Route path="/my_alerts" element={<MyAlert />} /> */}
-      {/* <Route path="/week100" element={<Week100 />}></Route> */}
       {/* <Route path="/my_interest_feed" element={<MyInterestFeed />} /> */}
-      {/* <Route path="/galaxy" element={<GalaxyList />}></Route> */}
-      {/* <Route path="/league_detail" element={<LeaguePage />}></Route> */}
 
       {/* 홈 화면 */}
       <Route
         path="/"
         element={
           <div className="all-box">
-            <div
-              onClick={(e) => {
-                e.stopPropagation();
-                if (showBox) {
-                  setShowBox(false);
-                }
-              }}
-              className={`container ${blackBox} ${getModeClass(brightMode)}`}
-            >
+            <div className={`container ${getModeClass(brightMode)}`}>
               <div className={`top-area ${getModeClass(brightMode)}`}>
                 <header className="header">
                   <div
@@ -237,9 +211,7 @@ function App() {
                 <SearchBox />
                 <h4 className="main-title">최애가 가장 빛날 수 있는 공간</h4>
 
-                <div className="banner-box">
-                  <Banner></Banner>
-                </div>
+                <Banner></Banner>
 
                 <FeedThumbnail
                   title={
@@ -247,7 +219,6 @@ function App() {
                       <span className="title-color">최애 </span>몰아보기
                     </>
                   }
-                  biasList={biasList}
                   img_src={new_pin}
                   feedData={weeklyFeed}
                   brightMode={brightMode}
@@ -285,7 +256,6 @@ function App() {
                   img_src={best}
                   feedData={todayBestFeed}
                   brightMode={brightMode}
-                  hasSearchBox
                   endPoint={`/feed_list?type=best`}
                 />
                 <FeedThumbnail

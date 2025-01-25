@@ -1,14 +1,12 @@
-import style from "./../pages/FeedPage/FeedPage.module.css";
 import { useState, useEffect } from "react";
-import { FaStar } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { Viewer } from "@toast-ui/react-editor";
+import style from "./../pages/FeedPage/FeedPage.module.css";
+
 import star from "./../img/favorite.png";
 import star_color from "./../img/favorite_color.png";
-import { getModeClass } from "./../App.js";
-import { useNavigate } from "react-router-dom";
-import ProgressBar from "./ProgressBar.js";
 import comment from "./../img/comment.png";
-import { Viewer } from "@toast-ui/react-editor";
-// import { useRef, useState } from 'react';
+
 export function useBrightMode() {
   const params = new URLSearchParams(window.location.search);
   const brightModeFromUrl = params.get("brightMode");
@@ -23,9 +21,9 @@ export function useBrightMode() {
 
   return [mode, setMode];
 }
+
 export default function Feed({
   feed,
-  func,
   feedData,
   interaction,
   feedInteraction,
@@ -68,9 +66,6 @@ export default function Feed({
         });
       });
   }
-  // function handleRequestURL() {
-  //     window.open(requestURL, '_blank', "noopener, noreferrer");
-  // };
 
   // let [isInteraction, setIsInteraction] = useState(false);
   // let [selectedIndex, setSelectedIndex] = useState(null);

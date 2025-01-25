@@ -26,7 +26,6 @@ body {
   font-weight: 300;
 }
 
-
 .title-color {
   margin-left: 5px;
   color: #0076ee;
@@ -102,11 +101,6 @@ body.dark-mode {
   position: relative;
   border: 1px white solid;
   /* margin-bottom: 20px; */
-}
-
-.black-box {
-  /* background-color: blue; */
-  /* background-color: rgba(0, 0, 0, 0.3); */
 }
 
 .top-area {

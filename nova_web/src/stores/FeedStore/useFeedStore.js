@@ -1,6 +1,5 @@
-import axios from "axios";
 import { create } from "zustand";
-import getTagList from "../../services/getTagList";
+
 const useFeedStore = create((set) => ({
   feedList: [],
   loading: false,
