@@ -57,12 +57,9 @@ export default function SearchPage() {
     localStorage.setItem("history", JSON.stringify(updateList));
   }
 
-  useEffect(() => {
-    fetchTagList();
-    // getTagList().then((data) => {
-    //   setTagList(data.body.hashtags);
-    // });
-  }, []);
+  // useEffect(() => {
+  //   fetchTagList();
+  // }, []);
 
   // function fetchRecommendKeyword() {
   //   fetch("https://nova-platform.kr/home_search/get_recommend_keyword", {
@@ -168,7 +165,7 @@ export default function SearchPage() {
       <section className="search-category">
         <h3>실시간 트렌드</h3>
 
-        <ul class="tag-list">
+        <ul className="tag-list">
           {tagList.map((tag, i) => {
             return <li key={i}>{tag}</li>;
           })}
