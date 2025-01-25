@@ -2,6 +2,8 @@ import BoardContent from "../BoardContent/BoardContent";
 import BoardTitle from "../BoardTitle/BoardTitle";
 import "./index.css";
 import chat from "../../img/chatLight.png";
+import insta from "../../img/insta_color.png";
+import x_img from "../../img/x_color.png";
 
 export default function Board({ boardData, setBoard }) {
   function handleRequestURL(url) {
@@ -18,7 +20,7 @@ export default function Board({ boardData, setBoard }) {
       <div className="LinkBox_container">
         <div className="LinkBox" onClick={() => handleRequestURL(boardData.urls.Instagram)}>
           <div className="LinkBox_img">
-            <img src={boardData.urls.Instagram} alt="img" />
+            <img src={insta} alt="img" />
           </div>
           인스타
         </div>
@@ -39,7 +41,7 @@ export default function Board({ boardData, setBoard }) {
 
         <div className="LinkBox" onClick={() => handleRequestURL(boardData.urls.X)}>
           <div className="LinkBox_img">
-            <img src={boardData.urls.X} alt="img" />
+            <img src={x_img} alt="img" />
           </div>
           X
         </div>

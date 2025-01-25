@@ -17,6 +17,7 @@ export default function CategoryModal({ onClickCategory, biasId, setBoard }) {
       .then((data) => {
         setBoardData(data.body);
         setIsLoading(false);
+        console.log(data);
       });
   }
 
