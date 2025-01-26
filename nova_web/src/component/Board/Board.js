@@ -2,6 +2,7 @@ import BoardContent from "../BoardContent/BoardContent";
 import BoardTitle from "../BoardTitle/BoardTitle";
 import "./index.css";
 import chat from "../../img/chatLight.png";
+import ticket from "../../img/Ticket_light.png";
 import insta from "../../img/insta_color.png";
 import x_img from "../../img/x_color.png";
 
@@ -50,11 +51,11 @@ export default function Board({ boardData, setBoard }) {
       <BoardTitle>노바 펀딩</BoardTitle>
       <ul className="Board_content">
         <li>
-          <img src={chat} alt="" />
+          <img src={ticket} alt="" />
           공식 판매 굿즈
         </li>
         <li>
-          <img src={chat} alt="" />
+          <img src={ticket} alt="" />
           펀딩 상품
         </li>
       </ul>
