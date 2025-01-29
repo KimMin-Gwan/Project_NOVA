@@ -617,7 +617,6 @@ class FilteredFeedModel(FeedModel):
         except Exception as e:
             raise CoreControllerLogicError("response making error | " + e)
 
-
 class CommunityFeedModel(FeedModel):
     def __init__(self, database:Local_Database) -> None:
         super().__init__(database)

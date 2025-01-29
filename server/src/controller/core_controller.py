@@ -18,14 +18,13 @@ class Core_Controller:
             model.set_state_code(e.error_code) # 종합 에러
         finally:
             return model
-        
 
-#----------check_page ------------------------------------------
+#------------------------------------check_page ------------------------------------------
     # check page 데이터
     # 여기서 부터는 최애인증을 check라고 정의함
-    #1. 사용자인지 확인
-    #2. 사용자가 팔로우 중인 bias 가 맞는지 확인
-    #3. 이미 인증 했는지 확인  
+    # 1. 사용자인지 확인
+    # 2. 사용자가 팔로우 중인 bias 가 맞는지 확인
+    # 3. 이미 인증 했는지 확인
     def get_check_page(self, database:Local_Database, request) -> BaseModel: 
         model = CheckPageModel(database=database)
         try:
@@ -267,7 +266,6 @@ class Core_Controller:
         </html>
         """
         return html
-
 
 class LeagueRequest():
     def __init__(self, league_name = None, league_id = None) -> None:

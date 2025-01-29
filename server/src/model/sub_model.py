@@ -387,7 +387,6 @@ class CommunitySideBoxModel(BaseModel):
             return True
         else:
             return False
-        
 
     def get_urls_of_bias(self):
         # URL 패턴. 고정된 패턴들을 포함합니다.
@@ -419,11 +418,15 @@ class CommunitySideBoxModel(BaseModel):
             self.__urls["Default"] = self.__bias.homepage
 
         # 팬카페 패턴
-
         if "naver" in self.__bias.fan_cafe:
             self.__urls["Naver"] = self.__bias.fan_cafe
         elif "daum" in self.__bias.fan_cafe:
             self.__urls["Daum"] = self.__bias.fan_cafe
+
+        # 디코로 대화하는 쪽도 있어서 걍 넣음
+        elif "discord" in self.__bias.fan_cafe:
+            self.__urls["Discord"] = self.__bias.fan_cafe
+
         # 팬카페는 3가지 경우에 대해서만 하겠음
         # 팬심은 안넣습니다.
         else:

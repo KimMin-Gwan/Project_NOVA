@@ -1369,7 +1369,7 @@ class FeedManager:
                                 board_type="자유게시판", # 이거, 게시판 타입 분리하는거, 나중에 프론트엔드에서 게시판타입을 받아오면 그 때, 데이터가 바뀐다.
                                 images=image_result,
                                 link=data_payload.link,
-                                bid=data_payload.bid
+                                bid=data_payload.bid,
                                 )
 
         # 롱폼의 경우 작성된 html을 올리고 저장하면됨
@@ -1399,7 +1399,7 @@ class FeedManager:
                                 images=[],
                                 link=data_payload.link,
                                 bid=data_payload.bid,
-                                raw_body = url
+                                raw_body = data_payload.raw_body, # 이거 url이라는 변수가 없어서
                                 )
 
         #작성한 피드 목록에 넣어주고

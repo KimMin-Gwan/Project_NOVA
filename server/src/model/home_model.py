@@ -20,8 +20,6 @@ class TokenModel(BaseModel):
         except Exception as e:
             raise CoreControllerLogicError("response making error | " + e)
 
-
-
 class BannerModel(BaseModel):
     def __init__(self, database:Local_Database) -> None:
         super().__init__(database)
