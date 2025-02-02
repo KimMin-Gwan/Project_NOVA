@@ -65,10 +65,7 @@ function MyPage() {
       </div>
       <div className={style["user-container"]}>
         <div className={style["user-img"]}>
-          <img
-            src={`https://kr.object.ncloudstorage.com/nova-user-profile/${myData?.uid}.png`}
-            alt="img"
-          />
+          <img src={`https://kr.object.ncloudstorage.com/nova-user-profile/${myData?.uid}.png`} alt="img" />
         </div>
         <div>
           <section className={style["user-name"]}>
@@ -101,13 +98,9 @@ function MyPage() {
             </ul>
           </section>
           <section className={style["info-list"]}>
-            <ul className={style["post-list"]}>
+            <ul className={style["post-list"]} data-active-index={activeIndex}>
               {["포스트", "모멘트", "좋아요", "댓글"].map((post, index) => (
-                <li
-                  key={index}
-                  className={`${style.post} ${activeIndex === index ? style.active : ""}`}
-                  onClick={() => handleClick(index)}
-                >
+                <li key={index} className={`${style.post} ${activeIndex === index ? style.active : ""}`} onClick={() => handleClick(index)}>
                   <button>{post}</button>
                 </li>
               ))}

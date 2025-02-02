@@ -91,7 +91,6 @@
 
       & li {
         width: 100%;
-
         display: flex;
         flex-flow: column;
         align-items: center;
@@ -110,6 +109,7 @@
 
 .info-list {
   .post-list {
+    position: relative;
     border-top: 1px solid #1082f48c;
     display: flex;
     background-color: #fff;
@@ -128,22 +128,47 @@
       transition: border-bottom 0.3s ease;
       padding-inline: 18px;
       margin: 0;
+      text-align: center;
 
       & button {
         margin-block: 15px;
         padding: 0;
         padding-bottom: 4px;
-        border: 0;
         border-radius: 0;
         font-size: 15px;
         font-weight: 600;
         cursor: pointer;
+        position: relative;
+        background: none;
+        border: none;
+        font-weight: bold;
+        width: 100%;
       }
     }
 
-    .post.active button {
-      border-bottom: 3px solid #1082f4;
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 15px;
+      left: 0;
+      width: 5%;
+      height: 3px;
+      background-color: #1082f4;
+      transition: left 0.3s ease-in-out;
     }
+  }
+
+  .post-list[data-active-index="0"]::after {
+    left: 9%;
+  }
+  .post-list[data-active-index="1"]::after {
+    left: 25%;
+  }
+  .post-list[data-active-index="2"]::after {
+    left: 41%;
+  }
+  .post-list[data-active-index="3"]::after {
+    left: 56%;
   }
 }
 
