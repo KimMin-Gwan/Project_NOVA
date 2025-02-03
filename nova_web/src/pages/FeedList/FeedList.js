@@ -65,7 +65,7 @@ export default function FeedList(isUserState) {
       body: {
         bids: [bids] || [bid] || [],
         board: board || "",
-        key: -1,
+        key: nextData || -1,
       },
     };
 
@@ -83,7 +83,7 @@ export default function FeedList(isUserState) {
         .then((response) => response.json())
         .then((data) => {
           console.log("first bias data", data);
-          setFeedData(data.body.send_data);
+          setFeedData((prevData) => [...prevData, ...data.body.send_data]);
           setNextData(data.body.key);
           setIsLoading(false);
         });
@@ -92,7 +92,7 @@ export default function FeedList(isUserState) {
 
   useEffect(() => {
     fetchBiasCategoryData();
-    console.log(biasId, board);
+    console.log(bids, board);
   }, [board]);
 
   let [filterCategory, setFilterCategory] = useState([]);
@@ -341,6 +341,7 @@ export default function FeedList(isUserState) {
 
         // fetchAllFeed();
         fetchPlusData();
+        fetchBiasCategoryData();
       });
     });
 
@@ -351,6 +352,7 @@ export default function FeedList(isUserState) {
     return () => {
       if (observerRef.current && target.current) {
         observerRef.current.unobserve(target.current);
+        observerRef.current.disconnect();
       }
     };
   }, [isLoading, nextData]);

@@ -12,7 +12,7 @@ const postApi = axios.create({
   baseURL: "https://nova-platform.kr/",
   withCredentials: true,
   headers: {
-    header,
+    ...header,
     "Content-Type": "application/json",
   },
 });

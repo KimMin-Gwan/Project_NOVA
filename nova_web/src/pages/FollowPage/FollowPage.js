@@ -9,6 +9,7 @@ import logo2 from "./../../img/logo2.png";
 import search_icon from "./../../img/search_icon.png";
 import Stackframe from "./../../img/Stackframe.png";
 import mainApi from "../../services/apis/mainApi.js";
+import postApi from "../../services/apis/postApi.js";
 
 const bias_url = "https://kr.object.ncloudstorage.com/nova-images/";
 export default function FollowPage() {
@@ -50,6 +51,57 @@ export default function FollowPage() {
   useEffect(() => {
     fetchBiasFollowList();
   }, []);
+  let header = {
+    "request-type": "default",
+    "client-version": "v1.0.1",
+    "client-ip": "127.0.0.1",
+    uid: "1234-abcd-5678",
+    endpoint: "/user_system/",
+  };
+
+  let send_data = {
+    header: header,
+    body: {
+      bid: clickedBid,
+    },
+  };
+  function fetchTryFollowBias() {
+    console.log(clickedBid);
+    fetch("https://nova-platform.kr/nova_sub_system/try_select_my_bias", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(send_data),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
+    // postApi
+    //   .post("nova_sub_system/try_select_my_bias", {
+    //     send_data,
+    //   })
+    //   .then((res) => {
+    //     console.log(res.data);
+    //   });
+  }
+
+  const [searchBias, setSearchBias] = useState("");
+
+  function fetchSearchBias() {
+    mainApi.get(`nova_sub_system/try_search_bias?bname=${searchBias}`).then((res) => {
+      console.log(res.data);
+    });
+  }
+
+  function onChangeSearchBias(e) {
+    setSearchBias(e.target.value);
+  }
 
   if (isLoading) {
     return <div>loading...</div>;
@@ -78,8 +130,15 @@ export default function FollowPage() {
 
         <div className={style["search-fac"]}>
           <div className={style["search-box"]}>
-            <input type="text" placeholder="팔로우 하고 싶은 최애를 검색해보세요" />
-            <img src={search_icon} alt="검색바" />
+            <input
+              type="text"
+              value={searchBias}
+              onChange={(e) => {
+                onChangeSearchBias(e);
+              }}
+              placeholder="팔로우 하고 싶은 최애를 검색해보세요"
+            />
+            <img src={search_icon} onClick={fetchSearchBias} alt="검색바" />
           </div>
 
           <button className={style["fav-apply"]}>
@@ -198,7 +257,9 @@ export default function FollowPage() {
               </p>
               <span>
                 <button onClick={closeModal}>취소</button>
-                <button className={style["follow-button"]}>팔로우</button>
+                <button className={style["follow-button"]} onClick={fetchTryFollowBias}>
+                  팔로우
+                </button>
               </span>
             </div>
           </div>

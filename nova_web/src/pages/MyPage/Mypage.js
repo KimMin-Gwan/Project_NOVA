@@ -3,13 +3,30 @@ import React, { useEffect, useState } from "react";
 import style from "./Mypage.module.css";
 import backword from "./../../img/back_icon.png";
 import mainApi from "../../services/apis/mainApi";
+import Feed from "../../component/feed";
 
+const categoryData = [
+  {
+    type: "post",
+    category: "포스트",
+  },
+  {
+    type: "moment",
+    category: "모멘트",
+  },
+  {
+    type: "like",
+    category: "좋아요",
+  },
+  { category: "댓글" },
+];
 function MyPage() {
   let navigate = useNavigate();
 
   let [isLoading, setIsLoading] = useState(true);
   let [myData, setMyData] = useState();
   let [myFeed, setMyFeed] = useState([]);
+  const [nextKey, setNextKey] = useState(-1);
 
   async function fetchMyPage() {
     await mainApi.get("user_home/get_my_page_data").then((res) => {
@@ -23,15 +40,23 @@ function MyPage() {
     fetchMyPage();
   }, []);
 
-  async function fetchMyFeed() {
-    await mainApi.get(`user_home/get_my_feed?type=post&key=-1`).then((res) => {
+  // async function fetchMyFeed(category) {
+  //   await mainApi.get(`user_home/get_my_feed?type=${category}&key=${nextKey}`).then((res) => {
+  //     console.log("feeed", res.data);
+  //     setIsLoading(false);
+  //     setMyFeed(res.data.body.feed);
+  //     setNextKey(res.data.body.key);
+  //   });
+  // }
+
+  async function fetchMyFeed(category) {
+    await mainApi.get(`user_home/get_my_feed?type=${category}&key=${nextKey}`).then((res) => {
       console.log("feeed", res.data);
       setIsLoading(false);
-      setMyFeed(res.data.body.feeds);
-      // 받은 데이터 출력 해야됨
+      setMyFeed(res.data.body.feed);
+      setNextKey(res.data.body.key);
     });
   }
-
   useEffect(() => {
     fetchMyFeed();
   }, []);
@@ -65,7 +90,10 @@ function MyPage() {
       </div>
       <div className={style["user-container"]}>
         <div className={style["user-img"]}>
-          <img src={`https://kr.object.ncloudstorage.com/nova-user-profile/${myData?.uid}.png`} alt="img" />
+          <img
+            src={`https://kr.object.ncloudstorage.com/nova-user-profile/${myData?.uid}.png`}
+            alt="img"
+          />
         </div>
         <div>
           <section className={style["user-name"]}>
@@ -99,16 +127,24 @@ function MyPage() {
           </section>
           <section className={style["info-list"]}>
             <ul className={style["post-list"]} data-active-index={activeIndex}>
-              {["포스트", "모멘트", "좋아요", "댓글"].map((post, index) => (
-                <li key={index} className={`${style.post} ${activeIndex === index ? style.active : ""}`} onClick={() => handleClick(index)}>
-                  <button>{post}</button>
+              {categoryData.map((item, index) => (
+                <li
+                  key={index}
+                  className={`${style.post} ${activeIndex === index ? style.active : ""}`}
+                  onClick={() => {
+                    fetchMyFeed(item.type);
+                    handleClick(index);
+                  }}
+                >
+                  <button>{item.category}</button>
                 </li>
               ))}
             </ul>
           </section>
-          {/* {myFeed.map((feed, i) => {
+
+          {myFeed.map((feed, i) => {
             return <Feed key={i} feed={feed} />;
-          })} */}
+          })}
         </div>
       </div>
     </div>
