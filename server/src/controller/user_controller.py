@@ -5,6 +5,7 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from fastapi import HTTPException, status
+from pprint import pprint
 
 class UserController:
 
@@ -153,6 +154,7 @@ class UserController:
 
         try:
             model.set_user_with_email(request=request.jwt_payload)
+            pprint("출력 함 2 ")
             model.get_user_data()
 
 

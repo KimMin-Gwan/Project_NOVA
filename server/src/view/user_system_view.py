@@ -6,7 +6,6 @@ from controller import Home_Controller, Core_Controller, UserController
 from view.jwt_decoder import RequestManager
 from pprint import pprint
 
-
 class User_Service_View(Master_View):
     def __init__(self, app:FastAPI, endpoint:str, database, head_parser:Head_Parser,
                  nova_verification, feed_manager, feed_search_engine) -> None:
@@ -62,7 +61,7 @@ class User_Service_View(Master_View):
 
         # 비밀번호 찾기에서 이메일 보내기
         @self.__app.post('/user_home/try_find_password_send_email')
-        def try_find_passwrod_send_email(raw_request:dict):
+        def try_find_password_send_email(raw_request:dict):
             request = EmailSendRequest(request=raw_request)
             user_controller=UserController()
             model = user_controller.try_send_email_password(database=self.__database,
@@ -128,7 +127,7 @@ class User_Service_View(Master_View):
         @self.__app.get('/user_home/get_my_page_data')
         def try_get_my_page(request:Request):
             request_manager = RequestManager()
-            pprint("프린트 됨")
+            # pprint("프린트 됨")
             data_payload = DummyRequest()
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
             if not request_manager.jwt_payload.result:
