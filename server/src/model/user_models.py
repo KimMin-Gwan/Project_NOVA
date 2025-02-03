@@ -186,21 +186,25 @@ class UserPageModel(BaseModel):
     def get_user_data(self):
         self._uname = self._user.uname
         self._uid = self._user.uid
-        self._num_long_feed = self._user.num_long_feeds
-        self._num_short_feed = self._user.num_short_feeds
+        self._num_long_feed = self._user.num_long_feed
+        self._num_short_feed = self._user.num_short_feed
         self._num_like = len(self._user.like)
         self._num_comment = len(self._user.my_comment)
 
-        pprint("[")
-        pprint(self._uname)
-        pprint(self._uid)
-        pprint(self._num_long_feed)
-        pprint(self._num_short_feed)
-        pprint(self._num_like)
-        pprint(self._num_comment)
-        pprint("]")
-
         return
+
+    def print_user_data(self):
+        body = {
+            'uname' : self._uname,
+            'uid' : self._uid,
+            'num_long_feed' : self._num_long_feed,
+            'num_short_feed' : self._num_short_feed,
+            'num_like' : self._num_like,
+            'num_comment' : self._num_comment
+        }
+        pprint(body)
+        return
+
 
     def get_response_form_data(self, head_parser):
         try:
