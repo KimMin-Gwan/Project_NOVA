@@ -60,12 +60,12 @@ export default function KeywordBox({ type, title, subTitle, onClickTagButton }) 
 
   let [currentTag, setCurrentTag] = useState();
 
-  function onClickTags(index) {
+  function onClickTags(index, tag) {
     if (currentTag === index) {
       setCurrentTag();
     } else {
       setCurrentTag(index);
-      onClickTagButton(index);
+      onClickTagButton(tag);
     }
   }
 
@@ -87,7 +87,7 @@ export default function KeywordBox({ type, title, subTitle, onClickTagButton }) 
             return (
               <div
                 key={i}
-                onClick={() => onClickTags(i)}
+                onClick={() => onClickTags(i, tag)}
                 className={`${style["tags"]} ${currentTag === i ? style["click-tag"] : ""}`}
               >
                 #{tag}
