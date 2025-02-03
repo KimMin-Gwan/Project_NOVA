@@ -136,6 +136,8 @@ class User_Service_View(Master_View):
             user_controller = UserController()
             model = user_controller.try_get_user_page(database=self.__database,request=request_manager)
             body_data = model.get_response_form_data(self._head_parser)
+            pprint("출력 3")
+            pprint(body_data)
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
