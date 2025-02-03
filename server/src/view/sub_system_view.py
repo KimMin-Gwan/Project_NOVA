@@ -235,8 +235,8 @@ class Sub_Service_View(Master_View):
         @self.__app.post('/nova_sub_system/try_select_my_bias')
         def try_select_my_bias(request:Request, raw_request:dict):
             request_manager = RequestManager()
-
-            # pprint(raw_request)
+            pprint(request.cookies)
+            pprint(raw_request)
             data_payload = BiasSelectRequest(request=raw_request)
             request_manager.try_view_management_authorized_with_temp_user(data_payload=data_payload, cookies=request.cookies)
             if not request_manager.jwt_payload.result:
