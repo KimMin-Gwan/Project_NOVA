@@ -4,6 +4,7 @@ from view.master_view import Master_View, RequestHeader
 from view.parsers import Head_Parser
 from controller import Home_Controller, Core_Controller, UserController
 from view.jwt_decoder import RequestManager
+from pprint import pprint
 
 
 class User_Service_View(Master_View):
@@ -127,7 +128,7 @@ class User_Service_View(Master_View):
         @self.__app.get('/user_home/get_my_page_data')
         def try_get_my_page(request:Request):
             request_manager = RequestManager()
-
+            pprint("프린트 됨")
             data_payload = DummyRequest()
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
             if not request_manager.jwt_payload.result:
