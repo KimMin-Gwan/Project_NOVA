@@ -548,6 +548,9 @@ class FeedSearchEngine:
         self.__managed_feed_bias_table.remove_user_to_bias(bid=bid, uid=uid)
         return
 
+    def get_all_managed_bias(self):
+        return self.__managed_feed_bias_table.get_all_managed_bias()
+
     # 피드 매니저가 관리중인 피드를 보기 위해 만든 함수
     def try_search_managed_feed(self, fid):
         return self.__search_manager.try_search_managed_feed(fid=fid)
