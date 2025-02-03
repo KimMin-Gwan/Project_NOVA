@@ -474,8 +474,7 @@ class Core_Service_View(Master_View):
             data_payload = CommunityRequest(request=raw_request)
 
             data = []
-            
-            pprint(raw_request)
+            # pprint(raw_request)
             
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
