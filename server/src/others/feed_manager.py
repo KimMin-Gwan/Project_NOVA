@@ -1449,7 +1449,8 @@ class FeedManager:
         return "COMPLETE", True
 
     # FEED 삭제
-    def try_remove_feed(self, user:User, fid):
+    # 진짜 데이터베이스에서 삭제하는 기믹임
+    def try_remove_feed_old(self, user:User, fid):
         feed_data=self._database.get_data_with_id(target="fid",id=fid)
         feed = Feed()
         feed.make_with_dict(feed_data)
@@ -1475,6 +1476,37 @@ class FeedManager:
             return "DATABASE_ERROR", False
         if not self._database.delete_data_with_id(target="fid", id=feed.fid):
             return "DATABASE_ERROR", False
+
+        return "COMPLETE", True
+
+    def try_set_private_feed(self, user:User, fid):
+        feed_data = self._database.get_data_with_id(target="fid",id=fid)
+        feed = Feed()
+        feed.make_with_dict(feed_data)
+
+        if feed.uid != user.uid:
+            return "NOT_OWNER", False
+
+        # 디스플레이 옵션
+        #   0 : 삭제
+        #   1 : 비공개
+        #   2 : 차단
+        #   3 : 댓글 작성 비활성화
+        #   4 : 전체 공개
+        # 디스플레이 옵션을 수정한 후, Feed를 수정한다.
+        feed.display = 1
+        self._database.modify_data_with_id(target_id="fid", target_data=feed.get_dict_form_data())
+
+        return "COMPLETE", True
+
+    # 피드 차단을 설정함
+    def try_set_blocked_feed(self, fid):
+        feed_data = self._database.get_data_with_id(target="fid",id=fid)
+        feed = Feed()
+        feed.make_with_dict(feed_data)
+
+        feed.display = 2
+        self._database.modify_data_with_id(target_id="fid", target_data=feed.get_dict_form_data())
 
         return "COMPLETE", True
 
