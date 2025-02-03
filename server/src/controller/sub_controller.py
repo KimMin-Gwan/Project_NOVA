@@ -265,7 +265,6 @@ class Sub_Controller:
 
         return model
 
-
     def try_get_community_side_box(self, database:Local_Database, data_payload):
         model = CommunitySideBoxModel(database=database)
 
