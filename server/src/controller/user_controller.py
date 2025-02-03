@@ -155,6 +155,7 @@ class UserController:
             model.set_user_with_email(request=request.jwt_payload)
             model.get_user_data()
 
+
         except CustomError as e:
             print("Error Catched : ", e.error_type)
             model.set_state_code(e.error_code) # 종합 에러

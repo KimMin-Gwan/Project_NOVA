@@ -7,6 +7,7 @@ from view.jwt_decoder import JWTManager
 import jwt
 import datetime
 import uuid
+from pprint import pprint
 
 class LoginModel(BaseModel):
     def __init__(self, database:Local_Database) -> None:
@@ -189,6 +190,15 @@ class UserPageModel(BaseModel):
         self._num_short_feed = self._user.num_short_feeds
         self._num_like = len(self._user.like)
         self._num_comment = len(self._user.my_comment)
+
+        pprint("[")
+        pprint(self._uname)
+        pprint(self._uid)
+        pprint(self._num_long_feed)
+        pprint(self._num_short_feed)
+        pprint(self._num_like)
+        pprint(self._num_comment)
+        pprint("]")
 
         return
 
