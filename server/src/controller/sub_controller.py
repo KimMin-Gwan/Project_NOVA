@@ -239,7 +239,7 @@ class Sub_Controller:
             return model
     
     # bias를 문자열로 검색
-    def try_search_bias(self, database:Local_Database, request:RequestManager,
+    def try_search_bias(self, database:Local_Database, request,
                                     feed_search_engine,): 
         model = BiasSearchModel(database=database)
 
