@@ -1,8 +1,6 @@
 from model import *
 from others import UserNotExist, CustomError
 
-from src.view.jwt_decoder import RequestManager
-
 
 class Sub_Controller:
     def sample_func(self, database:Local_Database, request) -> BaseModel: 
