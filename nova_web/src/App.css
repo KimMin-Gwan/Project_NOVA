@@ -121,9 +121,10 @@ body.dark-mode {
 }
 
 .logo {
+  margin-left: 15px;
   font-size: 24px;
   font-weight: bold;
-  padding-left: 5px;
+  /* padding-left: 5px; */
   padding-top: 5px;
   cursor: pointer;
 }
@@ -131,7 +132,7 @@ body.dark-mode {
 .logo img {
   width: 85px;
   /* height: 50px; */
-  margin-left: 10px;
+  /* margin-left: 10px; */
 }
 
 .buttons button {
