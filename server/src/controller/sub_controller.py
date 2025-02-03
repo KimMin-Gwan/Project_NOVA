@@ -1,6 +1,8 @@
 from model import *
 from others import UserNotExist, CustomError
 
+from src.view.jwt_decoder import RequestManager
+
 
 class Sub_Controller:
     def sample_func(self, database:Local_Database, request) -> BaseModel: 
@@ -239,11 +241,11 @@ class Sub_Controller:
             return model
     
     # bias를 문자열로 검색
-    def try_search_bias(self, database:Local_Database, request,
+    def try_search_bias(self, database:Local_Database, request:RequestManager,
                                     feed_search_engine,): 
         model = BiasSearchModel(database=database)
 
-        model.try_search_bias(bname=request.bname, feed_search_engine=feed_search_engine)
+        model.try_search_bias(bname=request.data_payload.bname, feed_search_engine=feed_search_engine)
 
         return model
         
