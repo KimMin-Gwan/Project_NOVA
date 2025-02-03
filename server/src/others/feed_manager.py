@@ -1525,7 +1525,7 @@ class FeedManager:
 
     # Moment(숏 피드)만 가져오는 거
     def get_my_short_feeds(self, user:User):
-        feed_datas = self._database.get_data_with_ids(target_id="fid", ids=user.my_feed)
+        feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=user.my_feed)
         feeds = []
 
         for _, feed_data in enumerate(reversed(feed_datas)):

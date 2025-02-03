@@ -102,6 +102,7 @@ class Feed_Controller:
         # 유저가 있으면 세팅
         if request.jwt_payload != "":
             model.set_user_with_email(request=request.jwt_payload)
+
         model.set_today_best_feed(feed_search_engine=feed_search_engine,
                                     feed_manager=self.__feed_manager,
                                     index=request.data_payload.key,
