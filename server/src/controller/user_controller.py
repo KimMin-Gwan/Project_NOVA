@@ -155,9 +155,6 @@ class UserController:
         try:
             model.set_user_with_email(request=request.jwt_payload)
             model.get_user_data()
-            model.print_user_data()
-
-
 
         except CustomError as e:
             print("Error Catched : ", e.error_type)

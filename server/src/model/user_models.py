@@ -193,19 +193,6 @@ class UserPageModel(BaseModel):
 
         return
 
-    def print_user_data(self):
-        body = {
-            'uname' : self._uname,
-            'uid' : self._uid,
-            'num_long_feed' : self._num_long_feed,
-            'num_short_feed' : self._num_short_feed,
-            'num_like' : self._num_like,
-            'num_comment' : self._num_comment
-        }
-        pprint(body)
-        return
-
-
     def get_response_form_data(self, head_parser):
         try:
             body = {
