@@ -391,11 +391,18 @@ class Banner(SampleDomain):
         }
 
 class Comment(SampleDomain):
-    def __init__(self, cid="", fid="", uid="", uname="",
+    def __init__(self, cid="", fid="", uid="", uname="", display=4,
                  body="", date="", like=0, state="y", like_user=[], mention="", target_cid=""):
         self.cid = cid
         self.fid = fid
         self.uid = uid
+        # 디스플레이 옵션
+        #   0 : 삭제
+        #   1 : 비공개
+        #   2 : 차단
+        #   3 : 댓글 작성 비활성화
+        #   4 : 전체 공개
+        self.display = display
         self.uname = uname
         self.body = body
         self.date = date
@@ -414,6 +421,7 @@ class Comment(SampleDomain):
             self.fid = dict_data['fid']
             self.uid = dict_data['uid']
             self.uname = dict_data['uname']
+            self.display = dict_data['display']
             self.body = dict_data['body']
             self.date = dict_data['date']
             self.like = dict_data['like']
@@ -430,6 +438,7 @@ class Comment(SampleDomain):
             "cid": self.cid,
             "fid": self.fid,
             "uid": self.uid,
+            "display": self.display,
             "uname": self.uname,
             "body": self.body,
             "date": self.date,
