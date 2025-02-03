@@ -1659,26 +1659,44 @@ class FeedManager:
         comment = Comment()
         comment.make_with_dict(comment_data)
 
-        # FEED 데이터를 변경해야함. 따라서 얘도 가져와야 함.
-        feed_data = self._database.get_data_with_id(target="fid", id=fid)
-        feed = Feed()
-        feed.make_with_dict(dict_data=feed_data)
-
         # 어 내 댓글 아니다.
         if user.uid != comment.uid:
             return 
 
-        # 이거 지우는거 뭔가 대책이 필요함
-        # 댓글 삭제할 떄, FEED의 경우와 동일하게 DB에서 삭제하지 않고, 상태만 업데이트하고, 작성 목록에서만 삭제하면 됨.
-        user.my_comment.remove(cid)
-        feed.comment.remove(cid)
+        comment.display = 0
+        self._database.modify_data_with_id("cid", target_data=comment.get_dict_form_data())
+
+        # # FEED 데이터를 변경해야함. 따라서 얘도 가져와야 함.
+        # feed_data = self._database.get_data_with_id(target="fid", id=fid)
+        # feed = Feed()
+        # feed.make_with_dict(dict_data=feed_data)
+
+        # # 이거 지우는거 뭔가 대책이 필요함
+        # # 댓글 삭제할 떄, FEED의 경우와 동일하게 DB에서 삭제하지 않고, 상태만 업데이트하고, 작성 목록에서만 삭제하면 됨.
+        # user.my_comment.remove(cid)
+        # feed.comment.remove(cid)
         # self._database.delete_data_with_id(target="cid", id=target_cid)
 
         # 데이터 업데이트
-        self._database.modify_data_with_id("fid", target_data=feed.get_dict_form_data())
-        self._database.modify_data_with_id("uid", target_data=user.get_dict_form_data())
+        # self._database.modify_data_with_id("fid", target_data=feed.get_dict_form_data())
+        # self._database.modify_data_with_id("uid", target_data=user.get_dict_form_data())
 
-        return 
+        return
+
+    # 댓글 비공개
+    def set_private_comment(self, user:User, fid, cid):
+        comment_data = self._database.get_data_with_id(target="cid", id=cid)
+        comment = Comment()
+        comment.make_with_dict(comment_data)
+
+        # 어 내 댓글 아니다.
+        if user.uid != comment.uid:
+            return
+
+        comment.display = 1
+        self._database.modify_data_with_id("cid", target_data=comment.get_dict_form_data())
+
+        return
 
     # 댓글에 좋아요를 누르는 기능
 
