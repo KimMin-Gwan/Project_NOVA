@@ -8,17 +8,18 @@ import BiasBoxes from "../../component/BiasBoxes.js";
 import logo2 from "./../../img/logo2.png";
 import search_icon from "./../../img/search_icon.png";
 import Stackframe from "./../../img/Stackframe.png";
+import mainApi from "../../services/apis/mainApi.js";
 
+const bias_url = "https://kr.object.ncloudstorage.com/nova-images/";
 export default function FollowPage() {
-  const navigate = useNavigate(); // useNavigate 훅 사용
+  const navigate = useNavigate();
 
   const [params] = useSearchParams();
   const type = params.get("type");
   let [biasId, setBiasId] = useState();
 
   const brightModeFromUrl = params.get("brightMode");
-  const initialMode =
-    brightModeFromUrl || localStorage.getItem("brightMode") || "bright"; // URL에서 가져오고, 없으면 로컬 스토리지에서 가져옴
+  const initialMode = brightModeFromUrl || localStorage.getItem("brightMode") || "bright"; // URL에서 가져오고, 없으면 로컬 스토리지에서 가져옴
   const [mode, setMode] = useState(initialMode);
 
   let [feedData, setFeedData] = useState([]);
@@ -27,44 +28,31 @@ export default function FollowPage() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const openModal = () => setIsModalOpen(true);
+  const openModal = (bid, bname) => {
+    setClickedBname(bname);
+    setClickedBid(bid);
+    setIsModalOpen(true);
+  };
   const closeModal = () => setIsModalOpen(false);
 
-  let header = {
-    "request-type": "default",
-    "client-version": "v1.0.1",
-    "client-ip": "127.0.0.1",
-    uid: "1234-abcd-5678",
-    endpoint: "/user_system/",
-  };
-  const FETCH_URL = "https://nova-platform.kr/feed_explore/";
-  function fetchBiasCategoryData(bid) {
-    let send_data = {
-      header: header,
-      body: {
-        bid: bid || "",
-        board: "",
-        last_fid: "",
-      },
-    };
-    // setIsLoading(true);
-    if (type === "bias") {
-      fetch(`${FETCH_URL}feed_with_community`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(send_data),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("first bias data", data);
-          setFeedData(data.body.send_data);
-          setNextData(data.body.last_fid);
-          setIsLoading(false);
-        });
-    }
+  const [biasDataList, setBiasDataList] = useState([]);
+  const [clickedBid, setClickedBid] = useState();
+  const [clickedBname, setClickedBname] = useState();
+
+  function fetchBiasFollowList() {
+    mainApi.get("nova_sub_system/get_bias_follow_page_data").then((res) => {
+      console.log(res.data);
+      setBiasDataList(res.data.body);
+      setIsLoading(false);
+    });
+  }
+
+  useEffect(() => {
+    fetchBiasFollowList();
+  }, []);
+
+  if (isLoading) {
+    return <div>loading...</div>;
   }
 
   return (
@@ -85,18 +73,12 @@ export default function FollowPage() {
           <h4>
             <b>팔로우</b> 중인 최애
           </h4>
-          <BiasBoxes
-            setBiasId={setBiasId}
-            fetchBiasCategoryData={fetchBiasCategoryData}
-          />
+          <BiasBoxes setBiasId={setBiasId} />
         </div>
 
         <div className={style["search-fac"]}>
           <div className={style["search-box"]}>
-            <input
-              type="text"
-              placeholder="팔로우 하고 싶은 최애를 검색해보세요"
-            />
+            <input type="text" placeholder="팔로우 하고 싶은 최애를 검색해보세요" />
             <img src={search_icon} alt="검색바" />
           </div>
 
@@ -110,72 +92,117 @@ export default function FollowPage() {
         </div>
 
         <div className={style["streamer-box"]}>
-          <h4>치지직 스트리머</h4>
+          <h4>아티스트</h4>
           <span className={style["streamer-list"]}>
-            <button onClick={openModal} className={style["streamer-img"]}>
-              <div>이미지</div>
-              <p>우정잉</p>
-            </button>
-            <button onClick={openModal} className={style["streamer-img"]}>
-              <div>이미지</div>
-              <p>우정잉</p>
-            </button>
-            <button onClick={openModal} className={style["streamer-img"]}>
-              <div>이미지</div>
-              <p>우정잉</p>
-            </button>
-          </span>
-          <span className={style["streamer-list"]}>
-            <button onClick={openModal} className={style["streamer-img"]}>
-              <div>이미지</div>
-              <p>우정잉</p>
-            </button>
-            <button onClick={openModal} className={style["streamer-img"]}>
-              <div>이미지</div>
-              <p>우정잉</p>
-            </button>
-            <button onClick={openModal} className={style["streamer-img"]}>
-              <div>이미지</div>
-              <p>우정잉</p>
-            </button>
-          </span>
-          <span className={style["streamer-list"]}>
-            <button onClick={openModal} className={style["streamer-img"]}>
-              <div>이미지</div>
-              <p>우정잉</p>
-            </button>
-            <button onClick={openModal} className={style["streamer-img"]}>
-              <div>이미지</div>
-              <p>우정잉</p>
-            </button>
-            <button onClick={openModal} className={style["streamer-img"]}>
-              <div>이미지</div>
-              <p>우정잉</p>
-            </button>
-          </span>
-
-          <button className={style["more-see"]}>더보기</button>
-
-          {isModalOpen && (
-            <div className={style["modal-overlay"]} onClick={closeModal}>
-              <div
-                className={style["modal"]}
-                onClick={(e) => e.stopPropagation()}
-              >
-                <button onClick={openModal} className={style["streamer-img"]}>
-                  <div>이미지</div>
+            {biasDataList.artist.map((bias, i) => {
+              return (
+                <button
+                  key={bias.bid}
+                  onClick={() => {
+                    openModal(bias.bid, bias.bname);
+                  }}
+                  className={style["streamer-img"]}
+                >
+                  <div>
+                    <img src={bias_url + `${bias.bid}.PNG`} />
+                  </div>
+                  <p>{bias.bname}</p>
                 </button>
-                <p>
-                  라디유님을 <b>팔로우</b>합니다
-                </p>
-                <span>
-                  <button onClick={closeModal}>취소</button>
-                  <button className={style["follow-button"]}>팔로우</button>
-                </span>
-              </div>
-            </div>
-          )}
+              );
+            })}
+          </span>
+          <button className={style["more-see"]}>더보기</button>
         </div>
+
+        {biasDataList.chzzk.length > 0 && (
+          <div className={style["streamer-box"]}>
+            <h4>치지직 스트리머</h4>
+            <span className={style["streamer-list"]}>
+              {biasDataList.chzzk.map((bias, i) => {
+                return (
+                  <button
+                    key={bias.bid}
+                    onClick={() => {
+                      openModal(bias.bid, bias.bname);
+                    }}
+                    className={style["streamer-img"]}
+                  >
+                    <div>
+                      <img src={bias_url + `${bias.bid}.PNG`} />
+                    </div>
+                    <p>{bias.bname}</p>
+                  </button>
+                );
+              })}
+            </span>
+            <button className={style["more-see"]}>더보기</button>
+          </div>
+        )}
+
+        <div className={style["streamer-box"]}>
+          <h4>SOOP 스트리머</h4>
+          <span className={style["streamer-list"]}>
+            {biasDataList.soop.map((bias, i) => {
+              return (
+                <button
+                  key={bias.bid}
+                  onClick={() => {
+                    openModal(bias.bid, bias.bname);
+                  }}
+                  className={style["streamer-img"]}
+                >
+                  <div>
+                    <img src={bias_url + `${bias.bid}.PNG`} />
+                  </div>
+                  <p>{bias.bname}</p>
+                </button>
+              );
+            })}
+          </span>
+          <button className={style["more-see"]}>더보기</button>
+        </div>
+
+        <div className={style["streamer-box"]}>
+          <h4>유튜버</h4>
+          <span className={style["streamer-list"]}>
+            {biasDataList.youtube.map((bias, i) => {
+              return (
+                <button
+                  key={bias.bid}
+                  onClick={() => {
+                    openModal(bias.bid, bias.bname);
+                  }}
+                  className={style["streamer-img"]}
+                >
+                  <div>
+                    <img src={bias_url + `${bias.bid}.PNG`} />
+                  </div>
+                  <p>{bias.bname}</p>
+                </button>
+              );
+            })}
+          </span>
+          <button className={style["more-see"]}>더보기</button>
+        </div>
+
+        {isModalOpen && (
+          <div className={style["modal-overlay"]} onClick={closeModal}>
+            <div className={style["modal"]} onClick={(e) => e.stopPropagation()}>
+              <button className={style["streamer-img"]}>
+                <div>
+                  <img src={bias_url + `${clickedBid}.PNG`} />
+                </div>
+              </button>
+              <p>
+                {clickedBname}님을 <b>팔로우</b>합니다
+              </p>
+              <span>
+                <button onClick={closeModal}>취소</button>
+                <button className={style["follow-button"]}>팔로우</button>
+              </span>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
