@@ -151,6 +151,9 @@ class BiasSearchModel(BaseModel):
         managed_bias_list = feed_search_engine.get_all_managed_bias()
 
         print("try_search_bias : ", managed_bias_list)
+        
+        print(managed_bias_list[0].bname)
+        
         # 코사인 유사도 평가를 통한 가장 비슷한 이름 검색
         result:list = self._search_similar_data(data_list=managed_bias_list,
                                     key_word=bname, key_attr="bname")
