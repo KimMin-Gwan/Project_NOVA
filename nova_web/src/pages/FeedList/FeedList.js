@@ -10,6 +10,7 @@ import { getModeClass } from "./../../App.js";
 import Feed, { Comments } from "./../../component/feed";
 import logo from "./../../img/NOVA_Platform.png";
 import logo2 from "./../../img/logo2.png";
+import filter_icon from "./../../img/filter.svg";
 import menu from "./../../img/menu-burger.png";
 import LeftBar from "./../WideVer/LeftBar.js";
 import RightBar from "./../WideVer/RightBar.js";
@@ -18,6 +19,7 @@ import NoticeBox from "../../component/NoticeBox/NoticeBox.js";
 import CategoryModal from "../../component/CategoryModal/CategoryModal.js";
 import NoneFeed from "../../component/NoneFeed/NoneFeed.js";
 import useBiasStore from "../../stores/BiasStore/useBiasStore.js";
+import NavBar from "../../component/NavBar.js";
 
 export default function FeedList(isUserState) {
   const [params] = useSearchParams();
@@ -429,11 +431,12 @@ export default function FeedList(isUserState) {
           <div className={style["search-section"]}>
             <SearchBox />
             <div className={style["search-filter"]}>
-              <button onClick={onClickFilterButton}>필터순</button>
-              {/* <div className={style["sort-btn-container"]}>
-                <button>최신순</button>
-                <button>랜덤순</button>
-              </div> */}
+              <button onClick={onClickFilterButton}>
+                필터
+                <span className={style["filter-icon"]}>
+                  <img src={filter_icon} alt="filter" />
+                </span>
+              </button>
             </div>
           </div>
           // <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>전체 피드</div>
@@ -499,6 +502,7 @@ export default function FeedList(isUserState) {
           <div ref={target} style={{ height: "1px" }}></div>
         </div>
       </div>
+      <NavBar />
     </div>
   );
 }

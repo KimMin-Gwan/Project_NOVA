@@ -1,6 +1,7 @@
 // import style from "./FilterModal.module.css";
 import "./FilterModal.css";
 import { useEffect, useState } from "react";
+import reset_icon from "./../../img/reset.svg";
 
 export default function FilterModal({
   isFilterClicked,
@@ -107,13 +108,21 @@ export default function FilterModal({
           e.stopPropagation();
         }}
       >
+        <div className="reset-button">
+          <span className="reset-icon">
+            <img src={reset_icon} alt="reset" />
+          </span>
+          초기화
+        </div>
         <div className="FilterModal_title">
           <h3>딱 맞는 피드를 추천해드려요!</h3>
           <p>보고 싶은 게시글만 보여질 수 있도록, 지금 바로 경험해보세요.</p>
         </div>
 
         <div className="FilterModal_kind">
-          <h5>게시글 종류</h5>
+          <h5>
+            게시글 종류 <span>(중복선택 가능)</span>
+          </h5>
           <div className="button_container">
             {FilterData.map((data, i) => {
               return (

@@ -2,7 +2,13 @@ import { useNavigate } from "react-router-dom";
 import search_icon from "./../img/home_search.svg";
 import style from "./feed-list/FeedThumbnail.module.css";
 
-export default function SearchBox({ type, searchWord, onClickSearch, onChangeSearchWord, onKeyDown }) {
+export default function SearchBox({
+  type,
+  searchWord,
+  onClickSearch,
+  onChangeSearchWord,
+  onKeyDown,
+}) {
   let navigate = useNavigate();
 
   function onClickSearchBtn(e) {
@@ -22,7 +28,18 @@ export default function SearchBox({ type, searchWord, onClickSearch, onChangeSea
         }
       }}
     >
-      {type === "search" ? <input className={style["search-box"]} value={searchWord} onKeyDown={onKeyDown} onChange={onChangeSearchWord} placeholder="인기 게시글 검색" type="text"></input> : <div className={style["search-box"]}>인기 게시글 검색</div>}
+      {type === "search" ? (
+        <input
+          className={style["search-box"]}
+          value={searchWord}
+          onKeyDown={onKeyDown}
+          onChange={onChangeSearchWord}
+          placeholder="보고 싶은 최애를 검색해보세요"
+          type="text"
+        ></input>
+      ) : (
+        <div className={style["search-box"]}>보고 싶은 최애를 검색해보세요</div>
+      )}
       <button
         className={style["search-btn"]}
         onClick={(e) => {

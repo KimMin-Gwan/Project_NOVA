@@ -119,10 +119,26 @@
 
   button {
     min-width: 55px;
-    padding: 5px 10px;
+    width: 62px;
+    display: flex;
+    align-items: center;
+    font-size: 11px;
+    height: 27px;
+    padding: 6px 10px;
     cursor: pointer;
-    border: 1px solid #359aff;
+    border-radius: 8px;
+    border: 1px solid rgba(22, 138, 255, 0.35);
     background-color: #f9fbff;
+    /* line-height: 15px; */
+  }
+}
+
+.filter-icon {
+  margin-left: 5px;
+  display: flex;
+  align-items: center;
+  img {
+    object-fit: cover;
   }
 }
 

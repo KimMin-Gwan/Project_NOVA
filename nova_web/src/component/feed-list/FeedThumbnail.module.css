@@ -40,9 +40,6 @@
   cursor: pointer;
 }
 
-.more-icon img {
-}
-
 /* 검색박스 */
 .search-section {
   width: 100%;
@@ -55,16 +52,19 @@
   .search-box {
     margin: 0 auto;
     width: 85%;
-    color: #1a80e6;
+    color: rgba(26, 128, 230, 0.65);
     padding: 15px;
     border-radius: 12px;
     background-color: #f1f7ff;
-    border: 1px solid #359aff;
+    border: 1px solid rgba(53, 154, 255, 0.68);
     font-weight: 300;
+    font-size: 12px;
   }
 
   .search-box::placeholder {
-    color: #1a80e6;
+    font-weight: 300;
+    color: rgba(26, 128, 230, 0.65);
+    /* color: black; */
   }
 
   .search-btn {
