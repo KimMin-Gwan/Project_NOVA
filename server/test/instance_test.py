@@ -15,3 +15,8 @@ class Item():
 item = Item(init_data={"chatting": 0, "saver" : 1})
 
 print(item.saver)
+
+
+attr = getattr(item, "saver")
+
+print(attr)
