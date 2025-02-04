@@ -39,5 +39,6 @@
   p {
     font-size: 12px;
     color: #797979;
+    margin-block: 20px 0;
   }
 }

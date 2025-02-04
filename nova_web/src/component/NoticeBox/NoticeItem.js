@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import "./index.css";
 
-export default function NoticeItem({ notice, isLoading }) {
+export default function NoticeItem({ notice, isLoading, imgSrc }) {
   let scrollRef = useRef(null);
   let [isDrag, setIsDrag] = useState(false);
   let [dragStart, setDragStart] = useState("");
@@ -30,18 +30,10 @@ export default function NoticeItem({ notice, isLoading }) {
   }
 
   return (
-    <div
-      ref={scrollRef}
-      onMouseDown={onMouseDown}
-      onMouseMove={onMouseMove}
-      onMouseUp={onMouseUp}
-      className="notice-container"
-    >
+    <div ref={scrollRef} onMouseDown={onMouseDown} onMouseMove={onMouseMove} onMouseUp={onMouseUp} className="notice-container">
       <div className="notice-wrapper">
         <div key={notice.nid} className="notice-box">
-          <div className="notice-img">
-            <img alt="img?" />
-          </div>
+          <div className="notice-img">{imgSrc && <img src={imgSrc} alt="img" />}</div>
 
           <div className="notice-content">
             <b>{notice.title}</b>
