@@ -222,7 +222,7 @@ class Sub_Controller:
         model = SelectBiasModel(database=database)
         model.set_user_with_email(request=request.jwt_payload)
             
-        if model.find_bias(request=request.data_payload.bid):
+        if model.find_bias(bid=request.data_payload.bid):
             model.set_my_bias(feed_search_engine=feed_search_engine)
 
         return model
