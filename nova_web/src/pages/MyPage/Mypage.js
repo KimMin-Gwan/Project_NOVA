@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import style from "./Mypage.module.css";
-import backword from "./../../img/back_icon.png";
+import backword from "./../../img/mypage_more.png";
 import mainApi from "../../services/apis/mainApi";
 import Feed from "../../component/feed";
 
@@ -66,7 +66,7 @@ function MyPage() {
     navigate(page);
   }
 
-  const [activeIndex, setActiveIndex] = useState(null);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   const handleClick = (index) => {
     setActiveIndex(index);
@@ -90,10 +90,7 @@ function MyPage() {
       </div>
       <div className={style["user-container"]}>
         <div className={style["user-img"]}>
-          <img
-            src={`https://kr.object.ncloudstorage.com/nova-user-profile/${myData?.uid}.png`}
-            alt="img"
-          />
+          <img src={`https://kr.object.ncloudstorage.com/nova-user-profile/${myData?.uid}.png`} alt="img" />
         </div>
         <div>
           <section className={style["user-name"]}>
