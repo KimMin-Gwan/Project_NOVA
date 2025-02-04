@@ -12,6 +12,8 @@ import datetime
 
 class FindSimilarData:
     def __decompose(self, text:str):
+        print(text)
+        
         return ''.join(j2hcj(h2j(text.replace(" ", ""))))
 
     def search_similar(self, data_list:list, key_word:str, key_attr:str):
