@@ -2,8 +2,12 @@ import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import style from "./Mypage.module.css";
 import axios from "axios";
+import useLoginStore from "../../stores/LoginStore/useLoginStore";
+import useBiasStore from "../../stores/BiasStore/useBiasStore";
 
 function MyPage() {
+  const { tryLogin, tryLogout } = useLoginStore();
+  const { fetchBiasList } = useBiasStore();
   let navigate = useNavigate();
   let [isLoading, setIsLoading] = useState(true);
   let [nickname, setNickname] = useState("");
@@ -83,6 +87,8 @@ function MyPage() {
   }
 
   const handleLogout = (e) => {
+    tryLogin();
+
     e.preventDefault();
     fetch("https://nova-platform.kr/user_home/try_logout", {
       credentials: "include",
@@ -96,8 +102,9 @@ function MyPage() {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
+        console.log("lgogio", data);
         navigate("/");
+        fetchBiasList();
       })
       .catch((error) => {
         console.error("Logout error:", error);

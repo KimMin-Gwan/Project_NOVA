@@ -8,6 +8,7 @@ import backword from "./../../img/back_icon.png";
 import { useNavigate } from "react-router-dom";
 import { getModeClass } from "./../../App.js";
 import { useRef } from "react";
+import useLoginStore from "../../stores/LoginStore/useLoginStore.js";
 const NOVALogin = ({ brightmode }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -19,6 +20,7 @@ const NOVALogin = ({ brightmode }) => {
     emailRef.current.focus();
   }, []);
 
+  const { tryLogin } = useLoginStore();
   const navigate = useNavigate();
   const handleLogin = async () => {
     if (!email || !password) {
@@ -52,9 +54,10 @@ const NOVALogin = ({ brightmode }) => {
     })
       .then((response) => response.json())
       .then((result) => {
-        // console.log('login', result.body);
+        console.log("login", result);
         setLogin(result.body.result);
         setDetail(result.body.detail);
+        tryLogin(result.body.result);
         if (result.body.result === "done") {
           navigate("/");
         }

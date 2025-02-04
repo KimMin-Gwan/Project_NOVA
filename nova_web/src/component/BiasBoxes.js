@@ -1,15 +1,20 @@
 import { useEffect, useRef, useState } from "react";
 import useBiasStore from "../stores/BiasStore/useBiasStore";
+import useLoginStore from "../stores/LoginStore/useLoginStore";
 
 export default function BiasBoxes({ setBiasId, fetchBiasCategoryData, writeCommunity }) {
   const URL = "https://nova-platform.kr/home/";
   let bias_url = "https://kr.object.ncloudstorage.com/nova-images/";
 
+  const { isLogin, isLogout } = useLoginStore();
   let { biasList, loading, fetchBiasList } = useBiasStore();
 
-  // useEffect(() => {
-  //   fetchBiasList();
-  // }, []);
+  useEffect(() => {
+    if (isLogin === "done") {
+      fetchBiasList();
+      console.log("isLogin", isLogin);
+    }
+  }, []);
 
   function onClickBiasId(bid) {
     setBiasId(bid);
