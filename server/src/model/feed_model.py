@@ -128,6 +128,15 @@ class FeedModel(BaseModel):
                                                                fid=data_payload.fid)
         return
 
+    # def try_make_new_reply_comment(self, feed_manager:FeedManager, data_payload):
+    #     feed_manager.try_make_reply_on_comment(user=self._user,
+    #                                            fid=data_payload.fid,
+    #                                            target_cid=data_payload.target_cid,
+    #                                            body=data_payload.body)
+    #     self._comments = feed_manager.get_all_comment_on_feed(user=self._user,
+    #                                                           fid=data_payload.fid)
+    #     return
+
     # 댓글 불러오기
     # 단일 feed에 맞는 댓글 전체 불러오기
     def get_all_comment_on_feed(self, feed_manager:FeedManager, data_payload):

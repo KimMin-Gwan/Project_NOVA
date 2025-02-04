@@ -1656,16 +1656,28 @@ class FeedManager:
         # 타겟 CID도 Comment 객체 멤버로 담아버림. CID 너무 길어지기도 하고, 프론트에서 작업을 안시키게 함.
         new_comment = Comment(
             cid=cid, fid=feed.fid, uid=user.uid, uname=user.uname,
-            body=body, date=date, mention=mention, target_cid=target_cid
+            body=body, date=date, mention=mention
         )
+
+        # 기존 코멘트에 리플라이 항목을 만들었는데 이 부분입니다
         # Feed에 comment(리스트)에 담음, 자신이 쓴 댓글도 첨가한다.
-        feed.comment.append(cid)
+        if target_cid != "":
+            target_comment_data = self._database.get_data_with_id(target="cid", id=cid)
+            target_comment = Comment()
+            target_comment.make_with_dict(target_comment_data)
+
+            target_comment.reply.append(cid)
+            self._database.modify_data_with_id(target_id="cid", target_data=target_comment.get_dict_form_data())
+        else:
+            feed.comment.append(cid)
+
         user.my_comment.append(cid)
 
         self._database.add_new_data("cid", new_data=new_comment.get_dict_form_data())
         self._database.modify_data_with_id("fid", target_data=feed.get_dict_form_data())
         self._database.modify_data_with_id("uid", target_data=user.get_dict_form_data())
         return
+
 
     # 댓글 수정
     # Feed에 저장된 CID는 따로 수정 대상이 아니므로, 따로 fid를 파라미터로 가져오지 않는다.

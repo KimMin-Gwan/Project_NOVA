@@ -618,6 +618,22 @@ class Core_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
+        # def try_make_reply_comment(request:Request, raw_requset:dict):
+        #     request_manager = RequestManager()
+        #     data_payload = MakeFeedCommentRequest(request=raw_requset)
+        #
+        #     request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+        #     if not request_manager.jwt_payload.result:
+        #         raise request_manager.credentials_exception
+        #
+        #     feed_controller =Feed_Controller(feed_manager=self.__feed_manager)
+        #     model = feed_controller.try_make_comment(database=self.__database,
+        #                                              request=request_manager,
+        #                                              feed_manager=self.__feed_manager)
+        #     body_data = model.get_response_form_data(self._head_parser)
+        #     response = request_manager.make_json_response(body_data=body_data)
+        #     return response
+
         # feed 랑 상호작용 -> 댓글 모두보기
         @self.__app.get('/feed_explore/view_comment')
         def get_all_comment(request:Request, fid:Optional[str]):

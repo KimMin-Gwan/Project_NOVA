@@ -391,7 +391,7 @@ class Banner(SampleDomain):
         }
 
 class Comment(SampleDomain):
-    def __init__(self, cid="", fid="", uid="", uname="", display=4,
+    def __init__(self, cid="", fid="", uid="", uname="", display=4, reply=[],
                  body="", date="", like=0, state="y", like_user=[], mention="", target_cid=""):
         self.cid = cid
         self.fid = fid
@@ -403,6 +403,7 @@ class Comment(SampleDomain):
         #   3 : 댓글 작성 비활성화
         #   4 : 전체 공개
         self.display = display
+        self.reply = reply      # 대댓글을 담는 공간
         self.uname = uname
         self.body = body
         self.date = date
@@ -411,7 +412,7 @@ class Comment(SampleDomain):
         self.like_user:list = copy.copy(like_user)
         self.num_like_user = len(self.like_user)
 
-        self.target_cid = target_cid            # 대댓글을 달 위치 cid
+        # self.target_cid = target_cid            # 대댓글을 달 위치 cid
         self.owner = False
         self.mention = mention
 
@@ -427,7 +428,7 @@ class Comment(SampleDomain):
             self.like = dict_data['like']
             self.state = dict_data['state']
             self.like_user= copy.copy(dict_data['like_user'])
-            self.target_cid = dict_data['target_cid']
+            # self.target_cid = dict_data['target_cid']
             self.owner = dict_data['owner']
             self.mention = dict_data['mention']
         except KeyError as e:
@@ -445,7 +446,7 @@ class Comment(SampleDomain):
             "like": self.like,
             "state": self.state,
             "like_user": copy.copy(self.like_user),
-            "target_cid": self.target_cid,
+            # "target_cid": self.target_cid,
             "owner" : self.owner,
             "mention": self.mention,
         }
