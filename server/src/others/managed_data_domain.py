@@ -5,6 +5,7 @@ from datetime import  datetime, timedelta
 import pandas as pd
 import random
 from copy import copy
+from pprint import pprint
 #--------------------------------------------------------------------------------------------------
 
 # 이건 아래에 피드 테이블에 들어가야되는 피드 자료형
@@ -224,6 +225,7 @@ class ManagedFeedBiasTable:
 
             # 이제 관리될 바이어스를 만들고 연결한다음
             managed_bias = ManagedBias(bid=single_bias.bid, bname=single_bias.bname, user_nodes=user_nodes, board_types=single_bias.board_types)
+            pprint(managed_bias.to_dict())
             # avl트리에 넣어주면됨
             self.__bias_avltree.insert(key=single_bias.bid, value=managed_bias)
 
