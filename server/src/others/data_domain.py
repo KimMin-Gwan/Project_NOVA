@@ -427,6 +427,7 @@ class Comment(SampleDomain):
             self.date = dict_data['date']
             self.like = dict_data['like']
             self.state = dict_data['state']
+            self.reply = copy.copy(dict_data['reply'])
             self.like_user= copy.copy(dict_data['like_user'])
             # self.target_cid = dict_data['target_cid']
             self.owner = dict_data['owner']
@@ -445,6 +446,7 @@ class Comment(SampleDomain):
             "date": self.date,
             "like": self.like,
             "state": self.state,
+            "reply": copy.copy(self.reply),
             "like_user": copy.copy(self.like_user),
             # "target_cid": self.target_cid,
             "owner" : self.owner,
