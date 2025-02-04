@@ -238,8 +238,11 @@ class Sub_Service_View(Master_View):
             pprint(request.cookies)
             pprint(raw_request)
             data_payload = BiasSelectRequest(request=raw_request)
+            
+            print("authorized you fuckin ediot")
             request_manager.try_view_management_authorized_with_temp_user(data_payload=data_payload, cookies=request.cookies)
 
+            print("???")
             sub_controller=Sub_Controller()
             model = sub_controller.try_select_bias(database=self.__database,
                                                  request=request_manager,
