@@ -4,6 +4,8 @@ from others.data_domain import Bias, League
 from others import CoreControllerLogicError, FeedSearchEngine
 from random import sample
 
+from pprint import pprint
+
 class TokenModel(BaseModel):
     def __init__(self, database:Local_Database) -> None:
         super().__init__(database)
@@ -152,7 +154,8 @@ class BiasSearchModel(BaseModel):
 
         print("try_search_bias : ", managed_bias_list)
         
-        print(managed_bias_list[0].bname)
+        for m_bias in managed_bias_list:
+            pprint(m_bias.to_dict())
         
         # 코사인 유사도 평가를 통한 가장 비슷한 이름 검색
         result:list = self._search_similar_data(data_list=managed_bias_list,
