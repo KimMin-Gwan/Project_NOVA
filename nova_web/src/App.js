@@ -29,7 +29,7 @@ import best from "./img/best.png";
 import new_pin from "./img/new_pin.png";
 import logo2 from "./img/logo2.png";
 import logo from "./img/NOVA_Platform.png";
-import hashtag from "./img/hashtag.png";
+import upIcon from "./img/up-ranking.png";
 
 import FeedThumbnail from "./component/feed-list/FeedThumbnail.js";
 import useFetchData from "./hooks/useFetchData.js";
@@ -201,11 +201,7 @@ function App() {
                       navigate("/");
                     }}
                   >
-                    <img
-                      src={logo2}
-                      alt="logo"
-                      className={`logo-st ${getModeClass(brightMode)}`}
-                    ></img>
+                    <img src={logo2} alt="logo" className={`logo-st ${getModeClass(brightMode)}`}></img>
                   </div>
                 </header>
                 <SearchBox />
@@ -229,7 +225,11 @@ function App() {
                 />
               </div>
 
-              <section>
+              <section className="up-container">
+                <div>
+                  <img src={upIcon} alt="급상승 해시태그" />
+                  <h3>급상승 해시태그</h3>
+                </div>
                 <ul className="rt-ranking ">
                   {tagList.map((tag, i) => {
                     return (
@@ -239,7 +239,8 @@ function App() {
                           display: i === currentIndex ? "flex" : "none",
                         }}
                       >
-                        {i + 1}. {tag}
+                        <p>{i + 1}</p>
+                        {tag}
                       </li>
                     );
                   })}
@@ -270,14 +271,7 @@ function App() {
                   endPoint={`/feed_list?type=weekly_best`}
                 />
 
-                <FeedThumbnail
-                  title={"전체 글"}
-                  img_src={all_post}
-                  feedData={allFeed}
-                  brightMode={brightMode}
-                  allPost={<AllPost allFeed={allFeed} />}
-                  endPoint={"/feed_list?type=all"}
-                />
+                <FeedThumbnail title={"전체 글"} img_src={all_post} feedData={allFeed} brightMode={brightMode} allPost={<AllPost allFeed={allFeed} />} endPoint={"/feed_list?type=all"} />
               </section>
               <NavBar brightMode={brightMode}></NavBar>
 
