@@ -12,7 +12,6 @@ import datetime
 
 class FindSimilarData:
     def __decompose(self, text:str):
-        print("decompose : ", text)
         return ''.join(j2hcj(h2j(text.replace(" ", ""))))
 
     def search_similar(self, data_list:list, key_word:str, key_attr:str):
@@ -20,8 +19,6 @@ class FindSimilarData:
         decomposed_key_data = self.__decompose(key_word)
         for item in data_list:
             target_item = getattr(item, key_attr)
-            
-            print('target_item : ', target_item)
             decomposed_item = self.__decompose(target_item)
             distance = editdistance.eval(decomposed_item, decomposed_key_data)
             if distance <= len(decomposed_item) - len(decomposed_key_data):

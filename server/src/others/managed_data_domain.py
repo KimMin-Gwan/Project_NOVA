@@ -78,7 +78,7 @@ class ManagedFeed:
 class ManagedBias:
     def __init__(self, bid, bname:str, user_nodes:list, board_types:list):
         self.bid = bid
-        self.bname = bname,
+        self.bname = bname
         self.trend_hashtags = []
         self.user_nodes:list = user_nodes
         self.board_types:list = board_types
@@ -223,7 +223,6 @@ class ManagedFeedBiasTable:
                     # 못찾 으면 예외 처리할 것
                     if user_node:
                         user_nodes.append(user_node)
-            pprint(single_bias.bname)
             # 이제 관리될 바이어스를 만들고 연결한다음
             managed_bias = ManagedBias(bid=single_bias.bid, bname=single_bias.bname, user_nodes=user_nodes, board_types=single_bias.board_types)
             #pprint(managed_bias.to_dict())
