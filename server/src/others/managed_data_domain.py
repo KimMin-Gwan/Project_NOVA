@@ -202,6 +202,8 @@ class ManagedFeedBiasTable:
         bias_datas = self.__database.get_all_data(target="bid")
         user_datas = self.__database.get_all_data(target="uid")
 
+        pprint(bias_datas) 
+            
         for bias_data in bias_datas:
             bias = Bias()
             bias.make_with_dict(bias_data)
@@ -225,7 +227,7 @@ class ManagedFeedBiasTable:
 
             # 이제 관리될 바이어스를 만들고 연결한다음
             managed_bias = ManagedBias(bid=single_bias.bid, bname=single_bias.bname, user_nodes=user_nodes, board_types=single_bias.board_types)
-            pprint(managed_bias.to_dict())
+            #pprint(managed_bias.to_dict())
             # avl트리에 넣어주면됨
             self.__bias_avltree.insert(key=single_bias.bid, value=managed_bias)
 
