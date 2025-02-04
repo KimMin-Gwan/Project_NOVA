@@ -20,6 +20,8 @@ class FindSimilarData:
         decomposed_key_data = self.__decompose(key_word)
         for item in data_list:
             target_item = getattr(item, key_attr)
+            
+            print('target_item : ', target_item)
             decomposed_item = self.__decompose(target_item)
             distance = editdistance.eval(decomposed_item, decomposed_key_data)
             if distance <= len(decomposed_item) - len(decomposed_key_data):
