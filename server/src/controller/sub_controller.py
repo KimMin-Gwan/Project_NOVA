@@ -220,23 +220,12 @@ class Sub_Controller:
 
     def try_select_bias(self, database:Local_Database, request, feed_search_engine):
         model = SelectBiasModel(database=database)
-        try:
-            # 유저가 있는지 확인
-            model.set_user_with_email(request=request.jwt_payload)
+        model.set_user_with_email(request=request.jwt_payload)
             
-            if model.find_bias(request=request.data_payload.bid):
-                model.set_my_bias(feed_search_engine=feed_search_engine)
+        if model.find_bias(request=request.data_payload.bid):
+            model.set_my_bias(feed_search_engine=feed_search_engine)
 
-        except CustomError as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
-
-        except Exception as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
-
-        finally:
-            return model
+        return model
     
     # bias를 문자열로 검색
     def try_search_bias(self, database:Local_Database, request,
