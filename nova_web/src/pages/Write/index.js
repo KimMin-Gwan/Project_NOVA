@@ -6,6 +6,7 @@ import style from "./WriteFeed.module.css";
 import backword from "./../../img/back_icon.png";
 
 import tags from "./../../img/tags.png";
+import tag from "./../../img/tag.svg";
 import back from "./../../img/write_vector1.png";
 import select from "./../../img/select-icon.png";
 import img from "./../../img/img-icon.png";
@@ -286,27 +287,31 @@ const Write = ({ brightmode }) => {
       <div className={style["hashtag_container"]}>
         <div>제목(해시태그)</div>
         <div className={style["input-container"]}>
-          <input
-            placeholder="#해시태그"
-            type="text"
-            value={`#${inputTag}`}
-            onChange={onChangeTag}
-            onKeyDown={onKeyDown}
-            className={style["input-hashtag"]}
-          />
-          <button
-            className={style["check-button"]}
-            onClick={(e) => {
-              onClickCheck(e);
-            }}
-          >
-            확인
-          </button>
+          <div className={style["input-wrapper"]}>
+            <input
+              placeholder="#해시태그"
+              type="text"
+              value={`${inputTag}`}
+              onChange={onChangeTag}
+              onKeyDown={onKeyDown}
+              className={style["input-hashtag"]}
+            />
+            <span className={style["count-text"]}>{inputTagCount}/12</span>
+          </div>
+          <div className={style["button-wrapper"]}>
+            <button
+              className={style["check-button"]}
+              onClick={(e) => {
+                onClickCheck(e);
+              }}
+            >
+              확인
+            </button>
+          </div>
         </div>
-        <span className={style["count-text"]}>{inputTagCount}/12</span>
         <div className={style["tag-container"]}>
           <div className={style["tag-icon-box"]}>
-            <img src={tags} alt="tag" />
+            <img src={tag} alt="tag" />
           </div>
           {tagList.length !== 0 &&
             tagList.map((tag, i) => (
@@ -322,7 +327,11 @@ const Write = ({ brightmode }) => {
       </div>
 
       <div className={style["content_container"]}>
-        <div className={style["content-title"]}>본문</div>
+        <div
+          className={`${style["content-title"]} ${type === "long" && style["content-title-long"]}`}
+        >
+          본문
+        </div>
         {type === "short" && (
           <>
             <textarea
@@ -349,14 +358,16 @@ const Write = ({ brightmode }) => {
       )}
 
       <div className={style["content_button"]}>
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onClickModal();
-          }}
-        >
-          이미지
-        </button>
+        {type !== "long" && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onClickModal();
+            }}
+          >
+            이미지
+          </button>
+        )}
         <button
           onClick={(e) => {
             e.stopPropagation();
