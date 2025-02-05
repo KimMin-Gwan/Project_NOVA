@@ -92,11 +92,21 @@ export default function FollowPage() {
   }
 
   const [searchBias, setSearchBias] = useState("");
+  const [resultBias, setResultBias] = useState([]);
 
   function fetchSearchBias() {
     mainApi.get(`nova_sub_system/try_search_bias?bname=${searchBias}`).then((res) => {
       console.log(res.data);
+      setResultBias(res.data.body.biases);
     });
+  }
+  // useEffect(() => {
+  //   fetchSearchBias();
+  // }, [searchBias]);
+  function onKeyDown(e) {
+    if (e.key === "Enter") {
+      fetchSearchBias();
+    }
   }
 
   function onChangeSearchBias(e) {
@@ -132,6 +142,7 @@ export default function FollowPage() {
           <div className={style["search-box"]}>
             <input
               type="text"
+              onKeyDown={onKeyDown}
               value={searchBias}
               onChange={(e) => {
                 onChangeSearchBias(e);
@@ -139,6 +150,27 @@ export default function FollowPage() {
               placeholder="팔로우 하고 싶은 최애를 검색해보세요"
             />
             <img src={search_icon} onClick={fetchSearchBias} alt="검색바" />
+          </div>
+
+          <div className={style["streamer-box"]}>
+            <span className={style["streamer-list"]}>
+              {resultBias.map((bias, i) => {
+                return (
+                  <button
+                    key={bias.bid}
+                    onClick={() => {
+                      openModal(bias.bid, bias.bname);
+                    }}
+                    className={style["streamer-img"]}
+                  >
+                    <div>
+                      <img src={bias_url + `${bias.bid}.PNG`} />
+                    </div>
+                    <p>{bias.bname}</p>
+                  </button>
+                );
+              })}
+            </span>
           </div>
 
           <button className={style["fav-apply"]}>

@@ -1,10 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import useBiasStore from "../stores/BiasStore/useBiasStore";
 import useLoginStore from "../stores/LoginStore/useLoginStore";
+import add_bias_icon from "./../img/add_bias.png";
+import { useNavigate } from "react-router-dom";
 
 export default function BiasBoxes({ setBiasId, fetchBiasCategoryData, writeCommunity }) {
   const URL = "https://nova-platform.kr/home/";
   let bias_url = "https://kr.object.ncloudstorage.com/nova-images/";
+
+  const navigation = useNavigate();
 
   const { isLogin, isLogout } = useLoginStore();
   let { biasList, loading, fetchBiasList } = useBiasStore();
@@ -20,7 +24,7 @@ export default function BiasBoxes({ setBiasId, fetchBiasCategoryData, writeCommu
     setBiasId(bid);
   }
 
-  const defaultBoxes = 4;
+  const defaultBoxes = 1;
   const totalBiasBoxes = Math.max(defaultBoxes, biasList.length);
 
   let scrollRef = useRef(null);
@@ -98,6 +102,17 @@ export default function BiasBoxes({ setBiasId, fetchBiasCategoryData, writeCommu
             </div>
           );
         })}
+        <div className="bias-info">
+          <button
+            className="add-bias-box"
+            onClick={() => {
+              navigation("/follow_page");
+            }}
+          >
+            <img src={add_bias_icon} alt="add-bias" />
+          </button>
+          <div className="b-name">최애 추가하기</div>
+        </div>
       </div>
     </div>
   );

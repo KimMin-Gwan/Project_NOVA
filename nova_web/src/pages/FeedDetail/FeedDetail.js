@@ -196,7 +196,7 @@ export default function FeedDetail({ feed }) {
           <img src={back} alt="back" />
           <span>뒤로</span>
         </button>
-        {feedData?.is_owner && (
+        {feedData.is_owner && (
           <button className={style["back-button"]}>
             <img src={back} />
             <span
@@ -222,53 +222,56 @@ export default function FeedDetail({ feed }) {
 
         {/* 댓글 각각 */}
         {comments.length !== 0 &&
-          comments.map((comment, i) => {
-            const [firstWord, ...restWords] = comment.body.split(" ");
-            return (
-              <div
-                key={comment.cid}
-                className={`${style["comment-box"]} `}
-                onClick={() => {
-                  onClickComment(comment.cid, comment.uname);
-                }}
-              >
+          comments
+            .slice()
+            .reverse()
+            .map((comment, i) => {
+              const [firstWord, ...restWords] = comment.body.split(" ");
+              return (
                 <div
-                  className={`${style["comment-wrapper"]}
-                ${comment.target_cid && style["comment-recomment"]}`}
+                  key={comment.cid}
+                  className={`${style["comment-box"]} `}
+                  onClick={() => {
+                    onClickComment(comment.cid, comment.uname);
+                  }}
                 >
-                  <div className={style["comment-user"]}>
-                    <div>
-                      {comment.uname}
-                      <span>{comment.date}</span>
+                  <div
+                    className={`${style["comment-wrapper"]}
+                ${comment.target_cid && style["comment-recomment"]}`}
+                  >
+                    <div className={style["comment-user"]}>
+                      <div>
+                        {comment.uname}
+                        <span>{comment.date}</span>
+                      </div>
+                      <div>신고</div>
                     </div>
-                    <div>신고</div>
-                  </div>
 
-                  <div className={style["comment-content"]}>
-                    <span style={{ color: comment.mention ? "#2C59CD" : "black" }}>
-                      {firstWord}{" "}
-                    </span>
-                    {restWords.join("")}
-                  </div>
-                  <div className={style["action-container"]}>
-                    <div className={style["button-box1"]}>
-                      <div className={style["action-button"]}>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            // handleCheckStar(feed.fid, e);
-                          }}
-                        >
-                          <img src={star} alt="star-icon" />
-                        </button>
-                        <span></span>
+                    <div className={style["comment-content"]}>
+                      <span style={{ color: comment.mention ? "#2C59CD" : "black" }}>
+                        {firstWord}{" "}
+                      </span>
+                      {restWords.join("")}
+                    </div>
+                    <div className={style["action-container"]}>
+                      <div className={style["button-box1"]}>
+                        <div className={style["action-button"]}>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              // handleCheckStar(feed.fid, e);
+                            }}
+                          >
+                            <img src={star} alt="star-icon" />
+                          </button>
+                          <span></span>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
         {comments.target_cid && <div>헤이</div>}
       </div>
       <div className={style["input-container"]}>

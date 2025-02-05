@@ -5,7 +5,17 @@ import style from "./FeedThumbnail.module.css";
 import more_icon from "../../img/home_arrow.svg";
 import NoneFeed from "../NoneFeed/NoneFeed";
 
-export default function FeedThumbnail({ title, img_src, feedData, brightMode, type, children, allPost, endPoint, customClassName }) {
+export default function FeedThumbnail({
+  title,
+  img_src,
+  feedData,
+  brightMode,
+  type,
+  children,
+  allPost,
+  endPoint,
+  customClassName,
+}) {
   let navigate = useNavigate();
   const [mode, setMode] = useState(brightMode); // 초기 상태는 부모로부터 받은 brightMode 값
 
@@ -24,11 +34,21 @@ export default function FeedThumbnail({ title, img_src, feedData, brightMode, ty
           <img src={more_icon} alt="더보기" onClick={() => navigate(endPoint)}></img>
         </div>
       </div>
+      {!feedData && <NoneFeed />}
 
       {children}
 
       {allPost}
-      {allPost ? null : type === "bias" ? <SimpleSlider feedData={feedData} brightMode={brightMode} type={type} className={customClassName || ""} /> : <SimpleSlider feedData={feedData} brightMode={brightMode} />}
+      {allPost ? null : type === "bias" ? (
+        <SimpleSlider
+          feedData={feedData}
+          brightMode={brightMode}
+          type={type}
+          className={customClassName || ""}
+        />
+      ) : (
+        <SimpleSlider feedData={feedData} brightMode={brightMode} />
+      )}
     </section>
   );
 }

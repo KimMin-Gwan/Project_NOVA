@@ -1246,9 +1246,6 @@ body.dark-mode {
   }
 }
 
-.bias-info-clicked {
-}
-
 .bias-box {
   width: 100px;
   height: 100px;
@@ -1273,6 +1270,25 @@ body.dark-mode {
     object-fit: cover;
     border-radius: 10px;
     box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
+  }
+}
+
+.add-bias-box {
+  all: unset;
+  cursor: pointer;
+  /* padding: 5px; */
+  border-radius: 20px;
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  img {
+    border-radius: 25px;
+    width: 90%;
+    height: 90%;
+    object-fit: cover;
   }
 }
 

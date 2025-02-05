@@ -84,14 +84,18 @@
     }
 
     .fav-apply {
+      cursor: pointer;
       display: flex;
       align-items: center;
       justify-self: center;
       justify-content: space-between;
       margin-top: 32px;
+      background-color: white;
+      border-radius: 5px;
       border: 1px dotted #727272;
       position: relative;
       width: 90%;
+      background-color: white;
       padding-block: 5px;
       img {
         position: absolute;
@@ -154,6 +158,9 @@
       border-color: #a6a6a6;
       border-radius: 16px;
       margin-top: 40px;
+      background-color: white;
+      /* border-radius: 5px; */
+      /* border: 1px solid #eee9fc; */
     }
   }
 }
@@ -168,6 +175,9 @@
   width: 120px;
   padding: 10px;
   margin-inline: 10px;
+  background-color: white;
+  border-radius: 5px;
+  cursor: pointer;
 
   img {
     width: 100%;
@@ -254,4 +264,12 @@
       filter: none;
     }
   }
+}
+
+button {
+  /* align-self: flex-end; */
+  /* padding: 5px 15px; */
+  /* background-color: white;
+  border-radius: 5px;
+  border: 1px solid #eee9fc; */
 }
