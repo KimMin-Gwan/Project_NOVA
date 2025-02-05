@@ -1782,12 +1782,13 @@ class FeedManager:
         self.__get_comment_liked_info(user=user, comments=comments)
 
         pprint("분류전 댓글")
-        pprint(comments)
+        for comment in comments:
+            pprint(comment.get_dict_form_data())
         # reply에 담는 작업
         # 왜 이렇게 하나면 마지막부터 시작하니까 저 위에서 처리하기엔 꼬이는 것 같음.
         for comment in comments:
             # 만약 답글형 댓글이라면 타겟을 찾아서 reply에 넣어야 한다.
-            # pprint(comment.get_dict_form_data())
+            pprint(comment.get_dict_form_data())
             if comment.target_cid != "" :
                 target_comment = self.__find_comment_in_comment_list(comments, comment.target_cid)
                 # pprint(target_comment.get_dict_form_data())
