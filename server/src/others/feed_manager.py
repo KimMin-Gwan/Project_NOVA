@@ -1761,6 +1761,23 @@ class FeedManager:
             if comment.cid == cid:
                 return comment
 
+    def __classify_reply_comment(self, comments):
+        no_targeted_comments = []       # target_cid가 없는 놈
+        exist_targeted_comments = []    # target_cid가 있는 놈
+
+        for comment in comments:
+            if comment.target_cid != '':
+                exist_targeted_comments.append(comment)
+            else:
+                no_targeted_comments.append(comment)
+
+        for targeted_comment in exist_targeted_comments:
+            for comment in no_targeted_comments:
+                if comment.cid == targeted_comment.target_cid:
+                    comment.reply.append(targeted_comment.get_dict_form_data())
+
+        return no_targeted_comments
+
 
     # Feed에 있는 모든 댓글들을 모두 가져와야 함
     # 피드 안에 있는 모든 Comment를 가져옴.
@@ -1784,6 +1801,13 @@ class FeedManager:
         self.__get_comment_liked_info(user=user, comments=comments)
 
         pprint(comments)
+
+        classified_comments = self.__classify_reply_comment(comments=comments)
+
+        pprint("분류 후 댓글")
+        for comment in classified_comments:
+            pprint(comment.get_dict_form_data())
+
         # pprint("분류전 댓글")
         # for comment in comments:
         #     pprint(comment.get_dict_form_data())
