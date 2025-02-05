@@ -1781,6 +1781,8 @@ class FeedManager:
 
         self.__get_comment_liked_info(user=user, comments=comments)
 
+        pprint(comments)
+
         pprint("분류전 댓글")
         for comment in comments:
             pprint(comment.get_dict_form_data())
@@ -1797,9 +1799,9 @@ class FeedManager:
                 continue
                 # 타겟에다가 Reply 공간에 담는다. 그리고 원래 리스트에는 지운다.
 
-        pprint("분류 후 댓글들")
-        for comment in comments:
-            pprint(comment.get_dict_form_data())
+        # pprint("분류 후 댓글들")
+        # for comment in comments:
+        #     pprint(comment.get_dict_form_data())
 
         return comments
 
