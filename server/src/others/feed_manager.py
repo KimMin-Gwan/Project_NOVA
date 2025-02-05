@@ -1787,8 +1787,8 @@ class FeedManager:
 
             comments.append(new_comment)
         #
-        # pprint("댓글들")
-        # pprint(comments)
+        pprint("댓글들")
+        pprint(comments)
 
         # 코멘트를 분류하는 작업
         # 왜 이렇게 하나면 마지막부터 시작하니까 저 위에서 처리하기엔 꼬이는 것 같음.
