@@ -1771,7 +1771,7 @@ class FeedManager:
         comments = []
         comment_datas = self._database.get_datas_with_ids(target_id="cid", ids=feed.comment)
 
-        for comment_data in reversed(comment_datas):
+        for comment_data in comment_datas:
             new_comment = Comment()
             new_comment.make_with_dict(comment_data)
             # 기본적으로 owner는 False
