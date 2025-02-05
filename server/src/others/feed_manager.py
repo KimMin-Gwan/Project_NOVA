@@ -1774,6 +1774,7 @@ class FeedManager:
         for comment_data in comment_datas:
             new_comment = Comment()
             new_comment.make_with_dict(comment_data)
+            pprint(comment_data)
             # 기본적으로 owner는 False
             if new_comment.uid == user.uid:
                 new_comment.owner= True
@@ -1782,9 +1783,9 @@ class FeedManager:
         self.__get_comment_liked_info(user=user, comments=comments)
 
         pprint(comments)
-        pprint("분류전 댓글")
-        for comment in comments:
-            pprint(comment.get_dict_form_data())
+        # pprint("분류전 댓글")
+        # for comment in comments:
+        #     pprint(comment.get_dict_form_data())
         # reply에 담는 작업
         # 왜 이렇게 하나면 마지막부터 시작하니까 저 위에서 처리하기엔 꼬이는 것 같음.
         for comment in comments:
