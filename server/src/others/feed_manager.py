@@ -1781,6 +1781,8 @@ class FeedManager:
 
         self.__get_comment_liked_info(user=user, comments=comments)
 
+        pprint("분류전 댓글")
+        pprint(comments)
         # reply에 담는 작업
         # 왜 이렇게 하나면 마지막부터 시작하니까 저 위에서 처리하기엔 꼬이는 것 같음.
         for comment in comments:
@@ -1791,6 +1793,7 @@ class FeedManager:
                 # pprint(target_comment.get_dict_form_data())
                 target_comment.reply.append(comment.get_dict_form_data())
                 comments.remove(comment)
+                continue
                 # 타겟에다가 Reply 공간에 담는다. 그리고 원래 리스트에는 지운다.
 
         pprint("분류 후 댓글들")
