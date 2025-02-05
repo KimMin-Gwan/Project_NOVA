@@ -403,7 +403,7 @@ class Comment(SampleDomain):
         #   3 : 댓글 작성 비활성화
         #   4 : 전체 공개
         self.display = display
-        self.reply = reply      # 대댓글을 담는 공간
+        self.reply = []      # 대댓글을 담는 공간
         self.uname = uname
         self.body = body
         self.date = date
@@ -411,7 +411,6 @@ class Comment(SampleDomain):
         self.state = state
         self.like_user:list = copy.copy(like_user)
         self.num_like_user = len(self.like_user)
-
         self.target_cid = target_cid            # 대댓글을 달 위치 cid
         self.owner = False
         self.mention = mention

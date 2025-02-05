@@ -1787,7 +1787,7 @@ class FeedManager:
                 if comment.cid == targeted_comment.target_cid:
                     # 이미 추가가 되어있다면 넘어간다
                     for reply_comment in comment.reply:
-                        if reply_comment["cid"] == comment.target_cid:
+                        if reply_comment["cid"] == targeted_comment.cid:
                             continue
                     comment.reply.append(targeted_comment.get_dict_form_data())
 
