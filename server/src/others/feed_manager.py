@@ -1788,8 +1788,8 @@ class FeedManager:
             # pprint(comment.get_dict_form_data())
             if comment.target_cid != "" :
                 target_comment = self.__find_comment_in_comment_list(comments, comment.target_cid)
-                pprint(target_comment.get_dict_form_data())
-                target_comment.reply.append(comment)
+                # pprint(target_comment.get_dict_form_data())
+                target_comment.reply.append(comment.get_dict_form_data())
                 comments.remove(comment)
                 # 타겟에다가 Reply 공간에 담는다. 그리고 원래 리스트에는 지운다.
 
