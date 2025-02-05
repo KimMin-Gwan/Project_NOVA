@@ -1786,7 +1786,7 @@ class FeedManager:
             for comment in no_targeted_comments:
                 if comment.cid == targeted_comment.target_cid:
                     # 이미 추가가 되어있다면 넘어간다
-                    if self.__find_comment_in_comment_list(comments.reply, targeted_comment.cid) is not None:
+                    if self.__find_comment_in_comment_list(comment.reply, targeted_comment.cid) is not None:
                         continue
                     comment.reply.append(targeted_comment.get_dict_form_data())
 
