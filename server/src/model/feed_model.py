@@ -19,12 +19,13 @@ class FeedModel(BaseModel):
     def set_single_feed_data(self, fid:str, feed_manager:FeedManager):
         feed_data = self._database.get_data_with_id(target="fid", id=fid)
 
-        feed = Feed()
-        feed.make_with_dict(feed_data)
-        self._feeds.append(feed)
+        if feed_data:
+            feed = Feed()
+            feed.make_with_dict(feed_data)
+            self._feeds.append(feed)
 
-        # 포인터로 동작함
-        self._set_feed_json_data(user=self._user, feeds=self._feeds)
+            # 포인터로 동작함
+            self._set_feed_json_data(user=self._user, feeds=self._feeds)
         return
     
     # send_data를 만들때 사용하는 함수임
