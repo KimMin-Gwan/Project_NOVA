@@ -1761,6 +1761,7 @@ class FeedManager:
             if comment.cid == cid:
                 return comment
 
+
     # Feed에 있는 모든 댓글들을 모두 가져와야 함
     # 피드 안에 있는 모든 Comment를 가져옴.
     def get_all_comment_on_feed(self, user, fid):
@@ -1788,16 +1789,6 @@ class FeedManager:
         #     pprint(comment.get_dict_form_data())
         # reply에 담는 작업
         # 왜 이렇게 하나면 마지막부터 시작하니까 저 위에서 처리하기엔 꼬이는 것 같음.
-        for comment in comments:
-            # 만약 답글형 댓글이라면 타겟을 찾아서 reply에 넣어야 한다.
-            #pprint(comment.get_dict_form_data())
-            if comment.target_cid != "" :
-                target_comment = self.__find_comment_in_comment_list(comments, comment.target_cid)
-                # pprint(target_comment.get_dict_form_data())
-                target_comment.reply.append(comment.get_dict_form_data())
-                comments.remove(comment)
-                continue
-                # 타겟에다가 Reply 공간에 담는다. 그리고 원래 리스트에는 지운다.
 
         # pprint("분류 후 댓글들")
         # for comment in comments:

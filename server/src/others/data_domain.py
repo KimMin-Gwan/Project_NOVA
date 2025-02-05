@@ -445,7 +445,6 @@ class Comment(SampleDomain):
             "date": self.date,
             "like": self.like,
             "state": self.state,
-            "reply": copy.copy(self.reply),
             "like_user": copy.copy(self.like_user),
             "target_cid": self.target_cid,
             "owner" : self.owner,
