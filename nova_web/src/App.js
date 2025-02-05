@@ -38,7 +38,7 @@ import BiasBoxes from "./component/BiasBoxes.js";
 import FeedDetail from "./pages/FeedDetail/FeedDetail.js";
 import LongFormWrite from "./pages/LongFormWrite/LongFormWrite.js";
 import SearchBox from "./component/SearchBox.js";
-import Write from "./pages/Write/index.js";
+import Write from "./pages/Write/Write.js";
 import SearchPage from "./pages/SearchPage/SearchPage.js";
 import useTagStore from "./stores/TagStore/useTagStore.js";
 import SearchResultPage from "./pages/SearchResultPage/SearchResultPage.js";
@@ -201,7 +201,11 @@ function App() {
                       navigate("/");
                     }}
                   >
-                    <img src={logo2} alt="logo" className={`logo-st ${getModeClass(brightMode)}`}></img>
+                    <img
+                      src={logo2}
+                      alt="logo"
+                      className={`logo-st ${getModeClass(brightMode)}`}
+                    ></img>
                   </div>
                 </header>
                 <SearchBox />
@@ -271,7 +275,14 @@ function App() {
                   endPoint={`/feed_list?type=weekly_best`}
                 />
 
-                <FeedThumbnail title={"전체 글"} img_src={all_post} feedData={allFeed} brightMode={brightMode} allPost={<AllPost allFeed={allFeed} />} endPoint={"/feed_list?type=all"} />
+                <FeedThumbnail
+                  title={"전체 글"}
+                  img_src={all_post}
+                  feedData={allFeed}
+                  brightMode={brightMode}
+                  allPost={<AllPost allFeed={allFeed} />}
+                  endPoint={"/feed_list?type=all"}
+                />
               </section>
               <NavBar brightMode={brightMode}></NavBar>
 

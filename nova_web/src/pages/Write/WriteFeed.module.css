@@ -277,7 +277,11 @@
   display: flex;
 
   button {
+    border: 1px solid #e4e9ee;
     padding: 10px;
+    border-radius: 3px;
+    background-color: #ffffff;
+    font-weight: bold;
     /* margin-right: 10px; */
   }
 
@@ -291,30 +295,49 @@
   }
 
   .apply_button_on {
+    color: #1a80e6;
     background-color: #f1f7ff;
     border: 1px solid #359aff;
   }
 }
 
 /* 투표 모달 */
+.vote-option-wrapper {
+  display: flex;
+  position: relative;
+}
 #vote-option[type="text"] {
   all: unset;
-  width: 80%;
+  box-sizing: border-box;
   display: flex;
-  margin: 0 auto;
+  flex: 1;
+  margin: 0 20px;
   padding: 15px;
+  padding-left: 30px;
   border-radius: 10px;
-  border: 1px solid gray;
+  border: 2px solid #e4e9ee;
   margin-bottom: 10px;
 }
 
+.delete-option {
+  all: unset;
+  position: absolute;
+  left: 20px;
+  top: 18px;
+  cursor: pointer;
+}
+
 .option-box {
-  width: 80%;
+  /* width: 90%; */
+  box-sizing: border-box;
   display: flex;
+  justify-content: center;
   margin: 0 auto;
+  margin: 0px 20px;
   padding: 15px;
+  /* font-size: 14px; */
   border-radius: 10px;
-  border: 1px solid gray;
+  border: dotted 2px #c5deff;
   cursor: pointer;
 }
 

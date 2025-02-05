@@ -321,13 +321,13 @@
   }
 }
 
-button {
-  /* align-self: flex-end; */
+/* button {
+  align-self: flex-end;
+  padding: 5px 15px;
   background-color: white;
   border-radius: 5px;
   border: 1px solid #eee9fc;
-  /* padding: 5px 15px; */
-}
+} */
 
 .funding-list {
   li {

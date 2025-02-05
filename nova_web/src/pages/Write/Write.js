@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-// import style from "./../FeedPage/FeedPage.module.css";
 import style from "./WriteFeed.module.css";
-// import stylePlanet from "./../PlanetPage/Planet.module.css";
 import backword from "./../../img/back_icon.png";
 
 import tag from "./../../img/tag.svg";
@@ -14,7 +12,7 @@ import link_icon from "./../../img/link.png";
 import back from "./../../img/write_vector1.png";
 import select from "./../../img/select-icon.png";
 import img from "./../../img/img-icon.png";
-import { getModeClass } from "./../../App.js";
+import { getModeClass } from "../../App.js";
 import BiasBoxes from "../../component/BiasBoxes.js";
 import EditorBox from "../../component/EditorBox.js";
 // import { Editor } from "@toast-ui/react-editor/index.js";
@@ -106,7 +104,13 @@ const Write = ({ brightmode }) => {
   }
 
   function onClickAdd() {
-    setCreateOptions(createOptions + 1);
+    setChoice([...choice, ""]);
+    setCreateOptions((prev) => prev + 1);
+  }
+
+  function onDeleteOption(i) {
+    setChoice((prevChoices) => prevChoices.filter((_, index) => index !== i));
+    setCreateOptions((prev) => Math.max(0, prev - 1));
   }
 
   let [currentFileName, setCurrentFileName] = useState([]);
@@ -406,6 +410,7 @@ const Write = ({ brightmode }) => {
           onClickModal={onClickVoteModal}
           createOptions={createOptions}
           onClickAdd={onClickAdd}
+          onClickDelete={onDeleteOption}
           handleChoiceChange={handleChoiceChange}
           choice={choice}
           setChoice={setChoice}
@@ -522,6 +527,7 @@ export function VoteModal({
   onClickModal,
   createOptions,
   onClickAdd,
+  onClickDelete,
   handleChoiceChange,
   optionValue,
   choice,
@@ -534,24 +540,62 @@ export function VoteModal({
       <div className={style["modal-container"]}>
         <div className={style["modal-title"]}>투표 추가</div>
         <div className={style["image-container"]}>
-          {Array.from({ length: createOptions }).map((option, i) => {
+          {choice.map((option, i) => {
             return (
-              <input
-                key={i}
-                ref={optionRef}
-                id={style["vote-option"]}
-                name="option"
-                type="text"
-                value={choice[i]}
-                placeholder="이곳을 눌러 수정"
-                onChange={(e) => {
-                  handleChoiceChange(i, e.target.value);
-                }}
-              />
+              <div key={i} className={style["vote-option-wrapper"]}>
+                <button
+                  className={`${style["delete-option"]} ${style["remove-icon"]}`}
+                  onClick={() => {
+                    onClickDelete(i);
+                  }}
+                >
+                  <img src={close_icon} alt="remove" />
+                </button>
+                <input
+                  ref={optionRef}
+                  id={style["vote-option"]}
+                  name="option"
+                  type="text"
+                  value={option}
+                  placeholder="이곳을 눌러 수정"
+                  onChange={(e) => {
+                    handleChoiceChange(i, e.target.value);
+                  }}
+                />
+              </div>
             );
           })}
+          {/* {Array.from({ length: createOptions }).map((option, i) => {
+            return (
+              <div key={i} className={style["vote-option-wrapper"]}>
+                <button
+                  className={`${style["delete-option"]} ${style["remove-icon"]}`}
+                  onClick={() => {
+                    console.log("dlee");
+                    onClickDelete(i);
+                  }}
+                >
+                  <img src={close_icon} alt="remove" />
+                </button>
+                <input
+                  ref={optionRef}
+                  id={style["vote-option"]}
+                  name="option"
+                  type="text"
+                  value={choice[i]}
+                  placeholder="이곳을 눌러 수정"
+                  onChange={(e) => {
+                    handleChoiceChange(i, e.target.value);
+                  }}
+                />
+              </div>
+            );
+          })} */}
           {createOptions < 4 && (
             <div className={style["option-box"]} onClick={onClickAdd}>
+              <span className={style["add-icon"]}>
+                <img src={add_icon} alt="add" />
+              </span>
               선택지를 추가하려면 여기를 클릭하세요
             </div>
           )}
