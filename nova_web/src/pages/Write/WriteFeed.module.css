@@ -115,9 +115,11 @@
   height: 500px;
   display: flex;
   flex-direction: column;
+  /* padding: 20px; */
 
   .content-title {
     height: 20px;
+    padding: 20px;
     /* padding-bottom: 5px; */
   }
 
@@ -130,10 +132,10 @@
     all: unset;
     /* background-color: blue; */
     border: none;
-    padding: 0;
-    padding-top: 10px;
-    padding-left: 3px;
-    width: 95%;
+    padding: 0px 20px;
+    /* padding-top: 10px; */
+    /* margin-left: 20px; */
+    /* width: 100%; */
     flex: 1;
     word-wrap: break-word;
     overflow-wrap: break-word;
@@ -162,17 +164,22 @@
   bottom: 0px;
   left: 0px;
   gap: 20px;
+  font-size: 10px;
 
   button {
     all: unset;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: gray;
-    /* padding: 20px; */
-    width: 50px;
-    height: 50px;
-    /* margin-right: 10px; */
+    padding: 5px 0px;
+    cursor: pointer;
+
+    img {
+      width: 40px;
+      height: 40px;
+      object-fit: cover;
+    }
   }
 
   button:first-child {
@@ -205,11 +212,10 @@
   background-color: white;
 
   .modal-title {
-    padding: 20px;
+    padding: 30px 0px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 10px;
   }
 }
 
@@ -236,7 +242,7 @@
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  border: dotted 1px blue;
+  border: dotted 2px #c5deff;
   margin-bottom: 10px;
 }
 
@@ -245,14 +251,18 @@
   width: 90%;
   height: 70px;
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   align-items: center;
-  border: 1px dotted blue;
+  border: dotted 2px #c5deff;
   margin-bottom: 10px;
 
+  .img-name {
+    flex: 1;
+  }
   .preview-image {
     width: 50px;
     height: 50px;
+    margin-right: 10px;
 
     img {
       height: 100%;
@@ -268,11 +278,12 @@
 
   button {
     padding: 10px;
-    margin-right: 10px;
+    /* margin-right: 10px; */
   }
 
   .close_button {
     width: 30%;
+    margin-right: 10px;
   }
 
   .apply_button {
@@ -340,5 +351,26 @@
 .bias-section {
   .title {
     padding: 10px 20px;
+  }
+}
+
+.add-icon {
+  margin-right: 6px;
+  img {
+    width: 12px;
+    height: 12px;
+    object-fit: cover;
+  }
+}
+
+.remove-icon {
+  margin-left: 8px;
+  margin-right: 20px;
+  display: flex;
+  align-items: center;
+  img {
+    width: 15px;
+    height: 15px;
+    object-fit: cover;
   }
 }

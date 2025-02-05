@@ -5,8 +5,12 @@ import style from "./WriteFeed.module.css";
 // import stylePlanet from "./../PlanetPage/Planet.module.css";
 import backword from "./../../img/back_icon.png";
 
-import tags from "./../../img/tags.png";
 import tag from "./../../img/tag.svg";
+import add_icon from "./../../img/add.svg";
+import close_icon from "./../../img/close.svg";
+import img_icon from "./../../img/image.png";
+import vote_icon from "./../../img/vote.png";
+import link_icon from "./../../img/link.png";
 import back from "./../../img/write_vector1.png";
 import select from "./../../img/select-icon.png";
 import img from "./../../img/img-icon.png";
@@ -365,6 +369,7 @@ const Write = ({ brightmode }) => {
               onClickModal();
             }}
           >
+            <img src={img_icon} alt="img" />
             이미지
           </button>
         )}
@@ -374,6 +379,7 @@ const Write = ({ brightmode }) => {
             onClickVoteModal();
           }}
         >
+          <img src={vote_icon} alt="img" />
           투표
         </button>
         <button
@@ -382,6 +388,7 @@ const Write = ({ brightmode }) => {
             onClickLinkModal();
           }}
         >
+          <img src={link_icon} alt="img" />
           링크
         </button>
       </div>
@@ -459,6 +466,9 @@ export const Modal = ({
         <div className={style["modal-title"]}>이미지 삽입</div>
         <div className={style["image-container"]}>
           <label htmlFor={style["image-file"]} className={style["input-image"]}>
+            <span className={style["add-icon"]}>
+              <img src={add_icon} alt="add" />
+            </span>
             이미지를 추가하려면 여기를 클릭하세요
           </label>
           <input
@@ -476,8 +486,10 @@ export const Modal = ({
             imagePreview.map((preview, index) => {
               return (
                 <div key={index} className={style["preview-container"]}>
-                  <div>닫기</div>
-                  <div>{imageFiles[index].name}</div>
+                  <div className={style["remove-icon"]}>
+                    <img src={close_icon} alt="remove" />
+                  </div>
+                  <div className={style["img-name"]}>{imageFiles[index].name}</div>
                   <div className={style["preview-image"]}>
                     <img key={index} src={preview} />
                   </div>
