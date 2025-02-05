@@ -589,6 +589,7 @@ class Core_Service_View(Master_View):
         @self.__app.post('/feed_explore/make_comment')
         def try_make_comment(request:Request, raw_requset:dict):
             request_manager = RequestManager()
+            print(raw_requset)
             data_payload = MakeFeedCommentRequest(request=raw_requset)
 
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
