@@ -1785,9 +1785,9 @@ class FeedManager:
                 new_comment.owner= True
 
             comments.append(new_comment)
-
-        pprint("댓글들")
-        pprint(comments)
+        #
+        # pprint("댓글들")
+        # pprint(comments)
 
         # 코멘트를 분류하는 작업
         # 왜 이렇게 하나면 마지막부터 시작하니까 저 위에서 처리하기엔 꼬이는 것 같음.
@@ -1799,6 +1799,9 @@ class FeedManager:
                 if target_comment != "":
                     target_comment.reply.append(comment)
                     comments.remove(comment)
+
+        pprint("분류 후 댓글들")
+        pprint(comments)
 
         self.__get_comment_liked_info(user=user, comments=comments)
 
