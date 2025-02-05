@@ -638,7 +638,7 @@ function QuizOption({ feed, interaction, handleInteraction }) {
   return (
     <ol className={style["quiz-container"]}>
       {interaction &&
-        interaction.choice.map((option, i) => {
+        interaction?.choice?.map((option, i) => {
           return (
             <li
               key={i}
