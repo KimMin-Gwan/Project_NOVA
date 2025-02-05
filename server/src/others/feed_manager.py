@@ -1786,14 +1786,15 @@ class FeedManager:
                 new_comment.owner= True
 
             comments.append(new_comment)
-        #
-        pprint("댓글들")
-        pprint(comments)
+
+        # pprint("댓글들")
+        # pprint(comments)
 
         # 코멘트를 분류하는 작업
         # 왜 이렇게 하나면 마지막부터 시작하니까 저 위에서 처리하기엔 꼬이는 것 같음.
         for comment in comments:
             # 만약 답글형 댓글이라면 타겟을 찾아서 reply에 넣어야 한다.
+            pprint(comment.get_dict_form_data())
             if comment.target_cid != "" :
                 target_comment = self.__find_comment_in_comment_list(comments, comment.target_cid)
                 # 타겟에다가 Reply 공간에 담는다. 그리고 원래 리스트에는 지운다.
