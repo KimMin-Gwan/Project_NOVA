@@ -1771,6 +1771,9 @@ class FeedManager:
             else:
                 no_targeted_comments.append(comment)
 
+        pprint(exist_targeted_comments)
+        pprint(no_targeted_comments)
+
         for targeted_comment in exist_targeted_comments:
             for comment in no_targeted_comments:
                 if comment.cid == targeted_comment.target_cid:
@@ -1792,7 +1795,7 @@ class FeedManager:
         for comment_data in comment_datas:
             new_comment = Comment()
             new_comment.make_with_dict(comment_data)
-            pprint(comment_data)
+            # pprint(comment_data)
             # 기본적으로 owner는 False
             if new_comment.uid == user.uid:
                 new_comment.owner= True
