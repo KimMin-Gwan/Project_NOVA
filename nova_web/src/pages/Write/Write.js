@@ -178,6 +178,7 @@ const Write = ({ brightmode }) => {
       })
       .catch((error) => {
         console.error("Error:", error);
+        alert("업로드 실패!");
       });
   };
 
@@ -249,10 +250,10 @@ const Write = ({ brightmode }) => {
   function onClickUpload() {
     if (isUserState) {
       alert("업로드가 완료되었습니다.");
-      navigate(-1);
+      navigate("/");
     } else {
       alert("로그인이 필요합니다.");
-      navigate("/");
+      navigate("/nova_login");
     }
   }
 

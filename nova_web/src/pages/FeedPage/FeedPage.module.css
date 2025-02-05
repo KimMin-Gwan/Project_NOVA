@@ -2391,10 +2391,12 @@ h5 {
 .quiz-container {
   padding: 10px;
   list-style-type: none;
-
   li {
-    padding: 10px;
-    border-radius: 15px;
+    display: flex;
+    flex: 1;
+    background-color: #ffffff;
+    padding: 15px;
+    border-radius: 12px;
     border: 1px solid gray;
     margin-bottom: 5px;
   }

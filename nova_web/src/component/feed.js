@@ -642,7 +642,6 @@ function QuizOption({ feed, interaction, handleInteraction }) {
           return (
             <li
               key={i}
-              style={{ backgroundColor: "#D2C8F7" }}
               onClick={(e) => {
                 e.stopPropagation();
                 handleInteraction(e, interaction.fid, i);
