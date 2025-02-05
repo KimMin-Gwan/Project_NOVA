@@ -1626,7 +1626,7 @@ class FeedManager:
     # 내가 좋아요를 누를 댓글인지 플래그를 올리는 함수
     def __get_comment_liked_info(self, user:User, comments):
         for comment in comments:
-            pprint(comment.get_dict_form_data())
+            # pprint(comment.get_dict_form_data())
             if user.uid in comment.like_user:
                 comment.like_user = True
             else:
@@ -1787,8 +1787,8 @@ class FeedManager:
 
             comments.append(new_comment)
 
-        pprint("댓글들")
-        pprint(comments)
+        # pprint("댓글들")
+        # pprint(comments)
 
         # 코멘트를 분류하는 작업
         # 왜 이렇게 하나면 마지막부터 시작하니까 저 위에서 처리하기엔 꼬이는 것 같음.
