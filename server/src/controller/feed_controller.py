@@ -399,23 +399,15 @@ class Feed_Controller:
     def get_all_comment_on_feed(self, database:Local_Database,
                                request):
         model = FeedModel(database=database)
-        try:
-            # 유저가 있으면 세팅
-            if request.jwt_payload != "":
-                model.set_user_with_email(request=request.jwt_payload)
-            model.get_all_comment_on_feed(feed_manager=self.__feed_manager,
-                                         data_payload=request.data_payload)
+        
+        # 유저가 있으면 세팅
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
+            
+        model.get_all_comment_on_feed(feed_manager=self.__feed_manager,
+                                        data_payload=request.data_payload)
 
-        except CustomError as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
-
-        except Exception as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
-
-        finally:
-            return model
+        return model
 
     # comment 지우기
     def try_remove_comment(self, database:Local_Database,
