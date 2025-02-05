@@ -1762,6 +1762,8 @@ class FeedManager:
                 return comment
         return None
 
+
+    # 댓글 분류를 해주는 함수. 도저히 저 밑에서 하기힘들다고 생각했음. 그래서 따로 함수를 나눴어
     def __classify_reply_comment(self, comments):
         no_targeted_comments = []       # target_cid가 없는 놈
         exist_targeted_comments = []    # target_cid가 있는 놈
@@ -1774,13 +1776,13 @@ class FeedManager:
 
         # pprint(exist_targeted_comments)
         # pprint(no_targeted_comments)
-
-        for no_targeted_comment in no_targeted_comments:
-            pprint(no_targeted_comment.get_dict_form_data())
-            pprint(no_targeted_comment.reply)
-
-        for exist_targeted_comment in exist_targeted_comments:
-            pprint(exist_targeted_comment.get_dict_form_data())
+        #
+        # for no_targeted_comment in no_targeted_comments:
+        #     pprint(no_targeted_comment.get_dict_form_data())
+        #     pprint(no_targeted_comment.reply)
+        #
+        # for exist_targeted_comment in exist_targeted_comments:
+        #     pprint(exist_targeted_comment.get_dict_form_data())
 
         for targeted_comment in exist_targeted_comments:
             for comment in no_targeted_comments:
@@ -1819,10 +1821,10 @@ class FeedManager:
 
         classified_comments = self.__classify_reply_comment(comments=comments)
 
-        pprint("분류 후 댓글")
-        for comment in classified_comments:
-            pprint(comment.get_dict_form_data())
-            pprint(comment.reply)
+        # pprint("분류 후 댓글")
+        # for comment in classified_comments:
+        #     pprint(comment.get_dict_form_data())
+        #     pprint(comment.reply)
 
         # pprint("분류전 댓글")
         # for comment in comments:
@@ -1834,7 +1836,10 @@ class FeedManager:
         # for comment in comments:
         #     pprint(comment.get_dict_form_data())
 
+        # 이거 바꿔야함.
+        # return classified_comments
         return comments
+
 
     # 내가 작성한 댓글 전부 불러오기
     # 페이징 기법은 새롭게 재편하기 떄문에 여기서 페이징을 하지않습니다.
