@@ -1385,6 +1385,7 @@ class FeedManager:
                 
             else:
                 body = " "
+                url = connector.make_new_feed_body_data(fid=fid, body=body)
 
             # 3. url을 body로 지정
 
@@ -1399,7 +1400,7 @@ class FeedManager:
                                 images=[],
                                 link=data_payload.link,
                                 bid=data_payload.bid,
-                                raw_body = data_payload.raw_body, # 이거 url이라는 변수가 없어서
+                                raw_body = url, # 이거 url이라는 변수가 없어서
                                 )
 
         #작성한 피드 목록에 넣어주고
