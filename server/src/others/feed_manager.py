@@ -1771,8 +1771,13 @@ class FeedManager:
             else:
                 no_targeted_comments.append(comment)
 
-        pprint(exist_targeted_comments)
-        pprint(no_targeted_comments)
+        # pprint(exist_targeted_comments)
+        # pprint(no_targeted_comments)
+
+        for no_targeted_comment in no_targeted_comments:
+            pprint(no_targeted_comment.get_dict_form_data())
+        for exist_targeted_comment in exist_targeted_comments:
+            pprint(exist_targeted_comment.get_dict_form_data())
 
         for targeted_comment in exist_targeted_comments:
             for comment in no_targeted_comments:
