@@ -1630,6 +1630,12 @@ class FeedManager:
                 comment.like_user = True
             else:
                 comment.like_user = False
+
+            for reply_comment in comment.reply:
+                if user.uid in reply_comment.like_user:
+                    reply_comment.like_user = True
+                else:
+                    reply_comment.like_user = False
         return
 
     # 멘션한 유저를 찾아내자
@@ -1754,8 +1760,14 @@ class FeedManager:
 
         return 
 
-    # Feed에 있는 모든 댓글들을 모두 가져와야 함.
+    # 댓글 도메인 리스트에서 찾아야 할 댓글을 찾는 함수
+    def __find_comment_in_comment_list(self, comments, cid):
+        for comment in comments:
+            if comment.cid == cid:
+                return comment
+        return ""
 
+    # Feed에 있는 모든 댓글들을 모두 가져와야 함
     # 피드 안에 있는 모든 Comment를 가져옴.
     def get_all_comment_on_feed(self, user, fid):
         feed_data = self._database.get_data_with_id(target="fid", id=fid)
@@ -1771,9 +1783,20 @@ class FeedManager:
             # 기본적으로 owner는 False
             if new_comment.uid == user.uid:
                 new_comment.owner= True
+
             comments.append(new_comment)
 
-        # 이거 해설만요.
+        # 코멘트를 분류하는 작업
+        # 왜 이렇게 하나면 마지막부터 시작하니까 저 위에서 처리하기엔 꼬이는 것 같음.
+        for comment in comments:
+            # 만약 답글형 댓글이라면 타겟을 찾아서 reply에 넣어야 한다.
+            if comment.target_cid != "" :
+                target_comment = self.__find_comment_in_comment_list(comments, comment.target_cid)
+                # 타겟에다가 Reply 공간에 담는다. 그리고 원래 리스트에는 지운다.
+                if target_comment != "":
+                    target_comment.reply.append(comment)
+                    comments.remove(comment)
+
         self.__get_comment_liked_info(user=user, comments=comments)
 
         return comments
