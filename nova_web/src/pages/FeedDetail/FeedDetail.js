@@ -7,7 +7,6 @@ import { useRef } from "react";
 
 import back from "./../../img/backword.png";
 import star from "./../../img/favorite.png";
-import FilterModal from "../../component/FilterModal/FilterModal";
 import axios from "axios";
 
 export default function FeedDetail({ feed }) {
@@ -197,7 +196,7 @@ export default function FeedDetail({ feed }) {
           <img src={back} alt="back" />
           <span>뒤로</span>
         </button>
-        {feedData.is_owner && (
+        {feedData?.is_owner && (
           <button className={style["back-button"]}>
             <img src={back} />
             <span

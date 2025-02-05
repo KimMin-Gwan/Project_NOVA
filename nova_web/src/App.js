@@ -50,7 +50,6 @@ export function getModeClass(mode) {
 }
 function App() {
   let navigate = useNavigate();
-  let [isUserState, setIsUserState] = useState(false);
   let todayBestFeed = useFetchData(`/home/today_best`);
   let weeklyFeed = useFetchData(`/home/weekly_best`);
   let allFeed = useFetchData(`/home/all_feed`);

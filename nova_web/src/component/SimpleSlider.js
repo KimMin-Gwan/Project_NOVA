@@ -1,38 +1,3 @@
-// import React, { useState } from 'react';
-// import './slider.css'; // 스타일을 위한 CSS 파일
-
-// const SimpleSlider = () => {
-//   const items = [
-//     <div style={{ backgroundColor: 'red' }}>Slide 1</div>,
-//     <div style={{ backgroundColor: 'blue' }}>Slide 2</div>,
-//     <div style={{ backgroundColor: 'green' }}>Slide 3</div>,
-//   ];
-
-//   const [currentIndex, setCurrentIndex] = useState(0);
-
-//   const nextSlide = () => {
-//     setCurrentIndex((prevIndex) => (prevIndex + 1) % items.length);
-//   };
-
-//   const prevSlide = () => {
-//     setCurrentIndex((prevIndex) =>
-//       prevIndex === 0 ? items.length - 1 : prevIndex - 1
-//     );
-//   };
-
-//   return (
-//     <div className="carousel">
-//       <button onClick={prevSlide}>&lt;</button>
-//       <div className="carousel-content">
-//         {items[currentIndex]}
-//       </div>
-//       <button onClick={nextSlide}>&gt;</button>
-//     </div>
-//   );
-// };
-
-// export default SimpleSlider;
-
 import "./slider.css";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -59,7 +24,8 @@ const SimpleSlider = ({ feedData, brightMode, type, className }) => {
   let navigate = useNavigate();
 
   function onClickMore(fid) {
-    navigate(`/feed_detail/${fid}`);
+    console.log("fid", fid);
+    navigate(`/feed_detail/${fid}`, { state: { commentClick: false } });
   }
 
   const [mode, setMode] = useState(brightMode); // 초기 상태는 부모로부터 받은 brightMode 값
@@ -83,7 +49,7 @@ const SimpleSlider = ({ feedData, brightMode, type, className }) => {
                     className={`slide-content ${getModeClass(mode)}`}
                     onClick={(e) => {
                       e.preventDefault();
-                      onClickMore(feed.fid);
+                      onClickMore(feed.feed.fid);
                     }}
                   >
                     {type === "bias" && (
