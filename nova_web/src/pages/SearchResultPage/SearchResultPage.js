@@ -1,4 +1,4 @@
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import SearchBox from "../../component/SearchBox";
 import { useEffect, useState } from "react";
 import back from "./../../img/backword.png";
@@ -15,7 +15,24 @@ export default function SearchResultPage() {
   let keyword = searchParams.get("keyword");
   // let keyword = params.keyword;
   let navigate = useNavigate();
+  let location = useLocation();
   let [isLoading, setIsLoading] = useState(true);
+  let [searchWord, setSearchWord] = useState("");
+  let [searchHistory, setSearchHistory] = useState([]);
+  function handleNavigate() {
+    // if (!searchWord) {
+    //   navigate("/");
+    // } else {
+    // navigate(`/feed_list/search_feed?keyword=${searchWord}`);
+    const updateHistory = [...searchHistory, searchWord];
+    setSearchHistory(updateHistory);
+    localStorage.setItem("history", JSON.stringify(updateHistory));
+    navigate(`/search_result?keyword=${searchWord}`);
+    navigate(0);
+    setSearchWord("");
+    // }
+  }
+
   function handleMovePage(e, page) {
     e.preventDefault();
     navigate(page);
@@ -28,6 +45,28 @@ export default function SearchResultPage() {
     setActiveIndex(index);
   };
 
+  useEffect(() => {
+    let historyList = JSON.parse(localStorage.getItem("history")) || [];
+    setSearchHistory(historyList);
+  }, []);
+
+  function onKeyDown(event) {
+    if (event.key === "Enter") {
+      handleNavigate();
+    }
+  }
+
+  function onChangeSearchWord(e) {
+    setSearchWord(e.target.value);
+  }
+  function onClickSearch(history) {
+    if (history) {
+      navigate(`/search_result?keyword=${history}`);
+    } else {
+      navigate(`/search_result?keyword=${searchWord}`);
+    }
+  }
+
   let [feedData, setFeedData] = useState([]);
 
   function fetchSearchKeyword() {
@@ -39,7 +78,9 @@ export default function SearchResultPage() {
         }
       )
       .then((res) => {
-        setFeedData(res.data.body.send_data);
+        setFeedData((prev) => {
+          return [...prev, ...res.data.body.send_data];
+        });
         console.log(res.data);
         setIsLoading(false);
         setNextKey(res.data.body.key);
@@ -69,12 +110,19 @@ export default function SearchResultPage() {
         <div
           className="back"
           onClick={() => {
-            navigate(-1);
+            navigate("/search");
           }}
         >
           <img src={back} />
         </div>
-        <SearchBox type="search" />
+        <SearchBox
+          type="search"
+          value={keyword}
+          // value={searchWord}
+          onClickSearch={onClickSearch}
+          onChangeSearchWord={onChangeSearchWord}
+          onKeyDown={onKeyDown}
+        />
       </div>
       <section className={style["info-list"]}>
         <ul className={style["post-list"]}>

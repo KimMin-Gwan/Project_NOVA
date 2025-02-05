@@ -8,6 +8,7 @@ export default function SearchBox({
   onClickSearch,
   onChangeSearchWord,
   onKeyDown,
+  value,
 }) {
   let navigate = useNavigate();
 
@@ -34,7 +35,7 @@ export default function SearchBox({
           value={searchWord}
           onKeyDown={onKeyDown}
           onChange={onChangeSearchWord}
-          placeholder="보고 싶은 최애를 검색해보세요"
+          placeholder={value ? value : "보고 싶은 최애를 검색해보세요"}
           type="text"
         ></input>
       ) : (

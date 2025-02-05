@@ -4,12 +4,9 @@ import back from "./../../img/backword.png";
 import logo2 from "../../img/logo2.png";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-// import getTagList from "../../services/getTagList";
-// import axios from "axios";
 import useTagStore from "../../stores/TagStore/useTagStore";
 export default function SearchPage() {
   let navigate = useNavigate();
-  //   let [tagList, setTagList] = useState([]);
 
   let { tagList, loading, error, fetchTagList } = useTagStore();
 
@@ -78,9 +75,9 @@ export default function SearchPage() {
 
   function onClickSearch(history) {
     if (history) {
-      navigate(`/search_result/?keyword=${history}`);
+      navigate(`/search_result?keyword=${history}`);
     } else {
-      navigate(`/search_result/?keyword=${searchWord}`);
+      navigate(`/search_result?keyword=${searchWord}`);
     }
   }
 
