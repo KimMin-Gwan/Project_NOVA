@@ -352,24 +352,33 @@ class Interaction(SampleDomain):
         }
 
 class FeedLink(SampleDomain):
-    def __init__(self, lid="", lname="", url=""):
+    def __init__(self, lid="", explain="", url="", domain="", title="", fid=""):
         self.lid = lid
-        self.lname= lname
+        self.explain = explain
         self.url = url 
+        self.domain = domain
+        self.title = title
+        self.fid = fid
 
     def make_with_dict(self, dict_data):
         try:
             self.lid = dict_data['lid']
-            self.lname = dict_data['lname']
+            self.lname = dict_data['explain']
             self.url = dict_data['url']
+            self.domain = dict_data['domain']
+            self.title= dict_data['title']
+            self.fid = dict_data['fid']
         except Exception as e:
             raise DictMakingError(error_type=e)
 
     def get_dict_form_data(self):
         return {
             "lid": self.lid,
-            "lname": self.lname,
-            "url": self.url
+            "explain": self.lname,
+            "url": self.url,
+            "domain" : self.domain,
+            "title" : self.title,
+            "fid" : self.fid
         }
 
 class Banner(SampleDomain):

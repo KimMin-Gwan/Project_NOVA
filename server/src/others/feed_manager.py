@@ -1292,11 +1292,41 @@ class FeedManager:
         return
     
     # 링크 만들기
-    def _make_new_link(self, fid,  link_data):
-        lid = self.__make_new_iid()
-        feed_link = FeedLink(lid=lid, lname=link_data["lname"], url=link_data["url"])
-        self._database.add_new_data(target_id="lid", new_data=feed_link.get_dict_form_data())
-        return
+    def _make_new_link(self, fid, feed_links):
+        result_feed_links = []
+        
+        lid_list = []
+        
+        # 여기서 실제 링크를 타고 들어가서 해당 사이트의 ㅡ내용을 긁어 올 필요가 있음
+        # 크롤링이 안되는 사이트면 하는 수 없고
+        for feed_link in feed_links:
+            feed_link:FeedLink = feed_link
+            lid = self.__make_new_iid()
+            feed_link.lid = lid
+            feed_link.fid = fid
+            feed_link.domain = self.__extract_link_domain_string(url=feed_link.url)
+            
+            result_feed_links.append(feed_link.get_dict_form_data())
+            lid_list.append(lid)
+            
+        # 데이터 저장
+        self._database.add_new_datas(target_id="lid", new_datas=result_feed_links)
+        
+        return lid_list
+    
+    # "https://chatgpt.com/c/67a4260b-1100-8013-916d-d0cb06b0a1e4" 이런 사이트에서 chatgpt.com 만 긁어오는 함수
+    def __extract_link_domain_string(self, url):
+
+        # 정규 표현식으로 도메인 추출
+        #url.split("//")[-1].split("/")[0] #안되면 이걸 쓰면된대
+        match = re.search(r"https?://([^/]+)", url)
+        
+        if match:
+            domain = match.group(1)
+            return domain
+        
+        return ""
+    
 
     # 새로운 피드의 데이터를 추가하여 반환
     def __set_new_feed(self, user:User,fid, fclass, choice, body, hashtag,
@@ -1309,9 +1339,9 @@ class FeedManager:
 
         # link가 있다면 작업할 것
         if link:
-            lid = self._make_new_link(fid=fid, link_data=link)
+            lids = self._make_new_link(fid=fid, link_data=link)
         else:
-            lid = ""
+            lids = []
 
         # 새로운 피드 만들어지는 곳
         new_feed = Feed()
@@ -1326,7 +1356,7 @@ class FeedManager:
         new_feed.hashtag = hashtag
         new_feed.num_image = len(image)
         new_feed.iid = iid
-        new_feed.lid = lid
+        new_feed.lid = lids
         new_feed.bid = bid
         new_feed.raw_body = raw_body
         return new_feed
@@ -1817,7 +1847,9 @@ class FeedManager:
         # pprint(comments)
 
         classified_comments = self.__classify_reply_comment(comments=comments)
-
+        
+        pprint(classified_comments)
+        
         # pprint("분류 후 댓글")
         # for comment in classified_comments:
         #     pprint(comment.get_dict_form_data())

@@ -2,7 +2,7 @@ from model.base_model import BaseModel
 from model import Local_Database
 #from others.data_domain import Alert
 from others import CoreControllerLogicError,FeedManager, FeedSearchEngine, ObjectStorageConnection
-from others import Comment, Feed, User, Interaction
+from others import Comment, Feed, User, Interaction, FeedLink
 from pprint import pprint
 
 
@@ -283,7 +283,17 @@ class FeedEditModel(BaseModel):
         super().__init__(database)
         self._result= False
         self._detail = "Somthing goes Bad| Error Code = 422"
-
+    
+    # dict 형태로 들어온 feed link의 데이터를 사용가능한 형태로 변환
+    def set_feed_link(self, data_payload):
+        feed_links = []
+        for link_data in data_payload.link:
+            feed_link = FeedLink(url=link_data['url'], explain=link_data['explain'])
+            feed_links.append(feed_link)
+        
+        data_payload.link = feed_links
+        return
+        
     def try_edit_feed(self, feed_manager:FeedManager, data_payload):
         # 만약 fid가 ""가 아니면 수정이나 삭제 요청일것임
         # 근데 삭제 요청은 여기서 처리 안하니까 반드시 수정일것

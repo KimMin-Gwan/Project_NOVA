@@ -226,7 +226,20 @@ class Local_Database:
         except Exception as e:
             raise DatabaseLogicError("add_new_data error | " + str(e))
         return True
-
+    
+    # 한번에 여러 데이터 인풋
+    # db.add_new_data(target_id="uid", new_data=[{key: value}])
+    def add_new_datas(self, target_id:str, new_datas:list):
+        try:
+            target_list:list = self._select_target_list(target=target_id)
+            for new_data in new_datas:
+                target_list.append(new_data)
+            func = self._select_save_function(target=target_id)
+            func()
+        except Exception as e:
+            raise DatabaseLogicError("add_new_data error | " + str(e))
+        return True
+    
     def _select_save_function(self, target:str):
         if target == "baid" or target == "banner":
             return self.__save_banner_json

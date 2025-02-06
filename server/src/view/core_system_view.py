@@ -937,7 +937,7 @@ class EditFeedRequest(RequestHeader):
         self.fclass = body['fclass']
         self.choice= body['choice']
         self.hashtag = body['hashtag']
-        self.link = body['link']
+        self.link:list = body['link']
         self.bid = body['bid']
         self.image_names = image_names
         self.images = images
