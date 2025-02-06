@@ -252,7 +252,7 @@ export default function FeedDetail({}) {
                       >
                         <img src={star} alt="star-icon" />
                       </button>
-                      <span></span>
+                      <span>{comment.like}</span>
                     </div>
                   </div>
                 </div>
@@ -291,7 +291,7 @@ export default function FeedDetail({}) {
                               >
                                 <img src={star} alt="star-icon" />
                               </button>
-                              <span></span>
+                              <span>{reply.like}</span>
                             </div>
                           </div>
                         </div>
