@@ -1339,7 +1339,7 @@ class FeedManager:
 
         # link가 있다면 작업할 것
         if link:
-            lids = self._make_new_link(fid=fid, link_data=link)
+            lids = self._make_new_link(fid=fid, feed_links=link)
         else:
             lids = []
 
