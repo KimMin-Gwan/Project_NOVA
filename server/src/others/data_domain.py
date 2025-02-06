@@ -457,6 +457,7 @@ class Comment(SampleDomain):
             "target_cid": self.target_cid,
             "owner" : self.owner,
             "mention": self.mention,
+            "reply":self.reply
         }
 
 # 유저 특화 시스템 구성을 위한 관리 유저
