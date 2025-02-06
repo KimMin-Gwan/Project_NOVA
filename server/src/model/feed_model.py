@@ -14,6 +14,7 @@ class FeedModel(BaseModel):
         self._comments = []
         self._interaction = Interaction()
         self._send_data = []
+        self._links = []
     
     # 단일 피드 데이터 전송
     def set_single_feed_data(self, fid:str, feed_manager:FeedManager):
@@ -35,6 +36,14 @@ class FeedModel(BaseModel):
                 self._interaction.make_with_dict(interaction_data)
                 
                 self._set_feed_interactied(self._user, interaction=self._interaction)
+                
+            if feed.lid:
+                feed_link_datas = self._database.get_datas_with_ids(target="lid", id=feed.lid)
+                
+                for feed_link_data in feed_link_datas:
+                    feed_link = FeedLink()
+                    feed_link.make_with_dict(feed_link_data)
+                    self._links.append(feed_link)
                 
             # 포인터로 동작함
             self._set_feed_json_data(user=self._user, feeds=self._feeds)
@@ -268,7 +277,8 @@ class FeedModel(BaseModel):
                 'key' : self._key,
                 'interaction' :self._interaction.get_dict_form_data(),
                 'comments' : self._make_dict_list_data(list_data=self._comments),
-                'send_data' : self._send_data
+                'send_data' : self._send_data,
+                'links' : self._make_dict_list_data(list_data=self._links)
             }
 
             response = self._get_response_data(head_parser=head_parser, body=body)

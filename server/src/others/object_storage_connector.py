@@ -7,6 +7,11 @@ from bs4 import BeautifulSoup
 from PIL import Image
 from io import BytesIO
 
+import re
+import requests
+from bs4 import BeautifulSoup
+from urllib.parse import urlparse
+
 
 
 # 건들지 않음
@@ -131,3 +136,73 @@ class ObjectStorageConnection:
         return body, imgs
         # response.raise_for_status()
 
+
+class HTMLEXtractor:
+    # 외부 사이트에서 가장 상단의 이미지나 섬네일을 가지고 오는 함수
+    def extract_external_webpage_image_data(self, url):
+        image = self.__extract_image(url=url)
+        return image
+    
+    def __get_youtube_thumbnail_url(self, video_url):
+        """유튜브 썸네일 URL 추출"""
+        match = re.search(r"(?:v=|\/)([0-9A-Za-z_-]{11})", video_url)
+        if match:
+            video_id = match.group(1)
+            return f"https://img.youtube.com/vi/{video_id}/hqdefault.jpg"
+        else:
+            return "유효한 유튜브 영상 URL이 아닙니다."
+
+    def __fetch_top_image(self, url):
+        """유튜브가 아닌 사이트에서 최상단 이미지 추출"""
+        try:
+            headers = {
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"
+            }
+            response = requests.get(url, headers=headers)
+            response.raise_for_status()
+
+            soup = BeautifulSoup(response.text, 'html.parser')
+
+            # 1. Open Graph (og:image) 메타 태그에서 이미지 추출
+            og_image = soup.find("meta", property="og:image")
+            if og_image and og_image.get("content"):
+                return og_image["content"]
+
+            # 2. 첫 번째 <img> 태그에서 이미지 추출
+            img_tag = soup.find("img")
+            if img_tag and img_tag.get("src"):
+                return img_tag["src"]
+
+            return "이미지를 찾을 수 없습니다."
+
+        except requests.exceptions.RequestException as e:
+            return f"요청 중 오류가 발생했습니다: {e}"
+
+    def __extract_image(self, url):
+        # URL을 분석하여 적합한 처리 수행
+        parsed_url = urlparse(url)
+
+        if "youtube.com" in parsed_url.netloc or "youtu.be" in parsed_url.netloc:
+            # 유튜브 링크일 경우
+            thumbnail = self.__get_youtube_thumbnail_url(url)
+            return thumbnail
+        else:
+            # 유튜브가 아닌 경우
+            top_image = self.__fetch_top_image(url)
+            print("최상단 이미지 URL:", top_image)
+            return top_image
+    
+    # 외부에서 사이트에서 title 데이터 추출하는 함수
+    def extract_external_webpage_title_tag(self, url):
+        # URL에서 HTML 가져오기
+        response = requests.get(url)
+
+        # BeautifulSoup 객체 생성
+        soup = BeautifulSoup(response.text, 'html.parser')
+
+        # <title> 태그 내용 추출
+        title = soup.title.string if soup.title else "Page Title"
+        
+        return title
+    
+    
