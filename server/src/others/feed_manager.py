@@ -1305,7 +1305,7 @@ class FeedManager:
             feed_link.lid = lid
             feed_link.fid = fid
             feed_link.domain = self.__extract_link_domain_string(url=feed_link.url)
-            feed_link.title = HTMLEXtractor.extract_external_webpage_title_tag(url=feed_link.url)
+            feed_link.title = HTMLEXtractor().extract_external_webpage_title_tag(url=feed_link.url)
             result_feed_links.append(feed_link.get_dict_form_data())
             lid_list.append(lid)
             
