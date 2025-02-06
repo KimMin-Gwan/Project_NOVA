@@ -9,8 +9,9 @@ import more_icon from "./../../img/more_icon.svg";
 import back from "./../../img/backword.png";
 import star from "./../../img/favorite.png";
 import axios from "axios";
+import mainApi from "../../services/apis/mainApi";
 
-export default function FeedDetail({ feed }) {
+export default function FeedDetail({}) {
   let navigate = useNavigate();
   let { fid } = useParams();
   // let [searchParams] = useSearchParams();
@@ -50,6 +51,18 @@ export default function FeedDetail({ feed }) {
   useEffect(() => {
     fetchFeed();
   }, [comments, fid]);
+
+  // 상호작용
+  async function handleInteraction(event, fid, action) {
+    event.preventDefault();
+    // setIsLoading(true);
+    await mainApi.get(`/feed_explore/interaction_feed?fid=${fid}&action=${action}`).then((res) => {
+      setInteraction((prevData) => {
+        return interaction.fid === fid ? res.data.body.interaction : prevData;
+      });
+      setIsLoading(false);
+    });
+  }
 
   async function fetchFeedComment() {
     await fetch(`https://nova-platform.kr/feed_explore/feed_detail/comment_data?fid=${fid}`, {
@@ -193,7 +206,12 @@ export default function FeedDetail({ feed }) {
       </div>
 
       <div>
-        <ContentFeed feed={feedData} interaction={interaction} handleCheckStar={handleCheckStar} />
+        <ContentFeed
+          feed={feedData}
+          interaction={interaction}
+          handleInteraction={handleInteraction}
+          handleCheckStar={handleCheckStar}
+        />
       </div>
 
       <div className={style["comment-container"]}>
