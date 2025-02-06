@@ -291,7 +291,6 @@ class ImageTagModel(BaseModel):
 
     def get_image(self, url):
         self.__url = url
-        self.__image = self.__extract_image(url=url)
         self.__image = HTMLEXtractor.extract_external_webpage_image_data(url=url)
 
     def get_response_form_data(self, head_parser):
