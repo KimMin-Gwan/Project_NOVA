@@ -34,7 +34,7 @@ export default function FeedThumbnail({
           <img src={more_icon} alt="더보기" onClick={() => navigate(endPoint)}></img>
         </div>
       </div>
-      {!feedData && <NoneFeed />}
+      {feedData.length === 0 && <NoneFeed />}
 
       {children}
 

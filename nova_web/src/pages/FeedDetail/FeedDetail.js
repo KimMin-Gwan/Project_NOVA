@@ -207,6 +207,7 @@ export default function FeedDetail({}) {
 
       <div>
         <ContentFeed
+          detailPage
           feed={feedData}
           interaction={interaction}
           handleInteraction={handleInteraction}
@@ -223,53 +224,83 @@ export default function FeedDetail({}) {
         {/* 댓글 각각 */}
         {comments.length !== 0 &&
           comments.map((comment, i) => {
-            const [firstWord, ...restWords] = comment.body.split(" ");
             return (
               <div
                 key={comment.cid}
-                className={`${style["comment-box"]} `}
+                className={style["comment-box"]}
                 onClick={() => {
                   onClickComment(comment.cid, comment.target_cid, comment.uname);
                 }}
               >
-                <div
-                  className={`${style["comment-wrapper"]}
-                ${comment.target_cid && style["comment-recomment"]}`}
-                >
-                  <div className={style["comment-user"]}>
-                    <div>
-                      {comment.uname}
-                      <span>{comment.date}</span>
-                    </div>
-                    <div>신고</div>
+                <div className={style["comment-user"]}>
+                  <div>
+                    {comment.uname}
+                    <span>{comment.date}</span>
                   </div>
+                  <div>신고</div>
+                </div>
 
-                  <div className={style["comment-content"]}>
-                    <span style={{ color: comment.mention ? "#2C59CD" : "black" }}>
-                      {firstWord}{" "}
-                    </span>
-                    {restWords.join("")}
-                  </div>
-                  <div className={style["action-container"]}>
-                    <div className={style["button-box1"]}>
-                      <div className={style["action-button"]}>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            // handleCheckStar(feed.fid, e);
-                          }}
-                        >
-                          <img src={star} alt="star-icon" />
-                        </button>
-                        <span></span>
-                      </div>
+                <div className={style["comment-content"]}>{comment.body}</div>
+
+                <div className={style["action-container"]}>
+                  <div className={style["button-box1"]}>
+                    <div className={style["action-button"]}>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                        }}
+                      >
+                        <img src={star} alt="star-icon" />
+                      </button>
+                      <span></span>
                     </div>
                   </div>
                 </div>
+
+                {comment.reply.length !== 0 &&
+                  comment.reply?.map((reply, i) => {
+                    const [firstWord, ...restWords] = reply.body.split(" ");
+                    return (
+                      <div
+                        key={reply.cid}
+                        className={`${style["reply-box"]}`}
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <div className={style["comment-user"]}>
+                          <div>
+                            답변 : {reply.uname}
+                            <span>{reply.date}</span>
+                          </div>
+                          <div>신고</div>
+                        </div>
+
+                        <div className={style["comment-content"]}>
+                          <span style={{ color: reply.mention ? "#2C59CD" : "black" }}>
+                            {firstWord}{" "}
+                          </span>
+                          {restWords.join("")}
+                        </div>
+
+                        <div className={style["action-container"]}>
+                          <div className={style["button-box1"]}>
+                            <div className={style["action-button"]}>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                }}
+                              >
+                                <img src={star} alt="star-icon" />
+                              </button>
+                              <span></span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
               </div>
             );
           })}
-        {comments.target_cid && <div>헤이</div>}
       </div>
       <div className={style["input-container"]}>
         <input

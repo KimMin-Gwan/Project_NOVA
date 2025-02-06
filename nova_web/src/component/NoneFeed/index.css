@@ -1,11 +1,13 @@
 .NoneFeed {
-  width: 500px;
-  height: 500px;
+  width: auto;
+  margin: 0px 27px;
+  height: 380px;
   background-color: #f1f7ff;
-  text-align: center;
-
-  h2 {
-    margin-top: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  p {
+    font-size: 16px;
     color: gray;
   }
 }

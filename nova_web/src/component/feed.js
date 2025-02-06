@@ -485,6 +485,7 @@ export default function Feed({
 // 내용 별 피드 박스
 
 export function ContentFeed({
+  detailPage,
   feed,
   interaction,
   feedInteraction,
@@ -514,7 +515,7 @@ export function ContentFeed({
 
       <div
         className={`${style["body-container"]} ${
-          feed.fclass === "long" ? style["long-form-hidden"] : ""
+          feed.fclass === "long" && detailPage ? "" : style["long-form-hidden"]
         }`}
       >
         <div className={style["body-hashtag"]}>
