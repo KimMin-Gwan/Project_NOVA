@@ -22,8 +22,20 @@ class FeedModel(BaseModel):
         if feed_data:
             feed = Feed()
             feed.make_with_dict(feed_data)
+            
+            # 노출 현황 이 1 이하면 죽어야됨
+            # 0: 삭제됨 1 : 비공개 2: 차단 3: 댓글 작성 X 4 : 정상(전체 공개)
+            if feed.display < 3:
+                return
+            
             self._feeds.append(feed)
-
+            
+            if feed.iid != "":
+                interaction_data = self._database.get_data_with_id(target="iid", id=feed.iid)
+                self._interaction.make_with_dict(interaction_data)
+                
+                self._set_feed_interactied(self._user, interaction=self._interaction)
+                
             # 포인터로 동작함
             self._set_feed_json_data(user=self._user, feeds=self._feeds)
         return
