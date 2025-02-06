@@ -1,7 +1,6 @@
 from openai import OpenAI
-#API 키
-
-client = OpenAI(api_key="####################")
+#API 키 
+client = OpenAI(api_key="여기에_API_키_입력")
 
 ## 현재 자료의 문장이 완성형에 가까워 높은 문장 완성 성능을 보여주는 중
 ## 커뮤니티에 게시된 자연어들이 제대로 처리 되는지 확인 하려면 완전히 박살난 문장 형식의 글이나 문맥 파악이 불가능한 자료가 필요
@@ -9,16 +8,22 @@ client = OpenAI(api_key="####################")
 ## 욕설로 도배된 자료 처리 확인 필요
 ## 많은(다양한) 데이터가 필요할 것으로 예상됨
 
+## 02/06 
+## 기호 처리를 잘 못하는걸로 보임 (예를들면 화살표)
+## 글자가 변형된 단어 처리를 못함
+## dlfjgrp Tmaus ahtdkfdkajrdma #이거 q:ㅂ, q는 ㅂ임 이렇게 알려줘도 안해줌 인터넷 단어 사전 프롬프트 같은걸 만들어서 import 해야되나?
+## 한글 암호 해독기를 만들어야 검열기가 완성될것으로 예상됨
 
 #gpt 사용하기 (본문)
 def rework(context):
     response = client.chat.completions.create(
-        #gpt 모댈
+        #gpt 모델
         model="gpt-4o-mini",
         #응답 형식
         response_format={ "type": "json_object" },
         #프롬프트 작성 하는 곳
         messages=[
+
         #응답 형식 요구 ( 대화 방식 지정 )
         {"role": "system", "content": "You are a helpful assistant designed to output JSON."},
 
@@ -29,13 +34,16 @@ def rework(context):
         {"role": "user", "content": "텍스트의 분위기 또한 파악하여 의미가 변형되지 않도록 해야합니다."},
         {"role": "user", "content": "텍스트는 title과 content로 이루어져 있습니다"},
         {"role": "user", "content": "텍스트의 title은 비어있을 수 있습니다. "},
-        {"role": "user", "content": "의미를 파악할 땐 title과 content를 모두 고려합니다."},
+        {"role": "user", "content": "의미를 파악할 땐 title과 content를 모두 고려합니다."}, #그냥 따로 하는듯
         {"role": "user", "content": "텍스트의 title이 비어있을경우 content만 고려합니다."},
         {"role": "user", "content": "응답은 '원본'과 '변환문', 강도로 합니다."},        
         {"role": "user", "content": "응답의 원본과 변환문 또한 title과 content로 구성되어야 합니다."},
         {"role": "user", "content": "title과 content 모두 변환합니다."},
-        {"role": "user", "content": "강도는 비속어 또는 욕설이 포함된 경우 2, 비속어는 포함되나 않으나 욕설이 없이 작성된 경우 1, 비속어 또는 욕설이 사용되지 않고 작성 된 경우 0을 반환합니다"},
-        {"role": "user", "content": '고유 명사는 변환하지 않습니다.'},
+        {"role": "user", "content": "강도는 비속어 또는 욕설이 포함된 경우 2, 비속어는 포함되나 않으나 욕설이 없이 작성된 경우 1, 비속어 또는 욕설이 사용되지 않고 작성 된 경우 0을 반환합니다"}, #작동이 애매함
+        {"role": "user", "content": '고유명사는 변환하지 않습니다.'},
+        {"role": "user", "content": '둘 이상의 단어가 합쳐진 단어가 있습니다. 이는 고유명사가 아닙니다.'}, #이상한 단어 분리해서 알아보라고 해보려고 한건데 안되는듯
+        {"role": "user", "content": '둘 이상의 단어가 합쳐진 단어는 해당 단어를 분해하여 어떤 단어가 사용됐는지 파악해 의미가 변하지 않도록 변환합니다.'},
+        {"role": "user", "content": '변환된 문장엔 일베용어가 사용되어선 안됩니다'}, #이거 정리해서 다 알려줘야 되나..?
         {"role": "user", "content": "변환된 문장엔 공격적인 단어가 적게 포함되어야 합니다."},
 
         #답변 제공
@@ -47,7 +55,6 @@ def rework(context):
     result = response.choices[0].message.content
         
     print(result)
-
 
 # 트렌드 변형 중....
 #gpt 사용하기 (트렌드) /공사중
@@ -124,7 +131,6 @@ def autoqna(context):
         {"role": "system", "content": "You are a helpful assistant designed to output JSON."},
 
         #주문사항
-
         {"role": "user", "content": "문장엔 공격적인 단어가 적게 포함되어야 합니다."},
 
         #답변 제공
@@ -135,8 +141,8 @@ def autoqna(context):
 
 #변환(검열)할 텍스트
 context = {
-    'title' : '',
-    'content' : '칸예가 입었으면 더 주목받을텐데 직접 입어라  쫄보새꺄'
+    'title' : 'dkssudgktpdy',
+    'content' : '멍한청인지공능'
 }
 
 trend_context = {
@@ -155,4 +161,4 @@ trend_context = {
 
 
 #테스트용 실행
-trend(context=trend_context)
+rework(context=context)
