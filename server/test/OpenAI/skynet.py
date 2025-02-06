@@ -1,6 +1,7 @@
 from openai import OpenAI
-#API 키 
-client = OpenAI(api_key="###############")
+#API 키
+
+client = OpenAI(api_key="####################")
 
 ## 현재 자료의 문장이 완성형에 가까워 높은 문장 완성 성능을 보여주는 중
 ## 커뮤니티에 게시된 자연어들이 제대로 처리 되는지 확인 하려면 완전히 박살난 문장 형식의 글이나 문맥 파악이 불가능한 자료가 필요
@@ -47,8 +48,10 @@ def rework(context):
         
     print(result)
 
+
+# 트렌드 변형 중....
 #gpt 사용하기 (트렌드) /공사중
-def trand(context):
+def trend(context):
     response = client.chat.completions.create(
         #gpt 모댈
         model="gpt-4o-mini",
@@ -60,14 +63,24 @@ def trand(context):
         {"role": "system", "content": "You are a helpful assistant designed to output JSON."},
 
         #주문사항
+
+        # 목적
         {"role": "user", "content": "주어진 텍스트를 요약해서 반환합니다."},
+
+        # 제공 정보 요약
         {"role": "user", "content": "주어진 텍스트는 여러개의 텍스트를 가진 리스트입니다."},
-        {"role": "user", "content": "리스트 안의 텍스트는 title과 content, conment로 이루어져 있습니다."},
-        {"role": "user", "content": "각 텍스트 마다 title과 content, conment를 종합적으로 요약하여 주제를 정합니다."},
-        {"role": "user", "content": "가장 많이 나온 주제를 메인 주제로 정합니다."},
-        {"role": "user", "content": "그 외 많이 나온 주제를 서브 주제로 정합니다."},
+        {"role": "user", "content": "리스트 안의 텍스트는 title과 content로 이루어져 있습니다."},
+        {"role": "user", "content": "각 텍스트 마다 title과 content를 종합 및 요약해 주제를 정하게 됩니다."},
+
+        # 주제 분석 방법
+        {"role": "user", "content": "텍스트를 읽고 현재의 글 주제 분야를 키워드로 제시해 주세요."},
+        {"role": "user", "content": "현재 주제의 대분류에 대한 정보를 포함시켜 주세요. Ex) 기술, 음악, 의료 등."},
+        {"role": "user", "content": "위에서 요약한 키워드는 Keyword라는 항목으로 표시를 해주세요."},
+        {"role": "user", "content": "다음부터 나오는 명령들은 위에서 진행한 키워드 요약이 아닌 내용 요약으로 진행해 주세요. "},
+        {"role": "user", "content": "가장 많이 나온 주제, 공통된 주제를 메인 주제로 정합니다."},
+        {"role": "user", "content": "그 외 많이 나온 주제나 요약해 나온 메인 주제의 하위 분류 주제를 서브 주제로 정합니다."},
         {"role": "user", "content": "메인 주제를 중심으로 요약문을 작성합니다."},
-        {"role": "user", "content": "응답은 trand로 합니다."},
+        {"role": "user", "content": "응답은 trend로 합니다."},
         {"role": "user", "content": "요약된 문장엔 공격적인 단어가 적게 포함되어야 합니다."},
 
         #답변 제공
@@ -111,6 +124,7 @@ def autoqna(context):
         {"role": "system", "content": "You are a helpful assistant designed to output JSON."},
 
         #주문사항
+
         {"role": "user", "content": "문장엔 공격적인 단어가 적게 포함되어야 합니다."},
 
         #답변 제공
@@ -125,6 +139,20 @@ context = {
     'content' : '칸예가 입었으면 더 주목받을텐데 직접 입어라  쫄보새꺄'
 }
 
+trend_context = {
+    'title' : '',
+    'content' : '애플뮤직 주간 TOP 100 8위 (2/3) 지금까지의 순위 (2024년 7월 22일 - 12월 30일)\
+    8 - ? - 5 - 5 - 6 - 5 - 6 - 6 - 8 - 9 - 10 - 11 - 7 - 9 - 10 - 15 - 11 - 14 - 15 - 18 - 1 - 1 - 1 - 2 - \
+    2025년 1월 6일 - 2월 3일 현재 \
+    1 - 1 - 3 - 4 - 8 \
+    2024년 7월 22일 새로 나온 애플 뮤직 클래시컬 차트에 대해서: \
+    이 주간 차트는 165개 이상의 국가로부터 수집한 Apple Music Classical 스트리밍, Apple Music 스트리밍, iTunes 다운로드, iTunes 곡 판매 및 Shazam 태그 등 5가지 데이터 소스를 결합해 클래식 음악의 최신 동향을 종합적으로 보여준다. \
+    클래식 앨범 TOP 100은 매주 월요일 Apple Music Classical 홈 탭에서 업데이트된다. 각 차트에는 전주 금요일부터 목요일까지 1주일간의 활동이 반영된다. \
+    4 \
+    고정닉 0 \
+    실베추공유신고, 댓글 : ',
+}
+
 
 #테스트용 실행
-rework(context=context)
+trend(context=trend_context)
