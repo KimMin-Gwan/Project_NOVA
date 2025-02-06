@@ -284,10 +284,6 @@ function App() {
                 />
               </section>
               <NavBar brightMode={brightMode}></NavBar>
-
-              {/* <div className="narrow-page">
-                <NavBar brightMode={brightMode}></NavBar>
-              </div> */}
             </div>
           </div>
         }

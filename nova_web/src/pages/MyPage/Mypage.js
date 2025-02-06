@@ -44,9 +44,9 @@ function MyPage() {
   async function fetchMyFeed(category) {
     await mainApi.get(`user_home/get_my_feed?type=${category}&key=${nextKey}`).then((res) => {
       console.log("feeed", res.data);
-      setIsLoading(false);
       setMyFeed(res.data.body.feed);
       setNextKey(res.data.body.key);
+      setIsLoading(false);
     });
   }
 

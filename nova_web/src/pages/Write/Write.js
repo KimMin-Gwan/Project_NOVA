@@ -15,6 +15,8 @@ import img from "./../../img/img-icon.png";
 import { getModeClass } from "../../App.js";
 import BiasBoxes from "../../component/BiasBoxes.js";
 import EditorBox from "../../component/EditorBox.js";
+import postApi from "../../services/apis/postApi.js";
+import axios from "axios";
 // import { Editor } from "@toast-ui/react-editor/index.js";
 const Write = ({ brightmode }) => {
   const params = useParams();
@@ -151,7 +153,7 @@ const Write = ({ brightmode }) => {
         fclass: type,
         choice: choice, // 4지선다 선택지 반영
         hashtag: tagList,
-        link: { lname: linkTitle, url: linkUrl },
+        link: [{ explain: linkTitle, url: linkUrl }],
         bid: biasId,
         image_names: "",
       },
@@ -175,6 +177,8 @@ const Write = ({ brightmode }) => {
       })
       .then((data) => {
         console.log("111", data);
+        alert("업로드가 완료되었습니다.");
+        navigate("/");
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -248,10 +252,7 @@ const Write = ({ brightmode }) => {
   }
 
   function onClickUpload() {
-    if (isUserState) {
-      alert("업로드가 완료되었습니다.");
-      navigate("/");
-    } else {
+    if (!isUserState) {
       alert("로그인이 필요합니다.");
       navigate("/nova_login");
     }
@@ -261,6 +262,7 @@ const Write = ({ brightmode }) => {
     // 로컬 스토리지에서 가져온 값이 있으면 그것을, 없으면 'bright'로 초기화
     return localStorage.getItem("brightMode") || "bright";
   });
+
   return (
     // <form onSubmit={handleSubmit}>
     <div className={style["WriteFeed"]}>
@@ -630,6 +632,44 @@ export function LinkModal({
   onClickAdd,
   linkList,
 }) {
+  const [urlImage, setUrlImage] = useState("");
+  let header = {
+    "request-type": "default",
+    "client-version": "v1.0.1",
+    "client-ip": "127.0.0.1",
+    uid: "1234-abcd-5678",
+    endpoint: "/user_system/",
+  };
+
+  const [isLoading, setIsLoading] = useState(true);
+  async function fetchkUrlImage() {
+    await axios
+      .post(
+        "https://nova-platform.kr/nova_sub_system/image_tag",
+        {
+          header: header,
+          body: {
+            url: "https://section.blog.naver.com/BlogHome.naver?directoryNo=0&currentPage=1&groupId=0",
+          },
+        },
+        {
+          headers: {
+            ...header,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((res) => {
+        setUrlImage(res.data.body.image);
+        console.log("image", res.data);
+        setIsLoading(false);
+      });
+  }
+
+  // if (isLoading) {
+  //   return <div>loading...</div>;
+  // }
+
   return (
     <div className={style["wrapper-container"]}>
       <div className={style["modal-container"]}>
@@ -639,9 +679,12 @@ export function LinkModal({
             linkList.map((link, i) => {
               return (
                 <div key={i} className={style["link-box"]}>
-                  <div>닫기</div>
+                  {/* <div>닫기</div> */}
                   <div>{link.title}</div>
                   <div>{link.url}</div>
+                  <div className={style["link-image"]}>
+                    <img src={urlImage} alt="img" />
+                  </div>
                 </div>
               );
             })}
@@ -662,7 +705,14 @@ export function LinkModal({
               placeholder="이곳을 클릭해서 URL을 추가하세요"
             />
           </div>
-          <button onClick={onClickAdd}>추가</button>
+          <button
+            onClick={() => {
+              onClickAdd();
+              fetchkUrlImage();
+            }}
+          >
+            추가
+          </button>
         </div>
 
         <div className={style["modal-buttons"]}>

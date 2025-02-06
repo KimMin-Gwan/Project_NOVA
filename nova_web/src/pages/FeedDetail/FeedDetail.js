@@ -15,14 +15,17 @@ import mainApi from "../../services/apis/mainApi";
 export default function FeedDetail({}) {
   let navigate = useNavigate();
   let { fid } = useParams();
-  // let [searchParams] = useSearchParams();
-  // let fid = searchParams.get("fid");
 
   let location = useLocation();
   let { state } = location;
-  const [isLoading, setIsLoading] = useState(true); // 로딩 상태 관리
 
   let commentRef = useRef(null);
+
+  const [isLoading, setIsLoading] = useState(true); // 로딩 상태 관리
+  let [feedData, setFeedData] = useState([]);
+  let [comments, setComments] = useState([]);
+  let [interaction, setInteraction] = useState();
+
   useEffect(() => {
     if (!isLoading && commentRef.current && state.commentClick) {
       commentRef.current.focus();
@@ -31,10 +34,6 @@ export default function FeedDetail({}) {
       //       }, 0); // 0초 후 실행
     }
   }, [isLoading]);
-
-  let [feedData, setFeedData] = useState([]);
-  let [comments, setComments] = useState([]);
-  let [interaction, setInteraction] = useState();
 
   async function fetchFeed() {
     await fetch(`https://nova-platform.kr/feed_explore/feed_detail/feed_data?fid=${fid}`, {
@@ -56,7 +55,7 @@ export default function FeedDetail({}) {
   // 상호작용
   async function handleInteraction(event, fid, action) {
     event.preventDefault();
-    // setIsLoading(true);
+    setIsLoading(true);
     await mainApi.get(`/feed_explore/interaction_feed?fid=${fid}&action=${action}`).then((res) => {
       setInteraction((prevData) => {
         return interaction.fid === fid ? res.data.body.interaction : prevData;
@@ -154,9 +153,6 @@ export default function FeedDetail({}) {
       .then((data) => {
         console.log("make", data);
         setComments(data.body.comments);
-        // setComments((prevComments) => {
-        //   return [data.body.comments[0], ...prevComments];
-        // });
         setCommentId("");
       });
   }
@@ -225,82 +221,7 @@ export default function FeedDetail({}) {
         {/* 댓글 각각 */}
         {comments.length !== 0 &&
           comments.map((comment, i) => {
-            return (
-              <div
-                key={comment.cid}
-                className={style["comment-box"]}
-                onClick={() => {
-                  onClickComment(comment.cid, comment.target_cid, comment.uname);
-                }}
-              >
-                <div className={style["comment-user"]}>
-                  <div>
-                    {comment.uname}
-                    <span>{comment.date}</span>
-                  </div>
-                  <div>신고</div>
-                </div>
-
-                <div className={style["comment-content"]}>{comment.body}</div>
-
-                <div className={style["action-container"]}>
-                  <div className={style["button-box1"]}>
-                    <div className={style["action-button"]}>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                        }}
-                      >
-                        <img src={star} alt="star-icon" />
-                      </button>
-                      <span>{comment.like}</span>
-                    </div>
-                  </div>
-                </div>
-
-                {comment.reply.length !== 0 &&
-                  comment.reply?.map((reply, i) => {
-                    const [firstWord, ...restWords] = reply.body.split(" ");
-                    return (
-                      <div
-                        key={reply.cid}
-                        className={`${style["reply-box"]}`}
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <div className={style["comment-user"]}>
-                          <div>
-                            답변 : {reply.uname}
-                            <span>{reply.date}</span>
-                          </div>
-                          <div>신고</div>
-                        </div>
-
-                        <div className={style["comment-content"]}>
-                          <span style={{ color: reply.mention ? "#2C59CD" : "black" }}>
-                            {firstWord}{" "}
-                          </span>
-                          {restWords.join("")}
-                        </div>
-
-                        <div className={style["action-container"]}>
-                          <div className={style["button-box1"]}>
-                            <div className={style["action-button"]}>
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                }}
-                              >
-                                <img src={star} alt="star-icon" />
-                              </button>
-                              <span>{reply.like}</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-              </div>
-            );
+            return <Comment key={comment.cid} comment={comment} onClickComment={onClickComment} />;
           })}
         <div className={style["input-container"]}>
           <input
@@ -312,6 +233,86 @@ export default function FeedDetail({}) {
             onKeyDown={onKeyDownEnter}
             placeholder="당신의 생각을 남겨보세요."
           />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// 댓글
+function Comment({ comment, onClickComment }) {
+  return (
+    <div
+      key={comment.cid}
+      className={style["comment-box"]}
+      onClick={() => {
+        onClickComment(comment.cid, comment.target_cid, comment.uname);
+      }}
+    >
+      <div className={style["comment-user"]}>
+        <div>
+          {comment.uname}
+          <span>{comment.date}</span>
+        </div>
+        <div>신고</div>
+      </div>
+
+      <div className={style["comment-content"]}>{comment.body}</div>
+
+      <div className={style["action-container"]}>
+        <div className={style["button-box1"]}>
+          <div className={style["action-button"]}>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+            >
+              <img src={star} alt="star-icon" />
+            </button>
+            <span>{comment.like}</span>
+          </div>
+        </div>
+      </div>
+
+      {comment.reply.length !== 0 &&
+        comment.reply?.map((reply, i) => {
+          return <ReplyComment key={reply.cid} reply={reply} />;
+        })}
+    </div>
+  );
+}
+
+// 대댓글
+function ReplyComment({ reply }) {
+  const [firstWord, ...restWords] = reply.body.split(" ");
+
+  return (
+    <div key={reply.cid} className={`${style["reply-box"]}`} onClick={(e) => e.stopPropagation()}>
+      <div className={style["comment-user"]}>
+        <div>
+          답변 : {reply.uname}
+          <span>{reply.date}</span>
+        </div>
+        <div>신고</div>
+      </div>
+
+      <div className={style["comment-content"]}>
+        <span style={{ color: reply.mention ? "#2C59CD" : "black" }}>{firstWord} </span>
+        {restWords.join("")}
+      </div>
+
+      <div className={style["action-container"]}>
+        <div className={style["button-box1"]}>
+          <div className={style["action-button"]}>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+            >
+              <img src={star} alt="star-icon" />
+            </button>
+            <span>{reply.like}</span>
+          </div>
         </div>
       </div>
     </div>
