@@ -6,7 +6,8 @@ import style from "./FeedDetail.module.css";
 import { useRef } from "react";
 
 import more_icon from "./../../img/more_icon.svg";
-import back from "./../../img/backword.png";
+// import back from "./../../img/backword.png";
+import back from "./../../img/detail_back.png";
 import star from "./../../img/favorite.png";
 import axios from "axios";
 import mainApi from "../../services/apis/mainApi";
@@ -188,8 +189,8 @@ export default function FeedDetail({}) {
 
   return (
     <div className={style["FeedDetail"]}>
-      <div className={style["top-container"]} onClick={onClickNav}>
-        <button className={style["back-button"]}>
+      <div className={style["top-container"]}>
+        <button className={style["back-button"]} onClick={onClickNav}>
           <img src={back} alt="back" />
           <span>뒤로</span>
         </button>
@@ -301,17 +302,17 @@ export default function FeedDetail({}) {
               </div>
             );
           })}
-      </div>
-      <div className={style["input-container"]}>
-        <input
-          ref={commentRef}
-          type="text"
-          id={style["comment"]}
-          value={commentValue}
-          onChange={onChangeComment}
-          onKeyDown={onKeyDownEnter}
-          placeholder="당신의 생각을 남겨보세요."
-        />
+        <div className={style["input-container"]}>
+          <input
+            ref={commentRef}
+            type="text"
+            id={style["comment"]}
+            value={commentValue}
+            onChange={onChangeComment}
+            onKeyDown={onKeyDownEnter}
+            placeholder="당신의 생각을 남겨보세요."
+          />
+        </div>
       </div>
     </div>
   );

@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import style from "./Mypage.module.css";
 import mypage_more_icon from "./../../img/mypage_more.png";
+import user_icon from "./../../img/user.svg";
 import mainApi from "../../services/apis/mainApi";
 import Feed from "../../component/feed";
 
@@ -40,15 +41,6 @@ function MyPage() {
     fetchMyPage();
   }, []);
 
-  // async function fetchMyFeed(category) {
-  //   await mainApi.get(`user_home/get_my_feed?type=${category}&key=${nextKey}`).then((res) => {
-  //     console.log("feeed", res.data);
-  //     setIsLoading(false);
-  //     setMyFeed(res.data.body.feed);
-  //     setNextKey(res.data.body.key);
-  //   });
-  // }
-
   async function fetchMyFeed(category) {
     await mainApi.get(`user_home/get_my_feed?type=${category}&key=${nextKey}`).then((res) => {
       console.log("feeed", res.data);
@@ -57,6 +49,7 @@ function MyPage() {
       setNextKey(res.data.body.key);
     });
   }
+
   useEffect(() => {
     fetchMyFeed();
   }, []);
@@ -101,7 +94,7 @@ function MyPage() {
             <img
               src={mypage_more_icon}
               alt=""
-              onClick={(e) => handleMovePage(e, "/mypage_edit")} // 클릭 시 /yourPage로 이동
+              onClick={(e) => handleMovePage(e, "/mypage_edit")}
               style={{ cursor: "pointer" }}
             />
           </section>
