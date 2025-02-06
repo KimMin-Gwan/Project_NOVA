@@ -1277,17 +1277,18 @@ body.dark-mode {
   all: unset;
   cursor: pointer;
   /* padding: 5px; */
-  border-radius: 20px;
-  width: 100px;
-  height: 100px;
+  border-radius: 10px;
+  /* background-color: #aad4ff; */
+  width: 97px;
+  height: 97px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: white;
+  border: dotted 2px #71b7ff;
   img {
     border-radius: 25px;
-    width: 90%;
-    height: 90%;
+    width: 30%;
+    height: 30%;
     object-fit: cover;
   }
 }

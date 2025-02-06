@@ -13,7 +13,6 @@ export default function useFetchData(url) {
         withCredentials: true,
       })
       .then((res) => {
-        console.log("fetch", res.data);
         setData(res.data.body.send_data);
         setLoading(false);
       });

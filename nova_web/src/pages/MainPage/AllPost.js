@@ -13,10 +13,8 @@ export default function AllPost({ brightMode, allFeed }) {
     setMode(brightMode); // brightMode 값이 바뀔 때마다 mode 업데이트
   }, [brightMode]);
 
-  // let allFeed = useFetchData("https://nova-platform.kr/home/all_feed");
-
   function onClick(fid) {
-    navigate(`/feed_detail/${fid}`);
+    navigate(`/feed_detail/${fid}`, { state: { commentClick: false } });
   }
 
   return (

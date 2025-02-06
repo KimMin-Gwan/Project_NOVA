@@ -100,25 +100,7 @@ export default function FeedDetail({ feed }) {
   let [commentValue, setCommentValue] = useState("");
 
   function onChangeComment(e) {
-    // if (commentId) {
-    //   setCommentValue(commentId + e.target.value);
-    // }
-    //   setCommentValue((prev)=>{
-    //     if(prev.includes('@')){
-
-    //       return e.target.value
-    //     }else {
-
-    //   }
-    // }
     setCommentValue(e.target.value);
-    // setCommentValue((prev) => {
-    //   if (prev.includes("@")) {
-    //     return prev + e.target.value;
-    //   } else {
-    //     return e.target.value;
-    //   }
-    // });
   }
 
   function onKeyDownEnter(e) {
@@ -156,17 +138,18 @@ export default function FeedDetail({ feed }) {
       .then((response) => response.json())
       .then((data) => {
         console.log("make", data);
-        setComments((prevComments) => {
-          return [data.body.comments[0], ...prevComments];
-        });
+        setComments(data.body.comments);
+        // setComments((prevComments) => {
+        //   return [data.body.comments[0], ...prevComments];
+        // });
         setCommentId("");
       });
   }
 
   let [commentId, setCommentId] = useState("");
 
-  const onClickComment = (cid, uname) => {
-    setCommentId(cid);
+  const onClickComment = (cid, targetCid, uname) => {
+    setCommentId(targetCid || cid);
     setCommentValue(`@${uname} `);
     commentRef.current.focus();
   };
@@ -222,56 +205,53 @@ export default function FeedDetail({ feed }) {
 
         {/* 댓글 각각 */}
         {comments.length !== 0 &&
-          comments
-            .slice()
-            .reverse()
-            .map((comment, i) => {
-              const [firstWord, ...restWords] = comment.body.split(" ");
-              return (
+          comments.map((comment, i) => {
+            const [firstWord, ...restWords] = comment.body.split(" ");
+            return (
+              <div
+                key={comment.cid}
+                className={`${style["comment-box"]} `}
+                onClick={() => {
+                  onClickComment(comment.cid, comment.target_cid, comment.uname);
+                }}
+              >
                 <div
-                  key={comment.cid}
-                  className={`${style["comment-box"]} `}
-                  onClick={() => {
-                    onClickComment(comment.cid, comment.uname);
-                  }}
-                >
-                  <div
-                    className={`${style["comment-wrapper"]}
+                  className={`${style["comment-wrapper"]}
                 ${comment.target_cid && style["comment-recomment"]}`}
-                  >
-                    <div className={style["comment-user"]}>
-                      <div>
-                        {comment.uname}
-                        <span>{comment.date}</span>
-                      </div>
-                      <div>신고</div>
+                >
+                  <div className={style["comment-user"]}>
+                    <div>
+                      {comment.uname}
+                      <span>{comment.date}</span>
                     </div>
+                    <div>신고</div>
+                  </div>
 
-                    <div className={style["comment-content"]}>
-                      <span style={{ color: comment.mention ? "#2C59CD" : "black" }}>
-                        {firstWord}{" "}
-                      </span>
-                      {restWords.join("")}
-                    </div>
-                    <div className={style["action-container"]}>
-                      <div className={style["button-box1"]}>
-                        <div className={style["action-button"]}>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              // handleCheckStar(feed.fid, e);
-                            }}
-                          >
-                            <img src={star} alt="star-icon" />
-                          </button>
-                          <span></span>
-                        </div>
+                  <div className={style["comment-content"]}>
+                    <span style={{ color: comment.mention ? "#2C59CD" : "black" }}>
+                      {firstWord}{" "}
+                    </span>
+                    {restWords.join("")}
+                  </div>
+                  <div className={style["action-container"]}>
+                    <div className={style["button-box1"]}>
+                      <div className={style["action-button"]}>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            // handleCheckStar(feed.fid, e);
+                          }}
+                        >
+                          <img src={star} alt="star-icon" />
+                        </button>
+                        <span></span>
                       </div>
                     </div>
                   </div>
                 </div>
-              );
-            })}
+              </div>
+            );
+          })}
         {comments.target_cid && <div>헤이</div>}
       </div>
       <div className={style["input-container"]}>
