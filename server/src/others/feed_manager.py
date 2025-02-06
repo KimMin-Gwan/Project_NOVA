@@ -1764,6 +1764,7 @@ class FeedManager:
 
 
     # 댓글 분류를 해주는 함수. 도저히 저 밑에서 하기힘들다고 생각했음. 그래서 따로 함수를 나눴어
+    # taregted는 타케팅 당한 쪽아니라 하는쪽임 따라서 사실은 [targeting]임 -> 읽을 때 유의할것
     def __classify_reply_comment(self, comments):
         no_targeted_comments = []       # target_cid가 없는 놈
         exist_targeted_comments = []    # target_cid가 있는 놈
@@ -1774,16 +1775,12 @@ class FeedManager:
             else:
                 no_targeted_comments.append(comment)
 
-        # pprint(exist_targeted_comments)
-        # pprint(no_targeted_comments)
-        #
-        # for no_targeted_comment in no_targeted_comments:
-        #     pprint(no_targeted_comment.get_dict_form_data())
-        #     pprint(no_targeted_comment.reply)
-        #
-        # for exist_targeted_comment in exist_targeted_comments:
-        #     pprint(exist_targeted_comment.get_dict_form_data())
-
+        # 1. 대댓글인 애들이랑 아닌 애들을 분리
+        # 2. 대댓글인 애들을 하나씩 뽑아서 목표 댓글 reply에 넣음 
+        # 2-1. (댓글을 하나씩 뽑아서 대댓글과 대조하는 것과 같은 시간 복잡도를 가짐)
+        # 3. 만약 이미 들어간 댓글이면 continue해야됨
+        # 4. reply에 넣을 땐, dict로 넣어야됨
+        
         for targeted_comment in exist_targeted_comments:
             for comment in no_targeted_comments:
                 if comment.cid == targeted_comment.target_cid:
@@ -1838,7 +1835,7 @@ class FeedManager:
 
         # 이거 바꿔야함.
         # return classified_comments
-        return comments
+        return classified_comments
 
 
     # 내가 작성한 댓글 전부 불러오기
