@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import style from "./FeedDetail.module.css";
 import { useRef } from "react";
 
+import more_icon from "./../../img/more_icon.svg";
 import back from "./../../img/backword.png";
 import star from "./../../img/favorite.png";
 import axios from "axios";
@@ -180,15 +181,13 @@ export default function FeedDetail({ feed }) {
           <span>뒤로</span>
         </button>
         {feedData.is_owner && (
-          <button className={style["back-button"]}>
-            <img src={back} />
-            <span
-              onClick={() => {
-                fetchRemoveFeed();
-              }}
-            >
-              삭제(더보기버튼예정)
-            </span>
+          <button
+            className={style["delete-button"]}
+            onClick={() => {
+              fetchRemoveFeed();
+            }}
+          >
+            <img src={more_icon} />
           </button>
         )}
       </div>

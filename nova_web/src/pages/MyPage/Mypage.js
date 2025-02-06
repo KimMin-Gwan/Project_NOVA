@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import style from "./Mypage.module.css";
-import backword from "./../../img/mypage_more.png";
+import mypage_more_icon from "./../../img/mypage_more.png";
 import mainApi from "../../services/apis/mainApi";
 import Feed from "../../component/feed";
 
@@ -90,13 +90,16 @@ function MyPage() {
       </div>
       <div className={style["user-container"]}>
         <div className={style["user-img"]}>
-          <img src={`https://kr.object.ncloudstorage.com/nova-user-profile/${myData?.uid}.png`} alt="img" />
+          <img
+            src={`https://kr.object.ncloudstorage.com/nova-user-profile/${myData?.uid}.png`}
+            alt="img"
+          />
         </div>
         <div>
           <section className={style["user-name"]}>
             <h3>{myData.uname}</h3>
             <img
-              src={backword}
+              src={mypage_more_icon}
               alt=""
               onClick={(e) => handleMovePage(e, "/mypage_edit")} // 클릭 시 /yourPage로 이동
               style={{ cursor: "pointer" }}
