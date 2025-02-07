@@ -30,7 +30,7 @@ export default function AllPost({ brightMode, allFeed }) {
                       src={
                         feed.feed.image.length > 0
                           ? feed.feed.image[0]
-                          : "https://kr.object.ncloudstorage.com/nova-feed-images/nova-platform.PNG"
+                          : "https://kr.object.ncloudstorage.com/nova-feed-images/nova-platform.png"
                       }
                       alt="이미지"
                     />

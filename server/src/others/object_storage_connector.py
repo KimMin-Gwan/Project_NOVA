@@ -157,7 +157,7 @@ class HTMLEXtractor:
             headers = {
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"
             }
-            response = requests.get(url, headers=headers)
+            response = requests.get(url, headers=headers, timeout=10)
             response.raise_for_status()
 
             soup = BeautifulSoup(response.text, 'html.parser')
@@ -193,14 +193,33 @@ class HTMLEXtractor:
     
     # 외부에서 사이트에서 title 데이터 추출하는 함수
     def extract_external_webpage_title_tag(self, url):
-        # URL에서 HTML 가져오기
-        response = requests.get(url)
+        title = "주소 제목"
+        
+        # URL이 비어있거나 None인지 확인
+        if not url:
+            raise ValueError("URL is empty or invalid")
+    
+        # URL 유효성 검증
+        if not self.__is_valid_url(url):
+            raise ValueError(f"Invalid URL provided: {url}")
+    
+        # 스키마가 없는 경우 http:// 추가
+        parsed_url = urlparse(url)
+        if not parsed_url.scheme:
+            url = f"http://{url}"
+        
+        
+        try:
+            # URL에서 HTML 가져오기
+            response = requests.get(url, timeout=10)
 
-        # BeautifulSoup 객체 생성
-        soup = BeautifulSoup(response.text, 'html.parser')
+            # BeautifulSoup 객체 생성
+            soup = BeautifulSoup(response.text, 'html.parser')
 
-        # <title> 태그 내용 추출
-        title = soup.title.string if soup.title else "Page Title"
+            # <title> 태그 내용 추출
+            title = soup.title.string if soup.title else "Page Title"
+        except requests.exceptions.RequestException as e:
+            return f"Error fetching URL : {e}"
         
         return title
     
@@ -215,3 +234,12 @@ class HTMLEXtractor:
             return domain
         
         return ""
+    
+    # url 정규식 검사
+    def __is_valid_url(self, url) -> bool:
+        try:
+            result = urlparse(url)
+            # 스키마(http, https)와 네트워크 위치(netloc) 확인
+            return all([result.scheme, result.netloc])
+        except ValueError:
+            return False

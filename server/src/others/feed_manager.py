@@ -1128,7 +1128,7 @@ class ImageDescriper():
                                  aws_access_key_id=self.__access_key,
                                  aws_secret_access_key=self.__secret_key)
         self.__bucket_name = "nova-feed-images"
-        self.__default_image = "https://kr.object.ncloudstorage.com/nova-feed-images/nova-platform.PNG"
+        self.__default_image = "https://kr.object.ncloudstorage.com/nova-feed-images/nova-platform.png"
 
     def __set_images_to_byte(self, images: list):
         pil_images = []
