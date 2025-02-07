@@ -539,7 +539,7 @@ export function ContentFeed({
     window.open(url, "_blank", "noopener, noreferrer");
   }
 
-  if (!feed || isLoading || !links) {
+  if (!feed || isLoading) {
     return <div>loading 중</div>;
   }
 
