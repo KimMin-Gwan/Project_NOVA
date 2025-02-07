@@ -298,6 +298,8 @@ class FeedEditModel(BaseModel):
     def set_feed_link(self, data_payload):
         feed_links = []
         for link_data in data_payload.link:
+            if link_data.url == '':
+                continue
             feed_link = FeedLink(url=link_data['url'], explain=link_data['explain'])
             feed_links.append(feed_link)
         

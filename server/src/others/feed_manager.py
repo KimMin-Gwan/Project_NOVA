@@ -1305,7 +1305,7 @@ class FeedManager:
             lid = self.__make_new_iid()
             feed_link.lid = lid
             feed_link.fid = fid
-            feed_link.domain = self.__extract_link_domain_string(url=feed_link.url)
+            feed_link.domain = HTMLEXtractor().extract_link_domain_string(url=feed_link.url)
             feed_link.title = HTMLEXtractor().extract_external_webpage_title_tag(url=feed_link.url)
             result_feed_links.append(feed_link.get_dict_form_data())
             lid_list.append(lid)
@@ -1315,18 +1315,6 @@ class FeedManager:
         
         return lid_list
     
-    # "https://chatgpt.com/c/67a4260b-1100-8013-916d-d0cb06b0a1e4" 이런 사이트에서 chatgpt.com 만 긁어오는 함수
-    def __extract_link_domain_string(self, url):
-
-        # 정규 표현식으로 도메인 추출
-        #url.split("//")[-1].split("/")[0] #안되면 이걸 쓰면된대
-        match = re.search(r"https?://([^/]+)", url)
-        
-        if match:
-            domain = match.group(1)
-            return domain
-        
-        return ""
     
 
     # 새로운 피드의 데이터를 추가하여 반환

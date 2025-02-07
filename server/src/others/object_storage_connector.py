@@ -9,7 +9,6 @@ from io import BytesIO
 
 import re
 import requests
-from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 
 
@@ -205,4 +204,14 @@ class HTMLEXtractor:
         
         return title
     
-    
+    # "https://chatgpt.com/c/67a4260b-1100-8013-916d-d0cb06b0a1e4" 이런 사이트에서 chatgpt.com 만 긁어오는 함수
+    def extract_link_domain_string(self, url):
+        # 정규 표현식으로 도메인 추출
+        #url.split("//")[-1].split("/")[0] #안되면 이걸 쓰면된대
+        match = re.search(r"https?://([^/]+)", url)
+        
+        if match:
+            domain = match.group(1)
+            return domain
+        
+        return ""
