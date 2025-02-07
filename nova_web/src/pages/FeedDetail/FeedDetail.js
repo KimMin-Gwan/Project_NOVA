@@ -35,6 +35,8 @@ export default function FeedDetail({}) {
     }
   }, [isLoading]);
 
+  const [links, setLinks] = useState([]);
+
   async function fetchFeed() {
     await fetch(`https://nova-platform.kr/feed_explore/feed_detail/feed_data?fid=${fid}`, {
       credentials: "include",
@@ -44,6 +46,7 @@ export default function FeedDetail({}) {
         console.log("detail", data);
         setInteraction(data.body.interaction);
         setFeedData(data.body.feed[0]);
+        setLinks(data.body.links);
         setIsLoading(false);
       });
   }
@@ -209,6 +212,7 @@ export default function FeedDetail({}) {
           interaction={interaction}
           handleInteraction={handleInteraction}
           handleCheckStar={handleCheckStar}
+          links={links}
         />
       </div>
 
