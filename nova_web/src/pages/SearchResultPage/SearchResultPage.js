@@ -1,6 +1,6 @@
 import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import SearchBox from "../../component/SearchBox";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import back from "./../../img/backword.png";
 import logo2 from "../../img/logo2.png";
 import "./index.css";
@@ -11,6 +11,8 @@ import Feed from "../../component/feed";
 
 export default function SearchResultPage() {
   // let params = useParams();
+  const target = useRef(null);
+
   let [searchParams] = useSearchParams();
   let keyword = searchParams.get("keyword");
   // let keyword = params.keyword;
@@ -90,6 +92,27 @@ export default function SearchResultPage() {
     fetchSearchKeyword();
   }, []);
 
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        if (isLoading) return;
+
+        fetchSearchKeyword();
+      });
+    });
+
+    if (target.current) {
+      observer.observe(target.current);
+    }
+
+    return () => {
+      if (target.current) {
+        observer.unobserve(target.current);
+      }
+    };
+  }, [nextKey]);
+
   if (isLoading) {
     return <div>loading...</div>;
   }
@@ -140,6 +163,7 @@ export default function SearchResultPage() {
       {feedData.map((feed, i) => {
         return <Feed key={feed.feed.fid} feed={feed.feed} />;
       })}
+      <div ref={target} style={{ height: "1px" }}></div>
     </div>
   );
 }
