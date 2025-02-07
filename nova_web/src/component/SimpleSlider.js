@@ -64,7 +64,7 @@ const SimpleSlider = ({ feedData, brightMode, type, className }) => {
                           src={
                             feed.feed.image.length > 0
                               ? feed.feed.image[0]
-                              : "https://kr.object.ncloudstorage.com/nova-feed-images/nova-platform.PNG"
+                              : "https://kr.object.ncloudstorage.com/nova-feed-images/nova-platform.png"
                           }
                           alt="이미지"
                         />
