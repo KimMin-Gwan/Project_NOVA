@@ -64,8 +64,10 @@ export default function SearchResultPage() {
   function onClickSearch(history) {
     if (history) {
       navigate(`/search_result?keyword=${history}`);
-    } else {
+    } else if (searchWord) {
       navigate(`/search_result?keyword=${searchWord}`);
+    } else {
+      alert("검색어를 입력해주세요.");
     }
   }
 
