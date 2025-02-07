@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import style from "./Mypage.module.css";
 import mypage_more_icon from "./../../img/mypage_more.png";
 import user_icon from "./../../img/user.svg";
@@ -22,12 +22,15 @@ const categoryData = [
   { category: "댓글" },
 ];
 function MyPage() {
+  const target = useRef(null);
+  const observerRef = useRef(null);
   let navigate = useNavigate();
 
   let [isLoading, setIsLoading] = useState(true);
   let [myData, setMyData] = useState();
   let [myFeed, setMyFeed] = useState([]);
   const [nextKey, setNextKey] = useState(-1);
+  const [nowCategory, setNowCategory] = useState(categoryData[0].type);
 
   async function fetchMyPage() {
     await mainApi.get("user_home/get_my_page_data").then((res) => {
@@ -44,15 +47,36 @@ function MyPage() {
   async function fetchMyFeed(category) {
     await mainApi.get(`user_home/get_my_feed?type=${category}&key=${nextKey}`).then((res) => {
       console.log("feeed", res.data);
-      setMyFeed(res.data.body.feed);
+      setMyFeed((prevData) => [...prevData, ...res.data.body.feed]);
       setNextKey(res.data.body.key);
       setIsLoading(false);
     });
   }
 
   useEffect(() => {
-    fetchMyFeed();
+    fetchMyFeed(nowCategory);
   }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        if (isLoading) return;
+
+        fetchMyFeed(nowCategory);
+      });
+    });
+
+    if (target.current) {
+      observer.observe(target.current);
+    }
+
+    return () => {
+      if (target.current) {
+        observer.unobserve(target.current);
+      }
+    };
+  }, [nowCategory, nextKey]);
 
   function handleMovePage(e, page) {
     e.preventDefault();
@@ -61,7 +85,13 @@ function MyPage() {
 
   const [activeIndex, setActiveIndex] = useState(0);
 
-  const handleClick = (index) => {
+  useEffect(() => {
+    setMyFeed([]);
+    setNextKey(-1);
+  }, [nowCategory]);
+
+  const handleClick = (index, type) => {
+    setNextKey(-1);
     setActiveIndex(index);
   };
 
@@ -125,8 +155,8 @@ function MyPage() {
                   key={index}
                   className={`${style.post} ${activeIndex === index ? style.active : ""}`}
                   onClick={() => {
-                    fetchMyFeed(item.type);
-                    handleClick(index);
+                    setNowCategory(item.type);
+                    handleClick(index, item.type);
                   }}
                 >
                   <button>{item.category}</button>
@@ -138,6 +168,7 @@ function MyPage() {
           {myFeed.map((feed, i) => {
             return <Feed key={i} feed={feed} />;
           })}
+          <div ref={target} style={{ height: "1px" }}></div>
         </div>
       </div>
     </div>
