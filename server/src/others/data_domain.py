@@ -363,7 +363,7 @@ class FeedLink(SampleDomain):
     def make_with_dict(self, dict_data):
         try:
             self.lid = dict_data['lid']
-            self.lname = dict_data['explain']
+            self.explain= dict_data['explain']
             self.url = dict_data['url']
             self.domain = dict_data['domain']
             self.title= dict_data['title']
@@ -371,12 +371,10 @@ class FeedLink(SampleDomain):
         except Exception as e:
             raise DictMakingError(error_type=e)
 
-    # 여기 오류가 생겼던 일이 있음 (lname  이 없다느 ㄴ무슨개소리냐 377)
-
     def get_dict_form_data(self):
         return {
             "lid": self.lid,
-            "explain": self.lname,
+            "explain": self.explain,
             "url": self.url,
             "domain" : self.domain,
             "title" : self.title,
