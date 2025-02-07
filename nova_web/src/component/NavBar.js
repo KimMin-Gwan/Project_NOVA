@@ -49,7 +49,7 @@ const NavBar = ({ isUserState, brightMode }) => {
           }}
         >
           <img src={menu3} alt="make" className="btn_img" />
-          <p className="btn_text">최애 주제 게시판</p>
+          <p className="btn_text">최애 게시판</p>
         </button>
       </div>
 
