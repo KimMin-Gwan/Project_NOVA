@@ -6,29 +6,28 @@ import pprint
 #PORT = 80
 HOST = '175.106.99.34'
 PORT = 6000
-token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJhbmRvbVVzZXIxQG5hdmVyLmNvbSIsImlhdCI6MTcyNTU1OTA5OS41MTEyNSwiZXhwIjoxNzI1NTY5ODk5LjUxMTI1LCJyZWZyZXNoX2V4cCI6MTcyNjE2Mzg5OS41MTEyNX0.XY4B-g1KczDowBGuK_fd0a-6lMXlX8o05UHd0Kw4xJc"
 
  #요청을 보낼 URL
  #get
-url = "https://nova-platform.kr/nova_fund_system/home/best_funding_section"  # 최애 페이지 기여도  랭킹 순위
+url = "https://nova-platform.kr/nova_sub_system/image_tag"  # 이미지 태그?
 
 
 
 
-#GET 요청 보내기
-response = requests.get(url)
+##GET 요청 보내기
+#response = requests.get(url)
 
-# # 상태 코드 확인
-print(f"Status Code: {response.status_code}")
+## # 상태 코드 확인
+#print(f"Status Code: {response.status_code}")
 
- # 응답 데이터 (JSON) 출력
-if response.status_code == 200:
-    result = response.json()
-    #result = response.text
-    pprint.pprint(result)
-else:
-     print("Failed to retrieve data")
-exit()
+ ## 응답 데이터 (JSON) 출력
+#if response.status_code == 200:
+    #result = response.json()
+    ##result = response.text
+    #pprint.pprint(result)
+#else:
+     #print("Failed to retrieve data")
+#exit()
 
 
 # make_jwt.py 실행시켜서 token 발급 받을 것
@@ -55,8 +54,7 @@ header = {
 send_data = {
     "header" : header,
     "body" : {
-        'token' : token,
-        'type' : "solo"
+        'url' : "https://smartstore.naver.com/kuksosu/products/9795815241?NaPm=ci%3D26KXiANZdyRJqg5J9SUvpFIg%7Ctr%3Dgfa%7Cct%3Dm6sztdcc%7Chk%3Dc70e722bcc94efb1bb0248f1d66c8584eaac8d3c%7Cnacn%3DC4a4BcQbqfpxA"
     }
 }
 
