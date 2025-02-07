@@ -496,7 +496,6 @@ export function ContentFeed({
   links,
 }) {
   let navigate = useNavigate();
-  const [urlImage, setUrlImage] = useState("");
   let header = {
     "request-type": "default",
     "client-version": "v1.0.1",
@@ -513,24 +512,27 @@ export function ContentFeed({
   // let linksUrl = links.map((item) => item.url);
 
   async function fetchImageTag() {
-    for (const item of links)
-      await postApi
-        .post("nova_sub_system/image_tag", {
-          header: header,
-          body: {
-            url: item.url,
-          },
-        })
-        .then((res) => {
-          console.log("rrr", res.data);
-          setLinkImage((prev) => [...prev, res.data.body.image]);
-        });
-
-    setIsLoading(false);
+    if (links && links.length > 0) {
+      for (const item of links)
+        await postApi
+          .post("nova_sub_system/image_tag", {
+            header: header,
+            body: {
+              url: item.url,
+            },
+          })
+          .then((res) => {
+            console.log("rrr", res.data);
+            setLinkImage((prev) => [...prev, res.data.body.image]);
+          });
+      setIsLoading(false);
+    }
   }
 
   useEffect(() => {
     fetchImageTag();
+
+    setIsLoading(false);
   }, []);
 
   function onClickLink(url) {
@@ -582,34 +584,35 @@ export function ContentFeed({
         {feed.fclass === "long" && <Viewer initialValue={feed.raw_body} />}
       </div>
 
-      {links.map((link, i) => {
-        return (
-          <div key={link.lid} className={style["Link_Container"]}>
-            <div
-              className={style["Link_box"]}
-              onClick={() => {
-                onClickLink(link.url);
-              }}
-            >
-              <div className={style["Link_thumbnail"]}>
-                <img src={isLoading || linkImage[i]} alt="thumbnail" />
+      {links &&
+        links.map((link, i) => {
+          return (
+            <div key={link.lid} className={style["Link_Container"]}>
+              <div
+                className={style["Link_box"]}
+                onClick={() => {
+                  onClickLink(link.url);
+                }}
+              >
+                <div className={style["Link_thumbnail"]}>
+                  <img src={isLoading || linkImage[i]} alt="thumbnail" />
+                </div>
+
+                <div className={style["Link_info"]}>
+                  <div className={style["Link_title"]}>{link.title}</div>
+                  <div className={style["Link_domain"]}>{link.domain}</div>
+                </div>
               </div>
 
-              <div className={style["Link_info"]}>
-                <div className={style["Link_title"]}>{link.title}</div>
-                <div className={style["Link_domain"]}>{link.domain}</div>
+              <div className={style["Link_explain"]}>
+                <span>
+                  <img src={link_pin_icon} alt="pin" />
+                </span>
+                <span>{link.explain}</span>
               </div>
             </div>
-
-            <div className={style["Link_explain"]}>
-              <span>
-                <img src={link_pin_icon} alt="pin" />
-              </span>
-              <span>{link.explain}</span>
-            </div>
-          </div>
-        );
-      })}
+          );
+        })}
 
       <div className={style["button-container"]}>
         <div>신고</div>
