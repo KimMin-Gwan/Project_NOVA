@@ -95,6 +95,11 @@ function MyPage() {
     setActiveIndex(index);
   };
 
+  const [isClickedComment, setIsClickedComment] = useState(false);
+  function onClickComment() {
+    setIsClickedComment(!isClickedComment);
+  }
+
   if (isLoading) {
     return <div>loading...</div>;
   }
@@ -144,7 +149,7 @@ function MyPage() {
               </li>
               <li>
                 <b>{myData.num_comment}</b>
-                <p>댓글</p>
+                <p onClick={onClickComment}>댓글</p>
               </li>
             </ul>
           </section>
@@ -165,6 +170,16 @@ function MyPage() {
             </ul>
           </section>
 
+          {isClickedComment && (
+            <div className={style["MyPage_Comment_Box"]}>
+              <div className={style["Feed_title"]}>
+                <div>화살표</div>
+                <div>이 예시문은 어쩌구 저쩌구</div>
+              </div>
+
+              <div className={style["Comment_content"]}>댓그 ㄹ내용</div>
+            </div>
+          )}
           {myFeed.map((feed, i) => {
             return <Feed key={i} feed={feed} />;
           })}

@@ -80,6 +80,7 @@
 }
 
 .searched-tag {
+  cursor: pointer;
   background-color: #ffffff;
   min-width: 85px;
 }
@@ -102,6 +103,17 @@
     &::before {
       content: counter(list);
       margin-right: 15px;
+    }
+
+    &:nth-child(1)::before,
+    &:nth-child(2)::before,
+    &:nth-child(3)::before {
+      color: #fd3d24;
+    }
+
+    &:nth-child(9)::before,
+    &:nth-child(10)::before {
+      color: #1085f4;
     }
   }
 }
