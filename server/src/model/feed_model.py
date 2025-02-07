@@ -38,7 +38,7 @@ class FeedModel(BaseModel):
                 self._set_feed_interactied(self._user, interaction=self._interaction)
                 
             if feed.lid:
-                feed_link_datas = self._database.get_datas_with_ids(target_ids="lid", ids=feed.lid)
+                feed_link_datas = self._database.get_datas_with_ids(target_id="lid", ids=feed.lid)
                 
                 for feed_link_data in feed_link_datas:
                     feed_link = FeedLink()
