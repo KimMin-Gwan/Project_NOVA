@@ -371,6 +371,8 @@ class FeedLink(SampleDomain):
         except Exception as e:
             raise DictMakingError(error_type=e)
 
+    # 여기 오류가 생겼던 일이 있음 (lname  이 없다느 ㄴ무슨개소리냐 377)
+
     def get_dict_form_data(self):
         return {
             "lid": self.lid,
