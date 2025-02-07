@@ -254,7 +254,7 @@ function App() {
                 <FeedThumbnail
                   title={
                     <>
-                      오늘의 베스트 <span className="title-color">피드</span>
+                      오늘의 베스트 <span className="title-color">게시글</span>
                     </>
                   }
                   img_src={best}
@@ -275,7 +275,7 @@ function App() {
                 />
 
                 <FeedThumbnail
-                  title={"전체 글"}
+                  title={"전체 게시글"}
                   img_src={all_post}
                   feedData={allFeed}
                   brightMode={brightMode}
