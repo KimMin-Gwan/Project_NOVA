@@ -512,25 +512,25 @@ export function ContentFeed({
   // let linksUrl = links.map((item) => item.url);
 
   async function fetchImageTag() {
-    if (links && links.length > 0) {
-      for (const item of links)
-        await postApi
-          .post("nova_sub_system/image_tag", {
-            header: header,
-            body: {
-              url: item.url,
-            },
-          })
-          .then((res) => {
-            console.log("rrr", res.data);
-            setLinkImage((prev) => [...prev, res.data.body.image]);
-          });
-      setIsLoading(false);
-    }
+    for (const item of links)
+      await postApi
+        .post("nova_sub_system/image_tag", {
+          header: header,
+          body: {
+            url: item.url,
+          },
+        })
+        .then((res) => {
+          console.log("rrr", res.data);
+          setLinkImage((prev) => [...prev, res.data.body.image]);
+        });
+    setIsLoading(false);
   }
 
   useEffect(() => {
-    fetchImageTag();
+    if (links) {
+      fetchImageTag();
+    }
 
     setIsLoading(false);
   }, []);
@@ -539,7 +539,7 @@ export function ContentFeed({
     window.open(url, "_blank", "noopener, noreferrer");
   }
 
-  if (!feed || isLoading) {
+  if (!feed || isLoading || !links) {
     return <div>loading 중</div>;
   }
 
@@ -595,7 +595,7 @@ export function ContentFeed({
                 }}
               >
                 <div className={style["Link_thumbnail"]}>
-                  <img src={isLoading || linkImage[i]} alt="thumbnail" />
+                  <img src={linkImage[i]} alt="thumbnail" />
                 </div>
 
                 <div className={style["Link_info"]}>
