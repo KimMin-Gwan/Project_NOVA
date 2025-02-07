@@ -44,12 +44,12 @@ const NavBar = ({ isUserState, brightMode }) => {
         <button
           className="nav_button"
           onClick={(e) => {
-            handleNavigate("/feed_list?type=all");
+            handleNavigate("/feed_list?type=bias");
             handleStopClick(e);
           }}
         >
           <img src={menu3} alt="make" className="btn_img" />
-          <p className="btn_text">넘기는 형태</p>
+          <p className="btn_text">최애 주제 게시판</p>
         </button>
       </div>
 
@@ -94,12 +94,12 @@ const NavBar = ({ isUserState, brightMode }) => {
         <button
           className="nav_button"
           onClick={(e) => {
-            handleNavigate("/nova_funding");
+            handleNavigate("/search");
             handleStopClick(e);
           }}
         >
           <img src={search} alt="make" className="btn_img" />
-          <p className="btn_text">펀딩</p>
+          <p className="btn_text">검색</p>
         </button>
       </div>
 

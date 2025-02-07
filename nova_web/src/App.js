@@ -275,7 +275,7 @@ function App() {
                 />
 
                 <FeedThumbnail
-                  title={"전체 게시글"}
+                  title={"모든 게시글"}
                   img_src={all_post}
                   feedData={allFeed}
                   brightMode={brightMode}
