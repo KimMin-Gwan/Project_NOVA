@@ -933,14 +933,14 @@ class DeleteFeedRequest(RequestHeader):
 class EditFeedRequest(RequestHeader):
     def __init__(self, request, image_names, images) -> None:
         super().__init__(request)
-        body = request['body']
+        body:dict = request['body']
         self.fid = body['fid']
         self.body = body['body']
         self.fclass = body['fclass']
         self.choice= body['choice']
         self.hashtag = body['hashtag']
         self.link:list = body['link']
-        self.bid = body['bid']
+        self.bid = body.get("bid", "")
         self.image_names = image_names
         self.images = images
         
