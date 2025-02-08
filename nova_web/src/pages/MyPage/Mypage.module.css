@@ -159,16 +159,16 @@
   }
 
   .post-list[data-active-index="0"]::after {
-    left: 9%;
+    left: 45px;
   }
   .post-list[data-active-index="1"]::after {
-    left: 25%;
+    left: 125px;
   }
   .post-list[data-active-index="2"]::after {
-    left: 41%;
+    left: 207px;
   }
   .post-list[data-active-index="3"]::after {
-    left: 56%;
+    left: 280px;
   }
 }
 
