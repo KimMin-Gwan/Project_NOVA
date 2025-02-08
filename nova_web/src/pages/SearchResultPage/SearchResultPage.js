@@ -1,7 +1,7 @@
 import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import SearchBox from "../../component/SearchBox";
 import { useEffect, useRef, useState } from "react";
-import back from "./../../img/backword.png";
+import back from "./../../img/search_back.png";
 import logo2 from "../../img/logo2.png";
 import "./index.css";
 import style from "./../MyPage/Mypage.module.css";
@@ -40,7 +40,7 @@ export default function SearchResultPage() {
     navigate(page);
   }
 
-  const [activeIndex, setActiveIndex] = useState(null);
+  const [activeIndex, setActiveIndex] = useState(0);
   let [nextKey, setNextKey] = useState(-1);
 
   const handleClick = (index) => {
@@ -75,12 +75,9 @@ export default function SearchResultPage() {
 
   function fetchSearchKeyword() {
     axios
-      .get(
-        `https://nova-platform.kr/feed_explore/search_feed_with_keyword?keyword=${keyword}&key=${nextKey}`,
-        {
-          withCredentials: true,
-        }
-      )
+      .get(`https://nova-platform.kr/feed_explore/search_feed_with_keyword?keyword=${keyword}&key=${nextKey}`, {
+        withCredentials: true,
+      })
       .then((res) => {
         setFeedData((prev) => {
           return [...prev, ...res.data.body.send_data];
@@ -150,13 +147,9 @@ export default function SearchResultPage() {
         />
       </div>
       <section className={style["info-list"]}>
-        <ul className={style["post-list"]}>
+        <ul className={style["post-list"]} data-active-index={activeIndex}>
           {["포스트", "모멘트", "좋아요", "댓글"].map((post, index) => (
-            <li
-              key={index}
-              className={`${style.post} ${activeIndex === index ? style.active : ""}`}
-              onClick={() => handleClick(index)}
-            >
+            <li key={index} className={`${style.post} ${activeIndex === index ? style.active : ""}`} onClick={() => handleClick(index)}>
               <p>{post}</p>
             </li>
           ))}
