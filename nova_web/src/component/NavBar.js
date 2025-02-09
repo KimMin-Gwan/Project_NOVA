@@ -10,9 +10,9 @@ import moment from "./../img/moment_img.png";
 import post from "./../img/post_img.png";
 
 import home_icon from "./../img/home_icon.png";
-import menu3 from "./../img/menu3.png";
-import feed_write from "./../img/feed_write.png";
-import search from "./../img/search.png";
+import menu3 from "./../img/fav_nav.png";
+import feed_write from "./../img/feed_nav.png";
+import search from "./../img/search_nav.png";
 import { getModeClass } from "./../App.js";
 
 const NavBar = ({ isUserState, brightMode }) => {
@@ -55,7 +55,7 @@ const NavBar = ({ isUserState, brightMode }) => {
 
       <div className="nav_button_box write_button_hover">
         {writeOptions && (
-          <div className="write_select">
+          <div className={`write_select ${writeOptions ? "active" : ""}`}>
             <div
               onClick={() => {
                 handleNavigate("/write_feed/short");
@@ -78,6 +78,7 @@ const NavBar = ({ isUserState, brightMode }) => {
             </div>
           </div>
         )}
+
         <button
           className="nav_button"
           onClick={(e) => {

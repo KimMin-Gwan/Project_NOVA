@@ -9,8 +9,7 @@ body {
 
 @font-face {
   font-family: "Pretendard-Regular";
-  src: url("https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff")
-    format("woff");
+  src: url("https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff") format("woff");
   /* font-weight: 400; */
   /* font-style: normal; */
 }
@@ -1058,9 +1057,9 @@ body.dark-mode {
 }
 
 .btn_text {
-  margin-top: 5px;
+  margin-block: 5px;
   /* 아이콘과 텍스트 사이 간격 */
-  font-size: 10px;
+  font-size: 12px;
   /* 텍스트 크기 */
   color: #666;
   /* 텍스트 색상 */
@@ -1068,12 +1067,14 @@ body.dark-mode {
   /* 텍스트가 한 줄로 유지되도록 */
   text-align: center;
   width: 100%;
+  display: flex;
+  justify-content: center;
   /* background-color: blue; */
   /* 텍스트가 들어갈 공간 확보 */
 }
 
 .btn_img {
-  width: 50%;
+  width: 60%;
   /* 이미지가 버튼 크기에 맞춰지도록 */
   height: auto;
   /* 비율을 유지하며 크기 조정 */
@@ -1146,19 +1147,22 @@ body.dark-mode {
 }
 
 .write_select {
+  color: #333333;
+  font-size: 12px;
   position: absolute;
   /* width: 100px; */
   /* padding: 10px; */
-  height: 100px;
-  background-color: white;
+  height: 60px;
+  background-color: #d2e3fb;
   bottom: 70px;
   display: flex;
   gap: 10px;
   border-radius: 5px;
-  padding: 5px 5px 10px;
+  padding: 2px 2px 10px;
   align-items: flex-start;
   justify-content: space-evenly;
-  clip-path: polygon(0% 0%, 100% 0%, 100% 60%, 65% 60%, 50% 100%, 35% 60%, 0 60%);
+  clip-path: polygon(0% 0%, 100% 0%, 100% 80%, 60% 80%, 50% 100%, 40% 80%, 0 80%);
+
   div {
     height: 50px;
     width: 50px;
