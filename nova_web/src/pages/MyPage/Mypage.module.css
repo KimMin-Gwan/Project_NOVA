@@ -172,6 +172,28 @@
   }
 }
 
+.search-nav-bar {
+  .post-list {
+    &::after {
+      bottom: 12px;
+      width: 18px;
+    }
+  }
+
+  .post-list[data-active-index="0"]::after {
+    left: 45px;
+  }
+  .post-list[data-active-index="1"]::after {
+    left: 125px;
+  }
+  .post-list[data-active-index="2"]::after {
+    left: 203px;
+  }
+  .post-list[data-active-index="3"]::after {
+    left: 273px;
+  }
+}
+
 /* 프로필 편집 */
 .edit-container {
   background-color: #fff;

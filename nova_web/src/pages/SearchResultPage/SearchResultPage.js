@@ -3,7 +3,7 @@ import SearchBox from "../../component/SearchBox";
 import { useEffect, useRef, useState } from "react";
 import back from "./../../img/search_back.png";
 import logo2 from "../../img/logo2.png";
-import "./index.css";
+import style2 from "./index.css";
 import style from "./../MyPage/Mypage.module.css";
 import axios from "axios";
 import FeedList from "../FeedList/FeedList";
@@ -146,7 +146,7 @@ export default function SearchResultPage() {
           onKeyDown={onKeyDown}
         />
       </div>
-      <section className={style["info-list"]}>
+      <section className={`${style["info-list"]} ${style["search-nav-bar"]}`}>
         <ul className={style["post-list"]} data-active-index={activeIndex}>
           {["포스트", "모멘트", "좋아요", "댓글"].map((post, index) => (
             <li key={index} className={`${style.post} ${activeIndex === index ? style.active : ""}`} onClick={() => handleClick(index)}>
