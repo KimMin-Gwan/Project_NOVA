@@ -92,9 +92,9 @@ hr {
   }
 }
 .list-bar {
-  background-color: #f2f2f2;
+  background-color: #f1f7ff;
   font-size: 13px;
-  color: #989898;
+  color: #626262;
   padding: 10px;
   padding-left: 20px;
   margin-bottom: 15px;
@@ -138,7 +138,7 @@ hr {
   font-size: 12px;
   text-align: center; /* 텍스트 가운데 정렬 */
   font-weight: 530;
-  border: 1.5px solid #cccfff;
+  border: 1.5px solid #107bf4;
   border-radius: 5px;
   padding: 5px 30px;
   box-sizing: border-box;
@@ -225,6 +225,42 @@ hr {
 .nova_project_container {
   display: flex; /* 플렉스 컨테이너 설정 */
   align-items: center; /* 세로 중앙 정렬 */
+}
+
+.service-container {
+  border: 1px solid #f2f2f2;
+  margin-inline: 21px;
+  padding: 14px;
+
+  & h3 {
+    margin: 0;
+    font-weight: 300;
+    font-size: 15px;
+    color: #626262;
+  }
+
+  .button-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 21px;
+
+    & button {
+      border: 0;
+      background-color: transparent;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      color: #1c1c1c;
+      font-size: 13px;
+
+      & img {
+        width: 24px;
+        height: 24px;
+        margin-inline: 11px 24px;
+      }
+    }
+  }
 }
 
 /* 더보기만 반대로 다크 모드로 설정 */
