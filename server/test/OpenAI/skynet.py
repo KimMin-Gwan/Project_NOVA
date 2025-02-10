@@ -61,15 +61,16 @@ def finder(context):
 def pre_v1(원본, 이거이름뭘로할까):
     #나중에 db로 뺴야됨
     words = {'q':'ㅂ','w':'ㅈ','e':'ㄷ','r':'ㄱ','t':'ㅅ','y':'ㅛ','u':'ㅕ','i':'ㅑ','o':'ㅐ','p':'ㅔ','a':'ㅁ','s':'ㄴ','d':'ㅇ','f':'ㄹ','g':'ㅎ','h':'ㅗ','j':'ㅓ','k':'ㅏ','l':'ㅣ','z':'ㅋ','x':'ㅌ','c':'ㅊ','v':'ㅍ','b':'ㅠ','n':'ㅜ','m':'ㅡ',
-        '멍한청인지공능': '멍청한인공지능'}
+        '멍한청인지공능': '멍청한인공지능', '스바' : '시발'}
     
     nouns = 이거이름뭘로할까
+    
     for word in nouns:
         if word in words:
-            result = 원본.replace(word, words[word])
+            원본 = 원본.replace(word, words[word])
 
-    print(result)
-    return result
+    print(원본)
+    return 원본
 
 #전처리 실행(인공지능의 힘을 쓰면)
 #단어 교환까지 gpt한테 다 맡기자
@@ -140,9 +141,9 @@ def rework(context):
         {"role": "user", "content": "title과 content 모두 변환합니다."},
         {"role": "user", "content": "강도는 비속어 또는 욕설이 포함된 경우 2, 비속어는 포함되나 않으나 욕설이 없이 작성된 경우 1, 비속어 또는 욕설이 사용되지 않고 작성 된 경우 0을 반환합니다"}, #작동이 애매함
         {"role": "user", "content": '고유명사는 변환하지 않습니다.'},
-        {"role": "user", "content": '둘 이상의 단어가 합쳐진 단어가 있습니다. 이는 고유명사가 아닙니다.'}, #이상한 단어 분리해서 알아보라고 해보려고 한건데 안되는듯
-        {"role": "user", "content": '둘 이상의 단어가 합쳐진 단어는 해당 단어를 분해하여 어떤 단어가 사용됐는지 파악해 의미가 변하지 않도록 변환합니다.'},
-        {"role": "user", "content": '변환된 문장엔 일베용어가 사용되어선 안됩니다'}, #이거 정리해서 다 알려줘야 되나..?
+        # {"role": "user", "content": '둘 이상의 단어가 합쳐진 단어가 있습니다. 이는 고유명사가 아닙니다.'}, #이상한 단어 분리해서 알아보라고 해보려고 한건데 안되는듯
+        # {"role": "user", "content": '둘 이상의 단어가 합쳐진 단어는 해당 단어를 분해하여 어떤 단어가 사용됐는지 파악해 의미가 변하지 않도록 변환합니다.'},
+        # {"role": "user", "content": '변환된 문장엔 일베용어가 사용되어선 안됩니다'}, #이거 정리해서 다 알려줘야 되나..?
         {"role": "user", "content": "변환된 문장엔 공격적인 단어가 적게 포함되어야 합니다."},
 
         #답변 제공
@@ -262,32 +263,32 @@ trend_context = {
 
 #테스트용 실행
 
-# ### 전처리 v1 (단어 뽑아서 처리 후 변환)
-# finder_context = {
-#     #'title' : 'dkssudgktpdy hello',
-#     'content' : 'hello dkssud 안녕하세요 멍한청인지공능 푸하하'
-# }
-
-# #finder(context=finder_context)
-# 이름짓기귀찮은데아무튼찾아낸고유명사랑원본문장 = finder(context=finder_context)
-# content = pre_v1(원본 = 이름짓기귀찮은데아무튼찾아낸고유명사랑원본문장['context']['input'], 이거이름뭘로할까 = 이름짓기귀찮은데아무튼찾아낸고유명사랑원본문장['context']['words'])
-
-# reworkd_context = {
-#     'title' : '',
-#     'content' : f'{content}'
-# }
-# rework(context=reworkd_context)
-
-
-### 전처리 v2 (ai가 다 함)
+### 전처리 v1 (단어 뽑아서 처리 후 변환)
 finder_context = {
     #'title' : 'dkssudgktpdy hello',
-    'content' : 'hello dkssud 안녕하세요 멍한청인지공능 푸하하'
+    'content' : '포켓몬 스바 이 새끼 프레임방어되는거맞지?'
 }
-content = pre_v2(finder_context)
+
+#finder(context=finder_context)
+이름짓기귀찮은데아무튼찾아낸고유명사랑원본문장 = finder(context=finder_context)
+content = pre_v1(원본 = 이름짓기귀찮은데아무튼찾아낸고유명사랑원본문장['context']['input'], 이거이름뭘로할까 = 이름짓기귀찮은데아무튼찾아낸고유명사랑원본문장['context']['words'])
 
 reworkd_context = {
     'title' : '',
     'content' : f'{content}'
 }
 rework(context=reworkd_context)
+
+
+# ### 전처리 v2 (ai가 다 함)
+# finder_context = {
+#     #'title' : 'dkssudgktpdy hello',
+#     'content' : 'hello dkssud 안녕하세요 멍한청인지공능 푸하하'
+# }
+# content = pre_v2(finder_context)
+
+# reworkd_context = {
+#     'title' : '',
+#     'content' : f'{content}'
+# }
+# rework(context=reworkd_context)
