@@ -20,7 +20,8 @@ class Local_Database:
             'notice_file' : 'notice.json',
             'project_file' : 'project.json',
             'interaction_file' : 'interaction.json',
-            'feed_link_file' : 'feed_link.json'
+            'feed_link_file' : 'feed_link.json',
+            'report_file' : 'report.json'
         }
         self.__read_json()
 
@@ -35,11 +36,12 @@ class Local_Database:
         self.__project_data = []
         self.__interaction_data= []
         self.__feed_link_data = []
+        self.__report_data = []
 
 
         data_list = [self.__banner_data, self.__bias_data, self.__feed_data, self.__user_data,
                      self.__comment_data, self.__alert_data, self.__notice_data,
-                    self.__project_data, self.__interaction_data, self.__feed_link_data]
+                    self.__project_data, self.__interaction_data, self.__feed_link_data, self.__report_data]
 
         for file_name, list_data in zip(self.__data_files.values(), data_list):
             with open(self.__db_file_path+file_name, 'r',  encoding='utf-8' )as f:
@@ -111,6 +113,12 @@ class Local_Database:
     def __save_feed_link_json(self):
         file_name = self.__data_files['feed_link_file']
         self.__save_json(file_name, self.__feed_link_data)
+        return
+    
+    # 저장하기
+    def __save_report_json(self):
+        file_name = self.__data_files['report_file']
+        self.__save_json(file_name, self.__report_data)
         return
 
     # db.get_data_with_key(target="user", key="uname", key_data="minsu")
@@ -189,6 +197,8 @@ class Local_Database:
             return self.__interaction_data
         elif target == "lid" or target == "feed_link":
             return self.__feed_link_data
+        elif target == "rid" or target == "report":
+            return self.__report_data
         else:
             raise DatabaseLogicError("target id did not define")
         
@@ -261,6 +271,8 @@ class Local_Database:
             return self.__save_interaction_json
         elif target == "lid" or target == "feed_link":
             return self.__save_feed_link_json
+        elif target == "rid" or target == "report":
+            return self.__save_report_json
         else:
             raise DatabaseLogicError("target id did not define")
 

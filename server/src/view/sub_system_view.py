@@ -284,6 +284,24 @@ class Sub_Service_View(Master_View):
             body_data = model.get_response_form_data(self._head_parser)
             return body_data
 
+    def sub_service(self):
+        # 신고 기능
+        @self.__app.get('/nova_sub_system/try_report')
+        def try_report_post_or_comment(request:Request, raw_request:dict):
+            request_manager = RequestManager()
+            
+            data_payload = ReportRequest(request=raw_request)
+            
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+
+            sub_controller=Sub_Controller()
+            model = sub_controller.try_report_post_or_comment(database=self.__database,
+                                                              data_payload=data_payload)
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+        
+
     #def bias_page_route(self, endpoint:str):
         #@self.__app.get(endpoint+'/home')
         #def home():
@@ -370,6 +388,15 @@ class BiasSelectRequest(RequestHeader):
         super().__init__(request)
         body = request['body']
         self.bid = body['bid']
+        
+class ReportRequest(RequestHeader):
+    def __init__(self, request) -> None:
+        super().__init__(request)
+        body:dict = request['body']
+        self.type = body.get("type", "")
+        self.type = body.get("detail", "")
+        self.cid = body.get("cid", "")
+        self.fid = body.get("fid", "")
 
 class CommunitySideBoxRequest(RequestHeader):
     def __init__(self, bid) -> None:

@@ -508,7 +508,47 @@ class ManagedUser:
             "comment_key" : self.comment_key
         }
 
-# 유저 특화 시스템 구성을 위한 관리 유저
+class Report:
+    def __init__(self, rid="", type="", date="", cid="",
+                 detail = "", fid="", uid="",
+                 result=False, aid_date=""):
+        self.rid = rid 
+        self.type = type
+        self.date = date
+        self.cid = cid 
+        self.fid = fid
+        self.uid = uid
+        self.detail = detail
+        self.result = result
+        self.aid_date =aid_date
+
+    def make_with_dict(self, dict_data):
+        try:
+            self.rid = dict_data['rid']
+            self.type= dict_data['type']
+            self.date = dict_data['date']
+            self.cid = dict_data['cid']
+            self.fid = dict_data['fid']
+            self.uid = dict_data['uid']
+            self.detail = dict_data['detail']
+            self.result = dict_data['result']
+            self.aid_date = dict_data['aid_date']
+        except KeyError as e:
+            raise DictMakingError(error_type=f"Missing key: {str(e)}")
+
+    def get_dict_form_data(self):
+        return {
+            "rid" : self.rid,
+            "type" : self.type,
+            "date" : self.date,
+            "cid" : self.cid,
+            "fid" : self.fid,
+            "uid" : self.uid,
+            "detail" :self.detail,
+            "result" : self.result,
+            "aid_date" : self.aid_date
+        }
+        
 class Alert:
     def __init__(self, aid="", uid="", body="", date =""):
         self.aid = aid

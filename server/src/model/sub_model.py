@@ -1,7 +1,7 @@
 from model.base_model import BaseModel
 from model.league_model import LeagueModel
 from model import Local_Database
-from others.data_domain import League, Bias, User, Notice
+from others.data_domain import League, Bias, User, Notice, Report
 from others import CoreControllerLogicError, HTMLEXtractor
 import copy
 
@@ -388,10 +388,41 @@ class CommunitySideBoxModel(BaseModel):
                 del self.__urls[key]
 
 
+class ReportModel(BaseModel):
+    def __init__(self, database):
+        super().__init__(database)
+        self.__report = Report()
+        self.__result = False
+        
+    # 리포트 만들기
+    def try_set_report(self, data_payload):
+        if data_payload.cid != "":
+            self.__report.cid = data_payload.cid
+        else:
+            self.__report.fid = data_payload.fid
+            
+        self.__report.date = self._set_datetime()
+        self.__report.rid = self._make_new_id()
+        
+        return
+    
+    # 리포트 저장
+    def save_report(self):
+        self._database.add_new_data(target_id="rid", new_data=self.__report.get_dict_form_data())
+        self.__result = True
+        return
+    
+    def get_response_form_data(self, head_parser):
+        try:
+            body = {
+                'result' : self.__result
+            }
 
+            response = self._get_response_data(head_parser=head_parser, body=body)
+            return response
 
-
-
+        except Exception as e:
+            raise CoreControllerLogicError("response making error | " + e)
 
 
 

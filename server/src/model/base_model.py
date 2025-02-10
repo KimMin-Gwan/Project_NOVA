@@ -8,7 +8,8 @@ import editdistance
 from jamo import h2j, j2hcj
 
 import boto3
-import datetime
+from datetime import datetime
+import random
 
 class FindSimilarData:
     def __decompose(self, text:str):
@@ -51,13 +52,25 @@ class HeaderModel:
         self._new_token = new_token
         return
 
-
+import string
 class BaseModel(HeaderModel):
     def __init__(self, database) -> None:
         self._database:Local_Database = database
         self._user = User()  # 이거 고려해야됨
         super().__init__()
 
+    def _make_new_id(self):
+        characters = string.ascii_letters + string.digits
+        
+        random_string = ''.join(random.choice(characters) for _ in range(6))
+        
+        return random_string
+    
+    def _get_datetime(self, date_str):
+        return datetime.strptime(date_str, "%Y/%m/%d-%H:%M:%S")
+
+    def _set_datetime(self):
+        return datetime.now().strftime("%Y/%m/%d-%H:%M:%S")
 
     # 유저의 정보를 검색하는 함수
     def set_user_with_uid(self, request):
@@ -145,7 +158,7 @@ class AdminModel(HeaderModel):
         else:
             return False
     def _upload_data(self, data_type):
-        now = datetime.datetime.now()
+        now = datetime.now()
         date = now.strftime('%Y-%m-%d-%H:%M:%S')
         self._s3.upload_file(f'{self.__path}{data_type}.json', f"nova-{data_type}", f"{data_type}{date}.json")
     
