@@ -1807,7 +1807,7 @@ class FeedManager:
         # 4. reply에 넣을 땐, dict로 넣어야됨
         
         for targeted_comment in exist_targeted_comments:
-            comment = self.__find_comment_in_comment_list(no_targeted_comments, targeted_comment.cid)
+            comment = self.__find_comment_in_comment_list(no_targeted_comments, targeted_comment.target_cid)
             # pprint("찾는 거")
             # pprint(comment)
             if comment is not None:
