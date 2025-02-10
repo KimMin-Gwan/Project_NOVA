@@ -1894,7 +1894,23 @@ class FeedManager:
         comment_datas = self._database.get_datas_with_ids(target_id="cid", ids=user.my_comment)
         comments = []
 
+        for _, comment_data in comment_datas:
+            comment = Comment()
+            comment.make_with_dict(comment_data)
+            comments.append(comment)
 
+        self.__get_comment_liked_info(user=user, comments=comments)
+
+        classified_comments = self.__classify_reply_comment(comments=comments)
+
+        pprint(classified_comments)
+
+        pprint("분류 후 댓글")
+        for comment in classified_comments:
+            pprint(comment.get_dict_form_data())
+            pprint(comment.reply)
+
+        return comments
 
     def get_my_comments(self, user):
         comment_datas = self._database.get_datas_with_ids(target_id="cid", ids=user.my_comment)
