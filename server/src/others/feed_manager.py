@@ -1781,7 +1781,6 @@ class FeedManager:
                 return comment
         return None
 
-
     # 댓글 분류를 해주는 함수. 도저히 저 밑에서 하기힘들다고 생각했음. 그래서 따로 함수를 나눴어
     # taregted는 타케팅 당한 쪽아니라 하는쪽임 따라서 사실은 [targeting]임 -> 읽을 때 유의할것
     def __classify_reply_comment(self, comments):
@@ -1801,15 +1800,22 @@ class FeedManager:
         # 4. reply에 넣을 땐, dict로 넣어야됨
         
         for targeted_comment in exist_targeted_comments:
-            for comment in no_targeted_comments:
-                if comment.cid == targeted_comment.target_cid:
-                    # 이미 추가가 되어있다면 넘어간다
-                    for reply_comment in comment.reply:
-                        if reply_comment["cid"] == targeted_comment.cid:
-                            continue
-                    comment.reply.append(targeted_comment.get_dict_form_data())
+            comment = self.__find_comment_in_comment_list(no_targeted_comments, targeted_comment.cid)
+            if comment is not None:
+                for reply_comment in comment.reply:
+                    if reply_comment["cid"] == targeted_comment.cid:
+                        continue
+                comment.reply.append(targeted_comment)
+            # for comment in no_targeted_comments:
+            #     if comment.cid == targeted_comment.target_cid:
+            #         # 이미 추가가 되어있다면 넘어간다
+            #         for reply_comment in comment.reply:
+            #             if reply_comment["cid"] == targeted_comment.cid:
+            #                 continue
+            #         comment.reply.append(targeted_comment.get_dict_form_data())
 
         return no_targeted_comments
+
 
 
     # Feed에 있는 모든 댓글들을 모두 가져와야 함
@@ -1861,6 +1867,12 @@ class FeedManager:
 
     # 내가 작성한 댓글 전부 불러오기
     # 페이징 기법은 새롭게 재편하기 떄문에 여기서 페이징을 하지않습니다.
+    def get_my_comments_new(self, user):
+        comment_datas = self._database.get_datas_with_ids(target_id="cid", ids=user.my_comment)
+        comments = []
+
+
+
     def get_my_comments(self, user):
         comment_datas = self._database.get_datas_with_ids(target_id="cid", ids=user.my_comment)
         comments = []
