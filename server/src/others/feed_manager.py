@@ -1793,8 +1793,12 @@ class FeedManager:
             else:
                 no_targeted_comments.append(comment)
 
-        pprint(exist_targeted_comments)
-        pprint(exist_targeted_comments)
+        pprint("타겟이 있는 댓글들")
+        for comment in exist_targeted_comments:
+            pprint(comment)
+        pprint("타겟이 없는 댓글들")
+        for comment in no_targeted_comments:
+            pprint(comment)
 
         # 1. 대댓글인 애들이랑 아닌 애들을 분리
         # 2. 대댓글인 애들을 하나씩 뽑아서 목표 댓글 reply에 넣음 
