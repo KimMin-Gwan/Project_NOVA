@@ -324,7 +324,7 @@ class Core_Service_View(Master_View):
                                                         request=request_manager)
 
             body_data = model.get_response_form_data(self._head_parser)
-            pprint(body_data)
+            # pprint(body_data)
             
             response = request_manager.make_json_response(body_data=body_data)
             return response
