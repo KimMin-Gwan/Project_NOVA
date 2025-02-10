@@ -1,6 +1,9 @@
+#### Skynet 였던것 / 파일 이름 바꿔야함
+import json
+
 from openai import OpenAI
 #API 키 
-client = OpenAI(api_key="여기에_API_키_입력")
+client = OpenAI(api_key="API_KEY_PLEASE")
 
 ## 현재 자료의 문장이 완성형에 가까워 높은 문장 완성 성능을 보여주는 중
 ## 커뮤니티에 게시된 자연어들이 제대로 처리 되는지 확인 하려면 완전히 박살난 문장 형식의 글이나 문맥 파악이 불가능한 자료가 필요
@@ -13,6 +16,102 @@ client = OpenAI(api_key="여기에_API_키_입력")
 ## 글자가 변형된 단어 처리를 못함
 ## dlfjgrp Tmaus ahtdkfdkajrdma #이거 q:ㅂ, q는 ㅂ임 이렇게 알려줘도 안해줌 인터넷 단어 사전 프롬프트 같은걸 만들어서 import 해야되나?
 ## 한글 암호 해독기를 만들어야 검열기가 완성될것으로 예상됨
+
+## 02/10
+## 영어로 작성된걸 어찌 처리 해야할지 모르겟음
+
+#gpt 사용 전 전처리 할 단어 찾기
+def finder(context):  
+    response = client.chat.completions.create(
+        #gpt 모델
+        model="gpt-4o-mini",
+        #응답 형식
+        response_format={ "type": "json_object" },
+        #프롬프트 작성 하는 곳
+        messages=[
+
+        #응답 형식 요구 ( 대화 방식 지정 )
+        {"role": "system", "content": "You are a helpful assistant designed to output JSON."},
+
+        #주문사항
+        {"role": "user", "content": "문장에서 고유명사를 찾아냅니다."},
+        {"role": "user", "content": "의미를 알 수 없는 단어를 고유명사로 취급합니다."},
+        {"role": "user", "content": "고유명사가 아닌 경우 응답에 포함하지 않습니다."},
+        {"role": "user", "content": "응답은 context로 합니다."},
+        {"role": "user", "content": "context에는 input, words가 있습니다."},
+        {"role": "user", "content": "words는 list입니다."},
+        #{"role": "user", "content": "고유명사가 영어인 경우 알파벳을 모두 분리합니다. "},
+        #{"role": "user", "content": "context에는 input, word와 index가 있습니다."},
+        #{"role": "user", "content": "input은 입력받은 문장 word는 고유명사 index는 위치입니다."},
+        #{"role": "user", "content": "title과 content에서 고유명사의 index 위치를 찾습니다."},
+        
+        #답변 제공
+        {"role": "assistant", "content": f"context에 포함된 고유명사들을 출력합니다. context:{context}"}
+        ]
+
+    )
+    #결과
+    result = response.choices[0].message.content
+    
+    #print(type(result))
+    print(json.loads(result))
+    return json.loads(result)
+
+#전처리 실행(기본 기능을 사용하자)
+def pre_v1(원본, 이거이름뭘로할까):
+    #나중에 db로 뺴야됨
+    words = {'q':'ㅂ','w':'ㅈ','e':'ㄷ','r':'ㄱ','t':'ㅅ','y':'ㅛ','u':'ㅕ','i':'ㅑ','o':'ㅐ','p':'ㅔ','a':'ㅁ','s':'ㄴ','d':'ㅇ','f':'ㄹ','g':'ㅎ','h':'ㅗ','j':'ㅓ','k':'ㅏ','l':'ㅣ','z':'ㅋ','x':'ㅌ','c':'ㅊ','v':'ㅍ','b':'ㅠ','n':'ㅜ','m':'ㅡ',
+        '멍한청인지공능': '멍청한인공지능'}
+    
+    nouns = 이거이름뭘로할까
+    for word in nouns:
+        if word in words:
+            result = 원본.replace(word, words[word])
+
+    print(result)
+    return result
+
+#전처리 실행(인공지능의 힘을 쓰면)
+#단어 교환까지 gpt한테 다 맡기자
+def pre_v2(context):
+    #나중에 db로 뺴야됨
+    words = {
+        '멍한청인지공능': '멍청한인공지능'}
+    
+    response = client.chat.completions.create(
+        #gpt 모델
+        model="gpt-4o-mini",
+        #응답 형식
+        response_format={ "type": "json_object" },
+        #프롬프트 작성 하는 곳
+        messages=[
+
+        #응답 형식 요구 ( 대화 방식 지정 )
+        {"role": "system", "content": "You are a helpful assistant designed to output JSON."},
+
+        #주문사항
+        {"role": "user", "content": "문장에서 고유명사를 찾아냅니다."},
+        {"role": "user", "content": "의미를 알 수 없는 단어를 고유명사로 취급합니다."},
+        {"role": "user", "content": "고유명사가 아닌 경우 응답에 포함하지 않습니다."},
+        {"role": "user", "content": "응답은 context로 합니다."},
+        {"role": "user", "content": f"고유명사를 {words}에 맞게 변환합니다."},
+        
+        #답변 제공
+        {"role": "assistant", "content": f"context에 포함된 고유명사들을 변환하여 출력합니다. context:{context}"}
+        ]
+
+    )
+    #결과
+    result = response.choices[0].message.content
+    
+    #print(type(result))
+    print(json.loads(result))
+    return json.loads(result)
+    
+        
+
+### 태그 뽑기
+### 나중에
 
 #gpt 사용하기 (본문)
 def rework(context):
@@ -54,7 +153,7 @@ def rework(context):
     #결과
     result = response.choices[0].message.content
         
-    print(result)
+    print(json.loads(result))
 
 # 트렌드 변형 중....
 #gpt 사용하기 (트렌드) /공사중
@@ -140,10 +239,11 @@ def autoqna(context):
 
 
 #변환(검열)할 텍스트
-context = {
-    'title' : 'dkssudgktpdy',
-    'content' : '멍한청인지공능'
-}
+
+# reworkd_context = {
+#     'title' : 'dkssudgktpdy hello',
+#     'content' : '멍한청인지공능 푸하하'
+# }
 
 trend_context = {
     'title' : '',
@@ -161,4 +261,33 @@ trend_context = {
 
 
 #테스트용 실행
-rework(context=context)
+
+# ### 전처리 v1 (단어 뽑아서 처리 후 변환)
+# finder_context = {
+#     #'title' : 'dkssudgktpdy hello',
+#     'content' : 'hello dkssud 안녕하세요 멍한청인지공능 푸하하'
+# }
+
+# #finder(context=finder_context)
+# 이름짓기귀찮은데아무튼찾아낸고유명사랑원본문장 = finder(context=finder_context)
+# content = pre_v1(원본 = 이름짓기귀찮은데아무튼찾아낸고유명사랑원본문장['context']['input'], 이거이름뭘로할까 = 이름짓기귀찮은데아무튼찾아낸고유명사랑원본문장['context']['words'])
+
+# reworkd_context = {
+#     'title' : '',
+#     'content' : f'{content}'
+# }
+# rework(context=reworkd_context)
+
+
+### 전처리 v2 (ai가 다 함)
+finder_context = {
+    #'title' : 'dkssudgktpdy hello',
+    'content' : 'hello dkssud 안녕하세요 멍한청인지공능 푸하하'
+}
+content = pre_v2(finder_context)
+
+reworkd_context = {
+    'title' : '',
+    'content' : f'{content}'
+}
+rework(context=reworkd_context)
