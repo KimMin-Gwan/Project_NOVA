@@ -292,12 +292,12 @@ const Write = ({ brightmode }) => {
         <BiasBoxes setBiasId={setBiasId} writeCommunity />
       </section>
 
-      <section className={style["Select_container"]}>
+      {/* <section className={style["Select_container"]}>
         <select className={style["Select_box"]}>
           <option>1</option>
           <option>2</option>
         </select>
-      </section>
+      </section> */}
 
       <div className={style["hashtag_container"]}>
         <div>해시태그</div>
