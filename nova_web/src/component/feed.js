@@ -581,7 +581,12 @@ export function ContentFeed({
         )}
         {feed.fclass === "long" && <Viewer initialValue={feed.raw_body} />}
       </div>
-
+      {links && (
+        <div className={style["link-line"]}>
+          <div className={style["hr-sect"]}>첨부된 링크</div>
+          <p>안전을 위해 신뢰할 수 있는 사이트에만 접속하세요.</p>
+        </div>
+      )}
       {links &&
         links.map((link, i) => {
           return (

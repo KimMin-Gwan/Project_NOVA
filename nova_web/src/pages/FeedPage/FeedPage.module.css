@@ -2461,6 +2461,7 @@ h5 {
 }
 
 .Link_Container {
+  cursor: pointer;
   width: 100%;
   /* height: 200px; */
   margin-bottom: 50px;
@@ -2477,7 +2478,7 @@ h5 {
 }
 
 .Link_thumbnail {
-  height: 150px;
+  height: 200px;
   img {
     border: none;
     height: 100%;
@@ -2517,4 +2518,37 @@ h5 {
     height: 100%;
     object-fit: cover;
   }
+}
+
+.link-line {
+  display: flex;
+  flex-direction: column;
+  p {
+    margin: 0;
+    margin-bottom: 15px;
+    padding: 0;
+    text-align: center;
+    color: #7c7c7c;
+    font-size: 13px;
+    font-variation-settings: "wght" 200;
+  }
+}
+
+.hr-sect {
+  display: flex;
+  align-items: center;
+  flex-basis: 100%;
+  font-size: 14px;
+  margin: 8px 0px;
+  font-variation-settings: "wght" 200;
+}
+.hr-sect::before,
+.hr-sect::after {
+  content: "";
+  flex-grow: 1;
+  background: #aad4ff;
+  height: 1px;
+  font-size: 0px;
+  line-height: 0px;
+  margin: 0px 20px;
 }
