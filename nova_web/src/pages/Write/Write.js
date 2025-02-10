@@ -9,9 +9,6 @@ import close_icon from "./../../img/close.svg";
 import img_icon from "./../../img/image.png";
 import vote_icon from "./../../img/vote.png";
 import link_icon from "./../../img/link.png";
-import back from "./../../img/write_vector1.png";
-import select from "./../../img/select-icon.png";
-import img from "./../../img/img-icon.png";
 import { getModeClass } from "../../App.js";
 import BiasBoxes from "../../component/BiasBoxes.js";
 import EditorBox from "../../component/EditorBox.js";
@@ -295,8 +292,15 @@ const Write = ({ brightmode }) => {
         <BiasBoxes setBiasId={setBiasId} writeCommunity />
       </section>
 
+      {/* <section className={style["Select_container"]}>
+        <select className={style["Select_box"]}>
+          <option>1</option>
+          <option>2</option>
+        </select>
+      </section> */}
+
       <div className={style["hashtag_container"]}>
-        <div>제목(해시태그)</div>
+        <div>해시태그</div>
         <div className={style["input-container"]}>
           <div className={style["input-wrapper"]}>
             <input
