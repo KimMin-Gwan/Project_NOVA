@@ -232,7 +232,7 @@ class MyCommentsModel(BaseModel):
 
     def get_my_comments(self, feed_manager:FeedManager, last_index:int=-1):
         self._comments = feed_manager.get_my_comments_new(user=self._user)
-        self._comments, self._key = feed_manager.paging_fid_list(fid_list=self._comments, last_index=last_index, page_size=3)
+        self._comments, self._key = feed_manager.paging_fid_list(fid_list=self._comments, last_index=last_index, page_size=10)
 
         return
 
