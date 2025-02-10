@@ -186,7 +186,7 @@ class UserPageModel(BaseModel):
     # 나의 Feed 중 타입에 따라 개수 세기
     def __count_my_feeds_type(self, feed_type:str):
         count = 0
-        feed_datas = self._database.get_datas_with_ids(target_id="feed", ids=self._user.my_feed)
+        feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=self._user.my_feed)
         for feed_data in feed_datas:
             if feed_data["fclass"] == feed_type:
                 count += 1
