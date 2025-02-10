@@ -1793,6 +1793,9 @@ class FeedManager:
             else:
                 no_targeted_comments.append(comment)
 
+        pprint(exist_targeted_comments)
+        pprint(exist_targeted_comments)
+
         # 1. 대댓글인 애들이랑 아닌 애들을 분리
         # 2. 대댓글인 애들을 하나씩 뽑아서 목표 댓글 reply에 넣음 
         # 2-1. (댓글을 하나씩 뽑아서 대댓글과 대조하는 것과 같은 시간 복잡도를 가짐)
@@ -1801,8 +1804,8 @@ class FeedManager:
         
         for targeted_comment in exist_targeted_comments:
             comment = self.__find_comment_in_comment_list(no_targeted_comments, targeted_comment.cid)
-            pprint("찾는 거")
-            pprint(comment)
+            # pprint("찾는 거")
+            # pprint(comment)
             if comment is not None:
                 for reply_comment in comment.reply:
                     if reply_comment["cid"] == targeted_comment.cid:
@@ -1841,7 +1844,7 @@ class FeedManager:
 
         self.__get_comment_liked_info(user=user, comments=comments)
 
-        pprint(comments)
+        # pprint(comments)
 
         classified_comments = self.__classify_reply_comment(comments=comments)
         
