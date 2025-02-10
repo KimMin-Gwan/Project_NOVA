@@ -107,7 +107,13 @@ export default function SearchPage() {
         >
           <img src={back} />
         </div>
-        <SearchBox type="search" value={searchWord} onClickSearch={onClickSearch} onChangeSearchWord={onChangeSearchWord} onKeyDown={onKeyDown} />
+        <SearchBox
+          type="search"
+          value={searchWord}
+          onClickSearch={onClickSearch}
+          onChangeSearchWord={onChangeSearchWord}
+          onKeyDown={onKeyDown}
+        />
       </div>
       {/* <p onClick={onDeleteAllHistory}>X</p> */}
 

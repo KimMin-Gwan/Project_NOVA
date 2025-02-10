@@ -133,11 +133,14 @@
     }
 
     .streamer-list {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      margin: 10px 25px;
+      /* display: flex;
       gap: 15px;
       margin: 10px 10px;
+      flex-wrap: wrap;
+      justify-content: center; */
     }
 
     @media (max-width: 400px) {
