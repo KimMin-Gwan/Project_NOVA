@@ -406,3 +406,19 @@
     object-fit: cover;
   }
 }
+
+.Select_container {
+  width: 100%;
+  /* background-color: blue; */
+  display: flex;
+}
+
+.Select_box {
+  /* all: unset; */
+  display: flex;
+  margin: 0 20px;
+  flex: 1;
+  border: 1px solid #4586e8;
+  border-radius: 6px;
+  padding: 10px;
+}
