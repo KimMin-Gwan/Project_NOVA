@@ -1853,11 +1853,11 @@ class FeedManager:
         classified_comments = self.__classify_reply_comment(comments=comments)
         
         # pprint(classified_comments)
-        
-        pprint("분류 후 댓글")
-        for comment in classified_comments:
-            pprint(comment.get_dict_form_data())
-            pprint(comment.reply)
+        #
+        # pprint("분류 후 댓글")
+        # for comment in classified_comments:
+        #     pprint(comment.get_dict_form_data())
+        #     pprint(comment.reply)
 
         # pprint("분류전 댓글")
         # for comment in comments:
