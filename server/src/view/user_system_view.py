@@ -261,7 +261,7 @@ class MyFeedsRequest(RequestHeader):
 
 class MyCommentsRequest(RequestHeader):
     def __init__(self, key) -> None:
-        self.email = "randomUser1@naver.com"
+        self.email = "randomUser4@naver.com"
         self.key = key
 
 class ChangePasswordRequest(RequestHeader):
