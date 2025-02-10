@@ -2297,11 +2297,17 @@ h5 {
 /* 피드 레이아웃 수정본 */
 .wrapper-container {
   width: 100%;
+
   background-color: white;
   color: black;
   margin-bottom: 15px;
   border: 1px 0px solid gray;
   position: relative;
+}
+
+.long-wrapper {
+  /* min-height: 600px; */
+  min-height: 300px;
 }
 
 .user-container {
@@ -2405,6 +2411,7 @@ h5 {
 /* 롱폼 */
 .long-form-container {
   width: 100%;
+  min-height: 250px;
   height: 40%;
   background-color: white;
   position: absolute;

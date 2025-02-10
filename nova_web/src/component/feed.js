@@ -521,7 +521,6 @@ export function ContentFeed({
           },
         })
         .then((res) => {
-          console.log("rrr", res.data);
           setLinkImage((prev) => [...prev, res.data.body.image]);
         });
     setIsLoading(false);
@@ -531,21 +530,20 @@ export function ContentFeed({
     if (links) {
       fetchImageTag();
     }
-
     setIsLoading(false);
-  }, []);
+  }, [links]);
 
   function onClickLink(url) {
     window.open(url, "_blank", "noopener, noreferrer");
   }
 
   if (!feed || isLoading) {
-    return <div>loading 중</div>;
+    return <div>loading 중..,.</div>;
   }
 
   return (
     <div
-      className={style["wrapper-container"]}
+      className={`${style["wrapper-container"]} ${feed.fclass === "long" && style["long-wrapper"]}`}
       onClick={(e) => {
         e.preventDefault();
         navigate(`/feed_detail/${feed.fid}`, {

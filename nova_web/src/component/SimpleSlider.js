@@ -24,7 +24,6 @@ const SimpleSlider = ({ feedData, brightMode, type, className }) => {
   let navigate = useNavigate();
 
   function onClickMore(fid) {
-    console.log("fid", fid);
     navigate(`/feed_detail/${fid}`, { state: { commentClick: false } });
   }
 

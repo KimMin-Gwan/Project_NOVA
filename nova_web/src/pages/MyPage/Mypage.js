@@ -123,7 +123,7 @@ function MyPage() {
             alt="img"
           />
         </div>
-        <div>
+        <div className={style["feed-wrapper"]}>
           <section className={style["user-name"]}>
             <h3>{myData.uname}</h3>
             <img
