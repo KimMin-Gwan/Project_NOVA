@@ -1841,11 +1841,11 @@ class FeedManager:
 
         self.__get_comment_liked_info(user=user, comments=comments)
 
-        # pprint(comments)
+        pprint(comments)
 
         classified_comments = self.__classify_reply_comment(comments=comments)
         
-        pprint(classified_comments)
+        # pprint(classified_comments)
         
         pprint("분류 후 댓글")
         for comment in classified_comments:
