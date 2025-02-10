@@ -1801,6 +1801,8 @@ class FeedManager:
         
         for targeted_comment in exist_targeted_comments:
             comment = self.__find_comment_in_comment_list(no_targeted_comments, targeted_comment.cid)
+            pprint("찾는 거")
+            pprint(comment)
             if comment is not None:
                 for reply_comment in comment.reply:
                     if reply_comment["cid"] == targeted_comment.cid:
