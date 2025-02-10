@@ -1900,11 +1900,11 @@ class FeedManager:
             comments.append(comment)
 
         self.__get_comment_liked_info(user=user, comments=comments)
-        pprint(comments)
-        pprint("분류 전 댓글")
-        for comment in comments:
-            pprint(comment.get_dict_form_data())
-            # pprint(comment.reply)
+        # pprint(comments)
+        # pprint("분류 전 댓글")
+        # for comment in comments:
+        #     pprint(comment.get_dict_form_data())
+        #     # pprint(comment.reply)
 
         classified_comments = self.__classify_reply_comment(comments=comments)
 
@@ -1915,7 +1915,7 @@ class FeedManager:
         #     pprint(comment.get_dict_form_data())
         #     pprint(comment.reply)
 
-        return comments
+        return classified_comments
 
     def get_my_comments(self, user):
         comment_datas = self._database.get_datas_with_ids(target_id="cid", ids=user.my_comment)
