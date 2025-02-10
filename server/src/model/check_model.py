@@ -120,7 +120,6 @@ class CheckPageModel(BaseModel):
         except Exception as e:
             raise CoreControllerLogicError("response making error | " + e)
 
-
 class TryCheckModel(CheckPageModel):
     def __init__(self, database:Local_Database) -> None:
         super().__init__(database)
@@ -313,9 +312,6 @@ class TrySpecialCheckModel(TryCheckModel):
 
         except Exception as e:
             raise CoreControllerLogicError("response making error | " + e)
-
-
-
 
 # 명함 제조기
 class NameCardMaker:
