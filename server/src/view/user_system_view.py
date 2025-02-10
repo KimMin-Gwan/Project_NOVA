@@ -163,8 +163,10 @@ class User_Service_View(Master_View):
             request_manager = RequestManager()
 
             data_payload = MyCommentsRequest(key=key)
-            #request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
-            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+            if not request_manager.jwt_payload.result:
+                raise request_manager.credentials_exception
+            # request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
             user_controller=UserController()
             model = user_controller.try_get_my_comments(database=self.__database,
@@ -261,7 +263,7 @@ class MyFeedsRequest(RequestHeader):
 
 class MyCommentsRequest(RequestHeader):
     def __init__(self, key) -> None:
-        self.email = "randomUser4@naver.com"
+        # self.email = "randomUser4@naver.com"
         self.key = key
 
 class ChangePasswordRequest(RequestHeader):

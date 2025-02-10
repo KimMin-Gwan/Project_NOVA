@@ -183,11 +183,22 @@ class UserPageModel(BaseModel):
         self._user.password = ""
         return
 
+    # 나의 Feed 중 타입에 따라 개수 세기
+    def __count_my_feeds_type(self, feed_type:str):
+        count = 0
+        feed_datas = self._database.get_datas_with_ids(target_id="feed", ids=self._user.my_feed)
+        for feed_data in feed_datas:
+            if feed_data["fclass"] == feed_type:
+                count += 1
+
+        return count
+
+
     def get_user_data(self):
         self._uname = self._user.uname
         self._uid = self._user.uid
-        self._num_long_feed = self._user.num_long_feed
-        self._num_short_feed = self._user.num_short_feed
+        self._num_long_feed = self.__count_my_feeds_type(feed_type="long")
+        self._num_short_feed = self.__count_my_feeds_type(feed_type="short")
         self._num_like = len(self._user.like)
         self._num_comment = len(self._user.my_comment)
 
