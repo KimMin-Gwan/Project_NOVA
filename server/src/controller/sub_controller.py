@@ -62,59 +62,20 @@ class Sub_Controller:
         # model = NoticeListModel(database=database)
         model = NoticeModel(database=database)
 
-        try:
-            model.get_notice_list()
-            model.set_send_notice_data_for_details()
+        model.get_notice_list()
+        model.set_send_notice_data_for_details()
 
-        except CustomError as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
 
-        except Exception as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
 
-        finally:
-
-            return model
+        return model
 
     def get_notice_detail(self, database:Local_Database, request) -> BaseModel: 
         model = NoticeModel(database=database)
-        try:
-            model.get_notice(nid = request.nid)
-            model.set_send_notice_data_for_details()
+        model.get_notice(nid = request.nid)
+        model.set_send_notice_data_for_details()
 
-        except CustomError as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
-
-        except Exception as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
-
-        finally:
-            return model
+        return model
         
-    # 최애 페이지의 배너 정보
-    # 배너가 없으면 뭘 보여줄래?
-    def get_bias_banner(self, database:Local_Database, request) -> BaseModel: 
-        model = BiasBannerModel(database=database)
-        try:
-            """
-            if not model.set_biases_with_bids():
-                model.set_state_code("210")
-                return model
-            """
-        except CustomError as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
-
-        except Exception as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
-
-        finally:
-            return model
 
     # 최애 페이지의 지지자 기여도 랭크 
     def get_user_contribution(self, database:Local_Database, request) -> UserContributionModel: 
@@ -262,6 +223,23 @@ class Sub_Controller:
             model.get_urls_of_bias()
 
         return model
+    
+    def try_report_post_or_comment(self, database:Local_Database, request):
+        model = ReportModel(database=database)
+        
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
+        
+        # type은 신고인지 버그 리포트인지 구분을 위한 용도임
+        # detail은 버그나 신고에 대한 자세한 내용을 기입하기 위한 용도임
+        # 나중에 추가될것임
+        
+        model.try_set_report(self, data_payload=request.data_payload)
+        model.save_report()
+        
+        return model
+        
+        
 
 
 
