@@ -215,7 +215,7 @@ function App() {
                 <FeedThumbnail
                   title={
                     <>
-                      <span className="title-color">최애 </span>몰아보기
+                      최애<span className="title-color">주제</span>
                     </>
                   }
                   img_src={new_pin}

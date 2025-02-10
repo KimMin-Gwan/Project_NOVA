@@ -59,19 +59,16 @@ export default function FeedList(isUserState) {
     return item.bid;
   });
 
-  // console.log("bidss", bids);
-
   async function fetchBiasCategoryData(bid) {
     let send_data = {
       header: header,
       body: {
-        bids: [bids] || [bid] || [],
+        bids: bid === undefined ? [bids] : [bid],
         board: board || "",
         key: nextData || -1,
       },
     };
 
-    // console.log("asdadasd", send_data);
     // setIsLoading(true);
     if (type === "bias") {
       await fetch(`${FETCH_URL}feed_with_community`, {
@@ -93,9 +90,11 @@ export default function FeedList(isUserState) {
   }
 
   useEffect(() => {
+    setFeedData([]);
+    setNextData(-1);
     fetchBiasCategoryData();
     console.log(bids, board);
-  }, [board]);
+  }, [biasId, board]);
 
   let [filterCategory, setFilterCategory] = useState([]);
   let [filterFclass, setFilterFclass] = useState("");

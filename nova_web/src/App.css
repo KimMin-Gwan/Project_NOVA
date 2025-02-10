@@ -1,35 +1,30 @@
 body {
-  font-family: "Pretendard-Regular";
-  /* font-family: "NanumGothic"; */
-  /* font-family: "Noto Sans KR", sans-serif; */
+  /* font-family: "Pretendard", sans-serif; */
   margin: 0;
   padding: 0;
   background-color: #111;
 }
 
-@font-face {
-  font-family: "Pretendard-Regular";
-  src: url("https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff") format("woff");
-  /* font-weight: 400; */
-  /* font-style: normal; */
+button {
+  font-family: "Pretendard", sans-serif;
 }
 
 .main-title {
+  font-variation-settings: "wght" 300;
   color: #323232;
   font-size: 20px;
-  font-weight: 200;
   margin: 0;
   margin-left: 20px;
   margin-bottom: 14px;
   text-shadow: 0px 4px 4px rgb(0, 0, 0, 0.25);
-  font-weight: 300;
 }
 
 .title-color {
   margin-left: 5px;
   color: #0076ee;
   white-space: pre;
-  font-weight: 700;
+  /* font-weight: 400; */
+  font-variation-settings: "wght" 700;
 }
 
 /* 다크 모드 버튼 */
@@ -303,7 +298,7 @@ body.dark-mode {
 }
 
 .rank-num {
-  font-family: "Noto Sans", sans-serif;
+  /* font-family: "Noto Sans", sans-serif; */
   color: white;
   font-weight: 400;
   font-size: 20px;
@@ -349,7 +344,7 @@ body.dark-mode {
 }
 
 .my-bias-solo {
-  font-family: "Noto Sans KR", sans-serif;
+  /* font-family: "Noto Sans KR", sans-serif; */
   font-size: 16px;
   text-align: start;
   position: relative;
@@ -576,7 +571,7 @@ body.dark-mode {
 }
 
 .point {
-  font-family: "Noto Sans", sans-serif;
+  /* font-family: "Noto Sans", sans-serif; */
   position: absolute;
   right: 20px;
   color: white;
@@ -1057,6 +1052,7 @@ body.dark-mode {
 }
 
 .btn_text {
+  font-variation-settings: "wght" 400;
   margin-block: 5px;
   /* 아이콘과 텍스트 사이 간격 */
   font-size: 12px;

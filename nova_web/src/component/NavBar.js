@@ -1,15 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
-import fund_img from "./../img/funding.png";
-import menuBtn_img from "./../img/menuBtn.png";
-import galaxy_img from "./../img/galaxy3.png";
 import shortForm_img from "./../img/short_form2.png";
-import new_feed from "./../img/new_feed2.png";
 import moment from "./../img/moment_img.png";
 import post from "./../img/post_img.png";
-
-import home_icon from "./../img/home_icon.png";
 import menu3 from "./../img/fav_nav.png";
 import feed_write from "./../img/feed_nav.png";
 import search from "./../img/search_nav.png";
