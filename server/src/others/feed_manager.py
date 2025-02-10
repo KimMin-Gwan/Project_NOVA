@@ -1793,6 +1793,12 @@ class FeedManager:
             else:
                 no_targeted_comments.append(comment)
 
+        # 1. 대댓글인 애들이랑 아닌 애들을 분리
+        # 2. 대댓글인 애들을 하나씩 뽑아서 목표 댓글 reply에 넣음 
+        # 2-1. (댓글을 하나씩 뽑아서 대댓글과 대조하는 것과 같은 시간 복잡도를 가짐)
+        # 3. 만약 이미 들어간 댓글이면 continue해야됨
+        # 4. reply에 넣을 땐, dict로 넣어야됨
+
         # pprint("타겟이 있는 댓글들")
         # for comment in exist_targeted_comments:
         #     pprint(comment)
@@ -1800,21 +1806,7 @@ class FeedManager:
         # for comment in no_targeted_comments:
         #     pprint(comment)
 
-        # 1. 대댓글인 애들이랑 아닌 애들을 분리
-        # 2. 대댓글인 애들을 하나씩 뽑아서 목표 댓글 reply에 넣음 
-        # 2-1. (댓글을 하나씩 뽑아서 대댓글과 대조하는 것과 같은 시간 복잡도를 가짐)
-        # 3. 만약 이미 들어간 댓글이면 continue해야됨
-        # 4. reply에 넣을 땐, dict로 넣어야됨
-        
         for targeted_comment in exist_targeted_comments:
-            comment = self.__find_comment_in_comment_list(no_targeted_comments, targeted_comment.target_cid)
-            pprint("찾는 거")
-            pprint(comment)
-            if comment is not None:
-                for reply_comment in comment.reply:
-                    if reply_comment["cid"] == targeted_comment.cid:
-                        continue
-                comment.reply.append(targeted_comment.get_dict_form_data())
             # for comment in no_targeted_comments:
             #     if comment.cid == targeted_comment.target_cid:
             #         # 이미 추가가 되어있다면 넘어간다
@@ -1822,6 +1814,28 @@ class FeedManager:
             #             if reply_comment["cid"] == targeted_comment.cid:
             #                 continue
             #         comment.reply.append(targeted_comment.get_dict_form_data())
+            comment = self.__find_comment_in_comment_list(no_targeted_comments, targeted_comment.target_cid)
+            if comment is not None:
+                for reply_comment in comment.reply:
+                    if reply_comment["cid"] == targeted_comment.cid:
+                        continue
+                comment.reply.append(targeted_comment.get_dict_form_data())
+
+            # 리스트에 없는 경우. 이 경우는 조금 위험하긴하지만, Database에서 찾아내서 붙인다.
+            # 마이페이지의 내가 쓴 댓글 중, 다른 댓글의 대댓글을 단 경우에 해당된다.
+            else:
+                comment_data = self._database.get_data_with_id(target="cid", id=targeted_comment.target_cid)
+                comment = Comment()
+                comment.make_with_dict(comment_data)
+
+                for reply_comment in comment.reply:
+                    if reply_comment["cid"] == targeted_comment.cid:
+                        continue
+                comment.reply.append(targeted_comment.get_dict_form_data())
+                # 이 댓글은 마이페이지에서 가져온 no_targeted_comments에는 없는 데이터이기 때문에
+                # 만약 한 댓글에 2개 이상의 대댓글을 달았다면.. 딱 한번만 들어가게 된다.
+                if comment not in no_targeted_comments:
+                    no_targeted_comments.append(comment)
 
         return no_targeted_comments
 
