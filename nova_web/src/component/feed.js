@@ -119,6 +119,7 @@ export function ContentFeed({
         })
         .then((res) => {
           setLinkImage((prev) => [...prev, res.data.body.image]);
+          console.log(res.data);
         });
     setIsLoading(false);
   }

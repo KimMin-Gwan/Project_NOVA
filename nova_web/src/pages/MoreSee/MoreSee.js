@@ -109,47 +109,48 @@ function MoreSee({ onModeChange }) {
         </div>
 
         <div className={style.content}>
-          <div
-            className={style.fullWidthComponent}
-            onClick={() => {
-              if (isLogin) {
-                navigate("/mypage");
-              } else {
-                navigate("/novalogin");
-              }
-            }}
-          >
-            <img src={isLogin ? mypage_icon : login_icon} alt="Arrow" className={style.vector_login} />
-            <p className={style.bodyText_login}>{isLogin ? "마이페이지" : "로그인"}</p>
+          <div className={style.fullWidthComponent}>
+            <img
+              src={isLogin ? mypage_icon : login_icon}
+              alt="Arrow"
+              className={style.vector_login}
+            />
+            <p
+              className={style.bodyText_login}
+              onClick={() => {
+                if (isLogin) {
+                  navigate("/mypage");
+                } else {
+                  navigate("/novalogin");
+                }
+              }}
+            >
+              {isLogin ? "마이페이지" : "로그인"}
+            </p>
           </div>
 
-          <div
-            className={style["list-bar"]}
-            onClick={(e) => {
-              e.preventDefault();
-              navigate("/");
-            }}
-          >
-            게시판 목록
-          </div>
+          <div className={style["list-bar"]}>게시판 목록</div>
           <hr></hr>
           <ul className={style.listContainer}>
-            <li className={style.mainComponent} onClick={() => handlePage("/feed_list")}>
+            <li className={style.mainComponent} onClick={() => handlePage("/feed_list?type=bias")}>
               <img src={fav_icon} alt="Arrow" className={style.vector} />
               <p className={style.bodyText}>최애 주제 게시판</p>
               <img src={more_icon} alt="Arrow" className={style.more_vector} />
             </li>
-            <li className={style.mainComponent} onClick={() => handlePage("/feed_page")}>
+            <li className={style.mainComponent} onClick={() => handlePage("/feed_list?type=best")}>
               <img src={today_up} alt="Arrow" className={style.vector} />
               <p className={style.bodyText}>오늘의 급상승 게시글</p>
               <img src={more_icon} alt="Arrow" className={style.more_vector} />
             </li>
-            <li className={style.mainComponent} onClick={() => handlePage("/feed_list?type=best")}>
+            <li
+              className={style.mainComponent}
+              onClick={() => handlePage("/feed_list?type=weekly_best")}
+            >
               <img src={week_up} alt="Arrow" className={style.vector} />
               <p className={style.bodyText}>주간 급상승 게시글</p>
               <img src={more_icon} alt="Arrow" className={style.more_vector} />
             </li>
-            <li className={style.mainComponent} onClick={() => handlePage("/feed_list?type=weekly_best")}>
+            <li className={style.mainComponent} onClick={() => handlePage("/feed_list?type=all")}>
               <img src={all_post} alt="Arrow" className={style.vector} />
               <p className={style.bodyText}>전체 게시글</p>
               <img src={more_icon} alt="Arrow" className={style.more_vector} />
@@ -159,19 +160,19 @@ function MoreSee({ onModeChange }) {
           <div className={style["service-container"]}>
             <h3>서비스</h3>
             <section className={style["button-container"]}>
-              <button>
+              <button onClick={() => handlePage("/write_feed/short")}>
                 <img src={new_moment} alt="새로운 모멘트 작성" />
                 새로운 모멘트 작성
               </button>
-              <button>
+              <button onClick={() => handlePage("/write_feed/long")}>
                 <img src={new_post} alt="새로운 포스트 작성" />
                 새로운 포스트 작성
               </button>
-              <button>
+              <button onClick={() => handlePage("/follow_page")}>
                 <img src={fav_follow} alt="최애 주제 팔로우" />
                 최애 주제 팔로우
               </button>
-              <button>
+              <button onClick={() => handleRequestURL(requestURL.naverform)}>
                 <img src={fav_sub} alt="최애 주제 신청" />
                 최애 주제 신청
               </button>
@@ -181,12 +182,12 @@ function MoreSee({ onModeChange }) {
           <div className={style["list-bar"]}>다른 기능</div>
           <hr></hr>
           <ul className={style.listContainer}>
-            <li className={style.mainComponent} onClick={() => handleRequestURL(requestURL.naverform)}>
+            <li className={style.mainComponent}>
               <img src={notice} alt="Arrow" className={style.vector} />
               <p className={style.bodyText}>공지사항</p>
               <img src={more_icon} alt="Arrow" className={style.more_vector} />
             </li>
-            <li className={style.mainComponent} onClick={() => handlePage("/notice_list")}>
+            <li className={style.mainComponent}>
               <img src={bug_icon} alt="Arrow" className={style.vector} />
               <p className={style.bodyText}>버그 리포트</p>
               <img src={more_icon} alt="Arrow" className={style.more_vector} />
@@ -198,7 +199,9 @@ function MoreSee({ onModeChange }) {
             </li>
             <li className={style.mainComponent} onClick={handleChangeMode}>
               <img src={set_icon} alt="Arrow" className={style.vector} />
-              <p className={style.bodyText}>{brightMode === "dark" ? "☀️ Light Mode" : "🌑 Dark Mode"}</p>
+              <p className={style.bodyText}>
+                {brightMode === "dark" ? "☀️ Light Mode" : "🌑 Dark Mode"}
+              </p>
               <img src={more_icon} alt="Arrow" className={style.more_vector} />
             </li>
           </ul>
@@ -230,7 +233,9 @@ function MoreSee({ onModeChange }) {
           <p className={style.nova_info}>경북 경산시 압량읍 압독2로1길 21, 1층 184</p>
           <p className={style.nova_info}>대표: 김민관 | 사업자등록번호: 380-08-03011</p>
           {/* <p className="nova-info">통신판매업신고번호: 0000-0000-000000</p> */}
-          <p className={style.nova_info}>전화번호: 010-9875-2508 | 이메일:youths0828@nova-platform.kr</p>
+          <p className={style.nova_info}>
+            전화번호: 010-9875-2508 | 이메일:youths0828@nova-platform.kr
+          </p>
           <p className={style.nova_info}>사업자 정보</p>
         </footer>
       </div>

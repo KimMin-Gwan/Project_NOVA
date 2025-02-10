@@ -98,7 +98,6 @@ hr {
   padding: 10px;
   padding-left: 20px;
   margin-bottom: 15px;
-  cursor: pointer;
 }
 .listContainer {
   list-style-type: none;
@@ -253,6 +252,7 @@ hr {
       align-items: center;
       color: #1c1c1c;
       font-size: 13px;
+      cursor: pointer;
 
       & img {
         width: 24px;
