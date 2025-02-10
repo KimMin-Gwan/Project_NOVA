@@ -272,6 +272,25 @@ class Feed_Controller:
 
         return model
 
+    def search_comment_with_keyword(self, database:Local_Database,
+                                    request, feed_search_engine:FeedSearchEngine,
+                                    num_comments = 10):
+        model = CommentSearchModel(database=database)
+
+        # 유저 세팅
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
+
+        # 키워드를 통해 서치함
+        model.try_search_comment_with_keyword(
+            target=request.data_payload.keyword,
+            last_index=request.data_payload.key,
+            feed_manager=self.__feed_manager,
+            num_comments=num_comments
+        )
+        return model
+
+
     ## 예전에 쓰던거
 
     #def get_home_feed_data(self, database:Local_Database,

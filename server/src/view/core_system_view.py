@@ -411,6 +411,22 @@ class Core_Service_View(Master_View):
 
             return response
 
+        @self.__app.get('/feed_explore/search_comment_with_keyword')
+        def search_with_keyword(request:Request, key:Optional[int]=-1, keyword:Optional[str]=""):
+            request_manager = RequestManager()
+            data_payload = KeywordSearchRequest(key=key, keyword=keyword)
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+
+            feed_controller = Feed_Controller(feed_manager=self.__feed_manager)
+            model = feed_controller.search_comment_with_keyword(database=self.__database,
+                                                                request=request_manager,
+                                                                feed_search_engine=self.__feed_search_engine,
+                                                                num_feed=6)
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+
+            return response
+
 
         # 전체 피드 제공
         @self.__app.post('/feed_explore/all_feed')

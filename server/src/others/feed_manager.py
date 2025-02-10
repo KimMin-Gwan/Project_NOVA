@@ -1887,6 +1887,19 @@ class FeedManager:
         # return classified_comments
         return classified_comments
 
+    def get_comments_with_keyword(self, keyword:str):
+        comment_datas = self._database.get_all_data(target="cid")
+        comments = []
+
+        for comment_data in comment_datas:
+            if keyword in comment_data["body"]:
+                comment = Comment()
+                comment.make_with_dict(comment_data)
+                comments.append(comment)
+
+        classified_comments = self.__classify_reply_comment(comments=comments)
+
+        return classified_comments
 
     # 내가 작성한 댓글 전부 불러오기
     # 페이징 기법은 새롭게 재편하기 떄문에 여기서 페이징을 하지않습니다.
@@ -1917,16 +1930,7 @@ class FeedManager:
 
         return classified_comments
 
-    # def get_my_comments(self, user):
-    #     comment_datas = self._database.get_datas_with_ids(target_id="cid", ids=user.my_comment)
-    #     comments = []
-    #
-    #     for comment_data in comment_datas:
-    #         comment = Comment()
-    #         comment.make_with_dict(comment_data)
-    #         comments.append(comment)
-    #
-    #     return comments
+
 
 #---------------------------------interaction 수행 관련------------------------------------------------------
     # IID를 만드는 곳
