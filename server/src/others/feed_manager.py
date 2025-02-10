@@ -1894,7 +1894,7 @@ class FeedManager:
         comment_datas = self._database.get_datas_with_ids(target_id="cid", ids=user.my_comment)
         comments = []
 
-        for _, comment_data in comment_datas:
+        for comment_data in comment_datas:
             comment = Comment()
             comment.make_with_dict(comment_data)
             comments.append(comment)
@@ -1916,7 +1916,7 @@ class FeedManager:
         comment_datas = self._database.get_datas_with_ids(target_id="cid", ids=user.my_comment)
         comments = []
 
-        for _, comment_data in comment_datas:
+        for comment_data in comment_datas:
             comment = Comment()
             comment.make_with_dict(comment_data)
             comments.append(comment)
