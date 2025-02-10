@@ -1793,12 +1793,12 @@ class FeedManager:
             else:
                 no_targeted_comments.append(comment)
 
-        pprint("타겟이 있는 댓글들")
-        for comment in exist_targeted_comments:
-            pprint(comment)
-        pprint("타겟이 없는 댓글들")
-        for comment in no_targeted_comments:
-            pprint(comment)
+        # pprint("타겟이 있는 댓글들")
+        # for comment in exist_targeted_comments:
+        #     pprint(comment)
+        # pprint("타겟이 없는 댓글들")
+        # for comment in no_targeted_comments:
+        #     pprint(comment)
 
         # 1. 대댓글인 애들이랑 아닌 애들을 분리
         # 2. 대댓글인 애들을 하나씩 뽑아서 목표 댓글 reply에 넣음 
@@ -1808,8 +1808,8 @@ class FeedManager:
         
         for targeted_comment in exist_targeted_comments:
             comment = self.__find_comment_in_comment_list(no_targeted_comments, targeted_comment.target_cid)
-            # pprint("찾는 거")
-            # pprint(comment)
+            pprint("찾는 거")
+            pprint(comment)
             if comment is not None:
                 for reply_comment in comment.reply:
                     if reply_comment["cid"] == targeted_comment.cid:
