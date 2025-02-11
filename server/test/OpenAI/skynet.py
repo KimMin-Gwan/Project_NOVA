@@ -4,7 +4,7 @@ import json
 
 from openai import OpenAI
 #API 키 
-client = OpenAI(api_key="ApI_kEy")
+client = OpenAI(api_key="aaaaaaaaaaaaaaaaaaaaaaaapi_keeeeeeeeeeeeeeeeeeeeeeeeeeeeey")
 
 ## 현재 자료의 문장이 완성형에 가까워 높은 문장 완성 성능을 보여주는 중
 ## 커뮤니티에 게시된 자연어들이 제대로 처리 되는지 확인 하려면 완전히 박살난 문장 형식의 글이나 문맥 파악이 불가능한 자료가 필요
@@ -281,12 +281,37 @@ def hashtag (context):
     result = response.choices[0].message.content
         
     print(json.loads(result))
-#변환(검열)할 텍스트
 
-# reworkd_context = {
-#     'title' : 'dkssudgktpdy hello',
-#     'content' : '멍한청인지공능 푸하하'
-# }
+##주제를 분석 해보아요 (간단 태그 검색??)
+def 너가무엇을원하는것인지알아야겠다 (context):
+    response = client.chat.completions.create(
+        #gpt 모댈
+        model="gpt-4o-mini",
+        #응답 형식
+        response_format={ "type": "json_object" },
+        #프롬프트 작성 하는 곳
+        messages=[
+        #응답 형식 요구 ( 대화 방식 지정 )
+        {"role": "system", "content": "You are a helpful assistant designed to output JSON."},
+
+        #주문사항
+        {"role": "user", "content": "주어진 문장에서 찾고자 하는 것을 유추합니다."},
+        {"role": "user", "content": "유추해낸 것은 태그와도 같습니다."},
+        {"role": "user", "content": "모든 태그는 명사입니다."},
+        {"role": "user", "content": "응답은 tags로 합니다."},
+        {"role": "user", "content": "응답은 tags는 list 입니다."},
+
+        #답변 제공
+        {"role": "assistant", "content": f"context에 포함된 내용에서 태그를 만들어 응답합니다. context:{context}"}
+        ]
+    )
+
+    #결과
+    result = response.choices[0].message.content
+        
+    print(json.loads(result))
+
+#변환(검열)할 텍스트
 
 # trend_context = {
 #     'title' : '',
@@ -304,6 +329,12 @@ def hashtag (context):
 
 
 #테스트용 실행
+###변환기
+# rework_context = {
+#     'title' : '',
+#     'content' : '나하야돼 도드보키 럼그 고거은놓어넝 상목명 은콘이조 냐니아 거논해가추 능기결연 스우마 용상 걍걍 상용 마우스 연결기능 추가해논거 아니냐 조이콘은 명목상 넣어놓은거고 그럼 키보드도 돼야하나…'
+# }
+# rework(context=rework_context)
 
 ### 전처리 v1 (단어 뽑아서 처리 후 변환)
 # finder_context = {
@@ -336,7 +367,14 @@ def hashtag (context):
 # rework(context=reworkd_context)
 
 ###태그내놔
-tag_context = {
-    'content' : '올해 휴덕 할 거 같습니다 그동안 감사했습니다 안녕하세요 바위게분들! 홍이장군입니다! 일단 주저없이 본론으로 넘어가겠습니다 저는 음악을 전공하는 바위게입니다 제가 올해 대입 광탈 이후 고민 끝에  재수를 결정하였습니다 그래서 당분간 덕질의 행복을 잠시 중단하고  이악물고 재수 즉 현생에 몰입할 예정입니다 당분간 저의 활동이 많이 뜸해질 거 같습니다! 정말 그동안 덕질하면서  너무도 행복했고 즐거웠습니다 하지만 저의 목표를 위해  잠시 휴덕을 하기로 결정했습니다 그동안 카페활동하면서  바위게분들에게정말 죄송하고 감사했습니다 부족한 저를 좋아해주시고  함께 소통해주셔서 감사합니다 여러분들의 올해 덕질생활도 행복하길 바랍니다 지금까지 홍이장군이었습니다 (홍이장군은 죽지않고 돌아온다)'
+# tag_context = {
+#     'content' : '기타연주에 반해버렸어요... 😍California Dreamin by The Mamas &Papas 도입부분에 나오는 기타연주 멜로디가 기가막히는데 이 곡도 한번 연주해주실수 있나요?'
+# }
+# hashtag(context=tag_context)
+
+###이거왜 이렇게 많아지는건지 너무 많은데 나중에정리해야겠다 주제파악하기
+title_context = {
+    'content' : '유튜브에 자주 나오는 발라드 노래 가수'
 }
-hashtag(context=tag_context)
+
+너가무엇을원하는것인지알아야겠다(context=title_context)
