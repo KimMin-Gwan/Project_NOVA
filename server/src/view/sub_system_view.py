@@ -395,7 +395,7 @@ class ReportRequest(RequestHeader):
         super().__init__(request)
         body:dict = request['body']
         self.type = body.get("type", "")
-        self.type = body.get("detail", "")
+        self.detail = body.get("detail", "")
         self.cid = body.get("cid", "")
         self.fid = body.get("fid", "")
 
