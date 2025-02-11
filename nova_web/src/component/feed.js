@@ -101,41 +101,7 @@ export function ContentFeed({
     endpoint: "/user_system/",
   };
 
-  const [isLoading, setIsLoading] = useState(true);
-
-  const [linkImage, setLinkImage] = useState([]);
-  const [linkUrl, setLinkUrl] = useState("");
-
-  // let linksUrl = links.map((item) => item.url);
-
-  async function fetchImageTag() {
-    for (const item of links)
-      await postApi
-        .post("nova_sub_system/image_tag", {
-          header: header,
-          body: {
-            url: item.url,
-          },
-        })
-        .then((res) => {
-          setLinkImage((prev) => [...prev, res.data.body.image]);
-          console.log(res.data);
-        });
-    setIsLoading(false);
-  }
-
-  useEffect(() => {
-    if (links) {
-      fetchImageTag();
-    }
-    setIsLoading(false);
-  }, [links]);
-
-  function onClickLink(url) {
-    window.open(url, "_blank", "noopener, noreferrer");
-  }
-
-  if (!feed || isLoading) {
+  if (!feed) {
     return <div>loading 중..,.</div>;
   }
 
@@ -179,7 +145,9 @@ export function ContentFeed({
         )}
         {feed.fclass === "long" && <Viewer initialValue={feed.raw_body} />}
       </div>
-      {links && (
+
+      <LinkSection links={links} />
+      {/* {links && (
         <div className={style["link-line"]}>
           <div className={style["hr-sect"]}>첨부된 링크</div>
           <p>안전을 위해 신뢰할 수 있는 사이트에만 접속하세요.</p>
@@ -213,7 +181,7 @@ export function ContentFeed({
               </div>
             </div>
           );
-        })}
+        })} */}
 
       <div className={style["button-container"]}>
         <div>신고</div>
@@ -308,6 +276,89 @@ export function ContentFeed({
         </div>
       )}
     </div>
+  );
+}
+
+let header = {
+  "request-type": "default",
+  "client-version": "v1.0.1",
+  "client-ip": "127.0.0.1",
+  uid: "1234-abcd-5678",
+  endpoint: "/user_system/",
+};
+
+function LinkSection({ links }) {
+  const [isLoading, setIsLoading] = useState(true);
+  const [linkImage, setLinkImage] = useState([]);
+
+  async function fetchImageTag() {
+    for (const item of links)
+      await postApi
+        .post("nova_sub_system/image_tag", {
+          header: header,
+          body: {
+            url: item.url,
+          },
+        })
+        .then((res) => {
+          setLinkImage((prev) => [...prev, res.data.body.image]);
+          console.log(res.data);
+        });
+    setIsLoading(false);
+  }
+
+  useEffect(() => {
+    if (links) {
+      fetchImageTag();
+    }
+    setIsLoading(false);
+  }, [links]);
+
+  function onClickLink(url) {
+    window.open(url, "_blank", "noopener, noreferrer");
+  }
+
+  if (isLoading) {
+    <div>loading...</div>;
+  }
+  return (
+    <>
+      {links && (
+        <div className={style["link-line"]}>
+          <div className={style["hr-sect"]}>첨부된 링크</div>
+          <p>안전을 위해 신뢰할 수 있는 사이트에만 접속하세요.</p>
+        </div>
+      )}
+      {links &&
+        links.map((link, i) => {
+          return (
+            <div key={link.lid} className={style["Link_Container"]}>
+              <div
+                className={style["Link_box"]}
+                onClick={() => {
+                  onClickLink(link.url);
+                }}
+              >
+                <div className={style["Link_thumbnail"]}>
+                  <img src={linkImage[i]} alt="thumbnail" />
+                </div>
+
+                <div className={style["Link_info"]}>
+                  <div className={style["Link_title"]}>{link.title}</div>
+                  <div className={style["Link_domain"]}>{link.domain}</div>
+                </div>
+              </div>
+
+              <div className={style["Link_explain"]}>
+                <span>
+                  <img src={link_pin_icon} alt="pin" />
+                </span>
+                <span>{link.explain}</span>
+              </div>
+            </div>
+          );
+        })}
+    </>
   );
 }
 
