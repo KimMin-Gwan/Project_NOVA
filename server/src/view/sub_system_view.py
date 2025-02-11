@@ -26,6 +26,7 @@ class Sub_Service_View(Master_View):
         #self.bias_page_route("/bias_info")
         self.test_route()
         self.bias_setting_route()
+        self.sub_service()
 
         # feed algorithm test
         self.user_add_test()
@@ -286,7 +287,7 @@ class Sub_Service_View(Master_View):
 
     def sub_service(self):
         # 신고 기능
-        @self.__app.get('/nova_sub_system/try_report')
+        @self.__app.post('/nova_sub_system/try_report')
         def try_report_post_or_comment(request:Request, raw_request:dict):
             request_manager = RequestManager()
             
@@ -296,7 +297,7 @@ class Sub_Service_View(Master_View):
 
             sub_controller=Sub_Controller()
             model = sub_controller.try_report_post_or_comment(database=self.__database,
-                                                              data_payload=data_payload)
+                                                              request=request_manager)
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response
