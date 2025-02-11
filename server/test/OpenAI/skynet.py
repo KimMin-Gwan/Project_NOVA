@@ -1,9 +1,10 @@
+# -*- coding: utf-8 -*- 
 #### Skynet 였던것 / 파일 이름 바꿔야함
 import json
 
 from openai import OpenAI
 #API 키 
-client = OpenAI(api_key="#############################")
+client = OpenAI(api_key="API_KEY_KEY_KEY_KEY_KEY_KEY_KEY_KEY_KEY_KEY_KEY_KEY_KEY_KEY_KEY_KEY_KEY_KEY_KEY_KEY_KEY_KEY_KEY_KEY")
 
 ## 현재 자료의 문장이 완성형에 가까워 높은 문장 완성 성능을 보여주는 중
 ## 커뮤니티에 게시된 자연어들이 제대로 처리 되는지 확인 하려면 완전히 박살난 문장 형식의 글이나 문맥 파악이 불가능한 자료가 필요
@@ -65,7 +66,7 @@ def finder(context):
 def pre_v1(원본, 이거이름뭘로할까):
     #나중에 db로 뺴야됨
     words = {'q':'ㅂ','w':'ㅈ','e':'ㄷ','r':'ㄱ','t':'ㅅ','y':'ㅛ','u':'ㅕ','i':'ㅑ','o':'ㅐ','p':'ㅔ','a':'ㅁ','s':'ㄴ','d':'ㅇ','f':'ㄹ','g':'ㅎ','h':'ㅗ','j':'ㅓ','k':'ㅏ','l':'ㅣ','z':'ㅋ','x':'ㅌ','c':'ㅊ','v':'ㅍ','b':'ㅠ','n':'ㅜ','m':'ㅡ',
-        '멍한청인지공능': '멍청한인공지능', '스바' : '시발',}
+        '멍한청인지공능': '멍청한인공지능'}
     
     nouns = 이거이름뭘로할까
     
@@ -249,7 +250,36 @@ def autoqna(context):
         ]
     )
 
+##태그를 찾아보아요 (1.예시글 2. 타이틀? 문장 1개 이상의 태그가 나와야 함)
+def hashtag (context):
+    response = client.chat.completions.create(
+        #gpt 모댈
+        model="gpt-4o-mini",
+        #응답 형식
+        response_format={ "type": "json_object" },
+        #프롬프트 작성 하는 곳
+        messages=[
+        #응답 형식 요구 ( 대화 방식 지정 )
+        {"role": "system", "content": "You are a helpful assistant designed to output JSON."},
 
+        #주문사항
+        {"role": "user", "content": "주어진 문장에서 태그를 추출합니다."},
+        {"role": "user", "content": "태그는 문장 전체 또는 각 단어에서 추출합니다."},
+        {"role": "user", "content": "태그는 문맥에서 가장 중요한걸로 추출합니다."},
+        {"role": "user", "content": "응답에 최소 1개 이상의 태그가 있어야 합니다."},
+        {"role": "user", "content": "모든 태그는 명사입니다."},
+        {"role": "user", "content": "응답은 tags로 합니다."},
+        {"role": "user", "content": "응답은 tags는 list 입니다."},
+
+        #답변 제공
+        {"role": "assistant", "content": f"context에 포함된 내용에서 태그를 추출하여 응답합니다. context:{context}"}
+        ]
+    )
+
+    #결과
+    result = response.choices[0].message.content
+        
+    print(json.loads(result))
 #변환(검열)할 텍스트
 
 # reworkd_context = {
@@ -257,44 +287,44 @@ def autoqna(context):
 #     'content' : '멍한청인지공능 푸하하'
 # }
 
-trend_context = {
-    'title' : '',
-    'content' : '애플뮤직 주간 TOP 100 8위 (2/3) 지금까지의 순위 (2024년 7월 22일 - 12월 30일)\
-    8 - ? - 5 - 5 - 6 - 5 - 6 - 6 - 8 - 9 - 10 - 11 - 7 - 9 - 10 - 15 - 11 - 14 - 15 - 18 - 1 - 1 - 1 - 2 - \
-    2025년 1월 6일 - 2월 3일 현재 \
-    1 - 1 - 3 - 4 - 8 \
-    2024년 7월 22일 새로 나온 애플 뮤직 클래시컬 차트에 대해서: \
-    이 주간 차트는 165개 이상의 국가로부터 수집한 Apple Music Classical 스트리밍, Apple Music 스트리밍, iTunes 다운로드, iTunes 곡 판매 및 Shazam 태그 등 5가지 데이터 소스를 결합해 클래식 음악의 최신 동향을 종합적으로 보여준다. \
-    클래식 앨범 TOP 100은 매주 월요일 Apple Music Classical 홈 탭에서 업데이트된다. 각 차트에는 전주 금요일부터 목요일까지 1주일간의 활동이 반영된다. \
-    4 \
-    고정닉 0 \
-    실베추공유신고, 댓글 : ',
-}
+# trend_context = {
+#     'title' : '',
+#     'content' : '애플뮤직 주간 TOP 100 8위 (2/3) 지금까지의 순위 (2024년 7월 22일 - 12월 30일)\
+#     8 - ? - 5 - 5 - 6 - 5 - 6 - 6 - 8 - 9 - 10 - 11 - 7 - 9 - 10 - 15 - 11 - 14 - 15 - 18 - 1 - 1 - 1 - 2 - \
+#     2025년 1월 6일 - 2월 3일 현재 \
+#     1 - 1 - 3 - 4 - 8 \
+#     2024년 7월 22일 새로 나온 애플 뮤직 클래시컬 차트에 대해서: \
+#     이 주간 차트는 165개 이상의 국가로부터 수집한 Apple Music Classical 스트리밍, Apple Music 스트리밍, iTunes 다운로드, iTunes 곡 판매 및 Shazam 태그 등 5가지 데이터 소스를 결합해 클래식 음악의 최신 동향을 종합적으로 보여준다. \
+#     클래식 앨범 TOP 100은 매주 월요일 Apple Music Classical 홈 탭에서 업데이트된다. 각 차트에는 전주 금요일부터 목요일까지 1주일간의 활동이 반영된다. \
+#     4 \
+#     고정닉 0 \
+#     실베추공유신고, 댓글 : ',
+# }
 
 
 #테스트용 실행
 
 ### 전처리 v1 (단어 뽑아서 처리 후 변환)
-finder_context = {
-    #'title' : 'dkssudgktpdy hello',
-    'content' : '포켓몬 SV 이 새끼 프레임방어되는거맞지?'
-}
+# finder_context = {
+#     #'title' : 'dkssudgktpdy hello',
+#     'content' : '포켓몬 스바 이 새끼 프레임방어되는거맞지? '
+# }
 
-#finder(context=finder_context)
-이름짓기귀찮은데아무튼찾아낸고유명사랑원본문장 = finder(context=finder_context)
-content = pre_v1(원본 = 이름짓기귀찮은데아무튼찾아낸고유명사랑원본문장['context']['input'], 이거이름뭘로할까 = 이름짓기귀찮은데아무튼찾아낸고유명사랑원본문장['context']['words'])
+# #finder(context=finder_context)
+# 이름짓기귀찮은데아무튼찾아낸고유명사랑원본문장 = finder(context=finder_context)
+# content = pre_v1(원본 = 이름짓기귀찮은데아무튼찾아낸고유명사랑원본문장['context']['input'], 이거이름뭘로할까 = 이름짓기귀찮은데아무튼찾아낸고유명사랑원본문장['context']['words'])
 
-reworkd_context = {
-    'title' : '',
-    'content' : f'{content}'
-}
-rework(context=reworkd_context)
+# reworkd_context = {
+#     'title' : '',
+#     'content' : f'{content}'
+# }
+# rework(context=reworkd_context)
 
 
 # ### 전처리 v2 (ai가 다 함)
 # finder_context = {
 #     #'title' : 'dkssudgktpdy hello',
-#     'content' : 'hello dkssud 안녕하세요 멍한청인지공능 푸하하'
+#     'content' : 'hello dkssud 안녕하세요 멍한청인지공능 푸하하 dkssudgkek'
 # }
 # content = pre_v2(finder_context)
 
@@ -303,3 +333,9 @@ rework(context=reworkd_context)
 #     'content' : f'{content}'
 # }
 # rework(context=reworkd_context)
+
+###태그내놔
+tag_context = {
+    'content' : '올해 휴덕 할 거 같습니다 그동안 감사했습니다 안녕하세요 바위게분들! 홍이장군입니다! 일단 주저없이 본론으로 넘어가겠습니다 저는 음악을 전공하는 바위게입니다 제가 올해 대입 광탈 이후 고민 끝에  재수를 결정하였습니다 그래서 당분간 덕질의 행복을 잠시 중단하고  이악물고 재수 즉 현생에 몰입할 예정입니다 당분간 저의 활동이 많이 뜸해질 거 같습니다! 정말 그동안 덕질하면서  너무도 행복했고 즐거웠습니다 하지만 저의 목표를 위해  잠시 휴덕을 하기로 결정했습니다 그동안 카페활동하면서  바위게분들에게정말 죄송하고 감사했습니다 부족한 저를 좋아해주시고  함께 소통해주셔서 감사합니다 여러분들의 올해 덕질생활도 행복하길 바랍니다 지금까지 홍이장군이었습니다 (홍이장군은 죽지않고 돌아온다)'
+}
+hashtag(context=tag_context)
