@@ -1,8 +1,10 @@
+import os.path
+
 from openai import OpenAI
+import pandas as pd
 #API 키
 
-client = OpenAI(api_key="#####################")
-
+client = OpenAI(api_key="#############################")
 ## 현재 자료의 문장이 완성형에 가까워 높은 문장 완성 성능을 보여주는 중
 ## 커뮤니티에 게시된 자연어들이 제대로 처리 되는지 확인 하려면 완전히 박살난 문장 형식의 글이나 문맥 파악이 불가능한 자료가 필요
 ## 초성, meme, 축약어 등 사전적 의미가 존재하지 않는 단어 처리 확인 필요
@@ -213,6 +215,152 @@ mood_context = {
     "content" : "개빡친당  벌써 10원이나 내렸누  씁"
 }
 
+def get_dataframe():
+    df = pd.read_csv("gpt_test_body.csv", encoding='euc-kr', index_col="index")
+
+    grouped_community_df = df.groupby('topic')
+    community_dfs = {category : group for category, group in grouped_community_df}
+    # for category, group in grouped_community_df:
+    #     print(f"\ncategory가 '{category}'인 데이터:")
+    # print(community_dfs["기타 국내 드라마 갤러리"])
+    data_community_csv = community_dfs[community_dfs['topic'].nunique()]
+
+
+
+def gpt_research_trends():
+    df = pd.read_csv("gpt_test_body.csv", encoding='euc-kr', index_col="index")
+
+    grouped_community_df = df.groupby('topic')
+    community_dfs = {category : group for category, group in grouped_community_df}
+    data_community_csv = community_dfs['닌텐도 마이너 갤러리'].to_csv(encoding='euc-kr', index=False)
+
+    # for category, group in grouped_community_df:
+    #     print(f"\ncategory가 '{category}'인 데이터:")
+    # print(community_dfs["기타 국내 드라마 갤러리"])
+    # print(df)
+
+    prompt_text = f"""
+    아래의 데이터는 커뮤니티 사이트에서 긁어온 한 페이지의 글에 대한 정보입니다.
+    다음의 글들을 통해  현재 어떤 트렌드가 유행하고 있는지 요약해 주십시오.
+    현재 body는 글의 제목과 내용이 붙어 있습니다.
+    붙여 기재한 이유는 글 제목에 내용을 쓰고, 내용란에는 쓸모없는 내용을 붙이는 경우가 있기 때문입니다. (예시: title='오늘 점심 추천 좀', body='ㅈㄱㄴ')
+    {data_community_csv}
+"""
+
+    response = client.chat.completions.create(
+        #gpt 모댈
+        model="gpt-4o-mini",
+        #응답 형식
+        response_format={ "type": "json_object" },
+        #프롬프트 작성 하는 곳
+        messages=[
+            #응답 형식 요구 ( 대화 방식 지정 )
+            {"role": "system", "content": "You are a helpful assistant designed to output JSON."},
+
+            #주문사항
+
+            # 목적
+            {"role": "user", "content": "주어진 텍스트를 요약해서 반환합니다."},
+
+            # 제공 정보 요약
+            {"role": "user", "content": prompt_text},
+            # {"role": "user", "content": "주어진 텍스트는 여러개의 텍스트를 가진 리스트입니다."},
+            # {"role": "user", "content": "리스트 안의 텍스트는 title과 content로 이루어져 있습니다."},
+            # {"role": "user", "content": "각 텍스트 마다 title과 content를 종합 및 요약해 주제를 정하게 됩니다."},
+
+            # 주제 분석 방법
+            {"role": "user", "content": "텍스트를 읽고 현재의 글 주제 분야를 키워드로 제시해 주세요."},
+            {"role": "user", "content": "현재 주제의 대분류에 대한 정보를 포함시켜 주세요. Ex) 기술, 음악, 의료 등."},
+            {"role": "user", "content": "위에서 요약한 키워드는 Keyword라는 항목으로 표시를 해주세요."},
+            {"role": "user", "content": "다음부터 나오는 명령들은 위에서 진행한 키워드 요약이 아닌 내용 요약으로 진행해 주세요. "},
+            {"role": "user", "content": "가장 많이 나온 주제, 공통된 주제를 메인 주제로 정합니다."},
+            {"role": "user", "content": "그 외 많이 나온 주제나 요약해 나온 메인 주제의 하위 분류 주제를 서브 주제로 정합니다."},
+            {"role": "user", "content": "메인 주제를 중심으로 요약문을 작성합니다."},
+            {"role": "user", "content": "응답은 trend로 합니다."},
+            {"role": "user", "content": "요약된 문장엔 공격적인 단어가 적게 포함되어야 합니다."},
+
+            #답변 제공
+            {"role": "assistant", "content": f"답변의 형식은 다음을 꼭 지켜주시길 바랍니다."},
+            {"role": "assistant", "content": f"\
+                trend : [\
+                    main_topic : 글을 요약해서 얻은 메인 주제 키워드\
+                    sub_topic : 글을 요약해 얻은 서브 주제들\
+                ]\
+                trend_reason : 글의 요약을 통해 유추한 결과를 자세히 서술하는 곳\
+            "}]
+    )
+
+
+    result = response.choices[0].message.content
+    print(result)
+
+def get_research_mood():
+    df = pd.read_csv("gpt_test_body.csv", encoding='euc-kr', index_col="index")
+
+    grouped_community_df = df.groupby('topic')
+    community_dfs = {category : group for category, group in grouped_community_df}
+    data_community_csv = community_dfs['닌텐도 마이너 갤러리'].to_csv(encoding='euc-kr', index=False)
+
+    # for category, group in grouped_community_df:
+    #     print(f"\ncategory가 '{category}'인 데이터:")
+    # print(community_dfs["기타 국내 드라마 갤러리"])
+    # print(df)
+
+    prompt_text = f"""
+    아래의 데이터는 커뮤니티 사이트에서 긁어온 한 페이지의 글에 대한 정보입니다.
+    다음의 글들을 통해  현재 어떤 트렌드가 유행하고 있는지 요약해 주십시오.
+    현재 body는 글의 제목과 내용이 붙어 있습니다.
+    붙여 기재한 이유는 글 제목에 내용을 쓰고, 내용란에는 쓸모없는 내용을 붙이는 경우가 있기 때문입니다. (예시: title='오늘 점심 추천 좀', body='ㅈㄱㄴ')
+    {data_community_csv}
+"""
+
+    response = client.chat.completions.create(
+        #gpt 모댈
+        model="gpt-4o-mini",
+        #응답 형식
+        response_format={ "type": "json_object" },
+        #프롬프트 작성 하는 곳
+        messages=[
+            #응답 형식 요구 ( 대화 방식 지정 )
+            {"role": "system", "content": "You are a helpful assistant designed to output JSON."},
+
+            #주문사항
+
+            # 목적
+            {"role": "user", "content": "주어진 텍스트를 요약해서 반환합니다."},
+
+            # 제공 정보 요약
+            {"role": "user", "content": prompt_text},
+            # {"role": "user", "content": "주어진 텍스트는 여러개의 텍스트를 가진 리스트입니다."},
+            # {"role": "user", "content": "리스트 안의 텍스트는 title과 content로 이루어져 있습니다."},
+            # {"role": "user", "content": "각 텍스트 마다 title과 content를 종합 및 요약해 주제를 정하게 됩니다."},
+
+            # 주제 분석 방법
+            {"role": "user", "content": "텍스트를 읽고 현재 이 커뮤니티의 분위기를 요약해주세요."},
+            {"role": "user", "content": "다음부터 나오는 명령들은 위에서 진행한 키워드 요약이 아닌 내용 요약으로 진행해 주세요. "},
+            {"role": "user", "content": "가장 대표적인 감정, 분위기로 단어 4개로 요약해주세요"},
+            {"role": "user", "content": "요약한 결과에 대한 이유를 작성해야합니다."},
+            {"role": "user", "content": "응답은 trend로 합니다."},
+            {"role": "user", "content": "요약된 문장엔 공격적인 단어가 적게 포함되어야 합니다."},
+
+            #답변 제공
+            {"role": "assistant", "content": f"답변의 형식은 다음을 꼭 지켜주시길 바랍니다."},
+            {"role": "assistant", "content": f"\
+                mood : 분석한 커뮤니티의 분위기를 요약해서 표시하는 곳입니다.\
+                mood_reason : 글의 요약을 통해 유추한 결과를 자세히 서술하는 곳\
+            "}
+        ]
+    )
+
+
+    result = response.choices[0].message.content
+    print(result)
+
+
 #테스트용 실행
-mood(context=mood_context)
+# path = os.path.abspath(os.path.dirname(__file__))
+# gpt_research_trends()
+get_research_mood()
+# mood(context=mood_context)
+
 # trend(context=trend_context)

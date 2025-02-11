@@ -3,7 +3,7 @@ import json
 
 from openai import OpenAI
 #API 키 
-client = OpenAI(api_key="API_KEY_PLEASE")
+client = OpenAI(api_key="#############################")
 
 ## 현재 자료의 문장이 완성형에 가까워 높은 문장 완성 성능을 보여주는 중
 ## 커뮤니티에 게시된 자연어들이 제대로 처리 되는지 확인 하려면 완전히 박살난 문장 형식의 글이나 문맥 파악이 불가능한 자료가 필요
@@ -19,6 +19,10 @@ client = OpenAI(api_key="API_KEY_PLEASE")
 
 ## 02/10
 ## 영어로 작성된걸 어찌 처리 해야할지 모르겟음
+
+## 02/11 (신대홍)
+## 한글자판으로 입력된 영어 같은 경우를 처리하는 프롬프트를 작성해봤습니다. 확인을 해봐야합니다
+## 이제 다음은 영어 관련 문제긴한데.. 이 부분은 레딧같은데서 긁어와서 한번해보려고 합니다.
 
 #gpt 사용 전 전처리 할 단어 찾기
 def finder(context):  
@@ -61,7 +65,7 @@ def finder(context):
 def pre_v1(원본, 이거이름뭘로할까):
     #나중에 db로 뺴야됨
     words = {'q':'ㅂ','w':'ㅈ','e':'ㄷ','r':'ㄱ','t':'ㅅ','y':'ㅛ','u':'ㅕ','i':'ㅑ','o':'ㅐ','p':'ㅔ','a':'ㅁ','s':'ㄴ','d':'ㅇ','f':'ㄹ','g':'ㅎ','h':'ㅗ','j':'ㅓ','k':'ㅏ','l':'ㅣ','z':'ㅋ','x':'ㅌ','c':'ㅊ','v':'ㅍ','b':'ㅠ','n':'ㅜ','m':'ㅡ',
-        '멍한청인지공능': '멍청한인공지능', '스바' : '시발'}
+        '멍한청인지공능': '멍청한인공지능', '스바' : '시발',}
     
     nouns = 이거이름뭘로할까
     
@@ -77,7 +81,10 @@ def pre_v1(원본, 이거이름뭘로할까):
 def pre_v2(context):
     #나중에 db로 뺴야됨
     words = {
-        '멍한청인지공능': '멍청한인공지능'}
+        '멍한청인지공능': '멍청한인공지능',
+        'dkssud': '안녕',
+    }
+
     
     response = client.chat.completions.create(
         #gpt 모델
@@ -96,7 +103,11 @@ def pre_v2(context):
         {"role": "user", "content": "고유명사가 아닌 경우 응답에 포함하지 않습니다."},
         {"role": "user", "content": "응답은 context로 합니다."},
         {"role": "user", "content": f"고유명사를 {words}에 맞게 변환합니다."},
-        
+
+        {"role": "user", "content": '주의사항 : 입력된 텍스트 중, 영단어가 포함되어 있을 수 있습니다. 이 경우, 문맥상 의미가 있는 경우면\
+                                    해석한 결과를 내보내되, 그렇지않은 문맥상 단어의 의미가 불명확하거나 규칙성이 없는 배열의 단어같은 경우\
+                                    한글 자판 입력 의도 (ex: dkssud = 안녕)일 수있으니, 이런식으로 한글 두벌식 자판 기준으로 단어를 변형하고 자동으로 변환합니다.'},
+
         #답변 제공
         {"role": "assistant", "content": f"context에 포함된 고유명사들을 변환하여 출력합니다. context:{context}"}
         ]
@@ -266,7 +277,7 @@ trend_context = {
 ### 전처리 v1 (단어 뽑아서 처리 후 변환)
 finder_context = {
     #'title' : 'dkssudgktpdy hello',
-    'content' : '포켓몬 스바 이 새끼 프레임방어되는거맞지?'
+    'content' : '포켓몬 SV 이 새끼 프레임방어되는거맞지?'
 }
 
 #finder(context=finder_context)
