@@ -20,6 +20,8 @@ client = OpenAI(api_key="API_KEY_PLEASE")
 ## 02/10
 ## 영어로 작성된걸 어찌 처리 해야할지 모르겟음
 
+## 확인요
+
 #gpt 사용 전 전처리 할 단어 찾기
 def finder(context):  
     response = client.chat.completions.create(
