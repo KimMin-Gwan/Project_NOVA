@@ -4,7 +4,7 @@ import json
 
 from openai import OpenAI
 #API 키 
-client = OpenAI(api_key="API_KEY_KEY_KEY_KEY_KEY_KEY_KEY_KEY_KEY_KEY_KEY_KEY_KEY_KEY_KEY_KEY_KEY_KEY_KEY_KEY_KEY_KEY_KEY_KEY")
+client = OpenAI(api_key="ApI_kEy")
 
 ## 현재 자료의 문장이 완성형에 가까워 높은 문장 완성 성능을 보여주는 중
 ## 커뮤니티에 게시된 자연어들이 제대로 처리 되는지 확인 하려면 완전히 박살난 문장 형식의 글이나 문맥 파악이 불가능한 자료가 필요
@@ -266,6 +266,7 @@ def hashtag (context):
         {"role": "user", "content": "주어진 문장에서 태그를 추출합니다."},
         {"role": "user", "content": "태그는 문장 전체 또는 각 단어에서 추출합니다."},
         {"role": "user", "content": "태그는 문맥에서 가장 중요한걸로 추출합니다."},
+        {"role": "user", "content": "고유명사는 중요한 태그일 가능성이 있습니다."},
         {"role": "user", "content": "응답에 최소 1개 이상의 태그가 있어야 합니다."},
         {"role": "user", "content": "모든 태그는 명사입니다."},
         {"role": "user", "content": "응답은 tags로 합니다."},
