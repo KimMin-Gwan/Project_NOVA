@@ -234,7 +234,7 @@ class Sub_Controller:
         # detail은 버그나 신고에 대한 자세한 내용을 기입하기 위한 용도임
         # 나중에 추가될것임
         
-        model.try_set_report(self, data_payload=request.data_payload)
+        model.try_set_report(data_payload=request.data_payload)
         model.save_report()
         
         return model
