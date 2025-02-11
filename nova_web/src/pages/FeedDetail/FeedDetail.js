@@ -9,6 +9,7 @@ import more_icon from "./../../img/more_icon.svg";
 // import back from "./../../img/backword.png";
 import back from "./../../img/detail_back.png";
 import star from "./../../img/favorite.png";
+import input from "./../../img/input.svg";
 import axios from "axios";
 import mainApi from "../../services/apis/mainApi";
 
@@ -127,6 +128,11 @@ export default function FeedDetail({}) {
     }
   }
 
+  function onClickInput() {
+    fetchMakeComment();
+    setCommentValue("");
+  }
+
   let header = {
     "request-type": "default",
     "client-version": "v1.0.1",
@@ -228,15 +234,20 @@ export default function FeedDetail({}) {
             return <Comment key={comment.cid} comment={comment} onClickComment={onClickComment} />;
           })}
         <div className={style["input-container"]}>
-          <input
-            ref={commentRef}
-            type="text"
-            id={style["comment"]}
-            value={commentValue}
-            onChange={onChangeComment}
-            onKeyDown={onKeyDownEnter}
-            placeholder="당신의 생각을 남겨보세요."
-          />
+          <div className={style["input-wrapper"]}>
+            <input
+              ref={commentRef}
+              type="text"
+              id={style["comment"]}
+              value={commentValue}
+              onChange={onChangeComment}
+              onKeyDown={onKeyDownEnter}
+              placeholder="당신의 생각을 남겨보세요."
+            />
+            <button className={style["input-button"]} onClick={onClickInput}>
+              <img src={input} alt="input" />
+            </button>
+          </div>
         </div>
       </div>
     </div>

@@ -138,9 +138,11 @@
     width: 90%;
     padding: 10px 0px;
     padding-left: 20px;
+    padding-right: 40px;
     display: flex;
     margin: 0 auto;
     border-radius: 20px;
+    box-sizing: border-box;
     border: none;
     background-color: #ededed;
   }
@@ -152,5 +154,31 @@
   #comment::placeholder {
     padding: 5px;
     color: #ababab;
+  }
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.input-button {
+  width: 20px;
+  height: 20px;
+  background-color: transparent;
+  border-radius: 100px;
+  border: #cdcdcd 1px solid;
+  position: absolute;
+  right: 35px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+
+  img {
+    width: 10px;
+    height: 10px;
+    object-fit: cover;
   }
 }
