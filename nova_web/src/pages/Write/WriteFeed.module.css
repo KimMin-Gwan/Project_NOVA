@@ -412,18 +412,18 @@
   background-color: white;
   padding: 20px;
   margin-bottom: 5px;
+}
 
-  .section_title {
-    margin-bottom: 5px;
-  }
+.section_title {
+  margin-bottom: 5px;
+}
 
-  .more-find {
-    margin-top: 15px;
-    text-align: end;
-    cursor: pointer;
-    color: #797979;
-    text-decoration: underline;
-  }
+.more-find {
+  margin-top: 15px;
+  text-align: end;
+  cursor: pointer;
+  color: #797979;
+  text-decoration: underline;
 }
 
 .Select_box {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useNavigation, useParams } from "react-router-dom";
 import style from "./WriteFeed.module.css";
 import backword from "./../../img/back_icon.png";
 
@@ -15,7 +15,13 @@ import EditorBox from "../../component/EditorBox.js";
 import postApi from "../../services/apis/postApi.js";
 import axios from "axios";
 import useBiasStore from "../../stores/BiasStore/useBiasStore.js";
-// import { Editor } from "@toast-ui/react-editor/index.js";
+
+const categoryData = [
+  { key: 0, category: "자유게시판" },
+  { key: 1, category: "팬아트" },
+  { key: 2, category: "유머게시판" },
+];
+
 const Write = ({ brightmode }) => {
   const params = useParams();
   const type = params.type;
@@ -286,7 +292,7 @@ const Write = ({ brightmode }) => {
           취소
         </p>
         {type === "long" && <p>롱 피드 작성</p>}
-        {type === "short" && <p>숏 피드 작성</p>}
+        {type === "short" && <p>모멘트 작성</p>}
 
         <p
           type="submit"
@@ -301,33 +307,14 @@ const Write = ({ brightmode }) => {
         </p>
       </div>
 
-      <section className={style["bias-section"]}>
+      {/* <section className={style["bias-section"]}>
         <div className={style["title"]}>커뮤니티 선택</div>
         <BiasBoxes setBiasId={setBiasId} writeCommunity />
-      </section>
+      </section> */}
 
       <section className={style["Select_container"]}>
         <div className={style["section_title"]}>주제 선택</div>
-        <label className={style["Select_box"]} onClick={onClickTopic}>
-          {currentTopic}
-        </label>
-        <ul className={`${showTopic ? style["Select_options_on"] : style["Select_options"]}`}>
-          <li onClick={onClickSelectTopic}>선택 없음</li>
-          {biasList &&
-            biasList.map((bias, i) => {
-              return (
-                <li
-                  key={bias.bid}
-                  onClick={(e) => {
-                    onClickSelectTopic(e);
-                  }}
-                >
-                  {bias.bname}
-                </li>
-              );
-            })}
-        </ul>
-
+        <DropDownSection options={biasList} setBiasId={setBiasId} />
         <div
           className={style["more-find"]}
           onClick={() => {
@@ -336,6 +323,11 @@ const Write = ({ brightmode }) => {
         >
           더 많은 주제 찾아보기
         </div>
+      </section>
+
+      <section className={style["Select_container"]}>
+        <div className={style["section_title"]}>카테고리 선택</div>
+        <DropDownSection options={categoryData} />
       </section>
 
       <div className={style["hashtag_container"]}>
@@ -484,6 +476,47 @@ const Write = ({ brightmode }) => {
 
 export default Write;
 
+function DropDownSection({ options, setBiasId }) {
+  const [showTopic, setShowTopic] = useState(false);
+  const [currentTopic, setCurrentTopic] = useState("선택 없음");
+  function onClickTopic() {
+    setShowTopic(!showTopic);
+  }
+
+  function onClickSelectTopic(e, bid) {
+    // console.log(e.target.innerText);
+    setCurrentTopic(e.target.innerText);
+    setShowTopic(!showTopic);
+    if (setBiasId) {
+      setBiasId(bid);
+    }
+  }
+  return (
+    <>
+      <label className={style["Select_box"]} onClick={onClickTopic}>
+        {currentTopic}
+      </label>
+      <ul className={`${showTopic ? style["Select_options_on"] : style["Select_options"]}`}>
+        <li onClick={onClickSelectTopic}>선택 없음</li>
+        {options &&
+          options.map((option, i) => {
+            return (
+              <li
+                key={option.bid || option.key}
+                value={option.bname || option.category}
+                onClick={(e) => {
+                  onClickSelectTopic(e, option.bname);
+                }}
+              >
+                {option.bname || option.category}
+              </li>
+            );
+          })}
+      </ul>
+    </>
+  );
+}
+
 export const Modal = ({
   show,
   closeModal,
@@ -501,16 +534,6 @@ export const Modal = ({
 
   let fileRef = useRef();
 
-  // if (!show) return null;
-  // return (
-  //   <div className={`${style["modal-overlay"]} ${style[getModeClass(mode)]}`} onClick={closeModal}>
-  //     <div className={style["modal-content"]} onClick={(e) => e.stopPropagation()}>
-  //       <p className={style["modal-title"]}>{title}</p>
-  //       {children}
-  //       <button onClick={closeModal}>닫기</button>
-  //     </div>
-  //   </div>
-  // );
   return (
     <div className={style["wrapper-container"]}>
       <div className={style["modal-container"]}>
@@ -611,32 +634,6 @@ export function VoteModal({
               </div>
             );
           })}
-          {/* {Array.from({ length: createOptions }).map((option, i) => {
-            return (
-              <div key={i} className={style["vote-option-wrapper"]}>
-                <button
-                  className={`${style["delete-option"]} ${style["remove-icon"]}`}
-                  onClick={() => {
-                    console.log("dlee");
-                    onClickDelete(i);
-                  }}
-                >
-                  <img src={close_icon} alt="remove" />
-                </button>
-                <input
-                  ref={optionRef}
-                  id={style["vote-option"]}
-                  name="option"
-                  type="text"
-                  value={choice[i]}
-                  placeholder="이곳을 눌러 수정"
-                  onChange={(e) => {
-                    handleChoiceChange(i, e.target.value);
-                  }}
-                />
-              </div>
-            );
-          })} */}
           {createOptions < 4 && (
             <div className={style["option-box"]} onClick={onClickAdd}>
               <span className={style["add-icon"]}>
