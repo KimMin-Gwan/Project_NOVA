@@ -5,7 +5,6 @@ import add_bias_icon from "./../img/add_bias.png";
 import { useNavigate } from "react-router-dom";
 
 export default function BiasBoxes({ setBiasId, fetchBiasCategoryData, writeCommunity }) {
-  const URL = "https://nova-platform.kr/home/";
   let bias_url = "https://kr.object.ncloudstorage.com/nova-images/";
 
   const navigation = useNavigate();

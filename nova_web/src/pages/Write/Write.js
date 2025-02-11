@@ -14,6 +14,7 @@ import BiasBoxes from "../../component/BiasBoxes.js";
 import EditorBox from "../../component/EditorBox.js";
 import postApi from "../../services/apis/postApi.js";
 import axios from "axios";
+import useBiasStore from "../../stores/BiasStore/useBiasStore.js";
 // import { Editor } from "@toast-ui/react-editor/index.js";
 const Write = ({ brightmode }) => {
   const params = useParams();
@@ -254,6 +255,19 @@ const Write = ({ brightmode }) => {
       navigate("/nova_login");
     }
   }
+  let { biasList, loading, fetchBiasList } = useBiasStore();
+
+  const [showTopic, setShowTopic] = useState(false);
+  const [currentTopic, setCurrentTopic] = useState("선택 없음");
+  function onClickTopic() {
+    setShowTopic(!showTopic);
+  }
+
+  function onClickSelectTopic(e) {
+    // console.log(e.target.innerText);
+    setCurrentTopic(e.target.innerText);
+    setShowTopic(!showTopic);
+  }
 
   const [mode, setMode] = useState(() => {
     // 로컬 스토리지에서 가져온 값이 있으면 그것을, 없으면 'bright'로 초기화
@@ -292,12 +306,37 @@ const Write = ({ brightmode }) => {
         <BiasBoxes setBiasId={setBiasId} writeCommunity />
       </section>
 
-      {/* <section className={style["Select_container"]}>
-        <select className={style["Select_box"]}>
-          <option>1</option>
-          <option>2</option>
-        </select>
-      </section> */}
+      <section className={style["Select_container"]}>
+        <div className={style["section_title"]}>주제 선택</div>
+        <label className={style["Select_box"]} onClick={onClickTopic}>
+          {currentTopic}
+        </label>
+        <ul className={`${showTopic ? style["Select_options_on"] : style["Select_options"]}`}>
+          <li onClick={onClickSelectTopic}>선택 없음</li>
+          {biasList &&
+            biasList.map((bias, i) => {
+              return (
+                <li
+                  key={bias.bid}
+                  onClick={(e) => {
+                    onClickSelectTopic(e);
+                  }}
+                >
+                  {bias.bname}
+                </li>
+              );
+            })}
+        </ul>
+
+        <div
+          className={style["more-find"]}
+          onClick={() => {
+            navigate("/follow_page");
+          }}
+        >
+          더 많은 주제 찾아보기
+        </div>
+      </section>
 
       <div className={style["hashtag_container"]}>
         <div>해시태그</div>
