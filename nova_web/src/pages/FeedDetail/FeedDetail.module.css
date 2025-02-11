@@ -182,3 +182,58 @@
     object-fit: cover;
   }
 }
+
+/* modal */
+.OptionModal {
+  margin: 0 auto;
+  /* max-width: 500px;
+  width: 500px; */
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 9999;
+}
+
+.modal_container {
+  /* margin: 0 50px; */
+  position: absolute;
+  left: 50%;
+  top: 30%;
+  transform: translateX(-50%);
+  max-width: 400px;
+  background-color: white;
+  width: 100%;
+  border-radius: 7px;
+  /* height: 300px; */
+
+  .modal_content:last-child {
+    border-bottom: none;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+  }
+}
+
+.modal_title {
+  padding: 8px 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #79797977;
+}
+
+.modal_content {
+  cursor: pointer;
+  padding: 8px 0px;
+  border-bottom: 1px solid #797979;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal_content_accent {
+  background-color: #f27b7b;
+  color: white;
+}

@@ -185,7 +185,18 @@ export default function FeedDetail({}) {
       })
       .then((res) => {
         console.log(res.data);
+        if (res.data.body.result) {
+          alert("삭제되었습니다.");
+          navigate(-1);
+        }
       });
+  }
+
+  const [showMoreOption, setShowMoreOption] = useState(false);
+  function onClickOption(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    setShowMoreOption(!showMoreOption);
   }
 
   if (isLoading) {
@@ -202,12 +213,15 @@ export default function FeedDetail({}) {
         {feedData.is_owner && (
           <button
             className={style["delete-button"]}
-            onClick={() => {
-              fetchRemoveFeed();
+            onClick={(e) => {
+              onClickOption(e);
             }}
           >
             <img src={more_icon} />
           </button>
+        )}
+        {showMoreOption && (
+          <OptionModal onClickOption={onClickOption} onClickDelete={fetchRemoveFeed} />
         )}
       </div>
 
@@ -328,6 +342,24 @@ function ReplyComment({ reply }) {
             </button>
             <span>{reply.like}</span>
           </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// 모달
+function OptionModal({ onClickOption, onClickDelete }) {
+  return (
+    <div className={style["OptionModal"]} onClick={onClickOption}>
+      <div className={style["modal_container"]}>
+        <div className={style["modal_title"]}>설정</div>
+        <div className={style["modal_content"]}>수정</div>
+        <div
+          className={`${style["modal_content"]} ${style["modal_content_accent"]}`}
+          onClick={onClickDelete}
+        >
+          삭제
         </div>
       </div>
     </div>
