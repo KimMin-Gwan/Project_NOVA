@@ -25,8 +25,8 @@ warnings.filterwarnings("ignore", module='boto3.compat')
 
 # Feed manager
 class FeedManager:
-    def __init__(self, database, fclasses, feed_search_engine) -> None:
-        self._feedClassManagement = FeedClassManagement(fclasses=fclasses)
+    def __init__(self, database, feed_search_engine) -> None:
+        #self._feedClassManagement = FeedClassManagement(fclasses=fclasses)
         #self._database:Local_Database= database
         self._database= database
         #self._managed_user_table = ManagedUserTable(database=database)
@@ -852,39 +852,39 @@ class FeedClassAnalist:
         return result
 
 
-# 이건 피드 메타 정보를 가지고 있는 친구
-# configure.txt 에서 설정 가능함
-class FeedClassManagement:
-    def __init__(self, fclasses):
-        self._fclasses = self.__set_fclasses(fclasses=fclasses)
+## 이건 피드 메타 정보를 가지고 있는 친구
+## configure.txt 에서 설정 가능함
+#class FeedClassManagement:
+    #def __init__(self, fclasses):
+        #self._fclasses = self.__set_fclasses(fclasses=fclasses)
 
-    # 초기 class들 세팅
-    def __set_fclasses(self, fclasses):
-        result = []
-        for fclass_data in fclasses:
-            fclass = FeedClass(fclass_data[0], fclass_data[1], fclass_data[2], int(fclass_data[3]))
-            result.append(fclass)
-        return result
+    ## 초기 class들 세팅
+    #def __set_fclasses(self, fclasses):
+        #result = []
+        #for fclass_data in fclasses:
+            #fclass = FeedClass(fclass_data[0], fclass_data[1], fclass_data[2], int(fclass_data[3]))
+            #result.append(fclass)
+        #return result
 
-    def get_class_name(self, fclass):
-        fname = "None"
-        num_choice = -1
+    #def get_class_name(self, fclass):
+        #fname = "None"
+        #num_choice = -1
 
-        for instance in self._fclasses:
-            if instance.fclass == fclass:
-                fname = instance.fname
-                num_choice = instance.num_choice
-                break
+        #for instance in self._fclasses:
+            #if instance.fclass == fclass:
+                #fname = instance.fname
+                #num_choice = instance.num_choice
+                #break
 
-        result = []
-        if num_choice != -1:
-            for _ in range(num_choice):
-                result.append(0)
+        #result = []
+        #if num_choice != -1:
+            #for _ in range(num_choice):
+                #result.append(0)
 
-        return fname, result
+        #return fname, result
             
-    def get_fclass_meta_data(self):
-        return self._fclasses
+    #def get_fclass_meta_data(self):
+        #return self._fclasses
 
 
 class FeedClass:
