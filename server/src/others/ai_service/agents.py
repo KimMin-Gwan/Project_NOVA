@@ -1,5 +1,5 @@
 # 반환되는 데이터에서 원문 데이터를 제외할 것 (돈나감)
-
+from pprint import pprint
 
 import json
 from openai import OpenAI
@@ -41,6 +41,8 @@ class BaseAgent():
     # query 전송하기(json 버전으로 받기)
     def _make_response_as_json(self, query_data:KeyParam) -> dict:
         message = self._message.extend(query_data.get_dict_key_param())
+        
+        pprint(message)
         
         response = self._client.chat.completions.create(
             model=self._model_v,
