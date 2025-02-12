@@ -1,26 +1,25 @@
-import pandas as pd
 from bintrees import AVLTree
-from bs4 import Tag
-from pandas.core.internals.construction import to_arrays
 
 
 # 인벤토리 -> 가방 원형
 class Inventory:
     def __init__(self):
-        self._bag = pd.DataFrame()
-        self._tree = AVLTree()
+        pass
+
         
 class ModifierWord:
     def __init__(self, word="", meaning=[]):
         self.word:str = word
         self.meaning:list = meaning
         self.num_meaning = len(self.meaning)
+        self.type=""
         
     # dict_data
     def to_dict(self):
         return {
             'word' : self.word,
             'meaning' : self.meaning,
+            'type' : self.type
         }
     
     # json 파일 뜯어서 만들 때 쓰는거
@@ -96,12 +95,13 @@ class AITagBag(Inventory):
         result = self._tag_tree.get(key=tag)
         return result
 
-    def modify_tag(self, tag:str, meaning:list):
+    def modify_tag(self, tag:str):
         target_tag:ModifierTag = self._tag_tree.get(key=tag)
         if not target_tag:
             self._tag_tree.insert(key=tag, value=ModifierTag(tag=tag))
         return
 
 
-
+        
+    
 

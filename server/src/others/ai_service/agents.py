@@ -56,10 +56,12 @@ class BaseAgent():
         return
 
 class AnalyzerAgent(BaseAgent):
+    
     class AnalyizerKeyParam(KeyParam):
         def __init__(self):
             super().__init__()
             self._init_content(content="context를 분석하는 Agent입니다. context:")
+            
     def __init__(self, model_setting):
         super().__init__(model_setting=model_setting)
         self.__set_analyzer_prompt()
@@ -87,6 +89,12 @@ class FinderAgent(BaseAgent):
         def __init__(self):
             super().__init__()
             self._init_content(content="context에 포함될 고유명사들을 출력합니다. context:")
+            
+        def set_context(self, context):
+            self.__content = [
+                f"context에 포함될 고유명사들을 출력합니다. context:{context}",
+            ]
+            return           
             
     def __init__(self, model_setting):
         super().__init__(model_setting)
@@ -122,8 +130,13 @@ class ConverterAgent(BaseAgent):
     class ConverterKeyParam(KeyParam):
         def __init__(self):
             super().__init__()
-            self._init_content(content="context에 포함된 내용을 변환하여 응답합니다. context:")
             
+        def set_context(self, context):
+            self.__content = [
+                f"context에 포함된 내용을 변환하여 응답합니다. context:{context}",
+            ]
+            return           
+        
     def __init__(self, model_setting):
         super().__init__(model_setting)
         self.__set_converter_prompt()

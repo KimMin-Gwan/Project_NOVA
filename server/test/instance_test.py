@@ -6,6 +6,6 @@ data = {
 }
 
 
-result = "아니 그래서 이게 뭔데 씹덕아 " + data
+result = f"아니 그래서 이게 뭔데 씹덕아 {data}"
 
-pprint(data)
+pprint(type(result))
