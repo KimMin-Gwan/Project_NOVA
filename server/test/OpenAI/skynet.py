@@ -4,7 +4,7 @@ import json
 
 from openai import OpenAI
 #API 키 
-client = OpenAI(api_key="aaaaaaaaaaaaaaaaaaaaaaaapi_keeeeeeeeeeeeeeeeeeeeeeeeeeeeey")
+client = OpenAI(api_key="키자꾸지워서올리래")
 
 ## 현재 자료의 문장이 완성형에 가까워 높은 문장 완성 성능을 보여주는 중
 ## 커뮤니티에 게시된 자연어들이 제대로 처리 되는지 확인 하려면 완전히 박살난 문장 형식의 글이나 문맥 파악이 불가능한 자료가 필요
@@ -43,7 +43,7 @@ def finder(context):
         {"role": "user", "content": "의미를 알 수 없는 단어를 고유명사로 취급합니다."},
         {"role": "user", "content": "고유명사가 아닌 경우 응답에 포함하지 않습니다."},
         {"role": "user", "content": "응답은 context로 합니다."},
-        {"role": "user", "content": "context에는 input, words가 있습니다."},
+        {"role": "user", "content": "context에는 words가 있습니다."},
         {"role": "user", "content": "words는 list입니다."},
         #{"role": "user", "content": "고유명사가 영어인 경우 알파벳을 모두 분리합니다. "},
         #{"role": "user", "content": "context에는 input, word와 index가 있습니다."},
@@ -127,7 +127,7 @@ def pre_v2(context):
 ### 나중에
 
 #gpt 사용하기 (본문)
-def rework(context):
+def rework(context,words,word_bag):
     response = client.chat.completions.create(
         #gpt 모델
         model="gpt-4o-mini",
@@ -148,15 +148,25 @@ def rework(context):
         {"role": "user", "content": "텍스트의 title은 비어있을 수 있습니다. "},
         {"role": "user", "content": "의미를 파악할 땐 title과 content를 모두 고려합니다."}, #그냥 따로 하는듯
         {"role": "user", "content": "텍스트의 title이 비어있을경우 content만 고려합니다."},
-        {"role": "user", "content": "응답은 '원본'과 '변환문', 강도로 합니다."},        
-        {"role": "user", "content": "응답의 원본과 변환문 또한 title과 content로 구성되어야 합니다."},
-        {"role": "user", "content": "title과 content 모두 변환합니다."},
+        {"role": "user", "content": "응답은 '변환문'과 강도로 합니다."},        
+        {"role": "user", "content": "응답의 변환문은 content로 구성되어야 합니다."},
+        
         {"role": "user", "content": "강도는 비속어 또는 욕설이 포함된 경우 2, 비속어는 포함되나 않으나 욕설이 없이 작성된 경우 1, 비속어 또는 욕설이 사용되지 않고 작성 된 경우 0을 반환합니다"}, #작동이 애매함
         {"role": "user", "content": '고유명사는 변환하지 않습니다.'},
         # {"role": "user", "content": '둘 이상의 단어가 합쳐진 단어가 있습니다. 이는 고유명사가 아닙니다.'}, #이상한 단어 분리해서 알아보라고 해보려고 한건데 안되는듯
         # {"role": "user", "content": '둘 이상의 단어가 합쳐진 단어는 해당 단어를 분해하여 어떤 단어가 사용됐는지 파악해 의미가 변하지 않도록 변환합니다.'},
         # {"role": "user", "content": '변환된 문장엔 일베용어가 사용되어선 안됩니다'}, #이거 정리해서 다 알려줘야 되나..?
         {"role": "user", "content": "변환된 문장엔 공격적인 단어가 적게 포함되어야 합니다."},
+
+        # 02/12 추가 워드백 사용하기
+        {"role": "user", "content": f"words:{words}, words 단어를 word_bag 맞게 변환합니다. word_bag:{word_bag} "},
+        {"role": "user", "content": "word를 meaning에 맞게 변환합니다."},
+        
+
+        ### 02/12
+        #단어 사전 사용하기
+        #for a in b:
+#        {"role": "user", "content": f'{}는 {}입니다. {}일 경우 ~~합니다,'},
 
         #답변 제공
         {"role": "assistant", "content": f"context에 포함된 내용을 변환하여 응답합니다. context:{context}"}
@@ -311,6 +321,9 @@ def 너가무엇을원하는것인지알아야겠다 (context):
         
     print(json.loads(result))
 
+
+
+
 #변환(검열)할 텍스트
 
 # trend_context = {
@@ -329,12 +342,6 @@ def 너가무엇을원하는것인지알아야겠다 (context):
 
 
 #테스트용 실행
-###변환기
-# rework_context = {
-#     'title' : '',
-#     'content' : '나하야돼 도드보키 럼그 고거은놓어넝 상목명 은콘이조 냐니아 거논해가추 능기결연 스우마 용상 걍걍 상용 마우스 연결기능 추가해논거 아니냐 조이콘은 명목상 넣어놓은거고 그럼 키보드도 돼야하나…'
-# }
-# rework(context=rework_context)
 
 ### 전처리 v1 (단어 뽑아서 처리 후 변환)
 # finder_context = {
@@ -360,21 +367,49 @@ def 너가무엇을원하는것인지알아야겠다 (context):
 # }
 # content = pre_v2(finder_context)
 
-# reworkd_context = {
-#     'title' : '',
-#     'content' : f'{content}'
-# }
-# rework(context=reworkd_context)
 
-###태그내놔
+
+##태그내놔
 # tag_context = {
-#     'content' : '기타연주에 반해버렸어요... 😍California Dreamin by The Mamas &Papas 도입부분에 나오는 기타연주 멜로디가 기가막히는데 이 곡도 한번 연주해주실수 있나요?'
+#     'content' : '포켓몬 스바 이 새끼 프레임방어되는거맞지?'
 # }
 # hashtag(context=tag_context)
 
-###이거왜 이렇게 많아지는건지 너무 많은데 나중에정리해야겠다 주제파악하기
-title_context = {
-    'content' : '유튜브에 자주 나오는 발라드 노래 가수'
+# rework_context = {
+#     'title' : '',
+#     'content' : '포켓몬 스바 이 새끼 프레임방어되는거맞지?'
+# }
+###테스트용 워드백
+words_bag=[{
+    'word':'유튜브',
+    'meaning': '',
+},
+{
+    'word':'발라드',
+    'meaning': '서양 고전음악의 한 장르',
+},
+{
+    'word':'노래',
+    'meaning': '',
+},
+{
+    'word':'가수',
+    'meaning': '노래 부르는 것을 직업으로 삼은 사람',
+},
+{
+    'word':'스바',
+    'meaning': '스칼렛 바이올렛',
+}]
+###변환기
+context = {
+    'content' : '포켓몬 스바 이 새끼 프레임방어되는거맞지?'
 }
+rework(context=context,words=finder(context=context),word_bag=words_bag)
 
-너가무엇을원하는것인지알아야겠다(context=title_context)
+###이거왜 이렇게 많아지는건지 너무 많은데 나중에정리해야겠다 주제파악하기
+# title_context = {
+#     'content' : '유튜브에 자주 나오는 발라드 노래 가수'
+# }
+
+# 너가무엇을원하는것인지알아야겠다(context=title_context)
+
