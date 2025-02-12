@@ -9,6 +9,14 @@ import star_color from "./../img/favorite_color.png";
 import comment from "./../img/comment.png";
 import postApi from "../services/apis/postApi";
 
+let header = {
+  "request-type": "default",
+  "client-version": "v1.0.1",
+  "client-ip": "127.0.0.1",
+  uid: "1234-abcd-5678",
+  endpoint: "/user_system/",
+};
+
 export function useBrightMode() {
   const params = new URLSearchParams(window.location.search);
   const brightModeFromUrl = params.get("brightMode");
@@ -68,6 +76,19 @@ export default function Feed({
       });
   }
 
+  const [report, setReport] = useState();
+
+  async function fetchReportResult(fid) {
+    await postApi
+      .post("nova_sub_system/try_report", {
+        header: header,
+        body: {
+          fid: fid,
+        },
+      })
+      .then((res) => console.log("rerere", res.data));
+  }
+
   return (
     <>
       <ContentFeed
@@ -76,6 +97,7 @@ export default function Feed({
         feedInteraction={feedInteraction}
         handleCheckStar={handleCheckStar}
         handleInteraction={handleInteraction}
+        fetchReportResult={fetchReportResult}
       />
     </>
   );
@@ -91,26 +113,20 @@ export function ContentFeed({
   handleCheckStar,
   handleInteraction,
   links,
+  fetchReportResult,
 }) {
   let navigate = useNavigate();
-  let header = {
-    "request-type": "default",
-    "client-version": "v1.0.1",
-    "client-ip": "127.0.0.1",
-    uid: "1234-abcd-5678",
-    endpoint: "/user_system/",
-  };
 
   if (!feed) {
     return <div>loading 중..,.</div>;
   }
-  console.log("deee", detailPage);
 
   return (
     <div
       className={`${style["wrapper-container"]} ${feed.fclass === "long" && style["long-wrapper"]}`}
       onClick={(e) => {
         e.preventDefault();
+        e.stopPropagation();
         navigate(`/feed_detail/${feed.fid}`, {
           state: { commentClick: false },
         });
@@ -146,7 +162,14 @@ export function ContentFeed({
       <LinkSection links={links} />
 
       <div className={style["button-container"]}>
-        <div>신고</div>
+        <div
+          onClick={(e) => {
+            e.stopPropagation();
+            fetchReportResult(feed.fid);
+          }}
+        >
+          신고
+        </div>
         <div className={style["button-box1"]}>
           <div className={style["action-button"]}>
             <button
@@ -206,7 +229,14 @@ export function ContentFeed({
           </div>
 
           <div className={style["button-container"]}>
-            <div>신고</div>
+            <div
+              onClick={(e) => {
+                e.stopPropagation();
+                fetchReportResult(feed.fid);
+              }}
+            >
+              신고
+            </div>
             <div className={style["button-box1"]}>
               <div className={style["action-button"]}>
                 <button
@@ -240,14 +270,6 @@ export function ContentFeed({
     </div>
   );
 }
-
-let header = {
-  "request-type": "default",
-  "client-version": "v1.0.1",
-  "client-ip": "127.0.0.1",
-  uid: "1234-abcd-5678",
-  endpoint: "/user_system/",
-};
 
 function LinkSection({ links }) {
   const [isLoading, setIsLoading] = useState(true);
