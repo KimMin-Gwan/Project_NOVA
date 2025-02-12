@@ -10,13 +10,6 @@
 # 실행할때는 다시 주석처리하여 사용할것
 #from model import Local_Database
 
-# from bintrees import AVLTree
-# from datetime import  datetime, timedelta
-# import random
-# from copy import copy
-from email.policy import default
-from time import sleep
-import pandas as pd
 import time
 import asyncio
 from others.data_domain import Feed, User, Bias, Notice, Comment
@@ -875,17 +868,9 @@ class SearchManager:
         self.__database = database
         self.__feed_algorithm=feed_algorithm
         self.__managed_feed_bias_table=managed_feed_bias_table
-    
 
         # best_feed_table이 필요한가? 필요없는거 같은데?
         self.__best_feed_table = [] # 좋아요가 30개 이상인 피드 테이블 | 최신 기준 
-
-        # self.__feed_table = [] # 최신 기준으로 쌓이는 피드 스택 | 인덱스를 활용할 것
-        # self.__feed_avltree = AVLTree()
-
-        # 테이블 초기화
-        # self.__init_feed_table(database=database)
-        # self.__init_feed_avltree()
 
     def try_get_random_feed(self):
         return self.__managed_feed_bias_table.get_random_feed()
@@ -1337,18 +1322,6 @@ class RecommendManager:
         trend_keyword_list = self.get_trend_keywords()
         return trend_keyword_list
 
-
-    # # 비로그인 유저를 위한 로직
-    # def get_recommend_feed_not_login(self, fid:str, history:list):
-    #     hashtag_ranking_list = self.get_best_hashtags() # 해시태그 랭킹 리스트
-    #     # 비로그인을 위한 로직
-    #     fid = self.__feed_algorithm.recommend_next_feed_not_login(
-    #         start_fid=fid,
-    #         history=history,
-    #         hashtag_ranking=hashtag_ranking_list
-    #     )
-    #     return fid
-
 # 필터링 매니저
 class FilteringManager:
     def __init__(self, database, feed_algorithm=None, managed_feed_bias_table:ManagedFeedBiasTable=None):
@@ -1403,10 +1376,6 @@ class FilteringManager:
             if len(keys) <= 0 or keys[0] == "":
                 filtered_fid_list = fid_list
 
-            # if "공지사항" in keys:
-            #     notice_list = self._filtering_notices_list()
-            #     filtered_fid_list.extend(notice_list)
-            #     keys.remove("공지사항")
             else:
                 temp_list = self.__managed_feed_bias_table.filtering_categories_feed_new(fid_list=fid_list, categories=keys)
 
