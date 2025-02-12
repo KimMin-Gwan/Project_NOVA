@@ -96,11 +96,10 @@ class FinderAgent(BaseAgent):
         def __init__(self):
             super().__init__()
             self._init_content(content="context에 포함될 고유명사들을 출력합니다. context:")
-            
+        
+        # 단일 속성에는 list가 아닌 string으로 넣엏야함
         def set_context(self, context):
-            self._content = [
-                f"context에 포함될 고유명사들을 출력합니다. context:{context}",
-            ]
+            self._content = f"context에 포함될 고유명사들을 출력합니다. context:{context}"
             return           
             
     def __init__(self, model_setting):
@@ -138,6 +137,7 @@ class ConverterAgent(BaseAgent):
         def __init__(self):
             super().__init__()
             
+        # 단일 속성에는 list가 아닌 string으로 넣엏야함
         def set_context(self, context):
             self._content = f"context에 포함된 내용을 변환하여 응답합니다. context:{context}"
             return           
