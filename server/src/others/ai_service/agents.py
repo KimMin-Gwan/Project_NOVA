@@ -40,9 +40,11 @@ class BaseAgent():
     
     # query 전송하기(json 버전으로 받기)
     def _make_response_as_json(self, query_data:KeyParam) -> dict:
+        pprint(query_data)
+        
         message = self._message.extend(query_data.get_dict_key_param())
         
-        pprint(message)
+        #pprint(message)
         
         response = self._client.chat.completions.create(
             model=self._model_v,
