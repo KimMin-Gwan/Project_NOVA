@@ -35,7 +35,7 @@ class BaseAgent():
         self._client = OpenAI(api_key=model_setting.api_key)
         self._model_v = model_setting.model_v
         self._response_format={ "type" : "json_object" }
-        self.__system_role = {"role": "system", "content": "You are a helpful assistant designed to output JSON."},
+        self.__system_role = {"role": "system", "content": "You are a helpful assistant designed to output JSON."}
         self._message = []
         self._message.append(self.__system_role)
     
