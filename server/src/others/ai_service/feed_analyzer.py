@@ -1,13 +1,13 @@
 from others.ai_service.agents import ConverterAgent, FinderAgent, AnalyzerAgent
 from others.data_domain import Feed
 from others.ai_service.ai_inventory import AIWordBag, ModifierWord, AITagBag
-from src.others.ai_service.ai_inventory import AITagBag, AIWordBag
 
 
 class FeedAnalyzer:
     def __init__(self, model_setting):
         self.__model_setting = model_setting
         self.__word_bag = AIWordBag()
+        self.__tag_bag = AITagBag()
         pass
     
     def pipeline_when_feed_created(self, feed:Feed):
@@ -22,11 +22,16 @@ class FeedAnalyzer:
         
         words = self._word_finder(feed=feed, word_bag=self.__word_bag)
         
-        self._convert_feed(feed=feed, words=words)
+        dict_words = []
         
+        for word in words:
+            dict_words.append(word.to_dict())
         
-    
-    
+        feed = self._convert_feed(feed=feed, words=dict_words)
+        
+        self._analyze_feed(feed=feed, tag_bag=self.__tag_bag)
+        
+        return  feed
     
     # 게시글 분석
     # 전성훈이가 들고오면 여기다가 집어넣으면됨
@@ -36,7 +41,7 @@ class FeedAnalyzer:
 
         result = agent.extract_proper_tag(context=feed.body)
 
-        new_tags = result['context']['tags']
+        new_tags = result['tags']
 
         result_tag = []
 

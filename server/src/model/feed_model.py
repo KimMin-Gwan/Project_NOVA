@@ -309,7 +309,7 @@ class FeedEditModel(BaseModel):
         data_payload.link = feed_links
         return
         
-    def try_edit_feed(self, feed_manager:FeedManager, data_payload):
+    def try_edit_feed(self, feed_manager:FeedManager, data_payload, ai_manager):
         # 만약 fid가 ""가 아니면 수정이나 삭제 요청일것임
         # 근데 삭제 요청은 여기서 처리 안하니까 반드시 수정일것
         if data_payload.fid != "":
@@ -319,7 +319,9 @@ class FeedEditModel(BaseModel):
         else:
             detail, flag = feed_manager.try_make_new_feed(
                 user=self._user,
-                data_payload = data_payload)
+                data_payload = data_payload,
+                ai_manager=ai_manager
+                )
 
         self._result = flag
         self._detail = detail

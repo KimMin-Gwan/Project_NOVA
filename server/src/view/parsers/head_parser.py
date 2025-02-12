@@ -8,13 +8,18 @@ header = {
 }
 '''
 
+class ModelSetting:
+    def __init__(self, open_api_key, gpt_model):
+        self.api_key = open_api_key
+        self.model_v = gpt_model
+
 class Configure_File_Reader:
     def __init__(self) -> None:
         self._host = ''
         self._port = 0
         self._version = ''
-        self._num_fclass = 0
-        self._fclasses = []
+        self._open_api_key = ''
+        self._gpt_model = ''
 
     def _extract_host_port(self, file_path='./configure.txt'):
         with open(file_path, 'r', encoding='utf-8') as file:
@@ -25,13 +30,14 @@ class Configure_File_Reader:
                     self._port = int(line.split('=')[1].strip())
                 elif line.startswith('VERSION'):
                     self._version = line.split('=')[1].strip()
-                elif line.startswith('num_fclass'):
-                    self._num_fclass = int(line.split('=')[1].strip())
-                elif line.startswith('fclass'):
-                    # fclass 데이터를 2차원 배열로 저장
-                    fclass_data = line.split('=')[1].strip().strip('[]').split(',')
-                    fclass_data = [item.strip() for item in fclass_data]
-                    self._fclasses.append(fclass_data)
+                elif line.startswith('open_api_key'):
+                    self._open_api_key= line.split('=')[1].strip()
+                elif line.startswith('gpt_model'):
+                    self._gpt_model= line.split('=')[1].strip()
+                    
+        self._model_setting = ModelSetting(
+            open_api_key=self._open_api_key,
+            gpt_model=self._gpt_model)
 
 class Head_Parser(Configure_File_Reader):
     def __init__(self) -> None:
@@ -43,6 +49,7 @@ class Head_Parser(Configure_File_Reader):
             'state-code' : "100",
             'detail' : 'Default'
         }
+        
 
     def get_header(self):
         return self._header

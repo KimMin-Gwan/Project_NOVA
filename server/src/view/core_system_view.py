@@ -20,7 +20,9 @@ class Core_Service_View(Master_View):
     def __init__(self, app:FastAPI, endpoint:str,
                   database, head_parser:Head_Parser,
                   connection_manager:CM, league_manager:LM,
-                  feed_manager:FM , feed_search_engine:FSE) -> None:
+                  feed_manager:FM , feed_search_engine:FSE,
+                  ai_manager
+                  ) -> None:
         super().__init__(head_parser=head_parser)
         self.__app = app
         self._endpoint = endpoint
@@ -29,6 +31,7 @@ class Core_Service_View(Master_View):
         self.__league_manager=league_manager
         self.__feed_manager = feed_manager
         self.__feed_search_engine = feed_search_engine
+        self.__ai_manager = ai_manager
         self.home_route(endpoint)
         self.check_route()
         #self.web_chatting_route(endpoint)
@@ -724,7 +727,9 @@ class Core_Service_View(Master_View):
             feed_controller =Feed_Controller(feed_manager=self.__feed_manager)
             model = feed_controller.try_edit_feed(database=self.__database,
                                                         request=request_manager,
-                                                        feed_manager=self.__feed_manager)
+                                                        feed_manager=self.__feed_manager,
+                                                        ai_manager = self.__ai_manager
+                                                        )
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response

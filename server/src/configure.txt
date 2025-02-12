@@ -1,9 +1,5 @@
 HOST = 127.0.0.1
 PORT = 6000
 VERSION = 0.9.81
-num_fclass = 5
-fclass0 = [None, 랜덤, 밤 하늘을 올려다 보는 것 처럼, -1]
-fclass1 = [card, 추억, 짧은 글로 된 피드, 0]
-fclass2 = [multiple, 사지선다, 간단한 이지선다, 4]
-fclass3 = [balance, 이지선다, 4가지 선택지 중 하나 고르기, 2]
-fclass4 = [station, 문, 노바가 아닌 다른 곳의 좌표, 0]
+open_api_key = 
+gpt_model = gpt-4o-mini

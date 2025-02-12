@@ -474,7 +474,9 @@ class Feed_Controller:
 
     # Feed 편집
     def try_edit_feed(self, database:Local_Database,
-                               request, feed_manager:FeedManager) -> FeedEditModel:
+                               request, feed_manager:FeedManager,
+                               ai_manager
+                               ) -> FeedEditModel:
         model = FeedEditModel(database=database)
 
         if request.jwt_payload != "":
@@ -483,7 +485,9 @@ class Feed_Controller:
         model.set_feed_link(data_payload= request.data_payload)
         
         model.try_edit_feed(feed_manager=feed_manager,
-                                        data_payload=request.data_payload)
+                            data_payload=request.data_payload,
+                            ai_manager=ai_manager
+                            )
         model.check_result(request_manager=request)
 
         return model

@@ -65,18 +65,22 @@ class AnalyzerAgent(BaseAgent):
     def __init__(self, model_setting):
         super().__init__(model_setting=model_setting)
         self.__set_analyzer_prompt()
+        self._init_message_setting(init_query=self._analyzer_prompt)
         self.__key_param = self.AnalyizerKeyParam()
 
     # 주문사항
     def __set_analyzer_prompt(self):
-        self._analyzer_prompt = {
-            {"role": "user", "content": "다음의 문장에서 중요한 단어들을 태그로 분류합니다"},
-            {"role": "user", "content": "의미를 알 수 없는 단어를 고유명사로 취급합니다."},
-            {"role": "user", "content": "고유명사가 아닌 경우 응답에 포함하지 않습니다."},
-            {"role": "user", "content": "응답은 context로 합니다."},
-            {"role": "user", "content": "context에는 input, words가 있습니다."},
-            {"role": "user", "content": "words는 list입니다."},
-        }
+        self._analyzer_prompt = [
+            #주문사항
+            {"role": "user", "content": "주어진 문장에서 태그를 추출합니다."},
+            {"role": "user", "content": "태그는 문장 전체 또는 각 단어에서 추출합니다."},
+            {"role": "user", "content": "태그는 문맥에서 가장 중요한걸로 추출합니다."},
+            {"role": "user", "content": "고유명사는 중요한 태그일 가능성이 있습니다."},
+            {"role": "user", "content": "응답에 최소 1개 이상의 태그가 있어야 합니다."},
+            {"role": "user", "content": "모든 태그는 명사입니다."},
+            {"role": "user", "content": "응답은 tags로 합니다."},
+            {"role": "user", "content": "응답은 tags는 list 입니다."},
+        ]
 
     def extract_proper_tag(self, context):
         self.__key_param.set_context(context)
@@ -99,12 +103,12 @@ class FinderAgent(BaseAgent):
     def __init__(self, model_setting):
         super().__init__(model_setting)
         self.__set_converter_prompt()
-        self._init_message_setting(init_query=self._converter_prompt)
+        self._init_message_setting(init_query=self._finder_prompt)
         self.__key_param = self.FinderKeyParam()
     
     # 주문사항
     def __set_converter_prompt(self):
-        self._converter_prompt = [
+        self._finder_prompt = [
             {"role": "user", "content": "문장에서 고유명사를 찾아냅니다."},
             {"role": "user", "content": "의미를 알 수 없는 단어를 고유명사로 취급합니다."},
             {"role": "user", "content": "고유명사가 아닌 경우 응답에 포함하지 않습니다."},
@@ -132,9 +136,7 @@ class ConverterAgent(BaseAgent):
             super().__init__()
             
         def set_context(self, context):
-            self.__content = [
-                f"context에 포함된 내용을 변환하여 응답합니다. context:{context}",
-            ]
+            self.__content = f"context에 포함된 내용을 변환하여 응답합니다. context:{context}"
             return           
         
     def __init__(self, model_setting):
@@ -151,13 +153,10 @@ class ConverterAgent(BaseAgent):
             {"role": "user", "content": "반말을 모두 존댓말로 교체합니다."},
             {"role": "user", "content": "텍스트에서 전달하고자 하는 의도 또는 의미가 변형되면 안됩니다."},
             {"role": "user", "content": "텍스트의 분위기 또한 파악하여 의미가 변형되지 않도록 해야합니다."},
-            {"role": "user", "content": "텍스트는 title과 content로 이루어져 있습니다"},
-            {"role": "user", "content": "텍스트의 title은 비어있을 수 있습니다. "},
-            {"role": "user", "content": "의미를 파악할 땐 title과 content를 모두 고려합니다."}, #그냥 따로 하는듯
-            {"role": "user", "content": "텍스트의 title이 비어있을경우 content만 고려합니다."},
-            {"role": "user", "content": "응답은 '원본'과 '변환문', 강도로 합니다."},        
-            {"role": "user", "content": "응답의 원본과 변환문 또한 title과 content로 구성되어야 합니다."},
-            {"role": "user", "content": "title과 content 모두 변환합니다."},
+            {"role": "user", "content": "텍스트는 content로 이루어져 있습니다"},
+            {"role": "user", "content": "응답은 '변환문'과 강도로 합니다."},        
+            {"role": "user", "content": "응답의 변환문은 content로 구성되어야 합니다."},
+        
             {"role": "user", "content": "강도는 비속어 또는 욕설이 포함된 경우 2, 비속어는 포함되나 않으나 욕설이 없이 작성된 경우 1, 비속어 또는 욕설이 사용되지 않고 작성 된 경우 0을 반환합니다"}, #작동이 애매함
             {"role": "user", "content": '고유명사는 변환하지 않습니다.'},
             # {"role": "user", "content": '둘 이상의 단어가 합쳐진 단어가 있습니다. 이는 고유명사가 아닙니다.'}, #이상한 단어 분리해서 알아보라고 해보려고 한건데 안되는듯
@@ -167,8 +166,23 @@ class ConverterAgent(BaseAgent):
         ]
         return
     
+    def _set_word_content(self, words_bag:list):
+        words = []
+        for single_word in words_bag:
+            words.append(single_word['word'])
+        
+        additional_prompt = [
+            # 02/12 추가 워드백 사용하기
+            {"role": "user", "content": f"words:{words}, words 단어를 word_bag 맞게 변환합니다. word_bag:{words_bag} "},
+            {"role": "user", "content": "word를 meaning에 맞게 변환합니다."},
+        ]
+        
+        self._message.extend(additional_prompt)
+        return
+    
     # 컨버팅 시작
-    def convert_feed_data(self, context) -> dict:
+    def convert_feed_data(self, words:list, context) -> dict:
+        self._set_word_content(words_bag = words)
         self.__key_param.set_context(context=context)
         return self._make_response_as_json(query_data=self.__key_param)
     

@@ -16,7 +16,7 @@ import random
 class NOVA_Server:
     def __init__(self, database, connection_manager,
                   league_manager, feed_manager, feed_search_engine,
-                  funding_project_manager
+                  funding_project_manager, ai_manager
                   ) -> None:
         self.__app = FastAPI()
 
@@ -45,7 +45,8 @@ class NOVA_Server:
                                                    connection_manager= connection_manager,
                                                    league_manager=league_manager,
                                                    feed_manager=feed_manager,
-                                                   feed_search_engine=feed_search_engine
+                                                   feed_search_engine=feed_search_engine,
+                                                   ai_manager=ai_manager
                                                    )
         self.__user_system_view = User_Service_View( app=self.__app,
                                                      endpoint='/user_system',

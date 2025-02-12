@@ -805,39 +805,32 @@ class FeedClassAnalist:
         return result
 
 
-# 이건 피드 메타 정보를 가지고 있는 친구
-# configure.txt 에서 설정 가능함
-class FeedClassManagement:
-    def __init__(self, fclasses):
-        self._fclasses = self.__set_fclasses(fclasses=fclasses)
+## 이건 피드 메타 정보를 가지고 있는 친구
+## configure.txt 에서 설정 가능함
+#class FeedClassManagement:
+    #def __init__(self):
+        #pass
+ 
 
-    # 초기 class들 세팅
-    def __set_fclasses(self, fclasses):
-        result = []
-        for fclass_data in fclasses:
-            fclass = FeedClass(fclass_data[0], fclass_data[1], fclass_data[2], int(fclass_data[3]))
-            result.append(fclass)
-        return result
+    #def get_class_name(self, fclass):
+        #fname = "None"
+        #num_choice = -1
 
-    def get_class_name(self, fclass):
-        fname = "None"
-        num_choice = -1
+        #for instance in self._fclasses:
+            #if instance.fclass == fclass:
+                #fname = instance.fname
+                #num_choice = instance.num_choice
+                #break
 
-        for instance in self._fclasses:
-            if instance.fclass == fclass:
-                fname = instance.fname
-                num_choice = instance.num_choice
-                break
+        #result = []
+        #if num_choice != -1:
+            #for _ in range(num_choice):
+                #result.append(0)
 
-        result = []
-        if num_choice != -1:
-            for _ in range(num_choice):
-                result.append(0)
-
-        return fname, result
+        #return fname, result
             
-    def get_fclass_meta_data(self):
-        return self._fclasses
+    #def get_fclass_meta_data(self):
+        #return self._fclasses
 
 
 class FeedClass:
@@ -1231,8 +1224,8 @@ class ImageDescriper():
     
 
 class FeedManager:
-    def __init__(self, database, fclasses, feed_search_engine) -> None:
-        self._feedClassManagement = FeedClassManagement(fclasses=fclasses)
+    def __init__(self, database, feed_search_engine) -> None:
+        #self._feedClassManagement = FeedClassManagement()
         #self._database:Local_Database= database
         self._database= database
         #self._managed_user_table = ManagedUserTable(database=database)
@@ -1280,11 +1273,13 @@ class FeedManager:
     # 새로운 피드 만들기
     # 실제로 피드를 만들고, 서치 엔진에 추가하는 부분이다.
     def __make_new_feed(self, user:User, fid, fclass, choice, body, hashtag,
-                        board_type, images, link, bid, raw_body=""):
+                        board_type, images, link, bid, raw_body="", ai_manager=None):
         # 검증을 위한 코드는 이곳에 작성하시오
         new_feed = self.__set_new_feed(user=user, fid=fid, fclass=fclass,
                                        choice=choice, body=body, hashtag=hashtag,
-                                       board_type=board_type, image=images, link=link, bid=bid, raw_body=raw_body)
+                                       board_type=board_type, image=images, link=link, bid=bid, raw_body=raw_body,
+                                       )
+        ai_manager.treat_new_feed(feed=new_feed)
         self._database.add_new_data(target_id="fid", new_data=new_feed.get_dict_form_data())
 
         self._feed_search_engine.try_make_new_managed_feed(feed=new_feed)
@@ -1357,7 +1352,7 @@ class FeedManager:
         return fname, result
 
     # FEED 작성
-    def try_make_new_feed(self, user:User, data_payload, fid = ""):
+    def try_make_new_feed(self, user:User, data_payload, fid = "", ai_manager=None):
         # fid 만들기 feed 수정기능을 겸하고 있기 때문에, 다음을 추가한 것
         if fid == "":
             fid = self.__make_new_fid(user=user)
@@ -1389,6 +1384,7 @@ class FeedManager:
                                 images=image_result,
                                 link=data_payload.link,
                                 bid=data_payload.bid,
+                                ai_manager=ai_manager
                                 )
 
         # 롱폼의 경우 작성된 html을 올리고 저장하면됨

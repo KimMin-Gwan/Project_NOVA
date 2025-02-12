@@ -5,6 +5,7 @@ from model import Local_Database, Mongo_Database
 from others import FeedManager, FeedSearchEngine, FundingProjectManager
 import asyncio
 from uvicorn import run
+from others.ai_service import AIManger
 
 class Master(Configure_File_Reader):
     def __init__(self):
@@ -18,14 +19,18 @@ class Master(Configure_File_Reader):
     async def server_start_up(self):
         database = Local_Database() #디비 실행
         #database = Mongo_Database() #디비 실행
+        
+        ai_manager = AIManger(model_setting=self._model_setting)
 
         #connection_manager = ConnectionManager() # 웹소켓 매니저 실행
         #league_manager = LeagueManager(connection_manager=connection_manager)
         #league_manager.init_league_manager(database=database) # 리그 매니저 초기화
         feed_search_engine = FeedSearchEngine(database=database)
-        feed_manager= FeedManager(database=database, fclasses=self._fclasses,
+        feed_manager= FeedManager(database=database,
                                   feed_search_engine=feed_search_engine)
         funding_project_manager = FundingProjectManager(database=database)
+
+
 
         nova_server = NOVA_Server(
             database=database,
@@ -33,7 +38,8 @@ class Master(Configure_File_Reader):
             league_manager=None,
             feed_manager=feed_manager,
             feed_search_engine=feed_search_engine,
-            funding_project_manager=funding_project_manager
+            funding_project_manager=funding_project_manager,
+            ai_manager = ai_manager
             )
         
         #app = nova_server.get_app()

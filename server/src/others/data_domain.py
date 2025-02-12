@@ -257,6 +257,8 @@ class Feed(SampleDomain):
         self.lid = lid  # link id
         self.bid = bid  # bias id
         self.raw_body = raw_body
+        self.reworked_body = ""
+        self.level = 0
 
         self.num_comment = len(self.comment)
         self.num_image = len(self.image)
@@ -282,6 +284,8 @@ class Feed(SampleDomain):
             self.lid = dict_data["lid"]
             self.bid = dict_data["bid"]
             self.raw_body = dict_data["raw_body"]
+            self.reworked_body = dict_data["reworked_body"]
+            self.level = dict_data["level"]
 
             self.num_comment = len(self.comment)
             self.num_image = len(self.image)
@@ -308,6 +312,8 @@ class Feed(SampleDomain):
             "lid": self.lid,
             "bid": self.bid,
             "raw_body" : self.raw_body,
+            "reworked_body" :self.reworked_body,
+            "level" : self.level,
 
             "num_comment":self.num_comment,
             "num_image":self.num_image,
