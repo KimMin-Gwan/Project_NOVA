@@ -4,7 +4,7 @@ import json
 
 from openai import OpenAI
 #API 키 
-client = OpenAI(api_key="키자꾸지워서올리래")
+client = OpenAI(api_key="ㅋ ㅣ")
 
 ## 현재 자료의 문장이 완성형에 가까워 높은 문장 완성 성능을 보여주는 중
 ## 커뮤니티에 게시된 자연어들이 제대로 처리 되는지 확인 하려면 완전히 박살난 문장 형식의 글이나 문맥 파악이 불가능한 자료가 필요
@@ -144,10 +144,7 @@ def rework(context,words,word_bag):
         {"role": "user", "content": "반말을 모두 존댓말로 교체합니다."},
         {"role": "user", "content": "텍스트에서 전달하고자 하는 의도 또는 의미가 변형되면 안됩니다."},
         {"role": "user", "content": "텍스트의 분위기 또한 파악하여 의미가 변형되지 않도록 해야합니다."},
-        {"role": "user", "content": "텍스트는 title과 content로 이루어져 있습니다"},
-        {"role": "user", "content": "텍스트의 title은 비어있을 수 있습니다. "},
-        {"role": "user", "content": "의미를 파악할 땐 title과 content를 모두 고려합니다."}, #그냥 따로 하는듯
-        {"role": "user", "content": "텍스트의 title이 비어있을경우 content만 고려합니다."},
+        {"role": "user", "content": "텍스트는 content로 이루어져 있습니다"},
         {"role": "user", "content": "응답은 '변환문'과 강도로 합니다."},        
         {"role": "user", "content": "응답의 변환문은 content로 구성되어야 합니다."},
         
