@@ -156,7 +156,7 @@
       position: absolute;
       bottom: 15px;
       left: 0;
-      width: 5%;
+      width: 20px;
       height: 3px;
       background-color: #1082f4;
       transition: left 0.3s ease-in-out;
@@ -164,16 +164,16 @@
   }
 
   .post-list[data-active-index="0"]::after {
-    left: 45px;
+    left: 43px;
   }
   .post-list[data-active-index="1"]::after {
-    left: 125px;
+    left: 118px;
   }
   .post-list[data-active-index="2"]::after {
-    left: 207px;
+    left: 194px;
   }
   .post-list[data-active-index="3"]::after {
-    left: 280px;
+    left: 262px;
   }
 }
 
