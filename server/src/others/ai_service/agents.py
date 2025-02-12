@@ -8,26 +8,26 @@ from openai import OpenAI
 class KeyParam:
     def __init__(self):
         self.set_role()
-        self.__content = ""
+        self._content = ""
         
     # 바꿀일이 있으면 사용할 것
     def set_role(self, role="assistant"):
-        self.__role = role
+        self._role = role
         return
         
     # contnet 초기화
     def _init_content(self, content):
-        self.__content = content
+        self._content = content
         return
     
     # content에 핵심 본문 추가(context 추가)
     def set_context(self, context):
-        self.__content = self.__content + context
+        self._content = self._content + context
         return
     
     # 전송에 사용될 dict 데이터 키 파라미터 (답변 내용)
     def get_dict_key_param(self):
-        return [{"role":self.__role, "content":self.__content}]
+        return [{"role":self._role, "content":self._content}]
 
 # 근본 에이전트
 class BaseAgent():
@@ -98,7 +98,7 @@ class FinderAgent(BaseAgent):
             self._init_content(content="context에 포함될 고유명사들을 출력합니다. context:")
             
         def set_context(self, context):
-            self.__content = [
+            self._content = [
                 f"context에 포함될 고유명사들을 출력합니다. context:{context}",
             ]
             return           
@@ -139,7 +139,7 @@ class ConverterAgent(BaseAgent):
             super().__init__()
             
         def set_context(self, context):
-            self.__content = f"context에 포함된 내용을 변환하여 응답합니다. context:{context}"
+            self._content = f"context에 포함된 내용을 변환하여 응답합니다. context:{context}"
             return           
         
     def __init__(self, model_setting):
@@ -198,7 +198,7 @@ class MoodMakerAgent(BaseAgent):
             super().__init__()
             
         def set_context(self, context):
-            self.__content = [
+            self._content = [
                 f"context에 포함된 내용을 변환하여 응답합니다. context:{context}",
                 "응답의 형식은 다음을 지켜주십시오",
                 f"원문 : {context}, mood : 요약해서 나온 mood 결과, mood_reason : 글의 요약을 통해 유추한 결과"
@@ -207,8 +207,8 @@ class MoodMakerAgent(BaseAgent):
         
         def get_dict_key_param(self):
             key_param = []
-            for content in self.__content:
-                key_param.append({"role":self.__role, "content":content})
+            for content in self._content:
+                key_param.append({"role":self._role, "content":content})
             return key_param
             
     def __init__(self, model_setting):
@@ -254,7 +254,7 @@ class TrendMakerAgent(BaseAgent):
             super().__init__()
             
         def set_context(self, context):
-            self.__content = [
+            self._content = [
                 f"context에 포함된 내용을 요약하여 응답합니다. context:{context}",
                 f"원문 : {context}\
                     trend : [\
@@ -268,7 +268,7 @@ class TrendMakerAgent(BaseAgent):
         
         def get_dict_key_param(self):
             key_param = []
-            for content in self.__content:
+            for content in self._content:
                 key_param.append({"role":self.__role, "content":content})
             return key_param
             

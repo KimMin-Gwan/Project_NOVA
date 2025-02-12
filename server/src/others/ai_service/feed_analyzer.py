@@ -23,7 +23,6 @@ class FeedAnalyzer:
         words = self._word_finder(feed=feed, word_bag=self.__word_bag)
         
         dict_words = []
-        print(words)
         
         for word in words:
             dict_words.append(word.to_dict())
@@ -78,6 +77,8 @@ class FeedAnalyzer:
         
         # 문장 새로 만들기
         result = agent.extract_proper_noun(context=feed.body)
+        
+        pprint(result)
         
         new_words = result['context']['words']
         # 단어 가방에 집어넣으면 끝
