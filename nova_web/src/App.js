@@ -148,9 +148,8 @@ function App() {
 
       {/* 피드 페이지 */}
       {/* <Route path="/feed_page" element={<FeedPage brightMode={brightMode} />}></Route> */}
-      {/* <Route path="/feed_hash_list" element={<FeedHashList />}></Route> */}
-      {/* <Route path="/feed_hash_list/:fid" element={<FeedHashList />}></Route> */}
       {/* <Route path="/select_bias" element={<SelectBias />}></Route> */}
+
       <Route path="/write_feed" element={<Write />}>
         <Route path=":type" element={<Write />}></Route>
       </Route>
@@ -177,14 +176,6 @@ function App() {
       <Route path="/test" element={<LongFormWrite />}></Route>
       <Route path="/test1" element={<NavBar />}></Route>
       <Route path="*" element={<div>404 Error</div>}></Route>
-
-      {/* 미사용 페이지 */}
-      {/* <Route path="/bias_info/user_contribution" element={<BiasDetail />}></Route> */}
-      {/* <Route path="/my_write_feed" element={<MyWriteFeed brightMode={brightMode} />}/> */}
-      {/* <Route path="/my_comment_feed" element={<MyCommentFeed />} /> */}
-      {/* <Route path="/my_active_feed" element={<MyActiveFeed />} /> */}
-      {/* <Route path="/my_alerts" element={<MyAlert />} /> */}
-      {/* <Route path="/my_interest_feed" element={<MyInterestFeed />} /> */}
 
       {/* 홈 화면 */}
       <Route

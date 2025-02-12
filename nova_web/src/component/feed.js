@@ -8,14 +8,7 @@ import link_pin_icon from "./../img/link_pin.svg";
 import star_color from "./../img/favorite_color.png";
 import comment from "./../img/comment.png";
 import postApi from "../services/apis/postApi";
-
-let header = {
-  "request-type": "default",
-  "client-version": "v1.0.1",
-  "client-ip": "127.0.0.1",
-  uid: "1234-abcd-5678",
-  endpoint: "/user_system/",
-};
+import HEADER from "../constant/header";
 
 export function useBrightMode() {
   const params = new URLSearchParams(window.location.search);
@@ -31,6 +24,7 @@ export function useBrightMode() {
 
   return [mode, setMode];
 }
+const header = HEADER;
 
 export default function Feed({
   feed,
@@ -365,41 +359,6 @@ function QuizOption({ feed, interaction, handleInteraction }) {
         })}
     </ol>
   );
-}
-// function SelectOption({ feed, feedInteraction }) {
-//   return (
-//     <div className={style["option-container"]}>
-//       {/* <ProgressBar point={50} type={"feed"} /> */}
-//       {feedInteraction.choice.map((option, i) => {
-//         return (
-//           <button key={i} className={style["option"]} onClick={(e) => e.stopPropagation()}>
-//             {option}
-//           </button>
-//         );
-//       })}
-//     </div>
-//   );
-// }
-
-{
-  /* <ol className={style["quiz_box"]}>
-                  {feed.choice.map((choi, i) => {
-                    if (feed.attend === i) {
-                      if (isUserState) {
-                        return (
-                          <li
-                            onClick={(e) => {
-                              handleInteraction(e, feed.fid, i);
-                              handleClick(i);
-                            }}
-                            key={i}
-                            style={{ backgroundColor: i === feed.attend ? "#D2C8F7" : "white" }}
-                          >
-                            {i + 1}. {choi}
-                            <span>{feed.result[i]}</span>
-                          </li>
-                        );
-                      } */
 }
 
 // 이미지 갯수 별 레이아웃

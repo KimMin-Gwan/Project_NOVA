@@ -15,6 +15,7 @@ import EditorBox from "../../component/EditorBox.js";
 import postApi from "../../services/apis/postApi.js";
 import axios from "axios";
 import useBiasStore from "../../stores/BiasStore/useBiasStore.js";
+import HEADER from "../../constant/header.js";
 
 const categoryData = [
   { key: 0, category: "자유게시판" },
@@ -180,7 +181,6 @@ const Write = ({ brightmode }) => {
         response.json();
       })
       .then((data) => {
-        console.log("111", data);
         alert("업로드가 완료되었습니다.");
         navigate("/");
       })
@@ -306,11 +306,6 @@ const Write = ({ brightmode }) => {
           게시
         </p>
       </div>
-
-      {/* <section className={style["bias-section"]}>
-        <div className={style["title"]}>커뮤니티 선택</div>
-        <BiasBoxes setBiasId={setBiasId} writeCommunity />
-      </section> */}
 
       <section className={style["Select_container"]}>
         <div className={style["section_title"]}>주제 선택</div>
@@ -673,13 +668,8 @@ export function LinkModal({
   linkList,
 }) {
   const [urlImage, setUrlImage] = useState([]);
-  let header = {
-    "request-type": "default",
-    "client-version": "v1.0.1",
-    "client-ip": "127.0.0.1",
-    uid: "1234-abcd-5678",
-    endpoint: "/user_system/",
-  };
+
+  const header = HEADER;
 
   const [isLoading, setIsLoading] = useState(true);
   async function fetchkUrlImage() {

@@ -38,6 +38,7 @@
   height: 32px;
   background-color: #f27b7b;
   color: white;
+  border: none;
   border-radius: 6px;
   margin-top: 65px;
   display: flex;

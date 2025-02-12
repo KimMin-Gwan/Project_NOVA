@@ -4,11 +4,12 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import style from "./../pages/MainPage/MainPart.module.css";
 import { useNavigate } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import { getModeClass } from "./../App.js";
 const SimpleSlider = ({ feedData, brightMode, type, className }) => {
   const showMaxCnt = 1;
+
   const settings = {
     className: "slider-items",
     dots: true,
@@ -23,9 +24,41 @@ const SimpleSlider = ({ feedData, brightMode, type, className }) => {
   // style안붙은 것은 slider.css에서 수정
   let navigate = useNavigate();
 
-  function onClickMore(fid) {
-    navigate(`/feed_detail/${fid}`, { state: { commentClick: false } });
+  const [isDragging, setIsDragging] = useState(false);
+  const [startPosition, setStartPosition] = useState({ x: 0, y: 0 });
+  const [moveDistance, setMoveDistance] = useState(0);
+
+  function onClickMore(fid, e) {
+    if (!isDragging) {
+      navigate(`/feed_detail/${fid}`, { state: { commentClick: false } });
+    }
   }
+
+  const handleMouseDown = (e) => {
+    setIsDragging(false);
+    setStartPosition({ x: e.clientX, y: e.clientY });
+    setMoveDistance(0); // 이동 거리를 초기화
+  };
+
+  const handleMouseMove = (e) => {
+    if (startPosition.x && startPosition.y) {
+      const distance = Math.sqrt(
+        (e.clientX - startPosition.x) ** 2 + (e.clientY - startPosition.y) ** 2
+      );
+      setMoveDistance(distance);
+
+      // 일정 거리 이상 이동하면 드래그로 간주
+      if (distance > 5) {
+        setIsDragging(true); // 드래그 상태로 설정
+      }
+    }
+  };
+
+  const handleMouseUp = (e) => {
+    if (moveDistance <= 5 && !isDragging) {
+      setIsDragging(false);
+    }
+  };
 
   const [mode, setMode] = useState(brightMode); // 초기 상태는 부모로부터 받은 brightMode 값
   useEffect(() => {
@@ -46,9 +79,11 @@ const SimpleSlider = ({ feedData, brightMode, type, className }) => {
                 <div className="slide-box">
                   <div
                     className={`slide-content ${getModeClass(mode)}`}
+                    onMouseDown={handleMouseDown}
+                    onMouseMove={handleMouseMove}
+                    onMouseUp={(e) => handleMouseUp(e)}
                     onClick={(e) => {
-                      e.preventDefault();
-                      onClickMore(feed.feed.fid);
+                      onClickMore(feed.feed.fid, e);
                     }}
                   >
                     {type === "bias" && (

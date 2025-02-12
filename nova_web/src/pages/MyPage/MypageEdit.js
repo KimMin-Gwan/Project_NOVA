@@ -225,11 +225,7 @@ function MyPage() {
           readOnly
         />
       </section>
-      <button
-        className={`${style["logout_box"]}`}
-        onClick={handleLogout}
-        style={{ cursor: "pointer" }}
-      >
+      <button className={`${style["logout_box"]}`} onClick={handleLogout}>
         로그아웃
       </button>
     </div>
