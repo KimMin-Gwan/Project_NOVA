@@ -47,7 +47,7 @@ class User(SampleDomain):
         self.like:list = copy.copy(like)
         self.my_comment:list = copy.copy(my_comment)
         self.my_feed:list = copy.copy(my_feed)
-        self.active_feed:list = copy.copy(active_feed)
+        self.active_feed:list = copy.copy(active_feed)      # interaction 한 Feed
         self.feed_history:list = copy.copy(feed_history)
         self.feed_search_history:list =copy.copy(feed_search_history)
 
