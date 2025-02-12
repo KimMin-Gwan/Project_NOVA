@@ -10,10 +10,12 @@ import search_icon from "./../../img/search_icon.png";
 import Stackframe from "./../../img/Stackframe.png";
 import mainApi from "../../services/apis/mainApi.js";
 import postApi from "../../services/apis/postApi.js";
+import useBiasStore from "../../stores/BiasStore/useBiasStore.js";
 
 const bias_url = "https://kr.object.ncloudstorage.com/nova-images/";
 export default function FollowPage() {
   const navigate = useNavigate();
+  let { biasList } = useBiasStore();
 
   const [params] = useSearchParams();
   const type = params.get("type");
@@ -78,6 +80,12 @@ export default function FollowPage() {
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
+        if (biasList.some((item) => item.bid === clickedBid)) {
+          alert("팔로우 취소 완료");
+        } else {
+          alert("팔로우 완료!");
+        }
+        setIsModalOpen(false);
       })
       .catch((err) => {
         console.log("err", err);
@@ -290,7 +298,11 @@ export default function FollowPage() {
               <span>
                 <button onClick={closeModal}>취소</button>
                 <button className={style["follow-button"]} onClick={fetchTryFollowBias}>
-                  팔로우
+                  {biasList.some((item) => {
+                    return item.bid === clickedBid;
+                  })
+                    ? "팔로우 취소"
+                    : "팔로우"}
                 </button>
               </span>
             </div>
