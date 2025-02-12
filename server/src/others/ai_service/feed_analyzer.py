@@ -60,7 +60,7 @@ class FeedAnalyzer:
         agent = ConverterAgent(model_setting=self.__model_setting)
         
         # 문장 새로 만들기
-        result = agent.convert_feed_data(context=feed.body)
+        result = agent.convert_feed_data(words=words, context=feed.body)
         
         # 피드 데이터 넣어주기
         feed.reworked_body = result['변환문']
