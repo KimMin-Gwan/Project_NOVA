@@ -27,7 +27,7 @@ class KeyParam:
     
     # 전송에 사용될 dict 데이터 키 파라미터 (답변 내용)
     def get_dict_key_param(self):
-        return {"role":self.__role, "content":self.__content}
+        return [{"role":self.__role, "content":self.__content}]
 
 # 근본 에이전트
 class BaseAgent():
