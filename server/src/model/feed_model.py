@@ -46,7 +46,7 @@ class FeedModel(BaseModel):
                     self._links.append(feed_link)
                 
             # 포인터로 동작함
-            self._set_feed_json_data(user=self._user, feeds=self._feeds)
+            self._feeds = self._set_feed_json_data(user=self._user, feeds=self._feeds)
         return
     
     # send_data를 만들때 사용하는 함수임
@@ -63,7 +63,7 @@ class FeedModel(BaseModel):
             if feed.iid != "":
                 iids.append(feed.iid)
 
-        self._set_feed_json_data(user=self._user, feeds=feeds)
+        feeds = self._set_feed_json_data(user=self._user, feeds=feeds)
         
         interaction_datas = self._database.get_datas_with_ids(target_id="iid", ids=iids)
         interactions = []
@@ -125,7 +125,7 @@ class FeedModel(BaseModel):
             
         self._set_feed_interactied(user=self._user, interaction=self._interaction)
         
-        self._set_feed_json_data(user=self._user, feeds=self._feeds)
+        self._feeds = self._set_feed_json_data(user=self._user, feeds=self._feeds)
         return
 
     # 좋아요 누르기
@@ -135,7 +135,7 @@ class FeedModel(BaseModel):
                                                 fid=data_payload.fid)
         
         
-        self._set_feed_json_data(user=self._user, feeds=self._feeds)
+        self._feeds = self._set_feed_json_data(user=self._user, feeds=self._feeds)
         return
 
     # 댓글 새로 달기
@@ -192,6 +192,8 @@ class FeedModel(BaseModel):
     def _set_feed_json_data(self, user, feeds:list):
         wusers = []
         uids=[]
+        result_feeds = []
+        
         for single_feed in feeds:
             single_feed:Feed = single_feed
             uids.append(single_feed.uid)
@@ -233,8 +235,9 @@ class FeedModel(BaseModel):
             feed.nickname = wuser.uname
             if user.uid == feed.uid:
                 feed.is_owner = True
+            result_feeds.append(feed)
             
-        return
+        return result_feeds
     
     # 상호작용에서 내가 상호작용한 내용이 있는지 검토하는 부분
     def _set_feed_interactied(self, user, interaction:Interaction):
@@ -372,7 +375,6 @@ class FeedSearchModelNew(FeedModel):
 
     def try_search_feed_with_hashtag(self, feed_search_engine:FeedSearchEngine,
                                      feed_manager:FeedManager, target="", last_index=-1, num_feed=8):
-        pprint(target)
         searched_fid_list = feed_search_engine.try_search_feed_new(target_type="hashtag", target=target)
 
         # 페이징
@@ -474,10 +476,10 @@ class FeedSearchModel(FeedModel):
         feed = Feed()
         feed.make_with_dict(feed_data)
 
-        self._set_feed_json_data(user=self._user, feeds=[feed])
+        feeds = self._set_feed_json_data(user=self._user, feeds=[feed])
 
         # 인터엑션 넣을 필요 있음
-        self._send_data = self.__set_send_data(feeds=[feed])
+        self._send_data = self.__set_send_data(feeds=feeds)
         return
 
     # fid로 검색 (숏피드 들어갈때 사용했었음)
@@ -501,7 +503,7 @@ class FeedSearchModel(FeedModel):
             self.__feed.append(feed)
 
         # 인터엑션은 별도라 여기 포함 안됨
-        self._set_feed_json_data(user=self._user, feeds=self.__feed)
+        self.__feed = self.__feed = self._set_feed_json_data(user=self._user, feeds=self.__feed)
         return
 
     def try_search_feed(self, feed_search_engine:FeedSearchEngine, feed_manager,
@@ -528,8 +530,8 @@ class FeedSearchModel(FeedModel):
 
 
 
-        self._set_feed_json_data(user=self._user, feeds=self._hashtag_feed )
-        self._set_feed_json_data(user=self._user, feeds=self._uname_feed)
+        self._hashtag_feed = self._set_feed_json_data(user=self._user, feeds=self._hashtag_feed )
+        self._uname_feed = self._set_feed_json_data(user=self._user, feeds=self._uname_feed)
 
         return
 
@@ -548,7 +550,7 @@ class FeedSearchModel(FeedModel):
             feed.make_with_dict(feed_data)
             feeds.append(feed)
 
-        self._set_feed_json_data(user=self._user, feeds=feeds)
+        feeds = self._set_feed_json_data(user=self._user, feeds=feeds)
 
         # 인터엑션 필요
         self._send_data = self.__set_send_data(feeds=feeds)

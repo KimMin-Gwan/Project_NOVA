@@ -252,12 +252,12 @@ class MyFeedsModel(FeedModel):
         super().__init__(database)
         
     def __set_send_data(self):
+        result_feeds = []
+        
         for feed in self._feeds:
             # 마이페이지에 인터엑션은 표시 없음
             feed.iid = ""
             
-            
-            print(feed.display)
             # 삭제된거 지우고
             if feed.display < 3:
                 continue
@@ -285,34 +285,35 @@ class MyFeedsModel(FeedModel):
             # 나중에 nickname으로 바꿀것
             feed.nickname = self._user.uname
             feed.is_owner = True
-        return
+            result_feeds.append(feed)
+        return result_feeds
 
     def get_my_long_feeds(self, feed_manager:FeedManager, last_index:int=-1):
         # 이게 가능한게, 리스트에서, 인덱스로만 사용해서 참조 하기 때문에 이거 써도 된다.
         self._feeds = feed_manager.get_my_long_feeds(user=self._user)
         self._feeds, self._key = feed_manager.paging_fid_list(fid_list=self._feeds, last_index=last_index, page_size=3)
-        self.__set_send_data()
+        self._feeds = self.__set_send_data()
         return
 
     def get_my_short_feeds(self, feed_manager:FeedManager, last_index:int=-1):
         # 이게 가능한게, 리스트에서, 인덱스로만 사용해서 참조 하기 때문에 이거 써도 된다.
         self._feeds = feed_manager.get_my_short_feeds(user=self._user)
         self._feeds, self._key = feed_manager.paging_fid_list(fid_list=self._feeds, last_index=last_index, page_size=3)
-        self.__set_send_data()
+        self._feeds = self.__set_send_data()
 
         return
 
     def get_liked_feeds(self, feed_manager:FeedManager, last_index:int=-1):
         self._feeds = feed_manager.get_liked_feeds(user=self._user)
         self._feeds, self._key = feed_manager.paging_fid_list(fid_list=self._feeds, last_index=last_index, page_size=3)
-        self.__set_send_data()
+        self._feeds = self.__set_send_data()
 
         return
 
     def get_interacted_feeds(self, feed_manager:FeedManager, last_index:int=-1):
         self._feeds = feed_manager.get_interacted_feeds(user=self._user)
         self._feeds, self._key = feed_manager.paging_fid_list(fid_list=self._feeds, last_index=last_index, page_size=3)
-        self.__set_send_data()
+        self._feeds = self.__set_send_data()
         
         return
 
