@@ -1,22 +1,11 @@
+from pprint import pprint
 
-class Item():
-    def __init__(self, init_data = {"chatting" : 0, "saver":0}):
-        self.chatting  = init_data["chatting"]
-        self.saver = init_data["saver"]
-
-    def get_dict_form_data(self):
-        return {
-            "chatting" : self.chatting,
-            "saver": self.saver
-        }
+data = {
+    "content": "사실 구라얌",
+    "detail":"가세요라"
+}
 
 
+result = "아니 그래서 이게 뭔데 씹덕아 " + data
 
-item = Item(init_data={"chatting": 0, "saver" : 1})
-
-print(item.saver)
-
-
-attr = getattr(item, "saver")
-
-print(attr)
+pprint(data)
