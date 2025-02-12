@@ -197,8 +197,8 @@ class UserPageModel(BaseModel):
     def get_user_data(self):
         self._uname = self._user.uname
         self._uid = self._user.uid
-        self._num_long_feed = self.__count_my_feeds_type(feed_type="long")
-        self._num_short_feed = self.__count_my_feeds_type(feed_type="short")
+        self._num_long_feed = self._user.num_long_feed
+        self._num_short_feed = self._user.num_short_feed
         self._num_like = len(self._user.like)
         self._num_comment = len(self._user.my_comment)
 

@@ -23,9 +23,8 @@ from pprint import pprint
 # Boto3의 경고 메시지 무시
 warnings.filterwarnings("ignore", module='boto3.compat')
 
-# 피드를 관리하는 장본인
-# 얘 이거 삭제해도 되는거 아니니
-class OldFeedManager:
+# Feed manager
+class FeedManager:
     def __init__(self, database, fclasses, feed_search_engine) -> None:
         self._feedClassManagement = FeedClassManagement(fclasses=fclasses)
         #self._database:Local_Database= database
@@ -38,48 +37,20 @@ class OldFeedManager:
 
     def __get_argo(self, user):
         return self._feed_class_analist.dice_argo(option=user.option)
-    
-    # 서버 시작 초기에 관리용 피드를 메모리에 올리는 작업
-    def init_feed_data(self):
-        feed_list = []
-        # 데이터 베이스에서 feed 데이터 전부다 가지고 오기
-        raw_feed_data = self._database.get_all_data(target="fid")
-        for data in raw_feed_data:
-            feed = Feed()
-            feed.make_with_dict(dict_data=data)
-            feed.date = self.__get_datetime(date_str=feed.date) # 데이트 타임
-            feed_list.append(feed)
-        
-        # 데이터를 날짜에 맞춰 정렬
-        sorted_data = sorted(feed_list,key=lambda x:x.date, reverse=False)
 
-        # 정렬된 데이터를 managed_feed로 만들어 메모리에 보관
-        for data in sorted_data:
-            managed_feed = ManagedFeed( key= self._num_feed,
-                                        fid=data.fid,
-                                        fclass=data.fclass,
-                                        category=data.category)
-            self._num_feed += 1
-            self._managed_feed_list.append(managed_feed)
-        print(f'INFO<-[      {self._num_feed} NOVA FEED NOW READY.')
-        
     def __get_datetime(self, date_str):
         return datetime.strptime(date_str, "%Y/%m/%d-%H:%M:%S")
 
     def __set_datetime(self):
         return datetime.now().strftime("%Y/%m/%d-%H:%M:%S")
 
+    def __get_today_date(self):
+        return datetime.now().strftime("%Y/%m/%d")
+
     def __set_fid_with_datatime(self):
         return datetime.now().strftime("%Y%m%d%H%M%S")
 
-    def __get_today_date(self):
-        return datetime.now().strftime("%Y/%m/%d")
-    
-    def __get_class_name(self, fclass):
-        fname, result = self._feedClassManagement.get_class_name(fclass=fclass)
-        return fname, result
-
-
+    #------------------------------Feed 작성, 삭제, 편집-------------------------------------------
     # 새로운 fid 만들기
     def __make_new_fid(self, user:User):
         random_string = "default"
@@ -99,107 +70,63 @@ class OldFeedManager:
                 break
 
         return fid
-    
-    def try_remove_feed(self, user:User, fid):
-        feed_data=self._database.get_data_with_id(target="fid",id=fid)
-        feed = Feed()
-        feed.make_with_dict(feed_data)
-        if feed.uid != user.uid:
-            return "NOT_OWNER", False
 
-        iid = feed.iid
-
-
-        comment_datas = self._database.get_datas_with_ids(target_id="cid", ids=feed.comment)
-        comments = []
-        for comment_data in comment_datas:
-            comment = Comment()
-            comment.make_with_dict(comment_data)
-            comments.append(comment)
-
-        cids = []
-        for c in comments:
-            cids.append(c.cid)
-
-        if not self._database.delete_datas_with_ids(target="cid", ids=cids):
-            return "DATABASE_ERROR", False
-
-        if not self._database.delete_data_with_id(target="fid", id=feed.fid):
-            return "DATABASE_ERROR", False
-
-        return "COMPLETE", True
-
-    def get_feed_meta_data(self):
-        return self._feedClassManagement.get_fclass_meta_data()
-
-    def try_modify_feed(self, user:User, data_payload):
-        feed_data=self._database.get_data_with_id(target="fid",id=data_payload.fid)
-        feed = Feed()
-        feed.make_with_dict(feed_data)
-        if feed.uid != user.uid:
-            return "NOT_OWNER", False
-
-        self._database.delete_data_with_id(target="fid", id=feed.fid)
-
-        result, flag = self.try_make_new_feed(user=user, data_payload=data_payload, fid=feed.fid)
-        return result, flag
-    
-    # 피드 새로 만들기
-    def try_make_new_feed(self, user:User, data_payload, fid = ""):
-        # fid 만들기
-        if fid == "":
-            fid = self.__make_new_fid(user=user)
-
-
-        # 이미지를 업로드 할것
-        image_descriper = ImageDescriper()
-        # 근데 이미지가 없으면 디폴트 이미지로 
-        if len(data_payload.image_names) == 0:
-            #image_result, flag = image_descriper.get_default_image_url()
-            image_result = []
-            flag = True
-        else:
-            image_result, flag = image_descriper.try_feed_image_upload(
-                fid=fid, image_names=data_payload.image_names,
-                images=data_payload.images)
-
-        # 이미지 업로드 실패하면
-        if not flag:
-            return image_result, False
-        # 여기서 댓글 허용 같은 부분도 처리해야될것임
-        self.__make_new_feed(user=user,
-                            fid=fid,
-                            fclass=data_payload.fclass,
-                            choice=data_payload.choice,
-                            body=data_payload.body,
-                            hashtag=data_payload.hashtag,
-                            images=image_result)
-        
-        #작성한 피드 목록에 넣어주고
-        user.my_feed.append(fid)
-        self._database.modify_data_with_id(target_id="uid", target_data=user.get_dict_form_data())
-
-
-        # 끝
-        return "Upload Success", True
-    
     # 새로운 피드 만들기
-    def __make_new_feed(self, user:User, fid, fclass, choice, body, hashtag, images):
-
+    # 실제로 피드를 만들고, 서치 엔진에 추가하는 부분이다.
+    def __make_new_feed(self, user:User, fid, fclass, choice, body, hashtag,
+                        board_type, images, link, bid, raw_body=""):
         # 검증을 위한 코드는 이곳에 작성하시오
         new_feed = self.__set_new_feed(user=user, fid=fid, fclass=fclass,
-                                        choice=choice, body=body, hashtag=hashtag,
-                                        image=images)
+                                       choice=choice, body=body, hashtag=hashtag,
+                                       board_type=board_type, image=images, link=link, bid=bid, raw_body=raw_body)
         self._database.add_new_data(target_id="fid", new_data=new_feed.get_dict_form_data())
 
         self._feed_search_engine.try_make_new_managed_feed(feed=new_feed)
         self._feed_search_engine.try_add_feed(feed=new_feed)
         return
 
-    # 새로운 피드의 데이터를 추가하여 반환
-    def __set_new_feed(self, user:User,fid, fclass, choice, body, hashtag, image):
-        temp_list = [[], [], [], []]
+    # 링크 만들기
+    def _make_new_link(self, fid, feed_links):
+        result_feed_links = []
 
+        lid_list = []
+
+        # 여기서 실제 링크를 타고 들어가서 해당 사이트의 ㅡ내용을 긁어 올 필요가 있음
+        # 크롤링이 안되는 사이트면 하는 수 없고
+        for feed_link in feed_links:
+            feed_link:FeedLink = feed_link
+            pprint(feed_link.get_dict_form_data())
+            lid = self.__make_new_iid()
+            feed_link.lid = lid
+            feed_link.fid = fid
+            feed_link.domain = HTMLEXtractor().extract_link_domain_string(url=feed_link.url)
+            feed_link.title = HTMLEXtractor().extract_external_webpage_title_tag(url=feed_link.url)
+            result_feed_links.append(feed_link.get_dict_form_data())
+            lid_list.append(lid)
+
+        # 데이터 저장
+        self._database.add_new_datas(target_id="lid", new_datas=result_feed_links)
+
+        return lid_list
+
+
+
+    # 새로운 피드의 데이터를 추가하여 반환
+    def __set_new_feed(self, user:User,fid, fclass, choice, body, hashtag,
+                       board_type, image, link, bid, raw_body):
+        # 인터액션이 있으면 작업할것
+        if len(choice) > 1:
+            iid, _ = self.try_make_new_interaction(fid=fid, choice=choice)
+        else:
+            iid = ""
+
+        # link가 있다면 작업할 것
+        if link:
+            lids = self._make_new_link(fid=fid, feed_links=link)
+        else:
+            lids = []
+
+        # 새로운 피드 만들어지는 곳
         new_feed = Feed()
         new_feed.fid = fid
         new_feed.uid = user.uid
@@ -207,407 +134,257 @@ class OldFeedManager:
         new_feed.body = body
         new_feed.date = self.__set_datetime()
         new_feed.fclass = fclass
-        new_feed.class_name, new_feed.result = self.__get_class_name(fclass=fclass)
-        new_feed.choice = choice[:len(new_feed.result)]
-        new_feed.attend = temp_list[:len(new_feed.result)]
-        new_feed.state = "y"
-        new_feed.category = [] # 여기서 카테고리 추가
+        new_feed.board_type = board_type
         new_feed.image= image
         new_feed.hashtag = hashtag
         new_feed.num_image = len(image)
+        new_feed.iid = iid
+        new_feed.lid = lids
+        new_feed.bid = bid
+        new_feed.raw_body = raw_body
         return new_feed
-    
 
-    def __set_send_feed(self, target_feed):
-        result_key = 0
-        target_fid = []
-        for single_feed in target_feed:
-            target_fid.append(single_feed.fid)
-        feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=target_fid)
 
-        result = []
-        for data in feed_datas:
+    # FEED 클래스를 반환하는 함수
+    def __get_class_name(self, fclass):
+        fname, result = self._feedClassManagement.get_class_name(fclass=fclass)
+        return fname, result
+
+    # FEED 작성
+    def try_make_new_feed(self, user:User, data_payload, fid = ""):
+        # fid 만들기 feed 수정기능을 겸하고 있기 때문에, 다음을 추가한 것
+        if fid == "":
+            fid = self.__make_new_fid(user=user)
+
+        if data_payload.fclass == "short":
+            # 이미지를 업로드 할것
+            image_descriper = ImageDescriper()
+            # 근데 이미지가 없으면 디폴트 이미지로
+            if len(data_payload.image_names) == 0:
+                #image_result, flag = image_descriper.get_default_image_url()
+                image_result = []
+                flag = True
+            else:
+                image_result, flag = image_descriper.try_feed_image_upload(
+                    fid=fid, image_names=data_payload.image_names,
+                    images=data_payload.images)
+            # 이미지 업로드 실패하면
+            if not flag:
+                return image_result, False
+
+            # 여기서 댓글 허용 같은 부분도 처리해야될 것임
+            self.__make_new_feed(user=user,
+                                 fid=fid,
+                                 fclass=data_payload.fclass,
+                                 choice=data_payload.choice,
+                                 body=data_payload.body,
+                                 hashtag=data_payload.hashtag,
+                                 board_type="자유게시판", # 이거, 게시판 타입 분리하는거, 나중에 프론트엔드에서 게시판타입을 받아오면 그 때, 데이터가 바뀐다.
+                                 images=image_result,
+                                 link=data_payload.link,
+                                 bid=data_payload.bid,
+                                 )
+
+        # 롱폼의 경우 작성된 html을 올리고 저장하면됨
+        # 이때 body 데이터는 url로 되어야함
+        # 대신 전송될 때는 body데이터가 html로 다시 복구되어 전송되어야함
+        elif data_payload.fclass == "long":
+            connector = ObjectStorageConnection()
+            # 1. 전송된 body데이터를 확인
+            if data_payload.body:
+                # 2. body데이터를 오브젝트 스토리지에 저장
+                url = connector.make_new_feed_body_data(fid = fid, body=data_payload.body)
+                body, _ = connector.extract_body_n_image(raw_data=data_payload.body)
+
+            else:
+                body = " "
+                url = connector.make_new_feed_body_data(fid=fid, body=body)
+
+            # 3. url을 body로 지정
+
+            # 여기서 댓글 허용 같은 부분도 처리해야될 것임
+            self.__make_new_feed(user=user,
+                                 fid=fid,
+                                 fclass=data_payload.fclass,
+                                 choice=data_payload.choice,
+                                 body=body,
+                                 hashtag=data_payload.hashtag,
+                                 board_type="자유게시판", # 이거도, 게시판 타입 받아야 함
+                                 images=[],
+                                 link=data_payload.link,
+                                 bid=data_payload.bid,
+                                 raw_body = url, # 이거 url이라는 변수가 없어서
+                                 )
+
+        #작성한 피드 목록에 넣어주고
+        user.my_feed.append(fid)
+
+        # 유저 데이터에 Feed 개수 늘리기. 생성 시 개수가 늘어남
+        if data_payload.fclass == "short":
+            user.num_short_feed+=1
+        elif data_payload.fclass == "long":
+            user.num_long_feed+=1
+
+        self._database.modify_data_with_id(target_id="uid", target_data=user.get_dict_form_data())
+        # 끝
+        return "Upload Success", True
+
+    # FEED 수정
+    # 댓글하고 다르게 이미지도 수정이 가능하므로, 데이터를 삭제하고 다시 작성하는 방식을 취함.
+    def try_modify_feed(self, user:User, data_payload):
+        # FEED 데이터 불러옴
+        feed_data=self._database.get_data_with_id(target="fid",id=data_payload.fid)
+        feed = Feed()
+        feed.make_with_dict(feed_data)
+
+        # 내 글이 아니네!
+        if feed.uid != user.uid:
+            return "NOT_OWNER", False
+
+        # 기존의 FEED를 삭제하고(?), 새롭게 데이터를 작성한다.
+        self._database.delete_data_with_id(target="fid", id=feed.fid)
+        result, flag = self.try_make_new_feed(user=user, data_payload=data_payload, fid=feed.fid)
+        return result, flag
+
+    def try_remove_feed_new(self, user:User, fid):
+        feed_data=self._database.get_data_with_id(target="fid",id=fid)
+        feed = Feed()
+        feed.make_with_dict(feed_data)
+
+        if feed.uid != user.uid:
+            return "NOT_OWNER", False
+
+        # 댓글도 남기고, Feed도 삭제하지 않는다. 다만, Display 옵션을 따로 두어
+        # 삭제해도 데이터베이스 안에 남기도록 한다.
+
+        # 디스플레이 옵션
+        #   0 : 삭제
+        #   1 : 비공개
+        #   2 : 차단
+        #   3 : 댓글 작성 비활성화
+        #   4 : 전체 공개
+        # 디스플레이 옵션을 수정한 후, Feed를 수정한다.
+        feed.display = 0
+
+        # 댓글 삭제 시
+        if feed.fclass == "short":
+            user.num_short_feed-=1
+        elif feed.fclass == "long":
+            user.num_long_feed-=1
+
+        self._database.modify_data_with_id(target_id="fid", target_data=feed.get_dict_form_data())
+
+        return "COMPLETE", True
+
+    def try_set_private_feed(self, user:User, fid):
+        feed_data = self._database.get_data_with_id(target="fid",id=fid)
+        feed = Feed()
+        feed.make_with_dict(feed_data)
+
+        if feed.uid != user.uid:
+            return "NOT_OWNER", False
+
+        # 디스플레이 옵션
+        #   0 : 삭제
+        #   1 : 비공개
+        #   2 : 차단
+        #   3 : 댓글 작성 비활성화
+        #   4 : 전체 공개
+        # 디스플레이 옵션을 수정한 후, Feed를 수정한다.
+        feed.display = 1
+        self._database.modify_data_with_id(target_id="fid", target_data=feed.get_dict_form_data())
+
+        return "COMPLETE", True
+
+    # 피드 차단을 설정함
+    def try_set_blocked_feed(self, fid):
+        feed_data = self._database.get_data_with_id(target="fid",id=fid)
+        feed = Feed()
+        feed.make_with_dict(feed_data)
+
+        feed.display = 2
+        self._database.modify_data_with_id(target_id="fid", target_data=feed.get_dict_form_data())
+
+        return "COMPLETE", True
+
+    # Post( 롱 피드)만 가져오는 거
+    def get_my_long_feeds(self, user:User):
+        feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=user.my_feed)
+        feeds = []
+
+        for _, feed_data in enumerate(reversed(feed_datas)):
             feed = Feed()
-            feed.make_with_dict(data)
-            result.append(feed)
-
-        return result, result_key
-    
-    # 홈 화면에서 feed를 요청하는 상황
-    def get_feed_in_home(self, user:User, key:int = -4):
-        if user.uid != "":
-            managed_user = self._managed_user_table.find_user(user=user)
-            result, result_key = self._get_home_feed_with_user(user=managed_user, key=key)
-            result = self.is_user_interacted(managed_user, result)
-        else:
-            result, result_key = self._get_home_feed(key=key)
-            managed_user = ManagedUser()
-            result = self.is_user_interacted(managed_user, result)
-
-        return result, result_key
-    
-    def _get_home_feed_with_user(self, user:ManagedUser, key):
-        sample_feeds = []
-        count = 0
-        while True:
-            if count > 100:
-                break
-            target_category =self.__get_argo(user)
-            #present_feed = self.pick_single_feed_with_category(user=user, category=target_category)
-            single_feed = self.pick_single_feed_with_category(user=user, category=target_category)
-            if single_feed.key == -1:
-                count += 1
-                user.history.clear()
-                continue
-            sample_feeds.append(single_feed)
-            result_key = single_feed.key
-
-            if len(sample_feeds) == 3:
-                break
-
-        result, _ = self.__set_send_feed(target_feed=sample_feeds)
-        return result, result_key
-    
-    def _get_home_feed(self, key=-4):
-        sample_feeds = []
-        if key <= 0:
-            key = self._num_feed -1
-            single_feed = self._get_single_managed_feed(key=key)
-            sample_feeds.append(single_feed)
-            result_key = single_feed.key
-
-        count = 0
-        while True:
-            if count > 8:
-                break
-            single_feed = self.pick_single_feed_with_key(key=key)
-            if single_feed.key == -1:
-                count += 1
-                key = self._num_feed - 1
-                continue
-            sample_feeds.append(single_feed)
-            result_key = single_feed.key
-            key = result_key
-
-            if len(sample_feeds) == 3:
-                break
-
-        result, _ = self.__set_send_feed(target_feed=sample_feeds)
-        return result, result_key
-    
-    # 위성 탐색에서 feed데이터를 요청하는 상황
-    def get_feed_in_fclass(self, user:User, key:int, fclass:str):
-        # 제일 위에서 하나 뽑고, 다음꺼 하나 더뽑고
-        # key에 맞는 feed 하나 더 뽑아서 넣어주기
-        #for feed in self._managed_feed_list:
-            #feed()
-        if user.uid != "":
-            managed_user = self._managed_user_table.find_user(user=user)
-            result, result_key = self._get_short_feed_with_user(user=managed_user,key=key, fclass=fclass)
-            result = self.is_user_interacted(managed_user, result)
-        else:
-            result, result_key = self._get_short_feed(key=key, fclass=fclass)
-            managed_user = ManagedUser()
-            result = self.is_user_interacted(managed_user, result)
-        return result, result_key
-
-    def _get_short_feed(self, key, fclass = "None"):
-        sample_feeds = []
-        # 제일 위에서 하나 뽑고, 다음꺼 하나 더뽑고
-        # key에 맞는 feed 하나 더 뽑아서 넣어주기
-        if key <= 0:
-            key = self._num_feed - 1
-            while True:
-                single_feed = self._get_single_managed_feed(key=key)
-                if fclass != "None":
-                    if single_feed.fclass != fclass:
-                        key -= 1
-                        continue
-                sample_feeds.append(single_feed)
-                result_key = single_feed.key
-                break
-            #self.__swap_list(sample_feeds)
-
-        single_feed = self.pick_single_feed_with_key(key=key, fclass=fclass)
-        sample_feeds.append(single_feed)
-        result_key = single_feed.key
-
-        result, _ = self.__set_send_feed(target_feed=sample_feeds)
-        return result, result_key
-
-    # 숏폼 피드에서 유저데이터가 있을때 데이터를 받아감
-    # result = [지금 볼꺼, 다음볼꺼, 방금 본거]
-    # result_key = 지금 볼꺼.key
-    def _get_short_feed_with_user(self, user:ManagedUser, key, fclass):
-        sample_feeds = []
-        # 제일 위에서 하나 뽑고, 다음꺼 하나 더뽑고
-        # key에 맞는 feed 하나 더 뽑아서 넣어주기
-        count = 0
-
-        while True:
-            if count > 100:
-                break
-            target_category =self.__get_argo(user)
-            present_feed= self.pick_single_feed_with_category(user=user, category=target_category, fclass=fclass)
-            if present_feed.key == -1:
-                count += 1
-                user.history.clear()
-                continue
-            sample_feeds.append(present_feed)
-            result_key = present_feed.key
-            break
-
-        if key == -4:
-            count = 0
-            while True:
-                if count > 100:
-                    break
-                target_category =self.__get_argo(user)
-                next_feed = self.pick_single_feed_with_category(user=user, category=target_category, fclass=fclass)
-                if next_feed.key == -1:
-                    count += 1
-                    user.history.clear()
+            feed.make_with_dict(feed_data)
+            if feed.fclass == "long":
+                if feed.display == 0:
                     continue
-                sample_feeds.append(next_feed)
-                result_key = next_feed.key
-                break
-            #self.__swap_list(sample_feeds)
+                feeds.append(feed)
 
+        return feeds
 
+    # Moment(숏 피드)만 가져오는 거
+    def get_my_short_feeds(self, user:User):
+        feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=user.my_feed)
+        feeds = []
 
+        for _, feed_data in enumerate(reversed(feed_datas)):
+            feed = Feed()
+            feed.make_with_dict(feed_data)
+            if feed.fclass == "short":
+                if feed.display == 0:
+                    continue
+                feeds.append(feed)
 
-        result, _ = self.__set_send_feed(target_feed=sample_feeds)
-        return result, result_key
-    
-    # 두개일때 뒤집기 해주는건데 이건 이제 안씀
-    def __swap_list(self, list_data):
-        temp = list_data[0]
-        list_data[0] = list_data[1]
-        list_data[1] = temp
-        return 
-    
-    # fid나 key로 단일 feed 하나만 호출할 때
-    #def _get_single_feed(self, key = -1, fid = ""):
-        #target_feed = None
-        #if key != -1:
-            #for feed in self._managed_feed_list:
-                #if feed.key == key:
-                    #target_feed=feed
-        #else:
-            #for feed in self._managed_feed_list:
-                #if feed.fid== fid:
-                    #target_feed=feed
+        return feeds
 
-        #if not target_feed:
-            #target_feed = Feed()
-        #else:
-            #feed_data=self._database.get_data_with_id(target="fid",id=feed.fid)
-            #target_feed = Feed()
-            #target_feed.make_with_dict(feed_data)
-        #return target_feed
+    # 내가 좋아요를 누른 Feed만 가져오는 거
+    def get_liked_feeds(self, user:User):
+        # "fid=시간" -> "fid"
+        liked_fid_data = [liked_feed.split('=')[0] for liked_feed in user.like]
 
-    # fid나 key로 단일 feed 하나만 호출할 때
-    def _get_single_managed_feed(self, key = -1, fid = ""):
-        target_feed = None
-        if key != -1:
-            for feed in self._managed_feed_list:
-                if feed.key == key:
-                    target_feed=feed
-        else:
-            for feed in self._managed_feed_list:
-                if feed.fid== fid:
-                    target_feed=feed
+        feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=liked_fid_data)
+        feeds = []
 
-        if not target_feed:
-            target_feed = ManagedFeed(key=-1)
-        return target_feed
-
-    # 유저가 참여한 feed인지 확인할것
-    # 사실상 User에게 전송하는 모든 feed는 이 함수를 통함
-    def is_user_interacted(self, user, feeds:list):
-        result = []
-        for feed in feeds:
-            # 검열된 feed면 생략
-            if feed.state != "y":
+        # 마지막이 좋아요 최신 순이라 리버스해야함.
+        for _, feed_datas in enumerate(reversed(feed_datas)):
+            feed = Feed()
+            feed.make_with_dict(feed_datas)
+            if feed.display == 0:
                 continue
+            feeds.append(feed)
 
-            # 피드에 참여한 내역이 있는지 확인
-            attend = -1
-            for i, choice in enumerate(feed.attend):
-                for uid in choice:
-                    if uid == user.uid:
-                        attend = i
+        return feeds
 
-            comment = self.__get_feed_comment(user=user, feed=feed)
-            feed.num_comment = len(feed.comment)
-            feed.attend = attend
-            feed.comment = comment
-            # 기본적으로 star_flag는 False
-            if feed.fid in user.like:
-                feed.star_flag = True
-            result.append(feed)
-        return result
-    
-    def __get_feed_comment(self, user, feed:Feed):
-        if len(feed.comment) == 0:
-            comment = Comment(body="아직 작성된 댓글이 없어요")
-            comment = comment.get_dict_form_data()
-        else:
-            #comment = Comment(body="아직 작성된 댓글이 없어요")
-            #comment = comment.get_dict_form_data()
-            cid = feed.comment[-1]
-            comment = self._database.get_data_with_id(target="cid", id=cid)
-            # 기본적으로 owner는 False로 고정
-            if comment['uid'] == user.uid:
-                comment['owner'] = True
-        return comment
+    # 상호작용한 Feed만 가져오기
+    def get_interacted_feed(self, user:User):
+        feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=user.active_feed)
+        feeds = []
 
-    def make_new_comment_on_feed(self, user:User, fid, body):
-        feed_data = self._database.get_data_with_id(target="fid", id=fid)
-        feed = Feed()
-        feed.make_with_dict(dict_data=feed_data)
+        for i, feed_data in enumerate(reversed(feed_datas)):
+            feed = Feed()
+            feed.make_with_dict(feed_data)
+            if feed.display == 0:
+                continue
+            feeds.append(feed)
 
-        cid = fid+"-"+self.__set_fid_with_datatime()
-        date = self.__get_today_date()
-        new_comment = Comment(
-            cid=cid, fid=feed.fid, uid=user.uid, 
-            uname=user.uname, body=body, date=date)
-        feed.comment.append(cid)
+        return feeds
 
-        user.my_comment.append(cid)
+    # 모든 Feed fid를 가져옵니다.
+    def get_all_fids(self):
+        feed_datas = self._database.get_all_data(target="fid")
+        fid_list = []
 
-        self._database.add_new_data("cid", new_data=new_comment.get_dict_form_data())
-        self._database.modify_data_with_id("fid", target_data=feed.get_dict_form_data())
+        for feed_data in feed_datas:
+            fid_list.append(feed_data["fid"])
 
-        result = self.is_user_interacted(user=user, feeds=[feed])
-        return result
+        return fid_list
 
-    def remove_comment_on_feed(self, user:User, fid, cid):
-        comment_data = self._database.get_data_with_id(target="cid", id=cid)
-        comment = Comment()
-        comment.make_with_dict(comment_data)
+    #------------------------------Feed 좋아요 누르기----------------------------------------------
 
-        feed_data = self._database.get_data_with_id(target="fid", id=fid)
-        feed = Feed()
-        feed.make_with_dict(dict_data=feed_data)
-
-        if user.uid != comment.uid:
-            result = self.is_user_interacted(user=user, feeds=[feed])
-            return result
-
-        # 이거 지우는거 뭔가 대책이 필요함
-        user.my_comment.remove(cid)
-
-        feed.comment.remove(cid)
-        self._database.delete_data_with_id(target="cid", id=cid)
-        self._database.modify_data_with_id("fid", target_data=feed.get_dict_form_data())
-        self._database.modify_data_with_id("uid", target_data=user.get_dict_form_data())
-
-        result = self.is_user_interacted(user=user, feeds=[feed])
-        return result
-
-    def get_all_comment_on_feed(self, user, fid):
-        feed_data = self._database.get_data_with_id(target="fid", id=fid)
-        feed=Feed()
-        feed.make_with_dict(dict_data=feed_data)
-
-        comments = []
-        comment_datas = self._database.get_datas_with_ids(target_id="cid", ids=feed.comment)
-
-        for comment_data in reversed(comment_datas):
-            new_comment = Comment()
-            new_comment.make_with_dict(comment_data)
-            # 기본적으로 owner는 False
-            if new_comment.uid == user.uid:
-                new_comment.owner= True
-            comments.append(new_comment)
-
-        self.__get_comment_liked_info(user=user, comments=comments)
-        return comments
-
-    def __get_comment_liked_info(self, user:User, comments):
-        for comment in comments:
-            if user.uid in comment.like_user:
-                comment.like_user = True
-            else:
-                comment.like_user = False
-        return
-
-    def try_like_comment(self, user:User, fid, cid):
-        feed_data = self._database.get_data_with_id(target="fid", id=fid)
-        feed = Feed()
-        feed.make_with_dict(dict_data=feed_data)
-
-
-        comment_data = self._database.get_data_with_id(target="cid", id=cid)
-        comment = Comment()
-        comment.make_with_dict(comment_data)
-
-
-        if user.uid in comment.like_user:
-            comment.like_user.remove(user.uid)
-            comment.like -= 1
-        else:
-            comment.like_user.append(user.uid)
-            comment.like += 1
-
-        self._database.modify_data_with_id("cid", target_data=comment.get_dict_form_data())
-
-        result = self.is_user_interacted(user=user, feeds=[feed])
-        return result
-
-    def try_interaction_feed(self, user:User, fid:str, action):
-        feed = self.__try_interaction_with_feed(user=user, fid=fid, action=action)
-
-        return [feed]
-        
-    # feed 와 상호작용 -> 선택지를 선택하는 경우
-    def __try_interaction_with_feed(self, user:User, fid, action):
-        fid_data = self._database.get_data_with_id(target="fid", id=fid)
-        feed = Feed()
-        feed.make_with_dict(fid_data)
-        try:
-            # 참여한 기록이 있는지 확인
-            # 있으면 지우고, 결과값도 하나 줄여야됨
-            target = -1
-
-            for i, uids in enumerate(feed.attend):
-                for uid in uids:
-                    if uid == user.uid:
-                        uids.remove(uid)
-                        target = i
-                        break
-
-            if target != -1:
-                user.active_feed.remove(fid)
-                feed.result[target] -= 1
-
-            # 이제 참여한 데이터를 세팅하고 저장하면됨
-            if target != action:
-                user.active_feed.append(fid)
-                feed.attend[action].append(user.uid)
-                feed.result[action] += 1
-            else:
-                #user.active_feed.remove(fid)  # 지울 필요가 없어보임 -> 주석 처리됨
-                action = -1
-
-            self._database.modify_data_with_id(target_id="fid",
-                                                target_data=feed.get_dict_form_data())
-            self._database.modify_data_with_id(target_id="uid",
-                                                target_data=user.get_dict_form_data())
-            
-            feed.attend = action
-            feed.comment = self.__get_feed_comment(user=user, feed=feed)
-        except Exception as e:
-            print(e)
-        finally:
-            return feed
-
-
+    # Feed에 좋아요를 눌렀을 때의 작용
     def try_staring_feed(self, user:User, fid:str):
         feed = self.__try_staring_feed(user=user, fid=fid)
-        feed = self.is_user_interacted(user, feeds=[feed])
-        return feed
+        return [feed]
 
     # feed 와 상호작용 -> 관심 표시
     def __try_staring_feed(self, user:User, fid):
@@ -616,17 +393,19 @@ class OldFeedManager:
         feed.make_with_dict(feed_data)
 
         flag = False
-        # fidNdate = fid=date
+        # fidNdate = "fid=date"
 
-
-        for fidNdate in user.like:
-            fidNdate:str = fidNdate
-            target_fid = fidNdate.split('=')[0]
+        for fid_n_date in user.like:
+            # 문자열 변환
+            fid_n_date:str = fid_n_date
+            # 현재 Feed를 얻음
+            target_fid = fid_n_date.split('=')[0]
+            # 왜이랬는지 생각해봤더니 지울때 또 반복문 돌리니까 이렇게 한 거네
             if target_fid == feed.fid:
-                user.like.remove(fidNdate)
+                user.like.remove(fid_n_date)
                 flag=True
                 break
-        
+
         date = datetime.now()
         str_fid_n_date = feed.fid + "=" + self.__set_datetime()
 
@@ -640,151 +419,419 @@ class OldFeedManager:
             feed.star += 1
 
         self._database.modify_data_with_id(target_id="fid",
-                                            target_data=feed.get_dict_form_data())
+                                           target_data=feed.get_dict_form_data())
         self._database.modify_data_with_id(target_id="uid",
-                                            target_data=user.get_dict_form_data())
+                                           target_data=user.get_dict_form_data())
 
         return feed
-    
-    # 단일 피드 뽑기
-    # 만약 추천순 같이 정렬이 바뀔 일이 있으면
-    # 여기다가 매게변수로 정렬된 리스트를 주면됨
-    #  아니면 걍 내부에서 소팅 돌링 별도의 리스트를 가지고 검색할것
-    def pick_single_feed_with_key(self, key, fclass = "None"):
-        target = None
-        flag = False
-        for managed_feed in reversed(self._managed_feed_list):
-            if managed_feed.key == key:
-                flag = True
-                continue
-            if flag:
-                if fclass == "None":
-                    target = managed_feed
-                    break
 
-                if managed_feed.fclass == fclass:
-                    target = managed_feed
-                    break
-        return target
+    #-----------------------------------댓글 기능--------------------------------------------------
+    # 댓글 좋아요를 누른 정보를 가져옴
+    # 내가 좋아요를 누를 댓글인지 플래그를 올리는 함수
+    def __get_comment_liked_info(self, user:User, comments):
+        for comment in comments:
+            # pprint(comment.get_dict_form_data())
+            if user.uid in comment.like_user:
+                comment.like_user = True
+            else:
+                comment.like_user = False
+        return
 
-    # 이건 카테고리에 있는 단일 피드 뽑는 함수
-    def pick_single_feed_with_category(self, user, category, fclass="None"):
-        target = None
+    # 멘션한 유저를 찾아내자
+    def _extract_mention_data(self, body):
+        # 정규식으로 찾음, 이메일 형식도 가져올수 있는 문제가 있어 정규식을 더 정교하게 설정
+        match = re.search(r'@(\w+)(?!\.\w+)', body)
+        # 매칭 실패시
+        if match:
+            return match.group(1)
+        return ""
 
-        for managed_feed in reversed(self._managed_feed_list):
-            if fclass != "None":
-                if managed_feed.fclass != fclass:
-                    continue
+    # 댓글, 대댓글 작성 함수
+    def try_make_comment_on_feed(self, user:User, fid, target_cid, body):
+        # FEED 데이터 불러오기
+        feed_data = self._database.get_data_with_id(target="fid", id=fid)
+        feed = Feed()
+        feed.make_with_dict(feed_data)
 
-            if managed_feed.fid in user.history:
-                continue
-            target = managed_feed
+        # CID 만들기, 중복이 있을 가능성 있음
+        # 일단 __set_datetime()쓰면 cid 분리 시, -때문에 분리가 이상하게 됨. 그래서 FID 만들 때랑 동일한 시간제작방식 사용
+        cid = fid+"-"+self.__set_fid_with_datatime()
+        date = self.__get_today_date()
+        mention = self._extract_mention_data(body)
 
-            # 옵션이 하나도 없는 사람은 category를 검사할 수 없음
-            if category == "None":
-                break
-            
-            # 옵션 이 있는 사람은 카테고리 검사 하삼
-            if category in target.category:
-                break
+        # 타겟 CID도 Comment 객체 멤버로 담아버림. CID 너무 길어지기도 하고, 프론트에서 작업을 안시키게 함.
+        new_comment = Comment(
+            cid=cid, fid=feed.fid, uid=user.uid, uname=user.uname, target_cid=target_cid,
+            body=body, date=date, mention=mention
+        )
+        feed.comment.append(cid)
+        user.my_comment.append(cid)
 
-        if target:
-            user.history.append(target.fid)
+        self._database.add_new_data("cid", new_data=new_comment.get_dict_form_data())
+        self._database.modify_data_with_id("fid", target_data=feed.get_dict_form_data())
+        self._database.modify_data_with_id("uid", target_data=user.get_dict_form_data())
+        return
+
+    # 댓글 수정
+    # Feed에 저장된 CID는 따로 수정 대상이 아니므로, 따로 fid를 파라미터로 가져오지 않는다.
+    # 이 부분은 검토를 해줬으면 좋겠음.
+    def try_modify_comment(self, user:User, cid, new_body):
+        comment_data = self._database.get_data_with_id(target="cid", id=cid)
+        comment = Comment()
+        comment.make_with_dict(dict_data=comment_data)
+
+        if comment.uid != user.uid:
+            return "NOT_OWNER", False
+
+        new_mention = self._extract_mention_data(new_body)
+        comment.body = new_body
+        comment.mention = new_mention
+
+        self._database.modify_data_with_id("cid", target_data=comment.get_dict_form_data())
+        return "Update Success",True
+
+    # 댓글 삭제
+    def remove_comment_on_feed(self, user:User, fid, cid):
+        comment_data = self._database.get_data_with_id(target="cid", id=cid)
+        comment = Comment()
+        comment.make_with_dict(comment_data)
+
+        # 어 내 댓글 아니다.
+        if user.uid != comment.uid:
+            return
+
+        # 디스플레이 옵션만 바꾸면 됨
+        comment.display = 0
+        self._database.modify_data_with_id("cid", target_data=comment.get_dict_form_data())
+
+        return
+
+    # 댓글 비공개
+    def set_private_comment(self, user:User, fid, cid):
+        comment_data = self._database.get_data_with_id(target="cid", id=cid)
+        comment = Comment()
+        comment.make_with_dict(comment_data)
+
+        # 어 내 댓글 아니다.
+        if user.uid != comment.uid:
+            return
+
+        comment.display = 1
+        self._database.modify_data_with_id("cid", target_data=comment.get_dict_form_data())
+
+        return
+
+    # 댓글에 좋아요를 누르는 기능
+
+    # 댓글 좋아요 표시
+    def try_like_comment(self, user:User, fid, cid):
+        feed_data = self._database.get_data_with_id(target="fid", id=fid)
+        feed = Feed()
+        feed.make_with_dict(dict_data=feed_data)
+
+        comment_data = self._database.get_data_with_id(target="cid", id=cid)
+        comment = Comment()
+        comment.make_with_dict(comment_data)
+
+        if user.uid in comment.like_user:
+            comment.like_user.remove(user.uid)
+            comment.like -= 1
         else:
-            # 만약에 category로 찍은 데이터가 없음?
-            target = ManagedFeed(key=-1)
-        return target
+            comment.like_user.append(user.uid)
+            comment.like += 1
 
-    # 내가 작성한 피드 전체 불러오기
-    def get_my_feeds(self, user, fid):
-        managed_user:ManagedUser= self._managed_user_table.find_user(user=user)
-        feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=managed_user.my_feed)
+        self._database.modify_data_with_id("cid", target_data=comment.get_dict_form_data())
 
-        target = -1
-        feeds = []
-        for i, feed_data in enumerate(reversed(feed_datas)):
-            feed = Feed()
-            feed.make_with_dict(feed_data)
-            feeds.append(feed)
-            if feed.fid == fid:
-                target = i
+        return
 
-        if target != -1:
-            feeds = feeds[target+1:]
+        # 댓글 도메인 리스트에서 찾아야 할 댓글을 찾는 함수
+    def __find_comment_in_comment_list(self, comments, cid):
+        for comment in comments:
+            if comment.cid == cid:
+                return comment
+        return None
 
-        if len(feeds) > 5:
-            feeds = feeds[:5]
+    # 댓글 분류를 해주는 함수. 도저히 저 밑에서 하기힘들다고 생각했음. 그래서 따로 함수를 나눴어
+    # taregted는 타케팅 당한 쪽아니라 하는쪽임 따라서 사실은 [targeting]임 -> 읽을 때 유의할것
+    def __classify_reply_comment(self, comments):
+        # 1. 대댓글인 애들이랑 아닌 애들을 분리
+        # 2. 대댓글인 애들을 하나씩 뽑아서 목표 댓글 reply에 넣음
+        # 2-1. (댓글을 하나씩 뽑아서 대댓글과 대조하는 것과 같은 시간 복잡도를 가짐)
+        # 3. 만약 이미 들어간 댓글이면 continue해야됨
+        # 4. reply에 넣을 땐, dict로 넣어야됨
+        no_targeted_comments = []       # target_cid가 없는 놈
+        exist_targeted_comments = []    # target_cid가 있는 놈
 
-        feeds = self.is_user_interacted(user=managed_user, feeds=feeds)
+        for comment in comments:
+            if comment.target_cid != '':
+                exist_targeted_comments.append(comment)
+            else:
+                no_targeted_comments.append(comment)
 
-        return feeds
+        # 대댓글을 분류하는 작업.
+        # 대댓글의 cid를 비교해서 댓글의 reply에 담는 작업을 합니다.
+        for targeted_comment in exist_targeted_comments:
+            comment = self.__find_comment_in_comment_list(no_targeted_comments, targeted_comment.target_cid)
+            if comment is not None:
+                for reply_comment in comment.reply:
+                    if reply_comment["cid"] == targeted_comment.cid:
+                        continue
+                comment.reply.append(targeted_comment.get_dict_form_data())
 
-    # 내가 작성한 댓글 전부 불러오기
-    def get_my_comments(self, user, cid):
-        comment_datas = self._database.get_datas_with_ids(target_id="cid", ids=user.my_comment)
+            # 리스트에 없는 경우. 이 경우는 조금 위험하긴하지만, Database에서 찾아내서 붙인다.
+            # 마이페이지의 내가 쓴 댓글 중, 다른 댓글의 대댓글을 단 경우에 해당된다.
+            else:
+                comment_data = self._database.get_data_with_id(target="cid", id=targeted_comment.target_cid)
+                comment = Comment()
+                comment.make_with_dict(comment_data)
+
+                for reply_comment in comment.reply:
+                    if reply_comment["cid"] == targeted_comment.cid:
+                        continue
+                comment.reply.append(targeted_comment.get_dict_form_data())
+                # 이 댓글은 마이페이지에서 가져온 no_targeted_comments에는 없는 데이터이기 때문에
+                # 만약 한 댓글에 2개 이상의 대댓글을 달았다면.. 딱 한번만 들어가게 된다.
+                if comment not in no_targeted_comments:
+                    no_targeted_comments.append(comment)
+
+        return no_targeted_comments
+
+    # Feed에 있는 모든 댓글들을 모두 가져와야 함
+    # 피드 안에 있는 모든 Comment를 가져옴.
+    def get_all_comment_on_feed(self, user, fid):
+        feed_data = self._database.get_data_with_id(target="fid", id=fid)
+        feed=Feed()
+        feed.make_with_dict(dict_data=feed_data)
 
         comments = []
-        target = -1
-        for i, comment_data in enumerate(reversed(comment_datas)):
+        comment_datas = self._database.get_datas_with_ids(target_id="cid", ids=feed.comment)
+
+        for comment_data in comment_datas:
+            new_comment = Comment()
+            new_comment.make_with_dict(comment_data)
+            if new_comment.display == 0:
+                continue
+            # 기본적으로 owner는 False
+            if new_comment.uid == user.uid:
+                new_comment.owner= True
+            comments.append(new_comment)
+
+        self.__get_comment_liked_info(user=user, comments=comments)
+
+        classified_comments = self.__classify_reply_comment(comments=comments)
+        return classified_comments
+
+        # pprint(classified_comments)
+        #
+        # pprint("분류 후 댓글")
+        # for comment in classified_comments:
+        #     pprint(comment.get_dict_form_data())
+        #     pprint(comment.reply)
+
+        # pprint("분류전 댓글")
+        # for comment in comments:
+        #     pprint(comment.get_dict_form_data())
+        # reply에 담는 작업
+        # 왜 이렇게 하나면 마지막부터 시작하니까 저 위에서 처리하기엔 꼬이는 것 같음.
+
+        # pprint("분류 후 댓글들")
+        # for comment in comments:
+        #     pprint(comment.get_dict_form_data())
+
+        # 이거 바꿔야함.
+        # return classified_comments
+
+    def get_comments_with_keyword(self, keyword:str):
+        comment_datas = self._database.get_all_data(target="cid")
+        comments = []
+
+        for comment_data in comment_datas:
+            if keyword in comment_data["body"]:
+                comment = Comment()
+                comment.make_with_dict(comment_data)
+                if comment.display == 0:
+                    continue
+                comments.append(comment)
+
+        classified_comments = self.__classify_reply_comment(comments=comments)
+
+        return classified_comments
+
+    # 내가 작성한 댓글 전부 불러오기
+    # 페이징 기법은 새롭게 재편하기 떄문에 여기서 페이징을 하지않습니다.
+    def get_my_comments(self, user):
+        comment_datas = self._database.get_datas_with_ids(target_id="cid", ids=user.my_comment)
+        comments = []
+
+        for comment_data in comment_datas:
             comment = Comment()
             comment.make_with_dict(comment_data)
+            if comment.display == 0:
+                continue
             comments.append(comment)
-            if comment.cid == cid:
-                target = i
 
-        if target != -1:
-            comments = comments[target+1:]
+        self.__get_comment_liked_info(user=user, comments=comments)
+        classified_comments = self.__classify_reply_comment(comments=comments)
 
-        if len(comments) > 5:
-            comments = comments[:5]
+        return classified_comments
 
-        return comments
 
-    # 관심 표시한 피드 전부 불러오기
-    def get_stared_feed(self, user:User, fid):
-        feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=user.like)
 
-        feeds = []
-        target = -1
-        for i, feed_data in enumerate(reversed(feed_datas)):
-            feed = Feed()
-            feed.make_with_dict(feed_data)
-            feeds.append(feed)
-            # Target Feed ID를 만나면 페이징을 위해 타겟을 입력한다.
-            if feed.fid == fid:
-                target = i
+    #---------------------------------interaction 수행 관련------------------------------------------------------
+    # IID를 만드는 곳
+    def __make_new_iid(self):
+        random_string = "default"
 
-        if target != -1:
-            feeds = feeds[target+1:]
+        # 사용할 문자 : FID와 비슷하게 대문자, 소문자, 숫자
+        characters = string.ascii_letters + string.digits
 
-        if len(feeds) > 5:
-            feeds = feeds[:5]
+        # 랜덤 문자열 7자리 생성 (단, 앞자리는 Interaction임을 알도록 붙여야함.)
+        random_string = 'i'+''.join(random.choice(characters) for _ in range(6))
 
-        feeds = self.is_user_interacted(user=user, feeds=feeds)
+        # FID가 이미 고유번호라 중복이 되어도 따로 상관없겠지?
+        # iid = iid고유
+        iid = random_string
 
-        return feeds
+        return iid
 
-    # 상호작용한 피드 전부 불러오기
-    def get_interactied_feed(self, user:User, fid):
-        feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=user.active_feed)
+    # 기본 뼈대 : FEED 만드는 함수 참고
+    def _make_new_interaction(self, iid, fid, choice:list):
+        user_attend_list = list([] for _ in choice)
+        new_interaction = Interaction()
 
-        feeds = []
-        target = -1
-        for i, feed_data in enumerate(reversed(feed_datas)):
-            feed = Feed()
-            feed.make_with_dict(feed_data)
-            feeds.append(feed)
-            if feed.fid == fid:
-                target = i
+        iid_dict = dict()
+        iid_dict['iid'] = iid
+        iid_dict['fid'] = fid
+        iid_dict['choice'] = copy.copy(choice)
+        iid_dict['attend'] = copy.copy(user_attend_list)
 
-        if target != -1:
-            feeds = feeds[target + 1:]
+        new_interaction.make_with_dict(iid_dict)
 
-        if len(feeds) > 5:
-            feeds = feeds[:5]
-        feeds = self.is_user_interacted(user=user, feeds=feeds)
+        return new_interaction
 
-        return feeds
+    # INTERACTION 만들기
+    def try_make_new_interaction(self, fid, choice:list):
+        # modify 의미가 없음
+        #fid = self._database.modify_data_with_id("fid", target_data=fid)
+        #feed = Feed()
+        #feed.make_with_dict(fid)
+
+        # 혹시 몰라서 예외처리 남김
+        if len(choice) == 0:
+            return "No Choice", False
+
+            # iid 만들기
+        new_iid = self.__make_new_iid()
+
+        new_interaction = self._make_new_interaction(iid=new_iid, fid=fid, choice=choice)
+
+        self._database.add_new_data(target_id="iid", new_data=new_interaction.get_dict_form_data())
+        # 음.. 따로 더 저장할게 있나요? 검토좀
+
+        return new_interaction.iid, True
+
+    # INTERACTION 수정, 근데 이거 필요한지는 모르겠음.
+
+    # Choice를 선택한 순간, USER 정보가 저장되는데, choice를 수정하면 그 선택지는 날려야할 것 같으니까.
+    # 그리고 이거 움직일려면 Try_modify_Feed랑 같이 움직여야 하는데
+    # 일단 잠시만 그 부분은 컨펌 이후에 진행하겠음
+    def try_modify_interaction(self, fid, iid, new_choice:list):
+        interaction_data = self._database.get_data_with_id(target="iid", id=iid)
+        interaction = Interaction()
+        interaction.make_with_dict(interaction_data)
+
+        self._database.delete_datas_with_id(target="iid", id=iid)
+        result, flag = self.try_make_new_interaction(fid=fid, choice=new_choice)
+
+        return result, flag
+
+    # 데이터베이스에서 삭제
+    def try_remove_interaction(self, fid):
+        feed_data = self._database.get_data_with_id(target="fid", id=fid)
+        feed = Feed()
+        feed.make_with_dict(feed_data)
+
+        # 데이터베이스에서 삭제
+        if not self._database.delete_datas_with_id(target="iid", id=feed.iid):
+            return "DATABASE_ERROR", False
+
+        # iid가 REMOVE되어서 FEED도 수정함.
+        feed.iid = ""
+        self._database.modify_data_with_id(target="fid", target_data=feed.get_dict_form_data())
+
+        return "COMPLETE", True
+
+    # FEED 상호 작용
+    def try_interaction_feed(self, user:User, fid:str, action):
+        feed = self.__try_interaction_with_feed(user=user, fid=fid, action=action)
+        return [feed]
+
+    # feed 와 상호작용 -> 선택지를 선택하는 경우
+    # interaction 객체에 맞게 수정했음.
+    def __try_interaction_with_feed(self, user:User, fid, action):
+        fid_data = self._database.get_data_with_id(target="fid", id=fid)
+        feed = Feed()
+        feed.make_with_dict(fid_data)
+
+        try:
+            iid = feed.iid
+            interaction_data = self._database.get_data_with_id(target="iid", id=iid)
+            interaction = Interaction()
+            interaction.make_with_dict(interaction_data)
+
+            # 참여한 기록이 있는지 확인
+            # 있으면 지우고, 결과값도 하나 줄여야됨
+
+            target = -1
+            for i, uids in enumerate(interaction.attend):
+                for uid in uids:
+                    if uid == user.uid:
+                        uids.remove(uid)
+                        target = i
+                        break
+
+            if target != -1:
+                user.active_feed.remove(fid)
+                interaction.result[target] -= 1
+
+            # 이제 참여한 데이터를 세팅하고 저장하면됨
+            if target != action:
+                user.active_feed.append(fid)
+                interaction.attend[action].append(user.uid)
+                interaction.result[action] += 1
+
+            else:
+                #user.active_feed.remove(fid)  # 지울 필요가 없어보임 -> 주석 처리됨
+                action = -1
+
+            self._database.modify_data_with_id(target_id="iid", target_data=interaction.get_dict_form_data())
+            self._database.modify_data_with_id(target_id="uid", target_data=user.get_dict_form_data())
+
+        except Exception as e:
+            print(e)
+        finally:
+            return feed
+
+    #------------------------------------------------------------------------------------------------------------
+    def paging_fid_list(self, fid_list:list, last_index:int, page_size=5):
+        # 최신순으로 정렬된 상태로 Fid_list를 받아오기 때문에, 인덱스 번호가 빠를수록 최신의 것
+        # 만약에 페이지 사이즈보다 더 짧은 경우도 있을 수 있기에 먼저 정해놓는다.
+        # 이러면 페이징된 리스트의 길이에 상관없이, 인덱스를 알아낼 수 있을 것
+
+        paging_list = fid_list[last_index + 1:]
+
+        # 예외 처리
+        last_index_next = -1
+        if len(fid_list) != 0:
+            last_index_next = fid_list.index(fid_list[-1])
+
+        # 만약 페이지 사이즈를 넘었다면 표시할 개수만큼 짜르고, last_index를 재설정한다.
+        if len(paging_list) > page_size:
+            paging_list = paging_list[:page_size]
+            # Paging 넘버
+            last_index_next = fid_list.index(fid_list[last_index + page_size])
+
+        return paging_list, last_index_next
 
 # 이건 뭐냐하면
 # fclass 간의 유사도를 판별하여
@@ -805,32 +852,39 @@ class FeedClassAnalist:
         return result
 
 
-## 이건 피드 메타 정보를 가지고 있는 친구
-## configure.txt 에서 설정 가능함
-#class FeedClassManagement:
-    #def __init__(self):
-        #pass
- 
+# 이건 피드 메타 정보를 가지고 있는 친구
+# configure.txt 에서 설정 가능함
+class FeedClassManagement:
+    def __init__(self, fclasses):
+        self._fclasses = self.__set_fclasses(fclasses=fclasses)
 
-    #def get_class_name(self, fclass):
-        #fname = "None"
-        #num_choice = -1
+    # 초기 class들 세팅
+    def __set_fclasses(self, fclasses):
+        result = []
+        for fclass_data in fclasses:
+            fclass = FeedClass(fclass_data[0], fclass_data[1], fclass_data[2], int(fclass_data[3]))
+            result.append(fclass)
+        return result
 
-        #for instance in self._fclasses:
-            #if instance.fclass == fclass:
-                #fname = instance.fname
-                #num_choice = instance.num_choice
-                #break
+    def get_class_name(self, fclass):
+        fname = "None"
+        num_choice = -1
 
-        #result = []
-        #if num_choice != -1:
-            #for _ in range(num_choice):
-                #result.append(0)
+        for instance in self._fclasses:
+            if instance.fclass == fclass:
+                fname = instance.fname
+                num_choice = instance.num_choice
+                break
 
-        #return fname, result
+        result = []
+        if num_choice != -1:
+            for _ in range(num_choice):
+                result.append(0)
+
+        return fname, result
             
-    #def get_fclass_meta_data(self):
-        #return self._fclasses
+    def get_fclass_meta_data(self):
+        return self._fclasses
 
 
 class FeedClass:
@@ -1223,865 +1277,6 @@ class ImageDescriper():
         return
     
 
-class FeedManager:
-    def __init__(self, database, feed_search_engine) -> None:
-        #self._feedClassManagement = FeedClassManagement()
-        #self._database:Local_Database= database
-        self._database= database
-        #self._managed_user_table = ManagedUserTable(database=database)
-        self._feed_class_analist = FeedClassAnalist()
-        self._feed_search_engine:FeedSearchEngine = feed_search_engine
-        self._num_feed = 0
-        self._managed_feed_list = []
 
-    def __get_argo(self, user):
-        return self._feed_class_analist.dice_argo(option=user.option)
-
-    def __get_datetime(self, date_str):
-        return datetime.strptime(date_str, "%Y/%m/%d-%H:%M:%S")
-
-    def __set_datetime(self):
-        return datetime.now().strftime("%Y/%m/%d-%H:%M:%S")
-
-    def __get_today_date(self):
-        return datetime.now().strftime("%Y/%m/%d")
-
-    def __set_fid_with_datatime(self):
-        return datetime.now().strftime("%Y%m%d%H%M%S")
-
-#------------------------------Feed 작성, 삭제, 편집-------------------------------------------
-    # 새로운 fid 만들기
-    def __make_new_fid(self, user:User):
-        random_string = "default"
-        # 중북되지 않는 fid 만들기
-        while True:
-            # 사용할 문자들: 대문자, 소문자, 숫자
-            characters = string.ascii_letters + string.digits
-
-            # 8자리 랜덤 문자열 생성
-            random_string = ''.join(random.choice(characters) for _ in range(6))
-
-            fid = user.uid + "-" + random_string
-
-            if self._feed_search_engine.try_search_managed_feed(fid=fid):
-                continue
-            else:
-                break
-
-        return fid
-
-    # 새로운 피드 만들기
-    # 실제로 피드를 만들고, 서치 엔진에 추가하는 부분이다.
-    def __make_new_feed(self, user:User, fid, fclass, choice, body, hashtag,
-                        board_type, images, link, bid, raw_body="", ai_manager=None):
-        # 검증을 위한 코드는 이곳에 작성하시오
-        new_feed = self.__set_new_feed(user=user, fid=fid, fclass=fclass,
-                                       choice=choice, body=body, hashtag=hashtag,
-                                       board_type=board_type, image=images, link=link, bid=bid, raw_body=raw_body,
-                                       )
-        ai_manager.treat_new_feed(feed=new_feed)
-        self._database.add_new_data(target_id="fid", new_data=new_feed.get_dict_form_data())
-
-        self._feed_search_engine.try_make_new_managed_feed(feed=new_feed)
-        self._feed_search_engine.try_add_feed(feed=new_feed)
-        return
-    
-    # 링크 만들기
-    def _make_new_link(self, fid, feed_links):
-        result_feed_links = []
-        
-        lid_list = []
-        
-        # 여기서 실제 링크를 타고 들어가서 해당 사이트의 ㅡ내용을 긁어 올 필요가 있음
-        # 크롤링이 안되는 사이트면 하는 수 없고
-        for feed_link in feed_links:
-            feed_link:FeedLink = feed_link
-            pprint(feed_link.get_dict_form_data())
-            lid = self.__make_new_iid()
-            feed_link.lid = lid
-            feed_link.fid = fid
-            feed_link.domain = HTMLEXtractor().extract_link_domain_string(url=feed_link.url)
-            feed_link.title = HTMLEXtractor().extract_external_webpage_title_tag(url=feed_link.url)
-            result_feed_links.append(feed_link.get_dict_form_data())
-            lid_list.append(lid)
-            
-        # 데이터 저장
-        self._database.add_new_datas(target_id="lid", new_datas=result_feed_links)
-        
-        return lid_list
-    
-    
-
-    # 새로운 피드의 데이터를 추가하여 반환
-    def __set_new_feed(self, user:User,fid, fclass, choice, body, hashtag,
-                       board_type, image, link, bid, raw_body):
-        # 인터액션이 있으면 작업할것
-        if len(choice) > 1:
-            iid, _ = self.try_make_new_interaction(fid=fid, choice=choice)
-        else:
-            iid = ""
-
-        # link가 있다면 작업할 것
-        if link:
-            lids = self._make_new_link(fid=fid, feed_links=link)
-        else:
-            lids = []
-
-        # 새로운 피드 만들어지는 곳
-        new_feed = Feed()
-        new_feed.fid = fid
-        new_feed.uid = user.uid
-        new_feed.nickname = user.uname
-        new_feed.body = body
-        new_feed.date = self.__set_datetime()
-        new_feed.fclass = fclass
-        new_feed.board_type = board_type
-        new_feed.image= image
-        new_feed.hashtag = hashtag
-        new_feed.num_image = len(image)
-        new_feed.iid = iid
-        new_feed.lid = lids
-        new_feed.bid = bid
-        new_feed.raw_body = raw_body
-        return new_feed
-    
-
-    # FEED 클래스를 반환하는 함수
-    def __get_class_name(self, fclass):
-        fname, result = self._feedClassManagement.get_class_name(fclass=fclass)
-        return fname, result
-
-    # FEED 작성
-    def try_make_new_feed(self, user:User, data_payload, fid = "", ai_manager=None):
-        # fid 만들기 feed 수정기능을 겸하고 있기 때문에, 다음을 추가한 것
-        if fid == "":
-            fid = self.__make_new_fid(user=user)
-
-        if data_payload.fclass == "short":
-            # 이미지를 업로드 할것
-            image_descriper = ImageDescriper()
-            # 근데 이미지가 없으면 디폴트 이미지로
-            if len(data_payload.image_names) == 0:
-                #image_result, flag = image_descriper.get_default_image_url()
-                image_result = []
-                flag = True
-            else:
-                image_result, flag = image_descriper.try_feed_image_upload(
-                    fid=fid, image_names=data_payload.image_names,
-                    images=data_payload.images)
-            # 이미지 업로드 실패하면
-            if not flag:
-                return image_result, False
-
-            # 여기서 댓글 허용 같은 부분도 처리해야될 것임
-            self.__make_new_feed(user=user,
-                                fid=fid,
-                                fclass=data_payload.fclass,
-                                choice=data_payload.choice,
-                                body=data_payload.body,
-                                hashtag=data_payload.hashtag,
-                                board_type="자유게시판", # 이거, 게시판 타입 분리하는거, 나중에 프론트엔드에서 게시판타입을 받아오면 그 때, 데이터가 바뀐다.
-                                images=image_result,
-                                link=data_payload.link,
-                                bid=data_payload.bid,
-                                ai_manager=ai_manager
-                                )
-
-        # 롱폼의 경우 작성된 html을 올리고 저장하면됨
-        # 이때 body 데이터는 url로 되어야함
-        # 대신 전송될 때는 body데이터가 html로 다시 복구되어 전송되어야함
-        elif data_payload.fclass == "long":
-            connector = ObjectStorageConnection()
-            # 1. 전송된 body데이터를 확인
-            if data_payload.body:
-            # 2. body데이터를 오브젝트 스토리지에 저장
-                url = connector.make_new_feed_body_data(fid = fid, body=data_payload.body)
-                body, _ = connector.extract_body_n_image(raw_data=data_payload.body)
-                
-            else:
-                body = " "
-                url = connector.make_new_feed_body_data(fid=fid, body=body)
-
-            # 3. url을 body로 지정
-
-            # 여기서 댓글 허용 같은 부분도 처리해야될 것임
-            self.__make_new_feed(user=user,
-                                fid=fid,
-                                fclass=data_payload.fclass,
-                                choice=data_payload.choice,
-                                body=body,
-                                hashtag=data_payload.hashtag,
-                                board_type="자유게시판", # 이거도, 게시판 타입 받아야 함
-                                images=[],
-                                link=data_payload.link,
-                                bid=data_payload.bid,
-                                raw_body = url, # 이거 url이라는 변수가 없어서
-                                )
-
-        #작성한 피드 목록에 넣어주고
-        user.my_feed.append(fid)
-        self._database.modify_data_with_id(target_id="uid", target_data=user.get_dict_form_data())
-        # 끝
-        return "Upload Success", True
-
-    # FEED 수정
-    # 댓글하고 다르게 이미지도 수정이 가능하므로, 데이터를 삭제하고 다시 작성하는 방식을 취함.
-    def try_modify_feed(self, user:User, data_payload):
-        # FEED 데이터 불러옴
-        feed_data=self._database.get_data_with_id(target="fid",id=data_payload.fid)
-        feed = Feed()
-        feed.make_with_dict(feed_data)
-
-        # 내 글이 아니네!
-        if feed.uid != user.uid:
-            return "NOT_OWNER", False
-
-        # 기존의 FEED를 삭제하고(?), 새롭게 데이터를 작성한다.
-        self._database.delete_data_with_id(target="fid", id=feed.fid)
-        result, flag = self.try_make_new_feed(user=user, data_payload=data_payload, fid=feed.fid)
-        return result, flag
-
-    def try_remove_feed_new(self, user:User, fid):
-        feed_data=self._database.get_data_with_id(target="fid",id=fid)
-        feed = Feed()
-        feed.make_with_dict(feed_data)
-
-        if feed.uid != user.uid:
-            return "NOT_OWNER", False
-
-        # 댓글도 남기고, Feed도 삭제하지 않는다. 다만, Display 옵션을 따로 두어
-        # 삭제해도 데이터베이스 안에 남기도록 한다.
-
-        # 디스플레이 옵션
-        #   0 : 삭제
-        #   1 : 비공개
-        #   2 : 차단
-        #   3 : 댓글 작성 비활성화
-        #   4 : 전체 공개
-        # 디스플레이 옵션을 수정한 후, Feed를 수정한다.
-        feed.display = 0
-        self._database.modify_data_with_id(target_id="fid", target_data=feed.get_dict_form_data())
-
-        return "COMPLETE", True
-
-    # FEED 삭제
-    # 진짜 데이터베이스에서 삭제하는 기믹임
-    def try_remove_feed_old(self, user:User, fid):
-        feed_data=self._database.get_data_with_id(target="fid",id=fid)
-        feed = Feed()
-        feed.make_with_dict(feed_data)
-
-        # 내 글이 아니야
-        if feed.uid != user.uid:
-            return "NOT_OWNER", False
-
-        # 댓글을 먼저 삭제한다.
-        # 그래서 데이터를 먼저 가져온다.
-        comment_datas = self._database.get_datas_with_ids(target_id="cid", ids=feed.comment)
-        comments = []
-        for comment_data in comment_datas:
-            comment = Comment()
-            comment.make_with_dict(comment_data)
-            comments.append(comment)
-
-        cids = []
-        for c in comments:
-            cids.append(c.cid)
-
-        if not self._database.delete_datas_with_ids(target="cid", ids=cids):
-            return "DATABASE_ERROR", False
-        if not self._database.delete_data_with_id(target="fid", id=feed.fid):
-            return "DATABASE_ERROR", False
-
-        return "COMPLETE", True
-
-    def try_set_private_feed(self, user:User, fid):
-        feed_data = self._database.get_data_with_id(target="fid",id=fid)
-        feed = Feed()
-        feed.make_with_dict(feed_data)
-
-        if feed.uid != user.uid:
-            return "NOT_OWNER", False
-
-        # 디스플레이 옵션
-        #   0 : 삭제
-        #   1 : 비공개
-        #   2 : 차단
-        #   3 : 댓글 작성 비활성화
-        #   4 : 전체 공개
-        # 디스플레이 옵션을 수정한 후, Feed를 수정한다.
-        feed.display = 1
-        self._database.modify_data_with_id(target_id="fid", target_data=feed.get_dict_form_data())
-
-        return "COMPLETE", True
-
-    # 피드 차단을 설정함
-    def try_set_blocked_feed(self, fid):
-        feed_data = self._database.get_data_with_id(target="fid",id=fid)
-        feed = Feed()
-        feed.make_with_dict(feed_data)
-
-        feed.display = 2
-        self._database.modify_data_with_id(target_id="fid", target_data=feed.get_dict_form_data())
-
-        return "COMPLETE", True
-
-    # Post( 롱 피드)만 가져오는 거
-    def get_my_long_feeds(self, user:User):
-        feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=user.my_feed)
-        feeds = []
-
-        for _, feed_data in enumerate(reversed(feed_datas)):
-            feed = Feed()
-            feed.make_with_dict(feed_data)
-            if feed.fclass == "long":
-                feeds.append(feed)
-
-        return feeds
-
-    # Moment(숏 피드)만 가져오는 거
-    def get_my_short_feeds(self, user:User):
-        feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=user.my_feed)
-        feeds = []
-
-        for _, feed_data in enumerate(reversed(feed_datas)):
-            feed = Feed()
-            feed.make_with_dict(feed_data)
-            if feed.fclass == "short":
-                feeds.append(feed)
-
-        return feeds
-
-    # 내가 좋아요를 누른 Feed만 가져오는 거
-    def get_liked_feeds(self, user:User):
-        # "fid=시간" -> "fid"
-        liked_fid_data = [liked_feed.split('=')[0] for liked_feed in user.like]
-
-        feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=liked_fid_data)
-        feeds = []
-
-        # 마지막이 좋아요 최신 순이라 리버스해야함.
-        for _, feed_datas in enumerate(reversed(feed_datas)):
-            feed = Feed()
-            feed.make_with_dict(feed_datas)
-            feeds.append(feed)
-
-        return feeds
-
-    # 상호작용한 Feed만 가져오기
-    def get_interacted_feed(self, user:User):
-        feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=user.active_feed)
-        feeds = []
-
-        for i, feed_data in enumerate(reversed(feed_datas)):
-            feed = Feed()
-            feed.make_with_dict(feed_data)
-            feeds.append(feed)
-
-        return feeds
-
-    # 모든 Feed fid를 가져옵니다.
-    def get_all_fids(self):
-        feed_datas = self._database.get_all_data(target="fid")
-        fid_list = []
-
-        for feed_data in feed_datas:
-            fid_list.append(feed_data["fid"])
-
-        return fid_list
-
-#------------------------------Feed 좋아요 누르기----------------------------------------------
-
-    # Feed에 좋아요를 눌렀을 때의 작용
-    def try_staring_feed(self, user:User, fid:str):
-        feed = self.__try_staring_feed(user=user, fid=fid)
-        return [feed]
-
-    # feed 와 상호작용 -> 관심 표시
-    def __try_staring_feed(self, user:User, fid):
-        feed_data = self._database.get_data_with_id(target="fid", id=fid)
-        feed = Feed()
-        feed.make_with_dict(feed_data)
-
-        flag = False
-        # fidNdate = "fid=date"
-
-        for fid_n_date in user.like:
-            # 문자열 변환
-            fid_n_date:str = fid_n_date
-            # 현재 Feed를 얻음
-            target_fid = fid_n_date.split('=')[0]
-            # 왜이랬는지 생각해봤더니 지울때 또 반복문 돌리니까 이렇게 한 거네
-            if target_fid == feed.fid:
-                user.like.remove(fid_n_date)
-                flag=True
-                break
-
-        date = datetime.now()
-        str_fid_n_date = feed.fid + "=" + self.__set_datetime()
-
-        if flag:
-            self._feed_search_engine.try_dislike_feed(fid=feed.fid, uid=user.uid)
-            #user.like.remove(str_fid_n_date)
-            feed.star -= 1
-        else:
-            self._feed_search_engine.try_like_feed(fid=feed.fid, uid=user.uid, like_time=date)
-            user.like.append(str_fid_n_date)
-            feed.star += 1
-
-        self._database.modify_data_with_id(target_id="fid",
-                                           target_data=feed.get_dict_form_data())
-        self._database.modify_data_with_id(target_id="uid",
-                                           target_data=user.get_dict_form_data())
-
-        return feed
-
-#-----------------------------------댓글 기능--------------------------------------------------
-    # 댓글 좋아요를 누른 정보를 가져옴
-    # 내가 좋아요를 누를 댓글인지 플래그를 올리는 함수
-    def __get_comment_liked_info(self, user:User, comments):
-        for comment in comments:
-            # pprint(comment.get_dict_form_data())
-            if user.uid in comment.like_user:
-                comment.like_user = True
-            else:
-                comment.like_user = False
-        return
-
-    # 멘션한 유저를 찾아내자
-    def _extract_mention_data(self, body):
-        # 정규식으로 찾음, 이메일 형식도 가져올수 있는 문제가 있어 정규식을 더 정교하게 설정
-        match = re.search(r'@(\w+)(?!\.\w+)', body)
-        # 매칭 실패시
-        if match:
-            return match.group(1)
-        return ""
-
-    # 댓글, 대댓글 작성 함수
-    def try_make_comment_on_feed(self, user:User, fid, target_cid, body):
-        # FEED 데이터 불러오기
-        feed_data = self._database.get_data_with_id(target="fid", id=fid)
-        feed = Feed()
-        feed.make_with_dict(feed_data)
-
-        # CID 만들기, 중복이 있을 가능성 있음
-        # 일단 __set_datetime()쓰면 cid 분리 시, -때문에 분리가 이상하게 됨. 그래서 FID 만들 때랑 동일한 시간제작방식 사용
-        cid = fid+"-"+self.__set_fid_with_datatime()
-        date = self.__get_today_date()
-        mention = self._extract_mention_data(body)
-
-        # 타겟 CID도 Comment 객체 멤버로 담아버림. CID 너무 길어지기도 하고, 프론트에서 작업을 안시키게 함.
-        new_comment = Comment(
-            cid=cid, fid=feed.fid, uid=user.uid, uname=user.uname, target_cid=target_cid,
-            body=body, date=date, mention=mention
-        )
-        feed.comment.append(cid)
-        user.my_comment.append(cid)
-
-        self._database.add_new_data("cid", new_data=new_comment.get_dict_form_data())
-        self._database.modify_data_with_id("fid", target_data=feed.get_dict_form_data())
-        self._database.modify_data_with_id("uid", target_data=user.get_dict_form_data())
-        return
-
-
-    # 댓글 수정
-    # Feed에 저장된 CID는 따로 수정 대상이 아니므로, 따로 fid를 파라미터로 가져오지 않는다.
-    # 이 부분은 검토를 해줬으면 좋겠음.
-    def try_modify_comment(self, user:User, cid, new_body):
-        comment_data = self._database.get_data_with_id(target="cid", id=cid)
-        comment = Comment()
-        comment.make_with_dict(dict_data=comment_data)
-
-        if comment.uid != user.uid:
-            return "NOT_OWNER", False
-
-        new_mention = self._extract_mention_data(new_body)
-        comment.body = new_body
-        comment.mention = new_mention
-
-        self._database.modify_data_with_id("cid", target_data=comment.get_dict_form_data())
-        return "Update Success",True
-
-    # 댓글 삭제
-    def remove_comment_on_feed(self, user:User, fid, cid):
-        comment_data = self._database.get_data_with_id(target="cid", id=cid)
-        comment = Comment()
-        comment.make_with_dict(comment_data)
-
-        # 어 내 댓글 아니다.
-        if user.uid != comment.uid:
-            return 
-
-        comment.display = 0
-        self._database.modify_data_with_id("cid", target_data=comment.get_dict_form_data())
-
-        # # FEED 데이터를 변경해야함. 따라서 얘도 가져와야 함.
-        # feed_data = self._database.get_data_with_id(target="fid", id=fid)
-        # feed = Feed()
-        # feed.make_with_dict(dict_data=feed_data)
-
-        # # 이거 지우는거 뭔가 대책이 필요함
-        # # 댓글 삭제할 떄, FEED의 경우와 동일하게 DB에서 삭제하지 않고, 상태만 업데이트하고, 작성 목록에서만 삭제하면 됨.
-        # user.my_comment.remove(cid)
-        # feed.comment.remove(cid)
-        # self._database.delete_data_with_id(target="cid", id=target_cid)
-
-        # 데이터 업데이트
-        # self._database.modify_data_with_id("fid", target_data=feed.get_dict_form_data())
-        # self._database.modify_data_with_id("uid", target_data=user.get_dict_form_data())
-
-        return
-
-    # 댓글 비공개
-    def set_private_comment(self, user:User, fid, cid):
-        comment_data = self._database.get_data_with_id(target="cid", id=cid)
-        comment = Comment()
-        comment.make_with_dict(comment_data)
-
-        # 어 내 댓글 아니다.
-        if user.uid != comment.uid:
-            return
-
-        comment.display = 1
-        self._database.modify_data_with_id("cid", target_data=comment.get_dict_form_data())
-
-        return
-
-    # 댓글에 좋아요를 누르는 기능
-
-    # 댓글 좋아요 표시
-    def try_like_comment(self, user:User, fid, cid):
-        feed_data = self._database.get_data_with_id(target="fid", id=fid)
-        feed = Feed()
-        feed.make_with_dict(dict_data=feed_data)
-
-        comment_data = self._database.get_data_with_id(target="cid", id=cid)
-        comment = Comment()
-        comment.make_with_dict(comment_data)
-
-        if user.uid in comment.like_user:
-            comment.like_user.remove(user.uid)
-            comment.like -= 1
-        else:
-            comment.like_user.append(user.uid)
-            comment.like += 1
-
-        self._database.modify_data_with_id("cid", target_data=comment.get_dict_form_data())
-
-        return 
-
-    # 댓글 도메인 리스트에서 찾아야 할 댓글을 찾는 함수
-    def __find_comment_in_comment_list(self, comments, cid):
-        for comment in comments:
-            if comment.cid == cid:
-                return comment
-        return None
-
-    # 댓글 분류를 해주는 함수. 도저히 저 밑에서 하기힘들다고 생각했음. 그래서 따로 함수를 나눴어
-    # taregted는 타케팅 당한 쪽아니라 하는쪽임 따라서 사실은 [targeting]임 -> 읽을 때 유의할것
-    def __classify_reply_comment(self, comments):
-        no_targeted_comments = []       # target_cid가 없는 놈
-        exist_targeted_comments = []    # target_cid가 있는 놈
-
-        for comment in comments:
-            if comment.target_cid != '':
-                exist_targeted_comments.append(comment)
-            else:
-                no_targeted_comments.append(comment)
-
-        # 1. 대댓글인 애들이랑 아닌 애들을 분리
-        # 2. 대댓글인 애들을 하나씩 뽑아서 목표 댓글 reply에 넣음 
-        # 2-1. (댓글을 하나씩 뽑아서 대댓글과 대조하는 것과 같은 시간 복잡도를 가짐)
-        # 3. 만약 이미 들어간 댓글이면 continue해야됨
-        # 4. reply에 넣을 땐, dict로 넣어야됨
-
-        # pprint("타겟이 있는 댓글들")
-        # for comment in exist_targeted_comments:
-        #     pprint(comment)
-        # pprint("타겟이 없는 댓글들")
-        # for comment in no_targeted_comments:
-        #     pprint(comment)
-
-        for targeted_comment in exist_targeted_comments:
-            # for comment in no_targeted_comments:
-            #     if comment.cid == targeted_comment.target_cid:
-            #         # 이미 추가가 되어있다면 넘어간다
-            #         for reply_comment in comment.reply:
-            #             if reply_comment["cid"] == targeted_comment.cid:
-            #                 continue
-            #         comment.reply.append(targeted_comment.get_dict_form_data())
-            comment = self.__find_comment_in_comment_list(no_targeted_comments, targeted_comment.target_cid)
-            if comment is not None:
-                for reply_comment in comment.reply:
-                    if reply_comment["cid"] == targeted_comment.cid:
-                        continue
-                comment.reply.append(targeted_comment.get_dict_form_data())
-
-            # 리스트에 없는 경우. 이 경우는 조금 위험하긴하지만, Database에서 찾아내서 붙인다.
-            # 마이페이지의 내가 쓴 댓글 중, 다른 댓글의 대댓글을 단 경우에 해당된다.
-            else:
-                comment_data = self._database.get_data_with_id(target="cid", id=targeted_comment.target_cid)
-                comment = Comment()
-                comment.make_with_dict(comment_data)
-
-                for reply_comment in comment.reply:
-                    if reply_comment["cid"] == targeted_comment.cid:
-                        continue
-                comment.reply.append(targeted_comment.get_dict_form_data())
-                # 이 댓글은 마이페이지에서 가져온 no_targeted_comments에는 없는 데이터이기 때문에
-                # 만약 한 댓글에 2개 이상의 대댓글을 달았다면.. 딱 한번만 들어가게 된다.
-                if comment not in no_targeted_comments:
-                    no_targeted_comments.append(comment)
-
-        return no_targeted_comments
-
-
-
-    # Feed에 있는 모든 댓글들을 모두 가져와야 함
-    # 피드 안에 있는 모든 Comment를 가져옴.
-    def get_all_comment_on_feed(self, user, fid):
-        feed_data = self._database.get_data_with_id(target="fid", id=fid)
-        feed=Feed()
-        feed.make_with_dict(dict_data=feed_data)
-
-        comments = []
-        comment_datas = self._database.get_datas_with_ids(target_id="cid", ids=feed.comment)
-
-        for comment_data in comment_datas:
-            new_comment = Comment()
-            new_comment.make_with_dict(comment_data)
-            # pprint(comment_data)
-            # 기본적으로 owner는 False
-            if new_comment.uid == user.uid:
-                new_comment.owner= True
-            comments.append(new_comment)
-
-        self.__get_comment_liked_info(user=user, comments=comments)
-
-        # pprint(comments)
-
-        classified_comments = self.__classify_reply_comment(comments=comments)
-        
-        # pprint(classified_comments)
-        #
-        # pprint("분류 후 댓글")
-        # for comment in classified_comments:
-        #     pprint(comment.get_dict_form_data())
-        #     pprint(comment.reply)
-
-        # pprint("분류전 댓글")
-        # for comment in comments:
-        #     pprint(comment.get_dict_form_data())
-        # reply에 담는 작업
-        # 왜 이렇게 하나면 마지막부터 시작하니까 저 위에서 처리하기엔 꼬이는 것 같음.
-
-        # pprint("분류 후 댓글들")
-        # for comment in comments:
-        #     pprint(comment.get_dict_form_data())
-
-        # 이거 바꿔야함.
-        # return classified_comments
-        return classified_comments
-
-    def get_comments_with_keyword(self, keyword:str):
-        comment_datas = self._database.get_all_data(target="cid")
-        comments = []
-
-        for comment_data in comment_datas:
-            if keyword in comment_data["body"]:
-                comment = Comment()
-                comment.make_with_dict(comment_data)
-                comments.append(comment)
-
-        classified_comments = self.__classify_reply_comment(comments=comments)
-
-        return classified_comments
-
-    # 내가 작성한 댓글 전부 불러오기
-    # 페이징 기법은 새롭게 재편하기 떄문에 여기서 페이징을 하지않습니다.
-    def get_my_comments(self, user):
-        comment_datas = self._database.get_datas_with_ids(target_id="cid", ids=user.my_comment)
-        comments = []
-
-        for comment_data in comment_datas:
-            comment = Comment()
-            comment.make_with_dict(comment_data)
-            comments.append(comment)
-
-        self.__get_comment_liked_info(user=user, comments=comments)
-        # pprint(comments)
-        # pprint("분류 전 댓글")
-        # for comment in comments:
-        #     pprint(comment.get_dict_form_data())
-        #     # pprint(comment.reply)
-
-        classified_comments = self.__classify_reply_comment(comments=comments)
-
-        # pprint(classified_comments)
-
-        # pprint("분류 후 댓글")
-        # for comment in classified_comments:
-        #     pprint(comment.get_dict_form_data())
-        #     pprint(comment.reply)
-
-        return classified_comments
-
-
-
-#---------------------------------interaction 수행 관련------------------------------------------------------
-    # IID를 만드는 곳
-    def __make_new_iid(self):
-        random_string = "default"
-
-        # 사용할 문자 : FID와 비슷하게 대문자, 소문자, 숫자
-        characters = string.ascii_letters + string.digits
-
-        # 랜덤 문자열 7자리 생성 (단, 앞자리는 Interaction임을 알도록 붙여야함.)
-        random_string = 'i'+''.join(random.choice(characters) for _ in range(6))
-
-        # FID가 이미 고유번호라 중복이 되어도 따로 상관없겠지?
-        # iid = iid고유
-        iid = random_string
-
-        return iid
-
-    # 기본 뼈대 : FEED 만드는 함수 참고
-    def _make_new_interaction(self, iid, fid, choice:list):
-        user_attend_list = list([] for _ in choice)
-        new_interaction = Interaction()
-
-        iid_dict = dict()
-        iid_dict['iid'] = iid
-        iid_dict['fid'] = fid
-        iid_dict['choice'] = copy.copy(choice)
-        iid_dict['attend'] = copy.copy(user_attend_list)
-
-        new_interaction.make_with_dict(iid_dict)
-
-        return new_interaction
-
-    # INTERACTION 만들기
-    def try_make_new_interaction(self, fid, choice:list):
-        # modify 의미가 없음
-        #fid = self._database.modify_data_with_id("fid", target_data=fid)
-        #feed = Feed()
-        #feed.make_with_dict(fid)
-
-        # 혹시 몰라서 예외처리 남김
-        if len(choice) == 0:
-            return "No Choice", False
-
-            # iid 만들기
-        new_iid = self.__make_new_iid()
-
-        new_interaction = self._make_new_interaction(iid=new_iid, fid=fid, choice=choice)
-
-        self._database.add_new_data(target_id="iid", new_data=new_interaction.get_dict_form_data())
-        # 음.. 따로 더 저장할게 있나요? 검토좀
-
-        return new_interaction.iid, True
-
-    # INTERACTION 수정, 근데 이거 필요한지는 모르겠음.
-
-    # Choice를 선택한 순간, USER 정보가 저장되는데, choice를 수정하면 그 선택지는 날려야할 것 같으니까.
-    # 그리고 이거 움직일려면 Try_modify_Feed랑 같이 움직여야 하는데
-    # 일단 잠시만 그 부분은 컨펌 이후에 진행하겠음
-    def try_modify_interaction(self, fid, iid, new_choice:list):
-        interaction_data = self._database.get_data_with_id(target="iid", id=iid)
-        interaction = Interaction()
-        interaction.make_with_dict(interaction_data)
-
-        self._database.delete_datas_with_id(target="iid", id=iid)
-        result, flag = self.try_make_new_interaction(fid=fid, choice=new_choice)
-
-        return result, flag
-
-    # 데이터베이스에서 삭제
-    def try_remove_interaction(self, fid):
-        feed_data = self._database.get_data_with_id(target="fid", id=fid)
-        feed = Feed()
-        feed.make_with_dict(feed_data)
-
-        # 데이터베이스에서 삭제
-        if not self._database.delete_datas_with_id(target="iid", id=feed.iid):
-            return "DATABASE_ERROR", False
-
-        # iid가 REMOVE되어서 FEED도 수정함.
-        feed.iid = ""
-        self._database.modify_data_with_id(target="fid", target_data=feed.get_dict_form_data())
-
-        return "COMPLETE", True
-
-    # FEED 상호 작용
-    def try_interaction_feed(self, user:User, fid:str, action):
-        feed = self.__try_interaction_with_feed(user=user, fid=fid, action=action)
-        return [feed]
-
-    # feed 와 상호작용 -> 선택지를 선택하는 경우
-    # interaction 객체에 맞게 수정했음.
-    def __try_interaction_with_feed(self, user:User, fid, action):
-        fid_data = self._database.get_data_with_id(target="fid", id=fid)
-        feed = Feed()
-        feed.make_with_dict(fid_data)
-
-        try:
-            iid = feed.iid
-            interaction_data = self._database.get_data_with_id(target="iid", id=iid)
-            interaction = Interaction()
-            interaction.make_with_dict(interaction_data)
-
-            # 참여한 기록이 있는지 확인
-            # 있으면 지우고, 결과값도 하나 줄여야됨
-
-            target = -1
-            for i, uids in enumerate(interaction.attend):
-                for uid in uids:
-                    if uid == user.uid:
-                        uids.remove(uid)
-                        target = i
-                        break
-
-            if target != -1:
-                user.active_feed.remove(fid)
-                interaction.result[target] -= 1
-
-            # 이제 참여한 데이터를 세팅하고 저장하면됨
-            if target != action:
-                user.active_feed.append(fid)
-                interaction.attend[action].append(user.uid)
-                interaction.result[action] += 1
-
-            else:
-                #user.active_feed.remove(fid)  # 지울 필요가 없어보임 -> 주석 처리됨
-                action = -1
-
-            self._database.modify_data_with_id(target_id="iid", target_data=interaction.get_dict_form_data())
-            self._database.modify_data_with_id(target_id="uid", target_data=user.get_dict_form_data())
-
-        except Exception as e:
-            print(e)
-        finally:
-            return feed
-
-#------------------------------------------------------------------------------------------------------------
-    def paging_fid_list(self, fid_list:list, last_index:int, page_size=5):
-        # 최신순으로 정렬된 상태로 Fid_list를 받아오기 때문에, 인덱스 번호가 빠를수록 최신의 것
-        # 만약에 페이지 사이즈보다 더 짧은 경우도 있을 수 있기에 먼저 정해놓는다.
-        # 이러면 페이징된 리스트의 길이에 상관없이, 인덱스를 알아낼 수 있을 것
-
-        paging_list = fid_list[last_index + 1:]
-
-        # 예외 처리
-        last_index_next = -1
-        if len(fid_list) != 0:
-            last_index_next = fid_list.index(fid_list[-1])
-
-        # 만약 페이지 사이즈를 넘었다면 표시할 개수만큼 짜르고, last_index를 재설정한다.
-        if len(paging_list) > page_size:
-            paging_list = paging_list[:page_size]
-            # Paging 넘버
-            last_index_next = fid_list.index(fid_list[last_index + page_size])
-
-        return paging_list, last_index_next
 
 #-------------------------------------------------------------------------------------------------------------
