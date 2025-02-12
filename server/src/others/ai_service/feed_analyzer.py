@@ -29,7 +29,7 @@ class FeedAnalyzer:
         
         feed = self._convert_feed(feed=feed, words=dict_words)
         
-        self._analyze_feed(feed=feed, tag_bag=self.__tag_bag)
+        #self._analyze_feed(feed=feed, tag_bag=self.__tag_bag)
         
         return  feed
     
