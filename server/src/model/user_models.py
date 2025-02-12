@@ -256,6 +256,8 @@ class MyFeedsModel(FeedModel):
             # 마이페이지에 인터엑션은 표시 없음
             feed.iid = ""
             
+            
+            print(feed.display)
             # 삭제된거 지우고
             if feed.display < 3:
                 continue
