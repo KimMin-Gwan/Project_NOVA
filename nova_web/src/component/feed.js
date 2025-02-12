@@ -104,6 +104,7 @@ export function ContentFeed({
   if (!feed) {
     return <div>loading 중..,.</div>;
   }
+  console.log("deee", detailPage);
 
   return (
     <div
@@ -120,11 +121,7 @@ export function ContentFeed({
         <div>{feed.nickname}</div>
       </div>
 
-      <div
-        className={`${style["body-container"]} ${
-          feed.fclass === "long" && detailPage ? "" : style["long-form-hidden"]
-        }`}
-      >
+      <div className={`${style["body-container"]} ${detailPage ? "" : style["long-form-hidden"]}`}>
         <div className={style["body-hashtag"]}>
           {feed?.hashtag?.length !== 0 &&
             feed?.hashtag?.map((tag, i) => {
@@ -147,41 +144,6 @@ export function ContentFeed({
       </div>
 
       <LinkSection links={links} />
-      {/* {links && (
-        <div className={style["link-line"]}>
-          <div className={style["hr-sect"]}>첨부된 링크</div>
-          <p>안전을 위해 신뢰할 수 있는 사이트에만 접속하세요.</p>
-        </div>
-      )}
-      {links &&
-        links.map((link, i) => {
-          return (
-            <div key={link.lid} className={style["Link_Container"]}>
-              <div
-                className={style["Link_box"]}
-                onClick={() => {
-                  onClickLink(link.url);
-                }}
-              >
-                <div className={style["Link_thumbnail"]}>
-                  <img src={linkImage[i]} alt="thumbnail" />
-                </div>
-
-                <div className={style["Link_info"]}>
-                  <div className={style["Link_title"]}>{link.title}</div>
-                  <div className={style["Link_domain"]}>{link.domain}</div>
-                </div>
-              </div>
-
-              <div className={style["Link_explain"]}>
-                <span>
-                  <img src={link_pin_icon} alt="pin" />
-                </span>
-                <span>{link.explain}</span>
-              </div>
-            </div>
-          );
-        })} */}
 
       <div className={style["button-container"]}>
         <div>신고</div>
