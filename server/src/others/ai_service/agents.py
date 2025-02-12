@@ -36,7 +36,8 @@ class BaseAgent():
         self._model_v = model_setting.model_v
         self._response_format={ "type" : "json_object" }
         self.__system_role = {"role": "system", "content": "You are a helpful assistant designed to output JSON."},
-        self._message = [self.__system_role]
+        self._message = []
+        self._message.append(self.__system_role)
     
     # query 전송하기(json 버전으로 받기)
     def _make_response_as_json(self, query_data:KeyParam) -> dict:
@@ -46,7 +47,7 @@ class BaseAgent():
         
         response = self._client.chat.completions.create(
             model=self._model_v,
-            response_format={"type":"json_object"},
+            response_format=self._response_format,
             messages=self._message
         )
         result = response.choices[0].message.content
