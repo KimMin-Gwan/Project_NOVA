@@ -1,7 +1,7 @@
 from others.ai_service.agents import ConverterAgent, FinderAgent, AnalyzerAgent
 from others.data_domain import Feed
 from others.ai_service.ai_inventory import AIWordBag, ModifierWord, AITagBag
-
+from pprint import pprint
 
 class FeedAnalyzer:
     def __init__(self, model_setting):
@@ -23,6 +23,7 @@ class FeedAnalyzer:
         words = self._word_finder(feed=feed, word_bag=self.__word_bag)
         
         dict_words = []
+        print(words)
         
         for word in words:
             dict_words.append(word.to_dict())
@@ -61,6 +62,8 @@ class FeedAnalyzer:
         
         # 문장 새로 만들기
         result = agent.convert_feed_data(words=words, context=feed.body)
+        
+        pprint(result)
         
         # 피드 데이터 넣어주기
         feed.reworked_body = result['변환문']
