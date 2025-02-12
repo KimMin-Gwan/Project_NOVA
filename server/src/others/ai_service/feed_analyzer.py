@@ -1,6 +1,10 @@
-from others.ai_service.agents import ConverterAgent, FinderAgent
+from others.ai_service.agents import ConverterAgent, FinderAgent, AnalyzerAgent
 from others.data_domain import Feed
-from others.ai_service.ai_inventory import AIWordBag, ModifierWord
+from others.ai_service.ai_inventory import AIWordBag, ModifierWord, AITagBag
+from wheel.cli import tags_f
+
+from src.others.ai_service.ai_inventory import AITagBag
+
 
 class FeedAnalyzer:
     def __init__(self, model_setting):
@@ -9,15 +13,27 @@ class FeedAnalyzer:
     
     # 게시글 분석
     # 전성훈이가 들고오면 여기다가 집어넣으면됨
-    # agnet 만들고
-    def _analize_feed(self, feed:Feed) -> Feed:
+    # agent 만들고
+    def _analyze_feed(self, feed:Feed, tag_bag:AITagBag) -> Feed:
         body = feed.body
-        
+        agent = AnalyzerAgent(model_setting=self.__model_setting)
+
+        result = agent.analyze_feed_data(context=feed.body)
+
+        new_tags = result['context']['tags']
+
+        result_tag = []
+
+        # 태그를 찾아서 가방에 넣기
+        for new_tag in new_tags:
+            modifier_word:ModifierWord= tag_bag.add_new_tag(tag=new_tag)
+            result_tag.append(modifier_word)
+
         return feed
         
     # 게시글 컨버터
-    # 워드 백이 들ㅇ러가야함
-    def _analize_feed(self, feed:Feed) -> Feed:
+    # 워드 백이 들어가야함
+    def _convert_feed(self, feed:Feed) -> Feed:
         
         # 에이전트 소환
         agent = ConverterAgent(model_setting=self.__model_setting)

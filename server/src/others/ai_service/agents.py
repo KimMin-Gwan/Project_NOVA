@@ -55,6 +55,30 @@ class BaseAgent():
         self._message.extend(init_query)
         return
 
+class AnalyzerAgent(BaseAgent):
+    class AnalyizerKeyParam(KeyParam):
+        def __init__(self):
+            super().__init__()
+            self._init_content(content="context를 분석하는 Agent입니다. context:")
+    def __init__(self, model_setting):
+        super().__init__(model_setting=model_setting)
+        self.__set_analyzer_prompt()
+        self.__key_param = self.AnalyizerKeyParam()
+
+    # 주문사항
+    def __set_analyzer_prompt(self):
+        self._analyzer_prompt = {
+            {"role": "user", "content": "다음의 문장에서 중요한 단어들을 태그로 분류합니다"},
+            {"role": "user", "content": "의미를 알 수 없는 단어를 고유명사로 취급합니다."},
+            {"role": "user", "content": "고유명사가 아닌 경우 응답에 포함하지 않습니다."},
+            {"role": "user", "content": "응답은 context로 합니다."},
+            {"role": "user", "content": "context에는 input, words가 있습니다."},
+            {"role": "user", "content": "words는 list입니다."},
+        }
+
+    def extract_proper_tag(self, context):
+        self.__key_param.set_context(context)
+        return self._make_response_as_json(query_data=self.__key_param)
 
 # 고유명사 찾아내는 Agent
 class FinderAgent(BaseAgent):
