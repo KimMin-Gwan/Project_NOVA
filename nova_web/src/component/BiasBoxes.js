@@ -19,8 +19,14 @@ export default function BiasBoxes({ setBiasId, fetchBiasCategoryData, writeCommu
     }
   }, []);
 
+  const [clickedBias, setClickedBias] = useState();
+
   function onClickBiasId(bid) {
     setBiasId(bid);
+  }
+
+  function onClickCurrentBias(i) {
+    setClickedBias(i);
   }
 
   const defaultBoxes = 1;
@@ -39,6 +45,10 @@ export default function BiasBoxes({ setBiasId, fetchBiasCategoryData, writeCommu
   }
 
   function onMouseUp(e) {
+    if (hasDragged) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
     setIsDrag(false);
   }
 
@@ -88,9 +98,11 @@ export default function BiasBoxes({ setBiasId, fetchBiasCategoryData, writeCommu
               <div className="bias-box">
                 {bias && (
                   <img
+                    className={clickedBias === i ? "clicked-img" : ""}
                     src={bias_url + `${bias.bid}.PNG`}
                     alt="bias"
                     onClick={() => {
+                      onClickCurrentBias(i);
                       onClickBiasId(bias.bid);
                       fetchBiasCategoryData && fetchBiasCategoryData(bias.bid);
                     }}
@@ -98,6 +110,7 @@ export default function BiasBoxes({ setBiasId, fetchBiasCategoryData, writeCommu
                 )}
               </div>
               <div className="b-name">{bias?.bname || <span>&nbsp;</span>}</div>
+              {clickedBias === i && <div className="clicked"></div>}
             </div>
           );
         })}

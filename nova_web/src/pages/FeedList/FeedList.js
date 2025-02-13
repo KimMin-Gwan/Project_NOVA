@@ -413,10 +413,12 @@ export default function FeedList(isUserState) {
           <div className={style["bias-section"]}>
             <BiasBoxes setBiasId={setBiasId} fetchBiasCategoryData={fetchBiasCategoryData} />
             <NoticeBox />
-            <div className={style["category-info"]}>
-              <h4>모든 게시글</h4>
-              {biasId && <p onClick={onClickCategory}>카테고리 변경</p>}
-            </div>
+            {biasId && (
+              <div className={style["category-info"]}>
+                <h4>모든 게시글</h4>
+                <p onClick={onClickCategory}>카테고리 변경</p>
+              </div>
+            )}
             {isOpendCategory && (
               <CategoryModal
                 onClickCategory={onClickCategory}

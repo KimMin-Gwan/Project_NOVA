@@ -1256,6 +1256,14 @@ body.dark-mode {
     margin-top: 12px;
     color: #1f2329;
   }
+
+  .clicked {
+    margin-top: 5px;
+    height: 3px;
+    width: 30%;
+    border-radius: 3px;
+    background-color: #1082f4;
+  }
 }
 
 .bias-box {
@@ -1281,8 +1289,12 @@ body.dark-mode {
     height: 100%;
     object-fit: cover;
     border-radius: 10px;
-    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
+    /* box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5); */
   }
+}
+
+.clicked-img {
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
 }
 
 .add-bias-box {
