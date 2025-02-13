@@ -23,16 +23,17 @@ def main():
     new_data = []
     uid = "9113-ganp-ga49"
 
-    with open("./../src/model/local_database/feed.json", 'r',  encoding='utf-8' )as f:
+    with open("./../src/model/local_database/comment.json", 'r',  encoding='utf-8' )as f:
         data_list.extend(json.load(f))
 
         for data in data_list:
-            data['reworked_body'] = ''
-            data['level'] = 0
+            data['reworked_body'] = data['body']
+            data['is_reworked'] = False
+            data['level'] = 1
             new_data.append(data)
         
 
-    with open("./../src/model/local_database/feed.json", 'w',  encoding='utf-8' )as f:
+    with open("./../src/model/local_database/comment.json", 'w',  encoding='utf-8' )as f:
         json.dump(new_data, f, ensure_ascii=False, indent=4)
 
 

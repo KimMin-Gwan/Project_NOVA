@@ -1,7 +1,7 @@
 from model.base_model import BaseModel
 from model import Local_Database
 #from others.data_domain import Alert
-from others import CoreControllerLogicError,FeedManager, FeedSearchEngine, ObjectStorageConnection
+from others import CoreControllerLogicError,FeedManager, FeedSearchEngine, ObjectStorageConnection, HTMLEXtractor
 from others import Comment, Feed, User, Interaction, FeedLink
 from pprint import pprint
 
@@ -141,11 +141,13 @@ class FeedModel(BaseModel):
     # 댓글 새로 달기
     # 1. 댓글 달기 -> 2. 댓글 달고나서 전체 댓글 데이터만 제공
     # 파라미터 수정 필요 
-    def try_make_new_comment(self, feed_manager:FeedManager, data_payload):
+    def try_make_new_comment(self, feed_manager:FeedManager, data_payload, ai_manager):
         feed_manager.try_make_comment_on_feed(user=self._user,
                                             fid=data_payload.fid,
                                             target_cid=data_payload.target_cid,
-                                            body=data_payload.body)
+                                            body=data_payload.body,
+                                            ai_manager=ai_manager
+                                            )
         self._comments = feed_manager.get_all_comment_on_feed( user=self._user,
                                                                fid=data_payload.fid)
         return
@@ -189,7 +191,7 @@ class FeedModel(BaseModel):
     
     # 피드 내용을 다듬어서 전송가능한 형태로 세팅
     # 포인터로 동작함
-    def _set_feed_json_data(self, user, feeds:list):
+    def _set_feed_json_data(self, user:User, feeds:list):
         wusers = []
         uids=[]
         result_feeds = []
@@ -211,13 +213,46 @@ class FeedModel(BaseModel):
             if feed.display < 3:
                 continue
             
-            # 롱폼은 바디 데이터를 받아야됨
-            if feed.fclass != "short":
-                feed.raw_body = ObjectStorageConnection().get_feed_body(fid = feed.fid)
-                _, feed.image = ObjectStorageConnection().extract_body_n_image(raw_data=feed.raw_body)
+            feed:Feed = feed
+            # level
+            # 1: 정상 2: 약간의 욕설과 반말 3: 인신공격 및 성희롱 등
+            # 만약 3단계를 선택했다면 모든 글은 원본 데이터를 제공함
+            # 만약 2단계를 선택했다면 3단계의 글은 전부다 재구성 된 데이터로 나와야됨
+            # 만약 1단계를 선택했다면 2단계와 3단계 글은 전부다 재구성 된 데이터로 나와야됨
+            
+            # 재구성 할 필요 있음
+            if user.level < feed.level:
+                # 롱폼은 바디 데이터를 받아야됨
+                if feed.fclass != "short":
+                    # 원본 긁어와서
+                    feed.raw_body = ObjectStorageConnection().get_feed_body(fid = feed.fid)
+                    
+                    # 재구성된 스트링으로 갈아끼우고
+                    feed.raw_body = HTMLEXtractor().restore_img_src_data_in_html(raw_html=feed.raw_body, p_html=feed.p_body)
+                    
+                    # 미리보기용 바디랑 이미지 데이터 만들어줌
+                    feed.body, feed.image = ObjectStorageConnection().extract_body_n_image(raw_data=feed.raw_body)
 
+                else:
+                    # 미리보기용 바디데이터는 재구성된 데이터로
+                    feed.body = feed.reworked_body
+                    # 실 데이터도 재구성된 데이터
+                    feed.raw_body = feed.body
+                
+                # 재구성된 데이터라고 알릴 것
+                feed.is_reworked = True
+                
+            # 없음
             else:
-                feed.raw_body = feed.body
+                # 롱폼은 바디 데이터를 받아야됨
+                if feed.fclass != "short":
+                    feed.raw_body = ObjectStorageConnection().get_feed_body(fid = feed.fid)
+                    _, feed.image = ObjectStorageConnection().extract_body_n_image(raw_data=feed.raw_body)
+
+                else:
+                    feed.raw_body = feed.body
+                    
+                feed.is_reworked = False
             
             # comment 길이 & image 길이
             feed.num_comment = len(feed.comment)

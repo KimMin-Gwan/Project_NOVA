@@ -74,11 +74,15 @@ class FeedManager:
     # 새로운 피드 만들기
     # 실제로 피드를 만들고, 서치 엔진에 추가하는 부분이다.
     def __make_new_feed(self, user:User, fid, fclass, choice, body, hashtag,
-                        board_type, images, link, bid, raw_body=""):
+                        board_type, images, link, bid, raw_body="", ai_manager=None):
         # 검증을 위한 코드는 이곳에 작성하시오
         new_feed = self.__set_new_feed(user=user, fid=fid, fclass=fclass,
                                        choice=choice, body=body, hashtag=hashtag,
                                        board_type=board_type, image=images, link=link, bid=bid, raw_body=raw_body)
+        
+        # ai한테 넣어서 다시 만들기
+        new_feed = ai_manager.treat_new_feed(feed=new_feed)
+        
         self._database.add_new_data(target_id="fid", new_data=new_feed.get_dict_form_data())
 
         self._feed_search_engine.try_make_new_managed_feed(feed=new_feed)
@@ -151,7 +155,7 @@ class FeedManager:
         return fname, result
 
     # FEED 작성
-    def try_make_new_feed(self, user:User, data_payload, fid = ""):
+    def try_make_new_feed(self, user:User, data_payload, fid = "", ai_manager=None):
         # fid 만들기 feed 수정기능을 겸하고 있기 때문에, 다음을 추가한 것
         if fid == "":
             fid = self.__make_new_fid(user=user)
@@ -183,6 +187,7 @@ class FeedManager:
                                  images=image_result,
                                  link=data_payload.link,
                                  bid=data_payload.bid,
+                                 ai_manager=ai_manager
                                  )
 
         # 롱폼의 경우 작성된 html을 올리고 저장하면됨
@@ -214,6 +219,7 @@ class FeedManager:
                                  link=data_payload.link,
                                  bid=data_payload.bid,
                                  raw_body = url, # 이거 url이라는 변수가 없어서
+                                 ai_manager=ai_manager
                                  )
 
         #작성한 피드 목록에 넣어주고
@@ -447,7 +453,7 @@ class FeedManager:
         return ""
 
     # 댓글, 대댓글 작성 함수
-    def try_make_comment_on_feed(self, user:User, fid, target_cid, body):
+    def try_make_comment_on_feed(self, user:User, fid, target_cid, body, ai_manager):
         # FEED 데이터 불러오기
         feed_data = self._database.get_data_with_id(target="fid", id=fid)
         feed = Feed()
@@ -464,6 +470,8 @@ class FeedManager:
             cid=cid, fid=feed.fid, uid=user.uid, uname=user.uname, target_cid=target_cid,
             body=body, date=date, mention=mention
         )
+        new_comment = ai_manager.treat_new_comment(comment=new_comment)
+        
         feed.comment.append(cid)
         user.my_comment.append(cid)
 
@@ -614,6 +622,13 @@ class FeedManager:
             # 기본적으로 owner는 False
             if new_comment.uid == user.uid:
                 new_comment.owner= True
+            
+            if user.level < new_comment.level:
+                # 리워크된 데이터로 변경
+                new_comment.body = new_comment.reworked_body
+                # 리워크 됨을 알려줄 것
+                new_comment.is_reworked = True
+                
             comments.append(new_comment)
 
         self.__get_comment_liked_info(user=user, comments=comments)

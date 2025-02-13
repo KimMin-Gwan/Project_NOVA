@@ -43,8 +43,6 @@ class BaseAgent():
     def _make_response_as_json(self, query_data:KeyParam) -> dict:
         self._message.extend(query_data.get_dict_key_param())
         
-        pprint(self._message)
-        
         response = self._client.chat.completions.create(
             model=self._model_v,
             response_format=self._response_format,

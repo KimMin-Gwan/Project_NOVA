@@ -127,7 +127,6 @@ class ObjectStorageConnection:
         soup = BeautifulSoup(raw_data, "html.parser")
 
         body = soup.p.text.strip()
-
         # <img> 태그의 모든 src 속성 가져오기
         # ImageBase64 코드의 형태로 저장됨
         imgs = [img["src"] for img in soup.find_all("img")]
@@ -243,3 +242,40 @@ class HTMLEXtractor:
             return all([result.scheme, result.netloc])
         except ValueError:
             return False
+        
+    
+    # html에서 img 태그 안에 있는 src 데이터를 지우는 함수
+    def remove_img_src_data_in_html(self, html_data):
+        
+        soup = BeautifulSoup(html_data, 'html.parser')
+        
+        img_tags = soup.find_all('img')
+        for img in img_tags:
+            img.attrs = {}
+        
+        filtered_html = str(soup)
+        
+        return filtered_html
+    
+    # 원본 html 데이터랑 추출해서 변형한 데이터를 같이 넣고 img src를 맞춰주는 함수
+    def restore_img_src_data_in_html(self, raw_html, p_html):
+        soup = BeautifulSoup(raw_html, 'html.parser')
+        
+        original_sources = []
+        
+        img_tags = soup.find_all('img')
+        for img in img_tags:
+            original_sources.append(img.attrs['src'])
+            img.attrs = {}
+        
+        restored_soup = BeautifulSoup(p_html, 'html.parser')
+        
+        # (필요 시) src 복원
+        for img, original_src in zip(restored_soup.find_all('img'), original_sources):
+            img['src'] = original_src
+
+        # src 복원된 HTML 출력
+        restored_html = str(soup)
+        
+        return restored_html
+        

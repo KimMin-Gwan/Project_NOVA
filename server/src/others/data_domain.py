@@ -30,7 +30,7 @@ class User(SampleDomain):
                  credit = 0, bids=[], num_long_feed=0, num_short_feed=0,
                  password = "", alert= [], like=[], my_comment=[],
                  my_feed = [], active_feed = [], feed_history = [],
-                 feed_search_history=[]):
+                 feed_search_history=[], level = 3):
 
         self.uid = uid
         self.uname = uname
@@ -42,6 +42,7 @@ class User(SampleDomain):
         self.credit = credit
         self.num_long_feed:int = num_long_feed
         self.num_short_feed:int = num_short_feed
+        self.level:int = level
 
         self.alert:list = copy.copy(alert)
         self.like:list = copy.copy(like)
@@ -64,6 +65,7 @@ class User(SampleDomain):
             self.credit= dict_data['credit']
             self.num_long_feed = dict_data['num_long_feed']
             self.num_short_feed = dict_data['num_short_feed']
+            self.level = dict_data['level']
 
             self.alert = copy.copy(dict_data['alert'])
             self.like = copy.copy(dict_data["like"])
@@ -89,6 +91,7 @@ class User(SampleDomain):
             "bids" : copy.copy(self.bids),
             "num_long_feed" : self.num_long_feed,
             "num_short_feed" : self.num_short_feed,
+            "level" : self.level,
 
             "alert" : copy.copy(self.alert),
             "like" : copy.copy(self.like),
@@ -228,7 +231,7 @@ class League(SampleDomain):
 class Feed(SampleDomain):
     def __init__(self, fid="", uid="", body="", fclass="", date="",
                  display=4, star=60, board_type="", image=None, hashtag=None,
-                 comment=None, iid="", lid="", bid="", raw_body =""):
+                 comment=None, iid="", lid="", bid="", raw_body ="", p_body=""):
         if image is None:
             image = []
         if hashtag is None:
@@ -259,12 +262,14 @@ class Feed(SampleDomain):
         self.raw_body = raw_body
         self.reworked_body = ""
         self.level = 0
+        self.p_body = p_body
 
         self.num_comment = len(self.comment)
         self.num_image = len(self.image)
         self.star_flag = False
         self.nickname = ""
         self.is_owner = False
+        self.is_reworked = False
 
 
     def make_with_dict(self, dict_data):
@@ -286,6 +291,7 @@ class Feed(SampleDomain):
             self.raw_body = dict_data["raw_body"]
             self.reworked_body = dict_data["reworked_body"]
             self.level = dict_data["level"]
+            self.p_body = dict_data["p_body"]
 
             self.num_comment = len(self.comment)
             self.num_image = len(self.image)
@@ -314,13 +320,16 @@ class Feed(SampleDomain):
             "raw_body" : self.raw_body,
             "reworked_body" :self.reworked_body,
             "level" : self.level,
+            "p_body": self.p_body,
 
             "num_comment":self.num_comment,
             "num_image":self.num_image,
             "star_flag":self.star_flag,
             "nickname" : self.nickname,
-            "is_owner" : self.is_owner
+            "is_owner" : self.is_owner,
+            "is_reworked" : self.is_reworked
         }
+        
 
 class Interaction(SampleDomain):
     def __init__(self, iid="", fid="", choice=[],
@@ -407,7 +416,9 @@ class Banner(SampleDomain):
 
 class Comment(SampleDomain):
     def __init__(self, cid="", fid="", uid="", uname="", display=4, reply=[],
-                 body="", date="", like=0, state="y", like_user=[], mention="", target_cid=""):
+                 body="", date="", like=0, state="y", like_user=[], mention="",
+                 target_cid="", level = 2, reworked_body =""
+                 ):
         self.cid = cid
         self.fid = fid
         self.uid = uid
@@ -429,6 +440,10 @@ class Comment(SampleDomain):
         self.target_cid = target_cid            # 대댓글을 달 위치 cid
         self.owner = False
         self.mention = mention
+        
+        self.reworked_body = reworked_body
+        self.level=level
+        self.is_reworked = False
 
     def make_with_dict(self, dict_data):
         try:
@@ -445,6 +460,9 @@ class Comment(SampleDomain):
             self.target_cid = dict_data['target_cid']
             self.owner = dict_data['owner']
             self.mention = dict_data['mention']
+            
+            self.reworked_body = dict_data['reworked_body']
+            self.level = dict_data['level']
         except KeyError as e:
             raise DictMakingError(error_type=f"Missing key: {str(e)}")
 
@@ -463,7 +481,11 @@ class Comment(SampleDomain):
             "target_cid": self.target_cid,
             "owner" : self.owner,
             "mention": self.mention,
-            "reply":self.reply
+            "reply":self.reply,
+            
+            "reworked_body" : self.reworked_body,
+            "level" : self.level,
+            "is_reworked" : self.is_reworked
         }
 
 # 유저 특화 시스템 구성을 위한 관리 유저

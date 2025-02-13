@@ -1187,29 +1187,21 @@ class RecommendManager:
     # 매 시간마다 갱신되는 비동기성 함수
     async def check_trend_hashtag(self):
         try:
-            time_diff = 1
-            current_time = time.time()
+            last_computed_time = time.time()  # 초기값 설정
+            
             while True:
-                # time_diff 계산
+                # 현재 시간 계산
+                current_time = time.time()
+                time_diff = (current_time - last_computed_time) / 3600  # 시간 단위로 계산
 
-                # 만약 마지막으로 연산한지 1시간이 지났으며 다시 연산
+                # 마지막 계산 시간이 1시간 이상일 경우 갱신
                 if time_diff >= 1:
                     self.__total_hashtag_setting()
                     self.__bias_hashtag_setting()
-                    # 이거 오류안남? current_time 생성위치가 밑에 있는데 없는 변수 만드는 거 아니냐.
-                    # 그러네 이거 왜 오류 안났냐 왜 서버에서는 정상동작 하는건데...
+                    self.last_computed_time = current_time  # 갱신 완료 시점 기록
 
-                    self.last_computed_time = current_time
-                    # 시간 간격이 1시간 미만인 경우
-                else:
-                    await asyncio.sleep(60)  # 너무 자주 루프를 돌지 않도록 대기
-
-                current_time = time.time()
-                if hasattr(self, 'last_computed_time'):
-                    time_diff = (current_time - self.last_computed_time) / 3600  # 시간 단위로 계산
-                else:
-                    self.last_computed_time = current_time
-                time_diff = 0
+                # 60초 대기
+                await asyncio.sleep(60)
 
         except KeyboardInterrupt:
             print("Shutting down due to KeyboardInterrupt.")
