@@ -20,7 +20,7 @@ class Master(Configure_File_Reader):
         database = Local_Database() #디비 실행
         #database = Mongo_Database() #디비 실행
         
-        ai_manager = AIManger(model_setting=self._model_setting)
+        ai_manager = AIManger(model_setting=self._model_setting, database=database)
 
         #connection_manager = ConnectionManager() # 웹소켓 매니저 실행
         #league_manager = LeagueManager(connection_manager=connection_manager)

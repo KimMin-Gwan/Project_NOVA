@@ -254,6 +254,9 @@ class FeedModel(BaseModel):
                     
                 feed.is_reworked = False
             
+            feed.p_body = ""
+            feed.reworked_body = ""
+            
             # comment 길이 & image 길이
             feed.num_comment = len(feed.comment)
             feed.num_image = len(feed.image)
