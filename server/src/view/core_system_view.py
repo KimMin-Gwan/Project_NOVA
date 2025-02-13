@@ -312,6 +312,32 @@ class Core_Service_View(Master_View):
             return response
 
     def feed_route(self):
+        
+        # 피드 자세히 보기 (피드 페이지)의 피드 데이터
+        @self.__app.get('/feed_explore/original_feed_data')
+        def get_original_feed_data(fid:Optional[str]):
+            data_payload = GetFeedRequest(fid=fid)
+
+            feed_controller =Feed_Controller(feed_manager=self.__feed_manager)
+            model = feed_controller.get_original_feed_data(database=self.__database,
+                                                           data_payload=data_payload)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            # pprint(body_data)
+            return body_data
+        
+        # 피드 자세히 보기 (피드 페이지)의 피드 데이터
+        @self.__app.get('/feed_explore/original_comment_data')
+        def get_original_comment_data(cid:Optional[str]):
+            data_payload = CommentRequest(cid=cid)
+
+            feed_controller =Feed_Controller(feed_manager=self.__feed_manager)
+            model = feed_controller.get_original_comment_data(database=self.__database,
+                                                            data_payload=data_payload)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            return body_data
+        
         # 피드 자세히 보기 (피드 페이지)의 피드 데이터
         @self.__app.get('/feed_explore/feed_detail/feed_data')
         def get_feed_detail(request:Request, fid:Optional[str]):
@@ -951,6 +977,10 @@ class FeedInteractionRequest(RequestHeader):
 class DeleteFeedRequest(RequestHeader):
     def __init__(self,fid) -> None:
         self.fid=fid
+        
+class CommentRequest(RequestHeader):
+    def __init__(self, cid) -> None:
+        self.cid = cid
 
 class EditFeedRequest(RequestHeader):
     def __init__(self, request, image_names, images) -> None:

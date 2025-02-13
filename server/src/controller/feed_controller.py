@@ -192,6 +192,20 @@ class Feed_Controller:
             num_feed=4, index= request.data_payload.key)
 
         return model
+    
+    def get_original_feed_data(self, database:Local_Database, data_payload):
+        model = FeedModel(database=database)
+        # 유저가 있으면 세팅
+        model.set_original_feed_data(fid=data_payload.fid)
+
+        return model
+        
+    def get_original_comment_data(self, database:Local_Database, data_payload):
+        model = FeedModel(database=database)
+        # 유저가 있으면 세팅
+        model.set_original_comment_data(cid=data_payload.cid)
+        return model
+    
 
     # bid로 피드 검색하기
     def get_feed_with_bid(self, database:Local_Database,

@@ -49,6 +49,43 @@ class FeedModel(BaseModel):
             self._feeds = self._set_feed_json_data(user=self._user, feeds=self._feeds)
         return
     
+    def set_original_feed_data(self, fid:str):
+        feed_data = self._database.get_data_with_id(target="fid", id=fid)
+
+        if feed_data:
+            feed = Feed()
+            feed.make_with_dict(feed_data)
+            
+            # 노출 현황 이 1 이하면 죽어야됨
+            # 0: 삭제됨 1 : 비공개 2: 차단 3: 댓글 작성 X 4 : 정상(전체 공개)
+            if feed.display < 3:
+                return
+            
+            # 롱폼은 바디 데이터를 받아야됨
+            if feed.fclass != "short":
+                feed.raw_body = ObjectStorageConnection().get_feed_body(fid = feed.fid)
+                _, feed.image = ObjectStorageConnection().extract_body_n_image(raw_data=feed.raw_body)
+
+            else:
+                feed.raw_body = feed.body
+                    
+            feed.is_reworked = False
+            
+            feed.p_body = ""
+            feed.reworked_body = ""
+        return
+    
+    def set_original_comment_data(self, cid:str):
+        comment_data = self._database.get_data_with_id(target="cid", id=cid)
+        new_comment = Comment()
+        new_comment.make_with_dict(comment_data)
+        
+        if new_comment.display == 0:
+            return
+                
+        self._comments.append(new_comment)
+        return
+    
     # send_data를 만들때 사용하는 함수임
     def _make_feed_data_n_interaction_data(self, feed_manager, fid_list):
         feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=fid_list)
@@ -242,7 +279,7 @@ class FeedModel(BaseModel):
                 # 재구성된 데이터라고 알릴 것
                 feed.is_reworked = True
                 
-            # 없음
+            # 필요 없음
             else:
                 # 롱폼은 바디 데이터를 받아야됨
                 if feed.fclass != "short":
