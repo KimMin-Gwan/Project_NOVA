@@ -1,4 +1,5 @@
 .container {
+  /* height: 100vh; */
   width: 100%;
   max-width: 500px;
   overflow: hidden;
@@ -74,7 +75,12 @@
 }
 .scroll-area {
   width: 100%;
+  /* height: 100vh; */
   overflow: hidden;
+}
+
+.none_feed_scroll {
+  height: 100vh;
 }
 /* ----라이트 모드 ----- */
 .feed-box.bright-mode {

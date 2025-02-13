@@ -463,7 +463,7 @@ export default function FeedList(isUserState) {
         {keyword && (
           <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>{keyword}</div>
         )}
-        <div className={style["scroll-area"]}>
+        <div className={feedData.length > 0 ? style["scroll-area"] : style["none_feed_scroll"]}>
           {feedData.length > 0 ? (
             feedData.map((feed, i) => {
               return (
