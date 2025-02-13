@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import React, { useEffect, useRef, useState } from "react";
 import style from "./Mypage.module.css";
 import mypage_more_icon from "./../../img/mypage_more.png";
-import user_icon from "./../../img/user.svg";
+import user_icon from "./../../img/user_profile.svg";
 import mainApi from "../../services/apis/mainApi";
 import Feed from "../../component/feed";
 
@@ -104,6 +104,8 @@ function MyPage() {
     return <div>loading...</div>;
   }
 
+  const profile = `https://kr.object.ncloudstorage.com/nova-user-profile/${myData.uid}.png`;
+
   return (
     <div className={style.container}>
       <div className={style.top_area}>
@@ -118,10 +120,7 @@ function MyPage() {
       </div>
       <div className={style["user-container"]}>
         <div className={style["user-img"]}>
-          <img
-            src={`https://kr.object.ncloudstorage.com/nova-user-profile/${myData?.uid}.png`}
-            alt="img"
-          />
+          <img src={profile} alt="img" onError={(e) => (e.target.src = user_icon)} />
         </div>
         <div className={style["feed-wrapper"]}>
           <section className={style["user-name"]}>

@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import style from "./Mypage.module.css";
 import axios from "axios";
+import user_icon from "./../../img/user_profile.svg";
 import useLoginStore from "../../stores/LoginStore/useLoginStore";
 import useBiasStore from "../../stores/BiasStore/useBiasStore";
 
@@ -126,11 +127,12 @@ function MyPage() {
   useEffect(() => {
     fetchEditProfile();
   }, []);
-  // let profile_img = `https://kr.object.ncloudstorage.com/nova-user-profile/${myProfile.uid}.png`;
 
   if (isLoading) {
     return <div>loading...</div>;
   }
+
+  const profile = `https://kr.object.ncloudstorage.com/nova-user-profile/${myProfile.uid}.png`;
 
   return (
     <div className={`${style["container"]} ${style["edit-container"]}`}>
@@ -146,10 +148,7 @@ function MyPage() {
       </div>
       <section className={style["profile-section"]}>
         <div className={style["user-img-edit"]}>
-          <img
-            src={`https://kr.object.ncloudstorage.com/nova-user-profile/${myProfile.uid}.png`}
-            alt="profile"
-          />
+          <img src={profile} alt="profile" onError={(e) => (e.target.src = user_icon)} />
         </div>
         <button>프로필 사진 변경</button>
       </section>

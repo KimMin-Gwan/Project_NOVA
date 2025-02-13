@@ -1,12 +1,8 @@
 import style from "./MoreSee.module.css";
 import backword from "./../../img/back_icon.png";
-import x_icon from "./../../img/x_color.png";
-import discord_icon from "./../../img/discord_color.png";
-import insta_icon from "./../../img/insta_color.png";
-import youtube_icon from "./../../img/youtube_color.png";
-import set_icon from "./../../img/setting_icon.png";
 import fav_icon from "./../../img/favset_icon.svg";
 import bug_icon from "./../../img/bug_icon.svg";
+import user_icon from "./../../img/user_profile.svg";
 import login_icon from "./../../img/login_icon.png";
 import mypage_icon from "./../../img/mypage_icon.png";
 import terms_icon from "./../../img/terms_icon.svg";
@@ -112,7 +108,7 @@ function MoreSee({ onModeChange }) {
         <div className={style.content}>
           <div className={style.fullWidthComponent}>
             <img
-              src={isLogin ? mypage_icon : login_icon}
+              src={isLogin ? user_icon : login_icon}
               alt="Arrow"
               className={style.vector_login}
             />
