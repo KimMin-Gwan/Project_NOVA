@@ -479,5 +479,7 @@
 
 .nav_moment {
   position: absolute;
-  bottom: 100px;
+  bottom: 61px;
+  width: 100%;
+  background-color: #ffffff;
 }

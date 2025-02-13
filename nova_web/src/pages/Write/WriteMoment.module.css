@@ -1,0 +1,7 @@
+.content-container {
+  height: 200px;
+}
+
+.select-container {
+  display: flex;
+}
