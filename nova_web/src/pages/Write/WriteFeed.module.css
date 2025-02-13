@@ -474,3 +474,10 @@
     border-bottom-right-radius: 5px;
   }
 }
+
+/* 네비게이션 모멘트 작성 */
+
+.nav_moment {
+  position: absolute;
+  bottom: 100px;
+}

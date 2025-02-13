@@ -7,6 +7,7 @@ import menu3 from "./../img/fav_nav.png";
 import feed_write from "./../img/feed_nav.png";
 import search from "./../img/search_nav.png";
 import { getModeClass } from "./../App.js";
+import WriteMoment from "../pages/Write/Writemoment.js";
 
 const NavBar = ({ isUserState, brightMode }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -14,6 +15,8 @@ const NavBar = ({ isUserState, brightMode }) => {
   let navigate = useNavigate();
 
   let [writeOptions, setWriteOptions] = useState(false);
+
+  const [writeMoment, setWriteMoment] = useState(false);
 
   const onClickWrite = () => {
     setWriteOptions(!writeOptions);
@@ -27,10 +30,15 @@ const NavBar = ({ isUserState, brightMode }) => {
     e.stopPropagation();
   }
 
+  const onClickMoment = () => {
+    setWriteMoment(!writeMoment);
+  };
+
   const [mode, setMode] = useState(brightMode); // 초기 상태는 부모로부터 받은 brightMode 값
   useEffect(() => {
     setMode(brightMode); // brightMode 값이 바뀔 때마다 mode 업데이트
   }, [brightMode]);
+
   return (
     <div className={`bottom_bar ${getModeClass(mode)}`}>
       {writeOptions && (
@@ -40,7 +48,8 @@ const NavBar = ({ isUserState, brightMode }) => {
           <section>
             <button
               onClick={() => {
-                handleNavigate("/write_feed/short");
+                setWriteOptions(!writeOptions);
+                onClickMoment();
               }}
             >
               <div className="img-box">
@@ -60,14 +69,14 @@ const NavBar = ({ isUserState, brightMode }) => {
             </button>
           </section>
 
-          <hr />
-
           <section>
             <button>주제 팔로우</button>
             <button>추가 기능</button>
           </section>
         </div>
       )}
+
+      {writeMoment && <WriteMoment />}
 
       <div className="nav_button_box">
         <button
