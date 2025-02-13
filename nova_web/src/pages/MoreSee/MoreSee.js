@@ -23,6 +23,7 @@ import fav_follow from "./../../img/fav_follow.svg";
 import fav_sub from "./../../img/fav_sub.svg";
 import notice from "./../../img/notice_more.svg";
 import { getModeClass } from "./../../App.js";
+import NavBar from "../../component/NavBar.js";
 
 function MoreSee({ onModeChange }) {
   const requestURL = {
@@ -197,47 +198,32 @@ function MoreSee({ onModeChange }) {
               <p className={style.bodyText}>이용약관</p>
               <img src={more_icon} alt="Arrow" className={style.more_vector} />
             </li>
-            <li className={style.mainComponent} onClick={handleChangeMode}>
+            {/* <li className={style.mainComponent} onClick={handleChangeMode}>
               <img src={set_icon} alt="Arrow" className={style.vector} />
               <p className={style.bodyText}>
                 {brightMode === "dark" ? "☀️ Light Mode" : "🌑 Dark Mode"}
               </p>
               <img src={more_icon} alt="Arrow" className={style.more_vector} />
-            </li>
+            </li> */}
           </ul>
         </div>
 
-        <div className={style.inquiry}>
-          <div className={style.iconBox} onClick={() => handleRequestURL(requestURL.x)}>
-            <img src={x_icon} alt="x_Icon" className={style.icon_img} />
-            <p className={style.icon_name}> X </p>
-          </div>
-          <div className={style.iconBox} onClick={() => handleRequestURL(requestURL.discord)}>
-            <img src={discord_icon} alt="discord_Icon" className={style.icon_img} />
-            <p className={style.icon_name}> Discord </p>
-          </div>
-          <div className={style.iconBox} onClick={() => handleRequestURL(requestURL.instagram)}>
-            <img src={insta_icon} alt="insta_Icon" className={style.icon_img} />
-            <p className={style.icon_name}> Instagram </p>
-          </div>
-          <div className={style.iconBox} onClick={() => handleRequestURL(requestURL.youtube)}>
-            <img src={youtube_icon} alt="youtube_Icon" className={style.icon_img} />
-            <p className={style.icon_name}> Youtube </p>
-          </div>
-        </div>
+        <div className={style.inquiry}></div>
 
         <footer className={style.footer}>
           <div>
             <img src={business_logo} alt="logo_Icon" className={style.logo_img} />
           </div>
+          <h4>세상을 바꾸는 청년들</h4>
           <p className={style.nova_info}>경북 경산시 압량읍 압독2로1길 21, 1층 184</p>
           <p className={style.nova_info}>대표: 김민관 | 사업자등록번호: 380-08-03011</p>
-          {/* <p className="nova-info">통신판매업신고번호: 0000-0000-000000</p> */}
+          <p className={style.nova_info}>통신판매업신고번호: 0000-0000-000000</p>
           <p className={style.nova_info}>
             전화번호: 010-9875-2508 | 이메일:youths0828@nova-platform.kr
           </p>
-          <p className={style.nova_info}>사업자 정보</p>
         </footer>
+
+        <NavBar />
       </div>
     </div>
   );

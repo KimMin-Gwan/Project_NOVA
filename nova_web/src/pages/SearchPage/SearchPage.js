@@ -5,6 +5,7 @@ import logo2 from "../../img/logo2.png";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useTagStore from "../../stores/TagStore/useTagStore";
+import NavBar from "../../component/NavBar";
 export default function SearchPage() {
   let navigate = useNavigate();
 
@@ -166,6 +167,7 @@ export default function SearchPage() {
           })}
         </ul>
       </section>
+      <NavBar />
     </div>
   );
 }

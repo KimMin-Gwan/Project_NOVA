@@ -16,6 +16,7 @@ import postApi from "../../services/apis/postApi.js";
 import axios from "axios";
 import useBiasStore from "../../stores/BiasStore/useBiasStore.js";
 import HEADER from "../../constant/header.js";
+import NavBar from "../../component/NavBar.js";
 
 const categoryData = [
   { key: 0, category: "자유게시판" },
