@@ -164,6 +164,9 @@ class ConverterAgent(BaseAgent):
             # {"role": "user", "content": '둘 이상의 단어가 합쳐진 단어는 해당 단어를 분해하여 어떤 단어가 사용됐는지 파악해 의미가 변하지 않도록 변환합니다.'},
             # {"role": "user", "content": '변환된 문장엔 일베용어가 사용되어선 안됩니다'}, #이거 정리해서 다 알려줘야 되나..?
             {"role": "user", "content": "변환된 문장엔 공격적인 단어가 적게 포함되어야 합니다."},
+
+            # 02/13 html태그 유지
+            {"role": "user", "content": "HTML 태그는 변환하지 않습니다."},
         ]
         return
     
