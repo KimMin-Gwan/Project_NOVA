@@ -33,6 +33,42 @@ const NavBar = ({ isUserState, brightMode }) => {
   }, [brightMode]);
   return (
     <div className={`bottom_bar ${getModeClass(mode)}`}>
+      {writeOptions && (
+        <div className={`write_select ${writeOptions ? "active" : ""}`}>
+          <h4>새로운 게시글 작성하기</h4>
+
+          <section>
+            <button
+              onClick={() => {
+                handleNavigate("/write_feed/short");
+              }}
+            >
+              <div className="img-box">
+                <img src={moment} alt="moment" />
+              </div>
+              모멘트
+            </button>
+            <button
+              onClick={() => {
+                handleNavigate("/write_feed/long");
+              }}
+            >
+              <div className="img-box">
+                <img src={post} alt="post" />
+              </div>
+              포스트
+            </button>
+          </section>
+
+          <hr />
+
+          <section>
+            <button>주제 팔로우</button>
+            <button>추가 기능</button>
+          </section>
+        </div>
+      )}
+
       <div className="nav_button_box">
         <button
           className="nav_button"
@@ -47,31 +83,6 @@ const NavBar = ({ isUserState, brightMode }) => {
       </div>
 
       <div className="nav_button_box write_button_hover">
-        {writeOptions && (
-          <div className={`write_select ${writeOptions ? "active" : ""}`}>
-            <div
-              onClick={() => {
-                handleNavigate("/write_feed/short");
-              }}
-            >
-              <div className="img-box">
-                <img src={moment} alt="moment" />
-              </div>
-              모멘트
-            </div>
-            <div
-              onClick={() => {
-                handleNavigate("/write_feed/long");
-              }}
-            >
-              <div className="img-box">
-                <img src={post} alt="post" />
-              </div>
-              포스트
-            </div>
-          </div>
-        )}
-
         <button
           className="nav_button"
           onClick={(e) => {
