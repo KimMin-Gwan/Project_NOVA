@@ -1294,6 +1294,7 @@ body.dark-mode {
 }
 
 .clicked-img {
+  transition: box-shadow ease 1s;
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
 }
 
