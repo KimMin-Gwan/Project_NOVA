@@ -200,8 +200,8 @@ class Sub_Service_View(Master_View):
         
         # 최신에 사용중인 최애 기반 커뮤니티 리스트에 나올 공지
         @self.__app.get('/nova_sub_system/sample_notice')
-        def try_get_sample_notice(bid:Optional[str]="", last_nid:Optional[str]=""):
-            data_payload = NoticeSampleRequest(bid=bid, last_nid=last_nid)
+        def try_get_sample_notice():
+            data_payload = DummyRequest()
             
             sub_controller =Sub_Controller()
             model = sub_controller.try_get_notice_sample(database=self.__database,

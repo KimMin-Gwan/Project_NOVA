@@ -73,6 +73,7 @@ class FeedModel(BaseModel):
             
             feed.p_body = ""
             feed.reworked_body = ""
+            self._feeds.append(feed)
         return
     
     def set_original_comment_data(self, cid:str):
