@@ -257,8 +257,11 @@ class FeedModel(BaseModel):
             # 만약 2단계를 선택했다면 3단계의 글은 전부다 재구성 된 데이터로 나와야됨
             # 만약 1단계를 선택했다면 2단계와 3단계 글은 전부다 재구성 된 데이터로 나와야됨
             
+            print(f"user : {user.level}  |  feed : {feed.level}")
+            
             # 재구성 할 필요 있음
             if user.level < feed.level:
+                print("재구성됨")
                 # 롱폼은 바디 데이터를 받아야됨
                 if feed.fclass != "short":
                     # 원본 긁어와서
@@ -291,6 +294,7 @@ class FeedModel(BaseModel):
                     
                 feed.is_reworked = False
             
+            
             feed.p_body = ""
             feed.reworked_body = ""
             
@@ -310,6 +314,9 @@ class FeedModel(BaseModel):
             feed.nickname = wuser.uname
             if user.uid == feed.uid:
                 feed.is_owner = True
+                
+            pprint(feed.get_dict_form_data())
+            
             result_feeds.append(feed)
             
         return result_feeds
