@@ -41,11 +41,15 @@ class FeedAnalyzer:
             feed.level = result['강도']
             
         else:
+            pprint(feed.get_dict_form_data())
+            
             html_data = ObjectStorageConnection().get_project_body(pid=feed.fid)
             body_content = HTMLEXtractor().remove_img_src_data_in_html(html_data=html_data)
             
             result = self._convert_feed(body_content=body_content, words=dict_words)
             #self._analyze_feed(feed=feed, tag_bag=self.__tag_bag)
+             
+            pprint(result)
             
             # 피드 데이터 넣어주기
             feed.p_body = result['변환문']
