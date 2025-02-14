@@ -267,8 +267,13 @@ class FeedModel(BaseModel):
                     # 원본 긁어와서
                     feed.raw_body = ObjectStorageConnection().get_feed_body(fid = feed.fid)
                     
+                    
+                    pprint(feed.get_dict_form_data())
+                    
                     # 재구성된 HTML데이터에 이미지 끼워넣고
                     feed.raw_body = HTMLEXtractor().restore_img_src_data_in_html(raw_html=feed.raw_body, p_html=feed.p_body)
+                    
+                    pprint(feed.raw_body)
                     
                     # 미리보기용 바디랑 이미지 데이터 만들어줌
                     feed.body, feed.image = ObjectStorageConnection().extract_body_n_image(raw_data=feed.raw_body)
@@ -315,7 +320,6 @@ class FeedModel(BaseModel):
             if user.uid == feed.uid:
                 feed.is_owner = True
                 
-            pprint(feed.get_dict_form_data())
             
             result_feeds.append(feed)
             
