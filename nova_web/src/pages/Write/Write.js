@@ -22,6 +22,7 @@ const categoryData = [
   { key: 0, category: "자유게시판" },
   { key: 1, category: "팬아트" },
   { key: 2, category: "유머게시판" },
+  { key: 3, category: "스토리게시판" },
 ];
 
 const Write = ({ brightmode }) => {

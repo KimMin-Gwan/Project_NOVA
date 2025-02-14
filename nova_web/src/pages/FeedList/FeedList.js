@@ -1,5 +1,4 @@
 import "@toast-ui/editor/dist/toastui-editor-viewer.css";
-import { Viewer } from "@toast-ui/react-editor";
 import { useEffect, useLocation, useMemo, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import BiasBoxes from "../../component/BiasBoxes.js";
@@ -8,12 +7,8 @@ import SearchBox from "../../component/SearchBox.js";
 import KeywordBox from "../../component/keyword/KeywordBox.js";
 import { getModeClass } from "./../../App.js";
 import Feed, { Comments } from "./../../component/feed";
-import logo from "./../../img/NOVA_Platform.png";
 import logo2 from "./../../img/logo2.png";
 import filter_icon from "./../../img/filter.svg";
-import menu from "./../../img/menu-burger.png";
-import LeftBar from "./../WideVer/LeftBar.js";
-import RightBar from "./../WideVer/RightBar.js";
 import style from "./FeedHashList.module.css";
 import NoticeBox from "../../component/NoticeBox/NoticeBox.js";
 import CategoryModal from "../../component/CategoryModal/CategoryModal.js";

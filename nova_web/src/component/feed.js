@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Viewer } from "@toast-ui/react-editor";
 import style from "./../pages/FeedPage/FeedPage.module.css";
@@ -119,6 +119,33 @@ export function ContentFeed({
     });
   }
 
+  let scrollRef = useRef(null);
+  let [isDrag, setIsDrag] = useState(false);
+  let [dragStart, setDragStart] = useState("");
+  let [hasDragged, setHasDragged] = useState(false);
+
+  function onMouseDown(e) {
+    e.preventDefault();
+    setIsDrag(true);
+    setDragStart(e.pageX + scrollRef.current.scrollLeft);
+    setHasDragged(false);
+  }
+
+  function onMouseUp(e) {
+    if (hasDragged) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+    setIsDrag(false);
+  }
+
+  function onMouseMove(e) {
+    if (isDrag) {
+      scrollRef.current.scrollLeft = dragStart - e.pageX;
+      setHasDragged(true);
+    }
+  }
+
   if (!feed) {
     return <div>loading 중...</div>;
   }
@@ -167,11 +194,26 @@ export function ContentFeed({
         {feed.fclass === "short" && <div className={style["body-content"]}>{feed.body}</div>}
         {feed.image?.length > 0 && feed.fclass === "short" ? (
           <div className={style["image-container"]}>
-            <img src={feed.image[0]} alt="image" />
+            <div
+              ref={scrollRef}
+              className={`${style["image-origin"]} ${style["two-over-image"]}`}
+              onMouseDown={onMouseDown}
+              onMouseMove={onMouseMove}
+              onMouseUp={onMouseUp}
+              // onClick={(e) => {
+              //   e.stopPropagation();
+              // }}
+            >
+              {feed.num_image >= 2 &&
+                feed.image.map((img, i) => {
+                  return <img key={i} src={img} alt="image" />;
+                })}
+            </div>
           </div>
         ) : (
           <div></div>
         )}
+
         {/* {feed.fclass === "short" && <SelectOption feed={feed} interaction={interaction} />} */}
         {feed.fclass === "short" && (
           <QuizOption feed={feed} interaction={interaction} handleInteraction={handleInteraction} />

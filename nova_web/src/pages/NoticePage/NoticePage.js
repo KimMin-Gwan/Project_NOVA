@@ -1,8 +1,24 @@
 import { useNavigate } from "react-router-dom";
 import "./index.css";
+import mainApi from "../../services/apis/mainApi";
+import { useEffect, useState } from "react";
 
 export default function NoticePage() {
   const navigate = useNavigate();
+
+  const [notices, setNotices] = useState([]);
+
+  function fetchNotice() {
+    mainApi.get("nova_sub_system/sample_notice").then((res) => {
+      console.log(res.data);
+      setNotices(res.data.body.notice);
+    });
+  }
+
+  useEffect(() => {
+    fetchNotice();
+  }, []);
+
   return (
     <div className="NoticePage">
       <div className="NoticePage_title">
@@ -18,15 +34,19 @@ export default function NoticePage() {
 
       <hr className="hr-line" />
 
-      <section className="notice_container">
-        <div className="notice_title">
-          <p>#공지사항 제목</p>
-          <h6>공지 일자</h6>
-        </div>
-        <hr className="hr-line hr-line-in-box" />
+      {notices.map((notice, i) => {
+        return (
+          <section key={notice.nid} className="notice_container">
+            <div className="notice_title">
+              <p>{notice.title}</p>
+              <h6>{notice.date}</h6>
+            </div>
+            <hr className="hr-line hr-line-in-box" />
 
-        <div className="notice_content">공지사항 본문</div>
-      </section>
+            <div className="notice_content">{notice.body}</div>
+          </section>
+        );
+      })}
 
       <hr className="hr-line" />
 

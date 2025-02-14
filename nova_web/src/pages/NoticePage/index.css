@@ -61,7 +61,10 @@
   }
 
   .notice_content {
+    line-height: 2;
     font-size: 12px;
+    padding-bottom: 10px;
+    white-space: pre-line;
   }
 }
 
@@ -69,6 +72,5 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
   padding: 15px 0px;
 }
