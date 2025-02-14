@@ -291,7 +291,7 @@ class HTMLEXtractor:
             img['src'] = original_src
 
         # src 복원된 HTML 출력
-        restored_html = str(soup)
+        restored_html = str(restored_soup)
         
         return restored_html
         
