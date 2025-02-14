@@ -11,7 +11,7 @@ class FeedAnalyzer:
         self.__tag_bag = AITagBag()
         pass
     
-    def pipeline_when_feed_created(self, feed:Feed):
+    def pipeline_when_feed_created(self, feed:Feed, data_payload_body=None):
         
         # 1. 피드에서 단어 골라내기
         # 2. 골라낸 단어랑 같이 컨버터에 넣기
@@ -41,9 +41,8 @@ class FeedAnalyzer:
             feed.level = result['강도']
             
         else:
-            html_data = ObjectStorageConnection().get_project_body(pid=feed.fid)
-            pprint(html_data)
-            body_content = HTMLEXtractor().remove_img_src_data_in_html(html_data=html_data)
+            pprint(data_payload_body)
+            body_content = HTMLEXtractor().remove_img_src_data_in_html(html_data=data_payload_body)
             pprint(body_content)
             result = self._convert_feed(body_content=body_content, words=dict_words)
             #self._analyze_feed(feed=feed, tag_bag=self.__tag_bag)

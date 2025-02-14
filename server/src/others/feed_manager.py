@@ -74,14 +74,19 @@ class FeedManager:
     # 새로운 피드 만들기
     # 실제로 피드를 만들고, 서치 엔진에 추가하는 부분이다.
     def __make_new_feed(self, user:User, fid, fclass, choice, body, hashtag,
-                        board_type, images, link, bid, raw_body="", ai_manager=None):
+                        board_type, images, link, bid, raw_body="", ai_manager=None, data_payload_body=None):
         # 검증을 위한 코드는 이곳에 작성하시오
         new_feed = self.__set_new_feed(user=user, fid=fid, fclass=fclass,
                                        choice=choice, body=body, hashtag=hashtag,
                                        board_type=board_type, image=images, link=link, bid=bid, raw_body=raw_body)
         
-        # ai한테 넣어서 다시 만들기
-        new_feed = ai_manager.treat_new_feed(feed=new_feed)
+        
+        if data_payload_body:
+            # ai한테 넣어서 다시 만들기
+            new_feed = ai_manager.treat_new_feed(feed=new_feed, data_payload_body=data_payload_body)
+        else:
+            new_feed = ai_manager.treat_new_feed(feed=new_feed)
+            
         
         self._database.add_new_data(target_id="fid", new_data=new_feed.get_dict_form_data())
 
@@ -197,11 +202,13 @@ class FeedManager:
             connector = ObjectStorageConnection()
             # 1. 전송된 body데이터를 확인
             if data_payload.body:
+                data_payload_body = data_payload.body
                 # 2. body데이터를 오브젝트 스토리지에 저장
                 url = connector.make_new_feed_body_data(fid = fid, body=data_payload.body)
                 body, _ = connector.extract_body_n_image(raw_data=data_payload.body)
 
             else:
+                data_payload_body = " "
                 body = " "
                 url = connector.make_new_feed_body_data(fid=fid, body=body)
 
@@ -219,7 +226,8 @@ class FeedManager:
                                  link=data_payload.link,
                                  bid=data_payload.bid,
                                  raw_body = url, # 이거 url이라는 변수가 없어서
-                                 ai_manager=ai_manager
+                                 ai_manager=ai_manager,
+                                 data_payload_body = data_payload_body
                                  )
 
         #작성한 피드 목록에 넣어주고
