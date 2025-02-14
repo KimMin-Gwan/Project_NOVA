@@ -28,7 +28,7 @@ class AIManger:
         return comment
         
         
-    async def apperehend_mood_n_trend(self):
+    async def apprehend_mood_n_trend(self):
         try:
             last_computed_time = time.time()  # 초기값 설정
             
@@ -38,7 +38,7 @@ class AIManger:
                 time_diff = (current_time - last_computed_time) / 3600  # 시간 단위로 계산
 
                 # 마지막 계산 시간이 1시간 이상일 경우 갱신
-                # 나중에는 bias 단위로 잘라서 필요할 때마다 실행시켜야됨
+                # 나중에는 bias 단위로 잘라서 필요할 때마다 실행 시켜야됨
                 if time_diff >= 12:
                     #feeds = []
                     #feed_datas = self._database.get_datas_with_ids(target_id=self.__treated_fid)
