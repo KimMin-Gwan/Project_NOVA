@@ -13,10 +13,10 @@ class AIRecommander:
         self._database = database
         
     def __init_bias(self):
-        
-        self._data
-        
+
         analyzed_bias = AnalyzedBias()
-        
+
+    def pipeline_feed_recommend(self):
+        #
     
 
