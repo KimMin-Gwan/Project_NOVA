@@ -37,7 +37,6 @@ class ObjectStorageConnection:
     # 프로젝트 바디 부분 불러오는 부분
     def get_project_body(self, pid):
         self.__init_boto3()
-        pid = "5"
         target_url = self.__endpoint_url + "/" + self.__project_bucket + "/" + pid + ".html"
         response = get(url=target_url)
         html_content = response.content.decode("utf-8")
