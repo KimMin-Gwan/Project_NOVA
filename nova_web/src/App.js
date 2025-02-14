@@ -6,8 +6,6 @@ import MyPage from "./pages/MyPage/Mypage";
 import MyPageEdit from "./pages/MyPage/MypageEdit";
 import NOVALogin from "./pages/NovaLogin/NovaLogin";
 import MoreSee from "./pages/MoreSee/MoreSee";
-import NoticeList from "./pages/Notice/NoticeList";
-import Notice from "./pages/Notice/Notice";
 import SignUp from "./pages/SignUp/SignUp.js";
 import NavBar from "./component/NavBar.js";
 import Temrs from "./pages/Temrs/Temrs.js";
@@ -43,6 +41,7 @@ import SearchPage from "./pages/SearchPage/SearchPage.js";
 import useTagStore from "./stores/TagStore/useTagStore.js";
 import SearchResultPage from "./pages/SearchResultPage/SearchResultPage.js";
 import useBiasStore from "./stores/BiasStore/useBiasStore.js";
+import NoticePage from "./pages/NoticePage/NoticePage.js";
 
 // 다크 모드 클래스 반환 함수
 export function getModeClass(mode) {
@@ -190,9 +189,8 @@ function App() {
 
       {/* 이용약관 및 공지사항 */}
       <Route path="/terms_page" element={<Temrs />}></Route>
-      <Route path="/notice_list" element={<NoticeList />}></Route>
-      <Route path="/notice" element={<NoticeList />} />
-      <Route path="/notice/:nid" element={<Notice />} />
+      <Route path="/notice" element={<NoticePage />} />
+      {/* <Route path="/notice/:nid" element={<Notice />} /> */}
 
       {/* 피드 페이지 */}
       {/* <Route path="/feed_page" element={<FeedPage brightMode={brightMode} />}></Route> */}

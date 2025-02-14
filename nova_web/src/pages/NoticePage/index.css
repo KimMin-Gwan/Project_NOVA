@@ -1,0 +1,74 @@
+.NoticePage {
+  max-width: 500px;
+  height: 100vh;
+  margin: 0 auto;
+  background-color: white;
+}
+
+.NoticePage_title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 25px;
+  padding-bottom: 30px;
+  position: relative;
+
+  button {
+    all: unset;
+    position: absolute;
+    left: 15px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #797979;
+  }
+}
+
+/* 경계선 */
+.hr-line {
+  margin: 8px;
+  border: 1px solid #d8d8d8;
+}
+
+.hr-line-in-box {
+  margin: 5px 0px;
+  border: 1px solid #dbe1e9;
+}
+
+/* 공지사항 박스스 */
+.notice_container {
+  margin: 15px;
+  padding: 0px 24px;
+  background-color: #f1f7ff;
+
+  .notice_title {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 0px 5px 0px;
+
+    p {
+      font-weight: 500;
+      margin: 0px;
+      padding: 0px;
+    }
+
+    h6 {
+      color: #9a9a9a;
+      font-size: 14px;
+      font-weight: 400;
+      margin: 0;
+      padding: 0;
+    }
+  }
+
+  .notice_content {
+    font-size: 12px;
+  }
+}
+
+.last_notice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 15px 0px;
+}

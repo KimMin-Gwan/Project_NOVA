@@ -179,7 +179,7 @@ function MoreSee({ onModeChange }) {
           <div className={style["list-bar"]}>다른 기능</div>
           <hr></hr>
           <ul className={style.listContainer}>
-            <li className={style.mainComponent}>
+            <li className={style.mainComponent} onClick={() => handlePage("/notice")}>
               <img src={notice} alt="Arrow" className={style.vector} />
               <p className={style.bodyText}>공지사항</p>
               <img src={more_icon} alt="Arrow" className={style.more_vector} />
@@ -203,7 +203,6 @@ function MoreSee({ onModeChange }) {
             </li> */}
           </ul>
         </div>
-
         <div className={style.inquiry}></div>
 
         <footer className={style.footer}>
