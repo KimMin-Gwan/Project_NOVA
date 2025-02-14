@@ -264,7 +264,7 @@ class FeedModel(BaseModel):
                     # 원본 긁어와서
                     feed.raw_body = ObjectStorageConnection().get_feed_body(fid = feed.fid)
                     
-                    # 재구성된 스트링으로 갈아끼우고
+                    # 재구성된 HTML데이터에 이미지 끼워넣고
                     feed.raw_body = HTMLEXtractor().restore_img_src_data_in_html(raw_html=feed.raw_body, p_html=feed.p_body)
                     
                     # 미리보기용 바디랑 이미지 데이터 만들어줌
@@ -274,7 +274,7 @@ class FeedModel(BaseModel):
                     # 미리보기용 바디데이터는 재구성된 데이터로
                     feed.body = feed.reworked_body
                     # 실 데이터도 재구성된 데이터
-                    feed.raw_body = feed.body
+                    #feed.raw_body = feed.body
                 
                 # 재구성된 데이터라고 알릴 것
                 feed.is_reworked = True
