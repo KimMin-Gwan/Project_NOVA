@@ -215,10 +215,10 @@ const WriteMoment = () => {
   return (
     <div className={style["nav_moment"]}>
       모멘트 작성
-      <form>
+      <form className={style2["nav_form"]}>
         <div className={style["input-container"]}>
           <div className={style["input-wrapper"]}>
-            <input placeholder="#해시태그" type="text" value={`${inputTag}`} onChange={onChangeTag} onKeyDown={onKeyDown} className={style["input-hashtag"]} />
+            <input placeholder="해시태그 입력" type="text" value={`${inputTag}`} onChange={onChangeTag} onKeyDown={onKeyDown} className={style["input-hashtag"]} />
             <span className={style["count-text"]}>{inputTagCount}/12</span>
           </div>
           <div className={style["button-wrapper"]}>

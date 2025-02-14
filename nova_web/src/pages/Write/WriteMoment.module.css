@@ -1,7 +1,11 @@
-.content-container {
-  height: 200px;
-}
+.nav_form {
+  padding-inline: 24px;
 
-.select-container {
-  display: flex;
+  .content-container {
+    height: 200px;
+  }
+
+  .select-container {
+    display: flex;
+  }
 }
