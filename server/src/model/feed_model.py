@@ -257,23 +257,16 @@ class FeedModel(BaseModel):
             # 만약 2단계를 선택했다면 3단계의 글은 전부다 재구성 된 데이터로 나와야됨
             # 만약 1단계를 선택했다면 2단계와 3단계 글은 전부다 재구성 된 데이터로 나와야됨
             
-            print(f"user : {user.level}  |  feed : {feed.level}")
-            
             # 재구성 할 필요 있음
             if user.level < feed.level:
-                print("재구성됨")
                 # 롱폼은 바디 데이터를 받아야됨
                 if feed.fclass != "short":
                     # 원본 긁어와서
                     feed.raw_body = ObjectStorageConnection().get_feed_body(fid = feed.fid)
                     
                     
-                    pprint(feed.get_dict_form_data())
-                    
                     # 재구성된 HTML데이터에 이미지 끼워넣고
                     feed.raw_body = HTMLEXtractor().restore_img_src_data_in_html(raw_html=feed.raw_body, p_html=feed.p_body)
-                    
-                    pprint(feed.raw_body)
                     
                     # 미리보기용 바디랑 이미지 데이터 만들어줌
                     feed.body, feed.image = ObjectStorageConnection().extract_body_n_image(raw_data=feed.raw_body)
