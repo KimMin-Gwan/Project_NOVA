@@ -243,18 +243,35 @@ class HTMLEXtractor:
             return False
         
     
-    # html에서 img 태그 안에 있는 src 데이터를 지우는 함수
+#    # html에서 img 태그 안에 있는 src 데이터를 지우는 함수
+    #def remove_img_src_data_in_html(self, html_data):
+        
+        #soup = BeautifulSoup(html_data, 'html.parser')
+        
+        #img_tags = soup.find_all('img')
+        #for img in img_tags:
+            #img.attrs = {}
+        
+        #filtered_html = str(soup)
+        
+        #return filtered_html
     def remove_img_src_data_in_html(self, html_data):
-        
         soup = BeautifulSoup(html_data, 'html.parser')
-        
+
+        # 모든 <img> 태그에서 src 속성만 제거
         img_tags = soup.find_all('img')
         for img in img_tags:
-            img.attrs = {}
-        
+            if 'src' in img.attrs:  # src 속성이 있는 경우만 제거
+                del img.attrs['src']
+
+        # XML 호환성을 위해 'self-closing' 형태로 변환
+        for img in img_tags:
+            if not img.attrs:  # 속성이 없는 경우
+                img.replace_with(BeautifulSoup('<img />', 'html.parser').img)
+
         filtered_html = str(soup)
-        
         return filtered_html
+
     
     # 원본 html 데이터랑 추출해서 변형한 데이터를 같이 넣고 img src를 맞춰주는 함수
     def restore_img_src_data_in_html(self, raw_html, p_html):
