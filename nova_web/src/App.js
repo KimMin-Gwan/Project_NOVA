@@ -62,10 +62,58 @@ function App() {
     fetchBiasList();
   }, []);
 
+  const FETCH_URL = "https://nova-platform.kr/feed_explore/";
+
   // 실시간 랭킹 받아오기
   useEffect(() => {
     fetchTagList();
   }, []);
+
+  let [feedData, setFeedData] = useState([]);
+
+  let [biasId, setBiasId] = useState();
+
+  let header = {
+    "request-type": "default",
+    "client-version": "v1.0.1",
+    "client-ip": "127.0.0.1",
+    uid: "1234-abcd-5678",
+    endpoint: "/user_system/",
+  };
+  const [isLoading, setIsLoading] = useState(true);
+  let bids = biasList.map((item, i) => {
+    return item.bid;
+  });
+  async function fetchBiasCategoryData(bid) {
+    let send_data = {
+      header: header,
+      body: {
+        bids: bid === undefined ? [bids] : [bid],
+        board: "자유게시판",
+        key: -1,
+      },
+    };
+
+    await fetch(`${FETCH_URL}feed_with_community`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(send_data),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("first bias data", data);
+        setFeedData(data.body.send_data);
+        setIsLoading(false);
+      });
+  }
+
+  useEffect(() => {
+    setFeedData([]);
+    fetchBiasCategoryData();
+  }, [biasId]);
 
   // function handleValidCheck() {
   //   fetch("https://nova-platform.kr/home/is_valid", {
@@ -97,7 +145,7 @@ function App() {
 
   const [currentIndex, setCurrentIndex] = useState(0); // 현재 표시 중인 태그 인덱스
   const intervalTime = 3000; // 2초마다 태그 변경
-  let [biasId, setBiasId] = useState();
+  // let [biasId, setBiasId] = useState();
 
   // 실시간 랭킹 동작(꺼놓음)
   // useEffect(() => {
@@ -124,7 +172,7 @@ function App() {
     setBrightMode(newMode); // MoreSee에서 전달받은 상태 업데이트
   };
 
-  if (loading) {
+  if (loading || isLoading) {
     return <div>loading...</div>;
   }
   return (
@@ -210,10 +258,15 @@ function App() {
                     </>
                   }
                   img_src={new_pin}
-                  feedData={weeklyFeed}
+                  feedData={feedData}
                   brightMode={brightMode}
                   type={"bias"}
-                  children={<BiasBoxes setBiasId={setBiasId} biasList={biasList} />}
+                  children={
+                    <BiasBoxes
+                      setBiasId={setBiasId}
+                      fetchBiasCategoryData={fetchBiasCategoryData}
+                    />
+                  }
                   endPoint={`/feed_list?type=bias`}
                   customClassName="custom-height"
                 />

@@ -6,9 +6,11 @@ import style from "./../pages/FeedPage/FeedPage.module.css";
 import star from "./../img/favorite.png";
 import link_pin_icon from "./../img/link_pin.svg";
 import star_color from "./../img/favorite_color.png";
+import info_icon from "./../img/Info.svg";
 import comment from "./../img/comment.png";
 import postApi from "../services/apis/postApi";
 import HEADER from "../constant/header";
+import mainApi from "../services/apis/mainApi";
 
 export function useBrightMode() {
   const params = new URLSearchParams(window.location.search);
@@ -111,8 +113,14 @@ export function ContentFeed({
 }) {
   let navigate = useNavigate();
 
+  async function fetchOriginalText(fid) {
+    await mainApi.get(`feed_explore/original_feed_data?fid=${fid}`).then((res) => {
+      console.log(res.data);
+    });
+  }
+
   if (!feed) {
-    return <div>loading 중..,.</div>;
+    return <div>loading 중...</div>;
   }
 
   return (
@@ -129,6 +137,24 @@ export function ContentFeed({
       <div className={style["user-container"]}>
         <div>{feed.date}</div>
         <div>{feed.nickname}</div>
+      </div>
+
+      <div className={style["AI_container"]}>
+        <div className={style["AI_text_info"]}>
+          <span>
+            <img src={info_icon} alt="info" />
+          </span>
+          본 게시글의 본문은 AI에 의해 필터링 되었습니다.
+        </div>
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            fetchOriginalText(feed.fid);
+          }}
+        >
+          원문 보기
+        </button>
       </div>
 
       <div className={`${style["body-container"]} ${detailPage ? "" : style["long-form-hidden"]}`}>

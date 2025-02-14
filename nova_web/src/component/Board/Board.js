@@ -48,7 +48,7 @@ export default function Board({ boardData, setBoard }) {
         </div>
       </div>
 
-      <BoardTitle>노바 펀딩</BoardTitle>
+      {/* <BoardTitle>노바 펀딩</BoardTitle>
       <ul className="Board_content">
         <li>
           <img src={ticket} alt="" />
@@ -58,7 +58,7 @@ export default function Board({ boardData, setBoard }) {
           <img src={ticket} alt="" />
           펀딩 상품
         </li>
-      </ul>
+      </ul> */}
     </div>
   );
 }

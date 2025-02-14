@@ -34,9 +34,8 @@ export default function FeedThumbnail({
           <img src={more_icon} alt="더보기" onClick={() => navigate(endPoint)}></img>
         </div>
       </div>
-      {feedData.length === 0 && <NoneFeed />}
-
       {children}
+      {feedData.length === 0 && <NoneFeed />}
 
       {allPost}
       {allPost ? null : type === "bias" ? (

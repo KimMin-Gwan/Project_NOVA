@@ -237,3 +237,14 @@
   background-color: #f27b7b;
   color: white;
 }
+
+.function_button_container {
+  display: flex;
+  gap: 15px;
+  color: #979797;
+  .AI_text {
+    all: unset;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+}

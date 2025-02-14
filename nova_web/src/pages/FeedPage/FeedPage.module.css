@@ -2552,3 +2552,34 @@ h5 {
   line-height: 0px;
   margin: 0px 20px;
 }
+
+.AI_container {
+  /* width: 100%; */
+  padding: 0px 20px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #949494;
+  font-size: 14px;
+
+  button {
+    all: unset;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+}
+
+.AI_text_info {
+  /* vertical-align: middle; */
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  line-height: 15px;
+
+  img {
+    display: flex;
+    /* width: 15px; */
+    /* height: 100%; */
+    object-fit: cover;
+  }
+}

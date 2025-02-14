@@ -271,6 +271,12 @@ export default function FeedDetail({}) {
 
 // 댓글
 function Comment({ comment, onClickComment }) {
+  async function fetchOriginalComment(cid) {
+    await mainApi.get(`feed_explore/original_comment_data?cid=${cid}`).then((res) => {
+      console.log(res.data);
+    });
+  }
+
   return (
     <div
       key={comment.cid}
@@ -284,7 +290,20 @@ function Comment({ comment, onClickComment }) {
           {comment.uname}
           <span>{comment.date}</span>
         </div>
-        <div>신고</div>
+
+        <div className={style["function_button_container"]}>
+          <button
+            className={style["AI_text"]}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              fetchOriginalComment(comment.cid);
+            }}
+          >
+            원문 보기
+          </button>
+          <div>신고</div>
+        </div>
       </div>
 
       <div className={style["comment-content"]}>{comment.body}</div>
@@ -306,14 +325,20 @@ function Comment({ comment, onClickComment }) {
 
       {comment.reply.length !== 0 &&
         comment.reply?.map((reply, i) => {
-          return <ReplyComment key={reply.cid} reply={reply} />;
+          return (
+            <ReplyComment
+              key={reply.cid}
+              reply={reply}
+              fetchOriginalComment={fetchOriginalComment}
+            />
+          );
         })}
     </div>
   );
 }
 
 // 대댓글
-function ReplyComment({ reply }) {
+function ReplyComment({ reply, fetchOriginalComment }) {
   const [firstWord, ...restWords] = reply.body.split(" ");
 
   return (
@@ -323,7 +348,19 @@ function ReplyComment({ reply }) {
           답변 : {reply.uname}
           <span>{reply.date}</span>
         </div>
-        <div>신고</div>
+        <div className={style["function_button_container"]}>
+          <button
+            className={style["AI_text"]}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              fetchOriginalComment(reply.cid);
+            }}
+          >
+            원문 보기
+          </button>
+          <div>신고</div>
+        </div>
       </div>
 
       <div className={style["comment-content"]}>
