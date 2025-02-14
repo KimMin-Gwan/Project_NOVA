@@ -22,14 +22,13 @@ class FeedAnalyzer:
         # 6. AIRecommander에서 bias를 찾아서 거기다가 Tag 넣어주기(중복 X)
         
         words = self._word_finder(body=feed.body, word_bag=self.__word_bag)
-        
+
+        body_content = ""
         dict_words = []
         
         for word in words:
             dict_words.append(word.to_dict())
-        
-        body_content = ""
-        
+
         if feed.fclass == "short":
             body_content = feed.body
             
@@ -81,8 +80,14 @@ class FeedAnalyzer:
         comment.level = result['강도']
         
         return comment
-    
-    
+
+    def pipeline_when_analyze_tag(self, feeds_body):
+        tags = self._tag_finder(bodys=feeds_body, tag_bag=self.__word_bag)
+
+        body_content = ""
+
+        result =
+
     # 게시글 분석
     # 전성훈이가 들고오면 여기다가 집어넣으면됨
     # agent 만들고
@@ -114,6 +119,11 @@ class FeedAnalyzer:
         
         
         return result
+
+    def _write_feed_body(self, tags:list) -> str:
+        agent = WriterAgent(model_setting=self.__model_setting)
+
+        result = agent.write_feed_body(tags=tags)
         
     # 단어 찾기
     def _word_finder(self, body:str, word_bag:AIWordBag) -> Feed:

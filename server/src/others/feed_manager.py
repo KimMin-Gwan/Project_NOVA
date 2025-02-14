@@ -79,8 +79,8 @@ class FeedManager:
         new_feed = self.__set_new_feed(user=user, fid=fid, fclass=fclass,
                                        choice=choice, body=body, hashtag=hashtag,
                                        board_type=board_type, image=images, link=link, bid=bid, raw_body=raw_body)
-        
-        
+
+
         if data_payload_body:
             # ai한테 넣어서 다시 만들기
             new_feed = ai_manager.treat_new_feed(feed=new_feed, data_payload_body=data_payload_body)
@@ -118,8 +118,6 @@ class FeedManager:
 
         return lid_list
 
-
-
     # 새로운 피드의 데이터를 추가하여 반환
     def __set_new_feed(self, user:User,fid, fclass, choice, body, hashtag,
                        board_type, image, link, bid, raw_body):
@@ -152,7 +150,6 @@ class FeedManager:
         new_feed.bid = bid
         new_feed.raw_body = raw_body
         return new_feed
-
 
     # FEED 클래스를 반환하는 함수
     def __get_class_name(self, fclass):
