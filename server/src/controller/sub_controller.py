@@ -39,14 +39,14 @@ class Sub_Controller:
         # bid가 없다면 -> bid가 포함되지 않은 공지 리스트
         model.set_base_notices_data()
 
-        # 2. BIAS 전용 공지와, 전체용 공지를 나누는 작업
-        # BIAS가 선택되지 않았을 경우, BID가 ""로 들어가게 될것이다.
-        # BID가 없는경우라면, NOTICE_FOR_BIAS 찾는 과정에서 BID를 통한 BIAS찾기에서 값이 없을 것(BID=""인 BIAS는 없으니까)
-        model.set_bias_notices_data(bid=data_payload.bid)
-        model.set_none_bias_notices_data()
+        ## 2. BIAS 전용 공지와, 전체용 공지를 나누는 작업
+        ## BIAS가 선택되지 않았을 경우, BID가 ""로 들어가게 될것이다.
+        ## BID가 없는경우라면, NOTICE_FOR_BIAS 찾는 과정에서 BID를 통한 BIAS찾기에서 값이 없을 것(BID=""인 BIAS는 없으니까)
+        #model.set_bias_notices_data(bid=data_payload.bid)
+        #model.set_none_bias_notices_data()
 
-        # 전송 데이터를 만드는 과정
-        model.set_send_notice_data(last_nid=data_payload.last_nid)
+        ## 전송 데이터를 만드는 과정
+        #model.set_send_notice_data(last_nid=data_payload.last_nid)
         return model
 
     def try_get_image_tag(self, database:Local_Database, data_payload) -> BaseModel:
@@ -64,8 +64,6 @@ class Sub_Controller:
 
         model.get_notice_list()
         model.set_send_notice_data_for_details()
-
-
 
         return model
 

@@ -46,7 +46,7 @@ class NoticeModel(BaseModel):
     def set_base_notices_data(self):
         notice_datas = self._database.get_all_data(target="notice")
     
-        for notice_data in notice_datas:
+        for notice_data in reversed(notice_datas):
             notice = Notice()
             notice.make_with_dict(notice_data)
             self._notices.append(notice)
