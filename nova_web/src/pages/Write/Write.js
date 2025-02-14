@@ -148,7 +148,7 @@ const Write = ({ brightmode }) => {
     setImagePreview((prevUrls) => [...prevUrls, ...previewUrls]);
     validFiles.forEach((file) => URL.revokeObjectURL(file));
   };
-
+  const [category, setCategory] = useState("");
   const handleSubmit = (event) => {
     event.preventDefault(); // 기본 동작을 막음 (중요)
 
@@ -162,6 +162,7 @@ const Write = ({ brightmode }) => {
         hashtag: tagList,
         link: linkList,
         bid: biasId,
+        category: category,
         image_names: "",
       },
     };
@@ -324,7 +325,7 @@ const Write = ({ brightmode }) => {
 
       <section className={style["Select_container"]}>
         <div className={style["section_title"]}>카테고리 선택</div>
-        <DropDownSection options={categoryData} />
+        <DropDownSection options={categoryData} setCategory={setCategory} />
       </section>
 
       <div className={style["hashtag_container"]}>
@@ -473,19 +474,21 @@ const Write = ({ brightmode }) => {
 
 export default Write;
 
-function DropDownSection({ options, setBiasId }) {
+function DropDownSection({ options, setBiasId, setCategory }) {
   const [showTopic, setShowTopic] = useState(false);
   const [currentTopic, setCurrentTopic] = useState("선택 없음");
   function onClickTopic() {
     setShowTopic(!showTopic);
   }
 
-  function onClickSelectTopic(e, bid) {
+  function onClickSelectTopic(e, bid, category) {
     // console.log(e.target.innerText);
     setCurrentTopic(e.target.innerText);
     setShowTopic(!showTopic);
     if (setBiasId) {
       setBiasId(bid);
+    } else if (setCategory) {
+      setCategory(category);
     }
   }
   return (
@@ -500,9 +503,9 @@ function DropDownSection({ options, setBiasId }) {
             return (
               <li
                 key={option.bid || option.key}
-                value={option.bname || option.category}
+                value={option.bid || option.category}
                 onClick={(e) => {
-                  onClickSelectTopic(e, option.bname);
+                  onClickSelectTopic(e, option.bid, option.category);
                 }}
               >
                 {option.bname || option.category}
