@@ -18,8 +18,8 @@ class AIManger:
         #self.__recommander = AIRecommander(database=database)
     
     # 새로운 게시물이 들어오면 처리하는 부분
-    def treat_new_feed(self, feed:Feed):
-        feed = self.__feed_analyzer.pipeline_when_feed_created(feed=feed)
+    def treat_new_feed(self, feed:Feed, data_payload_body=None):
+        feed = self.__feed_analyzer.pipeline_when_feed_created(feed=feed, data_payload_body=data_payload_body)
         return feed
         
     # 새로운 comment가 들어오면 처리하는 부분
