@@ -16,7 +16,7 @@ const categoryData = [
   { key: 2, category: "유머게시판" },
 ];
 
-const WriteMoment = () => {
+const WriteMoment = ({ onClickMoment }) => {
   let { biasList, loading, fetchBiasList } = useBiasStore();
   const navigate = useNavigate();
   let [biasId, setBiasId] = useState();
@@ -213,17 +213,17 @@ const WriteMoment = () => {
     setLinkUrl("");
   }
   return (
-    <div className={style["nav_moment"]}>
-      모멘트 작성
+    <div className={style2["nav_moment"]}>
+      <h4>모멘트 작성</h4>
       <form className={style2["nav_form"]}>
-        <div className={style["input-container"]}>
-          <div className={style["input-wrapper"]}>
-            <input placeholder="해시태그 입력" type="text" value={`${inputTag}`} onChange={onChangeTag} onKeyDown={onKeyDown} className={style["input-hashtag"]} />
-            <span className={style["count-text"]}>{inputTagCount}/12</span>
+        <div className={style2["input-container"]}>
+          <div className={style2["input-wrapper"]}>
+            <input placeholder="해시태그 입력" type="text" value={`${inputTag}`} onChange={onChangeTag} onKeyDown={onKeyDown} className={style2["input-hashtag"]} />
+            <span className={style2["count-text"]}>{inputTagCount}/12</span>
           </div>
-          <div className={style["button-wrapper"]}>
+          <div className={style2["button-wrapper"]}>
             <button
-              className={style["check-button"]}
+              className={style2["check-button"]}
               onClick={(e) => {
                 onClickCheck(e);
               }}
@@ -232,98 +232,94 @@ const WriteMoment = () => {
             </button>
           </div>
         </div>
-        <div className={style["tag-container"]}>
-          <div className={style["tag-icon-box"]}>
+        <div className={style2["tag-container"]}>
+          <div className={style2["tag-icon-box"]}>
             <img src={tag} alt="tag" />
           </div>
           {tagList.length !== 0 &&
             tagList.map((tag, i) => (
-              <div className={style["tag-box"]} key={i}>
+              <div className={style2["tag-box"]} key={i}>
                 #{tag}
-                <button onClick={() => onDeleteTag(i)} className={style["delete-tag"]}>
+                <button onClick={() => onDeleteTag(i)} className={style2["delete-tag"]}>
                   &times; {/* 삭제 아이콘 */}
                 </button>
               </div>
             ))}
         </div>
 
-        <div className={`${style["content_container"]} ${style2["content-container"]}`}>
-          <div className={`${style["content-title"]}`}>본문</div>
+        <div className={` ${style2["content-container"]}`}>
+          <div className={`${style2["content-title"]}`}>경험을 모두와 함께 이야기 해봐요!</div>
 
-          <textarea className={style["write_body"]} name="body" placeholder="내용을 입력해주세요" value={bodyText} onChange={onChangeBody} />
+          <textarea className={style2["write_body"]} name="body" placeholder="내용을 입력해주세요" value={bodyText} onChange={onChangeBody} />
         </div>
 
-        <section className={`${style["Select_container"]} ${style2["select-container"]}`}>
-          <div className={style["section_title"]}>주제 선택</div>
+        <section className={` ${style2["select-container"]}`}>
+          <div className={style2["section_title"]}>주제</div>
 
           <section>
             <DropDownSection options={biasList} setBiasId={setBiasId} />
           </section>
         </section>
 
-        <section className={`${style["Select_container"]} ${style2["select-container"]}`}>
-          <div className={style["section_title"]}>카테고리 선택</div>
+        <section className={` ${style2["select-container"]}`}>
+          <div className={style2["section_title"]}>카테고리</div>
           <section>
             <DropDownSection options={categoryData} />
           </section>
         </section>
 
-        <div className={style["content_button"]}>
-          {type !== "long" && (
+        <span className={style2["moment_footer"]}>
+          <div className={style2["content_button"]}>
+            {type !== "long" && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  onClickModal();
+                }}
+              >
+                <img src={img_icon} alt="img" />
+                이미지
+              </button>
+            )}
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
-                onClickModal();
+                onClickVoteModal();
               }}
             >
-              <img src={img_icon} alt="img" />
-              이미지
+              <img src={vote_icon} alt="img" />
+              투표
             </button>
-          )}
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              onClickVoteModal();
-            }}
-          >
-            <img src={vote_icon} alt="img" />
-            투표
-          </button>
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              onClickLinkModal();
-            }}
-          >
-            <img src={link_icon} alt="img" />
-            링크
-          </button>
-        </div>
-        {showModal && <Modal onClickModal={onClickModal} handleFileChange={handleFileChange} imagePreview={imagePreview} currentFileName={currentFileName} imageFiles={imageFiles} />}
-        {showVoteModal && <VoteModal onClickModal={onClickVoteModal} createOptions={createOptions} onClickAdd={onClickAdd} onClickDelete={onDeleteOption} handleChoiceChange={handleChoiceChange} choice={choice} setChoice={setChoice} />}
-        {showLinkModal && <LinkModal onClickModal={onClickLinkModal} link={urlLink} setLink={setUrlLink} numLink={numLink} linkTitle={linkTitle} linkUrl={linkUrl} setLinkTitle={setLinkTitle} setLinkUrl={setLinkUrl} onClickAdd={onClickAddLink} handleLinkChange={handleLinkChange} linkList={linkList} />}
-        <p
-          onClick={() => {
-            navigate(-1);
-          }}
-        >
-          취소
-        </p>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                onClickLinkModal();
+              }}
+            >
+              <img src={link_icon} alt="img" />
+              링크
+            </button>
+          </div>
+          {showModal && <Modal onClickModal={onClickModal} handleFileChange={handleFileChange} imagePreview={imagePreview} currentFileName={currentFileName} imageFiles={imageFiles} />}
+          {showVoteModal && <VoteModal onClickModal={onClickVoteModal} createOptions={createOptions} onClickAdd={onClickAdd} onClickDelete={onDeleteOption} handleChoiceChange={handleChoiceChange} choice={choice} setChoice={setChoice} />}
+          {showLinkModal && <LinkModal onClickModal={onClickLinkModal} link={urlLink} setLink={setUrlLink} numLink={numLink} linkTitle={linkTitle} linkUrl={linkUrl} setLinkTitle={setLinkTitle} setLinkUrl={setLinkUrl} onClickAdd={onClickAddLink} handleLinkChange={handleLinkChange} linkList={linkList} />}
+          <p onClick={onClickMoment}>취소</p>
 
-        <p
-          type="submit"
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            handleSubmit(e);
-            onClickUpload();
-          }}
-        >
-          게시
-        </p>
+          <p
+            type="submit"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              handleSubmit(e);
+              onClickUpload();
+            }}
+          >
+            게시하기
+          </p>
+        </span>
       </form>
     </div>
   );
