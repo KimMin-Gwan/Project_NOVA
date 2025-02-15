@@ -81,13 +81,6 @@ class FeedAnalyzer:
         
         return comment
 
-    def pipeline_when_analyze_tag(self, feeds_body):
-        tags = self._tag_finder(bodys=feeds_body, tag_bag=self.__word_bag)
-
-        body_content = ""
-
-        result =
-
     # 게시글 분석
     # 전성훈이가 들고오면 여기다가 집어넣으면됨
     # agent 만들고
@@ -116,14 +109,16 @@ class FeedAnalyzer:
         
         # 문장 새로 만들기
         result = agent.convert_feed_data(words=words, context=body_content)
-        
+
         
         return result
 
-    def _write_feed_body(self, tags:list) -> str:
+    def _write_feed_body(self, batch_bodies:list) -> str:
         agent = WriterAgent(model_setting=self.__model_setting)
 
-        result = agent.write_feed_body(tags=tags)
+        result = agent.write_feed_body(batched_bodys=batch_bodies)
+
+        return result
         
     # 단어 찾기
     def _word_finder(self, body:str, word_bag:AIWordBag) -> Feed:
