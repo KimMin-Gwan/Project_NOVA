@@ -51,6 +51,31 @@ const WriteMoment = ({ onClickMoment }) => {
     }
     e.preventDefault();
   }
+  let [isUserState, setIsUserState] = useState(false);
+  function handleValidCheck() {
+    fetch("https://nova-platform.kr/home/is_valid", {
+      credentials: "include",
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          setIsUserState(true);
+        } else {
+          setIsUserState(false);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        setIsUserState(false);
+      });
+  }
+
+  useEffect(() => {
+    handleValidCheck();
+  }, []);
 
   function onChangeTag(e) {
     const inputText = e.target.value;
@@ -97,6 +122,7 @@ const WriteMoment = ({ onClickMoment }) => {
     uid: "1234-abcd-5678",
     endpoint: "/user_system/",
   };
+  const [category, setCategory] = useState("");
 
   const handleSubmit = (event) => {
     event.preventDefault(); // 기본 동작을 막음 (중요)
@@ -111,6 +137,7 @@ const WriteMoment = ({ onClickMoment }) => {
         hashtag: tagList,
         link: linkList,
         bid: biasId,
+        category: category,
         image_names: "",
       },
     };
@@ -141,7 +168,6 @@ const WriteMoment = ({ onClickMoment }) => {
       });
   };
 
-  let [isUserState, setIsUserState] = useState(false);
   function onClickUpload() {
     if (!isUserState) {
       alert("로그인이 필요합니다.");
@@ -218,7 +244,14 @@ const WriteMoment = ({ onClickMoment }) => {
       <form className={style2["nav_form"]}>
         <div className={style2["input-container"]}>
           <div className={style2["input-wrapper"]}>
-            <input placeholder="해시태그 입력" type="text" value={`${inputTag}`} onChange={onChangeTag} onKeyDown={onKeyDown} className={style2["input-hashtag"]} />
+            <input
+              placeholder="해시태그 입력"
+              type="text"
+              value={`${inputTag}`}
+              onChange={onChangeTag}
+              onKeyDown={onKeyDown}
+              className={style2["input-hashtag"]}
+            />
             <span className={style2["count-text"]}>{inputTagCount}/12</span>
           </div>
           <div className={style2["button-wrapper"]}>
@@ -250,7 +283,13 @@ const WriteMoment = ({ onClickMoment }) => {
         <div className={` ${style2["content-container"]}`}>
           <div className={`${style2["content-title"]}`}>경험을 모두와 함께 이야기 해봐요!</div>
 
-          <textarea className={style2["write_body"]} name="body" placeholder="내용을 입력해주세요" value={bodyText} onChange={onChangeBody} />
+          <textarea
+            className={style2["write_body"]}
+            name="body"
+            placeholder="내용을 입력해주세요"
+            value={bodyText}
+            onChange={onChangeBody}
+          />
         </div>
 
         <section className={` ${style2["select-container"]}`}>
@@ -264,7 +303,7 @@ const WriteMoment = ({ onClickMoment }) => {
         <section className={` ${style2["select-container"]}`}>
           <div className={style2["section_title"]}>카테고리</div>
           <section>
-            <DropDownSection options={categoryData} />
+            <DropDownSection options={categoryData} setCategory={setCategory} />
           </section>
         </section>
 
@@ -303,9 +342,41 @@ const WriteMoment = ({ onClickMoment }) => {
               링크
             </button>
           </div>
-          {showModal && <Modal onClickModal={onClickModal} handleFileChange={handleFileChange} imagePreview={imagePreview} currentFileName={currentFileName} imageFiles={imageFiles} />}
-          {showVoteModal && <VoteModal onClickModal={onClickVoteModal} createOptions={createOptions} onClickAdd={onClickAdd} onClickDelete={onDeleteOption} handleChoiceChange={handleChoiceChange} choice={choice} setChoice={setChoice} />}
-          {showLinkModal && <LinkModal onClickModal={onClickLinkModal} link={urlLink} setLink={setUrlLink} numLink={numLink} linkTitle={linkTitle} linkUrl={linkUrl} setLinkTitle={setLinkTitle} setLinkUrl={setLinkUrl} onClickAdd={onClickAddLink} handleLinkChange={handleLinkChange} linkList={linkList} />}
+          {showModal && (
+            <Modal
+              onClickModal={onClickModal}
+              handleFileChange={handleFileChange}
+              imagePreview={imagePreview}
+              currentFileName={currentFileName}
+              imageFiles={imageFiles}
+            />
+          )}
+          {showVoteModal && (
+            <VoteModal
+              onClickModal={onClickVoteModal}
+              createOptions={createOptions}
+              onClickAdd={onClickAdd}
+              onClickDelete={onDeleteOption}
+              handleChoiceChange={handleChoiceChange}
+              choice={choice}
+              setChoice={setChoice}
+            />
+          )}
+          {showLinkModal && (
+            <LinkModal
+              onClickModal={onClickLinkModal}
+              link={urlLink}
+              setLink={setUrlLink}
+              numLink={numLink}
+              linkTitle={linkTitle}
+              linkUrl={linkUrl}
+              setLinkTitle={setLinkTitle}
+              setLinkUrl={setLinkUrl}
+              onClickAdd={onClickAddLink}
+              handleLinkChange={handleLinkChange}
+              linkList={linkList}
+            />
+          )}
           <p onClick={onClickMoment}>취소</p>
 
           <p
@@ -327,19 +398,21 @@ const WriteMoment = ({ onClickMoment }) => {
 
 export default WriteMoment;
 
-function DropDownSection({ options, setBiasId }) {
+function DropDownSection({ options, setBiasId, setCategory }) {
   const [showTopic, setShowTopic] = useState(false);
   const [currentTopic, setCurrentTopic] = useState("선택 없음");
   function onClickTopic() {
     setShowTopic(!showTopic);
   }
 
-  function onClickSelectTopic(e, bid) {
+  function onClickSelectTopic(e, bid, category) {
     // console.log(e.target.innerText);
     setCurrentTopic(e.target.innerText);
     setShowTopic(!showTopic);
     if (setBiasId) {
       setBiasId(bid);
+    } else if (setCategory) {
+      setCategory(category);
     }
   }
   return (
@@ -356,7 +429,7 @@ function DropDownSection({ options, setBiasId }) {
                 key={option.bid || option.key}
                 value={option.bname || option.category}
                 onClick={(e) => {
-                  onClickSelectTopic(e, option.bname);
+                  onClickSelectTopic(e, option.bid, option.category);
                 }}
               >
                 {option.bname || option.category}
