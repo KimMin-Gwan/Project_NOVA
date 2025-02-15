@@ -237,7 +237,11 @@ function App() {
                       navigate("/");
                     }}
                   >
-                    <img src={logo2} alt="logo" className={`logo-st ${getModeClass(brightMode)}`}></img>
+                    <img
+                      src={logo2}
+                      alt="logo"
+                      className={`logo-st ${getModeClass(brightMode)}`}
+                    ></img>
                   </div>
                 </header>
                 <SearchBox />
@@ -255,7 +259,12 @@ function App() {
                   feedData={feedData}
                   brightMode={brightMode}
                   type={"bias"}
-                  children={<BiasBoxes setBiasId={setBiasId} fetchBiasCategoryData={fetchBiasCategoryData} />}
+                  children={
+                    <BiasBoxes
+                      setBiasId={setBiasId}
+                      fetchBiasCategoryData={fetchBiasCategoryData}
+                    />
+                  }
                   endPoint={`/feed_list?type=bias`}
                   customClassName="custom-height"
                 />
@@ -307,7 +316,14 @@ function App() {
                   endPoint={`/feed_list?type=weekly_best`}
                 />
 
-                <FeedThumbnail title={"모든 게시글"} img_src={all_post} feedData={allFeed} brightMode={brightMode} allPost={<AllPost allFeed={allFeed} />} endPoint={"/feed_list?type=all"} />
+                <FeedThumbnail
+                  title={"모든 게시글"}
+                  img_src={all_post}
+                  feedData={allFeed}
+                  brightMode={brightMode}
+                  allPost={<AllPost allFeed={allFeed} />}
+                  endPoint={"/feed_list?type=all"}
+                />
               </section>
               <NavBar brightMode={brightMode}></NavBar>
             </div>
