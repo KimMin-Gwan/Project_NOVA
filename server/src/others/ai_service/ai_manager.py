@@ -1,6 +1,6 @@
 from others.data_domain import Feed, Comment
 from others.ai_service.feed_analyzer import FeedAnalyzer
-from others.ai_service.ai_recommand import AIRecommander
+from others.ai_service.ai_recommand import AIRecommender
 from model.local_database_model import Local_Database
 
 import time
