@@ -28,8 +28,8 @@ class AIManger:
         return comment
 
     # AI가 게시물을 작성합니다.
-    def try_make_ai_feed_body(self, analyzed_bias:AnalyzedBias ):
-        pass
+    #def try_make_ai_feed_body(self, analyzed_bias:AnalyzedBias ):
+        #pass
         
     async def apprehend_mood_n_trend(self):
         try:
