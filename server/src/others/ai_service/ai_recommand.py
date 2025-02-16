@@ -2,7 +2,6 @@ from model.local_database_model import Local_Database
 from others.data_domain import Feed
 from others.feed_manager import FeedManager
 from others.ai_service.feed_analyzer import FeedAnalyzer
-from others.ai_service.ai_manager import AIManager
 
 
 #
@@ -15,10 +14,9 @@ class AnalyzedBias:
 
 class AIRecommender:
     def __init__(self, database:Local_Database, feed_manager:FeedManager= None,
-                 ai_manager:AIManager=None, feed_analyzer:FeedAnalyzer= None):
+                 ai_manager=None, feed_analyzer:FeedAnalyzer= None):
         self._database = database
         self._feed_manager = feed_manager
-        self._ai_manager = ai_manager
         self.__feed_analyzer = feed_analyzer
         self._analyzed_biases = []
 
@@ -81,7 +79,8 @@ class AIRecommender:
 
         # AI를 이용해서 Feed를 작성합니다.
         # FeedManager에 AI가 스스로 작성하는 기능이 없네요
-        ai_feed_body = self._ai_manager.try_make_new_ai_feed_body()
+        #ai_feed_body = self._ai_manager.try_make_new_ai_feed_body()
+        
         # AI가 짠 Feed
         ai_feed = self._feed_manager.create_ai_feed(body=ai_feed_body)
 
