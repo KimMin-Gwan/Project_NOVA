@@ -989,7 +989,7 @@ class EditFeedRequest(RequestHeader):
         body:dict = request['body']
         self.fid = body['fid']
         self.body = body['body']
-        self.fclass = body['fclass']
+        self.fclass = body.get("fclass", "short")
         self.choice= body['choice']
         self.hashtag = body['hashtag']
         self.link:list = body['link']
