@@ -204,6 +204,7 @@ export function ContentFeed({
               //   e.stopPropagation();
               // }}
             >
+              <img src={feed.image[0]} alt="image" />
               {feed.num_image >= 2 &&
                 feed.image.map((img, i) => {
                   return <img key={i} src={img} alt="image" />;
