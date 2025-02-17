@@ -164,11 +164,11 @@ class Core_Service_View(Master_View):
 
         # /home/search_feed_with_hashtag?hashtag=뭐
         @self.__app.get('/home/search_feed_with_hashtag')
-        def get_hot_hashtag_feed(request:Request, hashtag:Optional[str]):
+        def get_hot_hashtag_feed(request:Request, hashtag:Optional[str], board_type:Optional[str]):
 
             request_manager = RequestManager()
 
-            data_payload = HashtagFeedRequest(hashtag=hashtag)
+            data_payload = HashtagFeedRequest(hashtag=hashtag, board_type=board_type)
 
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
@@ -381,9 +381,9 @@ class Core_Service_View(Master_View):
 
         # 해시태그로 검색
         @self.__app.get('/feed_explore/search_feed_with_hashtag')
-        def search_feed_with_hashtag(request:Request, hashtag:Optional[str], key:Optional[int] = -1):
+        def search_feed_with_hashtag(request:Request, hashtag:Optional[str], board_type:Optional[str], key:Optional[int]=-1):
             request_manager = RequestManager()
-            data_payload = HashtagFeedRequest(hashtag=hashtag, key=key)
+            data_payload = HashtagFeedRequest(hashtag=hashtag, key=key, board_type=board_type)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
                 #raise request_manager.credentials_exception
@@ -520,7 +520,7 @@ class Core_Service_View(Master_View):
         def get_feed_with_community(request:Request, raw_request:dict):
             request_manager = RequestManager()
             
-            # pprint(raw_request)
+            pprint(raw_request)
             
             # 데이터 페이로드에도 bid 리스트를 넣어야됨
             data_payload = CommunityRequest(request=raw_request)
@@ -843,9 +843,6 @@ class Core_Service_View(Master_View):
             html = core_controller.get_shared_url(database=self.__database,
                                                              request=request)
             return html
-        
-
-
 
     #def web_chatting_route(self, endpoint:str):
         ##채팅서버
@@ -948,8 +945,9 @@ class KeywordSearchRequest(RequestHeader):
         self.keyword = keyword
 
 class HashtagFeedRequest(RequestHeader):
-    def __init__(self, hashtag, key=-1) -> None:
-        self.hashtag = hashtag 
+    def __init__(self, hashtag, board_type, key=-1) -> None:
+        self.hashtag = hashtag
+        self.board_type = board_type
         self.key = key
 
 class GetFeedBidRequest(RequestHeader):
