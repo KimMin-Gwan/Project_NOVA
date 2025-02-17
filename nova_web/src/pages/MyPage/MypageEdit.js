@@ -88,7 +88,7 @@ function MyPage() {
   }
 
   const handleLogout = (e) => {
-    tryLogin();
+    tryLogin("");
 
     e.preventDefault();
     fetch("https://nova-platform.kr/user_home/try_logout", {

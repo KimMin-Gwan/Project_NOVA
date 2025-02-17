@@ -25,13 +25,13 @@ export default function FeedThumbnail({
 
   return (
     <section className={style["FeedThumbnail"]}>
-      <div className={style["title-section"]}>
+      <div className={style["title-section"]} onClick={() => navigate(endPoint)}>
         <div className={style["title"]}>
           <img src={img_src} />
           {title}
         </div>
         <div className={`${style["more-icon"]}`}>
-          <img src={more_icon} alt="더보기" onClick={() => navigate(endPoint)}></img>
+          <img src={more_icon} alt="더보기"></img>
         </div>
       </div>
       {children}

@@ -83,7 +83,7 @@ hr {
   justify-content: flex-end;
   margin: 5px 20px;
   flex-direction: column;
-
+  cursor: pointer;
   .nova_text {
     margin: 0;
     margin-top: 5px;
@@ -93,7 +93,7 @@ hr {
 }
 .list-bar {
   background-color: #f1f7ff;
-  font-size: 13px;
+  font-size: 15px;
   color: #626262;
   padding: 10px;
   padding-left: 20px;
@@ -129,7 +129,7 @@ hr {
   color: rgb(0, 0, 0);
   font-size: 13px;
   text-align: center; /* 텍스트 가운데 정렬 */
-  font-weight: 100;
+  font-weight: 400;
   /*margin-right: 23px; /* Add spacing between the text and icon */
 }
 .bodyText_login {
@@ -150,8 +150,8 @@ hr {
   padding: 0 10px;
 }
 .vector {
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   text-align: center;
   margin-top: 5px;
   /*margin-right: 10px;*/
@@ -166,7 +166,7 @@ hr {
 
 .inquiry {
   width: 100%; /* 너비를 원하는 비율로 설정 */
-  height: 300px;
+  height: 100px;
   margin: 0 auto;
   background-color: #ffffff; /* 배경색을 원하는 색으로 변경 가능 */
   display: flex;
@@ -201,16 +201,24 @@ hr {
 
 .footer {
   background-color: #eee9fc; /* 원하는 배경색으로 변경 */
-  padding: 10px; /* 여백 추가 (필요 시 조정) */
+  padding: 20px;
+  padding-bottom: 80px;
   line-height: 1.7;
   font-weight: 500;
   color: #333; /* 텍스트 색상 조정 (선택 사항) */
+
+  h4 {
+    padding: 0;
+    margin: 5px 0px 15px 0px;
+    /* margin: 15px 0; */
+  }
 }
 
 .logo_img {
-  width: 110px;
-  height: 90px;
-  margin-left: 5px;
+  width: 70px;
+  height: 40px;
+  transform: translateX(-10px);
+  /* margin-left: 5px; */
 }
 
 .nova_info {

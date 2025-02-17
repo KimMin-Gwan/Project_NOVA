@@ -7,7 +7,7 @@
 /* 주제 박스 */
 .FeedThumbnail .title-section {
   width: 100%;
-
+  cursor: pointer;
   display: flex;
   align-items: center;
   font-size: 16px;

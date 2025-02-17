@@ -410,8 +410,10 @@ export default function FeedList(isUserState) {
             <NoticeBox />
             {biasId && (
               <div className={style["category-info"]}>
-                <h4>모든 게시글</h4>
-                <p onClick={onClickCategory}>카테고리 변경</p>
+                <p>모든 게시글</p>
+                <p className={style["category_change"]} onClick={onClickCategory}>
+                  카테고리 변경
+                </p>
               </div>
             )}
             {isOpendCategory && (

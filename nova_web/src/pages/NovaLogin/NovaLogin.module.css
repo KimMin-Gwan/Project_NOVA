@@ -87,7 +87,7 @@
   width: 80%;
   padding: 15px;
   border-radius: 8px;
-  background-color: #98a0ff;
+  background-color: #107bf4;
   color: #fff;
   font-size: 18px;
   cursor: pointer;
@@ -112,7 +112,7 @@
 
 .input-box input {
   background-color: #f6f6f6;
-  border-radius: 3px;
+  border-radius: 8px;
   margin-top: 10px;
   height: 45px;
   width: 90%;

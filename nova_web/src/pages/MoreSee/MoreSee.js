@@ -1,4 +1,5 @@
 import style from "./MoreSee.module.css";
+import logo from "./../../img/logo2.png";
 import backword from "./../../img/back_icon.png";
 import fav_icon from "./../../img/favset_icon.svg";
 import bug_icon from "./../../img/bug_icon.svg";
@@ -106,24 +107,22 @@ function MoreSee({ onModeChange }) {
         </div>
 
         <div className={style.content}>
-          <div className={style.fullWidthComponent}>
+          <div
+            className={style.fullWidthComponent}
+            onClick={() => {
+              if (isLogin) {
+                navigate("/mypage");
+              } else {
+                navigate("/novalogin");
+              }
+            }}
+          >
             <img
               src={isLogin ? user_icon : login_icon}
               alt="Arrow"
               className={style.vector_login}
             />
-            <p
-              className={style.bodyText_login}
-              onClick={() => {
-                if (isLogin) {
-                  navigate("/mypage");
-                } else {
-                  navigate("/novalogin");
-                }
-              }}
-            >
-              {isLogin ? "마이페이지" : "로그인"}
-            </p>
+            <p className={style.bodyText_login}>{isLogin ? "마이페이지" : "로그인"}</p>
           </div>
 
           <div className={style["list-bar"]}>게시판 목록</div>
@@ -207,7 +206,7 @@ function MoreSee({ onModeChange }) {
 
         <footer className={style.footer}>
           <div>
-            <img src={business_logo} alt="logo_Icon" className={style.logo_img} />
+            <img src={logo} alt="logo_Icon" className={style.logo_img} />
           </div>
           <h4>세상을 바꾸는 청년들</h4>
           <p className={style.nova_info}>경북 경산시 압량읍 압독2로1길 21, 1층 184</p>

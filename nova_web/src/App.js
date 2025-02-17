@@ -114,33 +114,18 @@ function App() {
     fetchBiasCategoryData();
   }, [biasId]);
 
-  // function handleValidCheck() {
-  //   fetch("https://nova-platform.kr/home/is_valid", {
-  //     credentials: "include", // 쿠키를 함께 포함한다는 것
-  //   })
-  //     .then((response) => {
-  //       if (!response.ok) {
-  //         if (response.status === 401) {
-  //           setIsUserState(false);
-  //         } else if (response.status === 200) {
-  //           setIsUserState(true);
-  //         } else {
-  //           throw new Error(`status: ${response.status}`);
-  //         }
-  //       } else {
-  //         // console.log("로그인  확인");
-  //         setIsUserState(true);
-  //       }
-  //       return response.json();
-  //     })
-  //     .then((data) => {
-  //       // console.log(data);
-  //     });
-  // }
+  const [userState, setUserState] = useState(false);
 
-  // useEffect(() => {
-  //   handleValidCheck();
-  // }, []);
+  function handleValidCheck() {
+    fetch("https://nova-platform.kr/home/is_valid", {
+      credentials: "include", // 쿠키를 함께 포함한다는 것
+    }).then((response) => {
+      console.log(response);
+    });
+  }
+  useEffect(() => {
+    handleValidCheck();
+  }, []);
 
   const [currentIndex, setCurrentIndex] = useState(0); // 현재 표시 중인 태그 인덱스
   const intervalTime = 3000; // 2초마다 태그 변경
@@ -270,7 +255,7 @@ function App() {
                 />
               </div>
 
-              <section className="up-container">
+              {/* <section className="up-container">
                 <div>
                   <img src={upIcon} alt="급상승 해시태그" />
                   <h3>급상승 해시태그</h3>
@@ -290,7 +275,7 @@ function App() {
                     );
                   })}
                 </ul>
-              </section>
+              </section> */}
 
               <section className="contents">
                 <FeedThumbnail

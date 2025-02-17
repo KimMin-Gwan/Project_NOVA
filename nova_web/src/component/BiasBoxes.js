@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 export default function BiasBoxes({ setBiasId, fetchBiasCategoryData, writeCommunity }) {
   let bias_url = "https://kr.object.ncloudstorage.com/nova-images/";
 
-  const navigation = useNavigate();
+  const navigate = useNavigate();
 
   const { isLogin, isLogout } = useLoginStore();
   let { biasList, loading, fetchBiasList } = useBiasStore();
@@ -19,7 +19,7 @@ export default function BiasBoxes({ setBiasId, fetchBiasCategoryData, writeCommu
     }
   }, []);
 
-  const [clickedBias, setClickedBias] = useState();
+  const [clickedBias, setClickedBias] = useState(0);
 
   function onClickBiasId(bid) {
     setBiasId(bid);
@@ -36,6 +36,13 @@ export default function BiasBoxes({ setBiasId, fetchBiasCategoryData, writeCommu
   let [isDrag, setIsDrag] = useState(false);
   let [dragStart, setDragStart] = useState("");
   let [hasDragged, setHasDragged] = useState(false);
+
+  function onClickAddButton() {
+    if (isLogin === "") {
+      navigate("/novalogin");
+    }
+    navigate("/follow_page");
+  }
 
   function onMouseDown(e) {
     e.preventDefault();
@@ -118,7 +125,7 @@ export default function BiasBoxes({ setBiasId, fetchBiasCategoryData, writeCommu
           <button
             className="add-bias-box"
             onClick={() => {
-              navigation("/follow_page");
+              onClickAddButton();
             }}
           >
             <img src={add_bias_icon} alt="add-bias" />
