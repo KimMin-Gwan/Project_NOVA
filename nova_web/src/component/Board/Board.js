@@ -9,7 +9,7 @@ import naver from "../../img/naver.svg";
 import chzzz from "../../img/chzzz.svg";
 import x_img from "../../img/x_color.png";
 
-export default function Board({ boardData, setBoard }) {
+export default function Board({ SetIsOpen, boardData, setBoard }) {
   function handleRequestURL(url) {
     window.open(url, "_blank", "noopener, noreferrer");
   }
@@ -17,7 +17,7 @@ export default function Board({ boardData, setBoard }) {
   return (
     <div className="Board">
       <BoardTitle>게시판 목록</BoardTitle>
-      <BoardContent boardData={boardData} setBoard={setBoard} />
+      <BoardContent SetIsOpen={SetIsOpen} boardData={boardData} setBoard={setBoard} />
 
       <BoardTitle>외부 링크</BoardTitle>
       {/* link box */}

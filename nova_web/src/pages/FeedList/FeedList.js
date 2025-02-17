@@ -300,12 +300,9 @@ export default function FeedList(isUserState) {
   async function handleInteraction(event, fid, action) {
     event.preventDefault();
     // setIsLoading(true);
-    await fetch(
-      `https://nova-platform.kr/feed_explore/interaction_feed?fid=${fid}&action=${action}`,
-      {
-        credentials: "include",
-      }
-    )
+    await fetch(`https://nova-platform.kr/feed_explore/interaction_feed?fid=${fid}&action=${action}`, {
+      credentials: "include",
+    })
       .then((response) => {
         if (!response.ok) {
           if (response.status === 401) {
@@ -416,13 +413,7 @@ export default function FeedList(isUserState) {
                 </p>
               </div>
             )}
-            {isOpendCategory && (
-              <CategoryModal
-                onClickCategory={onClickCategory}
-                biasId={biasId}
-                setBoard={setBoard}
-              />
-            )}
+            {isOpendCategory && <CategoryModal SetIsOpen={setIsOpendCategory} onClickCategory={onClickCategory} biasId={biasId} setBoard={setBoard} />}
           </div>
         )}
         {type === "all" && (
@@ -441,44 +432,19 @@ export default function FeedList(isUserState) {
         )}
         {type === "best" && (
           <div className={style["keyword-section"]}>
-            <KeywordBox
-              type={"today"}
-              title={"인기 급상승"}
-              subTitle={"오늘의 키워드"}
-              onClickTagButton={onClickTag}
-            />
+            <KeywordBox type={"today"} title={"인기 급상승"} subTitle={"오늘의 키워드"} onClickTagButton={onClickTag} />
           </div>
         )}
         {type === "weekly_best" && (
           <div className={style["keyword-section"]}>
-            <KeywordBox
-              type={"weekly"}
-              title={"많은 사랑을 받은"}
-              subTitle={"이번주 키워드"}
-              onClickTagButton={onClickTag}
-            />
+            <KeywordBox type={"weekly"} title={"많은 사랑을 받은"} subTitle={"이번주 키워드"} onClickTagButton={onClickTag} />
           </div>
         )}
-        {keyword && (
-          <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>{keyword}</div>
-        )}
+        {keyword && <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>{keyword}</div>}
         <div className={feedData.length > 0 ? style["scroll-area"] : style["none_feed_scroll"]}>
           {feedData.length > 0 ? (
             feedData.map((feed, i) => {
-              return (
-                <Feed
-                  key={feed.feed.fid}
-                  className={`${style["feed-box"]} ${style[getModeClass(mode)]}`}
-                  feed={feed.feed}
-                  func={true}
-                  feedData={feedData}
-                  interaction={feed.interaction}
-                  feedInteraction={feedInteraction}
-                  setFeedData={setFeedData}
-                  isUserState={isUserState}
-                  handleInteraction={handleInteraction}
-                ></Feed>
-              );
+              return <Feed key={feed.feed.fid} className={`${style["feed-box"]} ${style[getModeClass(mode)]}`} feed={feed.feed} func={true} feedData={feedData} interaction={feed.interaction} feedInteraction={feedInteraction} setFeedData={setFeedData} isUserState={isUserState} handleInteraction={handleInteraction}></Feed>;
             })
           ) : (
             <NoneFeed />
@@ -486,15 +452,7 @@ export default function FeedList(isUserState) {
           {isLoading && <p>Loading...</p>}
           {isFilterClicked && (
             // <div className={style["filter-modal"]}>
-            <FilterModal
-              isFilterClicked={isFilterClicked}
-              onClickFilterButton={onClickFilterButton}
-              setFilterCategory={setFilterCategory}
-              setFilterFclass={setFilterFclass}
-              fetchAllFeed={fetchAllFeed}
-              onClickApplyButton1={onClickApplyButton1}
-              setNextData={setNextData}
-            />
+            <FilterModal isFilterClicked={isFilterClicked} onClickFilterButton={onClickFilterButton} setFilterCategory={setFilterCategory} setFilterFclass={setFilterFclass} fetchAllFeed={fetchAllFeed} onClickApplyButton1={onClickApplyButton1} setNextData={setNextData} />
             // {/* </div> */}
           )}
           <div ref={target} style={{ height: "1px" }}></div>

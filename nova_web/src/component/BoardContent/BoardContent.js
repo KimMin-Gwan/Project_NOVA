@@ -1,7 +1,7 @@
 import "./index.css";
 import chat from "../../img/chatLight.png";
 
-export default function BoardContent({ boardData, setBoard }) {
+export default function BoardContent({ SetIsOpen, boardData, setBoard }) {
   function onClickBoard(i) {
     setBoard(boardData.boards[i]);
   }
@@ -10,7 +10,13 @@ export default function BoardContent({ boardData, setBoard }) {
       {boardData &&
         boardData.boards.map((data, i) => {
           return (
-            <li key={i} onClick={() => onClickBoard(i)}>
+            <li
+              key={i}
+              onClick={() => {
+                SetIsOpen((prev) => !prev);
+                onClickBoard(i);
+              }}
+            >
               <img src={chat} alt="차트" />
               {data}
             </li>
