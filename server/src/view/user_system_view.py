@@ -126,7 +126,7 @@ class User_Service_View(Master_View):
         @self.__app.post('/user_home/try_sign_up')
         async def try_sign_up(raw_request:dict):
             request = SignInRequest(request=raw_request)
-            pprint(raw_request)
+            # pprint(raw_request)
             user_controller=UserController()
             model = await user_controller.try_sign_up(database=self.__database,
                                                    request = request,

@@ -343,8 +343,6 @@ class MyProfileModel(BaseModel):
                 "gender": self._gender
             }
 
-            pprint(body)
-
             response = self._get_response_data(head_parser=head_parser, body=body)
             return response
 
