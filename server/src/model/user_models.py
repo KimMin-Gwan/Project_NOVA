@@ -126,6 +126,13 @@ class SendEmailModel(BaseModel):
         except Exception as e:
             raise CoreControllerLogicError(error_type="set_response | " + str(e))
 
+    def check_email_duplicate(self, email:str):
+        user_data = self._database.get_data_with_key(target="uid", key="email", key_data=email)
+        if user_data is not None:
+            self.set_response()
+        else:
+            self.__detail = "사용 가능한 이메일 입니다."
+
     def get_response_form_data(self, head_parser):
         try:
             body = {

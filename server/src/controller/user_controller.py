@@ -8,8 +8,6 @@ from fastapi import HTTPException, status
 from pprint import pprint
 
 class UserController:
-
-        
     # 로그인 시도
     def try_login(self, database, request):
 
@@ -121,6 +119,15 @@ class UserController:
 
         finally:
             return model
+
+    # 이메일 중복 검사 기능
+    # 유저 데이터베이스에서 이메일을 서치해서 중복된 이메일이 있는지 확인합니다
+    # 만약 이메일이 중복된다면 False를, 중복되지 않는다면 True를 반환합니다.
+    def try_check_email_duplicate(self, database, request):
+        model = SendEmailModel(database=database)
+        # 이메일 체크
+        model.check_email_duplicate(email=request.data_payload.email)
+        return model
 
     # 회원가입 시도
     # 1. 인증번호 맞는지 확인
