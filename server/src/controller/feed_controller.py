@@ -248,6 +248,7 @@ class Feed_Controller:
         model.try_search_feed_with_hashtag(feed_search_engine=feed_search_engine,
                                            feed_manager=feed_manager,
                                            target=request.data_payload.hashtag,
+                                           board_type=request.data_payload.board_type,
                                            last_index=request.data_payload.key,
                                            num_feed=num_feed
                                            )

@@ -352,59 +352,59 @@ class ManagedFeedBiasTable:
 
     # 키, 옵션을 통해 Feed를 찾음
     # 페이징기법을 적용했음. 역순페이징을 사용함.
-    def search_feed_with_key_and_option(self, option:str, key:str="", num_feed=10, index=-1) -> tuple:
-        result_fid = []
-        result_index = -3
+    # def search_feed_with_key_and_option(self, option:str, key:str="", num_feed=10, index=-1) -> tuple:
+    #     result_fid = []
+    #     result_index = -3
+    #
+    #     if index == -1:
+    #         index = self.len_feed_table()
+    #
+    #         # target_index default 값은 0
+    #     search_range = self.get_feeds_target_range(index=index)
+    #     # search_range = self.__feed_table[:index][::-1]
+    #
+    #     if index < 0 or index > self.len_feed_table():
+    #         return result_fid, -3
+    #
+    #     count = 0
+    #     for i, managed_feed in enumerate(search_range):
+    #         #i = len(self.__feed_table) - 1 - i
+    #         # count로 이미 다 살펴 봤다면
+    #         if count == num_feed:
+    #             break
+    #
+    #         # 삭제된 피드는 None으로 표시될것이라서
+    #         if managed_feed.fid == "":
+    #             continue
+    #
+    #         if option == "hashtag":
+    #             # 찾는 해시태그가 아님
+    #             if key not in managed_feed.hashtag:
+    #                 continue
+    #         elif option == "uname":
+    #             if key not in managed_feed.uname:
+    #                 continue
+    #         elif option == "bid":
+    #             if key != managed_feed.bid:
+    #                 continue
+    #
+    #         elif option == "fid":
+    #             if key == managed_feed.fid:
+    #                 result_fid.append(managed_feed)
+    #                 result_index = i
+    #                 break
+    #
+    #
+    #         result_fid.append(managed_feed.fid)
+    #
+    #         # result_index 업데이트
+    #         # 마지막 index 발견
+    #         result_index = index - 1 - i  # 실제 self.__feed_table에서의 인덱스 계산
+    #         count += 1
+    #
+    #     return result_fid, result_index
 
-        if index == -1:
-            index = self.len_feed_table()
-
-            # target_index default 값은 0
-        search_range = self.get_feeds_target_range(index=index)
-        # search_range = self.__feed_table[:index][::-1]
-
-        if index < 0 or index > self.len_feed_table():
-            return result_fid, -3
-
-        count = 0
-        for i, managed_feed in enumerate(search_range):
-            #i = len(self.__feed_table) - 1 - i
-            # count로 이미 다 살펴 봤다면
-            if count == num_feed:
-                break
-
-            # 삭제된 피드는 None으로 표시될것이라서
-            if managed_feed.fid == "":
-                continue
-
-            if option == "hashtag":
-                # 찾는 해시태그가 아님
-                if key not in managed_feed.hashtag:
-                    continue
-            elif option == "uname":
-                if key not in managed_feed.uname:
-                    continue
-            elif option == "bid":
-                if key != managed_feed.bid:
-                    continue
-
-            elif option == "fid":
-                if key == managed_feed.fid:
-                    result_fid.append(managed_feed)
-                    result_index = i
-                    break
-
-
-            result_fid.append(managed_feed.fid)
-
-            # result_index 업데이트
-            # 마지막 index 발견
-            result_index = index - 1 - i  # 실제 self.__feed_table에서의 인덱스 계산
-            count += 1
-
-        return result_fid, result_index
-
-    def search_feeds_with_key_n_option(self, key:str, option):
+    def search_feeds_with_key_n_option(self, key:str, option, board_type):
         # Nan값의 경우, False 처리.
         # 대소문자를 구분하지 않음
         searched_df = self.__feed_df
@@ -424,6 +424,14 @@ class ManagedFeedBiasTable:
         elif option == "fid":
             # fid 서치
             searched_df = self.__feed_df[self.__feed_df["fid"] == key]
+
+        # board_type 필터링
+        # board_type이 ""이거나 All이면 다 고름
+        # 아니라면 board_type 필터링을 진행함
+        if board_type == "" or board_type == "all" or board_type == "전체":
+            pass
+        else:
+            searched_df = searched_df[searched_df["board_type"] == board_type]
 
         return searched_df['fid'].tolist()
     #---------------------------------------------------------------------------------------------
