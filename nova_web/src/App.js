@@ -84,6 +84,8 @@ function App() {
     return item.bid;
   });
   async function fetchBiasCategoryData(bid) {
+    console.log("1111", bids[0]);
+    console.log("1111", biasList[0]);
     let send_data = {
       header: header,
       body: {
@@ -92,6 +94,8 @@ function App() {
         key: -1,
       },
     };
+
+    console.log("2222", send_data.body);
 
     await fetch(`${FETCH_URL}feed_with_community`, {
       method: "POST",

@@ -1,10 +1,9 @@
 import axios from "axios";
+import mainApi from "./apis/mainApi";
 
-function getBiasList() {
-  return axios
-    .get("https://nova-platform.kr/home/my_bias", {
-      withCredentials: true,
-    })
+async function getBiasList() {
+  return await mainApi
+    .get("/home/my_bias")
     .then((res) => {
       console.log("biasListzzzz", res.data);
       return res.data;
