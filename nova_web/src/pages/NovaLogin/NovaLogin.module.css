@@ -108,6 +108,19 @@
   width: 85%;
   /* background-color: blue; */
   margin-bottom: 15px;
+  position: relative;
+
+  .toggle-btn {
+    background-color: transparent;
+    border: 0;
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+
+    & img {
+      width: 25px;
+    }
+  }
 }
 
 .input-box input {

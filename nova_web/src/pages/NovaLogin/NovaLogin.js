@@ -4,10 +4,12 @@ import style from "./NovaLogin.module.css";
 import styleSignUp from "./../SignUp/SignUp.module.css";
 // import back from "../../img/back.png";
 import backword from "./../../img/back_icon.png";
-
+import See from "./../../img/pwSee.png";
+import SeeOff from "./../../img/pwNoneSee.png";
 import { useNavigate } from "react-router-dom";
 import { getModeClass } from "./../../App.js";
 import { useRef } from "react";
+
 import useLoginStore from "../../stores/LoginStore/useLoginStore.js";
 const NOVALogin = ({ brightmode }) => {
   const [email, setEmail] = useState("");
@@ -80,6 +82,9 @@ const NOVALogin = ({ brightmode }) => {
     // 로컬 스토리지에서 가져온 값이 있으면 그것을, 없으면 'bright'로 초기화
     return localStorage.getItem("brightMode") || "bright";
   });
+
+  const [showPassword, setShowPassword] = useState(false);
+
   return (
     <div className={`${style["container"]} ${style[getModeClass(mode)]}`}>
       <div className={style.Topbar}>
@@ -100,14 +105,7 @@ const NOVALogin = ({ brightmode }) => {
           이메일
           <br />
           <label>
-            <input
-              ref={emailRef}
-              type="email"
-              placeholder="이메일 주소"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className={style.input}
-            />
+            <input ref={emailRef} type="email" placeholder="이메일 주소" value={email} onChange={(e) => setEmail(e.target.value)} className={style.input} />
           </label>
           {login === "email" && <div className={style.errorMessage}>{detail}</div>}
         </div>
@@ -119,7 +117,7 @@ const NOVALogin = ({ brightmode }) => {
           <br />
           <label>
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               placeholder="비밀번호"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -128,6 +126,9 @@ const NOVALogin = ({ brightmode }) => {
                 onKeyDown(e);
               }}
             />
+            <button type="button" className={style["toggle-btn"]} onClick={() => setShowPassword((prev) => !prev)}>
+              {showPassword ? <img src={SeeOff} alt="비밀번호 숨김" /> : <img src={See} alt="비밀번호 표시" />}
+            </button>
           </label>
           {login === "password" && <div className={style.errorMessage}>{detail}</div>}
         </div>
