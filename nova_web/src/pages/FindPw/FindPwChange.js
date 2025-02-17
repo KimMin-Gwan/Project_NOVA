@@ -104,6 +104,7 @@ function FindPwChange() {
             name="newPassword"
             className={style.input}
             value={newPassword}
+            placeholder="새로운 비밀번호를 입력해주세요"
             onChange={(e) => {
               setNewPassword(e.target.value);
               validatePassword(e.target.value);
@@ -113,7 +114,7 @@ function FindPwChange() {
         </section>
         <p className={style.input_text}>비밀번호 확인</p>
         <section className={style.section}>
-          <input type="password" name="confirmPassword" className={style.input} value={confirmPassword} onChange={handleCheckPassword} />
+          <input type="password" name="confirmPassword" className={style.input} value={confirmPassword} placeholder="새로운 비밀번호를 입력해주세요" onChange={handleCheckPassword} />
           {errorMessage && <p className={style.error}>{errorMessage}</p>} {/* Show error only if it exists */}
           <button type="submit" className={style.button} onClick={handleChangePW}>
             비밀번호 변경
