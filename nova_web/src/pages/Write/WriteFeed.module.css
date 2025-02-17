@@ -455,6 +455,8 @@
   z-index: 50;
   border: 1px solid gray;
   border-radius: 6px;
+  max-height: 60px;
+  overflow-y: auto;
 
   li {
     padding: 0;
