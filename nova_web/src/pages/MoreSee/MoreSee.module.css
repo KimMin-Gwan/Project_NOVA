@@ -15,10 +15,10 @@ hr {
 .container {
   max-width: 500px;
   /* 너비를 원하는 비율로 설정 */
-  height: 170vh;
+  height: 100%;
   margin: 0 auto;
   /*max-width: 1200px; /* 최대 너비를 설정 */
-  background-color: #eee9fc; /* 배경색을 원하는 색으로 변경 가능 */
+  background-color: #f1f7ff; /* 배경색을 원하는 색으로 변경 가능 */
   /*text-align: center; /* 텍스트 가운데 정렬 */
 }
 .TopBar {
@@ -93,7 +93,7 @@ hr {
 }
 .list-bar {
   background-color: #f1f7ff;
-  font-size: 15px;
+  font-size: 16px;
   color: #626262;
   padding: 10px;
   padding-left: 20px;
