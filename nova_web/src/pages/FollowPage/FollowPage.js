@@ -4,7 +4,7 @@ import { useEffect, useLocation, useMemo, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import style from "./FollowPage.module.css";
 import { getModeClass } from "./../../App.js";
-import BiasBoxes from "../../component/BiasBoxes.js";
+import FollowBoxes from "../../component/FollowBoxes.js";
 import logo2 from "./../../img/logo2.png";
 import search_icon from "./../../img/search_icon.png";
 import Stackframe from "./../../img/Stackframe.png";
@@ -86,10 +86,12 @@ export default function FollowPage() {
           alert("팔로우 완료!");
         }
         setIsModalOpen(false);
+        window.location.reload();
       })
       .catch((err) => {
         console.log("err", err);
       });
+
     // postApi
     //   .post("nova_sub_system/try_select_my_bias", {
     //     send_data,
@@ -98,13 +100,14 @@ export default function FollowPage() {
     //     console.log(res.data);
     //   });
   }
-
   const [searchBias, setSearchBias] = useState("");
   const [resultBias, setResultBias] = useState([]);
+  const [resultLength, setResultLength] = useState(1);
 
   function fetchSearchBias() {
     mainApi.get(`nova_sub_system/try_search_bias?bname=${searchBias}`).then((res) => {
-      console.log(res.data);
+      let biasCount = res.data.body.biases.length;
+      setResultLength(biasCount);
       setResultBias(res.data.body.biases);
     });
   }
@@ -134,16 +137,16 @@ export default function FollowPage() {
           </div>
         </header>
 
-        <h2 className={style["fav-title"]}>최애 팔로우</h2>
+        <h2 className={style["fav-title"]}>주제 팔로우</h2>
         <h3>
-          <b>노바</b>에 등록된 <b>최애</b>를 소개합니다.
+          <b>노바</b>에 등록된 <b>주제</b>를 소개합니다.
         </h3>
 
         <div className={style["following"]}>
           <h4>
-            <b>팔로우</b> 중인 최애
+            <b>팔로우</b> 중인 주제
           </h4>
-          <BiasBoxes setBiasId={setBiasId} />
+          <FollowBoxes setBiasId={setBiasId} />
         </div>
 
         <div className={style["search-fac"]}>
@@ -155,37 +158,40 @@ export default function FollowPage() {
               onChange={(e) => {
                 onChangeSearchBias(e);
               }}
-              placeholder="팔로우 하고 싶은 최애를 검색해보세요"
+              placeholder="팔로우 하고 싶은 주제를 검색해보세요"
             />
             <img src={search_icon} onClick={fetchSearchBias} alt="검색바" />
           </div>
-
-          <div className={style["streamer-box"]}>
-            <span className={style["streamer-list"]}>
-              {resultBias.map((bias, i) => {
-                return (
-                  <button
-                    key={bias.bid}
-                    onClick={() => {
-                      openModal(bias.bid, bias.bname);
-                    }}
-                    className={style["streamer-img"]}
-                  >
-                    <div>
-                      <img src={bias_url + `${bias.bid}.PNG`} />
-                    </div>
-                    <p>{bias.bname}</p>
-                  </button>
-                );
-              })}
-            </span>
-          </div>
+          {resultLength !== 0 ? (
+            <div className={style["streamer-box"]}>
+              <span className={style["streamer-list"]}>
+                {resultBias.map((bias, i) => {
+                  return (
+                    <button
+                      key={bias.bid}
+                      onClick={() => {
+                        openModal(bias.bid, bias.bname);
+                      }}
+                      className={style["streamer-img"]}
+                    >
+                      <div>
+                        <img src={bias_url + `${bias.bid}.PNG`} />
+                      </div>
+                      <p>{bias.bname}</p>
+                    </button>
+                  );
+                })}
+              </span>
+            </div>
+          ) : (
+            <p>검색 결과 없음 {resultLength}</p>
+          )}
 
           <button className={style["fav-apply"]}>
             <img src={Stackframe} alt="" />
             <span>
-              <p>찾는 최애가 없다면 간편하게 신청해요!</p>
-              <b>1분만에 최애 신청하기</b>
+              <p>찾는 주제가 없다면 간편하게 신청해요!</p>
+              <b>1분만에 주제 신청하기</b>
             </span>
           </button>
         </div>

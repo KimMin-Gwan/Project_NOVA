@@ -1253,6 +1253,7 @@ body.dark-mode {
   display: flex;
   gap: 20px;
   padding: 0px 20px;
+  cursor: pointer;
 }
 
 .bias-info {

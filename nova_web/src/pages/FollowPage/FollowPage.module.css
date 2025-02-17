@@ -77,6 +77,11 @@
           color: #6aacef;
           font-weight: 600;
         }
+
+        &:focus {
+          border: none;
+          outline: none;
+        }
       }
       img {
         width: 18px;
