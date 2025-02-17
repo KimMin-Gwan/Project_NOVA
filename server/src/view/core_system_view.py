@@ -843,9 +843,6 @@ class Core_Service_View(Master_View):
             html = core_controller.get_shared_url(database=self.__database,
                                                              request=request)
             return html
-        
-
-
 
     #def web_chatting_route(self, endpoint:str):
         ##채팅서버

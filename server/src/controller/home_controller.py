@@ -118,7 +118,7 @@ class Home_Controller:
         if request.jwt_payload != "":
             model.set_user_with_email(request=request.jwt_payload)
 
-        model.set_today_best_hashtag(feed_search_engine=feed_search_engine, num_hashtags=10)
+        model.set_today_best_hashtag(feed_search_engine=feed_search_engine, num_hashtags=5)
 
         return model
 
@@ -127,26 +127,17 @@ class Home_Controller:
         if request.jwt_payload != "":
             model.set_user_with_email(request=request.jwt_payload)
             
-        model.set_weekly_best_hashtag(feed_search_engine=feed_search_engine, num_hashtags=10)
+        model.set_weekly_best_hashtag(feed_search_engine=feed_search_engine, num_hashtags=5)
 
         return model
 
     def get_monthly_best_hashtag(self, database:Local_Database, request, feed_search_engine) -> HashTagModel:
         model = HashTagModel(database=database)
-        try:
-            if request.jwt_payload != "":
-                model.set_user_with_email(request=request.jwt_payload)
-            model.set_monthly_best_hashtag(feed_search_engine=feed_search_engine, num_hashtags=10)
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
+        model.set_monthly_best_hashtag(feed_search_engine=feed_search_engine, num_hashtags=5)
 
-        except CustomError as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code)
-        except Exception as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code)
-
-        finally:
-            return model
+        return model
 
     # 추천 검색어 시스템. 현재는 주간 핫 해시태그들만 보여줌
     def get_recommend_keyword(self, database:Local_Database, request, feed_search_engine) -> RecommendKeywordModel:
