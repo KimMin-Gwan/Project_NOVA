@@ -26,8 +26,8 @@ export default function SignUp() {
     "request-type": "default",
     "client-version": "v1.0.1",
     "client-ip": "127.0.0.1",
-    "uid": "1234-abcd-5678",
-    "endpoint": "/user_system/",
+    uid: "1234-abcd-5678",
+    endpoint: "/user_system/",
   };
 
   let send_data = {
@@ -58,11 +58,12 @@ export default function SignUp() {
     const password = e.target.value;
     setPwd(password);
 
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,}$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*\d)(?=.*[@$#!%*?&])[a-z\d@$#!%*?&]{10,}$/;
+
     const isValid = passwordRegex.test(password);
 
     setPasswordError(!isValid);
-    setPasswordMessage(isValid ? "" : "대소문자, 숫자, 특수문자를 포함해 10자리 이상이어야 합니다.");
+    setPasswordMessage(isValid ? "" : "영문, 숫자, 특수문자를 포함해 10자리 이상이어야 합니다.");
   }
 
   function handleCheckPassWord(e) {
@@ -165,8 +166,6 @@ export default function SignUp() {
       setAgree2(checked);
       setAllAgree(checked && agree1);
     }
-
-    
   };
   return (
     <div className={style.container}>
@@ -194,7 +193,7 @@ export default function SignUp() {
                   className={style.authen}
                   disabled={!inputEmail}
                   style={{
-                    background: inputEmail ? "#98A0FF" : "",
+                    background: inputEmail ? "#107BF4" : "",
                     color: inputEmail ? "white" : "",
                   }}
                   onClick={() => {
@@ -230,7 +229,7 @@ export default function SignUp() {
               비밀번호
               <br />
               <label className={style.inputContainer}>
-                <input type={showPassword ? "text" : "password"} name="password" required onChange={(e) => handlePassWord(e)} placeholder="Aabc123456!@" className={passwordError && passwordMessage ? style.error : ""} />
+                <input type={showPassword ? "text" : "password"} name="password" required onChange={(e) => handlePassWord(e)} placeholder="abc123456!@" className={passwordError && passwordMessage ? style.error : ""} />
                 <button type="button" onClick={() => setShowPassword(!showPassword)} className={style.toggleButton}>
                   {showPassword ? "숨기기" : "보기"}
                 </button>
@@ -244,7 +243,7 @@ export default function SignUp() {
               비밀번호 확인
               <br />
               <label className={style.inputContainer}>
-                <input type={showCheckPassword ? "text" : "password"} name="check_pwd" required onChange={(e) => handleCheckPassWord(e)} placeholder="Aabc123456!@" onFocus={() => setIsCheckPwdFocused(true)} className={passwordError && pwd && isCheckPwdFocused ? style.error : ""} />
+                <input type={showCheckPassword ? "text" : "password"} name="check_pwd" required onChange={(e) => handleCheckPassWord(e)} placeholder="abc123456!@" onFocus={() => setIsCheckPwdFocused(true)} className={passwordError && pwd && isCheckPwdFocused ? style.error : ""} />
                 <button type="button" onClick={() => setShowCheckPassword(!showCheckPassword)} className={style.toggleButton}>
                   {showCheckPassword ? "숨기기" : "보기"}
                 </button>
@@ -258,7 +257,7 @@ export default function SignUp() {
               나이
               <br />
               <label>
-                <input type="text" name="age" value={age} required onChange={handleAge} onKeyDown={handleKeyDown} placeholder="20" />
+                <input type="number" name="age" value={age} min="0" max="100" required onChange={handleAge} onKeyDown={handleKeyDown} placeholder="20" />
               </label>
             </div>
           </div>
