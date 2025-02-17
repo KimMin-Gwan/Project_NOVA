@@ -114,19 +114,6 @@ function App() {
     fetchBiasCategoryData();
   }, [biasId]);
 
-  const [userState, setUserState] = useState(false);
-
-  function handleValidCheck() {
-    fetch("https://nova-platform.kr/home/is_valid", {
-      credentials: "include", // 쿠키를 함께 포함한다는 것
-    }).then((response) => {
-      console.log(response);
-    });
-  }
-  useEffect(() => {
-    handleValidCheck();
-  }, []);
-
   const [currentIndex, setCurrentIndex] = useState(0); // 현재 표시 중인 태그 인덱스
   const intervalTime = 3000; // 2초마다 태그 변경
   // let [biasId, setBiasId] = useState();

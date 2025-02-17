@@ -38,10 +38,11 @@ export default function BiasBoxes({ setBiasId, fetchBiasCategoryData, writeCommu
   let [hasDragged, setHasDragged] = useState(false);
 
   function onClickAddButton() {
-    if (isLogin === "") {
+    if (isLogin === "done") {
+      navigate("/follow_page");
+    } else {
       navigate("/novalogin");
     }
-    navigate("/follow_page");
   }
 
   function onMouseDown(e) {
