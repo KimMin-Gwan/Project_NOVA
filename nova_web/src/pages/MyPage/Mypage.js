@@ -118,14 +118,17 @@ function MyPage() {
   return (
     <div className={style.container}>
       <div className={style.top_area}>
-        <p
+        <button
           className={style.backword}
           onClick={() => {
             navigate(-1);
           }}
         >
           뒤로
-        </p>
+        </button>
+        <button onClick={(e) => handleMovePage(e, "/mypage_edit")} style={{ cursor: "pointer" }}>
+          프로필 수정
+        </button>
       </div>
       <div className={style["user-container"]}>
         <div className={style["user-img"]}>
@@ -134,7 +137,6 @@ function MyPage() {
         <div className={style["feed-wrapper"]}>
           <section className={style["user-name"]}>
             <h3>{myData.uname}</h3>
-            <img src={mypage_more_icon} alt="" onClick={(e) => handleMovePage(e, "/mypage_edit")} style={{ cursor: "pointer" }} />
           </section>
           <section className={style["user-info"]}>
             <ul>

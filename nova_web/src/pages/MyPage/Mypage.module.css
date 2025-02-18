@@ -21,14 +21,21 @@
   width: 35px;
   height: 35px;
 }
+
 .top_area {
-  width: 100%; /* 너비를 원하는 비율로 설정 */
-  height: 30px;
+  display: flex;
+  justify-content: space-between;
   padding: 10px 15px;
 
-  p {
+  & button {
     color: #797979;
-    margin: 10px;
+    background-color: transparent;
+    border: none;
+    font-size: 16px;
+
+    &:first-child {
+      width: 10%;
+    }
   }
 }
 
@@ -81,13 +88,6 @@
       font-size: 25px;
       font-weight: 400;
       margin-bottom: 0;
-    }
-
-    & img {
-      position: absolute;
-      top: 15px;
-      right: 0px;
-      margin-right: 20px;
     }
   }
 
