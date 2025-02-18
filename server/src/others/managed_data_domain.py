@@ -439,7 +439,7 @@ class ManagedFeedBiasTable:
             # Fclass == long 인지 fclass == short인지 분류
             searched_df = searched_df[searched_df["fclass"] == fclass]
 
-        pprint(searched_df)
+        # pprint(searched_df)
 
         return searched_df['fid'].tolist()
     #---------------------------------------------------------------------------------------------
