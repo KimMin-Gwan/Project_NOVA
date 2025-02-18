@@ -164,11 +164,11 @@ class Core_Service_View(Master_View):
 
         # /home/search_feed_with_hashtag?hashtag=뭐
         @self.__app.get('/home/search_feed_with_hashtag')
-        def get_hot_hashtag_feed(request:Request, hashtag:Optional[str], board_type:Optional[str]):
+        def get_hot_hashtag_feed(request:Request, hashtag:Optional[str]):
 
             request_manager = RequestManager()
 
-            data_payload = HashtagFeedRequest(hashtag=hashtag, board_type=board_type)
+            data_payload = HashtagFeedRequest(hashtag=hashtag)
 
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
@@ -381,9 +381,9 @@ class Core_Service_View(Master_View):
 
         # 해시태그로 검색
         @self.__app.get('/feed_explore/search_feed_with_hashtag')
-        def search_feed_with_hashtag(request:Request, hashtag:Optional[str], board_type:Optional[str], key:Optional[int]=-1):
+        def search_feed_with_hashtag(request:Request, hashtag:Optional[str], key:Optional[int]=-1):
             request_manager = RequestManager()
-            data_payload = HashtagFeedRequest(hashtag=hashtag, key=key, board_type=board_type)
+            data_payload = HashtagFeedRequest(hashtag=hashtag, key=key)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
                 #raise request_manager.credentials_exception
@@ -436,8 +436,6 @@ class Core_Service_View(Master_View):
                                                              num_feed=6)
 
             body_data = model.get_response_form_data(self._head_parser)
-
-            pprint(body_data)
             response = request_manager.make_json_response(body_data=body_data)
 
             return response
@@ -948,9 +946,8 @@ class KeywordSearchRequest(RequestHeader):
         self.fclass = fclass
 
 class HashtagFeedRequest(RequestHeader):
-    def __init__(self, hashtag, board_type, key=-1) -> None:
+    def __init__(self, hashtag, key=-1) -> None:
         self.hashtag = hashtag
-        self.board_type = board_type
         self.key = key
 
 class GetFeedBidRequest(RequestHeader):

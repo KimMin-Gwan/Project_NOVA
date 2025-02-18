@@ -1062,24 +1062,24 @@ class SearchManager:
 
 #--------------------------------------------------------------------------------------------------------------------
 
-    def search_feeds_with_hashtag_new(self, hashtag:str, board_type=""):
-        fid_list = self.__managed_feed_bias_table.search_feeds_with_key_n_option(key=hashtag, option="hashtag", board_type=board_type)
+    def search_feeds_with_hashtag_new(self, hashtag:str):
+        fid_list = self.__managed_feed_bias_table.search_feeds_with_key_n_option(key=hashtag, option="hashtag")
         return fid_list
 
     def search_feeds_with_keyword_new(self, keyword: str, board_type=""):
-        fid_list = self.__managed_feed_bias_table.search_feeds_with_key_n_option(key=keyword, option="keyword", board_type=board_type)
+        fid_list = self.__managed_feed_bias_table.search_feeds_with_key_n_option(key=keyword, option="keyword")
         return fid_list
 
     def search_feeds_with_uname_new(self, uname: str, board_type=""):
-        fid_list = self.__managed_feed_bias_table.search_feeds_with_key_n_option(key=uname, option="keyword", board_type=board_type)
+        fid_list = self.__managed_feed_bias_table.search_feeds_with_key_n_option(key=uname, option="keyword")
         return fid_list
 
     def search_feeds_with_bid_new(self, bid: str, board_type=""):
-        fid_list = self.__managed_feed_bias_table.search_feeds_with_key_n_option(key=bid, option="keyword", board_type=board_type)
+        fid_list = self.__managed_feed_bias_table.search_feeds_with_key_n_option(key=bid, option="keyword")
         return fid_list
 
     def search_feeds_with_fid_new(self, fid: str, board_type=""):
-        fid_list = self.__managed_feed_bias_table.search_feeds_with_key_n_option(key=fid, option="keyword", board_type=board_type)
+        fid_list = self.__managed_feed_bias_table.search_feeds_with_key_n_option(key=fid, option="keyword")
         return fid_list
 
     # 댓글 검색
