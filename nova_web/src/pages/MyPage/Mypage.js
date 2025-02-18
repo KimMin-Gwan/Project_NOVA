@@ -5,6 +5,8 @@ import mypage_more_icon from "./../../img/mypage_more.png";
 import user_icon from "./../../img/user_profile.svg";
 import mainApi from "../../services/apis/mainApi";
 import Feed from "../../component/feed";
+import arrow from "./../../img/comment_arrow.svg";
+import reArrow from "./../../img/recomment.svg";
 
 const categoryData = [
   {
@@ -19,7 +21,10 @@ const categoryData = [
     type: "like",
     category: "좋아요",
   },
-  { category: "댓글" },
+  {
+    type: "comment",
+    category: "댓글",
+  },
 ];
 function MyPage() {
   const target = useRef(null);
@@ -31,7 +36,7 @@ function MyPage() {
   let [myFeed, setMyFeed] = useState([]);
   const [nextKey, setNextKey] = useState(-1);
   const [nowCategory, setNowCategory] = useState(categoryData[0].type);
-
+  const [isComment, setIsComment] = useState(false);
   async function fetchMyPage() {
     await mainApi.get("user_home/get_my_page_data").then((res) => {
       console.log("my", res.data);
@@ -46,7 +51,7 @@ function MyPage() {
 
   async function fetchMyFeed(category) {
     await mainApi.get(`user_home/get_my_feed?type=${category}&key=${nextKey}`).then((res) => {
-      console.log("feeed", res.data);
+      console.log("feed", res.data);
       setMyFeed((prevData) => [...prevData, ...res.data.body.feed]);
       setNextKey(res.data.body.key);
       setIsLoading(false);
@@ -96,6 +101,7 @@ function MyPage() {
   };
 
   const [isClickedComment, setIsClickedComment] = useState(false);
+
   function onClickComment() {
     setIsClickedComment(!isClickedComment);
   }
@@ -104,6 +110,9 @@ function MyPage() {
     return <div>loading...</div>;
   }
 
+  function handleComment() {
+    setIsComment(!isComment);
+  }
   const profile = `https://kr.object.ncloudstorage.com/nova-user-profile/${myData.uid}.png`;
 
   return (
@@ -125,12 +134,7 @@ function MyPage() {
         <div className={style["feed-wrapper"]}>
           <section className={style["user-name"]}>
             <h3>{myData.uname}</h3>
-            <img
-              src={mypage_more_icon}
-              alt=""
-              onClick={(e) => handleMovePage(e, "/mypage_edit")}
-              style={{ cursor: "pointer" }}
-            />
+            <img src={mypage_more_icon} alt="" onClick={(e) => handleMovePage(e, "/mypage_edit")} style={{ cursor: "pointer" }} />
           </section>
           <section className={style["user-info"]}>
             <ul>
@@ -161,6 +165,7 @@ function MyPage() {
                   onClick={() => {
                     setNowCategory(item.type);
                     handleClick(index, item.type);
+                    console.log(item.type);
                   }}
                 >
                   <button>{item.category}</button>
@@ -171,12 +176,18 @@ function MyPage() {
 
           {isClickedComment && (
             <div className={style["MyPage_Comment_Box"]}>
-              <div className={style["Feed_title"]}>
-                <div>화살표</div>
-                <div>이 예시문은 어쩌구 저쩌구</div>
+              <div className={style["Feed_title"]} onClick={handleComment}>
+                <img src={arrow} alt="화살표" />
+                <p>이 예시문은 어쩌구 저쩌구</p>
               </div>
 
-              <div className={style["Comment_content"]}>댓그 ㄹ내용</div>
+              {isComment && (
+                <section className={style["comment_box"]}>
+                  <img src={reArrow} alt="대댓글" />
+                  <p className={style["Comment_content"]}>댓글내용</p>
+                  <span>2025-02-05</span>
+                </section>
+              )}
             </div>
           )}
           {myFeed.map((feed, i) => {

@@ -216,7 +216,6 @@ export default function FollowPage() {
               );
             })}
           </span>
-          <button className={style["more-see"]}>더보기</button>
         </div>
 
         {biasDataList.chzzk.length > 0 && (
@@ -240,7 +239,6 @@ export default function FollowPage() {
                 );
               })}
             </span>
-            <button className={style["more-see"]}>더보기</button>
           </div>
         )}
 
@@ -264,7 +262,6 @@ export default function FollowPage() {
               );
             })}
           </span>
-          <button className={style["more-see"]}>더보기</button>
         </div>
 
         <div className={style["streamer-box"]}>
@@ -287,7 +284,6 @@ export default function FollowPage() {
               );
             })}
           </span>
-          <button className={style["more-see"]}>더보기</button>
         </div>
 
         {isModalOpen && (
