@@ -19,7 +19,7 @@ export default function SearchResultPage() {
   let navigate = useNavigate();
   let location = useLocation();
   let [isLoading, setIsLoading] = useState(true);
-  let [searchWord, setSearchWord] = useState("");
+  let [searchWord, setSearchWord] = useState(keyword);
   let [searchHistory, setSearchHistory] = useState([]);
   function handleNavigate() {
     // if (!searchWord) {
@@ -142,7 +142,7 @@ export default function SearchResultPage() {
         </div>
         <SearchBox
           type="search"
-          value={keyword}
+          searchWord={searchWord}
           onClickSearch={onClickSearch}
           onChangeSearchWord={onChangeSearchWord}
           onKeyDown={onKeyDown}

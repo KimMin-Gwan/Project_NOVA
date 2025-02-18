@@ -337,7 +337,7 @@ export function ContentFeed({
 function LinkSection({ links }) {
   const [isLoading, setIsLoading] = useState(true);
   const [linkImage, setLinkImage] = useState([]);
-
+  console.log(links);
   async function fetchImageTag() {
     for (const item of links)
       await postApi
@@ -370,7 +370,7 @@ function LinkSection({ links }) {
   }
   return (
     <>
-      {links && (
+      {links.length > 0 && (
         <div className={style["link-line"]}>
           <div className={style["hr-sect"]}>첨부된 링크</div>
           <p>안전을 위해 신뢰할 수 있는 사이트에만 접속하세요.</p>

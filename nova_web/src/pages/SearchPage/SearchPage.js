@@ -118,7 +118,7 @@ export default function SearchPage() {
         </div>
         <SearchBox
           type="search"
-          value={searchWord}
+          searchWord={searchWord}
           onClickSearch={onClickSearch}
           onChangeSearchWord={onChangeSearchWord}
           onKeyDown={onKeyDown}

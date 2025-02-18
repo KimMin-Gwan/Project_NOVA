@@ -146,8 +146,6 @@ const Write = ({ brightmode }) => {
   const handleSubmit = (event) => {
     event.preventDefault(); // 기본 동작을 막음 (중요)
 
-    alert("업로드 중입니다. 잠시만 기다려주세요.");
-
     const send_data = {
       header: header,
       body: {
@@ -284,6 +282,7 @@ const Write = ({ brightmode }) => {
     <div className={style["WriteFeed"]}>
       <div className={style["top_container"]}>
         <p
+          className={style["buttons"]}
           onClick={() => {
             navigate(-1);
           }}
@@ -294,6 +293,7 @@ const Write = ({ brightmode }) => {
         {type === "short" && <p>모멘트 작성</p>}
 
         <p
+          className={style["buttons"]}
           type="submit"
           onClick={(e) => {
             e.preventDefault();

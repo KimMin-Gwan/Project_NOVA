@@ -29,6 +29,32 @@ export default function BiasBoxes({ setBiasId, fetchBiasCategoryData, writeCommu
     setClickedBias(i);
   }
 
+  let [isUserState, setIsUserState] = useState(false);
+  function handleValidCheck() {
+    fetch("https://nova-platform.kr/home/is_valid", {
+      credentials: "include",
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          setIsUserState(true);
+        } else {
+          setIsUserState(false);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        setIsUserState(false);
+      });
+  }
+
+  useEffect(() => {
+    handleValidCheck();
+  }, []);
+
   const defaultBoxes = 1;
   const totalBiasBoxes = Math.max(defaultBoxes, biasList.length);
 
@@ -38,7 +64,7 @@ export default function BiasBoxes({ setBiasId, fetchBiasCategoryData, writeCommu
   let [hasDragged, setHasDragged] = useState(false);
 
   function onClickAddButton() {
-    if (isLogin === "done") {
+    if (isUserState) {
       navigate("/follow_page");
     } else {
       navigate("/novalogin");

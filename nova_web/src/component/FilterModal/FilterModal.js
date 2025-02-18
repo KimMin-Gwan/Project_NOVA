@@ -1,7 +1,41 @@
 // import style from "./FilterModal.module.css";
 import "./FilterModal.css";
 import { useEffect, useState } from "react";
-import reset_icon from "./../../img/reset.svg";
+// import reset_icon from "./../../img/reset.svg";
+
+let FilterData = [
+  {
+    id: 0,
+    value: "공지사항",
+    name: "공지사항",
+  },
+  {
+    id: 1,
+    value: "자유게시판",
+    name: "자유게시판",
+  },
+  {
+    id: 2,
+    value: "팬아트",
+    name: "팬아트",
+  },
+  {
+    id: 3,
+    value: "유머게시판",
+    name: "유머게시판",
+  },
+  {
+    id: 4,
+    value: "",
+    name: "전체",
+  },
+];
+
+let ContentData = [
+  { id: 0, value: "short", name: "모멘트" },
+  { id: 1, value: "long", name: "포스트" },
+  { id: 2, value: "", name: "전체" },
+];
 
 export default function FilterModal({
   isFilterClicked,
@@ -12,40 +46,6 @@ export default function FilterModal({
   onClickApplyButton1,
   setNextData,
 }) {
-  let FilterData = [
-    {
-      id: 0,
-      value: "공지사항",
-      name: "공지사항",
-    },
-    {
-      id: 1,
-      value: "자유게시판",
-      name: "자유게시판",
-    },
-    {
-      id: 2,
-      value: "팬아트",
-      name: "팬아트",
-    },
-    {
-      id: 3,
-      value: "유머게시판",
-      name: "유머게시판",
-    },
-    {
-      id: 4,
-      value: "",
-      name: "전체",
-    },
-  ];
-
-  let ContentData = [
-    { id: 0, value: "short", name: "모멘트" },
-    { id: 1, value: "long", name: "포스트" },
-    { id: 2, value: "", name: "전체" },
-  ];
-
   let [isClickedFilterBoard, setIsClickedFilterBoard] = useState([4]);
   let [isClickedFilterContent, setIsClickedFilterContent] = useState(2);
 
@@ -56,7 +56,6 @@ export default function FilterModal({
       }
       return i === 4 ? [i] : [...prev.filter((item) => item !== 4), i];
     });
-    // console.log(isClickedFilterBoard);
 
     setFilterCategory((prev) => {
       const data = FilterData[i].value;
@@ -108,12 +107,6 @@ export default function FilterModal({
           e.stopPropagation();
         }}
       >
-        <div className="reset-button">
-          <span className="reset-icon">
-            <img src={reset_icon} alt="reset" />
-          </span>
-          초기화
-        </div>
         <div className="FilterModal_title">
           <h3>딱 맞는 피드를 추천해드려요!</h3>
           <p>보고 싶은 게시글만 보여질 수 있도록, 지금 바로 경험해보세요.</p>
