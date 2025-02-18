@@ -271,7 +271,6 @@ class MyFeedsModel(FeedModel):
 
     def __set_send_data(self):
         result_feeds = []
-
         uids = []
         wusers = []
 
@@ -307,7 +306,6 @@ class MyFeedsModel(FeedModel):
             feed.num_image = len(feed.image)
 
             # 좋아요를 누를 전적
-            
             for fid_n_date in self._user.like:
                 target_fid = fid_n_date.split('=')[0]
                 if target_fid == feed.fid:
