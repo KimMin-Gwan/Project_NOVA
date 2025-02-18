@@ -14,6 +14,7 @@ function MyPage() {
   let [nickname, setNickname] = useState("");
   let [password, setPassword] = useState("");
   let [newPassword, setNewPassword] = useState("");
+  let [checkPassword, setCheckPassword] = useState("");
   let [myProfile, setMyProfile] = useState();
   const [image, setImage] = useState(null);
   const fileInputRef = useRef(null);
@@ -45,6 +46,7 @@ function MyPage() {
       )
       .then((res) => {
         console.log(res.data);
+
         if (res.data.body.result) {
           setNewNickname(res.data.body.uname);
         }
@@ -70,10 +72,15 @@ function MyPage() {
         }
       )
       .then((res) => {
-        console.log(res.data);
         if (!res.data.body.result) {
           alert(res.data.body.detail);
+        } else {
+          alert(res.data.body.detail);
         }
+
+        setPassword("");
+        setNewPassword("");
+        setCheckPassword("");
       });
   }
 
@@ -86,6 +93,9 @@ function MyPage() {
   }
   function onChangeNewPassword(e) {
     setNewPassword(e.target.value);
+  }
+  function onChangecheckPassword(e) {
+    setCheckPassword(e.target.value);
   }
 
   const handleLogout = (e) => {
@@ -121,7 +131,6 @@ function MyPage() {
       .then((data) => {
         setMyProfile(data.body);
         setIsLoading(false);
-        console.log(data);
       });
   }
 
@@ -177,7 +186,8 @@ function MyPage() {
             onChange={(e) => {
               onChangeNickname(e);
             }}
-            placeholder={myProfile.uname}
+            placeholder={`${myProfile.uname} (7글자 이내로 변경 가능합니다)`}
+            maxLength={7}
           />
           <button
             className={style["change-button"]}
@@ -209,7 +219,15 @@ function MyPage() {
             type="text"
             placeholder="새로운 비밀번호"
           />
-          <input className={style["input-st"]} type="text" placeholder="비밀번호 확인" />
+          <input
+            className={style["input-st"]}
+            value={checkPassword}
+            onChange={(e) => {
+              onChangecheckPassword(e);
+            }}
+            type="text"
+            placeholder="비밀번호 확인"
+          />
           <button className={style["change-button"]} onClick={fetchPasswordChange}>
             변경
           </button>
