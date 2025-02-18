@@ -468,7 +468,7 @@ class FeedSearchModelNew(FeedModel):
         return
 
     def try_search_feed_with_keyword(self, feed_search_engine:FeedSearchEngine,
-                                     feed_manager:FeedManager, target="", last_index=-1, num_feed=8):
+                                     feed_manager:FeedManager, fclass="", target="", last_index=-1, num_feed=8):
         searched_fid_list = feed_search_engine.try_search_feed_new(target_type="keyword", target=target)
 
         # 페이징
