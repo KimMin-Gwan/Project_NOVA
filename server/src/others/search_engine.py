@@ -1193,13 +1193,12 @@ class RecommendManager:
             while True:
                 # 현재 시간 계산
                 current_time = time.time()
-                time_diff = (current_time - last_computed_time) / 60  # 시간 단위로 계산
+                time_diff = (current_time - last_computed_time) / 3600  # 시간 단위로 계산
 
                 # 마지막 계산 시간이 1시간 이상일 경우 갱신
                 if time_diff >= 1:
                     self.__total_hashtag_setting()
                     self.__bias_hashtag_setting()
-                    print(self.hashtags)
                     self.last_computed_time = current_time  # 갱신 완료 시점 기록
 
                 # 60초 대기
