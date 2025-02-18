@@ -257,10 +257,35 @@ class MyCommentsModel(BaseModel):
 class MyFeedsModel(FeedModel):
     def __init__(self, database:Local_Database) -> None:
         super().__init__(database)
-        
+
+    def __search_user_nickname(self, uid:str, uids:list, wusers:list):
+        if uid not in uids:
+            return ""
+
+        # uid가 존재함. 그러면 리스트에서 찾는다
+        for user in wusers:
+            if user.uid == uid:
+                return user.uname
+
+        return ""
+
     def __set_send_data(self):
         result_feeds = []
-        
+
+        uids = []
+        wusers = []
+
+        for single_feed in self._feeds:
+            if single_feed.uid in uids:
+                continue
+            uids.append(single_feed.uid)
+
+        user_datas = self._database.get_datas_with_ids(target_id="uid", ids=uids)
+        for user_data in user_datas:
+            single_user = User()
+            single_user.make_with_dict(user_data)
+            wusers.append(single_user)
+
         for feed in self._feeds:
             # 마이페이지에 인터엑션은 표시 없음
             feed.iid = ""
@@ -290,7 +315,7 @@ class MyFeedsModel(FeedModel):
 
             # 피드 작성자 이름
             # 나중에 nickname으로 바꿀것
-            feed.nickname = feed.nickname
+            feed.nickname = self.__search_user_nickname(feed.uid, uids, wusers)
             feed.is_owner = True
             result_feeds.append(feed)
         return result_feeds
