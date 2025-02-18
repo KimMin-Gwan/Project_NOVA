@@ -6,7 +6,7 @@ import FilterModal from "../../component/FilterModal/FilterModal.js";
 import SearchBox from "../../component/SearchBox.js";
 import KeywordBox from "../../component/keyword/KeywordBox.js";
 import { getModeClass } from "./../../App.js";
-import Feed, { Comments } from "./../../component/feed";
+import Feed from "./../../component/feed";
 import logo2 from "./../../img/logo2.png";
 import filter_icon from "./../../img/filter.svg";
 import style from "./FeedHashList.module.css";
@@ -19,7 +19,6 @@ import NavBar from "../../component/NavBar.js";
 export default function FeedList(isUserState) {
   const [params] = useSearchParams();
   const type = params.get("type");
-  const keyword = params.get("keyword");
 
   const target = useRef(null);
   const observerRef = useRef(null);
@@ -49,7 +48,7 @@ export default function FeedList(isUserState) {
   const [mode, setMode] = useState(initialMode);
   let navigate = useNavigate();
 
-  let { biasList, fetchBiasList } = useBiasStore();
+  let { biasList } = useBiasStore();
   let bids = biasList.map((item, i) => {
     return item.bid;
   });
@@ -184,16 +183,6 @@ export default function FeedList(isUserState) {
           setIsLoading(false);
         });
     }
-
-    if (keyword) {
-      fetch(`${FETCH_URL}search_feed_with_hashtag?hashtag=${keyword}&key=-1`)
-        .then((response) => response.json())
-        .then((data) => {
-          setFeedData(data.body.send_data);
-          setNextData(data.body.key);
-          setIsLoading(false);
-        });
-    }
   }
 
   function fetchFeedWithTag(tag) {
@@ -202,10 +191,7 @@ export default function FeedList(isUserState) {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("tag", data);
         setFeedData(data.body.send_data);
-        // setFeedInteraction(data.body.send_data.map((interaction, i) => interaction));
-
         setNextData(data.body.key);
         setIsLoading(false);
       });
@@ -278,31 +264,18 @@ export default function FeedList(isUserState) {
           });
         });
     }
-
-    if (keyword) {
-      fetch(`${FETCH_URL}search_feed_with_hashtag?hashtag=${keyword}&key=${nextData}`, {
-        credentials: "include",
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          setNextData(data.body.key);
-          setFeedData((prevData) => {
-            const newData = [...prevData, ...data.body.send_data];
-            return newData;
-          });
-          setIsLoading(false);
-          console.log("mor", data);
-        });
-    }
   }
 
   let [isError, setIsError] = useState();
   async function handleInteraction(event, fid, action) {
     event.preventDefault();
     // setIsLoading(true);
-    await fetch(`https://nova-platform.kr/feed_explore/interaction_feed?fid=${fid}&action=${action}`, {
-      credentials: "include",
-    })
+    await fetch(
+      `https://nova-platform.kr/feed_explore/interaction_feed?fid=${fid}&action=${action}`,
+      {
+        credentials: "include",
+      }
+    )
       .then((response) => {
         if (!response.ok) {
           if (response.status === 401) {
@@ -385,7 +358,7 @@ export default function FeedList(isUserState) {
   }
 
   return (
-    <div className="all-box">
+    <div className={`all-box ${style["all_container"]}`}>
       {/* <section className="contents com1">
         <LeftBar brightMode={mode} />
       </section> */}
@@ -413,7 +386,14 @@ export default function FeedList(isUserState) {
                 </p>
               </div>
             )}
-            {isOpendCategory && <CategoryModal SetIsOpen={setIsOpendCategory} onClickCategory={onClickCategory} biasId={biasId} setBoard={setBoard} />}
+            {isOpendCategory && (
+              <CategoryModal
+                SetIsOpen={setIsOpendCategory}
+                onClickCategory={onClickCategory}
+                biasId={biasId}
+                setBoard={setBoard}
+              />
+            )}
           </div>
         )}
         {type === "all" && (
@@ -432,30 +412,62 @@ export default function FeedList(isUserState) {
         )}
         {type === "best" && (
           <div className={style["keyword-section"]}>
-            <KeywordBox type={"today"} title={"인기 급상승"} subTitle={"오늘의 키워드"} onClickTagButton={onClickTag} />
+            <KeywordBox
+              type={"today"}
+              title={"인기 급상승"}
+              subTitle={"오늘의 키워드"}
+              onClickTagButton={onClickTag}
+              fetchData={fetchData}
+            />
           </div>
         )}
         {type === "weekly_best" && (
           <div className={style["keyword-section"]}>
-            <KeywordBox type={"weekly"} title={"많은 사랑을 받은"} subTitle={"이번주 키워드"} onClickTagButton={onClickTag} />
+            <KeywordBox
+              type={"weekly"}
+              title={"많은 사랑을 받은"}
+              subTitle={"이번주 키워드"}
+              onClickTagButton={onClickTag}
+              fetchData={fetchData}
+            />
           </div>
         )}
-        {keyword && <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>{keyword}</div>}
         <div className={feedData.length > 0 ? style["scroll-area"] : style["none_feed_scroll"]}>
           {feedData.length > 0 ? (
             feedData.map((feed, i) => {
-              return <Feed key={feed.feed.fid} className={`${style["feed-box"]} ${style[getModeClass(mode)]}`} feed={feed.feed} func={true} feedData={feedData} interaction={feed.interaction} feedInteraction={feedInteraction} setFeedData={setFeedData} isUserState={isUserState} handleInteraction={handleInteraction}></Feed>;
+              return (
+                <Feed
+                  key={feed.feed.fid}
+                  className={`${style["feed-box"]} ${style[getModeClass(mode)]}`}
+                  feed={feed.feed}
+                  func={true}
+                  feedData={feedData}
+                  interaction={feed.interaction}
+                  feedInteraction={feedInteraction}
+                  setFeedData={setFeedData}
+                  isUserState={isUserState}
+                  handleInteraction={handleInteraction}
+                ></Feed>
+              );
             })
           ) : (
             <NoneFeed />
           )}
+          <div ref={target} style={{ height: "1px" }}></div>
           {isLoading && <p>Loading...</p>}
           {isFilterClicked && (
             // <div className={style["filter-modal"]}>
-            <FilterModal isFilterClicked={isFilterClicked} onClickFilterButton={onClickFilterButton} setFilterCategory={setFilterCategory} setFilterFclass={setFilterFclass} fetchAllFeed={fetchAllFeed} onClickApplyButton1={onClickApplyButton1} setNextData={setNextData} />
+            <FilterModal
+              isFilterClicked={isFilterClicked}
+              onClickFilterButton={onClickFilterButton}
+              setFilterCategory={setFilterCategory}
+              setFilterFclass={setFilterFclass}
+              fetchAllFeed={fetchAllFeed}
+              onClickApplyButton1={onClickApplyButton1}
+              setNextData={setNextData}
+            />
             // {/* </div> */}
           )}
-          <div ref={target} style={{ height: "1px" }}></div>
         </div>
       </div>
       <NavBar />

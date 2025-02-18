@@ -33,7 +33,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  /* gap: 11px; */
   /* animation: tagScroll 3s linear infinite; */
 }
 
@@ -47,11 +46,15 @@
   min-width: 70px;
   padding: 8px 15px;
   border-radius: 100px;
-  margin-left: 15px;
+  margin-right: 15px;
   background-color: white;
   border: #e4e9ee solid 1px;
   color: #7960ec;
   cursor: pointer;
+
+  &:first-child {
+    margin-left: 15px;
+  }
 }
 
 .click-tag {

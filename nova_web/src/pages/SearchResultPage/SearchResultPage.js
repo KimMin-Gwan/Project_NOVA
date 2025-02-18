@@ -8,6 +8,7 @@ import style from "./../MyPage/Mypage.module.css";
 import axios from "axios";
 import Feed from "../../component/feed";
 import NavBar from "../../component/NavBar";
+import mainApi from "../../services/apis/mainApi";
 
 export default function SearchResultPage() {
   // let params = useParams();
@@ -39,6 +40,9 @@ export default function SearchResultPage() {
     e.preventDefault();
     navigate(page);
   }
+  let [feedData, setFeedData] = useState([]);
+
+  const [type, setType] = useState("long");
 
   const [activeIndex, setActiveIndex] = useState(0);
   let [nextKey, setNextKey] = useState(-1);
@@ -71,16 +75,9 @@ export default function SearchResultPage() {
     }
   }
 
-  let [feedData, setFeedData] = useState([]);
-
-  function fetchSearchKeyword() {
-    axios
-      .get(
-        `https://nova-platform.kr/feed_explore/search_feed_with_keyword?keyword=${keyword}&key=${nextKey}`,
-        {
-          withCredentials: true,
-        }
-      )
+  async function fetchSearchKeyword() {
+    await mainApi
+      .get(`feed_explore/search_feed_with_keyword?keyword=${keyword}&key=${nextKey}&fclass=${type}`)
       .then((res) => {
         setFeedData((prev) => {
           return [...prev, ...res.data.body.send_data];
@@ -90,9 +87,41 @@ export default function SearchResultPage() {
         setNextKey(res.data.body.key);
       });
   }
+
+  async function fetchCommentKeyword() {
+    console.log("댓글 불러짐");
+    await mainApi
+      .get(`feed_explore/search_comment_with_keyword?keyword=${keyword}&key=${nextKey}`)
+      .then((res) => {
+        setFeedData((prev) => {
+          return [...prev, ...res.data.body.send_data];
+        });
+        console.log("댓글", res.data);
+        setIsLoading(false);
+        setNextKey(res.data.body.key);
+      });
+  }
+
   useEffect(() => {
-    fetchSearchKeyword();
-  }, []);
+    if (type === "long" || type === "short") {
+      fetchSearchKeyword();
+    } else {
+      fetchCommentKeyword();
+    }
+  }, [type]);
+
+  const onClickType = (data) => {
+    setFeedData([]);
+    setNextKey(-1);
+    console.log(data);
+    if (data === "포스트") {
+      setType("long");
+    } else if (data === "모멘트") {
+      setType("short");
+    } else {
+      setType("");
+    }
+  };
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
@@ -154,7 +183,10 @@ export default function SearchResultPage() {
             <li
               key={index}
               className={`${style.post} ${activeIndex === index ? style.active : ""}`}
-              onClick={() => handleClick(index)}
+              onClick={() => {
+                handleClick(index);
+                onClickType(post);
+              }}
             >
               <p>{post}</p>
             </li>

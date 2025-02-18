@@ -1,5 +1,4 @@
 .container {
-  /* height: 100vh; */
   width: 100%;
   max-width: 500px;
   overflow: hidden;
@@ -8,7 +7,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  height: 100%;
+  /* height: 100%; */
   background-color: #1e1e1e;
   border: 1px solid white;
   position: relative;
@@ -75,8 +74,10 @@
 }
 .scroll-area {
   width: 100%;
-  /* height: 100vh; */
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  /* overflow: hidden; */
 }
 
 .none_feed_scroll {
@@ -184,4 +185,10 @@
   .category_change {
     cursor: pointer;
   }
+}
+
+.all_container {
+  max-width: 500px;
+  /* height: auto; */
+  /* overflow: auto; */
 }

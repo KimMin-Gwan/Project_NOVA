@@ -57,6 +57,7 @@ body.dark-mode {
 
 .all-box {
   display: flex;
+  /* height: 100vh; */
   max-width: 1150px;
   margin: 0 auto;
   overflow: hidden;

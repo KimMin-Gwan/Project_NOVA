@@ -3,7 +3,7 @@ import style from "./KeywordBox.module.css";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 
-export default function KeywordBox({ type, title, subTitle, onClickTagButton }) {
+export default function KeywordBox({ type, title, subTitle, onClickTagButton, fetchData }) {
   let [bestTags, setBestTags] = useState([]);
   let [isLoading, setIsLoading] = useState(true);
 
@@ -62,7 +62,8 @@ export default function KeywordBox({ type, title, subTitle, onClickTagButton }) 
 
   function onClickTags(index, tag) {
     if (currentTag === index) {
-      setCurrentTag();
+      setCurrentTag(null);
+      fetchData();
     } else {
       setCurrentTag(index);
       onClickTagButton(tag);
@@ -87,7 +88,9 @@ export default function KeywordBox({ type, title, subTitle, onClickTagButton }) 
             return (
               <div
                 key={i}
-                onClick={() => onClickTags(i, tag)}
+                onClick={() => {
+                  onClickTags(i, tag);
+                }}
                 className={`${style["tags"]} ${currentTag === i ? style["click-tag"] : ""}`}
               >
                 #{tag}
