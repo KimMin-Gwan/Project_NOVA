@@ -404,7 +404,7 @@ class ManagedFeedBiasTable:
     #
     #     return result_fid, result_index
 
-    def search_feeds_with_key_n_option(self, key:str, option):
+    def search_feeds_with_key_n_option(self, key:str, fclass:str, board_type:str, option):
         # Nan값의 경우, False 처리.
         # 대소문자를 구분하지 않음
         searched_df = self.__feed_df
@@ -428,10 +428,17 @@ class ManagedFeedBiasTable:
         # board_type 필터링
         # board_type이 ""이거나 All이면 다 고름
         # 아니라면 board_type 필터링을 진행함
-        # if board_type == "" or board_type == "all" or board_type == "전체":
-        #     pass
-        # else:
-        #     searched_df = searched_df[searched_df["board_type"] == board_type]
+        if board_type == "" or board_type == "all" or board_type == "전체":
+            pass
+        else:
+            searched_df = searched_df[searched_df["board_type"] == board_type]
+
+        if fclass == "" or fclass == "all" or fclass == "전체":
+            pass
+        else:
+            # Fclass == long 인지 fclass == short인지 분류
+            searched_df = searched_df[searched_df["fclass"] == fclass]
+
         pprint(searched_df)
 
         return searched_df['fid'].tolist()
