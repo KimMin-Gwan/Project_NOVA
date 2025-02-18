@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import style from "./Mypage.module.css";
 import axios from "axios";
 import user_icon from "./../../img/user_profile.svg";
@@ -15,7 +15,8 @@ function MyPage() {
   let [password, setPassword] = useState("");
   let [newPassword, setNewPassword] = useState("");
   let [myProfile, setMyProfile] = useState();
-
+  const [image, setImage] = useState(null);
+  const fileInputRef = useRef(null);
   let [newNickname, setNewNickname] = useState("");
   let header = {
     "request-type": "default",
@@ -134,6 +135,18 @@ function MyPage() {
 
   const profile = `https://kr.object.ncloudstorage.com/nova-user-profile/${myProfile.uid}.png`;
 
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setImage(imageUrl);
+    }
+  };
+
+  const handleButtonClick = () => {
+    // fileInputRef.current.click();
+  };
+
   return (
     <div className={`${style["container"]} ${style["edit-container"]}`}>
       <div className={style.top_area}>
@@ -150,7 +163,7 @@ function MyPage() {
         <div className={style["user-img-edit"]}>
           <img src={profile} alt="profile" onError={(e) => (e.target.src = user_icon)} />
         </div>
-        <button>프로필 사진 변경</button>
+        <button onClick={handleButtonClick}>프로필 사진 변경</button>
       </section>
 
       <section className={style["profile-info"]}>
@@ -206,23 +219,13 @@ function MyPage() {
       <section className={style["user-info"]}>
         <h3>개인정보</h3>
         <p className={style["input-name"]}>uid</p>
-        <input className={style["input-st"]} type="text" placeholder={myProfile.uid} readOnly />
+        <input className={style["input-st"]} type="text" placeholder={myProfile.uid} readOnly tabIndex="-1" />
         <p className={style["input-name"]}>email</p>
-        <input className={style["input-st"]} type="text" placeholder={myProfile.email} readOnly />
+        <input className={style["input-st"]} type="text" placeholder={myProfile.email} readOnly tabIndex="-1" />
         <p className={style["input-name"]}>나이</p>
-        <input
-          className={style["input-st"]}
-          type="text"
-          placeholder={`${myProfile.age}살`}
-          readOnly
-        />
+        <input className={style["input-st"]} type="text" placeholder={`${myProfile.age}살`} readOnly tabIndex="-1" />
         <p className={style["input-name"]}>성별</p>
-        <input
-          className={style["input-st"]}
-          type="text"
-          placeholder={myProfile.gender === "f" ? "여성" : "남성"}
-          readOnly
-        />
+        <input className={style["input-st"]} type="text" placeholder={myProfile.gender === "f" ? "여성" : "남성"} readOnly tabIndex="-1" />
       </section>
       <button className={`${style["logout_box"]}`} onClick={handleLogout}>
         로그아웃
