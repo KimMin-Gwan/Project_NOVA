@@ -290,7 +290,7 @@ class MyFeedsModel(FeedModel):
 
             # 피드 작성자 이름
             # 나중에 nickname으로 바꿀것
-            feed.nickname = self._user.uname
+            # feed.nickname = self._user.uname
             feed.is_owner = True
             result_feeds.append(feed)
         return result_feeds
