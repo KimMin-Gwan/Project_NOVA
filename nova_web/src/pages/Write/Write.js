@@ -1,22 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate, useNavigation, useParams } from "react-router-dom";
 import style from "./WriteFeed.module.css";
-import backword from "./../../img/back_icon.png";
-
 import tag from "./../../img/tag.svg";
 import add_icon from "./../../img/add.svg";
 import close_icon from "./../../img/close.svg";
 import img_icon from "./../../img/image.png";
 import vote_icon from "./../../img/vote.png";
 import link_icon from "./../../img/link.png";
-import { getModeClass } from "../../App.js";
-import BiasBoxes from "../../component/BiasBoxes.js";
 import EditorBox from "../../component/EditorBox.js";
 import postApi from "../../services/apis/postApi.js";
-import axios from "axios";
 import useBiasStore from "../../stores/BiasStore/useBiasStore.js";
 import HEADER from "../../constant/header.js";
-import NavBar from "../../component/NavBar.js";
 
 const categoryData = [
   { key: 0, category: "자유게시판" },
@@ -151,6 +145,8 @@ const Write = ({ brightmode }) => {
   const [category, setCategory] = useState("");
   const handleSubmit = (event) => {
     event.preventDefault(); // 기본 동작을 막음 (중요)
+
+    alert("업로드 중입니다. 잠시만 기다려주세요.");
 
     const send_data = {
       header: header,
@@ -313,13 +309,15 @@ const Write = ({ brightmode }) => {
       <section className={style["Select_container"]}>
         <div className={style["section_title"]}>주제 선택</div>
         <DropDownSection options={biasList} setBiasId={setBiasId} />
-        <div
-          className={style["more-find"]}
-          onClick={() => {
-            navigate("/follow_page");
-          }}
-        >
-          더 많은 주제 찾아보기
+        <div style={{ textAlign: "right" }}>
+          <div
+            className={style["more-find"]}
+            onClick={() => {
+              navigate("/follow_page");
+            }}
+          >
+            더 많은 주제 찾아보기
+          </div>
         </div>
       </section>
 
@@ -397,7 +395,7 @@ const Write = ({ brightmode }) => {
       )}
       {type === "long" && (
         <p className={style["alert_message"]}>
-          타인에게 불편을 줄 수 있는 내용의 개시 글은 경고 없이 삭제 될 수 있습니다.
+          타인에게 불편을 줄 수 있는 내용의 게시글은 경고 없이 삭제 될 수 있습니다.
         </p>
       )}
 
@@ -413,7 +411,7 @@ const Write = ({ brightmode }) => {
             이미지
           </button>
         )}
-        <button
+        {/* <button
           onClick={(e) => {
             e.stopPropagation();
             onClickVoteModal();
@@ -421,7 +419,7 @@ const Write = ({ brightmode }) => {
         >
           <img src={vote_icon} alt="img" />
           투표
-        </button>
+        </button> */}
         <button
           onClick={(e) => {
             e.stopPropagation();
@@ -441,7 +439,7 @@ const Write = ({ brightmode }) => {
           imageFiles={imageFiles}
         />
       )}
-      {showVoteModal && (
+      {/* {showVoteModal && (
         <VoteModal
           onClickModal={onClickVoteModal}
           createOptions={createOptions}
@@ -451,7 +449,7 @@ const Write = ({ brightmode }) => {
           choice={choice}
           setChoice={setChoice}
         />
-      )}
+      )} */}
       {showLinkModal && (
         <LinkModal
           onClickModal={onClickLinkModal}

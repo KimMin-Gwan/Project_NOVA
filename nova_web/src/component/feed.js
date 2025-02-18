@@ -222,7 +222,7 @@ export function ContentFeed({
         {feed.fclass === "long" && <Viewer initialValue={feed.raw_body} />}
       </div>
 
-      <LinkSection links={links} />
+      {links && <LinkSection links={links} />}
 
       <div className={style["button-container"]}>
         <div
@@ -261,7 +261,7 @@ export function ContentFeed({
           </div>
         </div>
       </div>
-      {feed.fclass === "long" && interaction?.choice?.length > 0 && (
+      {/* {feed.fclass === "long" && interaction?.choice?.length > 0 && (
         <div
           className={style["long-form-container"]}
           onClick={(e) => {
@@ -329,7 +329,7 @@ export function ContentFeed({
             </div>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 }

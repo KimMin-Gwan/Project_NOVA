@@ -3,11 +3,11 @@ import SearchBox from "../../component/SearchBox";
 import { useEffect, useRef, useState } from "react";
 import back from "./../../img/search_back.png";
 import logo2 from "../../img/logo2.png";
-import style2 from "./index.css";
+import "./index.css";
 import style from "./../MyPage/Mypage.module.css";
 import axios from "axios";
-import FeedList from "../FeedList/FeedList";
 import Feed from "../../component/feed";
+import NavBar from "../../component/NavBar";
 
 export default function SearchResultPage() {
   // let params = useParams();
@@ -75,9 +75,12 @@ export default function SearchResultPage() {
 
   function fetchSearchKeyword() {
     axios
-      .get(`https://nova-platform.kr/feed_explore/search_feed_with_keyword?keyword=${keyword}&key=${nextKey}`, {
-        withCredentials: true,
-      })
+      .get(
+        `https://nova-platform.kr/feed_explore/search_feed_with_keyword?keyword=${keyword}&key=${nextKey}`,
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         setFeedData((prev) => {
           return [...prev, ...res.data.body.send_data];
@@ -117,8 +120,8 @@ export default function SearchResultPage() {
   }
 
   return (
-    <div className="container">
-      <header className="header">
+    <div className="container search_result_page">
+      <header className="header search_header">
         <div
           className="logo"
           onClick={() => {
@@ -128,7 +131,7 @@ export default function SearchResultPage() {
           <img src={logo2} alt="logo" className={`logo-st`}></img>
         </div>
       </header>
-      <div className="top-bar">
+      <div className="top-bar search_header">
         <div
           className="back"
           onClick={() => {
@@ -140,7 +143,6 @@ export default function SearchResultPage() {
         <SearchBox
           type="search"
           value={keyword}
-          // value={searchWord}
           onClickSearch={onClickSearch}
           onChangeSearchWord={onChangeSearchWord}
           onKeyDown={onKeyDown}
@@ -149,16 +151,24 @@ export default function SearchResultPage() {
       <section className={`${style["info-list"]} ${style["search-nav-bar"]}`}>
         <ul className={style["post-list"]} data-active-index={activeIndex}>
           {["포스트", "모멘트", "좋아요", "댓글"].map((post, index) => (
-            <li key={index} className={`${style.post} ${activeIndex === index ? style.active : ""}`} onClick={() => handleClick(index)}>
+            <li
+              key={index}
+              className={`${style.post} ${activeIndex === index ? style.active : ""}`}
+              onClick={() => handleClick(index)}
+            >
               <p>{post}</p>
             </li>
           ))}
         </ul>
       </section>
-      {feedData.map((feed, i) => {
-        return <Feed key={feed.feed.fid} feed={feed.feed} />;
-      })}
+
+      <section className="feed_section">
+        {feedData.map((feed, i) => {
+          return <Feed key={feed.feed.fid} feed={feed.feed} />;
+        })}
+      </section>
       <div ref={target} style={{ height: "1px" }}></div>
+      <NavBar />
     </div>
   );
 }

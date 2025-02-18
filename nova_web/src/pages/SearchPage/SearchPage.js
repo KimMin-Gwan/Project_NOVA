@@ -84,6 +84,14 @@ export default function SearchPage() {
     }
   }
 
+  function onClickList(word) {
+    if (word) {
+      navigate(`/search_result?keyword=${word}`);
+    } else {
+      alert("검색어를 입력해주세요.");
+    }
+  }
+
   if (loading) {
     return <div>loading...</div>;
   }
@@ -148,7 +156,7 @@ export default function SearchPage() {
         </div>
       </section>
 
-      <section className="search-category">
+      {/* <section className="search-category">
         <h3>추천 검색어</h3>
         <div className="search-tag-box">
           <div className="search-box-wrapper">
@@ -156,14 +164,23 @@ export default function SearchPage() {
             <button className="search-tag">하이</button>
           </div>
         </div>
-      </section>
+      </section> */}
 
       <section className="search-category">
         <h3>실시간 트렌드</h3>
 
         <ul className="tag-list">
           {tagList.map((tag, i) => {
-            return <li key={i}>{tag}</li>;
+            return (
+              <li
+                key={i}
+                onClick={() => {
+                  onClickList(tag);
+                }}
+              >
+                {tag}
+              </li>
+            );
           })}
         </ul>
       </section>

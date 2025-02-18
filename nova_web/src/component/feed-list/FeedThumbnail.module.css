@@ -57,7 +57,7 @@
     border-radius: 12px;
     background-color: #f1f7ff;
     border: 1px solid rgba(53, 154, 255, 0.68);
-    font-weight: 300;
+    font-weight: 600;
     font-size: 12px;
   }
   .search-box:focus {
@@ -65,7 +65,7 @@
   }
 
   .search-box::placeholder {
-    font-weight: 300;
+    font-weight: 600;
     color: rgba(26, 128, 230, 0.65);
     /* color: black; */
   }
