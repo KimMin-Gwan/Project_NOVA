@@ -768,8 +768,13 @@ class CommentSearchModel(FeedModel):
 
     def try_search_comment_with_keyword(self, feed_manager:FeedManager,
                                         target:str, last_index=-1, num_comments=8):
-        self._comments = feed_manager.get_comments_with_keyword(keyword=target)
-        self._comments, self._key = feed_manager.paging_fid_list(fid_list=self._comments, last_index=last_index, page_size=num_comments)
+
+        self._feeds = feed_manager.get_comments_with_type_and_keyword(
+            user=self._user, type="search", keyword=target
+        )
+        self._feeds, self._key = feed_manager.paging_fid_list(fid_list=self._feeds, last_index=last_index, page_size=num_comments)
+        # self._comments = feed_manager.get_comments_with_keyword(keyword=target)
+        # self._comments, self._key = feed_manager.paging_fid_list(fid_list=self._comments, last_index=last_index, page_size=num_comments)
 
         return
 

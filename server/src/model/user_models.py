@@ -244,13 +244,15 @@ class UserPageModel(BaseModel):
 class MyCommentsModel(BaseModel):
     def __init__(self, database:Local_Database ) -> None:
         super().__init__(database)
-        self._comments = []
+        # self._comments = []
+        self._feeds = []
         self._key = -1
 
     def get_response_form_data(self, head_parser):
         try:
             body = {
-                'comments' : self._make_dict_list_data(list_data=self._comments),
+                'feeds' : self._make_dict_list_data(list_data=self._feeds),
+                # 'comments' : self._make_dict_list_data(list_data=self._comments),
                 "key" : self._key
             }
 
@@ -261,8 +263,11 @@ class MyCommentsModel(BaseModel):
             raise CoreControllerLogicError("response making error | " + e)
 
     def get_my_comments(self, feed_manager:FeedManager, last_index:int=-1):
-        self._comments = feed_manager.get_my_comments(user=self._user)
-        self._comments, self._key = feed_manager.paging_fid_list(fid_list=self._comments, last_index=last_index, page_size=3)
+        self._feeds = feed_manager.get_comments_with_type_and_keyword(
+            user=self._user, type="mypage")
+        self._feeds, self._key = feed_manager.paging_fid_list(fid_list=self._comments, last_index=last_index, page_size=3)
+        # self._comments = feed_manager.get_my_comments(user=self._user)
+        # self._comments, self._key = feed_manager.paging_fid_list(fid_list=self._comments, last_index=last_index, page_size=3)
 
         return
 

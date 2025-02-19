@@ -448,6 +448,33 @@ class FeedManager:
                 comment.like_user = False
         return
 
+    # 서치한 댓글이 어떤 피드에서 긁어오는지 확인하기위해 feed 패키징을 하는 작업을 거칩니다.
+    def __get_feeds_on_searched_comments(self, comments):
+        # Set 자료형을 통해 중복을 처리함
+        comments_fids = set()
+        for comment in comments:
+            comments_fids.add(comment.fid)
+        # 리스트 화
+        comments_fids = list(comments_fids)
+
+        feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=comments_fids)
+        feeds = []
+        for feed_data in feed_datas:
+            feed = Feed()
+            feed.make_with_dict(feed_data)
+            feeds.append(feed)
+
+        # Feed 데이터에서 comments의 Cid들을 비교해서 매칭된 cid리스트를 정리한 다음 다시 Feed.comment에 담아버림
+
+        comments_cids = set(comment.cid for comment in comments)
+        for feed in feeds:
+            # Feed의 댓글들을 검색된 cid들로만 채웁니다. 저장만 안하면 되니까.
+            matched_cids = [ cid for cid in feed.comment if cid in comments_cids]
+            feed.comment = matched_cids
+
+        return feeds
+
+
     # 멘션한 유저를 찾아내자
     def _extract_mention_data(self, body):
         # 정규식으로 찾음, 이메일 형식도 가져올수 있는 문제가 있어 정규식을 더 정교하게 설정
@@ -660,6 +687,28 @@ class FeedManager:
 
         # 이거 바꿔야함.
         # return classified_comments
+
+    # 검색 시, 그리고
+    def get_comments_with_type_and_keyword(self, user, type:str, keyword:str=""):
+        comment_datas = self._database.get_all_data(target="cid")
+        comments = []
+
+        for comment_data in comment_datas:
+            if type == "search":
+                if keyword in comment_data["body"]:
+                    comment = Comment()
+                    comment.make_with_dict(comment_data)
+                    comments.append(comment)
+
+            elif type == "mypage":
+                if comment_data["cid"] in user.my_comments:
+                    comment = Comment()
+                    comment.make_with_dict(comment_data)
+                    comments.append(comment)
+
+        feeds = self.__get_feeds_on_searched_comments(comments)
+
+        return feeds
 
     def get_comments_with_keyword(self, keyword:str):
         comment_datas = self._database.get_all_data(target="cid")
