@@ -579,23 +579,31 @@ class FeedSearchEngine:
     # result , index = try_serach_feed(target_type="uname", target = "바위게", num_feed=10, index=240):
 
 
-    def try_search_feed_new(self, target_type="default", fclass="", board_type="", target=""):
+    def try_search_feed_new(self, target_type="default", fclass="", target_time="", board_type="", target=""):
         fid_list = []
 
-        if target_type == "hashtag":
-            fid_list = self.__search_manager.search_feeds_with_hashtag_new(hashtag=target, fclass=fclass, board_type=board_type)
-        elif target_type == "fid":
-            fid_list = self.__search_manager.search_feeds_with_fid_new(fid=target, fclass=fclass, board_type=board_type)
-        elif target_type == "uname":
-            fid_list = self.__search_manager.search_feeds_with_uname_new(uname=target, fclass=fclass, board_type=board_type)
-        elif target_type == "bid":
-            fid_list = self.__search_manager.search_feeds_with_bid_new(bid=target, fclass=fclass, board_type=board_type)
-        elif target_type == "keyword":
-            fid_list = self.__search_manager.search_feeds_with_keyword_new(keyword=target, fclass=fclass, board_type=board_type)
+        if target_type == "default":
+            print("default가 입력 됨")
+            pass
 
         else:
-            print("default 가 입력됨")
-            pass
+            fid_list = self.__search_manager.search_feeds_with_target_option(target_type=target_type,
+                                                                             target = target,
+                                                                             fclass=fclass,
+                                                                             board_type = board_type,
+                                                                             target_time=target_time
+                                                                             )
+
+        # if target_type == "hashtag":
+        #     fid_list = self.__search_manager.search_feeds_with_hashtag_new(hashtag=target, fclass=fclass, board_type=board_type)
+        # elif target_type == "fid":
+        #     fid_list = self.__search_manager.search_feeds_with_fid_new(fid=target, fclass=fclass, board_type=board_type)
+        # elif target_type == "uname":
+        #     fid_list = self.__search_manager.search_feeds_with_uname_new(uname=target, fclass=fclass, board_type=board_type)
+        # elif target_type == "bid":
+        #     fid_list = self.__search_manager.search_feeds_with_bid_new(bid=target, fclass=fclass, board_type=board_type)
+        # elif target_type == "keyword":
+        #     fid_list = self.__search_manager.search_feeds_with_keyword_new(keyword=target, fclass=fclass, board_type=board_type)
 
         return fid_list
 
@@ -1063,25 +1071,31 @@ class SearchManager:
 
 #--------------------------------------------------------------------------------------------------------------------
 
-    def search_feeds_with_hashtag_new(self, hashtag:str, fclass="", board_type=""):
-        fid_list = self.__managed_feed_bias_table.search_feeds_with_key_n_option(key=hashtag, option="hashtag", fclass=fclass, board_type=board_type)
+    def search_feeds_with_target_option(self, target_type:str, target:str, fclass="", board_type="", target_time=""):
+        fid_list = self.__managed_feed_bias_table.search_feeds_with_key_n_options(key=target, option=target_type,
+                                                                                  fclass=fclass, board_type=board_type,
+                                                                                  target_time=target_time)
         return fid_list
 
-    def search_feeds_with_keyword_new(self, keyword: str, fclass="", board_type=""):
-        fid_list = self.__managed_feed_bias_table.search_feeds_with_key_n_option(key=keyword, option="keyword", fclass=fclass, board_type=board_type)
-        return fid_list
-
-    def search_feeds_with_uname_new(self, uname: str, fclass="", board_type=""):
-        fid_list = self.__managed_feed_bias_table.search_feeds_with_key_n_option(key=uname, option="keyword", fclass=fclass, board_type=board_type)
-        return fid_list
-
-    def search_feeds_with_bid_new(self, bid: str, fclass="", board_type=""):
-        fid_list = self.__managed_feed_bias_table.search_feeds_with_key_n_option(key=bid, option="keyword", fclass=fclass, board_type=board_type)
-        return fid_list
-
-    def search_feeds_with_fid_new(self, fid: str, fclass="", board_type=""):
-        fid_list = self.__managed_feed_bias_table.search_feeds_with_key_n_option(key=fid, option="keyword", fclass=fclass, board_type=board_type)
-        return fid_list
+    # def search_feeds_with_hashtag_new(self, hashtag:str, fclass="", board_type=""):
+    #     fid_list = self.__managed_feed_bias_table.search_feeds_with_key_n_option(key=hashtag, option="hashtag", fclass=fclass, board_type=board_type)
+    #     return fid_list
+    #
+    # def search_feeds_with_keyword_new(self, keyword: str, fclass="", board_type=""):
+    #     fid_list = self.__managed_feed_bias_table.search_feeds_with_key_n_option(key=keyword, option="keyword", fclass=fclass, board_type=board_type)
+    #     return fid_list
+    #
+    # def search_feeds_with_uname_new(self, uname: str, fclass="", board_type=""):
+    #     fid_list = self.__managed_feed_bias_table.search_feeds_with_key_n_option(key=uname, option="keyword", fclass=fclass, board_type=board_type)
+    #     return fid_list
+    #
+    # def search_feeds_with_bid_new(self, bid: str, fclass="", board_type=""):
+    #     fid_list = self.__managed_feed_bias_table.search_feeds_with_key_n_option(key=bid, option="keyword", fclass=fclass, board_type=board_type)
+    #     return fid_list
+    #
+    # def search_feeds_with_fid_new(self, fid: str, fclass="", board_type=""):
+    #     fid_list = self.__managed_feed_bias_table.search_feeds_with_key_n_option(key=fid, option="keyword", fclass=fclass, board_type=board_type)
+    #     return fid_list
 
     # 댓글 검색
     def search_comments_with_keyword_new(self, keyword: str):

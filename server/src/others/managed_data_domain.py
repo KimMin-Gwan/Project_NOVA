@@ -404,7 +404,7 @@ class ManagedFeedBiasTable:
     #
     #     return result_fid, result_index
 
-    def search_feeds_with_key_n_option(self, key:str, fclass:str, board_type:str, option):
+    def search_feeds_with_key_n_option(self, key:str, fclass:str, board_type:str, target_time:str, option):
         # Nan값의 경우, False 처리.
         # 대소문자를 구분하지 않음
         searched_df = self.__feed_df
@@ -439,6 +439,13 @@ class ManagedFeedBiasTable:
             # Fclass == long 인지 fclass == short인지 분류
             searched_df = searched_df[searched_df["fclass"] == fclass]
 
+        # 시간에 따라 분류하는 함수 ( 일간 주간 )
+        if target_time=="" or target_time=="all" or target_time=="전체":
+            pass
+        elif target_time=="day":
+            searched_df = searched_df[self.__get_time_diff(target_time=searched_df['date'],target_hour=24)]
+        elif target_time=="weekly":
+            searched_df = searched_df[self.__get_time_diff(target_time=searched_df['date'],target_hour=168)]
         # pprint(searched_df)
 
         return searched_df['fid'].tolist()
