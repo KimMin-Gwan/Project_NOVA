@@ -466,14 +466,17 @@ class FeedManager:
 
         # Feed 데이터에서 comments의 Cid들을 비교해서 매칭된 cid리스트를 정리한 다음 다시 Feed.comment에 담아버림
 
-        comments_cids = set(comment.cid for comment in comments)
         for feed in feeds:
-            # Feed의 댓글들을 검색된 cid들로만 채웁니다. 저장만 안하면 되니까.
-            matched_cids = [ cid for cid in feed.comment if cid in comments_cids]
-            feed.comment = matched_cids
+            # feed.comment에는 원래 cid가 담기는 것이지만,
+            # 지금은 Comment()객체가 담기게 됨. 딕셔너리 데이터로 담기게 됩니다.
+            matched_comments = []
+            for comment in comments:
+                if feed.fid == comment.fid:
+                    matched_comments.append(comment.get_dict_form_data())
+
+            feed.comments = matched_comments
 
         return feeds
-
 
     # 멘션한 유저를 찾아내자
     def _extract_mention_data(self, body):
@@ -688,7 +691,7 @@ class FeedManager:
         # 이거 바꿔야함.
         # return classified_comments
 
-    # 검색 시, 그리고
+    # 검색 시, 그리고 마이페이지에서 검색되는 댓글들을 반환하는 함수입니다.
     def get_comments_with_type_and_keyword(self, user, type:str, keyword:str=""):
         comment_datas = self._database.get_all_data(target="cid")
         comments = []
