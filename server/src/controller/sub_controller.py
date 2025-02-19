@@ -1,6 +1,8 @@
 from model import *
 from others import UserNotExist, CustomError
 
+from src.model.sub_model import ChangeUserAgeModel
+
 
 class Sub_Controller:
     def sample_func(self, database:Local_Database, request) -> BaseModel: 
@@ -236,7 +238,12 @@ class Sub_Controller:
         model.save_report()
         
         return model
-        
+
+    def try_change_users_age(self, database:Local_Database, request):
+        model = ChangeUserAgeModel(database=database)
+        model.change_users_age()
+        return model
+
         
 
 

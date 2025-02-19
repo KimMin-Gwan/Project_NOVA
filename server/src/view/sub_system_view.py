@@ -301,7 +301,18 @@ class Sub_Service_View(Master_View):
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response
-        
+
+        @self.__app.post('/nova_sub_system/try_change_users_age')
+        def try_change_users_age(request:Request):
+            request_manager = RequestManager()
+            request_manager.try_view_management(cookies=request.cookies)
+
+            sub_controller=Sub_Controller()
+            model = sub_controller.try_change_users_age(database=self.__database,
+                                                        request=request_manager)
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
 
     #def bias_page_route(self, endpoint:str):
         #@self.__app.get(endpoint+'/home')
