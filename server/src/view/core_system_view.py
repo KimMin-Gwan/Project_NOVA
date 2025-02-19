@@ -164,7 +164,7 @@ class Core_Service_View(Master_View):
 
         # /home/search_feed_with_hashtag?hashtag=뭐
         @self.__app.get('/home/search_feed_with_hashtag')
-        def get_hot_hashtag_feed(request:Request, hashtag:Optional[str], target_time:Optional[str]):
+        def get_hot_hashtag_feed(request:Request, hashtag:Optional[str], target_time:Optional[str]="weekly"):
 
             request_manager = RequestManager()
 
