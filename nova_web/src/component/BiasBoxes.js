@@ -13,12 +13,12 @@ export default function BiasBoxes({ setBiasId, fetchBiasCategoryData, writeCommu
   let { biasList, loading, fetchBiasList } = useBiasStore();
 
   useEffect(() => {
-    fetchBiasList();
+    // fetchBiasList();
     if (isLogin === "done") {
       fetchBiasList();
       console.log("isLogin", isLogin);
     }
-  }, [fetchBiasList]);
+  }, []);
 
   const [clickedBias, setClickedBias] = useState(0);
 
