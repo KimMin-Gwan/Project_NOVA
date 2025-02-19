@@ -710,9 +710,9 @@ class FeedManager:
                     comments.append(comment)
 
         # pprint(comments)
-        pprint("댓글 들")
-        for comment in comments:
-            pprint(comment.get_dict_form_data())
+        # pprint("댓글 들")
+        # for comment in comments:
+        #     pprint(comment.get_dict_form_data())
 
         feeds = self.__get_feeds_on_searched_comments(comments)
 
