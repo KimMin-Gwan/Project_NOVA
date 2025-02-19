@@ -289,7 +289,7 @@ class Feed_Controller:
 
     def search_comment_with_keyword(self, database:Local_Database,
                                     request, feed_search_engine:FeedSearchEngine,
-                                    num_comments = 10):
+                                    num_comments=10):
         model = CommentSearchModel(database=database)
 
         # 유저 세팅
