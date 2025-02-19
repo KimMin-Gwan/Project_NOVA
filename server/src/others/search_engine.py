@@ -123,8 +123,8 @@ class FeedSearchEngine:
     # 예시 || 주간 Top100 페이지에서 사용자가 스크롤을 내려 주간 탑 100의 두번째 요청을 넣음
     # result , index = try_get_feed_in_recent(search_type ="weekly", num_feed= 10, index=320):
 
-    def try_get_feed_in_recent_new(self, time_type, search_type):
-        fid_list = self.__search_manager.try_get_feed_with_target_hour_new(search_type=search_type, time_type=time_type)
+    def try_get_feed_in_recent(self, time_type, search_type):
+        fid_list = self.__search_manager.try_get_feed_with_target_hour(search_type=search_type, time_type=time_type)
 
         return fid_list
     #
@@ -438,7 +438,7 @@ class SearchManager:
 
     # 목표시간을 바탕으로 피드를 찾는 함수
     # search_type == "all", "best"
-    def try_get_feed_with_target_hour_new(self, time_type, search_type):
+    def try_get_feed_with_target_hour(self, time_type, search_type):
         fid_list = self.__managed_feed_bias_table.search_feed_with_time_or_like(search_type=search_type, time_type=time_type)
 
         return fid_list
