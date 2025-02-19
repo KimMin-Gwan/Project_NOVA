@@ -381,7 +381,7 @@ class Core_Service_View(Master_View):
 
         # 해시태그로 검색
         @self.__app.get('/feed_explore/search_feed_with_hashtag')
-        def search_feed_with_hashtag(request:Request, hashtag:Optional[str], target_time:Optional[str], key:Optional[int]=-1):
+        def search_feed_with_hashtag(request:Request, hashtag:Optional[str], target_time:Optional[str]="weekly", key:Optional[int]=-1):
             request_manager = RequestManager()
             data_payload = HashtagFeedRequest(hashtag=hashtag, target_time=target_time, key=key)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
