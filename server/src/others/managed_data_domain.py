@@ -443,9 +443,9 @@ class ManagedFeedBiasTable:
         if target_time=="" or target_time=="all" or target_time=="전체":
             pass
         elif target_time=="day":
-            searched_df = searched_df[self.__get_time_diff(target_time=searched_df['date'],target_hour=24)]
+            searched_df = searched_df[not self.__get_time_diff(target_time=searched_df['date'],target_hour=24)]
         elif target_time=="weekly":
-            searched_df = searched_df[self.__get_time_diff(target_time=searched_df['date'],target_hour=168)]
+            searched_df = searched_df[not self.__get_time_diff(target_time=searched_df['date'],target_hour=168)]
 
         pprint(searched_df)
 
