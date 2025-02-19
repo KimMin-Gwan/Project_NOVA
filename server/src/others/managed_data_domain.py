@@ -123,10 +123,12 @@ class ManagedFeedBiasTable:
     # 시간 차이를 분석하는 함수
     # target_hour : 1, 24, 168
     def __get_time_diff(self, target_time, reference_time=datetime.now(),
-                        target_hour=2) -> bool:
+                        target_hour=2, reverse=False) -> bool:
         time_diff = abs(target_time - reference_time)
 
         # 차이가 2시간 이상인지 확인
+        if reverse:
+            return time_diff < timedelta(hours=target_hour)
         return time_diff >= timedelta(hours=target_hour)
 
     # 시간 차이를 바탕으로 정해진 시간대 내의 피드 정보 구하기
@@ -443,9 +445,9 @@ class ManagedFeedBiasTable:
         if target_time=="" or target_time=="all" or target_time=="전체":
             pass
         elif target_time=="day":
-            searched_df = searched_df[not self.__get_time_diff(target_time=searched_df['date'],target_hour=24)]
+            searched_df = searched_df[self.__get_time_diff(target_time=searched_df['date'],target_hour=24, reverse=True)]
         elif target_time=="weekly":
-            searched_df = searched_df[not self.__get_time_diff(target_time=searched_df['date'],target_hour=168)]
+            searched_df = searched_df[self.__get_time_diff(target_time=searched_df['date'],target_hour=168, reverse=True)]
 
         pprint(searched_df)
 
