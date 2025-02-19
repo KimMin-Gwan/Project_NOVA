@@ -944,6 +944,7 @@ class KeywordSearchRequest(RequestHeader):
         self.key = key
         self.keyword = "고세구"
         self.fclass = fclass
+        self.email=""
 
 class HashtagFeedRequest(RequestHeader):
     def __init__(self, hashtag, key=-1) -> None:
