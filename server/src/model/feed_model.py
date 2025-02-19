@@ -782,7 +782,7 @@ class CommentSearchModel(FeedModel):
         try:
             body = {
                 'key' : self._key,
-                'comments' : self._make_dict_list_data(list_data=self._comments)
+                'feeds' : self._make_dict_list_data(list_data=self._feeds)
             }
 
             response = self._get_response_data(head_parser=head_parser, body=body)
