@@ -193,6 +193,11 @@ const Write = ({ brightmode }) => {
     setChoice(newChoices); // 4지선다 선택지 업데이트
   };
 
+  function onDeleteLink(i) {
+    setLinkList((prev) => prev.filter((_, index) => index !== i));
+    setCreateOptions((prev) => Math.max(0, prev - 1));
+  }
+
   function handleLinkChange() {}
 
   //   }
@@ -463,6 +468,7 @@ const Write = ({ brightmode }) => {
           onClickAdd={onClickAddLink}
           handleLinkChange={handleLinkChange}
           linkList={linkList}
+          onDeleteLink={onDeleteLink}
         />
       )}
     </div>
@@ -666,9 +672,9 @@ export function LinkModal({
   setLinkUrl,
   linkTitle,
   linkUrl,
-  numLink,
   onClickAdd,
   linkList,
+  onDeleteLink,
 }) {
   const [urlImage, setUrlImage] = useState([]);
 
@@ -690,6 +696,7 @@ export function LinkModal({
       });
   }
 
+  const onClickDelete = (i) => {};
   // if (isLoading) {
   //   return <div>loading...</div>;
   // }
@@ -702,11 +709,18 @@ export function LinkModal({
           {linkList.length > 0 &&
             linkList.map((link, i) => {
               return (
-                <div key={i} className={style["link-box"]}>
-                  {/* <div>닫기</div> */}
-                  <div>{link.title}</div>
-                  <div>{link.url}</div>
-                  <div className={style["link-image"]}>
+                <div key={i} className={`${style["preview-container"]} ${style["link-box"]}`}>
+                  <div
+                    className={style["remove-icon"]}
+                    onClick={() => {
+                      onDeleteLink(i);
+                    }}
+                  >
+                    <img src={close_icon} alt="remove" />
+                  </div>
+                  <div className={style["link_explain"]}>{link.explain}</div>
+                  {/* <div>{link.url}</div> */}
+                  <div className={style["preview-image"]}>
                     <img src={urlImage[i]} alt="img" />
                   </div>
                 </div>
@@ -720,7 +734,7 @@ export function LinkModal({
               type="text"
               value={linkTitle}
               onChange={(e) => setLinkTitle(e.target.value)}
-              placeholder="좌표 이름"
+              placeholder="좌표 설명"
             />
             <input
               type="url"
@@ -730,6 +744,8 @@ export function LinkModal({
             />
           </div>
           <button
+            disabled={!(linkTitle && linkUrl)}
+            className={style["add_link_button"]}
             onClick={() => {
               onClickAdd();
               fetchkUrlImage();

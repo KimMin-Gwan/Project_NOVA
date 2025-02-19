@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useTagStore from "../../stores/TagStore/useTagStore";
 import NavBar from "../../component/NavBar";
+import Header from "../../component/Header/Header";
 export default function SearchPage() {
   let navigate = useNavigate();
 
@@ -97,16 +98,7 @@ export default function SearchPage() {
   }
   return (
     <div className="container">
-      <header className="header">
-        <div
-          className="logo"
-          onClick={() => {
-            navigate("/");
-          }}
-        >
-          <img src={logo2} alt="logo" className={`logo-st`}></img>
-        </div>
-      </header>
+      <Header />
       <div className="top-bar">
         <div
           className="back"

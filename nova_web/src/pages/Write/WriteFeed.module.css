@@ -263,16 +263,18 @@
   .img-name {
     flex: 1;
   }
-  .preview-image {
-    width: 50px;
-    height: 50px;
-    margin-right: 10px;
+}
 
-    img {
-      height: 100%;
-      width: 100%;
-      object-fit: cover;
-    }
+.preview-image {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+  /* background-color: blue; */
+
+  img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
   }
 }
 
@@ -348,13 +350,10 @@
 /* 좌표 모달 */
 
 .link-box {
-  width: 80%;
-  padding: 20px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border: 1px solid gray;
+  border: 1px solid #9ba3ae;
+}
+.link_explain {
+  flex: 1;
 }
 
 .link-image {
@@ -367,19 +366,26 @@
   }
 }
 .link-input-container {
-  margin: 0 auto;
+  margin: 0 20px;
   display: flex;
-  width: 80%;
+  border: 2px dotted #c5deff;
+}
+
+.link-input {
+  width: 100%;
   padding: 20px;
-  border: 1px dotted blue;
+  display: flex;
+  flex-direction: column;
+  input {
+    display: inline-block;
+    /* flex: 1; */
+    border: none;
+    border-bottom: 1px solid #b3b3b3;
+    padding: 5px 10px;
+    margin-bottom: 5px;
 
-  .link-input {
-    display: flex;
-    flex-direction: column;
-    width: 90%;
-
-    input {
-      padding: 10px;
+    &:focus {
+      outline: none;
     }
   }
 }
@@ -388,6 +394,24 @@
   .title {
     padding: 10px 20px;
   }
+}
+
+.add_link_button {
+  cursor: pointer;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  align-self: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+  padding: 30px;
+  white-space: nowrap;
+}
+
+.add_link_button_on {
+  border: solid 1px black;
 }
 
 .add-icon {
@@ -429,9 +453,6 @@
   cursor: pointer;
   color: #797979;
   text-decoration: underline;
-
-  span {
-  }
 }
 
 .Select_box {

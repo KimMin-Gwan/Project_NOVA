@@ -20,38 +20,6 @@ export default function FollowBoxes({ setBiasId }) {
   const [biasDataList, setBiasDataList] = useState([]);
   const [clickedBid, setClickedBid] = useState();
   const [clickedBname, setClickedBname] = useState();
-  function fetchTryFollowBias() {
-    console.log(clickedBid);
-    fetch("https://nova-platform.kr/nova_sub_system/try_select_my_bias", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(send_data),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        if (biasList.some((item) => item.bid === clickedBid)) {
-          alert("팔로우 취소 완료");
-        } else {
-          alert("팔로우 완료!");
-        }
-        setIsModalOpen(false);
-        window.location.reload();
-      })
-      .catch((err) => {
-        console.log("err", err);
-      });
-    // postApi
-    //   .post("nova_sub_system/try_select_my_bias", {
-    //     send_data,
-    //   })
-    //   .then((res) => {
-    //     console.log(res.data);
-    //   });
-  }
   const { isLogin, isLogout } = useLoginStore();
   let { biasList, loading, fetchBiasList } = useBiasStore();
 
@@ -153,7 +121,13 @@ export default function FollowBoxes({ setBiasId }) {
     //   });
   }
   return (
-    <div ref={scrollRef} onMouseDown={onMouseDown} onMouseMove={onMouseMove} onMouseUp={onMouseUp} className="bias-container">
+    <div
+      ref={scrollRef}
+      onMouseDown={onMouseDown}
+      onMouseMove={onMouseMove}
+      onMouseUp={onMouseUp}
+      className="bias-container"
+    >
       <div className="bias-wrapper">
         {/* <div className="bias-info">
           <div className="bias-box">

@@ -15,6 +15,7 @@ import CategoryModal from "../../component/CategoryModal/CategoryModal.js";
 import NoneFeed from "../../component/NoneFeed/NoneFeed.js";
 import useBiasStore from "../../stores/BiasStore/useBiasStore.js";
 import NavBar from "../../component/NavBar.js";
+import Header from "../../component/Header/Header.js";
 
 export default function FeedList(isUserState) {
   const [params] = useSearchParams();
@@ -359,21 +360,8 @@ export default function FeedList(isUserState) {
 
   return (
     <div className={`all-box ${style["all_container"]}`}>
-      {/* <section className="contents com1">
-        <LeftBar brightMode={mode} />
-      </section> */}
       <div className={`${style["container"]} ${style[getModeClass(mode)]}`}>
-        <header className={style.header}>
-          <div className="logo">
-            <img
-              src={logo2}
-              alt="logo"
-              onClick={() => {
-                navigate("/");
-              }}
-            ></img>
-          </div>
-        </header>
+        <Header />
         {type === "bias" && (
           <div className={style["bias-section"]}>
             <BiasBoxes setBiasId={setBiasId} fetchBiasCategoryData={fetchBiasCategoryData} />
@@ -408,7 +396,6 @@ export default function FeedList(isUserState) {
               </button>
             </div>
           </div>
-          // <div className={`${style["title"]} ${style[getModeClass(mode)]}`}>전체 피드</div>
         )}
         {type === "best" && (
           <div className={style["keyword-section"]}>
