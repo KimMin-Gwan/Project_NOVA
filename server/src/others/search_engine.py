@@ -1072,7 +1072,7 @@ class SearchManager:
 #--------------------------------------------------------------------------------------------------------------------
 
     def search_feeds_with_target_option(self, target_type:str, target:str, fclass="", board_type="", target_time=""):
-        fid_list = self.__managed_feed_bias_table.search_feeds_with_key_n_options(key=target, option=target_type,
+        fid_list = self.__managed_feed_bias_table.search_feeds_with_key_n_option(key=target, option=target_type,
                                                                                   fclass=fclass, board_type=board_type,
                                                                                   target_time=target_time)
         return fid_list
