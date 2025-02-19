@@ -1,4 +1,4 @@
-from model import FeedModel, Local_Database, FeedEditModel, FeedSearchModel, FilteredFeedModel, FeedSearchModelNew
+from model import *
 from fastapi import HTTPException, status
 from others import CustomError, FeedManager, FeedSearchEngine
 
