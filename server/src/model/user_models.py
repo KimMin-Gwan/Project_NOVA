@@ -8,6 +8,7 @@ import jwt
 import datetime
 import uuid
 from pprint import pprint
+import random
 
 class LoginModel(BaseModel):
     def __init__(self, database:Local_Database) -> None:
@@ -88,11 +89,23 @@ class SendEmailModel(BaseModel):
 
         except Exception as e:
             raise CoreControllerLogicError(error_type="make_token | " + str(e))
-        
+
+    def __make_user_nickname(self):
+        while True:
+            random_number = random.randint(0,10000)
+            uname = "지지자"+str(random_number)
+            # 만약 데이터베이스에 이 이름이 등록되어있다면.. 다시 랜덤숫자를 생성합니다
+            if self._database.get_data_with_key(target="uid", key="uname", key_datas=[uname]):
+                continue
+            else:
+                return uname
+
     def save_user(self,request, feed_search_engine:FeedSearchEngine):
         try:
             uid = self.__make_uid()
+            uname = self.__make_user_nickname()
             user = User(uid=uid,
+                        uname=uname,
                         age=request.age,
                         email=request.email,
                         gender=request.gender,
@@ -107,7 +120,6 @@ class SendEmailModel(BaseModel):
             feed_search_engine.try_add_user(user=user)
             #self._database.add_new_data(target_id="muid",
                                         #new_data=managedUser.get_dict_form_data())
-
 
         except Exception as e:
             raise CoreControllerLogicError(error_type="save_response | " + str(e))
