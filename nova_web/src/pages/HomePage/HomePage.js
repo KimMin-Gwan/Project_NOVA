@@ -28,9 +28,10 @@ export default function HomePage() {
   let { tagList, loading, fetchTagList } = useTagStore();
 
   // 최애 리스트 받아오기
-  useEffect(() => {
-    fetchBiasList();
-  }, []);
+  // useEffect(() => {
+  //   console.log("새로고침");
+  //   fetchBiasList();
+  // }, [fetchBiasList]);
 
   const FETCH_URL = "https://nova-platform.kr/feed_explore/";
 

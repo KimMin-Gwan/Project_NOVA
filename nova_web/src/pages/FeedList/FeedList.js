@@ -55,6 +55,7 @@ export default function FeedList(isUserState) {
   });
 
   async function fetchBiasCategoryData(bid) {
+    console.log("adasdas", bids, biasId);
     let send_data = {
       header: header,
       body: {
@@ -63,7 +64,7 @@ export default function FeedList(isUserState) {
         key: nextData || -1,
       },
     };
-
+    console.log("seeed", send_data);
     // setIsLoading(true);
     if (type === "bias") {
       await fetch(`${FETCH_URL}feed_with_community`, {

@@ -33,6 +33,11 @@ export function getModeClass(mode) {
   return mode === "dark" ? "dark-mode" : "bright-mode";
 }
 function App() {
+  // const { fetchBiasList } = useBiasStore();
+
+  // useEffect(() => {
+  //   fetchBiasList();
+  // }, []);
   // // brightMode 상태가 변경될 때마다 body 클래스 업데이트
   const [brightMode, setBrightMode] = useState(() => {
     return localStorage.getItem("brightMode") || "bright"; // 기본값은 'bright'

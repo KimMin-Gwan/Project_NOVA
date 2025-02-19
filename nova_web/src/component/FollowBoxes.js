@@ -25,6 +25,7 @@ export default function FollowBoxes({ setBiasId }) {
 
   useEffect(() => {
     console.log(biasList.length);
+    fetchBiasList();
     if (isLogin === "done") {
       fetchBiasList();
       console.log("isLogin", isLogin);
