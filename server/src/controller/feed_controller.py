@@ -293,8 +293,9 @@ class Feed_Controller:
         model = CommentSearchModel(database=database)
 
         # 유저 세팅
-        if request.jwt_payload != "":
-            model.set_user_with_email(request=request.jwt_payload)
+        model.set_user_with_email(request=request.data_payload)
+        # if request.jwt_payload != "":
+        #     model.set_user_with_email(request=request.jwt_payload)
 
         # 키워드를 통해 서치함
         model.try_search_comment_with_keyword(
