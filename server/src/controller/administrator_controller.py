@@ -168,8 +168,11 @@ class Administrator_Controller:
             if not model.check_admin_key(request=request):
                 return model
 
+            # 여기 전부 새로 뜯어고칠 예정이니 명시만 해둔 상태입니다.
+            # 그 FeedModel 파일에서 코드 주석처리 하기위해서 필요한 작업입니다.
             if type == 'add':
                 model.set_feed_data(request=request)
+                # model.set_feed_data(request=request)
                 model.add_feed()
 
             if type == 'load':
@@ -177,6 +180,7 @@ class Administrator_Controller:
 
             if type == 'modify':
                 model.load_feed(request=request)
+                # model.set_feed_data(request=request)
                 model.set_feed_data(request=request)
                 model.modify_feed()
 

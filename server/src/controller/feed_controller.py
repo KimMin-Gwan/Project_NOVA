@@ -186,18 +186,19 @@ class Feed_Controller:
                                 )
         return model
 
-    def get_home_hot_hashtag_feed(self, database:Local_Database,
-                            request , feed_manager:FeedManager):
-        model = FeedModel(database=database)
-        # 유저가 있으면 세팅
-        if request.jwt_payload != "":
-            model.set_user_with_email(request=request.jwt_payload)
-        model.set_feed_data(
-            target_type="hashtag", target=request.data_payload.target,
-            feed_manager=self.__feed_manager,
-            num_feed=4, index= request.data_payload.key)
-
-        return model
+    # 안 써서 주석처리
+    # def get_home_hot_hashtag_feed(self, database:Local_Database,
+    #                         request , feed_manager:FeedManager):
+    #     model = FeedModel(database=database)
+    #     # 유저가 있으면 세팅
+    #     if request.jwt_payload != "":
+    #         model.set_user_with_email(request=request.jwt_payload)
+    #     model.set_feed_data(
+    #         target_type="hashtag", target=request.data_payload.target,
+    #         feed_manager=self.__feed_manager,
+    #         num_feed=4, index= request.data_payload.key)
+    #
+    #     return model
     
     def get_original_feed_data(self, database:Local_Database, data_payload):
         model = FeedModel(database=database)

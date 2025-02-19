@@ -116,14 +116,22 @@ class FeedModel(BaseModel):
         
         return send_data
 
-    def set_feed_data(self, feed_search_engine:FeedSearchEngine, feed_manager,
-                        target_type="default", target="", num_feed=1, index=-1):
+    def set_feed_data(self, feed_search_engine:FeedSearchEngine, feed_manager:FeedManager,
+                      target_type="default", target="", last_index=-1, num_feed=1):
+        fid_list = feed_search_engine.try_search_feed_new(target_type=target_type, target=target)
+        fid_list, self._key = feed_manager.paging(fid_list, last_index=last_index, num_feed=num_feed)
 
-        fid_list, self._key = feed_search_engine.try_search_feed(
-            target_type=target_type, target=target, num_feed=num_feed, index=index)
-        
         self._send_data = self._make_feed_data_n_interaction_data(feed_manager=feed_manager, fid_list=fid_list)
         return
+
+    # def set_feed_data(self, feed_search_engine:FeedSearchEngine, feed_manager,
+    #                     target_type="default", target="", num_feed=1, index=-1):
+    #
+    #     fid_list, self._key = feed_search_engine.try_search_feed(
+    #         target_type=target_type, target=target, num_feed=num_feed, index=index)
+    #
+    #     self._send_data = self._make_feed_data_n_interaction_data(feed_manager=feed_manager, fid_list=fid_list)
+    #     return
 
     def set_today_best_feed(self, feed_search_engine:FeedSearchEngine, feed_manager,
                              index=-1, num_feed=4):
@@ -600,68 +608,66 @@ class FeedSearchModel(FeedModel):
         self.__feed = self.__feed = self._set_feed_json_data(user=self._user, feeds=self.__feed)
         return
 
-    def try_search_feed(self, feed_search_engine:FeedSearchEngine, feed_manager,
-                        target="", num_feed=1, index=-1, ):
-
-        hashtag_feed_fid, self._key = feed_search_engine.try_search_feed(
-            target_type="hashtag", target=target, num_feed=num_feed, index=index)
-
-        user_feed_fid, self._key = feed_search_engine.try_search_feed(
-            target_type="uname", target=target, num_feed=num_feed, index=index)
-
-        hashtag_feed_data = self._database.get_datas_with_ids(target_id="fid", ids=hashtag_feed_fid)
-        user_feed_fid = self._database.get_datas_with_ids(target_id="fid", ids=user_feed_fid)
-
-        for feed_data1 in hashtag_feed_data:
-            feed = Feed()
-            feed.make_with_dict(feed_data1)
-            self._hashtag_feed.append(feed)
-
-        for feed_data2 in user_feed_fid:
-            feed = Feed()
-            feed.make_with_dict(feed_data2)
-            self._uname_feed.append(feed)
-
-
-
-        self._hashtag_feed = self._set_feed_json_data(user=self._user, feeds=self._hashtag_feed )
-        self._uname_feed = self._set_feed_json_data(user=self._user, feeds=self._uname_feed)
-
-        return
-
-    def try_search_feed_with_hashtag(self, feed_search_engine:FeedSearchEngine, feed_manager,
-                                    target="", num_feed=1, index=-1):
-
-        hashtag_feed_fid, self._key = feed_search_engine.try_search_feed(
-            target_type="hashtag", target=target, num_feed=num_feed, index=index)
-
-        hashtag_feed_data = self._database.get_datas_with_ids(target_id="fid", ids=hashtag_feed_fid)
-
-        feeds = []
-
-        for feed_data in hashtag_feed_data:
-            feed = Feed()
-            feed.make_with_dict(feed_data)
-            feeds.append(feed)
-
-        feeds = self._set_feed_json_data(user=self._user, feeds=feeds)
-
-        # 인터엑션 필요
-        self._send_data = self.__set_send_data(feeds=feeds)
-        return
-
-    def try_search_feed_with_keyword(self, feed_search_engine:FeedSearchEngine,
-                                     feed_manager:FeedManager, target="", last_index=-1, num_feed=1):
-        searched_fid_list = feed_search_engine.try_search_feed_new(target_type="keyword", target=target)
-
-        # 페이징
-        searched_fid_list, self._key = feed_manager.paging_fid_list(fid_list=searched_fid_list,
-                                                                    last_index=last_index,
-                                                                    page_size=num_feed)
-
-        self._send_data = self._make_feed_data_n_interaction_data(feed_manager=feed_manager,
-                                                                  fid_list=searched_fid_list)
-        return
+    # def try_search_feed(self, feed_search_engine:FeedSearchEngine, feed_manager,
+    #                     target="", num_feed=1, index=-1, ):
+    #
+    #     hashtag_feed_fid, self._key = feed_search_engine.try_search_feed(
+    #         target_type="hashtag", target=target, num_feed=num_feed, index=index)
+    #
+    #     user_feed_fid, self._key = feed_search_engine.try_search_feed(
+    #         target_type="uname", target=target, num_feed=num_feed, index=index)
+    #
+    #     hashtag_feed_data = self._database.get_datas_with_ids(target_id="fid", ids=hashtag_feed_fid)
+    #     user_feed_fid = self._database.get_datas_with_ids(target_id="fid", ids=user_feed_fid)
+    #
+    #     for feed_data1 in hashtag_feed_data:
+    #         feed = Feed()
+    #         feed.make_with_dict(feed_data1)
+    #         self._hashtag_feed.append(feed)
+    #
+    #     for feed_data2 in user_feed_fid:
+    #         feed = Feed()
+    #         feed.make_with_dict(feed_data2)
+    #         self._uname_feed.append(feed)
+    #
+    #     self._hashtag_feed = self._set_feed_json_data(user=self._user, feeds=self._hashtag_feed )
+    #     self._uname_feed = self._set_feed_json_data(user=self._user, feeds=self._uname_feed)
+    #
+    #     return
+    #
+    # def try_search_feed_with_hashtag(self, feed_search_engine:FeedSearchEngine, feed_manager,
+    #                                 target="", num_feed=1, index=-1):
+    #
+    #     hashtag_feed_fid, self._key = feed_search_engine.try_search_feed(
+    #         target_type="hashtag", target=target, num_feed=num_feed, index=index)
+    #
+    #     hashtag_feed_data = self._database.get_datas_with_ids(target_id="fid", ids=hashtag_feed_fid)
+    #
+    #     feeds = []
+    #
+    #     for feed_data in hashtag_feed_data:
+    #         feed = Feed()
+    #         feed.make_with_dict(feed_data)
+    #         feeds.append(feed)
+    #
+    #     feeds = self._set_feed_json_data(user=self._user, feeds=feeds)
+    #
+    #     # 인터엑션 필요
+    #     self._send_data = self.__set_send_data(feeds=feeds)
+    #     return
+    #
+    # def try_search_feed_with_keyword(self, feed_search_engine:FeedSearchEngine,
+    #                                  feed_manager:FeedManager, target="", last_index=-1, num_feed=1):
+    #     searched_fid_list = feed_search_engine.try_search_feed_new(target_type="keyword", target=target)
+    #
+    #     # 페이징
+    #     searched_fid_list, self._key = feed_manager.paging_fid_list(fid_list=searched_fid_list,
+    #                                                                 last_index=last_index,
+    #                                                                 page_size=num_feed)
+    #
+    #     self._send_data = self._make_feed_data_n_interaction_data(feed_manager=feed_manager,
+    #                                                               fid_list=searched_fid_list)
+    #     return
 
 
     def get_response_form_data(self, head_parser):
