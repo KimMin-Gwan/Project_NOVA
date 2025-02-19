@@ -704,7 +704,7 @@ class FeedManager:
                     comments.append(comment)
 
             elif type == "mypage":
-                if comment_data["cid"] in user.my_comments:
+                if comment_data["cid"] in user.my_comment:
                     comment = Comment()
                     comment.make_with_dict(comment_data)
                     comments.append(comment)
