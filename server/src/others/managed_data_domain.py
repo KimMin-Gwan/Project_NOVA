@@ -438,7 +438,6 @@ class ManagedFeedBiasTable:
         else:
             # Fclass == long 인지 fclass == short인지 분류
             searched_df = searched_df[searched_df["fclass"] == fclass]
-        pprint(searched_df)
 
         # 시간에 따라 분류하는 함수 ( 일간 주간 )
         if target_time=="" or target_time=="all" or target_time=="전체":
@@ -447,6 +446,8 @@ class ManagedFeedBiasTable:
             searched_df = searched_df[self.__get_time_diff(target_time=searched_df['date'],target_hour=24)]
         elif target_time=="weekly":
             searched_df = searched_df[self.__get_time_diff(target_time=searched_df['date'],target_hour=168)]
+
+        pprint(searched_df)
 
         return searched_df['fid'].tolist()
     #---------------------------------------------------------------------------------------------
