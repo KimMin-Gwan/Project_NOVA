@@ -474,7 +474,7 @@ class FeedManager:
                 if feed.fid == comment.fid:
                     matched_comments.append(comment.get_dict_form_data())
 
-            feed.comments = matched_comments
+            feed.comment = matched_comments
 
         return feeds
 
@@ -709,7 +709,7 @@ class FeedManager:
                     comment.make_with_dict(comment_data)
                     comments.append(comment)
 
-        pprint(comments)
+        # pprint(comments)
         pprint("댓글 들")
         for comment in comments:
             pprint(comment.get_dict_form_data())
