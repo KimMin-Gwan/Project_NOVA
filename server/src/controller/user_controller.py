@@ -183,11 +183,10 @@ class UserController:
     def try_get_my_comments(self, database, request, feed_manager):
         model = MyCommentsModel(database=database)
         
-        model.set_user_with_email(request=request.jwt_payload)
-        # model.set_user_with_email(request=request.data_payload)
-        
-        model.get_my_comments(feed_manager=feed_manager,
-                                last_index=request.data_payload.key)
+        # model.set_user_with_email(request=request.jwt_payload)
+        model.set_user_with_email(request=request.data_payload)
+        model.get_my_comments(feed_manager=feed_manager, last_index=request.data_payload.key)
+
         return model
 
     # 마이페이지 프로필 가져오기
