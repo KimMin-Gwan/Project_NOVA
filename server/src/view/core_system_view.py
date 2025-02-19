@@ -942,7 +942,7 @@ class AllFeedRequest(RequestHeader):
 class KeywordSearchRequest(RequestHeader):
     def __init__(self, key, keyword, fclass="") -> None:
         self.key = key
-        self.keyword = "고세구"
+        self.keyword = keyword
         self.fclass = fclass
         self.email=""
 
