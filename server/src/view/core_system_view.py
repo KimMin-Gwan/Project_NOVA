@@ -941,7 +941,6 @@ class AllFeedRequest(RequestHeader):
 
 class KeywordSearchRequest(RequestHeader):
     def __init__(self, key, keyword, fclass="") -> None:
-        self.email = "randomUser4@naver.com"
         self.key = key
         self.keyword = "고세구"
         self.fclass = fclass
