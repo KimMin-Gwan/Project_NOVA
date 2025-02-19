@@ -10,13 +10,19 @@ class Feed_Controller:
     def try_search_in_fid(self, database:Local_Database,
                         request, feed_search_engine: FeedSearchEngine,
                         num_feed= 1):
-        model = FeedSearchModel(database=database)
+        model = FeedSearchModelNew(database=database)
         # 유저가 있으면 세팅
         if request.jwt_payload != "":
             model.set_user_with_email(request=request.jwt_payload)
-        model.try_search_feed_with_fid(feed_search_engine=feed_search_engine,
-                                       feed_manager=self.__feed_manager,
-                                        fid=request.data_payload.fid)
+        model.try_search_feed_with_target_type(feed_search_engine=feed_search_engine,
+                                               feed_manager=feed_manager,
+                                               target_type="fid",
+                                               target=request.data_payload.fid
+                                               )
+
+        # model.try_search_feed_with_fid(feed_search_engine=feed_search_engine,
+        #                                feed_manager=self.__feed_manager,
+        #                                 fid=request.data_payload.fid)
 
         return model
     
@@ -60,38 +66,38 @@ class Feed_Controller:
         return model
 
     # 키워드를 통한 피드 검색
-    def try_search_in_keyword(self, database:Local_Database,
-                        request, feed_search_engine: FeedSearchEngine,
-                        num_feed= 4):
-        model = FeedSearchModel(database=database)
-        
-        # 유저가 있으면 세팅
-        if request.jwt_payload != "":
-            model.set_user_with_email(request=request.jwt_payload)
-            
-        model.try_search_feed(feed_search_engine=feed_search_engine,
-                                feed_manager=self.__feed_manager,
-                            target=request.data_payload.keyword,
-                            num_feed=num_feed)
-
-        return model
-
-    # 키워드를 통한 피드 검색
-    def try_search_in_hashtag(self, database:Local_Database,
-                        request, feed_search_engine: FeedSearchEngine,
-                        num_feed= 4):
-        model = FeedSearchModel(database=database)
-        
-        # 유저가 있으면 세팅
-        if request.jwt_payload != "":
-            model.set_user_with_email(request=request.jwt_payload)
-        model.try_search_feed_with_hashtag(feed_search_engine=feed_search_engine,
-                                            feed_manager=self.__feed_manager,
-                                            target=request.data_payload.hashtag,
-                                            index=request.data_payload.key,
-                                            num_feed=num_feed)
-
-        return model
+    # def try_search_in_keyword(self, database:Local_Database,
+    #                     request, feed_search_engine: FeedSearchEngine,
+    #                     num_feed= 4):
+    #     model = FeedSearchModel(database=database)
+    #
+    #     # 유저가 있으면 세팅
+    #     if request.jwt_payload != "":
+    #         model.set_user_with_email(request=request.jwt_payload)
+    #
+    #     model.try_search_feed(feed_search_engine=feed_search_engine,
+    #                             feed_manager=self.__feed_manager,
+    #                         target=request.data_payload.keyword,
+    #                         num_feed=num_feed)
+    #
+    #     return model
+    #
+    # # 키워드를 통한 피드 검색
+    # def try_search_in_hashtag(self, database:Local_Database,
+    #                     request, feed_search_engine: FeedSearchEngine,
+    #                     num_feed= 4):
+    #     model = FeedSearchModel(database=database)
+    #
+    #     # 유저가 있으면 세팅
+    #     if request.jwt_payload != "":
+    #         model.set_user_with_email(request=request.jwt_payload)
+    #     model.try_search_feed_with_hashtag(feed_search_engine=feed_search_engine,
+    #                                         feed_manager=self.__feed_manager,
+    #                                         target=request.data_payload.hashtag,
+    #                                         index=request.data_payload.key,
+    #                                         num_feed=num_feed)
+    #
+    #     return model
 
     # 오늘의 인기 게시글
     def get_today_best(self, database:Local_Database,
@@ -217,19 +223,19 @@ class Feed_Controller:
         # 유저가 있으면 세팅
         if request.jwt_payload != "":
             model.set_user_with_email(request=request.jwt_payload)
-        model.try_search_feed_with_bid(feed_search_engine=feed_search_engine,
-                                       feed_manager=self.__feed_manager,
-                                       target=request.data_payload.target,
-                                       last_index=request.data_payload.last_index,
-                                       num_feed=num_feed)
 
-        # model.set_feed_data(feed_search_engine=feed_search_engine,
-        #                     target_type="bid",
-        #                     target=request.data_payload.bid,
-        #                     num_feed=num_feed,
-        #                     index=request.data_payload.key,
-        #                     feed_manager=self.__feed_manager
-        #                     )
+        model.try_search_feed_with_target_type(feed_search_engine=feed_search_engine,
+                                               feed_manager=self.__feed_manager,
+                                               target_type="bid",
+                                               index=request.data_payload.indexm,
+                                               num_feed=num_feed)
+
+        # model.try_search_feed_with_bid(feed_search_engine=feed_search_engine,
+        #                                feed_manager=self.__feed_manager,
+        #                                target=request.data_payload.target,
+        #                                last_index=request.data_payload.last_index,
+        #                                num_feed=num_feed)
+
 
         return model
 
@@ -245,21 +251,24 @@ class Feed_Controller:
         if request.jwt_payload != "":
             model.set_user_with_email(request=request.jwt_payload)
 
-        model.try_search_feed_with_hashtag(feed_search_engine=feed_search_engine,
-                                           feed_manager=feed_manager,
-                                           target=request.data_payload.hashtag,
-                                           target_time=request.data_payload.target_time,
-                                           last_index=request.data_payload.key,
-                                           num_feed=num_feed
-                                           )
+        model.try_search_feed_with_target_type(feed_search_engine=feed_search_engine,
+                                               feed_manager=feed_manager,
+                                               target_type="hashtag",
+                                               target=request.data_payload.target,
+                                               target_time=request.data_payload.target_time,
+                                               last_index=request.data_payload.last_index,
+                                               num_feed=num_feed
+        )
 
-        # model.set_feed_data(feed_search_engine=feed_search_engine,
-        #                     target_type="hashtag",
-        #                     target=request.data_payload.hashtag,
-        #                     num_feed=num_feed,
-        #                     index=request.data_payload.key,
-        #                     feed_manager=self.__feed_manager
-        #                     )
+        # model.try_search_feed_with_hashtag(feed_search_engine=feed_search_engine,
+        #                                    feed_manager=feed_manager,
+        #                                    target=request.data_payload.hashtag,
+        #                                    target_time=request.data_payload.target_time,
+        #                                    last_index=request.data_payload.key,
+        #                                    num_feed=num_feed
+        #                                    )
+
+
         return model
 
     def search_feed_with_keyword(self, database:Local_Database,
@@ -277,14 +286,22 @@ class Feed_Controller:
             target=request.data_payload.keyword,
             feed_search_engine=feed_search_engine,
         )
-        model.try_search_feed_with_keyword(
-            target=request.data_payload.keyword,
-            fclass=request.data_payload.fclass,
-            last_index=request.data_payload.key,
-            feed_search_engine=feed_search_engine,
-            feed_manager=self.__feed_manager,
-            num_feed=num_feed
-        )
+        model.try_search_feed_with_target_type(feed_search_engine=feed_search_engine,
+                                               feed_manager=feed_manager,
+                                               target_type="keyword",
+                                               target=request.data_payload.keyword,
+                                               fclass=request.data_payload.fclass,
+                                               last_index=request.data_payload.last_index,
+                                               num_feed=num_feed)
+
+        # model.try_search_feed_with_keyword(
+        #     target=request.data_payload.keyword,
+        #     fclass=request.data_payload.fclass,
+        #     last_index=request.data_payload.key,
+        #     feed_search_engine=feed_search_engine,
+        #     feed_manager=self.__feed_manager,
+        #     num_feed=num_feed
+        # )
 
         return model
 

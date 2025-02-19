@@ -164,7 +164,7 @@ class Core_Service_View(Master_View):
 
         # /home/search_feed_with_hashtag?hashtag=뭐
         @self.__app.get('/home/search_feed_with_hashtag')
-        def get_hot_hashtag_feed(request:Request, hashtag:Optional[str], target_time:Optional[str]="weekly"):
+        def get_hot_hashtag_feed(request:Request, hashtag:Optional[str], target_time:Optional[str]=""):
 
             request_manager = RequestManager()
 
@@ -381,7 +381,7 @@ class Core_Service_View(Master_View):
 
         # 해시태그로 검색
         @self.__app.get('/feed_explore/search_feed_with_hashtag')
-        def search_feed_with_hashtag(request:Request, hashtag:Optional[str], target_time:Optional[str]="weekly", key:Optional[int]=-1):
+        def search_feed_with_hashtag(request:Request, hashtag:Optional[str], target_time:Optional[str]="", key:Optional[int]=-1):
             request_manager = RequestManager()
             data_payload = HashtagFeedRequest(hashtag=hashtag, target_time=target_time, key=key)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
@@ -947,7 +947,7 @@ class KeywordSearchRequest(RequestHeader):
         # self.email=""
 
 class HashtagFeedRequest(RequestHeader):
-    def __init__(self, hashtag, target_time="weekly", key=-1) -> None:
+    def __init__(self, hashtag, target_time="", key=-1) -> None:
         self.hashtag = hashtag
         self.target_time = target_time
         self.key = key
