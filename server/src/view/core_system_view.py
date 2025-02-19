@@ -423,7 +423,7 @@ class Core_Service_View(Master_View):
             return response
 
         @self.__app.get('/feed_explore/search_feed_with_keyword')
-        def search_with_keyword(request:Request, key:Optional[int]=-1, keyword:Optional[str]="", fclass:Optional[str]="long"):
+        def search_with_keyword(request:Request, key:Optional[int]=-1, keyword:Optional[str]="", fclass:Optional[str]=""):
             request_manager = RequestManager()
 
             data_payload = KeywordSearchRequest(key=key, keyword=keyword, fclass=fclass)
