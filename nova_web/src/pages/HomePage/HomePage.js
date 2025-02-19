@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 import Banner from "../../component/banner.js";
 import NavBar from "../../component/NavBar.js";
-import AllPost from "../../pages/MainPage/AllPost.js";
+import AllPost from "../../component/AllPost/AllPost.js";
 import all_post from "../../img/all_post.png";
 import best from "../../img/best.png";
 import new_pin from "../../img/new_pin.png";
@@ -21,7 +20,6 @@ export function getModeClass(mode) {
 }
 
 export default function HomePage() {
-  let navigate = useNavigate();
   let todayBestFeed = useFetchData(`/home/today_best`);
   let weeklyFeed = useFetchData(`/home/weekly_best`);
   let allFeed = useFetchData(`/home/all_feed`);

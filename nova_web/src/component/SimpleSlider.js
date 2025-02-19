@@ -2,7 +2,7 @@ import "./slider.css";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import style from "./../pages/MainPage/MainPart.module.css";
+import style from "./AllPost/MainPart.module.css";
 import { useNavigate } from "react-router-dom";
 import React, { useEffect, useRef, useState } from "react";
 

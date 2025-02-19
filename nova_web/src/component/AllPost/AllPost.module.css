@@ -1,0 +1,36 @@
+.wrap-container {
+  background-color: white;
+  width: 100%;
+  height: 500px;
+  display: flex;
+  flex-direction: column;
+  color: white;
+}
+
+.allpost-container {
+  height: auto;
+}
+
+/* 전체 게시글 */
+.all-list {
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  column-gap: 28px;
+  row-gap: 17px;
+  padding-bottom: 20px;
+}
+
+/* --------------- */
+/* 라이트모드 스타일 */
+.wrap-container.bright-mode {
+  background-color: #f8f8f8;
+}
+
+/* 전체 글 */
+.all-list.bright-mode {
+  li {
+    background-color: #f1f7ff;
+  }
+}

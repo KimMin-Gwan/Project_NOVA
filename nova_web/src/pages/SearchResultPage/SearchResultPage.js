@@ -9,6 +9,7 @@ import axios from "axios";
 import Feed from "../../component/feed";
 import NavBar from "../../component/NavBar";
 import mainApi from "../../services/apis/mainApi";
+import Header from "../../component/Header/Header";
 
 export default function SearchResultPage() {
   // let params = useParams();
@@ -150,17 +151,8 @@ export default function SearchResultPage() {
 
   return (
     <div className="container search_result_page">
-      <header className="header search_header">
-        <div
-          className="logo"
-          onClick={() => {
-            navigate("/");
-          }}
-        >
-          <img src={logo2} alt="logo" className={`logo-st`}></img>
-        </div>
-      </header>
-      <div className="top-bar search_header">
+      <Header />
+      <div className="top-bar ">
         <div
           className="back"
           onClick={() => {

@@ -7,7 +7,6 @@ import SearchBox from "../../component/SearchBox.js";
 import KeywordBox from "../../component/keyword/KeywordBox.js";
 import { getModeClass } from "./../../App.js";
 import Feed from "./../../component/feed";
-import logo2 from "./../../img/logo2.png";
 import filter_icon from "./../../img/filter.svg";
 import style from "./FeedHashList.module.css";
 import NoticeBox from "../../component/NoticeBox/NoticeBox.js";
@@ -16,6 +15,7 @@ import NoneFeed from "../../component/NoneFeed/NoneFeed.js";
 import useBiasStore from "../../stores/BiasStore/useBiasStore.js";
 import NavBar from "../../component/NavBar.js";
 import Header from "../../component/Header/Header.js";
+import StoryFeed from "../../component/StoryFeed/StoryFeed.js";
 
 export default function FeedList(isUserState) {
   const [params] = useSearchParams();
@@ -365,7 +365,14 @@ export default function FeedList(isUserState) {
         {type === "bias" && (
           <div className={style["bias-section"]}>
             <BiasBoxes setBiasId={setBiasId} fetchBiasCategoryData={fetchBiasCategoryData} />
-            <NoticeBox />
+            <h4>스토리 게시판</h4>
+            <div className={style["story_container"]}>
+              <div className={style["story_wrapper"]}>
+                {feedData.map((feed, i) => {
+                  return <StoryFeed key={feed.feed.fid} feedData={feed} />;
+                })}
+              </div>
+            </div>
             {biasId && (
               <div className={style["category-info"]}>
                 <p>모든 게시글</p>
