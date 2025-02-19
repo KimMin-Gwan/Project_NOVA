@@ -669,6 +669,99 @@ class FeedSearchModel(FeedModel):
         except Exception as e:
             raise CoreControllerLogicError("response making error | " + e)
 
+class MyFeedsModel(FeedModel):
+    def __init__(self, database:Local_Database) -> None:
+        super().__init__(database)
+
+    def __search_user_nickname(self, uid:str, uids:list, wusers:list):
+        if uid not in uids:
+            return ""
+
+        # uid가 존재함. 그러면 리스트에서 찾는다
+        for user in wusers:
+            if user.uid == uid:
+                return user.uname
+
+        return ""
+
+    def __set_send_data(self):
+        result_feeds = []
+        uids = []
+        wusers = []
+
+        for single_feed in self._feeds:
+            if single_feed.uid in uids:
+                continue
+            uids.append(single_feed.uid)
+
+        user_datas = self._database.get_datas_with_ids(target_id="uid", ids=uids)
+        for user_data in user_datas:
+            single_user = User()
+            single_user.make_with_dict(user_data)
+            wusers.append(single_user)
+
+        for feed in self._feeds:
+            # 마이페이지에 인터엑션은 표시 없음
+            feed.iid = ""
+
+            # 삭제된거 지우고
+            if feed.display < 3:
+                continue
+
+            # 롱폼은 바디 데이터를 받아야됨
+            if feed.fclass != "short":
+                feed.raw_body = ObjectStorageConnection().get_feed_body(fid = feed.fid)
+                _, feed.image = ObjectStorageConnection().extract_body_n_image(raw_data=feed.raw_body)
+
+            else:
+                feed.raw_body = feed.body
+
+            # comment 길이 & image 길이
+            feed.num_comment = len(feed.comment)
+            feed.num_image = len(feed.image)
+
+            # 좋아요를 누를 전적
+            for fid_n_date in self._user.like:
+                target_fid = fid_n_date.split('=')[0]
+                if target_fid == feed.fid:
+                    feed.star_flag = True
+
+            # 피드 작성자 이름
+            # 나중에 nickname으로 바꿀것
+            feed.nickname = self.__search_user_nickname(feed.uid, uids, wusers)
+            feed.is_owner = True
+            result_feeds.append(feed)
+        return result_feeds
+
+    def get_my_long_feeds(self, feed_manager:FeedManager, last_index:int=-1):
+        # 이게 가능한게, 리스트에서, 인덱스로만 사용해서 참조 하기 때문에 이거 써도 된다.
+        self._feeds = feed_manager.get_my_long_feeds(user=self._user)
+        self._feeds, self._key = feed_manager.paging_fid_list(fid_list=self._feeds, last_index=last_index, page_size=3)
+        self._feeds = self.__set_send_data()
+        return
+
+    def get_my_short_feeds(self, feed_manager:FeedManager, last_index:int=-1):
+        # 이게 가능한게, 리스트에서, 인덱스로만 사용해서 참조 하기 때문에 이거 써도 된다.
+        self._feeds = feed_manager.get_my_short_feeds(user=self._user)
+        self._feeds, self._key = feed_manager.paging_fid_list(fid_list=self._feeds, last_index=last_index, page_size=3)
+        self._feeds = self.__set_send_data()
+
+        return
+
+    def get_liked_feeds(self, feed_manager:FeedManager, last_index:int=-1):
+        self._feeds = feed_manager.get_liked_feeds(user=self._user)
+        self._feeds, self._key = feed_manager.paging_fid_list(fid_list=self._feeds, last_index=last_index, page_size=3)
+        self._feeds = self.__set_send_data()
+
+        return
+
+    def get_interacted_feeds(self, feed_manager:FeedManager, last_index:int=-1):
+        self._feeds = feed_manager.get_interacted_feeds(user=self._user)
+        self._feeds, self._key = feed_manager.paging_fid_list(fid_list=self._feeds, last_index=last_index, page_size=3)
+        self._feeds = self.__set_send_data()
+
+        return
+
 class CommentSearchModel(FeedModel):
     def __init__(self, database:Local_Database) -> None:
         super().__init__(database)
