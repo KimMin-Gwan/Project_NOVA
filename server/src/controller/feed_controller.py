@@ -8,7 +8,7 @@ class Feed_Controller:
 
     # fid를 통한 피드 검색
     def try_search_in_fid(self, database:Local_Database,
-                        request, feed_search_engine: FeedSearchEngine,
+                        request, feed_search_engine: FeedSearchEngine, feed_manager: FeedManager,
                         num_feed= 1):
         model = FeedSearchModelNew(database=database)
         # 유저가 있으면 세팅
