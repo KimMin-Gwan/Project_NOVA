@@ -332,6 +332,22 @@ class ManagedFeedBiasTable:
 
     # 시간 차이를 바탕으로 정해진 시간대 내의 피드 정보 구하기
     # target_hour : 1, 24, 168
+    def search_feed_with_time_or_like(self, search_type:str, time_type:str=""):
+        searched_df = self.__feed_df
+
+        if search_type == "best":
+            searched_df = searched_df[searched_df['like'] >= 30]
+
+        if time_type == "" or time_type == "all" or time_type == "전체":
+            pass
+        elif time_type == "today":
+            searched_df = searched_df[self.__get_time_diff(target_time=searched_df['date'],target_hour=24, reverse=True)]
+        elif time_type == "weekly":
+            searched_df = searched_df[self.__get_time_diff(target_time=searched_df['date'],target_hour=168, reverse=True)]
+
+
+        return searched_df['fid'].tolist()
+
     def find_target_index(self, target_hour=1):
         target_index = len(self.__feed_table)
 

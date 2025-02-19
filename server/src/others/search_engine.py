@@ -123,39 +123,44 @@ class FeedSearchEngine:
     # 예시 || 주간 Top100 페이지에서 사용자가 스크롤을 내려 주간 탑 100의 두번째 요청을 넣음
     # result , index = try_get_feed_in_recent(search_type ="weekly", num_feed= 10, index=320):
 
-    def try_get_feed_in_recent(self, search_type="recent", num_feed=1, index=-1):
-        result_fid = []
-        result_index = -2
+    def try_get_feed_in_recent_new(self, time_type, search_type):
+        fid_list = self.__search_manager.try_get_feed_with_target_hour_new(search_type=search_type, time_type=time_type)
 
-        # 여기서 조건에 따른 검색을 해야함
-        
-        # 차라리 여기서 타임 스탬프를 받아가는건 어떨까?
-
-        # 1. 단순히 최신순 검색 ( 모든 피드 보기 기능 )
-        if search_type == "recent":
-            # 아래의 코드는 샘플이며 원하는 상태에 따라 다시 작성
-            result_fid, result_index = self.__search_manager.try_get_feed_with_target_hour(
-                search_type="all", num_feed=num_feed, target_hour=-1, index=index)
-
-        # 2. 24시간 이내에 좋아요가 30개 이상인 피드 ( 오늘의 인기 게시글 기능 )
-        elif search_type == "today":
-            # 아래의 코드는 샘플이며 원하는 상태에 따라 다시 작성
-            result_fid, result_index = self.__search_manager.try_get_feed_with_target_hour(
-                search_type="best", num_feed=num_feed, target_hour=24, index=index)
-
-        # 3. 168시간 이내에 좋아요 순 ( 주간 Top 100 기능 )
-        elif search_type == "weekly":
-            # 아래의 코드는 샘플이며 원하는 상태에 따라 다시 작성
-            result_fid, result_index = self.__search_manager.try_get_feed_with_target_hour(
-                search_type="best", num_feed=num_feed, target_hour=168, index=index)
-
-        # 4. 좋아요가 30개 이상인 피드들을 최신순으로 나열 ( 베스트 피드  기능)
-        elif search_type == "like":
-            # 아래의 코드는 샘플이며 원하는 상태에 따라 다시 작성
-            result_fid, result_index = self.__search_manager.try_get_feed_with_target_hour(
-                search_type="best", num_feed=num_feed, target_hour=-1, index=index)
-
-        return result_fid, result_index
+        return fid_list
+    #
+    # def try_get_feed_in_recent(self, search_type="recent", num_feed=1, index=-1):
+    #     result_fid = []
+    #     result_index = -2
+    #
+    #     # 여기서 조건에 따른 검색을 해야함
+    #
+    #     # 차라리 여기서 타임 스탬프를 받아가는건 어떨까?
+    #
+    #     # 1. 단순히 최신순 검색 ( 모든 피드 보기 기능 )
+    #     if search_type == "recent":
+    #         # 아래의 코드는 샘플이며 원하는 상태에 따라 다시 작성
+    #         result_fid, result_index = self.__search_manager.try_get_feed_with_target_hour(
+    #             search_type="all", num_feed=num_feed, target_hour=-1, index=index)
+    #
+    #     # 2. 24시간 이내에 좋아요가 30개 이상인 피드 ( 오늘의 인기 게시글 기능 )
+    #     elif search_type == "today":
+    #         # 아래의 코드는 샘플이며 원하는 상태에 따라 다시 작성
+    #         result_fid, result_index = self.__search_manager.try_get_feed_with_target_hour(
+    #             search_type="best", num_feed=num_feed, target_hour=24, index=index)
+    #
+    #     # 3. 168시간 이내에 좋아요 순 ( 주간 Top 100 기능 )
+    #     elif search_type == "weekly":
+    #         # 아래의 코드는 샘플이며 원하는 상태에 따라 다시 작성
+    #         result_fid, result_index = self.__search_manager.try_get_feed_with_target_hour(
+    #             search_type="best", num_feed=num_feed, target_hour=168, index=index)
+    #
+    #     # 4. 좋아요가 30개 이상인 피드들을 최신순으로 나열 ( 베스트 피드  기능)
+    #     elif search_type == "like":
+    #         # 아래의 코드는 샘플이며 원하는 상태에 따라 다시 작성
+    #         result_fid, result_index = self.__search_manager.try_get_feed_with_target_hour(
+    #             search_type="best", num_feed=num_feed, target_hour=-1, index=index)
+    #
+    #     return result_fid, result_index
 
     def try_filtered_feed_with_option(self, fid_list:list, option:str, keys:list):
         # 옵션과 키에 따라 필터링이 나뉘어진다.
@@ -433,105 +438,110 @@ class SearchManager:
 
     # 목표시간을 바탕으로 피드를 찾는 함수
     # search_type == "all", "best"
-    def try_get_feed_with_target_hour(self, search_type="all", num_feed=4, target_hour=1, index=-2):
-        result_fid = []
-        result_index = -3
-        feed_table_len = self.__managed_feed_bias_table.len_feed_table()
+    def try_get_feed_with_target_hour_new(self, time_type, search_type):
+        fid_list = self.__managed_feed_bias_table.search_feed_with_time_or_like(search_type=search_type, time_type=time_type)
 
-        if index == -1 or index == -2:
-            index = feed_table_len
-
-        if target_hour > 0 :
-            target_index = self.__managed_feed_bias_table.find_target_index(target_hour=target_hour)
-        else:
-            target_index = 0
-
-        # 이거는 페이징 기법이 적용되어있음.
-        search_range = self.__managed_feed_bias_table.get_feeds_target_range(index=index, target_index=target_index)
-        # search_range = self.__feed_table[target_index:index][::-1]
-
-        if index < target_index  or index > feed_table_len:
-            return result_fid, -3
-
-        count = 0
-
-        if search_type == "all":
-            for i, managed_feed in enumerate(search_range):
-                if count == num_feed:
-                    break
-                
-                # 삭제된 피드는 None으로 표시될것이라서
-                if managed_feed.display < 3:
-                    continue
-                # if managed_feed.fid == "":
-                #     continue
-
-                result_fid.append(managed_feed.fid)
-                # result_index 업데이트
-                result_index = index - 1 - i # 실제 self.__feed_table에서의 인덱스 계산
-                count += 1
-
-
-        elif search_type == "best":
-            #print("monitor --------------------------------------------------------------")
-            #for i, feed_data in enumerate(self.__feed_table):
-                #print(f"index : {i}  | date : {feed_data.date} | hashtag : {feed_data.hashtag}")
-            #print("monitor --------------------------------------------------------------")
-
-            for i, managed_feed in enumerate(search_range):
-                if count == num_feed:
-                    break
-
-                # 삭제된 피드는 None으로 표시될것이라서
-                if managed_feed.fid == "":
-                    continue
-                
-                if managed_feed.like < 30:
-                    continue
-
-                result_fid.append(managed_feed.fid)
-                # result_index 업데이트
-                result_index = index - 1 - i # 실제 self.__feed_table에서의 인덱스 계산
-                count += 1
-
-        return result_fid, result_index
-    
+        return fid_list
+    #
+    # def try_get_feed_with_target_hour(self, search_type="all", num_feed=4, target_hour=1, index=-2):
+    #     result_fid = []
+    #     result_index = -3
+    #     feed_table_len = self.__managed_feed_bias_table.len_feed_table()
+    #
+    #     if index == -1 or index == -2:
+    #         index = feed_table_len
+    #
+    #     if target_hour > 0 :
+    #         target_index = self.__managed_feed_bias_table.find_target_index(target_hour=target_hour)
+    #     else:
+    #         target_index = 0
+    #
+    #     # 이거는 페이징 기법이 적용되어있음.
+    #     search_range = self.__managed_feed_bias_table.get_feeds_target_range(index=index, target_index=target_index)
+    #     # search_range = self.__feed_table[target_index:index][::-1]
+    #
+    #     if index < target_index  or index > feed_table_len:
+    #         return result_fid, -3
+    #
+    #     count = 0
+    #
+    #     if search_type == "all":
+    #         for i, managed_feed in enumerate(search_range):
+    #             if count == num_feed:
+    #                 break
+    #
+    #             # 삭제된 피드는 None으로 표시될것이라서
+    #             if managed_feed.display < 3:
+    #                 continue
+    #             # if managed_feed.fid == "":
+    #             #     continue
+    #
+    #             result_fid.append(managed_feed.fid)
+    #             # result_index 업데이트
+    #             result_index = index - 1 - i # 실제 self.__feed_table에서의 인덱스 계산
+    #             count += 1
+    #
+    #
+    #     elif search_type == "best":
+    #         #print("monitor --------------------------------------------------------------")
+    #         #for i, feed_data in enumerate(self.__feed_table):
+    #             #print(f"index : {i}  | date : {feed_data.date} | hashtag : {feed_data.hashtag}")
+    #         #print("monitor --------------------------------------------------------------")
+    #
+    #         for i, managed_feed in enumerate(search_range):
+    #             if count == num_feed:
+    #                 break
+    #
+    #             # 삭제된 피드는 None으로 표시될것이라서
+    #             if managed_feed.fid == "":
+    #                 continue
+    #
+    #             if managed_feed.like < 30:
+    #                 continue
+    #
+    #             result_fid.append(managed_feed.fid)
+    #             # result_index 업데이트
+    #             result_index = index - 1 - i # 실제 self.__feed_table에서의 인덱스 계산
+    #             count += 1
+    #
+    #     return result_fid, result_index
+    #
     #type likes, time
-    def search_feed_with_hashtag(self, hashtag, num_feed=10, index=-1) -> tuple:
-        result_fid, result_index = self.__managed_feed_bias_table.search_feed_with_key_and_option(
-            option="hashtag",
-            key=hashtag,
-            num_feed=num_feed,
-            index=index
-        )
-        return result_fid, result_index
-
-    def search_feed_with_fid(self, fid, num_feed=1, index=-1) -> tuple:
-        result_fid, result_index = self.__managed_feed_bias_table.search_feed_with_key_and_option(
-            option="fid",
-            key=fid,
-            num_feed=num_feed,
-            index=index
-        )
-        return result_fid, result_index
-
-    def search_feed_with_uname(self, uname, num_feed=1, index=-1) -> tuple:
-        result_fid, result_index = self.__managed_feed_bias_table.search_feed_with_key_and_option(
-            option="uname",
-            key=uname,
-            num_feed=num_feed,
-            index=index
-        )
-        return result_fid, result_index
-
-    def search_feed_with_bid(self, bid, num_feed=10, index=-1) -> tuple:
-        result_fid, result_index = self.__managed_feed_bias_table.search_feed_with_key_and_option(
-            option="bid",
-            key=bid,
-            num_feed=num_feed,
-            index=index,
-        )
-        return result_fid, result_index
+    # def search_feed_with_hashtag(self, hashtag, num_feed=10, index=-1) -> tuple:
+    #     result_fid, result_index = self.__managed_feed_bias_table.search_feed_with_key_and_option(
+    #         option="hashtag",
+    #         key=hashtag,
+    #         num_feed=num_feed,
+    #         index=index
+    #     )
+    #     return result_fid, result_index
+    #
+    # def search_feed_with_fid(self, fid, num_feed=1, index=-1) -> tuple:
+    #     result_fid, result_index = self.__managed_feed_bias_table.search_feed_with_key_and_option(
+    #         option="fid",
+    #         key=fid,
+    #         num_feed=num_feed,
+    #         index=index
+    #     )
+    #     return result_fid, result_index
+    #
+    # def search_feed_with_uname(self, uname, num_feed=1, index=-1) -> tuple:
+    #     result_fid, result_index = self.__managed_feed_bias_table.search_feed_with_key_and_option(
+    #         option="uname",
+    #         key=uname,
+    #         num_feed=num_feed,
+    #         index=index
+    #     )
+    #     return result_fid, result_index
+    #
+    # def search_feed_with_bid(self, bid, num_feed=10, index=-1) -> tuple:
+    #     result_fid, result_index = self.__managed_feed_bias_table.search_feed_with_key_and_option(
+    #         option="bid",
+    #         key=bid,
+    #         num_feed=num_feed,
+    #         index=index,
+    #     )
+    #     return result_fid, result_index
 
 #--------------------------------------------------------------------------------------------------------------------
 
@@ -540,26 +550,6 @@ class SearchManager:
                                                                                   fclass=fclass, board_type=board_type,
                                                                                   target_time=target_time)
         return fid_list
-
-    # def search_feeds_with_hashtag_new(self, hashtag:str, fclass="", board_type=""):
-    #     fid_list = self.__managed_feed_bias_table.search_feeds_with_key_n_option(key=hashtag, option="hashtag", fclass=fclass, board_type=board_type)
-    #     return fid_list
-    #
-    # def search_feeds_with_keyword_new(self, keyword: str, fclass="", board_type=""):
-    #     fid_list = self.__managed_feed_bias_table.search_feeds_with_key_n_option(key=keyword, option="keyword", fclass=fclass, board_type=board_type)
-    #     return fid_list
-    #
-    # def search_feeds_with_uname_new(self, uname: str, fclass="", board_type=""):
-    #     fid_list = self.__managed_feed_bias_table.search_feeds_with_key_n_option(key=uname, option="keyword", fclass=fclass, board_type=board_type)
-    #     return fid_list
-    #
-    # def search_feeds_with_bid_new(self, bid: str, fclass="", board_type=""):
-    #     fid_list = self.__managed_feed_bias_table.search_feeds_with_key_n_option(key=bid, option="keyword", fclass=fclass, board_type=board_type)
-    #     return fid_list
-    #
-    # def search_feeds_with_fid_new(self, fid: str, fclass="", board_type=""):
-    #     fid_list = self.__managed_feed_bias_table.search_feeds_with_key_n_option(key=fid, option="keyword", fclass=fclass, board_type=board_type)
-    #     return fid_list
 
     # 댓글 검색
     def search_comments_with_keyword_new(self, keyword: str):
