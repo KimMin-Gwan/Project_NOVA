@@ -153,7 +153,9 @@ function MyPage() {
   };
 
   const handleButtonClick = () => {
-    // fileInputRef.current.click();
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
   };
 
   return (
@@ -172,7 +174,10 @@ function MyPage() {
         <div className={style["user-img-edit"]}>
           <img src={profile} alt="profile" onError={(e) => (e.target.src = user_icon)} />
         </div>
-        <button onClick={handleButtonClick}>프로필 사진 변경</button>
+        <button onClick={handleButtonClick}>
+          <label htmlFor="profileImg">프로필 이미지 추가</label>
+          <input type="file" accept="image/*" ref={fileInputRef} />
+        </button>
       </section>
 
       <section className={style["profile-info"]}>
