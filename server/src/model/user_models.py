@@ -110,9 +110,6 @@ class SendEmailModel(BaseModel):
                         email=request.email,
                         gender=request.gender,
                         password=request.password)
-            managedUser = ManagedUser(
-                uid=uid
-            )
 
             self._database.add_new_data(target_id="uid",
                                         new_data=user.get_dict_form_data())
@@ -124,12 +121,10 @@ class SendEmailModel(BaseModel):
         except Exception as e:
             raise CoreControllerLogicError(error_type="save_response | " + str(e))
         
-    def set_response(self,):
-        try:
-            self.__result = False
-            self.__detail = "이미 존재하는 이메일 입니다."
-        except Exception as e:
-            raise CoreControllerLogicError(error_type="set_response | " + str(e))
+    def set_response(self, result:bool, detail):
+        self.__result = result
+        self.__detail = detail
+        return
 
     def set_response_in_reverse(self,):
         try:

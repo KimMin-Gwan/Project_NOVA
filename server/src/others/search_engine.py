@@ -167,8 +167,8 @@ class FeedSearchEngine:
         return self.__filter_manager.filtered_feed_option_and_key(fid_list=fid_list, option=option, keys=keys)
 
     # 최애 페이지에서 요청
-    def try_feed_with_bid_n_filtering(self, target_bids:list[str]=[""], category=""):
-        return self.__filter_manager.filtering_community(bids=target_bids, category=category)
+    def try_feed_with_bid_n_filtering(self, target_bid:str = "", category=""):
+        return self.__filter_manager.filtering_community(bids=target_bid, category=category)
 
 #-----------------------------------------------------------------------------------------------------------
     # 여기도 아직 하지 말것 
@@ -844,5 +844,5 @@ class FilteringManager:
             return filtered_fid_list
 
     # BID로 필터링 하는 작업 수행, 카테고리별 필터링도 진행 됨
-    def filtering_community(self, bids:list, category:str):
-        return self.__managed_feed_bias_table.filtering_bias_community(bids=bids, board_type=category)
+    def filtering_community(self, bid:str, category:str):
+        return self.__managed_feed_bias_table.filtering_bias_community(bid=bid, board_type=category)

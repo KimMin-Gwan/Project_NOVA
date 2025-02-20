@@ -41,7 +41,7 @@ class Feed_Controller:
         model.try_filtered_feed_community(
             feed_search_engine=feed_search_engine,
             feed_manager=self.__feed_manager,
-            bids = request.data_payload.bids,
+            bid = request.data_payload.bid,
             category = request.data_payload.category,
             last_index=request.data_payload.key
         )

@@ -520,8 +520,6 @@ class Core_Service_View(Master_View):
         def get_feed_with_community(request:Request, raw_request:dict):
             request_manager = RequestManager()
             
-            pprint(raw_request)
-            
             # 데이터 페이로드에도 bid 리스트를 넣어야됨
             data_payload = CommunityRequest(request=raw_request)
             
@@ -918,7 +916,7 @@ class CommunityRequest(RequestHeader):
     def __init__(self, request) -> None:
         super().__init__(request)
         body = request['body']
-        self.bids = np.array(body['bids']).flatten().tolist()
+        self.bid = body['bid']
         self.category = body['board']
         self.key:int = body['key']
 

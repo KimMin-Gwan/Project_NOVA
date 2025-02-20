@@ -34,25 +34,16 @@ class UserController:
     # 6. 이미 있는 email이면 False 반환
     def try_send_email(self, database, request, nova_verification):
         model = SendEmailModel(database=database)
-        try:
-            if not model.set_user_with_email(request=request):
-                mailsender = MailSender()
-                temp_user = nova_verification.make_new_user(email=request.email)
+        
+        if not model.set_user_with_email(request=request):
+            mailsender = MailSender()
+            temp_user = nova_verification.make_new_user(email=request.email)
 
-                mailsender.send_email(receiver_email=temp_user.email,verification_code=temp_user.verification_code)
-            else:
-                model.set_response()
-
-        except CustomError as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
-
-        except Exception as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
-
-        finally:
-            return model
+            mailsender.send_email(receiver_email=temp_user.email,verification_code=temp_user.verification_code)
+            model.set_response(result=True, deatil="이메일이 전송되었습니다. 3분 안에 입력 해주세요.")
+        else:
+            model.set_response(result=False, detail="이미 존재하는 이메일 입니다.")
+        return model
         
     # 비밀번호 찾기 시도 이메일 전송
     # 1. 이메일을 전송
@@ -137,23 +128,16 @@ class UserController:
     # 5. 만약 인증번호 틀리면 False 반환 + 실패 사유 detail에 작성
     async def try_sign_up(self, database, request, nova_verification, feed_search_engine):
         model = SendEmailModel(database=database)
-        try:
-            if not await nova_verification.verificate_user(email=request.email, verification_code=request.verification_code):
-                model.set_response()
-            else:
-                model.save_user(request=request, feed_search_engine=feed_search_engine)
-                #model.make_token(request=request)
+        
+        if not await nova_verification.verificate_user(email=request.email, verification_code=request.verification_code):
+            model.set_response(result=False, detail="잘못된 인증번호")
+            
+        else:
+            model.save_user(request=request, feed_search_engine=feed_search_engine)
+            model.set_response(result=True, detail="회원가입 성공")
+            #model.make_token(request=request)
 
-        except CustomError as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
-
-        except Exception as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
-
-        finally:
-            return model
+        return model
 
     # 유저 페이지 맨 처음에 띄울 것
     def try_get_user_page(self, database, request):

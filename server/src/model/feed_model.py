@@ -863,7 +863,7 @@ class FilteredFeedModel(FeedModel):
     def try_filtered_feed_community(self,
                                     feed_search_engine:FeedSearchEngine,
                                     feed_manager:FeedManager,
-                                    bids:list,
+                                    bid:str,
                                     category:str,
                                     last_index:int=-1,
                                     num_feed:int=4,):
@@ -873,7 +873,7 @@ class FilteredFeedModel(FeedModel):
         # 기본 : category == "" (선택하지않음). BID 커뮤니티에 있는 게시글 중 카테고리 필터링을 거치지 않는다
         #       선택 시, 추가로 카테고리 필터링을 거치게됨
 
-        fid_list = feed_search_engine.try_feed_with_bid_n_filtering(target_bids=bids, category=category)
+        fid_list = feed_search_engine.try_feed_with_bid_n_filtering(target_bid=bid, category=category)
 
         fid_list, self._key = feed_manager.paging_fid_list(fid_list=fid_list, last_index=last_index, page_size=num_feed)
 
