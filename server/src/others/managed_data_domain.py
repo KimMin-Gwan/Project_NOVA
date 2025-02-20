@@ -466,7 +466,7 @@ class ManagedFeedBiasTable:
         elif target_time=="weekly":
             searched_df = searched_df[self.__get_time_diff(target_time=searched_df['date'],target_hour=168, reverse=True)]
 
-        pprint(searched_df)
+        # pprint(searched_df)
 
         return searched_df['fid'].tolist()
     #---------------------------------------------------------------------------------------------
