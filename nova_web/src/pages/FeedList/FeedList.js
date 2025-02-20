@@ -84,7 +84,9 @@ export default function FeedList(isUserState) {
   useEffect(() => {
     setFeedData([]);
     setNextData(-1);
-    fetchBiasCategoryData();
+    if (type === "bias") {
+      fetchBiasCategoryData();
+    }
     // console.log(bids, board);
   }, [biasId, board]);
 
@@ -300,7 +302,9 @@ export default function FeedList(isUserState) {
 
         // fetchAllFeed();
         fetchPlusData();
-        fetchBiasCategoryData();
+        if (type === "bias") {
+          fetchBiasCategoryData();
+        }
       });
     });
 

@@ -70,6 +70,10 @@ export default function KeywordBox({ type, title, subTitle, onClickTagButton, fe
     }
   }
 
+  if (isLoading) {
+    return <div>loading...</div>;
+  }
+
   return (
     <div className={style["keyword-container"]}>
       <div className={style["title-container"]}>
