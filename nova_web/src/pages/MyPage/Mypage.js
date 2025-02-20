@@ -55,6 +55,7 @@ function MyPage() {
 
   async function fetchMyFeed(category) {
     await mainApi.get(`user_home/get_my_feed?type=${category}&key=${nextKey}`).then((res) => {
+      console.log(res.data);
       setMyFeed((prevData) => [...prevData, ...res.data.body.feed]);
       setNextKey(res.data.body.key);
       setIsLoading(false);
@@ -63,6 +64,7 @@ function MyPage() {
 
   async function fetchMyComment() {
     await mainApi.get(`user_home/get_my_comments`).then((res) => {
+      console.log("adas", res.data);
       setComment((prevData) => [...res.data.body.feeds]);
     });
   }
@@ -78,13 +80,14 @@ function MyPage() {
         if (!entry.isIntersecting) return;
         if (isLoading) return;
 
-        if (nowCategory !== "comment") {
-          fetchMyFeed(nowCategory);
-          setIsClickedComment(false);
-        } else {
-          setIsClickedComment((prev) => !prev);
-          fetchMyComment();
-        }
+        fetchMyFeed(nowCategory);
+        fetchMyComment();
+        // if (nowCategory !== "comment") {
+        //   setIsClickedComment(false);
+        // } else {
+        //   setIsClickedComment((prev) => !prev);
+        //   // fetchMyComment();
+        // }
       });
     });
 
@@ -106,9 +109,15 @@ function MyPage() {
 
   const [activeIndex, setActiveIndex] = useState(0);
 
+  const [isClickedComment, setIsClickedComment] = useState(false);
   function handleMyInfo(index, item) {
     handleClick(index, item.type);
     setNowCategory(item.type);
+
+    // 수정된 부분분
+    if (item.type === "comment") {
+      setIsClickedComment(true);
+    }
   }
 
   useEffect(() => {
@@ -120,8 +129,6 @@ function MyPage() {
     setNextKey(-1);
     setActiveIndex(index);
   };
-
-  const [isClickedComment, setIsClickedComment] = useState(false);
 
   if (isLoading) {
     return <div>loading...</div>;
@@ -199,7 +206,10 @@ function MyPage() {
             (feed) =>
               isClickedComment && (
                 <div key={feed.fid} className={style["MyPage_Comment_Box"]}>
-                  <div className={style["Feed_title"]} onClick={() => handleCommentToggle(feed.fid)}>
+                  <div
+                    className={style["Feed_title"]}
+                    onClick={() => handleCommentToggle(feed.fid)}
+                  >
                     <img src={arrow} alt="화살표" />
                     <p>{feed.body}</p>
                   </div>
