@@ -117,8 +117,9 @@ export default function SignUp() {
         setEmailError(!emailError);
         setErrorMessage(data.body.detail);
       });
-
-    alert("인증코드가 전송되었습니다");
+    if (authen) {
+      alert("인증코드가 전송되었습니다");
+    }
   }
 
   function fetchSignUp() {
