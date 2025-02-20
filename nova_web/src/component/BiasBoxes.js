@@ -3,6 +3,8 @@ import useBiasStore from "../stores/BiasStore/useBiasStore";
 import useLoginStore from "../stores/LoginStore/useLoginStore";
 import add_bias_icon from "./../img/add_bias.png";
 import { useNavigate } from "react-router-dom";
+import mainApi from "../services/apis/mainApi";
+import getBiasList from "../services/getBiasList";
 
 export default function BiasBoxes({ setBiasId, fetchBiasCategoryData, writeCommunity }) {
   let bias_url = "https://kr.object.ncloudstorage.com/nova-images/";
@@ -11,9 +13,8 @@ export default function BiasBoxes({ setBiasId, fetchBiasCategoryData, writeCommu
 
   const { isLogin, isLogout } = useLoginStore();
   let { biasList, loading, fetchBiasList } = useBiasStore();
-
   useEffect(() => {
-    // fetchBiasList();
+    fetchBiasList();
     if (isLogin === "done") {
       fetchBiasList();
       console.log("isLogin", isLogin);
