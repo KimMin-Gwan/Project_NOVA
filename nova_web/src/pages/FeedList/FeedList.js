@@ -35,6 +35,8 @@ export default function FeedList(isUserState) {
   let [biasId, setBiasId] = useState();
   let [board, setBoard] = useState("자유게시판");
 
+  const [hashtag, setHashTag] = useState("");
+
   let header = {
     "request-type": "default",
     "client-version": "v1.0.1",
@@ -183,15 +185,19 @@ export default function FeedList(isUserState) {
   }
 
   function fetchFeedWithTag(tag) {
+    console.log("dasdasda", hashtag);
     mainApi
-      .get(`feed_explore/search_feed_with_hashtag?hashtag=${tag}&key=${nextData}&target_time=day`)
+      .get(`feed_explore/search_feed_with_hashtag?hashtag=${tag}&key=-1&target_time=day`)
       .then((res) => {
         console.log("fff", res.data);
         setFeedData(res.data.body.send_data);
-        setNextData(res.data.body.key);
+        // setNextData(res.data.body.key);
         setIsLoading(false);
       });
   }
+  useEffect(() => {
+    setFeedData([]);
+  }, []);
 
   function onClickTag(tag) {
     fetchFeedWithTag(tag);
