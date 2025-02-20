@@ -276,7 +276,7 @@ class Feed_Controller:
         model.try_search_feed_with_target_type(feed_search_engine=feed_search_engine,
                                                feed_manager=feed_manager,
                                                target_type="hashtag",
-                                               target=request.data_payload.target,
+                                               target=request.data_payload.hashtag,
                                                target_time=request.data_payload.target_time,
                                                last_index=request.data_payload.last_index,
                                                num_feed=num_feed
