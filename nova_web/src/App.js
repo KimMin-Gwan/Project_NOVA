@@ -26,7 +26,6 @@ import SearchPage from "./pages/SearchPage/SearchPage.js";
 import SearchResultPage from "./pages/SearchResultPage/SearchResultPage.js";
 import NoticePage from "./pages/NoticePage/NoticePage.js";
 import HomePage from "./pages/HomePage/HomePage.js";
-import useBiasStore from "./stores/BiasStore/useBiasStore.js";
 
 // 다크 모드 클래스 반환 함수
 export function getModeClass(mode) {

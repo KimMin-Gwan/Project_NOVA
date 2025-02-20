@@ -56,25 +56,6 @@ export default function SearchPage() {
     localStorage.setItem("history", JSON.stringify(updateList));
   }
 
-  // function fetchRecommendKeyword() {
-  //   fetch("https://nova-platform.kr/home_search/get_recommend_keyword", {
-  //     credentials: "include",
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       console.log(data);
-  //     });
-  //   // axios
-  //   //   .get("https://nova-platform.kr/home_search/get_recommend_keyword", {
-  //   //     withCredentials: true,
-  //   //   })
-  //   //   .then((res) => console.log(res.data));
-  // }
-
-  // useEffect(() => {
-  //   fetchRecommendKeyword();
-  // }, []);
-
   function onClickSearch(history) {
     if (history) {
       navigate(`/search_result?keyword=${history}`);
@@ -121,30 +102,11 @@ export default function SearchPage() {
       <section className="search-category">
         <h3>최근 검색어</h3>
         <div className="search-tag-box">
-          <div className="search-box-wrapper">
-            {searchHistory.length > 0 &&
-              searchHistory.map((history, i) => {
-                return (
-                  <button
-                    key={i}
-                    className="search-tag searched-tag"
-                    onClick={(e) => {
-                      onClickSearch(history);
-                    }}
-                  >
-                    {history}
-                    <p
-                      className="delete-tag"
-                      onClick={(e) => {
-                        onDeleteHistoryItem(e, i);
-                      }}
-                    >
-                      X
-                    </p>
-                  </button>
-                );
-              })}
-          </div>
+          <SearchItems
+            searchHistory={searchHistory}
+            onClickSearch={onClickSearch}
+            onDeleteHistoryItem={onDeleteHistoryItem}
+          />
         </div>
       </section>
 
@@ -177,6 +139,35 @@ export default function SearchPage() {
         </ul>
       </section>
       <NavBar />
+    </div>
+  );
+}
+
+function SearchItems({ searchHistory, onClickSearch, onDeleteHistoryItem }) {
+  return (
+    <div className="search-box-wrapper">
+      {searchHistory.length > 0 &&
+        searchHistory.map((history, i) => {
+          return (
+            <button
+              key={i}
+              className="search-tag searched-tag"
+              onClick={(e) => {
+                onClickSearch(history);
+              }}
+            >
+              {history}
+              <p
+                className="delete-tag"
+                onClick={(e) => {
+                  onDeleteHistoryItem(e, i);
+                }}
+              >
+                X
+              </p>
+            </button>
+          );
+        })}
     </div>
   );
 }

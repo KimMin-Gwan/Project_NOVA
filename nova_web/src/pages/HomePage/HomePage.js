@@ -14,6 +14,7 @@ import SearchBox from "../../component/SearchBox.js";
 import useTagStore from "../../stores/TagStore/useTagStore.js";
 import useBiasStore from "../../stores/BiasStore/useBiasStore.js";
 import Header from "../../component/Header/Header.js";
+import postApi from "../../services/apis/postApi.js";
 
 export function getModeClass(mode) {
   return mode === "dark" ? "dark-mode" : "bright-mode";
@@ -28,13 +29,10 @@ export default function HomePage() {
   let { tagList, loading, fetchTagList } = useTagStore();
 
   // 최애 리스트 받아오기
-  useEffect(() => {
-    console.log("새로고침");
-    // fetchBiasList();
-  }, []);
-
-  const FETCH_URL = "https://nova-platform.kr/feed_explore/";
-
+  // useEffect(() => {
+  //   console.log("새로고침");
+  //   // fetchBiasList();
+  // }, []);
   // 실시간 랭킹 받아오기
   //   useEffect(() => {
   //     fetchTagList();
@@ -78,36 +76,24 @@ export default function HomePage() {
   }, [bids]);
 
   async function fetchBiasCategoryData(bid) {
-    let send_data = {
-      header: header,
-      body: {
-        bid: biasId || bids?.[0] || null,
-        board: "자유게시판",
-        key: -1,
-      },
-    };
-
-    console.log("2222", send_data.body);
-
-    await fetch(`${FETCH_URL}feed_with_community`, {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(send_data),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("first bias data", data);
-        setFeedData(data.body.send_data);
+    await postApi
+      .post(`feed_explore/feed_with_community`, {
+        header: header,
+        body: {
+          bid: biasId || bids?.[0] || null,
+          board: "자유게시판",
+          key: -1,
+        },
+      })
+      .then((res) => {
+        console.log("first bias data", res.data);
+        setFeedData(res.data.body.send_data);
         setIsLoading(false);
       });
   }
 
   useEffect(() => {
     setFeedData([]);
-
     fetchBiasCategoryData();
   }, [biasId]);
 

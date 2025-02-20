@@ -30,7 +30,6 @@ const header = HEADER;
 
 export default function Feed({
   feed,
-  feedData,
   interaction,
   feedInteraction,
   setFeedData,

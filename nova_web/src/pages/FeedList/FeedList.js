@@ -9,13 +9,14 @@ import { getModeClass } from "./../../App.js";
 import Feed from "./../../component/feed";
 import filter_icon from "./../../img/filter.svg";
 import style from "./FeedHashList.module.css";
-import NoticeBox from "../../component/NoticeBox/NoticeBox.js";
 import CategoryModal from "../../component/CategoryModal/CategoryModal.js";
 import NoneFeed from "../../component/NoneFeed/NoneFeed.js";
 import useBiasStore from "../../stores/BiasStore/useBiasStore.js";
 import NavBar from "../../component/NavBar.js";
 import Header from "../../component/Header/Header.js";
 import StoryFeed from "../../component/StoryFeed/StoryFeed.js";
+import postApi from "../../services/apis/postApi.js";
+import mainApi from "../../services/apis/mainApi.js";
 
 export default function FeedList(isUserState) {
   const [params] = useSearchParams();
@@ -25,7 +26,6 @@ export default function FeedList(isUserState) {
   const observerRef = useRef(null);
 
   let [isFilterClicked, setIsFilterClicked] = useState(false);
-  let [contents, setContents] = useState("");
   let [isLoading, setIsLoading] = useState(true);
 
   let [feedData, setFeedData] = useState([]);
@@ -64,32 +64,19 @@ export default function FeedList(isUserState) {
     }
   }, [bids]);
   async function fetchBiasCategoryData(bid) {
-    console.log("adasdas", bids, biasId);
-    let send_data = {
-      header: header,
-      body: {
-        bid: biasId || bids?.[0] || "",
-
-        board: board || "",
-        key: nextData || -1,
-      },
-    };
-    console.log("seeed", send_data);
-    // setIsLoading(true);
-
-    await fetch(`${FETCH_URL}feed_with_community`, {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(send_data),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("first bias data", data);
-        setFeedData((prevData) => [...prevData, ...data.body.send_data]);
-        setNextData(data.body.key);
+    await postApi
+      .post(`feed_explore/feed_with_community`, {
+        header: header,
+        body: {
+          bid: biasId || bids?.[0] || "",
+          board: board || "",
+          key: nextData || -1,
+        },
+      })
+      .then((res) => {
+        console.log("first bias data", res.data);
+        setFeedData((prevData) => [...prevData, ...res.data.body.send_data]);
+        setNextData(res.data.body.key);
         setIsLoading(false);
       });
   }
@@ -156,8 +143,6 @@ export default function FeedList(isUserState) {
         .then((response) => response.json())
         .then((data) => {
           console.log("all feed first feed 3개", data.body);
-          // setFeedData(data.body.send_data);
-          // setFeedInteraction(data.body.send_data.map((interaction, i) => interaction));
           setNextData(data.body.key);
           setIsLoading(false);
           setFeedData(data.body.send_data);
@@ -178,7 +163,6 @@ export default function FeedList(isUserState) {
         .then((data) => {
           console.log("first feed 3개", data.body);
           setFeedData(data.body.send_data);
-          // setFeedInteraction(data.body.send_data.map((interaction, i) => interaction));
           setNextData(data.body.key);
           setIsLoading(false);
         });
@@ -188,7 +172,7 @@ export default function FeedList(isUserState) {
       })
         .then((response) => response.json())
         .then((data) => {
-          // console.log("first feed 3개", data);
+          console.log("first weekly feed 3개", data);
           setFeedData(data.body.send_data);
           setNextData(data.body.key);
           setIsLoading(false);
@@ -197,13 +181,12 @@ export default function FeedList(isUserState) {
   }
 
   function fetchFeedWithTag(tag) {
-    fetch(`${FETCH_URL}search_feed_with_hashtag?hashtag=${tag}&key=-1`, {
-      credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setFeedData(data.body.send_data);
-        setNextData(data.body.key);
+    mainApi
+      .get(`feed_explore/search_feed_with_hashtag?hashtag=${tag}&key=${nextData}&target_time=day`)
+      .then((res) => {
+        console.log("fff", res.data);
+        setFeedData(res.data.body.send_data);
+        setNextData(res.data.body.key);
         setIsLoading(false);
       });
   }
@@ -213,7 +196,6 @@ export default function FeedList(isUserState) {
   }
 
   function fetchPlusData() {
-    // setIsLoading(true);
     if (type === "best") {
       fetch(`${FETCH_URL}today_best?key=${nextData}`, {
         credentials: "include",
@@ -444,12 +426,9 @@ export default function FeedList(isUserState) {
                   key={feed.feed.fid}
                   className={`${style["feed-box"]} ${style[getModeClass(mode)]}`}
                   feed={feed.feed}
-                  func={true}
-                  feedData={feedData}
                   interaction={feed.interaction}
                   feedInteraction={feedInteraction}
                   setFeedData={setFeedData}
-                  isUserState={isUserState}
                   handleInteraction={handleInteraction}
                 ></Feed>
               );
