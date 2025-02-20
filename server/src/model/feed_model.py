@@ -476,6 +476,8 @@ class FeedSearchModelNew(FeedModel):
                                          target_type:str, fclass="", target="", target_time="", last_index=-1, num_feed=8):
         searched_fid_list = feed_search_engine.try_search_feed_new(target_type=target_type, target=target,
                                                                    fclass=fclass, target_time=target_time)
+
+        pprint(searched_fid_list)
         # 페이징
         searched_fid_list, self._key = feed_manager.paging_fid_list(fid_list=searched_fid_list,
                                                                     last_index=last_index,
