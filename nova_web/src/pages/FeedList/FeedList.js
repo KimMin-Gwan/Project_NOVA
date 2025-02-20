@@ -58,13 +58,18 @@ export default function FeedList(isUserState) {
   let bids = biasList.map((item, i) => {
     return item.bid;
   });
-
+  useEffect(() => {
+    if (bids.length > 0 && !biasId) {
+      setBiasId(bids[0]);
+    }
+  }, [bids]);
   async function fetchBiasCategoryData(bid) {
     console.log("adasdas", bids, biasId);
     let send_data = {
       header: header,
       body: {
-        bids: biasId === undefined ? [bids] : [biasId],
+        bid: biasId || bids?.[0] || "",
+
         board: board || "",
         key: nextData || -1,
       },

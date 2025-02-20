@@ -30,7 +30,7 @@ export default function HomePage() {
   // 최애 리스트 받아오기
   useEffect(() => {
     console.log("새로고침");
-    fetchBiasList();
+    // fetchBiasList();
   }, []);
 
   const FETCH_URL = "https://nova-platform.kr/feed_explore/";
@@ -57,7 +57,7 @@ export default function HomePage() {
   // });
   let [feedData, setFeedData] = useState([]);
 
-  let [biasId, setBiasId] = useState();
+  let [biasId, setBiasId] = useState(null);
 
   let header = {
     "request-type": "default",
@@ -66,16 +66,22 @@ export default function HomePage() {
     uid: "1234-abcd-5678",
     endpoint: "/user_system/",
   };
+
   const [isLoading, setIsLoading] = useState(true);
   let bids = biasList.map((item, i) => {
     return item.bid;
   });
+  useEffect(() => {
+    if (bids.length > 0 && !biasId) {
+      setBiasId(bids[0]);
+    }
+  }, [bids]);
 
   async function fetchBiasCategoryData(bid) {
     let send_data = {
       header: header,
       body: {
-        bids: biasId === undefined ? [bids] : [biasId],
+        bid: biasId || bids?.[0] || null,
         board: "자유게시판",
         key: -1,
       },
@@ -101,6 +107,7 @@ export default function HomePage() {
 
   useEffect(() => {
     setFeedData([]);
+
     fetchBiasCategoryData();
   }, [biasId]);
 
