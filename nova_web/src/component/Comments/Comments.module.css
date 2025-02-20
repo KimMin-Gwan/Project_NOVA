@@ -1,0 +1,368 @@
+.container {
+  max-width: 500px;
+  height: 200vh;
+  margin: 0 auto;
+  background-color: #f1f7ff;
+  position: relative;
+
+  li,
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+}
+
+.feed-wrapper {
+  background-color: #f1f7ff;
+}
+
+.backword {
+  width: 35px;
+  height: 35px;
+}
+
+.top_area {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 15px;
+
+  & button {
+    color: #797979;
+    background-color: transparent;
+    border: none;
+    font-size: 16px;
+
+    &:first-child {
+      width: 10%;
+    }
+  }
+}
+
+.logout_box {
+  margin: 0 auto;
+  width: 95%;
+  height: 32px;
+  background-color: #f27b7b;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  margin-top: 65px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+/* 마이페이지 */
+.user-container {
+  margin-top: 60px;
+  position: relative;
+
+  .user-img {
+    position: relative;
+    /* background: gray; */
+    border-radius: 50%;
+    width: 190px;
+    height: 190px;
+    z-index: 1;
+    justify-self: center;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    /* border: 1px solid #1082f4; */
+  }
+
+  .user-name {
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    padding-bottom: 63px;
+    z-index: 2;
+    margin-top: -40px;
+    & h3 {
+      font-size: 25px;
+      font-weight: 400;
+      margin-bottom: 0;
+    }
+  }
+
+  .user-info {
+    background-color: white;
+
+    & ul {
+      display: flex;
+      padding-inline: 20px;
+      justify-content: center;
+      padding-bottom: 37px;
+
+      & li {
+        width: 100%;
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        & b {
+          font-size: 24px;
+        }
+        & p {
+          font-size: 14px;
+          color: #585858;
+          margin-block: 5px 0;
+        }
+      }
+    }
+  }
+}
+
+.info-list {
+  .post-list {
+    position: relative;
+    border-top: 1px solid #1082f48c;
+    display: flex;
+    background-color: #fff;
+    padding-inline: 16px;
+
+    li,
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .post {
+      cursor: pointer;
+      margin: 10px 0;
+      transition: border-bottom 0.3s ease;
+      padding-inline: 18px;
+      margin: 0;
+      text-align: center;
+
+      & button {
+        margin-block: 15px;
+        padding: 0;
+        padding-bottom: 4px;
+        border-radius: 0;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        position: relative;
+        background: none;
+        border: none;
+        font-weight: bold;
+        width: 100%;
+      }
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 15px;
+      left: 0;
+      width: 20px;
+      height: 3px;
+      background-color: #1082f4;
+      transition: left 0.3s ease-in-out;
+    }
+  }
+
+  .post-list[data-active-index="0"]::after {
+    left: 43px;
+  }
+  .post-list[data-active-index="1"]::after {
+    left: 118px;
+  }
+  .post-list[data-active-index="2"]::after {
+    left: 194px;
+  }
+  .post-list[data-active-index="3"]::after {
+    left: 262px;
+  }
+}
+
+.search-nav-bar {
+  .post-list {
+    &::after {
+      bottom: 12px;
+      width: 18px;
+    }
+  }
+
+  .post-list[data-active-index="0"]::after {
+    left: 45px;
+  }
+  .post-list[data-active-index="1"]::after {
+    left: 125px;
+  }
+  .post-list[data-active-index="2"]::after {
+    left: 203px;
+  }
+  .post-list[data-active-index="3"]::after {
+    left: 273px;
+  }
+}
+
+/* 프로필 편집 */
+.edit-container {
+  background-color: #fff;
+
+  .profile-section {
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    gap: 22px;
+    margin-bottom: 38px;
+
+    .user-img-edit {
+      height: 150px;
+      width: 150px;
+      border-radius: 50%;
+      /* border: 1px solid #1082f4; */
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    }
+
+    & button {
+      font-size: 14px;
+      background-color: #f1f7ff;
+      border: 1px solid #1082f4;
+      padding: 5px 16px;
+      cursor: pointer;
+
+      & label {
+        cursor: pointer;
+      }
+
+      & input {
+        display: none;
+      }
+    }
+  }
+
+  /*  닉네임 비밀번호 변경 개인 정보 */
+  & h3 {
+    font-size: 15px;
+  }
+
+  /* input 스타일 */
+  .input-st {
+    width: 100%;
+    border: 0;
+    border-bottom: 1px solid #1082f4;
+    padding-block: 5px;
+    padding-left: 10px;
+
+    &::placeholder {
+      font-size: 14px;
+      color: #303030;
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  /* input 정보 이름 */
+  .input-name {
+    font-size: 14px;
+    color: #303030;
+  }
+
+  /* 프로필 정보 */
+  .profile-info {
+    margin-inline: 28px;
+
+    .change-button {
+      font-size: 12px;
+      background-color: #f1f7ff;
+      border: 1px solid #1082f4;
+      padding: 3px 14px;
+      cursor: pointer;
+    }
+
+    .user-name-input {
+      position: relative;
+
+      .change-button {
+        position: absolute;
+        right: 0;
+        bottom: 5px;
+      }
+    }
+
+    .pw-change {
+      position: relative;
+      display: flex;
+      flex-flow: column;
+      gap: 16px;
+
+      .change-button {
+        position: absolute;
+        right: 0;
+        bottom: -30px;
+      }
+    }
+  }
+
+  /* 개인정보 */
+  .user-info {
+    margin-inline: 28px;
+
+    & h3 {
+      margin-top: 44px;
+    }
+
+    .input-name {
+      margin-bottom: 8px;
+    }
+  }
+}
+
+.MyPage_Comment_Box {
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  margin-top: 5px;
+
+  .Feed_title {
+    border-bottom: 1px solid #f5f5f5;
+    display: flex;
+    padding: 6px 21px;
+    align-items: center;
+
+    & img {
+      width: 30px;
+      margin-right: 10px;
+    }
+    & p {
+      margin: 0;
+      font-weight: bold;
+    }
+  }
+
+  .comment_box {
+    padding: 0 29px;
+    & li {
+      display: flex;
+      align-items: start;
+      .Comment_content {
+        margin: 13px 0 20px 19px;
+        flex: 1;
+      }
+
+      & span {
+        color: #828282;
+        font-size: 14px;
+        margin-block: 50px 11px;
+      }
+    }
+  }
+}

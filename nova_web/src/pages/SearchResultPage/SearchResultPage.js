@@ -10,6 +10,8 @@ import Feed from "../../component/feed";
 import NavBar from "../../component/NavBar";
 import mainApi from "../../services/apis/mainApi";
 import Header from "../../component/Header/Header";
+import MyComments from "../../component/Comments/Comments";
+import Comments from "../../component/Comments/Comments";
 
 export default function SearchResultPage() {
   // let params = useParams();
@@ -88,18 +90,20 @@ export default function SearchResultPage() {
         setNextKey(res.data.body.key);
       });
   }
+  const [comments, setComments] = useState([]);
 
   async function fetchCommentKeyword() {
     console.log("댓글 불러짐");
     await mainApi
       .get(`feed_explore/search_comment_with_keyword?keyword=${keyword}&key=${nextKey}`)
       .then((res) => {
-        setFeedData((prev) => {
-          return [...prev, ...res.data.body.send_data];
-        });
+        // setFeedData((prev) => {
+        //   return [...prev, ...res.data.body.send_data];
+        // });
         console.log("댓글", res.data);
-        setIsLoading(false);
-        setNextKey(res.data.body.key);
+        setComments(res.data.body.feeds);
+        // setIsLoading(false);
+        // setNextKey(res.data.body.key);
       });
   }
 
@@ -119,8 +123,8 @@ export default function SearchResultPage() {
       setType("long");
     } else if (data === "모멘트") {
       setType("short");
-    } else {
-      setType("");
+    } else if (data === "댓글") {
+      setType("comment");
     }
   };
 
@@ -185,6 +189,7 @@ export default function SearchResultPage() {
           ))}
         </ul>
       </section>
+      {type === "comment" && <Comments comments={comments} />}
 
       <section className="feed_section">
         {feedData.map((feed, i) => {

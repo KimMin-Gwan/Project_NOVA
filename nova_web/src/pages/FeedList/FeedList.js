@@ -64,30 +64,29 @@ export default function FeedList(isUserState) {
     let send_data = {
       header: header,
       body: {
-        bids: bid === undefined ? [bids] : [bid],
+        bids: biasId === undefined ? [bids] : [biasId],
         board: board || "",
         key: nextData || -1,
       },
     };
     console.log("seeed", send_data);
     // setIsLoading(true);
-    if (type === "bias") {
-      await fetch(`${FETCH_URL}feed_with_community`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(send_data),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("first bias data", data);
-          setFeedData((prevData) => [...prevData, ...data.body.send_data]);
-          setNextData(data.body.key);
-          setIsLoading(false);
-        });
-    }
+
+    await fetch(`${FETCH_URL}feed_with_community`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(send_data),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("first bias data", data);
+        setFeedData((prevData) => [...prevData, ...data.body.send_data]);
+        setNextData(data.body.key);
+        setIsLoading(false);
+      });
   }
 
   useEffect(() => {
