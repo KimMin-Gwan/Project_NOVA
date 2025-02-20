@@ -168,7 +168,7 @@ class FeedSearchEngine:
 
     # 최애 페이지에서 요청
     def try_feed_with_bid_n_filtering(self, target_bid:str = "", category=""):
-        return self.__filter_manager.filtering_community(bids=target_bid, category=category)
+        return self.__filter_manager.filtering_community(bid=target_bid, category=category)
 
 #-----------------------------------------------------------------------------------------------------------
     # 여기도 아직 하지 말것 
