@@ -49,7 +49,12 @@ export default function FeedList(isUserState) {
   const [mode, setMode] = useState(initialMode);
   let navigate = useNavigate();
 
-  let { biasList } = useBiasStore();
+  let { biasList, fetchBiasList } = useBiasStore();
+  useEffect(() => {
+    console.log("동작");
+    fetchBiasList();
+  }, []);
+
   let bids = biasList.map((item, i) => {
     return item.bid;
   });
@@ -89,7 +94,7 @@ export default function FeedList(isUserState) {
     setFeedData([]);
     setNextData(-1);
     fetchBiasCategoryData();
-    console.log(bids, board);
+    // console.log(bids, board);
   }, [biasId, board]);
 
   let [filterCategory, setFilterCategory] = useState([]);
