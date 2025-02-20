@@ -82,9 +82,10 @@ function MyPage() {
 
         fetchMyFeed(nowCategory);
         fetchMyComment();
-        // if (nowCategory !== "comment") {
-        //   setIsClickedComment(false);
-        // } else {
+        if (nowCategory !== "comment") {
+          setIsClickedComment(false);
+        }
+        //else {
         //   setIsClickedComment((prev) => !prev);
         //   // fetchMyComment();
         // }
@@ -206,10 +207,7 @@ function MyPage() {
             (feed) =>
               isClickedComment && (
                 <div key={feed.fid} className={style["MyPage_Comment_Box"]}>
-                  <div
-                    className={style["Feed_title"]}
-                    onClick={() => handleCommentToggle(feed.fid)}
-                  >
+                  <div className={style["Feed_title"]} onClick={() => handleCommentToggle(feed.fid)}>
                     <img src={arrow} alt="화살표" />
                     <p>{feed.body}</p>
                   </div>
