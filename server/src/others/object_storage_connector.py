@@ -1,4 +1,5 @@
 from requests import get
+import requests
 import boto3 
 import time
 import glob
@@ -6,11 +7,13 @@ import os
 from bs4 import BeautifulSoup
 from PIL import Image
 from io import BytesIO
-
+import imageio
+from io import BytesIO
+from PIL import Image
+import cv2
+import numpy as np
 import re
-import requests
 from urllib.parse import urlparse
-
 
 
 # 건들지 않음
@@ -108,7 +111,10 @@ class ObjectStorageConnection:
 
         url = self.__endpoint_url + "/" + self.__feed_bucket + "/" + file_name
 
-        self.delete_temp_file(path)
+        #self.delete_temp_file(path)
+        
+        # 단일 파일만 제거
+        self.delete_temp_file(path=path, file_name=file_name)
 
         return url
         
@@ -119,6 +125,14 @@ class ObjectStorageConnection:
             if os.path.isfile(file):
                 os.remove(file)
         return
+    
+    def delete_specific_file(self, path, file_name):
+        time.sleep(0.1)
+        target_file = os.path.join(path, file_name)
+        if os.path.isfile(target_file):
+            os.remove(target_file)
+        else:
+            print(f"{file_name} does not exist.")
 
     # 오브젝트 바디 커넥트에서 데이터를 분리하는 함수
     # raw_data = String화 되어 파싱 된 것. <p> tag~
@@ -295,3 +309,130 @@ class HTMLEXtractor:
         
         return restored_html
         
+        
+class ImageDescriper():
+    def __init__(self):
+        self.__path = './model/local_database/feed_temp_image'
+        self.__service_name = 's3'
+        self.__endpoint_url = 'https://kr.object.ncloudstorage.com'
+        self.__region_name = 'kr-standard'
+        self.__access_key = 'eeJ2HV8gE5XTjmrBCi48'
+        self.__secret_key = 'zAGUlUjXMup1aSpG6SudbNDzPEXHITNkEUDcOGnv'
+        self.__s3 = boto3.client(self.__service_name,
+                                 endpoint_url=self.__endpoint_url,
+                                 aws_access_key_id=self.__access_key,
+                                 aws_secret_access_key=self.__secret_key)
+        self.__bucket_name = "nova-feed-images"
+        self.__default_image = "https://kr.object.ncloudstorage.com/nova-feed-images/nova-platform.png"
+        self.__profile_image_bucket = "nova-profile-images"
+        self.__bias_image_bucket = "nova-bias_image-images"
+
+    def __set_images_to_byte(self, images: list):
+        pil_images = []
+        for image in images:
+            try:
+                pil_image = Image.open(BytesIO(image))
+                pil_images.append(pil_image)
+            except Exception as e:
+                print(f"Error opening image with PIL: {e}")
+        return pil_images
+
+    def __set_images_to_cv2(self, images: list):
+        cv2_images = []
+        for pil_image in images:
+            try:
+                cv2_image = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR)
+                cv2_images.append(cv2_image)
+            except Exception as e:
+                print(f"Error converting PIL to CV2: {e}")
+        return cv2_images
+
+    def __process_gif_with_imageio(self, image: bytes):
+        try:
+            gif_images = imageio.mimread(image)
+            cv2_images = [cv2.cvtColor(frame, cv2.COLOR_RGB2BGR) for frame in gif_images]
+            return cv2_images
+        except Exception as e:
+            print(f"Error processing GIF with imageio: {e}")
+            return []
+
+    def __process_cv2img_to_gif(self, cv2_images: list):
+        try:
+            gif_images = [cv2.cvtColor(frame, cv2.COLOR_BGR2RGB) for frame in cv2_images]
+            return gif_images
+
+        except Exception as e:
+            print(f"Error processing GIF with imageio: {e}")
+            return []
+
+    def get_default_image_url(self):
+        return [self.__default_image], True
+
+    def try_feed_image_upload(self, fid: str, image_names: list, images):
+        try:
+            urls = []
+
+            for i, image in enumerate(images):
+                try:
+                    image_name:str = image_names[i]
+                    # Check if GIF or other unsupported formats
+                    if image_name.lower().endswith('.gif'):
+                        # 걍 gif 이미지 통째로 저장하는걸로 해★결
+                        # PIL를 이용해서 쇼부를 본다
+                        gif_file = Image.open(BytesIO(image))
+                        temp_path = f"{self.__path}/{fid}_{image_name}"
+
+                        gif_file.save(
+                            temp_path,
+                            save_all=True,
+                            loop=gif_file.info.get("loop", 0),         # 원본 루프 설정 유지
+                            duration=gif_file.info.get("duration", 100)  # 원본 지속 시간 유지
+                        )
+
+                        # if not os.path.exists(temp_path):
+                        #     print(f"GIF 파일 생성 실패: {temp_path}")
+
+                        self.__s3.upload_file(temp_path,
+                                              self.__bucket_name,
+                                              f"{fid}_{image_name}",
+                                              ExtraArgs={'ACL': 'public-read'})
+                        urls.append(f"{self.__endpoint_url}/{self.__bucket_name}/{fid}_{image_name}")
+
+                    else:
+                        # Process other formats
+                        pil_image = Image.open(BytesIO(image))
+                        temp_path = f"{self.__path}/{fid}_{image_name}"
+                        pil_image.save(temp_path)
+                        self.__s3.upload_file(temp_path,
+                                              self.__bucket_name,
+                                              f"{fid}_{image_name}",
+                                              ExtraArgs={'ACL': 'public-read'})
+                        urls.append(f"{self.__endpoint_url}/{self.__bucket_name}/{fid}_{image_name}")
+                except Exception as e:
+                    print(f"Error processing image {image_names[i]}: {e}")
+
+            #self.delete_temp_image()
+            # 단일 파일만 제거
+            self.delete_specific_file(file_name=f"{fid}_{image_name}")
+            
+            return urls, True
+
+        except Exception as e:
+            print(f"Error in try_feed_image_upload: {e}")
+            return "Something Goes Bad", False
+
+    def delete_temp_image(self):
+        time.sleep(0.1)
+        files = glob.glob(os.path.join(self.__path, '*'))
+        for file in files:
+            if os.path.isfile(file):
+                os.remove(file)
+        return
+    
+    def delete_specific_file(self, file_name):
+        time.sleep(0.1)
+        target_file = os.path.join(self.__path, file_name)
+        if os.path.isfile(target_file):
+            os.remove(target_file)
+        else:
+            print(f"{file_name} does not exist.")

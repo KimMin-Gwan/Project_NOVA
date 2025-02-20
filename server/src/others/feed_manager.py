@@ -2,22 +2,13 @@ import copy
 
 from others.data_domain import Feed, User, Comment, ManagedUser, Interaction, FeedLink
 from others.search_engine import FeedSearchEngine
-from others.object_storage_connector import ObjectStorageConnection, HTMLEXtractor
+from others.object_storage_connector import ObjectStorageConnection, HTMLEXtractor, ImageDescriper
 #from model import Local_Database
 from datetime import datetime, timedelta
 import string
 import random
-import boto3
-import cv2
-import glob
-import os
-import time
-import numpy as np
 import warnings
-from io import BytesIO
-from PIL import Image
 import re
-import imageio
 from pprint import pprint
 
 # Boto3의 경고 메시지 무시
@@ -163,15 +154,15 @@ class FeedManager:
             fid = self.__make_new_fid(user=user)
 
         if data_payload.fclass == "short":
+            
             # 이미지를 업로드 할것
-            image_descriper = ImageDescriper()
             # 근데 이미지가 없으면 디폴트 이미지로
             if len(data_payload.image_names) == 0:
                 #image_result, flag = image_descriper.get_default_image_url()
                 image_result = []
                 flag = True
             else:
-                image_result, flag = image_descriper.try_feed_image_upload(
+                image_result, flag = ImageDescriper().try_feed_image_upload(
                     fid=fid, image_names=data_payload.image_names,
                     images=data_payload.images)
             # 이미지 업로드 실패하면
@@ -185,7 +176,7 @@ class FeedManager:
                                  choice=data_payload.choice,
                                  body=data_payload.body,
                                  hashtag=data_payload.hashtag,
-                                 board_type="자유게시판", # 이거, 게시판 타입 분리하는거, 나중에 프론트엔드에서 게시판타입을 받아오면 그 때, 데이터가 바뀐다.
+                                 board_type=data_payload.board_type,
                                  images=image_result,
                                  link=data_payload.link,
                                  bid=data_payload.bid,
@@ -218,7 +209,7 @@ class FeedManager:
                                  choice=data_payload.choice,
                                  body=body,
                                  hashtag=data_payload.hashtag,
-                                 board_type="자유게시판", # 이거도, 게시판 타입 받아야 함
+                                 board_type=data_payload.board_type,
                                  images=[],
                                  link=data_payload.link,
                                  bid=data_payload.bid,
@@ -1106,118 +1097,4 @@ class TrashTable:
         return count
         
 
-class ImageDescriper():
-    def __init__(self):
-        self.__path = './model/local_database/feed_temp_image'
-        self.__service_name = 's3'
-        self.__endpoint_url = 'https://kr.object.ncloudstorage.com'
-        self.__region_name = 'kr-standard'
-        self.__access_key = 'eeJ2HV8gE5XTjmrBCi48'
-        self.__secret_key = 'zAGUlUjXMup1aSpG6SudbNDzPEXHITNkEUDcOGnv'
-        self.__s3 = boto3.client(self.__service_name,
-                                 endpoint_url=self.__endpoint_url,
-                                 aws_access_key_id=self.__access_key,
-                                 aws_secret_access_key=self.__secret_key)
-        self.__bucket_name = "nova-feed-images"
-        self.__default_image = "https://kr.object.ncloudstorage.com/nova-feed-images/nova-platform.png"
-
-    def __set_images_to_byte(self, images: list):
-        pil_images = []
-        for image in images:
-            try:
-                pil_image = Image.open(BytesIO(image))
-                pil_images.append(pil_image)
-            except Exception as e:
-                print(f"Error opening image with PIL: {e}")
-        return pil_images
-
-    def __set_images_to_cv2(self, images: list):
-        cv2_images = []
-        for pil_image in images:
-            try:
-                cv2_image = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR)
-                cv2_images.append(cv2_image)
-            except Exception as e:
-                print(f"Error converting PIL to CV2: {e}")
-        return cv2_images
-
-    def __process_gif_with_imageio(self, image: bytes):
-        try:
-            gif_images = imageio.mimread(image)
-            cv2_images = [cv2.cvtColor(frame, cv2.COLOR_RGB2BGR) for frame in gif_images]
-            return cv2_images
-        except Exception as e:
-            print(f"Error processing GIF with imageio: {e}")
-            return []
-
-    def __process_cv2img_to_gif(self, cv2_images: list):
-        try:
-            gif_images = [cv2.cvtColor(frame, cv2.COLOR_BGR2RGB) for frame in cv2_images]
-            return gif_images
-
-        except Exception as e:
-            print(f"Error processing GIF with imageio: {e}")
-            return []
-
-    def get_default_image_url(self):
-        return [self.__default_image], True
-
-    def try_feed_image_upload(self, fid: str, image_names: list, images):
-        try:
-            urls = []
-
-            for i, image in enumerate(images):
-                try:
-                    image_name:str = image_names[i]
-                    # Check if GIF or other unsupported formats
-                    if image_name.lower().endswith('.gif'):
-                        # 걍 gif 이미지 통째로 저장하는걸로 해★결
-                        # PIL를 이용해서 쇼부를 본다
-                        gif_file = Image.open(BytesIO(image))
-                        temp_path = f"{self.__path}/{fid}_{image_name}"
-
-                        gif_file.save(
-                            temp_path,
-                            save_all=True,
-                            loop=gif_file.info.get("loop", 0),         # 원본 루프 설정 유지
-                            duration=gif_file.info.get("duration", 100)  # 원본 지속 시간 유지
-                        )
-
-                        # if not os.path.exists(temp_path):
-                        #     print(f"GIF 파일 생성 실패: {temp_path}")
-
-                        self.__s3.upload_file(temp_path,
-                                              self.__bucket_name,
-                                              f"{fid}_{image_name}",
-                                              ExtraArgs={'ACL': 'public-read'})
-                        urls.append(f"{self.__endpoint_url}/{self.__bucket_name}/{fid}_{image_name}")
-
-                    else:
-                        # Process other formats
-                        pil_image = Image.open(BytesIO(image))
-                        temp_path = f"{self.__path}/{fid}_{image_name}"
-                        pil_image.save(temp_path)
-                        self.__s3.upload_file(temp_path,
-                                              self.__bucket_name,
-                                              f"{fid}_{image_name}",
-                                              ExtraArgs={'ACL': 'public-read'})
-                        urls.append(f"{self.__endpoint_url}/{self.__bucket_name}/{fid}_{image_name}")
-                except Exception as e:
-                    print(f"Error processing image {image_names[i]}: {e}")
-
-            self.delete_temp_image()
-            return urls, True
-
-        except Exception as e:
-            print(f"Error in try_feed_image_upload: {e}")
-            return "Something Goes Bad", False
-
-    def delete_temp_image(self):
-        time.sleep(0.1)
-        files = glob.glob(os.path.join(self.__path, '*'))
-        for file in files:
-            if os.path.isfile(file):
-                os.remove(file)
-        return
-    
 #-------------------------------------------------------------------------------------------------------------

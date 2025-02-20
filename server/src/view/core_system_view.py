@@ -519,7 +519,6 @@ class Core_Service_View(Master_View):
         @self.__app.post('/feed_explore/feed_with_community')
         def get_feed_with_community(request:Request, raw_request:dict):
             request_manager = RequestManager()
-            pprint(raw_request['body'])
             # 데이터 페이로드에도 bid 리스트를 넣어야됨
             data_payload = CommunityRequest(request=raw_request)
             
@@ -743,7 +742,7 @@ class Core_Service_View(Master_View):
                 raise request_manager.system_logic_exception
 
             raw_request = json.loads(jsonData)
-            pprint(raw_request)
+            pprint(raw_request['body'])
             
             data_payload = EditFeedRequest(request=raw_request,
                                             image_names=image_names,
@@ -989,6 +988,7 @@ class EditFeedRequest(RequestHeader):
         self.fid = body['fid']
         self.body = body['body']
         self.fclass = body.get("fclass", "short")
+        self.board_type = body.get("category", "자유게시판")  # 자유게시판 디폴트
         self.choice= body['choice']
         self.hashtag = body['hashtag']
         self.link:list = body['link']
