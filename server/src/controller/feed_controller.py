@@ -64,8 +64,8 @@ class Feed_Controller:
         #         board_type = request.data_payload.board_type,
         #         feed_search_engine=feed_search_engine,
         #         feed_manager=self.__feed_manager)
-
-        return model
+        finally:
+            return model
 
     # 키워드를 통한 피드 검색
     # def try_search_in_keyword(self, database:Local_Database,
