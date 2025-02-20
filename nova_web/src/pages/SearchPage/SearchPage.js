@@ -23,7 +23,7 @@ export default function SearchPage() {
     const updateHistory = [...searchHistory, searchWord];
     setSearchHistory(updateHistory);
     localStorage.setItem("history", JSON.stringify(updateHistory));
-    navigate(`/search_result/?keyword=${searchWord}`);
+    navigate(`/search_result?keyword=${searchWord}`);
     setSearchWord("");
     // }
   }

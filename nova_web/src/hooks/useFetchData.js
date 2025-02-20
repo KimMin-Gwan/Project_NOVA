@@ -8,14 +8,10 @@ export default function useFetchData(url) {
   const [loading, setLoading] = useState(true);
 
   async function fetchData() {
-    await mainApi
-      .get(url, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        setData(res.data.body.send_data);
-        setLoading(false);
-      });
+    await mainApi.get(url).then((res) => {
+      setData(res.data.body.send_data);
+      setLoading(false);
+    });
   }
 
   useEffect(() => {

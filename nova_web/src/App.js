@@ -64,9 +64,6 @@ function App() {
       {/* <Route path="/notice/:nid" element={<Notice />} /> */}
 
       {/* 피드 페이지 */}
-      {/* <Route path="/feed_page" element={<FeedPage brightMode={brightMode} />}></Route> */}
-      {/* <Route path="/select_bias" element={<SelectBias />}></Route> */}
-
       <Route path="/write_feed" element={<Write />}>
         <Route path=":type" element={<Write />}></Route>
       </Route>

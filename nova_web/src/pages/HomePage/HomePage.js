@@ -75,7 +75,7 @@ export default function HomePage() {
     let send_data = {
       header: header,
       body: {
-        bids: bid === undefined ? [bids] : [bid],
+        bids: biasId === undefined ? [bids] : [biasId],
         board: "자유게시판",
         key: -1,
       },
