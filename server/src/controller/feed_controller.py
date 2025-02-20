@@ -31,20 +31,22 @@ class Feed_Controller:
                                 request, feed_search_engine: FeedSearchEngine):
         # model = CommunityFeedModel(database=database)
         model = FilteredFeedModel(database=database)
-        
-        # 유저가 있으면 세팅
-        if request.jwt_payload != "":
-            model.set_user_with_email(request=request.jwt_payload)
-            
-        #model.is_bids_data_empty(data_payload=request.data_payload)
+        try:
+            # 유저가 있으면 세팅
+            if request.jwt_payload != "":
+                model.set_user_with_email(request=request.jwt_payload)
+                
+            #model.is_bids_data_empty(data_payload=request.data_payload)
 
-        model.try_filtered_feed_community(
-            feed_search_engine=feed_search_engine,
-            feed_manager=self.__feed_manager,
-            bid = request.data_payload.bid,
-            category = request.data_payload.category,
-            last_index=request.data_payload.key
-        )
+            model.try_filtered_feed_community(
+                feed_search_engine=feed_search_engine,
+                feed_manager=self.__feed_manager,
+                bid = request.data_payload.bid,
+                category = request.data_payload.category,
+                last_index=request.data_payload.key
+            )
+        except Exception as e:
+            print(e)
 
         # # board를 선택하지 않은 경우
         # if request.data_payload.board_type == "":
