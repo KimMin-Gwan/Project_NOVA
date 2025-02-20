@@ -95,7 +95,7 @@ class SendEmailModel(BaseModel):
             random_number = random.randint(0,10000)
             uname = "지지자"+str(random_number)
             # 만약 데이터베이스에 이 이름이 등록되어있다면.. 다시 랜덤숫자를 생성합니다
-            if self._database.get_data_with_key(target="uid", key="uname", key_datas=[uname]):
+            if self._database.get_data_with_key(target="uid", key="uname", key_data=uname):
                 continue
             else:
                 return uname
