@@ -519,7 +519,7 @@ class Core_Service_View(Master_View):
         @self.__app.post('/feed_explore/feed_with_community')
         def get_feed_with_community(request:Request, raw_request:dict):
             request_manager = RequestManager()
-            
+            pprint(raw_request['body'])
             # 데이터 페이로드에도 bid 리스트를 넣어야됨
             data_payload = CommunityRequest(request=raw_request)
             
