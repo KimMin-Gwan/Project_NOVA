@@ -15,6 +15,8 @@ import useTagStore from "../../stores/TagStore/useTagStore.js";
 import useBiasStore from "../../stores/BiasStore/useBiasStore.js";
 import Header from "../../component/Header/Header.js";
 import postApi from "../../services/apis/postApi.js";
+import GoogleAD from "../../component/display_google_ad.js";
+import DisplayAds from "../../component/display_google_ad.js";
 
 export function getModeClass(mode) {
   return mode === "dark" ? "dark-mode" : "bright-mode";
@@ -115,6 +117,10 @@ export default function HomePage() {
     <div className="all-box">
       <div className={`container ${getModeClass(brightMode)}`}>
         <div className={`top-area ${getModeClass(brightMode)}`}>
+
+          <DisplayAds />
+
+
           <Header />
           <SearchBox />
           <h4 className="main-title">최애가 가장 빛날 수 있는 공간</h4>
