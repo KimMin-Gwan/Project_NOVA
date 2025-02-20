@@ -184,7 +184,7 @@ export default function FollowPage() {
               </span>
             </div>
           ) : (
-            <p>검색 결과 없음 {resultLength}</p>
+            <p className={style["no_result"]}>검색 결과가 없어요</p>
           )}
 
           <button className={style["fav-apply"]}>

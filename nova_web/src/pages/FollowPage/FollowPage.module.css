@@ -88,6 +88,13 @@
       }
     }
 
+    .no_result {
+      color: #c6c6c6;
+      padding-block: 60px;
+      align-self: self;
+      justify-self: center;
+    }
+
     .fav-apply {
       cursor: pointer;
       display: flex;
