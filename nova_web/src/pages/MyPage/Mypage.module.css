@@ -342,18 +342,19 @@
 
   .comment_box {
     padding: 0 29px;
-    display: flex;
-    align-items: start;
+    & li {
+      display: flex;
+      align-items: start;
+      .Comment_content {
+        margin: 13px 0 20px 19px;
+        flex: 1;
+      }
 
-    .Comment_content {
-      margin: 13px 0 20px 19px;
-      flex: 1;
-    }
-
-    & span {
-      color: #828282;
-      font-size: 14px;
-      margin-block: 50px 11px;
+      & span {
+        color: #828282;
+        font-size: 14px;
+        margin-block: 50px 11px;
+      }
     }
   }
 }

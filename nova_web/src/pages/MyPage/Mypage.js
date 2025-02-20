@@ -36,7 +36,10 @@ function MyPage() {
   let [myFeed, setMyFeed] = useState([]);
   const [nextKey, setNextKey] = useState(-1);
   const [nowCategory, setNowCategory] = useState(categoryData[0].type);
-  const [isComment, setIsComment] = useState(false);
+  const [clickedComments, setClickedComments] = useState({});
+
+  const [comment, setComment] = useState([]);
+
   async function fetchMyPage() {
     await mainApi.get("user_home/get_my_page_data").then((res) => {
       console.log("my", res.data);
@@ -47,20 +50,27 @@ function MyPage() {
 
   useEffect(() => {
     fetchMyPage();
+    fetchMyFeed(nowCategory);
   }, []);
 
   async function fetchMyFeed(category) {
     await mainApi.get(`user_home/get_my_feed?type=${category}&key=${nextKey}`).then((res) => {
-      console.log("feed", res.data);
       setMyFeed((prevData) => [...prevData, ...res.data.body.feed]);
       setNextKey(res.data.body.key);
       setIsLoading(false);
     });
   }
 
-  useEffect(() => {
-    fetchMyFeed(nowCategory);
-  }, []);
+  async function fetchMyComment() {
+    await mainApi.get(`user_home/get_my_comments`).then((res) => {
+      setComment((prevData) => [...res.data.body.feeds]);
+    });
+  }
+
+  // useEffect(() => {
+
+  //   fetchMyFeed(nowCategory);
+  // }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
@@ -68,7 +78,13 @@ function MyPage() {
         if (!entry.isIntersecting) return;
         if (isLoading) return;
 
-        fetchMyFeed(nowCategory);
+        if (nowCategory !== "comment") {
+          fetchMyFeed(nowCategory);
+          setIsClickedComment(false);
+        } else {
+          setIsClickedComment((prev) => !prev);
+          fetchMyComment();
+        }
       });
     });
 
@@ -90,6 +106,11 @@ function MyPage() {
 
   const [activeIndex, setActiveIndex] = useState(0);
 
+  function handleMyInfo(index, item) {
+    handleClick(index, item.type);
+    setNowCategory(item.type);
+  }
+
   useEffect(() => {
     setMyFeed([]);
     setNextKey(-1);
@@ -102,17 +123,17 @@ function MyPage() {
 
   const [isClickedComment, setIsClickedComment] = useState(false);
 
-  function onClickComment() {
-    setIsClickedComment(!isClickedComment);
-  }
-
   if (isLoading) {
     return <div>loading...</div>;
   }
 
-  function handleComment() {
-    setIsComment(!isComment);
-  }
+  const handleCommentToggle = (id) => {
+    setClickedComments((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
+
   const profile = `https://kr.object.ncloudstorage.com/nova-user-profile/${myData.uid}.png`;
 
   return (
@@ -154,7 +175,7 @@ function MyPage() {
               </li>
               <li>
                 <b>{myData.num_comment}</b>
-                <p onClick={onClickComment}>댓글</p>
+                <p>댓글</p>
               </li>
             </ul>
           </section>
@@ -165,9 +186,7 @@ function MyPage() {
                   key={index}
                   className={`${style.post} ${activeIndex === index ? style.active : ""}`}
                   onClick={() => {
-                    setNowCategory(item.type);
-                    handleClick(index, item.type);
-                    console.log(item.type);
+                    handleMyInfo(index, item);
                   }}
                 >
                   <button>{item.category}</button>
@@ -176,22 +195,30 @@ function MyPage() {
             </ul>
           </section>
 
-          {isClickedComment && (
-            <div className={style["MyPage_Comment_Box"]}>
-              <div className={style["Feed_title"]} onClick={handleComment}>
-                <img src={arrow} alt="화살표" />
-                <p>이 예시문은 어쩌구 저쩌구</p>
-              </div>
+          {comment.map(
+            (feed) =>
+              isClickedComment && (
+                <div key={feed.fid} className={style["MyPage_Comment_Box"]}>
+                  <div className={style["Feed_title"]} onClick={() => handleCommentToggle(feed.fid)}>
+                    <img src={arrow} alt="화살표" />
+                    <p>{feed.body}</p>
+                  </div>
 
-              {isComment && (
-                <section className={style["comment_box"]}>
-                  <img src={reArrow} alt="대댓글" />
-                  <p className={style["Comment_content"]}>댓글내용</p>
-                  <span>2025-02-05</span>
-                </section>
-              )}
-            </div>
+                  {clickedComments[feed.fid] && Array.isArray(feed.cid) && feed.cid.length > 0 && (
+                    <ul className={style["comment_box"]}>
+                      {feed.cid.map((comment, j) => (
+                        <li key={j}>
+                          <img src={reArrow} alt="대댓글" />
+                          <p className={style["Comment_content"]}>{comment.body}</p>
+                          <span>{comment.date}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              )
           )}
+
           {myFeed.map((feed, i) => {
             return <Feed key={i} feed={feed} />;
           })}
