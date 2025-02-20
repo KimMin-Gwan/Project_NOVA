@@ -22,6 +22,9 @@ export default function SignUp() {
   let [isCheckPwdFocused, setIsCheckPwdFocused] = useState(false);
   let [showPassword, setShowPassword] = useState(false);
   let [showCheckPassword, setShowCheckPassword] = useState(false);
+
+  let [errorMessage, setErrorMessage] = useState("이메일 형식으로 아이디를 입력해주세요.");
+
   let header = {
     "request-type": "default",
     "client-version": "v1.0.1",
@@ -107,9 +110,14 @@ export default function SignUp() {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
-        setAuthen(data.body.result);
+        console.log(data.body.detail);
+        const newAuthen = data.body.result;
+        setAuthen(newAuthen);
+
+        setEmailError(!emailError);
+        setErrorMessage(data.body.detail);
       });
+
     alert("인증코드가 전송되었습니다");
   }
 
@@ -167,6 +175,7 @@ export default function SignUp() {
       setAllAgree(checked && agree1);
     }
   };
+
   return (
     <div className={style.container}>
       <div className={style.Topbar}>
@@ -195,6 +204,7 @@ export default function SignUp() {
                   style={{
                     background: inputEmail ? "#107BF4" : "",
                     color: inputEmail ? "white" : "",
+                    pointerEvents: inputEmail ? "auto" : "none",
                   }}
                   onClick={() => {
                     fetchAuthenEmail();
@@ -202,7 +212,7 @@ export default function SignUp() {
                 >
                   인증
                 </button>
-                {emailError && <p className={style.errorMessage}>이메일 형식으로 아이디를 입력해주세요.</p>}
+                {emailError && <p className={style.errorMessage}>{errorMessage}</p>}
               </label>
             </div>
           </div>
@@ -266,14 +276,12 @@ export default function SignUp() {
             <div className={style.test}>
               성별
               <br />
-              <input type="radio" name="gender" id="gender1" required onChange={(e) => handleGender(e)}></input>
+              <input type="radio" name="gender" value="m" id="gender1" required onChange={(e) => handleGender(e)} />
               <label htmlFor="gender1">남성</label>
-              <input type="radio" name="gender" id="gender2" required onChange={(e) => handleGender(e)}></input>
+              <input type="radio" name="gender" value="f" id="gender2" onChange={(e) => handleGender(e)} />
               <label htmlFor="gender2">여성</label>
-              <input type="radio" name="gender" id="gender3" required onChange={(e) => handleGender(e)}></input>
-              <label htmlFor="gender3">기타</label>
-              <input type="radio" name="gender" id="gender4" required onChange={(e) => handleGender(e)}></input>
-              <label htmlFor="gender4">비공개</label>
+              <input type="radio" name="gender" value="n" id="gender3" onChange={(e) => handleGender(e)} />
+              <label htmlFor="gender3">비공개</label>
             </div>
           </div>
 
