@@ -250,7 +250,7 @@ class Feed_Controller:
         model.try_search_feed_with_target_type(feed_search_engine=feed_search_engine,
                                                feed_manager=self.__feed_manager,
                                                target_type="bid",
-                                               index=request.data_payload.indexm,
+                                               last_index=request.data_payload.key,
                                                num_feed=num_feed)
 
         # model.try_search_feed_with_bid(feed_search_engine=feed_search_engine,
@@ -276,9 +276,9 @@ class Feed_Controller:
         model.try_search_feed_with_target_type(feed_search_engine=feed_search_engine,
                                                feed_manager=feed_manager,
                                                target_type="hashtag",
-                                               target=request.data_payload.target,
+                                               target=request.data_payload.hashtag,
                                                target_time=request.data_payload.target_time,
-                                               last_index=request.data_payload.last_index,
+                                               last_index=request.data_payload.key,
                                                num_feed=num_feed
         )
 
@@ -309,11 +309,11 @@ class Feed_Controller:
             feed_search_engine=feed_search_engine,
         )
         model.try_search_feed_with_target_type(feed_search_engine=feed_search_engine,
-                                               feed_manager=feed_manager,
+                                               feed_manager=self.__feed_manager,
                                                target_type="keyword",
                                                target=request.data_payload.keyword,
                                                fclass=request.data_payload.fclass,
-                                               last_index=request.data_payload.last_index,
+                                               last_index=request.data_payload.key,
                                                num_feed=num_feed)
 
         # model.try_search_feed_with_keyword(
