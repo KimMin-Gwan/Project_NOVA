@@ -502,7 +502,7 @@ class ManagedFeedBiasTable:
 
     #----------------------------------------------------------------------------------------------
     def filtering_bias_community(self, bid:str, board_type:str):
-        filtered_feeds_df = self.__feed_df[self.__feed_df['bid'].isin(bid)]
+        filtered_feeds_df = self.__feed_df[self.__feed_df['bid']==bid]
         if board_type != "":
             filtered_feeds_df = filtered_feeds_df[filtered_feeds_df['board_type'] == board_type]
         return filtered_feeds_df['fid'].tolist()
