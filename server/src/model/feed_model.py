@@ -876,7 +876,7 @@ class FilteredFeedModel(FeedModel):
         fid_list = feed_search_engine.try_feed_with_bid_n_filtering(target_bid=bid, category=category)
 
         fid_list, self._key = feed_manager.paging_fid_list(fid_list=fid_list, last_index=last_index, page_size=num_feed)
-        pprint(fid_list)
+        # pprint(fid_list)
         self._send_data = self._make_feed_data_n_interaction_data(feed_manager=feed_manager, fid_list=fid_list)
 
         return
