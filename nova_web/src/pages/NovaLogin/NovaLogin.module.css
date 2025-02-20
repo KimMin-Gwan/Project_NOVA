@@ -136,7 +136,7 @@
 }
 
 .input-box input:focus {
-  border: 1px solid #98a0ff;
+  border: 1px solid #107bf4;
 }
 
 .input-box input[type="email"] {
