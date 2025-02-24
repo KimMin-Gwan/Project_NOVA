@@ -57,8 +57,6 @@ export default function FeedList(isUserState) {
     // fetchBiasList();
   }, []);
 
-  console.log(biasList);
-
   let bids = biasList.map((item, i) => {
     return item.bid;
   });
@@ -370,14 +368,14 @@ export default function FeedList(isUserState) {
           <div className={style["bias-section"]}>
             <BiasBoxes setBiasId={setBiasId} fetchBiasCategoryData={fetchBiasCategoryData} />
             <h4>스토리 게시판</h4>
-            {/* <div className={style["story_container"]}>
+            <div className={style["story_container"]}>
               <div className={style["story_wrapper"]}>
                 {feedData.map((feed, i) => {
                   console.log("dasd", feed.feed.fid);
                   return <StoryFeed key={`story_${feed.feed.fid}`} feedData={feed} />;
                 })}
               </div>
-            </div> */}
+            </div>
             {biasId && (
               <div className={style["category-info"]}>
                 <p>모든 게시글</p>
