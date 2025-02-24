@@ -1,6 +1,6 @@
 from model.base_model import BaseModel
 from model import Local_Database
-from others.data_domain import Bias, League
+from others.data_domain import Bias
 from others import CoreControllerLogicError, FeedSearchEngine
 from random import sample
 

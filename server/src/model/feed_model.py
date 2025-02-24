@@ -31,11 +31,11 @@ class FeedModel(BaseModel):
             
             self._feeds.append(feed)
             
-            if feed.iid != "":
-                interaction_data = self._database.get_data_with_id(target="iid", id=feed.iid)
-                self._interaction.make_with_dict(interaction_data)
+            #if feed.iid != "":
+                #interaction_data = self._database.get_data_with_id(target="iid", id=feed.iid)
+                #self._interaction.make_with_dict(interaction_data)
                 
-                self._set_feed_interactied(self._user, interaction=self._interaction)
+                #self._set_feed_interactied(self._user, interaction=self._interaction)
                 
             if feed.lid:
                 feed_link_datas = self._database.get_datas_with_ids(target_id="lid", ids=feed.lid)
@@ -103,16 +103,16 @@ class FeedModel(BaseModel):
 
         feeds = self._set_feed_json_data(user=self._user, feeds=feeds)
         
-        interaction_datas = self._database.get_datas_with_ids(target_id="iid", ids=iids)
-        interactions = []
+        #interaction_datas = self._database.get_datas_with_ids(target_id="iid", ids=iids)
+        #interactions = []
         
-        for interaction_data in interaction_datas:
-            interaction = Interaction()
-            interaction.make_with_dict(interaction_data)
-            interactions.append(interaction)
+        #for interaction_data in interaction_datas:
+            #interaction = Interaction()
+            #interaction.make_with_dict(interaction_data)
+            #interactions.append(interaction)
             
         # 인터엑션 넣을 필요 있음
-        send_data = self.__set_send_data(feeds=feeds, interactions=interactions)
+        send_data = self.__set_send_data(feeds=feeds)
         
         return send_data
 
@@ -167,7 +167,6 @@ class FeedModel(BaseModel):
     #     return
     
     # 상호작용하기
-    # 만들어야됨 
     def try_interact_feed(self, feed_manager:FeedManager, data_payload):
         self._feeds = feed_manager.try_interaction_feed(user=self._user,
                                                     fid=data_payload.fid,
@@ -346,7 +345,7 @@ class FeedModel(BaseModel):
 
     # 전송 데이터 만들기
     # feed 데이터와 interaction을 모두 줘야하는 경우에만 사용
-    def __set_send_data(self, feeds:list, interactions:list=[]):
+    def __set_send_data(self, feeds:list):
         send_data = []
 
         for feed in feeds:
@@ -356,16 +355,16 @@ class FeedModel(BaseModel):
             if feed.display < 3:
                 continue
 
-            interaction = Interaction()
-            for single_interaction in interactions:
-                if single_interaction.iid == feed.iid:
-                    interaction = single_interaction
-                    self._set_feed_interactied(self._user, interaction=single_interaction)
+            #interaction = Interaction()
+            #for single_interaction in interactions:
+                #if single_interaction.iid == feed.iid:
+                    #interaction = single_interaction
+                    #self._set_feed_interactied(self._user, interaction=single_interaction)
                     
 
             dict_data={}
             dict_data['feed'] = feed.get_dict_form_data()
-            dict_data['interaction'] = interaction.get_dict_form_data()
+            #dict_data['interaction'] = interaction.get_dict_form_data()
 
             send_data.append(dict_data)
         return send_data

@@ -1,14 +1,11 @@
 from model.base_model import BaseModel
 from model.league_model import LeagueModel
 from model import Local_Database
-from others.data_domain import League, Bias, User, Notice, Report
+from others.data_domain import Bias, User, Report
 from others import CoreControllerLogicError, HTMLEXtractor
 import copy
-
-import re
-import requests
-from bs4 import BeautifulSoup
 from urllib.parse import urlparse
+import datetime
 
 class BiasBannerModel(BaseModel):
     def __init__(self, database:Local_Database) -> None:

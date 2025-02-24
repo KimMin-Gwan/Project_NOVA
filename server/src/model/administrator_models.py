@@ -2,12 +2,8 @@ from model.base_model import AdminModel
 from model import Local_Database
 from others.data_domain import League, User, Bias, Banner, NameCard, Feed
 from others import CoreControllerLogicError
-
-import boto3
 import datetime
 import uuid
-
-import time
 
 class ResetDatasModel(AdminModel):
     def __init__(self, database:Local_Database) -> None:

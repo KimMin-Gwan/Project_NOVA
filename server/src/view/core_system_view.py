@@ -461,7 +461,6 @@ class Core_Service_View(Master_View):
         @self.__app.post('/feed_explore/all_feed')
         def get_all_feed_filtering(request:Request, raw_request:dict):
             request_manager = RequestManager()
-            pprint(raw_request)
             data_payload = AllFeedRequest(request=raw_request)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:

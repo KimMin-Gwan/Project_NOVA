@@ -1,7 +1,6 @@
 from model.local_database_model import Local_Database
 from others.data_domain import User
 from view.parsers import Head_Parser
-import json
 from others import CoreControllerLogicError
 
 import editdistance

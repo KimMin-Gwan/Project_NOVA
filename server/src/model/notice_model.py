@@ -1,10 +1,9 @@
 from model.base_model import BaseModel
 from model import Local_Database
 #from others.data_domain import Alert
-from others import CoreControllerLogicError,FeedManager, FeedSearchEngine, ObjectStorageConnection
-from others import Comment, Feed, User, Interaction, Notice, Bias
+from others import CoreControllerLogicError
+from others import Notice, Bias
 from pprint import pprint
-from datetime import datetime
 
 class NoticeModel(BaseModel):
     def __init__(self, database:Local_Database) -> None:

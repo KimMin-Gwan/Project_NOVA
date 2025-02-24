@@ -1,7 +1,7 @@
 from model.base_model import BaseModel
 from model import Local_Database
 #from others.data_domain import Alert
-from others import CoreControllerLogicError,FeedManager, Bias, FeedSearchEngine
+from others import CoreControllerLogicError, Bias, FeedSearchEngine
 from pprint import pprint
 
 

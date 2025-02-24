@@ -1,10 +1,8 @@
 from model.base_model import BaseModel
 from model import Local_Database
-from model.feed_model import FeedModel
-from others.data_domain import User, Bias, Alert, ManagedUser
+from others.data_domain import User, Bias
 from others import CoreControllerLogicError, FeedManager, FeedSearchEngine, ObjectStorageConnection
 from view.jwt_decoder import JWTManager
-import jwt
 import datetime
 import uuid
 from pprint import pprint
