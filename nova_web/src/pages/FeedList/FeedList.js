@@ -1,6 +1,6 @@
 import "@toast-ui/editor/dist/toastui-editor-viewer.css";
-import { useEffect, useLocation, useMemo, useRef, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import BiasBoxes from "../../component/BiasBoxes.js";
 import FilterModal from "../../component/FilterModal/FilterModal.js";
 import SearchBox from "../../component/SearchBox.js";
@@ -49,7 +49,6 @@ export default function FeedList(isUserState) {
 
   const initialMode = brightModeFromUrl || localStorage.getItem("brightMode") || "bright"; // URL에서 가져오고, 없으면 로컬 스토리지에서 가져옴
   const [mode, setMode] = useState(initialMode);
-  let navigate = useNavigate();
 
   let { biasList, fetchBiasList } = useBiasStore();
   useEffect(() => {
@@ -89,7 +88,6 @@ export default function FeedList(isUserState) {
     if (type === "bias") {
       fetchBiasCategoryData();
     }
-    // console.log(bids, board);
   }, [biasId, board]);
 
   let [filterCategory, setFilterCategory] = useState([]);
@@ -244,50 +242,14 @@ export default function FeedList(isUserState) {
         .then((response) => response.json())
         .then((data) => {
           console.log("all feed first feed 3개", data.body);
-          // setFeedData(data.body.send_data);
-          // setFeedInteraction(data.body.send_data.map((interaction, i) => interaction));
           setNextData(data.body.key);
           setIsLoading(false);
-          // setFeedData(data.body.send_data);
           setFeedData((prevData) => {
             const newData = [...prevData, ...data.body.send_data];
             return newData;
           });
         });
     }
-  }
-
-  let [isError, setIsError] = useState();
-  async function handleInteraction(event, fid, action) {
-    event.preventDefault();
-    // setIsLoading(true);
-    await fetch(
-      `https://nova-platform.kr/feed_explore/interaction_feed?fid=${fid}&action=${action}`,
-      {
-        credentials: "include",
-      }
-    )
-      .then((response) => {
-        if (!response.ok) {
-          if (response.status === 401) {
-            setIsError(response.status);
-            navigate("/novalogin");
-          } else {
-            throw new Error(`status: ${response.status}`);
-          }
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setFeedData((prevFeeds) => {
-          const updatedFeeds = prevFeeds.map((feed) => {
-            return feed.feed.fid === fid ? { ...feed, interaction: data.body.interaction } : feed;
-          });
-
-          return updatedFeeds;
-        });
-        setIsLoading(false);
-      });
   }
 
   useEffect(() => {
@@ -430,7 +392,6 @@ export default function FeedList(isUserState) {
                   interaction={feed.interaction}
                   feedInteraction={feedInteraction}
                   setFeedData={setFeedData}
-                  handleInteraction={handleInteraction}
                 ></Feed>
               );
             })
