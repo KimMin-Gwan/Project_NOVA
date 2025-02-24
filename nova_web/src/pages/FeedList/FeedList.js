@@ -95,17 +95,7 @@ export default function FeedList(isUserState) {
   let [filterCategory, setFilterCategory] = useState([]);
   let [filterFclass, setFilterFclass] = useState("");
   let [isClickedFetch, setIsClickedFetch] = useState(false);
-  let [allFeed, setAllFeed] = useState([]);
   const FETCH_URL = "https://nova-platform.kr/feed_explore/";
-
-  //let send_form = {
-  //header: header,
-  //body: {
-  //key: nextData,
-  //category: filterCategory || [""],
-  //fclass: filterFclass || "",
-  //},
-  //};
 
   function onClickApplyButton1() {
     setNextData(-1);

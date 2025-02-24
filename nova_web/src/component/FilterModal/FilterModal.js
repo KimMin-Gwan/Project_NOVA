@@ -64,9 +64,8 @@ export default function FilterModal({
     });
     setFilterCategory((prev) => {
       const data = FilterData[i].value;
-
       if (prev.includes(data)) {
-        return prev.filter((item) => item !== i);
+        return prev.filter((item) => item !== data);
       }
       return i === 4 ? [data] : [...prev.filter((item) => item !== FilterData[4].value), data];
     });
