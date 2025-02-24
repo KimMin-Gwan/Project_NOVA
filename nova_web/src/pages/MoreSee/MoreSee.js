@@ -6,7 +6,7 @@ import bug_icon from "./../../img/bug_icon.svg";
 import user_icon from "./../../img/user_profile.svg";
 import login_icon from "./../../img/login_icon.png";
 import mypage_icon from "./../../img/mypage_icon.png";
-import terms_icon from "./../../img/terms_icon.svg";
+import terms_icon from "./../../img/agree.svg";
 import business_logo from "./../../img/business_logo.png";
 import more_icon from "./../../img/Icon.png";
 import { useNavigate } from "react-router-dom";
