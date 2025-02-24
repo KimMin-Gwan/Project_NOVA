@@ -30,6 +30,14 @@ const NavBar = ({ isUserState, brightMode }) => {
     e.stopPropagation();
   }
 
+  function handleModal() {
+    if (!writeMoment) {
+      onClickWrite();
+    } else {
+      setWriteMoment(false);
+    }
+  }
+
   const onClickMoment = () => {
     setWriteMoment(!writeMoment);
   };
@@ -40,7 +48,12 @@ const NavBar = ({ isUserState, brightMode }) => {
   }, [brightMode]);
 
   return (
-    <div className={` ${writeOptions || writeMoment ? "nav-back" : ""}`}>
+    <div
+      className={` ${writeOptions || writeMoment ? "nav-back" : ""}`}
+      onClick={() => {
+        handleModal();
+      }}
+    >
       <div className={`bottom_bar ${getModeClass(mode)}`}>
         {writeOptions && (
           <div className={`write_select ${writeOptions ? "active" : ""}`}>

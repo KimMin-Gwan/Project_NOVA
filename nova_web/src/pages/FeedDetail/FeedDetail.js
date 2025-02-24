@@ -22,7 +22,6 @@ export default function FeedDetail({}) {
 
   let commentRef = useRef(null);
 
-  const detailPage = true;
   const [isLoading, setIsLoading] = useState(true); // 로딩 상태 관리
   let [feedData, setFeedData] = useState([]);
   let [comments, setComments] = useState([]);

@@ -37,11 +37,9 @@ export default function Feed({
 }) {
   let navigate = useNavigate();
   let [isError, setIsError] = useState();
-  // let [myAttend, setMyAttend] = useState(null);
   let [isClickedStar, setIsClickedStar] = useState(false);
 
   function handleCheckStar(fid, e) {
-    // e.preventDefault();
     setIsClickedStar(!isClickedStar);
     fetch(`https://nova-platform.kr/feed_explore/check_star?fid=${fid}`, {
       credentials: "include",
@@ -100,16 +98,7 @@ export default function Feed({
 
 // 내용 별 피드 박스
 
-export function ContentFeed({
-  detailPage,
-  feed,
-  interaction,
-  feedInteraction,
-  handleCheckStar,
-  handleInteraction,
-  links,
-  fetchReportResult,
-}) {
+export function ContentFeed({ detailPage, feed, handleCheckStar, links, fetchReportResult }) {
   let navigate = useNavigate();
 
   async function fetchOriginalText(fid) {
@@ -214,10 +203,6 @@ export function ContentFeed({
           <div></div>
         )}
 
-        {/* {feed.fclass === "short" && <SelectOption feed={feed} interaction={interaction} />} */}
-        {feed.fclass === "short" && (
-          <QuizOption feed={feed} interaction={interaction} handleInteraction={handleInteraction} />
-        )}
         {feed.fclass === "long" && <Viewer initialValue={feed.raw_body} />}
       </div>
 
@@ -260,75 +245,6 @@ export function ContentFeed({
           </div>
         </div>
       </div>
-      {/* {feed.fclass === "long" && interaction?.choice?.length > 0 && (
-        <div
-          className={style["long-form-container"]}
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
-        >
-          <div className={style["action-container"]}>
-            {interaction.choice.map((option, i) => {
-              return (
-                <div
-                  key={i}
-                  className={style["action-box"]}
-                  onClick={(e) => {
-                    handleInteraction(e, feed.fid, i);
-                  }}
-                >
-                  <div
-                    className={style["action-result"]}
-                    style={{ width: `${interaction.result[i]}%` }}
-                  >
-                    {option}
-                  </div>
-
-                  <div className={style["action-points"]}>{interaction.result[i]}%</div>
-                </div>
-              );
-            })}
-          </div>
-
-          <div className={style["button-container"]}>
-            <div
-              onClick={(e) => {
-                e.stopPropagation();
-                fetchReportResult(feed.fid);
-              }}
-            >
-              신고
-            </div>
-            <div className={style["button-box1"]}>
-              <div className={style["action-button"]}>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleCheckStar(feed.fid, e);
-                  }}
-                >
-                  <img src={feed.star_flag ? star_color : star} alt="star-icon" />
-                </button>
-                <span>{feed.star}</span>
-              </div>
-
-              <div className={style["action-button"]}>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    navigate(`/feed_detail/${feed.fid}`, {
-                      state: { commentClick: true },
-                    });
-                  }}
-                >
-                  <img src={comment} alt="comment-icon" />
-                </button>
-                <span>{feed.num_comment}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      )} */}
     </div>
   );
 }
@@ -408,118 +324,23 @@ function LinkSection({ links }) {
   );
 }
 
-function QuizOption({ feed, interaction, handleInteraction }) {
-  return (
-    <ol className={style["quiz-container"]}>
-      {interaction &&
-        interaction?.choice?.map((option, i) => {
-          return (
-            <li
-              key={i}
-              onClick={(e) => {
-                e.stopPropagation();
-                handleInteraction(e, interaction.fid, i);
-              }}
-            >
-              {i + 1}. {option} / {interaction.result[i]}
-            </li>
-          );
-        })}
-    </ol>
-  );
-}
-
-// 이미지 갯수 별 레이아웃
-// {!img_circle && (
-//   <div className={style["home_feed_img"]}>
-//     {/* 1개이미지 */}
-//     {feed.num_image === 1 && (
-//       <img
-//         style={{ cursor: "pointer" }}
-//         src={feed.image[0]}
-//         alt="img"
-//         onClick={() => {
-//           handleRequestURL(feed.image[0]);
-//         }}
-//       />
-//     )}
-//     {/* 2개이미지 */}
-//     {feed.num_image === 2 && (
-//       <div className={style["image-box"]}>
-//         <div className={`${style["image-show"]} ${style["two-image"]}`}>
-//           {feed.image.map((img, i) => {
-//             return (
-//               <img
-//                 style={{ cursor: "pointer" }}
-//                 key={i}
-//                 src={img}
-//                 alt="img"
-//                 onClick={() => {
-//                   handleRequestURL(img);
-//                 }}
-//               />
-//             );
-//           })}
-//         </div>
-//       </div>
-//     )}
-//     {/* 3개이미지 */}
-//     {feed.num_image === 3 && (
-//       <div className={style["image-box"]}>
-//         <div className={`${style["image-show"]} ${style["three-image"]}`}>
-//           {feed.image.map((img, i) => {
-//             return (
-//               <img
-//                 style={{ cursor: "pointer" }}
-//                 key={i}
-//                 src={img}
-//                 alt="img"
-//                 onClick={() => {
-//                   handleRequestURL(img);
-//                 }}
-//               />
-//             );
-//           })}
-//         </div>
-//       </div>
-//     )}
-//     {/* 4개이미지 */}
-//     {feed.num_image === 4 && (
-//       <div className={style["image-show"]}>
-//         {feed.image.map((img, i) => {
+// function QuizOption({ feed, interaction, handleInteraction }) {
+//   return (
+//     <ol className={style["quiz-container"]}>
+//       {interaction &&
+//         interaction?.choice?.map((option, i) => {
 //           return (
-//             <img
-//               style={{ cursor: "pointer" }}
+//             <li
 //               key={i}
-//               src={img}
-//               alt="img"
-//               onClick={() => {
-//                 handleRequestURL(img);
+//               onClick={(e) => {
+//                 e.stopPropagation();
+//                 handleInteraction(e, interaction.fid, i);
 //               }}
-//             />
+//             >
+//               {i + 1}. {option} / {interaction.result[i]}
+//             </li>
 //           );
 //         })}
-//       </div>
-//     )}
-//     {/* 5개이상 */}
-//     {feed.num_image >= 5 && (
-//       <div className={style["image-box"]}>
-//         <div className={`${style["image-origin"]} ${style["five-over-image"]}`}>
-//           {feed.image.map((img, i) => {
-//             return (
-//               <img
-//                 style={{ cursor: "pointer" }}
-//                 key={i}
-//                 src={img}
-//                 alt="img"
-//                 onClick={() => {
-//                   handleRequestURL(img);
-//                 }}
-//               />
-//             );
-//           })}
-//         </div>
-//       </div>
-//     )}
-//   </div>
-// )}
+//     </ol>
+//   );
+// }

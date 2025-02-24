@@ -54,7 +54,7 @@ export default function FeedList(isUserState) {
   let { biasList, fetchBiasList } = useBiasStore();
   useEffect(() => {
     console.log("동작");
-    fetchBiasList();
+    // fetchBiasList();
   }, []);
 
   let bids = biasList.map((item, i) => {
@@ -371,7 +371,8 @@ export default function FeedList(isUserState) {
             <div className={style["story_container"]}>
               <div className={style["story_wrapper"]}>
                 {feedData.map((feed, i) => {
-                  return <StoryFeed key={feed.feed.fid} feedData={feed} />;
+                  console.log("dasd", feed.feed.fid);
+                  return <StoryFeed key={`story_${feed.feed.fid}`} feedData={feed} />;
                 })}
               </div>
             </div>
@@ -433,7 +434,7 @@ export default function FeedList(isUserState) {
             feedData.map((feed, i) => {
               return (
                 <Feed
-                  key={feed.feed.fid}
+                  key={`feed_${feed.feed.fid}`}
                   className={`${style["feed-box"]} ${style[getModeClass(mode)]}`}
                   feed={feed.feed}
                   interaction={feed.interaction}
