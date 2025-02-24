@@ -38,25 +38,32 @@ let ContentData = [
 ];
 
 export default function FilterModal({
-  isFilterClicked,
   onClickFilterButton,
   setFilterCategory,
   setFilterFclass,
   fetchAllFeed,
   onClickApplyButton1,
-  setNextData,
 }) {
-  let [isClickedFilterBoard, setIsClickedFilterBoard] = useState([4]);
-  let [isClickedFilterContent, setIsClickedFilterContent] = useState(2);
+  let [filterBoard, setFilterBoard] = useState(
+    JSON.parse(localStorage.getItem("board")) || ["전체"]
+  );
 
-  function onClickFilterBoard(i) {
-    setIsClickedFilterBoard((prev) => {
-      if (prev.includes(i)) {
-        return prev.filter((item) => item !== i);
+  let [isClickedFilterContent, setIsClickedFilterContent] = useState(
+    JSON.parse(localStorage.getItem("content")) || "전체"
+  );
+
+  useEffect(() => {
+    localStorage.setItem("board", JSON.stringify(filterBoard));
+    localStorage.setItem("content", JSON.stringify(isClickedFilterContent));
+  }, [filterBoard, isClickedFilterContent]);
+
+  function onClickFilterBoard(name, i) {
+    setFilterBoard((prev) => {
+      if (prev.includes(name)) {
+        return prev.filter((item) => item !== name);
       }
-      return i === 4 ? [i] : [...prev.filter((item) => item !== 4), i];
+      return name === "전체" ? [name] : [...prev.filter((item) => item !== "전체"), name];
     });
-
     setFilterCategory((prev) => {
       const data = FilterData[i].value;
 
@@ -65,31 +72,12 @@ export default function FilterModal({
       }
       return i === 4 ? [data] : [...prev.filter((item) => item !== FilterData[4].value), data];
     });
-
-    const selectBoard = [...isClickedFilterBoard, i];
-    let uniqueBoard;
-    if (i === 4) {
-      uniqueBoard = [4];
-    } else {
-      uniqueBoard = selectBoard.filter((item) => item !== 4);
-      uniqueBoard = [...new Set(uniqueBoard)];
-    }
-    localStorage.setItem("board", JSON.stringify(uniqueBoard));
   }
 
-  useEffect(() => {
-    let boardData = JSON.parse(localStorage.getItem("board"));
-    let contentData = JSON.parse(localStorage.getItem("content"));
-    if (boardData || contentData) {
-      setIsClickedFilterBoard(boardData);
-      setIsClickedFilterContent(contentData);
-    }
-  }, []);
-
-  function onClickFilterContent(i) {
-    setIsClickedFilterContent(i);
+  function onClickFilterContent(name, i) {
+    setIsClickedFilterContent(name);
     setFilterFclass(ContentData[i].value);
-    const selectContent = i;
+    const selectContent = name;
     localStorage.setItem("content", JSON.stringify(selectContent));
   }
 
@@ -120,9 +108,9 @@ export default function FilterModal({
             {FilterData.map((data, i) => {
               return (
                 <button
-                  className={`${isClickedFilterBoard.includes(i) ? "clicked_button" : ""}`}
+                  className={`${filterBoard.includes(data.name) ? "clicked_button" : ""}`}
                   key={data.id}
-                  onClick={() => onClickFilterBoard(i)}
+                  onClick={() => onClickFilterBoard(data.name, i)}
                 >
                   {data.name}
                 </button>
@@ -137,9 +125,9 @@ export default function FilterModal({
             {ContentData.map((data, i) => {
               return (
                 <button
-                  className={isClickedFilterContent === i ? "clicked_button" : ""}
+                  className={isClickedFilterContent === data.name ? "clicked_button" : ""}
                   key={data.id}
-                  onClick={() => onClickFilterContent(i)}
+                  onClick={() => onClickFilterContent(data.name, i)}
                 >
                   {data.name}
                 </button>

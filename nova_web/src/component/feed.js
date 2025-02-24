@@ -215,9 +215,9 @@ export function ContentFeed({
         )}
 
         {/* {feed.fclass === "short" && <SelectOption feed={feed} interaction={interaction} />} */}
-        {feed.fclass === "short" && (
+        {/* {feed.fclass === "short" && (
           <QuizOption feed={feed} interaction={interaction} handleInteraction={handleInteraction} />
-        )}
+        )} */}
         {feed.fclass === "long" && <Viewer initialValue={feed.raw_body} />}
       </div>
 
