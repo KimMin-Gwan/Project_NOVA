@@ -114,7 +114,7 @@ class Feed_Controller:
         model.set_best_feed_with_time(feed_search_engine=feed_search_engine,
                                       feed_manager=self.__feed_manager,
                                       search_type="best",
-                                      time_type="today",
+                                      time_type="day",
                                       last_index=request.data_payload.key,
                                       num_feed=num_feed)
         #
