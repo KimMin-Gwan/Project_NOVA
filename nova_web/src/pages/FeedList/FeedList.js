@@ -54,8 +54,10 @@ export default function FeedList(isUserState) {
   let { biasList, fetchBiasList } = useBiasStore();
   useEffect(() => {
     console.log("동작");
-    fetchBiasList();
+    // fetchBiasList();
   }, []);
+
+  console.log(biasList);
 
   let bids = biasList.map((item, i) => {
     return item.bid;
@@ -368,13 +370,14 @@ export default function FeedList(isUserState) {
           <div className={style["bias-section"]}>
             <BiasBoxes setBiasId={setBiasId} fetchBiasCategoryData={fetchBiasCategoryData} />
             <h4>스토리 게시판</h4>
-            <div className={style["story_container"]}>
+            {/* <div className={style["story_container"]}>
               <div className={style["story_wrapper"]}>
                 {feedData.map((feed, i) => {
-                  return <StoryFeed key={feed.feed.fid} feedData={feed} />;
+                  console.log("dasd", feed.feed.fid);
+                  return <StoryFeed key={`story_${feed.feed.fid}`} feedData={feed} />;
                 })}
               </div>
-            </div>
+            </div> */}
             {biasId && (
               <div className={style["category-info"]}>
                 <p>모든 게시글</p>
@@ -433,7 +436,7 @@ export default function FeedList(isUserState) {
             feedData.map((feed, i) => {
               return (
                 <Feed
-                  key={feed.feed.fid}
+                  key={`feed_${feed.feed.fid}`}
                   className={`${style["feed-box"]} ${style[getModeClass(mode)]}`}
                   feed={feed.feed}
                   interaction={feed.interaction}

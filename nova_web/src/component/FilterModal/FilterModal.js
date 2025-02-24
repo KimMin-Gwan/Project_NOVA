@@ -1,7 +1,5 @@
-// import style from "./FilterModal.module.css";
 import "./FilterModal.css";
 import { useEffect, useState } from "react";
-// import reset_icon from "./../../img/reset.svg";
 
 let FilterData = [
   {

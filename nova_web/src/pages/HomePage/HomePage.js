@@ -31,10 +31,10 @@ export default function HomePage() {
   let { tagList, loading, fetchTagList } = useTagStore();
 
   // 최애 리스트 받아오기
-  // useEffect(() => {
-  //   console.log("새로고침");
-  //   // fetchBiasList();
-  // }, []);
+  useEffect(() => {
+    console.log("새로고침");
+    // fetchBiasList();
+  }, []);
   // 실시간 랭킹 받아오기
   //   useEffect(() => {
   //     fetchTagList();
@@ -117,9 +117,7 @@ export default function HomePage() {
     <div className="all-box">
       <div className={`container ${getModeClass(brightMode)}`}>
         <div className={`top-area ${getModeClass(brightMode)}`}>
-
           <DisplayAds />
-
 
           <Header />
           <SearchBox />
