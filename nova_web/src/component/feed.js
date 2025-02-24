@@ -86,10 +86,7 @@ export default function Feed({
     <>
       <ContentFeed
         feed={feed}
-        interaction={interaction}
-        feedInteraction={feedInteraction}
         handleCheckStar={handleCheckStar}
-        handleInteraction={handleInteraction}
         fetchReportResult={fetchReportResult}
       />
     </>
