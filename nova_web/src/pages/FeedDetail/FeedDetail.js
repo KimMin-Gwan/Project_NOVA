@@ -12,7 +12,7 @@ import star from "./../../img/favorite.png";
 import input from "./../../img/input.svg";
 import axios from "axios";
 import mainApi from "../../services/apis/mainApi";
-
+import reArrow from "./../../img/recomment2.svg";
 export default function FeedDetail({}) {
   let navigate = useNavigate();
   let { fid } = useParams();
@@ -268,30 +268,34 @@ function Comment({ comment, onClickComment }) {
         onClickComment(comment.cid, comment.target_cid, comment.uname);
       }}
     >
-      <div className={style["comment-user"]}>
-        <div>
-          {comment.uname}
-          <span>{comment.date}</span>
+      <section>
+        <div className={style["comment-user"]}>
+          <div>
+            {comment.uname}
+            <span>{comment.date}</span>
+          </div>
+
+          <div className={style["function_button_container"]}>
+            <button
+              className={style["AI_text"]}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                fetchOriginalComment(comment.cid);
+              }}
+            >
+              원문 보기
+            </button>
+            <div>신고</div>
+          </div>
         </div>
 
-        <div className={style["function_button_container"]}>
-          <button
-            className={style["AI_text"]}
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              fetchOriginalComment(comment.cid);
-            }}
-          >
-            원문 보기
-          </button>
-          <div>신고</div>
-        </div>
-      </div>
+        <div className={style["comment-content"]}>{comment.body}</div>
 
-      <div className={style["comment-content"]}>{comment.body}</div>
+        <span className={style["date-st"]}>{comment.date}</span>
+      </section>
 
-      <div className={style["action-container"]}>
+      {/* <div className={style["action-container"]}>
         <div className={style["button-box1"]}>
           <div className={style["action-button"]}>
             <button
@@ -304,7 +308,7 @@ function Comment({ comment, onClickComment }) {
             <span>{comment.like}</span>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {comment.reply.length !== 0 &&
         comment.reply?.map((reply, i) => {
@@ -319,45 +323,47 @@ function ReplyComment({ reply, fetchOriginalComment }) {
   const [firstWord, ...restWords] = reply.body.split(" ");
 
   return (
-    <div key={reply.cid} className={`${style["reply-box"]}`} onClick={(e) => e.stopPropagation()}>
-      <div className={style["comment-user"]}>
-        <div>
-          답변 : {reply.uname}
-          <span>{reply.date}</span>
-        </div>
-        <div className={style["function_button_container"]}>
-          <button
-            className={style["AI_text"]}
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              fetchOriginalComment(reply.cid);
-            }}
-          >
-            원문 보기
-          </button>
-          <div>신고</div>
-        </div>
-      </div>
-
-      <div className={style["comment-content"]}>
-        <span style={{ color: reply.mention ? "#2C59CD" : "black" }}>{firstWord} </span>
-        {restWords.join("")}
-      </div>
-
-      <div className={style["action-container"]}>
-        <div className={style["button-box1"]}>
-          <div className={style["action-button"]}>
+    <div className={style["img-container"]}>
+      <img src={reArrow} alt="대댓글" />
+      <div key={reply.cid} className={`${style["reply-box"]}`} onClick={(e) => e.stopPropagation()}>
+        <div className={style["comment-user"]}>
+          <div>답변 : {reply.uname}</div>
+          <div className={style["function_button_container"]}>
             <button
+              className={style["AI_text"]}
               onClick={(e) => {
+                e.preventDefault();
                 e.stopPropagation();
+                fetchOriginalComment(reply.cid);
               }}
             >
-              <img src={star} alt="star-icon" />
+              원문 보기
             </button>
-            <span>{reply.like}</span>
+            <div>신고</div>
           </div>
         </div>
+
+        <div className={style["comment-content"]}>
+          <span style={{ color: reply.mention ? "#2C59CD" : "black" }}>{firstWord} </span>
+          {restWords.join("")}
+        </div>
+
+        <span className={style["date-st"]}> {reply.date}</span>
+
+        {/* <div className={style["action-container"]}>
+          <div className={style["button-box1"]}>
+            <div className={style["action-button"]}>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+              >
+                <img src={star} alt="star-icon" />
+              </button>
+              <span>{reply.like}</span>
+            </div>
+          </div>
+        </div> */}
       </div>
     </div>
   );
