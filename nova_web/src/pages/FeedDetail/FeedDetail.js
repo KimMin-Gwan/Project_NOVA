@@ -74,7 +74,6 @@ export default function FeedDetail({}) {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("comment all", data);
         setComments(data.body.comments);
         setIsLoading(false);
       });
@@ -160,7 +159,6 @@ export default function FeedDetail({}) {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("make", data);
         setComments(data.body.comments);
         setCommentId("");
       });
@@ -184,7 +182,6 @@ export default function FeedDetail({}) {
         withCredentials: true,
       })
       .then((res) => {
-        console.log(res.data);
         if (res.data.body.result) {
           alert("삭제되었습니다.");
           navigate(-1);
@@ -265,7 +262,7 @@ export default function FeedDetail({}) {
 function Comment({ comment, onClickComment }) {
   async function fetchOriginalComment(cid) {
     await mainApi.get(`feed_explore/original_comment_data?cid=${cid}`).then((res) => {
-      console.log(res.data);
+      console.log("ccc", res.data);
     });
   }
 

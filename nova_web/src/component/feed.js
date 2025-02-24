@@ -28,13 +28,7 @@ export function useBrightMode() {
 }
 const header = HEADER;
 
-export default function Feed({
-  feed,
-  interaction,
-  feedInteraction,
-  setFeedData,
-  handleInteraction,
-}) {
+export default function Feed({ feed, setFeedData }) {
   let navigate = useNavigate();
   let [isError, setIsError] = useState();
   let [isClickedStar, setIsClickedStar] = useState(false);
@@ -151,23 +145,25 @@ export function ContentFeed({ detailPage, feed, handleCheckStar, links, fetchRep
         <div>{feed.nickname}</div>
       </div>
 
-      <div className={style["AI_container"]}>
-        <div className={style["AI_text_info"]}>
-          <span>
-            <img src={info_icon} alt="info" />
-          </span>
-          본 게시글의 본문은 AI에 의해 필터링 되었습니다.
+      {feed.is_reworked && (
+        <div className={style["AI_container"]}>
+          <div className={style["AI_text_info"]}>
+            <span>
+              <img src={info_icon} alt="info" />
+            </span>
+            본 게시글의 본문은 AI에 의해 필터링 되었습니다.
+          </div>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              fetchOriginalText(feed.fid);
+            }}
+          >
+            원문 보기
+          </button>
         </div>
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            fetchOriginalText(feed.fid);
-          }}
-        >
-          원문 보기
-        </button>
-      </div>
+      )}
 
       <div className={`${style["body-container"]} ${detailPage ? "" : style["long-form-hidden"]}`}>
         <div className={style["body-hashtag"]}>
