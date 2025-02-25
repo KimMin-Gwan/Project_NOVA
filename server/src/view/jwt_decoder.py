@@ -8,7 +8,7 @@ import json
 
 class JWTManager:
     def __init__(self, secret_key):
-        self._secret_key = "your_secret_key"
+        self._secret_key = secret_key
         self._argorithms = ["HS256"]
 
     # 이건 이제 안씀
