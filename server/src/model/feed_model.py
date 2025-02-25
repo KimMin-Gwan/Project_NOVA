@@ -89,12 +89,10 @@ class FeedModel(BaseModel):
     
     # send_data를 만들때 사용하는 함수임
     def _make_feed_data_n_interaction_data(self, feed_manager, fid_list):
-        print(1)
         feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=fid_list)
 
         feeds = []
         iids = []
-        print(2)
 
         for feed_data in feed_datas:
             feed = Feed()
@@ -102,10 +100,8 @@ class FeedModel(BaseModel):
             feeds.append(feed)
             if feed.iid != "":
                 iids.append(feed.iid)
-        print(3)
 
         feeds = self._set_feed_json_data(user=self._user, feeds=feeds)
-        print(4)
         
         #interaction_datas = self._database.get_datas_with_ids(target_id="iid", ids=iids)
         #interactions = []
@@ -117,7 +113,6 @@ class FeedModel(BaseModel):
             
         # 인터엑션 넣을 필요 있음
         send_data = self.__set_send_data(feeds=feeds)
-        print(5)
         
         return send_data
 
@@ -256,15 +251,18 @@ class FeedModel(BaseModel):
         uids=[]
         result_feeds = []
         
+        print(1)
         for single_feed in feeds:
             single_feed:Feed = single_feed
             uids.append(single_feed.uid)
 
+        print(2)
         user_datas = self._database.get_datas_with_ids(target_id="uid", ids=uids)
         for user_data in user_datas:
             single_user = User()
             single_user.make_with_dict(user_data)
             wusers.append(single_user)
+        print(3)
 
         for feed, wuser in zip(feeds, wusers):
             # 노출 현황 이 1 이하면 죽어야됨
@@ -337,6 +335,7 @@ class FeedModel(BaseModel):
                 
             
             result_feeds.append(feed)
+        print(4)
             
         return result_feeds
     
