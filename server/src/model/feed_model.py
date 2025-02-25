@@ -251,13 +251,14 @@ class FeedModel(BaseModel):
         uids=[]
         result_feeds = []
         
-        print(1)
         for single_feed in feeds:
             single_feed:Feed = single_feed
             uids.append(single_feed.uid)
 
-        print(2)
         user_datas = self._database.get_datas_with_ids(target_id="uid", ids=uids)
+        print(2)
+        pprint(user_datas)
+        
         for user_data in user_datas:
             single_user = User()
             single_user.make_with_dict(user_data)
@@ -335,7 +336,6 @@ class FeedModel(BaseModel):
                 
             
             result_feeds.append(feed)
-        print(4)
             
         return result_feeds
     
