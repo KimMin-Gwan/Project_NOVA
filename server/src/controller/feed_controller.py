@@ -165,7 +165,6 @@ class Feed_Controller:
                                       time_type="",
                                       last_index=request.data_payload.key,
                                       num_feed=num_feed)
-        pprint(model.get_response_form_data())
         # model.set_all_feed(feed_search_engine=feed_search_engine,
         #                    feed_manager=self.__feed_manager,
         #                    index=request.data_payload.key,
