@@ -302,7 +302,24 @@ class Sub_Service_View(Master_View):
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response
+        
+        # 신고 기능
+        @self.__app.post('/nova_sub_system/try_report_bug')
+        def try_report_post_or_comment(request:Request, raw_request:dict):
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
+            
+            data_payload = ReportRequest(request=raw_request)
+            
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
+            sub_controller=Sub_Controller()
+            model = sub_controller.try_report_bug(database=self.__database,
+                                                              request=request_manager)
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
+        # 나이변경 기능
         @self.__app.post('/nova_sub_system/try_change_users_age')
         def try_change_users_age(request:Request):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)

@@ -396,11 +396,18 @@ class ReportModel(BaseModel):
         if data_payload.cid != "":
             self.__report.cid = data_payload.cid
         else:
-            self.__report.fid = data_payload.fid
+            self.__report.fid = data_payload.fid    
             
         self.__report.date = self._set_datetime()
         self.__report.rid = self._make_new_id()
-        
+        self.__report.type = "wicked"
+        self.__report.result = False
+        return
+    
+    # 버그 리포트 일때
+    def try_set_bug_report(self, data_payload):
+        self.__report.detail = data_payload.detail
+        self.__report.type = "bug"
         return
     
     # 리포트 저장

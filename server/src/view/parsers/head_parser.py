@@ -22,7 +22,6 @@ class Configure_File_Reader:
         self._gpt_model = ''
         self._mongo_db_key = ''
         self._jwt_secret_key = ''
-        self.__pattern = r'key = (.*)'
 
     def _extract_host_port(self, file_path='./configure.txt'):
         with open(file_path, 'r', encoding='utf-8') as file:

@@ -544,8 +544,8 @@ class Report(SampleDomain):
         self.cid = cid 
         self.fid = fid
         self.uid = uid
-        self.detail = detail
-        self.result = result
+        self.detail = detail  # 자세한 내용
+        self.result:bool = result  # 결과
         self.aid_date =aid_date
 
     def make_with_dict(self, dict_data):

@@ -236,6 +236,18 @@ class Sub_Controller:
         
         return model
 
+    def try_report_bug(self, database:Local_Database, request):
+        model = ReportModel(database=database)
+        
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
+        
+        model.try_set_report(data_payload=request.data_payload)
+        model.try_set_bug_report(data_payload=request.data_payload)
+        model.save_report()
+        
+        return model
+
     def try_change_users_age(self, database:Local_Database, request):
         model = ChangeUserAgeModel(database=database)
 
