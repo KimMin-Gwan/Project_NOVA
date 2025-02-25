@@ -1,17 +1,14 @@
-import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
-import SearchBox from "../../component/SearchBox";
 import { useEffect, useRef, useState } from "react";
-import back from "./../../img/search_back.png";
-import logo2 from "../../img/logo2.png";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import SearchBox from "../../component/SearchBox";
 import "./index.css";
-import style from "./../MyPage/Mypage.module.css";
-import axios from "axios";
-import Feed from "../../component/feed";
+import back from "./../../img/search_back.png";
 import NavBar from "../../component/NavBar";
 import mainApi from "../../services/apis/mainApi";
 import Header from "../../component/Header/Header";
-import MyComments from "../../component/Comments/Comments";
 import Comments from "../../component/Comments/Comments";
+import Tabs from "../../component/Tabs/Tabs";
+import FeedSection from "../../component/FeedSection/FeedSection";
 
 export default function SearchResultPage() {
   let [searchParams] = useSearchParams();
@@ -30,8 +27,6 @@ export default function SearchResultPage() {
 
   const [feedNextKey, setFeedNextKey] = useState(-1);
   const [commentNextKey, setCommentNextKey] = useState(-1);
-
-  const [nextKey, setNextKey] = useState(-1);
 
   let [isLoading, setIsLoading] = useState(true);
 
@@ -73,8 +68,6 @@ export default function SearchResultPage() {
   }
 
   async function fetchSearchKeyword() {
-    console.log("댓글 불러짐", feedNextKey);
-
     await mainApi
       .get(`feed_explore/search_feed_with_keyword?keyword=${keyword}&key=${feedNextKey}`)
       .then((res) => {
@@ -88,11 +81,9 @@ export default function SearchResultPage() {
   }
 
   async function fetchCommentKeyword() {
-    console.log("댓글 불러짐", commentNextKey);
     await mainApi
       .get(`feed_explore/search_comment_with_keyword?keyword=${keyword}&key=${commentNextKey}`)
       .then((res) => {
-        console.log("댓글", res.data);
         setComments(res.data.body.feeds);
         setIsLoading(false);
         setCommentNextKey(res.data.body.key);
@@ -166,31 +157,10 @@ export default function SearchResultPage() {
           onKeyDown={onKeyDown}
         />
       </div>
-      <section className={`${style["info-list"]} ${style["search-nav-bar"]}`}>
-        <ul className={style["post-list"]} data-active-index={activeIndex}>
-          {["게시글", "댓글"].map((post, index) => (
-            <li
-              key={index}
-              className={`${style.post} ${activeIndex === index ? style.active : ""}`}
-              onClick={() => {
-                handleClick(index);
-                onClickType(post);
-              }}
-            >
-              <p>{post}</p>
-            </li>
-          ))}
-        </ul>
-      </section>
+      <Tabs activeIndex={activeIndex} handleClick={handleClick} onClickType={onClickType} />
       {type === "comment" && <Comments comments={comments} />}
+      {type === "post" && <FeedSection feedData={feedData} />}
 
-      {type === "post" && (
-        <section className="feed_section">
-          {feedData.map((feed, i) => {
-            return <Feed key={feed.feed.fid} feed={feed.feed} />;
-          })}
-        </section>
-      )}
       <div ref={target} style={{ height: "1px" }}></div>
       <NavBar />
     </div>
