@@ -428,11 +428,12 @@ class ManagedFeedBiasTable:
         # 대소문자를 구분하지 않음
         searched_df = self.__feed_df
 
+        print(f"key: {key}, fclass: {fclass}, board_type: {board_type}, target_time: {target_time}, option: {option}")
+
+
         if option == "keyword":
             # 키워드를 통한 서치
             searched_df = self.__feed_df[self.__feed_df["body"].str.contains(key, case=False, na=False)]
-            
-            
         elif option == "hashtag":
             # 해시태그 리스트 안에 들어있는 해시태그들 중 하나만 있어도 찾는다.
             searched_df = self.__feed_df[self.__feed_df["hashtag"].apply(lambda hashtag: key in hashtag)]
