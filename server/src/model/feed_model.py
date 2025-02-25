@@ -260,7 +260,7 @@ class FeedModel(BaseModel):
             uids.append(single_feed.uid)
 
         user_datas = self._database.get_datas_with_ids(target_id="uid", ids=uids)
-
+        pprint(user_datas)
         for user_data in user_datas:
             single_user = User()
             single_user.make_with_dict(user_data)
