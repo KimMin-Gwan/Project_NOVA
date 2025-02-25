@@ -426,29 +426,58 @@ class Mongo_Database(Local_Database):
         selected_collection = self.__set_collection(collection=collection_name)
         return list(selected_collection.find({},{'_id':False}))
     
+
+    #def _select_target_list(self, target:str):
+        #if target == "baid" or target == "banner":
+            #return "banner"
+        #elif target == "bid" or target == "bias":
+            #return "bias"
+        #elif target == "fid" or target == "feed":
+            #return "feed"
+        #elif target == "lid" or target == "league":
+            #return "league"
+        #elif target == "ncid" or target == "name_card":
+            #return "name_card"
+        #elif target == "uid" or target == "user":
+            #return "user"
+        #elif target == "muid" or target == "managed_user":
+            #return "managed_user"
+        #elif target == "cid" or target == "comment":
+            #return "comment"
+        #elif target == "aid" or target == "alert":
+            #return "alert"
+        #elif target == "nid" or target == "notice":
+            #return "notice"
+        #elif target == "pid" or target == "project":
+            #return "project"
+        #elif target == "iid" or target == "interaction":
+            #return "interaction"
+        #else:
+            #raise DatabaseLogicError("target id did not define")
+        
     def _select_target_list(self, target:str):
         if target == "baid" or target == "banner":
-            return self.__banner_data
+            return "banner"
         elif target == "bid" or target == "bias":
-            return self.__bias_data
+            return "bias"
         elif target == "fid" or target == "feed":
-            return self.__feed_data
+            return "feed"
         elif target == "uid" or target == "user":
-            return self.__user_data
+            return "user"
         elif target == "cid" or target == "comment":
-            return self.__comment_data
+            return "comment"
         elif target == "aid" or target == "alert":
-            return self.__alert_data
+            return "alert"
         elif target == "nid" or target == "notice":
-            return self.__notice_data
+            return "notice"
         elif target == "pid" or target == "project":
-            return self.__project_data
+            return "project"
         elif target == "iid" or target == "interaction":
-            return self.__interaction_data
+            return "interaction"
         elif target == "lid" or target == "feed_link":
-            return self.__feed_link_data
+            return "feed_link"
         elif target == "rid" or target == "report":
-            return self.__report_data
+            return "report"
         else:
             raise DatabaseLogicError("target id did not define")
         
