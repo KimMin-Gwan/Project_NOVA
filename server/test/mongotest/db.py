@@ -47,3 +47,6 @@ class DBTest:
     
     def get_list_collection(self):
         self.collection_list = self.__db.list_collection_names()
+        
+        
+DBTest()
