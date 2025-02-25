@@ -481,7 +481,6 @@ class FeedSearchModelNew(FeedModel):
                                                                     last_index=last_index,
                                                                     page_size=num_feed)
 
-        pprint(searched_fid_list)
         self._send_data = self._make_feed_data_n_interaction_data(feed_manager=feed_manager, fid_list=searched_fid_list)
         return
 

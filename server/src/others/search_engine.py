@@ -94,8 +94,7 @@ class FeedSearchEngine:
         fid_list = []
 
         if target_type == "default":
-            print("default가 입력 됨")
-            pass
+            return fid_list
 
         else:
             fid_list = self.__search_manager.search_feeds_with_target_option(target_type=target_type,
