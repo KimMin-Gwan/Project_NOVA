@@ -533,6 +533,8 @@ class ManagedUser:
             "feed_key" : self.feed_key,
             "comment_key" : self.comment_key
         }
+        
+class Report(SampleDomain):
     def __init__(self, rid="", type="", date="", cid="",
                  detail = "", fid="", uid="",
                  result=False, aid_date=""):

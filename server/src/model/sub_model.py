@@ -1,7 +1,7 @@
 from model.base_model import BaseModel
 from model.league_model import LeagueModel
 from model import Local_Database
-from others.data_domain import Bias, User
+from others.data_domain import Bias, User, Report
 from others import CoreControllerLogicError, HTMLEXtractor
 import copy
 from urllib.parse import urlparse
