@@ -19,7 +19,9 @@ class Master(Configure_File_Reader):
 
     async def server_start_up(self):
         #database = Local_Database() #디비 실행
-        database = Mongo_Database(self._mongo_db_key) #디비 실행
+        
+        print(self._mongo_db_key)
+        database = Mongo_Database(uri=self._mongo_db_key) #디비 실행
         
         ai_manager = AIManger(model_setting=self._model_setting, database=database)
 

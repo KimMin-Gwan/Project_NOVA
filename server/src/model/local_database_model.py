@@ -341,9 +341,8 @@ class Local_Database:
 class Mongo_Database(Local_Database):
     def __init__(self, uri) -> None:
         #MongoDB연결 uri
-        self.__uri = uri
         # Create a new client and connect to the server
-        self.__client = MongoClient(self.__uri, server_api=ServerApi('1'))
+        self.__client = MongoClient(uri, server_api=ServerApi('1'))
         self.__db = self.__client.NovaDB    #사용 할 때 DB이름에 맞게 변경 필요
         self.collection_list = []
 
