@@ -157,7 +157,9 @@ class Feed_Controller:
 
         # 유저가 있으면 세팅
         if request.jwt_payload != "":
+            pprint("hello?")
             model.set_user_with_email(request=request.jwt_payload)
+            pprint("?????")
 
         model.set_best_feed_with_time(feed_search_engine=feed_search_engine,
                                       feed_manager=self.__feed_manager,
