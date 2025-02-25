@@ -33,7 +33,9 @@ class User_Service_View(Master_View):
 
             user_controller=UserController()
             model = user_controller.try_login(database=self.__database,
-                                              request=data_payload)
+                                              request=data_payload,
+                                              secret_key=self.__jwt_secret_key
+                                              )
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data,
                                                            token=body_data['body']['token'])
@@ -81,7 +83,9 @@ class User_Service_View(Master_View):
             user_controller=UserController()
             model = await user_controller.try_login_with_temp_user(database=self.__database,
                                                             request=request_manager,
-                                                            nova_verification=self.__nova_verification)
+                                                            nova_verification=self.__nova_verification,
+                                                            secret_key=self.__jwt_secret_key
+                                                            )
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data,
                                                            token=body_data['body']['token'],)

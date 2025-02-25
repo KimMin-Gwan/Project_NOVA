@@ -26,9 +26,9 @@ class LoginModel(BaseModel):
         except Exception as e:
             raise CoreControllerLogicError(error_type="request_login | " + str(e))
     
-    def make_token(self,request):
+    def make_token(self,request, secret_key):
         try:
-            jwtManager = JWTManager()
+            jwtManager = JWTManager(secret_key=secret_key)
             self.__token = jwtManager.make_token(email=request.email)
 
         except Exception as e:
@@ -38,8 +38,8 @@ class LoginModel(BaseModel):
         self.__result = result
         return
         
-    def make_temp_user_token(self, request):
-        jwtManager = JWTManager()
+    def make_temp_user_token(self, request, secret_key):
+        jwtManager = JWTManager(secret_key=secret_key)
         self.__token = jwtManager.make_token(email=request.email, usage="temp")
         return
 

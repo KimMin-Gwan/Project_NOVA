@@ -9,7 +9,7 @@ from pprint import pprint
 
 class UserController:
     # 로그인 시도
-    def try_login(self, database, request):
+    def try_login(self, database, request, secret_key):
 
         model = LoginModel(database=database)
         # 유저가 있는지 확인
@@ -21,7 +21,7 @@ class UserController:
         if model.get_result() != "done":
             return model
         
-        model.make_token(request=model._user)
+        model.make_token(request=model._user, secret_key=secret_key)
 
         return model
 
@@ -75,7 +75,7 @@ class UserController:
     # 비밀번호 변경하기 임시 유저 로그인
     # 비밀번호 찾기 & 변경하기에 사용되는 엔드포인트
     # 여긴 일반 로그인이랑 세팅 똑같이 해야됨
-    async def try_login_with_temp_user(self, database, request, nova_verification):
+    async def try_login_with_temp_user(self, database, request, nova_verification, secret_key):
         model = LoginModel(database=database)
 
         # 존재하는 이메일인지 확인
@@ -86,7 +86,7 @@ class UserController:
         if not await nova_verification.verificate_user(email=request.data_payload.email,
                                                         verification_code=request.data_payload.verification_code):
             raise request.forbidden_exception
-        model.make_temp_user_token(request=request.data_payload)
+        model.make_temp_user_token(request=request.data_payload, secret_key=secret_key)
         model.set_login_state(result="done")
 
         return model
