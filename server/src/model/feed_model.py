@@ -255,17 +255,14 @@ class FeedModel(BaseModel):
             single_feed:Feed = single_feed
             uids.append(single_feed.uid)
             
-        pprint(uids)
 
         user_datas = self._database.get_datas_with_ids(target_id="uid", ids=uids)
-        print(2)
-        pprint(user_datas)
+        user_datas = list(filter(lambda x: x is not None, user_datas))
         
         for user_data in user_datas:
             single_user = User()
             single_user.make_with_dict(user_data)
             wusers.append(single_user)
-        print(3)
 
         for feed, wuser in zip(feeds, wusers):
             # 노출 현황 이 1 이하면 죽어야됨
