@@ -316,23 +316,24 @@ function Comment({ comment, onClickComment }) {
 
       {comment.reply.length !== 0 &&
         comment.reply?.map((reply, i) => {
-          return <ReplyComment key={i} reply={reply} fetchOriginalComment={fetchOriginalComment} />;
+          return <ReplyComment key={reply.cid} index={i} length={comment.reply.length} reply={reply} fetchOriginalComment={fetchOriginalComment} />;
         })}
     </div>
   );
 }
 
 // 대댓글
-function ReplyComment({ key, reply, fetchOriginalComment }) {
+function ReplyComment({ index, length, reply, fetchOriginalComment }) {
   const [firstWord, ...restWords] = reply.body.split(" ");
 
   let src;
-  if (reply.length === 1) {
+
+  if (length === 1) {
     src = reArrow1;
   } else {
-    if (key === 1) {
+    if (index=== 0) {
       src = reArrow2;
-    } else if (key === reply.length) {
+    } else if (index+ 1 === length) {
       src = reArrow4;
     } else {
       src = reArrow3;
