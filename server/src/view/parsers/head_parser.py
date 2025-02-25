@@ -7,7 +7,7 @@ header = {
     'endpoint' : '/endpoint'
 }
 '''
-
+import re
 class ModelSetting:
     def __init__(self, open_api_key, gpt_model):
         self.api_key = open_api_key
@@ -22,6 +22,7 @@ class Configure_File_Reader:
         self._gpt_model = ''
         self._mongo_db_key = ''
         self._jwt_secret_key = ''
+        self.__pattern = r'key = (.*)'
 
     def _extract_host_port(self, file_path='./configure.txt'):
         with open(file_path, 'r', encoding='utf-8') as file:
@@ -37,7 +38,8 @@ class Configure_File_Reader:
                 elif line.startswith('gpt_model'):
                     self._gpt_model= line.split('=')[1].strip()
                 elif line.startswith('mongo_db_key'):
-                    self._mongo_db_key= line.split('=')[1].strip()
+                    match = re.search(pattern=r'key = (.*)',string=line)
+                    self._mongo_db_key= match.group(1)
                 elif line.startswith('jwt_secret_key'):
                     self._jwt_secret_key= line.split('=')[1].strip()
                     
