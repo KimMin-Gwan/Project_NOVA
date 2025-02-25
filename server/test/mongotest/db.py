@@ -4,7 +4,7 @@ from pymongo.server_api import ServerApi
 
 class DBTest:
     def __init__(self) -> None:
-        self.__uri = "mongodb+srv://admin:nova-db-password-43te7wuhbgi8we@nova-cluster.kz63a.mongodb.net/?retryWrites=true&w=majority&appName=Nova-Cluster"
+        self.__uri = ""
 
         # Create a new client and connect to the server
         self.__client = MongoClient(self.__uri, server_api=ServerApi('1'))

@@ -341,7 +341,7 @@ class Local_Database:
 class Mongo_Database(Local_Database):
     def __init__(self) -> None:
         #MongoDB연결 uri
-        self.__uri = "mongodb+srv://admin:nova-db-password-43te7wuhbgi8we@nova-cluster.kz63a.mongodb.net/?retryWrites=true&w=majority&appName=Nova-Cluster"
+        self.__uri = "#######"
         # Create a new client and connect to the server
         self.__client = MongoClient(self.__uri, server_api=ServerApi('1'))
         self.__db = self.__client.NovaDB    #사용 할 때 DB이름에 맞게 변경 필요
