@@ -12,7 +12,11 @@ import star from "./../../img/favorite.png";
 import input from "./../../img/input.svg";
 import axios from "axios";
 import mainApi from "../../services/apis/mainApi";
-import reArrow from "./../../img/recomment2.svg";
+//import reArrow from "./../../img/recomment2.svg";
+import reArrow1 from "./../../img/reArrow1.svg";
+import reArrow2 from "./../../img/reArrow2.svg";
+import reArrow3 from "./../../img/reArrow3.svg";
+import reArrow4 from "./../../img/reArrow4.svg";
 export default function FeedDetail({}) {
   let navigate = useNavigate();
   let { fid } = useParams();
@@ -312,19 +316,32 @@ function Comment({ comment, onClickComment }) {
 
       {comment.reply.length !== 0 &&
         comment.reply?.map((reply, i) => {
-          return <ReplyComment key={reply.cid} reply={reply} fetchOriginalComment={fetchOriginalComment} />;
+          return <ReplyComment key={i} reply={reply} fetchOriginalComment={fetchOriginalComment} />;
         })}
     </div>
   );
 }
 
 // 대댓글
-function ReplyComment({ reply, fetchOriginalComment }) {
+function ReplyComment({ key, reply, fetchOriginalComment }) {
   const [firstWord, ...restWords] = reply.body.split(" ");
+
+  let src;
+  if (reply.length === 1) {
+    src = reArrow1;
+  } else {
+    if (key === 1) {
+      src = reArrow2;
+    } else if (key === reply.length) {
+      src = reArrow4;
+    } else {
+      src = reArrow3;
+    }
+  }
 
   return (
     <div className={style["img-container"]}>
-      <img src={reArrow} alt="대댓글" />
+      <img src={src} alt="대댓글" />
       <div key={reply.cid} className={`${style["reply-box"]}`} onClick={(e) => e.stopPropagation()}>
         <div className={style["comment-user"]}>
           <div>답변 : {reply.uname}</div>
