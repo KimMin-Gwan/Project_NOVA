@@ -357,6 +357,7 @@ class Mongo_Database(Local_Database):
     #(찾기)
     def __find_one(self,document, collection:Collection) -> None:
         return collection.find_one(document,{'_id':False})
+    
     #수정
     def __update_one(self,document,data , collection:Collection) -> None:
         collection.update_one(document,{'$set':data})
@@ -497,12 +498,16 @@ class Mongo_Database(Local_Database):
 
     def add_new_data(self, target_id:str, new_data:dict):
         try:
-            collection = self._select_target_list(target=target_id)
-            self.__save_json(file_name=collection,data=new_data)
+            collection_name = self._select_target_list(target=target_id)
+            selected_collection = self.__set_collection(collection=collection_name)
+            
+            # document요? 그건 뭐지? 어디다 넣죠? new_data가 어디로 가야됨
+            self.__upload_one(document=new_data, collection=selected_collection)
 
         except Exception as e:
             raise DatabaseLogicError("add_new_data error | " + str(e))
         return True
+    
     
     def get_num_list_with_id(self, target_id:str):
         collection_name = self._select_target_list(target=target_id)
