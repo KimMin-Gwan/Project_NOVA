@@ -125,7 +125,6 @@ class Bias(SampleDomain):
         self.country = copy.copy(country)
         self.fanname = copy.copy(fanname)
 
-
     def make_with_dict(self, dict_data):
         try:
             self.bid = dict_data['bid']
@@ -329,7 +328,6 @@ class Feed(SampleDomain):
             "is_owner" : self.is_owner,
             "is_reworked" : self.is_reworked
         }
-        
 
 class Interaction(SampleDomain):
     def __init__(self, iid="", fid="", choice=[],
@@ -535,8 +533,6 @@ class ManagedUser:
             "feed_key" : self.feed_key,
             "comment_key" : self.comment_key
         }
-
-class Report:
     def __init__(self, rid="", type="", date="", cid="",
                  detail = "", fid="", uid="",
                  result=False, aid_date=""):

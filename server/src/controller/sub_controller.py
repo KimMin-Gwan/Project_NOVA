@@ -79,7 +79,7 @@ class Sub_Controller:
         model = UserContributionModel(database=database)
 
         try:
-            if not model.set_bias_data(request=request):
+            if not model.set_bias_data():
                 model.set_state_code("571") # 실패하면 571
                 return model
 
@@ -146,7 +146,7 @@ class Sub_Controller:
             return model
 
         try:
-            if not model.set_bias_data(request=request):
+            if not model.set_bias_data():
                 model.set_state_code("571") # 실패하면 571
                 return model
             
