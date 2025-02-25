@@ -182,9 +182,7 @@ class Feed_Controller:
 
         # 유저가 있으면 세팅
         if request.jwt_payload != "":
-            print("여긴가?")
             model.set_user_with_email(request=request.jwt_payload)
-            pprint("아닌가?")
 
         model.try_filtered_feed_with_options(feed_search_engine=feed_search_engine,
                                              feed_manager=self.__feed_manager,
@@ -193,7 +191,6 @@ class Feed_Controller:
                                              last_index=request.data_payload.key,
                                              num_feed=num_feed
                                              )
-        pprint("설마 여긴가?")
         return model
 
 
