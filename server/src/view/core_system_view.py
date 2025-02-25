@@ -21,7 +21,7 @@ class Core_Service_View(Master_View):
                   database, head_parser:Head_Parser,
                   connection_manager:CM, league_manager:LM,
                   feed_manager:FM , feed_search_engine:FSE,
-                  ai_manager
+                  ai_manager, jwt_secret_key
                   ) -> None:
         super().__init__(head_parser=head_parser)
         self.__app = app
@@ -32,6 +32,7 @@ class Core_Service_View(Master_View):
         self.__feed_manager = feed_manager
         self.__feed_search_engine = feed_search_engine
         self.__ai_manager = ai_manager
+        self.__jwt_secret_key = jwt_secret_key
         self.home_route(endpoint)
         self.check_route()
         #self.web_chatting_route(endpoint)
@@ -54,7 +55,7 @@ class Core_Service_View(Master_View):
             #except:
                 ##print("Anonymous User Try Contact Us")
 
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             request_manager.try_view_management_need_authorized(cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
                 #raise self._credentials_exception
@@ -76,7 +77,7 @@ class Core_Service_View(Master_View):
         # 홈 화면에 최애 정보
         @self.__app.get('/home/my_bias')
         def get_my_bias(request:Request):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = DummyRequest()
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             # 검사 결과에 없으면 없다는 결과로 가야됨
@@ -94,7 +95,7 @@ class Core_Service_View(Master_View):
 
         @self.__app.get('/home/hot_hashtag')
         def get_hot_hashtag(request:Request):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = DummyRequest()
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
@@ -113,7 +114,7 @@ class Core_Service_View(Master_View):
 
         @self.__app.get('/home/realtime_best_hashtag')
         def get_realtime_best_hashtag(request:Request):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = DummyRequest()
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
@@ -129,7 +130,7 @@ class Core_Service_View(Master_View):
 
         @self.__app.get('/home/today_spiked_hot_hashtag')
         def get_today_hot_hashtag(request:Request):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = DummyRequest()
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
@@ -147,7 +148,7 @@ class Core_Service_View(Master_View):
         # 이거 까지
         @self.__app.get('/home/weekly_spiked_hot_hashtag')
         def get_weekly_hot_hashtag(request:Request):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = DummyRequest()
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
@@ -166,7 +167,7 @@ class Core_Service_View(Master_View):
         @self.__app.get('/home/search_feed_with_hashtag')
         def get_hot_hashtag_feed(request:Request, hashtag:Optional[str], target_time:Optional[str]=""):
 
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
 
             data_payload = HashtagFeedRequest(hashtag=hashtag, target_time=target_time)
 
@@ -190,7 +191,7 @@ class Core_Service_View(Master_View):
         @self.__app.get('/home/search_feed_with_bid')
         def get_feed_with_bid(request:Request, bid:Optional[str]=""):
 
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
 
             data_payload = GetFeedBidRequest(bid=bid)
 
@@ -213,7 +214,7 @@ class Core_Service_View(Master_View):
         # 현재는 일부러 주간 핫태그를 내보내도록 했습니다.
         @self.__app.get('/home_search/get_recommend_keyword')
         def get_recommend_keyword(request:Request):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = DummyRequest()
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
@@ -228,7 +229,7 @@ class Core_Service_View(Master_View):
 
         @self.__app.get('/home/all_feed')
         def get_feed_data(request:Request, key:Optional[int] = -1):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = HomeFeedRequest(key=key)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
@@ -247,7 +248,7 @@ class Core_Service_View(Master_View):
         # 오늘의 인기 게시글
         @self.__app.get('/home/today_best')
         def get_feed_data(request:Request, key:Optional[int] = -1):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = HomeFeedRequest(key=-1)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
@@ -266,7 +267,7 @@ class Core_Service_View(Master_View):
         # 주간 베스트 피드
         @self.__app.get('/home/weekly_best')
         def get_feed_data(request:Request, key:Optional[int] = -1):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = HomeFeedRequest(key=-1)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
@@ -296,7 +297,7 @@ class Core_Service_View(Master_View):
         # 나의 최애 선택하기 (다시 누르면 취소하기됨0)
         @self.__app.post('/home/try_select_my_bias')
         def try_select_my_bias(request:Request, raw_request:dict):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
 
             data_payload = BiasSelectRequest(request=raw_request)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
@@ -341,7 +342,7 @@ class Core_Service_View(Master_View):
         # 피드 자세히 보기 (피드 페이지)의 피드 데이터
         @self.__app.get('/feed_explore/feed_detail/feed_data')
         def get_feed_detail(request:Request, fid:Optional[str]):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = GetFeedRequest(fid=fid)
 
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
@@ -361,7 +362,7 @@ class Core_Service_View(Master_View):
         # 피드 자세히 보기의 댓글 데이터
         @self.__app.get('/feed_explore/feed_detail/comment_data')
         def get_feed_detail(request:Request, fid:Optional[str]):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = GetFeedRequest(fid=fid)
 
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
@@ -382,7 +383,7 @@ class Core_Service_View(Master_View):
         # 해시태그로 검색
         @self.__app.get('/feed_explore/search_feed_with_hashtag')
         def search_feed_with_hashtag(request:Request, hashtag:Optional[str], target_time:Optional[str]="", key:Optional[int]=-1):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = HashtagFeedRequest(hashtag=hashtag, target_time=target_time, key=key)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
@@ -403,7 +404,7 @@ class Core_Service_View(Master_View):
         @self.__app.get('/feed_explore/search_feed_with_bid')
         def search_feed_with_bid(request:Request, bid:Optional[str]="", key:Optional[int] = -1):
 
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
 
             data_payload = GetFeedBidRequest(bid=bid, key=key)
 
@@ -424,7 +425,7 @@ class Core_Service_View(Master_View):
 
         @self.__app.get('/feed_explore/search_feed_with_keyword')
         def search_with_keyword(request:Request, key:Optional[int]=-1, keyword:Optional[str]="", fclass:Optional[str]=""):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = KeywordSearchRequest(key=key, keyword=keyword, fclass=fclass)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
@@ -441,7 +442,7 @@ class Core_Service_View(Master_View):
 
         @self.__app.get('/feed_explore/search_comment_with_keyword')
         def search_with_keyword(request:Request, key:Optional[int]=-1, keyword:Optional[str]=""):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = KeywordSearchRequest(key=key, keyword=keyword)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
@@ -459,7 +460,7 @@ class Core_Service_View(Master_View):
         # 전체 피드 제공
         @self.__app.post('/feed_explore/all_feed')
         def get_all_feed_filtering(request:Request, raw_request:dict):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = AllFeedRequest(request=raw_request)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
@@ -478,7 +479,7 @@ class Core_Service_View(Master_View):
         # 오늘의 인기 게시글
         @self.__app.get('/feed_explore/today_best')
         def get_today_best_in_search(request:Request, key:Optional[int] = -1):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = HomeFeedRequest(key=key)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
@@ -497,7 +498,7 @@ class Core_Service_View(Master_View):
         # 주간 베스트 피드
         @self.__app.get('/feed_explore/weekly_best')
         def get_weekly_best_in_search(request:Request, key:Optional[int] = -1):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = HomeFeedRequest(key=key)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
@@ -516,7 +517,7 @@ class Core_Service_View(Master_View):
         # Bias 기반 커뮤니티 피드
         @self.__app.post('/feed_explore/feed_with_community')
         def get_feed_with_community(request:Request, raw_request:dict):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             # 데이터 페이로드에도 bid 리스트를 넣어야됨
             data_payload = CommunityRequest(request=raw_request)
             
@@ -537,7 +538,7 @@ class Core_Service_View(Master_View):
         # 1차 필터링 (BIAS, 커뮤니티 필터링), 2차 필터링 (옵션 필터링)으로 최종적으로 선별된 Feed를 반환합니다.
         # @self.__app.get('/feed_explore/feed_filtering_with_options')
         # def get_feed_filtering_with_options(request:Request, raw_request:dict):
-        #     request_manager = RequestManager()
+        #     request_manager = RequestManager(secret_key=self.__jwt_secret_key)
         #     data_payload = CommunityFilteredRequest(request=raw_request)
         #     request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
         #
@@ -555,7 +556,7 @@ class Core_Service_View(Master_View):
         # 숏피드에서 맨처음에 feed 데이터를 fid로 검색하기
         @self.__app.get('/feed_explore/get_feed')
         def get_feed_data(request:Request, fid:Optional[str]="" ):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = GetFeedRequest(fid=fid)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
@@ -574,7 +575,7 @@ class Core_Service_View(Master_View):
         # 숏 피드에서 다음 피드를 요청할 때
         @self.__app.post('/feed_explore/get_next_feed')
         def get_next_feed(request:Request, raw_request:dict):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = ShortFeedrecommendRequest(request=raw_request)
 
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
@@ -593,7 +594,7 @@ class Core_Service_View(Master_View):
         # feed 랑 상호작용 -> 버튼을 눌렀을 때 ( 홈 또는 위성 탐색 페이지에서 사용)
         @self.__app.get('/feed_explore/interaction_feed')
         def try_interaction_feed(request:Request, fid:Optional[str], action:Optional[int]):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = FeedInteractionRequest(fid=fid, action=action)
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
             if not request_manager.jwt_payload.result:
@@ -611,7 +612,7 @@ class Core_Service_View(Master_View):
         # feed 랑 상호작용 -> 관심별 버튼 
         @self.__app.get('/feed_explore/check_star')
         def try_check_star(request:Request, fid:Optional[str]):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
 
             data_payload = FeedStaringRequest(fid=fid)
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
@@ -630,7 +631,7 @@ class Core_Service_View(Master_View):
         # feed 랑 상호작용 -> 댓글 달기
         @self.__app.post('/feed_explore/make_comment')
         def try_make_comment(request:Request, raw_requset:dict):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             print(raw_requset)
             data_payload = MakeFeedCommentRequest(request=raw_requset)
 
@@ -651,7 +652,7 @@ class Core_Service_View(Master_View):
         # feed 랑 상호작용 -> 댓글 지우기
         @self.__app.get('/feed_explore/remove_comment')
         def try_remove_comment(request:Request, fid:Optional[str], cid:Optional[str]):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
 
             data_payload = RemoveCommentRequest(fid=fid, cid=cid)
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
@@ -667,7 +668,7 @@ class Core_Service_View(Master_View):
             return response
 
         # def try_make_reply_comment(request:Request, raw_requset:dict):
-        #     request_manager = RequestManager()
+        #     request_manager = RequestManager(secret_key=self.__jwt_secret_key)
         #     data_payload = MakeFeedCommentRequest(request=raw_requset)
         #
         #     request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
@@ -685,7 +686,7 @@ class Core_Service_View(Master_View):
         # feed 랑 상호작용 -> 댓글 모두보기
         @self.__app.get('/feed_explore/view_comment')
         def get_all_comment(request:Request, fid:Optional[str]):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
 
             data_payload = FeedStaringRequest(fid=fid)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
@@ -702,7 +703,7 @@ class Core_Service_View(Master_View):
         # feed 랑 상호작용 -> 댓글 좋아요 하기
         @self.__app.get('/feed_explore/like_comment')
         def try_like_comment(request:Request, fid:Optional[str], cid:Optional[str]):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
 
             data_payload = RemoveCommentRequest(fid=fid, cid=cid)
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
@@ -723,7 +724,7 @@ class Core_Service_View(Master_View):
                         jsonData: Union[str, None] = Form(None)):
         #async def try_edit_feed(request:Request, images: UploadFile| None = File(None), 
                                 #jsonData:str | None = Form(None)):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
 
             form_data = await request.form()
             image_files = form_data.getlist("images")
@@ -760,7 +761,7 @@ class Core_Service_View(Master_View):
 
         @self.__app.get('/feed_explore/try_remove_feed')
         def try_remove_feed(request:Request, fid:Optional[str]):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = DeleteFeedRequest(fid=fid)
 
             # 로그인이 되어있지 않으면, 그 글을 삭제할 수 없음
@@ -781,7 +782,7 @@ class Core_Service_View(Master_View):
         # 최애 인증 페이지
         @self.__app.post('/nova_check/server_info/check_page')
         def get_check_page(request:Request, raw_request:dict):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
 
             data_payload= CheckRequest(request=raw_request)
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
@@ -798,7 +799,7 @@ class Core_Service_View(Master_View):
         # 최애 인증 시도 
         @self.__app.post('/nova_check/server_info/try_daily_check')
         def get_check_page(request:Request, raw_request:dict):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
 
             data_payload= CheckRequest(request=raw_request)
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
@@ -816,7 +817,7 @@ class Core_Service_View(Master_View):
         # 최애 특별시 인증
         @self.__app.post('/nova_check/server_info/try_special_check')
         def get_check_page(request:Request, raw_request:dict):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
 
             data_payload= CheckRequest(request=raw_request)
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)

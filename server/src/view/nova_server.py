@@ -16,7 +16,7 @@ import random
 class NOVA_Server:
     def __init__(self, database, connection_manager,
                   league_manager, feed_manager, feed_search_engine,
-                  funding_project_manager, ai_manager
+                  funding_project_manager, ai_manager, jwt_secret_key
                   ) -> None:
         self.__app = FastAPI()
 
@@ -46,7 +46,8 @@ class NOVA_Server:
                                                    league_manager=league_manager,
                                                    feed_manager=feed_manager,
                                                    feed_search_engine=feed_search_engine,
-                                                   ai_manager=ai_manager
+                                                   ai_manager=ai_manager,
+                                                   jwt_secret_key = jwt_secret_key
                                                    )
         self.__user_system_view = User_Service_View( app=self.__app,
                                                      endpoint='/user_system',
@@ -54,19 +55,22 @@ class NOVA_Server:
                                                    nova_verification=self.nova_verification,
                                                    head_parser=head_parser,
                                                    feed_manager=feed_manager,
-                                                   feed_search_engine=feed_search_engine
+                                                   feed_search_engine=feed_search_engine,
+                                                   jwt_secret_key = jwt_secret_key
                                                    )
         self.__sub_system_view = Sub_Service_View( app=self.__app,
                                                      endpoint='/sub_system',
                                                    database=database,
                                                    head_parser=head_parser,
-                                                   feed_search_engine=feed_search_engine
+                                                   feed_search_engine=feed_search_engine,
+                                                   jwt_secret_key = jwt_secret_key
                                                    )
         self.__funding_system_view = Funding_Service_View( app=self.__app,
-                                                     endpoint='/nova_fund_system',
+                                                    endpoint='/nova_fund_system',
                                                    database=database,
                                                    head_parser=head_parser,
-                                                   funding_project_manager=funding_project_manager
+                                                   funding_project_manager=funding_project_manager,
+                                                   jwt_secret_key = jwt_secret_key
                                                    )
         self.__administrator_system_view = Administrator_System_View( app=self.__app,
                                                      endpoint='/administrator_system',

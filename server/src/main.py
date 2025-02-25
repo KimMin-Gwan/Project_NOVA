@@ -7,6 +7,7 @@ import asyncio
 from uvicorn import run
 from others.ai_service import AIManger
 
+
 class Master(Configure_File_Reader):
     def __init__(self):
         super().__init__()
@@ -18,7 +19,7 @@ class Master(Configure_File_Reader):
 
     async def server_start_up(self):
         #database = Local_Database() #디비 실행
-        database = Mongo_Database() #디비 실행
+        database = Mongo_Database(self._mongo_db_key) #디비 실행
         
         ai_manager = AIManger(model_setting=self._model_setting, database=database)
 
@@ -29,8 +30,7 @@ class Master(Configure_File_Reader):
         feed_manager= FeedManager(database=database,
                                   feed_search_engine=feed_search_engine)
         funding_project_manager = FundingProjectManager(database=database)
-
-
+        
         nova_server = NOVA_Server(
             database=database,
             connection_manager=None,
@@ -38,7 +38,8 @@ class Master(Configure_File_Reader):
             feed_manager=feed_manager,
             feed_search_engine=feed_search_engine,
             funding_project_manager=funding_project_manager,
-            ai_manager = ai_manager
+            ai_manager = ai_manager,
+            jwt_secret_key = self._jwt_secret_key
             )
         
         #app = nova_server.get_app()

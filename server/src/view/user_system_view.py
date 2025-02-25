@@ -8,7 +8,7 @@ from pprint import pprint
 
 class User_Service_View(Master_View):
     def __init__(self, app:FastAPI, endpoint:str, database, head_parser:Head_Parser,
-                 nova_verification, feed_manager, feed_search_engine) -> None:
+                 nova_verification, feed_manager, feed_search_engine, jwt_secret_key) -> None:
         super().__init__(head_parser=head_parser)
         self.__app = app
         self._endpoint = endpoint
@@ -16,6 +16,7 @@ class User_Service_View(Master_View):
         self.__nova_verification = nova_verification
         self.__feed_manager = feed_manager
         self.__feed_search_engine = feed_search_engine
+        self.__jwt_secret_key = jwt_secret_key
         self.user_route(endpoint)
         self.my_page_route()
 
@@ -27,7 +28,7 @@ class User_Service_View(Master_View):
         #로그인
         @self.__app.post('/user_home/try_login')
         def try_login(raw_request:dict):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = LoginRequest(request=raw_request)
 
             user_controller=UserController()
@@ -41,7 +42,7 @@ class User_Service_View(Master_View):
         # 로그아웃
         @self.__app.get('/user_home/try_logout')
         def try_login(request:Request):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             request_manager.try_view_management_need_authorized(data_payload=None, cookies=request.cookies)
             response = request_manager.try_clear_cookies(request=request)
             return response
@@ -74,7 +75,7 @@ class User_Service_View(Master_View):
         # response 포함 정보 -> 'result' : True or False
         @self.__app.post('/user_home/try_login_temp_user')
         async def try_login_temp_user(raw_request:dict):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             request_manager.data_payload = TempLoginRequest(request=raw_request)
 
             user_controller=UserController()
@@ -89,7 +90,7 @@ class User_Service_View(Master_View):
         # 임시 로그인 상태에서 비밀번호 변경하기
         @self.__app.post('/user_home/try_find_password')
         def try_find_password(request:Request, raw_request:dict):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = ChangePasswordRequest(request=raw_request)
 
             request_manager.try_view_management_authorized_with_temp_user(data_payload=data_payload, cookies=request.cookies)
@@ -110,7 +111,7 @@ class User_Service_View(Master_View):
         # 이메일 중복 검사 기능
         @self.__app.post('/user_home/try_check_email_duplicate')
         def try_check_email_duplicate(request:Request, raw_request:dict):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             request_manager.data_payload = EmailCheckRequest(raw_request)
 
             user_controller=UserController()
@@ -140,7 +141,7 @@ class User_Service_View(Master_View):
     def my_page_route(self):
         @self.__app.get('/user_home/get_my_page_data')
         def try_get_my_page(request:Request):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             # pprint("프린트 됨")
             data_payload = DummyRequest()
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
@@ -156,7 +157,7 @@ class User_Service_View(Master_View):
         # 타입에 맞게 Feed들을 반환하는 내가쓴 글 찾기
         @self.__app.get('/user_home/get_my_feed')
         def try_get_my_feeds_type(request:Request, type:Optional[str]="post", key:Optional[int]=-1):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = MyFeedsRequest(type=type, key=key)
 
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
@@ -174,7 +175,7 @@ class User_Service_View(Master_View):
         # 내 댓글
         @self.__app.get('/user_home/get_my_comments')
         def try_get_my_comment(request:Request, key:Optional[int]=-1):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
 
             data_payload = MyCommentsRequest(key=key)
 
@@ -194,7 +195,7 @@ class User_Service_View(Master_View):
         # 프로필 수정 표시 탭
         @self.__app.get('/user_home/get_my_profile_data')
         def try_get_my_profile(request:Request):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
 
             data_payload = DummyRequest()
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
@@ -211,7 +212,7 @@ class User_Service_View(Master_View):
         # 패스워드 변경하기
         @self.__app.post('/user_home/try_change_password')
         def try_change_password(request:Request, raw_request:dict):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
 
             data_payload = ChangePasswordRequest(request=raw_request)
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
@@ -228,7 +229,7 @@ class User_Service_View(Master_View):
         # 닉네임 바꾸기
         @self.__app.post('/user_home/try_change_nickname')
         def try_change_nickname(request:Request, raw_request:dict):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
 
             data_payload  = ChangeNicknameRequest(request=raw_request)
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
@@ -245,7 +246,7 @@ class User_Service_View(Master_View):
         # 프로필 사진 바꾸기
         @self.__app.post('/user_home/try_change_profile_photo')
         def try_change_profile_photo(request:Request, image:Union[UploadFile, None] = File(None)):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             
             if image is None:
                 image_name = ""

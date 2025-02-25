@@ -10,12 +10,13 @@ import json
 
 class Funding_Service_View(Master_View):
     def __init__(self, app:FastAPI, endpoint:str, database, head_parser:Head_Parser,
-                 funding_project_manager) -> None:
+                 funding_project_manager, jwt_secret_key) -> None:
         super().__init__(head_parser=head_parser)
         self.__app = app
         self._endpoint = endpoint
         self.__database = database
         self.__funding_project_manager = funding_project_manager
+        self.__jwt_secret_key = jwt_secret_key
         self.get_route(endpoint)
         self.post_route(endpoint)
 
@@ -40,7 +41,7 @@ class Funding_Service_View(Master_View):
         # 홈에서 프로젝트 배너들 받기
         @self.__app.get('/nova_fund_system/home/banner')
         def get_home_banner(request:Request):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = DummyRequest()
 
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
@@ -60,7 +61,7 @@ class Funding_Service_View(Master_View):
         # 홈에서 추천 tag 받기
         @self.__app.get('/nova_fund_system/home/get_recommend_tag')
         def get_home_recommend_tag(request:Request):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = ProjectGetRequest()
 
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
@@ -81,7 +82,7 @@ class Funding_Service_View(Master_View):
         # 홈에서 추천 태그로 프로젝트 받기, sample, 완성해야함
         @self.__app.get('/nova_fund_system/home/get_project_as_tag')
         def get_home_project_as_tag(request:Request, tag:Optional[str]=""):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = ProjectWithTagRequest(tag=tag)       # 데이터를 받아온 리퀘스트 데이터
 
             # 쿠키를 통해 데이터를 뜯는 과정
@@ -111,7 +112,7 @@ class Funding_Service_View(Master_View):
             # 단순히 모든 최애들 프로젝트 중 가장 최신의 것만 얻으면 된다.
             # 그러면, INPUT = X, OUTPUT : 입력받은 최애의 프로젝트 데이터
 
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = ProjectGetRequest()
 
             # 단순히 최애들의 프로젝트를 띄우고 싶음. 따라서, 로그인 정보는 불필요함
@@ -139,7 +140,7 @@ class Funding_Service_View(Master_View):
         def get_home_fan_project(request:Request):
             # 최애의 펀딩시스템과 일맥상통 한다.
             # 그러면 똑같은 방법으로 시동한다.
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = ProjectGetRequest()
 
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
@@ -194,7 +195,7 @@ class Funding_Service_View(Master_View):
         # 이는 미리보기 형태로, 보여줄 개수가 정해져있다.
         @self.__app.get('/nova_fund_system/fan_project/achieve_the_goal')
         def get_done_project_list(request:Request, key:Optional[str]="" ):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = ProjectGetRequest(key=key)
 
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
@@ -219,7 +220,7 @@ class Funding_Service_View(Master_View):
         # 2. 마감 임박 프로젝트
         @self.__app.get('/nova_fund_system/fan_project/soon_expire')
         def get_near_deadline_project_list(request:Request):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = ProjectGetRequest()
 
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
@@ -242,7 +243,7 @@ class Funding_Service_View(Master_View):
         # 3. 추천 프로젝트 -> 최신순
         @self.__app.get('/nova_fund_system/fan_project/recommend_project')
         def get_project_list(request:Request):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = ProjectGetRequest()
 
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
@@ -265,7 +266,7 @@ class Funding_Service_View(Master_View):
         # 4. 참여 프로젝트
         @self.__app.get('/nova_fund_system/fan_project/funding_project')
         def get_attend_project_list(request:Request):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = ProjectGetRequest()
 
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
@@ -290,7 +291,7 @@ class Funding_Service_View(Master_View):
         # 5. 모금 프로젝트
         @self.__app.get('/nova_fund_system/fan_project/donation_project')
         def get_donate_project_list(request:Request):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = ProjectGetRequest()
 
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
@@ -317,7 +318,7 @@ class Funding_Service_View(Master_View):
         # 1. 이미 목표 달성에 성공한 프로젝트
         @self.__app.get('/nova_fund_system/fan_project_list/achieve_the_goal')
         def get_done_project_list_all(request:Request, key:Optional[str]="" ):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = ProjectGetRequest(key=key)
             # data_payload = ProjectPageGetRequest(page=key)
 
@@ -352,7 +353,7 @@ class Funding_Service_View(Master_View):
         # 2. 마감 임박 프로젝트
         @self.__app.get('/nova_fund_system/fan_project_list/soon_expire')
         def get_near_deadline_project_list_all(request:Request, key:Optional[str]="" ):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = ProjectGetRequest(key=key)
             # data_payload = ProjectPageGetRequest(page=key)
 
@@ -385,7 +386,7 @@ class Funding_Service_View(Master_View):
         # 3. 추천 프로젝트 -> 최신순
         @self.__app.get('/nova_fund_system/fan_project_list/recommend_project')
         def get_project_list(request:Request, key:Optional[str]="" ):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = ProjectGetRequest(key=key)
 
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
@@ -408,7 +409,7 @@ class Funding_Service_View(Master_View):
         # 4. 참여 프로젝트
         @self.__app.get('/nova_fund_system/fan_project_list/funding_project')
         def get_attend_project_list_all(request:Request, key:Optional[str]="" ):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = ProjectGetRequest(key=key)
             # data_payload = ProjectPageGetRequest(page=key)
 
@@ -442,7 +443,7 @@ class Funding_Service_View(Master_View):
         # 5. 모금 프로젝트
         @self.__app.get('/nova_fund_system/fan_project_list/donation_project')
         def get_donate_project_list_all(request:Request, key:Optional[str]="" ):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = ProjectGetRequest(key=key)
             data_payload = ProjectPageGetRequest(page=key)
 
@@ -475,7 +476,7 @@ class Funding_Service_View(Master_View):
         # 프로젝트 디테일 요청,
         @self.__app.get('/nova_fund_system/project_detail')
         def get_project_detail_body(request:Request, pid:Optional[str]="" ):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = ProjectDetailRequest(pid=pid)
 
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
@@ -500,7 +501,7 @@ class Funding_Service_View(Master_View):
         # 최애 펀딩 페이지 최상단 - 신규 최애 펀딩
         @self.__app.get('/nova_fund_system/bias_project/new_bias_project')
         def new_bias_project(request:Request, key:Optional[str]="" ):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = DummyRequest()
 
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
@@ -524,7 +525,7 @@ class Funding_Service_View(Master_View):
         # elif ftype == "attend" : 달성률 100% 초과
         @self.__app.get('/nova_fund_system/bias_project/recommend_project')
         def home_recommend_project(request:Request):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = DummyRequest()
 
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
@@ -549,7 +550,7 @@ class Funding_Service_View(Master_View):
         # 마감일 순으로, 가장 마감에 임박한 프로젝트 부터 노출
         @self.__app.get('/nova_fund_system/bias_project/all_project')
         def home_all_project(request:Request):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = DummyRequest()
 
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
@@ -575,7 +576,7 @@ class Funding_Service_View(Master_View):
         # elif ftype == "attend" : 달성률 100% 초과
         @self.__app.get('/nova_fund_system/bias_project_list/recommend_project')
         def recommend_project_list(request:Request, key:Optional[str]=""):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
 
             # data_payload = ProjectPageGetRequest(page=key)
             data_payload = ProjectGetRequest(key=key)
@@ -610,7 +611,7 @@ class Funding_Service_View(Master_View):
         # 마감일 순으로, 가장 마감에 임박한 프로젝트 부터 노출
         @self.__app.get('/nova_fund_system/bias_project_list/all_project')
         def all_project_list(request:Request, key:Optional[str]=""):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = ProjectGetRequest(key=key)
             # data_payload = ProjectPageGetRequest(page=key)
 
@@ -646,7 +647,7 @@ class Funding_Service_View(Master_View):
         # 아마도 page에 따라서 post가 따로 있을 예정
         @self.__app.post('/nova_fund_system/make_new_project')
         def try_make_new_project(request:Request, raw_request:dict):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = DummyRequest(request=raw_request)
 
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
@@ -669,7 +670,7 @@ class Funding_Service_View(Master_View):
                         jsonData: Union[str, None] = Form(None)):
         #async def try_edit_feed(request:Request, images: UploadFile| None = File(None), 
                                 #jsonData:str | None = Form(None)):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
 
             form_data = await request.form()
             image_files = form_data.getlist("images")

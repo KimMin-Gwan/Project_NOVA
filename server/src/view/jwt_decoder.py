@@ -7,7 +7,7 @@ import json
 
 
 class JWTManager:
-    def __init__(self):
+    def __init__(self, secret_key):
         self._secret_key = "your_secret_key"
         self._argorithms = ["HS256"]
 
@@ -90,8 +90,8 @@ class JWTPayload:
 
 # Request를 분석하는 모듈
 class RequestManager(JWTManager):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, secret_key):
+        super().__init__(secret_key=secret_key)
         self.data_payload= None
         self.jwt_payload = JWTPayload()
         self.new_token = ""

@@ -16,12 +16,13 @@ import json
 
 class Sub_Service_View(Master_View):
     def __init__(self, app:FastAPI, endpoint:str, database, head_parser:Head_Parser,
-                 feed_search_engine:FeedSearchEngine) -> None:
+                 feed_search_engine:FeedSearchEngine, jwt_secret_key) -> None:
         super().__init__(head_parser=head_parser)
         self.__app = app
         self._endpoint = endpoint
         self.__database = database
         self.__feed_search_engine=feed_search_engine
+        self.__jwt_secret_key = jwt_secret_key
         self.notice_route()
         #self.bias_page_route("/bias_info")
         self.test_route()
@@ -214,7 +215,7 @@ class Sub_Service_View(Master_View):
         # 바이어스를 String 으로 검색
         @self.__app.get('/nova_sub_system/try_search_bias')
         def try_search_bias(request:Request, bname:Optional[str] = -1):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             
             data_payload = BiasSearchRequest(bname=bname)
             
@@ -235,7 +236,7 @@ class Sub_Service_View(Master_View):
         # 바이어스 선택 또는 취소
         @self.__app.post('/nova_sub_system/try_select_my_bias')
         def try_select_my_bias(request:Request, raw_request:dict):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = BiasSelectRequest(request=raw_request)
             
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
@@ -259,7 +260,7 @@ class Sub_Service_View(Master_View):
         # 바이어스를 카테고리로 검색
         @self.__app.get('/nova_sub_system/try_search_bias_with_category')
         def try_search_bias_with_category(request:Request, category:Optional[str]):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
 
             data_payload = BiasWithCategoryRequest(category=category)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
@@ -289,7 +290,7 @@ class Sub_Service_View(Master_View):
         # 신고 기능
         @self.__app.post('/nova_sub_system/try_report')
         def try_report_post_or_comment(request:Request, raw_request:dict):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             
             data_payload = ReportRequest(request=raw_request)
             
@@ -304,7 +305,7 @@ class Sub_Service_View(Master_View):
 
         @self.__app.post('/nova_sub_system/try_change_users_age')
         def try_change_users_age(request:Request):
-            request_manager = RequestManager()
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             request_manager.try_view_management(cookies=request.cookies)
 
             sub_controller=Sub_Controller()

@@ -339,9 +339,9 @@ class Local_Database:
 
 # 실제로 사용할 몽고 디비
 class Mongo_Database(Local_Database):
-    def __init__(self) -> None:
+    def __init__(self, uri) -> None:
         #MongoDB연결 uri
-        self.__uri = "#######"
+        self.__uri = uri
         # Create a new client and connect to the server
         self.__client = MongoClient(self.__uri, server_api=ServerApi('1'))
         self.__db = self.__client.NovaDB    #사용 할 때 DB이름에 맞게 변경 필요
@@ -432,35 +432,6 @@ class Mongo_Database(Local_Database):
         selected_collection = self.__set_collection(collection=collection_name)
         return list(selected_collection.find({},{'_id':False}))
     
-
-    #def _select_target_list(self, target:str):
-        #if target == "baid" or target == "banner":
-            #return "banner"
-        #elif target == "bid" or target == "bias":
-            #return "bias"
-        #elif target == "fid" or target == "feed":
-            #return "feed"
-        #elif target == "lid" or target == "league":
-            #return "league"
-        #elif target == "ncid" or target == "name_card":
-            #return "name_card"
-        #elif target == "uid" or target == "user":
-            #return "user"
-        #elif target == "muid" or target == "managed_user":
-            #return "managed_user"
-        #elif target == "cid" or target == "comment":
-            #return "comment"
-        #elif target == "aid" or target == "alert":
-            #return "alert"
-        #elif target == "nid" or target == "notice":
-            #return "notice"
-        #elif target == "pid" or target == "project":
-            #return "project"
-        #elif target == "iid" or target == "interaction":
-            #return "interaction"
-        #else:
-            #raise DatabaseLogicError("target id did not define")
-        
     def _select_target_list(self, target:str):
         if target == "baid" or target == "banner":
             return "banner"
