@@ -428,8 +428,6 @@ class ManagedFeedBiasTable:
         # 대소문자를 구분하지 않음
         searched_df = self.__feed_df
 
-        print(f"key: {key}, fclass: {fclass}, board_type: {board_type}, target_time: {target_time}, option: {option}")
-
 
         if option == "keyword":
             # 키워드를 통한 서치
@@ -468,8 +466,6 @@ class ManagedFeedBiasTable:
             searched_df = searched_df[self.__get_time_diff(target_time=searched_df['date'],target_hour=24, reverse=True)]
         elif target_time=="weekly":
             searched_df = searched_df[self.__get_time_diff(target_time=searched_df['date'],target_hour=168, reverse=True)]
-
-        pprint(searched_df)
 
         return searched_df['fid'].tolist()
     #---------------------------------------------------------------------------------------------

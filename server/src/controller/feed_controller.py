@@ -310,6 +310,7 @@ class Feed_Controller:
             target=request.data_payload.keyword,
             feed_search_engine=feed_search_engine,
         )
+        
         model.try_search_feed_with_target_type(feed_search_engine=feed_search_engine,
                                                feed_manager=self.__feed_manager,
                                                target_type="keyword",
