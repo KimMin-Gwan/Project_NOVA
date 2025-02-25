@@ -156,12 +156,18 @@
     }
 
     @media (max-width: 400px) {
+      .streamer-list {
+        grid-template-columns: repeat(2, 1fr);
+      }
       .streamer-list button {
         width: 45%;
       }
     }
 
     @media (max-width: 300px) {
+      .streamer-list {
+        grid-template-columns: repeat(1, 1fr);
+      }
       .streamer-list button {
         width: 100%;
       }

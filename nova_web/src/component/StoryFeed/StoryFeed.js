@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import style from "./StoryFeed.module.css";
-export default function StoryFeed({ feedData }) {
+export default function StoryFeed({ feedData, type }) {
   let navigate = useNavigate();
 
   function onClickFeed(fid) {
@@ -13,7 +13,7 @@ export default function StoryFeed({ feedData }) {
 
   return (
     <div
-      className={style["story_feed"]}
+      className={`${style["story_feed"]} ${style[`story_feed_${type}`]}`}
       onClick={() => {
         onClickFeed(feedData.feed.fid);
       }}
