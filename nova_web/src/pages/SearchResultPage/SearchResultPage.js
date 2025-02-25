@@ -14,41 +14,35 @@ import MyComments from "../../component/Comments/Comments";
 import Comments from "../../component/Comments/Comments";
 
 export default function SearchResultPage() {
-  // let params = useParams();
-  const target = useRef(null);
-
   let [searchParams] = useSearchParams();
   let keyword = searchParams.get("keyword");
-  // let keyword = params.keyword;
   let navigate = useNavigate();
-  let location = useLocation();
-  let [isLoading, setIsLoading] = useState(true);
+  const target = useRef(null);
+
   let [searchWord, setSearchWord] = useState(keyword);
   let [searchHistory, setSearchHistory] = useState([]);
+
+  let [feedData, setFeedData] = useState([]);
+  const [comments, setComments] = useState([]);
+
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [type, setType] = useState("post");
+
+  const [feedNextKey, setFeedNextKey] = useState(-1);
+  const [commentNextKey, setCommentNextKey] = useState(-1);
+
+  const [nextKey, setNextKey] = useState(-1);
+
+  let [isLoading, setIsLoading] = useState(true);
+
   function handleNavigate() {
-    // if (!searchWord) {
-    //   navigate("/");
-    // } else {
-    // navigate(`/feed_list/search_feed?keyword=${searchWord}`);
     const updateHistory = [...searchHistory, searchWord];
     setSearchHistory(updateHistory);
     localStorage.setItem("history", JSON.stringify(updateHistory));
     navigate(`/search_result?keyword=${searchWord}`);
     navigate(0);
     setSearchWord("");
-    // }
   }
-
-  function handleMovePage(e, page) {
-    e.preventDefault();
-    navigate(page);
-  }
-  let [feedData, setFeedData] = useState([]);
-
-  const [type, setType] = useState("post");
-
-  const [activeIndex, setActiveIndex] = useState(0);
-  let [nextKey, setNextKey] = useState(-1);
 
   const handleClick = (index) => {
     setActiveIndex(index);
@@ -79,31 +73,29 @@ export default function SearchResultPage() {
   }
 
   async function fetchSearchKeyword() {
+    console.log("댓글 불러짐", feedNextKey);
+
     await mainApi
-      .get(`feed_explore/search_feed_with_keyword?keyword=${keyword}&key=${nextKey}`)
+      .get(`feed_explore/search_feed_with_keyword?keyword=${keyword}&key=${feedNextKey}`)
       .then((res) => {
         setFeedData((prev) => {
           return [...prev, ...res.data.body.send_data];
         });
         console.log(res.data);
         setIsLoading(false);
-        setNextKey(res.data.body.key);
+        setFeedNextKey(res.data.body.key);
       });
   }
-  const [comments, setComments] = useState([]);
 
   async function fetchCommentKeyword() {
-    console.log("댓글 불러짐");
+    console.log("댓글 불러짐", commentNextKey);
     await mainApi
-      .get(`feed_explore/search_comment_with_keyword?keyword=${keyword}&key=${nextKey}`)
+      .get(`feed_explore/search_comment_with_keyword?keyword=${keyword}&key=${commentNextKey}`)
       .then((res) => {
-        // setFeedData((prev) => {
-        //   return [...prev, ...res.data.body.send_data];
-        // });
         console.log("댓글", res.data);
         setComments(res.data.body.feeds);
-        // setIsLoading(false);
-        // setNextKey(res.data.body.key);
+        setIsLoading(false);
+        setCommentNextKey(res.data.body.key);
       });
   }
 
@@ -115,18 +107,15 @@ export default function SearchResultPage() {
     }
   }, [type]);
 
-  useEffect(() => {
-    setFeedData([]);
-    setNextKey(-1);
-  }, [type]);
-
   const onClickType = (data) => {
-    if (data === "게시글") {
-      setType("post");
-    } else if (data === "댓글") {
-      setType("comment");
-    }
+    setType(data === "게시글" ? "post" : "comment");
   };
+
+  useEffect(() => {
+    setFeedNextKey(-1);
+    setCommentNextKey(-1);
+    setFeedData([]);
+  }, [type]);
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
@@ -134,7 +123,11 @@ export default function SearchResultPage() {
         if (!entry.isIntersecting) return;
         if (isLoading) return;
 
-        fetchSearchKeyword();
+        if (type === "post") {
+          fetchSearchKeyword();
+        } else if (type === "comment") {
+          fetchCommentKeyword();
+        }
       });
     });
 
@@ -147,7 +140,7 @@ export default function SearchResultPage() {
         observer.unobserve(target.current);
       }
     };
-  }, [nextKey]);
+  }, [feedNextKey]);
 
   if (isLoading) {
     return <div>loading...</div>;
