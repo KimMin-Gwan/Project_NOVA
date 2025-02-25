@@ -76,7 +76,10 @@ class ObjectStorageConnection:
         self.__init_boto3()
         
         path = './model/local_database/temp_profile_image/'
-        file_name = f"{uid}.png"
+        
+        extension = image_name.split('.')[-1]
+        
+        file_name = f"{uid}.{extension}"
         
         pil_image = Image.open(BytesIO(image))
         file_path = path + file_name
@@ -88,7 +91,7 @@ class ObjectStorageConnection:
                                 file_name,
                                 ExtraArgs={'ACL': 'public-read'})
         
-        self.delete_temp_file(path)
+        self.delete_specific_file(path=path, file_name=file_name)
         return True
         
     
@@ -114,7 +117,7 @@ class ObjectStorageConnection:
         #self.delete_temp_file(path)
         
         # 단일 파일만 제거
-        self.delete_temp_file(path=path, file_name=file_name)
+        self.delete_specific_file(path=path, file_name=file_name)
 
         return url
         
@@ -420,6 +423,7 @@ class ImageDescriper():
         except Exception as e:
             print(f"Error in try_feed_image_upload: {e}")
             return "Something Goes Bad", False
+        
 
     def delete_temp_image(self):
         time.sleep(0.1)

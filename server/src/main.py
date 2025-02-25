@@ -31,7 +31,6 @@ class Master(Configure_File_Reader):
         funding_project_manager = FundingProjectManager(database=database)
 
 
-
         nova_server = NOVA_Server(
             database=database,
             connection_manager=None,
