@@ -354,6 +354,11 @@ class Mongo_Database(Local_Database):
     def __upload_one(self,document, collection:Collection) -> None:
         collection.insert_one(document=document)
         return
+    #업로드(업로드 여러개)
+    def __upload_many(self,document, collection:Collection) -> None:
+        collection.insert_many(document=document)
+        return
+
     #(찾기)
     def __find_one(self,document, collection:Collection) -> None:
         return collection.find_one(document,{'_id':False})
@@ -508,7 +513,18 @@ class Mongo_Database(Local_Database):
             raise DatabaseLogicError("add_new_data error | " + str(e))
         return True
     
-    
+    # db.add_new_data(target_id="uid", new_data=[{key: value}])
+    def add_new_datas(self, target_id:str, new_datas:list):
+        try:
+            collection_name = self._select_target_list(target=target_id)
+            selected_collection = self.__set_collection(collection=collection_name)
+
+            self.__upload_many(document=new_datas, collection=selected_collection)
+
+        except Exception as e:
+            raise DatabaseLogicError("add_new_data error | " + str(e))
+        return True
+
     def get_num_list_with_id(self, target_id:str):
         collection_name = self._select_target_list(target=target_id)
         selected_collection = self.__set_collection(collection=collection_name)
