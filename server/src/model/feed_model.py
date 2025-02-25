@@ -254,6 +254,8 @@ class FeedModel(BaseModel):
         for single_feed in feeds:
             single_feed:Feed = single_feed
             uids.append(single_feed.uid)
+            
+        pprint(uids)
 
         user_datas = self._database.get_datas_with_ids(target_id="uid", ids=uids)
         print(2)
