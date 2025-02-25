@@ -68,15 +68,15 @@ class NOVA_Server:
                                                    head_parser=head_parser,
                                                    funding_project_manager=funding_project_manager
                                                    )
-        self.__administrator_system_view = Administrator_Service_View( app=self.__app,
-                                                     endpoint='/administrator_system',
-                                                   database=database,
-                                                   head_parser=head_parser)
+        #self.__administrator_system_view = Administrator_Service_View( app=self.__app,
+                                                     #endpoint='/administrator_system',
+                                                   #database=database,
+                                                   #head_parser=head_parser)
         self.__core_system_view()
         self.__user_system_view()
         self.__sub_system_view()
         self.__funding_system_view()
-        self.__administrator_system_view()
+        #self.__administrator_system_view()
 
     def make_task(self):
         return self.nova_verification.make_task()
