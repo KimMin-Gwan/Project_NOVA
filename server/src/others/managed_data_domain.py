@@ -430,11 +430,8 @@ class ManagedFeedBiasTable:
 
         if option == "keyword":
             # 키워드를 통한 서치
-            print("key : ", key)
-            
             searched_df = self.__feed_df[self.__feed_df["body"].str.contains(key, case=False, na=False)]
             
-            print(searched_df)
             
         elif option == "hashtag":
             # 해시태그 리스트 안에 들어있는 해시태그들 중 하나만 있어도 찾는다.
@@ -471,7 +468,7 @@ class ManagedFeedBiasTable:
         elif target_time=="weekly":
             searched_df = searched_df[self.__get_time_diff(target_time=searched_df['date'],target_hour=168, reverse=True)]
 
-        # pprint(searched_df)
+        pprint(searched_df)
 
         return searched_df['fid'].tolist()
     #---------------------------------------------------------------------------------------------
