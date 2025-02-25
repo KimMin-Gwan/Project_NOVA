@@ -743,7 +743,6 @@ class Core_Service_View(Master_View):
                 raise request_manager.system_logic_exception
 
             raw_request = json.loads(jsonData)
-            pprint(raw_request['body'])
             
             data_payload = EditFeedRequest(request=raw_request,
                                             image_names=image_names,
