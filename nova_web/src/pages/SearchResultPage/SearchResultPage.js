@@ -45,7 +45,7 @@ export default function SearchResultPage() {
   }
   let [feedData, setFeedData] = useState([]);
 
-  const [type, setType] = useState("long");
+  const [type, setType] = useState("post");
 
   const [activeIndex, setActiveIndex] = useState(0);
   let [nextKey, setNextKey] = useState(-1);
@@ -80,7 +80,7 @@ export default function SearchResultPage() {
 
   async function fetchSearchKeyword() {
     await mainApi
-      .get(`feed_explore/search_feed_with_keyword?keyword=${keyword}&key=${nextKey}&fclass=${type}`)
+      .get(`feed_explore/search_feed_with_keyword?keyword=${keyword}&key=${nextKey}`)
       .then((res) => {
         setFeedData((prev) => {
           return [...prev, ...res.data.body.send_data];
@@ -108,21 +108,21 @@ export default function SearchResultPage() {
   }
 
   useEffect(() => {
-    if (type === "long" || type === "short") {
+    if (type === "post") {
       fetchSearchKeyword();
-    } else {
+    } else if (type === "comment") {
       fetchCommentKeyword();
     }
   }, [type]);
 
-  const onClickType = (data) => {
+  useEffect(() => {
     setFeedData([]);
     setNextKey(-1);
-    console.log(data);
-    if (data === "포스트") {
-      setType("long");
-    } else if (data === "모멘트") {
-      setType("short");
+  }, [type]);
+
+  const onClickType = (data) => {
+    if (data === "게시글") {
+      setType("post");
     } else if (data === "댓글") {
       setType("comment");
     }
@@ -175,7 +175,7 @@ export default function SearchResultPage() {
       </div>
       <section className={`${style["info-list"]} ${style["search-nav-bar"]}`}>
         <ul className={style["post-list"]} data-active-index={activeIndex}>
-          {["포스트", "모멘트", "좋아요", "댓글"].map((post, index) => (
+          {["게시글", "댓글"].map((post, index) => (
             <li
               key={index}
               className={`${style.post} ${activeIndex === index ? style.active : ""}`}
@@ -191,11 +191,13 @@ export default function SearchResultPage() {
       </section>
       {type === "comment" && <Comments comments={comments} />}
 
-      <section className="feed_section">
-        {feedData.map((feed, i) => {
-          return <Feed key={feed.feed.fid} feed={feed.feed} />;
-        })}
-      </section>
+      {type === "post" && (
+        <section className="feed_section">
+          {feedData.map((feed, i) => {
+            return <Feed key={feed.feed.fid} feed={feed.feed} />;
+          })}
+        </section>
+      )}
       <div ref={target} style={{ height: "1px" }}></div>
       <NavBar />
     </div>

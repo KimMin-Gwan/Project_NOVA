@@ -16,10 +16,16 @@
   margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(3, 1fr);
   column-gap: 28px;
   row-gap: 17px;
   padding-bottom: 20px;
+}
+
+@media (max-width: 475px) {
+  .all-list {
+    width: 90%;
+    grid-template-columns: repeat(1, 1fr);
+  }
 }
 
 /* --------------- */

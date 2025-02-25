@@ -10,6 +10,18 @@
   cursor: pointer;
 }
 
+@media (max-width: 475px) {
+  .story_feed_home {
+    width: 100%;
+    height: 100%;
+
+    .all-img {
+      margin: 0 auto;
+      width: 97%;
+    }
+  }
+}
+
 .all-img {
   margin: 0 auto;
   width: 206px;
