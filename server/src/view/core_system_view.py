@@ -425,9 +425,6 @@ class Core_Service_View(Master_View):
         @self.__app.get('/feed_explore/search_feed_with_keyword')
         def search_with_keyword(request:Request, key:Optional[int]=-1, keyword:Optional[str]="", fclass:Optional[str]=""):
             request_manager = RequestManager()
-
-            print("keyword : ", keyword)
-
             data_payload = KeywordSearchRequest(key=key, keyword=keyword, fclass=fclass)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
