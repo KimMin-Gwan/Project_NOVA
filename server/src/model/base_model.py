@@ -2,6 +2,7 @@ from model.local_database_model import Local_Database
 from others.data_domain import User
 from view.parsers import Head_Parser
 from others import CoreControllerLogicError
+from pprint import pprint
 
 import editdistance
 from jamo import h2j, j2hcj
@@ -84,6 +85,8 @@ class BaseModel(HeaderModel):
     def set_user_with_email(self, request):
         # email 기반으로 user table 데이터와 userbias 데이터를 가지고 올것
         user_data = self._database.get_data_with_key(target='user', key='email', key_data=request.email)
+        pprint(user_data)
+        
         if not user_data:
             return False
         self._user.make_with_dict(user_data)
