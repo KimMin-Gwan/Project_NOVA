@@ -3,7 +3,7 @@ from view.core_system_view import Core_Service_View
 from view.user_system_view import User_Service_View
 from view.sub_system_view import Sub_Service_View 
 from view.funding_system_view import Funding_Service_View
-from view.administrator_system_view import Administrator_Service_View
+#from view.administrator_system_view import Administrator_Service_View
 from view.parsers import Head_Parser
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
