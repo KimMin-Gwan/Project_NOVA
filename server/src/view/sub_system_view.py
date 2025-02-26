@@ -310,7 +310,8 @@ class Sub_Service_View(Master_View):
             
             print(images)
             print(jsonData)
-            print(request.body())
+            print(await request.body())
+            
             
             
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
