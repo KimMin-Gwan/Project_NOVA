@@ -363,7 +363,7 @@ class Mongo_Database(Local_Database):
         return collection.find_one(document,{'_id':False})
     
     def __find_many(self,document, collection:Collection) -> None:
-        return list(collection.find(document,{'_id':False}))
+        return list(collection.find({"$or" : document},{'_id':False}))
     
     #수정
     def __update_one(self,document,data , collection:Collection) -> None:
