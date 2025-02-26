@@ -434,7 +434,7 @@ class Mongo_Database(Local_Database):
     def get_all_data(self, target):
         collection_name = self._select_target_list(target=target)
         selected_collection = self.__set_collection(collection=collection_name)
-        find_data = self.__find_many(document={},collection=selected_collection)
+        find_data = self.__find_many(document=[{}],collection=selected_collection)
         #return list(selected_collection.find({},{'_id':False}))
         return find_data
     
