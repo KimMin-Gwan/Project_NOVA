@@ -88,20 +88,23 @@ class FeedModel(BaseModel):
         return
     
     # send_data를 만들때 사용하는 함수임
-    def _make_feed_data_n_interaction_data(self, feed_manager, fid_list):
+    def _make_feed_data_n_interaction_data(self, feed_manager, fid_list, flag = False):
         feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=fid_list)
 
         feeds = []
-        iids = []
+        #iids = []
 
+        if flag:
+            pprint(feed_datas)
         for feed_data in feed_datas:
             feed = Feed()
             feed.make_with_dict(feed_data)
             feeds.append(feed)
-            if feed.iid != "":
-                iids.append(feed.iid)
-
-        pprint(feed_datas)
+            
+            #if feed.iid != "":
+                #iids.append(feed.iid)
+        if flag:
+            pprint(feeds)
         feeds = self._set_feed_json_data(user=self._user, feeds=feeds)
         #interaction_datas = self._database.get_datas_with_ids(target_id="iid", ids=iids)
         #interactions = []
@@ -138,7 +141,7 @@ class FeedModel(BaseModel):
         
         fid_list = feed_search_engine.try_get_feed_in_recent(search_type=search_type, time_type=time_type)
         fid_list, self._key = feed_manager.paging_fid_list(fid_list, last_index=last_index, page_size=num_feed)
-        self._send_data = self._make_feed_data_n_interaction_data(feed_manager=feed_manager, fid_list=fid_list)
+        self._send_data = self._make_feed_data_n_interaction_data(feed_manager=feed_manager, fid_list=fid_list, flag = True)
         print(search_type)
 
         return
