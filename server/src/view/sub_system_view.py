@@ -308,6 +308,8 @@ class Sub_Service_View(Master_View):
         async def try_reporrt_bug(request:Request, images: Union[UploadFile, None] = File(None),
                                        jsonData: Union[str, None] = Form(None)):
             
+            print(images)
+            
             print(jsonData)
             
             
