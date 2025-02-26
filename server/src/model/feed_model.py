@@ -265,8 +265,10 @@ class FeedModel(BaseModel):
 
         pprint(feeds)
         
-        for i, feed, wuser in enumerate(zip(feeds, wusers)):
-            print(i)
+        
+        for feed, wuser in zip(feeds, wusers):
+            pprint(feed.body)
+            
             # 노출 현황 이 1 이하면 죽어야됨
             # 0: 삭제됨 1 : 비공개 2: 차단 3: 댓글 작성 X 4 : 정상(전체 공개)
             if feed.display < 3:
