@@ -61,7 +61,7 @@
 .comment-box {
   /* width: ; */
   padding: 10px 20px;
-  min-height: 100px;
+  min-height: 60px;
   /* border-top: solid 1px gray; */
   border-bottom: solid 1px gray;
   & section {
@@ -73,9 +73,14 @@
 .reply-box {
   /* background-color: rgba(0, 0, 0, 0.1); */
   width: 100%;
-  min-height: 100px;
+  min-height: 60px;
   margin-left: 19px;
-
+  padding-top: 10px;
+  & p {
+    margin: 0;
+    font-size: 14px;
+    color: #121212;
+  }
   & span {
     text-align: right;
   }
@@ -84,15 +89,11 @@
 .img-container {
   display: flex;
   align-items: start;
-  .comment-user {
-    padding-top: 5px;
-  }
 }
 
 .comment-user {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 10px;
 
   span {
     margin-left: 10px;
@@ -101,7 +102,7 @@
 }
 
 .comment-content {
-  margin-bottom: 20px;
+  margin-block: 5px 10px;
 
   /* span {
     color: #2c59cd;

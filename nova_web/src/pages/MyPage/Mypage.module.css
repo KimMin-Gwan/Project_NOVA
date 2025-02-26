@@ -350,14 +350,14 @@
       display: flex;
       align-items: start;
       .Comment_content {
-        margin: 13px 0 20px 19px;
+        margin: 13px 0 0 19px;
         flex: 1;
       }
 
       & span {
         color: #828282;
         font-size: 14px;
-        margin-block: 50px 11px;
+        margin-block: 50px 3px;
       }
     }
   }

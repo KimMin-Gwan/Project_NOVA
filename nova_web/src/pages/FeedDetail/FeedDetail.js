@@ -217,9 +217,7 @@ export default function FeedDetail({}) {
             <img src={more_icon} />
           </button>
         )}
-        {showMoreOption && (
-          <OptionModal onClickOption={onClickOption} onClickDelete={fetchRemoveFeed} />
-        )}
+        {showMoreOption && <OptionModal onClickOption={onClickOption} onClickDelete={fetchRemoveFeed} />}
       </div>
 
       <div>
@@ -239,15 +237,7 @@ export default function FeedDetail({}) {
           })}
         <div className={style["input-container"]}>
           <div className={style["input-wrapper"]}>
-            <input
-              ref={commentRef}
-              type="text"
-              id={style["comment"]}
-              value={commentValue}
-              onChange={onChangeComment}
-              onKeyDown={onKeyDownEnter}
-              placeholder="당신의 생각을 남겨보세요."
-            />
+            <input ref={commentRef} type="text" id={style["comment"]} value={commentValue} onChange={onChangeComment} onKeyDown={onKeyDownEnter} placeholder="당신의 생각을 남겨보세요." />
             <button className={style["input-button"]} onClick={onClickInput}>
               <img src={input} alt="input" />
             </button>
@@ -304,15 +294,7 @@ function Comment({ comment, onClickComment }) {
 
       {comment.reply.length !== 0 &&
         comment.reply?.map((reply, i) => {
-          return (
-            <ReplyComment
-              key={reply.cid}
-              index={i}
-              length={comment.reply.length}
-              reply={reply}
-              fetchOriginalComment={fetchOriginalComment}
-            />
-          );
+          return <ReplyComment key={reply.cid} index={i} length={comment.reply.length} reply={reply} fetchOriginalComment={fetchOriginalComment} />;
         })}
     </div>
   );
@@ -341,7 +323,7 @@ function ReplyComment({ index, length, reply, fetchOriginalComment }) {
       <img src={src} alt="대댓글" />
       <div key={reply.cid} className={`${style["reply-box"]}`} onClick={(e) => e.stopPropagation()}>
         <div className={style["comment-user"]}>
-          <div>답변 : {reply.uname}</div>
+          <p>{reply.uname}</p>
           <div className={style["function_button_container"]}>
             <button
               className={style["AI_text"]}
@@ -375,10 +357,7 @@ function OptionModal({ onClickOption, onClickDelete }) {
       <div className={style["modal_container"]}>
         <div className={style["modal_title"]}>설정</div>
         <div className={style["modal_content"]}>수정</div>
-        <div
-          className={`${style["modal_content"]} ${style["modal_content_accent"]}`}
-          onClick={onClickDelete}
-        >
+        <div className={`${style["modal_content"]} ${style["modal_content_accent"]}`} onClick={onClickDelete}>
           삭제
         </div>
       </div>
