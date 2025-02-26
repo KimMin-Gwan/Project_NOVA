@@ -212,7 +212,10 @@ function MyPage() {
             (feed) =>
               isClickedComment && (
                 <div key={feed.fid} className={style["MyPage_Comment_Box"]}>
-                  <div className={style["Feed_title"]} onClick={() => handleCommentToggle(feed.fid)}>
+                  <div
+                    className={style["Feed_title"]}
+                    onClick={() => handleCommentToggle(feed.fid)}
+                  >
                     <img src={arrow} alt="화살표" />
                     <p>{feed.body}</p>
                   </div>
@@ -220,40 +223,45 @@ function MyPage() {
                   {clickedComments[feed.fid] && Array.isArray(feed.cid) && feed.cid.length > 0 && (
                     <ul className={style["comment_box"]}>
                       {feed.cid.map((comment, index) => {
-                         // 조건부로 실행됨
-                          let src;
-                          const length = feed.cid.length;
+                        // 조건부로 실행됨
+                        let src;
+                        const length = feed.cid.length;
 
-                          if (length === 1) {
-                            src = reArrow1;  // 댓글 하나뿐이면 이거
-                          } else {  // 댓글이 하나뿐이 아니야!
-                            if (index === 0) { // 근데 첫번째면 이거
-                              src = reArrow2;
-                            } else if (index + 1 === length) {  // 맨마지막은 이거
-                              src = reArrow4;
-                            } else {  // 그 외에 모두는 이거
-                              src = reArrow3;
-                            }
+                        if (length === 1) {
+                          src = reArrow1; // 댓글 하나뿐이면 이거
+                        } else {
+                          // 댓글이 하나뿐이 아니야!
+                          if (index === 0) {
+                            // 근데 첫번째면 이거
+                            src = reArrow2;
+                          } else if (index + 1 === length) {
+                            // 맨마지막은 이거
+                            src = reArrow4;
+                          } else {
+                            // 그 외에 모두는 이거
+                            src = reArrow3;
                           }
-                          
-                          //이제 src에 이 위에서 정한 이미지가 들어감
-                          return (
-                            <li key={index}>
-                              <img src={src} alt="대댓글" />
-                              <p className={style["Comment_content"]}>{comment.body}</p>
-                              <span>{comment.date}</span>
-                            </li>
-                          );
-                        })}
+                        }
+
+                        //이제 src에 이 위에서 정한 이미지가 들어감
+                        return (
+                          <li key={index}>
+                            <img src={src} alt="대댓글" />
+                            <p className={style["Comment_content"]}>{comment.body}</p>
+                            <span>{comment.date}</span>
+                          </li>
+                        );
+                      })}
                     </ul>
                   )}
                 </div>
               )
           )}
 
-          {myFeed.map((feed, i) => {
-            return <Feed key={i} feed={feed} />;
-          })}
+          {!isClickedComment &&
+            myFeed.map((feed, i) => {
+              return <Feed key={i} feed={feed} />;
+            })}
           <div ref={target} style={{ height: "1px" }}></div>
         </div>
       </div>
