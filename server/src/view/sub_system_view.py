@@ -310,7 +310,6 @@ class Sub_Service_View(Master_View):
             
             print(images)
             print(jsonData)
-            print(await request.body())
             
             
             
