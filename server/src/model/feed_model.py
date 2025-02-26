@@ -103,7 +103,6 @@ class FeedModel(BaseModel):
                 #iids.append(feed.iid)
         feeds = self._set_feed_json_data(user=self._user, feeds=feeds)
         
-        pprint(feed_datas)
         #interaction_datas = self._database.get_datas_with_ids(target_id="iid", ids=iids)
         #interactions = []
         
@@ -114,7 +113,7 @@ class FeedModel(BaseModel):
             
         # 인터엑션 넣을 필요 있음
         send_data = self.__set_send_data(feeds=feeds)
-        
+        pprint(send_data)
         return send_data
 
     def set_feed_data(self, feed_search_engine:FeedSearchEngine, feed_manager:FeedManager,
