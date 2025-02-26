@@ -329,7 +329,7 @@ class Sub_Service_View(Master_View):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             
             data_payload = ReportRequest(request=raw_request,
-                                         images=images,
+                                         images=imgs,
                                          image_names=image_names)
             
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
@@ -337,6 +337,7 @@ class Sub_Service_View(Master_View):
             sub_controller=Sub_Controller()
             model = sub_controller.try_report_bug(database=self.__database,
                                                               request=request_manager)
+            
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response

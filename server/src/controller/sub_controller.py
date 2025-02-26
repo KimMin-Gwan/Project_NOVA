@@ -1,6 +1,5 @@
 from model import *
 from others import UserNotExist, CustomError
-from others import ImageDescriper
 
 class Sub_Controller:
     def sample_func(self, database:Local_Database, request) -> BaseModel: 

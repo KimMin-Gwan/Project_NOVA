@@ -315,7 +315,8 @@ class HTMLEXtractor:
         
 class ImageDescriper():
     def __init__(self):
-        self.__path = './model/local_database/feed_temp_image'
+        self.__feed_temp_path = './model/local_database/feed_temp_image'
+        self.__report_temp_path = './model/local_database/report_temp_image'
         self.__service_name = 's3'
         self.__endpoint_url = 'https://kr.object.ncloudstorage.com'
         self.__region_name = 'kr-standard'
@@ -371,7 +372,7 @@ class ImageDescriper():
     def get_default_image_url(self):
         return [self.__default_image], True
     
-    def try_report_image_upload(self, fid: str, image_names: list, images):
+    def try_report_image_upload(self, rid: str, image_names: list, images):
         try:
             urls = []
 
@@ -383,7 +384,7 @@ class ImageDescriper():
                         # 걍 gif 이미지 통째로 저장하는걸로 해★결
                         # PIL를 이용해서 쇼부를 본다
                         gif_file = Image.open(BytesIO(image))
-                        temp_path = f"{self.__path}/{fid}_{image_name}"
+                        temp_path = f"{self.__report_temp_path}/{rid}_{image_name}"
 
                         gif_file.save(
                             temp_path,
@@ -397,26 +398,26 @@ class ImageDescriper():
 
                         self.__s3.upload_file(temp_path,
                                               self.__report_image_bucket,
-                                              f"{fid}_{image_name}",
+                                              f"{rid}_{image_name}",
                                               ExtraArgs={'ACL': 'public-read'})
-                        urls.append(f"{self.__endpoint_url}/{self.__report_image_bucket}/{fid}_{image_name}")
+                        urls.append(f"{self.__endpoint_url}/{self.__report_image_bucket}/{rid}_{image_name}")
 
                     else:
                         # Process other formats
                         pil_image = Image.open(BytesIO(image))
-                        temp_path = f"{self.__path}/{fid}_{image_name}"
+                        temp_path = f"{self.__report_temp_path}/{rid}_{image_name}"
                         pil_image.save(temp_path)
                         self.__s3.upload_file(temp_path,
                                               self.__report_image_bucket,
-                                              f"{fid}_{image_name}",
+                                              f"{rid}_{image_name}",
                                               ExtraArgs={'ACL': 'public-read'})
-                        urls.append(f"{self.__endpoint_url}/{self.__report_image_bucket}/{fid}_{image_name}")
+                        urls.append(f"{self.__endpoint_url}/{self.__report_image_bucket}/{rid}_{image_name}")
                 except Exception as e:
                     print(f"Error processing image {image_names[i]}: {e}")
 
             #self.delete_temp_image()
             # 단일 파일만 제거
-            self.delete_specific_file(file_name=f"{fid}_{image_name}")
+            self.delete_specific_file(path=self.__report_temp_path, file_name=f"{rid}_{image_name}")
             
             return urls, True
 
@@ -436,7 +437,7 @@ class ImageDescriper():
                         # 걍 gif 이미지 통째로 저장하는걸로 해★결
                         # PIL를 이용해서 쇼부를 본다
                         gif_file = Image.open(BytesIO(image))
-                        temp_path = f"{self.__path}/{fid}_{image_name}"
+                        temp_path = f"{self.__feed_temp_path}/{fid}_{image_name}"
 
                         gif_file.save(
                             temp_path,
@@ -457,7 +458,7 @@ class ImageDescriper():
                     else:
                         # Process other formats
                         pil_image = Image.open(BytesIO(image))
-                        temp_path = f"{self.__path}/{fid}_{image_name}"
+                        temp_path = f"{self.__feed_temp_path}/{fid}_{image_name}"
                         pil_image.save(temp_path)
                         self.__s3.upload_file(temp_path,
                                               self.__feed_bucket_name,
@@ -469,7 +470,7 @@ class ImageDescriper():
 
             #self.delete_temp_image()
             # 단일 파일만 제거
-            self.delete_specific_file(file_name=f"{fid}_{image_name}")
+            self.delete_specific_file(path=self.__feed_temp_path, file_name=f"{fid}_{image_name}")
             
             return urls, True
 
@@ -480,15 +481,15 @@ class ImageDescriper():
 
     def delete_temp_image(self):
         time.sleep(0.1)
-        files = glob.glob(os.path.join(self.__path, '*'))
+        files = glob.glob(os.path.join(self.__feed_temp_path, '*'))
         for file in files:
             if os.path.isfile(file):
                 os.remove(file)
         return
     
-    def delete_specific_file(self, file_name):
+    def delete_specific_file(self, path, file_name):
         time.sleep(0.1)
-        target_file = os.path.join(self.__path, file_name)
+        target_file = os.path.join(path, file_name)
         if os.path.isfile(target_file):
             os.remove(target_file)
         else:

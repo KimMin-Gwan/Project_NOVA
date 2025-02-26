@@ -408,6 +408,13 @@ class ReportModel(BaseModel):
     def try_set_bug_report(self, data_payload):
         self.__report.detail = data_payload.detail
         self.__report.type = "bug"
+        
+        if data_payload.images:
+            ImageDescriper().try_report_image_upload(rid=self.__report.rid,
+                                                    image_names=data_payload.image_names,
+                                                    images=data_payload.images
+                                                    )
+        
         return
     
     # 리포트 저장

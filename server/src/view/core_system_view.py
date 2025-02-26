@@ -736,7 +736,6 @@ class Core_Service_View(Master_View):
                 image_names = [image.filename for image in image_files]
                 imgs = [await image.read() for image in image_files]
 
-
             if jsonData is None:
                 raise request_manager.system_logic_exception
 
