@@ -264,7 +264,7 @@ class FeedModel(BaseModel):
             wusers.append(single_user)
 
         pprint(feeds)
-        
+        pprint(wusers)
         
         for feed, wuser in zip(feeds, wusers):
             pprint(feed.body)
