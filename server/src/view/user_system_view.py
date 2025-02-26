@@ -165,8 +165,6 @@ class User_Service_View(Master_View):
             data_payload = MyFeedsRequest(type=type, key=key)
 
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
-            if not request_manager.jwt_payload.result:
-                raise request_manager.credentials_exception
 
             user_controller = UserController()
             model = user_controller.try_get_my_feeds_with_type(database=self.__database,
