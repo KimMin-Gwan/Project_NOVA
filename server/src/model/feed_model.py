@@ -102,7 +102,6 @@ class FeedModel(BaseModel):
             #if feed.iid != "":
                 #iids.append(feed.iid)
         feeds = self._set_feed_json_data(user=self._user, feeds=feeds)
-        pprint(feeds)
         #interaction_datas = self._database.get_datas_with_ids(target_id="iid", ids=iids)
         #interactions = []
         
@@ -264,7 +263,10 @@ class FeedModel(BaseModel):
             single_user.make_with_dict(user_data)
             wusers.append(single_user)
 
-        for feed, wuser in zip(feeds, wusers):
+        pprint(feeds)
+        
+        for i, feed, wuser in enumerate(zip(feeds, wusers)):
+            print(i)
             # 노출 현황 이 1 이하면 죽어야됨
             # 0: 삭제됨 1 : 비공개 2: 차단 3: 댓글 작성 X 4 : 정상(전체 공개)
             if feed.display < 3:
