@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import Board from "../Board/Board";
 import "./index.css";
+import ModalRectangle from "./../../img/ModalRectangle.png";
 
-export default function CategoryModal({ SetIsOpen, onClickCategory, biasId, setBoard }) {
+export default function CategoryModal({ SetIsOpen, onClickCategory, biasId, board, setBoard }) {
   let [boardData, setBoardData] = useState([]);
   let [isLoading, setIsLoading] = useState(true);
 
@@ -14,7 +15,6 @@ export default function CategoryModal({ SetIsOpen, onClickCategory, biasId, setB
       .then((data) => {
         setBoardData(data.body);
         setIsLoading(false);
-        console.log(data);
       });
   }
 
@@ -34,8 +34,11 @@ export default function CategoryModal({ SetIsOpen, onClickCategory, biasId, setB
       }}
     >
       <div className="modal-container" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-title">{boardData.bname}님의 팬들을 위한 게시판</div>
-        <Board SetIsOpen={SetIsOpen} boardData={boardData} setBoard={setBoard} />
+        <section className="top-section">
+          <img src={ModalRectangle} alt="모달 사각형" />
+          <div className="modal-title">주제 이름</div>
+        </section>
+        <Board SetIsOpen={SetIsOpen} boardData={boardData} board={board} setBoard={setBoard} />
       </div>
     </div>
   );

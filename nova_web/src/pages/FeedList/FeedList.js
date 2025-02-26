@@ -174,14 +174,12 @@ export default function FeedList(isUserState) {
 
   function fetchFeedWithTag(tag) {
     console.log("dasdasda", hashtag);
-    mainApi
-      .get(`feed_explore/search_feed_with_hashtag?hashtag=${tag}&key=-1&target_time=day`)
-      .then((res) => {
-        console.log("fff", res.data);
-        setFeedData(res.data.body.send_data);
-        // setNextData(res.data.body.key);
-        setIsLoading(false);
-      });
+    mainApi.get(`feed_explore/search_feed_with_hashtag?hashtag=${tag}&key=-1&target_time=day`).then((res) => {
+      console.log("fff", res.data);
+      setFeedData(res.data.body.send_data);
+      // setNextData(res.data.body.key);
+      setIsLoading(false);
+    });
   }
   useEffect(() => {
     setFeedData([]);
@@ -336,14 +334,7 @@ export default function FeedList(isUserState) {
                 </p>
               </div>
             )}
-            {isOpendCategory && (
-              <CategoryModal
-                SetIsOpen={setIsOpendCategory}
-                onClickCategory={onClickCategory}
-                biasId={biasId}
-                setBoard={setBoard}
-              />
-            )}
+            {isOpendCategory && <CategoryModal SetIsOpen={setIsOpendCategory} onClickCategory={onClickCategory} biasId={biasId} board={board} setBoard={setBoard} />}
           </div>
         )}
         {type === "all" && (
@@ -361,39 +352,18 @@ export default function FeedList(isUserState) {
         )}
         {type === "best" && (
           <div className={style["keyword-section"]}>
-            <KeywordBox
-              type={"today"}
-              title={"인기 급상승"}
-              subTitle={"오늘의 키워드"}
-              onClickTagButton={onClickTag}
-              fetchData={fetchData}
-            />
+            <KeywordBox type={"today"} title={"인기 급상승"} subTitle={"오늘의 키워드"} onClickTagButton={onClickTag} fetchData={fetchData} />
           </div>
         )}
         {type === "weekly_best" && (
           <div className={style["keyword-section"]}>
-            <KeywordBox
-              type={"weekly"}
-              title={"많은 사랑을 받은"}
-              subTitle={"이번주 키워드"}
-              onClickTagButton={onClickTag}
-              fetchData={fetchData}
-            />
+            <KeywordBox type={"weekly"} title={"많은 사랑을 받은"} subTitle={"이번주 키워드"} onClickTagButton={onClickTag} fetchData={fetchData} />
           </div>
         )}
         <div className={feedData.length > 0 ? style["scroll-area"] : style["none_feed_scroll"]}>
           {feedData.length > 0 ? (
             feedData.map((feed, i) => {
-              return (
-                <Feed
-                  key={`feed_${feed.feed.fid}`}
-                  className={`${style["feed-box"]} ${style[getModeClass(mode)]}`}
-                  feed={feed.feed}
-                  interaction={feed.interaction}
-                  feedInteraction={feedInteraction}
-                  setFeedData={setFeedData}
-                ></Feed>
-              );
+              return <Feed key={`feed_${feed.feed.fid}`} className={`${style["feed-box"]} ${style[getModeClass(mode)]}`} feed={feed.feed} interaction={feed.interaction} feedInteraction={feedInteraction} setFeedData={setFeedData}></Feed>;
             })
           ) : (
             <NoneFeed />
@@ -402,15 +372,7 @@ export default function FeedList(isUserState) {
           {isLoading && <p>Loading...</p>}
           {isFilterClicked && (
             // <div className={style["filter-modal"]}>
-            <FilterModal
-              isFilterClicked={isFilterClicked}
-              onClickFilterButton={onClickFilterButton}
-              setFilterCategory={setFilterCategory}
-              setFilterFclass={setFilterFclass}
-              fetchAllFeed={fetchAllFeed}
-              onClickApplyButton1={onClickApplyButton1}
-              setNextData={setNextData}
-            />
+            <FilterModal isFilterClicked={isFilterClicked} onClickFilterButton={onClickFilterButton} setFilterCategory={setFilterCategory} setFilterFclass={setFilterFclass} fetchAllFeed={fetchAllFeed} onClickApplyButton1={onClickApplyButton1} setNextData={setNextData} />
             // {/* </div> */}
           )}
         </div>
