@@ -254,9 +254,8 @@ class FeedModel(BaseModel):
             single_feed:Feed = single_feed
             uids.append(single_feed.uid)
             
-
+        print(uids)
         user_datas = self._database.get_datas_with_ids(target_id="uid", ids=uids)
-        pprint(user_datas)
         
         user_datas = list(filter(lambda x: x is not None, user_datas))
         
