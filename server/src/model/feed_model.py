@@ -256,6 +256,8 @@ class FeedModel(BaseModel):
             
 
         user_datas = self._database.get_datas_with_ids(target_id="uid", ids=uids)
+        pprint(user_datas)
+        
         user_datas = list(filter(lambda x: x is not None, user_datas))
         
         for user_data in user_datas:
@@ -263,11 +265,8 @@ class FeedModel(BaseModel):
             single_user.make_with_dict(user_data)
             wusers.append(single_user)
 
-        pprint(feeds)
-        pprint(wusers)
         
         for feed, wuser in zip(feeds, wusers):
-            pprint(feed.body)
             
             # 노출 현황 이 1 이하면 죽어야됨
             # 0: 삭제됨 1 : 비공개 2: 차단 3: 댓글 작성 X 4 : 정상(전체 공개)
