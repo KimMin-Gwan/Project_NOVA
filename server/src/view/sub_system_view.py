@@ -307,12 +307,7 @@ class Sub_Service_View(Master_View):
         @self.__app.post('/nova_sub_system/try_report_bug')
         async def try_report_bug(request:Request, images: Union[UploadFile, None] = File(None),
                                        jsonData: Union[str, None] = Form(None)):
-            
-            print(images)
-            print(jsonData)
-            
-            
-            
+     
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
 
             form_data = await request.form()

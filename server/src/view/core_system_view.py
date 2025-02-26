@@ -725,8 +725,6 @@ class Core_Service_View(Master_View):
         #async def try_edit_feed(request:Request, images: UploadFile| None = File(None), 
                                 #jsonData:str | None = Form(None)):
                                
-            print(images)
-            print(jsonData)
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
 
             form_data = await request.form()
