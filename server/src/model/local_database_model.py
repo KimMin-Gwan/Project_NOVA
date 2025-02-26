@@ -394,9 +394,16 @@ class Mongo_Database(Local_Database):
         try:
             collection_name = self._select_target_list(target=target)
             selected_collection = self.__set_collection(collection=collection_name)
-            find_datas = []
+            #find_datas = []
+            #for key_data in key_datas:
+            #    find_datas.append(self.__find_one({f'{key}':f'{key_data}'}, collection=selected_collection))
+
+            datas = []
             for key_data in key_datas:
-                find_datas.append(self.__find_one({f'{key}':f'{key_data}'}, collection=selected_collection))
+                datas.append({f'{key}' : f'{key_data}'})
+            
+            #append(self.__find_one({f'{target_id}':f'{id}'},collection=selected_collection))
+            find_datas = self.__find_many(document=datas, collection=selected_collection)
 
             return find_datas
         except Exception as e:
