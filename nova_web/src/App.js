@@ -26,6 +26,7 @@ import SearchPage from "./pages/SearchPage/SearchPage.js";
 import SearchResultPage from "./pages/SearchResultPage/SearchResultPage.js";
 import NoticePage from "./pages/NoticePage/NoticePage.js";
 import HomePage from "./pages/HomePage/HomePage.js";
+import ReportPage from "./pages/ReportPage/ReportPage.js";
 
 // 다크 모드 클래스 반환 함수
 export function getModeClass(mode) {
@@ -60,6 +61,7 @@ function App() {
       {/* 이용약관 및 공지사항 */}
       <Route path="/terms_page" element={<Temrs />}></Route>
       <Route path="/notice" element={<NoticePage />} />
+      <Route path="/report" element={<ReportPage />} />
       {/* <Route path="/notice/:nid" element={<Notice />} /> */}
 
       {/* 피드 페이지 */}

@@ -183,7 +183,7 @@ function MoreSee({ onModeChange }) {
               <p className={style.bodyText}>공지사항</p>
               <img src={more_icon} alt="Arrow" className={style.more_vector} />
             </li>
-            <li className={style.mainComponent}>
+            <li className={style.mainComponent} onClick={() => handlePage("/report")}>
               <img src={bug_icon} alt="Arrow" className={style.vector} />
               <p className={style.bodyText}>버그 리포트</p>
               <img src={more_icon} alt="Arrow" className={style.more_vector} />
