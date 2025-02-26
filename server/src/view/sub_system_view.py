@@ -1,6 +1,6 @@
 from datetime import datetime
-from typing import Any, Optional
-from fastapi import FastAPI, Request
+from typing import Any, Optional, Union
+from fastapi import FastAPI, Request, File, UploadFile, Form
 from view.jwt_decoder import RequestManager
 from view.master_view import Master_View, RequestHeader
 from view.parsers import Head_Parser
@@ -305,10 +305,32 @@ class Sub_Service_View(Master_View):
         
         # 신고 기능
         @self.__app.post('/nova_sub_system/try_report_bug')
-        def try_report_post_or_comment(request:Request, raw_request:dict):
+        async def try_report_post_or_comment(request:Request, images: Union[UploadFile, None],
+                                       jsonData: Union[str, None] = Form(None)):
+            
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
+
+            form_data = await request.form()
+            image_files = form_data.getlist("images")
+            
+            if images is None or len(image_files) == 0:
+                image_names = []
+                imgs = []
+            else:
+                image_names = [image.filename for image in image_files]
+                imgs = [await image.read() for image in image_files]
+
+
+            if jsonData is None:
+                raise request_manager.system_logic_exception
+
+            raw_request = json.loads(jsonData)
+            
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             
-            data_payload = ReportRequest(request=raw_request)
+            data_payload = ReportRequest(request=raw_request,
+                                         images=images,
+                                         image_names=image_names)
             
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
@@ -420,13 +442,15 @@ class BiasSelectRequest(RequestHeader):
         self.bid = body['bid']
         
 class ReportRequest(RequestHeader):
-    def __init__(self, request) -> None:
+    def __init__(self, request, image_names=[], images=[]) -> None:
         super().__init__(request)
         body:dict = request['body']
         self.type = body.get("type", "")
         self.detail = body.get("detail", "")
         self.cid = body.get("cid", "")
         self.fid = body.get("fid", "")
+        self.image_names = image_names
+        self.images = images
 
 class CommunitySideBoxRequest(RequestHeader):
     def __init__(self, bid) -> None:

@@ -325,10 +325,10 @@ class ImageDescriper():
                                  endpoint_url=self.__endpoint_url,
                                  aws_access_key_id=self.__access_key,
                                  aws_secret_access_key=self.__secret_key)
-        self.__bucket_name = "nova-feed-images"
+        self.__feed_bucket_name = "nova-feed-images"
         self.__default_image = "https://kr.object.ncloudstorage.com/nova-feed-images/nova-platform.png"
-        self.__profile_image_bucket = "nova-profile-images"
-        self.__bias_image_bucket = "nova-bias_image-images"
+        self.__bias_image_bucket = "nova-bias-profile-images"
+        self.__report_image_bucket = "nova-report-images"
 
     def __set_images_to_byte(self, images: list):
         pil_images = []
@@ -370,6 +370,59 @@ class ImageDescriper():
 
     def get_default_image_url(self):
         return [self.__default_image], True
+    
+    def try_report_image_upload(self, fid: str, image_names: list, images):
+        try:
+            urls = []
+
+            for i, image in enumerate(images):
+                try:
+                    image_name:str = image_names[i]
+                    # Check if GIF or other unsupported formats
+                    if image_name.lower().endswith('.gif'):
+                        # 걍 gif 이미지 통째로 저장하는걸로 해★결
+                        # PIL를 이용해서 쇼부를 본다
+                        gif_file = Image.open(BytesIO(image))
+                        temp_path = f"{self.__path}/{fid}_{image_name}"
+
+                        gif_file.save(
+                            temp_path,
+                            save_all=True,
+                            loop=gif_file.info.get("loop", 0),         # 원본 루프 설정 유지
+                            duration=gif_file.info.get("duration", 100)  # 원본 지속 시간 유지
+                        )
+
+                        # if not os.path.exists(temp_path):
+                        #     print(f"GIF 파일 생성 실패: {temp_path}")
+
+                        self.__s3.upload_file(temp_path,
+                                              self.__report_image_bucket,
+                                              f"{fid}_{image_name}",
+                                              ExtraArgs={'ACL': 'public-read'})
+                        urls.append(f"{self.__endpoint_url}/{self.__report_image_bucket}/{fid}_{image_name}")
+
+                    else:
+                        # Process other formats
+                        pil_image = Image.open(BytesIO(image))
+                        temp_path = f"{self.__path}/{fid}_{image_name}"
+                        pil_image.save(temp_path)
+                        self.__s3.upload_file(temp_path,
+                                              self.__report_image_bucket,
+                                              f"{fid}_{image_name}",
+                                              ExtraArgs={'ACL': 'public-read'})
+                        urls.append(f"{self.__endpoint_url}/{self.__report_image_bucket}/{fid}_{image_name}")
+                except Exception as e:
+                    print(f"Error processing image {image_names[i]}: {e}")
+
+            #self.delete_temp_image()
+            # 단일 파일만 제거
+            self.delete_specific_file(file_name=f"{fid}_{image_name}")
+            
+            return urls, True
+
+        except Exception as e:
+            print(f"Error in try_feed_image_upload: {e}")
+            return "Something Goes Bad", False
 
     def try_feed_image_upload(self, fid: str, image_names: list, images):
         try:
@@ -396,10 +449,10 @@ class ImageDescriper():
                         #     print(f"GIF 파일 생성 실패: {temp_path}")
 
                         self.__s3.upload_file(temp_path,
-                                              self.__bucket_name,
+                                              self.__feed_bucket_name,
                                               f"{fid}_{image_name}",
                                               ExtraArgs={'ACL': 'public-read'})
-                        urls.append(f"{self.__endpoint_url}/{self.__bucket_name}/{fid}_{image_name}")
+                        urls.append(f"{self.__endpoint_url}/{self.__feed_bucket_name}/{fid}_{image_name}")
 
                     else:
                         # Process other formats
@@ -407,10 +460,10 @@ class ImageDescriper():
                         temp_path = f"{self.__path}/{fid}_{image_name}"
                         pil_image.save(temp_path)
                         self.__s3.upload_file(temp_path,
-                                              self.__bucket_name,
+                                              self.__feed_bucket_name,
                                               f"{fid}_{image_name}",
                                               ExtraArgs={'ACL': 'public-read'})
-                        urls.append(f"{self.__endpoint_url}/{self.__bucket_name}/{fid}_{image_name}")
+                        urls.append(f"{self.__endpoint_url}/{self.__feed_bucket_name}/{fid}_{image_name}")
                 except Exception as e:
                     print(f"Error processing image {image_names[i]}: {e}")
 
