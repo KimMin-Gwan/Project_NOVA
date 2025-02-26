@@ -393,6 +393,7 @@ class Mongo_Database(Local_Database):
     # db.get_datas_with_key(target="user", key="uname", key_datas=["minsu", "minzi"])
     def get_datas_with_key(self, target:str, key:str, key_datas:list):
         try:
+            find_datas = []
             collection_name = self._select_target_list(target=target)
             selected_collection = self.__set_collection(collection=collection_name)
             #find_datas = []
@@ -404,7 +405,8 @@ class Mongo_Database(Local_Database):
                 datas.append({f'{key}' : f'{key_data}'})
             
             #append(self.__find_one({f'{target_id}':f'{id}'},collection=selected_collection))
-            find_datas = self.__find_many(document=datas, collection=selected_collection)
+            if datas:
+                find_datas = self.__find_many(document=datas, collection=selected_collection)
 
             return find_datas
         except Exception as e:
@@ -428,6 +430,7 @@ class Mongo_Database(Local_Database):
     # db.get_datas_with_ids(target="uid", ids=["1001", "1002"])
     def get_datas_with_ids(self, target_id:str, ids:list):
         try:
+            find_datas = []
             collection_name = self._select_target_list(target=target_id)
             selected_collection = self.__set_collection(collection=collection_name)
             datas = []
@@ -435,7 +438,9 @@ class Mongo_Database(Local_Database):
                 datas.append({f'{target_id}' : f'{id}'})
             
             #append(self.__find_one({f'{target_id}':f'{id}'},collection=selected_collection))
-            find_datas = self.__find_many(document=datas, collection=selected_collection)
+            
+            if datas:
+                find_datas = self.__find_many(document=datas, collection=selected_collection)
 
             return find_datas
         except Exception as e:
