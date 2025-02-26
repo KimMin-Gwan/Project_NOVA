@@ -1,9 +1,53 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./index.css";
 import { useNavigate } from "react-router-dom";
+import postApi from "../../services/apis/postApi";
+import HEADER from "../../constant/header";
 
 export default function ReportPage() {
   const navigate = useNavigate();
+
+  const [imageFiles, setImageFiles] = useState([]);
+  const [detail, setDetail] = useState("");
+
+  const handleFileChange = (e) => {
+    const files = e.target.files;
+    setImageFiles(files);
+  };
+
+  const onDetailChange = (e) => {
+    setDetail(e.target.value);
+  };
+
+  const postReport = async () => {
+    const formData = new FormData();
+    if (imageFiles) {
+      for (let file of imageFiles) {
+        formData.append("images", file); // "images" 키로 여러 파일 추가
+      }
+    }
+
+    const send_data = {
+      header: HEADER,
+      body: {
+        detail: detail,
+      },
+    };
+
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data", // 반드시 설정
+      },
+    };
+
+    console.log("111", send_data);
+
+    formData.append("jsonData", JSON.stringify(send_data));
+
+    await postApi.post("nova_sub_system/try_report_bug", formData, config).then((res) => {
+      console.log(res.data);
+    });
+  };
 
   return (
     <div className="container ReportPage">
@@ -33,13 +77,29 @@ export default function ReportPage() {
       <div className="Report_notice">
         <div className="Report_image">
           <div className="img_box">img</div>
-          <button>이미지 첨부</button>
+          <input
+            type="file"
+            multiple
+            accept="image/*"
+            name="image"
+            onChange={(e) => {
+              handleFileChange(e);
+            }}
+          />
         </div>
-        <textarea className="Report_input" placeholder="어떤 버그를 만나셨나요?" />
+        <textarea
+          className="Report_input"
+          placeholder="어떤 버그를 만나셨나요?"
+          onChange={(e) => {
+            onDetailChange(e);
+          }}
+        />
       </div>
 
       <div className="Report_button_container">
-        <button className="Report_button">리포트</button>
+        <button className="Report_button" onClick={postReport}>
+          리포트
+        </button>
       </div>
     </div>
   );

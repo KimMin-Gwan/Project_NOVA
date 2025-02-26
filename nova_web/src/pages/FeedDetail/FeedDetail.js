@@ -62,18 +62,6 @@ export default function FeedDetail({}) {
     fetchFeed();
   }, [comments, fid]);
 
-  // 상호작용
-  async function handleInteraction(event, fid, action) {
-    event.preventDefault();
-    setIsLoading(true);
-    await mainApi.get(`/feed_explore/interaction_feed?fid=${fid}&action=${action}`).then((res) => {
-      setInteraction((prevData) => {
-        return interaction.fid === fid ? res.data.body.interaction : prevData;
-      });
-      setIsLoading(false);
-    });
-  }
-
   async function fetchFeedComment() {
     await fetch(`https://nova-platform.kr/feed_explore/feed_detail/comment_data?fid=${fid}`, {
       credentials: "include",
@@ -210,7 +198,12 @@ export default function FeedDetail({}) {
   return (
     <div className={style["FeedDetail"]}>
       <div className={style["top-container"]}>
-        <button className={style["back-button"]} onClick={onClickNav}>
+        <button
+          className={style["back-button"]}
+          onClick={() => {
+            navigate(-1);
+          }}
+        >
           <img src={back} alt="back" />
           <span>뒤로</span>
         </button>
@@ -224,7 +217,9 @@ export default function FeedDetail({}) {
             <img src={more_icon} />
           </button>
         )}
-        {showMoreOption && <OptionModal onClickOption={onClickOption} onClickDelete={fetchRemoveFeed} />}
+        {showMoreOption && (
+          <OptionModal onClickOption={onClickOption} onClickDelete={fetchRemoveFeed} />
+        )}
       </div>
 
       <div>
@@ -244,7 +239,15 @@ export default function FeedDetail({}) {
           })}
         <div className={style["input-container"]}>
           <div className={style["input-wrapper"]}>
-            <input ref={commentRef} type="text" id={style["comment"]} value={commentValue} onChange={onChangeComment} onKeyDown={onKeyDownEnter} placeholder="당신의 생각을 남겨보세요." />
+            <input
+              ref={commentRef}
+              type="text"
+              id={style["comment"]}
+              value={commentValue}
+              onChange={onChangeComment}
+              onKeyDown={onKeyDownEnter}
+              placeholder="당신의 생각을 남겨보세요."
+            />
             <button className={style["input-button"]} onClick={onClickInput}>
               <img src={input} alt="input" />
             </button>
@@ -299,24 +302,17 @@ function Comment({ comment, onClickComment }) {
         <span className={style["date-st"]}>{comment.date}</span>
       </section>
 
-      {/* <div className={style["action-container"]}>
-        <div className={style["button-box1"]}>
-          <div className={style["action-button"]}>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-              }}
-            >
-              <img src={star} alt="star-icon" />
-            </button>
-            <span>{comment.like}</span>
-          </div>
-        </div>
-      </div> */}
-
       {comment.reply.length !== 0 &&
         comment.reply?.map((reply, i) => {
-          return <ReplyComment key={reply.cid} index={i} length={comment.reply.length} reply={reply} fetchOriginalComment={fetchOriginalComment} />;
+          return (
+            <ReplyComment
+              key={reply.cid}
+              index={i}
+              length={comment.reply.length}
+              reply={reply}
+              fetchOriginalComment={fetchOriginalComment}
+            />
+          );
         })}
     </div>
   );
@@ -331,9 +327,9 @@ function ReplyComment({ index, length, reply, fetchOriginalComment }) {
   if (length === 1) {
     src = reArrow1;
   } else {
-    if (index=== 0) {
+    if (index === 0) {
       src = reArrow2;
-    } else if (index+ 1 === length) {
+    } else if (index + 1 === length) {
       src = reArrow4;
     } else {
       src = reArrow3;
@@ -367,21 +363,6 @@ function ReplyComment({ index, length, reply, fetchOriginalComment }) {
         </div>
 
         <span className={style["date-st"]}> {reply.date}</span>
-
-        {/* <div className={style["action-container"]}>
-          <div className={style["button-box1"]}>
-            <div className={style["action-button"]}>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                }}
-              >
-                <img src={star} alt="star-icon" />
-              </button>
-              <span>{reply.like}</span>
-            </div>
-          </div>
-        </div> */}
       </div>
     </div>
   );
@@ -394,7 +375,10 @@ function OptionModal({ onClickOption, onClickDelete }) {
       <div className={style["modal_container"]}>
         <div className={style["modal_title"]}>설정</div>
         <div className={style["modal_content"]}>수정</div>
-        <div className={`${style["modal_content"]} ${style["modal_content_accent"]}`} onClick={onClickDelete}>
+        <div
+          className={`${style["modal_content"]} ${style["modal_content_accent"]}`}
+          onClick={onClickDelete}
+        >
           삭제
         </div>
       </div>
