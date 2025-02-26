@@ -112,8 +112,9 @@ class FeedModel(BaseModel):
             #interactions.append(interaction)
             
         # 인터엑션 넣을 필요 있음
+        
+        pprint(feeds)
         send_data = self.__set_send_data(feeds=feeds)
-        pprint(send_data)
         return send_data
 
     def set_feed_data(self, feed_search_engine:FeedSearchEngine, feed_manager:FeedManager,
