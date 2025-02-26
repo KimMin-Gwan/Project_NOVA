@@ -362,6 +362,9 @@ class Mongo_Database(Local_Database):
     def __find_one(self,document, collection:Collection) -> None:
         return collection.find_one(document,{'_id':False})
     
+    def __find_many(self,document, collection:Collection) -> None:
+        return list(collection.find(document,{'_id':False}))
+    
     #수정
     def __update_one(self,document,data , collection:Collection) -> None:
         collection.update_one(document,{'$set':data})
@@ -417,10 +420,12 @@ class Mongo_Database(Local_Database):
         try:
             collection_name = self._select_target_list(target=target_id)
             selected_collection = self.__set_collection(collection=collection_name)
-
-            find_datas = []
+            datas = []
             for id in ids:
-                find_datas.append(self.__find_one({f'{target_id}':f'{id}'},collection=selected_collection))
+                datas.append({f'{target_id}' : f'{id}'})
+            
+            #append(self.__find_one({f'{target_id}':f'{id}'},collection=selected_collection))
+            find_datas = self.__find_many(document=datas, collection=selected_collection)
 
             return find_datas
         except Exception as e:
@@ -429,7 +434,9 @@ class Mongo_Database(Local_Database):
     def get_all_data(self, target):
         collection_name = self._select_target_list(target=target)
         selected_collection = self.__set_collection(collection=collection_name)
-        return list(selected_collection.find({},{'_id':False}))
+        find_data = self.__find_many(document={},collection=selected_collection)
+        #return list(selected_collection.find({},{'_id':False}))
+        return find_data
     
     def _select_target_list(self, target:str):
         if target == "baid" or target == "banner":
