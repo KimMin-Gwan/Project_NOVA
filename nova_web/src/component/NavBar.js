@@ -48,12 +48,7 @@ const NavBar = ({ isUserState, brightMode }) => {
   }, [brightMode]);
 
   return (
-    <div
-      className={` ${writeOptions || writeMoment ? "nav-back" : ""}`}
-      onClick={() => {
-        handleModal();
-      }}
-    >
+    <div className={` ${writeOptions || writeMoment ? "nav-back" : ""}`}>
       <div className={`bottom_bar ${getModeClass(mode)}`}>
         {writeOptions && (
           <div className={`write_select ${writeOptions ? "active" : ""}`}>
