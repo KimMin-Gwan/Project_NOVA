@@ -305,12 +305,12 @@ class Sub_Service_View(Master_View):
         
         # 신고 기능
         @self.__app.post('/nova_sub_system/try_report_bug')
-        async def try_reporrt_bug(request:Request, images: Union[UploadFile, None] = File(None),
+        async def try_report_bug(request:Request, images: Union[UploadFile, None] = File(None),
                                        jsonData: Union[str, None] = Form(None)):
             
             print(images)
-            
             print(jsonData)
+            print(request.body())
             
             
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
