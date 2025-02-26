@@ -254,7 +254,6 @@ class FeedModel(BaseModel):
             single_feed:Feed = single_feed
             uids.append(single_feed.uid)
             
-        print(uids)
         user_datas = self._database.get_datas_with_ids(target_id="uid", ids=uids)
         
         user_datas = list(filter(lambda x: x is not None, user_datas))
@@ -265,7 +264,7 @@ class FeedModel(BaseModel):
             wusers.append(single_user)
 
         
-        for feed, wuser in zip(feeds, wusers):
+        for feed in feed:
             
             # 노출 현황 이 1 이하면 죽어야됨
             # 0: 삭제됨 1 : 비공개 2: 차단 3: 댓글 작성 X 4 : 정상(전체 공개)
@@ -331,7 +330,10 @@ class FeedModel(BaseModel):
 
             # 피드 작성자 이름
             # 나중에 nickname으로 바꿀것
-            feed.nickname = wuser.uname
+            for wuser in wusers:
+                if wuser.uid == feed.uid:
+                    feed.nickname = wuser.uname
+                    
             if user.uid == feed.uid:
                 feed.is_owner = True
                 
