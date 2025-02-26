@@ -102,7 +102,7 @@ class FeedModel(BaseModel):
                 iids.append(feed.iid)
 
         feeds = self._set_feed_json_data(user=self._user, feeds=feeds)
-        
+        pprint(feeds)
         #interaction_datas = self._database.get_datas_with_ids(target_id="iid", ids=iids)
         #interactions = []
         
@@ -139,8 +139,6 @@ class FeedModel(BaseModel):
         fid_list = feed_search_engine.try_get_feed_in_recent(search_type=search_type, time_type=time_type)
         fid_list, self._key = feed_manager.paging_fid_list(fid_list, last_index=last_index, page_size=num_feed)
         self._send_data = self._make_feed_data_n_interaction_data(feed_manager=feed_manager, fid_list=fid_list)
-        pprint(search_type)
-        pprint(self._send_data)
 
         return
 
