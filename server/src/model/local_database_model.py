@@ -387,7 +387,8 @@ class Mongo_Database(Local_Database):
 
             return find_data
         except Exception as e:
-            raise DatabaseLogicError("get_data_with_key error | " + str(e))
+            print(e)
+            raise
 
     # db.get_datas_with_key(target="user", key="uname", key_datas=["minsu", "minzi"])
     def get_datas_with_key(self, target:str, key:str, key_datas:list):
@@ -407,7 +408,8 @@ class Mongo_Database(Local_Database):
 
             return find_datas
         except Exception as e:
-            raise DatabaseLogicError("get_datas_with_key error | " + str(e))
+            print(e)
+            raise
         
 
     # db.get_data_with_id(target="uid", id="1001")
@@ -420,7 +422,8 @@ class Mongo_Database(Local_Database):
 
             return find_data
         except Exception as e:
-            raise DatabaseLogicError("get_data_with_id error | " + str(e))
+            print(e)
+            raise
 
     # db.get_datas_with_ids(target="uid", ids=["1001", "1002"])
     def get_datas_with_ids(self, target_id:str, ids:list):
@@ -436,7 +439,8 @@ class Mongo_Database(Local_Database):
 
             return find_datas
         except Exception as e:
-            raise DatabaseLogicError("get_datas_with_ids error | " + str(e))
+            print(e)
+            raise
 
     def get_all_data(self, target):
         collection_name = self._select_target_list(target=target)
