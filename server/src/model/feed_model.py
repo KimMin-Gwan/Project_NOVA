@@ -101,8 +101,8 @@ class FeedModel(BaseModel):
             if feed.iid != "":
                 iids.append(feed.iid)
 
+        pprint(feed_datas)
         feeds = self._set_feed_json_data(user=self._user, feeds=feeds)
-        pprint(feeds)
         #interaction_datas = self._database.get_datas_with_ids(target_id="iid", ids=iids)
         #interactions = []
         
