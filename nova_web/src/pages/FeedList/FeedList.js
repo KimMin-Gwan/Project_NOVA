@@ -29,7 +29,6 @@ export default function FeedList(isUserState) {
   let [isLoading, setIsLoading] = useState(true);
 
   let [feedData, setFeedData] = useState([]);
-  let [feedInteraction, setFeedInteraction] = useState([]);
   let [nextData, setNextData] = useState(-1);
 
   let [biasId, setBiasId] = useState();
@@ -147,39 +146,26 @@ export default function FeedList(isUserState) {
   }
 
   function fetchData() {
-    if (type === "best") {
-      fetch(`${FETCH_URL}today_best`, {
-        credentials: "include",
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("first feed 3개", data.body);
-          setFeedData(data.body.send_data);
-          setNextData(data.body.key);
-          setIsLoading(false);
-        });
-    } else if (type === "weekly_best") {
-      fetch(`${FETCH_URL}weekly_best`, {
-        credentials: "include",
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("first weekly feed 3개", data);
-          setFeedData(data.body.send_data);
-          setNextData(data.body.key);
-          setIsLoading(false);
-        });
+    if (type === "today" || type === "weekly") {
+      mainApi.get(`feed_explore/${type}_best`).then((res) => {
+        console.log(`${type} feed`, res.data.body);
+        setFeedData(res.data.body.send_data);
+        setNextData(res.data.body.key);
+        setIsLoading(false);
+      });
     }
   }
 
   function fetchFeedWithTag(tag) {
     console.log("dasdasda", hashtag);
-    mainApi.get(`feed_explore/search_feed_with_hashtag?hashtag=${tag}&key=-1&target_time=day`).then((res) => {
-      console.log("fff", res.data);
-      setFeedData(res.data.body.send_data);
-      // setNextData(res.data.body.key);
-      setIsLoading(false);
-    });
+    mainApi
+      .get(`feed_explore/search_feed_with_hashtag?hashtag=${tag}&key=-1&target_time=day`)
+      .then((res) => {
+        console.log("fff", res.data);
+        setFeedData(res.data.body.send_data);
+        // setNextData(res.data.body.key);
+        setIsLoading(false);
+      });
   }
   useEffect(() => {
     setFeedData([]);
@@ -190,34 +176,16 @@ export default function FeedList(isUserState) {
   }
 
   function fetchPlusData() {
-    if (type === "best") {
-      fetch(`${FETCH_URL}today_best?key=${nextData}`, {
-        credentials: "include",
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          setNextData(data.body.key);
-          setFeedData((prevData) => {
-            const newData = [...prevData, ...data.body.send_data];
-            return newData;
-          });
-          setIsLoading(false);
-          console.log("more", data);
+    if (type === "today" || type === "weekly") {
+      mainApi.get(`feed_explore/${type}_best?key=${nextData}`).then((res) => {
+        setNextData(res.data.body.key);
+        setFeedData((prevData) => {
+          const newData = [...prevData, ...res.data.body.send_data];
+          return newData;
         });
-    } else if (type === "weekly_best") {
-      fetch(`${FETCH_URL}weekly_best?key=${nextData}`, {
-        credentials: "include",
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          setNextData(data.body.key);
-          setFeedData((prevData) => {
-            const newData = [...prevData, ...data.body.send_data];
-            return newData;
-          });
-          setIsLoading(false);
-          console.log("mor2", data);
-        });
+        setIsLoading(false);
+        console.log(`more ${type}`, res.data);
+      });
     } else if (type === "all" || isClickedFetch) {
       // 지역 변수 데이터로 활용하기로함
       let send_form = {
@@ -334,7 +302,15 @@ export default function FeedList(isUserState) {
                 </p>
               </div>
             )}
-            {isOpendCategory && <CategoryModal SetIsOpen={setIsOpendCategory} onClickCategory={onClickCategory} biasId={biasId} board={board} setBoard={setBoard} />}
+            {isOpendCategory && (
+              <CategoryModal
+                SetIsOpen={setIsOpendCategory}
+                onClickCategory={onClickCategory}
+                biasId={biasId}
+                board={board}
+                setBoard={setBoard}
+              />
+            )}
           </div>
         )}
         {type === "all" && (
@@ -350,20 +326,30 @@ export default function FeedList(isUserState) {
             </div>
           </div>
         )}
-        {type === "best" && (
+
+        {(type === "today" || type === "weekly") && (
           <div className={style["keyword-section"]}>
-            <KeywordBox type={"today"} title={"인기 급상승"} subTitle={"오늘의 키워드"} onClickTagButton={onClickTag} fetchData={fetchData} />
+            <KeywordBox
+              type={type}
+              title={type === "today" ? "인기 급상승" : "많은 사랑을 받은"}
+              subTitle={type === "today" ? "오늘의 키워드" : "이번주 키워드"}
+              onClickTagButton={onClickTag}
+              fetchData={fetchData}
+            />
           </div>
         )}
-        {type === "weekly_best" && (
-          <div className={style["keyword-section"]}>
-            <KeywordBox type={"weekly"} title={"많은 사랑을 받은"} subTitle={"이번주 키워드"} onClickTagButton={onClickTag} fetchData={fetchData} />
-          </div>
-        )}
+
         <div className={feedData.length > 0 ? style["scroll-area"] : style["none_feed_scroll"]}>
           {feedData.length > 0 ? (
             feedData.map((feed, i) => {
-              return <Feed key={`feed_${feed.feed.fid}`} className={`${style["feed-box"]} ${style[getModeClass(mode)]}`} feed={feed.feed} interaction={feed.interaction} feedInteraction={feedInteraction} setFeedData={setFeedData}></Feed>;
+              return (
+                <Feed
+                  key={`feed_${feed.feed.fid}`}
+                  className={`${style["feed-box"]} ${style[getModeClass(mode)]}`}
+                  feed={feed.feed}
+                  setFeedData={setFeedData}
+                ></Feed>
+              );
             })
           ) : (
             <NoneFeed />
@@ -371,9 +357,15 @@ export default function FeedList(isUserState) {
           <div ref={target} style={{ height: "1px" }}></div>
           {isLoading && <p>Loading...</p>}
           {isFilterClicked && (
-            // <div className={style["filter-modal"]}>
-            <FilterModal isFilterClicked={isFilterClicked} onClickFilterButton={onClickFilterButton} setFilterCategory={setFilterCategory} setFilterFclass={setFilterFclass} fetchAllFeed={fetchAllFeed} onClickApplyButton1={onClickApplyButton1} setNextData={setNextData} />
-            // {/* </div> */}
+            <FilterModal
+              // isFilterClicked={isFilterClicked}
+              onClickFilterButton={onClickFilterButton}
+              setFilterCategory={setFilterCategory}
+              setFilterFclass={setFilterFclass}
+              fetchAllFeed={fetchAllFeed}
+              onClickApplyButton1={onClickApplyButton1}
+              // setNextData={setNextData}
+            />
           )}
         </div>
       </div>

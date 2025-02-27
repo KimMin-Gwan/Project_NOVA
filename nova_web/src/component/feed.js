@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Viewer } from "@toast-ui/react-editor";
 import style from "./../pages/FeedPage/FeedPage.module.css";
@@ -11,6 +11,8 @@ import comment from "./../img/comment.png";
 import postApi from "../services/apis/postApi";
 import HEADER from "../constant/header";
 import mainApi from "../services/apis/mainApi";
+import useDragScroll from "../hooks/useDragScroll";
+import useFeedActions from "../hooks/useFeedActions";
 
 export function useBrightMode() {
   const params = new URLSearchParams(window.location.search);
@@ -29,39 +31,7 @@ export function useBrightMode() {
 const header = HEADER;
 
 export default function Feed({ feed, setFeedData }) {
-  let navigate = useNavigate();
-  let [isError, setIsError] = useState();
-  let [isClickedStar, setIsClickedStar] = useState(false);
-
-  function handleCheckStar(fid, e) {
-    setIsClickedStar(!isClickedStar);
-    fetch(`https://nova-platform.kr/feed_explore/check_star?fid=${fid}`, {
-      credentials: "include",
-    })
-      .then((response) => {
-        if (!response.ok) {
-          if (response.status === 401) {
-            setIsError(response.status);
-            navigate("/novalogin");
-          } else {
-            throw new Error(`status: ${response.status}`);
-          }
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setFeedData((prevFeeds) => {
-          return prevFeeds.map((feed) => {
-            return feed.feed.fid === fid
-              ? {
-                  ...feed,
-                  feed: data.body.feed[0],
-                }
-              : feed;
-          });
-        });
-      });
-  }
+  const { handleCheckStar } = useFeedActions(setFeedData);
 
   const [report, setReport] = useState();
 
@@ -87,42 +57,14 @@ export default function Feed({ feed, setFeedData }) {
   );
 }
 
-// 내용 별 피드 박스
-
 export function ContentFeed({ detailPage, feed, handleCheckStar, links, fetchReportResult }) {
   let navigate = useNavigate();
+  const { scrollRef, hasDragged, dragHandlers } = useDragScroll();
 
   async function fetchOriginalText(fid) {
     await mainApi.get(`feed_explore/original_feed_data?fid=${fid}`).then((res) => {
       console.log(res.data);
     });
-  }
-
-  let scrollRef = useRef(null);
-  let [isDrag, setIsDrag] = useState(false);
-  let [dragStart, setDragStart] = useState("");
-  let [hasDragged, setHasDragged] = useState(false);
-
-  function onMouseDown(e) {
-    e.preventDefault();
-    setIsDrag(true);
-    setDragStart(e.pageX + scrollRef.current.scrollLeft);
-    setHasDragged(false);
-  }
-
-  function onMouseUp(e) {
-    if (hasDragged) {
-      e.stopPropagation();
-      e.preventDefault();
-    }
-    setIsDrag(false);
-  }
-
-  function onMouseMove(e) {
-    if (isDrag) {
-      scrollRef.current.scrollLeft = dragStart - e.pageX;
-      setHasDragged(true);
-    }
   }
 
   if (!feed) {
@@ -133,6 +75,7 @@ export function ContentFeed({ detailPage, feed, handleCheckStar, links, fetchRep
     <div
       className={`${style["wrapper-container"]} ${feed.fclass === "long" && style["long-wrapper"]}`}
       onClick={(e) => {
+        if (hasDragged) return;
         e.preventDefault();
         e.stopPropagation();
         navigate(`/feed_detail/${feed.fid}`, {
@@ -140,102 +83,138 @@ export function ContentFeed({ detailPage, feed, handleCheckStar, links, fetchRep
         });
       }}
     >
-      <div className={style["user-container"]}>
-        <div>{feed.date}</div>
-        <div>{feed.nickname}</div>
-      </div>
-
-      {feed.is_reworked && (
-        <div className={style["AI_container"]}>
-          <div className={style["AI_text_info"]}>
-            <span>
-              <img src={info_icon} alt="info" />
-            </span>
-            본 게시글의 본문은 AI에 의해 필터링 되었습니다.
-          </div>
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              fetchOriginalText(feed.fid);
-            }}
-          >
-            원문 보기
-          </button>
-        </div>
-      )}
+      <FeedHeader date={feed.date} nickname={feed.nickname} />
+      <AIFilter
+        isReworked={feed.is_reworked}
+        fid={feed.fid}
+        fetchOriginalText={fetchOriginalText}
+      />
 
       <div className={`${style["body-container"]} ${detailPage ? "" : style["long-form-hidden"]}`}>
-        <div className={style["body-hashtag"]}>
-          {feed?.hashtag?.length !== 0 &&
-            feed?.hashtag?.map((tag, i) => {
-              return <span key={i}>#{tag}</span>;
-            })}
-        </div>
+        <HashTags hashtags={feed.hashtag} />
+
         {feed.fclass === "short" && <div className={style["body-content"]}>{feed.body}</div>}
         {feed.image?.length > 0 && feed.fclass === "short" ? (
           <div className={style["image-container"]}>
             <div
               ref={scrollRef}
               className={`${style["image-origin"]} ${style["two-over-image"]}`}
-              onMouseDown={onMouseDown}
-              onMouseMove={onMouseMove}
-              onMouseUp={onMouseUp}
-              // onClick={(e) => {
-              //   e.stopPropagation();
-              // }}
+              onMouseDown={dragHandlers.onMouseDown}
+              onMouseMove={dragHandlers.onMouseMove}
+              onMouseUp={dragHandlers.onMouseUp}
             >
-              <img src={feed.image[0]} alt="image" />
-              {feed.num_image >= 2 &&
+              {feed.num_image >= 2 ? (
                 feed.image.map((img, i) => {
                   return <img key={i} src={img} alt="image" />;
-                })}
+                })
+              ) : (
+                <img src={feed.image[0]} alt="image" />
+              )}
             </div>
           </div>
-        ) : (
-          <div></div>
-        )}
+        ) : null}
 
         {feed.fclass === "long" && <Viewer initialValue={feed.raw_body} />}
       </div>
 
       {links && <LinkSection links={links} />}
 
-      <div className={style["button-container"]}>
-        <div
-          onClick={(e) => {
-            e.stopPropagation();
-            fetchReportResult(feed.fid);
-          }}
-        >
-          신고
-        </div>
-        <div className={style["button-box1"]}>
-          <div className={style["action-button"]}>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                handleCheckStar(feed.fid, e);
-              }}
-            >
-              <img src={feed.star_flag ? star_color : star} alt="star-icon" />
-            </button>
-            <span>{feed.star}</span>
-          </div>
+      <ActionButtons
+        feed={feed}
+        handleCheckStar={handleCheckStar}
+        fetchReportResult={fetchReportResult}
+      />
+    </div>
+  );
+}
 
-          <div className={style["action-button"]}>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                navigate(`/feed_detail/${feed.fid}`, {
-                  state: { commentClick: true },
-                });
-              }}
-            >
-              <img src={comment} alt="comment-icon" />
-            </button>
-            <span>{feed.num_comment}</span>
-          </div>
+function FeedHeader({ date, nickname }) {
+  return (
+    <div className={style["user-container"]}>
+      <div>{date}</div>
+      <div>{nickname}</div>
+    </div>
+  );
+}
+
+function AIFilter({ isReworked, fid, fetchOriginalText }) {
+  if (!isReworked) {
+    return null;
+  }
+  return (
+    <div className={style["AI_container"]}>
+      <div className={style["AI_text_info"]}>
+        <span>
+          <img src={info_icon} alt="info" />
+        </span>
+        본 게시글의 본문은 AI에 의해 필터링 되었습니다.
+      </div>
+      <button
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          fetchOriginalText(fid);
+        }}
+      >
+        원문 보기
+      </button>
+    </div>
+  );
+}
+
+function HashTags({ hashtags }) {
+  if (!hashtags || hashtags.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className={style["body-hashtag"]}>
+      {hashtags.length !== 0 &&
+        hashtags.map((tag, i) => {
+          return <span key={i}>#{tag}</span>;
+        })}
+    </div>
+  );
+}
+
+function ActionButtons({ feed, handleCheckStar, fetchReportResult }) {
+  const navigate = useNavigate();
+
+  return (
+    <div className={style["button-container"]}>
+      <div
+        onClick={(e) => {
+          e.stopPropagation();
+          fetchReportResult(feed.fid);
+        }}
+      >
+        신고
+      </div>
+      <div className={style["button-box1"]}>
+        <div className={style["action-button"]}>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              handleCheckStar(feed.fid, e);
+            }}
+          >
+            <img src={feed.star_flag ? star_color : star} alt="star-icon" />
+          </button>
+          <span>{feed.star}</span>
+        </div>
+
+        <div className={style["action-button"]}>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              navigate(`/feed_detail/${feed.fid}`, {
+                state: { commentClick: true },
+              });
+            }}
+          >
+            <img src={comment} alt="comment-icon" />
+          </button>
+          <span>{feed.num_comment}</span>
         </div>
       </div>
     </div>

@@ -1,22 +1,24 @@
-import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { ContentFeed } from "../../component/feed";
-import { useState } from "react";
-import { useEffect } from "react";
-import style from "./FeedDetail.module.css";
-import { useRef } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import axios from "axios";
+
+import mainApi from "../../services/apis/mainApi";
+import postApi from "../../services/apis/postApi";
+
+import HEADER from "../../constant/header";
 
 import more_icon from "./../../img/more_icon.svg";
-// import back from "./../../img/backword.png";
 import back from "./../../img/detail_back.png";
-import star from "./../../img/favorite.png";
 import input from "./../../img/input.svg";
-import axios from "axios";
-import mainApi from "../../services/apis/mainApi";
-//import reArrow from "./../../img/recomment2.svg";
 import reArrow1 from "./../../img/reArrow1.svg";
 import reArrow2 from "./../../img/reArrow2.svg";
 import reArrow3 from "./../../img/reArrow3.svg";
 import reArrow4 from "./../../img/reArrow4.svg";
+
+import { ContentFeed } from "../../component/feed";
+
+import style from "./FeedDetail.module.css";
+
 export default function FeedDetail({}) {
   let navigate = useNavigate();
   let { fid } = useParams();
@@ -30,6 +32,10 @@ export default function FeedDetail({}) {
   const [isComment, setIsComment] = useState(false);
   let [feedData, setFeedData] = useState([]);
   let [comments, setComments] = useState([]);
+  let [commentValue, setCommentValue] = useState("");
+  let [commentId, setCommentId] = useState("");
+  const [showMoreOption, setShowMoreOption] = useState(false);
+  const [links, setLinks] = useState([]);
 
   useEffect(() => {
     if (!isLoading && commentRef.current && state.commentClick) {
@@ -39,8 +45,6 @@ export default function FeedDetail({}) {
       //       }, 0); // 0초 후 실행
     }
   }, [isLoading]);
-
-  const [links, setLinks] = useState([]);
 
   async function fetchFeed() {
     await fetch(`https://nova-platform.kr/feed_explore/feed_detail/feed_data?fid=${fid}`, {
@@ -60,52 +64,39 @@ export default function FeedDetail({}) {
   }, [comments, fid]);
 
   async function fetchFeedComment() {
-    await fetch(`https://nova-platform.kr/feed_explore/feed_detail/comment_data?fid=${fid}`, {
-      credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setComments(data.body.comments);
-        setIsLoading(false);
-      });
+    await mainApi.get(`feed_explore/feed_detail/comment_data?fid=${fid}`).then((res) => {
+      setComments(res.data.body.comments);
+      setIsLoading(false);
+    });
   }
 
   useEffect(() => {
     fetchFeedComment();
   }, []);
 
-  let [isClickedStar, setIsClickedStar] = useState(false);
-
   async function handleCheckStar(fid, e) {
-    // e.preventDefault();
-    setIsClickedStar(!isClickedStar);
-    await fetch(`https://nova-platform.kr/feed_explore/check_star?fid=${fid}`, {
-      credentials: "include",
-    })
-      .then((response) => {
-        if (!response.ok) {
-          if (response.status === 401) {
-            navigate("/novalogin");
-          } else {
-            throw new Error(`status: ${response.status}`);
-          }
-        }
-        return response.json();
-      })
-      .then((data) => {
+    await mainApi
+      .get(`feed_explore/check_star?fid=${fid}`)
+      .then((res) => {
+        console.log("check", res.data);
         setFeedData((prevData) => {
           return prevData.fid === fid
             ? {
                 ...prevData,
-                star: data.body.feed[0].star,
-                star_flag: data.body.feed[0].star_flag,
+                star: res.data.body.feed[0].star,
+                star_flag: res.data.body.feed[0].star_flag,
               }
             : prevData;
         });
+      })
+      .catch((err) => {
+        if (err.response.status === 401) {
+          navigate("/novalogin");
+        } else {
+          console.error("Error checking star:", err);
+        }
       });
   }
-
-  let [commentValue, setCommentValue] = useState("");
 
   function onChangeComment(e) {
     setCommentValue(e.target.value);
@@ -124,49 +115,29 @@ export default function FeedDetail({}) {
     setCommentValue("");
   }
 
-  let header = {
-    "request-type": "default",
-    "client-version": "v1.0.1",
-    "client-ip": "127.0.0.1",
-    uid: "1234-abcd-5678",
-    endpoint: "/core_system/",
-  };
+  const header = HEADER;
 
   async function fetchMakeComment() {
-    await fetch("https://nova-platform.kr/feed_explore/make_comment", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        header,
-      },
-      body: JSON.stringify({
+    await postApi
+      .post("feed_explore/make_comment", {
         header: header,
         body: {
           fid: `${fid}`,
           body: `${commentValue}`,
           target_cid: commentId,
         },
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setComments(data.body.comments);
+      })
+      .then((res) => {
+        setComments(res.data.body.comments);
         setCommentId("");
       });
   }
-
-  let [commentId, setCommentId] = useState("");
 
   const onClickComment = (cid, targetCid, uname) => {
     setCommentId(targetCid || cid);
     setCommentValue(`@${uname} `);
     commentRef.current.focus();
   };
-
-  function onClickNav() {
-    navigate(-1);
-  }
 
   function fetchRemoveFeed() {
     axios
@@ -181,7 +152,6 @@ export default function FeedDetail({}) {
       });
   }
 
-  const [showMoreOption, setShowMoreOption] = useState(false);
   function onClickOption(e) {
     e.preventDefault();
     e.stopPropagation();

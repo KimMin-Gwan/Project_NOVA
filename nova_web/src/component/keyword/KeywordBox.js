@@ -2,61 +2,26 @@ import Slider from "react-slick";
 import style from "./KeywordBox.module.css";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
+import useDragScroll from "../../hooks/useDragScroll";
+import mainApi from "../../services/apis/mainApi";
 
 export default function KeywordBox({ type, title, subTitle, onClickTagButton, fetchData }) {
+  const { scrollRef, hasDragged, dragHandlers } = useDragScroll();
+
   let [bestTags, setBestTags] = useState([]);
   let [isLoading, setIsLoading] = useState(true);
 
   async function fetchHashTags() {
-    if (type === "today") {
-      await fetch("https://nova-platform.kr/home/today_spiked_hot_hashtag", {
-        credentials: "include",
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          setBestTags(data.body.hashtags);
-          setIsLoading(false);
-          console.log("today", data);
-        });
-    } else if (type === "weekly") {
-      await axios
-        .get("https://nova-platform.kr/home/weekly_spiked_hot_hashtag", {
-          withCredentials: true,
-        })
-        .then((res) => {
-          setBestTags(res.data.body.hashtags);
-          setIsLoading(false);
-          console.log("weekly", res.data);
-        });
-    }
+    await mainApi.get(`home/${type}_spiked_hot_hashtag`).then((res) => {
+      setBestTags(res.data.body.hashtags);
+      setIsLoading(false);
+      console.log(`${type}`, res.data);
+    });
   }
 
   useEffect(() => {
     fetchHashTags();
   }, []);
-
-  let scrollRef = useRef(null);
-  let [isDrag, setIsDrag] = useState(false);
-  let [dragStart, setDragStart] = useState("");
-  let [hasDragged, setHasDragged] = useState(false);
-
-  function onMouseDown(e) {
-    e.preventDefault();
-    setIsDrag(true);
-    setDragStart(e.pageX + scrollRef.current.scrollLeft);
-    setHasDragged(false);
-  }
-
-  function onMouseUp(e) {
-    setIsDrag(false);
-  }
-
-  function onMouseMove(e) {
-    if (isDrag) {
-      scrollRef.current.scrollLeft = dragStart - e.pageX;
-      setHasDragged(true);
-    }
-  }
 
   let [currentTag, setCurrentTag] = useState();
 
@@ -83,9 +48,9 @@ export default function KeywordBox({ type, title, subTitle, onClickTagButton, fe
       <div
         className={style["tags-container"]}
         ref={scrollRef}
-        onMouseDown={onMouseDown}
-        onMouseMove={onMouseMove}
-        onMouseUp={onMouseUp}
+        onMouseDown={dragHandlers.onMouseDown}
+        onMouseMove={dragHandlers.onMouseMove}
+        onMouseUp={dragHandlers.onMouseUp}
       >
         <div className={style["tags-wrapper"]}>
           {bestTags.map((tag, i) => {
@@ -93,6 +58,7 @@ export default function KeywordBox({ type, title, subTitle, onClickTagButton, fe
               <div
                 key={i}
                 onClick={() => {
+                  if (hasDragged) return;
                   onClickTags(i, tag);
                 }}
                 className={`${style["tags"]} ${currentTag === i ? style["click-tag"] : ""}`}

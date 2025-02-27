@@ -173,7 +173,7 @@ export default function HomePage() {
             img_src={best}
             feedData={todayBestFeed}
             brightMode={brightMode}
-            endPoint={`/feed_list?type=best`}
+            endPoint={`/feed_list?type=today`}
           />
           <FeedThumbnail
             title={
@@ -184,7 +184,7 @@ export default function HomePage() {
             img_src={best}
             feedData={weeklyFeed}
             brightMode={brightMode}
-            endPoint={`/feed_list?type=weekly_best`}
+            endPoint={`/feed_list?type=weekly`}
           />
 
           <FeedThumbnail
