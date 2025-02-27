@@ -60,7 +60,6 @@ function MyPage() {
 
   async function fetchMyFeed(category) {
     await mainApi.get(`user_home/get_my_feed?type=${category}&key=${nextKey}`).then((res) => {
-      console.log(res.data);
       setMyFeed((prevData) => [...prevData, ...res.data.body.feed]);
       setNextKey(res.data.body.key);
       setIsLoading(false);
@@ -68,10 +67,18 @@ function MyPage() {
   }
 
   async function fetchMyComment() {
-    await mainApi.get(`user_home/get_my_comments`).then((res) => {
-      console.log("adas", res.data);
-      setComment((prevData) => [...res.data.body.feeds]);
-    });
+    try {
+      const res = await mainApi.get(`user_home/get_my_comments`);
+      const feeds = res.data.body.feeds;
+
+      setComment([...feeds]);
+
+      const initialClickedState = Object.fromEntries(feeds.map((feed) => [feed.fid, true]));
+
+      setClickedComments(initialClickedState);
+    } catch (error) {
+      console.error("데이터 가져오기 실패:", error);
+    }
   }
 
   // useEffect(() => {
@@ -214,10 +221,7 @@ function MyPage() {
             (feed) =>
               isClickedComment && (
                 <div key={feed.fid} className={style["MyPage_Comment_Box"]}>
-                  <div
-                    className={style["Feed_title"]}
-                    onClick={() => handleCommentToggle(feed.fid)}
-                  >
+                  <div className={style["Feed_title"]} onClick={() => handleCommentToggle(feed.fid)}>
                     <img src={arrow} alt="화살표" />
                     <p>{feed.body}</p>
                   </div>
