@@ -10,6 +10,7 @@ import link_icon from "./../../img/link.png";
 import { Modal } from "./Write.js";
 import { VoteModal } from "./Write.js";
 import { LinkModal } from "./Write.js";
+import toast, { Toaster } from "react-hot-toast";
 const categoryData = [
   { key: 0, category: "자유게시판" },
   { key: 1, category: "팬아트" },
@@ -150,7 +151,7 @@ const WriteMoment = ({ onClickMoment }) => {
     }
     formData.append("jsonData", JSON.stringify(send_data)); // JSON 데이터 추가
 
-    setMessage(true);
+    const loadingToast = toast.loading("업로딩 중입니다..");
 
     fetch("https://nova-platform.kr/feed_explore/try_edit_feed", {
       method: "POST",
@@ -161,13 +162,13 @@ const WriteMoment = ({ onClickMoment }) => {
         response.json();
       })
       .then((data) => {
-        setMessage(false);
-        alert("업로드가 완료되었습니다.");
+        toast.success("업로드가 완료되었습니다!");
+        toast.dismiss(loadingToast);
         window.location.reload();
       })
       .catch((error) => {
-        console.error("Error:", error);
-        alert("업로드 실패!");
+        toast.error("업로드 실패하였습니다");
+        toast.dismiss(loadingToast);
       });
   };
 
@@ -246,20 +247,13 @@ const WriteMoment = ({ onClickMoment }) => {
 
   return (
     <>
-      {message && <div className={style2["success-message"]}>업로드 중입니다 ....</div>}
+      <Toaster position="top-center" />
       <div className={style2["nav_moment"]}>
         <h4>모멘트 작성</h4>
         <form className={style2["nav_form"]}>
           <div className={style2["input-container"]}>
             <div className={style2["input-wrapper"]}>
-              <input
-                placeholder="해시태그 입력"
-                type="text"
-                value={`${inputTag}`}
-                onChange={onChangeTag}
-                onKeyDown={onKeyDown}
-                className={style2["input-hashtag"]}
-              />
+              <input placeholder="해시태그 입력" type="text" value={`${inputTag}`} onChange={onChangeTag} onKeyDown={onKeyDown} className={style2["input-hashtag"]} />
               <span className={style2["count-text"]}>{inputTagCount}/12</span>
             </div>
             <div className={style2["button-wrapper"]}>
@@ -291,13 +285,7 @@ const WriteMoment = ({ onClickMoment }) => {
           <div className={` ${style2["content-container"]}`}>
             <div className={`${style2["content-title"]}`}>경험을 모두와 함께 이야기 해봐요!</div>
 
-            <textarea
-              className={style2["write_body"]}
-              name="body"
-              placeholder="내용을 입력해주세요"
-              value={bodyText}
-              onChange={onChangeBody}
-            />
+            <textarea className={style2["write_body"]} name="body" placeholder="내용을 입력해주세요" value={bodyText} onChange={onChangeBody} />
           </div>
 
           <section className={` ${style2["select-container"]}`}>
@@ -341,41 +329,9 @@ const WriteMoment = ({ onClickMoment }) => {
                 링크
               </button>
             </div>
-            {showModal && (
-              <Modal
-                onClickModal={onClickModal}
-                handleFileChange={handleFileChange}
-                imagePreview={imagePreview}
-                currentFileName={currentFileName}
-                imageFiles={imageFiles}
-              />
-            )}
-            {showVoteModal && (
-              <VoteModal
-                onClickModal={onClickVoteModal}
-                createOptions={createOptions}
-                onClickAdd={onClickAdd}
-                onClickDelete={onDeleteOption}
-                handleChoiceChange={handleChoiceChange}
-                choice={choice}
-                setChoice={setChoice}
-              />
-            )}
-            {showLinkModal && (
-              <LinkModal
-                onClickModal={onClickLinkModal}
-                link={urlLink}
-                setLink={setUrlLink}
-                numLink={numLink}
-                linkTitle={linkTitle}
-                linkUrl={linkUrl}
-                setLinkTitle={setLinkTitle}
-                setLinkUrl={setLinkUrl}
-                onClickAdd={onClickAddLink}
-                handleLinkChange={handleLinkChange}
-                linkList={linkList}
-              />
-            )}
+            {showModal && <Modal onClickModal={onClickModal} handleFileChange={handleFileChange} imagePreview={imagePreview} currentFileName={currentFileName} imageFiles={imageFiles} />}
+            {showVoteModal && <VoteModal onClickModal={onClickVoteModal} createOptions={createOptions} onClickAdd={onClickAdd} onClickDelete={onDeleteOption} handleChoiceChange={handleChoiceChange} choice={choice} setChoice={setChoice} />}
+            {showLinkModal && <LinkModal onClickModal={onClickLinkModal} link={urlLink} setLink={setUrlLink} numLink={numLink} linkTitle={linkTitle} linkUrl={linkUrl} setLinkTitle={setLinkTitle} setLinkUrl={setLinkUrl} onClickAdd={onClickAddLink} handleLinkChange={handleLinkChange} linkList={linkList} />}
             <p onClick={onClickMoment}>취소</p>
 
             <p
