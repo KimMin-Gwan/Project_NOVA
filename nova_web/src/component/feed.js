@@ -245,7 +245,7 @@ export function ContentFeed({ detailPage, feed, handleCheckStar, links, fetchRep
 function LinkSection({ links }) {
   const [isLoading, setIsLoading] = useState(true);
   const [linkImage, setLinkImage] = useState([]);
-  console.log(links);
+
   async function fetchImageTag() {
     for (const item of links)
       await postApi

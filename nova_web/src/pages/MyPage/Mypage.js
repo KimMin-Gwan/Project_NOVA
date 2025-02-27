@@ -85,10 +85,11 @@ function MyPage() {
         if (!entry.isIntersecting) return;
         if (isLoading) return;
 
-        fetchMyFeed(nowCategory);
-        fetchMyComment();
         if (nowCategory !== "comment") {
+          fetchMyFeed(nowCategory);
           setIsClickedComment(false);
+        } else {
+          fetchMyComment();
         }
         //else {
         //   setIsClickedComment((prev) => !prev);
@@ -128,6 +129,7 @@ function MyPage() {
 
   useEffect(() => {
     setMyFeed([]);
+    setComment([]);
     setNextKey(-1);
   }, [nowCategory]);
 

@@ -30,7 +30,6 @@ export default function FeedDetail({}) {
   const [isComment, setIsComment] = useState(false);
   let [feedData, setFeedData] = useState([]);
   let [comments, setComments] = useState([]);
-  let [interaction, setInteraction] = useState();
 
   useEffect(() => {
     if (!isLoading && commentRef.current && state.commentClick) {
@@ -49,8 +48,6 @@ export default function FeedDetail({}) {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("detail", data);
-        setInteraction(data.body.interaction);
         setFeedData(data.body.feed[0]);
         setLinks(data.body.links);
         setIsLoading(false);
@@ -217,7 +214,9 @@ export default function FeedDetail({}) {
             <img src={more_icon} />
           </button>
         )}
-        {showMoreOption && <OptionModal onClickOption={onClickOption} onClickDelete={fetchRemoveFeed} />}
+        {showMoreOption && (
+          <OptionModal onClickOption={onClickOption} onClickDelete={fetchRemoveFeed} />
+        )}
       </div>
 
       <div>
@@ -237,7 +236,15 @@ export default function FeedDetail({}) {
           })}
         <div className={style["input-container"]}>
           <div className={style["input-wrapper"]}>
-            <input ref={commentRef} type="text" id={style["comment"]} value={commentValue} onChange={onChangeComment} onKeyDown={onKeyDownEnter} placeholder="당신의 생각을 남겨보세요." />
+            <input
+              ref={commentRef}
+              type="text"
+              id={style["comment"]}
+              value={commentValue}
+              onChange={onChangeComment}
+              onKeyDown={onKeyDownEnter}
+              placeholder="당신의 생각을 남겨보세요."
+            />
             <button className={style["input-button"]} onClick={onClickInput}>
               <img src={input} alt="input" />
             </button>
@@ -267,22 +274,21 @@ function Comment({ comment, onClickComment }) {
     >
       <section>
         <div className={style["comment-user"]}>
-          <div>
-            {comment.uname}
-            <span>{comment.date}</span>
-          </div>
+          <div>{comment.uname}</div>
 
           <div className={style["function_button_container"]}>
-            <button
-              className={style["AI_text"]}
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                fetchOriginalComment(comment.cid);
-              }}
-            >
-              원문 보기
-            </button>
+            {comment.is_reworked && (
+              <button
+                className={style["AI_text"]}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  fetchOriginalComment(comment.cid);
+                }}
+              >
+                원문 보기
+              </button>
+            )}
             <div>신고</div>
           </div>
         </div>
@@ -294,7 +300,15 @@ function Comment({ comment, onClickComment }) {
 
       {comment.reply.length !== 0 &&
         comment.reply?.map((reply, i) => {
-          return <ReplyComment key={reply.cid} index={i} length={comment.reply.length} reply={reply} fetchOriginalComment={fetchOriginalComment} />;
+          return (
+            <ReplyComment
+              key={reply.cid}
+              index={i}
+              length={comment.reply.length}
+              reply={reply}
+              fetchOriginalComment={fetchOriginalComment}
+            />
+          );
         })}
     </div>
   );
@@ -325,16 +339,18 @@ function ReplyComment({ index, length, reply, fetchOriginalComment }) {
         <div className={style["comment-user"]}>
           <p>{reply.uname}</p>
           <div className={style["function_button_container"]}>
-            <button
-              className={style["AI_text"]}
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                fetchOriginalComment(reply.cid);
-              }}
-            >
-              원문 보기
-            </button>
+            {reply.is_reworked && (
+              <button
+                className={style["AI_text"]}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  fetchOriginalComment(reply.cid);
+                }}
+              >
+                원문 보기
+              </button>
+            )}
             <div>신고</div>
           </div>
         </div>
@@ -357,7 +373,10 @@ function OptionModal({ onClickOption, onClickDelete }) {
       <div className={style["modal_container"]}>
         <div className={style["modal_title"]}>설정</div>
         <div className={style["modal_content"]}>수정</div>
-        <div className={`${style["modal_content"]} ${style["modal_content_accent"]}`} onClick={onClickDelete}>
+        <div
+          className={`${style["modal_content"]} ${style["modal_content_accent"]}`}
+          onClick={onClickDelete}
+        >
           삭제
         </div>
       </div>
