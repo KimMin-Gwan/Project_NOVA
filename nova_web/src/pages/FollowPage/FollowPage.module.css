@@ -151,8 +151,8 @@
       /* display: flex;
       gap: 15px;
       margin: 10px 10px;
-      flex-wrap: wrap;
-      justify-content: center; */
+      flex-wrap: wrap;*/
+      justify-items: center;
     }
 
     @media (max-width: 400px) {

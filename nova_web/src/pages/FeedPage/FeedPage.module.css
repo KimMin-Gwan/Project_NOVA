@@ -2333,6 +2333,7 @@ h5 {
 
   .body-content {
     font-weight: 400;
+    word-wrap: break-word;
   }
 }
 
