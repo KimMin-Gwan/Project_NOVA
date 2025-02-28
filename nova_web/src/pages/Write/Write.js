@@ -11,6 +11,7 @@ import EditorBox from "../../component/EditorBox.js";
 import postApi from "../../services/apis/postApi.js";
 import useBiasStore from "../../stores/BiasStore/useBiasStore.js";
 import HEADER from "../../constant/header.js";
+import toast, { Toaster } from "react-hot-toast";
 
 const categoryData = [
   { key: 0, category: "자유게시판" },
@@ -146,6 +147,7 @@ const Write = ({ brightmode }) => {
   const handleSubmit = (event) => {
     event.preventDefault(); // 기본 동작을 막음 (중요)
 
+    const loadingText = toast.loading("업로드 중입니다..");
     const send_data = {
       header: header,
       body: {
@@ -178,12 +180,14 @@ const Write = ({ brightmode }) => {
         response.json();
       })
       .then((data) => {
-        alert("업로드가 완료되었습니다.");
+        toast.success("업로드가 완료되었습니다.");
+        // alert("업로드가 완료되었습니다.");
         navigate("/");
       })
       .catch((error) => {
-        console.error("Error:", error);
-        alert("업로드 실패!");
+        toast.error("업로드 실패!");
+        // console.error("Error:", error);
+        // alert("업로드 실패!");
       });
   };
 
@@ -285,6 +289,7 @@ const Write = ({ brightmode }) => {
   return (
     // <form onSubmit={handleSubmit}>
     <div className={style["WriteFeed"]}>
+      <Toaster />
       <div className={style["top_container"]}>
         <p
           className={style["buttons"]}
@@ -335,14 +340,7 @@ const Write = ({ brightmode }) => {
         <div>해시태그</div>
         <div className={style["input-container"]}>
           <div className={style["input-wrapper"]}>
-            <input
-              placeholder="#해시태그"
-              type="text"
-              value={`${inputTag}`}
-              onChange={onChangeTag}
-              onKeyDown={onKeyDown}
-              className={style["input-hashtag"]}
-            />
+            <input placeholder="#해시태그" type="text" value={`${inputTag}`} onChange={onChangeTag} onKeyDown={onKeyDown} className={style["input-hashtag"]} />
             <span className={style["count-text"]}>{inputTagCount}/12</span>
           </div>
           <div className={style["button-wrapper"]}>
@@ -374,20 +372,10 @@ const Write = ({ brightmode }) => {
       </div>
 
       <div className={style["content_container"]}>
-        <div
-          className={`${style["content-title"]} ${type === "long" && style["content-title-long"]}`}
-        >
-          본문
-        </div>
+        <div className={`${style["content-title"]} ${type === "long" && style["content-title-long"]}`}>본문</div>
         {type === "short" && (
           <>
-            <textarea
-              className={style["write_body"]}
-              name="body"
-              placeholder="내용을 입력해주세요"
-              value={bodyText}
-              onChange={onChangeBody}
-            />
+            <textarea className={style["write_body"]} name="body" placeholder="내용을 입력해주세요" value={bodyText} onChange={onChangeBody} />
             <span className={style["count-text"]}>{inputBodyCount}/300</span>
           </>
         )}
@@ -395,14 +383,8 @@ const Write = ({ brightmode }) => {
         {type === "long" && <EditorBox setLongData={setLongData} />}
       </div>
 
-      {type === "short" && (
-        <p className={style["alert_message"]}>숏 피드 게시글은 작성 후 24시간 동안 노출됩니다.</p>
-      )}
-      {type === "long" && (
-        <p className={style["alert_message"]}>
-          타인에게 불편을 줄 수 있는 내용의 게시글은 경고 없이 삭제 될 수 있습니다.
-        </p>
-      )}
+      {type === "short" && <p className={style["alert_message"]}>숏 피드 게시글은 작성 후 24시간 동안 노출됩니다.</p>}
+      {type === "long" && <p className={style["alert_message"]}>타인에게 불편을 줄 수 있는 내용의 게시글은 경고 없이 삭제 될 수 있습니다.</p>}
 
       <div className={style["content_button"]}>
         {type !== "long" && (
@@ -435,15 +417,7 @@ const Write = ({ brightmode }) => {
           링크
         </button>
       </div>
-      {showModal && (
-        <Modal
-          onClickModal={onClickModal}
-          handleFileChange={handleFileChange}
-          imagePreview={imagePreview}
-          currentFileName={currentFileName}
-          imageFiles={imageFiles}
-        />
-      )}
+      {showModal && <Modal onClickModal={onClickModal} handleFileChange={handleFileChange} imagePreview={imagePreview} currentFileName={currentFileName} imageFiles={imageFiles} />}
       {/* {showVoteModal && (
         <VoteModal
           onClickModal={onClickVoteModal}
@@ -455,22 +429,7 @@ const Write = ({ brightmode }) => {
           setChoice={setChoice}
         />
       )} */}
-      {showLinkModal && (
-        <LinkModal
-          onClickModal={onClickLinkModal}
-          link={urlLink}
-          setLink={setUrlLink}
-          numLink={numLink}
-          linkTitle={linkTitle}
-          linkUrl={linkUrl}
-          setLinkTitle={setLinkTitle}
-          setLinkUrl={setLinkUrl}
-          onClickAdd={onClickAddLink}
-          handleLinkChange={handleLinkChange}
-          linkList={linkList}
-          onDeleteLink={onDeleteLink}
-        />
-      )}
+      {showLinkModal && <LinkModal onClickModal={onClickLinkModal} link={urlLink} setLink={setUrlLink} numLink={numLink} linkTitle={linkTitle} linkUrl={linkUrl} setLinkTitle={setLinkTitle} setLinkUrl={setLinkUrl} onClickAdd={onClickAddLink} handleLinkChange={handleLinkChange} linkList={linkList} onDeleteLink={onDeleteLink} />}
     </div>
     // {/* </form> */}
   );
@@ -521,17 +480,7 @@ function DropDownSection({ options, setBiasId, setCategory }) {
   );
 }
 
-export const Modal = ({
-  show,
-  closeModal,
-  title,
-  children,
-  onClickModal,
-  handleFileChange,
-  imagePreview,
-  currentFileName,
-  imageFiles,
-}) => {
+export const Modal = ({ show, closeModal, title, children, onClickModal, handleFileChange, imagePreview, currentFileName, imageFiles }) => {
   const [mode, setMode] = useState(() => {
     return localStorage.getItem("brightMode") || "bright";
   });
@@ -580,9 +529,7 @@ export const Modal = ({
             닫기
           </button>
           <button
-            className={`${style["apply_button"]} ${
-              imagePreview.length > 0 ? style["apply_button_on"] : ""
-            }`}
+            className={`${style["apply_button"]} ${imagePreview.length > 0 ? style["apply_button_on"] : ""}`}
             onClick={() => {
               onClickModal();
             }}
@@ -596,16 +543,7 @@ export const Modal = ({
   );
 };
 
-export function VoteModal({
-  onClickModal,
-  createOptions,
-  onClickAdd,
-  onClickDelete,
-  handleChoiceChange,
-  optionValue,
-  choice,
-  setChoice,
-}) {
+export function VoteModal({ onClickModal, createOptions, onClickAdd, onClickDelete, handleChoiceChange, optionValue, choice, setChoice }) {
   let optionRef = useRef(0);
 
   return (
@@ -651,13 +589,7 @@ export function VoteModal({
           <button className={style["close_button"]} onClick={onClickModal}>
             닫기
           </button>
-          <button
-            className={`${style["apply_button"]} ${
-              choice.length > 0 ? style["apply_button_on"] : ""
-            }`}
-            disabled={choice.length === 0}
-            onClick={onClickModal}
-          >
+          <button className={`${style["apply_button"]} ${choice.length > 0 ? style["apply_button_on"] : ""}`} disabled={choice.length === 0} onClick={onClickModal}>
             적용
           </button>
         </div>
@@ -666,16 +598,7 @@ export function VoteModal({
   );
 }
 
-export function LinkModal({
-  onClickModal,
-  setLinkTitle,
-  setLinkUrl,
-  linkTitle,
-  linkUrl,
-  onClickAdd,
-  linkList,
-  onDeleteLink,
-}) {
+export function LinkModal({ onClickModal, setLinkTitle, setLinkUrl, linkTitle, linkUrl, onClickAdd, linkList, onDeleteLink }) {
   const [urlImage, setUrlImage] = useState([]);
 
   const header = HEADER;
@@ -730,18 +653,8 @@ export function LinkModal({
 
         <div className={style["link-input-container"]}>
           <div className={style["link-input"]}>
-            <input
-              type="text"
-              value={linkTitle}
-              onChange={(e) => setLinkTitle(e.target.value)}
-              placeholder="좌표 설명"
-            />
-            <input
-              type="url"
-              value={linkUrl}
-              onChange={(e) => setLinkUrl(e.target.value)}
-              placeholder="이곳을 클릭해서 URL을 추가하세요"
-            />
+            <input type="text" value={linkTitle} onChange={(e) => setLinkTitle(e.target.value)} placeholder="좌표 설명" />
+            <input type="url" value={linkUrl} onChange={(e) => setLinkUrl(e.target.value)} placeholder="이곳을 클릭해서 URL을 추가하세요" />
           </div>
           <button
             disabled={!(linkTitle && linkUrl)}
@@ -764,13 +677,7 @@ export function LinkModal({
           >
             닫기
           </button>
-          <button
-            className={`${style["apply_button"]} ${
-              linkList.length > 0 ? style["apply_button_on"] : ""
-            }`}
-            disabled={linkList.length === 0}
-            onClick={onClickModal}
-          >
+          <button className={`${style["apply_button"]} ${linkList.length > 0 ? style["apply_button_on"] : ""}`} disabled={linkList.length === 0} onClick={onClickModal}>
             적용
           </button>
         </div>
