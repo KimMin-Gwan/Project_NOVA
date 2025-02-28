@@ -3,6 +3,7 @@ import useBiasStore from "../stores/BiasStore/useBiasStore";
 import useLoginStore from "../stores/LoginStore/useLoginStore";
 import add_bias_icon from "./../img/add_bias.png";
 import { useNavigate } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function BiasBoxes({ setBiasId, fetchBiasCategoryData, writeCommunity }) {
   let bias_url = "https://kr.object.ncloudstorage.com/nova-images/";
@@ -94,17 +95,13 @@ export default function BiasBoxes({ setBiasId, fetchBiasCategoryData, writeCommu
   }
 
   if (loading) {
-    return <div>loading...</div>;
+    toast.loading("loading...");
+    return <Toaster position="bottom-center" />;
+    // return <div>loading...</div>;
   }
 
   return (
-    <div
-      ref={scrollRef}
-      onMouseDown={onMouseDown}
-      onMouseMove={onMouseMove}
-      onMouseUp={onMouseUp}
-      className="bias-container"
-    >
+    <div ref={scrollRef} onMouseDown={onMouseDown} onMouseMove={onMouseMove} onMouseUp={onMouseUp} className="bias-container">
       <div className="bias-wrapper">
         {writeCommunity && (
           <div className="bias-info">
