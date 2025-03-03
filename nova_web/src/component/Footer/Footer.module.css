@@ -1,0 +1,25 @@
+.footer {
+  background-color: #f1f7ff; /* 원하는 배경색으로 변경 */
+  padding: 20px;
+  padding-bottom: 80px;
+  line-height: 1.7;
+  font-weight: 500;
+  color: #333; /* 텍스트 색상 조정 (선택 사항) */
+
+  h4 {
+    padding: 0;
+    margin: 5px 0px 15px 0px;
+    /* margin: 15px 0; */
+  }
+}
+
+.logo_img {
+  width: 70px;
+  height: 40px;
+  transform: translateX(-10px);
+  /* margin-left: 5px; */
+}
+
+.nova_info {
+  font-size: 10px;
+}

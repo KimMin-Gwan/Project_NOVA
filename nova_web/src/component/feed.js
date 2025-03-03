@@ -128,6 +128,7 @@ export function ContentFeed({ detailPage, feed, handleCheckStar, links, fetchRep
   );
 }
 
+// 피드 날짜 및 작성자
 function FeedHeader({ date, nickname }) {
   return (
     <div className={style["user-container"]}>
@@ -162,6 +163,7 @@ function AIFilter({ isReworked, fid, fetchOriginalText }) {
   );
 }
 
+// 해시 태그
 function HashTags({ hashtags }) {
   if (!hashtags || hashtags.length === 0) {
     return null;
@@ -229,7 +231,7 @@ function LinkSection({ links }) {
     for (const item of links)
       await postApi
         .post("nova_sub_system/image_tag", {
-          header: header,
+          header: HEADER,
           body: {
             url: item.url,
           },
@@ -253,7 +255,7 @@ function LinkSection({ links }) {
   }
 
   if (isLoading) {
-    <div>loading...</div>;
+    return <div>loading...</div>;
   }
   return (
     <>

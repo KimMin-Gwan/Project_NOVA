@@ -1,6 +1,5 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
-import axios from "axios";
 
 import mainApi from "../../services/apis/mainApi";
 import postApi from "../../services/apis/postApi";
@@ -140,16 +139,12 @@ export default function FeedDetail({}) {
   };
 
   function fetchRemoveFeed() {
-    axios
-      .get(`https://nova-platform.kr/feed_explore/try_remove_feed?fid=${fid}`, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        if (res.data.body.result) {
-          alert("삭제되었습니다.");
-          navigate(-1);
-        }
-      });
+    mainApi.get(`feed_explore/try_remove_feed?fid=${fid}`).then((res) => {
+      if (res.data.body.result) {
+        alert("삭제되었습니다.");
+        navigate(-1);
+      }
+    });
   }
 
   function onClickOption(e) {

@@ -86,19 +86,8 @@ export default function BiasBoxes({ setBiasId, fetchBiasCategoryData, writeCommu
       onMouseUp={dragHandlers.onMouseUp}
       className="bias-container"
     >
-      <Toaster position="bottom-center" />;
+      <Toaster position="bottom-center" />
       <div className="bias-wrapper">
-        {writeCommunity && (
-          <div className="bias-info">
-            <div className="bias-box">
-              <div className="non-bias">선택 없음</div>
-            </div>
-            <div className="b-name">
-              <span>&nbsp;</span>
-            </div>
-          </div>
-        )}
-
         {Array.from({ length: totalBiasBoxes }).map((_, i) => {
           const bias = biasList[i];
           return (

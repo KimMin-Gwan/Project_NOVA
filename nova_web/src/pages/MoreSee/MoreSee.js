@@ -1,16 +1,12 @@
-import style from "./MoreSee.module.css";
-import logo from "./../../img/logo2.png";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import backword from "./../../img/back_icon.png";
 import fav_icon from "./../../img/favset_icon.svg";
 import bug_icon from "./../../img/bug_icon.svg";
 import user_icon from "./../../img/user_profile.svg";
 import login_icon from "./../../img/login_icon.png";
-import mypage_icon from "./../../img/mypage_icon.png";
 import terms_icon from "./../../img/agree.svg";
-import business_logo from "./../../img/business_logo.png";
 import more_icon from "./../../img/Icon.png";
-import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
 import new_moment from "./../../img/new_moment.svg";
 import today_up from "./../../img/today_up.svg";
 import week_up from "./../../img/week_up.svg";
@@ -19,10 +15,92 @@ import new_post from "./../../img/new_post.svg";
 import fav_follow from "./../../img/fav_follow.svg";
 import fav_sub from "./../../img/fav_sub.svg";
 import notice from "./../../img/notice_more.svg";
-import { getModeClass } from "./../../App.js";
 import NavBar from "../../component/NavBar.js";
+import Footer from "../../component/Footer/Footer.js";
+import { getModeClass } from "./../../App.js";
+import style from "./MoreSee.module.css";
+
+const boardList = [
+  {
+    id: 0,
+    title: "최애 주제 게시판",
+    src: fav_icon,
+    end_point: "/feed_list?type=bias",
+  },
+  {
+    id: 1,
+    title: "오늘의 급상승 게시글",
+    src: today_up,
+    end_point: "/feed_list?type=today",
+  },
+  {
+    id: 2,
+    title: "주간 급상승 게시글",
+    src: week_up,
+    end_point: "/feed_list?type=weekly",
+  },
+  {
+    id: 3,
+    title: "전체 게시글",
+    src: all_post,
+    end_point: "/feed_list?type=all",
+  },
+  {
+    id: 4,
+    title: "공지사항",
+    src: notice,
+    end_point: "/notice",
+  },
+  {
+    id: 5,
+    title: "버그 리포트",
+    src: bug_icon,
+    end_point: "/report",
+  },
+  {
+    id: 6,
+    title: "이용약관",
+    src: terms_icon,
+    end_point: "/terms_page",
+  },
+];
 
 function MoreSee({ onModeChange }) {
+  const serviceList = [
+    {
+      id: 0,
+      title: "새로운 모멘트 작성",
+      src: new_moment,
+      alt: "새로운 모멘트 작성",
+      end_point: "/write_feed/short",
+      onClick: (endPoint) => handlePage(endPoint),
+    },
+    {
+      id: 1,
+      title: "새로운 포스트 작성",
+      src: new_post,
+      alt: "새로운 포스트트 작성",
+      end_point: "/write_feed/long",
+      onClick: (endPoint) => handlePage(endPoint),
+    },
+    {
+      id: 2,
+      title: "최애 주제 팔로우",
+      src: fav_follow,
+      alt: "최애 주제 팔로우",
+      end_point: "/follow_page",
+      onClick: (endPoint) => handlePage(endPoint),
+    },
+    {
+      id: 3,
+      title: "최애 주제 신청",
+      src: fav_sub,
+      alt: "최애 주제 신청",
+      requestURL: "https://naver.me/xGImCJSN",
+      onClick: (requestURL) => handleRequestURL(requestURL),
+    },
+  ];
+
   const requestURL = {
     x: "https://x.com/sebacheong",
     discord: "https://discord.com",
@@ -88,6 +166,9 @@ function MoreSee({ onModeChange }) {
   useEffect(() => {
     document.body.className = brightMode === "dark" ? "dark-mode" : "bright-mode";
   }, [brightMode]);
+
+  const firstBoardList = boardList.slice(0, 4);
+  const otherFunctionList = boardList.slice(4);
   return (
     <div className={style.font}>
       <div className={`${style["container"]} ${style[getModeClass(brightMode)]}`}>
@@ -125,74 +206,63 @@ function MoreSee({ onModeChange }) {
             <p className={style.bodyText_login}>{isLogin ? "마이페이지" : "로그인"}</p>
           </div>
 
+          {/* 게시판 목록 */}
           <div className={style["list-bar"]}>게시판 목록</div>
           <hr></hr>
           <ul className={style.listContainer}>
-            <li className={style.mainComponent} onClick={() => handlePage("/feed_list?type=bias")}>
-              <img src={fav_icon} alt="Arrow" className={style.vector} />
-              <p className={style.bodyText}>최애 주제 게시판</p>
-              <img src={more_icon} alt="Arrow" className={style.more_vector} />
-            </li>
-            <li className={style.mainComponent} onClick={() => handlePage("/feed_list?type=best")}>
-              <img src={today_up} alt="Arrow" className={style.vector} />
-              <p className={style.bodyText}>오늘의 급상승 게시글</p>
-              <img src={more_icon} alt="Arrow" className={style.more_vector} />
-            </li>
-            <li
-              className={style.mainComponent}
-              onClick={() => handlePage("/feed_list?type=weekly_best")}
-            >
-              <img src={week_up} alt="Arrow" className={style.vector} />
-              <p className={style.bodyText}>주간 급상승 게시글</p>
-              <img src={more_icon} alt="Arrow" className={style.more_vector} />
-            </li>
-            <li className={style.mainComponent} onClick={() => handlePage("/feed_list?type=all")}>
-              <img src={all_post} alt="Arrow" className={style.vector} />
-              <p className={style.bodyText}>전체 게시글</p>
-              <img src={more_icon} alt="Arrow" className={style.more_vector} />
-            </li>
+            {firstBoardList.map((board, i) => {
+              return (
+                <li
+                  key={board.id}
+                  className={style.mainComponent}
+                  onClick={() => handlePage(board.end_point)}
+                >
+                  <img src={board.src} alt="Arrow" className={style.vector} />
+                  <p className={style.bodyText}>{board.title}</p>
+                  <img src={more_icon} alt="Arrow" className={style.more_vector} />
+                </li>
+              );
+            })}
           </ul>
           <br></br>
+
+          {/* 서비스 목록 */}
           <div className={style["service-container"]}>
             <h3>서비스</h3>
             <section className={style["button-container"]}>
-              <button onClick={() => handlePage("/write_feed/short")}>
-                <img src={new_moment} alt="새로운 모멘트 작성" />
-                새로운 모멘트 작성
-              </button>
-              <button onClick={() => handlePage("/write_feed/long")}>
-                <img src={new_post} alt="새로운 포스트 작성" />
-                새로운 포스트 작성
-              </button>
-              <button onClick={() => handlePage("/follow_page")}>
-                <img src={fav_follow} alt="최애 주제 팔로우" />
-                최애 주제 팔로우
-              </button>
-              <button onClick={() => handleRequestURL(requestURL.naverform)}>
-                <img src={fav_sub} alt="최애 주제 신청" />
-                최애 주제 신청
-              </button>
+              {serviceList.map((service, i) => {
+                return (
+                  <button
+                    key={service.id}
+                    onClick={() => service.onClick(service.end_point || service.requestURL)}
+                  >
+                    <img src={service.src} alt={service.alt} />
+                    {service.title}
+                  </button>
+                );
+              })}
             </section>
           </div>
+
           <br></br>
+          {/* 다른 기능 목록 */}
           <div className={style["list-bar"]}>다른 기능</div>
           <hr></hr>
           <ul className={style.listContainer}>
-            <li className={style.mainComponent} onClick={() => handlePage("/notice")}>
-              <img src={notice} alt="Arrow" className={style.vector} />
-              <p className={style.bodyText}>공지사항</p>
-              <img src={more_icon} alt="Arrow" className={style.more_vector} />
-            </li>
-            <li className={style.mainComponent} onClick={() => handlePage("/report")}>
-              <img src={bug_icon} alt="Arrow" className={style.vector} />
-              <p className={style.bodyText}>버그 리포트</p>
-              <img src={more_icon} alt="Arrow" className={style.more_vector} />
-            </li>
-            <li className={style.mainComponent} onClick={() => handlePage("/terms_page")}>
-              <img src={terms_icon} alt="Arrow" className={style.vector} />
-              <p className={style.bodyText}>이용약관</p>
-              <img src={more_icon} alt="Arrow" className={style.more_vector} />
-            </li>
+            {otherFunctionList.map((board, i) => {
+              return (
+                <li
+                  key={board.id}
+                  className={style.mainComponent}
+                  onClick={() => handlePage(board.end_point)}
+                >
+                  <img src={board.src} alt="Arrow" className={style.vector} />
+                  <p className={style.bodyText}>{board.title}</p>
+                  <img src={more_icon} alt="Arrow" className={style.more_vector} />
+                </li>
+              );
+            })}
+
             {/* <li className={style.mainComponent} onClick={handleChangeMode}>
               <img src={set_icon} alt="Arrow" className={style.vector} />
               <p className={style.bodyText}>
@@ -204,18 +274,7 @@ function MoreSee({ onModeChange }) {
         </div>
         <div className={style.inquiry}></div>
 
-        <footer className={style.footer}>
-          <div>
-            <img src={logo} alt="logo_Icon" className={style.logo_img} />
-          </div>
-          <h4>세상을 바꾸는 청년들</h4>
-          <p className={style.nova_info}>경북 경산시 압량읍 압독2로1길 21, 1층 184</p>
-          <p className={style.nova_info}>대표: 김민관 | 사업자등록번호: 380-08-03011</p>
-          <p className={style.nova_info}>통신판매업신고번호: 0000-0000-000000</p>
-          <p className={style.nova_info}>
-            전화번호: 010-9875-2508 | 이메일:youths0828@nova-platform.kr
-          </p>
-        </footer>
+        <Footer />
 
         <NavBar />
       </div>
