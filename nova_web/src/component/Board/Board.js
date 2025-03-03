@@ -1,47 +1,38 @@
 import BoardContent from "../BoardContent/BoardContent";
 import BoardTitle from "../BoardTitle/BoardTitle";
-import "./index.css";
-import chat from "../../img/chatLight.png";
-import ticket from "../../img/Ticket_light.png";
-import insta from "../../img/insta_color.png";
 import youtube from "../../img/youtube.svg";
 import naver from "../../img/naver.svg";
 import chzzz from "../../img/chzzz.svg";
-import x_img from "../../img/x_color.png";
-import { useState, useEffect } from "react";
+import "./index.css";
 
 export default function Board({ SetIsOpen, boardData, board, setBoard }) {
-  function handleRequestURL(url) {
-    window.open(url, "_blank", "noopener, noreferrer");
-  }
+  const linkItem = [
+    {
+      id: 0,
+      name: "네이버",
+      src: naver,
+      url: boardData.urls.Naver,
+    },
+    {
+      id: 1,
+      name: "유튜브",
+      src: youtube,
+      url: boardData.urls.TikTok,
+    },
+    {
+      id: 2,
+      name: "방송국",
+      src: chzzz,
+      url: boardData.urls.TikTok,
+    },
+  ];
 
   return (
     <div className="Board">
       <BoardTitle>게시판 목록</BoardTitle>
       <BoardContent SetIsOpen={SetIsOpen} boardData={boardData} board={board} setBoard={setBoard} />
       <BoardTitle>외부 링크</BoardTitle>
-      {/* link box */}
-      <div className="LinkBox_container">
-        <div className="LinkBox" onClick={() => handleRequestURL(boardData.urls.Naver)}>
-          <div className="LinkBox_img">
-            <img src={naver} alt="img" />
-          </div>
-          네이버
-        </div>
-
-        <div className="LinkBox" onClick={() => handleRequestURL(boardData.urls.TikTok)}>
-          <div className="LinkBox_img">
-            <img src={youtube} alt="img" />
-          </div>
-          유튜브
-        </div>
-        <div className="LinkBox" onClick={() => handleRequestURL(boardData.urls.TikTok)}>
-          <div className="LinkBox_img">
-            <img src={chzzz} alt="img" />
-          </div>
-          방송국
-        </div>
-      </div>
+      <BoardLink linkItem={linkItem} />
 
       {/* <BoardTitle>노바 펀딩</BoardTitle>
       <ul className="Board_content">
@@ -54,6 +45,26 @@ export default function Board({ SetIsOpen, boardData, board, setBoard }) {
           펀딩 상품
         </li>
       </ul> */}
+    </div>
+  );
+}
+
+function BoardLink({ linkItem }) {
+  function handleRequestURL(url) {
+    window.open(url, "_blank", "noopener, noreferrer");
+  }
+  return (
+    <div className="LinkBox_container">
+      {linkItem.map((item) => {
+        return (
+          <div key={item.id} className="LinkBox" onClick={() => handleRequestURL(item.url)}>
+            <div className="LinkBox_img">
+              <img src={item.src} alt="img" />
+            </div>
+            <div>{item.name}</div>
+          </div>
+        );
+      })}
     </div>
   );
 }

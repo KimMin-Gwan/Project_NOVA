@@ -1,9 +1,7 @@
-import Slider from "react-slick";
-import style from "./KeywordBox.module.css";
-import { useEffect, useRef, useState } from "react";
-import axios from "axios";
+import { useEffect, useState } from "react";
 import useDragScroll from "../../hooks/useDragScroll";
 import mainApi from "../../services/apis/mainApi";
+import style from "./KeywordBox.module.css";
 
 export default function KeywordBox({ type, title, subTitle, onClickTagButton, fetchData }) {
   const { scrollRef, hasDragged, dragHandlers } = useDragScroll();

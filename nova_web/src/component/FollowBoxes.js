@@ -130,23 +130,6 @@ export default function FollowBoxes({ setBiasId }) {
       className="bias-container"
     >
       <div className="bias-wrapper">
-        {/* <div className="bias-info">
-          <div className="bias-box">
-            <div
-              className="non-bias"
-              onClick={() => {
-                // onClickBiasId(bias.bid);
-                // fetchBiasCategoryData && fetchBiasCategoryData(bias.bid);
-              }}
-            >
-              선택 없음
-            </div>
-          </div>
-          <div className="b-name">
-            <span>&nbsp;</span>
-          </div>
-        </div> */}
-
         {Array.from({ length: totalBiasBoxes }).map((_, i) => {
           const bias = biasList[i];
           return (
@@ -178,7 +161,15 @@ export default function FollowBoxes({ setBiasId }) {
                 </div>
               </button>
               <p>
-                {clickedBname}님을 <b>팔로우</b>합니다
+                {clickedBname}님을{" "}
+                <b>
+                  {biasList.some((item) => {
+                    return item.bid === clickedBid;
+                  })
+                    ? "팔로우 취소"
+                    : "팔로우"}
+                </b>
+                합니다
               </p>
               <span>
                 <button onClick={closeModal}>취소</button>

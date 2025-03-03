@@ -1,24 +1,29 @@
-import "@toast-ui/editor/dist/toastui-editor-viewer.css";
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+
+import postApi from "../../services/apis/postApi.js";
+import mainApi from "../../services/apis/mainApi.js";
+import useBiasStore from "../../stores/BiasStore/useBiasStore.js";
+
+import { getModeClass } from "./../../App.js";
+
+import filter_icon from "./../../img/filter.svg";
+
+import Feed from "./../../component/feed";
 import BiasBoxes from "../../component/BiasBoxes.js";
 import FilterModal from "../../component/FilterModal/FilterModal.js";
 import SearchBox from "../../component/SearchBox.js";
 import KeywordBox from "../../component/keyword/KeywordBox.js";
-import { getModeClass } from "./../../App.js";
-import Feed from "./../../component/feed";
-import filter_icon from "./../../img/filter.svg";
-import style from "./FeedHashList.module.css";
 import CategoryModal from "../../component/CategoryModal/CategoryModal.js";
 import NoneFeed from "../../component/NoneFeed/NoneFeed.js";
-import useBiasStore from "../../stores/BiasStore/useBiasStore.js";
 import NavBar from "../../component/NavBar.js";
 import Header from "../../component/Header/Header.js";
 import StoryFeed from "../../component/StoryFeed/StoryFeed.js";
-import postApi from "../../services/apis/postApi.js";
-import mainApi from "../../services/apis/mainApi.js";
 
-export default function FeedList(isUserState) {
+import "@toast-ui/editor/dist/toastui-editor-viewer.css";
+import style from "./FeedHashList.module.css";
+
+export default function FeedList() {
   const [params] = useSearchParams();
   const type = params.get("type");
 
@@ -49,10 +54,9 @@ export default function FeedList(isUserState) {
   const initialMode = brightModeFromUrl || localStorage.getItem("brightMode") || "bright"; // URL에서 가져오고, 없으면 로컬 스토리지에서 가져옴
   const [mode, setMode] = useState(initialMode);
 
-  let { biasList, fetchBiasList } = useBiasStore();
+  let { biasList } = useBiasStore();
   useEffect(() => {
     console.log("동작");
-    // fetchBiasList();
   }, []);
 
   let bids = biasList.map((item, i) => {
@@ -289,19 +293,18 @@ export default function FeedList(isUserState) {
             <div className={style["story_container"]}>
               <div className={style["story_wrapper"]}>
                 {feedData.map((feed, i) => {
-                  console.log("dasd", feed.feed.fid);
                   return <StoryFeed key={`story_${feed.feed.fid}`} feedData={feed} />;
                 })}
               </div>
             </div>
-            {biasId && (
-              <div className={style["category-info"]}>
-                <p>모든 게시글</p>
-                <p className={style["category_change"]} onClick={onClickCategory}>
-                  카테고리 변경
-                </p>
-              </div>
-            )}
+
+            <div className={style["category-info"]}>
+              <p>모든 게시글</p>
+              <p className={style["category_change"]} onClick={onClickCategory}>
+                카테고리 변경
+              </p>
+            </div>
+
             {isOpendCategory && (
               <CategoryModal
                 SetIsOpen={setIsOpendCategory}
@@ -358,13 +361,11 @@ export default function FeedList(isUserState) {
           {isLoading && <p>Loading...</p>}
           {isFilterClicked && (
             <FilterModal
-              // isFilterClicked={isFilterClicked}
               onClickFilterButton={onClickFilterButton}
               setFilterCategory={setFilterCategory}
               setFilterFclass={setFilterFclass}
               fetchAllFeed={fetchAllFeed}
               onClickApplyButton1={onClickApplyButton1}
-              // setNextData={setNextData}
             />
           )}
         </div>

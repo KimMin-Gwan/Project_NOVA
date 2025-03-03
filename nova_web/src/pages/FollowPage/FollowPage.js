@@ -25,8 +25,6 @@ export default function FollowPage() {
   const initialMode = brightModeFromUrl || localStorage.getItem("brightMode") || "bright"; // URL에서 가져오고, 없으면 로컬 스토리지에서 가져옴
   const [mode, setMode] = useState(initialMode);
 
-  let [feedData, setFeedData] = useState([]);
-  let [nextData, setNextData] = useState([]);
   let [isLoading, setIsLoading] = useState(true);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -144,7 +142,7 @@ export default function FollowPage() {
 
         <div className={style["following"]}>
           <h4>
-            <b>팔로우</b> 중인 주제
+            <b>팔로우</b>중인 주제
           </h4>
           <FollowBoxes setBiasId={setBiasId} />
         </div>
@@ -295,7 +293,15 @@ export default function FollowPage() {
                 </div>
               </button>
               <p>
-                {clickedBname}님을 <b>팔로우</b>합니다
+                {clickedBname}님을{" "}
+                <b>
+                  {biasList.some((item) => {
+                    return item.bid === clickedBid;
+                  })
+                    ? "팔로우 취소"
+                    : "팔로우"}
+                </b>
+                합니다
               </p>
               <span>
                 <button onClick={closeModal}>취소</button>
