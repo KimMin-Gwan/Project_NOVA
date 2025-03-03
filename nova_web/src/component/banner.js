@@ -32,7 +32,6 @@ export default function Banner() {
         clickable: true,
       }}
       modules={[Autoplay, Pagination]}
-      className="mySwiper"
     >
       {banners.map((banner) => (
         <SwiperSlide key={banner.baid}>

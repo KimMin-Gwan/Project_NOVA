@@ -1,16 +1,55 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import shortForm_img from "./../img/short_form2.png";
-import moment from "./../img/moment_img.png";
-import post from "./../img/post_img.png";
-import menu3 from "./../img/fav_nav.png";
-import feed_write from "./../img/feed_nav.png";
-import search from "./../img/search_nav.png";
+
 import { getModeClass } from "./../App.js";
 import WriteMoment from "../pages/Write/Writemoment.js";
 
-const NavBar = ({ isUserState, brightMode }) => {
-  const [isVisible, setIsVisible] = useState(false);
+import more_see from "./../img/more_see.png";
+import moment from "./../img/moment_img.png";
+import post from "./../img/post_img.png";
+import short_form from "./../img/short_form_icon.png";
+import feed_write from "./../img/feed_nav.png";
+import search from "./../img/search_nav.png";
+
+const NavBar = ({ brightMode }) => {
+  const navBarList = [
+    {
+      id: 0,
+      title: "최애 게시판",
+      src: short_form,
+      alt: "bias_board",
+      end_point: "/feed_list?type=bias",
+      type: "navigate",
+      onClick: (endPoint) => handleNavigate(endPoint),
+    },
+    {
+      id: 1,
+      title: "피드 작성",
+      src: feed_write,
+      alt: "write",
+      end_point: "/feed_list?type=bias",
+      type: "write",
+      onClick: () => onClickWrite(),
+    },
+    {
+      id: 2,
+      title: "검색",
+      src: search,
+      alt: "search",
+      end_point: "/search",
+      type: "navigate",
+      onClick: (endPoint) => handleNavigate(endPoint),
+    },
+    {
+      id: 3,
+      title: "더보기",
+      src: more_see,
+      alt: "bias_board",
+      end_point: "/more_see",
+      type: "navigate",
+      onClick: (endPoint) => handleNavigate(endPoint),
+    },
+  ];
 
   let navigate = useNavigate();
 
@@ -26,15 +65,11 @@ const NavBar = ({ isUserState, brightMode }) => {
     navigate(path);
   }
 
-  function handleStopClick(e) {
-    e.stopPropagation();
-  }
-
-  function handleModal() {
-    if (!writeMoment) {
+  function handleAction(type, endPoint) {
+    if (type === "write") {
       onClickWrite();
     } else {
-      setWriteMoment(false);
+      handleNavigate(endPoint);
     }
   }
 
@@ -87,57 +122,19 @@ const NavBar = ({ isUserState, brightMode }) => {
 
         {writeMoment && <WriteMoment onClickMoment={onClickMoment} />}
 
-        <div className="nav_button_box">
-          <button
-            className="nav_button"
-            onClick={(e) => {
-              handleNavigate("/feed_list?type=bias");
-              handleStopClick(e);
-            }}
-          >
-            <img src={menu3} alt="make" className="btn_img" />
-            <p className="btn_text">최애 게시판</p>
-          </button>
-        </div>
-
-        <div className="nav_button_box write_button_hover">
-          <button
-            className="nav_button"
-            onClick={(e) => {
-              onClickWrite();
-              handleStopClick(e);
-            }}
-          >
-            <img src={feed_write} alt="make" className="btn_img" />
-            <p className="btn_text">피드 작성</p>
-          </button>
-        </div>
-
-        <div className="nav_button_box">
-          <button
-            className="nav_button"
-            onClick={(e) => {
-              handleNavigate("/search");
-              handleStopClick(e);
-            }}
-          >
-            <img src={search} alt="make" className="btn_img" />
-            <p className="btn_text">검색</p>
-          </button>
-        </div>
-
-        <div className="nav_button_box">
-          <button
-            className="nav_button"
-            onClick={(e) => {
-              handleNavigate("/more_see");
-              handleStopClick(e);
-            }}
-          >
-            <img src={shortForm_img} alt="shorts" className="btn_img" />
-            <p className="btn_text">더보기</p>
-          </button>
-        </div>
+        {navBarList.map((item) => (
+          <div className="nav_button_box">
+            <button
+              className="nav_button"
+              onClick={(e) => {
+                handleAction(item.type, item.end_point);
+              }}
+            >
+              <img src={item.src} alt={item.alt} className="btn_img" />
+              <p className="btn_text">{item.title}</p>
+            </button>
+          </div>
+        ))}
       </div>
     </div>
   );
