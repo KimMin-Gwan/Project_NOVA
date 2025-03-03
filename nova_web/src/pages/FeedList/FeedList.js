@@ -16,7 +16,7 @@ import SearchBox from "../../component/SearchBox.js";
 import KeywordBox from "../../component/keyword/KeywordBox.js";
 import CategoryModal from "../../component/CategoryModal/CategoryModal.js";
 import NoneFeed from "../../component/NoneFeed/NoneFeed.js";
-import NavBar from "../../component/NavBar.js";
+import NavBar from "../../component/NavBar/NavBar.js";
 import Header from "../../component/Header/Header.js";
 import StoryFeed from "../../component/StoryFeed/StoryFeed.js";
 

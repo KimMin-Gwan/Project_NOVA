@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import Banner from "../../component/banner.js";
-import NavBar from "../../component/NavBar.js";
+import NavBar from "../../component/NavBar/NavBar.js";
 import AllPost from "../../component/AllPost/AllPost.js";
 import all_post from "../../img/all_post.png";
 import best from "../../img/best.png";

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useNavigate, useNavigation, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import style from "./WriteFeed.module.css";
 import tag from "./../../img/tag.svg";
 import add_icon from "./../../img/add.svg";
@@ -34,11 +34,6 @@ const Write = ({ brightmode }) => {
   let [longData, setLongData] = useState();
 
   let [biasId, setBiasId] = useState();
-  // useEffect(() => {
-  //   setLinkList([{ name: linkTitle, url: linkUrl }]);
-  //   console.log("linklist");
-  // }, [linkTitle, linkUrl]);
-  let [numImg, setNumImg] = useState(0);
 
   function onClickModal() {
     setShowModal(!showModal);
@@ -50,7 +45,6 @@ const Write = ({ brightmode }) => {
     setShowLinkModal(!showLinkModal);
   }
 
-  // let [isLogined, setIsLogined] = useState(false);
   let header = {
     "request-type": "default",
     "client-version": "v1.0.1",
@@ -88,7 +82,6 @@ const Write = ({ brightmode }) => {
   const [imagePreview, setImagePreview] = useState([]);
   const [imageFiles, setImageFiles] = useState([]);
 
-  const [imageFile, setImageFile] = useState(null);
   const [bodyText, setBodyText] = useState(""); // 글 입력 내용 상태로 저장
   const [choice, setChoice] = useState([]); // 선택지 4개 상태로 저장
   let [inputTagCount, setInputTagCount] = useState(0); //글자수
@@ -202,12 +195,6 @@ const Write = ({ brightmode }) => {
     setCreateOptions((prev) => Math.max(0, prev - 1));
   }
 
-  function handleLinkChange() {}
-
-  //   }
-  //   let [plusTag, setPlusTag] = useState("");
-  //   let [link, setLink] = useState([]);
-
   let [inputTag, setInputTag] = useState("");
   let [tagList, setTagList] = useState([]);
 
@@ -267,7 +254,7 @@ const Write = ({ brightmode }) => {
       navigate("/nova_login");
     }
   }
-  let { biasList, loading, fetchBiasList } = useBiasStore();
+  let { biasList } = useBiasStore();
 
   const [showTopic, setShowTopic] = useState(false);
   const [currentTopic, setCurrentTopic] = useState("선택 없음");
@@ -280,11 +267,6 @@ const Write = ({ brightmode }) => {
     setCurrentTopic(e.target.innerText);
     setShowTopic(!showTopic);
   }
-
-  const [mode, setMode] = useState(() => {
-    // 로컬 스토리지에서 가져온 값이 있으면 그것을, 없으면 'bright'로 초기화
-    return localStorage.getItem("brightMode") || "bright";
-  });
 
   return (
     // <form onSubmit={handleSubmit}>
@@ -340,7 +322,14 @@ const Write = ({ brightmode }) => {
         <div>해시태그</div>
         <div className={style["input-container"]}>
           <div className={style["input-wrapper"]}>
-            <input placeholder="#해시태그" type="text" value={`${inputTag}`} onChange={onChangeTag} onKeyDown={onKeyDown} className={style["input-hashtag"]} />
+            <input
+              placeholder="#해시태그"
+              type="text"
+              value={`${inputTag}`}
+              onChange={onChangeTag}
+              onKeyDown={onKeyDown}
+              className={style["input-hashtag"]}
+            />
             <span className={style["count-text"]}>{inputTagCount}/12</span>
           </div>
           <div className={style["button-wrapper"]}>
@@ -372,10 +361,20 @@ const Write = ({ brightmode }) => {
       </div>
 
       <div className={style["content_container"]}>
-        <div className={`${style["content-title"]} ${type === "long" && style["content-title-long"]}`}>본문</div>
+        <div
+          className={`${style["content-title"]} ${type === "long" && style["content-title-long"]}`}
+        >
+          본문
+        </div>
         {type === "short" && (
           <>
-            <textarea className={style["write_body"]} name="body" placeholder="내용을 입력해주세요" value={bodyText} onChange={onChangeBody} />
+            <textarea
+              className={style["write_body"]}
+              name="body"
+              placeholder="내용을 입력해주세요"
+              value={bodyText}
+              onChange={onChangeBody}
+            />
             <span className={style["count-text"]}>{inputBodyCount}/300</span>
           </>
         )}
@@ -383,8 +382,14 @@ const Write = ({ brightmode }) => {
         {type === "long" && <EditorBox setLongData={setLongData} />}
       </div>
 
-      {type === "short" && <p className={style["alert_message"]}>숏 피드 게시글은 작성 후 24시간 동안 노출됩니다.</p>}
-      {type === "long" && <p className={style["alert_message"]}>타인에게 불편을 줄 수 있는 내용의 게시글은 경고 없이 삭제 될 수 있습니다.</p>}
+      {type === "short" && (
+        <p className={style["alert_message"]}>숏 피드 게시글은 작성 후 24시간 동안 노출됩니다.</p>
+      )}
+      {type === "long" && (
+        <p className={style["alert_message"]}>
+          타인에게 불편을 줄 수 있는 내용의 게시글은 경고 없이 삭제 될 수 있습니다.
+        </p>
+      )}
 
       <div className={style["content_button"]}>
         {type !== "long" && (
@@ -417,7 +422,15 @@ const Write = ({ brightmode }) => {
           링크
         </button>
       </div>
-      {showModal && <Modal onClickModal={onClickModal} handleFileChange={handleFileChange} imagePreview={imagePreview} currentFileName={currentFileName} imageFiles={imageFiles} />}
+      {showModal && (
+        <Modal
+          onClickModal={onClickModal}
+          handleFileChange={handleFileChange}
+          imagePreview={imagePreview}
+          currentFileName={currentFileName}
+          imageFiles={imageFiles}
+        />
+      )}
       {/* {showVoteModal && (
         <VoteModal
           onClickModal={onClickVoteModal}
@@ -429,7 +442,18 @@ const Write = ({ brightmode }) => {
           setChoice={setChoice}
         />
       )} */}
-      {showLinkModal && <LinkModal onClickModal={onClickLinkModal} link={urlLink} setLink={setUrlLink} numLink={numLink} linkTitle={linkTitle} linkUrl={linkUrl} setLinkTitle={setLinkTitle} setLinkUrl={setLinkUrl} onClickAdd={onClickAddLink} handleLinkChange={handleLinkChange} linkList={linkList} onDeleteLink={onDeleteLink} />}
+      {showLinkModal && (
+        <LinkModal
+          onClickModal={onClickLinkModal}
+          linkTitle={linkTitle}
+          linkUrl={linkUrl}
+          setLinkTitle={setLinkTitle}
+          setLinkUrl={setLinkUrl}
+          onClickAdd={onClickAddLink}
+          linkList={linkList}
+          onDeleteLink={onDeleteLink}
+        />
+      )}
     </div>
     // {/* </form> */}
   );
@@ -480,13 +504,13 @@ function DropDownSection({ options, setBiasId, setCategory }) {
   );
 }
 
-export const Modal = ({ show, closeModal, title, children, onClickModal, handleFileChange, imagePreview, currentFileName, imageFiles }) => {
-  const [mode, setMode] = useState(() => {
-    return localStorage.getItem("brightMode") || "bright";
-  });
-
-  let fileRef = useRef();
-
+export const Modal = ({
+  onClickModal,
+  handleFileChange,
+  imagePreview,
+  currentFileName,
+  imageFiles,
+}) => {
   return (
     <div className={style["wrapper-container"]}>
       <div className={style["modal-container"]}>
@@ -499,7 +523,6 @@ export const Modal = ({ show, closeModal, title, children, onClickModal, handleF
             이미지를 추가하려면 여기를 클릭하세요
           </label>
           <input
-            ref={fileRef}
             id={style["image-file"]}
             name="image"
             type="file"
@@ -529,7 +552,9 @@ export const Modal = ({ show, closeModal, title, children, onClickModal, handleF
             닫기
           </button>
           <button
-            className={`${style["apply_button"]} ${imagePreview.length > 0 ? style["apply_button_on"] : ""}`}
+            className={`${style["apply_button"]} ${
+              imagePreview.length > 0 ? style["apply_button_on"] : ""
+            }`}
             onClick={() => {
               onClickModal();
             }}
@@ -543,7 +568,16 @@ export const Modal = ({ show, closeModal, title, children, onClickModal, handleF
   );
 };
 
-export function VoteModal({ onClickModal, createOptions, onClickAdd, onClickDelete, handleChoiceChange, optionValue, choice, setChoice }) {
+export function VoteModal({
+  onClickModal,
+  createOptions,
+  onClickAdd,
+  onClickDelete,
+  handleChoiceChange,
+  optionValue,
+  choice,
+  setChoice,
+}) {
   let optionRef = useRef(0);
 
   return (
@@ -589,7 +623,13 @@ export function VoteModal({ onClickModal, createOptions, onClickAdd, onClickDele
           <button className={style["close_button"]} onClick={onClickModal}>
             닫기
           </button>
-          <button className={`${style["apply_button"]} ${choice.length > 0 ? style["apply_button_on"] : ""}`} disabled={choice.length === 0} onClick={onClickModal}>
+          <button
+            className={`${style["apply_button"]} ${
+              choice.length > 0 ? style["apply_button_on"] : ""
+            }`}
+            disabled={choice.length === 0}
+            onClick={onClickModal}
+          >
             적용
           </button>
         </div>
@@ -598,7 +638,16 @@ export function VoteModal({ onClickModal, createOptions, onClickAdd, onClickDele
   );
 }
 
-export function LinkModal({ onClickModal, setLinkTitle, setLinkUrl, linkTitle, linkUrl, onClickAdd, linkList, onDeleteLink }) {
+export function LinkModal({
+  onClickModal,
+  setLinkTitle,
+  setLinkUrl,
+  linkTitle,
+  linkUrl,
+  onClickAdd,
+  linkList,
+  onDeleteLink,
+}) {
   const [urlImage, setUrlImage] = useState([]);
 
   const header = HEADER;
@@ -618,11 +667,6 @@ export function LinkModal({ onClickModal, setLinkTitle, setLinkUrl, linkTitle, l
         setIsLoading(false);
       });
   }
-
-  const onClickDelete = (i) => {};
-  // if (isLoading) {
-  //   return <div>loading...</div>;
-  // }
 
   return (
     <div className={style["wrapper-container"]}>
@@ -653,8 +697,18 @@ export function LinkModal({ onClickModal, setLinkTitle, setLinkUrl, linkTitle, l
 
         <div className={style["link-input-container"]}>
           <div className={style["link-input"]}>
-            <input type="text" value={linkTitle} onChange={(e) => setLinkTitle(e.target.value)} placeholder="좌표 설명" />
-            <input type="url" value={linkUrl} onChange={(e) => setLinkUrl(e.target.value)} placeholder="이곳을 클릭해서 URL을 추가하세요" />
+            <input
+              type="text"
+              value={linkTitle}
+              onChange={(e) => setLinkTitle(e.target.value)}
+              placeholder="좌표 설명"
+            />
+            <input
+              type="url"
+              value={linkUrl}
+              onChange={(e) => setLinkUrl(e.target.value)}
+              placeholder="이곳을 클릭해서 URL을 추가하세요"
+            />
           </div>
           <button
             disabled={!(linkTitle && linkUrl)}
@@ -677,7 +731,13 @@ export function LinkModal({ onClickModal, setLinkTitle, setLinkUrl, linkTitle, l
           >
             닫기
           </button>
-          <button className={`${style["apply_button"]} ${linkList.length > 0 ? style["apply_button_on"] : ""}`} disabled={linkList.length === 0} onClick={onClickModal}>
+          <button
+            className={`${style["apply_button"]} ${
+              linkList.length > 0 ? style["apply_button_on"] : ""
+            }`}
+            disabled={linkList.length === 0}
+            onClick={onClickModal}
+          >
             적용
           </button>
         </div>

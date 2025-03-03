@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { getModeClass } from "./../App.js";
-import WriteMoment from "../pages/Write/Writemoment.js";
+import { getModeClass } from "../../App.js";
+import WriteMoment from "../../pages/Write/Writemoment.js";
 
-import more_see from "./../img/more_see.png";
-import moment from "./../img/moment_img.png";
-import post from "./../img/post_img.png";
-import short_form from "./../img/short_form_icon.png";
-import feed_write from "./../img/feed_nav.png";
-import search from "./../img/search_nav.png";
+import more_see from "./../../img/more_see.png";
+import moment from "./../../img/moment_img.png";
+import post from "./../../img/post_img.png";
+import short_form from "./../../img/short_form_icon.png";
+import feed_write from "./../../img/feed_nav.png";
+import search from "./../../img/search_nav.png";
+
+import "./index.css";
 
 const NavBar = ({ brightMode }) => {
   const navBarList = [
@@ -65,6 +67,7 @@ const NavBar = ({ brightMode }) => {
     navigate(path);
   }
 
+  // type이 write일 때만 다른 동작작
   function handleAction(type, endPoint) {
     if (type === "write") {
       onClickWrite();

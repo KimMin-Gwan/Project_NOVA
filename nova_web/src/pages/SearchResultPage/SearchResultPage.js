@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import SearchBox from "../../component/SearchBox";
 import "./index.css";
 import back from "./../../img/search_back.png";
-import NavBar from "../../component/NavBar";
+import NavBar from "../../component/NavBar/NavBar";
 import mainApi from "../../services/apis/mainApi";
 import Header from "../../component/Header/Header";
 import Comments from "../../component/Comments/Comments";

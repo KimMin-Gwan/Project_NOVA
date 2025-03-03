@@ -1,17 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 // import style from "./../FeedPage/FeedPage.module.css";
 import style from "./WriteFeed.module.css";
 // import stylePlanet from "./../PlanetPage/Planet.module.css";
-import backword from "./../../img/back_icon.png";
 
 import tags from "./../../img/tags.png";
-import back from "./../../img/write_vector1.png";
-import select from "./../../img/select-icon.png";
-import img from "./../../img/img-icon.png";
-import { getModeClass } from "./../../App.js";
 import BiasBoxes from "../../component/BiasBoxes.js";
-// import { Editor } from "@toast-ui/react-editor/index.js";
 const WriteFeed = ({ brightmode }) => {
   const params = useParams();
 
@@ -358,9 +352,7 @@ const WriteFeed = ({ brightmode }) => {
         <span className={style["count-text"]}>{inputBodyCount}/300</span>
       </div>
 
-      <p className={style["alert_message"]}>
-        숏 피드 게시글은 작성 후 24시간 동안 노출됩니다.
-      </p>
+      <p className={style["alert_message"]}>숏 피드 게시글은 작성 후 24시간 동안 노출됩니다.</p>
 
       <div className={style["content_button"]}>
         <button

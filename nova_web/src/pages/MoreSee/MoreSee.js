@@ -15,7 +15,7 @@ import new_post from "./../../img/new_post.svg";
 import fav_follow from "./../../img/fav_follow.svg";
 import fav_sub from "./../../img/fav_sub.svg";
 import notice from "./../../img/notice_more.svg";
-import NavBar from "../../component/NavBar.js";
+import NavBar from "../../component/NavBar/NavBar.js";
 import Footer from "../../component/Footer/Footer.js";
 import { getModeClass } from "./../../App.js";
 import style from "./MoreSee.module.css";

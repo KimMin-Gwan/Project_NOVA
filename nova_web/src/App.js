@@ -6,7 +6,7 @@ import MyPageEdit from "./pages/MyPage/MypageEdit";
 import NOVALogin from "./pages/NovaLogin/NovaLogin";
 import MoreSee from "./pages/MoreSee/MoreSee";
 import SignUp from "./pages/SignUp/SignUp.js";
-import NavBar from "./component/NavBar.js";
+import NavBar from "./component/NavBar/NavBar.js";
 import Temrs from "./pages/Temrs/Temrs.js";
 import FindPw from "./pages/FindPw/FindPw.js";
 import FindPwChange from "./pages/FindPw/FindPwChange.js";

@@ -5,7 +5,7 @@ import logo2 from "../../img/logo2.png";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useTagStore from "../../stores/TagStore/useTagStore";
-import NavBar from "../../component/NavBar";
+import NavBar from "../../component/NavBar/NavBar";
 import Header from "../../component/Header/Header";
 export default function SearchPage() {
   let navigate = useNavigate();
