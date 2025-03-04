@@ -92,20 +92,25 @@ const NavBar = ({ brightMode }) => {
         if (writeMoment) {
           e.stopPropagation();
           e.preventDefault();
-          setWriteMoment();
+          setWriteMoment(false);
+        } else {
+          onClickWrite();
         }
-        onClickWrite();
       }}
     >
       <div className={`bottom_bar ${getModeClass(mode)}`}>
         {writeOptions && (
-          <div className={`write_select`}>
+          <div
+            className={`write_select`}
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
             <h4>새로운 게시글 작성하기</h4>
 
             <section>
               <button
                 onClick={() => {
-                  setWriteOptions(!writeOptions);
                   onClickMoment();
                 }}
               >
@@ -114,6 +119,7 @@ const NavBar = ({ brightMode }) => {
                 </div>
                 새 모멘트
               </button>
+
               <button
                 onClick={() => {
                   handleNavigate("/write_feed/long");
@@ -134,7 +140,13 @@ const NavBar = ({ brightMode }) => {
               >
                 주제 팔로우
               </button>
-              <button>추가 기능</button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+              >
+                추가 기능
+              </button>
             </section>
           </div>
         )}

@@ -12,6 +12,8 @@ import postApi from "../../services/apis/postApi.js";
 import useBiasStore from "../../stores/BiasStore/useBiasStore.js";
 import HEADER from "../../constant/header.js";
 import toast, { Toaster } from "react-hot-toast";
+import DropDown from "../../component/DropDown/DropDown.js";
+import Input from "../../component/Input/Input.js";
 
 const categoryData = [
   { key: 0, category: "자유게시판" },
@@ -300,7 +302,8 @@ const Write = ({ brightmode }) => {
 
       <section className={style["Select_container"]}>
         <div className={style["section_title"]}>주제 선택</div>
-        <DropDownSection options={biasList} setBiasId={setBiasId} />
+        <DropDown options={biasList} setBiasId={setBiasId} />
+
         <div style={{ textAlign: "right" }}>
           <div
             className={style["more-find"]}
@@ -315,7 +318,7 @@ const Write = ({ brightmode }) => {
 
       <section className={style["Select_container"]}>
         <div className={style["section_title"]}>카테고리 선택</div>
-        <DropDownSection options={categoryData} setCategory={setCategory} />
+        <DropDown options={categoryData} setCategory={setCategory} />
       </section>
 
       <div className={style["hashtag_container"]}>
@@ -460,49 +463,6 @@ const Write = ({ brightmode }) => {
 };
 
 export default Write;
-
-function DropDownSection({ options, setBiasId, setCategory }) {
-  const [showTopic, setShowTopic] = useState(false);
-  const [currentTopic, setCurrentTopic] = useState("선택 없음");
-  function onClickTopic() {
-    setShowTopic(!showTopic);
-  }
-
-  function onClickSelectTopic(e, bid, category) {
-    // console.log(e.target.innerText);
-    setCurrentTopic(e.target.innerText);
-    setShowTopic(!showTopic);
-    if (setBiasId) {
-      setBiasId(bid);
-    } else if (setCategory) {
-      setCategory(category);
-    }
-  }
-  return (
-    <>
-      <label className={style["Select_box"]} onClick={onClickTopic}>
-        {currentTopic}
-      </label>
-      <ul className={`${showTopic ? style["Select_options_on"] : style["Select_options"]}`}>
-        <li onClick={onClickSelectTopic}>선택 없음</li>
-        {options &&
-          options.map((option, i) => {
-            return (
-              <li
-                key={option.bid || option.key}
-                value={option.bid || option.category}
-                onClick={(e) => {
-                  onClickSelectTopic(e, option.bid, option.category);
-                }}
-              >
-                {option.bname || option.category}
-              </li>
-            );
-          })}
-      </ul>
-    </>
-  );
-}
 
 export const Modal = ({
   onClickModal,
@@ -697,13 +657,13 @@ export function LinkModal({
 
         <div className={style["link-input-container"]}>
           <div className={style["link-input"]}>
-            <input
+            <Input
               type="text"
               value={linkTitle}
               onChange={(e) => setLinkTitle(e.target.value)}
               placeholder="좌표 설명"
             />
-            <input
+            <Input
               type="url"
               value={linkUrl}
               onChange={(e) => setLinkUrl(e.target.value)}
