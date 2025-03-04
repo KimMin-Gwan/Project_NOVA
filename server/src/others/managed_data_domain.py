@@ -122,8 +122,8 @@ class ManagedFeedBiasTable:
 
     # 시간 차이를 분석하는 함수
     # target_hour : 1, 24, 168
-    def __get_time_diff(self, target_time, reference_time=datetime.now(),
-                        target_hour=0.5, reverse=False) -> bool:
+    def __get_time_diff(self, target_time, target_hour=0.5, reverse=False) -> bool:
+        reference_time=datetime.now()
         time_diff = abs(target_time - reference_time)
         pprint("현재 시" + str(reference_time))
         pprint("시간 차 :" + str(time_diff))
