@@ -94,7 +94,7 @@ class FeedModel(BaseModel):
         feeds = []
         #iids = []
 
-        for feed_data in feed_datas.reverse():
+        for feed_data in reversed(feed_datas):
             feed = Feed()
             feed.make_with_dict(feed_data)
             feeds.append(feed)
