@@ -45,7 +45,7 @@ function MyPage() {
         }
       )
       .then((res) => {
-        console.log(res.data);
+        //console.log(res.data);
 
         if (res.data.body.result) {
           setNewNickname(res.data.body.uname);
@@ -114,7 +114,7 @@ function MyPage() {
         return response.json();
       })
       .then((data) => {
-        console.log("lgogio", data);
+        //console.log("lgogio", data);
         navigate("/");
         fetchBiasList();
       })

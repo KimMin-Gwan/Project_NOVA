@@ -56,7 +56,7 @@ const NOVALogin = ({ brightmode }) => {
     })
       .then((response) => response.json())
       .then((result) => {
-        console.log("login", result);
+        //console.log("login", result);
         setLogin(result.body.result);
         setDetail(result.body.detail);
         tryLogin(result.body.result);

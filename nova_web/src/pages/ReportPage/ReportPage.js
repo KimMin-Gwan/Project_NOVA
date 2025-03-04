@@ -40,12 +40,12 @@ export default function ReportPage() {
       },
     };
 
-    console.log("111", send_data);
+    //console.log("111", send_data);
 
     formData.append("jsonData", JSON.stringify(send_data));
 
     await postApi.post("nova_sub_system/try_report_bug", formData, config).then((res) => {
-      console.log(res.data);
+      //console.log(res.data);
     });
   };
 

@@ -77,7 +77,7 @@ export default function FeedDetail({}) {
     await mainApi
       .get(`feed_explore/check_star?fid=${fid}`)
       .then((res) => {
-        console.log("check", res.data);
+        //console.log("check", res.data);
         setFeedData((prevData) => {
           return prevData.fid === fid
             ? {
@@ -225,7 +225,7 @@ export default function FeedDetail({}) {
 function Comment({ comment, onClickComment }) {
   async function fetchOriginalComment(cid) {
     await mainApi.get(`feed_explore/original_comment_data?cid=${cid}`).then((res) => {
-      console.log("ccc", res.data);
+      //console.log("ccc", res.data);
     });
   }
 

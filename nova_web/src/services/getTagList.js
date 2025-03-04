@@ -4,11 +4,11 @@ function getTagList() {
   return mainApi
     .get("home/realtime_best_hashtag")
     .then((res) => {
-      console.log("rea", res.data);
+      //console.log("rea", res.data);
       return res.data;
     })
     .catch((err) => {
-      console.log(err);
+      //console.log(err);
     });
 }
 

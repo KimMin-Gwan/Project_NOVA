@@ -69,7 +69,7 @@ const Write = ({ brightmode }) => {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
+        //console.log(data);
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -265,7 +265,7 @@ const Write = ({ brightmode }) => {
   }
 
   function onClickSelectTopic(e) {
-    // console.log(e.target.innerText);
+    // //console.log(e.target.innerText);
     setCurrentTopic(e.target.innerText);
     setShowTopic(!showTopic);
   }
@@ -623,7 +623,7 @@ export function LinkModal({
       })
       .then((res) => {
         setUrlImage((prev) => [...prev, res.data.body.image]);
-        console.log("image", res.data);
+        //console.log("image", res.data);
         setIsLoading(false);
       });
   }

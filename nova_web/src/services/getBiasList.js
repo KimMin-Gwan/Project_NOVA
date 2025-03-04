@@ -8,7 +8,7 @@ async function getBiasList() {
       return res.data;
     })
     .catch((err) => {
-      console.log(err);
+      //console.log(err);
     });
 }
 

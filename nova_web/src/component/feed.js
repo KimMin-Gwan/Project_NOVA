@@ -43,7 +43,7 @@ export default function Feed({ feed, setFeedData }) {
           fid: fid,
         },
       })
-      .then((res) => console.log("rerere", res.data));
+      //.then((res) => //console.log("rerere", res.data));
   }
 
   return (
@@ -63,7 +63,7 @@ export function ContentFeed({ detailPage, feed, handleCheckStar, links, fetchRep
 
   async function fetchOriginalText(fid) {
     await mainApi.get(`feed_explore/original_feed_data?fid=${fid}`).then((res) => {
-      console.log(res.data);
+      console.log("done");
     });
   }
 
@@ -238,7 +238,7 @@ function LinkSection({ links }) {
         })
         .then((res) => {
           setLinkImage((prev) => [...prev, res.data.body.image]);
-          console.log(res.data);
+          //console.log(res.data);
         });
     setIsLoading(false);
   }

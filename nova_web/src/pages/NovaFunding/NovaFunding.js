@@ -116,7 +116,7 @@ export default function NovaFunding({ brightmode }) {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        //console.log(data);
         setNewProjects(data.body.project);
       });
   }

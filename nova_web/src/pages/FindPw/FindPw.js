@@ -39,7 +39,7 @@ function FindPw() {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        //console.log(data);
         setResult(data.body.result);
         setDetail(data.body.detail);
       });
@@ -64,7 +64,7 @@ function FindPw() {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        //console.log(data);
         setResult(data.body.result);
 
         if (data.body.result === "done") {

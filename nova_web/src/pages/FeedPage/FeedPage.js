@@ -143,7 +143,7 @@
 //         return response.json();
 //       })
 //       .then((data) => {
-//         console.log(data);
+//         //console.log(data);
 //       });
 //   }
 
@@ -160,14 +160,14 @@
 //       .then((data) => {
 //         setBanners(data.body.feed);
 //         setNextData(data.body.key);
-//         // console.log("da", data);
+//         // //console.log("da", data);
 //         setHistory(data.body.history);
 //       });
 //   }
 
 //   useEffect(() => {
 //     fetchFeed();
-//     // console.log("1111", banners);
+//     // //console.log("1111", banners);
 //   }, []);
 
 //   // 서버에서 추가 데이터를 받아오는 함수
@@ -272,13 +272,13 @@
 //     })
 //       .then((response) => response.json())
 //       .then((data) => {
-//         // console.log("show", data.body);
+//         // //console.log("show", data.body);
 //         setAllComments(data.body.comments);
 //       });
 //   }
 
 //   // useEffect(() => {
-//   // console.log("pleae", allComments);
+//   // //console.log("pleae", allComments);
 //   // handleShowComment();
 //   // }, [allComments]);
 
@@ -370,7 +370,7 @@
 //         return response.json();
 //       })
 //       .then((data) => {
-//         console.log("interactin", data);
+//         //console.log("interactin", data);
 //         setBanners((prevFeeds) => {
 //           return prevFeeds.map((feed) => {
 //             return feed.fid === fid
@@ -429,7 +429,7 @@
 //         return response.json();
 //       })
 //       .then((data) => {
-//         console.log("fasfas", data);
+//         //console.log("fasfas", data);
 //         // setNewComments(data.body.comments);
 //         setAllComments((prevAllComments) => {
 //           const newAllComments = [data.body.comments[0], ...prevAllComments];

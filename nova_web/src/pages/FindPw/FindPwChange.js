@@ -75,7 +75,7 @@ function FindPwChange() {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        //console.log(data);
         setResult(data.body.result);
 
         if (data.body.result === true) {

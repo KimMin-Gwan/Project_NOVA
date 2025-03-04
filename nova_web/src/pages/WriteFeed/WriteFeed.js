@@ -21,7 +21,7 @@ const WriteFeed = ({ brightmode }) => {
   let [biasId, setBiasId] = useState();
   // useEffect(() => {
   //   setLinkList([{ name: linkTitle, url: linkUrl }]);
-  //   console.log("linklist");
+  //   //console.log("linklist");
   // }, [linkTitle, linkUrl]);
   let [numImg, setNumImg] = useState(0);
 
@@ -58,7 +58,7 @@ const WriteFeed = ({ brightmode }) => {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
+        //console.log(data);
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -157,7 +157,7 @@ const WriteFeed = ({ brightmode }) => {
         response.json();
       })
       .then((data) => {
-        console.log("111", data);
+        //console.log("111", data);
       })
       .catch((error) => {
         console.error("Error:", error);

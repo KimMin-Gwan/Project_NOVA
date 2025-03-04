@@ -41,7 +41,7 @@ export default function DuckFunding() {
 
   const { type } = useParams();
   const currentProject = project.find((project) => project.type === type);
-  console.log(type);
+  //console.log(type);
 
   let [currentProjects, setCurrentProjects] = useState([]);
 

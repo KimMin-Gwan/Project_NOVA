@@ -29,7 +29,7 @@ export default function BiasFunding() {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("www", data);
+        //console.log("www", data);
         setNewProjects(data.body.project);
         setIsLoading(false);
       });

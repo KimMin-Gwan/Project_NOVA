@@ -24,11 +24,11 @@ export default function FollowBoxes({ setBiasId }) {
   let { biasList, loading, fetchBiasList } = useBiasStore();
 
   useEffect(() => {
-    console.log(biasList.length);
+    //console.log(biasList.length);
     fetchBiasList();
     if (isLogin === "done") {
       fetchBiasList();
-      console.log("isLogin", isLogin);
+      //console.log("isLogin", isLogin);
     }
   }, []);
 
@@ -90,7 +90,7 @@ export default function FollowBoxes({ setBiasId }) {
   };
 
   function fetchTryFollowBias() {
-    console.log(clickedBid);
+    //console.log(clickedBid);
     fetch("https://nova-platform.kr/nova_sub_system/try_select_my_bias", {
       method: "POST",
       credentials: "include",
@@ -101,7 +101,7 @@ export default function FollowBoxes({ setBiasId }) {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        //console.log(data);
         if (biasList.some((item) => item.bid === clickedBid)) {
           alert("팔로우 취소 완료");
           window.location.reload();
@@ -111,14 +111,14 @@ export default function FollowBoxes({ setBiasId }) {
         setIsModalOpen(false);
       })
       .catch((err) => {
-        console.log("err", err);
+        //console.log("err", err);
       });
     // postApi
     //   .post("nova_sub_system/try_select_my_bias", {
     //     send_data,
     //   })
     //   .then((res) => {
-    //     console.log(res.data);
+    //     //console.log(res.data);
     //   });
   }
   return (

@@ -19,7 +19,7 @@ export default function BiasBoxes({ setBiasId, fetchBiasCategoryData, writeCommu
     fetchBiasList();
     if (isLogin === "done") {
       fetchBiasList();
-      console.log("isLogin", isLogin);
+      //console.log("isLogin", isLogin);
     }
   }, []);
 
@@ -47,7 +47,7 @@ export default function BiasBoxes({ setBiasId, fetchBiasCategoryData, writeCommu
         return response.json();
       })
       .then((data) => {
-        console.log(data);
+        //console.log(data);
       })
       .catch((error) => {
         console.error("Error:", error);

@@ -13,7 +13,7 @@ export default function KeywordBox({ type, title, subTitle, onClickTagButton, fe
     await mainApi.get(`home/${type}_spiked_hot_hashtag`).then((res) => {
       setBestTags(res.data.body.hashtags);
       setIsLoading(false);
-      console.log(`${type}`, res.data);
+      //console.log(`${type}`, res.data);
     });
   }
 

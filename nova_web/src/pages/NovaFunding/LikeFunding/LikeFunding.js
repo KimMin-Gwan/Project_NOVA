@@ -22,7 +22,7 @@ export default function LikeFunding() {
     await fetch("https://nova-platform.kr/nova_fund_system/project_detail?pid=5")
       .then((response) => response.json())
       .then((data) => {
-        console.log("111", data.body.project);
+        //console.log("111", data.body.project);
         setProjectInfo(data.body.project);
         setContents(data.body.project_body_data);
       });

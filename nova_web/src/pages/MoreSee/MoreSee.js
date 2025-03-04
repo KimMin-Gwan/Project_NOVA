@@ -139,7 +139,7 @@ function MoreSee({ onModeChange }) {
       })
       .then((data) => {
         if (data) {
-          console.log(data);
+          //console.log(data);
           setIsLogin(data.body.result);
         }
       })

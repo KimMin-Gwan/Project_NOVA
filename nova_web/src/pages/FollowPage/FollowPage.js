@@ -43,7 +43,7 @@ export default function FollowPage() {
 
   function fetchBiasFollowList() {
     mainApi.get("nova_sub_system/get_bias_follow_page_data").then((res) => {
-      console.log(res.data);
+      //console.log(res.data);
       setBiasDataList(res.data.body);
       setIsLoading(false);
     });
@@ -67,7 +67,7 @@ export default function FollowPage() {
     },
   };
   function fetchTryFollowBias() {
-    console.log(clickedBid);
+    //console.log(clickedBid);
     fetch("https://nova-platform.kr/nova_sub_system/try_select_my_bias", {
       method: "POST",
       credentials: "include",
@@ -78,7 +78,7 @@ export default function FollowPage() {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        //console.log(data);
         if (biasList.some((item) => item.bid === clickedBid)) {
           alert("팔로우 취소 완료");
         } else {

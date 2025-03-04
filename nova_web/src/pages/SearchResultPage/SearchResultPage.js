@@ -74,7 +74,7 @@ export default function SearchResultPage() {
         setFeedData((prev) => {
           return [...prev, ...res.data.body.send_data];
         });
-        console.log(res.data);
+        //console.log(res.data);
         setIsLoading(false);
         setFeedNextKey(res.data.body.key);
       });

@@ -12,7 +12,7 @@ export default function NoticeBox() {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        //console.log(data);
         setNoticeDatas(data.body.notice);
         setIsLoading(false);
       });

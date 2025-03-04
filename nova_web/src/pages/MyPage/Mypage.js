@@ -47,7 +47,7 @@ function MyPage() {
 
   async function fetchMyPage() {
     await mainApi.get("user_home/get_my_page_data").then((res) => {
-      console.log("my", res.data);
+      //console.log("my", res.data);
       setMyData(res.data.body);
       setIsLoading(false);
     });

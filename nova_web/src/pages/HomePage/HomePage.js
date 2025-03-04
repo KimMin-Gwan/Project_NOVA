@@ -84,7 +84,7 @@ export default function HomePage() {
         },
       })
       .then((res) => {
-        console.log("first bias data", res.data);
+        ////console.log("first bias data", res.data);
         setFeedData(res.data.body.send_data);
         setIsLoading(false);
       });

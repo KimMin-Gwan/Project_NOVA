@@ -110,7 +110,7 @@ export default function SignUp() {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data.body.detail);
+        //console.log(data.body.detail);
         const newAuthen = data.body.result;
         setAuthen(newAuthen);
 
@@ -132,7 +132,7 @@ export default function SignUp() {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        //console.log(data);
         if (data.body.result) {
           alert("회원가입이 완료되었습니다.");
           navigate("/novalogin");

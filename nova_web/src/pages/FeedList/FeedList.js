@@ -59,7 +59,7 @@ export default function FeedList() {
 
   let { biasList } = useBiasStore();
   useEffect(() => {
-    console.log("동작");
+    //console.log("동작");
   }, []);
 
   let bids = biasList.map((item, i) => {
@@ -81,7 +81,7 @@ export default function FeedList() {
         },
       })
       .then((res) => {
-        console.log("first bias data", res.data);
+        ////console.log("first bias data", res.data);
         setFeedData((prevData) => [...prevData, ...res.data.body.send_data]);
         setNextData(res.data.body.key);
         setIsLoading(false);
@@ -106,7 +106,7 @@ export default function FeedList() {
 
   function onClickApplyButton1() {
     setNextData(-1);
-    console.log(nextData);
+    //console.log(nextData);
   }
 
   async function fetchAllFeed(clickedFetch) {
@@ -143,7 +143,7 @@ export default function FeedList() {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log("all feed first feed 3개", data.body);
+          //console.log("all feed first feed 3개", data.body);
           setNextData(data.body.key);
           setIsLoading(false);
           setFeedData(data.body.send_data);
@@ -158,7 +158,7 @@ export default function FeedList() {
   function fetchData() {
     if (type === "today" || type === "weekly") {
       mainApi.get(`feed_explore/${type}_best`).then((res) => {
-        console.log(`${type} feed`, res.data.body);
+        //console.log(`${type} feed`, res.data.body);
         setFeedData(res.data.body.send_data);
         setNextData(res.data.body.key);
         setIsLoading(false);
@@ -167,11 +167,11 @@ export default function FeedList() {
   }
 
   function fetchFeedWithTag(tag) {
-    console.log("dasdasda", hashtag);
+    //console.log("dasdasda", hashtag);
     mainApi
       .get(`feed_explore/search_feed_with_hashtag?hashtag=${tag}&key=-1&target_time=day`)
       .then((res) => {
-        console.log("fff", res.data);
+        //console.log("fff", res.data);
         setFeedData(res.data.body.send_data);
         // setNextData(res.data.body.key);
         setIsLoading(false);
@@ -194,7 +194,7 @@ export default function FeedList() {
           return newData;
         });
         setIsLoading(false);
-        console.log(`more ${type}`, res.data);
+        //console.log(`more ${type}`, res.data);
       });
     } else if (type === "all" || isClickedFetch) {
       // 지역 변수 데이터로 활용하기로함
@@ -217,7 +217,7 @@ export default function FeedList() {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log("all feed first feed 3개", data.body);
+          //console.log("all feed first feed 3개", data.body);
           setNextData(data.body.key);
           setIsLoading(false);
           setFeedData((prevData) => {

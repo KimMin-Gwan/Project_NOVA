@@ -10,7 +10,7 @@ export default function NoticePage() {
 
   function fetchNotice() {
     mainApi.get("nova_sub_system/sample_notice").then((res) => {
-      console.log(res.data);
+      //console.log(res.data);
       setNotices(res.data.body.notice);
     });
   }
