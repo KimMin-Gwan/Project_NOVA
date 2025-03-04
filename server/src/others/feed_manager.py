@@ -881,7 +881,7 @@ class FeedManager:
             return feed
 
     #------------------------------------------------------------------------------------------------------------
-    def paging_fid_list(self, fid_list:list, last_index:int, page_size=5, reverse=False):
+    def paging_fid_list(self, fid_list:list, last_index:int, page_size=5):
         # 최신순으로 정렬된 상태로 Fid_list를 받아오기 때문에, 인덱스 번호가 빠를수록 최신의 것
         # 만약에 페이지 사이즈보다 더 짧은 경우도 있을 수 있기에 먼저 정해놓는다.
         # 이러면 페이징된 리스트의 길이에 상관없이, 인덱스를 알아낼 수 있을 것
@@ -898,13 +898,6 @@ class FeedManager:
             paging_list = paging_list[:page_size]
             # Paging 넘버
             last_index_next = fid_list.index(fid_list[last_index + page_size])
-
-        if reverse:
-            pprint("역순 반환")
-            pprint(paging_list)
-            paging_list = paging_list[::-1]
-            pprint(paging_list)
-
 
         return paging_list, last_index_next
 
