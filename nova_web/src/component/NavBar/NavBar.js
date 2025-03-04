@@ -67,7 +67,7 @@ const NavBar = ({ brightMode }) => {
     navigate(path);
   }
 
-  // type이 write일 때만 다른 동작작
+  // type이 write일 때만 다른 동작
   function handleAction(type, endPoint) {
     if (type === "write") {
       onClickWrite();
@@ -86,10 +86,20 @@ const NavBar = ({ brightMode }) => {
   }, [brightMode]);
 
   return (
-    <div className={` ${writeOptions || writeMoment ? "nav-back" : ""}`}>
+    <div
+      className={` ${writeOptions || writeMoment ? "nav-back" : ""}`}
+      onClick={(e) => {
+        if (writeMoment) {
+          e.stopPropagation();
+          e.preventDefault();
+          setWriteMoment();
+        }
+        onClickWrite();
+      }}
+    >
       <div className={`bottom_bar ${getModeClass(mode)}`}>
         {writeOptions && (
-          <div className={`write_select ${writeOptions ? "active" : ""}`}>
+          <div className={`write_select`}>
             <h4>새로운 게시글 작성하기</h4>
 
             <section>
@@ -102,7 +112,7 @@ const NavBar = ({ brightMode }) => {
                 <div className="img-box">
                   <img src={moment} alt="moment" />
                 </div>
-                모멘트
+                새 모멘트
               </button>
               <button
                 onClick={() => {
@@ -112,12 +122,18 @@ const NavBar = ({ brightMode }) => {
                 <div className="img-box">
                   <img src={post} alt="post" />
                 </div>
-                포스트
+                새 포스트
               </button>
             </section>
 
-            <section>
-              <button>주제 팔로우</button>
+            <section className="button_container">
+              <button
+                onClick={() => {
+                  navigate("/follow_page");
+                }}
+              >
+                주제 팔로우
+              </button>
               <button>추가 기능</button>
             </section>
           </div>

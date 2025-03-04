@@ -5,9 +5,13 @@ body {
   background-color: #111;
 }
 
+button,
+input {
+  font-family: "Pretendard", sans-serif;
+}
+
 button {
   cursor: pointer;
-  font-family: "Pretendard", sans-serif;
 }
 
 .main-title {

@@ -34,9 +34,10 @@
   bottom: 61px;
   display: flex;
   flex-flow: column;
-  border-radius: 5px;
+  /* border-radius: 5px; */
 
   & h4 {
+    font-weight: 500;
     padding-inline: 24px;
     font-size: 13px;
   }
@@ -46,6 +47,7 @@
     justify-content: center;
 
     & button {
+      font-weight: 200;
       background-color: transparent;
       border: 0;
       width: 100%;
@@ -109,4 +111,11 @@
   display: flex;
   justify-content: center;
   /* 텍스트가 들어갈 공간 확보 */
+}
+
+.button_container {
+  & button {
+    font-variation-settings: "wght" 300;
+  }
+  margin: 12px 0px;
 }

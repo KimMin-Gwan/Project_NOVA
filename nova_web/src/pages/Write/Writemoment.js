@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Link, useNavigate, useNavigation, useParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import style from "./WriteFeed.module.css";
 import style2 from "./WriteMoment.module.css";
 import useBiasStore from "../../stores/BiasStore/useBiasStore.js";
@@ -7,10 +7,9 @@ import tag from "./../../img/tag.svg";
 import img_icon from "./../../img/image.png";
 import vote_icon from "./../../img/vote.png";
 import link_icon from "./../../img/link.png";
-import { Modal } from "./Write.js";
-import { VoteModal } from "./Write.js";
-import { LinkModal } from "./Write.js";
+import { Modal, VoteModal, LinkModal } from "./Write.js";
 import toast, { Toaster } from "react-hot-toast";
+
 const categoryData = [
   { key: 0, category: "자유게시판" },
   { key: 1, category: "팬아트" },
@@ -18,7 +17,7 @@ const categoryData = [
 ];
 
 const WriteMoment = ({ onClickMoment }) => {
-  let { biasList, loading, fetchBiasList } = useBiasStore();
+  let { biasList } = useBiasStore();
   const navigate = useNavigate();
   let [biasId, setBiasId] = useState();
   let [inputTagCount, setInputTagCount] = useState(0);
@@ -243,17 +242,27 @@ const WriteMoment = ({ onClickMoment }) => {
     setLinkUrl("");
   }
 
-  const [message, setMessage] = useState(false);
-
   return (
     <>
       <Toaster position="top-center" />
-      <div className={style2["nav_moment"]}>
+      <div
+        className={style2["nav_moment"]}
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
+      >
         <h4>모멘트 작성</h4>
         <form className={style2["nav_form"]}>
           <div className={style2["input-container"]}>
             <div className={style2["input-wrapper"]}>
-              <input placeholder="해시태그 입력" type="text" value={`${inputTag}`} onChange={onChangeTag} onKeyDown={onKeyDown} className={style2["input-hashtag"]} />
+              <input
+                placeholder="해시태그 입력"
+                type="text"
+                value={`${inputTag}`}
+                onChange={onChangeTag}
+                onKeyDown={onKeyDown}
+                className={style2["input-hashtag"]}
+              />
               <span className={style2["count-text"]}>{inputTagCount}/12</span>
             </div>
             <div className={style2["button-wrapper"]}>
@@ -285,7 +294,13 @@ const WriteMoment = ({ onClickMoment }) => {
           <div className={` ${style2["content-container"]}`}>
             <div className={`${style2["content-title"]}`}>경험을 모두와 함께 이야기 해봐요!</div>
 
-            <textarea className={style2["write_body"]} name="body" placeholder="내용을 입력해주세요" value={bodyText} onChange={onChangeBody} />
+            <textarea
+              className={style2["write_body"]}
+              name="body"
+              placeholder="내용을 입력해주세요"
+              value={bodyText}
+              onChange={onChangeBody}
+            />
           </div>
 
           <section className={` ${style2["select-container"]}`}>
@@ -329,9 +344,41 @@ const WriteMoment = ({ onClickMoment }) => {
                 링크
               </button>
             </div>
-            {showModal && <Modal onClickModal={onClickModal} handleFileChange={handleFileChange} imagePreview={imagePreview} currentFileName={currentFileName} imageFiles={imageFiles} />}
-            {showVoteModal && <VoteModal onClickModal={onClickVoteModal} createOptions={createOptions} onClickAdd={onClickAdd} onClickDelete={onDeleteOption} handleChoiceChange={handleChoiceChange} choice={choice} setChoice={setChoice} />}
-            {showLinkModal && <LinkModal onClickModal={onClickLinkModal} link={urlLink} setLink={setUrlLink} numLink={numLink} linkTitle={linkTitle} linkUrl={linkUrl} setLinkTitle={setLinkTitle} setLinkUrl={setLinkUrl} onClickAdd={onClickAddLink} handleLinkChange={handleLinkChange} linkList={linkList} />}
+            {showModal && (
+              <Modal
+                onClickModal={onClickModal}
+                handleFileChange={handleFileChange}
+                imagePreview={imagePreview}
+                currentFileName={currentFileName}
+                imageFiles={imageFiles}
+              />
+            )}
+            {showVoteModal && (
+              <VoteModal
+                onClickModal={onClickVoteModal}
+                createOptions={createOptions}
+                onClickAdd={onClickAdd}
+                onClickDelete={onDeleteOption}
+                handleChoiceChange={handleChoiceChange}
+                choice={choice}
+                setChoice={setChoice}
+              />
+            )}
+            {showLinkModal && (
+              <LinkModal
+                onClickModal={onClickLinkModal}
+                link={urlLink}
+                setLink={setUrlLink}
+                numLink={numLink}
+                linkTitle={linkTitle}
+                linkUrl={linkUrl}
+                setLinkTitle={setLinkTitle}
+                setLinkUrl={setLinkUrl}
+                onClickAdd={onClickAddLink}
+                handleLinkChange={handleLinkChange}
+                linkList={linkList}
+              />
+            )}
             <p onClick={onClickMoment}>취소</p>
 
             <p
@@ -362,7 +409,6 @@ function DropDownSection({ options, setBiasId, setCategory }) {
   }
 
   function onClickSelectTopic(e, bid, category) {
-    // console.log(e.target.innerText);
     setCurrentTopic(e.target.innerText);
     setShowTopic(!showTopic);
     if (setBiasId) {

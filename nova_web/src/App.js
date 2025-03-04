@@ -78,14 +78,14 @@ function App() {
       <Route path="/search_result" element={<SearchResultPage />}></Route>
 
       {/* 펀딩 페이지 목록 */}
-      <Route path="/nova_funding" element={<NovaFunding brightMode={brightMode} />}></Route>
+      {/* <Route path="/nova_funding" element={<NovaFunding brightMode={brightMode} />}></Route>
       <Route path="/like_funding" element={<LikeFunding />}></Route>
       <Route path="/duck_funding" element={<DuckFunding />}></Route>
       <Route path="/funding_project/:type" element={<SuccessFunding />}></Route>
       <Route path="/funding_ranking" element={<RankingFunding />}></Route>
       <Route path="/open_ranking" element={<OpenRanking />}></Route>
       <Route path="/bias_funding" element={<BiasFunding />}></Route>
-      <Route path="/bias_funding/:type" element={<MoreProjects />}></Route>
+      <Route path="/bias_funding/:type" element={<MoreProjects />}></Route> */}
 
       {/* 테스트 페이지 및 에러 페이지 */}
       <Route path="/test1" element={<NavBar />}></Route>
