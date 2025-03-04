@@ -88,11 +88,14 @@ export default function FeedList() {
   }
 
   useEffect(() => {
-    setFeedData([]);
-    setNextData(-1);
     if (type === "bias") {
       fetchBiasCategoryData();
     }
+  }, []);
+
+  useEffect(() => {
+    setFeedData([]);
+    setNextData(-1);
   }, [biasId, board]);
 
   let [filterCategory, setFilterCategory] = useState([]);
