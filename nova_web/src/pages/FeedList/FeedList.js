@@ -22,6 +22,7 @@ import StoryFeed from "../../component/StoryFeed/StoryFeed.js";
 
 import "@toast-ui/editor/dist/toastui-editor-viewer.css";
 import style from "./FeedHashList.module.css";
+import useDragScroll from "../../hooks/useDragScroll.js";
 
 export default function FeedList() {
   const [params] = useSearchParams();
@@ -29,6 +30,7 @@ export default function FeedList() {
 
   const target = useRef(null);
   const observerRef = useRef(null);
+  const { scrollRef, hasDragged, dragHandlers } = useDragScroll();
 
   let [isFilterClicked, setIsFilterClicked] = useState(false);
   let [isLoading, setIsLoading] = useState(true);
@@ -290,10 +292,22 @@ export default function FeedList() {
           <div className={style["bias-section"]}>
             <BiasBoxes setBiasId={setBiasId} fetchBiasCategoryData={fetchBiasCategoryData} />
             <h4>스토리 게시판</h4>
-            <div className={style["story_container"]}>
+            <div
+              ref={scrollRef}
+              className={style["story_container"]}
+              onMouseDown={dragHandlers.onMouseDown}
+              onMouseUp={dragHandlers.onMouseUp}
+              onMouseMove={dragHandlers.onMouseMove}
+            >
               <div className={style["story_wrapper"]}>
                 {feedData.map((feed, i) => {
-                  return <StoryFeed key={`story_${feed.feed.fid}`} feedData={feed} />;
+                  return (
+                    <StoryFeed
+                      key={`story_${feed.feed.fid}`}
+                      feedData={feed}
+                      hasDragged={hasDragged}
+                    />
+                  );
                 })}
               </div>
             </div>

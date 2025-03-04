@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import style from "./StoryFeed.module.css";
-export default function StoryFeed({ feedData, type }) {
+import useDragScroll from "../../hooks/useDragScroll";
+export default function StoryFeed({ feedData, type, hasDragged }) {
   let navigate = useNavigate();
 
   function onClickFeed(fid) {
@@ -15,6 +16,7 @@ export default function StoryFeed({ feedData, type }) {
     <div
       className={`${style["story_feed"]} ${style[`story_feed_${type}`]}`}
       onClick={() => {
+        if (hasDragged) return;
         onClickFeed(feedData.feed.fid);
       }}
     >
