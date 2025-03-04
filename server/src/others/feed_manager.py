@@ -901,7 +901,9 @@ class FeedManager:
 
         if reverse:
             pprint("역순 반환")
+            pprint(paging_list)
             paging_list = paging_list[::-1]
+            pprint(paging_list)
 
 
         return paging_list, last_index_next
