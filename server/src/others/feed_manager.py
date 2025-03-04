@@ -900,7 +900,9 @@ class FeedManager:
             last_index_next = fid_list.index(fid_list[last_index + page_size])
 
         if reverse:
-            paging_list.reverse()
+            pprint("역순 반환")
+            paging_list = paging_list[::-1]
+
 
         return paging_list, last_index_next
 
