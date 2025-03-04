@@ -110,7 +110,7 @@ export default function SearchPage() {
         </div>
       </section>
 
-      <section className="search-category">
+      {/* <section className="search-category">
         <h3>실시간 트렌드</h3>
 
         <ul className="tag-list">
@@ -127,7 +127,7 @@ export default function SearchPage() {
             );
           })}
         </ul>
-      </section>
+      </section> */}
       <NavBar />
     </div>
   );

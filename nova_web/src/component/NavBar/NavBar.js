@@ -126,7 +126,7 @@ const NavBar = ({ brightMode }) => {
         {writeMoment && <WriteMoment onClickMoment={onClickMoment} />}
 
         {navBarList.map((item) => (
-          <div className="nav_button_box">
+          <div key={item.id} className="nav_button_box">
             <button
               className="nav_button"
               onClick={(e) => {

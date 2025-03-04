@@ -1,16 +1,17 @@
 import React from "react";
-
-import { useEffect, useLocation, useMemo, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import style from "./FollowPage.module.css";
+
 import { getModeClass } from "./../../App.js";
-import FollowBoxes from "../../component/FollowBoxes.js";
+import useBiasStore from "../../stores/BiasStore/useBiasStore.js";
+import mainApi from "../../services/apis/mainApi.js";
+
 import logo2 from "./../../img/logo2.png";
+
+import FollowBoxes from "../../component/FollowBoxes.js";
 import search_icon from "./../../img/search_icon.png";
 import Stackframe from "./../../img/Stackframe.png";
-import mainApi from "../../services/apis/mainApi.js";
-import postApi from "../../services/apis/postApi.js";
-import useBiasStore from "../../stores/BiasStore/useBiasStore.js";
+import style from "./FollowPage.module.css";
 
 const bias_url = "https://kr.object.ncloudstorage.com/nova-images/";
 export default function FollowPage() {
