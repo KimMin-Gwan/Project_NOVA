@@ -899,7 +899,8 @@ class FeedManager:
             # Paging 넘버
             last_index_next = fid_list.index(fid_list[last_index + page_size])
 
-        paging_list.sort(reverse=reverse)
+        if reverse:
+            paging_list.reverse()
 
         return paging_list, last_index_next
 
