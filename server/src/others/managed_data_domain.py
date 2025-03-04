@@ -125,8 +125,8 @@ class ManagedFeedBiasTable:
     def __get_time_diff(self, target_time, reference_time=datetime.now(),
                         target_hour=0.5, reverse=False) -> bool:
         time_diff = abs(target_time - reference_time)
-        pprint(time_diff)
-        pprint(timedelta(hours=target_hour))
+        pprint("시간 차 :" + time_diff)
+        pprint("기준 시 :" + str(timedelta(hours=target_hour)))
 
         # 차이가 2시간 이상인지 확인
         if reverse:
