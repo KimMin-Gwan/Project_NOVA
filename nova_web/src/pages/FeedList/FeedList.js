@@ -23,6 +23,7 @@ import StoryFeed from "../../component/StoryFeed/StoryFeed.js";
 import "@toast-ui/editor/dist/toastui-editor-viewer.css";
 import style from "./FeedHashList.module.css";
 import useDragScroll from "../../hooks/useDragScroll.js";
+import LoadingPage from "../LoadingPage/LoadingPage.js";
 
 export default function FeedList() {
   const [params] = useSearchParams();
@@ -284,7 +285,7 @@ export default function FeedList() {
   }
 
   if (isLoading) {
-    return <p>데이터 불러오는 중</p>;
+    return <LoadingPage />;
   }
 
   return (

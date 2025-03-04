@@ -17,6 +17,7 @@ import Header from "../../component/Header/Header.js";
 import postApi from "../../services/apis/postApi.js";
 import GoogleAD from "../../component/display_google_ad.js";
 import DisplayAds from "../../component/display_google_ad.js";
+import LoadingPage from "../LoadingPage/LoadingPage.js";
 
 export function getModeClass(mode) {
   return mode === "dark" ? "dark-mode" : "bright-mode";
@@ -106,7 +107,7 @@ export default function HomePage() {
   };
 
   if (loading || isLoading) {
-    return <div>loading...</div>;
+    return <LoadingPage />;
   }
   return (
     <div className="all-box">
