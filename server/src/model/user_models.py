@@ -428,3 +428,35 @@ class ChangeProfilePhotoModel(BaseModel):
             self._detail = "업로드 성공"
         
         return
+
+class DeleteUserModel(BaseModel):
+    def __init__(self, database:Local_Database) -> None:
+        super().__init__(database)
+        self._result = False
+        self._detail = "Something goes bad | ERROR = 422"
+
+    def get_response_form_data(self, head_parser):
+        try:
+            body = {
+                'result' : self._result,
+                'detail' : self._detail
+            }
+
+            response = self._get_response_data(head_parser=head_parser, body=body)
+            return response
+
+        except Exception as e:
+            raise CoreControllerLogicError("response making error | " + e)
+
+    def try_delete_user(self, uid:str):
+        deleted_user_data = self._database.get_user_by_id(target="uid", id=uid)
+        deleted_user = User().make_from_data(deleted_user_data)
+
+        cleaned_user = User(uid=deleted_user.uid, uname="탈퇴한사람")
+
+        # 유저 데이터를 덮어씌워서 UID만 남김
+        self._database.modify_data_with_id(target_id="uid", target_data=cleaned_user.get_dict_form_data())
+
+        # 삭제된 유저는 다른 DB에 저장 됩니다. UID, 닉네임, 개인 정보 등을 저장합니다.
+        self._database.add_new_data(target_id="duid", new_data=self.__user.get_data_form_data())
+        return

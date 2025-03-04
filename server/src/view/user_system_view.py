@@ -43,7 +43,7 @@ class User_Service_View(Master_View):
 
         # 로그아웃
         @self.__app.get('/user_home/try_logout')
-        def try_login(request:Request):
+        def try_logout(request:Request):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             request_manager.try_view_management_need_authorized(data_payload=None, cookies=request.cookies)
             response = request_manager.try_clear_cookies(request=request)
@@ -141,7 +141,17 @@ class User_Service_View(Master_View):
             response = model.get_response_form_data(self._head_parser)
             return response
 
+        @self.__app.get('/user_home/try_resign')
+        def try_resign(request:Request):
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
+            user_controller=UserController()
+            model = user_controller.try_resign(database=self.__database, request=request_manager)
+
+            response = request_manager.try_clear_cookies(request=request)
+            return response
+
 #----------------------------------------신형--------------------------------------------------
+
     def my_page_route(self):
         @self.__app.get('/user_home/get_my_page_data')
         def try_get_my_page(request:Request):
@@ -267,8 +277,7 @@ class User_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
 
             return response
-        
-        
+
 
 class DummyRequest():
     def __init__(self) -> None:
@@ -337,6 +346,11 @@ class SignInRequest(RequestHeader):
         self.verification_code = int(body['verification_code'])
         self.age = body['age']
         self.gender = body['gender']
+
+class ResignRequest(RequestHeader):
+    def __init__(self, request) -> None:
+        super().__init__(request)
+        body = request['body']
 
 # class MyFeedRequest():
 #     def __init__(self, fid) -> None:

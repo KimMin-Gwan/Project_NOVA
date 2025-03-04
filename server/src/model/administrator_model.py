@@ -154,7 +154,19 @@ class UserEditorModel(AdminModel):
     # 회원탈퇴 기능은 User_deleted 옵션을 추가해볼까 싶은데
 
     def delete_user(self, uid):
-        self._database.delete_data_with_id(target="uid", id=uid)
+        deleted_user_data = self._database.get_data_with_id(target="uid", id=uid)
+        deleted_user = User().make_from_data(deleted_user_data)
+
+        cleaned_user = User(uid=deleted_user.uid, uname="탈퇴한유저")
+
+        # 유저 데이터를 덮어씌워서 UID만 남김
+        self._database.modify_data_with_id(target_id="uid", target_data=cleaned_user.get_data_form_data())
+
+        # 삭제된 유저는 다른 DB로 저장됩니다. UID, 닉네임, 개인 정보 등을 저장합니다. (추후에 쓰입니다.)
+        self._database.add_new_data(target_id="duid", new_data=self.__user.get_data_form_data())
+        return
+
+
 
     def get_response_form_data(self, head_parser):
         try:
