@@ -190,8 +190,8 @@ export default function FeedDetail({}) {
 
       <div className={style["comment-container"]}>
         <div className={style["title-box"]}>
-          <div>댓글</div>
-          <div>총 {feedData && feedData.num_comment}건</div>
+          <div className={style["comment-title"]}>댓글</div>
+          <div className={style["comment-total"]}>총 {feedData && feedData.num_comment}건</div>
         </div>
 
         {/* 댓글 각각 */}
@@ -237,9 +237,13 @@ function Comment({ comment, onClickComment }) {
         onClickComment(comment.cid, comment.target_cid, comment.uname);
       }}
     >
-      <section>
+      <section
+        className={`${style["comment-section"]} ${
+          comment.reply.length !== 0 ? style["reply-exist"] : ""
+        }`}
+      >
         <div className={style["comment-user"]}>
-          <div>{comment.uname}</div>
+          <div className={style["user-name"]}>{comment.uname}</div>
 
           <div className={style["function_button_container"]}>
             {comment.is_reworked && (
@@ -254,7 +258,7 @@ function Comment({ comment, onClickComment }) {
                 원문 보기
               </button>
             )}
-            <div>신고</div>
+            <div className={style["comment-report"]}>신고</div>
           </div>
         </div>
 
@@ -316,7 +320,7 @@ function ReplyComment({ index, length, reply, fetchOriginalComment }) {
                 원문 보기
               </button>
             )}
-            <div>신고</div>
+            <div className={style["comment-report"]}>신고</div>
           </div>
         </div>
 
