@@ -334,7 +334,7 @@ class ManagedFeedBiasTable:
     # target_hour : 1, 24, 168
     def search_feed_with_time_or_like(self, search_type:str="", time_type:str=""):
         searched_df = self.__feed_df
-        pprint(searched_df)
+        # pprint(searched_df)
 
         if search_type == "best":
             searched_df = searched_df[searched_df['like'] >= 30]
@@ -342,7 +342,7 @@ class ManagedFeedBiasTable:
         if time_type == "" or time_type == "all" or time_type == "전체":
             pass
         elif time_type == "day":
-            searched_df = searched_df[self.__get_time_diff(target_time=searched_df['date'],target_hour=24, reverse=True)]
+            searched_df = searched_df[self.__get_time_diff(target_time=searched_df['date'],target_hour=1, reverse=True)]
         elif time_type == "weekly":
             searched_df = searched_df[self.__get_time_diff(target_time=searched_df['date'],target_hour=168, reverse=True)]
 
@@ -463,7 +463,7 @@ class ManagedFeedBiasTable:
         if target_time=="" or target_time=="all" or target_time=="전체":
             pass
         elif target_time=="day":
-            searched_df = searched_df[self.__get_time_diff(target_time=searched_df['date'],target_hour=1, reverse=True)]
+            searched_df = searched_df[self.__get_time_diff(target_time=searched_df['date'],target_hour=24, reverse=True)]
         elif target_time=="weekly":
             searched_df = searched_df[self.__get_time_diff(target_time=searched_df['date'],target_hour=168, reverse=True)]
 
