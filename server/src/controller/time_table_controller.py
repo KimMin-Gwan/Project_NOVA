@@ -14,9 +14,5 @@ class TImeTableController:
             if not model._set_tuser_with_tuid():
                 return model
         
-        
-        
-        
-        
 
         return model
