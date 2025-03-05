@@ -1038,7 +1038,6 @@ class BiasSearchRequest():
     def __init__(self, bias_name= None) -> None:
         self.bias_name =bias_name
 
-
 class BiasSelectRequest(RequestHeader):
     def __init__(self, request) -> None:
         super().__init__(request)
@@ -1050,7 +1049,6 @@ class CheckRequest(RequestHeader):
         super().__init__(request)
         body = request['body']
         self.type = body['type']
-
 
 class ConnectionManager:
     def __init__(self):
