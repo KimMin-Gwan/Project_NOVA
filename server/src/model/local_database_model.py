@@ -477,6 +477,14 @@ class Mongo_Database(Local_Database):
             return "feed_link"
         elif target == "rid" or target == "report":
             return "report"
+        elif target == "tuid" or target == "time_table_user":
+            return "time_table_user"
+        elif target == "seid" or target == "schedule_event":
+            return "schedule_event"
+        elif target == "sbid" or target == "schedule_bundle":
+            return "schedule_bundle"
+        elif target == "sid" or target == "schedule":
+            return "schedule"
         else:
             raise DatabaseLogicError("target id did not define")
         

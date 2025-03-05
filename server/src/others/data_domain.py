@@ -24,6 +24,44 @@ class TempUser:
         print(self.exp)
         return
     
+class TimeTableUser(SampleDomain):
+    def __init__(self, tuid="", uid="", sids=None,
+                 sbids=None, seids=None, my_sids=None,
+                 my_sbids=None, my_seids=None):
+        self.tuid: str = tuid               # Time table user ID
+        self.uid: str = uid                 # User ID
+        self.sids: list = sids if sids is not None else []         # Schedule IDs
+        self.sbids: list = sbids if sbids is not None else []      # Schedule bundle IDs
+        self.seids: list = seids if seids is not None else []      # Schedule event IDs
+        self.my_sids: list = my_sids if my_sids is not None else []  # My schedule IDs
+        self.my_sbids: list = my_sbids if my_sbids is not None else []  # My schedule bundle IDs
+        self.my_seids: list = my_seids if my_seids is not None else []  # My schedule event IDs
+
+    def make_with_dict(self, dict_data:dict):
+        self.tuid = dict_data.get('tuid', "")
+        self.uid = dict_data.get('uid', "")
+        self.sids = dict_data.get('sids', [])
+        self.sbids = dict_data.get('sbids', [])
+        self.seids = dict_data.get('seids', [])
+        self.my_sids = dict_data.get('my_sids', [])
+        self.my_sbids = dict_data.get('my_sbids', [])
+        self.my_seids = dict_data.get('my_seids', [])
+        return self
+
+    def get_dict_form_data(self):
+        return {
+            "tuid": self.tuid,
+            "uid": self.uid,
+            "sids": self.sids,
+            "sbids": self.sbids,
+            "seids": self.seids,
+            "my_sids": self.my_sids,
+            "my_sbids": self.my_sbids,
+            "my_seids": self.my_seids
+        }
+
+
+    
 class ScheduleEvent(SampleDomain):
     def __init__(self, seid="", sename="", bid="",
                  bname="", uid="", uname="", update_datetime="",
