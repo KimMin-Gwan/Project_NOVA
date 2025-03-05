@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import style from "./StoryFeed.module.css";
-import useDragScroll from "../../hooks/useDragScroll";
 export default function StoryFeed({ feedData, type, hasDragged }) {
   let navigate = useNavigate();
 
