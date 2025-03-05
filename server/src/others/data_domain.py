@@ -28,8 +28,7 @@ class TimeTableUser(SampleDomain):
     def __init__(self, tuid="", uid="", sids=None,
                  sbids=None, seids=None, my_sids=None,
                  my_sbids=None, my_seids=None):
-        self.tuid: str = tuid               # Time table user ID
-        self.uid: str = uid                 # User ID
+        self.tuid: str = tuid               # Time table user ID == User.uid
         self.sids: list = sids if sids is not None else []         # Schedule IDs
         self.sbids: list = sbids if sbids is not None else []      # Schedule bundle IDs
         self.seids: list = seids if seids is not None else []      # Schedule event IDs
@@ -39,7 +38,6 @@ class TimeTableUser(SampleDomain):
 
     def make_with_dict(self, dict_data:dict):
         self.tuid = dict_data.get('tuid', "")
-        self.uid = dict_data.get('uid', "")
         self.sids = dict_data.get('sids', [])
         self.sbids = dict_data.get('sbids', [])
         self.seids = dict_data.get('seids', [])
@@ -51,7 +49,6 @@ class TimeTableUser(SampleDomain):
     def get_dict_form_data(self):
         return {
             "tuid": self.tuid,
-            "uid": self.uid,
             "sids": self.sids,
             "sbids": self.sbids,
             "seids": self.seids,

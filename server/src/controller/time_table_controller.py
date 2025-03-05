@@ -10,6 +10,11 @@ class TImeTableController:
         
         if request.jwt_payload != "":
             model.set_user_with_email(request=request.jwt_payload)
+            # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
+            if not model._set_tuser_with_tuid():
+                return model
+        
+        
         
         
         
