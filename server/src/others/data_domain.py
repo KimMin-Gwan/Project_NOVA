@@ -23,6 +23,161 @@ class TempUser:
         print(self.verification_code)
         print(self.exp)
         return
+    
+class ScheduleEvent(SampleDomain):
+    def __init__(self, seid="", sename="", bid="",
+                 bname="", uid="", uname="", update_datetime="",
+                 location="", start_time="", end_time="", date="",
+                 code="", sids=[]
+                 ):
+        
+        self.seid: str = seid                   # Schedule event ID
+        self.sename: str = sename               # Schedule event name
+        self.bid: str = bid                     # Bias ID
+        self.bname: str = bname                 # Bias name
+        self.uid: str = uid                     # Maker's ID
+        self.uname: str = uname                 # Maker's name
+        self.update_datetime: str = update_datetime  # Update date and time
+        self.location: str = location           # Event location
+        self.start_time: str = start_time       # Event start time
+        self.end_time: str = end_time           # Event end time
+        self.date: str = date                   # Event date
+        self.code: str = code                   # Schdeul Code
+        self.sids: list = sids
+
+    def make_with_dict(self, dict_data:dict):
+        self.seid = dict_data.get('seid', "")
+        self.sename = dict_data.get('sename', "")
+        self.bid = dict_data.get('bid', "")
+        self.bname = dict_data.get('bname', "")
+        self.uid = dict_data.get('uid', "")
+        self.uname = dict_data.get('uname', "")
+        self.update_datetime = dict_data.get('update_datetime', "")
+        self.location = dict_data.get('location', "")
+        self.start_time = dict_data.get('start_time', "")
+        self.end_time = dict_data.get('end_time', "")
+        self.date = dict_data.get('date', "")
+        self.code = dict_data.get('code', "")
+        self.sids= dict_data.get('sids', "")
+        return self
+
+    def get_dict_form_data(self):
+        return {
+            "seid": self.seid,
+            "sename": self.sename,
+            "bid": self.bid,
+            "bname": self.bname,
+            "uid": self.uid,
+            "uname": self.uname,
+            "update_datetime": self.update_datetime,
+            "location": self.location,
+            "start_time": self.start_time,
+            "end_time": self.end_time,
+            "date": self.date,
+            "code": self.code,
+            "sids": self.sids
+        }
+
+    
+class ScheduleBundle(SampleDomain):
+    def __init__(self, sbid="", sbname="", bid="",
+                 bname="", uid="", uname="",
+                 update_datetime="", code="", sids=None):
+        self.sbid: str = sbid                # Schedule bundle ID
+        self.sbname: str = sbname            # Schedule bundle name
+        self.bid: str = bid                  # Bias ID
+        self.bname: str = bname              # Bias name
+        self.uid: str = uid                  # Maker's ID
+        self.uname: str = uname              # Maker's name
+        self.update_datetime: str = update_datetime  # Update time
+        self.code: str = code                # Bundle code
+        self.sids: list = sids if sids is not None else []  # List of schedule IDs
+
+    def make_with_dict(self, dict_data:dict):
+        self.sbid = dict_data.get('sbid', "")
+        self.sbname = dict_data.get('sbname', "")
+        self.bid = dict_data.get('bid', "")
+        self.bname = dict_data.get('bname', "")
+        self.uid = dict_data.get('uid', "")
+        self.uname = dict_data.get('uname', "")
+        self.update_datetime = dict_data.get('update_datetime', "")
+        self.code = dict_data.get('code', "")
+        self.sids = dict_data.get('sids', [])
+        return self
+
+    def get_dict_form_data(self):
+        return {
+            "sbid": self.sbid,
+            "sbname": self.sbname,
+            "bid": self.bid,
+            "bname": self.bname,
+            "uid": self.uid,
+            "uname": self.uname,
+            "update_datetime": self.update_datetime,
+            "code": self.code,
+            "sids": self.sids
+        }
+
+
+    
+    
+class Schedule(SampleDomain):
+    def __init__(self, sid="", sname="", uid="", uname="",
+                 bid="", bname="", date="", start_time="",
+                 end_time="", location="", code="", update_datetime="",
+                 num_usage="", state=True
+                 ):
+        self.sid:str = sid                          # schedule id
+        self.sname:str = sname                      # schedule name
+        self.uid:str = uid                          # maker's id
+        self.uname:str = uname                      # maker's name
+        self.bid:str = bid                          # target bias
+        self.bname:str = bname                      # target bias's name
+        self.date:str = date                        # 시작 날짜
+        self.start_time:str = start_time            # 시작 시간 
+        self.end_time:str = end_time                # 시작 시간 
+        self.location:str = location                # 시작 시간 
+        self.code:str = code                        # 스케줄 코드
+        self.update_datetime:str = update_datetime  # 등록된 시간
+        self.num_usage:int = num_usage              # 추가된 횟수
+        self.state:bool = state
+    
+    def make_with_dict(self, dict_data:dict):
+        self.sid = dict_data.get('sid', "")
+        self.sname = dict_data.get('sname', "")
+        self.uid = dict_data.get('uid', "")
+        self.uname = dict_data.get('uname', "")
+        self.bid = dict_data.get('bid', "")
+        self.bname = dict_data.get('bname', "")
+        self.date = dict_data.get('date', "")
+        self.start_time = dict_data.get('start_time', "")
+        self.end_time = dict_data.get('end_time', "")
+        self.location = dict_data.get('location', "")
+        self.code = dict_data.get('code', "")
+        self.update_datetime = dict_data.get('update_datetime', "")
+        self.num_usage = dict_data.get('num_usage', 0)  # 기본값 0 설정
+        self.state:bool = dict_data.get('state', "")
+        return
+
+    def get_dict_form_data(self):
+        return {
+            "sid": self.sid,
+            "sname": self.sname,
+            "uid": self.uid,
+            "uname": self.uname,
+            "bid": self.bid,
+            "bname": self.bname,
+            "date": self.date,
+            "start_time": self.start_time,
+            "end_time": self.end_time,
+            "location": self.location,
+            "code": self.code,
+            "update_time": self.update_datetime,
+            "num_usage": self.num_usage,
+            "state":self.state
+        }
+
+    
 
 class User(SampleDomain):
     def __init__(self, uid = "", uname = "지지자", age=0, 

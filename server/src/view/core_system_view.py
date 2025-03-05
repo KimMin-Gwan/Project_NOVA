@@ -1,20 +1,17 @@
-from typing import Any, Optional, Union, List
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request, File, UploadFile, Form
+from typing import Optional, Union
+from fastapi import FastAPI, WebSocket, Request, File, UploadFile, Form
 from view.master_view import Master_View, RequestHeader
 from view.parsers import Head_Parser
-from view.jwt_decoder import RequestManager, TempCookieManager
+from view.jwt_decoder import RequestManager
 from controller import Home_Controller, Core_Controller, Feed_Controller
 from fastapi.responses import HTMLResponse
 from others import ConnectionManager as CM
 from others import LeagueManager as LM
 from others import FeedManager as FM
 from others import FeedSearchEngine as FSE
-from websockets.exceptions import ConnectionClosedError
+#from websockets.exceptions import ConnectionClosedError
 from pprint import pprint
 import json
-import time
-
-import numpy as np
 
 class Core_Service_View(Master_View):
     def __init__(self, app:FastAPI, endpoint:str,

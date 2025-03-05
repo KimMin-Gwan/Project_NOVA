@@ -11,3 +11,5 @@ from model.feed_model import *
 from model.hashtag_model import *
 from model.funding_model import *
 from model.notice_model import *
+from model.time_table_model import *
+
