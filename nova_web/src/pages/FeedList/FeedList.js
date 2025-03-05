@@ -99,8 +99,12 @@ export default function FeedList() {
     setNextData(-1);
   }, [biasId, board]);
 
-  let [filterCategory, setFilterCategory] = useState([]);
-  let [filterFclass, setFilterFclass] = useState("");
+  let [filterCategory, setFilterCategory] = useState(() => {
+    return JSON.parse(localStorage.getItem("board")) || [];
+  });
+  let [filterFclass, setFilterFclass] = useState(() => {
+    return JSON.parse(localStorage.getItem("content")) || "";
+  });
   let [isClickedFetch, setIsClickedFetch] = useState(false);
   const FETCH_URL = "https://nova-platform.kr/feed_explore/";
 

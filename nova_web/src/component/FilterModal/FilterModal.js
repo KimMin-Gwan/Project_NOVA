@@ -47,7 +47,7 @@ export default function FilterModal({
   );
 
   let [isClickedFilterContent, setIsClickedFilterContent] = useState(
-    JSON.parse(localStorage.getItem("content")) || "전체"
+    JSON.parse(localStorage.getItem("content")) || ""
   );
 
   useEffect(() => {
@@ -71,10 +71,10 @@ export default function FilterModal({
     });
   }
 
-  function onClickFilterContent(name, i) {
-    setIsClickedFilterContent(name);
+  function onClickFilterContent(name, value, i) {
+    setIsClickedFilterContent(value);
     setFilterFclass(ContentData[i].value);
-    const selectContent = name;
+    let selectContent = value;
     localStorage.setItem("content", JSON.stringify(selectContent));
   }
 
@@ -122,9 +122,9 @@ export default function FilterModal({
             {ContentData.map((data, i) => {
               return (
                 <button
-                  className={isClickedFilterContent === data.name ? "clicked_button" : ""}
+                  className={isClickedFilterContent === data.value ? "clicked_button" : ""}
                   key={data.id}
-                  onClick={() => onClickFilterContent(data.name, i)}
+                  onClick={() => onClickFilterContent(data.name, data.value, i)}
                 >
                   {data.name}
                 </button>
