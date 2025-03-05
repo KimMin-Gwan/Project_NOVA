@@ -2,12 +2,17 @@ import { useEffect, useState } from "react";
 import useDragScroll from "../../hooks/useDragScroll";
 import mainApi from "../../services/apis/mainApi";
 import style from "./KeywordBox.module.css";
+import useFetchFeedList from "../../hooks/useFetchFeedList";
+import useFeedStore from "../../stores/FeedStore/useFeedStore";
 
-export default function KeywordBox({ type, title, subTitle, onClickTagButton, fetchData }) {
+export default function KeywordBox({ type, title, subTitle, onClickTagButton }) {
   const { scrollRef, hasDragged, dragHandlers } = useDragScroll();
 
   let [bestTags, setBestTags] = useState([]);
   let [isLoading, setIsLoading] = useState(true);
+
+  // const { feedDatas, nextKey, fetchFeedList } = useFetchFeedList({ type });
+  const { fetchFeedList, loadings } = useFeedStore();
 
   async function fetchHashTags() {
     await mainApi.get(`home/${type}_spiked_hot_hashtag`).then((res) => {
@@ -26,14 +31,14 @@ export default function KeywordBox({ type, title, subTitle, onClickTagButton, fe
   function onClickTags(index, tag) {
     if (currentTag === index) {
       setCurrentTag(null);
-      fetchData();
+      fetchFeedList(type);
     } else {
       setCurrentTag(index);
       onClickTagButton(tag);
     }
   }
 
-  if (isLoading) {
+  if (isLoading || loadings) {
     return <div>loading...</div>;
   }
 
