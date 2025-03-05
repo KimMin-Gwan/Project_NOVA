@@ -6,6 +6,7 @@ body {
 }
 
 button,
+textarea,
 input {
   font-family: "Pretendard", sans-serif;
 }

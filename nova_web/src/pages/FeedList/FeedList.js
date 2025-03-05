@@ -24,6 +24,7 @@ import "@toast-ui/editor/dist/toastui-editor-viewer.css";
 import style from "./FeedHashList.module.css";
 import useDragScroll from "../../hooks/useDragScroll.js";
 import LoadingPage from "../LoadingPage/LoadingPage.js";
+import useFeedStore from "../../stores/FeedStore/useFeedStore.js";
 
 export default function FeedList() {
   const [params] = useSearchParams();
@@ -34,7 +35,7 @@ export default function FeedList() {
   const { scrollRef, hasDragged, dragHandlers } = useDragScroll();
 
   let [isFilterClicked, setIsFilterClicked] = useState(false);
-  let [isLoading, setIsLoading] = useState(true);
+  let [isLoading, setIsLoading] = useState(false);
 
   let [feedData, setFeedData] = useState([]);
   let [nextData, setNextData] = useState(-1);
@@ -58,9 +59,6 @@ export default function FeedList() {
   const [mode, setMode] = useState(initialMode);
 
   let { biasList } = useBiasStore();
-  useEffect(() => {
-    //console.log("동작");
-  }, []);
 
   let bids = biasList.map((item, i) => {
     return item.bid;
@@ -99,8 +97,12 @@ export default function FeedList() {
     setNextData(-1);
   }, [biasId, board]);
 
-  let [filterCategory, setFilterCategory] = useState([]);
-  let [filterFclass, setFilterFclass] = useState("");
+  let [filterCategory, setFilterCategory] = useState(() => {
+    return JSON.parse(localStorage.getItem("board")) || [];
+  });
+  let [filterFclass, setFilterFclass] = useState(() => {
+    return JSON.parse(localStorage.getItem("content")) || "";
+  });
   let [isClickedFetch, setIsClickedFetch] = useState(false);
   const FETCH_URL = "https://nova-platform.kr/feed_explore/";
 
@@ -143,7 +145,6 @@ export default function FeedList() {
       })
         .then((response) => response.json())
         .then((data) => {
-          //console.log("all feed first feed 3개", data.body);
           setNextData(data.body.key);
           setIsLoading(false);
           setFeedData(data.body.send_data);
@@ -155,48 +156,25 @@ export default function FeedList() {
     }
   }
 
-  function fetchData() {
-    if (type === "today" || type === "weekly") {
-      mainApi.get(`feed_explore/${type}_best`).then((res) => {
-        //console.log(`${type} feed`, res.data.body);
-        setFeedData(res.data.body.send_data);
-        setNextData(res.data.body.key);
-        setIsLoading(false);
-      });
-    }
-  }
+  // type이 today, weekly인 경우 동작작
+  const { feedDatas, nextKey, loadings, fetchFeedList, fetchMoreFeedList, fetchFeedWithTag } =
+    useFeedStore();
 
-  function fetchFeedWithTag(tag) {
-    //console.log("dasdasda", hashtag);
-    mainApi
-      .get(`feed_explore/search_feed_with_hashtag?hashtag=${tag}&key=-1&target_time=day`)
-      .then((res) => {
-        //console.log("fff", res.data);
-        setFeedData(res.data.body.send_data);
-        // setNextData(res.data.body.key);
-        setIsLoading(false);
-      });
-  }
+  useEffect(() => {
+    fetchFeedList(type);
+  }, [type]);
+
   useEffect(() => {
     setFeedData([]);
   }, []);
 
+  // tag 클릭시 피드 데이터 받기기
   function onClickTag(tag) {
-    fetchFeedWithTag(tag);
+    fetchFeedWithTag(type, tag);
   }
 
   function fetchPlusData() {
-    if (type === "today" || type === "weekly") {
-      mainApi.get(`feed_explore/${type}_best?key=${nextData}`).then((res) => {
-        setNextData(res.data.body.key);
-        setFeedData((prevData) => {
-          const newData = [...prevData, ...res.data.body.send_data];
-          return newData;
-        });
-        setIsLoading(false);
-        //console.log(`more ${type}`, res.data);
-      });
-    } else if (type === "all" || isClickedFetch) {
+    if (type === "all" || isClickedFetch) {
       // 지역 변수 데이터로 활용하기로함
       let send_form = {
         header: header,
@@ -232,10 +210,11 @@ export default function FeedList() {
     observerRef.current = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
-        if (isLoading) return;
+        if (isLoading || loadings) return;
 
         // fetchAllFeed();
-        fetchPlusData();
+        // fetchPlusData();
+        fetchMoreFeedList(type, nextKey);
         if (type === "bias") {
           fetchBiasCategoryData();
         }
@@ -252,10 +231,9 @@ export default function FeedList() {
         observerRef.current.disconnect();
       }
     };
-  }, [isLoading, nextData]);
+  }, [isLoading, nextData, nextKey]);
 
   useEffect(() => {
-    fetchData();
     fetchAllFeed(false);
 
     return () => {
@@ -284,7 +262,7 @@ export default function FeedList() {
     document.body.style.overflow = "auto";
   }
 
-  if (isLoading) {
+  if (isLoading || loadings) {
     return <LoadingPage />;
   }
 
@@ -355,14 +333,13 @@ export default function FeedList() {
               title={type === "today" ? "인기 급상승" : "많은 사랑을 받은"}
               subTitle={type === "today" ? "오늘의 키워드" : "이번주 키워드"}
               onClickTagButton={onClickTag}
-              fetchData={fetchData}
             />
           </div>
         )}
 
-        <div className={feedData.length > 0 ? style["scroll-area"] : style["none_feed_scroll"]}>
-          {feedData.length > 0 ? (
-            feedData.map((feed, i) => {
+        <div className={feedDatas.length > 0 ? style["scroll-area"] : style["none_feed_scroll"]}>
+          {feedDatas.length > 0 ? (
+            feedDatas.map((feed, i) => {
               return (
                 <Feed
                   key={`feed_${feed.feed.fid}`}

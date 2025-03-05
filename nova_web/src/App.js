@@ -27,6 +27,8 @@ import SearchResultPage from "./pages/SearchResultPage/SearchResultPage.js";
 import NoticePage from "./pages/NoticePage/NoticePage.js";
 import HomePage from "./pages/HomePage/HomePage.js";
 import ReportPage from "./pages/ReportPage/ReportPage.js";
+import ScheduleTopic from "./component/ScheduleTopic/ScheduleTopic.js";
+import EventCard from "./component/EventCard/EventCard.js";
 
 // 다크 모드 클래스 반환 함수
 export function getModeClass(mode) {
@@ -88,7 +90,8 @@ function App() {
       <Route path="/bias_funding/:type" element={<MoreProjects />}></Route> */}
 
       {/* 테스트 페이지 및 에러 페이지 */}
-      <Route path="/test1" element={<NavBar />}></Route>
+      <Route path="/test1" element={<ScheduleTopic />}></Route>
+      <Route path="/test2" element={<EventCard />}></Route>
       <Route path="*" element={<div>404 Error</div>}></Route>
 
       {/* 홈 화면 */}
