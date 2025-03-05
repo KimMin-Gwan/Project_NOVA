@@ -74,13 +74,13 @@
   .post-list[data-active-index="0"]::after {
     left: 45px;
   }
-  .post-list[data-active-index="1"]::after {
+  /* .post-list[data-active-index="1"]::after {
     left: 125px;
-  }
-  .post-list[data-active-index="2"]::after {
+  } */
+  /* .post-list[data-active-index="2"]::after {
     left: 203px;
   }
   .post-list[data-active-index="3"]::after {
     left: 273px;
-  }
+  } */
 }

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import "./index.css";
 import { useNavigate } from "react-router-dom";
 import postApi from "../../services/apis/postApi";
@@ -9,6 +9,15 @@ export default function ReportPage() {
 
   const [imageFiles, setImageFiles] = useState([]);
   const [detail, setDetail] = useState("");
+
+  const [image, setImage] = useState(null);
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage(URL.createObjectURL(file));
+    }
+  };
 
   const handleFileChange = (e) => {
     const files = e.target.files;
@@ -40,12 +49,13 @@ export default function ReportPage() {
       },
     };
 
-    //console.log("111", send_data);
-
     formData.append("jsonData", JSON.stringify(send_data));
 
     await postApi.post("nova_sub_system/try_report_bug", formData, config).then((res) => {
-      //console.log(res.data);
+      console.log(res.data);
+      if (res.data.body.result) {
+        alert("전송 완료");
+      }
     });
   };
 
@@ -76,13 +86,20 @@ export default function ReportPage() {
 
       <div className="Report_notice">
         <div className="Report_image">
-          <div className="img_box">img</div>
+          <div className="img_box">
+            <img src={image} />
+          </div>
+          <label htmlFor="image" className="file_button">
+            이미지 첨부
+          </label>
           <input
+            id="image"
             type="file"
             multiple
             accept="image/*"
             name="image"
             onChange={(e) => {
+              handleImageChange(e);
               handleFileChange(e);
             }}
           />

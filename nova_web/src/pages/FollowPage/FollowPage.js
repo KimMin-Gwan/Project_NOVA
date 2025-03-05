@@ -12,6 +12,7 @@ import FollowBoxes from "../../component/FollowBoxes.js";
 import search_icon from "./../../img/search_icon.png";
 import Stackframe from "./../../img/Stackframe.png";
 import style from "./FollowPage.module.css";
+import HEADER from "../../constant/header.js";
 
 const bias_url = "https://kr.object.ncloudstorage.com/nova-images/";
 export default function FollowPage() {
@@ -19,7 +20,6 @@ export default function FollowPage() {
   let { biasList } = useBiasStore();
 
   const [params] = useSearchParams();
-  const type = params.get("type");
   let [biasId, setBiasId] = useState();
 
   const brightModeFromUrl = params.get("brightMode");
@@ -43,7 +43,6 @@ export default function FollowPage() {
 
   function fetchBiasFollowList() {
     mainApi.get("nova_sub_system/get_bias_follow_page_data").then((res) => {
-      //console.log(res.data);
       setBiasDataList(res.data.body);
       setIsLoading(false);
     });
@@ -52,16 +51,9 @@ export default function FollowPage() {
   useEffect(() => {
     fetchBiasFollowList();
   }, []);
-  let header = {
-    "request-type": "default",
-    "client-version": "v1.0.1",
-    "client-ip": "127.0.0.1",
-    uid: "1234-abcd-5678",
-    endpoint: "/user_system/",
-  };
 
   let send_data = {
-    header: header,
+    header: HEADER,
     body: {
       bid: clickedBid,
     },
@@ -195,95 +187,10 @@ export default function FollowPage() {
           </button>
         </div>
 
-        <div className={style["streamer-box"]}>
-          <h4>아티스트</h4>
-          <span className={style["streamer-list"]}>
-            {biasDataList.artist.map((bias, i) => {
-              return (
-                <button
-                  key={bias.bid}
-                  onClick={() => {
-                    openModal(bias.bid, bias.bname);
-                  }}
-                  className={style["streamer-img"]}
-                >
-                  <div>
-                    <img src={bias_url + `${bias.bid}.PNG`} />
-                  </div>
-                  <p>{bias.bname}</p>
-                </button>
-              );
-            })}
-          </span>
-        </div>
-
-        {biasDataList.chzzk.length > 0 && (
-          <div className={style["streamer-box"]}>
-            <h4>치지직 스트리머</h4>
-            <span className={style["streamer-list"]}>
-              {biasDataList.chzzk.map((bias, i) => {
-                return (
-                  <button
-                    key={bias.bid}
-                    onClick={() => {
-                      openModal(bias.bid, bias.bname);
-                    }}
-                    className={style["streamer-img"]}
-                  >
-                    <div>
-                      <img src={bias_url + `${bias.bid}.PNG`} />
-                    </div>
-                    <p>{bias.bname}</p>
-                  </button>
-                );
-              })}
-            </span>
-          </div>
-        )}
-
-        <div className={style["streamer-box"]}>
-          <h4>SOOP 스트리머</h4>
-          <span className={style["streamer-list"]}>
-            {biasDataList.soop.map((bias, i) => {
-              return (
-                <button
-                  key={bias.bid}
-                  onClick={() => {
-                    openModal(bias.bid, bias.bname);
-                  }}
-                  className={style["streamer-img"]}
-                >
-                  <div>
-                    <img src={bias_url + `${bias.bid}.PNG`} />
-                  </div>
-                  <p>{bias.bname}</p>
-                </button>
-              );
-            })}
-          </span>
-        </div>
-
-        <div className={style["streamer-box"]}>
-          <h4>유튜버</h4>
-          <span className={style["streamer-list"]}>
-            {biasDataList.youtube.map((bias, i) => {
-              return (
-                <button
-                  key={bias.bid}
-                  onClick={() => {
-                    openModal(bias.bid, bias.bname);
-                  }}
-                  className={style["streamer-img"]}
-                >
-                  <div>
-                    <img src={bias_url + `${bias.bid}.PNG`} />
-                  </div>
-                  <p>{bias.bname}</p>
-                </button>
-              );
-            })}
-          </span>
-        </div>
+        <Streamer title={"아티스트"} platform={biasDataList.artist} openModal={openModal} />
+        <Streamer title={"치지직 스트리머"} platform={biasDataList.chzzk} openModal={openModal} />
+        <Streamer title={"SOOP 스트리머"} platform={biasDataList.soop} openModal={openModal} />
+        <Streamer title={"유튜버"} platform={biasDataList.youtube} openModal={openModal} />
 
         {isModalOpen && (
           <div className={style["modal-overlay"]} onClick={closeModal}>
@@ -318,6 +225,36 @@ export default function FollowPage() {
           </div>
         )}
       </div>
+    </div>
+  );
+}
+
+function Streamer({ title, platform, openModal }) {
+  if (platform.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className={style["streamer-box"]}>
+      <h4>{title}</h4>
+      <span className={style["streamer-list"]}>
+        {platform.map((bias, i) => {
+          return (
+            <button
+              key={bias.bid}
+              onClick={() => {
+                openModal(bias.bid, bias.bname);
+              }}
+              className={style["streamer-img"]}
+            >
+              <div>
+                <img src={bias_url + `${bias.bid}.PNG`} />
+              </div>
+              <p>{bias.bname}</p>
+            </button>
+          );
+        })}
+      </span>
     </div>
   );
 }
