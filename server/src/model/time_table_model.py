@@ -3,6 +3,7 @@ from model import Local_Database
 from others.data_domain import TimeTableUser as TUser
 from others.data_domain import Schedule, ScheduleBundle, ScheduleEvent
 
+# ------------------------------------ 기본 타임 테이블 모델 ------------------------------------------
 class TimeTableModel(BaseModel):
     def __init__(self, database:Local_Database) -> None:
         super().__init__(database)
@@ -39,10 +40,10 @@ class TimeTableModel(BaseModel):
         response = self._get_response_data(head_parser=head_parser, body=body)
         return response
 
-
+# ------------------------------------- 스케쥴 모델 ------------------------------------------------
 # 단일 스케줄을 반환할 때 사용하는 모델 
 # 사용할 일이 있을지는 모르는데, 아마 수정 같은 상황에 사용될것
-class SingleSchduleModel(TimeTableModel):
+class SingleScheduleModel(TimeTableModel):
     def __init__(self, database:Local_Database) -> None:
         super().__init__(database)
         self.__schedule = Schedule()
@@ -62,7 +63,7 @@ class SingleSchduleModel(TimeTableModel):
     
 # 복수 스케줄을 반환할 때 사용하는 모델 
 # 아마 대부분이 여러개를 반환해야하니 이거 쓰면 될듯
-class SingleSchduleModel(TimeTableModel):
+class MultiScheduleModel(TimeTableModel):
     def __init__(self, database:Local_Database) -> None:
         super().__init__(database)
         self.__schedules:list[Schedule] = []

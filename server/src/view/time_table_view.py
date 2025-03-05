@@ -50,7 +50,6 @@ class TimeTableView(Master_View):
         # 로그인 상태에서는 date를 선택하면 그날 이벤트를 모두 줄것
         # date는 안들어오면 오늘 날짜로 자동 선택될 것임
         # date는 "2025/03/05" 형식
-
         @self.__app.get('/time_table_server/try_get_eventboard_data')
         def get_eventboard_data(request:Request, date:Optional[str]=datetime.now().strftime("%Y/%m/%d")):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
@@ -64,7 +63,6 @@ class TimeTableView(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
 
             return response
-
 
         # 타임 차트에서 데이터 뽑아오기
         # 비로그인 상태에서는 데이터를 반환하지 않아도될듯 -> 아니면 반환할 데이터를 마련해도 될듯
@@ -94,7 +92,7 @@ class TimeTableView(Master_View):
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
             time_table_controller =TImeTableController()
-            model = time_table_controller.get_todya_time_table(database=self.__database,
+            model = time_table_controller.get_today_time_table(database=self.__database,
                                                               request=request_manager)
             
             body_data = model.get_response_form_data(self._head_parser)
@@ -125,7 +123,7 @@ class TimeTableView(Master_View):
         # key : 서치 키값
         # type : schedule, schedule_bundle, event
         @self.__app.get('/time_table_server/try_search')
-        def try_search_schedule(request:Request, keyword:Optional[str] = "", key:Optional[str]=-1, type:Optional[str]=""):
+        def try_search_schedule(request:Request, keyword:Optional[str] = "", key:Optional[int]=-1, type:Optional[str]=""):
             
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = SearchRequest(keyword=keyword, key=key, type=type)
@@ -149,7 +147,7 @@ class TimeTableView(Master_View):
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
             time_table_controller =TImeTableController()
-            model = time_table_controller.try_get_recomment_keyword(database=self.__database,
+            model = time_table_controller.try_get_recommend_keyword(database=self.__database,
                                                                     request=request_manager)
             
             body_data = model.get_response_form_data(self._head_parser)
@@ -182,7 +180,7 @@ class TimeTableView(Master_View):
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
 
             time_table_controller =TImeTableController()
-            model = time_table_controller.try_add_schedule(database=self.__database,
+            model = time_table_controller.try_add_event(database=self.__database,
                                                         request=request_manager)
             
             body_data = model.get_response_form_data(self._head_parser)
@@ -206,13 +204,13 @@ class TimeTableView(Master_View):
         
         # bid에서 내가 선택했는 스케줄들 볼때 쓰는 엔드 포인트. 로그인 필수
         @self.__app.get('/time_table_server/try_search_my_schedule_with_bid')
-        def try_reject_from_my_schedule(request:Request, bid:Optional[str]=""):
+        def ry_search_my_schedule_with_bid(request:Request, bid:Optional[str]=""):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = ScheduleWithBidRequest(bid=bid)
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
 
             time_table_controller =TImeTableController()
-            model = time_table_controller.try_reject_from_my_schedule(database=self.__database,
+            model = time_table_controller.try_search_my_schedule_with_bid(database=self.__database,
                                                                         request=request_manager)
             
             body_data = model.get_response_form_data(self._head_parser)
@@ -234,8 +232,6 @@ class TimeTableView(Master_View):
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response
-        
-    
 
     def make_schedule_route(self):
         # 단일 일정을 만들기
@@ -271,14 +267,14 @@ class TimeTableView(Master_View):
         
         # 여기는 2차 목표임
         ## 일정 수정하기
-        #@self.__app.post('/time_table_server/try_make_new_mulitple_schedule')
-        #def try_make_new_multiple_schedule(request: Request, raw_requset:dict):
+        #@self.__app.post('/time_table_server/try_modify_schedule')
+        #def try_modify_schedule(request: Request, raw_requset:dict):
             #request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             #data_payload = MakeSingleScheduleRequest(request=raw_requset)
             #request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
             #time_table_controller =TImeTableController()
-            #model = time_table_controller.make_new_multiple_schedule(database=self.__database,
+            #model = time_table_controller.modify_schedule(database=self.__database,
                                                                         #request=request_manager)
             
             #body_data = model.get_response_form_data(self._head_parser)
@@ -286,8 +282,8 @@ class TimeTableView(Master_View):
             #return response
         
         ## 일정 지우기 
-        #@self.__app.post('/time_table_server/try_make_new_mulitple_schedule')
-        #def try_make_new_multiple_schedule(request: Request, raw_requset:dict):
+        #@self.__app.post('/time_table_server/try_delete_schedule')
+        #def try_delete_schedule(request: Request, raw_requset:dict):
             #request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             #data_payload = MakeSingleScheduleRequest(request=raw_requset)
             #request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
