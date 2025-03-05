@@ -15,6 +15,8 @@ class TImeTableController:
             # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
             if not model._set_tuser_with_tuid():
                 return model
+
+        model.get_dashboard_data()
         
         return model
 
@@ -28,6 +30,8 @@ class TImeTableController:
             if not model._set_tuser_with_tuid():
                 return model
 
+        model.get_eventboard_data()
+
         return model
 
     # 오늘의 일정 차트를 불러오기
@@ -39,6 +43,8 @@ class TImeTableController:
             # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
             if not model._set_tuser_with_tuid():
                 return model
+
+        model.set_today_time_chart()
 
         return model
 
@@ -52,6 +58,8 @@ class TImeTableController:
             if not model._set_tuser_with_tuid():
                 return model
 
+        model.set_today_time_table()
+
         return model
 
     # 바이어스 추천 리스트 ( 추천 주제 리스트 )
@@ -63,6 +71,8 @@ class TImeTableController:
             # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
             if not model._set_tuser_with_tuid():
                 return model
+
+        model.get_recommended_bias_list()
 
         return model
 
@@ -106,6 +116,8 @@ class TImeTableController:
             if not model._set_tuser_with_tuid():
                 return model
 
+        model.add_new_schedule(data_payload=request.data_payload)
+
         return model
 
     # 이벤트 추가하기
@@ -117,6 +129,8 @@ class TImeTableController:
             # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
             if not model._set_tuser_with_tuid():
                 return model
+
+        model.make_new_event(data_payload=request.data_payload)
 
         return model
 
@@ -139,6 +153,9 @@ class TImeTableController:
             model.set_user_with_email(request=request.jwt_payload)
             if not model._set_tuser_with_tuid():
                 return model
+
+        model.search_schedule_with_bid(bid=request.data_payload.bid)
+
         return model
 
     # 선택한 스케쥴을 지우는 과정
@@ -150,6 +167,8 @@ class TImeTableController:
             # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
             if not model._set_tuser_with_tuid():
                 return model
+
+        model.reject_from_my_schedule(sid=request.data_payload.sid)
 
         return model
 
@@ -165,6 +184,8 @@ class TImeTableController:
             if not model._set_tuser_with_tuid():
                 return model
 
+        model.make_new_single_schedule(data_payload=request.data_payload)
+
         return model
 
     # 복수 일정을 만들기
@@ -176,6 +197,7 @@ class TImeTableController:
             if not model._set_tuser_with_tuid():
                 return model
 
+        model.make_new_multi_schedule(data_payload=request.data_payload)
         return model
 
     # 일정 수정하기

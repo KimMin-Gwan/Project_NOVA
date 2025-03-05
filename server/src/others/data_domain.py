@@ -113,7 +113,7 @@ class ScheduleEvent(SampleDomain):
             "sids": self.sids
         }
 
-    
+# 스케쥴 번들
 class ScheduleBundle(SampleDomain):
     def __init__(self, sbid="", sbname="", bid="",
                  bname="", uid="", uname="",
@@ -152,15 +152,12 @@ class ScheduleBundle(SampleDomain):
             "code": self.code,
             "sids": self.sids
         }
-
-
-    
     
 class Schedule(SampleDomain):
     def __init__(self, sid="", sname="", uid="", uname="",
                  bid="", bname="", date="", start_time="",
                  end_time="", location="", code="", update_datetime="",
-                 num_usage="", state=True
+                 num_usage=0, state=True
                  ):
         self.sid:str = sid                          # schedule id
         self.sname:str = sname                      # schedule name
