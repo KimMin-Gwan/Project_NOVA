@@ -25,36 +25,37 @@ class TempUser:
         return
     
 class TimeTableUser(SampleDomain):
-    def __init__(self, tuid="", uid="", sids=None,
-                 sbids=None, seids=None, my_sids=None,
-                 my_sbids=None, my_seids=None):
+    def __init__(self, tuid="", uid="", sids=None, this_week_sids=None,
+                 seids=None, my_sids=None,
+                 my_sbids=None, my_seids=None, category=None):
         self.tuid: str = tuid               # Time table user ID == User.uid
         self.sids: list = sids if sids is not None else []         # Schedule IDs
-        self.sbids: list = sbids if sbids is not None else []      # Schedule bundle IDs
         self.seids: list = seids if seids is not None else []      # Schedule event IDs
+        self.this_week_sids = this_week_sids if this_week_sids is not None else []  # 이번주에 체크한거
         self.my_sids: list = my_sids if my_sids is not None else []  # My schedule IDs
         self.my_sbids: list = my_sbids if my_sbids is not None else []  # My schedule bundle IDs
         self.my_seids: list = my_seids if my_seids is not None else []  # My schedule event IDs
+        self.category: list = category if category is not None else []  # interest category tag
 
     def make_with_dict(self, dict_data:dict):
         self.tuid = dict_data.get('tuid', "")
         self.sids = dict_data.get('sids', [])
-        self.sbids = dict_data.get('sbids', [])
         self.seids = dict_data.get('seids', [])
         self.my_sids = dict_data.get('my_sids', [])
         self.my_sbids = dict_data.get('my_sbids', [])
         self.my_seids = dict_data.get('my_seids', [])
+        self.category = dict_data.get('category', [])
         return self
 
     def get_dict_form_data(self):
         return {
             "tuid": self.tuid,
             "sids": self.sids,
-            "sbids": self.sbids,
             "seids": self.seids,
             "my_sids": self.my_sids,
             "my_sbids": self.my_sbids,
-            "my_seids": self.my_seids
+            "my_seids": self.my_seids,
+            "category" : self.category
         }
 
 
@@ -189,7 +190,7 @@ class Schedule(SampleDomain):
         self.update_datetime = dict_data.get('update_datetime', "")
         self.num_usage = dict_data.get('num_usage', 0)  # 기본값 0 설정
         self.state:bool = dict_data.get('state', "")
-        return
+        return self
 
     def get_dict_form_data(self):
         return {

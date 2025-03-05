@@ -1,91 +1,17 @@
-import requests
-
-import os
-import json
-from pprint import pprint
+from datetime import datetime
 
 
-def try_add_user_test():
-    with open('./test_user.json', 'r', encoding='utf-8') as f:
-        user_dict = json.load(f)
+today = datetime.today()
+shorted_year = today.year % 100
+        
+first_day_of_month = datetime(today.year, today.month, 1)
 
-    #pprint(user_dict)
+# 해당 날짜와 첫 번째 날의 주 번호 계산
+start_week = first_day_of_month.isocalendar()[1]  # 해당 달 첫 날의 주 번호
+current_week = today.isocalendar()[1]             # 해당 날짜의 주 번호
 
-    script_path = os.path.abspath(__file__)
-    script_dir = os.path.dirname(script_path)
-
-    print(f"현재 파일 디렉토리: {script_dir}")
-    test_user_path = script_dir + "/test_user.json"
-
-    params = {
-        'user_data_url': test_user_path,
-    }
-
-    result = requests.get(url="http://127.0.0.1:6000/testing/try_add_user",params=params)
-    print(result)
-
-def try_delete_user_test():
-    params = {
-        'target_uid' : 'asd0-19xd-a223'
-    }
-    result = requests.get(url="http://127.0.0.1:6000/testing/try_remove_user",params=params)
-    print(result)
-
-def try_add_feed_test():
-    with open('./test_feed.json', 'r', encoding='utf-8') as f:
-        feed_dict = json.load(f)
-
-    #pprint(user_dict)
-
-    script_path = os.path.abspath(__file__)
-    script_dir = os.path.dirname(script_path)
-
-    print(f"현재 파일 디렉토리: {script_dir}")
-    test_feed_path = script_dir + "/test_feed.json"
-
-    params = {
-        'feed_data_url': test_feed_path,
-    }
-    result = requests.get(url="http://127.0.0.1:6000/testing/try_add_feed",params=params)
-    print(result)
-
-def try_delete_feed_test():
-    params = {
-        'target_fid' : '34'
-    }
-
-    result = requests.get(url="http://127.0.0.1:6000/testing/try_remove_feed",params=params)
-    print(result)
-
-def try_like_feed():
-    params = {
-        'fid' : '5',
-        'uid' : "abcd-1234-5678"
-    }
-
-    result = requests.get(url="http://127.0.0.1:6000/testing/try_like_feed",params=params)
-    print(result)
-
-def try_dislike_feed():
-    params = {
-        'fid' : '5',
-        'uid' : "abcd-1234-5678"
-    }
-
-    result = requests.get(url="http://127.0.0.1:6000/testing/try_dislike_feed",params=params)
-    print(result)
-
-def try_recommend_feed():
-    params = {
-        'fid' : ''
-
-    }
-
-    result = requests.get(url="http://127.0.0.1:6000/testing/try_recommend_feed",params=params)
-    print(result)
-# try_add_user_test()
-# try_delete_user_test()
-# try_add_feed_test()
-# try_delete_feed_test()
-# try_like_feed()
-# try_dislike_feed()
+# 현재 주가 3월 내의 몇 번째 주인지 계산
+week_in_month = current_week - start_week + 1
+        
+# 만약 미래에 있는 사람이 2100에 산다면 이 곳의 코드를 고치면 됩니다
+print(f'{shorted_year}년 {today.month}월 {week_in_month}주차')

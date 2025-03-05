@@ -26,6 +26,7 @@ class TimeTableView(Master_View):
 
     def home_route(self):
         
+        # 완료 / 
         # 타임 테이블 페이지의 최 상단 대시보드데이터
         # 파라미터 없음, 비로그인 상태에서는 0으로 리턴함 
         @self.__app.get('/time_table_server/try_get_dashboard_data')
@@ -45,6 +46,7 @@ class TimeTableView(Master_View):
 
             return response
         
+        # 완료
         # 타임 테이블 페이지의 최 상단 이벤트 보드 데이터
         # 비로그인 상태에서는 date를 선택하지 않으면 그날 이벤트를 랜덤하게 3개 줄것
         # 로그인 상태에서는 date를 선택하면 그날 이벤트를 모두 줄것
@@ -53,7 +55,7 @@ class TimeTableView(Master_View):
         @self.__app.get('/time_table_server/try_get_eventboard_data')
         def get_eventboard_data(request:Request, date:Optional[str]=datetime.now().strftime("%Y/%m/%d")):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
-            data_payload = DummyRequest()
+            data_payload = DateRequest(date=date)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
             time_table_controller =TImeTableController()
@@ -64,17 +66,18 @@ class TimeTableView(Master_View):
 
             return response
 
+        # 완료
         # 타임 차트에서 데이터 뽑아오기
         # 비로그인 상태에서는 데이터를 반환하지 않아도될듯 -> 아니면 반환할 데이터를 마련해도 될듯
         # 로그인 상태에서는 본인이 추가한 모든 일정(오늘자)이 반환되어야함
         @self.__app.get('/time_table_server/try_get_today_time_chart')
         def try_get_today_time_chart(request:Request, date:Optional[str]=datetime.now().strftime("%Y/%m/%d")):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
-            data_payload = DummyRequest()
+            data_payload = DateRequest(date=date)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
             time_table_controller =TImeTableController()
-            model = time_table_controller.get_today_time_chart(database=self.__database,
+            model = time_table_controller.get_time_chart(database=self.__database,
                                                               request=request_manager)
             
             body_data = model.get_response_form_data(self._head_parser)
@@ -82,6 +85,7 @@ class TimeTableView(Master_View):
 
             return response
 
+        # 완료
         # 타임 테이블 데이터 (여러곳에서 복합적으로 사용될 수 있음)
         # 비로그인 유저에게는 랜덤한 데이터를 보여줄 것
         # 로그인 유저에게는 본인이 선택한 일정을 보여 줄 것
@@ -92,7 +96,7 @@ class TimeTableView(Master_View):
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
             time_table_controller =TImeTableController()
-            model = time_table_controller.get_today_time_table(database=self.__database,
+            model = time_table_controller.get_my_time_table(database=self.__database,
                                                               request=request_manager)
             
             body_data = model.get_response_form_data(self._head_parser)
@@ -100,6 +104,7 @@ class TimeTableView(Master_View):
 
             return response
         
+        # 보류
         # 홈 화면 젤 밑에 나오는 bias 데이터 들인데 이건 여기다가 만들지 말지 고민중임
         @self.__app.get('/time_table_server/try_get_recommended_bias_list')
         def get_recommended_bias_list(request:Request):
@@ -156,6 +161,7 @@ class TimeTableView(Master_View):
         
     
     def my_schedule_route(self):
+        # 완료
         # 내 스케줄에 추가하기
         # sids를 받아서 추가할 것(번들은 쪼개서 sid리스트만 받음, 이벤트는 이곳으로 추가하지 않음)
         @self.__app.get('/time_table_server/try_add_schedule')
@@ -172,11 +178,12 @@ class TimeTableView(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
         
+        # 완료 
         # 이벤트는 이곳으로 추가함
         @self.__app.get('/time_table_server/try_add_event')
-        def try_add_event(request:Request, sids:Optional[list]=[]):
+        def try_add_event(request:Request, seid:Optional[str]):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
-            data_payload = AddNewScheduleRequest(sids=sids)
+            data_payload = AddNewEventRequest(seid=seid)
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
 
             time_table_controller =TImeTableController()
@@ -338,6 +345,10 @@ class SearchRequest(RequestHeader):
 class AddNewScheduleRequest(RequestHeader):
     def __init__(self, sids=[])-> None:
         self.sids=sids
+
+class AddNewEventRequest(RequestHeader):
+    def __init__(self, seid) -> None:
+        self.seid:str=seid
         
 class SelectMyTimeTableRequest(RequestHeader):
     def __init__(self, date, bid)-> None:
@@ -352,3 +363,6 @@ class ScheduleWithBidRequest(RequestHeader):
     def __init__(self, bid)-> None:
         self.bid:str=bid
 
+class DateRequest(RequestHeader):
+    def __init__(self, date)-> None:
+        self.date:str=date
