@@ -257,7 +257,7 @@ class User_Service_View(Master_View):
 
         # 프로필 사진 바꾸기
         @self.__app.post('/user_home/try_change_profile_photo')
-        def try_change_profile_photo(request:Request, image:Union[UploadFile, None] = File(None)):
+        async def try_change_profile_photo(request:Request, image:Union[UploadFile, None] = File(None)):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             
             pprint(image)
@@ -267,8 +267,9 @@ class User_Service_View(Master_View):
                 image_name = ""
             else:
                 image_name = image.filename
+                image = await image.read()
         
-            data_payload = ChangeProfilePhotoRequest(image=image.read(), image_name=image_name)
+            data_payload = ChangeProfilePhotoRequest(image=image, image_name=image_name)
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
             if not request_manager.jwt_payload.result:
                 raise request_manager.credentials_exception
