@@ -4,6 +4,8 @@ from others.data_domain import TimeTableUser as TUser
 from others.data_domain import Schedule, ScheduleBundle, ScheduleEvent
 
 from datetime import datetime
+import random
+import string
 
 # ------------------------------------ 기본 타임 테이블 모델 ------------------------------------------
 class TimeTableModel(BaseModel):
@@ -289,8 +291,8 @@ class MultiScheduleModel(TimeTableModel):
     # date는 날짜임 , 형태는 2025/03/06 임
     # date안넣으면 기본적으로 오늘자로 감
     def set_my_schedule_in_by_day(self, date=datetime.today().strftime("%Y/%m/%d")):
-        # 내가 추가한 이벤트를 다 가지고 옴
-        schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids=self._tuser.seids)
+        # 내가 추가한 스케줄을 다 가지고 옴
+        schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids=self._tuser.sids)
         
         # 필요하면 갯수 제한도 두삼
         for schedule_data in schedule_datas:
@@ -380,14 +382,14 @@ class MultiScheduleModel(TimeTableModel):
     
         # 업데이트 했으면 데베에 저장할것
         if flag:
-            self._database.modify_data_with_id(target_id="tuid", target_data=self._tuser)
+            self._database.modify_data_with_id(target_id="tuid", target_data=self._tuser.get_dict_form_data())
             
         return
     
     # 주차에 따른 내가 추가한 스케줄을 보여줌
     def set_schedule_by_week(self, year="", week=0):
         # 데이터 불러오고
-        schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids=self._tuser.seids)
+        schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids=self._tuser.sids)
         
         # 필터링 해야되는데 날짜 기준이 필요함 
         # year 가 없으면 그냥 이번주임
@@ -429,6 +431,53 @@ class MultiScheduleModel(TimeTableModel):
         self._make_schedule_data(id_list=searched_list, search_type=search_type)
         return
 
+    
+    def search_my_schedule_with_bid(self, bid):
+        # 데이터 불러오고
+        schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids=self._tuser.sids)
+        
+        # 보낼 스케줄 정하는 곳
+        # 만약 등록된 순서가 뒤집히면 여기서 reverse 추가해야됨
+        for schedule_data in schedule_datas:
+            schedule = Schedule()
+            schedule.make_with_dict(dict_data=schedule_data)
+            
+            if schedule.bid == bid:
+                self.__schedules.append(schedule)
+                
+        # 데이터 불러오고
+        schedule_events_datas = self._database.get_datas_with_ids(target_id="seid", ids=self._tuser.seids)
+        
+        # 보낼 이벤트 정하는 곳
+        for schedule_event_data in schedule_events_datas:
+            schedule_event = ScheduleEvent()
+            schedule_event.make_with_dict(dict_data=schedule_event_data)
+            
+            if schedule_event.bid == bid:
+                self.__schedule_events.append(schedule_event)
+        return
+        
+    def search_my_all_schedule(self):
+        # 데이터 불러오고
+        schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids=self._tuser.sids)
+        
+        # 보낼 스케줄 정하는 곳
+        # 만약 등록된 순서가 뒤집히면 여기서 reverse 추가해야됨
+        for schedule_data in schedule_datas:
+            schedule = Schedule()
+            schedule.make_with_dict(dict_data=schedule_data)
+            self.__schedules.append(schedule)
+                
+        # 데이터 불러오고
+        schedule_events_datas = self._database.get_datas_with_ids(target_id="seid", ids=self._tuser.seids)
+        
+        # 보낼 이벤트 정하는 곳
+        for schedule_event_data in schedule_events_datas:
+            schedule_event = ScheduleEvent()
+            schedule_event.make_with_dict(dict_data=schedule_event_data)
+            self.__schedule_events.append(schedule_event)
+        return
+    
     def get_response_form_data(self, head_parser):
         body = {
             "schedules" : self._make_dict_list_data(list_data=self.__schedules),
@@ -464,7 +513,83 @@ class AddScheduleModel(TimeTableModel):
         self.__result = True
         return
     
+    # 이번주 타임 테이블에 노출시킬 스케줄을 선택하는 곳
+    # date는 날짜임 , 형태는 2025/03/06 임
+    def select_schedule_in_showcase(self, date, bid):
+        # 스케줄 데이터를 가지고 오고
+        schedule_data = self._database.get_data_with_id(target="sid", id=self._tuser.sids)
+        
+        # 저장해야하는지 체크하는 플래그
+        flag = False
+        
+        # 날짜를 비교해서 이사람이 본거 찾아야됨
+        # date는 날짜임 , 형태는 2025/03/06 임
+        for schedule in schedule_data:
+            schedule = Schedule()
+            schedule.make_with_dict(dict_data=schedule)
+            if schedule.date == date and schedule.bid == bid:
+                # 없으면 추가하고 있으면 삭제하면됨
+                if schedule.sid not in self._tuser.this_week_sids:
+                    self._tuser.this_week_sids.append(schedule.sid)
+                else:
+                    self._tuser.this_week_sids.remove(schedule.sid)
+                flag = True
+                return
+        
+        # 저장하는 곳
+        if flag:
+            self._database.modify_data_with_id(target_id="tuid", target_data=self._tuser.get_dict_form_data())
+            self.__result = True
+        
+        return
     
+    # 내 스케줄 목록에서 지워버리는 곳 (이번주 목록이면 여기서 함)
+    def reject_from_my_week_schedule(self, sid):
+        # 저장해야하는지 체크하는 플래장
+        flag= False
+        
+        if sid in self._tuser.sids:
+            self._tuser.sids.remove(sid)
+            flag = True
+            
+        if sid in self._tuser.this_week_sids:
+            self._tuser.this_week_sids.remove(sid)
+            flag = True
+        
+        if flag: 
+            self._database.modify_data_with_id(target_id="tuid", target_data=self._tuser.get_dict_form_data())
+            self.__result = True
+        return
+    
+    # sid 만들기
+    def __make_new_sid(self):
+        while True:
+            sid = self._make_new_id()
+            if self._database.get_data_with_id(target="sid", id=sid):
+                continue
+            else:
+                break
+        return sid
+    
+    # 코드 만들기
+    def __make_schedule_code(self):
+        # 영어 대문자와 숫자로 이루어진 6자리 코드 생성
+        characters = string.ascii_uppercase + string.digits
+        code = ''.join(random.choices(characters, k=6))
+        return code
+        
+    def make_new_single_schedule(self, schedule_data:dict):
+        
+        sid = self.__make_new_sid()
+        code = self.__make_schedule_code()
+         # 뭐하더라
+        
+        
+        
+        self._database.add_new_data(target_id="sid", new_data=schedule.get_dict_form_data())
+        self.__result = True
+        return
+        
     
     def get_response_form_data(self, head_parser):
         body = {

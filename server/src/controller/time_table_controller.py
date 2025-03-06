@@ -1,6 +1,6 @@
 from view.jwt_decoder import JWTManager, JWTPayload, RequestManager
 from model import Local_Database, BaseModel 
-from model import TimeTableModel, MultiSchduleModel, AddScheduleModel
+from model import TimeTableModel, MultiScheduleModel, AddScheduleModel
 
 
 class TImeTableController:
@@ -26,7 +26,7 @@ class TImeTableController:
     
     # 오늘의 이벤트 뽑기
     def get_eventboard_data(self, database:Local_Database, request:RequestManager) -> BaseModel: 
-        model = MultiSchduleModel(database=database)
+        model = MultiScheduleModel(database=database)
         
         if request.jwt_payload != "":
             model.set_user_with_email(request=request.jwt_payload)
@@ -44,7 +44,7 @@ class TImeTableController:
     
     # 내 타임 차트 가지고 오기
     def get_time_chart(self, database:Local_Database, request:RequestManager) -> BaseModel: 
-        model = MultiSchduleModel(database=database)
+        model = MultiScheduleModel(database=database)
         
         if request.jwt_payload != "":
             model.set_user_with_email(request=request.jwt_payload)
@@ -61,7 +61,7 @@ class TImeTableController:
     
     # 내 타임테이블 불러오기
     def get_my_time_table(self, database:Local_Database, request:RequestManager) -> BaseModel: 
-        model = MultiSchduleModel(database=database)
+        model = MultiScheduleModel(database=database)
         
         if request.jwt_payload != "":
             model.set_user_with_email(request=request.jwt_payload)
@@ -95,7 +95,7 @@ class TImeTableController:
         model.add_schedule(sids=request.sids)
         return model
     
-    # 이벤트 추가
+    # 이벤트 추가하기
     def try_add_event(self, database:Local_Database, request:RequestManager) -> BaseModel: 
         model = AddScheduleModel(database=database)
         if request.jwt_payload != "":
@@ -108,25 +108,28 @@ class TImeTableController:
         
         model.add_event(seid=request.seid)
         return model
-    
-    def try_add_event(self, database:Local_Database, request:RequestManager) -> BaseModel: 
+
+    # 이번주 타임테이블에 추가하기
+    def try_select_my_time_table_schedule(self, database:Local_Database, request:RequestManager) -> BaseModel: 
         model = AddScheduleModel(database=database)
+        
         if request.jwt_payload != "":
             model.set_user_with_email(request=request.jwt_payload)
             # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
             if not model._set_tuser_with_tuid():
                 return model
         else:
-            return model 
+            return model
         
-        model.add_event(seid=request.seid)
+        model.select_schedule_in_showcase(date=request.data_payload.date, bid=request.data_payload.bid)
+        
         return model
 
     # 키워드를 통한 검색
     def try_search_schedule_with_keyword(self, database:Local_Database, request:RequestManager,
                                          num_schedules=8) -> BaseModel:
-        model = MultiSchduleModel(database=database)
-
+        model = MultiScheduleModel(database=database)
+        
         if request.jwt_payload != "":
             model.set_user_with_email(request=request.jwt_payload)
             # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
@@ -140,9 +143,34 @@ class TImeTableController:
                                                 num_schedules=num_schedules)
         return model
 
-    # 인터페이스만 존재. 검색어 저장 시스템이 있어야 제대로 시스템이 구축 가능할 듯
-    def try_get_recommend_keyword(self, database:Local_Database, request:RequestManager, num_keywords=5) -> BaseModel:
-        model = MultiSchduleModel(database=database)
+    ## 인터페이스만 존재. 검색어 저장 시스템이 있어야 제대로 시스템이 구축 가능할 듯
+    #def try_get_recommend_keyword(self, database:Local_Database, request:RequestManager, num_keywords=5) -> BaseModel:
+        #model = MultiSchduleModel(database=database)
+        #else:
+            #return model
+        
+    # 내가 가진 스케줄중에서 해당 bid가 있는거 반환
+    def try_search_my_schedule_with_bid(self, database:Local_Database, request:RequestManager) -> BaseModel:
+        model = MultiScheduleModel(database=database)
+        
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
+            # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
+            if not model._set_tuser_with_tuid():
+                return model
+
+        # 그냥 요청이면 전부다 출력해주면됨
+        if request.bid == "":
+            model.search_my_all_schedule()
+        
+        model.search_my_schedule_with_bid(bid=request.data_payload.bid)
+        
+        return model
+
+    # 내가 가진 스케줄에서 제외
+    def try_reject_from_my_schedule(self, database:Local_Database, request:RequestManager) -> BaseModel: 
+        model = AddScheduleModel(database=database)
+        
         if request.jwt_payload != "":
             model.set_user_with_email(request=request.jwt_payload)
             # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거

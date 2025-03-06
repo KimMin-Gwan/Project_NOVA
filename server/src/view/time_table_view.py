@@ -194,6 +194,7 @@ class TimeTableView(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
         
+        # 완료
         # 홈화면에 노출될 스케줄 정하는건 여기서 함
         @self.__app.get('/time_table_server/try_select_my_time_table_schedule')
         def try_select_my_time_table_schedule(request:Request, date:Optional[str],bid:Optional[str]=""):
@@ -203,12 +204,13 @@ class TimeTableView(Master_View):
 
             time_table_controller =TImeTableController()
             model = time_table_controller.try_select_my_time_table_schedule(database=self.__database,
-                                                        request=request_manager)
+                                                                            request=request_manager)
             
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response
         
+        # 완료
         # bid에서 내가 선택했는 스케줄들 볼때 쓰는 엔드 포인트. 로그인 필수
         @self.__app.get('/time_table_server/try_search_my_schedule_with_bid')
         def ry_search_my_schedule_with_bid(request:Request, bid:Optional[str]=""):
@@ -224,6 +226,7 @@ class TimeTableView(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
         
+        # 완료
         # 선택했던 스케줄을 지우는건 여기서 함
         # 목표 sid를 넘기면 삭제 되게 할 것임. 단 로그인 필수
         @self.__app.get('/time_table_server/try_reject_from_my_schedule')
