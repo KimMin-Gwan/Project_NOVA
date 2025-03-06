@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 import postApi from "../../services/apis/postApi.js";
@@ -26,13 +26,12 @@ import useDragScroll from "../../hooks/useDragScroll.js";
 import LoadingPage from "../LoadingPage/LoadingPage.js";
 import HEADER from "../../constant/header.js";
 import useIntersectionObserver from "../../hooks/useIntersectionObserver.js";
+import useFetchFeedList from "../../hooks/useFetchFeedList.js";
 
 export default function FeedList() {
   const [params] = useSearchParams();
   const type = params.get("type");
 
-  const target = useRef(null);
-  const observerRef = useRef(null);
   const { scrollRef, hasDragged, dragHandlers } = useDragScroll();
 
   let [isFilterClicked, setIsFilterClicked] = useState(false);
@@ -44,38 +43,40 @@ export default function FeedList() {
   let [biasId, setBiasId] = useState();
   let [board, setBoard] = useState("자유게시판");
 
-  const [hashtag, setHashTag] = useState("");
-
-  let header = {
-    "request-type": "default",
-    "client-version": "v1.0.1",
-    "client-ip": "127.0.0.1",
-    uid: "1234-abcd-5678",
-    endpoint: "/user_system/",
-  };
-
   const brightModeFromUrl = params.get("brightMode");
+
+  const { feedDatas, isLoadings, nextKey } = useFetchFeedList(type);
 
   const initialMode = brightModeFromUrl || localStorage.getItem("brightMode") || "bright"; // URL에서 가져오고, 없으면 로컬 스토리지에서 가져옴
   const [mode, setMode] = useState(initialMode);
+
   const [hasMore, setHasMore] = useState(true);
   let { biasList } = useBiasStore();
-  useEffect(() => {
-    console.log("동작");
-  }, []);
 
   let bids = biasList.map((item, i) => {
     return item.bid;
   });
+
   useEffect(() => {
     if (bids.length > 0 && !biasId) {
       setBiasId(bids[0]);
     }
   }, [bids]);
-  async function fetchBiasCategoryData(bid) {
+
+  const loadMoreCallBack = () => {
+    if (!isLoading && hasMore) {
+      if (type === "bias") {
+        fetchBiasCategoryData();
+      } else {
+        fetchPlusData();
+      }
+    }
+  };
+
+  async function fetchBiasCategoryData() {
     await postApi
       .post(`feed_explore/feed_with_community`, {
-        header: header,
+        header: HEADER,
         body: {
           bid: biasId || bids?.[0] || "",
           board: board || "",
@@ -219,16 +220,6 @@ export default function FeedList() {
         });
     }
   }
-
-  const loadMoreCallBack = () => {
-    if (!isLoading && hasMore) {
-      if (type === "bias") {
-        fetchBiasCategoryData();
-      } else {
-        fetchPlusData();
-      }
-    }
-  };
 
   const targetRef = useIntersectionObserver(loadMoreCallBack, { threshold: 0.5 }, hasMore);
 
