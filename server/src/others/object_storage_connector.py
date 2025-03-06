@@ -79,12 +79,12 @@ class ObjectStorageConnection:
         
         extension = image_name.split('.')[-1]
         
-        file_name = f"{uid}.{extension}"
+        file_name = f"{uid}.png"
         
         pil_image = Image.open(BytesIO(image))
         file_path = path + file_name
         
-        pil_image.save(file_path)
+        pil_image.save(file_path, format='PNG')
         
         self.__s3.upload_file(  file_path,
                                 self.__profile_bucket,
