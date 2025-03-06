@@ -260,6 +260,9 @@ class User_Service_View(Master_View):
         def try_change_profile_photo(request:Request, image:Union[UploadFile, None] = File(None)):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             
+            pprint(image)
+            pprint(image.filename)
+            
             if image is None:
                 image_name = ""
             else:
