@@ -135,8 +135,8 @@ class TimeTableView(Master_View):
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
             time_table_controller =TImeTableController()
-            model = time_table_controller.try_search_schedule(database=self.__database,
-                                                            request=request_manager)
+            model = time_table_controller.try_search_schedule_with_keyword(database=self.__database,
+                                                            request=request_manager, num_schedules=8)
             
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)

@@ -35,8 +35,7 @@ class TimeTableModel(BaseModel):
             self._database.add_new_data(target_id="tuid", new_data=new_tuser.get_dict_form_data())
             self._tuser = new_tuser
         return True
-    
-    
+
     # string_date를 넣어서 몇주차인지 알아내는 함수임
     # date_str = "2025/03/06"
     def _find_week_number(self, date_str):
@@ -83,7 +82,26 @@ class TimeTableModel(BaseModel):
             return False
         else:
             return True
-        
+
+    def paging_id_list(self, id_list:list, last_index:int, page_size=8):
+
+        # 최신순으로 정렬된 상태로 id_list를 받아오기 때문에, 인덱스 번호가 빠를수록 최신의 것
+        # 만약에 페이지 사이즈보다 더 짧은 경우도 있을 수 있기에 먼저 정해놓는다.
+        # 이러면 페이징된 리스트의 길이에 상관없이, 인덱스를 알아낼 수 있을 것
+
+        paging_list = id_list[last_index + 1:]
+        last_index_next = -1
+        if len(id_list) != 0:
+            last_index_next = id_list.index(id_list[-1])
+
+        # 만약 페이지 사이즈를 넘었다면 표시할 개수만큼 짜르고, last_index를 재설정한다.
+        if len(paging_list) > page_size:
+            paging_list = paging_list[:page_size]
+            # Paging 넘버
+            last_index_next = id_list.index(id_list[last_index + page_size])
+
+        return paging_list, last_index_next
+
     def get_response_form_data(self, head_parser):
         body = {
             #"tuser" : self._tuser,
@@ -123,7 +141,120 @@ class MultiScheduleModel(TimeTableModel):
         self.__schedules:list[Schedule] = []
         self.__schedule_events:list[ScheduleEvent] = []
         self.__schedule_bundles:list[ScheduleBundle] = []
-    
+
+    # id_list는 서치한 데이터들의 고유 아이디
+    def _make_schedule_data(self,id_list:list, search_type:str="schedule"):
+        schedule_id_type = ""
+        if search_type == "schedule":
+            schedule_id_type = "sid"
+        elif search_type == "schedule_bundle":
+            schedule_id_type = "sbid"
+        elif search_type == "schedule_event":
+            schedule_id_type = "seid"
+
+        schedule_type_datas = self._database.get_datas_with_ids(target_id=schedule_id_type, ids=id_list)
+
+        for data in schedule_type_datas:
+            if schedule_id_type == "sid":
+                send_data = Schedule()
+                send_data.make_with_dict(data)
+                self.__schedules.append(send_data)
+
+            elif schedule_id_type == "seid":
+                send_data = ScheduleEvent()
+                send_data.make_with_dict(data)
+                self.__schedule_events.append(send_data)
+
+            elif schedule_id_type == "sbid":
+                send_data = ScheduleBundle()
+                send_data.make_with_dict(data)
+                self.__schedule_bundles.append(send_data)
+
+        return
+
+    def _find_schedule_data(self, keyword:str):
+        schedule_datas = self._database.get_all_data(target="sid")
+        # 왜 불편하게 id_list로 담나요?
+        # 페이징할 때 편합니다.
+        schedule_ids = []
+
+        # 찾기
+        for schedule_data in schedule_datas:
+            # 일정코드로 검색하는 경우
+            if keyword in schedule_data["code"]:
+                schedule_ids.append(schedule_data['sid'])
+                continue
+            # 스케쥴 이름으로 검색
+            elif keyword in schedule_data["sname"]:
+                schedule_ids.append(schedule_data['sid'])
+                continue
+            # 유저네임으로 검색하는 경우
+            elif keyword in schedule_data['uname']:
+                schedule_ids.append(schedule_data['sid'])
+                continue
+            # Bias 네임으로 검색하는 경우
+            elif keyword in schedule_data['bname']:
+                schedule_ids.append(schedule_data['sid'])
+                continue
+
+        return schedule_ids
+
+    def _find_schedule_bundle_data(self, keyword:str):
+        schedule_bundle_datas = self._database.get_all_data(target="sbid")
+        schedule_bundle_ids = []
+
+        for schedule_bundle_data in schedule_bundle_datas:
+            # schedule_bundle = ScheduleBundle()
+            # schedule_bundle.make_with_dict(dict_data=schedule_bundle_data)
+
+            # 한번 담으면 더 이상 서치된 번들에 대해서는 중복 서치할 필요가 없으므로 Continue.
+
+            # 일정코드로 검색
+            if keyword in schedule_bundle_data['code']:
+                schedule_bundle_ids.append(schedule_bundle_data['sbid'])
+                continue
+            # 스케쥴 이름으로 검색
+            elif keyword in schedule_bundle_data['sbname']:
+                schedule_bundle_ids.append(schedule_bundle_data['sbid'])
+                continue
+            # 유저네임으로 검색하는 경우
+            elif keyword in schedule_bundle_data['uname']:
+                schedule_bundle_ids.append(schedule_bundle_data['sbid'])
+                continue
+            # Bias 네임으로 검색하는 경우
+            elif keyword in schedule_bundle_data['bname']:
+                schedule_bundle_ids.append(schedule_bundle_data['sbid'])
+                continue
+
+        return schedule_bundle_ids
+
+    def _find_schedule_event_data(self, keyword:str):
+        schedule_event_datas = self._database.get_all_data(target="seid")
+        schedule_event_ids = []
+
+        for schedule_event_data in schedule_event_datas:
+            # schedule_event = ScheduleEvent()
+            # schedule_event.make_with_dict(dict_data=schedule_event_data)
+
+            # 한번 담으면 더 이상 서치된 번들에 대해서는 중복 서치할 필요가 없으므로 Continue.
+            # 일정코드로 검색
+            if keyword in schedule_event_data['code']:
+                schedule_event_ids.append(schedule_event_data['seid'])
+                continue
+            # 스케쥴 이름으로 검색
+            elif keyword in schedule_event_data['sbname']:
+                schedule_event_ids.append(schedule_event_data['seid'])
+                continue
+            # 유저네임으로 검색하는 경우
+            elif keyword in schedule_event_data['uname']:
+                schedule_event_ids.append(schedule_event_data['seid'])
+                continue
+            # Bias 네임으로 검색하는 경우
+            elif keyword in schedule_event_data['bname']:
+                schedule_event_ids.append(schedule_event_data['seid'])
+                continue
+
+        return schedule_event_ids
     # 내가 이벤트 스케줄 데이터 뽑기를 날짜로
     # date는 날짜임 , 형태는 2025/03/06 임
     # date안넣으면 기본적으로 오늘자로 감
@@ -279,7 +410,25 @@ class MultiScheduleModel(TimeTableModel):
             if year == date.year and target_week_number == date.isocalendar()[1]:
                 self.__schedules.append(schedule)
         return
-    
+
+    # 키워드를 통해 검색합니다.
+    def try_search_schedule_with_keyword(self, keyword:str, search_type:str, last_index=-1, num_schedules=8):
+        searched_list = []
+
+        if search_type == "schedule":
+            searched_list = self._find_schedule_data(keyword=keyword)
+        elif search_type == "schedule_bundle":
+            searched_list = self._find_schedule_bundle_data(keyword=keyword)
+        elif search_type == "event":
+            searched_list = self._find_schedule_event_data(keyword=keyword)
+
+        searched_list, self._key = self.paging_id_list(id_list=searched_list,
+                                                            last_index=last_index,
+                                                            page_size=num_schedules)
+
+        self._make_schedule_data(id_list=searched_list, search_type=search_type)
+        return
+
     def get_response_form_data(self, head_parser):
         body = {
             "schedules" : self._make_dict_list_data(list_data=self.__schedules),

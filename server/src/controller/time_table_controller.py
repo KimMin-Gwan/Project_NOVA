@@ -51,7 +51,7 @@ class TImeTableController:
             # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
             if not model._set_tuser_with_tuid():
                 return model
-        
+
         if model.is_tuser_alive():
             model.set_my_schedule_in_by_day(date=request.data_payload.date)
         else:
@@ -70,7 +70,7 @@ class TImeTableController:
                 return model
         else:
             return model # 여기 return을 지우면됨       ---
-            
+
         # 당장에는 로그인 안하면 보내줄 데이터는 없다!
         # 나중에 뭐 추가로 노출 시켜주고 싶으면 위에 return 을 지우고 아래에
         # 비로그인 사용자를 대상으로 하는 로직을 넣어라
@@ -120,4 +120,32 @@ class TImeTableController:
             return model 
         
         model.add_event(seid=request.seid)
+        return model
+
+    # 키워드를 통한 검색
+    def try_search_schedule_with_keyword(self, database:Local_Database, request:RequestManager,
+                                         num_schedules=8) -> BaseModel:
+        model = MultiSchduleModel(database=database)
+
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
+            # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
+            if not model._set_tuser_with_tuid():
+                return model
+
+        # 키워드를 넘겨 검색 후, 반환받음
+        model.try_search_schedule_with_keyword(keyword=request.data_payload.keyword,
+                                               type=request.data_payload.type,
+                                                last_index=request.data_payload.key,
+                                                num_schedules=num_schedules)
+        return model
+
+    # 인터페이스만 존재. 검색어 저장 시스템이 있어야 제대로 시스템이 구축 가능할 듯
+    def try_get_recommend_keyword(self, database:Local_Database, request:RequestManager, num_keywords=5) -> BaseModel:
+        model = MultiSchduleModel(database=database)
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
+            # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
+            if not model._set_tuser_with_tuid():
+                return model
         return model
