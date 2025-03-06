@@ -5,7 +5,15 @@ import style from "./KeywordBox.module.css";
 import useFetchFeedList from "../../hooks/useFetchFeedList";
 import useFeedStore from "../../stores/FeedStore/useFeedStore";
 
-export default function KeywordBox({ type, title, subTitle, onClickTagButton, fetchData }) {
+export default function KeywordBox({
+  type,
+  title,
+  subTitle,
+  onClickTagButton,
+  fetchData,
+  setHasMore,
+  setIsSameTag,
+}) {
   const { scrollRef, hasDragged, dragHandlers } = useDragScroll();
 
   let [bestTags, setBestTags] = useState([]);
@@ -30,10 +38,12 @@ export default function KeywordBox({ type, title, subTitle, onClickTagButton, fe
 
   function onClickTags(index, tag) {
     if (currentTag === index) {
+      setIsSameTag(true);
       setCurrentTag(null);
       fetchData();
       // fetchFeedList(type);
     } else {
+      setIsSameTag(false);
       setCurrentTag(index);
       onClickTagButton(tag);
     }

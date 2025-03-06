@@ -24,6 +24,8 @@ import "@toast-ui/editor/dist/toastui-editor-viewer.css";
 import style from "./FeedHashList.module.css";
 import useDragScroll from "../../hooks/useDragScroll.js";
 import LoadingPage from "../LoadingPage/LoadingPage.js";
+import HEADER from "../../constant/header.js";
+import useIntersectionObserver from "../../hooks/useIntersectionObserver.js";
 
 export default function FeedList() {
   const [params] = useSearchParams();
@@ -56,7 +58,7 @@ export default function FeedList() {
 
   const initialMode = brightModeFromUrl || localStorage.getItem("brightMode") || "bright"; // URL에서 가져오고, 없으면 로컬 스토리지에서 가져옴
   const [mode, setMode] = useState(initialMode);
-
+  const [hasMore, setHasMore] = useState(true);
   let { biasList } = useBiasStore();
   useEffect(() => {
     console.log("동작");
@@ -102,7 +104,6 @@ export default function FeedList() {
   let [filterCategory, setFilterCategory] = useState([]);
   let [filterFclass, setFilterFclass] = useState("");
   let [isClickedFetch, setIsClickedFetch] = useState(false);
-  const FETCH_URL = "https://nova-platform.kr/feed_explore/";
 
   function onClickApplyButton1() {
     setNextData(-1);
@@ -122,35 +123,20 @@ export default function FeedList() {
       updatedNextData = nextData;
     }
 
-    // 지역변수로 사용하기로함
-    let send_form = {
-      header: header,
-      body: {
-        key: updatedNextData, // 여기에서  사용됨
-        category: filterCategory || [""],
-        fclass: filterFclass || "",
-      },
-    };
-
     if (type === "all" || isClickedFetch) {
-      await fetch(`${FETCH_URL}all_feed`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(send_form),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("all feed first feed 3개", data.body);
-          setNextData(data.body.key);
+      await postApi
+        .post(`feed_explore/all_feed`, {
+          header: HEADER,
+          body: {
+            key: updatedNextData, // 여기에서  사용됨
+            category: filterCategory || [""],
+            fclass: filterFclass || "",
+          },
+        })
+        .then((res) => {
+          setFeedData(res.data.body.send_data);
+          setNextData(res.data.body.key);
           setIsLoading(false);
-          setFeedData(data.body.send_data);
-          // setFeedData((prevData) => {
-          //   const newData = [...prevData, ...data.body.send_data];
-          //   return newData;
-          // });
         });
     }
   }
@@ -166,17 +152,32 @@ export default function FeedList() {
     }
   }
 
+  const [isSameTag, setIsSameTag] = useState(true);
+
   function fetchFeedWithTag(tag) {
-    console.log("dasdasda", hashtag);
+    let time;
+    if (type === "today") {
+      time = "day";
+    } else if (type === "weekly") {
+      time = "weekly";
+    }
     mainApi
-      .get(`feed_explore/search_feed_with_hashtag?hashtag=${tag}&key=-1&target_time=day`)
+      .get(`feed_explore/search_feed_with_hashtag?hashtag=${tag}&key=-1&target_time=${time}`)
       .then((res) => {
         console.log("fff", res.data);
         setFeedData(res.data.body.send_data);
-        // setNextData(res.data.body.key);
         setIsLoading(false);
       });
   }
+
+  useEffect(() => {
+    if (isSameTag) {
+      setHasMore(true);
+    } else {
+      setHasMore(false);
+    }
+  }, [isSameTag]);
+
   useEffect(() => {
     setFeedData([]);
   }, []);
@@ -194,65 +195,42 @@ export default function FeedList() {
           return newData;
         });
         setIsLoading(false);
+        setHasMore(res.data.body.send_data.length > 0);
         console.log(`more ${type}`, res.data);
       });
     } else if (type === "all" || isClickedFetch) {
-      // 지역 변수 데이터로 활용하기로함
-      let send_form = {
-        header: header,
-        body: {
-          key: nextData,
-          category: filterCategory || [""],
-          fclass: filterFclass || "",
-        },
-      };
-
-      fetch(`${FETCH_URL}all_feed`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(send_form),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("all feed first feed 3개", data.body);
-          setNextData(data.body.key);
-          setIsLoading(false);
+      postApi
+        .post(`feed_explore/all_feed`, {
+          header: HEADER,
+          body: {
+            key: nextData,
+            category: filterCategory || [""],
+            fclass: filterFclass || "",
+          },
+        })
+        .then((res) => {
           setFeedData((prevData) => {
-            const newData = [...prevData, ...data.body.send_data];
+            const newData = [...prevData, ...res.data.body.send_data];
             return newData;
           });
+          setNextData(res.data.body.key);
+          setHasMore(res.data.body.send_data.length > 0);
+          setIsLoading(false);
         });
     }
   }
 
-  useEffect(() => {
-    observerRef.current = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        if (isLoading) return;
-
-        // fetchAllFeed();
+  const loadMoreCallBack = () => {
+    if (!isLoading && hasMore) {
+      if (type === "bias") {
+        fetchBiasCategoryData();
+      } else {
         fetchPlusData();
-        if (type === "bias") {
-          fetchBiasCategoryData();
-        }
-      });
-    });
-
-    if (target.current) {
-      observerRef.current.observe(target.current);
-    }
-
-    return () => {
-      if (observerRef.current && target.current) {
-        observerRef.current.unobserve(target.current);
-        observerRef.current.disconnect();
       }
-    };
-  }, [isLoading, nextData]);
+    }
+  };
+
+  const targetRef = useIntersectionObserver(loadMoreCallBack, { threshold: 0.5 }, hasMore);
 
   useEffect(() => {
     fetchData();
@@ -356,6 +334,8 @@ export default function FeedList() {
               subTitle={type === "today" ? "오늘의 키워드" : "이번주 키워드"}
               onClickTagButton={onClickTag}
               fetchData={fetchData}
+              setHasMore={setHasMore}
+              setIsSameTag={setIsSameTag}
             />
           </div>
         )}
@@ -375,7 +355,7 @@ export default function FeedList() {
           ) : (
             <NoneFeed />
           )}
-          <div ref={target} style={{ height: "1px" }}></div>
+          <div ref={targetRef} style={{ height: "1px" }}></div>
           {isLoading && <p>Loading...</p>}
           {isFilterClicked && (
             <FilterModal
