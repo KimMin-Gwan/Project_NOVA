@@ -54,7 +54,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: solid 1px gray;
+  border-bottom: solid 2px #f1f7ff;
 }
 
 .comment-title {
@@ -67,7 +67,7 @@
 
 .comment-box {
   min-height: 100px;
-  border-bottom: solid 1px gray;
+  border-bottom: solid 1px #e7e7e7;
 
   .comment-section {
     /* height: 100%; */
@@ -97,7 +97,7 @@
 }
 
 .img-container {
-  padding: 0px 20px 5px 20px;
+  padding-inline: 20px;
   display: flex;
   align-items: start;
 }
@@ -112,7 +112,7 @@
 }
 
 .comment-content {
-  margin-block: 5px 10px;
+  margin-block: 5px 0;
 }
 .date-st {
   width: 100%;
