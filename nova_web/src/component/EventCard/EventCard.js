@@ -1,12 +1,12 @@
 import "./index.css";
 
-export default function EventCard() {
+export default function EventCard({ name, topic, date }) {
   return (
     <div className="EventCard">
       <div>
-        <div>title</div>
-        <div>place</div>
-        <div>time</div>
+        <div>{name}</div>
+        <div>{topic}</div>
+        <div>{date}</div>
       </div>
     </div>
   );
