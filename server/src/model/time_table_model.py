@@ -448,7 +448,7 @@ class MultiScheduleModel(TimeTableModel):
         return
 
     # 키워드를 통해 검색합니다.
-    def try_search_schedule_with_keyword(self, keyword:str, search_type:str, last_index=-1, num_schedules=8):
+    def search_schedule_with_keyword(self, keyword:str, search_type:str, last_index=-1, num_schedules=8):
         searched_list = []
 
         if search_type == "schedule":

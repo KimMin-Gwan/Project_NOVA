@@ -137,7 +137,7 @@ class TImeTableController:
                 return model
 
         # 키워드를 넘겨 검색 후, 반환받음
-        model.try_search_schedule_with_keyword(keyword=request.data_payload.keyword,
+        model.search_schedule_with_keyword(keyword=request.data_payload.keyword,
                                                type=request.data_payload.type,
                                                 last_index=request.data_payload.key,
                                                 num_schedules=num_schedules)
