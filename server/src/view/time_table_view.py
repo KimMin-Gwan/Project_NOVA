@@ -127,6 +127,7 @@ class TimeTableView(Master_View):
         # keyword : 검색어
         # key : 서치 키값
         # type : schedule, schedule_bundle, event
+        # 완료 (테스트만 필요)
         @self.__app.get('/time_table_server/try_search')
         def try_search_schedule(request:Request, keyword:Optional[str] = "", key:Optional[int]=-1, type:Optional[str]=""):
             
@@ -145,6 +146,7 @@ class TimeTableView(Master_View):
         # keyword 추천
         # 본인이 팔로우한 bias의 카테고리 위주로 제시할 듯
         # 로그인을 안했거나 팔로우한 bias가 없으면 랜덤하게 뿌리면됨
+        #
         @self.__app.get('/time_table_server/try_get_recommend_keyword')
         def try_get_recommend_keyword(request:Request):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
@@ -153,8 +155,10 @@ class TimeTableView(Master_View):
 
             time_table_controller =TImeTableController()
             model = time_table_controller.try_get_recommend_keyword(database=self.__database,
-                                                                    request=request_manager)
-            
+                                                                    request=request_manager,
+                                                                    num_keywords=6)
+
+            # 반환 데이터 : 'recommend_keywords'
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response

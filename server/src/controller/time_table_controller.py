@@ -1,6 +1,6 @@
 from view.jwt_decoder import JWTManager, JWTPayload, RequestManager
 from model import Local_Database, BaseModel 
-from model import TimeTableModel, MultiScheduleModel, AddScheduleModel
+from model import TimeTableModel, MultiScheduleModel, AddScheduleModel, ScheduleRecommendKeywordModel
 
 
 class TImeTableController:
@@ -144,11 +144,16 @@ class TImeTableController:
         return model
 
     ## 인터페이스만 존재. 검색어 저장 시스템이 있어야 제대로 시스템이 구축 가능할 듯
-    #def try_get_recommend_keyword(self, database:Local_Database, request:RequestManager, num_keywords=5) -> BaseModel:
-        #model = MultiSchduleModel(database=database)
-        #else:
-            #return model
-        
+    def try_get_recommend_keyword(self, database:Local_Database, request:RequestManager, num_keywords=6) -> BaseModel:
+        model = ScheduleRecommendKeywordModel(database=database)
+
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
+
+        model.get_category_recommend(num_keywords=num_keywords)
+
+        return model
+
     # 내가 가진 스케줄중에서 해당 bid가 있는거 반환
     def try_search_my_schedule_with_bid(self, database:Local_Database, request:RequestManager) -> BaseModel:
         model = MultiScheduleModel(database=database)

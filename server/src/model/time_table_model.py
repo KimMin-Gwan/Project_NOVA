@@ -114,6 +114,40 @@ class TimeTableModel(BaseModel):
         response = self._get_response_data(head_parser=head_parser, body=body)
         return response
 
+class ScheduleRecommendKeywordModel(TimeTableModel):
+    def __init__(self, database:Local_Database) -> None:
+        super().__init__(database)
+        self._recommend_keywords = []
+
+    # 바이어스의 카테고리 데이터를 추천 검색어로 사용하는 방법
+    def get_category_recommend(self, num_keywords:int):
+        bias_datas = []
+        # 로그인이 된 상태라면 유저가 팔로우한 바이어스 위주로
+        if self._user.uid != "":
+            bias_datas = self._database.get_datas_with_ids(target_id="bid", ids=self._user.bids)
+        # 비로그인 상태라면 모든 바이어스 데이터를 가져와서 랜덤하게 뽑겠다.
+        else:
+            bias_datas = self._database.get_all_data(target="bid")
+
+        category_set = set()
+
+        # 카테고리들을 set에다가 집어넣고 랜덤하게 키워드를 뽑는다.
+        for bias_data in bias_datas:
+            category_list = bias_data['category']
+            category_set.update(category_list)
+
+        self._recommend_keywords = random.sample(category_set, num_keywords)
+
+        return
+
+    def get_response_form_data(self, head_parser):
+        body = {
+            "recommend_keywords" : self._recommend_keywords
+        }
+
+        response = self._get_response_data(head_parser=head_parser, body=body)
+        return response
+
 # ------------------------------------- 스케쥴 모델 ------------------------------------------------
 # 단일 스케줄을 반환할 때 사용하는 모델 
 # 사용할 일이 있을지는 모르는데, 아마 수정 같은 상황에 사용될것
