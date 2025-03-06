@@ -335,6 +335,8 @@ class Bias(SampleDomain):
         except Exception as e:
             print(e)
             raise DictMakingError(error_type=e)
+        finally:
+            return self
 
     def get_dict_form_data(self):
         return {

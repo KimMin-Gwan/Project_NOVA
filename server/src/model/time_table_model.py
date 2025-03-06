@@ -1,7 +1,7 @@
 from model.base_model import BaseModel
 from model import Local_Database
 from others.data_domain import TimeTableUser as TUser
-from others.data_domain import Schedule, ScheduleBundle, ScheduleEvent
+from others.data_domain import Schedule, ScheduleBundle, ScheduleEvent, Bias
 
 from datetime import datetime
 import random
@@ -577,18 +577,47 @@ class AddScheduleModel(TimeTableModel):
         characters = string.ascii_uppercase + string.digits
         code = ''.join(random.choices(characters, k=6))
         return code
+    
+    # 단일 스케줄 만들기
+    def make_new_single_schedule(self, data_payload, bid):
+        schedule = Schedule(
+            sname=data_payload.sname,
+            location=data_payload.location,
+            bid = bid,
+            date=data_payload.date,
+            start_time=data_payload.start_time,
+            end_time=data_payload.end_time,
+            state=data_payload.state
+        )
         
-    def make_new_single_schedule(self, schedule_data:dict):
+        schedule.sid = self.__make_new_sid()
+        schedule.code = self.__make_schedule_code()
         
-        sid = self.__make_new_sid()
-        code = self.__make_schedule_code()
-         # 뭐하더라
+        bias_data = self._database.get_data_with_id(target="bid", id=schedule.bid)
+        bias = Bias().make_with_dict(bias_data)
         
-        
-        
-        self._database.add_new_data(target_id="sid", new_data=schedule.get_dict_form_data())
+        schedule.bname = bias.bname
+        schedule.uid = self._user.uid
+        schedule.uname = self._user.uname
+        schedule.update_datetime = datetime.today().strftime("%Y/%m/%d-%H:%M:%S")
+        return schedule
+    
+    # 단일 스테줄 저장
+    def save_new_schedules(self, schedule:list):
+        save_data = self._make_dict_list_data(list_data=schedule)
+        self._database.add_new_datas(target_id="sid", new_datas=save_data)
         self.__result = True
         return
+    
+    # 복수 스케줄 만들기
+    def make_new_multiple_schedule(self, schedules:list[Schedule], bid:str):
+        schedule_list = []
+        
+        for schedule in schedules:
+            schedule = self.make_new_single_schedule(data_payload=schedule, bid=bid)
+            schedule_list.append(schedule)
+        
+        return schedule_list
         
     
     def get_response_form_data(self, head_parser):

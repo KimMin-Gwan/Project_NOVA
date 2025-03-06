@@ -176,4 +176,37 @@ class TImeTableController:
             # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
             if not model._set_tuser_with_tuid():
                 return model
+            
+        model.reject_from_my_week_schedule(sid=request.data_payload.sid)
         return model
+    
+    # 새로운 스케줄 만들기
+    def make_new_single_schedule(self, database:Local_Database, request:RequestManager) -> BaseModel: 
+        model = AddScheduleModel(database=database)
+        
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
+            # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
+            if not model._set_tuser_with_tuid():
+                return model
+            
+        schedule = model.make_new_single_schedule(schedule_data=request.data_payload, bid=request.data_payload.bid)
+    
+        # 리스트로 넣어야됨(파라미터가 list를 받음)
+        model.save_new_schedules(schedule=[schedule])
+        return model
+    
+    # 스케줄 여러개 만들기
+    def make_new_multiple_schedules(self, database:Local_Database, request:RequestManager) -> BaseModel: 
+        model = AddScheduleModel(database=database)
+        
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
+            # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
+            if not model._set_tuser_with_tuid():
+                return model
+            
+        schedule_list = model.make_new_multiple_schedule(schedule_data=request.data_payload, bid=request.data_payload.bid)
+        model.save_new_schedules(schedule=schedule_list)
+        return model
+    
