@@ -146,7 +146,7 @@ class TimeTableView(Master_View):
         # keyword 추천
         # 본인이 팔로우한 bias의 카테고리 위주로 제시할 듯
         # 로그인을 안했거나 팔로우한 bias가 없으면 랜덤하게 뿌리면됨
-        #
+        # 완료
         @self.__app.get('/time_table_server/try_get_recommend_keyword')
         def try_get_recommend_keyword(request:Request):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
