@@ -19,6 +19,7 @@ function MyPage() {
   const [image, setImage] = useState(null);
   const fileInputRef = useRef(null);
   let [newNickname, setNewNickname] = useState("");
+  const [imagePre, setImagePre] = useState(null);
   let header = {
     "request-type": "default",
     "client-version": "v1.0.1",
@@ -142,14 +143,45 @@ function MyPage() {
     return <div>loading...</div>;
   }
 
-  const profile = `https://kr.object.ncloudstorage.com/nova-user-profile/${myProfile.uid}.png`;
+  const profile = `https://kr.object.ncloudstorage.com/nova-profile-bucket/${myProfile.uid}.png`;
 
   const handleFileChange = (event) => {
+    const formData = new FormData();
     const file = event.target.files[0];
+    formData.append("image", file);
+
     if (file) {
       const imageUrl = URL.createObjectURL(file);
       setImage(imageUrl);
     }
+
+    fetch("https://nova-platform.kr/user_home/try_change_profile_photo", {
+      method: "POST",
+      credentials: "include",
+      body: formData,
+    })
+      .then((res) => {
+        res.json();
+      })
+      .then((data) => {
+        alert("완료");
+      })
+      .catch((error) => {
+        alert("실패");
+      });
+  };
+
+  const handlePreview = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+
+    return new Promise((resolve) => {
+      reader.onload = () => {
+        setImagePre(reader.result || null);
+        resolve();
+      };
+    });
   };
 
   const handleButtonClick = () => {
@@ -172,11 +204,23 @@ function MyPage() {
       </div>
       <section className={style["profile-section"]}>
         <div className={style["user-img-edit"]}>
-          <img src={profile} alt="profile" onError={(e) => (e.target.src = user_icon)} />
+          <img
+            src={image ? image : profile}
+            alt="profile"
+            onError={(e) => (e.target.src = user_icon)}
+          />
         </div>
         <button onClick={handleButtonClick}>
           <label htmlFor="profileImg">프로필 이미지 추가</label>
-          <input type="file" accept="image/*" ref={fileInputRef} />
+          <input
+            type="file"
+            accept="image/*"
+            ref={fileInputRef}
+            onChange={(e) => {
+              handleFileChange(e);
+              handlePreview(e);
+            }}
+          />
         </button>
       </section>
 
@@ -233,7 +277,10 @@ function MyPage() {
             type="text"
             placeholder="비밀번호 확인"
           />
-          <button className={style["change-button"]} onClick={fetchPasswordChange}>
+          <button
+            className={style["change-button"]}
+            onClick={fetchPasswordChange}
+          >
             변경
           </button>
         </div>
@@ -242,13 +289,37 @@ function MyPage() {
       <section className={style["user-info"]}>
         <h3>개인정보</h3>
         <p className={style["input-name"]}>uid</p>
-        <input className={style["input-st"]} type="text" placeholder={myProfile.uid} readOnly tabIndex="-1" />
+        <input
+          className={style["input-st"]}
+          type="text"
+          placeholder={myProfile.uid}
+          readOnly
+          tabIndex="-1"
+        />
         <p className={style["input-name"]}>email</p>
-        <input className={style["input-st"]} type="text" placeholder={myProfile.email} readOnly tabIndex="-1" />
+        <input
+          className={style["input-st"]}
+          type="text"
+          placeholder={myProfile.email}
+          readOnly
+          tabIndex="-1"
+        />
         <p className={style["input-name"]}>나이</p>
-        <input className={style["input-st"]} type="text" placeholder={`${myProfile.age}살`} readOnly tabIndex="-1" />
+        <input
+          className={style["input-st"]}
+          type="text"
+          placeholder={`${myProfile.age}살`}
+          readOnly
+          tabIndex="-1"
+        />
         <p className={style["input-name"]}>성별</p>
-        <input className={style["input-st"]} type="text" placeholder={myProfile.gender === "f" ? "여성" : "남성"} readOnly tabIndex="-1" />
+        <input
+          className={style["input-st"]}
+          type="text"
+          placeholder={myProfile.gender === "f" ? "여성" : "남성"}
+          readOnly
+          tabIndex="-1"
+        />
       </section>
       <button className={`${style["logout_box"]}`} onClick={handleLogout}>
         로그아웃
