@@ -151,7 +151,7 @@ class MultiScheduleModel(TimeTableModel):
             schedule_id_type = "sid"
         elif search_type == "schedule_bundle":
             schedule_id_type = "sbid"
-        elif search_type == "schedule_event":
+        elif search_type == "event":
             schedule_id_type = "seid"
 
         schedule_type_datas = self._database.get_datas_with_ids(target_id=schedule_id_type, ids=id_list)
@@ -431,7 +431,6 @@ class MultiScheduleModel(TimeTableModel):
         self._make_schedule_data(id_list=searched_list, search_type=search_type)
         return
 
-    
     def search_my_schedule_with_bid(self, bid):
         # 데이터 불러오고
         schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids=self._tuser.sids)
