@@ -5,14 +5,14 @@ import style from "./KeywordBox.module.css";
 import useFetchFeedList from "../../hooks/useFetchFeedList";
 import useFeedStore from "../../stores/FeedStore/useFeedStore";
 
-export default function KeywordBox({ type, title, subTitle, onClickTagButton }) {
+export default function KeywordBox({ type, title, subTitle, onClickTagButton, fetchData }) {
   const { scrollRef, hasDragged, dragHandlers } = useDragScroll();
 
   let [bestTags, setBestTags] = useState([]);
   let [isLoading, setIsLoading] = useState(true);
 
   // const { feedDatas, nextKey, fetchFeedList } = useFetchFeedList({ type });
-  const { fetchFeedList, loadings } = useFeedStore();
+  // const { fetchFeedList, loadings } = useFeedStore();
 
   async function fetchHashTags() {
     await mainApi.get(`home/${type}_spiked_hot_hashtag`).then((res) => {
@@ -31,14 +31,15 @@ export default function KeywordBox({ type, title, subTitle, onClickTagButton }) 
   function onClickTags(index, tag) {
     if (currentTag === index) {
       setCurrentTag(null);
-      fetchFeedList(type);
+      fetchData();
+      // fetchFeedList(type);
     } else {
       setCurrentTag(index);
       onClickTagButton(tag);
     }
   }
 
-  if (isLoading || loadings) {
+  if (isLoading) {
     return <div>loading...</div>;
   }
 

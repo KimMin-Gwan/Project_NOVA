@@ -29,6 +29,7 @@ import HomePage from "./pages/HomePage/HomePage.js";
 import ReportPage from "./pages/ReportPage/ReportPage.js";
 import ScheduleTopic from "./component/ScheduleTopic/ScheduleTopic.js";
 import EventCard from "./component/EventCard/EventCard.js";
+import SearchSchedulePage from "./pages/SearchSchedulePage/SearchSchedulePage.js";
 
 // 다크 모드 클래스 반환 함수
 export function getModeClass(mode) {
@@ -77,6 +78,7 @@ function App() {
 
       {/* 검색 페이지 */}
       <Route path="/search" element={<SearchPage />}></Route>
+      <Route path="/search/schedule" element={<SearchSchedulePage />}></Route>
       <Route path="/search_result" element={<SearchResultPage />}></Route>
 
       {/* 펀딩 페이지 목록 */}
