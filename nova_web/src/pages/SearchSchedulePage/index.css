@@ -1,0 +1,51 @@
+.SearchSchedulePage {
+  background-color: #f1f7ff;
+}
+
+.Search_section {
+  background-color: white;
+  padding: 20px;
+  margin-bottom: 10px;
+}
+
+.section_top {
+  display: flex;
+  justify-content: space-between;
+}
+
+.search-fac {
+  margin-block: 12px;
+  background-color: #fff;
+  width: 100%;
+  padding-block: 10px;
+
+  .search-box {
+    border-bottom: 1px solid black;
+    width: 90%;
+    display: flex;
+    justify-self: center;
+    padding-block: 6px;
+
+    input {
+      margin-right: auto;
+      width: 100%;
+      border: none;
+      background: none;
+      padding: 0;
+      margin: 0;
+
+      &::placeholder {
+        color: #6aacef;
+        font-weight: 600;
+      }
+
+      &:focus {
+        border: none;
+        outline: none;
+      }
+    }
+    img {
+      width: 18px;
+    }
+  }
+}
