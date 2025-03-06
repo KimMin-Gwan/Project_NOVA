@@ -168,8 +168,8 @@ class Schedule(SampleDomain):
         self.bname:str = bname                      # target bias's name
         self.date:str = date                        # 시작 날짜
         self.start_time:str = start_time            # 시작 시간 
-        self.end_time:str = end_time                # 시작 시간 
-        self.location:str = location                # 시작 시간 
+        self.end_time:str = end_time                # 종료 시간
+        self.location:str = location                # 시작 장소
         self.code:str = code                        # 스케줄 코드
         self.update_datetime:str = update_datetime  # 등록된 시간
         self.num_usage:int = num_usage              # 추가된 횟수
