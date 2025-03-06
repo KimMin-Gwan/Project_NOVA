@@ -268,7 +268,7 @@ class User_Service_View(Master_View):
             else:
                 image_name = image.filename
         
-            data_payload = ChangeProfilePhotoRequest(image=image, image_name=image_name)
+            data_payload = ChangeProfilePhotoRequest(image=image.read(), image_name=image_name)
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
             if not request_manager.jwt_payload.result:
                 raise request_manager.credentials_exception
