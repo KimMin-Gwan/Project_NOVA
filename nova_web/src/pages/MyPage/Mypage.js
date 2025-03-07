@@ -12,6 +12,8 @@ import reArrow1 from "./../../img/reArrow1.svg";
 import reArrow2 from "./../../img/reArrow2.svg";
 import reArrow3 from "./../../img/reArrow3.svg";
 import reArrow4 from "./../../img/reArrow4.svg";
+import LoadingPage from "../LoadingPage/LoadingPage";
+import MyPageLoading from "../LoadingPage/MypageLoading";
 
 const categoryData = [
   {
@@ -37,6 +39,7 @@ function MyPage() {
   let navigate = useNavigate();
 
   let [isLoading, setIsLoading] = useState(true);
+  let [categoryLoading, setCategoryLoading] = useState(false);
   let [myData, setMyData] = useState();
   let [myFeed, setMyFeed] = useState([]);
   const [nextKey, setNextKey] = useState(-1);
@@ -47,7 +50,7 @@ function MyPage() {
 
   async function fetchMyPage() {
     await mainApi.get("user_home/get_my_page_data").then((res) => {
-      //console.log("my", res.data);
+      // console.log("my", res.data);
       setMyData(res.data.body);
       setIsLoading(false);
     });
@@ -58,10 +61,13 @@ function MyPage() {
     fetchMyFeed(nowCategory);
   }, []);
 
+  useEffect(() => {}, [nowCategory]);
+
   async function fetchMyFeed(category) {
     await mainApi
       .get(`user_home/get_my_feed?type=${category}&key=${nextKey}`)
       .then((res) => {
+        setCategoryLoading(false);
         setMyFeed((prevData) => [...prevData, ...res.data.body.feed]);
         setNextKey(res.data.body.key);
         setIsLoading(false);
@@ -69,6 +75,7 @@ function MyPage() {
   }
 
   async function fetchMyComment() {
+    setCategoryLoading(true);
     try {
       const res = await mainApi.get(`user_home/get_my_comments`);
       const feeds = res.data.body.feeds;
@@ -80,6 +87,7 @@ function MyPage() {
       );
 
       setClickedComments(initialClickedState);
+      setCategoryLoading(false);
     } catch (error) {
       console.error("데이터 가져오기 실패:", error);
     }
@@ -132,13 +140,14 @@ function MyPage() {
     handleClick(index, item.type);
     setNowCategory(item.type);
 
-    // 수정된 부분분
+    // 수정된 부분
     if (item.type === "comment") {
       setIsClickedComment(true);
     }
   }
 
   useEffect(() => {
+    setCategoryLoading(true);
     setMyFeed([]);
     setComment([]);
     setNextKey(-1);
@@ -150,7 +159,7 @@ function MyPage() {
   };
 
   if (isLoading) {
-    return <div>loading...</div>;
+    return <MyPageLoading />;
   }
 
   const handleCommentToggle = (id) => {
@@ -230,6 +239,7 @@ function MyPage() {
             </ul>
           </section>
 
+          {categoryLoading && <MyPageLoading />}
           {comment.map(
             (feed) =>
               isClickedComment && (
