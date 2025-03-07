@@ -30,6 +30,7 @@ import ReportPage from "./pages/ReportPage/ReportPage.js";
 import ScheduleTopic from "./component/ScheduleTopic/ScheduleTopic.js";
 import EventCard from "./component/EventCard/EventCard.js";
 import SearchSchedulePage from "./pages/SearchSchedulePage/SearchSchedulePage.js";
+import TestPage from "./pages/TestPage/TestPage.js";
 
 // 다크 모드 클래스 반환 함수
 export function getModeClass(mode) {
@@ -93,7 +94,7 @@ function App() {
 
       {/* 테스트 페이지 및 에러 페이지 */}
       <Route path="/test1" element={<ScheduleTopic />}></Route>
-      <Route path="/test2" element={<EventCard />}></Route>
+      <Route path="/test2" element={<TestPage />}></Route>
       <Route path="*" element={<div>404 Error</div>}></Route>
 
       {/* 홈 화면 */}
