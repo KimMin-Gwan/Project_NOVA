@@ -27,6 +27,7 @@ import LoadingPage from "../LoadingPage/LoadingPage.js";
 import HEADER from "../../constant/header.js";
 import useIntersectionObserver from "../../hooks/useIntersectionObserver.js";
 import useFetchFeedList from "../../hooks/useFetchFeedList.js";
+import MyPageLoading from "../LoadingPage/MypageLoading.js";
 
 export default function FeedList() {
   const [params] = useSearchParams();
@@ -36,6 +37,7 @@ export default function FeedList() {
 
   let [isFilterClicked, setIsFilterClicked] = useState(false);
   let [isLoading, setIsLoading] = useState(true);
+  let [isBiasLoading, setIsBiasLoading] = useState(true);
 
   let [feedData, setFeedData] = useState([]);
   let [nextData, setNextData] = useState(-1);
@@ -66,27 +68,58 @@ export default function FeedList() {
   const loadMoreCallBack = () => {
     if (!isLoading && hasMore) {
       if (type === "bias") {
-        fetchBiasCategoryData();
+        fetchBiasPlusCategoryData();
       } else {
         fetchPlusData();
       }
     }
   };
 
-  async function fetchBiasCategoryData() {
+  async function fetchBiasCategoryData(bid) {
+    setIsLoading(true);
+    setIsBiasLoading(true);
+
+    let bodyData = {
+      bid: bid || bids?.[0] || "",
+      board: board || "",
+      key: -1,
+    };
+
     await postApi
       .post(`feed_explore/feed_with_community`, {
         header: HEADER,
-        body: {
-          bid: biasId || bids?.[0] || "",
-          board: board || "",
-          key: nextData || -1,
-        },
+        body: bodyData,
       })
       .then((res) => {
+        console.log("bias2", bodyData);
+        console.log("first bias data", res.data);
+        setFeedData(res.data.body.send_data);
+        setNextData(res.data.body.key);
+        setHasMore(res.data.body.send_data.length > 0);
+        setIsLoading(false);
+      });
+  }
+
+  async function fetchBiasPlusCategoryData() {
+    setIsLoading(true);
+
+    let bodyData = {
+      bid: biasId || bids?.[0] || "",
+      board: board || "",
+      key: nextData || -1,
+    };
+
+    await postApi
+      .post(`feed_explore/feed_with_community`, {
+        header: HEADER,
+        body: bodyData,
+      })
+      .then((res) => {
+        console.log("bias2", bodyData);
         console.log("first bias data", res.data);
         setFeedData((prevData) => [...prevData, ...res.data.body.send_data]);
         setNextData(res.data.body.key);
+        setHasMore(res.data.body.send_data.length > 0);
         setIsLoading(false);
       });
   }
@@ -100,7 +133,7 @@ export default function FeedList() {
   useEffect(() => {
     setFeedData([]);
     setNextData(-1);
-  }, [biasId, board]);
+  }, [biasId, board, type]);
 
   let [filterCategory, setFilterCategory] = useState([]);
   let [filterFclass, setFilterFclass] = useState("");
@@ -179,10 +212,6 @@ export default function FeedList() {
     }
   }, [isSameTag]);
 
-  useEffect(() => {
-    setFeedData([]);
-  }, []);
-
   function onClickTag(tag) {
     fetchFeedWithTag(tag);
   }
@@ -221,6 +250,10 @@ export default function FeedList() {
     }
   }
 
+  useEffect(() => {
+    console.log("nextkey추격", nextData);
+  }, [nextData]);
+
   const targetRef = useIntersectionObserver(loadMoreCallBack, { threshold: 0.5 }, hasMore);
 
   useEffect(() => {
@@ -253,9 +286,9 @@ export default function FeedList() {
     document.body.style.overflow = "auto";
   }
 
-  if (isLoading) {
-    return <LoadingPage />;
-  }
+  // if (isLoading) {
+  //   return <LoadingPage />;
+  // }
 
   return (
     <div className={`all-box ${style["all_container"]}`}>
@@ -347,7 +380,7 @@ export default function FeedList() {
             <NoneFeed />
           )}
           <div ref={targetRef} style={{ height: "1px" }}></div>
-          {isLoading && <p>Loading...</p>}
+          {isLoading && <p>loading...</p>}
           {isFilterClicked && (
             <FilterModal
               onClickFilterButton={onClickFilterButton}
