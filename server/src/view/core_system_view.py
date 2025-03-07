@@ -517,7 +517,7 @@ class Core_Service_View(Master_View):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             # 데이터 페이로드에도 bid 리스트를 넣어야됨
             
-            #pprint(raw_request)
+            pprint(raw_request)
             data_payload = CommunityRequest(request=raw_request)
             
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)

@@ -8,7 +8,7 @@ import useLoginStore from "../stores/LoginStore/useLoginStore";
 import useDragScroll from "../hooks/useDragScroll";
 import add_bias_icon from "./../img/add_bias.png";
 
-export default function BiasBoxes({ setBiasId, fetchBiasCategoryData, writeCommunity }) {
+export default function BiasBoxes({ setBiasId, fetchBiasCategoryData }) {
   const navigate = useNavigate();
   const biasUrl = BIAS_URL;
   const { scrollRef, hasDragged, dragHandlers } = useDragScroll();
@@ -45,9 +45,6 @@ export default function BiasBoxes({ setBiasId, fetchBiasCategoryData, writeCommu
           setIsUserState(false);
         }
         return response.json();
-      })
-      .then((data) => {
-        //console.log(data);
       })
       .catch((error) => {
         console.error("Error:", error);
