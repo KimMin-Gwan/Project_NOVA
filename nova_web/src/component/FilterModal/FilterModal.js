@@ -42,9 +42,7 @@ export default function FilterModal({
   fetchAllFeed,
   onClickApplyButton1,
 }) {
-  let [filterBoard, setFilterBoard] = useState(
-    JSON.parse(localStorage.getItem("board")) || ["전체"]
-  );
+  let [filterBoard, setFilterBoard] = useState(JSON.parse(localStorage.getItem("board")) || [""]);
 
   let [isClickedFilterContent, setIsClickedFilterContent] = useState(
     JSON.parse(localStorage.getItem("content")) || ""
@@ -55,12 +53,12 @@ export default function FilterModal({
     localStorage.setItem("content", JSON.stringify(isClickedFilterContent));
   }, [filterBoard, isClickedFilterContent]);
 
-  function onClickFilterBoard(name, i) {
+  function onClickFilterBoard(name, value, i) {
     setFilterBoard((prev) => {
-      if (prev.includes(name)) {
-        return prev.filter((item) => item !== name);
+      if (prev.includes(value)) {
+        return prev.filter((item) => item !== value);
       }
-      return name === "전체" ? [name] : [...prev.filter((item) => item !== "전체"), name];
+      return value === "" ? [value] : [...prev.filter((item) => item !== ""), value];
     });
     setFilterCategory((prev) => {
       const data = FilterData[i].value;
@@ -105,9 +103,9 @@ export default function FilterModal({
             {FilterData.map((data, i) => {
               return (
                 <button
-                  className={`${filterBoard.includes(data.name) ? "clicked_button" : ""}`}
+                  className={`${filterBoard.includes(data.value) ? "clicked_button" : ""}`}
                   key={data.id}
-                  onClick={() => onClickFilterBoard(data.name, i)}
+                  onClick={() => onClickFilterBoard(data.name, data.value, i)}
                 >
                   {data.name}
                 </button>
