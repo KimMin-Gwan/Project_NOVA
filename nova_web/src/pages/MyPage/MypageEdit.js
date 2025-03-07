@@ -20,6 +20,16 @@ function MyPage() {
   const fileInputRef = useRef(null);
   let [newNickname, setNewNickname] = useState("");
   const [imagePre, setImagePre] = useState(null);
+  const [isVali, setIsVali] = useState(false);
+  const [isValiPw, setIsValiPw] = useState(false);
+  const [warningMessage, setWarningMessage] = useState(
+    "영문, 숫자, 특수문자를 포함해 10자리 이상이어야 합니다."
+  );
+  const regexArray = [
+    /^[a-zA-Z0-9가-힣]{2,6}$/, // 알파벳, 숫자, 한글만 허용, 2~6글자
+    /^(?=.*[a-z])(?=.*\d)(?=.*[@$#!%*?&])[a-z\d@$#!%*?&]{10,}$/, // 영문 소문자, 숫자, 특수문자 포함, 10글자 이상
+  ];
+
   let header = {
     "request-type": "default",
     "client-version": "v1.0.1",
@@ -47,10 +57,11 @@ function MyPage() {
       )
       .then((res) => {
         //console.log(res.data);
-
         if (res.data.body.result) {
           setNewNickname(res.data.body.uname);
         }
+        alert("변경완료");
+        setNickname("");
       });
   }
 
@@ -85,6 +96,15 @@ function MyPage() {
       });
   }
 
+  function onChangeInput(e, index) {
+    handleVali(e, index);
+    if (index === 0) {
+      onChangeNickname(e);
+    } else if (index === 1) {
+      onChangeNewPassword(e);
+    }
+  }
+
   function onChangeNickname(e) {
     setNickname(e.target.value);
   }
@@ -98,6 +118,29 @@ function MyPage() {
   function onChangecheckPassword(e) {
     setCheckPassword(e.target.value);
   }
+
+  const handleVali = (e, index) => {
+    var Regex = regexArray[index];
+
+    if (!Regex.test(e.target.value)) {
+      index === 0 ? setIsVali(true) : setIsValiPw(true);
+    } else {
+      index === 0 ? setIsVali(false) : setIsValiPw(false);
+    }
+  };
+
+  const handleCheckPassWord = () => {
+    if (newPassword === checkPassword) {
+      setIsValiPw(false);
+    } else {
+      setWarningMessage("비밀번호가 같지 않습니다");
+      setIsValiPw(true);
+    }
+  };
+
+  useEffect(() => {
+    handleCheckPassWord();
+  }, [checkPassword]);
 
   const handleLogout = (e) => {
     tryLogin("");
@@ -233,21 +276,27 @@ function MyPage() {
             type="text"
             value={nickname}
             onChange={(e) => {
-              onChangeNickname(e);
+              onChangeInput(e, 0);
             }}
             placeholder={`${myProfile.uname} (7글자 이내로 변경 가능합니다)`}
+            minLength={2}
             maxLength={7}
           />
           <button
             className={style["change-button"]}
             onClick={(e) => {
-              fetchChangeNickname();
+              isVali ? alert("올바르게 입력하세요") : fetchChangeNickname();
             }}
           >
             변경
           </button>
         </div>
 
+        {isVali && (
+          <span className={style["warning-message"]}>
+            2글자 이상 7글자 미만으로 하고, 특수문자 사용 금지
+          </span>
+        )}
         <p className={style["input-name"]}> 비밀번호 변경</p>
         <div className={style["pw-change"]}>
           <input
@@ -263,7 +312,7 @@ function MyPage() {
             className={style["input-st"]}
             value={newPassword}
             onChange={(e) => {
-              onChangeNewPassword(e);
+              onChangeInput(e, 1);
             }}
             type="text"
             placeholder="새로운 비밀번호"
@@ -277,9 +326,19 @@ function MyPage() {
             type="text"
             placeholder="비밀번호 확인"
           />
+
+          {isValiPw && (
+            <span className={`${style["warning-message"]} ${style["pw-st"]}`}>
+              {warningMessage}
+            </span>
+          )}
           <button
             className={style["change-button"]}
-            onClick={fetchPasswordChange}
+            onClick={() => {
+              isValiPw
+                ? alert("비밀번호를 올바르게 입력하세요")
+                : fetchPasswordChange();
+            }}
           >
             변경
           </button>

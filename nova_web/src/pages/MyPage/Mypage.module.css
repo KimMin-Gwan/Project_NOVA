@@ -267,7 +267,15 @@
       outline: none;
     }
   }
-
+  /* 닉네임 변경, 비밀번호 변경 경고 메시지 */
+  .warning-message {
+    color: red;
+    font-size: 12px;
+  }
+  .pw-st {
+    position: absolute;
+    bottom: -25px;
+  }
   /* input 정보 이름 */
   .input-name {
     font-size: 14px;
