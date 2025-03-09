@@ -1,0 +1,29 @@
+.background-box{
+    width: 100%;
+    height: 72px;
+    background-color: #FFFFFF;
+    border-bottom: 2px solid #d0e4ff;
+}
+
+.schedule-box{
+    height: 60px;
+    background-color: #FFF371;
+    width: 300px;
+    margin-left: 72px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.schedule-box span:first-child{
+    margin-top: 5px;
+    margin-left: 8px;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.schedule-box span:last-child{
+    margin-left: 8px;
+    font-size: 13px;
+    font-weight: 300;
+}

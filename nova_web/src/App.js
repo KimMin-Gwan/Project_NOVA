@@ -31,6 +31,7 @@ import ScheduleTopic from "./component/ScheduleTopic/ScheduleTopic.js";
 import EventCard from "./component/EventCard/EventCard.js";
 import SearchSchedulePage from "./pages/SearchSchedulePage/SearchSchedulePage.js";
 import TestPage from "./pages/TestPage/TestPage.js";
+import ScheduleDashboard from "./pages/SchedulePage/ScheduleDashboard.js";
 
 // 다크 모드 클래스 반환 함수
 export function getModeClass(mode) {
@@ -79,8 +80,11 @@ function App() {
 
       {/* 검색 페이지 */}
       <Route path="/search" element={<SearchPage />}></Route>
-      <Route path="/search/schedule" element={<SearchSchedulePage />}></Route>
       <Route path="/search_result" element={<SearchResultPage />}></Route>
+
+      {/* 스케줄 페이지 */}
+      <Route path="/schedule" element={<ScheduleDashboard/>}></Route>
+      <Route path="/search/schedule" element={<SearchSchedulePage />}></Route>
 
       {/* 펀딩 페이지 목록 */}
       {/* <Route path="/nova_funding" element={<NovaFunding brightMode={brightMode} />}></Route>

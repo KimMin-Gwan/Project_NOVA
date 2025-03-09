@@ -1,0 +1,18 @@
+.time-week-box {
+    height: 72px;         /* 세로 크기 */
+    display: flex;
+    flex-direction: column;  /* 세로로 정렬 */
+    justify-content: center;  /* 세로 중앙 정렬 */
+    align-items: center;     /* 가로 중앙 정렬 */
+    background-color: #d0e4ff;
+}
+
+.time-week-box span:first-child {
+    font-size: 20px;   /* 첫 번째 span 크기 */
+    font-weight: 600;  /* 첫 번째 span 굵기 */
+}
+
+.time-week-box span:last-child {
+    font-size: 14px;   /* 두 번째 span 크기 */
+    font-weight: 500;  /* 첫 번째 span 굵기 */
+}

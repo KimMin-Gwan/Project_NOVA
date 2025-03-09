@@ -1,0 +1,21 @@
+.event-container{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    letter-spacing: -0.08px;
+    gap: 4px;
+    width: calc(100% - 56px); /* 계산식 수정 */
+    background-color: #d0e4ff;
+}
+
+.event-name{
+    padding-bottom: 4px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #2d2d2d;
+}
+
+.bias-name {
+    font-size: 14px;
+    color: #6b6b6b;
+}
