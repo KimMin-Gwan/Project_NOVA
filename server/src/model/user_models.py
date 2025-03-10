@@ -7,6 +7,7 @@ import datetime
 import uuid
 from pprint import pprint
 import random
+import re
 
 class LoginModel(BaseModel):
     def __init__(self, database:Local_Database) -> None:
@@ -307,13 +308,22 @@ class ChangePasswordModel(BaseModel):
     # 비밀번호 변경하기
     def try_change_password(self, data_payload):
         if self.__check_present_password(present_password=data_payload.password):
-            self.__try_change_password(new_password = data_payload.new_password)
-            self._result = True
-            self._detail = "비밀번호가 변경되었어요"
+            if self.check_password_format(password=data_payload.new_password):
+                self.__try_change_password(new_password = data_payload.new_password)
+                self._result = True
+                self._detail = "비밀번호가 변경되었어요."
+            else:
+                self._detail = "비밀번호 형식이 맞지 않습니다."
             return 
         else:
-            self._detail = "비밀번호가 틀렸어요"
+            self._detail = "비밀번호가 일치하지 않습니다."
             return
+        
+    def check_password_format(self, password: str) -> bool:
+        pattern = re.compile(
+            r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10}$'
+        )
+        return bool(pattern.match(password))
         
     # 비밀번호 변경하기를 임시유저로 ( 비밀번호 찾기)
     def try_change_password_with_temp_user(self, data_payload):
@@ -374,6 +384,12 @@ class ChangeNickNameModel(BaseModel):
             self._user.uname = new_uname
             self._database.modify_data_with_id(target_id="uid", target_data=self._user.get_dict_form_data())
             return True
+        
+    def check_uname_format(self, uname:str) -> bool:
+        if len(uname) == 0 or len(uname) > 7:
+            return False
+        else:
+            return True
 
     # 닉네임 변경하기
     def try_change_nickname(self, data_payload):
@@ -381,11 +397,15 @@ class ChangeNickNameModel(BaseModel):
         self._uname = self._user.uname
 
         if self.__check_new_nickname(data_payload.new_uname):
-            if self.__change_nickname(data_payload.new_uname):
-                self._result = True
-                self._detail = "닉네임이 변경되었습니다."
+            if self.check_uname_format(data_payload.new_uname):
+                if self.__change_nickname(data_payload.new_uname):
+                    self._result = True
+                    self._detail = "닉네임이 변경되었습니다."
+                else:
+                    self._detail = "이미 사용중인 닉네임입니다."
             else:
-                self._detail = "이미 사용중인 닉네임입니다."
+                self._detail = "닉네임은 0자 이상, 7자 이하로 입력해주세요."
+                
         else:
             self._detail = "기존 닉네임과 같습니다."
 

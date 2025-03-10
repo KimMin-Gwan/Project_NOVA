@@ -195,21 +195,12 @@ class UserController:
     # 비밀번호 변경하기
     def try_change_password(self, database, request):
         model = ChangePasswordModel(database=database)
-        try:
-            # 유저가 있으면 세팅
-            model.set_user_with_email(request=request.jwt_payload)
-            model.try_change_password(data_payload=request.data_payload)
+        
+        # 유저가 있으면 세팅
+        model.set_user_with_email(request=request.jwt_payload)
+        model.try_change_password(data_payload=request.data_payload)
 
-        except CustomError as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
-
-        except Exception as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
-
-        finally:
-            return model
+        return model
 
     # 프로필 사진 바꾸기 기능
     def try_change_profile_photo(self, database, request):
