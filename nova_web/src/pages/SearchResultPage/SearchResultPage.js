@@ -9,8 +9,6 @@ import Header from "../../component/Header/Header";
 import Comments from "../../component/Comments/Comments";
 import Tabs from "../../component/Tabs/Tabs";
 import FeedSection from "../../component/FeedSection/FeedSection";
-import MyPageLoading from "../LoadingPage/MypageLoading";
-import LoadingPage from "../LoadingPage/LoadingPage";
 
 export default function SearchResultPage() {
   let [searchParams] = useSearchParams();
@@ -44,6 +42,10 @@ export default function SearchResultPage() {
   const handleClick = (index) => {
     setActiveIndex(index);
   };
+
+  useEffect(() => {
+    setIsLoading(true);
+  }, [activeIndex]);
 
   useEffect(() => {
     let historyList = JSON.parse(localStorage.getItem("history")) || [];
