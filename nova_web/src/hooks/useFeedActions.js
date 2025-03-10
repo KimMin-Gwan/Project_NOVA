@@ -20,6 +20,7 @@ export default function useFeedActions(setFeedData) {
         });
       })
       .catch((err) => {
+        console.log(err);
         if (err.response.status === 401) {
           navigate("/novalogin");
         } else {
