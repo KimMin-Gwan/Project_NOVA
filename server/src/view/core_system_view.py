@@ -459,8 +459,6 @@ class Core_Service_View(Master_View):
         def get_all_feed_filtering(request:Request, raw_request:dict):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             
-            pprint(raw_request)
-            
             data_payload = AllFeedRequest(request=raw_request)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
@@ -634,7 +632,6 @@ class Core_Service_View(Master_View):
         @self.__app.post('/feed_explore/make_comment')
         def try_make_comment(request:Request, raw_requset:dict):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
-            print(raw_requset)
             data_payload = MakeFeedCommentRequest(request=raw_requset)
 
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
