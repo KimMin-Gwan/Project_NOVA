@@ -395,7 +395,8 @@ class ChangeNickNameModel(BaseModel):
         try:
             body = {
                 'result' : self._result,
-                "uname" : self._uname
+                "uname" : self._uname,
+                "detail" : self._detail
             }
 
             response = self._get_response_data(head_parser=head_parser, body=body)
