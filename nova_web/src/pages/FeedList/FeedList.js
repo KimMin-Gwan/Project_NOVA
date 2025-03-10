@@ -234,10 +234,6 @@ export default function FeedList() {
     document.body.style.overflow = "auto";
   }
 
-  // if (isLoading) {
-  //   return <LoadingPage />;
-  // }
-
   return (
     <div className={`all-box ${style["all_container"]}`}>
       <div className={`${style["container"]} ${style[getModeClass(mode)]}`}>

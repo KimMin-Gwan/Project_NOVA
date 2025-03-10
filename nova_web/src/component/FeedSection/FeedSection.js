@@ -3,7 +3,7 @@ import Feed from "../feed";
 import NoneFeed from "../NoneFeed/NoneFeed";
 import style from "./FeedSection.module.css";
 
-export default function FeedSection({ feedData, isLoading }) {
+export default function FeedSection({ feedData, setFeedData, isLoading }) {
   if (isLoading) {
     return <MyPageLoading />;
   }
@@ -15,7 +15,7 @@ export default function FeedSection({ feedData, isLoading }) {
   return (
     <section className={style["feed_section"]}>
       {feedData.map((feed, i) => {
-        return <Feed key={feed.feed.fid} feed={feed.feed} />;
+        return <Feed key={feed.feed.fid} setFeedData={setFeedData} feed={feed.feed} />;
       })}
     </section>
   );
