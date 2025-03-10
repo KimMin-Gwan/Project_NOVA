@@ -23,7 +23,7 @@ function MyPage() {
   const [isVali, setIsVali] = useState(false);
   const [isValiPw, setIsValiPw] = useState(false);
   const [warningMessage, setWarningMessage] = useState(
-    "영문, 숫자, 특수문자를 포함해 10자리 이상이어야 합니다."
+    "영소문자, 숫자, 특수문자를 포함해 10자리 이상이어야 합니다."
   );
   const regexArray = [
     /^[a-zA-Z0-9가-힣]{2,6}$/, // 알파벳, 숫자, 한글만 허용, 2~6글자
@@ -39,6 +39,7 @@ function MyPage() {
   };
 
   async function fetchChangeNickname() {
+    console.log(nickname);
     await axios
       .post(
         `https://nova-platform.kr/user_home/try_change_nickname`,
@@ -56,12 +57,15 @@ function MyPage() {
         }
       )
       .then((res) => {
-        //console.log(res.data);
+        console.log(res.data);
         if (res.data.body.result) {
+          // setNewNickname(res.data.body.uname);
+          alert(res.data.body.detail);
           setNewNickname(res.data.body.uname);
+          setNickname("");
+        } else {
+          alert(res.data.body.detail);
         }
-        alert("변경완료");
-        setNickname("");
       });
   }
 
@@ -84,15 +88,15 @@ function MyPage() {
         }
       )
       .then((res) => {
+        console.log(res.data.body);
         if (!res.data.body.result) {
           alert(res.data.body.detail);
         } else {
           alert(res.data.body.detail);
+          setPassword("");
+          setNewPassword("");
+          setCheckPassword("");
         }
-
-        setPassword("");
-        setNewPassword("");
-        setCheckPassword("");
       });
   }
 
@@ -123,6 +127,9 @@ function MyPage() {
     var Regex = regexArray[index];
 
     if (!Regex.test(e.target.value)) {
+      setWarningMessage(
+        "영소문자, 숫자, 특수문자를 포함해 10자리 이상이어야 합니다."
+      );
       index === 0 ? setIsVali(true) : setIsValiPw(true);
     } else {
       index === 0 ? setIsVali(false) : setIsValiPw(false);
@@ -175,6 +182,7 @@ function MyPage() {
       .then((data) => {
         setMyProfile(data.body);
         setIsLoading(false);
+        setNewNickname(data.body.uname);
       });
   }
 
@@ -278,7 +286,7 @@ function MyPage() {
             onChange={(e) => {
               onChangeInput(e, 0);
             }}
-            placeholder={`${myProfile.uname} (7글자 이내로 변경 가능합니다)`}
+            placeholder={`${newNickname} (7글자 이내로 변경 가능합니다)`}
             minLength={2}
             maxLength={7}
           />
