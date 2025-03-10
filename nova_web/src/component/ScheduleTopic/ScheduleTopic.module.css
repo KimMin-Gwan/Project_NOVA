@@ -7,6 +7,11 @@
   color: #797979;
   font-size: 12px;
 
+  /* dl 기존 스타일 없애기 */
+  & dl {
+    margin: 0;
+  }
+
   /* 주제 타이틀 스타일 */
   & .BiasTitle {
     display: inline-flex;

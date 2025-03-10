@@ -4,6 +4,7 @@
   /* justify-content: space-between; */
   padding: 20px;
   & dl {
+    margin: 0;
     width: 100%;
     color: #797979;
   }
