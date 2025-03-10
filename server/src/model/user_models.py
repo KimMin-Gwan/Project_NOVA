@@ -321,7 +321,7 @@ class ChangePasswordModel(BaseModel):
         
     def check_password_format(self, password: str) -> bool:
         pattern = re.compile(
-            r'^(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10}$'
+            r'^(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,}$'
         )
         return bool(pattern.match(password))
         
