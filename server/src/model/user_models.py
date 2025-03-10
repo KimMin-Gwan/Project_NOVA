@@ -378,7 +378,9 @@ class ChangeNickNameModel(BaseModel):
         # 바꾸게 되면 데이터베이스를 수정합니다.
         self._uname = new_uname
         
-        result = self._database.get_data_with_key(target="uid", key="uname", key_data=self._user.uname)
+        
+        pprint(new_uname)
+        result = self._database.get_data_with_key(target="uid", key="uname", key_data=new_uname)
         
         print("닉찾기 :", result)
             
