@@ -13,6 +13,7 @@ export default function CategoryModal({
 }) {
   let [boardData, setBoardData] = useState([]);
   let [isLoading, setIsLoading] = useState(true);
+  const [backgroundColor, setBackgroundColor] = useState("");
 
   async function fetchBoardData() {
     await fetch(
@@ -27,6 +28,15 @@ export default function CategoryModal({
         setIsLoading(false);
       });
   }
+  useEffect(() => {
+    if (!isOpend) {
+      setBackgroundColor("transparent"); //닫혀있을 때는 배경색 없애기
+    } else {
+      setTimeout(() => {
+        setBackgroundColor("rgba(0, 0, 0, 0.5)"); //일정시간 지난 후에 뒤에 배경색 주기
+      }, 500);
+    }
+  }, [isOpend]);
 
   useEffect(() => {
     fetchBoardData();
@@ -36,12 +46,20 @@ export default function CategoryModal({
     return <div>로딩 중...</div>;
   }
 
+  const handleTransitionEnd = (e) => {
+    if (!isOpend) {
+      setBackgroundColor("transparent"); // 애니메이션 후 배경색을 투명으로 변경
+    }
+  };
+
   return (
     <div
       className={`CategoryModal ${isOpend ? "see" : ""}`}
+      style={{ backgroundColor }}
       onClick={() => {
         onClickCategory();
       }}
+      onTransitionEnd={handleTransitionEnd}
     >
       <div
         className={`modal-container ${isOpend ? "on" : ""}`}
