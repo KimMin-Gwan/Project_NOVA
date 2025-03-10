@@ -1,0 +1,67 @@
+.EventCard {
+  background-color: white;
+  display: flex;
+  /* justify-content: space-between; */
+  padding: 20px;
+  & dl {
+    width: 100%;
+    color: #797979;
+  }
+  /* 스케줄 이름 및 등록자 */
+  & .EventHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    & dt {
+      font-size: 18px;
+      font-weight: 400;
+      color: black;
+    }
+    & .UnameInfo {
+      & dt {
+        font-size: 14px;
+        font-weight: 300;
+        text-align: end;
+        color: #797979;
+        margin-bottom: 4px;
+      }
+      & dt:last-child {
+        font-size: 12px;
+      }
+    }
+  }
+  /* 스케줄 상세 정보 */
+  & .BnameInfo {
+    font-size: 12px;
+    margin-block: 8px 0;
+    display: flex;
+    flex-flow: column;
+    gap: 4px;
+    & dt:first-child {
+      font-size: 14px;
+    }
+  }
+  /* 스케줄 코드 */
+  & .CodeInfo {
+    display: flex;
+    font-size: 14px;
+    align-items: center;
+
+    & p {
+      margin: 0;
+    }
+    & div {
+      background-color: #f1f7ff;
+      padding: 0 8px;
+      margin-inline: 6px 0;
+    }
+  }
+
+  /* 상세정보와 코드 박스 */
+  & .DesInfo {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+  }
+}
