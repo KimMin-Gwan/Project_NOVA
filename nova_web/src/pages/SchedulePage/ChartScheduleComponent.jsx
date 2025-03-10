@@ -8,23 +8,35 @@ import './chart_schedule_style.css'
 // 본 길이는 실제 길이를 300등분한 길이만큼 줄것
 // 끝
 
-export default function ChartScheduleComponent({schedule_detail, bias_name, start, length, color_code}) {
-    const adjustedWidth = length * 0.2777;  // 앞에 몇 분 임
-    const adjsutedPadding = start * 0.2777;  //  시작 시간 몇 분임
+export default function ChartScheduleComponent({ timeblocks, schedule_detail, bias_name, color_code, timeSection }) {
+    let adjustedWidth = 0; // 앞에 몇 분 임
+    let adjustedPadding = 0; // 시작 시간 몇 분임
+
+    // timeSection과 일치하는 timeblock 찾기
+    const matchingBlock = timeblocks.find((block) => block.time === timeSection);
+
+    if (matchingBlock) {
+        adjustedWidth = matchingBlock.length * 0.2777; // 길이 계산
+        adjustedPadding = matchingBlock.start * 0.2777; // 시작 위치 계산
+    }
 
     return (
-        <div className='background-box'>
+        <div className="background-box">
             <div
-             className='schedule-box'
-             style={{ 
-                width: `${adjustedWidth}%`,
-                marginLeft: `${adjsutedPadding}%`,
-                backgroundColor: `${color_code}`
-             }}
+                className="schedule-box"
+                style={{
+                    width: `${adjustedWidth}%`,
+                    marginLeft: `${adjustedPadding}%`,
+                    backgroundColor: `${color_code}`,
+                }}
             >
-                <span>{schedule_detail}</span>
-                <span>{bias_name}</span>
+                {matchingBlock && (
+                    <>
+                        <span>{schedule_detail}</span>
+                        <span>{bias_name}</span>
+                    </>
+                )}
             </div>
         </div>
     );
-};
+}

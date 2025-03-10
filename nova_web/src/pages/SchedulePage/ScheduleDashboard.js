@@ -2,11 +2,8 @@ import React from 'react';
 import './style.css'; // Corrected import for CSS file
 import vertical_line from './vertical_line.svg'; // Corrected import for SVG file
 import EventComponent from './EventComponent'; // Corrected import for EventComponent`
-import arrow_drop_left from './Arrow_drop_left.svg'; // Corrected import for SVG file
-import arrow_drop_right from './Arrow_drop_right.svg'; // Corrected import for SVG file
-import TimeWeekComponent from './TImeWeekComponent';
-import ChartScheduleComponent from './ChartScheduleComponent';
 import ScheduleTopic from '../../component/ScheduleTopic/ScheduleTopic';
+import TimeChart from './TimeChart';
 
 const mockData = [
   {
@@ -35,54 +32,110 @@ const mockData = [
   },
 ];
 
-const timeSectionList = [
-    ["00:00", "01:00", "02:00", "03:00", "04:00", "05:00"],
-    ["06:00", "07:00", "08:00", "09:00", "10:00", "11:00"],
-    ["12:00", "13:00", "14:00", "15:00", "16:00", "17:00"],
-    ["18:00", "19:00", "20:00", "21:00", "22:00", "23:00"],
-]
 
 const tempScheduleData= [
-    {
+    {   
+        timeblocks: [
+            {
+                time : 0,
+                start : 60,
+                length : 180
+            }
+        ],
         schedule_detail : "저스트 채팅 짧방",
         bias_name : "도롱챠",
-        start : 60,
-        length : 180,
         color_code : "#FFC871"
     },
     {
+        timeblocks: [
+            {
+                time : 0,
+                start : 60,
+                length : 300
+            },
+            {
+                time : 1,
+                start : 0,
+                length : 360,
+            },
+            {
+                time : 2,
+                start : 0,
+                length : 360,
+            }
+        ],
         schedule_detail : "런칭 하려는 날",
         bias_name : "김민관",
-        start : 60,
-        length : 300,
         color_code : "#B171FF"
     },
     {
+        timeblocks: [
+            {
+                time : 1,
+                start : 120,
+                length : 120,
+            },
+        ],
+        schedule_detail : "사무실 가는날",
+        bias_name : "잠을못자",
+        color_code : "#9CF6AA"
+    },
+    {
+        timeblocks: [
+            {
+                time : 0,
+                start : 240,
+                length : 120 
+            },
+            {
+                time : 1,
+                start : 0,
+                length : 120 
+            }
+        ],
         schedule_detail : "원펀맨 같이보기",
         bias_name : "허니츄러스",
-        start : 240,
-        length : 120,
         color_code : "#71C4FF"
     },
     {
+        timeblocks: [
+            {
+                time : 0,
+                start : 60,
+                length :240
+            }
+        ],
         schedule_detail : "원딜 연습하는 날",
         bias_name : "아리사 Arisa",
-        start : 60,
-        length : 240,
         color_code : "#71FFCD"
     },
     {
+        timeblocks: [
+            {
+                time : 0,
+                start : 300,
+                length : 60
+            },
+            {
+                time : 1,
+                start : 0,
+                length :300 
+            }
+        ],
         schedule_detail : "생일 특별 방송!",
         bias_name : "허니츄러스",
-        start : 240,
-        length : 120,
         color_code : "#71D9FF"
     },
     {
+        timeblocks: [
+            {
+                time : 0,
+                start : 0,
+                length :240 
+            }
+        ],
         schedule_detail : "행복한 합방 같은거 합니다요",
         bias_name : "다주",
-        start : 0,
-        length : 240,
         color_code : "#FFF371"
     },
 ]
@@ -91,32 +144,32 @@ const tempWeekDayData = [
     {
         date: 10,
         day: "월",
-        num_shedule: 1
+        num_schedule: 1
     },
     {
         date: 11,
         day: "화",
-        num_shedule: 1
+        num_schedule: 2
     },
     {
         date: 12,
         day: "수",
-        num_shedule: 1
+        num_schedule: 1
     },
     {
         date: 13,
         day: "목",
-        num_shedule: 1
+        num_schedule: 1
     },
     {
         date: 14,
         day: "금",
-        num_shedule: 1
+        num_schedule: 1
     },
     {
         date: 15,
         day: "토",
-        num_shedule: 1
+        num_schedule: 1
     }
 ]
 
@@ -173,33 +226,8 @@ const ScheduleDashboard = () => {
                         </p>
                     </div>
                 </div>
-                <div className="time-chart-box">
-                    <div className='day-week-list'>
-                        <div className='chart-etc-box'> </div>
-                        <div>
-                            {tempWeekDayData.map((item, i) => {
-                                return <TimeWeekComponent key={item.id} {...item} />;
-                            })}
-                        </div>
-                    </div>
-                    <div className='chart-box'>
-                        <div className='time-select-box'>
-                            <img src={arrow_drop_left} alt="vertical line" />
-                            <span> 오전 타임 </span>
-                            <img src={arrow_drop_right} alt="vertical line" />
-                        </div>
-                        <div  className='time-line-box'>
-                            {timeSectionList[0].map((time, i) => {
-                                return <span key={i}>{time}</span>
-                            })}
-                        </div>
-                        <div className='schedule-box-list'>
-                            {tempScheduleData.map((item, i) => {
-                                return <ChartScheduleComponent key={item.id} {...item} />;
-                            })}
-                        </div>
-                    </div>
-                </div>
+                {/* 타임차트를 만드는 핵심 구간 */}
+                <TimeChart tempWeekDayData={tempWeekDayData} tempScheduleData={tempScheduleData} />
             </div>
             <div className='section-line'></div>
             <div className='section-box'>
