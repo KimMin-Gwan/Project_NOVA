@@ -355,6 +355,7 @@ class ChangeNickNameModel(BaseModel):
         super().__init__(database)
         self._result = False
         self._uname = ""
+        self._detail = "default"
 
     # 달라진 닉네임인지 체크하는 곳
     def __check_new_nickname(self, new_uname:str):
@@ -366,8 +367,13 @@ class ChangeNickNameModel(BaseModel):
     def __change_nickname(self, new_uname:str):
         # 바꾸게 되면 데이터베이스를 수정합니다.
         self._uname = new_uname
-        self._user.uname = new_uname
-        self._database.modify_data_with_id(target_id="uid", target_data=self._user.get_dict_form_data())
+        
+        if self._database.get_data_with_key(target="uid", key="uname", key_data=self._user.uname):
+            return False
+        else:
+            self._user.uname = new_uname
+            self._database.modify_data_with_id(target_id="uid", target_data=self._user.get_dict_form_data())
+            return True
 
     # 닉네임 변경하기
     def try_change_nickname(self, data_payload):
@@ -375,8 +381,13 @@ class ChangeNickNameModel(BaseModel):
         self._uname = self._user.uname
 
         if self.__check_new_nickname(data_payload.new_uname):
-            self.__change_nickname(data_payload.new_uname)
-            self._result = True
+            if self.__change_nickname(data_payload.new_uname):
+                self._result = True
+                self._detail = "닉네임이 변경되었습니다."
+            else:
+                self._detail = "이미 사용중인 닉네임입니다."
+        else:
+            self._detail = "기존 닉네임과 같습니다."
 
         return
 
