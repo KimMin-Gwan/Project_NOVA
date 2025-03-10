@@ -226,7 +226,6 @@ class User_Service_View(Master_View):
         def try_change_password(request:Request, raw_request:dict):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
 
-            pprint(data_payload)
             data_payload = ChangePasswordRequest(request=raw_request)
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
 
@@ -242,6 +241,7 @@ class User_Service_View(Master_View):
         def try_change_nickname(request:Request, raw_request:dict):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
 
+            pprint(data_payload)
             data_payload  = ChangeNicknameRequest(request=raw_request)
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
 
