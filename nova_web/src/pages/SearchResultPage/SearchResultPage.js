@@ -44,6 +44,10 @@ export default function SearchResultPage() {
   };
 
   useEffect(() => {
+    setIsLoading(true);
+  }, [activeIndex]);
+
+  useEffect(() => {
     let historyList = JSON.parse(localStorage.getItem("history")) || [];
     setSearchHistory(historyList);
   }, []);
@@ -133,9 +137,9 @@ export default function SearchResultPage() {
     };
   }, [feedNextKey]);
 
-  if (isLoading) {
-    return <div>loading...</div>;
-  }
+  // if (isLoading) {
+  //   return <LoadingPage />;
+  // }
 
   return (
     <div className="container search_result_page">
@@ -158,8 +162,8 @@ export default function SearchResultPage() {
         />
       </div>
       <Tabs activeIndex={activeIndex} handleClick={handleClick} onClickType={onClickType} />
-      {type === "comment" && <Comments comments={comments} />}
-      {type === "post" && <FeedSection feedData={feedData} />}
+      {type === "comment" && <Comments comments={comments} isLoading={isLoading} />}
+      {type === "post" && <FeedSection feedData={feedData} isLoading={isLoading} />}
 
       <div ref={target} style={{ height: "1px" }}></div>
       <NavBar />
