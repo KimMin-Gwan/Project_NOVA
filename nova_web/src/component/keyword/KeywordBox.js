@@ -50,7 +50,7 @@ export default function KeywordBox({
   }
 
   if (isLoading) {
-    return <div>loading...</div>;
+    return null;
   }
 
   return (

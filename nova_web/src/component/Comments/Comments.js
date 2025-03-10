@@ -2,8 +2,10 @@ import style from "./Comments.module.css";
 import arrow from "./../../img/comment_arrow.svg";
 import reArrow from "./../../img/recomment.svg";
 import { useState } from "react";
+import MyPageLoading from "../../pages/LoadingPage/MypageLoading";
+import NoneFeed from "../NoneFeed/NoneFeed";
 
-export default function Comments({ comments }) {
+export default function Comments({ comments, isLoading }) {
   const [clickedComments, setClickedComments] = useState({});
   const [isClickedComment, setIsClickedComment] = useState(false);
   const handleCommentToggle = (id) => {
@@ -12,6 +14,14 @@ export default function Comments({ comments }) {
       [id]: !prev[id],
     }));
   };
+
+  if (isLoading) {
+    return <MyPageLoading />;
+  }
+
+  if (comments.length === 0) {
+    return <NoneFeed />;
+  }
   return (
     <>
       {comments.map((feed, i) => {

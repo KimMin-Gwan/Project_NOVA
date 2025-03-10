@@ -9,6 +9,8 @@ import Header from "../../component/Header/Header";
 import Comments from "../../component/Comments/Comments";
 import Tabs from "../../component/Tabs/Tabs";
 import FeedSection from "../../component/FeedSection/FeedSection";
+import MyPageLoading from "../LoadingPage/MypageLoading";
+import LoadingPage from "../LoadingPage/LoadingPage";
 
 export default function SearchResultPage() {
   let [searchParams] = useSearchParams();
@@ -133,9 +135,9 @@ export default function SearchResultPage() {
     };
   }, [feedNextKey]);
 
-  if (isLoading) {
-    return <div>loading...</div>;
-  }
+  // if (isLoading) {
+  //   return <LoadingPage />;
+  // }
 
   return (
     <div className="container search_result_page">
@@ -158,8 +160,8 @@ export default function SearchResultPage() {
         />
       </div>
       <Tabs activeIndex={activeIndex} handleClick={handleClick} onClickType={onClickType} />
-      {type === "comment" && <Comments comments={comments} />}
-      {type === "post" && <FeedSection feedData={feedData} />}
+      {type === "comment" && <Comments comments={comments} isLoading={isLoading} />}
+      {type === "post" && <FeedSection feedData={feedData} isLoading={isLoading} />}
 
       <div ref={target} style={{ height: "1px" }}></div>
       <NavBar />

@@ -32,6 +32,7 @@ import HEADER from "../../constant/header.js";
 import useIntersectionObserver from "../../hooks/useIntersectionObserver.js";
 import useFetchFeedList from "../../hooks/useFetchFeedList.js";
 import useBoardStore from "../../stores/BoardStore/useBoardStore.js";
+import MyPageLoading from "../LoadingPage/MypageLoading.js";
 
 export default function FeedList() {
   // url 파라미터 가져오기
@@ -143,7 +144,6 @@ export default function FeedList() {
 
     if (type === "all" || isClickedFetch) {
       const data = await fetchAllFeedList(updatedNextData, filterCategory, filterFclass);
-      console.log("ffff", data);
       setFeedData(data.body.send_data);
       setNextData(data.body.key);
       setHasMore(data.body.send_data.length > 0);
@@ -312,7 +312,9 @@ export default function FeedList() {
         )}
 
         <div className={feedData.length > 0 ? style["scroll-area"] : style["none_feed_scroll"]}>
-          {feedData.length > 0 ? (
+          {isLoading ? (
+            <MyPageLoading />
+          ) : feedData.length > 0 ? (
             feedData.map((feed, i) => {
               return (
                 <Feed
@@ -327,7 +329,6 @@ export default function FeedList() {
             <NoneFeed />
           )}
           <div ref={targetRef} style={{ height: "1px" }}></div>
-          {isLoading && <p>loading...</p>}
           {isFilterClicked && (
             <FilterModal
               onClickFilterButton={onClickFilterButton}

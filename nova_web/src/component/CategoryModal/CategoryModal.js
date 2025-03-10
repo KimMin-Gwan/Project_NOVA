@@ -35,7 +35,7 @@ export default function CategoryModal({ SetIsOpen, onClickCategory, biasId, isOp
   }, []);
 
   if (isLoading) {
-    return <div>로딩 중...</div>;
+    return null;
   }
 
   const handleTransitionEnd = (e) => {
