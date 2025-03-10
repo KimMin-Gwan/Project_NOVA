@@ -57,8 +57,7 @@ export default function FeedList() {
   let [biasId, setBiasId] = useState();
   let [board, setBoard] = useState("자유게시판");
 
-  const initialMode =
-    brightModeFromUrl || localStorage.getItem("brightMode") || "bright"; // URL에서 가져오고, 없으면 로컬 스토리지에서 가져옴
+  const initialMode = brightModeFromUrl || localStorage.getItem("brightMode") || "bright"; // URL에서 가져오고, 없으면 로컬 스토리지에서 가져옴
   const [mode, setMode] = useState(initialMode);
 
   const [hasMore, setHasMore] = useState(true);
@@ -66,9 +65,7 @@ export default function FeedList() {
   let [filterCategory, setFilterCategory] = useState(
     JSON.parse(localStorage.getItem("board")) || [""]
   );
-  let [filterFclass, setFilterFclass] = useState(
-    JSON.parse(localStorage.getItem("content")) || ""
-  );
+  let [filterFclass, setFilterFclass] = useState(JSON.parse(localStorage.getItem("content")) || "");
   let [isClickedFetch, setIsClickedFetch] = useState(false);
 
   // 모드 체인지
@@ -147,14 +144,11 @@ export default function FeedList() {
     }
 
     if (type === "all" || isClickedFetch) {
-      const data = await fetchAllFeedList(
-        updatedNextData,
-        filterCategory,
-        filterFclass
-      );
+      const data = await fetchAllFeedList(updatedNextData, filterCategory, filterFclass);
       console.log("ffff", data);
       setFeedData(data.body.send_data);
       setNextData(data.body.key);
+      setHasMore(data.body.send_data.length > 0);
       setIsLoading(false);
     }
   }
@@ -197,19 +191,8 @@ export default function FeedList() {
   }
 
   // 데이터 더 받기
-  async function fetchFeedListType(
-    fetchFunction,
-    type,
-    nextData,
-    filterCategory,
-    filterFclass
-  ) {
-    const data = await fetchFunction(
-      type,
-      nextData,
-      filterCategory,
-      filterFclass
-    );
+  async function fetchFeedListType(fetchFunction, type, nextData, filterCategory, filterFclass) {
+    const data = await fetchFunction(type, nextData, filterCategory, filterFclass);
 
     setFeedData((prevData) => {
       const newData = [...prevData, ...data.body.send_data];
@@ -225,20 +208,11 @@ export default function FeedList() {
     if (type === "today" || type === "weekly") {
       await fetchFeedListType(fetchDateFeedList, type, nextData);
     } else if (type === "all" || isClickedFetch) {
-      await fetchFeedListType(
-        fetchAllFeedList,
-        nextData,
-        filterCategory,
-        filterFclass
-      );
+      await fetchFeedListType(fetchAllFeedList, nextData, filterCategory, filterFclass);
     }
   }
   // 무한 스크롤
-  const targetRef = useIntersectionObserver(
-    loadMoreCallBack,
-    { threshold: 0.5 },
-    hasMore
-  );
+  const targetRef = useIntersectionObserver(loadMoreCallBack, { threshold: 0.5 }, hasMore);
 
   useEffect(() => {
     fetchData();
@@ -272,10 +246,7 @@ export default function FeedList() {
         <Header />
         {type === "bias" && (
           <div className={style["bias-section"]}>
-            <BiasBoxes
-              setBiasId={setBiasId}
-              fetchBiasCategoryData={fetchBiasCategoryData}
-            />
+            <BiasBoxes setBiasId={setBiasId} fetchBiasCategoryData={fetchBiasCategoryData} />
             <h4>스토리 게시판</h4>
             <div
               ref={scrollRef}
@@ -344,21 +315,13 @@ export default function FeedList() {
           </div>
         )}
 
-        <div
-          className={
-            feedData.length > 0
-              ? style["scroll-area"]
-              : style["none_feed_scroll"]
-          }
-        >
+        <div className={feedData.length > 0 ? style["scroll-area"] : style["none_feed_scroll"]}>
           {feedData.length > 0 ? (
             feedData.map((feed, i) => {
               return (
                 <Feed
                   key={`feed_${feed.feed.fid}`}
-                  className={`${style["feed-box"]} ${
-                    style[getModeClass(mode)]
-                  }`}
+                  className={`${style["feed-box"]} ${style[getModeClass(mode)]}`}
                   feed={feed.feed}
                   setFeedData={setFeedData}
                 ></Feed>

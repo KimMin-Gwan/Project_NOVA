@@ -321,7 +321,7 @@ class ChangePasswordModel(BaseModel):
         
     def check_password_format(self, password: str) -> bool:
         pattern = re.compile(
-            r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10}$'
+            r'^(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,}$'
         )
         return bool(pattern.match(password))
         
@@ -378,7 +378,14 @@ class ChangeNickNameModel(BaseModel):
         # 바꾸게 되면 데이터베이스를 수정합니다.
         self._uname = new_uname
         
-        if self._database.get_data_with_key(target="uid", key="uname", key_data=self._user.uname):
+        
+        pprint(new_uname)
+        result = self._database.get_data_with_key(target="uid", key="uname", key_data=new_uname)
+        
+        print("닉찾기 :", result)
+            
+            
+        if result:
             return False
         else:
             self._user.uname = new_uname
