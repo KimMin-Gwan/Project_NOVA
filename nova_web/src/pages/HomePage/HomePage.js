@@ -18,6 +18,7 @@ import postApi from "../../services/apis/postApi.js";
 import GoogleAD from "../../component/display_google_ad.js";
 import DisplayAds from "../../component/display_google_ad.js";
 import LoadingPage from "../LoadingPage/LoadingPage.js";
+import HEADER from "../../constant/header.js";
 
 export function getModeClass(mode) {
   return mode === "dark" ? "dark-mode" : "bright-mode";
@@ -53,15 +54,8 @@ export default function HomePage() {
   // });
   let [feedData, setFeedData] = useState([]);
 
-  let [biasId, setBiasId] = useState(null);
-
-  let header = {
-    "request-type": "default",
-    "client-version": "v1.0.1",
-    "client-ip": "127.0.0.1",
-    uid: "1234-abcd-5678",
-    endpoint: "/user_system/",
-  };
+  let { biasId, setBiasId } = useBiasStore();
+  // let [biasId, setBiasId] = useState(null);
 
   const [isLoading, setIsLoading] = useState(true);
   let bids = biasList.map((item, i) => {
@@ -76,9 +70,9 @@ export default function HomePage() {
   async function fetchBiasCategoryData(bid) {
     await postApi
       .post(`feed_explore/feed_with_community`, {
-        header: header,
+        header: HEADER,
         body: {
-          bid: biasId || bids?.[0] || null,
+          bid: biasId || bids?.[0] || "",
           board: "자유게시판",
           key: -1,
         },

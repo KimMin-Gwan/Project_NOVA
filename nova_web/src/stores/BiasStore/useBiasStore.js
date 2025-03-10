@@ -4,6 +4,9 @@ const useBiasStore = create((set) => ({
   biasList: [],
   loading: false,
   error: null,
+  biasId: "",
+
+  setBiasId: (bid) => set({ biasId: bid }),
 
   fetchBiasList: async () => {
     set({ loading: true, error: null });

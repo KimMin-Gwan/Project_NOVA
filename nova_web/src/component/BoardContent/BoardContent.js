@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import "./index.css";
+import useBoardStore from "../../stores/BoardStore/useBoardStore";
 
-export default function BoardContent({ SetIsOpen, boardData, setBoard }) {
+export default function BoardContent({ SetIsOpen, boardData }) {
   const [selected, setSelected] = useState(null);
+  const { setBoard } = useBoardStore();
 
   useEffect(() => {
     // 모달이 열릴 때 로컬 스토리지에서 선택된 인덱스 가져오기
@@ -24,7 +26,13 @@ export default function BoardContent({ SetIsOpen, boardData, setBoard }) {
         boardData.boards.map((data, i) => (
           <li key={data.id ? data.id : `board-${i}`}>
             {data}
-            <input type="radio" name="content" value={i} checked={selected === i} onChange={() => onClickBoard(i)} />
+            <input
+              type="radio"
+              name="content"
+              value={i}
+              checked={selected === i}
+              onChange={() => onClickBoard(i)}
+            />
           </li>
         ))}
     </ul>
