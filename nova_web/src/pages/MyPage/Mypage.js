@@ -60,12 +60,15 @@ function MyPage() {
     fetchMyFeed(nowCategory);
   }, []);
 
-  useEffect(() => {}, [nowCategory]);
+  useEffect(() => {
+    if (nowCategory === "comment") {
+      fetchMyComment();
+    }
+  }, [nowCategory]);
 
   async function fetchMyFeed(category) {
     await mainApi.get(`user_home/get_my_feed?type=${category}&key=${nextKey}`).then((res) => {
       setCategoryLoading(false);
-      console.log(res.data);
       setMyFeed((prevData) => [...prevData, ...res.data.body.feed]);
       setNextKey(res.data.body.key);
       setIsLoading(false);
@@ -89,11 +92,6 @@ function MyPage() {
     }
   }
 
-  // useEffect(() => {
-
-  //   fetchMyFeed(nowCategory);
-  // }, []);
-
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
@@ -103,11 +101,12 @@ function MyPage() {
         if (nowCategory !== "comment") {
           fetchMyFeed(nowCategory);
           setIsClickedComment(false);
-        } else {
-          fetchMyComment();
         }
+        // else if (nowCategory === "comment") {
+        //   fetchMyComment();
+        // }
         //else {
-        //   setIsClickedComment((prev) => !prev);
+        // setIsClickedComment((prev) => !prev);
         //   // fetchMyComment();
         // }
       });

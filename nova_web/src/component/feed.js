@@ -180,7 +180,6 @@ function HashTags({ hashtags }) {
 
 function ActionButtons({ feed, handleCheckStar, fetchReportResult }) {
   const navigate = useNavigate();
-  console.log("sdad", feed);
 
   return (
     <div className={style["button-container"]}>
