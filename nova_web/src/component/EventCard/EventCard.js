@@ -15,9 +15,9 @@ const schedule = {
   color_code: "#FF0000",
 };
 
-export default function EventCard({ name, topic, date }) {
+export default function EventCard({ name, topic, date, toggleClick }) {
   return (
-    <div className={style["EventCard"]}>
+    <div className={style["EventCard"]} onClick={toggleClick}>
       <dl>
         <span className={style["EventHeader"]}>
           <dt>{schedule.detail}</dt>

@@ -14,9 +14,9 @@ const event = {
   uname: "허니과메기",
 };
 
-export default function ScheduleEvent({ name, topic, date }) {
+export default function ScheduleEvent({ name, topic, date, toggleClick }) {
   return (
-    <div className={style["ScheduleEvent"]}>
+    <div className={style["ScheduleEvent"]} onClick={toggleClick}>
       <dl>
         <dt>{event.sename}</dt>
         <dt>{event.bname}</dt>

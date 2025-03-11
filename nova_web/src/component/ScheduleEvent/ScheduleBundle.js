@@ -12,9 +12,9 @@ const schedule_bundle = {
   uname: "허니과메기",
 };
 
-export default function ScheduleBundle() {
+export default function ScheduleBundle({ toggleClick }) {
   return (
-    <div className={style["ScheduleEvent"]}>
+    <div className={style["ScheduleEvent"]} onClick={toggleClick}>
       <dl>
         <span className={style["ScheduleBudleTitle"]}>
           <dt>{schedule_bundle.sbname}</dt>
