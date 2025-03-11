@@ -17,7 +17,7 @@ function Terms() {
           }}
         />
         <div className={style.TitleBox}>
-          <p className={style.titleName}> 이용약관 </p>
+          <p className={style.titleName}>이용약관</p>
         </div>
         <div className={style.EmptyBox} />
       </div>
@@ -26,7 +26,15 @@ function Terms() {
         <div
           className={style.noticelist}
           onClick={() => {
-            navigate("/service_terms_and_conditions.pdf");
+            window.open("https://nova-platform.kr/service_terms_and_conditions.pdf", "_blank");
+          }}
+        >
+          <span className={style.noticeText}>이용약관</span>
+        </div>
+        <div
+          className={style.noticelist}
+          onClick={() => {
+            window.open("https://nova-platform.kr/personal_information_processing_policy.pdf", "_blank");
           }}
         >
           <span className={style.noticeText}>개인정보처리방침</span>
@@ -34,21 +42,15 @@ function Terms() {
         <div
           className={style.noticelist}
           onClick={() => {
-            navigate("/personal_information_processing_policy.pdf");
+            window.open("https://nova-platform.kr/personal_information_processing_agreement.pdf", "_blank");
           }}
         >
           <span className={style.noticeText}>개인정보처리동의서</span>
-        </div>
-        <div
-          className={style.noticelist}
-          onClick={() => {
-            navigate("/personal_information_processing_agreement.pdf");
-          }}
-        >
         </div>
       </div>
     </div>
   );
 }
+
 
 export default Terms;
