@@ -225,7 +225,7 @@ class FeedModel(BaseModel):
     # 1. 댓글 지우기 -> 전체 댓글 데이터 제공
     # 파라미터 수정 필요 
     def try_remove_comment(self, feed_manager:FeedManager, data_payload):
-        detail, result = feed_manager.remove_comment_on_feed( user=self._user,
+        feed_manager.remove_comment_on_feed( user=self._user,
                                                                fid=data_payload.fid,
                                                                cid=data_payload.cid
                                                                )
