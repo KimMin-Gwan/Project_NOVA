@@ -95,7 +95,7 @@ export default function FeedList() {
 
   // 주제별 피드 리스트
   async function fetchBiasCategoryData(bid) {
-    setIsLoading(true);
+    // setIsLoading(true);
     const currentBid = bid || bids[0] || "";
 
     const data = await fetchBiasFeedList(currentBid, bids, board, (nextData = -1));
@@ -106,7 +106,7 @@ export default function FeedList() {
   }
 
   async function fetchBiasPlusCategoryData() {
-    setIsLoading(true);
+    // setIsLoading(true);
     const data = await fetchBiasFeedList(biasId, bids, board, nextData);
     setFeedData((prevData) => [...prevData, ...data.body.send_data]);
     setNextData(data.body.key);
