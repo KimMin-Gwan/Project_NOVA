@@ -297,7 +297,7 @@ class Bias(SampleDomain):
     def __init__(self, bid="",bname="", category=[], birthday="", debut="",
                  agency="", group=[], num_user=0, x_account="",
                  insta_account="", tiktok_account="", youtube_account="", homepage="",
-                 fan_cafe="", country=[], fanname = [], board_types=[]):
+                 fan_cafe="", country=[], fanname = [], board_types=["선택없음", "자유게시판", "팬아트", "유머게시판"]):
         self.bid = bid
         self.bname = bname
         self.category = copy.copy(category)
@@ -406,6 +406,7 @@ class League(SampleDomain):
             self.num_bias = dict_data['num_bias']
             self.state = dict_data['state']
             self.type = dict_data['type']
+            return self
         except Exception as e:
             raise DictMakingError(error_type=e)
 
@@ -489,6 +490,7 @@ class Feed(SampleDomain):
             self.num_image = len(self.image)
             self.star_flag = False
             self.nickname = ""
+            return self
         except KeyError as e:
             print(e)
             raise DictMakingError(error_type=f"Missing key: {str(e)}")
@@ -543,6 +545,7 @@ class Interaction(SampleDomain):
             self.attend = copy.copy(dict_data["attend"])
             self.num_choice = len(self.choice)
             self.result = [len(sublist) for sublist in self.attend] # 참여자 수
+            return self
         except Exception as e:
             raise DictMakingError(error_type=e)
 
@@ -574,6 +577,7 @@ class FeedLink(SampleDomain):
             self.domain = dict_data['domain']
             self.title= dict_data['title']
             self.fid = dict_data['fid']
+            return self
         except Exception as e:
             raise DictMakingError(error_type=e)
 
@@ -596,6 +600,7 @@ class Banner(SampleDomain):
         try:
             self.baid = dict_data['baid']
             self.ba_url = dict_data['ba_url']
+            return self
         except Exception as e:
             raise DictMakingError(error_type=e)
 
@@ -654,6 +659,7 @@ class Comment(SampleDomain):
             
             self.reworked_body = dict_data['reworked_body']
             self.level = dict_data['level']
+            return self
         except KeyError as e:
             raise DictMakingError(error_type=f"Missing key: {str(e)}")
 
@@ -706,6 +712,7 @@ class ManagedUser:
             self.active_feed:list =copy.copy(dict_data['active_feed'])
             self.feed_key = dict_data['feed_key']
             self.comment_key = dict_data['comment_key']
+            return self
         except KeyError as e:
             raise DictMakingError(error_type=f"Missing key: {str(e)}")
 
@@ -752,6 +759,7 @@ class Report(SampleDomain):
             self.detail = dict_data['detail']
             self.result = dict_data['result']
             self.aid_date = dict_data['aid_date']
+            return self
         except KeyError as e:
             raise DictMakingError(error_type=f"Missing key: {str(e)}")
 
@@ -782,6 +790,7 @@ class Alert:
             self.uid = dict_data['uid']
             self.body = dict_data['body']
             self.date = dict_data['date']
+            return self
         except KeyError as e:
             raise DictMakingError(error_type=f"Missing key: {str(e)}")
 
@@ -807,6 +816,7 @@ class Notice:
             self.date= dict_data['date']
             self.title= dict_data['title']
             self.body = dict_data['body']
+            return self
         except KeyError as e:
             raise DictMakingError(error_type=f"Missing key: {str(e)}")
         return
@@ -864,6 +874,7 @@ class Project:
             self.ftype = dict_data['ftype']
             self.introduce = dict_data['introduce']
             self.num_participants = dict_data['num_participants']
+            return self
         except KeyError as e:
             raise DictMakingError(error_type=f"Missing key: {str(e)}")
 
@@ -913,6 +924,7 @@ class ProjectSales:
             self.quantity = dict_data['quantity']
             self.num_sales = dict_data['num_sales']
             self.tags:list = copy.copy(dict_data['tags'])
+            return self
         except KeyError as e:
             raise ValueError(f"Missing key: {str(e)}")
 

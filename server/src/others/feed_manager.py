@@ -672,25 +672,16 @@ class FeedManager:
                 new_comment.is_reworked = True
 
             if new_comment.display == 0:
-                new_comment = Comment(cid=new_comment.cid,
-                                      fid=new_comment.fid,
-                                      display=new_comment.display,
-                                      target_cid=new_comment.target_cid,
-                                      body="삭제된 댓글입니다."
-                                      )
+                new_comment.body = "삭제된 댓글입니다."
+                new_comment.uname = ""
+                
             elif new_comment.display == 1 :
-                new_comment = Comment(cid=new_comment.cid,
-                                      fid=new_comment.fid,
-                                      display=new_comment.display,
-                                      target_cid=new_comment.target_cid,
-                                      body="차단된 댓글입니다.")
+                new_comment.body="차단된 댓글입니다."
+                new_comment.uname = ""
 
             elif new_comment.display == 2:
-                new_comment = Comment(cid=new_comment.cid,
-                                      fid=new_comment.fid,
-                                      display=new_comment.display,
-                                      target_cid=new_comment.target_cid,
-                                      body="비공개된 댓글입니다.")
+                new_comment.body="비공개된 댓글입니다."
+                new_comment.uname = ""
 
             comments.append(new_comment)
 
