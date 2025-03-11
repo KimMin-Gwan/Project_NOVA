@@ -266,6 +266,7 @@ class User(SampleDomain):
             self.feed_search_history = copy.copy(dict_data["feed_search_history"])
             return self
         except Exception as e:
+            print(e)
             raise DictMakingError(error_type=e)
     
     # response에 사용되는 json형태로 만들기 위한 dict 데이터
