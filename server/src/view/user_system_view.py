@@ -147,13 +147,10 @@ class User_Service_View(Master_View):
         def try_resign(request:Request):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = DummyRequest()
-            print(3)
             user_controller=UserController()
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
             
-            print(4)
             model = user_controller.try_resign(database=self.__database, request=request_manager)
-            print(5)
 
             response = request_manager.try_clear_cookies(request=request)
             return response

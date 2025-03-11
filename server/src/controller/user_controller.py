@@ -218,13 +218,9 @@ class UserController:
     def try_resign(self, database, request):
         model = DeleteUserModel(database=database)
 
-
-        print(1)
         # 유저 검색 (없으면 죽여야됨)
         if not model.set_user_with_email(request=request.jwt_payload):
             raise request.credentials_exception
-        print(2)
-
         # 프로필 사진 바꾸기
         model.try_delete_user()
 

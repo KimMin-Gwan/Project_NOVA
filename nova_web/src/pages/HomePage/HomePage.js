@@ -111,7 +111,7 @@ export default function HomePage() {
 
           <Header />
           <SearchBox />
-          <h4 className="main-title">최애가 가장 빛날 수 있는 공간</h4>
+          <h4 className="main-title">내 최애가 가장 빛날 수 있는 공간</h4>
           <Banner />
 
           <FeedThumbnail

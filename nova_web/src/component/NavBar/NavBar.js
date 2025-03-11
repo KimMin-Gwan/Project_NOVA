@@ -17,7 +17,7 @@ const NavBar = ({ brightMode }) => {
   const navBarList = [
     {
       id: 0,
-      title: "최애 게시판",
+      title: "주제 게시판",
       src: short_form,
       alt: "bias_board",
       end_point: "/feed_list?type=bias",
@@ -26,7 +26,7 @@ const NavBar = ({ brightMode }) => {
     },
     {
       id: 1,
-      title: "피드 작성",
+      title: "게시판 작성",
       src: feed_write,
       alt: "write",
       end_point: "/feed_list?type=bias",

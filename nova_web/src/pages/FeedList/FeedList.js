@@ -241,7 +241,7 @@ export default function FeedList() {
         {type === "bias" && (
           <div className={style["bias-section"]}>
             <BiasBoxes setBiasId={setBiasId} fetchBiasCategoryData={fetchBiasCategoryData} />
-            <h4>스토리 게시판</h4>
+            <h4>게시글 미리보기</h4>
             <div
               ref={scrollRef}
               className={style["story_container"]}
@@ -263,7 +263,7 @@ export default function FeedList() {
             </div>
 
             <div className={style["category-info"]}>
-              <p>모든 게시글</p>
+              <p>게시글 목록</p>
               <p className={style["category_change"]} onClick={onClickCategory}>
                 카테고리 변경
               </p>
