@@ -85,12 +85,15 @@ class HomeBiasModel(BaseModel):
 
     # 바이어스 데이터를 모두 받아와서 만들기
     def set_bias_list(self):
-        bias_datas = self._database.get_datas_with_ids(target_id="bid", ids=self._user.bids)
+        if self._user.bids:
+            bias_datas = self._database.get_datas_with_ids(target_id="bid", ids=self._user.bids)
 
-        for bias_data in bias_datas:
-            bias = Bias()
-            bias.make_with_dict(bias_data)
-            self.__bias_list.append(bias)
+            for bias_data in bias_datas:
+                bias = Bias()
+                bias.make_with_dict(bias_data)
+                self.__bias_list.append(bias)
+        else:
+            self.set_random_bias()
         return
         
 
