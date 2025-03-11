@@ -8,7 +8,6 @@ export default function useFeedActions(setFeedData, type) {
     mainApi
       .get(`feed_explore/check_star?fid=${fid}`)
       .then((res) => {
-        console.log(res.data);
         if (type === "myPage") {
           setFeedData((prevFeeds) =>
             prevFeeds.map((feed) =>
@@ -35,7 +34,6 @@ export default function useFeedActions(setFeedData, type) {
         }
       })
       .catch((err) => {
-        console.log(err);
         if (err.response.status === 401) {
           navigate("/novalogin");
         } else {
