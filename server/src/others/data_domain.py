@@ -242,7 +242,7 @@ class User(SampleDomain):
         self.feed_search_history:list =copy.copy(feed_search_history)
 
     # database로 부터 받아온 데이터를 사용해 내용 구성
-    def make_with_dict(self, dict_data):
+    def make_with_dict(self, dict_data:dict):
         try:
             self.uid = dict_data['uid']
             self.uname = dict_data['uname']
@@ -254,7 +254,6 @@ class User(SampleDomain):
             self.credit= dict_data['credit']
             self.num_long_feed = dict_data['num_long_feed']
             self.num_short_feed = dict_data['num_short_feed']
-            self.num_comment = dict_data['num_comment']
             self.level = dict_data['level']
 
             self.alert = copy.copy(dict_data['alert'])
@@ -264,6 +263,8 @@ class User(SampleDomain):
             self.active_feed = copy.copy(dict_data["active_feed"])
             self.feed_history = copy.copy(dict_data["feed_history"])
             self.feed_search_history = copy.copy(dict_data["feed_search_history"])
+            
+            self.num_comment = dict_data.get("num_comment", len(self.my_comment))
             return self
         except Exception as e:
             print(e)
