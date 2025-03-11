@@ -95,7 +95,7 @@ class FeedManager:
         # 크롤링이 안되는 사이트면 하는 수 없고
         for feed_link in feed_links:
             feed_link:FeedLink = feed_link
-            pprint(feed_link.get_dict_form_data())
+            # pprint(feed_link.get_dict_form_data())
             lid = self.__make_new_iid()
             feed_link.lid = lid
             feed_link.fid = fid
