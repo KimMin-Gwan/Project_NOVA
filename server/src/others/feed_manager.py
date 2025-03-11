@@ -675,15 +675,15 @@ class FeedManager:
                 new_comment.is_reworked = True
 
             if new_comment.display == 0:
-                new_comment.body = "삭제된 댓글입니다."
+                new_comment.body = "  삭제된 댓글입니다."
                 new_comment.uname = ""
                 
             elif new_comment.display == 1 :
-                new_comment.body="차단된 댓글입니다."
+                new_comment.body="  차단된 댓글입니다."
                 new_comment.uname = ""
 
             elif new_comment.display == 2:
-                new_comment.body="비공개된 댓글입니다."
+                new_comment.body="  비공개된 댓글입니다."
                 new_comment.uname = ""
 
             comments.append(new_comment)
@@ -750,13 +750,13 @@ class FeedManager:
                 comment.make_with_dict(comment_data)
 
                 if comment.display == 0:
-                    comment.body = "삭제된 댓글입니다."
+                    comment.body = "  삭제된 댓글입니다."
                     comment.uname = ""
                 elif comment.display == 1 :
-                    comment.body = "차단된 댓글입니다."
+                    comment.body = "  차단된 댓글입니다."
                     comment.uname = ""
                 elif comment.display == 2 :
-                    comment.body = "비공개된 댓글입니다."
+                    comment.body = "  비공개된 댓글입니다."
                     comment.uname = ""
 
                 comments.append(comment)
