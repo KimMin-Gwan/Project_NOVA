@@ -228,7 +228,7 @@ function MyPage() {
         }
       });
     } else {
-      console.log("no");
+      return null;
     }
   };
 

@@ -60,7 +60,6 @@ export default function FollowPage() {
     },
   };
   function fetchTryFollowBias() {
-    //console.log(clickedBid);
     fetch("https://nova-platform.kr/nova_sub_system/try_select_my_bias", {
       method: "POST",
       credentials: "include",
@@ -70,7 +69,6 @@ export default function FollowPage() {
       body: JSON.stringify(send_data),
     })
       .then((res) => {
-        console.log(res);
         if (res.status === 401) {
           alert("로그인이 필요한 서비스입니다.");
           navigate("/novalogin");
@@ -86,9 +84,6 @@ export default function FollowPage() {
         }
         setIsModalOpen(false);
         window.location.reload();
-      })
-      .catch((err) => {
-        console.log("err", err);
       });
 
     // postApi
