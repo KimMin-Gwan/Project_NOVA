@@ -21,7 +21,7 @@ class DictMakingError(CustomError):
         self.error_type = "DictMakingError | " + error_type
 
 class DatabaseLogicError(CustomError):
-    def __init__(self, *args: object, error_type:str) -> None:
+    def __init__(self, *args: object, error_type:str="") -> None:
         super().__init__(*args)
         self.error_code = "505"
         self.error_type = "DatabaseLogicError| " + error_type
