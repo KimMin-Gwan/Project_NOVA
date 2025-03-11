@@ -262,7 +262,7 @@ class User(SampleDomain):
             self.active_feed = copy.copy(dict_data["active_feed"])
             self.feed_history = copy.copy(dict_data["feed_history"])
             self.feed_search_history = copy.copy(dict_data["feed_search_history"])
-            return
+            return self
         except Exception as e:
             raise DictMakingError(error_type=e)
     

@@ -501,8 +501,8 @@ class DeleteUserModel(BaseModel):
             raise CoreControllerLogicError("response making error | " + e)
 
     def try_delete_user(self):
-        deleted_user_data = self._database.get_user_by_id(target="uid", id=self._user.uid)
-        deleted_user = User().make_from_data(deleted_user_data)
+        deleted_user_data = self._database.get_data_with_id(target="uid", id=self._user.uid)
+        deleted_user = User().make_with_dict(deleted_user_data)
 
         cleaned_user = User(uid=deleted_user.uid, uname="탈퇴한유저")
 
