@@ -665,6 +665,7 @@ class FeedManager:
 
             # 기본적으로 owner는 False
             if new_comment.uid == user.uid:
+                print("댓글 주인")
                 new_comment.owner= True
             
             if user.level < new_comment.level:
