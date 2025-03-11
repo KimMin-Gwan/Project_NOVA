@@ -226,7 +226,7 @@ class UserController:
         print(2)
 
         # 프로필 사진 바꾸기
-        model.try_delete_user(data_payload=request.data_payload)
+        model.try_delete_user()
 
         return model
 
