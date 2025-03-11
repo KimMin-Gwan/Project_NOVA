@@ -9,26 +9,88 @@ import Header from "../../component/Header/Header";
 import Comments from "../../component/Comments/Comments";
 import Tabs from "../../component/Tabs/Tabs";
 import FeedSection from "../../component/FeedSection/FeedSection";
+import useIntersectionObserver from "../../hooks/useIntersectionObserver";
 
 export default function SearchResultPage() {
   let [searchParams] = useSearchParams();
   let keyword = searchParams.get("keyword");
   let navigate = useNavigate();
-  const target = useRef(null);
 
+  // 검색어 상태
   let [searchWord, setSearchWord] = useState(keyword);
   let [searchHistory, setSearchHistory] = useState([]);
 
-  let [feedData, setFeedData] = useState([]);
-  const [comments, setComments] = useState([]);
-
+  // 탭 및 데이터 타입 상태
   const [activeIndex, setActiveIndex] = useState(0);
   const [type, setType] = useState("post");
 
+  // 데이터 관련 상태
+  let [feedData, setFeedData] = useState([]);
+  const [comments, setComments] = useState([]);
+  let [isLoading, setIsLoading] = useState(true);
+  const [hasMore, setHasMore] = useState(true);
+
+  // 페이지네이션 키
   const [feedNextKey, setFeedNextKey] = useState(-1);
   const [commentNextKey, setCommentNextKey] = useState(-1);
 
-  let [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    let historyList = JSON.parse(localStorage.getItem("history")) || [];
+    setSearchHistory(historyList);
+  }, []);
+
+  useEffect(() => {
+    setIsLoading(true);
+  }, [activeIndex]);
+
+  useEffect(() => {
+    setFeedNextKey(-1);
+    setCommentNextKey(-1);
+    setFeedData([]);
+    setComments([]);
+
+    if (type === "post") {
+      fetchSearchKeyword();
+    } else if (type === "comment") {
+      fetchCommentKeyword();
+    }
+  }, [type]);
+
+  async function fetchSearchKeyword() {
+    await mainApi
+      .get(`feed_explore/search_feed_with_keyword?keyword=${keyword}&key=${feedNextKey}`)
+      .then((res) => {
+        setFeedData((prev) => {
+          return [...prev, ...res.data.body.send_data];
+        });
+        setHasMore(res.data.body.send_data.length > 0);
+        setFeedNextKey(res.data.body.key);
+        setIsLoading(false);
+      });
+  }
+
+  async function fetchCommentKeyword() {
+    await mainApi
+      .get(`feed_explore/search_comment_with_keyword?keyword=${keyword}&key=${commentNextKey}`)
+      .then((res) => {
+        setComments((prev) => [...prev, ...res.data.body.feeds]);
+        setHasMore(res.data.body.feeds.length > 0);
+        setIsLoading(false);
+        setCommentNextKey(res.data.body.key);
+      });
+  }
+
+  function loadMoreCallBack() {
+    if (!hasMore || isLoading) return;
+
+    if (type === "post") {
+      fetchSearchKeyword();
+    } else if (type === "comment") {
+      fetchCommentKeyword();
+    }
+  }
+
+  const targetRef = useIntersectionObserver(loadMoreCallBack, { threshold: 0.5 }, hasMore);
 
   function handleNavigate() {
     const updateHistory = [...searchHistory, searchWord];
@@ -39,25 +101,21 @@ export default function SearchResultPage() {
     setSearchWord("");
   }
 
-  const handleClick = (index) => {
-    setActiveIndex(index);
-  };
+  function handleSearchWord(e) {
+    setSearchWord(e.target.value);
+  }
 
-  useEffect(() => {
-    let historyList = JSON.parse(localStorage.getItem("history")) || [];
-    setSearchHistory(historyList);
-  }, []);
-
-  function onKeyDown(event) {
+  function handleKeyDown(event) {
     if (event.key === "Enter") {
       handleNavigate();
     }
   }
 
-  function onChangeSearchWord(e) {
-    setSearchWord(e.target.value);
-  }
-  function onClickSearch(history) {
+  const handleClick = (index) => {
+    setActiveIndex(index);
+  };
+
+  function handleSearch(history) {
     if (history) {
       navigate(`/search_result?keyword=${history}`);
     } else if (searchWord) {
@@ -67,75 +125,9 @@ export default function SearchResultPage() {
     }
   }
 
-  async function fetchSearchKeyword() {
-    await mainApi
-      .get(`feed_explore/search_feed_with_keyword?keyword=${keyword}&key=${feedNextKey}`)
-      .then((res) => {
-        setFeedData((prev) => {
-          return [...prev, ...res.data.body.send_data];
-        });
-        //console.log(res.data);
-        setIsLoading(false);
-        setFeedNextKey(res.data.body.key);
-      });
-  }
-
-  async function fetchCommentKeyword() {
-    await mainApi
-      .get(`feed_explore/search_comment_with_keyword?keyword=${keyword}&key=${commentNextKey}`)
-      .then((res) => {
-        setComments(res.data.body.feeds);
-        setIsLoading(false);
-        setCommentNextKey(res.data.body.key);
-      });
-  }
-
-  useEffect(() => {
-    if (type === "post") {
-      fetchSearchKeyword();
-    } else if (type === "comment") {
-      fetchCommentKeyword();
-    }
-  }, [type]);
-
   const onClickType = (data) => {
     setType(data === "게시글" ? "post" : "comment");
   };
-
-  useEffect(() => {
-    setFeedNextKey(-1);
-    setCommentNextKey(-1);
-    setFeedData([]);
-  }, [type]);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        if (isLoading) return;
-
-        if (type === "post") {
-          fetchSearchKeyword();
-        } else if (type === "comment") {
-          fetchCommentKeyword();
-        }
-      });
-    });
-
-    if (target.current) {
-      observer.observe(target.current);
-    }
-
-    return () => {
-      if (target.current) {
-        observer.unobserve(target.current);
-      }
-    };
-  }, [feedNextKey]);
-
-  if (isLoading) {
-    return <div>loading...</div>;
-  }
 
   return (
     <div className="container search_result_page">
@@ -152,16 +144,18 @@ export default function SearchResultPage() {
         <SearchBox
           type="search"
           searchWord={searchWord}
-          onClickSearch={onClickSearch}
-          onChangeSearchWord={onChangeSearchWord}
-          onKeyDown={onKeyDown}
+          onClickSearch={handleSearch}
+          onChangeSearchWord={handleSearchWord}
+          onKeyDown={handleKeyDown}
         />
       </div>
       <Tabs activeIndex={activeIndex} handleClick={handleClick} onClickType={onClickType} />
-      {type === "comment" && <Comments comments={comments} />}
-      {type === "post" && <FeedSection feedData={feedData} />}
+      {type === "comment" && <Comments comments={comments} isLoading={isLoading} />}
+      {type === "post" && (
+        <FeedSection feedData={feedData} setFeedData={setFeedData} isLoading={isLoading} />
+      )}
 
-      <div ref={target} style={{ height: "1px" }}></div>
+      <div ref={targetRef} style={{ height: "1px" }}></div>
       <NavBar />
     </div>
   );

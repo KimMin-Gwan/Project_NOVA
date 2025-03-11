@@ -2,7 +2,9 @@ import React from 'react';
 import './time_week_style.css'
 
 export default function TimeWeekComponent({date, day, num_schedule}) {
-    const adjustedHeight = 74 * num_schedule;
+    
+    const adjustedHeight = 72 * num_schedule + (num_schedule-1) * 2;
+    console.log(num_schedule);
 
     return (
         <div

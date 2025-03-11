@@ -1,0 +1,66 @@
+.ScheduleTopic {
+  background-color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  color: #797979;
+  font-size: 12px;
+
+  /* dl 기존 스타일 없애기 */
+  & dl {
+    margin: 0;
+  }
+
+  /* 주제 타이틀 스타일 */
+  & .BiasTitle {
+    display: inline-flex;
+    font-size: 14px;
+    align-items: center;
+    gap: 3px;
+
+    & dt:first-child {
+      font-size: 20px;
+      font-weight: 400;
+      color: black;
+    }
+  }
+  /* 방송 정보 스타일 */
+  & .BiasMain {
+    display: flex;
+    flex-flow: column;
+    gap: 5px;
+    margin-block: 8px 0;
+
+    & dd {
+      margin: 0;
+      & p {
+        margin: 0;
+      }
+    }
+
+    & .TagSt {
+      display: flex;
+      gap: 54px;
+      & p {
+        display: inline;
+      }
+    }
+
+    & .MainTime {
+      display: flex;
+      gap: 18px;
+      & p {
+        display: inline;
+      }
+    }
+  }
+}
+
+.bias_img {
+  background-color: gray;
+  height: 90px;
+  width: 90px;
+  /* aspect-ratio: 1 / 1; */
+  /* display: block; */
+}

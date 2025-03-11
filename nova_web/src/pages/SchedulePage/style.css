@@ -2,8 +2,6 @@
 padding-bottom : 20px;
 }
 
-
-
 .section-line{
     background-color: #F1F7FF;
     height: 5px;
@@ -86,59 +84,4 @@ padding-bottom : 20px;
     flex-direction: column;
     gap: 20px;
     width: 90%;
-}
-
-.time-chart-box {
-    display: flex;
-    width: 100%; /* 부모 컨테이너의 전체 너비 */
-}
-
-.day-week-list {
-    width: 67px; /* 고정된 너비 */
-}
-
-.chart-box{
-    flex-grow: 1; /* 나머지 공간 차지 */
-    background-color: #ffffff; /* 배경색으로 구분 */
-}
-
-.chart-etc-box{
-    height: 62px;
-    background-color: #d0e4ff;
-    border-top-left-radius: 12px;;
-}
-
-.time-select-box{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 31px;
-    background-color: #d0e4ff;
-}
-
-.time-select-box img {
-    width: 20px; /* 이미지 크기 설정 (필요에 따라 조정) */
-}
-
-.time-select-box span {
-    flex-grow: 1;
-    text-align: center;
-    font-size: 13px;
-    font-weight: 500;
-}
-
-.time-line-box{
-    height: 31px;
-    background-color: #d0e4ff;
-    justify-content: space-between; /* 가로로 6등분 */
-    display: flex;
-    align-items: center;
-}
-
-
-.time-line-box span {
-    flex: 1;
-    text-align: left; /* 텍스트 가운데 정렬 */
-    font-size: 14px;
-    font-weight: 400;
 }

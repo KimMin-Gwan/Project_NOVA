@@ -5,7 +5,7 @@ import naver from "../../img/naver.svg";
 import chzzz from "../../img/chzzz.svg";
 import "./index.css";
 
-export default function Board({ SetIsOpen, boardData, board, setBoard }) {
+export default function Board({ SetIsOpen, boardData }) {
   const linkItem = [
     {
       id: 0,
@@ -30,21 +30,9 @@ export default function Board({ SetIsOpen, boardData, board, setBoard }) {
   return (
     <div className="Board">
       <BoardTitle>게시판 목록</BoardTitle>
-      <BoardContent SetIsOpen={SetIsOpen} boardData={boardData} board={board} setBoard={setBoard} />
+      <BoardContent SetIsOpen={SetIsOpen} boardData={boardData} />
       <BoardTitle>외부 링크</BoardTitle>
       <BoardLink linkItem={linkItem} />
-
-      {/* <BoardTitle>노바 펀딩</BoardTitle>
-      <ul className="Board_content">
-        <li>
-          <img src={ticket} alt="" />
-          공식 판매 굿즈
-        </li>
-        <li>
-          <img src={ticket} alt="" />
-          펀딩 상품
-        </li>
-      </ul> */}
     </div>
   );
 }

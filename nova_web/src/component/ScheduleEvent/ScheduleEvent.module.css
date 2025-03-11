@@ -1,0 +1,42 @@
+.ScheduleEvent {
+  background-color: white;
+  padding: 20px;
+  & dl {
+    margin: 0;
+    color: #797979;
+    display: flex;
+    flex-flow: column;
+    gap: 6px;
+
+    & dt {
+      font-size: 12px;
+    }
+
+    /* 번들 타이틀 스타일 */
+    & dt:first-child {
+      color: black;
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    /* 스케줄 bundle 타이틀 스타일 */
+    & .ScheduleBudleTitle {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      & p {
+        margin: 0;
+        font-size: 12px;
+      }
+    }
+
+    /* bundle 날짜 스타일 */
+    & dt:last-child {
+      & p {
+        margin: 0;
+        display: inline;
+      }
+    }
+  }
+}

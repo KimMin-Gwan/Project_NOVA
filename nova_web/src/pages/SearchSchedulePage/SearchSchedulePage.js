@@ -1,7 +1,9 @@
 import EventCard from "../../component/EventCard/EventCard";
 import ScheduleTopic from "../../component/ScheduleTopic/ScheduleTopic";
+import ScheduleEvent from "../../component/ScheduleEvent/ScheduleEvent";
 import "./index.css";
 import search_icon from "./../../img/search_icon.png";
+import ScheduleBundle from "../../component/ScheduleEvent/ScheduleBundle";
 const mockData = [
   {
     id: 0,
@@ -83,6 +85,8 @@ export default function SearchSchedulePage() {
       {eventData.map((event, i) => {
         return <EventCard key={event.id} {...event} />;
       })}
+      <ScheduleEvent />
+      <ScheduleBundle />
     </div>
   );
 }

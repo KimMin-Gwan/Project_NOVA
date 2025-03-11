@@ -14,19 +14,6 @@ export default function useIntersectionObserver(callback, options = {}, hasMore)
       });
     }, options);
 
-    // observerRef.current = new IntersectionObserver((entries) => {
-    //   entries.forEach((entry) => {
-    //     if (!entry.isIntersecting) return;
-    //     if (isLoading) return;
-
-    //     // fetchAllFeed();
-    //     fetchPlusData();
-    //     if (type === "bias") {
-    //       fetchBiasCategoryData();
-    //     }
-    //   });
-    // });
-
     if (targetRef.current) {
       observer.observe(targetRef.current);
     }

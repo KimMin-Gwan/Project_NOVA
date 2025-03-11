@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
-import postApi from "../../services/apis/postApi.js";
 import {
   fetchAllFeedList,
   fetchDateFeedList,
@@ -32,6 +31,8 @@ import LoadingPage from "../LoadingPage/LoadingPage.js";
 import HEADER from "../../constant/header.js";
 import useIntersectionObserver from "../../hooks/useIntersectionObserver.js";
 import useFetchFeedList from "../../hooks/useFetchFeedList.js";
+import useBoardStore from "../../stores/BoardStore/useBoardStore.js";
+import MyPageLoading from "../LoadingPage/MypageLoading.js";
 
 export default function FeedList() {
   // url 파라미터 가져오기
@@ -40,12 +41,12 @@ export default function FeedList() {
   const brightModeFromUrl = params.get("brightMode");
 
   // 전역 상태 관리
-  let { biasList } = useBiasStore();
+  let { biasList, biasId, setBiasId } = useBiasStore();
   // const { feedDatas, isLoadings, nextKey } = useFetchFeedList(type);
 
   // 드래그 기능
   const { scrollRef, hasDragged, dragHandlers } = useDragScroll();
-
+  const { board } = useBoardStore();
   let [isFilterClicked, setIsFilterClicked] = useState(false);
   let [isOpendCategory, setIsOpendCategory] = useState(false);
 
@@ -54,8 +55,7 @@ export default function FeedList() {
   let [nextData, setNextData] = useState(-1);
 
   const [isSameTag, setIsSameTag] = useState(true);
-  let [biasId, setBiasId] = useState("");
-  let [board, setBoard] = useState("자유게시판");
+  // let [biasId, setBiasId] = useState();
 
   const initialMode = brightModeFromUrl || localStorage.getItem("brightMode") || "bright"; // URL에서 가져오고, 없으면 로컬 스토리지에서 가져옴
   const [mode, setMode] = useState(initialMode);
@@ -96,9 +96,9 @@ export default function FeedList() {
   // 주제별 피드 리스트
   async function fetchBiasCategoryData(bid) {
     setIsLoading(true);
+    const currentBid = bid || bids[0] || "";
 
-    const data = await fetchBiasFeedList(bid, bids, board, (nextData = -1));
-    console.log("first bias data", data);
+    const data = await fetchBiasFeedList(currentBid, bids, board, (nextData = -1));
     setFeedData(data.body.send_data);
     setNextData(data.body.key);
     setHasMore(data.body.send_data.length > 0);
@@ -108,7 +108,6 @@ export default function FeedList() {
   async function fetchBiasPlusCategoryData() {
     setIsLoading(true);
     const data = await fetchBiasFeedList(biasId, bids, board, nextData);
-    console.log("first111 bias data", data);
     setFeedData((prevData) => [...prevData, ...data.body.send_data]);
     setNextData(data.body.key);
     setHasMore(data.body.send_data.length > 0);
@@ -117,9 +116,9 @@ export default function FeedList() {
 
   useEffect(() => {
     if (type === "bias") {
-      fetchBiasCategoryData();
+      fetchBiasCategoryData(biasId);
     }
-  }, []);
+  }, [biasId, board]);
 
   useEffect(() => {
     setFeedData([]);
@@ -145,9 +144,9 @@ export default function FeedList() {
 
     if (type === "all" || isClickedFetch) {
       const data = await fetchAllFeedList(updatedNextData, filterCategory, filterFclass);
-      console.log("ffff", data);
       setFeedData(data.body.send_data);
       setNextData(data.body.key);
+      setHasMore(data.body.send_data.length > 0);
       setIsLoading(false);
     }
   }
@@ -235,10 +234,6 @@ export default function FeedList() {
     document.body.style.overflow = "auto";
   }
 
-  // if (isLoading) {
-  //   return <LoadingPage />;
-  // }
-
   return (
     <div className={`all-box ${style["all_container"]}`}>
       <div className={`${style["container"]} ${style[getModeClass(mode)]}`}>
@@ -274,13 +269,12 @@ export default function FeedList() {
               </p>
             </div>
 
-            {isOpendCategory && (
+            {biasId && (
               <CategoryModal
                 SetIsOpen={setIsOpendCategory}
                 onClickCategory={onClickCategory}
                 biasId={biasId}
-                board={board}
-                setBoard={setBoard}
+                isOpend={isOpendCategory}
               />
             )}
           </div>
@@ -314,7 +308,9 @@ export default function FeedList() {
         )}
 
         <div className={feedData.length > 0 ? style["scroll-area"] : style["none_feed_scroll"]}>
-          {feedData.length > 0 ? (
+          {isLoading ? (
+            <MyPageLoading />
+          ) : feedData.length > 0 ? (
             feedData.map((feed, i) => {
               return (
                 <Feed
@@ -329,7 +325,6 @@ export default function FeedList() {
             <NoneFeed />
           )}
           <div ref={targetRef} style={{ height: "1px" }}></div>
-          {isLoading && <p>loading...</p>}
           {isFilterClicked && (
             <FilterModal
               onClickFilterButton={onClickFilterButton}

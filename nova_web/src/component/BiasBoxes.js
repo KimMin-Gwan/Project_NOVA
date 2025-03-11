@@ -8,11 +8,11 @@ import useLoginStore from "../stores/LoginStore/useLoginStore";
 import useDragScroll from "../hooks/useDragScroll";
 import add_bias_icon from "./../img/add_bias.png";
 
-export default function BiasBoxes({ setBiasId, fetchBiasCategoryData }) {
+export default function BiasBoxes({ fetchBiasCategoryData }) {
   const navigate = useNavigate();
   const biasUrl = BIAS_URL;
   const { scrollRef, hasDragged, dragHandlers } = useDragScroll();
-  let { biasList, loading, fetchBiasList } = useBiasStore();
+  let { biasList, biasId, setBiasId, loading, fetchBiasList } = useBiasStore();
 
   const { isLogin, isLogout } = useLoginStore();
   useEffect(() => {
