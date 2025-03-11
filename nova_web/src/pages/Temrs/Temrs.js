@@ -26,26 +26,25 @@ function Terms() {
         <div
           className={style.noticelist}
           onClick={() => {
-            navigate("/notice");
+            navigate("/service_terms_and_conditions.pdf");
           }}
         >
-          <span className={style.noticeText}>약관 1</span>
+          <span className={style.noticeText}>개인정보처리방침</span>
         </div>
         <div
           className={style.noticelist}
           onClick={() => {
-            navigate("/Termslist");
+            navigate("/personal_information_processing_policy.pdf");
           }}
         >
-          <span className={style.noticeText}>약관 2</span>
+          <span className={style.noticeText}>개인정보처리동의서</span>
         </div>
         <div
           className={style.noticelist}
           onClick={() => {
-            navigate("/Termslist");
+            navigate("/personal_information_processing_agreement.pdf");
           }}
         >
-          <span className={style.noticeText}>약관 3</span>
         </div>
       </div>
     </div>

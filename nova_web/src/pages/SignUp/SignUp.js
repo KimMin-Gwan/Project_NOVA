@@ -291,12 +291,12 @@ export default function SignUp() {
               <label>
                 <input type="checkbox" name="agree1" checked={agree1} onChange={handleIndividualChange} required />
                 (필수) 이용약관 동의
-                <p>상세보기</p>
+                <p onClick={() => window.open('https://nova-platform.kr/service_terms_and_conditions.pdf', '_blank')}>상세보기</p>
               </label>
               <label>
                 <input type="checkbox" name="agree2" checked={agree2} onChange={handleIndividualChange} required />
                 (필수) 개인정보처리 동의
-                <p>상세보기</p>
+                <p onClick={() => window.open('https://nova-platform.kr/personal_information_processing_agreement.pdf', '_blank')}>상세보기</p>
               </label>
             </div>
           </div>
