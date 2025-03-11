@@ -550,7 +550,7 @@ class FeedManager:
 
         # 유저 데이터베이스에서 갯수를 줄임. 단, 실제 댓글은 데이터베이스에 남는다.
         user.my_comment.remove(cid)
-        user.num_my_comment -= 1
+        user.num_comment -= 1
         self._database.modify_data_with_id("cid", target_data=comment.get_dict_form_data())
         # self._database.modify_data_with_id("fid", target_data=feed.get_dict_form_data())
         self._database.modify_data_with_id("uid", target_data=user.get_dict_form_data())
