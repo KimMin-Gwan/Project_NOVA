@@ -68,9 +68,16 @@ export default function FollowPage() {
       },
       body: JSON.stringify(send_data),
     })
-      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        if (res.status === 401) {
+          alert("로그인이 필요한 서비스입니다.");
+          navigate("/novalogin");
+          return Promise.reject();
+        }
+        return res.json();
+      })
       .then((data) => {
-        //console.log(data);
         if (biasList.some((item) => item.bid === clickedBid)) {
           alert("팔로우 취소 완료");
         } else {

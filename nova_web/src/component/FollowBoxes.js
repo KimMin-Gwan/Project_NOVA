@@ -99,9 +99,15 @@ export default function FollowBoxes({ setBiasId }) {
       },
       body: JSON.stringify(send_data),
     })
-      .then((res) => res.json())
+      .then((res) => {
+        if (res.status === 401) {
+          alert("로그인이 필요한 서비스입니다.");
+          navigate("/novalogin");
+          return Promise.reject();
+        }
+        return res.json();
+      })
       .then((data) => {
-        //console.log(data);
         if (biasList.some((item) => item.bid === clickedBid)) {
           alert("팔로우 취소 완료");
           window.location.reload();
@@ -109,10 +115,8 @@ export default function FollowBoxes({ setBiasId }) {
           alert("팔로우 완료!");
         }
         setIsModalOpen(false);
-      })
-      .catch((err) => {
-        //console.log("err", err);
       });
+
     // postApi
     //   .post("nova_sub_system/try_select_my_bias", {
     //     send_data,
