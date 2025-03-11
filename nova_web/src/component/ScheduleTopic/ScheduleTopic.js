@@ -8,9 +8,16 @@ const bias = {
   main_time: ["저녁", "새벽"],
   is_ad: false,
 };
-export default function ScheduleTopic({ name, job, tag, platform, time }) {
+export default function ScheduleTopic({
+  name,
+  job,
+  tag,
+  platform,
+  time,
+  toggleClick,
+}) {
   return (
-    <div className={style["ScheduleTopic"]}>
+    <div className={style["ScheduleTopic"]} onClick={toggleClick}>
       <dl>
         <section className={style["BiasTitle"]}>
           <dt>{bias.bname}</dt>
