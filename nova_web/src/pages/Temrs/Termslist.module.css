@@ -48,7 +48,7 @@ notice-area {
 .noticelist {
   height: 90px;
   margin-bottom: 5px;
-  background-color: #cccfff;
+  background-color: #f1f7ff;
   display: flex; /* flexbox 사용 */
   align-items: center; /* 수직 중앙 정렬 */
   padding-left: 30px; /* 왼쪽 여백 추가 */
