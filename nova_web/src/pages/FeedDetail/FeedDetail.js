@@ -65,7 +65,6 @@ export default function FeedDetail({}) {
   async function fetchFeedComment() {
     await mainApi.get(`feed_explore/feed_detail/comment_data?fid=${fid}`).then((res) => {
       setComments(res.data.body.comments);
-      console.log(res.data);
       setIsLoading(false);
     });
   }

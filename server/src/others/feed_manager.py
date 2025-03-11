@@ -504,6 +504,7 @@ class FeedManager:
         
         feed.comment.append(cid)
         user.my_comment.append(cid)
+        user.num_comment += 1
 
         self._database.add_new_data("cid", new_data=new_comment.get_dict_form_data())
         self._database.modify_data_with_id("fid", target_data=feed.get_dict_form_data())

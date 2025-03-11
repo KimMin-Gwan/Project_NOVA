@@ -40,7 +40,6 @@ function MyPage() {
   };
 
   async function fetchChangeNickname() {
-    console.log(nickname);
     await axios
       .post(
         `https://nova-platform.kr/user_home/try_change_nickname`,
@@ -58,7 +57,6 @@ function MyPage() {
         }
       )
       .then((res) => {
-        console.log(res.data);
         if (res.data.body.result) {
           // setNewNickname(res.data.body.uname);
           alert(res.data.body.detail);
@@ -89,7 +87,6 @@ function MyPage() {
         }
       )
       .then((res) => {
-        console.log(res.data.body);
         if (!res.data.body.result) {
           alert(res.data.body.detail);
         } else {
