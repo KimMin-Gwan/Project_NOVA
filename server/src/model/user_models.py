@@ -510,5 +510,5 @@ class DeleteUserModel(BaseModel):
         self._database.modify_data_with_id(target_id="uid", target_data=cleaned_user.get_dict_form_data())
 
         # 삭제된 유저는 다른 DB에 저장 됩니다. UID, 닉네임, 개인 정보 등을 저장합니다.
-        self._database.add_new_data(target_id="duid", new_data=self.__user.get_data_form_data())
+        self._database.add_new_data(target_id="duid", new_data=self._user.get_dict_form_data())
         return
