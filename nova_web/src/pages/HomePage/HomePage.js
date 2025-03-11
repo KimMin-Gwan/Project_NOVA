@@ -104,7 +104,6 @@ export default function HomePage() {
     return <LoadingPage />;
   }
   return (
-    <div className="all-box">
       <div className={`container ${getModeClass(brightMode)}`}>
         <div className={`top-area ${getModeClass(brightMode)}`}>
           <DisplayAds />
@@ -166,7 +165,6 @@ export default function HomePage() {
         </section>
         <NavBar brightMode={brightMode}></NavBar>
       </div>
-    </div>
   );
 }
 
