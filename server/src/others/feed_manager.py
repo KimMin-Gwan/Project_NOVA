@@ -540,9 +540,20 @@ class FeedManager:
 
         # 디스플레이 옵션만 바꾸면 됨
         comment.display = 0
-        self._database.modify_data_with_id("cid", target_data=comment.get_dict_form_data())
 
-        # 유저
+        # Feed 안에서는 댓글리스트에서 삭제합니다.
+        # 근데 댓글 리스트에서
+        # feed_data = self._database.get_data_with_id(target="fid", id=fid)
+        # feed = Feed()
+        # feed.make_with_dict(feed_data)
+        # feed.comment.remove(cid)
+
+        # 유저 데이터베이스에서 갯수를 줄임. 단, 실제 댓글은 데이터베이스에 남는다.
+        user.num_my_comment -= 1
+        self._database.modify_data_with_id("cid", target_data=comment.get_dict_form_data())
+        # self._database.modify_data_with_id("fid", target_data=feed.get_dict_form_data())
+        self._database.modify_data_with_id("uid", target_data=user.get_dict_form_data())
+
 
         return
 
@@ -649,8 +660,7 @@ class FeedManager:
         for comment_data in comment_datas:
             new_comment = Comment()
             new_comment.make_with_dict(comment_data)
-            if new_comment.display == 0:
-                continue
+
             # 기본적으로 owner는 False
             if new_comment.uid == user.uid:
                 new_comment.owner= True
@@ -660,7 +670,28 @@ class FeedManager:
                 new_comment.body = new_comment.reworked_body
                 # 리워크 됨을 알려줄 것
                 new_comment.is_reworked = True
-                
+
+            if new_comment.display == 0:
+                new_comment = Comment(cid=new_comment.cid,
+                                      fid=new_comment.fid,
+                                      display=new_comment.display,
+                                      target_cid=new_comment.target_cid,
+                                      body="삭제된 댓글입니다."
+                                      )
+            elif new_comment.display == 1 :
+                new_comment = Comment(cid=new_comment.cid,
+                                      fid=new_comment.fid,
+                                      display=new_comment.display,
+                                      target_cid=new_comment.target_cid,
+                                      body="차단된 댓글입니다.")
+
+            elif new_comment.display == 2:
+                new_comment = Comment(cid=new_comment.cid,
+                                      fid=new_comment.fid,
+                                      display=new_comment.display,
+                                      target_cid=new_comment.target_cid,
+                                      body="비공개된 댓글입니다.")
+
             comments.append(new_comment)
 
         self.__get_comment_liked_info(user=user, comments=comments)

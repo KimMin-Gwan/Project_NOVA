@@ -215,7 +215,7 @@ class Schedule(SampleDomain):
 class User(SampleDomain):
     def __init__(self, uid = "", uname = "지지자", age=0, 
                  email = "", gender = "d" ,
-                 credit = 0, bids=[], num_long_feed=0, num_short_feed=0,
+                 credit = 0, bids=[], num_long_feed=0, num_short_feed=0, num_comment=0,
                  password = "", alert= [], like=[], my_comment=[],
                  my_feed = [], active_feed = [], feed_history = [],
                  feed_search_history=[], level = 3):
@@ -230,6 +230,7 @@ class User(SampleDomain):
         self.credit = credit
         self.num_long_feed:int = num_long_feed
         self.num_short_feed:int = num_short_feed
+        self.num_comment:int = num_comment
         self.level:int = level
 
         self.alert:list = copy.copy(alert)
@@ -253,6 +254,7 @@ class User(SampleDomain):
             self.credit= dict_data['credit']
             self.num_long_feed = dict_data['num_long_feed']
             self.num_short_feed = dict_data['num_short_feed']
+            self.num_comment = dict_data['num_comment']
             self.level = dict_data['level']
 
             self.alert = copy.copy(dict_data['alert'])
@@ -279,6 +281,7 @@ class User(SampleDomain):
             "bids" : copy.copy(self.bids),
             "num_long_feed" : self.num_long_feed,
             "num_short_feed" : self.num_short_feed,
+            "num_comment" : self.num_comment,
             "level" : self.level,
 
             "alert" : copy.copy(self.alert),
