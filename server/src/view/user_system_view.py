@@ -141,10 +141,15 @@ class User_Service_View(Master_View):
             response = model.get_response_form_data(self._head_parser)
             return response
 
+
+        # 회원탈퇴
         @self.__app.get('/user_home/try_resign')
         def try_resign(request:Request):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
+            data_payload = DummyRequest()
+            
             user_controller=UserController()
+            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
             model = user_controller.try_resign(database=self.__database, request=request_manager)
 
             response = request_manager.try_clear_cookies(request=request)

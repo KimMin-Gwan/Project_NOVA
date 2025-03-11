@@ -504,7 +504,7 @@ class DeleteUserModel(BaseModel):
         deleted_user_data = self._database.get_user_by_id(target="uid", id=uid)
         deleted_user = User().make_from_data(deleted_user_data)
 
-        cleaned_user = User(uid=deleted_user.uid, uname="탈퇴한사람")
+        cleaned_user = User(uid=deleted_user.uid, uname="탈퇴한유저")
 
         # 유저 데이터를 덮어씌워서 UID만 남김
         self._database.modify_data_with_id(target_id="uid", target_data=cleaned_user.get_dict_form_data())
