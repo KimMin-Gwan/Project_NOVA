@@ -549,6 +549,7 @@ class FeedManager:
         # feed.comment.remove(cid)
 
         # 유저 데이터베이스에서 갯수를 줄임. 단, 실제 댓글은 데이터베이스에 남는다.
+        user.my_comment.remove(cid)
         user.num_my_comment -= 1
         self._database.modify_data_with_id("cid", target_data=comment.get_dict_form_data())
         # self._database.modify_data_with_id("fid", target_data=feed.get_dict_form_data())
@@ -596,6 +597,7 @@ class FeedManager:
         return
 
         # 댓글 도메인 리스트에서 찾아야 할 댓글을 찾는 함수
+
     def __find_comment_in_comment_list(self, comments, cid):
         for comment in comments:
             if comment.cid == cid:
@@ -745,8 +747,17 @@ class FeedManager:
             if keyword in comment_data["body"]:
                 comment = Comment()
                 comment.make_with_dict(comment_data)
+
                 if comment.display == 0:
-                    continue
+                    comment.body = "삭제된 댓글입니다."
+                    comment.uname = ""
+                elif comment.display == 1 :
+                    comment.body = "차단된 댓글입니다."
+                    comment.uname = ""
+                elif comment.display == 2 :
+                    comment.body = "비공개된 댓글입니다."
+                    comment.uname = ""
+
                 comments.append(comment)
 
         classified_comments = self.__classify_reply_comment(comments=comments)
