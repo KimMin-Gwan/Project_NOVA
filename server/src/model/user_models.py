@@ -208,12 +208,25 @@ class UserPageModel(BaseModel):
 
 
     def get_user_data(self):
+        def count_my_comments():
+            count = 0
+            my_comments = self._database.get_datas_with_ids(target_id="cid", ids=self._user.my_comment)
+
+            for my_comment in my_comments:
+                if my_comment['display'] != 0:
+                    count += 1
+
+            return count
+
         self._uname = self._user.uname
         self._uid = self._user.uid
         self._num_long_feed = self._user.num_long_feed
         self._num_short_feed = self._user.num_short_feed
         self._num_like = len(self._user.like)
-        self._num_comment = len(self._user.my_comment)
+        self._num_comment = count_my_comments()
+        # self._num_comment = len(self._user.my_comment)
+
+
 
         return
 
