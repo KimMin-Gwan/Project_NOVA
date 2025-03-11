@@ -274,7 +274,11 @@ class FeedManager:
         elif feed.fclass == "long":
             user.num_long_feed-=1
 
+        #
         self._database.modify_data_with_id(target_id="fid", target_data=feed.get_dict_form_data())
+
+        # 유저 데이터 수정
+        self._database.modify_data_with_id(target_id="uid", target_data=user.get_dict_form_data())
 
         return "COMPLETE", True
 
@@ -537,6 +541,8 @@ class FeedManager:
         # 디스플레이 옵션만 바꾸면 됨
         comment.display = 0
         self._database.modify_data_with_id("cid", target_data=comment.get_dict_form_data())
+
+        # 유저
 
         return
 
