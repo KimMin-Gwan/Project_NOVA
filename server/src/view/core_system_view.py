@@ -469,7 +469,8 @@ class Core_Service_View(Master_View):
             model = feed_controller.get_all_feed_filtered(database=self.__database,
                                                 request=request_manager,
                                                 feed_search_engine=self.__feed_search_engine,
-                                                num_feed=3)
+                                                num_feed= 10)
+
 
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
@@ -488,7 +489,7 @@ class Core_Service_View(Master_View):
             model = feed_controller.get_today_best(database=self.__database,
                                                     request=request_manager,
                                                     feed_search_engine=self.__feed_search_engine,
-                                                    num_feed=4)
+                                                    num_feed=10)
 
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
@@ -507,7 +508,7 @@ class Core_Service_View(Master_View):
             model = feed_controller.get_weekly_best(database=self.__database,
                                                     request=request_manager,
                                                     feed_search_engine=self.__feed_search_engine,
-                                                    num_feed=4)
+                                                    num_feed=10)
 
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
