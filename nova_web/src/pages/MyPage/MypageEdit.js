@@ -5,6 +5,7 @@ import axios from "axios";
 import user_icon from "./../../img/user_profile.svg";
 import useLoginStore from "../../stores/LoginStore/useLoginStore";
 import useBiasStore from "../../stores/BiasStore/useBiasStore";
+import mainApi from "../../services/apis/mainApi";
 
 function MyPage() {
   const { tryLogin, tryLogout } = useLoginStore();
@@ -127,9 +128,7 @@ function MyPage() {
     var Regex = regexArray[index];
 
     if (!Regex.test(e.target.value)) {
-      setWarningMessage(
-        "영소문자, 숫자, 특수문자를 포함해 10자리 이상이어야 합니다."
-      );
+      setWarningMessage("영소문자, 숫자, 특수문자를 포함해 10자리 이상이어야 합니다.");
       index === 0 ? setIsVali(true) : setIsValiPw(true);
     } else {
       index === 0 ? setIsVali(false) : setIsValiPw(false);
@@ -165,7 +164,6 @@ function MyPage() {
         return response.json();
       })
       .then((data) => {
-        //console.log("lgogio", data);
         navigate("/");
         fetchBiasList();
       })
@@ -220,6 +218,18 @@ function MyPage() {
       .catch((error) => {
         alert("실패");
       });
+  };
+
+  const handleWithdrawal = () => {
+    if (window.confirm("화원 탈퇴를 진행하시겠습니까?")) {
+      mainApi.get("user_home/try_resign").then((res) => {
+        if (res.data.result) {
+          navigate("/");
+        }
+      });
+    } else {
+      console.log("no");
+    }
   };
 
   const handlePreview = (e) => {
@@ -343,9 +353,7 @@ function MyPage() {
           <button
             className={style["change-button"]}
             onClick={() => {
-              isValiPw
-                ? alert("비밀번호를 올바르게 입력하세요")
-                : fetchPasswordChange();
+              isValiPw ? alert("비밀번호를 올바르게 입력하세요") : fetchPasswordChange();
             }}
           >
             변경
@@ -390,6 +398,9 @@ function MyPage() {
       </section>
       <button className={`${style["logout_box"]}`} onClick={handleLogout}>
         로그아웃
+      </button>
+      <button className={style["withdrawal_button"]} onClick={handleWithdrawal}>
+        회원 탈퇴
       </button>
     </div>
   );

@@ -65,6 +65,7 @@ export default function FeedDetail({}) {
   async function fetchFeedComment() {
     await mainApi.get(`feed_explore/feed_detail/comment_data?fid=${fid}`).then((res) => {
       setComments(res.data.body.comments);
+      console.log(res.data);
       setIsLoading(false);
     });
   }
@@ -77,7 +78,6 @@ export default function FeedDetail({}) {
     await mainApi
       .get(`feed_explore/check_star?fid=${fid}`)
       .then((res) => {
-        //console.log("check", res.data);
         setFeedData((prevData) => {
           return prevData.fid === fid
             ? {
@@ -147,6 +147,26 @@ export default function FeedDetail({}) {
     });
   }
 
+  function fetchRemoveComment(cid) {
+    mainApi.get(`feed_explore/remove_comment?fid=${fid}&cid=${cid}`).then(() => {
+      setComments((prev) => {
+        return prev
+          .map((comment) => {
+            if (comment.cid === cid) {
+              return null;
+            }
+
+            if (comment.reply && comment.reply.length > 0) {
+              comment.reply = comment.reply.filter((reply) => reply.cid !== cid);
+            }
+
+            return comment;
+          })
+          .filter((comment) => comment !== null);
+      });
+    });
+  }
+
   function onClickOption(e) {
     e.preventDefault();
     e.stopPropagation();
@@ -197,7 +217,14 @@ export default function FeedDetail({}) {
         {/* 댓글 각각 */}
         {comments.length !== 0 &&
           comments.map((comment, i) => {
-            return <Comment key={comment.cid} comment={comment} onClickComment={onClickComment} />;
+            return (
+              <Comment
+                key={comment.cid}
+                comment={comment}
+                onClickComment={onClickComment}
+                handleRemove={fetchRemoveComment}
+              />
+            );
           })}
         <div className={style["input-container"]}>
           <div className={style["input-wrapper"]}>
@@ -222,7 +249,7 @@ export default function FeedDetail({}) {
 }
 
 // 댓글
-function Comment({ comment, onClickComment }) {
+function Comment({ comment, onClickComment, handleRemove }) {
   async function fetchOriginalComment(cid) {
     await mainApi.get(`feed_explore/original_comment_data?cid=${cid}`).then((res) => {
       //console.log("ccc", res.data);
@@ -258,7 +285,19 @@ function Comment({ comment, onClickComment }) {
                 원문 보기
               </button>
             )}
-            <div className={style["comment-report"]}>신고</div>
+            {comment.owner ? (
+              <div
+                className={style["comment-delete-report"]}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleRemove(comment.cid);
+                }}
+              >
+                삭제
+              </div>
+            ) : (
+              <div className={style["comment-delete-report"]}>신고</div>
+            )}
           </div>
         </div>
 
@@ -276,6 +315,7 @@ function Comment({ comment, onClickComment }) {
               length={comment.reply.length}
               reply={reply}
               fetchOriginalComment={fetchOriginalComment}
+              handleRemove={handleRemove}
             />
           );
         })}
@@ -284,7 +324,7 @@ function Comment({ comment, onClickComment }) {
 }
 
 // 대댓글
-function ReplyComment({ index, length, reply, fetchOriginalComment }) {
+function ReplyComment({ index, length, reply, fetchOriginalComment, handleRemove }) {
   const [firstWord, ...restWords] = reply.body.split(" ");
 
   let src;
@@ -320,7 +360,19 @@ function ReplyComment({ index, length, reply, fetchOriginalComment }) {
                 원문 보기
               </button>
             )}
-            <div className={style["comment-report"]}>신고</div>
+            {reply.owner ? (
+              <div
+                className={style["comment-delete-report"]}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleRemove(reply.cid);
+                }}
+              >
+                삭제
+              </div>
+            ) : (
+              <div className={style["comment-delete-report"]}>신고</div>
+            )}
           </div>
         </div>
 
@@ -341,7 +393,7 @@ function OptionModal({ onClickOption, onClickDelete }) {
     <div className={style["OptionModal"]} onClick={onClickOption}>
       <div className={style["modal_container"]}>
         <div className={style["modal_title"]}>설정</div>
-        <div className={style["modal_content"]}>수정</div>
+        {/* <div className={style["modal_content"]}>수정</div> */}
         <div
           className={`${style["modal_content"]} ${style["modal_content_accent"]}`}
           onClick={onClickDelete}

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
-import BIAS_URL from "../constant/biasUrl";
+import { BIAS_URL } from "../constant/biasUrl";
 import useBiasStore from "../stores/BiasStore/useBiasStore";
 import useLoginStore from "../stores/LoginStore/useLoginStore";
 import useDragScroll from "../hooks/useDragScroll";
@@ -41,13 +41,13 @@ export default function BiasBoxes({ fetchBiasCategoryData }) {
       .then((response) => {
         if (response.status === 200) {
           setIsUserState(true);
+          return response.json();
         } else {
           setIsUserState(false);
+          return Promise.reject();
         }
-        return response.json();
       })
       .catch((error) => {
-        console.error("Error:", error);
         setIsUserState(false);
       });
   }

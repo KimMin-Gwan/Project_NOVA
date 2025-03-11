@@ -13,6 +13,7 @@ import search_icon from "./../../img/search_icon.png";
 import Stackframe from "./../../img/Stackframe.png";
 import style from "./FollowPage.module.css";
 import HEADER from "../../constant/header.js";
+import { REQUEST_URL } from "../../constant/biasUrl.js";
 
 const bias_url = "https://kr.object.ncloudstorage.com/nova-images/";
 export default function FollowPage() {
@@ -109,9 +110,11 @@ export default function FollowPage() {
       setResultBias(res.data.body.biases);
     });
   }
-  // useEffect(() => {
-  //   fetchSearchBias();
-  // }, [searchBias]);
+
+  function handleRequestURL(url) {
+    window.open(url, "_blank", "noopener, noreferrer");
+  }
+
   function onKeyDown(e) {
     if (e.key === "Enter") {
       fetchSearchBias();
@@ -185,7 +188,12 @@ export default function FollowPage() {
             <p className={style["no_result"]}>검색 결과가 없어요</p>
           )}
 
-          <button className={style["fav-apply"]}>
+          <button
+            className={style["fav-apply"]}
+            onClick={() => {
+              handleRequestURL(REQUEST_URL);
+            }}
+          >
             <img src={Stackframe} alt="" />
             <span>
               <p>찾는 주제가 없다면 간편하게 신청해요!</p>

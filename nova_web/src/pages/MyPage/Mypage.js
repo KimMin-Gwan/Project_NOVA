@@ -50,7 +50,6 @@ function MyPage() {
 
   async function fetchMyPage() {
     await mainApi.get("user_home/get_my_page_data").then((res) => {
-      // console.log("my", res.data);
       setMyData(res.data.body);
       setIsLoading(false);
     });
@@ -66,6 +65,7 @@ function MyPage() {
   async function fetchMyFeed(category) {
     await mainApi.get(`user_home/get_my_feed?type=${category}&key=${nextKey}`).then((res) => {
       setCategoryLoading(false);
+      console.log(res.data);
       setMyFeed((prevData) => [...prevData, ...res.data.body.feed]);
       setNextKey(res.data.body.key);
       setIsLoading(false);
@@ -279,7 +279,7 @@ function MyPage() {
 
           {!isClickedComment &&
             myFeed.map((feed, i) => {
-              return <Feed key={i} feed={feed} />;
+              return <Feed key={i} feed={feed} setFeedData={setMyFeed} type={"myPage"} />;
             })}
           <div ref={target} style={{ height: "1px" }}></div>
         </div>

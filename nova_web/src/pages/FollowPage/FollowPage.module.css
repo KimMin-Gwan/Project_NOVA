@@ -57,12 +57,14 @@
     background-color: #fff;
     width: 100%;
     padding-block: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 
     .search-box {
       border-bottom: 1px solid black;
-      width: 90%;
+      margin: 0px 25px;
       display: flex;
-      justify-self: center;
       padding-block: 6px;
 
       input {
@@ -89,6 +91,7 @@
     }
 
     .no_result {
+      margin: 0px 25px;
       color: #c6c6c6;
       padding-block: 60px;
       align-self: self;
@@ -99,8 +102,7 @@
       cursor: pointer;
       display: flex;
       align-items: center;
-      justify-self: center;
-      justify-content: space-between;
+      margin: 0px 25px;
       margin-top: 32px;
       background-color: white;
       border-radius: 5px;

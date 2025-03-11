@@ -30,20 +30,19 @@ export function useBrightMode() {
 }
 const header = HEADER;
 
-export default function Feed({ feed, setFeedData }) {
-  const { handleCheckStar } = useFeedActions(setFeedData);
+export default function Feed({ feed, setFeedData, type }) {
+  const { handleCheckStar } = useFeedActions(setFeedData, type);
 
   const [report, setReport] = useState();
 
   async function fetchReportResult(fid) {
-    await postApi
-      .post("nova_sub_system/try_report", {
-        header: header,
-        body: {
-          fid: fid,
-        },
-      })
-      //.then((res) => //console.log("rerere", res.data));
+    await postApi.post("nova_sub_system/try_report", {
+      header: header,
+      body: {
+        fid: fid,
+      },
+    });
+    //.then((res) => //console.log("rerere", res.data));
   }
 
   return (
@@ -181,6 +180,7 @@ function HashTags({ hashtags }) {
 
 function ActionButtons({ feed, handleCheckStar, fetchReportResult }) {
   const navigate = useNavigate();
+  console.log("sdad", feed);
 
   return (
     <div className={style["button-container"]}>

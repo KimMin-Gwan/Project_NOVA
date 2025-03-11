@@ -275,7 +275,8 @@
     text-decoration: underline;
   }
 
-  .comment-report {
+  .comment-delete-report {
+    cursor: pointer;
     text-decoration: underline;
   }
 }
