@@ -1,14 +1,9 @@
-import EventCard from "../../component/EventCard/EventCard";
 import ScheduleTopic from "../../component/ScheduleTopic/ScheduleTopic";
-import ScheduleEvent from "../../component/ScheduleEvent/ScheduleEvent";
 import style from "./SearchTopicPage.module.css";
-import ScheduleBundle from "../../component/ScheduleEvent/ScheduleBundle";
 import ScheduleSearch from "../../component/ScheduleSearch/ScheduleSearch";
 import React, { useEffect, useRef, useState } from "react";
-import {
-  ScheduleMore,
-  ScheduleAdd,
-} from "../../component/ScheduleMore/ScheduleMore";
+import { ScheduleFollow } from "../../component/ScheduleMore/ScheduleMore";
+import ScheduleFollowBox from "../../component/ScheduleFollowBox/ScheduleFollowBox";
 
 const mockData = [
   {
@@ -38,15 +33,8 @@ const mockData = [
 ];
 
 export default function SearchTopicPage() {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [ScheduleIndex, setScheduleIndex] = useState(0);
   const [moreClick, setMoreClick] = useState({});
-
-  const handleClick = (index, type) => {
-    setActiveIndex(index);
-    setScheduleIndex(index);
-  };
-
+  const [isModal, setIsModal] = useState(false);
   const toggleMore = (id) => {
     setMoreClick((prev) => ({
       ...prev,
@@ -54,41 +42,29 @@ export default function SearchTopicPage() {
     }));
   };
 
+  function handleFollowModal() {
+    setIsModal((isModal) => !isModal);
+  }
+
   return (
     <div className="container SearchSchedulePage">
-      <ScheduleSearch />
+      <ScheduleSearch title={false} />
 
       <ul className="scheduleList">
-        {ScheduleIndex === 0
-          ? mockData.map((item) => (
-              <li>
-                <ScheduleBundle
-                  key={item.id}
-                  toggleClick={() => toggleMore(item.id)}
-                />
-                {moreClick[item.id] && <ScheduleMore />}
-              </li>
-            ))
-          : ScheduleIndex === 1
-          ? mockData.map((item) => (
-              <li>
-                <EventCard
-                  key={item.id}
-                  toggleClick={() => toggleMore(item.id)}
-                />
-                {moreClick[item.id] && <ScheduleAdd />}
-              </li>
-            ))
-          : mockData.map((item) => (
-              <li>
-                <ScheduleEvent
-                  key={item.id}
-                  toggleClick={() => toggleMore(item.id)}
-                />
-                {moreClick[item.id] && <ScheduleMore />}
-              </li>
-            ))}
+        {mockData.map((item) => (
+          <li>
+            <ScheduleTopic
+              key={item.id}
+              toggleClick={() => toggleMore(item.id)}
+            />
+            {moreClick[item.id] && (
+              <ScheduleFollow followClick={handleFollowModal} />
+            )}
+          </li>
+        ))}
       </ul>
+
+      {isModal && <ScheduleFollowBox closeModal={handleFollowModal} />}
     </div>
   );
 }
