@@ -1,51 +1,76 @@
 .SearchSchedulePage {
   background-color: #f1f7ff;
-}
-
-.Search_section {
-  background-color: white;
-  padding: 20px;
-  margin-bottom: 10px;
-}
-
-.section_top {
-  display: flex;
-  justify-content: space-between;
-}
-
-.search-fac {
-  margin-block: 12px;
-  background-color: #fff;
-  width: 100%;
-  padding-block: 10px;
-
-  .search-box {
-    border-bottom: 1px solid black;
-    width: 90%;
+  & .scheduleList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
     display: flex;
-    justify-self: center;
-    padding-block: 6px;
+    flex-flow: column;
+    gap: 5px;
+  }
+}
 
-    input {
-      margin-right: auto;
-      width: 100%;
-      border: none;
-      background: none;
-      padding: 0;
+/* 번들,이번트 일정 리스트 스타일 */
+.info-list {
+  margin-bottom: 10px;
+  padding-block: 0 20px;
+  background-color: #fff;
+  li,
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .post-list {
+    position: relative;
+    display: flex;
+    background-color: #fff;
+    padding-inline: 16px;
+
+    .post {
+      cursor: pointer;
+      margin: 10px 0;
+      transition: border-bottom 0.3s ease;
+      padding-inline: 18px;
       margin: 0;
+      text-align: center;
 
-      &::placeholder {
-        color: #6aacef;
+      & button {
+        padding: 0;
+        padding-bottom: 7px;
+        border-radius: 0;
+        font-size: 17px;
         font-weight: 600;
-      }
-
-      &:focus {
+        cursor: pointer;
+        position: relative;
+        background: none;
         border: none;
-        outline: none;
+        width: 100%;
       }
     }
-    img {
-      width: 18px;
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 20px;
+      height: 3px;
+      border-radius: 5px;
+      background-color: #1082f4;
+      transition: left 0.3s ease-in-out;
     }
+  }
+
+  .post-list[data-active-index="0"]::after {
+    left: 44px;
+    width: 40px;
+  }
+  .post-list[data-active-index="1"]::after {
+    left: 138px;
+  }
+  .post-list[data-active-index="2"]::after {
+    left: 210px;
   }
 }
