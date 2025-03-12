@@ -12,10 +12,10 @@ import FollowBoxes from "../../component/FollowBoxes.js";
 import search_icon from "./../../img/search_icon.png";
 import Stackframe from "./../../img/Stackframe.png";
 import style from "./FollowPage.module.css";
-import HEADER from "../../constant/header.js";
-import { REQUEST_URL } from "../../constant/biasUrl.js";
 
-const bias_url = "https://kr.object.ncloudstorage.com/nova-images/";
+import HEADER from "../../constant/header.js";
+import { BIAS_URL, REQUEST_URL } from "../../constant/biasUrl.js";
+
 export default function FollowPage() {
   const navigate = useNavigate();
   let { biasList } = useBiasStore();
@@ -85,14 +85,6 @@ export default function FollowPage() {
         setIsModalOpen(false);
         window.location.reload();
       });
-
-    // postApi
-    //   .post("nova_sub_system/try_select_my_bias", {
-    //     send_data,
-    //   })
-    //   .then((res) => {
-    //     console.log(res.data);
-    //   });
   }
   const [searchBias, setSearchBias] = useState("");
   const [resultBias, setResultBias] = useState([]);
@@ -171,7 +163,7 @@ export default function FollowPage() {
                       className={style["streamer-img"]}
                     >
                       <div>
-                        <img src={bias_url + `${bias.bid}.PNG`} />
+                        <img src={BIAS_URL + `${bias.bid}.PNG`} />
                       </div>
                       <p>{bias.bname}</p>
                     </button>
@@ -207,7 +199,7 @@ export default function FollowPage() {
             <div className={style["modal"]} onClick={(e) => e.stopPropagation()}>
               <button className={style["streamer-img"]}>
                 <div>
-                  <img src={bias_url + `${clickedBid}.PNG`} />
+                  <img src={BIAS_URL + `${clickedBid}.PNG`} />
                 </div>
               </button>
               <p>
@@ -258,7 +250,7 @@ function Streamer({ title, platform, openModal }) {
               className={style["streamer-img"]}
             >
               <div>
-                <img src={bias_url + `${bias.bid}.PNG`} />
+                <img src={BIAS_URL + `${bias.bid}.PNG`} />
               </div>
               <p>{bias.bname}</p>
             </button>

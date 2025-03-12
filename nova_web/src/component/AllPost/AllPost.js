@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import style from "./AllPost.module.css";
 import StoryFeed from "../StoryFeed/StoryFeed";
 

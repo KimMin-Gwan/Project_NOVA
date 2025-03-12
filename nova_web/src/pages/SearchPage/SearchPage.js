@@ -1,16 +1,14 @@
 import SearchBox from "../../component/SearchBox";
 import "./index.css";
 import back from "./../../img/search_back.png";
-import logo2 from "../../img/logo2.png";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import useTagStore from "../../stores/TagStore/useTagStore";
 import NavBar from "../../component/NavBar/NavBar";
 import Header from "../../component/Header/Header";
 export default function SearchPage() {
   let navigate = useNavigate();
 
-  let { tagList, loading, error, fetchTagList } = useTagStore();
+  // let { tagList, loading, error, fetchTagList } = useTagStore();
 
   let [searchWord, setSearchWord] = useState("");
   let [searchHistory, setSearchHistory] = useState([]);
@@ -74,9 +72,6 @@ export default function SearchPage() {
     }
   }
 
-  if (loading) {
-    return <div>loading...</div>;
-  }
   return (
     <div className="container">
       <Header />
@@ -110,24 +105,6 @@ export default function SearchPage() {
         </div>
       </section>
 
-      {/* <section className="search-category">
-        <h3>실시간 트렌드</h3>
-
-        <ul className="tag-list">
-          {tagList.map((tag, i) => {
-            return (
-              <li
-                key={i}
-                onClick={() => {
-                  onClickList(tag);
-                }}
-              >
-                {tag}
-              </li>
-            );
-          })}
-        </ul>
-      </section> */}
       <NavBar />
     </div>
   );

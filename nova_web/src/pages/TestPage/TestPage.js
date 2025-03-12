@@ -13,6 +13,7 @@ import { getModeClass } from "./../../App.js";
 
 import filter_icon from "./../../img/filter.svg";
 
+// 컴포넌트
 import Feed from "./../../component/feed";
 import BiasBoxes from "../../component/BiasBoxes.js";
 import FilterModal from "../../component/FilterModal/FilterModal.js";
@@ -23,11 +24,14 @@ import NoneFeed from "../../component/NoneFeed/NoneFeed.js";
 import NavBar from "../../component/NavBar/NavBar.js";
 import Header from "../../component/Header/Header.js";
 import StoryFeed from "../../component/StoryFeed/StoryFeed.js";
+import LoadingPage from "../LoadingPage/LoadingPage.js";
 
+// 스타일
 import "@toast-ui/editor/dist/toastui-editor-viewer.css";
 import style from "./../FeedList/FeedHashList.module.css";
+
+// 커스텀 훅
 import useDragScroll from "../../hooks/useDragScroll.js";
-import LoadingPage from "../LoadingPage/LoadingPage.js";
 import useIntersectionObserver from "../../hooks/useIntersectionObserver.js";
 import useFetchFeedList from "../../hooks/useFetchFeedList.js";
 
@@ -37,40 +41,36 @@ export default function TestPage() {
   const type = params.get("type");
   const brightModeFromUrl = params.get("brightMode");
 
-  // 전역 상태 관리
+  // 상태 관리
   let { biasList } = useBiasStore();
-
-  // 드래그 기능
-  const { scrollRef, hasDragged, dragHandlers } = useDragScroll();
+  const [isSameTag, setIsSameTag] = useState(true);
+  let [biasId, setBiasId] = useState("");
+  let [board, setBoard] = useState("자유게시판");
+  let [isClickedFetch, setIsClickedFetch] = useState(false);
 
   // 필터 모달 및 카테고리 모달
   let [isFilterClicked, setIsFilterClicked] = useState(false);
   let [isOpendCategory, setIsOpendCategory] = useState(false);
 
-  const [isSameTag, setIsSameTag] = useState(true);
-  let [biasId, setBiasId] = useState("");
-  let [board, setBoard] = useState("자유게시판");
-
   const initialMode = brightModeFromUrl || localStorage.getItem("brightMode") || "bright"; // URL에서 가져오고, 없으면 로컬 스토리지에서 가져옴
-  const [mode, setMode] = useState(initialMode);
 
+  const [mode, setMode] = useState(initialMode);
   // 필터 카테고리 , 게시글 종류 초기 설정
   let [filterCategory, setFilterCategory] = useState(
     JSON.parse(localStorage.getItem("board")) || [""]
   );
   let [filterFclass, setFilterFclass] = useState(JSON.parse(localStorage.getItem("content")) || "");
-  let [isClickedFetch, setIsClickedFetch] = useState(false);
 
+  // 드래그 기능
+  const { scrollRef, hasDragged, dragHandlers } = useDragScroll();
   // 피드 관련 요청 커스텀 훅
-  const {
-    feedData,
-    isLoading,
-    nextKey,
-    hasMore,
-    fetchFeedList,
-    fetchPlusFeedList,
-    fetchFeedWithTag,
-  } = useFetchFeedList(type, biasId, isClickedFetch, filterCategory, filterFclass);
+  const { feedData, isLoading, hasMore, fetchFeedList, fetchPlusFeedList, fetchFeedWithTag } =
+    useFetchFeedList(type, biasId, isClickedFetch, filterCategory, filterFclass);
+
+  // 데이터 로드
+  useEffect(() => {
+    fetchFeedList();
+  }, [type]);
 
   // 모드 체인지
   useEffect(() => {
@@ -93,9 +93,8 @@ export default function TestPage() {
     }
   };
 
-  useEffect(() => {
-    fetchFeedList();
-  }, [type]);
+  // 무한 스크롤
+  const targetRef = useIntersectionObserver(loadMoreCallBack, { threshold: 0.5 }, hasMore);
 
   // useEffect(() => {
   //   if (isSameTag) {
@@ -105,12 +104,10 @@ export default function TestPage() {
   //   }
   // }, [isSameTag]);
 
+  // 이벤트 핸들러
   function onClickTag(tag) {
     fetchFeedWithTag(tag);
   }
-
-  //   // 무한 스크롤
-  const targetRef = useIntersectionObserver(loadMoreCallBack, { threshold: 0.5 }, hasMore);
 
   function onClickCategory() {
     setIsOpendCategory(!isOpendCategory);

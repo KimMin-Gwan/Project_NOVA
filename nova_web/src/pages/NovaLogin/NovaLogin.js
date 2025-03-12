@@ -1,16 +1,13 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import style from "./NovaLogin.module.css";
-import styleSignUp from "./../SignUp/SignUp.module.css";
-// import back from "../../img/back.png";
+import React, { useEffect, useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import backword from "./../../img/back_icon.png";
 import See from "./../../img/pwSee.png";
 import SeeOff from "./../../img/pwNoneSee.png";
-import { useNavigate } from "react-router-dom";
+import style from "./NovaLogin.module.css";
 import { getModeClass } from "./../../App.js";
-import { useRef } from "react";
 
 import useLoginStore from "../../stores/LoginStore/useLoginStore.js";
+import HEADER from "../../constant/header.js";
 const NOVALogin = ({ brightmode }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -30,16 +27,8 @@ const NOVALogin = ({ brightmode }) => {
       return; // POST 요청을 보내지 않음
     }
 
-    const header = {
-      "request-type": "default",
-      "client-version": "v1.0.1",
-      "client-ip": "127.0.0.1",
-      uid: "1234-abcd-5678",
-      endpoint: "/user_system/",
-    };
-
     const send_data = {
-      header: header,
+      header: HEADER,
       body: {
         email: email,
         password: password,
@@ -105,7 +94,14 @@ const NOVALogin = ({ brightmode }) => {
           이메일
           <br />
           <label>
-            <input ref={emailRef} type="email" placeholder="이메일 주소" value={email} onChange={(e) => setEmail(e.target.value)} className={style.input} />
+            <input
+              ref={emailRef}
+              type="email"
+              placeholder="이메일 주소"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className={style.input}
+            />
           </label>
           {login === "email" && <div className={style.errorMessage}>{detail}</div>}
         </div>
@@ -126,8 +122,16 @@ const NOVALogin = ({ brightmode }) => {
                 onKeyDown(e);
               }}
             />
-            <button type="button" className={style["toggle-btn"]} onClick={() => setShowPassword((prev) => !prev)}>
-              {showPassword ? <img src={SeeOff} alt="비밀번호 숨김" /> : <img src={See} alt="비밀번호 표시" />}
+            <button
+              type="button"
+              className={style["toggle-btn"]}
+              onClick={() => setShowPassword((prev) => !prev)}
+            >
+              {showPassword ? (
+                <img src={SeeOff} alt="비밀번호 숨김" />
+              ) : (
+                <img src={See} alt="비밀번호 표시" />
+              )}
             </button>
           </label>
           {login === "password" && <div className={style.errorMessage}>{detail}</div>}
