@@ -1,21 +1,16 @@
-import { useEffect, useState } from "react";
-import { useRef } from "react";
-import ProgressBar from "./ProgressBar";
+import "./CategoryModal/index.css";
+import ModalRectangle from "./../img/ModalRectangle.png";
+import ScheduleSelect from "./ScheduleSelect/ScheduleSelect";
 
 export default function TestRef() {
   return (
-    <div className="notice-container">
-      <div>
-        <div className="notice-box">
-          <div className="notice-img">
-            <img alt="img" />
-          </div>
-
-          <div className="notice-content">
-            <b>게시글 작성할 때 요zzzz령</b>
-            <p>전체 공지사항</p>
-          </div>
-        </div>
+    <div className={`CategoryModal see`}>
+      <div className={`modal-container on`} onClick={(e) => e.stopPropagation()}>
+        <section className="top-section">
+          <img src={ModalRectangle} alt="모달 사각형" />
+          <div className="modal-title">주제 이름</div>
+        </section>
+        <ScheduleSelect />
       </div>
     </div>
   );

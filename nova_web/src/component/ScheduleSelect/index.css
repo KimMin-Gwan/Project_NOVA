@@ -1,0 +1,4 @@
+.ScheduleSelect {
+  display: flex;
+  flex-direction: column;
+}

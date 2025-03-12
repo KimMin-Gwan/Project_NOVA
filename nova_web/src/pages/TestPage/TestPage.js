@@ -1,12 +1,12 @@
+// import TestRef from "../../component/TestRef";
+
+// export default function TestPage() {
+//   return <TestRef />;
+// }
+
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
-import {
-  fetchAllFeedList,
-  fetchDateFeedList,
-  fetchFeedListWithTag,
-  fetchBiasFeedList,
-} from "../../services/getFeedApi.js";
 import useBiasStore from "../../stores/BiasStore/useBiasStore.js";
 
 import { getModeClass } from "./../../App.js";
@@ -43,12 +43,9 @@ export default function TestPage() {
   // 드래그 기능
   const { scrollRef, hasDragged, dragHandlers } = useDragScroll();
 
+  // 필터 모달 및 카테고리 모달
   let [isFilterClicked, setIsFilterClicked] = useState(false);
   let [isOpendCategory, setIsOpendCategory] = useState(false);
-
-  //   let [isLoading, setIsLoading] = useState(true);
-  //   let [feedData, setFeedData] = useState([]);
-  //   let [nextData, setNextData] = useState(-1);
 
   const [isSameTag, setIsSameTag] = useState(true);
   let [biasId, setBiasId] = useState("");
@@ -57,16 +54,24 @@ export default function TestPage() {
   const initialMode = brightModeFromUrl || localStorage.getItem("brightMode") || "bright"; // URL에서 가져오고, 없으면 로컬 스토리지에서 가져옴
   const [mode, setMode] = useState(initialMode);
 
-  //   const [hasMore, setHasMore] = useState(true);
-
+  // 필터 카테고리 , 게시글 종류 초기 설정
   let [filterCategory, setFilterCategory] = useState(
     JSON.parse(localStorage.getItem("board")) || [""]
   );
   let [filterFclass, setFilterFclass] = useState(JSON.parse(localStorage.getItem("content")) || "");
   let [isClickedFetch, setIsClickedFetch] = useState(false);
 
-  const { feedData, isLoading, nextKey, hasMore, fetchFeedList, fetchPlusFeedList } =
-    useFetchFeedList(type, biasId);
+  // 피드 관련 요청 커스텀 훅
+  const {
+    feedData,
+    isLoading,
+    nextKey,
+    hasMore,
+    fetchFeedList,
+    fetchPlusFeedList,
+    fetchFeedWithTag,
+  } = useFetchFeedList(type, biasId, isClickedFetch, filterCategory, filterFclass);
+
   // 모드 체인지
   useEffect(() => {
     localStorage.setItem("brightMode", mode);
@@ -84,150 +89,36 @@ export default function TestPage() {
 
   const loadMoreCallBack = () => {
     if (!isLoading && hasMore) {
-      if (type === "bias") {
-        fetchPlusFeedList();
-      }
-      //   else {
-      //     fetchPlusData();
-      //   }
+      fetchPlusFeedList();
     }
   };
 
-  //   // 주제별 피드 리스트
-  //   async function fetchBiasCategoryData(bid) {
-  //     setIsLoading(true);
-
-  //     const data = await fetchBiasFeedList(bid, bids, board, (nextData = -1));
-  //     console.log("first bias data", data);
-  //     setFeedData(data.body.send_data);
-  //     setNextData(data.body.key);
-  //     setHasMore(data.body.send_data.length > 0);
-  //     setIsLoading(false);
-  //   }
-
-  //   async function fetchBiasPlusCategoryData() {
-  //     setIsLoading(true);
-  //     const data = await fetchBiasFeedList(biasId, bids, board, nextData);
-  //     console.log("first111 bias data", data);
-  //     setFeedData((prevData) => [...prevData, ...data.body.send_data]);
-  //     setNextData(data.body.key);
-  //     setHasMore(data.body.send_data.length > 0);
-  //     setIsLoading(false);
-  //   }
-
   useEffect(() => {
-    if (type === "bias") {
-      fetchFeedList();
-    }
-  }, []);
+    fetchFeedList();
+  }, [type]);
 
-  //   useEffect(() => {
-  //     setFeedData([]);
-  //     setNextData(-1);
-  //   }, [biasId, board, type]);
-
-  //   function onClickApplyButton1() {
-  //     setNextData(-1);
+  // useEffect(() => {
+  //   if (isSameTag) {
+  //     setHasMore(true);
+  //   } else {
+  //     setHasMore(false);
   //   }
+  // }, [isSameTag]);
 
-  //   async function fetchAllFeed(clickedFetch) {
-  //     let updatedNextData = -1;
+  function onClickTag(tag) {
+    fetchFeedWithTag(tag);
+  }
 
-  //     //  만약 적용 버튼을 누르면 -1로 세팅
-  //     if (clickedFetch) {
-  //       updatedNextData = -1;
-  //       setNextData(-1);
-  //     }
-  //     // 그게 아닌 상황에서는 기존의 nextData 를 사용
-  //     else {
-  //       updatedNextData = nextData;
-  //     }
-
-  //     if (type === "all" || isClickedFetch) {
-  //       const data = await fetchAllFeedList(updatedNextData, filterCategory, filterFclass);
-  //       console.log("ffff", data);
-  //       setFeedData(data.body.send_data);
-  //       setNextData(data.body.key);
-  //       setIsLoading(false);
-  //     }
-  //   }
-
-  //   // 오늘, 주간 피드 받기
-  //   async function fetchData() {
-  //     if (type === "today" || type === "weekly") {
-  //       const data = await fetchDateFeedList(type);
-  //       setFeedData(data.body.send_data);
-  //       setNextData(data.body.key);
-  //       setIsLoading(false);
-  //     } else if (type === "all") {
-  //       fetchAllFeed(false);
-  //     }
-  //   }
-
-  //   // 태그 클릭 시 데이터 받기
-  //   async function fetchFeedWithTag(tag) {
-  //     let time;
-  //     if (type === "today") {
-  //       time = "day";
-  //     } else if (type === "weekly") {
-  //       time = "weekly";
-  //     }
-  //     const data = await fetchFeedListWithTag(tag, time);
-  //     setFeedData(data.body.send_data);
-  //     setIsLoading(false);
-  //   }
-
-  //   useEffect(() => {
-  //     if (isSameTag) {
-  //       setHasMore(true);
-  //     } else {
-  //       setHasMore(false);
-  //     }
-  //   }, [isSameTag]);
-
-  //   function onClickTag(tag) {
-  //     fetchFeedWithTag(tag);
-  //   }
-
-  //   // 데이터 더 받기
-  //   async function fetchFeedListType(fetchFunction, type, nextData, filterCategory, filterFclass) {
-  //     const data = await fetchFunction(type, nextData, filterCategory, filterFclass);
-
-  //     setFeedData((prevData) => {
-  //       const newData = [...prevData, ...data.body.send_data];
-  //       return newData;
-  //     });
-  //     setNextData(data.body.key);
-  //     setIsLoading(false);
-  //     setHasMore(data.body.send_data.length > 0);
-  //   }
-
-  //   // 데이터 더 받기
-  //   async function fetchPlusData() {
-  //     if (type === "today" || type === "weekly") {
-  //       await fetchFeedListType(fetchDateFeedList, type, nextData);
-  //     } else if (type === "all" || isClickedFetch) {
-  //       await fetchFeedListType(fetchAllFeedList, nextData, filterCategory, filterFclass);
-  //     }
-  //   }
   //   // 무한 스크롤
   const targetRef = useIntersectionObserver(loadMoreCallBack, { threshold: 0.5 }, hasMore);
-
-  //   useEffect(() => {
-  //     fetchData();
-
-  //     return () => {
-  //       setFeedData([]);
-  //     };
-  //   }, []);
 
   function onClickCategory() {
     setIsOpendCategory(!isOpendCategory);
   }
 
-  //   function onClickFilterButton() {
-  //     setIsFilterClicked(!isFilterClicked);
-  //   }
+  function onClickFilterButton() {
+    setIsFilterClicked(!isFilterClicked);
+  }
 
   if (isFilterClicked) {
     document.body.style.overflow = "hidden";
@@ -285,7 +176,7 @@ export default function TestPage() {
             )}
           </div>
         )}
-        {/* {type === "all" && (
+        {type === "all" && (
           <div className={style["search-section"]}>
             <SearchBox />
             <div className={style["search-filter"]}>
@@ -306,12 +197,11 @@ export default function TestPage() {
               title={type === "today" ? "인기 급상승" : "많은 사랑을 받은"}
               subTitle={type === "today" ? "오늘의 키워드" : "이번주 키워드"}
               onClickTagButton={onClickTag}
-              fetchData={fetchData}
-              setHasMore={setHasMore}
+              fetchData={fetchFeedList}
               setIsSameTag={setIsSameTag}
             />
           </div>
-        )} */}
+        )}
 
         <div className={feedData.length > 0 ? style["scroll-area"] : style["none_feed_scroll"]}>
           {feedData.length > 0 ? (
@@ -330,15 +220,15 @@ export default function TestPage() {
           )}
           <div ref={targetRef} style={{ height: "1px" }}></div>
           {isLoading && <p>loading...</p>}
-          {/* {isFilterClicked && (
+          {isFilterClicked && (
             <FilterModal
               onClickFilterButton={onClickFilterButton}
               setFilterCategory={setFilterCategory}
               setFilterFclass={setFilterFclass}
-              fetchAllFeed={fetchAllFeed}
-              onClickApplyButton1={onClickApplyButton1}
+              fetchAllFeed={fetchFeedList}
+              // onClickApplyButton1={onClickApplyButton1}
             />
-          )} */}
+          )}
         </div>
       </div>
       <NavBar />
