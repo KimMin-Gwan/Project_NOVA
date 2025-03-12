@@ -156,9 +156,9 @@ class ScheduleBundle(SampleDomain):
     
 class Schedule(SampleDomain):
     def __init__(self, sid="", sname="", uid="", uname="",
-                 bid="", bname="", date="", start_time="",
+                 bid="", bname="", start_date="", end_date="", start_time="",
                  end_time="", location="", code="", update_datetime="",
-                 num_usage=0, state=True
+                 num_usage=0, state=True,
                  ):
         self.sid:str = sid                          # schedule id
         self.sname:str = sname                      # schedule name
@@ -166,10 +166,11 @@ class Schedule(SampleDomain):
         self.uname:str = uname                      # maker's name
         self.bid:str = bid                          # target bias
         self.bname:str = bname                      # target bias's name
-        self.date:str = date                        # 시작 날짜
+        self.start_date:str = start_date            # 시작 날짜
         self.start_time:str = start_time            # 시작 시간 
+        self.end_date:str = end_date                # 종료 날짜
         self.end_time:str = end_time                # 종료 시간
-        self.location:str = location                # 시작 장소
+        self.location:str = location                # 장소
         self.code:str = code                        # 스케줄 코드
         self.update_datetime:str = update_datetime  # 등록된 시간
         self.num_usage:int = num_usage              # 추가된 횟수
