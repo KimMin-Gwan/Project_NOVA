@@ -10,7 +10,11 @@ import {
   ScheduleAdd,
 } from "../../component/ScheduleMore/ScheduleMore";
 import EventMore from "../../component/EventMore/EventMore";
-
+import TimeChart from "../SchedulePage/TimeChart";
+import {
+  tempWeekDayData,
+  tempScheduleData,
+} from "../../pages/SchedulePage/TestScheduleData";
 const mockData = [
   {
     id: 0,
@@ -135,6 +139,10 @@ export default function SearchSchedulePage() {
             ))}
       </ul>
 
+      <TimeChart
+        tempWeekDayData={tempWeekDayData}
+        tempScheduleData={tempScheduleData}
+      />
       <EventMore closeSchedule={toggleSchedule} isOpen={isMoreModal} />
     </div>
   );
