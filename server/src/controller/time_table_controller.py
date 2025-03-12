@@ -80,6 +80,18 @@ class TImeTableController:
 
         return model
 
+    # 추천하는 바이어스 불러오기
+    def get_recommended_bias_list(self, database:Local_Database, request:RequestManager) -> BaseModel:
+        model = TimeTableBiasModel(database=database)
+
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
+            if not model._set_tuser_with_tuid():
+                return model
+
+        model.get_recommended_bias_list()
+        return
+
     # 스케줄 추가
     def try_add_schedule(self, database:Local_Database, request:RequestManager) -> BaseModel: 
         model = AddScheduleModel(database=database)

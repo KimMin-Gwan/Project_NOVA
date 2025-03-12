@@ -7,6 +7,9 @@ from datetime import datetime
 import random
 import string
 
+from pydantic_core.core_schema import time_schema
+
+
 # ------------------------------------ 기본 타임 테이블 모델 ------------------------------------------
 class TimeTableModel(BaseModel):
     def __init__(self, database:Local_Database) -> None:
@@ -55,7 +58,52 @@ class TimeTableModel(BaseModel):
         week_in_month = current_week - start_week + 1
         
         return week_in_month
-    
+
+    def _calculate_day_hour_time(self, dtime:datetime):
+        hour = dtime.hour
+        minute = dtime.minute
+
+        if hour < 12:
+            period = "오전"
+            display_hour = hour if hour != 0 else 12
+
+        else:
+            period = "오후"
+            display_hour = hour - 12 if hour > 12 else 12
+
+        result = f"{period} {display_hour:02d}:{minute:02d}"
+        return result
+
+    def _transfer_date_str(self, dtime:datetime):
+        formatted_date = f"{dtime.month}월 {dtime.day}일"
+        return formatted_date
+
+    def _cal_update_time(self, update_time:datetime):
+        today = datetime.today()
+
+        diff = today - update_time
+        seconds = diff.total_seconds()
+
+        if seconds < 60:
+            time_str = f"{int(seconds)} 초 전"
+        elif seconds < 3600:
+            minutes = seconds // 60
+            time_str = f"{int(minutes)} 분 전"
+        elif seconds < 3600 * 24:
+            hours = seconds // 3600
+            time_str = f"{int(hours)} 시간 전"
+        elif seconds < 3600 * 24 * 30:
+            days = seconds // (3600 * 24)
+            time_str = f"{int(days)} 일 전"
+        elif seconds < 3600 * 24 * 365:
+            months = seconds // (3600 * 24 * 30)
+            time_str = f"{int(months)} 달 전"
+        else:
+            years = seconds // (3600 * 24 * 365)
+            time_str = f"{int(years)} 년 전"
+
+        return time_str
+
     # bias 세팅
     def set_num_bias(self):
         self.__num_bias= len(self._user.bids)
@@ -145,6 +193,181 @@ class ScheduleRecommendKeywordModel(TimeTableModel):
             "recommend_keywords" : self._recommend_keywords
         }
 
+        response = self._get_response_data(head_parser=head_parser, body=body)
+        return response
+
+class TimeTableBiasModel(TimeTableModel):
+    def __init__(self, database:Local_Database) -> None:
+        super().__init__(database)
+        self._biases = []
+
+    # Time Schedule에 쓰는 Bias 데이터를 만드는 함수
+    def _tbias_data(self, bias:Bias):
+        Sbias_data = {}
+
+        Sbias_data["bid"] = bias.bid
+        Sbias_data["bname"] = bias.bname
+        Sbias_data["category"] = bias.category
+        Sbias_data["tags"] = bias.tags
+        Sbias_data["main_time"] = bias.main_time
+        Sbias_data["is_ad"] = False
+
+        return Sbias_data
+
+    # Time Bias를 담는 리스트를 만듦
+    def get_tbias_list(self, bids):
+        bias_datas = self._database.get_datas_with_ids(target_id="bid", ids=bids)
+
+        for bias_data in bias_datas:
+            bias=Bias()
+            bias.make_with_dict(dictionary=bias_data)
+            Sbias_data = self._tbias_data(bias)
+
+            self._biases.append(Sbias_data)
+
+        return
+
+    # 바이어스 추천 리스트
+    def get_recommend_bias_list(self):
+        pass
+
+    def get_response_form_data(self, head_parser):
+        body = {
+            "biases" : self._biases
+        }
+
+        response = self._get_response_data(head_parser=head_parser, body=body)
+        return response
+
+class TimeScheduleModel(TimeTableModel):
+    def __init__(self, database:Local_Database) -> None:
+        super().__init__(database)
+        self._schedules = []
+
+    # 스케쥴 Send Data 만드는 함수
+    def _time_schedule(self, schedule:Schedule):
+        time_schedule_data = {}
+
+        time_schedule_data["sid"] = schedule.sid
+        time_schedule_data["detail"] = schedule.sname
+        time_schedule_data["bid"] = schedule.bid
+        time_schedule_data["bname"] = schedule.bname
+        time_schedule_data["uid"] = schedule.uid
+        time_schedule_data["uname"] = schedule.uname
+        time_schedule_data["start_time"] = self._calculate_day_hour_time(schedule.start_time)
+        time_schedule_data["end_time"] = self._calculate_day_hour_time(schedule.end_time)
+        time_schedule_data["date"] = self._transfer_date_str(schedule.date)
+        time_schedule_data["update_time"] = self._cal_update_time(schedule.update_time)
+        time_schedule_data["location"] = schedule.location
+        time_schedule_data["code"] = schedule.code
+        time_schedule_data["color_code"] = ""
+
+    # 스케쥴 리스트 만드는 함수
+    def get_tschedule_list(self, sids):
+        schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids=sids)
+
+        for schedule_data in schedule_datas:
+            schedule = Schedule()
+            schedule.make_with_dict(dict_data=schedule_data)
+            self._schedules.append(self._time_schedule(schedule))
+
+        return
+
+    def get_response_form_data(self, head_parser):
+        body = {
+            "schedules" : self._schedules
+        }
+
+        response = self._get_response_data(head_parser=head_parser, body=body)
+        return response
+
+class TimeEventModel(TimeTableModel):
+    def __init__(self, database:Local_Database) -> None:
+        super().__init__(database)
+        self._events = []
+
+    # Event 보낼 거 만드는 함수
+    def _tevent_data(self, event:ScheduleEvent):
+        time_event_data = {}
+
+        time_event_data["seid"] = event.seid
+        time_event_data["sename"] = event.sename
+        time_event_data["bid"] = event.bid
+        time_event_data["bname"] = event.bname
+        time_event_data["uid"] = event.uid
+        time_event_data["uname"] = event.uname
+        time_event_data["date"] = self._transfer_date_str(event.date)
+        time_event_data["start"] = self._calculate_day_hour_time(event.start_time)
+        time_event_data["end"] = self._calculate_day_hour_time(event.end_time)
+        time_event_data["sids"] = event.sids
+        time_event_data["location"] = event.location
+
+    # 이벤트 딕셔너리 데이터 리스트를 만드는 곳
+    def get_tevent_list(self, seids):
+        event_datas = self._database.get_datas_with_ids(target_id="seid", ids=seids)
+
+        for event_data in event_datas:
+            event = ScheduleEvent()
+            event.make_with_dict(dict_data=event_data)
+            self._events.append(self._tevent_data(event))
+
+        return
+
+    def get_response_form_data(self, head_parser):
+        body = {
+            "events" : self._events
+        }
+
+        response = self._get_response_data(head_parser=head_parser, body=body)
+        return response
+
+class TimeScheduleBundleModel(TimeTableModel):
+    def __init__(self, database:Local_Database) -> None:
+        super().__init__(database)
+        self._schedule_bundles = []
+
+    def _transfer_date_str_list(self, sid_list):
+        schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids=sid_list)
+        date_list = []
+
+        for schedule_data in schedule_datas:
+            schedule = Schedule()
+            schedule.make_with_dict(dict_data=schedule_data)
+
+            date = schedule.date.strftime("%y년 %m월 %d일")
+            date_list.append(date)
+
+        return date_list
+
+
+    def _time_schedule_bundle(self, schedule_bundle:ScheduleBundle):
+        time_schedule_bundle_data = {}
+
+        time_schedule_bundle_data["sbid"] = schedule_bundle.sbid
+        time_schedule_bundle_data["sbname"] = schedule_bundle.sbname
+        time_schedule_bundle_data["bid"] = schedule_bundle.bid
+        time_schedule_bundle_data["bname"] = schedule_bundle.bname
+        time_schedule_bundle_data["uid"] = schedule_bundle.uid
+        time_schedule_bundle_data["uname"] = schedule_bundle.uname
+        time_schedule_bundle_data["sids"] = schedule_bundle.sids
+        time_schedule_bundle_data["date"] = self._transfer_date_str_list(schedule_bundle.sids)
+        time_schedule_bundle_data["location"] = schedule_bundle.location
+
+    def get_tschedule_bundle_list(self, sbids):
+        schedule_bundle_datas = self._database.get_datas_with_ids(target_id="sbid", ids=sbids)
+
+        for schedule_bundle_data in schedule_bundle_datas:
+            schedule_bundle = ScheduleBundle()
+            schedule_bundle.make_with_dict(dict_data=schedule_bundle_data)
+
+            self.schedule_bundles.append(self._time_schedule_bundle(schedule_bundle_data))
+
+        return
+
+    def get_response_form_data(self, head_parser):
+        body = {
+            "schedule_bundle" : self.schedule_bundles
+        }
         response = self._get_response_data(head_parser=head_parser, body=body)
         return response
 
@@ -299,9 +522,9 @@ class MultiScheduleModel(TimeTableModel):
         schedule_event_datas = self._database.get_datas_with_ids(target_id="seid", ids=self._tuser.seids)
         
         # 필요하면 갯수 제한도 두삼
-        for shedule_event_data in schedule_event_datas:
+        for schedule_event_data in schedule_event_datas:
             schedule_event = ScheduleEvent()
-            schedule_event.make_with_dict(dict_data=schedule_event)
+            schedule_event.make_with_dict(dict_data=schedule_event_data)
             # 여기서 날짜랑 맞는지 필터링 함
             if date== schedule_event.date:
                 self.__schedule_events.append(schedule_event)

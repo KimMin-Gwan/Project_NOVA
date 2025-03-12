@@ -296,13 +296,14 @@ class User(SampleDomain):
         }
 
 class Bias(SampleDomain):
-    def __init__(self, bid="",bname="", category=[], birthday="", debut="",
+    def __init__(self, bid="",bname="", category=[], tags=[], birthday="", debut="",
                  agency="", group=[], num_user=0, x_account="",
                  insta_account="", tiktok_account="", youtube_account="", homepage="",
                  fan_cafe="", country=[], fanname = [], board_types=["선택없음", "자유게시판", "팬아트", "유머게시판"]):
         self.bid = bid
         self.bname = bname
         self.category = copy.copy(category)
+        self.tags = copy.copy(tags)
         self.birthday = birthday
         self.debut = debut
         self.agency = agency
@@ -317,12 +318,15 @@ class Bias(SampleDomain):
         self.fan_cafe = fan_cafe
         self.country = copy.copy(country)
         self.fanname = copy.copy(fanname)
+        self.main_time = []
+        self.is_ad = False
 
     def make_with_dict(self, dict_data):
         try:
             self.bid = dict_data['bid']
             self.bname = dict_data['bname']
             self.category = copy.copy(dict_data['category'])
+            self.tags = copy.copy(dict_data['tags'])
             self.birthday = dict_data['birthday']
             self.debut = dict_data['debut']
             self.agency = dict_data['agency']
@@ -348,6 +352,7 @@ class Bias(SampleDomain):
             "bid": self.bid,
             "bname": self.bname,
             "category": copy.copy(self.category),
+            "tags": copy.copy(self.tags),
             "birthday": self.birthday,
             "debut": self.debut,
             "agency": self.agency,
