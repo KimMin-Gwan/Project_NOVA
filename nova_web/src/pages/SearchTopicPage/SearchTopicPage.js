@@ -35,6 +35,8 @@ const mockData = [
 export default function SearchTopicPage() {
   const [moreClick, setMoreClick] = useState({});
   const [isModal, setIsModal] = useState(false);
+
+  // 주제 탐색 페이지에 누르면 버튼 나오게 하기
   const toggleMore = (id) => {
     setMoreClick((prev) => ({
       ...prev,
@@ -42,6 +44,7 @@ export default function SearchTopicPage() {
     }));
   };
 
+  // 팔로우 모달창 나오게 하기
   function handleFollowModal() {
     setIsModal((isModal) => !isModal);
   }

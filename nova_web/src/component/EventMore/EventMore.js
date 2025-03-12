@@ -10,6 +10,8 @@ const exdata = [0, 1];
 export default function EventMore({ closeSchedule, isOpen }) {
   const [backgroundColor, setBackgroundColor] = useState("");
   const [selectBack, setSelectBack] = useState({});
+  const [isSelect, setIsSelect] = useState(1);
+
   // 애니메이션 올라오면 배경색 변화도록 해주는 이펙트
   useEffect(() => {
     if (!isOpen) {
@@ -27,7 +29,6 @@ export default function EventMore({ closeSchedule, isOpen }) {
 
   // 선택하면 배경색 변화하게 해주는 거
   function handleSelect(key) {
-    console.log(key);
     setSelectBack((prev) => ({
       ...prev,
       [key]: prev[key] === "" ? "#F1F7FF" : "",
@@ -35,7 +36,10 @@ export default function EventMore({ closeSchedule, isOpen }) {
   }
 
   // 일정 선택 하기, 취소하기 토클
-  const selectToggle = () => {};
+  const selectToggle = () => {
+    setIsSelect((prev) => (prev === 1 ? 4 : 1));
+    // 왜 3이냐면 button 배열에 선택됐을 때 텍스트가 배열[4]이기 때문임
+  };
   return (
     <div
       className={`${style["EventMoreContainer"]} ${isOpen ? style["see"] : ""}`}
@@ -50,7 +54,7 @@ export default function EventMore({ closeSchedule, isOpen }) {
           <img src={ModalRectangle} alt="모달 사각형" />
         </div>
         <ScheduleBundle />
-        <ScheduleMoreAdd selectToggle={selectToggle} />
+        <ScheduleMoreAdd selectToggle={selectToggle} selectText={isSelect} />
         {exdata.map((key, index) => (
           <ScheduleEvent
             key={index}
