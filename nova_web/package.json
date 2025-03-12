@@ -10,6 +10,7 @@
     "@testing-library/user-event": "^13.5.0",
     "@toast-ui/editor-plugin-color-syntax": "^3.1.0",
     "@toast-ui/react-editor": "^3.2.3",
+    "antd": "^5.24.3",
     "axios": "^1.7.4",
     "cors": "^2.8.5",
     "http-proxy-middleware": "^3.0.0",
