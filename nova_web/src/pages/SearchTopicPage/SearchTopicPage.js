@@ -4,33 +4,7 @@ import ScheduleSearch from "../../component/ScheduleSearch/ScheduleSearch";
 import React, { useEffect, useRef, useState } from "react";
 import { ScheduleFollow } from "../../component/ScheduleMore/ScheduleMore";
 import ScheduleFollowBox from "../../component/ScheduleFollowBox/ScheduleFollowBox";
-
-const mockData = [
-  {
-    id: 0,
-    name: "한결",
-    job: "인터넷 방송인",
-    platform: "SOOP",
-    tag: ["버추얼", "노래", "신입"],
-    time: ["저녁", "새벽"],
-  },
-  {
-    id: 1,
-    name: "한결1",
-    job: "인터넷 방송인",
-    platform: "SOOP",
-    tag: ["버추얼", "노래", "신입"],
-    time: ["저녁", "새벽"],
-  },
-  {
-    id: 2,
-    name: "한결2",
-    job: "인터넷 방송인",
-    platform: "SOOP",
-    tag: ["버추얼", "노래", "신입"],
-    time: ["저녁", "새벽"],
-  },
-];
+import { mockData } from "../../pages/SchedulePage/TestScheduleData";
 
 export default function SearchTopicPage() {
   const [moreClick, setMoreClick] = useState({});

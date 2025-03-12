@@ -189,3 +189,53 @@ export const tempScheduleData = [
     color_code: "#FFF371",
   },
 ];
+
+export const mockData = [
+  {
+    id: 0,
+    name: "한결",
+    job: "인터넷 방송인",
+    platform: "SOOP",
+    tag: ["버추얼", "노래", "신입"],
+    time: ["저녁", "새벽"],
+  },
+  {
+    id: 1,
+    name: "한결1",
+    job: "인터넷 방송인",
+    platform: "SOOP",
+    tag: ["버추얼", "노래", "신입"],
+    time: ["저녁", "새벽"],
+  },
+  {
+    id: 2,
+    name: "한결2",
+    job: "인터넷 방송인",
+    platform: "SOOP",
+    tag: ["버추얼", "노래", "신입"],
+    time: ["저녁", "새벽"],
+  },
+];
+
+export const ScheduleKind = ["일정 번들", "일정", "이벤트"];
+
+export const eventData = [
+  {
+    id: 0,
+    name: "한결 3월 1주차 방송 스케줄",
+    topic: "한결",
+    date: "25년 03월 01일",
+  },
+  {
+    id: 1,
+    name: "플레이브 미니 3집",
+    topic: "플레이브",
+    date: "25년 03월 01일",
+  },
+  {
+    id: 2,
+    name: "한결 3월 1주차 방송 스케줄",
+    topic: "한결1",
+    date: "25년 03월 01일",
+  },
+];
