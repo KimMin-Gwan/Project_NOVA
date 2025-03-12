@@ -11,7 +11,6 @@ export default function KeywordBox({
   subTitle,
   onClickTagButton,
   fetchData,
-  setHasMore,
   setIsSameTag,
 }) {
   const { scrollRef, hasDragged, dragHandlers } = useDragScroll();
@@ -19,14 +18,11 @@ export default function KeywordBox({
   let [bestTags, setBestTags] = useState([]);
   let [isLoading, setIsLoading] = useState(true);
 
-  // const { feedDatas, nextKey, fetchFeedList } = useFetchFeedList({ type });
-  // const { fetchFeedList, loadings } = useFeedStore();
-
   async function fetchHashTags() {
     await mainApi.get(`home/${type}_spiked_hot_hashtag`).then((res) => {
       setBestTags(res.data.body.hashtags);
       setIsLoading(false);
-      //console.log(`${type}`, res.data);
+      // console.log(`${type}`, res.data);
     });
   }
 
@@ -41,7 +37,6 @@ export default function KeywordBox({
       setIsSameTag(true);
       setCurrentTag(null);
       fetchData();
-      // fetchFeedList(type);
     } else {
       setIsSameTag(false);
       setCurrentTag(index);
