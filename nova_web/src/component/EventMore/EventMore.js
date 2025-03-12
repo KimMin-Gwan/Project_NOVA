@@ -4,7 +4,11 @@ import { useState, useEffect } from "react";
 import ScheduleBundle from "../ScheduleEvent/ScheduleBundle";
 import ScheduleEvent from "../EventCard/EventCard";
 import { ScheduleMoreAdd } from "../ScheduleMore/ScheduleMore";
-
+import TimeChart from "../../pages/SchedulePage/TimeChart";
+import {
+  tempWeekDayData,
+  tempScheduleData,
+} from "../../pages/SchedulePage/TestScheduleData";
 const exdata = [0, 1];
 
 export default function EventMore({ closeSchedule, isOpen }) {
@@ -99,6 +103,10 @@ export default function EventMore({ closeSchedule, isOpen }) {
             selectBack={selectBack[index] || ""}
           />
         ))}
+        <TimeChart
+          tempWeekDayData={tempWeekDayData}
+          tempScheduleData={tempScheduleData}
+        />
       </section>
     </div>
   );
