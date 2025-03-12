@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import useDragScroll from "../../hooks/useDragScroll";
 import mainApi from "../../services/apis/mainApi";
 import style from "./KeywordBox.module.css";
-import useFetchFeedList from "../../hooks/useFetchFeedList";
-import useFeedStore from "../../stores/FeedStore/useFeedStore";
 
 export default function KeywordBox({
   type,

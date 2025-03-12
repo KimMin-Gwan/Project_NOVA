@@ -18,7 +18,7 @@ import { ContentFeed } from "../../component/feed";
 
 import style from "./FeedDetail.module.css";
 
-export default function FeedDetail({}) {
+export default function FeedDetail() {
   let navigate = useNavigate();
   let { fid } = useParams();
 
@@ -39,23 +39,16 @@ export default function FeedDetail({}) {
   useEffect(() => {
     if (!isLoading && commentRef.current && state.commentClick) {
       commentRef.current.focus();
-      //       // 렌더링이 완료된 후 focus를 지연시킴
-      //       setTimeout(() => {
-      //       }, 0); // 0초 후 실행
     }
   }, [isLoading]);
 
   async function fetchFeed() {
-    await fetch(`https://nova-platform.kr/feed_explore/feed_detail/feed_data?fid=${fid}`, {
-      credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setFeedData(data.body.feed[0]);
-        setLinks(data.body.links);
-        setIsLoading(false);
-        setIsComment(false);
-      });
+    await mainApi.get(`feed_explore/feed_detail/feed_data?fid=${fid}`).then((res) => {
+      setFeedData(res.data.body.feed[0]);
+      setLinks(res.data.body.links);
+      setIsLoading(false);
+      setIsComment(false);
+    });
   }
 
   useEffect(() => {
