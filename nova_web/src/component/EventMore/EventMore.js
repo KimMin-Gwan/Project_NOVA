@@ -53,8 +53,20 @@ export default function EventMore({ closeSchedule, isOpen }) {
     setSelectBack({});
   }
 
-  // 일정 모두 추가
-  function handleAllSelect() {}
+  // 일정 모두 선택
+  function handleAllSelect() {
+    console.log("모두선택");
+
+    // 색상변화
+    // setSelectBack((prev) => {
+    //   const isAllSelected = exdata.every((key) => prev[key] === "#F1F7FF");
+
+    //   return exdata.reduce((acc, key) => {
+    //     acc[key] = isAllSelected ? "" : "#F1F7FF";
+    //     return acc;
+    //   }, {});
+    // });
+  }
 
   // 일정 선택 하기, 취소하기 토클
   const selectToggle = () => {
@@ -78,7 +90,7 @@ export default function EventMore({ closeSchedule, isOpen }) {
         <ScheduleMoreAdd
           selectToggle={selectToggle}
           selectText={isSelect}
-          allSelect={handleAllSelect}
+          allSelect={isSelect === 1 ? () => handleAllSelect() : undefined}
         />
         {exdata.map((key, index) => (
           <ScheduleEvent

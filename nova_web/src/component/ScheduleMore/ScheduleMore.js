@@ -45,8 +45,14 @@ export function ScheduleMore({ scheduleClick }) {
   return <BasicSchedule isMore={0} lastClick={scheduleClick} />;
 }
 // 일정 번들 자세히보기 버튼
-export function ScheduleMoreAdd({ selectToggle, selectText }) {
-  return <BasicSchedule isMore={selectText} secondClick={selectToggle} />;
+export function ScheduleMoreAdd({ selectToggle, selectText, allSelect }) {
+  return (
+    <BasicSchedule
+      isMore={selectText}
+      secondClick={selectToggle}
+      lastClick={allSelect}
+    />
+  );
 }
 // 일정 버튼
 export function ScheduleAdd({ addClick }) {
