@@ -9,6 +9,7 @@ import {
   ScheduleMore,
   ScheduleAdd,
 } from "../../component/ScheduleMore/ScheduleMore";
+import EventMore from "../../component/EventMore/EventMore";
 
 const mockData = [
   {
@@ -64,6 +65,7 @@ export default function SearchSchedulePage() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [ScheduleIndex, setScheduleIndex] = useState(0);
   const [moreClick, setMoreClick] = useState({});
+  const [isMoreModal, setIsMoreModal] = useState(false);
 
   const handleClick = (index, type) => {
     setActiveIndex(index);
@@ -77,6 +79,9 @@ export default function SearchSchedulePage() {
     }));
   };
 
+  const toggleSchedule = () => {
+    setIsMoreModal((isMoreModal) => !isMoreModal);
+  };
   return (
     <div className="container SearchSchedulePage">
       <ScheduleSearch title={true} />
@@ -120,10 +125,14 @@ export default function SearchSchedulePage() {
                   key={item.id}
                   toggleClick={() => toggleMore(item.id)}
                 />
-                {moreClick[item.id] && <ScheduleMore />}
+                {moreClick[item.id] && (
+                  <ScheduleMore scheduleClick={toggleSchedule} />
+                )}
               </li>
             ))}
       </ul>
+
+      <EventMore closeSchedule={toggleSchedule} isOpen={isMoreModal} />
     </div>
   );
 }
