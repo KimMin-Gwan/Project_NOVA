@@ -3,6 +3,8 @@
   display: flex;
   /* justify-content: space-between; */
   padding: 20px;
+  cursor: pointer;
+
   & dl {
     margin: 0;
     width: 100%;

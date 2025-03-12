@@ -66,12 +66,13 @@ export default function SearchSchedulePage() {
   const [ScheduleIndex, setScheduleIndex] = useState(0);
   const [moreClick, setMoreClick] = useState({});
   const [isMoreModal, setIsMoreModal] = useState(false);
-
+  // 일정 탐색 페이지에 일정번들, 일정, 이벤트 상태 변경
   const handleClick = (index, type) => {
     setActiveIndex(index);
     setScheduleIndex(index);
   };
 
+  // 클릭시 버튼 보이게 해주기
   const toggleMore = (id) => {
     setMoreClick((prev) => ({
       ...prev,
@@ -79,9 +80,11 @@ export default function SearchSchedulePage() {
     }));
   };
 
+  // 일정번들에 자세히 모달 토글
   const toggleSchedule = () => {
     setIsMoreModal((isMoreModal) => !isMoreModal);
   };
+
   return (
     <div className="container SearchSchedulePage">
       <ScheduleSearch title={true} />
@@ -106,7 +109,9 @@ export default function SearchSchedulePage() {
                   key={item.id}
                   toggleClick={() => toggleMore(item.id)}
                 />
-                {moreClick[item.id] && <ScheduleMore />}
+                {moreClick[item.id] && (
+                  <ScheduleMore scheduleClick={toggleSchedule} />
+                )}
               </li>
             ))
           : ScheduleIndex === 1
@@ -125,9 +130,7 @@ export default function SearchSchedulePage() {
                   key={item.id}
                   toggleClick={() => toggleMore(item.id)}
                 />
-                {moreClick[item.id] && (
-                  <ScheduleMore scheduleClick={toggleSchedule} />
-                )}
+                {moreClick[item.id] && <ScheduleMore />}
               </li>
             ))}
       </ul>
