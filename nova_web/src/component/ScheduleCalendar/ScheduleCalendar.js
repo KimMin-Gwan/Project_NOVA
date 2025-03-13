@@ -8,6 +8,12 @@ export default function ScheduleCalendar() {
   const data = sampleDate;
 
   const [value, onChange] = useState(new Date());
+
+  const tileClassName = ({ date }) => {
+    if (date.getDay() === 0 || date.getDay() == 6) {
+      return "weekend";
+    }
+  };
   return (
     <section className="CalendarBox">
       <Calendar
@@ -16,6 +22,7 @@ export default function ScheduleCalendar() {
         showNeighboringMonth={false}
         calendarType="hebrew"
         formatDay={(locale, date) => moment(date).format("D")}
+        tileClassName={tileClassName}
         tileContent={({ date, view }) => {
           if (data.find((x) => x === moment(date).format("YYYY-MM-DD"))) {
             return (

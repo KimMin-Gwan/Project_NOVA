@@ -3,6 +3,7 @@
   width: 100%;
   display: flex;
   justify-content: center;
+
   .dot {
     position: absolute;
     height: 7px;
@@ -35,7 +36,14 @@
     padding-block: 2px;
     border-radius: 50%;
   }
+  /* 기존 주말 색상 제거 */
+  .react-calendar__month-view__days__day--weekend {
+    color: inherit;
+  }
 
+  .react-calendar__tile.weekend {
+    color: red;
+  }
   /* 오늘 날짜 표시*/
   .react-calendar__tile--now {
     background-color: transparent;
