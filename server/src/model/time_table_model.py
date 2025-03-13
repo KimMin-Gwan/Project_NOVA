@@ -213,7 +213,7 @@ class TimeTableBiasModel(TimeTableModel):
         Sbias_data["category"] = bias.category
         Sbias_data["tags"] = bias.tags
         Sbias_data["main_time"] = bias.main_time
-        Sbias_data["is_ad"] = False
+        Sbias_data["is_ad"] = bias.is_ad
 
         return Sbias_data
 
@@ -233,7 +233,8 @@ class TimeTableBiasModel(TimeTableModel):
 
         return tbias_list
 
-    # 광고로 등록된 바이어스 추천 리스트를 샘플링 (광고)
+    # # 광고로 등록된 바이어스 추천 리스트를 샘플링 (광고)
+    # 수정해야하긴 해서 일단 원형을 남기고 나중에 광고를 붙인다면 그 때 다시하겠습니다.
     def _random_sampling_ad_true_bias(self, bias_list, random_samples):
         # 광고로 등록된 애들
         ad_true_bias = []
@@ -255,24 +256,26 @@ class TimeTableBiasModel(TimeTableModel):
             bias.make_with_dict(bias_data)
             bias_list.append(bias)
 
-        ad_true_samples = int(random_samples * 0.3)
-        # 최애 랜덤 샘플링 (광고, 비광고 구분)
-        ad_true_bias_list = self._random_sampling_ad_true_bias(bias_list=bias_list, random_samples=ad_true_samples)
+        self._biases = random.sample(bias_list, random_samples)
 
-        # 이렇게 하는 이유
-        # AD = True인 최애를 뽑았는데 그 개수가 부족하여 자리가 남는경우를 대비해서 더 뽑는거
-        # 전체 랜덤 수 = 5, 뽑아야 할 AD_True 명 수 = 2, 실제로 나온 거 1
-        # 뽑아야 할 것 = 4 ( 5 - 1 )
-        # 만약 AD_true = 0이면 5명 뽑아야 함
-        random_bias_samples = random_samples - len(ad_true_bias_list)
-
-        # 랜덤해서 뽑되, 광고로 뽑힌 사람은 제외한다
-        remain_bias_list = [bias for bias in bias_list if bias not in ad_true_bias_list]
-        random_remain_bias_list = random.sample(remain_bias_list, random_bias_samples)
-
-        # 메인에 등록될 광고 최애 + 랜덤 최애 추천
-        full_list = ad_true_bias_list + random_remain_bias_list
-        self._biases = self._get_tbias_list(full_list)
+        # ad_true_samples = int(random_samples * 0.3)
+        # # 최애 랜덤 샘플링 (광고, 비광고 구분)
+        # ad_true_bias_list = self._random_sampling_ad_true_bias(bias_list=bias_list, random_samples=ad_true_samples)
+        #
+        # # 이렇게 하는 이유
+        # # AD = True인 최애를 뽑았는데 그 개수가 부족하여 자리가 남는경우를 대비해서 더 뽑는거
+        # # 전체 랜덤 수 = 5, 뽑아야 할 AD_True 명 수 = 2, 실제로 나온 거 1
+        # # 뽑아야 할 것 = 4 ( 5 - 1 )
+        # # 만약 AD_true = 0이면 5명 뽑아야 함
+        # random_bias_samples = random_samples - len(ad_true_bias_list)
+        #
+        # # 랜덤해서 뽑되, 광고로 뽑힌 사람은 제외한다
+        # remain_bias_list = [bias for bias in bias_list if bias not in ad_true_bias_list]
+        # random_remain_bias_list = random.sample(remain_bias_list, random_bias_samples)
+        #
+        # # 메인에 등록될 광고 최애 + 랜덤 최애 추천
+        # full_list = ad_true_bias_list + random_remain_bias_list
+        # self._biases = self._get_tbias_list(full_list)
 
         return
 
@@ -337,7 +340,7 @@ class TimeScheduleModel(TimeTableModel):
         time_schedule_data["update_time"] = self._cal_update_time(schedule.update_time)
         time_schedule_data["location"] = schedule.location
         time_schedule_data["code"] = schedule.code
-        time_schedule_data["color_code"] = ""
+        time_schedule_data["color_code"] = schedule.color_code
 
     # 스케쥴 리스트 만드는 함수
     def get_tschedule_list(self, sids):
