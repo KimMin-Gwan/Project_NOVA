@@ -165,7 +165,7 @@ class TimeTableView(Master_View):
             return response
 
         @self.__app.get('/time_table_server/try_search_bias')
-        def try_search_bias_with_keyword(request:Request, keyword:[Optional[str]]="", key:Optional[int]=-1, type:Optional[str]="bias"):
+        def try_search_bias_with_keyword(request:Request, keyword:Optional[str]="", key:Optional[int]=-1, type:Optional[str]="bias"):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = SearchRequest(keyword=keyword, key=key, type=type)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
