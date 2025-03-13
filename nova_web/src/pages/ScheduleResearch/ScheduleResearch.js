@@ -5,9 +5,10 @@ import ScheduleCalendar from "../../component/ScheduleCalendar/ScheduleCalendar"
 export default function ScheduleResearch() {
   return (
     <div className={`container  ${style["ScheduleResearch"]}`}>
-      <section>
-        <ScheduleCalendar />
-      </section>
+      <nav>
+        <h3>이벤트</h3>
+      </nav>
+      <ScheduleCalendar />
     </div>
   );
 }
