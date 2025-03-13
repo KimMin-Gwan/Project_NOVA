@@ -26,7 +26,7 @@ export default function ScheduleSearch({ title }) {
     <div className={style["SearchSection"]}>
       <div className={style["sectionTop"]}>
         <h3>{titleKind[title].titleName}</h3>
-        {titleKind[title] !== "" && (
+        {titleKind[title].button !== "" && (
           <button>일정 {titleKind[title].button}</button>
         )}
       </div>
