@@ -16,7 +16,9 @@
 .CalendarBox {
   display: flex;
   justify-content: center;
+
   .react-calendar {
+    box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.2), 4px 6px 15px rgba(0, 0, 0, 0.22);
     border-radius: 10px;
     border: 1px solid gainsboro;
   }
@@ -35,6 +37,7 @@
   .react-calendar__tile--now {
     background-color: transparent;
     border-radius: 50%;
+
     & abbr {
       background-color: yellow;
     }
