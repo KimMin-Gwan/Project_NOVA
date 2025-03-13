@@ -343,8 +343,9 @@ class MakeSingleScheduleRequest(RequestHeader):
         self.sname = body['sname']
         self.location = body['location']
         self.bid = body.get("bid", "")
-        self.date = body['date']
+        self.start_date = body['start_date']
         self.start_time = body['start_time']
+        self.end_date = body['end_date']
         self.end_time = body['end_time']
         self.state = body.get("status", True)
         

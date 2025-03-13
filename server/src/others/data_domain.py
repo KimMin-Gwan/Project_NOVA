@@ -174,7 +174,7 @@ class Schedule(SampleDomain):
         self.code:str = code                        # 스케줄 코드
         self.update_datetime:str = update_datetime  # 등록된 시간
         self.num_usage:int = num_usage              # 추가된 횟수
-        self.state:bool = state
+        self.state:bool = state                     # 공개 비공개 여부
     
     def make_with_dict(self, dict_data:dict):
         self.sid = dict_data.get('sid', "")
@@ -183,8 +183,9 @@ class Schedule(SampleDomain):
         self.uname = dict_data.get('uname', "")
         self.bid = dict_data.get('bid', "")
         self.bname = dict_data.get('bname', "")
-        self.date = dict_data.get('date', "")
+        self.start_date = dict_data.get('start_date', "")
         self.start_time = dict_data.get('start_time', "")
+        self.end_date = dict_data.get('end_date', "")
         self.end_time = dict_data.get('end_time', "")
         self.location = dict_data.get('location', "")
         self.code = dict_data.get('code', "")
@@ -201,8 +202,9 @@ class Schedule(SampleDomain):
             "uname": self.uname,
             "bid": self.bid,
             "bname": self.bname,
-            "date": self.date,
+            "start_date": self.start_date,
             "start_time": self.start_time,
+            "end_date": self.end_date,
             "end_time": self.end_time,
             "location": self.location,
             "code": self.code,

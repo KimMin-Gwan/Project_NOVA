@@ -1,5 +1,5 @@
 from view.jwt_decoder import JWTManager, JWTPayload, RequestManager
-from model import Local_Database, BaseModel 
+from model import Local_Database, BaseModel , ScheduleChartModel
 from model import TimeTableModel, MultiScheduleModel, AddScheduleModel, ScheduleRecommendKeywordModel
 from model import TimeTableBiasModel, TimeTableScheduleModel, TimeTableEventModel, TimeTableScheduleBundelModel
 # from model.time_table_model import *
@@ -46,7 +46,7 @@ class TImeTableController:
     
     # 내 타임 차트 가지고 오기
     def get_time_chart(self, database:Local_Database, request:RequestManager) -> BaseModel: 
-        model = MultiScheduleModel(database=database)
+        model = ScheduleChartModel(database=database)
         
         if request.jwt_payload != "":
             model.set_user_with_email(request=request.jwt_payload)
@@ -56,9 +56,7 @@ class TImeTableController:
 
         if model.is_tuser_alive():
             model.set_my_schedule_in_by_day(date=request.data_payload.date)
-        else:
-            model.set_schedule_in_by_day(date=request.data_payload.date)
-        
+            
         return model
     
     # 내 타임테이블 불러오기
