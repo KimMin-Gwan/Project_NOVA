@@ -256,7 +256,8 @@ class TimeScheduleModel(TimeTableModel):
         time_schedule_data["uname"] = schedule.uname
         time_schedule_data["start_time"] = self._calculate_day_hour_time(schedule.start_time)
         time_schedule_data["end_time"] = self._calculate_day_hour_time(schedule.end_time)
-        time_schedule_data["date"] = self._transfer_date_str(schedule.date)
+        time_schedule_data["start_date"] = self._transfer_date_str(schedule.start_date)
+        time_schedule_data["end_date"] = self._transfer_date_str(schedule.end_date)
         time_schedule_data["update_time"] = self._cal_update_time(schedule.update_time)
         time_schedule_data["location"] = schedule.location
         time_schedule_data["code"] = schedule.code
