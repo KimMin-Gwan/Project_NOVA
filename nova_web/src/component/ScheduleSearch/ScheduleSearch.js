@@ -1,16 +1,34 @@
 import search_icon from "./../../img/search_icon.png";
 import arrow from "./../../img/home_arrow.svg";
 import style from "./ScheduleSearch.module.css";
-const keyword = {
-  word: ["인터넷방송", "유튜버", "버튜버"],
-};
 
 export default function ScheduleSearch({ title }) {
+  const keyword = {
+    word: ["인터넷방송", "유튜버", "버튜버"],
+  };
+
+  const titleKind = [
+    {
+      titleName: "주제 탐색",
+      button: "탐색",
+    },
+    {
+      titleName: "일정 탐색",
+      button: "등록",
+    },
+    {
+      titleName: "이벤트 상세",
+      button: "",
+    },
+  ];
+
   return (
     <div className={style["SearchSection"]}>
       <div className={style["sectionTop"]}>
-        <h3>{title ? "일정 탐색" : "주제 탐색"}</h3>
-        <button>일정 {title ? "등록" : "탐색"}</button>
+        <h3>{titleKind[title].titleName}</h3>
+        {titleKind[title] !== "" && (
+          <button>일정 {titleKind[title].button}</button>
+        )}
       </div>
       <div className={style["searchFac"]}>
         <div className={style["searchBox"]}>

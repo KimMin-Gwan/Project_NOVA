@@ -44,7 +44,7 @@ export default function SearchSchedulePage() {
 
   return (
     <div className="container SearchSchedulePage">
-      <ScheduleSearch title={true} />
+      <ScheduleSearch title={1} />
       <section className={"info-list"}>
         <ul className={"post-list"} data-active-index={activeIndex}>
           {ScheduleKind.map((item, index) => (

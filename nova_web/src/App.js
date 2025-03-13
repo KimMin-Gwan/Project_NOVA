@@ -33,6 +33,7 @@ import SearchSchedulePage from "./pages/SearchSchedulePage/SearchSchedulePage.js
 import TestPage from "./pages/TestPage/TestPage.js";
 import ScheduleDashboard from "./pages/SchedulePage/ScheduleDashboard.js";
 import SearchTopicPage from "./pages/SearchTopicPage/SearchTopicPage.js";
+import ScheduleResearch from "./pages/ScheduleResearch/ScheduleResearch.js";
 // 다크 모드 클래스 반환 함수
 export function getModeClass(mode) {
   return mode === "dark" ? "dark-mode" : "bright-mode";
@@ -43,7 +44,8 @@ function App() {
     return localStorage.getItem("brightMode") || "bright"; // 기본값은 'bright'
   });
   useEffect(() => {
-    document.body.className = brightMode === "dark" ? "dark-mode" : "bright-mode";
+    document.body.className =
+      brightMode === "dark" ? "dark-mode" : "bright-mode";
   }, [brightMode]);
 
   const handleModeChange = (newMode) => {
@@ -53,12 +55,18 @@ function App() {
   return (
     <Routes>
       {/* 더보기 페이지 / 마이페이지 */}
-      <Route path="/more_see" element={<MoreSee onModeChange={handleModeChange} />}></Route>
+      <Route
+        path="/more_see"
+        element={<MoreSee onModeChange={handleModeChange} />}
+      ></Route>
       <Route path="/mypage" element={<MyPage />}></Route>
       <Route path="/mypage_edit" element={<MyPageEdit />}></Route>
 
       {/* 로그인 및 비밀번호 및 회원가입 */}
-      <Route path="/novalogin" element={<NOVALogin brightMode={brightMode} />}></Route>
+      <Route
+        path="/novalogin"
+        element={<NOVALogin brightMode={brightMode} />}
+      ></Route>
       <Route path="/find_pw" element={<FindPw />}></Route>
       <Route path="/find_pw_change" element={<FindPwChange />}></Route>
       <Route path="/signup" element={<SignUp />}></Route>
@@ -73,7 +81,10 @@ function App() {
       <Route path="/write_feed" element={<Write />}>
         <Route path=":type" element={<Write />}></Route>
       </Route>
-      <Route path="/feed_list" element={<FeedList brightMode={brightMode} />}></Route>
+      <Route
+        path="/feed_list"
+        element={<FeedList brightMode={brightMode} />}
+      ></Route>
       <Route path="/feed_list/:fid" element={<FeedList />}></Route>
       <Route path="/feed_detail/:fid" element={<FeedDetail />}></Route>
       <Route path="/follow_page" element={<FollowPage />}></Route>
@@ -86,6 +97,7 @@ function App() {
       <Route path="/schedule" element={<ScheduleDashboard />}></Route>
       <Route path="/search/schedule" element={<SearchSchedulePage />}></Route>
       <Route path="/search/topic" element={<SearchTopicPage />}></Route>
+      <Route path="/search/research" element={<ScheduleResearch />}></Route>
 
       {/* 펀딩 페이지 목록 */}
       {/* <Route path="/nova_funding" element={<NovaFunding brightMode={brightMode} />}></Route>

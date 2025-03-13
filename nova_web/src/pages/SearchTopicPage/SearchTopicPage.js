@@ -25,7 +25,7 @@ export default function SearchTopicPage() {
 
   return (
     <div className="container SearchSchedulePage">
-      <ScheduleSearch title={false} />
+      <ScheduleSearch title={0} />
 
       <ul className="scheduleList">
         {mockData.map((item) => (
