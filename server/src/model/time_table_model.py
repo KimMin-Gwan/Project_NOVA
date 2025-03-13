@@ -1,5 +1,6 @@
 from model.base_model import BaseModel
 from model import Local_Database
+from numpy.random.c_distributions import random_exponential
 from others.data_domain import TimeTableUser as TUser
 from others.data_domain import Schedule, ScheduleBundle, ScheduleEvent, Bias
 
@@ -199,7 +200,9 @@ class ScheduleRecommendKeywordModel(TimeTableModel):
 class TimeTableBiasModel(TimeTableModel):
     def __init__(self, database:Local_Database) -> None:
         super().__init__(database)
-        self._biases = []
+        self._biases = [] # 홈 전용 및 검색 전용
+        self._ad_true_biases = []
+        self._key = -1
 
     # Time Schedule에 쓰는 Bias 데이터를 만드는 함수
     def _tbias_data(self, bias:Bias):
@@ -215,25 +218,97 @@ class TimeTableBiasModel(TimeTableModel):
         return Sbias_data
 
     # Time Bias를 담는 리스트를 만듦
-    def get_tbias_list(self, bids):
-        bias_datas = self._database.get_datas_with_ids(target_id="bid", ids=bids)
+    def _get_tbias_list(self, bias_list):
+        # bias_datas = self._database.get_datas_with_ids(target_id="bid", ids=bids)
+        #
+        # for bias_data in bias_datas:
+        #     bias=Bias()
+        #     bias.make_with_dict(dictionary=bias_data)
+        #     Sbias_data = self._tbias_data(bias)
+        tbias_list = []
+
+        for bias in bias_list:
+            schedule_bias_data = self._tbias_data(bias)
+            tbias_list.append(schedule_bias_data)
+
+        return tbias_list
+
+    # 광고로 등록된 바이어스 추천 리스트를 샘플링 (광고)
+    def _random_sampling_ad_true_bias(self, bias_list, random_samples):
+        # 광고로 등록된 애들
+        ad_true_bias = []
+        for bias in bias_list:
+            if bias.is_ad == True:
+                ad_true_bias.append(bias)
+        # 광고로 뽑힌 사람들
+        random_ad_true_list = random.sample(ad_true_bias, random_samples)
+
+        return random_ad_true_list
+
+    # 바이어스 추천 리스트
+    def get_recommend_bias_list(self, random_samples):
+        bias_datas = self._database.get_all_data(target="bid")
+        bias_list = []
 
         for bias_data in bias_datas:
-            bias=Bias()
-            bias.make_with_dict(dictionary=bias_data)
-            Sbias_data = self._tbias_data(bias)
+            bias = Bias()
+            bias.make_with_dict(bias_data)
+            bias_list.append(bias)
 
-            self._biases.append(Sbias_data)
+        ad_true_samples = int(random_samples * 0.3)
+        # 최애 랜덤 샘플링 (광고, 비광고 구분)
+        ad_true_bias_list = self._random_sampling_ad_true_bias(bias_list=bias_list, random_samples=ad_true_samples)
+
+        # 이렇게 하는 이유
+        # AD = True인 최애를 뽑았는데 그 개수가 부족하여 자리가 남는경우를 대비해서 더 뽑는거
+        # 전체 랜덤 수 = 5, 뽑아야 할 AD_True 명 수 = 2, 실제로 나온 거 1
+        # 뽑아야 할 것 = 4 ( 5 - 1 )
+        # 만약 AD_true = 0이면 5명 뽑아야 함
+        random_bias_samples = random_samples - len(ad_true_bias_list)
+
+        # 랜덤해서 뽑되, 광고로 뽑힌 사람은 제외한다
+        remain_bias_list = [bias for bias in bias_list if bias not in ad_true_bias_list]
+        random_remain_bias_list = random.sample(remain_bias_list, random_bias_samples)
+
+        # 메인에 등록될 광고 최애 + 랜덤 최애 추천
+        full_list = ad_true_bias_list + random_remain_bias_list
+        self._biases = self._get_tbias_list(full_list)
 
         return
 
-    # 바이어스 추천 리스트
-    def get_recommend_bias_list(self):
-        pass
+    # 바이어스 서치 함수
+    def __search_bias_list(self, keyword:str):
+        # 4가지의 경우가 존재한다
+        # 아티스트 닉네임, 카테고리, 플랫폼, 태그
+
+        bias_datas = self._database.get_all_data(target="bid")
+        search_list = []
+
+        for bias_data in bias_datas:
+            bias = Bias()
+            bias.make_with_dict(bias_data)
+            if keyword in bias.bname:
+                search_list.append(bias)
+            elif keyword in bias.category:
+                search_list.append(bias)
+            elif keyword in bias.tags:
+                search_list.append(bias)
+            elif keyword in bias.agency:
+                search_list.append(bias)
+
+        return search_list
+
+    # 바이어스 키워드 서치
+    def search_bias_with_keyword(self, keyword:str, last_index:int, num_bias:int):
+        search_bias_list = self.__search_bias_list(keyword=keyword)
+        self._biases, self._key = self.paging_id_list(id_list=search_bias_list, last_index=last_index, page_size=num_bias)
+        return
+
 
     def get_response_form_data(self, head_parser):
         body = {
-            "biases" : self._biases
+            "biases" : self._biases,
+            "key" : self._key
         }
 
         response = self._get_response_data(head_parser=head_parser, body=body)
@@ -243,6 +318,7 @@ class TimeScheduleModel(TimeTableModel):
     def __init__(self, database:Local_Database) -> None:
         super().__init__(database)
         self._schedules = []
+        self._key = -1
 
     # 스케쥴 Send Data 만드는 함수
     def _time_schedule(self, schedule:Schedule):
@@ -276,7 +352,8 @@ class TimeScheduleModel(TimeTableModel):
 
     def get_response_form_data(self, head_parser):
         body = {
-            "schedules" : self._schedules
+            "schedules" : self._schedules,
+            "key" : self._key
         }
 
         response = self._get_response_data(head_parser=head_parser, body=body)
@@ -286,6 +363,7 @@ class TimeEventModel(TimeTableModel):
     def __init__(self, database:Local_Database) -> None:
         super().__init__(database)
         self._events = []
+        self._key = -1
 
     # Event 보낼 거 만드는 함수
     def _tevent_data(self, event:ScheduleEvent):
@@ -316,7 +394,8 @@ class TimeEventModel(TimeTableModel):
 
     def get_response_form_data(self, head_parser):
         body = {
-            "events" : self._events
+            "events" : self._events,
+            "key" : self._key
         }
 
         response = self._get_response_data(head_parser=head_parser, body=body)
@@ -326,6 +405,7 @@ class TimeScheduleBundleModel(TimeTableModel):
     def __init__(self, database:Local_Database) -> None:
         super().__init__(database)
         self._schedule_bundles = []
+        self._key = -1
 
     def _transfer_date_str_list(self, sid_list):
         schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids=sid_list)
@@ -367,7 +447,8 @@ class TimeScheduleBundleModel(TimeTableModel):
 
     def get_response_form_data(self, head_parser):
         body = {
-            "schedule_bundle" : self.schedule_bundles
+            "schedule_bundle" : self.schedule_bundles,
+            "key": self._key
         }
         response = self._get_response_data(head_parser=head_parser, body=body)
         return response
