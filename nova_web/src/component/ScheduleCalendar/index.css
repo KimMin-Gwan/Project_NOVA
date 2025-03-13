@@ -1,0 +1,70 @@
+/* 밑에 도트 */
+.dotContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  .dot {
+    position: absolute;
+    height: 7px;
+    width: 7px;
+    background-color: #f87171;
+    border-radius: 50%;
+    display: flex;
+  }
+}
+
+.CalendarBox {
+  display: flex;
+  justify-content: center;
+  .react-calendar {
+    border-radius: 10px;
+    border: 1px solid gainsboro;
+  }
+  /* 네비게이션 버튼 색 */
+  .react-calendar__navigation button {
+    color: #f87171;
+    font-weight: 600;
+  }
+
+  & abbr {
+    border-radius: 50%;
+    padding: 5px;
+  }
+
+  /* 오늘 날짜 표시*/
+  .react-calendar__tile--now {
+    background-color: transparent;
+    border-radius: 50%;
+    & abbr {
+      background-color: yellow;
+    }
+  }
+  /* 오늘 날짜 호버 시 */
+  .react-calendar__tile--now:hover {
+    background-color: transparent;
+  }
+
+  /* 비활성화 */
+  /* 날짜 선택 시 */
+  .react-calendar__tile--active {
+    background-color: transparent;
+    color: black;
+    & abbr {
+      background-color: #f87171;
+    }
+  }
+
+  /* 활성화 */
+  /* 날짜 포커스 시 */
+  .react-calendar__tile:enabled:focus {
+    background-color: transparent;
+  }
+
+  /* 날짜 호버 시 */
+  .react-calendar__tile:enabled:hover {
+    background-color: transparent;
+    & abbr {
+      background-color: #f8abab;
+    }
+  }
+}

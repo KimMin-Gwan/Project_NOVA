@@ -1,10 +1,12 @@
+import React, { useState } from "react";
 import style from "./ScheduleResearch.module.css";
-import Calendar from "react-calendar";
+import ScheduleCalendar from "../../component/ScheduleCalendar/ScheduleCalendar";
+
 export default function ScheduleResearch() {
   return (
     <div className={`container  ${style["ScheduleResearch"]}`}>
       <section>
-        <Calendar />
+        <ScheduleCalendar />
       </section>
     </div>
   );

@@ -239,3 +239,5 @@ export const eventData = [
     date: "25년 03월 01일",
   },
 ];
+
+export const sampleDate = ["2025-03-10", "2025-03-17", "2025-03-16"];
