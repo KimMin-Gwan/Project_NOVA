@@ -114,7 +114,8 @@ class TimeTableView(Master_View):
 
             time_table_controller =TImeTableController()
             model = time_table_controller.get_recommended_bias_list(database=self.__database,
-                                                                        request=request_manager)
+                                                                    request=request_manager,
+                                                                    num_recommend=5)
             
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
@@ -136,7 +137,7 @@ class TimeTableView(Master_View):
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
             time_table_controller =TImeTableController()
-            model = time_table_controller.try_search_schedule(database=self.__database,
+            model = time_table_controller.try_search_schedule_with_keyword(database=self.__database,
                                                             request=request_manager)
             
             body_data = model.get_response_form_data(self._head_parser)
@@ -162,6 +163,26 @@ class TimeTableView(Master_View):
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response
+
+        @self.__app.get('/time_table_server/try_search_bias')
+        def try_search_bias_with_keyword(request:Request, keyword:Optional[str]="", key:Optional[int]=-1, type:Optional[str]="bias"):
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
+            data_payload = SearchRequest(keyword=keyword, key=key, type=type)
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+
+            time_table_controller =TImeTableController()
+            model = time_table_controller.try_search_bias_with_keyword(database=self.__database,
+                                                                       request=request_manager,
+                                                                       num_ad_true=5,
+                                                                       num_biases=15)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
+
+
+
         
     
     def my_schedule_route(self):
@@ -322,8 +343,9 @@ class MakeSingleScheduleRequest(RequestHeader):
         self.sname = body['sname']
         self.location = body['location']
         self.bid = body.get("bid", "")
-        self.date = body['date']
+        self.start_date = body['start_date']
         self.start_time = body['start_time']
+        self.end_date = body['end_date']
         self.end_time = body['end_time']
         self.state = body.get("status", True)
         

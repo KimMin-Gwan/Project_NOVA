@@ -1,6 +1,8 @@
 from view.jwt_decoder import JWTManager, JWTPayload, RequestManager
-from model import Local_Database, BaseModel 
+from model import Local_Database, BaseModel , ScheduleChartModel
 from model import TimeTableModel, MultiScheduleModel, AddScheduleModel, ScheduleRecommendKeywordModel
+from model import TimeTableBiasModel, TimeTableScheduleModel, TimeTableEventModel, TimeTableScheduleBundelModel
+# from model.time_table_model import *
 
 
 class TImeTableController:
@@ -44,7 +46,7 @@ class TImeTableController:
     
     # 내 타임 차트 가지고 오기
     def get_time_chart(self, database:Local_Database, request:RequestManager) -> BaseModel: 
-        model = MultiScheduleModel(database=database)
+        model = ScheduleChartModel(database=database)
         
         if request.jwt_payload != "":
             model.set_user_with_email(request=request.jwt_payload)
@@ -54,9 +56,7 @@ class TImeTableController:
 
         if model.is_tuser_alive():
             model.set_my_schedule_in_by_day(date=request.data_payload.date)
-        else:
-            model.set_schedule_in_by_day(date=request.data_payload.date)
-        
+            
         return model
     
     # 내 타임테이블 불러오기
@@ -81,7 +81,7 @@ class TImeTableController:
         return model
 
     # 추천하는 바이어스 불러오기
-    def get_recommended_bias_list(self, database:Local_Database, request:RequestManager) -> BaseModel:
+    def get_recommended_bias_list(self, database:Local_Database, request:RequestManager, num_recommend=5) -> BaseModel:
         model = TimeTableBiasModel(database=database)
 
         if request.jwt_payload != "":
@@ -89,7 +89,7 @@ class TImeTableController:
             if not model._set_tuser_with_tuid():
                 return model
 
-        model.get_recommended_bias_list()
+        model.get_recommend_bias_list(random_samples=num_recommend)
         return
 
     # 스케줄 추가
@@ -182,6 +182,22 @@ class TImeTableController:
         
         model.search_my_schedule_with_bid(bid=request.data_payload.bid)
         
+        return model
+
+    def try_search_bias_with_keyword(self, database:Local_Database, request:RequestManager,
+                                    num_biases=10) -> BaseModel:
+        model = TimeTableBiasModel(database=database)
+
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
+            # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
+            if not model._set_tuser_with_tuid():
+                return model
+
+        model.search_bias_with_keyword(keyword=request.data_payload.keyword,
+                                       last_index=request.data_payload.key,
+                                       num_biases=num_biases)
+
         return model
 
     # 내가 가진 스케줄에서 제외
