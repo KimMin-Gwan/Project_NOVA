@@ -23,13 +23,13 @@ export default function SearchTopicPage() {
   }
 
   return (
-    <div className="container SearchSchedulePage">
+    <div className={`container ${style["SearchTopicPage"]}`}>
       <ScheduleSearch
         title={0}
         clickButton={() => clickPath("/search/research")}
       />
 
-      <ul className="scheduleList">
+      <ul className={style["scheduleList"]}>
         {mockData.map((item) => (
           <li key={item.id}>
             <ScheduleTopic

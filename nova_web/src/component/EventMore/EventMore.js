@@ -17,14 +17,28 @@ const exdata = [0, 1];
 
 export default function EventMore({ closeSchedule, isOpen, children }) {
   const [backgroundColor, setBackgroundColor] = useState("");
-
+  const [displaySt, setdisplaySt] = useState("");
+  const [upAnimation, setUpAnimation] = useState(false);
   // 애니메이션 올라오면 배경색 변화도록 해주는 이펙트
   useEffect(() => {
     if (!isOpen) {
       setBackgroundColor("transparent"); //닫혀있을 때는 배경색 없애기
-    } else {
+      setUpAnimation(false); // see 클래스 없애주기 위해서 닫히면 false 되도록 바꿔줌
+      // 5초 뒤에 닫기도록
       setTimeout(() => {
-        setBackgroundColor("rgba(0, 0, 0, 0.5)"); //일정시간 지난 후에 뒤에 배경색 주기
+        setdisplaySt("none");
+      }, 500);
+    } else {
+      setdisplaySt("block");
+
+      // 열렸다는 block 후에 애니메이션 적용 되도록 함
+      setTimeout(() => {
+        setUpAnimation(true);
+      }, 10);
+
+      //애니메이션 다하고 뒤에 배경색 주기
+      setTimeout(() => {
+        setBackgroundColor("rgba(0, 0, 0, 0.5)");
       }, 500);
     }
 
@@ -35,9 +49,11 @@ export default function EventMore({ closeSchedule, isOpen, children }) {
 
   return (
     <div
-      className={`${style["EventMoreContainer"]} ${isOpen ? style["see"] : ""}`}
+      className={`${style["EventMoreContainer"]} ${
+        upAnimation ? style["see"] : ""
+      }`}
       onClick={closeSchedule}
-      style={{ backgroundColor }}
+      style={{ display: displaySt, backgroundColor }}
     >
       <section
         className={`${style["eventMain"]} ${isOpen ? style["on"] : ""}`}

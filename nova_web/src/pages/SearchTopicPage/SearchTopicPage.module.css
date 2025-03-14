@@ -1,0 +1,12 @@
+.SearchTopicPage {
+  background-color: #f1f7ff;
+  height: 150vh;
+  & .scheduleList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-flow: column;
+    gap: 5px;
+  }
+}
