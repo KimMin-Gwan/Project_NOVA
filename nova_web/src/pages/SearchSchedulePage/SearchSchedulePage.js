@@ -2,18 +2,18 @@ import EventCard from "../../component/EventCard/EventCard";
 import ScheduleTopic from "../../component/ScheduleTopic/ScheduleTopic";
 import ScheduleEvent from "../../component/ScheduleEvent/ScheduleEvent";
 import "./index.css";
-import ScheduleBundle from "../../component/ScheduleEvent/ScheduleBundle";
+import { ScheduleBundle } from "../../component/ScheduleEvent/ScheduleBundle";
 import ScheduleSearch from "../../component/ScheduleSearch/ScheduleSearch";
+import useToggleMore from "../../component/useToggleMore";
+
 import React, { useEffect, useRef, useState } from "react";
 import {
   ScheduleMore,
   ScheduleAdd,
 } from "../../component/ScheduleMore/ScheduleMore";
-import EventMore from "../../component/EventMore/EventMore";
-import TimeChart from "../SchedulePage/TimeChart";
+import { BundleEventMore } from "../../component/EventMore/EventMore";
+
 import {
-  tempWeekDayData,
-  tempScheduleData,
   mockData,
   ScheduleKind,
 } from "../../pages/SchedulePage/TestScheduleData";
@@ -21,20 +21,12 @@ import {
 export default function SearchSchedulePage() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [ScheduleIndex, setScheduleIndex] = useState(0);
-  const [moreClick, setMoreClick] = useState({});
+  const { moreClick, toggleMore } = useToggleMore();
   const [isMoreModal, setIsMoreModal] = useState(false);
   // 일정 탐색 페이지에 일정번들, 일정, 이벤트 상태 변경
   const handleClick = (index, type) => {
     setActiveIndex(index);
     setScheduleIndex(index);
-  };
-
-  // 클릭시 버튼 보이게 해주기
-  const toggleMore = (id) => {
-    setMoreClick((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
   };
 
   // 일정번들에 자세히 모달 토글
@@ -61,7 +53,7 @@ export default function SearchSchedulePage() {
       <ul className="scheduleList">
         {ScheduleIndex === 0
           ? mockData.map((item) => (
-              <li>
+              <li key={item.id}>
                 <ScheduleBundle
                   key={item.id}
                   toggleClick={() => toggleMore(item.id)}
@@ -92,7 +84,7 @@ export default function SearchSchedulePage() {
             ))}
       </ul>
 
-      <EventMore closeSchedule={toggleSchedule} isOpen={isMoreModal} />
+      <BundleEventMore closeSchedule={toggleSchedule} isOpen={isMoreModal} />
     </div>
   );
 }

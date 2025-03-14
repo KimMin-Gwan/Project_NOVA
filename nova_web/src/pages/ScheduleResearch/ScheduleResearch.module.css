@@ -1,5 +1,6 @@
 .ScheduleResearch {
   background-color: #f1f7ff;
+  height: 200vh;
 }
 /* 이벤트 캘린더 */
 .eventCalendarBox {
@@ -29,4 +30,5 @@
 /* 이벤트 상세 여러가지들 박스*/
 .eventBox {
   margin-block: 5px 0;
+  list-style: none;
 }

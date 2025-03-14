@@ -6,19 +6,12 @@ import { useNavigate } from "react-router-dom";
 import { ScheduleFollow } from "../../component/ScheduleMore/ScheduleMore";
 import ScheduleFollowBox from "../../component/ScheduleFollowBox/ScheduleFollowBox";
 import { mockData } from "../../pages/SchedulePage/TestScheduleData";
+import useToggleMore from "../../component/useToggleMore";
 
 export default function SearchTopicPage() {
-  const [moreClick, setMoreClick] = useState({});
+  const { moreClick, toggleMore } = useToggleMore();
   const [isModal, setIsModal] = useState(false);
   const navigate = useNavigate();
-
-  // 주제 탐색 페이지에 누르면 버튼 나오게 하기
-  const toggleMore = (id) => {
-    setMoreClick((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
-  };
 
   // 팔로우 모달창 나오게 하기
   function handleFollowModal() {
@@ -38,7 +31,7 @@ export default function SearchTopicPage() {
 
       <ul className="scheduleList">
         {mockData.map((item) => (
-          <li>
+          <li key={item.id}>
             <ScheduleTopic
               key={item.id}
               toggleClick={() => toggleMore(item.id)}

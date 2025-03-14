@@ -8,6 +8,7 @@
   transform: translateY(100%);
   transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
   pointer-events: none;
+  z-index: -1;
 }
 
 .eventMain {
@@ -32,6 +33,7 @@
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
+  z-index: 10;
 }
 .on {
   transform: translateY(0);
