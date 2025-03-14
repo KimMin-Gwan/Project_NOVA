@@ -3,6 +3,7 @@ import "./style.css"; // Corrected import for CSS file
 import vertical_line from "./vertical_line.svg"; // Corrected import for SVG file
 import EventComponent from "./EventComponent"; // Corrected import for EventComponent`
 import ScheduleTopic from "../../component/ScheduleTopic/ScheduleTopic";
+import { useNavigate } from "react-router-dom";
 import TimeChart from "./TimeChart";
 import {
   tempWeekDayData,
@@ -11,6 +12,10 @@ import {
 } from "../../pages/SchedulePage/TestScheduleData";
 
 const ScheduleDashboard = () => {
+  const navigate = useNavigate();
+  const handleNavigate = (path) => {
+    navigate(`${path}`);
+  };
   return (
     <div className="container">
       <div className="section-box">
@@ -28,9 +33,11 @@ const ScheduleDashboard = () => {
               <span>개</span>
             </div>
             <div className="right-group">
-              <span>주제 탐색</span>
+              <button onClick={() => handleNavigate("/search/topic")}>
+                주제 탐색
+              </button>
               <img src={vertical_line} alt="vertical line" />
-              <span>일정 등록</span>
+              <button>일정 등록</button>
             </div>
           </div>
         </div>

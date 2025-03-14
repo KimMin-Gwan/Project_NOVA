@@ -61,6 +61,11 @@
   display: flex;
   align-items: center; /* 세로 정렬 */
   gap: 10px; /* 요소 간 간격 */
+
+  & button {
+    border: none;
+    background-color: transparent;
+  }
 }
 
 .num-bias {
