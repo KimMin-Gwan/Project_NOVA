@@ -28,6 +28,11 @@ function BasicSchedule({ isMore, secondClick, lastClick }) {
       second: "선택 취소",
       last: "선택한 일정 추가하기",
     },
+    {
+      first: "",
+      second: "",
+      last: "이벤트 추가하기",
+    },
   ];
 
   return (
@@ -35,14 +40,22 @@ function BasicSchedule({ isMore, secondClick, lastClick }) {
       {buttons[isMore].first !== "" && (
         <button className={style["moreButton"]}>{buttons[isMore].first}</button>
       )}
-      <button onClick={secondClick}>{buttons[isMore].second}</button>
+      {buttons[isMore].second !== "" && (
+        <button onClick={secondClick}>{buttons[isMore].second}</button>
+      )}
       <button onClick={lastClick}>{buttons[isMore].last}</button>
     </div>
   );
 }
 // 일정 번들 버튼
-export function ScheduleMore({ scheduleClick }) {
-  return <BasicSchedule isMore={0} lastClick={scheduleClick} />;
+export function ScheduleMore({ navBoardClick, scheduleClick }) {
+  return (
+    <BasicSchedule
+      isMore={0}
+      secondClick={navBoardClick}
+      lastClick={scheduleClick}
+    />
+  );
 }
 // 일정 번들 자세히보기 버튼
 export function ScheduleMoreAdd({ selectToggle, selectText, allSelect }) {
@@ -67,4 +80,8 @@ export function ScheduleFollow({ scheduleClick, followClick }) {
       lastClick={followClick}
     />
   );
+}
+// 스케줄 이벤트 추가하기 버튼
+export function ScheduleEventAdd() {
+  return <BasicSchedule isMore={5} />;
 }

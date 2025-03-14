@@ -39,4 +39,41 @@
       }
     }
   }
+
+  .scheduleBox {
+    display: flex;
+    justify-content: space-between;
+
+    /* 이벤트 자세히 보기 날짜 시간 판매처 */
+    & .BnameInfo {
+      font-size: 12px;
+      display: flex;
+      flex-flow: column;
+      gap: 4px;
+
+      & .eventDate {
+        font-size: 12px;
+        font-weight: 300;
+        color: #797979;
+      }
+    }
+
+    /* 이벤트 자세히 보기 0 일전 0 선택 */
+    & .rightSection {
+      display: flex;
+      flex-flow: column;
+      justify-content: space-between;
+      height: 100%;
+
+      & p {
+        margin: 0;
+        font-size: 12px;
+
+        &:last-child {
+          font-weight: 300;
+          color: black;
+        }
+      }
+    }
+  }
 }

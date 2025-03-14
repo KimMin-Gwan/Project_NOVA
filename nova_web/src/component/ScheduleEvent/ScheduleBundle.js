@@ -1,5 +1,8 @@
 import style from "./ScheduleEvent.module.css";
-import { schedule_bundle } from "../../pages/SchedulePage/TestScheduleData";
+import {
+  schedule_bundle,
+  schedule,
+} from "../../pages/SchedulePage/TestScheduleData";
 
 export default function BaseBundle({ toggleClick, children }) {
   return (
@@ -33,5 +36,22 @@ export function ScheduleBundle({ toggleClick }) {
 }
 
 export function EventBundle({ toggleClick }) {
-  return <BaseBundle toggleClick={toggleClick}></BaseBundle>;
+  return (
+    <BaseBundle toggleClick={toggleClick}>
+      <div className={style["scheduleBox"]}>
+        <section className={style["BnameInfo"]}>
+          <dt className={style["eventDate"]}>
+            {schedule.date} | {schedule.start}
+          </dt>
+          <dt>{schedule.location}</dt>
+        </section>
+        <section className={style["rightSection"]}>
+          <p>14일 전</p>
+          <p>
+            <b>12</b> 선택
+          </p>
+        </section>
+      </div>
+    </BaseBundle>
+  );
 }

@@ -5,7 +5,7 @@ import "./index.css";
 import { ScheduleBundle } from "../../component/ScheduleEvent/ScheduleBundle";
 import ScheduleSearch from "../../component/ScheduleSearch/ScheduleSearch";
 import useToggleMore from "../../component/useToggleMore";
-
+import { useNavigate } from "react-router-dom";
 import React, { useEffect, useRef, useState } from "react";
 import {
   ScheduleMore,
@@ -17,12 +17,15 @@ import {
   mockData,
   ScheduleKind,
 } from "../../pages/SchedulePage/TestScheduleData";
+import TestRef from "../../component/TestRef";
 
 export default function SearchSchedulePage() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [ScheduleIndex, setScheduleIndex] = useState(0);
   const { moreClick, toggleMore } = useToggleMore();
   const [isMoreModal, setIsMoreModal] = useState(false);
+  const navigate = useNavigate();
+
   // 일정 탐색 페이지에 일정번들, 일정, 이벤트 상태 변경
   const handleClick = (index, type) => {
     setActiveIndex(index);
@@ -32,6 +35,11 @@ export default function SearchSchedulePage() {
   // 일정번들에 자세히 모달 토글
   const toggleSchedule = () => {
     setIsMoreModal((isMoreModal) => !isMoreModal);
+  };
+  // 게시판으로 이동
+  const navBoard = () => {
+    console.log("클릭");
+    navigate("/");
   };
 
   return (
@@ -59,7 +67,10 @@ export default function SearchSchedulePage() {
                   toggleClick={() => toggleMore(item.id)}
                 />
                 {moreClick[item.id] && (
-                  <ScheduleMore scheduleClick={toggleSchedule} />
+                  <ScheduleMore
+                    navBoardClick={navBoard}
+                    scheduleClick={toggleSchedule}
+                  />
                 )}
               </li>
             ))

@@ -1,14 +1,18 @@
 import style from "./EventMore.module.css";
 import ModalRectangle from "./../../img/ModalRectangle.png";
 import { useState, useEffect } from "react";
-import { EventBundle } from "../ScheduleEvent/ScheduleBundle";
+import BaseBundle, { EventBundle } from "../ScheduleEvent/ScheduleBundle";
 import ScheduleEvent from "../EventCard/EventCard";
-import { ScheduleMoreAdd } from "../ScheduleMore/ScheduleMore";
+import {
+  ScheduleEventAdd,
+  ScheduleMoreAdd,
+} from "../ScheduleMore/ScheduleMore";
 import TimeChart from "../../pages/SchedulePage/TimeChart";
 import {
   tempWeekDayData,
   tempScheduleData,
 } from "../../pages/SchedulePage/TestScheduleData";
+import ScheduleCalendar from "../ScheduleCalendar/ScheduleCalendar";
 const exdata = [0, 1];
 
 export default function EventMore({ closeSchedule, isOpen, children }) {
@@ -124,7 +128,13 @@ export function BundleEventMore({ closeSchedule, isOpen }) {
 export function ScheduleEventMore({ closeSchedule, isOpen }) {
   return (
     <EventMore closeSchedule={closeSchedule} isOpen={isOpen}>
+      <BaseBundle />
+      <ScheduleEventAdd />
       <EventBundle />
+      <section className={style["previewBox"]}>
+        <h3>이벤트 미리보기</h3>
+        <ScheduleCalendar />
+      </section>
     </EventMore>
   );
 }
