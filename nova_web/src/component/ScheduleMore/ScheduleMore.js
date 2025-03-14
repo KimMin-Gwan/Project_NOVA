@@ -59,6 +59,12 @@ export function ScheduleAdd({ addClick }) {
   return <BasicSchedule isMore={2} lastClick={addClick} />;
 }
 // 주제 탐색 페이지의 버튼
-export function ScheduleFollow({ followClick }) {
-  return <BasicSchedule isMore={3} lastClick={followClick} />;
+export function ScheduleFollow({ scheduleClick, followClick }) {
+  return (
+    <BasicSchedule
+      isMore={3}
+      secondClick={scheduleClick}
+      lastClick={followClick}
+    />
+  );
 }

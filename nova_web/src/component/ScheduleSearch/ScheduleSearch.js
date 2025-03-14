@@ -2,7 +2,7 @@ import search_icon from "./../../img/search_icon.png";
 import arrow from "./../../img/home_arrow.svg";
 import style from "./ScheduleSearch.module.css";
 
-export default function ScheduleSearch({ title }) {
+export default function ScheduleSearch({ title, clickButton }) {
   const keyword = {
     word: ["인터넷방송", "유튜버", "버튜버"],
   };
@@ -27,7 +27,7 @@ export default function ScheduleSearch({ title }) {
       <div className={style["sectionTop"]}>
         <h3>{titleKind[title].titleName}</h3>
         {titleKind[title].button !== "" && (
-          <button>일정 {titleKind[title].button}</button>
+          <button onClick={clickButton}>일정 {titleKind[title].button}</button>
         )}
       </div>
       <div className={style["searchFac"]}>

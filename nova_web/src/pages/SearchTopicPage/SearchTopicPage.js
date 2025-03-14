@@ -2,6 +2,7 @@ import ScheduleTopic from "../../component/ScheduleTopic/ScheduleTopic";
 import style from "./SearchTopicPage.module.css";
 import ScheduleSearch from "../../component/ScheduleSearch/ScheduleSearch";
 import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { ScheduleFollow } from "../../component/ScheduleMore/ScheduleMore";
 import ScheduleFollowBox from "../../component/ScheduleFollowBox/ScheduleFollowBox";
 import { mockData } from "../../pages/SchedulePage/TestScheduleData";
@@ -9,6 +10,7 @@ import { mockData } from "../../pages/SchedulePage/TestScheduleData";
 export default function SearchTopicPage() {
   const [moreClick, setMoreClick] = useState({});
   const [isModal, setIsModal] = useState(false);
+  const navigate = useNavigate();
 
   // 주제 탐색 페이지에 누르면 버튼 나오게 하기
   const toggleMore = (id) => {
@@ -23,9 +25,16 @@ export default function SearchTopicPage() {
     setIsModal((isModal) => !isModal);
   }
 
+  function clickPath(path) {
+    navigate(`${path}`);
+  }
+
   return (
     <div className="container SearchSchedulePage">
-      <ScheduleSearch title={0} />
+      <ScheduleSearch
+        title={0}
+        clickButton={() => clickPath("/search/research")}
+      />
 
       <ul className="scheduleList">
         {mockData.map((item) => (
@@ -35,7 +44,10 @@ export default function SearchTopicPage() {
               toggleClick={() => toggleMore(item.id)}
             />
             {moreClick[item.id] && (
-              <ScheduleFollow followClick={handleFollowModal} />
+              <ScheduleFollow
+                scheduleClick={() => clickPath("/search/schedule")}
+                followClick={handleFollowModal}
+              />
             )}
           </li>
         ))}
