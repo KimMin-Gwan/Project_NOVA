@@ -89,7 +89,7 @@ body.dark-mode {
   margin: 0 auto;
   background-color: white;
   position: relative;
-  border: 1px white solid;
+  /* border: 1px white solid; */
   /* margin-bottom: 20px; */
 }
 

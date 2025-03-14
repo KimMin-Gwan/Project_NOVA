@@ -1,87 +1,89 @@
-.section-box{
-padding-bottom : 20px;
+.section-box {
+  padding-bottom: 20px;
 }
 
-.section-line{
-    background-color: #F1F7FF;
-    height: 5px;
-    width: 100%;
+.section-line {
+  background-color: #f1f7ff;
+  height: 5px;
+  width: 100%;
 }
 
-.dashboard-section{
-    padding-left: 28px;
-    padding-bottom : 10px;
-    padding-right: 28px;
+.dashboard-section {
+  padding-left: 28px;
+  padding-bottom: 10px;
+  padding-right: 28px;
 }
 
 .element {
-    color: transparent;
-    height: 26px;
-    line-height: 26px; 
-    position: relative;
-    white-space: nowrap;
+  margin: 0;
+  padding-block: 20px;
+  color: transparent;
+  height: 26px;
+  line-height: 26px;
+  position: relative;
+  white-space: nowrap;
 }
 
 .text-wrapper {
-    color: #2d2d2d;
-    letter-spacing: -0.08px;
+  color: #2d2d2d;
+  letter-spacing: -0.08px;
 }
 
 .span {
-    color: #107af4;
-    letter-spacing: -0.08px;
+  color: #107af4;
+  letter-spacing: -0.08px;
 }
 
-.section-title{
-    font-size:20px;
-    font-weight: 600;
-    letter-spacing: -0.40px;
+.section-title {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.4px;
 }
 
 .my-dashboard {
-    font-size: 14px;
-    font-weight: 400;
-    background-color: #d0e4ff;
-    border-radius: 6px;
-    width: calc(100% - 56px); /* 계산식 수정 */
-    padding: 20px;
-    display: flex; /* Flexbox 사용 */
-    justify-content: space-between; /* 좌우 정렬 */
+  font-size: 14px;
+  font-weight: 400;
+  background-color: #d0e4ff;
+  border-radius: 6px;
+  width: calc(100% - 56px); /* 계산식 수정 */
+  padding: 20px;
+  display: flex; /* Flexbox 사용 */
+  justify-content: space-between; /* 좌우 정렬 */
 }
 
 .left-group {
-    display: flex;
-    align-items: center; /* 세로 정렬 */
-    gap: 4px; /* 요소 간 간격 */
+  display: flex;
+  align-items: center; /* 세로 정렬 */
+  gap: 4px; /* 요소 간 간격 */
 }
 
 .right-group {
-    display: flex;
-    align-items: center; /* 세로 정렬 */
-    gap: 10px; /* 요소 간 간격 */
+  display: flex;
+  align-items: center; /* 세로 정렬 */
+  gap: 10px; /* 요소 간 간격 */
 }
 
 .num-bias {
-    margin-left: 30px; /* 필요시 조정 */
+  margin-left: 30px; /* 필요시 조정 */
 }
 
-.day-title{
-    font-size: 16px;
-    font-weight: 600;
-    color: #2d2d2d;
-    width: 100px;
+.day-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #2d2d2d;
+  width: 100px;
 }
 
 .day-span {
-    font-size: 16px;
-    font-weight: 600;
-    color: #2d2d2d;
-    width: 100px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #2d2d2d;
+  width: 100px;
 }
 
-.event-list{
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    width: 90%;
+.event-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 90%;
 }
