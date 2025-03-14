@@ -18,7 +18,7 @@ export default function BaseBundle({ toggleClick, children }) {
     </div>
   );
 }
-
+// 일정탐색 페이지에 일정 번들 컴포넌트
 export function ScheduleBundle({ toggleClick }) {
   return (
     <BaseBundle toggleClick={toggleClick}>
@@ -35,6 +35,7 @@ export function ScheduleBundle({ toggleClick }) {
   );
 }
 
+//  이벤트 탐색 페이지에 이벤트 추가 컴포넌트
 export function EventBundle({ toggleClick }) {
   return (
     <BaseBundle toggleClick={toggleClick}>
