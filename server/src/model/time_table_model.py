@@ -132,6 +132,7 @@ class TimeTableModel(BaseModel):
         else:
             return True
 
+    # 페이징 기법 함수
     def paging_id_list(self, id_list:list, last_index:int, page_size=8):
 
         # 최신순으로 정렬된 상태로 id_list를 받아오기 때문에, 인덱스 번호가 빠를수록 최신의 것
@@ -201,6 +202,7 @@ class ScheduleRecommendKeywordModel(TimeTableModel):
 #---------------------------------데이터 전송용 모델 (쁘띠 모델)----------------------------------------
 
 # 얘들은 전부 쁘띠모델 입니다
+# 스케쥴 트랜스포메이션 모델 (기본 변환 함수들만 담김)
 class ScheduleTransformModel:
     def __init__(self):
         pass
@@ -278,130 +280,39 @@ class ScheduleTransformModel:
 
         return f"{date_list[0]}부터 {date_list[1]}까지"
 
-    def _linked_str(self, locations):
-        return ", ".join(locations)
+    def _linked_str(self,  str_list, sep=", "):
+        return sep.join(str_list)
 
-
-
-class TimeTableBiasModel(ScheduleTransformModel):
-    def __init__(self) -> None:
+# 일정 탭 전용 바이어스 데이터 폼 모델
+class TimeBiasModel(ScheduleTransformModel):
+    def __init__(self):
         super().__init__()
-        self._biases = [] # 홈 전용 및 검색 전용
-        self._ad_true_biases = []
+        self._biases = []
 
-    # Time Schedule에 쓰는 Bias 데이터를 만드는 함수
-    def _tbias_data(self, bias:Bias):
+    # 일정, 시간표에서의 바이어스 데이터
+    def _time_bias(self, bias:Bias):
         Sbias_data = {}
 
         Sbias_data["bid"] = bias.bid
         Sbias_data["bname"] = bias.bname
-        Sbias_data["category"] = bias.category
-        Sbias_data["tags"] = bias.tags
-        Sbias_data["main_time"] = bias.main_time
+        Sbias_data["category"] = bias.category[0]       # 카테고리는 맨처음의 데이터만
+        Sbias_data["tags"] = self._linked_str(bias.tags)    # 연결해서 보냄
+        Sbias_data["main_time"] = self._linked_str(bias.main_time) # 연결
         Sbias_data["is_ad"] = bias.is_ad
 
         return Sbias_data
 
-    # Time Bias를 담는 리스트를 만듦
-    def _get_tbias_list(self, bias_list):
-        # bias_datas = self._database.get_datas_with_ids(target_id="bid", ids=bids)
-        #
-        # for bias_data in bias_datas:
-        #     bias=Bias()
-        #     bias.make_with_dict(dictionary=bias_data)
-        #     Sbias_data = self._tbias_data(bias)
-        tbias_list = []
-
-        for bias in bias_list:
-            schedule_bias_data = self._tbias_data(bias)
-            tbias_list.append(schedule_bias_data)
-
-        return tbias_list
-
-    # # 광고로 등록된 바이어스 추천 리스트를 샘플링 (광고)
-    # 수정해야하긴 해서 일단 원형을 남기고 나중에 광고를 붙인다면 그 때 다시하겠습니다.
-    def _random_sampling_ad_true_bias(self, bias_list, random_samples):
-        # 광고로 등록된 애들
-        ad_true_bias = []
-        for bias in bias_list:
-            if bias.is_ad == True:
-                ad_true_bias.append(bias)
-        # 광고로 뽑힌 사람들
-        random_ad_true_list = random.sample(ad_true_bias, random_samples)
-
-        return random_ad_true_list
-
-    # 바이어스 추천 리스트
-    def get_recommend_bias_list(self, random_samples):
-        # bias_datas = self._database.get_all_data(target="bid")
-        # bias_list = []
-        #
-        # for bias_data in bias_datas:
-        #     bias = Bias()
-        #     bias.make_with_dict(bias_data)
-        #     bias_list.append(bias)
-        #
-        # self._biases = random.sample(bias_list, random_samples)
-
-        # ad_true_samples = int(random_samples * 0.3)
-        # # 최애 랜덤 샘플링 (광고, 비광고 구분)
-        # ad_true_bias_list = self._random_sampling_ad_true_bias(bias_list=bias_list, random_samples=ad_true_samples)
-        #
-        # # 이렇게 하는 이유
-        # # AD = True인 최애를 뽑았는데 그 개수가 부족하여 자리가 남는경우를 대비해서 더 뽑는거
-        # # 전체 랜덤 수 = 5, 뽑아야 할 AD_True 명 수 = 2, 실제로 나온 거 1
-        # # 뽑아야 할 것 = 4 ( 5 - 1 )
-        # # 만약 AD_true = 0이면 5명 뽑아야 함
-        # random_bias_samples = random_samples - len(ad_true_bias_list)
-        #
-        # # 랜덤해서 뽑되, 광고로 뽑힌 사람은 제외한다
-        # remain_bias_list = [bias for bias in bias_list if bias not in ad_true_bias_list]
-        # random_remain_bias_list = random.sample(remain_bias_list, random_bias_samples)
-        #
-        # # 메인에 등록될 광고 최애 + 랜덤 최애 추천
-        # full_list = ad_true_bias_list + random_remain_bias_list
-        # self._biases = self._get_tbias_list(full_list)
-
-        pass
-
-    # 바이어스 서치 함수
-    def __search_bias_list(self, keyword:str):
-        # 4가지의 경우가 존재한다
-        # 아티스트 닉네임, 카테고리, 플랫폼, 태그
-
-        bias_datas = self._database.get_all_data(target="bid")
-        search_list = []
-
-        for bias_data in bias_datas:
-            bias = Bias()
-            bias.make_with_dict(bias_data)
-            if keyword in bias.bname:
-                search_list.append(bias)
-            elif keyword in bias.category:
-                search_list.append(bias)
-            elif keyword in bias.tags:
-                search_list.append(bias)
-            elif keyword in bias.agency:
-                search_list.append(bias)
-
-        return search_list
-
-    # 바이어스 키워드 서치
-    def search_bias_with_keyword(self, keyword:str, last_index:int, num_bias:int):
-        search_bias_list = self.__search_bias_list(keyword=keyword)
-        self._biases, self._key = self.paging_id_list(id_list=search_bias_list, last_index=last_index, page_size=num_bias)
+    # 바이어스 데이터 폼 수정 리스트 반환
+    def get_tbias_list(self, biases):
+        for bias in biases:
+            self._biases.append(self._time_bias(bias))
         return
 
+    # 바이어스 데이터 반환
+    def get_response_form_data(self):
+        return self._biases
 
-    def get_response_form_data(self, head_parser):
-        body = {
-            "biases" : self._biases,
-            "key" : self._key
-        }
-
-        response = self._get_response_data(head_parser=head_parser, body=body)
-        return response
-
+# 일정 스케줄 전송 데이터 폼 모델
 class TimeScheduleModel(ScheduleTransformModel):
     def __init__(self) -> None:
         super().__init__()
@@ -438,6 +349,7 @@ class TimeScheduleModel(ScheduleTransformModel):
     def get_response_form_data(self):
         return self._schedules
 
+# 일정 스케줄 이벤트 데이터 폼 모델
 class TimeEventModel(ScheduleTransformModel):
     def __init__(self) -> None:
         super().__init__()
@@ -471,6 +383,7 @@ class TimeEventModel(ScheduleTransformModel):
     def get_response_form_data(self):
         return self._events
 
+# 일정 스케줄 번들 전송 데이터 폼 모델
 class TimeScheduleBundleModel(ScheduleTransformModel):
     def __init__(self) -> None:
         super().__init__()
@@ -529,6 +442,7 @@ class MultiScheduleModel(TimeTableModel):
         self.__schedules:list = []
         self.__schedule_events:list = []
         self.__schedule_bundles:list = []
+        self.__biases:list = []
 
     # id_list는 서치한 데이터들의 고유 아이디
     def _make_schedule_data(self,id_list:list, search_type:str="schedule"):
@@ -539,6 +453,8 @@ class MultiScheduleModel(TimeTableModel):
             schedule_id_type = "sbid"
         elif search_type == "event":
             schedule_id_type = "seid"
+        elif search_type == "bias":
+            schedule_id_type = "bid"
 
         schedule_type_datas = self._database.get_datas_with_ids(target_id=schedule_id_type, ids=id_list)
 
@@ -558,23 +474,55 @@ class MultiScheduleModel(TimeTableModel):
                 schedule_bundle.make_with_dict(data)
                 self.__schedule_bundles.append(schedule_bundle)
 
+            elif schedule_id_type == "bid":
+                bias = Bias()
+                bias.make_with_dict(data)
+                self.__biases.append(bias)
+
         # 데이터 변환 모델
         schedule_model = TimeScheduleModel()
         schedule_event_model = TimeEventModel()
         schedule_bundle_model = TimeScheduleBundleModel()
+        schedule_bias_model = TimeBiasModel()
 
+        # 데이터 변환
         schedule_model.get_tschedule_list(schedules=self.__schedules)
         schedule_event_model.get_tevent_list(events=self.__schedule_events)
         schedule_bundle_model.get_tschedule_bundle_list(schedule_bundles=self.__schedule_bundles)
+        schedule_bias_model.get_tbias_list(biases=self.__biases)
 
         # 반환받은 건 딕셔너리 리스트
         self.__schedules = schedule_model.get_response_form_data()
         self.__schedule_events = schedule_event_model.get_response_form_data()
         self.__schedule_bundles = schedule_bundle_model.get_response_form_data()
+        self.__biases = schedule_bias_model.get_response_form_data()
 
         return
 
-    def _find_schedule_data(self, keyword:str):
+    # 바이어스 서치 함수
+    def __search_bias_list(self, keyword:str):
+        # 4가지의 경우가 존재한다
+        # 아티스트 닉네임, 카테고리, 플랫폼, 태그
+
+        bias_datas = self._database.get_all_data(target="bid")
+        search_list = []
+
+        for bias_data in bias_datas:
+            bias = Bias()
+            bias.make_with_dict(bias_data)
+            if keyword in bias.bname:
+                search_list.append(bias.bid)
+            elif keyword in bias.category:
+                search_list.append(bias.bid)
+            elif keyword in bias.tags:
+                search_list.append(bias.bid)
+            elif keyword in bias.agency:
+                search_list.append(bias.bid)
+
+        return search_list
+
+    # 스케줄 데이터 서치 함수
+    def __find_schedule_data(self, keyword:str):
         schedule_datas = self._database.get_all_data(target="sid")
         # 왜 불편하게 id_list로 담나요?
         # 페이징할 때 편합니다.
@@ -601,7 +549,8 @@ class MultiScheduleModel(TimeTableModel):
 
         return schedule_ids
 
-    def _find_schedule_bundle_data(self, keyword:str):
+    # 스케줄 번들 데이터 서치 함수
+    def __find_schedule_bundle_data(self, keyword:str):
         schedule_bundle_datas = self._database.get_all_data(target="sbid")
         schedule_bundle_ids = []
 
@@ -630,7 +579,8 @@ class MultiScheduleModel(TimeTableModel):
 
         return schedule_bundle_ids
 
-    def _find_schedule_event_data(self, keyword:str):
+    # 스케줄 이벤트 데이터 서치 함수
+    def __find_schedule_event_data(self, keyword:str):
         schedule_event_datas = self._database.get_all_data(target="seid")
         schedule_event_ids = []
 
@@ -828,23 +778,28 @@ class MultiScheduleModel(TimeTableModel):
         return
 
     # 키워드를 통해 검색합니다.
-    def search_schedule_with_keyword(self, keyword:str, search_type:str, num_schedules, last_index=-1):
+    def search_schedule_with_keyword(self, keyword:str, search_type:str, num_schedules:int, last_index:int=-1):
         searched_list = []
 
         if search_type == "schedule":
-            searched_list = self._find_schedule_data(keyword=keyword)
+            searched_list = self.__find_schedule_data(keyword=keyword)
         elif search_type == "schedule_bundle":
-            searched_list = self._find_schedule_bundle_data(keyword=keyword)
+            searched_list = self.__find_schedule_bundle_data(keyword=keyword)
         elif search_type == "event":
-            searched_list = self._find_schedule_event_data(keyword=keyword)
+            searched_list = self.__find_schedule_event_data(keyword=keyword)
 
-        searched_list, self._key = self.paging_id_list(id_list=searched_list,
-                                                            last_index=last_index,
-                                                            page_size=num_schedules)
+        searched_list, self._key = self.paging_id_list(id_list=searched_list, last_index=last_index, page_size=num_schedules)
 
         self._make_schedule_data(id_list=searched_list, search_type=search_type)
 
         return
+
+    # 키워드를 통한 바이어스 서치
+    def search_bias_with_keyword(self, keyword:str, num_biases:int ,last_index:int=-1):
+        search_list = self.__search_bias_list(keyword=keyword)
+        search_list, self._key = self.paging_id_list(id_list=search_list, last_index=last_index, page_size=num_biases)
+
+        self._make_schedule_data(id_list=search_list, search_type="bias")
 
     def search_my_schedule_with_bid(self, bid):
         # 데이터 불러오고
@@ -907,6 +862,7 @@ class MultiScheduleModel(TimeTableModel):
             "schedules" : self.__schedules,
             "schedule_events" : self.__schedule_events,
             "schedule_bundles" : self.__schedule_bundles,
+            "biases": self.__biases,
             "key" : self._key
             }
 

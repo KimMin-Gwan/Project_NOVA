@@ -1,9 +1,6 @@
 from view.jwt_decoder import JWTManager, JWTPayload, RequestManager
 from model import Local_Database, BaseModel , ScheduleChartModel
 from model import TimeTableModel, MultiScheduleModel, AddScheduleModel, ScheduleRecommendKeywordModel
-from model import TimeTableBiasModel
-
-
 
 class TImeTableController:
     
@@ -84,7 +81,8 @@ class TImeTableController:
 
     # 추천하는 바이어스 불러오기
     def get_recommended_bias_list(self, database:Local_Database, request:RequestManager, num_recommend=5) -> BaseModel:
-        model = TimeTableBiasModel(database=database)
+        # model = TimeTableBiasModel(database=database)
+        model = MultiScheduleModel(database=database)
 
         if request.jwt_payload != "":
             model.set_user_with_email(request=request.jwt_payload)
@@ -140,8 +138,9 @@ class TImeTableController:
         return model
 
     # 키워드를 통한 검색
+    # 테스트 완료 (진짜)
     def try_search_schedule_with_keyword(self, database:Local_Database, request:RequestManager,
-                                         num_schedules=4) -> BaseModel:
+                                         num_schedules=8) -> BaseModel:
         model = MultiScheduleModel(database=database)
         
         if request.jwt_payload != "":
@@ -188,7 +187,8 @@ class TImeTableController:
 
     def try_search_bias_with_keyword(self, database:Local_Database, request:RequestManager,
                                     num_biases=10) -> BaseModel:
-        model = TimeTableBiasModel(database=database)
+        # model = TimeTableBiasModel(database=database)
+        model = MultiScheduleModel(database=database)
 
         if request.jwt_payload != "":
             model.set_user_with_email(request=request.jwt_payload)

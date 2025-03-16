@@ -149,15 +149,14 @@ class TimeTableView(Master_View):
         # Bias 서치
         # 팔로워 서치부분과는 다르게  둠
         @self.__app.get('/time_table_server/try_search_bias')
-        def try_search_bias_with_keyword(request:Request, keyword:Optional[str]="", key:Optional[int]=-1, type:Optional[str]="bias"):
+        def try_search_bias_with_keyword(request:Request, keyword:Optional[str]="", key:Optional[int]=-1):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
-            data_payload = SearchRequest(keyword=keyword, key=key, type=type)
+            data_payload = SearchRequest(keyword=keyword, key=key, type="bias")
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
             time_table_controller =TImeTableController()
             model = time_table_controller.try_search_bias_with_keyword(database=self.__database,
                                                                        request=request_manager,
-                                                                       num_ad_true=5,
                                                                        num_biases=15)
 
             body_data = model.get_response_form_data(self._head_parser)
@@ -216,6 +215,7 @@ class TimeTableView(Master_View):
         
         # 완료
         # bid에서 내가 선택했는 스케줄들 볼때 쓰는 엔드 포인트. 로그인 필수
+        # 테스트는 아직 못함
         @self.__app.get('/time_table_server/try_search_my_schedule_with_bid')
         def ry_search_my_schedule_with_bid(request:Request, bid:Optional[str]=""):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
