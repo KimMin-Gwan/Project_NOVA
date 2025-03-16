@@ -117,7 +117,7 @@ class ScheduleEvent(SampleDomain):
 # 스케쥴 번들
 class ScheduleBundle(SampleDomain):
     def __init__(self, sbid="", sbname="", bid="",
-                 bname="", uid="", uname="", date=[],
+                 bname="", uid="", uname="", date=[], location=[],
                  update_datetime="", code="", sids=None):
         self.sbid: str = sbid                # Schedule bundle ID
         self.sbname: str = sbname            # Schedule bundle name
@@ -126,7 +126,8 @@ class ScheduleBundle(SampleDomain):
         self.uid: str = uid                  # Maker's ID
         self.uname: str = uname              # Maker's name
         self.update_datetime: str = update_datetime  # Update time
-        self.date: list = copy.copy(date)            # start_date, end_date
+        self.date: list = copy.copy(date)           # start_date, end_date
+        self.location: list = copy.copy(location)   # Event BroadCast Location
         self.code: str = code                # Bundle code
         self.sids: list = sids if sids is not None else []  # List of schedule IDs
 
@@ -139,6 +140,7 @@ class ScheduleBundle(SampleDomain):
         self.uname = dict_data.get('uname', "")
         self.update_datetime = dict_data.get('update_datetime', "")
         self.date = copy.copy(dict_data.get('date'))
+        self.location = copy.copy(dict_data.get('location'))
         self.code = dict_data.get('code', "")
         self.sids = dict_data.get('sids', [])
         return self
@@ -153,6 +155,7 @@ class ScheduleBundle(SampleDomain):
             "uname": self.uname,
             "update_datetime": self.update_datetime,
             "date": copy.copy(self.date),
+            "location": copy.copy(self.location),
             "code": self.code,
             "sids": self.sids
         }
