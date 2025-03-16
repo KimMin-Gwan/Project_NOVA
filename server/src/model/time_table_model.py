@@ -893,16 +893,16 @@ class AddScheduleModel(TimeTableModel):
     # date는 날짜임 , 형태는 2025/03/06 임
     def select_schedule_in_showcase(self, date, bid):
         # 스케줄 데이터를 가지고 오고
-        schedule_data = self._database.get_data_with_id(target="sid", id=self._tuser.sids)
+        schedule_datas = self._database.get_datas_with_id(target_id="sid", ids=self._tuser.sids)
 
         # 저장해야하는지 체크하는 플래그
         flag = False
 
         # 날짜를 비교해서 이사람이 본거 찾아야됨
         # date는 날짜임 , 형태는 2025/03/06 임
-        for schedule in schedule_data:
+        for schedule_data in schedule_datas:
             schedule = Schedule()
-            schedule.make_with_dict(dict_data=schedule)
+            schedule.make_with_dict(dict_data=schedule_data)
             if schedule.date == date and schedule.bid == bid:
                 # 없으면 추가하고 있으면 삭제하면됨
                 if schedule.sid not in self._tuser.this_week_sids:
