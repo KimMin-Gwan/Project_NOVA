@@ -2,7 +2,7 @@ from view.jwt_decoder import JWTManager, JWTPayload, RequestManager
 from model import Local_Database, BaseModel , ScheduleChartModel
 from model import TimeTableModel, MultiScheduleModel, AddScheduleModel, ScheduleRecommendKeywordModel
 from model import TimeTableBiasModel
-# from model.time_table_model import *
+
 
 
 class TImeTableController:
@@ -141,7 +141,7 @@ class TImeTableController:
 
     # 키워드를 통한 검색
     def try_search_schedule_with_keyword(self, database:Local_Database, request:RequestManager,
-                                         num_schedules=8) -> BaseModel:
+                                         num_schedules=4) -> BaseModel:
         model = MultiScheduleModel(database=database)
         
         if request.jwt_payload != "":
@@ -152,7 +152,7 @@ class TImeTableController:
 
         # 키워드를 넘겨 검색 후, 반환받음
         model.search_schedule_with_keyword(keyword=request.data_payload.keyword,
-                                               type=request.data_payload.type,
+                                               search_type=request.data_payload.type,
                                                 last_index=request.data_payload.key,
                                                 num_schedules=num_schedules)
         return model

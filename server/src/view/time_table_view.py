@@ -22,6 +22,8 @@ class TimeTableView(Master_View):
         self.__database = database
         self.__jwt_secret_key = jwt_secret_key
         self.home_route()
+        self.schedule_search_route()
+        self.my_schedule_route()
         
     def home_route(self):
         # 완료 / 
@@ -102,7 +104,7 @@ class TimeTableView(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
 
             return response
-        
+
         
     def schedule_search_route(self):
         # 서치 가능하게 하는 곳
@@ -110,7 +112,7 @@ class TimeTableView(Master_View):
         # key : 서치 키값
         # type : schedule, schedule_bundle, event
         # 완료 (테스트만 필요)
-        @self.__app.get('/time_table_server/try_search')
+        @self.__app.get('/time_table_server/try_search_schedule_with_keyword')
         def try_search_schedule(request:Request, keyword:Optional[str] = "", key:Optional[int]=-1, type:Optional[str]=""):
             
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
@@ -128,7 +130,7 @@ class TimeTableView(Master_View):
         # keyword 추천
         # 본인이 팔로우한 bias의 카테고리 위주로 제시할 듯
         # 로그인을 안했거나 팔로우한 bias가 없으면 랜덤하게 뿌리면됨
-        # 완료
+        # 완료 (테스트 완료)
         @self.__app.get('/time_table_server/try_get_recommend_keyword')
         def try_get_recommend_keyword(request:Request):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
@@ -145,6 +147,8 @@ class TimeTableView(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
+        # Bias 서치
+        # 팔로워 서치부분과는 다르게  둠
         @self.__app.get('/time_table_server/try_search_bias')
         def try_search_bias_with_keyword(request:Request, keyword:Optional[str]="", key:Optional[int]=-1, type:Optional[str]="bias"):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
