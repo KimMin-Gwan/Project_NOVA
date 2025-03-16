@@ -1,6 +1,5 @@
 from model.base_model import BaseModel
 from model import Local_Database
-from numpy.random.c_distributions import random_exponential
 from others.data_domain import TimeTableUser as TUser
 from others.data_domain import Schedule, ScheduleBundle, ScheduleEvent, Bias
 
@@ -969,8 +968,8 @@ class ScheduleBlock(Schedule):
         self.color_code = "#D2D2D2"
         self.__overflowed = False
         self.__remain_time = Schedule()
-        self.start_datetime = datetime()
-        self.end_datetime = datetime()
+        self.start_datetime = None
+        self.end_datetime = None
     
     def is_overflowed(self):
         return self.__overflowed
@@ -1067,7 +1066,18 @@ class ScheduleBlockTreater():
         first_block = True  # 첫 번째 블록인지 확인하는 플래그
         end_flag = False
         
+        num_loop = 0
+        
+        
+        print("end_datetime : ",schedule_block.end_datetime)
+        
         while current_datetime < schedule_block.end_datetime:
+            
+            print("current_datetime : ", current_datetime)
+            
+            if num_loop >100:
+                break
+            
             # 현재 시간의 구간 판별
             hour = current_datetime.hour
         
@@ -1075,7 +1085,7 @@ class ScheduleBlockTreater():
                 break
         
             for i, (start_hour, end_hour) in enumerate(time_ranges):
-            
+                print(i)
                 if start_hour <= hour < end_hour:
                 
                     # 첫 번째 구간이 아닌 경우 제외
@@ -1112,7 +1122,9 @@ class ScheduleBlockTreater():
                     # 현재 시간을 다음 구간 시작으로 이동
                     current_datetime = actual_end
                     first_block = False# 첫 번째 구간이 끝났으므로 플래그 변경
-                break
+                    
+                    break
+            num_loop += 1
 
         # 하루를 넘어가면 넘어갔다고 표시하고 보관하기
         if schedule_block.start_datetime.day != schedule_block.end_datetime.day:
@@ -1157,6 +1169,8 @@ class ScheduleChartModel(TimeTableModel):
         
         # 내가 추가한 스케줄을 다 가지고 옴
         schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids=self._tuser.sids)
+        
+        target_date = datetime.strptime(target_date, ("%Y/%m/%d"))
         
         today = target_date - timedelta(days=2)
         

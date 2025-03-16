@@ -158,7 +158,7 @@ class Schedule(SampleDomain):
     def __init__(self, sid="", sname="", uid="", uname="",
                  bid="", bname="", start_date="", end_date="", start_time="",
                  end_time="", location="", code="", update_datetime="",
-                 num_usage=0, state=True,
+                 num_usage=0, state=True, color_code=""
                  ):
         self.sid:str = sid                          # schedule id
         self.sname:str = sname                      # schedule name
@@ -175,6 +175,7 @@ class Schedule(SampleDomain):
         self.update_datetime:str = update_datetime  # 등록된 시간
         self.num_usage:int = num_usage              # 추가된 횟수
         self.state:bool = state                     # 공개 비공개 여부
+        self.color_code = color_code
     
     def make_with_dict(self, dict_data:dict):
         self.sid = dict_data.get('sid', "")
@@ -192,6 +193,7 @@ class Schedule(SampleDomain):
         self.update_datetime = dict_data.get('update_datetime', "")
         self.num_usage = dict_data.get('num_usage', 0)  # 기본값 0 설정
         self.state:bool = dict_data.get('state', "")
+        self.color_code:str= dict_data.get('color_code', "")
         return self
 
     def get_dict_form_data(self):
@@ -210,7 +212,8 @@ class Schedule(SampleDomain):
             "code": self.code,
             "update_time": self.update_datetime,
             "num_usage": self.num_usage,
-            "state":self.state
+            "state":self.state,
+            "color_code": self.color_code
         }
 
     
@@ -324,7 +327,7 @@ class Bias(SampleDomain):
         self.main_time = []
         self.is_ad = False
 
-    def make_with_dict(self, dict_data):
+    def make_with_dict(self, dict_data:dict):
         try:
             self.bid = dict_data['bid']
             self.bname = dict_data['bname']
@@ -344,6 +347,8 @@ class Bias(SampleDomain):
             self.fan_cafe = dict_data['fan_cafe']
             self.country = copy.copy(dict_data['country'])
             self.fanname = copy.copy(dict_data['fanname'])
+            self.main_time = dict_data.get('main_time', [])
+            self.is_ad = False
         except Exception as e:
             print(e)
             raise DictMakingError(error_type=e)
@@ -370,6 +375,7 @@ class Bias(SampleDomain):
             "fan_cafe": self.fan_cafe,
             "country": copy.copy(self.country),
             'fanname':copy.copy(self.fanname),
+            'main_time' : copy.copy(self.main_time)
         }
 
 class NameCard(SampleDomain):

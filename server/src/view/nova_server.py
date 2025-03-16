@@ -4,6 +4,7 @@ from view.user_system_view import User_Service_View
 from view.sub_system_view import Sub_Service_View 
 from view.funding_system_view import Funding_Service_View
 from view.administrator_system_view import Administrator_System_View
+from view.time_table_view import TimeTableView
 from view.parsers import Head_Parser
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
@@ -76,11 +77,19 @@ class NOVA_Server:
                                                      endpoint='/administrator_system',
                                                    database=database,
                                                    head_parser=head_parser)
+        
+        self.__time_tiable_system_view = TimeTableView( app=self.__app,
+                                                     endpoint='/schedule',
+                                                   database=database,
+                                                   head_parser=head_parser,
+                                                   jwt_secret_key = jwt_secret_key
+                                                   )
         self.__core_system_view()
         self.__user_system_view()
         self.__sub_system_view()
         self.__funding_system_view()
         self.__administrator_system_view()
+        self.__time_tiable_system_view()
 
     def make_task(self):
         return self.nova_verification.make_task()

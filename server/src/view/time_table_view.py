@@ -14,18 +14,16 @@ from datetime import datetime
 class TimeTableView(Master_View):
     def __init__(self, app:FastAPI, endpoint:str,
                   database, head_parser:Head_Parser,
-                  ai_manager, jwt_secret_key
+                  jwt_secret_key
                   ) -> None:
         super().__init__(head_parser=head_parser)
         self.__app = app
         self._endpoint = endpoint
         self.__database = database
-        self.__ai_manager = ai_manager
         self.__jwt_secret_key = jwt_secret_key
         self.home_route()
-
-    def home_route(self):
         
+    def home_route(self):
         # 완료 / 
         # 타임 테이블 페이지의 최 상단 대시보드데이터
         # 파라미터 없음, 비로그인 상태에서는 0으로 리턴함 
@@ -74,7 +72,8 @@ class TimeTableView(Master_View):
         def try_get_today_time_chart(request:Request, date:Optional[str]=datetime.now().strftime("%Y/%m/%d")):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = DateRequest(date=date)
-            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            #request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            request_manager.try_view_management(data_payload=data_payload)
 
             time_table_controller =TImeTableController()
             model = time_table_controller.get_time_chart(database=self.__database,
@@ -85,24 +84,6 @@ class TimeTableView(Master_View):
 
             return response
 
-        # 완료
-        # 타임 테이블 데이터 (여러곳에서 복합적으로 사용될 수 있음)
-        # 비로그인 유저에게는 랜덤한 데이터를 보여줄 것
-        # 로그인 유저에게는 본인이 선택한 일정을 보여 줄 것
-        @self.__app.get('/time_table_server/try_my_time_table')
-        def try_get_my_time_table(request:Request):
-            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
-            data_payload = DummyRequest()
-            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
-
-            time_table_controller =TImeTableController()
-            model = time_table_controller.get_my_time_table(database=self.__database,
-                                                              request=request_manager)
-            
-            body_data = model.get_response_form_data(self._head_parser)
-            response = request_manager.make_json_response(body_data=body_data)
-
-            return response
         
         # 보류
         # 홈 화면 젤 밑에 나오는 bias 데이터 들인데 이건 여기다가 만들지 말지 고민중임
@@ -180,11 +161,6 @@ class TimeTableView(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
-
-
-
-        
-    
     def my_schedule_route(self):
         # 완료
         # 내 스케줄에 추가하기
@@ -395,3 +371,4 @@ class ScheduleWithBidRequest(RequestHeader):
 class DateRequest(RequestHeader):
     def __init__(self, date)-> None:
         self.date:str=date
+        self.email = "alsrhks2508@naver.com"
