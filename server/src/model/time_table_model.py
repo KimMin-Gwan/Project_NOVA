@@ -198,6 +198,8 @@ class ScheduleRecommendKeywordModel(TimeTableModel):
         response = self._get_response_data(head_parser=head_parser, body=body)
         return response
 
+#---------------------------------데이터 전송용 모델 (쁘띠 모델)----------------------------------------
+
 # 얘들은 전부 쁘띠모델 입니다
 class ScheduleTransformModel:
     def __init__(self):
@@ -275,6 +277,11 @@ class ScheduleTransformModel:
             return f"{date_list[0]}"
 
         return f"{date_list[0]}부터 {date_list[1]}까지"
+
+    def _linked_str(self, locations):
+        return ", ".join(locations)
+
+
 
 class TimeTableBiasModel(ScheduleTransformModel):
     def __init__(self) -> None:
@@ -480,7 +487,7 @@ class TimeScheduleBundleModel(ScheduleTransformModel):
         time_schedule_bundle_data["uname"] = schedule_bundle.uname
         time_schedule_bundle_data["sids"] = schedule_bundle.sids
         time_schedule_bundle_data["date"] = self._transfer_date_str_list(schedule_bundle.date)
-        time_schedule_bundle_data["location"] = schedule_bundle.location
+        time_schedule_bundle_data["location"] = self._linked_str(schedule_bundle.location)
 
         return time_schedule_bundle_data
 
@@ -492,7 +499,6 @@ class TimeScheduleBundleModel(ScheduleTransformModel):
 
     def get_response_form_data(self):
         return self._schedule_bundles
-# 여기까지
 
 # ------------------------------------- 스케쥴 모델 ------------------------------------------------
 # 단일 스케줄을 반환할 때 사용하는 모델
@@ -863,6 +869,11 @@ class MultiScheduleModel(TimeTableModel):
 
             if schedule_event.bid == bid:
                 self.__schedule_events.append(schedule_event)
+
+        schedule_event_model = TimeEventModel()
+        schedule_event_model.get_tevent_list(events=self.__schedule_events)
+        self.__schedule_events = schedule_event_model.get_response_form_data()
+
         return
 
     def search_my_all_schedule(self):
@@ -884,6 +895,11 @@ class MultiScheduleModel(TimeTableModel):
             schedule_event = ScheduleEvent()
             schedule_event.make_with_dict(dict_data=schedule_event_data)
             self.__schedule_events.append(schedule_event)
+
+        schedule_event_model = TimeEventModel()
+        schedule_event_model.get_tevent_list(events=self.__schedule_events)
+        self.__schedule_events = schedule_event_model.get_response_form_data()
+
         return
 
     def get_response_form_data(self, head_parser):
