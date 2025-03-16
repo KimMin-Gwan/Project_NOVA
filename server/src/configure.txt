@@ -1,5 +1,5 @@
 HOST = 127.0.0.1
-PORT = 4000
+PORT = 6000
 VERSION = 1.0.0
 open_api_key = 
 gpt_model = gpt-4o-mini
