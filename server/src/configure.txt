@@ -3,5 +3,5 @@ PORT = 6000
 VERSION = 1.0.0
 open_api_key = 
 gpt_model = gpt-4o-mini
-mongo_db_key =
+mongo_db_key = 
 jwt_secet_key = 
