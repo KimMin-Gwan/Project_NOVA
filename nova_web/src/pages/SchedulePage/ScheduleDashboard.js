@@ -11,6 +11,7 @@ import {
   mockData,
 } from "../../pages/SchedulePage/TestScheduleData";
 import mainApi from "../../services/apis/mainApi";
+import NavBar from "../../component/NavBar/NavBar";
 
 const ScheduleDashboard = () => {
   let [weekDayData, setWeekDayData] = useState([]);
@@ -22,6 +23,8 @@ const ScheduleDashboard = () => {
   let [numBias, setNumBias] = useState(0)
 
   let [biasData, setBiasData] = useState([])
+
+  const brightMode = "brigthMode"
 
   // 목표 날짜를 받아오고
   function fetchTargetMonthWeek() {
@@ -118,12 +121,15 @@ const ScheduleDashboard = () => {
             <p className="element">
               <span className="text-wrapper">타임 차트</span>
             </p>
+            <span className="add-schedule"
+            onClick={() => handleNavigate("/search/schedule")}
+            >일정 추가</span>
           </div>
         </div>
         {/* 타임차트를 만드는 핵심 구간 */}
         <TimeChart
-          tempWeekDayData={weekDayData}
-          tempScheduleData={scheduleData}
+          weekDayData={weekDayData}
+          scheduleData={scheduleData}
         />
       </div>
       <div className="section-line"></div>
@@ -135,10 +141,11 @@ const ScheduleDashboard = () => {
             </p>
           </div>
         </div>
-        {timeChartData.map((item, i) => {
+        {biasData.map((item, i) => {
           return <ScheduleTopic key={item.id} {...item} />;
         })}
       </div>
+      <NavBar brightMode={brightMode}></NavBar>
     </div>
   );
 };

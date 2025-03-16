@@ -15,7 +15,7 @@ import {
 import ScheduleCalendar from "../ScheduleCalendar/ScheduleCalendar";
 const exdata = [0, 1];
 
-export default function EventMore({ closeSchedule, isOpen, children }) {
+export function ScheduleDetail ({ closeSchedule, isOpen, children }) {
   const [backgroundColor, setBackgroundColor] = useState("");
   const [displaySt, setdisplaySt] = useState("");
   const [upAnimation, setUpAnimation] = useState(false);
@@ -68,7 +68,7 @@ export default function EventMore({ closeSchedule, isOpen, children }) {
   );
 }
 
-export function BundleEventMore({ closeSchedule, isOpen }) {
+export function BundleScheduleDetail({ closeSchedule, isOpen }) {
   const [selectBack, setSelectBack] = useState({});
   const [isSelect, setIsSelect] = useState(1);
   // 취소했을 때 모두 취소되어서 변화하도록함
@@ -119,7 +119,7 @@ export function BundleEventMore({ closeSchedule, isOpen }) {
   };
 
   return (
-    <EventMore closeSchedule={closeSchedule} isOpen={isOpen}>
+    <ScheduleDetail closeSchedule={closeSchedule} isOpen={isOpen}>
       <EventBundle />
       <ScheduleMoreAdd
         selectToggle={selectToggle}
@@ -134,16 +134,16 @@ export function BundleEventMore({ closeSchedule, isOpen }) {
         />
       ))}
       <TimeChart
-        tempWeekDayData={tempWeekDayData}
-        tempScheduleData={tempScheduleData}
+        weekDayData={tempWeekDayData}
+        scheduleData={tempScheduleData}
       />
-    </EventMore>
+    </ScheduleDetail>
   );
 }
 
-export function ScheduleEventMore({ closeSchedule, isOpen }) {
+export function EventDetail ({ closeSchedule, isOpen }) {
   return (
-    <EventMore closeSchedule={closeSchedule} isOpen={isOpen}>
+    <ScheduleDetail closeSchedule={closeSchedule} isOpen={isOpen}>
       <BaseBundle />
       <ScheduleEventAdd />
       <EventBundle />
@@ -151,6 +151,6 @@ export function ScheduleEventMore({ closeSchedule, isOpen }) {
         <h3>이벤트 미리보기</h3>
         <ScheduleCalendar />
       </section>
-    </EventMore>
+    </ScheduleDetail>
   );
 }

@@ -217,7 +217,6 @@ export const mockData = [
   },
 ];
 
-export const ScheduleKind = ["일정 번들", "일정", "이벤트"];
 
 export const eventData = [
   {

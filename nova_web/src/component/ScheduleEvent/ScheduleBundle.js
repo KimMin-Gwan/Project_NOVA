@@ -4,7 +4,7 @@ import {
   schedule,
 } from "../../pages/SchedulePage/TestScheduleData";
 
-export default function BaseBundle({ toggleClick, children }) {
+export default function BaseBundle({ toggleClick, children, schedule_bundle }) {
   return (
     <div className={style["ScheduleEvent"]} onClick={toggleClick}>
       <dl>
@@ -19,7 +19,7 @@ export default function BaseBundle({ toggleClick, children }) {
   );
 }
 // 일정탐색 페이지에 일정 번들 컴포넌트
-export function ScheduleBundle({ toggleClick }) {
+export function ScheduleBundle({ toggleClick, schedule_bundle }) {
   return (
     <BaseBundle toggleClick={toggleClick}>
       <dt>
