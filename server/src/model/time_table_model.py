@@ -1068,14 +1068,9 @@ class ScheduleBlockTreater():
         
         num_loop = 0
         
-        
-        print("end_datetime : ",schedule_block.end_datetime)
-        
         while current_datetime < schedule_block.end_datetime:
             
-            print("current_datetime : ", current_datetime)
-            
-            if num_loop >100:
+            if num_loop >10000:
                 break
             
             # 현재 시간의 구간 판별
