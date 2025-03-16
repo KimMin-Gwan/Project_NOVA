@@ -163,7 +163,7 @@ class ScheduleBundle(SampleDomain):
 class Schedule(SampleDomain):
     def __init__(self, sid="", sname="", uid="", uname="",
                  bid="", bname="", start_date="", end_date="", start_time="",
-                 end_time="", location="", code="", update_datetime="",
+                 end_time="", location=[], code="", update_datetime="",
                  num_usage=0, state=True, color_code=""
                  ):
         self.sid:str = sid                          # schedule id
@@ -176,7 +176,7 @@ class Schedule(SampleDomain):
         self.start_time:str = start_time            # 시작 시간 
         self.end_date:str = end_date                # 종료 날짜
         self.end_time:str = end_time                # 종료 시간
-        self.location:str = location                # 장소
+        self.location:list = copy.copy(location)                # 송출 장소
         self.code:str = code                        # 스케줄 코드
         self.update_datetime:str = update_datetime  # 등록된 시간
         self.num_usage:int = num_usage              # 추가된 횟수
@@ -194,11 +194,11 @@ class Schedule(SampleDomain):
         self.start_time = dict_data.get('start_time', "")
         self.end_date = dict_data.get('end_date', "")
         self.end_time = dict_data.get('end_time', "")
-        self.location = dict_data.get('location', "")
+        self.location = copy.copy(dict_data.get('location'))
         self.code = dict_data.get('code', "")
         self.update_datetime = dict_data.get('update_datetime', "")
         self.num_usage = dict_data.get('num_usage', 0)  # 기본값 0 설정
-        self.state:bool = dict_data.get('state', "")
+        self.state:bool = dict_data.get('state')
         self.color_code:str= dict_data.get('color_code', "")
         return self
 
@@ -214,7 +214,7 @@ class Schedule(SampleDomain):
             "start_time": self.start_time,
             "end_date": self.end_date,
             "end_time": self.end_time,
-            "location": self.location,
+            "location": copy.copy(self.location),
             "code": self.code,
             "update_time": self.update_datetime,
             "num_usage": self.num_usage,
