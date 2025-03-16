@@ -369,7 +369,7 @@ class TimeEventModel(ScheduleTransformModel):
         time_event_data["start"] = self._calculate_day_hour_time(datetime.strptime(event.start_time, "%H:%M"))
         time_event_data["end"] = self._calculate_day_hour_time(datetime.strptime(event.end_time, "%H:%M"))
         time_event_data["sids"] = event.sids
-        time_event_data["location"] = event.location
+        time_event_data["location"] = self._linked_str(event.location)
 
         return time_event_data
 
