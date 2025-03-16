@@ -2,14 +2,17 @@ import React from 'react';
 
 import './event_style.css'; // Corrected import for CSS file
 
-const EventComponent = () => {
+export default function EventComponent({
+  sename,
+  bname,
+  location,
+  date
+}) {
     return (
         <div className='event-container'>
-            <span className='event-name'>하이블루밍 데뷔</span>
-            <span className='bias-name'>OVERTHEWALL</span>
-            <span className='bias-name'>치지직, 오후 3:00</span>
+            <span className='event-name'>{sename}</span>
+            <span className='bias-name'>{bname}</span>
+            <span className='bias-name'>{location}, {date}</span>
         </div>
     );
 };
-
-export default EventComponent;

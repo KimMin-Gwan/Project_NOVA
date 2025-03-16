@@ -15,7 +15,8 @@ class TimeTableModel(BaseModel):
         self._key = -1
         
         self.__num_bias = 0
-        self.__target_date = f'00년 0월 0주차'
+        self.__target_month= f'00년 0월'
+        self.__target_week= f'0주차'
         
     # 로그인이 필수인 유저이거나, 로그인을 한 유저를 처리할 때 필수적으로 사용되는 부분
     def _set_tuser_with_tuid(self, tuid="") -> bool:
@@ -120,7 +121,8 @@ class TimeTableModel(BaseModel):
         week_in_month = current_week - start_week + 1
         
         # 만약 미래에 있는 사람이 2100에 산다면 이 곳의 코드를 고치면 됩니다
-        self.__target_date = f'{shorted_year}년 {today.month}월 {week_in_month}주차'
+        self.__target_month = f'{shorted_year}년 {today.month}월'
+        self.__target_week = f'{week_in_month}주차'
         return
     
     # 컨트롤러에서 유저가 있는지 확인이 가능하게 하는 부분
@@ -153,7 +155,8 @@ class TimeTableModel(BaseModel):
         body = {
             #"tuser" : self._tuser,
             "num_bias" : self.__num_bias,
-            "target_date" : self.__target_date
+            "target_month" : self.__target_month,
+            "target_week" : self.__target_week
             }
 
         response = self._get_response_data(head_parser=head_parser, body=body)
@@ -1097,11 +1100,12 @@ class ScheduleBlockTreater():
 
             # 없으면 지금찾던걸로 하나 만들어야됨
             if not targetWeekDayDateBlock:
-                targetWeekDayDateBlock = WeekDayDataBlock(date=weekday_names[schedule_block.start_datetime.weekday()],
-                                                       day = schedule_block.start_datetime.day,
+                targetWeekDayDateBlock = WeekDayDataBlock(day=weekday_names[schedule_block.start_datetime.weekday()],
+                                                       date = schedule_block.start_datetime.day,
                                                        num_schedule=0
                                                        )
-
+                weekDayDateBlocks.append(targetWeekDayDateBlock)
+            
             # 핵심 - 스케줄 수를 하나 늘려주면됨
             targetWeekDayDateBlock.num_schedule += 1
 
@@ -1158,7 +1162,6 @@ class ScheduleBlockTreater():
                 break
 
             for i, (start_hour, end_hour) in enumerate(time_ranges):
-                print(i)
                 if start_hour <= hour < end_hour:
 
                     # 첫 번째 구간이 아닌 경우 제외

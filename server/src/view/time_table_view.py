@@ -74,8 +74,7 @@ class TimeTableView(Master_View):
         def try_get_today_time_chart(request:Request, date:Optional[str]=datetime.now().strftime("%Y/%m/%d")):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = DateRequest(date=date)
-            #request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
-            request_manager.try_view_management(data_payload=data_payload)
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
             time_table_controller =TImeTableController()
             model = time_table_controller.get_time_chart(database=self.__database,
@@ -375,4 +374,4 @@ class ScheduleWithBidRequest(RequestHeader):
 class DateRequest(RequestHeader):
     def __init__(self, date)-> None:
         self.date:str=date
-        self.email = "alsrhks2508@naver.com"
+        self.email:str="alsrhks2508@naver.com"

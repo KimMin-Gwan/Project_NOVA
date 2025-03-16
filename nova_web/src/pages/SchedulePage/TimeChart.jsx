@@ -23,7 +23,7 @@ const timeList = [
 
 const timeSectionList = ["새벽", "오전", "오후", "밤"]; // 시간 섹션 이름
 
-export default function TimeChart({ tempWeekDayData, tempScheduleData }) {
+export default function TimeChart({ weekDayData, scheduleData }) {
     const swiperRef = useRef(null); // Swiper 인스턴스를 참조하기 위한 Ref 생성
 
     return (
@@ -33,7 +33,7 @@ export default function TimeChart({ tempWeekDayData, tempScheduleData }) {
                 <div className="chart-etc-box"></div> {/* 기타 구성 요소 */}
                 <div>
                     {/* 요일 데이터를 렌더링 */}
-                    {tempWeekDayData.map((item, i) => (
+                    {weekDayData.map((item, i) => (
                         <TimeWeekComponent key={item.id} {...item} />
                     ))}
                 </div>
@@ -74,7 +74,7 @@ export default function TimeChart({ tempWeekDayData, tempScheduleData }) {
 
                             {/* 스케줄 데이터 렌더링 */}
                             <div className="schedule-box-list">
-                                {tempScheduleData.map((item, i) => (
+                                {scheduleData.map((item, i) => (
                                     <ChartScheduleComponent key={item.id} {...item} timeSection={j} />
                                 ))}
                             </div>
