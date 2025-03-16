@@ -63,7 +63,7 @@ class TimeTableUser(SampleDomain):
 class ScheduleEvent(SampleDomain):
     def __init__(self, seid="", sename="", bid="",
                  bname="", uid="", uname="", update_datetime="",
-                 location="", start_time="", end_time="", date="",
+                 location=[], start_time="", end_time="", date="",
                  code="", sids=[]
                  ):
         
@@ -74,12 +74,12 @@ class ScheduleEvent(SampleDomain):
         self.uid: str = uid                     # Maker's ID
         self.uname: str = uname                 # Maker's name
         self.update_datetime: str = update_datetime  # Update date and time
-        self.location: str = location           # Event location
+        self.location: list = copy.copy(location)          # Event location
         self.start_time: str = start_time       # Event start time
         self.end_time: str = end_time           # Event end time
         self.date: str = date                   # Event date
         self.code: str = code                   # Schdeul Code
-        self.sids: list = sids
+        self.sids: list = copy.copy(sids)
 
     def make_with_dict(self, dict_data:dict):
         self.seid = dict_data.get('seid', "")
@@ -89,12 +89,12 @@ class ScheduleEvent(SampleDomain):
         self.uid = dict_data.get('uid', "")
         self.uname = dict_data.get('uname', "")
         self.update_datetime = dict_data.get('update_datetime', "")
-        self.location = dict_data.get('location', "")
+        self.location = copy.copy(dict_data.get('location'))
         self.start_time = dict_data.get('start_time', "")
         self.end_time = dict_data.get('end_time', "")
         self.date = dict_data.get('date', "")
         self.code = dict_data.get('code', "")
-        self.sids= dict_data.get('sids', "")
+        self.sids = copy.copy(dict_data.get('sids'))
         return self
 
     def get_dict_form_data(self):
@@ -106,12 +106,12 @@ class ScheduleEvent(SampleDomain):
             "uid": self.uid,
             "uname": self.uname,
             "update_datetime": self.update_datetime,
-            "location": self.location,
+            "location": copy.copy(self.location),
             "start_time": self.start_time,
             "end_time": self.end_time,
             "date": self.date,
             "code": self.code,
-            "sids": self.sids
+            "sids": copy.copy(self.sids)
         }
 
 # 스케쥴 번들
