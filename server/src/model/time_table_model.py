@@ -333,7 +333,7 @@ class TimeScheduleModel(ScheduleTransformModel):
         time_schedule_data["start_date"] = self._transfer_date_str(datetime.strptime(schedule.start_date, "%Y/%m/%d"))
         time_schedule_data["end_date"] = self._transfer_date_str(datetime.strptime(schedule.start_date, "%Y/%m/%d"))
         time_schedule_data["update_datetime"] = self._cal_update_time(datetime.strptime(schedule.update_datetime, "%Y/%m/%d-%H:%M:%S"))
-        time_schedule_data["location"] = schedule.location
+        time_schedule_data["location"] = self._linked_str(schedule.location)
         time_schedule_data["code"] = schedule.code
         time_schedule_data["color_code"] = schedule.color_code
 
@@ -445,7 +445,8 @@ class MultiScheduleModel(TimeTableModel):
         self.__biases:list = []
 
     # id_list는 서치한 데이터들의 고유 아이디
-    def _make_schedule_data(self,id_list:list, search_type:str="schedule"):
+    # 전송용 데이터를 만드는 함수
+    def _make_send_data_with_ids(self,id_list:list, search_type:str="schedule"):
         schedule_id_type = ""
         if search_type == "schedule":
             schedule_id_type = "sid"
@@ -479,6 +480,13 @@ class MultiScheduleModel(TimeTableModel):
                 bias.make_with_dict(data)
                 self.__biases.append(bias)
 
+        # 데이터들을 전부 변환
+        self._make_send_data_with_datas()
+
+        return
+
+    # 이미 데이터를 받아온 경우에 씀
+    def _make_send_data_with_datas(self):
         # 데이터 변환 모델
         schedule_model = TimeScheduleModel()
         schedule_event_model = TimeEventModel()
@@ -607,6 +615,7 @@ class MultiScheduleModel(TimeTableModel):
                 continue
 
         return schedule_event_ids
+
     # 내가 이벤트 스케줄 데이터 뽑기를 날짜로
     # date는 날짜임 , 형태는 2025/03/06 임
     # date안넣으면 기본적으로 오늘자로 감
@@ -623,9 +632,7 @@ class MultiScheduleModel(TimeTableModel):
                 self.__schedule_events.append(schedule_event)
 
         # 스케줄 이벤트 데이터 폼 수정
-        schedule_event_model = TimeEventModel()
-        schedule_event_model.get_tevent_list(events=self.__schedule_events)
-        self.__schedule_events = schedule_event_model.get_response_form_data()
+        self._make_send_data_with_datas()
 
         return
 
@@ -643,9 +650,7 @@ class MultiScheduleModel(TimeTableModel):
             self.__schedule_events.append(schedule_event)
 
         # 스케줄 이벤트 데이터 폼 수정
-        schedule_event_model = TimeEventModel()
-        schedule_event_model.get_tevent_list(events=self.__schedule_events)
-        self.__schedule_events = schedule_event_model.get_response_form_data()
+        self._make_send_data_with_datas()
 
         return
 
@@ -664,9 +669,7 @@ class MultiScheduleModel(TimeTableModel):
             self.__schedules.append(schedule)
 
         # 스케줄 데이터 폼 수정
-        schedule_model = TimeScheduleModel()
-        schedule_model.get_tschedule_list(schedules=self.__schedules)
-        self.__schedules = schedule_model.get_response_form_data()
+        self._make_send_data_with_datas()
 
         return
 
@@ -738,11 +741,7 @@ class MultiScheduleModel(TimeTableModel):
             self._database.modify_data_with_id(target_id="tuid", target_data=self._tuser.get_dict_form_data())
 
         # 스케줄 데이터 폼 수정
-        schedule_model = TimeScheduleModel()
-        schedule_model.get_tschedule_list(schedules=self.__schedules)
-        self.__schedules = schedule_model.get_response_form_data()
-
-
+        self._make_send_data_with_datas()
         return
 
     # 주차에 따른 내가 추가한 스케줄을 보여줌
@@ -772,9 +771,8 @@ class MultiScheduleModel(TimeTableModel):
                 self.__schedules.append(schedule)
 
         # 스케줄 데이터 폼 수정
-        schedule_model = TimeScheduleModel()
-        schedule_model.get_tschedule_list(schedules=self.__schedules)
-        self.__schedules = schedule_model.get_response_form_data()
+        self._make_send_data_with_datas()
+
         return
 
     # 키워드를 통해 검색합니다.
@@ -790,7 +788,7 @@ class MultiScheduleModel(TimeTableModel):
 
         searched_list, self._key = self.paging_id_list(id_list=searched_list, last_index=last_index, page_size=num_schedules)
 
-        self._make_schedule_data(id_list=searched_list, search_type=search_type)
+        self._make_send_data_with_ids(id_list=searched_list, search_type=search_type)
 
         return
 
@@ -799,8 +797,9 @@ class MultiScheduleModel(TimeTableModel):
         search_list = self.__search_bias_list(keyword=keyword)
         search_list, self._key = self.paging_id_list(id_list=search_list, last_index=last_index, page_size=num_biases)
 
-        self._make_schedule_data(id_list=search_list, search_type="bias")
+        self._make_send_data_with_ids(id_list=search_list, search_type="bias")
 
+    # 바이어스를 통한 내 스케쥴 관리
     def search_my_schedule_with_bid(self, bid):
         # 데이터 불러오고
         schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids=self._tuser.sids)
@@ -825,12 +824,11 @@ class MultiScheduleModel(TimeTableModel):
             if schedule_event.bid == bid:
                 self.__schedule_events.append(schedule_event)
 
-        schedule_event_model = TimeEventModel()
-        schedule_event_model.get_tevent_list(events=self.__schedule_events)
-        self.__schedule_events = schedule_event_model.get_response_form_data()
+        self._make_send_data_with_datas()
 
         return
 
+    # 내가 설정한 모든 스케쥴 불러오기
     def search_my_all_schedule(self):
         # 데이터 불러오고
         schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids=self._tuser.sids)
@@ -851,12 +849,10 @@ class MultiScheduleModel(TimeTableModel):
             schedule_event.make_with_dict(dict_data=schedule_event_data)
             self.__schedule_events.append(schedule_event)
 
-        schedule_event_model = TimeEventModel()
-        schedule_event_model.get_tevent_list(events=self.__schedule_events)
-        self.__schedule_events = schedule_event_model.get_response_form_data()
-
+        self.__make_send_data_with_datas()
         return
 
+    # 전송 데이터 만들기
     def get_response_form_data(self, head_parser):
         body = {
             "schedules" : self.__schedules,
@@ -869,7 +865,7 @@ class MultiScheduleModel(TimeTableModel):
         response = self._get_response_data(head_parser=head_parser, body=body)
         return response
 
-
+# 스케쥴 추가 모델
 class AddScheduleModel(TimeTableModel):
     def __init__(self, database:Local_Database) -> None:
         super().__init__(database)
