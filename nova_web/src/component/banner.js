@@ -38,7 +38,11 @@ export default function Banner() {
           <section className="banner">
             <div className="banner-images">
               <div className="image-box">
-                <img src={banner.ba_url} alt={`banner ${banner.baid}`} />{" "}
+                <img
+                  src={banner.ba_url}
+                  alt={`banner ${banner.baid}`}
+                  onClick={() => window.open(banner.redirect, '_blank')}
+                />
               </div>
             </div>
           </section>
