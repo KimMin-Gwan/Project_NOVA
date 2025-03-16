@@ -1025,7 +1025,7 @@ class ScheduleBlockTreater():
                                                        )
             
             # 핵심 - 스케줄 수를 하나 늘려주면됨
-            weekDayDateBlock.num_schedule += 1
+            targetWeekDayDateBlock.num_schedule += 1
         
          # WeekDayDateBlocks를 date 기준으로 정렬
         sorted_block_list = sorted(weekDayDateBlocks, key=lambda x: x.date)
