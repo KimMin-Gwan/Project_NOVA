@@ -852,6 +852,23 @@ class MultiScheduleModel(TimeTableModel):
         self.__make_send_data_with_datas()
         return
 
+    # 바이어스 추천 로직
+    # 근데 아직 추천할게 없어
+    def get_recommend_bias_list(self, num_biases:int):
+        # 바이어스 데이터 로드
+        bias_datas = self._database.get_all_data(target="bid")
+
+        for bias_data in bias_datas:
+            bias = Bias()
+            bias.make_with_dict(bias_data)
+            self.__biases.append(bias)
+
+        # 랜덤하게 뽑기 (만약 데이터가 많다면
+        if len(self.__biases) > num_biases :
+            self.__biases = random.sample(self.__biases, num_biases)
+
+        self._make_send_data_with_datas()
+
     # 전송 데이터 만들기
     def get_response_form_data(self, head_parser):
         body = {

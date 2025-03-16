@@ -89,8 +89,9 @@ class TImeTableController:
             if not model._set_tuser_with_tuid():
                 return model
 
-        model.get_recommend_bias_list(random_samples=num_recommend)
-        return
+        model.get_recommend_bias_list(num_biases=num_recommend)
+
+        return model
 
     # 스케줄 추가
     def try_add_schedule(self, database:Local_Database, request:RequestManager) -> BaseModel: 
