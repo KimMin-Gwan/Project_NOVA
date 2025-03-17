@@ -355,7 +355,7 @@ class Mongo_Database(Local_Database):
         return
     #업로드(업로드 여러개)
     def __upload_many(self,document, collection:Collection) -> None:
-        collection.insert_many(document=document)
+        collection.insert_many(documents=document)
         return
 
     #(찾기)
