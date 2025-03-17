@@ -93,8 +93,8 @@ const NavBar = ({ brightMode }) => {
           e.stopPropagation();
           e.preventDefault();
           setWriteMoment(false);
-        } else {
-          onClickWrite();
+        } else if (writeOptions) {
+          setWriteOptions(false);
         }
       }}
     >

@@ -7,8 +7,7 @@ import { ScheduleFollow } from "../../component/ScheduleMore/ScheduleMore";
 import ScheduleFollowBox from "../../component/ScheduleFollowBox/ScheduleFollowBox";
 import { mockData } from "../../pages/SchedulePage/TestScheduleData";
 import useToggleMore from "../../component/useToggleMore";
-
-
+import mainApi from "../../services/apis/mainApi";
 
 export default function SearchTopicPage() {
   let [eventData, setEventData] = useState([]);
@@ -21,11 +20,11 @@ export default function SearchTopicPage() {
   const [nextKey, setNextKey] = useState(-1);
 
   async function fetchSearchData(keyword) {
-      await mainApi
-        .get(`time_table_server/try_search_bias?keyword=${keyword}&key=${nextKey}`)
-        .then((res) => {
-          setBiasData((prev) => [...prev, ...res.data.body.biases]);
-          setNextKey(res.data.body.key);
+    await mainApi
+      .get(`time_table_server/try_search_bias?keyword=${keyword}&key=${nextKey}`)
+      .then((res) => {
+        setBiasData((prev) => [...prev, ...res.data.body.biases]);
+        setNextKey(res.data.body.key);
       });
   }
 
@@ -49,10 +48,7 @@ export default function SearchTopicPage() {
       <ul className={style["scheduleList"]}>
         {biasData.map((item) => (
           <li key={item.id}>
-            <ScheduleTopic
-              key={item.id}
-              toggleClick={() => toggleMore(item.id)}
-            />
+            <ScheduleTopic key={item.id} toggleClick={() => toggleMore(item.id)} />
             {moreClick[item.id] && (
               <ScheduleFollow
                 scheduleClick={() => clickPath("/search/schedule")}

@@ -5,12 +5,14 @@
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 100;
+  z-index: 10000;
 }
 
 .bottom_bar {
   height: 60px;
   position: fixed;
+  z-index: 10000;
+
   bottom: 0px;
   left: 0;
   right: 0;
