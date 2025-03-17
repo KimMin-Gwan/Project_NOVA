@@ -3,13 +3,9 @@ import vertical_line from "./vertical_line.svg"; // Corrected import for SVG fil
 import EventComponent from "./EventComponent"; // Corrected import for EventComponent`
 import ScheduleTopic from "../../component/ScheduleTopic/ScheduleTopic";
 import { useNavigate } from "react-router-dom";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import TimeChart from "./TimeChart";
-import {
-  tempWeekDayData,
-  tempScheduleData,
-  mockData,
-} from "../../pages/SchedulePage/TestScheduleData";
+
 import mainApi from "../../services/apis/mainApi";
 import NavBar from "../../component/NavBar/NavBar";
 
@@ -18,13 +14,13 @@ const ScheduleDashboard = () => {
   let [scheduleData, setScheduleData] = useState([]);
   let [eventData, setEventData] = useState([]);
 
-  let [targetMonth, setTargetMonth] = useState("00년 00월")
-  let [targetWeek, setTargetWeek] = useState("0주차")
-  let [numBias, setNumBias] = useState(0)
+  let [targetMonth, setTargetMonth] = useState("00년 00월");
+  let [targetWeek, setTargetWeek] = useState("0주차");
+  let [numBias, setNumBias] = useState(0);
 
-  let [biasData, setBiasData] = useState([])
+  let [biasData, setBiasData] = useState([]);
 
-  const brightMode = "brigthMode"
+  const brightMode = "brigthMode";
 
   // 목표 날짜를 받아오고
   function fetchTargetMonthWeek() {
@@ -70,7 +66,6 @@ const ScheduleDashboard = () => {
     navigate(`${path}`);
   };
 
-
   return (
     <div className="container">
       <div className="section-box">
@@ -88,9 +83,7 @@ const ScheduleDashboard = () => {
               <span>개</span>
             </div>
             <div className="right-group">
-              <button onClick={() => handleNavigate("/search/topic")}>
-                주제 탐색
-              </button>
+              <button onClick={() => handleNavigate("/search/topic")}>주제 탐색</button>
               <img src={vertical_line} alt="vertical line" />
               <button>일정 등록</button>
             </div>
@@ -121,16 +114,13 @@ const ScheduleDashboard = () => {
             <p className="element">
               <span className="text-wrapper">타임 차트</span>
             </p>
-            <span className="add-schedule"
-            onClick={() => handleNavigate("/search/schedule")}
-            >일정 추가</span>
+            <span className="add-schedule" onClick={() => handleNavigate("/search/schedule")}>
+              일정 추가
+            </span>
           </div>
         </div>
         {/* 타임차트를 만드는 핵심 구간 */}
-        <TimeChart
-          weekDayData={weekDayData}
-          scheduleData={scheduleData}
-        />
+        <TimeChart weekDayData={weekDayData} scheduleData={scheduleData} />
       </div>
       <div className="section-line"></div>
       <div className="section-box">
