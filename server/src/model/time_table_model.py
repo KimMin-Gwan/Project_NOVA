@@ -240,7 +240,7 @@ class ScheduleTransformModel:
         # return result
 
     def _transfer_date_str(self, dtime:datetime):
-        return dtime.strftime("%M월 %d일")
+        return dtime.strftime("%m월 %d일")
 
         # formatted_date = f"{dtime.month}월 {dtime.day}일"
         # return formatted_date
