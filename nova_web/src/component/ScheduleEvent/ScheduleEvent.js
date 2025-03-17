@@ -1,7 +1,7 @@
 import style from "./ScheduleEvent.module.css";
 import { event } from "../../pages/SchedulePage/TestScheduleData";
 
-export default function ScheduleEvent({ sename, bname, date, location, date, start, toggleClick }) {
+export default function ScheduleEvent({ sename, bname, date, location, start, toggleClick }) {
   return (
     <div className={style["ScheduleEvent"]} onClick={toggleClick}>
       <dl>

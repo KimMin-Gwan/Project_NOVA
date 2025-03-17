@@ -6,8 +6,8 @@ export default function ScheduleCard({
   uname,
   update_time,
   bname,
-  date,
-  start,
+  start_date,
+  start_time,
   location,
   code,
   toggleClick,
@@ -31,7 +31,7 @@ export default function ScheduleCard({
           <section className={style["BnameInfo"]}>
             <dt>{bname}</dt>
             <dt>
-              {date} | {start}
+              {start_date} | {start_time}
             </dt>
             <dt>{location}</dt>
           </section>

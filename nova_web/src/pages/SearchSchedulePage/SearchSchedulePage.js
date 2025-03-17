@@ -12,16 +12,11 @@ import {
   ScheduleAdd,
 } from "../../component/ScheduleMore/ScheduleMore";
 import { BundleScheduleDetail, EventDetail, ScheduleDetail} from "../../component/EventMore/EventMore";
-
-import {
-  mockData,
-  ScheduleKind,
-} from "../../pages/SchedulePage/TestScheduleData";
-import TestRef from "../../component/TestRef";
 import mainApi from "../../services/apis/mainApi";
 
-
 export default function SearchSchedulePage() {
+  const typeSelectData = ["schedule_bundle", "schedule", "event"];
+
   const [activeIndex, setActiveIndex] = useState(0);
   const [ScheduleIndex, setScheduleIndex] = useState(0);
   const { moreClick, toggleMore } = useToggleMore();
@@ -30,27 +25,59 @@ export default function SearchSchedulePage() {
   const [addScheduleBundleModal, setAddScheduleBundleModal] = useState(false);
   const [addEventModal, setAddEventMoal] = useState(false);
 
-  const [mock, setScheduleBundleData] = useState([]);
-  const [nextKey, setNextKey] = useState(-1);
+  const [scheduleBundleData, setScheduleBundleData] = useState([]);
+  const [scheduleData, setScheduleData] = useState([]);
+  const [scheduleEventData, setScheduleEventData] = useState([]);
+
+  const [scheduleBundleKey, setScheduleBundleKey] = useState(-1);
+  const [scheduleKey, setScheduleKey] = useState(-1);
+  const [scheduleEventKey, setScheduleEventKey] = useState(-1);
+
   const [typeSelect, setTypeSelect] = useState("schedule_bundle");
+
+  const [keyword, setKeyword] = useState("");
+
+  const [hasMore, setHasMore] = useState(false);
 
   const navigate = useNavigate();
 
-  async function fetchSearchData() {
-    await mainApi
-      .get(`time_table_server/try_search_schedule_with_keyword?keyword=${keyword}&key=${nextKey}`)
-      .then((res) => {
-        setComments((prev) => [...prev, ...res.data.body.feeds]);
-        setHasMore(res.data.body.feeds.length > 0);
-        setIsLoading(false);
-        setCommentNextKey(res.data.body.key);
+  async function fetchSearchData(keyword) {
+    if (activeIndex == 0 ){
+      await mainApi
+        .get(`time_table_server/try_search_schedule_with_keyword?keyword=${keyword}&key=${scheduleBundleKey}&type=${typeSelectData[activeIndex]}`)
+        .then((res) => {
+          setScheduleBundleData((prev) => [...prev, ...res.data.body.schedule_bundles]);
+          setScheduleBundleKey(res.data.body.key);
       });
+    }
+    else if (activeIndex == 1) {
+      await mainApi
+        .get(`time_table_server/try_search_schedule_with_keyword?keyword=${keyword}&key=${scheduleKey}&type=${typeSelectData[activeIndex]}`)
+        .then((res) => {
+          setScheduleData((prev) => [...prev, ...res.data.body.schedules]);
+          setScheduleKey(res.data.body.key);
+      });
+    }
+    else if (activeIndex == 2) {
+      await mainApi
+        .get(`time_table_server/try_search_schedule_with_keyword?keyword=${keyword}&key=${scheduleEventKey}&type=${typeSelectData[activeIndex]}`)
+        .then((res) => {
+          setScheduleEventData((prev) => [...prev, ...res.data.body.schedule_events]);
+          setScheduleEventKey(res.data.body.key);
+      });
+    }
   }
 
+  useEffect(() => {
+    fetchSearchData("");
+  }, []);
+  
   // 일정 탐색 페이지에 일정번들, 일정, 이벤트 상태 변경
   const handleClick = (index, type) => {
     setActiveIndex(index);
     setScheduleIndex(index);
+    setTypeSelect(typeSelectData[index])
+    fetchSearchData("");
   };
 
   // 일정 추가하기 버튼 누르면 동작하는애
@@ -78,7 +105,7 @@ export default function SearchSchedulePage() {
 
   return (
     <div className="container SearchSchedulePage">
-      <ScheduleSearch title={1} />
+      <ScheduleSearch title={1} fetchMockData={fetchSearchData} />
       <section className={"info-list"}>
         <ul className={"post-list"} data-active-index={activeIndex}>
           {ScheduleKind.map((item, index) => (
@@ -94,11 +121,11 @@ export default function SearchSchedulePage() {
       </section>
       <ul className="scheduleList">
         {ScheduleIndex === 0
-          ? mockData.map((item) => (
+          ? scheduleBundleData.map((item) => (
               <li key={item.id}>
                 <ScheduleBundle
                   key={item.id}
-                  schedule_bundle={item}
+                  item={item}
                   toggleClick={() => toggleMore(item.id)}
                 />
                 {moreClick[item.id] && (
@@ -110,7 +137,7 @@ export default function SearchSchedulePage() {
               </li>
             ))
           : ScheduleIndex === 1
-          ? mockData.map((item) => (
+          ? scheduleData.map((item) => (
               <li>
                 <ScheduleCard
                   key={item.id}
@@ -123,7 +150,7 @@ export default function SearchSchedulePage() {
                  />}
               </li>
             ))
-          : mockData.map((item) => (
+          : scheduleEventData.map((item) => (
               <li>
                 <ScheduleEvent
                   key={item.id}

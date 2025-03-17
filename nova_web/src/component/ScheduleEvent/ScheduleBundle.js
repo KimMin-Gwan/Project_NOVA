@@ -4,24 +4,25 @@ import {
   schedule,
 } from "../../pages/SchedulePage/TestScheduleData";
 
-export default function BaseBundle({ toggleClick, children, schedule_bundle }) {
+export default function BaseBundle({ toggleClick, children, sbname, uname, bname}) {
   return (
     <div className={style["ScheduleEvent"]} onClick={toggleClick}>
       <dl>
         <span className={style["ScheduleBudleTitle"]}>
-          <dt>{schedule_bundle.sbname}</dt>
-          <p>{schedule_bundle.uname} 등록</p>
+          <dt>{sbname}</dt>
+          <p>{uname} 등록</p>
         </span>
-        <dt>{schedule_bundle.bname}</dt>
+        <dt>{bname}</dt>
         {children}
       </dl>
     </div>
   );
 }
+
 // 일정탐색 페이지에 일정 번들 컴포넌트
-export function ScheduleBundle({ toggleClick, schedule_bundle }) {
+export function ScheduleBundle({ toggleClick, item}) {
   return (
-    <BaseBundle toggleClick={toggleClick}>
+    <BaseBundle toggleClick={toggleClick} {...item}>
       <dt>
         {schedule_bundle.date.map((item, index) => {
           return (

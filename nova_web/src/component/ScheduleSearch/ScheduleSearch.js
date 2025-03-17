@@ -1,8 +1,19 @@
 import search_icon from "./../../img/search_icon.png";
 import arrow from "./../../img/home_arrow.svg";
 import style from "./ScheduleSearch.module.css";
+import React, { useEffect, useRef, useState } from "react";
 
-export default function ScheduleSearch({ title, clickButton }) {
+export default function ScheduleSearch({ title, clickButton, fetchMockData }) {
+  const [searchKeyword, setKeyword] = useState('');
+
+  const onChangeSearchKeyWord= (e) => {
+    setKeyword(e.target.value);
+  }
+
+  async function fetchData() {
+    await fetchMockData(searchKeyword)
+  }
+
   const keyword = {
     word: ["인터넷방송", "유튜버", "버튜버"],
   };
@@ -34,16 +45,13 @@ export default function ScheduleSearch({ title, clickButton }) {
         <div className={style["searchBox"]}>
           <input
             type="text"
-            //   onKeyDown={onKeyDown}
-            //   value={searchBias}
-            //   onChange={(e) => {
-            //     onChangeSearchBias(e);
-            //   }}
+            value={searchKeyword}
+            onChange={onChangeSearchKeyWord}
             placeholder="키워드 또는 일정 코드를 입력해 보세요!"
           />
           <img
             src={search_icon}
-            // onClick={fetchSearchBias}
+            onClick={fetchData}
             alt="검색바"
           />
         </div>
