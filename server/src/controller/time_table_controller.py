@@ -235,14 +235,18 @@ class TImeTableController:
     # 스케줄 여러개 만들기
     def make_new_multiple_schedules(self, database:Local_Database, request:RequestManager) -> BaseModel: 
         model = AddScheduleModel(database=database)
-        
+
         if request.jwt_payload != "":
             model.set_user_with_email(request=request.jwt_payload)
             # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
             if not model._set_tuser_with_tuid():
                 return model
             
-        schedule_list = model.make_new_multiple_schedule(schedule_data=request.data_payload, bid=request.data_payload.bid)
-        model.save_new_schedules(schedule=schedule_list)
+        schedule_object = model.make_new_multiple_schedule(schedules=request.data_payload.schedules,
+                                                         sname=request.data_payload.sname,
+                                                         bid=request.data_payload.bid,
+                                                         data_type=request.data_payload.type)
+
+        model.save_new_multiple_schedule_object_with_type(schedule_object=schedule_object, data_type=request.data_payload.type)
+
         return model
-    

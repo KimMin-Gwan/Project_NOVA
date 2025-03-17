@@ -964,12 +964,57 @@ class AddScheduleModel(TimeTableModel):
                 break
         return sid
 
+    # sbid 만들기
+    def __make_new_sbid(self):
+        while True:
+            sbid = self._make_new_id()
+            if self._database.get_data_with_id(target="sbid", id=sbid):
+                continue
+            else:
+                break
+        return sbid
+
     # 코드 만들기
     def __make_schedule_code(self):
         # 영어 대문자와 숫자로 이루어진 6자리 코드 생성
         characters = string.ascii_uppercase + string.digits
         code = ''.join(random.choices(characters, k=6))
         return code
+
+    # 모든 방송 플랫폼 찾는 함수
+    def __find_all_broadcast_location(self, schedule_list:list):
+        location = set()
+
+        for schedule in schedule_list:
+            location.update(schedule.location)
+
+        return list(location)
+
+    # 스케줄 번들 시작 날짜와 끝 날짜 찾기
+    def __find_start_n_end_date(self, schedule_list:list, ):
+        # 기준 날짜는 맨 처음 스케줄
+        start_date = datetime.strptime(schedule_list[0].start_date, "%Y/%m/%d")
+        end_date = datetime.strptime(schedule_list[0].end_date, "%Y/%m/%d")
+
+        # 스케줄마다 확인해서 일정 번들 중 가장 빠른 시작날짜와 가장 늦은 끝 날짜를 찾는다.
+        for schedule in schedule_list:
+            other_start = datetime.strptime(schedule.start_date,"%Y/%m/%d")
+            other_end = datetime.strptime(schedule.end_date,"%Y/%m/%d")
+
+            # 시작일 은 가장 오래된 순서
+            if start_date > other_start:
+                start_date = other_start
+            # 종료일은 스케쥴의 가장 나중에 끝나는 날
+            if end_date < other_end:
+                end_date = other_end
+
+        # 문자열화
+        start_date_str = start_date.strftime("%y년 %m월 %d일")
+        end_date_str = end_date.strftime("%y년 %m월 %d일")
+
+        # 반환
+        return [start_date_str, end_date_str]
+
 
     # 단일 스케줄 만들기
     def make_new_single_schedule(self, data_payload, bid):
@@ -984,17 +1029,37 @@ class AddScheduleModel(TimeTableModel):
             state=data_payload.state
         )
 
-        schedule.sid = self.__make_new_sid()
-        schedule.code = self.__make_schedule_code()
-
         bias_data = self._database.get_data_with_id(target="bid", id=schedule.bid)
         bias = Bias().make_with_dict(bias_data)
 
+        schedule.sid = self.__make_new_sid()
         schedule.bname = bias.bname
         schedule.uid = self._user.uid
         schedule.uname = self._user.uname
+        schedule.code = self.__make_schedule_code()
         schedule.update_datetime = datetime.today().strftime("%Y/%m/%d-%H:%M:%S")
         return schedule
+
+    def make_new_schedule_bundle(self, schedule_list:list, sbname:str, bid:str):
+        schedule_bundle = ScheduleBundle(
+            sbname=sbname,
+            bid=bid,
+            sids= [schedule.sid for schedule in schedule_list]
+        )
+
+        bias_data = self._database.get_data_with_id(target="bid", id=bid)
+        bias = Bias().make_with_dict(bias_data)
+
+        schedule_bundle.sbid = self.__make_new_sbid()
+        schedule_bundle.bname = bias.bname
+        schedule_bundle.uid = self._user.uid
+        schedule_bundle.uname = self._user.uname
+        schedule_bundle.date = self.__find_start_n_end_date(schedule_list=schedule_list)
+        schedule_bundle.location = self.__find_all_broadcast_location(schedule_list=schedule_list)
+        schedule_bundle.code = self.__make_schedule_code()
+        schedule_bundle.update_datetime = datetime.today().strftime("%Y/%m/%d-%H:%M:%S")
+
+        return schedule_bundle
 
     # 단일 스테줄 저장
     def save_new_schedules(self, schedule:list):
@@ -1004,15 +1069,31 @@ class AddScheduleModel(TimeTableModel):
         return
 
     # 복수 스케줄 만들기
-    def make_new_multiple_schedule(self, schedules:list[Schedule], bid:str):
+    def make_new_multiple_schedule(self, schedules:list[Schedule], sname:str, bid:str, data_type:str):
         schedule_list = []
+        schedules_object = None
 
         for schedule in schedules:
             schedule = self.make_new_single_schedule(data_payload=schedule, bid=bid)
             schedule_list.append(schedule)
 
-        return schedule_list
+        # 스케쥴 등록
+        self.save_new_schedules(schedule=schedule_list)
 
+        if data_type == "bundle":
+            schedules_object = self.make_new_schedule_bundle(schedule_list=schedule_list, sbname=sname, bid=bid)
+
+        return schedules_object
+
+    def save_new_multiple_schedule_object_with_type(self, schedule_object, data_type:str):
+        if data_type == "bundle":
+            self._database.add_new_data(target_id="sbid", new_data=schedule_object.get_dict_form_data())
+            self.__result = True
+        # elif data_type == "event":
+        #     self._database.add_new_data(target_id="seid", new_data=schedule_object.get_dict_form_data())
+        #     self.__result = True
+
+        return
 
     def get_response_form_data(self, head_parser):
         body = {

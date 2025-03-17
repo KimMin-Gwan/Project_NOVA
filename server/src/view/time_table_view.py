@@ -24,6 +24,7 @@ class TimeTableView(Master_View):
         self.home_route()
         self.schedule_search_route()
         self.my_schedule_route()
+        self.make_schedule_route()
         
     def home_route(self):
         # 완료 / 
@@ -250,9 +251,9 @@ class TimeTableView(Master_View):
     def make_schedule_route(self):
         # 단일 일정을 만들기
         @self.__app.post('/time_table_server/try_make_new_single_schedule')
-        def try_make_new_single_schedule(request: Request, raw_requset:dict):
+        def try_make_new_single_schedule(request: Request, raw_request:dict):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
-            data_payload = MakeSingleScheduleRequest(request=raw_requset)
+            data_payload = MakeSingleScheduleRequest(request=raw_request)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
             time_table_controller =TImeTableController()
@@ -264,10 +265,12 @@ class TimeTableView(Master_View):
             return response
 
         # 복수 일정을 만들기
+        # 테스트 완료
         @self.__app.post('/time_table_server/try_make_new_mulitple_schedule')
-        def try_make_new_multiple_schedule(request: Request, raw_requset:dict):
+        def try_make_new_multiple_schedule(request: Request, raw_request:dict):
+
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
-            data_payload = MakeMultipleScheduleRequest(request=raw_requset)
+            data_payload = MakeMultipleScheduleRequest(request=raw_request)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
             time_table_controller =TImeTableController()
@@ -277,8 +280,7 @@ class TimeTableView(Master_View):
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response
-        
-        
+
         # 여기는 2차 목표임
         ## 일정 수정하기
         #@self.__app.post('/time_table_server/try_modify_schedule')
@@ -314,7 +316,7 @@ class TimeTableView(Master_View):
 class DummyRequest():
     def __init__(self) -> None:
         pass
-        
+
 class MakeSingleScheduleRequest(RequestHeader):
     def __init__(self, request) -> None:
         super().__init__(request)
@@ -327,11 +329,14 @@ class MakeSingleScheduleRequest(RequestHeader):
         self.end_date = body['end_date']
         self.end_time = body['end_time']
         self.state = body.get("status", True)
-        
-class MakeMultipleScheduleRequest(RequestHeader):
+
+class MakeMultipleScheduleRequest:
+# class MakeMultipleScheduleRequest(RequestHeader):
     def __init__(self, request) -> None:
-        super().__init__(request)
         body:dict = request['body']
+        # 테스트용 운영자 이메일
+        self.email:str="alsrhks2508@naver.com"
+
         self.sname = body['sname']
         self.bid = body['bid']
         self.type = body.get("type", "bundle")
