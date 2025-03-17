@@ -8,6 +8,8 @@ import ScheduleFollowBox from "../../component/ScheduleFollowBox/ScheduleFollowB
 import { mockData } from "../../pages/SchedulePage/TestScheduleData";
 import useToggleMore from "../../component/useToggleMore";
 
+
+
 export default function SearchTopicPage() {
   let [eventData, setEventData] = useState([]);
 
@@ -15,13 +17,13 @@ export default function SearchTopicPage() {
   const [isModal, setIsModal] = useState(false);
   const navigate = useNavigate();
 
-  // 오늘짜 이벤트 데이터 받아오고
-  // 이것도 나중에 오늘 말고 내일, 이틀 후 사흘 후 이런걸로 해야될 듯
-  function fetchEventData() {
-    mainApi.get("time_table_server/try_get_event_board_data").then((res) => {
-      setEventData(res.data.body.schedule_events);
-    });
-  }
+  //// 오늘짜 이벤트 데이터 받아오고
+  //// 이것도 나중에 오늘 말고 내일, 이틀 후 사흘 후 이런걸로 해야될 듯
+  //function fetchEventData() {
+    //mainApi.get("time_table_server/try_get_event_board_data").then((res) => {
+      //setEventData(res.data.body.schedule_events);
+    //});
+  //}
 
   // 팔로우 모달창 나오게 하기
   function handleFollowModal() {

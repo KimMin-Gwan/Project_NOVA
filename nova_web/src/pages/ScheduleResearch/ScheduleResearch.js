@@ -4,7 +4,7 @@ import ScheduleCalendar from "../../component/ScheduleCalendar/ScheduleCalendar"
 import ScheduleSearch from "../../component/ScheduleSearch/ScheduleSearch";
 import ScheduleEvent from "../../component/ScheduleEvent/ScheduleEvent";
 import { ScheduleMore } from "../../component/ScheduleMore/ScheduleMore";
-import { ScheduleEventMore } from "../../component/EventMore/EventMore";
+import { EventDetail } from "../../component/EventMore/EventMore";
 
 import { mockData } from "../../pages/SchedulePage/TestScheduleData";
 import useToggleMore from "../../component/useToggleMore";
@@ -40,7 +40,7 @@ export default function ScheduleResearch() {
         </li>
       ))}
 
-      <ScheduleEventMore closeSchedule={toggleSchedule} isOpen={isMoreModal} />
+      <EventDetail closeSchedule={toggleSchedule} isOpen={isMoreModal} />
     </div>
   );
 }

@@ -197,21 +197,21 @@ class TimeTableView(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
         
-        # 완료
-        # 홈화면에 노출될 스케줄 정하는건 여기서 함
-        @self.__app.get('/time_table_server/try_select_my_time_table_schedule')
-        def try_select_my_time_table_schedule(request:Request, date:Optional[str],bid:Optional[str]=""):
-            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
-            data_payload = SelectMyTimeTableRequest(date=date, bid=bid)
-            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+        ## 완료
+        ## 홈화면에 노출될 스케줄 정하는건 여기서 함
+        #@self.__app.get('/time_table_server/try_select_my_time_table_schedule')
+        #def try_select_my_time_table_schedule(request:Request, date:Optional[str],bid:Optional[str]=""):
+            #request_manager = RequestManager(secret_key=self.__jwt_secret_key)
+            #data_payload = SelectMyTimeTableRequest(date=date, bid=bid)
+            #request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
 
-            time_table_controller =TImeTableController()
-            model = time_table_controller.try_select_my_time_table_schedule(database=self.__database,
-                                                                            request=request_manager)
+            #time_table_controller =TImeTableController()
+            #model = time_table_controller.try_select_my_time_table_schedule(database=self.__database,
+                                                                            #request=request_manager)
             
-            body_data = model.get_response_form_data(self._head_parser)
-            response = request_manager.make_json_response(body_data=body_data)
-            return response
+            #body_data = model.get_response_form_data(self._head_parser)
+            #response = request_manager.make_json_response(body_data=body_data)
+            #return response
         
         # 완료
         # bid에서 내가 선택했는 스케줄들 볼때 쓰는 엔드 포인트. 로그인 필수

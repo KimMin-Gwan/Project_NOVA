@@ -8,7 +8,7 @@ import './chart_schedule_style.css'
 // 본 길이는 실제 길이를 300등분한 길이만큼 줄것
 // 끝
 
-export default function ChartScheduleComponent({ timeblocks, schedule_detail, bias_name, color_code, timeSection }) {
+export default function ChartScheduleComponent({ timeblocks, sname, bname, color_code, timeSection }) {
     let adjustedWidth = 0; // 앞에 몇 분 임
     let adjustedPadding = 0; // 시작 시간 몇 분임
 
@@ -25,18 +25,19 @@ export default function ChartScheduleComponent({ timeblocks, schedule_detail, bi
             <div
                 className="schedule-box"
                 style={{
-                    width: `${adjustedWidth}%`,
-                    marginLeft: `${adjustedPadding}%`,
-                    backgroundColor: `${color_code}`,
+                width: `${adjustedWidth}%`,
+                marginLeft: `${adjustedPadding}%`,
+                backgroundColor: `${color_code}`,
                 }}
             >
-                {matchingBlock && (
-                    <>
-                        <span>{schedule_detail}</span>
-                        <span>{bias_name}</span>
-                    </>
+                {matchingBlock && matchingBlock.length >= 80 && (
+                <>
+                    <span>{sname}</span>
+                    <span>{bname}</span>
+                </>
                 )}
             </div>
         </div>
+
     );
 }

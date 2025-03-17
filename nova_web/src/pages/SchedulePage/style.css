@@ -29,6 +29,13 @@
   letter-spacing: -0.08px;
 }
 
+.add-schedule {
+  font-size: 16px; /* 타임 차트보다 작은 크기 */
+  font-weight: 400;
+  color: #555555;
+  margin-right: 12px; /* 간격 조정 */
+}
+
 .span {
   color: #107af4;
   letter-spacing: -0.08px;
@@ -38,6 +45,9 @@
   font-size: 20px;
   font-weight: 600;
   letter-spacing: -0.4px;
+  display: flex;
+  align-items: center; /* 수직 정렬 */
+  justify-content: space-between; /* 양쪽 정렬 */
 }
 
 .my-dashboard {

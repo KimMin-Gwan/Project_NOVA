@@ -1,10 +1,15 @@
 import style from "./EventCard.module.css";
 import { schedule } from "../../pages/SchedulePage/TestScheduleData";
 
-export default function EventCard({
-  name,
-  topic,
+export default function ScheduleCard({
+  detail,
+  uname,
+  update_time,
+  bname,
   date,
+  start,
+  location,
+  code,
   toggleClick,
   selectBack,
 }) {
@@ -16,23 +21,23 @@ export default function EventCard({
     >
       <dl>
         <span className={style["EventHeader"]}>
-          <dt>{schedule.detail}</dt>
+          <dt>{detail}</dt>
           <section className={style["UnameInfo"]}>
-            <dt>{schedule.uname} 등록</dt>
-            <dt>{schedule.update_time}</dt>
+            <dt>{uname} 등록</dt>
+            <dt>{update_time}</dt>
           </section>
         </span>
         <section className={style["DesInfo"]}>
           <section className={style["BnameInfo"]}>
-            <dt>{schedule.bname}</dt>
+            <dt>{bname}</dt>
             <dt>
-              {schedule.date} | {schedule.start}
+              {date} | {start}
             </dt>
-            <dt>{schedule.location}</dt>
+            <dt>{location}</dt>
           </section>
           <span className={style["CodeInfo"]}>
             <p>일정 코드</p>
-            <div>{schedule.code}</div>
+            <div>{code}</div>
           </span>
         </section>
       </dl>
