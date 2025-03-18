@@ -166,10 +166,10 @@ class TimeTableView(Master_View):
         
         # Bias 서치
         # 팔로워 서치부분과는 다르게  둠
-        @self.__app.get('/time_table_server/get_schedule_with_sids')
-        def try_search_bias_with_keyword(request:Request, sids:Optional[str]=[]):
+        @self.__app.post('/time_table_server/get_schedule_with_sids')
+        def try_search_bias_with_keyword(request:Request, raw_request:Optional[str]=[]):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
-            data_payload = GetSchedulesRequest(sids=sids)
+            data_payload = GetSchedulesRequest(raw_request=raw_request)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
             time_table_controller =TImeTableController()
@@ -372,8 +372,9 @@ class SearchRequest(RequestHeader):
         self.type=type
 
 class GetSchedulesRequest(RequestHeader):
-    def __init__(self, sids=[]) -> None:
-        self.sids=sids
+    def __init__(self, request:dict)-> None:
+        body:dict = request['body']
+        self.sids=body.get('sids', [])
         
 class AddNewScheduleRequest(RequestHeader):
     def __init__(self, sids=[])-> None:
