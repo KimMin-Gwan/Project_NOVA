@@ -71,9 +71,7 @@ const ScheduleDashboard = () => {
   return (
     <div className="container">
       <div className="body-box">
-        <div className="section-box">
-          <Header />
-        </div>
+        <Header />
         <div className="section-box">
           <div className="dashboard-section">
             <div className="section-title">

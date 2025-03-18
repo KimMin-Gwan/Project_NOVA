@@ -16,8 +16,8 @@ export default function ChartScheduleComponent({ timeblocks, sname, bname, color
     const matchingBlock = timeblocks.find((block) => block.time === timeSection);
 
     if (matchingBlock) {
-        adjustedWidth = matchingBlock.length * 0.2777; // 길이 계산
-        adjustedPadding = matchingBlock.start * 0.2777; // 시작 위치 계산
+        adjustedWidth = matchingBlock.length * 0.2778; // 길이 계산
+        adjustedPadding = matchingBlock.start * 0.2778; // 시작 위치 계산
     }
 
     return (

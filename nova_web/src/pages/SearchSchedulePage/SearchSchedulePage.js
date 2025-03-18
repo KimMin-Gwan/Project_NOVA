@@ -14,17 +14,19 @@ import {
 import { BundleScheduleDetail, EventDetail, ScheduleDetail} from "../../component/EventMore/EventMore";
 import mainApi from "../../services/apis/mainApi";
 
+
+
 export default function SearchSchedulePage() {
   //const typeSelectData = ["schedule_bundle", "schedule", "event"];
+  //const [addEventModal, setAddEventMoal] = useState(false);
+
   const typeSelectData = ["schedule_bundle", "schedule"];
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [ScheduleIndex, setScheduleIndex] = useState(0);
-  const { moreClick, toggleMore } = useToggleMore();
 
   const [addScheduleModal, setAddScheduleModal] = useState(false);
   const [addScheduleBundleModal, setAddScheduleBundleModal] = useState(false);
-  const [addEventModal, setAddEventMoal] = useState(false);
 
   const [scheduleBundleData, setScheduleBundleData] = useState([]);
   const [scheduleData, setScheduleData] = useState([]);
@@ -42,7 +44,25 @@ export default function SearchSchedulePage() {
 
   const navigate = useNavigate();
 
+  const [moreClick, setMoreClick] = useState({});
+//  const { moreClick, setMoreClick} = useToggleMore();
+  function toggleMore(id){
+    setMoreClick((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
+
+  const [moreClickBundle, setMoreClickBundle] = useState({});
+  function toggleMoreBundle(id){
+    setMoreClickBundle((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
+
   async function fetchSearchData(keyword) {
+    // setActiveIndex가 너무 느리게 동작해서 그냥 index를 파라미터로 받아서 만들게 했습니다
     if (activeIndex == 0 ){
       await mainApi
         .get(`time_table_server/try_search_schedule_with_keyword?keyword=${keyword}&key=${scheduleBundleKey}&type=${typeSelectData[activeIndex]}`)
@@ -59,14 +79,44 @@ export default function SearchSchedulePage() {
           setScheduleKey(res.data.body.key);
       });
     }
-    else if (activeIndex == 2) {
+    // Event는 1.5버전에 추가 예정
+    //else if (activeIndex == 2) {
+      //await mainApi
+        //.get(`time_table_server/try_search_schedule_with_keyword?keyword=${keyword}&key=${scheduleEventKey}&type=${typeSelectData[activeIndex]}`)
+        //.then((res) => {
+          //setScheduleEventData((prev) => [...prev, ...res.data.body.schedule_events]);
+          //setScheduleEventKey(res.data.body.key);
+      //});
+    //}
+  }
+
+  async function fetchSearchDataWidthIndex(keyword, index) {
+    // setActiveIndex가 너무 느리게 동작해서 그냥 index를 파라미터로 받아서 만들게 했습니다
+    if (index== 0 ){
       await mainApi
-        .get(`time_table_server/try_search_schedule_with_keyword?keyword=${keyword}&key=${scheduleEventKey}&type=${typeSelectData[activeIndex]}`)
+        .get(`time_table_server/try_search_schedule_with_keyword?keyword=${keyword}&key=${scheduleBundleKey}&type=${typeSelectData[index]}`)
         .then((res) => {
-          setScheduleEventData((prev) => [...prev, ...res.data.body.schedule_events]);
-          setScheduleEventKey(res.data.body.key);
+          setScheduleBundleData((prev) => [...prev, ...res.data.body.schedule_bundles]);
+          setScheduleBundleKey(res.data.body.key);
       });
     }
+    else if (index== 1) {
+      await mainApi
+        .get(`time_table_server/try_search_schedule_with_keyword?keyword=${keyword}&key=${scheduleKey}&type=${typeSelectData[index]}`)
+        .then((res) => {
+          setScheduleData((prev) => [...prev, ...res.data.body.schedules]);
+          setScheduleKey(res.data.body.key);
+      });
+    }
+    // Event는 1.5버전에 추가 예정
+    //else if (activeIndex == 2) {
+      //await mainApi
+        //.get(`time_table_server/try_search_schedule_with_keyword?keyword=${keyword}&key=${scheduleEventKey}&type=${typeSelectData[activeIndex]}`)
+        //.then((res) => {
+          //setScheduleEventData((prev) => [...prev, ...res.data.body.schedule_events]);
+          //setScheduleEventKey(res.data.body.key);
+      //});
+    //}
   }
 
   useEffect(() => {
@@ -74,27 +124,34 @@ export default function SearchSchedulePage() {
   }, []);
   
   // 일정 탐색 페이지에 일정번들, 일정, 이벤트 상태 변경
+  // 누르면 키가 자꾸 올라가는 문제가 있음 !!!!
   const handleClick = (index, type) => {
     setActiveIndex(index);
     setScheduleIndex(index);
     setTypeSelect(typeSelectData[index])
-    fetchSearchData("");
+    fetchSearchDataWidthIndex("", index);
   };
+
+  const [targetSchedule, setTargetSchedule] = useState({});
+  const [targetScheduleBundle, setTargetScheduleBundle] = useState({});
 
   // 일정 추가하기 버튼 누르면 동작하는애
-  const toggleAddScheduleModal = () => {
+  const toggleAddScheduleModal = (target) => {
     setAddScheduleModal((addScheduleModal) => !addScheduleModal);
+    setTargetSchedule(target)
   };
+
 
   // 일정 번들 추가하기 버튼 누르면 동작하는 애
-  const toggleAddScheduleBundleModal= () => {
+  const toggleAddScheduleBundleModal= (target) => {
     setAddScheduleBundleModal((addScheduleBundleModal) => !addScheduleBundleModal);
+    setTargetScheduleBundle(target)
   };
 
-  // 이벤트 추가하기 버트 ㄴ누르면 동작하는 애
-  const toggleAddEventModal= () => {
-    setAddEventMoal((addEventModal) => !addEventModal);
-  };
+  //// 이벤트 추가하기 버트 ㄴ누르면 동작하는 애
+  //const toggleAddEventModal= () => {
+    //setAddEventMoal((addEventModal) => !addEventModal);
+  //};
 
   // 게시판으로 이동
   const navBoard = () => {
@@ -121,55 +178,75 @@ export default function SearchSchedulePage() {
           ))}
         </ul>
       </section>
-      <ul className="scheduleList">
-        {ScheduleIndex === 0
-          ? scheduleBundleData.map((item) => (
-              <li key={item.id}>
-                <ScheduleBundle
-                  key={item.id}
-                  item={item}
-                  toggleClick={() => toggleMore(item.id)}
-                />
-                {moreClick[item.id] && (
-                  <ScheduleMore
-                    navBoardClick={navBoard}
-                    scheduleClick={toggleAddScheduleBundleModal}
+        <ul className="scheduleList">
+          {ScheduleIndex === 0
+            ? scheduleBundleData.map((item) => (
+                <li key={item.sbid}>
+                  <ScheduleBundle
+                    item={item}
+                    toggleClick={() => toggleMoreBundle(item.sbid)} // id 전달
                   />
-                )}
-              </li>
-            ))
-          : ScheduleIndex === 1
-          ? scheduleData.map((item) => (
-              <li>
-                <ScheduleCard
-                  key={item.id}
-                  {...item}
-                  toggleClick={() => toggleMore(item.id)}
-                />
-                {moreClick[item.id] && <ScheduleAdd
-                    navBoardClick={navBoard}
-                    scheduleClick={toggleAddEventModal}
-                 />}
-              </li>
-            ))
-          : scheduleEventData.map((item) => (
-              <li>
-                <ScheduleEvent
-                  key={item.id}
-                  {...item}
-                  toggleClick={() => toggleMore(item.id)}
-                />
-                {moreClick[item.id] && <ScheduleMore 
-                    navBoardClick={navBoard}
-                    scheduleClick={toggleAddScheduleModal}
-                />}
-              </li>
-            ))}
-      </ul>
+                  {moreClickBundle[item.sbid] && ( // 해당 id의 상태만 확인
+                    <ScheduleMore
+                      target={item}
+                      navBoardClick={navBoard}
+                      scheduleClick={toggleAddScheduleBundleModal}
+                    />
+                  )}
+                </li>
+              ))
+            : scheduleData.map((item) => (
+                <li key={item.sid}>
+                  <ScheduleCard
+                    {...item}
+                    toggleClick={() => toggleMore(item.sid)} // id 전달
+                  />
+                  {moreClick[item.sid] && ( // 해당 id의 상태만 확인
+                    <ScheduleAdd
+                      target={item}
+                      navBoardClick={navBoard}
+                      addClick={toggleAddScheduleModal}
+                    />
+                  )}
+                </li>
+              ))}
+        </ul>
 
-      <BundleScheduleDetail closeSchedule={toggleAddScheduleBundleModal} isOpen={addScheduleBundleModal} />
-      <EventDetail closeSchedule={toggleAddEventModal} isOpen={addEventModal} />
+
+      <BundleScheduleDetail closeSchedule={toggleAddScheduleBundleModal} isOpen={addScheduleBundleModal} target={targetScheduleBundle} />
+
+      {/*여기도 target 추가해야될 듯 */}
       <ScheduleDetail closeSchedule={toggleAddScheduleModal} isOpen={addScheduleModal} />
     </div>
   );
 }
+
+
+      //<EventDetail closeSchedule={toggleAddEventModal} isOpen={addEventModal} />
+
+          //? scheduleData.map((item) => (
+              //<li>
+                //<ScheduleCard
+                  //key={item.id}
+                  //{...item}
+                  //toggleClick={() => toggleMore(item.id)}
+                ///>
+                //{moreClick[item.id] && <ScheduleAdd
+                    //navBoardClick={navBoard}
+                    //scheduleClick={toggleAddEventModal}
+                 ///>}
+              //</li>
+            //))
+          //: scheduleEventData.map((item) => (
+              //<li>
+                //<ScheduleEvent
+                  //key={item.id}
+                  //{...item}
+                  //toggleClick={() => toggleMore(item.id)}
+                ///>
+                //{moreClick[item.id] && <ScheduleMore 
+                    //navBoardClick={navBoard}
+                    //scheduleClick={toggleAddScheduleModal}
+                ///>}
+              //</li>
+            //))

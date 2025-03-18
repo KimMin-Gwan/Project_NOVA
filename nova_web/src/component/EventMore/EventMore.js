@@ -3,6 +3,8 @@ import ModalRectangle from "./../../img/ModalRectangle.png";
 import { useState, useEffect } from "react";
 import BaseBundle, { EventBundle } from "../ScheduleEvent/ScheduleBundle";
 import ScheduleEvent from "../EventCard/EventCard";
+import HEADER from "../../constant/header";
+import postApi from "../../services/apis/postApi";
 import {
   ScheduleEventAdd,
   ScheduleMoreAdd,
@@ -13,7 +15,9 @@ import {
   tempScheduleData,
 } from "../../pages/SchedulePage/TestScheduleData";
 import ScheduleCalendar from "../ScheduleCalendar/ScheduleCalendar";
+import { ScheduleBundle } from "../../component/ScheduleEvent/ScheduleBundle";
 const exdata = [0, 1];
+
 
 export function ScheduleDetail ({ closeSchedule, isOpen, children }) {
   const [backgroundColor, setBackgroundColor] = useState("");
@@ -68,15 +72,39 @@ export function ScheduleDetail ({ closeSchedule, isOpen, children }) {
   );
 }
 
-export function BundleScheduleDetail({ closeSchedule, isOpen }) {
+export function BundleScheduleDetail({ closeSchedule, isOpen, target}) {
   const [selectBack, setSelectBack] = useState({});
   const [isSelect, setIsSelect] = useState(1);
+  const [schedules, setSchedules] = useState([]);
+
+  // 스케줄 번들에 있는 스케줄들 받아오는 함수
+  async function fetchSchedules() {
+    // 패치 받기 전에 스케줄 초기화 부터하기
+    setSchedules([]);
+    await postApi 
+      .post('time_table_server/get_schedule_with_sids', {
+      header: HEADER,
+      body: {
+        sids: target.sids,
+      }})
+      .then((res) => {
+        setSchedules((prev) => [...prev, ...res.data.body.schedules]);
+    });
+  }
   // 취소했을 때 모두 취소되어서 변화하도록함
   useEffect(() => {
     if (isSelect === 1) {
       handleReset();
     }
   }, [isSelect]);
+
+  // 취소했을 때 모두 취소되어서 변화하도록함
+  useEffect(() => {
+    // 토글창 열리면 패치 받아오기
+    if (isOpen){
+      fetchSchedules()
+    }
+  }, [isOpen]);
 
   // 선택하면 배경색 변화하게 해주는 거
   function handleSelect(key) {
@@ -93,7 +121,9 @@ export function BundleScheduleDetail({ closeSchedule, isOpen }) {
   }
 
   // 선택한 일정 리셋하기
+  // 
   function handleReset() {
+    // 선택 초기화 하기
     setSelectBack({});
   }
 
@@ -120,16 +150,19 @@ export function BundleScheduleDetail({ closeSchedule, isOpen }) {
 
   return (
     <ScheduleDetail closeSchedule={closeSchedule} isOpen={isOpen}>
-      <EventBundle />
+      <ScheduleBundle
+        item={target}
+      />
       <ScheduleMoreAdd
         selectToggle={selectToggle}
         selectText={isSelect}
         allSelect={isSelect === 1 ? () => handleAllSelect() : undefined}
       />
-      {exdata.map((key, index) => (
+      {schedules.map((item, index) => (
         <ScheduleEvent
           key={index}
-          toggleClick={isSelect === 4 ? () => handleSelect(key) : undefined}
+          {...item}
+          toggleClick={isSelect === 4 ? () => handleSelect(item) : undefined}
           selectBack={selectBack[index] || ""}
         />
       ))}

@@ -1,6 +1,6 @@
 import style from "./ScheduleMore.module.css";
 
-function BasicSchedule({ isMore, secondClick, lastClick }) {
+function BasicSchedule({ isMore, secondClick, lastClick, target }) {
   const buttons = [
     {
       first: "",
@@ -35,6 +35,10 @@ function BasicSchedule({ isMore, secondClick, lastClick }) {
     },
   ];
 
+  function isButtonClicked(){
+    lastClick(target)
+  }
+
   return (
     <div className={style["moreContainer"]}>
       {buttons[isMore].first !== "" && (
@@ -43,15 +47,16 @@ function BasicSchedule({ isMore, secondClick, lastClick }) {
       {buttons[isMore].second !== "" && (
         <button onClick={secondClick}>{buttons[isMore].second}</button>
       )}
-      <button onClick={lastClick}>{buttons[isMore].last}</button>
+      <button onClick={isButtonClicked}>{buttons[isMore].last}</button>
     </div>
   );
 }
 // 일정 번들 버튼
-export function ScheduleMore({ navBoardClick, scheduleClick }) {
+export function ScheduleMore({ navBoardClick, scheduleClick, target }) {
   return (
     <BasicSchedule
       isMore={0}
+      target={target}
       secondClick={navBoardClick}
       lastClick={scheduleClick}
     />
@@ -68,8 +73,13 @@ export function ScheduleMoreAdd({ selectToggle, selectText, allSelect }) {
   );
 }
 // 일정 버튼
-export function ScheduleAdd({ addClick }) {
-  return <BasicSchedule isMore={2} lastClick={addClick} />;
+export function ScheduleAdd({ navBoardClick, addClick, target }) {
+  return <BasicSchedule
+      isMore={2}
+      target={target}
+      secondClick={navBoardClick}
+      lastClick={addClick}
+       />;
 }
 // 주제 탐색 페이지의 버튼
 export function ScheduleFollow({ scheduleClick, followClick }) {

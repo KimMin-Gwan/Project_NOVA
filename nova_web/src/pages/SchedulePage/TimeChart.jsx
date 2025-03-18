@@ -34,7 +34,7 @@ export default function TimeChart({ weekDayData, scheduleData }) {
                 <div>
                     {/* 요일 데이터를 렌더링 */}
                     {weekDayData.map((item, i) => (
-                        <TimeWeekComponent key={item.id} {...item} />
+                        <TimeWeekComponent key={i} {...item} />
                     ))}
                 </div>
             </div>
@@ -67,8 +67,8 @@ export default function TimeChart({ weekDayData, scheduleData }) {
 
                             {/* 시간 라인 표시 */}
                             <div className="time-line-box">
-                                {timeList[j].map((time, i) => (
-                                    <span key={i}>{time}</span> // 각 시간 표시
+                                {timeList[j].map((time, k) => (
+                                    <span key={k}>{time}</span> // 각 시간 표시
                                 ))}
                             </div>
 
