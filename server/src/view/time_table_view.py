@@ -163,6 +163,22 @@ class TimeTableView(Master_View):
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response
+        
+        # Bias 서치
+        # 팔로워 서치부분과는 다르게  둠
+        @self.__app.get('/time_table_server/get_schedule_with_sids')
+        def try_search_bias_with_keyword(request:Request, sids:Optional[str]=[]):
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
+            data_payload = GetSchedulesRequest(sids=sids)
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+
+            time_table_controller =TImeTableController()
+            model = time_table_controller.get_schedules_with_sids(database=self.__database,
+                                                                request=request_manager)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
 
     def my_schedule_route(self):
         # 완료
@@ -355,6 +371,10 @@ class SearchRequest(RequestHeader):
         self.key=key
         self.type=type
 
+class GetSchedulesRequest(RequestHeader):
+    def __init__(self, sids=[]) -> None:
+        self.sids=sids
+        
 class AddNewScheduleRequest(RequestHeader):
     def __init__(self, sids=[])-> None:
         self.sids=sids

@@ -4,6 +4,21 @@ from model import TimeTableModel, MultiScheduleModel, AddScheduleModel, Schedule
 
 class TImeTableController:
     
+    # sid 리스트로 스케줄 데이터 뽑아내기
+    def get_schedules_with_sids(self, database:Local_Database, request:RequestManager) -> BaseModel: 
+        model = MultiScheduleModel(database=database)
+        
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
+            # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
+            if not model._set_tuser_with_tuid():
+                return model
+        
+        # 주제 수 찍어주면됨
+        model.set_schedules_with_sids(data_payload=request.data_payload)
+        return model
+
+        
     # 타임 테이블 페이지의 최 상단 대시보드데이터
     # 파라미터 없음, 비로그인 상태에서는 0으로 리턴함 
     def get_dashboard_data(self, database:Local_Database, request:RequestManager) -> BaseModel: 

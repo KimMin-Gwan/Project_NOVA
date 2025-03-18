@@ -443,6 +443,11 @@ class MultiScheduleModel(TimeTableModel):
         self.__schedule_events:list = []
         self.__schedule_bundles:list = []
         self.__biases:list = []
+        
+    def set_schedules_with_sids(self, data_payload):
+        self._make_send_data_with_ids(self, id_list=data_payload.sids)
+        return
+        
 
     # id_list는 서치한 데이터들의 고유 아이디
     # 전송용 데이터를 만드는 함수
