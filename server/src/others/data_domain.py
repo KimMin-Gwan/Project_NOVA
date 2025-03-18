@@ -216,7 +216,7 @@ class Schedule(SampleDomain):
             "end_time": self.end_time,
             "location": copy.copy(self.location),
             "code": self.code,
-            "update_time": self.update_datetime,
+            "update_datetime": self.update_datetime,
             "num_usage": self.num_usage,
             "state":self.state,
             "color_code": self.color_code
