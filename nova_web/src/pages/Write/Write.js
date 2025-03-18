@@ -14,6 +14,7 @@ import HEADER from "../../constant/header.js";
 import toast, { Toaster } from "react-hot-toast";
 import DropDown from "../../component/DropDown/DropDown.js";
 import Input from "../../component/Input/Input.js";
+import Button from "../../component/Button/Button.js";
 
 const categoryData = [
   { key: 0, category: "자유게시판" },
@@ -89,13 +90,11 @@ const Write = ({ brightmode }) => {
   let [inputTagCount, setInputTagCount] = useState(0); //글자수
   let [inputBodyCount, setInputBodyCount] = useState(0); //글자수
 
-  let [urlLink, setUrlLink] = useState([{ name: "", url: "" }]);
   let [numLink, setNumLink] = useState(0);
   let [createOptions, setCreateOptions] = useState(0);
 
   function onClickAddLink() {
     setNumLink(numLink + 1);
-    // setLinkList((items) => [...items, linkTitle]);
     let newLink = { explain: linkTitle, url: linkUrl };
     setLinkList([...linkList, newLink]);
     setLinkTitle("");
@@ -110,6 +109,11 @@ const Write = ({ brightmode }) => {
   function onDeleteOption(i) {
     setChoice((prevChoices) => prevChoices.filter((_, index) => index !== i));
     setCreateOptions((prev) => Math.max(0, prev - 1));
+  }
+
+  function handleRemoveImg(i) {
+    setImagePreview((prev) => prev.filter((_, index) => index !== i));
+    setImageFiles((prev) => prev.filter((_, index) => index !== i));
   }
 
   let [currentFileName, setCurrentFileName] = useState([]);
@@ -283,7 +287,7 @@ const Write = ({ brightmode }) => {
         >
           취소
         </p>
-        {type === "long" && <p>롱 피드 작성</p>}
+        {type === "long" && <p>포스트 작성</p>}
         {type === "short" && <p>모멘트 작성</p>}
 
         <p
@@ -360,7 +364,6 @@ const Write = ({ brightmode }) => {
               </div>
             ))}
         </div>
-        {/* <div>#샘플</div> */}
       </div>
 
       <div className={style["content_container"]}>
@@ -386,7 +389,7 @@ const Write = ({ brightmode }) => {
       </div>
 
       {type === "short" && (
-        <p className={style["alert_message"]}>숏 피드 게시글은 작성 후 24시간 동안 노출됩니다.</p>
+        <p className={style["alert_message"]}>모멘트 게시글은 작성 후 24시간 동안 노출됩니다.</p>
       )}
       {type === "long" && (
         <p className={style["alert_message"]}>
@@ -429,6 +432,7 @@ const Write = ({ brightmode }) => {
         <Modal
           onClickModal={onClickModal}
           handleFileChange={handleFileChange}
+          handleRemoveImg={handleRemoveImg}
           imagePreview={imagePreview}
           currentFileName={currentFileName}
           imageFiles={imageFiles}
@@ -470,133 +474,143 @@ export const Modal = ({
   imagePreview,
   currentFileName,
   imageFiles,
+  handleRemoveImg,
 }) => {
   return (
-    <div className={style["wrapper-container"]}>
-      <div className={style["modal-container"]}>
-        <div className={style["modal-title"]}>이미지 삽입</div>
-        <div className={style["image-container"]}>
-          <label htmlFor={style["image-file"]} className={style["input-image"]}>
-            <span className={style["add-icon"]}>
-              <img src={add_icon} alt="add" />
-            </span>
-            이미지를 추가하려면 여기를 클릭하세요
-          </label>
-          <input
-            id={style["image-file"]}
-            name="image"
-            type="file"
-            accept="image/*"
-            multiple
-            onChange={(e) => {
-              handleFileChange(e);
-            }}
-          />
-          {imagePreview.length !== 0 &&
-            imagePreview.map((preview, index) => {
-              return (
-                <div key={index} className={style["preview-container"]}>
-                  <div className={style["remove-icon"]}>
-                    <img src={close_icon} alt="remove" />
-                  </div>
-                  <div className={style["img-name"]}>{imageFiles[index].name}</div>
-                  <div className={style["preview-image"]}>
-                    <img key={index} src={preview} />
-                  </div>
-                </div>
-              );
-            })}
-        </div>
-        <div className={style["modal-buttons"]}>
-          <button className={style["close_button"]} onClick={onClickModal}>
-            닫기
-          </button>
-          <button
-            className={`${style["apply_button"]} ${
-              imagePreview.length > 0 ? style["apply_button_on"] : ""
-            }`}
-            onClick={() => {
-              onClickModal();
-            }}
-            disabled={imagePreview.length === 0}
-          >
-            적용
-          </button>
-        </div>
+    <ModalWrapper title={"이미지 추가"}>
+      <div className={style["image-container"]}>
+        <ImageUploader handleFileChange={handleFileChange} />
+        <ImagePreview
+          imagePreview={imagePreview}
+          imageFiles={imageFiles}
+          handleRemoveImg={handleRemoveImg}
+        />
       </div>
-    </div>
+
+      <div className={style["modal-buttons"]}>
+        <Button type={"close"} onClick={onClickModal}>
+          닫기
+        </Button>
+        <Button
+          type={"apply"}
+          onClick={() => {
+            onClickModal();
+          }}
+          disabled={imagePreview.length === 0}
+        >
+          적용
+        </Button>
+      </div>
+    </ModalWrapper>
   );
 };
 
-export function VoteModal({
-  onClickModal,
-  createOptions,
-  onClickAdd,
-  onClickDelete,
-  handleChoiceChange,
-  optionValue,
-  choice,
-  setChoice,
-}) {
-  let optionRef = useRef(0);
-
+export function ImagePreview({ imagePreview, imageFiles, handleRemoveImg }) {
   return (
-    <div className={style["wrapper-container"]}>
-      <div className={style["modal-container"]}>
-        <div className={style["modal-title"]}>투표 추가</div>
-        <div className={style["image-container"]}>
-          {choice.map((option, i) => {
-            return (
-              <div key={i} className={style["vote-option-wrapper"]}>
-                <button
-                  className={`${style["delete-option"]} ${style["remove-icon"]}`}
-                  onClick={() => {
-                    onClickDelete(i);
-                  }}
-                >
-                  <img src={close_icon} alt="remove" />
-                </button>
-                <input
-                  ref={optionRef}
-                  id={style["vote-option"]}
-                  name="option"
-                  type="text"
-                  value={option}
-                  placeholder="이곳을 눌러 수정"
-                  onChange={(e) => {
-                    handleChoiceChange(i, e.target.value);
-                  }}
-                />
+    <>
+      {imagePreview.length !== 0 &&
+        imagePreview.map((preview, index) => {
+          return (
+            <div key={index} className={style["preview-container"]}>
+              <div className={style["remove-icon"]} onClick={() => handleRemoveImg(index)}>
+                <img src={close_icon} alt="remove" />
               </div>
-            );
-          })}
-          {createOptions < 4 && (
-            <div className={style["option-box"]} onClick={onClickAdd}>
-              <span className={style["add-icon"]}>
-                <img src={add_icon} alt="add" />
-              </span>
-              선택지를 추가하려면 여기를 클릭하세요
+              <div className={style["img-name"]}>{imageFiles[index].name}</div>
+              <div className={style["preview-image"]}>
+                <img key={index} src={preview} />
+              </div>
             </div>
-          )}
-        </div>
-        <div className={style["modal-buttons"]}>
-          <button className={style["close_button"]} onClick={onClickModal}>
-            닫기
-          </button>
-          <button
-            className={`${style["apply_button"]} ${
-              choice.length > 0 ? style["apply_button_on"] : ""
-            }`}
-            disabled={choice.length === 0}
-            onClick={onClickModal}
-          >
-            적용
-          </button>
-        </div>
-      </div>
-    </div>
+          );
+        })}
+    </>
   );
 }
+export function ImageUploader({ handleFileChange }) {
+  return (
+    <>
+      <label htmlFor={style["image-file"]} className={style["input-image"]}>
+        <span className={style["add-icon"]}>
+          <img src={add_icon} alt="add" />
+        </span>
+        이미지를 추가하려면 여기를 클릭하세요
+      </label>
+      <input
+        id={style["image-file"]}
+        name="image"
+        type="file"
+        accept="image/*"
+        multiple
+        onChange={(e) => {
+          handleFileChange(e);
+        }}
+      />
+    </>
+  );
+}
+
+// export function VoteModal({
+//   onClickModal,
+//   createOptions,
+//   onClickAdd,
+//   onClickDelete,
+//   handleChoiceChange,
+//   optionValue,
+//   choice,
+//   setChoice,
+// }) {
+//   let optionRef = useRef(0);
+
+//   return (
+//     <div className={style["wrapper-container"]}>
+//       <div className={style["modal-container"]}>
+//         <div className={style["modal-title"]}>투표 추가</div>
+//         <div className={style["image-container"]}>
+//           {choice.map((option, i) => {
+//             return (
+//               <div key={i} className={style["vote-option-wrapper"]}>
+//                 <button
+//                   className={`${style["delete-option"]} ${style["remove-icon"]}`}
+//                   onClick={() => {
+//                     onClickDelete(i);
+//                   }}
+//                 >
+//                   <img src={close_icon} alt="remove" />
+//                 </button>
+//                 <input
+//                   ref={optionRef}
+//                   id={style["vote-option"]}
+//                   name="option"
+//                   type="text"
+//                   value={option}
+//                   placeholder="이곳을 눌러 수정"
+//                   onChange={(e) => {
+//                     handleChoiceChange(i, e.target.value);
+//                   }}
+//                 />
+//               </div>
+//             );
+//           })}
+//           {createOptions < 4 && (
+//             <div className={style["option-box"]} onClick={onClickAdd}>
+//               <span className={style["add-icon"]}>
+//                 <img src={add_icon} alt="add" />
+//               </span>
+//               선택지를 추가하려면 여기를 클릭하세요
+//             </div>
+//           )}
+//         </div>
+//         <div className={style["modal-buttons"]}>
+//           <Button type={"close"} onClick={onClickModal}>
+//             닫기
+//           </Button>
+//           <Button type={"apply"} disabled={choice.length === 0} onClick={onClickModal}>
+//             적용
+//           </Button>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
 
 export function LinkModal({
   onClickModal,
@@ -609,98 +623,92 @@ export function LinkModal({
   onDeleteLink,
 }) {
   const [urlImage, setUrlImage] = useState([]);
-
-  const header = HEADER;
-
   const [isLoading, setIsLoading] = useState(true);
+
   async function fetchkUrlImage() {
     await postApi
       .post("nova_sub_system/image_tag", {
-        header: header,
+        header: HEADER,
         body: {
           url: linkUrl,
         },
       })
       .then((res) => {
         setUrlImage((prev) => [...prev, res.data.body.image]);
-        //console.log("image", res.data);
         setIsLoading(false);
       });
   }
 
   return (
+    <ModalWrapper title={"좌표 추가"}>
+      <div className={style["link-box-container"]}>
+        {linkList.length > 0 &&
+          linkList.map((link, i) => {
+            return (
+              <div key={i} className={`${style["preview-container"]} ${style["link-box"]}`}>
+                <div
+                  className={style["remove-icon"]}
+                  onClick={() => {
+                    onDeleteLink(i);
+                  }}
+                >
+                  <img src={close_icon} alt="remove" />
+                </div>
+                <div className={style["link_explain"]}>{link.explain}</div>
+                {/* <div>{link.url}</div> */}
+                <div className={style["preview-image"]}>
+                  <img src={urlImage[i]} alt="img" />
+                </div>
+              </div>
+            );
+          })}
+      </div>
+
+      <div className={style["link-input-container"]}>
+        <div className={style["link-input"]}>
+          <Input
+            type="text"
+            value={linkTitle}
+            onChange={(e) => setLinkTitle(e.target.value)}
+            placeholder="좌표 설명"
+          />
+          <Input
+            type="url"
+            value={linkUrl}
+            onChange={(e) => setLinkUrl(e.target.value)}
+            placeholder="이곳을 클릭해서 URL을 추가하세요"
+          />
+        </div>
+        <button
+          disabled={!(linkTitle && linkUrl)}
+          className={style["add_link_button"]}
+          onClick={() => {
+            onClickAdd();
+            fetchkUrlImage();
+          }}
+        >
+          추가
+        </button>
+      </div>
+
+      <div className={style["modal-buttons"]}>
+        <Button type={"close"} onClick={onClickModal}>
+          닫기
+        </Button>
+        <Button type={"apply"} onClick={onClickModal} disabled={linkList.length === 0}>
+          적용
+        </Button>
+      </div>
+    </ModalWrapper>
+  );
+}
+
+export function ModalWrapper({ title, children }) {
+  return (
     <div className={style["wrapper-container"]}>
       <div className={style["modal-container"]}>
-        <div className={style["modal-title"]}>좌표 추가</div>
-        <div className={style["link-box-container"]}>
-          {linkList.length > 0 &&
-            linkList.map((link, i) => {
-              return (
-                <div key={i} className={`${style["preview-container"]} ${style["link-box"]}`}>
-                  <div
-                    className={style["remove-icon"]}
-                    onClick={() => {
-                      onDeleteLink(i);
-                    }}
-                  >
-                    <img src={close_icon} alt="remove" />
-                  </div>
-                  <div className={style["link_explain"]}>{link.explain}</div>
-                  {/* <div>{link.url}</div> */}
-                  <div className={style["preview-image"]}>
-                    <img src={urlImage[i]} alt="img" />
-                  </div>
-                </div>
-              );
-            })}
-        </div>
-
-        <div className={style["link-input-container"]}>
-          <div className={style["link-input"]}>
-            <Input
-              type="text"
-              value={linkTitle}
-              onChange={(e) => setLinkTitle(e.target.value)}
-              placeholder="좌표 설명"
-            />
-            <Input
-              type="url"
-              value={linkUrl}
-              onChange={(e) => setLinkUrl(e.target.value)}
-              placeholder="이곳을 클릭해서 URL을 추가하세요"
-            />
-          </div>
-          <button
-            disabled={!(linkTitle && linkUrl)}
-            className={style["add_link_button"]}
-            onClick={() => {
-              onClickAdd();
-              fetchkUrlImage();
-            }}
-          >
-            추가
-          </button>
-        </div>
-
-        <div className={style["modal-buttons"]}>
-          <button
-            className={style["close_button"]}
-            onClick={() => {
-              onClickModal();
-            }}
-          >
-            닫기
-          </button>
-          <button
-            className={`${style["apply_button"]} ${
-              linkList.length > 0 ? style["apply_button_on"] : ""
-            }`}
-            disabled={linkList.length === 0}
-            onClick={onClickModal}
-          >
-            적용
-          </button>
-        </div>
+        <div className={style["modal-title"]}>{title}</div>
+        {children}
       </div>
     </div>
   );

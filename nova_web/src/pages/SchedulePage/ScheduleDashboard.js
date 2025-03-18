@@ -1,6 +1,6 @@
-import "./style.css"; // Corrected import for CSS file
-import vertical_line from "./vertical_line.svg"; // Corrected import for SVG file
-import EventComponent from "./EventComponent"; // Corrected import for EventComponent`
+import "./style.css";
+import vertical_line from "./vertical_line.svg";
+import EventComponent from "./EventComponent";
 import ScheduleTopic from "../../component/ScheduleTopic/ScheduleTopic";
 import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";

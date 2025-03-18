@@ -353,7 +353,7 @@ const WriteMoment = ({ onClickMoment }) => {
                 imageFiles={imageFiles}
               />
             )}
-            {showVoteModal && (
+            {/* {showVoteModal && (
               <VoteModal
                 onClickModal={onClickVoteModal}
                 createOptions={createOptions}
@@ -363,7 +363,7 @@ const WriteMoment = ({ onClickMoment }) => {
                 choice={choice}
                 setChoice={setChoice}
               />
-            )}
+            )} */}
             {showLinkModal && (
               <LinkModal
                 onClickModal={onClickLinkModal}
