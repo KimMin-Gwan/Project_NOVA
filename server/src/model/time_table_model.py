@@ -445,7 +445,7 @@ class MultiScheduleModel(TimeTableModel):
         self.__biases:list = []
         
     def set_schedules_with_sids(self, data_payload):
-        self._make_send_data_with_ids(self, id_list=data_payload.sids)
+        self._make_send_data_with_ids(id_list=data_payload.sids)
         return
         
 
