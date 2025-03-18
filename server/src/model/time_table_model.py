@@ -1142,18 +1142,38 @@ class WeekDayDataBlock:
         self.date = date
         self.day = day
         self.num_schedule = num_schedule
+        self.is_today = False
 
      # 이게 전송용 데이터 포멧
     def get_dict_form_data(self):
         return {
             'date' : self.date,
             'day' : self.day,
-            'num_schedule' : self.num_schedule
+            'num_schedule' : self.num_schedule,
+            'is_today' : self.is_today
         }
 
 class ScheduleBlockTreater():
     def __init__(self):
         self.__over_flowed_schedules = []
+
+    # WeekDay Block 데이터 만들기
+    def make_default_week_day_data(self, today:datetime, days):
+
+        weekDayDateBlock_list = []
+
+
+        # 5일 / 7일 분량
+        for i in range(days):
+            day_block = WeekDayDataBlock(day=weekday_names[(today + timedelta(days=i)).weekday()],
+                                         date=(today+timedelta(days=i)).day,
+                                         num_schedule=0)
+            if day_block.date == today.day:
+                day_block.is_today = True
+
+            weekDayDateBlock_list.append(day_block)
+
+        return weekDayDateBlock_list
 
     def make_week_day_data(self, schedule_blocks):
         today = datetime.today()
@@ -1189,7 +1209,6 @@ class ScheduleBlockTreater():
 
         return trimmed_list
 
-
     def claer_over_flowed_schedule(self) -> list[ScheduleBlock]:
         schedule_blocks = []
 
@@ -1198,6 +1217,26 @@ class ScheduleBlockTreater():
             schedule_blocks.append(schedule_block)
 
         return schedule_blocks
+
+    # 스케줄 블럭 등록
+    def compare_week_day_block(self, schedule_blocks, weekday_blocks):
+        today = datetime.today()
+
+        for schedule_block in schedule_blocks:
+            schedule_block:ScheduleBlock = schedule_block
+
+            # 목표 블럭 찾기
+            for weekDayBlock in weekday_blocks:
+                # 있으면 목표 블럭
+                if weekDayBlock.date == schedule_block.start_datetime.day:
+                    weekDayBlock.num_schedule += 1
+
+        sorted_block_list = sorted(weekday_blocks, key=lambda x : x.date)
+
+        today_weekday = today.weekday()
+        trimmed_list = [block for block in sorted_block_list if block.date >= today_weekday]
+
+        return trimmed_list
 
     #  만들기
     def make_schedule_block(self, schedule:Schedule):
@@ -1312,15 +1351,16 @@ class ScheduleChartModel(TimeTableModel):
     # 내가 추가한 스케줄 데이터 뽑기를 날짜로
     # date는 날짜임 , 형태는 2025/03/06 임
     # date안넣으면 기본적으로 오늘자로 감
-    def set_my_schedule_in_by_day(self, target_date=datetime.today().strftime("%Y/%m/%d")):
+    def set_my_schedule_in_by_day(self, target_date=datetime.today().strftime("%Y/%m/%d"), days=5):
         
         # 내가 추가한 스케줄을 다 가지고 옴
         schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids=self._tuser.sids)
         
         target_date = datetime.strptime(target_date, ("%Y/%m/%d"))
-        
-        today = target_date - timedelta(days=3)
-        
+
+        today:datetime = target_date
+        # today = target_date - timedelta(days=3)
+
         schedules = []
         
         # 필요하면 갯수 제한도 두삼
@@ -1328,12 +1368,15 @@ class ScheduleChartModel(TimeTableModel):
             schedule = Schedule()
             schedule.make_with_dict(dict_data=schedule_data)
             # 여기서 날짜랑 맞는지 필터링 함
-            if datetime.strptime(schedule.start_date, "%Y/%m/%d") > today:
+            # if datetime.strptime(schedule.start_date, "%Y/%m/%d") > today:
+            #     schedules.append(schedule)
+            if today+timedelta(days=days) > datetime.strptime(schedule.start_date, "%Y/%m/%d") >= today:
                 schedules.append(schedule)
-                
+
         schedule_block_treater = ScheduleBlockTreater()
         
-        
+        weekday_blocks = schedule_block_treater.make_default_week_day_data(today=today, days=days)
+
         for schedule in schedules:
             schedule_block = schedule_block_treater.make_schedule_block(schedule=schedule)
             self.__schedule_blocks.append(schedule_block)
@@ -1342,8 +1385,10 @@ class ScheduleChartModel(TimeTableModel):
         
         self.__schedule_blocks.extend(over_flowed_schedule)
         
-        self.__week_day_datas = schedule_block_treater.make_week_day_data(schedule_blocks=self.__schedule_blocks)
-        
+        # self.__week_day_datas = schedule_block_treater.make_week_day_data(schedule_blocks=self.__schedule_blocks)
+        self.__week_day_datas = schedule_block_treater.compare_week_day_block(schedule_blocks=self.__schedule_blocks,
+                                                                             weekday_blocks=weekday_blocks)
+
         # 시작이 전날이고, 끝나는게 오늘이면 데이터가 안나오기 때문에
         # 결국 타임 블럭에서 하루 전날꺼를 구하고 그날 데이터를 버려야됨
         # 이코드가 추가되어야됨
