@@ -87,7 +87,9 @@ function App() {
       <Route path="/schedule" element={<ScheduleDashboard />}></Route>
       <Route path="/search/schedule" element={<SearchSchedulePage />}></Route>
       <Route path="/search/topic" element={<SearchTopicPage />}></Route>
-      <Route path="/search/event" element={<ScheduleResearch />}></Route>
+      
+      {/* 이벤트는 다다음 버전에 추가 */}
+      {/*<Route path="/search/event" element={<ScheduleResearch />}></Route>/*}
 
       {/* 펀딩 페이지 목록 */}
       {/* <Route path="/nova_funding" element={<NovaFunding brightMode={brightMode} />}></Route>

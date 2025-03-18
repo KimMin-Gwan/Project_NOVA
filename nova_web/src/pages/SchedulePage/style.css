@@ -1,6 +1,9 @@
 .section-box {
   padding-bottom: 20px;
 }
+.body-box{
+  height: 120dvh
+}
 
 .section-line {
   background-color: #f1f7ff;

@@ -9,46 +9,51 @@ const bias = {
   is_ad: false,
 };
 export default function ScheduleTopic({
-  name,
-  job,
-  tag,
-  platform,
-  time,
+  bname,
+  category,
+  agency,
+  tags,
+  main_time,
   toggleClick,
 }) {
   return (
     <div className={style["ScheduleTopic"]} onClick={toggleClick}>
       <dl>
         <section className={style["BiasTitle"]}>
-          <dt>{bias.bname}</dt>
-          <dt>{bias.category}</dt>
+          <dt>{bname}</dt>
+          <dt>{category}</dt>
         </section>
         <section className={style["BiasMain"]}>
-          <dt>{bias.agency}</dt>
+          <dt>{agency}</dt>
           <span className={style["TagSt"]}>
             <dt>태그</dt>
             <dd>
-              {bias.tags.map((item, index) => {
-                return (
-                  <p key={index}>
-                    {item}
-                    {index !== bias.tags.length - 1 && ","}
-                  </p>
-                );
-              })}
+              {//tags.map((item, index) => {
+                //return (
+                  //<p key={index}>
+                    //{item}
+                    //{index !== tags.length - 1 && ","}
+                  //</p>
+                //);
+              //})
+              <p>{tags}</p>
+              }
             </dd>
           </span>
           <span className={style["MainTime"]}>
             <dt>주 방송 시간</dt>
             <dd>
-              {bias.main_time.map((item, index) => {
-                return (
-                  <p key={index}>
-                    {item}
-                    {index !== bias.main_time.length - 1 && ","}
-                  </p>
-                );
-              })}
+              {
+              //main_time.map((item, index) => {
+                //return (
+                  //<p key={index}>
+                    //{item}
+                    //{index !== main_time.length - 1 && ","}
+                  //</p>
+                //);
+              //})
+              <p>{main_time}</p>
+              }
             </dd>
           </span>
         </section>

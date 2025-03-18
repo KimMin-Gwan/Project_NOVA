@@ -1314,7 +1314,7 @@ class ScheduleChartModel(TimeTableModel):
         
         target_date = datetime.strptime(target_date, ("%Y/%m/%d"))
         
-        today = target_date - timedelta(days=2)
+        today = target_date + timedelta(days=2)
         
         schedules = []
         

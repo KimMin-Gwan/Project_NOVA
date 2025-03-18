@@ -37,6 +37,12 @@ export default function SearchTopicPage() {
     navigate(`${path}`);
   }
 
+  useEffect(() => {
+    fetchSearchData("");
+  }, []);
+
+
+
   return (
     <div className={`container ${style["SearchTopicPage"]}`}>
       <ScheduleSearch
@@ -48,7 +54,7 @@ export default function SearchTopicPage() {
       <ul className={style["scheduleList"]}>
         {biasData.map((item) => (
           <li key={item.id}>
-            <ScheduleTopic key={item.id} toggleClick={() => toggleMore(item.id)} />
+            <ScheduleTopic key={item.id} {...item}toggleClick={() => toggleMore(item.id)} />
             {moreClick[item.id] && (
               <ScheduleFollow
                 scheduleClick={() => clickPath("/search/schedule")}

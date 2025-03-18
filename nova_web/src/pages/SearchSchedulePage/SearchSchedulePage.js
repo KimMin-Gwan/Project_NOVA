@@ -15,7 +15,8 @@ import { BundleScheduleDetail, EventDetail, ScheduleDetail} from "../../componen
 import mainApi from "../../services/apis/mainApi";
 
 export default function SearchSchedulePage() {
-  const typeSelectData = ["schedule_bundle", "schedule", "event"];
+  //const typeSelectData = ["schedule_bundle", "schedule", "event"];
+  const typeSelectData = ["schedule_bundle", "schedule"];
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [ScheduleIndex, setScheduleIndex] = useState(0);
@@ -101,7 +102,8 @@ export default function SearchSchedulePage() {
     navigate("/");
   };
 
-  const ScheduleKind = ["일정 번들", "일정", "이벤트"];
+  //const ScheduleKind = ["일정 번들", "일정", "이벤트"];
+  const ScheduleKind = ["일정 번들", "일정"];
 
   return (
     <div className="container SearchSchedulePage">
