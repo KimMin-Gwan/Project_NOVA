@@ -125,6 +125,24 @@
         "state": false,
         "color_code" : "#d0c6de"
     }
+    {
+        "sid": "8",
+        "sname": "스케줄 이름 11",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "111",
+        "bname": "임시주제1호",
+        "start_date": "2025/03/20",
+        "start_time": "21:00",
+        "end_date": "2025/03/20",
+        "end_time": "23:50",
+        "location": "치지직",
+        "code": "123456",
+        "update_time": "2025/03/15-08:30:00",
+        "num_usage": 0,
+        "state": false,
+        "color_code" : "#d5deec"
+    }
 ]
 
 
