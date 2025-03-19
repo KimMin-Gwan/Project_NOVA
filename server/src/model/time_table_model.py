@@ -1219,7 +1219,7 @@ class ScheduleBlockTreater():
 
     # 스케줄 블럭 등록
     def compare_week_day_block(self, schedule_blocks:list, weekday_blocks):
-        today = datetime.today()
+        # today = datetime.today()
         is_flag = False # 스케줄이 있는지 없는지 확인하는 플래그
         
         num_schedule_block = 0
@@ -1227,7 +1227,7 @@ class ScheduleBlockTreater():
         # 목표 블럭 찾기
         for weekDayBlock in weekday_blocks:
             is_flag = False
-            weekDayBlock:WeekDayDataBlock = weekDayBlock
+            # weekDayBlock:WeekDayDataBlock = weekDayBlock
             
             for schedule_block in schedule_blocks:
                 schedule_block:ScheduleBlock = schedule_block
@@ -1247,7 +1247,7 @@ class ScheduleBlockTreater():
                 num_schedule_block += 1
 
         # 날짜 데이터를 바탕으로 정렬합니다.
-        sorted_block_list = sorted(weekday_blocks, key=lambda x : x.origin_day_data)
+        sorted_block_list = sorted(weekday_blocks, key=lambda x : x.origin_date)
 
         return sorted_block_list, num_schedule_block
 
