@@ -87,10 +87,11 @@ export function ScheduleAdd({ navBoardClick, detailClick, addClick, target }) {
        />;
 }
 // 주제 탐색 페이지의 버튼
-export function ScheduleFollow({ scheduleClick, followClick }) {
+export function ScheduleFollow({ scheduleClick, followClick, target }) {
   return (
     <BasicSchedule
       isMore={3}
+      target={target}
       secondClick={scheduleClick}
       lastClick={followClick}
     />

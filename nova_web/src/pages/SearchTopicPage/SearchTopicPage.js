@@ -8,6 +8,7 @@ import ScheduleFollowBox from "../../component/ScheduleFollowBox/ScheduleFollowB
 import { mockData } from "../../pages/SchedulePage/TestScheduleData";
 import useToggleMore from "../../component/useToggleMore";
 import mainApi from "../../services/apis/mainApi";
+import HEADER from "../../constant/header";
 
 export default function SearchTopicPage() {
   let [eventData, setEventData] = useState([]);
@@ -41,7 +42,42 @@ export default function SearchTopicPage() {
     fetchSearchData("");
   }, []);
 
+  function fetchTryFollowBias(target) {
 
+    let send_data = {
+      header: HEADER,
+      body: {
+        bid: target.bid,
+      },
+    };
+
+
+    fetch("https://nova-platform.kr/nova_sub_system/try_select_my_bias", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(send_data),
+    })
+      .then((res) => {
+        if (res.status === 401) {
+          alert("로그인이 필요한 서비스입니다.");
+          navigate("/novalogin");
+          return Promise.reject();
+        }
+        return res.json();
+      })
+      .then((data) => {
+        if (biasData.some((item) => item.bid === target.bid)) {
+          alert("팔로우 취소 완료");
+        } else {
+          alert("팔로우 완료!");
+        }
+        setIsModal(false);
+        window.location.reload();
+      });
+  }
 
   return (
     <div className={`container ${style["SearchTopicPage"]}`}>
