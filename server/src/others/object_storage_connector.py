@@ -30,8 +30,8 @@ class ObjectStorageConnection:
         self.__service_name = 's3'
         self.__endpoint_url = 'https://kr.object.ncloudstorage.com'
         self.__region_name = 'kr-standard'
-        self.__access_key = 'eeJ2HV8gE5XTjmrBCi48'
-        self.__secret_key = 'zAGUlUjXMup1aSpG6SudbNDzPEXHITNkEUDcOGnv'
+        self.__access_key = ''
+        self.__secret_key = ''
         self.__s3 = boto3.client(self.__service_name,
                                  endpoint_url=self.__endpoint_url,
                                  aws_access_key_id=self.__access_key,
@@ -311,17 +311,17 @@ class HTMLEXtractor:
         restored_html = str(restored_soup)
         
         return restored_html
+    
         
-        
-class ImageDescriper():
+class ImageDescriper:
     def __init__(self):
         self.__feed_temp_path = './model/local_database/feed_temp_image'
         self.__report_temp_path = './model/local_database/report_temp_image'
         self.__service_name = 's3'
         self.__endpoint_url = 'https://kr.object.ncloudstorage.com'
         self.__region_name = 'kr-standard'
-        self.__access_key = 'eeJ2HV8gE5XTjmrBCi48'
-        self.__secret_key = 'zAGUlUjXMup1aSpG6SudbNDzPEXHITNkEUDcOGnv'
+        self.__access_key = ''
+        self.__secret_key = ''
         self.__s3 = boto3.client(self.__service_name,
                                  endpoint_url=self.__endpoint_url,
                                  aws_access_key_id=self.__access_key,

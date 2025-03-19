@@ -22,6 +22,8 @@ class Configure_File_Reader:
         self._gpt_model = ''
         self._mongo_db_key = ''
         self._jwt_secret_key = ''
+        self._storage_access_key = ''
+        self._storage_secret_key = ''
 
     def _extract_host_port(self, file_path='./configure.txt'):
         with open(file_path, 'r', encoding='utf-8') as file:
@@ -41,6 +43,10 @@ class Configure_File_Reader:
                     self._mongo_db_key= match.group(1)
                 elif line.startswith('jwt_secret_key'):
                     self._jwt_secret_key= line.split('=')[1].strip()
+                elif line.startswith('storage_access_key'):
+                    self._storage_access_key= line.split('=')[1].strip()
+                elif line.startswith('storage_sectet_key'):
+                    self._storage_secret_key= line.split('=')[1].strip()
                     
         self._model_setting = ModelSetting(
             open_api_key=self._open_api_key,
