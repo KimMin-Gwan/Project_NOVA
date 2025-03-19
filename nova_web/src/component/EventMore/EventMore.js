@@ -5,22 +5,14 @@ import BaseBundle, { EventBundle } from "../ScheduleEvent/ScheduleBundle";
 import ScheduleEvent from "../EventCard/EventCard";
 import HEADER from "../../constant/header";
 import postApi from "../../services/apis/postApi";
-import {
-  ScheduleEventAdd,
-  ScheduleDetailAdd,
-  ScheduleAdd,
-} from "../ScheduleMore/ScheduleMore";
-import TimeChart from "../../pages/SchedulePage/TimeChart";
-import {
-  tempWeekDayData,
-  tempScheduleData,
-} from "../../pages/SchedulePage/TestScheduleData";
+import { ScheduleEventAdd, ScheduleDetailAdd, ScheduleAdd } from "../ScheduleMore/ScheduleMore";
+import TimeChart from "../../pages/SchedulePage/TimeChart/TimeChart";
+import { tempWeekDayData, tempScheduleData } from "../../pages/SchedulePage/TestScheduleData";
 import ScheduleCalendar from "../ScheduleCalendar/ScheduleCalendar";
 import { ScheduleBundle } from "../../component/ScheduleEvent/ScheduleBundle";
 const exdata = [0, 1];
 
-
-export function DetailModal ({ closeSchedule, isOpen, children }) {
+export function DetailModal({ closeSchedule, isOpen, children }) {
   const [backgroundColor, setBackgroundColor] = useState("");
   const [displaySt, setdisplaySt] = useState("");
   const [upAnimation, setUpAnimation] = useState(false);
@@ -54,9 +46,7 @@ export function DetailModal ({ closeSchedule, isOpen, children }) {
 
   return (
     <div
-      className={`${style["EventMoreContainer"]} ${
-        upAnimation ? style["see"] : ""
-      }`}
+      className={`${style["EventMoreContainer"]} ${upAnimation ? style["see"] : ""}`}
       onClick={closeSchedule}
       style={{ display: displaySt, backgroundColor }}
     >
@@ -73,7 +63,7 @@ export function DetailModal ({ closeSchedule, isOpen, children }) {
   );
 }
 
-export function BundleScheduleDetail({ closeSchedule, isOpen, target}) {
+export function BundleScheduleDetail({ closeSchedule, isOpen, target }) {
   const [selectBack, setSelectBack] = useState({});
   const [isSelect, setIsSelect] = useState(1);
   const [sids, setSids] = useState([]);
@@ -82,28 +72,28 @@ export function BundleScheduleDetail({ closeSchedule, isOpen, target}) {
   // 내 스케줄에 등록하는 함수 (추가하기 버튼 누르면 동작해야됨)
   // 완료하면 성공했다고 알려주면 좋을듯
   async function fetchTryAddSchedule(dummy) {
-
-    await postApi 
-      .post('time_table_server/try_add_schedule', {
+    await postApi.post("time_table_server/try_add_schedule", {
       header: HEADER,
       body: {
         sids: sids,
-      }})
-  }; 
+      },
+    });
+  }
 
   // 스케줄 번들에 있는 스케줄들 받아오는 함수
   async function fetchSchedules() {
     // 패치 받기 전에 스케줄 초기화 부터하기
     setSchedules([]);
-    await postApi 
-      .post('time_table_server/get_schedule_with_sids', {
-      header: HEADER,
-      body: {
-        sids: target.sids,
-      }})
+    await postApi
+      .post("time_table_server/get_schedule_with_sids", {
+        header: HEADER,
+        body: {
+          sids: target.sids,
+        },
+      })
       .then((res) => {
         setSchedules((prev) => [...prev, ...res.data.body.schedules]);
-    });
+      });
   }
   // 취소했을 때 모두 취소되어서 변화하도록함
   useEffect(() => {
@@ -115,16 +105,16 @@ export function BundleScheduleDetail({ closeSchedule, isOpen, target}) {
   // 취소했을 때 모두 취소되어서 변화하도록함
   useEffect(() => {
     // 토글창 열리면 패치 받아오기
-    if (isOpen){
+    if (isOpen) {
       handleReset();
-      fetchSchedules()
+      fetchSchedules();
     }
   }, [isOpen]);
 
   // 선택하면 배경색 변화하게 해주는 거
   function handleSelect(item, key) {
     setSelectBack((prev) => {
-    // 클릭한 key가 이미 존재하는지 확인
+      // 클릭한 key가 이미 존재하는지 확인
       if (prev[key]) {
         // 이미 존재할 경우, 해당 key를 제외하고 새로운 객체를 반환
         const { [key]: omit, ...rest } = prev;
@@ -147,35 +137,33 @@ export function BundleScheduleDetail({ closeSchedule, isOpen, target}) {
       }
     });
 
-    console.log(sids)
+    console.log(sids);
     // 새로운 값에 할당하여 값을 설정해주어서 상태가 즉시 업데이트 되도록 해준다
   }
 
   // 선택한 일정 리셋하기
-  // 
+  //
   function handleReset() {
     // 선택 초기화 하기
     setSelectBack({});
     setSids([]);
-    setIsSelect(1)
+    setIsSelect(1);
   }
 
   // 일정 모두 선택
   function handleAllSelect() {
     console.log("모두선택");
 
-     ////색상변화
-    schedules.map((item, index) => (
-      handleSelect(item, index)
-    ))
-    setIsSelect(4)
+    ////색상변화
+    schedules.map((item, index) => handleSelect(item, index));
+    setIsSelect(4);
     //setSelectBack((prev) => {
-      //const isAllSelected = exdata.every((key) => prev[key] === "#F1F7FF");
+    //const isAllSelected = exdata.every((key) => prev[key] === "#F1F7FF");
 
-      //return exdata.reduce((acc, key) => {
-        //acc[key] = isAllSelected ? "" : "#F1F7FF";
-        //return acc;
-      //}, {});
+    //return exdata.reduce((acc, key) => {
+    //acc[key] = isAllSelected ? "" : "#F1F7FF";
+    //return acc;
+    //}, {});
     //});
   }
 
@@ -187,9 +175,7 @@ export function BundleScheduleDetail({ closeSchedule, isOpen, target}) {
 
   return (
     <DetailModal closeSchedule={closeSchedule} isOpen={isOpen}>
-      <ScheduleBundle
-        item={target}
-      />
+      <ScheduleBundle item={target} />
       <ScheduleDetailAdd
         selectToggle={selectToggle}
         selectText={isSelect}
@@ -203,54 +189,42 @@ export function BundleScheduleDetail({ closeSchedule, isOpen, target}) {
           selectBack={selectBack[index] || ""}
         />
       ))}
-      <TimeChart
-        weekDayData={tempWeekDayData}
-        scheduleData={tempScheduleData}
-      />
+      <TimeChart weekDayData={tempWeekDayData} scheduleData={tempScheduleData} />
     </DetailModal>
   );
 }
 
-
 // 이건 스케줄 목록에서 추가하기 버튼 누르면 나오는 자세히 모달창(밑에서 위로 올라오는애)
-export function ScheduleDetail({ closeSchedule, isOpen, target}) {
+export function ScheduleDetail({ closeSchedule, isOpen, target }) {
   const [sids, setSids] = useState([]);
 
   // 내 스케줄에 등록하는 함수 (추가하기 버튼 누르면 동작해야됨)
   async function fetchTryAddSchedule() {
-    await postApi 
-      .post('time_table_server/try_add_schedule', {
+    await postApi.post("time_table_server/try_add_schedule", {
       header: HEADER,
       body: {
         sids: sids,
-      }})
-  }; 
+      },
+    });
+  }
 
   useEffect(() => {
     // 토글창 열리면 패치 받아오기
-    if (isOpen){
-      setSids([target.sid])
+    if (isOpen) {
+      setSids([target.sid]);
     }
   }, [isOpen]);
 
   return (
     <DetailModal closeSchedule={closeSchedule} isOpen={isOpen}>
-      <ScheduleEvent
-        {...target}
-      />
-      <ScheduleAdd
-        target={target}
-        addClick={fetchTryAddSchedule}
-      />
-      <TimeChart
-        weekDayData={tempWeekDayData}
-        scheduleData={tempScheduleData}
-      />
+      <ScheduleEvent {...target} />
+      <ScheduleAdd target={target} addClick={fetchTryAddSchedule} />
+      <TimeChart weekDayData={tempWeekDayData} scheduleData={tempScheduleData} />
     </DetailModal>
   );
 }
 
-export function EventDetail ({ closeSchedule, isOpen }) {
+export function EventDetail({ closeSchedule, isOpen }) {
   return (
     <DetailModal closeSchedule={closeSchedule} isOpen={isOpen}>
       <BaseBundle />

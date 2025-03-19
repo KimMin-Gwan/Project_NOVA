@@ -1,11 +1,10 @@
 import ScheduleTopic from "../../component/ScheduleTopic/ScheduleTopic";
 import style from "./SearchTopicPage.module.css";
 import ScheduleSearch from "../../component/ScheduleSearch/ScheduleSearch";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ScheduleFollow } from "../../component/ScheduleMore/ScheduleMore";
 import ScheduleFollowBox from "../../component/ScheduleFollowBox/ScheduleFollowBox";
-import { mockData } from "../../pages/SchedulePage/TestScheduleData";
 import useToggleMore from "../../component/useToggleMore";
 import mainApi from "../../services/apis/mainApi";
 import HEADER from "../../constant/header";
@@ -26,6 +25,7 @@ export default function SearchTopicPage() {
       .then((res) => {
         setBiasData((prev) => [...prev, ...res.data.body.biases]);
         setNextKey(res.data.body.key);
+        console.log(res.data);
       });
   }
 
@@ -43,14 +43,12 @@ export default function SearchTopicPage() {
   }, []);
 
   function fetchTryFollowBias(target) {
-
     let send_data = {
       header: HEADER,
       body: {
         bid: target.bid,
       },
     };
-
 
     fetch("https://nova-platform.kr/nova_sub_system/try_select_my_bias", {
       method: "POST",
@@ -83,14 +81,14 @@ export default function SearchTopicPage() {
     <div className={`container ${style["SearchTopicPage"]}`}>
       <ScheduleSearch
         title={0}
-        fetchMockData={fetchSearchData}
+        fetchSearchData={fetchSearchData}
         clickButton={() => clickPath("/search/research")}
       />
 
       <ul className={style["scheduleList"]}>
         {biasData.map((item) => (
           <li key={item.id}>
-            <ScheduleTopic key={item.id} {...item}toggleClick={() => toggleMore(item.id)} />
+            <ScheduleTopic key={item.id} {...item} toggleClick={() => toggleMore(item.id)} />
             {moreClick[item.id] && (
               <ScheduleFollow
                 scheduleClick={() => clickPath("/search/schedule")}

@@ -1,10 +1,10 @@
 import search_icon from "./../../img/search_icon.png";
 import arrow from "./../../img/home_arrow.svg";
 import style from "./ScheduleSearch.module.css";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import TopicModal from "../TopicModal/TopicModal";
 
-export default function ScheduleSearch({ title, clickButton, fetchMockData }) {
+export default function ScheduleSearch({ title, clickButton, fetchSearchData }) {
   const [searchKeyword, setKeyword] = useState("");
   const [isClicked, setIsClicked] = useState(false);
 
@@ -17,7 +17,7 @@ export default function ScheduleSearch({ title, clickButton, fetchMockData }) {
   };
 
   async function fetchData() {
-    await fetchMockData(searchKeyword);
+    await fetchSearchData(searchKeyword);
   }
 
   const keyword = {

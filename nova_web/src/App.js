@@ -87,7 +87,7 @@ function App() {
       <Route path="/schedule" element={<ScheduleDashboard />}></Route>
       <Route path="/search/schedule" element={<SearchSchedulePage />}></Route>
       <Route path="/search/topic" element={<SearchTopicPage />}></Route>
-      
+
       {/* 이벤트는 다다음 버전에 추가 */}
       {/*<Route path="/search/event" element={<ScheduleResearch />}></Route>/*}
 
@@ -102,7 +102,7 @@ function App() {
       <Route path="/bias_funding/:type" element={<MoreProjects />}></Route> */}
 
       {/* 테스트 페이지 및 에러 페이지 */}
-      <Route path="/test1" element={<ScheduleTopic />}></Route>
+      {/* <Route path="/test1" element={<SearchSchedulePage2 />}></Route> */}
       <Route path="/test2" element={<TestPage />}></Route>
       <Route path="*" element={<div>404 Error</div>}></Route>
 

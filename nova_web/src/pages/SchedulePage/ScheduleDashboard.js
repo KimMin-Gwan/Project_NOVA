@@ -1,14 +1,14 @@
 import "./style.css";
-import vertical_line from "./vertical_line.svg";
-import EventComponent from "./EventComponent";
-import ScheduleTopic from "../../component/ScheduleTopic/ScheduleTopic";
+import vertical_line from "./../../img/vertical_line.svg";
+import EventComponent from "./EventComponent.jsx";
+import ScheduleTopic from "../../component/ScheduleTopic/ScheduleTopic.js";
 import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import TimeChart from "./TimeChart";
+import TimeChart from "./TimeChart/TimeChart.jsx";
 import Header from "../../component/Header/Header.js";
 
-import mainApi from "../../services/apis/mainApi";
-import NavBar from "../../component/NavBar/NavBar";
+import mainApi from "../../services/apis/mainApi.js";
+import NavBar from "../../component/NavBar/NavBar.js";
 
 const ScheduleDashboard = () => {
   let [weekDayData, setWeekDayData] = useState([]);
@@ -32,12 +32,12 @@ const ScheduleDashboard = () => {
     });
   }
 
-//  // 오늘짜 이벤트 데이터 받아오고
+  //  // 오늘짜 이벤트 데이터 받아오고
   //// 이것도 나중에 오늘 말고 내일, 이틀 후 사흘 후 이런걸로 해야될 듯
   //function fetchEventData() {
-    //mainApi.get("time_table_server/try_get_event_board_data").then((res) => {
-      //setEventData(res.data.body.schedule_events);
-    //});
+  //mainApi.get("time_table_server/try_get_event_board_data").then((res) => {
+  //setEventData(res.data.body.schedule_events);
+  //});
   //}
 
   // 시간 차트 받아오고
@@ -72,6 +72,7 @@ const ScheduleDashboard = () => {
     <div className="container">
       <div className="body-box">
         <Header />
+
         <div className="section-box">
           <div className="dashboard-section">
             <div className="section-title">
@@ -94,7 +95,9 @@ const ScheduleDashboard = () => {
             </div>
           </div>
         </div>
+
         <div className="section-line"></div>
+
         <div className="section-box">
           <div className="dashboard-section">
             <div className="section-title">
@@ -109,7 +112,9 @@ const ScheduleDashboard = () => {
           {/* 타임차트를 만드는 핵심 구간 */}
           <TimeChart weekDayData={weekDayData} scheduleData={scheduleData} />
         </div>
+
         <div className="section-line"></div>
+
         <div className="section-box">
           <div className="dashboard-section">
             <div className="section-title">
