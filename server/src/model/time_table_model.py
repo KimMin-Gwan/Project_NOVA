@@ -1232,7 +1232,7 @@ class ScheduleBlockTreater():
                 # 있으면 목표 블럭
                 if weekDayBlock.date == schedule_block.start_datetime.day:
                     weekDayBlock.num_schedule += 1
-                    num_schedule += 1
+                    num_schedule_block += 1
                     is_flag = True
             
             # 만약 스케줄이 없다면
