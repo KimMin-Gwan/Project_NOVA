@@ -8,12 +8,15 @@ export default function ScheduleTopic({ bname, category, agency, tags, main_time
           <dt>{bname}</dt>
           <dt>{category}</dt>
         </section>
+
         <section className={style["BiasMain"]}>
           <dt>{agency}</dt>
+
           <span className={style["TagSt"]}>
             <dt>태그</dt>
             <dd>{<p>{tags}</p>}</dd>
           </span>
+
           <span className={style["MainTime"]}>
             <dt>주 방송 시간</dt>
             <dd>{<p>{main_time}</p>}</dd>

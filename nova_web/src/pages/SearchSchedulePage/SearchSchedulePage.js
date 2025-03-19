@@ -20,7 +20,6 @@ import HEADER from "../../constant/header";
 export default function SearchSchedulePage() {
   //const typeSelectData = ["schedule_bundle", "schedule", "event"];
   //const [addEventModal, setAddEventMoal] = useState(false);
-
   const typeSelectData = ["schedule_bundle", "schedule"];
 
   const [activeIndex, setActiveIndex] = useState(0);
@@ -154,7 +153,7 @@ export default function SearchSchedulePage() {
     setTargetScheduleBundle(target);
   };
 
-  //// 이벤트 추가하기 버트 ㄴ누르면 동작하는 애
+  //// 이벤트 추가하기 버트 누르면 동작하는 애
   //const toggleAddEventModal= () => {
   //setAddEventMoal((addEventModal) => !addEventModal);
   //};
@@ -185,11 +184,12 @@ export default function SearchSchedulePage() {
   return (
     <div className="container SearchSchedulePage">
       <ScheduleSearch title={1} fetchMockData={fetchSearchData} />
+
       <section className={"info-list"}>
         <ul className={"post-list"} data-active-index={activeIndex}>
           {ScheduleKind.map((item, index) => (
             <li
-              key={item}
+              key={index}
               className={`post ${activeIndex === index ? "active" : ""}`}
               onClick={() => handleClick(index, item)}
             >
@@ -198,6 +198,7 @@ export default function SearchSchedulePage() {
           ))}
         </ul>
       </section>
+
       <ul className="scheduleList">
         {ScheduleIndex === 0
           ? scheduleBundleData.map((item) => (

@@ -1,10 +1,7 @@
 import style from "./ScheduleEvent.module.css";
-import {
-  schedule_bundle,
-  schedule,
-} from "../../pages/SchedulePage/TestScheduleData";
+import { schedule_bundle, schedule } from "../../pages/SchedulePage/TestScheduleData";
 
-export default function BaseBundle({ toggleClick, children, sbname, uname, bname}) {
+export default function BaseBundle({ toggleClick, children, date, sbname, uname, bname }) {
   return (
     <div className={style["ScheduleEvent"]} onClick={toggleClick}>
       <dl>
@@ -13,27 +10,27 @@ export default function BaseBundle({ toggleClick, children, sbname, uname, bname
           <p>{uname} 등록</p>
         </span>
         <dt>{bname}</dt>
-        {children}
+        <dt>{date}</dt>
+        {/* {children} */}
       </dl>
     </div>
   );
 }
 
 // 일정탐색 페이지에 일정 번들 컴포넌트
-export function ScheduleBundle({ toggleClick, item}) {
-  return (
-    <BaseBundle toggleClick={toggleClick} {...item}>
-      <dt>
-        {schedule_bundle.date.map((item, index) => {
-          return (
-            <p key={index}>
-              {item} {index == 0 && "-"}
-            </p>
-          );
-        })}
-      </dt>
-    </BaseBundle>
-  );
+export function ScheduleBundle({ toggleClick, item }) {
+  return <BaseBundle toggleClick={toggleClick} {...item} />;
+  {
+    /* <dt>
+    {schedule_bundle.date.map((item, index) => {
+      return (
+        <p key={index}>
+          {item} {index == 0 && "-"}
+        </p>
+      );
+    })}
+  </dt> */
+  }
 }
 
 //  이벤트 탐색 페이지에 이벤트 추가 컴포넌트

@@ -4,28 +4,30 @@ import ScheduleSearch from "../../component/ScheduleSearch/ScheduleSearch";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ScheduleFollow } from "../../component/ScheduleMore/ScheduleMore";
-import ScheduleFollowBox from "../../component/ScheduleFollowBox/ScheduleFollowBox";
 import useToggleMore from "../../component/useToggleMore";
 import mainApi from "../../services/apis/mainApi";
 import HEADER from "../../constant/header";
+import FollowBiasModal from "../../component/FollowBiasModal/FollowBiasModal";
 
 export default function SearchTopicPage() {
   let [eventData, setEventData] = useState([]);
+  const navigate = useNavigate();
 
   const { moreClick, toggleMore } = useToggleMore();
   const [isModal, setIsModal] = useState(false);
-  const navigate = useNavigate();
 
   const [biasData, setBiasData] = useState([]);
   const [nextKey, setNextKey] = useState(-1);
+  const [searchKeyword, setSearchKeyword] = useState("");
 
-  async function fetchSearchData(keyword) {
+  async function fetchSearchData() {
     await mainApi
-      .get(`time_table_server/try_search_bias?keyword=${keyword}&key=${nextKey}`)
+      .get(`time_table_server/try_search_bias?keyword=${searchKeyword}&key=${nextKey}`)
       .then((res) => {
-        setBiasData((prev) => [...prev, ...res.data.body.biases]);
+        // setBiasData((prev) => [...prev, ...res.data.body.biases]);
+        setBiasData(res.data.body.biases);
         setNextKey(res.data.body.key);
-        console.log(res.data);
+        console.log("검색", res.data);
       });
   }
 
@@ -39,8 +41,8 @@ export default function SearchTopicPage() {
   }
 
   useEffect(() => {
-    fetchSearchData("");
-  }, []);
+    fetchSearchData();
+  }, [searchKeyword]);
 
   function fetchTryFollowBias(target) {
     let send_data = {
@@ -82,14 +84,16 @@ export default function SearchTopicPage() {
       <ScheduleSearch
         title={0}
         fetchSearchData={fetchSearchData}
-        clickButton={() => clickPath("/search/research")}
+        searchKeyword={searchKeyword}
+        setSearchKeyword={setSearchKeyword}
+        // clickButton={() => clickPath(`/search/topic?keyword=${d}`)}
       />
 
       <ul className={style["scheduleList"]}>
         {biasData.map((item) => (
-          <li key={item.id}>
-            <ScheduleTopic key={item.id} {...item} toggleClick={() => toggleMore(item.id)} />
-            {moreClick[item.id] && (
+          <li key={item.bid}>
+            <ScheduleTopic key={item.bid} {...item} toggleClick={() => toggleMore(item.bid)} />
+            {moreClick[item.bid] && (
               <ScheduleFollow
                 scheduleClick={() => clickPath("/search/schedule")}
                 followClick={handleFollowModal}
@@ -99,7 +103,7 @@ export default function SearchTopicPage() {
         ))}
       </ul>
 
-      {isModal && <ScheduleFollowBox closeModal={handleFollowModal} />}
+      {isModal && <FollowBiasModal closeModal={handleFollowModal} />}
     </div>
   );
 }

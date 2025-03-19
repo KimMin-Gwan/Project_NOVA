@@ -1,8 +1,9 @@
 .section-box {
   padding-bottom: 20px;
 }
-.body-box{
-  height: 120dvh
+.body-box {
+  /* height: 120dvh; */
+  margin-bottom: 60px;
 }
 
 .section-line {

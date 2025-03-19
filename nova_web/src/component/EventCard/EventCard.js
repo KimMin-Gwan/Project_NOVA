@@ -1,5 +1,4 @@
 import style from "./EventCard.module.css";
-import { schedule } from "../../pages/SchedulePage/TestScheduleData";
 
 export default function ScheduleCard({
   detail,
