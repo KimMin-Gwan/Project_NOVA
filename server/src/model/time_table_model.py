@@ -1240,7 +1240,7 @@ class ScheduleBlockTreater():
             if not is_flag:
                 start_datetime = f'{today.year}/{today.month}/{weekDayBlock.date}'
                 schedule_block = ScheduleBlock(start_datetime=datetime.strptime(start_datetime, "%Y/%m/%d"))
-                schedule_blocks.append(schedule_blocks)
+                schedule_blocks.append(schedule_block)
                 num_schedule_block += 1
 
         today_weekday = today.weekday()
