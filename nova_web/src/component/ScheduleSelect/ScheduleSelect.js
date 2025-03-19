@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Input from "../Input/Input";
-import "./index.css";
+import style from "./index.module.css";
 import Picker from "react-mobile-picker";
 
 const date = new Date();
@@ -21,6 +21,43 @@ const timeSelections = {
   hour: Array.from({ length: 24 }, (_, i) => i),
   minute: Array.from({ length: 60 }, (_, i) => i),
 };
+
+
+export function MakeScheduleDetail() {
+
+  const [searchKeyword, setKeyword] = useState("");
+
+  const onChangeSearchKeyWord = (e) => {
+    setKeyword(e.target.value);
+  };
+
+
+  return(
+      <div className={style["searchFac"]}>
+        <div className={style["searchBox"]}>
+          <input
+            type="text"
+            value={searchKeyword}
+            onChange={onChangeSearchKeyWord}
+            placeholder="일정 상세"
+          />
+        </div>
+        <div className={style["searchBox"]}>
+          <input
+            type="text"
+            value={searchKeyword}
+            onChange={onChangeSearchKeyWord}
+            placeholder="장소"
+          />
+        </div>
+      </div>
+  );
+}
+
+
+
+
+
 
 export default function ScheduleSelect() {
   const [isStartPickerOpen, setIsStartPickerOpen] = useState(false);

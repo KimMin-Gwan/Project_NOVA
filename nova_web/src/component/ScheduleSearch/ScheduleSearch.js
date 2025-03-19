@@ -47,6 +47,7 @@ export default function ScheduleSearch({
     },
   ];
 
+
   return (
     <div className={style["SearchSection"]}>
       <div className={style["sectionTop"]}>
@@ -55,13 +56,12 @@ export default function ScheduleSearch({
           <button
             onClick={() => {
               // clickButton();
-              handleClickBtn();
+              buttonClick();
             }}
           >
             일정 {titleKind[title].button}
           </button>
         )}
-        {isClicked && <TopicModal />}
       </div>
       <div className={style["searchFac"]}>
         <div className={style["searchBox"]}>
@@ -87,6 +87,7 @@ export default function ScheduleSearch({
           return <button key={index}>{item}</button>;
         })}
       </section>
+
     </div>
   );
 }

@@ -4,6 +4,7 @@ import ScheduleSearch from "../../component/ScheduleSearch/ScheduleSearch";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ScheduleFollow } from "../../component/ScheduleMore/ScheduleMore";
+import ScheduleFollowBox from "../../component/ScheduleFollowBox/ScheduleFollowBox";
 import useToggleMore from "../../component/useToggleMore";
 import mainApi from "../../services/apis/mainApi";
 import HEADER from "../../constant/header";
@@ -95,7 +96,7 @@ export default function SearchTopicPage() {
             <ScheduleTopic key={item.bid} {...item} toggleClick={() => toggleMore(item.bid)} />
             {moreClick[item.bid] && (
               <ScheduleFollow
-                scheduleClick={() => clickPath("/search/schedule")}
+                scheduleClick={() => clickPath(`/search/schedule?keyword=${item.bname}`)}
                 followClick={handleFollowModal}
               />
             )}

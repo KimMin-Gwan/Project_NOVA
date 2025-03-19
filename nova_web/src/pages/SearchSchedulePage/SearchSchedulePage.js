@@ -10,12 +10,12 @@ import React, { useEffect, useState } from "react";
 import { ScheduleMore, ScheduleAdd } from "../../component/ScheduleMore/ScheduleMore";
 import {
   BundleScheduleDetail,
-  EventDetail,
   ScheduleDetail,
 } from "../../component/EventMore/EventMore";
 import mainApi from "../../services/apis/mainApi";
 import postApi from "../../services/apis/mainApi";
 import HEADER from "../../constant/header";
+import { MakeSingleSchedule } from "../../component/EventMore/EventMore";
 
 export default function SearchSchedulePage() {
   //const typeSelectData = ["schedule_bundle", "schedule", "event"];
@@ -178,6 +178,13 @@ export default function SearchSchedulePage() {
     });
   }
 
+  const [makeSingleScheduleModal, setMakeSingleScheduleModal] = useState(false);
+
+  // 일정 추가하기 버튼 누르면 동작하는애
+  const toggleMakeSingleScheduleModal = () => {
+    setMakeSingleScheduleModal((makeSingleScheduleModal) => !makeSingleScheduleModal);
+  };
+
   //const ScheduleKind = ["일정 번들", "일정", "이벤트"];
   const ScheduleKind = ["일정 번들", "일정"];
 
@@ -242,11 +249,17 @@ export default function SearchSchedulePage() {
       />
 
       {/*여기도 target 추가해야될 듯 */}
-      <ScheduleDetail
-        closeSchedule={toggleAddScheduleModal}
-        isOpen={addScheduleModal}
-        target={targetSchedule}
+      <ScheduleDetail 
+      closeSchedule={toggleAddScheduleModal}
+      isOpen={addScheduleModal}
+      target={targetSchedule} 
       />
+            
+
+      <MakeSingleSchedule 
+      closeSchedule={toggleMakeSingleScheduleModal}
+       isOpen={makeSingleScheduleModal}
+       />
     </div>
   );
 }

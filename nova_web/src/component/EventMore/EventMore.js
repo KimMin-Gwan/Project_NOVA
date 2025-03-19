@@ -10,7 +10,8 @@ import TimeChart from "../../pages/SchedulePage/TimeChart/TimeChart";
 import { tempWeekDayData, tempScheduleData } from "../../pages/SchedulePage/TestScheduleData";
 import ScheduleCalendar from "../ScheduleCalendar/ScheduleCalendar";
 import { ScheduleBundle } from "../../component/ScheduleEvent/ScheduleBundle";
-const exdata = [0, 1];
+import { MakeScheduleDetail } from "../ScheduleSelect/ScheduleSelect";
+
 
 export function DetailModal({ closeSchedule, isOpen, children }) {
   const [backgroundColor, setBackgroundColor] = useState("");
@@ -224,16 +225,41 @@ export function ScheduleDetail({ closeSchedule, isOpen, target }) {
   );
 }
 
-export function EventDetail({ closeSchedule, isOpen }) {
+//export function EventDetail ({ closeSchedule, isOpen }) {
+  //return (
+    //<DetailModal closeSchedule={closeSchedule} isOpen={isOpen}>
+      //<BaseBundle />
+      //<ScheduleEventAdd />
+      //<EventBundle />
+      //<section className={style["previewBox"]}>
+        //<h3>이벤트 미리보기</h3>
+        //<ScheduleCalendar />
+      //</section>
+    //</DetailModal>
+  //);
+//}
+
+
+// 단일 스케줄 만들기
+export function MakeSingleSchedule({ closeSchedule, isOpen}) {
+  //const [sids, setSids] = useState([]);
+
+  // 내 스케줄에 등록하는 함수 (추가하기 버튼 누르면 동작해야됨)
+  async function fetchTryAddSchedule() {
+    await postApi 
+      .post('time_table_server/try_add_schedule', {
+      header: HEADER,
+      body: {
+      }})
+  }; 
+
   return (
     <DetailModal closeSchedule={closeSchedule} isOpen={isOpen}>
-      <BaseBundle />
-      <ScheduleEventAdd />
-      <EventBundle />
-      <section className={style["previewBox"]}>
-        <h3>이벤트 미리보기</h3>
-        <ScheduleCalendar />
-      </section>
+      <MakeScheduleDetail></MakeScheduleDetail>
+
     </DetailModal>
   );
 }
+
+
+
