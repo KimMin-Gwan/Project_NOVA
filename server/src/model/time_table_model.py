@@ -1364,15 +1364,17 @@ class ScheduleChartModel(TimeTableModel):
     # 내가 추가한 스케줄 데이터 뽑기를 날짜로
     # date는 날짜임 , 형태는 2025/03/06 임
     # date안넣으면 기본적으로 오늘자로 감
-    def set_my_schedule_in_by_day(self, target_date=datetime.today().strftime("%Y/%m/%d"), days=5):
+    def set_my_schedule_in_by_day(self, target_date=datetime.today().strftime("%Y/%m/%d"), days=5, target_sids=[]):
+        
+        fetch_sids = self._tuser.sids.extend(target_sids)
         
         # 내가 추가한 스케줄을 다 가지고 옴
-        schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids=self._tuser.sids)
+        schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids=fetch_sids)
         
         target_date = datetime.strptime(target_date, ("%Y/%m/%d"))
 
-        # today:datetime = target_date
-        today = target_date + timedelta(days=12)
+        today:datetime = target_date
+        #today = target_date + timedelta(days=12)
         # today = target_date - timedelta(days=3)
 
         schedules = []
