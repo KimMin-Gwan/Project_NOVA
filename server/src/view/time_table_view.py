@@ -180,14 +180,16 @@ class TimeTableView(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
+    # 로그인 필수
     def my_schedule_route(self):
         # 완료
         # 내 스케줄에 추가하기
         # sids를 받아서 추가할 것(번들은 쪼개서 sid리스트만 받음, 이벤트는 이곳으로 추가하지 않음)
-        @self.__app.get('/time_table_server/try_add_schedule')
-        def try_add_schedule(request:Request, sids:Optional[list]):
+        @self.__app.post('/time_table_server/try_add_schedule')
+        def try_add_schedule(request:Request, raw_request:dict):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
-            data_payload = AddNewScheduleRequest(sids=sids)
+            data_payload = GetSchedulesRequest(request=raw_request)
+            
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
 
             time_table_controller =TImeTableController()
@@ -198,21 +200,22 @@ class TimeTableView(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
         
-        # 완료 
+        
+        # 1.5버전까지 반려됨
         # 이벤트는 이곳으로 추가함
-        @self.__app.get('/time_table_server/try_add_event')
-        def try_add_event(request:Request, seid:Optional[str]):
-            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
-            data_payload = AddNewEventRequest(seid=seid)
-            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+        #@self.__app.get('/time_table_server/try_add_event')
+        #def try_add_event(request:Request, seid:Optional[str]):
+            #request_manager = RequestManager(secret_key=self.__jwt_secret_key)
+            #data_payload = AddNewEventRequest(seid=seid)
+            #request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
 
-            time_table_controller =TImeTableController()
-            model = time_table_controller.try_add_event(database=self.__database,
-                                                        request=request_manager)
+            #time_table_controller =TImeTableController()
+            #model = time_table_controller.try_add_event(database=self.__database,
+                                                        #request=request_manager)
             
-            body_data = model.get_response_form_data(self._head_parser)
-            response = request_manager.make_json_response(body_data=body_data)
-            return response
+            #body_data = model.get_response_form_data(self._head_parser)
+            #response = request_manager.make_json_response(body_data=body_data)
+            #return response
         
         ## 완료
         ## 홈화면에 노출될 스케줄 정하는건 여기서 함
