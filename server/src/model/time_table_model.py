@@ -1115,19 +1115,15 @@ time_ranges = [(0, 6), (6, 12), (12, 18), (18, 24)]
 weekday_names = ['월', '화', '수', '목', '금', '토', '일']
 
 class ScheduleBlock(Schedule):
-    def __init__(self):
+    def __init__(self, start_datetime=None):
         self.timeblocks = []
         self.color_code = "#D2D2D2"
         self.__overflowed = False
-        self.__remain_time = Schedule()
-        self.start_datetime = None
+        self.start_datetime = start_datetime
         self.end_datetime = None
 
     def is_overflowed(self):
         return self.__overflowed
-
-    def get_remain_schedule(self):
-        return self.__remain_time
 
 
     # 이게 전송용 데이터 포멧
@@ -1219,24 +1215,40 @@ class ScheduleBlockTreater():
         return schedule_blocks
 
     # 스케줄 블럭 등록
-    def compare_week_day_block(self, schedule_blocks, weekday_blocks):
+    def compare_week_day_block(self, schedule_blocks:list, weekday_blocks):
         today = datetime.today()
+        is_flag = False # 스케줄이 있는지 없는지 확인하는 플래그
+        
+        num_schedule_block = 0
 
-        for schedule_block in schedule_blocks:
-            schedule_block:ScheduleBlock = schedule_block
-
-            # 목표 블럭 찾기
-            for weekDayBlock in weekday_blocks:
+        # 목표 블럭 찾기
+        for weekDayBlock in weekday_blocks:
+            is_flag = False
+            weekDayBlock:WeekDayDataBlock = weekDayBlock
+            
+            for schedule_block in schedule_blocks:
+                schedule_block:ScheduleBlock = schedule_block
+                
                 # 있으면 목표 블럭
                 if weekDayBlock.date == schedule_block.start_datetime.day:
                     weekDayBlock.num_schedule += 1
-
-        sorted_block_list = sorted(weekday_blocks, key=lambda x : x.date)
+                    num_schedule += 1
+                    is_flag = True
+            
+            # 만약 스케줄이 없다면
+            # 가짜 빈 스케줄을 넣으면됨
+            if not is_flag:
+                start_datetime = f'{today.year}/{today.month}/{weekDayBlock.date}'
+                schedule_block = ScheduleBlock(start_datetime=datetime.strptime(start_datetime, "%Y/%m/%d"))
+                schedule_blocks.append(schedule_blocks)
+                num_schedule_block += 1
 
         today_weekday = today.weekday()
-        trimmed_list = [block for block in sorted_block_list if block.date >= today_weekday]
+        trimmed_list = [block for block in weekday_blocks if block.date >= today_weekday]
+        
+        sorted_block_list = sorted(trimmed_list, key=lambda x : x.date)
 
-        return trimmed_list
+        return sorted_block_list, num_schedule_block
 
     #  만들기
     def make_schedule_block(self, schedule:Schedule):
@@ -1384,13 +1396,17 @@ class ScheduleChartModel(TimeTableModel):
         over_flowed_schedule:list = schedule_block_treater.claer_over_flowed_schedule()
         
         self.__schedule_blocks.extend(over_flowed_schedule)
-
-        sorted_schedule = sorted(self.__schedule_blocks, key=lambda x : datetime.strptime(x.start_date,"%Y/%m/%d"))
-        self.__schedule_blocks = sorted_schedule
-
+        
         # self.__week_day_datas = schedule_block_treater.make_week_day_data(schedule_blocks=self.__schedule_blocks)
-        self.__week_day_datas = schedule_block_treater.compare_week_day_block(schedule_blocks=self.__schedule_blocks,
+        # 위크데이 블럭이랑 스케줄 불럭의 수를 받아와야됨 (가짜 블럭의 수도 포함됨)
+        self.__week_day_datas, num_schedule_blocks = schedule_block_treater.compare_week_day_block(schedule_blocks=self.__schedule_blocks,
                                                                              weekday_blocks=weekday_blocks)
+        
+        # 정렬 순서는 맨 마지막에서 바로 앞으로
+        self.__schedule_blocks = sorted(self.__schedule_blocks, key=lambda x : x.start_datetime)
+        
+        # 이제 안쓰는 블럭(날짜의 데이터는 버려야됨)
+        self.__schedule_blocks = self.__schedule_blocks[:num_schedule_blocks]
 
         # 시작이 전날이고, 끝나는게 오늘이면 데이터가 안나오기 때문에
         # 결국 타임 블럭에서 하루 전날꺼를 구하고 그날 데이터를 버려야됨
