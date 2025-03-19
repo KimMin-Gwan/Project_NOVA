@@ -1116,6 +1116,7 @@ weekday_names = ['월', '화', '수', '목', '금', '토', '일']
 
 class ScheduleBlock(Schedule):
     def __init__(self, start_datetime=None):
+        super().__init__()
         self.timeblocks = []
         self.color_code = "#D2D2D2"
         self.__overflowed = False
