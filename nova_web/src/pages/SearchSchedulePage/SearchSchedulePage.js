@@ -13,7 +13,8 @@ import {
 } from "../../component/ScheduleMore/ScheduleMore";
 import { BundleScheduleDetail, EventDetail, ScheduleDetail} from "../../component/EventMore/EventMore";
 import mainApi from "../../services/apis/mainApi";
-
+import postApi from "../../services/apis/mainApi";
+import HEADER from "../../constant/header";
 
 
 export default function SearchSchedulePage() {
@@ -159,6 +160,20 @@ export default function SearchSchedulePage() {
     navigate("/");
   };
 
+  // 내 스케줄에 등록하는 함수 (추가하기 버튼 누르면 동작해야됨)
+  // 완료하면 성공했다고 알려주면 좋을듯
+  async function fetchTryAddSchedule(target) {
+    // 무조건 리스트로 만들어야됨
+    const sids = [target.sid]
+
+    await postApi 
+      .post('time_table_server/try_add_schedule', {
+      header: HEADER,
+      body: {
+        sids: sids,
+      }})
+  }; 
+
   //const ScheduleKind = ["일정 번들", "일정", "이벤트"];
   const ScheduleKind = ["일정 번들", "일정"];
 
@@ -204,19 +219,20 @@ export default function SearchSchedulePage() {
                   {moreClick[item.sid] && ( // 해당 id의 상태만 확인
                     <ScheduleAdd
                       target={item}
+                      detailClick={toggleAddScheduleModal}
                       navBoardClick={navBoard}
-                      addClick={toggleAddScheduleModal}
+                      addClick={fetchTryAddSchedule}
                     />
                   )}
                 </li>
               ))}
         </ul>
 
-
+      {/* 자세히 보기 모달창 */}
       <BundleScheduleDetail closeSchedule={toggleAddScheduleBundleModal} isOpen={addScheduleBundleModal} target={targetScheduleBundle} />
 
       {/*여기도 target 추가해야될 듯 */}
-      <ScheduleDetail closeSchedule={toggleAddScheduleModal} isOpen={addScheduleModal} />
+      <ScheduleDetail closeSchedule={toggleAddScheduleModal} isOpen={addScheduleModal} target={targetSchedule} />
     </div>
   );
 }

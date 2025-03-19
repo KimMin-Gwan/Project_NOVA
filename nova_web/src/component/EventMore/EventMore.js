@@ -7,7 +7,8 @@ import HEADER from "../../constant/header";
 import postApi from "../../services/apis/postApi";
 import {
   ScheduleEventAdd,
-  ScheduleMoreAdd,
+  ScheduleDetailAdd,
+  ScheduleAdd,
 } from "../ScheduleMore/ScheduleMore";
 import TimeChart from "../../pages/SchedulePage/TimeChart";
 import {
@@ -19,7 +20,7 @@ import { ScheduleBundle } from "../../component/ScheduleEvent/ScheduleBundle";
 const exdata = [0, 1];
 
 
-export function ScheduleDetail ({ closeSchedule, isOpen, children }) {
+export function DetailModal ({ closeSchedule, isOpen, children }) {
   const [backgroundColor, setBackgroundColor] = useState("");
   const [displaySt, setdisplaySt] = useState("");
   const [upAnimation, setUpAnimation] = useState(false);
@@ -75,7 +76,20 @@ export function ScheduleDetail ({ closeSchedule, isOpen, children }) {
 export function BundleScheduleDetail({ closeSchedule, isOpen, target}) {
   const [selectBack, setSelectBack] = useState({});
   const [isSelect, setIsSelect] = useState(1);
+  const [sids, setSids] = useState([]);
   const [schedules, setSchedules] = useState([]);
+
+  // 내 스케줄에 등록하는 함수 (추가하기 버튼 누르면 동작해야됨)
+  // 완료하면 성공했다고 알려주면 좋을듯
+  async function fetchTryAddSchedule(dummy) {
+
+    await postApi 
+      .post('time_table_server/try_add_schedule', {
+      header: HEADER,
+      body: {
+        sids: sids,
+      }})
+  }; 
 
   // 스케줄 번들에 있는 스케줄들 받아오는 함수
   async function fetchSchedules() {
@@ -102,22 +116,39 @@ export function BundleScheduleDetail({ closeSchedule, isOpen, target}) {
   useEffect(() => {
     // 토글창 열리면 패치 받아오기
     if (isOpen){
+      handleReset();
       fetchSchedules()
     }
   }, [isOpen]);
 
   // 선택하면 배경색 변화하게 해주는 거
-  function handleSelect(key) {
+  function handleSelect(item, key) {
     setSelectBack((prev) => {
-      const newState = {
-        ...prev,
-        [key]: prev[key] === "" || prev[key] === undefined ? "#F1F7FF" : "",
-        // 처음에 초기 값이 ""이나 undefined여도 눌렀을 때 바로 색이 변하도록 함
-      };
-
-      return newState;
-      // 새로운 값에 할당하여 값을 설정해주어서 상태가 즉시 업데이트 되도록 해준다
+    // 클릭한 key가 이미 존재하는지 확인
+      if (prev[key]) {
+        // 이미 존재할 경우, 해당 key를 제외하고 새로운 객체를 반환
+        const { [key]: omit, ...rest } = prev;
+        return rest;
+      } else {
+        // 존재하지 않을 경우, 새로운 key와 초기값 추가
+        return { ...prev, [key]: "#F1F7FF" };
+      }
     });
+
+    // 전송에 사용할 sid도 추가
+    setSids((prev) => {
+      // 클릭한 item.sid가 배열에 이미 존재하는지 확인
+      if (prev.includes(item.sid)) {
+        // 이미 존재할 경우, 해당 item.sid를 배열에서 제거
+        return prev.filter((sid) => sid !== item.sid);
+      } else {
+        // 존재하지 않을 경우, 배열에 추가
+        return [...prev, item.sid];
+      }
+    });
+
+    console.log(sids)
+    // 새로운 값에 할당하여 값을 설정해주어서 상태가 즉시 업데이트 되도록 해준다
   }
 
   // 선택한 일정 리셋하기
@@ -125,21 +156,27 @@ export function BundleScheduleDetail({ closeSchedule, isOpen, target}) {
   function handleReset() {
     // 선택 초기화 하기
     setSelectBack({});
+    setSids([]);
+    setIsSelect(1)
   }
 
   // 일정 모두 선택
   function handleAllSelect() {
     console.log("모두선택");
 
-    // 색상변화
-    // setSelectBack((prev) => {
-    //   const isAllSelected = exdata.every((key) => prev[key] === "#F1F7FF");
+     ////색상변화
+    schedules.map((item, index) => (
+      handleSelect(item, index)
+    ))
+    setIsSelect(4)
+    //setSelectBack((prev) => {
+      //const isAllSelected = exdata.every((key) => prev[key] === "#F1F7FF");
 
-    //   return exdata.reduce((acc, key) => {
-    //     acc[key] = isAllSelected ? "" : "#F1F7FF";
-    //     return acc;
-    //   }, {});
-    // });
+      //return exdata.reduce((acc, key) => {
+        //acc[key] = isAllSelected ? "" : "#F1F7FF";
+        //return acc;
+      //}, {});
+    //});
   }
 
   // 일정 선택 하기, 취소하기 토클
@@ -149,20 +186,20 @@ export function BundleScheduleDetail({ closeSchedule, isOpen, target}) {
   };
 
   return (
-    <ScheduleDetail closeSchedule={closeSchedule} isOpen={isOpen}>
+    <DetailModal closeSchedule={closeSchedule} isOpen={isOpen}>
       <ScheduleBundle
         item={target}
       />
-      <ScheduleMoreAdd
+      <ScheduleDetailAdd
         selectToggle={selectToggle}
         selectText={isSelect}
-        allSelect={isSelect === 1 ? () => handleAllSelect() : undefined}
+        allSelect={isSelect === 1 ? () => handleAllSelect() : fetchTryAddSchedule}
       />
       {schedules.map((item, index) => (
         <ScheduleEvent
           key={index}
           {...item}
-          toggleClick={isSelect === 4 ? () => handleSelect(item) : undefined}
+          toggleClick={isSelect === 4 ? () => handleSelect(item, index) : undefined}
           selectBack={selectBack[index] || ""}
         />
       ))}
@@ -170,13 +207,52 @@ export function BundleScheduleDetail({ closeSchedule, isOpen, target}) {
         weekDayData={tempWeekDayData}
         scheduleData={tempScheduleData}
       />
-    </ScheduleDetail>
+    </DetailModal>
+  );
+}
+
+
+// 이건 스케줄 목록에서 추가하기 버튼 누르면 나오는 자세히 모달창(밑에서 위로 올라오는애)
+export function ScheduleDetail({ closeSchedule, isOpen, target}) {
+  const [sids, setSids] = useState([]);
+
+  // 내 스케줄에 등록하는 함수 (추가하기 버튼 누르면 동작해야됨)
+  async function fetchTryAddSchedule() {
+    await postApi 
+      .post('time_table_server/try_add_schedule', {
+      header: HEADER,
+      body: {
+        sids: sids,
+      }})
+  }; 
+
+  useEffect(() => {
+    // 토글창 열리면 패치 받아오기
+    if (isOpen){
+      setSids([target.sid])
+    }
+  }, [isOpen]);
+
+  return (
+    <DetailModal closeSchedule={closeSchedule} isOpen={isOpen}>
+      <ScheduleEvent
+        {...target}
+      />
+      <ScheduleAdd
+        target={target}
+        addClick={fetchTryAddSchedule}
+      />
+      <TimeChart
+        weekDayData={tempWeekDayData}
+        scheduleData={tempScheduleData}
+      />
+    </DetailModal>
   );
 }
 
 export function EventDetail ({ closeSchedule, isOpen }) {
   return (
-    <ScheduleDetail closeSchedule={closeSchedule} isOpen={isOpen}>
+    <DetailModal closeSchedule={closeSchedule} isOpen={isOpen}>
       <BaseBundle />
       <ScheduleEventAdd />
       <EventBundle />
@@ -184,6 +260,6 @@ export function EventDetail ({ closeSchedule, isOpen }) {
         <h3>이벤트 미리보기</h3>
         <ScheduleCalendar />
       </section>
-    </ScheduleDetail>
+    </DetailModal>
   );
 }

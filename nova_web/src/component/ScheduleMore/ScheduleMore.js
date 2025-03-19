@@ -1,6 +1,6 @@
 import style from "./ScheduleMore.module.css";
 
-function BasicSchedule({ isMore, secondClick, lastClick, target }) {
+function BasicSchedule({ isMore, firstClick, secondClick, lastClick, target }) {
   const buttons = [
     {
       first: "",
@@ -35,23 +35,27 @@ function BasicSchedule({ isMore, secondClick, lastClick, target }) {
     },
   ];
 
-  function isButtonClicked(){
+  function isLastButtonClicked(){
     lastClick(target)
+  }
+
+  function isFistButtonClicked(){
+    firstClick(target)
   }
 
   return (
     <div className={style["moreContainer"]}>
       {buttons[isMore].first !== "" && (
-        <button className={style["moreButton"]}>{buttons[isMore].first}</button>
+        <button onClick={isFistButtonClicked} className={style["moreButton"]}>{buttons[isMore].first}</button>
       )}
       {buttons[isMore].second !== "" && (
         <button onClick={secondClick}>{buttons[isMore].second}</button>
       )}
-      <button onClick={isButtonClicked}>{buttons[isMore].last}</button>
+      <button onClick={isLastButtonClicked}>{buttons[isMore].last}</button>
     </div>
   );
 }
-// 일정 번들 버튼
+// 일정 번들 밑에 붙는 버튼
 export function ScheduleMore({ navBoardClick, scheduleClick, target }) {
   return (
     <BasicSchedule
@@ -62,8 +66,8 @@ export function ScheduleMore({ navBoardClick, scheduleClick, target }) {
     />
   );
 }
-// 일정 번들 자세히보기 버튼
-export function ScheduleMoreAdd({ selectToggle, selectText, allSelect }) {
+// 일정 번들 자세히보기 모달창에서 밑에 붙는 버튼
+export function ScheduleDetailAdd({ selectToggle, selectText, allSelect }) {
   return (
     <BasicSchedule
       isMore={selectText}
@@ -72,11 +76,12 @@ export function ScheduleMoreAdd({ selectToggle, selectText, allSelect }) {
     />
   );
 }
-// 일정 버튼
-export function ScheduleAdd({ navBoardClick, addClick, target }) {
+// 일정 밑에 붙는 버튼
+export function ScheduleAdd({ navBoardClick, detailClick, addClick, target }) {
   return <BasicSchedule
       isMore={2}
       target={target}
+      firstClick={detailClick}
       secondClick={navBoardClick}
       lastClick={addClick}
        />;
