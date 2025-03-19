@@ -1135,17 +1135,19 @@ class ScheduleBlock(Schedule):
         return super_dict_data
 
 class WeekDayDataBlock:
-    def __init__(self, date, day, num_schedule):
-        self.date = date
-        self.day = day
+    def __init__(self, day, make_day_data:datetime, num_schedule:int):
+        self.year = make_day_data.year       # 년
+        self.month = make_day_data.month     # 월
+        self.date = make_day_data.day        # 일
+        self.day = day          # 요일
         self.num_schedule = num_schedule
         self.is_today = False
 
      # 이게 전송용 데이터 포멧
     def get_dict_form_data(self):
         return {
-            'date' : self.date,
-            'day' : self.day,
+            'date' : self.date,     #  일
+            'day' : self.day,       # 요일
             'num_schedule' : self.num_schedule,
             'is_today' : self.is_today
         }
@@ -1163,7 +1165,7 @@ class ScheduleBlockTreater():
         # 5일 / 7일 분량
         for i in range(days):
             day_block = WeekDayDataBlock(day=weekday_names[(today + timedelta(days=i)).weekday()],
-                                         date=(today+timedelta(days=i)).day,
+                                         make_day_data=(today+timedelta(days=i)),
                                          num_schedule=0)
             if day_block.date == today.day:
                 day_block.is_today = True
@@ -1189,7 +1191,7 @@ class ScheduleBlockTreater():
             # 없으면 지금찾던걸로 하나 만들어야됨
             if not targetWeekDayDateBlock:
                 targetWeekDayDateBlock = WeekDayDataBlock(day=weekday_names[schedule_block.start_datetime.weekday()],
-                                                       date = schedule_block.start_datetime.day,
+                                                       make_day_data=schedule_block.start_datetime,
                                                        num_schedule=0
                                                        )
                 weekDayDateBlocks.append(targetWeekDayDateBlock)
@@ -1239,7 +1241,7 @@ class ScheduleBlockTreater():
             # 만약 스케줄이 없다면
             # 가짜 빈 스케줄을 넣으면됨
             if not is_flag:
-                start_datetime = f'{today.year}/{today.month}/{weekDayBlock.date}'
+                start_datetime = f'{weekDayBlock.year}/{weekDayBlock.month}/{weekDayBlock.date}'
                 schedule_block = ScheduleBlock(start_datetime=datetime.strptime(start_datetime, "%Y/%m/%d"))
                 schedule_blocks.append(schedule_block)
                 num_schedule_block += 1
@@ -1371,7 +1373,8 @@ class ScheduleChartModel(TimeTableModel):
         
         target_date = datetime.strptime(target_date, ("%Y/%m/%d"))
 
-        today:datetime = target_date
+        # today:datetime = target_date
+        today = target_date + timedelta(days=12)
         # today = target_date - timedelta(days=3)
 
         schedules = []
