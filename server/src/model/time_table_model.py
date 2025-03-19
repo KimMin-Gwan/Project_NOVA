@@ -1384,7 +1384,10 @@ class ScheduleChartModel(TimeTableModel):
         over_flowed_schedule:list = schedule_block_treater.claer_over_flowed_schedule()
         
         self.__schedule_blocks.extend(over_flowed_schedule)
-        
+
+        sorted_schedule = sorted(self.__schedule_blocks, key=lambda x : datetime.strptime(x.start_date,"%Y/%m/%d"))
+        self.__schedule_blocks = sorted_schedule
+
         # self.__week_day_datas = schedule_block_treater.make_week_day_data(schedule_blocks=self.__schedule_blocks)
         self.__week_day_datas = schedule_block_treater.compare_week_day_block(schedule_blocks=self.__schedule_blocks,
                                                                              weekday_blocks=weekday_blocks)
