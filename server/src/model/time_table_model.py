@@ -1136,6 +1136,7 @@ class ScheduleBlock(Schedule):
 
 class WeekDayDataBlock:
     def __init__(self, day, make_day_data:datetime, num_schedule:int):
+        self.origin_date = make_day_data     # 년 월 일
         self.year = make_day_data.year       # 년
         self.month = make_day_data.month     # 월
         self.date = make_day_data.day        # 일
@@ -1160,7 +1161,6 @@ class ScheduleBlockTreater():
     def make_default_week_day_data(self, today:datetime, days):
 
         weekDayDateBlock_list = []
-
 
         # 5일 / 7일 분량
         for i in range(days):
@@ -1246,10 +1246,8 @@ class ScheduleBlockTreater():
                 schedule_blocks.append(schedule_block)
                 num_schedule_block += 1
 
-        today_weekday = today.weekday()
-        trimmed_list = [block for block in weekday_blocks if block.date >= today_weekday]
-        
-        sorted_block_list = sorted(trimmed_list, key=lambda x : x.date)
+        # 날짜 데이터를 바탕으로 정렬합니다.
+        sorted_block_list = sorted(weekday_blocks, key=lambda x : x.origin_day_data)
 
         return sorted_block_list, num_schedule_block
 
