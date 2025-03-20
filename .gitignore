@@ -1,5 +1,4 @@
 *.pyc
 __pycache__/
 server\src\configure.txt
-/server/src
 server/src/configure.txt

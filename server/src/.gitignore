@@ -1,0 +1,4 @@
+*.pyc
+__pycache__/
+configure.txt
+/server/src/configure.txt
