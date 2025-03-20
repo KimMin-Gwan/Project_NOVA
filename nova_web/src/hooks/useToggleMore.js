@@ -4,14 +4,14 @@ const useToggleMore = () => {
   const [moreClick, setMoreClick] = useState({});
 
   // 버튼 나오게 하는 함수
-  const toggleMore = (id) => {
+  const handleToggleMore = (id) => {
     setMoreClick((prev) => ({
       ...prev,
       [id]: !prev[id],
     }));
   };
 
-  return { moreClick, toggleMore };
+  return { moreClick, handleToggleMore };
 };
 
 export default useToggleMore;

@@ -105,7 +105,7 @@ const ScheduleDashboard = () => {
                 <span className="text-wrapper">타임 차트</span>
               </p>
               <span className="add-schedule" onClick={() => handleNavigate("/search/schedule")}>
-                일정 추가
+                일정 탐색
               </span>
             </div>
           </div>
@@ -124,7 +124,7 @@ const ScheduleDashboard = () => {
             </div>
           </div>
           {biasData.map((item, i) => {
-            return <ScheduleTopic key={item.id} {...item} />;
+            return <ScheduleTopic key={i} {...item} />;
           })}
         </div>
       </div>

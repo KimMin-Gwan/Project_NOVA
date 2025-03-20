@@ -4,17 +4,18 @@ import ScheduleSearch from "../../component/ScheduleSearch/ScheduleSearch";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ScheduleFollow } from "../../component/ScheduleMore/ScheduleMore";
-import ScheduleFollowBox from "../../component/ScheduleFollowBox/ScheduleFollowBox";
-import useToggleMore from "../../component/useToggleMore";
+import useToggleMore from "../../hooks/useToggleMore";
 import mainApi from "../../services/apis/mainApi";
 import HEADER from "../../constant/header";
 import FollowBiasModal from "../../component/FollowBiasModal/FollowBiasModal";
+import postApi from "../../services/apis/postApi";
 
 export default function SearchTopicPage() {
   let [eventData, setEventData] = useState([]);
   const navigate = useNavigate();
+  const [clickedBid, setClickedBid] = useState();
 
-  const { moreClick, toggleMore } = useToggleMore();
+  const { moreClick, handleToggleMore } = useToggleMore();
   const [isModal, setIsModal] = useState(false);
 
   const [biasData, setBiasData] = useState([]);
@@ -28,7 +29,6 @@ export default function SearchTopicPage() {
         // setBiasData((prev) => [...prev, ...res.data.body.biases]);
         setBiasData(res.data.body.biases);
         setNextKey(res.data.body.key);
-        console.log("검색", res.data);
       });
   }
 
@@ -37,7 +37,7 @@ export default function SearchTopicPage() {
     setIsModal((isModal) => !isModal);
   }
 
-  function clickPath(path) {
+  function handleNavigate(path) {
     navigate(`${path}`);
   }
 
@@ -45,7 +45,7 @@ export default function SearchTopicPage() {
     fetchSearchData();
   }, [searchKeyword]);
 
-  function fetchTryFollowBias(target) {
+  async function fetchTryFollowBias(target) {
     let send_data = {
       header: HEADER,
       body: {
@@ -78,6 +78,18 @@ export default function SearchTopicPage() {
         setIsModal(false);
         window.location.reload();
       });
+
+    // await postApi.post(
+    //   "nova_sub_system/try_select_my_bias",
+    //   {
+    //     header: HEADER,
+    //     body: {
+    //       bid: target.bid,
+    //     },
+    //   }.then((res) => {
+    //     console.log(res.data);
+    //   })
+    // );
   }
 
   return (
@@ -87,24 +99,32 @@ export default function SearchTopicPage() {
         fetchSearchData={fetchSearchData}
         searchKeyword={searchKeyword}
         setSearchKeyword={setSearchKeyword}
-        // clickButton={() => clickPath(`/search/topic?keyword=${d}`)}
       />
 
       <ul className={style["scheduleList"]}>
         {biasData.map((item) => (
           <li key={item.bid}>
-            <ScheduleTopic key={item.bid} {...item} toggleClick={() => toggleMore(item.bid)} />
+            <ScheduleTopic
+              key={item.bid}
+              {...item}
+              toggleClick={() => handleToggleMore(item.bid)}
+            />
             {moreClick[item.bid] && (
               <ScheduleFollow
-                scheduleClick={() => clickPath(`/search/schedule?keyword=${item.bname}`)}
+                scheduleClick={() => handleNavigate(`/search/schedule?keyword=${item.bname}`)}
                 followClick={handleFollowModal}
+              />
+            )}
+            {isModal && (
+              <FollowBiasModal
+                biasData={item}
+                closeModal={handleFollowModal}
+                fetchFollowBias={fetchTryFollowBias}
               />
             )}
           </li>
         ))}
       </ul>
-
-      {isModal && <FollowBiasModal closeModal={handleFollowModal} />}
     </div>
   );
 }

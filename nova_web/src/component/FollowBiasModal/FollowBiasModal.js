@@ -1,22 +1,43 @@
 import "./index.css";
 import sample from "./../../img/chzzz.svg";
 import { BIAS_URL } from "../../constant/biasUrl";
-export default function FollowBiasModal({ closeModal }) {
+import useBiasStore from "../../stores/BiasStore/useBiasStore";
+
+export default function FollowBiasModal({ biasData, closeModal, fetchFollowBias }) {
+  const { biasList } = useBiasStore();
   return (
     <div className="modal-overlay" onClick={closeModal}>
       <div className="modal" onClick={(e) => e.stopPropagation()}>
         <div className="streamer-img">
-          <img src={sample} alt="프로필 이미지" />
-          {/* <img src={BIAS_URL + `${clickedBid}.PNG`} /> */}
+          <img src={`${BIAS_URL}${biasData.bid}.PNG` || sample} alt="프로필 이미지" />
         </div>
 
         <p>
-          이시연님을 <b>팔로우</b>
+          {biasData.bname}님을{" "}
+          <b>
+            {biasList.some((item) => {
+              return item.bid === biasData.bid;
+            })
+              ? "팔로우 취소"
+              : "팔로우"}
+          </b>
           합니다
         </p>
+
         <span>
           <button onClick={closeModal}>취소</button>
-          <button className="follow-button">팔로우</button>
+          <button
+            className={"follow-button"}
+            onClick={() => {
+              fetchFollowBias(biasData.bid);
+            }}
+          >
+            {biasList.some((item) => {
+              return item.bid === biasData.bid;
+            })
+              ? "팔로우 취소"
+              : "팔로우"}
+          </button>
         </span>
       </div>
     </div>
@@ -29,25 +50,3 @@ export default function FollowBiasModal({ closeModal }) {
 //           </div>
 //         </button>
 //         <p>
-//           {clickedBname}님을{" "}
-//           <b>
-//             {biasList.some((item) => {
-//               return item.bid === clickedBid;
-//             })
-//               ? "팔로우 취소"
-//               : "팔로우"}
-//           </b>
-//           합니다
-//         </p>
-//         <span>
-//           <button className={style["follow-button"]} onClick={fetchTryFollowBias}>
-//             {biasList.some((item) => {
-//               return item.bid === clickedBid;
-//             })
-//               ? "팔로우 취소"
-//               : "팔로우"}
-//           </button>
-//         </span>
-//       </div>
-//     </div>
-// }

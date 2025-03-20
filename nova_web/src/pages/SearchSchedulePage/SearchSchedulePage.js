@@ -8,16 +8,16 @@ import ScheduleSearch from "../../component/ScheduleSearch/ScheduleSearch";
 import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { ScheduleMore, ScheduleAdd } from "../../component/ScheduleMore/ScheduleMore";
-import {
-  BundleScheduleDetail,
-  ScheduleDetail,
-} from "../../component/EventMore/EventMore";
+import { BundleScheduleDetail, ScheduleDetail } from "../../component/EventMore/EventMore";
 import mainApi from "../../services/apis/mainApi";
 import postApi from "../../services/apis/mainApi";
 import HEADER from "../../constant/header";
 import { MakeSingleSchedule } from "../../component/EventMore/EventMore";
 
 export default function SearchSchedulePage() {
+  const navigate = useNavigate();
+  let [searchKeyword, setSearchKeyword] = useState("");
+
   //const typeSelectData = ["schedule_bundle", "schedule", "event"];
   //const [addEventModal, setAddEventMoal] = useState(false);
   const typeSelectData = ["schedule_bundle", "schedule"];
@@ -25,27 +25,26 @@ export default function SearchSchedulePage() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [ScheduleIndex, setScheduleIndex] = useState(0);
 
+  // 모달
   const [addScheduleModal, setAddScheduleModal] = useState(false);
   const [addScheduleBundleModal, setAddScheduleBundleModal] = useState(false);
 
+  // 데이터
   const [scheduleBundleData, setScheduleBundleData] = useState([]);
   const [scheduleData, setScheduleData] = useState([]);
   const [scheduleEventData, setScheduleEventData] = useState([]);
 
+  // 키 값
   const [scheduleBundleKey, setScheduleBundleKey] = useState(-1);
   const [scheduleKey, setScheduleKey] = useState(-1);
   const [scheduleEventKey, setScheduleEventKey] = useState(-1);
 
   const [typeSelect, setTypeSelect] = useState("schedule_bundle");
 
-  const [keyword, setKeyword] = useState("");
-
   const [hasMore, setHasMore] = useState(false);
 
-  const navigate = useNavigate();
-
   const [moreClick, setMoreClick] = useState({});
-  //  const { moreClick, setMoreClick} = useToggleMore();
+
   function toggleMore(id) {
     setMoreClick((prev) => ({
       ...prev,
@@ -61,21 +60,22 @@ export default function SearchSchedulePage() {
     }));
   }
 
-  async function fetchSearchData(keyword) {
+  async function fetchSearchData() {
     // setActiveIndex가 너무 느리게 동작해서 그냥 index를 파라미터로 받아서 만들게 했습니다
     if (activeIndex === 0) {
       await mainApi
         .get(
-          `time_table_server/try_search_schedule_with_keyword?keyword=${keyword}&key=${scheduleBundleKey}&type=${typeSelectData[activeIndex]}`
+          `time_table_server/try_search_schedule_with_keyword?keyword=${searchKeyword}&key=${scheduleBundleKey}&type=${typeSelectData[activeIndex]}`
         )
         .then((res) => {
-          setScheduleBundleData((prev) => [...prev, ...res.data.body.schedule_bundles]);
+          // setScheduleBundleData((prev) => [...prev, ...res.data.body.schedule_bundles]);
+          setScheduleBundleData(res.data.body.schedule_bundles);
           setScheduleBundleKey(res.data.body.key);
         });
     } else if (activeIndex === 1) {
       await mainApi
         .get(
-          `time_table_server/try_search_schedule_with_keyword?keyword=${keyword}&key=${scheduleKey}&type=${typeSelectData[activeIndex]}`
+          `time_table_server/try_search_schedule_with_keyword?keyword=${searchKeyword}&key=${scheduleKey}&type=${typeSelectData[activeIndex]}`
         )
         .then((res) => {
           setScheduleData((prev) => [...prev, ...res.data.body.schedules]);
@@ -126,8 +126,8 @@ export default function SearchSchedulePage() {
   }
 
   useEffect(() => {
-    fetchSearchData("");
-  }, []);
+    fetchSearchData();
+  }, [searchKeyword]);
 
   // 일정 탐색 페이지에 일정번들, 일정, 이벤트 상태 변경
   // 누르면 키가 자꾸 올라가는 문제가 있음 !!!!
@@ -190,19 +190,17 @@ export default function SearchSchedulePage() {
 
   return (
     <div className="container SearchSchedulePage">
-      <ScheduleSearch title={1} fetchMockData={fetchSearchData} />
+      <ScheduleSearch
+        title={1}
+        fetchSearchData={fetchSearchData}
+        searchKeyword={searchKeyword}
+        setSearchKeyword={setSearchKeyword}
+      />
 
+      {/* 탭 영역 */}
       <section className={"info-list"}>
         <ul className={"post-list"} data-active-index={activeIndex}>
-          {ScheduleKind.map((item, index) => (
-            <li
-              key={index}
-              className={`post ${activeIndex === index ? "active" : ""}`}
-              onClick={() => handleClick(index, item)}
-            >
-              <button>{item}</button>
-            </li>
-          ))}
+          <TabItem tabs={ScheduleKind} activeIndex={activeIndex} handleClick={handleClick} />
         </ul>
       </section>
 
@@ -249,18 +247,33 @@ export default function SearchSchedulePage() {
       />
 
       {/*여기도 target 추가해야될 듯 */}
-      <ScheduleDetail 
-      closeSchedule={toggleAddScheduleModal}
-      isOpen={addScheduleModal}
-      target={targetSchedule} 
+      <ScheduleDetail
+        closeSchedule={toggleAddScheduleModal}
+        isOpen={addScheduleModal}
+        target={targetSchedule}
       />
-            
-
-      <MakeSingleSchedule 
-      closeSchedule={toggleMakeSingleScheduleModal}
-       isOpen={makeSingleScheduleModal}
-       />
+      {/* 
+      <MakeSingleSchedule
+        closeSchedule={toggleMakeSingleScheduleModal}
+        isOpen={makeSingleScheduleModal}
+      /> */}
     </div>
+  );
+}
+
+function TabItem({ tabs, activeIndex, handleClick }) {
+  return (
+    <>
+      {tabs.map((tab, index) => (
+        <li
+          key={index}
+          className={`post ${activeIndex === index ? "active" : ""}`}
+          onClick={() => handleClick(index, tab)}
+        >
+          <button>{tab}</button>
+        </li>
+      ))}
+    </>
   );
 }
 
