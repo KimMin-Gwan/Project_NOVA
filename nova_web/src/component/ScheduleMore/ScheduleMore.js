@@ -1,15 +1,17 @@
-import BUTTON_TYPES from "../../constant/buttonTypes";
+import { BUTTON_TYPES } from "../../constant/type_data";
 import style from "./ScheduleMore.module.css";
 
+const BUTTON_SETTING = {
+  [BUTTON_TYPES.DEFAULT]: { first: "", second: "게시판", last: "자세히" },
+  [BUTTON_TYPES.SELECT]: { first: "", second: "일정 선택하기", last: "모두 추가하기" },
+  [BUTTON_TYPES.SCHEDULE]: { first: "자세히", second: "게시판에서 공유", last: "추가하기" },
+  [BUTTON_TYPES.BIAS]: { first: "게시판", second: "일정 검색", last: "팔로우" },
+  [BUTTON_TYPES.CANCEL]: { first: "", second: "선택 취소", last: "선택한 일정 추가하기" },
+  [BUTTON_TYPES.EVENT]: { first: "", second: "", last: "이벤트 추가하기" },
+};
+
 function BasicSchedule({ isMore, firstClick, secondClick, lastClick, target }) {
-  const buttons = {
-    [BUTTON_TYPES.DEFAULT]: { first: "", second: "게시판", last: "자세히" },
-    [BUTTON_TYPES.SELECT]: { first: "", second: "일정 선택하기", last: "모두 추가하기" },
-    [BUTTON_TYPES.SCHEDULE]: { first: "자세히", second: "게시판에서 공유", last: "추가하기" },
-    [BUTTON_TYPES.BIAS]: { first: "게시판", second: "일정 검색", last: "팔로우" },
-    [BUTTON_TYPES.CANCEL]: { first: "", second: "선택 취소", last: "선택한 일정 추가하기" },
-    [BUTTON_TYPES.EVENT]: { first: "", second: "", last: "이벤트 추가하기" },
-  };
+  const buttons = BUTTON_SETTING[isMore];
 
   function isLastButtonClicked() {
     lastClick(target);
@@ -21,15 +23,13 @@ function BasicSchedule({ isMore, firstClick, secondClick, lastClick, target }) {
 
   return (
     <div className={style["moreContainer"]}>
-      {buttons[isMore].first !== "" && (
+      {buttons.first !== "" && (
         <button onClick={isFistButtonClicked} className={style["moreButton"]}>
-          {buttons[isMore].first}
+          {buttons.first}
         </button>
       )}
-      {buttons[isMore].second !== "" && (
-        <button onClick={secondClick}>{buttons[isMore].second}</button>
-      )}
-      <button onClick={isLastButtonClicked}>{buttons[isMore].last}</button>
+      {buttons.second !== "" && <button onClick={secondClick}>{buttons.second}</button>}
+      <button onClick={isLastButtonClicked}>{buttons.last}</button>
     </div>
   );
 }
@@ -73,5 +73,5 @@ export function ScheduleFollow({ scheduleClick, followClick, target }) {
 }
 // 스케줄 이벤트 추가하기 버튼
 export function ScheduleEventAdd() {
-  return <BasicSchedule isMore={5} />;
+  return <BasicSchedule isMore={BUTTON_TYPES.EVENT} />;
 }

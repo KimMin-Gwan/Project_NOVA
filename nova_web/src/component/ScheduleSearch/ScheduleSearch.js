@@ -4,22 +4,15 @@ import style from "./ScheduleSearch.module.css";
 import React from "react";
 
 import Input from "../Input/Input";
+import { TITLE_TYPES } from "../../constant/type_data";
 
 const keyword = ["인터넷방송", "유튜버", "버튜버"];
-const titleKind = [
-  {
-    titleName: "주제 탐색",
-    button: "탐색",
-  },
-  {
-    titleName: "일정 탐색",
-    button: "등록",
-  },
-  {
-    titleName: "이벤트 상세",
-    button: "",
-  },
-];
+
+const TITLES = {
+  [TITLE_TYPES.BIAS]: { titleName: "주제 탐색", button: "탐색" },
+  [TITLE_TYPES.SCHEDULE]: { titleName: "일정 탐색", button: "등록" },
+  [TITLE_TYPES.EVENT]: { titleName: "이벤트 상세", button: "" },
+};
 
 export default function ScheduleSearch({
   title,
@@ -27,6 +20,7 @@ export default function ScheduleSearch({
   setSearchKeyword,
   fetchSearchData,
 }) {
+  const titles = TITLES[title];
   const onChangeSearchKeyWord = (e) => {
     setSearchKeyword(e.target.value);
   };
@@ -34,8 +28,8 @@ export default function ScheduleSearch({
   return (
     <div className={style["SearchSection"]}>
       <div className={style["sectionTop"]}>
-        <h3>{titleKind[title].titleName}</h3>
-        {titleKind[title].button !== "" && <button>일정 {titleKind[title].button}</button>}
+        <h3>{titles.titleName}</h3>
+        {titles.button !== "" && <button>일정 {titles.button}</button>}
       </div>
       <div className={style["searchFac"]}>
         <div className={style["searchBox"]}>

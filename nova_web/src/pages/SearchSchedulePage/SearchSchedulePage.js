@@ -1,29 +1,31 @@
-import ScheduleCard from "../../component/EventCard/EventCard";
-// import ScheduleTopic from "../../component/ScheduleTopic/ScheduleTopic";
-// import ScheduleEvent from "../../component/ScheduleEvent/ScheduleEvent";
-// import useToggleMore from "../../component/useToggleMore";
-import "./index.css";
-import { ScheduleBundle } from "../../component/ScheduleEvent/ScheduleBundle";
-import ScheduleSearch from "../../component/ScheduleSearch/ScheduleSearch";
-import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import { TITLE_TYPES } from "../../constant/type_data";
+import HEADER from "../../constant/header";
+
+import { ScheduleBundle } from "../../component/ScheduleEvent/ScheduleBundle";
+import ScheduleCard from "../../component/EventCard/EventCard";
+import ScheduleSearch from "../../component/ScheduleSearch/ScheduleSearch";
 import { ScheduleMore, ScheduleAdd } from "../../component/ScheduleMore/ScheduleMore";
 import { BundleScheduleDetail, ScheduleDetail } from "../../component/EventMore/EventMore";
+
+import useToggleMore from "../../hooks/useToggleMore";
+
 import mainApi from "../../services/apis/mainApi";
 import postApi from "../../services/apis/mainApi";
-import HEADER from "../../constant/header";
-import { MakeSingleSchedule } from "../../component/EventMore/EventMore";
+import "./index.css";
 
 export default function SearchSchedulePage() {
+  const { moreClick, handleToggleMore } = useToggleMore();
   const navigate = useNavigate();
+
   let [searchKeyword, setSearchKeyword] = useState("");
 
-  //const typeSelectData = ["schedule_bundle", "schedule", "event"];
-  //const [addEventModal, setAddEventMoal] = useState(false);
   const typeSelectData = ["schedule_bundle", "schedule"];
+  const scheduleKind = ["일정 번들", "일정"];
 
   const [activeIndex, setActiveIndex] = useState(0);
-  const [ScheduleIndex, setScheduleIndex] = useState(0);
 
   // 모달
   const [addScheduleModal, setAddScheduleModal] = useState(false);
@@ -32,114 +34,54 @@ export default function SearchSchedulePage() {
   // 데이터
   const [scheduleBundleData, setScheduleBundleData] = useState([]);
   const [scheduleData, setScheduleData] = useState([]);
-  const [scheduleEventData, setScheduleEventData] = useState([]);
 
   // 키 값
   const [scheduleBundleKey, setScheduleBundleKey] = useState(-1);
   const [scheduleKey, setScheduleKey] = useState(-1);
-  const [scheduleEventKey, setScheduleEventKey] = useState(-1);
-
-  const [typeSelect, setTypeSelect] = useState("schedule_bundle");
-
-  const [hasMore, setHasMore] = useState(false);
-
-  const [moreClick, setMoreClick] = useState({});
-
-  function toggleMore(id) {
-    setMoreClick((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
-  }
-
-  const [moreClickBundle, setMoreClickBundle] = useState({});
-  function toggleMoreBundle(id) {
-    setMoreClickBundle((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
-  }
-
-  async function fetchSearchData() {
-    // setActiveIndex가 너무 느리게 동작해서 그냥 index를 파라미터로 받아서 만들게 했습니다
-    if (activeIndex === 0) {
-      await mainApi
-        .get(
-          `time_table_server/try_search_schedule_with_keyword?keyword=${searchKeyword}&key=${scheduleBundleKey}&type=${typeSelectData[activeIndex]}`
-        )
-        .then((res) => {
-          // setScheduleBundleData((prev) => [...prev, ...res.data.body.schedule_bundles]);
-          setScheduleBundleData(res.data.body.schedule_bundles);
-          setScheduleBundleKey(res.data.body.key);
-        });
-    } else if (activeIndex === 1) {
-      await mainApi
-        .get(
-          `time_table_server/try_search_schedule_with_keyword?keyword=${searchKeyword}&key=${scheduleKey}&type=${typeSelectData[activeIndex]}`
-        )
-        .then((res) => {
-          setScheduleData((prev) => [...prev, ...res.data.body.schedules]);
-          setScheduleKey(res.data.body.key);
-        });
-    }
-    // Event는 1.5버전에 추가 예정
-    //else if (activeIndex == 2) {
-    //await mainApi
-    //.get(`time_table_server/try_search_schedule_with_keyword?keyword=${keyword}&key=${scheduleEventKey}&type=${typeSelectData[activeIndex]}`)
-    //.then((res) => {
-    //setScheduleEventData((prev) => [...prev, ...res.data.body.schedule_events]);
-    //setScheduleEventKey(res.data.body.key);
-    //});
-    //}
-  }
-
-  async function fetchSearchDataWidthIndex(keyword, index) {
-    // setActiveIndex가 너무 느리게 동작해서 그냥 index를 파라미터로 받아서 만들게 했습니다
-    if (index === 0) {
-      await mainApi
-        .get(
-          `time_table_server/try_search_schedule_with_keyword?keyword=${keyword}&key=${scheduleBundleKey}&type=${typeSelectData[index]}`
-        )
-        .then((res) => {
-          setScheduleBundleData((prev) => [...prev, ...res.data.body.schedule_bundles]);
-          setScheduleBundleKey(res.data.body.key);
-        });
-    } else if (index === 1) {
-      await mainApi
-        .get(
-          `time_table_server/try_search_schedule_with_keyword?keyword=${keyword}&key=${scheduleKey}&type=${typeSelectData[index]}`
-        )
-        .then((res) => {
-          setScheduleData((prev) => [...prev, ...res.data.body.schedules]);
-          setScheduleKey(res.data.body.key);
-        });
-    }
-    // Event는 1.5버전에 추가 예정
-    //else if (activeIndex == 2) {
-    //await mainApi
-    //.get(`time_table_server/try_search_schedule_with_keyword?keyword=${keyword}&key=${scheduleEventKey}&type=${typeSelectData[activeIndex]}`)
-    //.then((res) => {
-    //setScheduleEventData((prev) => [...prev, ...res.data.body.schedule_events]);
-    //setScheduleEventKey(res.data.body.key);
-    //});
-    //}
-  }
-
-  useEffect(() => {
-    fetchSearchData();
-  }, [searchKeyword]);
-
-  // 일정 탐색 페이지에 일정번들, 일정, 이벤트 상태 변경
-  // 누르면 키가 자꾸 올라가는 문제가 있음 !!!!
-  const handleClick = (index, type) => {
-    setActiveIndex(index);
-    setScheduleIndex(index);
-    setTypeSelect(typeSelectData[index]);
-    fetchSearchDataWidthIndex("", index);
-  };
 
   const [targetSchedule, setTargetSchedule] = useState({});
   const [targetScheduleBundle, setTargetScheduleBundle] = useState({});
+
+  // const [hasMore, setHasMore] = useState(false);
+
+  async function fetchSearchData() {
+    let key = activeIndex === 0 ? scheduleBundleKey : scheduleKey;
+    let type = typeSelectData[activeIndex];
+
+    await mainApi
+      .get(
+        `time_table_server/try_search_schedule_with_keyword?keyword=${searchKeyword}&key=${key}&type=${type}`
+      )
+      .then((res) => {
+        if (activeIndex === 0) {
+          setScheduleBundleData(res.data.body.schedule_bundles);
+          setScheduleBundleKey(res.data.body.key);
+        } else if (activeIndex === 1) {
+          setScheduleData(res.data.body.schedules);
+          setScheduleKey(res.data.body.key);
+        }
+      });
+  }
+
+  useEffect(() => {
+    setScheduleKey(-1);
+    setScheduleBundleKey(-1);
+    setScheduleData([]);
+    setScheduleBundleData([]);
+
+    fetchSearchData();
+  }, [searchKeyword, activeIndex]);
+
+  // 탭 변경시 검색 초기화
+  useEffect(() => {
+    setSearchKeyword("");
+  }, [activeIndex]);
+
+  // 일정 탐색 페이지에 일정번들, 일정, 이벤트 상태 변경
+  // 누르면 키가 자꾸 올라가는 문제가 있음 !!!!
+  const handleClick = (index) => {
+    setActiveIndex(index);
+  };
 
   // 일정 추가하기 버튼 누르면 동작하는애
   const toggleAddScheduleModal = (target) => {
@@ -153,14 +95,8 @@ export default function SearchSchedulePage() {
     setTargetScheduleBundle(target);
   };
 
-  //// 이벤트 추가하기 버트 누르면 동작하는 애
-  //const toggleAddEventModal= () => {
-  //setAddEventMoal((addEventModal) => !addEventModal);
-  //};
-
   // 게시판으로 이동
   const navBoard = () => {
-    console.log("클릭");
     navigate("/");
   };
 
@@ -170,28 +106,22 @@ export default function SearchSchedulePage() {
     // 무조건 리스트로 만들어야됨
     const sids = [target.sid];
 
-    await postApi.post("time_table_server/try_add_schedule", {
-      header: HEADER,
-      body: {
-        sids: sids,
-      },
-    });
+    await postApi
+      .post("time_table_server/try_add_schedule", {
+        header: HEADER,
+        body: {
+          sids: sids,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+      });
   }
-
-  const [makeSingleScheduleModal, setMakeSingleScheduleModal] = useState(false);
-
-  // 일정 추가하기 버튼 누르면 동작하는애
-  const toggleMakeSingleScheduleModal = () => {
-    setMakeSingleScheduleModal((makeSingleScheduleModal) => !makeSingleScheduleModal);
-  };
-
-  //const ScheduleKind = ["일정 번들", "일정", "이벤트"];
-  const ScheduleKind = ["일정 번들", "일정"];
 
   return (
     <div className="container SearchSchedulePage">
       <ScheduleSearch
-        title={1}
+        title={TITLE_TYPES.SCHEDULE}
         fetchSearchData={fetchSearchData}
         searchKeyword={searchKeyword}
         setSearchKeyword={setSearchKeyword}
@@ -200,19 +130,19 @@ export default function SearchSchedulePage() {
       {/* 탭 영역 */}
       <section className={"info-list"}>
         <ul className={"post-list"} data-active-index={activeIndex}>
-          <TabItem tabs={ScheduleKind} activeIndex={activeIndex} handleClick={handleClick} />
+          <TabItem tabs={scheduleKind} activeIndex={activeIndex} handleClick={handleClick} />
         </ul>
       </section>
 
       <ul className="scheduleList">
-        {ScheduleIndex === 0
+        {activeIndex === 0
           ? scheduleBundleData.map((item) => (
               <li key={item.sbid}>
                 <ScheduleBundle
                   item={item}
-                  toggleClick={() => toggleMoreBundle(item.sbid)} // id 전달
+                  toggleClick={() => handleToggleMore(item.sbid)} // id 전달
                 />
-                {moreClickBundle[item.sbid] && ( // 해당 id의 상태만 확인
+                {moreClick[item.sbid] && ( // 해당 id의 상태만 확인
                   <ScheduleMore
                     target={item}
                     navBoardClick={navBoard}
@@ -225,7 +155,7 @@ export default function SearchSchedulePage() {
               <li key={item.sid}>
                 <ScheduleCard
                   {...item}
-                  toggleClick={() => toggleMore(item.sid)} // id 전달
+                  toggleClick={() => handleToggleMore(item.sid)} // id 전달
                 />
                 {moreClick[item.sid] && ( // 해당 id의 상태만 확인
                   <ScheduleAdd
@@ -261,6 +191,7 @@ export default function SearchSchedulePage() {
   );
 }
 
+// Tabs 컴포넌트가 존재, 그거랑 합치기 필요
 function TabItem({ tabs, activeIndex, handleClick }) {
   return (
     <>
@@ -305,3 +236,29 @@ function TabItem({ tabs, activeIndex, handleClick }) {
 ///>}
 //</li>
 //))
+// Event는 1.5버전에 추가 예정
+//else if (activeIndex == 2) {
+//await mainApi
+//.get(`time_table_server/try_search_schedule_with_keyword?keyword=${keyword}&key=${scheduleEventKey}&type=${typeSelectData[activeIndex]}`)
+//.then((res) => {
+//setScheduleEventData((prev) => [...prev, ...res.data.body.schedule_events]);
+//setScheduleEventKey(res.data.body.key);
+//});
+//}
+
+// Event는 1.5버전에 추가 예정
+//else if (activeIndex == 2) {
+//await mainApi
+//.get(`time_table_server/try_search_schedule_with_keyword?keyword=${keyword}&key=${scheduleEventKey}&type=${typeSelectData[activeIndex]}`)
+//.then((res) => {
+//setScheduleEventData((prev) => [...prev, ...res.data.body.schedule_events]);
+//setScheduleEventKey(res.data.body.key);
+//});
+//}
+
+// const [makeSingleScheduleModal, setMakeSingleScheduleModal] = useState(false);
+
+// 일정 추가하기 버튼 누르면 동작하는애
+// const toggleMakeSingleScheduleModal = () => {
+//   setMakeSingleScheduleModal((makeSingleScheduleModal) => !makeSingleScheduleModal);
+// };

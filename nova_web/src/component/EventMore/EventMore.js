@@ -1,14 +1,12 @@
 import style from "./EventMore.module.css";
 import ModalRectangle from "./../../img/ModalRectangle.png";
 import { useState, useEffect } from "react";
-import BaseBundle, { EventBundle } from "../ScheduleEvent/ScheduleBundle";
 import ScheduleEvent from "../EventCard/EventCard";
 import HEADER from "../../constant/header";
 import postApi from "../../services/apis/postApi";
-import { ScheduleEventAdd, ScheduleDetailAdd, ScheduleAdd } from "../ScheduleMore/ScheduleMore";
+import { ScheduleDetailAdd, ScheduleAdd } from "../ScheduleMore/ScheduleMore";
 import TimeChart from "../../pages/SchedulePage/TimeChart/TimeChart";
 import { tempWeekDayData, tempScheduleData } from "../../pages/SchedulePage/TestScheduleData";
-import ScheduleCalendar from "../ScheduleCalendar/ScheduleCalendar";
 import { ScheduleBundle } from "../../component/ScheduleEvent/ScheduleBundle";
 import { MakeScheduleDetail } from "../ScheduleSelect/ScheduleSelect";
 

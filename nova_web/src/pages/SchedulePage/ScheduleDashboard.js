@@ -1,6 +1,6 @@
+import EventComponent from "./EventComponent.jsx";
 import "./style.css";
 import vertical_line from "./../../img/vertical_line.svg";
-import EventComponent from "./EventComponent.jsx";
 import ScheduleTopic from "../../component/ScheduleTopic/ScheduleTopic.js";
 import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
@@ -11,6 +11,8 @@ import mainApi from "../../services/apis/mainApi.js";
 import NavBar from "../../component/NavBar/NavBar.js";
 
 const ScheduleDashboard = () => {
+  const navigate = useNavigate();
+
   let [weekDayData, setWeekDayData] = useState([]);
   let [scheduleData, setScheduleData] = useState([]);
   //let [eventData, setEventData] = useState([]);
@@ -23,7 +25,12 @@ const ScheduleDashboard = () => {
 
   const brightMode = "brigthMode";
 
-  // 목표 날짜를 받아오고
+  // 네비게이션 함수
+  const handleNavigate = (path) => {
+    navigate(`${path}`);
+  };
+
+  // 주간 날짜 받기
   function fetchTargetMonthWeek() {
     mainApi.get("time_table_server/try_get_dashboard_data").then((res) => {
       setTargetMonth(res.data.body.target_month);
@@ -32,15 +39,7 @@ const ScheduleDashboard = () => {
     });
   }
 
-  //  // 오늘짜 이벤트 데이터 받아오고
-  //// 이것도 나중에 오늘 말고 내일, 이틀 후 사흘 후 이런걸로 해야될 듯
-  //function fetchEventData() {
-  //mainApi.get("time_table_server/try_get_event_board_data").then((res) => {
-  //setEventData(res.data.body.schedule_events);
-  //});
-  //}
-
-  // 시간 차트 받아오고
+  // 시간 차트 데이터 받기
   function fetchTimeChartData() {
     mainApi.get("time_table_server/try_get_today_time_chart").then((res) => {
       setScheduleData(res.data.body.schedule_blocks);
@@ -48,8 +47,7 @@ const ScheduleDashboard = () => {
     });
   }
 
-  // 오늘짜 이벤트 데이터 받아오고
-  // 이것도 나중에 오늘 말고 내일, 이틀 후 사흘 후 이런걸로 해야될 듯
+  // 추천 주제 데이터 받기
   function fetchBiasData() {
     mainApi.get("time_table_server/try_get_recommended_bias_list").then((res) => {
       setBiasData(res.data.body.biases);
@@ -58,15 +56,9 @@ const ScheduleDashboard = () => {
 
   useEffect(() => {
     fetchTargetMonthWeek();
-    //fetchEventData();
     fetchBiasData();
     fetchTimeChartData();
   }, []);
-
-  const navigate = useNavigate();
-  const handleNavigate = (path) => {
-    navigate(`${path}`);
-  };
 
   return (
     <div className="container">
@@ -128,9 +120,17 @@ const ScheduleDashboard = () => {
           })}
         </div>
       </div>
-      <NavBar brightMode={brightMode}></NavBar>
+      <NavBar brightMode={brightMode} />
     </div>
   );
 };
 
 export default ScheduleDashboard;
+
+//  // 오늘짜 이벤트 데이터 받아오고
+//// 이것도 나중에 오늘 말고 내일, 이틀 후 사흘 후 이런걸로 해야될 듯
+//function fetchEventData() {
+//mainApi.get("time_table_server/try_get_event_board_data").then((res) => {
+//setEventData(res.data.body.schedule_events);
+//});
+//}

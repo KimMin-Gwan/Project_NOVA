@@ -64,14 +64,6 @@ export default function SearchPage() {
     }
   }
 
-  function onClickList(word) {
-    if (word) {
-      navigate(`/search_result?keyword=${word}`);
-    } else {
-      alert("검색어를 입력해주세요.");
-    }
-  }
-
   return (
     <div className="container">
       <Header />

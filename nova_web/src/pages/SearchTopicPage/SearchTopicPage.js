@@ -8,15 +8,14 @@ import useToggleMore from "../../hooks/useToggleMore";
 import mainApi from "../../services/apis/mainApi";
 import HEADER from "../../constant/header";
 import FollowBiasModal from "../../component/FollowBiasModal/FollowBiasModal";
-import postApi from "../../services/apis/postApi";
+import { TITLE_TYPES } from "../../constant/type_data";
 
 export default function SearchTopicPage() {
-  let [eventData, setEventData] = useState([]);
   const navigate = useNavigate();
-  const [clickedBid, setClickedBid] = useState();
-
   const { moreClick, handleToggleMore } = useToggleMore();
-  const [isModal, setIsModal] = useState(false);
+  // const [clickedBid, setClickedBid] = useState();
+
+  const [isOpenModal, setIsOpenModal] = useState(false);
 
   const [biasData, setBiasData] = useState([]);
   const [nextKey, setNextKey] = useState(-1);
@@ -34,7 +33,7 @@ export default function SearchTopicPage() {
 
   // 팔로우 모달창 나오게 하기
   function handleFollowModal() {
-    setIsModal((isModal) => !isModal);
+    setIsOpenModal((prev) => !prev);
   }
 
   function handleNavigate(path) {
@@ -42,6 +41,7 @@ export default function SearchTopicPage() {
   }
 
   useEffect(() => {
+    setNextKey(-1);
     fetchSearchData();
   }, [searchKeyword]);
 
@@ -75,7 +75,7 @@ export default function SearchTopicPage() {
         } else {
           alert("팔로우 완료!");
         }
-        setIsModal(false);
+        setIsOpenModal(false);
         window.location.reload();
       });
 
@@ -95,29 +95,29 @@ export default function SearchTopicPage() {
   return (
     <div className={`container ${style["SearchTopicPage"]}`}>
       <ScheduleSearch
-        title={0}
+        title={TITLE_TYPES.BIAS}
         fetchSearchData={fetchSearchData}
         searchKeyword={searchKeyword}
         setSearchKeyword={setSearchKeyword}
       />
 
       <ul className={style["scheduleList"]}>
-        {biasData.map((item) => (
-          <li key={item.bid}>
+        {biasData.map((bias) => (
+          <li key={bias.bid}>
             <ScheduleTopic
-              key={item.bid}
-              {...item}
-              toggleClick={() => handleToggleMore(item.bid)}
+              key={bias.bid}
+              {...bias}
+              toggleClick={() => handleToggleMore(bias.bid)}
             />
-            {moreClick[item.bid] && (
+            {moreClick[bias.bid] && (
               <ScheduleFollow
-                scheduleClick={() => handleNavigate(`/search/schedule?keyword=${item.bname}`)}
+                scheduleClick={() => handleNavigate(`/search/schedule?keyword=${bias.bname}`)}
                 followClick={handleFollowModal}
               />
             )}
-            {isModal && (
+            {isOpenModal && (
               <FollowBiasModal
-                biasData={item}
+                biasData={bias}
                 closeModal={handleFollowModal}
                 fetchFollowBias={fetchTryFollowBias}
               />
