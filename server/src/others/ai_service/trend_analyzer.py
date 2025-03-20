@@ -1,5 +1,0 @@
-
-
-class TrendAnalyzer:
-    pass
-
