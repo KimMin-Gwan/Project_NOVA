@@ -6,7 +6,7 @@ import React from "react";
 import Input from "../Input/Input";
 import { TITLE_TYPES } from "../../constant/type_data";
 
-const keyword = ["인터넷방송", "유튜버", "버튜버"];
+const KEYWORD = ["인터넷방송", "유튜버", "버튜버"];
 
 const TITLES = {
   [TITLE_TYPES.BIAS]: { titleName: "주제 탐색", button: "탐색" },
@@ -50,7 +50,7 @@ export default function ScheduleSearch({
       </div>
       <section className={style["wordSection"]}>
         <img src={arrow} alt="화살표" />
-        {keyword.map((item, index) => {
+        {KEYWORD.map((item, index) => {
           return <button key={index}>{item}</button>;
         })}
       </section>

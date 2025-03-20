@@ -28,12 +28,10 @@ import SearchResultPage from "./pages/SearchResultPage/SearchResultPage.js";
 import NoticePage from "./pages/NoticePage/NoticePage.js";
 import HomePage from "./pages/HomePage/HomePage.js";
 import ReportPage from "./pages/ReportPage/ReportPage.js";
-import ScheduleTopic from "./component/ScheduleTopic/ScheduleTopic.js";
 import SearchSchedulePage from "./pages/SearchSchedulePage/SearchSchedulePage.js";
 import TestPage from "./pages/TestPage/TestPage.js";
 import ScheduleDashboard from "./pages/SchedulePage/ScheduleDashboard.js";
 import SearchTopicPage from "./pages/SearchTopicPage/SearchTopicPage.js";
-import ScheduleResearch from "./pages/ScheduleResearch/ScheduleResearch.js";
 // 다크 모드 클래스 반환 함수
 export function getModeClass(mode) {
   return mode === "dark" ? "dark-mode" : "bright-mode";
