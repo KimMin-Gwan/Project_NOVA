@@ -32,6 +32,7 @@ import SearchSchedulePage from "./pages/SearchSchedulePage/SearchSchedulePage.js
 import TestPage from "./pages/TestPage/TestPage.js";
 import ScheduleDashboard from "./pages/SchedulePage/ScheduleDashboard.js";
 import SearchTopicPage from "./pages/SearchTopicPage/SearchTopicPage.js";
+import MySchedulePage from "./pages/MySchedulePage/MySchedulePage.js";
 // 다크 모드 클래스 반환 함수
 export function getModeClass(mode) {
   return mode === "dark" ? "dark-mode" : "bright-mode";
@@ -100,7 +101,7 @@ function App() {
       <Route path="/bias_funding/:type" element={<MoreProjects />}></Route> */}
 
       {/* 테스트 페이지 및 에러 페이지 */}
-      {/* <Route path="/test1" element={<SearchSchedulePage2 />}></Route> */}
+      <Route path="/test1" element={<MySchedulePage />}></Route>
       <Route path="/test2" element={<TestPage />}></Route>
       <Route path="*" element={<div>404 Error</div>}></Route>
 
