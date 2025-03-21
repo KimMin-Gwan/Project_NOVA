@@ -16,6 +16,7 @@ const TITLES = {
 
 export default function ScheduleSearch({
   title,
+  makeSchedule,
   searchKeyword,
   setSearchKeyword,
   fetchSearchData,
@@ -29,7 +30,11 @@ export default function ScheduleSearch({
     <div className={style["SearchSection"]}>
       <div className={style["sectionTop"]}>
         <h3>{titles.titleName}</h3>
-        {titles.button !== "" && <button>일정 {titles.button}</button>}
+        {titles.button !== "" && <button
+            onClick={() => {
+              makeSchedule();
+            }}
+        >일정 {titles.button}</button>}
       </div>
       <div className={style["searchFac"]}>
         <div className={style["searchBox"]}>

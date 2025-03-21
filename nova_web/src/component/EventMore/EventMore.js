@@ -8,7 +8,7 @@ import { ScheduleDetailAdd, ScheduleAdd } from "../ScheduleMore/ScheduleMore";
 import TimeChart from "../../pages/SchedulePage/TimeChart/TimeChart";
 import { tempWeekDayData, tempScheduleData } from "../../pages/SchedulePage/TestScheduleData";
 import { ScheduleBundle } from "../../component/ScheduleEvent/ScheduleBundle";
-import { MakeScheduleDetail } from "../ScheduleSelect/ScheduleSelect";
+import ScheduleSelect, { MakeScheduleDetail } from "../ScheduleSelect/ScheduleSelect";
 
 export function DetailModal({ closeSchedule, isOpen, children }) {
   const [backgroundColor, setBackgroundColor] = useState("");
@@ -61,11 +61,29 @@ export function DetailModal({ closeSchedule, isOpen, children }) {
   );
 }
 
+async function fetchTimeTableData(sids) {
+  try {
+    const response = await postApi.post("time_table_server/get_time_chart_with_other_schedule", {
+      header: HEADER,
+      body: {
+        sids: sids,
+      },
+    });
+    return response.data.body; // 데이터 반환
+  } catch (error) {
+    return {schedule_blocks:[], week_day_datas:[]}; // 에러 발생 시 null 또는 다른 처리
+  }
+}
+
+
 export function BundleScheduleDetail({ closeSchedule, isOpen, target }) {
   const [selectBack, setSelectBack] = useState({});
   const [isSelect, setIsSelect] = useState(1);
-  const [sids, setSids] = useState([]);
-  const [schedules, setSchedules] = useState([]);
+  const [sids, setSids] = useState([]);  // 선택한 schedule의 sid 리스트임
+  const [schedules, setSchedules] = useState([]); // 이건 표시되는 모든 schedule임
+
+  const [timeWeekDayData, setTimeWeekDayData] = useState([]);
+  const [timeChartData, setTimeChartData] = useState([]);
 
   // 내 스케줄에 등록하는 함수 (추가하기 버튼 누르면 동작해야됨)
   // 완료하면 성공했다고 알려주면 좋을듯
@@ -77,6 +95,7 @@ export function BundleScheduleDetail({ closeSchedule, isOpen, target }) {
       },
     });
   }
+
 
   // 스케줄 번들에 있는 스케줄들 받아오는 함수
   async function fetchSchedules() {
@@ -93,6 +112,20 @@ export function BundleScheduleDetail({ closeSchedule, isOpen, target }) {
         setSchedules((prev) => [...prev, ...res.data.body.schedules]);
       });
   }
+
+  // 타임 차트 데이터를 받아오는 비동기 함수
+  const fetchData = async (sids) => {
+    let fetchBody = {}
+    fetchBody = await fetchTimeTableData(sids);
+    setTimeChartData(fetchBody.schedule_blocks);
+    setTimeWeekDayData(fetchBody.week_day_datas);
+  }
+
+  // 선택이 되면 패치 받아야됨
+  useEffect(() => {
+    fetchData(sids)
+  }, [sids]);
+
   // 취소했을 때 모두 취소되어서 변화하도록함
   useEffect(() => {
     if (isSelect === 1) {
@@ -104,8 +137,10 @@ export function BundleScheduleDetail({ closeSchedule, isOpen, target }) {
   useEffect(() => {
     // 토글창 열리면 패치 받아오기
     if (isOpen) {
+      let fetchBody = {}
       handleReset();
       fetchSchedules();
+      fetchData([])
     }
   }, [isOpen]);
 
@@ -134,8 +169,6 @@ export function BundleScheduleDetail({ closeSchedule, isOpen, target }) {
         return [...prev, item.sid];
       }
     });
-
-    console.log(sids);
     // 새로운 값에 할당하여 값을 설정해주어서 상태가 즉시 업데이트 되도록 해준다
   }
 
@@ -150,8 +183,6 @@ export function BundleScheduleDetail({ closeSchedule, isOpen, target }) {
 
   // 일정 모두 선택
   function handleAllSelect() {
-    console.log("모두선택");
-
     ////색상변화
     schedules.map((item, index) => handleSelect(item, index));
     setIsSelect(4);
@@ -187,7 +218,8 @@ export function BundleScheduleDetail({ closeSchedule, isOpen, target }) {
           selectBack={selectBack[index] || ""}
         />
       ))}
-      <TimeChart weekDayData={tempWeekDayData} scheduleData={tempScheduleData} />
+
+      <TimeChart weekDayData={timeWeekDayData} scheduleData={timeChartData} />
     </DetailModal>
   );
 }
@@ -195,6 +227,8 @@ export function BundleScheduleDetail({ closeSchedule, isOpen, target }) {
 // 이건 스케줄 목록에서 추가하기 버튼 누르면 나오는 자세히 모달창(밑에서 위로 올라오는애)
 export function ScheduleDetail({ closeSchedule, isOpen, target }) {
   const [sids, setSids] = useState([]);
+  const [timeWeekDayData, setTimeWeekDayData] = useState([]);
+  const [timeChartData, setTimeChartData] = useState([]);
 
   // 내 스케줄에 등록하는 함수 (추가하기 버튼 누르면 동작해야됨)
   async function fetchTryAddSchedule() {
@@ -206,10 +240,24 @@ export function ScheduleDetail({ closeSchedule, isOpen, target }) {
     });
   }
 
+  // 타임 차트 데이터를 받아오는 비동기 함수
+  const fetchData = async (sids) => {
+    let fetchBody = {}
+    fetchBody = await fetchTimeTableData(sids);
+    setTimeChartData(fetchBody.schedule_blocks);
+    setTimeWeekDayData(fetchBody.week_day_datas);
+  }
+
+  //// 선택이 되면 패치 받아야됨
+  //useEffect(() => {
+    //fetchData(sids)
+  //}, [sids]);
+
   useEffect(() => {
     // 토글창 열리면 패치 받아오기
     if (isOpen) {
-      setSids([target.sid]);
+      setSids([target.sid])
+      fetchData([target.sid])
     }
   }, [isOpen]);
 
@@ -217,7 +265,7 @@ export function ScheduleDetail({ closeSchedule, isOpen, target }) {
     <DetailModal closeSchedule={closeSchedule} isOpen={isOpen}>
       <ScheduleEvent {...target} />
       <ScheduleAdd target={target} addClick={fetchTryAddSchedule} />
-      <TimeChart weekDayData={tempWeekDayData} scheduleData={tempScheduleData} />
+      <TimeChart weekDayData={timeWeekDayData} scheduleData={timeChartData} />
     </DetailModal>
   );
 }
@@ -250,7 +298,7 @@ export function MakeSingleSchedule({ closeSchedule, isOpen }) {
 
   return (
     <DetailModal closeSchedule={closeSchedule} isOpen={isOpen}>
-      <MakeScheduleDetail></MakeScheduleDetail>
+      <ScheduleSelect></ScheduleSelect>
     </DetailModal>
   );
 }

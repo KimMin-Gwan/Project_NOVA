@@ -8,7 +8,7 @@ import { ScheduleBundle } from "../../component/ScheduleEvent/ScheduleBundle";
 import ScheduleCard from "../../component/EventCard/EventCard";
 import ScheduleSearch from "../../component/ScheduleSearch/ScheduleSearch";
 import { ScheduleMore, ScheduleAdd } from "../../component/ScheduleMore/ScheduleMore";
-import { BundleScheduleDetail, ScheduleDetail } from "../../component/EventMore/EventMore";
+import { BundleScheduleDetail, ScheduleDetail, MakeSingleSchedule } from "../../component/EventMore/EventMore";
 
 import useToggleMore from "../../hooks/useToggleMore";
 
@@ -30,6 +30,7 @@ export default function SearchSchedulePage() {
   // 모달
   const [addScheduleModal, setAddScheduleModal] = useState(false);
   const [addScheduleBundleModal, setAddScheduleBundleModal] = useState(false);
+  const [makeScheduleModal, setMakeScheduleModal] = useState(false);
 
   // 데이터
   const [scheduleBundleData, setScheduleBundleData] = useState([]);
@@ -84,6 +85,11 @@ export default function SearchSchedulePage() {
   };
 
   // 일정 추가하기 버튼 누르면 동작하는애
+  const toggleMakeScheduleModal = (target) => {
+    setMakeScheduleModal((makeScheduleModal) => !makeScheduleModal);
+  };
+
+  // 일정 추가하기 버튼 누르면 동작하는애
   const toggleAddScheduleModal = (target) => {
     setAddScheduleModal((addScheduleModal) => !addScheduleModal);
     setTargetSchedule(target);
@@ -122,6 +128,7 @@ export default function SearchSchedulePage() {
     <div className="container SearchSchedulePage">
       <ScheduleSearch
         title={TITLE_TYPES.SCHEDULE}
+        makeSchedule={toggleMakeScheduleModal}
         fetchSearchData={fetchSearchData}
         searchKeyword={searchKeyword}
         setSearchKeyword={setSearchKeyword}
@@ -182,11 +189,10 @@ export default function SearchSchedulePage() {
         isOpen={addScheduleModal}
         target={targetSchedule}
       />
-      {/* 
       <MakeSingleSchedule
-        closeSchedule={toggleMakeSingleScheduleModal}
-        isOpen={makeSingleScheduleModal}
-      /> */}
+        closeSchedule={toggleMakeScheduleModal}
+        isOpen={makeScheduleModal}
+      />
     </div>
   );
 }

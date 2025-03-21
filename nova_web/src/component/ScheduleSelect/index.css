@@ -1,0 +1,69 @@
+.ScheduleSelect {
+  display: flex;
+  flex-direction: column;
+}
+
+.date,
+.time {
+  display: flex;
+  align-items: center;
+}
+
+#startDate,
+#endDate,
+#startTime,
+#endTime {
+  display: none;
+}
+
+.DateAndTimeInfo {
+  display: flex;
+  justify-content: space-around;
+  /* margin-bottom: 50px; */
+}
+
+.DatePicker,
+.TimePicker {
+  width: 100%;
+  height: 100%;
+}
+
+.DatePicker__container {
+  font-size : 14px;
+  padding-left : 20px;
+  padding-right : 20px;
+  padding-top : 8px;
+  display: flex;
+  align-items: center; /* 세로 정렬을 가운데로 */
+  gap: 18px; /* YearInfo와 MonthInfo 사이 간격 조정 */
+  padding-bottom : 12px;
+}
+
+.TimePicker__wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.SearchSection {
+  background-color: white;
+  padding: 23px 28px 20px 28px;
+
+  & h3 {
+    margin: 0;
+    font-weight: 600;
+    font-size: 20px;
+  }
+
+  & button {
+    color: #585858;
+    background-color: #e4e4e4;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 11px;
+  }
+}
+
+.sectionTop {
+  display: flex;
+  justify-content: space-between;
+}
