@@ -60,9 +60,8 @@ class TImeTableController:
     def get_time_chart(self, database:Local_Database, request:RequestManager) -> BaseModel: 
         model = ScheduleChartModel(database=database)
         
-        #if request.jwt_payload != "":
         
-        model.set_user_with_email(request=request.data_payload)
+        model.set_user_with_email(request=request.jwt_payload)
         # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
         if not model._set_tuser_with_tuid():
             return model
@@ -73,26 +72,42 @@ class TImeTableController:
             
         return model
     
-    # 내 타임테이블 불러오기
-    def get_my_time_table(self, database:Local_Database, request:RequestManager) -> BaseModel: 
-        model = MultiScheduleModel(database=database)
+    # 내 타임 차트 가지고 오기
+    def get_time_chart_with_sids(self, database:Local_Database, request:RequestManager) -> BaseModel: 
+        model = ScheduleChartModel(database=database)
         
-        if request.jwt_payload != "":
-            model.set_user_with_email(request=request.jwt_payload)
-            # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
-            if not model._set_tuser_with_tuid():
-                return model
-        else:
-            return model # 여기 return을 지우면됨       ---
-
-        # 당장에는 로그인 안하면 보내줄 데이터는 없다!
-        # 나중에 뭐 추가로 노출 시켜주고 싶으면 위에 return 을 지우고 아래에
-        # 비로그인 사용자를 대상으로 하는 로직을 넣어라
         
-        # 자동으로 노출 schedule 지우는거 옵션을 나중에 넣어주면 여기 추가하면됨
-        model.set_schedule_by_this_week()
+        model.set_user_with_email(request=request.jwt_payload)
+        # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
+        if not model._set_tuser_with_tuid():
+            return model
 
+        
+        if model.is_tuser_alive():
+            model.set_my_schedule_in_by_day(target_date=request.data_payload.date, sids=request.data_payload.sids)
+            
         return model
+    
+    ## 내 타임테이블 불러오기
+    #def get_my_time_table(self, database:Local_Database, request:RequestManager) -> BaseModel: 
+        #model = MultiScheduleModel(database=database)
+        
+        #if request.jwt_payload != "":
+            #model.set_user_with_email(request=request.jwt_payload)
+            ## 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
+            #if not model._set_tuser_with_tuid():
+                #return model
+        #else:
+            #return model # 여기 return을 지우면됨       ---
+
+        ## 당장에는 로그인 안하면 보내줄 데이터는 없다!
+        ## 나중에 뭐 추가로 노출 시켜주고 싶으면 위에 return 을 지우고 아래에
+        ## 비로그인 사용자를 대상으로 하는 로직을 넣어라
+        
+        ## 자동으로 노출 schedule 지우는거 옵션을 나중에 넣어주면 여기 추가하면됨
+        #model.set_schedule_by_this_week()
+
+        #return model
 
     # 추천하는 바이어스 불러오기
     def get_recommended_bias_list(self, database:Local_Database, request:RequestManager, num_recommend=5) -> BaseModel:

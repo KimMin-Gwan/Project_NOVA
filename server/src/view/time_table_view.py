@@ -85,7 +85,23 @@ class TimeTableView(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
 
             return response
+        
+        # 타임 차트에 임시 일정들 추가로 넣어주기
+        @self.__app.post('/time_table_server/get_time_chart_with_other_schedule')
+        def try_get_today_time_chart_with_other_schedule(request:Request, raw_requset:dict):
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
+            data_payload = TimeChartRequest(request=raw_requset)
+            
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
+            time_table_controller =TImeTableController()
+            model = time_table_controller.get_time_chart_with_sids(database=self.__database,
+                                                              request=request_manager)
+            
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+
+            return response
         
         # 보류
         # 홈 화면 젤 밑에 나오는 bias 데이터 들인데 이건 여기다가 만들지 말지 고민중임
@@ -410,4 +426,9 @@ class ScheduleWithBidRequest(RequestHeader):
 class DateRequest(RequestHeader):
     def __init__(self, date)-> None:
         self.date:str=date
-        self.email:str="alsrhks2508@naver.com"
+        
+class TimeChartRequest(RequestHeader):
+    def __init__(self, request):
+        body:dict = request['body']
+        self.date:str=body.get('date',datetime.now().strftime("%Y/%m/%d"))
+        self.sids = body.get("sids", [])

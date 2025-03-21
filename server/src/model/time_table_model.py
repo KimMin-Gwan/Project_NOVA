@@ -22,8 +22,10 @@ class TimeTableModel(BaseModel):
     def _set_tuser_with_tuid(self, tuid="") -> bool:
         # 유저를 먼져 부르고 해야됨 반드시
         if tuid == "" :
+            # 만약 로그인한 상태가 아니면 그냥 빈 TUSER를 가지게 될것임
             if self._user.uid == "":
                 return False
+            # 만약 로그인한 상태가 아니면 그냥 빈 TUSER를 가지게 될것임
             else:
                 tuid = self._user.uid
             
@@ -101,6 +103,20 @@ class TimeTableModel(BaseModel):
             time_str = f"{int(years)} 년 전"
 
         return time_str
+
+    # 쨍하고 밝은 색깔 코드 생성기
+    def _make_color_code(self):
+        # 더 쨍하고 밝은 색상을 위해 범위 설정
+        r = random.randint(170, 255)  # 밝은 색상 범위
+        g = random.randint(170, 255)
+        b = random.randint(170, 255)
+
+        # 흰색과의 혼합을 줄여 더 선명한 색상 유지
+        r = (r * 3 + 255) // 4
+        g = (g * 3 + 255) // 4
+        b = (b * 3 + 255) // 4
+
+        return f'#{r:02x}{g:02x}{b:02x}'
 
     # bias 세팅
     def set_num_bias(self):
@@ -1064,8 +1080,7 @@ class AddScheduleModel(TimeTableModel):
         schedule.uname = self._user.uname
         schedule.code = self.__make_schedule_code()
         schedule.update_datetime = datetime.today().strftime("%Y/%m/%d-%H:%M:%S")
-
-
+        schedule.color_code = self._make_color_code()
         return schedule
 
     def make_new_schedule_bundle(self, schedule_list:list, sbname:str, bid:str):
@@ -1282,7 +1297,7 @@ class ScheduleBlockTreater():
         return sorted_block_list, num_schedule_block
 
     #  만들기
-    def make_schedule_block(self, schedule:Schedule):
+    def make_schedule_block(self, schedule:Schedule, sids = []):
         schedule_block = ScheduleBlock()
         schedule_block.make_with_dict(schedule.get_dict_form_data())
 
@@ -1292,9 +1307,14 @@ class ScheduleBlockTreater():
 
         # 위크 데이트 블록 리스트에 날짜가 포함되었는지 확인하고 넣을 것
         schedule_block = self.__make_timeblocks(schedule_block=schedule_block)
+        
+        # 만약 추가하기 파트에서 선택한 임시 스케줄이라면 색깔을 바꿔서 보낼것임
+        if schedule_block.sid in sids:
+            # 아래의 컬러 코드가 우리 이미지 컬러코드(파스텔톤)
+            schedule_block.color_code = "#D0E4FF"
 
-        schedule_block.color_code = self.__make_color_code()
         return schedule_block
+    
 
     def __make_timeblocks(self, schedule_block:ScheduleBlock) -> ScheduleBlock:
         current_datetime = schedule_block.start_datetime
@@ -1366,19 +1386,20 @@ class ScheduleBlockTreater():
 
         return schedule_block
 
-    # 쨍하고 밝은 색깔 코드 생성기
-    def __make_color_code(self):
-        # 더 쨍하고 밝은 색상을 위해 범위 설정
-        r = random.randint(170, 255)  # 밝은 색상 범위
-        g = random.randint(170, 255)
-        b = random.randint(170, 255)
 
-        # 흰색과의 혼합을 줄여 더 선명한 색상 유지
-        r = (r * 3 + 255) // 4
-        g = (g * 3 + 255) // 4
-        b = (b * 3 + 255) // 4
+    ## 쨍하고 밝은 색깔 코드 생성기
+    #def __make_color_code(self):
+        ## 더 쨍하고 밝은 색상을 위해 범위 설정
+        #r = random.randint(170, 255)  # 밝은 색상 범위
+        #g = random.randint(170, 255)
+        #b = random.randint(170, 255)
 
-        return f'#{r:02x}{g:02x}{b:02x}'
+        ## 흰색과의 혼합을 줄여 더 선명한 색상 유지
+        #r = (r * 3 + 255) // 4
+        #g = (g * 3 + 255) // 4
+        #b = (b * 3 + 255) // 4
+
+        #return f'#{r:02x}{g:02x}{b:02x}'
 
 # 복수 스케줄을 반환할 때 사용하는 모델
 # 아마 대부분이 여러개를 반환해야하니 이거 쓰면 될듯
@@ -1388,14 +1409,16 @@ class ScheduleChartModel(TimeTableModel):
         self.__schedule_blocks = []
         self.__week_day_datas = []
         
-    
     # 내가 추가한 스케줄 데이터 뽑기를 날짜로
     # date는 날짜임 , 형태는 2025/03/06 임
     # date안넣으면 기본적으로 오늘자로 감
-    def set_my_schedule_in_by_day(self, target_date=datetime.today().strftime("%Y/%m/%d"), days=5):
+    def set_my_schedule_in_by_day(self, target_date=datetime.today().strftime("%Y/%m/%d"), days=5, sids =[]):
+        target_sids = []
+        target_sids.extend(self._tuser.sids)
+        target_sids.extend(sids)
         
         # 내가 추가한 스케줄을 다 가지고 옴
-        schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids=self._tuser.sids)
+        schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids=target_sids)
         
         target_date = datetime.strptime(target_date, ("%Y/%m/%d"))
 
@@ -1420,7 +1443,7 @@ class ScheduleChartModel(TimeTableModel):
         weekday_blocks = schedule_block_treater.make_default_week_day_data(today=today, days=days)
 
         for schedule in schedules:
-            schedule_block = schedule_block_treater.make_schedule_block(schedule=schedule)
+            schedule_block = schedule_block_treater.make_schedule_block(schedule=schedule, sids=sids)
             self.__schedule_blocks.append(schedule_block)
             
         over_flowed_schedule:list = schedule_block_treater.claer_over_flowed_schedule()
