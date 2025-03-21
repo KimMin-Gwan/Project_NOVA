@@ -148,9 +148,87 @@ class TimeTableModel(BaseModel):
         else:
             return True
 
+    # 현재 시간이 end_date/ end_time을 넘기면 True, 아니면 False다.
+    def __check_schedule_time(self, date:str, when:str, time:str="", bundle:bool=False):
+        # 날짜 데이터
+        if bundle:
+            date_obj = datetime.strptime(date, "%y년 %m월 %d일")
+        else:
+            date_obj = datetime.strptime(date, "%Y/%m/%d")
+
+        # 시간 데이터가 존재한다면 시간도 같이 붙여야 함
+        if time != "":
+            time_obj = datetime.strptime(time, "%H:%M")
+            date_obj = datetime.combine(date=date_obj.date(), time=time_obj.time())
+
+        if when == "end":
+            return date_obj < datetime.now()
+        elif when == "start":
+            return date_obj > datetime.now()
+
+    # 필터링 옵션을 주면 리스트를 필터링 합니다.
+    def filtering_list_with_option(self, id_list:list, filter_option:str, search_type:str="sid"):
+        if filter_option == "all" or filter_option == "":
+            return id_list
+
+        filtered_id_list = []
+
+        schedule_id_type = ""
+        if search_type == "schedule" or search_type=="sid":
+            schedule_id_type = "sid"
+        elif search_type == "schedule_bundle" or search_type == "sbid":
+            schedule_id_type = "sbid"
+        # elif search_type == "event" or search_type == "seid":
+        #     schedule_id_type = "seid"
+
+        searched_data = self._database.get_datas_with_ids(target_id=schedule_id_type, ids=id_list)
+
+        for data in searched_data:
+            if schedule_id_type == "sid":
+                schedule = Schedule()
+                schedule.make_with_dict(dict_data=data)
+
+                if filter_option == "ended":
+                    # 종료된 일정 서치
+                    if self.__check_schedule_time(date=schedule.end_date, time=schedule.end_time, when="end"):
+                        filtered_id_list.append(schedule.sid)
+                elif filter_option == "in_progress":
+                    # 일정이 끝나지 않았을 떄,
+                    if not self.__check_schedule_time(date=schedule.end_date, time=schedule.end_time, when="end"):
+                        # 현재 시작한 일정
+                        if not self.__check_schedule_time(date=schedule.start_date, time=schedule.start_time, when="start"):
+                            filtered_id_list.append(schedule.sid)
+
+                elif filter_option == "not_start":
+                    # 시작 전인 일정 서치
+                    if self.__check_schedule_time(date=schedule.start_date, time=schedule.start_time, when="start"):
+                        filtered_id_list.append(schedule.sid)
+
+            elif schedule_id_type == "sbid":
+                schedule_bundle = ScheduleBundle()
+                schedule_bundle.make_with_dict(dict_data=data)
+
+                if filter_option == "ended":
+                    # 종료된 일정 번들
+                    if self.__check_schedule_time(date=schedule_bundle.date[1], when="end", bundle=True):
+                        filtered_id_list.append(schedule_bundle.sbid)
+                elif filter_option == "in_progress":
+                    # 종료되지 않은 일정 번들
+                    if not self.__check_schedule_time(date=schedule_bundle.date[1], when="end", bundle=True):
+                        # 시작한 일정 번들
+                        if not self.__check_schedule_time(date=schedule_bundle.date[0], when="start", bundle=True):
+                            filtered_id_list.append(schedule_bundle.sbid)
+
+                elif filter_option == "not_start":
+                    # 시작하지 않은 일정 번들
+                    if self.__check_schedule_time(date=schedule_bundle.date[0], when="start", bundle=True):
+                        filtered_id_list.append(schedule_bundle.sbid)
+
+
+        return filtered_id_list
+
     # 페이징 기법 함수
     def paging_id_list(self, id_list:list, last_index:int, page_size=8):
-
         # 최신순으로 정렬된 상태로 id_list를 받아오기 때문에, 인덱스 번호가 빠를수록 최신의 것
         # 만약에 페이지 사이즈보다 더 짧은 경우도 있을 수 있기에 먼저 정해놓는다.
         # 이러면 페이징된 리스트의 길이에 상관없이, 인덱스를 알아낼 수 있을 것
@@ -335,7 +413,7 @@ class TimeScheduleModel(ScheduleTransformModel):
         self._schedules = []
 
     # 스케쥴 Send Data 만드는 함수
-    def _time_schedule(self, schedule:Schedule):
+    def _time_schedule(self, schedule:Schedule ):
         time_schedule_data = {}
 
         time_schedule_data["sid"] = schedule.sid
@@ -358,7 +436,7 @@ class TimeScheduleModel(ScheduleTransformModel):
     # 스케쥴 리스트 만드는 함수
     def get_tschedule_list(self, schedules):
         for schedule in schedules:
-            self._schedules.append(self._time_schedule(schedule))
+            self._schedules.append(self._time_schedule(schedule=schedule))
 
         return
 
@@ -550,7 +628,7 @@ class MultiScheduleModel(TimeTableModel):
         return search_list
 
     # 스케줄 데이터 서치 함수
-    def __find_schedule_data(self, keyword:str, filtering:str):
+    def __find_schedule_data(self, keyword:str):
         schedule_datas = self._database.get_all_data(target="sid")
         # 왜 불편하게 id_list로 담나요?
         # 페이징할 때 편합니다.
@@ -814,16 +892,17 @@ class MultiScheduleModel(TimeTableModel):
                                      num_schedules:int, last_index:int=-1):
         searched_list = []
 
-        if search_type == "schedule":
-            searched_list = self.__find_schedule_data(keyword=keyword, filtering=filter_option)
-        elif search_type == "schedule_bundle":
-            searched_list = self.__find_schedule_bundle_data(keyword=keyword, filtering=filter_option)
-        elif search_type == "event":
-            searched_list = self.__find_schedule_event_data(keyword=keyword, filtering=filter_option)
+        if search_type == "schedule" or search_type == "sid":
+            searched_list = self.__find_schedule_data(keyword=keyword)
+        elif search_type == "schedule_bundle" or search_type == "sbid":
+            searched_list = self.__find_schedule_bundle_data(keyword=keyword)
+        elif search_type == "event" or search_type == "seid":
+            searched_list = self.__find_schedule_event_data(keyword=keyword)
 
-        searched_list, self._key = self.paging_id_list(id_list=searched_list, last_index=last_index, page_size=num_schedules)
+        filtered_searched_list = self.filtering_list_with_option(id_list=searched_list, search_type=search_type, filter_option=filter_option)
+        filtered_searched_list, self._key = self.paging_id_list(id_list=filtered_searched_list, last_index=last_index, page_size=num_schedules)
 
-        self._make_send_data_with_ids(id_list=searched_list, search_type=search_type)
+        self._make_send_data_with_ids(id_list=filtered_searched_list, search_type=search_type)
 
         return
 
@@ -1111,7 +1190,7 @@ class AddScheduleModel(TimeTableModel):
 
         # 스케쥴 데이터를 추가 할 때, Tuser도 업데이트함
         for s in schedule:
-            self._tuser.sids.append(s.sid)
+            self._tuser.my_sids.append(s.sid)
         self._database.modify_data_with_id(target_id="tuid", target_data=self._tuser.get_dict_form_data())
 
         self.__result = True
@@ -1131,7 +1210,7 @@ class AddScheduleModel(TimeTableModel):
 
         if data_type == "bundle":
             schedules_object = self.make_new_schedule_bundle(schedule_list=schedule_list, sbname=sname, bid=bid)
-            self._tuser.sbids.append(schedules_object)
+            self._tuser.my_sbids.append(schedules_object)
             self._database.modify_data_with_id(target_id="tuid", target_data=self._tuser.get_dict_form_data())
 
         return schedules_object
