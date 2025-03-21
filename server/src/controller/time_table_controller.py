@@ -182,9 +182,10 @@ class TImeTableController:
 
         # 키워드를 넘겨 검색 후, 반환받음
         model.search_schedule_with_keyword(keyword=request.data_payload.keyword,
-                                               search_type=request.data_payload.type,
-                                                last_index=request.data_payload.key,
-                                                num_schedules=num_schedules)
+                                            search_type=request.data_payload.type,
+                                            filter_option=request.data_payload.filter_option,
+                                            last_index=request.data_payload.key,
+                                            num_schedules=num_schedules)
         return model
 
     ## 인터페이스만 존재. 검색어 저장 시스템이 있어야 제대로 시스템이 구축 가능할 듯
@@ -225,11 +226,14 @@ class TImeTableController:
             if not model._set_tuser_with_tuid():
                 return model
 
+        # model.set_user_with_email(request=request.data_payload)
+        # model._set_tuser_with_tuid()
+
         model.get_my_selected_schedules(bid=request.data_payload.bid,
                                         last_index=request.data_payload.key,
                                         num_schedules=num_schedules)
 
-        return
+        return model
 
 
 
@@ -268,13 +272,13 @@ class TImeTableController:
     def make_new_single_schedule(self, database:Local_Database, request:RequestManager) -> BaseModel: 
         model = AddScheduleModel(database=database)
         
-        # if request.jwt_payload != "":
-        #     model.set_user_with_email(request=request.jwt_payload)
-        #     # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
-        #     if not model._set_tuser_with_tuid():
-        #         return model
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
+            # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
+            if not model._set_tuser_with_tuid():
+                return model
+        # model.set_user_with_email(request=request.data_payload)
 
-        model.set_user_with_email(request=request.data_payload)
         schedule = model.make_new_single_schedule(data_payload=request.data_payload, bid=request.data_payload.bid)
     
         # 리스트로 넣어야됨(파라미터가 list를 받음)

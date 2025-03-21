@@ -550,7 +550,7 @@ class MultiScheduleModel(TimeTableModel):
         return search_list
 
     # 스케줄 데이터 서치 함수
-    def __find_schedule_data(self, keyword:str):
+    def __find_schedule_data(self, keyword:str, filtering:str):
         schedule_datas = self._database.get_all_data(target="sid")
         # 왜 불편하게 id_list로 담나요?
         # 페이징할 때 편합니다.
@@ -558,7 +558,6 @@ class MultiScheduleModel(TimeTableModel):
 
         # 찾기
         for schedule_data in schedule_datas:
-            # 일정코드로 검색하는 경우
             if keyword in schedule_data["code"]:
                 schedule_ids.append(schedule_data['sid'])
                 continue
@@ -811,15 +810,16 @@ class MultiScheduleModel(TimeTableModel):
         return
 
     # 키워드를 통해 검색합니다.
-    def search_schedule_with_keyword(self, keyword:str, search_type:str, num_schedules:int, last_index:int=-1):
+    def search_schedule_with_keyword(self, keyword:str, search_type:str, filter_option:str,
+                                     num_schedules:int, last_index:int=-1):
         searched_list = []
 
         if search_type == "schedule":
-            searched_list = self.__find_schedule_data(keyword=keyword)
+            searched_list = self.__find_schedule_data(keyword=keyword, filtering=filter_option)
         elif search_type == "schedule_bundle":
-            searched_list = self.__find_schedule_bundle_data(keyword=keyword)
+            searched_list = self.__find_schedule_bundle_data(keyword=keyword, filtering=filter_option)
         elif search_type == "event":
-            searched_list = self.__find_schedule_event_data(keyword=keyword)
+            searched_list = self.__find_schedule_event_data(keyword=keyword, filtering=filter_option)
 
         searched_list, self._key = self.paging_id_list(id_list=searched_list, last_index=last_index, page_size=num_schedules)
 

@@ -129,10 +129,9 @@ class TimeTableView(Master_View):
         # type : schedule, schedule_bundle, event
         # 완료 (테스트만 필요)
         @self.__app.get('/time_table_server/try_search_schedule_with_keyword')
-        def try_search_schedule(request:Request, keyword:Optional[str] = "", key:Optional[int]=-1, type:Optional[str]=""):
-            
+        def try_search_schedule(request:Request, filter_option:Optional[str]="", keyword:Optional[str] = "", key:Optional[int]=-1, type:Optional[str]=""):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
-            data_payload = SearchRequest(keyword=keyword, key=key, type=type)
+            data_payload = SearchRequest(keyword=keyword, key=key, search_type=type, filter_option=filter_option)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
             time_table_controller =TImeTableController()
@@ -166,9 +165,9 @@ class TimeTableView(Master_View):
         # Bias 서치
         # 팔로워 서치부분과는 다르게  둠
         @self.__app.get('/time_table_server/try_search_bias')
-        def try_search_bias_with_keyword(request:Request, keyword:Optional[str]="", key:Optional[int]=-1):
+        def try_search_bias_with_keyword(request:Request,  keyword:Optional[str]="", key:Optional[int]=-1):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
-            data_payload = SearchRequest(keyword=keyword, key=key, type="bias")
+            data_payload = SearchRequest(keyword=keyword, key=key, search_type="bias")
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
             time_table_controller =TImeTableController()
@@ -215,8 +214,7 @@ class TimeTableView(Master_View):
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response
-        
-        
+
         # 1.5버전까지 반려됨
         # 이벤트는 이곳으로 추가함
         #@self.__app.get('/time_table_server/try_add_event')
@@ -252,24 +250,26 @@ class TimeTableView(Master_View):
         # 완료
         # bid에서 내가 선택했는 스케줄들 볼때 쓰는 엔드 포인트. 로그인 필수
         # 테스트는 아직 못함
-        @self.__app.get('/time_table_server/try_search_my_schedule_with_bid')
-        def try_search_my_schedule_with_bid(request:Request, bid:Optional[str]=""):
-            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
-            data_payload = ScheduleWithBidRequest(bid=bid)
-            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+        # @self.__app.get('/time_table_server/try_search_my_schedule_with_bid')
+        # def try_search_my_schedule_with_bid(request:Request, bid:Optional[str]="", key:Optional[int]=-1):
+        #     request_manager = RequestManager(secret_key=self.__jwt_secret_key)
+        #     data_payload = ScheduleWithBidRequest(bid=bid, key=key)
+        #     request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+        #
+        #     time_table_controller =TImeTableController()
+        #     model = time_table_controller.try_search_my_schedule_with_bid(database=self.__database,
+        #                                                                 request=request_manager)
+        #
+        #     body_data = model.get_response_form_data(self._head_parser)
+        #     response = request_manager.make_json_response(body_data=body_data)
+        #     return response
 
-            time_table_controller =TImeTableController()
-            model = time_table_controller.try_search_my_schedule_with_bid(database=self.__database,
-                                                                        request=request_manager)
-            
-            body_data = model.get_response_form_data(self._head_parser)
-            response = request_manager.make_json_response(body_data=body_data)
-            return response
-
+        # 내가 담아놓은 스케줄들을 볼 수 있습니다.
+        # 테스트 완료
         @self.__app.get('/time_table_server/try_get_my_selected_schedules')
-        def try_get_my_selected_schedules(request:Request, bid:Optional[str]=""):
+        def try_get_my_selected_schedules(request:Request, bid:Optional[str]="", key:Optional[int]=-1):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
-            data_payload = ScheduleWithBidRequest(bid=bid)
+            data_payload = ScheduleWithBidRequest(bid=bid, key=key)
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
 
             time_table_controller =TImeTableController()
@@ -392,10 +392,11 @@ class MakeMultipleScheduleRequest(RequestHeader):
         self.schedules = [Schedule().make_with_dict(dict_data=single_schedule_data) for single_schedule_data in body.get("schedules", []) if single_schedule_data != ""]
 
 class SearchRequest(RequestHeader):
-    def __init__(self, keyword, key=-1, type="") -> None:
+    def __init__(self, keyword, key=-1, search_type="", filter_option="") -> None:
         self.keyword=keyword
         self.key=key
-        self.type=type
+        self.type=search_type
+        self.filter_option=filter_option
 
 class GetSchedulesRequest(RequestHeader):
     def __init__(self, request:dict)-> None:
@@ -420,8 +421,9 @@ class ScheduleRequest(RequestHeader):
         self.sid:str=sid
     
 class ScheduleWithBidRequest(RequestHeader):
-    def __init__(self, bid)-> None:
+    def __init__(self, bid, key)-> None:
         self.bid:str=bid
+        self.key:int=key
 
 class DateRequest(RequestHeader):
     def __init__(self, date)-> None:
