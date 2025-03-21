@@ -201,6 +201,24 @@ class TImeTableController:
         
         return model
 
+    def try_get_my_selected_schedules(self, database:Local_Database, request:RequestManager,
+                                      num_schedules=6):
+        model = MultiScheduleModel(database)
+
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
+            if not model._set_tuser_with_tuid():
+                return model
+
+        model.get_my_selected_schedules(bid=request.data_payload.bid,
+                                        last_index=request.data_payload.key,
+                                        num_schedules=num_schedules)
+
+        return
+
+
+
+
     def try_search_bias_with_keyword(self, database:Local_Database, request:RequestManager,
                                     num_biases=10) -> BaseModel:
         # model = TimeTableBiasModel(database=database)
@@ -235,13 +253,14 @@ class TImeTableController:
     def make_new_single_schedule(self, database:Local_Database, request:RequestManager) -> BaseModel: 
         model = AddScheduleModel(database=database)
         
-        if request.jwt_payload != "":
-            model.set_user_with_email(request=request.jwt_payload)
-            # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
-            if not model._set_tuser_with_tuid():
-                return model
-            
-        schedule = model.make_new_single_schedule(schedule_data=request.data_payload, bid=request.data_payload.bid)
+        # if request.jwt_payload != "":
+        #     model.set_user_with_email(request=request.jwt_payload)
+        #     # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
+        #     if not model._set_tuser_with_tuid():
+        #         return model
+
+        model.set_user_with_email(request=request.data_payload)
+        schedule = model.make_new_single_schedule(data_payload=request.data_payload, bid=request.data_payload.bid)
     
         # 리스트로 넣어야됨(파라미터가 list를 받음)
         model.save_new_schedules(schedule=[schedule])

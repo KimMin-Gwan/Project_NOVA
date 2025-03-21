@@ -447,19 +447,18 @@ class MultiScheduleModel(TimeTableModel):
     def set_schedules_with_sids(self, data_payload):
         self._make_send_data_with_ids(id_list=data_payload.sids)
         return
-        
 
     # id_list는 서치한 데이터들의 고유 아이디
     # 전송용 데이터를 만드는 함수
     def _make_send_data_with_ids(self,id_list:list, search_type:str="schedule"):
         schedule_id_type = ""
-        if search_type == "schedule":
+        if search_type == "schedule" or search_type=="sid":
             schedule_id_type = "sid"
-        elif search_type == "schedule_bundle":
+        elif search_type == "schedule_bundle" or search_type == "sbid":
             schedule_id_type = "sbid"
-        elif search_type == "event":
+        elif search_type == "event" or search_type == "seid":
             schedule_id_type = "seid"
-        elif search_type == "bias":
+        elif search_type == "bias" or search_type == "bid":
             schedule_id_type = "bid"
 
         schedule_type_datas = self._database.get_datas_with_ids(target_id=schedule_id_type, ids=id_list)
@@ -620,6 +619,21 @@ class MultiScheduleModel(TimeTableModel):
                 continue
 
         return schedule_event_ids
+
+    # 내가 선택한 스케쥴 데이터 서치 함수. bid에 따라 필터링도 함
+    def __find_my_selected_schedules(self, bid:str):
+        my_schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids=self._tuser.sids)
+        schedule_id_list = []
+
+        for schedule_data in my_schedule_datas:
+            schedule = Schedule()
+            schedule.make_with_dict(dict_data=schedule_data)
+
+            if schedule.bid == bid:
+                # 비어있는 BID = "" 이면 BID가 실제로 ""로 저장된 Schedule들을 반환한다.
+                schedule_id_list.append(schedule.sid)
+
+        return schedule_id_list
 
     # 내가 이벤트 스케줄 데이터 뽑기를 날짜로
     # date는 날짜임 , 형태는 2025/03/06 임
@@ -833,6 +847,14 @@ class MultiScheduleModel(TimeTableModel):
 
         return
 
+    # 내가 선택한 스케줄들을 반환
+    def get_my_selected_schedules(self, bid, num_schedules:int, last_index:int=-1):
+        searched_list = self.__find_my_selected_schedules(bid=bid)
+        searched_list, self._key = self.paging_id_list(id_list=searched_list, last_index=last_index, page_size=num_schedules)
+
+        self._make_send_data_with_ids(id_list=searched_list, search_type="schedule")
+        return
+
     # 내가 설정한 모든 스케쥴 불러오기
     def search_my_all_schedule(self):
         # 데이터 불러오고
@@ -1020,7 +1042,6 @@ class AddScheduleModel(TimeTableModel):
         # 반환
         return [start_date_str, end_date_str]
 
-
     # 단일 스케줄 만들기
     def make_new_single_schedule(self, data_payload, bid):
         schedule = Schedule(
@@ -1043,6 +1064,8 @@ class AddScheduleModel(TimeTableModel):
         schedule.uname = self._user.uname
         schedule.code = self.__make_schedule_code()
         schedule.update_datetime = datetime.today().strftime("%Y/%m/%d-%H:%M:%S")
+
+
         return schedule
 
     def make_new_schedule_bundle(self, schedule_list:list, sbname:str, bid:str):
@@ -1070,6 +1093,12 @@ class AddScheduleModel(TimeTableModel):
     def save_new_schedules(self, schedule:list):
         save_data = self._make_dict_list_data(list_data=schedule)
         self._database.add_new_datas(target_id="sid", new_datas=save_data)
+
+        # 스케쥴 데이터를 추가 할 때, Tuser도 업데이트함
+        for s in schedule:
+            self._tuser.sids.append(s.sid)
+        self._database.modify_data_with_id(target_id="tuid", target_data=self._tuser.get_dict_form_data())
+
         self.__result = True
         return
 
@@ -1087,6 +1116,8 @@ class AddScheduleModel(TimeTableModel):
 
         if data_type == "bundle":
             schedules_object = self.make_new_schedule_bundle(schedule_list=schedule_list, sbname=sname, bid=bid)
+            self._tuser.sbids.append(schedules_object)
+            self._database.modify_data_with_id(target_id="tuid", target_data=self._tuser.get_dict_form_data())
 
         return schedules_object
 
@@ -1125,7 +1156,6 @@ class ScheduleBlock(Schedule):
 
     def is_overflowed(self):
         return self.__overflowed
-
 
     # 이게 전송용 데이터 포멧
     def get_dict_form_data(self):
@@ -1336,7 +1366,6 @@ class ScheduleBlockTreater():
 
         return schedule_block
 
-
     # 쨍하고 밝은 색깔 코드 생성기
     def __make_color_code(self):
         # 더 쨍하고 밝은 색상을 위해 범위 설정
@@ -1350,7 +1379,6 @@ class ScheduleBlockTreater():
         b = (b * 3 + 255) // 4
 
         return f'#{r:02x}{g:02x}{b:02x}'
-
 
 # 복수 스케줄을 반환할 때 사용하는 모델
 # 아마 대부분이 여러개를 반환해야하니 이거 쓰면 될듯

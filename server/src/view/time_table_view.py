@@ -237,7 +237,7 @@ class TimeTableView(Master_View):
         # bid에서 내가 선택했는 스케줄들 볼때 쓰는 엔드 포인트. 로그인 필수
         # 테스트는 아직 못함
         @self.__app.get('/time_table_server/try_search_my_schedule_with_bid')
-        def ry_search_my_schedule_with_bid(request:Request, bid:Optional[str]=""):
+        def try_search_my_schedule_with_bid(request:Request, bid:Optional[str]=""):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = ScheduleWithBidRequest(bid=bid)
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
@@ -249,7 +249,21 @@ class TimeTableView(Master_View):
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response
-        
+
+        @self.__app.get('/time_table_server/try_get_my_selected_schedules')
+        def try_get_my_selected_schedules(request:Request, bid:Optional[str]=""):
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
+            data_payload = ScheduleWithBidRequest(bid=bid)
+            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+
+            time_table_controller =TImeTableController()
+            model = time_table_controller.try_get_my_selected_schedules(database=self.__database,
+                                                                          request=request_manager)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
         # 완료
         # 선택했던 스케줄을 지우는건 여기서 함
         # 목표 sid를 넘기면 삭제 되게 할 것임. 단 로그인 필수
@@ -336,9 +350,11 @@ class DummyRequest():
     def __init__(self) -> None:
         pass
 
-class MakeSingleScheduleRequest(RequestHeader):
+# class MakeSingleScheduleRequest(RequestHeader):
+class MakeSingleScheduleRequest:
     def __init__(self, request) -> None:
-        super().__init__(request)
+        # super().__init__(request)
+        self.email:str="alsrhks2508@naver.com"
         body:dict = request['body']
         self.sname = body['sname']
         self.location = body['location']
@@ -349,24 +365,15 @@ class MakeSingleScheduleRequest(RequestHeader):
         self.end_time = body['end_time']
         self.state = body.get("status", True)
 
-class MakeMultipleScheduleRequest:
-# class MakeMultipleScheduleRequest(RequestHeader):
+# class MakeMultipleScheduleRequest:
+class MakeMultipleScheduleRequest(RequestHeader):
     def __init__(self, request) -> None:
+        super().__init__(request)
         body:dict = request['body']
-        # 테스트용 운영자 이메일
-        self.email:str="alsrhks2508@naver.com"
-
         self.sname = body['sname']
         self.bid = body['bid']
         self.type = body.get("type", "bundle")
         self.schedules = [Schedule().make_with_dict(dict_data=single_schedule_data) for single_schedule_data in body.get("schedules", []) if single_schedule_data != ""]
-
-        #schedules = []
-        #for single_schedule_data in body.get("schedules", ""):
-            #if single_schedule_data == "":
-                #break
-            #else:
-                #schedules.append(Schedule().make_with_dict(dict_data=single_schedule_data))
 
 class SearchRequest(RequestHeader):
     def __init__(self, keyword, key=-1, type="") -> None:
