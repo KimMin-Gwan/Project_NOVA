@@ -1256,6 +1256,7 @@ class ScheduleBlock(Schedule):
         super_dict_data = super().get_dict_form_data()
         super_dict_data['timeblocks'] = self.timeblocks
         super_dict_data['color_code'] = self.color_code
+        print(self.color_code)
         return super_dict_data
 
 class WeekDayDataBlock:
