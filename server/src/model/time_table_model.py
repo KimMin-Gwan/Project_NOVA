@@ -1516,7 +1516,6 @@ class ScheduleChartModel(TimeTableModel):
             # 이거 미리보기 일 때 라는 조건문임
             if sids:
                 # min_date를 가장 빠른 날짜로 설정
-                print("hello?")
                 if min_date is None or schedule_date < min_date:
                     min_date = schedule_date
                     
@@ -1531,6 +1530,8 @@ class ScheduleChartModel(TimeTableModel):
         
         
         schedules= []
+        
+        print(target_date)
         
         for schedule in temp_schedules:
             if target_date + timedelta(days=days) > schedule_date >= target_date:
