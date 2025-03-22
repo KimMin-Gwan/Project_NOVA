@@ -1534,7 +1534,7 @@ class ScheduleChartModel(TimeTableModel):
         print(target_date)
         
         for schedule in temp_schedules:
-            if target_date + timedelta(days=days) > schedule_date >= target_date:
+            if target_date + timedelta(days=days) > datetime.strptime(schedule.start_date, "%Y/%m/%d") >= target_date:
                 schedules.append(schedule)
                     
                     
