@@ -1256,7 +1256,6 @@ class ScheduleBlock(Schedule):
         super_dict_data = super().get_dict_form_data()
         super_dict_data['timeblocks'] = self.timeblocks
         super_dict_data['color_code'] = self.color_code
-        print(self.color_code)
         return super_dict_data
 
 class WeekDayDataBlock:
@@ -1531,8 +1530,6 @@ class ScheduleChartModel(TimeTableModel):
         
         
         schedules= []
-        
-        print(target_date)
         
         for schedule in temp_schedules:
             if target_date + timedelta(days=days) > datetime.strptime(schedule.start_date, "%Y/%m/%d") >= target_date:
