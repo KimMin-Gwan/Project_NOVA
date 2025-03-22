@@ -1,5 +1,5 @@
-from typing import Optional, Union
-from fastapi import FastAPI, WebSocket, Request, File, UploadFile, Form
+from typing import Optional
+from fastapi import FastAPI, Request
 from others import Schedule
 from view.master_view import Master_View, RequestHeader
 from view.parsers import Head_Parser
@@ -47,25 +47,25 @@ class TimeTableView(Master_View):
 
             return response
         
-        # 완료
+        # 이벤트는 보류
         # 타임 테이블 페이지의 최 상단 이벤트 보드 데이터
         # 비로그인 상태에서는 date를 선택하지 않으면 그날 이벤트를 랜덤하게 3개 줄것
         # 로그인 상태에서는 date를 선택하면 그날 이벤트를 모두 줄것
         # date는 안들어오면 오늘 날짜로 자동 선택될 것임
         # date는 "2025/03/05" 형식
-        @self.__app.get('/time_table_server/try_get_eventboard_data')
-        def get_eventboard_data(request:Request, date:Optional[str]=datetime.now().strftime("%Y/%m/%d")):
-            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
-            data_payload = DateRequest(date=date)
-            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+        #@self.__app.get('/time_table_server/try_get_eventboard_data')
+        #def get_eventboard_data(request:Request, date:Optional[str]=datetime.now().strftime("%Y/%m/%d")):
+            #request_manager = RequestManager(secret_key=self.__jwt_secret_key)
+            #data_payload = DateRequest(date=date)
+            #request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
-            time_table_controller =TImeTableController()
-            model = time_table_controller.get_eventboard_data(database=self.__database,
-                                                              request=request_manager)
-            body_data = model.get_response_form_data(self._head_parser)
-            response = request_manager.make_json_response(body_data=body_data)
+            #time_table_controller =TImeTableController()
+            #model = time_table_controller.get_eventboard_data(database=self.__database,
+                                                              #request=request_manager)
+            #body_data = model.get_response_form_data(self._head_parser)
+            #response = request_manager.make_json_response(body_data=body_data)
 
-            return response
+            #return response
 
         # 완료
         # 타임 차트에서 데이터 뽑아오기

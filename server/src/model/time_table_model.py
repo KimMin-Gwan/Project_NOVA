@@ -1499,27 +1499,41 @@ class ScheduleChartModel(TimeTableModel):
         # 내가 추가한 스케줄을 다 가지고 옴
         schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids=target_sids)
         
-        target_date = datetime.strptime(target_date, ("%Y/%m/%d"))
-
-        today:datetime = target_date
         #today = target_date + timedelta(days=12)
         # today = target_date - timedelta(days=3)
 
+        min_date = None
         schedules = []
-        
+
         # 필요하면 갯수 제한도 두삼
         for schedule_data in schedule_datas:
             schedule = Schedule()
             schedule.make_with_dict(dict_data=schedule_data)
-            # 여기서 날짜랑 맞는지 필터링 함
-            # if datetime.strptime(schedule.start_date, "%Y/%m/%d") > today:
-            #     schedules.append(schedule)
-            if today+timedelta(days=days) > datetime.strptime(schedule.start_date, "%Y/%m/%d") >= today:
+    
+            # 날짜가 오늘부터 지정된 일수만큼 뒤까지 포함되는지 확인
+            schedule_date = datetime.strptime(schedule.start_date, "%Y/%m/%d")
+
+            # 이거 미리보기 일 때 라는 조건문임
+            if sids:
+                # min_date를 가장 빠른 날짜로 설정
+                if min_date is None or schedule_date < min_date:
+                    min_date = schedule_date
+        
+        # 가장 빠른 날짜가 있으면 이걸로 보여줘야됨
+        if min_date:
+            target_date = min_date
+        else:
+            # 아니면 평범하게 오늘자로 하면됨
+            target_date = datetime.strptime(target_date, ("%Y/%m/%d"))
+        
+        for schedule in schedules:
+            if target_date + timedelta(days=days) > schedule_date >= target_date:
                 schedules.append(schedule)
+                    
 
         schedule_block_treater = ScheduleBlockTreater()
         
-        weekday_blocks = schedule_block_treater.make_default_week_day_data(today=today, days=days)
+        weekday_blocks = schedule_block_treater.make_default_week_day_data(today=target_date, days=days)
 
         for schedule in schedules:
             schedule_block = schedule_block_treater.make_schedule_block(schedule=schedule, sids=sids)
