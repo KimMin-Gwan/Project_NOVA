@@ -1512,12 +1512,14 @@ class ScheduleChartModel(TimeTableModel):
     
             # 날짜가 오늘부터 지정된 일수만큼 뒤까지 포함되는지 확인
             schedule_date = datetime.strptime(schedule.start_date, "%Y/%m/%d")
+            schedules.append(schedule)
 
             # 이거 미리보기 일 때 라는 조건문임
             if sids:
                 # min_date를 가장 빠른 날짜로 설정
                 if min_date is None or schedule_date < min_date:
                     min_date = schedule_date
+                    
         
         # 가장 빠른 날짜가 있으면 이걸로 보여줘야됨
         if min_date:
@@ -1528,7 +1530,6 @@ class ScheduleChartModel(TimeTableModel):
         
         for schedule in schedules:
             if target_date + timedelta(days=days) > schedule_date >= target_date:
-                schedules.append(schedule)
                     
 
         schedule_block_treater = ScheduleBlockTreater()
