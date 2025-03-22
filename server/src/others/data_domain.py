@@ -126,8 +126,8 @@ class ScheduleBundle(SampleDomain):
         self.uid: str = uid                  # Maker's ID
         self.uname: str = uname              # Maker's name
         self.update_datetime: str = update_datetime  # Update time
-        self.date: list = copy.copy(date)           # start_date, end_date
-        self.location: list = copy.copy(location)   # Event BroadCast Location
+        self.date: list = copy.copy(date)            # start_date, end_date
+        self.location: list = copy.copy(location)    # Event BroadCast Location
         self.code: str = code                # Bundle code
         self.sids: list = sids if sids is not None else []  # List of schedule IDs
 
@@ -176,14 +176,14 @@ class Schedule(SampleDomain):
         self.start_time:str = start_time            # 시작 시간 
         self.end_date:str = end_date                # 종료 날짜
         self.end_time:str = end_time                # 종료 시간
-        self.location:list = copy.copy(location)                # 송출 장소
+        self.location:list = copy.copy(location)    # 송출 장소
         self.code:str = code                        # 스케줄 코드
         self.update_datetime:str = update_datetime  # 등록된 시간
         self.num_usage:int = num_usage              # 추가된 횟수
         self.state:bool = state                     # 공개 비공개 여부
-        self.color_code = color_code
+        self.color_code = color_code                # 색깔 코드
         self.is_already_have = False
-        self.is_owner = False
+        self.is_owner = False                       # 글쓴이 여부
     
     def make_with_dict(self, dict_data:dict):
         self.sid = dict_data.get('sid', "")
