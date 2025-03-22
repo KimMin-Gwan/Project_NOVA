@@ -9,6 +9,7 @@ import ScheduleCard from "../../component/EventCard/EventCard";
 import ScheduleSearch from "../../component/ScheduleSearch/ScheduleSearch";
 import { ScheduleMore, ScheduleAdd } from "../../component/ScheduleMore/ScheduleMore";
 import { BundleScheduleDetail, ScheduleDetail, MakeSingleSchedule } from "../../component/EventMore/EventMore";
+import back from "./../../img/detail_back.png";
 
 import useToggleMore from "../../hooks/useToggleMore";
 

@@ -9,9 +9,17 @@ import Header from "../../component/Header/Header.js";
 
 import mainApi from "../../services/apis/mainApi.js";
 import NavBar from "../../component/NavBar/NavBar.js";
+import { MakeSingleSchedule } from "../../component/EventMore/EventMore.js";
 
 const ScheduleDashboard = () => {
   const navigate = useNavigate();
+
+  const [makeScheduleModal, setMakeScheduleModal] = useState(false);
+
+  // 일정 추가하기 버튼 누르면 동작하는애
+  const toggleMakeScheduleModal = (target) => {
+    setMakeScheduleModal((makeScheduleModal) => !makeScheduleModal);
+  };
 
   let [weekDayData, setWeekDayData] = useState([]);
   let [scheduleData, setScheduleData] = useState([]);
@@ -82,7 +90,7 @@ const ScheduleDashboard = () => {
               <div className="right-group">
                 <button onClick={() => handleNavigate("/search/topic")}>주제 탐색</button>
                 <img src={vertical_line} alt="vertical line" />
-                <button>일정 등록</button>
+                <button onClick={()=>toggleMakeScheduleModal()}>일정 등록</button>
               </div>
             </div>
           </div>
@@ -121,6 +129,13 @@ const ScheduleDashboard = () => {
         </div>
       </div>
       <NavBar brightMode={brightMode} />
+
+
+      <MakeSingleSchedule
+        closeSchedule={toggleMakeScheduleModal}
+        isOpen={makeScheduleModal}
+      />
+
     </div>
   );
 };

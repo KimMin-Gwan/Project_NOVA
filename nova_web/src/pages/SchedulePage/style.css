@@ -38,6 +38,7 @@
   font-weight: 400;
   color: #555555;
   margin-right: 12px; /* 간격 조정 */
+  cursor: pointer;
 }
 
 .span {

@@ -9,6 +9,8 @@ import TimeChart from "../../pages/SchedulePage/TimeChart/TimeChart";
 import { tempWeekDayData, tempScheduleData } from "../../pages/SchedulePage/TestScheduleData";
 import { ScheduleBundle } from "../../component/ScheduleEvent/ScheduleBundle";
 import ScheduleSelect, { MakeScheduleDetail } from "../ScheduleSelect/ScheduleSelect";
+import useBiasStore from "../../stores/BiasStore/useBiasStore";
+import DropDown from "../DropDown/DropDown";
 
 export function DetailModal({ closeSchedule, isOpen, children }) {
   const [backgroundColor, setBackgroundColor] = useState("");
@@ -219,6 +221,9 @@ export function BundleScheduleDetail({ closeSchedule, isOpen, target }) {
         />
       ))}
 
+      <div className={style["modal-title"]}>
+        미리보기
+      </div>
       <TimeChart weekDayData={timeWeekDayData} scheduleData={timeChartData} />
     </DetailModal>
   );
@@ -265,6 +270,9 @@ export function ScheduleDetail({ closeSchedule, isOpen, target }) {
     <DetailModal closeSchedule={closeSchedule} isOpen={isOpen}>
       <ScheduleEvent {...target} />
       <ScheduleAdd target={target} addClick={fetchTryAddSchedule} />
+      <div className={style["modal-title"]}>
+        미리보기
+      </div>
       <TimeChart weekDayData={timeWeekDayData} scheduleData={timeChartData} />
     </DetailModal>
   );
@@ -286,19 +294,178 @@ export function ScheduleDetail({ closeSchedule, isOpen, target }) {
 
 // 단일 스케줄 만들기
 export function MakeSingleSchedule({ closeSchedule, isOpen }) {
-  //const [sids, setSids] = useState([]);
+  // 스케줄 만들기 모드
+  // single vs bundle
 
-  // 내 스케줄에 등록하는 함수 (추가하기 버튼 누르면 동작해야됨)
-  async function fetchTryAddSchedule() {
-    await postApi.post("time_table_server/try_add_schedule", {
+  const scheduleFormat = {
+    id: Date.now(), 
+    sname : '',
+    location : '',
+    bid : '',
+    start_date : '',
+    start_time : '',
+    end_date : '',
+    end_time : ''
+  }
+
+  const [scheduleArray, setScheduleArray] = useState([scheduleFormat]);
+
+  const bundleFormat = {
+    sname : '',
+    bid : '',
+    schedules : scheduleArray
+  }
+
+  const [addMode, setAddMode] = useState('single');
+  const [numSchedule, setNumSchedule] = useState(1);
+  const [sendScheduleData, setSendScheduleData] = useState(bundleFormat)
+
+  let { biasList } = useBiasStore();
+  let [biasId, setBiasId] = useState();
+
+
+
+  // 번들 이름 
+  const [bundleNameInput, setBundleNameInput] = useState("");
+
+  // 번들 이름 바꾸기
+  const onChangeBundleName= (e) => {
+    setBundleNameInput(e.target.value);
+  };
+
+  // 단일 스케줄 만들기
+  async function fetchTryMakeSingleSchedule() {
+    await postApi.post("time_table_server/try_make_new_single_schedule", {
       header: HEADER,
-      body: {},
+      body: sendScheduleData.schedules[0],
     });
   }
 
+  // 번들 스케줄 만들기
+  async function fetchTryMakeBundleSchedule() {
+    await postApi.post("time_table_server/try_make_new_multiple_schedule", {
+      header: HEADER,
+      body: sendScheduleData,
+    });
+  }
+
+  // 전송하는 함수 (모드를 보고 번들로 보낼지 싱글로 보낼지 확인)
+  function tryFetchMakeSchedule(){
+    if (addMode == 'single') {
+      fetchTryMakeSingleSchedule()
+    }
+    else if (addMode == 'bundle'){
+      fetchTryMakeBundleSchedule()
+    }
+  }
+
+  const addSchedule = () => {
+    setNumSchedule((prev) => prev + 1);
+    const newSchedule = { ...scheduleFormat, id: Date.now() };
+    const updatedSchedules = [...sendScheduleData.schedules, newSchedule];
+    setSendScheduleData((prev) => ({
+      ...prev,
+      schedules: updatedSchedules,
+    }));
+  };
+
+
+  const removeSchedule = (index) => {
+    setNumSchedule((prev) => (prev-1))
+    const updatedSchedules = sendScheduleData.schedules.filter((_, i) => i !== index);
+    setSendScheduleData((prev) => ({
+    ...prev,
+    schedules: updatedSchedules,
+    }));
+  }
+
+  useEffect(()=>{
+    if(numSchedule == 1){
+      setAddMode("single")
+    }
+    else{
+      setAddMode("bundle")
+    }
+  }, [numSchedule])
+
+  useEffect(()=>{
+    setSendScheduleData(prevState => ({
+      ...prevState,
+      bid: biasId, // bundleNameInput 값으로 sname 업데이트
+    }));
+  }, [biasId])
+
+  useEffect(() => {
+    setSendScheduleData(prevState => ({
+      ...prevState,
+      sname: bundleNameInput, // bundleNameInput 값으로 sname 업데이트
+    }));
+  }, [bundleNameInput]);
+
+  useEffect( () => {
+    if (isOpen) {
+      // 스케줄 초기화
+      setScheduleArray([scheduleFormat]);
+
+      // 번들 이름 초기화
+      setBundleNameInput('');
+
+      // 추가 모드 설정
+      setAddMode('single');
+      setNumSchedule(1);
+
+      // 전송 데이터 초기화
+      setSendScheduleData(bundleFormat);
+    }
+  }, [isOpen])
+
+
   return (
     <DetailModal closeSchedule={closeSchedule} isOpen={isOpen}>
-      <ScheduleSelect></ScheduleSelect>
+      <div className={style["modal-title"]}>
+        일정 등록
+      </div>
+      {
+        addMode === "bundle" ? (
+          <div className="ScheduleSelect">
+            <div className={style["searchFac"]}>
+              <div className={style["searchBox"]}>
+                <input
+                  type="text"
+                  value={bundleNameInput}
+                  onChange={onChangeBundleName}
+                  placeholder="일정 번들 이름"
+                />
+              </div>
+            </div>
+          </div>
+        ) : null
+      }
+      <div className={style["bias-container"]}>
+        <DropDown options={biasList} setBiasId={setBiasId} />
+      </div>
+      {
+       sendScheduleData.schedules.map((schedule, index) => (
+          <ScheduleSelect
+            key={schedule.id}
+            index={index}
+            setSendScheduleData={setSendScheduleData}
+            sendScheduleData={sendScheduleData}
+            removeSchedule={removeSchedule}
+          />
+        ))
+      }
+      <div className={style["additional-schedule-button"]}>
+        <p
+          className={style["additional-schedule-text"]}
+          onClick={addSchedule}
+        >
+          일정 추가
+        </p>
+      </div>
+      <div className={style["moreContainer"]}>
+        <button onClick={() => {tryFetchMakeSchedule()}}>일정 등록</button>
+      </div>
     </DetailModal>
   );
 }

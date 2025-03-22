@@ -1,6 +1,6 @@
 
 .searchFac {
-  margin-block: 33px 12px;
+  margin-block: 10px 12px;
   background-color: #fff;
   padding-left : 28px;
   padding-right: 28px;
@@ -54,4 +54,25 @@
       filter: brightness(0.9);
     }
   }
+}
+
+.top-delete-box {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end; /* Flexbox로 오른쪽 정렬 */
+}
+
+.remove-schedule-button {
+  margin: 0; /* 부모에서 상속된 마진을 무시 */
+  padding-bottom: 2px;
+  border-bottom: 2px solid #5C5C5C; /* hover 시 밑줄 색상 변경 */
+  width: 55px;
+  cursor: pointer;
+  text-align: center; /* 텍스트를 가운데 정렬 */
+}
+
+.remove-schedule-text {
+  margin: 0; /* 부모에서 상속된 마진을 무시 */
+  font-size: 14px;
+  color: #5C5C5C;
 }
