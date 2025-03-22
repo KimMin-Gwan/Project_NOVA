@@ -65,6 +65,7 @@ class TImeTableController:
         if not model._set_tuser_with_tuid():
             return model
 
+        #if model.is_tuser_alive():
         model.set_my_schedule_in_by_day(target_date=request.data_payload.date)
             
         return model
@@ -80,8 +81,8 @@ class TImeTableController:
             return model
 
         
-        if model.is_tuser_alive():
-            model.set_my_schedule_in_by_day(target_date=request.data_payload.date, sids=request.data_payload.sids)
+        #if model.is_tuser_alive():
+        model.set_my_schedule_in_by_day(target_date=request.data_payload.date, sids=request.data_payload.sids)
             
         return model
     

@@ -182,6 +182,8 @@ class Schedule(SampleDomain):
         self.num_usage:int = num_usage              # 추가된 횟수
         self.state:bool = state                     # 공개 비공개 여부
         self.color_code = color_code
+        self.is_already_have = False
+        self.is_owner = False
     
     def make_with_dict(self, dict_data:dict):
         self.sid = dict_data.get('sid', "")
@@ -219,7 +221,9 @@ class Schedule(SampleDomain):
             "update_datetime": self.update_datetime,
             "num_usage": self.num_usage,
             "state":self.state,
-            "color_code": self.color_code
+            "color_code": self.color_code,
+            "is_already_have" : self.is_already_have,
+            "is_owner" : self.is_owner
         }
 
     

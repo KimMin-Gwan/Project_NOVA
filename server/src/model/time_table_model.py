@@ -430,6 +430,8 @@ class TimeScheduleModel(ScheduleTransformModel):
         time_schedule_data["location"] = self._linked_str(schedule.location)
         time_schedule_data["code"] = schedule.code
         time_schedule_data["color_code"] = schedule.color_code
+        time_schedule_data["is_already_have"] = schedule.is_already_have
+        time_schedule_data["is_owner"] = schedule.is_owner
 
         return time_schedule_data
 
@@ -591,6 +593,14 @@ class MultiScheduleModel(TimeTableModel):
         schedule_bundle_model = TimeScheduleBundleModel()
         schedule_bias_model = TimeBiasModel()
 
+        # 이미 등록 했는지 확인하는 함수
+        for schedule in self.__schedules:
+            if schedule.sid in self._tuser.sids:
+                schedule.is_already_have = True
+                
+            if schedule.sid in self._tuser.my_sids:
+                schedule.is_owner = True
+        
         # 데이터 변환
         schedule_model.get_tschedule_list(schedules=self.__schedules)
         schedule_event_model.get_tevent_list(events=self.__schedule_events)
@@ -1491,7 +1501,7 @@ class ScheduleChartModel(TimeTableModel):
     # 내가 추가한 스케줄 데이터 뽑기를 날짜로
     # date는 날짜임 , 형태는 2025/03/06 임
     # date안넣으면 기본적으로 오늘자로 감
-    def set_my_schedule_in_by_day(self, target_date=datetime.today().strftime("%Y/%m/%d"), days=5, sids =[]):
+    def set_my_schedule_in_by_day(self, target_date=datetime.today().strftime("%Y/%m/%d"), days=7, sids =[]):
         target_sids = []
         target_sids.extend(self._tuser.sids)
         target_sids.extend(sids)
