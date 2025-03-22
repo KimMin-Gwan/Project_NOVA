@@ -1503,7 +1503,7 @@ class ScheduleChartModel(TimeTableModel):
         # today = target_date - timedelta(days=3)
 
         min_date = None
-        schedules = []
+        temp_schedules = []
 
         # 필요하면 갯수 제한도 두삼
         for schedule_data in schedule_datas:
@@ -1512,7 +1512,6 @@ class ScheduleChartModel(TimeTableModel):
     
             # 날짜가 오늘부터 지정된 일수만큼 뒤까지 포함되는지 확인
             schedule_date = datetime.strptime(schedule.start_date, "%Y/%m/%d")
-            schedules.append(schedule)
 
             # 이거 미리보기 일 때 라는 조건문임
             if sids:
@@ -1520,6 +1519,7 @@ class ScheduleChartModel(TimeTableModel):
                 if min_date is None or schedule_date < min_date:
                     min_date = schedule_date
                     
+            temp_schedules.append(schedule)
         
         # 가장 빠른 날짜가 있으면 이걸로 보여줘야됨
         if min_date:
@@ -1528,10 +1528,14 @@ class ScheduleChartModel(TimeTableModel):
             # 아니면 평범하게 오늘자로 하면됨
             target_date = datetime.strptime(target_date, ("%Y/%m/%d"))
         
-        for schedule in schedules:
+        
+        schedules= []
+        
+        for schedule in temp_schedules:
             if target_date + timedelta(days=days) > schedule_date >= target_date:
+                schedules.append(schedule)
                     
-
+                    
         schedule_block_treater = ScheduleBlockTreater()
         
         weekday_blocks = schedule_block_treater.make_default_week_day_data(today=target_date, days=days)
