@@ -10,6 +10,7 @@ import post from "./../../img/post_img.png";
 import short_form from "./../../img/short_form_icon.png";
 import feed_write from "./../../img/feed_nav.png";
 import search from "./../../img/search_nav.png";
+import searchSchedule from "./../../img/search_schedule.svg";
 
 import "./index.css";
 
@@ -17,7 +18,7 @@ const NavBar = ({ brightMode }) => {
   const navBarList = [
     {
       id: 0,
-      title: "주제 게시판",
+      title: "게시판",
       src: short_form,
       alt: "bias_board",
       end_point: "/feed_list?type=bias",
@@ -26,7 +27,16 @@ const NavBar = ({ brightMode }) => {
     },
     {
       id: 1,
-      title: "게시판 작성",
+      title: "일정",
+      src: searchSchedule,
+      alt: "bias_board",
+      end_point: "/schedule",
+      type: "navigate",
+      onClick: (endPoint) => handleNavigate(endPoint),
+    },
+    {
+      id: 2,
+      title: "게시글 작성",
       src: feed_write,
       alt: "write",
       end_point: "/feed_list?type=bias",
@@ -34,7 +44,7 @@ const NavBar = ({ brightMode }) => {
       onClick: () => onClickWrite(),
     },
     {
-      id: 2,
+      id: 3,
       title: "검색",
       src: search,
       alt: "search",
@@ -43,7 +53,7 @@ const NavBar = ({ brightMode }) => {
       onClick: (endPoint) => handleNavigate(endPoint),
     },
     {
-      id: 3,
+      id: 4,
       title: "더보기",
       src: more_see,
       alt: "bias_board",
