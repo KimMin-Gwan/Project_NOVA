@@ -3,7 +3,7 @@ from model import Local_Database
 from others.data_domain import TimeTableUser as TUser
 from others.data_domain import Schedule, ScheduleBundle, ScheduleEvent, Bias
 
-from datetime import datetime,timedelta
+from datetime import datetime,timedelta, time
 import random
 import string
 
@@ -1347,7 +1347,7 @@ class ScheduleBlockTreater():
 
         # 오늘 날짜
         # 여기 마져 만들어야됨
-        today = datetime.today()
+        today = datetime.combine(today, time.min)
     
         # 5일 / 7일 분량
         for i in range(days):
@@ -1360,7 +1360,7 @@ class ScheduleBlockTreater():
                 num_schedule=0
             )                           
             # day_block.origin_date는 datetime에서 년, 월, 일을 포함함
-            if day_block.year == today.year and day_block.month == today.month and day_block.day == today.day:
+            if day_block.year == today:
                 day_block.is_today = True
 
             weekDayDateBlock_list.append(day_block)
