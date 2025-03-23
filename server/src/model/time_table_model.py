@@ -200,10 +200,13 @@ class TimeTableModel(BaseModel):
                         # 현재 시작한 일정
                         if not self.__check_schedule_time(date=schedule.start_date, time=schedule.start_time, when="start"):
                             filtered_id_list.append(schedule.sid)
-
                 elif filter_option == "not_start":
                     # 시작 전인 일정 서치
                     if self.__check_schedule_time(date=schedule.start_date, time=schedule.start_time, when="start"):
+                        filtered_id_list.append(schedule.sid)
+
+                elif filter_option == "not_end":
+                    if not self.__check_schedule_time(date=schedule.end_date, time=schedule.end_time, when="end"):
                         filtered_id_list.append(schedule.sid)
 
             elif schedule_id_type == "sbid":
@@ -220,10 +223,13 @@ class TimeTableModel(BaseModel):
                         # 시작한 일정 번들
                         if not self.__check_schedule_time(date=schedule_bundle.date[0], when="start"):
                             filtered_id_list.append(schedule_bundle.sbid)
-
                 elif filter_option == "not_start":
                     # 시작하지 않은 일정 번들
                     if self.__check_schedule_time(date=schedule_bundle.date[0], when="start"):
+                        filtered_id_list.append(schedule_bundle.sbid)
+
+                elif filter_option == "not_end":
+                    if not self.__check_schedule_time(date=schedule_bundle.date[0], when="end"):
                         filtered_id_list.append(schedule_bundle.sbid)
 
 
