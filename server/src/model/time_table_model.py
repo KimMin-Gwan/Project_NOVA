@@ -941,16 +941,16 @@ class MultiScheduleModel(TimeTableModel):
             if schedule.bid == bid:
                 self.__schedules.append(schedule)
 
-        # 데이터 불러오고
-        schedule_events_datas = self._database.get_datas_with_ids(target_id="seid", ids=self._tuser.seids)
-
-        # 보낼 이벤트 정하는 곳
-        for schedule_event_data in schedule_events_datas:
-            schedule_event = ScheduleEvent()
-            schedule_event.make_with_dict(dict_data=schedule_event_data)
-
-            if schedule_event.bid == bid:
-                self.__schedule_events.append(schedule_event)
+        # # 데이터 불러오고
+        # schedule_events_datas = self._database.get_datas_with_ids(target_id="seid", ids=self._tuser.seids)
+        #
+        # # 보낼 이벤트 정하는 곳
+        # for schedule_event_data in schedule_events_datas:
+        #     schedule_event = ScheduleEvent()
+        #     schedule_event.make_with_dict(dict_data=schedule_event_data)
+        #
+        #     if schedule_event.bid == bid:
+        #         self.__schedule_events.append(schedule_event)
 
         self._make_send_data_with_datas()
 
