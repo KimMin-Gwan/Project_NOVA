@@ -791,6 +791,7 @@ class FilteringManager:
 
 #--------------------실제로 사용하게 될 구간입니다. 필터링 옵션이 확정났기 때문에 이렇게 새로만듭니다----------------------------------------------
 
+
     def __paging_list(self, fid_list:list, fid, page_size):
         # 이미 Date 최신순으로 정렬되어서 맨처음이 젤 최신의 글임
         start_index = 0
