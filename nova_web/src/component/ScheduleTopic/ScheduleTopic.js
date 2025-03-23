@@ -1,6 +1,9 @@
 import style from "./ScheduleTopic.module.css";
+import tempBias from "./../../img/tempBias.png";
 
-export default function ScheduleTopic({ bname, category, agency, tags, main_time, toggleClick }) {
+export default function ScheduleTopic({ bid, bname, category, agency, tags, main_time, toggleClick }) {
+  let bias_url = "https://kr.object.ncloudstorage.com/nova-images/";
+
   return (
     <div className={style["ScheduleTopic"]} onClick={toggleClick}>
       <dl>
@@ -24,7 +27,13 @@ export default function ScheduleTopic({ bname, category, agency, tags, main_time
         </section>
       </dl>
 
-      <div className={style["bias_img"]}>img</div>
+      <div className={style["bias_img"]}>
+        <img
+          src={bias_url + `${bid}.PNG`}
+          alt="bias"
+          onError={(e) => (e.target.src = tempBias)}
+        />
+      </div>
     </div>
   );
 }

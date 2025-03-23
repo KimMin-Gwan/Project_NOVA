@@ -37,13 +37,23 @@ export default function TimeChart({ weekDayData, scheduleData }) {
 
     // 시간대 인덱스 계산
     if (currentHour >= 0 && currentHour < 6) {
-      return 0
+      return 1
     } else if (currentHour >= 6 && currentHour < 12) {
       return 1
     } else if (currentHour >= 12 && currentHour < 18) {
       return 2
     } else if (currentHour >= 18 && currentHour < 24) {
       return 3
+    }
+  }
+
+  const handleSlideChange = (swiper) => {
+    console.log(swiper.activeIndex)
+    if (swiper.activeIndex === 1) {
+      return false; // 첫 번째 슬라이드에서는 이전 슬라이드 이동 막음
+    }
+    else{
+      return true;
     }
   }
 
@@ -66,9 +76,24 @@ export default function TimeChart({ weekDayData, scheduleData }) {
         //loop={true} // 무한 루프
         onSwiper={(swiper) => (swiperRef.current = swiper)} // Swiper 인스턴스 참조
         initialSlide={findSection()}
+          onSlideChange={(swiper) => {
+          if (swiper.activeIndex === 0) {
+            // 0번 슬라이드로 이동하면 강제로 1번 슬라이드로 이동
+            setTimeout(() => swiperRef.current?.slideTo(1), 0);
+          }
+          else if (swiper.activeIndex === 5){
+            setTimeout(() => swiperRef.current?.slideTo(4), 0);
+          }
+        }}
+        //allowSlidePrev={allowPrev} // 이전 슬라이드 이동 허용 여부
       >
+        <SwiperSlide key={0}>
+          <div>
+            지난 주 불러오기
+          </div>
+        </SwiperSlide>
         {timeSectionList.map((item, j) => (
-          <SwiperSlide key={j}>
+          <SwiperSlide key={j+1}>
             <div className="chart-box">
               {/* 시간 선택 및 화살표 */}
               <div className="time-select-box">
@@ -103,6 +128,11 @@ export default function TimeChart({ weekDayData, scheduleData }) {
             </div>
           </SwiperSlide>
         ))}
+        <SwiperSlide key={5}>
+          <div>
+            다음 주 불러오기
+          </div>
+        </SwiperSlide>
       </Swiper>
     </div>
   );

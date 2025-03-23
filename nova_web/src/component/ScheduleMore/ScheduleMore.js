@@ -22,7 +22,6 @@ function BasicSchedule({ isMore, firstClick, secondClick, lastClick, target }) {
   function isFistButtonClicked() {
     firstClick(target);
   }
-  console.log(isMore)
 
   return (
     <div className={style["moreContainer"]}>

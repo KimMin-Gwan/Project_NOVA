@@ -59,8 +59,20 @@
 
 .bias_img {
   background-color: gray;
-  height: 90px;
-  width: 90px;
   /* aspect-ratio: 1 / 1; */
   /* display: block; */
+}
+.bias_img {
+  height: 90px;
+  width: 90px;
+  overflow: hidden; /* 이미지가 넘치는 부분 숨김 */
+  display: flex; /* 가운데 정렬을 위해 플렉스박스 사용 */
+  justify-content: center; /* 수평 정렬 */
+  align-items: center; /* 수직 정렬 */
+}
+
+.bias_img img {
+  max-width: 100%; /* 부모의 너비를 초과하지 않음 */
+  max-height: 100%; /* 부모의 높이를 초과하지 않음 */
+  object-fit: contain; /* 이미지 비율 유지하면서 부모 영역에 맞춤 */
 }
