@@ -129,7 +129,7 @@ class TimeTableView(Master_View):
         # type : schedule, schedule_bundle, event
         # 완료 (테스트만 필요)
         @self.__app.get('/time_table_server/try_search_schedule_with_keyword')
-        def try_search_schedule(request:Request, filter_option:Optional[str]="not_end", keyword:Optional[str] = "", key:Optional[int]=-1, type:Optional[str]=""):
+        def try_search_schedule(request:Request, filter_option:Optional[str]="ended", keyword:Optional[str] = "", key:Optional[int]=-1, type:Optional[str]=""):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = SearchRequest(keyword=keyword, key=key, search_type=type, filter_option=filter_option)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
