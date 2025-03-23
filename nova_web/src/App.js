@@ -50,6 +50,13 @@ function App() {
     setBrightMode(newMode); // MoreSee에서 전달받은 상태 업데이트
   };
 
+
+  if (window.innerWidth <= 768 || /Mobi|Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent)) {
+    document.body.style.zoom = 100 + "%";
+  } else {
+    document.body.style.zoom = 120 + "%";
+  }
+
   return (
     <Routes>
       {/* 더보기 페이지 / 마이페이지 */}
