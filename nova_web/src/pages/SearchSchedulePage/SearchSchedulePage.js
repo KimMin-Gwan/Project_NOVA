@@ -66,7 +66,6 @@ export default function SearchSchedulePage() {
   }
 
   async function fecthSearchDataDefault() {
-    let key = activeIndex === 0 ? scheduleBundleKey : scheduleKey;
     let type = typeSelectData[activeIndex];
 
     await mainApi
@@ -92,14 +91,6 @@ export default function SearchSchedulePage() {
 
     fecthSearchDataDefault()
   }, [searchKeyword, activeIndex]);
-
-  useEffect(() => {
-    setScheduleKey(-1);
-    setScheduleBundleKey(-1);
-    setScheduleData([]);
-    setScheduleBundleData([]);
-
-  }, [searchKeyword]);
 
 
   // 탭 변경시 검색 초기화
