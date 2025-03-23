@@ -1347,6 +1347,7 @@ class ScheduleBlockTreater():
 
         # 오늘 날짜
         # 여기 마져 만들어야됨
+        today = datetime.today()
         today = datetime.combine(today, time.min)
     
         # 5일 / 7일 분량
