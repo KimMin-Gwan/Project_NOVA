@@ -1,7 +1,7 @@
 .time-chart-box {
     display: flex;
-    margin-left : 5%;
-    width: 95%; /* 부모 컨테이너의 전체 너비 */
+    margin-left : 2%;
+    width: 98%; /* 부모 컨테이너의 전체 너비 */
 }
 
 .day-week-list {

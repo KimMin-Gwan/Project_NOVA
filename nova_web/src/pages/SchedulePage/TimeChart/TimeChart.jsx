@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import "./time_chart_style.css"; // 스타일 파일
 import ChartScheduleComponent from "../ChartScheduleComponent"; // 일정 컴포넌트
 import arrow_drop_left from "./../../../img/Arrow_drop_left.svg"; // 왼쪽 화살표 이미지
@@ -14,17 +14,38 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 
 // 시간 리스트와 시간 섹션 정의
+//const timeList = [
+  //["00:00", "01:00", "02:00", "03:00", "04:00", "05:00"],
+  //["06:00", "07:00", "08:00", "09:00", "10:00", "11:00"],
+  //["12:00", "13:00", "14:00", "15:00", "16:00", "17:00"],
+  //["18:00", "19:00", "20:00", "21:00", "22:00", "23:00"],
+//];
 const timeList = [
-  ["00:00", "01:00", "02:00", "03:00", "04:00", "05:00"],
-  ["06:00", "07:00", "08:00", "09:00", "10:00", "11:00"],
-  ["12:00", "13:00", "14:00", "15:00", "16:00", "17:00"],
-  ["18:00", "19:00", "20:00", "21:00", "22:00", "23:00"],
+  ["00시", "01시", "02시", "03시", "04시", "05시"],
+  ["06시", "07시", "08시", "09시", "10시", "11시"],
+  ["12시", "13시", "14시", "15시", "16시", "17시"],
+  ["18시", "19시", "20시", "21시", "22시", "23시"],
 ];
 
 const timeSectionList = ["새벽", "오전", "오후", "밤"]; // 시간 섹션 이름
 
 export default function TimeChart({ weekDayData, scheduleData }) {
   const swiperRef = useRef(null); // Swiper 인스턴스를 참조하기 위한 Ref 생성
+
+  const findSection = () => {
+    const currentHour = new Date().getHours(); // 현재 시간의 '시'를 가져옴
+
+    // 시간대 인덱스 계산
+    if (currentHour >= 0 && currentHour < 6) {
+      return 0
+    } else if (currentHour >= 6 && currentHour < 12) {
+      return 1
+    } else if (currentHour >= 12 && currentHour < 18) {
+      return 2
+    } else if (currentHour >= 18 && currentHour < 24) {
+      return 3
+    }
+  }
 
   return (
     <div className="time-chart-box">
@@ -42,8 +63,9 @@ export default function TimeChart({ weekDayData, scheduleData }) {
       {/* Swiper 컴포넌트 */}
       <Swiper
         centeredSlides={true} // 중앙 정렬
-        loop={true} // 무한 루프
+        //loop={true} // 무한 루프
         onSwiper={(swiper) => (swiperRef.current = swiper)} // Swiper 인스턴스 참조
+        initialSlide={findSection()}
       >
         {timeSectionList.map((item, j) => (
           <SwiperSlide key={j}>

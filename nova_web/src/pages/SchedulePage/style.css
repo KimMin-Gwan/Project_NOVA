@@ -13,9 +13,9 @@
 }
 
 .dashboard-section {
-  padding-left: 28px;
+  padding-left: 20px;
   padding-bottom: 10px;
-  padding-right: 28px;
+  padding-right: 20px;
 }
 
 .element {
@@ -60,7 +60,6 @@
   font-weight: 400;
   background-color: #d0e4ff;
   border-radius: 6px;
-  width: calc(100% - 56px); /* 계산식 수정 */
   padding: 20px;
   display: flex; /* Flexbox 사용 */
   justify-content: space-between; /* 좌우 정렬 */
@@ -76,11 +75,21 @@
   display: flex;
   align-items: center; /* 세로 정렬 */
   gap: 10px; /* 요소 간 간격 */
+}
 
-  & button {
-    border: none;
-    background-color: transparent;
-  }
+.right-group button {
+  border: none;
+  background-color: transparent;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.right-group button:hover {
+  background-color: #8ebfff; /* 호버 시 배경색 */
+  color: #333; /* 호버 시 텍스트 색상 */
 }
 
 .num-bias {
@@ -106,4 +115,8 @@
   flex-direction: column;
   gap: 20px;
   width: 90%;
+}
+
+.button:hover {
+  background-color: #2980b9; /* 호버 시 색상 */
 }
