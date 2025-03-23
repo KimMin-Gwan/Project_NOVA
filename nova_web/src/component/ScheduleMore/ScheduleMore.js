@@ -8,6 +8,8 @@ const BUTTON_SETTING = {
   [BUTTON_TYPES.BIAS]: { first: "게시판", second: "일정 검색", last: "팔로우" },
   [BUTTON_TYPES.CANCEL]: { first: "", second: "선택 취소", last: "선택한 일정 추가하기" },
   [BUTTON_TYPES.EVENT]: { first: "", second: "", last: "이벤트 추가하기" },
+  [BUTTON_TYPES.SCHEDULE_HAVE]: { first: "", second: "게시판에서 공유", last: "일정에서 제외하기" },
+  [BUTTON_TYPES.SCHEDULE_EDIT]: { first: "", second: "게시판에서 공유", last: "수정하기" },
 };
 
 function BasicSchedule({ isMore, firstClick, secondClick, lastClick, target }) {
@@ -20,6 +22,7 @@ function BasicSchedule({ isMore, firstClick, secondClick, lastClick, target }) {
   function isFistButtonClicked() {
     firstClick(target);
   }
+  console.log(isMore)
 
   return (
     <div className={style["moreContainer"]}>
@@ -49,7 +52,7 @@ export function ScheduleDetailAdd({ selectToggle, selectText, allSelect }) {
   return <BasicSchedule isMore={selectText} secondClick={selectToggle} lastClick={allSelect} />;
 }
 // 일정 밑에 붙는 버튼
-export function ScheduleAdd({ navBoardClick, detailClick, addClick, target }) {
+export function ScheduleAdd({ navBoardClick, detailClick, addClick, target}) {
   return (
     <BasicSchedule
       isMore={BUTTON_TYPES.SCHEDULE}
@@ -60,6 +63,33 @@ export function ScheduleAdd({ navBoardClick, detailClick, addClick, target }) {
     />
   );
 }
+
+// 일정 밑에 붙는 버튼
+export function ScheduleRemove({ navBoardClick, detailClick, addClick, target}) {
+  return (
+    <BasicSchedule
+      isMore={BUTTON_TYPES.SCHEDULE_HAVE}
+      target={target}
+      firstClick={detailClick}
+      secondClick={navBoardClick}
+      lastClick={addClick}
+    />
+  );
+}
+
+// 일정 밑에 붙는 버튼
+export function ScheduleEdit({ navBoardClick, detailClick, addClick, target}) {
+  return (
+    <BasicSchedule
+      isMore={BUTTON_TYPES.SCHEDULE_EDIT}
+      target={target}
+      firstClick={detailClick}
+      secondClick={navBoardClick}
+      lastClick={addClick}
+    />
+  );
+}
+
 // 주제 탐색 페이지의 버튼
 export function ScheduleFollow({ scheduleClick, followClick, target }) {
   return (

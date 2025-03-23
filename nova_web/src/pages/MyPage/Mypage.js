@@ -40,7 +40,16 @@ function MyPage() {
 
   let [isLoading, setIsLoading] = useState(true);
   let [categoryLoading, setCategoryLoading] = useState(false);
-  let [myData, setMyData] = useState();
+  let [myData, setMyData] = useState(
+    {
+      num_comment : 0,
+      num_like : 0,
+      num_long_feed : 0,
+      num_short_feed : 0,
+      uid : "",
+      uname : ''
+    }
+  );
   let [myFeed, setMyFeed] = useState([]);
   const [nextKey, setNextKey] = useState(-1);
   const [nowCategory, setNowCategory] = useState(categoryData[0].type);

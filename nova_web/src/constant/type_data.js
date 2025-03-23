@@ -5,6 +5,8 @@ export const BUTTON_TYPES = {
   BIAS: 3,
   CANCEL: 4,
   EVENT: 5,
+  SCHEDULE_HAVE:6,
+  SCHEDULE_EDIT:7
 };
 
 export const TITLE_TYPES = {
