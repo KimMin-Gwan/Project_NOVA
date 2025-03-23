@@ -1561,32 +1561,45 @@ class ScheduleChartModel(TimeTableModel):
         #today = target_date + timedelta(days=12)
         # today = target_date - timedelta(days=3)
 
-        min_date = None
-        temp_schedules = []
+        temp_schedules:list[Schedule] = []
 
         # 필요하면 갯수 제한도 두삼
         for schedule_data in schedule_datas:
             schedule = Schedule()
             schedule.make_with_dict(dict_data=schedule_data)
     
+                    
+            temp_schedules.append(schedule)
+            
+        # 임시로 뽑은 애들 정렬치는 부분
+        sids_schedules = []
+        
+        for schedule in temp_schedules:
+            if schedule.sid in sids:
+                sids_schedules.append(schedule)
+                
+        # 반드시 임시로 뽑은 애들중에서 min_date를 골라야했음
+        min_date = None
+        
+        for sid_schedule in sids_schedules:
             # 날짜가 오늘부터 지정된 일수만큼 뒤까지 포함되는지 확인
-            schedule_date = datetime.strptime(schedule.start_date, "%Y/%m/%d")
+            schedule_date = datetime.strptime(sid_schedule.start_date, "%Y/%m/%d")
 
             # 이거 미리보기 일 때 라는 조건문임
             if sids:
                 # min_date를 가장 빠른 날짜로 설정
                 if min_date is None or schedule_date < min_date:
                     min_date = schedule_date
-                    
-            temp_schedules.append(schedule)
         
         # 가장 빠른 날짜가 있으면 이걸로 보여줘야됨
         if min_date:
             target_date = min_date
         else:
-            # 아니면 평범하게 오늘자로 하면됨
-            target_date = datetime.strptime(target_date, ("%Y/%m/%d"))
-        
+            # 아니면 평범하게 오늘자로 하면됨 ==> 수정됨
+            #target_date = datetime.strptime(target_date, ("%Y/%m/%d"))
+            
+            # 오늘이 포함된 주차에서 월요일을 골라야됨
+            target_date = self._get_monday_date(target_date=target_date)
         
         schedules= []
         
@@ -1623,6 +1636,19 @@ class ScheduleChartModel(TimeTableModel):
         # 이코드가 추가되어야됨
         
         return
+    
+    def _get_monday_date(self, target_date: str) -> datetime:
+        # 입력 날짜를 datetime 객체로 변환
+        target_date = datetime.strptime(target_date, "%Y/%m/%d")
+    
+        # 오늘의 요일 계산 (0: 월요일, 6: 일요일)
+        day_of_week = target_date.weekday()
+    
+        # 오늘 날짜에서 요일 값을 빼서 이번 주 월요일 계산
+        monday_date = target_date - timedelta(days=day_of_week)
+    
+        # 월요일 날짜를 datetime 객체로 반환
+        return monday_date
     
     def get_response_form_data(self, head_parser):
         body = {
