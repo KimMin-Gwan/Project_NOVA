@@ -149,12 +149,14 @@ class TimeTableModel(BaseModel):
             return True
 
     # 현재 시간이 end_date/ end_time을 넘기면 True, 아니면 False다.
-    def __check_schedule_time(self, date:str, when:str, time:str="", bundle:bool=False):
-        # 날짜 데이터
-        if bundle:
-            date_obj = datetime.strptime(date, "%y년 %m월 %d일")
-        else:
-            date_obj = datetime.strptime(date, "%Y/%m/%d")
+    def __check_schedule_time(self, date:str, when:str, time:str=""):
+        # # 날짜 데이터
+        # if bundle:
+        #     date_obj = datetime.strptime(date, "%y년 %m월 %d일")
+        # else:
+        #     date_obj = datetime.strptime(date, "%Y/%m/%d")
+
+        date_obj = datetime.strptime(date, "%Y/%m/%d")
 
         # 시간 데이터가 존재한다면 시간도 같이 붙여야 함
         if time != "":
@@ -210,18 +212,18 @@ class TimeTableModel(BaseModel):
 
                 if filter_option == "ended":
                     # 종료된 일정 번들
-                    if self.__check_schedule_time(date=schedule_bundle.date[1], when="end", bundle=True):
+                    if self.__check_schedule_time(date=schedule_bundle.date[1], when="end"):
                         filtered_id_list.append(schedule_bundle.sbid)
                 elif filter_option == "in_progress":
                     # 종료되지 않은 일정 번들
-                    if not self.__check_schedule_time(date=schedule_bundle.date[1], when="end", bundle=True):
+                    if not self.__check_schedule_time(date=schedule_bundle.date[1], when="end"):
                         # 시작한 일정 번들
-                        if not self.__check_schedule_time(date=schedule_bundle.date[0], when="start", bundle=True):
+                        if not self.__check_schedule_time(date=schedule_bundle.date[0], when="start"):
                             filtered_id_list.append(schedule_bundle.sbid)
 
                 elif filter_option == "not_start":
                     # 시작하지 않은 일정 번들
-                    if self.__check_schedule_time(date=schedule_bundle.date[0], when="start", bundle=True):
+                    if self.__check_schedule_time(date=schedule_bundle.date[0], when="start"):
                         filtered_id_list.append(schedule_bundle.sbid)
 
 
@@ -233,10 +235,11 @@ class TimeTableModel(BaseModel):
         # 만약에 페이지 사이즈보다 더 짧은 경우도 있을 수 있기에 먼저 정해놓는다.
         # 이러면 페이징된 리스트의 길이에 상관없이, 인덱스를 알아낼 수 있을 것
 
+        # 아이디 리스트 중 last_index 부터 시작해서 나머지 모든 데이터를 꺼냄
         paging_list = id_list[last_index + 1:]
         last_index_next = -1
         if len(id_list) != 0:
-            last_index_next = id_list.index(id_list[-1])
+            last_index_next = id_list.index(id_list[-1]) # 다음 라스트 인덱스를 설정
 
         # 만약 페이지 사이즈를 넘었다면 표시할 개수만큼 짜르고, last_index를 재설정한다.
         if len(paging_list) > page_size:
