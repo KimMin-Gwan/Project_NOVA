@@ -7,6 +7,7 @@ import useBiasStore from "../stores/BiasStore/useBiasStore";
 import useLoginStore from "../stores/LoginStore/useLoginStore";
 import useDragScroll from "../hooks/useDragScroll";
 import add_bias_icon from "./../img/add_bias.png";
+import tempBias from "./../img/tempBias.png";
 
 export default function BiasBoxes({ fetchBiasCategoryData }) {
   const navigate = useNavigate();
@@ -94,6 +95,7 @@ export default function BiasBoxes({ fetchBiasCategoryData }) {
                   <img
                     className={clickedBias === i ? "clicked-img" : ""}
                     src={biasUrl + `${bias.bid}.PNG`}
+                    onError={(e) => (e.target.src = tempBias)}
                     alt="bias"
                     onClick={() => {
                       if (hasDragged) return;

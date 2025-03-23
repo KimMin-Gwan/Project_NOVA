@@ -5,6 +5,8 @@ body {
   background-color: #111;
 }
 
+
+
 button,
 textarea,
 input {
@@ -54,6 +56,7 @@ body.dark-mode {
   display: flex;
   /* height: 100vh; */
   max-width: 1150px;
+  width: 100%;
   margin: 0 auto;
   overflow: hidden;
 }
