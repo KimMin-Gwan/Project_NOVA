@@ -1341,16 +1341,27 @@ class ScheduleBlockTreater():
         self.__over_flowed_schedules = []
 
     # WeekDay Block 데이터 만들기
-    def make_default_week_day_data(self, today:datetime, days):
+    def make_default_week_day_data(self, target_date:datetime, days):
 
         weekDayDateBlock_list = []
 
+        # 오늘 날짜
+        # 여기 마져 만들어야됨
+        today = datetime.today().date()
+    
         # 5일 / 7일 분량
         for i in range(days):
-            day_block = WeekDayDataBlock(day=weekday_names[(today + timedelta(days=i)).weekday()],
-                                         make_day_data=(today+timedelta(days=i)),
-                                         num_schedule=0)
-            if day_block.date == today.day:
+            current_date = target_date + timedelta(days=i)
+
+            # WeekDayDataBlock 생성
+            day_block = WeekDayDataBlock(
+                day=weekday_names[current_date.weekday()],
+                make_day_data=current_date,
+                num_schedule=0
+            )                           
+            
+            # day_block.origin_date는 datetime에서 년, 월, 일을 포함함
+            if day_block.origin_date == today:
                 day_block.is_today = True
 
             weekDayDateBlock_list.append(day_block)
@@ -1391,7 +1402,7 @@ class ScheduleBlockTreater():
 
         return trimmed_list
 
-    def claer_over_flowed_schedule(self) -> list[ScheduleBlock]:
+    def clear_over_flowed_schedule(self) -> list[ScheduleBlock]:
         schedule_blocks = []
 
         for schedule in self.__over_flowed_schedules:
@@ -1610,14 +1621,16 @@ class ScheduleChartModel(TimeTableModel):
                     
         schedule_block_treater = ScheduleBlockTreater()
         
-        weekday_blocks = schedule_block_treater.make_default_week_day_data(today=target_date, days=days)
+        # 위크데이 블럭만드는 곳
+        weekday_blocks = schedule_block_treater.make_default_week_day_data(target_date=target_date, days=days)
 
+        # 스케줄 블럭 만드는 곳
         for schedule in schedules:
             schedule_block = schedule_block_treater.make_schedule_block(schedule=schedule, sids=sids)
             self.__schedule_blocks.append(schedule_block)
-            
-        over_flowed_schedule:list = schedule_block_treater.claer_over_flowed_schedule()
         
+        # 오버 플로우된거 처리까지 해서 스케줄 블럭 완성하기
+        over_flowed_schedule:list = schedule_block_treater.clear_over_flowed_schedule()
         self.__schedule_blocks.extend(over_flowed_schedule)
         
         # self.__week_day_datas = schedule_block_treater.make_week_day_data(schedule_blocks=self.__schedule_blocks)
