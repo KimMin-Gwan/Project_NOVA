@@ -1163,7 +1163,7 @@ class ManagedScheduleTable(ManagedTable):
 
         return
 
-
+    # 랜덤하게 하나 스케줄 나옴
     def get_random_schedule(self):
         random_index = random.randint(0, len(self.__schedule_table)-1)
         return self.__schedule_table[random_index].sid
