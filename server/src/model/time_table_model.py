@@ -1612,6 +1612,7 @@ class ScheduleChartModel(TimeTableModel):
             
             # 오늘이 포함된 주차에서 월요일을 골라야됨
             target_date = self._get_monday_date(target_date=target_date)
+            print(target_date)
         
         schedules= []
         
