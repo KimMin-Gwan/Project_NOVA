@@ -1611,8 +1611,8 @@ class ScheduleChartModel(TimeTableModel):
             #target_date = datetime.strptime(target_date, ("%Y/%m/%d"))
             
             # 오늘이 포함된 주차에서 월요일을 골라야됨
+            # 여기 서버 안끄면 초기화 안되는 쌉 버그가 생김
             target_date = self._get_monday_date(target_date=target_date)
-            print(target_date)
         
         schedules= []
         
