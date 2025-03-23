@@ -125,16 +125,21 @@ class TimeTableModel(BaseModel):
     
     def set_target_date(self):
         today = datetime.today()
-        shorted_year = today.year % 100
-        
         first_day_of_month = datetime(today.year, today.month, 1)
 
-        # 해당 날짜와 첫 번째 날의 주 번호 계산
-        start_week = first_day_of_month.isocalendar()[1]  # 해당 달 첫 날의 주 번호
-        current_week = today.isocalendar()[1]             # 해당 날짜의 주 번호
+        # 월요일이 가장 빠른 날을 찾기 위해 이번 달 첫째 날부터 시작해서 월요일을 찾습니다.
+        current_date = first_day_of_month
+        while current_date.weekday() != 0:  # 0은 월요일을 나타냅니다.
+            current_date += timedelta(days=1)
 
-        # 현재 주가 3월 내의 몇 번째 주인지 계산
+        # 해당 주가 1주차인지 계산합니다.
+        start_week = current_date.isocalendar()[1]  # 해당 달 첫 번째 월요일이 속한 주 번호
+        current_week = today.isocalendar()[1]       # 오늘 날짜의 주 번호
+
+        # 현재 주가 이번 달 내 몇 번째 주인지 계산합니다.
         week_in_month = current_week - start_week + 1
+        
+        shorted_year = today.year % 100
         
         # 만약 미래에 있는 사람이 2100에 산다면 이 곳의 코드를 고치면 됩니다
         self.__target_month = f'{shorted_year}년 {today.month}월'
