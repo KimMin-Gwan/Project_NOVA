@@ -684,9 +684,10 @@ class MultiScheduleModel(TimeTableModel):
                 schedule_ids.append(schedule_data['sid'])
                 continue
             # location에 대해서도 찾는다
-            elif keyword in schedule_data['location']:
-                schedule_ids.append(schedule_data['sid'])
-                continue
+            for loca in schedule_data['location']:
+                if keyword in loca:
+                    schedule_ids.append(schedule_data['sid'])
+                    continue
 
 
         return schedule_ids
@@ -718,9 +719,10 @@ class MultiScheduleModel(TimeTableModel):
             elif keyword in schedule_bundle_data['bname']:
                 schedule_bundle_ids.append(schedule_bundle_data['sbid'])
                 continue
-            elif keyword in schedule_bundle_data['location']:
-                schedule_bundle_ids.append(schedule_bundle_data['sbid'])
-                continue
+            for loca in schedule_bundle_data['location']:
+                if keyword in loca:
+                    schedule_bundle_ids.append(schedule_bundle_data['sbid'])
+                    continue
 
         return schedule_bundle_ids
 
