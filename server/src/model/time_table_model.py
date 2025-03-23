@@ -787,7 +787,7 @@ class MultiScheduleModel(TimeTableModel):
         # 필요하면 갯수 제한도 두삼
         for schedule_data in schedule_datas:
             schedule= Schedule()
-            schedule.make_with_dict(dict_data=schedule)
+            schedule.make_with_dict(dict_data=schedule_data)
             self.__schedules.append(schedule)
 
         # 스케줄 데이터 폼 수정
