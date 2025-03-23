@@ -1348,6 +1348,7 @@ class ScheduleBlockTreater():
         # 오늘 날짜
         # 여기 마져 만들어야됨
         today = datetime.today().date()
+        print("today : ", today)
     
         # 5일 / 7일 분량
         for i in range(days):
@@ -1359,10 +1360,9 @@ class ScheduleBlockTreater():
                 make_day_data=current_date,
                 num_schedule=0
             )                           
-            
+            print(day_block.origin_date)
             # day_block.origin_date는 datetime에서 년, 월, 일을 포함함
             if day_block.origin_date == today:
-                print("today!")
                 day_block.is_today = True
 
             weekDayDateBlock_list.append(day_block)
