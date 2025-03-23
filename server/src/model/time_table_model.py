@@ -738,6 +738,7 @@ class MultiScheduleModel(TimeTableModel):
 
         return schedule_id_list
 
+    # 안 씀
     # 내가 이벤트 스케줄 데이터 뽑기를 날짜로
     # date는 날짜임 , 형태는 2025/03/06 임
     # date안넣으면 기본적으로 오늘자로 감
@@ -758,6 +759,7 @@ class MultiScheduleModel(TimeTableModel):
 
         return
 
+    # 안 씀
     # 전체 이벤트 데이터 뽑기를 날짜로
     # date는 날짜임 , 형태는 2025/03/06 임
     # date안넣으면 기본적으로 오늘자로 감
@@ -777,6 +779,8 @@ class MultiScheduleModel(TimeTableModel):
         return
 
 
+
+    # 이거 로직 수정필요
     # 전체 스케줄 데이터 뽑기를 날짜로
     # date는 날짜임 , 형태는 2025/03/06 임
     # date안넣으면 기본적으로 오늘자로 감
@@ -972,14 +976,15 @@ class MultiScheduleModel(TimeTableModel):
             schedule.make_with_dict(dict_data=schedule_data)
             self.__schedules.append(schedule)
 
-        # 데이터 불러오고
-        schedule_events_datas = self._database.get_datas_with_ids(target_id="seid", ids=self._tuser.seids)
-
-        # 보낼 이벤트 정하는 곳
-        for schedule_event_data in schedule_events_datas:
-            schedule_event = ScheduleEvent()
-            schedule_event.make_with_dict(dict_data=schedule_event_data)
-            self.__schedule_events.append(schedule_event)
+        # 이벤트 데이터는 지금 사용 X
+        # # 데이터 불러오고
+        # schedule_events_datas = self._database.get_datas_with_ids(target_id="seid", ids=self._tuser.seids)
+        #
+        # # 보낼 이벤트 정하는 곳
+        # for schedule_event_data in schedule_events_datas:
+        #     schedule_event = ScheduleEvent()
+        #     schedule_event.make_with_dict(dict_data=schedule_event_data)
+        #     self.__schedule_events.append(schedule_event)
 
         self.__make_send_data_with_datas()
         return
