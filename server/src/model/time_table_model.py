@@ -370,9 +370,17 @@ class ScheduleTransformModel:
             return f"잘못된 데이터"
 
         if len(date_list) == 1:
-            return f"{date_list[0]}"
+            start_date = datetime.strptime(date_list[0],"%Y/%m/%d")
+            start_date_str = start_date.strftime("%y년 %m월 %d일")
+            return f"{start_date_str}"
 
-        return f"{date_list[0]}부터 {date_list[1]}까지"
+
+        start_date = datetime.strptime(date_list[0],"%Y/%m/%d")
+        start_date_str = start_date.strftime("%y년 %m월 %d일")
+        end_date = datetime.strptime(date_list[1], "%Y/%m/%d")
+        end_date_str = end_date.strftime("%y년 %m월 %d일")
+
+        return f"{start_date_str}부터 {end_date_str}까지"
 
     def _linked_str(self,  str_list, sep=", "):
         return sep.join(str_list)
@@ -781,6 +789,7 @@ class MultiScheduleModel(TimeTableModel):
 
 
     # 이거 로직 수정필요
+    # schedule_data를 들고올 때, key가 잘못됨.
     # 전체 스케줄 데이터 뽑기를 날짜로
     # date는 날짜임 , 형태는 2025/03/06 임
     # date안넣으면 기본적으로 오늘자로 감
@@ -1146,8 +1155,10 @@ class AddScheduleModel(TimeTableModel):
                 end_date = other_end
 
         # 문자열화
-        start_date_str = start_date.strftime("%y년 %m월 %d일")
-        end_date_str = end_date.strftime("%y년 %m월 %d일")
+        # start_date_str = start_date.strftime("%y년 %m월 %d일")
+        # end_date_str = end_date.strftime("%y년 %m월 %d일")
+        start_date_str = start_date.strftime("%Y/%m/%d")
+        end_date_str = end_date.strftime("%Y/%m/%d")
 
         # 반환
         return [start_date_str, end_date_str]
@@ -1177,6 +1188,7 @@ class AddScheduleModel(TimeTableModel):
         schedule.color_code = self._make_color_code()
         return schedule
 
+    # 스케줄 번들 만들기
     def make_new_schedule_bundle(self, schedule_list:list, sbname:str, bid:str):
         schedule_bundle = ScheduleBundle(
             sbname=sbname,
@@ -1230,6 +1242,7 @@ class AddScheduleModel(TimeTableModel):
 
         return schedules_object
 
+    # 스케줄 번들 저장
     def save_new_multiple_schedule_object_with_type(self, schedule_object, data_type:str):
         if data_type == "bundle":
             self._database.add_new_data(target_id="sbid", new_data=schedule_object.get_dict_form_data())
@@ -1239,6 +1252,13 @@ class AddScheduleModel(TimeTableModel):
         #     self.__result = True
 
         return
+
+    # # 스케줄 편집
+    # def modify_single_schedule(self, data_payload, sid:str):
+    #     schedule_data =
+
+
+
 
     def get_response_form_data(self, head_parser):
         body = {
