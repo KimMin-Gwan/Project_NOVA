@@ -3,7 +3,7 @@ from model import Local_Database
 from others.data_domain import TimeTableUser as TUser
 from others.data_domain import Schedule, ScheduleBundle, ScheduleEvent, Bias
 
-from datetime import datetime,timedelta
+from datetime import datetime,timedelta, time
 import random
 import string
 
@@ -125,16 +125,21 @@ class TimeTableModel(BaseModel):
     
     def set_target_date(self):
         today = datetime.today()
-        shorted_year = today.year % 100
-        
         first_day_of_month = datetime(today.year, today.month, 1)
 
-        # 해당 날짜와 첫 번째 날의 주 번호 계산
-        start_week = first_day_of_month.isocalendar()[1]  # 해당 달 첫 날의 주 번호
-        current_week = today.isocalendar()[1]             # 해당 날짜의 주 번호
+        # 월요일이 가장 빠른 날을 찾기 위해 이번 달 첫째 날부터 시작해서 월요일을 찾습니다.
+        current_date = first_day_of_month
+        while current_date.weekday() != 0:  # 0은 월요일을 나타냅니다.
+            current_date += timedelta(days=1)
 
-        # 현재 주가 3월 내의 몇 번째 주인지 계산
+        # 해당 주가 1주차인지 계산합니다.
+        start_week = current_date.isocalendar()[1]  # 해당 달 첫 번째 월요일이 속한 주 번호
+        current_week = today.isocalendar()[1]       # 오늘 날짜의 주 번호
+
+        # 현재 주가 이번 달 내 몇 번째 주인지 계산합니다.
         week_in_month = current_week - start_week + 1
+        
+        shorted_year = today.year % 100
         
         # 만약 미래에 있는 사람이 2100에 산다면 이 곳의 코드를 고치면 됩니다
         self.__target_month = f'{shorted_year}년 {today.month}월'
@@ -149,12 +154,14 @@ class TimeTableModel(BaseModel):
             return True
 
     # 현재 시간이 end_date/ end_time을 넘기면 True, 아니면 False다.
-    def __check_schedule_time(self, date:str, when:str, time:str="", bundle:bool=False):
-        # 날짜 데이터
-        if bundle:
-            date_obj = datetime.strptime(date, "%y년 %m월 %d일")
-        else:
-            date_obj = datetime.strptime(date, "%Y/%m/%d")
+    def __check_schedule_time(self, date:str, when:str, time:str=""):
+        # # 날짜 데이터
+        # if bundle:
+        #     date_obj = datetime.strptime(date, "%y년 %m월 %d일")
+        # else:
+        #     date_obj = datetime.strptime(date, "%Y/%m/%d")
+
+        date_obj = datetime.strptime(date, "%Y/%m/%d")
 
         # 시간 데이터가 존재한다면 시간도 같이 붙여야 함
         if time != "":
@@ -198,10 +205,13 @@ class TimeTableModel(BaseModel):
                         # 현재 시작한 일정
                         if not self.__check_schedule_time(date=schedule.start_date, time=schedule.start_time, when="start"):
                             filtered_id_list.append(schedule.sid)
-
                 elif filter_option == "not_start":
                     # 시작 전인 일정 서치
                     if self.__check_schedule_time(date=schedule.start_date, time=schedule.start_time, when="start"):
+                        filtered_id_list.append(schedule.sid)
+
+                elif filter_option == "not_end":
+                    if not self.__check_schedule_time(date=schedule.end_date, time=schedule.end_time, when="end"):
                         filtered_id_list.append(schedule.sid)
 
             elif schedule_id_type == "sbid":
@@ -210,18 +220,21 @@ class TimeTableModel(BaseModel):
 
                 if filter_option == "ended":
                     # 종료된 일정 번들
-                    if self.__check_schedule_time(date=schedule_bundle.date[1], when="end", bundle=True):
+                    if self.__check_schedule_time(date=schedule_bundle.date[1], when="end"):
                         filtered_id_list.append(schedule_bundle.sbid)
                 elif filter_option == "in_progress":
                     # 종료되지 않은 일정 번들
-                    if not self.__check_schedule_time(date=schedule_bundle.date[1], when="end", bundle=True):
+                    if not self.__check_schedule_time(date=schedule_bundle.date[1], when="end"):
                         # 시작한 일정 번들
-                        if not self.__check_schedule_time(date=schedule_bundle.date[0], when="start", bundle=True):
+                        if not self.__check_schedule_time(date=schedule_bundle.date[0], when="start"):
                             filtered_id_list.append(schedule_bundle.sbid)
-
                 elif filter_option == "not_start":
                     # 시작하지 않은 일정 번들
-                    if self.__check_schedule_time(date=schedule_bundle.date[0], when="start", bundle=True):
+                    if self.__check_schedule_time(date=schedule_bundle.date[0], when="start"):
+                        filtered_id_list.append(schedule_bundle.sbid)
+
+                elif filter_option == "not_end":
+                    if not self.__check_schedule_time(date=schedule_bundle.date[1], when="end"):
                         filtered_id_list.append(schedule_bundle.sbid)
 
 
@@ -233,10 +246,11 @@ class TimeTableModel(BaseModel):
         # 만약에 페이지 사이즈보다 더 짧은 경우도 있을 수 있기에 먼저 정해놓는다.
         # 이러면 페이징된 리스트의 길이에 상관없이, 인덱스를 알아낼 수 있을 것
 
+        # 아이디 리스트 중 last_index 부터 시작해서 나머지 모든 데이터를 꺼냄
         paging_list = id_list[last_index + 1:]
         last_index_next = -1
         if len(id_list) != 0:
-            last_index_next = id_list.index(id_list[-1])
+            last_index_next = id_list.index(id_list[-1]) # 다음 라스트 인덱스를 설정
 
         # 만약 페이지 사이즈를 넘었다면 표시할 개수만큼 짜르고, last_index를 재설정한다.
         if len(paging_list) > page_size:
@@ -370,9 +384,17 @@ class ScheduleTransformModel:
             return f"잘못된 데이터"
 
         if len(date_list) == 1:
-            return f"{date_list[0]}"
+            start_date = datetime.strptime(date_list[0],"%Y/%m/%d")
+            start_date_str = start_date.strftime("%y년 %m월 %d일")
+            return f"{start_date_str}"
 
-        return f"{date_list[0]}부터 {date_list[1]}까지"
+
+        start_date = datetime.strptime(date_list[0],"%Y/%m/%d")
+        start_date_str = start_date.strftime("%y년 %m월 %d일")
+        end_date = datetime.strptime(date_list[1], "%Y/%m/%d")
+        end_date_str = end_date.strftime("%y년 %m월 %d일")
+
+        return f"{start_date_str}부터 {end_date_str}까지"
 
     def _linked_str(self,  str_list, sep=", "):
         return sep.join(str_list)
@@ -661,6 +683,12 @@ class MultiScheduleModel(TimeTableModel):
             elif keyword in schedule_data['bname']:
                 schedule_ids.append(schedule_data['sid'])
                 continue
+            # location에 대해서도 찾는다
+            for loca in schedule_data['location']:
+                if keyword in loca:
+                    schedule_ids.append(schedule_data['sid'])
+                    continue
+
 
         return schedule_ids
 
@@ -691,6 +719,10 @@ class MultiScheduleModel(TimeTableModel):
             elif keyword in schedule_bundle_data['bname']:
                 schedule_bundle_ids.append(schedule_bundle_data['sbid'])
                 continue
+            for loca in schedule_bundle_data['location']:
+                if keyword in loca:
+                    schedule_bundle_ids.append(schedule_bundle_data['sbid'])
+                    continue
 
         return schedule_bundle_ids
 
@@ -781,6 +813,7 @@ class MultiScheduleModel(TimeTableModel):
 
 
     # 이거 로직 수정필요
+    # schedule_data를 들고올 때, key가 잘못됨.
     # 전체 스케줄 데이터 뽑기를 날짜로
     # date는 날짜임 , 형태는 2025/03/06 임
     # date안넣으면 기본적으로 오늘자로 감
@@ -1146,8 +1179,10 @@ class AddScheduleModel(TimeTableModel):
                 end_date = other_end
 
         # 문자열화
-        start_date_str = start_date.strftime("%y년 %m월 %d일")
-        end_date_str = end_date.strftime("%y년 %m월 %d일")
+        # start_date_str = start_date.strftime("%y년 %m월 %d일")
+        # end_date_str = end_date.strftime("%y년 %m월 %d일")
+        start_date_str = start_date.strftime("%Y/%m/%d")
+        end_date_str = end_date.strftime("%Y/%m/%d")
 
         # 반환
         return [start_date_str, end_date_str]
@@ -1177,6 +1212,7 @@ class AddScheduleModel(TimeTableModel):
         schedule.color_code = self._make_color_code()
         return schedule
 
+    # 스케줄 번들 만들기
     def make_new_schedule_bundle(self, schedule_list:list, sbname:str, bid:str):
         schedule_bundle = ScheduleBundle(
             sbname=sbname,
@@ -1230,6 +1266,7 @@ class AddScheduleModel(TimeTableModel):
 
         return schedules_object
 
+    # 스케줄 번들 저장
     def save_new_multiple_schedule_object_with_type(self, schedule_object, data_type:str):
         if data_type == "bundle":
             self._database.add_new_data(target_id="sbid", new_data=schedule_object.get_dict_form_data())
@@ -1239,6 +1276,13 @@ class AddScheduleModel(TimeTableModel):
         #     self.__result = True
 
         return
+
+    # # 스케줄 편집
+    # def modify_single_schedule(self, data_payload, sid:str):
+    #     schedule_data =
+
+
+
 
     def get_response_form_data(self, head_parser):
         body = {
@@ -1297,16 +1341,27 @@ class ScheduleBlockTreater():
         self.__over_flowed_schedules = []
 
     # WeekDay Block 데이터 만들기
-    def make_default_week_day_data(self, today:datetime, days):
+    def make_default_week_day_data(self, target_date:datetime, days):
 
         weekDayDateBlock_list = []
 
+        # 오늘 날짜
+        # 여기 마져 만들어야됨
+        today = datetime.today()
+        today = datetime.combine(today, time.min)
+
         # 5일 / 7일 분량
         for i in range(days):
-            day_block = WeekDayDataBlock(day=weekday_names[(today + timedelta(days=i)).weekday()],
-                                         make_day_data=(today+timedelta(days=i)),
-                                         num_schedule=0)
-            if day_block.date == today.day:
+            current_date = target_date + timedelta(days=i)
+
+            # WeekDayDataBlock 생성
+            day_block = WeekDayDataBlock(
+                day=weekday_names[current_date.weekday()],
+                make_day_data=current_date,
+                num_schedule=0
+            )                           
+            # day_block.origin_date는 datetime에서 년, 월, 일을 포함함
+            if day_block.origin_date== today:
                 day_block.is_today = True
 
             weekDayDateBlock_list.append(day_block)
@@ -1347,7 +1402,7 @@ class ScheduleBlockTreater():
 
         return trimmed_list
 
-    def claer_over_flowed_schedule(self) -> list[ScheduleBlock]:
+    def clear_over_flowed_schedule(self) -> list[ScheduleBlock]:
         schedule_blocks = []
 
         for schedule in self.__over_flowed_schedules:
@@ -1517,32 +1572,45 @@ class ScheduleChartModel(TimeTableModel):
         #today = target_date + timedelta(days=12)
         # today = target_date - timedelta(days=3)
 
-        min_date = None
-        temp_schedules = []
+        temp_schedules:list[Schedule] = []
 
         # 필요하면 갯수 제한도 두삼
         for schedule_data in schedule_datas:
             schedule = Schedule()
             schedule.make_with_dict(dict_data=schedule_data)
     
+                    
+            temp_schedules.append(schedule)
+            
+        # 임시로 뽑은 애들 정렬치는 부분
+        sids_schedules = []
+        
+        for schedule in temp_schedules:
+            if schedule.sid in sids:
+                sids_schedules.append(schedule)
+                
+        # 반드시 임시로 뽑은 애들중에서 min_date를 골라야했음
+        min_date = None
+        
+        for sid_schedule in sids_schedules:
             # 날짜가 오늘부터 지정된 일수만큼 뒤까지 포함되는지 확인
-            schedule_date = datetime.strptime(schedule.start_date, "%Y/%m/%d")
+            schedule_date = datetime.strptime(sid_schedule.start_date, "%Y/%m/%d")
 
             # 이거 미리보기 일 때 라는 조건문임
             if sids:
                 # min_date를 가장 빠른 날짜로 설정
                 if min_date is None or schedule_date < min_date:
                     min_date = schedule_date
-                    
-            temp_schedules.append(schedule)
         
         # 가장 빠른 날짜가 있으면 이걸로 보여줘야됨
         if min_date:
             target_date = min_date
         else:
-            # 아니면 평범하게 오늘자로 하면됨
-            target_date = datetime.strptime(target_date, ("%Y/%m/%d"))
-        
+            # 아니면 평범하게 오늘자로 하면됨 ==> 수정됨
+            #target_date = datetime.strptime(target_date, ("%Y/%m/%d"))
+            
+            # 오늘이 포함된 주차에서 월요일을 골라야됨
+            target_date = self._get_monday_date(target_date=target_date)
         
         schedules= []
         
@@ -1553,14 +1621,16 @@ class ScheduleChartModel(TimeTableModel):
                     
         schedule_block_treater = ScheduleBlockTreater()
         
-        weekday_blocks = schedule_block_treater.make_default_week_day_data(today=target_date, days=days)
+        # 위크데이 블럭만드는 곳
+        weekday_blocks = schedule_block_treater.make_default_week_day_data(target_date=target_date, days=days)
 
+        # 스케줄 블럭 만드는 곳
         for schedule in schedules:
             schedule_block = schedule_block_treater.make_schedule_block(schedule=schedule, sids=sids)
             self.__schedule_blocks.append(schedule_block)
-            
-        over_flowed_schedule:list = schedule_block_treater.claer_over_flowed_schedule()
         
+        # 오버 플로우된거 처리까지 해서 스케줄 블럭 완성하기
+        over_flowed_schedule:list = schedule_block_treater.clear_over_flowed_schedule()
         self.__schedule_blocks.extend(over_flowed_schedule)
         
         # self.__week_day_datas = schedule_block_treater.make_week_day_data(schedule_blocks=self.__schedule_blocks)
@@ -1579,6 +1649,19 @@ class ScheduleChartModel(TimeTableModel):
         # 이코드가 추가되어야됨
         
         return
+    
+    def _get_monday_date(self, target_date: str) -> datetime:
+        # 입력 날짜를 datetime 객체로 변환
+        target_date = datetime.strptime(target_date, "%Y/%m/%d")
+    
+        # 오늘의 요일 계산 (0: 월요일, 6: 일요일)
+        day_of_week = target_date.weekday()
+    
+        # 오늘 날짜에서 요일 값을 빼서 이번 주 월요일 계산
+        monday_date = target_date - timedelta(days=day_of_week)
+    
+        # 월요일 날짜를 datetime 객체로 반환
+        return monday_date
     
     def get_response_form_data(self, head_parser):
         body = {

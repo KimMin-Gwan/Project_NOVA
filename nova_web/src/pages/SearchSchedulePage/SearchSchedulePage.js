@@ -7,7 +7,7 @@ import HEADER from "../../constant/header";
 import { ScheduleBundle } from "../../component/ScheduleEvent/ScheduleBundle";
 import ScheduleCard from "../../component/EventCard/EventCard";
 import ScheduleSearch from "../../component/ScheduleSearch/ScheduleSearch";
-import { ScheduleMore, ScheduleAdd } from "../../component/ScheduleMore/ScheduleMore";
+import { ScheduleMore, ScheduleAdd, ScheduleEdit, ScheduleRemove } from "../../component/ScheduleMore/ScheduleMore";
 import { BundleScheduleDetail, ScheduleDetail, MakeSingleSchedule } from "../../component/EventMore/EventMore";
 import back from "./../../img/detail_back.png";
 
@@ -65,18 +65,38 @@ export default function SearchSchedulePage() {
       });
   }
 
+  async function fecthSearchDataDefault() {
+    let type = typeSelectData[activeIndex];
+
+    await mainApi
+      .get(
+        `time_table_server/try_search_schedule_with_keyword?keyword=${searchKeyword}&key=-1&type=${type}`
+      )
+      .then((res) => {
+        if (activeIndex === 0) {
+          setScheduleBundleData(res.data.body.schedule_bundles);
+          setScheduleBundleKey(res.data.body.key);
+        } else if (activeIndex === 1) {
+          setScheduleData(res.data.body.schedules);
+          setScheduleKey(res.data.body.key);
+        }
+      });
+  }
+
   useEffect(() => {
     setScheduleKey(-1);
     setScheduleBundleKey(-1);
     setScheduleData([]);
     setScheduleBundleData([]);
 
-    fetchSearchData();
+    fecthSearchDataDefault()
   }, [searchKeyword, activeIndex]);
+
 
   // 탭 변경시 검색 초기화
   useEffect(() => {
     setSearchKeyword("");
+    setScheduleBundleKey(-1);
   }, [activeIndex]);
 
   // 일정 탐색 페이지에 일정번들, 일정, 이벤트 상태 변경
@@ -121,7 +141,6 @@ export default function SearchSchedulePage() {
         },
       })
       .then((res) => {
-        console.log(res.data);
       });
   }
 
@@ -160,20 +179,38 @@ export default function SearchSchedulePage() {
               </li>
             ))
           : scheduleData.map((item) => (
-              <li key={item.sid}>
-                <ScheduleCard
-                  {...item}
-                  toggleClick={() => handleToggleMore(item.sid)} // id 전달
-                />
-                {moreClick[item.sid] && ( // 해당 id의 상태만 확인
+            <li key={item.sid}>
+              <ScheduleCard
+                {...item}
+                toggleClick={() => handleToggleMore(item.sid)} // id 전달
+              />
+
+              {moreClick[item.sid] && (
+                item.is_already_have === false ? (
                   <ScheduleAdd
                     target={item}
                     detailClick={toggleAddScheduleModal}
                     navBoardClick={navBoard}
                     addClick={fetchTryAddSchedule}
                   />
-                )}
-              </li>
+                ) : item.is_owner === false? (
+                  <ScheduleRemove
+                    target={item}
+                    detailClick={toggleAddScheduleModal}
+                    navBoardClick={navBoard}
+                    addClick={fetchTryAddSchedule}
+                  />
+                ) : (
+                  <ScheduleEdit
+                    target={item}
+                    detailClick={toggleAddScheduleModal}
+                    navBoardClick={navBoard}
+                    addClick={fetchTryAddSchedule}
+                  />
+                )
+              )}
+            </li>
+ 
             ))}
       </ul>
 

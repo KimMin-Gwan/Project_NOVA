@@ -8,7 +8,7 @@ class TImeTableController:
     def get_schedules_with_sids(self, database:Local_Database, request:RequestManager) -> BaseModel: 
         model = MultiScheduleModel(database=database)
         
-        if request.jwt_payload != "":
+        if request.jwt_payload!= "":
             model.set_user_with_email(request=request.jwt_payload)
             # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
             if not model._set_tuser_with_tuid():
@@ -24,7 +24,7 @@ class TImeTableController:
     def get_dashboard_data(self, database:Local_Database, request:RequestManager) -> BaseModel: 
         model = TimeTableModel(database=database)
         
-        if request.jwt_payload != "":
+        if request.jwt_payload!= "":
             model.set_user_with_email(request=request.jwt_payload)
             # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
             if not model._set_tuser_with_tuid():
@@ -42,7 +42,7 @@ class TImeTableController:
     def get_eventboard_data(self, database:Local_Database, request:RequestManager) -> BaseModel: 
         model = MultiScheduleModel(database=database)
         
-        if request.jwt_payload != "":
+        if request.jwt_payload!= "":
             model.set_user_with_email(request=request.jwt_payload)
             # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
             if not model._set_tuser_with_tuid():
@@ -59,11 +59,12 @@ class TImeTableController:
     # 내 타임 차트 가지고 오기
     def get_time_chart(self, database:Local_Database, request:RequestManager) -> BaseModel: 
         model = ScheduleChartModel(database=database)
-        
-        model.set_user_with_email(request=request.jwt_payload)
-        # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
-        if not model._set_tuser_with_tuid():
-            return model
+
+        if request.jwt_payload!= "":
+            model.set_user_with_email(request=request.jwt_payload)
+            # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
+            if not model._set_tuser_with_tuid():
+                return model
 
         #if model.is_tuser_alive():
         model.set_my_schedule_in_by_day(target_date=request.data_payload.date)
@@ -73,12 +74,12 @@ class TImeTableController:
     # 내 타임 차트 가지고 오기
     def get_time_chart_with_sids(self, database:Local_Database, request:RequestManager) -> BaseModel: 
         model = ScheduleChartModel(database=database)
-        
-        
-        model.set_user_with_email(request=request.jwt_payload)
-        # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
-        if not model._set_tuser_with_tuid():
-            return model
+
+        if request.jwt_payload!= "":
+            model.set_user_with_email(request=request.jwt_payload)
+            # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
+            if not model._set_tuser_with_tuid():
+                return model
 
         
         #if model.is_tuser_alive():
@@ -112,7 +113,7 @@ class TImeTableController:
         # model = TimeTableBiasModel(database=database)
         model = MultiScheduleModel(database=database)
 
-        if request.jwt_payload != "":
+        if request.jwt_payload!= "":
             model.set_user_with_email(request=request.jwt_payload)
             if not model._set_tuser_with_tuid():
                 return model
@@ -125,7 +126,7 @@ class TImeTableController:
     def try_add_schedule(self, database:Local_Database, request:RequestManager) -> BaseModel: 
         model = AddScheduleModel(database=database)
         
-        if request.jwt_payload != "":
+        if request.jwt_payload!= "":
             model.set_user_with_email(request=request.jwt_payload)
             # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
             if not model._set_tuser_with_tuid():
@@ -139,7 +140,7 @@ class TImeTableController:
     # 이벤트 추가하기
     def try_add_event(self, database:Local_Database, request:RequestManager) -> BaseModel: 
         model = AddScheduleModel(database=database)
-        if request.jwt_payload != "":
+        if request.jwt_payload!= "":
             model.set_user_with_email(request=request.jwt_payload)
             # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
             if not model._set_tuser_with_tuid():
@@ -154,7 +155,7 @@ class TImeTableController:
     def try_select_my_time_table_schedule(self, database:Local_Database, request:RequestManager) -> BaseModel: 
         model = AddScheduleModel(database=database)
         
-        if request.jwt_payload != "":
+        if request.jwt_payload!= "":
             model.set_user_with_email(request=request.jwt_payload)
             # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
             if not model._set_tuser_with_tuid():
@@ -172,7 +173,7 @@ class TImeTableController:
                                          num_schedules=8) -> BaseModel:
         model = MultiScheduleModel(database=database)
         
-        if request.jwt_payload != "":
+        if request.jwt_payload!= "":
             model.set_user_with_email(request=request.jwt_payload)
             # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
             if not model._set_tuser_with_tuid():
@@ -190,7 +191,7 @@ class TImeTableController:
     def try_get_recommend_keyword(self, database:Local_Database, request:RequestManager, num_keywords=6) -> BaseModel:
         model = ScheduleRecommendKeywordModel(database=database)
 
-        if request.jwt_payload != "":
+        if request.jwt_payload!= "":
             model.set_user_with_email(request=request.jwt_payload)
 
         model.get_category_recommend(num_keywords=num_keywords)
@@ -201,7 +202,7 @@ class TImeTableController:
     def try_search_my_schedule_with_bid(self, database:Local_Database, request:RequestManager) -> BaseModel:
         model = MultiScheduleModel(database=database)
         
-        if request.jwt_payload != "":
+        if request.jwt_payload!= "":
             model.set_user_with_email(request=request.jwt_payload)
             # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
             if not model._set_tuser_with_tuid():
@@ -219,7 +220,7 @@ class TImeTableController:
                                       num_schedules=6):
         model = MultiScheduleModel(database)
 
-        if request.jwt_payload != "":
+        if request.jwt_payload!= "":
             model.set_user_with_email(request=request.jwt_payload)
             if not model._set_tuser_with_tuid():
                 return model
@@ -241,7 +242,7 @@ class TImeTableController:
         # model = TimeTableBiasModel(database=database)
         model = MultiScheduleModel(database=database)
 
-        if request.jwt_payload != "":
+        if request.jwt_payload!= "":
             model.set_user_with_email(request=request.jwt_payload)
             # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
             if not model._set_tuser_with_tuid():
@@ -257,7 +258,7 @@ class TImeTableController:
     def try_reject_from_my_schedule(self, database:Local_Database, request:RequestManager) -> BaseModel: 
         model = AddScheduleModel(database=database)
         
-        if request.jwt_payload != "":
+        if request.jwt_payload!= "":
             model.set_user_with_email(request=request.jwt_payload)
             # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
             if not model._set_tuser_with_tuid():
@@ -270,7 +271,7 @@ class TImeTableController:
     def make_new_single_schedule(self, database:Local_Database, request:RequestManager) -> BaseModel: 
         model = AddScheduleModel(database=database)
         
-        if request.jwt_payload != "":
+        if request.jwt_payload!= "":
             model.set_user_with_email(request=request.jwt_payload)
             # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
             if not model._set_tuser_with_tuid():
@@ -287,7 +288,7 @@ class TImeTableController:
     def make_new_multiple_schedules(self, database:Local_Database, request:RequestManager) -> BaseModel: 
         model = AddScheduleModel(database=database)
 
-        if request.jwt_payload != "":
+        if request.jwt_payload!= "":
             model.set_user_with_email(request=request.jwt_payload)
             # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
             if not model._set_tuser_with_tuid():
