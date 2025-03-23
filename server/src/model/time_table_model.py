@@ -672,6 +672,11 @@ class MultiScheduleModel(TimeTableModel):
             elif keyword in schedule_data['bname']:
                 schedule_ids.append(schedule_data['sid'])
                 continue
+            # location에 대해서도 찾는다
+            elif keyword in schedule_data['location']:
+                schedule_ids.append(schedule_data['sid'])
+                continue
+
 
         return schedule_ids
 
@@ -700,6 +705,9 @@ class MultiScheduleModel(TimeTableModel):
                 continue
             # Bias 네임으로 검색하는 경우
             elif keyword in schedule_bundle_data['bname']:
+                schedule_bundle_ids.append(schedule_bundle_data['sbid'])
+                continue
+            elif keyword in schedule_bundle_data['location']:
                 schedule_bundle_ids.append(schedule_bundle_data['sbid'])
                 continue
 
