@@ -234,7 +234,7 @@ class TimeTableModel(BaseModel):
                         filtered_id_list.append(schedule_bundle.sbid)
 
                 elif filter_option == "not_end":
-                    if not self.__check_schedule_time(date=schedule_bundle.date[0], when="end"):
+                    if not self.__check_schedule_time(date=schedule_bundle.date[1], when="end"):
                         filtered_id_list.append(schedule_bundle.sbid)
 
 
