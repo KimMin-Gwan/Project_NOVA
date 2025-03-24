@@ -1289,6 +1289,7 @@ class AddScheduleModel(TimeTableModel):
 
         # 스케쥴 데이터를 추가 할 때, Tuser도 업데이트함
         for s in schedule:
+            self._tuser.sids.append(s.sid)
             self._tuser.my_sids.append(s.sid)
         self._database.modify_data_with_id(target_id="tuid", target_data=self._tuser.get_dict_form_data())
 
@@ -1431,8 +1432,11 @@ class AddScheduleModel(TimeTableModel):
                 tu_sids.append({"sids" : tuser.sids})
                 tuids.append(tuser.tuid)
             
+        self._tuser.my_sids.remove(sid)
         self._database.modify_datas_with_ids(target_id="sbid", ids=sbids, target_datas=sb_sids)
         self._database.modify_datas_with_ids(target_id="tuid", ids=tuids, target_datas=tu_sids)
+        self._database.modify_data_with_id(target_id="tuid", target_data=self._tuser.get_dict_form_data())
+        
         self._database.delete_data_with_id(target="sid", id=sid)
         self.__result = True
         return
