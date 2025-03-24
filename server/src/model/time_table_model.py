@@ -1014,9 +1014,6 @@ class MultiScheduleModel(TimeTableModel):
     def get_weekday_schedules(self):
         schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids=self._tuser.sids)
 
-        pprint(schedule_datas)
-        
-        
         monday, sunday = self._find_week_monday_N_sunday()
 
         for schedule_data in schedule_datas:
@@ -1167,10 +1164,6 @@ class AddScheduleModel(TimeTableModel):
 
         if sid in self._tuser.sids:
             self._tuser.sids.remove(sid)
-            flag = True
-
-        if sid in self._tuser.this_week_sids:
-            self._tuser.this_week_sids.remove(sid)
             flag = True
 
         if flag:
