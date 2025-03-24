@@ -3,7 +3,7 @@ from model import Local_Database
 from others.data_domain import TimeTableUser as TUser
 from others.data_domain import Schedule, ScheduleBundle, ScheduleEvent, Bias
 
-from datetime import datetime,timedelta, time
+from datetime import datetime,timedelta, time, date
 import random
 import string
 
@@ -59,6 +59,16 @@ class TimeTableModel(BaseModel):
         week_in_month = current_week - start_week + 1
         
         return week_in_month
+
+    def _find_week_monday_N_sunday(self):
+        today_str = datetime.today().strftime("%Y/%m/%d")
+        today = datetime.strptime(today_str, "%Y/%m/%d")
+
+        # weekday() -> 월 : 0, 화 : 1 ...  일 : 6
+        monday = today - timedelta(days=today.weekday())
+        sunday = today + timedelta(days=(6 - today.weekday()))
+
+        return monday, sunday
 
     def _calculate_day_hour_time(self, dtime:datetime):
         hour = dtime.hour
@@ -998,6 +1008,31 @@ class MultiScheduleModel(TimeTableModel):
         self._make_send_data_with_ids(id_list=searched_list, search_type="schedule")
         return
 
+    # 이번 주 일정을 들고 옮
+    def get_weekday_schedules(self):
+        schedule_datas = self._database.get_all_data(target="sid")
+
+        monday, sunday = self._find_week_monday_N_sunday()
+
+        for schedule_data in schedule_datas:
+            schedule = Schedule()
+            schedule.make_with_dict(schedule_data)
+
+            start_date = datetime.strptime(schedule.start_date, "%Y/%m/%d")
+            end_date = datetime.strptime(schedule.end_date, "%Y/%m/%d")
+
+            if monday <= start_date <= sunday:
+                self.__schedules.append(schedule)
+            elif monday <= end_date <= sunday:
+                self.__schedules.append(schedule)
+
+
+        self._make_send_data_with_datas()
+
+        return
+
+
+
     # 내가 설정한 모든 스케쥴 불러오기
     def search_my_all_schedule(self):
         # 데이터 불러오고
@@ -1022,6 +1057,19 @@ class MultiScheduleModel(TimeTableModel):
 
         self.__make_send_data_with_datas()
         return
+
+    def get_written_schedule(self, sid:str):
+        schedule_data = self._database.get_data_with_id(target="sid",id=sid)
+        schedule=Schedule()
+        schedule.make_with_dict(schedule_data)
+
+        if schedule.sid in self._tuser.my_sids:
+            schedule.is_owner = True
+
+        self.schedules.append(schedule.get_dict_form_data())
+
+        return
+
 
     # 바이어스 추천 로직
     # 근데 아직 추천할게 없어
@@ -1262,7 +1310,7 @@ class AddScheduleModel(TimeTableModel):
 
         if data_type == "bundle":
             schedules_object = self.make_new_schedule_bundle(schedule_list=schedule_list, sbname=sname, bid=bid)
-            self._tuser.my_sbids.append(schedules_object)
+            self._tuser.my_sbids.append(schedules_object.sbid)
             self._database.modify_data_with_id(target_id="tuid", target_data=self._tuser.get_dict_form_data())
 
         return schedules_object
@@ -1282,8 +1330,78 @@ class AddScheduleModel(TimeTableModel):
     # def modify_single_schedule(self, data_payload, sid:str):
     #     schedule_data =
 
+    # 단일 스케줄 편집 저장
+    def modify_single_schedule(self, data_payload, sid:str):
+        schedule_data = self._database.get_data_with_id(target="sid", id=sid)
+        schedule = Schedule()
+        schedule.make_with_dict(schedule_data)
 
+        bias_data = self._database.get_data_with_id(target="bid", id=data_payload.bid)
+        bias = Bias().make_with_dict(bias_data)
 
+        schedule.sname = data_payload.sname
+        schedule.bid = data_payload.bid
+        schedule.bname = bias.bname
+        schedule.start_date = data_payload.start_date
+        schedule.start_time = data_payload.start_time
+        schedule.end_date = data_payload.end_date
+        schedule.end_time = data_payload.end_time
+        schedule.state = data_payload.state
+        schedule.update_datetime= datetime.today().strftime("%Y/%m/%d-%H:%M:%S")
+
+        return schedule
+
+    # 복수의 스케줄 저장 ( Schedule 데이터에 sid가 들어감 )
+    def modify_multiple_schedule(self, schedules:list[Schedule], sname:str , sbid:str, bid:str, data_type:str):
+        schedule_list = []
+        schedule_object = None
+
+        # 스케줄 데이터들을 편집
+        for schedule in schedules:
+            schedule = self.modify_single_schedule(data_payload=schedule, sid=schedule.sid)
+            schedule_list.append(schedule)
+
+        # 데이터 저장
+        self.save_modified_schedule(schedule=schedule_list)
+
+        # 번들데이터 만들기
+        if data_type == "bundle":
+            schedule_object = self.modify_schedule_bundle(schedule_list=schedule_list, sbid=sbid, sbname=sname, bid=bid)
+
+        return schedule_object
+
+    # 스케줄 번들을 수정
+    def modify_schedule_bundle(self, schedule_list:list, sbid:str, sbname:str, bid:str):
+        schedule_bundle_data = self._database.get_data_with_id(target="sbid", id=sbid)
+        schedule_bundle = ScheduleBundle().make_with_dict(schedule_bundle_data)
+
+        bias_data = self._database.get_data_with_id(target="bid", id=bid)
+        bias = Bias().make_with_dict(bias_data)
+
+        schedule_bundle.sbname = sbname
+        schedule_bundle.bid = bid
+        schedule_bundle.bname = bias.bname
+        schedule_bundle.date = self.__find_start_n_end_date(schedule_list=schedule_list)
+        schedule_bundle.location = self.__find_all_broadcast_location(schedule_list=schedule_list)
+        schedule_bundle.update_datetime = datetime.today().strftime("%Y/%m/%d-%H:%M:%S")
+
+        return schedule_bundle
+
+    #
+    def save_modified_schedule(self, schedule:list):
+        save_datas = self._make_dict_list_data(list_data=schedule)
+
+        for s_data in save_datas:
+            self._database.modify_data_with_id(target_id="sid", target_data=s_data)
+
+        self.__result = True
+        return
+
+    def save_modified_multiple_schedule_object_with_type(self, schedule_object, data_type:str):
+        if data_type == "bundle":
+            self._database.modify_data_with_id(target_id="sbid", target_data=schedule_object.get_dict_form_data())
+            self.__result = True
+        return
 
     def get_response_form_data(self, head_parser):
         body = {

@@ -134,7 +134,7 @@ class TImeTableController:
         else:
             return model 
         
-        model.add_schedule(sids=request.data_payload.sids)
+        # model.add_schedule(sids=request.data_payload.sids)
         return model
     
     # 이벤트 추가하기
@@ -216,6 +216,22 @@ class TImeTableController:
         
         return model
 
+    # 이번 주 일정을 들고 올 것 (전체에서)
+    def try_get_weekday_schedules(self, database:Local_Database, request:RequestManager) -> BaseModel:
+        model = MultiScheduleModel(database=database)
+
+        # if request.jwt_payload!= "":
+            # model.set_user_with_email(request=request.jwt_payload)
+            # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
+            # if not model._set_tuser_with_tuid():
+            #     return model
+
+        model.get_weekday_schedules()
+
+        return model
+
+
+    # 내가 선택한 일정을 들고 옴
     def try_get_my_selected_schedules(self, database:Local_Database, request:RequestManager,
                                       num_schedules=6):
         model = MultiScheduleModel(database)
@@ -233,7 +249,6 @@ class TImeTableController:
                                         num_schedules=num_schedules)
 
         return model
-
 
 
 
@@ -302,3 +317,33 @@ class TImeTableController:
         model.save_new_multiple_schedule_object_with_type(schedule_object=schedule_object, data_type=request.data_payload.type)
 
         return model
+
+    def try_get_written_schedule(self, database:Local_Database, request:RequestManager):
+        model = MultiScheduleModel(database)
+
+        if request.jwt_payload!= "":
+            model.set_user_with_email(request=request.jwt_payload)
+            if not model._set_tuser_with_tuid():
+                return model
+
+        # model.set_user_with_email(request=request.data_payload)
+        # model._set_tuser_with_tuid()
+
+        model.get_written_schedule(sid=request.data_payload.sid)
+
+        return model
+
+
+    def try_modify_single_schedule(self, database:Local_Database, request:RequestManager):
+        model = AddScheduleModel(database)
+
+        if request.jwt_payload!= "":
+            model.set_user_with_email(request=request.jwt_payload)
+            if not model._set_tuser_with_tuid():
+                return model
+
+        schedule = model.modify_single_schedule(data_payload=request.data_payload, sid=request.data_payload.sid)
+        model.save_modified_schedule(schedule=[schedule])
+
+        return model
+
