@@ -768,7 +768,7 @@ class MultiScheduleModel(TimeTableModel):
 
     # 내가 선택한 스케쥴 데이터 서치 함수. bid에 따라 필터링도 함
     def __find_my_selected_schedules(self, bid:str):
-        my_schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids=self._tuser.sids)
+        my_schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids=self._tuser.my_sids)
         schedule_id_list = []
 
         for schedule_data in my_schedule_datas:
@@ -1010,7 +1010,7 @@ class MultiScheduleModel(TimeTableModel):
 
     # 이번 주 일정을 들고 옮
     def get_weekday_schedules(self):
-        schedule_datas = self._database.get_all_data(target="sid")
+        schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids=self._tuser.sids)
 
         monday, sunday = self._find_week_monday_N_sunday()
 
