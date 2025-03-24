@@ -134,7 +134,7 @@ class TImeTableController:
         else:
             return model 
         
-        # model.add_schedule(sids=request.data_payload.sids)
+        model.add_schedule(sids=request.data_payload.sids)
         return model
     
     # 이벤트 추가하기
