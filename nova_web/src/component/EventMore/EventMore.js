@@ -95,6 +95,9 @@ export function BundleScheduleDetail({ closeSchedule, isOpen, target }) {
       body: {
         sids: sids,
       },
+    }).then((res) => {
+      alert("일정을 추가했습니다.");
+      closeSchedule()
     });
   }
 
