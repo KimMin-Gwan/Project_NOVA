@@ -407,7 +407,7 @@ class TimeTableView(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
-
+        # 스케줄 데이터 삭제
         @self.__app.get('/time_table_server/try_delete_schedule')
         def try_delete_schedule(request:Request, sid:Optional[str]=""):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
@@ -422,6 +422,7 @@ class TimeTableView(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
+        # 번들 데이터 삭제
         @self.__app.get('/time_table_server/try_delete_bundle')
         def try_delete_bundle(request:Request, sbid:Optional[str]=""):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
