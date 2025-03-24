@@ -24,12 +24,6 @@ const getDaysInMonth = (year, month) => {
   return new Date(year, month, 0).getDate();
 };
 
-// Picker 에서 선택 가능한 시간 범위
-// 근데 이 친구는 왜 함수 밖에 있냐? 뭐지?
-const timeSelections = {
-  hour: Array.from({ length: 24 }, (_, i) => i),
-  minute: Array.from({ length: 60 }, (_, i) => i),
-};
 
 export default function ScheduleSelect({
   index,
@@ -37,11 +31,18 @@ export default function ScheduleSelect({
   sendScheduleData,
   removeSchedule,
 }) {
-  // 파라미터로 넘어온 데이터 에서 location이랑 sname 바꾸는 함수
+   //파라미터로 넘어온 데이터 에서 location이랑 sname 바꾸는 함수
   const handleScheduleChange = (field, value) => {
     const updatedSchedules = [...sendScheduleData.schedules];
     updatedSchedules[index] = { ...updatedSchedules[index], [field]: value };
     setSendScheduleData({ ...sendScheduleData, schedules: updatedSchedules });
+  };
+
+  // Picker 에서 선택 가능한 시간 범위
+  // 근데 이 친구는 왜 함수 밖에 있냐? 뭐지?
+  const timeSelections = {
+    hour: Array.from({ length: 24 }, (_, i) => i),
+    minute: Array.from({ length: 60 }, (_, i) => i),
   };
 
   // 파라미터로 넘어온 데이터에서 schedule 데이터 바꾸는 함수
@@ -225,6 +226,14 @@ export default function ScheduleSelect({
     }));
   };
 
+  // Picker 에서 선택하면 실제로 바꿔주는 함수
+  const updateTimePickerField = (field, value, setValue) => {
+    setValue((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
   // 무슨요일인지 바꿔주는 인터페이스
   const updateDaysOfWeek = (year, month, day, setWeek) => {
     const selectDate = new Date(year, month - 1, day);
@@ -251,6 +260,7 @@ export default function ScheduleSelect({
     const targetEndDate = `${endPickerValue.year}/${endPickerValue.month}/${endPickerValue.day}`;
     const targetStartTime = `${startTimePickerValue.hour}:${startTimePickerValue.minute}`;
     const targetEndTime = `${endTimePickerValue.hour}:${endTimePickerValue.minute}`;
+
     handleScheduleDateTimeChange(
       targetStartDate,
       targetEndDate,
@@ -311,6 +321,7 @@ export default function ScheduleSelect({
 
       <div className="DateAndTimeInfo">
         <DatePicker
+          index={index}
           {...startPickerValue}
           setIsYearPickerOpen={setIsStartYearPickerOpen}
           setIsMonthPickerOpen={setIsStartMonthPickerOpen}
@@ -321,6 +332,8 @@ export default function ScheduleSelect({
           type={"시작"}
           weekDay={startWeek}
         />
+      <div>
+      </div>
         <TimePicker
           pickerValue={startTimePickerValue}
           setIsOpen={setIsStartTimePickerOpen}
@@ -342,6 +355,7 @@ export default function ScheduleSelect({
           weekDay={endWeek}
         />
         <TimePicker
+          index={index}
           pickerValue={endTimePickerValue}
           setIsOpen={setIsEndTimePickerOpen}
           id={"endTime"}
@@ -384,6 +398,7 @@ export default function ScheduleSelect({
         <TimePickers
           pickerValue={startTimePickerValue}
           setPickerValue={setStartTimePickerValue}
+          displayData={timeSelections}
           onClose={() => setIsStartTimePickerOpen(false)}
         />
       )}
@@ -423,6 +438,7 @@ export default function ScheduleSelect({
         <TimePickers
           pickerValue={endTimePickerValue}
           setPickerValue={setEndTimePickerValue}
+          displayData={timeSelections}
           onClose={() => setIsEndTimePickerOpen(false)}
         />
       )}
@@ -442,9 +458,9 @@ function DatePicker({
   isDayPickerOpen,
   type,
   weekDay,
+  index
 }) {
   const selectDate = new Date(year, month - 1, day);
-
   return (
     <div className="DatePicker__container">
       <div className="date">{type}</div>
@@ -474,14 +490,14 @@ function TimePicker({ pickerValue, setIsOpen, id, isOpen }) {
       <TimeInfo
         {...pickerValue}
         id={id}
-        onOpen={() => setIsOpen(true)}
+        onOpen={setIsOpen}
         isOpen={isOpen}
       />
     </div>
   );
 }
 
-function UpDownArrow({ isOpen }) {
+function UpDownArrow({ isOpen}) {
   return (
     <img
       src={down_arrow} // 항상 같은 이미지 사용
@@ -509,7 +525,7 @@ function MonthInfo({ month, setIsOpen, isOpen }) {
   );
 }
 
-function YearInfo({ year, setIsOpen, isOpen }) {
+function YearInfo({ year, setIsOpen, isOpen}) {
   return (
     <div className="date" onClick={() => setIsOpen(true)}>
       <div>{year}년</div>
@@ -518,17 +534,16 @@ function YearInfo({ year, setIsOpen, isOpen }) {
   );
 }
 
-function TimeInfo({ hour, minute, id, onOpen, isOpen }) {
+function TimeInfo({ index, hour, minute, id, onOpen, isOpen }) {
   return (
     <>
-      <label htmlFor={id} className="time">
+      <label htmlFor={id} className="time" onClick={() => onOpen(true)}>
         <div>{`${String(hour).padStart(2, "0")}:${String(minute).padStart(
           2,
           "0"
         )}`}</div>
-        <UpDownArrow isOpen={isOpen} />
+        <UpDownArrow isOpen={isOpen} index={index} />
       </label>
-      <Input type={"time"} id={id} onClick={onOpen} />
     </>
   );
 }
@@ -567,7 +582,7 @@ function MyPicker({
   );
 }
 
-function TimePickers({ pickerValue, setPickerValue, onClose }) {
+function TimePickers({ pickerValue, setPickerValue, displayData, onClose }) {
   return (
     <div className="EventMoreContainer">
       <div className="TimePicker">
@@ -577,9 +592,9 @@ function TimePickers({ pickerValue, setPickerValue, onClose }) {
             onChange={setPickerValue}
             wheelMode="normal"
           >
-            {Object.keys(timeSelections).map((name) => (
+            {Object.keys(displayData).map((name) => (
               <Picker.Column key={name} name={name}>
-                {timeSelections[name].map((option) => (
+                {displayData[name].map((option) => (
                   <Picker.Item key={option} value={option}>
                     {String(option).padStart(2, "0")}
                   </Picker.Item>
