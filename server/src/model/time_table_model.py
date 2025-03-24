@@ -1010,7 +1010,7 @@ class MultiScheduleModel(TimeTableModel):
 
     # 이번 주 일정을 들고 옮
     def get_weekday_schedules(self):
-        schedule_datas = self._database.get_all_data(target="sid")
+        schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids=self._tuser.sids)
 
         monday, sunday = self._find_week_monday_N_sunday()
 
