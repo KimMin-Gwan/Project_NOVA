@@ -136,14 +136,14 @@ export default function TimeChart({ weekDayData, scheduleData }) {
         onTouchMove={(swiper) => {
           if (swiper.activeIndex== 4){
             if (swiper.touches.diff < -99 && swiper.touches.diff > -301){
-              if (swiper.touches.diff % -10 == 0){
+              if (parseInt(swiper.touches.diff) % -10 == 0){
                 calculateRightRotation(swiper.touches.diff);
               }
             }
           }
           if (swiper.activeIndex== 1){
             if (swiper.touches.diff > 99 && swiper.touches.diff < 301){
-              if (swiper.touches.diff % 10 == 0){
+              if (parseInt(swiper.touches.diff) % 10 == 0){
                 calculateLeftRotation(swiper.touches.diff);
               }
             }
