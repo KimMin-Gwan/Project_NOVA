@@ -266,7 +266,7 @@ class TimeTableView(Master_View):
 
         # 내가 담아놓은 스케줄들을 볼 수 있습니다.
         # 테스트 완료
-        @self.__app.get('/time_table_server/try_get_my_selected_schedules')
+        @self.__app.get('/time_table_server/try_search_my_schedule_with_bid')
         def try_get_my_selected_schedules(request:Request, bid:Optional[str]="", key:Optional[int]=-1):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = ScheduleWithBidRequest(bid=bid, key=key)
