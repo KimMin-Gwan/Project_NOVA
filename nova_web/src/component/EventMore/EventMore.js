@@ -5,7 +5,7 @@ import ScheduleEvent from "../EventCard/EventCard";
 import HEADER from "../../constant/header";
 import postApi from "../../services/apis/postApi";
 import { ScheduleDetailAdd, ScheduleAdd } from "../ScheduleMore/ScheduleMore";
-import TimeChart from "../../pages/SchedulePage/TimeChart/TimeChart";
+import TimeChart, {TimeChartPreview} from "../../pages/SchedulePage/TimeChart/TimeChart";
 import { tempWeekDayData, tempScheduleData } from "../../pages/SchedulePage/TestScheduleData";
 import { ScheduleBundle } from "../../component/ScheduleEvent/ScheduleBundle";
 import ScheduleSelect, { MakeScheduleDetail } from "../ScheduleSelect/ScheduleSelect";
@@ -224,7 +224,7 @@ export function BundleScheduleDetail({ closeSchedule, isOpen, target }) {
       <div className={style["modal-title"]}>
         미리보기
       </div>
-      <TimeChart weekDayData={timeWeekDayData} scheduleData={timeChartData} />
+      <TimeChartPreview weekDayData={timeWeekDayData} scheduleData={timeChartData} />
     </DetailModal>
   );
 }
@@ -273,7 +273,7 @@ export function ScheduleDetail({ closeSchedule, isOpen, target }) {
       <div className={style["modal-title"]}>
         미리보기
       </div>
-      <TimeChart weekDayData={timeWeekDayData} scheduleData={timeChartData} />
+      <TimeChartPreview weekDayData={timeWeekDayData} scheduleData={timeChartData} />
     </DetailModal>
   );
 }

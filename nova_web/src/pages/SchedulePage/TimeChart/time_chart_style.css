@@ -54,3 +54,28 @@
     font-size: 14px;
     font-weight: 400;
 }
+
+.load-week-container {
+    margin-left : 40px;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding-right: 37px;
+}
+
+.load-text {
+    font-size: 40px;
+    font-weight: 700;
+    margin-right: 20px;
+    writing-mode: vertical-rl; /* 텍스트를 세로로 표시 */
+    text-orientation: upright; /* 글자가 똑바로 보이게 */
+}
+
+.arrow-img {
+    height: 100%; /* 이미지를 박스의 세로 기준 중앙에 맞추기 */
+    transition: transform 0.2s ease-in-out;
+}
+
+.arrow-img.rotate {
+  transform: rotate(180deg);
+}
