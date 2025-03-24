@@ -73,10 +73,6 @@ export default function TimeChart({ weekDayData, scheduleData, onChangeIndex }) 
     // 변환된 값을 상태로 설정
     setRightRotation(rotation);
 
-    // 완전히 당기면 새로고침 하는 코드 여기
-    //if (rotation == 0){
-      //fetchData()
-    //}
   }
   function calculateLeftRotation(diff) {
     const inputMin = 300;
@@ -89,13 +85,7 @@ export default function TimeChart({ weekDayData, scheduleData, onChangeIndex }) 
     // 변환된 값을 상태로 설정
     setLeftRotation(rotation);
 
-    // 완전히 당기면 새로고침 하는 코드 여기
-    //if (rotation == 180){
-      //fetchData()
-    //}
   }
-
-  const [rotateImage, setRotateImage] = useState(false);
 
   return (
     <div className="time-chart-box">
@@ -120,14 +110,23 @@ export default function TimeChart({ weekDayData, scheduleData, onChangeIndex }) 
           if (swiper.activeIndex === 0) {
             // 0번 슬라이드로 이동하면 강제로 1번 슬라이드로 이동
             setTimeout(() => swiperRef.current?.slideTo(1), 0);
+            // 당기면 지난주 데이터를 받아야하는데, 너무 민감해서 diff 차이로 계산
+            if (swiper.touches.diff > 300){
+              onChangeIndex(-1);
+            }
           }
           else if (swiper.activeIndex === 5){
+            // 5번 슬라이드로 이동하면 강제로 4번 슬라이드로 이동
             setTimeout(() => swiperRef.current?.slideTo(4), 0);
+            // 당기면 다음주 데이터를 받아야하는데, 너무 민감해서 diff 차이로 계산
+            if (swiper.touches.diff < -300){
+              onChangeIndex(1);
+            }
           }else{
-
           }
         }}
         onTransitionStart={(swiper) => {
+          // 화살표 돌리기 로직 (초기화 로직)
             if (swiper.activeIndex == 1)
             {
               setLeftRotation(0);
@@ -136,6 +135,7 @@ export default function TimeChart({ weekDayData, scheduleData, onChangeIndex }) 
             }
         }}
         onTouchMove={(swiper) => {
+          // 화살표 돌리기 로직
           if (swiper.activeIndex== 4){
             if (swiper.touches.diff < -99 && swiper.touches.diff > -301){
               if (parseInt(swiper.touches.diff) % -10 == 0){
@@ -226,9 +226,7 @@ export default function TimeChart({ weekDayData, scheduleData, onChangeIndex }) 
 export function TimeChartPreview({ weekDayData, scheduleData }) {
   const swiperRef = useRef(null); // Swiper 인스턴스를 참조하기 위한 Ref 생성
 
-  console.log(scheduleData)
-
-  // 초기화
+  // 초기 위치 준비
   const findSection = () => {
     let maxTimeIndex = 3;
 

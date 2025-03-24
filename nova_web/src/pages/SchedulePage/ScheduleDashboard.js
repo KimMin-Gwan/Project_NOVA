@@ -39,7 +39,7 @@ const ScheduleDashboard = () => {
     setPageIndex(index);
 
     const targetDate = new Date(todayDate); // 기존 날짜 복사
-    const daysToAdd = index * 7; // 일수를 계산
+    const daysToAdd = param * 7; // 일수를 계산
     targetDate.setDate(targetDate.getDate() + daysToAdd); // 날짜를 계산
     setTodayDate(targetDate);
   };
@@ -131,7 +131,7 @@ const ScheduleDashboard = () => {
             </div>
           </div>
           {/* 타임차트를 만드는 핵심 구간 */}
-          <TimeChart weekDayData={weekDayData} scheduleData={scheduleData} />
+          <TimeChart weekDayData={weekDayData} scheduleData={scheduleData} onChangeIndex={onChangeIndex} />
         </div>
 
         <div className="section-line"></div>
