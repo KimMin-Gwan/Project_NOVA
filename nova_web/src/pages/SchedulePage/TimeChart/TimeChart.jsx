@@ -142,7 +142,6 @@ export default function TimeChart({ weekDayData, scheduleData }) {
             }
           }
           if (swiper.activeIndex== 1){
-            console.log(swiper.touches.diff)
             if (swiper.touches.diff > 99 && swiper.touches.diff < 301){
               if (swiper.touches.diff % 10 == 0){
                 calculateLeftRotation(swiper.touches.diff);
