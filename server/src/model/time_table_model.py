@@ -136,7 +136,9 @@ class TimeTableModel(BaseModel):
     
     def set_target_date(self, date=datetime.today().strftime("%Y-%m-%d")):
         today = datetime.strptime(date, "%Y-%m-%d")
+        print(today)
         first_day_of_month = datetime(today.year, today.month, 1)
+        #print(first_day_of_month)
 
         # 월요일이 가장 빠른 날을 찾기 위해 이번 달 첫째 날부터 시작해서 월요일을 찾습니다.
         current_date = first_day_of_month
