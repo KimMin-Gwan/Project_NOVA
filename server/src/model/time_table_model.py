@@ -1387,7 +1387,7 @@ class AddScheduleModel(TimeTableModel):
 
         return schedule_bundle
 
-    #
+    # 수정한 스케줄 저장
     def save_modified_schedule(self, schedule:list):
         save_datas = self._make_dict_list_data(list_data=schedule)
 
@@ -1397,11 +1397,33 @@ class AddScheduleModel(TimeTableModel):
         self.__result = True
         return
 
+    # 수정한 스케줄 번들 저장
     def save_modified_multiple_schedule_object_with_type(self, schedule_object, data_type:str):
         if data_type == "bundle":
             self._database.modify_data_with_id(target_id="sbid", target_data=schedule_object.get_dict_form_data())
             self.__result = True
         return
+
+    # 스케줄 삭제
+    def delete_schedule(self, sid:str):
+        self._database.delete_data_with_id(target="sid", id=sid)
+        self.__result = True
+
+        return
+
+    # 스케줄 번들 삭제
+    def delete_bundle(self, sbid:str):
+        schedule_bundle_data = self._database.get_data_with_id(target='sbid', id=sbid)
+        schedule_bundle = ScheduleBundle().make_with_dict(schedule_bundle_data)
+        sids = schedule_bundle.sids
+
+        self._database.delete_data_with_ids(target="sid", ids=sids)
+        self._database.delete_data_with_id(target="sbid", id=sbid)
+
+        self.__result = True
+
+        return
+
 
     def get_response_form_data(self, head_parser):
         body = {
