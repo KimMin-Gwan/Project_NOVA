@@ -5,7 +5,7 @@
 }
 
 .day-week-list {
-    width: 67px; /* 고정된 너비 */
+    width: 12%; /* 고정된 너비 */
     flex-shrink: 0; /* 고정 크기를 유지하도록 설정 */
 }
 
