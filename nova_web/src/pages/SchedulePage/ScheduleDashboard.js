@@ -88,7 +88,7 @@ const ScheduleDashboard = () => {
                 <span>개</span>
               </div>
               <div className="right-group">
-                <button onClick={() => handleNavigate("/search/topic")}>주제 탐색</button>
+                <button onClick={() => handleNavigate("/schedule/my_schedule")}>내 일정</button>
                 <img src={vertical_line} alt="vertical line" />
                 <button onClick={()=>toggleMakeScheduleModal()}>일정 등록</button>
               </div>
@@ -121,6 +121,9 @@ const ScheduleDashboard = () => {
               <p className="element">
                 <span className="text-wrapper">이런 최애는 어때요?</span>
               </p>
+              <span className="add-schedule" onClick={() => handleNavigate("/search/topic")}>
+                주제 탐색
+              </span>
             </div>
           </div>
           {biasData.map((item, i) => {
