@@ -1,6 +1,8 @@
 import ScheduleCard from "../../component/EventCard/EventCard";
 import React, { useEffect, useState } from "react";
 import mainApi from "../../services/apis/mainApi";
+import postApi from "../../services/apis/postApi";
+import HEADER from "../../constant/header";
 import useToggleMore from "../../hooks/useToggleMore";
 import "./index.css";
 import {
@@ -36,6 +38,20 @@ export default function MySchedulePage() {
       });
   }
 
+
+  // 내 스케줄에 등록하는 함수 (추가하기 버튼 누르면 동작해야됨)
+  // 완료하면 성공했다고 알려주면 좋을듯
+  async function fetchTryRejectSchedule(target) {
+    // 무조건 리스트로 만들어야됨
+
+    await mainApi 
+      .get(`time_table_server/try_reject_from_my_schedule?sid=${target.sid}`)
+      .then((res) => {
+        setThisWeekSchedule((prev) => prev ? prev.filter((item) => item.sid !== target.sid) : []);
+        setMySchedules((prev) => prev ? prev.filter((item) => item.sid !== target.sid) : []);
+      });
+  }
+
   const [addScheduleModal, setAddScheduleModal] = useState(false);
   const [targetSchedule, setTargetSchedule] = useState({});
 
@@ -44,6 +60,8 @@ export default function MySchedulePage() {
     setAddScheduleModal((addScheduleModal) => !addScheduleModal);
     setTargetSchedule(target);
   };
+
+  console.log(thisWeekSchedule)
 
   // 게시판으로 이동
   const navBoard = () => {};
@@ -77,6 +95,7 @@ export default function MySchedulePage() {
                     target={item}
                     detailClick={toggleAddScheduleModal}
                     navBoardClick={navBoard}
+                    removeClick={fetchTryRejectSchedule}
                   />
                 ) : (
                   <ScheduleEdit
@@ -92,7 +111,7 @@ export default function MySchedulePage() {
 
       <section className="MySchedule__section">
         <div className="section_header">
-          <h3>내가 선택한 일정</h3>
+          <h3>내가 추가한 일정</h3>
         </div>
         <div className="bias_wrapper">
           <BiasBoxes />
@@ -110,6 +129,7 @@ export default function MySchedulePage() {
                     target={item}
                     detailClick={toggleAddScheduleModal}
                     navBoardClick={navBoard}
+                    removeClick={fetchTryRejectSchedule}
                   />
                 ) : (
                   <ScheduleEdit

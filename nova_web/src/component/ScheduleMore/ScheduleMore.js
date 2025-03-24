@@ -64,27 +64,27 @@ export function ScheduleAdd({ navBoardClick, detailClick, addClick, target}) {
 }
 
 // 일정 밑에 붙는 버튼
-export function ScheduleRemove({ navBoardClick, detailClick, addClick, target}) {
+export function ScheduleRemove({ navBoardClick, detailClick, removeClick, target}) {
   return (
     <BasicSchedule
       isMore={BUTTON_TYPES.SCHEDULE_HAVE}
       target={target}
       firstClick={detailClick}
       secondClick={navBoardClick}
-      lastClick={addClick}
+      lastClick={removeClick}
     />
   );
 }
 
 // 일정 밑에 붙는 버튼
-export function ScheduleEdit({ navBoardClick, detailClick, addClick, target}) {
+export function ScheduleEdit({ navBoardClick, detailClick, editClick, target}) {
   return (
     <BasicSchedule
       isMore={BUTTON_TYPES.SCHEDULE_EDIT}
       target={target}
       firstClick={detailClick}
       secondClick={navBoardClick}
-      lastClick={addClick}
+      lastClick={editClick}
     />
   );
 }

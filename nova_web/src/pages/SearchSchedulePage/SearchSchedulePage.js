@@ -141,8 +141,58 @@ export default function SearchSchedulePage() {
         },
       })
       .then((res) => {
+        setScheduleData((prev) => {
+          if (!prev.some((item) => item.sid === target.sid)) {
+            // 목표 item이 없으면 기존 상태 반환
+            return prev;
+          }
+          // 목표 item이 있으면 업데이트
+          return prev.map((item) =>
+            item.sid === target.sid ? { ...item, is_already_have: true } : item
+          );
+        });
       });
   }
+
+  // 내 스케줄에 등록하는 함수 (추가하기 버튼 누르면 동작해야됨)
+  // 완료하면 성공했다고 알려주면 좋을듯
+  async function fetchTryRejectSchedule(target) {
+    // 무조건 리스트로 만들어야됨
+
+    await mainApi 
+      .get(`time_table_server/try_reject_from_my_schedule?sid=${target.sid}`)
+      .then((res) => {
+        setScheduleData((prev) => {
+          if (!prev.some((item) => item.sid === target.sid)) {
+            // 목표 item이 없으면 기존 상태 반환
+            return prev;
+          }
+          // 목표 item이 있으면 업데이트
+          return prev.map((item) =>
+            item.sid === target.sid ? { ...item, is_already_have: false} : item
+          );
+        });
+      });
+  }
+
+
+  // 내 스케줄에 등록하는 함수 (추가하기 버튼 누르면 동작해야됨)
+  // 완료하면 성공했다고 알려주면 좋을듯
+  async function fetchTryEditSchedule(target) {
+    // 무조건 리스트로 만들어야됨
+
+    await postApi
+      .post("time_table_server/try_reject_from_my_schedule", {
+        header: HEADER,
+        body: {
+          sid: target.sid,
+        },
+      })
+      .then((res) => {
+      });
+  }
+
+
 
   return (
     <div className="container SearchSchedulePage">
@@ -198,14 +248,14 @@ export default function SearchSchedulePage() {
                     target={item}
                     detailClick={toggleAddScheduleModal}
                     navBoardClick={navBoard}
-                    addClick={fetchTryAddSchedule}
+                    removeClick={fetchTryRejectSchedule}
                   />
                 ) : (
                   <ScheduleEdit
                     target={item}
                     detailClick={toggleAddScheduleModal}
                     navBoardClick={navBoard}
-                    addClick={fetchTryAddSchedule}
+                    editClick={fetchTryAddSchedule}
                   />
                 )
               )}
