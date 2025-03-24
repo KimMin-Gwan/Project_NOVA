@@ -1068,7 +1068,7 @@ class MultiScheduleModel(TimeTableModel):
         if schedule.sid in self._tuser.my_sids:
             schedule.is_owner = True
 
-        self.schedules.append(schedule.get_dict_form_data())
+        self.__schedules.append(schedule.get_dict_form_data())
 
         return
 
@@ -1389,6 +1389,7 @@ class AddScheduleModel(TimeTableModel):
     def save_modified_schedule(self, schedule:list):
         save_datas = self._make_dict_list_data(list_data=schedule)
 
+        # 이건 비효율적이긴 함
         for s_data in save_datas:
             self._database.modify_data_with_id(target_id="sid", target_data=s_data)
 
@@ -1406,7 +1407,6 @@ class AddScheduleModel(TimeTableModel):
     def delete_schedule(self, sid:str):
         self._database.delete_data_with_id(target="sid", id=sid)
         self.__result = True
-
         return
 
     # 스케줄 번들 삭제
@@ -1415,7 +1415,7 @@ class AddScheduleModel(TimeTableModel):
         schedule_bundle = ScheduleBundle().make_with_dict(schedule_bundle_data)
         sids = schedule_bundle.sids
 
-        self._database.delete_data_with_ids(target="sid", ids=sids)
+        self._database.delete_datas_with_ids(target="sid", ids=sids)
         self._database.delete_data_with_id(target="sbid", id=sbid)
 
         self.__result = True

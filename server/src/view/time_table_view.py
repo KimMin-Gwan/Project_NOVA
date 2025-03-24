@@ -385,7 +385,7 @@ class TimeTableView(Master_View):
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
 
             time_table_controller =TImeTableController()
-            model = time_table_controller.try_modify_schedule(database=self.__database,
+            model = time_table_controller.try_modify_single_schedule(database=self.__database,
                                                               request=request_manager)
 
             body_data = model.get_response_form_data(self._head_parser)
@@ -393,7 +393,7 @@ class TimeTableView(Master_View):
             return response
 
         # 스케줄 번들 수정
-        @self.__app.post('/time_table_server/try_modify_bundle')
+        @self.__app.post('/time_table_server/try_modify_schedule_bundle')
         def try_modify_bundle(request:Request, raw_request:dict):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = ModifyMultipleScheduleRequest(request=raw_request)
