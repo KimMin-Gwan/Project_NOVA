@@ -3,6 +3,7 @@ from model import Local_Database
 from others.data_domain import TimeTableUser as TUser
 from others.data_domain import Schedule, ScheduleBundle, ScheduleEvent, Bias
 
+from pprint import pprint
 from datetime import datetime,timedelta, time, date
 import random
 import string
@@ -1013,6 +1014,9 @@ class MultiScheduleModel(TimeTableModel):
     def get_weekday_schedules(self):
         schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids=self._tuser.sids)
 
+        pprint(schedule_datas)
+        
+        
         monday, sunday = self._find_week_monday_N_sunday()
 
         for schedule_data in schedule_datas:
