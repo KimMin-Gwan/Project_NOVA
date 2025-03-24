@@ -2,6 +2,7 @@ import json
 from others import DatabaseLogicError
 from copy import copy
 
+from pymongo import UpdateOne
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from pymongo.collection import Collection
@@ -175,6 +176,9 @@ class Local_Database:
     def get_all_data(self, target):
         return self._select_target_list(target=target)
     
+    def modify_datas_with_ids(self, target_id, ids:list, target_datas:list):
+        return
+    
 
     def _select_target_list(self, target:str):
         if target == "baid" or target == "banner":
@@ -336,7 +340,6 @@ class Local_Database:
             print(e)
             raise DatabaseLogicError(error_type="delete_data_with_id error | " + str(e))
     
-
 # 실제로 사용할 몽고 디비
 class Mongo_Database(Local_Database):
     def __init__(self, uri) -> None:
@@ -369,6 +372,22 @@ class Mongo_Database(Local_Database):
     def __update_one(self,document,data , collection:Collection) -> None:
         collection.update_one(document,{'$set':data})
         return
+    
+    def __bulk_update(self, ids:list, datas: list[dict], collection: Collection) -> None:
+        # Bulk write 작업을 위한 리스트 준비
+        bulk_operations = []
+    
+        for filter_, update_data in zip(ids, datas):
+            
+            if filter_ and update_data:
+                # UpdateOne 작업 생성
+                bulk_operations.append(UpdateOne(filter_, {'$set': update_data}))
+    
+        # 한 번에 bulk_write로 업데이트 수행
+        if bulk_operations:
+            collection.bulk_write(bulk_operations)
+        return
+    
     #삭제
     def __delete_one(self,document, collection:Collection) -> None:
         collection.delete_one(document=document)
@@ -503,6 +522,20 @@ class Mongo_Database(Local_Database):
             print(e)
             raise DatabaseLogicError(error_type="modifiy_data_with_id error | " + str(e))
 
+    # 반드시 ids와 target_datas는 동일한 순서로 같은 갯수가 와야됨
+    def modify_datas_with_ids(self, target_id, ids:list, target_datas:list):
+        try:
+            collection_name = self._select_target_list(target=target_id)
+            selected_collection = self.__set_collection(collection=collection_name)
+            
+            self.__bulk_update(ids=ids, datas=target_datas, collection=selected_collection)
+            #self.__update_one({f'{target_id}':f'{target_data[target_id]}'},data=target_data,collection=selected_collection)
+            
+            return True
+
+        except Exception as e:
+            print(e)
+            raise DatabaseLogicError(error_type="modifiy_data_with_id error | " + str(e))
 
     def add_new_data(self, target_id:str, new_data:dict):
         try:

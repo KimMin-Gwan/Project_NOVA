@@ -1028,11 +1028,9 @@ class MultiScheduleModel(TimeTableModel):
             elif monday <= end_date <= sunday:
                 self.__schedules.append(schedule)
 
-
         self._make_send_data_with_datas()
 
         return
-
 
 
     # 내가 설정한 모든 스케쥴 불러오기
@@ -1057,7 +1055,7 @@ class MultiScheduleModel(TimeTableModel):
         #     schedule_event.make_with_dict(dict_data=schedule_event_data)
         #     self.__schedule_events.append(schedule_event)
 
-        self.__make_send_data_with_datas()
+        self._make_send_data_with_datas()
         return
 
     def get_written_schedule(self, sid:str):
@@ -1248,7 +1246,10 @@ class AddScheduleModel(TimeTableModel):
         )
 
         bias_data = self._database.get_data_with_id(target="bid", id=schedule.bid)
-        bias = Bias().make_with_dict(bias_data)
+        if bias_data:
+            bias = Bias().make_with_dict(bias_data)
+        else:
+            bias = Bias()
 
         schedule.sid = self.__make_new_sid()
         schedule.bname = bias.bname
@@ -1405,6 +1406,33 @@ class AddScheduleModel(TimeTableModel):
 
     # 스케줄 삭제
     def delete_schedule(self, sid:str):
+        schedule_bundle_datas = self._database.get_all_data(target = "sbid")
+    
+        sb_sids:list[dict] = []
+        sbids = []
+    
+        for schedule_bundle_data in schedule_bundle_datas:
+            schedule_bundle= ScheduleBundle().make_with_dict(schedule_bundle_data)
+            if sid in schedule_bundle.sids:
+                schedule_bundle.sids.remove(sid)
+                sb_sids.append({"sids" : schedule_bundle.sids})
+                sbids.append(schedule_bundle.sbid)
+        
+            
+        tuser_datas = self._database.get_all_data(target="tuid")
+        
+        tu_sids:list[TUser] = []
+        tuids = []
+        
+        for tuser_data in tuser_datas:
+            tuser = TUser().make_with_dict(tuser_data)
+            if sid in tuser.sids:
+                tuser.sids.remove(sid)
+                tu_sids.append({"sids" : tuser.sids})
+                tuids.append(tuser.tuid)
+            
+        self._database.modify_datas_with_ids(target_id="sbid", ids=sbids, target_datas=sb_sids)
+        self._database.modify_datas_with_ids(target_id="tuid", ids=tuids, target_datas=tu_sids)
         self._database.delete_data_with_id(target="sid", id=sid)
         self.__result = True
         return
