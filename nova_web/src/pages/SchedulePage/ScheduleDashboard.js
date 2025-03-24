@@ -31,6 +31,17 @@ const ScheduleDashboard = () => {
 
   let [biasData, setBiasData] = useState([]);
 
+  const [pageIndex, setPageIndex] = useState(0);
+  const [todayDate, setTodayDate] = useState(new Date());
+
+
+  const onChangeIndex = (param) =>{
+    const index = pageIndex + param
+    setPageIndex(index)
+
+  }
+
+
   const brightMode = "brigthMode";
 
   // 네비게이션 함수
@@ -48,8 +59,8 @@ const ScheduleDashboard = () => {
   }
 
   // 시간 차트 데이터 받기
-  function fetchTimeChartData() {
-    mainApi.get("time_table_server/try_get_today_time_chart").then((res) => {
+  function fetchTimeChartData(date) {
+    mainApi.get(`time_table_server/try_get_today_time_chart?date=${date}`).then((res) => {
       setScheduleData(res.data.body.schedule_blocks);
       setWeekDayData(res.data.body.week_day_datas);
     });
@@ -65,7 +76,8 @@ const ScheduleDashboard = () => {
   useEffect(() => {
     fetchTargetMonthWeek();
     fetchBiasData();
-    fetchTimeChartData();
+    const dateString = todayDate.toISOString().split('T')[0]; // 'YYYY-MM-DD' 형식으로 변환
+    fetchTimeChartData(dateString);
   }, []);
 
   return (

@@ -1702,7 +1702,9 @@ class ScheduleChartModel(TimeTableModel):
     # 내가 추가한 스케줄 데이터 뽑기를 날짜로
     # date는 날짜임 , 형태는 2025/03/06 임
     # date안넣으면 기본적으로 오늘자로 감
-    def set_my_schedule_in_by_day(self, target_date=datetime.today().strftime("%Y/%m/%d"), days=7, sids =[]):
+    def set_my_schedule_in_by_day(self, target_date=datetime.today().strftime("%Y-%m-%d"), days=7, sids =[]):
+        
+        
         target_sids = []
         target_sids.extend(self._tuser.sids)
         target_sids.extend(sids)
@@ -1794,7 +1796,7 @@ class ScheduleChartModel(TimeTableModel):
     
     def _get_monday_date(self, target_date: str) -> datetime:
         # 입력 날짜를 datetime 객체로 변환
-        target_date = datetime.strptime(target_date, "%Y/%m/%d")
+        target_date = datetime.strptime(target_date, "%Y-%m-%d")
     
         # 오늘의 요일 계산 (0: 월요일, 6: 일요일)
         day_of_week = target_date.weekday()

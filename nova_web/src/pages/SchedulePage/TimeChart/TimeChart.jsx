@@ -246,6 +246,20 @@ export function TimeChartPreview({ weekDayData, scheduleData }) {
     }
     return maxTimeIndex
   }
+  const [allowPrev, setAllowPrev] = useState(false);
+
+  const handleSlideChange = (swiper) => {
+    // 현재 활성 슬라이드 확인
+
+    if (swiper.activeIndex === 1) {
+      swiper.allowSlidePrev = false; // 첫 번째 슬라이드에서는 이전 슬라이드 이동 막음
+    }else if( swiper.activeIndex == 4){
+      swiper.allowSlideNext = false;
+    } else {
+      swiper.allowSlidePrev = true; // 다른 슬라이드에서는 이전 슬라이드 이동 허용
+      swiper.allowSlideNext = true;
+    }
+  };
 
 
   return (
@@ -267,17 +281,8 @@ export function TimeChartPreview({ weekDayData, scheduleData }) {
         //loop={true} // 무한 루프
         onSwiper={(swiper) => (swiperRef.current = swiper)} // Swiper 인스턴스 참조
         initialSlide={findSection()}
-        //onSlideChange={(swiper) => {
-          //if (swiper.activeIndex === 0) {
-            //// 0번 슬라이드로 이동하면 강제로 1번 슬라이드로 이동
-            //setTimeout(() => swiperRef.current?.slideTo(1), 0);
-          //}
-          //else if (swiper.activeIndex === 5){
-            //setTimeout(() => swiperRef.current?.slideTo(4), 0);
-          //}
-        //}}
-        allowSlidePrev={(swiper)=>{if(swiper.activeIndex === 1){return false}else{return true}}} // 이전 슬라이드 이동 허용 여부
-        allowSlideNext={(swiper)=>{if(swiper.activeIndex === 4){return false}else{return true}}} // 이전 슬라이드 이동 허용 여부
+        onSlideChange={handleSlideChange} // 슬라이드 변경 시 호출
+        //allowSlidePrev={allowPrev} // 이전 슬라이드 이동 허용 여부
       >
         <SwiperSlide key={0}>
           <div className="load-week-container"
