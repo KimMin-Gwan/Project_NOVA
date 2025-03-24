@@ -29,7 +29,7 @@ const NavBar = ({ brightMode }) => {
       id: 1,
       title: "일정",
       src: searchSchedule,
-      alt: "bias_board",
+      alt: "schedule",
       end_point: "/schedule",
       type: "navigate",
       onClick: (endPoint) => handleNavigate(endPoint),
@@ -65,6 +65,9 @@ const NavBar = ({ brightMode }) => {
 
   let navigate = useNavigate();
 
+  const [activeIndex, setActiveIndex] = useState(() => {
+    return Number(sessionStorage.getItem("activeNav")) || 0;
+  });
   let [writeOptions, setWriteOptions] = useState(false);
 
   const [writeMoment, setWriteMoment] = useState(false);
@@ -75,6 +78,11 @@ const NavBar = ({ brightMode }) => {
 
   function handleNavigate(path) {
     navigate(path);
+  }
+
+  function handleClickNav(index) {
+    setActiveIndex(index);
+    sessionStorage.setItem("activeNav", index);
   }
 
   // type이 write일 때만 다른 동작
@@ -163,11 +171,15 @@ const NavBar = ({ brightMode }) => {
 
         {writeMoment && <WriteMoment onClickMoment={onClickMoment} />}
 
-        {navBarList.map((item) => (
-          <div key={item.id} className="nav_button_box">
+        {navBarList.map((item, index) => (
+          <div
+            key={item.id}
+            className={`nav_button_box ${activeIndex === index ? "btn_clicked" : ""}`}
+          >
             <button
               className="nav_button"
-              onClick={(e) => {
+              onClick={() => {
+                handleClickNav(index);
                 handleAction(item.type, item.end_point);
               }}
             >
