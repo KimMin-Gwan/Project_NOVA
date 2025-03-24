@@ -142,8 +142,8 @@
 .additional-schedule-button {
   margin: 0; /* 부모에서 상속된 마진을 무시 */
   padding-top: 20px;
-  padding-bottom: 2px;
-  margin-bottom: 20px;
+  padding-bottom: 22px;
+
   /* hover 시 밑줄 색상 변경 */
   width: 100%;
   cursor: pointer;
