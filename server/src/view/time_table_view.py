@@ -331,8 +331,8 @@ class TimeTableView(Master_View):
             return response
 
         # 복수 일정을 만들기
-        # 테스트 완료
-        @self.__app.post('/time_table_server/try_make_new_mulitple_schedule')
+        # 테스트 완료 
+        @self.__app.post('/time_table_server/try_make_new_multiple_schedule')
         def try_make_new_multiple_schedule(request: Request, raw_request:dict):
 
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
