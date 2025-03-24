@@ -136,7 +136,6 @@ class TimeTableModel(BaseModel):
     
     def set_target_date(self, date=datetime.today().strftime("%Y-%m-%d")):
         today = datetime.strptime(date, "%Y-%m-%d")
-        print(today)
         first_day_of_month = datetime(today.year, today.month, 1)
         #print(first_day_of_month)
 
