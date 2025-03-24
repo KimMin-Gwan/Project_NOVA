@@ -134,8 +134,8 @@ class TimeTableModel(BaseModel):
         self.__num_bias= len(self._user.bids)
         return
     
-    def set_target_date(self):
-        today = datetime.today()
+    def set_target_date(self, date=datetime.today().strftime("%Y-%m-%d")):
+        today = datetime.strptime(date, "%Y-%m-%d")
         first_day_of_month = datetime(today.year, today.month, 1)
 
         # 월요일이 가장 빠른 날을 찾기 위해 이번 달 첫째 날부터 시작해서 월요일을 찾습니다.

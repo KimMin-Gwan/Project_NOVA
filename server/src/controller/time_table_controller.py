@@ -34,7 +34,7 @@ class TImeTableController:
         model.set_num_bias()
         
         # 맨 위에 출력되는 문자열 이거임
-        model.set_target_date()
+        model.set_target_date(date= request.data_payload.date)
         
         return model
     

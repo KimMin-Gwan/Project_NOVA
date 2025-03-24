@@ -34,13 +34,15 @@ const ScheduleDashboard = () => {
   const [pageIndex, setPageIndex] = useState(0);
   const [todayDate, setTodayDate] = useState(new Date());
 
+  const onChangeIndex = (param) => {
+    const index = pageIndex + param;
+    setPageIndex(index);
 
-  const onChangeIndex = (param) =>{
-    const index = pageIndex + param
-    setPageIndex(index)
-
-  }
-
+    const targetDate = new Date(todayDate); // 기존 날짜 복사
+    const daysToAdd = index * 7; // 일수를 계산
+    targetDate.setDate(targetDate.getDate() + daysToAdd); // 날짜를 계산
+    setTodayDate(targetDate);
+  };
 
   const brightMode = "brigthMode";
 
@@ -50,8 +52,8 @@ const ScheduleDashboard = () => {
   };
 
   // 주간 날짜 받기
-  function fetchTargetMonthWeek() {
-    mainApi.get("time_table_server/try_get_dashboard_data").then((res) => {
+  function fetchTargetMonthWeek(date) {
+    mainApi.get(`time_table_server/try_get_dashboard_data?date=${date}`).then((res) => {
       setTargetMonth(res.data.body.target_month);
       setTargetWeek(res.data.body.target_week);
       setNumBias(res.data.body.num_bias);
@@ -74,9 +76,16 @@ const ScheduleDashboard = () => {
   }
 
   useEffect(() => {
-    fetchTargetMonthWeek();
+    const dateString = todayDate.toISOString().split('T')[0]; // 'YYYY-MM-DD' 형식으로 변환
+    fetchTargetMonthWeek(dateString);
+    fetchTimeChartData(dateString);
+  }, [todayDate]);
+
+
+  useEffect(() => {
     fetchBiasData();
     const dateString = todayDate.toISOString().split('T')[0]; // 'YYYY-MM-DD' 형식으로 변환
+    fetchTargetMonthWeek(dateString);
     fetchTimeChartData(dateString);
   }, []);
 

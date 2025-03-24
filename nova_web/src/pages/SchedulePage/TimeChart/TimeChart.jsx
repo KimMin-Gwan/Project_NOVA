@@ -30,7 +30,7 @@ const timeList = [
 
 const timeSectionList = ["새벽", "오전", "오후", "밤"]; // 시간 섹션 이름
 
-export default function TimeChart({ weekDayData, scheduleData }) {
+export default function TimeChart({ weekDayData, scheduleData, onChangeIndex }) {
   const swiperRef = useRef(null); // Swiper 인스턴스를 참조하기 위한 Ref 생성
 
   const findSection = () => {
@@ -123,6 +123,8 @@ export default function TimeChart({ weekDayData, scheduleData }) {
           }
           else if (swiper.activeIndex === 5){
             setTimeout(() => swiperRef.current?.slideTo(4), 0);
+          }else{
+
           }
         }}
         onTransitionStart={(swiper) => {

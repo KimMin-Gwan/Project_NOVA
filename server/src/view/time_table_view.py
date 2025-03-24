@@ -31,9 +31,9 @@ class TimeTableView(Master_View):
         # 타임 테이블 페이지의 최 상단 대시보드데이터
         # 파라미터 없음, 비로그인 상태에서는 0으로 리턴함 
         @self.__app.get('/time_table_server/try_get_dashboard_data')
-        def get_dashboard_data(request:Request):
+        def get_dashboard_data(request:Request, date:Optional[str]=datetime.now().strftime("%Y-%m-%d")):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
-            data_payload = DummyRequest()
+            data_payload = DateRequest(date=date)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
             # if not request_manager.jwt_payload.result:
