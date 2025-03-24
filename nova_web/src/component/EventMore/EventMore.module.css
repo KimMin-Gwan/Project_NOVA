@@ -141,18 +141,21 @@
 
 .additional-schedule-button {
   margin: 0; /* 부모에서 상속된 마진을 무시 */
-  margin-left: 34px;
   padding-top: 20px;
   padding-bottom: 2px;
   margin-bottom: 20px;
-  border-bottom: 2px solid #5c5c5c; /* hover 시 밑줄 색상 변경 */
-  width: 60px;
+  /* hover 시 밑줄 색상 변경 */
+  width: 100%;
   cursor: pointer;
+  background-color: #fff;
 }
 
 .additional-schedule-text {
   margin: 0; /* 부모에서 상속된 마진을 무시 */
   font-size: 16px;
+  border-bottom: 2px solid #5c5c5c;
+  margin-left: 34px;
+  width: 60px;
   color: #5c5c5c;
 }
 

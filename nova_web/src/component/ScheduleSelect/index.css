@@ -1,6 +1,7 @@
 .ScheduleSelect {
   display: flex;
   flex-direction: column;
+  background-color: #fff;
 }
 
 .EventMoreContainer {
