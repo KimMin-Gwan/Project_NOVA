@@ -5,8 +5,6 @@ body {
   background-color: #111;
 }
 
-
-
 button,
 textarea,
 input {
@@ -42,10 +40,10 @@ body.bright-mode {
 }
 
 /* 다크모드 */
-body.dark-mode {
+/* body.dark-mode {
   background-color: #111;
   color: #303030;
-}
+} */
 
 .hr-line {
   border: 6px solid #292929;
@@ -228,12 +226,12 @@ body.dark-mode {
 .top-area.bright-mode {
   background-color: #f1f7ff;
 }
-.logo-st.dark-mode {
-  /* filter: invert(100%); */
+/* .logo-st.dark-mode {
+  filter: invert(100%);
 }
 .authen.dark-mode {
   color: white;
-}
+} */
 /* 선 */
 .hr-line.bright-mode {
   border-color: #eaeeff;

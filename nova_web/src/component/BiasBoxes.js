@@ -11,16 +11,14 @@ import tempBias from "./../img/tempBias.png";
 
 export default function BiasBoxes({ fetchBiasCategoryData }) {
   const navigate = useNavigate();
-  const biasUrl = BIAS_URL;
   const { scrollRef, hasDragged, dragHandlers } = useDragScroll();
   let { biasList, biasId, setBiasId, loading, fetchBiasList } = useBiasStore();
 
-  const { isLogin, isLogout } = useLoginStore();
+  const { isLogin } = useLoginStore();
   useEffect(() => {
     fetchBiasList();
     if (isLogin === "done") {
       fetchBiasList();
-      //console.log("isLogin", isLogin);
     }
   }, []);
 
@@ -94,7 +92,7 @@ export default function BiasBoxes({ fetchBiasCategoryData }) {
                 {bias && (
                   <img
                     className={clickedBias === i ? "clicked-img" : ""}
-                    src={biasUrl + `${bias.bid}.PNG`}
+                    src={BIAS_URL + `${bias.bid}.PNG`}
                     onError={(e) => (e.target.src = tempBias)}
                     alt="bias"
                     onClick={() => {
