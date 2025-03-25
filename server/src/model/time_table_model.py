@@ -1431,7 +1431,7 @@ class AddScheduleModel(TimeTableModel):
                 tuser.sids.remove(sid)
                 tu_sids.append({"sids" : tuser.sids})
                 tuids.append(tuser.tuid)
-            
+        pprint(self._tuser.my_sids)
         self._tuser.my_sids.remove(sid)
         self._database.modify_datas_with_ids(target_id="sbid", ids=sbids, target_datas=sb_sids)
         self._database.modify_datas_with_ids(target_id="tuid", ids=tuids, target_datas=tu_sids)
