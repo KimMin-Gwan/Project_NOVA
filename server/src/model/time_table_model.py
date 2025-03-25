@@ -1465,7 +1465,7 @@ class AddScheduleModel(TimeTableModel):
         return
 
     # 스케줄 번들 삭제
-    # 테스트 아직 안했음 주의
+    # 테스트 아직 안했음 주의 ( Modify 수정이 완료된 후에 하기로)
     def delete_bundle(self, sbid:str):
         # 스케줄 데이터 삭제
         schedule_bundle_data = self._database.get_data_with_id(target='sbid', id=sbid)
