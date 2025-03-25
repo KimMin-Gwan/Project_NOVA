@@ -320,6 +320,8 @@ class TimeTableView(Master_View):
         def try_make_new_single_schedule(request: Request, raw_request:dict):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = MakeSingleScheduleRequest(request=raw_request)
+
+            pprint(request.body())
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
             time_table_controller =TImeTableController()

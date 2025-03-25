@@ -1236,8 +1236,6 @@ class AddScheduleModel(TimeTableModel):
 
     # 단일 스케줄 만들기
     def make_new_single_schedule(self, data_payload, bid):
-        pprint(data_payload)
-
         schedule = Schedule(
             sname=data_payload.sname,
             bid = bid,
@@ -1258,6 +1256,7 @@ class AddScheduleModel(TimeTableModel):
         # ", "와 같은 케이스도 말끔히. 근데 이후의 공백이 있을 수 있다는 점이 있어 주의를 요합니다.
         str_list = re.split(r'\W+', data_payload.location)
         str_list = [s for s in str_list if s]
+        pprint(str_list)
 
         schedule.sid = self.__make_new_sid()
         schedule.bname = bias.bname
