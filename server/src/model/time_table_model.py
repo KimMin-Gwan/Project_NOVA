@@ -1111,6 +1111,7 @@ class MultiScheduleModel(TimeTableModel):
             "key" : self._key
             }
 
+        pprint(body)
         response = self._get_response_data(head_parser=head_parser, body=body)
         return response
 
