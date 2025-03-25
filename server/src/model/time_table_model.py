@@ -1,3 +1,5 @@
+import re
+
 from model.base_model import BaseModel
 from model import Local_Database
 from others.data_domain import TimeTableUser as TUser
@@ -1234,9 +1236,10 @@ class AddScheduleModel(TimeTableModel):
 
     # 단일 스케줄 만들기
     def make_new_single_schedule(self, data_payload, bid):
+        pprint(data_payload)
+
         schedule = Schedule(
             sname=data_payload.sname,
-            location=data_payload.location,
             bid = bid,
             start_date=data_payload.start_date,
             start_time=data_payload.start_time,
@@ -1251,6 +1254,11 @@ class AddScheduleModel(TimeTableModel):
         else:
             bias = Bias()
 
+        # location을 나누는 방법 ( 정규식을 이용해서 구두점, 콤마 등을 걸러냅니다.
+        # ", "와 같은 케이스도 말끔히. 근데 이후의 공백이 있을 수 있다는 점이 있어 주의를 요합니다.
+        str_list = re.split(r'\W+', data_payload.location)
+        str_list = [s for s in str_list if s]
+
         schedule.sid = self.__make_new_sid()
         schedule.bname = bias.bname
         schedule.uid = self._user.uid
@@ -1258,6 +1266,8 @@ class AddScheduleModel(TimeTableModel):
         schedule.code = self.__make_schedule_code()
         schedule.update_datetime = datetime.today().strftime("%Y/%m/%d-%H:%M:%S")
         schedule.color_code = self._make_color_code()
+        schedule.location = str_list
+
         return schedule
 
     # 스케줄 번들 만들기
@@ -1394,10 +1404,17 @@ class AddScheduleModel(TimeTableModel):
     # 수정한 스케줄 저장
     def save_modified_schedule(self, schedule:list):
         save_datas = self._make_dict_list_data(list_data=schedule)
+        sids = []
+
+        for s in schedule:
+            sids.append(s.sid)
+
+        # 일단 이건 스케줄 수정하는 거
+        self._database.modify_datas_with_ids(target_id="sid", ids=sids, target_datas=save_datas)
 
         # 이건 비효율적이긴 함
-        for s_data in save_datas:
-            self._database.modify_data_with_id(target_id="sid", target_data=s_data)
+        # for s_data in save_datas:
+        #     self._database.modify_data_with_id(target_id="sid", target_data=s_data)
 
         self.__result = True
         return

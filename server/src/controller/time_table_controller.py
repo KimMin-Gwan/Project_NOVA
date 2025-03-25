@@ -293,6 +293,7 @@ class TImeTableController:
                 return model
         # model.set_user_with_email(request=request.data_payload)
 
+
         schedule = model.make_new_single_schedule(data_payload=request.data_payload, bid=request.data_payload.bid)
         # 리스트로 넣어야됨(파라미터가 list를 받음)
         model.save_new_schedules(schedule=[schedule])
