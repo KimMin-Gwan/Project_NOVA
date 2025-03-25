@@ -429,8 +429,8 @@ class TimeTableView(Master_View):
         def try_delete_bundle(request:Request, sbid:Optional[str]=""):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = DeleteScheduleBundleRequest(sbid=sbid)
-            # request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
-            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+            # request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
             time_table_controller = TImeTableController()
             model = time_table_controller.try_delete_bundle(database=self.__database,
@@ -531,7 +531,7 @@ class DeleteSingleScheduleRequest(RequestHeader):
 
 class DeleteScheduleBundleRequest(RequestHeader):
     def __init__(self, sbid) -> None:
-        self.email:str="alsrhks2508@naver.com"
+        # self.email:str="alsrhks2508@naver.com"
         self.sbid = sbid
 
 
