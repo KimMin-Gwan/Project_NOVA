@@ -1346,6 +1346,8 @@ class AddScheduleModel(TimeTableModel):
 
     # 단일 스케줄 편집 저장
     def modify_single_schedule(self, data_payload, sid:str):
+        pprint("Single_schedule_modify")
+
         schedule_data = self._database.get_data_with_id(target="sid", id=sid)
         schedule = Schedule()
         schedule.make_with_dict(schedule_data)
@@ -1367,6 +1369,8 @@ class AddScheduleModel(TimeTableModel):
 
     # 복수의 스케줄 저장 ( Schedule 데이터에 sid가 들어감 )
     def modify_multiple_schedule(self, schedules:list[Schedule], sname:str , sbid:str, bid:str, data_type:str):
+        pprint("Multi_schedule_modify")
+
         schedule_list = []
         schedule_object = None
 

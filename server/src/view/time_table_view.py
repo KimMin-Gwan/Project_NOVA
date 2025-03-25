@@ -398,6 +398,8 @@ class TimeTableView(Master_View):
         @self.__app.post('/time_table_server/try_modify_schedule_bundle')
         def try_modify_bundle(request:Request, raw_request:dict):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
+
+            pprint(raw_request['body'])
             data_payload = ModifyMultipleScheduleRequest(request=raw_request)
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
 
@@ -520,7 +522,7 @@ class ModifyMultipleScheduleRequest(RequestHeader):
         super().__init__(request)
         body:dict = request['body']
         self.sbid = body.get('sbid', "")
-        self.sname = body('sname', "")
+        self.sname = body.get('sname', "")
         self.bid = body['bid']
         self.type = body.get("type", "")
         self.schedules = [Schedule().make_with_dict(dict_data=single_schedule_data) for single_schedule_data in body.get("schedules", []) if single_schedule_data != ""]
