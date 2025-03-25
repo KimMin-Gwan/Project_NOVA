@@ -1068,6 +1068,7 @@ class MultiScheduleModel(TimeTableModel):
         if schedule.sid in self._tuser.my_sids:
             schedule.is_owner = True
 
+        pprint(schedule.get_dict_form_data())
         self.__schedules.append(schedule.get_dict_form_data())
 
         return
