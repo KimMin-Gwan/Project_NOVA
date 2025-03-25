@@ -1498,11 +1498,6 @@ class AddScheduleModel(TimeTableModel):
         tu_sids : list[TUser] = []
         tuids = []
 
-        if self._database.get_data_with_id(target="sid", id='1'):
-            pprint("YES")
-        else:
-            pprint("NO")
-
         # 각 Tuser마다 반복합니다
         for tuser_data in tuser_datas:
             tuser = TUser().make_with_dict(tuser_data)
