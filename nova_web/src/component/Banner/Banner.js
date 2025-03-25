@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import mainApi from "../services/apis/mainApi";
+import mainApi from "../../services/apis/mainApi";
 
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+
+import "./index.css";
 
 // import required modules
 import { Autoplay, Pagination } from "swiper/modules";
@@ -41,7 +43,7 @@ export default function Banner() {
                 <img
                   src={banner.ba_url}
                   alt={`banner ${banner.baid}`}
-                  onClick={() => window.open(banner.redirect, '_blank')}
+                  onClick={() => window.open(banner.redirect, "_blank")}
                 />
               </div>
             </div>

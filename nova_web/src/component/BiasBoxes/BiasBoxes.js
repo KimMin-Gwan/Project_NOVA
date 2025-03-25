@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
-import { BIAS_URL } from "../constant/biasUrl";
-import useBiasStore from "../stores/BiasStore/useBiasStore";
-import useLoginStore from "../stores/LoginStore/useLoginStore";
-import useDragScroll from "../hooks/useDragScroll";
-import add_bias_icon from "./../img/add_bias.png";
-import tempBias from "./../img/tempBias.png";
+import { BIAS_URL } from "../../constant/biasUrl";
+import useBiasStore from "../../stores/BiasStore/useBiasStore";
+import useLoginStore from "../../stores/LoginStore/useLoginStore";
+import useDragScroll from "../../hooks/useDragScroll";
+import add_bias_icon from "./../../img/add_bias.png";
+import tempBias from "./../../img/tempBias.png";
+
+import "./index.css";
 
 export default function BiasBoxes({ fetchBiasCategoryData }) {
   const navigate = useNavigate();
