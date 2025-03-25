@@ -76,17 +76,16 @@ const ScheduleDashboard = () => {
   }
 
   useEffect(() => {
-    const dateString = todayDate.toISOString().split('T')[0]; // 'YYYY-MM-DD' 형식으로 변환
+    const dateString = todayDate.toISOString().split("T")[0]; // 'YYYY-MM-DD' 형식으로 변환
     fetchTargetMonthWeek(dateString);
     fetchTimeChartData(dateString);
   }, [todayDate]);
 
-
   useEffect(() => {
     fetchBiasData();
-    const dateString = todayDate.toISOString().split('T')[0]; // 'YYYY-MM-DD' 형식으로 변환
-    fetchTargetMonthWeek(dateString);
-    fetchTimeChartData(dateString);
+    // const dateString = todayDate.toISOString().split("T")[0]; // 'YYYY-MM-DD' 형식으로 변환
+    // fetchTargetMonthWeek(dateString);
+    // fetchTimeChartData(dateString);
   }, []);
 
   return (
@@ -111,7 +110,7 @@ const ScheduleDashboard = () => {
               <div className="right-group">
                 <button onClick={() => handleNavigate("/schedule/my_schedule")}>내 일정</button>
                 <img src={vertical_line} alt="vertical line" />
-                <button onClick={()=>toggleMakeScheduleModal()}>일정 등록</button>
+                <button onClick={() => toggleMakeScheduleModal()}>일정 등록</button>
               </div>
             </div>
           </div>
@@ -131,7 +130,11 @@ const ScheduleDashboard = () => {
             </div>
           </div>
           {/* 타임차트를 만드는 핵심 구간 */}
-          <TimeChart weekDayData={weekDayData} scheduleData={scheduleData} onChangeIndex={onChangeIndex} />
+          <TimeChart
+            weekDayData={weekDayData}
+            scheduleData={scheduleData}
+            onChangeIndex={onChangeIndex}
+          />
         </div>
 
         <div className="section-line"></div>
@@ -154,12 +157,7 @@ const ScheduleDashboard = () => {
       </div>
       <NavBar brightMode={brightMode} />
 
-
-      <MakeSingleSchedule
-        closeSchedule={toggleMakeScheduleModal}
-        isOpen={makeScheduleModal}
-      />
-
+      <MakeSingleSchedule closeSchedule={toggleMakeScheduleModal} isOpen={makeScheduleModal} />
     </div>
   );
 };
