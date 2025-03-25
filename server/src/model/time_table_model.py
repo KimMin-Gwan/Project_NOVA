@@ -1407,6 +1407,7 @@ class AddScheduleModel(TimeTableModel):
 
     # 스케줄 삭제
     def delete_schedule(self, sid:str):
+        pprint(sid)
         schedule_bundle_datas = self._database.get_all_data(target = "sbid")
     
         sb_sids:list[dict] = []
