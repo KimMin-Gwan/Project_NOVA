@@ -1432,9 +1432,9 @@ class AddScheduleModel(TimeTableModel):
                 tuser.sids.remove(sid)
                 tu_sids.append({"sids" : tuser.sids})
                 tuids.append(tuser.tuid)
-                
+
         self._tuser.my_sids.remove(sid)
-        
+
         self._database.modify_datas_with_ids(target_id="sbid", ids=sbids, target_datas=sb_sids)
         self._database.modify_datas_with_ids(target_id="tuid", ids=tuids, target_datas=tu_sids)
         self._database.modify_data_with_id(target_id="tuid", target_data=self._tuser.get_dict_form_data())
@@ -1444,10 +1444,36 @@ class AddScheduleModel(TimeTableModel):
         return
 
     # 스케줄 번들 삭제
+    # 테스트 아직 안했음 주의
     def delete_bundle(self, sbid:str):
+        # 스케줄 데이터 삭제
         schedule_bundle_data = self._database.get_data_with_id(target='sbid', id=sbid)
         schedule_bundle = ScheduleBundle().make_with_dict(schedule_bundle_data)
         sids = schedule_bundle.sids
+
+        # tuser에서 sid를 삭제
+        tuser_datas = self._database.get_all_data(target="tuid")
+        tu_sids : list[TUser] = []
+        tuids = []
+
+        # 각 Tuser마다 반복합니다
+        for tuser_data in tuser_datas:
+            tuser = TUser().make_with_dict(tuser_data)
+            # 스케줄 번들 안에 있는 모든 sids에 대해 삭제를 진행합니다.
+            tuser.sids = list(filter(lambda sid: sid not in sids, tuser.sids))      # 잘 됨
+            if sbid in tuser.sbids:
+                tuser.sbids.remove(sbid)
+
+            tu_sids.append({"sids": tuser.sids, "sbids": tuser.sbids})
+            tuids.append(tuser.tuid)
+
+
+        self._tuser.my_sids = list(filter(lambda sid: sid not in sids, self._tuser.my_sids))
+        self._tuser.my_sbids.remove(sbid)
+
+
+        self._database.modify_datas_with_ids(target_id="tuid", ids=tuids, target_datas=tu_sids)
+        self._database.modify_data_with_id(target_id="tuid", target_data=self._tuser.get_dict_form_data())
 
         self._database.delete_datas_with_ids(target="sid", ids=sids)
         self._database.delete_data_with_id(target="sbid", id=sbid)

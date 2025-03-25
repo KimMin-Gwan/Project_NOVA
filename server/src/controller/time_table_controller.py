@@ -380,6 +380,8 @@ class TImeTableController:
     def try_delete_bundle(self, database:Local_Database, request:RequestManager):
         model = AddScheduleModel(database)
 
+        # model.set_user_with_email(request=request.data_payload)
+        # model._set_tuser_with_tuid()
         if request.jwt_payload!= "":
             model.set_user_with_email(request=request.jwt_payload)
             if not model._set_tuser_with_tuid():
