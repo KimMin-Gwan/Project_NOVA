@@ -1485,7 +1485,7 @@ class AddScheduleModel(TimeTableModel):
             # if sbid in tuser.sbids:
             #     tuser.sbids.remove(sbid)
 
-            tu_sids.append({"sids": tuser.sids, "sbids": tuser.sbids})
+            tu_sids.append({"sids": tuser.sids})
             tuids.append(tuser.tuid)
 
 
