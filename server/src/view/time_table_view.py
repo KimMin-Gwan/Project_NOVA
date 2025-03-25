@@ -383,6 +383,8 @@ class TimeTableView(Master_View):
         @self.__app.post('/time_table_server/try_modify_schedule')
         def try_modify_schedule(request:Request, raw_request:dict):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
+
+            pprint(raw_request['body'])
             data_payload = ModifySingleScheduleRequest(request=raw_request)
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
 
