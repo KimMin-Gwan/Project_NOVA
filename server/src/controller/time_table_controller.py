@@ -331,6 +331,19 @@ class TImeTableController:
 
         return model
 
+    def try_get_written_bundle(self, database:Local_Database, request:RequestManager):
+        model = MultiScheduleModel(database)
+
+        if request.jwt_payload!= "":
+            model.set_user_with_email(request=request.jwt_payload)
+            if not model._set_tuser_with_tuid():
+                return model
+
+        model.get_written_schedule(sid=request.data_payload.sbid)
+
+        return model
+
+
     # 단일 스케줄 편집
     def try_modify_single_schedule(self, database:Local_Database, request:RequestManager):
         model = AddScheduleModel(database)

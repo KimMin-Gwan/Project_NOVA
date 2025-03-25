@@ -1068,11 +1068,21 @@ class MultiScheduleModel(TimeTableModel):
         if schedule.sid in self._tuser.my_sids:
             schedule.is_owner = True
 
-        pprint(schedule.get_dict_form_data())
         self.__schedules.append(schedule.get_dict_form_data())
 
         return
 
+    def get_written_bundle(self, sbid:str):
+        schedule_bundle_data = self._database.get_data_with_id(target="sbid", id=sbid)
+        schedule_bundle = ScheduleBundle()
+        schedule_bundle.make_with_dict(schedule_bundle_data)
+
+        schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids=schedule_bundle.sids)
+        self.__schedules.extend(schedule_datas)
+
+        self.__schedule_bundles.append(schedule_bundle.get_dict_form_data())
+
+        return
 
     # 바이어스 추천 로직
     # 근데 아직 추천할게 없어

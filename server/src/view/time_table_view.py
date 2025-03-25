@@ -372,7 +372,7 @@ class TimeTableView(Master_View):
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
 
             time_table_controller =TImeTableController()
-            model = time_table_controller.try_get_written_schedule(database=self.__database,
+            model = time_table_controller.try_get_written_bundle(database=self.__database,
                                                                    request=request_manager)
 
             body_data = model.get_response_form_data(self._head_parser)
