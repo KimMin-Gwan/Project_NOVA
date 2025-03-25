@@ -1482,8 +1482,8 @@ class AddScheduleModel(TimeTableModel):
             tuser = TUser().make_with_dict(tuser_data)
             # 스케줄 번들 안에 있는 모든 sids에 대해 삭제를 진행합니다.
             tuser.sids = list(filter(lambda sid: sid not in sids, tuser.sids))      # 잘 됨
-            if sbid in tuser.sbids:
-                tuser.sbids.remove(sbid)
+            # if sbid in tuser.sbids:
+            #     tuser.sbids.remove(sbid)
 
             tu_sids.append({"sids": tuser.sids, "sbids": tuser.sbids})
             tuids.append(tuser.tuid)
