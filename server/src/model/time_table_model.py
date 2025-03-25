@@ -1254,6 +1254,7 @@ class AddScheduleModel(TimeTableModel):
 
         # location을 나누는 방법 ( 정규식을 이용해서 구두점, 콤마 등을 걸러냅니다.
         # ", "와 같은 케이스도 말끔히. 근데 이후의 공백이 있을 수 있다는 점이 있어 주의를 요합니다.
+        # 또한 플랫폼이 아닌 다른 문자가 들어가는 불상사도 있을 수 있습니다. (이건 어찌할 방도가..)
         str_list = re.split(r'\W+', data_payload.location)
         str_list = [s for s in str_list if s]
         pprint(str_list)
