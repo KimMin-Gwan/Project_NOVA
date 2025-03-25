@@ -8,7 +8,7 @@ import { ScheduleBundle } from "../../component/ScheduleEvent/ScheduleBundle";
 import ScheduleCard from "../../component/EventCard/EventCard";
 import ScheduleSearch from "../../component/ScheduleSearch/ScheduleSearch";
 import { ScheduleMore, ScheduleAdd, ScheduleEdit, ScheduleRemove } from "../../component/ScheduleMore/ScheduleMore";
-import { BundleScheduleDetail, ScheduleDetail, MakeSingleSchedule } from "../../component/EventMore/EventMore";
+import { BundleScheduleDetail, ScheduleDetail, MakeSingleSchedule, EditSingleSchedule } from "../../component/EventMore/EventMore";
 import back from "./../../img/detail_back.png";
 
 import useToggleMore from "../../hooks/useToggleMore";
@@ -32,6 +32,7 @@ export default function SearchSchedulePage() {
   const [addScheduleModal, setAddScheduleModal] = useState(false);
   const [addScheduleBundleModal, setAddScheduleBundleModal] = useState(false);
   const [makeScheduleModal, setMakeScheduleModal] = useState(false);
+  const [editScheduleModal, setEditScheduleModal] = useState(false);
 
   // 데이터
   const [scheduleBundleData, setScheduleBundleData] = useState([]);
@@ -110,6 +111,13 @@ export default function SearchSchedulePage() {
     setMakeScheduleModal((makeScheduleModal) => !makeScheduleModal);
   };
 
+
+  const toggleEditScheduleModal = (target) => {
+    setEditScheduleModal((editScheduleModal) => !editScheduleModal);
+    setTargetSchedule(target);
+  };
+
+
   // 일정 추가하기 버튼 누르면 동작하는애
   const toggleAddScheduleModal = (target) => {
     setAddScheduleModal((addScheduleModal) => !addScheduleModal);
@@ -175,6 +183,26 @@ export default function SearchSchedulePage() {
       });
   }
 
+  // 내 스케줄에 등록하는 함수 (추가하기 버튼 누르면 동작해야됨)
+  // 완료하면 성공했다고 알려주면 좋을듯
+  async function fetchTryDeleteSchedule(target) {
+    // 무조건 리스트로 만들어야됨
+
+    await mainApi 
+      .get(`time_table_server/try_delete_schedule?sid=${target.sid}`)
+      .then((res) => {
+        setScheduleData((prev) => {
+          if (!prev.some((item) => item.sid === target.sid)) {
+            // 목표 item이 없으면 기존 상태 반환
+            return prev;
+          }
+          // 목표 item이 있으면 업데이트
+          return prev.map((item) =>
+            item.sid === target.sid ? { ...item, is_already_have: false, is_owner : false} : item
+          );
+        });
+      });
+  }
 
   // 내 스케줄에 등록하는 함수 (추가하기 버튼 누르면 동작해야됨)
   // 완료하면 성공했다고 알려주면 좋을듯
@@ -191,8 +219,6 @@ export default function SearchSchedulePage() {
       .then((res) => {
       });
   }
-
-
 
   return (
     <div className="container SearchSchedulePage">
@@ -246,16 +272,14 @@ export default function SearchSchedulePage() {
                 ) : item.is_owner === false? (
                   <ScheduleRemove
                     target={item}
-                    detailClick={toggleAddScheduleModal}
                     navBoardClick={navBoard}
                     removeClick={fetchTryRejectSchedule}
                   />
                 ) : (
                   <ScheduleEdit
                     target={item}
-                    detailClick={toggleAddScheduleModal}
                     navBoardClick={navBoard}
-                    editClick={fetchTryAddSchedule}
+                    editClick={toggleEditScheduleModal}
                   />
                 )
               )}
@@ -277,10 +301,19 @@ export default function SearchSchedulePage() {
         isOpen={addScheduleModal}
         target={targetSchedule}
       />
+
       <MakeSingleSchedule
         closeSchedule={toggleMakeScheduleModal}
         isOpen={makeScheduleModal}
       />
+
+      <EditSingleSchedule
+        closeSchedule={toggleEditScheduleModal}
+        isOpen={editScheduleModal}
+        target={targetSchedule}
+        isSingleSchedule={true}
+      />
+
     </div>
   );
 }

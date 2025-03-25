@@ -30,7 +30,11 @@ export default function ScheduleSelect({
   setSendScheduleData,
   sendScheduleData,
   removeSchedule,
+  isEditMode,
+  targetSchedule
 }) {
+
+
    //파라미터로 넘어온 데이터 에서 location이랑 sname 바꾸는 함수
   const handleScheduleChange = (field, value) => {
     const updatedSchedules = [...sendScheduleData.schedules];
@@ -135,6 +139,35 @@ export default function ScheduleSelect({
     const validDay = getValidDay(year, month, day); // 유효한 날짜로 수정
     setPickerValue({ year, month, day: validDay });
   };
+
+  // 수정하기 전용 초기 데이터 세팅 하는 곳
+  useEffect(()=>{
+    if (isEditMode){
+      if (targetSchedule){
+        setStartPickerValue({
+          year: targetSchedule.startYear,
+          month: targetSchedule.startMonth,
+          day : targetSchedule.startDay,
+        })
+        setEndPickerValue({
+          year: targetSchedule.endYear,
+          month: targetSchedule.endMonth,
+          day : targetSchedule.endDay,
+        })
+        setStartTimePickerValue({
+          hour : targetSchedule.startHour,
+          minute : targetSchedule.startMinute,
+        })
+        setEndTimePickerValue({
+          hour : targetSchedule.endHour,
+          minute : targetSchedule.endMinute,
+        })
+        setDetailPlaceInput(targetSchedule.location)
+        setPlaceInput(targetSchedule.sname)
+      }
+    }
+
+  }, [targetSchedule])
 
   // 무슨 요일인지 맞춰주는 마법같은 함수
   useEffect(() => {
