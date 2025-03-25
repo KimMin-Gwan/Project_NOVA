@@ -14,13 +14,12 @@ import { getModeClass } from "./../../App.js";
 import filter_icon from "./../../img/filter.svg";
 
 import Feed from "./../../component/feed";
-import BiasBoxes from "../../component/BiasBoxes.js";
+import BiasBoxes from "../../component/BiasBoxes/BiasBoxes.js";
 import FilterModal from "../../component/FilterModal/FilterModal.js";
 import SearchBox from "../../component/SearchBox.js";
 import KeywordBox from "../../component/keyword/KeywordBox.js";
 import CategoryModal from "../../component/CategoryModal/CategoryModal.js";
 import NoneFeed from "../../component/NoneFeed/NoneFeed.js";
-import NavBar from "../../component/NavBar/NavBar.js";
 import Header from "../../component/Header/Header.js";
 import StoryFeed from "../../component/StoryFeed/StoryFeed.js";
 
@@ -28,7 +27,6 @@ import "@toast-ui/editor/dist/toastui-editor-viewer.css";
 import style from "./FeedHashList.module.css";
 import useDragScroll from "../../hooks/useDragScroll.js";
 import LoadingPage from "../LoadingPage/LoadingPage.js";
-import HEADER from "../../constant/header.js";
 import useIntersectionObserver from "../../hooks/useIntersectionObserver.js";
 import useFetchFeedList from "../../hooks/useFetchFeedList.js";
 import useBoardStore from "../../stores/BoardStore/useBoardStore.js";

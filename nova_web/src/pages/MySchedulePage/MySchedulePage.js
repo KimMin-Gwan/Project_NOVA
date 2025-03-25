@@ -9,7 +9,7 @@ import {
   ScheduleEdit,
   ScheduleRemove,
 } from "../../component/ScheduleMore/ScheduleMore";
-import BiasBoxes from "../../component/BiasBoxes";
+import BiasBoxes from "../../component/BiasBoxes/BiasBoxes";
 
 export default function MySchedulePage() {
   let [thisWeekSchedule, setThisWeekSchedule] = useState([]);

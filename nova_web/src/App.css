@@ -15,24 +15,6 @@ button {
   cursor: pointer;
 }
 
-.main-title {
-  font-variation-settings: "wght" 300;
-  color: #323232;
-  font-size: 20px;
-  margin: 0;
-  margin-left: 20px;
-  margin-bottom: 14px;
-  /* text-shadow: 0px 4px 4px rgb(0, 0, 0, 0.25); */
-}
-
-.title-color {
-  margin-left: 5px;
-  color: #0076ee;
-  white-space: pre;
-  /* font-weight: 400; */
-  font-variation-settings: "wght" 700;
-}
-
 /* 라이트모드 */
 body.bright-mode {
   background-color: #131718;
@@ -44,11 +26,6 @@ body.bright-mode {
   background-color: #111;
   color: #303030;
 } */
-
-.hr-line {
-  border: 6px solid #292929;
-  opacity: 1;
-}
 
 .all-box {
   display: flex;
@@ -69,20 +46,6 @@ body.bright-mode {
   }
 }
 
-.white-title {
-  color: white;
-}
-
-.top_area {
-  width: 100%;
-  height: 100px;
-  background-color: blue;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
 .container {
   max-width: 500px;
   min-height: 100vh;
@@ -92,15 +55,6 @@ body.bright-mode {
   position: relative;
   /* border: 1px white solid; */
   /* margin-bottom: 20px; */
-}
-
-.top-area {
-  width: 100%;
-  /* height: 400px; */
-  background-color: #131718;
-  /* margin: 0 auto; */
-  /* margin-bottom: 20px; */
-  /* border-radius: 0 0 5% 5%; */
 }
 
 .header {
@@ -142,27 +96,6 @@ body.bright-mode {
   border-radius: 10px;
 }
 
-.banner-images {
-  display: flex;
-  width: 100%;
-  height: 100%;
-}
-
-.image-box {
-  flex: 0 0 100%;
-  width: 100vw;
-  height: 150px;
-  align-items: center;
-  float: left;
-  cursor: pointer;
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-}
-
 .buttons {
   /* width: 200px; */
   /* background-color: blue; */
@@ -192,19 +125,8 @@ body.bright-mode {
 
 /* ---------------------- */
 
-/* 피드 영역 */
-
-.main-container {
-  width: 600px;
-  /* height: auto; */
-  /* height: 100%; */
-  background-color: green;
-  position: relative;
-}
-
 .contents {
   height: auto;
-  /* margin-top: 100px; */
 }
 
 @media (min-width: 1024px) {
@@ -232,10 +154,6 @@ body.bright-mode {
 .authen.dark-mode {
   color: white;
 } */
-/* 선 */
-.hr-line.bright-mode {
-  border-color: #eaeeff;
-}
 
 /* 가장 보고싶은 최애 */
 .bias-container {
@@ -280,49 +198,12 @@ body.bright-mode {
   background-color: gray;
   border-radius: 10px;
 
-  .non-bias {
-    width: 100%;
-    height: 100%;
-    font-size: 13px;
-    background-color: white;
-    border-radius: 10px;
-    border: solid 2px rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
   img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     border-radius: 10px;
     /* box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5); */
-  }
-}
-
-.clicked-img {
-  transition: box-shadow ease 0.5s;
-  box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.5);
-}
-
-.add-bias-box {
-  all: unset;
-  cursor: pointer;
-  /* padding: 5px; */
-  border-radius: 10px;
-  /* background-color: #aad4ff; */
-  width: 97px;
-  height: 97px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: dotted 2px #71b7ff;
-  img {
-    border-radius: 25px;
-    width: 30%;
-    height: 30%;
-    object-fit: cover;
   }
 }
 
@@ -344,6 +225,7 @@ body.bright-mode {
     }
   }
 
+  /* 실시간 랭킹 */
   .rt-ranking {
     all: unset;
     display: flex;
@@ -375,5 +257,3 @@ body.bright-mode {
     }
   }
 }
-
-/* test css */

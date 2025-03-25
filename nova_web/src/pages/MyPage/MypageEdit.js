@@ -6,6 +6,7 @@ import user_icon from "./../../img/user_profile.svg";
 import useLoginStore from "../../stores/LoginStore/useLoginStore";
 import useBiasStore from "../../stores/BiasStore/useBiasStore";
 import mainApi from "../../services/apis/mainApi";
+import postApi from "../../services/apis/postApi";
 
 function MyPage() {
   const { tryLogin, tryLogout } = useLoginStore();
@@ -13,13 +14,13 @@ function MyPage() {
   let navigate = useNavigate();
   let [isLoading, setIsLoading] = useState(true);
   let [nickname, setNickname] = useState("");
+  let [newNickname, setNewNickname] = useState("");
   let [password, setPassword] = useState("");
   let [newPassword, setNewPassword] = useState("");
   let [checkPassword, setCheckPassword] = useState("");
   let [myProfile, setMyProfile] = useState();
   const [image, setImage] = useState(null);
   const fileInputRef = useRef(null);
-  let [newNickname, setNewNickname] = useState("");
   const [imagePre, setImagePre] = useState(null);
   const [isVali, setIsVali] = useState(false);
   const [isValiPw, setIsValiPw] = useState(false);
@@ -40,22 +41,13 @@ function MyPage() {
   };
 
   async function fetchChangeNickname() {
-    await axios
-      .post(
-        `https://nova-platform.kr/user_home/try_change_nickname`,
-        {
-          header: header,
-          body: {
-            uname: nickname,
-          },
+    await postApi
+      .post(`user_home/try_change_nickname`, {
+        header: header,
+        body: {
+          uname: nickname,
         },
-        {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
+      })
       .then((res) => {
         if (res.data.body.result) {
           // setNewNickname(res.data.body.uname);
@@ -69,23 +61,14 @@ function MyPage() {
   }
 
   async function fetchPasswordChange() {
-    await axios
-      .post(
-        "https://nova-platform.kr/user_home/try_change_password",
-        {
-          header: header,
-          body: {
-            password: password,
-            new_password: newPassword,
-          },
+    await postApi
+      .post("user_home/try_change_password", {
+        header: header,
+        body: {
+          password: password,
+          new_password: newPassword,
         },
-        {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
+      })
       .then((res) => {
         if (!res.data.body.result) {
           alert(res.data.body.detail);
@@ -163,6 +146,7 @@ function MyPage() {
       .then((data) => {
         navigate("/");
         fetchBiasList();
+        localStorage.removeItem("history");
       })
       .catch((error) => {
         console.error("Logout error:", error);
