@@ -1310,8 +1310,6 @@ class AddScheduleModel(TimeTableModel):
 
         if data_type == "bundle":
             schedules_object = self.make_new_schedule_bundle(schedule_list=schedule_list, sbname=sname, bid=bid)
-            self._tuser.my_sbids.append(schedules_object.sbid)
-            self._database.modify_data_with_id(target_id="tuid", target_data=self._tuser.get_dict_form_data())
 
         return schedules_object
 
@@ -1319,9 +1317,15 @@ class AddScheduleModel(TimeTableModel):
     def save_new_multiple_schedule_object_with_type(self, schedule_object, data_type:str):
         if data_type == "bundle":
             self._database.add_new_data(target_id="sbid", new_data=schedule_object.get_dict_form_data())
+            self._tuser.sbids.append(schedule_object.sbid)
+            self._tuser.my_sbids.append(schedule_object.sbid)
+            self._database.modify_data_with_id(target_id="tuid", target_data=self._tuser.get_dict_form_data())
             self.__result = True
         # elif data_type == "event":
         #     self._database.add_new_data(target_id="seid", new_data=schedule_object.get_dict_form_data())
+        #     self._tuser.seids.append(schedule_object.seid)
+        #     self._tuser.my_seids.append(schedule_object.seid)
+        #     self._database.modify_data_with_id(target_id="tuid", target_data=self._tuser.get_dict_form_data())
         #     self.__result = True
 
         return
@@ -1760,9 +1764,10 @@ class ScheduleChartModel(TimeTableModel):
     # 내가 추가한 스케줄 데이터 뽑기를 날짜로
     # date는 날짜임 , 형태는 2025/03/06 임
     # date안넣으면 기본적으로 오늘자로 감
-    def set_my_schedule_in_by_day(self, target_date=datetime.today().strftime("%Y-%m-%d"), days=7, sids =[]):
-        
-        
+    def set_my_schedule_in_by_day(self, target_date="", days=7, sids =[]):
+        if target_date == "":
+            target_date = datetime.today().strftime("%Y-%m-%d")
+
         target_sids = []
         target_sids.extend(self._tuser.sids)
         target_sids.extend(sids)
