@@ -50,8 +50,10 @@ function App() {
     setBrightMode(newMode); // MoreSee에서 전달받은 상태 업데이트
   };
 
-
-  if (window.innerWidth <= 768 || /Mobi|Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent)) {
+  if (
+    window.innerWidth <= 768 ||
+    /Mobi|Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent)
+  ) {
     document.body.style.zoom = 100 + "%";
   } else {
     document.body.style.zoom = 120 + "%";
@@ -91,7 +93,7 @@ function App() {
 
       {/* 스케줄 페이지 */}
       <Route path="/schedule" element={<ScheduleDashboard />}></Route>
-      <Route path="/schedule/my_schedule" element={<MySchedulePage/>}></Route>
+      <Route path="/schedule/my_schedule" element={<MySchedulePage />}></Route>
       <Route path="/search/schedule" element={<SearchSchedulePage />}></Route>
       <Route path="/search/topic" element={<SearchTopicPage />}></Route>
 
@@ -109,7 +111,7 @@ function App() {
       <Route path="/bias_funding/:type" element={<MoreProjects />}></Route> */}
 
       {/* 테스트 페이지 및 에러 페이지 */}
-      <Route path="/test2" element={<TestPage />}></Route>
+      {/* <Route path="/test2" element={<TestPage />}></Route> */}
       <Route path="*" element={<div>404 Error</div>}></Route>
 
       {/* 홈 화면 */}

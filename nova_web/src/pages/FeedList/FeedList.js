@@ -336,7 +336,7 @@ export default function FeedList() {
           )}
         </div>
       </div>
-      <NavBar />
+      {/* <NavBar /> */}
     </div>
   );
 }
