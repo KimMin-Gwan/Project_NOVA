@@ -519,10 +519,10 @@ class ModifyMultipleScheduleRequest(RequestHeader):
     def __init__(self, request) -> None:
         super().__init__(request)
         body:dict = request['body']
-        self.sbid = body['sbid']
-        self.sname = body['body']
+        self.sbid = body.get('sbid', "")
+        self.sname = body('sname', "")
         self.bid = body['bid']
-        self.type = body.get("type", "bundle")
+        self.type = body.get("type", "")
         self.schedules = [Schedule().make_with_dict(dict_data=single_schedule_data) for single_schedule_data in body.get("schedules", []) if single_schedule_data != ""]
 
 class DeleteSingleScheduleRequest(RequestHeader):

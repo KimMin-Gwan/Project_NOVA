@@ -1380,7 +1380,10 @@ class AddScheduleModel(TimeTableModel):
 
         # 번들데이터 만들기
         if data_type == "bundle":
-            schedule_object = self.modify_schedule_bundle(schedule_list=schedule_list, sbid=sbid, sbname=sname, bid=bid)
+            if self._database.get_data_with_id(target='sid', id=sbid):
+                schedule_object = self.modify_schedule_bundle(schedule_list=schedule_list, sbid=sbid, sbname=sname, bid=bid)
+            else:
+                schedule_object = self.make_new_schedule_bundle(schedule_list=schedule_list, sbname=sname, bid=bid)
 
         return schedule_object
 
@@ -1406,11 +1409,23 @@ class AddScheduleModel(TimeTableModel):
         save_datas = self._make_dict_list_data(list_data=schedule)
         sids = []
 
-        for s in schedule:
-            sids.append(s.sid)
+        # for s in schedule:
+        #     sids.append(s.sid)
+
+        for s_data in save_datas:
+            if self._database.get_data_with_id(target="sid", id=s_data['sid']):
+                self._database.modify_data_with_id(target_id='sid', target_data=s_data)
+            # 새로운 스케줄을 저장하는 경우
+            else:
+                self._database.add_new_data(target_id='sid', new_data=s_data)
+                # 유저에게도 추가
+                self._tuser.my_sids.append(s_data['sid'])
+                self._tuser.sids.append(s_data['sid'])
+                self._database.modify_data_with_id(target_id='tuid', target_data=self._tuser.get_dict_form_data())
+
 
         # 일단 이건 스케줄 수정하는 거
-        self._database.modify_datas_with_ids(target_id="sid", ids=sids, target_datas=save_datas)
+        # self._database.modify_datas_with_ids(target_id="sid", ids=sids, target_datas=save_datas)
 
         # 이건 비효율적이긴 함
         # for s_data in save_datas:
@@ -1422,8 +1437,14 @@ class AddScheduleModel(TimeTableModel):
     # 수정한 스케줄 번들 저장
     def save_modified_multiple_schedule_object_with_type(self, schedule_object, data_type:str):
         if data_type == "bundle":
-            self._database.modify_data_with_id(target_id="sbid", target_data=schedule_object.get_dict_form_data())
-            self.__result = True
+            if self._database.get_data_with_id(target="sbid"):
+                self._database.modify_data_with_id(target_id="sbid", target_data=schedule_object.get_dict_form_data())
+                self.__result = True
+            else:
+                self._database.add_new_data(target_id="sbid", new_data=schedule_object.get_dict_form_data())
+                self._tuser.my_sbids.append(schedule_object.sbid)
+                self._database.modify_data_with_id(target_id='tuid', target_data=self._tuser.get_dict_form_data())
+                self.__result = True
         return
 
     # 스케줄 삭제
@@ -1476,6 +1497,11 @@ class AddScheduleModel(TimeTableModel):
         tuser_datas = self._database.get_all_data(target="tuid")
         tu_sids : list[TUser] = []
         tuids = []
+
+        if self._database.get_data_with_id(target="sid", id='1'):
+            pprint("YES")
+        else:
+            pprint("NO")
 
         # 각 Tuser마다 반복합니다
         for tuser_data in tuser_datas:
