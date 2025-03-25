@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { getModeClass } from "../../App.js";
 import WriteMoment from "../../pages/Write/Writemoment.js";
@@ -18,10 +18,11 @@ const NavBar = ({ brightMode }) => {
   const navBarList = [
     {
       id: 0,
-      title: "게시판",
+      title: "게시글",
       src: short_form,
       alt: "bias_board",
-      end_point: "/feed_list?type=bias",
+      // end_point: "/feed_list?type=bias",
+      end_point: "/",
       type: "navigate",
       onClick: (endPoint) => handleNavigate(endPoint),
     },
@@ -64,6 +65,7 @@ const NavBar = ({ brightMode }) => {
   ];
 
   let navigate = useNavigate();
+  const location = useLocation(); //현재 경로 감지
 
   const [activeIndex, setActiveIndex] = useState(() => {
     return Number(sessionStorage.getItem("activeNav")) || 0;
@@ -71,6 +73,20 @@ const NavBar = ({ brightMode }) => {
   let [writeOptions, setWriteOptions] = useState(false);
 
   const [writeMoment, setWriteMoment] = useState(false);
+  useEffect(() => {
+    const currentIndex = navBarList.findIndex((item) => item.end_point === location.pathname);
+    setActiveIndex(currentIndex !== -1 ? currentIndex : 0);
+    sessionStorage.setItem("activeNav", currentIndex !== -1 ? currentIndex : 0);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    const currentIndex = navBarList.findIndex((item) => item.end_point === location.pathname);
+
+    if (!writeOptions && !writeMoment) {
+      setActiveIndex(currentIndex);
+      sessionStorage.removeItem("activeNav");
+    }
+  }, [writeOptions, writeMoment]);
 
   const onClickWrite = () => {
     setWriteOptions(!writeOptions);
