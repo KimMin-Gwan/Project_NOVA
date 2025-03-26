@@ -232,14 +232,6 @@ export default function ScheduleExplore() {
 
   return (
     <div className="container SearchSchedulePage">
-      <ScheduleSearch
-        title={TITLE_TYPES.SCHEDULE}
-        makeSchedule={toggleMakeScheduleModal}
-        fetchSearchData={fetchSearchData}
-        searchKeyword={searchKeyword}
-        setSearchKeyword={setSearchKeyword}
-      />
-
       {/* 탭 영역 */}
       <section className={"info-list"}>
         <ul className={"post-list"} data-active-index={activeIndex}>
@@ -250,7 +242,11 @@ export default function ScheduleExplore() {
           />
         </ul>
       </section>
-
+      <section>
+        <button>시간 설정</button>
+        <button>시간 설정</button>
+        <button>시간 설정</button>
+      </section>
       <ul className="scheduleList">
         {activeIndex === 0
           ? scheduleBundleData.map((item) => (
@@ -299,32 +295,6 @@ export default function ScheduleExplore() {
               </li>
             ))}
       </ul>
-
-      {/* 자세히 보기 모달창 */}
-      <BundleScheduleDetail
-        closeSchedule={toggleAddScheduleBundleModal}
-        isOpen={addScheduleBundleModal}
-        target={targetScheduleBundle}
-      />
-
-      {/*여기도 target 추가해야될 듯 */}
-      <ScheduleDetail
-        closeSchedule={toggleAddScheduleModal}
-        isOpen={addScheduleModal}
-        target={targetSchedule}
-      />
-
-      <MakeSingleSchedule
-        closeSchedule={toggleMakeScheduleModal}
-        isOpen={makeScheduleModal}
-      />
-
-      <EditSingleSchedule
-        closeSchedule={toggleEditScheduleModal}
-        isOpen={editScheduleModal}
-        target={targetSchedule}
-        isSingleSchedule={true}
-      />
     </div>
   );
 }
@@ -345,58 +315,3 @@ function TabItem({ tabs, activeIndex, handleClick }) {
     </>
   );
 }
-
-//<EventDetail closeSchedule={toggleAddEventModal} isOpen={addEventModal} />
-
-//? scheduleData.map((item) => (
-//<li>
-//<ScheduleCard
-//key={item.id}
-//{...item}
-//toggleClick={() => toggleMore(item.id)}
-///>
-//{moreClick[item.id] && <ScheduleAdd
-//navBoardClick={navBoard}
-//scheduleClick={toggleAddEventModal}
-///>}
-//</li>
-//))
-//: scheduleEventData.map((item) => (
-//<li>
-//<ScheduleEvent
-//key={item.id}
-//{...item}
-//toggleClick={() => toggleMore(item.id)}
-///>
-//{moreClick[item.id] && <ScheduleMore
-//navBoardClick={navBoard}
-//scheduleClick={toggleAddScheduleModal}
-///>}
-//</li>
-//))
-// Event는 1.5버전에 추가 예정
-//else if (activeIndex == 2) {
-//await mainApi
-//.get(`time_table_server/try_search_schedule_with_keyword?keyword=${keyword}&key=${scheduleEventKey}&type=${typeSelectData[activeIndex]}`)
-//.then((res) => {
-//setScheduleEventData((prev) => [...prev, ...res.data.body.schedule_events]);
-//setScheduleEventKey(res.data.body.key);
-//});
-//}
-
-// Event는 1.5버전에 추가 예정
-//else if (activeIndex == 2) {
-//await mainApi
-//.get(`time_table_server/try_search_schedule_with_keyword?keyword=${keyword}&key=${scheduleEventKey}&type=${typeSelectData[activeIndex]}`)
-//.then((res) => {
-//setScheduleEventData((prev) => [...prev, ...res.data.body.schedule_events]);
-//setScheduleEventKey(res.data.body.key);
-//});
-//}
-
-// const [makeSingleScheduleModal, setMakeSingleScheduleModal] = useState(false);
-
-// 일정 추가하기 버튼 누르면 동작하는애
-// const toggleMakeSingleScheduleModal = () => {
-//   setMakeSingleScheduleModal((makeSingleScheduleModal) => !makeSingleScheduleModal);
-// };
