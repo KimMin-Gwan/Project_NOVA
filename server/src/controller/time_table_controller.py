@@ -334,12 +334,14 @@ class TImeTableController:
     def try_get_written_bundle(self, database:Local_Database, request:RequestManager):
         model = MultiScheduleModel(database)
 
+        # model.set_user_with_email(request=request.data_payload)
+        # model._set_tuser_with_tuid()
         if request.jwt_payload!= "":
             model.set_user_with_email(request=request.jwt_payload)
             if not model._set_tuser_with_tuid():
                 return model
 
-        model.get_written_schedule(sid=request.data_payload.sbid)
+        model.get_written_bundle(sbid=request.data_payload.sbid)
 
         return model
 

@@ -339,7 +339,7 @@ class TimeTableView(Master_View):
 
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = MakeMultipleScheduleRequest(request=raw_request)
-            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
 
             time_table_controller =TImeTableController()
             model = time_table_controller.make_new_multiple_schedules(database=self.__database,
@@ -354,7 +354,8 @@ class TimeTableView(Master_View):
         def try_get_written_schedule(request:Request, sid:Optional[str]=""):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = ScheduleRequest(sid=sid)
-            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            # request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
 
             time_table_controller =TImeTableController()
             model = time_table_controller.try_get_written_schedule(database=self.__database,
@@ -369,6 +370,7 @@ class TimeTableView(Master_View):
         def try_get_written_bundle(request:Request, sbid:Optional[str]=""):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = ScheduleBundleRequest(sbid=sbid)
+            # request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
 
             time_table_controller =TImeTableController()
@@ -571,6 +573,7 @@ class ScheduleRequest(RequestHeader):
 
 class ScheduleBundleRequest(RequestHeader):
     def __init__(self, sbid) -> None:
+        # self.email:str="alsrhks2508@naver.com"
         self.sbid:str = sbid
     
 class ScheduleWithBidRequest(RequestHeader):
