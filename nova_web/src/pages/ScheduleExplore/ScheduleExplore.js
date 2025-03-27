@@ -17,34 +17,11 @@ export default function ScheduleExplore() {
 
   const [modalButton, setModalButton] = useState(false);
 
-  let [searchKeyword, setSearchKeyword] = useState("");
-
-  const typeSelectData = ["schedule_bundle", "schedule"];
   const scheduleKind = ["게임", "저챗", "음악", "그림", "스포츠", "시참"];
 
   const [activeIndex, setActiveIndex] = useState(0);
 
-  // 모달
-  const [addScheduleModal, setAddScheduleModal] = useState(false);
-  const [addScheduleBundleModal, setAddScheduleBundleModal] = useState(false);
-  const [makeScheduleModal, setMakeScheduleModal] = useState(false);
-  const [editScheduleModal, setEditScheduleModal] = useState(false);
-
-  // 키 값
-  const [scheduleBundleKey, setScheduleBundleKey] = useState(-1);
-  const [scheduleKey, setScheduleKey] = useState(-1);
-
-  useEffect(() => {
-    setScheduleKey(-1);
-    setScheduleBundleKey(-1);
-  }, [searchKeyword, activeIndex]);
-
-  // 탭 변경시 검색 초기화
-  useEffect(() => {
-    setSearchKeyword("");
-    setScheduleBundleKey(-1);
-  }, [activeIndex]);
-
+  const [buttonType, setButtonType] = useState("");
   // 일정 탐색 페이지에 일정번들, 일정, 이벤트 상태 변경
   // 누르면 키가 자꾸 올라가는 문제가 있음 !!!!
   const handleClick = (index) => {
@@ -56,8 +33,9 @@ export default function ScheduleExplore() {
     navigate("/");
   };
 
-  function handleModal() {
+  function handleModal(type) {
     setModalButton((modalButton) => !modalButton);
+    setButtonType(type);
   }
   return (
     <div className="container ExploreSchedulePage">
@@ -79,10 +57,10 @@ export default function ScheduleExplore() {
         </ul>
       </section>
       <section className="button-container">
-        <button onClick={handleModal}>
+        <button onClick={() => handleModal("time")}>
           시간 설정 <img src={arrow} alt="" />
         </button>
-        <button>
+        <button onClick={() => handleModal("style")}>
           방송 스타일 <img src={arrow} alt="" />
         </button>
         <button>
@@ -90,7 +68,11 @@ export default function ScheduleExplore() {
         </button>
       </section>
       <ul className="scheduleList"></ul>
-      <ButtonModal closeSchedule={handleModal} isOpen={modalButton} />
+      <ButtonModal
+        closeSchedule={handleModal}
+        isOpen={modalButton}
+        type={buttonType}
+      />
     </div>
   );
 }
@@ -112,10 +94,42 @@ function TabItem({ tabs, activeIndex, handleClick }) {
   );
 }
 
-export function ButtonModal({ closeSchedule, isOpen, children }) {
+export function ButtonModal({ closeSchedule, isOpen, type }) {
   const [backgroundColor, setBackgroundColor] = useState("");
   const [displaySt, setdisplaySt] = useState("");
   const [upAnimation, setUpAnimation] = useState(false);
+
+  const [selected, setSelected] = useState([]);
+
+  const timeOptions = [
+    { label: "새벽 일정", time: "00시 ~ 06시" },
+    { label: "오전 일정", time: "06시 ~ 12시" },
+    { label: "오후 일정", time: "12시 ~ 16시" },
+    { label: "저녁 일정", time: "16시 ~ 24시" },
+  ];
+
+  const broadcastOptions = [
+    { label: "캠 방송", value: "캠 방송" },
+    { label: "노캠 방송", value: "노캠 방송" },
+    { label: "버츄얼 방송", value: "버츄얼 방송" },
+  ];
+
+  const handleSelect = (value) => {
+    if (value === "all") {
+      setSelected(
+        selected.length === 4
+          ? []
+          : ["새벽 일정", "오전 일정", "오후 일정", "저녁 일정"]
+      );
+    } else {
+      setSelected((prev) =>
+        prev.includes(value)
+          ? prev.filter((item) => item !== value)
+          : [...prev, value]
+      );
+    }
+  };
+
   // 애니메이션 올라오면 배경색 변화도록 해주는 이펙트
   useEffect(() => {
     if (!isOpen) {
@@ -144,6 +158,24 @@ export function ButtonModal({ closeSchedule, isOpen, children }) {
     };
   }, [isOpen]);
 
+  const renderCheckboxes = (options) => {
+    return options.map((option) => (
+      <label key={option.label}>
+        <span>
+          <p>{option.label}</p>
+          {option.time && <p>{option.time}</p>}
+        </span>
+        <input
+          type="checkbox"
+          name="time"
+          value={option.label}
+          checked={selected.includes(option.label)}
+          onChange={() => handleSelect(option.label)}
+        />
+      </label>
+    ));
+  };
+
   return (
     <div
       className={`EventMoreContainer ${upAnimation ? "see" : ""}`}
@@ -154,7 +186,41 @@ export function ButtonModal({ closeSchedule, isOpen, children }) {
         className={`eventMain ${isOpen ? "on" : ""}`}
         onClick={(e) => e.stopPropagation()}
       >
-        {children}
+        {type === "time" ? (
+          <>
+            <h3>시간 설정</h3>
+            <form className="form-container">
+              <label>
+                전체 선택
+                <input
+                  type="checkbox"
+                  name="time"
+                  value="all"
+                  checked={selected.length === timeOptions.length}
+                  onChange={() => handleSelect("all")}
+                />
+              </label>
+              {renderCheckboxes(timeOptions)}
+            </form>
+          </>
+        ) : (
+          <>
+            <h3>방송 스타일</h3>
+            <form className="form-container">
+              <label>
+                전체 선택
+                <input
+                  type="checkbox"
+                  name="time"
+                  value="all"
+                  checked={selected.length === broadcastOptions.length}
+                  onChange={() => handleSelect("all")}
+                />
+              </label>
+              {renderCheckboxes(broadcastOptions)}
+            </form>
+          </>
+        )}
       </section>
     </div>
   );

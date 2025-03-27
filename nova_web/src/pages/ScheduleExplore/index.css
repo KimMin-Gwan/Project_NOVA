@@ -146,6 +146,13 @@
   border-top-right-radius: 20px;
   transition: transform 0.5s ease-in-out;
   transform: translateY(100%);
+
+  & h3 {
+    text-align: center;
+    padding-block: 20px;
+    font-weight: 500;
+    font-size: 17px;
+  }
 }
 
 /* 올라가고 내려가는 애니메이션 */
@@ -157,4 +164,55 @@
 }
 .on {
   transform: translateY(0);
+}
+
+/* 체크박스 선택 */
+.form-container {
+  display: flex;
+  flex-flow: column;
+  gap: 40px;
+  padding-inline: 30px;
+
+  & label {
+    font-size: 20px;
+    font-weight: 500;
+    display: flex;
+    justify-content: space-between;
+
+    & span {
+      & p {
+        margin: 0;
+      }
+      & p:nth-child(2) {
+        font-weight: 300;
+        font-size: 18px;
+        color: #797979;
+      }
+    }
+
+    & input {
+      appearance: none;
+      width: 25px;
+      height: 25px;
+      border: 2px solid #afafaf;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+
+      &:checked {
+        position: relative;
+
+        &::before {
+          content: "";
+          width: 15px;
+          height: 15px;
+          border-radius: 50%;
+          background-color: #afafaf;
+          position: absolute;
+        }
+      }
+    }
+  }
 }
