@@ -1,15 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
 import back from "./../../img/detail_back.png";
 import arrow from "./../../img/explore_down.png";
 import useToggleMore from "../../hooks/useToggleMore";
 
-import mainApi from "../../services/apis/mainApi";
 import "./index.css";
-import style from "../../component/EventMore/EventMore.module.css";
-
-import ModalRectangle from "./../../img/ModalRectangle.png";
 
 export default function ScheduleExplore() {
   const { moreClick, handleToggleMore } = useToggleMore();
@@ -18,7 +15,7 @@ export default function ScheduleExplore() {
   const [modalButton, setModalButton] = useState(false);
 
   const scheduleKind = ["게임", "저챗", "음악", "그림", "스포츠", "시참"];
-
+  const swiperRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
   const [buttonType, setButtonType] = useState("");
@@ -26,17 +23,19 @@ export default function ScheduleExplore() {
   // 누르면 키가 자꾸 올라가는 문제가 있음 !!!!
   const handleClick = (index) => {
     setActiveIndex(index);
-  };
-
-  // 게시판으로 이동
-  const navBoard = () => {
-    navigate("/");
+    swiperRef.current.swiper.slideTo(index);
   };
 
   function handleModal(type) {
     setModalButton((modalButton) => !modalButton);
     setButtonType(type);
   }
+
+  // 슬라이드 변경 시 활성화된 탭을 동기화
+  const handleTabChange = (swiper) => {
+    setActiveIndex(swiper.activeIndex);
+  };
+
   return (
     <div className="container ExploreSchedulePage">
       <nav className="navBar">
@@ -67,7 +66,34 @@ export default function ScheduleExplore() {
           성별 <img src={arrow} alt="" />
         </button>
       </section>
-      <ul className="scheduleList"></ul>
+      <Swiper
+        spaceBetween={50}
+        slidesPerView={1}
+        onSlideChange={handleTabChange}
+        ref={swiperRef}
+        className="scheduleList"
+      >
+        <ul>
+          <SwiperSlide>
+            <li>슬라이드 A</li>
+          </SwiperSlide>
+          <SwiperSlide>
+            <li>슬라이드 B</li>
+          </SwiperSlide>
+          <SwiperSlide>
+            <li>슬라이드 C</li>
+          </SwiperSlide>
+          <SwiperSlide>
+            <li>슬라이드 D</li>
+          </SwiperSlide>
+          <SwiperSlide>
+            <li>슬라이드 E</li>
+          </SwiperSlide>
+          <SwiperSlide>
+            <li>슬라이드 F</li>
+          </SwiperSlide>
+        </ul>
+      </Swiper>
       <ButtonModal
         closeSchedule={handleModal}
         isOpen={modalButton}

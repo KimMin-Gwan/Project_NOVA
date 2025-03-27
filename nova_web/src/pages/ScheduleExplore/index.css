@@ -216,3 +216,9 @@
     }
   }
 }
+
+/* 일정 리스트 swiper 스타일 */
+.scheduleList {
+  background: yellow;
+  height: 30vh;
+}
