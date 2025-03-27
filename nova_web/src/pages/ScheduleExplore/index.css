@@ -1,0 +1,160 @@
+.ExploreSchedulePage {
+  background-color: #f1f7ff;
+}
+/* 상단 바 */
+.navBar {
+  background: #fff;
+  display: flex;
+  align-items: center;
+
+  & button {
+    background-color: transparent;
+    border: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-inline: 17px 28px;
+    & img {
+      width: 8px;
+    }
+  }
+
+  & h1 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #2e2e2e;
+  }
+
+  & p {
+    margin: 0;
+    font-size: 12px;
+    color: #5c5c5c;
+    margin-inline: auto 20px;
+    border-bottom: 1px solid currentColor;
+  }
+}
+
+.button-container {
+  display: flex;
+  background-color: #fff;
+  padding: 21px 23px;
+  gap: 20px;
+  & button {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    background: #f1f7ff;
+    border: 1px solid #e4e4e4;
+    border-radius: 16px;
+    padding: 5px 10px 5px 16px;
+  }
+}
+
+/* 선택 바 */
+.type-list {
+  margin-bottom: 5px;
+  padding-block: 40px 5px;
+  background-color: #fff;
+  li,
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .post-list {
+    position: relative;
+    display: flex;
+    background-color: #fff;
+    padding-inline: 16px;
+
+    .post {
+      cursor: pointer;
+      margin: 10px 0;
+      transition: border-bottom 0.3s ease;
+      padding-inline: 18px;
+      margin: 0;
+      text-align: center;
+
+      & button {
+        padding: 0;
+        padding-bottom: 7px;
+        border-radius: 0;
+        font-size: 17px;
+        font-weight: 600;
+        cursor: pointer;
+        position: relative;
+        background: none;
+        border: none;
+        width: 100%;
+      }
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 20px;
+      height: 3px;
+      border-radius: 5px;
+      background-color: #1082f4;
+      transition: left 0.3s ease-in-out;
+    }
+  }
+
+  .post-list[data-active-index="0"]::after {
+    left: 40px;
+  }
+  .post-list[data-active-index="1"]::after {
+    left: 105px;
+  }
+  .post-list[data-active-index="2"]::after {
+    left: 170px;
+  }
+  .post-list[data-active-index="3"]::after {
+    left: 235px;
+  }
+  .post-list[data-active-index="4"]::after {
+    left: 308px;
+  }
+  .post-list[data-active-index="5"]::after {
+    left: 381px;
+  }
+}
+
+/* 모달 창 */
+.EventMoreContainer {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10001;
+  background-color: transparent;
+  opacity: 0;
+  transform: translateY(100%);
+  transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+  pointer-events: none;
+}
+
+.eventMain {
+  background-color: #fff;
+  width: 100%;
+  height: 70vh;
+  margin-top: 471px;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  transition: transform 0.5s ease-in-out;
+  transform: translateY(100%);
+}
+
+/* 올라가고 내려가는 애니메이션 */
+.see {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+}
+.on {
+  transform: translateY(0);
+}
