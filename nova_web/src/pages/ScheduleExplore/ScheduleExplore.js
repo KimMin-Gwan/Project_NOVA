@@ -47,13 +47,30 @@ export default function ScheduleExplore() {
         <p>3월 4째주</p>
       </nav>
       <section className={"type-list"}>
-        <ul className={"post-list"} data-active-index={activeIndex}>
-          <TabItem
-            tabs={scheduleKind}
-            activeIndex={activeIndex}
-            handleClick={handleClick}
-          />
-        </ul>
+        <section className={"type-list"}>
+          <ul className={"post-list"} data-active-index={activeIndex}>
+            <TabItem
+              tabs={scheduleKind}
+              activeIndex={activeIndex}
+              handleClick={handleClick}
+            />
+          </ul>
+
+          {/* 화면이 530px 이하일 때 슬라이더로 탭 대체
+          <div className="swiper-container">
+            <Swiper
+              spaceBetween={10}
+              slidesPerView={3} // 여러 개의 탭을 동시에 보여주기
+              // 슬라이드 변경 시 클릭 핸들러 호출
+            >
+              {scheduleKind.map((item, index) => (
+                <SwiperSlide key={index}>
+                  <button onClick={() => handleClick(index)}>{item}</button>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div> */}
+        </section>
       </section>
       <section className="button-container">
         <button onClick={() => handleModal("time")}>
