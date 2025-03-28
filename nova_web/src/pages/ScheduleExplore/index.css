@@ -53,8 +53,9 @@
 /* 선택 바 */
 .type-list {
   margin-bottom: 5px;
-  padding-block: 40px 5px;
+  padding-block: 20px 5px;
   background-color: #fff;
+
   li,
   ul {
     list-style: none;
@@ -221,4 +222,42 @@
 .scheduleList {
   background: yellow;
   height: 30vh;
+}
+
+/* 크기 줄어들면 swiper로 변화하도록 함 */
+
+.swiper-type {
+  background: #fff;
+  padding-inline: 20px;
+  display: none;
+  padding-block: 20px 5px;
+  margin-bottom: 5px;
+
+  & button {
+    background-color: transparent;
+    border: 0;
+    padding: 0;
+    padding-bottom: 7px;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+    position: relative;
+    background: none;
+    border: none;
+    width: 100%;
+  }
+  & button.active {
+    color: #007aff; /* 활성화된 탭의 색상 */
+    font-weight: bold; /* 활성화된 탭을 더 두껍게 */
+  }
+}
+
+@media (max-width: 530px) {
+  /* 이게 display:flex를 쓰고 있어서 display:none이 안먹혀  */
+  .type-list {
+    display: none;
+  }
+  .swiper-type {
+    display: block;
+  }
 }
