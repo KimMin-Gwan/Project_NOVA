@@ -1,7 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { Scrollbar } from "swiper/modules";
 import "swiper/css";
+import "swiper/css/scrollbar";
 import back from "./../../img/detail_back.png";
 import arrow from "./../../img/explore_down.png";
 import useToggleMore from "../../hooks/useToggleMore";
@@ -26,6 +28,10 @@ export default function ScheduleExplore() {
     swiperRef.current.swiper.slideTo(index);
   };
 
+  useEffect(() => {
+    console.log(activeIndex);
+  }, [activeIndex]);
+
   function handleModal(type) {
     setModalButton((modalButton) => !modalButton);
     setButtonType(type);
@@ -47,31 +53,37 @@ export default function ScheduleExplore() {
         <p>3월 4째주</p>
       </nav>
       <section className={"type-list"}>
-        <section className={"type-list"}>
-          <ul className={"post-list"} data-active-index={activeIndex}>
-            <TabItem
-              tabs={scheduleKind}
-              activeIndex={activeIndex}
-              handleClick={handleClick}
-            />
-          </ul>
-
-          {/* 화면이 530px 이하일 때 슬라이더로 탭 대체
-          <div className="swiper-container">
-            <Swiper
-              spaceBetween={10}
-              slidesPerView={3} // 여러 개의 탭을 동시에 보여주기
-              // 슬라이드 변경 시 클릭 핸들러 호출
-            >
-              {scheduleKind.map((item, index) => (
-                <SwiperSlide key={index}>
-                  <button onClick={() => handleClick(index)}>{item}</button>
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          </div> */}
-        </section>
+        <ul className={"post-list"} data-active-index={activeIndex}>
+          <TabItem
+            tabs={scheduleKind}
+            activeIndex={activeIndex}
+            handleClick={handleClick}
+          />
+        </ul>
       </section>
+      {/* 화면이 530px 이하일 때 슬라이더로 탭 대체 */}
+      <section className="swiper-type">
+        <Swiper
+          spaceBetween={10}
+          slidesPerView={4} // 여러 개의 탭을 동시에 보여주기
+          onSlideChange={handleTabChange}
+          ref={swiperRef}
+          modules={[Scrollbar]}
+          scrollbar={{ draggable: true }}
+        >
+          {scheduleKind.map((item, index) => (
+            <SwiperSlide key={index}>
+              <button
+                className={activeIndex === index ? "active" : ""}
+                onClick={() => handleClick(index)}
+              >
+                {item}
+              </button>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </section>
+
       <section className="button-container">
         <button onClick={() => handleModal("time")}>
           시간 설정 <img src={arrow} alt="" />
