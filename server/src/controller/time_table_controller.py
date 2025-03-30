@@ -17,6 +17,24 @@ class TImeTableController:
         # 주제 수 찍어주면됨
         model.set_schedules_with_sids(data_payload=request.data_payload)
         return model
+    
+    # 스케줄 탐색 페이지에서 요청받는 데이터 처리
+    def try_explore_schedule_with_category(self, database:Local_Database, request:RequestManager) -> BaseModel: 
+        model = MultiScheduleModel(database=database)
+        
+        if request.jwt_payload!= "":
+            model.set_user_with_email(request=request.jwt_payload)
+            # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
+            if not model._set_tuser_with_tuid():
+                return model
+        
+        # data_payload 참고해서 탐색하는 스케줄 데이터를 보내주면됨
+        # 1. 카테고리에 따라 데이터 추출
+        # 2. 필터에 따라 데이터 필터링
+        # 3. 페이징에 따른 데이터 세팅
+        
+        
+        return model
 
         
     # 타임 테이블 페이지의 최 상단 대시보드데이터

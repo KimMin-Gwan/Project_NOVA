@@ -194,6 +194,25 @@ class TimeTableView(Master_View):
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response
+        
+        
+        # 신기능 (1.2.1)
+        # 스케줄 탐색 페이지에서 요청받는 데이터 처리
+        @self.__app.post('/time_table_server/get_explore_schedules')
+        def try_explore_schedule_by_filters(request:Request, raw_request:dict):
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
+            data_payload = ExploreScheduleRequset(request=raw_request)
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+
+            time_table_controller =TImeTableController()
+            model = time_table_controller.try_explore_schedule_with_category(database=self.__database,
+                                                                            request=request_manager)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
+
 
     # 로그인 필수
     def my_schedule_route(self):
@@ -553,6 +572,16 @@ class GetSchedulesRequest(RequestHeader):
     def __init__(self, request:dict)-> None:
         body:dict = request['body']
         self.sids=body.get('sids', [])
+        
+
+class ExploreScheduleRequset(RequestHeader):
+    def __init__(self, request:dict)-> None:
+        body:dict = request['body']
+        self.category:str=body.get("category", "") # category 는 따로 있을듯
+        self.key:int=body.get("key", -1)  
+        self.time_section:int=body.get("timeSection", 0) # 0 -> 0~6 / 1 -> 6~12 / 2 -> 12~16 / 3 -> 16~24 / -1 -> 0~24(전체)
+        self.style:int=body.get("style", "all")  # all, vtuber, cam, nocam -> bias 데이터 (tags)
+        self.gender:int=body.get("gender", "all") # male, female, etc -> bias 데이터 (tags)
         
 class AddNewScheduleRequest(RequestHeader):
     def __init__(self, sids=[])-> None:
