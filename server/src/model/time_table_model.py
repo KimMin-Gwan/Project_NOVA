@@ -789,7 +789,11 @@ class MultiScheduleModel(TimeTableModel):
     # 내가 이벤트 스케줄 데이터 뽑기를 날짜로
     # date는 날짜임 , 형태는 2025/03/06 임
     # date안넣으면 기본적으로 오늘자로 감
-    def set_my_event_in_by_day(self, date=datetime.today().strftime("%Y/%m/%d")):
+    def set_my_event_in_by_day(self, date:str=""):
+
+        if not date:
+            date = datetime.today().strftime("%Y/%m/%d")
+
         # 내가 추가한 이벤트를 다 가지고 옴
         schedule_event_datas = self._database.get_datas_with_ids(target_id="seid", ids=self._tuser.seids)
 
@@ -810,7 +814,11 @@ class MultiScheduleModel(TimeTableModel):
     # 전체 이벤트 데이터 뽑기를 날짜로
     # date는 날짜임 , 형태는 2025/03/06 임
     # date안넣으면 기본적으로 오늘자로 감
-    def set_event_in_by_day(self, date=datetime.today().strftime("%Y/%m/%d")):
+    def set_event_in_by_day(self, date:str=""):
+
+        if date == "":
+            date = datetime.today().strftime("%Y/%m/%d")
+
         # 이건 데이터 베이스에서 해당 날짜 이벤트만 전부다 뽑는거임
         schedule_event_datas = self._database.get_datas_with_key(target="seid", key="date", key_datas=[date])
 
@@ -1703,7 +1711,7 @@ class ScheduleBlockTreater():
         return sorted_block_list, num_schedule_block
 
     #  만들기
-    def make_schedule_block(self, schedule:Schedule, sids = []):
+    def make_schedule_block(self, schedule:Schedule, sids:list=[]):
         schedule_block = ScheduleBlock()
         schedule_block.make_with_dict(schedule.get_dict_form_data())
 
@@ -1720,7 +1728,6 @@ class ScheduleBlockTreater():
             schedule_block.color_code = "#D0E4FF"
 
         return schedule_block
-    
 
     def __make_timeblocks(self, schedule_block:ScheduleBlock) -> ScheduleBlock:
         current_datetime = schedule_block.start_datetime
@@ -1819,7 +1826,7 @@ class ScheduleChartModel(TimeTableModel):
     # date는 날짜임 , 형태는 2025/03/06 임
     # date안넣으면 기본적으로 오늘자로 감
     def set_my_schedule_in_by_day(self, target_date="", days=7, sids =[]):
-        if target_date == "":
+        if not target_date:
             target_date = datetime.today().strftime("%Y-%m-%d")
 
         target_sids = []
