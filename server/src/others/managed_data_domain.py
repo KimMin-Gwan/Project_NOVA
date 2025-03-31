@@ -1280,28 +1280,35 @@ class ManagedScheduleTable(ManagedTable):
 
 
 
-
     # 키를 통해 스케줄을 검색합니다.
-    def search_schedule_with_key(self, key:str):
+    def search_schedule_with_key(self, key:str, return_id:bool=True):
         columns = ['sname', 'bname', 'uname', 'code']
         searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_df, key=key, columns=columns)
-        return  searched_df['sid'].to_list()
+        if return_id:
+            return  searched_df['sid'].to_list()
+        return searched_df.to_dict('records')
 
     # 번들 서치 함수.
-    def search_bundle_with_key(self, key:str):
+    def search_bundle_with_key(self, key:str, return_id:bool=True):
         columns = ['sbname', 'bname', 'uname', 'code']
         searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_bundle_df, key=key, columns=columns)
-        return searched_df['sbid'].to_list()
+        if return_id:
+            return searched_df['sbid'].to_list()
+        return searched_df.to_dict('records')
 
     # 내가 선택한 일정들을 보는 함수
-    def search_my_selected_schedules(self, bid:str, selected_sids:list):
+    def search_my_selected_schedules(self, bid:str, selected_sids:list, return_id:bool=True):
         searched_df = self.__schedule_df[self.__schedule_df['sid'].isin(selected_sids)]
         searched_df = self._search_data_with_key_str_n_columns(df=searched_df, key=bid, columns=['bid'])
-        return searched_df['sid'].to_list()
+        if return_id:
+            return searched_df['sbid'].to_list()
+        return searched_df.to_dict('records')
 
     # 내가 선택한 일정 번들들을 보는 함수
-    def search_my_selected_bundles(self, bid:str, selected_sbids:list):
+    def search_my_selected_bundles(self, bid:str, selected_sbids:list, return_id:bool=True):
         searched_df = self.__schedule_bundle_df[self.__schedule_bundle_df['sbid'].isin(selected_sbids)]
         searched_df = self._search_data_with_key_str_n_columns(df=searched_df, key=bid, columns=['bid'])
-        return searched_df['sbid'].to_list()
+        if return_id:
+            return searched_df['sbid'].to_list()
+        return searched_df.to_dict('records')
 
