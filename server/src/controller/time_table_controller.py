@@ -17,6 +17,24 @@ class TImeTableController:
         # 주제 수 찍어주면됨
         model.set_schedules_with_sids(data_payload=request.data_payload)
         return model
+    
+    # 스케줄 탐색 페이지에서 요청받는 데이터 처리
+    def try_explore_schedule_with_category(self, database:Local_Database, request:RequestManager) -> BaseModel: 
+        model = MultiScheduleModel(database=database)
+        
+        if request.jwt_payload!= "":
+            model.set_user_with_email(request=request.jwt_payload)
+            # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
+            if not model._set_tuser_with_tuid():
+                return model
+        
+        # data_payload 참고해서 탐색하는 스케줄 데이터를 보내주면됨
+        # 1. 카테고리에 따라 데이터 추출
+        # 2. 필터에 따라 데이터 필터링
+        # 3. 페이징에 따른 데이터 세팅
+        
+        
+        return model
 
         
     # 타임 테이블 페이지의 최 상단 대시보드데이터
@@ -34,7 +52,7 @@ class TImeTableController:
         model.set_num_bias()
         
         # 맨 위에 출력되는 문자열 이거임
-        model.set_target_date()
+        model.set_target_date(date= request.data_payload.date)
         
         return model
     
@@ -216,6 +234,22 @@ class TImeTableController:
         
         return model
 
+    # 이번 주 일정을 들고 올 것 (전체에서)
+    def try_get_weekday_schedules(self, database:Local_Database, request:RequestManager) -> BaseModel:
+        model = MultiScheduleModel(database=database)
+
+        if request.jwt_payload!= "":
+            model.set_user_with_email(request=request.jwt_payload)
+            # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
+            if not model._set_tuser_with_tuid():
+                return model
+
+        model.get_weekday_schedules()
+
+        return model
+
+
+    # 내가 선택한 일정을 들고 옴
     def try_get_my_selected_schedules(self, database:Local_Database, request:RequestManager,
                                       num_schedules=6):
         model = MultiScheduleModel(database)
@@ -235,8 +269,7 @@ class TImeTableController:
         return model
 
 
-
-
+    # 키워드를 통해 바이어스를 검색
     def try_search_bias_with_keyword(self, database:Local_Database, request:RequestManager,
                                     num_biases=10) -> BaseModel:
         # model = TimeTableBiasModel(database=database)
@@ -278,14 +311,14 @@ class TImeTableController:
                 return model
         # model.set_user_with_email(request=request.data_payload)
 
+
         schedule = model.make_new_single_schedule(data_payload=request.data_payload, bid=request.data_payload.bid)
-    
         # 리스트로 넣어야됨(파라미터가 list를 받음)
         model.save_new_schedules(schedule=[schedule])
         return model
     
     # 스케줄 여러개 만들기
-    def make_new_multiple_schedules(self, database:Local_Database, request:RequestManager) -> BaseModel: 
+    def make_new_multiple_schedules(self, database:Local_Database, request:RequestManager) -> BaseModel:
         model = AddScheduleModel(database=database)
 
         if request.jwt_payload!= "":
@@ -300,5 +333,94 @@ class TImeTableController:
                                                          data_type=request.data_payload.type)
 
         model.save_new_multiple_schedule_object_with_type(schedule_object=schedule_object, data_type=request.data_payload.type)
+
+        return model
+
+    # 작성한 스케줄 보내기
+    def try_get_written_schedule(self, database:Local_Database, request:RequestManager):
+        model = MultiScheduleModel(database)
+
+        if request.jwt_payload!= "":
+            model.set_user_with_email(request=request.jwt_payload)
+            if not model._set_tuser_with_tuid():
+                return model
+
+        model.get_written_schedule(sid=request.data_payload.sid)
+
+        return model
+
+    def try_get_written_bundle(self, database:Local_Database, request:RequestManager):
+        model = MultiScheduleModel(database)
+
+        # model.set_user_with_email(request=request.data_payload)
+        # model._set_tuser_with_tuid()
+        if request.jwt_payload!= "":
+            model.set_user_with_email(request=request.jwt_payload)
+            if not model._set_tuser_with_tuid():
+                return model
+
+        model.get_written_bundle(sbid=request.data_payload.sbid)
+
+        return model
+
+
+    # 단일 스케줄 편집
+    def try_modify_single_schedule(self, database:Local_Database, request:RequestManager):
+        model = AddScheduleModel(database)
+
+        if request.jwt_payload!= "":
+            model.set_user_with_email(request=request.jwt_payload)
+            if not model._set_tuser_with_tuid():
+                return model
+
+        schedule = model.modify_single_schedule(data_payload=request.data_payload, sid=request.data_payload.sid)
+        model.save_modified_schedule(schedule=[schedule])
+
+        return model
+
+    # 스케줄 번들 편집
+    def try_modify_bundle(self, database:Local_Database, request:RequestManager):
+        model = AddScheduleModel(database)
+
+        if request.jwt_payload!= "":
+            model.set_user_with_email(request=request.jwt_payload)
+            if not model._set_tuser_with_tuid():
+                return model
+
+        schedule_object = model.modify_multiple_schedule(
+            schedules=request.data_payload.schedules,
+            sname=request.data_payload.sname,
+            sbid=request.data_payload.sbid,
+            bid=request.data_payload.bid,
+            data_type=request.data_payload.type
+        )
+
+        model.save_modified_multiple_schedule_object_with_type(schedule_object=schedule_object, data_type=request.data_payload.type)
+
+        return model
+
+    def try_delete_schedule(self, database:Local_Database, request:RequestManager):
+        model = AddScheduleModel(database)
+
+        if request.jwt_payload!= "":
+            model.set_user_with_email(request=request.jwt_payload)
+            if not model._set_tuser_with_tuid():
+                return model
+
+        model.delete_schedule(sid=request.data_payload.sid)
+
+        return model
+
+    def try_delete_bundle(self, database:Local_Database, request:RequestManager):
+        model = AddScheduleModel(database)
+
+        # model.set_user_with_email(request=request.data_payload)
+        # model._set_tuser_with_tuid()
+        if request.jwt_payload!= "":
+            model.set_user_with_email(request=request.jwt_payload)
+            if not model._set_tuser_with_tuid():
+                return model
+
+        model.delete_bundle(sbid=request.data_payload.sbid)
 
         return model

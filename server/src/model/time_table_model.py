@@ -1,9 +1,12 @@
+import re
+
 from model.base_model import BaseModel
 from model import Local_Database
 from others.data_domain import TimeTableUser as TUser
 from others.data_domain import Schedule, ScheduleBundle, ScheduleEvent, Bias
 
-from datetime import datetime,timedelta, time
+from pprint import pprint
+from datetime import datetime,timedelta, time, date
 import random
 import string
 
@@ -41,6 +44,7 @@ class TimeTableModel(BaseModel):
             self._tuser = new_tuser
         return True
 
+
     # string_date를 넣어서 몇주차인지 알아내는 함수임
     # date_str = "2025/03/06"
     def _find_week_number(self, date_str):
@@ -58,6 +62,16 @@ class TimeTableModel(BaseModel):
         week_in_month = current_week - start_week + 1
         
         return week_in_month
+
+    def _find_week_monday_N_sunday(self):
+        today_str = datetime.today().strftime("%Y/%m/%d")
+        today = datetime.strptime(today_str, "%Y/%m/%d")
+
+        # weekday() -> 월 : 0, 화 : 1 ...  일 : 6
+        monday = today - timedelta(days=today.weekday())
+        sunday = today + timedelta(days=(6 - today.weekday()))
+
+        return monday, sunday
 
     def _calculate_day_hour_time(self, dtime:datetime):
         hour = dtime.hour
@@ -123,9 +137,10 @@ class TimeTableModel(BaseModel):
         self.__num_bias= len(self._user.bids)
         return
     
-    def set_target_date(self):
-        today = datetime.today()
+    def set_target_date(self, date=datetime.today().strftime("%Y-%m-%d")):
+        today = datetime.strptime(date, "%Y-%m-%d")
         first_day_of_month = datetime(today.year, today.month, 1)
+        #print(first_day_of_month)
 
         # 월요일이 가장 빠른 날을 찾기 위해 이번 달 첫째 날부터 시작해서 월요일을 찾습니다.
         current_date = first_day_of_month
@@ -997,6 +1012,29 @@ class MultiScheduleModel(TimeTableModel):
         self._make_send_data_with_ids(id_list=searched_list, search_type="schedule")
         return
 
+    # 이번 주 일정을 들고 옮
+    def get_weekday_schedules(self):
+        schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids=self._tuser.sids)
+
+        monday, sunday = self._find_week_monday_N_sunday()
+
+        for schedule_data in schedule_datas:
+            schedule = Schedule()
+            schedule.make_with_dict(schedule_data)
+
+            start_date = datetime.strptime(schedule.start_date, "%Y/%m/%d")
+            end_date = datetime.strptime(schedule.end_date, "%Y/%m/%d")
+
+            if monday <= start_date <= sunday:
+                self.__schedules.append(schedule)
+            elif monday <= end_date <= sunday:
+                self.__schedules.append(schedule)
+
+        self._make_send_data_with_datas()
+
+        return
+
+
     # 내가 설정한 모든 스케쥴 불러오기
     def search_my_all_schedule(self):
         # 데이터 불러오고
@@ -1019,7 +1057,31 @@ class MultiScheduleModel(TimeTableModel):
         #     schedule_event.make_with_dict(dict_data=schedule_event_data)
         #     self.__schedule_events.append(schedule_event)
 
-        self.__make_send_data_with_datas()
+        self._make_send_data_with_datas()
+        return
+
+    def get_written_schedule(self, sid:str):
+        schedule_data = self._database.get_data_with_id(target="sid",id=sid)
+        schedule=Schedule()
+        schedule.make_with_dict(schedule_data)
+
+        if schedule.sid in self._tuser.my_sids:
+            schedule.is_owner = True
+
+        self.__schedules.append(schedule.get_dict_form_data())
+
+        return
+
+    def get_written_bundle(self, sbid:str):
+        schedule_bundle_data = self._database.get_data_with_id(target="sbid", id=sbid)
+        schedule_bundle = ScheduleBundle()
+        schedule_bundle.make_with_dict(schedule_bundle_data)
+
+        schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids=schedule_bundle.sids)
+        self.__schedules.extend(schedule_datas)
+
+        self.__schedule_bundles.append(schedule_bundle.get_dict_form_data())
+
         return
 
     # 바이어스 추천 로직
@@ -1049,6 +1111,7 @@ class MultiScheduleModel(TimeTableModel):
             "key" : self._key
             }
 
+        # pprint(body)
         response = self._get_response_data(head_parser=head_parser, body=body)
         return response
 
@@ -1113,10 +1176,6 @@ class AddScheduleModel(TimeTableModel):
 
         if sid in self._tuser.sids:
             self._tuser.sids.remove(sid)
-            flag = True
-
-        if sid in self._tuser.this_week_sids:
-            self._tuser.this_week_sids.remove(sid)
             flag = True
 
         if flag:
@@ -1191,7 +1250,6 @@ class AddScheduleModel(TimeTableModel):
     def make_new_single_schedule(self, data_payload, bid):
         schedule = Schedule(
             sname=data_payload.sname,
-            location=data_payload.location,
             bid = bid,
             start_date=data_payload.start_date,
             start_time=data_payload.start_time,
@@ -1201,7 +1259,17 @@ class AddScheduleModel(TimeTableModel):
         )
 
         bias_data = self._database.get_data_with_id(target="bid", id=schedule.bid)
-        bias = Bias().make_with_dict(bias_data)
+        if bias_data:
+            bias = Bias().make_with_dict(bias_data)
+        else:
+            bias = Bias()
+
+        # location을 나누는 방법 ( 정규식을 이용해서 구두점, 콤마 등을 걸러냅니다.
+        # ", "와 같은 케이스도 말끔히. 근데 이후의 공백이 있을 수 있다는 점이 있어 주의를 요합니다.
+        # 또한 플랫폼이 아닌 다른 문자가 들어가는 불상사도 있을 수 있습니다. (이건 어찌할 방도가..)
+        str_list = re.split(r'\W+', data_payload.location)
+        str_list = [s for s in str_list if s]
+        pprint(str_list)
 
         schedule.sid = self.__make_new_sid()
         schedule.bname = bias.bname
@@ -1210,6 +1278,8 @@ class AddScheduleModel(TimeTableModel):
         schedule.code = self.__make_schedule_code()
         schedule.update_datetime = datetime.today().strftime("%Y/%m/%d-%H:%M:%S")
         schedule.color_code = self._make_color_code()
+        schedule.location = str_list
+
         return schedule
 
     # 스케줄 번들 만들기
@@ -1241,6 +1311,7 @@ class AddScheduleModel(TimeTableModel):
 
         # 스케쥴 데이터를 추가 할 때, Tuser도 업데이트함
         for s in schedule:
+            self._tuser.sids.append(s.sid)
             self._tuser.my_sids.append(s.sid)
         self._database.modify_data_with_id(target_id="tuid", target_data=self._tuser.get_dict_form_data())
 
@@ -1261,8 +1332,6 @@ class AddScheduleModel(TimeTableModel):
 
         if data_type == "bundle":
             schedules_object = self.make_new_schedule_bundle(schedule_list=schedule_list, sbname=sname, bid=bid)
-            self._tuser.my_sbids.append(schedules_object)
-            self._database.modify_data_with_id(target_id="tuid", target_data=self._tuser.get_dict_form_data())
 
         return schedules_object
 
@@ -1270,9 +1339,15 @@ class AddScheduleModel(TimeTableModel):
     def save_new_multiple_schedule_object_with_type(self, schedule_object, data_type:str):
         if data_type == "bundle":
             self._database.add_new_data(target_id="sbid", new_data=schedule_object.get_dict_form_data())
+            self._tuser.sbids.append(schedule_object.sbid)
+            self._tuser.my_sbids.append(schedule_object.sbid)
+            self._database.modify_data_with_id(target_id="tuid", target_data=self._tuser.get_dict_form_data())
             self.__result = True
         # elif data_type == "event":
         #     self._database.add_new_data(target_id="seid", new_data=schedule_object.get_dict_form_data())
+        #     self._tuser.seids.append(schedule_object.seid)
+        #     self._tuser.my_seids.append(schedule_object.seid)
+        #     self._database.modify_data_with_id(target_id="tuid", target_data=self._tuser.get_dict_form_data())
         #     self.__result = True
 
         return
@@ -1281,7 +1356,189 @@ class AddScheduleModel(TimeTableModel):
     # def modify_single_schedule(self, data_payload, sid:str):
     #     schedule_data =
 
+    # 단일 스케줄 편집 저장
+    def modify_single_schedule(self, data_payload, sid:str):
+        pprint("Single_schedule_modify")
 
+        schedule_data = self._database.get_data_with_id(target="sid", id=sid)
+        schedule = Schedule()
+        schedule.make_with_dict(schedule_data)
+
+        bias_data = self._database.get_data_with_id(target="bid", id=data_payload.bid)
+        bias = Bias().make_with_dict(bias_data)
+
+        schedule.sname = data_payload.sname
+        schedule.bid = data_payload.bid
+        schedule.bname = bias.bname
+        schedule.start_date = data_payload.start_date
+        schedule.start_time = data_payload.start_time
+        schedule.end_date = data_payload.end_date
+        schedule.end_time = data_payload.end_time
+        schedule.state = data_payload.state
+        schedule.update_datetime= datetime.today().strftime("%Y/%m/%d-%H:%M:%S")
+
+        return schedule
+
+    # 복수의 스케줄 저장 ( Schedule 데이터에 sid가 들어감 )
+    def modify_multiple_schedule(self, schedules:list[Schedule], sname:str , sbid:str, bid:str, data_type:str):
+        pprint("Multi_schedule_modify")
+
+        schedule_list = []
+        schedule_object = None
+
+        # 스케줄 데이터들을 편집
+        for schedule in schedules:
+            schedule = self.modify_single_schedule(data_payload=schedule, sid=schedule.sid)
+            schedule_list.append(schedule)
+
+        # 데이터 저장
+        self.save_modified_schedule(schedule=schedule_list)
+
+        # 번들데이터 만들기
+        if data_type == "bundle":
+            if self._database.get_data_with_id(target='sid', id=sbid):
+                schedule_object = self.modify_schedule_bundle(schedule_list=schedule_list, sbid=sbid, sbname=sname, bid=bid)
+            else:
+                schedule_object = self.make_new_schedule_bundle(schedule_list=schedule_list, sbname=sname, bid=bid)
+
+        return schedule_object
+
+    # 스케줄 번들을 수정
+    def modify_schedule_bundle(self, schedule_list:list, sbid:str, sbname:str, bid:str):
+        schedule_bundle_data = self._database.get_data_with_id(target="sbid", id=sbid)
+        schedule_bundle = ScheduleBundle().make_with_dict(schedule_bundle_data)
+
+        bias_data = self._database.get_data_with_id(target="bid", id=bid)
+        bias = Bias().make_with_dict(bias_data)
+
+        schedule_bundle.sbname = sbname
+        schedule_bundle.bid = bid
+        schedule_bundle.bname = bias.bname
+        schedule_bundle.date = self.__find_start_n_end_date(schedule_list=schedule_list)
+        schedule_bundle.location = self.__find_all_broadcast_location(schedule_list=schedule_list)
+        schedule_bundle.update_datetime = datetime.today().strftime("%Y/%m/%d-%H:%M:%S")
+
+        return schedule_bundle
+
+    # 수정한 스케줄 저장
+    def save_modified_schedule(self, schedule:list):
+        save_datas = self._make_dict_list_data(list_data=schedule)
+        sids = []
+
+        # for s in schedule:
+        #     sids.append(s.sid)
+
+        for s_data in save_datas:
+            if self._database.get_data_with_id(target="sid", id=s_data['sid']):
+                self._database.modify_data_with_id(target_id='sid', target_data=s_data)
+            # 새로운 스케줄을 저장하는 경우
+            else:
+                self._database.add_new_data(target_id='sid', new_data=s_data)
+                # 유저에게도 추가
+                self._tuser.my_sids.append(s_data['sid'])
+                self._tuser.sids.append(s_data['sid'])
+                self._database.modify_data_with_id(target_id='tuid', target_data=self._tuser.get_dict_form_data())
+
+
+        # 일단 이건 스케줄 수정하는 거
+        # self._database.modify_datas_with_ids(target_id="sid", ids=sids, target_datas=save_datas)
+
+        # 이건 비효율적이긴 함
+        # for s_data in save_datas:
+        #     self._database.modify_data_with_id(target_id="sid", target_data=s_data)
+
+        self.__result = True
+        return
+
+    # 수정한 스케줄 번들 저장
+    def save_modified_multiple_schedule_object_with_type(self, schedule_object, data_type:str):
+        if data_type == "bundle":
+            if self._database.get_data_with_id(target="sbid"):
+                self._database.modify_data_with_id(target_id="sbid", target_data=schedule_object.get_dict_form_data())
+                self.__result = True
+            else:
+                self._database.add_new_data(target_id="sbid", new_data=schedule_object.get_dict_form_data())
+                self._tuser.my_sbids.append(schedule_object.sbid)
+                self._database.modify_data_with_id(target_id='tuid', target_data=self._tuser.get_dict_form_data())
+                self.__result = True
+        return
+
+    # 스케줄 삭제
+    def delete_schedule(self, sid:str):
+        pprint(sid)
+        schedule_bundle_datas = self._database.get_all_data(target = "sbid")
+    
+        sb_sids:list[dict] = []
+        sbids = []
+    
+        for schedule_bundle_data in schedule_bundle_datas:
+            schedule_bundle= ScheduleBundle().make_with_dict(schedule_bundle_data)
+            if sid in schedule_bundle.sids:
+                schedule_bundle.sids.remove(sid)
+                sb_sids.append({"sids" : schedule_bundle.sids})
+                sbids.append(schedule_bundle.sbid)
+        
+            
+        tuser_datas = self._database.get_all_data(target="tuid")
+        
+        tu_sids:list[TUser] = []
+        tuids = []
+        
+        for tuser_data in tuser_datas:
+            tuser = TUser().make_with_dict(tuser_data)
+            if sid in tuser.sids:
+                tuser.sids.remove(sid)
+                tu_sids.append({"sids" : tuser.sids})
+                tuids.append(tuser.tuid)
+
+        self._tuser.my_sids.remove(sid)
+
+        self._database.modify_datas_with_ids(target_id="sbid", ids=sbids, target_datas=sb_sids)
+        self._database.modify_datas_with_ids(target_id="tuid", ids=tuids, target_datas=tu_sids)
+        self._database.modify_data_with_id(target_id="tuid", target_data=self._tuser.get_dict_form_data())
+        
+        self._database.delete_data_with_id(target="sid", id=sid)
+        self.__result = True
+        return
+
+    # 스케줄 번들 삭제
+    # 테스트 아직 안했음 주의 ( Modify 수정이 완료된 후에 하기로)
+    def delete_bundle(self, sbid:str):
+        # 스케줄 데이터 삭제
+        schedule_bundle_data = self._database.get_data_with_id(target='sbid', id=sbid)
+        schedule_bundle = ScheduleBundle().make_with_dict(schedule_bundle_data)
+        sids = schedule_bundle.sids
+
+        # tuser에서 sid를 삭제
+        tuser_datas = self._database.get_all_data(target="tuid")
+        tu_sids : list[TUser] = []
+        tuids = []
+
+        # 각 Tuser마다 반복합니다
+        for tuser_data in tuser_datas:
+            tuser = TUser().make_with_dict(tuser_data)
+            # 스케줄 번들 안에 있는 모든 sids에 대해 삭제를 진행합니다.
+            tuser.sids = list(filter(lambda sid: sid not in sids, tuser.sids))      # 잘 됨
+            # if sbid in tuser.sbids:
+            #     tuser.sbids.remove(sbid)
+
+            tu_sids.append({"sids": tuser.sids})
+            tuids.append(tuser.tuid)
+
+
+        self._tuser.my_sids = list(filter(lambda sid: sid not in sids, self._tuser.my_sids))
+        self._tuser.my_sbids.remove(sbid)
+
+
+        self._database.modify_datas_with_ids(target_id="tuid", ids=tuids, target_datas=tu_sids)
+        self._database.modify_data_with_id(target_id="tuid", target_data=self._tuser.get_dict_form_data())
+
+        self._database.delete_datas_with_ids(target="sid", ids=sids)
+        self._database.delete_data_with_id(target="sbid", id=sbid)
+
+        self.__result = True
+
+        return
 
 
     def get_response_form_data(self, head_parser):
@@ -1561,7 +1818,10 @@ class ScheduleChartModel(TimeTableModel):
     # 내가 추가한 스케줄 데이터 뽑기를 날짜로
     # date는 날짜임 , 형태는 2025/03/06 임
     # date안넣으면 기본적으로 오늘자로 감
-    def set_my_schedule_in_by_day(self, target_date=datetime.today().strftime("%Y/%m/%d"), days=7, sids =[]):
+    def set_my_schedule_in_by_day(self, target_date="", days=7, sids =[]):
+        if target_date == "":
+            target_date = datetime.today().strftime("%Y-%m-%d")
+
         target_sids = []
         target_sids.extend(self._tuser.sids)
         target_sids.extend(sids)
@@ -1610,6 +1870,7 @@ class ScheduleChartModel(TimeTableModel):
             #target_date = datetime.strptime(target_date, ("%Y/%m/%d"))
             
             # 오늘이 포함된 주차에서 월요일을 골라야됨
+            # 여기 서버 안끄면 초기화 안되는 쌉 버그가 생김
             target_date = self._get_monday_date(target_date=target_date)
         
         schedules= []
@@ -1652,7 +1913,7 @@ class ScheduleChartModel(TimeTableModel):
     
     def _get_monday_date(self, target_date: str) -> datetime:
         # 입력 날짜를 datetime 객체로 변환
-        target_date = datetime.strptime(target_date, "%Y/%m/%d")
+        target_date = datetime.strptime(target_date, "%Y-%m-%d")
     
         # 오늘의 요일 계산 (0: 월요일, 6: 일요일)
         day_of_week = target_date.weekday()

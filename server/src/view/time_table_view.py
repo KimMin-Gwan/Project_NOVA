@@ -31,9 +31,9 @@ class TimeTableView(Master_View):
         # 타임 테이블 페이지의 최 상단 대시보드데이터
         # 파라미터 없음, 비로그인 상태에서는 0으로 리턴함 
         @self.__app.get('/time_table_server/try_get_dashboard_data')
-        def get_dashboard_data(request:Request):
+        def get_dashboard_data(request:Request, date:Optional[str]=datetime.now().strftime("%Y-%m-%d")):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
-            data_payload = DummyRequest()
+            data_payload = DateRequest(date=date)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
             # if not request_manager.jwt_payload.result:
@@ -72,7 +72,7 @@ class TimeTableView(Master_View):
         # 비로그인 상태에서는 데이터를 반환하지 않아도될듯 -> 아니면 반환할 데이터를 마련해도 될듯
         # 로그인 상태에서는 본인이 추가한 모든 일정(오늘자)이 반환되어야함
         @self.__app.get('/time_table_server/try_get_today_time_chart')
-        def try_get_today_time_chart(request:Request, date:Optional[str]=datetime.now().strftime("%Y/%m/%d")):
+        def try_get_today_time_chart(request:Request, date:Optional[str]=datetime.now().strftime("%Y-%m-%d")):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = DateRequest(date=date)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
@@ -194,6 +194,25 @@ class TimeTableView(Master_View):
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response
+        
+        
+        # 신기능 (1.2.1)
+        # 스케줄 탐색 페이지에서 요청받는 데이터 처리
+        @self.__app.post('/time_table_server/get_explore_schedules')
+        def try_explore_schedule_by_filters(request:Request, raw_request:dict):
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
+            data_payload = ExploreScheduleRequset(request=raw_request)
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+
+            time_table_controller =TImeTableController()
+            model = time_table_controller.try_explore_schedule_with_category(database=self.__database,
+                                                                            request=request_manager)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
+
 
     # 로그인 필수
     def my_schedule_route(self):
@@ -266,11 +285,12 @@ class TimeTableView(Master_View):
 
         # 내가 담아놓은 스케줄들을 볼 수 있습니다.
         # 테스트 완료
-        @self.__app.get('/time_table_server/try_get_my_selected_schedules')
+        @self.__app.get('/time_table_server/try_search_my_schedule_with_bid')
         def try_get_my_selected_schedules(request:Request, bid:Optional[str]="", key:Optional[int]=-1):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = ScheduleWithBidRequest(bid=bid, key=key)
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+            # request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
             time_table_controller =TImeTableController()
             model = time_table_controller.try_get_my_selected_schedules(database=self.__database,
@@ -297,12 +317,30 @@ class TimeTableView(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
+        # 이번 주 일정 불러오기
+        @self.__app.get('/time_table_server/try_get_weekday_schedules')
+        def try_get_weekday_schedules(request:Request ):
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
+            data_payload = DummyRequest()
+            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+            # request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+
+            time_table_controller =TImeTableController()
+            model = time_table_controller.try_get_weekday_schedules(database=self.__database,
+                                                                      request=request_manager)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
     def make_schedule_route(self):
         # 단일 일정을 만들기
         @self.__app.post('/time_table_server/try_make_new_single_schedule')
         def try_make_new_single_schedule(request: Request, raw_request:dict):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = MakeSingleScheduleRequest(request=raw_request)
+
+            # pprint(raw_request["body"])
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
             time_table_controller =TImeTableController()
@@ -314,13 +352,13 @@ class TimeTableView(Master_View):
             return response
 
         # 복수 일정을 만들기
-        # 테스트 완료
-        @self.__app.post('/time_table_server/try_make_new_mulitple_schedule')
+        # 테스트 완료 
+        @self.__app.post('/time_table_server/try_make_new_multiple_schedule')
         def try_make_new_multiple_schedule(request: Request, raw_request:dict):
 
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = MakeMultipleScheduleRequest(request=raw_request)
-            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
 
             time_table_controller =TImeTableController()
             model = time_table_controller.make_new_multiple_schedules(database=self.__database,
@@ -329,6 +367,104 @@ class TimeTableView(Master_View):
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response
+
+        # 수정을 위해 작성했던 스케줄을 확인하는 함수
+        @self.__app.get('/time_table_server/try_get_written_schedule')
+        def try_get_written_schedule(request:Request, sid:Optional[str]=""):
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
+            data_payload = ScheduleRequest(sid=sid)
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            # request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+
+            time_table_controller =TImeTableController()
+            model = time_table_controller.try_get_written_schedule(database=self.__database,
+                                                                   request=request_manager)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
+        # 수정할 번들 데이터 불러오기
+        @self.__app.get('/time_table_server/try_get_written_bundle')
+        def try_get_written_bundle(request:Request, sbid:Optional[str]=""):
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
+            data_payload = ScheduleBundleRequest(sbid=sbid)
+            # request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+
+            time_table_controller =TImeTableController()
+            model = time_table_controller.try_get_written_bundle(database=self.__database,
+                                                                   request=request_manager)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
+        # 단일 스케줄 수정
+        @self.__app.post('/time_table_server/try_modify_schedule')
+        def try_modify_schedule(request:Request, raw_request:dict):
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
+
+            pprint(raw_request['body'])
+            data_payload = ModifySingleScheduleRequest(request=raw_request)
+            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+
+            time_table_controller =TImeTableController()
+            model = time_table_controller.try_modify_single_schedule(database=self.__database,
+                                                              request=request_manager)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
+        # 스케줄 번들 수정
+        @self.__app.post('/time_table_server/try_modify_schedule_bundle')
+        def try_modify_bundle(request:Request, raw_request:dict):
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
+
+            pprint(raw_request['body'])
+            data_payload = ModifyMultipleScheduleRequest(request=raw_request)
+            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+
+            time_table_controller =TImeTableController()
+            model = time_table_controller.try_modify_bundle(database=self.__database,
+                                                              request=request_manager)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
+        # 스케줄 데이터 삭제
+        @self.__app.get('/time_table_server/try_delete_schedule')
+        def try_delete_schedule(request:Request, sid:Optional[str]=""):
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
+            data_payload = DeleteSingleScheduleRequest(sid=sid)
+            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+
+            time_table_controller = TImeTableController()
+            model = time_table_controller.try_delete_schedule(database=self.__database,
+                                                              request=request_manager)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
+        # 번들 데이터 삭제
+        @self.__app.get('/time_table_server/try_delete_bundle')
+        def try_delete_bundle(request:Request, sbid:Optional[str]=""):
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
+            data_payload = DeleteScheduleBundleRequest(sbid=sbid)
+            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+            # request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+
+            time_table_controller = TImeTableController()
+            model = time_table_controller.try_delete_bundle(database=self.__database,
+                                                              request=request_manager)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
 
         # 여기는 2차 목표임
         ## 일정 수정하기
@@ -366,11 +502,11 @@ class DummyRequest():
     def __init__(self) -> None:
         pass
 
-# class MakeSingleScheduleRequest(RequestHeader):
-class MakeSingleScheduleRequest:
+class MakeSingleScheduleRequest(RequestHeader):
+# class MakeSingleScheduleRequest:
     def __init__(self, request) -> None:
-        # super().__init__(request)
-        self.email:str="alsrhks2508@naver.com"
+        super().__init__(request)
+        # self.email:str="alsrhks2508@naver.com"
         body:dict = request['body']
         self.sname = body['sname']
         self.location = body['location']
@@ -391,6 +527,40 @@ class MakeMultipleScheduleRequest(RequestHeader):
         self.type = body.get("type", "bundle")
         self.schedules = [Schedule().make_with_dict(dict_data=single_schedule_data) for single_schedule_data in body.get("schedules", []) if single_schedule_data != ""]
 
+class ModifySingleScheduleRequest(RequestHeader):
+    def __init__(self, request):
+        super().__init__(request)
+        body:dict = request['body']
+        self.sid = body['sid']
+        self.sname = body['sname']
+        self.bid = body.get('bid', "")
+        self.start_date = body["start_date"]
+        self.start_time = body["start_time"]
+        self.end_date = body["end_date"]
+        self.end_time = body["end_time"]
+        self.state = body["state"]
+
+class ModifyMultipleScheduleRequest(RequestHeader):
+    def __init__(self, request) -> None:
+        super().__init__(request)
+        body:dict = request['body']
+        self.sbid = body.get('sbid', "")
+        self.sname = body.get('sname', "")
+        self.bid = body['bid']
+        self.type = body.get("type", "")
+        self.schedules = [Schedule().make_with_dict(dict_data=single_schedule_data) for single_schedule_data in body.get("schedules", []) if single_schedule_data != ""]
+
+class DeleteSingleScheduleRequest(RequestHeader):
+    def __init__(self, sid) -> None:
+        self.sid = sid
+
+class DeleteScheduleBundleRequest(RequestHeader):
+    def __init__(self, sbid) -> None:
+        # self.email:str="alsrhks2508@naver.com"
+        self.sbid = sbid
+
+
+
 class SearchRequest(RequestHeader):
     def __init__(self, keyword, key=-1, search_type="", filter_option="") -> None:
         self.keyword=keyword
@@ -402,6 +572,16 @@ class GetSchedulesRequest(RequestHeader):
     def __init__(self, request:dict)-> None:
         body:dict = request['body']
         self.sids=body.get('sids', [])
+        
+
+class ExploreScheduleRequset(RequestHeader):
+    def __init__(self, request:dict)-> None:
+        body:dict = request['body']
+        self.category:str=body.get("category", "") # category 는 따로 있을듯
+        self.key:int=body.get("key", -1)  
+        self.time_section:int=body.get("timeSection", 0) # 0 -> 0~6 / 1 -> 6~12 / 2 -> 12~16 / 3 -> 16~24 / -1 -> 0~24(전체)
+        self.style:int=body.get("style", "all")  # all, vtuber, cam, nocam -> bias 데이터 (tags)
+        self.gender:int=body.get("gender", "all") # male, female, etc -> bias 데이터 (tags)
         
 class AddNewScheduleRequest(RequestHeader):
     def __init__(self, sids=[])-> None:
@@ -419,18 +599,24 @@ class SelectMyTimeTableRequest(RequestHeader):
 class ScheduleRequest(RequestHeader):
     def __init__(self, sid)-> None:
         self.sid:str=sid
+
+class ScheduleBundleRequest(RequestHeader):
+    def __init__(self, sbid) -> None:
+        # self.email:str="alsrhks2508@naver.com"
+        self.sbid:str = sbid
     
 class ScheduleWithBidRequest(RequestHeader):
     def __init__(self, bid, key)-> None:
+        # self.email:str="alsrhks2508@naver.com"
         self.bid:str=bid
         self.key:int=key
 
 class DateRequest(RequestHeader):
     def __init__(self, date)-> None:
-        self.date:str=date
+        self.date:str = date
         
 class TimeChartRequest(RequestHeader):
     def __init__(self, request):
         body:dict = request['body']
-        self.date:str=body.get('date',datetime.now().strftime("%Y/%m/%d"))
+        self.date:str=body.get('date',datetime.now().strftime("%Y-%m-%d"))
         self.sids = body.get("sids", [])

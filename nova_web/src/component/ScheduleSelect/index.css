@@ -1,6 +1,7 @@
 .ScheduleSelect {
   display: flex;
   flex-direction: column;
+  background-color: #fff;
 }
 
 .EventMoreContainer {
@@ -33,6 +34,8 @@
 .DateAndTimeInfo {
   display: flex;
   justify-content: space-around;
+  align-items: center;
+  padding-inline: 20px;
   /* margin-bottom: 50px; */
 }
 
@@ -48,16 +51,19 @@
 }
 
 .DatePicker__container {
-  font-size : 14px;
-  padding-left : 20px;
-  padding-right : 20px;
-  padding-top : 8px;
+  font-size: 14px;
+  padding-right: 20px;
+  padding-top: 8px;
   display: flex;
   align-items: center; /* 세로 정렬을 가운데로 */
-  gap: 18px; /* YearInfo와 MonthInfo 사이 간격 조정 */
-  padding-bottom : 12px;
+  /* gap: 18px; YearInfo와 MonthInfo 사이 간격 조정 */
+  padding-bottom: 12px;
+  width: 100%;
+  justify-content: space-around;
 }
-
+.TimePicker__container {
+  font-size: 14px;
+}
 .TimePicker__wrapper {
   display: flex;
   flex-direction: column;
@@ -87,7 +93,7 @@
   justify-content: space-between;
 }
 
-.ok-button{
+.ok-button {
   cursor: pointer;
 }
 
@@ -103,12 +109,12 @@
 
 .DatePicker {
   cursor: grab; /* 기본 커서 */
-  pointer-events: 'none';
+  pointer-events: "none";
 }
 
 .DatePicker:active {
   cursor: grabbing; /* 드래그 중 커서 */
-  pointer-events: 'none';
+  pointer-events: "none";
 }
 
 .overlay {

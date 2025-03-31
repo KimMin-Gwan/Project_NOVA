@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import Banner from "../../component/banner.js";
+import Banner from "../../component/Banner/Banner.js";
 import NavBar from "../../component/NavBar/NavBar.js";
 import AllPost from "../../component/AllPost/AllPost.js";
 import all_post from "../../img/all_post.png";
@@ -9,7 +9,7 @@ import new_pin from "../../img/new_pin.png";
 
 import FeedThumbnail from "../../component/feed-list/FeedThumbnail.js";
 import useFetchData from "../../hooks/useFetchData.js";
-import BiasBoxes from "../../component/BiasBoxes.js";
+import BiasBoxes from "../../component/BiasBoxes/BiasBoxes.js";
 import SearchBox from "../../component/SearchBox.js";
 import useTagStore from "../../stores/TagStore/useTagStore.js";
 import useBiasStore from "../../stores/BiasStore/useBiasStore.js";
@@ -19,6 +19,8 @@ import GoogleAD from "../../component/display_google_ad.js";
 import DisplayAds from "../../component/display_google_ad.js";
 import LoadingPage from "../LoadingPage/LoadingPage.js";
 import HEADER from "../../constant/header.js";
+
+import "./index.css";
 
 export function getModeClass(mode) {
   return mode === "dark" ? "dark-mode" : "bright-mode";
@@ -53,7 +55,6 @@ export default function HomePage() {
         },
       })
       .then((res) => {
-        ////console.log("first bias data", res.data);
         setFeedData(res.data.body.send_data);
         setIsLoading(false);
       });

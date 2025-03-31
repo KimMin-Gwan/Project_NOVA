@@ -1,11 +1,11 @@
 import search_icon from "./../../img/search_icon.png";
 import arrow from "./../../img/home_arrow.svg";
 import style from "./ScheduleSearch.module.css";
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 
 import Input from "../Input/Input";
 import { TITLE_TYPES } from "../../constant/type_data";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import back from "./Vector.svg";
 import mainApi from "../../services/apis/mainApi";
@@ -36,13 +36,12 @@ export default function ScheduleSearch({
   // 주간 날짜 받기
   function fetchRecommendKeyword() {
     mainApi.get("time_table_server/try_get_recommend_keyword").then((res) => {
-      setKeywords(res.data.body.recommend_keywords)
+      setKeywords(res.data.body.recommend_keywords);
     });
   }
-  useEffect(()=>{
-    fetchRecommendKeyword()
-  }, [])
-
+  useEffect(() => {
+    fetchRecommendKeyword();
+  }, []);
 
   return (
     <div className={style["SearchSection"]}>
@@ -59,11 +58,15 @@ export default function ScheduleSearch({
       </div>
       <div className={style["sectionTop"]}>
         <h3>{titles.titleName}</h3>
-        {titles.button !== "" && <button
+        {titles.button !== "" && (
+          <button
             onClick={() => {
               makeSchedule();
             }}
-        >일정 {titles.button}</button>}
+          >
+            일정 {titles.button}
+          </button>
+        )}
       </div>
       <div className={style["searchFac"]}>
         <div className={style["searchBox"]}>

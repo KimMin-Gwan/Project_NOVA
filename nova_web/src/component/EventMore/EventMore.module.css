@@ -14,7 +14,7 @@
 .eventMain {
   background-color: #fff;
   width: 100%;
-  height: 100%;
+  height: 150vh;
   margin-top: 54px;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
@@ -52,11 +52,10 @@
   }
 }
 
-
 .searchFac {
   margin-block: 10px 12px;
   background-color: #fff;
-  padding-left : 28px;
+  padding-left: 28px;
   padding-right: 28px;
 
   .searchBox {
@@ -140,36 +139,38 @@
   }
 }
 
-.additional-schedule-button{
+.additional-schedule-button {
   margin: 0; /* 부모에서 상속된 마진을 무시 */
-  margin-left: 34px;
   padding-top: 20px;
-  padding-bottom: 2px;
-  margin-bottom: 20px;
-  border-bottom: 2px solid #5C5C5C; /* hover 시 밑줄 색상 변경 */
-  width : 60px;
-  cursor: pointer;
-}
+  padding-bottom: 22px;
 
-.additional-schedule-text{
-  margin: 0; /* 부모에서 상속된 마진을 무시 */
-  font-size:16px;
-  color: #5C5C5C
-}
-
-
-.modal-title{
+  /* hover 시 밑줄 색상 변경 */
   width: 100%;
-  margin-top : 30px;
+  cursor: pointer;
+  background-color: #fff;
+}
+
+.additional-schedule-text {
+  margin: 0; /* 부모에서 상속된 마진을 무시 */
+  font-size: 16px;
+  border-bottom: 2px solid #5c5c5c;
+  margin-left: 34px;
+  width: 60px;
+  color: #5c5c5c;
+}
+
+.modal-title {
+  width: 100%;
+  margin-top: 30px;
   text-align: center;
   display: flex;
   justify-content: center; /* 수평 중앙 정렬 */
   align-items: center; /* 수직 중앙 정렬 */
-  font-size:20px;
+  font-size: 20px;
   font-weight: 600;
   margin-bottom: 20px;
 }
 
-.bias-container{
-  margin-top : 10px;
+.bias-container {
+  margin-top: 10px;
 }

@@ -61,25 +61,25 @@ class HomeBiasModel(BaseModel):
         return self.__bias_list
         
     def set_random_bias(self):
-        bias_datas = self._database.get_all_data(target="bid")
+        #bias_datas = self._database.get_all_data(target="bid")
         
-        num_bias = len(bias_datas)
+        #num_bias = len(bias_datas)
         
-        if num_bias >= 1 or num_bias < 4:
-            random_index = sample(range(num_bias), 1)
-        elif num_bias >= 4 and num_bias < 10: 
-            random_index = sample(range(num_bias), 2)
-        elif num_bias >= 10 and num_bias < 20:
-            random_index = sample(range(num_bias), 3)
-        elif num_bias >= 20:
-            random_index = sample(range(num_bias), 4)
-        else:
-            return
+        #if num_bias >= 1 or num_bias < 4:
+            #random_index = sample(range(num_bias), 1)
+        #elif num_bias >= 4 and num_bias < 10: 
+            #random_index = sample(range(num_bias), 2)
+        #elif num_bias >= 10 and num_bias < 20:
+            #random_index = sample(range(num_bias), 3)
+        #elif num_bias >= 20:
+            #random_index = sample(range(num_bias), 4)
+        #else:
+            #return
         
-        for index in random_index:
-            bias = Bias()
-            bias.make_with_dict(bias_datas[index])
-            self.__bias_list.append(bias)
+        #for index in random_index:
+            #bias = Bias()
+            #bias.make_with_dict(bias_datas[index])
+            #self.__bias_list.append(bias)
             
         return
 

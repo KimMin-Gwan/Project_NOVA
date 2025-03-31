@@ -3,9 +3,10 @@ import ModalRectangle from "./../../img/ModalRectangle.png";
 import { useState, useEffect } from "react";
 import ScheduleEvent from "../EventCard/EventCard";
 import HEADER from "../../constant/header";
+import mainApi from "../../services/apis/mainApi";
 import postApi from "../../services/apis/postApi";
 import { ScheduleDetailAdd, ScheduleAdd } from "../ScheduleMore/ScheduleMore";
-import TimeChart from "../../pages/SchedulePage/TimeChart/TimeChart";
+import TimeChart, {TimeChartPreview} from "../../pages/SchedulePage/TimeChart/TimeChart";
 import { tempWeekDayData, tempScheduleData } from "../../pages/SchedulePage/TestScheduleData";
 import { ScheduleBundle } from "../../component/ScheduleEvent/ScheduleBundle";
 import ScheduleSelect, { MakeScheduleDetail } from "../ScheduleSelect/ScheduleSelect";
@@ -95,6 +96,9 @@ export function BundleScheduleDetail({ closeSchedule, isOpen, target }) {
       body: {
         sids: sids,
       },
+    }).then((res) => {
+      alert("일정을 추가했습니다.");
+      closeSchedule()
     });
   }
 
@@ -224,7 +228,7 @@ export function BundleScheduleDetail({ closeSchedule, isOpen, target }) {
       <div className={style["modal-title"]}>
         미리보기
       </div>
-      <TimeChart weekDayData={timeWeekDayData} scheduleData={timeChartData} />
+      <TimeChartPreview weekDayData={timeWeekDayData} scheduleData={timeChartData} />
     </DetailModal>
   );
 }
@@ -273,7 +277,7 @@ export function ScheduleDetail({ closeSchedule, isOpen, target }) {
       <div className={style["modal-title"]}>
         미리보기
       </div>
-      <TimeChart weekDayData={timeWeekDayData} scheduleData={timeChartData} />
+      <TimeChartPreview weekDayData={timeWeekDayData} scheduleData={timeChartData} />
     </DetailModal>
   );
 }
@@ -465,6 +469,276 @@ export function MakeSingleSchedule({ closeSchedule, isOpen }) {
       </div>
       <div className={style["moreContainer"]}>
         <button onClick={() => {tryFetchMakeSchedule()}}>일정 등록</button>
+      </div>
+    </DetailModal>
+  );
+}
+
+// 스케줄 수정하기 모드
+export function EditSingleSchedule({ closeSchedule, isOpen, target, isSingleSchedule }) {
+  // 스케줄 만들기 모드
+  // single vs bundle
+
+  const scheduleFormat = {
+    id: Date.now(), 
+    sid:'',
+    sname : '',
+    location : '',
+    bid : '',
+    start_date : '',
+    start_time : '',
+    end_date : '',
+    end_time : ''
+  }
+
+  const [scheduleArray, setScheduleArray] = useState([scheduleFormat]);
+
+  const bundleFormat = {
+    sname : '',
+    bid : '',
+    schedules : scheduleArray
+  }
+
+  const [editMode, setEditMode] = useState('single');
+  const [numSchedule, setNumSchedule] = useState(1);
+  const [sendScheduleData, setSendScheduleData] = useState(bundleFormat)
+
+  let { biasList } = useBiasStore();
+  let [biasId, setBiasId] = useState();
+
+
+
+  // 번들 이름 
+  const [bundleNameInput, setBundleNameInput] = useState("");
+
+  // 번들 이름 바꾸기
+  const onChangeBundleName= (e) => {
+    setBundleNameInput(e.target.value);
+  };
+
+  useEffect(() =>{
+    if (isSingleSchedule && isOpen) {
+      setEditMode("single")
+      fetchSingleWrittenSchedule(target.sid)
+    }
+    else{
+      setEditMode("bundle")
+    }
+  },[isOpen])
+
+  const [editScheduleData, setEditScheduleData] =  useState([]);
+
+  const onFetchEditScheduleData = (schedules) => {
+    const formattedSchedules = schedules.map(schedule => {
+      // Extract and parse start_date and end_date
+      const [startYear, startMonth, startDay] = schedule.start_date.split("/").map(Number);
+      const [endYear, endMonth, endDay] = schedule.end_date.split("/").map(Number);
+
+      // Extract and parse start_time and end_time
+      const [startHour, startMinute] = schedule.start_time.split(":").map(Number);
+      const [endHour, endMinute] = schedule.end_time.split(":").map(Number);
+
+      return {
+        sid: schedule.sid,
+        location : schedule.location,
+        sname : schedule.sname,
+        startYear,
+        startMonth,
+        startDay,
+        startHour,
+        startMinute,
+        endYear,
+        endMonth,
+        endDay,
+        endHour,
+        endMinute
+      };
+    });
+
+    //formattedSchedules.forEach(schedule => addSchedule(schedule));
+    for (let i = 0; i < formattedSchedules.length - 1; i++) {
+      addSchedule(formattedSchedules[i]);
+    }
+
+    // Update the state with the formatted schedules
+    setEditScheduleData(formattedSchedules);
+  };
+
+  //console.log(editScheduleData)
+
+  async function fetchSingleWrittenSchedule(target) {
+    await mainApi 
+      .get(`time_table_server/try_get_written_schedule?sid=${target}`)
+      .then((res) => {
+          onFetchEditScheduleData(res.data.body.schedules)
+      });
+  }
+
+  // 단일 스케줄 만들기
+  async function fetchTryEditSingleSchedule() {
+    await postApi.post("time_table_server/try_modify_schedule", {
+      header: HEADER,
+      body: sendScheduleData.schedules[0],
+    }).then(()=>{
+      closeSchedule()
+    });
+  }
+
+  // 번들 스케줄 만들기
+  async function fetchTryEditBundleSchedule() {
+    await postApi.post("time_table_server/try_modify_schedule_bundle", {
+      header: HEADER,
+      body: sendScheduleData,
+    }).then(()=>{
+      closeSchedule()
+    });
+  }
+
+  async function fetchDeleteSingleSchedule(target) {
+    await mainApi 
+      .get(`time_table_server/try_delete_schedule?sid=${target.sid}`)
+        .then(()=>{
+          closeSchedule()
+    });
+  }
+
+  //async function fetchDeleteSingleSchedule(target) {
+    //await mainApi 
+      //.get(`time_table_server/try_delete_bundle?sbid=${target}`)
+        //.then(()=>{
+          //closeSchedule()
+    //});
+  //}
+
+  function tryDeleteSchedule(){
+    //if (editMode == 'single') {
+      fetchDeleteSingleSchedule(target)
+    //}
+    //else if (editMode == 'bundle'){
+      //fetchTryMakeBundleSchedule()
+    //}
+  }
+
+
+  // 전송하는 함수 (모드를 보고 번들로 보낼지 싱글로 보낼지 확인)
+  function tryFetchEditSchedule(){
+    if (editMode == 'single') {
+      fetchTryEditSingleSchedule()
+    }
+    else if (editMode == 'bundle'){
+      fetchTryEditBundleSchedule()
+    }
+  }
+
+  const addSchedule = () => {
+    setNumSchedule((prev) => prev + 1);
+    const newSchedule = { ...scheduleFormat, id: Date.now() };
+    const updatedSchedules = [...sendScheduleData.schedules, newSchedule];
+    setSendScheduleData((prev) => ({
+      ...prev,
+      schedules: updatedSchedules,
+    }));
+  };
+
+
+  const removeSchedule = (index) => {
+    setNumSchedule((prev) => (prev-1))
+    const updatedSchedules = sendScheduleData.schedules.filter((_, i) => i !== index);
+    setSendScheduleData((prev) => ({
+    ...prev,
+    schedules: updatedSchedules,
+    }));
+  }
+
+  useEffect(()=>{
+    if(numSchedule == 1){
+      setEditMode("single")
+    }
+    else{
+      setEditMode("bundle")
+    }
+  }, [numSchedule])
+
+  useEffect(()=>{
+    setSendScheduleData(prevState => ({
+      ...prevState,
+      bid: biasId, // bundleNameInput 값으로 sname 업데이트
+    }));
+  }, [biasId])
+
+  useEffect(() => {
+    setSendScheduleData(prevState => ({
+      ...prevState,
+      sname: bundleNameInput, // bundleNameInput 값으로 sname 업데이트
+    }));
+  }, [bundleNameInput]);
+
+  useEffect( () => {
+    if (isOpen) {
+      // 스케줄 초기화
+      setScheduleArray([scheduleFormat]);
+
+      // 번들 이름 초기화
+      setBundleNameInput('');
+
+      // 추가 모드 설정
+      setEditMode('single');
+      setNumSchedule(1);
+
+      // 전송 데이터 초기화
+      setSendScheduleData(bundleFormat);
+    }
+  }, [isOpen])
+
+
+  return (
+    <DetailModal closeSchedule={closeSchedule} isOpen={isOpen}>
+      <div className={style["modal-title"]}>
+        일정 등록
+      </div>
+      {
+        editMode === "bundle" ? (
+          <div className="ScheduleSelect">
+            <div className={style["searchFac"]}>
+              <div className={style["searchBox"]}>
+                <input
+                  type="text"
+                  value={bundleNameInput}
+                  onChange={onChangeBundleName}
+                  placeholder="일정 번들 이름"
+                />
+              </div>
+            </div>
+          </div>
+        ) : null
+      }
+      <div className={style["bias-container"]}>
+        <DropDown options={biasList} setBiasId={setBiasId} />
+      </div>
+      {
+       sendScheduleData.schedules.map((schedule, index) => (
+          <ScheduleSelect
+            key={schedule.id}
+            index={index}
+            setSendScheduleData={setSendScheduleData}
+            sendScheduleData={sendScheduleData}
+            removeSchedule={removeSchedule}
+            isEditMode={true}
+            targetSchedule={editScheduleData[index]}
+          />
+        ))
+      }
+      <div className={style["additional-schedule-button"]}>
+        <p
+          className={style["additional-schedule-text"]}
+          onClick={addSchedule}
+        >
+          일정 추가
+        </p>
+      </div>
+      <div className={style["moreContainer"]}>
+        <button onClick={() => {tryDeleteSchedule()}}>일정 제거</button>
+        <button onClick={() => {tryFetchEditSchedule()}}>일정 등록</button>
       </div>
     </DetailModal>
   );

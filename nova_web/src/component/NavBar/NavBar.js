@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { getModeClass } from "../../App.js";
 import WriteMoment from "../../pages/Write/Writemoment.js";
@@ -10,6 +10,7 @@ import post from "./../../img/post_img.png";
 import short_form from "./../../img/short_form_icon.png";
 import feed_write from "./../../img/feed_nav.png";
 import search from "./../../img/search_nav.png";
+import searchSchedule from "./../../img/search_schedule.svg";
 
 import "./index.css";
 
@@ -17,16 +18,26 @@ const NavBar = ({ brightMode }) => {
   const navBarList = [
     {
       id: 0,
-      title: "주제 게시판",
+      title: "게시글",
       src: short_form,
       alt: "bias_board",
-      end_point: "/feed_list?type=bias",
+      // end_point: "/feed_list?type=bias",
+      end_point: "/",
       type: "navigate",
       onClick: (endPoint) => handleNavigate(endPoint),
     },
     {
       id: 1,
-      title: "게시판 작성",
+      title: "일정",
+      src: searchSchedule,
+      alt: "schedule",
+      end_point: "/schedule",
+      type: "navigate",
+      onClick: (endPoint) => handleNavigate(endPoint),
+    },
+    {
+      id: 2,
+      title: "게시글 작성",
       src: feed_write,
       alt: "write",
       end_point: "/feed_list?type=bias",
@@ -34,7 +45,7 @@ const NavBar = ({ brightMode }) => {
       onClick: () => onClickWrite(),
     },
     {
-      id: 2,
+      id: 3,
       title: "검색",
       src: search,
       alt: "search",
@@ -43,7 +54,7 @@ const NavBar = ({ brightMode }) => {
       onClick: (endPoint) => handleNavigate(endPoint),
     },
     {
-      id: 3,
+      id: 4,
       title: "더보기",
       src: more_see,
       alt: "bias_board",
@@ -54,10 +65,28 @@ const NavBar = ({ brightMode }) => {
   ];
 
   let navigate = useNavigate();
+  const location = useLocation(); //현재 경로 감지
 
+  const [activeIndex, setActiveIndex] = useState(() => {
+    return Number(sessionStorage.getItem("activeNav")) || 0;
+  });
   let [writeOptions, setWriteOptions] = useState(false);
 
   const [writeMoment, setWriteMoment] = useState(false);
+  useEffect(() => {
+    const currentIndex = navBarList.findIndex((item) => item.end_point === location.pathname);
+    setActiveIndex(currentIndex !== -1 ? currentIndex : 0);
+    sessionStorage.setItem("activeNav", currentIndex !== -1 ? currentIndex : 0);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    const currentIndex = navBarList.findIndex((item) => item.end_point === location.pathname);
+
+    if (!writeOptions && !writeMoment) {
+      setActiveIndex(currentIndex);
+      sessionStorage.removeItem("activeNav");
+    }
+  }, [writeOptions, writeMoment]);
 
   const onClickWrite = () => {
     setWriteOptions(!writeOptions);
@@ -65,6 +94,11 @@ const NavBar = ({ brightMode }) => {
 
   function handleNavigate(path) {
     navigate(path);
+  }
+
+  function handleClickNav(index) {
+    setActiveIndex(index);
+    sessionStorage.setItem("activeNav", index);
   }
 
   // type이 write일 때만 다른 동작
@@ -153,11 +187,15 @@ const NavBar = ({ brightMode }) => {
 
         {writeMoment && <WriteMoment onClickMoment={onClickMoment} />}
 
-        {navBarList.map((item) => (
-          <div key={item.id} className="nav_button_box">
+        {navBarList.map((item, index) => (
+          <div
+            key={item.id}
+            className={`nav_button_box ${activeIndex === index ? "btn_clicked" : ""}`}
+          >
             <button
               className="nav_button"
-              onClick={(e) => {
+              onClick={() => {
+                handleClickNav(index);
                 handleAction(item.type, item.end_point);
               }}
             >

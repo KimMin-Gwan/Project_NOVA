@@ -27,7 +27,9 @@ export default function FeedThumbnail({
     <section className={style["FeedThumbnail"]}>
       <div className={style["title-section"]} onClick={() => navigate(endPoint)}>
         <div className={style["title"]}>
+        {/**
           <img src={img_src} alt="thumbnail" />
+        */}
           {title}
         </div>
         <div className={`${style["more-icon"]}`}>

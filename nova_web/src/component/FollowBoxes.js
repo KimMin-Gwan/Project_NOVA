@@ -4,6 +4,8 @@ import useLoginStore from "../stores/LoginStore/useLoginStore";
 import add_bias_icon from "./../img/add_bias.png";
 import { useNavigate } from "react-router-dom";
 import style from "./FollowBoxes.module.css";
+import tempBias from "./../img/tempBias.png";
+
 export default function FollowBoxes({ setBiasId }) {
   let bias_url = "https://kr.object.ncloudstorage.com/nova-images/";
 
@@ -126,6 +128,7 @@ export default function FollowBoxes({ setBiasId }) {
     //   });
   }
   return (
+    <div >
     <div
       ref={scrollRef}
       onMouseDown={onMouseDown}
@@ -143,6 +146,7 @@ export default function FollowBoxes({ setBiasId }) {
                   <img
                     src={bias_url + `${bias.bid}.PNG`}
                     alt="bias"
+                    onError={(e) => (e.target.src = tempBias)}
                     onClick={() => {
                       onClickCurrentBias(i);
                       onClickBiasId(bias.bid);
@@ -189,6 +193,8 @@ export default function FollowBoxes({ setBiasId }) {
           </div>
         )}
       </div>
+    </div>
+
     </div>
   );
 }

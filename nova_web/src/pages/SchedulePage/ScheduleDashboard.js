@@ -31,6 +31,19 @@ const ScheduleDashboard = () => {
 
   let [biasData, setBiasData] = useState([]);
 
+  const [pageIndex, setPageIndex] = useState(0);
+  const [todayDate, setTodayDate] = useState(new Date());
+
+  const onChangeIndex = (param) => {
+    const index = pageIndex + param;
+    setPageIndex(index);
+
+    const targetDate = new Date(todayDate); // 기존 날짜 복사
+    const daysToAdd = param * 7; // 일수를 계산
+    targetDate.setDate(targetDate.getDate() + daysToAdd); // 날짜를 계산
+    setTodayDate(targetDate);
+  };
+
   const brightMode = "brigthMode";
 
   // 네비게이션 함수
@@ -39,8 +52,8 @@ const ScheduleDashboard = () => {
   };
 
   // 주간 날짜 받기
-  function fetchTargetMonthWeek() {
-    mainApi.get("time_table_server/try_get_dashboard_data").then((res) => {
+  function fetchTargetMonthWeek(date) {
+    mainApi.get(`time_table_server/try_get_dashboard_data?date=${date}`).then((res) => {
       setTargetMonth(res.data.body.target_month);
       setTargetWeek(res.data.body.target_week);
       setNumBias(res.data.body.num_bias);
@@ -48,8 +61,8 @@ const ScheduleDashboard = () => {
   }
 
   // 시간 차트 데이터 받기
-  function fetchTimeChartData() {
-    mainApi.get("time_table_server/try_get_today_time_chart").then((res) => {
+  function fetchTimeChartData(date) {
+    mainApi.get(`time_table_server/try_get_today_time_chart?date=${date}`).then((res) => {
       setScheduleData(res.data.body.schedule_blocks);
       setWeekDayData(res.data.body.week_day_datas);
     });
@@ -63,9 +76,16 @@ const ScheduleDashboard = () => {
   }
 
   useEffect(() => {
-    fetchTargetMonthWeek();
+    const dateString = todayDate.toISOString().split("T")[0]; // 'YYYY-MM-DD' 형식으로 변환
+    fetchTargetMonthWeek(dateString);
+    fetchTimeChartData(dateString);
+  }, [todayDate]);
+
+  useEffect(() => {
     fetchBiasData();
-    fetchTimeChartData();
+    // const dateString = todayDate.toISOString().split("T")[0]; // 'YYYY-MM-DD' 형식으로 변환
+    // fetchTargetMonthWeek(dateString);
+    // fetchTimeChartData(dateString);
   }, []);
 
   return (
@@ -88,9 +108,9 @@ const ScheduleDashboard = () => {
                 <span>개</span>
               </div>
               <div className="right-group">
-                <button onClick={() => handleNavigate("/search/topic")}>주제 탐색</button>
+                <button onClick={() => handleNavigate("/schedule/my_schedule")}>내 일정</button>
                 <img src={vertical_line} alt="vertical line" />
-                <button onClick={()=>toggleMakeScheduleModal()}>일정 등록</button>
+                <button onClick={() => toggleMakeScheduleModal()}>일정 등록</button>
               </div>
             </div>
           </div>
@@ -110,7 +130,11 @@ const ScheduleDashboard = () => {
             </div>
           </div>
           {/* 타임차트를 만드는 핵심 구간 */}
-          <TimeChart weekDayData={weekDayData} scheduleData={scheduleData} />
+          <TimeChart
+            weekDayData={weekDayData}
+            scheduleData={scheduleData}
+            onChangeIndex={onChangeIndex}
+          />
         </div>
 
         <div className="section-line"></div>
@@ -121,6 +145,9 @@ const ScheduleDashboard = () => {
               <p className="element">
                 <span className="text-wrapper">이런 최애는 어때요?</span>
               </p>
+              <span className="add-schedule" onClick={() => handleNavigate("/search/topic")}>
+                주제 탐색
+              </span>
             </div>
           </div>
           {biasData.map((item, i) => {
@@ -130,12 +157,7 @@ const ScheduleDashboard = () => {
       </div>
       <NavBar brightMode={brightMode} />
 
-
-      <MakeSingleSchedule
-        closeSchedule={toggleMakeScheduleModal}
-        isOpen={makeScheduleModal}
-      />
-
+      <MakeSingleSchedule closeSchedule={toggleMakeScheduleModal} isOpen={makeScheduleModal} />
     </div>
   );
 };
