@@ -128,7 +128,7 @@ function AddBiasButton({ onClickAddButton, add_bias_icon }) {
       >
         <img src={add_bias_icon} alt="add-bias" />
       </button>
-      <div className="b-name">최애 추가하기</div>
+      <div className="b-name">주제 추가하기</div>
     </div>
   );
 }

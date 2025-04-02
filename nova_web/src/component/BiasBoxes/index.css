@@ -67,6 +67,11 @@
   box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.5);
 }
 
+.add-bias-box:hover {
+  
+  background-color: #649BD9;
+}
+
 .add-bias-box {
   all: unset;
   cursor: pointer;
@@ -79,6 +84,7 @@
   align-items: center;
   justify-content: center;
   border: dotted 2px #71b7ff;
+  transition: background-color 0.1s ease-in-out;
   img {
     border-radius: 25px;
     width: 30%;

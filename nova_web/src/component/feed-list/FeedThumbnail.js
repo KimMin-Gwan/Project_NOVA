@@ -33,7 +33,7 @@ export default function FeedThumbnail({
           {title}
         </div>
         <div className={`${style["more-icon"]}`}>
-          <img src={more_icon} alt="더보기"></img>
+            <img src={more_icon} alt="더보기"></img>
         </div>
       </div>
       {children}
