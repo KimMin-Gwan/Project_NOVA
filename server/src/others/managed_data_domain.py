@@ -1267,13 +1267,15 @@ class ManagedScheduleTable(ManagedTable):
         return
 
     # 스케줄 삭제
-    def remove_schedule_df(self, sid:str):
+    def remove_schedule_in_table(self, sid:str):
         managed_schedule = self.__schedule_tree.get(key=sid)
         managed_schedule = ManagedSchedule()
 
         self.__schedule_tree.remove(key=sid)
         # 데이터프레임 삭제
         self.__schedule_df = self._remove_data_in_df(df=self.__schedule_df, remove_id=sid, id_type='sid')
+
+        return
 
     # 새로운 스케줄 번들 추가 함수
     def make_new_managed_bundle(self, bundle:ScheduleBundle):
@@ -1322,17 +1324,20 @@ class ManagedScheduleTable(ManagedTable):
         return
 
     # 번들 데이터 삭제
-    def remove_bundle_df(self, bundle:ScheduleBundle):
-        managed_bundle = self.__bundle_tree.get(key=bundle.sbid)
+    def remove_bundle_in_table(self, sbid:str):
+        managed_bundle = self.__bundle_tree.get(key=sbid)
         managed_bundle = ManagedScheduleBundle()
 
-        self.__bundle_tree.remove(key=bundle.sbid)
-        self.__schedule_bundle_df = self._remove_data_in_df(df=self.__schedule_bundle_df, remove_id=bundle.sbid, id_type='sbid')
+        self.__bundle_tree.remove(key=sbid)
+        self.__schedule_bundle_df = self._remove_data_in_df(df=self.__schedule_bundle_df, remove_id=sbid, id_type='sbid')
+
+        return
 
 
     # 날짜와 bid를 통해 일정을 검색합니다.
     def search_schedule_with_date_n_bids(self, selected_sids:list, date:str, bid:str, return_id:bool=True):
         searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_df, sid=selected_sids, bid=bid, date=date)
+
         if return_id:
             return searched_df['sid'].to_list()
         return searched_df.to_dict('records')
@@ -1341,6 +1346,7 @@ class ManagedScheduleTable(ManagedTable):
     def search_schedule_with_key(self, key:str, return_id:bool=True):
         columns = ['sname', 'bname', 'uname', 'code']
         searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_df, columns=columns, key=key)
+
         if return_id:
             return  searched_df['sid'].to_list()
         return searched_df.to_dict('records')
@@ -1349,6 +1355,7 @@ class ManagedScheduleTable(ManagedTable):
     def search_bundle_with_key(self, key:str, return_id:bool=True):
         columns = ['sbname', 'bname', 'uname', 'code']
         searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_bundle_df, columns=columns, key=key)
+
         if return_id:
             return searched_df['sbid'].to_list()
         return searched_df.to_dict('records')
@@ -1363,8 +1370,8 @@ class ManagedScheduleTable(ManagedTable):
 
     # 내가 선택한 일정 번들들을 보는 함수
     def search_my_selected_bundles(self, bid:str, selected_sbids:list, return_id:bool=True):
-        searched_df = self.__schedule_bundle_df[self.__schedule_bundle_df['sbid'].isin(selected_sbids)]
-        searched_df = self._search_data_with_key_str_n_columns(df=searched_df, bid=bid)
+        searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_bundle_df, sbid=selected_sbids, bid=bid)
+
         if return_id:
             return searched_df['sbid'].to_list()
         return searched_df.to_dict('records')
