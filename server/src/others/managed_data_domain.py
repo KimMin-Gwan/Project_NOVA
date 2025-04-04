@@ -240,33 +240,109 @@ class ManagedTable:
         df = df.drop(index=remove_index).reset_index(drop=True)
         return df
 
+    # kwargs를 이용해서 어떤 열이든, 리스트로 검색하든, 문자열로 검색하든, 날짜를 검색하든
+    # 어떤 값이든 찾아드리려고 노력해봅니다.
+    # key="..."를 입력한다면 특정 컬럼에 대해서 검색도 가능합니다.
+    #  재밌는 로직이네요.
+    def _search_data_with_key_str_n_columns(self, df:pd.DataFrame, columns:list=[], **kwargs):
+        searched_df = df.copy()
+
+        def cell_matches(cell, search_str):
+            try:
+                search_date = pd.to_datetime(search_str)
+            except Exception:
+                search_date = None
+
+            if isinstance(cell, datetime):
+                if search_date is not None:
+                    return cell.date() == search_date.date()
+                else:
+                    return str(search_str) in str(cell)
+
+            if isinstance(cell, list):
+                return any(str(search_str) in str(item) for item in cell)
+            return str(search_str) in str(cell)
+
+        # 값이 만약 공백이거나 전체, ALL이라는 글자가 들어올 시, 필터링을 진행하지 않습니다.
+        def should_skip(val):
+            if isinstance(val, str):
+                return val.strip() in ("", "전체", "all", "선택없음")
+            if isinstance(val, list) and len(val) > 0:
+                return str(val[0]).strip() in ("", "전체", "all", "선택없음")
+
+        # kwargs 중, key라는 데이터 말고 다른 데이터들에 대해 각 컬럼에서 검색을 수행합니다.
+        # 열 이름을 헷갈리면 안됩니다.
+        for col, value in kwargs.items():
+            if col == "key":
+                continue
+
+            if should_skip(value):
+                continue
+
+
+            # 값이 리스트로 반환된다면, 리스트의 항목 중 하나라도 만족한다면 True를 반환합니다.
+            if isinstance(value, list):
+                if col in searched_df.columns:
+                    searched_df = searched_df[searched_df[col].apply
+                        (lambda cell: any(cell_matches(cell, v) for v in value))
+                    ]
+            # 아니면 문자열이므로 문자열 검색을 합니다.
+            else:
+                searched_df = searched_df[searched_df[col].apply(lambda cell: cell_matches(cell, value))]
+
+
+        # key에 대한 검색을 진행합니다.
+        if "key" in kwargs:
+            key_value = kwargs["key"]
+            if key_value != "":
+                if not columns:
+                    columns = searched_df.columns
+                # 리스트 안에서도 검색할 수 있도록 합니다.
+                mask = searched_df[columns].apply(
+                    lambda row: any(cell_matches(cell, key_value) for cell in row), axis=1
+                )
+                searched_df = searched_df[mask]
+
+        return searched_df
+
+
+
+
     # 검색 로직
     # GPT 도움
-    def _search_data_with_key_str_n_columns(self, df:pd.DataFrame, key:str, columns:list=[]):
-        # 안쪽 함수
-        def cell_contains(cell):
-            # datetime객체는 검색에서 제외
-            if isinstance(cell, datetime):
-                return False
-            # List라면 들어있는 리스트를 검색함
-            if isinstance(cell, list):
-                return any(key in str(item) for item in cell)
-            return key in str(cell)
-
-        # key == "": 검색어가 없다면
-        # 전체 df를 반환
-        if key == "":
-            return df
-
-        # columns 지정 안되어 있으면 모든 열에 대해 검사합니다.
-        if not columns:
-            columns = df.columns
-
-        # 데이터프레임 마스킹 데이터 만들기
-        mask = df[columns].apply(lambda row: any(cell_contains(cell) for cell in row), axis=1)
-
-        # df에 맞는 데이터프레임 행 반환
-        return df[mask]
+    # def _search_data_with_key_str_n_columns(self, df:pd.DataFrame, key:str, columns:list=[]):
+    #     try:
+    #         key_date = pd.to_datetime(key)
+    #     except:
+    #         key_date = None
+    #
+    #     # 안쪽 함수
+    #     def cell_contains(cell):
+    #         # datetime객체는 검색에서 제외
+    #         if isinstance(cell, datetime):
+    #             if key_date is not None:
+    #                 return cell.date() == key_date.date()
+    #             else:
+    #                 return key in str(cell)
+    #         # List라면 들어있는 리스트를 검색함
+    #         if isinstance(cell, list):
+    #             return any(key in str(item) for item in cell)
+    #         return key in str(cell)
+    #
+    #     # key == "": 검색어가 없다면
+    #     # 전체 df를 반환
+    #     if key == "":
+    #         return df
+    #
+    #     # columns 지정 안되어 있으면 모든 열에 대해 검사합니다.
+    #     if not columns:
+    #         columns = df.columns
+    #
+    #     # 데이터프레임 마스킹 데이터 만들기
+    #     mask = df[columns].apply(lambda row: any(cell_contains(cell) for cell in row), axis=1)
+    #
+    #     # df에 맞는 데이터프레임 행 반환
+    #     return df[mask]
 
     # def get_managed_table_value_test(self):
     #     return self._data_table[2].to_dict()
@@ -958,21 +1034,8 @@ class ManagedFeedBiasTableNew(ManagedTable):
         # 데이터 프레임 검색 옵션 : Option에 따라 리스트가 달라짐
         columns = [option]
 
-        searched_df = self._search_data_with_key_str_n_columns(df=self.__feed_df, key=key, columns=columns)
-
-        # board_type 필터링
-        # board_type이 ""이거나 All이면 다 고름
-        # 아니라면 board_type 필터링을 진행함
-        if board_type == "" or board_type == "all" or board_type == "전체":
-            pass
-        else:
-            searched_df = searched_df[searched_df["board_type"] == board_type]
-
-        if fclass == "" or fclass == "all" or fclass == "전체":
-            pass
-        else:
-            # Fclass == long 인지 fclass == short인지 분류
-            searched_df = searched_df[searched_df["fclass"] == fclass]
+        searched_df = self._search_data_with_key_str_n_columns(df=self.__feed_df, columns=columns,
+                                                               key=key, board_type=board_type, fclass=fclass)
 
         # 시간에 따라 분류하는 함수 ( 일간 주간 )
         if target_time=="" or target_time=="all" or target_time=="전체":
@@ -991,42 +1054,30 @@ class ManagedFeedBiasTableNew(ManagedTable):
 
     # 바이어스 별 필터링을 진행합니다.
     def filtering_bias_community(self, bid:str, board_type:str):
-        filtered_feeds_df = self.__feed_df[self.__feed_df['bid']==bid]
-        if board_type == "" or board_type == "전체" or board_type == "all" or board_type == "선택없음":
-            pass
-        else:
-            filtered_feeds_df = filtered_feeds_df[filtered_feeds_df['board_type'] == board_type]
+        filtered_feeds_df = self._search_data_with_key_str_n_columns(df=self.__feed_df, bid=bid, board_type=board_type)
         # 마지막, 삭제된 Feed는 반환하지 않는다.
         filtered_feeds_df = filtered_feeds_df[filtered_feeds_df['display'] != 0]
         return filtered_feeds_df['fid'].tolist()
 
     # 여기서는 추가적인 필터링을 위해 필터링된 FID리스트를 받고, 2차 필터링을 실시하는 곳입니다.
     def filtering_fclass_feed(self, fid_list:list, fclass:str) -> list:
-        fid_list_df = self.__feed_df[(self.__feed_table['fid'].isin(fid_list))]
         # Filtering 시, 다음의 값을 유의
         # fclass == ""인 경우, 모든 경우를 가져옵니다.
-        if fclass != "":
-            filtered_feeds_df = fid_list_df[(fid_list_df['fclass'] == fclass)]
-            # 마지막, 삭제된 Feed는 반환하지 않는다.
-            filtered_feeds_df = filtered_feeds_df[filtered_feeds_df['display'] != 0]
-            return filtered_feeds_df['fid'].tolist()
+        filtered_feeds_df = self._search_data_with_key_str_n_columns(df=self.__feed_df, fid=fid_list, fclass=fclass)
+
         # 마지막, 삭제된 Feed는 반환하지 않는다.
-        fid_list_df = fid_list_df[fid_list_df['display'] != 0]
-        return fid_list_df['fid'].tolist()
+        filtered_feeds_df = filtered_feeds_df[filtered_feeds_df['display'] != 0]
+        return filtered_feeds_df['fid'].tolist()
 
     # 카테고리별 피드를 나눕니다.
     def filtering_categories_feed_new(self, fid_list:list, categories:list):
-        fid_list_df = self.__feed_df[(self.__feed_df['fid'].isin(fid_list))]
         # Filtering 시, 다음의 값을 유의
         # categories[0] == ""인 경우, 모든 경우를 가져옵니다.
-        if categories[0] != "" or categories[0] != "전체" or categories[0] != "all" or categories[0] != "선택없음":
-            filtered_feeds_df = fid_list_df[(fid_list_df['board_type'].isin(categories))]
-            # 마지막, 삭제된 Feed는 반환하지 않는다.
-            filtered_feeds_df = filtered_feeds_df[filtered_feeds_df['display'] != 0]
-            return filtered_feeds_df['fid'].tolist()
+        filtered_feeds_df = self._search_data_with_key_str_n_columns(df=self.__feed_df, fid=fid_list, board_type=categories)
+
         # 마지막, 삭제된 Feed는 반환하지 않는다.
-        fid_list_df = fid_list_df[fid_list_df['display'] != 0]
-        return fid_list_df['fid'].tolist()
+        filtered_feeds_df = filtered_feeds_df[filtered_feeds_df['display'] != 0]
+        return filtered_feeds_df['fid'].tolist()
 
     #---------------------------------------------------------------------------------------------------------
     # 최애의 정보 하나 반환
@@ -1279,11 +1330,17 @@ class ManagedScheduleTable(ManagedTable):
         self.__schedule_bundle_df = self._remove_data_in_df(df=self.__schedule_bundle_df, remove_id=bundle.sbid, id_type='sbid')
 
 
+    # 날짜와 bid를 통해 일정을 검색합니다.
+    def search_schedule_with_date_n_bids(self, selected_sids:list, date:str, bid:str, return_id:bool=True):
+        searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_df, sid=selected_sids, bid=bid, date=date)
+        if return_id:
+            return searched_df['sid'].to_list()
+        return searched_df.to_dict('records')
 
     # 키를 통해 스케줄을 검색합니다.
     def search_schedule_with_key(self, key:str, return_id:bool=True):
         columns = ['sname', 'bname', 'uname', 'code']
-        searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_df, key=key, columns=columns)
+        searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_df, columns=columns, key=key)
         if return_id:
             return  searched_df['sid'].to_list()
         return searched_df.to_dict('records')
@@ -1291,15 +1348,15 @@ class ManagedScheduleTable(ManagedTable):
     # 번들 서치 함수.
     def search_bundle_with_key(self, key:str, return_id:bool=True):
         columns = ['sbname', 'bname', 'uname', 'code']
-        searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_bundle_df, key=key, columns=columns)
+        searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_bundle_df, columns=columns, key=key)
         if return_id:
             return searched_df['sbid'].to_list()
         return searched_df.to_dict('records')
 
     # 내가 선택한 일정들을 보는 함수
     def search_my_selected_schedules(self, bid:str, selected_sids:list, return_id:bool=True):
-        searched_df = self.__schedule_df[self.__schedule_df['sid'].isin(selected_sids)]
-        searched_df = self._search_data_with_key_str_n_columns(df=searched_df, key=bid, columns=['bid'])
+        searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_df, sid=selected_sids, bid=bid)
+
         if return_id:
             return searched_df['sbid'].to_list()
         return searched_df.to_dict('records')
@@ -1307,8 +1364,7 @@ class ManagedScheduleTable(ManagedTable):
     # 내가 선택한 일정 번들들을 보는 함수
     def search_my_selected_bundles(self, bid:str, selected_sbids:list, return_id:bool=True):
         searched_df = self.__schedule_bundle_df[self.__schedule_bundle_df['sbid'].isin(selected_sbids)]
-        searched_df = self._search_data_with_key_str_n_columns(df=searched_df, key=bid, columns=['bid'])
+        searched_df = self._search_data_with_key_str_n_columns(df=searched_df, bid=bid)
         if return_id:
             return searched_df['sbid'].to_list()
         return searched_df.to_dict('records')
-
