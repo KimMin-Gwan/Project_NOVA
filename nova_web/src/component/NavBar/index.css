@@ -70,7 +70,13 @@
   }
 }
 
+.nav_button_box:hover {
+  background-color: #bfdbff;
+}
+
 .nav_button_box {
+  transition: background-color 0.15s ease-in-out;
+  border-radius: 6px;
   display: flex;
   justify-content: center;
   align-items: center;

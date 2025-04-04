@@ -15,6 +15,7 @@
   margin-block: 23px 12px;
 }
 
+
 .title-section > div {
   display: flex;
   align-items: center;
@@ -38,6 +39,11 @@
   justify-content: end;
   margin-right: 29px;
   cursor: pointer;
+}
+
+.title-section .icon-box:hover {
+  cursor: pointer;
+  background-color: #f0f0f0;
 }
 
 /* 검색박스 */

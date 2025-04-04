@@ -24,18 +24,15 @@ const getDaysInMonth = (year, month) => {
   return new Date(year, month, 0).getDate();
 };
 
-
 export default function ScheduleSelect({
   index,
   setSendScheduleData,
   sendScheduleData,
   removeSchedule,
   isEditMode,
-  targetSchedule
+  targetSchedule,
 }) {
-
-
-   //파라미터로 넘어온 데이터 에서 location이랑 sname 바꾸는 함수
+  //파라미터로 넘어온 데이터 에서 location이랑 sname 바꾸는 함수
   const handleScheduleChange = (field, value) => {
     const updatedSchedules = [...sendScheduleData.schedules];
     updatedSchedules[index] = { ...updatedSchedules[index], [field]: value };
@@ -141,33 +138,32 @@ export default function ScheduleSelect({
   };
 
   // 수정하기 전용 초기 데이터 세팅 하는 곳
-  useEffect(()=>{
-    if (isEditMode){
-      if (targetSchedule){
+  useEffect(() => {
+    if (isEditMode) {
+      if (targetSchedule) {
         setStartPickerValue({
           year: targetSchedule.startYear,
           month: targetSchedule.startMonth,
-          day : targetSchedule.startDay,
-        })
+          day: targetSchedule.startDay,
+        });
         setEndPickerValue({
           year: targetSchedule.endYear,
           month: targetSchedule.endMonth,
-          day : targetSchedule.endDay,
-        })
+          day: targetSchedule.endDay,
+        });
         setStartTimePickerValue({
-          hour : targetSchedule.startHour,
-          minute : targetSchedule.startMinute,
-        })
+          hour: targetSchedule.startHour,
+          minute: targetSchedule.startMinute,
+        });
         setEndTimePickerValue({
-          hour : targetSchedule.endHour,
-          minute : targetSchedule.endMinute,
-        })
-        setDetailPlaceInput(targetSchedule.location)
-        setPlaceInput(targetSchedule.sname)
+          hour: targetSchedule.endHour,
+          minute: targetSchedule.endMinute,
+        });
+        setDetailPlaceInput(targetSchedule.location);
+        setPlaceInput(targetSchedule.sname);
       }
     }
-
-  }, [targetSchedule])
+  }, [targetSchedule]);
 
   // 무슨 요일인지 맞춰주는 마법같은 함수
   useEffect(() => {
@@ -365,8 +361,7 @@ export default function ScheduleSelect({
           type={"시작"}
           weekDay={startWeek}
         />
-      <div>
-      </div>
+        <div></div>
         <TimePicker
           pickerValue={startTimePickerValue}
           setIsOpen={setIsStartTimePickerOpen}
@@ -491,7 +486,7 @@ function DatePicker({
   isDayPickerOpen,
   type,
   weekDay,
-  index
+  index,
 }) {
   const selectDate = new Date(year, month - 1, day);
   return (
@@ -520,17 +515,12 @@ function DatePicker({
 function TimePicker({ pickerValue, setIsOpen, id, isOpen }) {
   return (
     <div className="TimePicker__container">
-      <TimeInfo
-        {...pickerValue}
-        id={id}
-        onOpen={setIsOpen}
-        isOpen={isOpen}
-      />
+      <TimeInfo {...pickerValue} id={id} onOpen={setIsOpen} isOpen={isOpen} />
     </div>
   );
 }
 
-function UpDownArrow({ isOpen}) {
+function UpDownArrow({ isOpen }) {
   return (
     <img
       src={down_arrow} // 항상 같은 이미지 사용
@@ -558,7 +548,7 @@ function MonthInfo({ month, setIsOpen, isOpen }) {
   );
 }
 
-function YearInfo({ year, setIsOpen, isOpen}) {
+function YearInfo({ year, setIsOpen, isOpen }) {
   return (
     <div className="date" onClick={() => setIsOpen(true)}>
       <div>{year}년</div>
@@ -590,7 +580,7 @@ function MyPicker({
   setValue,
 }) {
   return (
-    <div className="EventMoreContainer">
+    <div className="PickerMoreContainer">
       <div className="DatePicker">
         <Picker
           value={pickerValue}

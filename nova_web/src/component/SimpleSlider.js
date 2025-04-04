@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import React, { useEffect, useRef, useState } from "react";
 
 import { getModeClass } from "./../App.js";
+import { Autoplay } from "swiper/modules";
 const SimpleSlider = ({ feedData, brightMode, type, className }) => {
   const showMaxCnt = 1;
 
@@ -14,12 +15,14 @@ const SimpleSlider = ({ feedData, brightMode, type, className }) => {
     className: "slider-items",
     dots: true,
     infinite: feedData.length > showMaxCnt,
-    speed: 500,
+    speed: 700,
     slidesToShow: 1,
     slidesToScroll: 1,
     centerMode: true,
     centerPadding: "0px",
     arrows: false,
+    autoplay:true,
+    autoplaySpeed:7000
   };
   // style안붙은 것은 slider.css에서 수정
   let navigate = useNavigate();

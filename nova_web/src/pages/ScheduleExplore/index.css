@@ -219,8 +219,8 @@
 }
 
 /* 일정 리스트 swiper 스타일 */
+/* 여기랑 SearchSchedulePage에 index.css랑 겹쳐서 들어감,,, */
 .scheduleList {
-  background: yellow;
   height: 30vh;
 }
 
