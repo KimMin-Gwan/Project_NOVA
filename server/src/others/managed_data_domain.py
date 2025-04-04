@@ -1267,13 +1267,13 @@ class ManagedScheduleTable(ManagedTable):
         return
 
     # 스케줄 삭제
-    def remove_schedule_df(self, schedule:Schedule):
-        managed_schedule = self.__schedule_tree.get(key=schedule.sid)
+    def remove_schedule_df(self, sid:str):
+        managed_schedule = self.__schedule_tree.get(key=sid)
         managed_schedule = ManagedSchedule()
 
-        self.__schedule_tree.remove(key=schedule.sid)
+        self.__schedule_tree.remove(key=sid)
         # 데이터프레임 삭제
-        self.__schedule_df = self._remove_data_in_df(df=self.__schedule_df, remove_id=schedule.sid, id_type='sid')
+        self.__schedule_df = self._remove_data_in_df(df=self.__schedule_df, remove_id=sid, id_type='sid')
 
     # 새로운 스케줄 번들 추가 함수
     def make_new_managed_bundle(self, bundle:ScheduleBundle):
