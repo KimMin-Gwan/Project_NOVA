@@ -66,22 +66,43 @@ class ScheduleSearchEngine:
     def try_remove_bundle(self, sbid:str=''):
         self.__managed_schedule_table.remove_bundle_in_table(sbid=sbid)
 
-    def try_remove_bundle_list(self, sbids:list[str]=[]):
+    def try_remove_bundle_list(self, sbids:list[str]):
         for sbid in sbids:
             self.__managed_schedule_table.remove_bundle_in_table(sbid=sbid)
 
 
-    def try_filtering_schedule_in_progress(self, when:str, sids:list=[]):
+
+
+
+    def try_filtering_schedule_in_progress(self, when:str, sids:list=None):
+        if sids is None:
+            sids = []
         sid_list = self.__managed_schedule_table.filtering_schedule_is_in_progress(selected_sids=sids,
                                                                                    when=when)
         return sid_list
 
-    def try_get_weekday_schedules(self, sids:list=[]):
-        sid_list = self.__managed_schedule_table.
-
-    def try_filtering_bundle_in_progress(self, when:str, sbids:list=[]):
+    def try_filtering_bundle_in_progress(self, when:str, sbids:list=None):
+        if sbids is None:
+            sbids = []
         sbid_list = self.__managed_schedule_table.filtering_bundle_is_in_progress(selected_sbids=sbids,
                                                                                   when=when)
+        return sbid_list
+
+
+
+
+    def try_get_weekday_schedule_list(self, sids:list=None):
+        if sids is None:
+            sids = []
+        sid_list = self.__managed_schedule_table.filtering_weekday_schedule(selected_sids=sids)
+
+        return sid_list
+
+    def try_get_weekday_bundle_list(self, sbids:list=None):
+        if sbids is None:
+            sbids = []
+        sbid_list = self.__managed_schedule_table.filtering_weekday_bundle(selected_sbids=sbids)
+
         return sbid_list
 
 
@@ -95,11 +116,18 @@ class ScheduleSearchEngine:
         sbid_list = self.__managed_schedule_table.search_bundle_with_key(key=target_keyword)
         return sbid_list
 
-    def try_search_my_selected_schedules(self, sids:list, bid=""):
+
+
+
+    def try_search_selected_schedules(self, sids:list=None, bid=""):
+        if sids is None:
+            sids = []
         sid_list = self.__managed_schedule_table.search_my_selected_schedules(bid=bid, selected_sids=sids)
         return sid_list
 
-    def try_search_my_selected_bundles(self, sbids:list, bid=""):
+    def try_search_selected_bundles(self, sbids:list=None, bid=""):
+        if sbids is None:
+            sbids = []
         sbid_list = self.__managed_schedule_table.search_my_selected_bundles(bid=bid, selected_sbids=sbids)
         return sbid_list
 
