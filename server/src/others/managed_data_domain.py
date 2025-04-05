@@ -334,31 +334,14 @@ class ManagedTable:
         df = df.drop(index=remove_index).reset_index(drop=True)
         return df
 
-    # def _add_new_data_in_df(self, df:pd.DataFrame, new_dict_data:dict):
-    #     new_data = pd.DataFrame(new_dict_data)
-    #     df = pd.concat([df, new_data], ignore_index=True)
-    #     return df
-    # # ID가 일치하는 경우는 단 한가지 이므로 가능한 일
-    # def _modify_data_in_df(self, df:pd.DataFrame, modify_dict_data:dict, id_type:str):
-    #     update_index = df.index[df[id_type] == modify_dict_data[id_type].tolist()][0]
-    #     df.loc[update_index] = modify_dict_data
-    #     return
-    #
-    # # 삭제 로직
-    # # id_type의 설명 : 이상과 동일
-    # def _remove_data_in_df(self, df:pd.DataFrame, remove_id:str, id_type:str):
-    #     remove_index = df.index[df[id_type] == remove_id].tolist()[0]
-    #     df = df.drop(index=remove_index).reset_index(drop=True)
-    #     return df
-
-
 
     # conditions를 이용해서 어떤 열이든, 리스트로 검색하든, 문자열로 검색하든, 날짜를 검색하든
     # 어떤 값이든 찾아드리려고 노력해봅니다.
     # key="..."를 입력한다면 특정 컬럼에 대해서 검색도 가능합니다.
     #  재밌는 로직이네요.
-    def _search_data_with_key_str_n_columns(self, df:pd.DataFrame, columns:list=[], **conditions):
+    def _search_data_with_key_str_n_columns(self, df:pd.DataFrame, columns:list=None, **conditions):
         searched_df = df.copy()
+
 
         # 데이터프레임 서치 조건 함수
         def cell_matches(cell, search_str):
@@ -415,7 +398,7 @@ class ManagedTable:
         if "key" in conditions:
             key_value = conditions["key"]
             if key_value != "":
-                if not columns:
+                if columns is None:
                     columns = searched_df.columns.values.tolist()
 
                 # columns에 값을 잘못넣으면 서치하지 않습니다.
@@ -434,14 +417,22 @@ class ManagedTable:
 
     # 날짜에 따라서 필터링 합니다. Update_time 필터링
     # 오늘로부터 하루동안, 일주일동안 등등 필터링
-    def _filter_data_with_until_before_X_days(self, df:pd.DataFrame, date_column:str, target_time:str):
-        # target_time이 SKIP_TUPLE 안에 있는 값이라면 필터링을 하지 않습니다.
-        if target_time.strip() in SKIP_TUPLE:
+    def _filter_data_with_until_before_X_days(self, df:pd.DataFrame, date_column:str=None, target_time:str=""):
+        if date_column is None:
+            logging.error('date_column이 입력되지 않음')
             return df
 
         # Date_Column이 데이터프레임에 존재하지 않으면 펄티렁이 불가능하므로 다시 반환
         if date_column not in df.columns.values.tolist():
             logging.error("데이터프레임에 해당 컬럼이 존재하지 않음")
+            return df
+
+        if target_time == "":
+            logging.error("target_time이 입력되지 않음")
+            return df
+
+        # target_time이 SKIP_TUPLE 안에 있는 값이라면 필터링을 하지 않습니다.
+        if target_time.strip() in SKIP_TUPLE:
             return df
 
         target_hour:int = 0
@@ -455,13 +446,14 @@ class ManagedTable:
             return df
 
         # 날짜 필터링
-        filtered_df = df[self._get_time_diff(target_time=df[date_column], target_hour=target_hour, reverse=True)]
+        mask = df[date_column].apply(lambda dt: self._get_time_diff(target_time=dt, target_hour=target_hour, reverse=True))
+        filtered_df = df[mask]
 
         return filtered_df
 
     # 오늘을 기준으로, 현재 진행 중인, 종료된, 예정인 데이터들을 필터링합니다.
-    def _filter_data_with_date_in_progress(self, df:pd.DataFrame, date_columns:list=[], when:str=''):
-        if not date_columns:
+    def _filter_data_with_date_in_progress(self, df:pd.DataFrame, date_columns:list=None, when:str=''):
+        if date_columns is None:
             logging.error("date_columns가 입력되지 않음")
             return df
 
@@ -480,29 +472,52 @@ class ManagedTable:
         # 리스트 길이가 가변일 수 있음. 길이가 1이거나 2일수있다.
         # 그래서 Padding을 하고 요소 2개만 가져와서 mapping합니다.
 
-        filtered_df = df
 
         start_column, end_column = date_columns[:2]
+        mask = pd.Series(True, index=df.index)
 
         # 끝난 일정에 대한 필터링
         if when == "ended":
-            filtered_df = df[df[end_column] < now]
+            mask &= (df[end_column] < now)
 
         # 끝나지 않은 일정에 대한 필터링 ( in_progress + not_start )
         elif when == "not_end":
-            filtered_df = df[df[end_column] >= now]
+            mask &= (df[end_column] >= now)
 
         # 진행 중인 일정에 대한 필터링
         elif when == "in_progress":
-            filtered_df = df[df[start_column] <= now < df[end_column]]
+            mask &= (df[start_column] <= now < df[end_column])
 
         # 시작하지 않은 예정 일정에 대한 필터링
         elif when == "not_start":
-            filtered_df = df[df[start_column] > now]
+            mask &= (df[start_column] > now)
+
+        filtered_df = df[mask]
 
         return filtered_df
 
-    def _filter_data_with_mon_to_sun_with_date(self, df:pd.DataFrame, date_columns:list=[]):
+    # 금주의 데이터를 필터링합니다.
+    # 이는 Update_time이 될수도 있고,
+    def _filter_data_with_mon_to_sun_with_date(self, df:pd.DataFrame, date_columns:list=None):
+        if date_columns is None:
+            logging.error("date_columns가 입력되지 않음")
+            return df
+
+        missing_cols = list(set(date_columns) ^ set(df.columns.values.tolist()))
+        if missing_cols:
+            logging.error("존재하지 않는 열에 대해서는 검색이 불가능")
+            return df
+
+        # 월요일, 일요일 날짜 데이터, 마스킹 데이터 얻음
+        monday, sunday = self._get_monday_sunday_of_this_week()
+        mask = pd.Series(True, index=df.index)
+
+        for date_column in date_columns:
+            mask &= (monday <= df[date_column] <= sunday)
+
+        filtered_df = df[mask]
+        return filtered_df
+
 
 
 #-------------------------------------------------------------------------------------------------------------------------------------
@@ -1525,14 +1540,22 @@ class ManagedScheduleTable(ManagedTable):
     def filtering_weekday_schedule(self, selected_sids:list, return_id:bool=True):
         # 선택된 sids 필터링
         searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_df, sid=selected_sids)
-
-
-
+        # 금주의 일정 필터링
+        searched_df = self._filter_data_with_mon_to_sun_with_date(df=searched_df, date_columns=["start_date_time", "end_date_time"])
 
         if return_id:
             return searched_df['sid'].to_list()
         return searched_df.to_dict('records')
 
+    def filtering_weekday_bundle(self, selected_sbids:list, return_id:bool=True):
+        # 선택한 sbids 필터링
+        searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_bundle_df, sid=selected_sbids)
+        # 금주의 일정 필터링
+        searched_df = self._filter_data_with_mon_to_sun_with_date(df=searched_df, date_columns=["start_date", "end_date"])
+
+        if return_id:
+            return searched_df['sid'].to_list()
+        return searched_df.to_dict('records')
 
 
 
