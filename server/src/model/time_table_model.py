@@ -265,6 +265,10 @@ class TimeTableModel(BaseModel):
 
         # 아이디 리스트 중 last_index 부터 시작해서 나머지 모든 데이터를 꺼냄
         paging_list = id_list[last_index + 1:]
+
+        if page_size != -1:
+            return paging_list, last_index
+
         last_index_next = -1
         if len(id_list) != 0:
             last_index_next = id_list.index(id_list[-1]) # 다음 라스트 인덱스를 설정
@@ -566,6 +570,28 @@ class MultiScheduleModelNew(TimeTableModel):
         self.__schedule_events:list = []
         self.__schedule_bundles:list = []
         self.__biases:list = []
+
+    # 바이어스 서치 함수
+    def __search_bias_list(self, keyword:str):
+        # 4가지의 경우가 존재한다
+        # 아티스트 닉네임, 카테고리, 플랫폼, 태그
+
+        bias_datas = self._database.get_all_data(target="bid")
+        search_list = []
+
+        for bias_data in bias_datas:
+            bias = Bias()
+            bias.make_with_dict(bias_data)
+            if keyword in bias.bname:
+                search_list.append(bias.bid)
+            elif keyword in bias.category:
+                search_list.append(bias.bid)
+            elif keyword in bias.tags:
+                search_list.append(bias.bid)
+            elif keyword in bias.agency:
+                search_list.append(bias.bid)
+
+        return search_list
 
     def set_schedules_with_sids(self, data_payload):
         self._make_send_data_with_ids(id_list=data_payload.sids)
