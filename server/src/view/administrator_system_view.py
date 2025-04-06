@@ -21,13 +21,15 @@ class Administrator_System_View(Master_View):
         def try_insert_new_bias(request:Request, raw_request:dict):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
 
-            data_payload = BiasInsertRequest(raw_request=raw_request)
+            data_payload = BiasInsertRequest(request=raw_request)
 
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
             administrator_controller=Administrator_Controller()
-            model = administrator_controller.try_insert_new_bias(database=self.__database,
-                                                                request=request_manager)
+            model = administrator_controller.bias_editor(database=self.__database,
+                                                        request=request_manager,
+                                                         order='add'
+                                                         )
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response
@@ -43,6 +45,7 @@ class BiasInsertRequest(RequestHeader):
         self.admin_key = body['admin_key']
         
         self.bname = data['bname']
+        self.gender = data['gender']
         self.category = data['category']
         self.birthday = data['birthday']
         self.debut = data['debut']

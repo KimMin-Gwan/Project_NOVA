@@ -23,6 +23,8 @@ class BiasEditorModel(AdminModel):
         else : self.__bias.bid = body_data.bid
         if not body_data.bname : pass
         else : self.__bias.bname = body_data.bname
+        if not body_data.gender : pass
+        else : self.__bias.gender = body_data.gender
         if not body_data.category : pass
         else : self.__bias.category = body_data.category
         if not body_data.birthday : pass
