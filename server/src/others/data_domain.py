@@ -313,7 +313,7 @@ class User(SampleDomain):
 
 class Bias(SampleDomain):
     def __init__(self, bid="",bname="", gender="", category=[], tags=[], birthday="", debut="",
-                 agency="", group=[], num_user=0, x_account="",
+                 agency="", group=[], num_user=0, x_account="", main_time=[],
                  insta_account="", tiktok_account="", youtube_account="", homepage="",
                  fan_cafe="", country=[], fanname = [], board_types=["선택없음", "자유게시판", "팬아트", "유머게시판"]):
         self.bid = bid
@@ -335,7 +335,7 @@ class Bias(SampleDomain):
         self.fan_cafe = fan_cafe
         self.country = copy.copy(country)
         self.fanname = copy.copy(fanname)
-        self.main_time = []
+        self.main_time = copy.copy(main_time)
         self.is_ad = False
 
     def make_with_dict(self, dict_data:dict):
