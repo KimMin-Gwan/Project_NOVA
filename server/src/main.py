@@ -2,7 +2,7 @@ from view import NOVA_Server
 from view.parsers import Configure_File_Reader
 from model import Local_Database, Mongo_Database
 #from others import ConnectionManager, LeagueManager
-from others import FeedManager, FeedSearchEngine, FundingProjectManager
+from others import FeedManager, FeedSearchEngine, ScheduleSearchEngine, FundingProjectManager
 import asyncio
 from uvicorn import run
 from others.ai_service import AIManger
@@ -27,6 +27,7 @@ class Master(Configure_File_Reader):
         #league_manager = LeagueManager(connection_manager=connection_manager)
         #league_manager.init_league_manager(database=database) # 리그 매니저 초기화
         feed_search_engine = FeedSearchEngine(database=database)
+        schedule_search_engine = ScheduleSearchEngine(database=database)
         feed_manager= FeedManager(database=database,
                                   feed_search_engine=feed_search_engine)
         funding_project_manager = FundingProjectManager(database=database)
@@ -37,6 +38,7 @@ class Master(Configure_File_Reader):
             league_manager=None,
             feed_manager=feed_manager,
             feed_search_engine=feed_search_engine,
+            schedule_search_engine=schedule_search_engine,
             funding_project_manager=funding_project_manager,
             ai_manager = ai_manager,
             jwt_secret_key = self._jwt_secret_key
