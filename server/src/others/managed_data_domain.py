@@ -94,20 +94,25 @@ class ManagedBias:
         }
 
 class ManagedSchedule:
-    def __init__(self, sid="", sname="", uname="", bid="", bname="", date=None,
-                 start_date_time=None, end_date_time=None, location=[],
-                 code="", state:bool=True):
+    def __init__(self, sid="", sname="", uname="", bid="", bname="", bias_gender="", bias_category=[],
+                 date=None, start_date_time=None, end_date_time=None, time_section=[],  location=[],
+                 code="", state:bool=True, bias_tags=[]):
         self.sid=sid
         self.sname=sname
         self.bid=bid
         self.bname=bname
+        self.bias_gender=bias_gender
+        self.bias_category=bias_category            # 바이어스 카테고리
+        self.bias_tags=bias_tags                     # 바이어스 태그
         self.uname=uname
         self.date=date                              # update_datetime
         self.start_date_time=start_date_time        # start_date + start_time
         self.end_date_time=end_date_time            # end_date + end_time
+        self.time_section=time_section              # 타임 섹션
         self.location=location
         self.code=code
         self.state=state
+
 
     # 무슨 데이터인지 출력해보기
     def __call__(self):
@@ -115,10 +120,14 @@ class ManagedSchedule:
         print("sname: ", self.sname)
         print("bid: ", self.bid)
         print("bname: ", self.bname)
+        print("bias_gender: ", self.bias_gender)
+        print("bias_category: ", self.bias_category)
+        print("bias_tags: ", self.bias_tags)
         print("uname: ", self.uname)
         print("date: ", self.date)
         print("start_date_time: ", self.start_date_time)
         print("end_date_time: ", self.end_date_time)
+        print("time_section", self.time_section)
         print("location: ", self.location)
         print("code: ", self.code)
         print("state: ", self.state)
@@ -130,22 +139,29 @@ class ManagedSchedule:
             "sname": self.sname,
             "bid": self.bid,
             "bname": self.bname,
+            "bias_gender": self.bias_gender,
+            "bias_category": self.bias_category,
+            "bias_tags": self.bias_tags,
             "uname": self.uname,
             "date": self.date,
             "start_date_time": self.start_date_time,
             "end_date_time": self.end_date_time,
+            "time_section": self.time_section,
             "location": self.location,
             "code": self.code,
             "state": self.state
         }
 
 class ManagedScheduleBundle:
-    def __init__(self, sbid="", sbname="", bid="", bname="", uname="", date=None,
-                  start_date=None, end_date=None, location=[], code="", sids=[]):
+    def __init__(self, sbid="", sbname="", bid="", bname="", bias_gender="", bias_category=[],
+                 bias_tags=[], uname="", date=None, start_date=None, end_date=None, location=[], code="", sids=[]):
         self.sbid=sbid
         self.sbname=sbname
         self.bid=bid
         self.bname=bname
+        self.bias_gender=bias_gender
+        self.bias_category=bias_category
+        self.bias_tags=bias_tags
         self.uname=uname
         self.date=date                      # update_datetime
         self.start_date=start_date          # 스케쥴 번들 시작 날짜
@@ -159,6 +175,9 @@ class ManagedScheduleBundle:
         print("sbname: ", self.sbname)
         print("bid: ", self.bid)
         print("bname: ", self.bname)
+        print("bias_gender: ", self.bias_gender)
+        print("bias_category: ", self.bias_category)
+        print("bias_tags: ", self.bias_tags)
         print("uname: ", self.uname)
         print("date: ", self.date)
         print("start_date: ", self.start_date)
@@ -173,6 +192,9 @@ class ManagedScheduleBundle:
             "sname": self.sbname,
             "bid": self.bid,
             "bname": self.bname,
+            "bias_gender": self.bias_gender,
+            "bias_category": self.bias_category,
+            "bias_tags": self.bias_tags,
             "uname": self.uname,
             "date": self.date,
             "start_date": self.start_date,
@@ -208,8 +230,6 @@ class ManagedTable:
 
         return monday, sunday
 
-
-
     # string to datetime
     def _get_date_str_to_object(self, str_date):
         date_obj = datetime.strptime(str_date, "%Y/%m/%d-%H:%M:%S")
@@ -229,6 +249,53 @@ class ManagedTable:
         if reverse:
             return time_diff < timedelta(hours=target_hour)
         return time_diff >= timedelta(hours=target_hour)
+
+    # 타임 섹션을 얻는 함수
+    # 24시간을 4등분 하고 각 구간을 0, 1, 2, 3으로 설정합니다.
+    def _get_schedule_time_section(self, start_time:datetime, end_time:datetime):
+        current_time = start_time
+        first_section = True
+        end_flag = False
+        time_sections = set()       # 타임 섹션을 판별할 때, 0, 1, 2, 3의 값만 가지며, 이후의 날도 넘어간다면 그것도 포함시킨다.
+
+        # 첫 타임 섹션 설정
+        time_ranges = [(0, 6), (6, 12), (12, 18), (18, 24)]
+
+        # end_time을 넘기전 까지 Time Section을 찾아낸다.
+        while current_time < end_time:
+            hour = current_time.hour
+
+            # 탈출 구문
+            if end_flag:
+                break
+
+            for i, (start_hour, end_hour) in enumerate(time_ranges):
+                if start_hour <= hour < end_hour:
+                    if not first_section and i == 0:
+                        end_flag = True
+                        break
+
+                    # 구간이 끝는 시각이 24면 다음날 00시로 설정
+                    if end_hour == 24:
+                        current_range_end = current_time.replace(hour=0, minute=0, second=0) + timedelta(days=1)
+                    else:
+                        current_range_end = current_time.replace(hour=end_hour, minute=0, second=0)
+
+                    # 구간 종료 시간이 스케줄 종료 시간보다 크면 종료시간으로 제한
+                    actual_end = min(end_time, current_range_end)
+
+                    # time_sections에 추가
+                    time_sections.add(i)
+                    current_time = actual_end       # 구간 재설정
+
+                    first_section = False
+
+                    break
+
+        # 리스트로 반환합니다.
+        return list(time_sections)
+
+
 
     # table list DataFrame화
     def _dataframing_table(self, data_table:list):
@@ -497,8 +564,10 @@ class ManagedTable:
         return filtered_df
 
     # 금주의 데이터를 필터링합니다.
-    # 이는 Update_time이 될수도 있고,
-    def _filter_data_with_mon_to_sun_with_date(self, df:pd.DataFrame, date_columns:list=None):
+    # 이는 Update_time이 될수도 있고, Start_date, End_date가 될 수 있습니다.
+    # date_option = day => 오늘을 기준으로 필터링 (오늘 하루동안 올라온/시작하는/끝나는 데이터를 분류)
+    # date_option = week => 오늘을 포함하는 일주일 (월요일 ~ 금요일) 필터링
+    def _filter_data_with_date_option(self, df:pd.DataFrame, date_option:str="", date_columns:list=None):
         if date_columns is None:
             logging.error("date_columns가 입력되지 않음")
             return df
@@ -508,13 +577,29 @@ class ManagedTable:
             logging.error("존재하지 않는 열에 대해서는 검색이 불가능")
             return df
 
-        # 월요일, 일요일 날짜 데이터, 마스킹 데이터 얻음
-        monday, sunday = self._get_monday_sunday_of_this_week()
+        # 마스킹 데이터 만들기
         mask = pd.Series(True, index=df.index)
+        if date_option in SKIP_TUPLE:
+            pass
 
-        for date_column in date_columns:
-            mask &= (monday <= df[date_column] <= sunday)
+        elif date_option not in ("day", "weekly"):
+            logging.error("date_option은 day, weekly에만 대응 됨")
 
+        # 데이터가 당일에만 시작하는 / 끝나는 / 진행(시작-끝이 오늘) 인 데이터들만 필터링
+        elif date_option == "day":
+            today_str = datetime.now().strftime("%Y/%m/%d")
+            today = datetime.strptime(today_str, "%Y/%m/%d")
+            for date_column in date_columns:
+                mask &= (df[date_column].date() == today)
+
+        # 데이터가 이번 주에만 시작 / 끝/ 진행하는 데이터인지
+        elif date_option == "weekly":
+            # 월요일, 일요일 날짜 데이터, 마스킹 데이터 얻음
+            monday, sunday = self._get_monday_sunday_of_this_week()
+            for date_column in date_columns:
+                mask &= (monday <= df[date_column] <= sunday)
+
+        # 최종 필터링
         filtered_df = df[mask]
         return filtered_df
 
@@ -1300,17 +1385,26 @@ class ManagedScheduleTable(ManagedTable):
             schedules.append(schedule)
 
         for single_schedule in schedules:
-            start_date_time = single_schedule.start_date+'-'+single_schedule.start_time+':00'
-            end_date_time = single_schedule.end_date+'-'+single_schedule.end_time+':00'
+            bias_data = self._database.get_data_with_id(target="bid", id=single_schedule.bid)
+            bias=Bias().make_with_dict(dict_data=bias_data)
+
+            start_date_time = self._get_date_str_to_object(str_date=single_schedule.start_date+'-'+single_schedule.start_time+':00')
+            end_date_time = self._get_date_str_to_object(single_schedule.end_date+'-'+single_schedule.end_time+':00')
+
+            time_sections = self._get_schedule_time_section(start_time= start_date_time,end_time=end_date_time)
 
             managed_schedule = ManagedSchedule(sid=single_schedule.sid,
                                                sname=single_schedule.sname,
                                                bid=single_schedule.bid,
                                                bname=single_schedule.bname,
+                                               bias_gender=bias.gender,
+                                               bias_category=bias.category,
+                                               bias_tags=bias.tags,
                                                uname=single_schedule.uname,
                                                date=self._get_date_str_to_object(str_date=single_schedule.update_datetime),
-                                               start_date_time=self._get_date_str_to_object(str_date=start_date_time),
-                                               end_date_time=self._get_date_str_to_object(str_date=end_date_time),
+                                               start_date_time=start_date_time,
+                                               end_date_time=end_date_time,
+                                               time_section=time_sections,
                                                location=copy(single_schedule.location),
                                                code=single_schedule.code,
                                                state=single_schedule.state
@@ -1344,6 +1438,10 @@ class ManagedScheduleTable(ManagedTable):
             schedule_bundles.append(schedule_bundle)
 
         for bundle in schedule_bundles:
+            bias_data = self._database.get_data_with_id(target="bid", id=bundle.bid)
+            bias=Bias().make_with_dict(dict_data=bias_data)
+
+
             start_date = bundle.date[0]+"-00:00:00"
             end_date = bundle.date[1]+"-00:00:00"
 
@@ -1351,6 +1449,9 @@ class ManagedScheduleTable(ManagedTable):
                                                    sbname=bundle.sbname,
                                                    bid=bundle.bid,
                                                    bname=bundle.bname,
+                                                   bias_gender=bias.gender,
+                                                   bias_category=bias.category,
+                                                   bias_tags=bias.tags,
                                                    uname=bundle.uname,
                                                    date=self._get_date_str_to_object(str_date=bundle.update_datetime),
                                                    start_date=self._get_date_str_to_object(str_date=start_date),
@@ -1503,6 +1604,17 @@ class ManagedScheduleTable(ManagedTable):
 
 
 
+
+    # 탐색 스케줄 얻음
+    def search_explore_schedule(self, time_section:int, style:str, gender:str, return_id:bool=True):
+        searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_df, time_section=time_section,
+                                                               bias_gender=gender, bias_tags=style)
+        searched_df = self._filter_data_with_date_option(df=searched_df, date_option="day", date_columns=["start_date_time"])
+
+        if return_id:
+            return searched_df['sid'].to_list()
+        return searched_df.to_dict('records')
+
     # 날짜와 bid를 통해 일정을 검색합니다.
     def search_schedule_with_date_n_bids(self, selected_sids:list, date:str, bid:str, return_id:bool=True):
         searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_df, sid=selected_sids, bid=bid, date=date)
@@ -1541,17 +1653,18 @@ class ManagedScheduleTable(ManagedTable):
         # 선택된 sids 필터링
         searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_df, sid=selected_sids)
         # 금주의 일정 필터링
-        searched_df = self._filter_data_with_mon_to_sun_with_date(df=searched_df, date_columns=["start_date_time", "end_date_time"])
+        searched_df = self._filter_data_with_date_option(df=searched_df, date_option="weekly", date_columns=["start_date_time", "end_date_time"])
 
         if return_id:
             return searched_df['sid'].to_list()
         return searched_df.to_dict('records')
 
+    # 금주의 일정 번들 필터링
     def filtering_weekday_bundle(self, selected_sbids:list, return_id:bool=True):
         # 선택한 sbids 필터링
         searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_bundle_df, sid=selected_sbids)
         # 금주의 일정 필터링
-        searched_df = self._filter_data_with_mon_to_sun_with_date(df=searched_df, date_columns=["start_date", "end_date"])
+        searched_df = self._filter_data_with_date_option(df=searched_df, date_option="weekly", date_columns=["start_date", "end_date"])
 
         if return_id:
             return searched_df['sid'].to_list()
