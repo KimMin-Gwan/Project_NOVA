@@ -1,4 +1,4 @@
-from others.data_domain import TimTableUser, Schedule, ScheduleBundle
+from others.data_domain import TimeTableUser, Schedule, ScheduleBundle
 from others.managed_data_domain import ManagedScheduleTable, ManagedSchedule, ManagedScheduleBundle
 from pprint import pprint
 

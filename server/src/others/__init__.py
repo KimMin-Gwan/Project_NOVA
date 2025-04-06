@@ -8,3 +8,4 @@ from others.search_engine import *
 from others.funding_manager import *
 from others.object_storage_connector import *
 from others.graph_domain import *
+from others.time_table_engine import *
