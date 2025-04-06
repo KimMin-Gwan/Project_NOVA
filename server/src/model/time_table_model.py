@@ -1600,9 +1600,8 @@ class AddScheduleModelNew(TimeTableModel):
     # date는 날짜임 , 형태는 2025/03/06 임
     def select_schedule_in_showcase(self, schedule_search_engine:SSE, date, bid):
         # 데이터 검색
-        searched_sids = schedule_search_engine.try_search_schedule_in_showcase(
-            sids=self._tuser.sids, date=date, bid=bid
-        )
+        searched_sids = schedule_search_engine.try_search_schedule_in_showcase(sids=self._tuser.sids,
+                                                                               date=date, bid=bid)
 
         schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids=searched_sids)
 
