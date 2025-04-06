@@ -312,12 +312,13 @@ class User(SampleDomain):
         }
 
 class Bias(SampleDomain):
-    def __init__(self, bid="",bname="", category=[], tags=[], birthday="", debut="",
+    def __init__(self, bid="",bname="", gender="", category=[], tags=[], birthday="", debut="",
                  agency="", group=[], num_user=0, x_account="",
                  insta_account="", tiktok_account="", youtube_account="", homepage="",
                  fan_cafe="", country=[], fanname = [], board_types=["선택없음", "자유게시판", "팬아트", "유머게시판"]):
         self.bid = bid
         self.bname = bname
+        self.gender = gender
         self.category = copy.copy(category)
         self.tags = copy.copy(tags)
         self.birthday = birthday
@@ -341,6 +342,7 @@ class Bias(SampleDomain):
         try:
             self.bid = dict_data['bid']
             self.bname = dict_data['bname']
+            self.gender = dict_data['gender']
             self.category = copy.copy(dict_data['category'])
             self.tags = copy.copy(dict_data['tags'])
             self.birthday = dict_data['birthday']
@@ -369,6 +371,7 @@ class Bias(SampleDomain):
         return {
             "bid": self.bid,
             "bname": self.bname,
+            "gender": self.gender,
             "category": copy.copy(self.category),
             "tags": copy.copy(self.tags),
             "birthday": self.birthday,
