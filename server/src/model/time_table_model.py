@@ -137,8 +137,7 @@ class TimeTableModel(BaseModel):
         self.__num_bias= len(self._user.bids)
         return
     
-    def set_target_date(self, date=datetime.today().strftime("%Y-%m-%d")):
-        today = datetime.strptime(date, "%Y-%m-%d")
+    def __calc_date(self, today:datetime):
         first_day_of_month = datetime(today.year, today.month, 1)
         #print(first_day_of_month)
 
@@ -150,7 +149,18 @@ class TimeTableModel(BaseModel):
         # 해당 주가 1주차인지 계산합니다.
         start_week = current_date.isocalendar()[1]  # 해당 달 첫 번째 월요일이 속한 주 번호
         current_week = today.isocalendar()[1]       # 오늘 날짜의 주 번호
-
+        
+        return start_week, current_week
+    
+    def set_target_date(self, date=datetime.today().strftime("%Y-%m-%d")):
+        today = datetime.strptime(date, "%Y-%m-%d")
+        start_week, current_week = self.__calc_date(today)
+    
+        if start_week > current_week:
+            # 이번 주의 월요일이 today임
+            today = today = today - timedelta(days=today.weekday())
+            start_week, current_week = self.__calc_date(today)
+        
         # 현재 주가 이번 달 내 몇 번째 주인지 계산합니다.
         week_in_month = current_week - start_week + 1
         
