@@ -1,0 +1,7 @@
+.slick-slide slick-active {
+  width: 190px !important;
+  div{
+    align-items: start;
+
+  }
+}
