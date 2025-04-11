@@ -46,9 +46,7 @@ export default function NovaADHomepage() {
     const projects = newProjects[i];
     boxes.push(
       <div className="inner-slick-slide-component" key={i}>
-        <div className="new-img">
-          {projects && <img src={projects.head_image[0]} alt="img" />}
-        </div>
+        <div className="new-img">{projects && <img src={projects.head_image[0]} alt="img" />}</div>
 
         <div className="new-title">
           <p> 타이틀</p>
@@ -59,7 +57,7 @@ export default function NovaADHomepage() {
   }
 
   return (
-    <div className="container"> 
+    <div className="container">
       <div
         className={styleFunding.Topbar}
         style={{
@@ -82,36 +80,25 @@ export default function NovaADHomepage() {
         <p className={styleFunding["new-fav"]}>무료 리워드 광고</p>
       </div>
       <div className="banner-slider">
-          <Slider {...settings}>{boxes}</Slider>
+        <Slider {...settings}>{boxes}</Slider>
       </div>
 
       <div className="section-separator"> </div>
       <section>
-        <div>
-          <span className="section-title">
-              기여도 포인트 현황
-          </span>
-          <div className="contribute-point-background">
-            <div className="contribute-point-box">
-                <div className="bias-detail-section">
-                    <div className="bias-profile-image">
-                        이미지
-                    </div>
-                    <div className="bias-name-n-point-box">
-                        <div className="bias-name">이름 여기 공개</div>
-                        <div className="bias-point">1200 / 20000 PT</div>
-                    </div>
-                </div>
-                <div className="my-point-section">
-                    <div className="sum-of-point-box">
-                        <p className="title"> 이번달 포인트 총합</p>
-                        <p> 1200 PT</p>
-                        <button> 포인트 사용</button>
-                    </div>
-                    <div className="my-point-box">
+        <span className="section-title">기여도 포인트 현황</span>
+        <div className="contribute-point-background">
+          <div className="contribute-point-box">
+            <div className="bias-detail-section">
+              <div className="bias-profile-image">이미지</div>
+              <div className="bias-name-n-point-box">
+                <div className="bias-name">이름 여기 공개</div>
+                <div className="bias-point">1200 / 20000 PT</div>
+              </div>
+            </div>
 
-                    </div>
-                </div>
+            <div className="my-point-section">
+              <PointBox title={"이번달 포인트 총합"} point={1200} buttonText={"포인트 사용"} />
+              <PointBox title={"내 잔여 포인트"} point={200} buttonText={"충전"} />
             </div>
           </div>
         </div>
@@ -122,20 +109,24 @@ export default function NovaADHomepage() {
         <div>
           <div>
             <span className="section-title">
-                <span className="highlight"> 무료</span>&nbsp; 리워드 받기
+              <span className="highlight"> 무료</span>&nbsp; 리워드 받기
             </span>
           </div>
-          <div className="sponser-section">
-            
-
-
-          </div>
+          <div className="sponser-section"></div>
         </div>
       </section>
-
     </div>
-
   );
 }
 
-
+function PointBox({ title, point, buttonText }) {
+  return (
+    <div className="point-box">
+      <p className="title">{title}</p>
+      <p className="point">
+        <span className="highlight">{point}</span> PT
+      </p>
+      <button className="action-button">{buttonText}</button>
+    </div>
+  );
+}

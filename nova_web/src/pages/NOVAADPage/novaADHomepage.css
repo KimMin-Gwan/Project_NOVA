@@ -18,10 +18,10 @@
   padding: 0 !important; /* 슬라이드의 패딩 제거 */
 }
 
-.inner-slick-slide-component{
+.inner-slick-slide-component {
   padding-left: 20px;
   padding-right: 7px;
-  width: 100px  !important ;
+  width: 100px !important ;
   height: 240px;
   display: flex;
   flex-direction: column;
@@ -59,16 +59,15 @@
 
   .banner-p-tag {
     font-size: 12px;
-    color: #107BF4;
+    color: #107bf4;
     font-weight: 500;
   }
 }
 
-
 .section-separator {
   width: 100%;
   height: 5px;
-  background-color: #F1F7FF;
+  background-color: #f1f7ff;
   margin: 0 auto;
 }
 
@@ -76,20 +75,18 @@
   font-size: 20px;
   font-weight: 700;
   color: #595959;
-  margin-left : 20px;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin: 20px;
   display: flex;
   justify-content: flex-start;
 }
 
-.section-title .highlight {
-  color: #0076EE; /* 파란색 */
+.highlight {
+  color: #0076ee; /* 파란색 */
 }
 
-.contribute-point-background{
-  height : 434px;
-  width : 100%;
+.contribute-point-background {
+  height: 434px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -102,9 +99,9 @@
   height: 393px;
   display: flex;
   flex-direction: column; /* 세로 방향 배치 */
-  background: linear-gradient(135deg, #2E92FE 0%, #1979E1 60%, #005BBE 100%);
+  background: linear-gradient(135deg, #2e92fe 0%, #1979e1 60%, #005bbe 100%);
   border-radius: 15px;
-  border-bottom: #134F91 3px solid;
+  border-bottom: #134f91 3px solid;
 }
 
 .bias-detail-section {
@@ -117,13 +114,13 @@
   margin: 4%;
   width: calc(40%); /* 부모 높이와 동기화 */
   max-width: 120px;
-  min-width : 80px;
+  min-width: 80px;
   background-color: #d1d1d1;
 }
 
 .bias-name-n-point-box {
   flex: 1 60%;
-  margin : 4%;
+  margin: 4%;
   align-content: center;
   justify-items: end;
 
@@ -132,43 +129,70 @@
     font-weight: 700;
     color: #ffffff;
     margin-left: 20px;
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin-top: 15px;
+    margin-bottom: 15px;
   }
 
-  .bias-point{
+  .bias-point {
     font-size: 24px;
     font-weight: 600;
+    width: 100%;
     color: #595959;
+    background-color: white;
+    border-radius: 8px;
+    padding: 6px 0px;
+    text-align: end;
     margin-left: 20px;
-    margin-top: 20px;
     margin-bottom: 20px;
   }
 }
 
 .my-point-section {
-  display:flex;
-  height : 59.5%;
-  background-color: #fff000;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  padding: 0px 20px;
+  padding-bottom: 20px;
+  height: 59.5%;
+}
 
-  .title{
-    margin-top:6%;
-    margin-left:6%;
+.point-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 50%;
+  border-radius: 14px;
+  background-color: #ffffff;
+  padding: 0px 10px;
+
+  .title {
+    margin: 0;
+    margin-top: 10px;
+    /* margin-left: 10px; */
     font-size: 20px;
-    color: #3D3D3D;
+    color: #3d3d3d;
     font-weight: 500;
   }
 
+  .point {
+    margin: 0;
+    font-weight: 600;
+    font-size: 24px;
+    text-align: center;
+  }
+
+  .action-button {
+    border: none;
+    font-size: 16px;
+    width: 100%;
+    padding: 10px 50px;
+    background-color: #d0e4ff;
+    margin-bottom: 10px;
+    border-radius: 10px;
+  }
 }
 
-.sum-of-point-box{
-  flex: 0 50% auto;
-  width: 50%;
-  height: 100%;
-  background-color: #2cdf88;
-}
-
-.my-point-box{
+.my-point-box {
   flex: 1 50% auto;
   width: 50%;
   height: 100%;
