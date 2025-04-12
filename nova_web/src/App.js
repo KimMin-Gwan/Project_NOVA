@@ -34,6 +34,8 @@ import ScheduleDashboard from "./pages/SchedulePage/ScheduleDashboard.js";
 import SearchTopicPage from "./pages/SearchTopicPage/SearchTopicPage.js";
 import MySchedulePage from "./pages/MySchedulePage/MySchedulePage.js";
 import ScheduleExplore from "./pages/ScheduleExplore/ScheduleExplore.js";
+import PaymentPage from "./pages/NOVAADPage/paymentpage.js";
+import NovaADHomepage from "./pages/NOVAADPage/novaADHomepage.js";
 
 // 다크 모드 클래스 반환 함수
 export function getModeClass(mode) {
@@ -59,7 +61,7 @@ function App() {
   ) {
     document.body.style.zoom = 100 + "%";
   } else {
-    document.body.style.zoom = 120 + "%";
+    document.body.style.zoom = 100 + "%";
   }
 
   return (
@@ -110,11 +112,16 @@ function App() {
       <Route path="/search/topic" element={<SearchTopicPage />}></Route>
       <Route path="/explore/schedule" element={<ScheduleExplore />}></Route>
 
+
+      {/* 광고 페이지 */}
+      <Route path="/nova_ad/home" element={<NovaADHomepage/>}></Route>
+      <Route path="/nova_ad/charging" element={<PaymentPage/>}></Route>
+
       {/* 이벤트는 다다음 버전에 추가 */}
       {/*<Route path="/search/event" element={<ScheduleResearch />}></Route>/*}
 
       {/* 펀딩 페이지 목록 */}
-      {/* <Route path="/nova_funding" element={<NovaFunding brightMode={brightMode} />}></Route>
+      {/* 
       <Route path="/like_funding" element={<LikeFunding />}></Route>
       <Route path="/duck_funding" element={<DuckFunding />}></Route>
       <Route path="/funding_project/:type" element={<SuccessFunding />}></Route>
