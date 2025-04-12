@@ -313,7 +313,9 @@ class ManagedTable:
 
     # 데이터 프레임 삽입 / 삭제 / 편집
     def _add_new_data_in_df(self, df:pd.DataFrame, new_dict_data:dict, **condition):
-        new_data = pd.DataFrame(new_dict_data)
+        # 딕셔너리를 통해 새로운 DF를 만들고 Transpose(전치)시키면 된다
+        new_data = pd.DataFrame.from_dict(new_dict_data, orient="index").transpose()
+
 
         if not condition:
             logging.error("추가 행 지정 조건 필요")
@@ -409,11 +411,28 @@ class ManagedTable:
     def _search_data_with_key_str_n_columns(self, df:pd.DataFrame, columns:list=None, **conditions):
         searched_df = df.copy()
 
-
-        # 데이터프레임 서치 조건 함수
-        def cell_matches(cell, search_str):
+        def cell_match_exact(cell, search_value):
             try:
-                search_date = pd.to_datetime(search_str)
+                search_date = pd.to_datetime(search_value)
+            except:
+                search_date = None
+
+            if isinstance(cell, datetime):
+                if search_date is not None:
+                    return cell.date() == search_date.date()
+                else:
+                    return str(search_value) == cell.strftime("%Y/%m/%d-%H:%M:%S")
+
+            if isinstance(cell, list):
+                return any(str(search_value) == str(item) for item in cell)
+
+            return str(search_value) == str(cell)
+
+
+        # 데이터프레임 서치 조건 함수, 부분 일치에 대한 함수
+        def cell_match_partial(cell, search_value):
+            try:
+                search_date = pd.to_datetime(search_value)
             except Exception:
                 search_date = None
 
@@ -421,11 +440,12 @@ class ManagedTable:
                 if search_date is not None:
                     return cell.date() == search_date.date()
                 else:
-                    return str(search_str) in str(cell)
+                    return str(search_value) == cell.strftime("%Y/%m/%d-%H:%M:%S")
 
             if isinstance(cell, list):
-                return any(str(search_str) in str(item) for item in cell)
-            return str(search_str) in str(cell)
+                return any(str(search_value) == str(item) for item in cell)
+
+            return str(search_value) in str(cell)
 
         # 값이 만약 공백이거나 전체, ALL이라는 글자가 들어올 시, 필터링을 진행하지 않습니다.
         def should_skip(val):
@@ -450,15 +470,15 @@ class ManagedTable:
             if should_skip(value):
                 continue
 
-            # 값이 리스트로 반환된다면, 리스트의 항목 중 하나라도 만족한다면 True를 반환합니다.
+            # 값이 리스트로 반환된다면, .
             if isinstance(value, list):
                 if col in searched_df.columns.values.tolist():
                     searched_df = searched_df[searched_df[col].apply
-                        (lambda cell: any(cell_matches(cell, v) for v in value))
+                    (lambda cell: any(cell_match_exact(cell, v) for v in value))
                     ]
             # 아니면 문자열이므로 문자열 검색을 합니다.
             else:
-                searched_df = searched_df[searched_df[col].apply(lambda cell: cell_matches(cell, value))]
+                searched_df = searched_df[searched_df[col].apply(lambda cell: cell_match_exact(cell, value))]
 
 
         # key에 대한 검색을 진행합니다.
@@ -469,14 +489,14 @@ class ManagedTable:
                     columns = searched_df.columns.values.tolist()
 
                 # columns에 값을 잘못넣으면 서치하지 않습니다.
-                missing_cols = list(set(columns) ^ set(searched_df.columns.values.tolist()))
+                missing_cols = list(set(columns) - set(searched_df.columns.values.tolist()))
                 if missing_cols:
                     logging.error("데이터프레임에 존재하지 않는 열은 검색할 수 없습니다.")
                     return df
 
                 # 리스트 안에서도 검색할 수 있도록 합니다.
                 mask = searched_df[columns].apply(
-                    lambda row: any(cell_matches(cell, key_value) for cell in row), axis=1
+                    lambda row: any(cell_match_partial(cell, key_value) for cell in row), axis=1
                 )
                 searched_df = searched_df[mask]
 
@@ -524,12 +544,12 @@ class ManagedTable:
             logging.error("date_columns가 입력되지 않음")
             return df
 
-        missing_cols = list(set(date_columns) ^ set(df.columns.values.tolist()))
+        missing_cols = list(set(date_columns) - set(df.columns.values.tolist()))
         if missing_cols:
             logging.error("존재하지 않는 열에 대해서는 검색이 불가능")
             return df
 
-        if when in ("ended", "in_progress", "not_start", "not_end"):
+        if when not in ("ended", "in_progress", "not_start", "not_end"):
             logging.error("when은 다음 네 가지에 대해서만 대응됩니다. ('ended', 'in_progress', 'not_start', 'not_end')")
             return df
 
@@ -572,7 +592,7 @@ class ManagedTable:
             logging.error("date_columns가 입력되지 않음")
             return df
 
-        missing_cols = list(set(date_columns) ^ set(df.columns.values.tolist()))
+        missing_cols = list(set(date_columns) - set(df.columns.values.tolist()))
         if missing_cols:
             logging.error("존재하지 않는 열에 대해서는 검색이 불가능")
             return df
@@ -590,14 +610,14 @@ class ManagedTable:
             today_str = datetime.now().strftime("%Y/%m/%d")
             today = datetime.strptime(today_str, "%Y/%m/%d")
             for date_column in date_columns:
-                mask &= (df[date_column].date() == today)
+                mask &= (df[date_column].dt.date == today)
 
         # 데이터가 이번 주에만 시작 / 끝/ 진행하는 데이터인지
         elif date_option == "weekly":
             # 월요일, 일요일 날짜 데이터, 마스킹 데이터 얻음
             monday, sunday = self._get_monday_sunday_of_this_week()
             for date_column in date_columns:
-                mask &= (monday <= df[date_column] <= sunday)
+                mask &= ((monday <= df[date_column]) & (df[date_column] <= sunday))
 
         # 최종 필터링
         filtered_df = df[mask]
@@ -1391,7 +1411,7 @@ class ManagedScheduleTable(ManagedTable):
             start_date_time = self._get_date_str_to_object(str_date=single_schedule.start_date+'-'+single_schedule.start_time+':00')
             end_date_time = self._get_date_str_to_object(single_schedule.end_date+'-'+single_schedule.end_time+':00')
 
-            time_sections = self._get_schedule_time_section(start_time= start_date_time,end_time=end_date_time)
+            time_sections = self._get_schedule_time_section(start_time=start_date_time, end_time=end_date_time)
 
             managed_schedule = ManagedSchedule(sid=single_schedule.sid,
                                                sname=single_schedule.sname,
@@ -1501,6 +1521,20 @@ class ManagedScheduleTable(ManagedTable):
             state=schedule.state
         )
 
+        # 바이어스 데이터 삽입
+        bias_data = self._database.get_data_with_id(target="bid", id=managed_schedule.bid)
+        bias = Bias()
+        bias.make_with_dict(dict_data=bias_data)
+
+        managed_schedule.bias_gender = bias.gender
+        managed_schedule.bias_tags = bias.tags
+        managed_schedule.bias_category = bias.category
+
+        # 타임 섹션 데이터 삽입
+        managed_schedule.time_section = self._get_schedule_time_section(start_time=managed_schedule.start_date_time,
+                                                                        end_time=managed_schedule.end_date_time)
+
+
         self.__schedule_table.append(managed_schedule)
         self.__schedule_tree.insert(managed_schedule.sid, managed_schedule)
 
@@ -1561,6 +1595,15 @@ class ManagedScheduleTable(ManagedTable):
             code=bundle.code,
             sids=copy(bundle.sids)
         )
+
+        # 바이어스 데이터
+        bias_data = self._database.get_data_with_id(target="bid", id=managed_bundle.bid)
+        bias = Bias()
+        bias.make_with_dict(dict_data=bias_data)
+
+        managed_bundle.bias_gender = bias.gender
+        managed_bundle.bias_tags = bias.tags
+        managed_bundle.bias_category = bias.category
 
         self.__schedule_bundle_table.append(managed_bundle)
         self.__bundle_tree.insert(managed_bundle.sbid, managed_bundle)
