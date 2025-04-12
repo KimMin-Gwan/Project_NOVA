@@ -5,7 +5,7 @@ from model import Local_Database
 from others.data_domain import TimeTableUser as TUser
 from others.data_domain import Schedule, ScheduleBundle, ScheduleEvent, Bias
 
-from others import ScheduleSearchEngine as SSE
+from others.time_table_engine import ScheduleSearchEngine as SSE
 
 from pprint import pprint
 from datetime import datetime,timedelta, time, date
@@ -265,13 +265,14 @@ class TimeTableModel(BaseModel):
 
         # 아이디 리스트 중 last_index 부터 시작해서 나머지 모든 데이터를 꺼냄
         paging_list = id_list[last_index + 1:]
-
-        if page_size != -1:
-            return paging_list, last_index
-
         last_index_next = -1
         if len(id_list) != 0:
             last_index_next = id_list.index(id_list[-1]) # 다음 라스트 인덱스를 설정
+
+        # 페이지 사이즈가 -1 (전체)인 경우, 그대로 전체를 반환하고 라스트 인덱스도 갱신반환한다.
+        if page_size == -1:
+            return paging_list, last_index_next
+
 
         # 만약 페이지 사이즈를 넘었다면 표시할 개수만큼 짜르고, last_index를 재설정한다.
         if len(paging_list) > page_size:
@@ -1677,7 +1678,7 @@ class AddScheduleModelNew(TimeTableModel):
         # 또한 플랫폼이 아닌 다른 문자가 들어가는 불상사도 있을 수 있습니다. (이건 어찌할 방도가..)
         str_list = re.split(r'\W+', data_payload.location)
         str_list = [s for s in str_list if s]
-        pprint(str_list)
+        # pprint(str_list)
 
         schedule.sid = self.__make_new_sid()
         schedule.bname = bias.bname
@@ -1734,8 +1735,8 @@ class AddScheduleModelNew(TimeTableModel):
     # 복수 개의 (단일 포함) 스테줄 저장
     def save_new_schedules(self, schedule_search_engine:SSE, schedule:list):
         save_data = self._make_dict_list_data(list_data=schedule)
-        self._database.add_new_datas(target_id="sid", new_datas=save_data)                  # 데이터베이스에 먼저 저장
         schedule_search_engine.try_add_new_managed_schedule_list(new_schedules=schedule)    # 서치 엔진에다가 저장합니다.
+        self._database.add_new_datas(target_id="sid", new_datas=save_data)                  # 데이터베이스에 먼저 저장
 
         # 스케쥴 데이터를 추가 할 때, Tuser도 업데이트함
         for s in schedule:
