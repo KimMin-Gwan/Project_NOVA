@@ -1780,24 +1780,42 @@ class AddScheduleModelNew(TimeTableModel):
 
     # 수정한 스케줄들 저장
     def save_modified_schedule(self, schedule_search_engine:SSE, schedule:list):
-        save_datas = self._make_dict_list_data(list_data=schedule)
+        # save_datas = self._make_dict_list_data(list_data=schedule)
 
         # for s in schedule:
         #     sids.append(s.sid)
 
-        for s_data in save_datas:
-            if self._database.get_data_with_id(target="sid", id=s_data['sid']):
-                self._database.modify_data_with_id(target_id='sid', target_data=s_data)
-            # 새로운 스케줄을 저장하는 경우
+        for s in schedule:
+            save_data = s.get_dict_form_data()
+            if self._database.get_data_with_id(target="sid", id=s.sid):
+                self._database.modify_data_with_id(target_id='sid', target_data=save_data)
             else:
-                self._database.add_new_data(target_id='sid', new_data=s_data)
-                # 유저에게도 추가
-                self._tuser.my_sids.append(s_data['sid'])
-                self._tuser.sids.append(s_data['sid'])
+                schedule_search_engine.try_add_new_managed_schedule(new_schedule=s)
+                self._database.add_new_data(target_id="sid", new_data=save_data)
+                self._tuser.sids.append(s.sid)
                 self._database.modify_data_with_id(target_id='tuid', target_data=self._tuser.get_dict_form_data())
 
         # 서치 엔진에도 저장합니다.
         schedule_search_engine.try_modify_schedule_list(modify_schedule_list=schedule)
+
+        self.__result = True
+        return
+
+
+        # for s_data in save_datas:
+        #     if self._database.get_data_with_id(target="sid", id=s_data['sid']):
+        #         self._database.modify_data_with_id(target_id='sid', target_data=s_data)
+        #     # 새로운 스케줄을 저장하는 경우
+        #     else:
+        #         self._database.add_new_data(target_id='sid', new_data=s_data)
+        #         schedule_search_engine.try_add_new_managed_schedule(new_schedule=schedule)
+        #         # 유저에게도 추가
+        #         self._tuser.my_sids.append(s_data['sid'])
+        #         self._tuser.sids.append(s_data['sid'])
+        #         self._database.modify_data_with_id(target_id='tuid', target_data=self._tuser.get_dict_form_data())
+        #
+        # # 서치 엔진에도 저장합니다.
+        # schedule_search_engine.try_modify_schedule_list(modify_schedule_list=schedule)
 
         # 일단 이건 스케줄 수정하는 거
         # self._database.modify_datas_with_ids(target_id="sid", ids=sids, target_datas=save_datas)
@@ -1806,8 +1824,8 @@ class AddScheduleModelNew(TimeTableModel):
         # for s_data in save_datas:
         #     self._database.modify_data_with_id(target_id="sid", target_data=s_data)
 
-        self.__result = True
-        return
+        # self.__result = True
+        # return
 
     # 수정한 스케줄 번들 저장
     def save_modified_multiple_schedule_object_with_type(self, schedule_search_engine:SSE, schedule_object, data_type:str):
@@ -1835,7 +1853,7 @@ class AddScheduleModelNew(TimeTableModel):
 
     # 단일 스케줄 편집
     def modify_single_schedule(self, data_payload, sid:str):
-        pprint("Single_schedule_modify")
+        # pprint("Single_schedule_modify")
 
         schedule_data = self._database.get_data_with_id(target="sid", id=sid)
         schedule = Schedule()
@@ -1844,8 +1862,12 @@ class AddScheduleModelNew(TimeTableModel):
         bias_data = self._database.get_data_with_id(target="bid", id=data_payload.bid)
         bias = Bias().make_with_dict(bias_data)
 
+        str_list = re.split(r'\W+', data_payload.location)
+        str_list = [s for s in str_list if s]
+
         schedule.sname = data_payload.sname
         schedule.bid = data_payload.bid
+        schedule.location = str_list
         schedule.bname = bias.bname
         schedule.start_date = data_payload.start_date
         schedule.start_time = data_payload.start_time
@@ -1929,12 +1951,16 @@ class AddScheduleModelNew(TimeTableModel):
 
         for tuser_data in tuser_datas:
             tuser = TUser().make_with_dict(tuser_data)
+            # 자기 자신에 대해서는 따로 처리하겠습니다
+            if tuser.tuid == self._tuser.tuid:
+                continue
             if sid in tuser.sids:
                 tuser.sids.remove(sid)
                 tu_sids.append({"sids" : tuser.sids})
                 tuids.append(tuser.tuid)
 
         self._tuser.my_sids.remove(sid)
+        self._tuser.sids.remove(sid)
 
         self._database.modify_datas_with_ids(target_id="sbid", ids=sbids, target_datas=sb_sids)
         self._database.modify_datas_with_ids(target_id="tuid", ids=tuids, target_datas=tu_sids)
