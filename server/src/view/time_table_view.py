@@ -370,6 +370,9 @@ class TimeTableView(Master_View):
 
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = MakeMultipleScheduleRequest(request=raw_request)
+
+            pprint(raw_request)
+
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
 
             time_table_controller =TImeTableController()
