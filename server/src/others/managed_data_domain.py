@@ -404,6 +404,29 @@ class ManagedTable:
         return df
 
 
+    # 테이블에서 인덱스를 가져옴
+    def _get_obj_index_in_table_with_id(self, table:list, **condition):
+        if len(condition) > 1:
+            logging.error("조건이 너무 많음. ID만 받음")
+            return -1
+
+        key, val = next(iter(condition.items()))
+        if "id" not in key:
+            logging.error("조건은 id여야함, (예시 : fid, sid, sbid 등)")
+            return -1
+
+        # id의 값은 고유값이므로 다음과 같이 해도 되긴 함.
+        for item in table:
+            # getattr를 사용함
+            if getattr(item, key, "") == val:
+                return table.index(item)
+
+        # 못 찾은 거면 -1를 반환하고 그에따른 처리를 진행합니다.
+        return -1
+
+
+
+
     # conditions를 이용해서 어떤 열이든, 리스트로 검색하든, 문자열로 검색하든, 날짜를 검색하든
     # 어떤 값이든 찾아드리려고 노력해봅니다.
     # key="..."를 입력한다면 특정 컬럼에 대해서 검색도 가능합니다.
@@ -1261,6 +1284,10 @@ class ManagedFeedBiasTableNew(ManagedTable):
         # 삭제하는 함수. 피드가  삭제되면 None으로 바뀔것
         managed_feed = self.__feed_avltree.get(key=feed.fid)
         managed_feed = ManagedFeed()
+        table_index = self._get_obj_index_in_table_with_id(table=self.__feed_table, fid=feed.fid)
+
+        if table_index != -1:
+            self.__feed_table.pop(table_index)
 
         self.__feed_avltree.remove(key=feed.fid)
         # dataframe 삭제
@@ -1570,9 +1597,12 @@ class ManagedScheduleTable(ManagedTable):
     def remove_schedule_in_table(self, sid:str):
         managed_schedule = self.__schedule_tree.get(key=sid)
         managed_schedule = ManagedSchedule()
+        table_index = self._get_obj_index_in_table_with_id(table=self.__schedule_table, sid=sid)
+
+        if table_index != -1:
+            self.__schedule_table.pop(table_index)
 
         self.__schedule_tree.remove(key=sid)
-        # 데이터프레임 삭제
         self.__schedule_df = self._remove_data_in_df(df=self.__schedule_df, sid=sid)
 
         return
@@ -1639,6 +1669,11 @@ class ManagedScheduleTable(ManagedTable):
     def remove_bundle_in_table(self, sbid:str):
         managed_bundle = self.__bundle_tree.get(key=sbid)
         managed_bundle = ManagedScheduleBundle()
+        table_index = self._get_obj_index_in_table_with_id(table=self.__schedule_bundle_table, sbid=sbid)
+
+        # 못 찾은 경우에는 지우지 못한다
+        if table_index != -1:
+            self.__schedule_bundle_table.pop(table_index)       # 리스트에서 삭제
 
         self.__bundle_tree.remove(key=sbid)
         self.__schedule_bundle_df = self._remove_data_in_df(df=self.__schedule_bundle_df, sbid=sbid)
