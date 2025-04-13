@@ -365,21 +365,19 @@ class TimeTableView(Master_View):
             return response
 
         # 복수 일정을 만들기
+        # Managed_Table 테스트 완료
         @self.__app.post('/time_table_server/try_make_new_multiple_schedule')
         def try_make_new_multiple_schedule(request: Request, raw_request:dict):
-
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = MakeMultipleScheduleRequest(request=raw_request)
 
-            pprint(raw_request)
-
+            # request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
 
             time_table_controller =TImeTableController()
             model = time_table_controller.make_new_multiple_schedules(schedule_search_engine=self.__schedule_search_engine,
                                                                       database=self.__database,
                                                                       request=request_manager)
-
             
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
@@ -444,6 +442,7 @@ class TimeTableView(Master_View):
 
             pprint(raw_request['body'])
             data_payload = ModifyMultipleScheduleRequest(request=raw_request)
+            # request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
 
             time_table_controller =TImeTableController()
@@ -461,8 +460,7 @@ class TimeTableView(Master_View):
         def try_delete_schedule(request:Request, sid:Optional[str]=""):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = DeleteSingleScheduleRequest(sid=sid)
-            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
-            # request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
 
             time_table_controller = TImeTableController()
             model = time_table_controller.try_delete_schedule(schedule_search_engine=self.__schedule_search_engine,
@@ -474,12 +472,12 @@ class TimeTableView(Master_View):
             return response
 
         # 번들 데이터 삭제
+        # Managed_Table에 대해 테스트 완료
         @self.__app.get('/time_table_server/try_delete_bundle')
         def try_delete_bundle(request:Request, sbid:Optional[str]=""):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = DeleteScheduleBundleRequest(sbid=sbid)
-            # request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
-            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
 
             time_table_controller = TImeTableController()
             model = time_table_controller.try_delete_bundle(schedule_search_engine=self.__schedule_search_engine,
@@ -540,9 +538,11 @@ class MakeSingleScheduleRequest(RequestHeader):
         self.end_time = body['end_time']
         self.state = body.get("state", True)
 
+# class MakeMultipleScheduleRequest:
 class MakeMultipleScheduleRequest(RequestHeader):
     def __init__(self, request) -> None:
         super().__init__(request)
+        # self.email:str="alsrhks2508@naver.com"
         body:dict = request['body']
         self.sname = body['sname']
         self.bid = body['bid']
@@ -563,9 +563,11 @@ class ModifySingleScheduleRequest(RequestHeader):
         self.end_time = body["end_time"]
         self.state = body["state"]
 
+# class ModifyMultipleScheduleRequest:
 class ModifyMultipleScheduleRequest(RequestHeader):
     def __init__(self, request) -> None:
         super().__init__(request)
+        # self.email:str="alsrhks2508@naver.com"
         body:dict = request['body']
         self.sbid = body.get('sbid', "")
         self.sname = body.get('sname', "")
@@ -579,7 +581,6 @@ class DeleteSingleScheduleRequest(RequestHeader):
 
 class DeleteScheduleBundleRequest(RequestHeader):
     def __init__(self, sbid) -> None:
-        # self.email:str="alsrhks2508@naver.com"
         self.sbid = sbid
 
 
