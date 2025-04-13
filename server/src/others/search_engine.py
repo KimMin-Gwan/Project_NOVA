@@ -791,25 +791,24 @@ class FilteringManager:
 
 #--------------------실제로 사용하게 될 구간입니다. 필터링 옵션이 확정났기 때문에 이렇게 새로만듭니다----------------------------------------------
 
-
-    def __paging_list(self, fid_list:list, fid, page_size):
-        # 이미 Date 최신순으로 정렬되어서 맨처음이 젤 최신의 글임
-        start_index = 0
-
-        # 페이징을 하지 않음
-        if page_size == -1:
-            return fid_list
-
-        if fid != "":
-            start_index = fid_list.index(fid)  # 타겟으로 잡은 구간부터, 불러오기
-
-        paging_fid_list = fid_list[start_index:]        # 페이징으로 짜르기
-        # 만약 자른 리스트가 페이지를 넘어간다면 짤라야한다
-        if len(paging_fid_list) > page_size:
-            paging_fid_list = paging_fid_list[:page_size]
-
-        # Paging Fid List, Last_fid
-        return paging_fid_list, paging_fid_list[-1]
+    # def __paging_list(self, fid_list:list, fid, page_size):
+    #     # 이미 Date 최신순으로 정렬되어서 맨처음이 젤 최신의 글임
+    #     start_index = 0
+    #
+    #     # 페이징을 하지 않음
+    #     if page_size == -1:
+    #         return fid_list
+    #
+    #     if fid != "":
+    #         start_index = fid_list.index(fid)  # 타겟으로 잡은 구간부터, 불러오기
+    #
+    #     paging_fid_list = fid_list[start_index:]        # 페이징으로 짜르기
+    #     # 만약 자른 리스트가 페이지를 넘어간다면 짤라야한다
+    #     if len(paging_fid_list) > page_size:
+    #         paging_fid_list = paging_fid_list[:page_size]
+    #
+    #     # Paging Fid List, Last_fid
+    #     return paging_fid_list, paging_fid_list[-1]
 
     def _filtering_notices_list(self):
         notice_datas = self.__database.get_all_data(target="notice")

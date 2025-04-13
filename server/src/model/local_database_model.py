@@ -369,11 +369,11 @@ class Mongo_Database(Local_Database):
         return list(collection.find({"$or" : document},{'_id':False}))
     
     #수정
-    def __update_one(self,document,data , collection:Collection) -> None:
+    def __update_one(self,document, data, collection:Collection) -> None:
         collection.update_one(document,{'$set':data})
         return
     
-    def __bulk_update(self, ids:list, datas: list[dict], collection: Collection) -> None:
+    def __bulk_update(self,target_id:str, ids:list, datas: list[dict], collection: Collection) -> None:
         # Bulk write 작업을 위한 리스트 준비
         bulk_operations = []
     
@@ -381,7 +381,8 @@ class Mongo_Database(Local_Database):
             
             if filter_ and update_data:
                 # UpdateOne 작업 생성
-                bulk_operations.append(UpdateOne(filter_, {'$set': update_data}))
+                bulk_update_one = UpdateOne({f"{target_id}" : filter_}, {"$set": update_data})
+                bulk_operations.append(bulk_update_one)
     
         # 한 번에 bulk_write로 업데이트 수행
         if bulk_operations:
@@ -389,8 +390,8 @@ class Mongo_Database(Local_Database):
         return
     
     #삭제
-    def __delete_one(self,document, collection:Collection) -> None:
-        collection.delete_one(document=document)
+    def __delete_one(self, document, collection:Collection) -> None:
+        collection.delete_one(document)
         return
 
     # def __save_json(self, file_name, data):
@@ -528,7 +529,7 @@ class Mongo_Database(Local_Database):
             collection_name = self._select_target_list(target=target_id)
             selected_collection = self.__set_collection(collection=collection_name)
             
-            self.__bulk_update(ids=ids, datas=target_datas, collection=selected_collection)
+            self.__bulk_update(target_id=target_id, ids=ids, datas=target_datas, collection=selected_collection)
             #self.__update_one({f'{target_id}':f'{target_data[target_id]}'},data=target_data,collection=selected_collection)
             
             return True
