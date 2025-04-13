@@ -188,8 +188,8 @@ class ManagedScheduleBundle:
 
     def to_dict(self):
         return {
-            "sid": self.sbid,
-            "sname": self.sbname,
+            "sbid": self.sbid,
+            "sbname": self.sbname,
             "bid": self.bid,
             "bname": self.bname,
             "bias_gender": self.bias_gender,
