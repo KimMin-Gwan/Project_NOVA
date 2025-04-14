@@ -10,6 +10,12 @@ import Comments from "../../component/Comments/Comments";
 import Tabs from "../../component/Tabs/Tabs";
 import FeedSection from "../../component/FeedSection/FeedSection";
 import useIntersectionObserver from "../../hooks/useIntersectionObserver";
+import { BundleScheduleDetail, ScheduleDetail } from "../../component/EventMore/EventMore";
+import { MakeSingleSchedule, EditSingleSchedule } from "../../component/EventMore/EventMore";
+import { ScheduleMore, ScheduleAdd, ScheduleRemove, ScheduleEdit} from "../../component/ScheduleMore/ScheduleMore";
+import { ScheduleBundle} from "../../component/ScheduleEvent/ScheduleBundle";
+import useToggleMore from "../../hooks/useToggleMore";
+import ScheduleCard from "../../component/EventCard/EventCard";
 
 export default function SearchResultPage() {
   let [searchParams] = useSearchParams();
@@ -24,15 +30,27 @@ export default function SearchResultPage() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [type, setType] = useState("post");
 
+  const [targetSchedule, setTargetSchedule] = useState({});
+  const [targetScheduleBundle, setTargetScheduleBundle] = useState({});
+
   // 데이터 관련 상태
   let [feedData, setFeedData] = useState([]);
   const [comments, setComments] = useState([]);
+  const [scheduleBundleData, setScheduleBundleData] = useState([]);
+  const [scheduleData, setScheduleData] = useState([]);
   let [isLoading, setIsLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
+
+  const [addScheduleModal, setAddScheduleModal] = useState(false);
+  const [addScheduleBundleModal, setAddScheduleBundleModal] = useState(false);
+  const [makeScheduleModal, setMakeScheduleModal] = useState(false);
+  const [editScheduleModal, setEditScheduleModal] = useState(false);
 
   // 페이지네이션 키
   const [feedNextKey, setFeedNextKey] = useState(-1);
   const [commentNextKey, setCommentNextKey] = useState(-1);
+  const [scheduleBundleKey, setScheduleBundleKey] = useState(-1);
+  const [scheduleKey, setScheduleKey] = useState(-1);
 
   useEffect(() => {
     let historyList = JSON.parse(localStorage.getItem("history")) || [];
@@ -53,7 +71,13 @@ export default function SearchResultPage() {
       fetchSearchKeyword();
     } else if (type === "comment") {
       fetchCommentKeyword();
+    } else if (type === "schedule") {
+      fetchScheduleKeyword();
+    } else if (type === "schedule_bundle") {
+      fetchScheduleBundleKeyword();
     }
+
+
   }, [type]);
 
   async function fetchSearchKeyword() {
@@ -69,6 +93,7 @@ export default function SearchResultPage() {
       });
   }
 
+
   async function fetchCommentKeyword() {
     await mainApi
       .get(`feed_explore/search_comment_with_keyword?keyword=${keyword}&key=${commentNextKey}`)
@@ -80,6 +105,35 @@ export default function SearchResultPage() {
       });
   }
 
+
+  async function fetchScheduleKeyword() {
+    await mainApi
+      .get(
+        `time_table_server/try_search_schedule_with_keyword?keyword=${keyword}&key=${scheduleKey}&type=schedule`
+      )
+      .then((res) => {
+          setScheduleData((prev) => [...prev, ...res.data.body.schedules]);
+          setHasMore(res.data.body.schedules.length > 0);
+          setIsLoading(false);
+          setScheduleKey(res.data.body.key);
+      });
+  }
+
+
+  async function fetchScheduleBundleKeyword() {
+    await mainApi
+      .get(
+        `time_table_server/try_search_schedule_with_keyword?keyword=${keyword}&key=${scheduleBundleKey}&type=schedule_bundle`
+      )
+      .then((res) => {
+          setScheduleBundleData((prev) => [...prev, ...res.data.body.schedule_bundles]);
+          setHasMore(res.data.body.schedule_bundles.length > 0);
+          setIsLoading(false);
+          setScheduleBundleKey(res.data.body.key);
+      });
+  }
+
+
   function loadMoreCallBack() {
     if (!hasMore || isLoading) return;
 
@@ -87,8 +141,13 @@ export default function SearchResultPage() {
       fetchSearchKeyword();
     } else if (type === "comment") {
       fetchCommentKeyword();
+    } else if (type === "schedule") {
+      fetchScheduleKeyword();
+    } else if (type === "schedule_bundle") {
+      fetchScheduleBundleKeyword();
     }
   }
+
 
   const targetRef = useIntersectionObserver(loadMoreCallBack, { threshold: 0.5 }, hasMore);
 
@@ -126,7 +185,45 @@ export default function SearchResultPage() {
   }
 
   const onClickType = (data) => {
-    setType(data === "게시글" ? "post" : "comment");
+    if (data === "게시글"){
+      setType("post");
+    }
+    else if (data === "댓글"){
+      setType("comment");
+    }
+    else if (data === "일정"){
+      setType("schedule");
+    }
+    else if (data === "일정 번들"){
+      setType("schedule_bundle");
+    }
+    else{
+      setType("post");
+    }
+  };
+
+  // 일정 추가하기 버튼 누르면 동작하는애
+  const toggleMakeScheduleModal = (target) => {
+    setMakeScheduleModal((makeScheduleModal) => !makeScheduleModal);
+  };
+
+
+  const toggleEditScheduleModal = (target) => {
+    setEditScheduleModal((editScheduleModal) => !editScheduleModal);
+    setTargetSchedule(target);
+  };
+
+
+  // 일정 추가하기 버튼 누르면 동작하는애
+  const toggleAddScheduleModal = (target) => {
+    setAddScheduleModal((addScheduleModal) => !addScheduleModal);
+    setTargetSchedule(target);
+  };
+
+  // 일정 번들 추가하기 버튼 누르면 동작하는 애
+  const toggleAddScheduleBundleModal = (target) => {
+    setAddScheduleBundleModal((addScheduleBundleModal) => !addScheduleBundleModal);
+    setTargetScheduleBundle(target);
   };
 
   return (
@@ -151,12 +248,103 @@ export default function SearchResultPage() {
       </div>
       <Tabs activeIndex={activeIndex} handleClick={handleClick} onClickType={onClickType} />
       {type === "comment" && <Comments comments={comments} isLoading={isLoading} />}
-      {type === "post" && (
-        <FeedSection feedData={feedData} setFeedData={setFeedData} isLoading={isLoading} />
-      )}
+      {type === "post" && <FeedSection feedData={feedData} setFeedData={setFeedData} isLoading={isLoading} /> }
+      {type === "schedule" && <Schedules scheduleData={feedData}
+       type={type} toggleAddScheduleBundleModal={toggleAddScheduleBundleModal} toggleEditScheduleModal={toggleEditScheduleModal} />}
 
       <div ref={targetRef} style={{ height: "1px" }}></div>
       <NavBar />
+
+      {/* 자세히 보기 모달창 */}
+      <BundleScheduleDetail
+        closeSchedule={toggleAddScheduleBundleModal}
+        isOpen={addScheduleBundleModal}
+        target={targetScheduleBundle}
+      />
+
+      {/*여기도 target 추가해야될 듯 */}
+      <ScheduleDetail
+        closeSchedule={toggleAddScheduleModal}
+        isOpen={addScheduleModal}
+        target={targetSchedule}
+      />
+
+      <MakeSingleSchedule
+        closeSchedule={toggleMakeScheduleModal}
+        isOpen={makeScheduleModal}
+      />
+
+      <EditSingleSchedule
+        closeSchedule={toggleEditScheduleModal}
+        isOpen={editScheduleModal}
+        target={targetSchedule}
+        isSingleSchedule={true}
+      />
+
     </div>
   );
 }
+
+function Schedules ({scheduleData, type, toggleAddScheduleBundleModal, toggleAddScheduleModal, toggleEditScheduleModal, fetchTryAddSchedule, fetchTryRejectSchedule}) {
+  const { moreClick, handleToggleMore } = useToggleMore();
+  let navigate = useNavigate();
+  // 게시판으로 이동
+  const navBoard = () => {
+    navigate("/");
+  };
+
+  return(
+        <ul className="scheduleList">
+        {type=== "schedule_bundle"
+          ? scheduleData.map((item) => (
+              <li key={item.sbid}>
+                <ScheduleBundle
+                  item={item}
+                  toggleClick={() => handleToggleMore(item.sbid)} // id 전달
+                />
+                {moreClick[item.sbid] && ( // 해당 id의 상태만 확인
+                  <ScheduleMore
+                    target={item}
+                    navBoardClick={navBoard}
+                    scheduleClick={toggleAddScheduleBundleModal}
+                  />
+                )}
+              </li>
+            ))
+          : scheduleData.map((item) => (
+            <li key={item.sid}>
+              <ScheduleCard
+                {...item}
+                toggleClick={() => handleToggleMore(item.sid)} // id 전달
+              />
+
+              {moreClick[item.sid] && (
+                item.is_already_have === false ? (
+                  <ScheduleAdd
+                    target={item}
+                    detailClick={toggleAddScheduleModal}
+                    navBoardClick={navBoard}
+                    addClick={fetchTryAddSchedule}
+                  />
+                ) : item.is_owner === false? (
+                  <ScheduleRemove
+                    target={item}
+                    navBoardClick={navBoard}
+                    removeClick={fetchTryRejectSchedule}
+                  />
+                ) : (
+                  <ScheduleEdit
+                    target={item}
+                    navBoardClick={navBoard}
+                    editClick={toggleEditScheduleModal}
+                  />
+                )
+              )}
+            </li>
+ 
+            ))}
+      </ul>
+  );
+}
+
+

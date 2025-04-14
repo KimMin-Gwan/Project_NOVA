@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import Input from "../Input/Input";
 import style from "./style.module.css";
-import "./index.css";
+import "./scheduleSelcetStyle.css";
 import Picker from "react-mobile-picker";
 import down_arrow from "./Expand_down_light.svg";
 
@@ -581,25 +581,25 @@ function MyPicker({
 }) {
   return (
     <div className="PickerMoreContainer">
-      <div className="DatePicker">
-        <Picker
-          value={pickerValue}
-          onChange={(name, _) => {
-            setPickerValue(type, name[type], setValue);
-          }}
-          wheelMode="normal"
-        >
-          <Picker.Column name={type}>
-            {displayData.map((option) => (
-              <Picker.Item key={option} value={option}>
-                {String(option).padStart(2, "0")}
-              </Picker.Item>
-            ))}
-          </Picker.Column>
-        </Picker>
-        <div className="ok-button" onClick={onClose}>
-          확인
-        </div>
+        <div className="DatePicker">
+          <Picker
+            value={pickerValue}
+            onChange={(name, _) => {
+              setPickerValue(type, name[type], setValue);
+            }}
+            wheelMode="normal"
+          >
+            <Picker.Column name={type}>
+              {displayData.map((option) => (
+                <Picker.Item key={option} value={option}>
+                  {String(option).padStart(2, "0")}
+                </Picker.Item>
+              ))}
+            </Picker.Column>
+          </Picker>
+          <div className="ok-button" onClick={onClose}>
+            확인
+          </div>
       </div>
     </div>
   );
