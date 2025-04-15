@@ -50,15 +50,16 @@
   width: 85%;
   /* height: 250px; */
   /* 부모 높이에 맞게 설정 */
-  background-color: #101010;
-  color: white;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.6) 100%);
+  color: #000000;
   border-radius: 15px;
   padding: 22px;
   cursor: pointer;
   /* 텍스트 색상 */
   display: flex;
   flex-direction: column;
-  border: 1px solid #e9e9e9;
+  border: 2px solid #ffffff;
+  box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.08);
   /* Flexbox를 사용하여 내용 정렬 */
   /* align-items: center; */
   /* 수직 중앙 정렬 */
@@ -72,12 +73,14 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom : 4px;
   /* background-color: yellow; */
 }
 
 /* 점 컨테이너 */
 .slick-dots {
   /* color: white; */
+  background-color: RGB(0,0,0,0.00);
   bottom: 10px; /* 점의 위치 조정 */
 }
 

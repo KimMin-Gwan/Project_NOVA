@@ -7,6 +7,13 @@ import "swiper/css/scrollbar";
 import back from "./../../img/detail_back.png";
 import arrow from "./../../img/explore_down.png";
 import useToggleMore from "../../hooks/useToggleMore";
+import HEADER from "../../constant/header";
+import mainApi from "../../services/apis/mainApi";
+import postApi from "../../services/apis/mainApi";
+
+import ScheduleCard from "../../component/EventCard/EventCard";
+import { ScheduleAdd, ScheduleEdit, ScheduleRemove } from "../../component/ScheduleMore/ScheduleMore";
+import { ScheduleDetail, EditSingleSchedule } from "../../component/EventMore/EventMore";
 
 import "./index.css";
 
@@ -15,6 +22,13 @@ export default function ScheduleExplore() {
   const navigate = useNavigate();
 
   const [modalButton, setModalButton] = useState(false);
+
+  const [addScheduleModal, setAddScheduleModal] = useState(false);
+  const [addScheduleBundleModal, setAddScheduleBundleModal] = useState(false);
+
+  const [targetSchedule, setTargetSchedule] = useState({});
+  const [editScheduleModal, setEditScheduleModal] = useState(false);
+
 
   const scheduleKind = ["게임", "저챗", "음악", "그림", "스포츠", "시참"];
   const swiperRef = useRef(null);
@@ -28,8 +42,20 @@ export default function ScheduleExplore() {
     swiperRef.current.swiper.slideTo(index);
   };
 
+  const toggleEditScheduleModal = (target) => {
+    setEditScheduleModal((editScheduleModal) => !editScheduleModal);
+    setTargetSchedule(target);
+  };
+
+
+  // 일정 추가하기 버튼 누르면 동작하는애
+  const toggleAddScheduleModal = (target) => {
+    setAddScheduleModal((addScheduleModal) => !addScheduleModal);
+    setTargetSchedule(target);
+  };
+
+
   useEffect(() => {
-    console.log(activeIndex);
   }, [activeIndex]);
 
   function handleModal(type) {
@@ -45,9 +71,8 @@ export default function ScheduleExplore() {
   return (
     <div className="container ExploreSchedulePage">
       <nav className="navBar">
-        <button>
+        <button onClick={() => navigate(-1)} className="backButton">
           <img src={back} alt="" />
-          뒤로
         </button>
         <h1>일정 탐색</h1>
         <p>3월 4째주</p>
@@ -103,24 +128,19 @@ export default function ScheduleExplore() {
         className="scheduleList"
       >
         <ul>
-          <SwiperSlide>
-            <li>슬라이드 A</li>
-          </SwiperSlide>
-          <SwiperSlide>
-            <li>슬라이드 B</li>
-          </SwiperSlide>
-          <SwiperSlide>
-            <li>슬라이드 C</li>
-          </SwiperSlide>
-          <SwiperSlide>
-            <li>슬라이드 D</li>
-          </SwiperSlide>
-          <SwiperSlide>
-            <li>슬라이드 E</li>
-          </SwiperSlide>
-          <SwiperSlide>
-            <li>슬라이드 F</li>
-          </SwiperSlide>
+          <ul>
+            {scheduleKind.map((item, index) => (
+              <SwiperSlide key={index}>
+                <ScheduleComponentList
+                  category={item}
+                  toggleEditScheduleModal={toggleEditScheduleModal}
+                  toggleAddScheduleModal={toggleAddScheduleModal}
+                  activeIndex={activeIndex}
+                  myIndex={index}
+                />
+              </SwiperSlide>
+            ))}
+          </ul>
         </ul>
       </Swiper>
       <ButtonModal
@@ -128,9 +148,156 @@ export default function ScheduleExplore() {
         isOpen={modalButton}
         type={buttonType}
       />
+
+      <ScheduleDetail
+        closeSchedule={toggleAddScheduleModal}
+        isOpen={addScheduleModal}
+        target={targetSchedule}
+      />
+
+      <EditSingleSchedule
+        closeSchedule={toggleEditScheduleModal}
+        isOpen={editScheduleModal}
+        target={targetSchedule}
+        isSingleSchedule={true}
+      />
     </div>
   );
 }
+
+
+function ScheduleComponentList({category, toggleEditScheduleModal, toggleAddScheduleModal, activeIndex, myIndex}){
+
+  const [scheduleData, setScheduleData] = useState([]);
+  const [key, setKey] = useState(-1);
+
+  const [isInit, setIsInit] = useState(false);
+  const { moreClick, handleToggleMore } = useToggleMore();
+
+  const navigate = useNavigate();
+  // 게시판으로 이동
+  const navBoard = () => {
+    navigate("/");
+  };
+
+  async function fetchSearchData() {
+    await postApi
+      .post("time_table_server/get_explore_schedules", {
+        header: HEADER,
+        body: {
+          sid: category,
+          key:key,
+          time_section: -1,
+          style: "all",
+          gender : "all"
+        },
+      })
+      .then((res) => {
+        setScheduleData(res.data.body.schedules);
+        setKey(res.data.body.key);
+        setIsInit(true);
+      });
+  }
+
+  useEffect(() => {
+    if (!isInit) {
+      //if (scheduleData.length ===0){
+        if (activeIndex== myIndex){
+          fetchSearchData();
+          setIsInit(true);
+        }
+      //}
+    }
+  }, [activeIndex]);
+
+  // 내 스케줄에 등록하는 함수 (추가하기 버튼 누르면 동작해야됨)
+  // 완료하면 성공했다고 알려주면 좋을듯
+  async function fetchTryAddSchedule(target) {
+    // 무조건 리스트로 만들어야됨
+    const sids = [target.sid];
+
+    await postApi
+      .post("time_table_server/try_add_schedule", {
+        header: HEADER,
+        body: {
+          sids: sids,
+        },
+      })
+      .then((res) => {
+        setScheduleData((prev) => {
+          if (!prev.some((item) => item.sid === target.sid)) {
+            // 목표 item이 없으면 기존 상태 반환
+            return prev;
+          }
+          console.log("hello?", )
+          // 목표 item이 있으면 업데이트
+          return prev.map((item) =>
+            item.sid === target.sid ? { ...item, is_already_have: true } : item
+          );
+        });
+      });
+  }
+
+    // 내 스케줄에 등록하는 함수 (추가하기 버튼 누르면 동작해야됨)
+  // 완료하면 성공했다고 알려주면 좋을듯
+  async function fetchTryRejectSchedule(target) {
+    // 무조건 리스트로 만들어야됨
+
+    await mainApi 
+      .get(`time_table_server/try_reject_from_my_schedule?sid=${target.sid}`)
+      .then((res) => {
+        setScheduleData((prev) => {
+          if (!prev.some((item) => item.sid === target.sid)) {
+            // 목표 item이 없으면 기존 상태 반환
+            return prev;
+          }
+          // 목표 item이 있으면 업데이트
+          return prev.map((item) =>
+            item.sid === target.sid ? { ...item, is_already_have: false} : item
+          );
+        });
+      });
+  }
+
+
+  return (
+    <>
+      {scheduleData.map((item) => (
+        <li key={item.sid}>
+          <ScheduleCard
+            {...item}
+            toggleClick={() => handleToggleMore(item.sid)} // id 전달
+          />
+
+          {moreClick[item.sid] && (
+            item.is_already_have === false ? (
+              <ScheduleAdd
+                target={item}
+                detailClick={toggleAddScheduleModal}
+                navBoardClick={navBoard}
+                addClick={fetchTryAddSchedule}
+              />
+            ) : item.is_owner === false? (
+              <ScheduleRemove
+                target={item}
+                navBoardClick={navBoard}
+                removeClick={fetchTryRejectSchedule}
+              />
+            ) : (
+              <ScheduleEdit
+                target={item}
+                navBoardClick={navBoard}
+                editClick={toggleEditScheduleModal}
+              />
+            )
+          )}
+        </li>
+        ))}
+    </>
+  );
+}
+
+
 
 // Tabs 컴포넌트가 존재, 그거랑 합치기 필요
 function TabItem({ tabs, activeIndex, handleClick }) {

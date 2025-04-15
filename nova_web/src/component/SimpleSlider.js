@@ -81,7 +81,7 @@ const SimpleSlider = ({ feedData, brightMode, type, className }) => {
               <div key={i} className="slick-slide">
                 <div className="slide-box">
                   <div
-                    className={`slide-content ${getModeClass(mode)}`}
+                    className="slide-content"
                     onMouseDown={handleMouseDown}
                     onMouseMove={handleMouseMove}
                     onMouseUp={(e) => handleMouseUp(e)}

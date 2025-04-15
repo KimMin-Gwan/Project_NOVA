@@ -124,7 +124,7 @@ const ScheduleDashboard = () => {
               <p className="element">
                 <span className="text-wrapper">타임 차트</span>
               </p>
-              <span className="add-schedule" onClick={() => handleNavigate("/search/schedule")}>
+              <span className="add-schedule" onClick={() => handleNavigate("/explore/schedule")}>
                 일정 탐색
               </span>
             </div>
