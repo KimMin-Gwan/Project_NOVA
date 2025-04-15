@@ -581,25 +581,25 @@ function MyPicker({
 }) {
   return (
     <div className="PickerMoreContainer">
-        <div className="DatePicker">
-          <Picker
-            value={pickerValue}
-            onChange={(name, _) => {
-              setPickerValue(type, name[type], setValue);
-            }}
-            wheelMode="normal"
-          >
-            <Picker.Column name={type}>
-              {displayData.map((option) => (
-                <Picker.Item key={option} value={option}>
-                  {String(option).padStart(2, "0")}
-                </Picker.Item>
-              ))}
-            </Picker.Column>
-          </Picker>
-          <div className="ok-button" onClick={onClose}>
-            확인
-          </div>
+      <div className="DatePicker">
+        <Picker
+          value={pickerValue}
+          onChange={(name, _) => {
+            setPickerValue(type, name[type], setValue);
+          }}
+          wheelMode="normal"
+        >
+          <Picker.Column name={type}>
+            {displayData.map((option) => (
+              <Picker.Item key={option} value={option}>
+                {String(option).padStart(2, "0")}
+              </Picker.Item>
+            ))}
+          </Picker.Column>
+        </Picker>
+        <div className="ok-button" onClick={onClose}>
+          확인
+        </div>
       </div>
     </div>
   );
@@ -607,7 +607,7 @@ function MyPicker({
 
 function TimePickers({ pickerValue, setPickerValue, displayData, onClose }) {
   return (
-    <div className="EventMoreContainer">
+    <div className="TimeMoreContainer">
       <div className="TimePicker">
         <div className="TimePicker__wrapper">
           <Picker
