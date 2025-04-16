@@ -48,7 +48,7 @@ export default function SearchBox({
           onClickSearchBtn(e);
         }}
       >
-        <img src={search_icon}></img>
+      <img src={search_icon}></img>
       </button>
     </div>
   );

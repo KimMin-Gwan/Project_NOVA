@@ -81,13 +81,11 @@ export default function HomePage() {
   }
   return (
     <div className={`container ${getModeClass(brightMode)}`}>
-      <div className={`top-area ${getModeClass(brightMode)}`}>
-        <DisplayAds />
+      <div className={'top-area'}>
+        {/*<DisplayAds />*/}
 
         <Header />
         <SearchBox />
-        <h4 className="main-title">내 최애가 가장 빛날 수 있는 공간</h4>
-        <Banner />
 
         <FeedThumbnail
           title={
@@ -105,6 +103,9 @@ export default function HomePage() {
           <BiasBoxes setBiasId={setBiasId} fetchBiasCategoryData={fetchBiasCategoryData} />
         </FeedThumbnail>
       </div>
+
+        <Banner />
+      <div className="section-separator"></div>
 
       <section className="contents">
         <FeedThumbnail
@@ -130,6 +131,7 @@ export default function HomePage() {
           endPoint={`/feed_list?type=weekly`}
         />
 
+          <div className="section-separator"></div>
         <FeedThumbnail
           title={"모든 게시글"}
           img_src={all_post}

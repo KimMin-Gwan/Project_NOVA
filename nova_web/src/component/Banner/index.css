@@ -1,4 +1,15 @@
+.banner-container {
+  width: 100%;
+  padding-top : 40px;
+  padding-bottom: 20px;
+  background-color: #F8FBFF;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .banner {
+  width: 92%;
   position: relative;
   background-color: #ccc;
   margin: 0 10px 30px 10px;

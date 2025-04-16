@@ -22,24 +22,36 @@
   /* background-color: blue; */
   .b-name {
     font-size: 12px;
+    font-weight: 500;
     margin-top: 12px;
-    color: #1f2329;
+    color: #303030;
   }
 
-  .clicked {
+  .non-clicked-box {
+    margin-top: 5px;
+    height: 0px;
+    width: 0px;
+    border-radius: 3px;
+    background-color: #F8FBFF;
+    transition: background-color 0.2s ease-in-out;
+  }
+
+  .clicked-box {
     margin-top: 5px;
     height: 3px;
     width: 30%;
     border-radius: 3px;
     background-color: #1082f4;
+    transition: background-color 0.2s ease-in-out;
   }
 }
 
 .bias-box {
   width: 100px;
   height: 100px;
-  background-color: gray;
   border-radius: 10px;
+  border: solid 2px #ffffff;
+  box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.08);
 
   .non-bias {
     width: 100%;
@@ -47,10 +59,11 @@
     font-size: 13px;
     background-color: white;
     border-radius: 10px;
-    border: solid 2px rgba(0, 0, 0, 0.5);
+    border: solid 2px #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.08);
   }
 
   img {
@@ -64,7 +77,8 @@
 
 .clicked-img {
   transition: box-shadow ease 0.5s;
-  box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.5);
+  border: solid 2px #ffffff;
+  box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.3);
 }
 
 .add-bias-box:hover {

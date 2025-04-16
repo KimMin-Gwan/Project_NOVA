@@ -35,8 +35,8 @@
 .time-select-box span {
     flex-grow: 1;
     text-align: center;
-    font-size: 13px;
-    font-weight: 500;
+    font-size: 16px;
+    font-weight: 600;
 }
 
 .time-line-box{
@@ -52,7 +52,7 @@
     flex: 1;
     text-align: left; /* 텍스트 가운데 정렬 */
     font-size: 14px;
-    font-weight: 400;
+    font-weight: 500;
 }
 
 .load-week-container {

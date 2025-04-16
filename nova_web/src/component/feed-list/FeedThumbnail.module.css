@@ -1,18 +1,20 @@
 /* 전체 컨테이너 */
 .FeedThumbnail {
   width: 100%;
-  margin-bottom: 53px;
+  margin-bottom: 40px;
+  background-color: #F8FBFF;
 }
 
 /* 주제 박스 */
 .FeedThumbnail .title-section {
   width: 100%;
+  height : 40px;
+  margin-bottom: 10px;
   cursor: pointer;
   display: flex;
   align-items: center;
   font-size: 16px;
-  color: white;
-  margin-block: 23px 12px;
+  color: #F7F6FB;
 }
 
 
@@ -26,6 +28,7 @@
   justify-content: start;
   color: black;
   font-size: 18px;
+  font-weight: 600;
   img {
     margin-right: 5px;
     object-fit: cover;
@@ -43,25 +46,25 @@
 
 .title-section .icon-box:hover {
   cursor: pointer;
-  background-color: #f0f0f0;
+  background-color: #F8FBFF;
 }
 
 /* 검색박스 */
 .search-section {
   width: 100%;
   display: flex;
-  margin-bottom: 20px;
   /* margin-block: 20px; */
   position: relative;
   cursor: pointer;
+  padding-bottom : 20px;
 
   .search-box {
     margin: 0 auto;
-    width: 85%;
+    width: 86%;
     color: rgba(26, 128, 230, 0.65);
     padding: 15px;
-    border-radius: 12px;
-    background-color: #f1f7ff;
+    border-radius: 7px;
+    background-color: #F8FBFF;
     border: 1px solid rgba(53, 154, 255, 0.68);
     font-weight: 600;
     font-size: 12px;
@@ -79,10 +82,10 @@
   .search-btn {
     position: absolute;
     right: 6%;
-    top: 50%;
+    top: 37%;
     transform: translateY(-50%);
     cursor: pointer;
-    background-color: #f1f7ff;
+    background-color: #F8FBFF;
     border: 0;
     img {
       width: 24px;

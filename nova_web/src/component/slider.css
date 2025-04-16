@@ -47,7 +47,7 @@
 .slide-content {
   margin: 0 auto;
   position: relative;
-  width: 85%;
+  width: 82.5%;
   /* height: 250px; */
   /* 부모 높이에 맞게 설정 */
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.6) 100%);
@@ -126,24 +126,24 @@
 }
 /* 라이트 모드 */
 .slide-content.bright-mode {
-  background-color: #ffffff;
+  background-color: #F8FBFF;
   color: #232323;
   border: 1px solid #e4e9ee;
   height: 433px;
 }
 .bright-mode {
   .slick-dots li {
-    background-color: #ffffff;
+    background-color: #F8FBFF;
   }
   .slick-dots li button::before {
-    background-color: #ffffff;
+    background-color: #F8FBFF;
   }
 
   .slick-dots li.slick-active button {
-    background-color: #ffffff;
+    background-color: #F8FBFF;
   }
   .slick-dots li button {
-    background-color: #ffffff;
+    background-color: #F8FBFF;
   }
 }
 /*  */
@@ -154,19 +154,19 @@
     height: 240px;
   }
   .slick-dots {
-    background-color: #f1f7ff;
+    background-color: #F8FBFF;
     padding-block: 8px;
     bottom: -41px;
   }
 
   .slick-dots li button::before {
-    background-color: #f1f7ff;
+    background-color: #F8FBFF;
   }
 
   .slick-dots li.slick-active button {
-    background-color: #f1f7ff;
+    background-color: #F8FBFF;
   }
   .slick-dots li button {
-    background-color: #f1f7ff;
+    background-color: #F8FBFF;
   }
 }

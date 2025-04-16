@@ -103,7 +103,7 @@ const ScheduleDashboard = () => {
             </div>
             <div className="my-dashboard">
               <div className="left-group">
-                <span>선택중인 주제</span>
+                <span>컨텐츠</span>
                 <span className="num-bias">{numBias}</span>
                 <span>개</span>
               </div>
@@ -116,7 +116,7 @@ const ScheduleDashboard = () => {
           </div>
         </div>
 
-        <div className="section-line"></div>
+        <div className="section-separator"></div>
 
         <div className="section-box">
           <div className="dashboard-section">
@@ -137,7 +137,7 @@ const ScheduleDashboard = () => {
           />
         </div>
 
-        <div className="section-line"></div>
+        <div className="section-separator"></div>
 
         <div className="section-box">
           <div className="dashboard-section">

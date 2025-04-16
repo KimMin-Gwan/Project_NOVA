@@ -51,7 +51,7 @@ body.bright-mode {
   min-height: 100vh;
   height: auto;
   margin: 0 auto;
-  background-color: white;
+  background-color: #F8FBFF;
   position: relative;
   /* border: 1px white solid; */
   /* margin-bottom: 20px; */
@@ -59,10 +59,11 @@ body.bright-mode {
 
 .header {
   width: 100%;
-  height: 82px;
+  padding-top : 20px;
+  height: 70px;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .logo {
@@ -138,7 +139,7 @@ body.bright-mode {
 /* --------------- */
 /* 라이트모드 스타일 */
 .container.bright-mode {
-  background-color: #ffffff;
+  background-color: #F8FBFF;
 }
 .bottom_bar.bright-mode {
   background-color: #f1f7ff;
@@ -146,7 +147,7 @@ body.bright-mode {
 
 /* 제일 위 */
 .top-area.bright-mode {
-  background-color: #f1f7ff;
+  background-color: #F8FBFF;
 }
 /* .logo-st.dark-mode {
   filter: invert(100%);
@@ -195,7 +196,6 @@ body.bright-mode {
 .bias-box {
   width: 100px;
   height: 100px;
-  background-color: gray;
   border-radius: 10px;
 
   img {
@@ -205,6 +205,17 @@ body.bright-mode {
     border-radius: 10px;
     /* box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5); */
   }
+}
+
+.section-separator {
+  margin-left : 4%;
+  margin-right : 4%;
+  width: 92%;
+  height: 3px;
+  border-radius: 5px;
+  background-color: #cce1ff;
+  margin-bottom: 20px;
+  margin-top: 10px;
 }
 
 /* 실시간 랭킹 */
