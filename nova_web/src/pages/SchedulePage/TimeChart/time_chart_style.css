@@ -2,6 +2,8 @@
     display: flex;
     margin-left : 2%;
     width: 98%; /* 부모 컨테이너의 전체 너비 */
+    background-color: #d0e4ff;
+    border-radius: 12px;;
 }
 
 .day-week-list {
@@ -56,11 +58,12 @@
 }
 
 .load-week-container {
-    margin-left : 40px;
+    padding-left: 37px;
     display: flex;
     align-items: center;
     height: 100%;
     padding-right: 37px;
+    background-color: #d0e4ff;
 }
 
 .load-text {
