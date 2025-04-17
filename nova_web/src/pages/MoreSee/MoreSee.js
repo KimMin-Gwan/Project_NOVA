@@ -12,6 +12,9 @@ import today_up from "./../../img/today_up.svg";
 import week_up from "./../../img/week_up.svg";
 import all_post from "./../../img/all_post.svg";
 import new_post from "./../../img/new_post.svg";
+import calendar from "./../../img/calendar.svg";
+import calendar_plus from "./../../img/calendar_plus.svg";
+import calendar_check from "./../../img/calendar_check.svg";
 import fav_follow from "./../../img/fav_follow.svg";
 import fav_sub from "./../../img/fav_sub.svg";
 import notice from "./../../img/notice_more.svg";
@@ -47,18 +50,42 @@ const boardList = [
   },
   {
     id: 4,
+    title: "일정 대시보드",
+    src: calendar,
+    end_point: "/schedule",
+  },
+  {
+    id: 5,
+    title: "일정 탐색",
+    src: calendar_plus,
+    end_point: "/explore/schedule",
+  },
+  {
+    id: 6,
+    title: "일정 관리",
+    src: calendar_check,
+    end_point: "/schedule/my_schedule",
+  },
+  {
+    id: 7,
+    title: "일정 등록",
+    src: all_post,
+    end_point: "/feed_list?type=all",
+  },
+  {
+    id: 8,
     title: "공지사항",
     src: notice,
     end_point: "/notice",
   },
   {
-    id: 5,
+    id: 9,
     title: "버그 리포트",
     src: bug_icon,
     end_point: "/report",
   },
   {
-    id: 6,
+    id: 10,
     title: "이용약관",
     src: terms_icon,
     end_point: "/terms_page",
@@ -168,7 +195,8 @@ function MoreSee({ onModeChange }) {
   }, [brightMode]);
 
   const firstBoardList = boardList.slice(0, 4);
-  const otherFunctionList = boardList.slice(4);
+  const secondBoardList = boardList.slice(4, 7);
+  const otherFunctionList = boardList.slice(8);
   return (
     <div className={style.font}>
       <div className={`${style["container"]} ${style[getModeClass(brightMode)]}`}>
@@ -243,6 +271,26 @@ function MoreSee({ onModeChange }) {
               })}
             </section>
           </div>
+
+          <br></br>
+          {/* 다른 기능 목록 */}
+          <div className={style["list-bar"]}>일정</div>
+          <hr></hr>
+          <ul className={style.listContainer}>
+            {secondBoardList.map((board, i) => {
+              return (
+                <li
+                  key={board.id}
+                  className={style.mainComponent}
+                  onClick={() => handlePage(board.end_point)}
+                >
+                  <img src={board.src} alt="Arrow" className={style.vector} />
+                  <p className={style.bodyText}>{board.title}</p>
+                  <img src={more_icon} alt="Arrow" className={style.more_vector} />
+                </li>
+              );
+            })}
+          </ul>
 
           <br></br>
           {/* 다른 기능 목록 */}
