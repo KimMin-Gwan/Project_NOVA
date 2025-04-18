@@ -190,7 +190,8 @@ export default function TimeChart({ weekDayData, scheduleData, onChangeIndex }) 
                     onClick={() => swiperRef2.current?.slidePrev()} // 왼쪽 슬라이드 이동
                     style={{ cursor: "pointer" }} // 클릭 가능 표시
                   />
-                  <span>{item} 타임</span>
+                  {/*<span>{item} 타임</span>*/}
+                  <span>{item}</span>
                   <img
                     src={arrow_drop_right}
                     alt="arrow right"
