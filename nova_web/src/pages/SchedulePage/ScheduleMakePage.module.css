@@ -1,0 +1,133 @@
+
+.body-container{
+    display:flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    width: 100%;
+    height: 200vh;
+
+    .slide-title-box {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 500px;
+        transition: height 1s ease; /* 추가: height 변경 애니메이션 */
+    }
+
+    .swiper-slide {
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        font-size: 18px;
+        background: #ECF4FF;
+        border: 1px solid black;
+
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .slide-step-title {
+        font-size: 64px;
+        font-weight: 600;
+        margin-bottom: 26px;
+        transition: font-size 1s ease; /* 추가: font-size 변경 애니메이션 */
+    }
+
+    .slide-step-subtitle {
+        font-size: 20px;
+        font-weight: 500;
+        transition: opacity 0.5s ease; /* 추가: opacity 애니메이션 */
+        opacity: 1;
+    }
+    
+    .slide-box-wrapper{
+        width: calc(100% - 40px);
+        margin: 20px;
+        height: 100%;
+        overflow: hidden; /* 부모 높이를 벗어난 자식 요소 숨기기 */
+    }
+
+    .slide-body-container {
+        overflow: hidden; /* 부모 높이를 벗어난 자식 요소 숨기기 */
+        display: flex;
+
+        height: 0px;
+        width: calc(100% - 30px);
+
+        margin-top : 27px;
+        margin-bottom : 27px;
+
+        margin-left: 15px;
+        margin-right: 15px;
+        border-radius: 12px;
+
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.6) 100%);
+        box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.08);
+        flex-direction: column;
+        opacity: 0;
+        transition: height 1s ease; /* 추가: height 변경 애니메이션 */
+        transition: opacity 1.2s ease; /* 추가: opacity 애니메이션 */
+    }
+
+    .slide-body-top-box {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: calc(100%);
+        height: 206px;
+        flex-direction: column;
+    }
+
+    .target-bias {
+        height: 100px;
+        width: 100px;
+        border-radius: 12px;
+        border : 2px dotted #71B7FF;
+        margin-bottom: 15px
+    }
+    
+    .top-box-content {
+        font-size: 17px;
+        font-weight: 600;
+    }
+
+    .slide-body-bottom-box {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: calc(100%);
+        height: 427px;
+    }
+
+    .slide-bottom-container {
+        display:flex;
+        flex-direction: horizontal;
+        justify-content: center;
+        width: 100%;
+        height: 0px;
+        margin-top: 40px;
+        opacity: 0;
+        transition: height 1s ease; /* 추가: height 변경 애니메이션 */
+        transition: opacity 1.2s ease; /* 추가: opacity 애니메이션 */
+        gap: 12%;
+    }
+
+    .bottom-button{
+        display:flex;
+        justify-content: center;
+        align-items: center;
+        width: 200px;
+        height : 70px;
+        font-size : 20px;
+        font-weight: 600;
+        border-radius: 12px;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.6) 100%);
+        box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.08);
+
+    }
+
+}

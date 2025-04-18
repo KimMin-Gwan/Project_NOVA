@@ -36,6 +36,7 @@ import MySchedulePage from "./pages/MySchedulePage/MySchedulePage.js";
 import ScheduleExplore from "./pages/ScheduleExplore/ScheduleExplore.js";
 import PaymentPage from "./pages/NOVAADPage/paymentpage.js";
 import NovaADHomepage from "./pages/NOVAADPage/novaADHomepage.js";
+import ScheduleMakePage from "./pages/SchedulePage/ScheduleMakePage.js";
 
 // 다크 모드 클래스 반환 함수
 export function getModeClass(mode) {
@@ -111,6 +112,7 @@ function App() {
       <Route path="/search/schedule" element={<SearchSchedulePage />}></Route>
       <Route path="/search/topic" element={<SearchTopicPage />}></Route>
       <Route path="/explore/schedule" element={<ScheduleExplore />}></Route>
+      <Route path="/schedule/make_new" element={<ScheduleMakePage/>}></Route>
 
 
       {/* 광고 페이지 */}
