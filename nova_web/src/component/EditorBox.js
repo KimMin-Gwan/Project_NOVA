@@ -15,18 +15,22 @@ export default function EditorBox({ setLongData }) {
   };
 
   return (
-    <Editor
-      ref={editorRef}
-      initialValue=""
-      placeholder="내용을 입력해주세요"
-      // previewStyle="vertical"
-      height="100%"
-      initialEditType="wysiwyg"
-      useCommandShortcut={false}
-      plugins={[colorSyntax]}
-      hideModeSwitch={true}
-      onChange={onChange}
-      language="ko-KR"
-    />
+      <Editor
+        ref={editorRef}
+        initialValue=""
+        placeholder="내용을 입력해주세요"
+        // previewStyle="vertical"
+        height="100%"
+        initialEditType="wysiwyg"
+        useCommandShortcut={false}
+        plugins={[colorSyntax]}
+        hideModeSwitch={true}
+        onChange={onChange}
+        language="ko-KR"
+        toolbarItems={[
+          ["image"],
+          ["heading", "bold", "italic", "strike"], // headings - 1,2,3
+        ]}
+      />
   );
 }
