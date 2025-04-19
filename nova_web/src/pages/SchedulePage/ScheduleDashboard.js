@@ -110,7 +110,7 @@ const ScheduleDashboard = () => {
               <div className="right-group">
                 <button onClick={() => handleNavigate("/schedule/my_schedule")}>내 일정</button>
                 <img src={vertical_line} alt="vertical line" />
-                <button onClick={() => toggleMakeScheduleModal()}>일정 등록</button>
+                <button onClick={() => handleNavigate("/schedule/make_new")}>일정 등록</button>
               </div>
             </div>
           </div>

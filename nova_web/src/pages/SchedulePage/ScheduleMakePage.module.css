@@ -5,7 +5,7 @@
     align-items: flex-start;
 
     width: 100%;
-    height: 200vh;
+    height: 1200px;
 
     .slide-title-box {
         display: flex;
@@ -97,10 +97,14 @@
 
     .slide-body-bottom-box {
         display: flex;
-        justify-content: center;
-        align-items: center;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
         width: calc(100%);
         height: 427px;
+        overflow: auto; /* 초과된 내용은 스크롤 가능 */
+        overflow-y: none; /* 수직 스크롤 강제 표시 */
+        align-items: stretch;
     }
 
     .slide-bottom-container {
@@ -127,7 +131,63 @@
         border-radius: 12px;
         background: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.6) 100%);
         box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.08);
-
+        cursor: pointer; /* 손 모양 커서 */
     }
 
+}
+
+
+
+
+.input-slide-container {
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.input-slide-info{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 80px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #A3A3A3
+}
+
+.input-slide-bottom-guide{
+    display: flex;
+    justify-content: end;
+    align-items: flex-end;
+    width: 100%;
+    height: 110px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #33363F;
+    gap: 10px;
+}
+
+.input-slide-new-schedule-title{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    font-size: 14px;
+    font-weight: 500;
+    color: #A3A3A3;
+    gap: 20px;
+
+    .title-span{
+        font-size: 26px;
+        font-weight: 600;
+        color: #3d3d3d;
+    }
+
+    opacity: 1;
+    transition: opacity 0.5s ease; /* 추가: opacity 애니메이션 */
 }

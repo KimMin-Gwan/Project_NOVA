@@ -28,7 +28,6 @@ export default function ScheduleSelect({
   index,
   setSendScheduleData,
   sendScheduleData,
-  removeSchedule,
   isEditMode,
   targetSchedule,
 }) {
@@ -272,6 +271,7 @@ export default function ScheduleSelect({
   // 장소 및 일정 디테일 입력
   const [detailInput, setDetailPlaceInput] = useState("");
   const [placeInput, setPlaceInput] = useState("");
+  const [tagInput, setTagInput] = useState("");
 
   // 스케줄 상세 바꾸기
   const onChangeDetailInput = (e) => {
@@ -316,36 +316,34 @@ export default function ScheduleSelect({
   return (
     <div className="ScheduleSelect">
       <div className={style["searchFac"]}>
-        {index !== 0 ? (
-          <div className={style["top-delete-box"]}>
-            <div className={style["remove-schedule-button"]}>
-              <p
-                className={style["remove-schedule-text"]}
-                onClick={() => {
-                  removeSchedule(index);
-                }}
-              >
-                일정 삭제
-              </p>
-            </div>
+        <span>*이름</span>
+        <div className={style["searchBoxMargin"]}>
+          <div className={style["searchBox"]}>
+            <input
+              type="text"
+              value={detailInput}
+              onChange={onChangeDetailInput}
+              placeholder="일정의 이름"
+            />
           </div>
-        ) : null}
-        <div className={style["searchBox"]}>
-          <input
-            type="text"
-            value={detailInput}
-            onChange={onChangeDetailInput}
-            placeholder="일정 상세"
-          />
         </div>
-        <div className={style["searchBox"]}>
-          <input
-            type="text"
-            value={placeInput}
-            onChange={onChangePlaceInput}
-            placeholder="장소"
-          />
+      </div>
+      <div className={style["searchFac"]}>
+        <span>*장소</span>
+        <div className={style["searchBoxMargin"]}>
+          <div className={style["searchBox"]}>
+            <input
+              type="text"
+              value={placeInput}
+              onChange={onChangePlaceInput}
+              placeholder="쉼표(,)를 사용하여 여러개의 장소를 입력"
+            />
+          </div>
         </div>
+      </div>
+
+      <div className={style["searchFac"]}>
+        <span>*시간</span>
       </div>
 
       <div className="DateAndTimeInfo">
@@ -389,6 +387,21 @@ export default function ScheduleSelect({
           id={"endTime"}
           isOpen={isEndTimePickerOpen}
         />
+      </div>
+
+      <div style={{height : "20px"}}></div>
+
+      <div className={style["searchFac"]}>
+        <span>태그</span>
+        <div className={style["searchBoxMargin"]}>
+          <div className={style["searchBox"]}>
+            <input
+              type="text"
+              value={placeInput}
+              placeholder="비워두시면 AI가 이름을 기반으로 자동 생성합니다."
+            />
+          </div>
+        </div>
       </div>
 
       {/** 시작시간 선택 모달 */}
