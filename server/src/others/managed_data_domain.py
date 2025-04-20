@@ -480,6 +480,8 @@ class ManagedTable:
                     return True
                 return str(val[0]).strip() in SKIP_TUPLE
 
+            return True
+
 
 
         # conditions 중, key라는 데이터 말고 다른 데이터들에 대해 각 컬럼에서 검색을 수행합니다.
@@ -1751,8 +1753,11 @@ class ManagedScheduleTable(ManagedTable):
 
 
     # 키를 통해 스케줄을 검색합니다.
-    def search_schedule_with_key(self, key:str, return_id:bool=True):
-        columns = ['sname', 'bname', 'uname', 'code']
+    def search_schedule_with_key(self, key:str, search_columns:list, return_id:bool=True):
+        if len(search_columns) == 0 or search_columns[0]=="":
+            columns =['sname', 'bname', 'uname', 'code']
+        else:
+            columns = search_columns
         searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_df, columns=columns, key=key)
 
         if return_id:
@@ -1760,8 +1765,12 @@ class ManagedScheduleTable(ManagedTable):
         return searched_df.to_dict('records')
 
     # 번들 서치 함수.
-    def search_bundle_with_key(self, key:str, return_id:bool=True):
-        columns = ['sbname', 'bname', 'uname', 'code']
+    def search_bundle_with_key(self, key:str, search_columns:list, return_id:bool=True):
+        if len(search_columns) == 0 or search_columns[0]=="":
+            columns =['sbname', 'bname', 'uname', 'code']
+        else:
+            columns = search_columns
+
         searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_bundle_df, columns=columns, key=key)
 
         if return_id:
