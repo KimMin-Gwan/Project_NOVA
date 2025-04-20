@@ -154,9 +154,11 @@ class TImeTableController:
         model = MultiScheduleModel(database=database)
 
         if request.jwt_payload!= "":
-            model.jwt_payload = request.jwt_payload
+            model.set_user_with_email(request=request.jwt_payload)
             if not model._set_tuser_with_tuid():
                 return model
+
+
 
         model.get_print_forms_bias()
 
