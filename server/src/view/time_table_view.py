@@ -356,7 +356,8 @@ class TimeTableView(Master_View):
             return response
 
         # 쁘띠 모델 출력용 인터페이스
-        @self.__app.get('/time_table_server/get_schedule_printed_form')
+        # 테스트가 필요 (이거 내가알기론 아직 엔드포인트가 없어서 확인이 안됨)
+        @self.__app.post('/time_table_server/get_schedule_printed_form')
         def try_get_printed_form(request:Request, raw_request:dict):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = MakeMultipleScheduleRequest(request=raw_request)
@@ -551,11 +552,9 @@ class MakeSingleScheduleRequest(RequestHeader):
         self.end_time = body['end_time']
         self.state = body.get("state", True)
 
-# class MakeMultipleScheduleRequest:
 class MakeMultipleScheduleRequest(RequestHeader):
     def __init__(self, request) -> None:
         super().__init__(request)
-        # self.email:str="alsrhks2508@naver.com"
         body:dict = request['body']
         self.sname = body['sname']
         self.bid = body['bid']
