@@ -885,15 +885,21 @@ class MultiScheduleModel(TimeTableModel):
         return
 
     # 키워드를 통해 검색합니다.
-    def search_schedule_with_keyword(self, schedule_search_engine:SSE, keyword:str, search_type:str, search_columns:list,
+    def search_schedule_with_keyword(self, schedule_search_engine:SSE, keyword:str, search_type:str, search_columns:str,
                                       when:str, num_schedules:int, last_index:int=-1):
         searched_list = []
 
+        if search_columns == "":
+            search_columns_list= []
+        else:
+            search_columns_list = search_columns.split(",")
+
+
         if search_type == "schedule" or search_type == "sid":
-            searched_list = schedule_search_engine.try_search_schedule_w_keyword(target_keyword=keyword, search_columns=search_columns)
+            searched_list = schedule_search_engine.try_search_schedule_w_keyword(target_keyword=keyword, search_columns=search_columns_list)
             searched_list = schedule_search_engine.try_filtering_schedule_in_progress(sids=searched_list, when=when)
         elif search_type == "schedule_bundle" or search_type == "sbid":
-            searched_list = schedule_search_engine.try_search_bundle_w_keyword(target_keyword=keyword, search_columns=search_columns)
+            searched_list = schedule_search_engine.try_search_bundle_w_keyword(target_keyword=keyword, search_columns=search_columns_list)
             searched_list = schedule_search_engine.try_filtering_bundle_in_progress(sbids=searched_list, when=when)
 
         searched_list, self._key = self.paging_id_list(id_list=searched_list, last_index=last_index, page_size=num_schedules)
