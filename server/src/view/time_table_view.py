@@ -137,7 +137,7 @@ class TimeTableView(Master_View):
         # search_columns : Managed_Table에서 서치할 컬럼을 받아옴
         # Bias 이름에 대한 스케쥴이나 번들을 검색하고 싶을 때, Search_columns = ["bname"]이라고 주면 됩니다.
         # 비어있는 경우에는 Managed_data_domain.py에서 디폴트 컬럼을 결정합니다.
-        # 테스트가 필요합니다.
+        # 테스트완료
 
         @self.__app.get('/time_table_server/try_search_schedule_with_keyword')
         def try_search_schedule(request:Request, search_columns:Optional[str]="",
