@@ -114,7 +114,7 @@ class ScheduleTransformModel:
             end_time=schedule.end_time,
             update_datetime=datetime.today().strftime("%Y/%m/%d-%H:%M:%S"),
             location=location_list,
-            status=schedule.status
+            state=schedule.state
         )
 
         return schedule
