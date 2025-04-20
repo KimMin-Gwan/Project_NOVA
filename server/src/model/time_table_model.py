@@ -997,7 +997,7 @@ class MultiScheduleModel(TimeTableModel):
         return
 
     # 내가 팔로우한 바이어스에 대한 전송 폼을 만드는 함수
-    def get_print_forms_bias(self):
+    def get_print_forms_my_bias(self):
         bias_datas = self._database.get_datas_with_ids(target="bid", ids=self._user.bids)
         for bias_data in bias_datas:
             bias = Bias()
