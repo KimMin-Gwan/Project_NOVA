@@ -141,8 +141,9 @@ class TimeTableView(Master_View):
 
         @self.__app.get('/time_table_server/try_search_schedule_with_keyword')
         def try_search_schedule(request:Request, search_columns:Optional[str]="",
-                                filter_option:Optional[str]="not_end", keyword:Optional[str] = "",
+                                filter_option:Optional[str]="not_end", keyword:Optional[str]="",
                                 key:Optional[int]=-1, type:Optional[str]=""):
+
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = SearchRequest(keyword=keyword, search_columns=search_columns, key=key, search_type=type, filter_option=filter_option)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
@@ -374,7 +375,7 @@ class TimeTableView(Master_View):
         @self.__app.get('/time_table_server/get_following_bias_printed_form')
         def try_get_following_bias_printed_form(request:Request):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
-            data_payload = DummyLoginedRequest()
+            data_payload = DummyLoginedRequest(request=request)
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
 
             time_table_controller =TImeTableController()
@@ -533,8 +534,8 @@ class DummyRequest():
         pass
 
 class DummyLoginedRequest(RequestHeader):
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self, request) -> None:
+        super().__init__(request)
 
 
 class MakeSingleScheduleRequest(RequestHeader):
@@ -598,9 +599,9 @@ class DeleteScheduleBundleRequest(RequestHeader):
 
 
 class SearchRequest(RequestHeader):
-    def __init__(self, keyword, search_columns="", key=-1, search_type="", filter_option="") -> None:
+    def __init__(self, keyword="", search_columns="", key=-1, search_type="", filter_option="") -> None:
         self.keyword=keyword
-        self.search_columns=search_columns,
+        self.search_columns=search_columns
         self.key=key
         self.type=search_type
         self.filter_option=filter_option

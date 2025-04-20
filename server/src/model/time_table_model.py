@@ -892,7 +892,7 @@ class MultiScheduleModel(TimeTableModel):
         if search_columns == "":
             search_columns_list= []
         else:
-            search_columns_list = search_columns.split(",")
+            search_columns_list = [i.strip() for i in search_columns.split(",")]
 
 
         if search_type == "schedule" or search_type == "sid":
