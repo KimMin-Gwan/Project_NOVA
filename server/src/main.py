@@ -8,6 +8,7 @@ from uvicorn import run
 from others.ai_service import AIManger
 
 
+
 class Master(Configure_File_Reader):
     def __init__(self):
         super().__init__()
