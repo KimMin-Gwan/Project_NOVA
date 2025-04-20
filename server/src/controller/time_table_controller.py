@@ -149,6 +149,18 @@ class TImeTableController:
         
         return model
 
+    # 내가 팔로우하고 있는 셀럽들의 출력용 폼 반환 함수
+    def try_get_following_bias_printed_form(self, database:Local_Database, request:RequestManager) -> BaseModel:
+        model = MultiScheduleModel(database=database)
+
+        if request.jwt_payload!= "":
+            model.jwt_payload = request.jwt_payload
+            if not model._set_tuser_with_tuid():
+                return model
+
+        model.get_print_forms_bias()
+
+        return model
 
 
 
@@ -166,8 +178,9 @@ class TImeTableController:
 
         # 키워드를 넘겨 검색 후, 반환받음
         model.search_schedule_with_keyword(schedule_search_engine=schedule_search_engine,
-                                           keyword=request.data_payload.keyword,
+                                            keyword=request.data_payload.keyword,
                                             search_type=request.data_payload.type,
+                                            search_columns=request.data_payload.search_columns,
                                             when=request.data_payload.filter_option,
                                             last_index=request.data_payload.key,
                                             num_schedules=num_schedules)
@@ -315,7 +328,20 @@ class TImeTableController:
 
         return model
 
+    # 쁘띠 모델 변환기
+    def get_schedule_printed_form(self, database:Local_Database, request:RequestManager) -> BaseModel:
+        model = MultiScheduleModel(database=database)
 
+
+        if request.jwt_payload!= "":
+            model.set_user_with_email(request=request.jwt_payload)
+            if not model._set_tuser_with_tuid():
+                return model
+
+        model.get_print_forms_schedule(schedules = request.data_payload.schedules,
+                                        bid=request.data_payload.bid)
+
+        return model
 
     # 작성한 스케줄 보내기
     # 하나만 가지고 오므로 Search Engine을 쓰지 않음
