@@ -158,9 +158,7 @@ class TImeTableController:
             if not model._set_tuser_with_tuid():
                 return model
 
-
-
-        model.get_print_forms_bias()
+        model.get_print_forms_my_bias()
 
         return model
 
