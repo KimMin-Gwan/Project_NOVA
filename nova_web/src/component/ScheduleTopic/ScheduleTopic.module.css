@@ -1,11 +1,11 @@
 .ScheduleTopic {
-  background-color: white;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 20px;
   color: #797979;
   font-size: 12px;
+  cursor: pointer; /* 손 모양 커서 */
 
   /* dl 기존 스타일 없애기 */
   & dl {

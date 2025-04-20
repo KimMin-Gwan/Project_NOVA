@@ -1687,7 +1687,7 @@ class ManagedScheduleTable(ManagedTable):
     def search_explore_schedule(self, time_section:int, style:str, gender:str, return_id:bool=True):
         searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_df, time_section=time_section,
                                                                bias_gender=gender, bias_tags=style)
-        searched_df = self._filter_data_with_date_option(df=searched_df, date_option="day", date_columns=["start_date_time"])
+        searched_df = self._filter_data_with_date_option(df=searched_df, date_option="weekly", date_columns=["start_date_time"])
 
         if return_id:
             return searched_df['sid'].to_list()

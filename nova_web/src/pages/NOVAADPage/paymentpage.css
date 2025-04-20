@@ -19,12 +19,7 @@ h2{
   padding: 16px;
 }
 
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 16px;
-}
+
 
 .back-button {
   color: #6b7280;
@@ -47,7 +42,7 @@ h2{
   margin-bottom: 16px;
 }
 
-.section-title {
+.payment-section-title {
   font-weight: 600;
   margin-bottom: 8px;
 }

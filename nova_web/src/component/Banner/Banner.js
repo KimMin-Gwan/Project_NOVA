@@ -24,32 +24,36 @@ export default function Banner() {
     fetchBanner();
   }, []);
   return (
-    <Swiper
-      centeredSlides={true}
-      autoplay={{
-        delay: 3000,
-        disableOnInteraction: false,
-      }}
-      pagination={{
-        clickable: true,
-      }}
-      modules={[Autoplay, Pagination]}
-    >
-      {banners.map((banner) => (
-        <SwiperSlide key={banner.baid}>
-          <section className="banner">
-            <div className="banner-images">
-              <div className="image-box">
-                <img
-                  src={banner.ba_url}
-                  alt={`banner ${banner.baid}`}
-                  onClick={() => window.open(banner.redirect, "_blank")}
-                />
-              </div>
+    <div className="banner-container">
+      <Swiper
+        centeredSlides={true}
+        autoplay={{
+          delay: 3000,
+          disableOnInteraction: false,
+        }}
+        pagination={{
+          clickable: true,
+        }}
+        modules={[Autoplay, Pagination]}
+      >
+        {banners.map((banner) => (
+          <SwiperSlide key={banner.baid}>
+            <div style={{display:"flex", justifyContent:"center"}}>
+              <section className="banner">
+                <div className="banner-images">
+                  <div className="image-box">
+                    <img
+                      src={banner.ba_url}
+                      alt={`banner ${banner.baid}`}
+                      onClick={() => window.open(banner.redirect, "_blank")}
+                    />
+                  </div>
+                </div>
+              </section>
             </div>
-          </section>
-        </SwiperSlide>
-      ))}
-    </Swiper>
+          </SwiperSlide>
+        ))}
+      </Swiper>
+    </div>
   );
 }

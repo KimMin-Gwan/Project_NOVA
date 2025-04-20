@@ -107,7 +107,7 @@ export default function BiasBoxes({ fetchBiasCategoryData }) {
                 )}
               </div>
               <div className="b-name">{bias?.bname || <span>&nbsp;</span>}</div>
-              {clickedBias === i && <div className="clicked"></div>}
+              <div className={clickedBias === i ? "clicked-box" : "non-clicked-box"}></div>
             </div>
           );
         })}

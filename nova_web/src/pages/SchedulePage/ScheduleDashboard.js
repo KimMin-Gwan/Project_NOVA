@@ -103,20 +103,20 @@ const ScheduleDashboard = () => {
             </div>
             <div className="my-dashboard">
               <div className="left-group">
-                <span>선택중인 주제</span>
+                <span>컨텐츠</span>
                 <span className="num-bias">{numBias}</span>
                 <span>개</span>
               </div>
               <div className="right-group">
                 <button onClick={() => handleNavigate("/schedule/my_schedule")}>내 일정</button>
                 <img src={vertical_line} alt="vertical line" />
-                <button onClick={() => toggleMakeScheduleModal()}>일정 등록</button>
+                <button onClick={() => handleNavigate("/schedule/make_new")}>일정 등록</button>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="section-line"></div>
+        <div className="section-separator"></div>
 
         <div className="section-box">
           <div className="dashboard-section">
@@ -124,7 +124,7 @@ const ScheduleDashboard = () => {
               <p className="element">
                 <span className="text-wrapper">타임 차트</span>
               </p>
-              <span className="add-schedule" onClick={() => handleNavigate("/search/schedule")}>
+              <span className="add-schedule" onClick={() => handleNavigate("/explore/schedule")}>
                 일정 탐색
               </span>
             </div>
@@ -137,7 +137,7 @@ const ScheduleDashboard = () => {
           />
         </div>
 
-        <div className="section-line"></div>
+        <div className="section-separator"></div>
 
         <div className="section-box">
           <div className="dashboard-section">

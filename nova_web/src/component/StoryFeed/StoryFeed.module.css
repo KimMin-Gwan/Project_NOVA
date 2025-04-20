@@ -4,9 +4,10 @@
   width: 215px;
   height: 245px;
   border-radius: 11px;
-  background-color: #fffefe;
-  border: 1px solid #e0e0e0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.6) 100%);
+  border: 2px solid #ffffff;
   color: #1f1f1f;
+  box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.08);
   cursor: pointer;
 }
 

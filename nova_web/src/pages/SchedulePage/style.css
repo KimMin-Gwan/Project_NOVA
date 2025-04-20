@@ -35,8 +35,8 @@
 
 .add-schedule {
   font-size: 16px; /* 타임 차트보다 작은 크기 */
-  font-weight: 400;
-  color: #555555;
+  font-weight: 600;
+  color: #888888;
   margin-right: 12px; /* 간격 조정 */
   cursor: pointer;
 }
@@ -69,12 +69,22 @@
   display: flex;
   align-items: center; /* 세로 정렬 */
   gap: 4px; /* 요소 간 간격 */
+
+  span{
+    font-size: 15px;
+    font-weight: 600;
+  }
 }
 
 .right-group {
   display: flex;
   align-items: center; /* 세로 정렬 */
   gap: 10px; /* 요소 간 간격 */
+
+  button{
+    font-size: 15px;
+    font-weight: 600;
+  }
 }
 
 .right-group button {

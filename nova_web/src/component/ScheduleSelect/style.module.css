@@ -1,43 +1,51 @@
-
 .searchFac {
-  margin-block: 10px 12px;
-  background-color: #fff;
-  padding-left : 28px;
-  padding-right: 28px;
+  margin-block: 8px 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+
+  span {
+    font-size: 16px;
+    font-weight: medium;
+    color: black;
+  }
+
+  .searchBoxMargin {
+    width: calc(100% - 20px);
+    margin-left: 20px;
+  }
 
   .searchBox {
-    border-bottom: 1px solid black;
     width: 100%;
     display: flex;
-    justify-self: center;
     padding-block: 8px;
+    border-bottom: 1px solid #ccc;
 
     input {
-      margin-right: auto;
       width: 100%;
       border: none;
       background: none;
-      padding-top: 12px;
-      padding-left: 12px;
-      padding-right: 12px;
+      padding: 8px 12px;
       margin: 0;
+      font-size: 16px;
+      font-weight: 500;
 
       &::placeholder {
-        color: #797979;
+        color: #a1a1a1;
         font-size: 14px;
-        font-weight: 600;
+        font-weight: 400;
       }
 
       &:focus {
-        border: none;
         outline: none;
       }
     }
-    img {
-      width: 18px;
-    }
   }
 }
+
 
 .wordSection {
   display: flex;

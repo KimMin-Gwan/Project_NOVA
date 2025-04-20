@@ -7,7 +7,7 @@ import TimeWeekComponent from "./TImeWeekComponent"; // 주간 요일 컴포넌�
 import arrowRightStop from './Arrow_right_stop.svg';
 
 // Swiper 관련 모듈
-import { Autoplay, Pagination } from "swiper/modules";
+import { FreeMode, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import "swiper/css";
@@ -32,19 +32,20 @@ const timeSectionList = ["새벽", "오전", "오후", "밤"]; // 시간 섹션 
 
 export default function TimeChart({ weekDayData, scheduleData, onChangeIndex }) {
   const swiperRef = useRef(null); // Swiper 인스턴스를 참조하기 위한 Ref 생성
+  const swiperRef2 = useRef(null); // Swiper 인스턴스를 참조하기 위한 Ref 생성
 
   const findSection = () => {
     const currentHour = new Date().getHours(); // 현재 시간의 '시'를 가져옴
 
     // 시간대 인덱스 계산
     if (currentHour >= 0 && currentHour < 6) {
-      return 1
+      return 0
     } else if (currentHour >= 6 && currentHour < 12) {
-      return 2
+      return 1
     } else if (currentHour >= 12 && currentHour < 18) {
-      return 3
+      return 2
     } else if (currentHour >= 18 && currentHour < 24) {
-      return 4
+      return 3
     }
   }
 
@@ -102,10 +103,10 @@ export default function TimeChart({ weekDayData, scheduleData, onChangeIndex }) 
 
       {/* Swiper 컴포넌트 */}
       <Swiper
+        initialSlide={1}
         centeredSlides={true} // 중앙 정렬
         //loop={true} // 무한 루프
         onSwiper={(swiper) => (swiperRef.current = swiper)} // Swiper 인스턴스 참조
-        initialSlide={findSection()}
         onSlideChange={(swiper) => {
           if (swiper.activeIndex === 0) {
             // 0번 슬라이드로 이동하면 강제로 1번 슬라이드로 이동
@@ -115,9 +116,9 @@ export default function TimeChart({ weekDayData, scheduleData, onChangeIndex }) 
               onChangeIndex(-1);
             }
           }
-          else if (swiper.activeIndex === 5){
+          else if (swiper.activeIndex === 2){
             // 5번 슬라이드로 이동하면 강제로 4번 슬라이드로 이동
-            setTimeout(() => swiperRef.current?.slideTo(4), 0);
+            setTimeout(() => swiperRef.current?.slideTo(1), 0);
             // 당기면 다음주 데이터를 받아야하는데, 너무 민감해서 diff 차이로 계산
             if (swiper.touches.diff < -300){
               onChangeIndex(1);
@@ -130,13 +131,17 @@ export default function TimeChart({ weekDayData, scheduleData, onChangeIndex }) 
             if (swiper.activeIndex == 1)
             {
               setLeftRotation(0);
-            }else if (swiper.activeIndex == 4){
               setRightRotation(180);
             }
+            
+            //else if (swiper.activeIndex == 1){
+              //setRightRotation(180);
+            //}
         }}
         onTouchMove={(swiper) => {
           // 화살표 돌리기 로직
-          if (swiper.activeIndex== 4){
+          //if (swiper.activeIndex== 4){
+          if (swiper.activeIndex== 1){
             if (swiper.touches.diff < -99 && swiper.touches.diff > -301){
               if (parseInt(swiper.touches.diff) % -10 == 0){
                 calculateRightRotation(swiper.touches.diff);
@@ -167,43 +172,53 @@ export default function TimeChart({ weekDayData, scheduleData, onChangeIndex }) 
               </div>
           </div>
         </SwiperSlide>
-        {timeSectionList.map((item, j) => (
-          <SwiperSlide key={j+1}>
-            <div className="chart-box">
-              {/* 시간 선택 및 화살표 */}
-              <div className="time-select-box">
-                <img
-                  src={arrow_drop_left}
-                  alt="arrow left"
-                  onClick={() => swiperRef.current?.slidePrev()} // 왼쪽 슬라이드 이동
-                  style={{ cursor: "pointer" }} // 클릭 가능 표시
-                />
-                <span>{item} 타임</span>
-                <img
-                  src={arrow_drop_right}
-                  alt="arrow right"
-                  onClick={() => swiperRef.current?.slideNext()} // 오른쪽 슬라이드 이동
-                  style={{ cursor: "pointer" }} // 클릭 가능 표시
-                />
-              </div>
+        <SwiperSlide>
+          <Swiper
+            onSwiper={(swiper) => (swiperRef2.current = swiper)} // Swiper 인스턴스 참조
+            freeMode={true}
+            modules={[FreeMode, Pagination]}
+            initialSlide={findSection()}
+          >
+          {timeSectionList.map((item, j) => (
+            <SwiperSlide key={j+1}>
+              <div className="chart-box">
+                {/* 시간 선택 및 화살표 */}
+                <div className="time-select-box">
+                  <img
+                    src={arrow_drop_left}
+                    alt="arrow left"
+                    onClick={() => swiperRef2.current?.slidePrev()} // 왼쪽 슬라이드 이동
+                    style={{ cursor: "pointer" }} // 클릭 가능 표시
+                  />
+                  {/*<span>{item} 타임</span>*/}
+                  <span>{item}</span>
+                  <img
+                    src={arrow_drop_right}
+                    alt="arrow right"
+                    onClick={() => swiperRef2.current?.slideNext()} // 오른쪽 슬라이드 이동
+                    style={{ cursor: "pointer" }} // 클릭 가능 표시
+                  />
+                </div>
 
-              {/* 시간 라인 표시 */}
-              <div className="time-line-box">
-                {timeList[j].map((time, i) => (
-                  <span key={i}>{time}</span> // 각 시간 표시
-                ))}
-              </div>
+                {/* 시간 라인 표시 */}
+                <div className="time-line-box">
+                  {timeList[j].map((time, i) => (
+                    <span key={i}>{time}</span> // 각 시간 표시
+                  ))}
+                </div>
 
-              {/* 스케줄 데이터 렌더링 */}
-              <div className="schedule-box-list">
-                {scheduleData.map((item, i) => (
-                  <ChartScheduleComponent key={i} {...item} timeSection={j} />
-                ))}
+                {/* 스케줄 데이터 렌더링 */}
+                <div className="schedule-box-list">
+                  {scheduleData.map((item, i) => (
+                    <ChartScheduleComponent key={i} {...item} timeSection={j} />
+                  ))}
+                </div>
               </div>
-            </div>
-          </SwiperSlide>
-        ))}
-        <SwiperSlide key={5}>
+            </SwiperSlide>
+          ))}
+          </Swiper>
+        </SwiperSlide>
+        <SwiperSlide key={2}>
           <div className="load-week-container"
             style={{justifyContent:'flex-start'}}
           >
