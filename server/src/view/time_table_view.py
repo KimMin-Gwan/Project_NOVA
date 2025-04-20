@@ -373,15 +373,20 @@ class TimeTableView(Master_View):
             return response
 
         # 내가 팔로우한 바이어스 데이터 출력용 인터페이스
+        # docs로 확인은 했는데 로그인 상내에서 잘 나오는지는 확인을 안함..
         @self.__app.get('/time_table_server/get_following_bias_printed_form')
         def try_get_following_bias_printed_form(request:Request):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
-            data_payload = DummyLoginedRequest(request=request)
+            data_payload = DummyRequest()
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
 
             time_table_controller =TImeTableController()
 
             model = time_table_controller.try_get_following_bias_printed_form(database=self.__database, request=request_manager)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response =request_manager.make_json_response(body_data=body_data)
+            return response
 
     # 스케줄을 만들 때 사용하는 기능.
     def make_schedule_route(self):
@@ -532,12 +537,13 @@ class TimeTableView(Master_View):
         
 class DummyRequest():
     def __init__(self) -> None:
+        self.email:str="alsrhks2508@naver.com"
         pass
 
-class DummyLoginedRequest(RequestHeader):
-    def __init__(self, request) -> None:
-        super().__init__(request)
-
+# class DummyLoginedRequest(RequestHeader):
+#     def __init__(self, request) -> None:
+#         super().__init__(request)
+#         # self.email:str="alsrhks2508@naver.com"
 
 class MakeSingleScheduleRequest(RequestHeader):
     def __init__(self, request) -> None:
@@ -555,6 +561,7 @@ class MakeSingleScheduleRequest(RequestHeader):
 class MakeMultipleScheduleRequest(RequestHeader):
     def __init__(self, request) -> None:
         super().__init__(request)
+        # self.email:str="alsrhks2508@naver.com"
         body:dict = request['body']
         self.sname = body['sname']
         self.bid = body['bid']
