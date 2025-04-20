@@ -130,13 +130,13 @@ class ScheduleSearchEngine:
 
 
     # 키워드를 활용한 스케줄 검색 로직
-    def try_search_schedule_w_keyword(self, target_keyword=""):
-        sid_list = self.__managed_schedule_table.search_schedule_with_key(key=target_keyword)
+    def try_search_schedule_w_keyword(self, search_columns:list, target_keyword:str=""):
+        sid_list = self.__managed_schedule_table.search_schedule_with_key(key=target_keyword, search_columns=search_columns)
         return sid_list
 
     # 키워드를 활용한 스케줄 번들 검색 로직
-    def try_search_bundle_w_keyword(self, target_keyword=""):
-        sbid_list = self.__managed_schedule_table.search_bundle_with_key(key=target_keyword)
+    def try_search_bundle_w_keyword(self, search_columns:list, target_keyword:str=""):
+        sbid_list = self.__managed_schedule_table.search_bundle_with_key(key=target_keyword, search_columns=search_columns)
         return sbid_list
 
 
