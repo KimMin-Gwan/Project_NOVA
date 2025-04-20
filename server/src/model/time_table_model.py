@@ -3,7 +3,7 @@ import re
 from model.base_model import BaseModel
 from model import Local_Database
 from others.data_domain import TimeTableUser as TUser
-from others.data_domain import Schedule, ScheduleBundle, ScheduleEvent, Bias
+from others.data_domain import Schedule, ScheduleBundle, ScheduleEvent, Bias, User
 
 from others.time_table_engine import ScheduleSearchEngine as SSE
 
@@ -11,6 +11,245 @@ from pprint import pprint
 from datetime import datetime,timedelta, time, date
 import random
 import string
+
+#---------------------------------데이터 전송용 모델 (쁘띠 모델)----------------------------------------
+
+# 얘들은 전부 쁘띠모델 입니다
+# 스케쥴 트랜스포메이션 모델 (기본 변환 함수들만 담김)
+
+# 근데 하다보니까 TransForm의 의미가 좀 더 확장되어
+# Static Method를 통해 스케줄 만드는 함수를
+class ScheduleTransformModel:
+    def __init__(self):
+        pass
+
+    def _find_week_number(self, date_str):
+        # 문자열을 datetime 객체로 변환
+        date = datetime.strptime(date_str, "%Y/%m/%d")
+
+        # 해당 달의 첫 번째 날
+        first_day_of_month = datetime(date.year, date.month, 1)
+
+        # 해당 날짜와 첫 번째 날의 주 번호 계산
+        start_week = first_day_of_month.isocalendar()[1]  # 해당 달 첫 날의 주 번호
+        current_week = date.isocalendar()[1]             # 해당 날짜의 주 번호
+
+        # 현재 주가 3월 내의 몇 번째 주인지 계산
+        week_in_month = current_week - start_week + 1
+
+        return week_in_month
+
+    def _calculate_day_hour_time(self, dtime:datetime):
+        return dtime.strftime("%p %I:%M")
+
+    def _transfer_date_str(self, dtime:datetime):
+        return dtime.strftime("%m월 %d일")
+
+        # formatted_date = f"{dtime.month}월 {dtime.day}일"
+        # return formatted_date
+
+    def _cal_update_time(self, update_time:datetime):
+        today = datetime.today()
+
+        diff = today - update_time
+        seconds = diff.total_seconds()
+
+        if seconds < 60:
+            time_str = f"{int(seconds)} 초 전"
+        elif seconds < 3600:
+            minutes = seconds // 60
+            time_str = f"{int(minutes)} 분 전"
+        elif seconds < 3600 * 24:
+            hours = seconds // 3600
+            time_str = f"{int(hours)} 시간 전"
+        elif seconds < 3600 * 24 * 30:
+            days = seconds // (3600 * 24)
+            time_str = f"{int(days)} 일 전"
+        elif seconds < 3600 * 24 * 365:
+            months = seconds // (3600 * 24 * 30)
+            time_str = f"{int(months)} 달 전"
+        else:
+            years = seconds // (3600 * 24 * 365)
+            time_str = f"{int(years)} 년 전"
+
+        return time_str
+
+    def _transfer_date_str_list(self, date_list):
+        if len(date_list) == 0:
+            return f"잘못된 데이터"
+
+        if len(date_list) == 1:
+            start_date = datetime.strptime(date_list[0],"%Y/%m/%d")
+            start_date_str = start_date.strftime("%y년 %m월 %d일")
+            return f"{start_date_str}"
+
+
+        start_date = datetime.strptime(date_list[0],"%Y/%m/%d")
+        start_date_str = start_date.strftime("%y년 %m월 %d일")
+        end_date = datetime.strptime(date_list[1], "%Y/%m/%d")
+        end_date_str = end_date.strftime("%y년 %m월 %d일")
+
+        return f"{start_date_str}부터 {end_date_str}까지"
+
+    def _linked_str(self,  str_list, sep=", "):
+        return sep.join(str_list)
+
+    # 전송용 폼을 만들기 위한 임시 데이터 작성 함수
+    # 스태틱 메서드를 활용합니다.
+    # 번들은 따로 만들지는 않음. (필요성은 있겠지만 나중에 요청받을 때 하겠습니다.)
+    @staticmethod
+    def make_temp_schedule(schedule:Schedule, bias:Bias, user:User):
+        location_list = re.split(r"\W+", schedule.location)
+        location_list = [l for l in location_list if l]
+
+        schedule = Schedule(
+            sname=schedule.sname,
+            bid=bias.bid,
+            bname=bias.bname,
+            uid=user.uid,
+            uname=user.uname,
+            start_date=schedule.start_date,
+            start_time=schedule.start_time,
+            end_date=schedule.end_date,
+            end_time=schedule.end_time,
+            update_datetime=datetime.today().strftime("%Y/%m/%d-%H:%M:%S"),
+            location=location_list,
+            state=schedule.state
+        )
+
+        return schedule
+
+# 일정 탭 전용 바이어스 데이터 폼 모델
+class TimeBiasModel(ScheduleTransformModel):
+    def __init__(self):
+        super().__init__()
+        self._biases = []
+
+    # 일정, 시간표에서의 바이어스 데이터
+    def _time_bias(self, bias:Bias):
+        Sbias_data = {}
+
+        Sbias_data["bid"] = bias.bid
+        Sbias_data["bname"] = bias.bname
+        Sbias_data["category"] = bias.category[0]       # 카테고리는 맨처음의 데이터만
+        Sbias_data["tags"] = self._linked_str(bias.tags)    # 연결해서 보냄
+        Sbias_data["main_time"] = self._linked_str(bias.main_time) # 연결
+        Sbias_data["is_ad"] = bias.is_ad
+
+        return Sbias_data
+
+    # 바이어스 데이터 폼 수정 리스트 반환
+    def get_tbias_list(self, biases):
+        for bias in biases:
+            self._biases.append(self._time_bias(bias))
+        return
+
+    # 바이어스 데이터 반환
+    def get_response_form_data(self):
+        return self._biases
+
+# 일정 스케줄 전송 데이터 폼 모델
+class TimeScheduleModel(ScheduleTransformModel):
+    def __init__(self) -> None:
+        super().__init__()
+        self._schedules = []
+
+    # 스케쥴 Send Data 만드는 함수
+    def _time_schedule(self, schedule:Schedule ):
+        time_schedule_data = {}
+
+        time_schedule_data["sid"] = schedule.sid
+        time_schedule_data["detail"] = schedule.sname
+        time_schedule_data["bid"] = schedule.bid
+        time_schedule_data["bname"] = schedule.bname
+        time_schedule_data["uid"] = schedule.uid
+        time_schedule_data["uname"] = schedule.uname
+        time_schedule_data["start_time"] = self._calculate_day_hour_time(datetime.strptime(schedule.start_time,"%H:%M"))
+        time_schedule_data["end_time"] = self._calculate_day_hour_time(datetime.strptime(schedule.end_time, "%H:%M"))
+        time_schedule_data["start_date"] = self._transfer_date_str(datetime.strptime(schedule.start_date, "%Y/%m/%d"))
+        time_schedule_data["end_date"] = self._transfer_date_str(datetime.strptime(schedule.start_date, "%Y/%m/%d"))
+        time_schedule_data["update_datetime"] = self._cal_update_time(datetime.strptime(schedule.update_datetime, "%Y/%m/%d-%H:%M:%S"))
+        time_schedule_data["location"] = self._linked_str(schedule.location)
+        time_schedule_data["code"] = schedule.code
+        time_schedule_data["color_code"] = schedule.color_code
+        time_schedule_data["is_already_have"] = schedule.is_already_have
+        time_schedule_data["is_owner"] = schedule.is_owner
+
+        return time_schedule_data
+
+    # 스케쥴 리스트 만드는 함수
+    def get_tschedule_list(self, schedules):
+        for schedule in schedules:
+            self._schedules.append(self._time_schedule(schedule=schedule))
+
+        return
+
+    def get_response_form_data(self):
+        return self._schedules
+
+# 일정 스케줄 이벤트 데이터 폼 모델
+class TimeEventModel(ScheduleTransformModel):
+    def __init__(self) -> None:
+        super().__init__()
+        self._events = []
+
+    # Event 보낼 거 만드는 함수
+    def _tevent_data(self, event:ScheduleEvent):
+        time_event_data = {}
+
+        time_event_data["seid"] = event.seid
+        time_event_data["sename"] = event.sename
+        time_event_data["bid"] = event.bid
+        time_event_data["bname"] = event.bname
+        time_event_data["uid"] = event.uid
+        time_event_data["uname"] = event.uname
+        time_event_data["date"] = self._transfer_date_str(datetime.strptime(event.date,"%Y/%m/%d"))
+        time_event_data["start"] = self._calculate_day_hour_time(datetime.strptime(event.start_time, "%H:%M"))
+        time_event_data["end"] = self._calculate_day_hour_time(datetime.strptime(event.end_time, "%H:%M"))
+        time_event_data["sids"] = event.sids
+        time_event_data["location"] = self._linked_str(event.location)
+
+        return time_event_data
+
+    # 이벤트 딕셔너리 데이터 리스트를 만드는 곳
+    def get_tevent_list(self, events):
+        for event in events:
+            self._events.append(self._tevent_data(event))
+
+        return
+
+    def get_response_form_data(self):
+        return self._events
+
+# 일정 스케줄 번들 전송 데이터 폼 모델
+class TimeScheduleBundleModel(ScheduleTransformModel):
+    def __init__(self) -> None:
+        super().__init__()
+        self._schedule_bundles = []
+
+    def _time_schedule_bundle(self, schedule_bundle:ScheduleBundle):
+        time_schedule_bundle_data = {}
+
+        time_schedule_bundle_data["sbid"] = schedule_bundle.sbid
+        time_schedule_bundle_data["sbname"] = schedule_bundle.sbname
+        time_schedule_bundle_data["bid"] = schedule_bundle.bid
+        time_schedule_bundle_data["bname"] = schedule_bundle.bname
+        time_schedule_bundle_data["uid"] = schedule_bundle.uid
+        time_schedule_bundle_data["uname"] = schedule_bundle.uname
+        time_schedule_bundle_data["sids"] = schedule_bundle.sids
+        time_schedule_bundle_data["date"] = self._transfer_date_str_list(schedule_bundle.date)
+        time_schedule_bundle_data["location"] = self._linked_str(schedule_bundle.location)
+
+        return time_schedule_bundle_data
+
+    def get_tschedule_bundle_list(self, schedule_bundles):
+        for schedule_bundle in schedule_bundles:
+            self._schedule_bundles.append(self._time_schedule_bundle(schedule_bundle))
+
+        return
+
+    def get_response_form_data(self):
+        return self._schedule_bundles
 
 # ------------------------------------ 기본 타임 테이블 모델 ------------------------------------------
 class TimeTableModel(BaseModel):
@@ -339,217 +578,6 @@ class ScheduleRecommendKeywordModel(TimeTableModel):
         response = self._get_response_data(head_parser=head_parser, body=body)
         return response
 
-#---------------------------------데이터 전송용 모델 (쁘띠 모델)----------------------------------------
-
-# 얘들은 전부 쁘띠모델 입니다
-# 스케쥴 트랜스포메이션 모델 (기본 변환 함수들만 담김)
-class ScheduleTransformModel:
-    def __init__(self):
-        pass
-
-    def _find_week_number(self, date_str):
-        # 문자열을 datetime 객체로 변환
-        date = datetime.strptime(date_str, "%Y/%m/%d")
-
-        # 해당 달의 첫 번째 날
-        first_day_of_month = datetime(date.year, date.month, 1)
-
-        # 해당 날짜와 첫 번째 날의 주 번호 계산
-        start_week = first_day_of_month.isocalendar()[1]  # 해당 달 첫 날의 주 번호
-        current_week = date.isocalendar()[1]             # 해당 날짜의 주 번호
-
-        # 현재 주가 3월 내의 몇 번째 주인지 계산
-        week_in_month = current_week - start_week + 1
-
-        return week_in_month
-
-    def _calculate_day_hour_time(self, dtime:datetime):
-        return dtime.strftime("%p %I:%M")
-
-
-    def _transfer_date_str(self, dtime:datetime):
-        return dtime.strftime("%m월 %d일")
-
-        # formatted_date = f"{dtime.month}월 {dtime.day}일"
-        # return formatted_date
-
-    def _cal_update_time(self, update_time:datetime):
-        today = datetime.today()
-
-        diff = today - update_time
-        seconds = diff.total_seconds()
-
-        if seconds < 60:
-            time_str = f"{int(seconds)} 초 전"
-        elif seconds < 3600:
-            minutes = seconds // 60
-            time_str = f"{int(minutes)} 분 전"
-        elif seconds < 3600 * 24:
-            hours = seconds // 3600
-            time_str = f"{int(hours)} 시간 전"
-        elif seconds < 3600 * 24 * 30:
-            days = seconds // (3600 * 24)
-            time_str = f"{int(days)} 일 전"
-        elif seconds < 3600 * 24 * 365:
-            months = seconds // (3600 * 24 * 30)
-            time_str = f"{int(months)} 달 전"
-        else:
-            years = seconds // (3600 * 24 * 365)
-            time_str = f"{int(years)} 년 전"
-
-        return time_str
-
-    def _transfer_date_str_list(self, date_list):
-        if len(date_list) == 0:
-            return f"잘못된 데이터"
-
-        if len(date_list) == 1:
-            start_date = datetime.strptime(date_list[0],"%Y/%m/%d")
-            start_date_str = start_date.strftime("%y년 %m월 %d일")
-            return f"{start_date_str}"
-
-
-        start_date = datetime.strptime(date_list[0],"%Y/%m/%d")
-        start_date_str = start_date.strftime("%y년 %m월 %d일")
-        end_date = datetime.strptime(date_list[1], "%Y/%m/%d")
-        end_date_str = end_date.strftime("%y년 %m월 %d일")
-
-        return f"{start_date_str}부터 {end_date_str}까지"
-
-    def _linked_str(self,  str_list, sep=", "):
-        return sep.join(str_list)
-
-# 일정 탭 전용 바이어스 데이터 폼 모델
-class TimeBiasModel(ScheduleTransformModel):
-    def __init__(self):
-        super().__init__()
-        self._biases = []
-
-    # 일정, 시간표에서의 바이어스 데이터
-    def _time_bias(self, bias:Bias):
-        Sbias_data = {}
-
-        Sbias_data["bid"] = bias.bid
-        Sbias_data["bname"] = bias.bname
-        Sbias_data["category"] = bias.category[0]       # 카테고리는 맨처음의 데이터만
-        Sbias_data["tags"] = self._linked_str(bias.tags)    # 연결해서 보냄
-        Sbias_data["main_time"] = self._linked_str(bias.main_time) # 연결
-        Sbias_data["is_ad"] = bias.is_ad
-
-        return Sbias_data
-
-    # 바이어스 데이터 폼 수정 리스트 반환
-    def get_tbias_list(self, biases):
-        for bias in biases:
-            self._biases.append(self._time_bias(bias))
-        return
-
-    # 바이어스 데이터 반환
-    def get_response_form_data(self):
-        return self._biases
-
-# 일정 스케줄 전송 데이터 폼 모델
-class TimeScheduleModel(ScheduleTransformModel):
-    def __init__(self) -> None:
-        super().__init__()
-        self._schedules = []
-
-    # 스케쥴 Send Data 만드는 함수
-    def _time_schedule(self, schedule:Schedule ):
-        time_schedule_data = {}
-
-        time_schedule_data["sid"] = schedule.sid
-        time_schedule_data["detail"] = schedule.sname
-        time_schedule_data["bid"] = schedule.bid
-        time_schedule_data["bname"] = schedule.bname
-        time_schedule_data["uid"] = schedule.uid
-        time_schedule_data["uname"] = schedule.uname
-        time_schedule_data["start_time"] = self._calculate_day_hour_time(datetime.strptime(schedule.start_time,"%H:%M"))
-        time_schedule_data["end_time"] = self._calculate_day_hour_time(datetime.strptime(schedule.end_time, "%H:%M"))
-        time_schedule_data["start_date"] = self._transfer_date_str(datetime.strptime(schedule.start_date, "%Y/%m/%d"))
-        time_schedule_data["end_date"] = self._transfer_date_str(datetime.strptime(schedule.start_date, "%Y/%m/%d"))
-        time_schedule_data["update_datetime"] = self._cal_update_time(datetime.strptime(schedule.update_datetime, "%Y/%m/%d-%H:%M:%S"))
-        time_schedule_data["location"] = self._linked_str(schedule.location)
-        time_schedule_data["code"] = schedule.code
-        time_schedule_data["color_code"] = schedule.color_code
-        time_schedule_data["is_already_have"] = schedule.is_already_have
-        time_schedule_data["is_owner"] = schedule.is_owner
-
-        return time_schedule_data
-
-    # 스케쥴 리스트 만드는 함수
-    def get_tschedule_list(self, schedules):
-        for schedule in schedules:
-            self._schedules.append(self._time_schedule(schedule=schedule))
-
-        return
-
-    def get_response_form_data(self):
-        return self._schedules
-
-# 일정 스케줄 이벤트 데이터 폼 모델
-class TimeEventModel(ScheduleTransformModel):
-    def __init__(self) -> None:
-        super().__init__()
-        self._events = []
-
-    # Event 보낼 거 만드는 함수
-    def _tevent_data(self, event:ScheduleEvent):
-        time_event_data = {}
-
-        time_event_data["seid"] = event.seid
-        time_event_data["sename"] = event.sename
-        time_event_data["bid"] = event.bid
-        time_event_data["bname"] = event.bname
-        time_event_data["uid"] = event.uid
-        time_event_data["uname"] = event.uname
-        time_event_data["date"] = self._transfer_date_str(datetime.strptime(event.date,"%Y/%m/%d"))
-        time_event_data["start"] = self._calculate_day_hour_time(datetime.strptime(event.start_time, "%H:%M"))
-        time_event_data["end"] = self._calculate_day_hour_time(datetime.strptime(event.end_time, "%H:%M"))
-        time_event_data["sids"] = event.sids
-        time_event_data["location"] = self._linked_str(event.location)
-
-        return time_event_data
-
-    # 이벤트 딕셔너리 데이터 리스트를 만드는 곳
-    def get_tevent_list(self, events):
-        for event in events:
-            self._events.append(self._tevent_data(event))
-
-        return
-
-    def get_response_form_data(self):
-        return self._events
-
-# 일정 스케줄 번들 전송 데이터 폼 모델
-class TimeScheduleBundleModel(ScheduleTransformModel):
-    def __init__(self) -> None:
-        super().__init__()
-        self._schedule_bundles = []
-
-    def _time_schedule_bundle(self, schedule_bundle:ScheduleBundle):
-        time_schedule_bundle_data = {}
-
-        time_schedule_bundle_data["sbid"] = schedule_bundle.sbid
-        time_schedule_bundle_data["sbname"] = schedule_bundle.sbname
-        time_schedule_bundle_data["bid"] = schedule_bundle.bid
-        time_schedule_bundle_data["bname"] = schedule_bundle.bname
-        time_schedule_bundle_data["uid"] = schedule_bundle.uid
-        time_schedule_bundle_data["uname"] = schedule_bundle.uname
-        time_schedule_bundle_data["sids"] = schedule_bundle.sids
-        time_schedule_bundle_data["date"] = self._transfer_date_str_list(schedule_bundle.date)
-        time_schedule_bundle_data["location"] = self._linked_str(schedule_bundle.location)
-
-        return time_schedule_bundle_data
-
-    def get_tschedule_bundle_list(self, schedule_bundles):
-        for schedule_bundle in schedule_bundles:
-            self._schedule_bundles.append(self._time_schedule_bundle(schedule_bundle))
-
-        return
-
-    def get_response_form_data(self):
-        return self._schedule_bundles
 
 # ------------------------------------- 스케쥴 모델 ------------------------------------------------
 # 단일 스케줄을 반환할 때 사용하는 모델
@@ -857,15 +885,21 @@ class MultiScheduleModel(TimeTableModel):
         return
 
     # 키워드를 통해 검색합니다.
-    def search_schedule_with_keyword(self, schedule_search_engine:SSE, keyword:str, search_type:str,
+    def search_schedule_with_keyword(self, schedule_search_engine:SSE, keyword:str, search_type:str, search_columns:str,
                                       when:str, num_schedules:int, last_index:int=-1):
         searched_list = []
 
+        if search_columns == "":
+            search_columns_list= []
+        else:
+            search_columns_list = [i.strip() for i in search_columns.split(",")]
+
+
         if search_type == "schedule" or search_type == "sid":
-            searched_list = schedule_search_engine.try_search_schedule_w_keyword(target_keyword=keyword)
+            searched_list = schedule_search_engine.try_search_schedule_w_keyword(target_keyword=keyword, search_columns=search_columns_list)
             searched_list = schedule_search_engine.try_filtering_schedule_in_progress(sids=searched_list, when=when)
         elif search_type == "schedule_bundle" or search_type == "sbid":
-            searched_list = schedule_search_engine.try_search_bundle_w_keyword(target_keyword=keyword)
+            searched_list = schedule_search_engine.try_search_bundle_w_keyword(target_keyword=keyword, search_columns=search_columns_list)
             searched_list = schedule_search_engine.try_filtering_bundle_in_progress(sbids=searched_list, when=when)
 
         searched_list, self._key = self.paging_id_list(id_list=searched_list, last_index=last_index, page_size=num_schedules)
@@ -954,8 +988,31 @@ class MultiScheduleModel(TimeTableModel):
 
         self._make_send_data_with_datas()
 
+    # 전송용 폼데이터를 만드는 함수
+    def get_print_forms_schedule(self, schedules:list, bid:str):
+        bias_data = self._database.get_data_with_id(target="bid", id=bid)
+        bias = Bias()
+        bias.make_with_dict(bias_data)
 
+        for make_schedule in schedules:
+            schedule = ScheduleTransformModel.make_temp_schedule(schedule=make_schedule,bias=bias,user=self._user)
+            self.__schedules.append(schedule)
 
+        self._make_send_data_with_datas()
+
+        return
+
+    # 내가 팔로우한 바이어스에 대한 전송 폼을 만드는 함수
+    def get_print_forms_my_bias(self):
+        bias_datas = self._database.get_datas_with_ids(target_id="bid", ids=self._user.bids)
+        for bias_data in bias_datas:
+            bias = Bias()
+            bias.make_with_dict(bias_data)
+            self.__biases.append(bias)
+
+        self._make_send_data_with_datas()
+
+        return
 
     # 전송 데이터 만들기
     def get_response_form_data(self, head_parser):
@@ -1131,7 +1188,7 @@ class AddScheduleModel(TimeTableModel):
         # ", "와 같은 케이스도 말끔히. 근데 이후의 공백이 있을 수 있다는 점이 있어 주의를 요합니다.
         # 또한 플랫폼이 아닌 다른 문자가 들어가는 불상사도 있을 수 있습니다. (이건 어찌할 방도가..)
         str_list = re.split(r'\W+', data_payload.location)
-        str_list = [s for s in str_list if s]
+        location_list = [s for s in str_list if s]
         # pprint(str_list)
 
         schedule.sid = self.__make_new_sid()
@@ -1141,7 +1198,7 @@ class AddScheduleModel(TimeTableModel):
         schedule.code = self.__make_schedule_code()
         schedule.update_datetime = datetime.today().strftime("%Y/%m/%d-%H:%M:%S")
         schedule.color_code = self._make_color_code()
-        schedule.location = str_list
+        schedule.location = location_list
 
         return schedule
 
@@ -1168,12 +1225,12 @@ class AddScheduleModel(TimeTableModel):
         return schedule_bundle
 
     # 복수 스케줄 만들기
-    def make_new_multiple_schedule(self, schedule_search_engine:SSE, schedules:list[Schedule], sname:str, bid:str, data_type:str):
+    def make_new_multiple_schedule(self, schedule_search_engine:SSE, schedules:list, sname:str, bid:str, data_type:str):
         schedule_list = []
         schedules_object = None
 
-        for schedule in schedules:
-            schedule = self.make_new_single_schedule(data_payload=schedule, bid=bid)
+        for make_schedule in schedules:
+            schedule = self.make_new_single_schedule(data_payload=make_schedule, bid=bid)
             schedule_list.append(schedule)
 
         # 스케쥴 등록
