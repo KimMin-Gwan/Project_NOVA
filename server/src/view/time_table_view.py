@@ -138,6 +138,7 @@ class TimeTableView(Master_View):
         # Bias 이름에 대한 스케쥴이나 번들을 검색하고 싶을 때, Search_columns = ["bname"]이라고 주면 됩니다.
         # 비어있는 경우에는 Managed_data_domain.py에서 디폴트 컬럼을 결정합니다.
         # 테스트완료
+        # 이걸로 바이어스 네임으로 서치 가능
 
         @self.__app.get('/time_table_server/try_search_schedule_with_keyword')
         def try_search_schedule(request:Request, search_columns:Optional[str]="",
@@ -356,7 +357,7 @@ class TimeTableView(Master_View):
             return response
 
         # 쁘띠 모델 출력용 인터페이스
-        # 테스트가 필요 (이거 내가알기론 아직 엔드포인트가 없어서 확인이 안됨)
+        # 테스트 확인 완료
         @self.__app.post('/time_table_server/get_schedule_printed_form')
         def try_get_printed_form(request:Request, raw_request:dict):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
@@ -373,7 +374,7 @@ class TimeTableView(Master_View):
             return response
 
         # 내가 팔로우한 바이어스 데이터 출력용 인터페이스
-        # docs로 확인은 했는데 로그인 상내에서 잘 나오는지는 확인을 안함..
+        # docs로 확인은 했는데 로그인 상내에서 잘 나오는지는 확인을 못함. 해 줘
         @self.__app.get('/time_table_server/get_following_bias_printed_form')
         def try_get_following_bias_printed_form(request:Request):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
