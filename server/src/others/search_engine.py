@@ -15,6 +15,7 @@ import asyncio
 from others.data_domain import Feed, User, Bias, Notice, Comment
 from others.graph_domain import *
 from others.managed_data_domain import ManagedFeedBiasTable, ManagedFeed, ManagedBias
+from others.managed_data_domain import ManagedFeedBiasTableNew
 from pprint import pprint
 from collections import Counter, OrderedDict
 
