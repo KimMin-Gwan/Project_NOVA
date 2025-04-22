@@ -361,6 +361,9 @@ class TimeTableView(Master_View):
         @self.__app.post('/time_table_server/get_schedule_printed_form')
         def try_get_printed_form(request:Request, raw_request:dict):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
+            
+            pprint(raw_request)
+            
             data_payload = MakeMultipleScheduleRequest(request=raw_request)
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
 
