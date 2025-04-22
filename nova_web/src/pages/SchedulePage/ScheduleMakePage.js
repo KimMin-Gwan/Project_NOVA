@@ -13,12 +13,16 @@ import style from "./ScheduleMakePage.module.css"; // CSS 모듈 임포트
 import HEADER from "../../constant/header";
 import mainApi from "../../services/apis/mainApi";
 import postApi from "../../services/apis/postApi";
+
 import useBiasStore from "../../stores/BiasStore/useBiasStore";
 import ScheduleSelect from "../../component/ScheduleSelect/ScheduleSelect";
 import ScheduleTopic from "../../component/ScheduleTopic/ScheduleTopic";
+import ScheduleCard from "../../component/EventCard/EventCard";
 // import required modules
 
 import right_double_arrow from "../../img/right_double_arrow.svg";
+import { BIAS_URL, REQUEST_URL } from "../../constant/biasUrl.js";
+import tempBias from "../../img/tempBias.png";
 
 const textContentList = [
     "새로운 일정을 등록할 목표 주제를 정해주세요!",
@@ -112,6 +116,7 @@ const ScheduleMakeSlideComponent = ({ activeIndex, index,
 
     return animationFlag ?  <ScheduleMakeComponent 
         schedule={schedule}
+        index={index+1}
         setSendScheduleData={setSendScheduleData} 
         sendScheduleData={sendScheduleData}
     /> : <ScheduleMakeTitleComponent /> ;
@@ -121,7 +126,6 @@ const ScheduleMakePage = () => {
     const swiperRef = useRef(null); // Swiper 인스턴스를 참조하기 위한 Ref 생성
     const inputSwiperRef = useRef(null); // Swiper 인스턴스를 참조하기 위한 Ref 생성
     const navigate = useNavigate();
-
 
     const [numSchedule, setNumSchedule] = useState(1);
     const [activeIndex, setActiveIndex] = useState(0);
@@ -155,29 +159,45 @@ const ScheduleMakePage = () => {
     const [addMode, setAddMode] = useState('single');
     const [tempScheduleData, setTempScheduleData] = useState(bundleFormat)
     const [sendScheduleData, setSendScheduleData] = useState(bundleFormat)
+    const [makedScheduleData, setMakedScheduleData] = useState([])
 
-    const makeSendScheduleData = () => {
+    // 추천 주제 데이터 받기
+    async function fetchFormattedScheduleData(scheduleData) {
+        await postApi.post("time_table_server/get_schedule_printed_form", {
+        header: HEADER,
+        body: scheduleData,
+        })
+        .then((res) => {
+        setMakedScheduleData( res.data.body.schedules)})
+    }
+
+    async function makeSendScheduleData() {
         let numSchedule = 0;
-        const updatedSchedules = tempScheduleData.schedules.filter(element => {
+        const updatedSchedules = tempScheduleData.schedules.filter((element) => {
             if (element.sname !== "") {
                 numSchedule += 1;
-                return true; // 이름이 있는 일정만 반환
+                return true;
             }
             return false;
         });
 
-        // 새로운 상태 객체를 만들어서 업데이트
-        setSendScheduleData(prevState => ({
-            ...prevState, // 이전 상태 유지
-            schedules: updatedSchedules, // schedules 업데이트
-        }));
+        const newSendScheduleData = {
+            ...sendScheduleData,
+            schedules: updatedSchedules,
+        };
 
+        setSendScheduleData(newSendScheduleData); // 상태 업데이트
         if (numSchedule === 1) {
-            setAddMode("single")
-        }else{
-            setAddMode("bundle")
+            setAddMode("single");
+        } else if (numSchedule > 1) {
+            setAddMode("bundle");
+        } else {
+            return;
         }
+
+        await fetchFormattedScheduleData(newSendScheduleData);
     }
+
 
 
     //let { biasList } = useBiasStore();
@@ -227,7 +247,7 @@ const ScheduleMakePage = () => {
     // 슬라이드 변경 시 애니메이션 실행
     const handleSlideChange = () => {
         const currentIndex = swiperRef.current?.activeIndex;
-        const slideId = `swiperSlide${currentIndex + 1}`; // 슬라이드 ID 계산
+        const slideId = `swiperSlide${currentIndex}`; // 슬라이드 ID 계산
 
         if (currentIndex === 0) {
             // 첫 번째 슬라이드에서 두 번째 슬라이드로 이동할 때 애니메이션 실행
@@ -246,12 +266,17 @@ const ScheduleMakePage = () => {
     };
 
     useEffect(() => {
-        const currentIndex = swiperRef.current?.activeIndex;
-        const slideId = `swiperSlide${currentIndex + 1}`; // 슬라이드 ID 계산
+        //const currentIndex = swiperRef.current?.activeIndex;
+        //const slideId = `swiperSlide${currentIndex}`; // 슬라이드 ID 계산
 
-        setTimeout(() => {
-            executeSlideAnimation(slideId);
-        }, 1000)
+        const timer = setTimeout(() => {
+            swiperRef.current?.slideNext(); // 다음 슬라이드로 이동
+        }, 1000); // 1초 대기
+
+        //        setTimeout(() => {
+            //console.log(slideId);
+            //executeSlideAnimation(slideId);
+        //}, 1000)
 
         setMakeScheduleList([
             { id: Date.now(), index: -1},
@@ -275,8 +300,17 @@ const ScheduleMakePage = () => {
 
   // 추천 주제 데이터 받기
   function fetchBiasData() {
-    mainApi.get("time_table_server/try_get_recommended_bias_list").then((res) => {
+    mainApi.get("time_table_server/get_following_bias_printed_form").then((res) => {
       setBiasList(res.data.body.biases);
+    });
+  }
+
+
+  const [searchedSchedule, setSearchedSchedule] = useState([]);
+
+  function fetchSearchSchedule() {
+    mainApi.get(`time_table_server/try_search_schedule_with_keyword?search_columns=bias&keyword=${targetBias.bname}`).then((res) => {
+      setSearchedSchedule(res.data.body.schedules);
     });
   }
 
@@ -366,6 +400,14 @@ const ScheduleMakePage = () => {
   };
 
 
+  const handleSelectBias = (index) => {
+    const selectedBias = biasList[index];
+    setTargetBias(selectedBias); // 선택된 주제 설정
+    setTempScheduleData((prevState) => ({
+      ...prevState,
+      bid: selectedBias.bid, // bundleNameInput 값으로 sname 업데이
+    }));
+  }
 
   return (
     <div className="container">
@@ -378,7 +420,13 @@ const ScheduleMakePage = () => {
                 speed={1000} // 슬라이드 전환 속도 1초
                 allowTouchMove={false}
             >
-
+                <SwiperSlide>
+                    <div id="swiperSlide0" className={style["swiper-slide"]}>
+                        <div id ="slideTitleBox" className={style["slide-title-box"]}>
+                            <span id="slideStepTitle" className={style["slide-step-title"]}> 일정 등록 </span>
+                        </div>
+                    </div>
+                </SwiperSlide>
                 <SwiperSlide>
                     <div id="swiperSlide1" className={style["swiper-slide"]}>
                         <div id ="slideTitleBox" className={style["slide-title-box"]}>
@@ -388,14 +436,20 @@ const ScheduleMakePage = () => {
                             <div id="slideBodyContainer" className ={style["slide-body-container"]}>
                                 <div className={style["slide-box-wrapper"]}>
                                     <div className={style["slide-body-top-box"]}>
-                                        <div className={style["target-bias"]}></div>
+                                        {targetBias.bid === "" ? (
+                                            <div className={style["target-bias"]}></div>
+                                        ) : (
+                                            <img src={BIAS_URL + `${targetBias.bid}.PNG`} onError={(e) => (e.target.src = tempBias)}  />
+                                        )}
                                         <span className={style["top-box-content"]}> 
                                             {targetBias.bname}
                                         </span>
                                     </div>
                                     <div className={style["slide-body-bottom-box"]}>
                                         {biasList.map((item, i) => {
-                                            return <ScheduleTopic key={i} {...item} style={{width: "90%"}} />;
+                                            return <div onClick={() => handleSelectBias(i)} key={i} className={style["bias-box"]}>
+                                                <ScheduleTopic key={i} {...item} style={{width: "90%"}} />
+                                            </div>
                                         })}
                                     </div>
                                 </div>
@@ -405,7 +459,14 @@ const ScheduleMakePage = () => {
                                     취소
                                 </div>
                                 <div className={style["bottom-button"]}
-                                    onClick={() => swiperRef.current?.slideNext()} // 오른쪽 슬라이드 이동
+                                    onClick={() => {
+                                    if (targetBias.bid === "") {
+                                         alert("선택된 주제가 없어요.");
+                                    } else {
+                                        swiperRef.current?.slideNext(); // 오른쪽 슬라이드 이동
+                                        //fetchSearchSchedule(); // 검색된 스케줄 가져오기
+                                    }
+                                }}
                                 >
                                     선택 완료
                                 </div>
@@ -421,12 +482,24 @@ const ScheduleMakePage = () => {
                             <div id="slideBodyContainer" className ={style["slide-body-container"]}>
                                 <div className={style["slide-box-wrapper"]}>
                                     <div className={style["slide-body-top-box"]}>
-                                        <div className={style["target-bias"]}></div>
+                                        {targetBias.bid === "" ? (
+                                            <div className={style["target-bias"]}></div>
+                                        ) : (
+                                            <img src={BIAS_URL + `${targetBias.bid}.PNG`} onError={(e) => (e.target.src = tempBias)}  />
+                                        )}
                                         <span className={style["top-box-content"]}> 
                                             {targetBias.bname}
                                         </span>
                                     </div>
-                                    <div className={style["slide-body-bottom-box"]}> 컨텐츠 </div>
+                                    <div className={style["slide-body-bottom-box"]}> 
+
+                                        {searchedSchedule.map((item, i) => {
+                                            return <div onClick={() => handleSelectBias(i)} key={i} className={style["bias-box"]}>
+                                                <ScheduleCard key={i} {...item} style={{width: "90%"}} />
+                                            </div>
+                                        })}
+
+                                    </div>
                                 </div>
                             </div>
                             <div id="slideBottomContainer" className={style["slide-bottom-container"]}>
@@ -477,7 +550,10 @@ const ScheduleMakePage = () => {
                                     이전으로
                                 </div>
                                 <div className={style["bottom-button"]}
-                                    onClick={() => swiperRef.current?.slideNext()} // 오른쪽 슬라이드 이동
+                                    onClick={() => {
+                                        swiperRef.current?.slideNext()
+                                        makeSendScheduleData()
+                                    }} 
                                 >
                                     작성 완료
                                 </div>
@@ -494,10 +570,18 @@ const ScheduleMakePage = () => {
                                 <div className={style["slide-box-wrapper"]}>
                                     <div className={style["slide-body-top-box"]}>
                                         <span className={style["top-box-content"]}> 
-                                            총 5개의 일정을 작성했어요.
+                                            총 {makedScheduleData.length}개의 일정을 작성했어요.
                                         </span>
                                     </div>
-                                    <div className={style["slide-body-bottom-box"]}> 컨텐츠 </div>
+                                    <div className={style["slide-body-bottom-box"]}> 
+
+                                        {makedScheduleData.map((item, i) => {
+                                            return <div onClick={() => handleSelectBias(i)} key={i} className={style["bias-box"]}>
+                                                <ScheduleCard key={i} {...item} style={{width: "90%"}} />
+                                            </div>
+                                        })}
+
+                                    </div>
                                 </div>
                             </div>
                             <div id="slideBottomContainer" className={style["slide-bottom-container"]}>
@@ -507,7 +591,9 @@ const ScheduleMakePage = () => {
                                     이전으로
                                 </div>
                                 <div className={style["bottom-button"]}
-                                    onClick={() => swiperRef.current?.slideNext()} // 오른쪽 슬라이드 이동
+                                    onClick={() => {
+                                        swiperRef.current?.slideNext()
+                                    }} // 오른쪽 슬라이드 이동
                                 >
                                     등록
                                 </div>
