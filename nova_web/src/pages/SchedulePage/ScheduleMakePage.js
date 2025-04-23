@@ -192,7 +192,7 @@ const ScheduleMakePage = () => {
         } else if (numSchedule > 1) {
             setAddMode("bundle");
         } else {
-            return;
+            setAddMode("error");
         }
 
         await fetchFormattedScheduleData(newSendScheduleData);
@@ -309,7 +309,7 @@ const ScheduleMakePage = () => {
   const [searchedSchedule, setSearchedSchedule] = useState([]);
 
   function fetchSearchSchedule() {
-    mainApi.get(`time_table_server/try_search_schedule_with_keyword?search_columns=bias&keyword=${targetBias.bname}`).then((res) => {
+    mainApi.get(`time_table_server/try_search_schedule_with_keyword?search_columns=bid&type=schedule&keyword=${targetBias.bname}`).then((res) => {
       setSearchedSchedule(res.data.body.schedules);
     });
   }
@@ -339,6 +339,11 @@ const ScheduleMakePage = () => {
     else if (addMode == 'bundle'){
       fetchTryMakeBundleSchedule()
     }
+    else{
+        alert("일정이 비어있어요!")
+        swiperRef.current?.slidePrev()
+    }
+
   }
 
   const addSchedule = () => {
@@ -464,7 +469,7 @@ const ScheduleMakePage = () => {
                                          alert("선택된 주제가 없어요.");
                                     } else {
                                         swiperRef.current?.slideNext(); // 오른쪽 슬라이드 이동
-                                        //fetchSearchSchedule(); // 검색된 스케줄 가져오기
+                                        fetchSearchSchedule(); // 검색된 스케줄 가져오기
                                     }
                                 }}
                                 >
@@ -492,13 +497,15 @@ const ScheduleMakePage = () => {
                                         </span>
                                     </div>
                                     <div className={style["slide-body-bottom-box"]}> 
-
-                                        {searchedSchedule.map((item, i) => {
-                                            return <div onClick={() => handleSelectBias(i)} key={i} className={style["bias-box"]}>
-                                                <ScheduleCard key={i} {...item} style={{width: "90%"}} />
-                                            </div>
-                                        })}
-
+                                        {searchedSchedule.length === 0 ? (
+                                            <div className={style["no-content-message"]}>등록된 컨텐츠 일정이 없어요!</div>
+                                        ) : (
+                                            searchedSchedule.map((item, i) => (
+                                                <div onClick={() => handleSelectBias(i)} key={i} className={style["bias-box"]}>
+                                                    <ScheduleCard key={i} {...item} style={{ width: "90%" }} />
+                                                </div>
+                                            ))
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -592,7 +599,9 @@ const ScheduleMakePage = () => {
                                 </div>
                                 <div className={style["bottom-button"]}
                                     onClick={() => {
-                                        swiperRef.current?.slideNext()
+                                        //swiperRef.current?.slideNext()
+
+                                        tryFetchMakeSchedule()
                                     }} // 오른쪽 슬라이드 이동
                                 >
                                     등록
@@ -604,6 +613,15 @@ const ScheduleMakePage = () => {
                     <div id="swiperSlide4" className={style["swiper-slide"]}>
                         <div id ="slideTitleBox" className={style["slide-title-box"]}>
                             <span id="slideStepTitle" className={style["slide-step-title"]}> 등록 완료 </span>
+                        </div>
+                        <div style={{width: "100%", display: "flex", justifyContent: "center", alignItems: "center"}}>
+                            <div className={style["bottom-button"]}
+                                onClick={() => {
+                                    navigate("/schedule") // 오른쪽 슬라이드 이동
+                                }} // 오른쪽 슬라이드 이동
+                            >
+                            돌아가기
+                            </div>
                         </div>
                     </div>
                 </SwiperSlide>
