@@ -476,8 +476,10 @@ class ManagedTable:
                 return val.strip() in SKIP_TUPLE
 
             if isinstance(val, list):
+                # 리스트가 공백인 경우에는 진짜 아무것도 서치하지 않겠다는 의미이므로..
+                # 예외로 Skip하지 않겠습니다.
                 if len(val) == 0:
-                    return True
+                    return False
                 return str(val[0]).strip() in SKIP_TUPLE
 
             return True
