@@ -51,7 +51,7 @@ body.bright-mode {
   min-height: 100vh;
   height: auto;
   margin: 0 auto;
-  background-color: #F8FBFF;
+  background-color: #F1F7FF;
   position: relative;
   /* border: 1px white solid; */
   /* margin-bottom: 20px; */
@@ -139,7 +139,7 @@ body.bright-mode {
 /* --------------- */
 /* 라이트모드 스타일 */
 .container.bright-mode {
-  background-color: #F8FBFF;
+  background-color: #F1F7FF;
 }
 .bottom_bar.bright-mode {
   background-color: #f1f7ff;
@@ -147,7 +147,7 @@ body.bright-mode {
 
 /* 제일 위 */
 .top-area.bright-mode {
-  background-color: #F8FBFF;
+  background-color: #F1F7FF;
 }
 /* .logo-st.dark-mode {
   filter: invert(100%);

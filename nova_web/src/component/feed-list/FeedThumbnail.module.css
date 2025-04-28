@@ -2,7 +2,7 @@
 .FeedThumbnail {
   width: 100%;
   margin-bottom: 40px;
-  background-color: #F8FBFF;
+  background-color: #F1F7FF;
 }
 
 /* 주제 박스 */
@@ -46,7 +46,7 @@
 
 .title-section .icon-box:hover {
   cursor: pointer;
-  background-color: #F8FBFF;
+  background-color: #F1F7FF;
 }
 
 /* 검색박스 */
@@ -64,7 +64,7 @@
     color: rgba(26, 128, 230, 0.65);
     padding: 15px;
     border-radius: 7px;
-    background-color: #F8FBFF;
+    background-color: #F1F7FF;
     border: 1px solid rgba(53, 154, 255, 0.68);
     font-weight: 600;
     font-size: 12px;
@@ -85,7 +85,7 @@
     top: 37%;
     transform: translateY(-50%);
     cursor: pointer;
-    background-color: #F8FBFF;
+    background-color: #F1F7FF;
     border: 0;
     img {
       width: 24px;

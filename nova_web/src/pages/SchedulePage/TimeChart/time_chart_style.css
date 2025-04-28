@@ -61,9 +61,16 @@
     padding-left: 37px;
     display: flex;
     align-items: center;
-    height: 100%;
     padding-right: 37px;
     background-color: #d0e4ff;
+}
+
+.load-week-container-new {
+    padding-left: 37px;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding-right: 37px;
 }
 
 .load-text {

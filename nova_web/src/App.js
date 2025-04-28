@@ -37,6 +37,7 @@ import ScheduleExplore from "./pages/ScheduleExplore/ScheduleExplore.js";
 import PaymentPage from "./pages/NOVAADPage/paymentpage.js";
 import NovaADHomepage from "./pages/NOVAADPage/novaADHomepage.js";
 import ScheduleMakePage from "./pages/SchedulePage/ScheduleMakePage.js";
+import { NewFeedWritePage } from "./pages/Write/newWrite.js";
 
 // 다크 모드 클래스 반환 함수
 export function getModeClass(mode) {
@@ -62,7 +63,7 @@ function App() {
   ) {
     document.body.style.zoom = 100 + "%";
   } else {
-    document.body.style.zoom = 100 + "%";
+    document.body.style.zoom = 120 + "%";
   }
 
   return (
@@ -101,6 +102,8 @@ function App() {
       <Route path="/feed_list/:fid" element={<FeedList />}></Route>
       <Route path="/feed_detail/:fid" element={<FeedDetail />}></Route>
       <Route path="/follow_page" element={<FollowPage />}></Route>
+
+      <Route path="/new_write_feed" element={<NewFeedWritePage/>}></Route>
 
       {/* 검색 페이지 */}
       <Route path="/search" element={<SearchPage />}></Route>

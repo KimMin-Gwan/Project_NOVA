@@ -76,3 +76,70 @@
   max-height: 100%; /* 부모의 높이를 초과하지 않음 */
   object-fit: contain; /* 이미지 비율 유지하면서 부모 영역에 맞춤 */
 }
+
+.ScheduleTopicMain {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.6) 100%);
+  box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  cursor: pointer; /* 손 모양 커서 */
+  margin : 20px;
+
+  /* dl 기존 스타일 없애기 */
+  & dl {
+    margin: 0;
+  }
+
+  /* 주제 타이틀 스타일 */
+  & .BiasTitle {
+    display: inline-flex;
+    font-size: 14px;
+    font-weight: 500;
+    align-items: flex-end;
+    gap: 8px;
+    color : #797979;
+
+    & dt:first-child {
+      font-size: 20px;
+      font-weight: 600;
+      color: #1F1F1F;
+    }
+
+  }
+  /* 방송 정보 스타일 */
+  & .BiasMain {
+    display: flex;
+    flex-flow: column;
+    gap: 5px;
+    font-size: 13px;
+    font-weight: 400;
+    margin-block: 8px 0;
+    color : #797979;
+
+    & dd {
+      margin: 0;
+      & p {
+        margin: 0;
+      }
+    }
+
+    & .TagSt {
+      display: flex;
+      gap: 59px;
+      & p {
+        display: inline;
+      }
+    }
+
+    & .MainTime {
+      display: flex;
+      gap: 18px;
+      & p {
+        display: inline;
+      }
+    }
+  }
+}

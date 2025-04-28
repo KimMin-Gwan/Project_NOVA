@@ -1,0 +1,65 @@
+.time-layer-box {
+  position: relative; /* 추가 */
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  top: 0;
+  left: 0;
+  z-index: 100; /* 이미지 위에 나타나도록 설정 */
+}
+
+.background-gradient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* TimeLayerBox 아래에 나타나도록 설정 */
+}
+
+
+.time-layer-info {
+    width : 100%;
+    height : 72px;
+    padding-bottom : 15px;
+    display: flex;
+}
+
+.tag-box {
+    width : 49.2%;
+    height : 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+     
+    span {
+        font-size : 16.5px;
+        font-weight : 700;
+        margin-left : 12px;
+        color : #555D6E
+    }
+
+    img{
+        width : 45px;
+        height : 45px;
+        filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.2)); /* 이미지 외곽선에 그림자 적용 */
+    }
+}
+
+.calender-box {
+    width : 50.8%;
+    height : 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.6) 100%);
+    border : solid 1px #FFFFFF;
+    border-radius: 12px;
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.08);
+     
+    span {
+        font-size : 16.5px;
+        font-weight : 600;
+        color : #555D6E
+    }
+}

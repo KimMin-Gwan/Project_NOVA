@@ -58,7 +58,9 @@
 .my-dashboard {
   font-size: 14px;
   font-weight: 400;
-  background-color: #d0e4ff;
+  background: linear-gradient(135deg, rgba(113, 174, 255, 0.4) 0%, rgba(113, 174, 255, 0.8) 100%);
+  border : solid 2px #ffffff;
+  box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.08);
   border-radius: 12px;
   padding: 20px;
   display: flex; /* Flexbox 사용 */

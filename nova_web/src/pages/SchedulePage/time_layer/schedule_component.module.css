@@ -1,0 +1,135 @@
+.schedule-component {
+  display: flex;
+  align-items: flex-start;
+  justify-content: start;
+  width: 100%;
+  min-height: calc(119px - 34px);
+  margin-top : 15px;
+  margin-bottom : 15px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.6) 100%);
+  box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  border: solid 2px #FFFFFF;
+}
+
+
+.schedule-section-box{
+    display :flex;
+    align-items: center;
+    justify-content: center;
+    width : 15.6%;
+    height : 88px;
+    font-size : 16px;
+    font-weight: 700;
+}
+
+
+.schedule-section{
+    display :flex;
+    align-items: center;
+    justify-content: center;
+    width : 100%;
+    font-size : 16px;
+    font-weight: 700;
+}
+
+.empty-schedule-span {
+    display : flex;
+    width: 100%;
+    height: 85px;
+    align-items: center;
+    justify-content: center;
+    font-size : 15px;
+    font-weight: 600;
+    color: #797979;
+}
+
+.schedule-detail-box{
+    display : flex;
+    align-items: center;
+    justify-content: space-around;
+    min-height : 48.64px;
+    padding : 5.2%;
+    cursor: pointer;
+
+    .time-span {
+        font-size : 12px;
+        font-weight : 500;
+        width : 22%;
+    }
+
+    .schedule-arrow{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+}
+
+.recommened-schedule{
+    display : flex;
+    align-items: center;
+    justify-content: center;
+    width : 43px;
+    height : 30px;
+    background: linear-gradient(135deg, rgba(78, 143, 253, 0.9) 2%, rgba(56, 127, 254, 1.0) 100%);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.10);
+    border-radius: 6px;
+    color : white;
+    font-size: 13px;
+}
+
+.added-schedule{
+    display : flex;
+    align-items: center;
+    justify-content: center;
+    width : 43px;
+    height : 30px;
+    background : linear-gradient(135deg, rgba(253, 78, 81, 0.9) 2%, rgba(92, 56, 254, 1.0) 100%);;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.10);
+    border-radius: 6px;
+    color : white;
+    font-size: 13px;
+}   
+
+.schedule-detail{
+    width: 54%;
+    display: flex;
+    margin-left : 4.9%;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+
+    .schedule-title{
+        width: 100%;
+        display: block; /* inline 요소에는 동작하지 않으므로 block 또는 inline-block 필요 */
+        overflow: hidden; /* 넘치는 텍스트를 숨김 */
+        text-overflow: ellipsis; /* 생략 부호 (...) 표시 */
+        white-space: nowrap; /* 텍스트를 한 줄로 표시 */
+        font-size:16px;
+        font-weight: 600;
+        color: #000000;
+    }
+
+    .schedule-bias{
+        font-size:12px;
+        font-weight: 500;
+        color: #3d3d3d;
+    }
+}
+
+.outer-schedule-box {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width : calc(100% - 15.6%);
+    min-height: 89px;
+}
+
+.schedule-sperator {
+    width : 70%;
+    height: 2px;
+    background-color: #bbd7ff;
+    margin-left : 25%;
+    border-radius : 1px;
+}
