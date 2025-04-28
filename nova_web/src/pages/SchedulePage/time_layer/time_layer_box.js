@@ -7,9 +7,7 @@ import calender_icon from "./../../../img/calender.svg";
 import shop_icon from "./../../../img/3d_shop_icon.png";
 
 
-export default function TimeLayerBox({ tag, scheduleData, formattedDate}) {
-
-
+export default function TimeLayerBox({scheduleData, formattedDate}) {
     const [visibleCount, setVisibleCount] = useState(0); // 렌더링된 컴포넌트 개수
     const [opacity, setOpacity] = useState(0);
 
@@ -35,7 +33,7 @@ export default function TimeLayerBox({ tag, scheduleData, formattedDate}) {
                 <div className={style["tag-box"]}>
                     <img src={shop_icon}/>
                     <span>
-                        노래/음악
+                        {scheduleData[0].tag}
                     </span>
                 </div>
                 <div className={style["calender-box"]}>
@@ -47,7 +45,7 @@ export default function TimeLayerBox({ tag, scheduleData, formattedDate}) {
                 
             </div>
             <div>
-                {scheduleData.slice(0, visibleCount).map((item, index) => (
+                {scheduleData.slice(1, visibleCount).map((item, index) => (
                     <ScheduleComponent key={index} section={item.section} schedules={item.schedules} />
                 ))}
             </div>
@@ -154,7 +152,7 @@ function ScheduleDetail({ time, type, schedule_id, schedule_title, schedule_bias
             }}
         >
             <span className={component_style["time-span"]}>
-                AM 11:00
+                {time}
             </span>
             <ScheduleExposeType type={type}/>
             <div className={component_style["schedule-detail"]}>
