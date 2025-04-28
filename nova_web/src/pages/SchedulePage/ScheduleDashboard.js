@@ -22,23 +22,38 @@ import "swiper/css/navigation";
 import arrowRightStop from './Arrow_right_stop.svg';
 
 const temp_schedule_data = [
+    { tag : "노래/음악"},
     { section : "새벽", schedules : [
         ]
     },
     { section : "오전", schedules : [
-        { time: "AM 11:00", type: "recommened", schedule_id: "0", schedule_title: "아침 노래뱅", schedule_bias: "성화린" },
-        { time: "AM 11:00", type: "recommened", schedule_id: "1", schedule_title: "한식 맛집 아테의 노래뱅", schedule_bias: "김아테" },
+        { time: "AM 11:00", type: "recommened", schedule_id: "0", schedule_title: "아침 노래뱅", schedule_bias: "주제이름1" },
+        { time: "AM 11:00", type: "recommened", schedule_id: "1", schedule_title: "한식 맛집 아테의 노래뱅", schedule_bias: "주제이름2" },
         ]
     },
     { section : "오후", schedules : [
-        { time: "PM 01:00", type: "added", schedule_id: "2", schedule_title: "마지막 노래 방송", schedule_bias: "슈메히메" },
+        { time: "PM 01:00", type: "added", schedule_id: "2", schedule_title: "마지막 노래 방송", schedule_bias: "주제이름3" },
         ]
     },
     { section : "저녁", schedules : [
-        { time: "PM 07:00", type: "recommened", schedule_id: "3", schedule_title: "잔잔노래짧뱅", schedule_bias: "후츄후츄" },
-        { time: "PM 08:00", type: "recommened", schedule_id: "4", schedule_title: "이쁜이들이랑 싱크룸", schedule_bias: "밍수진" },
+        { time: "PM 07:00", type: "recommened", schedule_id: "3", schedule_title: "잔잔노래짧뱅", schedule_bias: "주제이름4" },
+        { time: "PM 08:00", type: "recommened", schedule_id: "4", schedule_title: "이쁜이들이랑 싱크룸", schedule_bias: "주제이름5" },
         ]
     }
+    //{ section : "오전", schedules : [
+        //{ time: "AM 11:00", type: "recommened", schedule_id: "0", schedule_title: "아침 노래뱅", schedule_bias: "성화린" },
+        //{ time: "AM 11:00", type: "recommened", schedule_id: "1", schedule_title: "한식 맛집 아테의 노래뱅", schedule_bias: "김아테" },
+        //]
+    //},
+    //{ section : "오후", schedules : [
+        //{ time: "PM 01:00", type: "added", schedule_id: "2", schedule_title: "마지막 노래 방송", schedule_bias: "슈메히메" },
+        //]
+    //},
+    //{ section : "저녁", schedules : [
+        //{ time: "PM 07:00", type: "recommened", schedule_id: "3", schedule_title: "잔잔노래짧뱅", schedule_bias: "후츄후츄" },
+        //{ time: "PM 08:00", type: "recommened", schedule_id: "4", schedule_title: "이쁜이들이랑 싱크룸", schedule_bias: "밍수진" },
+        //]
+    //}
 ]
 
 const ScheduleDashboard = () => {
