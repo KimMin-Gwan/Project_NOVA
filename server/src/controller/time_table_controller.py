@@ -72,7 +72,20 @@ class TImeTableController:
         model.set_my_schedule_in_by_day(target_date=request.data_payload.date, sids=request.data_payload.sids)
             
         return model
+    
+    # 내 타임 차트 가지고 오기
+    def get_time_layer_with_date(self, database:Local_Database, request:RequestManager) -> BaseModel: 
+        model = ScheduleChartModel(database=database)
 
+        if request.jwt_payload!= "":
+            model.set_user_with_email(request=request.jwt_payload)
+            # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
+            if not model._set_tuser_with_tuid():
+                return model
+
+        model.set_my_schedule_in_by_day(target_date=request.data_payload.date, sids=request.data_payload.sids)
+            
+        return model
 
 
     # 추천하는 바이어스 불러오기

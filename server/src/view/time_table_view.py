@@ -124,6 +124,23 @@ class TimeTableView(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
 
             return response
+        
+        # 홈화면의 스케줄 레이어를 바탕으로 검색
+        @self.__app.get('/time_table_server/get_time_layer_schedule_with_date')
+        def get_time_layer_schedule_with_date(request:Request,date:Optional[str]=datetime.now().strftime("%Y-%m-%d")):
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
+            data_payload = DateRequest(date=date)
+            
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+
+            time_table_controller =TImeTableController()
+            model = time_table_controller.get_time_layer_with_date(database=self.__database,
+                                                              request=request_manager)
+            
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+
+            return response       
 
         
     def schedule_search_route(self):

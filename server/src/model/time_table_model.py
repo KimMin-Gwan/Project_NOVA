@@ -1761,6 +1761,74 @@ class ScheduleBlockTreater():
         #b = (b * 3 + 255) // 4
 
         #return f'#{r:02x}{g:02x}{b:02x}'
+        
+    
+# temp_schedule_data = [
+#   { tag : "노래/음악"},
+#   { section : "새벽", schedules : [
+#       ]
+#   },
+#   { section : "오전", schedules : [
+#       { time: "AM 11:00", type: "recommened", schedule_id: "0", schedule_title: "아침 노래뱅", schedule_bias: "주제이름1", schedule_bid:"1" },
+#       { time: "AM 11:00", type: "recommened", schedule_id: "1", schedule_title: "한식 맛집 아테의 노래뱅", schedule_bias: "주제이름2" , schedule_bid:"2"},
+#       ]
+#   },
+#   { section : "오후", schedules : [
+#       { time: "PM 01:00", type: "added", schedule_id: "2", schedule_title: "마지막 노래 방송", schedule_bias: "주제이름3", schedule_bid:"3"},
+#       ]
+#   },
+#   { section : "저녁", schedules : [
+#       { time: "PM 07:00", type: "recommened", schedule_id: "3", schedule_title: "잔잔노래짧뱅", schedule_bias: "주제이름4", schedule_bid:"4" },
+#       { time: "PM 08:00", type: "recommened", schedule_id: "4", schedule_title: "이쁜이들이랑 싱크룸", schedule_bias: "주제이름5", schedule_bid:"5"},
+#       ]
+#   }
+# ]
+        
+class ScheduleTimeLayerModel(TimeTableModel):
+    def __init__(self, database:Local_Database) -> None:
+        super().__init__(database)
+        self.__layer_data = [
+            {"tag" : ""},
+            {"section":"새벽", "schedules":[]}
+            {"section":"오전", "schedules":[]}
+            {"section":"오후", "schedules":[]}
+            {"section":"저녁", "schedules":[]}
+        ]
+    
+    # 단일 스케줄의 데이터 폼을 받아내는 객체
+    def __make_single_schedule_data_form(self, type, schedule:Schedule):
+        schedule_form = {}
+        
+        # 24시간 형식의 문자열을 datetime 객체로 변환
+        time_obj = datetime.strptime(schedule.start_time, "%H:%M")
+
+        # 12시간 형식의 문자열로 변환
+        time_12 = time_obj.strftime("%p %I:%M").lstrip("0").replace("AM", "AM").replace("PM", "PM")
+        
+        schedule_form["time"] = time_12
+        schedule_form["type"] = type
+        schedule_form["schedule_id"] = schedule.sid
+        schedule_form["schedule_title"] = schedule.sname
+        schedule_form["schedule_bias"] = schedule.bname
+        schedule_form["schedule_bid"] = schedule.bid
+        return schedule_form
+    
+    
+    # 여기부터 시작
+    def set_layer_data(self, time):
+        pass
+        
+    
+    
+    
+    
+    def get_response_form_data(self, head_parser):
+        body = {
+            "schedule_layer" : self.__layer_data
+            }
+
+        response = self._get_response_data(head_parser=head_parser, body=body)
+        return response
 
 # 복수 스케줄을 반환할 때 사용하는 모델
 # 아마 대부분이 여러개를 반환해야하니 이거 쓰면 될듯
