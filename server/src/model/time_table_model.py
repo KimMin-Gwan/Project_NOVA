@@ -1787,14 +1787,29 @@ class ScheduleBlockTreater():
 class ScheduleTimeLayerModel(TimeTableModel):
     def __init__(self, database:Local_Database) -> None:
         super().__init__(database)
+        self.__schedules = []
         self.__layer_data = [
             {"tag" : ""},
-            {"section":"새벽", "schedules":[]}
-            {"section":"오전", "schedules":[]}
-            {"section":"오후", "schedules":[]}
+            {"section":"새벽", "schedules":[]},
+            {"section":"오전", "schedules":[]},
+            {"section":"오후", "schedules":[]},
             {"section":"저녁", "schedules":[]}
         ]
-    
+        self.__my_layer_data = [
+            {"tag" : ""},
+            {"section":"새벽", "schedules":[]},
+            {"section":"오전", "schedules":[]},
+            {"section":"오후", "schedules":[]},
+            {"section":"저녁", "schedules":[]}
+        ]
+        self.__recommand_layer_data = [
+            {"tag" : ""},
+            {"section":"새벽", "schedules":[]},
+            {"section":"오전", "schedules":[]},
+            {"section":"오후", "schedules":[]},
+            {"section":"저녁", "schedules":[]}
+        ]   
+        
     # 단일 스케줄의 데이터 폼을 받아내는 객체
     def __make_single_schedule_data_form(self, type, schedule:Schedule):
         schedule_form = {}
@@ -1814,12 +1829,118 @@ class ScheduleTimeLayerModel(TimeTableModel):
         return schedule_form
     
     
-    # 여기부터 시작
-    def set_layer_data(self, time):
-        pass
+    # 태그 데이터 넣어줘야됨
+    def set_tag_data(self):
+        target_tag:str = callable()
         
+        self.__layer_data[0]["tag"]=target_tag
+        pass
     
     
+    # 날짜에 맞는 스케줄 데이터 불러오기
+    def make_my_schedule_data(self, target_date, schedule_search_engine):
+        
+        self._tuser.sids = self._tuser.sids
+        
+        # 여기서 schedule_search_engine으로 검색해야됨
+        result_sids = callable()
+        
+        schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids= result_sids)
+        
+        # 다 만들면 보관
+        for schedule_data in schedule_datas:
+            schedule = Schedule().make_with_dict(dict_data=schedule_data)
+            self.__schedules.append(schedule)
+        
+        return
+    
+    # 레이어 만들기
+    def set_my_schedule_layer(self):
+        # 핵심 시간 섹션
+        options = [
+            {"start": time(0, 0), "end": time(6, 0)},
+            {"start": time(6, 0), "end": time(12, 0)},
+            {"start": time(12, 0), "end": time(18, 0)},
+            {"start": time(18, 0), "end": time(23, 59)},  # 하루의 끝을 23:59로 설정
+        ]
+        
+        # 섹션마다 분류
+        for single_schedule in self.__schedules:
+            
+            single_schedule:Schedule = single_schedule
+            time_obj = datetime.strptime(single_schedule.start_time, "%H:%M")
+            
+        
+            if options[0]["start"] <= time_obj < options[0]["end"]:
+                self.__my_layer_data[1]["schedules"].append(single_schedule)
+            elif options[1]["start"] <= time_obj < options[1]["end"]:
+                self.__my_layer_data[2]["schedules"].append(single_schedule)
+            elif options[2]["start"] <= time_obj < options[2]["end"]:
+                self.__my_layer_data[3]["schedules"].append(single_schedule)
+            elif options[3]["start"] <= time_obj <= options[3]["end"]:  # 하루 끝 비교는 <= 사용
+                self.__my_layer_data[4]["schedules"].append(single_schedule)
+            else:
+                continue
+            
+            
+    # 날짜에 맞는 스케줄 데이터 불러오기
+    def make_recommand_schedule_data(self, target_date, schedule_search_engine):
+        
+        self._tuser.sids = self._tuser.sids
+        
+        # 여기서 schedule_search_engine으로 검색해야됨
+        result_sids = callable()
+        
+        schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids= result_sids)
+        
+        # 다 만들면 보관
+        for schedule_data in schedule_datas:
+            schedule = Schedule().make_with_dict(dict_data=schedule_data)
+            self.__schedules.append(schedule)
+        
+        return       
+            
+            
+     # 레이어 만들기
+    def set_recommand_schedule_layer(self):
+        # 핵심 시간 섹션
+        options = [
+            {"start": time(0, 0), "end": time(6, 0)},
+            {"start": time(6, 0), "end": time(12, 0)},
+            {"start": time(12, 0), "end": time(18, 0)},
+            {"start": time(18, 0), "end": time(23, 59)},  # 하루의 끝을 23:59로 설정
+        ]
+        
+        # 섹션마다 분류
+        for single_schedule in self.__schedules:
+            
+            single_schedule:Schedule = single_schedule
+            time_obj = datetime.strptime(single_schedule.start_time, "%H:%M")
+            
+        
+            if options[0]["start"] <= time_obj < options[0]["end"]:
+                self.__my_layer_data[1]["schedules"].append(single_schedule)
+            elif options[1]["start"] <= time_obj < options[1]["end"]:
+                self.__my_layer_data[2]["schedules"].append(single_schedule)
+            elif options[2]["start"] <= time_obj < options[2]["end"]:
+                self.__my_layer_data[3]["schedules"].append(single_schedule)
+            elif options[3]["start"] <= time_obj <= options[3]["end"]:  # 하루 끝 비교는 <= 사용
+                self.__my_layer_data[4]["schedules"].append(single_schedule)
+            else:
+                continue
+        
+        
+    # 전송용 폼으로 교체
+    def change_layer_form(self):
+        for my_single_time_section, recommand_single_time_section, layer_data in map(self.__my_layer_data[1:4], self.__recommand_layer_data[1:4], self.__layer_data):
+            temp_list = []
+            for my_single_schedule in my_single_time_section['schedules']:
+                temp_list.append(self.__make_single_schedule_data_form(type="구독", schedule=my_single_schedule))
+            for recommand_single_schedule in recommand_single_time_section['schedules']:
+                temp_list.append(self.__make_single_schedule_data_form(type="추천", schedule=recommand_single_schedule))
+            layer_data['schedules'] = temp_list
+                
+        return
     
     
     def get_response_form_data(self, head_parser):

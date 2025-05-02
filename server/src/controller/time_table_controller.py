@@ -1,6 +1,6 @@
 from cryptography.hazmat.primitives.serialization import load_ssh_private_key
 from view.jwt_decoder import JWTManager, JWTPayload, RequestManager
-from model import Local_Database, BaseModel , ScheduleChartModel
+from model import Local_Database, BaseModel , ScheduleChartModel, ScheduleTimeLayerModel
 from model import TimeTableModel,  ScheduleRecommendKeywordModel
 from model import MultiScheduleModel, AddScheduleModel
 from others import ScheduleSearchEngine as SSE
@@ -74,8 +74,8 @@ class TImeTableController:
         return model
     
     # 내 타임 차트 가지고 오기
-    def get_time_layer_with_date(self, database:Local_Database, request:RequestManager) -> BaseModel: 
-        model = ScheduleChartModel(database=database)
+    def get_time_layer_with_date(self, database:Local_Database, schedule_search_engine:SSE, request:RequestManager) -> BaseModel: 
+        model = ScheduleTimeLayerModel(database=database)
 
         if request.jwt_payload!= "":
             model.set_user_with_email(request=request.jwt_payload)
@@ -83,7 +83,15 @@ class TImeTableController:
             if not model._set_tuser_with_tuid():
                 return model
 
-        model.set_my_schedule_in_by_day(target_date=request.data_payload.date, sids=request.data_payload.sids)
+        model.make_my_schedule_data(target_date=request.data_payload.target_date,
+                                 schedule_search_engine=schedule_search_engine)
+        model.set_my_schedule_layer()
+        
+        model.make_recommand_schedule_data(target_date=request.data_payload.target_date,
+                                 schedule_search_engine=schedule_search_engine)
+        model.set_recommand_schedule_layer()
+        
+        model.change_layer_form()
             
         return model
 

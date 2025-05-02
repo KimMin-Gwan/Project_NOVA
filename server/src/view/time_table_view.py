@@ -135,6 +135,7 @@ class TimeTableView(Master_View):
 
             time_table_controller =TImeTableController()
             model = time_table_controller.get_time_layer_with_date(database=self.__database,
+                                                                   schedule_search_engine=self.__schedule_search_engine,
                                                               request=request_manager)
             
             body_data = model.get_response_form_data(self._head_parser)
