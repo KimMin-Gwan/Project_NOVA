@@ -1,6 +1,8 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from websockets.exceptions import ConnectionClosedError
 import asyncio
+from queue import Queue
+from others.data_domain import User
 
 # 소켓을 관리하기 위해 소켓 사용자를 하나의 객체로 두고 체크할것
 
@@ -35,6 +37,87 @@ class ConnectionManager:
         for connection in self.__active_connection:
             await connection.send_data(message)
         return
+    
+    
+class FeedObserveUnit:
+    def __init__(self, fid):
+        self.__fid = fid
+        self.__observers = []
+        self.__send_data_que = Queue()
+        self.__count = 0
+        self.__kill_flag = False
+        
+        
+    async def __unit_self_process(self):
+        while True:
+            if self.__count > 10:
+                self.__kill_flag = True
+            
+            if not self.__send_data_que.empty():
+                send_data = self.__send_data_que.get()
+                for observer in self.__observers:
+                    observer.set_send_data(send_data)
+                # 보내고 나면 잠시 대기
+                asyncio.sleep(0.5)
+            
+            if len(self.__observers) == 0:
+                self.__count += 1
+            else:
+                self.__count = 0
+
+    def is_this_feed_killed(self):
+        return self.__kill_flag
+    
+    def add_new_observer(self, user:User):
+        if self.__kill_flag:
+            return False
+        
+        for observer in self.__observers:
+            if observer.get_observers_uid() == user.uid:
+                return False
+        
+        new_observer = FeedObserver(fid=self.__fid, user=user)
+        self.__observers.append(new_observer)
+        return True
+    
+    async def remove_observer(self):
+        if self.__kill_flag:
+            for observer in self.__observers:
+                self.__observers.remove(observer)
+        
+        for observer in self.__observers:
+            if observer.is_observer_disconnected():
+                self.__observers.remove(observer)
+        return
+        
+    
+    
+class FeedObserver:
+    def __init__(self, fid, user):
+        self.__user = user
+        self.__fid = fid
+        self.__websocekt:WebSocket = None
+        self.__send_flag = False
+        self.__send_data = ""
+        
+    async def connect(self, websocket:WebSocket):
+        self.__websocket = websocket
+        await self.__websocekt.accept()
+        return
+    
+    async def send_data(self, data:str):
+        await self.__websocekt.send_text(data)
+        return
+    
+    async def recive_data(self):
+        data = None
+        data = await self.__websocekt.receive_text()
+        
+        # data 분석하는 로직이 여기 들어감
+        
+        
+        
+    
 
 # 리그 관찰자
 class LeagueObserver:
