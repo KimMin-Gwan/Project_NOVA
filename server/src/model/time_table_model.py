@@ -946,15 +946,15 @@ class MultiScheduleModel(TimeTableModel):
 
         return
 
-    def get_specific_schedules(self, schedule_search_engine:SSE, specific_date:str,
-                               num_schedules:int, last_index:int=-1):
-        searched_list = schedule_search_engine.try_get_schedules_in_specific_date(sids=["all"],
-                                                                                  specific_date=specific_date,
-                                                                                  return_id=True)
-        searched_list, self._key = self.paging_id_list(id_list=searched_list, last_index=last_index, page_size=num_schedules)
-        self._make_send_data_with_ids(id_list=searched_list, search_type="schedule")
-
-        return
+    # def get_specific_schedules(self, schedule_search_engine:SSE, specific_date:str,
+    #                            num_schedules:int, last_index:int=-1):
+    #     searched_list = schedule_search_engine.try_get_schedules_in_specific_date(sids=["all"],
+    #                                                                               specific_date=specific_date,
+    #                                                                               return_id=True)
+    #     searched_list, self._key = self.paging_id_list(id_list=searched_list, last_index=last_index, page_size=num_schedules)
+    #     self._make_send_data_with_ids(id_list=searched_list, search_type="schedule")
+    #
+    #     return
 
 
 

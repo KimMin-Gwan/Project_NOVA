@@ -257,20 +257,20 @@ class TimeTableView(Master_View):
 
         # 테스트용
         # 날짜에 따라 잘되는지 테스트
-        @self.__app.get('/time_table_server/get_specific_schedules')
-        def try_get_specific_schedules(request:Request, target_date:Optional[str], num_schedules:Optional[int], key:Optional[int]=-1):
-            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
-            data_payload = TestGetSpecificRequest(target_date=target_date, num_schedules=num_schedules, key=key)
-            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
-
-            time_table_controller =TImeTableController()
-            model = time_table_controller.try_get_specific_schedules(database=self.__database,
-                                                                     schedule_search_engine=self.__schedule_search_engine,
-                                                                     request=request_manager)
-
-            body_data = model.get_response_form_data(self._head_parser)
-            response = request_manager.make_json_response(body_data=body_data)
-            return response
+        # @self.__app.get('/time_table_server/get_specific_schedules')
+        # def try_get_specific_schedules(request:Request, target_date:Optional[str], num_schedules:Optional[int], key:Optional[int]=-1):
+        #     request_manager = RequestManager(secret_key=self.__jwt_secret_key)
+        #     data_payload = TestGetSpecificRequest(target_date=target_date, num_schedules=num_schedules, key=key)
+        #     request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+        #
+        #     time_table_controller =TImeTableController()
+        #     model = time_table_controller.try_get_specific_schedules(database=self.__database,
+        #                                                              schedule_search_engine=self.__schedule_search_engine,
+        #                                                              request=request_manager)
+        #
+        #     body_data = model.get_response_form_data(self._head_parser)
+        #     response = request_manager.make_json_response(body_data=body_data)
+        #     return response
 
     # 로그인 필수
     def my_schedule_route(self):
@@ -580,12 +580,12 @@ class DummyRequest():
         pass
 
 # 테스트용이므로 쓰고나서 지우기
-class TestGetSpecificRequest():
-    def __init__(self, target_date:str, num_schedules:int, key:int) -> None:
-        self.email:str="alsrhks2508@naver.com"
-        self.target_date = target_date
-        self.num_schedules = num_schedules
-        self.key = key
+# class TestGetSpecificRequest():
+#     def __init__(self, target_date:str, num_schedules:int, key:int) -> None:
+#         self.email:str="alsrhks2508@naver.com"
+#         self.target_date = target_date
+#         self.num_schedules = num_schedules
+#         self.key = key
 
 # class DummyLoginedRequest(RequestHeader):
 #     def __init__(self, request) -> None:

@@ -111,21 +111,21 @@ class TImeTableController:
 
     # Specific Schedule 들고오기 테스트용
     # 하고나선 무조건 삭제
-    def try_get_specific_schedules(self, database:Local_Database,schedule_search_engine:SSE,
-                               request:RequestManager) -> BaseModel:
-        model = MultiScheduleModel(database=database)
-
-        model.set_user_with_email(request=request.data_payload)
-        if not model._set_tuser_with_tuid():
-            return model
-
-        model.get_specific_schedules(schedule_search_engine=schedule_search_engine,
-                                     specific_date=request.data_payload.target_date,
-                                     num_schedules=request.data_payload.num_schedules,
-                                     last_index=request.data_payload.key)
-
-        return model
-
+    # def try_get_specific_schedules(self, database:Local_Database,schedule_search_engine:SSE,
+    #                            request:RequestManager) -> BaseModel:
+    #     model = MultiScheduleModel(database=database)
+    #
+    #     model.set_user_with_email(request=request.data_payload)
+    #     if not model._set_tuser_with_tuid():
+    #         return model
+    #
+    #     model.get_specific_schedules(schedule_search_engine=schedule_search_engine,
+    #                                  specific_date=request.data_payload.target_date,
+    #                                  num_schedules=request.data_payload.num_schedules,
+    #                                  last_index=request.data_payload.key)
+    #
+    #     return model
+    #
     # 스케줄 추가
     def try_add_schedule(self, database:Local_Database, request:RequestManager ) -> BaseModel:
         model = AddScheduleModel(database=database)
