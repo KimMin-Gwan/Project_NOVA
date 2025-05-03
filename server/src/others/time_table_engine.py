@@ -137,7 +137,7 @@ class ScheduleSearchEngine:
         if sids is None:
             sids = []
 
-        sid_list = self.__managed_schedule_table.search_specific_date(sid=sids, specific_date=specific_date, return_id=return_id)
+        sid_list = self.__managed_schedule_table.filtering_schedule_in_specific_date(selected_sids=sids, specific_date=specific_date, return_id=return_id)
         return sid_list
 
 
