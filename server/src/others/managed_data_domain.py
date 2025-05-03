@@ -1654,6 +1654,7 @@ class ManagedScheduleTable(ManagedTable):
             sids=copy(bundle.sids)
         )
 
+
         # 바이어스 데이터
         bias_data = self._database.get_data_with_id(target="bid", id=managed_bundle.bid)
         bias = Bias()
