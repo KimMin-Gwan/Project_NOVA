@@ -565,6 +565,8 @@ class ManagedTable:
 
         return filtered_df
 
+    # 이거 수정해야함
+    # 로직에 살짝 변경이 있을 예정
     # 오늘을 기준으로, 현재 진행 중인, 종료된, 예정인 데이터들을 필터링합니다.
     def _filter_data_with_date_in_progress(self, df:pd.DataFrame, date_columns:list=None, when:str=''):
         if date_columns is None:
@@ -610,11 +612,11 @@ class ManagedTable:
 
         return filtered_df
 
-    # 금주의 데이터를 필터링합니다.
+    # 일정에 맞는 데이터를 필터링합니다.
     # 이는 Update_time이 될수도 있고, Start_date, End_date가 될 수 있습니다.
     # date_option = day => 오늘을 기준으로 필터링 (오늘 하루동안 올라온/시작하는/끝나는 데이터를 분류)
     # date_option = week => 오늘을 포함하는 일주일 (월요일 ~ 금요일) 필터링
-    def _filter_data_with_date_option(self, df:pd.DataFrame, date_option:str="", date_columns:list=None):
+    def _filter_data_with_date_option(self, df:pd.DataFrame, date_option:str="", date_columns:list=None, **condition):
         if date_columns is None:
             logging.error("date_columns가 입력되지 않음")
             return df
@@ -629,8 +631,8 @@ class ManagedTable:
         if date_option in SKIP_TUPLE:
             pass
 
-        elif date_option not in ("day", "weekly"):
-            logging.error("date_option은 day, weekly에만 대응 됨")
+        elif date_option not in ("day", "weekly", "specific"):
+            logging.error("date_option은 day, weekly, specific 에만 대응 됨")
 
         # 데이터가 당일에만 시작하는 / 끝나는 / 진행(시작-끝이 오늘) 인 데이터들만 필터링
         elif date_option == "day":
@@ -645,6 +647,28 @@ class ManagedTable:
             monday, sunday = self._get_monday_sunday_of_this_week()
             for date_column in date_columns:
                 mask &= ((monday <= df[date_column]) & (df[date_column] <= sunday))
+
+        elif date_option == "specific":
+            if "specific_date" in condition:
+                # if specific_date == str, transform datetime object
+                if type(condition["specific_date"]) == str and not condition["specific_date"] in SKIP_TUPLE:
+                    specific_date = datetime.strptime(condition["specific_date"], "%Y/%m/%d").date()
+                else:
+                    specific_date = condition["specific_date"].date()      # datetime obj
+
+
+                # if date_columns length is not 2, not filtering.
+                if len(date_columns) < 2:
+                    logging.error("시작 날짜, 종료 날짜가 제대로 설정되지 않아 필터링을 할 수 없습니다.")
+                    mask = pd.Series(False, index=df.index)
+                else:
+                    # start_date_columns, end_date_columns가 서로 바뀌어도 날짜가 일찍이면 start, 늦으면 end로 판단함
+                    start_date = df[[date_columns[0], date_columns[1]]].min(axis=1).dt.date
+                    end_date = df[[date_columns[0], date_columns[1]]].max(axis=1).dt.date
+
+                    # specific in start date ~ end_date
+                    mask &= ((start_date <= specific_date) & (specific_date <= end_date))
+
 
         # 최종 필터링
         filtered_df = df[mask]
@@ -1630,6 +1654,7 @@ class ManagedScheduleTable(ManagedTable):
             sids=copy(bundle.sids)
         )
 
+
         # 바이어스 데이터
         bias_data = self._database.get_data_with_id(target="bid", id=managed_bundle.bid)
         bias = Bias()
@@ -1688,7 +1713,8 @@ class ManagedScheduleTable(ManagedTable):
 
 
     # 탐색 스케줄 얻음
-    def search_explore_schedule(self, time_section:int, style:str, gender:str, return_id:bool=True):
+    # 이거 기능을 분리하는게 나을지도 모르겠는데 생각 해볼려고 함
+    def search_explore_schedule(self, time_section:int, style:str, gender:str, return_id:bool):
         searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_df, time_section=time_section,
                                                                bias_gender=gender, bias_tags=style)
         searched_df = self._filter_data_with_date_option(df=searched_df, date_option="weekly", date_columns=["start_date_time"])
@@ -1698,7 +1724,7 @@ class ManagedScheduleTable(ManagedTable):
         return searched_df.to_dict('records')
 
     # 날짜와 bid를 통해 일정을 검색합니다.
-    def search_schedule_with_date_n_bids(self, selected_sids:list, date:str, bid:str, return_id:bool=True):
+    def search_schedule_with_date_n_bids(self, selected_sids:list, date:str, bid:str, return_id:bool):
         searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_df, sid=selected_sids, bid=bid, date=date)
 
         if return_id:
@@ -1706,7 +1732,7 @@ class ManagedScheduleTable(ManagedTable):
         return searched_df.to_dict('records')
 
     # 현재 시간에 맞춰서 스케줄 일정 필터링 (종료된 스케줄, 진행 중인 스케줄, 예정된 스케줄)
-    def filtering_schedule_is_in_progress(self, selected_sids:list, when:str, return_id:bool=True):
+    def filtering_schedule_is_in_progress(self, selected_sids:list, when:str, return_id:bool):
         # 선택된 sid 필터링
         searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_df, sid=selected_sids)
         # 날짜 필터링
@@ -1717,8 +1743,20 @@ class ManagedScheduleTable(ManagedTable):
             return searched_df['sid'].to_list()
         return searched_df.to_dict('records')
 
+    # 오늘 날짜, 혹은 특정 날짜에 대한 일정들을 표시하는 기능.
+    def filtering_schedule_in_specific_date(self, selected_sids:list, specific_date:str, return_id:bool):
+        searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_df, sid=selected_sids)
+        searched_df = self._filter_data_with_date_option(df=searched_df, date_option="specific",
+                                                         date_columns=["start_date_time", "end_date_time"],
+                                                         specific_date=specific_date)
+
+        if return_id:
+            return searched_df['sid'].to_list()
+        return searched_df.to_dict('records')
+
+
     # 스케줄 번들 일정 필터링
-    def filtering_bundle_is_in_progress(self, selected_sbids:list, when:str, return_id:bool=True):
+    def filtering_bundle_is_in_progress(self, selected_sbids:list, when:str, return_id:bool):
         # 선택된 sbid 필터링
         searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_bundle_df, sbid=selected_sbids)
         # 날짜 필터링
@@ -1731,7 +1769,7 @@ class ManagedScheduleTable(ManagedTable):
         return searched_df.to_dict('records')
 
     # 금주의 일정 필터링
-    def filtering_weekday_schedule(self, selected_sids:list, return_id:bool=True):
+    def filtering_weekday_schedule(self, selected_sids:list, return_id:bool):
         # 선택된 sids 필터링
         searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_df, sid=selected_sids)
         # 금주의 일정 필터링
@@ -1742,7 +1780,7 @@ class ManagedScheduleTable(ManagedTable):
         return searched_df.to_dict('records')
 
     # 금주의 일정 번들 필터링
-    def filtering_weekday_bundle(self, selected_sbids:list, return_id:bool=True):
+    def filtering_weekday_bundle(self, selected_sbids:list, return_id:bool):
         # 선택한 sbids 필터링
         searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_bundle_df, sid=selected_sbids)
         # 금주의 일정 필터링
@@ -1755,7 +1793,7 @@ class ManagedScheduleTable(ManagedTable):
 
 
     # 키를 통해 스케줄을 검색합니다.
-    def search_schedule_with_key(self, key:str, search_columns:list, return_id:bool=True):
+    def search_schedule_with_key(self, key:str, search_columns:list, return_id:bool):
         if len(search_columns) == 0 or search_columns[0]=="":
             columns =['sname', 'bname', 'uname', 'code']
         else:
@@ -1767,7 +1805,7 @@ class ManagedScheduleTable(ManagedTable):
         return searched_df.to_dict('records')
 
     # 번들 서치 함수.
-    def search_bundle_with_key(self, key:str, search_columns:list, return_id:bool=True):
+    def search_bundle_with_key(self, key:str, search_columns:list, return_id:bool):
         if len(search_columns) == 0 or search_columns[0]=="":
             columns =['sbname', 'bname', 'uname', 'code']
         else:
@@ -1780,7 +1818,7 @@ class ManagedScheduleTable(ManagedTable):
         return searched_df.to_dict('records')
 
     # 내가 선택한 일정들을 보는 함수
-    def search_my_selected_schedules(self, bid:str, selected_sids:list, return_id:bool=True):
+    def search_my_selected_schedules(self, bid:str, selected_sids:list, return_id:bool):
         searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_df, sid=selected_sids, bid=bid)
 
         if return_id:
@@ -1788,7 +1826,7 @@ class ManagedScheduleTable(ManagedTable):
         return searched_df.to_dict('records')
 
     # 내가 선택한 일정 번들들을 보는 함수
-    def search_my_selected_bundles(self, bid:str, selected_sbids:list, return_id:bool=True):
+    def search_my_selected_bundles(self, bid:str, selected_sbids:list, return_id:bool):
         searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_bundle_df, sbid=selected_sbids, bid=bid)
 
         if return_id:
