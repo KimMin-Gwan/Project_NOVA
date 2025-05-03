@@ -88,70 +88,84 @@ class ScheduleSearchEngine:
 
 
     # 현재 진행 중인 스케줄을 필터링합니다
-    def try_filtering_schedule_in_progress(self, when:str, sids:list=None):
+    def try_filtering_schedule_in_progress(self, when:str, sids:list=None, return_id:bool=True):
         if sids is None:
             sids = []
         sid_list = self.__managed_schedule_table.filtering_schedule_is_in_progress(selected_sids=sids,
-                                                                                   when=when)
+                                                                                   when=when,
+                                                                                   return_id=return_id)
         return sid_list
 
     # 진행 중인 스케줄 번들을 필터링 합니다
-    def try_filtering_bundle_in_progress(self, when:str, sbids:list=None):
+    def try_filtering_bundle_in_progress(self, when:str, sbids:list=None, return_id:bool=True):
         if sbids is None:
             sbids = []
         sbid_list = self.__managed_schedule_table.filtering_bundle_is_in_progress(selected_sbids=sbids,
-                                                                                  when=when)
+                                                                                  when=when,
+                                                                                  return_id=return_id)
         return sbid_list
 
 
 
     # 금주의 일정들을 얻습니다.
-    def try_get_weekday_schedule_list(self, sids:list=None):
+    def try_get_weekday_schedule_list(self, sids:list=None, return_id:bool=True):
         if sids is None:
             sids = []
-        sid_list = self.__managed_schedule_table.filtering_weekday_schedule(selected_sids=sids)
+        sid_list = self.__managed_schedule_table.filtering_weekday_schedule(selected_sids=sids, return_id=return_id)
 
         return sid_list
 
     # 금주의 일정 번들을 얻습니다.
-    def try_get_weekday_bundle_list(self, sbids:list=None):
+    def try_get_weekday_bundle_list(self, sbids:list=None, return_id:bool=True):
         if sbids is None:
             sbids = []
-        sbid_list = self.__managed_schedule_table.filtering_weekday_bundle(selected_sbids=sbids)
+        sbid_list = self.__managed_schedule_table.filtering_weekday_bundle(selected_sbids=sbids, return_id=return_id)
 
         return sbid_list
 
 
 
     # 탐색용 스케줄을 반환하는 함수
-    def try_get_explore_schedule_list(self, time_section:int, style:str, gender:str):
-        sid_list = self.__managed_schedule_table.search_explore_schedule(time_section=time_section, style=style, gender=gender)
+    def try_get_explore_schedule_list(self, time_section:int, style:str, gender:str, return_id:bool=True):
+        sid_list = self.__managed_schedule_table.search_explore_schedule(time_section=time_section, style=style,
+                                                                         gender=gender, return_id=return_id)
+        return sid_list
+
+    # 특정 날짜에 걸려있는 모든 스케줄 을
+    def try_get_schedules_in_specific_date(self, sids:list=None, specific_date:str="", return_id:bool=True):
+        # 모든 sid를 사용하려면 무조건 "all"을 붙이시오.
+        if sids is None:
+            sids = []
+
+        sid_list = self.__managed_schedule_table.search_specific_date(sid=sids, specific_date=specific_date, return_id=return_id)
         return sid_list
 
 
     # 키워드를 활용한 스케줄 검색 로직
-    def try_search_schedule_w_keyword(self, search_columns:list, target_keyword:str=""):
-        sid_list = self.__managed_schedule_table.search_schedule_with_key(key=target_keyword, search_columns=search_columns)
+    def try_search_schedule_w_keyword(self, search_columns:list, target_keyword:str="", return_id:bool=True):
+        sid_list = self.__managed_schedule_table.search_schedule_with_key(key=target_keyword, search_columns=search_columns,
+                                                                          return_id=return_id)
         return sid_list
 
     # 키워드를 활용한 스케줄 번들 검색 로직
-    def try_search_bundle_w_keyword(self, search_columns:list, target_keyword:str=""):
-        sbid_list = self.__managed_schedule_table.search_bundle_with_key(key=target_keyword, search_columns=search_columns)
+    def try_search_bundle_w_keyword(self, search_columns:list, target_keyword:str="", return_id:bool=True):
+        sbid_list = self.__managed_schedule_table.search_bundle_with_key(key=target_keyword, search_columns=search_columns,
+                                                                         return_id=return_id)
         return sbid_list
 
 
 
     # 선택한 스케줄을 반환하는 함수
-    def try_search_selected_schedules(self, sids:list=None, bid=""):
+    def try_search_selected_schedules(self, sids:list=None, bid="", return_id:bool=True):
         if sids is None:
             sids = []
-        sid_list = self.__managed_schedule_table.search_my_selected_schedules(bid=bid, selected_sids=sids)
+        sid_list = self.__managed_schedule_table.search_my_selected_schedules(bid=bid, selected_sids=sids, return_id=return_id)
         return sid_list
 
     # 선택한 스케줄 번들을 반환하는 함수
-    def try_search_selected_bundles(self, sbids:list=None, bid=""):
+    def try_search_selected_bundles(self, sbids:list=None, bid="", return_id:bool=True):
         if sbids is None:
             sbids = []
-        sbid_list = self.__managed_schedule_table.search_my_selected_bundles(bid=bid, selected_sbids=sbids)
+        sbid_list = self.__managed_schedule_table.search_my_selected_bundles(bid=bid, selected_sbids=sbids, return_id=return_id)
         return sbid_list
 
