@@ -652,9 +652,9 @@ class ManagedTable:
             if "specific_date" in condition:
                 # if specific_date == str, transform datetime object
                 if type(condition["specific_date"]) == str and not condition["specific_date"] in SKIP_TUPLE:
-                    specific_date = datetime.strptime(condition["specific_date"], "%Y/%m/%d")
+                    specific_date = datetime.strptime(condition["specific_date"], "%Y/%m/%d").date()
                 else:
-                    specific_date = condition["specific_date"]      # datetime obj
+                    specific_date = condition["specific_date"].date()      # datetime obj
 
 
                 # if date_columns length is not 2, not filtering.
@@ -663,11 +663,11 @@ class ManagedTable:
                     mask = pd.Series(False, index=df.index)
                 else:
                     # start_date_columns, end_date_columns가 서로 바뀌어도 날짜가 일찍이면 start, 늦으면 end로 판단함
-                    start_date_time = df[date_columns[0], date_columns[1]].min(axis=1)
-                    end_date_time = df[date_columns[0], date_columns[1]].max(axis=1)
+                    start_date = df[date_columns[0], date_columns[1]].min(axis=1).dt.date
+                    end_date = df[date_columns[0], date_columns[1]].max(axis=1).dt.date
 
                     # specific in start date ~ end_date
-                    mask &= ((start_date_time <= specific_date) & (specific_date <= end_date_time))
+                    mask &= ((start_date <= specific_date) & (specific_date <= end_date))
 
 
         # 최종 필터링
