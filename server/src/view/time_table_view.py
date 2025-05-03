@@ -260,7 +260,7 @@ class TimeTableView(Master_View):
         @self.__app.get('/time_table_server/get_specific_schedules')
         def try_get_specific_schedules(request:Request, target_date:Optional[str], num_schedules:Optional[int], key:Optional[int]=-1):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
-            data_payload = TestGetSpecificRequest(request=request, target_date=target_date, num_schedules=num_schedules, key=key)
+            data_payload = TestGetSpecificRequest(target_date=target_date, num_schedules=num_schedules, key=key)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
             time_table_controller =TImeTableController()
@@ -580,9 +580,8 @@ class DummyRequest():
         pass
 
 # 테스트용이므로 쓰고나서 지우기
-class TestGetSpecificRequest(RequestHeader):
-    def __init__(self, request, target_date:str, num_schedules:int, key:int) -> None:
-        super().__init__(request)
+class TestGetSpecificRequest():
+    def __init__(self, target_date:str, num_schedules:int, key:int) -> None:
         self.email:str="alsrhks2508@naver.com"
         self.target_date = target_date
         self.num_schedules = num_schedules
