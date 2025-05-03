@@ -663,8 +663,8 @@ class ManagedTable:
                     mask = pd.Series(False, index=df.index)
                 else:
                     # start_date_columns, end_date_columns가 서로 바뀌어도 날짜가 일찍이면 start, 늦으면 end로 판단함
-                    start_date = df[date_columns[0], date_columns[1]].min(axis=1).dt.date
-                    end_date = df[date_columns[0], date_columns[1]].max(axis=1).dt.date
+                    start_date = df[[date_columns[0], date_columns[1]]].min(axis=1).dt.date
+                    end_date = df[[date_columns[0], date_columns[1]]].max(axis=1).dt.date
 
                     # specific in start date ~ end_date
                     mask &= ((start_date <= specific_date) & (specific_date <= end_date))
@@ -1746,7 +1746,9 @@ class ManagedScheduleTable(ManagedTable):
     # 오늘 날짜, 혹은 특정 날짜에 대한 일정들을 표시하는 기능.
     def filtering_schedule_in_specific_date(self, selected_sids:list, specific_date:str, return_id:bool):
         searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_df, sid=selected_sids)
-        searched_df = self._filter_data_with_date_option(df=searched_df, date_columns=["start_date_time", "end_date_time"], specific_date=specific_date)
+        searched_df = self._filter_data_with_date_option(df=searched_df, date_option="specific",
+                                                         date_columns=["start_date_time", "end_date_time"],
+                                                         specific_date=specific_date)
 
         if return_id:
             return searched_df['sid'].to_list()
