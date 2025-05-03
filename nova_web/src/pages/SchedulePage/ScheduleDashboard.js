@@ -408,7 +408,6 @@ const ScheduleDashboard = () => {
       </div>
       <NavBar brightMode={brightMode} />
 
-      <MakeSingleSchedule closeSchedule={toggleMakeScheduleModal} isOpen={makeScheduleModal} />
     </div>
   );
 };

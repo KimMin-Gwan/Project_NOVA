@@ -38,6 +38,7 @@ import PaymentPage from "./pages/NOVAADPage/paymentpage.js";
 import NovaADHomepage from "./pages/NOVAADPage/novaADHomepage.js";
 import ScheduleMakePage from "./pages/SchedulePage/ScheduleMakePage.js";
 import { NewFeedWritePage } from "./pages/Write/newWrite.js";
+import NewFeedDetail from "./pages/FeedDetail/NewFeedDetail.js";
 
 // 다크 모드 클래스 반환 함수
 export function getModeClass(mode) {
@@ -101,6 +102,7 @@ function App() {
       ></Route>
       <Route path="/feed_list/:fid" element={<FeedList />}></Route>
       <Route path="/feed_detail/:fid" element={<FeedDetail />}></Route>
+      <Route path="/new_feed_detail/" element={<NewFeedDetail/>}></Route>
       <Route path="/follow_page" element={<FollowPage />}></Route>
 
       <Route path="/new_write_feed" element={<NewFeedWritePage/>}></Route>

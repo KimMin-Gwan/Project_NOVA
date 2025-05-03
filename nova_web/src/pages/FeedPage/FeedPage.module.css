@@ -2294,12 +2294,14 @@ h5 {
 /* 2024/12/30 */
 /* 피드 레이아웃 수정본 */
 .wrapper-container {
-  width: 100%;
+  width: calc(100% - 4px);
   cursor: pointer;
-  background-color: white;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.6) 100%);
+  box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.08);
   color: black;
   margin-bottom: 15px;
-  border: 1px 0px solid gray;
+  border: 2px solid white;
+  border-radius: 12px;
   position: relative;
 }
 
