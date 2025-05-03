@@ -945,6 +945,19 @@ class MultiScheduleModel(TimeTableModel):
         self._make_send_data_with_ids(id_list=searched_list, search_type="schedule")
 
         return
+
+    def get_specific_schedules(self, schedule_search_engine:SSE, specific_date:str,
+                               num_schedules:int, last_index:int=-1):
+        searched_list = schedule_search_engine.try_get_schedules_in_specific_date(sids=["all"],
+                                                                                  specific_date=specific_date,
+                                                                                  return_id=True)
+        searched_list, self._key = self.paging_id_list(id_list=searched_list, last_index=last_index, page_size=num_schedules)
+        self._make_send_data_with_ids(id_list=searched_list, search_type="schedule")
+
+        return
+
+
+
     # 내가 작성한 스케쥴 가져오기 (수정을 위해서)
     def get_written_schedule(self, sid:str):
         schedule_data = self._database.get_data_with_id(target="sid",id=sid)
@@ -1839,10 +1852,14 @@ class ScheduleTimeLayerModel(TimeTableModel):
     
     # 날짜에 맞는 스케줄 데이터 불러오기
     def make_my_schedule_data(self, target_date, schedule_search_engine):
-        
         self._tuser.sids = self._tuser.sids
         
         # 여기서 schedule_search_engine으로 검색해야됨
+        # sids 전체애 대한 검색은 무조건 ["all"]로 해주시길 바람
+        # specific_date의 자료형은 str 그대로 써도됩니다. managed_table에서 Datetime 객체로 변환시키도록 만들었음.
+        # return_id = True -> sid list 반환, False -> managed_Schedule list 반환
+
+        result_sids = schedule_search_engine.try_get_schedules_in_specific_date(sids=["all"], specific_date=target_date, return_id=False)
         result_sids = callable()
         
         schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids= result_sids)
