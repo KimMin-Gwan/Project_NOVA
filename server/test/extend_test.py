@@ -1,8 +1,10 @@
-data = ["1"]
+
+data = [1,2,3,4,5,6,7,8,9,10]
+
+count = 0
 
 
-temp_list = []
+for k in data[::-1]:
+    print(k)
 
-temp_list.extend([data])
 
-print(temp_list)

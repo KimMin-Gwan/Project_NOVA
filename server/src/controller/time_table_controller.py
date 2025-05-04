@@ -5,6 +5,7 @@ from model import TimeTableModel,  ScheduleRecommendKeywordModel
 from model import MultiScheduleModel, AddScheduleModel
 from others import ScheduleSearchEngine as SSE
 
+from datetime import datetime
 
 
 class TImeTableController:
@@ -87,9 +88,12 @@ class TImeTableController:
                                  schedule_search_engine=schedule_search_engine)
         model.set_my_schedule_layer()
         
-        model.make_recommand_schedule_data(target_date=request.data_payload.target_date,
-                                 schedule_search_engine=schedule_search_engine)
-        model.set_recommand_schedule_layer()
+        target_date = datetime.strptime(date_string=request.data_payload.taget_date, format="%Y-%m-%d")
+        
+        if datetime.today() <= target_date:
+            model.make_recommand_schedule_data(target_date=request.data_payload.target_date,
+                                    schedule_search_engine=schedule_search_engine)
+            model.set_recommand_schedule_layer()
         
         model.change_layer_form()
             

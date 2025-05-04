@@ -1,4 +1,5 @@
 import re
+from collections import Counter
 
 from model.base_model import BaseModel
 from model import Local_Database
@@ -6,6 +7,7 @@ from others.data_domain import TimeTableUser as TUser
 from others.data_domain import Schedule, ScheduleBundle, ScheduleEvent, Bias, User
 
 from others.time_table_engine import ScheduleSearchEngine as SSE
+from others import ManagedSchedule
 
 from pprint import pprint
 from datetime import datetime,timedelta, time, date
@@ -1841,28 +1843,62 @@ class ScheduleTimeLayerModel(TimeTableModel):
         schedule_form["schedule_bid"] = schedule.bid
         return schedule_form
     
-    
     # 태그 데이터 넣어줘야됨
     def set_tag_data(self):
-        target_tag:str = callable()
+        target_sids = []
+        count = 0
         
-        self.__layer_data[0]["tag"]=target_tag
-        pass
+        # 분석할 정보가 부족하면 tuser의 bias 카테고리 기반으로 세팅하면됨
+        if len(self._tuser.sids) < 10:
+            index = random.randint(0, len(self._tuser.category)-1)
+            self.__layer_data[0]["tag"] = self._tuser.category[index]
+            return
+        
+        
+        for sid in reversed(self._tuser.sids):
+            if count > 10:
+                break
+            
+            target_sids.append(sid)
+            count+=1
+
+        schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids=target_sids)
+        
+        tags = []
+        unigue_tag = set()
+        
+        for schedule_data in schedule_datas:
+            schedule = Schedule().make_with_dict(schedule_data)
+            for tag in schedule.tags:
+                tags.append(tag)
+                unigue_tag.add(tag)
+        
+        # 각 태그의 개수를 세기
+        tag_counts = Counter(tags)
+
+        # 가장 많이 나온 태그와 그 개수 찾기
+        most_common_tag, count = tag_counts.most_common(1)[0]  # [(tag, count)] 형태 반환
+        
+        self.__layer_data[0]["tag"]=most_common_tag
+        return
     
     
     # 날짜에 맞는 스케줄 데이터 불러오기
-    def make_my_schedule_data(self, target_date, schedule_search_engine):
-        self._tuser.sids = self._tuser.sids
-        
+    def make_my_schedule_data(self, target_date, schedule_search_engine:SSE):
         # 여기서 schedule_search_engine으로 검색해야됨
         # sids 전체애 대한 검색은 무조건 ["all"]로 해주시길 바람
         # specific_date의 자료형은 str 그대로 써도됩니다. managed_table에서 Datetime 객체로 변환시키도록 만들었음.
         # return_id = True -> sid list 반환, False -> managed_Schedule list 반환
 
-        result_sids = schedule_search_engine.try_get_schedules_in_specific_date(sids=["all"], specific_date=target_date, return_id=False)
-        result_sids = callable()
-        
-        schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids= result_sids)
+        result_schedules = schedule_search_engine.try_get_schedules_in_specific_date(sids=["all"], specific_date=target_date, return_id=False)
+
+        target_sids = []
+
+        for managed_schedule in result_schedules:
+            if managed_schedule.sid in self._tuser.sids:
+                target_sids.append(managed_schedule.sid)
+                
+        schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids= target_sids)
         
         # 다 만들면 보관
         for schedule_data in schedule_datas:
@@ -1901,14 +1937,21 @@ class ScheduleTimeLayerModel(TimeTableModel):
             
             
     # 날짜에 맞는 스케줄 데이터 불러오기
-    def make_recommand_schedule_data(self, target_date, schedule_search_engine):
+    def make_recommand_schedule_data(self, target_date, schedule_search_engine:SSE):
+        result_schedules = schedule_search_engine.try_get_schedules_in_specific_date(sids=["all"], specific_date=target_date, return_id=False)
         
-        self._tuser.sids = self._tuser.sids
+        target_sids = []
+
+        for managed_schedule in result_schedules:
+            if len(target_sids) > 5:
+                break
+            
+            target_sids.append(managed_schedule.sid)
+                
+        schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids= target_sids)
         
-        # 여기서 schedule_search_engine으로 검색해야됨
-        result_sids = callable()
         
-        schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids= result_sids)
+        self.__schedules.clear()
         
         # 다 만들면 보관
         for schedule_data in schedule_datas:
@@ -1949,14 +1992,13 @@ class ScheduleTimeLayerModel(TimeTableModel):
         
     # 전송용 폼으로 교체
     def change_layer_form(self):
-        for my_single_time_section, recommand_single_time_section, layer_data in map(self.__my_layer_data[1:4], self.__recommand_layer_data[1:4], self.__layer_data):
+        for my_single_time_section, recommand_single_time_section, layer_data in map(self.__my_layer_data[1:4], self.__recommand_layer_data[1:4], self.__layer_data[1:4]):
             temp_list = []
             for my_single_schedule in my_single_time_section['schedules']:
                 temp_list.append(self.__make_single_schedule_data_form(type="구독", schedule=my_single_schedule))
             for recommand_single_schedule in recommand_single_time_section['schedules']:
                 temp_list.append(self.__make_single_schedule_data_form(type="추천", schedule=recommand_single_schedule))
-            layer_data['schedules'] = temp_list
-                
+            layer_data['schedules'].append(temp_list)
         return
     
     
