@@ -153,6 +153,32 @@ class ScheduleSearchEngine:
                                                                          return_id=return_id)
         return sbid_list
 
+    # sid를 넣으면 Managed_객체가 반환되도록 함.
+    # 이건 단일 sid에 대해서 나눔
+    def try_get_schedule_with_sid(self, sid:str, return_id:bool=False):
+        search_sid_list = list(sid)
+        managed_schedule_list = self.__managed_schedule_table.search_schedule_with_sids(sid=search_sid_list, return_id=return_id)
+
+        return managed_schedule_list
+
+    # 복수의 sid에 대해 Managed_객체 반환
+    def try_get_schedule_with_sids(self, sids:list[str], return_id:bool=False):
+        managed_schedule_list = self.__managed_schedule_table.search_schedule_with_sids(sids=sids, return_id=return_id)
+
+        return managed_schedule_list
+
+    # 단일 번들 객체에 대해 Managed_객체 반환
+    def try_get_bundle_with_sbid(self, sbid:str, return_id:bool=False):
+        search_sbid_list = list(sbid)
+        managed_bundle_list = self.__managed_schedule_table.search_bundle_with_sbids(sbid=search_sbid_list, return_id=return_id)
+
+        return managed_bundle_list
+
+    # 복수 sbid에 대해 Managed_객체 반환
+    def try_get_bundle_with_sbids(self, sbids:list[str], return_id:bool=False):
+        managed_bundle_list = self.__managed_schedule_table.search_bundle_with_sbids(sbids=sbids, return_id=return_id)
+
+        return managed_bundle_list
 
 
     # 선택한 스케줄을 반환하는 함수

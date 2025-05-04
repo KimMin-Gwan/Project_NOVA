@@ -1817,6 +1817,24 @@ class ManagedScheduleTable(ManagedTable):
             return searched_df['sbid'].to_list()
         return searched_df.to_dict('records')
 
+    # sid를 넣으면 sid에 맞는 것들을 반환합니다.
+    def search_schedule_with_sids(self, sids:list, return_id:bool):
+        searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_df, sid=sids)
+
+        if return_id:
+            return searched_df['sid'].to_list()
+        return searched_df.to_dict('records')
+
+    # sbid를 넣으면 sbid에 맞는 Manged 객체들을 반환합니다.
+    def search_bundle_with_sbids(self, sbids:list, return_id:bool):
+        searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_bundle_df, sbid=sbids)
+
+        if return_id:
+            return searched_df['sbid'].to_list()
+        return searched_df.to_dict('records')
+
+    # 이거 위의 저 함수들을 쓰게되면 이걸 managed_table에서 해결하는게 아니라 Search_engine에서 2개의 함수를 운용하는게 나을지도 모르겠는데
+    # 살짝만 더 고민하다가 바꾸겠음
     # 내가 선택한 일정들을 보는 함수
     def search_my_selected_schedules(self, bid:str, selected_sids:list, return_id:bool):
         searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_df, sid=selected_sids, bid=bid)
