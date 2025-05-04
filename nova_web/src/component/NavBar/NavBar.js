@@ -37,7 +37,7 @@ const NavBar = ({ brightMode }) => {
     },
     {
       id: 2,
-      title: "게시글 작성",
+      title: "추가",
       src: feed_write,
       alt: "write",
       end_point: "/feed_list?type=bias",
@@ -145,24 +145,25 @@ const NavBar = ({ brightMode }) => {
             <section>
               <button
                 onClick={() => {
-                  onClickMoment();
+                  //onClickMoment();
+                  handleNavigate("/write_feed/long");
                 }}
               >
                 <div className="img-box">
                   <img src={moment} alt="moment" />
                 </div>
-                새 모멘트
+                새 게시글
               </button>
 
               <button
                 onClick={() => {
-                  handleNavigate("/write_feed/long");
+                  handleNavigate("/schedule/make_new");
                 }}
               >
                 <div className="img-box">
                   <img src={post} alt="post" />
                 </div>
-                새 포스트
+                새 일정
               </button>
             </section>
 

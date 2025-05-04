@@ -94,19 +94,19 @@ const boardList = [
 
 function MoreSee({ onModeChange }) {
   const serviceList = [
-    {
-      id: 0,
-      title: "새로운 모멘트 작성",
-      src: new_moment,
-      alt: "새로운 모멘트 작성",
-      end_point: "/write_feed/short",
-      onClick: (endPoint) => handlePage(endPoint),
-    },
+    //{
+      //id: 0,
+      //title: "새로운 모멘트 작성",
+      //src: new_moment,
+      //alt: "새로운 모멘트 작성",
+      //end_point: "/write_feed/short",
+      //onClick: (endPoint) => handlePage(endPoint),
+    //},
     {
       id: 1,
-      title: "새로운 포스트 작성",
-      src: new_post,
-      alt: "새로운 포스트트 작성",
+      title: "새로운 게시글 작성",
+      src: new_moment,
+      alt: "새로운 게시글 작성",
       end_point: "/write_feed/long",
       onClick: (endPoint) => handlePage(endPoint),
     },

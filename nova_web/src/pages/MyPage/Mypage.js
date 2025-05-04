@@ -18,12 +18,12 @@ import MyPageLoading from "../LoadingPage/MypageLoading";
 const categoryData = [
   {
     type: "post",
-    category: "포스트",
+    category: "게시글",
   },
-  {
-    type: "moment",
-    category: "모멘트",
-  },
+  //{
+    //type: "moment",
+    //category: "모멘트",
+  //},
   {
     type: "like",
     category: "좋아요",
@@ -202,11 +202,7 @@ function MyPage() {
             <ul>
               <li>
                 <b>{myData.num_long_feed}</b>
-                <p>포스트</p>
-              </li>
-              <li>
-                <b>{myData.num_short_feed}</b>
-                <p>모멘트</p>
+                <p>게시글</p>
               </li>
               <li>
                 <b>{myData.num_like}</b>
