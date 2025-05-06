@@ -870,22 +870,33 @@ class Core_Service_View(Master_View):
         # 최애를 검색하는 보편적인 함수
         # 목적 : 나의 최애 선택하기, 홈화면의 최애 검색 기능
         #"http://127.0.0.1:6000/home/search_bias?bias_name=김"  # bias 검색
-        @self.__app.get('/league_detail/league_meta_data')
-        def get_league_meta_data():
-            home_controller=Home_Controller()
-            model = home_controller.get_league_meta_data(database=self.__database, league_manager=self.__league_manager)
-            response = model.get_response_form_data(self._head_parser)
-            return response
-
-        @self.__app.websocket('/league_detail/league_data')
-        async def league_socket(websocket:WebSocket, league_name:Optional[str] = ""):
+        #@self.__app.get('/league_detail/league_meta_data')
+        #def get_league_meta_data():
+            #home_controller=Home_Controller()
+            #model = home_controller.get_league_meta_data(database=self.__database, league_manager=self.__league_manager)
+            #response = model.get_response_form_data(self._head_parser)
+            #return response
+            
+        @self.__app.websocket('/feed_detail_realtime/chatting_socket')
+        async def league_socket(request:Request, websocket:WebSocket, fid:Optional[str] = ""):
             try:
-                if league_name == "":
+                if fid == "":
                     return
-                observer = await self.__connection_manager.connect(lname=league_name,
-                                                                     websocket=websocket,
-                                                                     league_manager=self.__league_manager,
-                                                                     )
+                
+                request_manager = RequestManager(secret_key=self.__jwt_secret_key)
+
+                data_payload= CheckRequest(request=fid)
+                request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+                
+                observer = await self.__connection_manager.connect(
+                    fid = fid,
+                    request=request_manager,
+                    websocket=websocket,
+                    database = self.__database,
+                    core_controller=Core_Controller()
+                    )
+                
+                
                 result = await observer.send_operation()
                 if not result:
                     self.__connection_manager.disconnect(observer=observer)
@@ -895,6 +906,25 @@ class Core_Service_View(Master_View):
                 
             except WebSocketDisconnect:
                 self.__connection_manager.disconnect(observer=observer)
+
+        #@self.__app.websocket('/league_detail/league_data')
+        #async def league_socket(websocket:WebSocket, league_name:Optional[str] = ""):
+            #try:
+                #if league_name == "":
+                    #return
+                #observer = await self.__connection_manager.connect(lname=league_name,
+                                                                     #websocket=websocket,
+                                                                     #league_manager=self.__league_manager,
+                                                                     #)
+                #result = await observer.send_operation()
+                #if not result:
+                    #self.__connection_manager.disconnect(observer=observer)
+
+            #except ConnectionClosedError:
+                #self.__connection_manager.disconnect(observer=observer)
+                
+            #except WebSocketDisconnect:
+                #self.__connection_manager.disconnect(observer=observer)
 
 class DummyRequest():
     def __init__(self) -> None:
