@@ -1,7 +1,7 @@
 from view import NOVA_Server 
 from view.parsers import Configure_File_Reader
 from model import Local_Database, Mongo_Database
-#from others import ConnectionManager, LeagueManager
+from manager import ConnectionManager
 from others import FeedManager, FeedSearchEngine, ScheduleSearchEngine, FundingProjectManager
 import asyncio
 from uvicorn import run
@@ -24,7 +24,7 @@ class Master(Configure_File_Reader):
         
         ai_manager = AIManger(model_setting=self._model_setting, database=database)
 
-        #connection_manager = ConnectionManager() # 웹소켓 매니저 실행
+        connection_manager = ConnectionManager() # 웹소켓 매니저 실행
         #league_manager = LeagueManager(connection_manager=connection_manager)
         #league_manager.init_league_manager(database=database) # 리그 매니저 초기화
         feed_search_engine = FeedSearchEngine(database=database)
@@ -36,7 +36,6 @@ class Master(Configure_File_Reader):
         nova_server = NOVA_Server(
             database=database,
             connection_manager=None,
-            league_manager=None,
             feed_manager=feed_manager,
             feed_search_engine=feed_search_engine,
             schedule_search_engine=schedule_search_engine,

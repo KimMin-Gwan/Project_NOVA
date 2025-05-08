@@ -16,7 +16,7 @@ import random
 
 class NOVA_Server:
     def __init__(self, database, connection_manager,
-                  league_manager, feed_manager, feed_search_engine,
+                   feed_manager, feed_search_engine,
                   schedule_search_engine,
                   funding_project_manager, ai_manager, jwt_secret_key
                   ) -> None:
@@ -45,7 +45,6 @@ class NOVA_Server:
                                                    database=database,
                                                    head_parser=head_parser,
                                                    connection_manager= connection_manager,
-                                                   league_manager=league_manager,
                                                    feed_manager=feed_manager,
                                                    feed_search_engine=feed_search_engine,
                                                    ai_manager=ai_manager,

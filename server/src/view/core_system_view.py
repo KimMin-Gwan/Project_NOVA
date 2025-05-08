@@ -5,18 +5,18 @@ from view.parsers import Head_Parser
 from view.jwt_decoder import RequestManager
 from controller import Home_Controller, Core_Controller, Feed_Controller
 from fastapi.responses import HTMLResponse
-from others import ConnectionManager as CM
-from others import LeagueManager as LM
+from manager import ConnectionManager as CM
 from others import FeedManager as FM
 from others import FeedSearchEngine as FSE
 from websockets.exceptions import ConnectionClosedError
 from pprint import pprint
 import json
+from datetime import datetime
 
 class Core_Service_View(Master_View):
     def __init__(self, app:FastAPI, endpoint:str,
                   database, head_parser:Head_Parser,
-                  connection_manager:CM, league_manager:LM,
+                  connection_manager:CM,
                   feed_manager:FM , feed_search_engine:FSE,
                   ai_manager, jwt_secret_key
                   ) -> None:
@@ -25,13 +25,12 @@ class Core_Service_View(Master_View):
         self._endpoint = endpoint
         self.__database = database
         self.__connection_manager=connection_manager
-        self.__league_manager=league_manager
         self.__feed_manager = feed_manager
         self.__feed_search_engine = feed_search_engine
         self.__ai_manager = ai_manager
         self.__jwt_secret_key = jwt_secret_key
         self.home_route(endpoint)
-        self.check_route()
+        #self.check_route()
         #self.web_chatting_route(endpoint)
         self.feed_route()
 
@@ -356,26 +355,26 @@ class Core_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
-        # 피드 자세히 보기의 댓글 데이터
-        @self.__app.get('/feed_explore/feed_detail/comment_data')
-        def get_feed_detail(request:Request, fid:Optional[str]):
-            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
-            data_payload = GetFeedRequest(fid=fid)
+  #      # 피드 자세히 보기의 댓글 데이터
+        #@self.__app.get('/feed_explore/feed_detail/comment_data')
+        #def get_feed_detail(request:Request, fid:Optional[str]):
+            #request_manager = RequestManager(secret_key=self.__jwt_secret_key)
+            #data_payload = GetFeedRequest(fid=fid)
 
-            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
-            #if not request_manager.jwt_payload.result:
-                #raise request_manager.credentials_exception
+            #request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            ##if not request_manager.jwt_payload.result:
+                ##raise request_manager.credentials_exception
 
-            feed_controller =Feed_Controller(feed_manager=self.__feed_manager)
-            model = feed_controller.get_all_comment_on_feed(database=self.__database,
-                                                        request=request_manager)
+            #feed_controller =Feed_Controller(feed_manager=self.__feed_manager)
+            #model = feed_controller.get_all_comment_on_feed(database=self.__database,
+                                                        #request=request_manager)
 
-            body_data = model.get_response_form_data(self._head_parser)
+            #body_data = model.get_response_form_data(self._head_parser)
 
-            # pprint("댓글데이터")
-            # pprint(body_data)
-            response = request_manager.make_json_response(body_data=body_data)
-            return response
+            ## pprint("댓글데이터")
+            ## pprint(body_data)
+            #response = request_manager.make_json_response(body_data=body_data)
+            #return response
 
         # 해시태그로 검색
         @self.__app.get('/feed_explore/search_feed_with_hashtag')
@@ -684,10 +683,10 @@ class Core_Service_View(Master_View):
 
         # feed 랑 상호작용 -> 댓글 모두보기
         @self.__app.get('/feed_explore/view_comment')
-        def get_all_comment(request:Request, fid:Optional[str]):
+        def get_all_comment(request:Request, fid:Optional[str], cid:Optional[str]):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
 
-            data_payload = FeedStaringRequest(fid=fid)
+            data_payload = FeedStaringRequest(fid=fid, cid=cid)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
                 #raise request_manager.credentials_exception
@@ -777,67 +776,67 @@ class Core_Service_View(Master_View):
             return response
 
 
-    def check_route(self):
-        # 최애 인증 페이지
-        @self.__app.post('/nova_check/server_info/check_page')
-        def get_check_page(request:Request, raw_request:dict):
-            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
+    #def check_route(self):
+        ## 최애 인증 페이지
+        #@self.__app.post('/nova_check/server_info/check_page')
+        #def get_check_page(request:Request, raw_request:dict):
+            #request_manager = RequestManager(secret_key=self.__jwt_secret_key)
 
-            data_payload= CheckRequest(request=raw_request)
-            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
-            if not request_manager.jwt_payload.result:
-                raise request_manager.credentials_exception
+            #data_payload= CheckRequest(request=raw_request)
+            #request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+            #if not request_manager.jwt_payload.result:
+                #raise request_manager.credentials_exception
 
-            core_controller=Core_Controller()
-            model = core_controller.get_check_page(database=self.__database,
-                                                             request=request_manager)
-            body_data = model.get_response_form_data(self._head_parser)
-            response = request_manager.make_json_response(body_data=body_data)
-            return response
+            #core_controller=Core_Controller()
+            #model = core_controller.get_check_page(database=self.__database,
+                                                             #request=request_manager)
+            #body_data = model.get_response_form_data(self._head_parser)
+            #response = request_manager.make_json_response(body_data=body_data)
+            #return response
 
-        # 최애 인증 시도 
-        @self.__app.post('/nova_check/server_info/try_daily_check')
-        def get_check_page(request:Request, raw_request:dict):
-            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
+        ## 최애 인증 시도 
+        #@self.__app.post('/nova_check/server_info/try_daily_check')
+        #def get_check_page(request:Request, raw_request:dict):
+            #request_manager = RequestManager(secret_key=self.__jwt_secret_key)
 
-            data_payload= CheckRequest(request=raw_request)
-            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
-            if not request_manager.jwt_payload.result:
-                raise request_manager.credentials_exception
+            #data_payload= CheckRequest(request=raw_request)
+            #request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+            #if not request_manager.jwt_payload.result:
+                #raise request_manager.credentials_exception
 
-            core_controller=Core_Controller()
-            model = core_controller.try_daily_check(database=self.__database,
-                                                             request=request_manager,
-                                                             league_manager=self.__league_manager)
-            body_data = model.get_response_form_data(self._head_parser)
-            response = request_manager.make_json_response(body_data=body_data)
-            return response
+            #core_controller=Core_Controller()
+            #model = core_controller.try_daily_check(database=self.__database,
+                                                             #request=request_manager,
+                                                             #league_manager=self.__league_manager)
+            #body_data = model.get_response_form_data(self._head_parser)
+            #response = request_manager.make_json_response(body_data=body_data)
+            #return response
 
-        # 최애 특별시 인증
-        @self.__app.post('/nova_check/server_info/try_special_check')
-        def get_check_page(request:Request, raw_request:dict):
-            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
+        ## 최애 특별시 인증
+        #@self.__app.post('/nova_check/server_info/try_special_check')
+        #def get_check_page(request:Request, raw_request:dict):
+            #request_manager = RequestManager(secret_key=self.__jwt_secret_key)
 
-            data_payload= CheckRequest(request=raw_request)
-            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
-            if not request_manager.jwt_payload.result:
-                raise request_manager.credentials_exception
+            #data_payload= CheckRequest(request=raw_request)
+            #request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+            #if not request_manager.jwt_payload.result:
+                #raise request_manager.credentials_exception
 
-            core_controller=Core_Controller()
-            model = core_controller.try_special_check(database=self.__database,
-                                                             request=request_manager,
-                                                             league_manager=self.__league_manager)
-            body_data = model.get_response_form_data(self._head_parser)
-            response = request_manager.make_json_response(body_data=body_data)
-            return response
+            #core_controller=Core_Controller()
+            #model = core_controller.try_special_check(database=self.__database,
+                                                             #request=request_manager,
+                                                             #league_manager=self.__league_manager)
+            #body_data = model.get_response_form_data(self._head_parser)
+            #response = request_manager.make_json_response(body_data=body_data)
+            #return response
 
-        @self.__app.get('/nova_check/shared/{name_card}', response_class=HTMLResponse)
-        def sample_get(name_card:str):
-            request = name_card 
-            core_controller=Core_Controller()
-            html = core_controller.get_shared_url(database=self.__database,
-                                                             request=request)
-            return html
+        #@self.__app.get('/nova_check/shared/{name_card}', response_class=HTMLResponse)
+        #def sample_get(name_card:str):
+            #request = name_card 
+            #core_controller=Core_Controller()
+            #html = core_controller.get_shared_url(database=self.__database,
+                                                             #request=request)
+            #return html
 
     def web_chatting_route(self, endpoint:str):
         ##채팅서버
@@ -877,27 +876,49 @@ class Core_Service_View(Master_View):
             #response = model.get_response_form_data(self._head_parser)
             #return response
             
+        @self.__app.get('/feed_explore/feed_detail/comment_data')
+        def get_comment_data(request:Request, fid:Optional[str], cid:Optional[str]=""):
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
+            data_payload = CommentRequest(fid=fid, cid=cid)
+
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            #if not request_manager.jwt_payload.result:
+                #raise request_manager.credentials_exception
+
+            feed_controller =Feed_Controller(feed_manager=self.__feed_manager)
+            model = feed_controller.get_target_comment_on_feed(database=self.__database,
+                                                        request=request_manager)
+
+            body_data = model.get_response_form_data(self._head_parser)
+
+            # pprint("댓글데이터")
+            # pprint(body_data)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
+            
+            
         @self.__app.websocket('/feed_detail_realtime/chatting_socket')
-        async def league_socket(request:Request, websocket:WebSocket, fid:Optional[str] = ""):
+        async def try_socket_chatting(request:Request, websocket:WebSocket, fid:Optional[str] = ""):
             try:
                 if fid == "":
                     return
                 
                 request_manager = RequestManager(secret_key=self.__jwt_secret_key)
 
-                data_payload= CheckRequest(request=fid)
-                request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+                data_payload= ChattingSocketRequest(fid=fid)
+                request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
                 
                 observer = await self.__connection_manager.connect(
                     fid = fid,
                     request=request_manager,
                     websocket=websocket,
                     database = self.__database,
-                    core_controller=Core_Controller()
+                    feed_controller=Feed_Controller(feed_manager=self.__feed_manager)
                     )
                 
+                result = await observer.observer_operation()
                 
-                result = await observer.send_operation()
                 if not result:
                     self.__connection_manager.disconnect(observer=observer)
 
@@ -992,8 +1013,9 @@ class RemoveCommentRequest(RequestHeader):
         self.cid=cid
 
 class FeedStaringRequest(RequestHeader):
-    def __init__(self,fid) -> None:
+    def __init__(self,fid, date) -> None:
         self.fid=fid 
+        self.date=date
 
 class FeedInteractionRequest(RequestHeader):
     def __init__(self,fid, action) -> None:
@@ -1076,11 +1098,17 @@ class BiasSelectRequest(RequestHeader):
         body = request['body']
         self.bid = body['bid']
 
-class CheckRequest(RequestHeader):
-    def __init__(self, request) -> None:
-        super().__init__(request)
-        body = request['body']
-        self.type = body['type']
+class ChattingSocketRequest(RequestHeader):
+    def __init__(self, fid="", date=datetime.today()) -> None:
+        fid= fid,
+        date = date
+        
+class CommentRequest(RequestHeader):
+    def __init__(self, fid="", cid="", date=datetime.today()) -> None:
+        fid= fid,
+        cid = cid,
+        date = date
+        
 
 class ConnectionManager:
     def __init__(self):

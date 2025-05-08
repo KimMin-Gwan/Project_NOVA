@@ -5,6 +5,15 @@ from others import CustomError, FeedManager, FeedSearchEngine
 class Feed_Controller:
     def __init__(self, feed_manager:FeedManager):
         self.__feed_manager = feed_manager
+        
+    def init_chatting(self, request, database:Local_Database) ->BaseModel:
+        model = BaseModel(database=database)
+        # 유저가 있으면 세팅
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
+
+        return model
+
 
     # fid를 통한 피드 검색
     def try_search_in_fid(self, database:Local_Database,
@@ -414,7 +423,22 @@ class Feed_Controller:
                                         data_payload=request.data_payload)
 
         return model
+    
+    # comment 모두 요청
+    def get_target_comment_on_feed(self, database:Local_Database,
+                               request) -> BaseModel:
+        model = CommentModel(database=database)
+        
+        # 유저가 있으면 세팅
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
+            
+        model.set_target_comment(fid=request.data_payload.fid,
+                                target_cid=request.data_payload.cid)
 
+        return model
+    
+    
     # comment 지우기
     def try_remove_comment(self, database:Local_Database,
                                request, feed_manager:FeedManager):

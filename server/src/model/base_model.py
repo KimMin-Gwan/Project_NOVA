@@ -58,6 +58,9 @@ class BaseModel(HeaderModel):
         self._database:Local_Database = database
         self._user = User()  # 이거 고려해야됨
         super().__init__()
+        
+    def get_user(self):
+        return self._user
 
     def _make_new_id(self):
         characters = string.ascii_letters + string.digits

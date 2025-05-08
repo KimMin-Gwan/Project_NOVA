@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, List
 from others.error_lib import DictMakingError
 import copy
 
@@ -480,7 +480,7 @@ class Feed(SampleDomain):
         self.board_type = board_type
         self.image = copy.copy(image)
         self.hashtag = copy.copy(hashtag)
-        self.comment = copy.copy(comment)
+        self.comment:List[str] = copy.copy(comment)
         self.iid = iid  # interaction id
         self.lid = lid  # link id
         self.bid = bid  # bias id
