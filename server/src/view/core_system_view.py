@@ -886,6 +886,8 @@ class Core_Service_View(Master_View):
                 #raise request_manager.credentials_exception
 
             feed_controller =Feed_Controller(feed_manager=self.__feed_manager)
+            
+            print(data_payload.fid)
             model = feed_controller.get_target_comment_on_feed(database=self.__database,
                                                         request=request_manager)
 
