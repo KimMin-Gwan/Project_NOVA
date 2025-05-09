@@ -1027,7 +1027,8 @@ class DeleteFeedRequest(RequestHeader):
         self.fid=fid
         
 class CommentRequest(RequestHeader):
-    def __init__(self, cid) -> None:
+    def __init__(self, fid, cid) -> None:
+        self.fid = fid
         self.cid = cid
 
 class EditFeedRequest(RequestHeader):
