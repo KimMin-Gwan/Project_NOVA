@@ -879,6 +879,7 @@ class Core_Service_View(Master_View):
         @self.__app.get('/feed_explore/feed_detail/comment_data')
         def get_comment_data(request:Request, fid:Optional[str], cid:Optional[str]=""):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
+            print(fid)
             data_payload = CommentRequest(fid=fid, cid=cid)
 
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
@@ -887,7 +888,6 @@ class Core_Service_View(Master_View):
 
             feed_controller =Feed_Controller(feed_manager=self.__feed_manager)
             
-            print(data_payload.fid)
             model = feed_controller.get_target_comment_on_feed(database=self.__database,
                                                         request=request_manager)
 
