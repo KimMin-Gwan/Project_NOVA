@@ -1030,7 +1030,7 @@ class CommentRequest(RequestHeader):
     def __init__(self, fid, cid) -> None:
         self.fid = fid
         self.cid = cid
-        print("fid : ", fid)
+        print("fid ???: ", fid)
         print("self.fid : ", self.fid)
 
 class EditFeedRequest(RequestHeader):
