@@ -900,13 +900,14 @@ class Core_Service_View(Master_View):
             
             
         @self.__app.websocket('/feed_detail_realtime/chatting_socket')
-        async def try_socket_chatting(request:Request, websocket:WebSocket, uid:Optional[str], fid:Optional[str] = ""):
+        async def try_socket_chatting(request:Request, websocket:WebSocket, uid:Optional[str]="", fid:Optional[str] = ""):
             try:
                 if fid == "":
                     return
                 
                 request_manager = RequestManager(secret_key=self.__jwt_secret_key)
-
+                if uid == "-1":
+                    uid = ""
                 data_payload= ChattingSocketRequest(uid=uid, fid=fid)
                 request_manager.try_view_just_data_payload(data_payload=data_payload)
                 
