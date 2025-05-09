@@ -68,6 +68,7 @@ class FeedObserveUnit:
                 if process_data.type == "add":
                     result = await CommentModel(database=self.__database).make_new_comment(user=process_data.user,
                                                                         fid=self.__fid,
+                                                                        cid=process_data.cid,
                                                                         body=process_data.body,
                                                                         ai_manager=None)
                 #elif process_data.type == "modify":
@@ -186,6 +187,7 @@ class FeedObserver:
         
         self.__unit.add_process_que(process_data=ProcessData(user=self.__user,
                                                             type=parts[1],
+                                                            cid=dataform.cid,
                                                             body=dataform.body,
                                                             ))
         
@@ -331,18 +333,27 @@ class ConnectionManager:
         
 # 채팅 == 댓글 라서 저장 하거나 전송 가능한 형태로 만들기 위한 세팅!
 class ChattingDataform:
-    def __init__(self, uid, uname, fid, body, type):
+    def __init__(self, uid, uname, fid, body, type, cid=""):
         self.uid = uid
         self.uname = uname
         self.fid = fid
         self.body = body
         self.date = "datetimesample"
         self.type = type
+        if type == "add":
+            self.cid = fid+"-"+self.__set_fid_with_datatime()
+        else:
+            self.cid=cid
     
-    # 타입<br>유아이디<br>유저이름<br>피드번호<br>본문<br>날짜
+    def __set_fid_with_datatime(self):
+        now = datetime.now()
+        formatted_time = now.strftime("%Y%m%d%H%M%S") + f"{now.microsecond:06d}"
+        return formatted_time
+    
+    # 타입<br>유아이디<br>uid<br>유저이름<br>본문<br>날짜
     # 타입 : add, delete
     def get_send_form(self):
-        return f"{self.type}<br>{self.uid}<br>{self.uname}<br>{self.fid}<br>{self.body}<br>{self.date}"
+        return f"{self.type}<br>{self.uid}<br>{self.uname}<br>{self.cid}<br>{self.body}<br>{self.date}"
         
         
 

@@ -668,12 +668,13 @@ class Comment(SampleDomain):
         self.target_cid = target_cid            # 대댓글을 달 위치 cid
         self.owner = False
         self.mention = mention
+        self.is_reply = False
         
         self.reworked_body = reworked_body
         self.level=level
         self.is_reworked = False
 
-    def make_with_dict(self, dict_data):
+    def make_with_dict(self, dict_data:dict):
         try:
             self.cid = dict_data['cid']
             self.fid = dict_data['fid']
@@ -688,6 +689,7 @@ class Comment(SampleDomain):
             self.target_cid = dict_data['target_cid']
             self.owner = dict_data['owner']
             self.mention = dict_data['mention']
+            self.is_reply = dict_data.get('is_reply', False)
             
             self.reworked_body = dict_data['reworked_body']
             self.level = dict_data['level']
@@ -711,6 +713,7 @@ class Comment(SampleDomain):
             "owner" : self.owner,
             "mention": self.mention,
             "reply":self.reply,
+            "is_reply": self.is_reply,
             
             "reworked_body" : self.reworked_body,
             "level" : self.level,

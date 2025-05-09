@@ -70,17 +70,19 @@ class CommentModel(BaseModel):
     def __set_fid_with_datatime(self):
         return datetime.now().strftime("%Y%m%d%H%M%S")
 
-    async def make_new_comment(self, user:User, fid:str, body:str, ai_manager):
+    async def make_new_comment(self, user:User, fid:str, cid:str, body:str, ai_manager):
         try:
             feed_data = self._database.get_data_with_id(target="fid", id=fid)
             feed = Feed()
             feed.make_with_dict(feed_data)
 
-            # CID 만들기, 중복이 있을 가능성 있음
-            # 일단 __set_datetime()쓰면 cid 분리 시, -때문에 분리가 이상하게 됨. 그래서 FID 만들 때랑 동일한 시간제작방식 사용
-            cid = fid+"-"+self.__set_fid_with_datatime()
-            date = self.__get_today_date()
+            # 이건 안해도됨
+            ## CID 만들기, 중복이 있을 가능성 있음
+            ## 일단 __set_datetime()쓰면 cid 분리 시, -때문에 분리가 이상하게 됨. 그래서 FID 만들 때랑 동일한 시간제작방식 사용
+            ##cid = fid+"-"+self.__set_fid_with_datatime()
             #mention = self._extract_mention_data(body)
+            
+            date = self.__get_today_date()
 
             # 타겟 CID도 Comment 객체 멤버로 담아버림. CID 너무 길어지기도 하고, 프론트에서 작업을 안시키게 함.
             new_comment = Comment(
