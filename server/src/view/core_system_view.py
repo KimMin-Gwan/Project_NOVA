@@ -881,8 +881,6 @@ class Core_Service_View(Master_View):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = CommentRequest(fid=fid, cid=cid)
             
-            print("fid")
-
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
                 #raise request_manager.credentials_exception
@@ -902,7 +900,9 @@ class Core_Service_View(Master_View):
             
             
         @self.__app.websocket('/feed_detail_realtime/chatting_socket')
-        async def try_socket_chatting(request:Request, websocket:WebSocket, uid:Optional[str]="", fid:Optional[str] = ""):
+        async def try_socket_chatting(websocket:WebSocket, uid:Optional[str]="", fid:Optional[str] = ""):
+            print(uid)
+            
             try:
                 if fid == "":
                     return
