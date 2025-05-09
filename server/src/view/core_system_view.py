@@ -904,6 +904,7 @@ class Core_Service_View(Master_View):
             fid="6adf-fb09-4907-ULIx2R&"
             uid="0cb7-f17f-46ef"
             
+            print("소켓 연결")
             try:
                 if fid == "":
                     return
