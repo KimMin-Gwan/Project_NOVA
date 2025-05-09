@@ -11,7 +11,6 @@ class CommentModel(BaseModel):
 
 
     def set_target_comment(self, fid:str, target_cid:str=""):
-        print("fid : ", fid)
         feed_data = self._database.get_data_with_id(target="fid", id=fid)
         feed = Feed().make_with_dict(feed_data)
         
@@ -29,7 +28,7 @@ class CommentModel(BaseModel):
             cids.append(cid)
             
         
-        comment_datas = self._database.get_data_with_id(target="cid", id=cids)
+        comment_datas = self._database.get_datas_with_ids(target_id="cid", ids=cids)
         for comment_data in comment_datas:
             comment = Feed().make_with_dict(comment_data)
             if comment.display == 2:
