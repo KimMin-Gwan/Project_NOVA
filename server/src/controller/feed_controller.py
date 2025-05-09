@@ -9,8 +9,7 @@ class Feed_Controller:
     def init_chatting(self, request, database:Local_Database) ->BaseModel:
         model = BaseModel(database=database)
         # 유저가 있으면 세팅
-        if request.jwt_payload != "":
-            model.set_user_with_uid(request=request.data_payload)
+        model.set_user_with_uid(request=request.data_payload)
 
         return model
 

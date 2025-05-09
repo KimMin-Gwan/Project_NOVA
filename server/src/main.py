@@ -35,13 +35,13 @@ class Master(Configure_File_Reader):
         
         nova_server = NOVA_Server(
             database=database,
-            connection_manager=None,
             feed_manager=feed_manager,
             feed_search_engine=feed_search_engine,
             schedule_search_engine=schedule_search_engine,
             funding_project_manager=funding_project_manager,
             ai_manager = ai_manager,
-            jwt_secret_key = self._jwt_secret_key
+            jwt_secret_key = self._jwt_secret_key,
+            connection_manager=connection_manager
             )
         
         #app = nova_server.get_app()

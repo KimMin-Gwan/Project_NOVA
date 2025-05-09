@@ -89,7 +89,6 @@ class CommentModel(BaseModel):
                 cid=cid, fid=feed.fid, uid=user.uid, uname=user.uname,
                 body=body, date=date, mention=""
             )
-        
             # 이거 일단 대기
             #new_comment = ai_manager.treat_new_comment(comment=new_comment)
         

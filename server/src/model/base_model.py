@@ -77,6 +77,7 @@ class BaseModel(HeaderModel):
 
     # 유저의 정보를 검색하는 함수
     def set_user_with_uid(self, request):
+        
         # uid를 기반으로 user table 데이터와 userbias 데이터를 가지고 올것
         user_data = self._database.get_data_with_id(target="uid", id=request.uid)
 

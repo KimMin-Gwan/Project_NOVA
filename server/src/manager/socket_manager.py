@@ -48,7 +48,7 @@ class FeedObserveUnit:
             if observer.get_observer_uid() == user.uid:
                 return None
         
-        new_observer = FeedObserver(fid=self.__fid, user=user)
+        new_observer = FeedObserver(user=user)
         self.__observers.append(new_observer)
         return new_observer
     
@@ -83,7 +83,7 @@ class FeedObserveUnit:
         
 class ProcessData:
     def __init__(self, user:User = None, type:str="add", cid:str="", body:str=""):
-        user=user
+        self.user=user
         self.type = type
         self.cid = cid
         self.body = body
@@ -94,7 +94,7 @@ class FeedObserver:
         self.__user:User = user
         self.__unit = None
         self.__observers:List[FeedObserver] = []
-        self.__websocekt:WebSocket = None
+        self.__websocket:WebSocket = None
         self.__send_data = Queue()
         
         if self.__user.uid.startswith("t_"):
@@ -123,7 +123,7 @@ class FeedObserver:
             else:
                 self.__observers.append(observer)
         
-        await self.__websocekt.accept()
+        await self.__websocket.accept()
         return
     
     # 전송할 데이터 que에 넣기
@@ -141,6 +141,8 @@ class FeedObserver:
             while True:
                 await asyncio.sleep(0.2)  # 일시 정지
                 await self.send_data("ping")
+                
+                    
                 if not self.__send_data.empty():
                     send_data:ChattingDataform = self.__send_data.get()
                     await self.send_data(send_data.get_send_form())
@@ -148,16 +150,13 @@ class FeedObserver:
                 # 데이터가 안받아지면 죽이삼 (ack)
                 
                 #*********  뭔가 이상하면 이거 들여쓰기 해보라 *********
-                
-                if self.__is_logged_in:
-                    if not await self.recive_data():
-                        break
-                
+                if not await self.recive_data():
+                    break
                 #****************************************************
                 
                 # 목표 옵져버들을 다시 체크해야됨(사라진 옵져버를 지우기 위해)
                 await self.__sync_observers()
-
+                
         except ConnectionClosedError:
             return False
             
@@ -170,12 +169,12 @@ class FeedObserver:
     # 메세지 받기 (리시빙~)
     async def recive_data(self):
         raw_message= None
-        raw_message= await self.__websocekt.receive_text()
+        raw_message= await self.__websocket.receive_text()
         
         # data = body<br>type
         parts = raw_message.split('<br>')
         if len(parts) != 2:
-            return
+            return True
         
         dataform = ChattingDataform(uid=self.__user.uid,
                                     uname=self.__user.uname,
@@ -184,7 +183,6 @@ class FeedObserver:
                                     type=parts[1],
                                     )
         # data 분석하는 로직이 여기 들어감
-        
         self.__unit.add_process_que(process_data=ProcessData(user=self.__user,
                                                             type=parts[1],
                                                             cid=dataform.cid,
@@ -193,7 +191,7 @@ class FeedObserver:
         
         for observer in self.__observers:
             await observer.set_send_data(dataform)
-        return
+        return True
         
     def get_websocket(self):
         return self.__websocket
@@ -204,14 +202,14 @@ class FeedObserver:
         target_observsers:List[FeedObserver] = self.__unit.get_observers()
         
         # 만약 그룹에 있는 옵져버 수가 줄었으면 사라진 옵져버를 여기서도 지워줘야됨
-        if len(target_observsers) < (self.__observers + 1):
+        if len(target_observsers) < (len(self.__observers) + 1):
             for observser in self.__observers:
                 # 지우기
                 if observser not in target_observsers:
                     self.__observers.remove(observser)
                     
         # 만약 그룹에 있는 옵져버 수가 늘었으면 추가된 옵져버를 여기서도 추가해야됨
-        elif len(target_observsers) > (self.__observers + 1):
+        elif len(target_observsers) > (len(self.__observers) + 1):
             for observser in target_observsers:
                 # 본인은 제외
                 if observser.get_observer_uid() == self.__user.uid:
@@ -240,13 +238,11 @@ class ConnectionManager:
         ## 유저 정보 받아오기
         #user:User = core_controller.get_user_data(database=database,
                                                 #request=request.data_payload)
-                                                
+        
         comment_model = feed_controller.init_chatting(request=request,
                                                         database=database)
-        
         user:User = comment_model.get_user()
         #init_chattings = comment_model.get_chattings()
-        
         
         #ㅂ 비회원일때
         if user.uid == "":

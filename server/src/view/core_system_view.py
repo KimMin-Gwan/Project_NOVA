@@ -847,24 +847,24 @@ class Core_Service_View(Master_View):
             ##response = model.get_response_form_data(self._head_parser)
             ##return response
             
-        ##@self.__app.websocket('/chatting')
-        ##async def chatting_socket(websocket:WebSocket):
-            ##self.manager = ConnectionManager()
-            ##core_controller=Core_Controller()
-            ##await self.manager.connect(websocket)
-            ##try:
-                ##while True:
-                    ###{"token":"token"."message":"msg"}
-                    ##request = await websocket.receive_text()
-                    ##model = core_controller.chatting(database=self.__database, request=request)
-                    ##if model.get_check() == True:
-                        ##await self.manager.broadcast(f"{model._user.uname} :{model.get_chat_data().message}")
-                    ##else:
-                        ##continue
+        #@self.__app.websocket('/chatting')
+        #async def chatting_socket(websocket:WebSocket):
+            #self.manager = ConnectionManager()
+            #core_controller=Core_Controller()
+            #await self.manager.connect(websocket)
+            #try:
+                #while True:
+                    ##{"token":"token"."message":"msg"}
+                    #request = await websocket.receive_text()
+                    #model = core_controller.chatting(database=self.__database, request=request)
+                    #if model.get_check() == True:
+                        #await self.manager.broadcast(f"{model._user.uname} :{model.get_chat_data().message}")
+                    #else:
+                        #continue
                 
-            ##except WebSocketDisconnect:
-                ##self.manager.disconnect(websocket)
-            ###    await self.manager.broadcast("client disconnected")
+            #except WebSocketDisconnect:
+                #self.manager.disconnect(websocket)
+            #    await self.manager.broadcast("client disconnected")
 
         # 최애를 검색하는 보편적인 함수
         # 목적 : 나의 최애 선택하기, 홈화면의 최애 검색 기능
@@ -900,10 +900,9 @@ class Core_Service_View(Master_View):
             
             
         @self.__app.websocket('/feed_detail_realtime/chatting_socket')
-        async def try_socket_chatting(websocket:WebSocket):
-            fid="6adf-fb09-4907-ULIx2R&"
-            uid="0cb7-f17f-46ef"
-            
+        async def try_socket_chatting(websocket:WebSocket, fid:Optional[str] = "", uid:Optional[str] = ""):  
+            #fid="6adf-fb09-4907-ULIx2R"
+            #uid="0cb7-f17f-46ef"
             print("소켓 연결")
             try:
                 if fid == "":
@@ -1102,8 +1101,8 @@ class BiasSelectRequest(RequestHeader):
 
 class ChattingSocketRequest(RequestHeader):
     def __init__(self, uid="",fid="", date=datetime.today()) -> None:
-        self.uid=uid,
-        self.fid= fid,
+        self.uid=uid
+        self.fid= fid
         self.date = date
         
 class CommentRequest(RequestHeader):

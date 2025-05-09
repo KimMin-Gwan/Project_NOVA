@@ -34,7 +34,7 @@
     <button id="sendButton">Send</button>
 
     <script>
-        const ws = new WebSocket('wss://nova-platform.kr/league_detail/league_data?league_name=고양이 은하');
+        const ws = new WebSocket('ws://127.0.0.1:4000/feed_detail_realtime/chatting_socket');
         const messages = document.getElementById('messages');
         const messageInput = document.getElementById('messageInput');
         const sendButton = document.getElementById('sendButton');
@@ -43,19 +43,26 @@
         ws.onmessage = function(event) {
             const message = document.createElement('div');
             message.textContent = event.data;
-            messages.appendChild(message);
-            messages.scrollTop = messages.scrollHeight;  // Scroll to the bottom
-            ws.send(JSON.stringify("hello"));  // JSON 형태로 전송
+            if (message.textContent.includes('ping')) {
+                ws.send(JSON.stringify("pong"));  // JSON 형태로 전송
+                return;
+            }else{
+                messages.appendChild(message);
+                messages.scrollTop = messages.scrollHeight;  // Scroll to the bottom
+                ws.send(JSON.stringify("pong"));  // JSON 형태로 전송
+            }
         };
 
         sendButton.onclick = function() {
             const messageText = messageInput.value;
             if (messageText) {
-                const message = {
-                    token: token,  // 토큰 값
-                    message: messageText  // 입력된 메시지
-                };
-                ws.send(JSON.stringify(message));  // JSON 형태로 전송
+                const message = `${messageText}<br>add`;
+                //const message = {
+                    //token: token,  // 토큰 값
+                    //message: messageText  // 입력된 메시지
+                //};
+                console.log(message)
+                ws.send(message);  // JSON 형태로 전송
                 messageInput.value = '';
             }
         };

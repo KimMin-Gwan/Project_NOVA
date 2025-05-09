@@ -21,7 +21,7 @@ class TestServer:
         def post_test(data:dict):
             return data
 
-        @self.__app.websocket('/chatting')
+        @self.__app.websocket('/feed_d')
         async def chatting_socket(websocket:WebSocket, bias_name:Optional[str] = ""):
             await self.manager.connect(websocket)
             print(bias_name)
