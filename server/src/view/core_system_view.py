@@ -1026,12 +1026,6 @@ class DeleteFeedRequest(RequestHeader):
     def __init__(self,fid) -> None:
         self.fid=fid
         
-class CommentRequest(RequestHeader):
-    def __init__(self, fid, cid) -> None:
-        self.fid = fid
-        self.cid = cid
-        print("fid ???: ", fid)
-        print("self.fid : ", self.fid)
 
 class EditFeedRequest(RequestHeader):
     def __init__(self, request, image_names, images) -> None:
@@ -1109,8 +1103,8 @@ class ChattingSocketRequest(RequestHeader):
         
 class CommentRequest(RequestHeader):
     def __init__(self, fid="", cid="", date=datetime.today()) -> None:
-        self.fid= fid,
-        self.cid = cid,
+        self.fid= fid
+        self.cid = cid
         self.date = date
         
 
