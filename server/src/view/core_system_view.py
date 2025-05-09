@@ -880,6 +880,8 @@ class Core_Service_View(Master_View):
         def get_comment_data(request:Request, fid:Optional[str], cid:Optional[str]=""):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = CommentRequest(fid=fid, cid=cid)
+            
+            print("fid")
 
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
