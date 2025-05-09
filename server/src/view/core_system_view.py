@@ -900,8 +900,9 @@ class Core_Service_View(Master_View):
             
             
         @self.__app.websocket('/feed_detail_realtime/chatting_socket')
-        async def try_socket_chatting(websocket:WebSocket, uid:Optional[str]="", fid:Optional[str] = ""):
-            print(uid)
+        async def try_socket_chatting(websocket:WebSocket):
+            fid="6adf-fb09-4907-ULIx2R&"
+            uid="0cb7-f17f-46ef"
             
             try:
                 if fid == "":
