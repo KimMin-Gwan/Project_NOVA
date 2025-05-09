@@ -899,18 +899,17 @@ class Core_Service_View(Master_View):
             
             
         @self.__app.websocket('/feed_detail_realtime/chatting_socket')
-        async def try_socket_chatting(request:Request, websocket:WebSocket, fid:Optional[str] = ""):
+        async def try_socket_chatting(request:Request, websocket:WebSocket, uid:Optional[str], fid:Optional[str] = ""):
             try:
                 if fid == "":
                     return
                 
                 request_manager = RequestManager(secret_key=self.__jwt_secret_key)
 
-                data_payload= ChattingSocketRequest(fid=fid)
-                request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+                data_payload= ChattingSocketRequest(uid=uid, fid=fid)
+                request_manager.try_view_just_data_payload(data_payload=data_payload)
                 
                 observer = await self.__connection_manager.connect(
-                    fid = fid,
                     request=request_manager,
                     websocket=websocket,
                     database = self.__database,
@@ -1100,15 +1099,16 @@ class BiasSelectRequest(RequestHeader):
         self.bid = body['bid']
 
 class ChattingSocketRequest(RequestHeader):
-    def __init__(self, fid="", date=datetime.today()) -> None:
-        fid= fid,
-        date = date
+    def __init__(self, uid="",fid="", date=datetime.today()) -> None:
+        self.uid=uid,
+        self.fid= fid,
+        self.date = date
         
 class CommentRequest(RequestHeader):
     def __init__(self, fid="", cid="", date=datetime.today()) -> None:
-        fid= fid,
-        cid = cid,
-        date = date
+        self.fid= fid,
+        self.cid = cid,
+        self.date = date
         
 
 class ConnectionManager:

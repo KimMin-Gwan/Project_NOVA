@@ -10,7 +10,7 @@ class Feed_Controller:
         model = BaseModel(database=database)
         # 유저가 있으면 세팅
         if request.jwt_payload != "":
-            model.set_user_with_email(request=request.jwt_payload)
+            model.set_user_with_uid(request=request.data_payload)
 
         return model
 

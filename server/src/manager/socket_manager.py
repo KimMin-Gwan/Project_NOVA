@@ -232,7 +232,7 @@ class ConnectionManager:
         return ''.join(random.choices(string.ascii_lowercase, k=length))
         
     # 커넥션 세팅
-    async def connect(self, fid, request, websocket: WebSocket, database, feed_controller) -> FeedObserver:
+    async def connect(self, request, websocket: WebSocket, database, feed_controller) -> FeedObserver:
         target_unit = FeedObserveUnit(fid="", database=database)
         
         ## 유저 정보 받아오기
@@ -268,13 +268,13 @@ class ConnectionManager:
         
         # 유닛 찾아서 연결
         for unit in self.__active_observe_unit:
-            if unit.get_fid() == fid:
+            if unit.get_fid() == request.data_payload.fid:
                 target_unit = unit
                 break
             
         # 못찾았으면 만들어야됨
         if target_unit.get_fid() == "":
-            target_unit.set_fid(fid=fid)
+            target_unit.set_fid(fid=request.data_payload.fid)
             new_observer = target_unit.add_new_observer(user=user)
             # 만들고나면 리스트에 넣어서 관리
             self.__active_observe_unit.append(target_unit)
