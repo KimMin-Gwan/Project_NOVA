@@ -30,7 +30,7 @@ class CommentModel(BaseModel):
         
         comment_datas = self._database.get_datas_with_ids(target_id="cid", ids=cids)
         for comment_data in comment_datas:
-            comment = Feed().make_with_dict(comment_data)
+            comment = Comment().make_with_dict(comment_data)
             if comment.display == 2:
                 comment.body = "차단된 댓글입니다."
             elif comment.display == 1:
