@@ -191,6 +191,13 @@ class RequestManager(JWTManager):
             self.new_token = ""
         finally:
             return
+        
+    def try_view_just_data_payload(self, data_payload = None):
+        self.data_payload= data_payload
+        self.jwt_payload = ""
+        self.new_token = ""
+        return
+        
 
     # json데이터 보내줘야할 때 response 만드는 곳
     def make_json_response(self, body_data:dict, token = ""):
