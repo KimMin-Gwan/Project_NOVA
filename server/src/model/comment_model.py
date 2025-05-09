@@ -11,6 +11,7 @@ class CommentModel(BaseModel):
 
 
     def set_target_comment(self, fid:str, target_cid:str=""):
+        print("fid : ", fid)
         feed_data = self._database.get_data_with_id(target="fid", id=fid)
         feed = Feed().make_with_dict(feed_data)
         
