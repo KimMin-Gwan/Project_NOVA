@@ -879,7 +879,6 @@ class Core_Service_View(Master_View):
         @self.__app.get('/feed_explore/feed_detail/comment_data')
         def get_comment_data(request:Request, fid:Optional[str], cid:Optional[str]=""):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
-            print(fid)
             data_payload = CommentRequest(fid=fid, cid=cid)
 
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
@@ -1031,6 +1030,8 @@ class CommentRequest(RequestHeader):
     def __init__(self, fid, cid) -> None:
         self.fid = fid
         self.cid = cid
+        print("fid : ", fid)
+        print("self.fid : ", self.fid)
 
 class EditFeedRequest(RequestHeader):
     def __init__(self, request, image_names, images) -> None:
