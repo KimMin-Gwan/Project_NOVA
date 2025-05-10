@@ -69,7 +69,6 @@ export default function NewFeedDetail() {
 
         socket.onopen = () => {
           setConnectionStatus('Connected');
-          console.log('WebSocket Connection established');
         };
 
         socket.onmessage = (event) => {
@@ -79,7 +78,6 @@ export default function NewFeedDetail() {
 
         socket.onclose = () => {
           setConnectionStatus('Disconnected');
-          console.log('WebSocket connection closed');
         };
 
         socket.onerror = (error) => {
@@ -104,11 +102,8 @@ export default function NewFeedDetail() {
   }, []); // 필요한 의존성 추가
 
   useEffect(() => {
-    console.log(location.pathname);
-
     // 현재 경로에 fid가 포함되어 있는지 확인
     if (!location.pathname.includes(fid)) {
-      console.log(`Path changed, closing WebSocket because fid "${fid}" not found`);
       if (socketRef.current) {
         socketRef.current.close();
       }
@@ -221,7 +216,6 @@ export default function NewFeedDetail() {
         setIsLoading(false);
       });
     };
-    console.log("uid", uid)
     return uid;
   }
 
