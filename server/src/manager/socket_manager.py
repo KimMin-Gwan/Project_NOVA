@@ -305,6 +305,7 @@ class ConnectionManager:
 
     # 연결 해제
     def disconnect(self, observer):
+        print(" 연결 해제 로직 실행함")
         observer:FeedObserver = observer
         observe_unit:FeedObserveUnit = observer.get_unit()
         
