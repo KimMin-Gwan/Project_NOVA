@@ -158,6 +158,7 @@ class FeedObserver:
                 
                 #*********  뭔가 이상하면 이거 들여쓰기 해보라 *********
                 if not await self.recive_data():
+                    print("뒤져")
                     break
                 #****************************************************
                 
@@ -171,7 +172,6 @@ class FeedObserver:
             return False
 
         finally:
-            await self.__websocket.close()
             print(f'INFO<-[      NOVA Feed Observer | {self.__user.uid} disconnected')
             return False
         
