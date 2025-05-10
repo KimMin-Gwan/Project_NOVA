@@ -184,7 +184,11 @@ class FeedObserver:
         
         print("리시빙~")
         raw_message= None
-        raw_message= await self.__websocket.receive_text()
+        try:
+            raw_message= await self.__websocket.receive_text()
+        except Exception as e:
+            print(f"ERROR<-[      NOVA Feed Observer | {self.__user.uid} : {e}")
+            
         print(f"raw_message : {raw_message}")
         
         # data = body<br>type
