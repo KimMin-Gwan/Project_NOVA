@@ -181,6 +181,8 @@ class FeedObserver:
         
     # 메세지 받기 (리시빙~)
     async def recive_data(self):
+        
+        print("리시빙~")
         raw_message= None
         raw_message= await self.__websocket.receive_text()
         print(f"raw_message : {raw_message}")
