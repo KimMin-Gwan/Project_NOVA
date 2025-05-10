@@ -58,14 +58,14 @@ class FeedObserveUnit:
     async def remove_observer(self, observer):
         for observer in self.__observers:
             if observer == observer:
-                print(f"{observer.get_observer_uid()} 옵져버 지움")
+                print(f"{observer.get_observer_uid()} observer remove")
                 self.__observers.remove(observer)
                 break
         return
     
     async def unit_process(self):
         while True:
-            await asyncio.sleep(0.2)
+            await asyncio.sleep(0.4)
             if not self.__process_que.empty():
                 process_data:ProcessData = self.__process_que.get()
                 if process_data.type == "add":
@@ -171,6 +171,7 @@ class FeedObserver:
             return False
 
         finally:
+            print(f'INFO<-[      NOVA Feed Observer | {self.__user.uid} disconnected')
             return False
         
     # 메세지 받기 (리시빙~)
@@ -246,13 +247,11 @@ class ConnectionManager:
         ## 유저 정보 받아오기
         #user:User = core_controller.get_user_data(database=database,
                                                 #request=request.data_payload)
-        print(11)
         comment_model = feed_controller.init_chatting(request=request,
                                                         database=database)
         user:User = comment_model.get_user()
         #init_chattings = comment_model.get_chattings()
         
-        print(12)
         #ㅂ 비회원일때
         if user.uid == "":
             while True:
@@ -271,8 +270,6 @@ class ConnectionManager:
                     break
             
             user.uid = new_uid
-            
-        print(13)
         
         # 유닛 찾아서 연결
         for unit in self.__active_observe_unit:
@@ -280,7 +277,6 @@ class ConnectionManager:
                 target_unit = unit
                 break
             
-        print(14)
         # 못찾았으면 만들어야됨
         if target_unit.get_fid() == "":
             target_unit.set_fid(fid=request.data_payload.fid)
@@ -292,11 +288,9 @@ class ConnectionManager:
         else:
             new_observer = target_unit.add_new_observer(user=user)
         
-        print(15)
         # 연결 시도!
         await new_observer.connect(websocket=websocket, unit=target_unit)
         
-        print(16)
         # 리스트에 넣어서 관리
         self.__active_connection.append(new_observer)
         
@@ -313,7 +307,6 @@ class ConnectionManager:
 
     # 연결 해제
     async def disconnect(self, observer):
-        print(" 연결 해제 로직 실행함")
         observer:FeedObserver = observer
         observe_unit:FeedObserveUnit = observer.get_unit()
         
@@ -340,11 +333,9 @@ class ConnectionManager:
         return
     
     async def connection_manager_process(self):
+        print(f'INFO<-[      NOVA Connection Manager clean up process started.')
         while True:
             await asyncio.sleep(1)
-            print("연결된 옵져버  : " + str(len(self.__active_connection)))
-            print("연결된 유닛  : " + str(len(self.__active_observe_unit)))
-            
             # 연결된 소켓이 없으면 대기
             if not self.__active_observe_unit and not self.__active_connection:
                 continue
