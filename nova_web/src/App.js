@@ -101,8 +101,8 @@ function App() {
         element={<FeedList brightMode={brightMode} />}
       ></Route>
       <Route path="/feed_list/:fid" element={<FeedList />}></Route>
-      <Route path="/feed_detail/:fid" element={<FeedDetail />}></Route>
-      <Route path="/new_feed_detail/" element={<NewFeedDetail/>}></Route>
+      {/*<Route path="/feed_detail/:fid" element={<FeedDetail />}></Route>*/}
+      <Route path="/feed_detail/:fid" element={<NewFeedDetail/>}></Route>
       <Route path="/follow_page" element={<FollowPage />}></Route>
 
       <Route path="/new_write_feed" element={<NewFeedWritePage/>}></Route>

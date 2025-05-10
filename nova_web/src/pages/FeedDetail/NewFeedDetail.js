@@ -19,22 +19,19 @@ import { ContentFeed } from "../../component/feed";
 import style from "./NewFeedDetail.module.css";
 
 
-const temp_comment = [
-  {cid: "1", uid:"1", owner:false, uname:"익명", isReply:false, reply:"", body:"원글 그림 왜 잘그림? 님 혹시 제것도 슬쩍 그려주실 수 있음?"},
-  {cid: "2", uid:"2", owner:false, uname:"니말이다맞음", isReply:false, reply:"", body:"윗댓 정신좀 차려라. 그냥 날로 처먹으려고 하네;; 님들 같은 사람들 때문에 멀정한 치수들 다 욕먹는거임"},
-  {cid: "3", uid:"3", owner:true, uname:"관리자", isReply:false, reply:"", body:"님들 싸우지 말죠 ㅋㅋㅋ"},
-  {cid: "4", uid:"1", owner:false, uname:"익명", isReply:false, reply:"", body:"뭐래;; 그냥 하는말인데 왜 급발진함;;"},
-  {cid: "5", uid:"3", owner:true, uname:"관리자", isReply:true, reply:{cid:"2", uname:"익명", body:"뭐래;; 그냥 하는말인데 왜 급발진함;;"}, body:"그려드릴테니 진정하십쇼 ㅋㅋㅋㅋㅋ"},
-]
-
-
-
+//const temp_comment = [
+  //{cid: "1", uid:"1", owner:false, uname:"익명", is_reply:false, reply:"", body:"원글 그림 왜 잘그림? 님 혹시 제것도 슬쩍 그려주실 수 있음?"},
+  //{cid: "2", uid:"2", owner:false, uname:"니말이다맞음", is_reply:false, reply:"", body:"윗댓 정신좀 차려라. 그냥 날로 처먹으려고 하네;; 님들 같은 사람들 때문에 멀정한 치수들 다 욕먹는거임"},
+  //{cid: "3", uid:"3", owner:true, uname:"관리자", is_reply:false, reply:"", body:"님들 싸우지 말죠 ㅋㅋㅋ"},
+  //{cid: "4", uid:"1", owner:false, uname:"익명", is_reply:false, reply:"", body:"뭐래;; 그냥 하는말인데 왜 급발진함;;"},
+  //{cid: "5", uid:"3", owner:true, uname:"관리자", is_reply:true, reply:{cid:"2", uname:"익명", body:"뭐래;; 그냥 하는말인데 왜 급발진함;;"}, body:"그려드릴테니 진정하십쇼 ㅋㅋㅋㅋㅋ"},
+//]
 
 
 export default function NewFeedDetail() {
   let navigate = useNavigate();
-  //let { fid } = useParams();
-  let fid = '6adf-fb09-4907-ULIx2R'
+  let { fid } = useParams();
+  //let fid = '6adf-fb09-4907-ULIx2R'
 
   let location = useLocation();
   //let { state } = location;
@@ -46,37 +43,126 @@ export default function NewFeedDetail() {
   let [feedData, setFeedData] = useState([]);
   let [comments, setComments] = useState([]);
   let [commentValue, setCommentValue] = useState("");
+
   let [commentId, setCommentId] = useState("");
+  let [targetCid, setTargetCid] = useState("");
+
   const [showMoreOption, setShowMoreOption] = useState(false);
   const [links, setLinks] = useState([]);
 
   const [messages, setMessages] = useState([]);
   const [connectionStatus, setConnectionStatus] = useState('Disconnected');
 
+  const [socket, setSocket] = useState(null);
+  const [user, setUser] = useState("");
+
   useEffect(() => {
-    const socket = new WebSocket('');
+    const initialize = async () => {
+      try {
+        // 1. fetchFeedComment가 완료될 때까지 대기
+        const uid = await fetchFeedComment();
+        setUser(uid);
 
-    socket.onopen = () => {
-      setConnectionStatus('Connected');
-      console.log('WebSocket Connection established')
+        // 2. fetchFeedComment 완료 후 WebSocket 초기화
+        const socket = new WebSocket(`wss://nova-platform.kr/feed_detail_realtime/chatting_socket?fid=${fid}&uid=${uid}`);
+        setSocket(socket);
+
+        socket.onopen = () => {
+          setConnectionStatus('Connected');
+          console.log('WebSocket Connection established');
+        };
+
+        socket.onmessage = (event) => {
+          //setMessages((prevMessages) => [...prevMessages, event.data]);
+          analyzeMessage(event.data);
+          console.log('Message received:', event.data);
+        };
+
+        socket.onclose = () => {
+          setConnectionStatus('Disconnected');
+          console.log('WebSocket connection closed');
+        };
+
+        socket.onerror = (error) => {
+          console.error('WebSocket error:', error);
+        };
+
+
+
+      } catch (error) {
+        console.error('Error during initialization:', error);
+      }
+    }
+    initialize();
+
+  }, []); // 필요한 의존성 추가
+
+
+  function parseDataToObject(data) {
+    // 데이터를 줄바꿈 단위로 분리
+    const [type, uid, uname, cid, body, date] = data.split('<br>');
+
+    // 객체 생성 및 반환
+    return {
+      type: type,
+      cid: cid, 
+      uid: uid, // 유아이디
+      owner: uname,
+      uname: uname, // 유저 이름
+      is_reply: true, // 항상 true
+      reply: {}, // 항상 빈 객체
+      body: body, // 본문
+      date: date, // 날짜
+    };
+  }
+
+  function analyzeMessage(message) {
+    // 메시지 분석 로직을 여기에 추가합니다.
+    // 예를 들어, JSON 형식의 메시지를 파싱하거나 특정 키워드를 찾는 등의 작업을 수행할 수 있습니다.
+    if (message === "ping") {
+      return;
+    }else{
+      const parsedMessage = parseDataToObject(message);
+      if (parsedMessage.type === "add") {
+        console.log('Parsed message:', parsedMessage);
+        setComments((prevComments) => [...prevComments, parsedMessage]);
+      }else if (parsedMessage.type === "delete") {
+        console.log('Delete message:', parsedMessage);
+        setComments((prevComments) => prevComments.filter(comment => comment.cid !== parsedMessage.body));
+      }
     }
 
-    socket.onmessage = (event) => {
-      setMessages((prevMessages) => [...prevMessages, event.data]);
-      console.log('Meesage received:', event.data);
+    try {
+      const parsedMessage = JSON.parse(message);
+      console.log('Parsed message:', parsedMessage);
+    } catch (error) {
+      console.error('Error parsing message:', error);
     }
+  }
 
-    socket.onclose= () => {
-      setConnectionStatus('Disconnected')
-      console.log('WebSocket connection closed')
+  const tryDeleteComment = (cid) => {
+    if (socket) {
+      const inputMessage = `${cid}<br>delete`; // 실제 메시지로 변경
+      setComments((prevComments) => prevComments.filter(comment => comment.cid !== cid));
+      socket.send(inputMessage);
     }
+  };
 
-    socket.onerror= (error) => {
-      console.error('WebSocket error :', error)
+  const tryAddComment = () => {
+    if (user === "") {
+      alert("로그인 후 댓글을 남길 수 있습니다.");
+      return;
+    }else{
+      if (socket && socket.readyState === WebSocket.OPEN) {
+        const sanitizedCommentValue = commentValue.replace(/<br>/g, '[br]');
+        const inputMessage = `${sanitizedCommentValue}<br>add`; // 실제 메시지로 변경
+        socket.send(inputMessage);
+        setCommentValue(''); // 메시지 전송 후 입력 필드 초기화
+      } else {
+        console.error('WebSocket is not open. Unable to send message.');
+      }
     }
-
-  }, []);
-
+  }
 
 
   //useEffect(() => {
@@ -98,16 +184,45 @@ export default function NewFeedDetail() {
     fetchFeed();
   }, [comments, fid]);
 
+
   async function fetchFeedComment() {
-    await mainApi.get(`feed_explore/feed_detail/comment_data?fid=${fid}`).then((res) => {
-      setComments(res.data.body.comments);
-      setIsLoading(false);
-    });
+    let uid = "-1";
+
+    if (targetCid !== "") {
+      await mainApi.get(`feed_explore/feed_detail/comment_data?fid=${fid}&target_cid=${targetCid}`).then((res) => {
+        putCommentProcess({ fetchedComments: res.data.body.comments });
+        uid = res.data.body.uid;
+        setIsLoading(false);
+      });
+    } else{
+      await mainApi.get(`feed_explore/feed_detail/comment_data?fid=${fid}`).then((res) => {
+        putCommentProcess({ fetchedComments: res.data.body.comments });
+        uid = res.data.body.uid;
+        setIsLoading(false);
+      });
+    };
+    console.log("uid", uid)
+    return uid;
   }
 
-  useEffect(() => {
-    fetchFeedComment();
-  }, []);
+  function putCommentProcess({ fetchedComments }) {
+    // 중복 확인: 기존 comments에 없는 cid만 필터링
+    const uniqueComments = fetchedComments.filter(
+      (newComment) => !comments.some((existingComment) => existingComment.cid === newComment.cid)
+    );
+
+    // 중복이 없는 댓글만 추가
+    if (uniqueComments.length > 0) {
+      const newComments = [...uniqueComments, ...comments];
+      setComments(newComments);
+
+      // 첫 번째 댓글의 cid를 타겟으로 설정
+      setTargetCid(newComments[0].cid);
+    } else {
+      console.log("No new comments to add.");
+    }
+  }
+
 
   async function handleCheckStar(fid, e) {
     await mainApi
@@ -139,33 +254,43 @@ export default function NewFeedDetail() {
   function onKeyDownEnter(e) {
     if (e.key === "Enter") {
       setIsComment(true);
-      fetchMakeComment();
+      //fetchMakeComment();
       setCommentValue("");
     }
   }
 
   function onClickInput() {
-    fetchMakeComment();
+    tryAddComment();
+    //fetchMakeComment();
     setCommentValue("");
   }
 
   const header = HEADER;
 
-  async function fetchMakeComment() {
-    await postApi
-      .post("feed_explore/make_comment", {
-        header: header,
-        body: {
-          fid: `${fid}`,
-          body: `${commentValue}`,
-          target_cid: commentId,
-        },
-      })
-      .then((res) => {
-        setComments(res.data.body.comments);
-        setCommentId("");
-      });
+  //async function fetchMakeComment() {
+    //await postApi
+      //.post("feed_explore/make_comment", {
+        //header: header,
+        //body: {
+          //fid: `${fid}`,
+          //body: `${commentValue}`,
+          //target_cid: commentId,
+        //},
+      //})
+      //.then((res) => {
+        //setComments(res.data.body.comments);
+        //setCommentId("");
+      //});
+  //}
+
+  const setPlaceholder = () => {
+    if (user !== "") { 
+      return "당신의 생각을 남겨보세요.";
+    }else{
+      return "로그인 후 댓글을 남길 수 있습니다.";
+    }
   }
+
 
   const onClickComment = (cid, targetCid, uname) => {
     setCommentId(targetCid || cid);
@@ -251,7 +376,7 @@ export default function NewFeedDetail() {
         </div>
 
         <div className={style["new-comment-box"]}>
-          {temp_comment.map((comment, index) => {
+          {comments.map((comment, index) => {
             return <CommentComponent key={index} {...comment}/>
           })}
         </div>
@@ -265,7 +390,7 @@ export default function NewFeedDetail() {
               value={commentValue}
               onChange={onChangeComment}
               onKeyDown={onKeyDownEnter}
-              placeholder="당신의 생각을 남겨보세요."
+              placeholder={setPlaceholder()}
             />
             <button className={style["input-button"]} onClick={onClickInput}>
               <img src={input} alt="input" />
@@ -275,16 +400,11 @@ export default function NewFeedDetail() {
       </div>
 
     </div>
-
   );
 }
 
 
 function CommentComponent({cid, uid, owner, uname, isReply, reply, body}){
-  const sampleWriter = "익명"
-  const sampleText = "이건 댓글 샘플임 긴걸 적으면 어떻게 될까? \n줄바꿈이 되는지도 한번 보자";
-
-
 
   if(owner){
     return(
@@ -348,9 +468,6 @@ function CommentComponent({cid, uid, owner, uname, isReply, reply, body}){
     }
   }
 }
-
-
-
 
 
 
