@@ -56,6 +56,7 @@ class FeedObserveUnit:
     async def remove_observer(self, observer):
         for observer in self.__observers:
             if observer == observer:
+                print(f"{observer.get_observer_uid()} 옵져버 지움")
                 self.__observers.remove(observer)
                 break
         return
@@ -304,14 +305,14 @@ class ConnectionManager:
         return new_observer
 
     # 연결 해제
-    def disconnect(self, observer):
+    async def disconnect(self, observer):
         print(" 연결 해제 로직 실행함")
         observer:FeedObserver = observer
         observe_unit:FeedObserveUnit = observer.get_unit()
         
         for unit in self.__active_observe_unit:
             if unit == observe_unit:
-                observe_unit.remove_observer(observer)
+                await observe_unit.remove_observer(observer)
         
         self.__active_connection.remove(observer)
         return
