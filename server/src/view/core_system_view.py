@@ -927,9 +927,11 @@ class Core_Service_View(Master_View):
                     self.__connection_manager.disconnect(observer=observer)
 
             except ConnectionClosedError:
+                print("소켓 연결 끊김")
                 self.__connection_manager.disconnect(observer=observer)
                 
             except WebSocketDisconnect:
+                print("뭔가 문제 발생")
                 self.__connection_manager.disconnect(observer=observer)
 
         #@self.__app.websocket('/league_detail/league_data')
