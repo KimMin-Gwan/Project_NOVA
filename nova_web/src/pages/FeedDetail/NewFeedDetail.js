@@ -1,6 +1,5 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
-
 import mainApi from "../../services/apis/mainApi";
 import postApi from "../../services/apis/postApi";
 
@@ -35,7 +34,6 @@ export default function NewFeedDetail() {
 
   let location = useLocation();
   //let { state } = location;
-
   let commentRef = useRef(null);
 
   const [isLoading, setIsLoading] = useState(true); // 로딩 상태 관리
@@ -56,6 +54,8 @@ export default function NewFeedDetail() {
   const [socket, setSocket] = useState(null);
   const [user, setUser] = useState("");
 
+  const socketRef = useRef(null);
+
   useEffect(() => {
     const initialize = async () => {
       try {
@@ -65,7 +65,7 @@ export default function NewFeedDetail() {
 
         // 2. fetchFeedComment 완료 후 WebSocket 초기화
         const socket = new WebSocket(`wss://nova-platform.kr/feed_detail_realtime/chatting_socket?fid=${fid}&uid=${uid}`);
-        setSocket(socket);
+        socketRef.current = socket;
 
         socket.onopen = () => {
           setConnectionStatus('Connected');
@@ -75,7 +75,6 @@ export default function NewFeedDetail() {
         socket.onmessage = (event) => {
           //setMessages((prevMessages) => [...prevMessages, event.data]);
           analyzeMessage(event.data);
-          console.log('Message received:', event.data);
         };
 
         socket.onclose = () => {
@@ -93,10 +92,54 @@ export default function NewFeedDetail() {
         console.error('Error during initialization:', error);
       }
     }
-    initialize();
+    initialize(); 
+
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.close();
+        console.log('WebSocket connection closed during cleanup');
+      }
+    };
 
   }, []); // 필요한 의존성 추가
 
+  useEffect(() => {
+    console.log(location.pathname);
+
+    // 현재 경로에 fid가 포함되어 있는지 확인
+    if (!location.pathname.includes(fid)) {
+      console.log(`Path changed, closing WebSocket because fid "${fid}" not found`);
+      if (socketRef.current) {
+        socketRef.current.close();
+      }
+    }
+  }, [location]);
+
+  function analyzeMessage(message) {
+    const socket = socketRef.current; // Access the WebSocket instance directly
+    if (!socket) {
+      console.error('Socket is not initialized');
+      return;
+    }
+
+    if (message === "ping") {
+      socket.send("pong");
+      return;
+    }
+
+    try {
+      const parsedMessage = JSON.parse(message);
+      if (parsedMessage.type === "add") {
+        setComments((prevComments) => [...prevComments, parsedMessage]);
+      } else if (parsedMessage.type === "delete") {
+        setComments((prevComments) =>
+          prevComments.filter((comment) => comment.cid !== parsedMessage.body)
+        );
+      }
+    } catch (error) {
+      console.error('Error parsing message:', error);
+    }
+  }
 
   function parseDataToObject(data) {
     // 데이터를 줄바꿈 단위로 분리
@@ -116,36 +159,12 @@ export default function NewFeedDetail() {
     };
   }
 
-  function analyzeMessage(message) {
-    // 메시지 분석 로직을 여기에 추가합니다.
-    // 예를 들어, JSON 형식의 메시지를 파싱하거나 특정 키워드를 찾는 등의 작업을 수행할 수 있습니다.
-    if (message === "ping") {
-        socket.send("pong");
-      return;
-    }else{
-      const parsedMessage = parseDataToObject(message);
-      if (parsedMessage.type === "add") {
-        console.log('Parsed message:', parsedMessage);
-        setComments((prevComments) => [...prevComments, parsedMessage]);
-      }else if (parsedMessage.type === "delete") {
-        console.log('Delete message:', parsedMessage);
-        setComments((prevComments) => prevComments.filter(comment => comment.cid !== parsedMessage.body));
-      }
-    }
-
-    try {
-      const parsedMessage = JSON.parse(message);
-      console.log('Parsed message:', parsedMessage);
-    } catch (error) {
-      console.error('Error parsing message:', error);
-    }
-  }
 
   const tryDeleteComment = (cid) => {
-    if (socket) {
+    if (socketRef.current) {
       const inputMessage = `${cid}<br>delete`; // 실제 메시지로 변경
       setComments((prevComments) => prevComments.filter(comment => comment.cid !== cid));
-      socket.send(inputMessage);
+      socketRef.send(inputMessage);
     }
   };
 
@@ -154,10 +173,10 @@ export default function NewFeedDetail() {
       alert("로그인 후 댓글을 남길 수 있습니다.");
       return;
     }else{
-      if (socket && socket.readyState === WebSocket.OPEN) {
+      if (socketRef && socketRef.readyState === WebSocket.OPEN) {
         const sanitizedCommentValue = commentValue.replace(/<br>/g, '[br]');
         const inputMessage = `${sanitizedCommentValue}<br>add`; // 실제 메시지로 변경
-        socket.send(inputMessage);
+        socketRef.send(inputMessage);
         setCommentValue(''); // 메시지 전송 후 입력 필드 초기화
       } else {
         console.error('WebSocket is not open. Unable to send message.');
