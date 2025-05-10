@@ -171,7 +171,7 @@ class FeedObserver:
             return False
 
         finally:
-            self.__websocket.close()
+            await self.__websocket.close()
             print(f'INFO<-[      NOVA Feed Observer | {self.__user.uid} disconnected')
             return False
         
