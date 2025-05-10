@@ -24,6 +24,8 @@ class FeedObserveUnit:
         self._task = asyncio.create_task(self.unit_process())
         print(f'INFO<-[      NOVA Feed Observe Unit | {self.__fid}')
         
+    def get_delete_flag(self):
+        return self.__delete_flag
     
     def toggle_delete_flag(self):
         self.__delete_flag = not self.__delete_flag
@@ -78,8 +80,12 @@ class FeedObserveUnit:
                 elif process_data.type == "delete":
                     result = await CommentModel(database=self.__database).delete_comment(cid=process_data.body)
             else:
+                if len(self.__observers) == 0:
+                    self.toggle_delete_flag()
+                
                 if self.__delete_flag:
                     break
+                
         return True
         
 class ProcessData:
@@ -331,6 +337,23 @@ class ConnectionManager:
         for connection in self.__active_connection:
             await connection.send_data(message)
         return
+    
+    async def connection_manager_process(self):
+        while True:
+            await asyncio.sleep(1)
+            print("연결된 옵져버  : " + str(len(self.__active_connection)))
+            print("연결된 유닛  : " + str(len(self.__active_observe_unit)))
+            
+            # 연결된 소켓이 없으면 대기
+            if not self.__active_observe_unit and not self.__active_connection:
+                continue
+            
+            for single_unit in self.__active_observe_unit:
+                if single_unit.get_delete_flag():
+                    self.__active_observe_unit.remove(single_unit)
+                    print(f'INFO<-[      NOVA Feed Observe Unit | {single_unit.get_fid()} 삭제됨')
+                
+        return True
     
 
         
