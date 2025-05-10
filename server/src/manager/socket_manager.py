@@ -146,24 +146,28 @@ class FeedObserver:
     async def observer_operation(self):
         try:
             while True:
-                await asyncio.sleep(0.2)  # 일시 정지
+                await asyncio.sleep(0.2)
+                print(1)
                 await self.send_data("ping")
                 
+                print(2)
                     
                 if not self.__send_data.empty():
                     send_data:ChattingDataform = self.__send_data.get()
                     await self.send_data(send_data.get_send_form())
                 
+                print(3)
                 # 데이터가 안받아지면 죽이삼 (ack)
                 
                 #*********  뭔가 이상하면 이거 들여쓰기 해보라 *********
                 if not await self.recive_data():
-                    print("뒤져")
                     break
                 #****************************************************
                 
+                print(4)
                 # 목표 옵져버들을 다시 체크해야됨(사라진 옵져버를 지우기 위해)
                 await self.__sync_observers()
+                print(5)
                 
         except ConnectionClosedError:
             return False
