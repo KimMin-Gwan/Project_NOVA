@@ -911,7 +911,6 @@ class Core_Service_View(Master_View):
                 data_payload= ChattingSocketRequest(uid=uid, fid=fid)
                 request_manager.try_view_just_data_payload(data_payload=data_payload)
                 
-                print("이건 몇번 켜짐?  ")
                 observer = await self.__connection_manager.connect(
                     request=request_manager,
                     websocket=websocket,
