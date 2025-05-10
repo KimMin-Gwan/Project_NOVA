@@ -233,6 +233,7 @@ class ConnectionManager:
         self.__active_connection: list[FeedObserver] = []
         self.__active_observe_unit : list[FeedObserveUnit] = []
         print(f'INFO<-[      NOVA Connection Manager NOW READY.')
+        self.__task = asyncio.create_task(self.connection_manager_process())
         
     def generate_random_string(self, length=8):
         # string.ascii_lowercase: 모든 소문자 알파벳
