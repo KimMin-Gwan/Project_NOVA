@@ -178,6 +178,7 @@ class FeedObserver:
     async def recive_data(self):
         raw_message= None
         raw_message= await self.__websocket.receive_text()
+        print(f"raw_message : {raw_message}")
         
         # data = body<br>type
         parts = raw_message.split('<br>')
