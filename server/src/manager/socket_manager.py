@@ -144,6 +144,7 @@ class FeedObserver:
         return
     
     async def observer_operation(self):
+        print("이게 왜 두번 켜짐?")
         try:
             while True:
                 await asyncio.sleep(0.2)
