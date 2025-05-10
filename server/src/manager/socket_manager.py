@@ -334,8 +334,11 @@ class ConnectionManager:
     
     async def connection_manager_process(self):
         print(f'INFO<-[      NOVA Connection Manager clean up process started.')
+        
         while True:
             await asyncio.sleep(1)
+            print("연결중인 옵져버 수 ", len(self.__active_connection))
+            print("연결중인 옵져버 유닛 수 ", len(self.__active_observe_unit))
             # 연결된 소켓이 없으면 대기
             if not self.__active_observe_unit and not self.__active_connection:
                 continue
