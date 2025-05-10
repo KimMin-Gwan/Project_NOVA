@@ -913,7 +913,7 @@ class Core_Service_View(Master_View):
                     uid = ""
                 data_payload= ChattingSocketRequest(uid=uid, fid=fid)
                 request_manager.try_view_just_data_payload(data_payload=data_payload)
-                
+                print(1)
                 observer = await self.__connection_manager.connect(
                     request=request_manager,
                     websocket=websocket,
@@ -921,8 +921,10 @@ class Core_Service_View(Master_View):
                     feed_controller=Feed_Controller(feed_manager=self.__feed_manager)
                     )
                 
+                print(2)
                 result = await observer.observer_operation()
                 
+                print(3)
                 if not result:
                     self.__connection_manager.disconnect(observer=observer)
 

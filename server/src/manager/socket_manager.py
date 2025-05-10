@@ -238,12 +238,13 @@ class ConnectionManager:
         ## 유저 정보 받아오기
         #user:User = core_controller.get_user_data(database=database,
                                                 #request=request.data_payload)
-        
+        print(11)
         comment_model = feed_controller.init_chatting(request=request,
                                                         database=database)
         user:User = comment_model.get_user()
         #init_chattings = comment_model.get_chattings()
         
+        print(12)
         #ㅂ 비회원일때
         if user.uid == "":
             while True:
@@ -263,6 +264,7 @@ class ConnectionManager:
             
             user.uid = new_uid
             
+        print(13)
         
         # 유닛 찾아서 연결
         for unit in self.__active_observe_unit:
@@ -270,6 +272,7 @@ class ConnectionManager:
                 target_unit = unit
                 break
             
+        print(14)
         # 못찾았으면 만들어야됨
         if target_unit.get_fid() == "":
             target_unit.set_fid(fid=request.data_payload.fid)
@@ -281,9 +284,11 @@ class ConnectionManager:
         else:
             new_observer = target_unit.add_new_observer(user=user)
         
+        print(15)
         # 연결 시도!
         await new_observer.connect(websocket=websocket, unit=target_unit)
         
+        print(16)
         # 리스트에 넣어서 관리
         self.__active_connection.append(new_observer)
         
