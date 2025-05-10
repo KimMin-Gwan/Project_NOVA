@@ -109,8 +109,8 @@ class FeedObserver:
         else:
             self.__is_logged_in = True
         
-        self.__task = asyncio.create_task(self.observer_operation())
         print(f'INFO<-[      NOVA Feed Observer | {self.__user.uid}')
+        self.__task = asyncio.create_task(self.observer_operation())
         
             
     
@@ -318,9 +318,8 @@ class ConnectionManager:
         return new_observer
 
     # 연결 해제
-    async def disconnect(self, observer):
+    async def disconnect(self, observer:FeedObserver):
         print(" 연결 해제")
-        observer:FeedObserver = observer
         observe_unit:FeedObserveUnit = observer.get_unit()
         
         for unit in self.__active_observe_unit:
