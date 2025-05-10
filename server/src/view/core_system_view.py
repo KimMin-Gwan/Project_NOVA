@@ -901,8 +901,9 @@ class Core_Service_View(Master_View):
             
         @self.__app.websocket('/feed_detail_realtime/chatting_socket')
         async def try_socket_chatting(websocket:WebSocket, fid:Optional[str] = "", uid:Optional[str] = ""):  
-            #fid="6adf-fb09-4907-ULIx2R"
-            #uid="0cb7-f17f-46ef"
+            fid="6adf-fb09-4907-ULIx2R"
+            uid="0cb7-f17f-46ef"
+            
             print("소켓 연결")
             try:
                 if fid == "":
@@ -913,7 +914,7 @@ class Core_Service_View(Master_View):
                     uid = ""
                 data_payload= ChattingSocketRequest(uid=uid, fid=fid)
                 request_manager.try_view_just_data_payload(data_payload=data_payload)
-                print(1)
+                
                 observer = await self.__connection_manager.connect(
                     request=request_manager,
                     websocket=websocket,
@@ -921,10 +922,8 @@ class Core_Service_View(Master_View):
                     feed_controller=Feed_Controller(feed_manager=self.__feed_manager)
                     )
                 
-                print(2)
                 result = await observer.observer_operation()
                 
-                print(3)
                 if not result:
                     self.__connection_manager.disconnect(observer=observer)
 
