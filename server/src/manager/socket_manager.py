@@ -147,12 +147,16 @@ class FeedObserver:
         try:
             while True:
                 await asyncio.sleep(0.2)
+                print(1)
                 await self.send_data("ping")
                 
+                print(2)
+                    
                 if not self.__send_data.empty():
                     send_data:ChattingDataform = self.__send_data.get()
                     await self.send_data(send_data.get_send_form())
                 
+                print(3)
                 # 데이터가 안받아지면 죽이삼 (ack)
                 
                 #*********  뭔가 이상하면 이거 들여쓰기 해보라 *********
@@ -160,8 +164,10 @@ class FeedObserver:
                     break
                 #****************************************************
                 
+                print(4)
                 # 목표 옵져버들을 다시 체크해야됨(사라진 옵져버를 지우기 위해)
                 await self.__sync_observers()
+                print(5)
                 
         except ConnectionClosedError:
             return False
@@ -177,7 +183,10 @@ class FeedObserver:
     async def recive_data(self):
         
         raw_message= None
-        raw_message= await self.__websocket.receive_text()
+        try:
+            raw_message= await self.__websocket.receive_text()
+        except Exception as e:
+            print(f"ERROR<-[      NOVA Feed Observer | {self.__user.uid} : {e}")
             
         print(f"raw_message : {raw_message}")
         
