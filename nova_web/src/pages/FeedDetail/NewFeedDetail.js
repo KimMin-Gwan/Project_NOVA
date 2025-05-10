@@ -120,6 +120,7 @@ export default function NewFeedDetail() {
     // 메시지 분석 로직을 여기에 추가합니다.
     // 예를 들어, JSON 형식의 메시지를 파싱하거나 특정 키워드를 찾는 등의 작업을 수행할 수 있습니다.
     if (message === "ping") {
+        socket.send("pong");
       return;
     }else{
       const parsedMessage = parseDataToObject(message);
