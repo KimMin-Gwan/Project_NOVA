@@ -110,7 +110,7 @@ class FeedObserver:
             self.__is_logged_in = True
         
         print(f'INFO<-[      NOVA Feed Observer | {self.__user.uid}')
-        self.__task = asyncio.create_task(self.observer_operation())
+        #self.__task = asyncio.create_task(self.observer_operation())
         
             
     
