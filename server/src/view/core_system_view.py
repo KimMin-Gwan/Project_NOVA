@@ -901,10 +901,6 @@ class Core_Service_View(Master_View):
             
         @self.__app.websocket('/feed_detail_realtime/chatting_socket')
         async def try_socket_chatting(websocket:WebSocket, fid:Optional[str] = "", uid:Optional[str] = ""):  
-            fid="6adf-fb09-4907-ULIx2R"
-            uid="0cb7-f17f-46ef"
-            
-            print("소켓 연결")
             try:
                 if fid == "":
                     return
@@ -928,11 +924,9 @@ class Core_Service_View(Master_View):
                     await self.__connection_manager.disconnect(observer=observer)
 
             except ConnectionClosedError:
-                print("소켓 연결 끊김")
                 await self.__connection_manager.disconnect(observer=observer)
                 
             except WebSocketDisconnect:
-                print("뭔가 문제 발생")
                 await self.__connection_manager.disconnect(observer=observer)
 
         #@self.__app.websocket('/league_detail/league_data')
