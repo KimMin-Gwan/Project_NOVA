@@ -424,6 +424,7 @@ const ScheduleMakePage = () => {
                 onSlideChange={handleSlideChange} // 슬라이드 변경 이벤트
                 speed={1000} // 슬라이드 전환 속도 1초
                 allowTouchMove={false}
+                touchEventsTarget="wrapper"
             >
                 <SwiperSlide>
                     <div id="swiperSlide0" className={style["swiper-slide"]}>
