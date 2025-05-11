@@ -6,8 +6,7 @@ import "@toast-ui/editor/dist/i18n/ko-kr";
 import "@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css";
 import { useRef } from "react";
 
-export default function EditorBox({ setLongData }) {
-  const editorRef = useRef();
+export default function EditorBox({ setLongData, editorRef }) {
 
   const onChange = () => {
     const data = editorRef.current.getInstance().getHTML();
@@ -28,8 +27,7 @@ export default function EditorBox({ setLongData }) {
         onChange={onChange}
         language="ko-KR"
         toolbarItems={[
-          ["image"],
-          ["heading", "bold", "italic", "strike"], // headings - 1,2,3
+          ["heading", "bold", "italic", "strike"] // headings - 1,2,3
         ]}
       />
   );

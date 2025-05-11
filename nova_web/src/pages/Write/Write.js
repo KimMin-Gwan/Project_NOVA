@@ -27,6 +27,7 @@ const Write = ({ brightmode }) => {
   const params = useParams();
   const type = params.type;
   const navigate = useNavigate();
+  const editorRef = useRef();
 
   let [showModal, setShowModal] = useState(false);
   let [showVoteModal, setShowVoteModal] = useState(false);
@@ -82,6 +83,31 @@ const Write = ({ brightmode }) => {
     handleValidCheck();
   }, []);
 
+
+  // 에디터 내용 관찰
+  useEffect(() => {
+    const editorElement = editorRef.current?.editorInst?.rootEl;
+
+    if (!editorElement) return;
+
+    const observer = new MutationObserver(() => {
+      // 현재 에디터의 이미지 목록 가져오기
+      const currentImages = Array.from(editorElement.querySelectorAll("img")).map(
+        (img) => img.getAttribute("src")
+      );
+
+      // imagePreview에서 없는 이미지 제거
+      setImagePreview((prevUrls) =>
+        prevUrls.filter((url) => currentImages.includes(url))
+      );
+    });
+
+    // 에디터 DOM의 변화를 관찰
+    observer.observe(editorElement, { childList: true, subtree: true });
+
+    return () => observer.disconnect();
+  }, []);
+
   const [imagePreview, setImagePreview] = useState([]);
   const [imageFiles, setImageFiles] = useState([]);
 
@@ -118,30 +144,75 @@ const Write = ({ brightmode }) => {
 
   let [currentFileName, setCurrentFileName] = useState([]);
 
+  //const handleFileChange = (event) => {
+    //const files = Array.from(event.target.files);
+    //const names = files.map((file) => file.name);
+    //if (names) {
+      //setCurrentFileName(names);
+    //} else {
+      //setCurrentFileName([""]);
+    //}
+    //const selectedFile = Array.from(event.target.files);
+    //const validFiles = selectedFile.filter((file) => file.type.startsWith("image/"));
+
+    //if (validFiles.length < selectedFile.length) {
+      //alert("이미지 파일만 가능");
+    //}
+
+    //setImageFiles((prevFiles) => [...prevFiles, ...validFiles]);
+
+    //const previewUrls = validFiles.map((file) => {
+      //return URL.createObjectURL(file);
+    //});
+
+    //setImagePreview((prevUrls) => [...prevUrls, ...previewUrls]);
+    //validFiles.forEach((file) => URL.revokeObjectURL(file));
+  //};
+
+
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files);
     const names = files.map((file) => file.name);
+
+    // 파일 이름 업데이트
     if (names) {
       setCurrentFileName(names);
     } else {
       setCurrentFileName([""]);
     }
-    const selectedFile = Array.from(event.target.files);
-    const validFiles = selectedFile.filter((file) => file.type.startsWith("image/"));
 
-    if (validFiles.length < selectedFile.length) {
-      alert("이미지 파일만 가능");
+    // 유효한 이미지 파일 필터링
+    const validFiles = files.filter((file) => file.type.startsWith("image/"));
+
+    if (validFiles.length < files.length) {
+      alert("이미지 파일만 가능합니다.");
     }
 
-    setImageFiles((prevFiles) => [...prevFiles, ...validFiles]);
+    // 이미지 파일 추가
+    //setImageFiles((prevFiles) => [...prevFiles, ...validFiles]);
 
-    const previewUrls = validFiles.map((file) => {
-      return URL.createObjectURL(file);
+    // 이미지 미리보기 URL 생성
+    //const previewUrls = validFiles.map((file) => URL.createObjectURL(file));
+    //setImagePreview((prevUrls) => [...prevUrls, ...previewUrls]);
+
+    const editorInstance = editorRef.current?.getInstance();
+
+    validFiles.forEach((file) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const base64Image = reader.result;
+        const imgTag = `<img src="${base64Image}" alt="Uploaded Image" style="max-width: 100%;">`;
+
+        // 현재 HTML 가져오기
+        const currentHtml = editorInstance?.getHTML() || "";
+        // 새로운 HTML 삽입
+        editorInstance?.setHTML(currentHtml + imgTag);
+      };
+      reader.readAsDataURL(file);
     });
 
-    setImagePreview((prevUrls) => [...prevUrls, ...previewUrls]);
-    validFiles.forEach((file) => URL.revokeObjectURL(file));
   };
+
   const [category, setCategory] = useState("");
   const handleSubmit = (event) => {
     event.preventDefault(); // 기본 동작을 막음 (중요)
@@ -367,11 +438,7 @@ const Write = ({ brightmode }) => {
       </div>
 
       <div className={style["content_container"]}>
-        <div
-          className={`${style["content-title"]} ${type === "long" && style["content-title-long"]}`}
-        >
-          본문
-        </div>
+
         {type === "short" && (
           <>
             <textarea
@@ -385,7 +452,7 @@ const Write = ({ brightmode }) => {
           </>
         )}
 
-        {type === "long" && <EditorBox setLongData={setLongData} />}
+        {type === "long" && <EditorBox setLongData={setLongData} editorRef={editorRef} />}
       </div>
 
       {type === "short" && (
@@ -393,12 +460,12 @@ const Write = ({ brightmode }) => {
       )}
       {type === "long" && (
         <p className={style["alert_message"]}>
-          타인에게 불편을 줄 수 있는 내용의 게시글은 경고 없이 삭제 될 수 있습니다.
+          작성 규정을 위반한 게시글은 경고 없이 삭제 될 수 있습니다.
         </p>
       )}
 
       <div className={style["content_button"]}>
-        {type !== "long" && (
+        {type === "long" && (
           <button
             onClick={(e) => {
               e.stopPropagation();
@@ -480,25 +547,23 @@ export const Modal = ({
     <ModalWrapper title={"이미지 추가"}>
       <div className={style["image-container"]}>
         <ImageUploader handleFileChange={handleFileChange} />
+        {/** 
         <ImagePreview
           imagePreview={imagePreview}
           imageFiles={imageFiles}
           handleRemoveImg={handleRemoveImg}
         />
+        */}
       </div>
 
       <div className={style["modal-buttons"]}>
-        <Button type={"close"} onClick={onClickModal}>
-          닫기
-        </Button>
         <Button
           type={"apply"}
           onClick={() => {
             onClickModal();
           }}
-          disabled={imagePreview.length === 0}
         >
-          적용
+          닫기
         </Button>
       </div>
     </ModalWrapper>
@@ -525,6 +590,7 @@ export function ImagePreview({ imagePreview, imageFiles, handleRemoveImg }) {
     </>
   );
 }
+
 export function ImageUploader({ handleFileChange }) {
   return (
     <>
