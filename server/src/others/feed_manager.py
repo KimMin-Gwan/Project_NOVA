@@ -195,6 +195,7 @@ class FeedManager:
                 # 2. body데이터를 오브젝트 스토리지에 저장
                 url = connector.make_new_feed_body_data(fid = fid, body=data_payload.body)
                 body, _ = connector.extract_body_n_image(raw_data=data_payload.body)
+                print(body)
 
             else:
                 data_payload_body = " "
