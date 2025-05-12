@@ -8,6 +8,7 @@ class CommentModel(BaseModel):
     def __init__(self, database:Local_Database) -> None:
         super().__init__(database)
         self._comments = []
+        self._is_more = False
 
 
     def set_target_comment(self, fid:str, target_cid:str=""):
@@ -18,16 +19,17 @@ class CommentModel(BaseModel):
             index = feed.comment.index(target_cid)
             feed.comment = feed.comment[:index]
             
-        
         cids = []
         
         for cid in reversed(feed.comment):
-            if len(cids) > 10:
+            if len(cids) >= 10:
                 break
             
             cids.append(cid)
 
-        print(len(cids))
+        # 더있는지 확인해주는 플래그
+        if len(cids) < len(feed.comment):
+            self._is_more = True
             
         
         comment_datas = self._database.get_datas_with_ids(target_id="cid", ids=cids)
@@ -51,7 +53,8 @@ class CommentModel(BaseModel):
         try:
             body = {
                 'comments' : self._make_dict_list_data(list_data=self._comments),
-                'uid' : self._user.uid
+                'uid' : self._user.uid,
+                'is_more' : self._is_more
             }
 
             response = self._get_response_data(head_parser=head_parser, body=body)
