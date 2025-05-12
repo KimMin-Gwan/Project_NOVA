@@ -147,6 +147,7 @@ function MoreSee({ onModeChange }) {
 
   let [isLogin, setIsLogin] = useState();
   let [isError, setIsError] = useState();
+  let [user, setUser] = useState("")
 
   function handleFetch() {
     fetch("https://nova-platform.kr/home/is_valid", {
@@ -168,6 +169,7 @@ function MoreSee({ onModeChange }) {
         if (data) {
           //console.log(data);
           setIsLogin(data.body.result);
+          setUser(data.body.user);
         }
       })
       .catch((error) => {
@@ -193,6 +195,9 @@ function MoreSee({ onModeChange }) {
   useEffect(() => {
     document.body.className = brightMode === "dark" ? "dark-mode" : "bright-mode";
   }, [brightMode]);
+
+
+  const profile = `https://kr.object.ncloudstorage.com/nova-profile-bucket/${user}.png`;
 
   const firstBoardList = boardList.slice(0, 4);
   const secondBoardList = boardList.slice(4, 7);
@@ -227,9 +232,10 @@ function MoreSee({ onModeChange }) {
             }}
           >
             <img
-              src={isLogin ? user_icon : login_icon}
+              src={isLogin ? profile : login_icon}
               alt="Arrow"
               className={style.vector_login}
+              onError={(e) => (e.target.src = user_icon)} 
             />
             <p className={style.bodyText_login}>{isLogin ? "마이페이지" : "로그인"}</p>
           </div>

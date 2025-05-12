@@ -6,6 +6,7 @@ import postApi from "../../services/apis/postApi";
 import HEADER from "../../constant/header";
 
 import more_icon from "./../../img/more_icon.svg";
+import user_icon from "./../../img/user_profile.svg";
 import back from "./../../img/detail_back.png";
 import input from "./../../img/input.svg";
 import reArrow1 from "./../../img/reArrow1.svg";
@@ -451,6 +452,7 @@ export default function NewFeedDetail() {
 
 
 function CommentComponent({cid, uid, owner, uname, isReply, reply, body, date, commentAction}){
+  const profile = `https://kr.object.ncloudstorage.com/nova-profile-bucket/${uid}.png`;
   const pressTimer = useRef(null);
 
   const handlePressStart = () => {
@@ -490,8 +492,7 @@ function CommentComponent({cid, uid, owner, uname, isReply, reply, body, date, c
       return (
         <div id={cid} className={style["comment-component"]}>
           <div className={style["profile-box"]}>
-            <div style={{width:"36px", height:"36px", borderRadius:"50%", backgroundColor:"white"}}>
-            </div>
+              <img className={style=["profile-img"]} src={profile} alt="img" onError={(e) => (e.target.src = user_icon)} />
           </div>
             <div style={{width:"14px"}}>
             </div>
@@ -515,8 +516,7 @@ function CommentComponent({cid, uid, owner, uname, isReply, reply, body, date, c
       return (
         <div id={cid} className={style["comment-component"]}>
           <div className={style["profile-box"]}>
-            <div style={{width:"36px", height:"36px", borderRadius:"50%", backgroundColor:"white"}}>
-            </div>
+              <img src={profile} alt="img" onError={(e) => (e.target.src = user_icon)} />
           </div>
             <div style={{width:"14px"}}>
             </div>
