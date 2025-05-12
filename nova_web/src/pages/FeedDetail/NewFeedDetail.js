@@ -44,6 +44,7 @@ export default function NewFeedDetail() {
 
   let [commentId, setCommentId] = useState("");
   let [targetCid, setTargetCid] = useState("");
+  let [isMoreComment, setIsMoreComment] = useState(false);
 
   const [showMoreOption, setShowMoreOption] = useState(false);
   const [links, setLinks] = useState([]);
@@ -53,8 +54,28 @@ export default function NewFeedDetail() {
 
   const [socket, setSocket] = useState(null);
   const [user, setUser] = useState("");
+  const [newComment, setNewComment] = useState(false);
 
   const socketRef = useRef(null);
+  const commentBoxRef = useRef(null);
+
+  const [showCommentMoreOption, setShowCommentMoreOption] = useState(false);
+  const [optionTargetComment, setOptionTargetComment] = useState("");
+
+  const togglePushingComment = (cid) => {
+    setOptionTargetComment(cid);
+    setShowCommentMoreOption(!showCommentMoreOption);
+  }
+
+  useEffect(() => {
+    if (newComment){
+      if (commentBoxRef.current) {
+        commentBoxRef.current.scrollTo({top: commentBoxRef.current.scrollHeight, behavior:"smooth"})
+        setNewComment(false);
+      }
+    }
+  }, [newComment]);
+
 
   useEffect(() => {
     const initialize = async () => {
@@ -72,7 +93,6 @@ export default function NewFeedDetail() {
         };
 
         socket.onmessage = (event) => {
-          //setMessages((prevMessages) => [...prevMessages, event.data]);
           analyzeMessage(event.data);
         };
 
@@ -110,6 +130,8 @@ export default function NewFeedDetail() {
     }
   }, [location]);
 
+  console.log(commentBoxRef.current?.scroll)
+
   function analyzeMessage(message) {
     const socket = socketRef.current; // Access the WebSocket instance directly
     if (!socket) {
@@ -117,18 +139,32 @@ export default function NewFeedDetail() {
       return;
     }
 
+
     if (message === "ping") {
       socket.send("pong");
       return;
     }
 
     try {
-      const parsedMessage = JSON.parse(message);
-      if (parsedMessage.type === "add") {
-        setComments((prevComments) => [...prevComments, parsedMessage]);
-      } else if (parsedMessage.type === "delete") {
+      // Parse the message
+      const messageParts = message.split('<br>');
+      // Extract `type` and remove it from parsedMessage
+      const messageType = messageParts[0];
+
+
+      const transformedMessage = parseDataToObject(message);
+      
+      // Handle different message types
+      if (messageType === "add") {
+        setComments((prevComments) => [...prevComments, transformedMessage]);
+        setNewComment(true);
+      } else if (messageType === "delete") {
         setComments((prevComments) =>
-          prevComments.filter((comment) => comment.cid !== parsedMessage.body)
+          prevComments.map((comment) =>
+            comment.cid === transformedMessage.body
+              ? { ...comment, body: "삭제된 메시지입니다" }
+              : comment
+          )
         );
       }
     } catch (error) {
@@ -138,14 +174,13 @@ export default function NewFeedDetail() {
 
   function parseDataToObject(data) {
     // 데이터를 줄바꿈 단위로 분리
-    const [type, uid, uname, cid, body, date] = data.split('<br>');
+    const [type, cid, uid, owner, uname, body, date] = data.split('<br>');
 
     // 객체 생성 및 반환
     return {
-      type: type,
       cid: cid, 
       uid: uid, // 유아이디
-      owner: uname,
+      owner: owner,
       uname: uname, // 유저 이름
       is_reply: true, // 항상 true
       reply: {}, // 항상 빈 객체
@@ -157,9 +192,11 @@ export default function NewFeedDetail() {
 
   const tryDeleteComment = (cid) => {
     if (socketRef.current) {
+      const socket = socketRef.current; // Access the WebSocket instance directly
       const inputMessage = `${cid}<br>delete`; // 실제 메시지로 변경
-      setComments((prevComments) => prevComments.filter(comment => comment.cid !== cid));
-      socketRef.send(inputMessage);
+      //setComments((prevComments) => prevComments.filter(comment => comment.cid !== cid));
+      socket.send(inputMessage);
+      togglePushingComment("");
     }
   };
 
@@ -168,13 +205,12 @@ export default function NewFeedDetail() {
       alert("로그인 후 댓글을 남길 수 있습니다.");
       return;
     }else{
-      if (socketRef && socketRef.readyState === WebSocket.OPEN) {
+      if (socketRef && commentValue !== "") {
+        const socket = socketRef.current; // Access the WebSocket instance directly
         const sanitizedCommentValue = commentValue.replace(/<br>/g, '[br]');
         const inputMessage = `${sanitizedCommentValue}<br>add`; // 실제 메시지로 변경
-        socketRef.send(inputMessage);
+        socket.send(inputMessage);
         setCommentValue(''); // 메시지 전송 후 입력 필드 초기화
-      } else {
-        console.error('WebSocket is not open. Unable to send message.');
       }
     }
   }
@@ -202,16 +238,19 @@ export default function NewFeedDetail() {
 
   async function fetchFeedComment() {
     let uid = "-1";
-
+    console.log("targetCid", targetCid);
     if (targetCid !== "") {
-      await mainApi.get(`feed_explore/feed_detail/comment_data?fid=${fid}&target_cid=${targetCid}`).then((res) => {
+      await mainApi.get(`feed_explore/feed_detail/comment_data?fid=${fid}&cid=${targetCid}`).then((res) => {
         putCommentProcess({ fetchedComments: res.data.body.comments });
+        setIsMoreComment(res.data.body.is_more);
+        console.log(res.data.body.comments);
         uid = res.data.body.uid;
         setIsLoading(false);
       });
     } else{
       await mainApi.get(`feed_explore/feed_detail/comment_data?fid=${fid}`).then((res) => {
         putCommentProcess({ fetchedComments: res.data.body.comments });
+        setIsMoreComment(res.data.body.is_more);
         uid = res.data.body.uid;
         setIsLoading(false);
       });
@@ -232,9 +271,7 @@ export default function NewFeedDetail() {
 
       // 첫 번째 댓글의 cid를 타겟으로 설정
       setTargetCid(newComments[0].cid);
-    } else {
-      console.log("No new comments to add.");
-    }
+    } 
   }
 
 
@@ -268,15 +305,17 @@ export default function NewFeedDetail() {
   function onKeyDownEnter(e) {
     if (e.key === "Enter") {
       setIsComment(true);
-      //fetchMakeComment();
+      tryAddComment();
       setCommentValue("");
     }
   }
 
   function onClickInput() {
+
     tryAddComment();
     //fetchMakeComment();
     setCommentValue("");
+
   }
 
   const header = HEADER;
@@ -318,26 +357,6 @@ export default function NewFeedDetail() {
         alert("삭제되었습니다.");
         navigate(-1);
       }
-    });
-  }
-
-  function fetchRemoveComment(cid) {
-    mainApi.get(`feed_explore/remove_comment?fid=${fid}&cid=${cid}`).then(() => {
-      setComments((prev) => {
-        return prev
-          .map((comment) => {
-            if (comment.cid === cid) {
-              return null;
-            }
-
-            if (comment.reply && comment.reply.length > 0) {
-              comment.reply = comment.reply.filter((reply) => reply.cid !== cid);
-            }
-
-            return comment;
-          })
-          .filter((comment) => comment !== null);
-      });
     });
   }
 
@@ -384,14 +403,33 @@ export default function NewFeedDetail() {
       
       <div className="section-separator"></div>
 
+      {showCommentMoreOption && (
+        <CommentOptionModal onClose={togglePushingComment} onClickDelete={tryDeleteComment} deleteTargetCid={optionTargetComment} />
+      )}
+
+
       <div className={style["comment-wrapper"]}>
         <div className={style["comment-wrapper-title"]}>
-          코멘트
+          실시간 코멘트
         </div>
+        
+        {
+         isMoreComment && (
+          <button className={style["comment-more-button"]}
+              onClick={() => {
+                fetchFeedComment();
+              }}
+          >
+              더보기
+          </button>
+        )}
 
-        <div className={style["new-comment-box"]}>
+
+        <div className={style["new-comment-box"]}
+          ref={commentBoxRef} // ref 연결
+        >
           {comments.map((comment, index) => {
-            return <CommentComponent key={index} {...comment}/>
+            return <CommentComponent key={index} {...comment} commentAction={togglePushingComment}/>
           })}
         </div>
 
@@ -418,13 +456,31 @@ export default function NewFeedDetail() {
 }
 
 
-function CommentComponent({cid, uid, owner, uname, isReply, reply, body}){
+function CommentComponent({cid, uid, owner, uname, isReply, reply, body, commentAction}){
+  const pressTimer = useRef(null);
+
+  const handlePressStart = () => {
+    pressTimer.current = setTimeout(() => {
+      // 꾹 누르기 감지 시 실행할 작업
+      commentAction(cid);
+    }, 500); // 500ms 이상 눌렀을 때 실행
+  };
+
+  const handlePressEnd = () => {
+    clearTimeout(pressTimer.current); // 타이머 초기화
+  };
 
   if(owner){
     return(
-      <div className={style["comment-component-my"]}>
+      <div id={cid} className={style["comment-component-my"]}>
         <div className={style["comment-box"]}>
-          <div className={style["comment-body-my"]}>
+          <div className={style["comment-body-my"]}
+            onMouseDown={handlePressStart}
+            onMouseUp={handlePressEnd}
+            onMouseLeave={handlePressEnd} // 마우스가 벗어날 경우 초기화
+            onTouchStart={handlePressStart}
+            onTouchEnd={handlePressEnd} // 모바일 터치 지원
+          >
             {body}
           </div>
         </div>
@@ -433,7 +489,7 @@ function CommentComponent({cid, uid, owner, uname, isReply, reply, body}){
   }else{
     if(isReply){
       return (
-        <div className={style["comment-component"]}>
+        <div id={cid} className={style["comment-component"]}>
           <div className={style["profile-box"]}>
             <div style={{width:"36px", height:"36px", borderRadius:"50%", backgroundColor:"white"}}>
 
@@ -457,7 +513,7 @@ function CommentComponent({cid, uid, owner, uname, isReply, reply, body}){
       );
     }else{
       return (
-        <div className={style["comment-component"]}>
+        <div id={cid} className={style["comment-component"]}>
           <div className={style["profile-box"]}>
             <div style={{width:"36px", height:"36px", borderRadius:"50%", backgroundColor:"white"}}>
 
@@ -476,7 +532,6 @@ function CommentComponent({cid, uid, owner, uname, isReply, reply, body}){
               {body}
             </div>
           </div>
-
         </div>
       );
     }
@@ -560,6 +615,27 @@ function OptionModal({ onClickOption, onClickDelete }) {
         <div
           className={`${style["modal_content"]} ${style["modal_content_accent"]}`}
           onClick={onClickDelete}
+        >
+          삭제
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// 댓글 옵션 모달
+function CommentOptionModal({ onClose, onClickDelete, deleteTargetCid }) {
+  return (
+    <div className={style["OptionModal"]} onClick={()=>onClose("")}>
+      <div
+        className={style["modal_container"]}
+        onClick={(e) => e.stopPropagation()} // 이벤트 버블링 방지
+      >
+        <div className={style["modal_title"]}>댓글</div>
+        {/* <div className={style["modal_content"]}>수정</div> */}
+        <div
+          className={`${style["modal_content"]} ${style["modal_content_accent"]}`}
+          onClick={() => onClickDelete(deleteTargetCid)}
         >
           삭제
         </div>
