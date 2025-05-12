@@ -17,12 +17,7 @@ class CommentModel(BaseModel):
         
         if target_cid != "":
             index = feed.comment.index(target_cid)
-            print(index)
             feed.comment = feed.comment[:index]
-        
-        print(target_cid)
-        print(feed.comment)
-        
         cids = []
         
         for cid in reversed(feed.comment):

@@ -150,8 +150,6 @@ class FeedObserver:
                 
                 if not self.__send_data.empty():
                     send_data:ChattingDataform = self.__send_data.get()
-                    print(f"send data : {send_data.get_send_form()}")
-                    
                     await self.send_data(send_data.get_send_form())
                 
                 # 데이터가 안받아지면 죽이삼 (ack)
@@ -185,7 +183,6 @@ class FeedObserver:
         if len(parts) != 2:
             return True
         
-        print(parts)
         
         
         dataform = ChattingDataform(uid=self.__user.uid,
