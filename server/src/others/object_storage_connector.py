@@ -146,7 +146,9 @@ class ObjectStorageConnection:
         # <img> 태그의 모든 src 속성 가져오기
         # ImageBase64 코드의 형태로 저장됨
         imgs = [img.get("src") for img in soup.find_all("img") if img.get("src")]
-
+        
+        print(body)
+        
         return body, imgs
         # response.raise_for_status()
 
