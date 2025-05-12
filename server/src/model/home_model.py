@@ -13,7 +13,8 @@ class TokenModel(BaseModel):
     def get_response_form_data(self, head_parser):
         try:
             body = {
-                'result' : True
+                'result' : True,
+                'user' : self._user.uid
             }
 
             response = self._get_response_data(head_parser=head_parser, body=body)
