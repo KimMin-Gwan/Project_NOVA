@@ -141,11 +141,24 @@ class ObjectStorageConnection:
     # raw_data = String화 되어 파싱 된 것. <p> tag~
     def extract_body_n_image(self, raw_data:str):
         soup = BeautifulSoup(raw_data, "html.parser")
-
-        body = soup.p.text.strip()
-        # <img> 태그의 모든 src 속성 가져오기
-        # ImageBase64 코드의 형태로 저장됨
-        imgs = [img.get("src") for img in soup.find_all("img") if img.get("src")]
+        
+        try:
+            
+            # <p> 태그의 첫 번째 텍스트 가져오기
+            p_body = soup.find_all("p")
+            body = []
+    
+            for p_tag in p_body:
+                striped_data = p_tag.text.strip()
+                if striped_data:
+                    body.append(striped_data)
+        
+            body = soup.p.text.strip()
+            # <img> 태그의 모든 src 속성 가져오기
+            # ImageBase64 코드의 형태로 저장됨
+            imgs = [img.get("src") for img in soup.find_all("img") if img.get("src")]
+        except Exception as e:
+            return ["불러오기에 실패했습니다."], []
         
         return body, imgs
         # response.raise_for_status()
