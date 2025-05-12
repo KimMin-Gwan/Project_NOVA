@@ -30,7 +30,8 @@ class CommentModel(BaseModel):
         # 더있는지 확인해주는 플래그
         if len(cids) < len(feed.comment):
             self._is_more = True
-            
+    
+        print(cids)
         
         comment_datas = self._database.get_datas_with_ids(target_id="cid", ids=cids)
         for comment_data in comment_datas:
