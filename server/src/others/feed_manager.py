@@ -195,12 +195,11 @@ class FeedManager:
                 # 2. body데이터를 오브젝트 스토리지에 저장
                 url = connector.make_new_feed_body_data(fid = fid, body=data_payload.body)
                 body, _ = connector.extract_body_n_image(raw_data=data_payload.body)
-                print(body)
-
+                
             else:
                 data_payload_body = " "
-                body = " "
-                url = connector.make_new_feed_body_data(fid=fid, body=body)
+                body = [" "]
+                url = connector.make_new_feed_body_data(fid=fid, body=body[0])
 
             # 3. url을 body로 지정
 
@@ -209,7 +208,7 @@ class FeedManager:
                                  fid=fid,
                                  fclass=data_payload.fclass,
                                  choice=data_payload.choice,
-                                 body=body,
+                                 body=body[0],
                                  hashtag=data_payload.hashtag,
                                  board_type=data_payload.board_type,
                                  images=[],
