@@ -461,7 +461,11 @@ const ScheduleMakePage = () => {
                                 </div>
                             </div>
                             <div id="slideBottomContainer" className={style["slide-bottom-container"]}>
-                                <div className={style["bottom-button"]}>
+                                <div className={style["bottom-button"]}
+                                    onClick={() => {
+                                        navigate(-1);
+                                    }}
+                                >
                                     취소
                                 </div>
                                 <div className={style["bottom-button"]}
