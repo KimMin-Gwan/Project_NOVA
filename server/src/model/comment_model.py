@@ -31,11 +31,8 @@ class CommentModel(BaseModel):
         if len(cids) < len(feed.comment):
             self._is_more = True
     
-        print(cids)
-        
         comment_datas = self._database.get_datas_with_ids(target_id="cid", ids=cids)
         for comment_data in comment_datas:
-            pprint(comment_data)
             comment = Comment().make_with_dict(comment_data)
             if comment.display == 2:
                 comment.body = "차단된 댓글입니다."
@@ -131,7 +128,8 @@ class CommentModel(BaseModel):
             comment = Comment().make_with_dict(comment_data)
             comment.display = 0
             
-            self._database.add_new_data("cid", new_data=comment.get_dict_form_data())
+            self._database.modify_data_with_id(target_id="cid", target_data=comment.get_dict_form_data())
+            
         except Exception as e:
             print(e)
             return False
