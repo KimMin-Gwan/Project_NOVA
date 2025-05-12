@@ -78,7 +78,6 @@ class FeedObserveUnit:
                     #result = await CommentModel(database=self.__database).modify_comment(cid=process_data.cid,
                                                                         #body=process_data.body)
                 elif process_data.type == "delete":
-                    print(f"delete {process_data.body}")
                     result = await CommentModel(database=self.__database).delete_comment(cid=process_data.body)
             else:
                 if len(self.__observers) == 0:
