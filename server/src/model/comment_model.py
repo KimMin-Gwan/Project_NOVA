@@ -39,7 +39,7 @@ class CommentModel(BaseModel):
                 comment.body = "삭제된 댓글입니다."
             
             if comment.uid == self._user.uid:
-                comment.is_owner = True
+                comment.owner = True
                 
             self._comments.append(comment)
         
