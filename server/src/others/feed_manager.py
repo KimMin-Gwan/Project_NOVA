@@ -73,11 +73,11 @@ class FeedManager:
                                        board_type=board_type, image=images, link=link, bid=bid, raw_body=raw_body)
 
 
-        if data_payload_body:
-            # ai한테 넣어서 다시 만들기
-            new_feed = ai_manager.treat_new_feed(feed=new_feed, data_payload_body=data_payload_body)
-        else:
-            new_feed = ai_manager.treat_new_feed(feed=new_feed)
+        #if data_payload_body:
+            ## ai한테 넣어서 다시 만들기
+            #new_feed = ai_manager.treat_new_feed(feed=new_feed, data_payload_body=data_payload_body)
+        #else:
+            #new_feed = ai_manager.treat_new_feed(feed=new_feed)
             
         
         self._database.add_new_data(target_id="fid", new_data=new_feed.get_dict_form_data())
