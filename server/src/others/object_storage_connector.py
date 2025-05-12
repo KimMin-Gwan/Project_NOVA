@@ -147,8 +147,6 @@ class ObjectStorageConnection:
         # ImageBase64 코드의 형태로 저장됨
         imgs = [img.get("src") for img in soup.find_all("img") if img.get("src")]
         
-        print(body)
-        
         return body, imgs
         # response.raise_for_status()
 
