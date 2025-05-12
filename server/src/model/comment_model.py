@@ -3,6 +3,7 @@ from model import Local_Database
 from others import Feed, Comment, User
 from others import CoreControllerLogicError,FeedManager, FeedSearchEngine, ObjectStorageConnection, HTMLEXtractor
 from datetime import datetime
+from pprint import pprint
 
 class CommentModel(BaseModel):
     def __init__(self, database:Local_Database) -> None:
@@ -33,6 +34,7 @@ class CommentModel(BaseModel):
         
         comment_datas = self._database.get_datas_with_ids(target_id="cid", ids=cids)
         for comment_data in comment_datas:
+            pprint(comment_data)
             comment = Comment().make_with_dict(comment_data)
             if comment.display == 2:
                 comment.body = "차단된 댓글입니다."
