@@ -26,6 +26,8 @@ class CommentModel(BaseModel):
                 break
             
             cids.append(cid)
+
+        print(len(cids))
             
         
         comment_datas = self._database.get_datas_with_ids(target_id="cid", ids=cids)
