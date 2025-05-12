@@ -22,7 +22,7 @@ class FeedObserveUnit:
         self.__process_que = Queue()
         self.__delete_flag = False
         self._task = asyncio.create_task(self.unit_process())
-        print(f'INFO<-[      NOVA Feed Observe Unit | {self.__fid}')
+        #print(f'INFO<-[      NOVA Feed Observe Unit | {self.__fid}')
         
     def get_delete_flag(self):
         return self.__delete_flag
@@ -58,7 +58,7 @@ class FeedObserveUnit:
     async def remove_observer(self, observer):
         for observer in self.__observers:
             if observer == observer:
-                print(f"{observer.get_observer_uid()} observer remove")
+                #print(f"{observer.get_observer_uid()} observer remove")
                 self.__observers.remove(observer)
                 break
         return
@@ -109,7 +109,7 @@ class FeedObserver:
         else:
             self.__is_logged_in = True
         
-        print(f'INFO<-[      NOVA Feed Observer | {self.__user.uid}')
+        #print(f'INFO<-[      NOVA Feed Observer | {self.__user.uid}')
         
             
     
@@ -169,7 +169,7 @@ class FeedObserver:
             return False
 
         finally:
-            print(f'INFO<-[      NOVA Feed Observer | {self.__user.uid} disconnected')
+            #print(f'INFO<-[      NOVA Feed Observer | {self.__user.uid} disconnected')
             return False
         
     # 메세지 받기 (리시빙~)
@@ -183,7 +183,7 @@ class FeedObserver:
         if len(parts) != 2:
             return True
         
-        print(parts)
+        #print(parts)
         
         
         dataform = ChattingDataform(uid=self.__user.uid,
