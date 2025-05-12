@@ -201,6 +201,10 @@ class FeedObserver:
         
         for observer in self.__observers:
             await observer.set_send_data(dataform)
+            
+        dataform.is_owner = True
+        await self.set_send_data(dataform)
+        
         return True
         
     def get_websocket(self):
@@ -361,19 +365,22 @@ class ChattingDataform:
         self.date = "datetimesample"
         self.type = type
         if type == "add":
-            self.cid = fid+"-"+self.__set_fid_with_datatime()
+            self.cid = uid+"-"+self.__set_fid_with_datatime()
         else:
             self.cid=cid
+            
+        self.is_owner = False
     
     def __set_fid_with_datatime(self):
         now = datetime.now()
         formatted_time = now.strftime("%Y%m%d%H%M%S") + f"{now.microsecond:06d}"
         return formatted_time
     
-    # 타입<br>유아이디<br>uid<br>유저이름<br>본문<br>날짜
+    
+    # type<br>is_owner<br>uid<br>uname<br>cid<br>body<br>date
     # 타입 : add, delete
     def get_send_form(self):
-        return f"{self.type}<br>{self.uid}<br>{self.uname}<br>{self.cid}<br>{self.body}<br>{self.date}"
+        return f"{self.type}<br>{self.is_owner}<br>{self.uid}<br>{self.uname}<br>{self.cid}<br>{self.body}<br>{self.date}"
         
         
 
