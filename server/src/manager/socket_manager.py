@@ -349,7 +349,7 @@ class ConnectionManager:
             for single_unit in self.__active_observe_unit:
                 if single_unit.get_delete_flag():
                     self.__active_observe_unit.remove(single_unit)
-                    print(f'INFO<-[      NOVA Feed Observe Unit | {single_unit.get_fid()} 삭제됨')
+                    print(f'INFO<-[      NOVA Feed Observe Unit | {single_unit.get_fid()} delete')
                 
         return True
     
@@ -362,7 +362,7 @@ class ChattingDataform:
         self.uname = uname
         self.fid = fid
         self.body = body
-        self.date = "datetimesample"
+        self.date = datetime.now().strftime("%Y/%m/%d")
         self.type = type
         if type == "add":
             self.cid = uid+"-"+self.__set_fid_with_datatime()

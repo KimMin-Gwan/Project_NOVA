@@ -164,6 +164,18 @@
   cursor: pointer;
 }
 
+.comment-flex-vertical-container{
+  display: flex;
+  align-items: flex-end;
+  width: 100%; /* 부모 컨테이너에서의 최대 너비 설정 */
+  gap: 4px;
+} 
+
+.comment-date{
+  color: #999999;
+  font-size: 10px;
+  font-weight: 400;
+}
 
 
 .input-container {
@@ -288,15 +300,16 @@
   justify-content: center;
   width: 92%;
   height: 40px;
-  background-color: #B1C3D5;
-  border-top : 2px solid #A6B8C8;
-  border-bottom: 2px solid #CAD9E7;
-  border-left : 2px solid #B1C3D5;
-  border-right: 2px solid #B1C3D5;
-  clip-path: polygon(0% 80%, 10% 90%, 20% 80%, 30% 90%, 40% 80%, 50% 90%, 60% 80%, 70% 90%, 80% 80%, 90% 90%, 100% 80%, 100% 100%, 0% 100%);
-}
+  background-color: #F1F7FF;
+  border: 2px solid #F1F7FF;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #999999;
+} 
 
 .comment-more-button:hover{
   background-color: #9EAFBF;
   cursor: pointer;
 }
+

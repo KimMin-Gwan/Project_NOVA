@@ -76,7 +76,6 @@ export default function NewFeedDetail() {
     }
   }, [newComment]);
 
-
   useEffect(() => {
     const initialize = async () => {
       try {
@@ -415,7 +414,7 @@ export default function NewFeedDetail() {
                 fetchFeedComment();
               }}
           >
-              더보기
+              지난 댓글 불러오기
           </button>
         )}
 
@@ -451,7 +450,7 @@ export default function NewFeedDetail() {
 }
 
 
-function CommentComponent({cid, uid, owner, uname, isReply, reply, body, commentAction}){
+function CommentComponent({cid, uid, owner, uname, isReply, reply, body, date, commentAction}){
   const pressTimer = useRef(null);
 
   const handlePressStart = () => {
@@ -469,14 +468,19 @@ function CommentComponent({cid, uid, owner, uname, isReply, reply, body, comment
     return(
       <div id={cid} className={style["comment-component-my"]}>
         <div className={style["comment-box"]}>
-          <div className={style["comment-body-my"]}
-            onMouseDown={handlePressStart}
-            onMouseUp={handlePressEnd}
-            onMouseLeave={handlePressEnd} // 마우스가 벗어날 경우 초기화
-            onTouchStart={handlePressStart}
-            onTouchEnd={handlePressEnd} // 모바일 터치 지원
-          >
-            {body}
+          <div className={style["comment-flex-vertical-container"]}>
+            <div className={style["comment-date"]}>
+              {date}
+            </div>
+            <div className={style["comment-body-my"]}
+              onMouseDown={handlePressStart}
+              onMouseUp={handlePressEnd}
+              onMouseLeave={handlePressEnd} // 마우스가 벗어날 경우 초기화
+              onTouchStart={handlePressStart}
+              onTouchEnd={handlePressEnd} // 모바일 터치 지원
+            >
+              {body}
+            </div>
           </div>
         </div>
       </div>
@@ -487,9 +491,7 @@ function CommentComponent({cid, uid, owner, uname, isReply, reply, body, comment
         <div id={cid} className={style["comment-component"]}>
           <div className={style["profile-box"]}>
             <div style={{width:"36px", height:"36px", borderRadius:"50%", backgroundColor:"white"}}>
-
             </div>
-
           </div>
             <div style={{width:"14px"}}>
             </div>
@@ -498,12 +500,15 @@ function CommentComponent({cid, uid, owner, uname, isReply, reply, body, comment
             <div className={style["comment-writer"]}>
               {uname}
             </div>
-
-            <div className={style["comment-body"]}>
-              {body}
+            <div className={style["comment-flex-vertical-container"]}>
+              <div className={style["comment-body"]}>
+                {body}
+              </div>
+              <div className={style["comment-date"]}>
+                {date}
+              </div>
             </div>
           </div>
-
         </div>
       );
     }else{
@@ -511,20 +516,22 @@ function CommentComponent({cid, uid, owner, uname, isReply, reply, body, comment
         <div id={cid} className={style["comment-component"]}>
           <div className={style["profile-box"]}>
             <div style={{width:"36px", height:"36px", borderRadius:"50%", backgroundColor:"white"}}>
-
             </div>
-
           </div>
             <div style={{width:"14px"}}>
             </div>
-
           <div className={style["comment-box"]}>
             <div className={style["comment-writer"]}>
               {uname}
             </div>
 
-            <div className={style["comment-body"]}>
-              {body}
+            <div className={style["comment-flex-vertical-container"]}>
+              <div className={style["comment-body"]}>
+                {body}
+              </div>
+              <div className={style["comment-date"]}>
+                {date}
+              </div>
             </div>
           </div>
         </div>
