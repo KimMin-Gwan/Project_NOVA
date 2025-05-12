@@ -183,6 +183,9 @@ class FeedObserver:
         if len(parts) != 2:
             return True
         
+        print(parts)
+        
+        
         dataform = ChattingDataform(uid=self.__user.uid,
                                     uname=self.__user.uname,
                                     fid=self.__unit.get_fid(),
