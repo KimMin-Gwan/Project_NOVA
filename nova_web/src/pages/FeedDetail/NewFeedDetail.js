@@ -115,7 +115,6 @@ export default function NewFeedDetail() {
     return () => {
       if (socketRef.current) {
         socketRef.current.close();
-        console.log('WebSocket connection closed during cleanup');
       }
     };
 
@@ -129,8 +128,6 @@ export default function NewFeedDetail() {
       }
     }
   }, [location]);
-
-  console.log(commentBoxRef.current?.scroll)
 
   function analyzeMessage(message) {
     const socket = socketRef.current; // Access the WebSocket instance directly
@@ -238,12 +235,10 @@ export default function NewFeedDetail() {
 
   async function fetchFeedComment() {
     let uid = "-1";
-    console.log("targetCid", targetCid);
     if (targetCid !== "") {
       await mainApi.get(`feed_explore/feed_detail/comment_data?fid=${fid}&cid=${targetCid}`).then((res) => {
         putCommentProcess({ fetchedComments: res.data.body.comments });
         setIsMoreComment(res.data.body.is_more);
-        console.log(res.data.body.comments);
         uid = res.data.body.uid;
         setIsLoading(false);
       });
