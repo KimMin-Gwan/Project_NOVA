@@ -15,6 +15,7 @@ import toast, { Toaster } from "react-hot-toast";
 import DropDown from "../../component/DropDown/DropDown.js";
 import Input from "../../component/Input/Input.js";
 import Button from "../../component/Button/Button.js";
+import mainApi from "../../services/apis/mainApi.js";
 
 const categoryData = [
   { key: 0, category: "자유게시판" },
@@ -29,6 +30,9 @@ const Write = ({ brightmode }) => {
   const navigate = useNavigate();
   const editorRef = useRef();
 
+  //const { fid } = useParams();
+  const fid = "0cb7-f17f-46ef-eh3YRX";
+
   let [showModal, setShowModal] = useState(false);
   let [showVoteModal, setShowVoteModal] = useState(false);
   let [showLinkModal, setShowLinkModal] = useState(false);
@@ -36,6 +40,8 @@ const Write = ({ brightmode }) => {
   let [linkUrl, setLinkUrl] = useState("");
   let [linkList, setLinkList] = useState([]);
   let [longData, setLongData] = useState();
+  let [initFeedData, setInitFeedData] = useState({});
+  let [initialValue, setInitialValue] = useState("");
 
   let [biasId, setBiasId] = useState();
 
@@ -79,8 +85,17 @@ const Write = ({ brightmode }) => {
       });
   }
 
+  async function fetchFeed() {
+    await mainApi.get(`feed_explore/feed_detail/feed_data?fid=${fid}`).then((res) => {
+      setInitFeedData(res.data.body.feed[0]);
+      setLinkList(res.data.body.links);
+      setInitialValue(res.data.body.feed[0].raw_body);
+    });
+  }
+
   useEffect(() => {
     handleValidCheck();
+    fetchFeed();
   }, []);
 
 
@@ -452,7 +467,7 @@ const Write = ({ brightmode }) => {
           </>
         )}
 
-        {type === "long" && <EditorBox setLongData={setLongData} editorRef={editorRef} />}
+        {type === "long" && <EditorBox setLongData={setLongData} editorRef={editorRef} initialValue={initialValue}/>}
       </div>
 
       {type === "short" && (
