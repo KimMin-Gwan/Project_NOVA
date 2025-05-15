@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./index.css";
 
-export default function DropDown({ options, setBiasId, setCategory }) {
+export default function DropDown({ options, biasId, category, setBiasId, setCategory }) {
   const [showTopic, setShowTopic] = useState(false);
   const [currentTopic, setCurrentTopic] = useState("선택 없음");
 
@@ -18,6 +18,14 @@ export default function DropDown({ options, setBiasId, setCategory }) {
       setCategory(category);
     }
   }
+
+  useEffect(() => {
+    setCurrentTopic(biasId)
+  }, [biasId]);
+
+  useEffect(() => {
+    setCurrentTopic(category)
+  }, [category]);
 
   return (
     <>

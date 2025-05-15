@@ -16,6 +16,7 @@ import DropDown from "../../component/DropDown/DropDown.js";
 import Input from "../../component/Input/Input.js";
 import Button from "../../component/Button/Button.js";
 import mainApi from "../../services/apis/mainApi.js";
+import { use } from "react";
 
 const categoryData = [
   { key: 0, category: "자유게시판" },
@@ -24,14 +25,14 @@ const categoryData = [
   { key: 3, category: "스토리게시판" },
 ];
 
-const Write = ({ brightmode }) => {
-  const params = useParams();
-  const type = params.type;
+const Write = ({ brightmode}) => {
+  const param = useParams();
+  const type = "long"
   const navigate = useNavigate();
   const editorRef = useRef();
 
   //const { fid } = useParams();
-  const fid = "0cb7-f17f-46ef-eh3YRX";
+  //const fid = "0cb7-f17f-46ef-eh3YRX";
 
   let [showModal, setShowModal] = useState(false);
   let [showVoteModal, setShowVoteModal] = useState(false);
@@ -42,6 +43,11 @@ const Write = ({ brightmode }) => {
   let [longData, setLongData] = useState();
   let [initFeedData, setInitFeedData] = useState({});
   let [initialValue, setInitialValue] = useState("");
+  let [user, setUser] = useState("");
+  const [category, setCategory] = useState("");
+
+  console.log("category", category);
+
 
   let [biasId, setBiasId] = useState();
 
@@ -65,16 +71,16 @@ const Write = ({ brightmode }) => {
 
   let [isUserState, setIsUserState] = useState(false);
   function handleValidCheck() {
-    fetch("https://nova-platform.kr/home/is_valid", {
-      credentials: "include",
-    })
-      .then((response) => {
-        if (response.status === 200) {
+    mainApi.get("https://nova-platform.kr/home/is_valid?only_token=n").then((res) => {
+        if (res.status === 200) {
+          setUser(res.data.body.user);
           setIsUserState(true);
         } else {
+          alert("로그인이 필요합니다.");
+          navigate("/nova_login");
           setIsUserState(false);
         }
-        return response.json();
+        return 
       })
       .then((data) => {
         //console.log(data);
@@ -86,17 +92,32 @@ const Write = ({ brightmode }) => {
   }
 
   async function fetchFeed() {
-    await mainApi.get(`feed_explore/feed_detail/feed_data?fid=${fid}`).then((res) => {
+    console.log("함수 실행")
+    await mainApi.get(`feed_explore/feed_detail/feed_data?fid=${param.fid}`).then((res) => {
+      console.log("피드 데이터", res.data.body.feed[0])
+      if (res.data.body.feed[0].uid !== user) {
+        alert("잘못된 접근입니다.");
+        navigate("/");
+      }
       setInitFeedData(res.data.body.feed[0]);
+      setTagList(res.data.body.feed[0].hashtag);
       setLinkList(res.data.body.links);
       setInitialValue(res.data.body.feed[0].raw_body);
+      setCategory(res.data.body.feed[0].board_type);
+      setBiasId(res.data.body.feed[0].bid);
     });
   }
 
   useEffect(() => {
     handleValidCheck();
-    fetchFeed();
   }, []);
+
+  useEffect(() => {
+    if (user && param.fid){
+      console.log("fid :", param);
+      fetchFeed();
+    }
+  }, [user]);
 
 
   // 에디터 내용 관찰
@@ -228,7 +249,6 @@ const Write = ({ brightmode }) => {
 
   };
 
-  const [category, setCategory] = useState("");
   const handleSubmit = (event) => {
     event.preventDefault(); // 기본 동작을 막음 (중요)
 
@@ -237,7 +257,7 @@ const Write = ({ brightmode }) => {
       header: header,
       body: {
         body: bodyText || longData, // 입력된 글 본문 반영
-        fid: "",
+        fid: param.fid || "",
         fclass: type,
         choice: choice, // 4지선다 선택지 반영
         hashtag: tagList,
@@ -347,6 +367,7 @@ const Write = ({ brightmode }) => {
     }
   }
   let { biasList } = useBiasStore();
+  console.log("biasList", biasList);
 
   const [showTopic, setShowTopic] = useState(false);
   const [currentTopic, setCurrentTopic] = useState("선택 없음");
@@ -392,7 +413,7 @@ const Write = ({ brightmode }) => {
 
       <section className={style["Select_container"]}>
         <div className={style["section_title"]}>주제 선택</div>
-        <DropDown options={biasList} setBiasId={setBiasId} />
+        <DropDown biasId={biasId} options={biasList} setBiasId={setBiasId} />
 
         <div style={{ textAlign: "right" }}>
           <div
@@ -408,7 +429,7 @@ const Write = ({ brightmode }) => {
 
       <section className={style["Select_container"]}>
         <div className={style["section_title"]}>카테고리 선택</div>
-        <DropDown options={categoryData} setCategory={setCategory} />
+        <DropDown category={category} options={categoryData} setCategory={setCategory} />
       </section>
 
       <div className={style["hashtag_container"]}>

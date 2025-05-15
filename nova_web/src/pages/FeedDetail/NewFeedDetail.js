@@ -388,7 +388,7 @@ export default function NewFeedDetail() {
           </button>
         )}
         {showMoreOption && (
-          <OptionModal onClickOption={onClickOption} onClickDelete={fetchRemoveFeed} />
+          <OptionModal onClickOption={onClickOption} onClickDelete={fetchRemoveFeed} fid={fid} />
         )}
       </div>
 
@@ -608,12 +608,24 @@ function ReplyComment({ index, length, reply, fetchOriginalComment, handleRemove
 }
 
 // 모달
-function OptionModal({ onClickOption, onClickDelete }) {
+function OptionModal({ onClickOption, onClickDelete, fid }) {
+  const navigate = useNavigate();
+
+  const handleNavigate = () => {
+    navigate(`/write_feed/${fid}`);
+  };
+
   return (
     <div className={style["OptionModal"]} onClick={onClickOption}>
       <div className={style["modal_container"]}>
         <div className={style["modal_title"]}>설정</div>
         {/* <div className={style["modal_content"]}>수정</div> */}
+        <div
+          className={`${style["modal_content"]} ${style["modal_content_accent"]}`}
+          onClick={handleNavigate}
+        >
+          수정
+        </div>
         <div
           className={`${style["modal_content"]} ${style["modal_content_accent"]}`}
           onClick={onClickDelete}

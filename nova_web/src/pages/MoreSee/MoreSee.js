@@ -107,7 +107,7 @@ function MoreSee({ onModeChange }) {
       title: "새로운 게시글 작성",
       src: new_moment,
       alt: "새로운 게시글 작성",
-      end_point: "/write_feed/long",
+      end_point: "/write_feed",
       onClick: (endPoint) => handlePage(endPoint),
     },
     {

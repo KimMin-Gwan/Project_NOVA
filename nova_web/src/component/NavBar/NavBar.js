@@ -146,7 +146,7 @@ const NavBar = ({ brightMode }) => {
               <button
                 onClick={() => {
                   //onClickMoment();
-                  handleNavigate("/write_feed/long");
+                  handleNavigate("/write_feed");
                 }}
               >
                 <div className="img-box">
