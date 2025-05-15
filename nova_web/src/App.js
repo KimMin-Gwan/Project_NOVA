@@ -94,7 +94,7 @@ function App() {
 
       {/* 피드 페이지 */}
       <Route path="/write_feed" element={<Write />}>
-        <Route path=":type" element={<Write />}></Route>
+        <Route path=":fid" element={<Write />}></Route>
       </Route>
       <Route
         path="/feed_list"
