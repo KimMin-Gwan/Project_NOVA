@@ -41,8 +41,7 @@ class Core_Service_View(Master_View):
 
         # 홈화
         @self.__app.get('/home/is_valid')
-        def is_valid_user(request:Request):
-            
+        def is_valid_user(request:Request, only_token:Optional[str]="y"):
             #try:
                 #client_host = request.client.host
                 #print(f"{client_host}  -  GET /home/is_valid 200 OK")
@@ -57,7 +56,11 @@ class Core_Service_View(Master_View):
                 #raise self._credentials_exception
 
             home_controller=Home_Controller()
-            model = home_controller.get_token(database=self.__database)
+            if only_token == "n":
+                model = home_controller.get_token_need_user(request=request_manager,
+                                                            database=self.__database)
+            else:
+                model = home_controller.get_token(database=self.__database)
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response

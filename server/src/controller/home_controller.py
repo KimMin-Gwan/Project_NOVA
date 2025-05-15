@@ -21,6 +21,12 @@ class Home_Controller:
         model = TokenModel(database=database)
         return model
     
+    # 홈 화면에서 토큰 발급  시도하는동작
+    def get_token_need_user(self, request, database:Local_Database) -> TokenModel: 
+        model = TokenModel(database=database)
+        model.set_user_with_email(request=request.jwt_payload)
+        return model
+    
     # 홈 화면의 bias 정보 
     def get_my_bias_data(self, database:Local_Database, request) -> HomeBiasModel: 
         model = HomeBiasModel(database=database)
