@@ -44,10 +44,8 @@ const Write = ({ brightmode}) => {
   let [initFeedData, setInitFeedData] = useState({});
   let [initialValue, setInitialValue] = useState("");
   let [user, setUser] = useState("");
-  const [category, setCategory] = useState("");
-
-  console.log("category", category);
-
+  let [category, setCategory] = useState("선택 없음");
+  let [date, setDate] = useState("");
 
   let [biasId, setBiasId] = useState();
 
@@ -86,15 +84,17 @@ const Write = ({ brightmode}) => {
         //console.log(data);
       })
       .catch((error) => {
-        console.error("Error:", error);
+        if (error.response.status == 401){
+          alert("로그인이 필요합니다.");
+          navigate("/novalogin");
+          setIsUserState(false);
+        }
         setIsUserState(false);
       });
   }
 
   async function fetchFeed() {
-    console.log("함수 실행")
     await mainApi.get(`feed_explore/feed_detail/feed_data?fid=${param.fid}`).then((res) => {
-      console.log("피드 데이터", res.data.body.feed[0])
       if (res.data.body.feed[0].uid !== user) {
         alert("잘못된 접근입니다.");
         navigate("/");
@@ -105,6 +105,7 @@ const Write = ({ brightmode}) => {
       setInitialValue(res.data.body.feed[0].raw_body);
       setCategory(res.data.body.feed[0].board_type);
       setBiasId(res.data.body.feed[0].bid);
+      setLinkList(res.data.body.links)
     });
   }
 
@@ -114,7 +115,6 @@ const Write = ({ brightmode}) => {
 
   useEffect(() => {
     if (user && param.fid){
-      console.log("fid :", param);
       fetchFeed();
     }
   }, [user]);
@@ -265,6 +265,7 @@ const Write = ({ brightmode}) => {
         bid: biasId,
         category: category,
         image_names: "",
+        date : ""
       },
     };
 
@@ -367,7 +368,6 @@ const Write = ({ brightmode}) => {
     }
   }
   let { biasList } = useBiasStore();
-  console.log("biasList", biasList);
 
   const [showTopic, setShowTopic] = useState(false);
   const [currentTopic, setCurrentTopic] = useState("선택 없음");

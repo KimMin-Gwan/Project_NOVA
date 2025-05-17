@@ -82,7 +82,7 @@ const NOVALogin = ({ brightmode }) => {
           alt="Arrow"
           className={style.backword}
           onClick={() => {
-            navigate(-1);
+            navigate("/");
           }}
         />
         <div className={style.title}>로그인</div>

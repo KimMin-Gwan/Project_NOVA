@@ -181,6 +181,7 @@ function MoreSee({ onModeChange }) {
   useEffect(() => {
     handleFetch();
   }, []);
+
   const [brightMode, setBrightMode] = useState(() => {
     return localStorage.getItem("brightMode") || "bright"; // 기본값은 'bright'
   });

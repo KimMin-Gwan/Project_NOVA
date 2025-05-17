@@ -417,7 +417,10 @@ class FeedEditModel(BaseModel):
         if data_payload.fid != "":
             detail, flag = feed_manager.try_modify_feed(
                 user=self._user,
-                data_payload = data_payload)
+                data_payload = data_payload,
+                fid=data_payload.fid,
+                ai_manager=ai_manager
+                )
         else:
             detail, flag = feed_manager.try_make_new_feed(
                 user=self._user,

@@ -1043,6 +1043,7 @@ class EditFeedRequest(RequestHeader):
         self.hashtag = body['hashtag']
         self.link:list = body['link']
         self.bid = body.get("bid", "")
+        self.date = body.get("date", "")
         self.image_names = image_names
         self.images = images
         
