@@ -182,7 +182,7 @@ export default function NewFeedDetail() {
     return {
       cid: cid, 
       uid: uid, // 유아이디
-      owner: owner,
+      owner: booleanValue,
       uname: uname, // 유저 이름
       is_reply: true, // 항상 true
       reply: {}, // 항상 빈 객체
