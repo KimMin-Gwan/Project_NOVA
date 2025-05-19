@@ -68,7 +68,7 @@ class FeedObserveUnit:
             await asyncio.sleep(0.4)
             if not self.__process_que.empty():
                 process_data:ProcessData = self.__process_que.get()
-                print(process_data)
+                process_data()
                 if process_data.type == "add":
                     result = await CommentModel(database=self.__database).make_new_comment(user=process_data.user,
                                                                         fid=self.__fid,
@@ -96,6 +96,13 @@ class ProcessData:
         self.type = type
         self.cid = cid
         self.body = body
+        
+    def __call__(self):
+        print("user : ", self.user)
+        print("type : ", self.type)
+        print("cid  : ", self.cid)
+        print("body : ", self.body)
+        
 
 # 단톡에서 채팅을 치는 소켓 입장임
 class FeedObserver:
