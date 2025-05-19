@@ -385,7 +385,7 @@ class ChattingDataform:
         print("초기 cid : ", cid)
         
         if type == "add":
-            if cid != "":
+            if cid == "":
                 self.cid = uid+"-"+self.__set_fid_with_datatime()
             else:
                 self.cid = cid
