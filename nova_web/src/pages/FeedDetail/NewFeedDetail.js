@@ -151,8 +151,6 @@ export default function NewFeedDetail() {
 
       const transformedMessage = parseDataToObject(message);
       
-      console.log("formdata : ", transformedMessage)
-
       // Handle different message types
       if (messageType === "add") {
         setComments((prevComments) => [...prevComments, transformedMessage]);
