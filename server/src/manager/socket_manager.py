@@ -211,7 +211,7 @@ class FeedObserver:
         
         for observer in self.__observers:
             await observer.set_send_data(dataform)
-            
+        
         resend_myself_dataform= ChattingDataform(uid=self.__user.uid,
                                     uname=self.__user.uname,
                                     fid=self.__unit.get_fid(),
@@ -381,6 +381,9 @@ class ChattingDataform:
         self.body = body
         self.date = datetime.now().strftime("%Y/%m/%d")
         self.type = type
+        
+        print("초기 cid : ", cid)
+        
         if type == "add":
             if cid != "":
                 self.cid = uid+"-"+self.__set_fid_with_datatime()
