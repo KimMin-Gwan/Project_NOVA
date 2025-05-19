@@ -68,6 +68,7 @@ class FeedObserveUnit:
             await asyncio.sleep(0.4)
             if not self.__process_que.empty():
                 process_data:ProcessData = self.__process_que.get()
+                print(process_data)
                 if process_data.type == "add":
                     result = await CommentModel(database=self.__database).make_new_comment(user=process_data.user,
                                                                         fid=self.__fid,
@@ -79,6 +80,7 @@ class FeedObserveUnit:
                                                                         #body=process_data.body)
                 elif process_data.type == "delete":
                     result = await CommentModel(database=self.__database).delete_comment(cid=process_data.body)
+                print(result)
             else:
                 if len(self.__observers) == 0:
                     self.toggle_delete_flag()
@@ -150,6 +152,7 @@ class FeedObserver:
                 
                 if not self.__send_data.empty():
                     send_data:ChattingDataform = self.__send_data.get()
+                    print(send_data)
                     await self.send_data(send_data.get_send_form())
                 
                 # 데이터가 안받아지면 죽이삼 (ack)
