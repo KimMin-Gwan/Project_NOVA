@@ -202,12 +202,16 @@ class FeedObserver:
                                     body=parts[0],
                                     type=parts[1],
                                     )
+        
+        process_data = ProcessData(user=self.__user,
+                                    type=parts[1],
+                                    cid=dataform.cid,
+                                    body=dataform.body,)
+        
         # data 분석하는 로직이 여기 들어감
-        self.__unit.add_process_que(process_data=ProcessData(user=self.__user,
-                                                            type=parts[1],
-                                                            cid=dataform.cid,
-                                                            body=dataform.body,
-                                                            ))
+        self.__unit.add_process_que(process_data= process_data)
+        
+        process_data()
         
         for observer in self.__observers:
             await observer.set_send_data(dataform)
