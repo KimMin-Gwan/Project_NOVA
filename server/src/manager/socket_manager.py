@@ -193,7 +193,7 @@ class FeedObserver:
         if len(parts) != 2:
             return True
         
-        #print(parts)
+        print("raw data : ", parts)
         
         
         dataform = ChattingDataform(uid=self.__user.uid,
