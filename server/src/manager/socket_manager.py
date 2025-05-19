@@ -68,6 +68,7 @@ class FeedObserveUnit:
             await asyncio.sleep(0.4)
             if not self.__process_que.empty():
                 process_data:ProcessData = self.__process_que.get()
+                process_data()
                 if process_data.type == "add":
                     result = await CommentModel(database=self.__database).make_new_comment(user=process_data.user,
                                                                         fid=self.__fid,
