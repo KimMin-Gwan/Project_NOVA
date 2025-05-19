@@ -68,7 +68,6 @@ class FeedObserveUnit:
             await asyncio.sleep(0.4)
             if not self.__process_que.empty():
                 process_data:ProcessData = self.__process_que.get()
-                process_data()
                 if process_data.type == "add":
                     result = await CommentModel(database=self.__database).make_new_comment(user=process_data.user,
                                                                         fid=self.__fid,
@@ -158,7 +157,6 @@ class FeedObserver:
                 
                 if not self.__send_data.empty():
                     send_data:ChattingDataform = self.__send_data.get()
-                    print(send_data)
                     await self.send_data(send_data.get_send_form())
                 
                 # 데이터가 안받아지면 죽이삼 (ack)
@@ -192,8 +190,6 @@ class FeedObserver:
         if len(parts) != 2:
             return True
         
-        print(parts)
-        
         dataform = ChattingDataform(uid=self.__user.uid,
                                     uname=self.__user.uname,
                                     fid=self.__unit.get_fid(),
@@ -212,6 +208,8 @@ class FeedObserver:
         for observer in self.__observers:
             await observer.set_send_data(dataform)
         
+        # 나한테 보내는 데이터는 별도로 구성되게 해야됨
+        # 안그러면 is_owner가 동일하게 변경되는 문제가 있음(포인트)
         resend_myself_dataform= ChattingDataform(uid=self.__user.uid,
                                     uname=self.__user.uname,
                                     fid=self.__unit.get_fid(),
@@ -382,8 +380,6 @@ class ChattingDataform:
         self.date = datetime.now().strftime("%Y/%m/%d")
         self.type = type
         
-        print("초기 cid : ", cid)
-        
         if type == "add":
             if cid == "":
                 self.cid = uid+"-"+self.__set_fid_with_datatime()
@@ -391,8 +387,6 @@ class ChattingDataform:
                 self.cid = cid
         else:
             self.cid=cid
-        
-        print("add 에서 만든 cid : ", self.cid)
         
         self.is_owner = False
     
