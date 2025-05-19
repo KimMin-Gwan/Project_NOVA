@@ -2,3 +2,4 @@
 __pycache__/
 server\src\configure.txt
 server/src/configure.txt
+server/test/downloader.py
