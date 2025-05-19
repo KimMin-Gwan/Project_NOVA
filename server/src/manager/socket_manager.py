@@ -382,7 +382,10 @@ class ChattingDataform:
         self.date = datetime.now().strftime("%Y/%m/%d")
         self.type = type
         if type == "add":
-            self.cid = uid+"-"+self.__set_fid_with_datatime()
+            if cid != "":
+                self.cid = uid+"-"+self.__set_fid_with_datatime()
+            else:
+                self.cid = cid
         else:
             self.cid=cid
         
