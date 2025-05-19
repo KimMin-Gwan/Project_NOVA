@@ -209,8 +209,15 @@ class FeedObserver:
         for observer in self.__observers:
             await observer.set_send_data(dataform)
             
-        dataform.is_owner = True
-        await self.set_send_data(dataform)
+        resend_myself_dataform= ChattingDataform(uid=self.__user.uid,
+                                    uname=self.__user.uname,
+                                    fid=self.__unit.get_fid(),
+                                    body=parts[0],
+                                    type=parts[1],
+                                    cid=dataform.cid
+                                    )
+        resend_myself_dataform.is_owner = True
+        await self.set_send_data(resend_myself_dataform)
         
         return True
         
