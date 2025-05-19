@@ -151,6 +151,8 @@ export default function NewFeedDetail() {
 
       const transformedMessage = parseDataToObject(message);
       
+      console.log("formdata : ", transformedMessage)
+
       // Handle different message types
       if (messageType === "add") {
         setComments((prevComments) => [...prevComments, transformedMessage]);
@@ -172,6 +174,9 @@ export default function NewFeedDetail() {
   function parseDataToObject(data) {
     // 데이터를 줄바꿈 단위로 분리
     const [type, owner, uid, uname, cid, body, date] = data.split('<br>');
+
+
+    let booleanValue = owner.toLowerCase() === "true";
 
     // 객체 생성 및 반환
     return {
