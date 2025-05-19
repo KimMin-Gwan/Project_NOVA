@@ -171,7 +171,7 @@ export default function NewFeedDetail() {
 
   function parseDataToObject(data) {
     // 데이터를 줄바꿈 단위로 분리
-    const [type, cid, uid, owner, uname, body, date] = data.split('<br>');
+    const [type, owner, uid, uname, cid, body, date] = data.split('<br>');
 
     // 객체 생성 및 반환
     return {

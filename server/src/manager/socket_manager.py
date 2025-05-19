@@ -68,7 +68,6 @@ class FeedObserveUnit:
             await asyncio.sleep(0.4)
             if not self.__process_que.empty():
                 process_data:ProcessData = self.__process_que.get()
-                process_data()
                 if process_data.type == "add":
                     result = await CommentModel(database=self.__database).make_new_comment(user=process_data.user,
                                                                         fid=self.__fid,
@@ -80,7 +79,6 @@ class FeedObserveUnit:
                                                                         #body=process_data.body)
                 elif process_data.type == "delete":
                     result = await CommentModel(database=self.__database).delete_comment(cid=process_data.body)
-                print(result)
             else:
                 if len(self.__observers) == 0:
                     self.toggle_delete_flag()
@@ -193,9 +191,6 @@ class FeedObserver:
         if len(parts) != 2:
             return True
         
-        print("raw data : ", parts)
-        
-        
         dataform = ChattingDataform(uid=self.__user.uid,
                                     uname=self.__user.uname,
                                     fid=self.__unit.get_fid(),
@@ -210,8 +205,6 @@ class FeedObserver:
         
         # data 분석하는 로직이 여기 들어감
         self.__unit.add_process_que(process_data= process_data)
-        
-        process_data()
         
         for observer in self.__observers:
             await observer.set_send_data(dataform)
