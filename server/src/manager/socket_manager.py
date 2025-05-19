@@ -385,7 +385,9 @@ class ChattingDataform:
             self.cid = uid+"-"+self.__set_fid_with_datatime()
         else:
             self.cid=cid
-            
+        
+        print("add 에서 만든 cid : ", self.cid)
+        
         self.is_owner = False
     
     def __set_fid_with_datatime(self):
