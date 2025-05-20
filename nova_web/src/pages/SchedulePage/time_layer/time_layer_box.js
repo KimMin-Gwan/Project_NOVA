@@ -1,13 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { act, useEffect, useState } from "react";
 import style from "./time_layer_box.module.css";
 import component_style from "./schedule_component.module.css";
 import right_vector_arrow from "./../../../img/right-vector-arrow.svg";
 import background_gradient from "./../../../img/background_gradient.svg";
 import calender_icon from "./../../../img/calender.svg";
+import double_arrow_round from "./../../../img/double_arrow_round.svg";
 import shop_icon from "./../../../img/3d_shop_icon.png";
 
 
-export default function TimeLayerBox({scheduleData, formattedDate}) {
+export default function TimeLayerBox({
+    swiperRef, scheduleData, scheduleDayList, formattedDate,
+    onChangeIndexNext, onChangeIndexPrev, onClickSchedule
+}) {
     const [visibleCount, setVisibleCount] = useState(0); // 렌더링된 컴포넌트 개수
     const [opacity, setOpacity] = useState(0);
 
@@ -27,9 +31,31 @@ export default function TimeLayerBox({scheduleData, formattedDate}) {
         return () => clearTimeout(timer); // 컴포넌트 언마운트 시 타이머 정리
     }, [visibleCount, scheduleData.length]);
 
+    async function onClickPrevArrow() {
+        const activeIndex = swiperRef.current?.activeIndex
+        if (activeIndex==0){
+            await onChangeIndexPrev()
+        }else{
+            swiperRef.current?.slidePrev()
+        }
+
+
+        return
+    }
+
+    async function onClickNextArrow() {
+        if (swiperRef.current?.activeIndex==(scheduleDayList.length-1)){
+            await onChangeIndexNext()
+        }
+        swiperRef.current?.slideNext()
+        return
+    }
+
+
     return (
         <div className={style["time-layer-box"]}>
-            <div className={style["time-layer-info"]}>
+            <div className={style["time-layer-info"]} style={{display:"flex", alignContent:"center", justifyContent:"center"}}>
+                {/**
                 <div className={style["tag-box"]}>
                     <img src={shop_icon}/>
                     <span>
@@ -42,11 +68,32 @@ export default function TimeLayerBox({scheduleData, formattedDate}) {
                         {formattedDate}
                     </span>
                 </div>
-                
+                 */}
+                <div className={style["slide-arrow-box"]}>
+                    <img src={double_arrow_round}
+                    onClick={()=>
+                        onClickPrevArrow()
+                    }
+                    />
+                </div>
+                <div className={style["calender-box-v1"]}>
+                    <img src={calender_icon}/>
+                    <span>
+                        {formattedDate}
+                    </span>
+                </div>
+                <div className={style["slide-arrow-box"]}>
+                    <img src={double_arrow_round} style={{rotate:"180deg"}}
+                    onClick={()=>
+                        onClickNextArrow()}
+                    />
+                </div>
+
             </div>
+
             <div>
                 {scheduleData.slice(1, visibleCount).map((item, index) => (
-                    <ScheduleComponent key={index} section={item.section} schedules={item.schedules} />
+                    <ScheduleComponent key={index} section={item.section} schedules={item.schedules} onClickSchedule={onClickSchedule} />
                 ))}
             </div>
            <img src={background_gradient} alt="gradient" className={style["background-gradient"]} 
@@ -55,7 +102,7 @@ export default function TimeLayerBox({scheduleData, formattedDate}) {
     );
 }
 
-function ScheduleComponent({ section, schedules}) {
+function ScheduleComponent({ section, schedules, onClickSchedule}) {
     const [opacity, setOpacity] = useState(0);
     const [transform, setTransform] = useState("translateY(20px)"); // 처음에는 살짝 아래로 이동
 
@@ -84,7 +131,7 @@ function ScheduleComponent({ section, schedules}) {
                     </span>
                 </div>
                 <div className={component_style["outer-schedule-box"]}>
-                <ScheduleDetail {...schedules[0]}/>
+                <ScheduleDetail {...schedules[0]} onClickSchedule={onClickSchedule}/>
                 </div>
             </div>
         );
@@ -103,7 +150,7 @@ function ScheduleComponent({ section, schedules}) {
                     schedules.map((schedule, index) => {
                         return (
                             <div>
-                                <ScheduleDetail key= {index} {...schedule}/>
+                                <ScheduleDetail key= {index} {...schedule} onClickSchedule={onClickSchedule}/>
                                 {index % 2 === 0 && (
                                     <div className={component_style["schedule-sperator"]}></div>
                                 )}
@@ -133,10 +180,14 @@ function ScheduleComponent({ section, schedules}) {
 }
 
 
-function ScheduleDetail({ time, type, schedule_id, schedule_title, schedule_bias}) {
+function ScheduleDetail({
+     time, type, schedule_id,
+     schedule_title, schedule_bias, onClickSchedule
+    }) {
     const [isClicked, setIsClicked] = useState(false); // 클릭 여부를 관리하는 상태
 
     const handleClick = () => {
+        onClickSchedule(schedule_id);
         setIsClicked(true); // 클릭 시 색상을 변경
         setTimeout(() => {
             setIsClicked(false); // 1초 후 원래 상태로 돌아가게 설정

@@ -18,6 +18,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 
+import style from './../FeedDetail/NewFeedDetail.module.css';
 
 import arrowRightStop from './Arrow_right_stop.svg';
 
@@ -27,12 +28,12 @@ const temp_schedule_data = [
         ]
     },
     { section : "오전", schedules : [
-        { time: "AM 11:00", type: "recommened", schedule_id: "0", schedule_title: "아침 노래뱅", schedule_bias: "주제이름1" },
-        { time: "AM 11:00", type: "recommened", schedule_id: "1", schedule_title: "한식 맛집 아테의 노래뱅", schedule_bias: "주제이름2" },
+        { time: "AM 11:00", type: "recommened", schedule_id: "aaa", schedule_title: "아침 노래뱅", schedule_bias: "주제이름1" },
+        { time: "AM 11:00", type: "recommened", schedule_id: "bbb", schedule_title: "한식 맛집 아테의 노래뱅", schedule_bias: "주제이름2" },
         ]
     },
     { section : "오후", schedules : [
-        { time: "PM 01:00", type: "added", schedule_id: "2", schedule_title: "마지막 노래 방송", schedule_bias: "주제이름3" },
+        { time: "PM 01:00", type: "added", schedule_id: "ccc", schedule_title: "마지막 노래 방송", schedule_bias: "주제이름2" },
         ]
     },
     { section : "저녁", schedules : [
@@ -92,9 +93,18 @@ const ScheduleDashboard = () => {
     return formatter.format(date)
   }
 
+  const [showScheduleMoreOption, setShowScheduleMoreOption] = useState(false);
+  const [targetSchedule, setTargetSchedule] = useState("");
+
+  const toggleMoreOption = (targetSchedule) => {
+    setTargetSchedule(targetSchedule);
+    setShowScheduleMoreOption(!showScheduleMoreOption);
+  }
+
   const [formatDate, setFormatDate] = useState([getFormattedDate(targetDate)])
 
   async function onChangeIndexPrev() {
+    const activeIndex = swiperRef2.current?.activeIndex
     // 일단 왼쪽 날짜를 하나 지워야됨
     const yieldDate = new Date(leftTargetDate); // 기존 날짜 복사
     yieldDate.setDate(leftTargetDate.getDate() - 1); // 날짜를 계산
@@ -105,8 +115,28 @@ const ScheduleDashboard = () => {
     const newSchedule = await fetchScheduleDataWithDate(dateString)
     setScheduleData((prev) => [newSchedule, ...prev])
     setFormatDate((prev) => [getFormattedDate(yieldDate), ...prev])
-    swiperRef2.current?.slideTo(1)
+
+        // 슬라이드 업데이트 후 현재 인덱스 유지
+    setTimeout(() => {
+        if (swiperRef2.current) {
+            // 1. 현재 활성화된 슬라이드 위치 유지
+            swiperRef2.current.slideTo(activeIndex + 1, 0); 
+            
+            // 2. 새 슬라이드로 이동
+            setTimeout(() => {
+                swiperRef2.current.slideTo(0, 300); // 새 슬라이드로 300ms 동안 이동
+            }, 100); // 상태 변경 반영 후 동작하도록 약간의 지연 추가
+        }
+    }, 0);
+
   }
+
+
+  async function onChangeNextAsync(){
+    await onChangeIndexNext()
+    swiperRef2.current?.slideNext()
+  }
+
 
   async function onChangeIndexNext() {
     // 일단 왼쪽 날짜를 하나 지워야됨
@@ -136,6 +166,12 @@ const ScheduleDashboard = () => {
       setNumBias(res.data.body.num_bias);
     });
   }
+
+  async function fetchRejectSchedule(target){
+    mainApi.get(`time_table_server/try_reject_from_my_schedule?sid=${target}`).then((res)=> {
+    });
+  }
+
 
   //// 시간 차트 데이터 받기
   //function fetchTimeChartData(date) {
@@ -236,8 +272,9 @@ const ScheduleDashboard = () => {
                 <span>개</span>
               </div>
               <div className="right-group">
-                <button onClick={() => handleNavigate("/schedule/my_schedule")}>내 일정</button>
-                <img src={vertical_line} alt="vertical line" />
+                {/* <button onClick={() => handleNavigate("/schedule/my_schedule")}>내 일정</button> 
+                <img src={vertical_line} alt="vertical line" />*/}
+
                 <button onClick={() => {
                   mainApi.get("home/is_valid").then((res) => {
                     navigate("/schedule/make_new")
@@ -277,6 +314,10 @@ const ScheduleDashboard = () => {
           />
           */}
           <div style={{display: "flex", justifyContent:"center", alignContent:"center"}}>
+            {showScheduleMoreOption && (
+              <CommentOptionModal onClose={setShowScheduleMoreOption} targetSid={targetSchedule} onClickDelete={fetchRejectSchedule}/>
+            )}
+
             <Swiper
               initialSlide={1}
               centeredSlides={true} // 중앙 정렬
@@ -296,7 +337,7 @@ const ScheduleDashboard = () => {
                   setTimeout(() => swiperRef.current?.slideTo(1), 0);
                   // 당기면 다음주 데이터를 받아야하는데, 너무 민감해서 diff 차이로 계산
                   if (swiper.touches.diff < -300){
-                    onChangeIndexNext();
+                    onChangeNextAsync()
                   }
                 }else{
                 }
@@ -360,7 +401,10 @@ const ScheduleDashboard = () => {
                   scheduleData.map((schedule, index) => {
                     return (
                       <SwiperSlide key={index}>
-                        <TimeLayerBox scheduleData={schedule} formattedDate={formatDate[index]}/>
+                        <TimeLayerBox swiperRef={swiperRef2} scheduleData={schedule} formattedDate={formatDate[index]} 
+                        onChangeIndexNext={onChangeIndexNext} onChangeIndexPrev={onChangeIndexPrev}
+                        scheduleDayList={scheduleData} onClickSchedule={toggleMoreOption}
+                        />
                       </SwiperSlide>
                     );
                   })
@@ -407,10 +451,30 @@ const ScheduleDashboard = () => {
         </div>
       </div>
       <NavBar brightMode={brightMode} />
-
     </div>
   );
 };
+
+function CommentOptionModal({ onClose, targetSid, onClickDelete}) {
+  return (
+    <div className={style["OptionModal"]} onClick={()=>onClose(false)}>
+      <div
+        className={style["modal_container"]}
+        onClick={(e) => e.stopPropagation()} // 이벤트 버블링 방지
+      >
+        <div className={style["modal_title"]}>댓글</div>
+        {/* <div className={style["modal_content"]}>수정</div> */}
+        <div
+          className={`${style["modal_content"]} ${style["modal_content_accent"]}`}
+          onClick={() => onClickDelete(targetSid)}
+        >
+          제외하기
+        </div>
+      </div>
+    </div>
+  );
+}
+
 
 export default ScheduleDashboard;
 
@@ -421,3 +485,4 @@ export default ScheduleDashboard;
 //setEventData(res.data.body.schedule_events);
 //});
 //}
+// 댓글 옵션 모달

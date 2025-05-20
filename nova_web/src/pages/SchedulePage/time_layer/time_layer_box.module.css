@@ -63,3 +63,31 @@
         color : #555D6E
     }
 }
+
+.calender-box-v1{
+    width : 50.8%;
+    height : 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+     
+    span {
+        font-size : 16.5px;
+        font-weight : 600;
+        color : #555D6E
+    }
+}
+
+.slide-arrow-box{
+    width : 20%;
+    height : 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+     
+    span {
+        font-size : 16.5px;
+        font-weight : 600;
+        color : #555D6E
+    }
+}
