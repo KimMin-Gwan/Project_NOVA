@@ -1912,18 +1912,37 @@ class ScheduleTimeLayerModel(TimeTableModel):
     # 레이어 만들기
     def set_my_schedule_layer(self):
         # 핵심 시간 섹션
-        options = [
-            {"start": time(0, 0), "end": time(6, 0)},
-            {"start": time(6, 0), "end": time(12, 0)},
-            {"start": time(12, 0), "end": time(18, 0)},
-            {"start": time(18, 0), "end": time(23, 59)},  # 하루의 끝을 23:59로 설정
-        ]
+        #options = [
+            #{"start": time(0, 0), "end": time(6, 0)},
+            #{"start": time(6, 0), "end": time(12, 0)},
+            #{"start": time(12, 0), "end": time(18, 0)},
+            #{"start": time(18, 0), "end": time(23, 59)},  # 하루의 끝을 23:59로 설정
+        #]
         
         # 섹션마다 분류
         for single_schedule in self.__schedules:
             
             single_schedule:Schedule = single_schedule
             time_obj = datetime.strptime(single_schedule.start_time, "%H:%M")
+            
+            options = [
+                {
+                    "start": datetime.combine(single_schedule.start_date, datetime.min.time()),
+                    "end": datetime.combine(single_schedule.start_date, datetime.min.time()).replace(hour=6, minute=0),
+                },
+                {
+                    "start": datetime.combine(single_schedule.start_date, datetime.min.time()).replace(hour=6, minute=0),
+                    "end": datetime.combine(single_schedule.start_date, datetime.min.time()).replace(hour=12, minute=0),
+                },
+                {
+                    "start": datetime.combine(single_schedule.start_date, datetime.min.time()).replace(hour=12, minute=0),
+                    "end": datetime.combine(single_schedule.start_date, datetime.min.time()).replace(hour=18, minute=0),
+                },
+                {
+                    "start": datetime.combine(single_schedule.start_date, datetime.min.time()).replace(hour=18, minute=0),
+                    "end": datetime.combine(single_schedule.start_date, datetime.min.time()).replace(hour=23, minute=59),
+                },
+            ]
             
         
             if options[0]["start"] <= time_obj < options[0]["end"]:
@@ -1976,7 +1995,7 @@ class ScheduleTimeLayerModel(TimeTableModel):
         for single_schedule in self.__schedules:
             
             single_schedule:Schedule = single_schedule
-            time_obj = datetime.strptime(single_schedule.start_time, "%H:%M").time()
+            time_obj = datetime.strptime(single_schedule.start_time, "%H:%M")
             
             options = [
                 {
