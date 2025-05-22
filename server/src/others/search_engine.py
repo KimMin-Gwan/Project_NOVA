@@ -15,7 +15,6 @@ import asyncio
 from others.data_domain import Feed, User, Bias, Notice, Comment
 from others.graph_domain import *
 from others.managed_data_domain import ManagedFeedBiasTable, ManagedFeed, ManagedBias
-from others.managed_data_domain import ManagedFeedBiasTableNew
 from pprint import pprint
 from collections import Counter, OrderedDict
 
@@ -67,7 +66,17 @@ class FeedSearchEngine:
         self.__search_manager.try_make_new_managed_feed(feed)
         self.try_add_feed(feed=feed)
         return
-    
+
+    def try_modify_managed_feed(self, feed):
+        self.__search_manager.try_modify_managed_feed(feed)
+        self.try_modify_feed(feed=feed)
+        return
+
+    def try_remove_managed_feed(self, feed):
+        self.__search_manager.try_remove_managed_feed(feed)
+        self.try_remove_feed(fid=feed.fid)
+        return
+
     def try_get_random_feed(self) -> str:
         return self.__search_manager.try_get_random_feed()
 
@@ -264,7 +273,10 @@ class FeedSearchEngine:
 
     def try_add_feed(self, feed:Feed):
         result = self.__feed_algorithm.add_feed_node(feed)
+        return result
 
+    def try_modify_feed(self, feed:Feed):
+        result = self.__feed_algorithm.modify_feed_node(feed=feed)
         return result
 
     def try_remove_feed(self, fid):
@@ -355,6 +367,14 @@ class SearchManager:
 
     def try_make_new_managed_feed(self, feed:Feed):
         self.__managed_feed_bias_table.make_new_managed_feed(feed)
+        return
+
+    def try_modify_managed_feed(self, feed:Feed):
+        self.__managed_feed_bias_table.modify_feed_table(feed)
+        return
+
+    def try_remove_managed_feed(self, feed:Feed):
+        self.__managed_feed_bias_table.remove_feed(feed)
         return
 
     # 피드 매니저에서 사용가능하게 만든 검색 기능
