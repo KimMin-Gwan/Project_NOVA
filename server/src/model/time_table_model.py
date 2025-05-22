@@ -1902,7 +1902,6 @@ class ScheduleTimeLayerModel(TimeTableModel):
                 
         schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids= target_sids)
 
-        pprint(schedule_datas)
         
         
         # 다 만들면 보관
@@ -1973,6 +1972,7 @@ class ScheduleTimeLayerModel(TimeTableModel):
             target_sids.append(sid)
                 
         schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids= target_sids)
+        pprint(schedule_datas)
         
         
         self.__schedules.clear()
