@@ -83,7 +83,7 @@ class FeedManager:
         self._database.add_new_data(target_id="fid", new_data=new_feed.get_dict_form_data())
 
         self._feed_search_engine.try_make_new_managed_feed(feed=new_feed)
-        self._feed_search_engine.try_add_feed(feed=new_feed)
+        # self._feed_search_engine.try_add_feed(feed=new_feed)
         return
     
     def __modify_feed(self, user:User, fid, fclass, choice, body, hashtag, board_type, date,
@@ -105,9 +105,9 @@ class FeedManager:
         self._database.modify_data_with_id(target_id="fid", target_data=feed.get_dict_form_data())
 
         # 이곳에 add와 make가 아닌 modify 되는 함수가 필요함
+        self._feed_search_engine.try_modify_managed_feed(feed=feed)
         #self._feed_search_engine.try_make_new_managed_feed(feed=new_feed)
-        #self._feed_search_engine.try_add_feed(feed=new_feed)
-        
+
         return
 
     # 링크 만들기
