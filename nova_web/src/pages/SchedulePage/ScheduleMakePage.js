@@ -309,7 +309,7 @@ const ScheduleMakePage = () => {
   const [searchedSchedule, setSearchedSchedule] = useState([]);
 
   function fetchSearchSchedule() {
-    mainApi.get(`time_table_server/try_search_schedule_with_keyword?search_columns=bid&type=schedule&keyword=${targetBias.bname}`).then((res) => {
+    mainApi.get(`time_table_server/try_search_schedule_with_keyword?search_columns=bname&type=schedule&keyword=${targetBias.bname}`).then((res) => {
       setSearchedSchedule(res.data.body.schedules);
     });
   }
@@ -317,6 +317,9 @@ const ScheduleMakePage = () => {
 
   // 단일 스케줄 만들기
   async function fetchTryMakeSingleSchedule() {
+
+    sendScheduleData.schedules[0].bid = targetBias.bid
+
     await postApi.post("time_table_server/try_make_new_single_schedule", {
       header: HEADER,
       body: sendScheduleData.schedules[0],
@@ -399,8 +402,6 @@ const ScheduleMakePage = () => {
               { id: Date.now(), index: currentIndex },
           ]);
       }
-
-      console.log("currentIndex", currentIndex);
       setActiveIndex(currentIndex);
   };
 
@@ -408,6 +409,7 @@ const ScheduleMakePage = () => {
   const handleSelectBias = (index) => {
     const selectedBias = biasList[index];
     setTargetBias(selectedBias); // 선택된 주제 설정
+
     setTempScheduleData((prevState) => ({
       ...prevState,
       bid: selectedBias.bid, // bundleNameInput 값으로 sname 업데이
@@ -506,7 +508,7 @@ const ScheduleMakePage = () => {
                                             <div className={style["no-content-message"]}>등록된 컨텐츠 일정이 없어요!</div>
                                         ) : (
                                             searchedSchedule.map((item, i) => (
-                                                <div onClick={() => handleSelectBias(i)} key={i} className={style["bias-box"]}>
+                                                <div>
                                                     <ScheduleCard key={i} {...item} style={{ width: "90%" }} />
                                                 </div>
                                             ))
@@ -588,7 +590,7 @@ const ScheduleMakePage = () => {
                                     <div className={style["slide-body-bottom-box"]}> 
 
                                         {makedScheduleData.map((item, i) => {
-                                            return <div onClick={() => handleSelectBias(i)} key={i} className={style["bias-box"]}>
+                                            return <div>
                                                 <ScheduleCard key={i} {...item} style={{width: "90%"}} />
                                             </div>
                                         })}
@@ -604,8 +606,8 @@ const ScheduleMakePage = () => {
                                 </div>
                                 <div className={style["bottom-button"]}
                                     onClick={() => {
-                                        //swiperRef.current?.slideNext()
-
+                                        swiperRef.current?.slideNext()
+  
                                         tryFetchMakeSchedule()
                                     }} // 오른쪽 슬라이드 이동
                                 >

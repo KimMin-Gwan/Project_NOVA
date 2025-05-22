@@ -22,7 +22,7 @@ import style from './../FeedDetail/NewFeedDetail.module.css';
 
 import arrowRightStop from './Arrow_right_stop.svg';
 
-const temp_schedule_data = [
+const temp_schedule_data2 = [
     { tag : "노래/음악"},
     { section : "새벽", schedules : [
         ]
@@ -55,6 +55,14 @@ const temp_schedule_data = [
         //{ time: "PM 08:00", type: "recommened", schedule_id: "4", schedule_title: "이쁜이들이랑 싱크룸", schedule_bias: "밍수진" },
         //]
     //}
+]
+
+const temp_schedule_data = [
+    { tag : ""},
+    { section : "새벽", schedules : [ ] },
+    { section : "오전", schedules : [ ] },
+    { section : "오후", schedules : [ ] },
+    { section : "저녁", schedules : [ ] }
 ]
 
 const ScheduleDashboard = () => {
@@ -110,7 +118,7 @@ const ScheduleDashboard = () => {
     yieldDate.setDate(leftTargetDate.getDate() - 1); // 날짜를 계산
     setLeftTargetDate(yieldDate);
 
-    const dateString = yieldDate.toISOString().split("T")[0]; // 'YYYY-MM-DD' 형식으로 변환
+    const dateString = yieldDate.toISOString().split("T")[0].replace(/-/g, "/");
 
     const newSchedule = await fetchScheduleDataWithDate(dateString)
     setScheduleData((prev) => [newSchedule, ...prev])
@@ -144,7 +152,7 @@ const ScheduleDashboard = () => {
     yieldDate.setDate(rightTargetDate.getDate() + 1); // 날짜를 계산
     setRightTargetDate(yieldDate);
 
-    const dateString = yieldDate.toISOString().split("T")[0]; // 'YYYY-MM-DD' 형식으로 변환
+    const dateString = yieldDate.toISOString().split("T")[0].replace(/-/g, "/");
 
     const newSchedule = await fetchScheduleDataWithDate(dateString)
     setScheduleData((prev) => [...prev, newSchedule])
@@ -167,6 +175,7 @@ const ScheduleDashboard = () => {
     });
   }
 
+  // 내 스케줄에서 지우기
   async function fetchRejectSchedule(target){
     mainApi.get(`time_table_server/try_reject_from_my_schedule?sid=${target}`).then((res)=> {
     });
@@ -181,18 +190,20 @@ const ScheduleDashboard = () => {
     //});
   //}
 
-  //// 시간 레이어 데이터 받기
-  //async function fetchScheduleDataWithDate(date) {
-    //await mainApi.get(`time_table_server/get_schedule_data_with_date?date=${date}`).then((res) => {
-      //setScheduleData(res.data.body.schedule_blocks);
-      //setWeekDayData(res.data.body.week_day_datas);
-    //});
-  //}
-
   // 시간 레이어 데이터 받기
   async function fetchScheduleDataWithDate(date) {
-    return temp_schedule_data
+    try {
+      const res = await mainApi.get(`/time_table_server/get_time_layer_schedule_with_date?date=${date}`);
+      return res.data.body.schedule_layer; // 반환값을 명시적으로 설정
+    } catch (error) {
+      return temp_schedule_data
+    }
   }
+
+  //// 시간 레이어 데이터 받기
+  //async function fetchScheduleDataWithDate(date) {
+    //return temp_schedule_data2
+  //}
 
   // 추천 주제 데이터 받기
   function fetchBiasData() {
@@ -201,18 +212,24 @@ const ScheduleDashboard = () => {
     });
   }
 
-  useEffect(() => {
-    const dateString = targetDate.toISOString().split("T")[0]; // 'YYYY-MM-DD' 형식으로 변환
-    fetchTargetMonthWeek(dateString);
-    //fetchTimeChartData(dateString);
-    //fetchScheduleDataWithDate(dateString);
-  }, [targetDate]);
+  //useEffect(() => {
+    //const dateString = targetDate.toISOString().split("T")[0]; // 'YYYY-MM-DD' 형식으로 변환
+    //fetchTargetMonthWeek(dateString);
+    ////fetchTimeChartData(dateString);
+    ////fetchScheduleDataWithDate(dateString);
+  //}, [targetDate]);
+
+  async function initDataSetting(dateString){
+    const newSchedule = await fetchScheduleDataWithDate(dateString)
+    setScheduleData([newSchedule])
+    return
+  }
 
   useEffect(() => {
+    const dateString = targetDate.toISOString().split("T")[0].replace(/-/g, "/");
+    fetchTargetMonthWeek(dateString);
     fetchBiasData();
-    // const dateString = todayDate.toISOString().split("T")[0]; // 'YYYY-MM-DD' 형식으로 변환
-    // fetchTargetMonthWeek(dateString);
-    // fetchTimeChartData(dateString);
+    initDataSetting(dateString)
   }, []);
 
 
@@ -283,7 +300,6 @@ const ScheduleDashboard = () => {
                     if (err.response.status === 401) {
                       navigate("/novalogin")
                     }else{
-                      console.log("Error", err)
                     }
                   })
                 }}>일정 등록</button>

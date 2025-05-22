@@ -151,7 +151,7 @@ function ScheduleComponent({ section, schedules, onClickSchedule}) {
                         return (
                             <div>
                                 <ScheduleDetail key= {index} {...schedule} onClickSchedule={onClickSchedule}/>
-                                {index % 2 === 0 && (
+                                {(schedules.length-1) !== index && (
                                     <div className={component_style["schedule-sperator"]}></div>
                                 )}
                             </div>
