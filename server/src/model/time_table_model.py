@@ -1824,6 +1824,8 @@ class ScheduleTimeLayerModel(TimeTableModel):
             {"section":"오후", "schedules":[]},
             {"section":"저녁", "schedules":[]}
         ]   
+        self.__my_target_sids = []
+        self.__recommend_target_sids = []
         
     # 단일 스케줄의 데이터 폼을 받아내는 객체
     def __make_single_schedule_data_form(self, type, schedule:Schedule):
@@ -1892,18 +1894,14 @@ class ScheduleTimeLayerModel(TimeTableModel):
 
         sids = schedule_search_engine.try_get_schedules_in_specific_date(sids=["all"], specific_date=target_date, return_id=True)
 
-
-        self.__my_target_sids = []
-
         # 여기서 managed_schedule은 dict 형태임
         for sid in sids:
             if sid in self._tuser.sids:
                 self.__my_target_sids.append(sid)
+            else:
+                self.__recommend_target_sids.append(sid)
                 
         schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids= self.__my_target_sids)
-        pprint(schedule_datas)
-
-        
         
         # 다 만들면 보관
         for schedule_data in schedule_datas:
@@ -1964,15 +1962,19 @@ class ScheduleTimeLayerModel(TimeTableModel):
             
     # 날짜에 맞는 스케줄 데이터 불러오기
     def make_recommand_schedule_data(self, target_date, schedule_search_engine:SSE):
-        sids = schedule_search_engine.try_get_schedules_in_specific_date(sids=["all"], specific_date=target_date, return_id=True)
-        
         target_sids = []
-
-        for sid in sids :
-            if len(target_sids) > 5:
-                break
+                
+        # 0개에서 3개 랜덤 선택
+        sample_size = random.randint(0, 3)  # 0부터 3까지의 개수 선택
+        result = random.sample(self.__recommend_target_sids, k=min(sample_size, len(self.__recommend_target_sids)))  # 데이터 크기를 초과하지 않도록 처리
+        
+        pprint(result)
+        
+        #for sid in sids :
+            #if len(target_sids) > 5:
+                #break
             
-            target_sids.append(sid)
+            #target_sids.append(sid)
                 
         schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids= target_sids)
         
