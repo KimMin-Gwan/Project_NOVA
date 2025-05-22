@@ -1913,12 +1913,6 @@ class ScheduleTimeLayerModel(TimeTableModel):
     # 레이어 만들기
     def set_my_schedule_layer(self):
         # 핵심 시간 섹션
-        #options = [
-            #{"start": time(0, 0), "end": time(6, 0)},
-            #{"start": time(6, 0), "end": time(12, 0)},
-            #{"start": time(12, 0), "end": time(18, 0)},
-            #{"start": time(18, 0), "end": time(23, 59)},  # 하루의 끝을 23:59로 설정
-        #]
         
         # 섹션마다 분류
         for single_schedule in self.__schedules:
@@ -1978,13 +1972,6 @@ class ScheduleTimeLayerModel(TimeTableModel):
     
     def set_recommand_schedule_layer(self):
         # 핵심 시간 섹션
-        options = [
-            {"start": time(0, 0), "end": time(6, 0)},
-            {"start": time(6, 0), "end": time(12, 0)},
-            {"start": time(12, 0), "end": time(18, 0)},
-            {"start": time(18, 0), "end": time(23, 59)},  # 하루의 끝을 23:59로 설정
-        ]
-        
         # 섹션마다 분류
         for single_schedule in self.__schedules:
             
@@ -2014,11 +2001,11 @@ class ScheduleTimeLayerModel(TimeTableModel):
             if options[0]["start"] <= time_obj < options[0]["end"]:
                 self.__recommand_layer_data[1]["schedules"].append(single_schedule)
             elif options[1]["start"] <= time_obj < options[1]["end"]:
-                self.__recommand_layer_data[1]["schedules"].append(single_schedule)
+                self.__recommand_layer_data[2]["schedules"].append(single_schedule)
             elif options[2]["start"] <= time_obj < options[2]["end"]:
-                self.__recommand_layer_data[1]["schedules"].append(single_schedule)
+                self.__recommand_layer_data[3]["schedules"].append(single_schedule)
             elif options[3]["start"] <= time_obj <= options[3]["end"]:  # 하루 끝 비교는 <= 사용
-                self.__recommand_layer_data[1]["schedules"].append(single_schedule)
+                self.__recommand_layer_data[4]["schedules"].append(single_schedule)
             else:
                 continue
 
