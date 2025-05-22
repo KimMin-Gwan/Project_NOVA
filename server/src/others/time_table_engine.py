@@ -1,6 +1,7 @@
 from others.data_domain import TimeTableUser, Schedule, ScheduleBundle
 from others.managed_data_domain import ManagedScheduleTable, ManagedSchedule, ManagedScheduleBundle
 from pprint import pprint
+from typing import Union, List
 
 
 # 스케줄 서치 엔진
@@ -132,7 +133,7 @@ class ScheduleSearchEngine:
         return sid_list
 
     # 특정 날짜에 걸려있는 모든 스케줄 을
-    def try_get_schedules_in_specific_date(self, sids:list=None, specific_date:str="", return_id:bool=True):
+    def try_get_schedules_in_specific_date(self, sids:list=None, specific_date:str="", return_id:bool=True) -> Union[List[dict], List[None]]:
         # 모든 sid를 사용하려면 무조건 "all"을 붙이시오.
         if sids is None:
             sids = []
