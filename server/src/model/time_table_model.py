@@ -1961,9 +1961,8 @@ class ScheduleTimeLayerModel(TimeTableModel):
             self.__schedules.append(schedule)
         
         return       
-            
-            
-     # 레이어 만들기
+    
+    
     def set_recommand_schedule_layer(self):
         # 핵심 시간 섹션
         options = [
@@ -1979,6 +1978,25 @@ class ScheduleTimeLayerModel(TimeTableModel):
             single_schedule:Schedule = single_schedule
             time_obj = datetime.strptime(single_schedule.start_time, "%H:%M").time()
             
+            options = [
+                {
+                    "start": datetime.combine(single_schedule.start_date, datetime.min.time()),
+                    "end": datetime.combine(single_schedule.start_date, datetime.min.time()).replace(hour=6, minute=0),
+                },
+                {
+                    "start": datetime.combine(single_schedule.start_date, datetime.min.time()).replace(hour=6, minute=0),
+                    "end": datetime.combine(single_schedule.start_date, datetime.min.time()).replace(hour=12, minute=0),
+                },
+                {
+                    "start": datetime.combine(single_schedule.start_date, datetime.min.time()).replace(hour=12, minute=0),
+                    "end": datetime.combine(single_schedule.start_date, datetime.min.time()).replace(hour=18, minute=0),
+                },
+                {
+                    "start": datetime.combine(single_schedule.start_date, datetime.min.time()).replace(hour=18, minute=0),
+                    "end": datetime.combine(single_schedule.start_date, datetime.min.time()).replace(hour=23, minute=59),
+                },
+            ]
+            
         
             if options[0]["start"] <= time_obj < options[0]["end"]:
                 self.__my_layer_data[1]["schedules"].append(single_schedule)
@@ -1990,7 +2008,7 @@ class ScheduleTimeLayerModel(TimeTableModel):
                 self.__my_layer_data[4]["schedules"].append(single_schedule)
             else:
                 continue
-        
+
         
     # 전송용 폼으로 교체
     def change_layer_form(self):
