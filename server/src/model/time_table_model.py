@@ -1927,20 +1927,20 @@ class ScheduleTimeLayerModel(TimeTableModel):
             
             options = [
                 {
-                    "start": datetime.combine(single_schedule.start_date, datetime.min.time()),
-                    "end": datetime.combine(single_schedule.start_date, datetime.min.time()).replace(hour=6, minute=0),
+                    "start": datetime.combine(time_obj, datetime.min.time()),
+                    "end": datetime.combine(time_obj, datetime.min.time()).replace(hour=6, minute=0),
                 },
                 {
-                    "start": datetime.combine(single_schedule.start_date, datetime.min.time()).replace(hour=6, minute=0),
-                    "end": datetime.combine(single_schedule.start_date, datetime.min.time()).replace(hour=12, minute=0),
+                    "start": datetime.combine(time_obj, datetime.min.time()).replace(hour=6, minute=0),
+                    "end": datetime.combine(time_obj, datetime.min.time()).replace(hour=12, minute=0),
                 },
                 {
-                    "start": datetime.combine(single_schedule.start_date, datetime.min.time()).replace(hour=12, minute=0),
-                    "end": datetime.combine(single_schedule.start_date, datetime.min.time()).replace(hour=18, minute=0),
+                    "start": datetime.combine(time_obj, datetime.min.time()).replace(hour=12, minute=0),
+                    "end": datetime.combine(time_obj, datetime.min.time()).replace(hour=18, minute=0),
                 },
                 {
-                    "start": datetime.combine(single_schedule.start_date, datetime.min.time()).replace(hour=18, minute=0),
-                    "end": datetime.combine(single_schedule.start_date, datetime.min.time()).replace(hour=23, minute=59),
+                    "start": datetime.combine(time_obj, datetime.min.time()).replace(hour=18, minute=0),
+                    "end": datetime.combine(time_obj, datetime.min.time()).replace(hour=23, minute=59),
                 },
             ]
             
@@ -1999,20 +1999,20 @@ class ScheduleTimeLayerModel(TimeTableModel):
             
             options = [
                 {
-                    "start": datetime.combine(single_schedule.start_date, datetime.min.time()),
-                    "end": datetime.combine(single_schedule.start_date, datetime.min.time()).replace(hour=6, minute=0),
+                    "start": datetime.combine(time_obj, datetime.min.time()),
+                    "end": datetime.combine(time_obj, datetime.min.time()).replace(hour=6, minute=0),
                 },
                 {
-                    "start": datetime.combine(single_schedule.start_date, datetime.min.time()).replace(hour=6, minute=0),
-                    "end": datetime.combine(single_schedule.start_date, datetime.min.time()).replace(hour=12, minute=0),
+                    "start": datetime.combine(time_obj, datetime.min.time()).replace(hour=6, minute=0),
+                    "end": datetime.combine(time_obj, datetime.min.time()).replace(hour=12, minute=0),
                 },
                 {
-                    "start": datetime.combine(single_schedule.start_date, datetime.min.time()).replace(hour=12, minute=0),
-                    "end": datetime.combine(single_schedule.start_date, datetime.min.time()).replace(hour=18, minute=0),
+                    "start": datetime.combine(time_obj, datetime.min.time()).replace(hour=12, minute=0),
+                    "end": datetime.combine(time_obj, datetime.min.time()).replace(hour=18, minute=0),
                 },
                 {
-                    "start": datetime.combine(single_schedule.start_date, datetime.min.time()).replace(hour=18, minute=0),
-                    "end": datetime.combine(single_schedule.start_date, datetime.min.time()).replace(hour=23, minute=59),
+                    "start": datetime.combine(time_obj, datetime.min.time()).replace(hour=18, minute=0),
+                    "end": datetime.combine(time_obj, datetime.min.time()).replace(hour=23, minute=59),
                 },
             ]
             
