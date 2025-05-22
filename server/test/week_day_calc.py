@@ -18,9 +18,9 @@ def calc_date(today:datetime):
         return start_week, current_week
         
         
-def set_target_date(date=datetime.today().strftime("%Y-%m-%d")):
+def set_target_date(date=datetime.today().strftime("%Y/%m/%d")):
     
-    today = datetime.strptime(date, "%Y-%m-%d")
+    today = datetime.strptime(date, "%Y/%m/%d")
     
     start_week, current_week = calc_date(today)
     

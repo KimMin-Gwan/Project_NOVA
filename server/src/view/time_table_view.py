@@ -35,7 +35,7 @@ class TimeTableView(Master_View):
         # 타임 테이블 페이지의 최 상단 대시보드데이터
         # 파라미터 없음, 비로그인 상태에서는 0으로 리턴함 
         @self.__app.get('/time_table_server/try_get_dashboard_data')
-        def get_dashboard_data(request:Request, date:Optional[str]=datetime.now().strftime("%Y-%m-%d")):
+        def get_dashboard_data(request:Request, date:Optional[str]=datetime.now().strftime("%Y/%m/%d")):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = DateRequest(date=date)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
@@ -76,7 +76,7 @@ class TimeTableView(Master_View):
         # 비로그인 상태에서는 데이터를 반환하지 않아도될듯 -> 아니면 반환할 데이터를 마련해도 될듯
         # 로그인 상태에서는 본인이 추가한 모든 일정(오늘자)이 반환되어야함
         @self.__app.get('/time_table_server/try_get_today_time_chart')
-        def try_get_today_time_chart(request:Request, date:Optional[str]=datetime.now().strftime("%Y-%m-%d")):
+        def try_get_today_time_chart(request:Request, date:Optional[str]=datetime.now().strftime("%Y/%m/%d")):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = DateRequest(date=date)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
@@ -127,7 +127,7 @@ class TimeTableView(Master_View):
         
         # 홈화면의 스케줄 레이어를 바탕으로 검색
         @self.__app.get('/time_table_server/get_time_layer_schedule_with_date')
-        def get_time_layer_schedule_with_date(request:Request,date:Optional[str]=datetime.now().strftime("%Y-%m-%d")):
+        def get_time_layer_schedule_with_date(request:Request,date:Optional[str]=datetime.now().strftime("%Y/%m/%d")):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = DateRequest(date=date)
             
@@ -717,5 +717,5 @@ class DateRequest(RequestHeader):
 class TimeChartRequest(RequestHeader):
     def __init__(self, request):
         body:dict = request['body']
-        self.date:str=body.get('date',datetime.now().strftime("%Y-%m-%d"))
+        self.date:str=body.get('date',datetime.now().strftime("%Y/%m/%d"))
         self.sids = body.get("sids", [])

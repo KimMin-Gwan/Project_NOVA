@@ -395,8 +395,8 @@ class TimeTableModel(BaseModel):
         
         return start_week, current_week
     
-    def set_target_date(self, date=datetime.today().strftime("%Y-%m-%d")):
-        today = datetime.strptime(date, "%Y-%m-%d")
+    def set_target_date(self, date=datetime.today().strftime("%Y/%m/%d")):
+        today = datetime.strptime(date, "%Y/%m/%d")
         start_week, current_week = self.__calc_date(today)
     
         if start_week > current_week:
@@ -2023,7 +2023,7 @@ class ScheduleChartModel(TimeTableModel):
     # date안넣으면 기본적으로 오늘자로 감
     def set_my_schedule_in_by_day(self, target_date="", days=7, sids =[]):
         if not target_date:
-            target_date = datetime.today().strftime("%Y-%m-%d")
+            target_date = datetime.today().strftime("%Y/%m/%d")
 
         target_sids = []
         target_sids.extend(self._tuser.sids)
@@ -2116,7 +2116,7 @@ class ScheduleChartModel(TimeTableModel):
     
     def _get_monday_date(self, target_date: str) -> datetime:
         # 입력 날짜를 datetime 객체로 변환
-        target_date = datetime.strptime(target_date, "%Y-%m-%d")
+        target_date = datetime.strptime(target_date, "%Y/%m/%d")
     
         # 오늘의 요일 계산 (0: 월요일, 6: 일요일)
         day_of_week = target_date.weekday()
