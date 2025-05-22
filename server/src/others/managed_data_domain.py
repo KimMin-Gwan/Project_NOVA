@@ -1484,7 +1484,7 @@ class ManagedScheduleTable(ManagedTable):
                                                code=single_schedule.code,
                                                state=single_schedule.state
                                                )
-
+            managed_schedule()
             self.__schedule_table.append(managed_schedule)
             self.__schedule_tree.insert(managed_schedule.sid, managed_schedule)
 
@@ -1576,6 +1576,7 @@ class ManagedScheduleTable(ManagedTable):
             state=schedule.state
         )
 
+        managed_schedule()
         # 바이어스 데이터 삽입
         bias_data = self._database.get_data_with_id(target="bid", id=managed_schedule.bid)
         bias = Bias()
