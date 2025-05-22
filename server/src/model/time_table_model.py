@@ -1962,22 +1962,11 @@ class ScheduleTimeLayerModel(TimeTableModel):
             
     # 날짜에 맞는 스케줄 데이터 불러오기
     def make_recommand_schedule_data(self, target_date, schedule_search_engine:SSE):
-        target_sids = []
-                
         # 0개에서 3개 랜덤 선택
         sample_size = random.randint(0, 3)  # 0부터 3까지의 개수 선택
         result = random.sample(self.__recommend_target_sids, k=min(sample_size, len(self.__recommend_target_sids)))  # 데이터 크기를 초과하지 않도록 처리
-        
-        pprint(result)
-        
-        #for sid in sids :
-            #if len(target_sids) > 5:
-                #break
-            
-            #target_sids.append(sid)
                 
-        schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids= target_sids)
-        
+        schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids= result)
         
         self.__schedules.clear()
         
