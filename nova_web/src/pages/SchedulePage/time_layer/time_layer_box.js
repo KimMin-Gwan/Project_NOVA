@@ -223,7 +223,7 @@ function ScheduleDetail({
 
 function ScheduleExposeType( {type} ){
 
-    if(type === "recommened"){
+    if(type === "추천"){
         return (
             <div className={component_style["recommened-schedule"]}>
                 추천
