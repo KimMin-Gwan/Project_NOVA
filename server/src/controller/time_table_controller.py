@@ -84,14 +84,14 @@ class TImeTableController:
             if not model._set_tuser_with_tuid():
                 return model
 
-        model.make_my_schedule_data(target_date=request.data_payload.target_date,
+        model.make_my_schedule_data(target_date=request.data_payload.date,
                                  schedule_search_engine=schedule_search_engine)
         model.set_my_schedule_layer()
         
-        target_date = datetime.strptime(date_string=request.data_payload.taget_date, format="%Y-%m-%d")
+        target_date = datetime.strptime(date_string=request.data_payload.date, format="%Y-%m-%d")
         
         if datetime.today() <= target_date:
-            model.make_recommand_schedule_data(target_date=request.data_payload.target_date,
+            model.make_recommand_schedule_data(target_date=request.data_payload.date,
                                     schedule_search_engine=schedule_search_engine)
             model.set_recommand_schedule_layer()
         
