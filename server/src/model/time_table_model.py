@@ -1890,15 +1890,15 @@ class ScheduleTimeLayerModel(TimeTableModel):
         # specific_date의 자료형은 str 그대로 써도됩니다. managed_table에서 Datetime 객체로 변환시키도록 만들었음.
         # return_id = True -> sid list 반환, False -> managed_Schedule list 반환
 
-        result_schedules = schedule_search_engine.try_get_schedules_in_specific_date(sids=["all"], specific_date=target_date, return_id=False)
+        sids = schedule_search_engine.try_get_schedules_in_specific_date(sids=["all"], specific_date=target_date, return_id=True)
 
 
         target_sids = []
 
         # 여기서 managed_schedule은 dict 형태임
-        for managed_schedule in result_schedules:
-            if managed_schedule["sid"] in self._tuser.sids:
-                target_sids.append(managed_schedule['sid'])
+        for sid in sids:
+            if sid in self._tuser.sids:
+                target_sids.append(sid)
                 
         schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids= target_sids)
         
@@ -1940,15 +1940,15 @@ class ScheduleTimeLayerModel(TimeTableModel):
             
     # 날짜에 맞는 스케줄 데이터 불러오기
     def make_recommand_schedule_data(self, target_date, schedule_search_engine:SSE):
-        result_schedules = schedule_search_engine.try_get_schedules_in_specific_date(sids=["all"], specific_date=target_date, return_id=False)
+        sids = schedule_search_engine.try_get_schedules_in_specific_date(sids=["all"], specific_date=target_date, return_id=True)
         
         target_sids = []
 
-        for managed_schedule in result_schedules:
+        for sid in sids :
             if len(target_sids) > 5:
                 break
             
-            target_sids.append(managed_schedule.sid)
+            target_sids.append(sid)
                 
         schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids= target_sids)
         
@@ -1977,7 +1977,7 @@ class ScheduleTimeLayerModel(TimeTableModel):
         for single_schedule in self.__schedules:
             
             single_schedule:Schedule = single_schedule
-            time_obj = datetime.strptime(single_schedule.start_time, "%H:%M")
+            time_obj = datetime.strptime(single_schedule.start_time, "%H:%M").time()
             
         
             if options[0]["start"] <= time_obj < options[0]["end"]:

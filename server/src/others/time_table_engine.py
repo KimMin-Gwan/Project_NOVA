@@ -133,7 +133,7 @@ class ScheduleSearchEngine:
         return sid_list
 
     # 특정 날짜에 걸려있는 모든 스케줄 을
-    def try_get_schedules_in_specific_date(self, sids:list=None, specific_date:str="", return_id:bool=True) -> Union[List[dict], List[None]]:
+    def try_get_schedules_in_specific_date(self, sids:list=None, specific_date:str="", return_id:bool=True) -> Union[List[dict], List[None], List[str]]:
         # 모든 sid를 사용하려면 무조건 "all"을 붙이시오.
         if sids is None:
             sids = []
