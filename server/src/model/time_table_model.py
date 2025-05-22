@@ -2025,6 +2025,9 @@ class ScheduleTimeLayerModel(TimeTableModel):
         
     # 전송용 폼으로 교체
     def change_layer_form(self):
+        pprint(self.__my_layer_data)
+        pprint(self.__recommand_layer_data)
+        
         for my_single_time_section, recommand_single_time_section, layer_data in zip(self.__my_layer_data[1:5], self.__recommand_layer_data[1:5], self.__layer_data[1:5]):
             temp_list = []
             for my_single_schedule in my_single_time_section['schedules']:
