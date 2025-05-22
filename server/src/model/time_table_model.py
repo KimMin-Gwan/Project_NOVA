@@ -1948,7 +1948,6 @@ class ScheduleTimeLayerModel(TimeTableModel):
             ]
             
         
-            pprint(single_schedule.get_dict_form_data())
             if options[0]["start"] <= time_obj < options[0]["end"]:
                 self.__my_layer_data[1]["schedules"].append(single_schedule)
             elif options[1]["start"] <= time_obj < options[1]["end"]:
@@ -1956,6 +1955,7 @@ class ScheduleTimeLayerModel(TimeTableModel):
             elif options[2]["start"] <= time_obj < options[2]["end"]:
                 self.__my_layer_data[3]["schedules"].append(single_schedule)
             elif options[3]["start"] <= time_obj <= options[3]["end"]:  # 하루 끝 비교는 <= 사용
+                pprint(single_schedule.get_dict_form_data())
                 self.__my_layer_data[4]["schedules"].append(single_schedule)
             else:
                 continue
