@@ -91,10 +91,10 @@ class TImeTableController:
         
         target_date = datetime.strptime(request.data_payload.date, "%Y/%m/%d")
         
-        if datetime.today() <= target_date:
-            model.make_recommand_schedule_data(target_date=request.data_payload.date,
-                                    schedule_search_engine=schedule_search_engine)
-            model.set_recommand_schedule_layer()
+        #if datetime.today() <= target_date:
+            #model.make_recommand_schedule_data(target_date=request.data_payload.date,
+                                    #schedule_search_engine=schedule_search_engine)
+            #model.set_recommand_schedule_layer()
         
         model.change_layer_form()
             

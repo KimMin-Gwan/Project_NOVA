@@ -1893,14 +1893,14 @@ class ScheduleTimeLayerModel(TimeTableModel):
         sids = schedule_search_engine.try_get_schedules_in_specific_date(sids=["all"], specific_date=target_date, return_id=True)
 
 
-        target_sids = []
+        self.__my_target_sids = []
 
         # 여기서 managed_schedule은 dict 형태임
         for sid in sids:
             if sid in self._tuser.sids:
-                target_sids.append(sid)
+                self.__my_target_sids.append(sid)
                 
-        schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids= target_sids)
+        schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids= self.__my_target_sids)
 
         
         
