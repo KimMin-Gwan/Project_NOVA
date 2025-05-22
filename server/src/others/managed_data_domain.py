@@ -1484,7 +1484,6 @@ class ManagedScheduleTable(ManagedTable):
                                                code=single_schedule.code,
                                                state=single_schedule.state
                                                )
-            managed_schedule()
             self.__schedule_table.append(managed_schedule)
             self.__schedule_tree.insert(managed_schedule.sid, managed_schedule)
 
@@ -1597,7 +1596,11 @@ class ManagedScheduleTable(ManagedTable):
         self.__schedule_df = self._add_new_data_in_df(df=self.__schedule_df,
                                                       new_dict_data=managed_schedule.to_dict(),
                                                       sid=managed_schedule.sid)
+        
+        
         self.__schedule_df = self.__schedule_df.sort_values(by='date', ascending=False).reset_index(drop=True)
+
+        pprint(self.__schedule_df.head(5))
 
         return
 
