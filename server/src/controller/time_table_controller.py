@@ -88,6 +88,9 @@ class TImeTableController:
                                  schedule_search_engine=schedule_search_engine)
         model.set_my_schedule_layer()
         
+        
+        print(request.data_payload.date)
+        
         target_date = datetime.strptime(date_string=request.data_payload.date, format="%Y/%m/%d")
         
         if datetime.today() <= target_date:
