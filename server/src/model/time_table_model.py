@@ -1948,6 +1948,7 @@ class ScheduleTimeLayerModel(TimeTableModel):
             ]
             
         
+            pprint(single_schedule.get_dict_form_data())
             if options[0]["start"] <= time_obj < options[0]["end"]:
                 self.__my_layer_data[1]["schedules"].append(single_schedule)
             elif options[1]["start"] <= time_obj < options[1]["end"]:
