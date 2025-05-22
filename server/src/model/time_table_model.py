@@ -1894,6 +1894,8 @@ class ScheduleTimeLayerModel(TimeTableModel):
 
         target_sids = []
 
+        pprint(result_schedules)
+        
         for managed_schedule in result_schedules:
             if managed_schedule.sid in self._tuser.sids:
                 target_sids.append(managed_schedule.sid)
