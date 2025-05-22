@@ -1898,7 +1898,7 @@ class ScheduleTimeLayerModel(TimeTableModel):
         # 여기서 managed_schedule은 dict 형태임
         for managed_schedule in result_schedules:
             if managed_schedule["sid"] in self._tuser.sids:
-                target_sids.append(managed_schedule.sid)
+                target_sids.append(managed_schedule['sid'])
                 
         schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids= target_sids)
         
