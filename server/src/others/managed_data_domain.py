@@ -663,6 +663,7 @@ class ManagedTable:
                     mask = pd.Series(False, index=df.index)
                 else:
                     # start_date_columns, end_date_columns가 서로 바뀌어도 날짜가 일찍이면 start, 늦으면 end로 판단함
+
                     start_date = df[[date_columns[0], date_columns[1]]].min(axis=1).dt.date
                     end_date = df[[date_columns[0], date_columns[1]]].max(axis=1).dt.date
 
@@ -1448,6 +1449,8 @@ class ManagedScheduleTable(ManagedTable):
         self.__init_schedule_table()
         self.__init_schedule_bundle_table()
 
+        pprint(self.__schedule_df["sid", "sname", "bname","date"])
+
     # 최초 스케줄 데이터프레임 초기화 함수
     def __init_schedule_table(self):
         schedules = []
@@ -1600,7 +1603,7 @@ class ManagedScheduleTable(ManagedTable):
         
         self.__schedule_df = self.__schedule_df.sort_values(by='date', ascending=False).reset_index(drop=True)
 
-        pprint(self.__schedule_df.head(5))
+        pprint(self.__schedule_df["sid","sname", "bname", "date"].head(5))
 
         return
 
