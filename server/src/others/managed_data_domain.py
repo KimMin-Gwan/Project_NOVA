@@ -1621,10 +1621,6 @@ class ManagedScheduleTable(ManagedTable):
 
         self.__schedule_df = self.__schedule_df.sort_values(by='date', ascending=False).reset_index(drop=True)
 
-        pprint(self.__schedule_df[["sid","sname", "bname", "date", "start_date_time", "end_date_time"]].head(10))
-        pprint(f"추가 된 후의 start_date_time : {self.__schedule_df['start_date_time'].dtype}")
-        #
-
         return
 
     # 스케줄 내용이 변경되었을 때
