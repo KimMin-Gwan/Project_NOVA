@@ -303,8 +303,7 @@ class ManagedTable:
         managed_dict_list = [managed_data.to_dict() for managed_data in data_table]
         data_df = pd.DataFrame(managed_dict_list)
         # 데이터프레임을 정렬함
-        # self._data_df = feed_df.sort_values(by='date', ascending=False).reset_index(drop=True)
-        #
+        data_df = data_df.sort_values(by='date', ascending=False).reset_index(drop=True)
         return data_df
 
 
@@ -1465,7 +1464,7 @@ class ManagedScheduleTable(ManagedTable):
             bias=Bias().make_with_dict(dict_data=bias_data)
 
             start_date_time = self._get_date_str_to_object(str_date=single_schedule.start_date+'-'+single_schedule.start_time+':00')
-            end_date_time = self._get_date_str_to_object(single_schedule.end_date+'-'+single_schedule.end_time+':00')
+            end_date_time = self._get_date_str_to_object(str_date=single_schedule.end_date+'-'+single_schedule.end_time+':00')
 
             time_sections = self._get_schedule_time_section(start_time=start_date_time, end_time=end_date_time)
 
@@ -1496,7 +1495,7 @@ class ManagedScheduleTable(ManagedTable):
 
         num_schedules = str(len(self.__schedule_table))
 
-        pprint(self.__schedule_df[["sid", "sname", "bname", "date"]].head(5))
+        pprint(self.__schedule_df[["sid", "sname", "bname", "date", "start_date_time", "end_date_time"]].head(10))
 
         print(f'INFO<-[      {num_schedules} NOVA SCHEDULES IN SEARCH ENGINE NOW READY.')
         print(f'INFO<-[      {num_schedules} NOVA SCHEDULES DATAFRAME IN SEARCH ENGINE NOW READY.')
@@ -1561,9 +1560,19 @@ class ManagedScheduleTable(ManagedTable):
 
     # 새로운 스케줄을 추가하는 함수
     def make_new_managed_schedule(self, schedule:Schedule):
-        start_date_time = schedule.start_date+'-'+schedule.start_time+':00'
-        end_date_time = schedule.end_date+'-'+schedule.end_time+':00'
+        start_date_time = self._get_date_str_to_object(schedule.start_date+'-'+schedule.start_time+':00')
+        end_date_time = self._get_date_str_to_object(schedule.end_date+'-'+schedule.end_time+':00')
 
+        # 타임 섹션 데이터 삽입
+        time_section = self._get_schedule_time_section(start_time=start_date_time,
+                                                       end_time=end_date_time)
+
+        pprint("추가된 schedule")
+        pprint(f"start_time : {start_date_time}")
+        pprint(f"start_date_time.type : {type(start_date_time)}")
+        pprint(f"end_time : {end_date_time}")
+        pprint(f"end_date_time.type : {type(end_date_time)}")
+        
         managed_schedule = ManagedSchedule(
             sid=schedule.sid,
             sname=schedule.sname,
@@ -1571,8 +1580,9 @@ class ManagedScheduleTable(ManagedTable):
             bname=schedule.bname,
             uname=schedule.uname,
             date=self._get_date_str_to_object(str_date=schedule.update_datetime),
-            start_date_time=self._get_date_str_to_object(str_date=start_date_time),
-            end_date_time=self._get_date_str_to_object(str_date=end_date_time),
+            start_date_time=start_date_time,
+            end_date_time=end_date_time,
+            time_section=time_section,
             location=copy(schedule.location),
             code=schedule.code,
             state=schedule.state
@@ -1588,11 +1598,6 @@ class ManagedScheduleTable(ManagedTable):
         managed_schedule.bias_tags = bias.tags
         managed_schedule.bias_category = bias.category
 
-        # 타임 섹션 데이터 삽입
-        managed_schedule.time_section = self._get_schedule_time_section(start_time=managed_schedule.start_date_time,
-                                                                        end_time=managed_schedule.end_date_time)
-
-
         self.__schedule_table.append(managed_schedule)
         self.__schedule_tree.insert(managed_schedule.sid, managed_schedule)
 
@@ -1603,7 +1608,7 @@ class ManagedScheduleTable(ManagedTable):
         
         self.__schedule_df = self.__schedule_df.sort_values(by='date', ascending=False).reset_index(drop=True)
 
-        pprint(self.__schedule_df[["sid","sname", "bname", "date"]].head(5))
+        pprint(self.__schedule_df[["sid","sname", "bname", "date", "start_date_time", "end_date_time"]].head(10))
 
         return
 
