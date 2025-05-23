@@ -1449,8 +1449,6 @@ class ManagedScheduleTable(ManagedTable):
         self.__init_schedule_table()
         self.__init_schedule_bundle_table()
 
-        pprint(self.__schedule_df["sid", "sname", "bname","date"])
-
     # 최초 스케줄 데이터프레임 초기화 함수
     def __init_schedule_table(self):
         schedules = []
