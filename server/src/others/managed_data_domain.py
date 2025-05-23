@@ -1498,6 +1498,8 @@ class ManagedScheduleTable(ManagedTable):
 
         num_schedules = str(len(self.__schedule_table))
 
+        pprint(self.__schedule_df["sid","sname", "bname", "date"].head(5))
+
         print(f'INFO<-[      {num_schedules} NOVA SCHEDULES IN SEARCH ENGINE NOW READY.')
         print(f'INFO<-[      {num_schedules} NOVA SCHEDULES DATAFRAME IN SEARCH ENGINE NOW READY.')
 
