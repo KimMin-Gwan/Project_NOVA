@@ -308,8 +308,6 @@ class ManagedTable:
 
 
 
-
-
     # 데이터 프레임 삽입 / 삭제 / 편집
     def _add_new_data_in_df(self, df:pd.DataFrame, new_dict_data:dict, **condition):
         # 딕셔너리를 통해 새로운 DF를 만들고 Transpose(전치)시키면 된다
@@ -337,6 +335,10 @@ class ManagedTable:
 
         # 최종 추가 과정
         df = pd.concat([df, new_data], ignore_index=True)
+
+        # date열의 data type을 datetime으로 강제 형변환
+        df['date'] = df['date'].apply(pd.to_datetime, errors='coerce')
+
         return df
 
     # id_type : fid / sid 같은 경우를 말합니다.
@@ -370,6 +372,10 @@ class ManagedTable:
         # 최종 업데이트 과정
         update_index = df.index[mask][0]
         df.loc[update_index] = modify_dict_data
+
+        # date열의 data type을 datetime으로 강제 형변환
+        df['date'] = df['date'].apply(pd.to_datetime, errors='coerce')
+
         return df
 
     # 삭제 로직
@@ -1496,7 +1502,7 @@ class ManagedScheduleTable(ManagedTable):
         num_schedules = str(len(self.__schedule_table))
 
         # pprint(self.__schedule_df[["sid", "sname", "bname", "date", "start_date_time", "end_date_time"]].head(10))
-        pprint(f"init한 start_date_time : {self.__schedule_df['start_date_time'].dtype}")
+        # pprint(f"init한 start_date_time : {self.__schedule_df['start_date_time'].dtype}")
         # datetime64[ns]로 출력됨. 정상적인 것
 
         print(f'INFO<-[      {num_schedules} NOVA SCHEDULES IN SEARCH ENGINE NOW READY.')
@@ -1606,8 +1612,13 @@ class ManagedScheduleTable(ManagedTable):
         self.__schedule_df = self._add_new_data_in_df(df=self.__schedule_df,
                                                       new_dict_data=managed_schedule.to_dict(),
                                                       sid=managed_schedule.sid)
-        
-        
+
+        # start_date_time, end_date_time 강제 형변환
+        # date 열은 Managed_Table 함수 내에서 처리하도록 함
+        date_columns = ['start_date_time', 'end_date_time']
+        self.__schedule_df[date_columns] = self.__schedule_df[date_columns].apply(pd.to_datetime, errors='coerce')
+
+
         self.__schedule_df = self.__schedule_df.sort_values(by='date', ascending=False).reset_index(drop=True)
 
         pprint(self.__schedule_df[["sid","sname", "bname", "date", "start_date_time", "end_date_time"]].head(10))
@@ -1634,6 +1645,10 @@ class ManagedScheduleTable(ManagedTable):
         self._modify_data_in_df(df=self.__schedule_df,
                                 modify_dict_data=managed_schedule.to_dict(),
                                 sid=managed_schedule.sid)
+
+        # start_date_time, end_date_time 강제 형변환
+        date_columns = ['start_date_time', 'end_date_time']
+        self.__schedule_df[date_columns] = self.__schedule_df[date_columns].apply(pd.to_datetime, errors='coerce')
 
         return
 
@@ -1686,6 +1701,12 @@ class ManagedScheduleTable(ManagedTable):
         self.__schedule_bundle_df = self._add_new_data_in_df(df=self.__schedule_bundle_df,
                                                              new_dict_data=managed_bundle.to_dict(),
                                                              sbid=managed_bundle.sbid)
+
+        # start_date_time, end_date_time 강제 형변환
+        # date 열은 Managed_Table 함수 내에서 처리하도록 함
+        date_columns = ['start_date', 'end_date']
+        self.__schedule_bundle_df[date_columns] = self.__schedule_bundle_df[date_columns].apply(pd.to_datetime, errors='coerce')
+
         self.__schedule_bundle_df = self.__schedule_bundle_df.sort_values(by='date', ascending=False).reset_index(drop=True)
 
         return
@@ -1707,6 +1728,9 @@ class ManagedScheduleTable(ManagedTable):
         self._modify_data_in_df(df=self.__schedule_bundle_df,
                                 modify_dict_data=managed_bundle.to_dict(),
                                 sbid=managed_bundle.sbid)
+
+        date_columns = ['start_date', 'end_date']
+        self.__schedule_bundle_df[date_columns] = self.__schedule_bundle_df[date_columns].apply(pd.to_datetime, errors='coerce')
 
         return
 
