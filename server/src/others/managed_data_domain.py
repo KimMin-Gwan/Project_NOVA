@@ -1495,7 +1495,8 @@ class ManagedScheduleTable(ManagedTable):
 
         num_schedules = str(len(self.__schedule_table))
 
-        pprint(self.__schedule_df[["sid", "sname", "bname", "date", "start_date_time", "end_date_time"]].head(10))
+        # pprint(self.__schedule_df[["sid", "sname", "bname", "date", "start_date_time", "end_date_time"]].head(10))
+        pprint(f"init한 start_date_time : {self.__schedule_df['start_date_time'].dtype}")
 
         print(f'INFO<-[      {num_schedules} NOVA SCHEDULES IN SEARCH ENGINE NOW READY.')
         print(f'INFO<-[      {num_schedules} NOVA SCHEDULES DATAFRAME IN SEARCH ENGINE NOW READY.')
@@ -1609,6 +1610,7 @@ class ManagedScheduleTable(ManagedTable):
         self.__schedule_df = self.__schedule_df.sort_values(by='date', ascending=False).reset_index(drop=True)
 
         pprint(self.__schedule_df[["sid","sname", "bname", "date", "start_date_time", "end_date_time"]].head(10))
+        pprint(self.__schedule_df["start_date_time"].dtype)
 
         return
 
