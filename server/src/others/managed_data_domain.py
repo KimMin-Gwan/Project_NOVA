@@ -103,7 +103,7 @@ class ManagedSchedule:
         self.bname=bname
         self.bias_gender=bias_gender
         self.bias_category=bias_category            # 바이어스 카테고리
-        self.tags=tags                     # 바이어스 태그
+        self.tags:list=tags                     # 바이어스 태그
         self.uname=uname
         self.date=date                              # update_datetime
         self.start_date_time=start_date_time        # start_date + start_time
@@ -1480,7 +1480,6 @@ class ManagedScheduleTable(ManagedTable):
                                                bname=single_schedule.bname,
                                                bias_gender=bias.gender,
                                                bias_category=bias.category,
-                                               tags=bias.tags,
                                                uname=single_schedule.uname,
                                                date=self._get_date_str_to_object(str_date=single_schedule.update_datetime),
                                                start_date_time=start_date_time,
@@ -1491,6 +1490,10 @@ class ManagedScheduleTable(ManagedTable):
                                                state=single_schedule.state,
                                                tags=single_schedule.tags
                                                )
+            managed_schedule.tags.extend( bias.tags)
+                                               
+            
+            
             self.__schedule_table.append(managed_schedule)
             self.__schedule_tree.insert(managed_schedule.sid, managed_schedule)
 
