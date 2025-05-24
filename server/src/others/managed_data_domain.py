@@ -96,14 +96,14 @@ class ManagedBias:
 class ManagedSchedule:
     def __init__(self, sid="", sname="", uname="", bid="", bname="", bias_gender="", bias_category=[],
                  date=None, start_date_time=None, end_date_time=None, time_section=[],  location=[],
-                 code="", state:bool=True, bias_tags=[]):
+                 code="", state:bool=True, tags=[]):
         self.sid=sid
         self.sname=sname
         self.bid=bid
         self.bname=bname
         self.bias_gender=bias_gender
         self.bias_category=bias_category            # 바이어스 카테고리
-        self.bias_tags=bias_tags                     # 바이어스 태그
+        self.tags=tags                     # 바이어스 태그
         self.uname=uname
         self.date=date                              # update_datetime
         self.start_date_time=start_date_time        # start_date + start_time
@@ -122,7 +122,7 @@ class ManagedSchedule:
         print("bname: ", self.bname)
         print("bias_gender: ", self.bias_gender)
         print("bias_category: ", self.bias_category)
-        print("bias_tags: ", self.bias_tags)
+        print("tags: ", self.tags)
         print("uname: ", self.uname)
         print("date: ", self.date)
         print("start_date_time: ", self.start_date_time)
@@ -141,7 +141,7 @@ class ManagedSchedule:
             "bname": self.bname,
             "bias_gender": self.bias_gender,
             "bias_category": self.bias_category,
-            "bias_tags": self.bias_tags,
+            "tags": self.tags,
             "uname": self.uname,
             "date": self.date,
             "start_date_time": self.start_date_time,
@@ -154,14 +154,14 @@ class ManagedSchedule:
 
 class ManagedScheduleBundle:
     def __init__(self, sbid="", sbname="", bid="", bname="", bias_gender="", bias_category=[],
-                 bias_tags=[], uname="", date=None, start_date=None, end_date=None, location=[], code="", sids=[]):
+                 tags=[], uname="", date=None, start_date=None, end_date=None, location=[], code="", sids=[]):
         self.sbid=sbid
         self.sbname=sbname
         self.bid=bid
         self.bname=bname
         self.bias_gender=bias_gender
         self.bias_category=bias_category
-        self.bias_tags=bias_tags
+        self.tags=tags
         self.uname=uname
         self.date=date                      # update_datetime
         self.start_date=start_date          # 스케쥴 번들 시작 날짜
@@ -177,7 +177,7 @@ class ManagedScheduleBundle:
         print("bname: ", self.bname)
         print("bias_gender: ", self.bias_gender)
         print("bias_category: ", self.bias_category)
-        print("bias_tags: ", self.bias_tags)
+        print("tags: ", self.tags)
         print("uname: ", self.uname)
         print("date: ", self.date)
         print("start_date: ", self.start_date)
@@ -194,7 +194,7 @@ class ManagedScheduleBundle:
             "bname": self.bname,
             "bias_gender": self.bias_gender,
             "bias_category": self.bias_category,
-            "bias_tags": self.bias_tags,
+            "tags": self.tags,
             "uname": self.uname,
             "date": self.date,
             "start_date": self.start_date,
@@ -1480,7 +1480,7 @@ class ManagedScheduleTable(ManagedTable):
                                                bname=single_schedule.bname,
                                                bias_gender=bias.gender,
                                                bias_category=bias.category,
-                                               bias_tags=bias.tags,
+                                               tags=bias.tags,
                                                uname=single_schedule.uname,
                                                date=self._get_date_str_to_object(str_date=single_schedule.update_datetime),
                                                start_date_time=start_date_time,
@@ -1488,7 +1488,8 @@ class ManagedScheduleTable(ManagedTable):
                                                time_section=time_sections,
                                                location=copy(single_schedule.location),
                                                code=single_schedule.code,
-                                               state=single_schedule.state
+                                               state=single_schedule.state,
+                                               tags=single_schedule.tags
                                                )
             self.__schedule_table.append(managed_schedule)
             self.__schedule_tree.insert(managed_schedule.sid, managed_schedule)
@@ -1535,7 +1536,7 @@ class ManagedScheduleTable(ManagedTable):
                                                    bname=bundle.bname,
                                                    bias_gender=bias.gender,
                                                    bias_category=bias.category,
-                                                   bias_tags=bias.tags,
+                                                   tags=bias.tags,
                                                    uname=bundle.uname,
                                                    date=self._get_date_str_to_object(str_date=bundle.update_datetime),
                                                    start_date=self._get_date_str_to_object(str_date=start_date),
@@ -1593,7 +1594,8 @@ class ManagedScheduleTable(ManagedTable):
             time_section=time_section,
             location=copy(schedule.location),
             code=schedule.code,
-            state=schedule.state
+            state=schedule.state,
+            tags=schedule.tags
         )
 
         # managed_schedule()
@@ -1603,7 +1605,7 @@ class ManagedScheduleTable(ManagedTable):
         bias.make_with_dict(dict_data=bias_data)
 
         managed_schedule.bias_gender = bias.gender
-        managed_schedule.bias_tags = bias.tags
+        managed_schedule.tags = bias.tags
         managed_schedule.bias_category = bias.category
 
         self.__schedule_table.append(managed_schedule)
@@ -1688,7 +1690,7 @@ class ManagedScheduleTable(ManagedTable):
         bias.make_with_dict(dict_data=bias_data)
 
         managed_bundle.bias_gender = bias.gender
-        managed_bundle.bias_tags = bias.tags
+        managed_bundle.tags = bias.tags
         managed_bundle.bias_category = bias.category
 
         self.__schedule_bundle_table.append(managed_bundle)
@@ -1750,9 +1752,13 @@ class ManagedScheduleTable(ManagedTable):
 
     # 탐색 스케줄 얻음
     # 이거 기능을 분리하는게 나을지도 모르겠는데 생각 해볼려고 함
-    def search_explore_schedule(self, time_section:int, style:str, gender:str, return_id:bool):
+    def search_explore_schedule(self, time_section:int, style:str, category:str, gender:str, return_id:bool):
+        tags = []
+        tags.extend(style)
+        tags.extend(category)
+        
         searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_df, time_section=time_section,
-                                                               bias_gender=gender, bias_tags=style)
+                                                               bias_gender=gender, tags=tags)
         searched_df = self._filter_data_with_date_option(df=searched_df, date_option="weekly", date_columns=["start_date_time"])
 
         if return_id:

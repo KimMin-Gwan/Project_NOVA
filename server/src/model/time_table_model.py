@@ -940,9 +940,9 @@ class MultiScheduleModel(TimeTableModel):
         return
 
     # 탐색용 스케줄 불러오기
-    def get_explore_schedule_with_category(self, schedule_search_engine:SSE, time_section:int,
+    def get_explore_schedule_with_category(self, schedule_search_engine:SSE, time_section:int, category:str,
                                            style:str, gender:str, num_schedules:int, last_index:int=-1):
-        searched_list = schedule_search_engine.try_get_explore_schedule_list(time_section=time_section, style=style, gender=gender)
+        searched_list = schedule_search_engine.try_get_explore_schedule_list(time_section=time_section, style=style, gender=gender, category=category)
         searched_list, self._key = self.paging_id_list(id_list=searched_list, last_index=last_index, page_size=num_schedules)
         self._make_send_data_with_ids(id_list=searched_list, search_type="schedule")
 
@@ -1183,6 +1183,7 @@ class AddScheduleModel(TimeTableModel):
 
     # 단일 스케줄 만들기
     def make_new_single_schedule(self, data_payload, bid):
+        
         schedule = Schedule(
             sname=data_payload.sname,
             bid = bid,
@@ -1190,7 +1191,8 @@ class AddScheduleModel(TimeTableModel):
             start_time=data_payload.start_time,
             end_date=data_payload.end_date,
             end_time=data_payload.end_time,
-            state=data_payload.state
+            state=data_payload.state,
+            tags=data_payload.tags
         )
 
         bias_data = self._database.get_data_with_id(target="bid", id=schedule.bid)

@@ -127,8 +127,8 @@ class ScheduleSearchEngine:
 
 
     # 탐색용 스케줄을 반환하는 함수
-    def try_get_explore_schedule_list(self, time_section:int, style:str, gender:str, return_id:bool=True):
-        sid_list = self.__managed_schedule_table.search_explore_schedule(time_section=time_section, style=style,
+    def try_get_explore_schedule_list(self, time_section:int, style:str, gender:str, category:str, return_id:bool=True):
+        sid_list = self.__managed_schedule_table.search_explore_schedule(time_section=time_section, style=style, category=category,
                                                                          gender=gender, return_id=return_id)
         return sid_list
 

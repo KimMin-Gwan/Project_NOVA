@@ -265,7 +265,8 @@ class TImeTableController:
                                                  style=request.data_payload.style,
                                                  gender=request.data_payload.gender,
                                                  num_schedules=num_schedules,
-                                                 last_index=request.data_payload.key
+                                                 last_index=request.data_payload.key,
+                                                 category=request.data_payload.category
                                                  )
         # data_payload 참고해서 탐색하는 스케줄 데이터를 보내주면됨
         # 1. 카테고리에 따라 데이터 추출

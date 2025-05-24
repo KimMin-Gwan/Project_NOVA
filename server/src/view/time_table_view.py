@@ -602,6 +602,7 @@ class MakeSingleScheduleRequest(RequestHeader):
         self.end_date = body['end_date']
         self.end_time = body['end_time']
         self.state = body.get("state", True)
+        self.tags = body.get("tags", [])
 
 class MakeMultipleScheduleRequest(RequestHeader):
     def __init__(self, request) -> None:
@@ -675,7 +676,6 @@ class GetSchedulesRequest(RequestHeader):
 class ExploreScheduleRequset(RequestHeader):
     def __init__(self, request:dict)-> None:
         body:dict = request['body']
-        pprint(body)
         self.category:str=body.get("category", "") # category 는 따로 있을듯
         self.key:int=body.get("key", -1)  
         self.time_section:int=body.get("timeSection", 0) # 0 -> 0~6 / 1 -> 6~12 / 2 -> 12~16 / 3 -> 16~24 / -1 -> 0~24(전체)
