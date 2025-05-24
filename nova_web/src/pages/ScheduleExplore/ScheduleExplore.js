@@ -16,6 +16,7 @@ import { ScheduleAdd, ScheduleEdit, ScheduleRemove } from "../../component/Sched
 import { ScheduleDetail, EditSingleSchedule } from "../../component/EventMore/EventMore";
 
 import "./index.css";
+import useIntersectionObserver from "../../hooks/useIntersectionObserver";
 
 export default function ScheduleExplore() {
   const { moreClick, handleToggleMore } = useToggleMore();
@@ -168,11 +169,19 @@ export default function ScheduleExplore() {
 
 function ScheduleComponentList({category, toggleEditScheduleModal, toggleAddScheduleModal, activeIndex, myIndex}){
 
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasMore, setHasMore] = useState(true);
   const [scheduleData, setScheduleData] = useState([]);
   const [key, setKey] = useState(-1);
-
   const [isInit, setIsInit] = useState(false);
   const { moreClick, handleToggleMore } = useToggleMore();
+  console.log(scheduleData)
+  const loadMoreCallBack = () => {
+    if (!isLoading && hasMore) {
+      fetchMoreSearchData()
+    }
+  };
+  const targetRef = useIntersectionObserver(loadMoreCallBack, { threshold: 0.5 }, hasMore);
 
   const navigate = useNavigate();
   // 게시판으로 이동
@@ -185,7 +194,7 @@ function ScheduleComponentList({category, toggleEditScheduleModal, toggleAddSche
       .post("time_table_server/get_explore_schedules", {
         header: HEADER,
         body: {
-          sid: category,
+          category: category,
           key:key,
           time_section: -1,
           style: "all",
@@ -194,8 +203,31 @@ function ScheduleComponentList({category, toggleEditScheduleModal, toggleAddSche
       })
       .then((res) => {
         setScheduleData(res.data.body.schedules);
+        setHasMore(res.data.body.schedules.length > 0);
         setKey(res.data.body.key);
+        setIsLoading(false);
         setIsInit(true);
+      });
+  }
+
+  async function fetchMoreSearchData() {
+    await postApi
+      .post("time_table_server/get_explore_schedules", {
+        header: HEADER,
+        body: {
+          category: category,
+          key:key,
+          time_section: -1,
+          style: "all",
+          gender : "all"
+        },
+      })
+      .then((res) => {
+        console.log(scheduleData)
+
+        setScheduleData((prev) => [...prev, ...res.data.body.schedules]);
+        setHasMore(res.data.body.schedules.length > 0);
+        setKey(res.data.body.key);
       });
   }
 
@@ -293,6 +325,7 @@ function ScheduleComponentList({category, toggleEditScheduleModal, toggleAddSche
           )}
         </li>
         ))}
+        <div ref={targetRef} style={{ height: "1px" }}></div>
     </>
   );
 }
