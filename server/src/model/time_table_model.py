@@ -1183,7 +1183,6 @@ class AddScheduleModel(TimeTableModel):
 
     # 단일 스케줄 만들기
     def make_new_single_schedule(self, data_payload, bid):
-        
         schedule = Schedule(
             sname=data_payload.sname,
             bid = bid,
