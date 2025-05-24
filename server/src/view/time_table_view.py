@@ -675,11 +675,14 @@ class GetSchedulesRequest(RequestHeader):
 class ExploreScheduleRequset(RequestHeader):
     def __init__(self, request:dict)-> None:
         body:dict = request['body']
+        pprint(body)
         self.category:str=body.get("category", "") # category 는 따로 있을듯
         self.key:int=body.get("key", -1)  
         self.time_section:int=body.get("timeSection", 0) # 0 -> 0~6 / 1 -> 6~12 / 2 -> 12~16 / 3 -> 16~24 / -1 -> 0~24(전체)
         self.style:str=body.get("style", "all")  # all, vtuber, cam, nocam -> bias 데이터 (tags)
         self.gender:str=body.get("gender", "all") # male, female, etc -> bias 데이터 (tags)
+
+        
         
 class AddNewScheduleRequest(RequestHeader):
     def __init__(self, sids=[])-> None:
