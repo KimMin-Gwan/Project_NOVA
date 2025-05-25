@@ -82,6 +82,7 @@ const ScheduleDashboard = () => {
   let [targetMonth, setTargetMonth] = useState("00년 00월");
   let [targetWeek, setTargetWeek] = useState("0주차");
   let [numBias, setNumBias] = useState(0);
+  let [numSchedule, setNumSchedule] = useState(0);
 
   let [biasData, setBiasData] = useState([]);
 
@@ -183,6 +184,7 @@ const ScheduleDashboard = () => {
       setTargetMonth(res.data.body.target_month);
       setTargetWeek(res.data.body.target_week);
       setNumBias(res.data.body.num_bias);
+      setNumSchedule(res.data.body.num_schedules);
     });
   }
 
@@ -295,8 +297,8 @@ const ScheduleDashboard = () => {
             </div>
             <div className="my-dashboard">
               <div className="left-group">
-                <span>컨텐츠</span>
-                <span className="num-bias">{numBias}</span>
+                <span>이번주 컨텐츠</span>
+                <span className="num-bias">{numSchedule}</span>
                 <span>개</span>
               </div>
               <div className="right-group">
