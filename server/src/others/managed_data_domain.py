@@ -523,6 +523,7 @@ class ManagedTable:
                 # columns에 값을 잘못넣으면 서치하지 않습니다.
                 missing_cols = list(set(columns) - set(searched_df.columns.values.tolist()))
                 if missing_cols:
+                    logging.error(f"missing_cols {missing_cols}")
                     logging.error("데이터프레임에 존재하지 않는 열은 검색할 수 없습니다.")
                     return df
 
