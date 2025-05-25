@@ -44,7 +44,9 @@ class TimeTableView(Master_View):
             #     raise request_manager.credentials_exception
             time_table_controller =TImeTableController()
             model = time_table_controller.get_dashboard_data(database=self.__database,
-                                                           request=request_manager)
+                                                           request=request_manager,
+                                                           schedule_search_engine=self.__schedule_search_engine
+                                                           )
             
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
