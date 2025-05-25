@@ -29,7 +29,7 @@ class Keyword:
 
 # 클래스 목적 : 피드를 검색하거나, 조건에 맞는 피드를 제공하기 위함
 class ManagedFeed:
-    def __init__(self, fid="", like=0, date=None, uname="", fclass="", display=4,
+    def __init__(self, fid="", like=0, date=None, uname="", bname="", fclass="", display=4,
                  board_type="", hashtag=[], body="", bid="", iid="", num_images=0):
         self.fid=fid
         self.fclass = fclass
@@ -37,6 +37,7 @@ class ManagedFeed:
         self.like=like
         self.date=date
         self.uname = uname
+        self.bname = bname
         self.hashtag = hashtag
         self.board_type = board_type
         self.body = body
@@ -52,6 +53,7 @@ class ManagedFeed:
         print("like : ", self.like)
         print("date: ", self.date)
         print("uname: ", self.uname)
+        print("bname: ", self.bname)
         print("hashtag: ", self.hashtag)
         print("board_type: ", self.board_type)
         print("body: ", self.body)
@@ -67,6 +69,7 @@ class ManagedFeed:
             "like": self.like,
             "date": self.date,
             "uname": self.uname,
+            "bname": self.bname,
             "hashtag": self.hashtag,
             "board_type": self.board_type,
             "body": self.body,
@@ -1163,6 +1166,10 @@ class ManagedFeedBiasTable(ManagedTable):
 
         # 잠시 보관한 피드 데이터에서 필요한 정보만 뽑아서 ManagedFeed 객체 생성
         for single_feed in feeds:
+            bias_data = self._database.get_data_with_id(target="bid", id=single_feed.bid)
+            bias = Bias()
+            bias.make_with_dict(bias_data)
+
             managed_feed = ManagedFeed(fid=single_feed.fid,
                                        fclass=single_feed.fclass,
                                        display=single_feed.display,
@@ -1170,6 +1177,7 @@ class ManagedFeedBiasTable(ManagedTable):
                                        date=self._get_date_str_to_object(single_feed.date),
                                        hashtag=copy(single_feed.hashtag),
                                        uname=single_feed.nickname,
+                                       bname=bias.bname,
                                        board_type=single_feed.board_type,
                                        body=single_feed.body,
                                        bid=single_feed.bid,
@@ -1269,12 +1277,17 @@ class ManagedFeedBiasTable(ManagedTable):
 
     # 새로운 ManagedFeed를 추가함
     def make_new_managed_feed(self, feed:Feed):
+        bias_data = self._database.get_data_with_id(target="bid", id=feed.bid)
+        bias = Bias()
+        bias.make_with_dict(bias_data)
+
         managed_feed = ManagedFeed(
             fid=feed.fid,
             fclass=feed.fclass,
             like=feed.star,
             date=self._get_date_str_to_object(feed.date),
             uname=feed.nickname,
+            bname=bias.bname,
             hashtag=feed.hashtag,
             board_type=feed.board_type, # 이거 추가됨
             body=feed.body,
