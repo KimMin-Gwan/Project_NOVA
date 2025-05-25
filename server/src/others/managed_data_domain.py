@@ -1364,11 +1364,15 @@ class ManagedFeedBiasTable(ManagedTable):
 
     # 키워드와 필터링을 통해 데이터프레임에서 Feed들을 찾아냅니다.
     # 다양한 옵션들을 제공하고.. 있긴 합니다.
-    def search_feeds_with_key_n_option(self, key:str, fclass:str, board_type:str, target_time:str, option, return_id:bool=True):
+    def search_feeds_with_key_n_option(self, key:str, fclass:str, board_type:str, target_time:str,
+                                       search_columns:list, return_id:bool=True):
         # # Nan값의 경우, False 처리.
         # # 대소문자를 구분하지 않음
         # 데이터 프레임 검색 옵션 : Option에 따라 리스트가 달라짐
-        columns = [option]
+        if len(search_columns) == 0 or search_columns[0]=="":
+            columns =['body', 'bname', 'uname', 'hashtag']
+        else:
+            columns = search_columns
 
         searched_df = self._search_data_with_key_str_n_columns(df=self.__feed_df, columns=columns,
                                                                key=key, board_type=board_type, fclass=fclass)

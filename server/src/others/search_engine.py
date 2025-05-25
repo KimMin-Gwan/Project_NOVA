@@ -100,19 +100,13 @@ class FeedSearchEngine:
     # 예시 ||  [바위게] 라는 이름을 가진 작성자로 10개의 피드를 요청하는데 이번이 두번 째 요청
     # result , index = try_serach_feed(target_type="uname", target = "바위게", num_feed=10, index=240):
 
-    def try_search_feed_new(self, target_type="default", fclass="", target_time="", board_type="", target=""):
-        fid_list = []
-
-        if target_type == "default":
-            return fid_list
-
-        else:
-            fid_list = self.__search_manager.search_feeds_with_target_option(target_type=target_type,
-                                                                             target = target,
-                                                                             fclass=fclass,
-                                                                             board_type = board_type,
-                                                                             target_time=target_time
-                                                                             )
+    def try_search_feed_new(self, search_columns:list, fclass="", target_time="", board_type="", target=""):
+        fid_list = self.__search_manager.search_feeds_with_target_option(target = target,
+                                                                         search_columns=search_columns,
+                                                                         fclass=fclass,
+                                                                         board_type = board_type,
+                                                                         target_time=target_time
+                                                                         )
 
         return fid_list
 
@@ -565,9 +559,11 @@ class SearchManager:
 
 #--------------------------------------------------------------------------------------------------------------------
 
-    def search_feeds_with_target_option(self, target_type:str, target:str, fclass="", board_type="", target_time=""):
-        fid_list = self.__managed_feed_bias_table.search_feeds_with_key_n_option(key=target, option=target_type,
-                                                                                  fclass=fclass, board_type=board_type,
+    def search_feeds_with_target_option(self, target:str, search_columns:list, fclass="", board_type="", target_time=""):
+        fid_list = self.__managed_feed_bias_table.search_feeds_with_key_n_option(key=target,
+                                                                                  fclass=fclass,
+                                                                                  board_type=board_type,
+                                                                                  search_columns=search_columns,
                                                                                   target_time=target_time)
         return fid_list
 

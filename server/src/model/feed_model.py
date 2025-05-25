@@ -116,8 +116,15 @@ class FeedModel(BaseModel):
         return send_data
 
     def set_feed_data(self, feed_search_engine:FeedSearchEngine, feed_manager:FeedManager,
-                      target_type="default", target="", last_index=-1, num_feed=1):
-        fid_list = feed_search_engine.try_search_feed_new(target_type=target_type, target=target)
+                      search_columns:str="", target="", last_index=-1, num_feed=1):
+
+        if search_columns == "":
+            search_columns_list= []
+        else:
+            search_columns_list = [i.strip() for i in search_columns.split(",")]
+
+
+        fid_list = feed_search_engine.try_search_feed_new(target=target, search_columns=search_columns_list)
         fid_list, self._key = feed_manager.paging_fid_list(fid_list, last_index=last_index, page_size=num_feed)
 
         self._send_data = self._make_feed_data_n_interaction_data(feed_manager=feed_manager, fid_list=fid_list)
@@ -480,9 +487,14 @@ class FeedSearchModelNew(FeedModel):
         feed_search_engine.try_save_keyword_data(keyword=target)
         return
 
-    def try_search_feed_with_target_type(self, feed_search_engine:FeedSearchEngine, feed_manager:FeedManager,
-                                         target_type:str, fclass="", target="", target_time="", last_index=-1, num_feed=8):
-        searched_fid_list = feed_search_engine.try_search_feed_new(target_type=target_type, target=target,
+    def try_search_feed_with_keyword(self, feed_search_engine:FeedSearchEngine, feed_manager:FeedManager,
+                                        search_columns:str, fclass="", target="", target_time="", last_index=-1, num_feed=8):
+        if search_columns == "":
+            search_columns_list= []
+        else:
+            search_columns_list = [i.strip() for i in search_columns.split(",")]
+
+        searched_fid_list = feed_search_engine.try_search_feed_new(target=target, search_columns=search_columns_list,
                                                                    fclass=fclass, target_time=target_time)
 
         # 페이징

@@ -22,9 +22,9 @@ class Feed_Controller:
         # 유저가 있으면 세팅
         if request.jwt_payload != "":
             model.set_user_with_email(request=request.jwt_payload)
-        model.try_search_feed_with_target_type(feed_search_engine=feed_search_engine,
+        model.try_search_feed_with_keyword(feed_search_engine=feed_search_engine,
                                                feed_manager=feed_manager,
-                                               target_type="fid",
+                                               search_columns="fid",
                                                target=request.data_payload.fid
                                                )
 
@@ -256,9 +256,9 @@ class Feed_Controller:
         if request.jwt_payload != "":
             model.set_user_with_email(request=request.jwt_payload)
 
-        model.try_search_feed_with_target_type(feed_search_engine=feed_search_engine,
+        model.try_search_feed_with_keyword(feed_search_engine=feed_search_engine,
                                                feed_manager=self.__feed_manager,
-                                               target_type="bid",
+                                               search_columns="bid",
                                                last_index=request.data_payload.key,
                                                num_feed=num_feed)
 
@@ -282,9 +282,9 @@ class Feed_Controller:
         if request.jwt_payload != "":
             model.set_user_with_email(request=request.jwt_payload)
 
-        model.try_search_feed_with_target_type(feed_search_engine=feed_search_engine,
+        model.try_search_feed_with_keyword(feed_search_engine=feed_search_engine,
                                                feed_manager=feed_manager,
-                                               target_type="hashtag",
+                                               search_columns="hashtag",
                                                target=request.data_payload.hashtag,
                                                target_time=request.data_payload.target_time,
                                                last_index=request.data_payload.key,
@@ -318,10 +318,10 @@ class Feed_Controller:
             feed_search_engine=feed_search_engine,
         )
         
-        model.try_search_feed_with_target_type(feed_search_engine=feed_search_engine,
+        model.try_search_feed_with_keyword(feed_search_engine=feed_search_engine,
                                                feed_manager=self.__feed_manager,
-                                               target_type="keyword",
                                                target=request.data_payload.keyword,
+                                               search_columns=request.data.payload.search_columns,
                                                fclass=request.data_payload.fclass,
                                                last_index=request.data_payload.key,
                                                num_feed=num_feed)
