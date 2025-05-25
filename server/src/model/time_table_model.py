@@ -261,6 +261,7 @@ class TimeTableModel(BaseModel):
         self._key = -1
         
         self.__num_bias = 0
+        self.__num_schedule = 0
         self.__target_month= f'00년 0월'
         self.__target_week= f'0주차'
         
@@ -378,6 +379,28 @@ class TimeTableModel(BaseModel):
     # bias 세팅
     def set_num_bias(self):
         self.__num_bias= len(self._user.bids)
+        return
+        
+    def set_num_schedule(self, schedule_search_engine:SSE):
+        
+        today = datetime.today()
+        
+        sunday = today + timedelta(days=(6 - today.weekday()))
+        
+        # 오늘부터 일요일까지 날짜 생성
+        current_day = today
+        
+        sid_list = []
+        
+        while current_day <= sunday:
+            sids = schedule_search_engine.try_get_schedules_in_specific_date(sids=["all"], specific_date=current_day, return_id=True)
+            sid_list.extend(sids)
+            current_day += timedelta(days=1)  # 하루씩 증가
+        
+        for sid in sid_list:
+            if sid in self._tuser.sids:
+                self.__num_schedule += 1
+        
         return
     
     def __calc_date(self, today:datetime):
@@ -537,6 +560,7 @@ class TimeTableModel(BaseModel):
         body = {
             #"tuser" : self._tuser,
             "num_bias" : self.__num_bias,
+            "num_schedules" : self.__num_schedule,
             "target_month" : self.__target_month,
             "target_week" : self.__target_week
             }

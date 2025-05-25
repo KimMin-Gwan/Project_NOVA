@@ -35,7 +35,8 @@ class TImeTableController:
                 return model
         
         # 주제 수 찍어주면됨
-        model.set_num_bias()
+        #model.set_num_bias()
+        model.set_num_schedule()
         
         # 맨 위에 출력되는 문자열 이거임
         model.set_target_date(date= request.data_payload.date)
