@@ -321,7 +321,7 @@ class Feed_Controller:
         model.try_search_feed_with_keyword(feed_search_engine=feed_search_engine,
                                                feed_manager=self.__feed_manager,
                                                target=request.data_payload.keyword,
-                                               search_columns=request.data.payload.search_columns,
+                                               search_columns=request.data_payload.search_columns,
                                                fclass=request.data_payload.fclass,
                                                last_index=request.data_payload.key,
                                                num_feed=num_feed)
