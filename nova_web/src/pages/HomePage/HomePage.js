@@ -35,9 +35,11 @@ export default function HomePage() {
   let [feedData, setFeedData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+
   let bids = biasList.map((item, i) => {
     return item.bid;
   });
+
   useEffect(() => {
     if (bids.length > 0 && !biasId) {
       setBiasId(bids[0]);
@@ -100,7 +102,7 @@ export default function HomePage() {
           endPoint={`/feed_list?type=bias`}
           customClassName="custom-height"
         >
-          <BiasBoxes setBiasId={setBiasId} fetchBiasCategoryData={fetchBiasCategoryData} />
+        <BiasBoxes setBiasId={setBiasId} fetchBiasCategoryData={fetchBiasCategoryData} />
         </FeedThumbnail>
       </div>
 

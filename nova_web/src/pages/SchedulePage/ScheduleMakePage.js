@@ -95,7 +95,7 @@ const ScheduleMakeSlideComponent = ({ activeIndex, index,
             setTimeout(() => {
                 // 애니메이션이 끝난 후 상태 변경
                 setAnimationFlag(true);
-            }, 1000); // 1초 후 다음 상태로 전환
+            }, 300); // 1초 후 다음 상태로 전환
         }
     };
 
@@ -103,13 +103,13 @@ const ScheduleMakeSlideComponent = ({ activeIndex, index,
         if (activeIndex === index+1) {
             setTimeout(() => {
                 executeMakeNewScheduleAnimation();
-            }, 1000);
+            }, 300);
         }
         else {
             const titleElement = document.getElementById("input-slide-new-schedule-title");
             titleElement.style.opacity = 1; // 투명하게 만듦
             setTimeout(() => {
-            }, 1000);
+            }, 300);
         }
 
     }, [activeIndex, index]); // activeIndex와 index가 변경될 때 실행
@@ -235,9 +235,9 @@ const ScheduleMakePage = () => {
                         slideStepSubtitle.style.fontSize = "17px";
                         slideBodyContainer.style.opacity = 1;
                         slideBottomContainer.style.opacity = 1; // 하단 컨테이너 나타나기
-                    }, 1000); // titleBox와 title 애니메이션이 끝난 후 실행
-                }, 500); // subtitle 사라지는 애니메이션 시간
-            }, 1000); // 1초 후 애니메이션 시작
+                    }, 300); // titleBox와 title 애니메이션이 끝난 후 실행
+                }, 200); // subtitle 사라지는 애니메이션 시간
+            }, 300); // 1초 후 애니메이션 시작
         }
     };
 

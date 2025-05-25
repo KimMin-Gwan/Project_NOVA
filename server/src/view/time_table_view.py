@@ -44,7 +44,9 @@ class TimeTableView(Master_View):
             #     raise request_manager.credentials_exception
             time_table_controller =TImeTableController()
             model = time_table_controller.get_dashboard_data(database=self.__database,
-                                                           request=request_manager)
+                                                           request=request_manager,
+                                                           schedule_search_engine=self.__schedule_search_engine
+                                                           )
             
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
@@ -602,6 +604,7 @@ class MakeSingleScheduleRequest(RequestHeader):
         self.end_date = body['end_date']
         self.end_time = body['end_time']
         self.state = body.get("state", True)
+        self.tags = body.get("tags", [])
 
 class MakeMultipleScheduleRequest(RequestHeader):
     def __init__(self, request) -> None:
@@ -680,6 +683,8 @@ class ExploreScheduleRequset(RequestHeader):
         self.time_section:int=body.get("timeSection", 0) # 0 -> 0~6 / 1 -> 6~12 / 2 -> 12~16 / 3 -> 16~24 / -1 -> 0~24(전체)
         self.style:str=body.get("style", "all")  # all, vtuber, cam, nocam -> bias 데이터 (tags)
         self.gender:str=body.get("gender", "all") # male, female, etc -> bias 데이터 (tags)
+
+        
         
 class AddNewScheduleRequest(RequestHeader):
     def __init__(self, sids=[])-> None:

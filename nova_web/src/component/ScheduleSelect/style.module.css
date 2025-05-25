@@ -84,3 +84,56 @@
   font-size: 14px;
   color: #5C5C5C;
 }
+
+.tagsContainer {
+  padding-left : 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag {
+  background-color: #B3E5FC;
+  border: 2px solid #FFF;
+  border-radius: 16px;
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  font-size : 12px;
+  font-weight: 500;
+  box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.08);
+}
+
+.removeButton {
+  background: none;
+  border: none;
+  color: #999;
+  margin-left: 4px;
+  cursor: pointer;
+}
+
+.removeButton:hover {
+  color: #333;
+}
+
+.sampleTagsContainer {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+  padding-left : 10px;
+}
+
+.sampleTag {
+  background-color: #D0EFFF;
+  border: 2px solid #FFF;
+  border-radius: 16px;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size : 12px;
+  font-weight: 400;
+  box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.08);
+}
+
+.sampleTag:hover {
+  background-color: #B3E5FC;
+}

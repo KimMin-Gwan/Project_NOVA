@@ -76,45 +76,50 @@ export default function BiasBoxes({ fetchBiasCategoryData }) {
     }
   }, [loading]);
 
-  return (
-    <div
-      ref={scrollRef}
-      onMouseDown={dragHandlers.onMouseDown}
-      onMouseMove={dragHandlers.onMouseMove}
-      onMouseUp={dragHandlers.onMouseUp}
-      className="bias-container"
-    >
-      <Toaster position="bottom-center" />
-      <div className="bias-wrapper">
-        {Array.from({ length: totalBiasBoxes }).map((_, i) => {
-          const bias = biasList[i];
-          return (
-            <div key={i} className="bias-info">
-              <div className="bias-box">
-                {bias && (
-                  <img
-                    className={clickedBias === i ? "clicked-img" : ""}
-                    src={BIAS_URL + `${bias.bid}.PNG`}
-                    onError={(e) => (e.target.src = tempBias)}
-                    alt="bias"
-                    onClick={() => {
-                      if (hasDragged) return;
-                      onClickCurrentBias(i);
-                      onClickBiasId(bias.bid);
-                      fetchBiasCategoryData && fetchBiasCategoryData(bias.bid);
-                    }}
-                  />
-                )}
+  if(biasList.length === 0){
+    return null;
+  }else{
+    return (
+      <div
+        ref={scrollRef}
+        onMouseDown={dragHandlers.onMouseDown}
+        onMouseMove={dragHandlers.onMouseMove}
+        onMouseUp={dragHandlers.onMouseUp}
+        className="bias-container"
+      >
+        <Toaster position="bottom-center" />
+        <div className="bias-wrapper">
+          {Array.from({ length: totalBiasBoxes }).map((_, i) => {
+            const bias = biasList[i];
+            return (
+              <div key={i} className="bias-info">
+                <div className="bias-box">
+                  {bias && (
+                    <img
+                      className={clickedBias === i ? "clicked-img" : ""}
+                      src={BIAS_URL + `${bias.bid}.PNG`}
+                      onError={(e) => (e.target.src = tempBias)}
+                      alt="bias"
+                      onClick={() => {
+                        if (hasDragged) return;
+                        onClickCurrentBias(i);
+                        onClickBiasId(bias.bid);
+                        fetchBiasCategoryData && fetchBiasCategoryData(bias.bid);
+                      }}
+                    />
+                  )}
+                </div>
+                <div className="b-name">{bias?.bname || <span>&nbsp;</span>}</div>
+                <div className={clickedBias === i ? "clicked-box" : "non-clicked-box"}></div>
               </div>
-              <div className="b-name">{bias?.bname || <span>&nbsp;</span>}</div>
-              <div className={clickedBias === i ? "clicked-box" : "non-clicked-box"}></div>
-            </div>
-          );
-        })}
-        <AddBiasButton onClickAddButton={onClickAddButton} add_bias_icon={add_bias_icon} />
+            );
+          })}
+          <AddBiasButton onClickAddButton={onClickAddButton} add_bias_icon={add_bias_icon} />
+        </div>
       </div>
-    </div>
-  );
+    );
+
+  }
 }
 
 function AddBiasButton({ onClickAddButton, add_bias_icon }) {

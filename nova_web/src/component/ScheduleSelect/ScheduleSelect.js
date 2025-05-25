@@ -268,10 +268,38 @@ export default function ScheduleSelect({
     setWeek(daysOfWeek[selectDate.getDay()]);
   };
 
+ 
+  const sampleTags= ["게임", "저챗", "음악", "그림", "스포츠", "시참"];
   // 장소 및 일정 디테일 입력
   const [detailInput, setDetailPlaceInput] = useState("");
+  const [tagsInput, setTagsInput] = useState("");
+  const [tagsArrayData, setTagsArrayData] = useState([]);
+
   const [placeInput, setPlaceInput] = useState("");
-  const [tagInput, setTagInput] = useState("");
+
+  const onChangeTagsInput = (e) => {
+    const value = e.target.value
+    setTagsInput(value)
+
+    // 공백 제거 .filter(item => item !== ""); // 빈 항목 제거
+    const splitData = value.split(",").map(item => item.trim()) 
+    setTagsArrayData(splitData)
+
+    if (value == ""){
+      setTagsArrayData([])
+    }
+  };
+
+  const removeTag = (index) => {
+    // 특정 태그 제거
+    setTagsArrayData((prevTags) => {
+      const updatedTags = prevTags.filter((_, i) => i !== index);
+
+      // `tagsInput` 업데이트: 삭제된 태그를 제외한 나머지 태그를 쉼표로 결합
+      setTagsInput(updatedTags.join(", "));
+      return updatedTags;
+    });
+  };
 
   // 스케줄 상세 바꾸기
   const onChangeDetailInput = (e) => {
@@ -281,6 +309,14 @@ export default function ScheduleSelect({
   // 스케줄 장소 바꾸기
   const onChangePlaceInput = (e) => {
     setPlaceInput(e.target.value);
+  };
+
+  const addSampleTag = (tag) => {
+    if (!tagsArrayData.includes(tag)) {
+      // 중복 방지
+      setTagsArrayData((prev) => [...prev, tag]);
+      setTagsInput((prevInput) => (prevInput ? `${prevInput}, ${tag}` : tag));
+    }
   };
 
   // 변경이 있고 나서 전송용 데이터를 수정하게 하는 useEffect
@@ -307,6 +343,11 @@ export default function ScheduleSelect({
   useEffect(() => {
     handleScheduleChange("sname", detailInput);
   }, [detailInput]);
+
+  // 위와 같은 목적 => sname
+  useEffect(() => {
+    handleScheduleChange("tags", tagsArrayData);
+  }, [tagsArrayData]);
 
   // 위와 같은 목적 => location
   useEffect(() => {
@@ -393,14 +434,40 @@ export default function ScheduleSelect({
 
       <div className={style["searchFac"]}>
         <span>태그</span>
+        <div className={style["sampleTagsContainer"]}>
+          {sampleTags.map((tag, index) => (
+            <div
+              className={style["sampleTag"]}
+              key={index}
+              onClick={() => addSampleTag(tag)}
+            >
+              {tag}
+            </div>
+          ))}
+        </div>
+
         <div className={style["searchBoxMargin"]}>
           <div className={style["searchBox"]}>
             <input
               type="text"
-              value={placeInput}
-              placeholder="비워두시면 AI가 이름을 기반으로 자동 생성합니다."
+              value={tagsInput}
+              onChange={onChangeTagsInput}
+              placeholder="각 태그의 뒤에 쉼표를 입력하세요"
             />
           </div>
+        </div>
+        <div className={style["tagsContainer"]}>
+           {tagsArrayData.map((tag, index) => (
+              <div className={style["tag"]} key={index}>
+                {tag}
+                <button
+                  className={style["removeButton"]}
+                  onClick={() => removeTag(index)}
+                >
+                  &times;
+                </button>
+              </div>
+            ))}
         </div>
       </div>
 

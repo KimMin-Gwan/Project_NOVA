@@ -221,7 +221,7 @@
 /* 일정 리스트 swiper 스타일 */
 /* 여기랑 SearchSchedulePage에 index.css랑 겹쳐서 들어감,,, */
 .scheduleList {
-  height: 30vh;
+  /*height: 30vh;*/
 }
 
 /* 크기 줄어들면 swiper로 변화하도록 함 */

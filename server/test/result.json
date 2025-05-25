@@ -1,0 +1,1561 @@
+[
+    {
+        "_id": {
+            "$oid": "67d6b0535c7af010afb5e172"
+        },
+        "sid": "1",
+        "sname": "스케줄 이름",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "111",
+        "bname": "임시주제1호",
+        "start_date": "2025/03/16",
+        "start_time": "11:00",
+        "end_date": "2025/03/16",
+        "end_time": "14:00",
+        "location": [
+            "치지직",
+            "SOOP"
+        ],
+        "code": "123456",
+        "num_usage": 0,
+        "state": false,
+        "color_code": "#f5c4e1",
+        "update_datetime": "2025/03/15-08:30:00",
+        "tags": [
+            "게임"
+        ]
+    },
+    {
+        "_id": {
+            "$oid": "67d6b0645c7af010afb5e173"
+        },
+        "sid": "2",
+        "sname": "스케줄 이름 2",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "111",
+        "bname": "임시주제1호",
+        "start_date": "2025/03/16",
+        "start_time": "14:00",
+        "end_date": "2025/03/16",
+        "end_time": "18:30",
+        "location": [
+            "치지직",
+            "유튜브"
+        ],
+        "code": "123456",
+        "num_usage": 0,
+        "state": false,
+        "color_code": "#c7cff2",
+        "update_datetime": "2025/03/15-08:30:00",
+        "tags": []
+    },
+    {
+        "_id": {
+            "$oid": "67d6b0725c7af010afb5e174"
+        },
+        "sid": "3",
+        "sname": "스케줄 이름 3",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "111",
+        "bname": "임시주제1호",
+        "start_date": "2025/03/19",
+        "start_time": "10:15",
+        "end_date": "2025/03/19",
+        "end_time": "13:45",
+        "location": [
+            "치지직"
+        ],
+        "code": "123456",
+        "num_usage": 0,
+        "state": false,
+        "color_code": "#c7d5fb",
+        "update_datetime": "2025/03/15-08:30:00",
+        "tags": [
+            "시참",
+            "그림"
+        ]
+    },
+    {
+        "_id": {
+            "$oid": "67d6b0815c7af010afb5e175"
+        },
+        "sid": "4",
+        "sname": "스케줄 이름 4",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "111",
+        "bname": "임시주제1호",
+        "start_date": "2025/03/21",
+        "start_time": "15:00",
+        "end_date": "2025/03/21",
+        "end_time": "18:30",
+        "location": [
+            "유튜브"
+        ],
+        "code": "123456",
+        "num_usage": 0,
+        "state": false,
+        "color_code": "#d8d3dd",
+        "update_datetime": "2025/03/15-08:30:00",
+        "tags": [
+            "음악",
+            "저챗"
+        ]
+    },
+    {
+        "_id": {
+            "$oid": "67d6b0905c7af010afb5e176"
+        },
+        "sid": "5",
+        "sname": "스케줄 이름 5",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "111",
+        "bname": "임시주제1호",
+        "start_date": "2025/03/22",
+        "start_time": "09:45",
+        "end_date": "2025/03/22",
+        "end_time": "12:30",
+        "location": [
+            "치지직"
+        ],
+        "code": "123456",
+        "num_usage": 0,
+        "state": false,
+        "color_code": "#cafcca",
+        "update_datetime": "2025/03/15-08:30:00",
+        "tags": [
+            "그림"
+        ]
+    },
+    {
+        "_id": {
+            "$oid": "67d6b0a05c7af010afb5e177"
+        },
+        "sid": "6",
+        "sname": "스케줄 이름 6",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "111",
+        "bname": "임시주제1호",
+        "start_date": "2025/03/20",
+        "start_time": "17:00",
+        "end_date": "2025/03/20",
+        "end_time": "21:15",
+        "location": [
+            "SOOP"
+        ],
+        "code": "123456",
+        "num_usage": 0,
+        "state": false,
+        "color_code": "#d0c6de",
+        "update_datetime": "2025/03/15-08:30:00",
+        "tags": [
+            "음악",
+            "저챗"
+        ]
+    },
+    {
+        "_id": {
+            "$oid": "67d6c636dad4e39f471cddf9"
+        },
+        "sid": "7",
+        "sname": "스케줄 이름 7",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "111",
+        "bname": "임시주제1호",
+        "start_date": "2025/03/20",
+        "start_time": "17:00",
+        "end_date": "2025/03/20",
+        "end_time": "21:15",
+        "location": [
+            "치지직"
+        ],
+        "code": "123456",
+        "num_usage": 0,
+        "state": false,
+        "color_code": "#d0c6de",
+        "update_datetime": "2025/03/15-08:30:00",
+        "tags": []
+    },
+    {
+        "_id": {
+            "$oid": "67d86603272a3db286b2bc13"
+        },
+        "sid": "qytYAh",
+        "sname": "스케줄 이름 8",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "111",
+        "bname": "임시주제1호",
+        "start_date": "2025/03/22",
+        "start_time": "12:41",
+        "end_date": "2025/03/22",
+        "end_time": "19:19",
+        "location": [
+            "유튜브"
+        ],
+        "code": "5FM8SH",
+        "num_usage": 0,
+        "state": false,
+        "color_code": "#cac1f9",
+        "update_datetime": "2025/03/18-03:12:14",
+        "tags": []
+    },
+    {
+        "_id": {
+            "$oid": "67d86603272a3db286b2bc14"
+        },
+        "sid": "PalGwe",
+        "sname": "스케줄 이름 9",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "111",
+        "bname": "임시주제1호",
+        "start_date": "2025/03/24",
+        "start_time": "23:44",
+        "end_date": "2025/03/25",
+        "end_time": "23:25",
+        "location": [
+            "치지직",
+            "유튜브"
+        ],
+        "code": "8T8HTJ",
+        "num_usage": 0,
+        "state": false,
+        "color_code": "#cef6ef",
+        "update_datetime": "2025/03/18-03:12:15",
+        "tags": [
+            "그림",
+            "스포츠",
+            "기타"
+        ]
+    },
+    {
+        "_id": {
+            "$oid": "67d86603272a3db286b2bc15"
+        },
+        "sid": "HUfJUh",
+        "sname": "스케줄 이름 10",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "111",
+        "bname": "임시주제1호",
+        "start_date": "2025/03/24",
+        "start_time": "13:26",
+        "end_date": "2025/03/24",
+        "end_time": "22:57",
+        "location": [
+            "치지직",
+            "SOOP"
+        ],
+        "code": "CZQV38",
+        "num_usage": 0,
+        "state": false,
+        "color_code": "#c9ead1",
+        "update_datetime": "2025/03/18-03:12:16",
+        "tags": [
+            "음악",
+            "스포츠"
+        ]
+    },
+    {
+        "_id": {
+            "$oid": "67da21400ca57305bfd3a8cf"
+        },
+        "sid": "8",
+        "sname": "스케쥴 이름 11",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "111",
+        "bname": "임시주제1호",
+        "start_date": "2025/03/20",
+        "start_time": "21:00",
+        "end_date": "2025/03/20",
+        "end_time": "23:50",
+        "location": [
+            "치지직"
+        ],
+        "code": "123456",
+        "num_usage": 0,
+        "state": false,
+        "color_code": "#d5deec",
+        "update_datetime": "2025/03/15-08:30:00",
+        "tags": [
+            "음악"
+        ]
+    },
+    {
+        "_id": {
+            "$oid": "67dd0d5eaa087597f593f5b4"
+        },
+        "sid": "UlOeAb",
+        "sname": "스케쥴 이름 12",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "222",
+        "bname": "임시주제2호",
+        "start_date": "2025/03/22",
+        "start_time": "07:12",
+        "end_date": "2025/03/22",
+        "end_time": "19:03",
+        "location": [
+            "치지직"
+        ],
+        "code": "OIJ09K",
+        "update_datetime": "2025/03/21-15:55:24",
+        "num_usage": 0,
+        "state": true,
+        "color_code": "#d2e0c9",
+        "tags": [
+            "음악",
+            "스포츠"
+        ]
+    },
+    {
+        "_id": {
+            "$oid": "67e11a446c00495ef28a6666"
+        },
+        "sid": "DWbrEf",
+        "sname": "이건 뭐지",
+        "uid": "",
+        "uname": "지지자",
+        "bid": "333",
+        "bname": "임시주제3호",
+        "start_date": "2025/3/24",
+        "start_time": "0:0",
+        "end_date": "2025/3/24",
+        "end_time": "0:01",
+        "location": [],
+        "code": "UMMBH0",
+        "update_datetime": "2025/03/24-17:39:32",
+        "num_usage": 0,
+        "state": true,
+        "color_code": "#c1f8f0",
+        "is_already_have": false,
+        "is_owner": false,
+        "tags": [
+            "게임"
+        ]
+    },
+    {
+        "_id": {
+            "$oid": "67e14519e9608fe139addde9"
+        },
+        "sid": "qc5Ehu",
+        "sname": "만들어 본 스케줄",
+        "uid": "6adf-fb09-4907",
+        "uname": "지지자6431",
+        "bid": "",
+        "bname": "",
+        "start_date": "2025/3/25",
+        "start_time": "4:0",
+        "end_date": "2025/3/25",
+        "end_time": "11:0",
+        "location": [
+            "노바"
+        ],
+        "code": "TMLPW8",
+        "update_datetime": "2025/03/24-20:42:17",
+        "num_usage": 0,
+        "state": true,
+        "color_code": "#f5f3f0",
+        "is_already_have": false,
+        "is_owner": false,
+        "tags": []
+    },
+    {
+        "_id": {
+            "$oid": "67e145c92e8c51f6e479f984"
+        },
+        "sid": "JABOES",
+        "sname": "만들어 본 스케줄2",
+        "uid": "6adf-fb09-4907",
+        "uname": "지지자6431",
+        "bid": "",
+        "bname": "",
+        "start_date": "2025/3/26",
+        "start_time": "4:0",
+        "end_date": "2025/3/26",
+        "end_time": "8:0",
+        "location": [
+            "노바"
+        ],
+        "code": "OGJSI8",
+        "update_datetime": "2025/03/24-20:45:13",
+        "num_usage": 0,
+        "state": true,
+        "color_code": "#cdefcb",
+        "is_already_have": false,
+        "is_owner": false,
+        "tags": []
+    },
+    {
+        "_id": {
+            "$oid": "67e1a25decf155c94c4a8ff2"
+        },
+        "sid": "srrTP7",
+        "sname": "번들 일정 1",
+        "uid": "6adf-fb09-4907",
+        "uname": "지지자6431",
+        "bid": "111",
+        "bname": "임시주제1호",
+        "start_date": "2025/3/25",
+        "start_time": "12:0",
+        "end_date": "2025/3/25",
+        "end_time": "17:0",
+        "location": [
+            "노바"
+        ],
+        "code": "1YBWDX",
+        "update_datetime": "2025/03/25-03:20:13",
+        "num_usage": 0,
+        "state": true,
+        "color_code": "#e9f0e1",
+        "is_already_have": false,
+        "is_owner": false,
+        "display": true,
+        "tags": [
+            "스포츠",
+            "게임"
+        ]
+    },
+    {
+        "_id": {
+            "$oid": "67e1a25decf155c94c4a8ff3"
+        },
+        "sid": "XjmPD7",
+        "sname": "번들 일정 2",
+        "uid": "6adf-fb09-4907",
+        "uname": "지지자6431",
+        "bid": "111",
+        "bname": "임시주제1호",
+        "start_date": "2025/3/29",
+        "start_time": "17:0",
+        "end_date": "2025/3/29",
+        "end_time": "23:0",
+        "location": [
+            "노바"
+        ],
+        "code": "GCAXXJ",
+        "update_datetime": "2025/03/25-03:20:13",
+        "num_usage": 0,
+        "state": true,
+        "color_code": "#c4c4dd",
+        "is_already_have": false,
+        "is_owner": false,
+        "tags": [
+            "음악",
+            "기타"
+        ]
+    },
+    {
+        "_id": {
+            "$oid": "67e1a25decf155c94c4a8ff4"
+        },
+        "sid": "wreCEA",
+        "sname": "번들 일정 3",
+        "uid": "6adf-fb09-4907",
+        "uname": "지지자6431",
+        "bid": "111",
+        "bname": "임시주제1호",
+        "start_date": "2025/3/27",
+        "start_time": "23:0",
+        "end_date": "2025/3/28",
+        "end_time": "2:0",
+        "location": [
+            "노바"
+        ],
+        "code": "2QA68I",
+        "update_datetime": "2025/03/25-03:20:13",
+        "num_usage": 0,
+        "state": true,
+        "color_code": "#def2c0",
+        "is_already_have": false,
+        "is_owner": false,
+        "tags": [
+            "그림"
+        ]
+    },
+    {
+        "_id": {
+            "$oid": "67fb530b963e4f6adab74f78"
+        },
+        "sid": "uMW5q9",
+        "sname": "XX와 합방(마인크래프트)",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "222",
+        "bname": "임시주제2호",
+        "start_date": "2025/04/13",
+        "start_time": "18:00",
+        "end_date": "2025/04/13",
+        "end_time": "21:00",
+        "location": [
+            "치지직"
+        ],
+        "code": "WGHOLY",
+        "update_datetime": "2025/04/13-15:55:39",
+        "num_usage": 0,
+        "state": "false",
+        "color_code": "#ebc2c9",
+        "is_already_have": false,
+        "is_owner": false,
+        "tags": []
+    },
+    {
+        "_id": {
+            "$oid": "67fc34ca550f3267ec770d8b"
+        },
+        "sid": "tIM9Gr",
+        "sname": "마리오파티",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "",
+        "bname": "",
+        "start_date": "2025/4/14",
+        "start_time": "0:0",
+        "end_date": "2025/4/15",
+        "end_time": "0:0",
+        "location": [
+            "치지직"
+        ],
+        "code": "2HGFRW",
+        "update_datetime": "2025/04/14-07:03:54",
+        "num_usage": 0,
+        "state": null,
+        "color_code": "#c9d8f1",
+        "is_already_have": false,
+        "is_owner": false,
+        "tags": [
+            "그림",
+            "음악",
+            "기타"
+        ]
+    },
+    {
+        "_id": {
+            "$oid": "67fc34ca550f3267ec770d8c"
+        },
+        "sid": "76lD1u",
+        "sname": "마인크래프트",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "",
+        "bname": "",
+        "start_date": "2025/4/17",
+        "start_time": "0:0",
+        "end_date": "2025/4/18",
+        "end_time": "0:0",
+        "location": [
+            "치지직"
+        ],
+        "code": "UP5R62",
+        "update_datetime": "2025/04/14-07:03:54",
+        "num_usage": 0,
+        "state": null,
+        "color_code": "#d9c2c3",
+        "is_already_have": false,
+        "is_owner": false,
+        "tags": []
+    },
+    {
+        "_id": {
+            "$oid": "682eba9b5a8ab168bed9edae"
+        },
+        "sid": "1111",
+        "sname": "스케줄 이름 1",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "111",
+        "bname": "임시주제1호",
+        "start_date": "2025/05/23",
+        "start_time": "12:00",
+        "end_date": "2025/05/23",
+        "end_time": "15:00",
+        "location": [
+            "치지직",
+            "SOOP"
+        ],
+        "code": "123456",
+        "num_usage": 0,
+        "state": false,
+        "color_code": "#f5c4e1",
+        "update_datetime": "2025/05/22-08:30:00",
+        "tags": []
+    },
+    {
+        "_id": {
+            "$oid": "682eba9b5a8ab168bed9edaf"
+        },
+        "sid": "2222",
+        "sname": "스케줄 이름 2",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "222",
+        "bname": "임시주제2호",
+        "start_date": "2025/05/24",
+        "start_time": "09:00",
+        "end_date": "2025/05/24",
+        "end_time": "16:00",
+        "location": [
+            "치지직",
+            "SOOP"
+        ],
+        "code": "123456",
+        "num_usage": 0,
+        "state": false,
+        "color_code": "#f5c4e1",
+        "update_datetime": "2025/05/23-08:30:00",
+        "tags": [
+            "시참"
+        ]
+    },
+    {
+        "_id": {
+            "$oid": "682eba9b5a8ab168bed9edb0"
+        },
+        "sid": "3333",
+        "sname": "스케줄 이름 3",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "111",
+        "bname": "임시주제1호",
+        "start_date": "2025/05/25",
+        "start_time": "14:00",
+        "end_date": "2025/05/25",
+        "end_time": "21:00",
+        "location": [
+            "치지직",
+            "SOOP"
+        ],
+        "code": "123456",
+        "num_usage": 0,
+        "state": false,
+        "color_code": "#f5c4e1",
+        "update_datetime": "2025/05/24-08:30:00",
+        "tags": [
+            "스포츠",
+            "시참",
+            "음악"
+        ]
+    },
+    {
+        "_id": {
+            "$oid": "682eba9b5a8ab168bed9edb1"
+        },
+        "sid": "4444",
+        "sname": "스케줄 이름 1",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "222",
+        "bname": "임시주제2호",
+        "start_date": "2025/05/23",
+        "start_time": "08:00",
+        "end_date": "2025/05/23",
+        "end_time": "12:00",
+        "location": [
+            "치지직",
+            "SOOP"
+        ],
+        "code": "123456",
+        "num_usage": 0,
+        "state": false,
+        "color_code": "#f5c4e1",
+        "update_datetime": "2025/05/22-08:30:00",
+        "tags": [
+            "그림",
+            "시참"
+        ]
+    },
+    {
+        "_id": {
+            "$oid": "682eba9b5a8ab168bed9edb2"
+        },
+        "sid": "5555",
+        "sname": "스케줄 이름 2",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "333",
+        "bname": "임시주제3호",
+        "start_date": "2025/05/23",
+        "start_time": "13:00",
+        "end_date": "2025/05/23",
+        "end_time": "18:00",
+        "location": [
+            "치지직",
+            "SOOP"
+        ],
+        "code": "123456",
+        "num_usage": 0,
+        "state": false,
+        "color_code": "#f5c4e1",
+        "update_datetime": "2025/05/22-08:30:00",
+        "tags": [
+            "기타"
+        ]
+    },
+    {
+        "_id": {
+            "$oid": "682eba9b5a8ab168bed9edb3"
+        },
+        "sid": "6666",
+        "sname": "스케줄 이름 3",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "444",
+        "bname": "임시주제4호",
+        "start_date": "2025/05/23",
+        "start_time": "19:00",
+        "end_date": "2025/05/23",
+        "end_time": "23:00",
+        "location": [
+            "치지직",
+            "SOOP"
+        ],
+        "code": "123456",
+        "num_usage": 0,
+        "state": false,
+        "color_code": "#f5c4e1",
+        "update_datetime": "2025/05/22-08:30:00",
+        "tags": []
+    },
+    {
+        "_id": {
+            "$oid": "682eba9b5a8ab168bed9edb4"
+        },
+        "sid": "7777",
+        "sname": "스케줄 이름 4",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "111",
+        "bname": "임시주제1호",
+        "start_date": "2025/05/24",
+        "start_time": "08:00",
+        "end_date": "2025/05/24",
+        "end_time": "12:00",
+        "location": [
+            "치지직",
+            "SOOP"
+        ],
+        "code": "123456",
+        "num_usage": 0,
+        "state": false,
+        "color_code": "#f5c4e1",
+        "update_datetime": "2025/05/23-08:30:00",
+        "tags": [
+            "시참",
+            "그림",
+            "기타"
+        ]
+    },
+    {
+        "_id": {
+            "$oid": "682eba9b5a8ab168bed9edb5"
+        },
+        "sid": "8888",
+        "sname": "스케줄 이름 5",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "333",
+        "bname": "임시주제3호",
+        "start_date": "2025/05/24",
+        "start_time": "13:00",
+        "end_date": "2025/05/24",
+        "end_time": "18:00",
+        "location": [
+            "치지직",
+            "SOOP"
+        ],
+        "code": "123456",
+        "num_usage": 0,
+        "state": false,
+        "color_code": "#f5c4e1",
+        "update_datetime": "2025/05/23-08:30:00",
+        "tags": [
+            "그림",
+            "음악",
+            "기타"
+        ]
+    },
+    {
+        "_id": {
+            "$oid": "682eba9b5a8ab168bed9edb6"
+        },
+        "sid": "9999",
+        "sname": "스케줄 이름 6",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "444",
+        "bname": "임시주제4호",
+        "start_date": "2025/05/24",
+        "start_time": "00:00",
+        "end_date": "2025/05/24",
+        "end_time": "04:00",
+        "location": [
+            "치지직",
+            "SOOP"
+        ],
+        "code": "123456",
+        "num_usage": 0,
+        "state": false,
+        "color_code": "#f5c4e1",
+        "update_datetime": "2025/05/23-08:30:00",
+        "tags": [
+            "그림"
+        ]
+    },
+    {
+        "_id": {
+            "$oid": "682eba9b5a8ab168bed9edb7"
+        },
+        "sid": "0012",
+        "sname": "스케줄 이름 8",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "222",
+        "bname": "임시주제2호",
+        "start_date": "2025/05/25",
+        "start_time": "12:00",
+        "end_date": "2025/05/25",
+        "end_time": "16:00",
+        "location": [
+            "치지직",
+            "SOOP"
+        ],
+        "code": "123456",
+        "num_usage": 0,
+        "state": false,
+        "color_code": "#f5c4e1",
+        "update_datetime": "2025/05/24-08:30:00",
+        "tags": []
+    },
+    {
+        "_id": {
+            "$oid": "682eba9b5a8ab168bed9edb8"
+        },
+        "sid": "0013",
+        "sname": "스케줄 이름 9",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "333",
+        "bname": "임시주제3호",
+        "start_date": "2025/05/25",
+        "start_time": "17:00",
+        "end_date": "2025/05/25",
+        "end_time": "20:00",
+        "location": [
+            "치지직",
+            "SOOP"
+        ],
+        "code": "123456",
+        "num_usage": 0,
+        "state": false,
+        "color_code": "#f5c4e1",
+        "update_datetime": "2025/05/24-08:30:00",
+        "tags": [
+            "저챗",
+            "그림"
+        ]
+    },
+    {
+        "_id": {
+            "$oid": "682eba9b5a8ab168bed9edb9"
+        },
+        "sid": "0014",
+        "sname": "스케줄 이름 10",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "444",
+        "bname": "임시주제4호",
+        "start_date": "2025/05/25",
+        "start_time": "16:00",
+        "end_date": "2025/05/25",
+        "end_time": "22:00",
+        "location": [
+            "치지직",
+            "SOOP"
+        ],
+        "code": "123456",
+        "num_usage": 0,
+        "state": false,
+        "color_code": "#f5c4e1",
+        "update_datetime": "2025/05/24-08:30:00",
+        "tags": [
+            "게임",
+            "그림",
+            "스포츠"
+        ]
+    },
+    {
+        "_id": {
+            "$oid": "682ef449726cf70dfca71ba3"
+        },
+        "sid": "gNLgGv",
+        "sname": "테스트용 일정１",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "222",
+        "bname": "임시주제2호",
+        "start_date": "2025/5/23",
+        "start_time": "15:6",
+        "end_date": "2025/5/23",
+        "end_time": "18:20",
+        "location": [
+            "치지직"
+        ],
+        "code": "BHZMPH",
+        "update_datetime": "2025/05/22-18:54:17",
+        "num_usage": 0,
+        "state": true,
+        "color_code": "#d5e1db",
+        "is_already_have": false,
+        "is_owner": false,
+        "tags": [
+            "시참",
+            "음악"
+        ]
+    },
+    {
+        "_id": {
+            "$oid": "682ef9bb70a7c8d6e6860f4c"
+        },
+        "sid": "BKPgG1",
+        "sname": "테스트용 일정 ２",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "222",
+        "bname": "임시주제2호",
+        "start_date": "2025/5/22",
+        "start_time": "21:0",
+        "end_date": "2025/5/22",
+        "end_time": "23:0",
+        "location": [
+            "치지직"
+        ],
+        "code": "IJ49RE",
+        "update_datetime": "2025/05/22-19:17:31",
+        "num_usage": 0,
+        "state": true,
+        "color_code": "#d5f9c5",
+        "is_already_have": false,
+        "is_owner": false,
+        "tags": []
+    },
+    {
+        "_id": {
+            "$oid": "682efe3e21b9566538f083a1"
+        },
+        "sid": "q9ZJFw",
+        "sname": "테스트 일정 3",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "111",
+        "bname": "임시주제1호",
+        "start_date": "2025/5/22",
+        "start_time": "8:0",
+        "end_date": "2025/5/22",
+        "end_time": "13:0",
+        "location": [
+            "치지직"
+        ],
+        "code": "H1KVM8",
+        "update_datetime": "2025/05/22-19:36:46",
+        "num_usage": 0,
+        "state": true,
+        "color_code": "#c6dec3",
+        "is_already_have": false,
+        "is_owner": false,
+        "tags": [
+            "게임",
+            "시참"
+        ]
+    },
+    {
+        "_id": {
+            "$oid": "682f00c9e31056235082700d"
+        },
+        "sid": "HeusaN",
+        "sname": "테스트용 일정4",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "111",
+        "bname": "임시주제1호",
+        "start_date": "2025/5/22",
+        "start_time": "13:0",
+        "end_date": "2025/5/22",
+        "end_time": "16:0",
+        "location": [
+            "치지직"
+        ],
+        "code": "FUTDKS",
+        "update_datetime": "2025/05/22-19:47:37",
+        "num_usage": 0,
+        "state": true,
+        "color_code": "#c0e4e7",
+        "is_already_have": false,
+        "is_owner": false,
+        "tags": [
+            "시참",
+            "그림",
+            "기타"
+        ]
+    },
+    {
+        "_id": {
+            "$oid": "682f01ac58644ba2e5e93f3a"
+        },
+        "sid": "mwl2eK",
+        "sname": "테스트용 일정6",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "222",
+        "bname": "임시주제2호",
+        "start_date": "2025/5/22",
+        "start_time": "8:0",
+        "end_date": "2025/5/22",
+        "end_time": "11:0",
+        "location": [
+            "치지직"
+        ],
+        "code": "IGE677",
+        "update_datetime": "2025/05/22-19:51:24",
+        "num_usage": 0,
+        "state": true,
+        "color_code": "#f7dbd7",
+        "is_already_have": false,
+        "is_owner": false,
+        "tags": [
+            "음악",
+            "게임"
+        ]
+    },
+    {
+        "_id": {
+            "$oid": "682f0250b5a246728a39cedb"
+        },
+        "sid": "doV3qO",
+        "sname": "일정 테스트 7",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "222",
+        "bname": "임시주제2호",
+        "start_date": "2025/5/22",
+        "start_time": "2:0",
+        "end_date": "2025/5/22",
+        "end_time": "5:0",
+        "location": [
+            "치지직"
+        ],
+        "code": "ZRFUBI",
+        "update_datetime": "2025/05/22-19:54:08",
+        "num_usage": 0,
+        "state": true,
+        "color_code": "#d0d0db",
+        "is_already_have": false,
+        "is_owner": false,
+        "tags": [
+            "스포츠",
+            "게임"
+        ]
+    },
+    {
+        "_id": {
+            "$oid": "682f0406d8698b3cb758d70d"
+        },
+        "sid": "z1GRdk",
+        "sname": "테스트12131",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "111",
+        "bname": "임시주제1호",
+        "start_date": "2025/5/22",
+        "start_time": "1:0",
+        "end_date": "2025/5/22",
+        "end_time": "4:0",
+        "location": [
+            "치지직"
+        ],
+        "code": "T38FV5",
+        "update_datetime": "2025/05/22-20:01:26",
+        "num_usage": 0,
+        "state": true,
+        "color_code": "#f3cbf0",
+        "is_already_have": false,
+        "is_owner": false,
+        "tags": []
+    },
+    {
+        "_id": {
+            "$oid": "683021abd86c5136eac7416b"
+        },
+        "sid": "dFnmIb",
+        "sname": "테스트용 일정 3",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "222",
+        "bname": "임시주제2호",
+        "start_date": "2025/5/23",
+        "start_time": "3:0",
+        "end_date": "2025/5/23",
+        "end_time": "4:30",
+        "location": [
+            "SOOP"
+        ],
+        "code": "02QF1B",
+        "update_datetime": "2025/05/23-16:20:11",
+        "num_usage": 0,
+        "state": true,
+        "color_code": "#f9c0d8",
+        "is_already_have": false,
+        "is_owner": false,
+        "tags": []
+    },
+    {
+        "_id": {
+            "$oid": "683025bdec4423addc2ea5bc"
+        },
+        "sid": "RDEOmp",
+        "sname": "테스트 일정 0001",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "111",
+        "bname": "임시주제1호",
+        "start_date": "2025/5/24",
+        "start_time": "1:0",
+        "end_date": "2025/5/24",
+        "end_time": "4:0",
+        "location": [
+            "치지직"
+        ],
+        "code": "A70CZY",
+        "update_datetime": "2025/05/23-16:37:33",
+        "num_usage": 0,
+        "state": true,
+        "color_code": "#c5d8f3",
+        "is_already_have": false,
+        "is_owner": false,
+        "tags": [
+            "기타",
+            "시참",
+            "스포츠"
+        ]
+    },
+    {
+        "_id": {
+            "$oid": "683028a6140ca1feee48b0c7"
+        },
+        "sid": "IbXJbZ",
+        "sname": "테스트 일정 0002",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "222",
+        "bname": "임시주제2호",
+        "start_date": "2025/5/24",
+        "start_time": "1:0",
+        "end_date": "2025/5/24",
+        "end_time": "2:10",
+        "location": [],
+        "code": "CU30YW",
+        "update_datetime": "2025/05/23-16:49:57",
+        "num_usage": 0,
+        "state": true,
+        "color_code": "#f7bfc2",
+        "is_already_have": false,
+        "is_owner": false,
+        "tags": []
+    },
+    {
+        "_id": {
+            "$oid": "683029470d0c51459ea26001"
+        },
+        "sid": "fdom3S",
+        "sname": "테스트 일정 0003",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "222",
+        "bname": "임시주제2호",
+        "start_date": "2025/5/24",
+        "start_time": "2:30",
+        "end_date": "2025/5/24",
+        "end_time": "3:0",
+        "location": [
+            "SOOP"
+        ],
+        "code": "AC2I44",
+        "update_datetime": "2025/05/23-16:52:39",
+        "num_usage": 0,
+        "state": true,
+        "color_code": "#d2e1d7",
+        "is_already_have": false,
+        "is_owner": false,
+        "tags": [
+            "게임",
+            "그림",
+            "스포츠"
+        ]
+    },
+    {
+        "_id": {
+            "$oid": "68303199e70244c704cc35ca"
+        },
+        "sid": "OJZOTv",
+        "sname": "테스트 일정 4",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "222",
+        "bname": "임시주제2호",
+        "start_date": "2025/5/24",
+        "start_time": "3:12",
+        "end_date": "2025/5/24",
+        "end_time": "4:0",
+        "location": [
+            "SOOP"
+        ],
+        "code": "1KPUOE",
+        "update_datetime": "2025/05/23-17:28:09",
+        "num_usage": 0,
+        "state": true,
+        "color_code": "#f4f1ca",
+        "is_already_have": false,
+        "is_owner": false,
+        "tags": [
+            "그림"
+        ]
+    },
+    {
+        "_id": {
+            "$oid": "683176a95a8ab168bedad219"
+        },
+        "sid": "111120",
+        "sname": "스케줄 이름 1",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "111",
+        "bname": "임시주제1호",
+        "start_date": "2025/05/26",
+        "start_time": "12:00",
+        "end_date": "2025/05/26",
+        "end_time": "15:00",
+        "location": [
+            "치지직",
+            "SOOP"
+        ],
+        "code": "123456",
+        "num_usage": 0,
+        "state": false,
+        "color_code": "#f5c4e1",
+        "update_datetime": "2025/05/22-08:30:00",
+        "tags": [
+            "기타"
+        ]
+    },
+    {
+        "_id": {
+            "$oid": "683176a95a8ab168bedad21a"
+        },
+        "sid": "2222401",
+        "sname": "스케줄 이름 2",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "222",
+        "bname": "임시주제2호",
+        "start_date": "2025/05/26",
+        "start_time": "09:00",
+        "end_date": "2025/05/26",
+        "end_time": "16:00",
+        "location": [
+            "치지직",
+            "SOOP"
+        ],
+        "code": "123456",
+        "num_usage": 0,
+        "state": false,
+        "color_code": "#f5c4e1",
+        "update_datetime": "2025/05/23-08:30:00",
+        "tags": [
+            "저챗",
+            "그림"
+        ]
+    },
+    {
+        "_id": {
+            "$oid": "683176a95a8ab168bedad21b"
+        },
+        "sid": "3333450",
+        "sname": "스케줄 이름 3",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "111",
+        "bname": "임시주제1호",
+        "start_date": "2025/05/27",
+        "start_time": "14:00",
+        "end_date": "2025/05/27",
+        "end_time": "21:00",
+        "location": [
+            "치지직",
+            "SOOP"
+        ],
+        "code": "123456",
+        "num_usage": 0,
+        "state": false,
+        "color_code": "#f5c4e1",
+        "update_datetime": "2025/05/24-08:30:00",
+        "tags": [
+            "게임"
+        ]
+    },
+    {
+        "_id": {
+            "$oid": "683176a95a8ab168bedad21c"
+        },
+        "sid": "44441240",
+        "sname": "스케줄 이름 1",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "222",
+        "bname": "임시주제2호",
+        "start_date": "2025/05/27",
+        "start_time": "08:00",
+        "end_date": "2025/05/27",
+        "end_time": "12:00",
+        "location": [
+            "치지직",
+            "SOOP"
+        ],
+        "code": "123456",
+        "num_usage": 0,
+        "state": false,
+        "color_code": "#f5c4e1",
+        "update_datetime": "2025/05/22-08:30:00",
+        "tags": [
+            "스포츠",
+            "기타",
+            "그림"
+        ]
+    },
+    {
+        "_id": {
+            "$oid": "683176a95a8ab168bedad21d"
+        },
+        "sid": "5555190",
+        "sname": "스케줄 이름 2",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "333",
+        "bname": "임시주제3호",
+        "start_date": "2025/05/27",
+        "start_time": "13:00",
+        "end_date": "2025/05/27",
+        "end_time": "18:00",
+        "location": [
+            "치지직",
+            "SOOP"
+        ],
+        "code": "123456",
+        "num_usage": 0,
+        "state": false,
+        "color_code": "#f5c4e1",
+        "update_datetime": "2025/05/22-08:30:00",
+        "tags": []
+    },
+    {
+        "_id": {
+            "$oid": "683176a95a8ab168bedad21e"
+        },
+        "sid": "6666194",
+        "sname": "스케줄 이름 3",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "444",
+        "bname": "임시주제4호",
+        "start_date": "2025/05/27",
+        "start_time": "19:00",
+        "end_date": "2025/05/27",
+        "end_time": "23:00",
+        "location": [
+            "치지직",
+            "SOOP"
+        ],
+        "code": "123456",
+        "num_usage": 0,
+        "state": false,
+        "color_code": "#f5c4e1",
+        "update_datetime": "2025/05/22-08:30:00",
+        "tags": [
+            "스포츠"
+        ]
+    },
+    {
+        "_id": {
+            "$oid": "683176a95a8ab168bedad21f"
+        },
+        "sid": "77771491",
+        "sname": "스케줄 이름 4",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "111",
+        "bname": "임시주제1호",
+        "start_date": "2025/05/27",
+        "start_time": "08:00",
+        "end_date": "2025/05/27",
+        "end_time": "12:00",
+        "location": [
+            "치지직",
+            "SOOP"
+        ],
+        "code": "123456",
+        "num_usage": 0,
+        "state": false,
+        "color_code": "#f5c4e1",
+        "update_datetime": "2025/05/23-08:30:00",
+        "tags": [
+            "시참",
+            "기타"
+        ]
+    },
+    {
+        "_id": {
+            "$oid": "683176a95a8ab168bedad220"
+        },
+        "sid": "8888149",
+        "sname": "스케줄 이름 5",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "333",
+        "bname": "임시주제3호",
+        "start_date": "2025/05/27",
+        "start_time": "13:00",
+        "end_date": "2025/05/27",
+        "end_time": "18:00",
+        "location": [
+            "치지직",
+            "SOOP"
+        ],
+        "code": "123456",
+        "num_usage": 0,
+        "state": false,
+        "color_code": "#f5c4e1",
+        "update_datetime": "2025/05/23-08:30:00",
+        "tags": [
+            "시참",
+            "게임",
+            "스포츠"
+        ]
+    },
+    {
+        "_id": {
+            "$oid": "683176a95a8ab168bedad221"
+        },
+        "sid": "9999590",
+        "sname": "스케줄 이름 6",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "444",
+        "bname": "임시주제4호",
+        "start_date": "2025/05/28",
+        "start_time": "00:00",
+        "end_date": "2025/05/28",
+        "end_time": "04:00",
+        "location": [
+            "치지직",
+            "SOOP"
+        ],
+        "code": "123456",
+        "num_usage": 0,
+        "state": false,
+        "color_code": "#f5c4e1",
+        "update_datetime": "2025/05/23-08:30:00",
+        "tags": [
+            "게임",
+            "기타",
+            "저챗"
+        ]
+    },
+    {
+        "_id": {
+            "$oid": "683176a95a8ab168bedad222"
+        },
+        "sid": "001294",
+        "sname": "스케줄 이름 8",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "222",
+        "bname": "임시주제2호",
+        "start_date": "2025/05/28",
+        "start_time": "12:00",
+        "end_date": "2025/05/28",
+        "end_time": "16:00",
+        "location": [
+            "치지직",
+            "SOOP"
+        ],
+        "code": "123456",
+        "num_usage": 0,
+        "state": false,
+        "color_code": "#f5c4e1",
+        "update_datetime": "2025/05/24-08:30:00",
+        "tags": []
+    },
+    {
+        "_id": {
+            "$oid": "683176a95a8ab168bedad223"
+        },
+        "sid": "0013949",
+        "sname": "스케줄 이름 9",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "333",
+        "bname": "임시주제3호",
+        "start_date": "2025/05/28",
+        "start_time": "17:00",
+        "end_date": "2025/05/28",
+        "end_time": "20:00",
+        "location": [
+            "치지직",
+            "SOOP"
+        ],
+        "code": "123456",
+        "num_usage": 0,
+        "state": false,
+        "color_code": "#f5c4e1",
+        "update_datetime": "2025/05/24-08:30:00",
+        "tags": [
+            "그림",
+            "음악",
+            "스포츠"
+        ]
+    },
+    {
+        "_id": {
+            "$oid": "683176a95a8ab168bedad224"
+        },
+        "sid": "00184500",
+        "sname": "스케줄 이름 10",
+        "uid": "0cb7-f17f-46ef",
+        "uname": "운영자",
+        "bid": "444",
+        "bname": "임시주제4호",
+        "start_date": "2025/05/28",
+        "start_time": "16:00",
+        "end_date": "2025/05/28",
+        "end_time": "22:00",
+        "location": [
+            "치지직",
+            "SOOP"
+        ],
+        "code": "123456",
+        "num_usage": 0,
+        "state": false,
+        "color_code": "#f5c4e1",
+        "update_datetime": "2025/05/24-08:30:00",
+        "tags": [
+            "기타",
+            "음악"
+        ]
+    }
+]

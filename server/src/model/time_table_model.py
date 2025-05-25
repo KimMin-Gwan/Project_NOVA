@@ -261,6 +261,7 @@ class TimeTableModel(BaseModel):
         self._key = -1
         
         self.__num_bias = 0
+        self.__num_schedule = 0
         self.__target_month= f'00년 0월'
         self.__target_week= f'0주차'
         
@@ -378,6 +379,29 @@ class TimeTableModel(BaseModel):
     # bias 세팅
     def set_num_bias(self):
         self.__num_bias= len(self._user.bids)
+        return
+        
+    def set_num_schedule(self, schedule_search_engine:SSE):
+        
+        today = datetime.today()
+        # 이번 주 월요일 계산
+        monday = today - timedelta(days=today.weekday())
+         # 이번 주 일요일 계산
+        sunday = monday + timedelta(days=6)
+        
+        sid_list = []
+        
+         # 월요일부터 일요일까지 날짜 생성
+        current_day = monday
+        while current_day <= sunday:
+            sids = schedule_search_engine.try_get_schedules_in_specific_date(sids=["all"], specific_date=current_day, return_id=True)
+            sid_list.extend(sids)
+            current_day += timedelta(days=1)  # 하루씩 증가
+        
+        for sid in sid_list:
+            if sid in self._tuser.sids:
+                self.__num_schedule += 1
+        
         return
     
     def __calc_date(self, today:datetime):
@@ -537,6 +561,7 @@ class TimeTableModel(BaseModel):
         body = {
             #"tuser" : self._tuser,
             "num_bias" : self.__num_bias,
+            "num_schedules" : self.__num_schedule,
             "target_month" : self.__target_month,
             "target_week" : self.__target_week
             }
@@ -940,9 +965,9 @@ class MultiScheduleModel(TimeTableModel):
         return
 
     # 탐색용 스케줄 불러오기
-    def get_explore_schedule_with_category(self, schedule_search_engine:SSE, time_section:int,
+    def get_explore_schedule_with_category(self, schedule_search_engine:SSE, time_section:int, category:str,
                                            style:str, gender:str, num_schedules:int, last_index:int=-1):
-        searched_list = schedule_search_engine.try_get_explore_schedule_list(time_section=time_section, style=style, gender=gender)
+        searched_list = schedule_search_engine.try_get_explore_schedule_list(time_section=time_section, style=style, gender=gender, category=category)
         searched_list, self._key = self.paging_id_list(id_list=searched_list, last_index=last_index, page_size=num_schedules)
         self._make_send_data_with_ids(id_list=searched_list, search_type="schedule")
 
@@ -1190,7 +1215,8 @@ class AddScheduleModel(TimeTableModel):
             start_time=data_payload.start_time,
             end_date=data_payload.end_date,
             end_time=data_payload.end_time,
-            state=data_payload.state
+            state=data_payload.state,
+            tags=data_payload.tags
         )
 
         bias_data = self._database.get_data_with_id(target="bid", id=schedule.bid)

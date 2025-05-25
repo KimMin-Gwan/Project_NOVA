@@ -82,6 +82,7 @@ const ScheduleDashboard = () => {
   let [targetMonth, setTargetMonth] = useState("00년 00월");
   let [targetWeek, setTargetWeek] = useState("0주차");
   let [numBias, setNumBias] = useState(0);
+  let [numSchedule, setNumSchedule] = useState(0);
 
   let [biasData, setBiasData] = useState([]);
 
@@ -124,7 +125,6 @@ const ScheduleDashboard = () => {
     setScheduleData((prev) => [newSchedule, ...prev])
     setFormatDate((prev) => [getFormattedDate(yieldDate), ...prev])
 
-        // 슬라이드 업데이트 후 현재 인덱스 유지
     setTimeout(() => {
         if (swiperRef2.current) {
             // 1. 현재 활성화된 슬라이드 위치 유지
@@ -136,13 +136,25 @@ const ScheduleDashboard = () => {
             }, 100); // 상태 변경 반영 후 동작하도록 약간의 지연 추가
         }
     }, 0);
-
   }
 
 
   async function onChangeNextAsync(){
+    const activeIndex = swiperRef2.current?.activeIndex
+
     await onChangeIndexNext()
-    swiperRef2.current?.slideNext()
+    setTimeout(() => {
+        if (swiperRef2.current) {
+            // 1. 현재 활성화된 슬라이드 위치 유지
+            swiperRef2.current.slideTo(activeIndex + 1, 0); 
+            
+            // 2. 새 슬라이드로 이동
+            setTimeout(() => {
+                swiperRef2.current?.slideNext()
+                //swiperRef2.current.slideTo(0, 300); // 새 슬라이드로 300ms 동안 이동
+            }, 100); // 상태 변경 반영 후 동작하도록 약간의 지연 추가
+        }
+    }, 0);
   }
 
 
@@ -172,6 +184,7 @@ const ScheduleDashboard = () => {
       setTargetMonth(res.data.body.target_month);
       setTargetWeek(res.data.body.target_week);
       setNumBias(res.data.body.num_bias);
+      setNumSchedule(res.data.body.num_schedules);
     });
   }
 
@@ -284,8 +297,8 @@ const ScheduleDashboard = () => {
             </div>
             <div className="my-dashboard">
               <div className="left-group">
-                <span>컨텐츠</span>
-                <span className="num-bias">{numBias}</span>
+                <span>이번주 컨텐츠</span>
+                <span className="num-bias">{numSchedule}</span>
                 <span>개</span>
               </div>
               <div className="right-group">
@@ -418,7 +431,7 @@ const ScheduleDashboard = () => {
                     return (
                       <SwiperSlide key={index}>
                         <TimeLayerBox swiperRef={swiperRef2} scheduleData={schedule} formattedDate={formatDate[index]} 
-                        onChangeIndexNext={onChangeIndexNext} onChangeIndexPrev={onChangeIndexPrev}
+                        onChangeIndexNext={onChangeNextAsync} onChangeIndexPrev={onChangeIndexPrev}
                         scheduleDayList={scheduleData} onClickSchedule={toggleMoreOption}
                         />
                       </SwiperSlide>

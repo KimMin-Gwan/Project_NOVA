@@ -25,7 +25,7 @@ class TImeTableController:
 
     # 타임 테이블 페이지의 최 상단 대시보드데이터
     # 파라미터 없음, 비로그인 상태에서는 0으로 리턴함 
-    def get_dashboard_data(self, database:Local_Database, request:RequestManager) -> BaseModel: 
+    def get_dashboard_data(self, database:Local_Database, request:RequestManager, schedule_search_engine:SSE) -> BaseModel: 
         model = TimeTableModel(database=database)
         
         if request.jwt_payload!= "":
@@ -35,7 +35,8 @@ class TImeTableController:
                 return model
         
         # 주제 수 찍어주면됨
-        model.set_num_bias()
+        #model.set_num_bias()
+        model.set_num_schedule(schedule_search_engine=schedule_search_engine)
         
         # 맨 위에 출력되는 문자열 이거임
         model.set_target_date(date= request.data_payload.date)
@@ -265,7 +266,8 @@ class TImeTableController:
                                                  style=request.data_payload.style,
                                                  gender=request.data_payload.gender,
                                                  num_schedules=num_schedules,
-                                                 last_index=request.data_payload.key
+                                                 last_index=request.data_payload.key,
+                                                 category=request.data_payload.category
                                                  )
         # data_payload 참고해서 탐색하는 스케줄 데이터를 보내주면됨
         # 1. 카테고리에 따라 데이터 추출
