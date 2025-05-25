@@ -384,14 +384,15 @@ class TimeTableModel(BaseModel):
     def set_num_schedule(self, schedule_search_engine:SSE):
         
         today = datetime.today()
-        
-        sunday = today + timedelta(days=(6 - today.weekday()))
-        
-        # 오늘부터 일요일까지 날짜 생성
-        current_day = today
+        # 이번 주 월요일 계산
+        monday = today - timedelta(days=today.weekday())
+         # 이번 주 일요일 계산
+        sunday = monday + timedelta(days=6)
         
         sid_list = []
         
+         # 월요일부터 일요일까지 날짜 생성
+        current_day = monday
         while current_day <= sunday:
             sids = schedule_search_engine.try_get_schedules_in_specific_date(sids=["all"], specific_date=current_day, return_id=True)
             sid_list.extend(sids)
