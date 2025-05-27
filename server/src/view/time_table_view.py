@@ -243,8 +243,6 @@ class TimeTableView(Master_View):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = ExploreScheduleRequset(request=raw_request)
             
-            data_payload()
-            
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
             time_table_controller =TImeTableController()
