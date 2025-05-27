@@ -56,10 +56,10 @@
     left: 118px;
   }
   .post-list[data-active-index="2"]::after {
-    left: 194px;
+    left: 180px;
   }
   .post-list[data-active-index="3"]::after {
-    left: 262px;
+    left: 259px;
   }
 }
 
