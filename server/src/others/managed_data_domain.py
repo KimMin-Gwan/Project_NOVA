@@ -1776,6 +1776,9 @@ class ManagedScheduleTable(ManagedTable):
     # 이거 기능을 분리하는게 나을지도 모르겠는데 생각 해볼려고 함
     def search_explore_schedule(self, time_section:int, style:str, category:str, gender:str, return_id:bool):
         tags = []
+        print(category)
+        print(style)
+        
         tags += style
         tags += category
         
