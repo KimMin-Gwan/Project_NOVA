@@ -1861,6 +1861,8 @@ class ManagedScheduleTable(ManagedTable):
             columns =['sname', 'bname', 'uname', 'code']
         else:
             columns = search_columns
+            
+        print(f"search_columns : {columns}")
         searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_df, columns=columns, key=key)
 
         if return_id:
