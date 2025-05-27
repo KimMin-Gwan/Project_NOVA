@@ -55,6 +55,10 @@
   margin-bottom: 5px;
   padding-block: 20px 5px;
   background-color: #fff;
+  overflow-x: auto; /* 가로 스크롤 가능 */
+  white-space: nowrap; /* 한 줄로 유지 */
+  scrollbar-width: none; /* Firefox에서 스크롤바 숨김 */
+  -ms-overflow-style: none; /* Internet Explorer/Edge에서 스크롤바 숨김 */
 
   li,
   ul {
@@ -122,6 +126,10 @@
   .post-list[data-active-index="5"]::after {
     left: 381px;
   }
+}
+
+.type-list::-webkit-scrollbar {
+  display: none; /* Chrome, Safari에서 스크롤바 숨김 */
 }
 
 /* 모달 창 */
@@ -252,12 +260,4 @@
   }
 }
 
-@media (max-width: 530px) {
-  /* 이게 display:flex를 쓰고 있어서 display:none이 안먹혀  */
-  .type-list {
-    display: none;
-  }
-  .swiper-type {
-    display: block;
-  }
-}
+

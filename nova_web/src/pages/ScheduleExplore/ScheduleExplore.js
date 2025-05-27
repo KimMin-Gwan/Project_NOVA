@@ -88,27 +88,7 @@ export default function ScheduleExplore() {
         </ul>
       </section>
       {/* 화면이 530px 이하일 때 슬라이더로 탭 대체 */}
-      <section className="swiper-type">
-        <Swiper
-          spaceBetween={10}
-          slidesPerView={4} // 여러 개의 탭을 동시에 보여주기
-          onSlideChange={handleTabChange}
-          ref={swiperRef}
-          modules={[Scrollbar]}
-          scrollbar={{ draggable: true }}
-        >
-          {scheduleKind.map((item, index) => (
-            <SwiperSlide key={index}>
-              <button
-                className={activeIndex === index ? "active" : ""}
-                onClick={() => handleClick(index)}
-              >
-                {item}
-              </button>
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </section>
+
 
       <section className="button-container">
         <button onClick={() => handleModal("time")}>
@@ -334,13 +314,26 @@ function ScheduleComponentList({category, toggleEditScheduleModal, toggleAddSche
 
 // Tabs 컴포넌트가 존재, 그거랑 합치기 필요
 function TabItem({ tabs, activeIndex, handleClick }) {
+  const tabRefs = React.useRef([]);
+
+  const handleTabClick = (index, tab) => {
+    handleClick(index, tab);
+
+    // 해당 탭으로 스크롤 이동
+    tabRefs.current[index]?.scrollIntoView({
+      behavior: "smooth",
+      inline: "center",
+    });
+  };
+
   return (
     <>
       {tabs.map((tab, index) => (
         <li
           key={index}
           className={`post ${activeIndex === index ? "active" : ""}`}
-          onClick={() => handleClick(index, tab)}
+          onClick={() => handleTabClick(index, tab)}
+          ref={(el) => (tabRefs.current[index] = el)}
         >
           <button>{tab}</button>
         </li>
