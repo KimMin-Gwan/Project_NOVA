@@ -1777,7 +1777,7 @@ class ManagedScheduleTable(ManagedTable):
     def search_explore_schedule(self, time_section:int, style:str, category:str, gender:str, return_id:bool):
         tags = []
         
-        tags.append(style)
+        #tags.append(style)
         tags.append(category)
         
         print(tags)
