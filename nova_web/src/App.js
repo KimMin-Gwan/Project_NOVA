@@ -64,7 +64,7 @@ function App() {
   ) {
     document.body.style.zoom = 100 + "%";
   } else {
-    document.body.style.zoom = 120 + "%";
+    document.body.style.zoom = 100 + "%";
   }
 
   return (
