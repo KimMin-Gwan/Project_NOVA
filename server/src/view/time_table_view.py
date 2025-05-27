@@ -168,8 +168,6 @@ class TimeTableView(Master_View):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = SearchRequest(keyword=keyword, search_columns=search_columns, key=key, search_type=type, filter_option=filter_option)
             
-            data_payload()
-            
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
             time_table_controller =TImeTableController()
@@ -244,6 +242,9 @@ class TimeTableView(Master_View):
         def try_explore_schedule_by_filters(request:Request, raw_request:dict):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = ExploreScheduleRequset(request=raw_request)
+            
+            data_payload()
+            
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
             time_table_controller =TImeTableController()
@@ -686,6 +687,12 @@ class ExploreScheduleRequset(RequestHeader):
         self.style:str=body.get("style", "all")  # all, vtuber, cam, nocam -> bias 데이터 (tags)
         self.gender:str=body.get("gender", "all") # male, female, etc -> bias 데이터 (tags)
 
+    def __call__(self):
+        print("category:", self.category)
+        print("key:", self.key)
+        print("time_section:", self.time_section)
+        print("style:", self.style)
+        return
         
         
 class AddNewScheduleRequest(RequestHeader):
