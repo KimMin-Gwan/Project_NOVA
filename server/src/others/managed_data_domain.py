@@ -1779,6 +1779,8 @@ class ManagedScheduleTable(ManagedTable):
         tags.extend(style)
         tags.extend(category)
         
+        print(tags)
+        
         searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_df, time_section=time_section,
                                                                bias_gender=gender, tags=tags)
         searched_df = self._filter_data_with_date_option(df=searched_df, date_option="weekly", date_columns=["start_date_time"])
