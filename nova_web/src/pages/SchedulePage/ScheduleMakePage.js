@@ -155,7 +155,6 @@ const ScheduleMakePage = () => {
       bname : "선택된 주제",
     }
 
-
     const [addMode, setAddMode] = useState('single');
     const [tempScheduleData, setTempScheduleData] = useState(bundleFormat)
     const [sendScheduleData, setSendScheduleData] = useState(bundleFormat)
@@ -302,7 +301,13 @@ const ScheduleMakePage = () => {
   function fetchBiasData() {
     mainApi.get("time_table_server/get_following_bias_printed_form").then((res) => {
       setBiasList(res.data.body.biases);
-    });
+    }).catch((error) => {
+        if (error.response.status === 401){
+            alert("로그인이 필요합니다.");
+            navigate("/novalogin");
+        }
+    })
+    ;
   }
 
 
