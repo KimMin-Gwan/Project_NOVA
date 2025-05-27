@@ -50,27 +50,21 @@ const boardList = [
   },
   {
     id: 4,
-    title: "일정 대시보드",
+    title: "컨텐츠 일정 대시보드",
     src: calendar,
     end_point: "/schedule",
   },
   {
     id: 5,
-    title: "일정 탐색",
+    title: "컨텐츠 일정 탐색",
     src: calendar_plus,
     end_point: "/explore/schedule",
   },
   {
-    id: 6,
-    title: "일정 관리",
-    src: calendar_check,
-    end_point: "/schedule/my_schedule",
-  },
-  {
     id: 7,
-    title: "일정 등록",
-    src: all_post,
-    end_point: "/feed_list?type=all",
+    title: "컨텐츠 일정 등록",
+    src: calendar_check,
+    end_point: "/schedule/make_new"
   },
   {
     id: 8,
@@ -281,7 +275,7 @@ function MoreSee({ onModeChange }) {
 
           <br></br>
           {/* 다른 기능 목록 */}
-          <div className={style["list-bar"]}>일정</div>
+          <div className={style["list-bar"]}>컨텐츠 일정</div>
           <hr></hr>
           <ul className={style.listContainer}>
             {secondBoardList.map((board, i) => {
