@@ -43,7 +43,6 @@ export default function SearchResultPage() {
 
   const [addScheduleModal, setAddScheduleModal] = useState(false);
   const [addScheduleBundleModal, setAddScheduleBundleModal] = useState(false);
-  const [makeScheduleModal, setMakeScheduleModal] = useState(false);
   const [editScheduleModal, setEditScheduleModal] = useState(false);
 
   // 페이지네이션 키
@@ -175,6 +174,7 @@ export default function SearchResultPage() {
   };
 
   function handleSearch(history) {
+    console.log("검색어:", history, searchWord);
     if (history) {
       navigate(`/search_result?keyword=${history}`);
     } else if (searchWord) {
@@ -194,17 +194,12 @@ export default function SearchResultPage() {
     else if (data === "일정"){
       setType("schedule");
     }
-    else if (data === "일정 번들"){
-      setType("schedule_bundle");
-    }
+    //else if (data === "일정 번들"){
+      //setType("schedule_bundle");
+    //}
     else{
       setType("post");
     }
-  };
-
-  // 일정 추가하기 버튼 누르면 동작하는애
-  const toggleMakeScheduleModal = (target) => {
-    setMakeScheduleModal((makeScheduleModal) => !makeScheduleModal);
   };
 
 
@@ -249,7 +244,7 @@ export default function SearchResultPage() {
       <Tabs activeIndex={activeIndex} handleClick={handleClick} onClickType={onClickType} />
       {type === "comment" && <Comments comments={comments} isLoading={isLoading} />}
       {type === "post" && <FeedSection feedData={feedData} setFeedData={setFeedData} isLoading={isLoading} /> }
-      {type === "schedule" && <Schedules scheduleData={feedData}
+      {type === "schedule" && <Schedules scheduleData={scheduleData}
        type={type} toggleAddScheduleBundleModal={toggleAddScheduleBundleModal} toggleEditScheduleModal={toggleEditScheduleModal} />}
 
       <div ref={targetRef} style={{ height: "1px" }}></div>
@@ -267,11 +262,6 @@ export default function SearchResultPage() {
         closeSchedule={toggleAddScheduleModal}
         isOpen={addScheduleModal}
         target={targetSchedule}
-      />
-
-      <MakeSingleSchedule
-        closeSchedule={toggleMakeScheduleModal}
-        isOpen={makeScheduleModal}
       />
 
       <EditSingleSchedule
@@ -294,10 +284,10 @@ function Schedules ({scheduleData, type, toggleAddScheduleBundleModal, toggleAdd
   };
 
   return(
-        <ul className="scheduleList">
+        <ul className="scheduleList" style={{ display: "flex", flexDirection: "column", gap: "4px", paddingLeft:"0px"}}>
         {type=== "schedule_bundle"
           ? scheduleData.map((item) => (
-              <li key={item.sbid}>
+              <div key={item.sbid}>
                 <ScheduleBundle
                   item={item}
                   toggleClick={() => handleToggleMore(item.sbid)} // id 전달
@@ -309,10 +299,10 @@ function Schedules ({scheduleData, type, toggleAddScheduleBundleModal, toggleAdd
                     scheduleClick={toggleAddScheduleBundleModal}
                   />
                 )}
-              </li>
+              </div>
             ))
           : scheduleData.map((item) => (
-            <li key={item.sid}>
+            <div key={item.sid}>
               <ScheduleCard
                 {...item}
                 toggleClick={() => handleToggleMore(item.sid)} // id 전달
@@ -340,9 +330,11 @@ function Schedules ({scheduleData, type, toggleAddScheduleBundleModal, toggleAdd
                   />
                 )
               )}
-            </li>
+            </div>
  
             ))}
+          <div style={{height:"48px"}}></div>
+
       </ul>
   );
 }
