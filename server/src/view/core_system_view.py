@@ -428,7 +428,7 @@ class Core_Service_View(Master_View):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = KeywordSearchRequest(key=key, keyword=keyword, fclass=fclass, search_columns=search_columns)
             
-            print(data_payload())
+            pprint(data_payload())
             
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
@@ -447,7 +447,7 @@ class Core_Service_View(Master_View):
         def search_with_keyword(request:Request, key:Optional[int]=-1, keyword:Optional[str]=""):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = KeywordSearchRequest(key=key, keyword=keyword)
-            print(data_payload())
+            pprint(data_payload())
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
             feed_controller = Feed_Controller(feed_manager=self.__feed_manager)
