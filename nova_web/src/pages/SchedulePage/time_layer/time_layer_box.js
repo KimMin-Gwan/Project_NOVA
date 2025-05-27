@@ -70,7 +70,7 @@ export default function TimeLayerBox({
                 </div>
                  */}
                 <div className={style["slide-arrow-box"]}>
-                    <img src={double_arrow_round}
+                    <img src={double_arrow_round} style={{cursor:"pointer"}}
                     onClick={()=>
                         onClickPrevArrow()
                     }
@@ -83,7 +83,7 @@ export default function TimeLayerBox({
                     </span>
                 </div>
                 <div className={style["slide-arrow-box"]}>
-                    <img src={double_arrow_round} style={{rotate:"180deg"}}
+                    <img src={double_arrow_round} style={{rotate:"180deg", cursor:"pointer"}}
                     onClick={()=>
                         onClickNextArrow()}
                     />
