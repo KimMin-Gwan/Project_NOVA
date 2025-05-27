@@ -442,6 +442,8 @@ class ManagedTable:
     def _search_data_with_key_str_n_columns(self, df:pd.DataFrame, columns:list=None, **conditions):
         searched_df = df.copy()
 
+        print(searched_df.head())
+        
         def cell_match_exact(cell, search_value):
             try:
                 search_date = pd.to_datetime(search_value)
