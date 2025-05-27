@@ -11,7 +11,8 @@ import random
 import string
 
 # 소켓을 관리하기 위해 소켓 사용자를 하나의 객체로 두고 체크할것
-
+YELLOW = "\033[33m"
+RESET = "\033[0m"
 # 단톡방 같은 개념임
 # 사람이 없으면 사라지게 되어있음
 class FeedObserveUnit:
@@ -22,7 +23,7 @@ class FeedObserveUnit:
         self.__process_que = Queue()
         self.__delete_flag = False
         self._task = asyncio.create_task(self.unit_process())
-        #print(f'INFO<-[      NOVA Feed Observe Unit | {self.__fid}')
+        #print(f'{YELLOW}INFO{RESET}<-[      NOVA Feed Observe Unit | {self.__fid}')
         
     def get_delete_flag(self):
         return self.__delete_flag
@@ -116,7 +117,7 @@ class FeedObserver:
         else:
             self.__is_logged_in = True
         
-        #print(f'INFO<-[      NOVA Feed Observer | {self.__user.uid}')
+        #print(f'{YELLOW}INFO{RESET}<-[      NOVA Feed Observer | {self.__user.uid}')
         
             
     
@@ -176,7 +177,7 @@ class FeedObserver:
             return False
 
         finally:
-            #print(f'INFO<-[      NOVA Feed Observer | {self.__user.uid} disconnected')
+            #print(f'{YELLOW}INFO{RESET}<-[      NOVA Feed Observer | {self.__user.uid} disconnected')
             return False
         
     # 메세지 받기 (리시빙~)
@@ -254,7 +255,7 @@ class ConnectionManager:
         #self.__active_connection: list[LeagueObserver] = []
         self.__active_connection: list[FeedObserver] = []
         self.__active_observe_unit : list[FeedObserveUnit] = []
-        print(f'INFO<-[      NOVA Connection Manager NOW READY.')
+        print(f'{YELLOW}INFO{RESET}<-[      NOVA Connection Manager NOW READY.')
         self.__task = asyncio.create_task(self.connection_manager_process())
         
     def generate_random_string(self, length=8):
@@ -353,7 +354,7 @@ class ConnectionManager:
         return
     
     async def connection_manager_process(self):
-        print(f'INFO<-[      NOVA Connection Manager clean up process started.')
+        print(f'{YELLOW}INFO{RESET}<-[      NOVA Connection Manager clean up process started.')
         
         while True:
             await asyncio.sleep(1)
@@ -364,7 +365,7 @@ class ConnectionManager:
             for single_unit in self.__active_observe_unit:
                 if single_unit.get_delete_flag():
                     self.__active_observe_unit.remove(single_unit)
-                    print(f'INFO<-[      NOVA Feed Observe Unit | {single_unit.get_fid()} delete')
+                    print(f'{YELLOW}INFO{RESET}<-[      NOVA Feed Observe Unit | {single_unit.get_fid()} delete')
                 
         return True
     

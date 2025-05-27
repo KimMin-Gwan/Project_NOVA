@@ -15,7 +15,8 @@ from others.data_domain import Project
 from bintrees import AVLTree
 from requests import get
 from datetime import date, datetime
-
+YELLOW = "\033[33m"
+RESET = "\033[0m"
 class FundingProjectManager:
     def __init__(self, database):
         #self.__database:Local_Database = database
@@ -323,8 +324,8 @@ class ProjectSearchEngine:
                 index = i
         # 유효 기간이 끝난 데이터가 있는 제일 끝 데이터를 쓸것
         self.__endpoint = index 
-        print(f'INFO<-[      {num_project} NOVA PROJECT IN SEARCH ENGINE NOW READY.')
-        print(f"INFO<-[      {self.__endpoint} IS THE LAST PROJECT THAT WORKING")
+        print(f'{YELLOW}INFO{RESET}<-[      {num_project} NOVA PROJECT IN SEARCH ENGINE NOW READY.')
+        print(f"{YELLOW}INFO{RESET}<-[      {self.__endpoint} IS THE LAST PROJECT THAT WORKING")
         return
 
     # 새로운 관리용 프로젝트 만들기

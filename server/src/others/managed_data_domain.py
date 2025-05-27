@@ -6,7 +6,8 @@ import random
 from copy import copy
 
 import logging
-
+YELLOW = "\033[33m"
+RESET = "\033[0m"
 from pprint import pprint
 #--------------------------------------------------------------------------------------------------
 
@@ -787,8 +788,8 @@ class ManagedTable:
 #         self.__feed_df = self.__dataframing_feed_list()
 #
 #         num_feed = str(len(self.__feed_table))
-#         print(f'INFO<-[      {num_feed} NOVA FEED IN SEARCH ENGINE NOW READY.')
-#         print(f'INFO<-[      {num_feed} NOVA FEED DATAFRAME IN SEARCH ENGINE NOW READY.')
+#         print(f'{YELLOW}INFO{RESET}<-[      {num_feed} NOVA FEED IN SEARCH ENGINE NOW READY.')
+#         print(f'{YELLOW}INFO{RESET}<-[      {num_feed} NOVA FEED DATAFRAME IN SEARCH ENGINE NOW READY.')
 #
 #         return
 #
@@ -796,7 +797,7 @@ class ManagedTable:
 #     def __init_feed_avltree(self):
 #         for feed in self.__feed_table:
 #             self.__feed_avltree.insert(feed.fid, feed)
-#         print(f'INFO<-[      NOVA FEED AVLTREE IN SEARCH ENGINE NOW READY.')
+#         print(f'{YELLOW}INFO{RESET}<-[      NOVA FEED AVLTREE IN SEARCH ENGINE NOW READY.')
 #
 #     # Bias Tree 설정
 #     def __init_bias_tree(self):
@@ -1200,8 +1201,8 @@ class ManagedFeedBiasTable(ManagedTable):
 
         num_feed = str(len(self.__feed_table))
 
-        print(f'INFO<-[      {num_feed} NOVA FEED IN SEARCH ENGINE NOW READY.')
-        print(f'INFO<-[      {num_feed} NOVA FEED DATAFRAME IN SEARCH ENGINE NOW READY.')
+        print(f'{YELLOW}INFO{RESET}<-[      {num_feed} NOVA FEED IN SEARCH ENGINE NOW READY.')
+        print(f'{YELLOW}INFO{RESET}<-[      {num_feed} NOVA FEED DATAFRAME IN SEARCH ENGINE NOW READY.')
 
         return
 
@@ -1527,8 +1528,8 @@ class ManagedScheduleTable(ManagedTable):
         # pprint(f"init한 start_date_time : {self.__schedule_df['start_date_time'].dtype}")
         # datetime64[ns]로 출력됨. 정상적인 것
 
-        print(f'INFO<-[      {num_schedules} NOVA SCHEDULES IN SEARCH ENGINE NOW READY.')
-        print(f'INFO<-[      {num_schedules} NOVA SCHEDULES DATAFRAME IN SEARCH ENGINE NOW READY.')
+        print(f'{YELLOW}INFO{RESET}<-[      {num_schedules} NOVA SCHEDULES IN SEARCH ENGINE NOW READY.')
+        print(f'{YELLOW}INFO{RESET}<-[      {num_schedules} NOVA SCHEDULES DATAFRAME IN SEARCH ENGINE NOW READY.')
 
         return
 
@@ -1577,8 +1578,8 @@ class ManagedScheduleTable(ManagedTable):
 
         num_schedule_bundles = str(len(self.__schedule_bundle_table))
 
-        print(f'INFO<-[      {num_schedule_bundles} NOVA SCHEDULE BUNDLES IN SEARCH ENGINE NOW READY.')
-        print(f'INFO<-[      {num_schedule_bundles} NOVA SCHEDULE BUNDLES DATAFRAME IN SEARCH ENGINE NOW READY.')
+        print(f'{YELLOW}INFO{RESET}<-[      {num_schedule_bundles} NOVA SCHEDULE BUNDLES IN SEARCH ENGINE NOW READY.')
+        print(f'{YELLOW}INFO{RESET}<-[      {num_schedule_bundles} NOVA SCHEDULE BUNDLES DATAFRAME IN SEARCH ENGINE NOW READY.')
 
         return
 

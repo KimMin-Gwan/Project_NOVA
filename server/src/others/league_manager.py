@@ -32,7 +32,7 @@
             #managed_league.init_league_data(bias_list=bias_list)
             #self.__managed_leagues.append(managed_league)
 
-        #print(f'INFO<-[      {len(self.__managed_leagues)} NOVA LEAGUE NOW READY.')
+        #print(f'{YELLOW}INFO{RESET}<-[      {len(self.__managed_leagues)} NOVA LEAGUE NOW READY.')
         #return
     
     ## 인증을 통해 포인트가 바뀌는 현상을 표시 -> bias 데이터를 받아와서 처리

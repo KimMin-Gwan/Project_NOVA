@@ -7,16 +7,17 @@ import asyncio
 from uvicorn import run
 from others.ai_service import AIManger
 
-
+YELLOW = "\033[33m"
+RESET = "\033[0m"
 
 class Master(Configure_File_Reader):
     def __init__(self):
         super().__init__()
         self._extract_host_port()
         #self.abstract_loop = asyncio.get_event_loop()
-        print('INFO<-[      Application startup.')
-        print(f'INFO<-[      Application | Welcome to NOVA Server')
-        print(f'INFO<-[      Application | Version : v{self._version}')
+        print('{YELLOW}INFO{RESET}<-[      Application startup.')
+        print(f'{YELLOW}INFO{RESET}<-[      Application | Welcome to NOVA Server')
+        print(f'{YELLOW}INFO{RESET}<-[      Application | Version : v{self._version}')
 
     async def server_start_up(self):
         #database = Local_Database() #디비 실행

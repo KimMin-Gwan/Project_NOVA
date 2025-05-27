@@ -4,7 +4,8 @@ from pprint import pprint
 from bintrees import AVLTree
 from others.data_domain import Feed, User, Bias, Notice, Comment
 # --------------------------------------------------------------------------------------------
-
+YELLOW = "\033[33m"
+RESET = "\033[0m"
 # Edge 수도코드
 # class Edge
 #   __init__(target_node, gen_time:datetime):
@@ -340,7 +341,7 @@ class FeedNode(BaseNode):
 #
 #     2. Call 함수 정의
 #         all_node_feeds = self.num_feed_nodes + self.num_user_nodes + self.num_hash_nodes
-#         pprint(f'INFO<-[    {all_node_feeds} NOVA Graph IN SEARCH ENGINE NOW READY')
+#         pprint(f'{YELLOW}INFO{RESET}<-[    {all_node_feeds} NOVA Graph IN SEARCH ENGINE NOW READY')
 #         pprint(f'           {self.num_feed_nodes} feed nodes,')
 #         pprint(f'           {self.num_user_nodes} user nodes,')
 #         pprint(f'           {self.num_hash_nodes} hash nodes,')
@@ -434,7 +435,7 @@ class FeedChaosGraph:
 
     def __call__(self):
         all_node_feeds = self.num_feed_nodes + self.num_user_nodes + self.num_hash_nodes
-        pprint(f'INFO<-[    {all_node_feeds} NOVA Graph IN SEARCH ENGINE NOW READY')
+        pprint(f'{YELLOW}INFO{RESET}<-[    {all_node_feeds} NOVA Graph IN SEARCH ENGINE NOW READY')
         pprint(f'           {self.num_feed_nodes} feed nodes,')
         pprint(f'           {self.num_user_nodes} user nodes,')
         pprint(f'           {self.num_hash_nodes} hash nodes,')
@@ -781,7 +782,7 @@ class FeedAlgorithm:
 
     def __str__(self):
         all_node_feeds = len(self.__feed_node_avltree) + len(self.__user_node_avltree) + len(self.__hash_node_avltree)
-        return (f"INFO<-[    {all_node_feeds} nodes in NOVA Graph IN SEARCH ENGINE NOW READY\n")
+        return (f"{YELLOW}INFO{RESET}<-[    {all_node_feeds} nodes in NOVA Graph IN SEARCH ENGINE NOW READY\n")
         #f"             {list(self.__feed_node_avltree.values())} feed node in Graph.\n" +
         #f"             {list(self.__user_node_avltree.values())} user node in Graph.\n" +
         #f"             {list(self.__hash_node_avltree.values())} hash node in Graph.\n" )
@@ -830,7 +831,7 @@ class FeedAlgorithm:
             self.add_feed_node(feed)
 
         all_node_feeds = len(self.__feed_node_avltree) + len(self.__user_node_avltree) + len(self.__hash_node_avltree)
-        print(f'INFO<-[      {all_node_feeds} nodes in NOVA Graph IN SEARCH ENGINE NOW READY')
+        print(f'{YELLOW}INFO{RESET}<-[      {all_node_feeds} nodes in NOVA Graph IN SEARCH ENGINE NOW READY')
 
         #$print(f"             {list(self.__feed_node_avltree.values())} feed node in Graph.")
         #$print(f"             {list(self.__user_node_avltree.values())} user node in Graph.")
