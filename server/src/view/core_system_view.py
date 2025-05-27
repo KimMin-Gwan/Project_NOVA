@@ -427,6 +427,9 @@ class Core_Service_View(Master_View):
                                 search_columns:Optional[str]=""):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = KeywordSearchRequest(key=key, keyword=keyword, fclass=fclass, search_columns=search_columns)
+            
+            print(data_payload())
+            
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
             feed_controller =Feed_Controller(feed_manager=self.__feed_manager)
@@ -444,6 +447,7 @@ class Core_Service_View(Master_View):
         def search_with_keyword(request:Request, key:Optional[int]=-1, keyword:Optional[str]=""):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = KeywordSearchRequest(key=key, keyword=keyword)
+            print(data_payload())
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
             feed_controller = Feed_Controller(feed_manager=self.__feed_manager)
@@ -997,6 +1001,15 @@ class KeywordSearchRequest(RequestHeader):
         self.fclass = fclass
         self.search_columns = search_columns
         # self.email=""
+    
+    def __call__(self):
+        return {
+            "key": self.key,
+            "keyword": self.keyword,
+            "fclass": self.fclass,
+            "search_columns": self.search_columns
+        }
+        
 
 class HashtagFeedRequest(RequestHeader):
     def __init__(self, hashtag, target_time="", key=-1) -> None:
