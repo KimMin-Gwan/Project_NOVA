@@ -427,7 +427,7 @@ class TImeTableController:
                 return model
 
         schedule = model.modify_single_schedule(data_payload=request.data_payload, sid=request.data_payload.sid)
-        model.save_modified_schedule(schedule_search_engine=schedule_search_engine, schedule=[schedule])
+        model.save_modified_schedule(schedule_search_engine=schedule_search_engine, schedules=[schedule])
 
         return model
 

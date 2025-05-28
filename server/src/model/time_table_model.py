@@ -1321,20 +1321,20 @@ class AddScheduleModel(TimeTableModel):
         return
 
     # 수정한 스케줄들 저장
-    def save_modified_schedule(self, schedule_search_engine:SSE, schedule:list):
+    def save_modified_schedule(self, schedule_search_engine:SSE, schedules:list):
         # save_datas = self._make_dict_list_data(list_data=schedule)
 
         # for s in schedule:
         #     sids.append(s.sid)
 
-        for s in schedule:
-            save_data = s.get_dict_form_data()
-            if self._database.get_data_with_id(target="sid", id=s.sid):
+        for schedule in schedules:
+            save_data = schedule.get_dict_form_data()
+            if self._database.get_data_with_id(target="sid", id=schedule.sid):
                 self._database.modify_data_with_id(target_id='sid', target_data=save_data)
             else:
-                schedule_search_engine.try_add_new_managed_schedule(new_schedule=s)
+                schedule_search_engine.try_add_new_managed_schedule(new_schedule=schedule)
                 self._database.add_new_data(target_id="sid", new_data=save_data)
-                self._tuser.sids.append(s.sid)
+                self._tuser.sids.append(schedule.sid)
                 self._database.modify_data_with_id(target_id='tuid', target_data=self._tuser.get_dict_form_data())
 
         # 서치 엔진에도 저장합니다.
@@ -1379,8 +1379,13 @@ class AddScheduleModel(TimeTableModel):
         bias_data = self._database.get_data_with_id(target="bid", id=data_payload.bid)
         bias = Bias().make_with_dict(bias_data)
 
-        str_list = re.split(r'\W+', data_payload.location)
-        str_list = [s for s in str_list if s]
+        if isinstance(data_payload.location, str):
+            str_list = re.split(r'\W+', data_payload.location)
+            str_list = [s for s in str_list if s]
+        elif isinstance(data_payload.location, list):
+            str_list = data_payload.location
+        else:
+            str_list = []
 
         schedule.sname = data_payload.sname
         schedule.bid = data_payload.bid
@@ -1425,7 +1430,7 @@ class AddScheduleModel(TimeTableModel):
             schedule_list.append(schedule)
 
         # 데이터 저장
-        self.save_modified_schedule(schedule_search_engine=schedule_search_engine, schedule=schedule_list)
+        self.save_modified_schedule(schedule_search_engine=schedule_search_engine, schedules=schedule_list)
 
         # 번들데이터 만들기
         if data_type == "bundle":

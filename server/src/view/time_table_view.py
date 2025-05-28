@@ -621,7 +621,6 @@ class ModifySingleScheduleRequest(RequestHeader):
     def __init__(self, request):
         super().__init__(request)
         body:dict = request['body']
-        pprint(body)
         self.sid = body['sid']
         self.sname = body['sname']
         self.location = body['location']
@@ -630,7 +629,6 @@ class ModifySingleScheduleRequest(RequestHeader):
         self.start_time = body["start_time"]
         self.end_date = body["end_date"]
         self.end_time = body["end_time"]
-        self.state = body["state"]
 
 # class ModifyMultipleScheduleRequest:
 class ModifyMultipleScheduleRequest(RequestHeader):
