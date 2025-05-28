@@ -27,16 +27,20 @@ const getDaysInMonth = (year, month) => {
 export default function ScheduleSelect({
   index,
   setSendScheduleData,
-  sendScheduleData,
+  sendScheduleData,  // fetch에 보낼 스케줄 데이터
   isEditMode,
-  targetSchedule,
+  targetSchedule, // fetch로 받아온 수정용 데이터
 }) {
   //파라미터로 넘어온 데이터 에서 location이랑 sname 바꾸는 함수
-  const handleScheduleChange = (field, value) => {
-    const updatedSchedules = [...sendScheduleData.schedules];
-    updatedSchedules[index] = { ...updatedSchedules[index], [field]: value };
-    setSendScheduleData({ ...sendScheduleData, schedules: updatedSchedules });
-  };
+  const handleScheduleChange = (field, value) => {  
+    console.log(field, value)
+    setSendScheduleData((prevState) => {
+      const updatedSchedules = [...prevState.schedules];
+      updatedSchedules[index] = { ...updatedSchedules[index], [field]: value };
+      console.log(updatedSchedules)
+      return { ...prevState, schedules: updatedSchedules };
+    });
+  }
 
   // Picker 에서 선택 가능한 시간 범위
   // 근데 이 친구는 왜 함수 밖에 있냐? 뭐지?
@@ -74,6 +78,11 @@ export default function ScheduleSelect({
   const [isEndMonthPickerOpen, setIsEndMonthPickerOpen] = useState(false);
   const [isEndDayPickerOpen, setIsEndDayPickerOpen] = useState(false);
   const [isEndTimePickerOpen, setIsEndTimePickerOpen] = useState(false);
+
+  const [tagsInput, setTagsInput] = useState("");
+  const [tagsArrayData, setTagsArrayData] = useState([]);
+  const [sid, setSid] = useState("");
+  const [bid, setBid] = useState("");
 
   // 실제로 선택한 시작 날짜
   const [startPickerValue, setStartPickerValue] = useState({
@@ -136,10 +145,29 @@ export default function ScheduleSelect({
     setPickerValue({ year, month, day: validDay });
   };
 
+  const initEditTag = (tags) => {
+    if (!Array.isArray(tags) || tags.length === 0) return; // 유효성 검사
+
+    setTagsArrayData((prev) => {
+      // 기존 태그와 병합 후 중복 제거
+      const uniqueTags = Array.from(new Set([...prev, ...tags]));
+      return uniqueTags;
+    });
+
+    setTagsInput((prevInput) => {
+      // 기존 입력값과 병합 후 쉼표로 구분된 문자열 생성
+      const updatedTags = prevInput ? `${prevInput}, ${tags.join(", ")}` : tags.join(", ");
+      return updatedTags;
+    });
+  };
+
   // 수정하기 전용 초기 데이터 세팅 하는 곳
+  // 초기화임 중요한 부분임
   useEffect(() => {
     if (isEditMode) {
       if (targetSchedule) {
+        setTagsArrayData([]);
+        setTagsInput("");
         setStartPickerValue({
           year: targetSchedule.startYear,
           month: targetSchedule.startMonth,
@@ -158,8 +186,23 @@ export default function ScheduleSelect({
           hour: targetSchedule.endHour,
           minute: targetSchedule.endMinute,
         });
-        setDetailPlaceInput(targetSchedule.location);
-        setPlaceInput(targetSchedule.sname);
+        setDetailInput(targetSchedule.sname);
+        setPlaceInput(targetSchedule.location);
+        setSid(targetSchedule.sid);
+        setBid(targetSchedule.bid);
+        initEditTag(targetSchedule.tags)
+
+        const targetStartDate = `${targetSchedule.startYear}/${targetSchedule.startMonth}/${targetSchedule.startDay}`;
+        const targetEndDate = `${targetSchedule.endYear}/${targetSchedule.endMonth}/${targetSchedule.endDay}`;
+        const targetStartTime = `${targetSchedule.startHour}:${targetSchedule.startMinute}`;
+        const targetEndTime = `${targetSchedule.endHour}:${targetSchedule.endMinute}`;
+
+        handleScheduleDateTimeChange(
+          targetStartDate,
+          targetEndDate,
+          targetStartTime,
+          targetEndTime
+        );
       }
     }
   }, [targetSchedule]);
@@ -271,9 +314,7 @@ export default function ScheduleSelect({
  
   const sampleTags= ["게임", "저챗", "음악", "그림", "스포츠", "시참"];
   // 장소 및 일정 디테일 입력
-  const [detailInput, setDetailPlaceInput] = useState("");
-  const [tagsInput, setTagsInput] = useState("");
-  const [tagsArrayData, setTagsArrayData] = useState([]);
+  const [detailInput, setDetailInput] = useState("");
 
   const [placeInput, setPlaceInput] = useState("");
 
@@ -303,7 +344,7 @@ export default function ScheduleSelect({
 
   // 스케줄 상세 바꾸기
   const onChangeDetailInput = (e) => {
-    setDetailPlaceInput(e.target.value);
+    setDetailInput(e.target.value);
   };
 
   // 스케줄 장소 바꾸기
@@ -318,6 +359,9 @@ export default function ScheduleSelect({
       setTagsInput((prevInput) => (prevInput ? `${prevInput}, ${tag}` : tag));
     }
   };
+
+
+
 
   // 변경이 있고 나서 전송용 데이터를 수정하게 하는 useEffect
   useEffect(() => {
@@ -338,6 +382,16 @@ export default function ScheduleSelect({
     startTimePickerValue,
     endTimePickerValue,
   ]);
+
+  // 위와 같은 목적 => bid
+  useEffect(() => {
+    handleScheduleChange("bid", bid);
+  }, [sid]);
+
+  // 위와 같은 목적 => sid
+  useEffect(() => {
+    handleScheduleChange("sid", sid);
+  }, [sid]);
 
   // 위와 같은 목적 => sname
   useEffect(() => {
