@@ -176,4 +176,9 @@
 
 .bias-container {
   margin-top: 10px;
+  margin-bottom : 20px;
+}
+
+.modal-container{
+  margin : 4%;
 }
