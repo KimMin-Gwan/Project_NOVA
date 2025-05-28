@@ -491,7 +491,7 @@ function CommentOptionModal({ onClose, targetSid, onClickDelete}) {
         className={style["modal_container"]}
         onClick={(e) => e.stopPropagation()} // 이벤트 버블링 방지
       >
-        <div className={style["modal_title"]}>댓글</div>
+        <div className={style["modal_title"]}>일정</div>
         {/* <div className={style["modal_content"]}>수정</div> */}
         <div
           className={`${style["modal_content"]} ${style["modal_content_accent"]}`}
