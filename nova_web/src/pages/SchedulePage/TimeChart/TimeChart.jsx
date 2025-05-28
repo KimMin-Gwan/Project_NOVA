@@ -299,13 +299,6 @@ export function TimeChartPreview({ weekDayData, scheduleData }) {
         onSlideChange={handleSlideChange} // 슬라이드 변경 시 호출
         //allowSlidePrev={allowPrev} // 이전 슬라이드 이동 허용 여부
       >
-        <SwiperSlide key={0}>
-          <div className="load-week-container"
-            style={{justifyContent:'flex-end'}}
-          >
-              <span className="load-text">여긴 없어요!</span>
-          </div>
-        </SwiperSlide>
         {timeSectionList.map((item, j) => (
           <SwiperSlide key={j+1}>
             <div className="chart-box">
@@ -342,13 +335,6 @@ export function TimeChartPreview({ weekDayData, scheduleData }) {
             </div>
           </SwiperSlide>
         ))}
-        <SwiperSlide key={5}>
-          <div className="load-week-container"
-            style={{justifyContent:'flex-start'}}
-          >
-              <span className="load-text">여기도 없어요!</span>
-          </div>
-        </SwiperSlide>
       </Swiper>
     </div>
   );
