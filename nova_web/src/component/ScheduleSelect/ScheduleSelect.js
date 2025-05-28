@@ -33,11 +33,9 @@ export default function ScheduleSelect({
 }) {
   //파라미터로 넘어온 데이터 에서 location이랑 sname 바꾸는 함수
   const handleScheduleChange = (field, value) => {  
-    console.log(field, value)
     setSendScheduleData((prevState) => {
       const updatedSchedules = [...prevState.schedules];
       updatedSchedules[index] = { ...updatedSchedules[index], [field]: value };
-      console.log(updatedSchedules)
       return { ...prevState, schedules: updatedSchedules };
     });
   }
