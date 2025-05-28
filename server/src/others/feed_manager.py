@@ -106,7 +106,7 @@ class FeedManager:
 
         # 이곳에 add와 make가 아닌 modify 되는 함수가 필요함
         self._feed_search_engine.try_modify_managed_feed(feed=feed)
-        #self._feed_search_engine.try_make_new_managed_feed(feed=new_feed)
+        self._feed_search_engine.try_make_new_managed_feed(feed=feed)
 
         return
 
@@ -305,8 +305,7 @@ class FeedManager:
                                 data_payload_body = data_payload_body
                                 )
         
-        result, flag = self.try_make_new_feed(user=user, data_payload=data_payload, fid=feed.fid)
-        return result, flag
+        return "Upload Success", True
 
     def try_remove_feed_new(self, user:User, fid):
         feed_data=self._database.get_data_with_id(target="fid",id=fid)
