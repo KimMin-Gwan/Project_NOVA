@@ -90,6 +90,7 @@ export default function ScheduleExplore() {
       {/* 화면이 530px 이하일 때 슬라이더로 탭 대체 */}
 
 
+        {/** 
       <section className="button-container">
         <button onClick={() => handleModal("time")}>
           시간 설정 <img src={arrow} alt="" />
@@ -100,7 +101,9 @@ export default function ScheduleExplore() {
         <button>
           성별 <img src={arrow} alt="" />
         </button>
+         
       </section>
+        */}
       <Swiper
         spaceBetween={50}
         slidesPerView={1}
@@ -155,7 +158,6 @@ function ScheduleComponentList({category, toggleEditScheduleModal, toggleAddSche
   const [key, setKey] = useState(-1);
   const [isInit, setIsInit] = useState(false);
   const { moreClick, handleToggleMore } = useToggleMore();
-  console.log(scheduleData)
   const loadMoreCallBack = () => {
     if (!isLoading && hasMore) {
       fetchMoreSearchData()
@@ -203,8 +205,6 @@ function ScheduleComponentList({category, toggleEditScheduleModal, toggleAddSche
         },
       })
       .then((res) => {
-        console.log(scheduleData)
-
         setScheduleData((prev) => [...prev, ...res.data.body.schedules]);
         setHasMore(res.data.body.schedules.length > 0);
         setKey(res.data.body.key);
@@ -241,7 +241,6 @@ function ScheduleComponentList({category, toggleEditScheduleModal, toggleAddSche
             // 목표 item이 없으면 기존 상태 반환
             return prev;
           }
-          console.log("hello?", )
           // 목표 item이 있으면 업데이트
           return prev.map((item) =>
             item.sid === target.sid ? { ...item, is_already_have: true } : item
