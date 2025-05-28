@@ -1338,7 +1338,7 @@ class AddScheduleModel(TimeTableModel):
                 self._database.modify_data_with_id(target_id='tuid', target_data=self._tuser.get_dict_form_data())
 
         # 서치 엔진에도 저장합니다.
-        schedule_search_engine.try_modify_schedule_list(modify_schedule_list=schedule)
+        schedule_search_engine.try_modify_schedule_list(modify_schedule_list=schedules)
 
         self.__result = True
         return
