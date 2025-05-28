@@ -488,7 +488,8 @@ export function EditSingleSchedule({ closeSchedule, isOpen, target, isSingleSche
     start_date : '',
     start_time : '',
     end_date : '',
-    end_time : ''
+    end_time : '',
+    tags : []
   }
 
   const [scheduleArray, setScheduleArray] = useState([scheduleFormat]);
@@ -503,10 +504,20 @@ export function EditSingleSchedule({ closeSchedule, isOpen, target, isSingleSche
   const [numSchedule, setNumSchedule] = useState(1);
   const [sendScheduleData, setSendScheduleData] = useState(bundleFormat)
 
-  let { biasList } = useBiasStore();
+  //let { biasList } = useBiasStore();
   let [biasId, setBiasId] = useState();
+  const[ biasList, setBiasList] = useState([]);
 
-
+  async function getBiasList() {
+    return await mainApi
+      .get("/home/my_bias")
+      .then((res) => {
+        setBiasList(res.data.body.bias_list)
+      })
+      .catch((err) => {
+        //console.log(err);
+      });
+  }
 
   // 번들 이름 
   const [bundleNameInput, setBundleNameInput] = useState("");
@@ -519,6 +530,7 @@ export function EditSingleSchedule({ closeSchedule, isOpen, target, isSingleSche
   useEffect(() =>{
     if (isSingleSchedule && isOpen) {
       setEditMode("single")
+      getBiasList()
       fetchSingleWrittenSchedule(target.sid)
     }
     else{
@@ -537,11 +549,13 @@ export function EditSingleSchedule({ closeSchedule, isOpen, target, isSingleSche
       // Extract and parse start_time and end_time
       const [startHour, startMinute] = schedule.start_time.split(":").map(Number);
       const [endHour, endMinute] = schedule.end_time.split(":").map(Number);
-
+      setBiasId(schedule.bid)
       return {
+        bid: schedule.bid,
         sid: schedule.sid,
         location : schedule.location,
         sname : schedule.sname,
+        tags : schedule.tags,
         startYear,
         startMonth,
         startDay,
@@ -570,6 +584,7 @@ export function EditSingleSchedule({ closeSchedule, isOpen, target, isSingleSche
     await mainApi 
       .get(`time_table_server/try_get_written_schedule?sid=${target}`)
       .then((res) => {
+          console.log(res.data.body.schedules)
           onFetchEditScheduleData(res.data.body.schedules)
       });
   }
@@ -582,6 +597,7 @@ export function EditSingleSchedule({ closeSchedule, isOpen, target, isSingleSche
     }).then(()=>{
       closeSchedule()
     });
+
   }
 
   // 번들 스케줄 만들기
@@ -690,55 +706,50 @@ export function EditSingleSchedule({ closeSchedule, isOpen, target, isSingleSche
     }
   }, [isOpen])
 
-
   return (
     <DetailModal closeSchedule={closeSchedule} isOpen={isOpen}>
-      <div className={style["modal-title"]}>
-        일정 등록
-      </div>
-      {
-        editMode === "bundle" ? (
-          <div className="ScheduleSelect">
-            <div className={style["searchFac"]}>
-              <div className={style["searchBox"]}>
-                <input
-                  type="text"
-                  value={bundleNameInput}
-                  onChange={onChangeBundleName}
-                  placeholder="일정 번들 이름"
-                />
+      <div className={style["modal-container"]}>
+        <div className={style["modal-title"]}>
+          일정 등록
+        </div>
+        {
+          editMode === "bundle" ? (
+            <div className="ScheduleSelect">
+              <div className={style["searchFac"]}>
+                <div className={style["searchBox"]}>
+                  <input
+                    type="text"
+                    value={bundleNameInput}
+                    onChange={onChangeBundleName}
+                    placeholder="일정 번들 이름"
+                  />
+                </div>
               </div>
             </div>
-          </div>
-        ) : null
-      }
-      <div className={style["bias-container"]}>
-        <DropDown options={biasList} setBiasId={setBiasId} />
-      </div>
-      {
-       sendScheduleData.schedules.map((schedule, index) => (
-          <ScheduleSelect
-            key={schedule.id}
-            index={index}
-            setSendScheduleData={setSendScheduleData}
-            sendScheduleData={sendScheduleData}
-            removeSchedule={removeSchedule}
-            isEditMode={true}
-            targetSchedule={editScheduleData[index]}
-          />
-        ))
-      }
-      <div className={style["additional-schedule-button"]}>
-        <p
-          className={style["additional-schedule-text"]}
-          onClick={addSchedule}
-        >
-          일정 추가
-        </p>
-      </div>
-      <div className={style["moreContainer"]}>
-        <button onClick={() => {tryDeleteSchedule()}}>일정 제거</button>
-        <button onClick={() => {tryFetchEditSchedule()}}>일정 등록</button>
+          ) : null
+        }
+        <div className={style["bias-container"]}>
+          <DropDown options={biasList} setBiasId={setBiasId} biasId={biasId}/>
+        </div>
+        {
+        sendScheduleData.schedules.map((schedule, index) => (
+            <ScheduleSelect
+              key={schedule.id}
+              index={index}
+              setSendScheduleData={setSendScheduleData}
+              sendScheduleData={sendScheduleData}
+              removeSchedule={removeSchedule}
+              isEditMode={true}
+              targetSchedule={editScheduleData[index]}
+            />
+          ))
+        }
+        <div className={style["additional-schedule-button"]}>
+        </div>
+        <div className={style["moreContainer"]}>
+          <button onClick={() => {tryDeleteSchedule()}}>일정 제거</button>
+          <button onClick={() => {tryFetchEditSchedule()}}>일정 수정</button>
+        </div>
       </div>
     </DetailModal>
   );
