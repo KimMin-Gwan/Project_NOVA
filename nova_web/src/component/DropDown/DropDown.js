@@ -20,17 +20,17 @@ export default function DropDown({ options, biasId, category, setBiasId, setCate
   }
 
  useEffect(() => {
-  if (biasId) {
-    const selectedOption = options.find(option => option.bid === biasId);
-    if (selectedOption) {
-      setCurrentTopic(selectedOption.bname);
+    if (biasId) {
+      const selectedOption = options.find(option => option.bid === biasId);
+      if (selectedOption) {
+        setCurrentTopic(selectedOption.bname);
+      } else {
+        setCurrentTopic("선택없음");
+      }
     } else {
       setCurrentTopic("선택없음");
     }
-  } else {
-    setCurrentTopic("선택없음");
-  }
-}, [biasId, options]);
+  }, [biasId, options]);
 
   useEffect(() => {
     if (category){
