@@ -1395,7 +1395,6 @@ class AddScheduleModel(TimeTableModel):
         schedule.start_time = data_payload.start_time
         schedule.end_date = data_payload.end_date
         schedule.end_time = data_payload.end_time
-        schedule.state = data_payload.state
         schedule.update_datetime= datetime.today().strftime("%Y/%m/%d-%H:%M:%S")
 
         return schedule
