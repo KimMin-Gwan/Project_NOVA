@@ -1924,6 +1924,8 @@ class ScheduleTimeLayerModel(TimeTableModel):
 
         sids = schedule_search_engine.try_get_schedules_in_specific_date(sids=["all"], specific_date=target_date, return_id=True)
 
+        print(sids)
+        
         # 여기서 managed_schedule은 dict 형태임
         for sid in sids:
             if sid in self._tuser.sids:
