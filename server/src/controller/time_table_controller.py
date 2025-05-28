@@ -92,9 +92,6 @@ class TImeTableController:
         
         target_date = datetime.strptime(request.data_payload.date, "%Y/%m/%d")
         
-        print(target_date)
-        print(datetime.today())
-        
         if datetime.today().date() <= target_date.date():
             model.make_recommand_schedule_data(
                 target_date=request.data_payload.date,
