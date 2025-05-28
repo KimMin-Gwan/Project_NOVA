@@ -621,6 +621,7 @@ class ModifySingleScheduleRequest(RequestHeader):
     def __init__(self, request):
         super().__init__(request)
         body:dict = request['body']
+        pprint(body)
         self.sid = body['sid']
         self.sname = body['sname']
         self.location = body['location']
