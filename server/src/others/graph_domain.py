@@ -919,7 +919,7 @@ class FeedAlgorithm:
 
     # feed_node 해시 태그 수정
     def modify_feed_node(self, feed:Feed):
-        if feed.id not in self.__feed_node_avltree:
+        if feed.fid not in self.__feed_node_avltree:
             return False
 
         # 이미 수정된 Feed를 가지고 진행, 즉, Feed 수정 버튼을 누른 직후에 일어나는 일
