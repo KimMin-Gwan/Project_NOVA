@@ -190,10 +190,12 @@ export default function FollowPage() {
             </button>
           </div>
 
-          <Streamer title={"아티스트"} platform={biasDataList.artist} openModal={openModal} />
           <Streamer title={"치지직 스트리머"} platform={biasDataList.chzzk} openModal={openModal} />
+          {/*
+            <Streamer title={"아티스트"} platform={biasDataList.artist} openModal={openModal} />
           <Streamer title={"SOOP 스트리머"} platform={biasDataList.soop} openModal={openModal} />
           <Streamer title={"유튜버"} platform={biasDataList.youtube} openModal={openModal} />
+          */}
 
           {isModalOpen && (
             <div className={style["modal-overlay"]} onClick={closeModal}>
@@ -238,26 +240,31 @@ function Streamer({ title, platform, openModal }) {
   }
 
   return (
-    <div className={style["streamer-box"]}>
-      <h4>{title}</h4>
-      <span className={style["streamer-list"]}>
-        {platform.map((bias, i) => {
-          return (
-            <button
-              key={bias.bid}
-              onClick={() => {
-                openModal(bias.bid, bias.bname);
-              }}
-              className={style["streamer-img"]}
-            >
-              <div>
-                <img src={BIAS_URL + `${bias.bid}.PNG`} />
-              </div>
-              <p>{bias.bname}</p>
-            </button>
-          );
-        })}
-      </span>
+    <div className={style["outter-box"]}>
+      <div className={style["streamer-box"]}>
+        <h4>{title}</h4>
+        <span className={style["streamer-list"]}>
+          {platform.map((bias, i) => {
+            return (
+              <button
+                key={bias.bid}
+                onClick={() => {
+                  openModal(bias.bid, bias.bname);
+                }}
+                className={style["streamer-img"]}
+              >
+                <div>
+                  <img
+                   src={BIAS_URL + `${bias.bid}.PNG`}
+                   onError={(e) => (e.target.src = tempBias)}  
+                   />
+                </div>
+                <p>{bias.bname}</p>
+              </button>
+            );
+          })}
+        </span>
+      </div>
     </div>
   );
 }
