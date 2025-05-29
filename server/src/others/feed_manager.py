@@ -124,15 +124,16 @@ class FeedManager:
             lid = self.__make_new_iid()
             feed_link.lid = lid
             feed_link.fid = fid
-            result, url, feed_link.title = HTMLEXtractor().extract_external_webpage_title_tag(url=feed_link.url)
+            result, feed_link.url, feed_link.title = HTMLEXtractor().extract_external_webpage_title_tag(url=feed_link.url)
             if not result:
                 continue
-            feed_link.domain = HTMLEXtractor().extract_link_domain_string(url=url)
+            feed_link.domain = HTMLEXtractor().extract_link_domain_string(url=feed_link.url)
             result_feed_links.append(feed_link.get_dict_form_data())
             lid_list.append(lid)
 
-        # 데이터 저장
-        self._database.add_new_datas(target_id="lid", new_datas=result_feed_links)
+        if lid_list:
+            # 데이터 저장
+            self._database.add_new_datas(target_id="lid", new_datas=result_feed_links)
 
         return lid_list
 
