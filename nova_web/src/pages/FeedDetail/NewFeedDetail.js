@@ -396,7 +396,7 @@ export default function NewFeedDetail() {
       </div>
 
       <div className={style["content-box"]}>
-        <ContentFeed detailPage feed={feedData} handleCheckStar={handleCheckStar} links={links} />
+        <ContentFeed detailPage feed={feedData} handleCheckStar={handleCheckStar} links={links} disableClick={true} />
       </div>
       
       <div className="section-separator"></div>
