@@ -267,7 +267,7 @@ class HTMLEXtractor:
         try:
             result = urlparse(url)
             # 스키마(http, https)와 네트워크 위치(netloc) 확인
-            return all([result.scheme, result.netloc])
+            return all([result.netloc])
         except ValueError:
             return False
         
