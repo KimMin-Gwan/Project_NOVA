@@ -124,8 +124,10 @@ class FeedManager:
             lid = self.__make_new_iid()
             feed_link.lid = lid
             feed_link.fid = fid
-            feed_link.domain = HTMLEXtractor().extract_link_domain_string(url=feed_link.url)
-            feed_link.title = HTMLEXtractor().extract_external_webpage_title_tag(url=feed_link.url)
+            result, url, feed_link.title = HTMLEXtractor().extract_external_webpage_title_tag(url=feed_link.url)
+            if not result:
+                continue
+            feed_link.domain = HTMLEXtractor().extract_link_domain_string(url=url)
             result_feed_links.append(feed_link.get_dict_form_data())
             lid_list.append(lid)
 
