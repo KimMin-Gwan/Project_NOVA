@@ -29,7 +29,7 @@ export default function EditorBox({ setLongData, editorRef, initialValue }) {
       hideModeSwitch={true}
       onChange={onChange}
       language="ko-KR"
-      toolbarItems={[["heading", "bold", "italic", "strike"]]}
+      toolbarItems={[["bold", "italic", "strike"]]}
     />
   );
 }
