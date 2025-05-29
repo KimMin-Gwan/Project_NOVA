@@ -15,8 +15,8 @@ import numpy as np
 import re
 from urllib.parse import urlparse
 
-access_key = ""
-secret_key = ""
+access_key = 
+secret_key = 
 
 
 # 건들지 않음
@@ -279,6 +279,8 @@ class HTMLEXtractor:
             spilted_data = url.split(".")
             
             if len(spilted_data) <= 1:
+                return False
+            else:
                 return True
             #result = urlparse(url)
             ## 스키마(http, https)와 네트워크 위치(netloc) 확인
