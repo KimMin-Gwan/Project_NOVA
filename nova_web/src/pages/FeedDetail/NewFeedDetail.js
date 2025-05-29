@@ -353,7 +353,7 @@ export default function NewFeedDetail() {
     mainApi.get(`feed_explore/try_remove_feed?fid=${fid}`).then((res) => {
       if (res.data.body.result) {
         alert("삭제되었습니다.");
-        navigate(-1);
+        navigate("/");
       }
     });
   }
