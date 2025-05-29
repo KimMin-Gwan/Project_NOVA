@@ -629,6 +629,7 @@ class ModifySingleScheduleRequest(RequestHeader):
         self.start_time = body["start_time"]
         self.end_date = body["end_date"]
         self.end_time = body["end_time"]
+        self.tags = body.get('tags', [])
 
 # class ModifyMultipleScheduleRequest:
 class ModifyMultipleScheduleRequest(RequestHeader):

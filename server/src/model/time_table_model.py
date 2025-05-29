@@ -1391,6 +1391,7 @@ class AddScheduleModel(TimeTableModel):
         schedule.bid = data_payload.bid
         schedule.location = str_list
         schedule.bname = bias.bname
+        schedule.tags = data_payload.tags
         schedule.start_date = data_payload.start_date
         schedule.start_time = data_payload.start_time
         schedule.end_date = data_payload.end_date
