@@ -988,7 +988,6 @@ class AllFeedRequest(RequestHeader):
     def __init__(self, request) -> None:
         super().__init__(request)
         body = request['body']
-        pprint(body)
         self.category = body['category']
         self.fclass= body['fclass']
         self.key= body['key']
