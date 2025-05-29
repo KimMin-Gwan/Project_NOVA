@@ -50,10 +50,10 @@
   }
 
   .post-list[data-active-index="0"]::after {
-    left: 43px;
+    left: 48px;
   }
   .post-list[data-active-index="1"]::after {
-    left: 118px;
+    left: 115.5px;
   }
   .post-list[data-active-index="2"]::after {
     left: 180px;
