@@ -71,7 +71,6 @@ export function ContentFeed({ detailPage, feed, handleCheckStar, links, fetchRep
     return <div>loading 중...</div>;
   }
 
-
   if (disableClick){
     return (
       <div
@@ -261,12 +260,6 @@ function ActionButtons({ feed, handleCheckStar, fetchReportResult }) {
 
         <div className={style["action-button"]}>
           <button
-            onClick={(e) => {
-              e.stopPropagation();
-              navigate(`/feed_detail/${feed.fid}`, {
-                state: { commentClick: true },
-              });
-            }}
           >
             <img src={comment} alt="comment-icon" />
           </button>
@@ -326,6 +319,7 @@ function LinkSection({ links }) {
               <div
                 className={style["Link_box"]}
                 onClick={() => {
+                  console.log(link.url)
                   onClickLink(link.url);
                 }}
               >
