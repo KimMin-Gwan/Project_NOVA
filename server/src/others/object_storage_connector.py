@@ -276,12 +276,13 @@ class HTMLEXtractor:
     # url 정규식 검사
     def __is_valid_url(self, url) -> bool:
         try:
-            result = urlparse(url)
-            print(result)
-            print(result.netloc)
-            print(result.scheme)
-            # 스키마(http, https)와 네트워크 위치(netloc) 확인
-            return all([result.netloc])
+            spilted_data = url.split(".")
+            
+            if len(spilted_data) <= 1:
+                return True
+            #result = urlparse(url)
+            ## 스키마(http, https)와 네트워크 위치(netloc) 확인
+            #return all([result.netloc])
         except ValueError:
             return False
         
