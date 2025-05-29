@@ -464,6 +464,7 @@ class Core_Service_View(Master_View):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             
             data_payload = AllFeedRequest(request=raw_request)
+            
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
                 #raise request_manager.credentials_exception
@@ -987,9 +988,11 @@ class AllFeedRequest(RequestHeader):
     def __init__(self, request) -> None:
         super().__init__(request)
         body = request['body']
+        pprint(body)
         self.category = body['category']
         self.fclass= body['fclass']
         self.key= body['key']
+        
 
 class KeywordSearchRequest(RequestHeader):
     def __init__(self, key, keyword, fclass="", search_columns="") -> None:
