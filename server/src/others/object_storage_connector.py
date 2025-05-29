@@ -221,14 +221,15 @@ class HTMLEXtractor:
     # 외부에서 사이트에서 title 데이터 추출하는 함수
     def extract_external_webpage_title_tag(self, url):
         title = "주소 제목"
+        result = False
         
         # URL이 비어있거나 None인지 확인
         if not url:
-            raise ValueError("URL is empty or invalid")
+            return result, url, title
     
         # URL 유효성 검증
         if not self.__is_valid_url(url):
-            raise ValueError(f"Invalid URL provided: {url}")
+            return result, url, title
     
         # 스키마가 없는 경우 http:// 추가
         parsed_url = urlparse(url)
@@ -246,9 +247,10 @@ class HTMLEXtractor:
             # <title> 태그 내용 추출
             title = soup.title.string if soup.title else "Page Title"
         except requests.exceptions.RequestException as e:
-            return f"Error fetching URL : {e}"
+            return result, url, f"Error fetching URL : {e}"
+        result = True
         
-        return title
+        return result, url, title
     
     # "https://chatgpt.com/c/67a4260b-1100-8013-916d-d0cb06b0a1e4" 이런 사이트에서 chatgpt.com 만 긁어오는 함수
     def extract_link_domain_string(self, url):
