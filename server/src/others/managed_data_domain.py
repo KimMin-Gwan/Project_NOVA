@@ -1656,6 +1656,7 @@ class ManagedScheduleTable(ManagedTable):
 
         # 스케줄 데이터를 변경합니다.
         managed_schedule.sname = modify_schedule.sname
+        managed_schedule.tags = modify_schedule.tags
         managed_schedule.date = self._get_date_str_to_object(str_date=modify_schedule.update_datetime)
         managed_schedule.start_date_time = self._get_date_str_to_object(str_date=mo_start_date_time)
         managed_schedule.end_date_time = self._get_date_str_to_object(str_date=mo_end_date_time)
