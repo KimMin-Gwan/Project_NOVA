@@ -226,24 +226,18 @@ class HTMLEXtractor:
         title = "주소 제목"
         result = False
         
-        print(1)
         # URL이 비어있거나 None인지 확인
         if not url:
             return result, url, title
     
-        print(2)
         # URL 유효성 검증
         if not self.__is_valid_url(url):
             return result, url, title
     
-        print(3)
         # 스키마가 없는 경우 http:// 추가
         parsed_url = urlparse(url)
-        print(4)
         if not parsed_url.scheme:
             url = f"http://{url}"
-        
-        print(5)
         
         try:
             # URL에서 HTML 가져오기
@@ -251,8 +245,6 @@ class HTMLEXtractor:
 
             # BeautifulSoup 객체 생성
             soup = BeautifulSoup(response.text, 'html.parser')
-
-            print(6)    
             # <title> 태그 내용 추출
             title = soup.title.string if soup.title else "Page Title"
         except requests.exceptions.RequestException as e:
