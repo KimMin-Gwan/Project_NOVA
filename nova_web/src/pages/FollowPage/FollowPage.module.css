@@ -160,7 +160,7 @@
       justify-items: center;
     }
 
-    @media (max-width: 400px) {
+    @media (max-width: 480px) {
       .streamer-list {
         grid-template-columns: repeat(2, 1fr);
       }
@@ -169,7 +169,7 @@
       }
     }
 
-    @media (max-width: 300px) {
+    @media (max-width: 380px) {
       .streamer-list {
         grid-template-columns: repeat(1, 1fr);
       }
@@ -203,6 +203,7 @@
   border-radius: 5px;
   cursor: pointer;
   background: none;
+  flex-shrink: 0;
 
   img {
     width: 100%;

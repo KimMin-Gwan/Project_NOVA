@@ -197,7 +197,7 @@ export default function FeedDetail() {
       </div>
 
       <div>
-        <ContentFeed detailPage feed={feedData} handleCheckStar={handleCheckStar} links={links} />
+        <ContentFeed detailPage feed={feedData} handleCheckStar={handleCheckStar} links={links} disableClick={true}/>
       </div>
 
       <div className={style["comment-container"]}>

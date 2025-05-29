@@ -76,7 +76,6 @@ export default function ScheduleExplore() {
           <img src={back} alt="" />
         </button>
         <h1>일정 탐색</h1>
-        <p>3월 4째주</p>
       </nav>
       <section className={"type-list"}>
         <ul className={"post-list"} data-active-index={activeIndex}>
