@@ -15,6 +15,9 @@ import numpy as np
 import re
 from urllib.parse import urlparse
 
+access_key = ""
+secret_key = ""
+
 
 # 건들지 않음
 # Project Body (프로젝트 상세보기 화면 받아옴)
@@ -30,8 +33,8 @@ class ObjectStorageConnection:
         self.__service_name = 's3'
         self.__endpoint_url = 'https://kr.object.ncloudstorage.com'
         self.__region_name = 'kr-standard'
-        self.__access_key = ''
-        self.__secret_key = ''
+        self.__access_key = access_key
+        self.__secret_key = secret_key
         self.__s3 = boto3.client(self.__service_name,
                                  endpoint_url=self.__endpoint_url,
                                  aws_access_key_id=self.__access_key,
@@ -340,8 +343,8 @@ class ImageDescriper:
         self.__service_name = 's3'
         self.__endpoint_url = 'https://kr.object.ncloudstorage.com'
         self.__region_name = 'kr-standard'
-        self.__access_key = ''
-        self.__secret_key = ''
+        self.__access_key = access_key
+        self.__secret_key = secret_key
         self.__s3 = boto3.client(self.__service_name,
                                  endpoint_url=self.__endpoint_url,
                                  aws_access_key_id=self.__access_key,
