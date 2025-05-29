@@ -1,7 +1,7 @@
 [
     {
-        "sid": "198555",
-        "sname": "스케줄 이름 1198555",
+        "sid": "151245",
+        "sname": "스케줄 이름 1151245",
         "uid": "0cb7-f17f-46ef",
         "uname": "운영자",
         "bid": "111",
@@ -18,18 +18,21 @@
         "num_usage": 0,
         "state": false,
         "color_code": "#f5c4e1",
-        "update_datetime": "2025/05/22-08:30:00"
+        "update_datetime": "2025/05/22-08:30:00",
+        "tags": [
+            "스포츠"
+        ]
     },
     {
-        "sid": "180918",
-        "sname": "스케줄 이름 2180918",
+        "sid": "241762",
+        "sname": "스케줄 이름 2241762",
         "uid": "0cb7-f17f-46ef",
         "uname": "운영자",
         "bid": "222",
         "bname": "임시주제2호",
-        "start_date": "2025/05/29",
+        "start_date": "2025/05/30",
         "start_time": "09:00",
-        "end_date": "2025/05/29",
+        "end_date": "2025/05/30",
         "end_time": "16:00",
         "location": [
             "치지직",
@@ -39,18 +42,19 @@
         "num_usage": 0,
         "state": false,
         "color_code": "#f5c4e1",
-        "update_datetime": "2025/05/23-08:30:00"
+        "update_datetime": "2025/05/23-08:30:00",
+        "tags": []
     },
     {
-        "sid": "178558",
-        "sname": "스케줄 이름 3178558",
+        "sid": "228102",
+        "sname": "스케줄 이름 3228102",
         "uid": "0cb7-f17f-46ef",
         "uname": "운영자",
         "bid": "111",
         "bname": "임시주제1호",
-        "start_date": "2025/05/31",
+        "start_date": "2025/05/29",
         "start_time": "14:00",
-        "end_date": "2025/05/31",
+        "end_date": "2025/05/29",
         "end_time": "21:00",
         "location": [
             "치지직",
@@ -60,11 +64,15 @@
         "num_usage": 0,
         "state": false,
         "color_code": "#f5c4e1",
-        "update_datetime": "2025/05/24-08:30:00"
+        "update_datetime": "2025/05/24-08:30:00",
+        "tags": [
+            "시참",
+            "스포츠"
+        ]
     },
     {
-        "sid": "203319",
-        "sname": "스케줄 이름 1203319",
+        "sid": "112255",
+        "sname": "스케줄 이름 1112255",
         "uid": "0cb7-f17f-46ef",
         "uname": "운영자",
         "bid": "222",
@@ -81,11 +89,14 @@
         "num_usage": 0,
         "state": false,
         "color_code": "#f5c4e1",
-        "update_datetime": "2025/05/22-08:30:00"
+        "update_datetime": "2025/05/22-08:30:00",
+        "tags": [
+            "그림"
+        ]
     },
     {
-        "sid": "186993",
-        "sname": "스케줄 이름 2186993",
+        "sid": "123767",
+        "sname": "스케줄 이름 2123767",
         "uid": "0cb7-f17f-46ef",
         "uname": "운영자",
         "bid": "333",
@@ -102,18 +113,23 @@
         "num_usage": 0,
         "state": false,
         "color_code": "#f5c4e1",
-        "update_datetime": "2025/05/22-08:30:00"
+        "update_datetime": "2025/05/22-08:30:00",
+        "tags": [
+            "스포츠",
+            "그림",
+            "기타"
+        ]
     },
     {
-        "sid": "218744",
-        "sname": "스케줄 이름 3218744",
+        "sid": "154365",
+        "sname": "스케줄 이름 3154365",
         "uid": "0cb7-f17f-46ef",
         "uname": "운영자",
         "bid": "444",
         "bname": "임시주제4호",
-        "start_date": "2025/05/31",
+        "start_date": "2025/05/29",
         "start_time": "19:00",
-        "end_date": "2025/05/31",
+        "end_date": "2025/05/29",
         "end_time": "23:00",
         "location": [
             "치지직",
@@ -123,18 +139,22 @@
         "num_usage": 0,
         "state": false,
         "color_code": "#f5c4e1",
-        "update_datetime": "2025/05/22-08:30:00"
+        "update_datetime": "2025/05/22-08:30:00",
+        "tags": [
+            "저챗",
+            "그림"
+        ]
     },
     {
-        "sid": "164145",
-        "sname": "스케줄 이름 4164145",
+        "sid": "221977",
+        "sname": "스케줄 이름 4221977",
         "uid": "0cb7-f17f-46ef",
         "uname": "운영자",
         "bid": "111",
         "bname": "임시주제1호",
-        "start_date": "2025/05/31",
+        "start_date": "2025/05/30",
         "start_time": "08:00",
-        "end_date": "2025/05/31",
+        "end_date": "2025/05/30",
         "end_time": "12:00",
         "location": [
             "치지직",
@@ -144,11 +164,12 @@
         "num_usage": 0,
         "state": false,
         "color_code": "#f5c4e1",
-        "update_datetime": "2025/05/23-08:30:00"
+        "update_datetime": "2025/05/23-08:30:00",
+        "tags": []
     },
     {
-        "sid": "291250",
-        "sname": "스케줄 이름 5291250",
+        "sid": "182303",
+        "sname": "스케줄 이름 5182303",
         "uid": "0cb7-f17f-46ef",
         "uname": "운영자",
         "bid": "333",
@@ -165,18 +186,19 @@
         "num_usage": 0,
         "state": false,
         "color_code": "#f5c4e1",
-        "update_datetime": "2025/05/23-08:30:00"
+        "update_datetime": "2025/05/23-08:30:00",
+        "tags": []
     },
     {
-        "sid": "168305",
-        "sname": "스케줄 이름 6168305",
+        "sid": "278030",
+        "sname": "스케줄 이름 6278030",
         "uid": "0cb7-f17f-46ef",
         "uname": "운영자",
         "bid": "444",
         "bname": "임시주제4호",
-        "start_date": "2025/05/30",
+        "start_date": "2025/05/31",
         "start_time": "00:00",
-        "end_date": "2025/05/30",
+        "end_date": "2025/05/31",
         "end_time": "04:00",
         "location": [
             "치지직",
@@ -186,18 +208,21 @@
         "num_usage": 0,
         "state": false,
         "color_code": "#f5c4e1",
-        "update_datetime": "2025/05/23-08:30:00"
+        "update_datetime": "2025/05/23-08:30:00",
+        "tags": [
+            "스포츠"
+        ]
     },
     {
-        "sid": "118445",
-        "sname": "스케줄 이름 8118445",
+        "sid": "271500",
+        "sname": "스케줄 이름 8271500",
         "uid": "0cb7-f17f-46ef",
         "uname": "운영자",
         "bid": "222",
         "bname": "임시주제2호",
-        "start_date": "2025/05/30",
+        "start_date": "2025/05/31",
         "start_time": "12:00",
-        "end_date": "2025/05/30",
+        "end_date": "2025/05/31",
         "end_time": "16:00",
         "location": [
             "치지직",
@@ -207,11 +232,12 @@
         "num_usage": 0,
         "state": false,
         "color_code": "#f5c4e1",
-        "update_datetime": "2025/05/24-08:30:00"
+        "update_datetime": "2025/05/24-08:30:00",
+        "tags": []
     },
     {
-        "sid": "153706",
-        "sname": "스케줄 이름 9153706",
+        "sid": "249143",
+        "sname": "스케줄 이름 9249143",
         "uid": "0cb7-f17f-46ef",
         "uname": "운영자",
         "bid": "333",
@@ -228,18 +254,21 @@
         "num_usage": 0,
         "state": false,
         "color_code": "#f5c4e1",
-        "update_datetime": "2025/05/24-08:30:00"
+        "update_datetime": "2025/05/24-08:30:00",
+        "tags": [
+            "음악"
+        ]
     },
     {
-        "sid": "130960",
-        "sname": "스케줄 이름 10130960",
+        "sid": "187242",
+        "sname": "스케줄 이름 10187242",
         "uid": "0cb7-f17f-46ef",
         "uname": "운영자",
         "bid": "444",
         "bname": "임시주제4호",
-        "start_date": "2025/05/30",
+        "start_date": "2025/05/29",
         "start_time": "16:00",
-        "end_date": "2025/05/30",
+        "end_date": "2025/05/29",
         "end_time": "22:00",
         "location": [
             "치지직",
@@ -249,6 +278,9 @@
         "num_usage": 0,
         "state": false,
         "color_code": "#f5c4e1",
-        "update_datetime": "2025/05/24-08:30:00"
+        "update_datetime": "2025/05/24-08:30:00",
+        "tags": [
+            "저챗"
+        ]
     }
 ]

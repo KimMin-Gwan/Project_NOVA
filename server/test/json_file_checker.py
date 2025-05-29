@@ -29,12 +29,11 @@ def main():
     with open("./test_data.json", 'r', encoding='utf-8') as f:
         data_list = json.load(f)
         
-        
-
         for data in data_list:
             sid = str(randint(100000, 300000))
             # 0개에서 3개의 랜덤 옵션을 선택
             num_tags = randint(0, 3)
+            data['tags'] = sample(options, num_tags)
             data['start_date'] = "2025/05/29"
             data['end_date'] = "2025/05/29"
             data["sid"] = sid
