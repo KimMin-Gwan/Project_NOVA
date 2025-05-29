@@ -854,7 +854,7 @@ class FilteringManager:
                 filtered_fid_list = fid_list
 
             else:
-                temp_list = self.__managed_feed_bias_table.filtering_categories_feed_new(fid_list=fid_list, categories=keys)
+                temp_list = self.__managed_feed_bias_table.filtering_categories_feed(fid_list=fid_list, categories=keys)
 
                 filtered_fid_list.extend(temp_list)
             return filtered_fid_list
