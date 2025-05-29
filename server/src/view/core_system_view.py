@@ -691,7 +691,7 @@ class Core_Service_View(Master_View):
         def get_all_comment(request:Request, fid:Optional[str], cid:Optional[str]):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
 
-            data_payload = FeedStaringRequest(fid=fid, cid=cid)
+            data_payload = GetAllCommentRequest(fid=fid, cid=cid)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
                 #raise request_manager.credentials_exception
@@ -1028,10 +1028,14 @@ class RemoveCommentRequest(RequestHeader):
         self.fid=fid 
         self.cid=cid
 
-class FeedStaringRequest(RequestHeader):
-    def __init__(self,fid, date) -> None:
+class GetAllCommentRequest(RequestHeader):
+    def __init__(self,fid, cid="") -> None:
         self.fid=fid 
-        self.date=date
+        self.cid=cid
+
+class FeedStaringRequest(RequestHeader):
+    def __init__(self,fid) -> None:
+        self.fid=fid 
 
 class FeedInteractionRequest(RequestHeader):
     def __init__(self,fid, action) -> None:
