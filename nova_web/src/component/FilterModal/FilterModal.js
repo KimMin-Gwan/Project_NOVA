@@ -113,24 +113,6 @@ export default function FilterModal({
             })}
           </div>
         </div>
-
-        <div className="FilterModal_kind">
-          <h5>컨텐츠 종류</h5>
-          <div className="button_container">
-            {ContentData.map((data, i) => {
-              return (
-                <button
-                  className={isClickedFilterContent === data.value ? "clicked_button" : ""}
-                  key={data.id}
-                  onClick={() => onClickFilterContent(data.name, data.value, i)}
-                >
-                  {data.name}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
         <div className="FilterModal_buttons">
           <button className="close_button" onClick={onClickFilterButton}>
             닫기
