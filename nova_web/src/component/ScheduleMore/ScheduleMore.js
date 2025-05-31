@@ -4,12 +4,12 @@ import style from "./ScheduleMore.module.css";
 const BUTTON_SETTING = {
   [BUTTON_TYPES.DEFAULT]: { first: "", second: "게시판", last: "자세히" },
   [BUTTON_TYPES.SELECT]: { first: "", second: "일정 선택하기", last: "모두 추가하기" },
-  [BUTTON_TYPES.SCHEDULE]: { first: "자세히", second: "게시판에서 공유", last: "추가하기" },
+  [BUTTON_TYPES.SCHEDULE]: { first: "자세히", second: "게시글 검색", last: "추가하기" },
   [BUTTON_TYPES.BIAS]: { first: "게시판", second: "일정 검색", last: "팔로우" },
   [BUTTON_TYPES.CANCEL]: { first: "", second: "선택 취소", last: "선택한 일정 추가하기" },
   [BUTTON_TYPES.EVENT]: { first: "", second: "", last: "이벤트 추가하기" },
-  [BUTTON_TYPES.SCHEDULE_HAVE]: { first: "", second: "게시판에서 공유", last: "일정에서 제외하기" },
-  [BUTTON_TYPES.SCHEDULE_EDIT]: { first: "", second: "게시판에서 공유", last: "수정하기" },
+  [BUTTON_TYPES.SCHEDULE_HAVE]: { first: "", second: "게시글 검색", last: "일정에서 제외하기" },
+  [BUTTON_TYPES.SCHEDULE_EDIT]: { first: "", second: "게시글 검색", last: "수정하기" },
 };
 
 function BasicSchedule({ isMore, firstClick, secondClick, lastClick, target }) {

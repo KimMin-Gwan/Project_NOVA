@@ -166,8 +166,8 @@ function ScheduleComponentList({category, toggleEditScheduleModal, toggleAddSche
 
   const navigate = useNavigate();
   // 게시판으로 이동
-  const navBoard = () => {
-    navigate("/");
+  const navBoard = (target) => {
+    navigate(`/search_result?keyword=${target}`);
   };
 
   async function fetchSearchData() {
@@ -284,19 +284,26 @@ function ScheduleComponentList({category, toggleEditScheduleModal, toggleAddSche
               <ScheduleAdd
                 target={item}
                 detailClick={toggleAddScheduleModal}
-                navBoardClick={navBoard}
+                navBoardClick={()=>{
+                  navBoard(item.detail)
+                }}
                 addClick={fetchTryAddSchedule}
               />
             ) : item.is_owner === false? (
               <ScheduleRemove
                 target={item}
-                navBoardClick={navBoard}
+                navBoardClick={()=>{
+                  navBoard(item.detail)
+                }}
                 removeClick={fetchTryRejectSchedule}
               />
             ) : (
               <ScheduleEdit
                 target={item}
-                navBoardClick={navBoard}
+                navBoardClick={
+                  ()=>{
+                    navBoard(item.detail)
+                  }}
                 editClick={toggleEditScheduleModal}
               />
             )
