@@ -331,10 +331,6 @@ class TImeTableController:
         return model
 
 
-
-
-
-
     # 새로운 스케줄 만들기
     def make_new_single_schedule(self, schedule_search_engine:SSE, database:Local_Database, request:RequestManager) -> BaseModel:
         model = AddScheduleModel(database=database)

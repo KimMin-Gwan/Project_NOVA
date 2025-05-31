@@ -176,6 +176,7 @@ class TimeScheduleModel(ScheduleTransformModel):
         time_schedule_data["color_code"] = schedule.color_code
         time_schedule_data["is_already_have"] = schedule.is_already_have
         time_schedule_data["is_owner"] = schedule.is_owner
+        time_schedule_data["url"] = schedule.url
 
         return time_schedule_data
 

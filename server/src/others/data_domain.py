@@ -164,7 +164,7 @@ class Schedule(SampleDomain):
     def __init__(self, sid="", sname="", uid="", uname="",
                  bid="", bname="", start_date="", end_date="", start_time="",
                  end_time="", location=[], code="", update_datetime="",
-                 num_usage=0, state=True, color_code="", tags=[]
+                 num_usage=0, state=True, color_code="", tags=[], url=""
                  ):
         self.sid:str = sid                          # schedule id
         self.sname:str = sname                      # schedule name
@@ -185,6 +185,7 @@ class Schedule(SampleDomain):
         self.is_already_have = False
         self.is_owner = False                       # 글쓴이 여부
         self.tags = tags
+        self.url = url
     
     def make_with_dict(self, dict_data:dict):
         self.sid = dict_data.get('sid', "")
@@ -204,6 +205,7 @@ class Schedule(SampleDomain):
         self.state:bool = dict_data.get('state')
         self.color_code:str= dict_data.get('color_code', "")
         self.tags:list = dict_data.get('tags', [])
+        self.url:list = dict_data.get('url', "")
         return self
 
     def get_dict_form_data(self):
@@ -226,7 +228,8 @@ class Schedule(SampleDomain):
             "color_code": self.color_code,
             "is_already_have" : self.is_already_have,
             "is_owner" : self.is_owner,
-            "tags" : self.tags
+            "tags" : self.tags,
+            "url" : self.url
         }
 
     
