@@ -1,4 +1,4 @@
-import React, { act, useEffect, useState } from "react";
+import React, { act, useEffect, useState, useRef } from "react";
 import style from "./time_layer_box.module.css";
 import component_style from "./schedule_component.module.css";
 import right_vector_arrow from "./../../../img/right-vector-arrow.svg";
@@ -179,43 +179,35 @@ function ScheduleComponent({ section, schedules, onClickSchedule}) {
     }
 }
 
-
 function ScheduleDetail({
-     time, type, schedule_id,
-     schedule_title, schedule_bias, onClickSchedule
-    }) {
-    const [isClicked, setIsClicked] = useState(false); // 클릭 여부를 관리하는 상태
+    time, type, schedule_id,
+    schedule_title, schedule_bias, onClickSchedule
+}) {
 
-    const handleClick = () => {
-        onClickSchedule(schedule_id);
-        setIsClicked(true); // 클릭 시 색상을 변경
-        setTimeout(() => {
-            setIsClicked(false); // 1초 후 원래 상태로 돌아가게 설정
-        }, 1000); // 1000ms = 1초 후 원래 색으로 돌아가도록 설정
+    const handleClick = (e) => {
+        onClickSchedule(schedule_id); // 꾹 누르기 동작 실행
+
     };
 
     return (
-        <div className={component_style["schedule-detail-box"]}
-            onClick={handleClick} // 클릭 시 색상 변경
+        <div
+            className={component_style["schedule-detail-box"]}
+
+            onClick={handleClick}
             style={{
-                backgroundColor: isClicked ? "rgba(255,255,255,0.7)" : "", // 클릭 시 배경색 변경
-                transition: "background-color 0.3s ease", // 부드러운 색상 전환
+                transition: "background-color 0.3s ease",
             }}
         >
-            <span className={component_style["time-span"]}>
-                {time}
-            </span>
-            <ScheduleExposeType type={type}/>
+            <span className={component_style["time-span"]}>{time}</span>
+            <ScheduleExposeType type={type} />
             <div className={component_style["schedule-detail"]}>
                 <div className={component_style["schedule-title"]}>
                     {schedule_title}
                 </div>
-                <div className={component_style["schedule-bias"]}>
-                    {schedule_bias}
-                </div>  
+                <div className={component_style["schedule-bias"]}>{schedule_bias}</div>
             </div>
             <div className={component_style["schedule-arrow"]}>
-                <img src={right_vector_arrow} />
+                <img src={right_vector_arrow} alt="Arrow" />
             </div>
         </div>
     );

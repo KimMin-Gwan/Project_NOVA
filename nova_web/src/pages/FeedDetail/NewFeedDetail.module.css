@@ -262,13 +262,129 @@
   z-index: 9999;
 }
 
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  font-size: 18px;
+  color: #666;
+}
+
+.modal-top-span{
+  position: absolute;
+  left: 50%;
+  top: 12%;
+  transform: translateX(-50%);
+  font-weight: 500;
+  font-size: 13px;
+  color: white;
+}
+
+
+.modal-middle-box{
+  position: absolute;
+  left: 50%;
+  top: 15%;
+  transform: translateX(-50%);
+  width: 236px;
+  height: 410px;
+  border-radius: 12px;
+  
+  .overlap-group{
+    height : 316px;
+    width: 236px;
+    background-color: white;
+    border-radius: 12px;
+  }
+
+  .overlap-bottom{
+    height : 60px;
+    width: 236px;
+    background-color: white;
+    border-radius: 12px;
+  }
+
+  .modal-image{
+    border-radius: 12px;
+    width: 236px;
+    height: 236px;
+    object-fit: cover;
+  }
+
+  .modal-rectangle{
+    position : absolute;
+    width: 236px;
+    height: 316px;
+    top: 0;
+    left: 0;
+    border-radius: 12px;
+    background : linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.2) 0%,
+      rgba(255, 255, 255, 1) 68%
+    );
+    z-index: 1;
+    cursor:pointer;
+  }
+
+  .text-wrapper-2,
+  .text-wrapper-3 {
+    position: absolute; /* 텍스트 위치 지정 */
+    z-index: 2; /* modal-rectangle 위에 표시 */
+    color: black; /* 필요 시 텍스트 색상 명시 */
+    font-size: 14px; /* 예시 텍스트 크기 */
+  }
+
+  .text-wrapper-2 {
+    top: 240px; /* 텍스트 위치 조정 */
+    left: 10px;
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: -1.8px;
+  }
+
+  .text-wrapper-3 {
+    top: 280px; /* 텍스트 위치 조정 */
+    left: 10px;
+  } 
+
+  .overlap-top{
+    background-color: white;
+    width: 236px;
+    height: 39px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top : 10px;
+    margin-bottom: 10px;
+    cursor:pointer;
+  }
+
+  .overlap-under{
+    background-color: white;
+    width: 236px;
+    height: 39px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top : 10px;
+    margin-bottom: 10px;
+    cursor:pointer;
+  }
+}
+
+
+
 .modal_container {
   /* margin: 0 50px; */
   position: absolute;
   left: 50%;
   top: 30%;
   transform: translateX(-50%);
-  max-width: 250px;
+  max-width: 340px;
   background-color: white;
   width: 100%;
   border-radius: 7px;

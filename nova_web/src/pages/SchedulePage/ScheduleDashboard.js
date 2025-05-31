@@ -6,12 +6,14 @@ import { useNavigate } from "react-router-dom";
 import React, { useRef, useEffect, useState } from "react";
 //import TimeChart from "./TimeChart/TimeChart.jsx";
 import Header from "../../component/Header/Header.js";
-
+import HEADER from "../../constant/header";
+import postApi from "../../services/apis/postApi.js";
 import mainApi from "../../services/apis/mainApi.js";
 import NavBar from "../../component/NavBar/NavBar.js";
 import { MakeSingleSchedule } from "../../component/EventMore/EventMore.js";
 import TimeLayerBox from "./time_layer/time_layer_box.js";
 
+import { EditSingleSchedule } from "../../component/EventMore/EventMore";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import "swiper/css";
@@ -21,6 +23,7 @@ import "swiper/css/navigation";
 import style from './../FeedDetail/NewFeedDetail.module.css';
 
 import arrowRightStop from './Arrow_right_stop.svg';
+import tempBias from "./../../img/tempBias.png";
 
 const temp_schedule_data2 = [
     { tag : "노래/음악"},
@@ -279,7 +282,17 @@ const ScheduleDashboard = () => {
     // 변환된 값을 상태로 설정
     setLeftRotation(rotation);
 
-  }
+  } 
+
+  const [editScheduleModal, setEditScheduleModal] = useState(false);
+  const [editTarget, setEditTarget] = useState({sid:""})
+
+  const toggleEditScheduleModal = (target) => {
+    setEditScheduleModal((editScheduleModal) => !editScheduleModal);
+    setEditTarget({sid:target})
+  };
+
+
 
 
   return (
@@ -344,7 +357,7 @@ const ScheduleDashboard = () => {
           */}
           <div style={{display: "flex", justifyContent:"center", alignContent:"center"}}>
             {showScheduleMoreOption && (
-              <CommentOptionModal onClose={setShowScheduleMoreOption} targetSid={targetSchedule} onClickDelete={fetchRejectSchedule}/>
+              <ScheduleOptionModal onClose={setShowScheduleMoreOption} targetSid={targetSchedule} onClickEdit={toggleEditScheduleModal}/>
             )}
 
             <Swiper
@@ -479,26 +492,141 @@ const ScheduleDashboard = () => {
           })}
         </div>
       </div>
+
+      <EditSingleSchedule
+        closeSchedule={toggleEditScheduleModal}
+        isOpen={editScheduleModal}
+        target={editTarget}
+        isSingleSchedule={true}
+      />
+
       <NavBar brightMode={brightMode} />
     </div>
   );
 };
 
-function CommentOptionModal({ onClose, targetSid, onClickDelete}) {
+function ScheduleOptionModal({ onClose, targetSid, onClickEdit}) {
+  const bias_url = "https://kr.object.ncloudstorage.com/nova-images/";
+
+  const [bid, setBid] = useState("");
+  const [sname, setSname] = useState("");
+  const [startDate, setStartDate] = useState("00월 00일");
+  const [startTime, setStartTime] = useState("00:00");
+  const [isOwner, setOwner] = useState(false);
+  const [isHave, setIsHave] = useState(false);
+  const [url, setUrl] = useState("http://www.naver.com");
+  const [loading, setLoading] = useState(true); // 로딩 상태 추가
+
+  async function fetchScheduleData() {
+    const scheduleData = {
+      sids: [targetSid],
+    };
+
+    setLoading(true); // 로딩 시작
+    try {
+      const res = await postApi.post("time_table_server/get_schedule_with_sids", {
+        header: HEADER,
+        body: scheduleData,
+      });
+      const schedule = res.data.body.schedules[0];
+      setBid(schedule.bid);
+      setSname(schedule.detail);
+      setStartDate(schedule.start_date);
+      setStartTime(schedule.start_time);
+      setOwner(schedule.is_owner);
+      setIsHave(schedule.is_already_have);
+    } catch (error) {
+      console.error("Failed to fetch schedule data:", error);
+    } finally {
+      setLoading(false); // 로딩 완료
+    }
+  }
+
+  // 내 스케줄에 등록하는 함수 (추가하기 버튼 누르면 동작해야됨)
+  // 완료하면 성공했다고 알려주면 좋을듯
+  async function fetchTryRejectSchedule() {
+    await mainApi 
+      .get(`time_table_server/try_reject_from_my_schedule?sid=${targetSid}`)
+      .then((res) => { 
+        onClose()
+      });
+  }
+
+  useEffect(() => {
+    fetchScheduleData();
+  }, []);
+
+  function onClickLink(url) {
+    window.open(url, "_blank", "noopener, noreferrer");
+  }
+
+  if (loading) {
+    // 로딩 중일 때 표시할 UI
+    return (
+      <div className={style["OptionModal"]} onClick={() => onClose(false)}>
+        <div className={style["loading-spinner"]}>로딩 중...</div>
+      </div>
+    );
+  }
+
   return (
-    <div className={style["OptionModal"]} onClick={()=>onClose(false)}>
-      <div
-        className={style["modal_container"]}
-        onClick={(e) => e.stopPropagation()} // 이벤트 버블링 방지
-      >
-        <div className={style["modal_title"]}>일정</div>
-        {/* <div className={style["modal_content"]}>수정</div> */}
+    <div className={style["OptionModal"]} onClick={() => onClose(false)}>
+      <span className={style["modal-top-span"]}>
+        카드를 클릭해 방송국으로 이동
+      </span>
+      <div className={style["modal-middle-box"]}>
         <div
-          className={`${style["modal_content"]} ${style["modal_content_accent"]}`}
-          onClick={() => onClickDelete(targetSid)}
+          className={style["overlap-group"]}
+          onClick={(e) => {
+            e.stopPropagation();
+            onClickLink(url)
+          }}
         >
-          제외하기
+          <img
+            className={style["modal-image"]}
+            src={bias_url + `${bid}.PNG`}
+            alt="bias"
+            onError={(e) => (e.target.src = tempBias)}
+          />
+          <div className={style["modal-rectangle"]}></div>
+          <div className={style["text-wrapper-2"]}>{sname}</div>
+          <div className={style["text-wrapper-3"]}>
+            {startDate}  |  {startTime}
+          </div>
         </div>
+          {isOwner ? (
+            <>
+              <div
+                className={style["overlap-top"]}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onClose();
+                  onClickEdit(targetSid);
+                }}
+              >
+                수정
+              </div>
+              <div
+                className={style["overlap-under"]}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  fetchTryRejectSchedule();
+                }}
+              >
+                제외
+              </div>
+            </>
+          ) : isHave ? (
+            <div
+              className={style["overlap-top"]}
+              onClick={(e) => {
+                e.stopPropagation();
+                fetchTryRejectSchedule();
+              }}
+            >
+              제외
+            </div>
+          ) : null}
       </div>
     </div>
   );
