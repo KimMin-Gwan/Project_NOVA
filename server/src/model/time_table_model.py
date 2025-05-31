@@ -1235,6 +1235,7 @@ class AddScheduleModel(TimeTableModel):
 
         schedule.sid = self.__make_new_sid()
         schedule.bname = bias.bname
+        schedule.url = bias.homepage
         schedule.uid = self._user.uid
         schedule.uname = self._user.uname
         schedule.code = self.__make_schedule_code()
