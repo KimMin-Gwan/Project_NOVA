@@ -319,7 +319,6 @@ function LinkSection({ links }) {
               <div
                 className={style["Link_box"]}
                 onClick={() => {
-                  console.log(link.url)
                   onClickLink(link.url);
                 }}
               >
