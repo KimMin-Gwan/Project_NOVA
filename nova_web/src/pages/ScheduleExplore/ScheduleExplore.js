@@ -248,7 +248,7 @@ function ScheduleComponentList({category, toggleEditScheduleModal, toggleAddSche
       });
   }
 
-    // 내 스케줄에 등록하는 함수 (추가하기 버튼 누르면 동작해야됨)
+  // 내 스케줄에 등록하는 함수 (추가하기 버튼 누르면 동작해야됨)
   // 완료하면 성공했다고 알려주면 좋을듯
   async function fetchTryRejectSchedule(target) {
     // 무조건 리스트로 만들어야됨
