@@ -67,10 +67,18 @@ class FeedManager:
     # 실제로 피드를 만들고, 서치 엔진에 추가하는 부분이다.
     def __make_new_feed(self, user:User, fid, fclass, choice, body, hashtag,
                         board_type, images, link, bid, raw_body="", ai_manager=None, data_payload_body=None):
+        bname = ""
+        bias_data = self._database.get_data_with_id(target="bid", id=bid)
+        
+        if bias_data:
+            bname = bias_data.bname
+        
+        
         # 검증을 위한 코드는 이곳에 작성하시오
         new_feed = self.__set_new_feed(user=user, fid=fid, fclass=fclass,
                                        choice=choice, body=body, hashtag=hashtag,
-                                       board_type=board_type, image=images, link=link, bid=bid, raw_body=raw_body)
+                                       board_type=board_type, image=images, link=link,
+                                       bid=bid, raw_body=raw_body, bname=bname)
 
 
         #if data_payload_body:
@@ -88,6 +96,12 @@ class FeedManager:
     
     def __modify_feed(self, user:User, fid, fclass, choice, body, hashtag, board_type, date,
                       images, link, bid, raw_body="", ai_manager=None, data_payload_body=None):
+        bname = ""
+        bias_data = self._database.get_data_with_id(target="bid", id=bid)
+        
+        if bias_data:
+            bname = bias_data.bname
+            
         # 검증을 위한 코드는 이곳에 작성하시오
         feed = self.__set_new_feed(user=user, fid=fid, fclass=fclass,
                                        choice=choice, body=body, hashtag=hashtag,
@@ -138,7 +152,7 @@ class FeedManager:
         return lid_list
 
     # 새로운 피드의 데이터를 추가하여 반환
-    def __set_new_feed(self, user:User,fid, fclass, choice, body, hashtag,
+    def __set_new_feed(self, user:User,fid, fclass, choice, body, hashtag, bname,
                        board_type, image, link, bid, raw_body, date=None):
         # 인터액션이 있으면 작업할것
         if len(choice) > 1:
@@ -171,6 +185,7 @@ class FeedManager:
         new_feed.iid = iid
         new_feed.lid = lids
         new_feed.bid = bid
+        new_feed.bname = bname
         new_feed.raw_body = raw_body
         return new_feed
     
@@ -185,6 +200,7 @@ class FeedManager:
         # fid 만들기 feed 수정기능을 겸하고 있기 때문에, 다음을 추가한 것
         if fid == "":
             fid = self.__make_new_fid(user=user)
+            
 
         if data_payload.fclass == "short":
             

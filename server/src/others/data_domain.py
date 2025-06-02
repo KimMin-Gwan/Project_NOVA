@@ -458,7 +458,7 @@ class League(SampleDomain):
 
 class Feed(SampleDomain):
     def __init__(self, fid="", uid="", body="", fclass="", date="",
-                 display=4, star=0, board_type="", image=None, hashtag=None,
+                 display=4, star=0, board_type="", image=None, hashtag=None, bname="",
                  comment=None, iid="", lid="", bid="", raw_body ="", p_body=""):
         if image is None:
             image = []
@@ -487,6 +487,7 @@ class Feed(SampleDomain):
         self.iid = iid  # interaction id
         self.lid = lid  # link id
         self.bid = bid  # bias id
+        self.bname = bname
         self.raw_body = raw_body
         self.reworked_body = ""
         self.level = 0
@@ -500,7 +501,7 @@ class Feed(SampleDomain):
         self.is_reworked = False
 
 
-    def make_with_dict(self, dict_data):
+    def make_with_dict(self, dict_data:dict):
         try:
             self.fid = dict_data["fid"]
             self.uid = dict_data["uid"]
@@ -520,6 +521,7 @@ class Feed(SampleDomain):
             self.reworked_body = dict_data["reworked_body"]
             self.level = dict_data["level"]
             self.p_body = dict_data["p_body"]
+            self.bname = dict_data.get("bname", "")
 
             self.num_comment = len(self.comment)
             self.num_image = len(self.image)
@@ -550,6 +552,7 @@ class Feed(SampleDomain):
             "reworked_body" :self.reworked_body,
             "level" : self.level,
             "p_body": self.p_body,
+            "bname" : self.bname,
 
             "num_comment":self.num_comment,
             "num_image":self.num_image,

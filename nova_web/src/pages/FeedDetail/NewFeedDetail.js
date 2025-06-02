@@ -224,6 +224,7 @@ export default function NewFeedDetail() {
 
   async function fetchFeed() {
     await mainApi.get(`feed_explore/feed_detail/feed_data?fid=${fid}`).then((res) => {
+      console.log(res.data.body)
       setFeedData(res.data.body.feed[0]);
       setLinks(res.data.body.links);
       setIsLoading(false);
