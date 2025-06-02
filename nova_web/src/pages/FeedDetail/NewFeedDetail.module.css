@@ -370,6 +370,7 @@
 
 }
 
+
 .schedule-text-wrapper-2,
 .schedule-text-wrapper-3 {
   position: absolute; /* 부모 요소를 기준으로 위치를 지정 */
@@ -377,14 +378,36 @@
   color: black;
   font-size: 14px;
   left: 10px; /* 왼쪽 여백 */
+  cursor: pointer;
 }
 
+
+
 .schedule-text-wrapper-2 {
+  width: 213px; /* 고정된 너비 */
+  height: 20px; /* 고정된 높이 */
+  overflow: hidden; /* 넘치는 텍스트 숨기기 */
+  white-space: nowrap; /* 텍스트를 한 줄로 유지 */
   top: 240px; /* 부모 요소 안에서 위쪽 여백 */
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: -1.05px;
 }
+
+.scrolling-text {
+  display: inline-block;
+  transform: translateX(0); /* 초기 위치 */
+  transition: transform 0.5s ease-out; /* 복귀 애니메이션 */
+}
+
 
 .schedule-text-wrapper-3 {
   top: 280px; /* 부모 요소 안에서 위쪽 여백 */
+  font-size: 14px;
+  letter-spacing: -1.00px;
+  display: flex;
+  align-items: center;
+  gap: 12px; /* 요소 간 간격 */
 }
 
 

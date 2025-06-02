@@ -506,6 +506,8 @@ const ScheduleDashboard = () => {
 };
 
 function ScheduleOptionModal({ onClose, targetSid, onClickEdit}) {
+  const textRef = useRef(null);
+  const wrapperRef = useRef(null);
   const bias_url = "https://kr.object.ncloudstorage.com/nova-images/";
 
   const [bid, setBid] = useState("");
@@ -569,6 +571,24 @@ function ScheduleOptionModal({ onClose, targetSid, onClickEdit}) {
     );
   }
 
+
+  const handleMouseEnter = () => {
+    const wrapperWidth = wrapperRef.current.offsetWidth;
+    const textWidth = textRef.current.scrollWidth;
+
+    if (textWidth > wrapperWidth) {
+      const moveDistance = Math.min(textWidth - wrapperWidth + 20, 999); // 최대 이동 거리 제한
+      const duration = moveDistance / 50; // 속도 조절 (50px/s)
+      textRef.current.style.transition = `transform ${duration}s linear`;
+      textRef.current.style.transform = `translateX(-${moveDistance}px)`;
+    }
+  };
+
+  const handleMouseLeave = () => {
+    textRef.current.style.transition = "transform 0.5s ease-out"; // 복귀 애니메이션
+    textRef.current.style.transform = "translateX(0)";
+  };
+
   return (
     <div className={style["OptionModal"]} onClick={() => onClose(false)}>
       <span className={style["modal-top-span"]}>
@@ -589,9 +609,21 @@ function ScheduleOptionModal({ onClose, targetSid, onClickEdit}) {
             onError={(e) => (e.target.src = tempBias)}
           />
           <div className={style["schedule-modal-rectangle"]}></div>
-          <div className={style["schedule-text-wrapper-2"]}>{sname}</div>
+          <div
+            className={style["schedule-text-wrapper-2"]}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            ref={wrapperRef}
+          >
+            <div className={style["scrolling-text"]} ref={textRef}>
+              {sname}
+            </div>
+          </div>
+
           <div className={style["schedule-text-wrapper-3"]}>
-            {startDate}  |  {startTime}
+              <span>{startDate}</span>
+              <span> | </span>
+              <span>{startTime}</span>
           </div>
         </div>
           {isOwner ? (
