@@ -1867,7 +1867,7 @@ class ManagedScheduleTable(ManagedTable):
             columns = search_columns
             
         searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_df, columns=columns, key=key)
-        
+        pprint(searched_df.head())
 
         if return_id:
             return searched_df['sid'].to_list()
