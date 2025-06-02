@@ -151,17 +151,36 @@ export default function SearchResultPage() {
 
   const targetRef = useIntersectionObserver(loadMoreCallBack, { threshold: 0.5 }, hasMore);
 
-  function handleNavigate() {
-    const updateHistory = [...searchHistory, searchWord];
-    setSearchHistory(updateHistory);
-    localStorage.setItem("history", JSON.stringify(updateHistory));
-    navigate(`/search_result?keyword=${searchWord}`);
-    navigate(0);
-    setSearchWord("");
+  // 다른 버튼 눌러서 동작할때 파라미터를 사용함
+  function handleNavigate(searchDetail) {
+    if (searchDetail){
+      const updateHistory = [...searchHistory, searchDetail];
+      setSearchHistory(updateHistory);
+      localStorage.setItem("history", JSON.stringify(updateHistory));
+      navigate(`/search_result?keyword=${searchDetail}`);
+      navigate(0);
+      setSearchWord("");
+    }else{
+      const updateHistory = [...searchHistory, searchWord];
+      setSearchHistory(updateHistory);
+      localStorage.setItem("history", JSON.stringify(updateHistory));
+      navigate(`/search_result?keyword=${searchWord}`);
+      navigate(0);
+      setSearchWord("");
+    }
   }
 
   function handleSearchWord(e) {
     setSearchWord(e.target.value);
+  }
+
+  function handleClickScheduleButton(e, detail){
+    e.stopPropagation();
+    setSearchWord(prev => {
+      const newWord = detail;
+      handleNavigate(newWord); // 새로운 검색어와 함께 handleSearch 실행
+      return newWord;
+    });
   }
 
   function handleKeyDown(event) {
@@ -175,7 +194,6 @@ export default function SearchResultPage() {
   };
 
   function handleSearch(history) {
-    console.log("검색어:", history, searchWord);
     if (history) {
       navigate(`/search_result?keyword=${history}`);
     } else if (searchWord) {
@@ -246,8 +264,9 @@ export default function SearchResultPage() {
       {type === "comment" && <Comments comments={comments} isLoading={isLoading} />}
       {type === "post" && <FeedSection feedData={feedData} setFeedData={setFeedData} isLoading={isLoading} /> }
       {type === "schedule" && <Schedules scheduleData={scheduleData}
-       type={type} toggleAddScheduleBundleModal={toggleAddScheduleBundleModal} toggleEditScheduleModal={toggleEditScheduleModal} />}
-
+       type={type} toggleAddScheduleBundleModal={toggleAddScheduleBundleModal} toggleEditScheduleModal={toggleEditScheduleModal} 
+          fetchNavBoard={handleClickScheduleButton}
+       />}
       <div ref={targetRef} style={{ height: "1px" }}></div>
       <NavBar />
 
@@ -276,13 +295,22 @@ export default function SearchResultPage() {
   );
 }
 
-function Schedules ({scheduleData, type, toggleAddScheduleBundleModal, toggleAddScheduleModal, toggleEditScheduleModal, fetchTryAddSchedule, fetchTryRejectSchedule}) {
+function Schedules ({
+  scheduleData, type, toggleAddScheduleBundleModal,
+  toggleAddScheduleModal, toggleEditScheduleModal,
+   fetchTryAddSchedule, fetchTryRejectSchedule,
+   fetchNavBoard
+  }) {
   const { moreClick, handleToggleMore } = useToggleMore();
   let navigate = useNavigate();
   // 게시판으로 이동
-  const navBoard = () => {
-    navigate("/");
+  const navBoard = (target) => {
+    console.log(target)
+    setTimeout(() => {
+      navigate(`/search_result?keyword=${target}`);
+    }, 0);
   };
+
 
   return(
         <ul className="scheduleList" style={{ display: "flex", flexDirection: "column", gap: "4px", paddingLeft:"0px"}}>
@@ -315,25 +343,31 @@ function Schedules ({scheduleData, type, toggleAddScheduleBundleModal, toggleAdd
                   <ScheduleAdd
                     target={item}
                     detailClick={toggleAddScheduleModal}
-                    navBoardClick={navBoard}
+                    navBoardClick={(e)=>{
+                      fetchNavBoard(e, item.detail)
+                    }}
                     addClick={fetchTryAddSchedule}
                   />
                 ) : item.is_owner === false? (
                   <ScheduleRemove
                     target={item}
-                    navBoardClick={navBoard}
+                    navBoardClick={(e)=>{
+                      fetchNavBoard(e, item.detail)
+                    }}
                     removeClick={fetchTryRejectSchedule}
                   />
                 ) : (
                   <ScheduleEdit
                     target={item}
-                    navBoardClick={navBoard}
+                    navBoardClick={
+                      (e)=>{
+                        fetchNavBoard(e,item.detail)
+                      }}
                     editClick={toggleEditScheduleModal}
                   />
                 )
               )}
             </div>
- 
             ))}
           <div style={{height:"48px"}}></div>
 
