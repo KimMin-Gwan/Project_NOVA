@@ -8,8 +8,7 @@
 }
 
 .content-box{
-  width: 92%;
-  margin : 4%;
+  width: 100%;
   pointer-events: "none";
 }
 
