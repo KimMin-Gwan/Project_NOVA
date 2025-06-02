@@ -73,109 +73,133 @@ export function ContentFeed({ detailPage, feed, handleCheckStar, links, fetchRep
 
   if (disableClick){
     return (
-      <div
-        className={`${style["wrapper-container"]} ${feed.fclass === "long" && style["long-wrapper"]}`}
-      >
-        <FeedHeader date={feed.date} nickname={feed.nickname} />
-        {/**
-        <AIFilter
-          isReworked={feed.is_reworked}
-          fid={feed.fid}
-          fetchOriginalText={fetchOriginalText}
-        />
-         
-         */}
-
-        <div className={`${style["body-container"]} ${detailPage ? "" : style["long-form-hidden"]}`}>
-          <HashTags hashtags={feed.hashtag} />
-
-          {feed.fclass === "short" && <div className={style["body-content"]}>{feed.body}</div>}
-          {feed.image?.length > 0 && feed.fclass === "short" ? (
-            <div className={style["image-container"]}>
-              <div
-                ref={scrollRef}
-                className={`${style["image-origin"]} ${style["two-over-image"]}`}
-                onMouseDown={dragHandlers.onMouseDown}
-                onMouseMove={dragHandlers.onMouseMove}
-                onMouseUp={dragHandlers.onMouseUp}
-              >
-                {feed.num_image >= 2 ? (
-                  feed.image.map((img, i) => {
-                    return <img key={i} src={img} alt="image" />;
-                  })
-                ) : (
-                  <img src={feed.image[0]} alt="image" />
-                )}
-              </div>
+      <div>
+        <div className={style["wrapper-top-component"]}>
+          {feed.bname && (
+            <div className={style["meta-data-1"]}>
+              {feed.bname}
             </div>
-          ) : null}
-
-          {feed.fclass === "long" && <Viewer initialValue={feed.raw_body} />}
+          )}
+          <div className={style["meta-data-2"]}>
+            {feed.board_type}
+          </div>
         </div>
+        <div
+          className={`${style["wrapper-container"]} ${feed.fclass === "long" && style["long-wrapper"]}`}
+        >
+          <FeedHeader date={feed.date} nickname={feed.nickname} />
+          {/**
+          <AIFilter
+            isReworked={feed.is_reworked}
+            fid={feed.fid}
+            fetchOriginalText={fetchOriginalText}
+          />
+         
+          */}
 
-        {links && <LinkSection links={links} />}
+          <div className={`${style["body-container"]} ${detailPage ? "" : style["long-form-hidden"]}`}>
+            <HashTags hashtags={feed.hashtag} />
 
-        <ActionButtons
-          feed={feed}
-          handleCheckStar={handleCheckStar}
-          fetchReportResult={fetchReportResult}
-        />
+            {feed.fclass === "short" && <div className={style["body-content"]}>{feed.body}</div>}
+            {feed.image?.length > 0 && feed.fclass === "short" ? (
+              <div className={style["image-container"]}>
+                <div
+                  ref={scrollRef}
+                  className={`${style["image-origin"]} ${style["two-over-image"]}`}
+                  onMouseDown={dragHandlers.onMouseDown}
+                  onMouseMove={dragHandlers.onMouseMove}
+                  onMouseUp={dragHandlers.onMouseUp}
+                >
+                  {feed.num_image >= 2 ? (
+                    feed.image.map((img, i) => {
+                      return <img key={i} src={img} alt="image" />;
+                    })
+                  ) : (
+                    <img src={feed.image[0]} alt="image" />
+                  )}
+                </div>
+              </div>
+            ) : null}
+
+            {feed.fclass === "long" && <Viewer initialValue={feed.raw_body} />}
+          </div>
+
+          {links && <LinkSection links={links} />}
+
+          <ActionButtons
+            feed={feed}
+            handleCheckStar={handleCheckStar}
+            fetchReportResult={fetchReportResult}
+          />
+        </div>
       </div>
     );
   }else{
     return (
-      <div
-        className={`${style["wrapper-container"]} ${feed.fclass === "long" && style["long-wrapper"]}`}
-        onClick={(e) => {
-          if (hasDragged) return;
-          e.preventDefault();
-          e.stopPropagation();
-          navigate(`/feed_detail/${feed.fid}`, {
-            state: { commentClick: false },
-          });
-        }}
-      >
-        <FeedHeader date={feed.date} nickname={feed.nickname} />
-        <AIFilter
-          isReworked={feed.is_reworked}
-          fid={feed.fid}
-          fetchOriginalText={fetchOriginalText}
-        />
-
-        <div className={`${style["body-container"]} ${detailPage ? "" : style["long-form-hidden"]}`}>
-          <HashTags hashtags={feed.hashtag} />
-
-          {feed.fclass === "short" && <div className={style["body-content"]}>{feed.body}</div>}
-          {feed.image?.length > 0 && feed.fclass === "short" ? (
-            <div className={style["image-container"]}>
-              <div
-                ref={scrollRef}
-                className={`${style["image-origin"]} ${style["two-over-image"]}`}
-                onMouseDown={dragHandlers.onMouseDown}
-                onMouseMove={dragHandlers.onMouseMove}
-                onMouseUp={dragHandlers.onMouseUp}
-              >
-                {feed.num_image >= 2 ? (
-                  feed.image.map((img, i) => {
-                    return <img key={i} src={img} alt="image" />;
-                  })
-                ) : (
-                  <img src={feed.image[0]} alt="image" />
-                )}
-              </div>
+      <div>
+        <div className={style["wrapper-top-component"]}>
+          {feed.bname && (
+            <div className={style["meta-data-1"]}>
+              {feed.bname}
             </div>
-          ) : null}
-
-          {feed.fclass === "long" && <Viewer initialValue={feed.raw_body} />}
+          )}
+          <div className={style["meta-data-2"]}>
+            {feed.board_type}
+          </div>
         </div>
+        <div
+          className={`${style["wrapper-container"]} ${feed.fclass === "long" && style["long-wrapper"]}`}
+          onClick={(e) => {
+            if (hasDragged) return;
+            e.preventDefault();
+            e.stopPropagation();
+            navigate(`/feed_detail/${feed.fid}`, {
+              state: { commentClick: false },
+            });
+          }}
+        >
+          <FeedHeader date={feed.date} nickname={feed.nickname} />
+          <AIFilter
+            isReworked={feed.is_reworked}
+            fid={feed.fid}
+            fetchOriginalText={fetchOriginalText}
+          />
 
-        {links && <LinkSection links={links} />}
+          <div className={`${style["body-container"]} ${detailPage ? "" : style["long-form-hidden"]}`}>
+            <HashTags hashtags={feed.hashtag} />
 
-        <ActionButtons
-          feed={feed}
-          handleCheckStar={handleCheckStar}
-          fetchReportResult={fetchReportResult}
-        />
+            {feed.fclass === "short" && <div className={style["body-content"]}>{feed.body}</div>}
+            {feed.image?.length > 0 && feed.fclass === "short" ? (
+              <div className={style["image-container"]}>
+                <div
+                  ref={scrollRef}
+                  className={`${style["image-origin"]} ${style["two-over-image"]}`}
+                  onMouseDown={dragHandlers.onMouseDown}
+                  onMouseMove={dragHandlers.onMouseMove}
+                  onMouseUp={dragHandlers.onMouseUp}
+                >
+                  {feed.num_image >= 2 ? (
+                    feed.image.map((img, i) => {
+                      return <img key={i} src={img} alt="image" />;
+                    })
+                  ) : (
+                    <img src={feed.image[0]} alt="image" />
+                  )}
+                </div>
+              </div>
+            ) : null}
+
+            {feed.fclass === "long" && <Viewer initialValue={feed.raw_body} />}
+          </div>
+
+          {links && <LinkSection links={links} />}
+
+          <ActionButtons
+            feed={feed}
+            handleCheckStar={handleCheckStar}
+            fetchReportResult={fetchReportResult}
+          />
+        </div>
       </div>
     );
   }
