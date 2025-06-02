@@ -588,9 +588,9 @@ function ScheduleOptionModal({ onClose, targetSid, onClickEdit}) {
             alt="bias"
             onError={(e) => (e.target.src = tempBias)}
           />
-          <div className={style["modal-rectangle"]}></div>
-          <div className={style["text-wrapper-2"]}>{sname}</div>
-          <div className={style["text-wrapper-3"]}>
+          <div className={style["schedule-modal-rectangle"]}></div>
+          <div className={style["schedule-text-wrapper-2"]}>{sname}</div>
+          <div className={style["schedule-text-wrapper-3"]}>
             {startDate}  |  {startTime}
           </div>
         </div>

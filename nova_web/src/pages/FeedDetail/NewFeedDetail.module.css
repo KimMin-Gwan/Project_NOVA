@@ -312,29 +312,6 @@
     object-fit: cover;
   }
 
-  .modal-rectangle{
-    position : absolute;
-    width: 236px;
-    height: 316px;
-    top: 0;
-    left: 0;
-    border-radius: 12px;
-    background : linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.2) 0%,
-      rgba(255, 255, 255, 1) 68%
-    );
-    z-index: 1;
-    cursor:pointer;
-  }
-
-  .text-wrapper-2,
-  .text-wrapper-3 {
-    position: absolute; /* 텍스트 위치 지정 */
-    z-index: 2; /* modal-rectangle 위에 표시 */
-    color: black; /* 필요 시 텍스트 색상 명시 */
-    font-size: 14px; /* 예시 텍스트 크기 */
-  }
 
   .text-wrapper-2 {
     top: 240px; /* 텍스트 위치 조정 */
@@ -376,6 +353,39 @@
   }
 }
 
+.schedule-modal-rectangle{
+  position : absolute;
+  width: 236px;
+  height: 316px;
+  top: 0;
+  left: 0;
+  border-radius: 12px;
+  background : linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(255, 255, 255, 1) 68%
+  );
+  z-index: 1;
+  cursor:pointer;
+
+}
+
+.schedule-text-wrapper-2,
+.schedule-text-wrapper-3 {
+  position: absolute; /* 부모 요소를 기준으로 위치를 지정 */
+  z-index: 2; /* modal-rectangle 위로 배치 */
+  color: black;
+  font-size: 14px;
+  left: 10px; /* 왼쪽 여백 */
+}
+
+.schedule-text-wrapper-2 {
+  top: 240px; /* 부모 요소 안에서 위쪽 여백 */
+}
+
+.schedule-text-wrapper-3 {
+  top: 280px; /* 부모 요소 안에서 위쪽 여백 */
+}
 
 
 .modal_container {
