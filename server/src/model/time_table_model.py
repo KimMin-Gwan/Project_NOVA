@@ -925,7 +925,6 @@ class MultiScheduleModel(TimeTableModel):
 
         if search_type == "schedule" or search_type == "sid":
             searched_list = schedule_search_engine.try_search_schedule_w_keyword(target_keyword=keyword, search_columns=search_columns_list)
-            print(when)
             if when != "": # 진행중인 애만 찾고싶으면
                 searched_list = schedule_search_engine.try_filtering_schedule_in_progress(sids=searched_list, when=when)
         elif search_type == "schedule_bundle" or search_type == "sbid":
@@ -934,7 +933,6 @@ class MultiScheduleModel(TimeTableModel):
                 searched_list = schedule_search_engine.try_filtering_bundle_in_progress(sbids=searched_list, when=when)
 
 
-        pprint(searched_list)
         searched_list, self._key = self.paging_id_list(id_list=searched_list, last_index=last_index, page_size=num_schedules)
         self._make_send_data_with_ids(id_list=searched_list, search_type=search_type)
 
