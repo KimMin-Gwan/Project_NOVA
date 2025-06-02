@@ -2294,8 +2294,10 @@ h5 {
 /* 2024/12/30 */
 /* 피드 레이아웃 수정본 */
 .wrapper-container {
-  width: calc(100% - 4px);
+  width: calc(92% - 4px);
   cursor: pointer;
+  margin-left : 4%;
+  margin-right: 4%;
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.6) 100%);
   box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.08);
   color: black;
@@ -2304,6 +2306,45 @@ h5 {
   border-radius: 12px;
   position: relative;
 }
+
+.wrapper-top-component{
+  width: calc(92% - 4px);
+  height: 30px;
+  margin-left : 4%;
+  margin-right: 4%;
+  display: flex;
+  flex-direction: row;
+}
+
+.meta-data-1{
+  justify-content: center;
+  padding-top : 7px;
+  display: flex;
+  margin-left : 13px;
+  width: 110px;
+  height: 25px;
+  background-color: #C2DCFF;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  color: white;
+  font-size: 15px;
+}
+
+.meta-data-2{
+  justify-content: center;
+  padding-top : 7px;
+  display: flex;
+  margin-left : 13px;
+  width: 110px;
+  height: 25px;
+  background-color: #8EBFFF;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  color: white;
+  font-size: 15px;
+}
+
+
 
 .long-wrapper {
   /* min-height: 600px; */
