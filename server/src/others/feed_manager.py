@@ -71,7 +71,7 @@ class FeedManager:
         bias_data = self._database.get_data_with_id(target="bid", id=bid)
         
         if bias_data:
-            bname = bias_data.bname
+            bname = bias_data.get("bname", "")
         
         
         # 검증을 위한 코드는 이곳에 작성하시오
