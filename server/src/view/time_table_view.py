@@ -160,9 +160,11 @@ class TimeTableView(Master_View):
         # 테스트완료
         # 이걸로 바이어스 네임으로 서치 가능
 
+
+        # filter_option : "not_end", ""
         @self.__app.get('/time_table_server/try_search_schedule_with_keyword')
         def try_search_schedule(request:Request, search_columns:Optional[str]="",
-                                filter_option:Optional[str]="not_end", keyword:Optional[str]="",
+                                filter_option:Optional[str]="", keyword:Optional[str]="",
                                 key:Optional[int]=-1, type:Optional[str]=""):
 
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
