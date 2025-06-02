@@ -370,7 +370,7 @@ const ScheduleDashboard = () => {
                   // 0번 슬라이드로 이동하면 강제로 1번 슬라이드로 이동
                   setTimeout(() => swiperRef.current?.slideTo(1), 0);
                   // 당기면 지난주 데이터를 받아야하는데, 너무 민감해서 diff 차이로 계산
-                  if (swiper.touches.diff > 300){
+                  if (swiper.touches.diff > 200){
                     onChangeIndexPrev();
                   }
                 }
@@ -378,7 +378,7 @@ const ScheduleDashboard = () => {
                   // 5번 슬라이드로 이동하면 강제로 4번 슬라이드로 이동
                   setTimeout(() => swiperRef.current?.slideTo(1), 0);
                   // 당기면 다음주 데이터를 받아야하는데, 너무 민감해서 diff 차이로 계산
-                  if (swiper.touches.diff < -300){
+                  if (swiper.touches.diff < -200){
                     onChangeNextAsync()
                   }
                 }else{
