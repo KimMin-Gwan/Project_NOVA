@@ -16,6 +16,7 @@ import { ScheduleMore, ScheduleAdd, ScheduleRemove, ScheduleEdit} from "../../co
 import { ScheduleBundle} from "../../component/ScheduleEvent/ScheduleBundle";
 import useToggleMore from "../../hooks/useToggleMore";
 import ScheduleCard from "../../component/EventCard/EventCard";
+import NoneSchedule from "../../component/NoneFeed/NoneSchedule";
 
 export default function SearchResultPage() {
   let [searchParams] = useSearchParams();
@@ -285,6 +286,7 @@ function Schedules ({scheduleData, type, toggleAddScheduleBundleModal, toggleAdd
 
   return(
         <ul className="scheduleList" style={{ display: "flex", flexDirection: "column", gap: "4px", paddingLeft:"0px"}}>
+        {scheduleData.length === 0 && <NoneSchedule/>}
         {type=== "schedule_bundle"
           ? scheduleData.map((item) => (
               <div key={item.sbid}>
