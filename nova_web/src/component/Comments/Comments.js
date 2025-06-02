@@ -3,7 +3,7 @@ import arrow from "./../../img/comment_arrow.svg";
 import reArrow from "./../../img/recomment.svg";
 import { useState } from "react";
 import MyPageLoading from "../../pages/LoadingPage/MypageLoading";
-import NoneFeed from "../NoneFeed/NoneFeed";
+import NoneComment from "../NoneFeed/NoneComment";
 
 export default function Comments({ comments, isLoading }) {
   const [clickedComments, setClickedComments] = useState({});
@@ -20,7 +20,7 @@ export default function Comments({ comments, isLoading }) {
   }
 
   if (comments.length === 0) {
-    return <NoneFeed />;
+    return <NoneComment/>;
   }
   return (
     <>

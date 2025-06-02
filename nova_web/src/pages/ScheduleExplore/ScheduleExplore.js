@@ -17,6 +17,7 @@ import { ScheduleDetail, EditSingleSchedule } from "../../component/EventMore/Ev
 
 import "./index.css";
 import useIntersectionObserver from "../../hooks/useIntersectionObserver";
+import NoneSchedule from "../../component/NoneFeed/NoneSchedule";
 
 export default function ScheduleExplore() {
   const { moreClick, handleToggleMore } = useToggleMore();
@@ -272,6 +273,8 @@ function ScheduleComponentList({category, toggleEditScheduleModal, toggleAddSche
 
   return (
     <>
+      {scheduleData.length === 0 && <NoneSchedule/>}
+
       {scheduleData.map((item) => (
         <li key={item.sid}>
           <ScheduleCard

@@ -1,6 +1,6 @@
 import MyPageLoading from "../../pages/LoadingPage/MypageLoading";
 import Feed from "../feed";
-import NoneFeed from "../NoneFeed/NoneFeed";
+import NoneFindFeed from "../NoneFeed/NoneFindFeed";
 import style from "./FeedSection.module.css";
 
 export default function FeedSection({ feedData, setFeedData, isLoading }) {
@@ -9,7 +9,7 @@ export default function FeedSection({ feedData, setFeedData, isLoading }) {
   }
 
   if (feedData.length === 0) {
-    return <NoneFeed />;
+    return <NoneFindFeed/>;
   }
 
   return (
