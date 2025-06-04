@@ -348,7 +348,7 @@ class ImageDescriper:
                                  aws_access_key_id=self.__access_key,
                                  aws_secret_access_key=self.__secret_key)
         self.__feed_bucket_name = "nova-feed-images"
-        self.__default_image = "https://kr.object.ncloudstorage.com/nova-feed-images/nova-platform.png"
+        self.__default_image = "https://kr.object.ncloudstorage.com/nova-feed-images/super_nova.png"
         self.__bias_image_bucket = "nova-bias-profile-images"
         self.__report_image_bucket = "nova-report-images"
 

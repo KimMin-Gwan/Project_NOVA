@@ -61,9 +61,10 @@ body.bright-mode {
 .header {
   width: 100%;
   padding-top : 20px;
+  padding-bottom: 15px;
   height: 70px;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: flex-start;
 }
 

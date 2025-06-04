@@ -24,7 +24,7 @@ export default function StoryFeed({ feedData, type, hasDragged }) {
           src={
             feedData.feed?.image.length > 0
               ? feedData.feed.image[0]
-              : "https://kr.object.ncloudstorage.com/nova-feed-images/nova-platform.png"
+              : "https://kr.object.ncloudstorage.com/nova-feed-images/super_nova.png"
           }
           alt="이미지"
         />

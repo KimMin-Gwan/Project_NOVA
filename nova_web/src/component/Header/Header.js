@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import logo2 from "../../img/logo2.png";
+import logo3 from "../../img/logo3.svg";
 
 export default function Header() {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ export default function Header() {
           navigate("/");
         }}
       >
-        <img src={logo2} alt="logo" className={`logo-st `}></img>
+        <img src={logo3} alt="logo" className={`logo-st `}></img>
       </div>
     </header>
   );
