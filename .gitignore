@@ -3,3 +3,5 @@ __pycache__/
 server\src\configure.txt
 server/src/configure.txt
 server/test/downloader.py
+server/test/audio.mp4
+server/test/video.mp4
