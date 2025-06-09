@@ -39,6 +39,7 @@ import NovaADHomepage from "./pages/NOVAADPage/novaADHomepage.js";
 import ScheduleMakePage from "./pages/SchedulePage/ScheduleMakePage.js";
 import { NewFeedWritePage } from "./pages/Write/newWrite.js";
 import NewFeedDetail from "./pages/FeedDetail/NewFeedDetail.js";
+import BrandPage from "./pages/BrandPage/brandPage.jsx";
 
 // 다크 모드 클래스 반환 함수
 export function getModeClass(mode) {
@@ -143,6 +144,7 @@ function App() {
 
       {/* 홈 화면 */}
       <Route path="/" element={<HomePage />} />
+      <Route path="/welcome" element={<BrandPage/>} />
     </Routes>
   );
 }
