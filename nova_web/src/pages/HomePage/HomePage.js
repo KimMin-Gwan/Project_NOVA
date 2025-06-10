@@ -19,6 +19,8 @@ import GoogleAD from "../../component/display_google_ad.js";
 import DisplayAds from "../../component/display_google_ad.js";
 import LoadingPage from "../LoadingPage/LoadingPage.js";
 import HEADER from "../../constant/header.js";
+import { useNavigate } from "react-router-dom";
+import addBias from "../../img/search_nav.png";
 
 import "./index.css";
 
@@ -27,6 +29,14 @@ export function getModeClass(mode) {
 }
 
 export default function HomePage() {
+  const navigate = useNavigate();
+
+  // 네비게이션 함수
+  const handleNavigate = (path) => {
+    navigate(`${path}`);
+  };
+
+
   let todayBestFeed = useFetchData(`/home/today_best`);
   let weeklyFeed = useFetchData(`/home/weekly_best`);
   let allFeed = useFetchData(`/home/all_feed`);
@@ -88,22 +98,55 @@ export default function HomePage() {
 
         <Header />
         <SearchBox />
+        {
+          bids.length > 0 ? (
+            <FeedThumbnail
+              title={
+                <>
+                  최애<span className="title-color">주제</span>
+                </>
+              }
+              img_src={new_pin}
+              feedData={feedData}
+              brightMode={brightMode}
+              type={"bias"}
+              endPoint={`/feed_list?type=bias`}
+              customClassName="custom-height"
+            >
+            <BiasBoxes setBiasId={setBiasId} fetchBiasCategoryData={fetchBiasCategoryData} />
+            </FeedThumbnail>
+          ):(
+            <div className="bias-container">
+              <div 
+                style={{
+                  display: "flex",
+                  margin: "20px",
+                  width: "100%",
+                  height: "60px",
+                  background: "linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.6) 100%)",
+                  border: "2px solid #ffffff",
+                  boxShadow: "3px 3px 8px rgba(0, 0, 0, 0.08)",
+                  borderRadius: "15px",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  cursor: "pointer",
+                }}
+                  onClick={()=>{handleNavigate("/follow_page")}}
+                >
+                  <img src={addBias}  style={{
+                    width: "30px",
+                    height: "30px",
+                    marginRight: "20px"
+                  }}/>
 
-        <FeedThumbnail
-          title={
-            <>
-              최애<span className="title-color">주제</span>
-            </>
-          }
-          img_src={new_pin}
-          feedData={feedData}
-          brightMode={brightMode}
-          type={"bias"}
-          endPoint={`/feed_list?type=bias`}
-          customClassName="custom-height"
-        >
-        <BiasBoxes setBiasId={setBiasId} fetchBiasCategoryData={fetchBiasCategoryData} />
-        </FeedThumbnail>
+                <div style={{fontSize:"16px", fontWeight:"500", color:"#111"}}>
+                  주제 팔로우 하러 가기
+                </div>
+              </div>
+            </div>
+          )
+
+        }
       </div>
 
         <Banner />
