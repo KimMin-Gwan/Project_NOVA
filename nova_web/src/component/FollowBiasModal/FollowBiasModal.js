@@ -18,7 +18,7 @@ export default function FollowBiasModal({ biasData, closeModal, fetchFollowBias 
       <div className="modal" onClick={(e) => e.stopPropagation()}>
         <div className="streamer-img">
           <img
-            src={BIAS_URL + `${biasData.bid}.PNG`}
+            src={BIAS_URL + `${biasData.bid}.png`}
             alt="bias"
             onError={(e) => {
               e.target.src = tempBias;

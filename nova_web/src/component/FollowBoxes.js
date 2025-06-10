@@ -93,7 +93,7 @@ export default function FollowBoxes({ setBiasId }) {
 
   function fetchTryFollowBias() {
     //console.log(clickedBid);
-    fetch("https://nova-platform.kr/nova_sub_system/try_select_my_bias", {
+    fetch("https://supernova.io.kr/nova_sub_system/try_select_my_bias", {
       method: "POST",
       credentials: "include",
       headers: {
@@ -127,6 +127,19 @@ export default function FollowBoxes({ setBiasId }) {
     //     //console.log(res.data);
     //   });
   }
+
+  if (biasList.length === 0) {
+    return (
+      <div className="bias-container">
+        <div style={{display:"flex", margin:"20px", width:"100%", height:"60px", justifyContent:"center", alignItems:"center",}}>
+          <div style={{fontSize:"16px", fontWeight:"600", color:"#111"}}>
+            팔로우한 주제가 없어요!
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div >
     <div
@@ -144,7 +157,7 @@ export default function FollowBoxes({ setBiasId }) {
               <div className={style["bias-box"]}>
                 {bias && (
                   <img
-                    src={bias_url + `${bias.bid}.PNG`}
+                    src={bias_url + `${bias.bid}.png`}
                     alt="bias"
                     onError={(e) => (e.target.src = tempBias)}
                     onClick={() => {
@@ -165,7 +178,7 @@ export default function FollowBoxes({ setBiasId }) {
             <div className={style["modal"]} onClick={(e) => e.stopPropagation()}>
               <button className={style["streamer-img"]}>
                 <div>
-                  <img src={bias_url + `${clickedBid}.PNG`} />
+                  <img src={bias_url + `${clickedBid}.png`} />
                 </div>
               </button>
               <p>

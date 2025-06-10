@@ -29,7 +29,7 @@ export default function ScheduleTopic({ bid, bname, category, agency, tags, main
 
       <div className={style["bias_img"]}>
         <img
-          src={bias_url + `${bid}.PNG`}
+          src={bias_url + `${bid}.png`}
           alt="bias"
           onError={(e) => (e.target.src = tempBias)}
         />
@@ -66,7 +66,7 @@ export function ScheduleTopicMain({ bid, bname, category, agency, tags, main_tim
 
       <div className={style["bias_img"]}>
         <img
-          src={bias_url + `${bid}.PNG`}
+          src={bias_url + `${bid}.png`}
           alt="bias"
           onError={(e) => (e.target.src = tempBias)}
         />

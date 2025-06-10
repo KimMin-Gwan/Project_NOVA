@@ -604,7 +604,7 @@ function ScheduleOptionModal({ onClose, targetSid, onClickEdit}) {
         >
           <img
             className={style["modal-image"]}
-            src={bias_url + `${bid}.PNG`}
+            src={bias_url + `${bid}.png`}
             alt="bias"
             onError={(e) => (e.target.src = tempBias)}
           />
