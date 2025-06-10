@@ -1,6 +1,6 @@
 import "./App.css";
 import { useEffect, useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { useNavigate, Routes, Route } from "react-router-dom";
 import MyPage from "./pages/MyPage/Mypage";
 import MyPageEdit from "./pages/MyPage/MypageEdit";
 import NOVALogin from "./pages/NovaLogin/NovaLogin";
@@ -46,6 +46,19 @@ export function getModeClass(mode) {
   return mode === "dark" ? "dark-mode" : "bright-mode";
 }
 function App() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const visited = localStorage.getItem("visited");
+
+    if (!visited) {
+      // 첫 방문인 경우
+      localStorage.setItem("visited", "true");
+      // /welcome 페이지로 이동
+      navigate("/welcome", { replace: true });
+    }
+  }, [navigate]);
+
   // // brightMode 상태가 변경될 때마다 body 클래스 업데이트
   const [brightMode, setBrightMode] = useState(() => {
     return localStorage.getItem("brightMode") || "bright"; // 기본값은 'bright'
