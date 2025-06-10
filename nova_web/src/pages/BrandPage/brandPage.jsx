@@ -44,6 +44,7 @@ export default function BrandPage() {
     console.log(targetRef1)
 
     const temp = " © 2025 TEAM SUPERNOVA. All rights reserved."
+    const temp2 =" 대표 : 김민관 | 이메일: youth0828@naver.com"
     return (
         <div className={style["brand-page-background"]} >
             <TopBar
@@ -60,7 +61,12 @@ export default function BrandPage() {
             </div>
 
             <div className={style["brand-page-footer"]}>
-                {temp}
+                <span>
+                    {temp}
+                </span>
+                <span>
+                    {temp2}
+                </span>
             </div>
         </div>
 
