@@ -36,7 +36,7 @@ export default function BiasBoxes({ fetchBiasCategoryData }) {
 
   let [isUserState, setIsUserState] = useState(false);
   function handleValidCheck() {
-    fetch("https://nova-platform.kr/home/is_valid", {
+    fetch("https://supernova.io.kr/home/is_valid", {
       credentials: "include",
     })
       .then((response) => {
@@ -97,7 +97,7 @@ export default function BiasBoxes({ fetchBiasCategoryData }) {
                   {bias && (
                     <img
                       className={clickedBias === i ? "clicked-img" : ""}
-                      src={BIAS_URL + `${bias.bid}.PNG`}
+                      src={BIAS_URL + `${bias.bid}.png`}
                       onError={(e) => (e.target.src = tempBias)}
                       alt="bias"
                       onClick={() => {
