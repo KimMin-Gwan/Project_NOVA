@@ -1598,11 +1598,11 @@ class ManagedScheduleTable(ManagedTable):
         time_section = self._get_schedule_time_section(start_time=start_date_time,
                                                        end_time=end_date_time)
 
-        pprint("추가된 schedule")
-        pprint(f"start_time : {start_date_time}")
-        pprint(f"start_date_time.type : {type(start_date_time)}")
-        pprint(f"end_time : {end_date_time}")
-        pprint(f"end_date_time.type : {type(end_date_time)}")
+        #pprint("추가된 schedule")
+        #pprint(f"start_time : {start_date_time}")
+        #pprint(f"start_date_time.type : {type(start_date_time)}")
+        #pprint(f"end_time : {end_date_time}")
+        #pprint(f"end_date_time.type : {type(end_date_time)}")
         
         managed_schedule = ManagedSchedule(
             sid=schedule.sid,
