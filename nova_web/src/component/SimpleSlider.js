@@ -108,7 +108,7 @@ const SimpleSlider = ({ feedData, brightMode, type, className }) => {
                       </div>
                     )}
 
-                    <section className={style["text-container"]}>
+                    <div className={style["text-container"]}>
                       <div className={style["tag-text"]}>
                         {feed.feed.hashtag.map((tag, i) => {
                           return (
@@ -118,8 +118,12 @@ const SimpleSlider = ({ feedData, brightMode, type, className }) => {
                           );
                         })}
                       </div>
-                      <div className={style["main-text"]}>{feed.feed.body}</div>
-                    </section>
+                      <div className={style["main-text-wrapper"]}>
+                        <div className={style["main-text"]}>
+                          {feed.feed.body}
+                        </div>
+                      </div>
+                    </div >
                     <footer className={style["like-comment"]}>
                       좋아요 {feed.feed.star}개 | 댓글 {feed.feed.num_comment}개
                     </footer>
