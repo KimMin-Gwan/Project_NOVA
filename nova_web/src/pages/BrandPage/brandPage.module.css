@@ -90,7 +90,6 @@
     position: relative; /* 자식 요소의 절대 위치 지정 기준 */
     width: 100%;
     height: 800px;
-    overflow: hidden; /* 필요 시 초과 영역 숨김 */
 }
 
 .brand-highlight .brand-highlight-background-image {
@@ -423,6 +422,7 @@
     font-size: 15px;
     font-style: normal;
     font-weight: 500;
+    white-space: pre-line; /* 줄바꿈 문자(\n)를 두 줄로 렌더링 */
 }
 
 .middle-content-container .middle-image-wrapper{

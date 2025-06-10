@@ -1,5 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useState, useRef } from "react";
 import style from "./brandPage.module.css";
 
 import brandBackgroundImage from "./brand-background.svg";
@@ -8,29 +7,55 @@ import chzzkLogo from "./chzzklogo_kor(Green) 1.png";
 import soopLogo from "./SOOP_LOGO_Blue 1.png";
 import youtubLogo from "./youtube logo 04 1.png";
 import footerImage from "./footer-image.png";
+import intro1 from "./intro1.png";
+import intro2 from "./intro2.png";
+import intro3 from "./intro3.png";
+import intro4 from "./intro4.png";
 
 import Carousel from "react-spring-3d-carousel";
 import { config } from "react-spring";
 import { useDrag } from "@use-gesture/react";
 
+import { useNavigate } from "react-router-dom";
 
 
 
 export default function BrandPage() {
+    const targetRef1 = useRef(null);
+    const targetRef2 = useRef(null);
+    const targetRef3 = useRef(null);
+
+    const scrollToSection1 = () => {
+        targetRef1.current?.scrollIntoView({ behavior: "smooth" });
+    };
+
+    const scrollToSection2 = () => {
+        targetRef2.current?.scrollIntoView({ behavior: "smooth" });
+    };
+
+    const scrollToSection3 = () => {
+        targetRef3.current?.scrollIntoView({ behavior: "smooth" });
+    };
     //const { brandId } = useParams();
     //const [brandData, setBrandData] = useState(null);
     //const [loading, setLoading] = useState(true);
     //const brandRef = useRef(null);
 
-    const temp = " © 2023 SUPERNOVA. All rights reserved."
+    console.log(targetRef1)
+
+    const temp = " © 2025 TEAM SUPERNOVA. All rights reserved."
     return (
         <div className={style["brand-page-background"]} >
-            <TopBar />
+            <TopBar
+             scrollToSection1={scrollToSection1}
+             scrollToSection2={scrollToSection2}
+             scrollToSection3={scrollToSection3}
+             />
             <BrandHighlight />
             <div className={style["brand-page-content"]}>
-                <AppServices1/>
-                <AppServices2/>
-                <AppServices3/>
+                <AppServices1 targetRef={targetRef1}/>
+                <AppServices2 targetRef={targetRef2} />
+                <AppServices3 targetRef={targetRef3} />
                 <BottomFooter/>
             </div>
 
@@ -44,29 +69,54 @@ export default function BrandPage() {
 }
 
 
-function TopBar() {
+function TopBar({scrollToSection1, scrollToSection2, scrollToSection3}) {
+
+  const navigate = useNavigate();
+
+  // 네비게이션 함수
+  const handleNavigate = (path) => {
+    navigate(`${path}`);
+  };
+
     return (
         <div className={style["topBar-frame"]}>
             <div className={style["topBar-div"]}>
-                <div className={style["topBar-text-wrapper"]}>
+                <div className={style["topBar-text-wrapper"]}
+                    onClick={()=>scrollToSection1()}
+                >
                     앱 소개
                 </div>
-                <div className={style["topBar-text-wrapper"]}>
+                <div className={style["topBar-text-wrapper"]}
+                    onClick={()=>scrollToSection2()}
+                >
                     전용 컨텐츠
                 </div>
-                <div className={style["topBar-text-wrapper"]}>
+                <div className={style["topBar-text-wrapper"]}
+                    onClick={()=>scrollToSection3()}
+                >
                     운영자 정보
                 </div>
             </div>
             <div className={style["topBar-div-2"]}>
-                <div className={style["topBar-button-1"]}>회원가입</div>
-                <div className={style["topBar-button-2"]}>로그인</div>
+                <div className={style["topBar-button-1"]}
+                    onClick={() => handleNavigate("/signup")}>
+                    회원가입
+                </div>
+                <div className={style["topBar-button-2"]}
+                    onClick={() => handleNavigate("/novalogin")}>
+                로그인
+                </div>
             </div>
         </div>
     );
 }
 
 function BrandHighlight() {
+  const navigate = useNavigate();
+
+  const handleNavigate = (path) => {
+    navigate(`${path}`);
+  };
     return (
         <div className={style["brand-highlight"]}>
             <div className={style["brand-highlight-content"]}>
@@ -78,13 +128,22 @@ function BrandHighlight() {
                         다양한 커뮤니티와 방송 일정을 한눈에 확인하고, 컨텐츠를 공유해보세요!
                     </div>
                     <div className={style["button-div"]}>
-                        <div className={style["button-1"]}>회원가입</div>
-                        <div className={style["button-2"]}>바로가기</div>
+                        <div className={style["button-1"]}
+                            onClick={() => handleNavigate("/signup")}>
+                            회원가입
+                        </div>
+                        <div className={style["button-2"]}
+                            onClick={() => handleNavigate("/")}>
+                            바로가기
+                        </div>
                     </div>
                 </div>
                 <div className={style["brand-highlight-button"]}>
                     <img src={buttonStar} alt="button image" className={style["brand-highlight-button-image"]} />
-                    <span className={style["brand-highlight-button-text"]}>스트리머 주제 등록하기</span>
+                    <span className={style["brand-highlight-button-text"]}
+                        onClick={() => handleNavigate("/follow_page")}>
+                        등록된 스트리머 주제 살펴보기
+                    </span>
                 </div>
                 <div className={style["platforms-div"]}>
                     <div className={style["sites-box"]}>
@@ -117,9 +176,7 @@ function ServiceTitle({title, subtitle}){
 function BigContentContainer({tag1, tag2, title, detail, image, button}){
     return (
         <div className={style["big-content-container"]}>
-            <div className={style["big-image-container"]}>
-                이미지
-            </div>
+            <img src={image} className={style["big-image-container"]}/>
 
             <div className={style["big-content-tag-container"]}>
                 <div className={style["big-content-tag1"]}>{tag1}</div>
@@ -139,12 +196,14 @@ function MiddleContentContainer({index, title, detail, image}){
                 <div className={style["middle-content-title"]}>{title}</div>
                 <div className={style["middle-content-detail"]}>{detail}</div>
             </div>
-
+            
+            {/* 
             <div className={style["middle-image-wrapper"]}>
                 <div className={style["middle-image-container"]}>
                     아이콘
                 </div>
             </div>
+            */}
         </div>
     )
 }
@@ -183,9 +242,10 @@ const MyCarousel = () => {
     );
 };
 
-function AppServices1(){
+function AppServices1({targetRef}){
+
     const title = "SUPERNOVA.io.kr 에서 제공하는 기능들";
-    const subtitle = "스트리머를 위한 여러가지 기능과 스트리머를 좋아하는 팬들의 팬활동을 지원하는 핵심 4가지 기능!"
+    const subtitle = "스트리머를 위한 여러가지 기능과 스트리머를 좋아하는 팬들의 팬활동을 지원하는 핵심 4가지 기능! \n 단, 사이트는 스마트폰 화면에 최적화되어 있습니다.";
 
     const features = [
         {
@@ -193,38 +253,38 @@ function AppServices1(){
             tag2: "소통",
             title: "스트리머와 팬이 소통하는 커뮤니티",
             detail: "스트리머를 주제로 하는 커뮤니티에서 팬들과 소통해보세요!",
-            image: "https://example.com/community-image.png",
+            image: intro1,
             button: "커뮤니티 바로가기"
         },
         {
-            tag1: "컨텐츠",
-            tag2: "탐색",
+            tag1: "스트리밍",
+            tag2: "일정",
             title: "방송 일정과 알림 기능",
             detail: "스트리머의 방송 일정을 확인하고 다양한 컨텐츠를 탐색해보세요!",
-            image: "https://example.com/schedule-image.png",
+            image: intro2,
             button: "일정 확인하기"
         },
         {
-            tag1: "공유",
-            tag2: "팬활동",
-            title: "팬들과 컨텐츠를 공유하는 공간",
-            detail: "팬들이 만든 컨텐츠를 공유하고 즐길 수 있는 공간입니다.",
-            image: "https://example.com/content-image.png",
+            tag1: "후기",
+            tag2: "실시간",
+            title: "팬들과 대중의 피드백 공간",
+            detail: "컨텐츠에 대한 다양한 생각을 실시간으로 공유해요!",
+            image: intro3,
             button: "컨텐츠 공유하기"
         },
         {
-            tag1: "후기",
-            tag2: "피드백",
-            title: "팬들과 대중의 피드백 공간",
-            detail: "팬들과 대중의 피드백을 받아보세요!",
-            image: "https://example.com/content-image.png",
+            tag1: "탐색",
+            tag2: "컨텐츠",
+            title: "등록된 컨텐츠를 탐색하고 추가하기",
+            detail: "누구나 최애의 컨텐츠를 등록하거나 탐색할 수 있어요!",
+            image: intro4,
             button: "컨텐츠 공유하기"
-        }
+        },
     ]
 
 
     return(
-        <div className={style["app-services"]}>
+        <div className={style["app-services"]} ref={targetRef}>
             <ServiceTitle title={title} subtitle={subtitle} />
             <div className={style["service-wrapper"]}>
                 {features.map((feature, index) => (
@@ -243,12 +303,12 @@ function AppServices1(){
     );
 }
 
-function AppServices2(){
+function AppServices2({targetRef}) {
     const title = "SUPERNOVA에서만 제공하는 스트리밍 전용 컨텐츠";
     const subtitle = "지원되는 플랫폼에서 스트리밍 하는 스트리머들은 누구나 사용가능!\n  SUPERNOVA의 스트리밍 전용 컨텐츠를 시청자와 함께 지금 바로 즐겨보세요!"
 
     return(
-        <div className={style["app-services"]}>
+        <div className={style["app-services"]} ref={targetRef}>
             <ServiceTitle title={title} subtitle={subtitle} />
             <div className={style["carousel-wrapper"]}>
                 <MyCarousel/>
@@ -257,34 +317,34 @@ function AppServices2(){
     );
 }
 
-function AppServices3(){
+function AppServices3({targetRef}) {
     const title = "이 모든걸 만들고 운영하는 팀 [ SUPERNOVA ]는 누구?";
-    const subtitle = "20대의 열정을 바쳐 더 쉬운 스트리머 활동과 더 포괄적인 팬활동을 위해 노력합니다. ";
+    const subtitle = "팀 슈퍼노바는 총 5명의 청년 개발자로 이루어진 팀입니다.\n 20대의 청춘을 바쳐 더 쉬운 스트리머 활동과 더 포괄적인 팬활동을 위해 노력합니다. ";
 
     const features = [
         {
             index: "01",
-            title: "패기와 젊음",
-            detail: "슈퍼노바 팀은 젊은 열정과 패기로 새로운 아이디어를 실현합니다.",
+            title: "쓰는 사람이 만드는 사람",
+            detail: "팀 슈퍼노바는 내가 실제로 사용하는 상황을 먼저 생각합니다. \n 내 최애가 이 서비스를 사용한다면 어떤 기능이 필요할까?\n 이런 질문을 스스로에게 던지며 서비스를 만듭니다.",
             image: "https://example.com/team-image1.png"
         },
         {
             index: "02",
-            title: "협업과 소통",
-            detail: "슈퍼노바 팀은 협업과 소통을 통해 창의적인 아이디어를 공유하고 발전시킵니다.",
+            title: "오타쿠의 사명을 가진 사람",
+            detail: "팀 슈퍼노바는 특정 분야를 집요하게 파는 오타쿠 들입니다. \n 이름이 슈퍼노바인 이유도 누구나 최애가 될 수 있고, 누구나 최애를 가질 수 있다는 생각에서 지었답니다.",
             image: "https://example.com/team-image2.png"
         },
         {
             index: "03",
-            title: "열정과 헌신",
-            detail: "슈퍼노바 팀은 열정과 헌신으로 최고의 서비스를 제공하기 위해 노력합니다.",
+            title: "돈보다 낭만이 먼저인 사람",
+            detail: "팀 슈퍼노바는 돈보다 낭만을 먼저 생각합니다. \n 돈? 명예? 그건 중요하지 않습니다. \n 오로지 좋아하는 것을 위해 노력합니다.",
             image: "https://example.com/team-image3.png"
         }
     ];
 
 
     return(
-        <div className={style["app-services"]}>
+        <div className={style["app-services"]} ref={targetRef}>
             <ServiceTitle title={title} subtitle={subtitle} />
             <div className={style["service-wrapper2"]}>
                 {features.map((feature, index) => (
