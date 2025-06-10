@@ -333,6 +333,8 @@ const ScheduleMakePage = () => {
 
   // 번들 스케줄 만들기
   async function fetchTryMakeBundleSchedule() {
+    sendScheduleData.bid = targetBias.bid;
+
     await postApi.post("time_table_server/try_make_new_multiple_schedule", {
       header: HEADER,
       body: sendScheduleData,
@@ -452,7 +454,7 @@ const ScheduleMakePage = () => {
                                         {targetBias.bid === "" ? (
                                             <div className={style["target-bias"]}></div>
                                         ) : (
-                                            <img src={BIAS_URL + `${targetBias.bid}.PNG`} onError={(e) => (e.target.src = tempBias)}  />
+                                            <img src={BIAS_URL + `${targetBias.bid}.png`} onError={(e) => (e.target.src = tempBias)}  />
                                         )}
                                         <span className={style["top-box-content"]}> 
                                             {targetBias.bname}
@@ -502,7 +504,7 @@ const ScheduleMakePage = () => {
                                         {targetBias.bid === "" ? (
                                             <div className={style["target-bias"]}></div>
                                         ) : (
-                                            <img src={BIAS_URL + `${targetBias.bid}.PNG`} onError={(e) => (e.target.src = tempBias)}  />
+                                            <img src={BIAS_URL + `${targetBias.bid}.png`} onError={(e) => (e.target.src = tempBias)}  />
                                         )}
                                         <span className={style["top-box-content"]}> 
                                             {targetBias.bname}
