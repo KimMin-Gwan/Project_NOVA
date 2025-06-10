@@ -6,7 +6,7 @@ import { getModeClass } from "./../../App.js";
 import useBiasStore from "../../stores/BiasStore/useBiasStore.js";
 import mainApi from "../../services/apis/mainApi.js";
 
-import logo2 from "./../../img/logo2.png";
+import logo2 from "./../../img/footer-logo.svg";
 
 import FollowBoxes from "../../component/FollowBoxes.js";
 import search_icon from "./../../img/search_icon.png";
@@ -61,7 +61,7 @@ export default function FollowPage() {
     },
   };
   function fetchTryFollowBias() {
-    fetch("https://nova-platform.kr/nova_sub_system/try_select_my_bias", {
+    fetch("https://supernova.io.kr/nova_sub_system/try_select_my_bias", {
       method: "POST",
       credentials: "include",
       headers: {
@@ -73,7 +73,7 @@ export default function FollowPage() {
         if (res.status === 401) {
           alert("로그인이 필요한 서비스입니다.");
           navigate("/novalogin");
-          return Promise.reject();
+          return Promise.reject("Unauthorized: 로그인 필요");
         }
         return res.json();
       })
@@ -85,7 +85,10 @@ export default function FollowPage() {
         }
         setIsModalOpen(false);
         window.location.reload();
+      }) .catch(err => {
+        console.error("Error | ", err);
       });
+      ;
   }
   const [searchBias, setSearchBias] = useState("");
   const [resultBias, setResultBias] = useState([]);
@@ -164,7 +167,7 @@ export default function FollowPage() {
                         className={style["streamer-img"]}
                       >
                         <div>
-                          <img src={BIAS_URL + `${bias.bid}.PNG`} onError={(e) => (e.target.src = tempBias)}  />
+                          <img src={BIAS_URL + `${bias.bid}.png`} onError={(e) => (e.target.src = tempBias)}  />
                         </div>
                         <p>{bias.bname}</p>
                       </button>
@@ -202,7 +205,7 @@ export default function FollowPage() {
               <div className={style["modal"]} onClick={(e) => e.stopPropagation()}>
                 <button className={style["streamer-img"]}>
                   <div>
-                    <img src={BIAS_URL + `${clickedBid}.PNG`} />
+                    <img src={BIAS_URL + `${clickedBid}.png`} />
                   </div>
                 </button>
                 <p>
@@ -255,7 +258,7 @@ function Streamer({ title, platform, openModal }) {
               >
                 <div>
                   <img
-                   src={BIAS_URL + `${bias.bid}.PNG`}
+                   src={BIAS_URL + `${bias.bid}.png`}
                    onError={(e) => (e.target.src = tempBias)}  
                    />
                 </div>
