@@ -287,6 +287,8 @@
   .header {
     background-color: #f1f7ff;
     img {
+      height: 60px;
+      width: 200px;
       filter: none;
     }
   }
