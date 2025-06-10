@@ -458,6 +458,8 @@ class TimeTableView(Master_View):
         def try_make_new_multiple_schedule(request: Request, raw_request:dict):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = MakeMultipleScheduleRequest(request=raw_request)
+            
+            pprint(raw_request)
 
             # request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
