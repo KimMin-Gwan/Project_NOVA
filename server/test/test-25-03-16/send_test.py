@@ -9,7 +9,7 @@ PORT = 6000
 
  #요청을 보낼 URL
  #get
-url = "https://nova-platform.kr/nova_sub_system/image_tag"  # 이미지 태그?
+url = "https://supernova.io.kr/nova_sub_system/image_tag"  # 이미지 태그?
 
 
 

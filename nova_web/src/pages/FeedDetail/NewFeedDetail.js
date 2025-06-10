@@ -85,7 +85,7 @@ export default function NewFeedDetail() {
         setUser(uid);
 
         // 2. fetchFeedComment 완료 후 WebSocket 초기화
-        const socket = new WebSocket(`wss://nova-platform.kr/feed_detail_realtime/chatting_socket?fid=${fid}&uid=${uid}`);
+        const socket = new WebSocket(`wss://supernova.io.kr/feed_detail_realtime/chatting_socket?fid=${fid}&uid=${uid}`);
         socketRef.current = socket;
 
         socket.onopen = () => {

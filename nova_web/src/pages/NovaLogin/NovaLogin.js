@@ -35,7 +35,7 @@ const NOVALogin = ({ brightmode }) => {
       },
     };
 
-    fetch("https://nova-platform.kr/user_home/try_login", {
+    fetch("https://supernova.io.kr/user_home/try_login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

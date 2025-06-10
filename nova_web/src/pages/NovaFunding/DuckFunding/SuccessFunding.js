@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 export default function DuckFunding() {
   let navigate = useNavigate();
-  const URL = `https://nova-platform.kr/nova_fund_system/fan_project_list/`;
+  const URL = `https://supernova.io.kr/nova_fund_system/fan_project_list/`;
 
   let project = [
     {

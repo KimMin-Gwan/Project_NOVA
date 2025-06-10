@@ -7,7 +7,7 @@ export default function NoticeBox() {
   let [noticeDatas, setNoticeDatas] = useState([]);
 
   async function fetchNoticeData() {
-    await fetch("https://nova-platform.kr/nova_sub_system/sample_notice", {
+    await fetch("https://supernova.io.kr/nova_sub_system/sample_notice", {
       credentials: "include",
     })
       .then((response) => response.json())

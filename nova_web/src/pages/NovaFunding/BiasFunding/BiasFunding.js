@@ -24,7 +24,7 @@ export default function BiasFunding() {
   const boxes = [];
 
   async function fetchNewProject() {
-    await fetch(`https://nova-platform.kr/nova_fund_system/bias_project/new_bias_project`, {
+    await fetch(`https://supernova.io.kr/nova_fund_system/bias_project/new_bias_project`, {
       credentials: "include",
     })
       .then((response) => response.json())
@@ -42,7 +42,7 @@ export default function BiasFunding() {
   let [recommendProjects, setRecommendProjects] = useState([]);
 
   function fetchRecommendProject() {
-    fetch(`https://nova-platform.kr/nova_fund_system/bias_project/recommend_project`, {
+    fetch(`https://supernova.io.kr/nova_fund_system/bias_project/recommend_project`, {
       credentials: "include",
     })
       .then((response) => response.json())
@@ -58,7 +58,7 @@ export default function BiasFunding() {
   let [allProjects, setAllProjects] = useState([]);
 
   function fetchAllProject() {
-    fetch(`https://nova-platform.kr/nova_fund_system/bias_project/all_project`, {
+    fetch(`https://supernova.io.kr/nova_fund_system/bias_project/all_project`, {
       credentials: "include",
     })
       .then((response) => response.json())

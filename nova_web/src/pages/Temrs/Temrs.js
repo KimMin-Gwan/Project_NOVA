@@ -26,7 +26,7 @@ function Terms() {
         <div
           className={style.noticelist}
           onClick={() => {
-            window.open("https://nova-platform.kr/service_terms_and_conditions.pdf", "_blank");
+            window.open("https://supernova.io.kr/service_terms_and_conditions.pdf", "_blank");
           }}
         >
           <span className={style.noticeText}>이용약관</span>
@@ -34,7 +34,7 @@ function Terms() {
         <div
           className={style.noticelist}
           onClick={() => {
-            window.open("https://nova-platform.kr/personal_information_processing_policy.pdf", "_blank");
+            window.open("https://supernova.io.kr/personal_information_processing_policy.pdf", "_blank");
           }}
         >
           <span className={style.noticeText}>개인정보처리방침</span>
@@ -42,7 +42,7 @@ function Terms() {
         <div
           className={style.noticelist}
           onClick={() => {
-            window.open("https://nova-platform.kr/personal_information_processing_agreement.pdf", "_blank");
+            window.open("https://supernova.io.kr/personal_information_processing_agreement.pdf", "_blank");
           }}
         >
           <span className={style.noticeText}>개인정보처리동의서</span>

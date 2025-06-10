@@ -20,7 +20,7 @@ send_data = {
  ```
 ## 최애 인증 페이지 접근
  + 목적 :  최애 인증 페이지에 데이터를 불러오기 위한 목적
- + url : http://nova-platform.kr/nova_check/server_info/check_page
+ + url : http://supernova.io.kr/nova_check/server_info/check_page
  + 기타 : 이미 인증을 수행한 사람과 아닌 사람의 결과값이 다름, result를 보고 판단할 것(valid -> 아직 안함, done -> 이미 했음, invalid -> 비정상 요청, error -> 죽음)
  + send_data 예시
 ```
@@ -42,7 +42,7 @@ send_data = {
 
 ## 최애 인증 요청
  + 목적 :  최애 인증 페이지에서 최애 인증 버튼을 눌러 최애 인증을 시도할 때
- + url : http://nova-platform.kr/nova_check/server_info/try_daily_check
+ + url : http://supernova.io.kr/nova_check/server_info/try_daily_check
  + 기타 : result를 보고 판단해야함 (valid -> 아직 안함, done -> 이미 했음, invalid -> 비정상 요청, error -> 죽음)
  + send_data 예시
 ```
@@ -64,7 +64,7 @@ send_data = {
 
 ## 특별 인증 요청
  + 목적 :  최애 인증 페이지에서 특별 인증을 시도할 때
- + url : http://nova-platform.kr/nova_check/server_info/try_special_check
+ + url : http://supernova.io.kr/nova_check/server_info/try_special_check
  + 기타 : 기존에 보내준 special_time리스트에 현재 시간(시)가 포함되어 있는지 판단 후 전송 혹은 전송 안 함(alert로 경고)
  + send_data 예시
 ```

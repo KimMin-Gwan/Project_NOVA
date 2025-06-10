@@ -31,7 +31,7 @@ export default function NovaADHomepage() {
   }
 
   async function fetchNewProject() {
-    await fetch(`https://nova-platform.kr/nova_fund_system/bias_project/new_bias_project`, {
+    await fetch(`https://supernova.io.kr/nova_fund_system/bias_project/new_bias_project`, {
       credentials: "include",
     })
       .then((response) => response.json())

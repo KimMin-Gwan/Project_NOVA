@@ -69,7 +69,7 @@ const Write = ({ brightmode}) => {
 
   let [isUserState, setIsUserState] = useState(false);
   function handleValidCheck() {
-    mainApi.get("https://nova-platform.kr/home/is_valid?only_token=n").then((res) => {
+    mainApi.get("https://supernova.io.kr/home/is_valid?only_token=n").then((res) => {
         if (res.status === 200) {
           setUser(res.data.body.user);
           setIsUserState(true);
@@ -277,7 +277,7 @@ const Write = ({ brightmode}) => {
     }
     formData.append("jsonData", JSON.stringify(send_data)); // JSON 데이터 추가
 
-    fetch("https://nova-platform.kr/feed_explore/try_edit_feed", {
+    fetch("https://supernova.io.kr/feed_explore/try_edit_feed", {
       method: "POST",
       credentials: "include",
       body: formData,

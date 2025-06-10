@@ -144,7 +144,7 @@ function MoreSee({ onModeChange }) {
   let [user, setUser] = useState("")
 
   function handleFetch() {
-    fetch("https://nova-platform.kr/home/is_valid", {
+    fetch("https://supernova.io.kr/home/is_valid", {
       credentials: "include", // 쿠키를 함께 포함한다는 것
     })
       .then((response) => {

@@ -2,4 +2,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://nova-platform.kr/sitemap.xml
+Sitemap: https://supernova.io.kr/sitemap.xml

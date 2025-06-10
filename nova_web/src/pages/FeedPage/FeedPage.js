@@ -127,7 +127,7 @@
 //   let [isUserState, setIsUserState] = useState(false);
 
 //   function handleValidCheck() {
-//     fetch("https://nova-platform.kr/home/is_valid", {
+//     fetch("https://supernova.io.kr/home/is_valid", {
 //       credentials: "include", // 쿠키를 함께 포함한다는 것
 //     })
 //       .then((response) => {
@@ -153,7 +153,7 @@
 
 //   // 피드 데이터 받기
 //   async function fetchFeed() {
-//     await fetch(`https://nova-platform.kr/feed_explore/get_feed?fid=${FID ? FID : ""}`, {
+//     await fetch(`https://supernova.io.kr/feed_explore/get_feed?fid=${FID ? FID : ""}`, {
 //       credentials: "include",
 //     })
 //       .then((response) => response.json())
@@ -174,7 +174,7 @@
 //   const fetchMoreBanners = async (currentIndex) => {
 //     try {
 //       // 서버로부터 추가 배너 데이터를 가져옴
-//       const response = await fetch(`https://nova-platform.kr/feed_explore/get_next_feed`, {
+//       const response = await fetch(`https://supernova.io.kr/feed_explore/get_next_feed`, {
 //         method: "POST",
 //         headers: {
 //           "Content-Type": "application/json",
@@ -212,7 +212,7 @@
 //   // 피드 좋아요 부분(되긴되는데 반복되는 오류가 생김)
 //   function handleCheckStar(fid, index) {
 //     // setIsClickedStar(!isClickedStar);
-//     fetch(`https://nova-platform.kr/feed_explore/check_star?fid=${fid}`, {
+//     fetch(`https://supernova.io.kr/feed_explore/check_star?fid=${fid}`, {
 //       credentials: "include",
 //     })
 //       .then((response) => {
@@ -267,7 +267,7 @@
 //   // 댓글 창 보기(완료)
 //   function handleShowComment(fid, event) {
 //     event.preventDefault();
-//     fetch(`https://nova-platform.kr/feed_explore/view_comment?fid=${fid}`, {
+//     fetch(`https://supernova.io.kr/feed_explore/view_comment?fid=${fid}`, {
 //       credentials: "include",
 //     })
 //       .then((response) => response.json())
@@ -288,7 +288,7 @@
 //   // 댓글 좋아요 부분(완료)
 //   function handleCommentLike(fid, cid, event) {
 //     event.preventDefault();
-//     fetch(`https://nova-platform.kr/feed_explore/like_comment?fid=${fid}&cid=${cid}`, {
+//     fetch(`https://supernova.io.kr/feed_explore/like_comment?fid=${fid}&cid=${cid}`, {
 //       credentials: "include",
 //     })
 //       .then((response) => {
@@ -325,7 +325,7 @@
 //     const newAll = allComments.filter((comment) => comment.cid !== cid);
 //     setAllComments(newAll);
 
-//     fetch(`https://nova-platform.kr/feed_explore/remove_comment?fid=${fid}&cid=${cid}`, {
+//     fetch(`https://supernova.io.kr/feed_explore/remove_comment?fid=${fid}&cid=${cid}`, {
 //       credentials: "include",
 //     })
 //       .then((response) => {
@@ -355,7 +355,7 @@
 //   function handleInteraction(event, fid, action) {
 //     event.preventDefault();
 
-//     fetch(`https://nova-platform.kr/feed_explore/interaction_feed?fid=${fid}&action=${action}`, {
+//     fetch(`https://supernova.io.kr/feed_explore/interaction_feed?fid=${fid}&action=${action}`, {
 //       credentials: "include",
 //     })
 //       .then((response) => {
@@ -401,7 +401,7 @@
 //   function handleSubmit(fid, event) {
 //     event.preventDefault();
 
-//     fetch("https://nova-platform.kr/feed_explore/make_comment", {
+//     fetch("https://supernova.io.kr/feed_explore/make_comment", {
 //       method: "POST",
 //       headers: {
 //         "Content-Type": "application/json",

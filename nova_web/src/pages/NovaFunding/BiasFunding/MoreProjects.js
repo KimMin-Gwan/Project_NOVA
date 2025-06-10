@@ -15,7 +15,7 @@ export default function MoreProjects() {
   let [projects, setProjects] = useState([]);
 
   function fetchProjects() {
-    fetch("https://nova-platform.kr/nova_fund_system/bias_project_list/recommend_project", {
+    fetch("https://supernova.io.kr/nova_fund_system/bias_project_list/recommend_project", {
       credentials: "include",
     })
       .then((response) => response.json())

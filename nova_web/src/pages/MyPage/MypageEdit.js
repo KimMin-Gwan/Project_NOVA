@@ -132,7 +132,7 @@ function MyPage() {
     tryLogin("");
 
     e.preventDefault();
-    fetch("https://nova-platform.kr/user_home/try_logout", {
+    fetch("https://supernova.io.kr/user_home/try_logout", {
       credentials: "include",
     })
       .then((response) => {
@@ -154,7 +154,7 @@ function MyPage() {
   };
 
   async function fetchEditProfile() {
-    await fetch("https://nova-platform.kr/user_home/get_my_profile_data", {
+    await fetch("https://supernova.io.kr/user_home/get_my_profile_data", {
       credentials: "include",
     })
       .then((res) => res.json())
@@ -185,7 +185,7 @@ function MyPage() {
       setImage(imageUrl);
     }
 
-    fetch("https://nova-platform.kr/user_home/try_change_profile_photo", {
+    fetch("https://supernova.io.kr/user_home/try_change_profile_photo", {
       method: "POST",
       credentials: "include",
       body: formData,

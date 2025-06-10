@@ -65,7 +65,7 @@ function FindPwChange() {
       },
     };
 
-    fetch("https://nova-platform.kr/user_home/try_find_password", {
+    fetch("https://supernova.io.kr/user_home/try_find_password", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -19,7 +19,7 @@ export default function LikeFunding() {
   }
 
   async function fetchData() {
-    await fetch("https://nova-platform.kr/nova_fund_system/project_detail?pid=5")
+    await fetch("https://supernova.io.kr/nova_fund_system/project_detail?pid=5")
       .then((response) => response.json())
       .then((data) => {
         //console.log("111", data.body.project);

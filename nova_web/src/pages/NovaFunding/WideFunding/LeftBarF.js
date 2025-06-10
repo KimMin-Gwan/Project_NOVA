@@ -17,7 +17,7 @@ export default function LeftBarF({ brightMode }) {
   let [tagList, setTagList] = useState([]);
 
   function fetchTagData() {
-    fetch("https://nova-platform.kr/home/realtime_best_hashtag", {
+    fetch("https://supernova.io.kr/home/realtime_best_hashtag", {
       credentials: "include",
     })
       .then((response) => response.json())

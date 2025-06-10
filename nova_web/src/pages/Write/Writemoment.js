@@ -53,7 +53,7 @@ const WriteMoment = ({ onClickMoment }) => {
   }
   let [isUserState, setIsUserState] = useState(false);
   function handleValidCheck() {
-    fetch("https://nova-platform.kr/home/is_valid", {
+    fetch("https://supernova.io.kr/home/is_valid", {
       credentials: "include",
     })
       .then((response) => {
@@ -152,7 +152,7 @@ const WriteMoment = ({ onClickMoment }) => {
 
     const loadingToast = toast.loading("업로딩 중입니다..");
 
-    fetch("https://nova-platform.kr/feed_explore/try_edit_feed", {
+    fetch("https://supernova.io.kr/feed_explore/try_edit_feed", {
       method: "POST",
       credentials: "include",
       body: formData,

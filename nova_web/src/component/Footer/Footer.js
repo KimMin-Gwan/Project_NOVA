@@ -12,7 +12,7 @@ export default function Footer() {
       <p className={style.nova_info}>대표: 김민관</p>
       { /*<p className={style.nova_info}>통신판매업신고번호: 0000-0000-000000</p> 
       <p className={style.nova_info}>
-        전화번호: 010-9875-2508 | 이메일:youths0828@nova-platform.kr
+        전화번호: 010-9875-2508 | 이메일:youths0828@supernova.io.kr
       </p>
       */}
       <p className={style.nova_info}>

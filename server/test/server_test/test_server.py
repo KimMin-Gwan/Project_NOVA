@@ -5,7 +5,7 @@ from pprint import pprint
 session = requests.Session()
 
 # 로그인 정보
-login_url = "https://nova-platform.kr/user_home/try_login"
+login_url = "https://supernova.io.kr/user_home/try_login"
 #login_url = "http://127.0.0.1:4000/user_home/try_login"
 login_data = {
     "header": {  # 빈 값이라도 정확히 포함해야 함
@@ -33,7 +33,7 @@ else:
 fid = "6063-qfgh-2540-3URvvc"
 
 #test_url = f"http://127.0.0.1:4000/home/weekly_best"
-test_url = "https://nova-platform.kr/home/weekly_best"
+test_url = "https://supernova.io.kr/home/weekly_best"
 
 
 print("????")

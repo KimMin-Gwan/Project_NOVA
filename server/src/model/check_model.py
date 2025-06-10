@@ -220,7 +220,7 @@
     ## 공유 전용 url
     #def get_shared_url(self):
         #try:
-            #self._shared_url = f"http://nova-platform.kr/home_check/shared/{self._name_card}"
+            #self._shared_url = f"http://supernova.io.kr/home_check/shared/{self._name_card}"
             #return
         #except Exception as e:
             #raise CoreControllerLogicError(error_type="get_shared_url | " + str(e))

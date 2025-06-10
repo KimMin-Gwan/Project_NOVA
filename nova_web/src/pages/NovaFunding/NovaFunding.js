@@ -24,7 +24,7 @@ export default function NovaFunding({ brightmode }) {
   }
 
   function fetchTag() {
-    fetch(`https://nova-platform.kr/nova_fund_system/home/get_recommend_tag`, {
+    fetch(`https://supernova.io.kr/nova_fund_system/home/get_recommend_tag`, {
       credentials: "include",
     })
       .then((response) => response.json())
@@ -38,7 +38,7 @@ export default function NovaFunding({ brightmode }) {
   }, []);
 
   function fetchTagData(tag) {
-    fetch(`https://nova-platform.kr/nova_fund_system/home/get_project_as_tag?tag=${tag}`, {
+    fetch(`https://supernova.io.kr/nova_fund_system/home/get_project_as_tag?tag=${tag}`, {
       credentials: "include",
     })
       .then((response) => response.json())
@@ -56,7 +56,7 @@ export default function NovaFunding({ brightmode }) {
   }
 
   function fetchBiasProj() {
-    fetch(`https://nova-platform.kr/nova_fund_system/home/get_bias_project`, {
+    fetch(`https://supernova.io.kr/nova_fund_system/home/get_bias_project`, {
       credentials: "include",
     })
       .then((response) => response.json())
@@ -70,7 +70,7 @@ export default function NovaFunding({ brightmode }) {
   }, []);
 
   function fetchBestProject() {
-    fetch(`https://nova-platform.kr/nova_fund_system/home/best_funding_section`)
+    fetch(`https://supernova.io.kr/nova_fund_system/home/best_funding_section`)
       .then((response) => response.json())
       .then((data) => {
         // setBestProjects(data.body.project);
@@ -83,7 +83,7 @@ export default function NovaFunding({ brightmode }) {
   }, []);
 
   function fetchFanProj() {
-    fetch(`https://nova-platform.kr/nova_fund_system/home/get_fan_funding`, {
+    fetch(`https://supernova.io.kr/nova_fund_system/home/get_fan_funding`, {
       credentials: "include",
     })
       .then((response) => response.json())
@@ -97,7 +97,7 @@ export default function NovaFunding({ brightmode }) {
   }, []);
 
   function fetchFundingInfo() {
-    fetch(`https://nova-platform.kr/nova_fund_system/home/get_nova_funding_info`)
+    fetch(`https://supernova.io.kr/nova_fund_system/home/get_nova_funding_info`)
       .then((response) => response.json())
       .then((data) => {
         setFundingInfo(data.body);
@@ -111,7 +111,7 @@ export default function NovaFunding({ brightmode }) {
   let [newProjects, setNewProjects] = useState([]);
 
   function fetchNewProject() {
-    fetch(`https://nova-platform.kr/nova_fund_system/bias_project/new_bias_project`, {
+    fetch(`https://supernova.io.kr/nova_fund_system/bias_project/new_bias_project`, {
       credentials: "include",
     })
       .then((response) => response.json())

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const mainApi = axios.create({
-  baseURL: "https://nova-platform.kr/",
+  baseURL: "https://supernova.io.kr/",
   withCredentials: true,
 });
 

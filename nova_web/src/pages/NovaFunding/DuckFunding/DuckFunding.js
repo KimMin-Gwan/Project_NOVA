@@ -24,7 +24,7 @@ export default function DuckFunding() {
       label: "모금 프로젝트",
     },
   ];
-  const URL = `https://nova-platform.kr/nova_fund_system/fan_project/`;
+  const URL = `https://supernova.io.kr/nova_fund_system/fan_project/`;
 
   let [achieveProj, setAchieveProj] = useState([]);
   let [soonExpireProj, setSoonExpireProj] = useState([]);

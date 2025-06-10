@@ -30,7 +30,7 @@ function FindPw() {
       },
     };
 
-    fetch("https://nova-platform.kr/user_home/try_find_password_send_email", {
+    fetch("https://supernova.io.kr/user_home/try_find_password_send_email", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -54,7 +54,7 @@ function FindPw() {
       },
     };
 
-    fetch("https://nova-platform.kr/user_home/try_login_temp_user", {
+    fetch("https://supernova.io.kr/user_home/try_login_temp_user", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
