@@ -11,6 +11,7 @@ import intro1 from "./intro1.png";
 import intro2 from "./intro2.png";
 import intro3 from "./intro3.png";
 import intro4 from "./intro4.png";
+import external from "./External.svg";
 
 import Carousel from "react-spring-3d-carousel";
 import { config } from "react-spring";
@@ -369,12 +370,17 @@ function AppServices3({targetRef}) {
 
 
 function FotterInfoBox({title, detail}) {
-
+    const url = "https://projectsupernova.notion.site";
     return(
         <div className={style["footer-info-box"]}>
             <div className={style["footer-info-box-wrapper"]}>
                 <div className={style["footer-info-title"]}>{title}</div>
                 <div className={style["footer-info-detail"]}>{detail}</div>
+            </div>
+            <div className={style["footer-info-icon-wrapper"]}>
+                <img src={external} 
+                    onClick={() => window.open(url, "_blank")}
+                />
             </div>
         </div>
     );
@@ -387,8 +393,8 @@ function BottomFooter(){
 
     const features = [
         {
-            title: "1대1 문의",
-            detail: "카카오톡 채널을 통해 1대1 문의를 할 수 있습니다."
+            title: "팀 SUPERNOVA",
+            detail: "SUPERNOVA에 대하여 자세히 알아보기",
         },
         {
             title: "이메일 문의",

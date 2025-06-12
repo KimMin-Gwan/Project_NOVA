@@ -491,9 +491,9 @@
 
 .footer-info-box{
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
     width: 813px;
     height: 140px;
     border-radius: 20px;
@@ -536,6 +536,24 @@
     font-size: 16px;
     font-weight: 600;
 }
+
+.footer-info-box .footer-info-icon-wrapper{
+    display:flex;
+    align-items: center;
+    align-content: center;
+    width: 75.5px;
+    height : 75.5px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+
+    img {
+        width: 30px;
+        height : 30px;
+    }
+}
+
+
 
 .brand-page-footer{
     display: flex;
