@@ -16,7 +16,7 @@
 
 
 .BrandLoader {
-  width: 400px; /* 로고 크기 조절 */
+  width: 80%; /* 로고 크기 조절 */
   height: auto; /* 비율 유지 */
 }
 
