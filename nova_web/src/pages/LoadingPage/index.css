@@ -5,7 +5,7 @@
   height: 100vh;
   max-width: 500px;
   margin: 0 auto;
-  background-color: white;
+  background-color: #fff;
 }
 .MyPageLoading {
   display: flex;
@@ -13,3 +13,11 @@
   align-items: center;
   height: 50vh;
 }
+
+
+.BrandLoader {
+  width: 400px; /* 로고 크기 조절 */
+  height: auto; /* 비율 유지 */
+}
+
+
