@@ -40,6 +40,9 @@ import ScheduleMakePage from "./pages/SchedulePage/ScheduleMakePage.js";
 import { NewFeedWritePage } from "./pages/Write/newWrite.js";
 import NewFeedDetail from "./pages/FeedDetail/NewFeedDetail.js";
 import BrandPage from "./pages/BrandPage/brandPage.jsx";
+import YouTubePlayer from "./pages/BrandContent/TestPage.jsx";
+import ImageChecker from "./pages/BrandContent/ImageChecker.jsx";
+import ContentPage from "./pages/BrandContent/ContentPage.jsx";
 
 // 다크 모드 클래스 반환 함수
 export function getModeClass(mode) {
@@ -158,6 +161,9 @@ function App() {
       {/* 홈 화면 */}
       <Route path="/" element={<HomePage />} />
       <Route path="/welcome" element={<BrandPage/>} />
+      <Route path="/temp_test2" element={<YouTubePlayer/>} />
+      <Route path="/temp_test3" element={<ImageChecker/>} />
+      <Route path="/content" element={<ContentPage/>} />
     </Routes>
   );
 }

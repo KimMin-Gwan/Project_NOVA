@@ -1,0 +1,423 @@
+.trick-container{
+    background-color: #f1f7ff;
+    height: 100vh;
+    align-items: end;
+}
+
+
+.content-container{
+    height: 100vh;
+    width : 100%;
+    min-width: 1420px;
+    display: flex;
+    flex-direction: row;
+}
+
+
+.content-component{
+    display: flex;
+    flex-direction: column;
+    background-color : #fff;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 140%; /* 22.4px */
+    letter-spacing: -0.4px;
+    color : #111;
+    box-shadow: 10px 10px 30px 0px rgba(0, 0, 0, 0.06);
+}
+
+
+.waiting-room-side-frame{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 1020px;
+    width: 462px;
+}
+
+.waiting-room-side-frame .sub-tools-wrapper{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 322px;
+    height: 438px;
+    gap: 20px;
+}
+
+.waiting-room-side-frame .tools-detail-wrapper{
+    gap: 11px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    align-self: stretch;
+    white-space: pre-line; /* 줄바꿈 문자(\n)를 두 줄로 렌더링 */
+}
+
+.tools-detail-wrapper .tools-title{
+    font-size: 20px;
+    font-weight: 600;
+    color: #111;
+}
+
+.tools-detail-wrapper .tools-subtitle{
+    font-size: 15px;
+    font-weight: 500;
+    color: #767676;
+}
+
+
+
+.waiting-room-side-frame .tools-container{
+    font-style: normal;
+    line-height: 140%; /* 22.4px */
+    letter-spacing: -0.4px;
+    width: 280px;
+    height: 167px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding : 21px;
+    background-color : #fff;
+    font-size: 16px;
+    font-style: normal;
+    line-height: 140%; /* 22.4px */
+    letter-spacing: -0.4px;
+    color : #111;
+    box-shadow: 10px 10px 30px 0px rgba(0, 0, 0, 0.06);
+    border-radius:  16px;
+
+    button{
+        display: flex;
+        width: 280px;
+        padding: 16px 24px;
+        justify-content: center;
+        align-items: center;
+        border-radius: 12px;
+        background: #F7F7FB;
+        border: none;
+        font-weight: 500;
+        color : #111;
+        font-size: 16px;
+    }
+}
+
+.waiting-room-side-frame .pagenation-wrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    width: 135px;
+}
+
+.pagenation-wrapper .pagenation-container{
+    width: 135px;
+    height: 54px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-self: stretch;
+    border-radius: 25px;
+    color: #111;
+    font-family: Pretendard;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 140%; /* 22.4px */
+    letter-spacing: -0.4px;
+    cursor: pointer;
+}
+
+
+
+.waiting-room-middle-frame{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: calc(1020px- 147px);
+    margin-top: 147px;
+    width: calc(100% - 924px);
+}
+
+.waiting-room-middle-frame .waiting-room-title-wrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 104px;
+    gap:20px;
+    font-style: normal;
+    line-height: 140%; /* 56px */
+    letter-spacing: -1px;
+}
+
+.waiting-room-middle-frame .waiting-room-title{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #111;
+    font-size: 40px;
+    font-weight: 600;
+    height: 56px;
+}
+
+.waiting-room-middle-frame .waiting-room-subtitle{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #767676;
+    font-size: 20px;
+    font-weight: 500;
+    height: 28px;
+}
+
+.chatting-preview-container{
+    display: flex;
+    flex-direction: column;
+    margin-top : 100px;
+    width: 70%;
+    height: 395px;
+    padding: 35px;
+    align-items: center;
+    gap: 16px;
+    border-radius: 24px;
+    background: #FFF;
+    box-shadow: 10px 10px 30px 0px rgba(0, 0, 0, 0.06);
+    font-style: normal;
+    line-height: 140%; /* 36.4px */
+    letter-spacing: -0.65px;
+}
+
+.waiting-room-middle-frame .chatting-title{
+    display: flex;
+    height: 36px;
+    color: #505050;
+    font-weight: 600;
+    font-size: 26px;
+}
+
+.chatting-wrapper{
+    display: flex;
+    width: calc(100% - 48px);
+    height: 330px;
+    padding: 24px;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    gap: 10px;
+    align-self: stretch;
+    border-radius: 12px;
+    border: 2px solid #111;
+    overflow: hidden; /* 경계 밖의 내용을 잘라냄 */
+}
+
+.chatting-component{
+    display : flex;
+    position: relative;
+    flex-direction: column; /* 세로로 쌓이도록 설정 (필요 시) */
+}
+
+.chatting-box-deco {
+    width: 10px;
+    height: 10px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background-color: #FAB83D;
+    position: absolute; /* 쌓임 맥락 내에서 자유롭게 배치 */
+    z-index: 2; /* z-index가 더 높은 값으로 위에 올라감 */
+    left: 0px; /* 위치를 조정 */
+    top: 0px;
+}
+
+.chatting-box {
+    display: flex;
+    margin-top: 2px;
+    margin-left: 2px;
+    min-width: calc(100% - 48px);
+    border-radius: 8px;
+    border: 1px solid #E5E5EC;
+    padding: 10px 10px;
+    justify-content: center;
+    align-items: center;
+    position: relative; /* 부모 쌓임 맥락에 속함 */
+    z-index: 1; /* z-index가 낮아 deco 아래로 내려감 */
+    word-wrap: break-word; /* 긴 내용 줄바꿈 */
+    overflow: visible;
+}
+
+
+.left-container-wrapper{
+    height: 100%;
+    width: 409px;
+    padding-left: 68px;
+}
+
+.content-container-inner-wrapper{
+    height: 940px;
+    width : 100%;
+    min-width: 1420px;
+    display: flex;
+    flex-direction: row;
+    transition: all 0.3s ease-in-out;
+}
+
+.content-left-container-wrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-start;
+    min-width: 480px;
+    gap: 15px;
+}
+
+.content-left-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 410px;
+}
+
+.content-info-n-how-to-use{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 410px;
+    gap: 12px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+    span{
+        color: #111;
+        font-family: "Cafe24 Ohsquare";
+        font-size: 40px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 140%; /* 56px */
+        letter-spacing: -0.8px;
+    }
+
+    .how-to-use{
+        color: #767676;
+        font-size: 20px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 140%; /* 28px */
+        letter-spacing: -0.5px;
+    }
+}
+
+.content-body{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    min-width: 1200px;
+    line-height: 140%; /* 50.4px */
+    letter-spacing: -0.72px;
+    font-family: "Cafe24 Ohsquare";
+    font-size: 36px;
+
+    .content-meta-frame{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap : 38px;
+        cursor: pointer;
+
+
+        .content-meta-frame-input-wrapper2,
+        .content-meta-frame-input-wrapper {
+            transition: all 0.3s ease-in-out;
+            display: flex;
+            margin-top: 10px;
+            width: 412px;
+            height: 90px;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+            border-radius: 40px;
+            background: #FFF;
+            box-shadow: 10px 10px 30px 0px rgba(0, 0, 0, 0.06);
+
+            font-family: "Cafe24 Ohsquare";
+            text-align: center; /* 텍스트를 가운데 정렬 */
+            font-size: 36px;
+            color: #505050;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 140%;
+            letter-spacing: -0.72px;
+        }
+
+        .content-meta-frame-input-wrapper input {
+            font-family: "Cafe24 Ohsquare";
+            width: 100%; /* input 요소가 부모 요소 내에서 확장되도록 설정 */
+            text-align: center; /* 텍스트를 가운데 정렬 */
+            font-size: 36px;
+            color: #A3A3A3;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 140%;
+            letter-spacing: -0.72px;
+            border: none; /* 필요시 테두리 제거 */
+            background: transparent; /* 필요시 배경 투명하게 설정 */
+            outline: none; /* 포커스 효과 제거 */
+        }
+
+        .content-meta-frame-input-wrapper input::placeholder {
+            font-family: "Cafe24 Ohsquare";
+            text-align: center; /* placeholder도 가운데 정렬 */
+            color: #A3A3A3;
+        }
+
+        .content-meta-frame-input-wrapper2:hover {
+            background-color: #A1C9FF;
+        }
+    }
+}
+
+
+.content-meta-data-wrapper{
+    display: flex;
+    flex-direction: column; /* row 도 나쁘지 않은데ㅐ?*/
+    gap: 20px;
+
+    div{
+        display: flex;
+        width: 354px;
+        height: 125px;
+        justify-content: center;
+        align-items: center;
+        align-self: stretch;
+        border-radius: 40px;
+        background: #FFF;
+        box-shadow: 10px 10px 30px 0px rgba(0, 0, 0, 0.06);
+        color: #505050;
+        font-style: normal;
+        font-weight: 400;
+        cursor: default;
+    }
+}
+
+.meta-data-clickable-div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.meta-data-subtitle{
+    color: #767676;
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+}
