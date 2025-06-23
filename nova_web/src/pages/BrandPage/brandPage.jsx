@@ -124,6 +124,15 @@ function BrandHighlight() {
   const handleNavigate = (path) => {
     navigate(`${path}`);
   };
+
+  const openNewWindow = () => {
+    window.open(
+      "https://supernova.io.kr", // 새 창에 열 URL
+      "_blank", // 새로운 탭 또는 창으로 열기
+      "width=600,height=900" // 창의 크기 및 기타 옵션
+    );
+  };
+
     return (
         <div className={style["brand-highlight"]}>
             <div className={style["brand-highlight-content"]}>
@@ -140,7 +149,7 @@ function BrandHighlight() {
                             회원가입
                         </div>
                         <div className={style["button-2"]}
-                            onClick={() => handleNavigate("/")}>
+                            onClick={() => openNewWindow()}>
                             바로가기
                         </div>
                     </div>
@@ -370,7 +379,7 @@ function AppServices3({targetRef}) {
 
 
 function FotterInfoBox({title, detail}) {
-    const url = "https://projectsupernova.notion.site";
+    const url = "https://projectsupernova.notion.site"; // 우리 브랜드 Notion
     return(
         <div className={style["footer-info-box"]}>
             <div className={style["footer-info-box-wrapper"]}>
