@@ -1,4 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { CSSTransition, TransitionGroup } from "react-transition-group";
+import "./animations.css"; // CSS 애니메이션 정의
 import brandStyle from "./../BrandPage/brandPage.module.css";
 import style from "./style.module.css";
 
@@ -44,10 +46,10 @@ function IntroComponent({setStart}){
   return(
       <div 
         className={brandStyle["brand-page-background"]}
-        style={{height: "1020px"}}
+        style={{height: "100vh"}}
       >
         <div className={brandStyle["brand-highlight"]}
-          style={{height: "1020px"}}
+          style={{height: "100vh"}}
         >
           <div className={brandStyle["brand-highlight-content"]}
           style={{paddingTop:"336px"}}
@@ -77,7 +79,7 @@ function IntroComponent({setStart}){
           </div>
 
           <img src={contentBackgroundImage} alt="Brand Highlight" className={brandStyle["brand-highlight-background-image"]} 
-            style={{height: "1020px"}}
+            style={{height: "100vh"}}
           />
         </div>
       </div>
@@ -157,6 +159,7 @@ function ConnectedComponent() {
       >
         <SwiperSlide>
           <WatiingRoomComponent
+            myIndex={0}
             chattings={temp_chattings}
             pages={pages}
             selectedPage={selectedPage}
@@ -165,13 +168,16 @@ function ConnectedComponent() {
         </SwiperSlide>
         <SwiperSlide>
           <div className={style["trick-container"]}>
+            <img src={contentBackgroundImage} alt="Brand Highlight" className={brandStyle["brand-highlight-background-image"]} 
+              style={{height: "100vh"}}
+            />
           </div>
         </SwiperSlide>
 
         <SwiperSlide>
           <QuestionGuessorComponent
+            myIndex={1}
             chattings={temp_chattings}
-            pages={pages}
             selectedPage={selectedPage}
             setSelectedPage={sliderController}
           />
@@ -179,24 +185,34 @@ function ConnectedComponent() {
 
         <SwiperSlide>
           <div className={style["trick-container"]}>
+            <img src={contentBackgroundImage} alt="Brand Highlight" className={brandStyle["brand-highlight-background-image"]} 
+              style={{height: "100vh"}}
+            />
           </div>
         </SwiperSlide>
 
         <SwiperSlide>
           <DiffGuessorComponent
+            myIndex={2}
             chattings={temp_chattings}
+            selectedPage={selectedPage}
             setSelectedPage={sliderController}
           />
         </SwiperSlide>
 
         <SwiperSlide>
           <div className={style["trick-container"]}>
+            <img src={contentBackgroundImage} alt="Brand Highlight" className={brandStyle["brand-highlight-background-image"]} 
+              style={{height: "100vh"}}
+            />
           </div>
         </SwiperSlide>
 
         <SwiperSlide>
           <MusicGuessorComponent
+            myIndex={3}
             chattings={temp_chattings}
+            selectedPage={selectedPage}
             setSelectedPage={sliderController}
           />
         </SwiperSlide>
@@ -320,19 +336,21 @@ function Chatting({index, body}){
   );
 }
 
-const executeSlideAnimation = (id) => {
-    const swiperSlide = document.getElementById(id);
+const executeSlideAnimation = () => {
+  const className = style["content-container-inner-wrapper"];
+    const swiperSlides = document.querySelectorAll(`.${className}`);
 
-    console.log(swiperSlide)
-    if (swiperSlide){
+    swiperSlides.forEach((swiperSlide) => {
         swiperSlide.style.opacity = 0;
         setTimeout(() => {
-          swiperSlide.style.opacity = 1;
-        }, 300); // 1초 후 애니메이션 시작
-    }
+          setTimeout(() => {
+              swiperSlide.style.opacity = 1;
+          }, 300); // 0.3초 후 애니메이션 실행
+        }, 300); // 0.3초 후 애니메이션 실행
+    });
 };
 
-function QuestionGuessorComponent({chattings, setSelectedPage}){
+function QuestionGuessorComponent({chattings, myIndex, selectedPage, setSelectedPage}){
   const swiperRef = useRef(null); // Swiper 인스턴스를 참조하기 위한 Ref 생성
   const title = "스무고개";
   const howToUse =[
@@ -361,11 +379,9 @@ function QuestionGuessorComponent({chattings, setSelectedPage}){
 
   // 슬라이드하면 나타나는 뭐시기 애니메이션인데 이거 필요없을듯
   const handlePage = (e) => {
-    console.log("hello")
-    const slideId = "inner-content-id"; // 슬라이드 ID 계산
-    // 첫 번째 슬라이드에서 두 번째 슬라이드로 이동할 때 애니메이션 실행
-    executeSlideAnimation(slideId);
+    executeSlideAnimation();
   }
+
 
   return(
     <div className={style["content-container"]}
@@ -381,7 +397,7 @@ function QuestionGuessorComponent({chattings, setSelectedPage}){
           </div>
         </div>
       </div>
-      <div className={style["content-container-inner-wrapper"]}>
+      <div className={style["content-container-inner-wrapper2"]}>
         <div className={style["content-left-container-wrapper"]}>
           <div className={style["content-info-n-how-to-use"]}>
             <span>
@@ -434,8 +450,21 @@ function QuestionGuessorComponent({chattings, setSelectedPage}){
             />
           </SwiperSlide>
           <SwiperSlide>
-            <div className={style["content-container-inner-wrapper"]}>  
-            </div>
+              <QuestionGuessorPlayingSlide 
+                buttonPress={sliderController}
+              />
+          </SwiperSlide>
+          <SwiperSlide>
+              <QuestionGuessorClearSlide 
+                title={title}
+                howToUse={howToUse}
+                numQuestion={numQuestion}
+                option={option}
+                subOption={subOption}
+                input={input}
+                setInput={handleInput}
+                buttonPress={sliderController}
+              />
           </SwiperSlide>
         </Swiper>
       </div>
@@ -444,7 +473,279 @@ function QuestionGuessorComponent({chattings, setSelectedPage}){
 }
 
 
-function DiffGuessorComponent({chattings, setSelectedPage}){
+function QuestionGuessorPlayingSlide({
+  buttonPress
+}){
+  const temp = [
+    {
+      body: "대충 질문 1번asgasgnqphgbeqnhlhnbalsdnhlabnlh",
+      answer: 0
+    },
+    {
+      body: "근데 ㅇㄱㅈㅉㅇㅇ 아밈누헵흄ㄴ,.휴ㅜ벰 ㅁㄶㄻ뉗ㄴㅂ미ㅏ",
+      answer: 0
+    },
+    {
+      body: "하나만 더해보자 QWER화이팅",
+      answer: 0
+    },
+  ]
+
+  const temp2 = [
+    {
+      body: "ㄹㅇ 버그투성이 개 망겜",
+      answer: 1
+    },
+    {
+      body: "ㄹㅇ 버그투성이 개 망겜",
+      answer: 1
+    },
+    {
+      body: "니가  한번 만들어봐 미친놈아",
+      answer: 1
+    },
+    {
+      body: "근데 질문 길이가 이렇게 길고 해서 좀 다루기 어ㅇ려우면 어떠헥 해야할가 더 길게 적어봐",
+      answer: 3
+    },
+    {
+      body: "니가  한번 만들어봐 미친놈아",
+      answer: 2
+    },
+    {
+      body: "근데 질문 길이가 이렇게 길고 해서 좀 다루기 어ㅇ려우면 어떠헥 해야할가 더 길게 적어봐",
+      answer: 3
+    }
+  ]
+
+  const [waitingQuestion, setWaitingQuestion] = useState(temp);
+  const [answeredQuestion, setAnsweredQuestion] = useState(temp2);
+
+
+  return(
+    <div id={"inner-content-id"} className={style["content-container-inner-wrapper"]}
+      style={{justifyContent:"center", alignItems:"center", opacity:0}}
+    >  
+      <div className={style["content-body"]}>
+        <div className={style["question-guessor-top"]}>
+          <div className={style["question-guessor-top-left-box"]}>
+            <div className={style["question-guessor-top-left-title-wrapper"]}>
+              <span> 질문 대기</span>
+              <p>최대 3개 까지 보관됩니다.</p>
+            </div>
+            <TransitionGroup className={style["question-guessor-top-left-body-wrapper"]}>
+              {waitingQuestion.map((question, index) => (
+                <CSSTransition
+                  key={index}
+                  timeout={300}
+                  classNames="fade"
+                >
+                  <QuestionObject
+                    question={question}
+                    waitingQuestion={waitingQuestion}
+                    setWaitingQuestion={setWaitingQuestion}
+                    setAnsweredQuestion={setAnsweredQuestion}
+                  />
+                </CSSTransition>
+              ))}
+            </TransitionGroup>
+          </div>
+          <div className={style["question-guessor-top-right-wrapper"]}>
+            <div className={style["stage-meta-data-box"]}>
+              <span style={{color:"#505050", fontSize:"36px"}}>
+                스테이지1
+              </span>
+            </div>
+            <div className={style["stage-meta-data-box"]}>
+              <span style={{color:"#111", fontSize:"36px", height:"50px"}}>
+                남은 질문 20개
+              </span>
+              <div>
+                클릭해서 질문 개수 변경
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className={style["question-guessor-middle-box"]}>
+          <div className={style["question-guessor-middle-title-wrapper"]}>
+            <span>
+              답변 내역
+            </span>
+          </div>
+          <TransitionGroup className={style["question-guessor-middle-question-wrapper"]}>
+            {answeredQuestion.map((question, index) => (
+              <CSSTransition
+                key={index}
+                timeout={300}
+                classNames="fade"
+              >
+                <QuestionObject
+                  question={question}
+                  waitingQuestion={waitingQuestion}
+                  setWaitingQuestion={setWaitingQuestion}
+                  setAnsweredQuestion={setAnsweredQuestion}
+                />
+              </CSSTransition>
+            ))}
+          </TransitionGroup>
+        </div>
+        <div className={style["question-guessor-bottom"]}>
+          <div className={style["question-guessor-bottom-button"]}
+            onClick={()=>buttonPress()}
+          >
+            <span
+              style={{fontSize:"36px"}}
+            >
+              정답 확인
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+function QuestionGuessorClearSlide({
+  buttonPress
+}){
+  return(
+    <div id={"inner-content-id"} className={style["content-container-inner-wrapper"]} 
+      style={{justifyContent:"center", alignItems:"center", opacity:0}}
+    >  
+      {/*여기부터 천천히 등장해야됨 */}
+      <div className={style["content-meta-body"]}>
+        <div className={style["content-meta-frame"]}>
+          <div className={style["content-meta-data-wrapper"]}>
+            <div className={style["meta-data-clickable-div"]}> 
+              <span>
+                스테이지1
+              </span>
+            </div>
+          </div>
+          <div className={style["content-meta-frame-input-wrapper"]}
+            style={{
+              width: "500px",
+              height: "300px",
+              flexDirection: "column",
+              gap: "30px"
+            }}
+          >
+            <span
+              style={{
+                fontSize: "28px",
+                color: "#767676"
+              }}
+            >
+              정답
+            </span>
+            <span
+              style={{
+                fontSize: "38px",
+                color: "#111"
+              }}
+            >
+              정답은 이거랍니다.
+            </span>
+          </div>
+          <div className={style["content-meta-frame-input-wrapper2"]}
+            onClick={()=>{buttonPress()}}
+          >
+            <span 
+            >
+              다음 스테이지 시작
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+function QuestionObject({
+  question, 
+  waitingQuestion,
+  setWaitingQuestion,
+  setAnsweredQuestion
+}){
+  const [isClicked, setIsClicked] = useState(false);
+  const [isFading, setIsFading] = useState(false);
+  const s_answer = ["네", "아니오", "거절"];
+
+  const handleClick = () => {
+    setIsClicked((prev) => !prev);
+  };
+
+  console.log(isClicked)
+  const handleAnswer = (index) => {
+    setIsFading(true); // 페이드 아웃 시작
+    setTimeout(() => {
+      // 페이드 아웃 완료 후 상태 업데이트
+      const updatedWaitingQuestions = waitingQuestion.filter(
+        (q) => q !== question
+      );
+      setWaitingQuestion(updatedWaitingQuestions);
+
+      if (index !== 3) {
+        const answered = { ...question, answer: index };
+        setAnsweredQuestion((prev) => [...prev, answered]);
+      }
+    }, 300); // 애니메이션 지속 시간과 동일하게 설정
+  };
+
+  if(question.answer){
+    return(
+      <div className={style["question-object-frame"]}
+        style={{maxWidth:"33%"}}
+      >
+        <div className={style["question-object-body"]}>
+          {question.body}
+        </div>
+        <div className={style["question-object-interaction-wrapper"]}>
+          <p>{s_answer[question.answer-1]}</p>
+        </div>
+      </div>
+    );
+  }else{
+    return(
+      <div
+        className={`${style["question-object-frame"]} ${
+          isFading ? "fade-out" : "" } question-object`}
+      >
+        <div className={style["question-object-body"]}
+            style={{
+              border : isClicked ? "2px solid #111" : "1px solid #5C5C5C"
+            }}
+          onClick={handleClick}
+        >
+          {question.body}
+        </div>
+        <div className={style["question-object-interaction-wrapper"]}>
+          <div
+            style={{
+              opacity: isClicked ? "1" : "0",
+              transform: isClicked ? "scale(1)" : "scale(0.9)",
+              height: isClicked ? "auto" : "0",
+            }}
+          >
+            <p onClick={() => handleAnswer(1)}
+            >네
+            </p><p> / </p>
+            <p onClick={() => handleAnswer(2)}
+            >아니오</p><p>/</p>
+            <p onClick={() => handleAnswer(3)}
+            >거절</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
+
+
+
+function DiffGuessorComponent({chattings, selectedPage, myIndex, setSelectedPage}){
   const diffSwiperRef= useRef(null);
   const title = "틀린그림찾기";
   const howToUse =[
@@ -476,7 +777,36 @@ function DiffGuessorComponent({chattings, setSelectedPage}){
           </div>
         </div>
       </div>
-      <div className={style["content-container-inner-wrapper"]}>
+      <div className={style["content-container-inner-wrapper2"]}>
+        <div className={style["content-left-container-wrapper"]}>
+          <div className={style["content-info-n-how-to-use"]}>
+            <span>
+              {title}
+            </span>
+            <div className={style["how-to-use"]}>
+              {
+                howToUse.map((usage, index)=>{
+                  return <li key={index}>{usage}</li>
+                })
+              }
+            </div>
+          </div>
+          <div className={style["content-left-container"]}>
+            <div className={style["chatting-preview-container"]}
+              style={{padding:"16px 14px", marginTop:"0px"}}
+            >
+              <div className={style["chatting-wrapper"]}>
+              {
+                chattings.map((chatting, index) =>{
+                  return (
+                      <Chatting key={index} index={index} body={chatting.body}/>
+                  );
+                })
+              }
+              </div>
+            </div>
+          </div>
+        </div>
         <Swiper
           style={{width: "100%", height: "1020px"}}
           direction={'horizontal'}
@@ -504,7 +834,7 @@ function DiffGuessorComponent({chattings, setSelectedPage}){
   );
 }
 
-function MusicGuessorComponent({chattings, setSelectedPage}){
+function MusicGuessorComponent({chattings, myIndex, selectedPage, setSelectedPage}){
   const diffSwiperRef= useRef(null);
   const title = "뮤직게서";
   const howToUse =[
@@ -520,6 +850,7 @@ function MusicGuessorComponent({chattings, setSelectedPage}){
   const handleSlide = () => {
     diffSwiperRef.current?.slideNext()
   };
+
 
   return(
     <div className={style["content-container"]}
@@ -537,7 +868,36 @@ function MusicGuessorComponent({chattings, setSelectedPage}){
           </div>
         </div>
       </div>
-      <div className={style["content-container-inner-wrapper"]}>
+      <div className={style["content-container-inner-wrapper2"]}>
+        <div className={style["content-left-container-wrapper"]}>
+          <div className={style["content-info-n-how-to-use"]}>
+            <span>
+              {title}
+            </span>
+            <div className={style["how-to-use"]}>
+              {
+                howToUse.map((usage, index)=>{
+                  return <li key={index}>{usage}</li>
+                })
+              }
+            </div>
+          </div>
+          <div className={style["content-left-container"]}>
+            <div className={style["chatting-preview-container"]}
+              style={{padding:"16px 14px", marginTop:"0px"}}
+            >
+              <div className={style["chatting-wrapper"]}>
+              {
+                chattings.map((chatting, index) =>{
+                  return (
+                      <Chatting key={index} index={index} body={chatting.body}/>
+                  );
+                })
+              }
+              </div>
+            </div>
+          </div>
+        </div>
         <Swiper
           style={{width: "100%", height: "1020px"}}
           direction={'horizontal'}
@@ -580,12 +940,10 @@ function ContentIntroSlide({
     }
   };
 
-  console.log(setInput);
-
   return(
     <div id={"inner-content-id"} className={style["content-container-inner-wrapper"]} >  
       {/*여기부터 천천히 등장해야됨 */}
-      <div className={style["content-body"]}>
+      <div className={style["content-meta-body"]}>
         <div className={style["content-meta-frame"]}>
           <div className={style["content-meta-data-wrapper"]}>
             <div className={style["meta-data-clickable-div"]}> 
