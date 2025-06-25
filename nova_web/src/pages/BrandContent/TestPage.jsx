@@ -1,50 +1,72 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 
-const YouTubePlayer = () => {
-  let player;
+const YouTubePlayerWithControls = () => {
+  const playerRef = useRef(null);
 
   useEffect(() => {
-    // 1. This code loads the IFrame Player API code asynchronously.
+    // Load the IFrame Player API code asynchronously
     const tag = document.createElement('script');
-    tag.src = 'https://youtu.be/Gz2Q1-Q7B8s?si=r3s9Eby19kY4c_JI';
+    tag.src = 'https://www.youtube.com/iframe_api';
     const firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-    // 2. This function creates an <iframe> (and YouTube player)
-    //    after the API code downloads.
+    // Function to create a YouTube player after the API loads
     window.onYouTubeIframeAPIReady = () => {
-      player = new window.YT.Player('player', {
-        height: '0', // Hidden height
-        width: '0',  // Hidden width
-        videoId: 'M7lc1UVf-VE', // Replace with your desired video ID
+      playerRef.current = new window.YT.Player('player', {
+        height: '620',
+        width: '980',
+        videoId: '7y6XuryGHww', // Replace with your desired video ID
         playerVars: {
+          autoplay: 0, // Prevent auto-play
+          controls: 1,
           playsinline: 1,
-        },
-        events: {
-          onReady: onPlayerReady,
         },
       });
     };
 
-    // Clean up function
     return () => {
-      if (player) {
-        player.destroy();
+      if (playerRef.current) {
+        playerRef.current.destroy();
       }
     };
   }, []);
 
-  // 3. The API will call this function when the video player is ready.
-  const onPlayerReady = (event) => {
-    event.target.playVideo();
+  const playVideo = () => {
+    if (playerRef.current) {
+      playerRef.current.playVideo();
+    }
+  };
+
+  const pauseVideo = () => {
+    if (playerRef.current) {
+      playerRef.current.pauseVideo();
+    }
+  };
+
+  const stopVideo = () => {
+    if (playerRef.current) {
+      playerRef.current.stopVideo();
+    }
+  };
+
+  const restartVideo = () => {
+    if (playerRef.current) {
+      playerRef.current.seekTo(0); // Seek to the start of the video
+      playerRef.current.playVideo(); // Play the video
+    }
   };
 
   return (
     <div>
-      {/* 1. The <iframe> (and video player) will replace this <div> tag. */}
-      <div id="player" style={{ display: 'none' }}></div>
+      <div id="player"></div>
+      <div style={{ marginTop: '20px' }}>
+        <button onClick={playVideo} style={{ marginRight: '10px' }}>Play</button>
+        <button onClick={pauseVideo} style={{ marginRight: '10px' }}>Pause</button>
+        <button onClick={stopVideo} style={{ marginRight: '10px' }}>Stop</button>
+        <button onClick={restartVideo}>Restart</button>
+      </div>
     </div>
   );
 };
 
-export default YouTubePlayer;
+export default YouTubePlayerWithControls;
