@@ -162,7 +162,6 @@ function App() {
       <Route path="/" element={<HomePage />} />
       <Route path="/welcome" element={<BrandPage/>} />
       <Route path="/temp_test2" element={<YouTubePlayer/>} />
-      <Route path="/temp_test3" element={<ImageChecker/>} />
       <Route path="/content" element={<ContentPage/>} />
     </Routes>
   );

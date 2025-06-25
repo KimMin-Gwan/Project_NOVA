@@ -677,7 +677,6 @@ function QuestionObject({
     setIsClicked((prev) => !prev);
   };
 
-  console.log(isClicked)
   const handleAnswer = (index) => {
     setIsFading(true); // 페이드 아웃 시작
     setTimeout(() => {
@@ -742,6 +741,27 @@ function QuestionObject({
     );
   }
 }
+
+
+
+//----------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -834,6 +854,17 @@ function DiffGuessorComponent({chattings, selectedPage, myIndex, setSelectedPage
   );
 }
 
+
+
+//-------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
 function MusicGuessorComponent({chattings, myIndex, selectedPage, setSelectedPage}){
   const diffSwiperRef= useRef(null);
   const title = "뮤직게서";
@@ -905,6 +936,7 @@ function MusicGuessorComponent({chattings, myIndex, selectedPage, setSelectedPag
           allowTouchMove={false}
           touchEventsTarget="wrapper"
           initialSlide={0}
+          onSwiper={(swiper) => (diffSwiperRef.current = swiper)} // Swiper 인스턴스 참조
         >
           <SwiperSlide>
             <ContentIntroSlide 
@@ -916,8 +948,9 @@ function MusicGuessorComponent({chattings, myIndex, selectedPage, setSelectedPag
             />
           </SwiperSlide>
           <SwiperSlide>
-            <div className={style["content-container-inner-wrapper"]}>  
-            </div>
+            <MusicGuessorPlayingSlide
+              buttonPress={handleSlide}
+            />
           </SwiperSlide>
         </Swiper>
       </div>
@@ -925,19 +958,351 @@ function MusicGuessorComponent({chattings, myIndex, selectedPage, setSelectedPag
   );
 }
 
+
+
+const colorSample = ["#FFA347", "#479DFF", "#A947FF"]
+
+function MusicGuessorPlayingSlide({buttonPress}){
+
+  const tempMusicInfo = {
+    id : 'J7klzJ9auE0',
+    name : "뜨거운여름밤은가고남은것은볼품없지만"
+  }
+
+  const playerRef = useRef(null);
+  const [answerFlag, setAnswerFlag] = useState(false);
+
+  const handleShowAnswer =()=>{
+    setAnswerFlag((prev)=>!prev);
+  }
+
+
+  useEffect(() => {
+    // Load the IFrame Player API code asynchronously
+    const tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    const firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    // Function to create a YouTube player after the API loads
+    window.onYouTubeIframeAPIReady = () => {
+      playerRef.current = new window.YT.Player('player', {
+        height: '80%',
+        videoId: tempMusicInfo.id, // Replace with your desired video ID
+        playerVars: {
+          autoplay: 0, // Prevent auto-play
+          controls: 1,
+          playsinline: 1,
+        },
+      });
+    };
+
+    return () => {
+      if (playerRef.current) {
+        playerRef.current.destroy();
+      }
+    };
+  }, []);
+
+  const playVideo = () => {
+    if (playerRef.current) {
+      playerRef.current.playVideo();
+    }
+  };
+
+  const pauseVideo = () => {
+    if (playerRef.current) {
+      playerRef.current.pauseVideo();
+    }
+  };
+
+  const stopVideo = () => {
+    if (playerRef.current) {
+      playerRef.current.stopVideo();
+    }
+  };
+
+
+
+  const [answer, setAnswer] = useState("");
+
+  const tempUser = [
+    { id: 0, nickname: "가짜 이름 1", point: 10 },
+    { id: 1, nickname: "가짜 이름 2", point: 6 },
+    { id: 2, nickname: "가짜 이름 3", point: 5 },
+    { id: 5, nickname: "누구겠냐~", point: 11 },
+  ];
+
+  const tempChatting = [
+    { id: 4, body: "이건 뭐지", state:false},
+    { id: 0, body: "정답!", state:false },
+    { id: 1, body: "잠시만 저거", state:false},
+    { id: 2, body: "이게정답임", state:true},
+  ]
+
+  const [sampleChatting ,setSampleChatting] = useState(tempChatting);
+
+  const handleNewAnswer = (e) =>{
+    if (e.key === 'Enter') {
+      const newChatting = {
+        id: sampleChatting.length,
+        body: answer,
+        state: false
+      };
+      
+      if (answer === tempMusicInfo.name){
+        newChatting.state = true
+        setAnswerFlag(true);
+      }
+
+      setSampleChatting((prev)=>[...prev, newChatting]);
+      setAnswer("");
+    }
+  }
+
+  const [userList, setUserList] = useState(tempUser);
+  const [top3Users, setTop3Users] = useState([]);
+
+  useEffect(() => {
+    if (userList) {
+      // point 기준으로 내림차순 정렬 후 상위 3명만 선택
+      const sortedTop3 = [...userList]
+        .sort((a, b) => b.point - a.point)
+        .slice(0, 3);
+      setTop3Users(sortedTop3);
+    }
+  }, [userList]); // userList가 변경될 때 실행
+
+
+  const handleInput = (e) => {
+    const newInput = e.target.value;
+    setAnswer(newInput); // 입력 값을 상태로 설정
+  };
+
+  const [counter, setCounter] = useState(15);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const timerRef = useRef(null); // 타이머 ID를 저장할 Ref
+
+  const handlePlaying = () => {
+    if (counter === 0) {
+      // 카운터가 0이면 초기화
+      setCounter(15); // 초기값으로 설정
+      setIsPlaying(false); // 정지 상태로 변경
+      stopVideo();
+    }
+    if (isPlaying) {
+      // 타이머가 동작 중이면 정지
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+      setIsPlaying(false);
+      pauseVideo()
+    } else {
+      // 타이머가 멈춰있으면 시작
+      timerRef.current = setInterval(() => {
+        setCounter((prevCounter) => {
+          if (prevCounter <= 1) {
+            clearInterval(timerRef.current); // 0에 도달하면 타이머 정지
+            timerRef.current = null;
+            setIsPlaying(false); // 정지 상태로 전환
+            stopVideo();
+            return 0;
+          }
+          return prevCounter - 1;
+        });
+      }, 1000);
+      setIsPlaying(true);
+      playVideo();
+    }
+  };
+
+  useEffect(() => {
+    // 컴포넌트 언마운트 시 타이머 정리
+    return () => clearInterval(timerRef.current);
+  }, []);
+
+
+  const ScoreComponent = ({index, nickname, point}) => {
+    const color = colorSample[index]
+
+    return(
+      <div className={style["music-guessor-score-component"]}>
+        <div className={style["rating-nickname-wrapper"]}>
+          <p className={style["score-rating"]}
+           style={{ color : color }}
+          >
+            {index+1}위
+          </p>
+          <p className={style["nickname"]}>
+            {nickname}
+          </p>
+        </div>
+        <p className={style["point"]}>
+          {point}
+        </p>
+      </div>
+    );
+  }
+
+  const AnswerChattingComponent = ({answer}) => {
+    return(
+      <div className={style["music-guessor-chatting-component"]}>
+        <div className={style["answer-chatting"]}>
+          {answer.body}
+        </div>
+        {
+          answer.state ? (
+            <p className={style["correct"]}>
+              정답
+            </p>
+          ) : (
+            <p className={style["uncorrect"]}>
+              오답
+            </p>
+          )
+        }
+      </div>
+    );
+  }
+
+
+  return(
+    <div id={"inner-content-id"} className={style["content-container-inner-wrapper"]} 
+      style={{justifyContent:"center", alignItems:"center", opacity:1, position:"relative"}}
+    >  
+      <div className={style["content-body"]}
+        style={{
+          position:"relative",
+          zIndex: "1",
+        }}
+      >
+        <div className={style["music-guessor-top-frame"]}>
+          <div className={style["music-guessor-top-left-frame"]}>
+            <div className={style["music-guessor-playing-button-wrapper"]}>
+              <div className={style["music-guessor-playing-button"]}
+                onClick={handlePlaying} disabled={isPlaying}
+              >
+              </div>
+              <div className={style["music-guessor-playing-counter"]}>
+                {counter}
+              </div>
+            </div>
+          </div>
+          <div className={style["music-guessor-top-right-frame"]}>
+            <div className={style["music-guessor-meta-data-box"]}>
+              <span>스코어보드</span>
+              <div className={style["music-guessor-score-board-wrapper"]}>
+                {top3Users.map((user, index) => {
+                  return <ScoreComponent
+                    key={index}
+                    index={index}
+                    nickname={user.nickname}
+                    point={user.point}
+                  />
+                })
+                }
+              </div>
+            </div>
+            <div className={style["music-guessor-meta-data-box"]}>
+              <span>답변 내역</span>
+              <div className={style["music-guessor-answer-wrapper"]}>
+                {
+                  sampleChatting.map((answer, index)=>{
+                    return <AnswerChattingComponent
+                      key={index}
+                      answer={answer}
+                    />
+                  })
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className={style["music-guessor-bottom-frame"]}>
+          <div className={style["music-guessor-input-frame"]}>
+            <div className={style["music-guessor-input-wrapper"]}>
+              <input
+                className={style["music-guessor-input"]}
+                value={answer}
+                onChange={(e) => {
+                  handleInput(e);
+                }}
+                placeholder={answer? answer: "정답"}
+                type="text"
+                onKeyDown={handleNewAnswer}
+              >
+              </input>
+            </div>
+          </div>
+          <div className={style["music-guessor-next-button-frame"]}>
+            <div className={style["music-guessor-next-button-wrapper"]}>
+              <div className={style["music-guessor-next-button"]}
+                onClick={handleShowAnswer}
+              >
+                <span>다음</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className={style["music-guessor-upper-frame"]}
+          style={{
+            height: answerFlag ? "70%" : "0%",
+            display : answerFlag ? "visible" : "hidden",
+            opacity :answerFlag ? 1 : 0,
+          }}
+        >
+          <div id="player"
+            style={{
+              display : answerFlag ? "visible" : "hidden",
+            }}
+          ></div>
+      </div>
+    </div>
+  );
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//------------------------------------------------------------------------------
+
+
+
+
+
+
+
 function ContentIntroSlide({
   title, howToUse, option, subOption,
   input, setInput, buttonPress
 }) {
 
   const handleNextSlide =() => {
+    console.log(setInput)
     if(setInput){
       if (input == ""){
         alert("정답을 입력해주세요!");
-      }else{
-        buttonPress()
+        return
       }
     }
+    buttonPress()
   };
 
   return(
@@ -971,7 +1336,9 @@ function ContentIntroSlide({
             )
           }
           <div className={style["content-meta-frame-input-wrapper2"]}
-            onClick={()=>{handleNextSlide()}}
+            onClick={()=>{
+              handleNextSlide()
+            }}
           >
             <span 
             >
