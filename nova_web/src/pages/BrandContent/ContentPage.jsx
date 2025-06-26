@@ -1084,6 +1084,8 @@ function MusicGuessorPlayingSlide({buttonPress}){
   const timerRef = useRef(null); // 타이머 ID를 저장할 Ref
 
   const handlePlaying = () => {
+    const shape = document.getElementById('shape');
+
     if (counter === 0) {
       // 카운터가 0이면 초기화
       setCounter(15); // 초기값으로 설정
@@ -1180,7 +1182,81 @@ function MusicGuessorPlayingSlide({buttonPress}){
             <div className={style["music-guessor-playing-button-wrapper"]}>
               <div className={style["music-guessor-playing-button"]}
                 onClick={handlePlaying} disabled={isPlaying}
+                style={{
+                  position: "relative",
+                  cursor: "pointer",
+                  overflow: "hidden",
+                }}
               >
+                    {/* Pause Icon */}
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="136"
+                      height="136"
+                      viewBox="0 0 136 136"
+                      fill="none"
+                      style={{
+                        position: "absolute",
+                        top: 85,
+                        left: 84,
+                        opacity: isPlaying ? 1 : 0,
+                        transform: isPlaying ? "scale(1)" : "scale(0.8)",
+                        transition: "opacity 0.3s ease, transform 0.3s ease",
+                      }}
+                    >
+                      <path
+                        d="M109.882 0.118578C124.242 0.118578 135.882 11.7592 135.882 26.1186V109.883C135.882 124.242 124.242 135.883 109.882 135.883H26.1178C11.7584 135.883 0.11775 124.242 0.11775 109.883V26.1186C0.11775 11.7592 11.7583 0.118578 26.1177 0.118578H109.882Z"
+                        fill="url(#paint0_linear_2545_19)"
+                      />
+                      <defs>
+                        <linearGradient
+                          id="paint0_linear_2545_19"
+                          x1="135.882"
+                          y1="0.118578"
+                          x2="32.9721"
+                          y2="103.029"
+                          gradientUnits="userSpaceOnUse"
+                        >
+                          <stop stopColor="#86C4FF" />
+                          <stop offset="1" stopColor="#389FFF" />
+                        </linearGradient>
+                      </defs>
+                    </svg>
+
+                    {/* Play Icon */}
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="107"
+                      height="120"
+                      viewBox="0 0 107 120"
+                      fill="none"
+                      style={{
+                        position: "absolute",
+                        top: 95,
+                        left: 110,
+                        opacity: isPlaying ? 0 : 1,
+                        transform: isPlaying ? "scale(1.2)" : "scale(1)",
+                        transition: "opacity 0.3s ease, transform 0.3s ease",
+                      }}
+                    >
+                      <path
+                        d="M0.11697 10.0705C0.116967 2.37251 8.4503 -2.43875 15.117 1.41025L101.367 51.2067C108.034 55.0557 108.034 64.6782 101.367 68.5272L15.117 118.324C8.45031 122.173 0.116969 117.361 0.11697 109.663L0.11697 10.0705Z"
+                        fill="url(#paint0_linear_2531_56)"
+                      />
+                      <defs>
+                        <linearGradient
+                          id="paint0_linear_2531_56"
+                          x1="0.116968"
+                          y1="-7.25"
+                          x2="58.8624"
+                          y2="94.5"
+                          gradientUnits="userSpaceOnUse"
+                        >
+                          <stop stopColor="#86C4FF" />
+                          <stop offset="1" stopColor="#389FFF" />
+                        </linearGradient>
+                      </defs>
+                    </svg>
               </div>
               <div className={style["music-guessor-playing-counter"]}>
                 {counter}

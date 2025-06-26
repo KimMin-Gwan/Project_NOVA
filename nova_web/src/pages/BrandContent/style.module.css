@@ -692,7 +692,7 @@
 }
 
 .music-guessor-playing-button:hover{
-    background-color: #41A3FF;
+    background-color: #7fd0ff;
 
 }
 
@@ -964,8 +964,23 @@
 }
 
 
+.music-guessor-shape {
+  width: 140px;
+  height: 140px;
+  background: linear-gradient(180deg, #86C4FF 0%, #389FFF 75.8%);
+  transition: clip-path 0.2s ease, border-radius 0.5s ease;
+}
 
+.square {
+  clip-path: inset(0%);
+  border-radius: 40px; /* 둥근 네모 */
+}
 
+.triangle {
+  rotate: 90deg;
+  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+  border-radius: 0; /* 삼각형 */
+}
 
 
 
