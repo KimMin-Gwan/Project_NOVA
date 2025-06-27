@@ -233,10 +233,9 @@ class TestConnectionManager:
         
 # 채팅 == 댓글 라서 저장 하거나 전송 가능한 형태로 만들기 위한 세팅!
 class ChattingDataform:
-    def __init__(self, uid, uname, fid, body, type, cid=""):
+    def __init__(self, uid, uname, body, type, cid=""):
         self.uid = uid
         self.uname = uname
-        self.fid = fid
         self.body = body
         self.date = datetime.now().strftime("%Y/%m/%d")
         self.type = type
