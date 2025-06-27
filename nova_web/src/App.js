@@ -43,6 +43,7 @@ import BrandPage from "./pages/BrandPage/brandPage.jsx";
 import YouTubePlayer from "./pages/BrandContent/TestPage.jsx";
 import ImageChecker from "./pages/BrandContent/ImageChecker.jsx";
 import ContentPage from "./pages/BrandContent/ContentPage.jsx";
+import ContentTestPage from "./pages/BrandContent/ContentTestPage.jsx";
 
 // 다크 모드 클래스 반환 함수
 export function getModeClass(mode) {
@@ -122,8 +123,6 @@ function App() {
       <Route path="/feed_detail/:fid" element={<NewFeedDetail/>}></Route>
       <Route path="/follow_page" element={<FollowPage />}></Route>
 
-      <Route path="/new_write_feed" element={<NewFeedWritePage/>}></Route>
-
       {/* 검색 페이지 */}
       <Route path="/search" element={<SearchPage />}></Route>
       <Route path="/search_result" element={<SearchResultPage />}></Route>
@@ -163,6 +162,8 @@ function App() {
       <Route path="/welcome" element={<BrandPage/>} />
       <Route path="/temp_test2" element={<YouTubePlayer/>} />
       <Route path="/content" element={<ContentPage/>} />
+
+      <Route path="/content_test" element={<ContentTestPage/>} />
     </Routes>
   );
 }
