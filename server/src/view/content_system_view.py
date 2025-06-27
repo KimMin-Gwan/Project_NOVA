@@ -67,14 +67,18 @@ class Content_Service_view(Master_View):
         @self.__app.websocket('/testing_websocket')
         async def try_socket_chatting(websocket:WebSocket): 
             try:
+                print(1)
                 observer = await self.__test_connection_manager.connect(
                     websocket=websocket,
                     )
+                print(2)
                 
                 result = await observer.observer_operation()
                 
+                print(3)
                 if not result:
                     await self.__test_connection_manager.disconnect(observer=observer)
+                print(4)
 
             except ConnectionClosedError:
                 await self.__test_connection_manager.disconnect(observer=observer)
