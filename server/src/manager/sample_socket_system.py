@@ -100,11 +100,15 @@ class Observer:
             return True
         
         print("b")
-        dataform = ChattingDataform(uid=self.__user.uid,
-                                    uname=self.__user.uname,
-                                    body=parts[0],
-                                    type=parts[1],
-                                    )
+        try:
+            dataform = ChattingDataform(uid=self.__user.uid,
+                                        uname=self.__user.uname,
+                                        body=parts[0],
+                                        type=parts[1],
+                                        )
+        except Exception as e:
+            print(e)
+            
         
         print("c")
         for observer in self.__observers:
