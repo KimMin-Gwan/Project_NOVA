@@ -67,13 +67,6 @@ class Content_Service_view(Master_View):
         @self.__app.websocket('/testing_websocket')
         async def try_socket_chatting(websocket:WebSocket): 
             try:
-                
-                request_manager = RequestManager(secret_key=self.__jwt_secret_key)
-                if uid == "-1":
-                    uid = ""
-                data_payload= GetContentRequest()
-                request_manager.try_view_just_data_payload(data_payload=data_payload)
-                
                 observer = await self.__test_connection_manager.connect(
                     websocket=websocket,
                     )
