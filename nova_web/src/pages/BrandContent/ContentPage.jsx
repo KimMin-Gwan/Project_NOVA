@@ -18,7 +18,7 @@ export default function ContentPage (){
   const socketRef = useRef(null);
   const [start, setStart] = useState(false);
   const [connectionStatus, setConnectionStatus] = useState('Disconnected');
-  const [chattings, setChattings] = useState("");
+  const [chattings, setChattings] = useState([]);
 
   useEffect(() => {
     const initialize = async () => {
@@ -84,8 +84,8 @@ export default function ContentPage (){
       
       // Handle different message types
       if (messageType === "add") {
-        //setComments((prevComments) => [...prevComments, transformedMessage]);
-        console.log(transformedMessage)
+        setChattings((prev) => [...prev, transformedMessage]);
+        //console.log(transformedMessage)
       }
 
     } catch (error) {
@@ -113,7 +113,7 @@ export default function ContentPage (){
   return (
     <div className={style["trick-container"]}>
     {start ? (
-      <ConnectedComponent chatting={chattings} setChatting={setChattings}/>
+      <ConnectedComponent chattings={chattings} setChattings={setChattings}/>
     ) : (
       <IntroComponent start={start} setStart={setStart} />
     )}
