@@ -87,7 +87,7 @@ class NOVA_Server:
                                                    jwt_secret_key = jwt_secret_key
                                                    )
         
-        self.__time_tiable_system_view = Content_Service_view( app=self.__app,
+        self.__content_serviec_view  = Content_Service_view( app=self.__app,
                                                      endpoint='/content',
                                                    database=database,
                                                    head_parser=head_parser,
@@ -100,6 +100,7 @@ class NOVA_Server:
         self.__funding_system_view()
         self.__administrator_system_view()
         self.__time_tiable_system_view()
+        self.__content_serviec_view()
 
     def make_task(self):
         return self.nova_verification.make_task()
