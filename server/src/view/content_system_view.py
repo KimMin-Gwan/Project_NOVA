@@ -22,6 +22,7 @@ class Content_Service_view(Master_View):
         self.__database = database
         self.__test_connection_manager = test_connection_manager
         self.__jwt_secret_key = jwt_secret_key
+        self.home_route(endpoint=endpoint)
         
     def home_route(self, endpoint:str):
         @self.__app.get(endpoint + "/home")
