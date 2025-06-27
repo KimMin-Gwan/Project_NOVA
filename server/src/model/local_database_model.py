@@ -507,6 +507,8 @@ class Mongo_Database(Local_Database):
             return "schedule"
         elif target == "duid" or target == "deleted_user":
             return "deleted_user"
+        elif target == "content_id" or target == "content":
+            return "deleted_user"
         else:
             raise DatabaseLogicError("target id did not define")
         

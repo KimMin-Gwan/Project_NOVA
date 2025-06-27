@@ -5,6 +5,7 @@ from view.sub_system_view import Sub_Service_View
 from view.funding_system_view import Funding_Service_View
 from view.administrator_system_view import Administrator_System_View
 from view.time_table_view import TimeTableView
+from view.content_system_view import Content_Service_view
 from view.parsers import Head_Parser
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
@@ -18,7 +19,7 @@ class NOVA_Server:
     def __init__(self, database, connection_manager,
                    feed_manager, feed_search_engine,
                   schedule_search_engine,
-                  funding_project_manager, ai_manager, jwt_secret_key
+                  funding_project_manager, ai_manager, jwt_secret_key, test_connection_manager
                   ) -> None:
         self.__app = FastAPI()
 
@@ -83,6 +84,14 @@ class NOVA_Server:
                                                    database=database,
                                                    head_parser=head_parser,
                                                    schedule_search_engine=schedule_search_engine,
+                                                   jwt_secret_key = jwt_secret_key
+                                                   )
+        
+        self.__time_tiable_system_view = Content_Service_view( app=self.__app,
+                                                     endpoint='/content',
+                                                   database=database,
+                                                   head_parser=head_parser,
+                                                   test_connection_manager=test_connection_manager,
                                                    jwt_secret_key = jwt_secret_key
                                                    )
         self.__core_system_view()

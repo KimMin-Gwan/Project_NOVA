@@ -13,5 +13,5 @@ from model.funding_model import *
 from model.notice_model import *
 from model.time_table_model import *
 from model.comment_model import *
-
+from model.content_model import *
 
