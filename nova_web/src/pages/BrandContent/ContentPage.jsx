@@ -15,17 +15,102 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 
 export default function ContentPage (){
+  const socketRef = useRef(null);
   const [start, setStart] = useState(false);
+  const [connectionStatus, setConnectionStatus] = useState('Disconnected');
+
+  useEffect(() => {
+    const initialize = async () => {
+    try {
+
+        // 2. fetchFeedComment 완료 후 WebSocket 초기화
+        const socket = new WebSocket('wss://supernova.io.kr/testing_websocket')
+        socketRef.current = socket;
+
+        socket.onopen = () => {
+        setConnectionStatus('Connected');
+        };
+
+        socket.onmessage = (event) => {
+          analyzeMessage(event.data);
+        };
+
+        socket.onclose = () => {
+        setConnectionStatus('Disconnected');
+        };
+
+        socket.onerror = (error) => {
+        console.error('WebSocket error:', error);
+        };
 
 
-  const urlPath = [
-    "https://naver.com",
-    "https://naver.com",
-  ]
 
-  const handleNavigate = (index) => {
-    window.open(urlPath(index), "_blank")
-  };
+    } catch (error) {
+        console.error('Error during initialization:', error);
+    }
+    }
+    initialize(); 
+
+    return () => {
+    if (socketRef.current) {
+        socketRef.current.close();
+    }
+    };
+
+  }, []); // 필요한 의존성 추가
+
+  function analyzeMessage(message) {
+    const socket = socketRef.current; // Access the WebSocket instance directly
+    if (!socket) {
+      console.error('Socket is not initialized');
+      return;
+    }
+
+
+    if (message === "ping") {
+      socket.send("pong");
+      return;
+    }
+
+    try {
+      // Parse the message
+      const messageParts = message.split('<br>');
+      // Extract `type` and remove it from parsedMessage
+      const messageType = messageParts[0];
+
+
+      const transformedMessage = parseDataToObject(message);
+      
+      // Handle different message types
+      if (messageType === "add") {
+        //setComments((prevComments) => [...prevComments, transformedMessage]);
+        console.log(transformedMessage)
+      }
+
+    } catch (error) {
+      console.error('Error parsing message:', error);
+    }
+  }
+
+  function parseDataToObject(data) {
+    // 데이터를 줄바꿈 단위로 분리
+    const [type, owner, uid, uname, cid, body, date] = data.split('<br>');
+
+
+    let booleanValue = owner.toLowerCase() === "true";
+
+    // 객체 생성 및 반환
+    return {
+      cid: cid, 
+      uid: uid, // 유아이디
+      owner: booleanValue,
+      uname: uname, // 유저 이름
+      is_reply: true, // 항상 true
+      reply: {}, // 항상 빈 객체
+      body: body, // 본문
+      date: date, // 날짜
+    };
+  }
 
 
   return (
@@ -43,6 +128,11 @@ export default function ContentPage (){
 function IntroComponent({setStart}){
   const title = "SUPERNOVA 컨텐츠 클럽에 오신걸 환영합니다.";
   const subtitle = "SUPERNOVA 컨텐츠 클럽은 방송 플랫폼에서 실시간 스트리밍을 통해 사용 가능합니다."
+
+
+
+
+
   return(
       <div 
         className={brandStyle["brand-page-background"]}

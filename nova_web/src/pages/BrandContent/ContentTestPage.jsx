@@ -1,7 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 
 const ContentTestPage = () => {
+    const socketRef = useRef(null);
     const [inputData, setInputData] = useState("");
+    const [connectionStatus, setConnectionStatus] = useState('Disconnected');
 
     const handleInput = (e) => {
         const newInput = e.target.value;
@@ -14,18 +16,11 @@ const ContentTestPage = () => {
         }
     }
 
-    const [messages, setMessages] = useState([]);
-    const [connectionStatus, setConnectionStatus] = useState('Disconnected');
 
-    const [socket, setSocket] = useState(null);
-    const socketRef = useRef(null);
 
     useEffect(() => {
         const initialize = async () => {
         try {
-            // 1. fetchFeedComment가 완료될 때까지 대기
-            const uid = await fetchFeedComment();
-            setUser(uid);
 
             // 2. fetchFeedComment 완료 후 WebSocket 초기화
             const socket = new WebSocket('wss://supernova.io.kr/testing_websocket')
@@ -36,7 +31,7 @@ const ContentTestPage = () => {
             };
 
             socket.onmessage = (event) => {
-            analyzeMessage(event.data);
+            analyzeMessage();
             };
 
             socket.onclose = () => {
@@ -63,7 +58,21 @@ const ContentTestPage = () => {
 
     }, []); // 필요한 의존성 추가
 
-const tryAddComment = () => {
+
+  function analyzeMessage() {
+    const socket = socketRef.current; // Access the WebSocket instance directly
+    if (!socket) {
+      console.error('Socket is not initialized');
+      return;
+    }
+
+
+    socket.send("pong");
+    return;
+  }
+ 
+
+  const tryAddComment = () => {
     if (socketRef && inputData!== "") {
     const socket = socketRef.current; // Access the WebSocket instance directly
     const sanitizedCommentValue = inputData.replace(/<br>/g, '[br]');
