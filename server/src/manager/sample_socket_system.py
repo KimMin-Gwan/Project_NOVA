@@ -93,20 +93,24 @@ class Observer:
         
         print(raw_message)
         
+        print("a")
         # data = body<br>type
         parts = raw_message.split('<br>')
         if len(parts) != 2:
             return True
         
+        print("b")
         dataform = ChattingDataform(uid=self.__user.uid,
                                     uname=self.__user.uname,
                                     body=parts[0],
                                     type=parts[1],
                                     )
         
+        print("c")
         for observer in self.__observers:
             await observer.set_send_data(dataform)
         
+        print("d")
         # 나한테 보내는 데이터는 별도로 구성되게 해야됨
         # 안그러면 is_owner가 동일하게 변경되는 문제가 있음(포인트)
         resend_myself_dataform= ChattingDataform(uid=self.__user.uid,
@@ -115,8 +119,11 @@ class Observer:
                                     type=parts[1],
                                     cid=dataform.cid
                                     )
+        print("e")
         resend_myself_dataform.is_owner = True
+        print("f")
         await self.set_send_data(resend_myself_dataform)
+        print("g")
         
         return True
         
