@@ -515,7 +515,40 @@ function QuestionGuessorPlayingSlide({
     {
       body: "근데 질문 길이가 이렇게 길고 해서 좀 다루기 어ㅇ려우면 어떠헥 해야할가 더 길게 적어봐",
       answer: 3
+    },
+    {
+      body: "니가  한번 만들어봐 미친놈아",
+      answer: 1
+    },
+    {
+      body: "근데 질문 길이가 이렇게 길고 해서 좀 다루기 어ㅇ려우면 어떠헥 해야할가 더 길게 적어봐",
+      answer: 3
+    },
+    {
+      body: "니가  한번 만들어봐 미친놈아",
+      answer: 2
+    },
+    {
+      body: "근데 질문 길이가 이렇게 길고 해서 좀 다루기 어ㅇ려우면 어떠헥 해야할가 더 길게 적어봐",
+      answer: 3
+    }, 
+    {
+      body: "니가  한번 만들어봐 미친놈아",
+      answer: 1
+    },
+    {
+      body: "근데 질문 길이가 이렇게 길고 해서 좀 다루기 어ㅇ려우면 어떠헥 해야할가 더 길게 적어봐",
+      answer: 3
+    },
+    {
+      body: "니가  한번 만들어봐 미친놈아",
+      answer: 2
+    },
+    {
+      body: "근데 질문 길이가 이렇게 길고 해서 좀 다루기 어ㅇ려우면 어떠헥 해야할가 더 길게 적어봐",
+      answer: 3
     }
+
   ]
 
   const [waitingQuestion, setWaitingQuestion] = useState(temp);
@@ -524,7 +557,7 @@ function QuestionGuessorPlayingSlide({
 
   return(
     <div id={"inner-content-id"} className={style["content-container-inner-wrapper"]}
-      style={{justifyContent:"center", alignItems:"center", opacity:0}}
+      style={{justifyContent:"center", alignItems:"flex-start", opacity:0}}
     >  
       <div className={style["content-body"]}>
         <div className={style["question-guessor-top"]}>
@@ -551,11 +584,6 @@ function QuestionGuessorPlayingSlide({
             </TransitionGroup>
           </div>
           <div className={style["question-guessor-top-right-wrapper"]}>
-            <div className={style["stage-meta-data-box"]}>
-              <span style={{color:"#505050", fontSize:"36px"}}>
-                스테이지1
-              </span>
-            </div>
             <div className={style["stage-meta-data-box"]}>
               <span style={{color:"#111", fontSize:"36px", height:"50px"}}>
                 남은 질문 20개
@@ -616,13 +644,6 @@ function QuestionGuessorClearSlide({
       {/*여기부터 천천히 등장해야됨 */}
       <div className={style["content-meta-body"]}>
         <div className={style["content-meta-frame"]}>
-          <div className={style["content-meta-data-wrapper"]}>
-            <div className={style["meta-data-clickable-div"]}> 
-              <span>
-                스테이지1
-              </span>
-            </div>
-          </div>
           <div className={style["content-meta-frame-input-wrapper"]}
             style={{
               width: "500px",
@@ -653,7 +674,7 @@ function QuestionGuessorClearSlide({
           >
             <span 
             >
-              다음 스테이지 시작
+              다시 시작
             </span>
           </div>
         </div>
@@ -758,13 +779,6 @@ function QuestionObject({
 
 
 
-
-
-
-
-
-
-
 function DiffGuessorComponent({chattings, selectedPage, myIndex, setSelectedPage}){
   const diffSwiperRef= useRef(null);
   const title = "틀린그림찾기";
@@ -774,11 +788,11 @@ function DiffGuessorComponent({chattings, selectedPage, myIndex, setSelectedPage
     "2. 스트리머는 클릭하여 선택합니다.",
   ];
 
-
   const option = '틀린곳 5개'
 
   const handleSlide = () => {
-    diffSwiperRef.current?.slideNext()
+    //diffSwiperRef.current?.slideNext()
+    alert("아직 준비중입니다!");
   }
 
   return(
