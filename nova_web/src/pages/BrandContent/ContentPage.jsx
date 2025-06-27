@@ -18,6 +18,7 @@ export default function ContentPage (){
   const socketRef = useRef(null);
   const [start, setStart] = useState(false);
   const [connectionStatus, setConnectionStatus] = useState('Disconnected');
+  const [chattings, setChattings] = useState("");
 
   useEffect(() => {
     const initialize = async () => {
@@ -101,14 +102,10 @@ export default function ContentPage (){
 
     // 객체 생성 및 반환
     return {
-      cid: cid, 
+      _id: chattings.length,
       uid: uid, // 유아이디
-      owner: booleanValue,
       uname: uname, // 유저 이름
-      is_reply: true, // 항상 true
-      reply: {}, // 항상 빈 객체
       body: body, // 본문
-      date: date, // 날짜
     };
   }
 
@@ -116,7 +113,7 @@ export default function ContentPage (){
   return (
     <div className={style["trick-container"]}>
     {start ? (
-      <ConnectedComponent/>
+      <ConnectedComponent chatting={chattings} setChatting={setChattings}/>
     ) : (
       <IntroComponent start={start} setStart={setStart} />
     )}
@@ -176,7 +173,7 @@ function IntroComponent({setStart}){
   );
 }
 
-function ConnectedComponent() {
+function ConnectedComponent({chattings, setChattings}) {
   const swiperRef = useRef(null); // Swiper 인스턴스를 참조하기 위한 Ref 생성
   const [selectedPage, setSelectedPage] = useState(0);
   const pageTitle = "닉네임1234님 어서오세요!";
@@ -250,7 +247,7 @@ function ConnectedComponent() {
         <SwiperSlide>
           <WatiingRoomComponent
             myIndex={0}
-            chattings={temp_chattings}
+            chattings={chattings}
             pages={pages}
             selectedPage={selectedPage}
             setSelectedPage={sliderController}
@@ -267,7 +264,7 @@ function ConnectedComponent() {
         <SwiperSlide>
           <QuestionGuessorComponent
             myIndex={1}
-            chattings={temp_chattings}
+            chattings={chattings}
             selectedPage={selectedPage}
             setSelectedPage={sliderController}
           />
@@ -284,7 +281,7 @@ function ConnectedComponent() {
         <SwiperSlide>
           <DiffGuessorComponent
             myIndex={2}
-            chattings={temp_chattings}
+            chattings={chattings}
             selectedPage={selectedPage}
             setSelectedPage={sliderController}
           />
@@ -301,7 +298,7 @@ function ConnectedComponent() {
         <SwiperSlide>
           <MusicGuessorComponent
             myIndex={3}
-            chattings={temp_chattings}
+            chattings={chattings}
             selectedPage={selectedPage}
             setSelectedPage={sliderController}
           />
