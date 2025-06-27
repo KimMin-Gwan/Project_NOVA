@@ -181,7 +181,6 @@ class TestConnectionManager:
             
             user.uid = new_uid
 
-        print("new client! : ", user.uid)
         
         new_observer = self.add_new_observer(user=user)
         
