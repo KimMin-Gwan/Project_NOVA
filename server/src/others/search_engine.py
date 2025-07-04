@@ -729,7 +729,7 @@ class RecommendManager:
         # 아직은 시행이 불가능하다.
     def get_spiked_hashtags_in_hours(self, num_hashtag=10, target_hours=1) -> list:
         # 시간 내에 올라온 모든 글을 긁어온다.
-        index = self.__managed_feed_bias_table.len_feed_table()
+        index = self.__managed_feed_bias_table.get_len_feed_table()
 
         if target_hours > 0 :
             target_index = self.__managed_feed_bias_table.find_target_index(target_hour=target_hours)

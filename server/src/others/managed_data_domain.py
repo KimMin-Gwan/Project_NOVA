@@ -1154,6 +1154,9 @@ class ManagedFeedBiasTable(ManagedTable):
         self.__init_feed_table()
         self.__init_bias_tree()
 
+    def get_len_feed_table(self):
+        return len(self.__feed_table)
+
     # Initialize feed 테이블
     def __init_feed_table(self):
         feeds = []
