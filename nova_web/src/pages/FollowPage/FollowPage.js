@@ -131,7 +131,7 @@ export default function FollowPage() {
 
           <h2 className={style["fav-title"]}>주제 팔로우</h2>
           <h3>
-            <b>노바</b>에 등록된 <b>주제</b>를 소개합니다.
+            <b>슈퍼노바</b>에 등록된 <b>주제</b>를 소개합니다.
           </h3>
 
           <div className={style["following"]}>
