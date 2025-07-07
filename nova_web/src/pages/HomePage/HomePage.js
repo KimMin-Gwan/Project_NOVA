@@ -23,6 +23,7 @@ import { useNavigate } from "react-router-dom";
 import addBias from "../../img/search_nav.png";
 
 import "./index.css";
+import { use } from "react";
 
 export function getModeClass(mode) {
   return mode === "dark" ? "dark-mode" : "bright-mode";
@@ -37,13 +38,22 @@ export default function HomePage() {
   };
 
 
-  let todayBestFeed = useFetchData(`/home/today_best`);
-  let weeklyFeed = useFetchData(`/home/weekly_best`);
-  let allFeed = useFetchData(`/home/all_feed`);
+  //let todayBestFeed = useFetchData(`/home/today_best`);
+  // /let weeklyFeed = useFetchData(`/home/weekly_best`);
+  //let allFeed = useFetchData(`/home/all_feed`);
 
-  let { biasId, biasList, setBiasId } = useBiasStore();
+  const { data: allFeed, loading: allFeedLoading } = useFetchData(`/home/all_feed`);
+  const { data: weeklyFeed, loading: weeklyFeedLoading } = useFetchData(`/home/weekly_best`);
+  const { data: todayBestFeed, loading: todayBestFeedLoading } = useFetchData(`/home/today_best`);
+
+  let { biasId, biasList, setBiasId, fetchBiasList} = useBiasStore();
   let [feedData, setFeedData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [topSectionLoading, setTopSectionLoading] = useState(false);
+
+  useEffect(() => {
+    fetchBiasList();
+  }, []);
 
 
   let bids = biasList.map((item, i) => {
@@ -56,12 +66,13 @@ export default function HomePage() {
     }
   }, [bids]);
 
-  async function fetchBiasCategoryData(bid) {
+  async function fetchBiasCategoryData(targetBid) {
+    setTopSectionLoading(true);
     await postApi
       .post(`feed_explore/feed_with_community`, {
         header: HEADER,
         body: {
-          bid: biasId || bids?.[0] || "",
+          bid: targetBid || bids?.[0] || "",
           board: "자유게시판",
           key: -1,
         },
@@ -69,12 +80,13 @@ export default function HomePage() {
       .then((res) => {
         setFeedData(res.data.body.send_data);
         setIsLoading(false);
+        setTopSectionLoading(false);
       });
   }
 
   useEffect(() => {
     setFeedData([]);
-    fetchBiasCategoryData();
+    fetchBiasCategoryData(biasId);
   }, [biasId]);
 
   const [brightMode, setBrightMode] = useState(() => {
@@ -100,21 +112,18 @@ export default function HomePage() {
         <SearchBox />
         {
           bids.length > 0 ? (
-            <FeedThumbnail
-              title={
-                <>
-                  최애<span className="title-color">주제</span>
-                </>
-              }
-              img_src={new_pin}
-              feedData={feedData}
-              brightMode={brightMode}
-              type={"bias"}
-              endPoint={`/feed_list?type=bias`}
-              customClassName="custom-height"
-            >
-            <BiasBoxes setBiasId={setBiasId} fetchBiasCategoryData={fetchBiasCategoryData} />
-            </FeedThumbnail>
+            <>
+              <BiasBoxes setBiasId={setBiasId} fetchBiasCategoryData={fetchBiasCategoryData} />
+              <FeedThumbnail
+                img_src={new_pin}
+                feedData={feedData}
+                brightMode={brightMode}
+                type={"bias"}
+                endPoint={`/feed_list?type=bias`}
+                customClassName="custom-height"
+                loading={topSectionLoading}
+              />
+            </>
           ):(
             <div className="bias-container">
               <div 
@@ -153,6 +162,8 @@ export default function HomePage() {
       <div className="section-separator"></div>
 
       <section className="contents">
+        {/**
+         * 
         <FeedThumbnail
           title={
             <>
@@ -164,6 +175,8 @@ export default function HomePage() {
           brightMode={brightMode}
           endPoint={`/feed_list?type=today`}
         />
+         * 
+         */}
         <FeedThumbnail
           title={
             <>
@@ -174,6 +187,7 @@ export default function HomePage() {
           feedData={weeklyFeed}
           brightMode={brightMode}
           endPoint={`/feed_list?type=weekly`}
+          loading={weeklyFeedLoading}
         />
 
           <div className="section-separator"></div>
@@ -184,6 +198,7 @@ export default function HomePage() {
           brightMode={brightMode}
           allPost={<AllPost allFeed={allFeed} />}
           endPoint={"/feed_list?type=all"}
+          loading={allFeedLoading}
         />
       </section>
       <NavBar brightMode={brightMode}></NavBar>

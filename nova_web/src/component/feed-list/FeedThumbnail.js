@@ -4,6 +4,7 @@ import SimpleSlider from "../SimpleSlider";
 import style from "./FeedThumbnail.module.css";
 import more_icon from "../../img/home_arrow.svg";
 import NoneFeed from "../NoneFeed/NoneFeed";
+import LoadingComponent from "../NoneFeed/LoadingComponent";
 
 export default function FeedThumbnail({
   title,
@@ -15,6 +16,7 @@ export default function FeedThumbnail({
   allPost,
   endPoint,
   customClassName,
+  loading
 }) {
   let navigate = useNavigate();
   const [mode, setMode] = useState(brightMode); // 초기 상태는 부모로부터 받은 brightMode 값
@@ -23,19 +25,27 @@ export default function FeedThumbnail({
     setMode(brightMode); // brightMode 값이 바뀔 때마다 mode 업데이트
   }, [brightMode]);
 
+
+  if (loading) { 
+    return (
+      <section className={style["FeedThumbnail"]}>
+        <LoadingComponent />
+      </section>
+    );
+  }
+
   return (
     <section className={style["FeedThumbnail"]}>
-      <div className={style["title-section"]} onClick={() => navigate(endPoint)}>
-        <div className={style["title"]}>
-        {/**
-          <img src={img_src} alt="thumbnail" />
-        */}
-          {title}
+      {title && (
+        <div className={style["title-section"]} onClick={() => navigate(endPoint)}>
+          <div className={style["title"]}>
+            {title}
+          </div>
+          <div className={`${style["more-icon"]}`}>
+              <img src={more_icon} alt="더보기"></img>
+          </div>
         </div>
-        <div className={`${style["more-icon"]}`}>
-            <img src={more_icon} alt="더보기"></img>
-        </div>
-      </div>
+      )}
       {children}
       {feedData.length === 0 && <NoneFeed />}
 
