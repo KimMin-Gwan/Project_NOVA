@@ -1,9 +1,12 @@
 body {
   font-family: "Pretendard", sans-serif;
+  line-height: 140%; /* 21px */
+  letter-spacing: -0.375px;
+  font-style: normal;
   font-feature-settings: 'tnum';
   margin: 0;
   padding: 0;
-  background-color: #111;
+  background-color: #F1F7FF;
 }
 
 button,
@@ -18,7 +21,7 @@ button {
 
 /* 라이트모드 */
 body.bright-mode {
-  background-color: #131718;
+  background-color: #ecf4ff;
   color: #000000;
 }
 
