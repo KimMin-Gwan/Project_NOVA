@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, forwardRef } from 'react';
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import "./animations.css"; // CSS 애니메이션 정의
 import brandStyle from "./../BrandPage/brandPage.module.css";
@@ -8,6 +8,8 @@ import style from "./style.module.css";
 import chzzkLogo from "./../BrandPage/chzzklogo_kor(Green) 1.png";
 import soopLogo from "./../BrandPage/SOOP_LOGO_Blue 1.png";
 import contentBackgroundImage from "./content-background-svg.svg";
+import bluredBackgroundImage from "./blurBackground.png";
+import brandImg from "./brand_img.png";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -19,6 +21,11 @@ export default function ContentPage (){
   const [start, setStart] = useState(false);
   const [connectionStatus, setConnectionStatus] = useState('Disconnected');
   const [chattings, setChattings] = useState([]);
+  const [filteredChatting, setFilteredChatting] = useState([]);
+  const [selectedPage, setSelectedPage] = useState(0);
+  const [filteredCode, setFilteredCode] = useState("");
+  const filteredCodeRef = useRef(filteredCode);
+  const filteredCodes = ['','질문', '좌표', '정답'];
 
   useEffect(() => {
     const initialize = async () => {
@@ -33,7 +40,8 @@ export default function ContentPage (){
         };
 
         socket.onmessage = (event) => {
-          analyzeMessage(event.data);
+          const data = { message: event.data, filter: filteredCodeRef.current };
+          analyzeMessage(data);
         };
 
         socket.onclose = () => {
@@ -43,9 +51,6 @@ export default function ContentPage (){
         socket.onerror = (error) => {
         console.error('WebSocket error:', error);
         };
-
-
-
     } catch (error) {
         console.error('Error during initialization:', error);
     }
@@ -60,13 +65,25 @@ export default function ContentPage (){
 
   }, []); // 필요한 의존성 추가
 
-  function analyzeMessage(message) {
+  useEffect(()=>{
+    setFilteredCode(filteredCodes[selectedPage]);
+  }, [selectedPage])
+
+  // 최신 값을 ref에 항상 저장
+  useEffect(() => {
+    filteredCodeRef.current = filteredCode;
+  }, [filteredCode]);
+
+  function analyzeMessage(data) {
+    const message = data.message
+    const filter = data.filter
+
     const socket = socketRef.current; // Access the WebSocket instance directly
+
     if (!socket) {
       console.error('Socket is not initialized');
       return;
     }
-
 
     if (message === "ping") {
       socket.send("pong");
@@ -81,10 +98,14 @@ export default function ContentPage (){
 
 
       const transformedMessage = parseDataToObject(message);
-      
+      console.log(filter);
+
       // Handle different message types
       if (messageType === "add") {
         setChattings((prev) => [...prev, transformedMessage]);
+        if (!transformedMessage.body.startsWith(filter)) {
+          setFilteredChatting((prev) => [...prev, transformedMessage])
+        }
         //console.log(transformedMessage)
       }
 
@@ -104,7 +125,7 @@ export default function ContentPage (){
     return {
       _id: chattings.length,
       uid: uid, // 유아이디
-      uname: uname, // 유저 이름
+      uname: "임시 유저", // 유저 이름
       body: body, // 본문
     };
   }
@@ -113,10 +134,57 @@ export default function ContentPage (){
   return (
     <div className={style["trick-container"]}>
     {start ? (
-      <ConnectedComponent chattings={chattings} setChattings={setChattings}/>
+      <ConnectedComponent 
+        chattings={chattings}
+        setChattings={setChattings}
+        filteredChatting={filteredChatting}
+        selectedPage={selectedPage}
+        setSelectedPage={setSelectedPage}
+      />
     ) : (
       <IntroComponent start={start} setStart={setStart} />
     )}
+    </div>
+  );
+}
+
+function Stopwatch({
+  duration,
+  triggerSignal,
+  onComplete
+}) {
+  const [timeLeft, setTimeLeft] = useState(duration);
+  const animationRef = useRef(null);
+
+  useEffect(() => {
+    if (triggerSignal === 0) return; // ❗ 초기값은 무시
+
+    let start = performance.now();
+
+    const frame = (now) => {
+      const elapsed = now - start;
+      const remaining = duration - elapsed;
+      console.log(`Elapsed: ${elapsed}, Remaining: ${remaining}`);
+
+      if (remaining > 0) {
+        setTimeLeft(remaining);
+        animationRef.current = requestAnimationFrame(frame);
+      } else {
+        setTimeLeft(0); // 종료 시 0
+        onComplete?.(true); // ✅ 완료 콜백 호출
+      }
+    };
+
+    // 이전 애니메이션 정리 후 새로 시작
+    if (animationRef.current) cancelAnimationFrame(animationRef.current);
+    animationRef.current = requestAnimationFrame(frame);
+
+    return () => cancelAnimationFrame(animationRef.current);
+  }, [triggerSignal]);
+
+  return (
+    <div className={style["stopwatch-container"]}>
+      채팅창 대기 {(timeLeft / 1000).toFixed(1)}초
     </div>
   );
 }
@@ -125,8 +193,6 @@ export default function ContentPage (){
 function IntroComponent({setStart}){
   const title = "SUPERNOVA 컨텐츠 클럽에 오신걸 환영합니다.";
   const subtitle = "SUPERNOVA 컨텐츠 클럽은 방송 플랫폼에서 실시간 스트리밍을 통해 사용 가능합니다."
-
-
 
 
 
@@ -173,12 +239,14 @@ function IntroComponent({setStart}){
   );
 }
 
-function ConnectedComponent({chattings, setChattings}) {
+function ConnectedComponent({
+  chattings, setChattings, filteredChatting,
+  selectedPage, setSelectedPage
+}) {
   const swiperRef = useRef(null); // Swiper 인스턴스를 참조하기 위한 Ref 생성
-  const [selectedPage, setSelectedPage] = useState(0);
   const pageTitle = "닉네임1234님 어서오세요!";
   const subTitle = "화면 오른쪽에서 ㅓ원하는 컨텐츠로 선택하세요!";
-
+  const [duration, setDuration] = useState(0); // 5초
 
   const pages = [
     {
@@ -251,6 +319,8 @@ function ConnectedComponent({chattings, setChattings}) {
             pages={pages}
             selectedPage={selectedPage}
             setSelectedPage={sliderController}
+            duration={duration}
+            setDuration={setDuration}
           />
         </SwiperSlide>
         <SwiperSlide>
@@ -267,6 +337,7 @@ function ConnectedComponent({chattings, setChattings}) {
             chattings={chattings}
             selectedPage={selectedPage}
             setSelectedPage={sliderController}
+            filteredChatting={filteredChatting}
           />
         </SwiperSlide>
 
@@ -297,10 +368,13 @@ function ConnectedComponent({chattings, setChattings}) {
 
         <SwiperSlide>
           <MusicGuessorComponent
+            key={"123"}
             myIndex={3}
             chattings={chattings}
+            filteredChatting={filteredChatting}
             selectedPage={selectedPage}
             setSelectedPage={sliderController}
+            duration={duration}
           />
         </SwiperSlide>
       </Swiper>
@@ -309,9 +383,65 @@ function ConnectedComponent({chattings, setChattings}) {
 }
 
 
-function WatiingRoomComponent({chattings, pages, selectedPage, setSelectedPage}){
+function WatiingRoomComponent({
+  chattings, pages, selectedPage, setSelectedPage,
+  duration, setDuration
+}){
+  const [syncFlag, setSyncFlag] = useState(false);
   const pageTitle = "닉네임1234님 어서오세요!";
   const subTitle = "화면 오른쪽에서 원하는 컨텐츠로 선택하세요!";
+
+  const howToUse = [
+    "1. 실제 스트리밍 창 (치지직, SOOP 등)을 크롬을 사용하여 입장합니다.",
+    "2. 크롬화면에서 스트리밍 되는 문구를 채팅창에 입력합니다.",
+    "3. 채팅창과 실제 스트리머의 화면의 차이를 자동으로 확인합니다.",
+    "4. 빠르게 입력 할 수록, 싱크가 정확해집니다."
+  ]
+
+  const words = ["사슴", "토끼", "곰", "호랑이", "여우", "늑대", "고양이", "개", "원숭이", "코끼리"];
+  const [targetWord, setTargetWord] = useState(words[Math.floor(Math.random() * words.length)]);
+
+  const [elapsedTime, setElapsedTime] = useState(0);
+
+  const startTimeRef = useRef(performance.now()); // 시작 시간 저장용
+
+  // 단어를 바꾸고 타이머 시작
+  const changeTargetWord = () => {
+    const newWord = words[Math.floor(Math.random() * words.length)];
+    setTargetWord(newWord);
+    startTimeRef.current = performance.now(); // 시간 초기화
+  };
+
+  // 최초 mount 또는 syncFlag가 true일 때 5초 간격으로 단어 변경
+  useEffect(() => {
+    if (!syncFlag) return;
+
+    startTimeRef.current = performance.now(); // 시간 초기화
+    //const interval = setInterval(() => {
+      //changeTargetWord();
+    //}, 5000);
+
+    //// 시작 시점 초기화
+    //changeTargetWord();
+
+    //return () => clearInterval(interval);
+  }, [syncFlag]);
+
+  // 채팅이 바뀔 때마다 정답 확인
+  useEffect(() => {
+    if (chattings.length === 0) return;
+
+    const lastChat = chattings[chattings.length - 1].body;
+
+    if (lastChat === targetWord) {
+      const now = performance.now();
+      const elapsed = now - startTimeRef.current;
+
+      setDuration(elapsed); // 경과 시간 업데이트
+      changeTargetWord(); // 새로운 단어로 변경
+    }
+  }, [chattings]);
+
 
   const tools = [
     {
@@ -327,12 +457,13 @@ function WatiingRoomComponent({chattings, pages, selectedPage, setSelectedPage})
   ];
 
   return(
-    <div className={style["content-container"]}>
+    <div className={brandStyle["brand-page-background"]}>
+    <div className={style["content-container"]} >
       <div className={style["waiting-room-side-frame"]}>
         <div className={style["sub-tools-wrapper"]}>
           <div className={style["tools-container"]}>
             <div className={style["tools-detail-wrapper"]}>
-              <div className={style["tools-title"]}>
+              <div className={style["tools-title"]} >
                 {tools[0].title}
               </div>
               <div className={style["tools-subtitle"]}>
@@ -340,7 +471,7 @@ function WatiingRoomComponent({chattings, pages, selectedPage, setSelectedPage})
               </div>
             </div>
             <button className={style["tools-button"]}
-              onClick={()=>{console.log('hi')}}
+              onClick={()=> setSyncFlag(!syncFlag)}
             >
               {tools[0].button}
             </button>
@@ -355,7 +486,9 @@ function WatiingRoomComponent({chattings, pages, selectedPage, setSelectedPage})
               </div>
             </div>
             <button className={style["tools-button"]}
-              onClick={()=>{console.log('hi')}}
+              onClick={()=>{
+                window.location.reload();
+              }}
             >
               {tools[1].button}
             </button>
@@ -407,6 +540,60 @@ function WatiingRoomComponent({chattings, pages, selectedPage, setSelectedPage})
           }
         </div>
       </div>
+      <div className={style["set-sync-frame-wrapper"]}
+          style={{
+            display: syncFlag ? "flex" : "none", // 또는 "block"
+            opacity :syncFlag? 1 : 0,
+          }}
+          onClick={()=> setSyncFlag(!syncFlag)}
+      >
+        <div className={style["set-sync-frame"]} 
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className={style["content-info-n-how-to-use"]}
+            style={{width: "100%", gap: "25px"}}
+          >
+            <span>
+              싱크 맞추기
+            </span>
+            <div className={style["how-to-use"]}
+              style={{display: "flex", flexDirection:"column", gap: "15px"}}
+            >
+              {
+                howToUse.map((usage, index)=>{
+                  return <li key={index}>{usage}</li>
+                })
+              }
+            </div>
+          </div>
+          <div className={style["set-sync-content-frame"]}>
+            {targetWord}
+          </div>
+          <div className={style["set-sync-button-wrapper"]}>
+            <div
+              onClick={()=>{
+                setDuration((prev)=> prev + 1000);
+              }}
+            >
+              +
+            </div>
+            <span>
+              {(duration/ 1000).toFixed(2)}초
+            </span>
+            <div
+              onClick={()=>{
+                setDuration((prev)=> prev - 1000);
+              }}
+            >
+              -
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <img src={bluredBackgroundImage} alt="Brand Highlight" className={brandStyle["brand-highlight-background-image"]} 
+      style={{height: "100vh"}}
+    />
     </div>
   );
 }
@@ -437,8 +624,12 @@ const executeSlideAnimation = () => {
     });
 };
 
-function QuestionGuessorComponent({chattings, myIndex, selectedPage, setSelectedPage}){
+function QuestionGuessorComponent({
+  chattings, myIndex, selectedPage,
+  setSelectedPage, filteredChatting
+}){
   const swiperRef = useRef(null); // Swiper 인스턴스를 참조하기 위한 Ref 생성
+  const [isChattingOn, setIsChattingOn] = useState(true);
   const title = "스무고개";
   const howToUse =[
     "1. 스트리머가 주제를 정합니다.",
@@ -447,22 +638,52 @@ function QuestionGuessorComponent({chattings, myIndex, selectedPage, setSelected
     "4. 스트리머가 질문에 '네', '아니오'로 대답합니다.",
   ];
 
+  const makeItVoid= () => {
+    setTarget([""]);
+    setSelectedPage(0);
+    setNumQuestion(20);
+    swiperRef.current?.slideTo(0);
+  }
+
   const [numQuestion, setNumQuestion] = useState(20);
 
   const option = `남은 질문 ${numQuestion}개`;
   const subOption = "클릭하여 질문 개수 조정하기";
 
+  const [targetIndex, setTargetIndex] = useState(0);
   const [input, setInput] = useState("");
-  const [target, setTarget] = useState([]);
+  const [target, setTarget] = useState([""]);
 
   const handleInput = (e) => {
     const newInput = e.target.value;
     setInput(newInput); // 입력 값을 상태로 설정
   };
 
+  const confirmInput = () => {
+    // 최신 슬라이드의 내용을 입력값으로 실시간 업데이트
+    setTarget((prev) => {
+      const newTarget = [...prev];
+      newTarget[newTarget.length - 1] = input;
+      return newTarget;
+    });
+    setInput("");
+    sliderController();
+  }
+
+  const makeNewSlideController = () => {
+    setTarget((prev)=> [...prev, ""]);
+    sliderController();
+  }
+
+  const bringToNextStage = () =>{
+    setTargetIndex((prev) => prev+1);
+    sliderController();
+  }
+
   const sliderController = () => {
     swiperRef.current?.slideNext();
   }
+
 
   // 슬라이드하면 나타나는 뭐시기 애니메이션인데 이거 필요없을듯
   const handlePage = (e) => {
@@ -471,6 +692,7 @@ function QuestionGuessorComponent({chattings, myIndex, selectedPage, setSelected
 
 
   return(
+    <div className={brandStyle["brand-page-background"]}>
     <div className={style["content-container"]}
       style={{flexDirection:"column"}}
     >
@@ -478,7 +700,7 @@ function QuestionGuessorComponent({chattings, myIndex, selectedPage, setSelected
         <div className={brandStyle["topBar-div"]}>
           <div className={brandStyle["topBar-text-wrapper"]}
             style={{width: "auto", marginTop:"20px", marginBottom: "20px"}}
-            onClick={()=>setSelectedPage(0)}
+            onClick={makeItVoid}
           >
           대기실로 돌아가기
           </div>
@@ -502,15 +724,23 @@ function QuestionGuessorComponent({chattings, myIndex, selectedPage, setSelected
             <div className={style["chatting-preview-container"]}
               style={{padding:"16px 14px", marginTop:"0px"}}
             >
-              <div className={style["chatting-wrapper"]}>
               {
-                chattings.map((chatting, index) =>{
-                  return (
-                      <Chatting key={index} index={index} body={chatting.body}/>
-                  );
-                })
+                isChattingOn ? (
+                  <div className={style["chatting-wrapper"]}>
+                  {
+                    filteredChatting.map((chatting, index) =>{
+                      return (
+                          <Chatting key={chatting} index={index} body={chatting.body}/>
+                      );
+                    })
+                  }
+                  </div>
+                ) : (
+                  <div className={style["chatting-cover"]}>
+                  </div>
+                )
               }
-              </div>
+              <ToggleSwitch isChecked={isChattingOn} setIsChecked={setIsChattingOn}/>
             </div>
           </div>
         </div>
@@ -524,123 +754,130 @@ function QuestionGuessorComponent({chattings, myIndex, selectedPage, setSelected
           onSwiper={(swiper) => (swiperRef.current = swiper)} // Swiper 인스턴스 참조
           onSlideChange={handlePage}
         >
-          <SwiperSlide>
-            <ContentIntroSlide 
-              title={title}
-              howToUse={howToUse}
-              numQuestion={numQuestion}
-              option={option}
-              subOption={subOption}
-              input={input}
-              setInput={handleInput}
-              buttonPress={sliderController}
-            />
-          </SwiperSlide>
-          <SwiperSlide>
-              <QuestionGuessorPlayingSlide 
-                buttonPress={sliderController}
-              />
-          </SwiperSlide>
-          <SwiperSlide>
-              <QuestionGuessorClearSlide 
-                title={title}
-                howToUse={howToUse}
-                numQuestion={numQuestion}
-                option={option}
-                subOption={subOption}
-                input={input}
-                setInput={handleInput}
-                buttonPress={sliderController}
-              />
-          </SwiperSlide>
+          {
+            target.map((question, index) => {
+              return (
+                index === targetIndex ? (
+                  <React.Fragment key={question+index}>
+                    <SwiperSlide>
+                      <ContentIntroSlide 
+                        title={title}
+                        howToUse={howToUse}
+                        numQuestion={numQuestion}
+                        option={option}
+                        subOption={subOption}
+                        input={input}
+                        setInput={handleInput}
+                        buttonPress={confirmInput}
+                      />
+                    </SwiperSlide>
+                    <SwiperSlide>
+                        <QuestionGuessorPlayingSlide 
+                          initNumQuestion={numQuestion}
+                          buttonPress={makeNewSlideController}
+                          chattings={chattings}
+                        />
+                    </SwiperSlide>
+                    <SwiperSlide>
+                        <QuestionGuessorClearSlide 
+                          title={title}
+                          howToUse={howToUse}
+                          initNumQuestion={numQuestion}
+                          option={option}
+                          subOption={subOption}
+                          input={question}
+                          setInput={handleInput}
+                          buttonPress1={bringToNextStage}
+                        />
+                    </SwiperSlide>
+                  </React.Fragment>
+                ):(
+                  <React.Fragment key={question+index*index}>
+                    <SwiperSlide>
+                      <TrashComponent/>
+                    </SwiperSlide>
+                    <SwiperSlide>
+                      <TrashComponent/>
+                    </SwiperSlide>
+                    <SwiperSlide>
+                      <TrashComponent/>
+                    </SwiperSlide>
+                  </React.Fragment>
+                )
+              );
+            })
+          }
         </Swiper>
       </div>
+    </div>
+    <img src={bluredBackgroundImage} alt="Brand Highlight" className={brandStyle["brand-highlight-background-image"]}
+      style={{height: "100vh"}}
+    />
     </div>
   );
 }
 
 
 function QuestionGuessorPlayingSlide({
-  buttonPress
+  buttonPress, initNumQuestion, chattings
 }){
-  const temp = [
-    {
-      body: "대충 질문 1번asgasgnqphgbeqnhlhnbalsdnhlabnlh",
-      answer: 0
-    },
-    {
-      body: "근데 ㅇㄱㅈㅉㅇㅇ 아밈누헵흄ㄴ,.휴ㅜ벰 ㅁㄶㄻ뉗ㄴㅂ미ㅏ",
-      answer: 0
-    },
-    {
-      body: "하나만 더해보자 QWER화이팅",
-      answer: 0
-    },
-  ]
+  const refs1 = useRef([]); // ref 배열을 한 번만 생성
+  const refs2 = useRef([]); // ref 배열을 한 번만 생성
+  const [waitingQuestion, setWaitingQuestion] = useState([]);
+  const [answeredQuestion, setAnsweredQuestion] = useState([]);
+  const [numQuestion, setNumQuestion] = useState(initNumQuestion);
+  const [displayNum, setDisplayNum] = useState(numQuestion);
+  const [fade, setFade] = useState("fade-in");
 
-  const temp2 = [
-    {
-      body: "ㄹㅇ 버그투성이 개 망겜",
-      answer: 1
-    },
-    {
-      body: "ㄹㅇ 버그투성이 개 망겜",
-      answer: 1
-    },
-    {
-      body: "니가  한번 만들어봐 미친놈아",
-      answer: 1
-    },
-    {
-      body: "근데 질문 길이가 이렇게 길고 해서 좀 다루기 어ㅇ려우면 어떠헥 해야할가 더 길게 적어봐",
-      answer: 3
-    },
-    {
-      body: "니가  한번 만들어봐 미친놈아",
-      answer: 2
-    },
-    {
-      body: "근데 질문 길이가 이렇게 길고 해서 좀 다루기 어ㅇ려우면 어떠헥 해야할가 더 길게 적어봐",
-      answer: 3
-    },
-    {
-      body: "니가  한번 만들어봐 미친놈아",
-      answer: 1
-    },
-    {
-      body: "근데 질문 길이가 이렇게 길고 해서 좀 다루기 어ㅇ려우면 어떠헥 해야할가 더 길게 적어봐",
-      answer: 3
-    },
-    {
-      body: "니가  한번 만들어봐 미친놈아",
-      answer: 2
-    },
-    {
-      body: "근데 질문 길이가 이렇게 길고 해서 좀 다루기 어ㅇ려우면 어떠헥 해야할가 더 길게 적어봐",
-      answer: 3
-    }, 
-    {
-      body: "니가  한번 만들어봐 미친놈아",
-      answer: 1
-    },
-    {
-      body: "근데 질문 길이가 이렇게 길고 해서 좀 다루기 어ㅇ려우면 어떠헥 해야할가 더 길게 적어봐",
-      answer: 3
-    },
-    {
-      body: "니가  한번 만들어봐 미친놈아",
-      answer: 2
-    },
-    {
-      body: "근데 질문 길이가 이렇게 길고 해서 좀 다루기 어ㅇ려우면 어떠헥 해야할가 더 길게 적어봐",
-      answer: 3
+  useEffect(() => {
+    if (chattings.length > 0) {
+      const lastChat = chattings[chattings.length - 1].body;
+      //const targetUser = chattings[chattings.length - 1].uname;
+      
+      if (waitingQuestion.length < 3){
+        if (lastChat.startsWith('질문')) {
+
+          // "정답" 뒤의 내용을 처리
+          const answerContent = lastChat.slice(3).trim(); // "정답" 뒤의 문자열 추출
+          const now = new Date();
+          const id = `id_${now.getFullYear()}${now.getMonth() + 1}${now.getDate()}${now.getHours()}${now.getMinutes()}${now.getSeconds()}`;
+
+          const newChatting = {
+            id: id,
+            answer: 0,
+            body: answerContent,
+          };
+      
+          // 추가 로직 실행
+          if (answerContent) {
+            setWaitingQuestion((prev)=>[...prev, newChatting]);
+          }
+        }
+      }
     }
+  }, [chattings]);
 
-  ]
+  useEffect(() => {
+    setFade("fade-out");
+    const timeout = setTimeout(() => {
+      setDisplayNum(numQuestion);
+      setFade("fade-in");
+    }, 200); // 페이드 아웃 후 바뀌도록
 
-  const [waitingQuestion, setWaitingQuestion] = useState(temp);
-  const [answeredQuestion, setAnsweredQuestion] = useState(temp2);
+    return () => clearTimeout(timeout);
+  }, [numQuestion]);
 
+
+  // 렌더링 전에 배열 크기 맞춰주기
+  useEffect(() => {
+    refs1.current = waitingQuestion.map((_, i) => refs1.current[i] || React.createRef());
+  }, [waitingQuestion]);
+
+  // 렌더링 전에 배열 크기 맞춰주기
+  useEffect(() => {
+    refs2.current = waitingQuestion.map((_, i) => refs2.current[i] || React.createRef());
+    setNumQuestion(initNumQuestion - answeredQuestion.length)
+  }, [waitingQuestion]);
 
   return(
     <div id={"inner-content-id"} className={style["content-container-inner-wrapper"]}
@@ -654,30 +891,37 @@ function QuestionGuessorPlayingSlide({
               <p>최대 3개 까지 보관됩니다.</p>
             </div>
             <TransitionGroup className={style["question-guessor-top-left-body-wrapper"]}>
-              {waitingQuestion.map((question, index) => (
+              {waitingQuestion.map((question, index) => {
+                return(
                 <CSSTransition
                   key={index}
                   timeout={300}
                   classNames="fade"
+                  nodeRef={refs1.current[index]}
                 >
                   <QuestionObject
+                    nodeRef={refs1.current[index]}
                     question={question}
                     waitingQuestion={waitingQuestion}
+                    remainQuestion={numQuestion}
                     setWaitingQuestion={setWaitingQuestion}
                     setAnsweredQuestion={setAnsweredQuestion}
                   />
                 </CSSTransition>
-              ))}
+                );
+              })}
             </TransitionGroup>
           </div>
           <div className={style["question-guessor-top-right-wrapper"]}>
             <div className={style["stage-meta-data-box"]}>
-              <span style={{color:"#111", fontSize:"36px", height:"50px"}}>
-                남은 질문 20개
+              <span
+                className={style[`question-text ${fade}`]}
+                style={{color:"#111", fontSize:"36px", height:"50px"}}>
+                남은 질문 {numQuestion}개
               </span>
-              <div>
-                클릭해서 질문 개수 변경
-              </div>
+            </div>
+            <div className={style["stage-meta-data-box"]}>
+              <img src={brandImg} className={style["brand-image"]}/>
             </div>
           </div>
         </div>
@@ -693,8 +937,10 @@ function QuestionGuessorPlayingSlide({
                 key={index}
                 timeout={300}
                 classNames="fade"
+                nodeRef={refs2.current[index]}
               >
                 <QuestionObject
+                  nodeRef={refs2.current[index]}
                   question={question}
                   waitingQuestion={waitingQuestion}
                   setWaitingQuestion={setWaitingQuestion}
@@ -722,7 +968,7 @@ function QuestionGuessorPlayingSlide({
 
 
 function QuestionGuessorClearSlide({
-  buttonPress
+  buttonPress1, buttonPress2, input
 }){
   return(
     <div id={"inner-content-id"} className={style["content-container-inner-wrapper"]} 
@@ -753,16 +999,26 @@ function QuestionGuessorClearSlide({
                 color: "#111"
               }}
             >
-              정답은 이거랍니다.
+              {input}
             </span>
           </div>
-          <div className={style["content-meta-frame-input-wrapper2"]}
-            onClick={()=>{buttonPress()}}
-          >
-            <span 
+          <div className={style["question-guessor-clear-button-wrapper"]}>
+            <div className={style["content-meta-frame-input-wrapper2"]}
+              onClick={()=>{buttonPress2()}}
             >
-              다시 시작
-            </span>
+              <span 
+              >
+               이전으로
+              </span>
+            </div>
+            <div className={style["content-meta-frame-input-wrapper2"]}
+              onClick={()=>{buttonPress1()}}
+            >
+              <span 
+              >
+                다시 시작
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -770,13 +1026,11 @@ function QuestionGuessorClearSlide({
   );
 }
 
-
-function QuestionObject({
-  question, 
-  waitingQuestion,
-  setWaitingQuestion,
-  setAnsweredQuestion
-}){
+const QuestionObject = forwardRef(function QuestionObject({
+   question, waitingQuestion, remainQuestion,
+  setWaitingQuestion, setAnsweredQuestion },
+  nodeRef
+){
   const [isClicked, setIsClicked] = useState(false);
   const [isFading, setIsFading] = useState(false);
   const s_answer = ["네", "아니오", "거절"];
@@ -787,6 +1041,11 @@ function QuestionObject({
 
   const handleAnswer = (index) => {
     setIsFading(true); // 페이드 아웃 시작
+    if (remainQuestion <= 0 && index !== 3){
+      alert("질문 갯수를 초과 했습니다.");
+      return;
+    };
+
     setTimeout(() => {
       // 페이드 아웃 완료 후 상태 업데이트
       const updatedWaitingQuestions = waitingQuestion.filter(
@@ -805,6 +1064,7 @@ function QuestionObject({
     return(
       <div className={style["question-object-frame"]}
         style={{maxWidth:"33%"}}
+        ref={nodeRef}
       >
         <div className={style["question-object-body"]}>
           {question.body}
@@ -819,10 +1079,11 @@ function QuestionObject({
       <div
         className={`${style["question-object-frame"]} ${
           isFading ? "fade-out" : "" } question-object`}
+        ref={nodeRef}
       >
         <div className={style["question-object-body"]}
             style={{
-              border : isClicked ? "2px solid #111" : "1px solid #5C5C5C"
+              border : isClicked ? "1px solid #111" : "1px solid #5C5C5C",
             }}
           onClick={handleClick}
         >
@@ -848,7 +1109,7 @@ function QuestionObject({
       </div>
     );
   }
-}
+});
 
 
 
@@ -883,6 +1144,7 @@ function DiffGuessorComponent({chattings, selectedPage, myIndex, setSelectedPage
   }
 
   return(
+    <div className={brandStyle["brand-page-background"]}>
     <div className={style["content-container"]}
       style={{flexDirection:"column"}}
     >
@@ -952,6 +1214,10 @@ function DiffGuessorComponent({chattings, selectedPage, myIndex, setSelectedPage
         </Swiper>
       </div>
     </div>
+    <img src={bluredBackgroundImage} alt="Brand Highlight" className={brandStyle["brand-highlight-background-image"]}
+      style={{height: "100vh"}}
+    />
+    </div>
   );
 }
 
@@ -966,8 +1232,56 @@ function DiffGuessorComponent({chattings, selectedPage, myIndex, setSelectedPage
 
 
 
-function MusicGuessorComponent({chattings, myIndex, selectedPage, setSelectedPage}){
+
+
+function MusicGuessorComponent({
+  chattings, myIndex, selectedPage, setSelectedPage,
+   filteredChatting, duration
+}){
   const diffSwiperRef= useRef(null);
+  const [isChattingOn, setIsChattingOn] = useState(true);
+
+
+  const content = [
+    {
+      id : 'tfmwbxBKPh0',
+      name : "모르시나요"
+    },
+    {
+      id : '59iVUkOty-k',
+      name : "나는반딧불"
+    }
+  ]
+  const tempUser = [
+    //{ id: 0, uname: "가짜 이름 1", point: 10 },
+  ];
+
+  const tempChatting = [
+    //{ id: 4, body: "이건 뭐지", state:false},
+    //{ id: 0, body: "정답!", state:false },
+    //{ id: 1, body: "잠시만 저거", state:false},
+    //{ id: 2, body: "이게정답임", state:true},
+  ]
+
+
+  const[contents, setContents] = useState(content);
+  const[activeIndex, setActiveIndex] = useState(-1);
+
+
+  const [answers, setAnswers] = useState(tempChatting);
+
+  const [userList, setUserList] = useState(tempUser);
+  const [top3Users, setTop3Users] = useState([]);
+
+  const makeItVoid = () => {
+    setSelectedPage(0);
+    setActiveIndex(-1);
+    setContents(content);
+    setUserList(tempUser);
+    setTop3Users([]);
+    diffSwiperRef.current?.slideTo(0);
+  }
+
   const title = "뮤직게서";
   const howToUse =[
     "1. 노래 듣고 정답을 맞추는 컨텐츠입니다.",
@@ -976,15 +1290,55 @@ function MusicGuessorComponent({chattings, myIndex, selectedPage, setSelectedPag
     "4. 스트리머는 화면 하단에 정답을 입력합니다.",
   ];
 
-
   const option = '인트로 15초 듣기';
 
   const handleSlide = () => {
     diffSwiperRef.current?.slideNext()
+    setActiveIndex((prev)=>prev+1)
   };
+
+  const handleUserList = (chatting) => {
+    // userList는 기존 유저 리스트 상태라고 가정
+    setUserList((prevList) => {
+      const existingUserIndex = prevList.findIndex(
+        (user) => user.uname === chatting.uname
+      );
+
+      if (existingUserIndex !== -1) {
+        // 기존 유저인 경우: 포인트 증가
+        const updatedList = [...prevList];
+        updatedList[existingUserIndex].point += 1;
+        return updatedList;
+      } else {
+        // 새 유저인 경우: 새 유저 추가
+        const newId = prevList.length > 0
+          ? Math.max(...prevList.map((u) => u.id)) + 1
+          : 0;
+        return [
+          ...prevList,
+          {
+            id: newId,
+            uname: chatting.uname,
+            point: 1,
+          },
+        ];
+      }
+    });
+  };
+
+  useEffect(() => {
+    if (userList) {
+      // point 기준으로 내림차순 정렬 후 상위 3명만 선택
+      const sortedTop3 = [...userList]
+        .sort((a, b) => b.point - a.point)
+        .slice(0, 3);
+      setTop3Users(sortedTop3);
+    }
+  }, [userList]); // userList가 변경될 때 실행
 
 
   return(
+    <div className={brandStyle["brand-page-background"]}>
     <div className={style["content-container"]}
       style={{flexDirection:"column"}}
     >
@@ -993,7 +1347,7 @@ function MusicGuessorComponent({chattings, myIndex, selectedPage, setSelectedPag
           <div className={brandStyle["topBar-text-wrapper"]}
             style={{width: "auto", marginTop:"20px", marginBottom: "20px"}}
             onClick={()=>{
-              setSelectedPage(0);
+              makeItVoid();
             }}
           >
           대기실로 돌아가기
@@ -1018,15 +1372,23 @@ function MusicGuessorComponent({chattings, myIndex, selectedPage, setSelectedPag
             <div className={style["chatting-preview-container"]}
               style={{padding:"16px 14px", marginTop:"0px"}}
             >
-              <div className={style["chatting-wrapper"]}>
               {
-                chattings.map((chatting, index) =>{
-                  return (
-                      <Chatting key={index} index={index} body={chatting.body}/>
-                  );
-                })
+                isChattingOn ? (
+                  <div className={style["chatting-wrapper"]}>
+                  {
+                    filteredChatting.map((chatting, index) =>{
+                      return (
+                          <Chatting key={index} index={index} body={chatting.body}/>
+                      );
+                    })
+                  }
+                  </div>
+                ) : (
+                  <div className={style["chatting-cover"]}>
+                  </div>
+                )
               }
-              </div>
+              <ToggleSwitch isChecked={isChattingOn} setIsChecked={setIsChattingOn}/>
             </div>
           </div>
         </div>
@@ -1040,7 +1402,7 @@ function MusicGuessorComponent({chattings, myIndex, selectedPage, setSelectedPag
           onSwiper={(swiper) => (diffSwiperRef.current = swiper)} // Swiper 인스턴스 참조
         >
           <SwiperSlide>
-            <ContentIntroSlide 
+            <ContentIntroSlide2 
               chattings={chattings}
               title={title}
               howToUse={howToUse}
@@ -1048,62 +1410,112 @@ function MusicGuessorComponent({chattings, myIndex, selectedPage, setSelectedPag
               buttonPress={handleSlide}
             />
           </SwiperSlide>
-          <SwiperSlide>
-            <MusicGuessorPlayingSlide
-              buttonPress={handleSlide}
-            />
-          </SwiperSlide>
+          {
+            contents.map((content, index)=>{
+              return(
+                <SwiperSlide
+                  key={index}
+                >
+                  { 
+                  activeIndex == index ? (
+                    <MusicGuessorPlayingSlide
+                      content={content}
+                      top3Users={top3Users}
+                      buttonPress={handleSlide}
+                      answers={answers}
+                      setAnswers={setAnswers}
+                      chattings={chattings}
+                      handleUserList={handleUserList}
+                      duration={duration}
+                    />
+                  ):(
+                    <TrashComponent
+                      key={index}
+                    />
+                  )
+                  }
+                </SwiperSlide>
+              )
+            })}
         </Swiper>
       </div>
+    </div>
+    <img src={bluredBackgroundImage} alt="Brand Highlight" className={brandStyle["brand-highlight-background-image"]}
+      style={{height: "100vh"}}
+    />
     </div>
   );
 }
 
-
+function TrashComponent(){
+  return(
+    <div id={"inner-content-id"} className={style["content-container-inner-wrapper"]} 
+      style={{justifyContent:"center", alignItems:"center", opacity:1, position:"relative"}}
+    >  
+    </div>
+  );
+}
 
 const colorSample = ["#FFA347", "#479DFF", "#A947FF"]
 
-function MusicGuessorPlayingSlide({buttonPress}){
-
-  const tempMusicInfo = {
-    id : 'J7klzJ9auE0',
-    name : "뜨거운여름밤은가고남은것은볼품없지만"
-  }
+function MusicGuessorPlayingSlide({
+  client, handleUserList,
+  content, buttonPress, top3Users,
+  answers, setAnswers, chattings,
+  duration
+}){
 
   const playerRef = useRef(null);
   const [answerFlag, setAnswerFlag] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [stopwatchSwitch, setStopwatchSwitch] = useState(false);
+  const [syncFlag, setSyncFlag] = useState(false);
 
   const handleShowAnswer =()=>{
-    setAnswerFlag((prev)=>!prev);
+    if (!answerFlag){
+      setAnswerFlag(true);
+    }
+    setModalOpen((prev)=>!prev);
   }
 
 
   useEffect(() => {
-    // Load the IFrame Player API code asynchronously
-    const tag = document.createElement('script');
-    tag.src = 'https://www.youtube.com/iframe_api';
-    const firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    const playerId = `youtube-player-${content.id}`;
 
-    // Function to create a YouTube player after the API loads
-    window.onYouTubeIframeAPIReady = () => {
-      playerRef.current = new window.YT.Player('player', {
-        height: '80%',
-        videoId: tempMusicInfo.id, // Replace with your desired video ID
+    const initializePlayer = () => {
+      if (!document.getElementById(playerId)) {
+        console.error(`Player container with id ${playerId} does not exist.`);
+        return;
+      }
+
+      playerRef.current = new window.YT.Player(playerId, {
+        height: '70%',
+        videoId: content.id,
         playerVars: {
-          autoplay: 0, // Prevent auto-play
+          autoplay: 0,
           controls: 1,
           playsinline: 1,
         },
       });
     };
 
+    if (!window.YT) {
+      const tag = document.createElement('script');
+      tag.src = 'https://www.youtube.com/iframe_api';
+      const firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+      window.onYouTubeIframeAPIReady = initializePlayer;
+    } else {
+      initializePlayer();
+    }
+
     return () => {
       if (playerRef.current) {
         playerRef.current.destroy();
       }
     };
-  }, []);
+  }, [content.id]);
 
   const playVideo = () => {
     if (playerRef.current) {
@@ -1123,57 +1535,71 @@ function MusicGuessorPlayingSlide({buttonPress}){
     }
   };
 
-
-
   const [answer, setAnswer] = useState("");
+  const [trigger, setTrigger] = useState(0);
 
-  const tempUser = [
-    { id: 0, nickname: "가짜 이름 1", point: 10 },
-    { id: 1, nickname: "가짜 이름 2", point: 6 },
-    { id: 2, nickname: "가짜 이름 3", point: 5 },
-    { id: 5, nickname: "누구겠냐~", point: 11 },
-  ];
 
-  const tempChatting = [
-    { id: 4, body: "이건 뭐지", state:false},
-    { id: 0, body: "정답!", state:false },
-    { id: 1, body: "잠시만 저거", state:false},
-    { id: 2, body: "이게정답임", state:true},
-  ]
-
-  const [sampleChatting ,setSampleChatting] = useState(tempChatting);
-
-  const handleNewAnswer = (e) =>{
+  const handleMyAnswer = (e) =>{
     if (e.key === 'Enter') {
+      setTrigger(Date.now());
+    }
+  }
+
+  useEffect(() => {
+    if(syncFlag){
+      const now = new Date();
+      const id = `id_${now.getFullYear()}${now.getMonth() + 1}${now.getDate()}${now.getHours()}${now.getMinutes()}${now.getSeconds()}`;
       const newChatting = {
-        id: sampleChatting.length,
+        id: id,
+        uname: "클라이언트", //유저 이름이 들어감
         body: answer,
         state: false
       };
       
-      if (answer === tempMusicInfo.name){
+      if (answer === content.name){
         newChatting.state = true
         setAnswerFlag(true);
+        handleUserList(newChatting);
       }
 
-      setSampleChatting((prev)=>[...prev, newChatting]);
+      setAnswers((prev)=>[...prev, newChatting]);
       setAnswer("");
+      setSyncFlag(false);
     }
-  }
+  },[syncFlag]);
 
-  const [userList, setUserList] = useState(tempUser);
-  const [top3Users, setTop3Users] = useState([]);
 
   useEffect(() => {
-    if (userList) {
-      // point 기준으로 내림차순 정렬 후 상위 3명만 선택
-      const sortedTop3 = [...userList]
-        .sort((a, b) => b.point - a.point)
-        .slice(0, 3);
-      setTop3Users(sortedTop3);
-    }
-  }, [userList]); // userList가 변경될 때 실행
+    if (chattings.length > 0) {
+      const lastChat = chattings[chattings.length - 1].body;
+      const targetUser = chattings[chattings.length - 1].uname;
 
+      if (lastChat.startsWith('정답')) {
+
+        // "정답" 뒤의 내용을 처리
+        const answerContent = lastChat.slice(3).trim(); // "정답" 뒤의 문자열 추출
+        const now = new Date();
+        const id = `id_${now.getFullYear()}${now.getMonth() + 1}${now.getDate()}${now.getHours()}${now.getMinutes()}${now.getSeconds()}`;
+
+        const newChatting = {
+          id: id,
+          uname: targetUser,
+          body: answerContent,
+          state: false
+        };
+      
+        // 추가 로직 실행
+        if (answerContent) {
+          if (answerContent == content.name){
+            newChatting.state = true
+            setAnswerFlag(true);
+            handleUserList(newChatting);
+          }
+          setAnswers((prev)=>[...prev, newChatting]);
+        }
+      }
+    }
+  }, [chattings]);
 
   const handleInput = (e) => {
     const newInput = e.target.value;
@@ -1368,14 +1794,15 @@ function MusicGuessorPlayingSlide({buttonPress}){
             <div className={style["music-guessor-meta-data-box"]}>
               <span>스코어보드</span>
               <div className={style["music-guessor-score-board-wrapper"]}>
-                {top3Users.map((user, index) => {
-                  return <ScoreComponent
-                    key={index}
-                    index={index}
-                    nickname={user.nickname}
-                    point={user.point}
-                  />
-                })
+                {
+                  top3Users.map((user, index) => {
+                    return <ScoreComponent
+                      key={index}
+                      index={index}
+                      nickname={user.uname}
+                      point={user.point}
+                    />
+                  })
                 }
               </div>
             </div>
@@ -1383,7 +1810,7 @@ function MusicGuessorPlayingSlide({buttonPress}){
               <span>답변 내역</span>
               <div className={style["music-guessor-answer-wrapper"]}>
                 {
-                  sampleChatting.map((answer, index)=>{
+                  answers.map((answer, index)=>{
                     return <AnswerChattingComponent
                       key={index}
                       answer={answer}
@@ -1405,41 +1832,63 @@ function MusicGuessorPlayingSlide({buttonPress}){
                 }}
                 placeholder={answer? answer: "정답"}
                 type="text"
-                onKeyDown={handleNewAnswer}
+                onKeyDown={handleMyAnswer}
               >
               </input>
             </div>
+            <Stopwatch
+              duration={duration}
+              triggerSignal={trigger}
+              onComplete={setSyncFlag}
+            />
           </div>
           <div className={style["music-guessor-next-button-frame"]}>
             <div className={style["music-guessor-next-button-wrapper"]}>
+              {
+                answerFlag && (
+                  <div className={style["music-guessor-next-button"]}
+                    onClick={buttonPress}
+                  >
+                    <span
+                      style={{
+                        color: "#111"
+                      }}
+                    >다음 문제</span>
+                  </div>
+                )
+              }
               <div className={style["music-guessor-next-button"]}
                 onClick={handleShowAnswer}
               >
-                <span>다음</span>
+                <span>정답 보기</span>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div className={style["music-guessor-upper-frame"]}
-          style={{
-            height: answerFlag ? "70%" : "0%",
-            display : answerFlag ? "visible" : "hidden",
-            opacity :answerFlag ? 1 : 0,
-          }}
+      <div className={style["set-sync-frame-wrapper"]}
+        style={{
+          backgroundColor: "rgba(0, 0, 0, 0.0)",
+          display: modalOpen? "flex" : "none", // 또는 "block"
+          opacity : modalOpen? 1 : 0,
+        }}
+        onClick={()=> setModalOpen(!modalOpen)}
+      >
+        <div className={style["music-guessor-upper-frame"]}
+            onClick={(e) => e.stopPropagation()}
         >
-          <div id="player"
-            style={{
-              display : answerFlag ? "visible" : "hidden",
-            }}
-          ></div>
+            <span>정답 : {content.name}</span>
+            <div id={`youtube-player-${content.id}`}
+              style={{
+                display : modalOpen? "visible" : "hidden",
+              }}
+            ></div>
+            <p>Youtube Iframe Player API를 이용한 영상 및 오디오 재생 기능입니다.</p>
+        </div>
       </div>
     </div>
   );
 }
-
-
-
 
 
 
@@ -1472,7 +1921,6 @@ function ContentIntroSlide({
 }) {
 
   const handleNextSlide =() => {
-    console.log(setInput)
     if(setInput){
       if (input == ""){
         alert("정답을 입력해주세요!");
@@ -1528,3 +1976,83 @@ function ContentIntroSlide({
   );
 }
 
+function ContentIntroSlide2({
+  title, howToUse, option, subOption,
+  input, setInput, buttonPress
+}) {
+  const [selectedOption, setSelectedOption] = useState("전체");
+  const options = ["전체", "KPop", "JPop"];
+
+  const handleNextSlide =() => {
+    if(setInput){
+      if (input == ""){
+        alert("정답을 입력해주세요!");
+        return
+      }
+    }
+    buttonPress()
+  };
+
+  return(
+    <div id={"inner-content-id"} className={style["content-container-inner-wrapper"]} >  
+      {/*여기부터 천천히 등장해야됨 */}
+      <div className={style["content-meta-body"]}>
+        <div className={style["content-meta-frame"]}>
+          <div className={style["content-meta-data-wrapper"]}>
+            <div className={style["meta-data-clickable-div"]}> 
+              <span>
+                {option}
+              </span>
+            </div>
+          </div>
+          <div className={style["content-meta-frame-input-wrapper2"]}
+            onClick={()=>{
+              handleNextSlide()
+            }}
+          >
+            <span 
+            >
+              시작하기
+            </span>
+          </div>
+        </div>
+          <div className={style["content-option-selector-wrapper"]}>
+            {options.map((option) => (
+              <div
+                key={option}
+                className={`${style["content-option-selector-container"]} ${
+                  selectedOption === option ? style["selected"] : ""
+                }`}
+                onClick={() => setSelectedOption(option)}
+              >
+                <span>{option}</span>
+              </div>
+            ))}
+          </div>
+      </div>
+    </div>
+  );
+}
+
+function ToggleSwitch({isChecked, setIsChecked}) {
+  const handleToggle = (e) => {
+    setIsChecked(e.target.checked);
+  };
+
+  return (
+    <div className={style["toggleSwitchWrapper"]}>
+      <span>명령어를 제외한 채팅만 표시됩니다.</span>
+
+      <input
+        type="checkbox"
+        id="toggle"
+        hidden
+        checked={isChecked}
+        onChange={handleToggle}
+      />
+      <label htmlFor="toggle" className={style["toggleSwitch"]}>
+        <span className={style["toggleButton"]}></span>
+      </label>
+    </div>
+  );
+}
