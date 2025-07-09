@@ -92,7 +92,7 @@
     height: 800px;
 }
 
-.brand-highlight .brand-highlight-background-image {
+.brand-highlight-background-image {
     position: absolute; /* 부모 요소 기준으로 배치 */
     top: 0;
     left: 0;
