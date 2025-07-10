@@ -289,6 +289,10 @@
     border-radius: 12px;
     border: 2px solid #111;
     overflow: hidden; /* 경계 밖의 내용을 잘라냄 */
+    background-image: url('./chatting_logo.png'); /* 또는 http:// 등 외부 링크 */
+    background-size: 80%;
+    background-repeat: no-repeat; /* 반복 안 함 */
+    background-position: center;  /* 중앙 정렬 */
 }
 
 .chatting-cover{
@@ -324,6 +328,7 @@
 
 .chatting-box {
     display: flex;
+    background-color: #fff;
     margin-top: 2px;
     margin-left: 2px;
     min-width: calc(100% - 48px);
@@ -531,12 +536,12 @@
 
 .content-meta-data-wrapper{
     display: flex;
-    flex-direction: column; /* row 도 나쁘지 않은데ㅐ?*/
+    flex-direction: row; /* row 도 나쁘지 않은데ㅐ?*/
     justify-content: center;
     align-items: center;
     gap: 20px;
 
-    div{
+    .meta-data-clickable-div{
         display: flex;
         width: 354px;
         height: 125px;
@@ -551,6 +556,31 @@
         font-weight: 400;
         cursor: default;
     }
+}
+
+.question-meta-data-button-wrapper{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 125px;
+    gap :15px;
+}
+
+.question-meta-data-button{
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    width: 50px;
+    height: 50px;
+    border-radius: 13px;
+    background: #FFF;
+    box-shadow: 10px 10px 30px 0px rgba(0, 0, 0, 0.06);
+}
+
+.question-meta-data-button:hover{
+    background-color: #A1C9FF;
 }
 
 .meta-data-clickable-div{
