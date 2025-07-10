@@ -164,7 +164,6 @@ function Stopwatch({
     const frame = (now) => {
       const elapsed = now - start;
       const remaining = duration - elapsed;
-      console.log(`Elapsed: ${elapsed}, Remaining: ${remaining}`);
 
       if (remaining > 0) {
         setTimeLeft(remaining);
@@ -355,6 +354,7 @@ function ConnectedComponent({
             chattings={chattings}
             selectedPage={selectedPage}
             setSelectedPage={sliderController}
+            filteredChatting={filteredChatting}
           />
         </SwiperSlide>
 
@@ -368,7 +368,6 @@ function ConnectedComponent({
 
         <SwiperSlide>
           <MusicGuessorComponent
-            key={"123"}
             myIndex={3}
             chattings={chattings}
             filteredChatting={filteredChatting}
@@ -508,7 +507,9 @@ function WatiingRoomComponent({
           <div className={style["chatting-title"]}>
             채팅 미리보기
           </div>
-          <div className={style["chatting-wrapper"]}>
+          <div className={style["chatting-wrapper"]}
+            style={{backgroundSize: "40%"}}
+          >
           {
             chattings.map((chatting, index) =>{
               return (
@@ -642,6 +643,7 @@ function QuestionGuessorComponent({
     setTarget([""]);
     setSelectedPage(0);
     setNumQuestion(20);
+    setTargetIndex(0);
     swiperRef.current?.slideTo(0);
   }
 
@@ -684,6 +686,9 @@ function QuestionGuessorComponent({
     swiperRef.current?.slideNext();
   }
 
+  const ReverseSliderController = () =>{
+    swiperRef.current?.slidePrev();
+  }
 
   // 슬라이드하면 나타나는 뭐시기 애니메이션인데 이거 필요없을듯
   const handlePage = (e) => {
@@ -740,7 +745,7 @@ function QuestionGuessorComponent({
                   </div>
                 )
               }
-              <ToggleSwitch isChecked={isChattingOn} setIsChecked={setIsChattingOn}/>
+              <ToggleSwitch id="chatToggle1" isChecked={isChattingOn} setIsChecked={setIsChattingOn}/>
             </div>
           </div>
         </div>
@@ -758,12 +763,13 @@ function QuestionGuessorComponent({
             target.map((question, index) => {
               return (
                 index === targetIndex ? (
-                  <React.Fragment key={question+index}>
-                    <SwiperSlide>
+                  <React.Fragment key={index}>
+                    <SwiperSlide key={`intro-${index}`}>
                       <ContentIntroSlide 
                         title={title}
                         howToUse={howToUse}
                         numQuestion={numQuestion}
+                        setNumQuestion={setNumQuestion}
                         option={option}
                         subOption={subOption}
                         input={input}
@@ -771,14 +777,14 @@ function QuestionGuessorComponent({
                         buttonPress={confirmInput}
                       />
                     </SwiperSlide>
-                    <SwiperSlide>
+                    <SwiperSlide key={`playing-${index}`}>
                         <QuestionGuessorPlayingSlide 
                           initNumQuestion={numQuestion}
                           buttonPress={makeNewSlideController}
                           chattings={chattings}
                         />
                     </SwiperSlide>
-                    <SwiperSlide>
+                    <SwiperSlide key={`clear-${index}`}>
                         <QuestionGuessorClearSlide 
                           title={title}
                           howToUse={howToUse}
@@ -788,19 +794,20 @@ function QuestionGuessorComponent({
                           input={question}
                           setInput={handleInput}
                           buttonPress1={bringToNextStage}
+                          buttonPress2={ReverseSliderController}
                         />
                     </SwiperSlide>
                   </React.Fragment>
                 ):(
-                  <React.Fragment key={question+index*index}>
-                    <SwiperSlide>
-                      <TrashComponent/>
+                  <React.Fragment key={index}>
+                    <SwiperSlide key={`trash-1-${index}`}>
+                      <TrashComponent />
                     </SwiperSlide>
-                    <SwiperSlide>
-                      <TrashComponent/>
+                    <SwiperSlide key={`trash-2-${index}`}>
+                      <TrashComponent />
                     </SwiperSlide>
-                    <SwiperSlide>
-                      <TrashComponent/>
+                    <SwiperSlide key={`trash-3-${index}`}>
+                      <TrashComponent />
                     </SwiperSlide>
                   </React.Fragment>
                 )
@@ -825,9 +832,12 @@ function QuestionGuessorPlayingSlide({
   const refs2 = useRef([]); // ref 배열을 한 번만 생성
   const [waitingQuestion, setWaitingQuestion] = useState([]);
   const [answeredQuestion, setAnsweredQuestion] = useState([]);
-  const [numQuestion, setNumQuestion] = useState(initNumQuestion);
-  const [displayNum, setDisplayNum] = useState(numQuestion);
   const [fade, setFade] = useState("fade-in");
+  const [numQuestion, setNumQuestion] = useState(initNumQuestion);
+
+  useEffect(() => {
+    setNumQuestion(initNumQuestion);
+  }, [initNumQuestion])
 
   useEffect(() => {
     if (chattings.length > 0) {
@@ -856,16 +866,6 @@ function QuestionGuessorPlayingSlide({
       }
     }
   }, [chattings]);
-
-  useEffect(() => {
-    setFade("fade-out");
-    const timeout = setTimeout(() => {
-      setDisplayNum(numQuestion);
-      setFade("fade-in");
-    }, 200); // 페이드 아웃 후 바뀌도록
-
-    return () => clearTimeout(timeout);
-  }, [numQuestion]);
 
 
   // 렌더링 전에 배열 크기 맞춰주기
@@ -1127,8 +1127,12 @@ const QuestionObject = forwardRef(function QuestionObject({
 
 
 
-function DiffGuessorComponent({chattings, selectedPage, myIndex, setSelectedPage}){
+function DiffGuessorComponent({
+  chattings, selectedPage, myIndex, setSelectedPage,
+  filteredChatting
+}){
   const diffSwiperRef= useRef(null);
+  const [isChattingOn, setIsChattingOn] = useState(true);
   const title = "틀린그림찾기";
   const howToUse =[
     "1. 시청자는 좌표를 입력합니다.",
@@ -1178,15 +1182,23 @@ function DiffGuessorComponent({chattings, selectedPage, myIndex, setSelectedPage
             <div className={style["chatting-preview-container"]}
               style={{padding:"16px 14px", marginTop:"0px"}}
             >
-              <div className={style["chatting-wrapper"]}>
               {
-                chattings.map((chatting, index) =>{
-                  return (
-                      <Chatting key={index} index={index} body={chatting.body}/>
-                  );
-                })
+                isChattingOn ? (
+                  <div className={style["chatting-wrapper"]}>
+                  {
+                    filteredChatting.map((chatting, index) =>{
+                      return (
+                          <Chatting key={index} index={index} body={chatting.body}/>
+                      );
+                    })
+                  }
+                  </div>
+                ) : (
+                  <div className={style["chatting-cover"]}>
+                  </div>
+                )
               }
-              </div>
+              <ToggleSwitch id="chatToggle2" isChecked={isChattingOn} setIsChecked={setIsChattingOn}/>
             </div>
           </div>
         </div>
@@ -1199,7 +1211,7 @@ function DiffGuessorComponent({chattings, selectedPage, myIndex, setSelectedPage
           initialSlide={0}
         >
           <SwiperSlide>
-            <ContentIntroSlide 
+            <ContentIntroSlide1 
               chattings={chattings}
               title={title}
               howToUse={howToUse}
@@ -1388,7 +1400,7 @@ function MusicGuessorComponent({
                   </div>
                 )
               }
-              <ToggleSwitch isChecked={isChattingOn} setIsChecked={setIsChattingOn}/>
+              <ToggleSwitch id="chatToggle3" isChecked={isChattingOn} setIsChecked={setIsChattingOn}/>
             </div>
           </div>
         </div>
@@ -1909,13 +1921,102 @@ function MusicGuessorPlayingSlide({
 
 //------------------------------------------------------------------------------
 
-
-
-
-
-
-
 function ContentIntroSlide({
+  title, howToUse, option, subOption, numQuestion, setNumQuestion,
+  input, setInput, buttonPress
+}) {
+
+  const handleNextSlide =() => {
+    if(setInput){
+      if (input == ""){
+        alert("정답을 입력해주세요!");
+        return
+      }
+    }
+    buttonPress()
+  };
+
+  const handleIncreaseQuestion = () => {
+    if (numQuestion >= 40) {
+      alert("질문 갯수는 40개를 초과할 수 없습니다.");
+      return;
+    }else{
+      setNumQuestion((prev)=>prev+1);
+    }
+  }
+
+  const handleDecreaseQuestion = () => {
+    if (numQuestion <= 1) {
+      alert("질문 갯수는 1개 이상이어야 합니다.");
+    }else{
+      setNumQuestion((prev)=>prev-1);
+    }
+  }
+
+
+  return(
+    <div id={"inner-content-id"} className={style["content-container-inner-wrapper"]} >  
+      {/*여기부터 천천히 등장해야됨 */}
+      <div className={style["content-meta-body"]}>
+        <div className={style["content-meta-frame"]}>
+          <div className={style["content-meta-data-wrapper"]}>
+            <div className={style["meta-data-clickable-div"]}> 
+              <span>
+                {option}
+              </span>
+              <li className={style["meta-data-subtitle"]}>
+                {subOption}
+              </li>
+            </div>
+            <div className={style["question-meta-data-button-wrapper"]}>
+              <div className={style["question-meta-data-button"]}
+                onClick={handleIncreaseQuestion}
+              >
+                +
+              </div>
+              <div className={style["question-meta-data-button"]}
+                onClick={handleDecreaseQuestion}
+              >
+                -
+              </div>
+            </div>
+          </div>
+            {setInput && (
+              <div className={style["content-meta-frame-input-wrapper"]}>
+                <input
+                  className={style["content-meta-frame-input"]}
+                  value={input}
+                  onChange={(e) => {
+                    setInput(e);
+                  }}
+                  placeholder={input? input: "정답 작성"}
+                  type="text"
+                >
+                </input>
+              </div>
+            )
+          }
+          <div className={style["content-meta-frame-input-wrapper2"]}
+            onClick={()=>{
+              handleNextSlide()
+            }}
+          >
+            <span 
+            >
+              시작하기
+            </span>
+        </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+
+
+
+function ContentIntroSlide1({
   title, howToUse, option, subOption,
   input, setInput, buttonPress
 }) {
@@ -2034,8 +2135,9 @@ function ContentIntroSlide2({
   );
 }
 
-function ToggleSwitch({isChecked, setIsChecked}) {
+function ToggleSwitch({id, isChecked, setIsChecked}) {
   const handleToggle = (e) => {
+    console.log("Toggle Switch Changed:", e.target.checked);
     setIsChecked(e.target.checked);
   };
 
@@ -2045,12 +2147,12 @@ function ToggleSwitch({isChecked, setIsChecked}) {
 
       <input
         type="checkbox"
-        id="toggle"
+        id={id}
         hidden
         checked={isChecked}
         onChange={handleToggle}
       />
-      <label htmlFor="toggle" className={style["toggleSwitch"]}>
+      <label htmlFor={id} className={style["toggleSwitch"]}>
         <span className={style["toggleButton"]}></span>
       </label>
     </div>
