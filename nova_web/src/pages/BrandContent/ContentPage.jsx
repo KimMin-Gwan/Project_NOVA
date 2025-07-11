@@ -1309,6 +1309,14 @@ function MusicGuessorComponent({
     setActiveIndex((prev)=>prev+1)
   };
 
+  const resetData = () => {
+    diffSwiperRef.current?.slideTo(0)
+    setActiveIndex(-1);
+    setContents(content);
+    setUserList(tempUser);
+    setTop3Users([]);
+  }
+
   const handleUserList = (chatting) => {
     // userList는 기존 유저 리스트 상태라고 가정
     setUserList((prevList) => {
@@ -1449,6 +1457,12 @@ function MusicGuessorComponent({
                 </SwiperSlide>
               )
             })}
+            <SwiperSlide>
+              <MusicGuessorClearSlide
+                buttonPress={resetData}
+                userList={userList}
+              />
+            </SwiperSlide>
         </Swiper>
       </div>
     </div>
@@ -1468,7 +1482,7 @@ function TrashComponent(){
   );
 }
 
-const colorSample = ["#FFA347", "#479DFF", "#A947FF"]
+
 
 function MusicGuessorPlayingSlide({
   client, handleUserList,
@@ -1570,8 +1584,10 @@ function MusicGuessorPlayingSlide({
       
       if (answer === content.name){
         newChatting.state = true
+        if (!answerFlag){
+          handleUserList(newChatting);
+        }
         setAnswerFlag(true);
-        handleUserList(newChatting);
       }
 
       setAnswers((prev)=>[...prev, newChatting]);
@@ -1604,8 +1620,10 @@ function MusicGuessorPlayingSlide({
         if (answerContent) {
           if (answerContent == content.name){
             newChatting.state = true
+            if (!answerFlag){
+              handleUserList(newChatting);
+            }
             setAnswerFlag(true);
-            handleUserList(newChatting);
           }
           setAnswers((prev)=>[...prev, newChatting]);
         }
@@ -1662,27 +1680,7 @@ function MusicGuessorPlayingSlide({
   }, []);
 
 
-  const ScoreComponent = ({index, nickname, point}) => {
-    const color = colorSample[index]
 
-    return(
-      <div className={style["music-guessor-score-component"]}>
-        <div className={style["rating-nickname-wrapper"]}>
-          <p className={style["score-rating"]}
-           style={{ color : color }}
-          >
-            {index+1}위
-          </p>
-          <p className={style["nickname"]}>
-            {nickname}
-          </p>
-        </div>
-        <p className={style["point"]}>
-          {point}
-        </p>
-      </div>
-    );
-  }
 
   const AnswerChattingComponent = ({answer}) => {
     return(
@@ -1903,9 +1901,81 @@ function MusicGuessorPlayingSlide({
 }
 
 
+const ScoreComponent = ({index, nickname, point}) => {
+  const colorSample = ["#FFA347", "#479DFF", "#A947FF"]
+  const color = colorSample[index]
+
+  return(
+    <div className={style["music-guessor-score-component"]}>
+      <div className={style["rating-nickname-wrapper"]}>
+        <p className={style["score-rating"]}
+          style={{ color : color }}
+        >
+          {index+1}위
+        </p>
+        <p className={style["nickname"]}>
+          {nickname}
+        </p>
+      </div>
+      <p className={style["point"]}>
+        {point}
+      </p>
+    </div>
+  );
+}
 
 
 
+
+
+function MusicGuessorClearSlide({
+  buttonPress, userList
+}){
+  return(
+    <div id={"inner-content-id"} className={style["content-container-inner-wrapper"]} 
+      style={{justifyContent:"center", alignItems:"center", opacity:1, position:"relative"}}
+    >  
+      <div className={style["content-body"]}
+        style={{
+          position:"relative",
+          zIndex: "1",
+        }}
+      >
+        <div className={style["music-guessor-top-right-frame"]}>
+          <div className={style["music-guessor-meta-data-box"]}>
+            <span>스코어보드</span>
+            <div className={style["music-guessor-score-board-wrapper"]}>
+              {
+                userList.map((user, index) => {
+                  return <ScoreComponent
+                    key={index}
+                    index={index}
+                    nickname={user.uname}
+                    point={user.point}
+                  />
+                })
+              }
+            </div>
+          </div>
+        </div>
+            
+        <div className={style["music-guessor-next-button-frame"]}>
+          <div className={style["music-guessor-next-button-wrapper"]}>
+            <div className={style["music-guessor-next-button"]}
+              onClick={buttonPress}
+            >
+              <span
+                style={{
+                  color: "#111"
+                }}
+              >초기화</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 
 
