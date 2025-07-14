@@ -5,6 +5,15 @@ from datetime import datetime
 
 
 class ContentController:
+    
+    # 뮤직 컨텐츠에서 초기에 갯수 받아오게 하는 부분
+    def get_num_music_content(self, database, request):
+        model = ContentModel(database=database)
+        
+        # 주제 수 찍어주면됨
+        model.get_num_music_content()
+        return model
+    
     # sid 리스트로 스케줄 데이터 뽑아내기
     def get_music_content(self, database, request):
         model = ContentModel(database=database)

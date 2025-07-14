@@ -29,8 +29,25 @@ class Content_Service_view(Master_View):
         def home():
             return "bad request"
         
+        
+        @self.__app.get('/content_system/get_num_music_content')
+        def get_num_music_content(request:Request):
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
+
+            content_controller = ContentController()
+            model = content_controller.get_num_music_content(
+                database=self.__database,
+                request=request_manager,
+            )
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+            
+        
+        
         @self.__app.get('/content_system/get_music_content')
-        def get_music_content(request:Request, type:Optional[str]="default"):
+        def get_music_content(request:Request, type:Optional[str]="all"):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
 
             data_payload = GetContentRequest(type=type)
@@ -85,5 +102,5 @@ class Content_Service_view(Master_View):
         
             
 class GetContentRequest(RequestHeader):
-    def __init__(self, type) -> None:
+    def __init__(self, type="all") -> None:
         self.type = type
