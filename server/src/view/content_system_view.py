@@ -64,6 +64,7 @@ class Content_Service_view(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
         
+        
         @self.__app.get('/content_system/get_diff_image_content')
         def get_image_content(request:Request):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
