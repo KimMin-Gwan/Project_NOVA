@@ -10,6 +10,7 @@ import soopLogo from "./../BrandPage/SOOP_LOGO_Blue 1.png";
 import contentBackgroundImage from "./content-background-svg.svg";
 import bluredBackgroundImage from "./blurBackground.png";
 import brandImg from "./brand_img.png";
+import mainApi from "../../services/apis/mainApi.js";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -1251,19 +1252,15 @@ function MusicGuessorComponent({
    filteredChatting, duration
 }){
   const diffSwiperRef= useRef(null);
+  const defaultOptions = {"전체" : 0}
   const [isChattingOn, setIsChattingOn] = useState(true);
+  const [selectedOption, setSelectedOption] = useState("전체");
+
+  const [optionList, setOptionList] = useState(defaultOptions);
+  const [numMusic, setNumMusic] = useState(0);
 
 
-  const content = [
-    {
-      id : 'tfmwbxBKPh0',
-      name : "모르시나요"
-    },
-    {
-      id : '59iVUkOty-k',
-      name : "나는반딧불"
-    }
-  ]
+  const content = []
   const tempUser = [
     //{ id: 0, uname: "가짜 이름 1", point: 10 },
   ];
@@ -1302,12 +1299,18 @@ function MusicGuessorComponent({
     "4. 스트리머는 화면 하단에 정답을 입력합니다.",
   ];
 
-  const option = '인트로 15초 듣기';
+  const subTitle = '인트로 15초 듣기';
 
   const handleSlide = () => {
     diffSwiperRef.current?.slideNext()
     setActiveIndex((prev)=>prev+1)
   };
+
+  const tryStartContent = async () => {
+    await fetchContentData();
+    handleSlide();
+  }
+
 
   const resetData = () => {
     diffSwiperRef.current?.slideTo(0)
@@ -1345,6 +1348,25 @@ function MusicGuessorComponent({
       }
     });
   };
+
+  const fetchMetaData = () => {
+    mainApi.get('/content_system/get_num_music_content').then((res) => {
+      const meta_data = res.data.body.meta_data
+      setOptionList(meta_data)
+    });
+  }
+
+  const fetchContentData = async () => {
+    mainApi.get(`/content_system/get_music_content?type=${selectedOption}&num_content=${numMusic}`).then((res) => {
+      const content = res.data.body.content
+      setContents(content)
+    });
+  }
+
+  useEffect(()=> {
+    fetchMetaData()
+  }, [])
+
 
   useEffect(() => {
     if (userList) {
@@ -1423,11 +1445,13 @@ function MusicGuessorComponent({
         >
           <SwiperSlide>
             <ContentIntroSlide2 
-              chattings={chattings}
-              title={title}
-              howToUse={howToUse}
-              option={option}
-              buttonPress={handleSlide}
+              optionList = {optionList}
+              subTitle ={subTitle}
+              buttonPress={tryStartContent}
+              selectedOption={selectedOption}
+              setSelectedOption={setSelectedOption}
+              numMusic={numMusic}
+              setNumMusic={setNumMusic}
             />
           </SwiperSlide>
           {
@@ -1504,9 +1528,8 @@ function MusicGuessorPlayingSlide({
     setModalOpen((prev)=>!prev);
   }
 
-
   useEffect(() => {
-    const playerId = `youtube-player-${content.id}`;
+    const playerId = `youtube-player-${content.url}`;
 
     const initializePlayer = () => {
       if (!document.getElementById(playerId)) {
@@ -1516,7 +1539,7 @@ function MusicGuessorPlayingSlide({
 
       playerRef.current = new window.YT.Player(playerId, {
         height: '70%',
-        videoId: content.id,
+        videoId: content.url,
         playerVars: {
           autoplay: 0,
           controls: 1,
@@ -1541,7 +1564,7 @@ function MusicGuessorPlayingSlide({
         playerRef.current.destroy();
       }
     };
-  }, [content.id]);
+  }, [content.url]);
 
   const playVideo = () => {
     if (playerRef.current) {
@@ -1582,7 +1605,11 @@ function MusicGuessorPlayingSlide({
         state: false
       };
       
-      if (answer === content.name){
+      const normalizedAnswer = answer.replace(/\s/g, ""); // 공백 모두 제거
+
+      // content.name 배열도 각각 공백 제거해서 비교
+
+      if (content.answer.includes(normalizedAnswer)) {
         newChatting.state = true
         if (!answerFlag){
           handleUserList(newChatting);
@@ -1616,16 +1643,20 @@ function MusicGuessorPlayingSlide({
           state: false
         };
       
-        // 추가 로직 실행
         if (answerContent) {
-          if (answerContent == content.name){
-            newChatting.state = true
-            if (!answerFlag){
+          const normalizedAnswer = answerContent.replace(/\s/g, ""); // 공백 모두 제거
+
+          // content.name 배열도 각각 공백 제거해서 비교
+
+          if (content.answer.includes(normalizedAnswer)) {
+            newChatting.state = true;
+            if (!answerFlag) {
               handleUserList(newChatting);
             }
             setAnswerFlag(true);
           }
-          setAnswers((prev)=>[...prev, newChatting]);
+
+          setAnswers((prev) => [...prev, newChatting]);
         }
       }
     }
@@ -1887,8 +1918,8 @@ function MusicGuessorPlayingSlide({
         <div className={style["music-guessor-upper-frame"]}
             onClick={(e) => e.stopPropagation()}
         >
-            <span>정답 : {content.name}</span>
-            <div id={`youtube-player-${content.id}`}
+            <span>정답 : {content.title} - {content.artist}</span>
+            <div id={`youtube-player-${content.url}`}
               style={{
                 display : modalOpen? "visible" : "hidden",
               }}
@@ -2101,6 +2132,7 @@ function ContentIntroSlide1({
     buttonPress()
   };
 
+
   return(
     <div id={"inner-content-id"} className={style["content-container-inner-wrapper"]} >  
       {/*여기부터 천천히 등장해야됨 */}
@@ -2148,21 +2180,37 @@ function ContentIntroSlide1({
 }
 
 function ContentIntroSlide2({
-  title, howToUse, option, subOption,
-  input, setInput, buttonPress
+  subTitle, optionList, selectedOption, setSelectedOption,
+  numMusic, setNumMusic, buttonPress
 }) {
-  const [selectedOption, setSelectedOption] = useState("전체");
-  const options = ["전체", "KPop", "JPop"];
 
   const handleNextSlide =() => {
-    if(setInput){
-      if (input == ""){
-        alert("정답을 입력해주세요!");
-        return
-      }
-    }
     buttonPress()
   };
+
+  const increaseNumMusic = (size) => {
+    if ((numMusic+size) >= optionList[selectedOption]){
+      alert(`문제는 ${optionList[selectedOption]}개를 넘을 수 없습니다.`)
+    }else{
+      setNumMusic((prev) => prev+size)
+    }
+  }
+  const decreaseNumMusic = (size) => {
+    if ((numMusic-size) < 1){
+      alert("문제는 1개 이상이어야 합니다!")
+    }else{
+      setNumMusic((prev) => prev-size)
+    }
+  }
+
+  useEffect(()=>{
+    setNumMusic(optionList[selectedOption])
+  }, [selectedOption])
+
+  useEffect(()=>{
+    setNumMusic(optionList[selectedOption])
+  }, [optionList])
+
 
   return(
     <div id={"inner-content-id"} className={style["content-container-inner-wrapper"]} >  
@@ -2172,7 +2220,7 @@ function ContentIntroSlide2({
           <div className={style["content-meta-data-wrapper"]}>
             <div className={style["meta-data-clickable-div"]}> 
               <span>
-                {option}
+                {subTitle}
               </span>
             </div>
           </div>
@@ -2187,19 +2235,56 @@ function ContentIntroSlide2({
             </span>
           </div>
         </div>
-          <div className={style["content-option-selector-wrapper"]}>
-            {options.map((option) => (
-              <div
-                key={option}
-                className={`${style["content-option-selector-container"]} ${
-                  selectedOption === option ? style["selected"] : ""
-                }`}
-                onClick={() => setSelectedOption(option)}
-              >
-                <span>{option}</span>
-              </div>
-            ))}
-          </div>
+        <div className={style["content-option-selector-wrapper"]}>
+          {
+          Object.entries(optionList).map(([key, value]) => {
+            return (
+              <React.Fragment key={key}>
+                <div
+                  key={key}
+                  className={`${style["content-option-selector-container"]} ${
+                    selectedOption === key? style["selected"] : ""
+                  }`}
+                  onClick={() => setSelectedOption(key)}
+                >
+                  <span>{key}</span>
+                  {
+                    selectedOption == key ? (
+                      <p>{numMusic} 개</p>
+                    ):(
+                      <p>{value} 개</p>
+                    )
+                  }
+                </div>
+                {
+                  selectedOption === key &&(
+                    <div className={style["content-option-selector-button-wrapper"]}>
+                      <div className={style["music-num-raise-button"]}
+                        onClick={()=>increaseNumMusic(10)}
+                      >
+                        +10
+                      </div>
+                      <div className={style["music-num-raise-button"]}
+                        onClick={()=>increaseNumMusic(1)}
+                      >
+                        +1
+                      </div>
+                      <div className={style["music-num-raise-button"]}
+                        onClick={()=>decreaseNumMusic(1)}
+                      >
+                        -1
+                      </div>
+                      <div className={style["music-num-raise-button"]}
+                        onClick={()=>decreaseNumMusic(10)}
+                      >
+                        -10
+                      </div>
+                    </div>
+                  )
+                }
+              </React.Fragment>
+          )})}
+        </div>
       </div>
     </div>
   );

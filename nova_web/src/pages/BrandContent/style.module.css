@@ -4,6 +4,14 @@
     align-items: end;
 }
 
+span{
+    user-select: none;
+}
+
+div{
+    user-select: none;
+}
+
 
 .content-container{
     height: 100vh;
@@ -512,6 +520,7 @@
     background-color: #FFF;
     box-shadow: 10px 10px 30px 0px rgba(0, 0, 0, 0.06);
     cursor:pointer;
+    gap : 10px;
 
     span{
         color: #767676;
@@ -522,7 +531,51 @@
         line-height: 140%; /* 50.4px */
         letter-spacing: -0.72px;
     }
+
+    p{
+        color: #767676;
+        font-family: "Pretendard";
+        font-size: 20px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 140%; /* 50.4px */
+        letter-spacing: -0.72px;
+    }
 }
+
+
+.content-option-selector-button-wrapper{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    width: 220px;
+    height: 60px;
+}
+
+.content-option-selector-button-wrapper .music-num-raise-button{
+    display: flex;
+    align-items: center;
+    letter-spacing: -0.72px;
+    font-family: 'Pretendard';
+    font-weight: 700;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    background-color: #fff;
+    color: #111;
+    font-size: 13px;
+    border-radius: 9px;
+    box-shadow: 6px 6px 8px 0px rgba(0, 0, 0, 0.08);
+    cursor: pointer;
+    user-select: none;
+}
+
+.content-option-selector-button-wrapper .music-num-raise-button:hover{
+    background-color: #A1C9FF;
+}
+
+
+
 
 .selected {
   background-color: #A1C9FF;
