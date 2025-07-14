@@ -111,7 +111,7 @@ class ContentModel(BaseModel):
         music_datas = self._database.get_datas_with_key(target="content", key="type", key_datas=["music"])
         
         # 랜덤하게 섞어주자
-        random.shuffle(music_data)
+        random.shuffle(music_datas)
         
         for music_data in music_datas:
             music_content = MusicContent().make_with_dict(dict_data=music_data)
