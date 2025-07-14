@@ -116,7 +116,7 @@ class ContentModel(BaseModel):
         for music_data in music_datas:
             music_content = MusicContent().make_with_dict(dict_data=music_data)
             # 타입이 default면 그냥 싹다 보내주면됨
-            if music_content.tag == data_payload.type or data_payload.type == "all":
+            if music_content.tag == data_payload.type or data_payload.type == "전체":
                 self.__contents.append(music_content)
             
             if data_payload.num_content != 0:
