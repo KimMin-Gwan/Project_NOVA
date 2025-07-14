@@ -5,3 +5,6 @@ server/src/configure.txt
 server/test/downloader.py
 server/test/audio.mp4
 server/test/video.mp4
+server/test/data_format/gpt_prompt_manager.py
+server/test/data_format/index.html
+/server/test/data_format
