@@ -118,6 +118,11 @@ class ContentModel(BaseModel):
             # 타입이 default면 그냥 싹다 보내주면됨
             if music_content.tag == data_payload.type or data_payload.type == "all":
                 self.__contents.append(music_content)
+            
+            if data_payload.num_content != 0:
+                if len(self.__contents) > data_payload.num_content:
+                    break
+                
         return
     
     

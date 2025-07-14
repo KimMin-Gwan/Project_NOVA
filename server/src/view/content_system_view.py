@@ -47,10 +47,10 @@ class Content_Service_view(Master_View):
         
         
         @self.__app.get('/content_system/get_music_content')
-        def get_music_content(request:Request, type:Optional[str]="all"):
+        def get_music_content(request:Request, type:Optional[str]="all", num_content:Optional[int]=0):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
 
-            data_payload = GetContentRequest(type=type)
+            data_payload = GetContentRequest(type=type, num_content=num_content)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
 
@@ -102,5 +102,6 @@ class Content_Service_view(Master_View):
         
             
 class GetContentRequest(RequestHeader):
-    def __init__(self, type="all") -> None:
+    def __init__(self, type="all", num_content=0) -> None:
         self.type = type
+        self.num_content = num_content
