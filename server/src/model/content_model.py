@@ -80,7 +80,7 @@ class ContentModel(BaseModel):
         music_datas = self._database.get_datas_with_key(target="content", key="type", key_datas=["music"])
         
         dict_data:dict = {
-            "all" : 0
+            "전체" : 0
         }
         
         for music_data in music_datas:
@@ -98,7 +98,7 @@ class ContentModel(BaseModel):
                 dict_data[music_content.tag] = 1
             
             # 전체 갯수도 1씩 올려줘라
-            dict_data["all"] += 1
+            dict_data["전체"] += 1
             
         self.__meta_data = dict_data
         return 
