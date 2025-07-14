@@ -508,7 +508,7 @@ class Mongo_Database(Local_Database):
         elif target == "duid" or target == "deleted_user":
             return "deleted_user"
         elif target == "content_id" or target == "content":
-            return "deleted_user"
+            return "content"
         else:
             raise DatabaseLogicError("target id did not define")
         
