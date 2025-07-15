@@ -120,7 +120,7 @@ class ContentModel(BaseModel):
                 self.__contents.append(music_content)
             
             if data_payload.num_content != 0:
-                if len(self.__contents) > data_payload.num_content:
+                if len(self.__contents) >= data_payload.num_content:
                     break
                 
         return
