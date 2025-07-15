@@ -1295,7 +1295,7 @@ function MusicGuessorComponent({
   const howToUse =[
     "1. 노래 듣고 정답을 맞추는 컨텐츠입니다.",
     "2. 시청자는 채팅창에 정답을 입력합니다.",
-    "3. 예시: &정답 노래이름",
+    "3. 예시: 정답 노래이름",
     "4. 스트리머는 화면 하단에 정답을 입력합니다.",
   ];
 
@@ -1933,8 +1933,8 @@ function MusicGuessorPlayingSlide({
 
 
 const ScoreComponent = ({index, nickname, point}) => {
-  const colorSample = ["#FFA347", "#479DFF", "#A947FF"]
-  const color = colorSample[index]
+  const colorSample = ["#FFA347", "#479DFF", "#A947FF"];
+  const color = colorSample[index];
 
   return(
     <div className={style["music-guessor-score-component"]}>
@@ -1972,10 +1972,19 @@ function MusicGuessorClearSlide({
           zIndex: "1",
         }}
       >
-        <div className={style["music-guessor-top-right-frame"]}>
-          <div className={style["music-guessor-meta-data-box"]}>
+        <div className={style["music-guessor-top-right-frame"]}
+          style={{alignItems:"center"}}
+          
+        >
+          <span
+            style={{fontSize:"40px", marginBottom:"40px"}}
+          >수고하셨습니다.</span>
+
+          <div className={style["music-guessor-meta-data-box"]} >
             <span>스코어보드</span>
-            <div className={style["music-guessor-score-board-wrapper"]}>
+            <div className={style["music-guessor-score-board-wrapper"]}
+              style={{overflowY:"auto", maxHeight:"100%"}}
+            >
               {
                 userList.map((user, index) => {
                   return <ScoreComponent
@@ -1991,7 +2000,9 @@ function MusicGuessorClearSlide({
         </div>
             
         <div className={style["music-guessor-next-button-frame"]}>
-          <div className={style["music-guessor-next-button-wrapper"]}>
+          <div className={style["music-guessor-next-button-wrapper"]}
+              style={{justifyContent:"center"}}
+          >
             <div className={style["music-guessor-next-button"]}
               onClick={buttonPress}
             >
@@ -2034,7 +2045,7 @@ function ContentIntroSlide({
         return
       }
     }
-    buttonPress()
+    buttonPress();
   };
 
   const handleIncreaseQuestion = () => {
@@ -2099,7 +2110,7 @@ function ContentIntroSlide({
           }
           <div className={style["content-meta-frame-input-wrapper2"]}
             onClick={()=>{
-              handleNextSlide()
+              handleNextSlide();
             }}
           >
             <span 
@@ -2126,10 +2137,10 @@ function ContentIntroSlide1({
     if(setInput){
       if (input == ""){
         alert("정답을 입력해주세요!");
-        return
+        return;
       }
     }
-    buttonPress()
+    buttonPress();
   };
 
 
@@ -2165,7 +2176,7 @@ function ContentIntroSlide1({
           }
           <div className={style["content-meta-frame-input-wrapper2"]}
             onClick={()=>{
-              handleNextSlide()
+              handleNextSlide();
             }}
           >
             <span 
@@ -2190,25 +2201,25 @@ function ContentIntroSlide2({
 
   const increaseNumMusic = (size) => {
     if ((numMusic+size) >= optionList[selectedOption]){
-      alert(`문제는 ${optionList[selectedOption]}개를 넘을 수 없습니다.`)
+      alert(`해당 장르는 ${optionList[selectedOption]}개를 넘을 수 없습니다.`);
     }else{
-      setNumMusic((prev) => prev+size)
+      setNumMusic((prev) => prev+size);
     }
   }
   const decreaseNumMusic = (size) => {
     if ((numMusic-size) < 1){
-      alert("문제는 1개 이상이어야 합니다!")
+      alert("문제는 1개 이상이어야 합니다!");
     }else{
-      setNumMusic((prev) => prev-size)
+      setNumMusic((prev) => prev-size);
     }
   }
 
   useEffect(()=>{
-    setNumMusic(optionList[selectedOption])
+    setNumMusic(optionList[selectedOption]);
   }, [selectedOption])
 
   useEffect(()=>{
-    setNumMusic(optionList[selectedOption])
+    setNumMusic(optionList[selectedOption]);
   }, [optionList])
 
 
