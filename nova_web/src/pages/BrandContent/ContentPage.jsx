@@ -16,9 +16,17 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+import chzzkApi from '../../services/apis/chzzkApi.js';
 
 export default function ContentPage (){
   const socketRef = useRef(null);
+
+  const [accessToken, setAccessToken] = useState("");
+  const [refreshToken, setRefreshToken] = useState("");
+  const [tokenType, setTokenType] = useState("Bearer");
+  const [expiresIn, setExpiresIn] = useState("");
+
+
   const [start, setStart] = useState(false);
   const [connectionStatus, setConnectionStatus] = useState('Disconnected');
   const [chattings, setChattings] = useState([]);
@@ -28,43 +36,75 @@ export default function ContentPage (){
   const filteredCodeRef = useRef(filteredCode);
   const filteredCodes = ['','질문', '좌표', '정답'];
 
-  useEffect(() => {
-    const initialize = async () => {
-    try {
+  useEffect(()=>{
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get("code");
+    const state = params.get("state");
+    const savedState = localStorage.getItem("chzzk_oauth_state")
 
-        // 2. fetchFeedComment 완료 후 WebSocket 초기화
-        const socket = new WebSocket('wss://supernova.io.kr/testing_websocket')
-        socketRef.current = socket;
-
-        socket.onopen = () => {
-        setConnectionStatus('Connected');
-        };
-
-        socket.onmessage = (event) => {
-          const data = { message: event.data, filter: filteredCodeRef.current };
-          analyzeMessage(data);
-        };
-
-        socket.onclose = () => {
-        setConnectionStatus('Disconnected');
-        };
-
-        socket.onerror = (error) => {
-        console.error('WebSocket error:', error);
-        };
-    } catch (error) {
-        console.error('Error during initialization:', error);
+    if (state !== savedState) {
+      console.log("state 검증 실패! 요청이 의심됩니다.");
+      return;
     }
-    }
-    initialize(); 
 
-    return () => {
-    if (socketRef.current) {
-        socketRef.current.close();
+    if (code) {
+      mainApi.get(`/content_system/try_auth_chzzk?code=${code}&state=${state}`).then((res) => {
+        const result = res.data.body.result
+        setAccessToken(result.accessToken);
+        setRefreshToken(result.refreshToken);
+        setTokenType(result.tokenType);
+        setExpiresIn(result.expiresIn);
+      });
     }
-    };
+  }, [])
 
-  }, []); // 필요한 의존성 추가
+
+  useEffect(()=>{
+    if (accessToken) {
+      console.log("이제 세션 연결하삼");
+      //setStart(true);
+    }
+  }, [accessToken])
+
+
+
+  //useEffect(() => {
+    //const initialize = async () => {
+    //try {
+
+        //// 2. fetchFeedComment 완료 후 WebSocket 초기화
+        //const socket = new WebSocket('wss://supernova.io.kr/testing_websocket')
+        //socketRef.current = socket;
+
+        //socket.onopen = () => {
+        //setConnectionStatus('Connected');
+        //};
+
+        //socket.onmessage = (event) => {
+          //const data = { message: event.data, filter: filteredCodeRef.current };
+          //analyzeMessage(data);
+        //};
+
+        //socket.onclose = () => {
+        //setConnectionStatus('Disconnected');
+        //};
+
+        //socket.onerror = (error) => {
+        //console.error('WebSocket error:', error);
+        //};
+    //} catch (error) {
+        //console.error('Error during initialization:', error);
+    //}
+    //}
+    //initialize(); 
+
+    //return () => {
+    //if (socketRef.current) {
+        //socketRef.current.close();
+    //}
+    //};
+
+  //}, []); // 필요한 의존성 추가
 
   useEffect(()=>{
     setFilteredCode(filteredCodes[selectedPage]);
@@ -195,6 +235,21 @@ function IntroComponent({setStart}){
   const subtitle = "SUPERNOVA 컨텐츠 클럽은 방송 플랫폼에서 실시간 스트리밍을 통해 사용 가능합니다."
 
 
+  const fetchTest = async () => {
+    const clientId = "cd2bbdef-c85b-4f84-8a26-76e5de315e5a";
+    const redirectUri = "https://supernova.io.kr/content"; // chzzk에 등록된 URI
+    const state = crypto.randomUUID();
+
+    // state 저장 (나중에 콜백에서 검증용)
+    localStorage.setItem("chzzk_oauth_state", state);
+
+    // 인증 URL 만들기
+    const authUrl = `https://chzzk.naver.com/account-interlock?clientId=${clientId}&redirectUri=${encodeURIComponent(redirectUri)}&state=${state}`;
+
+    // 브라우저를 인증 URL로 이동 (리디렉션)
+    window.location.href = authUrl;
+  }
+
 
   return(
       <div 
@@ -219,7 +274,7 @@ function IntroComponent({setStart}){
               </div>
               <div className={brandStyle["platforms-div"]} >
                   <div className={brandStyle["sites-box"]}
-                    onClick={()=>setStart(true)}
+                    onClick={()=>fetchTest()}
                   >
                       <img src={chzzkLogo} className={brandStyle["platform-icon"]} alt="Platform Icon" />
                   </div>
