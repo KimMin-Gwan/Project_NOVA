@@ -8,7 +8,7 @@ import requests
 
 
 class ContentController:
-    def try_auth_chzzk(self, data_payload, content_key_storage):
+    def try_subscribe_chat(self, data_payload, content_key_storage):
         Client_Id = content_key_storage.chzzk_client_id
         Client_Secret = content_key_storage.chzzk_client_secret
         url="https://openapi.chzzk.naver.com/open/v1/sessions/events/subscribe/chat"
