@@ -32,6 +32,18 @@ class Content_Service_view(Master_View):
             return "bad request"
         
         
+        @self.__app.get('/content_system/try_subscribe_chat')
+        def get_num_music_content(sessionKey:Optional[str]):
+            content_controller = ContentController()
+            data_payload = ChzzkSubscribeRequest(session_key=sessionKey)
+            
+            result:dict = content_controller.try_subscribe_chat(
+                data_payload=data_payload,
+                content_key_storage=self.__content_key_storage
+            )
+
+            return result
+        
         @self.__app.get('/content_system/try_auth_chzzk')
         def get_num_music_content(code:Optional[str], state:Optional[str]):
             content_controller = ContentController()
@@ -126,3 +138,8 @@ class ChzzkAuthRequest(RequestHeader):
     def __init__(self, code, state):
         self.code = code
         self.state = state
+        
+class ChzzkSubscribeRequest(RequestHeader):
+    def __init__(self, session_key):
+        self.session_key=session_key 
+        

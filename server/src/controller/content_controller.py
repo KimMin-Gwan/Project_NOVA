@@ -7,11 +7,35 @@ from pprint import pprint
 import requests
 
 
-
-
-
-
 class ContentController:
+    def try_auth_chzzk(self, data_payload, content_key_storage):
+        Client_Id = content_key_storage.chzzk_client_id
+        Client_Secret = content_key_storage.chzzk_client_secret
+        url="https://openapi.chzzk.naver.com/open/v1/sessions/events/subscribe/chat"
+        
+        headers = {
+            "Client-Id": Client_Id,
+            "Client-Secret": Client_Secret,
+            "Content-Type": "application/json"
+        }
+        
+        requests_data = {
+            'sessionKey' : data_payload.session_key
+        }
+
+        result = requests.post(
+            url=url,
+            headers=headers,
+            json=requests_data
+        )
+        
+        pprint(result)
+
+        return result
+        
+        
+    
+    
     def try_auth_chzzk(self, data_payload, content_key_storage):
         Client_Id = content_key_storage.chzzk_client_id
         Client_Secret = content_key_storage.chzzk_client_secret
@@ -30,21 +54,37 @@ class ContentController:
             "Content-Type": "application/json"
         }
         
-        result = requests.post(
+        token_result = requests.post(
             url="https://openapi.chzzk.naver.com/auth/v1/token",
             headers=headers,
             json=requests_data
         )
         
-        pprint(result.json())
+        access_token = token_result["content"]["accessToken"]
+        refresh_token = token_result["content"]["refreshToken"]
+        expires_in = token_result["content"]["expiresIn"]
+        
+
+
+        headers = {
+            "Authorization": f"Bearer {access_token}",  # 유저 accessToken
+            "Content-Type": "application/json"
+        }
+
+        response = requests.get(
+            url = "https://openapi.chzzk.naver.com/open/v1/sessions/auth",
+            headers=headers
+            )
+
+        url = response["content"]["url"]
         
         result={
-            'accessToken':"temp",
-            'refreshToken':"temp",
+            'accessToken': access_token,
+            'refreshToken': refresh_token,
             'tokenType':"Bearer",
-            'expiresIn':"86400"
+            'expiresIn':"86400",
+            'url' : url
         }
-        
         
         return result
         
