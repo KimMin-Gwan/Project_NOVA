@@ -2,9 +2,48 @@ from view.jwt_decoder import JWTManager, JWTPayload, RequestManager
 from model import Local_Database, BaseModel, ContentModel
 from others import ScheduleSearchEngine as SSE
 from datetime import datetime
+from pprint import pprint
+
+import requests
+
+
+
+
 
 
 class ContentController:
+    def try_auth_chzzk(self, data_payload, content_key_storage):
+        Client_Id = content_key_storage.chzzk_client_id
+        Client_Secret = content_key_storage.chzzk_client_secret
+        
+        requests_data = {
+            "grantType" : "authorization_code",
+            "clientId": Client_Id,
+            "clientSecret": Client_Secret,
+            "code": data_payload.code,
+            "state": data_payload.state
+        }
+        
+        
+        result = requests.post(
+            url="/auth/v1/token",
+            data=requests_data
+        )
+        pprint(result)
+        
+        result={
+            'accessToken':"temp",
+            'refreshToken':"temp",
+            'tokenType':"Bearer",
+            'expiresIn':"86400"
+        }
+        
+        
+        return result
+        
+        
+        
+    
     
     # 뮤직 컨텐츠에서 초기에 갯수 받아오게 하는 부분
     def get_num_music_content(self, database, request):
