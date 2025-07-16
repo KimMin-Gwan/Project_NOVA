@@ -29,7 +29,7 @@ class ContentController:
             url="https://openapi.chzzk.naver.com/auth/v1/token",
             data=requests_data
         )
-        pprint(result)
+        pprint(result.json())
         
         result={
             'accessToken':"temp",
