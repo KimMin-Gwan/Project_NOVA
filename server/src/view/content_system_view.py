@@ -14,7 +14,8 @@ class Content_Service_view(Master_View):
     def __init__(
         self, app:FastAPI, endpoint: str,
         database, head_parser:Head_Parser,
-        test_connection_manager:TC, jwt_secret_key
+        test_connection_manager:TC, jwt_secret_key,
+        content_key_storage
         ):
         super().__init__(head_parser=head_parser)
         self.__app = app
@@ -22,6 +23,7 @@ class Content_Service_view(Master_View):
         self.__database = database
         self.__test_connection_manager = test_connection_manager
         self.__jwt_secret_key = jwt_secret_key
+        self.__content_key_storage = content_key_storage
         self.home_route(endpoint=endpoint)
         
     def home_route(self, endpoint:str):
@@ -29,6 +31,20 @@ class Content_Service_view(Master_View):
         def home():
             return "bad request"
         
+        
+        @self.__app.get('/content_system/try_auth_chzzk')
+        def get_num_music_content(code:Optional[str], state:Optional[str]):
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
+
+            content_controller = ContentController()
+            
+            result:dict = content_controller.try_auth_chzzk(
+                database=self.__database,
+                request=request_manager,
+                content_key_storage=self.__content_key_storage
+            )
+
+            return result
         
         @self.__app.get('/content_system/get_num_music_content')
         def get_num_music_content(request:Request):

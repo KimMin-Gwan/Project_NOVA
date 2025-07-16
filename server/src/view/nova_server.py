@@ -18,8 +18,9 @@ import random
 class NOVA_Server:
     def __init__(self, database, connection_manager,
                    feed_manager, feed_search_engine,
-                  schedule_search_engine,
-                  funding_project_manager, ai_manager, jwt_secret_key, test_connection_manager
+                  schedule_search_engine, funding_project_manager,
+                  ai_manager, jwt_secret_key, test_connection_manager,
+                  content_key_storage
                   ) -> None:
         self.__app = FastAPI()
 
@@ -92,7 +93,8 @@ class NOVA_Server:
                                                    database=database,
                                                    head_parser=head_parser,
                                                    test_connection_manager=test_connection_manager,
-                                                   jwt_secret_key = jwt_secret_key
+                                                   jwt_secret_key = jwt_secret_key,
+                                                   content_key_storage=content_key_storage
                                                    )
         self.__core_system_view()
         self.__user_system_view()
