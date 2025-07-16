@@ -17,6 +17,8 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import chzzkApi from '../../services/apis/chzzkApi.js';
+import useChzzkSocket from "./hooks/useChzzkSocket";
+import { io, Socket } from "socket.io-client";
 
 export default function ContentPage (){
   const socketRef = useRef(null);
@@ -33,6 +35,7 @@ export default function ContentPage (){
   const [filteredChatting, setFilteredChatting] = useState([]);
   const [selectedPage, setSelectedPage] = useState(0);
   const [filteredCode, setFilteredCode] = useState("");
+  const [sessionURL, setSessionURL] = useState("");
   const filteredCodeRef = useRef(filteredCode);
   const filteredCodes = ['','질문', '좌표', '정답'];
 
@@ -49,22 +52,64 @@ export default function ContentPage (){
 
     if (code) {
       mainApi.get(`/content_system/try_auth_chzzk?code=${code}&state=${state}`).then((res) => {
-        const result = res.data.body.result
+        const result = res.data.body
         setAccessToken(result.accessToken);
         setRefreshToken(result.refreshToken);
         setTokenType(result.tokenType);
         setExpiresIn(result.expiresIn);
+        setSessionURL(result.url)
       });
     }
   }, [])
 
+  const subscribeChzzkChat = async (sessionKey) => {
+    mainApi.get(`/content_system/try_subscribe_chat?sessionKey=${sessionKey}`).then((res) => {
+      const result = res.data.body
+    });
+  }
 
-  useEffect(()=>{
-    if (accessToken) {
-      console.log("이제 세션 연결하삼");
-      //setStart(true);
-    }
-  }, [accessToken])
+
+
+  useEffect(() => {
+    // 백엔드에서 세션 생성 요청 (유저용)
+    const initialization = async = () =>{
+      try{
+        const socketOption = {
+          reconnection : false,
+          'force new connection' : true,
+          'connect timeout' : 3000,
+          transports : ['websocket']
+        }
+
+        const socket = io.connet(sessionURL, socketOption)
+        socketRef.current = socket;
+
+        // 소켓 연결 성공 시
+        socket.on('connect', (event) => {
+          console.log(event);
+          console.log('✅ WebSocket 연결됨');
+          subscribeChzzkChat()
+        });
+
+        socket.onmessage = (event) => {
+          console.log(event.data);
+          //const data = { message: event.data, filter: filteredCodeRef.current };
+          analyzeMessage(event.data);
+        };
+
+      }
+       catch (error) {
+        console.error('Error during initialization:', error);
+        }
+      }
+
+      initialization(); 
+
+    return () => {
+      if (socketRef.current) {
+          socketRef.current.close();
+      }};
+    }, [sessionURL]);
 
 
 
@@ -115,61 +160,106 @@ export default function ContentPage (){
     filteredCodeRef.current = filteredCode;
   }, [filteredCode]);
 
+
   function analyzeMessage(data) {
-    const message = data.message
-    const filter = data.filter
-
-    const socket = socketRef.current; // Access the WebSocket instance directly
-
+    const socket = socketRef.current;
     if (!socket) {
-      console.error('Socket is not initialized');
+      console.error("Socket is not initialized");
       return;
     }
 
-    if (message === "ping") {
+    // ping 처리
+    if (data === "ping") {
       socket.send("pong");
       return;
     }
 
     try {
-      // Parse the message
-      const messageParts = message.split('<br>');
-      // Extract `type` and remove it from parsedMessage
-      const messageType = messageParts[0];
+      // 실제 데이터는 JSON 형식으로 들어옴
+      const parsed = typeof data === "string" ? JSON.parse(data) : data;
 
+      // 기본 구조 확인
+      if (parsed.type !== "chat") return;
 
-      const transformedMessage = parseDataToObject(message);
-      console.log(filter);
+      const messageData = parsed.data;
+      const content = messageData?.message?.content ?? "";
+      const userId = messageData?.senderChannelId ?? "";
+      const nickname = messageData?.profile?.nickname ?? "닉네임없음";
 
-      // Handle different message types
-      if (messageType === "add") {
-        setChattings((prev) => [...prev, transformedMessage]);
-        if (!transformedMessage.body.startsWith(filter)) {
-          setFilteredChatting((prev) => [...prev, transformedMessage])
-        }
-        //console.log(transformedMessage)
+      const chatObj = {
+        _id: chattings.length,
+        uid: userId,
+        uname: nickname,
+        body: content,
+      };
+
+      setChattings((prev) => [...prev, chatObj]);
+
+      // 예시 filter 사용
+      if (!content.startsWith(filter)) {
+        setFilteredChatting((prev) => [...prev, chatObj]);
       }
 
     } catch (error) {
-      console.error('Error parsing message:', error);
+      console.error("❌ 채팅 메시지 파싱 에러:", error);
     }
   }
 
-  function parseDataToObject(data) {
-    // 데이터를 줄바꿈 단위로 분리
-    const [type, owner, uid, uname, cid, body, date] = data.split('<br>');
+  //function analyzeMessage(data) {
+    //const message = data.message
+    //const filter = data.filter
+
+    //const socket = socketRef.current; // Access the WebSocket instance directly
+
+    //if (!socket) {
+      //console.error('Socket is not initialized');
+      //return;
+    //}
+
+    //if (message === "ping") {
+      //socket.send("pong");
+      //return;
+    //}
+
+    //try {
+      //// Parse the message
+      //const messageParts = message.split('<br>');
+      //// Extract `type` and remove it from parsedMessage
+      //const messageType = messageParts[0];
 
 
-    let booleanValue = owner.toLowerCase() === "true";
+      //const transformedMessage = parseDataToObject(message);
+      //console.log(filter);
 
-    // 객체 생성 및 반환
-    return {
-      _id: chattings.length,
-      uid: uid, // 유아이디
-      uname: "임시 유저", // 유저 이름
-      body: body, // 본문
-    };
-  }
+      //// Handle different message types
+      //if (messageType === "add") {
+        //setChattings((prev) => [...prev, transformedMessage]);
+        //if (!transformedMessage.body.startsWith(filter)) {
+          //setFilteredChatting((prev) => [...prev, transformedMessage])
+        //}
+        ////console.log(transformedMessage)
+      //}
+
+    //} catch (error) {
+      //console.error('Error parsing message:', error);
+    //}
+  //}
+
+  //function parseDataToObject(data) {
+    //// 데이터를 줄바꿈 단위로 분리
+    //const [type, owner, uid, uname, cid, body, date] = data.split('<br>');
+
+
+    //let booleanValue = owner.toLowerCase() === "true";
+
+    //// 객체 생성 및 반환
+    //return {
+      //_id: chattings.length,
+      //uid: uid, // 유아이디
+      //uname: "임시 유저", // 유저 이름
+      //body: body, // 본문
+    //};
+  //}
 
 
   return (
