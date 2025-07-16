@@ -34,13 +34,12 @@ class Content_Service_view(Master_View):
         
         @self.__app.get('/content_system/try_auth_chzzk')
         def get_num_music_content(code:Optional[str], state:Optional[str]):
-            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
-
             content_controller = ContentController()
+            data_payload = ChzzkAuthRequest(code=code, state=state)
+            
             
             result:dict = content_controller.try_auth_chzzk(
-                database=self.__database,
-                request=request_manager,
+                data_payload=data_payload,
                 content_key_storage=self.__content_key_storage
             )
 
@@ -122,3 +121,8 @@ class GetContentRequest(RequestHeader):
     def __init__(self, type="all", num_content=0) -> None:
         self.type = type
         self.num_content = num_content
+        
+class ChzzkAuthRequest(RequestHeader):
+    def __init__(self, code, state):
+        self.code = code
+        self.state = state
