@@ -10,6 +10,18 @@ from others.ai_service import AIManger
 YELLOW = "\033[33m"
 RESET = "\033[0m"
 
+class ContentKeyStorage:
+    def __init__(self,
+                 chzzk_client_id, chzzk_client_secret,
+                 soop_client_id, soop_client_secret
+                 ):
+        self.chzzk_client_id = chzzk_client_id
+        self.chzzk_client_secret= chzzk_client_secret
+        self.soop_client_id = soop_client_id
+        self.soop_client_secret= soop_client_secret
+
+
+
 class Master(Configure_File_Reader):
     def __init__(self):
         super().__init__()
@@ -35,6 +47,16 @@ class Master(Configure_File_Reader):
                                   feed_search_engine=feed_search_engine)
         funding_project_manager = FundingProjectManager(database=database)
         
+        content_key_storage = ContentKeyStorage(
+            chzzk_client_id=self._chzzk_client_id,
+            chzzk_client_secret=self._chzzk_client_secret,
+            soop_client_id=self._soop_client_id,
+            soop_client_secret=self._soop_client_secret
+        )
+        
+        
+        
+        
         nova_server = NOVA_Server(
             database=database,
             feed_manager=feed_manager,
@@ -44,7 +66,8 @@ class Master(Configure_File_Reader):
             ai_manager = ai_manager,
             jwt_secret_key = self._jwt_secret_key,
             connection_manager=connection_manager,
-            test_connection_manager=test_connection_manager
+            test_connection_manager=test_connection_manager,
+            content_key_storage=content_key_storage
             )
         
         #app = nova_server.get_app()
