@@ -24,11 +24,19 @@ class ContentController:
             "state": data_payload.state
         }
         
+        headers = {
+            "Client-Id": Client_Id,
+            "Client-Secret": Client_Secret,
+            "Content-Type": "application/json"
+        }
+        
         
         result = requests.post(
             url="https://openapi.chzzk.naver.com/auth/v1/token",
+            headers=headers,
             data=requests_data
         )
+        
         pprint(result.json())
         
         result={
