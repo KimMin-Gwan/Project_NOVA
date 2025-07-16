@@ -30,18 +30,13 @@ class ContentController:
             "Content-Type": "application/json"
         }
         
-        pprint(requests_data)
+        result = requests.post(
+            url="https://openapi.chzzk.naver.com/auth/v1/token",
+            headers=headers,
+            json=requests_data
+        )
         
-        pprint(headers)
-
-        
-        #result = requests.post(
-            #url="https://openapi.chzzk.naver.com/auth/v1/token",
-            #headers=headers,
-            #data=requests_data
-        #)
-        
-        #pprint(result.json())
+        pprint(result.json())
         
         result={
             'accessToken':"temp",
