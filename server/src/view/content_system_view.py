@@ -54,7 +54,9 @@ class Content_Service_view(Master_View):
                 data_payload=data_payload,
                 content_key_storage=self.__content_key_storage
             )
-
+            
+            print(result)
+            
             return result
         
         @self.__app.get('/content_system/get_num_music_content')
