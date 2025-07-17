@@ -94,6 +94,7 @@ export default function ContentPage (){
 
         socket.on("SYSTEM", function(res) {
           console.log(res);
+          console.log(res.data.sessionKey);
           if (res.data.sessionKey){
             subscribeChzzkChat(res.data.sessionKey);  // 네 로직
           }
