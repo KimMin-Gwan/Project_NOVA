@@ -72,8 +72,7 @@ export default function ContentPage (){
     // 백엔드에서 세션 생성 요청 (유저용)
     const initialization = async () =>{
       try{
-        const wsURL = sessionURL.replace(/^http(s?):\/\//, 'wss://');
-
+        //const wsURL = sessionURL.replace(/^http(s?):\/\//, 'wss://');
         const socketOption = {
           reconnection: false,
           'force new connection': true,
@@ -81,7 +80,9 @@ export default function ContentPage (){
           transports: ['websocket']
         };
 
-        const socket = io.connect(wsURL, socketOption);
+        console.log(sessionURL);
+
+        const socket = io.connect(sessionURL, socketOption);
  
         socketRef.current = socket;
 
