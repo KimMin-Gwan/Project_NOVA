@@ -22,6 +22,9 @@ class ContentController:
         requests_data = {
             'sessionKey' : data_payload.session_key
         }
+        
+        pprint(requests_data)
+        
 
         result = requests.post(
             url=url,
