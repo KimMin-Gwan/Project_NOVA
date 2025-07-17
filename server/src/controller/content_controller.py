@@ -38,7 +38,6 @@ class ContentController:
             headers=headers
         )
         
-        pprint(result.json())
 
         return result
         
