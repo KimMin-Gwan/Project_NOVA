@@ -79,7 +79,7 @@ export default function ContentPage (){
           transports : ['websocket']
         }
 
-        const socket = io.connet(sessionURL, socketOption)
+        const socket = io.connect(sessionURL, socketOption)
         socketRef.current = socket;
 
         // 소켓 연결 성공 시
