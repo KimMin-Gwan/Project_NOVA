@@ -51,13 +51,13 @@ export default function ContentPage (){
 
     if (code) {
       mainApi.get(`/content_system/try_auth_chzzk?code=${code}&state=${state}`).then((result) => {
-        setAccessToken(result.accessToken);
-        setRefreshToken(result.refreshToken);
-        setTokenType(result.tokenType);
-        setExpiresIn(result.expiresIn);
-        setSessionURL(result.url)
+        setAccessToken(result.data.accessToken);
+        setRefreshToken(result.data.refreshToken);
+        setTokenType(result.data.tokenType);
+        setExpiresIn(result.data.expiresIn);
+        setSessionURL(result.data.url)
         console.log(result);
-        console.log(result.url);
+        console.log(result.data.url);
 
       });
     }
