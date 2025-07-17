@@ -17,7 +17,6 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import chzzkApi from '../../services/apis/chzzkApi.js';
-import useChzzkSocket from "./hooks/useChzzkSocket";
 import { io, Socket } from "socket.io-client";
 
 export default function ContentPage (){
