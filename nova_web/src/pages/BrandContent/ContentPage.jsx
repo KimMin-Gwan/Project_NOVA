@@ -72,14 +72,17 @@ export default function ContentPage (){
     // 백엔드에서 세션 생성 요청 (유저용)
     const initialization = async () =>{
       try{
-        const socketOption = {
-          reconnection : false,
-          'force new connection' : true,
-          'connect timeout' : 3000,
-          transports : ['websocket']
-        }
+        const wsURL = sessionURL.replace(/^http(s?):\/\//, 'wss://');
 
-        const socket = io.connect(sessionURL, socketOption)
+        const socketOption = {
+          reconnection: false,
+          'force new connection': true,
+          'connect timeout': 3000,
+          transports: ['websocket']
+        };
+
+        const socket = io.connect(wsURL, socketOption);
+ 
         socketRef.current = socket;
 
         // 소켓 연결 성공 시
