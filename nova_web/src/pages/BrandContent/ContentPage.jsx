@@ -56,6 +56,9 @@ export default function ContentPage (){
         setTokenType(result.tokenType);
         setExpiresIn(result.expiresIn);
         setSessionURL(result.url)
+        console.log(result);
+        console.log(result.url);
+
       });
     }
   }, [])
