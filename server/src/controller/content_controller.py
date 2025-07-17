@@ -28,7 +28,6 @@ class ContentController:
 
         result = requests.post(
             url=url,
-            headers=headers,
             json=requests_data
         )
         
