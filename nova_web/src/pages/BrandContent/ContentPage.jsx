@@ -93,6 +93,12 @@ export default function ContentPage (){
           subscribeChzzkChat();  // 네 로직
         });
 
+        socket.on("SYSTEM", function(data) {
+          console.log(data);
+            /* on system event */
+        });
+
+
         // 서버에서 message 수신 시
         socket.on("message", (data) => {
           console.log("📩 수신 메시지:", data);
