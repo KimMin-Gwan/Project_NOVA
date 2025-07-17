@@ -60,7 +60,7 @@ class ContentController:
             json=requests_data
         )
         
-        pprint(token_result)
+        pprint(token_result.content)
         
         
         access_token = token_result["content"]["accessToken"]
