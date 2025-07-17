@@ -70,50 +70,53 @@ export default function ContentPage (){
   }
 
 
-
   useEffect(() => {
-    // 백엔드에서 세션 생성 요청 (유저용)
-    const initialization = async () =>{
-      try{
-        //const wsURL = sessionURL.replace(/^http(s?):\/\//, 'wss://');
+    const initialization = async () => {
+      try {
         const socketOption = {
           reconnection: false,
           'force new connection': true,
-          'connect timeout': 3000,
+          'connect timeout': 10000,  // 타임아웃 살짝 늘리기
           transports: ['websocket']
         };
 
-        console.log(sessionURL);
+        console.log("🔌 연결 시도 중:", sessionURL);
 
         const socket = io.connect(sessionURL, socketOption);
- 
         socketRef.current = socket;
 
-        // 소켓 연결 성공 시
-        socket.on('connect', (event) => {
-          console.log(event);
+        // 연결 성공
+        socket.on('connect', () => {
           console.log('✅ WebSocket 연결됨');
-          subscribeChzzkChat()
+          subscribeChzzkChat();  // 네 로직
         });
 
-        socket.onmessage = (event) => {
-          console.log(event.data);
-          const data = { message: event.data, filter: filteredCodeRef.current };
-          analyzeMessage(data);
-        };
-      }
-       catch (error) {
-        console.error('Error during initialization:', error);
-        }
-      }
+        // 서버에서 message 수신 시
+        socket.on("message", (data) => {
+          console.log("📩 수신 메시지:", data);
+          const payload = { message: data, filter: filteredCodeRef.current };
+          analyzeMessage(payload);
+        });
 
-      initialization(); 
+        // 오류 로그
+        socket.on("connect_error", (err) => {
+          console.error("❌ 연결 오류:", err);
+        });
+
+      } catch (error) {
+        console.error('Error during initialization:', error);
+      }
+    };
+
+    initialization();
 
     return () => {
       if (socketRef.current) {
-          socketRef.current.close();
-      }};
-    }, [sessionURL]);
+        socketRef.current.disconnect(); // disconnect 권장
+        console.log("🔌 WebSocket 연결 해제");
+      }
+    };
+  }, [sessionURL]);
 
 
 
