@@ -60,8 +60,6 @@ class ContentController:
             json=requests_data
         )
         
-        pprint(token_result.json())
-        
         token_result_json = token_result.json()
         
         access_token = token_result_json["content"]["accessToken"]
@@ -80,7 +78,7 @@ class ContentController:
             headers=headers
             )
 
-        url = response["content"]["url"]
+        url = response.json()["content"]["url"]
         
         result={
             'accessToken': access_token,
@@ -90,6 +88,7 @@ class ContentController:
             'url' : url
         }
         
+        pprint(result)
         return result
         
         
