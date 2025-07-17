@@ -19,7 +19,7 @@ class ContentController:
             #"Content-Type": "application/json"
         #}
 
-        auth = f'Bearer {data_payload}'
+        auth = f'Bearer {data_payload.access_token}'
 
         headers = {
             "Authorization" : auth,
