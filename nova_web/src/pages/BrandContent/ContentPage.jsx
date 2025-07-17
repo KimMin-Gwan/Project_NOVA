@@ -17,7 +17,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import chzzkApi from '../../services/apis/chzzkApi.js';
-import { io, Socket } from "socket.io-client";
+//import { io, Socket } from "socket.io-client";
 
 export default function ContentPage (){
   const socketRef = useRef(null);
@@ -73,6 +73,8 @@ export default function ContentPage (){
   useEffect(() => {
     const initialization = async () => {
       try {
+        const io = require("socket.io-client");
+
         const socketOption = {
           reconnection: false,
           'force new connection': true,
