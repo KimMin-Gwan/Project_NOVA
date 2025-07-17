@@ -62,10 +62,11 @@ class ContentController:
         
         pprint(token_result.json())
         
+        token_result_json = token_result.json()
         
-        access_token = token_result["content"]["accessToken"]
-        refresh_token = token_result["content"]["refreshToken"]
-        expires_in = token_result["content"]["expiresIn"]
+        access_token = token_result_json["content"]["accessToken"]
+        refresh_token = token_result_json["content"]["refreshToken"]
+        expires_in = token_result_json["content"]["expiresIn"]
         
 
 
