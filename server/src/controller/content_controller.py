@@ -32,7 +32,7 @@ class ContentController:
             json=requests_data
         )
         
-        pprint(result)
+        pprint(result.json())
 
         return result
         
