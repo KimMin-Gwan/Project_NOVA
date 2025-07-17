@@ -51,7 +51,7 @@ export default function ContentPage (){
 
     if (code) {
       mainApi.get(`/content_system/try_auth_chzzk?code=${code}&state=${state}`).then((res) => {
-        console.log(res.data.body);
+        console.log(res.data);
 
         const result = res.data.body;
         setAccessToken(result.accessToken);
