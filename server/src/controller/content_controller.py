@@ -13,31 +13,29 @@ class ContentController:
         Client_Secret = content_key_storage.chzzk_client_secret
         url="https://openapi.chzzk.naver.com/open/v1/sessions/events/subscribe/chat"
         
-        #headers = {
-            #"Client-Id": Client_Id,
-            #"Client-Secret": Client_Secret,
-            #"Content-Type": "application/json"
-        #}
-
-        auth = f'Bearer {data_payload.access_token}'
-
         headers = {
-            "Authorization" : auth,
+            "Client-Id": Client_Id,
+            "Client-Secret": Client_Secret,
             "Content-Type": "application/json"
         }
+
+        #auth = f'Bearer {data_payload.access_token}'
+
+        #headers = {
+            #"Authorization" : auth,
+            #"Content-Type": "application/json"
+        #}
 
         
         requests_data = {
             'sessionKey' : data_payload.session_key
         }
         
-        pprint(requests_data)
+        target_url = f'{url}?sessionKey={data_payload.session_key}'
         
-
         result = requests.post(
-            url=url,
-            headers=headers,
-            json=requests_data
+            url=target_url,
+            headers=headers
         )
         
         pprint(result.json())
