@@ -50,10 +50,7 @@ export default function ContentPage (){
     }
 
     if (code) {
-      mainApi.get(`/content_system/try_auth_chzzk?code=${code}&state=${state}`).then((res) => {
-        console.log(res.data);
-
-        const result = res.data.body;
+      mainApi.get(`/content_system/try_auth_chzzk?code=${code}&state=${state}`).then((result) => {
         setAccessToken(result.accessToken);
         setRefreshToken(result.refreshToken);
         setTokenType(result.tokenType);
@@ -65,7 +62,7 @@ export default function ContentPage (){
 
   const subscribeChzzkChat = async (sessionKey) => {
     mainApi.get(`/content_system/try_subscribe_chat?sessionKey=${sessionKey}`).then((res) => {
-      const result = res.data.body
+      const result = result
     });
   }
 
