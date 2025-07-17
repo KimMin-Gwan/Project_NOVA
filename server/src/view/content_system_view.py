@@ -35,6 +35,7 @@ class Content_Service_view(Master_View):
         @self.__app.get('/content_system/try_subscribe_chat')
         def get_num_music_content(sessionKey:Optional[str]):
             print(sessionKey)
+            print(type(sessionKey))
 
             content_controller = ContentController()
             data_payload = ChzzkSubscribeRequest(session_key=sessionKey)
