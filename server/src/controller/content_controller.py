@@ -88,7 +88,6 @@ class ContentController:
             'url' : url
         }
         
-        pprint(result)
         return result
         
         
