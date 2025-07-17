@@ -33,9 +33,11 @@ class Content_Service_view(Master_View):
         
         
         @self.__app.get('/content_system/try_subscribe_chat')
-        def get_num_music_content(sessionKey:Optional[str]):
+        def get_num_music_content(accessToken:Optional[str], sessionKey:Optional[str]):
             content_controller = ContentController()
-            data_payload = ChzzkSubscribeRequest(session_key=sessionKey)
+            data_payload = ChzzkSubscribeRequest(
+                access_token=accessToken,
+                session_key=sessionKey)
             
             result:dict = content_controller.try_subscribe_chat(
                 data_payload=data_payload,
@@ -140,6 +142,7 @@ class ChzzkAuthRequest(RequestHeader):
         self.state = state
         
 class ChzzkSubscribeRequest(RequestHeader):
-    def __init__(self, session_key):
+    def __init__(self,access_token, session_key):
+        self.access_token = access_token
         self.session_key=session_key 
         
