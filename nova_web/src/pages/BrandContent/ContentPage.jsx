@@ -93,11 +93,15 @@ export default function ContentPage (){
         });
 
         socket.on("SYSTEM", function(res) {
-          console.log(res);
-          console.log(res.data.sessionKey);
-          if (res.data.sessionKey){
-            subscribeChzzkChat(res.data.sessionKey);  // 네 로직
-          }
+            console.log("res type : ", typeof res)
+
+            const parsed = typeof res === "string" ? JSON.parse(res) : res;
+            console.log(parsed);
+
+            if (parsed.data && parsed.data.sessionKey) {
+              subscribeChzzkChat(parsed.data.sessionKey);
+            }
+
         });
 
 
