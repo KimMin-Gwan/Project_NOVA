@@ -73,7 +73,7 @@ export default function ContentPage (){
 
   useEffect(() => {
     // 백엔드에서 세션 생성 요청 (유저용)
-    const initialization = async = () =>{
+    const initialization = async () =>{
       try{
         const socketOption = {
           reconnection : false,
@@ -94,10 +94,9 @@ export default function ContentPage (){
 
         socket.onmessage = (event) => {
           console.log(event.data);
-          //const data = { message: event.data, filter: filteredCodeRef.current };
-          analyzeMessage(event.data);
+          const data = { message: event.data, filter: filteredCodeRef.current };
+          analyzeMessage(data);
         };
-
       }
        catch (error) {
         console.error('Error during initialization:', error);
@@ -178,6 +177,7 @@ export default function ContentPage (){
     try {
       // 실제 데이터는 JSON 형식으로 들어옴
       const parsed = typeof data === "string" ? JSON.parse(data) : data;
+      const filter = data.filter
 
       // 기본 구조 확인
       if (parsed.type !== "chat") return;
