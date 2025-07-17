@@ -90,12 +90,13 @@ export default function ContentPage (){
         // 연결 성공
         socket.on('connect', () => {
           console.log('✅ WebSocket 연결됨');
-          subscribeChzzkChat();  // 네 로직
         });
 
-        socket.on("SYSTEM", function(data) {
-          console.log(data);
-            /* on system event */
+        socket.on("SYSTEM", function(res) {
+          console.log(res);
+          if (res.data.sessionKey){
+            subscribeChzzkChat(res.data.sessionKey);  // 네 로직
+          }
         });
 
 
