@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import style from "./brandPage.module.css";
 
 import brandBackgroundImage from "./brand-background.svg";
@@ -13,7 +13,14 @@ import intro3 from "./intro3.png";
 import intro4 from "./intro4.png";
 import external from "./External.svg";
 
-import Carousel from "react-spring-3d-carousel";
+import icon1 from "./icon1.png";
+import sample1 from "./sample1.png";
+import sample2 from "./sample2.png";
+import sample3 from "./sample3.png";
+
+import Card from "./carosel/Card.jsx";
+import Carousel from "./carosel/Carosel.jsx"
+
 import { config } from "react-spring";
 import { useDrag } from "@use-gesture/react";
 
@@ -132,6 +139,7 @@ function BrandHighlight() {
       "width=600,height=900" // 창의 크기 및 기타 옵션
     );
   };
+  const url = "https://supernova.io.kr/content";
 
     return (
         <div className={style["brand-highlight"]}>
@@ -154,12 +162,16 @@ function BrandHighlight() {
                         </div>
                     </div>
                 </div>
-                <div className={style["brand-highlight-button"]}>
-                    <img src={buttonStar} alt="button image" className={style["brand-highlight-button-image"]} />
-                    <span className={style["brand-highlight-button-text"]}
-                        onClick={() => handleNavigate("/follow_page")}>
-                        등록된 스트리머 주제 살펴보기
-                    </span>
+                <div className={style["brand-highlight-button-wrapper"]}>
+                    <span> 컨텐츠를 즐기러 온 스트리머는! </span>
+                    <div className={style["brand-highlight-button"]}
+                        onClick={() => window.open(url, "_blank")}
+                    >
+                        <img src={buttonStar} alt="button image" className={style["brand-highlight-button-image"]} />
+                        <span>
+                                컨텐츠 클럽 바로가기
+                        </span>
+                    </div>
                 </div>
                 <div className={style["platforms-div"]}>
                     <div className={style["sites-box"]}>
@@ -213,50 +225,15 @@ function MiddleContentContainer({index, title, detail, image}){
                 <div className={style["middle-content-detail"]}>{detail}</div>
             </div>
             
-            {/* 
             <div className={style["middle-image-wrapper"]}>
-                <div className={style["middle-image-container"]}>
-                    아이콘
-                </div>
+                <img className={style["middle-image-container"]}
+                    src={image}
+                />
             </div>
-            */}
         </div>
     )
 }
 
-const MyCarousel = () => {
-    const slides = [
-        { key: 1, content:
-            <div className={style["slider-container"]}>Slide 1</div> 
-        },
-        { key: 2, content:
-            <div className={style["slider-container"]}>Slide 2</div> 
-        },
-        { key: 3, content:
-            <div className={style["slider-container"]}>Slide 3</div> 
-        },
-    ];
-
-    const [goToSlide, setGoToSlide] = useState(0);
-
-    const bind = useDrag(({ swipe: [swipeX], velocity, direction: [xDir] }) => {
-        if (Math.abs(swipeX) > 0 || velocity > 0.2) {
-            const nextSlide = xDir > 0 ? goToSlide - 1 : goToSlide + 1;
-            setGoToSlide((nextSlide + slides.length) % slides.length);
-        }
-    });
-
-    return (
-        <div {...bind()} style={{ width: "80%", height: "300px", margin: "0 auto", touchAction: "pan-y" }}>
-            <Carousel
-                slides={slides}
-                goToSlide={goToSlide}
-                offsetRadius={2}
-                animationConfig={config.gentle}
-            />
-        </div>
-    );
-};
 
 function AppServices1({targetRef}){
 
@@ -323,11 +300,49 @@ function AppServices2({targetRef}) {
     const title = "SUPERNOVA에서만 제공하는 스트리밍 전용 컨텐츠";
     const subtitle = "지원되는 플랫폼에서 스트리밍 하는 스트리머들은 누구나 사용가능!\n  SUPERNOVA의 스트리밍 전용 컨텐츠를 시청자와 함께 지금 바로 즐겨보세요!"
 
+    let cards = [
+        {
+        key: "1",
+        content: (
+            <Card imagen={sample1}
+                title={"스트리머 vs 모두의 두뇌! 실시간 [ 스무고개 ]"}
+                body={"스트리머가 떠올린 정답, 시청자 여러분의 질문으로 풀어보세요. \n채팅 하나면 누구나 참여 가능! \n 하나의 질문, 수많은 추리. 집단 지성의 힘으로 정답에 다가가 보세요!"}
+            />
+        )
+        },
+        {
+        key: "2",
+        content: (
+            <Card imagen={sample3}
+                title={"시청자와 함께 하는 [ 틀린 그림 찾기 ]"}
+                body={"함께 보면 더 잘 보여요!\n 여러 사람의 관찰력이 모여 정답을 찾아가는 집단 지성 기반의 실시간 협력형 콘텐츠입니다."}
+            />
+        )
+        },
+        {
+        key: "3",
+        content: (
+            <Card imagen={sample2}
+                title={"채팅으로 참여하는 노래 맞추기! [ 뮤직게서 ]"}
+                body={"이 노래, 어디서 많이 들어봤는데…? \n 시청자는 채팅으로 참여해 곡명을 추리하고 정답을 맞힙니다. \n 다같이 추리하면 전부다 맞출 수 있을지도??"}
+            />
+        )
+        }
+    ];
+
+
     return(
         <div className={style["app-services"]} ref={targetRef}>
             <ServiceTitle title={title} subtitle={subtitle} />
             <div className={style["carousel-wrapper"]}>
-                <MyCarousel/>
+                <Carousel
+                    cards={cards}
+                    height="500px"
+                    width="80%"
+                    margin="0 auto"
+                    offset={2}
+                    showArrows={false}
+                />
             </div>
         </div>
     );
@@ -335,26 +350,26 @@ function AppServices2({targetRef}) {
 
 function AppServices3({targetRef}) {
     const title = "이 모든걸 만들고 운영하는 팀 [ SUPERNOVA ]는 누구?";
-    const subtitle = "팀 슈퍼노바는 총 5명의 청년 개발자로 이루어진 팀입니다.\n 20대의 청춘을 바쳐 더 쉬운 스트리머 활동과 더 포괄적인 팬활동을 위해 노력합니다. ";
+    const subtitle = "팀 슈퍼노바는 총 4명의 청년 개발자로 이루어진 팀입니다.\n 20대의 청춘을 바쳐 더 쉬운 스트리머 활동과 더 포괄적인 팬활동을 위해 노력합니다. ";
 
     const features = [
         {
             index: "01",
             title: "쓰는 사람이 만드는 사람",
             detail: "팀 슈퍼노바는 내가 실제로 사용하는 상황을 먼저 생각합니다. \n 내 최애가 이 서비스를 사용한다면 어떤 기능이 필요할까?\n 이런 질문을 스스로에게 던지며 서비스를 만듭니다.",
-            image: "https://example.com/team-image1.png"
+            image: icon1
         },
         {
             index: "02",
             title: "오타쿠의 사명을 가진 사람",
             detail: "팀 슈퍼노바는 특정 분야를 집요하게 파는 오타쿠 들입니다. \n 이름이 슈퍼노바인 이유도 누구나 최애가 될 수 있고, 누구나 최애를 가질 수 있다는 생각에서 지었답니다.",
-            image: "https://example.com/team-image2.png"
+            image: icon1
         },
         {
             index: "03",
             title: "돈보다 낭만이 먼저인 사람",
             detail: "팀 슈퍼노바는 돈보다 낭만을 먼저 생각합니다. \n 돈? 명예? 그건 중요하지 않습니다. \n 오로지 좋아하는 것을 위해 노력합니다.",
-            image: "https://example.com/team-image3.png"
+            image: icon1
         }
     ];
 

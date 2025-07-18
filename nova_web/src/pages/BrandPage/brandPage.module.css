@@ -170,11 +170,29 @@
     cursor: pointer;
 }
 
+.brand-highlight .brand-highlight-button-wrapper{
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    height: 80px;
+    margin-top : 100px;
+    align-items: center;
+    gap: 10px;
+
+    span{
+        color: #8d8d8d;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 140%; /* 22.4px */
+        letter-spacing: -0.4px;
+    }
+}
+
 .brand-highlight .brand-highlight-button{
     display: flex;
     width: 400px;
     height: 70px;
-    margin-top : 50px;
     justify-content: center;
     align-items: center;
     gap: 8px;
@@ -183,16 +201,15 @@
     background: #FFF;
     box-shadow: 10px 10px 30px 0px rgba(0, 0, 0, 0.06);
     cursor: pointer;
-}
-
-.brand-highlight .brand-highlight-button-text{
-    color: #767676;
-    font-family: Pretendard;
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 140%; /* 22.4px */
-    letter-spacing: -0.4px;
+    span{
+        color: #767676;
+        font-family: Pretendard;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 140%; /* 22.4px */
+        letter-spacing: -0.4px;
+    }
 }
 
 .brand-highlight .platforms-div{
@@ -358,7 +375,7 @@
 .carousel-wrapper{
     display: flex;
     width: 100%;
-    height: 448px;
+    height: 650px;
     justify-content: center;
     align-items: center;
 }
@@ -367,7 +384,16 @@
     display: flex;
     width: 980px;
     height: 420px;
+    overflow: hidden;   /* 잘리는 부분 감춤 */
+    position: relative;
     background-color: #505050;
+}
+
+.slider-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;  /* 비율 유지하면서 꽉 채움, 잘릴 수 있음 */
+  display: block;
 }
 
 .middle-content-container{
@@ -425,17 +451,20 @@
     white-space: pre-line; /* 줄바꿈 문자(\n)를 두 줄로 렌더링 */
 }
 
-.middle-content-container .middle-image-wrapper{
-    width: 358px;
-    height: 72px;
-}
 
 .middle-content-container .middle-image-wrapper{
+    margin-top: 10px;
     width: 69px;
     height: 72px;
-    margin-left: 289px;
-    background-color: #505050;
+    margin-left: 315px;
 }
+
+.middle-image-wrapper .middle-image-container{
+    width: 69px;
+    height: 69px;
+
+}
+
 
 .bottom-footer-container{
     display: flex;
