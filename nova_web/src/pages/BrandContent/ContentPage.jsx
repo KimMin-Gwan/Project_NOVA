@@ -347,7 +347,7 @@ function IntroComponent({setStart}){
   const subtitle = "SUPERNOVA 컨텐츠 클럽은 방송 플랫폼에서 실시간 스트리밍을 통해 사용 가능합니다."
 
 
-  const fetchTest = async () => {
+  const fetchChzzkAPI= async () => {
     const clientId = "cd2bbdef-c85b-4f84-8a26-76e5de315e5a";
     const redirectUri = "https://supernova.io.kr/content"; // chzzk에 등록된 URI
     const state = crypto.randomUUID();
@@ -386,12 +386,16 @@ function IntroComponent({setStart}){
               </div>
               <div className={brandStyle["platforms-div"]} >
                   <div className={brandStyle["sites-box"]}
-                    onClick={()=>fetchTest()}
+                    onClick={()=>{
+                        alert("준비 중 입니다.");
+                      }}
                   >
                       <img src={chzzkLogo} className={brandStyle["platform-icon"]} alt="Platform Icon" />
                   </div>
                   <div className={brandStyle["sites-box"]}
-                    onClick={()=>setStart(false)}
+                    onClick={()=>{
+                        alert("준비 중 입니다.");
+                      }}
                   >
                       <img src={soopLogo} className={brandStyle["platform-icon"]} alt="Platform Icon" />
                   </div>
