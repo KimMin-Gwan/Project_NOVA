@@ -201,6 +201,7 @@
     background: #FFF;
     box-shadow: 10px 10px 30px 0px rgba(0, 0, 0, 0.06);
     cursor: pointer;
+    transition: all 0.2s ease-in-out;
     span{
         color: #767676;
         font-family: Pretendard;
@@ -209,8 +210,22 @@
         font-weight: 500;
         line-height: 140%; /* 22.4px */
         letter-spacing: -0.4px;
+        transition: all 0.2s ease-in-out;
     }
 }
+
+.brand-highlight .brand-highlight-button:hover{
+    background-color: #afd4ff;
+    box-shadow: 0px 10px 10px 0px rgba(0, 0, 0, 0.10);
+    scale: 1.03;
+    span{
+        color : #383838;
+        font-weight: 700;
+    }
+}
+
+
+
 
 .brand-highlight .platforms-div{
     display: flex;
@@ -454,14 +469,15 @@
 
 .middle-content-container .middle-image-wrapper{
     margin-top: 10px;
-    width: 69px;
-    height: 72px;
-    margin-left: 315px;
+    width: 80px;
+    height: 80px;
+    margin-left: 308px;
 }
 
 .middle-image-wrapper .middle-image-container{
-    width: 69px;
-    height: 69px;
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
 
 }
 

@@ -14,6 +14,8 @@ import intro4 from "./intro4.png";
 import external from "./External.svg";
 
 import icon1 from "./icon1.png";
+import icon2 from "./icon2.png";
+import icon3 from "./icon3.png";
 import sample1 from "./sample1.png";
 import sample2 from "./sample2.png";
 import sample3 from "./sample3.png";
@@ -363,13 +365,13 @@ function AppServices3({targetRef}) {
             index: "02",
             title: "오타쿠의 사명을 가진 사람",
             detail: "팀 슈퍼노바는 특정 분야를 집요하게 파는 오타쿠 들입니다. \n 이름이 슈퍼노바인 이유도 누구나 최애가 될 수 있고, 누구나 최애를 가질 수 있다는 생각에서 지었답니다.",
-            image: icon1
+            image: icon3
         },
         {
             index: "03",
             title: "돈보다 낭만이 먼저인 사람",
             detail: "팀 슈퍼노바는 돈보다 낭만을 먼저 생각합니다. \n 돈? 명예? 그건 중요하지 않습니다. \n 오로지 좋아하는 것을 위해 노력합니다.",
-            image: icon1
+            image: icon2
         }
     ];
 
