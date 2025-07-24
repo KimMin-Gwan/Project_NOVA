@@ -1739,6 +1739,11 @@ function MusicGuessorPlayingSlide({
           controls: 1,
           playsinline: 1,
         },
+        events: {
+          onReady: (event) => {
+            event.target.setVolume(40); // 볼륨 50%로 설정
+          },
+        },
       });
     };
 
@@ -2226,6 +2231,9 @@ function MusicGuessorClearSlide({
 
 
 //------------------------------------------------------------------------------
+
+
+
 
 function ContentIntroSlide({
   title, howToUse, option, subOption, numQuestion, setNumQuestion,

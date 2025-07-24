@@ -92,12 +92,12 @@ hr {
   }
 }
 .list-bar {
-  background-color: #f1f7ff;
-  font-size: 16px;
-  color: #626262;
+  font-size: 17px;
+  color: #383838;
   padding: 10px;
   padding-left: 20px;
   margin-bottom: 15px;
+  font-weight: 500;
 }
 .listContainer {
   list-style-type: none;

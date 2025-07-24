@@ -22,6 +22,7 @@ import NavBar from "../../component/NavBar/NavBar.js";
 import Footer from "../../component/Footer/Footer.js";
 import { getModeClass } from "./../../App.js";
 import style from "./MoreSee.module.css";
+import Banner from "../../component/Banner/Banner.js";
 
 const boardList = [
   {
@@ -235,9 +236,11 @@ function MoreSee({ onModeChange }) {
             <p className={style.bodyText_login}>{isLogin ? "마이페이지" : "로그인"}</p>
           </div>
 
+          <div className="section-separator"></div>
+          <Banner/>
           {/* 게시판 목록 */}
+          <div className="section-separator"></div>
           <div className={style["list-bar"]}>게시판 목록</div>
-          <hr></hr>
           <ul className={style.listContainer}>
             {firstBoardList.map((board, i) => {
               return (
@@ -274,9 +277,9 @@ function MoreSee({ onModeChange }) {
           </div>
 
           <br></br>
+          <div className="section-separator"></div>
           {/* 다른 기능 목록 */}
           <div className={style["list-bar"]}>컨텐츠 일정</div>
-          <hr></hr>
           <ul className={style.listContainer}>
             {secondBoardList.map((board, i) => {
               return (
@@ -294,9 +297,9 @@ function MoreSee({ onModeChange }) {
           </ul>
 
           <br></br>
+          <div className="section-separator"></div>
           {/* 다른 기능 목록 */}
           <div className={style["list-bar"]}>다른 기능</div>
-          <hr></hr>
           <ul className={style.listContainer}>
             {otherFunctionList.map((board, i) => {
               return (

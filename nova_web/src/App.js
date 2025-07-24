@@ -44,6 +44,7 @@ import YouTubePlayer from "./pages/BrandContent/TestPage.jsx";
 import ImageChecker from "./pages/BrandContent/ImageChecker.jsx";
 import ContentPage from "./pages/BrandContent/ContentPage.jsx";
 import ContentTestPage from "./pages/BrandContent/ContentTestPage.jsx";
+import NewHomePage from "./pages/NewHomePage/NewHomePage.jsx";
 
 // 다크 모드 클래스 반환 함수
 export function getModeClass(mode) {
@@ -158,7 +159,9 @@ function App() {
       <Route path="*" element={<div>404 Error</div>}></Route>
 
       {/* 홈 화면 */}
-      <Route path="/" element={<HomePage />} />
+      <Route path="/" element={<NewHomePage/>} />
+      {/*<Route path="home_test" element={<NewHomePage />}/>*/}
+
       <Route path="/welcome" element={<BrandPage/>} />
       <Route path="/temp_test2" element={<YouTubePlayer/>} />
       <Route path="/content" element={<ContentPage/>} />

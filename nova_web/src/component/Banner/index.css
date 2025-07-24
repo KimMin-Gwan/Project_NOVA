@@ -1,8 +1,8 @@
 .banner-container {
   width: 100%;
-  padding-top : 40px;
+  padding-top : 20px;
   padding-bottom: 20px;
-  background-color: #F1F7FF;
+  background-color: #fff;
   display: flex;
   justify-content: center;
   align-items: center;

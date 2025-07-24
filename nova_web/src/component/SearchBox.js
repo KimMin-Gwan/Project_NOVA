@@ -36,11 +36,11 @@ export default function SearchBox({
           onChange={(e) => {
             onChangeSearchWord(e);
           }}
-          placeholder={searchWord ? searchWord : "보고 싶은 최애를 검색해보세요"}
+          placeholder={searchWord ? searchWord : "보고 싶은 스트리머를 검색해보세요"}
           type="text"
         ></input>
       ) : (
-        <div className={style["search-box"]}>보고 싶은 최애를 검색해보세요</div>
+        <div className={style["search-box"]}>보고 싶은 스트리머를 검색해보세요</div>
       )}
       <button
         className={style["search-btn"]}
