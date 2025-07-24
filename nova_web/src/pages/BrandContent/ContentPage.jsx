@@ -432,8 +432,8 @@ function ConnectedComponent({
   selectedPage, setSelectedPage
 }) {
   const swiperRef = useRef(null); // Swiper 인스턴스를 참조하기 위한 Ref 생성
-  const pageTitle = "닉네임1234님 어서오세요!";
-  const subTitle = "화면 오른쪽에서 ㅓ원하는 컨텐츠로 선택하세요!";
+  const pageTitle = "어서오세요!";
+  const subTitle = "화면 오른쪽에서 원하는 컨텐츠로 선택하세요!";
   const [duration, setDuration] = useState(0); // 5초
 
   const pages = [
