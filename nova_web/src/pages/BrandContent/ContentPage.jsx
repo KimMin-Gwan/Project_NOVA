@@ -66,6 +66,11 @@ export default function ContentPage (){
   const subscribeChzzkChat = async (sessionKey) => {
     mainApi.get(`/content_system/try_subscribe_chat?accessKey=${accessToken}&sessionKey=${sessionKey}`).then((res) => {
       console.log("최종 결과", res);
+      if (res.data.result == 200){
+        setStart(true);
+      }else{
+        alert("연결에 문제가 있습니다. 창을 닫고 다시 시도하세요.")
+      }
     });
   }
 
