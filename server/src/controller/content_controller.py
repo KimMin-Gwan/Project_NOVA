@@ -49,7 +49,8 @@ class ContentController:
             headers=headers
         )
         
-        pprint(result.json())
+        pprint(result)
+        
         channelName = result.json()["content"]["channelName"]
         
         if result:
