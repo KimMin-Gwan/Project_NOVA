@@ -66,6 +66,8 @@ export default function ContentPage (){
   const subscribeChzzkChat = async (sessionKey) => {
     mainApi.get(`/content_system/try_subscribe_chat?accessKey=${accessToken}&sessionKey=${sessionKey}`).then((res) => {
       const result = result
+      console.log(result);
+      
     });
   }
 
