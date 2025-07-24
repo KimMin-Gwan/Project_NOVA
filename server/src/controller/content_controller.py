@@ -50,7 +50,7 @@ class ContentController:
         )
         
         channelName = result.json()["content"]["channelName"]
-        
+        print(channelName)
         
         if result:
             return { "result" : 200 }
