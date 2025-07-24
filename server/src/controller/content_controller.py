@@ -33,15 +33,20 @@ class ContentController:
         
         target_url = f'{url}?sessionKey={data_payload.session_key}'
         
-        print(target_url)
         
         result = requests.post(
             url=target_url,
             headers=headers
         )
         
-
-        return result
+        if result:
+            return {
+                "result" : 200
+            }
+        else:
+            return {
+                "result" : 500
+            }
         
         
     
