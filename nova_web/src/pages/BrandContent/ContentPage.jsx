@@ -112,8 +112,9 @@ export default function ContentPage (){
 
         // 서버에서 message 수신 시
         socket.on("CHAT", (data) => {
-          console.log("📩 수신 메시지:", data);
-          const payload = { message: data, filter: filteredCodeRef.current };
+          const parsed = typeof res === "string" ? JSON.parse(res) : res;
+          console.log("📩 수신 메시지:", parsed);
+          const payload = { message: parsed , filter: filteredCodeRef.current };
           analyzeMessage(payload);
         });
 
@@ -216,8 +217,8 @@ export default function ContentPage (){
       // 기본 구조 확인
       if (parsed.type !== "chat") return;
 
-      const messageData = parsed.data;
-      const content = messageData?.message?.content ?? "";
+      const messageData = parsed;
+      const content = messageData?.content ?? "";
       const userId = messageData?.senderChannelId ?? "";
       const nickname = messageData?.profile?.nickname ?? "닉네임없음";
 
