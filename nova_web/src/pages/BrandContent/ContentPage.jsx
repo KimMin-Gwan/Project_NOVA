@@ -217,12 +217,12 @@ export default function ContentPage (){
       const filter = data.filter
 
       // 기본 구조 확인
-      if (parsed.type !== "chat") return;
-
+      //if (parsed.type !== "chat") return;
       const messageData = parsed;
       const content = messageData?.message?.content ?? "";
       const userId = messageData?.message?.senderChannelId ?? "";
       const nickname = messageData?.message?.profile?.nickname ?? "닉네임없음";
+
 
       const chatObj = {
         _id: chattings.length,
