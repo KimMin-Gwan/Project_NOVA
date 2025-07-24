@@ -8,7 +8,7 @@ from fastapi.responses import HTMLResponse
 from manager import TestConnectionManager as TC
 from others import FeedManager as FM
 from websockets.exceptions import ConnectionClosedError
-
+from pprint import pprint
 
 class Content_Service_view(Master_View):
     def __init__(
@@ -44,6 +44,8 @@ class Content_Service_view(Master_View):
                 data_payload=data_payload,
                 content_key_storage=self.__content_key_storage
             )
+            
+            pprint(result)
 
             return result
         
