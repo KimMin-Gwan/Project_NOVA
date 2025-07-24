@@ -387,14 +387,15 @@ function IntroComponent({setStart}){
               <div className={brandStyle["platforms-div"]} >
                   <div className={brandStyle["sites-box"]}
                     onClick={()=>{
-                        alert("준비 중 입니다.");
+                        fetchChzzkAPI();
+                        //alert("준비 중 입니다.");
                       }}
                   >
                       <img src={chzzkLogo} className={brandStyle["platform-icon"]} alt="Platform Icon" />
                   </div>
                   <div className={brandStyle["sites-box"]}
                     onClick={()=>{
-                        alert("준비 중 입니다.");
+                        setStart(true);
                       }}
                   >
                       <img src={soopLogo} className={brandStyle["platform-icon"]} alt="Platform Icon" />
