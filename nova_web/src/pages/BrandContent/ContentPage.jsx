@@ -112,7 +112,7 @@ export default function ContentPage (){
 
         // 서버에서 message 수신 시
         socket.on("CHAT", (data) => {
-          const parsed = typeof res === "string" ? JSON.parse(res) : res;
+          const parsed = typeof data === "string" ? JSON.parse(data) : data;
           console.log("📩 수신 메시지:", parsed);
           const payload = { message: parsed , filter: filteredCodeRef.current };
           analyzeMessage(payload);
