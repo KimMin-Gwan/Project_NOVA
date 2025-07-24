@@ -197,17 +197,19 @@ export default function ContentPage (){
 
 
   function analyzeMessage(data) {
-    const socket = socketRef.current;
-    if (!socket) {
-      console.error("Socket is not initialized");
-      return;
-    }
+    //const socket = socketRef.current;
+    //if (!socket) {
+      //console.error("Socket is not initialized");
+      //return;
+    //}
 
-    // ping 처리
-    if (data === "ping") {
-      socket.send("pong");
-      return;
-    }
+    //// ping 처리
+    //if (data === "ping") {
+      //socket.send("pong");
+      //return;
+    //}
+
+    console.log(data);
 
     try {
       // 실제 데이터는 JSON 형식으로 들어옴
