@@ -39,14 +39,23 @@ class ContentController:
             headers=headers
         )
         
+        if not result:
+            return { "result" : 500 }
+        
+        
+        url="https://openapi.chzzk.naver.com/open/v1/users/me"
+        result = requests.get(
+            url=target_url,
+            headers=headers
+        )
+        
+        channelName = result.json()["content"]["channelName"]
+        
+        
         if result:
-            return {
-                "result" : 200
-            }
+            return { "result" : 200 }
         else:
-            return {
-                "result" : 500
-            }
+            return { "result" : 500 }
         
         
     
