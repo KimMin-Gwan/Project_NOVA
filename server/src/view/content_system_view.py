@@ -45,8 +45,6 @@ class Content_Service_view(Master_View):
                 content_key_storage=self.__content_key_storage
             )
             
-            pprint(result)
-
             return result
         
         @self.__app.get('/content_system/try_auth_chzzk')
