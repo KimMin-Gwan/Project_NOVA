@@ -111,6 +111,14 @@ export default function ContentPage (){
 
 
         // 서버에서 message 수신 시
+        socket.on("CHAT", (data) => {
+          console.log("📩 수신 메시지:", data);
+          const payload = { message: data, filter: filteredCodeRef.current };
+          analyzeMessage(payload);
+        });
+
+
+        // 서버에서 message 수신 시
         socket.on("message", (data) => {
           console.log("📩 수신 메시지:", data);
           const payload = { message: data, filter: filteredCodeRef.current };
