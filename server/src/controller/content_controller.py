@@ -33,6 +33,8 @@ class ContentController:
         
         target_url = f'{url}?sessionKey={data_payload.session_key}'
         
+        print(target_url)
+        
         result = requests.post(
             url=target_url,
             headers=headers
