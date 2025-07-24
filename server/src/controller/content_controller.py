@@ -46,6 +46,8 @@ class ContentController:
         #url2="https://openapi.chzzk.naver.com/open/v1/users/me"
         #result = requests.get(
             #url=url2,
+            #headers=headers
+        #)
         
         #pprint(result)
         
