@@ -218,7 +218,11 @@ export default function ContentPage (){
 
       // 기본 구조 확인
       //if (parsed.type !== "chat") return;
+
+
       const messageData = parsed;
+      console.log("meesagData", messageData);
+
       const content = messageData?.message?.content ?? "";
       const userId = messageData?.message?.senderChannelId ?? "";
       const nickname = messageData?.message?.profile?.nickname ?? "닉네임없음";
@@ -230,6 +234,8 @@ export default function ContentPage (){
         uname: nickname,
         body: content,
       };
+
+      console.log("endContent", chatObj);
 
       setChattings((prev) => [...prev, chatObj]);
 
