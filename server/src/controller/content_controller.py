@@ -43,9 +43,9 @@ class ContentController:
             return { "result" : 500 }
         
         
-        url="https://openapi.chzzk.naver.com/open/v1/users/me"
+        url2="https://openapi.chzzk.naver.com/open/v1/users/me"
         result = requests.get(
-            url=target_url,
+            url=url2,
             headers=headers
         )
         
