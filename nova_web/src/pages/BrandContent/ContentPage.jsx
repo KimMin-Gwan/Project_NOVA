@@ -218,9 +218,9 @@ export default function ContentPage (){
       if (parsed.type !== "chat") return;
 
       const messageData = parsed;
-      const content = messageData?.content ?? "";
-      const userId = messageData?.senderChannelId ?? "";
-      const nickname = messageData?.profile?.nickname ?? "닉네임없음";
+      const content = messageData?message?.content ?? "";
+      const userId = messageData?.message?.senderChannelId ?? "";
+      const nickname = messageData?.message?.profile?.nickname ?? "닉네임없음";
 
       const chatObj = {
         _id: chattings.length,
