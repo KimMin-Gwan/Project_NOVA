@@ -31,18 +31,18 @@ const boardList = [
     src: fav_icon,
     end_point: "/feed_list?type=bias",
   },
-  {
-    id: 1,
-    title: "오늘의 급상승 게시글",
-    src: today_up,
-    end_point: "/feed_list?type=today",
-  },
-  {
-    id: 2,
-    title: "주간 급상승 게시글",
-    src: week_up,
-    end_point: "/feed_list?type=weekly",
-  },
+  //{
+    //id: 1,
+    //title: "오늘의 급상승 게시글",
+    //src: today_up,
+    //end_point: "/feed_list?type=today",
+  //},
+  //{
+    //id: 2,
+    //title: "주간 급상승 게시글",
+    //src: week_up,
+    //end_point: "/feed_list?type=weekly",
+  //},
   {
     id: 3,
     title: "전체 게시글",
@@ -195,9 +195,9 @@ function MoreSee({ onModeChange }) {
 
   const profile = `https://kr.object.ncloudstorage.com/nova-profile-bucket/${user}.png`;
 
-  const firstBoardList = boardList.slice(0, 4);
-  const secondBoardList = boardList.slice(4, 7);
-  const otherFunctionList = boardList.slice(8);
+  const firstBoardList = boardList.slice(0, 2);
+  const secondBoardList = boardList.slice(2, 5);
+  const otherFunctionList = boardList.slice(5);
   return (
     <div className={style.font}>
       <div className={`${style["container"]} ${style[getModeClass(brightMode)]}`}>
@@ -236,10 +236,8 @@ function MoreSee({ onModeChange }) {
             <p className={style.bodyText_login}>{isLogin ? "마이페이지" : "로그인"}</p>
           </div>
 
-          <div className="section-separator"></div>
           <Banner/>
           {/* 게시판 목록 */}
-          <div className="section-separator"></div>
           <div className={style["list-bar"]}>게시판 목록</div>
           <ul className={style.listContainer}>
             {firstBoardList.map((board, i) => {
