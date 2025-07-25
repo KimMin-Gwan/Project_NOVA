@@ -4,7 +4,7 @@
   display: flex;
   overflow-x: auto;
   scrollbar-width: none;
-  margin-bottom: 41px;
+  margin-bottom: 20px;
 }
 
 .bias-wrapper {

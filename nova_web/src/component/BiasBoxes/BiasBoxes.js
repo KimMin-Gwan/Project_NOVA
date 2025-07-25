@@ -11,7 +11,7 @@ import tempBias from "./../../img/tempBias.png";
 
 import "./index.css";
 
-export default function BiasBoxes({ fetchBiasCategoryData }) {
+export default function BiasBoxes({ fetchBiasCategoryData, fecthDefaultSetting }) {
   const navigate = useNavigate();
   const { scrollRef, hasDragged, dragHandlers } = useDragScroll();
   let { biasList, biasId, setBiasId, loading, fetchBiasList } = useBiasStore();
@@ -24,7 +24,7 @@ export default function BiasBoxes({ fetchBiasCategoryData }) {
     }
   }, []);
 
-  const [clickedBias, setClickedBias] = useState(0);
+  const [clickedBias, setClickedBias] = useState(-1);
 
   function onClickBiasId(bid) {
     setBiasId(bid);
@@ -77,7 +77,20 @@ export default function BiasBoxes({ fetchBiasCategoryData }) {
   }, [loading]);
 
   if(biasList.length === 0){
-    return null;
+    return (
+      <div
+        ref={scrollRef}
+        onMouseDown={dragHandlers.onMouseDown}
+        onMouseMove={dragHandlers.onMouseMove}
+        onMouseUp={dragHandlers.onMouseUp}
+        className="bias-container"
+      >
+        <Toaster position="bottom-center" />
+        <div className="bias-wrapper">
+          <AddBiasButton onClickAddButton={onClickAddButton} add_bias_icon={add_bias_icon} />
+        </div>
+      </div>
+    );
   }else{
     return (
       <div
@@ -102,9 +115,15 @@ export default function BiasBoxes({ fetchBiasCategoryData }) {
                       alt="bias"
                       onClick={() => {
                         if (hasDragged) return;
-                        onClickCurrentBias(i);
-                        onClickBiasId(bias.bid);
-                        fetchBiasCategoryData && fetchBiasCategoryData(bias.bid);
+                        if (clickedBias == i){
+                          onClickCurrentBias(-1);
+                          onClickBiasId("");
+                          fecthDefaultSetting();
+                        }else{
+                          onClickCurrentBias(i);
+                          onClickBiasId(bias.bid);
+                          fetchBiasCategoryData && fetchBiasCategoryData(bias.bid);
+                        }
                       }}
                     />
                   )}
@@ -133,7 +152,7 @@ function AddBiasButton({ onClickAddButton, add_bias_icon }) {
       >
         <img src={add_bias_icon} alt="add-bias" />
       </button>
-      <div className="b-name">주제 추가하기</div>
+      <div className="b-name"></div>
     </div>
   );
 }

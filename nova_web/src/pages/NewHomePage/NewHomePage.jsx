@@ -3,6 +3,7 @@ import Feed from "./../../component/feed";
 import style from "./../FeedList/FeedHashList.module.css";
 
 import NavBar from "../../component/NavBar/NavBar.js";
+import BiasBoxes from "../../component/BiasBoxes/BiasBoxes.js";
 import Banner from "../../component/Banner/Banner.js";
 import SearchBox from "../../component/SearchBox.js";
 import Header from "../../component/Header/Header.js";
@@ -10,6 +11,9 @@ import { fetchAllFeedList } from "../../services/getFeedApi.js";
 import useIntersectionObserver from "../../hooks/useIntersectionObserver.js";
 import MyPageLoading from "../LoadingPage/MypageLoading.js";
 import NoneFeed from "../../component/NoneFeed/NoneFeed.js";
+import useBiasStore from "../../stores/BiasStore/useBiasStore.js";
+import HEADER from "../../constant/header.js";
+import postApi from "../../services/apis/postApi.js";
 
 export default function NewHomePage () {
     const [feedData, setFeedData] = useState([]);
@@ -18,8 +22,14 @@ export default function NewHomePage () {
     const [isLoading, setIsLoading] = useState(true);
     const [filterFclass, setFilterFclass] = useState(JSON.parse(localStorage.getItem("content")) || "");
     const [filterCategory, setFilterCategory] = useState( JSON.parse(localStorage.getItem("board")) || [""]);
+    const { biasId, biasList, setBiasId, fetchBiasList} = useBiasStore();
+
+    let bids = biasList.map((item, i) => {
+        return item.bid;
+    });
 
     const fetchAllFeed = async () => {
+      setIsLoading(true);
       const data = await fetchAllFeedList(nextData, filterCategory, filterFclass);
       setFeedData(data.body.send_data);
       setNextData(data.body.key);
@@ -27,7 +37,25 @@ export default function NewHomePage () {
       setIsLoading(false);
     }
 
+    async function fetchBiasCategoryData(targetBid) {
+        setIsLoading(true);
+        await postApi.post(`feed_explore/feed_with_community`, {
+            header: HEADER,
+            body: {
+            bid: targetBid || bids?.[0] || "",
+            board: "자유게시판",
+            key: -1,
+            },
+        })
+        .then((res) => {
+            setFeedData(res.data.body.send_data);
+            setIsLoading(false);
+        });
+    }
+
+
     useEffect(() => {
+        fetchBiasList();
         fetchAllFeed();
 
         return () => {
@@ -69,6 +97,7 @@ export default function NewHomePage () {
                     <Header />
                     <SearchBox />
                 </div>
+                <BiasBoxes setBiasId={setBiasId} fetchBiasCategoryData={fetchBiasCategoryData}  fecthDefaultSetting={fetchAllFeed}/>
                 <div className="section-separator"></div>
 
 
