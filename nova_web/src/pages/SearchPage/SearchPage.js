@@ -88,6 +88,10 @@ export default function SearchPage() {
 
       <section className="search-category">
         <h3>최근 검색어</h3>
+        <div classname="ad-banner-strip">
+
+        </div>
+
         <div className="search-tag-box">
           <SearchItems
             searchHistory={searchHistory}
@@ -96,7 +100,6 @@ export default function SearchPage() {
           />
         </div>
       </section>
-
       <NavBar />
     </div>
   );
