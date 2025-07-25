@@ -160,7 +160,7 @@ function App() {
 
       {/* 홈 화면 */}
       <Route path="/" element={<NewHomePage/>} />
-      {/*<Route path="home_test" element={<NewHomePage />}/>*/}
+      <Route path="/home_test" element={<HomePage/>}/>
 
       <Route path="/welcome" element={<BrandPage/>} />
       <Route path="/temp_test2" element={<YouTubePlayer/>} />
