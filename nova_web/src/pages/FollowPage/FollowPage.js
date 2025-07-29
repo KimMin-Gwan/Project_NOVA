@@ -18,6 +18,7 @@ import HEADER from "../../constant/header.js";
 import { BIAS_URL, REQUEST_URL } from "../../constant/biasUrl.js";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import DesktopLayout from "../../component/DesktopLayout/DeskTopLayout.jsx";
+import LoadingPage from "../LoadingPage/LoadingPage.js";
 
 export default function FollowPage() {
   const isMobile = useMediaQuery('(max-width:1100px)');
@@ -42,7 +43,9 @@ export default function FollowPage() {
   };
   const closeModal = () => setIsModalOpen(false);
 
-  const [biasDataList, setBiasDataList] = useState([]);
+  const [biasDataList, setBiasDataList] = useState({
+    chzzk:[]
+  });
   const [clickedBid, setClickedBid] = useState();
   const [clickedBname, setClickedBname] = useState();
 
@@ -119,9 +122,6 @@ export default function FollowPage() {
     setSearchBias(e.target.value);
   }
 
-  if (isLoading) {
-    return <div>loading...</div>;
-  }
 
   if(isMobile){
     return(
