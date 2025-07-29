@@ -45,6 +45,7 @@ import ImageChecker from "./pages/BrandContent/ImageChecker.jsx";
 import ContentPage from "./pages/BrandContent/ContentPage.jsx";
 import ContentTestPage from "./pages/BrandContent/ContentTestPage.jsx";
 import NewHomePage from "./pages/NewHomePage/NewHomePage.jsx";
+import DesktopLayout from "./component/DesktopLayout/DeskTopLayout.jsx";
 
 // 다크 모드 클래스 반환 함수
 export function getModeClass(mode) {
@@ -130,16 +131,16 @@ function App() {
 
       {/* 스케줄 페이지 */}
       <Route path="/schedule" element={<ScheduleDashboard />}></Route>
-      <Route path="/schedule/my_schedule" element={<MySchedulePage />}></Route>
-      <Route path="/search/schedule" element={<SearchSchedulePage />}></Route>
       <Route path="/search/topic" element={<SearchTopicPage />}></Route>
       <Route path="/explore/schedule" element={<ScheduleExplore />}></Route>
       <Route path="/schedule/make_new" element={<ScheduleMakePage/>}></Route>
 
 
       {/* 광고 페이지 */}
+      {/**
       <Route path="/nova_ad/home" element={<NovaADHomepage/>}></Route>
       <Route path="/nova_ad/charging" element={<PaymentPage/>}></Route>
+      */}
 
       {/* 이벤트는 다다음 버전에 추가 */}
       {/*<Route path="/search/event" element={<ScheduleResearch />}></Route>/*}
@@ -161,6 +162,9 @@ function App() {
       {/* 홈 화면 */}
       <Route path="/" element={<NewHomePage/>} />
       <Route path="/home_test" element={<HomePage/>}/>
+
+      <Route path="desktop_test" element={<DesktopLayout/>} />
+
 
       <Route path="/welcome" element={<BrandPage/>} />
       <Route path="/temp_test2" element={<YouTubePlayer/>} />
