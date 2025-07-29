@@ -14,6 +14,8 @@ import reArrow3 from "./../../img/reArrow3.svg";
 import reArrow4 from "./../../img/reArrow4.svg";
 import LoadingPage from "../LoadingPage/LoadingPage";
 import MyPageLoading from "../LoadingPage/MypageLoading";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import DesktopLayout from "../../component/DesktopLayout/DeskTopLayout";
 
 const categoryData = [
   {
@@ -34,6 +36,7 @@ const categoryData = [
   },
 ];
 function MyPage() {
+  const isMobile = useMediaQuery('(max-width:1100px)');
   const target = useRef(null);
   const observerRef = useRef(null);
   let navigate = useNavigate();
@@ -175,121 +178,241 @@ function MyPage() {
 
   const profile = `https://kr.object.ncloudstorage.com/nova-profile-bucket/${myData.uid}.png`;
 
-  return (
-    <div className={style.container}>
-      <div className={style.top_area}>
-        <button
-          className={style.backword}
-          onClick={() => {
-            navigate(-1);
-          }}
-        >
-          뒤로
-        </button>
-        <button onClick={(e) => handleMovePage(e, "/mypage_edit")} style={{ cursor: "pointer" }}>
-          프로필 수정
-        </button>
-      </div>
-      <div className={style["user-container"]}>
-        <div className={style["user-img"]}>
-          <img src={profile} alt="img" onError={(e) => (e.target.src = user_icon)} />
+  if(isMobile){
+    return (
+      <div className={style.container}>
+        <div className={style.top_area}>
+          <button
+            className={style.backword}
+            onClick={() => {
+              navigate(-1);
+            }}
+          >
+            뒤로
+          </button>
+          <button onClick={(e) => handleMovePage(e, "/mypage_edit")} style={{ cursor: "pointer" }}>
+            프로필 수정
+          </button>
         </div>
-        <div className={style["feed-wrapper"]}>
-          <section className={style["user-name"]}>
-            <h3>{myData.uname}</h3>
-          </section>
-          <section className={style["user-info"]}>
-            <ul>
-              <li>
-                <b>{myData.num_long_feed}</b>
-                <p>게시글</p>
-              </li>
-              <li>
-                <b>{myData.num_like}</b>
-                <p>좋아요</p>
-              </li>
-              <li>
-                <b>{myData.num_comment}</b>
-                <p>댓글</p>
-              </li>
-            </ul>
-          </section>
-          <section className={style["info-list"]}>
-            <ul className={style["post-list"]} data-active-index={activeIndex}>
-              {categoryData.map((item, index) => (
-                <li
-                  key={index}
-                  className={`${style.post} ${activeIndex === index ? style.active : ""}`}
-                  onClick={() => {
-                    handleMyInfo(index, item);
-                  }}
-                >
-                  <button>{item.category}</button>
+        <div className={style["user-container"]}>
+          <div className={style["user-img"]}>
+            <img src={profile} alt="img" onError={(e) => (e.target.src = user_icon)} />
+          </div>
+          <div className={style["feed-wrapper"]}>
+            <section className={style["user-name"]}>
+              <h3>{myData.uname}</h3>
+            </section>
+            <section className={style["user-info"]}>
+              <ul>
+                <li>
+                  <b>{myData.num_long_feed}</b>
+                  <p>게시글</p>
                 </li>
-              ))}
-            </ul>
-          </section>
-
-          {categoryLoading && <MyPageLoading />}
-          {comment.map(
-            (feed) =>
-              isClickedComment && (
-                <div key={feed.fid} className={style["MyPage_Comment_Box"]}>
-                  <div
-                    className={style["Feed_title"]}
-                    onClick={() => handleCommentToggle(feed.fid)}
+                <li>
+                  <b>{myData.num_like}</b>
+                  <p>좋아요</p>
+                </li>
+                <li>
+                  <b>{myData.num_comment}</b>
+                  <p>댓글</p>
+                </li>
+              </ul>
+            </section>
+            <section className={style["info-list"]}>
+              <ul className={style["post-list"]} data-active-index={activeIndex}>
+                {categoryData.map((item, index) => (
+                  <li
+                    key={index}
+                    className={`${style.post} ${activeIndex === index ? style.active : ""}`}
+                    onClick={() => {
+                      handleMyInfo(index, item);
+                    }}
                   >
-                    <img src={arrow} alt="화살표" />
-                    <p>{feed.body}</p>
-                  </div>
+                    <button>{item.category}</button>
+                  </li>
+                ))}
+              </ul>
+            </section>
 
-                  {clickedComments[feed.fid] && Array.isArray(feed.cid) && feed.cid.length > 0 && (
-                    <ul className={style["comment_box"]}>
-                      {feed.cid.map((comment, index) => {
-                        // 조건부로 실행됨
-                        let src;
-                        const length = feed.cid.length;
+            {categoryLoading && <MyPageLoading />}
+            {comment.map(
+              (feed) =>
+                isClickedComment && (
+                  <div key={feed.fid} className={style["MyPage_Comment_Box"]}>
+                    <div
+                      className={style["Feed_title"]}
+                      onClick={() => handleCommentToggle(feed.fid)}
+                    >
+                      <img src={arrow} alt="화살표" />
+                      <p>{feed.body}</p>
+                    </div>
 
-                        if (length === 1) {
-                          src = reArrow1; // 댓글 하나뿐이면 이거
-                        } else {
-                          // 댓글이 하나뿐이 아니야!
-                          if (index === 0) {
-                            // 근데 첫번째면 이거
-                            src = reArrow2;
-                          } else if (index + 1 === length) {
-                            // 맨마지막은 이거
-                            src = reArrow4;
+                    {clickedComments[feed.fid] && Array.isArray(feed.cid) && feed.cid.length > 0 && (
+                      <ul className={style["comment_box"]}>
+                        {feed.cid.map((comment, index) => {
+                          // 조건부로 실행됨
+                          let src;
+                          const length = feed.cid.length;
+
+                          if (length === 1) {
+                            src = reArrow1; // 댓글 하나뿐이면 이거
                           } else {
-                            // 그 외에 모두는 이거
-                            src = reArrow3;
+                            // 댓글이 하나뿐이 아니야!
+                            if (index === 0) {
+                              // 근데 첫번째면 이거
+                              src = reArrow2;
+                            } else if (index + 1 === length) {
+                              // 맨마지막은 이거
+                              src = reArrow4;
+                            } else {
+                              // 그 외에 모두는 이거
+                              src = reArrow3;
+                            }
                           }
-                        }
 
-                        //이제 src에 이 위에서 정한 이미지가 들어감
-                        return (
-                          <li key={index}>
-                            <img src={src} alt="대댓글" />
-                            <p className={style["Comment_content"]}>{comment.body}</p>
-                            <span>{comment.date}</span>
-                          </li>
-                        );
-                      })}
-                    </ul>
-                  )}
-                </div>
-              )
-          )}
+                          //이제 src에 이 위에서 정한 이미지가 들어감
+                          return (
+                            <li key={index}>
+                              <img src={src} alt="대댓글" />
+                              <p className={style["Comment_content"]}>{comment.body}</p>
+                              <span>{comment.date}</span>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    )}
+                  </div>
+                )
+            )}
 
-          {!isClickedComment &&
-            myFeed.map((feed, i) => {
-              return <Feed key={i} feed={feed} setFeedData={setMyFeed} type={"myPage"} />;
-            })}
-          <div ref={target} style={{ height: "1px" }}></div>
+            {!isClickedComment &&
+              myFeed.map((feed, i) => {
+                return <Feed key={i} feed={feed} setFeedData={setMyFeed} type={"myPage"} />;
+              })}
+            <div ref={target} style={{ height: "1px" }}></div>
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  }else{
+    return (
+      <DesktopLayout>
+        <div className={style.container}>
+          <div className={style.top_area}>
+            <button
+              className={style.backword}
+              onClick={() => {
+                navigate(-1);
+              }}
+            >
+              뒤로
+            </button>
+            <button onClick={(e) => handleMovePage(e, "/mypage_edit")} style={{ cursor: "pointer" }}>
+              프로필 수정
+            </button>
+          </div>
+          <div className={style["user-container"]}>
+            <div className={style["user-img"]}>
+              <img src={profile} alt="img" onError={(e) => (e.target.src = user_icon)} />
+            </div>
+            <div className={style["feed-wrapper"]}>
+              <section className={style["user-name"]}>
+                <h3>{myData.uname}</h3>
+              </section>
+              <section className={style["user-info"]}>
+                <ul>
+                  <li>
+                    <b>{myData.num_long_feed}</b>
+                    <p>게시글</p>
+                  </li>
+                  <li>
+                    <b>{myData.num_like}</b>
+                    <p>좋아요</p>
+                  </li>
+                  <li>
+                    <b>{myData.num_comment}</b>
+                    <p>댓글</p>
+                  </li>
+                </ul>
+              </section>
+              <section className={style["info-list"]}>
+                <ul className={style["post-list"]} data-active-index={activeIndex}>
+                  {categoryData.map((item, index) => (
+                    <li
+                      key={index}
+                      className={`${style.post} ${activeIndex === index ? style.active : ""}`}
+                      onClick={() => {
+                        handleMyInfo(index, item);
+                      }}
+                    >
+                      <button>{item.category}</button>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+
+              {categoryLoading && <MyPageLoading />}
+              {comment.map(
+                (feed) =>
+                  isClickedComment && (
+                    <div key={feed.fid} className={style["MyPage_Comment_Box"]}>
+                      <div
+                        className={style["Feed_title"]}
+                        onClick={() => handleCommentToggle(feed.fid)}
+                      >
+                        <img src={arrow} alt="화살표" />
+                        <p>{feed.body}</p>
+                      </div>
+
+                      {clickedComments[feed.fid] && Array.isArray(feed.cid) && feed.cid.length > 0 && (
+                        <ul className={style["comment_box"]}>
+                          {feed.cid.map((comment, index) => {
+                            // 조건부로 실행됨
+                            let src;
+                            const length = feed.cid.length;
+
+                            if (length === 1) {
+                              src = reArrow1; // 댓글 하나뿐이면 이거
+                            } else {
+                              // 댓글이 하나뿐이 아니야!
+                              if (index === 0) {
+                                // 근데 첫번째면 이거
+                                src = reArrow2;
+                              } else if (index + 1 === length) {
+                                // 맨마지막은 이거
+                                src = reArrow4;
+                              } else {
+                                // 그 외에 모두는 이거
+                                src = reArrow3;
+                              }
+                            }
+
+                            //이제 src에 이 위에서 정한 이미지가 들어감
+                            return (
+                              <li key={index}>
+                                <img src={src} alt="대댓글" />
+                                <p className={style["Comment_content"]}>{comment.body}</p>
+                                <span>{comment.date}</span>
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      )}
+                    </div>
+                  )
+              )}
+
+              {!isClickedComment &&
+                myFeed.map((feed, i) => {
+                  return <Feed key={i} feed={feed} setFeedData={setMyFeed} type={"myPage"} />;
+                })}
+              <div ref={target} style={{ height: "1px" }}></div>
+            </div>
+          </div>
+        </div>
+      </DesktopLayout>
+    );
+  }
 }
 
 export default MyPage;

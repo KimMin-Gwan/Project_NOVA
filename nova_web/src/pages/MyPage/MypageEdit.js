@@ -7,8 +7,11 @@ import useLoginStore from "../../stores/LoginStore/useLoginStore";
 import useBiasStore from "../../stores/BiasStore/useBiasStore";
 import mainApi from "../../services/apis/mainApi";
 import postApi from "../../services/apis/postApi";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import DesktopLayout from "../../component/DesktopLayout/DeskTopLayout";
 
 function MyPage() {
+  const isMobile = useMediaQuery('(max-width:1100px)');
   const { tryLogin, tryLogout } = useLoginStore();
   const { fetchBiasList } = useBiasStore();
   let navigate = useNavigate();
@@ -232,159 +235,317 @@ function MyPage() {
     }
   };
 
-  return (
-    <div className={`${style["container"]} ${style["edit-container"]}`}>
-      <div className={style.top_area}>
-        <p
-          className={style.backword}
-          onClick={() => {
-            navigate(-1);
-          }}
-        >
-          뒤로
-        </p>
-      </div>
-      <section className={style["profile-section"]}>
-        <div className={style["user-img-edit"]}>
-          <img
-            src={image ? image : profile}
-            alt="profile"
-            onError={(e) => (e.target.src = user_icon)}
-          />
-        </div>
-        <button onClick={handleButtonClick}>
-          <label htmlFor="profileImg">프로필 이미지 추가</label>
-          <input
-            type="file"
-            accept="image/*"
-            ref={fileInputRef}
-            onChange={(e) => {
-              handleFileChange(e);
-              handlePreview(e);
-            }}
-          />
-        </button>
-      </section>
-
-      <section className={style["profile-info"]}>
-        <h3>프로필 정보</h3>
-        <p className={style["input-name"]}>닉네임</p>
-        <div className={style["user-name-input"]}>
-          <input
-            className={style["input-st"]}
-            type="text"
-            value={nickname}
-            onChange={(e) => {
-              onChangeInput(e, 0);
-            }}
-            placeholder={`${newNickname} (7글자 이내로 변경 가능합니다)`}
-            minLength={2}
-            maxLength={7}
-          />
-          <button
-            className={style["change-button"]}
-            onClick={(e) => {
-              isVali ? alert("올바르게 입력하세요") : fetchChangeNickname();
+  if (isMobile){
+    return (
+      <div className={`${style["container"]} ${style["edit-container"]}`}>
+        <div className={style.top_area}>
+          <p
+            className={style.backword}
+            onClick={() => {
+              navigate(-1);
             }}
           >
-            변경
-          </button>
+            뒤로
+          </p>
         </div>
+        <section className={style["profile-section"]}>
+          <div className={style["user-img-edit"]}>
+            <img
+              src={image ? image : profile}
+              alt="profile"
+              onError={(e) => (e.target.src = user_icon)}
+            />
+          </div>
+          <button onClick={handleButtonClick}>
+            <label htmlFor="profileImg">프로필 이미지 추가</label>
+            <input
+              type="file"
+              accept="image/*"
+              ref={fileInputRef}
+              onChange={(e) => {
+                handleFileChange(e);
+                handlePreview(e);
+              }}
+            />
+          </button>
+        </section>
 
-        {isVali && (
-          <span className={style["warning-message"]}>
-            2글자 이상 7글자 미만으로 하고, 특수문자 사용 금지
-          </span>
-        )}
-        <p className={style["input-name"]}> 비밀번호 변경</p>
-        <div className={style["pw-change"]}>
-          <input
-            className={style["input-st"]}
-            type="text"
-            value={password}
-            onChange={(e) => {
-              onChangePassword(e);
-            }}
-            placeholder="기존 비밀번호"
-          />
-          <input
-            className={style["input-st"]}
-            value={newPassword}
-            onChange={(e) => {
-              onChangeInput(e, 1);
-            }}
-            type="text"
-            placeholder="새로운 비밀번호"
-          />
-          <input
-            className={style["input-st"]}
-            value={checkPassword}
-            onChange={(e) => {
-              onChangecheckPassword(e);
-            }}
-            type="text"
-            placeholder="비밀번호 확인"
-          />
+        <section className={style["profile-info"]}>
+          <h3>프로필 정보</h3>
+          <p className={style["input-name"]}>닉네임</p>
+          <div className={style["user-name-input"]}>
+            <input
+              className={style["input-st"]}
+              type="text"
+              value={nickname}
+              onChange={(e) => {
+                onChangeInput(e, 0);
+              }}
+              placeholder={`${newNickname} (7글자 이내로 변경 가능합니다)`}
+              minLength={2}
+              maxLength={7}
+            />
+            <button
+              className={style["change-button"]}
+              onClick={(e) => {
+                isVali ? alert("올바르게 입력하세요") : fetchChangeNickname();
+              }}
+            >
+              변경
+            </button>
+          </div>
 
-          {isValiPw && (
-            <span className={`${style["warning-message"]} ${style["pw-st"]}`}>
-              {warningMessage}
+          {isVali && (
+            <span className={style["warning-message"]}>
+              2글자 이상 7글자 미만으로 하고, 특수문자 사용 금지
             </span>
           )}
-          <button
-            className={style["change-button"]}
+          <p className={style["input-name"]}> 비밀번호 변경</p>
+          <div className={style["pw-change"]}>
+            <input
+              className={style["input-st"]}
+              type="text"
+              value={password}
+              onChange={(e) => {
+                onChangePassword(e);
+              }}
+              placeholder="기존 비밀번호"
+            />
+            <input
+              className={style["input-st"]}
+              value={newPassword}
+              onChange={(e) => {
+                onChangeInput(e, 1);
+              }}
+              type="text"
+              placeholder="새로운 비밀번호"
+            />
+            <input
+              className={style["input-st"]}
+              value={checkPassword}
+              onChange={(e) => {
+                onChangecheckPassword(e);
+              }}
+              type="text"
+              placeholder="비밀번호 확인"
+            />
+
+            {isValiPw && (
+              <span className={`${style["warning-message"]} ${style["pw-st"]}`}>
+                {warningMessage}
+              </span>
+            )}
+            <button
+              className={style["change-button"]}
+              onClick={() => {
+                isValiPw ? alert("비밀번호를 올바르게 입력하세요") : fetchPasswordChange();
+              }}
+            >
+              변경
+            </button>
+          </div>
+        </section>
+
+        <section className={style["user-info"]}>
+          <h3>개인정보</h3>
+          <p className={style["input-name"]}>uid</p>
+          <input
+            className={style["input-st"]}
+            type="text"
+            placeholder={myProfile.uid}
+            readOnly
+            tabIndex="-1"
+          />
+          <p className={style["input-name"]}>email</p>
+          <input
+            className={style["input-st"]}
+            type="text"
+            placeholder={myProfile.email}
+            readOnly
+            tabIndex="-1"
+          />
+          <p className={style["input-name"]}>나이</p>
+          <input
+            className={style["input-st"]}
+            type="text"
+            placeholder={`${myProfile.age}살`}
+            readOnly
+            tabIndex="-1"
+          />
+          <p className={style["input-name"]}>성별</p>
+          <input
+            className={style["input-st"]}
+            type="text"
+            placeholder={myProfile.gender === "f" ? "여성" : "남성"}
+            readOnly
+            tabIndex="-1"
+          />
+        </section>
+        <button className={`${style["logout_box"]}`} onClick={handleLogout}>
+          로그아웃
+        </button>
+        <button className={style["withdrawal_button"]} onClick={handleWithdrawal}>
+          회원 탈퇴
+        </button>
+      </div>
+    );
+  }else{
+    <DesktopLayout>
+      <div className={`${style["container"]} ${style["edit-container"]}`}>
+        <div className={style.top_area}>
+          <p
+            className={style.backword}
             onClick={() => {
-              isValiPw ? alert("비밀번호를 올바르게 입력하세요") : fetchPasswordChange();
+              navigate(-1);
             }}
           >
-            변경
-          </button>
+            뒤로
+          </p>
         </div>
-      </section>
+        <section className={style["profile-section"]}>
+          <div className={style["user-img-edit"]}>
+            <img
+              src={image ? image : profile}
+              alt="profile"
+              onError={(e) => (e.target.src = user_icon)}
+            />
+          </div>
+          <button onClick={handleButtonClick}>
+            <label htmlFor="profileImg">프로필 이미지 추가</label>
+            <input
+              type="file"
+              accept="image/*"
+              ref={fileInputRef}
+              onChange={(e) => {
+                handleFileChange(e);
+                handlePreview(e);
+              }}
+            />
+          </button>
+        </section>
 
-      <section className={style["user-info"]}>
-        <h3>개인정보</h3>
-        <p className={style["input-name"]}>uid</p>
-        <input
-          className={style["input-st"]}
-          type="text"
-          placeholder={myProfile.uid}
-          readOnly
-          tabIndex="-1"
-        />
-        <p className={style["input-name"]}>email</p>
-        <input
-          className={style["input-st"]}
-          type="text"
-          placeholder={myProfile.email}
-          readOnly
-          tabIndex="-1"
-        />
-        <p className={style["input-name"]}>나이</p>
-        <input
-          className={style["input-st"]}
-          type="text"
-          placeholder={`${myProfile.age}살`}
-          readOnly
-          tabIndex="-1"
-        />
-        <p className={style["input-name"]}>성별</p>
-        <input
-          className={style["input-st"]}
-          type="text"
-          placeholder={myProfile.gender === "f" ? "여성" : "남성"}
-          readOnly
-          tabIndex="-1"
-        />
-      </section>
-      <button className={`${style["logout_box"]}`} onClick={handleLogout}>
-        로그아웃
-      </button>
-      <button className={style["withdrawal_button"]} onClick={handleWithdrawal}>
-        회원 탈퇴
-      </button>
-    </div>
-  );
+        <section className={style["profile-info"]}>
+          <h3>프로필 정보</h3>
+          <p className={style["input-name"]}>닉네임</p>
+          <div className={style["user-name-input"]}>
+            <input
+              className={style["input-st"]}
+              type="text"
+              value={nickname}
+              onChange={(e) => {
+                onChangeInput(e, 0);
+              }}
+              placeholder={`${newNickname} (7글자 이내로 변경 가능합니다)`}
+              minLength={2}
+              maxLength={7}
+            />
+            <button
+              className={style["change-button"]}
+              onClick={(e) => {
+                isVali ? alert("올바르게 입력하세요") : fetchChangeNickname();
+              }}
+            >
+              변경
+            </button>
+          </div>
+
+          {isVali && (
+            <span className={style["warning-message"]}>
+              2글자 이상 7글자 미만으로 하고, 특수문자 사용 금지
+            </span>
+          )}
+          <p className={style["input-name"]}> 비밀번호 변경</p>
+          <div className={style["pw-change"]}>
+            <input
+              className={style["input-st"]}
+              type="text"
+              value={password}
+              onChange={(e) => {
+                onChangePassword(e);
+              }}
+              placeholder="기존 비밀번호"
+            />
+            <input
+              className={style["input-st"]}
+              value={newPassword}
+              onChange={(e) => {
+                onChangeInput(e, 1);
+              }}
+              type="text"
+              placeholder="새로운 비밀번호"
+            />
+            <input
+              className={style["input-st"]}
+              value={checkPassword}
+              onChange={(e) => {
+                onChangecheckPassword(e);
+              }}
+              type="text"
+              placeholder="비밀번호 확인"
+            />
+
+            {isValiPw && (
+              <span className={`${style["warning-message"]} ${style["pw-st"]}`}>
+                {warningMessage}
+              </span>
+            )}
+            <button
+              className={style["change-button"]}
+              onClick={() => {
+                isValiPw ? alert("비밀번호를 올바르게 입력하세요") : fetchPasswordChange();
+              }}
+            >
+              변경
+            </button>
+          </div>
+        </section>
+
+        <section className={style["user-info"]}>
+          <h3>개인정보</h3>
+          <p className={style["input-name"]}>uid</p>
+          <input
+            className={style["input-st"]}
+            type="text"
+            placeholder={myProfile.uid}
+            readOnly
+            tabIndex="-1"
+          />
+          <p className={style["input-name"]}>email</p>
+          <input
+            className={style["input-st"]}
+            type="text"
+            placeholder={myProfile.email}
+            readOnly
+            tabIndex="-1"
+          />
+          <p className={style["input-name"]}>나이</p>
+          <input
+            className={style["input-st"]}
+            type="text"
+            placeholder={`${myProfile.age}살`}
+            readOnly
+            tabIndex="-1"
+          />
+          <p className={style["input-name"]}>성별</p>
+          <input
+            className={style["input-st"]}
+            type="text"
+            placeholder={myProfile.gender === "f" ? "여성" : "남성"}
+            readOnly
+            tabIndex="-1"
+          />
+        </section>
+        <button className={`${style["logout_box"]}`} onClick={handleLogout}>
+          로그아웃
+        </button>
+        <button className={style["withdrawal_button"]} onClick={handleWithdrawal}>
+          회원 탈퇴
+        </button>
+      </div>
+    </DesktopLayout>
+  }
+
+
 }
 
 export default MyPage;

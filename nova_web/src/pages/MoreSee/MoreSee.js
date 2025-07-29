@@ -23,6 +23,7 @@ import Footer from "../../component/Footer/Footer.js";
 import { getModeClass } from "./../../App.js";
 import style from "./MoreSee.module.css";
 import Banner from "../../component/Banner/Banner.js";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const boardList = [
   {
@@ -88,6 +89,7 @@ const boardList = [
 ];
 
 function MoreSee({ onModeChange }) {
+  const isMobile = useMediaQuery('(max-width:1100px)');
   const serviceList = [
     //{
       //id: 0,
@@ -198,138 +200,143 @@ function MoreSee({ onModeChange }) {
   const firstBoardList = boardList.slice(0, 2);
   const secondBoardList = boardList.slice(2, 5);
   const otherFunctionList = boardList.slice(5);
-  return (
-    <div className={style.font}>
-      <div className={`${style["container"]} ${style[getModeClass(brightMode)]}`}>
-        <div className={style.TopBar}>
-          <img
-            src={backword}
-            alt="Arrow"
-            className={style.backword}
-            onClick={() => {
-              navigate(-1);
-            }}
-          />
-          <div className={style.TitleBox}>
-            <p className={style.titleName}> 더보기 </p>
-          </div>
-          <div className={style.EmptyBox} />
-        </div>
 
-        <div className={style.content}>
-          <div
-            className={style.fullWidthComponent}
-            onClick={() => {
-              if (isLogin) {
-                navigate("/mypage");
-              } else {
-                navigate("/novalogin");
-              }
-            }}
-          >
+  if (isMobile){
+    return (
+      <div className={style.font}>
+        <div className={`${style["container"]} ${style[getModeClass(brightMode)]}`}>
+          <div className={style.TopBar}>
             <img
-              src={isLogin ? profile : login_icon}
+              src={backword}
               alt="Arrow"
-              className={style.vector_login}
-              onError={(e) => (e.target.src = user_icon)} 
+              className={style.backword}
+              onClick={() => {
+                navigate(-1);
+              }}
             />
-            <p className={style.bodyText_login}>{isLogin ? "마이페이지" : "로그인"}</p>
+            <div className={style.TitleBox}>
+              <p className={style.titleName}> 더보기 </p>
+            </div>
+            <div className={style.EmptyBox} />
           </div>
 
-          <Banner/>
-          {/* 게시판 목록 */}
-          <div className={style["list-bar"]}>게시판 목록</div>
-          <ul className={style.listContainer}>
-            {firstBoardList.map((board, i) => {
-              return (
-                <li
-                  key={board.id}
-                  className={style.mainComponent}
-                  onClick={() => handlePage(board.end_point)}
-                >
-                  <img src={board.src} alt="Arrow" className={style.vector} />
-                  <p className={style.bodyText}>{board.title}</p>
-                  <img src={more_icon} alt="Arrow" className={style.more_vector} />
-                </li>
-              );
-            })}
-          </ul>
-          <br></br>
+          <div className={style.content}>
+            <div
+              className={style.fullWidthComponent}
+              onClick={() => {
+                if (isLogin) {
+                  navigate("/mypage");
+                } else {
+                  navigate("/novalogin");
+                }
+              }}
+            >
+              <img
+                src={isLogin ? profile : login_icon}
+                alt="Arrow"
+                className={style.vector_login}
+                onError={(e) => (e.target.src = user_icon)} 
+              />
+              <p className={style.bodyText_login}>{isLogin ? "마이페이지" : "로그인"}</p>
+            </div>
 
-          {/* 서비스 목록 */}
-          <div className={style["service-container"]}>
-            <h3>서비스</h3>
-            <section className={style["button-container"]}>
-              {serviceList.map((service, i) => {
+            <Banner/>
+            {/* 게시판 목록 */}
+            <div className={style["list-bar"]}>게시판 목록</div>
+            <ul className={style.listContainer}>
+              {firstBoardList.map((board, i) => {
                 return (
-                  <button
-                    key={service.id}
-                    onClick={() => service.onClick(service.end_point || service.requestURL)}
+                  <li
+                    key={board.id}
+                    className={style.mainComponent}
+                    onClick={() => handlePage(board.end_point)}
                   >
-                    <img src={service.src} alt={service.alt} />
-                    {service.title}
-                  </button>
+                    <img src={board.src} alt="Arrow" className={style.vector} />
+                    <p className={style.bodyText}>{board.title}</p>
+                    <img src={more_icon} alt="Arrow" className={style.more_vector} />
+                  </li>
                 );
               })}
-            </section>
+            </ul>
+            <br></br>
+
+            {/* 서비스 목록 */}
+            <div className={style["service-container"]}>
+              <h3>서비스</h3>
+              <section className={style["button-container"]}>
+                {serviceList.map((service, i) => {
+                  return (
+                    <button
+                      key={service.id}
+                      onClick={() => service.onClick(service.end_point || service.requestURL)}
+                    >
+                      <img src={service.src} alt={service.alt} />
+                      {service.title}
+                    </button>
+                  );
+                })}
+              </section>
+            </div>
+
+            <br></br>
+            <div className="section-separator"></div>
+            {/* 다른 기능 목록 */}
+            <div className={style["list-bar"]}>컨텐츠 일정</div>
+            <ul className={style.listContainer}>
+              {secondBoardList.map((board, i) => {
+                return (
+                  <li
+                    key={board.id}
+                    className={style.mainComponent}
+                    onClick={() => handlePage(board.end_point)}
+                  >
+                    <img src={board.src} alt="Arrow" className={style.vector} />
+                    <p className={style.bodyText}>{board.title}</p>
+                    <img src={more_icon} alt="Arrow" className={style.more_vector} />
+                  </li>
+                );
+              })}
+            </ul>
+
+            <br></br>
+            <div className="section-separator"></div>
+            {/* 다른 기능 목록 */}
+            <div className={style["list-bar"]}>다른 기능</div>
+            <ul className={style.listContainer}>
+              {otherFunctionList.map((board, i) => {
+                return (
+                  <li
+                    key={board.id}
+                    className={style.mainComponent}
+                    onClick={() => handlePage(board.end_point)}
+                  >
+                    <img src={board.src} alt="Arrow" className={style.vector} />
+                    <p className={style.bodyText}>{board.title}</p>
+                    <img src={more_icon} alt="Arrow" className={style.more_vector} />
+                  </li>
+                );
+              })}
+
+              {/* <li className={style.mainComponent} onClick={handleChangeMode}>
+                <img src={set_icon} alt="Arrow" className={style.vector} />
+                <p className={style.bodyText}>
+                  {brightMode === "dark" ? "☀️ Light Mode" : "🌑 Dark Mode"}
+                </p>
+                <img src={more_icon} alt="Arrow" className={style.more_vector} />
+              </li> */}
+            </ul>
           </div>
+          <div className={style.inquiry}></div>
 
-          <br></br>
-          <div className="section-separator"></div>
-          {/* 다른 기능 목록 */}
-          <div className={style["list-bar"]}>컨텐츠 일정</div>
-          <ul className={style.listContainer}>
-            {secondBoardList.map((board, i) => {
-              return (
-                <li
-                  key={board.id}
-                  className={style.mainComponent}
-                  onClick={() => handlePage(board.end_point)}
-                >
-                  <img src={board.src} alt="Arrow" className={style.vector} />
-                  <p className={style.bodyText}>{board.title}</p>
-                  <img src={more_icon} alt="Arrow" className={style.more_vector} />
-                </li>
-              );
-            })}
-          </ul>
+          <Footer />
 
-          <br></br>
-          <div className="section-separator"></div>
-          {/* 다른 기능 목록 */}
-          <div className={style["list-bar"]}>다른 기능</div>
-          <ul className={style.listContainer}>
-            {otherFunctionList.map((board, i) => {
-              return (
-                <li
-                  key={board.id}
-                  className={style.mainComponent}
-                  onClick={() => handlePage(board.end_point)}
-                >
-                  <img src={board.src} alt="Arrow" className={style.vector} />
-                  <p className={style.bodyText}>{board.title}</p>
-                  <img src={more_icon} alt="Arrow" className={style.more_vector} />
-                </li>
-              );
-            })}
-
-            {/* <li className={style.mainComponent} onClick={handleChangeMode}>
-              <img src={set_icon} alt="Arrow" className={style.vector} />
-              <p className={style.bodyText}>
-                {brightMode === "dark" ? "☀️ Light Mode" : "🌑 Dark Mode"}
-              </p>
-              <img src={more_icon} alt="Arrow" className={style.more_vector} />
-            </li> */}
-          </ul>
+          <NavBar />
         </div>
-        <div className={style.inquiry}></div>
-
-        <Footer />
-
-        <NavBar />
       </div>
-    </div>
-  );
+    );
+  }else{
+    handlePage("/");
+  }
 }
 
 export default MoreSee;

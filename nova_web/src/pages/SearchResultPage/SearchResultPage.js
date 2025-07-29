@@ -17,8 +17,11 @@ import { ScheduleBundle} from "../../component/ScheduleEvent/ScheduleBundle";
 import useToggleMore from "../../hooks/useToggleMore";
 import ScheduleCard from "../../component/EventCard/EventCard";
 import NoneSchedule from "../../component/NoneFeed/NoneSchedule";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import DesktopLayout from "../../component/DesktopLayout/DeskTopLayout";
 
 export default function SearchResultPage() {
+  const isMobile = useMediaQuery('(max-width:1100px)');
   let [searchParams] = useSearchParams();
   let keyword = searchParams.get("keyword");
   let navigate = useNavigate();
@@ -240,59 +243,115 @@ export default function SearchResultPage() {
     setTargetScheduleBundle(target);
   };
 
-  return (
-    <div className="container search_result_page">
-      <Header />
-      <div className="top-bar ">
-        <div
-          className="back"
-          onClick={() => {
-            navigate("/search");
-          }}
-        >
-          <img src={back} />
+  if(isMobile){
+    return (
+      <div className="container search_result_page">
+        <Header />
+        <div className="top-bar ">
+          <div
+            className="back"
+            onClick={() => {
+              navigate("/search");
+            }}
+          >
+            <img src={back} />
+          </div>
+          <SearchBox
+            type="search"
+            searchWord={searchWord}
+            onClickSearch={handleSearch}
+            onChangeSearchWord={handleSearchWord}
+            onKeyDown={handleKeyDown}
+          />
         </div>
-        <SearchBox
-          type="search"
-          searchWord={searchWord}
-          onClickSearch={handleSearch}
-          onChangeSearchWord={handleSearchWord}
-          onKeyDown={handleKeyDown}
+        <Tabs activeIndex={activeIndex} handleClick={handleClick} onClickType={onClickType} />
+        {type === "comment" && <Comments comments={comments} isLoading={isLoading} />}
+        {type === "post" && <FeedSection feedData={feedData} setFeedData={setFeedData} isLoading={isLoading} /> }
+        {type === "schedule" && <Schedules scheduleData={scheduleData}
+        type={type} toggleAddScheduleBundleModal={toggleAddScheduleBundleModal} toggleEditScheduleModal={toggleEditScheduleModal} 
+            fetchNavBoard={handleClickScheduleButton}
+        />}
+        <div ref={targetRef} style={{ height: "1px" }}></div>
+        <NavBar />
+
+        {/* 자세히 보기 모달창 */}
+        <BundleScheduleDetail
+          closeSchedule={toggleAddScheduleBundleModal}
+          isOpen={addScheduleBundleModal}
+          target={targetScheduleBundle}
+        />
+
+        {/*여기도 target 추가해야될 듯 */}
+        <ScheduleDetail
+          closeSchedule={toggleAddScheduleModal}
+          isOpen={addScheduleModal}
+          target={targetSchedule}
+        />
+
+        <EditSingleSchedule
+          closeSchedule={toggleEditScheduleModal}
+          isOpen={editScheduleModal}
+          target={targetSchedule}
+          isSingleSchedule={true}
         />
       </div>
-      <Tabs activeIndex={activeIndex} handleClick={handleClick} onClickType={onClickType} />
-      {type === "comment" && <Comments comments={comments} isLoading={isLoading} />}
-      {type === "post" && <FeedSection feedData={feedData} setFeedData={setFeedData} isLoading={isLoading} /> }
-      {type === "schedule" && <Schedules scheduleData={scheduleData}
-       type={type} toggleAddScheduleBundleModal={toggleAddScheduleBundleModal} toggleEditScheduleModal={toggleEditScheduleModal} 
-          fetchNavBoard={handleClickScheduleButton}
-       />}
-      <div ref={targetRef} style={{ height: "1px" }}></div>
-      <NavBar />
+    );
+  }else{
+    <DesktopLayout>
+      <div className="container search_result_page">
+        <Header />
+        <div className="top-bar ">
+          <div
+            className="back"
+            onClick={() => {
+              navigate("/search");
+            }}
+          >
+            <img src={back} />
+          </div>
+          <SearchBox
+            type="search"
+            searchWord={searchWord}
+            onClickSearch={handleSearch}
+            onChangeSearchWord={handleSearchWord}
+            onKeyDown={handleKeyDown}
+          />
+        </div>
+        <Tabs activeIndex={activeIndex} handleClick={handleClick} onClickType={onClickType} />
+        {type === "comment" && <Comments comments={comments} isLoading={isLoading} />}
+        {type === "post" && <FeedSection feedData={feedData} setFeedData={setFeedData} isLoading={isLoading} /> }
+        {type === "schedule" && <Schedules scheduleData={scheduleData}
+        type={type} toggleAddScheduleBundleModal={toggleAddScheduleBundleModal} toggleEditScheduleModal={toggleEditScheduleModal} 
+            fetchNavBoard={handleClickScheduleButton}
+        />}
+        <div ref={targetRef} style={{ height: "1px" }}></div>
 
-      {/* 자세히 보기 모달창 */}
-      <BundleScheduleDetail
-        closeSchedule={toggleAddScheduleBundleModal}
-        isOpen={addScheduleBundleModal}
-        target={targetScheduleBundle}
-      />
+        {/* 자세히 보기 모달창 */}
+        <BundleScheduleDetail
+          closeSchedule={toggleAddScheduleBundleModal}
+          isOpen={addScheduleBundleModal}
+          target={targetScheduleBundle}
+        />
 
-      {/*여기도 target 추가해야될 듯 */}
-      <ScheduleDetail
-        closeSchedule={toggleAddScheduleModal}
-        isOpen={addScheduleModal}
-        target={targetSchedule}
-      />
+        {/*여기도 target 추가해야될 듯 */}
+        <ScheduleDetail
+          closeSchedule={toggleAddScheduleModal}
+          isOpen={addScheduleModal}
+          target={targetSchedule}
+        />
 
-      <EditSingleSchedule
-        closeSchedule={toggleEditScheduleModal}
-        isOpen={editScheduleModal}
-        target={targetSchedule}
-        isSingleSchedule={true}
-      />
+        <EditSingleSchedule
+          closeSchedule={toggleEditScheduleModal}
+          isOpen={editScheduleModal}
+          target={targetSchedule}
+          isSingleSchedule={true}
+        />
+      </div>
 
-    </div>
-  );
+    </DesktopLayout>
+
+  }
+
 }
 
 function Schedules ({

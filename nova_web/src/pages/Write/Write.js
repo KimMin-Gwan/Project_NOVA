@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { useNavigate, useParams } from "react-router-dom";
 import style from "./WriteFeed.module.css";
 import tag from "./../../img/tag.svg";
@@ -17,6 +18,7 @@ import Input from "../../component/Input/Input.js";
 import Button from "../../component/Button/Button.js";
 import mainApi from "../../services/apis/mainApi.js";
 import { use } from "react";
+import DesktopLayout from "../../component/DesktopLayout/DeskTopLayout.jsx";
 
 const categoryData = [
   { key: 0, category: "자유게시판" },
@@ -26,6 +28,7 @@ const categoryData = [
 ];
 
 const Write = ({ brightmode}) => {
+  const isMobile = useMediaQuery('(max-width:1100px)');
   const param = useParams();
   const type = "long"
   const navigate = useNavigate();
@@ -381,192 +384,389 @@ const Write = ({ brightmode}) => {
     setShowTopic(!showTopic);
   }
 
-  return (
-    // <form onSubmit={handleSubmit}>
-    <div className={style["WriteFeed"]}>
-      <Toaster />
-      <div className={style["top_container"]}>
-        <p
-          className={style["buttons"]}
-          onClick={() => {
-            navigate(-1);
-          }}
-        >
-          취소
-        </p>
-        {type === "long" && <p>포스트 작성</p>}
-        {type === "short" && <p>모멘트 작성</p>}
-
-        <p
-          className={style["buttons"]}
-          type="submit"
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            handleSubmit(e);
-            onClickUpload();
-          }}
-        >
-          게시
-        </p>
-      </div>
-
-      <section className={style["Select_container"]}>
-        <div className={style["section_title"]}>주제 선택</div>
-        <DropDown biasId={biasId} options={biasList} setBiasId={setBiasId} />
-
-        <div style={{ textAlign: "right" }}>
-          <div
-            className={style["more-find"]}
+  if (isMobile){
+    return (
+      // <form onSubmit={handleSubmit}>
+      <div className={style["WriteFeed"]}>
+        <Toaster />
+        <div className={style["top_container"]}>
+          <p
+            className={style["buttons"]}
             onClick={() => {
-              navigate("/follow_page");
+              navigate(-1);
             }}
           >
-            더 많은 주제 찾아보기
-          </div>
+            취소
+          </p>
+          {type === "long" && <p>포스트 작성</p>}
+          {type === "short" && <p>모멘트 작성</p>}
+
+          <p
+            className={style["buttons"]}
+            type="submit"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              handleSubmit(e);
+              onClickUpload();
+            }}
+          >
+            게시
+          </p>
         </div>
-      </section>
 
-      <section className={style["Select_container"]}>
-        <div className={style["section_title"]}>카테고리 선택</div>
-        <DropDown category={category} options={categoryData} setCategory={setCategory} />
-      </section>
+        <section className={style["Select_container"]}>
+          <div className={style["section_title"]}>주제 선택</div>
+          <DropDown biasId={biasId} options={biasList} setBiasId={setBiasId} />
 
-      <div className={style["hashtag_container"]}>
-        <div>해시태그</div>
-        <div className={style["input-container"]}>
-          <div className={style["input-wrapper"]}>
-            <input
-              placeholder="#해시태그"
-              type="text"
-              value={`${inputTag}`}
-              onChange={onChangeTag}
-              onKeyDown={onKeyDown}
-              className={style["input-hashtag"]}
-            />
-            <span className={style["count-text"]}>{inputTagCount}/12</span>
-          </div>
-          <div className={style["button-wrapper"]}>
-            <button
-              className={style["check-button"]}
-              onClick={(e) => {
-                onClickCheck(e);
+          <div style={{ textAlign: "right" }}>
+            <div
+              className={style["more-find"]}
+              onClick={() => {
+                navigate("/follow_page");
               }}
             >
-              확인
-            </button>
+              더 많은 주제 찾아보기
+            </div>
           </div>
-        </div>
-        <div className={style["tag-container"]}>
-          <div className={style["tag-icon-box"]}>
-            <img src={tag} alt="tag" />
-          </div>
-          {tagList.length !== 0 &&
-            tagList.map((tag, i) => (
-              <div className={style["tag-box"]} key={i}>
-                #{tag}
-                <button onClick={() => onDeleteTag(i)} className={style["delete-tag"]}>
-                  &times; {/* 삭제 아이콘 */}
-                </button>
-              </div>
-            ))}
-        </div>
-      </div>
+        </section>
 
-      <div className={style["content_container"]}>
+        <section className={style["Select_container"]}>
+          <div className={style["section_title"]}>카테고리 선택</div>
+          <DropDown category={category} options={categoryData} setCategory={setCategory} />
+        </section>
+
+        <div className={style["hashtag_container"]}>
+          <div>해시태그</div>
+          <div className={style["input-container"]}>
+            <div className={style["input-wrapper"]}>
+              <input
+                placeholder="#해시태그"
+                type="text"
+                value={`${inputTag}`}
+                onChange={onChangeTag}
+                onKeyDown={onKeyDown}
+                className={style["input-hashtag"]}
+              />
+              <span className={style["count-text"]}>{inputTagCount}/12</span>
+            </div>
+            <div className={style["button-wrapper"]}>
+              <button
+                className={style["check-button"]}
+                onClick={(e) => {
+                  onClickCheck(e);
+                }}
+              >
+                확인
+              </button>
+            </div>
+          </div>
+          <div className={style["tag-container"]}>
+            <div className={style["tag-icon-box"]}>
+              <img src={tag} alt="tag" />
+            </div>
+            {tagList.length !== 0 &&
+              tagList.map((tag, i) => (
+                <div className={style["tag-box"]} key={i}>
+                  #{tag}
+                  <button onClick={() => onDeleteTag(i)} className={style["delete-tag"]}>
+                    &times; {/* 삭제 아이콘 */}
+                  </button>
+                </div>
+              ))}
+          </div>
+        </div>
+
+        <div className={style["content_container"]}>
+
+          {type === "short" && (
+            <>
+              <textarea
+                className={style["write_body"]}
+                name="body"
+                placeholder="내용을 입력해주세요"
+                value={bodyText}
+                onChange={onChangeBody}
+              />
+              <span className={style["count-text"]}>{inputBodyCount}/300</span>
+            </>
+          )}
+
+          {type === "long" && <EditorBox setLongData={setLongData} editorRef={editorRef} initialValue={initialValue}/>}
+        </div>
 
         {type === "short" && (
-          <>
-            <textarea
-              className={style["write_body"]}
-              name="body"
-              placeholder="내용을 입력해주세요"
-              value={bodyText}
-              onChange={onChangeBody}
-            />
-            <span className={style["count-text"]}>{inputBodyCount}/300</span>
-          </>
+          <p className={style["alert_message"]}>모멘트 게시글은 작성 후 24시간 동안 노출됩니다.</p>
+        )}
+        {type === "long" && (
+          <p className={style["alert_message"]}>
+            작성 규정을 위반한 게시글은 경고 없이 삭제 될 수 있습니다.
+          </p>
         )}
 
-        {type === "long" && <EditorBox setLongData={setLongData} editorRef={editorRef} initialValue={initialValue}/>}
-      </div>
-
-      {type === "short" && (
-        <p className={style["alert_message"]}>모멘트 게시글은 작성 후 24시간 동안 노출됩니다.</p>
-      )}
-      {type === "long" && (
-        <p className={style["alert_message"]}>
-          작성 규정을 위반한 게시글은 경고 없이 삭제 될 수 있습니다.
-        </p>
-      )}
-
-      <div className={style["content_button"]}>
-        {type === "long" && (
+        <div className={style["content_button"]}>
+          {type === "long" && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onClickModal();
+              }}
+            >
+              <img src={img_icon} alt="img" />
+              이미지
+            </button>
+          )}
+          {/* <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onClickVoteModal();
+            }}
+          >
+            <img src={vote_icon} alt="img" />
+            투표
+          </button> */}
           <button
             onClick={(e) => {
               e.stopPropagation();
-              onClickModal();
+              onClickLinkModal();
             }}
           >
-            <img src={img_icon} alt="img" />
-            이미지
+            <img src={link_icon} alt="img" />
+            링크
           </button>
+        </div>
+        {showModal && (
+          <Modal
+            onClickModal={onClickModal}
+            handleFileChange={handleFileChange}
+            handleRemoveImg={handleRemoveImg}
+            imagePreview={imagePreview}
+            currentFileName={currentFileName}
+            imageFiles={imageFiles}
+          />
         )}
-        {/* <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onClickVoteModal();
-          }}
-        >
-          <img src={vote_icon} alt="img" />
-          투표
-        </button> */}
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onClickLinkModal();
-          }}
-        >
-          <img src={link_icon} alt="img" />
-          링크
-        </button>
+        {/* {showVoteModal && (
+          <VoteModal
+            onClickModal={onClickVoteModal}
+            createOptions={createOptions}
+            onClickAdd={onClickAdd}
+            onClickDelete={onDeleteOption}
+            handleChoiceChange={handleChoiceChange}
+            choice={choice}
+            setChoice={setChoice}
+          />
+        )} */}
+        {showLinkModal && (
+          <LinkModal
+            onClickModal={onClickLinkModal}
+            linkTitle={linkTitle}
+            linkUrl={linkUrl}
+            setLinkTitle={setLinkTitle}
+            setLinkUrl={setLinkUrl}
+            onClickAdd={onClickAddLink}
+            linkList={linkList}
+            onDeleteLink={onDeleteLink}
+          />
+        )}
       </div>
-      {showModal && (
-        <Modal
-          onClickModal={onClickModal}
-          handleFileChange={handleFileChange}
-          handleRemoveImg={handleRemoveImg}
-          imagePreview={imagePreview}
-          currentFileName={currentFileName}
-          imageFiles={imageFiles}
-        />
-      )}
-      {/* {showVoteModal && (
-        <VoteModal
-          onClickModal={onClickVoteModal}
-          createOptions={createOptions}
-          onClickAdd={onClickAdd}
-          onClickDelete={onDeleteOption}
-          handleChoiceChange={handleChoiceChange}
-          choice={choice}
-          setChoice={setChoice}
-        />
-      )} */}
-      {showLinkModal && (
-        <LinkModal
-          onClickModal={onClickLinkModal}
-          linkTitle={linkTitle}
-          linkUrl={linkUrl}
-          setLinkTitle={setLinkTitle}
-          setLinkUrl={setLinkUrl}
-          onClickAdd={onClickAddLink}
-          linkList={linkList}
-          onDeleteLink={onDeleteLink}
-        />
-      )}
-    </div>
-    // {/* </form> */}
-  );
+      // {/* </form> */}
+    );
+
+  }else{
+    // <form onSubmit={handleSubmit}>
+    return (
+      <DesktopLayout>
+        <div className={style["WriteFeed"]}>
+          <Toaster />
+          <div className={style["top_container"]}>
+            <p
+              className={style["buttons"]}
+              onClick={() => {
+                navigate(-1);
+              }}
+            >
+              취소
+            </p>
+            {type === "long" && <p>포스트 작성</p>}
+            {type === "short" && <p>모멘트 작성</p>}
+
+            <p
+              className={style["buttons"]}
+              type="submit"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                handleSubmit(e);
+                onClickUpload();
+              }}
+            >
+              게시
+            </p>
+          </div>
+
+          <section className={style["Select_container"]}>
+            <div className={style["section_title"]}>주제 선택</div>
+            <DropDown biasId={biasId} options={biasList} setBiasId={setBiasId} />
+
+            <div style={{ textAlign: "right" }}>
+              <div
+                className={style["more-find"]}
+                onClick={() => {
+                  navigate("/follow_page");
+                }}
+              >
+                더 많은 주제 찾아보기
+              </div>
+            </div>
+          </section>
+
+          <section className={style["Select_container"]}>
+            <div className={style["section_title"]}>카테고리 선택</div>
+            <DropDown category={category} options={categoryData} setCategory={setCategory} />
+          </section>
+
+          <div className={style["hashtag_container"]}>
+            <div>해시태그</div>
+            <div className={style["input-container"]}>
+              <div className={style["input-wrapper"]}>
+                <input
+                  placeholder="#해시태그"
+                  type="text"
+                  value={`${inputTag}`}
+                  onChange={onChangeTag}
+                  onKeyDown={onKeyDown}
+                  className={style["input-hashtag"]}
+                />
+                <span className={style["count-text"]}>{inputTagCount}/12</span>
+              </div>
+              <div className={style["button-wrapper"]}>
+                <button
+                  className={style["check-button"]}
+                  onClick={(e) => {
+                    onClickCheck(e);
+                  }}
+                >
+                  확인
+                </button>
+              </div>
+            </div>
+            <div className={style["tag-container"]}>
+              <div className={style["tag-icon-box"]}>
+                <img src={tag} alt="tag" />
+              </div>
+              {tagList.length !== 0 &&
+                tagList.map((tag, i) => (
+                  <div className={style["tag-box"]} key={i}>
+                    #{tag}
+                    <button onClick={() => onDeleteTag(i)} className={style["delete-tag"]}>
+                      &times; {/* 삭제 아이콘 */}
+                    </button>
+                  </div>
+                ))}
+            </div>
+          </div>
+
+          <div className={style["content_container"]}>
+
+            {type === "short" && (
+              <>
+                <textarea
+                  className={style["write_body"]}
+                  name="body"
+                  placeholder="내용을 입력해주세요"
+                  value={bodyText}
+                  onChange={onChangeBody}
+                />
+                <span className={style["count-text"]}>{inputBodyCount}/300</span>
+              </>
+            )}
+
+            {type === "long" && <EditorBox setLongData={setLongData} editorRef={editorRef} initialValue={initialValue}/>}
+          </div>
+
+          {type === "short" && (
+            <p className={style["alert_message"]}>모멘트 게시글은 작성 후 24시간 동안 노출됩니다.</p>
+          )}
+          {type === "long" && (
+            <p className={style["alert_message"]}>
+              작성 규정을 위반한 게시글은 경고 없이 삭제 될 수 있습니다.
+            </p>
+          )}
+
+          <div className={style["content_button"]}>
+            {type === "long" && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onClickModal();
+                }}
+              >
+                <img src={img_icon} alt="img" />
+                이미지
+              </button>
+            )}
+            {/* <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onClickVoteModal();
+              }}
+            >
+              <img src={vote_icon} alt="img" />
+              투표
+            </button> */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onClickLinkModal();
+              }}
+            >
+              <img src={link_icon} alt="img" />
+              링크
+            </button>
+          </div>
+          {showModal && (
+            <Modal
+              onClickModal={onClickModal}
+              handleFileChange={handleFileChange}
+              handleRemoveImg={handleRemoveImg}
+              imagePreview={imagePreview}
+              currentFileName={currentFileName}
+              imageFiles={imageFiles}
+            />
+          )}
+          {/* {showVoteModal && (
+            <VoteModal
+              onClickModal={onClickVoteModal}
+              createOptions={createOptions}
+              onClickAdd={onClickAdd}
+              onClickDelete={onDeleteOption}
+              handleChoiceChange={handleChoiceChange}
+              choice={choice}
+              setChoice={setChoice}
+            />
+          )} */}
+          {showLinkModal && (
+            <LinkModal
+              onClickModal={onClickLinkModal}
+              linkTitle={linkTitle}
+              linkUrl={linkUrl}
+              setLinkTitle={setLinkTitle}
+              setLinkUrl={setLinkUrl}
+              onClickAdd={onClickAddLink}
+              linkList={linkList}
+              onDeleteLink={onDeleteLink}
+            />
+          )}
+        </div>
+
+      </DesktopLayout>
+      // {/* </form> */}
+    );
+
+  }
+
+
+
 };
 
 export default Write;

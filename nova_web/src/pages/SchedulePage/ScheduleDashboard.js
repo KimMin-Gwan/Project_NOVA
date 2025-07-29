@@ -24,6 +24,8 @@ import style from './../FeedDetail/NewFeedDetail.module.css';
 
 import arrowRightStop from './Arrow_right_stop.svg';
 import tempBias from "./../../img/tempBias.png";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import DesktopLayout from "../../component/DesktopLayout/DeskTopLayout.jsx";
 
 const temp_schedule_data2 = [
     { tag : "노래/음악"},
@@ -69,6 +71,7 @@ const temp_schedule_data = [
 ]
 
 const ScheduleDashboard = () => {
+  const isMobile = useMediaQuery('(max-width:1100px)');
   const navigate = useNavigate();
 
   const [makeScheduleModal, setMakeScheduleModal] = useState(false);
@@ -293,216 +296,425 @@ const ScheduleDashboard = () => {
   };
 
 
+  if(isMobile){
+    return (
+      <div className="container">
+        <div className="body-box">
+          <Header />
 
-
-  return (
-    <div className="container">
-      <div className="body-box">
-        <Header />
-
-        <div className="section-box">
-          <div className="dashboard-section">
-            <div className="section-title">
-              <p className="element">
-                <span className="text-wrapper">{targetMonth} </span>
-                <span className="span">{targetWeek}</span>
-              </p>
-            </div>
-            <div className="my-dashboard">
-              <div className="left-group">
-                <span>이번주 컨텐츠</span>
-                <span className="num-bias">{numSchedule}</span>
-                <span>개</span>
+          <div className="section-box">
+            <div className="dashboard-section">
+              <div className="section-title">
+                <p className="element">
+                  <span className="text-wrapper">{targetMonth} </span>
+                  <span className="span">{targetWeek}</span>
+                </p>
               </div>
-              <div className="right-group">
-                {/* <button onClick={() => handleNavigate("/schedule/my_schedule")}>내 일정</button> 
-                <img src={vertical_line} alt="vertical line" />*/}
-
-                <button onClick={() => {
-                  mainApi.get("home/is_valid").then((res) => {
-                    navigate("/schedule/make_new")
-                  })
-                  .catch((err) => {
-                    if (err.response.status === 401) {
-                      navigate("/novalogin")
-                    }else{
-                    }
-                  })
-                }}>일정 등록</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="section-separator"></div>
-
-        <div className="section-box">
-          <div className="dashboard-section" style={{paddingBottom: "0px"}}>
-            <div className="section-title">
-              <p className="element">
-                <span className="text-wrapper">컨텐츠 목록</span>
-              </p>
-              <span className="add-schedule" onClick={() => handleNavigate("/explore/schedule")}>
-                일정 탐색
-              </span>
-            </div>
-          </div>
-
-          {/**   타임차트 만들던 곳
-          <TimeChart
-            weekDayData={weekDayData}
-            scheduleData={scheduleData}
-            onChangeIndex={onChangeIndex}
-          />
-          */}
-          <div style={{display: "flex", justifyContent:"center", alignContent:"center"}}>
-            {showScheduleMoreOption && (
-              <ScheduleOptionModal onClose={setShowScheduleMoreOption} targetSid={targetSchedule} onClickEdit={toggleEditScheduleModal}/>
-            )}
-
-            <Swiper
-              initialSlide={1}
-              centeredSlides={true} // 중앙 정렬
-              //loop={true} // 무한 루프
-              onSwiper={(swiper) => (swiperRef.current = swiper)} // Swiper 인스턴스 참조
-              onSlideChange={(swiper) => {
-                if (swiper.activeIndex === 0) {
-                  // 0번 슬라이드로 이동하면 강제로 1번 슬라이드로 이동
-                  setTimeout(() => swiperRef.current?.slideTo(1), 0);
-                  // 당기면 지난주 데이터를 받아야하는데, 너무 민감해서 diff 차이로 계산
-                  if (swiper.touches.diff > 200){
-                    onChangeIndexPrev();
-                  }
-                }
-                else if (swiper.activeIndex === 2){
-                  // 5번 슬라이드로 이동하면 강제로 4번 슬라이드로 이동
-                  setTimeout(() => swiperRef.current?.slideTo(1), 0);
-                  // 당기면 다음주 데이터를 받아야하는데, 너무 민감해서 diff 차이로 계산
-                  if (swiper.touches.diff < -200){
-                    onChangeNextAsync()
-                  }
-                }else{
-                }
-              }}
-              onTransitionStart={(swiper) => {
-                // 화살표 돌리기 로직 (초기화 로직)
-                  if (swiper.activeIndex == 1)
-                  {
-                    setLeftRotation(0);
-                    setRightRotation(180);
-                  }
-            
-                  //else if (swiper.activeIndex == 1){
-                    //setRightRotation(180);
-                  //}
-              }}
-              onTouchMove={(swiper) => {
-                // 화살표 돌리기 로직
-                //if (swiper.activeIndex== 4){
-                if (swiper.activeIndex== 1){
-                  if (swiper.touches.diff < -99 && swiper.touches.diff > -301){
-                    if (parseInt(swiper.touches.diff) % -10 == 0){
-                      calculateRightRotation(swiper.touches.diff);
-                    }
-                  }
-                }
-                if (swiper.activeIndex== 1){
-                  if (swiper.touches.diff > 99 && swiper.touches.diff < 301){
-                    if (parseInt(swiper.touches.diff) % 10 == 0){
-                      calculateLeftRotation(swiper.touches.diff);
-                    }
-                  }
-                }
-              }}
-              //allowSlidePrev={allowPrev} // 이전 슬라이드 이동 허용 여부
-            >
-              <SwiperSlide key={0}>
-                <div className="load-week-container-new"
-                  style={{justifyContent:'flex-end'}}
-                >
-                    <span className="load-text">지난 날 불러오기</span>
-                    <div>
-                      <img
-                        src={arrowRightStop}
-                        className="arrow-img"
-                        style={{ transform: `rotate(${leftRotation}deg)` }}
-                      />
-                    </div>
+              <div className="my-dashboard">
+                <div className="left-group">
+                  <span>이번주 컨텐츠</span>
+                  <span className="num-bias">{numSchedule}</span>
+                  <span>개</span>
                 </div>
-              </SwiperSlide>
-              <SwiperSlide>
+                <div className="right-group">
+                  {/* <button onClick={() => handleNavigate("/schedule/my_schedule")}>내 일정</button> 
+                  <img src={vertical_line} alt="vertical line" />*/}
+
+                  <button onClick={() => {
+                    mainApi.get("home/is_valid").then((res) => {
+                      navigate("/schedule/make_new")
+                    })
+                    .catch((err) => {
+                      if (err.response.status === 401) {
+                        navigate("/novalogin")
+                      }else{
+                      }
+                    })
+                  }}>일정 등록</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="section-separator"></div>
+
+          <div className="section-box">
+            <div className="dashboard-section" style={{paddingBottom: "0px"}}>
+              <div className="section-title">
+                <p className="element">
+                  <span className="text-wrapper">컨텐츠 목록</span>
+                </p>
+                <span className="add-schedule" onClick={() => handleNavigate("/explore/schedule")}>
+                  일정 탐색
+                </span>
+              </div>
+            </div>
+
+            {/**   타임차트 만들던 곳
+            <TimeChart
+              weekDayData={weekDayData}
+              scheduleData={scheduleData}
+              onChangeIndex={onChangeIndex}
+            />
+            */}
+            <div style={{display: "flex", justifyContent:"center", alignContent:"center"}}>
+              {showScheduleMoreOption && (
+                <ScheduleOptionModal onClose={setShowScheduleMoreOption} targetSid={targetSchedule} onClickEdit={toggleEditScheduleModal}/>
+              )}
+
               <Swiper
-                onSwiper={(swiper) => (swiperRef2.current = swiper)} // Swiper 인스턴스 참조
+                initialSlide={1}
+                centeredSlides={true} // 중앙 정렬
+                //loop={true} // 무한 루프
+                onSwiper={(swiper) => (swiperRef.current = swiper)} // Swiper 인스턴스 참조
+                onSlideChange={(swiper) => {
+                  if (swiper.activeIndex === 0) {
+                    // 0번 슬라이드로 이동하면 강제로 1번 슬라이드로 이동
+                    setTimeout(() => swiperRef.current?.slideTo(1), 0);
+                    // 당기면 지난주 데이터를 받아야하는데, 너무 민감해서 diff 차이로 계산
+                    if (swiper.touches.diff > 200){
+                      onChangeIndexPrev();
+                    }
+                  }
+                  else if (swiper.activeIndex === 2){
+                    // 5번 슬라이드로 이동하면 강제로 4번 슬라이드로 이동
+                    setTimeout(() => swiperRef.current?.slideTo(1), 0);
+                    // 당기면 다음주 데이터를 받아야하는데, 너무 민감해서 diff 차이로 계산
+                    if (swiper.touches.diff < -200){
+                      onChangeNextAsync()
+                    }
+                  }else{
+                  }
+                }}
+                onTransitionStart={(swiper) => {
+                  // 화살표 돌리기 로직 (초기화 로직)
+                    if (swiper.activeIndex == 1)
+                    {
+                      setLeftRotation(0);
+                      setRightRotation(180);
+                    }
+            
+                    //else if (swiper.activeIndex == 1){
+                      //setRightRotation(180);
+                    //}
+                }}
+                onTouchMove={(swiper) => {
+                  // 화살표 돌리기 로직
+                  //if (swiper.activeIndex== 4){
+                  if (swiper.activeIndex== 1){
+                    if (swiper.touches.diff < -99 && swiper.touches.diff > -301){
+                      if (parseInt(swiper.touches.diff) % -10 == 0){
+                        calculateRightRotation(swiper.touches.diff);
+                      }
+                    }
+                  }
+                  if (swiper.activeIndex== 1){
+                    if (swiper.touches.diff > 99 && swiper.touches.diff < 301){
+                      if (parseInt(swiper.touches.diff) % 10 == 0){
+                        calculateLeftRotation(swiper.touches.diff);
+                      }
+                    }
+                  }
+                }}
+                //allowSlidePrev={allowPrev} // 이전 슬라이드 이동 허용 여부
               >
-              {
-                scheduleData.length === 0 ? (
-                  <div className="loading-screen">
-                    로딩 중...
-                  </div>
-                ) : (
-                  scheduleData.map((schedule, index) => {
-                    return (
-                      <SwiperSlide key={index}>
-                        <TimeLayerBox swiperRef={swiperRef2} scheduleData={schedule} formattedDate={formatDate[index]} 
-                        onChangeIndexNext={onChangeNextAsync} onChangeIndexPrev={onChangeIndexPrev}
-                        scheduleDayList={scheduleData} onClickSchedule={toggleMoreOption}
+                <SwiperSlide key={0}>
+                  <div className="load-week-container-new"
+                    style={{justifyContent:'flex-end'}}
+                  >
+                      <span className="load-text">지난 날 불러오기</span>
+                      <div>
+                        <img
+                          src={arrowRightStop}
+                          className="arrow-img"
+                          style={{ transform: `rotate(${leftRotation}deg)` }}
                         />
-                      </SwiperSlide>
-                    );
-                  })
-                )
-              }
-              </Swiper>
-
-
-              </SwiperSlide>
-              <SwiperSlide key={2}>
-                <div className="load-week-container-new"
-                  style={{justifyContent:'flex-start'}}
+                      </div>
+                  </div>
+                </SwiperSlide>
+                <SwiperSlide>
+                <Swiper
+                  onSwiper={(swiper) => (swiperRef2.current = swiper)} // Swiper 인스턴스 참조
                 >
-                    <span className="load-text">다음 날 불러오기</span>
-                    <div>
-                      <img
-                        src={arrowRightStop}
-                        className="arrow-img"
-                        style={{ transform: `rotate(${rightRotation}deg)` }}
-                      />
+                {
+                  scheduleData.length === 0 ? (
+                    <div className="loading-screen">
+                      로딩 중...
                     </div>
-                </div>
-              </SwiperSlide>
-            </Swiper>
-          </div>
-        </div>
+                  ) : (
+                    scheduleData.map((schedule, index) => {
+                      return (
+                        <SwiperSlide key={index}>
+                          <TimeLayerBox swiperRef={swiperRef2} scheduleData={schedule} formattedDate={formatDate[index]} 
+                          onChangeIndexNext={onChangeNextAsync} onChangeIndexPrev={onChangeIndexPrev}
+                          scheduleDayList={scheduleData} onClickSchedule={toggleMoreOption}
+                          />
+                        </SwiperSlide>
+                      );
+                    })
+                  )
+                }
+                </Swiper>
 
-        <div className="section-separator"></div>
 
-        <div className="section-box">
-          <div className="dashboard-section">
-            <div className="section-title">
-              <p className="element">
-                <span className="text-wrapper">이런 최애는 어때요?</span>
-              </p>
-              <span className="add-schedule" onClick={() => handleNavigate("/search/topic")}>
-                주제 탐색
-              </span>
+                </SwiperSlide>
+                <SwiperSlide key={2}>
+                  <div className="load-week-container-new"
+                    style={{justifyContent:'flex-start'}}
+                  >
+                      <span className="load-text">다음 날 불러오기</span>
+                      <div>
+                        <img
+                          src={arrowRightStop}
+                          className="arrow-img"
+                          style={{ transform: `rotate(${rightRotation}deg)` }}
+                        />
+                      </div>
+                  </div>
+                </SwiperSlide>
+              </Swiper>
             </div>
           </div>
-          {biasData.map((item, i) => {
-            return <ScheduleTopicMain key={i} {...item} />;
-          })}
+
+          <div className="section-separator"></div>
+
+          <div className="section-box">
+            <div className="dashboard-section">
+              <div className="section-title">
+                <p className="element">
+                  <span className="text-wrapper">이런 최애는 어때요?</span>
+                </p>
+                <span className="add-schedule" onClick={() => handleNavigate("/search/topic")}>
+                  주제 탐색
+                </span>
+              </div>
+            </div>
+            {biasData.map((item, i) => {
+              return <ScheduleTopicMain key={i} {...item} />;
+            })}
+          </div>
         </div>
+
+        <EditSingleSchedule
+          closeSchedule={toggleEditScheduleModal}
+          isOpen={editScheduleModal}
+          target={editTarget}
+          isSingleSchedule={true}
+        />
+        <NavBar brightMode={brightMode} />
       </div>
+    );
+  }else{
+    return(
+    <DesktopLayout>
+      <div className="container">
+        <div className="body-box">
+          <Header />
 
-      <EditSingleSchedule
-        closeSchedule={toggleEditScheduleModal}
-        isOpen={editScheduleModal}
-        target={editTarget}
-        isSingleSchedule={true}
-      />
+          <div className="section-box">
+            <div className="dashboard-section">
+              <div className="section-title">
+                <p className="element">
+                  <span className="text-wrapper">{targetMonth} </span>
+                  <span className="span">{targetWeek}</span>
+                </p>
+              </div>
+              <div className="my-dashboard">
+                <div className="left-group">
+                  <span>이번주 컨텐츠</span>
+                  <span className="num-bias">{numSchedule}</span>
+                  <span>개</span>
+                </div>
+                <div className="right-group">
+                  {/* <button onClick={() => handleNavigate("/schedule/my_schedule")}>내 일정</button> 
+                  <img src={vertical_line} alt="vertical line" />*/}
 
-      <NavBar brightMode={brightMode} />
-    </div>
-  );
+                  <button onClick={() => {
+                    mainApi.get("home/is_valid").then((res) => {
+                      navigate("/schedule/make_new")
+                    })
+                    .catch((err) => {
+                      if (err.response.status === 401) {
+                        navigate("/novalogin")
+                      }else{
+                      }
+                    })
+                  }}>일정 등록</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="section-separator"></div>
+
+          <div className="section-box">
+            <div className="dashboard-section" style={{paddingBottom: "0px"}}>
+              <div className="section-title">
+                <p className="element">
+                  <span className="text-wrapper">컨텐츠 목록</span>
+                </p>
+                <span className="add-schedule" onClick={() => handleNavigate("/explore/schedule")}>
+                  일정 탐색
+                </span>
+              </div>
+            </div>
+
+            {/**   타임차트 만들던 곳
+            <TimeChart
+              weekDayData={weekDayData}
+              scheduleData={scheduleData}
+              onChangeIndex={onChangeIndex}
+            />
+            */}
+            <div style={{display: "flex", justifyContent:"center", alignContent:"center"}}>
+              {showScheduleMoreOption && (
+                <ScheduleOptionModal onClose={setShowScheduleMoreOption} targetSid={targetSchedule} onClickEdit={toggleEditScheduleModal}/>
+              )}
+
+              <Swiper
+                initialSlide={1}
+                centeredSlides={true} // 중앙 정렬
+                //loop={true} // 무한 루프
+                onSwiper={(swiper) => (swiperRef.current = swiper)} // Swiper 인스턴스 참조
+                onSlideChange={(swiper) => {
+                  if (swiper.activeIndex === 0) {
+                    // 0번 슬라이드로 이동하면 강제로 1번 슬라이드로 이동
+                    setTimeout(() => swiperRef.current?.slideTo(1), 0);
+                    // 당기면 지난주 데이터를 받아야하는데, 너무 민감해서 diff 차이로 계산
+                    if (swiper.touches.diff > 200){
+                      onChangeIndexPrev();
+                    }
+                  }
+                  else if (swiper.activeIndex === 2){
+                    // 5번 슬라이드로 이동하면 강제로 4번 슬라이드로 이동
+                    setTimeout(() => swiperRef.current?.slideTo(1), 0);
+                    // 당기면 다음주 데이터를 받아야하는데, 너무 민감해서 diff 차이로 계산
+                    if (swiper.touches.diff < -200){
+                      onChangeNextAsync()
+                    }
+                  }else{
+                  }
+                }}
+                onTransitionStart={(swiper) => {
+                  // 화살표 돌리기 로직 (초기화 로직)
+                    if (swiper.activeIndex == 1)
+                    {
+                      setLeftRotation(0);
+                      setRightRotation(180);
+                    }
+            
+                    //else if (swiper.activeIndex == 1){
+                      //setRightRotation(180);
+                    //}
+                }}
+                onTouchMove={(swiper) => {
+                  // 화살표 돌리기 로직
+                  //if (swiper.activeIndex== 4){
+                  if (swiper.activeIndex== 1){
+                    if (swiper.touches.diff < -99 && swiper.touches.diff > -301){
+                      if (parseInt(swiper.touches.diff) % -10 == 0){
+                        calculateRightRotation(swiper.touches.diff);
+                      }
+                    }
+                  }
+                  if (swiper.activeIndex== 1){
+                    if (swiper.touches.diff > 99 && swiper.touches.diff < 301){
+                      if (parseInt(swiper.touches.diff) % 10 == 0){
+                        calculateLeftRotation(swiper.touches.diff);
+                      }
+                    }
+                  }
+                }}
+                //allowSlidePrev={allowPrev} // 이전 슬라이드 이동 허용 여부
+              >
+                <SwiperSlide key={0}>
+                  <div className="load-week-container-new"
+                    style={{justifyContent:'flex-end'}}
+                  >
+                      <span className="load-text">지난 날 불러오기</span>
+                      <div>
+                        <img
+                          src={arrowRightStop}
+                          className="arrow-img"
+                          style={{ transform: `rotate(${leftRotation}deg)` }}
+                        />
+                      </div>
+                  </div>
+                </SwiperSlide>
+                <SwiperSlide>
+                <Swiper
+                  onSwiper={(swiper) => (swiperRef2.current = swiper)} // Swiper 인스턴스 참조
+                >
+                {
+                  scheduleData.length === 0 ? (
+                    <div className="loading-screen">
+                      로딩 중...
+                    </div>
+                  ) : (
+                    scheduleData.map((schedule, index) => {
+                      return (
+                        <SwiperSlide key={index}>
+                          <TimeLayerBox swiperRef={swiperRef2} scheduleData={schedule} formattedDate={formatDate[index]} 
+                          onChangeIndexNext={onChangeNextAsync} onChangeIndexPrev={onChangeIndexPrev}
+                          scheduleDayList={scheduleData} onClickSchedule={toggleMoreOption}
+                          />
+                        </SwiperSlide>
+                      );
+                    })
+                  )
+                }
+                </Swiper>
+
+
+                </SwiperSlide>
+                <SwiperSlide key={2}>
+                  <div className="load-week-container-new"
+                    style={{justifyContent:'flex-start'}}
+                  >
+                      <span className="load-text">다음 날 불러오기</span>
+                      <div>
+                        <img
+                          src={arrowRightStop}
+                          className="arrow-img"
+                          style={{ transform: `rotate(${rightRotation}deg)` }}
+                        />
+                      </div>
+                  </div>
+                </SwiperSlide>
+              </Swiper>
+            </div>
+          </div>
+
+          <div className="section-separator"></div>
+
+          <div className="section-box">
+            <div className="dashboard-section">
+              <div className="section-title">
+                <p className="element">
+                  <span className="text-wrapper">이런 최애는 어때요?</span>
+                </p>
+                <span className="add-schedule" onClick={() => handleNavigate("/search/topic")}>
+                  주제 탐색
+                </span>
+              </div>
+            </div>
+            {biasData.map((item, i) => {
+              return <ScheduleTopicMain key={i} {...item} />;
+            })}
+          </div>
+        </div>
+
+        <EditSingleSchedule
+          closeSchedule={toggleEditScheduleModal}
+          isOpen={editScheduleModal}
+          target={editTarget}
+          isSingleSchedule={true}
+        />
+      </div>
+    </DesktopLayout>
+    );
+  }
+
 };
 
 function ScheduleOptionModal({ onClose, targetSid, onClickEdit}) {

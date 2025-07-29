@@ -5,7 +5,11 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import NavBar from "../../component/NavBar/NavBar";
 import Header from "../../component/Header/Header";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import DesktopLayout from "../../component/DesktopLayout/DeskTopLayout";
+
 export default function SearchPage() {
+  const isMobile = useMediaQuery('(max-width:1100px)');
   let navigate = useNavigate();
 
   // let { tagList, loading, error, fetchTagList } = useTagStore();
@@ -64,45 +68,89 @@ export default function SearchPage() {
     }
   }
 
-  return (
-    <div className="container">
-      <Header />
-      <div className="top-bar">
-        <div
-          className="back"
-          onClick={() => {
-            navigate("/");
-          }}
-        >
-          <img src={back} />
-        </div>
-        <SearchBox
-          type="search"
-          searchWord={searchWord}
-          onClickSearch={onClickSearch}
-          onChangeSearchWord={onChangeSearchWord}
-          onKeyDown={onKeyDown}
-        />
-      </div>
-      {/* <p onClick={onDeleteAllHistory}>X</p> */}
-
-      <section className="search-category">
-        <h3>최근 검색어</h3>
-        <div classname="ad-banner-strip">
-
-        </div>
-
-        <div className="search-tag-box">
-          <SearchItems
-            searchHistory={searchHistory}
+  if(isMobile){
+    return (
+      <div className="container">
+        <Header />
+        <div className="top-bar">
+          <div
+            className="back"
+            onClick={() => {
+              navigate("/");
+            }}
+          >
+            <img src={back} />
+          </div>
+          <SearchBox
+            type="search"
+            searchWord={searchWord}
             onClickSearch={onClickSearch}
-            onDeleteHistoryItem={onDeleteHistoryItem}
+            onChangeSearchWord={onChangeSearchWord}
+            onKeyDown={onKeyDown}
           />
         </div>
-      </section>
-      <NavBar />
-    </div>
-  );
+        {/* <p onClick={onDeleteAllHistory}>X</p> */}
+
+        <section className="search-category">
+          <h3>최근 검색어</h3>
+          <div classname="ad-banner-strip">
+
+          </div>
+
+          <div className="search-tag-box">
+            <SearchItems
+              searchHistory={searchHistory}
+              onClickSearch={onClickSearch}
+              onDeleteHistoryItem={onDeleteHistoryItem}
+            />
+          </div>
+        </section>
+        <NavBar />
+      </div>
+    );
+  }else{
+    return(
+      <DesktopLayout>
+        <div className="container">
+          <Header />
+          <div className="top-bar">
+            <div
+              className="back"
+              onClick={() => {
+                navigate("/");
+              }}
+            >
+              <img src={back} />
+            </div>
+            <SearchBox
+              type="search"
+              searchWord={searchWord}
+              onClickSearch={onClickSearch}
+              onChangeSearchWord={onChangeSearchWord}
+              onKeyDown={onKeyDown}
+            />
+          </div>
+          {/* <p onClick={onDeleteAllHistory}>X</p> */}
+
+          <section className="search-category">
+            <h3>최근 검색어</h3>
+            <div classname="ad-banner-strip">
+
+            </div>
+
+            <div className="search-tag-box">
+              <SearchItems
+                searchHistory={searchHistory}
+                onClickSearch={onClickSearch}
+                onDeleteHistoryItem={onDeleteHistoryItem}
+              />
+            </div>
+          </section>
+        </div>
+      </DesktopLayout>
+    );
+  }
+
 }
 
 function SearchItems({ searchHistory, onClickSearch, onDeleteHistoryItem }) {

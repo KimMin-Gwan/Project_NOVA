@@ -18,8 +18,11 @@ import { ScheduleDetail, EditSingleSchedule } from "../../component/EventMore/Ev
 import "./index.css";
 import useIntersectionObserver from "../../hooks/useIntersectionObserver";
 import NoneSchedule from "../../component/NoneFeed/NoneSchedule";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import DesktopLayout from "../../component/DesktopLayout/DeskTopLayout";
 
 export default function ScheduleExplore() {
+  const isMobile = useMediaQuery('(max-width:1100px)');
   const { moreClick, handleToggleMore } = useToggleMore();
   const navigate = useNavigate();
 
@@ -70,6 +73,7 @@ export default function ScheduleExplore() {
     setActiveIndex(swiper.activeIndex);
   };
 
+  if(isMobile){
   return (
     <div className="container ExploreSchedulePage">
       <nav className="navBar">
@@ -87,23 +91,6 @@ export default function ScheduleExplore() {
           />
         </ul>
       </section>
-      {/* 화면이 530px 이하일 때 슬라이더로 탭 대체 */}
-
-
-        {/** 
-      <section className="button-container">
-        <button onClick={() => handleModal("time")}>
-          시간 설정 <img src={arrow} alt="" />
-        </button>
-        <button onClick={() => handleModal("style")}>
-          방송 스타일 <img src={arrow} alt="" />
-        </button>
-        <button>
-          성별 <img src={arrow} alt="" />
-        </button>
-         
-      </section>
-        */}
       <Swiper
         spaceBetween={50}
         slidesPerView={1}
@@ -147,6 +134,72 @@ export default function ScheduleExplore() {
       />
     </div>
   );
+  }else{
+    return(
+      <DesktopLayout>
+        <div className="container ExploreSchedulePage">
+          <nav className="navBar">
+            <button onClick={() => navigate(-1)} className="backButton">
+              <img src={back} alt="" />
+            </button>
+            <h1>일정 탐색</h1>
+          </nav>
+          <section className={"type-list"}>
+            <ul className={"post-list"} data-active-index={activeIndex}>
+              <TabItem
+                tabs={scheduleKind}
+                activeIndex={activeIndex}
+                handleClick={handleClick}
+              />
+            </ul>
+          </section>
+          <Swiper
+            spaceBetween={50}
+            slidesPerView={1}
+            onSlideChange={handleTabChange}
+            ref={swiperRef}
+            className="scheduleList"
+          >
+            <ul>
+              <ul>
+                {scheduleKind.map((item, index) => (
+                  <SwiperSlide key={index}>
+                    <ScheduleComponentList
+                      category={item}
+                      toggleEditScheduleModal={toggleEditScheduleModal}
+                      toggleAddScheduleModal={toggleAddScheduleModal}
+                      activeIndex={activeIndex}
+                      myIndex={index}
+                    />
+                  </SwiperSlide>
+                ))}
+              </ul>
+            </ul>
+          </Swiper>
+          <ButtonModal
+            closeSchedule={handleModal}
+            isOpen={modalButton}
+            type={buttonType}
+          />
+
+          <ScheduleDetail
+            closeSchedule={toggleAddScheduleModal}
+            isOpen={addScheduleModal}
+            target={targetSchedule}
+          />
+
+          <EditSingleSchedule
+            closeSchedule={toggleEditScheduleModal}
+            isOpen={editScheduleModal}
+            target={targetSchedule}
+            isSingleSchedule={true}
+          />
+        </div>
+      </DesktopLayout>
+    )
+  }
+
+
 }
 
 

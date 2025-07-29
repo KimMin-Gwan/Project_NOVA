@@ -23,6 +23,8 @@ import ScheduleCard from "../../component/EventCard/EventCard";
 import right_double_arrow from "../../img/right_double_arrow.svg";
 import { BIAS_URL, REQUEST_URL } from "../../constant/biasUrl.js";
 import tempBias from "../../img/tempBias.png";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import DesktopLayout from "../../component/DesktopLayout/DeskTopLayout.jsx";
 
 const textContentList = [
     "새로운 일정을 등록할 목표 주제를 정해주세요!",
@@ -123,6 +125,7 @@ const ScheduleMakeSlideComponent = ({ activeIndex, index,
 };
 
 const ScheduleMakePage = () => {
+    const isMobile = useMediaQuery('(max-width:1100px)');
     const swiperRef = useRef(null); // Swiper 인스턴스를 참조하기 위한 Ref 생성
     const inputSwiperRef = useRef(null); // Swiper 인스턴스를 참조하기 위한 Ref 생성
     const navigate = useNavigate();
@@ -423,226 +426,451 @@ const ScheduleMakePage = () => {
     }));
   }
 
-  return (
-    <div className="container">
-        <div className={style["body-container"]} >
-            <Swiper 
-                style={{width: "100%", height: "100%"}}
-                direction={'vertical'}
-                onSwiper={(swiper) => (swiperRef.current = swiper)} // Swiper 인스턴스 참조
-                onSlideChange={handleSlideChange} // 슬라이드 변경 이벤트
-                speed={1000} // 슬라이드 전환 속도 1초
-                allowTouchMove={false}
-                touchEventsTarget="wrapper"
-            >
-                <SwiperSlide>
-                    <div id="swiperSlide0" className={style["swiper-slide"]}>
-                        <div id ="slideTitleBox" className={style["slide-title-box"]}>
-                            <span id="slideStepTitle" className={style["slide-step-title"]}> 일정 등록 </span>
-                        </div>
-                    </div>
-                </SwiperSlide>
-                <SwiperSlide>
-                    <div id="swiperSlide1" className={style["swiper-slide"]}>
-                        <div id ="slideTitleBox" className={style["slide-title-box"]}>
-                            <span id="slideStepTitle" className={style["slide-step-title"]}> 1단계 </span>
-                            <span id="slideStepSubtitle" className={style["slide-step-subtitle"]}> 주제 선택</span>
-                        </div>
-                            <div id="slideBodyContainer" className ={style["slide-body-container"]}>
-                                <div className={style["slide-box-wrapper"]}>
-                                    <div className={style["slide-body-top-box"]}>
-                                        {targetBias.bid === "" ? (
-                                            <div className={style["target-bias"]}></div>
-                                        ) : (
-                                            <img src={BIAS_URL + `${targetBias.bid}.png`} onError={(e) => (e.target.src = tempBias)}  />
-                                        )}
-                                        <span className={style["top-box-content"]}> 
-                                            {targetBias.bname}
-                                        </span>
-                                    </div>
-                                    <div className={style["slide-body-bottom-box"]}>
-                                        {biasList.map((item, i) => {
-                                            return <div onClick={() => handleSelectBias(i)} key={i} className={style["bias-box"]}>
-                                                <ScheduleTopic key={i} {...item} style={{width: "90%"}} />
-                                            </div>
-                                        })}
-                                    </div>
-                                </div>
+  if(isMobile){
+    return (
+        <div className="container">
+            <div className={style["body-container"]} >
+                <Swiper 
+                    style={{width: "100%", height: "100%"}}
+                    direction={'vertical'}
+                    onSwiper={(swiper) => (swiperRef.current = swiper)} // Swiper 인스턴스 참조
+                    onSlideChange={handleSlideChange} // 슬라이드 변경 이벤트
+                    speed={1000} // 슬라이드 전환 속도 1초
+                    allowTouchMove={false}
+                    touchEventsTarget="wrapper"
+                >
+                    <SwiperSlide>
+                        <div id="swiperSlide0" className={style["swiper-slide"]}>
+                            <div id ="slideTitleBox" className={style["slide-title-box"]}>
+                                <span id="slideStepTitle" className={style["slide-step-title"]}> 일정 등록 </span>
                             </div>
-                            <div id="slideBottomContainer" className={style["slide-bottom-container"]}>
-                                <div className={style["bottom-button"]}
-                                    onClick={() => {
-                                        navigate(-1);
-                                    }}
-                                >
-                                    취소
-                                </div>
-                                <div className={style["bottom-button"]}
-                                    onClick={() => {
-                                    if (targetBias.bid === "") {
-                                         alert("선택된 주제가 없어요.");
-                                    } else {
-                                        swiperRef.current?.slideNext(); // 오른쪽 슬라이드 이동
-                                        fetchSearchSchedule(); // 검색된 스케줄 가져오기
-                                    }
-                                }}
-                                >
-                                    선택 완료
-                                </div>
-                            </div>
-                    </div>
-                </SwiperSlide>
-                <SwiperSlide>
-                    <div id="swiperSlide2" className={style["swiper-slide"]}>
-                        <div id ="slideTitleBox" className={style["slide-title-box"]}>
-                            <span id="slideStepTitle" className={style["slide-step-title"]}> 2단계 </span>
-                            <span id="slideStepSubtitle" className={style["slide-step-subtitle"]}> 중복 확인</span>
                         </div>
-                            <div id="slideBodyContainer" className ={style["slide-body-container"]}>
-                                <div className={style["slide-box-wrapper"]}>
-                                    <div className={style["slide-body-top-box"]}>
-                                        {targetBias.bid === "" ? (
-                                            <div className={style["target-bias"]}></div>
-                                        ) : (
-                                            <img src={BIAS_URL + `${targetBias.bid}.png`} onError={(e) => (e.target.src = tempBias)}  />
-                                        )}
-                                        <span className={style["top-box-content"]}> 
-                                            {targetBias.bname}
-                                        </span>
-                                    </div>
-                                    <div className={style["slide-body-bottom-box"]}> 
-                                        {searchedSchedule.length === 0 ? (
-                                            <div className={style["no-content-message"]}>등록된 컨텐츠 일정이 없어요!</div>
-                                        ) : (
-                                            searchedSchedule.map((item, i) => (
-                                                <div>
-                                                    <ScheduleCard key={i} {...item} style={{ width: "90%" }} />
+                    </SwiperSlide>
+                    <SwiperSlide>
+                        <div id="swiperSlide1" className={style["swiper-slide"]}>
+                            <div id ="slideTitleBox" className={style["slide-title-box"]}>
+                                <span id="slideStepTitle" className={style["slide-step-title"]}> 1단계 </span>
+                                <span id="slideStepSubtitle" className={style["slide-step-subtitle"]}> 주제 선택</span>
+                            </div>
+                                <div id="slideBodyContainer" className ={style["slide-body-container"]}>
+                                    <div className={style["slide-box-wrapper"]}>
+                                        <div className={style["slide-body-top-box"]}>
+                                            {targetBias.bid === "" ? (
+                                                <div className={style["target-bias"]}></div>
+                                            ) : (
+                                                <img src={BIAS_URL + `${targetBias.bid}.png`} onError={(e) => (e.target.src = tempBias)}  />
+                                            )}
+                                            <span className={style["top-box-content"]}> 
+                                                {targetBias.bname}
+                                            </span>
+                                        </div>
+                                        <div className={style["slide-body-bottom-box"]}>
+                                            {biasList.map((item, i) => {
+                                                return <div onClick={() => handleSelectBias(i)} key={i} className={style["bias-box"]}>
+                                                    <ScheduleTopic key={i} {...item} style={{width: "90%"}} />
                                                 </div>
-                                            ))
-                                        )}
+                                            })}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div id="slideBottomContainer" className={style["slide-bottom-container"]}>
-                                <div className={style["bottom-button"]}
-                                    onClick={() => swiperRef.current?.slidePrev()} // 오른쪽 슬라이드 이동
-                                >
-                                    이전
+                                <div id="slideBottomContainer" className={style["slide-bottom-container"]}>
+                                    <div className={style["bottom-button"]}
+                                        onClick={() => {
+                                            navigate(-1);
+                                        }}
+                                    >
+                                        취소
+                                    </div>
+                                    <div className={style["bottom-button"]}
+                                        onClick={() => {
+                                        if (targetBias.bid === "") {
+                                            alert("선택된 주제가 없어요.");
+                                        } else {
+                                            swiperRef.current?.slideNext(); // 오른쪽 슬라이드 이동
+                                            fetchSearchSchedule(); // 검색된 스케줄 가져오기
+                                        }
+                                    }}
+                                    >
+                                        선택 완료
+                                    </div>
                                 </div>
-                                <div className={style["bottom-button"]}
-                                    onClick={() => swiperRef.current?.slideNext()} // 오른쪽 슬라이드 이동
-                                >
-                                    확인 완료
-                                </div>
-                            </div>
-                    </div>
-                </SwiperSlide>
-                <SwiperSlide>
-                    <div id="swiperSlide3" className={style["swiper-slide"]}>
-                        <div id ="slideTitleBox" className={style["slide-title-box"]}>
-                            <span id="slideStepTitle" className={style["slide-step-title"]}> 3단계 </span>
-                            <span id="slideStepSubtitle" className={style["slide-step-subtitle"]}> 일정 작성</span>
                         </div>
-                            <div id="slideBodyContainer" className ={style["slide-body-container"]}>
-                                <div className={style["slide-box-wrapper"]}>
-                                    <div className={style["input-slide-container"]}>
-                                        <Swiper
-                                            style={{width: "100%", height: "100%"}}
-                                            onSwiper={(swiper) => (inputSwiperRef.current = swiper)} // Swiper 인스턴스 참조
-                                            onSlideChange={handleMakeNewSchedule} // 슬라이드 변경 이벤트
-                                        >
-                                            {makeScheduleList.map(({id, index}, i) => (
-                                                <SwiperSlide key={id}>
-                                                    <ScheduleMakeSlideComponent activeIndex={activeIndex} index={index}
-                                                        schedule={tempScheduleData.schedules[i]}
-                                                        setSendScheduleData={setTempScheduleData} 
-                                                        sendScheduleData={tempScheduleData}
-                                                    />
-                                                </SwiperSlide>
-                                            ))}
-                                        </Swiper>
+                    </SwiperSlide>
+                    <SwiperSlide>
+                        <div id="swiperSlide2" className={style["swiper-slide"]}>
+                            <div id ="slideTitleBox" className={style["slide-title-box"]}>
+                                <span id="slideStepTitle" className={style["slide-step-title"]}> 2단계 </span>
+                                <span id="slideStepSubtitle" className={style["slide-step-subtitle"]}> 중복 확인</span>
+                            </div>
+                                <div id="slideBodyContainer" className ={style["slide-body-container"]}>
+                                    <div className={style["slide-box-wrapper"]}>
+                                        <div className={style["slide-body-top-box"]}>
+                                            {targetBias.bid === "" ? (
+                                                <div className={style["target-bias"]}></div>
+                                            ) : (
+                                                <img src={BIAS_URL + `${targetBias.bid}.png`} onError={(e) => (e.target.src = tempBias)}  />
+                                            )}
+                                            <span className={style["top-box-content"]}> 
+                                                {targetBias.bname}
+                                            </span>
+                                        </div>
+                                        <div className={style["slide-body-bottom-box"]}> 
+                                            {searchedSchedule.length === 0 ? (
+                                                <div className={style["no-content-message"]}>등록된 컨텐츠 일정이 없어요!</div>
+                                            ) : (
+                                                searchedSchedule.map((item, i) => (
+                                                    <div>
+                                                        <ScheduleCard key={i} {...item} style={{ width: "90%" }} />
+                                                    </div>
+                                                ))
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div id="slideBottomContainer" className={style["slide-bottom-container"]}>
-                                <div className={style["bottom-button"]}
-                                    onClick={() => swiperRef.current?.slidePrev()} // 오른쪽 슬라이드 이동
-                                >
-                                    이전으로
+                                <div id="slideBottomContainer" className={style["slide-bottom-container"]}>
+                                    <div className={style["bottom-button"]}
+                                        onClick={() => swiperRef.current?.slidePrev()} // 오른쪽 슬라이드 이동
+                                    >
+                                        이전
+                                    </div>
+                                    <div className={style["bottom-button"]}
+                                        onClick={() => swiperRef.current?.slideNext()} // 오른쪽 슬라이드 이동
+                                    >
+                                        확인 완료
+                                    </div>
                                 </div>
-                                <div className={style["bottom-button"]}
-                                    onClick={() => {
-                                        swiperRef.current?.slideNext()
-                                        makeSendScheduleData()
-                                    }} 
-                                >
-                                    작성 완료
-                                </div>
-                            </div>
-                    </div>
-                </SwiperSlide>
-                <SwiperSlide>
-                    <div id="swiperSlide4" className={style["swiper-slide"]}>
-                        <div id ="slideTitleBox" className={style["slide-title-box"]}>
-                            <span id="slideStepTitle" className={style["slide-step-title"]}> 4단계 </span>
-                            <span id="slideStepSubtitle" className={style["slide-step-subtitle"]}> 일정 검토</span>
                         </div>
-                            <div id="slideBodyContainer" className ={style["slide-body-container"]}>
-                                <div className={style["slide-box-wrapper"]}>
-                                    <div className={style["slide-body-top-box"]}>
-                                        <span className={style["top-box-content"]}> 
-                                            총 {makedScheduleData.length}개의 일정을 작성했어요.
-                                        </span>
-                                    </div>
-                                    <div className={style["slide-body-bottom-box"]}> 
-
-                                        {makedScheduleData.map((item, i) => {
-                                            return <div>
-                                                <ScheduleCard key={i} {...item} style={{width: "90%"}} />
-                                            </div>
-                                        })}
-
-                                    </div>
-                                </div>
+                    </SwiperSlide>
+                    <SwiperSlide>
+                        <div id="swiperSlide3" className={style["swiper-slide"]}>
+                            <div id ="slideTitleBox" className={style["slide-title-box"]}>
+                                <span id="slideStepTitle" className={style["slide-step-title"]}> 3단계 </span>
+                                <span id="slideStepSubtitle" className={style["slide-step-subtitle"]}> 일정 작성</span>
                             </div>
-                            <div id="slideBottomContainer" className={style["slide-bottom-container"]}>
-                                <div className={style["bottom-button"]}
-                                    onClick={() => swiperRef.current?.slidePrev()} // 오른쪽 슬라이드 이동
-                                >
-                                    이전으로
+                                <div id="slideBodyContainer" className ={style["slide-body-container"]}>
+                                    <div className={style["slide-box-wrapper"]}>
+                                        <div className={style["input-slide-container"]}>
+                                            <Swiper
+                                                style={{width: "100%", height: "100%"}}
+                                                onSwiper={(swiper) => (inputSwiperRef.current = swiper)} // Swiper 인스턴스 참조
+                                                onSlideChange={handleMakeNewSchedule} // 슬라이드 변경 이벤트
+                                            >
+                                                {makeScheduleList.map(({id, index}, i) => (
+                                                    <SwiperSlide key={id}>
+                                                        <ScheduleMakeSlideComponent activeIndex={activeIndex} index={index}
+                                                            schedule={tempScheduleData.schedules[i]}
+                                                            setSendScheduleData={setTempScheduleData} 
+                                                            sendScheduleData={tempScheduleData}
+                                                        />
+                                                    </SwiperSlide>
+                                                ))}
+                                            </Swiper>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className={style["bottom-button"]}
-                                    onClick={() => {
-                                        swiperRef.current?.slideNext()
+                                <div id="slideBottomContainer" className={style["slide-bottom-container"]}>
+                                    <div className={style["bottom-button"]}
+                                        onClick={() => swiperRef.current?.slidePrev()} // 오른쪽 슬라이드 이동
+                                    >
+                                        이전으로
+                                    </div>
+                                    <div className={style["bottom-button"]}
+                                        onClick={() => {
+                                            swiperRef.current?.slideNext()
+                                            makeSendScheduleData()
+                                        }} 
+                                    >
+                                        작성 완료
+                                    </div>
+                                </div>
+                        </div>
+                    </SwiperSlide>
+                    <SwiperSlide>
+                        <div id="swiperSlide4" className={style["swiper-slide"]}>
+                            <div id ="slideTitleBox" className={style["slide-title-box"]}>
+                                <span id="slideStepTitle" className={style["slide-step-title"]}> 4단계 </span>
+                                <span id="slideStepSubtitle" className={style["slide-step-subtitle"]}> 일정 검토</span>
+                            </div>
+                                <div id="slideBodyContainer" className ={style["slide-body-container"]}>
+                                    <div className={style["slide-box-wrapper"]}>
+                                        <div className={style["slide-body-top-box"]}>
+                                            <span className={style["top-box-content"]}> 
+                                                총 {makedScheduleData.length}개의 일정을 작성했어요.
+                                            </span>
+                                        </div>
+                                        <div className={style["slide-body-bottom-box"]}> 
+
+                                            {makedScheduleData.map((item, i) => {
+                                                return <div>
+                                                    <ScheduleCard key={i} {...item} style={{width: "90%"}} />
+                                                </div>
+                                            })}
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="slideBottomContainer" className={style["slide-bottom-container"]}>
+                                    <div className={style["bottom-button"]}
+                                        onClick={() => swiperRef.current?.slidePrev()} // 오른쪽 슬라이드 이동
+                                    >
+                                        이전으로
+                                    </div>
+                                    <div className={style["bottom-button"]}
+                                        onClick={() => {
+                                            swiperRef.current?.slideNext()
   
-                                        tryFetchMakeSchedule()
+                                            tryFetchMakeSchedule()
+                                        }} // 오른쪽 슬라이드 이동
+                                    >
+                                        등록
+                                    </div>
+                                </div>
+                        </div>
+                    </SwiperSlide>
+                    <SwiperSlide>
+                        <div id="swiperSlide4" className={style["swiper-slide"]}>
+                            <div id ="slideTitleBox" className={style["slide-title-box"]}>
+                                <span id="slideStepTitle" className={style["slide-step-title"]}> 등록 완료 </span>
+                            </div>
+                            <div style={{width: "100%", display: "flex", justifyContent: "center", alignItems: "center"}}>
+                                <div className={style["bottom-button"]}
+                                    onClick={() => {
+                                        navigate("/schedule") // 오른쪽 슬라이드 이동
                                     }} // 오른쪽 슬라이드 이동
                                 >
-                                    등록
+                                돌아가기
                                 </div>
                             </div>
-                    </div>
-                </SwiperSlide>
-                <SwiperSlide>
-                    <div id="swiperSlide4" className={style["swiper-slide"]}>
-                        <div id ="slideTitleBox" className={style["slide-title-box"]}>
-                            <span id="slideStepTitle" className={style["slide-step-title"]}> 등록 완료 </span>
                         </div>
-                        <div style={{width: "100%", display: "flex", justifyContent: "center", alignItems: "center"}}>
-                            <div className={style["bottom-button"]}
-                                onClick={() => {
-                                    navigate("/schedule") // 오른쪽 슬라이드 이동
-                                }} // 오른쪽 슬라이드 이동
-                            >
-                            돌아가기
-                            </div>
-                        </div>
-                    </div>
-                </SwiperSlide>
-            </Swiper>
+                    </SwiperSlide>
+                </Swiper>
+            </div>
         </div>
-    </div>
-  );
+    );
+  }else{
+    return(
+        <DesktopLayout>
+            <div className="container">
+                <div className={style["body-container"]} >
+                    <Swiper 
+                        style={{width: "100%", height: "100%"}}
+                        direction={'vertical'}
+                        onSwiper={(swiper) => (swiperRef.current = swiper)} // Swiper 인스턴스 참조
+                        onSlideChange={handleSlideChange} // 슬라이드 변경 이벤트
+                        speed={1000} // 슬라이드 전환 속도 1초
+                        allowTouchMove={false}
+                        touchEventsTarget="wrapper"
+                    >
+                        <SwiperSlide>
+                            <div id="swiperSlide0" className={style["swiper-slide"]}>
+                                <div id ="slideTitleBox" className={style["slide-title-box"]}>
+                                    <span id="slideStepTitle" className={style["slide-step-title"]}> 일정 등록 </span>
+                                </div>
+                            </div>
+                        </SwiperSlide>
+                        <SwiperSlide>
+                            <div id="swiperSlide1" className={style["swiper-slide"]}>
+                                <div id ="slideTitleBox" className={style["slide-title-box"]}>
+                                    <span id="slideStepTitle" className={style["slide-step-title"]}> 1단계 </span>
+                                    <span id="slideStepSubtitle" className={style["slide-step-subtitle"]}> 주제 선택</span>
+                                </div>
+                                    <div id="slideBodyContainer" className ={style["slide-body-container"]}>
+                                        <div className={style["slide-box-wrapper"]}>
+                                            <div className={style["slide-body-top-box"]}>
+                                                {targetBias.bid === "" ? (
+                                                    <div className={style["target-bias"]}></div>
+                                                ) : (
+                                                    <img src={BIAS_URL + `${targetBias.bid}.png`} onError={(e) => (e.target.src = tempBias)}  />
+                                                )}
+                                                <span className={style["top-box-content"]}> 
+                                                    {targetBias.bname}
+                                                </span>
+                                            </div>
+                                            <div className={style["slide-body-bottom-box"]}>
+                                                {biasList.map((item, i) => {
+                                                    return <div onClick={() => handleSelectBias(i)} key={i} className={style["bias-box"]}>
+                                                        <ScheduleTopic key={i} {...item} style={{width: "90%"}} />
+                                                    </div>
+                                                })}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="slideBottomContainer" className={style["slide-bottom-container"]}>
+                                        <div className={style["bottom-button"]}
+                                            onClick={() => {
+                                                navigate(-1);
+                                            }}
+                                        >
+                                            취소
+                                        </div>
+                                        <div className={style["bottom-button"]}
+                                            onClick={() => {
+                                            if (targetBias.bid === "") {
+                                                alert("선택된 주제가 없어요.");
+                                            } else {
+                                                swiperRef.current?.slideNext(); // 오른쪽 슬라이드 이동
+                                                fetchSearchSchedule(); // 검색된 스케줄 가져오기
+                                            }
+                                        }}
+                                        >
+                                            선택 완료
+                                        </div>
+                                    </div>
+                            </div>
+                        </SwiperSlide>
+                        <SwiperSlide>
+                            <div id="swiperSlide2" className={style["swiper-slide"]}>
+                                <div id ="slideTitleBox" className={style["slide-title-box"]}>
+                                    <span id="slideStepTitle" className={style["slide-step-title"]}> 2단계 </span>
+                                    <span id="slideStepSubtitle" className={style["slide-step-subtitle"]}> 중복 확인</span>
+                                </div>
+                                    <div id="slideBodyContainer" className ={style["slide-body-container"]}>
+                                        <div className={style["slide-box-wrapper"]}>
+                                            <div className={style["slide-body-top-box"]}>
+                                                {targetBias.bid === "" ? (
+                                                    <div className={style["target-bias"]}></div>
+                                                ) : (
+                                                    <img src={BIAS_URL + `${targetBias.bid}.png`} onError={(e) => (e.target.src = tempBias)}  />
+                                                )}
+                                                <span className={style["top-box-content"]}> 
+                                                    {targetBias.bname}
+                                                </span>
+                                            </div>
+                                            <div className={style["slide-body-bottom-box"]}> 
+                                                {searchedSchedule.length === 0 ? (
+                                                    <div className={style["no-content-message"]}>등록된 컨텐츠 일정이 없어요!</div>
+                                                ) : (
+                                                    searchedSchedule.map((item, i) => (
+                                                        <div>
+                                                            <ScheduleCard key={i} {...item} style={{ width: "90%" }} />
+                                                        </div>
+                                                    ))
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="slideBottomContainer" className={style["slide-bottom-container"]}>
+                                        <div className={style["bottom-button"]}
+                                            onClick={() => swiperRef.current?.slidePrev()} // 오른쪽 슬라이드 이동
+                                        >
+                                            이전
+                                        </div>
+                                        <div className={style["bottom-button"]}
+                                            onClick={() => swiperRef.current?.slideNext()} // 오른쪽 슬라이드 이동
+                                        >
+                                            확인 완료
+                                        </div>
+                                    </div>
+                            </div>
+                        </SwiperSlide>
+                        <SwiperSlide>
+                            <div id="swiperSlide3" className={style["swiper-slide"]}>
+                                <div id ="slideTitleBox" className={style["slide-title-box"]}>
+                                    <span id="slideStepTitle" className={style["slide-step-title"]}> 3단계 </span>
+                                    <span id="slideStepSubtitle" className={style["slide-step-subtitle"]}> 일정 작성</span>
+                                </div>
+                                    <div id="slideBodyContainer" className ={style["slide-body-container"]}>
+                                        <div className={style["slide-box-wrapper"]}>
+                                            <div className={style["input-slide-container"]}>
+                                                <Swiper
+                                                    style={{width: "100%", height: "100%"}}
+                                                    onSwiper={(swiper) => (inputSwiperRef.current = swiper)} // Swiper 인스턴스 참조
+                                                    onSlideChange={handleMakeNewSchedule} // 슬라이드 변경 이벤트
+                                                >
+                                                    {makeScheduleList.map(({id, index}, i) => (
+                                                        <SwiperSlide key={id}>
+                                                            <ScheduleMakeSlideComponent activeIndex={activeIndex} index={index}
+                                                                schedule={tempScheduleData.schedules[i]}
+                                                                setSendScheduleData={setTempScheduleData} 
+                                                                sendScheduleData={tempScheduleData}
+                                                            />
+                                                        </SwiperSlide>
+                                                    ))}
+                                                </Swiper>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="slideBottomContainer" className={style["slide-bottom-container"]}>
+                                        <div className={style["bottom-button"]}
+                                            onClick={() => swiperRef.current?.slidePrev()} // 오른쪽 슬라이드 이동
+                                        >
+                                            이전으로
+                                        </div>
+                                        <div className={style["bottom-button"]}
+                                            onClick={() => {
+                                                swiperRef.current?.slideNext()
+                                                makeSendScheduleData()
+                                            }} 
+                                        >
+                                            작성 완료
+                                        </div>
+                                    </div>
+                            </div>
+                        </SwiperSlide>
+                        <SwiperSlide>
+                            <div id="swiperSlide4" className={style["swiper-slide"]}>
+                                <div id ="slideTitleBox" className={style["slide-title-box"]}>
+                                    <span id="slideStepTitle" className={style["slide-step-title"]}> 4단계 </span>
+                                    <span id="slideStepSubtitle" className={style["slide-step-subtitle"]}> 일정 검토</span>
+                                </div>
+                                    <div id="slideBodyContainer" className ={style["slide-body-container"]}>
+                                        <div className={style["slide-box-wrapper"]}>
+                                            <div className={style["slide-body-top-box"]}>
+                                                <span className={style["top-box-content"]}> 
+                                                    총 {makedScheduleData.length}개의 일정을 작성했어요.
+                                                </span>
+                                            </div>
+                                            <div className={style["slide-body-bottom-box"]}> 
+
+                                                {makedScheduleData.map((item, i) => {
+                                                    return <div>
+                                                        <ScheduleCard key={i} {...item} style={{width: "90%"}} />
+                                                    </div>
+                                                })}
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="slideBottomContainer" className={style["slide-bottom-container"]}>
+                                        <div className={style["bottom-button"]}
+                                            onClick={() => swiperRef.current?.slidePrev()} // 오른쪽 슬라이드 이동
+                                        >
+                                            이전으로
+                                        </div>
+                                        <div className={style["bottom-button"]}
+                                            onClick={() => {
+                                                swiperRef.current?.slideNext()
+  
+                                                tryFetchMakeSchedule()
+                                            }} // 오른쪽 슬라이드 이동
+                                        >
+                                            등록
+                                        </div>
+                                    </div>
+                            </div>
+                        </SwiperSlide>
+                        <SwiperSlide>
+                            <div id="swiperSlide4" className={style["swiper-slide"]}>
+                                <div id ="slideTitleBox" className={style["slide-title-box"]}>
+                                    <span id="slideStepTitle" className={style["slide-step-title"]}> 등록 완료 </span>
+                                </div>
+                                <div style={{width: "100%", display: "flex", justifyContent: "center", alignItems: "center"}}>
+                                    <div className={style["bottom-button"]}
+                                        onClick={() => {
+                                            navigate("/schedule") // 오른쪽 슬라이드 이동
+                                        }} // 오른쪽 슬라이드 이동
+                                    >
+                                    돌아가기
+                                    </div>
+                                </div>
+                            </div>
+                        </SwiperSlide>
+                    </Swiper>
+                </div>
+            </div>
+        </DesktopLayout>
+    );
+  }
 };
 
 export default ScheduleMakePage;

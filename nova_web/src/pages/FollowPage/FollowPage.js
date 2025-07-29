@@ -16,8 +16,11 @@ import tempBias from "./../../img/tempBias.png";
 
 import HEADER from "../../constant/header.js";
 import { BIAS_URL, REQUEST_URL } from "../../constant/biasUrl.js";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import DesktopLayout from "../../component/DesktopLayout/DeskTopLayout.jsx";
 
 export default function FollowPage() {
+  const isMobile = useMediaQuery('(max-width:1100px)');
   const navigate = useNavigate();
   let { biasList } = useBiasStore();
 
@@ -120,121 +123,241 @@ export default function FollowPage() {
     return <div>loading...</div>;
   }
 
-  return (
-    <div className="container">
-        <div className={`${style["container"]} ${style[getModeClass(mode)]}`}>
-          <header className={style.header}>
-            <div className="logo">
-              <img src={logo2} alt="logo" onClick={() => navigate("/")} />
+  if(isMobile){
+    return(
+      <div className="container">
+          <div className={`${style["container"]} ${style[getModeClass(mode)]}`}>
+            <header className={style.header}>
+              <div className="logo">
+                <img src={logo2} alt="logo" onClick={() => navigate("/")} />
+              </div>
+            </header>
+
+            <h2 className={style["fav-title"]}>주제 팔로우</h2>
+            <h3>
+              <b>슈퍼노바</b>에 등록된 <b>주제</b>를 소개합니다.
+            </h3>
+
+            <div className={style["following"]}>
+              <h4>
+                <b>팔로우</b>중인 주제
+              </h4>
+              <FollowBoxes setBiasId={setBiasId} />
             </div>
-          </header>
 
-          <h2 className={style["fav-title"]}>주제 팔로우</h2>
-          <h3>
-            <b>슈퍼노바</b>에 등록된 <b>주제</b>를 소개합니다.
-          </h3>
+            <div className={style["search-fac"]}>
+              <div className={style["search-box"]}>
+                <input
+                  type="text"
+                  onKeyDown={onKeyDown}
+                  value={searchBias}
+                  onChange={(e) => {
+                    onChangeSearchBias(e);
+                  }}
+                  placeholder="팔로우 하고 싶은 주제를 검색해보세요"
+                />
+                <img src={search_icon} onClick={fetchSearchBias} alt="검색바" />
+              </div>
+              {resultLength !== 0 ? (
+                <div className={style["streamer-box"]}>
+                  <span className={style["streamer-list"]}>
+                    {resultBias.map((bias, i) => {
+                      return (
+                        <button
+                          key={bias.bid}
+                          onClick={() => {
+                            openModal(bias.bid, bias.bname);
+                          }}
+                          className={style["streamer-img"]}
+                        >
+                          <div>
+                            <img src={BIAS_URL + `${bias.bid}.png`} onError={(e) => (e.target.src = tempBias)}  />
+                          </div>
+                          <p>{bias.bname}</p>
+                        </button>
+                      );
+                    })}
+                  </span>
+                </div>
+              ) : (
+                <p className={style["no_result"]}>검색 결과가 없어요</p>
+              )}
 
-          <div className={style["following"]}>
-            <h4>
-              <b>팔로우</b>중인 주제
-            </h4>
-            <FollowBoxes setBiasId={setBiasId} />
-          </div>
-
-          <div className={style["search-fac"]}>
-            <div className={style["search-box"]}>
-              <input
-                type="text"
-                onKeyDown={onKeyDown}
-                value={searchBias}
-                onChange={(e) => {
-                  onChangeSearchBias(e);
+              <button
+                className={style["fav-apply"]}
+                onClick={() => {
+                  handleRequestURL(REQUEST_URL);
                 }}
-                placeholder="팔로우 하고 싶은 주제를 검색해보세요"
-              />
-              <img src={search_icon} onClick={fetchSearchBias} alt="검색바" />
-            </div>
-            {resultLength !== 0 ? (
-              <div className={style["streamer-box"]}>
-                <span className={style["streamer-list"]}>
-                  {resultBias.map((bias, i) => {
-                    return (
-                      <button
-                        key={bias.bid}
-                        onClick={() => {
-                          openModal(bias.bid, bias.bname);
-                        }}
-                        className={style["streamer-img"]}
-                      >
-                        <div>
-                          <img src={BIAS_URL + `${bias.bid}.png`} onError={(e) => (e.target.src = tempBias)}  />
-                        </div>
-                        <p>{bias.bname}</p>
-                      </button>
-                    );
-                  })}
-                </span>
-              </div>
-            ) : (
-              <p className={style["no_result"]}>검색 결과가 없어요</p>
-            )}
-
-            <button
-              className={style["fav-apply"]}
-              onClick={() => {
-                handleRequestURL(REQUEST_URL);
-              }}
-            >
-              <img src={Stackframe} alt="" />
-              <span>
-                <p>찾는 주제가 없다면 간편하게 신청해요!</p>
-                <b>1분만에 주제 신청하기</b>
-              </span>
-            </button>
-          </div>
-
-          <Streamer title={"치지직 스트리머"} platform={biasDataList.chzzk} openModal={openModal} />
-          {/*
-            <Streamer title={"아티스트"} platform={biasDataList.artist} openModal={openModal} />
-          <Streamer title={"SOOP 스트리머"} platform={biasDataList.soop} openModal={openModal} />
-          <Streamer title={"유튜버"} platform={biasDataList.youtube} openModal={openModal} />
-          */}
-
-          {isModalOpen && (
-            <div className={style["modal-overlay"]} onClick={closeModal}>
-              <div className={style["modal"]} onClick={(e) => e.stopPropagation()}>
-                <button className={style["streamer-img"]}>
-                  <div>
-                    <img src={BIAS_URL + `${clickedBid}.png`} />
-                  </div>
-                </button>
-                <p>
-                  {clickedBname}님을{" "}
-                  <b>
-                    {biasList.some((item) => {
-                      return item.bid === clickedBid;
-                    })
-                      ? "팔로우 취소"
-                      : "팔로우"}
-                  </b>
-                  합니다
-                </p>
+              >
+                <img src={Stackframe} alt="" />
                 <span>
-                  <button onClick={closeModal}>취소</button>
-                  <button className={style["follow-button"]} onClick={fetchTryFollowBias}>
-                    {biasList.some((item) => {
-                      return item.bid === clickedBid;
-                    })
-                      ? "팔로우 취소"
-                      : "팔로우"}
-                  </button>
+                  <p>찾는 주제가 없다면 간편하게 신청해요!</p>
+                  <b>1분만에 주제 신청하기</b>
                 </span>
-              </div>
+              </button>
             </div>
-          )}
+
+            <Streamer title={"치지직 스트리머"} platform={biasDataList.chzzk} openModal={openModal} />
+            {/*
+              <Streamer title={"아티스트"} platform={biasDataList.artist} openModal={openModal} />
+            <Streamer title={"SOOP 스트리머"} platform={biasDataList.soop} openModal={openModal} />
+            <Streamer title={"유튜버"} platform={biasDataList.youtube} openModal={openModal} />
+            */}
+
+            {isModalOpen && (
+              <div className={style["modal-overlay"]} onClick={closeModal}>
+                <div className={style["modal"]} onClick={(e) => e.stopPropagation()}>
+                  <button className={style["streamer-img"]}>
+                    <div>
+                      <img src={BIAS_URL + `${clickedBid}.png`} />
+                    </div>
+                  </button>
+                  <p>
+                    {clickedBname}님을{" "}
+                    <b>
+                      {biasList.some((item) => {
+                        return item.bid === clickedBid;
+                      })
+                        ? "팔로우 취소"
+                        : "팔로우"}
+                    </b>
+                    합니다
+                  </p>
+                  <span>
+                    <button onClick={closeModal}>취소</button>
+                    <button className={style["follow-button"]} onClick={fetchTryFollowBias}>
+                      {biasList.some((item) => {
+                        return item.bid === clickedBid;
+                      })
+                        ? "팔로우 취소"
+                        : "팔로우"}
+                    </button>
+                  </span>
+                </div>
+              </div>
+            )}
+          </div>
+      </div>
+    );
+  }else{
+    return (
+      <DesktopLayout>
+        <div className="container">
+            <div className={`${style["container"]} ${style[getModeClass(mode)]}`}>
+              <header className={style.header}>
+                <div className="logo">
+                  <img src={logo2} alt="logo" onClick={() => navigate("/")} />
+                </div>
+              </header>
+
+              <h2 className={style["fav-title"]}>주제 팔로우</h2>
+              <h3>
+                <b>슈퍼노바</b>에 등록된 <b>주제</b>를 소개합니다.
+              </h3>
+
+              <div className={style["following"]}>
+                <h4>
+                  <b>팔로우</b>중인 주제
+                </h4>
+                <FollowBoxes setBiasId={setBiasId} />
+              </div>
+
+              <div className={style["search-fac"]}>
+                <div className={style["search-box"]}>
+                  <input
+                    type="text"
+                    onKeyDown={onKeyDown}
+                    value={searchBias}
+                    onChange={(e) => {
+                      onChangeSearchBias(e);
+                    }}
+                    placeholder="팔로우 하고 싶은 주제를 검색해보세요"
+                  />
+                  <img src={search_icon} onClick={fetchSearchBias} alt="검색바" />
+                </div>
+                {resultLength !== 0 ? (
+                  <div className={style["streamer-box"]}>
+                    <span className={style["streamer-list"]}>
+                      {resultBias.map((bias, i) => {
+                        return (
+                          <button
+                            key={bias.bid}
+                            onClick={() => {
+                              openModal(bias.bid, bias.bname);
+                            }}
+                            className={style["streamer-img"]}
+                          >
+                            <div>
+                              <img src={BIAS_URL + `${bias.bid}.png`} onError={(e) => (e.target.src = tempBias)}  />
+                            </div>
+                            <p>{bias.bname}</p>
+                          </button>
+                        );
+                      })}
+                    </span>
+                  </div>
+                ) : (
+                  <p className={style["no_result"]}>검색 결과가 없어요</p>
+                )}
+
+                <button
+                  className={style["fav-apply"]}
+                  onClick={() => {
+                    handleRequestURL(REQUEST_URL);
+                  }}
+                >
+                  <img src={Stackframe} alt="" />
+                  <span>
+                    <p>찾는 주제가 없다면 간편하게 신청해요!</p>
+                    <b>1분만에 주제 신청하기</b>
+                  </span>
+                </button>
+              </div>
+
+              <Streamer title={"치지직 스트리머"} platform={biasDataList.chzzk} openModal={openModal} />
+              {/*
+                <Streamer title={"아티스트"} platform={biasDataList.artist} openModal={openModal} />
+              <Streamer title={"SOOP 스트리머"} platform={biasDataList.soop} openModal={openModal} />
+              <Streamer title={"유튜버"} platform={biasDataList.youtube} openModal={openModal} />
+              */}
+
+              {isModalOpen && (
+                <div className={style["modal-overlay"]} onClick={closeModal}>
+                  <div className={style["modal"]} onClick={(e) => e.stopPropagation()}>
+                    <button className={style["streamer-img"]}>
+                      <div>
+                        <img src={BIAS_URL + `${clickedBid}.png`} />
+                      </div>
+                    </button>
+                    <p>
+                      {clickedBname}님을{" "}
+                      <b>
+                        {biasList.some((item) => {
+                          return item.bid === clickedBid;
+                        })
+                          ? "팔로우 취소"
+                          : "팔로우"}
+                      </b>
+                      합니다
+                    </p>
+                    <span>
+                      <button onClick={closeModal}>취소</button>
+                      <button className={style["follow-button"]} onClick={fetchTryFollowBias}>
+                        {biasList.some((item) => {
+                          return item.bid === clickedBid;
+                        })
+                          ? "팔로우 취소"
+                          : "팔로우"}
+                      </button>
+                    </span>
+                  </div>
+                </div>
+              )}
+            </div>
         </div>
-    </div>
-  );
+      </DesktopLayout>
+    );
+  }
 }
 
 function Streamer({ title, platform, openModal }) {
