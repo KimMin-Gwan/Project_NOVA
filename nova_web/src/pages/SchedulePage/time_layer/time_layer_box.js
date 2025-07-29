@@ -39,7 +39,6 @@ export default function TimeLayerBox({
             swiperRef.current?.slidePrev()
         }
 
-
         return
     }
 
@@ -186,7 +185,6 @@ function ScheduleDetail({
 
     const handleClick = (e) => {
         onClickSchedule(schedule_id); // 꾹 누르기 동작 실행
-
     };
 
     return (

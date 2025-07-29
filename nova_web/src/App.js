@@ -163,7 +163,7 @@ function App() {
       <Route path="/" element={<NewHomePage/>} />
       <Route path="/home_test" element={<HomePage/>}/>
 
-      <Route path="desktop_test" element={<DesktopLayout/>} />
+      <Route path="/desktop_test" element={<DesktopLayout/>} />
 
 
       <Route path="/welcome" element={<BrandPage/>} />
