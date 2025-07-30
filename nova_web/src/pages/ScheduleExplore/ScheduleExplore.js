@@ -22,6 +22,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import DesktopLayout from "../../component/DesktopLayout/DeskTopLayout";
 
 import ScheduleExploreDesktop from "./ScheduleExplore.jsx";
+const scheduleKind = ["게임", "저챗", "음악", "그림", "스포츠", "시참"];
 
 export default function ScheduleExplore() {
   const isMobile = useMediaQuery('(max-width:1100px)');
@@ -37,9 +38,11 @@ export default function ScheduleExplore() {
   const [editScheduleModal, setEditScheduleModal] = useState(false);
 
 
-  const scheduleKind = ["게임", "저챗", "음악", "그림", "스포츠", "시참"];
+
   const swiperRef = useRef(null);
+
   const [activeIndex, setActiveIndex] = useState(0);
+  const [targetCategory, setTargetCategory] = useState(scheduleKind[activeIndex]);
 
   const [buttonType, setButtonType] = useState("");
   // 일정 탐색 페이지에 일정번들, 일정, 이벤트 상태 변경
@@ -61,9 +64,6 @@ export default function ScheduleExplore() {
     setTargetSchedule(target);
   };
 
-
-  useEffect(() => {
-  }, [activeIndex]);
 
   function handleModal(type) {
     setModalButton((modalButton) => !modalButton);
@@ -105,10 +105,12 @@ export default function ScheduleExplore() {
             {scheduleKind.map((item, index) => (
               <SwiperSlide key={index}>
                 <ScheduleComponentList
+                  isMobile={isMobile}
                   category={item}
                   toggleEditScheduleModal={toggleEditScheduleModal}
                   toggleAddScheduleModal={toggleAddScheduleModal}
                   activeIndex={activeIndex}
+                  setActiveIndex={setActiveIndex}
                   myIndex={index}
                 />
               </SwiperSlide>
@@ -139,17 +141,28 @@ export default function ScheduleExplore() {
   }else{
     return(
       <DesktopLayout>
-        <ScheduleExploreDesktop
+        <ScheduleComponentList
+          isMobile={isMobile}
+          category={targetCategory}
+          setCategory={setTargetCategory}
+          toggleEditScheduleModal={toggleEditScheduleModal}
+          toggleAddScheduleModal={toggleAddScheduleModal}
+          activeIndex={activeIndex}
+          setActiveIndex={setActiveIndex}
+          myIndex={0}
         />
       </DesktopLayout>
     )
   }
-
-
 }
 
 
-function ScheduleComponentList({category, toggleEditScheduleModal, toggleAddScheduleModal, activeIndex, myIndex}){
+
+function ScheduleComponentList({
+  isMobile, category, setCategory,
+  toggleEditScheduleModal, toggleAddScheduleModal,
+   activeIndex, setActiveIndex, myIndex
+}){
 
   const [isLoading, setIsLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
@@ -211,14 +224,20 @@ function ScheduleComponentList({category, toggleEditScheduleModal, toggleAddSche
   }
 
   useEffect(() => {
-    if (!isInit) {
-      //if (scheduleData.length ===0){
-        if (activeIndex== myIndex){
-          fetchSearchData();
-          setIsInit(true);
-        }
-      //}
+    if (isMobile){
+      if (!isInit) {
+        //if (scheduleData.length ===0){
+          if (activeIndex== myIndex){
+            fetchSearchData();
+            setIsInit(true);
+          }
+        //}
+      }
+    }else{
+      fetchSearchData();
+      setIsInit(true);
     }
+
   }, [activeIndex]);
 
   // 내 스케줄에 등록하는 함수 (추가하기 버튼 누르면 동작해야됨)
@@ -270,51 +289,64 @@ function ScheduleComponentList({category, toggleEditScheduleModal, toggleAddSche
   }
 
 
-  return (
-    <>
-      {scheduleData.length === 0 && <NoneSchedule/>}
+  if(isMobile){
+    return (
+      <>
+        {scheduleData.length === 0 && <NoneSchedule/>}
 
-      {scheduleData.map((item) => (
-        <li key={item.sid}>
-          <ScheduleCard
-            {...item}
-            toggleClick={() => handleToggleMore(item.sid)} // id 전달
-          />
+        {scheduleData.map((item) => (
+          <li key={item.sid}>
+            <ScheduleCard
+              {...item}
+              toggleClick={() => handleToggleMore(item.sid)} // id 전달
+            />
 
-          {moreClick[item.sid] && (
-            item.is_already_have === false ? (
-              <ScheduleAdd
-                target={item}
-                detailClick={toggleAddScheduleModal}
-                navBoardClick={()=>{
-                  navBoard(item.detail)
-                }}
-                addClick={fetchTryAddSchedule}
-              />
-            ) : item.is_owner === false? (
-              <ScheduleRemove
-                target={item}
-                navBoardClick={()=>{
-                  navBoard(item.detail)
-                }}
-                removeClick={fetchTryRejectSchedule}
-              />
-            ) : (
-              <ScheduleEdit
-                target={item}
-                navBoardClick={
-                  ()=>{
+            {moreClick[item.sid] && (
+              item.is_already_have === false ? (
+                <ScheduleAdd
+                  target={item}
+                  detailClick={toggleAddScheduleModal}
+                  navBoardClick={()=>{
                     navBoard(item.detail)
                   }}
-                editClick={toggleEditScheduleModal}
-              />
-            )
-          )}
-        </li>
-        ))}
-        <div ref={targetRef} style={{ height: "1px" }}></div>
-    </>
-  );
+                  addClick={fetchTryAddSchedule}
+                />
+              ) : item.is_owner === false? (
+                <ScheduleRemove
+                  target={item}
+                  navBoardClick={()=>{
+                    navBoard(item.detail)
+                  }}
+                  removeClick={fetchTryRejectSchedule}
+                />
+              ) : (
+                <ScheduleEdit
+                  target={item}
+                  navBoardClick={
+                    ()=>{
+                      navBoard(item.detail)
+                    }}
+                  editClick={toggleEditScheduleModal}
+                />
+              )
+            )}
+          </li>
+          ))}
+          <div ref={targetRef} style={{ height: "1px" }}></div>
+      </>
+    );
+  }else{
+    return(
+      <ScheduleExploreDesktop 
+        setCategory={setCategory}
+        activeIndex={activeIndex}
+        setActiveIndex={setActiveIndex}
+        scheduleData={scheduleData}
+      />
+    );
+  }
+
+
 }
 
 
