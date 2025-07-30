@@ -22,7 +22,8 @@ export default function DesktopLayout({ children }) {
     setTargetMenu(location.pathname);
   }, [location.pathname])
 
-  let [isLogin, setIsLogin] = useState();
+  let [isLogin, setIsLogin] = useState(false);
+  let [loading, setLoading] = useState(false);
   let [isError, setIsError] = useState();
   let [user, setUser] = useState("")
 
@@ -31,6 +32,7 @@ export default function DesktopLayout({ children }) {
       credentials: "include", // 쿠키를 함께 포함한다는 것
     })
       .then((response) => {
+        setLoading(true);
         if (!response.ok) {
           if (response.status === 401) {
             setIsError(response.status);
@@ -179,19 +181,24 @@ export default function DesktopLayout({ children }) {
                 <img src={top_logo} />
             </div>
             <div className={style["sign-button-wrapper"]}>
-              {isLogin ? (
-                <div className={style["sign-up-button"]}
-                  onClick={()=>{handleNavigate('/mypage')}}
-                >마이페이지</div>
-              ):(
+              {loading &&(
                 <>
+                {isLogin ? (
                   <div className={style["sign-up-button"]}
-                    onClick={()=>{handleNavigate('/signup')}}
-                  >회원가입</div>
-                  <div className={style["sign-in-button"]}
-                    onClick={()=>{handleNavigate('/novalogin')}}
-                  >로그인</div>
+                    onClick={()=>{handleNavigate('/mypage')}}
+                  >마이페이지</div>
+                ):(
+                  <>
+                    <div className={style["sign-up-button"]}
+                      onClick={()=>{handleNavigate('/signup')}}
+                    >회원가입</div>
+                    <div className={style["sign-in-button"]}
+                      onClick={()=>{handleNavigate('/novalogin')}}
+                    >로그인</div>
+                  </>
+                )}
                 </>
+
               )}
             </div>
         </div>
