@@ -21,6 +21,8 @@ import NoneSchedule from "../../component/NoneFeed/NoneSchedule";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import DesktopLayout from "../../component/DesktopLayout/DeskTopLayout";
 
+import ScheduleExploreDesktop from "./ScheduleExplore.jsx";
+
 export default function ScheduleExplore() {
   const isMobile = useMediaQuery('(max-width:1100px)');
   const { moreClick, handleToggleMore } = useToggleMore();
@@ -137,64 +139,8 @@ export default function ScheduleExplore() {
   }else{
     return(
       <DesktopLayout>
-        <div className="container ExploreSchedulePage">
-          <nav className="navBar">
-            <button onClick={() => navigate(-1)} className="backButton">
-              <img src={back} alt="" />
-            </button>
-            <h1>일정 탐색</h1>
-          </nav>
-          <section className={"type-list"}>
-            <ul className={"post-list"} data-active-index={activeIndex}>
-              <TabItem
-                tabs={scheduleKind}
-                activeIndex={activeIndex}
-                handleClick={handleClick}
-              />
-            </ul>
-          </section>
-          <Swiper
-            spaceBetween={50}
-            slidesPerView={1}
-            onSlideChange={handleTabChange}
-            ref={swiperRef}
-            className="scheduleList"
-          >
-            <ul>
-              <ul>
-                {scheduleKind.map((item, index) => (
-                  <SwiperSlide key={index}>
-                    <ScheduleComponentList
-                      category={item}
-                      toggleEditScheduleModal={toggleEditScheduleModal}
-                      toggleAddScheduleModal={toggleAddScheduleModal}
-                      activeIndex={activeIndex}
-                      myIndex={index}
-                    />
-                  </SwiperSlide>
-                ))}
-              </ul>
-            </ul>
-          </Swiper>
-          <ButtonModal
-            closeSchedule={handleModal}
-            isOpen={modalButton}
-            type={buttonType}
-          />
-
-          <ScheduleDetail
-            closeSchedule={toggleAddScheduleModal}
-            isOpen={addScheduleModal}
-            target={targetSchedule}
-          />
-
-          <EditSingleSchedule
-            closeSchedule={toggleEditScheduleModal}
-            isOpen={editScheduleModal}
-            target={targetSchedule}
-            isSingleSchedule={true}
-          />
-        </div>
+        <ScheduleExploreDesktop
+        />
       </DesktopLayout>
     )
   }
