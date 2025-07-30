@@ -22,6 +22,44 @@ export default function DesktopLayout({ children }) {
     setTargetMenu(location.pathname);
   }, [location.pathname])
 
+  let [isLogin, setIsLogin] = useState();
+  let [isError, setIsError] = useState();
+  let [user, setUser] = useState("")
+
+  function handleFetch() {
+    fetch("https://supernova.io.kr/home/is_valid", {
+      credentials: "include", // 쿠키를 함께 포함한다는 것
+    })
+      .then((response) => {
+        if (!response.ok) {
+          if (response.status === 401) {
+            setIsError(response.status);
+            setIsLogin(false);
+            return null;
+          } else {
+            throw new Error(`status: ${response.status}`);
+          }
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data) {
+          //console.log(data);
+          setIsLogin(data.body.result);
+          setUser(data.body.user);
+        }
+      })
+      .catch((error) => {
+        console.error("Fetch error:", error);
+        setIsError(error.message);
+      });
+  }
+
+  useEffect(() => {
+    handleFetch();
+  }, []);
+
+
   const actionButtons = [
     {
         title: "게시글 작성",
@@ -85,6 +123,11 @@ export default function DesktopLayout({ children }) {
                 end_point : "/terms_page",
                 alt: "terms_page"
             },
+            {
+                title: "컨텐츠 클럽",
+                end_point : "/content",
+                alt: "terms_page"
+            }
     ],
       isSub: true,
     },
@@ -136,8 +179,20 @@ export default function DesktopLayout({ children }) {
                 <img src={top_logo} />
             </div>
             <div className={style["sign-button-wrapper"]}>
-                <div className={style["sign-up-button"]}>회원가입</div>
-                <div className={style["sign-in-button"]}>로그인</div>
+              {isLogin ? (
+                <div className={style["sign-up-button"]}
+                  onClick={()=>{handleNavigate('/mypage')}}
+                >마이페이지</div>
+              ):(
+                <>
+                  <div className={style["sign-up-button"]}
+                    onClick={()=>{handleNavigate('/signup')}}
+                  >회원가입</div>
+                  <div className={style["sign-in-button"]}
+                    onClick={()=>{handleNavigate('/novalogin')}}
+                  >로그인</div>
+                </>
+              )}
             </div>
         </div>
       </div>
@@ -170,7 +225,11 @@ export default function DesktopLayout({ children }) {
           </div>
 
           {/* Footer */}
-          <div className={style["side-bar-footer-wrapper"]}>
+          <div className={style["side-bar-footer-wrapper"]}
+            onClick={()=>{
+              handleNavigate("/welcome");
+            }}
+          >
             <div className={style["side-bar-footer-box"]}>
               <div className={style["team-name"]}>Team SUPERNOVA</div>
               <div className={style["footer-body-wrapper"]}>
