@@ -27,14 +27,15 @@
     display: flex;
     width: 160px;
     height: 40px;
-    padding: 16px;
     justify-content: center;
     align-items: center;
     gap: 10px;
-
+    border: 2px solid transparent;
+    background-image: linear-gradient(#fff, #fff),
+        linear-gradient(135deg, #FFE9E9 -0.5%, #91FF94 25.38%, #8981FF 83.1%);
+    background-origin: border-box;
+    background-clip: content-box, border-box;
     border-radius: 40px;
-    border: 2px solid #FFE9E9;
-    background: #FFF;
     box-sizing: border-box;
 }
 
@@ -42,15 +43,15 @@
     display: flex;
     width: 120px;
     height: 40px;
-    padding: 16px;
     justify-content: center;
     align-items: center;
     gap: 10px;
-
     border-radius: 40px;
     border: 2px solid #D8E9FF;
     background: #FFF;
     box-sizing: border-box;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
 }
 
 .schedule_grid{
@@ -145,18 +146,8 @@
 }
 .schedule_detail{
     display: flex;
-    padding: 6px 20px;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    border-radius: 8px 8px 20px 8px;
-    border: 1px solid #FFA8A8;
-    background: #FFF;
-    box-shadow: 3px 3px 8px 0 rgba(0, 0, 0, 0.08);
-}
-.schedule_subscribe{
-    display: flex;
-    padding: 6px 48px;
+    width: 80px;
+    height: 34px;
     justify-content: center;
     align-items: center;
     gap: 10px;
@@ -164,4 +155,43 @@
     border: 1px solid #FFF;
     background: #FFF;
     box-shadow: 3px 3px 8px 0 rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.schedule_detail:hover{
+    border: 1px solid transparent;
+    background-image: linear-gradient(#fff, #fff),
+        linear-gradient(135deg, #FFE9E9 -0.5%, #91FF94 25.38%, #8981FF 83.1%);
+    background-origin: border-box;
+    background-clip: content-box, border-box;
+}
+
+
+.schedule_subscribe{
+    width: 150px;
+    height : 34px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 8px 8px 20px 8px;
+    border: 1px solid #FFF;
+    background: #FFF;
+    box-shadow: 3px 3px 8px 0 rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.schedule_subscribe:hover{
+    border: 1px solid transparent;
+    background-image: linear-gradient(#fff, #fff),
+        linear-gradient(135deg, #FFE9E9 -0.5%, #91FF94 25.38%, #8981FF 83.1%);
+    background-origin: border-box;
+    background-clip: content-box, border-box;
+}
+
+.none_schedule_frame{
+    width: 100%;
+    height: 600px;
 }
