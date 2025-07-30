@@ -159,7 +159,7 @@ function BrandHighlight() {
                             회원가입
                         </div>
                         <div className={style["button-2"]}
-                            onClick={() => openNewWindow()}>
+                            onClick={() => handleNavigate("/")}>
                             바로가기
                         </div>
                     </div>
