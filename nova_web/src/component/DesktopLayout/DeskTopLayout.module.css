@@ -85,6 +85,7 @@
     align-items: center;
     padding-left: 30px;
     gap: 10px;
+    cursor: pointer;
 }
 
 

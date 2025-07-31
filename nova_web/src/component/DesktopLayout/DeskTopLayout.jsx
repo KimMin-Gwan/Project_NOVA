@@ -177,7 +177,9 @@ export default function DesktopLayout({ children }) {
       {/* Top bar */}
       <div className={style["top-bar-frame"]}>
         <div className={style["top-bar-inner"]}>
-            <div className={style["top-bar-logo-box"]}>
+            <div className={style["top-bar-logo-box"]}
+              onClick={()=>{handleNavigate('/')}}
+            >
                 <img src={top_logo} />
             </div>
             <div className={style["sign-button-wrapper"]}>
