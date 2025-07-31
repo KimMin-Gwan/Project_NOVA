@@ -108,8 +108,10 @@ export default function FollowPage() {
     });
   }
 
+
   function handleRequestURL(url) {
-    window.open(url, "_blank", "noopener, noreferrer");
+    //window.open(url, "_blank", "noopener, noreferrer");
+    navigate("/submit_new");
   }
 
   function onKeyDown(e) {
