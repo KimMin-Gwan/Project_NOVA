@@ -73,6 +73,23 @@ class Sub_Service_View(Master_View):
             response = model.get_response_form_data(self._head_parser)
             return response
         
+        @self.__app.get('/nova_sub_system/try_add_new_bias')
+        def try_add_new_bias(request:Request, raw_reqeust:dict):
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
+            data_payload = AddNewBiasRequest(raw_reqeust)
+
+            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+            #if not request_manager.jwt_payload.result:
+                #raise request_manager.credentials_exception
+
+            sub_controller =Sub_Controller()
+            model = sub_controller.try_add_new_bias(database=self.__database,
+                                                        data_payload=data_payload)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+        
 
     def bias_setting_route(self):
         # 바이어스를 String 으로 검색
@@ -222,6 +239,8 @@ class Sub_Service_View(Master_View):
 class DummyRequest():
     def __init__(self) -> None:
         pass
+    
+    
         
 class BiasWithCategoryRequest():
     def __init__(self, category) -> None:
@@ -243,6 +262,14 @@ class BiasPageInfoRequest():
 class BiasSearchRequest():
     def __init__(self, bname) -> None:
         self.bname=bname
+        
+class AddNewBiasRequest(RequestHeader):
+    def __init__(self, request) -> None:
+        super().__init__(request)
+        body = request['body']
+
+        # 여기부터
+
 
 class MyContributionRequest(RequestHeader):
     def __init__(self, request) -> None:
