@@ -316,12 +316,15 @@ class User(SampleDomain):
             "feed_history" : copy.copy(self.feed_history),
             "feed_search_history" : copy.copy(self.feed_search_history)
         }
-
+        
+        
 class Bias(SampleDomain):
-    def __init__(self, bid="",bname="", gender="", category=[], tags=[], birthday="", debut="",
+    def __init__(self, bid="", bname="", gender="", category=[], tags=[], birthday="", debut="",
                  agency="", group=[], num_user=0, x_account="", main_time=[],
                  insta_account="", tiktok_account="", youtube_account="", homepage="",
-                 fan_cafe="", country=[], fanname = [], board_types=["선택없음", "자유게시판", "팬아트", "유머게시판"]):
+                 fan_cafe="", country=[], fanname=[], board_types=["선택없음", "자유게시판", "팬아트", "유머게시판"],
+                 state="DEFAULT"
+                 ):
         self.bid = bid
         self.bname = bname
         self.gender = gender
@@ -343,37 +346,39 @@ class Bias(SampleDomain):
         self.fanname = copy.copy(fanname)
         self.main_time = copy.copy(main_time)
         self.is_ad = False
+        self.state = state
 
-    def make_with_dict(self, dict_data:dict):
+    def from_dict(self, dict_data: dict):
         try:
-            self.bid = dict_data['bid']
-            self.bname = dict_data['bname']
-            self.gender = dict_data['gender']
-            self.category = copy.copy(dict_data['category'])
-            self.tags = copy.copy(dict_data['tags'])
-            self.birthday = dict_data['birthday']
-            self.debut = dict_data['debut']
-            self.agency = dict_data['agency']
-            self.group = copy.copy(dict_data['group'])
-            self.num_user = dict_data['num_user']
-            self.board_types = copy.copy(dict_data['board_types'])
-            self.x_account = dict_data['x_account']
-            self.insta_account = dict_data['insta_account']
-            self.tiktok_account = dict_data['tiktok_account']
-            self.youtube_account = dict_data['youtube_account']
-            self.homepage = dict_data['homepage']
-            self.fan_cafe = dict_data['fan_cafe']
-            self.country = copy.copy(dict_data['country'])
-            self.fanname = copy.copy(dict_data['fanname'])
-            self.main_time = dict_data.get('main_time', [])
+            self.bid = dict_data.get('bid', "")
+            self.bname = dict_data.get('bname', "")
+            self.gender = dict_data.get('gender', "")
+            self.category = copy.copy(dict_data.get('category', []))
+            self.tags = copy.copy(dict_data.get('tags', []))
+            self.birthday = dict_data.get('birthday', "")
+            self.debut = dict_data.get('debut', "")
+            self.agency = dict_data.get('agency', "")
+            self.group = copy.copy(dict_data.get('group', []))
+            self.num_user = dict_data.get('num_user', 0)
+            self.board_types = copy.copy(dict_data.get('board_types', ["선택없음", "자유게시판", "팬아트", "유머게시판"]))
+            self.x_account = dict_data.get('x_account', "")
+            self.insta_account = dict_data.get('insta_account', "")
+            self.tiktok_account = dict_data.get('tiktok_account', "")
+            self.youtube_account = dict_data.get('youtube_account', "")
+            self.homepage = dict_data.get('homepage', "")
+            self.fan_cafe = dict_data.get('fan_cafe', "")
+            self.country = copy.copy(dict_data.get('country', []))
+            self.fanname = copy.copy(dict_data.get('fanname', []))
+            self.main_time = copy.copy(dict_data.get('main_time', []))
             self.is_ad = False
+            self.state = dict_data.get("state", "DEFAULT")
         except Exception as e:
             print(e)
             raise DictMakingError(error_type=e)
         finally:
             return self
 
-    def get_dict_form_data(self):
+    def to_dict(self):
         return {
             "bid": self.bid,
             "bname": self.bname,
@@ -393,8 +398,9 @@ class Bias(SampleDomain):
             "homepage": self.homepage,
             "fan_cafe": self.fan_cafe,
             "country": copy.copy(self.country),
-            'fanname':copy.copy(self.fanname),
-            'main_time' : copy.copy(self.main_time)
+            "fanname": copy.copy(self.fanname),
+            "main_time": copy.copy(self.main_time),
+            "state" : self.state
         }
 
 class NameCard(SampleDomain):
