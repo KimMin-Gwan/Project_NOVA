@@ -106,10 +106,9 @@ export default function BiasBoxes({ fetchBiasCategoryData, fecthDefaultSetting }
             const bias = biasList[i];
             return (
               <div key={i} className="bias-info">
-                <div className="bias-box">
+                <div className={clickedBias === i ? "clicked_bias" : "bias-box"}>
                   {bias && (
                     <img
-                      className={clickedBias === i ? "clicked-img" : ""}
                       src={BIAS_URL + `${bias.bid}.png`}
                       onError={(e) => (e.target.src = tempBias)}
                       alt="bias"
