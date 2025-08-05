@@ -497,15 +497,15 @@ class MakeNewBiasModel(BaseModel):
 
     def try_make_new_bias(self, name, platform):
         if name == "NONE" or name == "":
-            return
+            return False
         
         if platform == "NONE" or platform == "":
-            return
+            return False
         
         self._bias.bid = str(uuid.uuid4())
         self._bias.bname = name
         self._bias.platform = platform
-        return
+        return True
     
     def try_alert_to_admin(self, info:str):
         MailSender().alert_new_bias(bias=self._bias, info=info)
