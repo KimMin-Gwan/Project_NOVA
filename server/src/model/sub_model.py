@@ -2,7 +2,7 @@ from model.base_model import BaseModel
 from model.league_model import LeagueModel
 from model import Local_Database
 from others.data_domain import Bias, User, Report
-from others import CoreControllerLogicError, HTMLEXtractor, ImageDescriper
+from others import CoreControllerLogicError, HTMLEXtractor, ImageDescriper, MailSender
 import copy
 from urllib.parse import urlparse
 import datetime
@@ -474,7 +474,6 @@ class ChangeUserAgeModel(BaseModel):
 
 # bias.state => "DEFAULT", "TEMP", "CONFIRMED", "APPROVED"
 import uuid
-from manager import MailSender
 
 class MakeNewBiasModel(BaseModel):
     def __init__(self, database:Local_Database) -> None:

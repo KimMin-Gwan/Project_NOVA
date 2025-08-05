@@ -3,8 +3,6 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from fastapi import HTTPException, status
 
-from others import Bias
-
 # 이메일 전송
 class MailSender:
     def __init__(self):

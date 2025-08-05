@@ -1,6 +1,5 @@
 from model import *
-from others import UserNotExist, CustomError
-from manager import MailSender
+from others import UserNotExist, CustomError, MailSender
 
 from pprint import pprint
 
