@@ -140,11 +140,11 @@ class BiasSearchModel(BaseModel):
         
         if len(biases):
             for bias in biases:
-                if category in bias.category:
+                if category in bias.platform:
                     result.append(bias)
         else:
             for bias in self._biases:
-                if category in bias.category:
+                if category in bias.platform:
                     result.append(bias)
                     
         return result
