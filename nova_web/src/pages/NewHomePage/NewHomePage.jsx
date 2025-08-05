@@ -1,7 +1,8 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useState, useRef} from 'react';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Feed from "./../../component/feed";
 import style from "./../FeedList/FeedHashList.module.css";
+import style2 from "./NewHomePage.module.css";
 
 import NavBar from "../../component/NavBar/NavBar.js";
 import BiasBoxes from "../../component/BiasBoxes/BiasBoxes.js";
@@ -89,7 +90,10 @@ export default function NewHomePage () {
         }
     };
 
-    const targetRef = useIntersectionObserver(loadMoreCallBack, { threshold: 0.5 }, hasMore);
+
+    const scrollRef = useRef(null);
+    const targetRef = useIntersectionObserver(loadMoreCallBack, 
+        { root:scrollRef.current, threshold: 0.5 }, hasMore);
 
     if (isMobile){
         return(
@@ -106,7 +110,9 @@ export default function NewHomePage () {
 
 
                     <section>
-                        <div className={feedData.length > 0 ? style["scroll-area"] : style["none_feed_scroll"]}>
+                        <div className={feedData.length > 0 ? style["scroll-area"] : style["none_feed_scroll"]}
+                            style={{columnCount:2, columnGap: "20px"}}
+                            >
                         {
                             isLoading ? (
                                 <MyPageLoading />
@@ -134,20 +140,13 @@ export default function NewHomePage () {
     }else{
         return(
             <DesktopLayout>
-                <div className={`all-box ${style["all_container"]}`}>
-                    <div className={style["container"]}>
-                        <div className={'top-area'}>
-                            {/*<DisplayAds />*/}
-
-                            <Header />
-                            <SearchBox />
-                        </div>
+                <div className={style2["desktop_feed_list_outer_frame"]}>
+                    <div className={style2["desktop_feed_list_inner_frame"]}>
                         <BiasBoxes setBiasId={setBiasId} fetchBiasCategoryData={fetchBiasCategoryData}  fecthDefaultSetting={fetchAllFeed}/>
-                        <div className="section-separator"></div>
-
-
                         <section>
-                            <div className={feedData.length > 0 ? style["scroll-area"] : style["none_feed_scroll"]}>
+                            <div className={feedData.length > 0 ? style["scroll-area"] : style["none_feed_scroll"]}
+                                ref={scrollRef}
+                            >
                             {
                                 isLoading ? (
                                     <MyPageLoading />
