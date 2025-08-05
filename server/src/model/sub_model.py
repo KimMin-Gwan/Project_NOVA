@@ -508,7 +508,7 @@ class MakeNewBiasModel(BaseModel):
         return True
     
     def try_alert_to_admin(self, info:str):
-        MailSender().alert_new_bias(bias=self._bias, info=info)
+        MailSender().alert_new_bias(user=self._user, bias=self._bias, info=info)
         MailSender().send_email_new_bias_added(
             receiver_email=self._user.email,
             bias=self._bias, info=info
