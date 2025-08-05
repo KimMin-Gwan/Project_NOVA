@@ -118,7 +118,7 @@ class MailSender:
             
     # 전송하는 함수
     # send_email(보낼 주소, 인증번호)
-    def alert_new_bias(self, bias, info):
+    def alert_new_bias(self, user, bias, info):
         receiver_email = "youths0828@naver.com"
         
         # 이메일 메시지 구성
@@ -148,6 +148,7 @@ class MailSender:
                         <p style="margin: 5px 0; font-weight: bold;">이름: {bias.bname}</p>
                         <p style="margin: 5px 0; font-weight: bold;">플랫폼: {bias.platform}</p>
                         <p style="margin: 5px 0; font-weight: bold;">정보: {info}</p>
+                        <p style="margin: 5px 0; font-weight: bold;">등록 이메일 : {user.email}</p>
                     </div>
 
                     <p style="margin: 10px 0;">요청 내용을 검토하시고, 등록 상태를 <strong>CONFIRMED</strong>로 변경해 주세요.</p>
