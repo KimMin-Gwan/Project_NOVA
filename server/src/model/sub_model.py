@@ -472,3 +472,62 @@ class ChangeUserAgeModel(BaseModel):
 
 
 
+# bias.state => "DEFAULT", "TEMP", "CONFIRMED", "APPROVED"
+import uuid
+from manager import MailSender
+
+class MakeNewBiasModel(BaseModel):
+    def __init__(self, database:Local_Database) -> None:
+        super().__init__(database)
+        self._info = ""
+        self._bias = Bias(state="TEMP")
+        self._result = False
+
+    def get_response_form_data(self, head_parser):
+        try:
+            body = {
+                'result' : self._result,
+            }
+
+            response = self._get_response_data(head_parser=head_parser, body=body)
+            return response
+
+        except Exception as e:
+            raise CoreControllerLogicError("response making error | " + e)
+
+
+    def try_make_new_bias(self, name, platform):
+        if name == "NONE" or name == "":
+            return
+        
+        if platform == "NONE" or platform == "":
+            return
+        
+        self._bias.bid = str(uuid.uuid4())
+        self._bias.bname = name
+        self._bias.platform = platform
+        return
+    
+    def try_alert_to_admin(self, info:str):
+        MailSender().alert_new_bias(bias=self._bias, info=info)
+        MailSender().send_email_new_bias_added(
+            receiver_email=self._user.email,
+            bias=self._bias, info=info
+            )
+        
+        self._database.add_new_data(target_id="bid", new_data=self._bias.get_dict_form_data())
+        self._result = True
+        return
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        

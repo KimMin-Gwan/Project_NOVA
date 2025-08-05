@@ -28,6 +28,26 @@ class Sub_Controller:
 
         finally:
             return model
+        
+    
+    def try_add_new_bias(self, database:Local_Database, request) -> BaseModel:
+        model = MakeNewBiasModel(database=database)
+        
+        if not model.set_user_with_email(request=request.jwt_payload):
+            raise UserNotExist("Can not find User With uid")
+        
+        result = model.try_make_new_bias(
+            name=request.data_payload.name,
+            platform=request.data_payload.platform
+            )
+        
+        if result:
+            model.try_alert_to_admin(info=request.data_payload.info)
+        
+        return model
+        
+        
+        
     
     # 최애 기반 커뮤니티 페이지에서 노출될 공지시항 리스트
     def try_get_notice_sample(self, database:Local_Database, data_payload) -> BaseModel: 

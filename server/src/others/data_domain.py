@@ -323,6 +323,7 @@ class Bias(SampleDomain):
                  agency="", group=[], num_user=0, x_account="", main_time=[],
                  insta_account="", tiktok_account="", youtube_account="", homepage="",
                  fan_cafe="", country=[], fanname=[], board_types=["선택없음", "자유게시판", "팬아트", "유머게시판"],
+                 platform=[],
                  state="DEFAULT"
                  ):
         self.bid = bid
@@ -347,6 +348,7 @@ class Bias(SampleDomain):
         self.main_time = copy.copy(main_time)
         self.is_ad = False
         self.state = state
+        self.platform = copy.copy(platform)
 
     def from_dict(self, dict_data: dict):
         try:
@@ -372,6 +374,7 @@ class Bias(SampleDomain):
             self.main_time = copy.copy(dict_data.get('main_time', []))
             self.is_ad = False
             self.state = dict_data.get("state", "DEFAULT")
+            self.platform = copy.copy(dict_data.get("platform", []))
         except Exception as e:
             print(e)
             raise DictMakingError(error_type=e)
@@ -400,7 +403,8 @@ class Bias(SampleDomain):
             "country": copy.copy(self.country),
             "fanname": copy.copy(self.fanname),
             "main_time": copy.copy(self.main_time),
-            "state" : self.state
+            "state" : self.state,
+            "platform" : self.platform
         }
 
 class NameCard(SampleDomain):

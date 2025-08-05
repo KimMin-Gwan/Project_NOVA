@@ -83,8 +83,10 @@ class Sub_Service_View(Master_View):
                 #raise request_manager.credentials_exception
 
             sub_controller =Sub_Controller()
-            model = sub_controller.try_add_new_bias(database=self.__database,
-                                                        data_payload=data_payload)
+            model = sub_controller.try_add_new_bias(
+                database=self.__database,
+                request=request_manager
+                )
 
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
@@ -266,10 +268,10 @@ class BiasSearchRequest():
 class AddNewBiasRequest(RequestHeader):
     def __init__(self, request) -> None:
         super().__init__(request)
-        body = request['body']
-
-        # 여기부터
-
+        body:dict = request['body']
+        self.name = body.get("name", "NONE")
+        self.platform = body.get("platform", "NONE")
+        self.info = body.get("info", "")
 
 class MyContributionRequest(RequestHeader):
     def __init__(self, request) -> None:
