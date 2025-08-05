@@ -390,6 +390,7 @@ function MyPage() {
       </div>
     );
   }else{
+    return(
     <DesktopLayout>
       <div className={`${style["container"]} ${style["edit-container"]}`}>
         <div className={style.top_area}>
@@ -543,6 +544,7 @@ function MyPage() {
         </button>
       </div>
     </DesktopLayout>
+    );
   }
 
 
