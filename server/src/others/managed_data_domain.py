@@ -1486,6 +1486,8 @@ class ManagedScheduleTable(ManagedTable):
             schedule = Schedule()
             schedule.make_with_dict(dict_data=schedule_data)
             schedules.append(schedule)
+            
+        pprint(schedules)
 
         for single_schedule in schedules:
             bias_data = self._database.get_data_with_id(target="bid", id=single_schedule.bid)
