@@ -73,7 +73,7 @@ class Sub_Service_View(Master_View):
             response = model.get_response_form_data(self._head_parser)
             return response
         
-        @self.__app.get('/nova_sub_system/try_add_new_bias')
+        @self.__app.post('/nova_sub_system/try_add_new_bias')
         def try_add_new_bias(request:Request, raw_reqeust:dict):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = AddNewBiasRequest(raw_reqeust)
