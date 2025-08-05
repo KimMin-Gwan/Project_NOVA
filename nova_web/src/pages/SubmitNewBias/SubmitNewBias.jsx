@@ -1,5 +1,5 @@
-import { useState} from 'react';
-
+import { useEffect, useState} from 'react';
+import { useNavigate } from "react-router-dom";
 import style from "./SubmitNewBias.module.css";
 import title_star from "./title_star.svg";
 import info from "./Info.svg";
@@ -7,6 +7,8 @@ import positive_icon from "./positive.svg";
 import negative_icon from "./negative.svg";
 import useMediaQuery from '@mui/material/useMediaQuery';
 import DesktopLayout from '../../component/DesktopLayout/DeskTopLayout';
+import mainApi from '../../services/apis/mainApi';
+import HEADER from '../../constant/header';
 
 const TEXT = {
   title: "최애 주제 등록",
@@ -35,12 +37,7 @@ const formFields = [
     label: "관련 정보*",
     placeholder: "스트리머에 대한 추가 정보를 적어주세요",
     multiline: true,
-  },
-  {
-    label: "작성자 이메일*",
-    placeholder: "제출하신 내용의 결과는 이메일로 알려드립니다",
-    multiline: false,
-  },
+  }
 ];
 
 const mainConditions = [
@@ -80,6 +77,36 @@ export default function SubmitNewBiasPage(){
 
 
 function SubmitNewBias() {
+    const navigate = useNavigate();
+
+    function handleFetch() {
+        fetch("https://supernova.io.kr/home/is_valid", {
+        credentials: "include", // 쿠키를 함께 포함한다는 것
+        })
+        .then((response) => {
+            if (!response.ok) {
+                if (response.status === 401) {
+                    alert("로그인이 필요한 서비스입니다.");
+                    navigate("/novalogin");
+                    return Promise.reject();
+                }
+            }
+            return response
+        })
+        .then((data) => {
+            if (data) {
+            //console.log(data);
+            }
+        })
+        .catch((error) => {
+            console.error("Fetch error:", error);
+        });
+    }
+
+    useEffect(() => {
+        handleFetch();
+    }, []);
+
     const [isChecked, setIsChecked] = useState(false);
 
 
@@ -98,10 +125,6 @@ function SubmitNewBias() {
         checkbox: '',
     });
 
-    const isValidEmail = (email) => {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
-    };
 
     const handleChange = (key) => (e) => {
         const value = e.target.value;
@@ -115,20 +138,17 @@ function SubmitNewBias() {
     };
 
     const handleSubmit = () => {
-        const { name, platform, info, email } = form;
+        const { name, platform, info} = form;
         const newErrors = {
             name: '',
             platform: '',
             info: '',
-            email: '',
             checkbox: '',
         };
 
         if (!name.trim()) newErrors.name = '이름을 입력해주세요.';
         if (!platform.trim()) newErrors.platform = '플랫폼을 입력해주세요.';
         if (!info.trim()) newErrors.info = '관련 정보를 입력해주세요.';
-        if (!email.trim()) newErrors.email = '이메일을 입력해주세요.';
-        else if (!isValidEmail(email)) newErrors.email = '올바른 이메일 형식이 아닙니다.';
         if (!isChecked) newErrors.checkbox = '필수조건을 확인해주세요.';
 
         setErrors(newErrors);
@@ -137,9 +157,19 @@ function SubmitNewBias() {
         const hasError = Object.values(newErrors).some(msg => msg);
         if (!hasError) {
             console.log('제출 완료', form);
+            fetchNewBias()
         }
     };
 
+    const fetchNewBias = async () => {
+        await mainApi.post("nova_sub_system/try_add_new_bias", {
+                header: HEADER,
+                body: form
+            }
+        ).then((res) => {
+            console.log(res);
+        });
+    }
 
 
     const renderCondition = (condition, idx) => (
