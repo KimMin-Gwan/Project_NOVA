@@ -46,6 +46,8 @@ import ContentPage from "./pages/BrandContent/ContentPage.jsx";
 import ContentTestPage from "./pages/BrandContent/ContentTestPage.jsx";
 import NewHomePage from "./pages/NewHomePage/NewHomePage.jsx";
 import DesktopLayout from "./component/DesktopLayout/DeskTopLayout.jsx";
+import SubmitNewBias from "./pages/SubmitNewBias/SubmitNewBias.jsx";
+import SubmitNewBiasPage from "./pages/SubmitNewBias/SubmitNewBias.jsx";
 
 // 다크 모드 클래스 반환 함수
 export function getModeClass(mode) {
@@ -96,6 +98,7 @@ function App() {
       ></Route>
       <Route path="/mypage" element={<MyPage />}></Route>
       <Route path="/mypage_edit" element={<MyPageEdit />}></Route>
+      <Route path="/submit_new" element={<SubmitNewBiasPage/>} />
 
       {/* 로그인 및 비밀번호 및 회원가입 */}
       <Route
