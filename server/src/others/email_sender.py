@@ -26,83 +26,22 @@ class MailSender:
         <html lang="ko">
         <head>
             <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>노바 플랫폼 비밀번호 찾기 보안코드</title>
-            <style>
-                body {{
-                    font-family: 'Arial', sans-serif;
-                    background-color: #f4f4f4;
-                    margin: 0;
-                    padding: 0;
-                }}
-                .email-container {{
-                    max-width: 600px;
-                    margin: 0 auto;
-                    background-color: #ffffff;
-                    padding: 20px;
-                    border: 1px solid #dddddd;
-                    border-radius: 8px;
-                    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-                }}
-                .header {{
-                    text-align: center;
-                    padding: 10px 0;
-                    border-bottom: 1px solid #dddddd;
-                }}
-                .header h1 {{
-                    font-size: 24px;
-                    margin: 0;
-                    color: #333333;
-                }}
-                .content {{
-                    padding: 20px;
-                    text-align: center;
-                    line-height: 1.6;
-                }}
-                .content p {{
-                    font-size: 16px;
-                    color: #555555;
-                    margin-bottom: 20px;
-                }}
-                .button-container {{
-                    text-align: center;
-                    margin: 20px 0;
-                }}
-                .button {{
-                    background-color: #007bff;
-                    color: #ffffff;
-                    padding: 12px 20px;
-                    border-radius: 5px;
-                    text-decoration: none;
-                    font-size: 16px;
-                }}
-                .button:hover {{
-                    background-color: #0056b3;
-                }}
-                .footer {{
-                    text-align: center;
-                    font-size: 14px;
-                    color: #aaaaaa;
-                    margin-top: 30px;
-                    border-top: 1px solid #dddddd;
-                    padding-top: 10px;
-                }}
-            </style>
         </head>
-        <body>
-            <div class="email-container">
-                <div class="header">
-                    <h1>노바 플랫폼 비밀번호 찾기 이메일입니다</h1>
+        <body style="margin: 0; padding: 0; background-color: #f4f4f4; font-family: Arial, sans-serif;">
+            <div style="max-width: 600px; margin: 40px auto; background-color: #ffffff; padding: 20px; border: 1px solid #dddddd; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
+                <div style="text-align: center; padding: 10px 0; border-bottom: 1px solid #dddddd;">
+                    <h1 style="font-size: 24px; margin: 0; color: #333333;">노바 플랫폼 비밀번호 찾기</h1>
                 </div>
-                <div class="content">
-                    <p>안녕하세요, 지지자님!</p>
-                    <p>아래 인증 코드를 입력하여 비밀번호 찾기를 진행해주세요.</p>
-                    <div class="button-container">
-                        <p style="font-size: 24px; font-weight: bold;">인증 코드: {verification_code}</p>
+                <div style="padding: 20px; text-align: center; line-height: 1.6;">
+                    <p style="font-size: 16px; color: #555555; margin-bottom: 20px;">안녕하세요, 지지자님!</p>
+                    <p style="font-size: 16px; color: #555555; margin-bottom: 20px;">아래 인증 코드를 입력하여 비밀번호 찾기를 완료해 주세요.</p>
+                    <div style="margin: 20px 0;">
+                        <p style="font-size: 24px; font-weight: bold; color: #000000;">인증 코드: <span style="color: #007bff;">{verification_code}</span></p>
                     </div>
                 </div>
-                <div class="footer">
-                    <p>이 메일은 발신 전용입니다. 비밀번호 찾기에 문제가 있으시면 고객센터로 연락해 주세요.</p>
+                <div style="text-align: center; font-size: 14px; color: #aaaaaa; margin-top: 30px; border-top: 1px solid #dddddd; padding-top: 10px;">
+                    <p>이 메일은 발신 전용입니다. 문제가 있으시면 고객센터로 문의해 주세요.</p>
                 </div>
             </div>
         </body>
@@ -138,88 +77,28 @@ class MailSender:
         <html lang="ko">
         <head>
             <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>회원가입 인증 이메일</title>
-            <style>
-                body {{
-                    font-family: 'Arial', sans-serif;
-                    background-color: #f4f4f4;
-                    margin: 0;
-                    padding: 0;
-                }}
-                .email-container {{
-                    max-width: 600px;
-                    margin: 0 auto;
-                    background-color: #ffffff;
-                    padding: 20px;
-                    border: 1px solid #dddddd;
-                    border-radius: 8px;
-                    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-                }}
-                .header {{
-                    text-align: center;
-                    padding: 10px 0;
-                    border-bottom: 1px solid #dddddd;
-                }}
-                .header h1 {{
-                    font-size: 24px;
-                    margin: 0;
-                    color: #333333;
-                }}
-                .content {{
-                    padding: 20px;
-                    text-align: center;
-                    line-height: 1.6;
-                }}
-                .content p {{
-                    font-size: 16px;
-                    color: #555555;
-                    margin-bottom: 20px;
-                }}
-                .button-container {{
-                    text-align: center;
-                    margin: 20px 0;
-                }}
-                .button {{
-                    background-color: #007bff;
-                    color: #ffffff;
-                    padding: 12px 20px;
-                    border-radius: 5px;
-                    text-decoration: none;
-                    font-size: 16px;
-                }}
-                .button:hover {{
-                    background-color: #0056b3;
-                }}
-                .footer {{
-                    text-align: center;
-                    font-size: 14px;
-                    color: #aaaaaa;
-                    margin-top: 30px;
-                    border-top: 1px solid #dddddd;
-                    padding-top: 10px;
-                }}
-            </style>
         </head>
-        <body>
-            <div class="email-container">
-                <div class="header">
-                    <h1>노바 플랫폼 회원가입을 환영합니다!</h1>
+        <body style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0;">
+            <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 20px; border: 1px solid #dddddd; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
+                <div style="text-align: center; padding: 10px 0; border-bottom: 1px solid #dddddd;">
+                    <h1 style="font-size: 24px; margin: 0; color: #333333;">노바 플랫폼 회원가입을 환영합니다!</h1>
                 </div>
-                <div class="content">
-                    <p>안녕하세요, 지지자님!</p>
-                    <p>아래 인증 코드를 입력하여 회원가입을 완료해 주세요.</p>
-                    <div class="button-container">
+                <div style="padding: 20px; text-align: center; line-height: 1.6;">
+                    <p style="font-size: 16px; color: #555555; margin-bottom: 20px;">안녕하세요, 지지자님!</p>
+                    <p style="font-size: 16px; color: #555555; margin-bottom: 20px;">아래 인증 코드를 입력하여 회원가입을 완료해 주세요.</p>
+                    <div style="text-align: center; margin: 20px 0;">
                         <p style="font-size: 24px; font-weight: bold;">인증 코드: {verification_code}</p>
                     </div>
-                    <p>회원가입 절차를 계속 진행해 주세요.</p>
+                    <p style="font-size: 16px; color: #555555; margin-bottom: 20px;">회원가입 절차를 계속 진행해 주세요.</p>
                 </div>
-                <div class="footer">
+                <div style="text-align: center; font-size: 14px; color: #aaaaaa; margin-top: 30px; border-top: 1px solid #dddddd; padding-top: 10px;">
                     <p>이 메일은 발신 전용입니다. 로그인에 문제가 있으시면 고객센터로 연락해 주세요.</p>
                 </div>
             </div>
         </body>
         </html>
+
         """
         # MIMEText 객체로 HTML 본문 생성
         part = MIMEText(html_content, "html")
@@ -256,76 +135,24 @@ class MailSender:
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>새로운 스트리머 등록 요청</title>
-            <style>
-                body {{
-                    font-family: 'Arial', sans-serif;
-                    background-color: #f4f4f4;
-                    margin: 0;
-                    padding: 0;
-                }}
-                .email-container {{
-                    max-width: 600px;
-                    margin: 40px auto;
-                    background-color: #ffffff;
-                    padding: 30px;
-                    border: 1px solid #dddddd;
-                    border-radius: 8px;
-                    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-                }}
-                .header {{
-                    text-align: center;
-                    margin-bottom: 20px;
-                }}
-                .header h2 {{
-                    font-size: 22px;
-                    color: #333333;
-                    margin: 0;
-                }}
-                .content {{
-                    font-size: 16px;
-                    color: #555555;
-                    line-height: 1.7;
-                }}
-                .content p {{
-                    margin: 10px 0;
-                }}
-                .highlight-box {{
-                    background-color: #f9f9f9;
-                    border-left: 4px solid #007bff;
-                    padding: 15px;
-                    margin: 20px 0;
-                }}
-                .highlight-box p {{
-                    margin: 5px 0;
-                    font-weight: bold;
-                }}
-                .footer {{
-                    text-align: center;
-                    font-size: 13px;
-                    color: #999999;
-                    margin-top: 40px;
-                    border-top: 1px solid #dddddd;
-                    padding-top: 10px;
-                }}
-            </style>
         </head>
-        <body>
-            <div class="email-container">
-                <div class="header">
-                    <h2>새로운 스트리머 등록 요청이 도착했습니다.</h2>
+        <body style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0;">
+            <div style="max-width: 600px; margin: 40px auto; background-color: #ffffff; padding: 30px; border: 1px solid #dddddd; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <h2 style="font-size: 22px; color: #333333; margin: 0;">새로운 스트리머 등록 요청이 도착했습니다.</h2>
                 </div>
-                <div class="content">
-                    <p>다음 스트리머에 대한 등록 요청이 서버에 접수되었습니다.</p>
+                <div style="font-size: 16px; color: #555555; line-height: 1.7;">
+                    <p style="margin: 10px 0;">다음 스트리머에 대한 등록 요청이 서버에 접수되었습니다.</p>
 
-                    <div class="highlight-box">
-                        <p>이름: {bias.bname}</p>
-                        <p>플랫폼: {bias.platform}</p>
-                        <p>정보: {info}</p>
+                    <div style="background-color: #f9f9f9; border-left: 4px solid #007bff; padding: 15px; margin: 20px 0;">
+                        <p style="margin: 5px 0; font-weight: bold;">이름: {bias.bname}</p>
+                        <p style="margin: 5px 0; font-weight: bold;">플랫폼: {bias.platform}</p>
+                        <p style="margin: 5px 0; font-weight: bold;">정보: {info}</p>
                     </div>
 
-                    <p>요청 내용을 검토하시고, 등록 상태를 <strong>CONFIRMED</strong>로 변경해 주세요.</p>
+                    <p style="margin: 10px 0;">요청 내용을 검토하시고, 등록 상태를 <strong>CONFIRMED</strong>로 변경해 주세요.</p>
                 </div>
-                <div class="footer">
+                <div style="text-align: center; font-size: 13px; color: #999999; margin-top: 40px; border-top: 1px solid #dddddd; padding-top: 10px;">
                     이 메일은 시스템에 의해 자동 발송되었습니다.
                 </div>
             </div>
@@ -355,7 +182,7 @@ class MailSender:
         
         # 이메일 메시지 구성
         message = MIMEMultipart("alternative")
-        message["Subject"] = "노바 플랫폼 회원 가입 | 보안 코드"
+        message["Subject"] = "새로운 스트리머가 등록되었습니다."
         message["From"] = self.sender_email
         message["To"] = receiver_email
         
@@ -366,85 +193,30 @@ class MailSender:
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>새로운 스트리머 등록 요청</title>
-            <style>
-                body {{
-                    font-family: 'Arial', sans-serif;
-                    background-color: #f4f4f4;
-                    margin: 0;
-                    padding: 0;
-                }}
-                .email-container {{
-                    max-width: 600px;
-                    margin: 40px auto;
-                    background-color: #ffffff;
-                    padding: 30px;
-                    border: 1px solid #dddddd;
-                    border-radius: 8px;
-                    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-                }}
-                .header {{
-                    text-align: center;
-                    margin-bottom: 20px;
-                }}
-                .header h2 {{
-                    font-size: 22px;
-                    color: #333333;
-                    margin: 0;
-                }}
-                .content {{
-                    font-size: 16px;
-                    color: #555555;
-                    line-height: 1.7;
-                }}
-                .content p {{
-                    margin: 10px 0;
-                }}
-                .highlight-box {{
-                    background-color: #f9f9f9;
-                    border-left: 4px solid #007bff;
-                    padding: 15px;
-                    margin: 20px 0;
-                }}
-                .highlight-box p {{
-                    margin: 5px 0;
-                    font-weight: bold;
-                }}
-                .footer {{
-                    text-align: center;
-                    font-size: 13px;
-                    color: #999999;
-                    margin-top: 40px;
-                    border-top: 1px solid #dddddd;
-                    padding-top: 10px;
-                }}
-            </style>
+            <title>새로운 스트리머 등록</title>
         </head>
-        <body>
-            <div class="email-container">
-                <div class="header">
-                    <h2>새로운 스트리머 등록 요청이 완료되었습니다.</h2>
-                </div>
-                <div class="content">
-                    <p>다음 스트리머에 대한 등록 요청이 서버에 정상적으로 접수되었습니다.</p>
+        <body style="margin:0; padding:0; background-color:#f4f4f4;">
+        <div style="max-width:600px; margin:40px auto; background-color:#ffffff; padding:30px; border:1px solid #dddddd; border-radius:8px;">
+            <h2 style="text-align:center; font-size:22px; color:#333333; margin:0 0 20px 0;">새로운 스트리머 등록 요청이 완료되었습니다.</h2>
 
-                    <div class="highlight-box">
-                        <p>이름: {bias.bname}</p>
-                        <p>플랫폼: {bias.platform}</p>
-                        <p>정보: {info}</p>
-                    </div>
+            <p style="font-size:16px; color:#555555; line-height:1.6;">다음 스트리머에 대한 등록 요청이 서버에 정상적으로 접수되었습니다.</p>
 
-                    <p>소중한 시간을 내어 등록해 주셔서 감사합니다.</p>
-
-                    <p>요청하신 내용은 운영진이 확인 후, 검토 절차를 거쳐 정식 등록 여부가 결정됩니다.</p>
-
-                    <p>등록하신 대상이 내부 기준에 부합하지 않는 경우, 요청이 반려될 수 있습니다.</p>
-                </div>
-                <div class="footer">
-                    이 메일은 시스템에 의해 자동 발송되었습니다.
-                </div>
+            <div style="background-color:#f9f9f9; border-left:4px solid #007bff; padding:15px; margin:20px 0;">
+            <p style="margin:5px 0; font-weight:bold;">이름: {bias.bname}</p>
+            <p style="margin:5px 0; font-weight:bold;">플랫폼: {bias.platform}</p>
+            <p style="margin:5px 0; font-weight:bold;">정보: {info}</p>
             </div>
+
+            <p style="font-size:16px; color:#555555; line-height:1.6;">소중한 시간을 내어 등록해 주셔서 감사합니다.</p>
+            <p style="font-size:16px; color:#555555; line-height:1.6;">요청하신 내용은 운영진이 확인 후, 검토 절차를 거쳐 정식 등록 여부가 결정됩니다.</p>
+            <p style="font-size:16px; color:#555555; line-height:1.6;">등록하신 대상이 내부 기준에 부합하지 않는 경우, 요청이 반려될 수 있습니다.</p>
+
+            <p style="text-align:center; font-size:13px; color:#999999; margin-top:40px; border-top:1px solid #dddddd; padding-top:10px;">
+            이 메일은 시스템에 의해 자동 발송되었습니다.
+            </p>
+        </div>
         </body>
+
         </html>
         """
         # MIMEText 객체로 HTML 본문 생성
