@@ -1488,13 +1488,9 @@ class ManagedScheduleTable(ManagedTable):
             schedules.append(schedule)
             
         for single_schedule in schedules:
-            print(single_schedule.bid)
             bias_data = self._database.get_data_with_id(target="bid", id=single_schedule.bid)
-            pprint(bias_data)
             bias=Bias().make_with_dict(dict_data=bias_data)
             
-            print(bias.bid, bias.gender)
-
             start_date_time = self._get_date_str_to_object(str_date=single_schedule.start_date+'-'+single_schedule.start_time+':00')
             end_date_time = self._get_date_str_to_object(str_date=single_schedule.end_date+'-'+single_schedule.end_time+':00')
 

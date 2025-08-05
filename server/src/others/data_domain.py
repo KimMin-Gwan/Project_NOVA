@@ -350,7 +350,7 @@ class Bias(SampleDomain):
         self.state = state
         self.platform = copy.copy(platform)
 
-    def from_dict(self, dict_data: dict):
+    def make_with_dict(self, dict_data: dict):
         try:
             self.bid = dict_data.get('bid', "")
             self.bname = dict_data.get('bname', "")
@@ -381,7 +381,7 @@ class Bias(SampleDomain):
         finally:
             return self
 
-    def to_dict(self):
+    def get_dict_form_data(self):
         return {
             "bid": self.bid,
             "bname": self.bname,
