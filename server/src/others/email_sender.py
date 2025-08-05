@@ -239,7 +239,7 @@ class MailSender:
             
     # 전송하는 함수
     # send_email(보낼 주소, 인증번호)
-    def alert_new_bias(self, bias:Bias, info):
+    def alert_new_bias(self, bias, info):
         receiver_email = "youths0828@naver.com"
         
         # 이메일 메시지 구성
@@ -351,7 +351,7 @@ class MailSender:
             
     # 전송하는 함수
     # send_email(보낼 주소, 인증번호)
-    def send_email_new_bias_added(self, receiver_email, bias:Bias, info):
+    def send_email_new_bias_added(self, receiver_email, bias, info):
         
         # 이메일 메시지 구성
         message = MIMEMultipart("alternative")
