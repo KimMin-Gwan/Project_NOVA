@@ -77,11 +77,15 @@ export function ContentFeed({ detailPage, feed, handleCheckStar, links, fetchRep
         <div className={style["wrapper-top-component"]}>
           {feed.bname && (
             <div className={style["meta-data-1"]}>
-              {feed.bname}
+              <p>
+                {feed.bname}
+              </p>
             </div>
           )}
           <div className={style["meta-data-2"]}>
-            {feed.board_type}
+              <p>
+                {feed.board_type}
+              </p>
           </div>
         </div>
         <div
@@ -136,15 +140,19 @@ export function ContentFeed({ detailPage, feed, handleCheckStar, links, fetchRep
     );
   }else{
     return (
-      <div>
+      <div style={{breakInside: "avoid", marginBottom: "20px"}}>
         <div className={style["wrapper-top-component"]}>
           {feed.bname && (
             <div className={style["meta-data-1"]}>
-              {feed.bname}
+              <p>
+                {feed.bname}
+              </p>
             </div>
           )}
           <div className={style["meta-data-2"]}>
-            {feed.board_type}
+              <p>
+                {feed.board_type}
+              </p>
           </div>
         </div>
         <div
