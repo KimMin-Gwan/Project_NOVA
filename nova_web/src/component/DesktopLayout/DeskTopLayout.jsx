@@ -243,7 +243,7 @@ export default function DesktopLayout({ children }) {
               <div className={style["team-name"]}>Team SUPERNOVA</div>
               <div className={style["footer-body-wrapper"]}>
                 <div className={style["footer-body"]}>대표 : 김민관</div>
-                <div className={style["footer-body"]}>youth0828@naver.com</div>
+                <div className={style["footer-body"]}>youths0828@naver.com</div>
               </div>
             </div>
             <div className={style["copyright"]}>

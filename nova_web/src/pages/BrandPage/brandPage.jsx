@@ -53,8 +53,8 @@ export default function BrandPage() {
 
     console.log(targetRef1)
 
-    const temp = " © 2025 TEAM SUPERNOVA. All rights reserved."
-    const temp2 =" 대표 : 김민관 | 이메일: youth0828@naver.com"
+    const rights = " © 2025 TEAM SUPERNOVA. All rights reserved."
+    const info =" 대표 : 김민관 | 이메일: youths0828@naver.com"
     return (
         <div className={style["brand-page-background"]} >
             <TopBar
@@ -72,10 +72,10 @@ export default function BrandPage() {
 
             <div className={style["brand-page-footer"]}>
                 <span>
-                    {temp}
+                    {rights}
                 </span>
                 <span>
-                    {temp2}
+                    {info}
                 </span>
             </div>
         </div>
@@ -424,7 +424,7 @@ function BottomFooter(){
         },
         {
             title: "이메일 문의",
-            detail: "youth0828@naver.com"
+            detail: "youths0828@naver.com"
         },
     ];
 
