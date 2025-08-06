@@ -133,10 +133,13 @@ class TimeBiasModel(ScheduleTransformModel):
 
         Sbias_data["bid"] = bias.bid
         Sbias_data["bname"] = bias.bname
-        Sbias_data["category"] = bias.category[0]       # 카테고리는 맨처음의 데이터만
         Sbias_data["tags"] = self._linked_str(bias.tags)    # 연결해서 보냄
         Sbias_data["main_time"] = self._linked_str(bias.main_time) # 연결
         Sbias_data["is_ad"] = bias.is_ad
+        if bias.platform:
+            Sbias_data["category"] = bias.platform[0]       # 카테고리는 맨처음의 데이터만
+        else:
+            Sbias_data["category"] = "없음"
 
         return Sbias_data
 
@@ -650,6 +653,8 @@ class MultiScheduleModel(TimeTableModel):
             bias = Bias()
             bias.make_with_dict(bias_data)
             if keyword in bias.bname:
+                search_list.append(bias.bid)
+            elif keyword in bias.platform:
                 search_list.append(bias.bid)
             elif keyword in bias.category:
                 search_list.append(bias.bid)
