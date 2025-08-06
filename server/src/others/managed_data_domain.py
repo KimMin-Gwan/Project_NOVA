@@ -100,7 +100,7 @@ class ManagedBias:
 class ManagedSchedule:
     def __init__(self, sid="", sname="", uname="", bid="", bname="", bias_gender="", bias_category=[],
                  date=None, start_date_time=None, end_date_time=None, time_section=[],  location=[],
-                 code="", state:bool=True, tags=[]):
+                 code="", state:bool=True, tags=[], platform=[]):
         self.sid=sid
         self.sname=sname
         self.bid=bid
@@ -116,6 +116,7 @@ class ManagedSchedule:
         self.location=location
         self.code=code
         self.state=state
+        self.platform = platform
 
 
     # 무슨 데이터인지 출력해보기
@@ -135,6 +136,7 @@ class ManagedSchedule:
         print("location: ", self.location)
         print("code: ", self.code)
         print("state: ", self.state)
+        print("platform: ", self.platform)
 
     # 딕셔너리화
     def to_dict(self):
@@ -153,7 +155,8 @@ class ManagedSchedule:
             "time_section": self.time_section,
             "location": self.location,
             "code": self.code,
-            "state": self.state
+            "state": self.state,
+            "platform": self.platform
         }
 
 class ManagedScheduleBundle:
@@ -1510,7 +1513,8 @@ class ManagedScheduleTable(ManagedTable):
                                                location=copy(single_schedule.location),
                                                code=single_schedule.code,
                                                state=single_schedule.state,
-                                               tags=single_schedule.tags
+                                               tags=single_schedule.tags,
+                                               platform=bias.platform
                                                )
             managed_schedule.tags.extend( bias.tags)
                                                
