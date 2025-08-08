@@ -19,6 +19,9 @@ import ScheduleCard from "../../component/EventCard/EventCard";
 import NoneSchedule from "../../component/NoneFeed/NoneSchedule";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import DesktopLayout from "../../component/DesktopLayout/DeskTopLayout";
+import style from "./SearchResultPageDesktop.module.css";
+import SearchBoxDesktop from "../../component/SearchBoxDesktop";
+import ScheduleGrid from "../ScheduleExplore/ScheduleGrid";
 
 export default function SearchResultPage() {
   const isMobile = useMediaQuery('(max-width:1100px)');
@@ -243,6 +246,17 @@ export default function SearchResultPage() {
     setTargetScheduleBundle(target);
   };
 
+  function getTapStyle(isActive) {
+    return {
+      border: isActive ? "2px solid transparent" : "2px solid #D8E9FF",
+      backgroundImage: isActive
+        ? "linear-gradient(#fff, #fff), linear-gradient(135deg, #FFE9E9 -0.5%, #91FF94 25.38%, #8981FF 83.1%)"
+        : "none",
+      backgroundOrigin: isActive ? "border-box" : "initial",
+      backgroundClip: isActive ? "content-box, border-box" : "initial",
+    };
+  }
+
   if(isMobile){
     return (
       <div className="container search_result_page">
@@ -297,61 +311,54 @@ export default function SearchResultPage() {
       </div>
     );
   }else{
-    <DesktopLayout>
-      <div className="container search_result_page">
-        <Header />
-        <div className="top-bar ">
-          <div
-            className="back"
-            onClick={() => {
-              navigate("/search");
-            }}
-          >
-            <img src={back} />
+    return(
+      <DesktopLayout>
+        <div className={style["desktop_search_result_page_outer_frame"]}>
+          <div className={style["desktop_search_result_page_inner_frame"]}>
+            <SearchBoxDesktop
+              type="search"
+              searchWord={searchWord}
+              onClickSearch={handleSearch}
+              onChangeSearchWord={handleSearchWord}
+              onKeyDown={handleKeyDown}
+            />
+
+          <div className={style["taps_wrapper"]}>
+            <div
+              className={style["single_tap"]}
+              onClick={() => onClickType("게시글")}
+              style={getTapStyle(type === "post")}
+            >
+              게시글
+            </div>
+            <div
+              className={style["single_tap"]}
+              onClick={() => onClickType("일정")}
+              style={getTapStyle(type === "schedule")}
+            >
+              콘텐츠
+            </div>
           </div>
-          <SearchBox
-            type="search"
-            searchWord={searchWord}
-            onClickSearch={handleSearch}
-            onChangeSearchWord={handleSearchWord}
-            onKeyDown={handleKeyDown}
-          />
+
+          {type === "post" && <FeedSection feedData={feedData} setFeedData={setFeedData} isLoading={isLoading} /> }
+          {type === "schedule" && (
+            scheduleData.length === 0 ? (
+              <div className={style["none_schedule_frame"]}>
+                <NoneSchedule />
+              </div>
+            ) : (
+              <ScheduleGrid scheduleData={scheduleData} />
+            )
+          )}
+
+
+          <div ref={targetRef} style={{ height: "1px" }}></div>
+
+          </div>
         </div>
-        <Tabs activeIndex={activeIndex} handleClick={handleClick} onClickType={onClickType} />
-        {type === "comment" && <Comments comments={comments} isLoading={isLoading} />}
-        {type === "post" && <FeedSection feedData={feedData} setFeedData={setFeedData} isLoading={isLoading} /> }
-        {type === "schedule" && <Schedules scheduleData={scheduleData}
-        type={type} toggleAddScheduleBundleModal={toggleAddScheduleBundleModal} toggleEditScheduleModal={toggleEditScheduleModal} 
-            fetchNavBoard={handleClickScheduleButton}
-        />}
-        <div ref={targetRef} style={{ height: "1px" }}></div>
-
-        {/* 자세히 보기 모달창 */}
-        <BundleScheduleDetail
-          closeSchedule={toggleAddScheduleBundleModal}
-          isOpen={addScheduleBundleModal}
-          target={targetScheduleBundle}
-        />
-
-        {/*여기도 target 추가해야될 듯 */}
-        <ScheduleDetail
-          closeSchedule={toggleAddScheduleModal}
-          isOpen={addScheduleModal}
-          target={targetSchedule}
-        />
-
-        <EditSingleSchedule
-          closeSchedule={toggleEditScheduleModal}
-          isOpen={editScheduleModal}
-          target={targetSchedule}
-          isSingleSchedule={true}
-        />
-      </div>
-
-    </DesktopLayout>
-
+      </DesktopLayout>
+    );
   }
-
 }
 
 function Schedules ({
