@@ -7,6 +7,9 @@ import NavBar from "../../component/NavBar/NavBar";
 import Header from "../../component/Header/Header";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import DesktopLayout from "../../component/DesktopLayout/DeskTopLayout";
+import style from "./SearchPageDesktop.module.css";
+import SearchBoxDesktop from "../../component/SearchBoxDesktop";
+
 
 export default function SearchPage() {
   const isMobile = useMediaQuery('(max-width:1100px)');
@@ -111,18 +114,12 @@ export default function SearchPage() {
   }else{
     return(
       <DesktopLayout>
-        <div className="container">
-          <Header />
-          <div className="top-bar">
-            <div
-              className="back"
-              onClick={() => {
-                navigate("/");
-              }}
-            >
-              <img src={back} />
-            </div>
-            <SearchBox
+        <div className={style["desktop_search_page_outer_frame"]}>
+          <div className={style["desktop_search_page_inner_frame"]}>
+            <span className={style["search_page_header"]}>
+              무엇을 찾으시나요?
+            </span>
+            <SearchBoxDesktop
               type="search"
               searchWord={searchWord}
               onClickSearch={onClickSearch}
@@ -130,22 +127,6 @@ export default function SearchPage() {
               onKeyDown={onKeyDown}
             />
           </div>
-          {/* <p onClick={onDeleteAllHistory}>X</p> */}
-
-          <section className="search-category">
-            <h3>최근 검색어</h3>
-            <div classname="ad-banner-strip">
-
-            </div>
-
-            <div className="search-tag-box">
-              <SearchItems
-                searchHistory={searchHistory}
-                onClickSearch={onClickSearch}
-                onDeleteHistoryItem={onDeleteHistoryItem}
-              />
-            </div>
-          </section>
         </div>
       </DesktopLayout>
     );
