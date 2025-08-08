@@ -1,0 +1,31 @@
+.search_input_wrapper{
+    display: flex;
+    width: 100%;
+    height: 64px;
+    align-items: center;
+    align-self: stretch;
+    gap: 10px;
+    border-radius: 20px;
+    border : 2px solid transparent;
+    background-image: linear-gradient(90deg, #fff, #fff), linear-gradient(135deg, #252525, #3b3b3b6b);
+    background-origin: border-box;
+    background-clip: content-box, border-box;
+}
+
+.search_input {
+    display: flex;
+    width: 100%;
+    margin-left: 40px;
+    margin-right: 40px;
+    justify-content: center;
+    border: none;
+    outline: none;
+    background: transparent;
+    resize: none;       /* 사용자가 마우스로 크기 조절 못 하게 */
+    overflow-y: hidden; /* 스크롤바 안 보이게 */
+    line-height: 1.4;
+    white-space: pre-wrap; /* 줄바꿈 허용 */
+    color: #6C6C6C;
+    font-size: 18px;
+    font-weight: 500;
+}
