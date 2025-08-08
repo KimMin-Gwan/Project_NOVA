@@ -63,7 +63,7 @@ export function ContentFeed({ detailPage, feed, handleCheckStar, links, fetchRep
 
   async function fetchOriginalText(fid) {
     await mainApi.get(`feed_explore/original_feed_data?fid=${fid}`).then((res) => {
-      console.log("done");
+      //console.log("done");
     });
   }
 

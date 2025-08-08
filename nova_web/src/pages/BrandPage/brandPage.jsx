@@ -51,8 +51,6 @@ export default function BrandPage() {
     //const [loading, setLoading] = useState(true);
     //const brandRef = useRef(null);
 
-    console.log(targetRef1)
-
     const rights = " © 2025 TEAM SUPERNOVA. All rights reserved."
     const info =" 대표 : 김민관 | 이메일: youths0828@naver.com"
     return (

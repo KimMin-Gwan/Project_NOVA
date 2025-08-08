@@ -45,7 +45,7 @@ export default function ContentPage (){
     const savedState = localStorage.getItem("chzzk_oauth_state")
 
     if (state !== savedState) {
-      console.log("state 검증 실패! 요청이 의심됩니다.");
+      //console.log("state 검증 실패! 요청이 의심됩니다.");
       return;
     }
 
@@ -56,8 +56,8 @@ export default function ContentPage (){
         setTokenType(result.data.tokenType);
         setExpiresIn(result.data.expiresIn);
         setSessionURL(result.data.url)
-        console.log(result);
-        console.log(result.data.url);
+        //console.log(result);
+        //console.log(result.data.url);
 
       });
     }
@@ -65,7 +65,7 @@ export default function ContentPage (){
 
   const subscribeChzzkChat = async (sessionKey) => {
     mainApi.get(`/content_system/try_subscribe_chat?accessKey=${accessToken}&sessionKey=${sessionKey}`).then((res) => {
-      console.log("최종 결과", res);
+      //console.log("최종 결과", res);
       if (res.data.result == 200){
         setStart(true);
       }else{
@@ -87,21 +87,21 @@ export default function ContentPage (){
           transports: ['websocket']
         };
 
-        console.log("🔌 연결 시도 중:", sessionURL);
+        //console.log("🔌 연결 시도 중:", sessionURL);
 
         const socket = io.connect(sessionURL, socketOption);
         socketRef.current = socket;
 
         // 연결 성공
         socket.on('connect', () => {
-          console.log('✅ WebSocket 연결됨');
+          //console.log('✅ WebSocket 연결됨');
         });
 
         socket.on("SYSTEM", function(res) {
-            console.log("res type : ", typeof res)
+            //console.log("res type : ", typeof res)
 
             const parsed = typeof res === "string" ? JSON.parse(res) : res;
-            console.log(parsed);
+            //console.log(parsed);
 
             if (parsed.data && parsed.data.sessionKey) {
               subscribeChzzkChat(parsed.data.sessionKey);
@@ -113,7 +113,7 @@ export default function ContentPage (){
         // 서버에서 message 수신 시
         socket.on("CHAT", (data) => {
           const parsed = typeof data === "string" ? JSON.parse(data) : data;
-          console.log("📩 수신 메시지:", parsed);
+          //console.log("📩 수신 메시지:", parsed);
           const payload = { message: parsed , filter: filteredCodeRef.current };
           analyzeMessage(payload);
         });
@@ -121,7 +121,7 @@ export default function ContentPage (){
 
         // 서버에서 message 수신 시
         socket.on("message", (data) => {
-          console.log("📩 수신 메시지:", data);
+          //console.log("📩 수신 메시지:", data);
           const payload = { message: data, filter: filteredCodeRef.current };
           analyzeMessage(payload);
         });
@@ -141,7 +141,7 @@ export default function ContentPage (){
     return () => {
       if (socketRef.current) {
         socketRef.current.disconnect(); // disconnect 권장
-        console.log("🔌 WebSocket 연결 해제");
+        //console.log("🔌 WebSocket 연결 해제");
       }
     };
   }, [sessionURL]);
@@ -209,7 +209,7 @@ export default function ContentPage (){
       //return;
     //}
 
-    console.log(data);
+    //console.log(data);
 
     try {
       // 실제 데이터는 JSON 형식으로 들어옴
@@ -221,7 +221,7 @@ export default function ContentPage (){
 
 
       const messageData = parsed;
-      console.log("meesagData", messageData);
+      //console.log("meesagData", messageData);
 
       const content = messageData?.message?.content ?? "";
       const userId = messageData?.message?.senderChannelId ?? "";
@@ -235,7 +235,7 @@ export default function ContentPage (){
         body: content,
       };
 
-      console.log("endContent", chatObj);
+      //console.log("endContent", chatObj);
 
       setChattings((prev) => [...prev, chatObj]);
 
