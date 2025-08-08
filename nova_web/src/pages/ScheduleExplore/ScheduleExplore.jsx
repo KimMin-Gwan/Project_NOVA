@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useRef } from "react";
 import style from "./ScheduleExplore.module.css"
 import NoneSchedule from "../../component/NoneFeed/NoneSchedule";
+import ScheduleGrid from "./ScheduleGrid.jsx";
 
 export default function ScheduleExploreDesktop({
     setCategory, activeIndex, setActiveIndex,
@@ -44,60 +44,11 @@ export default function ScheduleExploreDesktop({
                 <div className={style["none_schedule_frame"]}>
                     {scheduleData.length === 0 && <NoneSchedule/>}
                 </div>
-                {
-                    scheduleData.map((schedule)=>{
-                        return(
-                            <ScheduleComponent/>
-                        );
-                    })
-                }
+                <ScheduleGrid scheduleData={scheduleData} />
             </div>
         </div>
-      
     )
   }
 
 
-  function ScheduleComponent({
-    detail,
-    uname,
-    update_time,
-    bname,
-    start_date,
-    start_time,
-    location,
-    code,
-    toggleClick,
-    selectBack,
-  }){
-
-    const [isClicked, setIsClicked] = useState(false);
-
-    return(
-    <div className={style["schedule_grid"]}>
-        <div className={style["schedule_component_wrapper"]}>
-            <div className={style["schedule_wrapper"]}>
-                <span className={style["schedule_title"]}>{detail}</span>
-                <div className={style["schedule_detail_container"]}>
-                    <span className={style["artist_name"]}>{bname}</span>
-                    <div className={style["schedule_time_wrapper"]}>
-                        <span className={style["schedule_time"]}>{start_date} | {start_time}</span>
-                    </div>
-                    <span className={style["schedule_platform"]}>{location}</span>
-                </div>
-            </div>
-            {
-                isClicked && (
-                    <div className={style["schedule_extra_control_container"]}>
-                        <div className={style["schedule_detail"]}>자세히</div>
-                        <div className={style["schedule_subscribe"]}>구독하기</div>
-                    </div>
-                )
-            }
-        </div>
-    </div>
-
-    );
-
-  }
 
