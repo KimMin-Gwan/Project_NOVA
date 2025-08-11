@@ -1,5 +1,5 @@
 from view.jwt_decoder import JWTManager, JWTPayload, RequestManager
-from model import Local_Database, BaseModel , ScheduleChartModel, ScheduleTimeLayerModel
+from model import Mongo_Database, BaseModel , ScheduleChartModel, ScheduleTimeLayerModel
 from model import TimeTableModel,  ScheduleRecommendKeywordModel
 from model import MultiScheduleModel, AddScheduleModel
 from others import ScheduleSearchEngine as SSE
@@ -9,7 +9,7 @@ from datetime import datetime
 
 class TImeTableController:
     # sid 리스트로 스케줄 데이터 뽑아내기
-    def get_schedules_with_sids(self, database:Local_Database, request:RequestManager) -> BaseModel: 
+    def get_schedules_with_sids(self, database:Mongo_Database, request:RequestManager) -> BaseModel: 
         model = MultiScheduleModel(database=database)
         
         if request.jwt_payload!= "":
@@ -24,7 +24,7 @@ class TImeTableController:
 
     # 타임 테이블 페이지의 최 상단 대시보드데이터
     # 파라미터 없음, 비로그인 상태에서는 0으로 리턴함 
-    def get_dashboard_data(self, database:Local_Database, request:RequestManager, schedule_search_engine:SSE) -> BaseModel: 
+    def get_dashboard_data(self, database:Mongo_Database, request:RequestManager, schedule_search_engine:SSE) -> BaseModel: 
         model = TimeTableModel(database=database)
         
         if request.jwt_payload!= "":
@@ -44,7 +44,7 @@ class TImeTableController:
 
 
     # 내 타임 차트 가지고 오기
-    def get_time_chart(self, database:Local_Database, request:RequestManager) -> BaseModel: 
+    def get_time_chart(self, database:Mongo_Database, request:RequestManager) -> BaseModel: 
         model = ScheduleChartModel(database=database)
 
         if request.jwt_payload!= "":
@@ -59,7 +59,7 @@ class TImeTableController:
         return model
     
     # 내 타임 차트 가지고 오기
-    def get_time_chart_with_sids(self, database:Local_Database, request:RequestManager) -> BaseModel: 
+    def get_time_chart_with_sids(self, database:Mongo_Database, request:RequestManager) -> BaseModel: 
         model = ScheduleChartModel(database=database)
 
         if request.jwt_payload!= "":
@@ -75,7 +75,7 @@ class TImeTableController:
         return model
     
     # 내 타임 차트 가지고 오기
-    def get_time_layer_with_date(self, database:Local_Database, schedule_search_engine:SSE, request:RequestManager) -> BaseModel: 
+    def get_time_layer_with_date(self, database:Mongo_Database, schedule_search_engine:SSE, request:RequestManager) -> BaseModel: 
         model = ScheduleTimeLayerModel(database=database)
 
         if request.jwt_payload!= "":
@@ -104,7 +104,7 @@ class TImeTableController:
 
 
     # 추천하는 바이어스 불러오기
-    def get_recommended_bias_list(self, database:Local_Database, request:RequestManager, num_recommend=5) -> BaseModel:
+    def get_recommended_bias_list(self, database:Mongo_Database, request:RequestManager, num_recommend=5) -> BaseModel:
         model = MultiScheduleModel(database=database)
 
         if request.jwt_payload!= "":
@@ -118,7 +118,7 @@ class TImeTableController:
 
     # Specific Schedule 들고오기 테스트용
     # 하고나선 무조건 삭제
-    # def try_get_specific_schedules(self, database:Local_Database,schedule_search_engine:SSE,
+    # def try_get_specific_schedules(self, database:Mongo_Database,schedule_search_engine:SSE,
     #                            request:RequestManager) -> BaseModel:
     #     model = MultiScheduleModel(database=database)
     #
@@ -134,7 +134,7 @@ class TImeTableController:
     #     return model
     #
     # 스케줄 추가
-    def try_add_schedule(self, database:Local_Database, request:RequestManager ) -> BaseModel:
+    def try_add_schedule(self, database:Mongo_Database, request:RequestManager ) -> BaseModel:
         model = AddScheduleModel(database=database)
 
         if request.jwt_payload!= "":
@@ -149,7 +149,7 @@ class TImeTableController:
         return model
 
     # 이벤트 추가하기
-    def try_add_event(self, database:Local_Database, request:RequestManager) -> BaseModel:
+    def try_add_event(self, database:Mongo_Database, request:RequestManager) -> BaseModel:
         model = AddScheduleModel(database=database)
         if request.jwt_payload!= "":
             model.set_user_with_email(request=request.jwt_payload)
@@ -163,7 +163,7 @@ class TImeTableController:
         return model
 
     # 내가 가진 스케줄에서 제외
-    def try_reject_from_my_schedule(self, database:Local_Database, request:RequestManager) -> BaseModel:
+    def try_reject_from_my_schedule(self, database:Mongo_Database, request:RequestManager) -> BaseModel:
         model = AddScheduleModel(database=database)
 
         if request.jwt_payload!= "":
@@ -178,7 +178,7 @@ class TImeTableController:
 
 
     # 이번주 타임테이블에 추가하기
-    def try_select_my_time_table_schedule(self, schedule_search_engine:SSE, database:Local_Database, request:RequestManager) -> BaseModel:
+    def try_select_my_time_table_schedule(self, schedule_search_engine:SSE, database:Mongo_Database, request:RequestManager) -> BaseModel:
         model = AddScheduleModel(database=database)
         
         if request.jwt_payload!= "":
@@ -195,7 +195,7 @@ class TImeTableController:
         return model
 
     # 내가 팔로우하고 있는 셀럽들의 출력용 폼 반환 함수
-    def try_get_following_bias_printed_form(self, database:Local_Database, request:RequestManager) -> BaseModel:
+    def try_get_following_bias_printed_form(self, database:Mongo_Database, request:RequestManager) -> BaseModel:
         model = MultiScheduleModel(database=database)
 
         if request.jwt_payload!= "":
@@ -211,7 +211,7 @@ class TImeTableController:
 
     # 키워드를 통한 검색
     # 테스트 완료 (진짜)
-    def try_search_schedule_with_keyword(self, schedule_search_engine:SSE, database:Local_Database,
+    def try_search_schedule_with_keyword(self, schedule_search_engine:SSE, database:Mongo_Database,
                                          request:RequestManager, num_schedules=8) -> BaseModel:
         model = MultiScheduleModel(database=database)
         
@@ -233,7 +233,7 @@ class TImeTableController:
 
     # 키워드를 통해 바이어스를 검색
     # 유이하게 Search Engine을 사용하지 않음
-    def try_search_bias_with_keyword(self, database:Local_Database, request:RequestManager, num_biases=10) -> BaseModel:
+    def try_search_bias_with_keyword(self, database:Mongo_Database, request:RequestManager, num_biases=10) -> BaseModel:
         # model = TimeTableBiasModel(database=database)
         model = MultiScheduleModel(database=database)
 
@@ -252,7 +252,7 @@ class TImeTableController:
 
 
     # 스케줄 탐색 페이지에서 요청받는 데이터 처리
-    def try_explore_schedule_with_category(self, schedule_search_engine:SSE, database:Local_Database,
+    def try_explore_schedule_with_category(self, schedule_search_engine:SSE, database:Mongo_Database,
                                            request:RequestManager, num_schedules:int=6) -> BaseModel:
         model = MultiScheduleModel(database=database)
 
@@ -286,7 +286,7 @@ class TImeTableController:
 
     # 인터페이스만 존재. 검색어 저장 시스템이 있어야 제대로 시스템이 구축 가능할 듯
     # 유이하게 Search Engine을 사용하지 않음
-    def try_get_recommend_keyword(self, database:Local_Database, request:RequestManager, num_keywords=6) -> BaseModel:
+    def try_get_recommend_keyword(self, database:Mongo_Database, request:RequestManager, num_keywords=6) -> BaseModel:
         model = ScheduleRecommendKeywordModel(database=database)
 
         if request.jwt_payload!= "":
@@ -299,7 +299,7 @@ class TImeTableController:
 
 
     # 이번 주 일정을 들고 올 것 (전체에서)
-    def try_get_weekday_schedules(self, schedule_search_engine:SSE, database:Local_Database, request:RequestManager) -> BaseModel:
+    def try_get_weekday_schedules(self, schedule_search_engine:SSE, database:Mongo_Database, request:RequestManager) -> BaseModel:
         model = MultiScheduleModel(database=database)
 
         if request.jwt_payload!= "":
@@ -313,7 +313,7 @@ class TImeTableController:
         return model
 
     # 내가 선택한 일정을 들고 옴
-    def try_get_my_selected_schedules(self,schedule_search_engine:SSE, database:Local_Database,
+    def try_get_my_selected_schedules(self,schedule_search_engine:SSE, database:Mongo_Database,
                                       request:RequestManager, num_schedules=6):
         model = MultiScheduleModel(database)
 
@@ -331,7 +331,7 @@ class TImeTableController:
 
 
     # 새로운 스케줄 만들기
-    def make_new_single_schedule(self, schedule_search_engine:SSE, database:Local_Database, request:RequestManager) -> BaseModel:
+    def make_new_single_schedule(self, schedule_search_engine:SSE, database:Mongo_Database, request:RequestManager) -> BaseModel:
         model = AddScheduleModel(database=database)
         
         if request.jwt_payload!= "":
@@ -346,7 +346,7 @@ class TImeTableController:
         return model
     
     # 스케줄 여러개 만들기
-    def make_new_multiple_schedules(self, schedule_search_engine:SSE, database:Local_Database, request:RequestManager) -> BaseModel:
+    def make_new_multiple_schedules(self, schedule_search_engine:SSE, database:Mongo_Database, request:RequestManager) -> BaseModel:
         model = AddScheduleModel(database=database)
 
         if request.jwt_payload!= "":
@@ -371,7 +371,7 @@ class TImeTableController:
         return model
 
     # 쁘띠 모델 변환기
-    def get_schedule_printed_form(self, database:Local_Database, request:RequestManager) -> BaseModel:
+    def get_schedule_printed_form(self, database:Mongo_Database, request:RequestManager) -> BaseModel:
         model = MultiScheduleModel(database=database)
 
 
@@ -387,7 +387,7 @@ class TImeTableController:
 
     # 작성한 스케줄 보내기
     # 하나만 가지고 오므로 Search Engine을 쓰지 않음
-    def try_get_written_schedule(self, database:Local_Database, request:RequestManager):
+    def try_get_written_schedule(self, database:Mongo_Database, request:RequestManager):
         model = MultiScheduleModel(database)
 
         if request.jwt_payload!= "":
@@ -402,7 +402,7 @@ class TImeTableController:
 
     # 작성한 스케줄 번들을 보내기
     # 하나만 가지고 오므로 Search Engine을 쓰지 않음
-    def try_get_written_bundle(self, database:Local_Database, request:RequestManager):
+    def try_get_written_bundle(self, database:Mongo_Database, request:RequestManager):
         model = MultiScheduleModel(database)
 
         if request.jwt_payload!= "":
@@ -415,7 +415,7 @@ class TImeTableController:
         return model
 
     # 단일 스케줄 편집
-    def try_modify_single_schedule(self, schedule_search_engine:SSE, database:Local_Database, request:RequestManager):
+    def try_modify_single_schedule(self, schedule_search_engine:SSE, database:Mongo_Database, request:RequestManager):
         model = AddScheduleModel(database)
 
         if request.jwt_payload!= "":
@@ -429,7 +429,7 @@ class TImeTableController:
         return model
 
     # 스케줄 번들 편집
-    def try_modify_bundle(self, schedule_search_engine:SSE, database:Local_Database, request:RequestManager):
+    def try_modify_bundle(self, schedule_search_engine:SSE, database:Mongo_Database, request:RequestManager):
         model = AddScheduleModel(database)
 
         if request.jwt_payload!= "":
@@ -454,7 +454,7 @@ class TImeTableController:
 
 
     # 스케줄 삭제
-    def try_delete_schedule(self, schedule_search_engine:SSE, database:Local_Database, request:RequestManager):
+    def try_delete_schedule(self, schedule_search_engine:SSE, database:Mongo_Database, request:RequestManager):
         model = AddScheduleModel(database)
 
         if request.jwt_payload!= "":
@@ -467,7 +467,7 @@ class TImeTableController:
         return model
 
     # 스케줄 번들 삭제
-    def try_delete_bundle(self, schedule_search_engine:SSE, database:Local_Database, request:RequestManager):
+    def try_delete_bundle(self, schedule_search_engine:SSE, database:Mongo_Database, request:RequestManager):
         model = AddScheduleModel(database)
 
         if request.jwt_payload!= "":
@@ -481,7 +481,7 @@ class TImeTableController:
 
 
     # 오늘의 이벤트 뽑기
-    # def get_eventboard_data(self, database:Local_Database, request:RequestManager) -> BaseModel:
+    # def get_eventboard_data(self, database:Mongo_Database, request:RequestManager) -> BaseModel:
     #     model = MultiScheduleModelNew(database=database)
     #
     #     if request.jwt_payload!= "":

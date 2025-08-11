@@ -4,8 +4,6 @@ from view.core_system_view import *
 from view.parsers import *
 from view.user_system_view import *
 from view.sub_system_view import *
-from view.administrator_system_view import Administrator_System_View
 from view.jwt_decoder import *
-from view.funding_system_view import *
 from view.time_table_view import *
 from view.content_system_view import Content_Service_view

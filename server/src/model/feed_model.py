@@ -1,5 +1,5 @@
 from model.base_model import BaseModel
-from model import Local_Database
+from model import Mongo_Database
 #from others.data_domain import Alert
 from others import CoreControllerLogicError,FeedManager, FeedSearchEngine, ObjectStorageConnection, HTMLEXtractor
 from others import Comment, Feed, User, Interaction, FeedLink
@@ -7,7 +7,7 @@ from pprint import pprint
 
 
 class FeedModel(BaseModel):
-    def __init__(self, database:Local_Database) -> None:
+    def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)
         self._feeds = []
         self._key = -1
@@ -401,7 +401,7 @@ class FeedModel(BaseModel):
 
 # 피드를 생성하거나 수정하는 모델, 삭제에도 사용될 것
 class FeedEditModel(BaseModel):
-    def __init__(self, database:Local_Database) -> None:
+    def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)
         self._result= False
         self._detail = "Somthing goes Bad| Error Code = 422"
@@ -468,7 +468,7 @@ class FeedEditModel(BaseModel):
             raise CoreControllerLogicError("response making error | " + e)
 
 class FeedSearchModelNew(FeedModel):
-    def __init__(self, database:Local_Database) -> None:
+    def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)
         self.__history = []
 
@@ -590,7 +590,7 @@ class FeedSearchModelNew(FeedModel):
             raise CoreControllerLogicError("response making error | " + e)
 
 class FeedSearchModel(FeedModel):
-    def __init__(self, database:Local_Database) -> None:
+    def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)
         self._hashtag_feed= []
         self._uname_feed= []
@@ -718,7 +718,7 @@ class FeedSearchModel(FeedModel):
             raise CoreControllerLogicError("response making error | " + e)
 
 class MyFeedsModel(FeedModel):
-    def __init__(self, database:Local_Database) -> None:
+    def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)
 
     def __search_user_nickname(self, uid:str, uids:list, wusers:list):
@@ -811,7 +811,7 @@ class MyFeedsModel(FeedModel):
         return
 
 class CommentSearchModel(FeedModel):
-    def __init__(self, database:Local_Database) -> None:
+    def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)
 
     def try_search_comment_with_keyword(self, feed_manager:FeedManager,
@@ -840,7 +840,7 @@ class CommentSearchModel(FeedModel):
             raise CoreControllerLogicError("response making error | " + e)
 
 class FilteredFeedModel(FeedModel):
-    def __init__(self, database:Local_Database):
+    def __init__(self, database:Mongo_Database):
         super().__init__(database)
         
     def is_bids_data_empty(self, data_payload):
@@ -916,7 +916,7 @@ class FilteredFeedModel(FeedModel):
             raise CoreControllerLogicError("response making error | " + e)
 
 class CommunityFeedModel(FeedModel):
-    def __init__(self, database:Local_Database) -> None:
+    def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)
         self.__last_fid = ""
 

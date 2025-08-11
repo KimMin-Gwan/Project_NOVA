@@ -8,7 +8,7 @@
 # LocalDatabase의 import 문제로 아래 코드는 정상동작 하지 않으니
 # 코드를 작성하는 도중에는 주석을 해제하여 LocalDatabase 함수를 자동완성하고
 # 실행할때는 다시 주석처리하여 사용할것
-#from model import Local_Database
+#from model import Mongo_Database
 
 import time
 import asyncio
@@ -347,7 +347,7 @@ class SearchManager:
     # LocalDatabase의 import 문제로 아래 코드는 정상동작 하지 않으니
     # 코드를 작성하는 도중에는 주석을 해제하여 LocalDatabase 함수를 자동완성하고
     # 실행할때는 다시 주석처리하여 사용할것
-    #def __init__(self, database:Local_Database, feed_algorithm : FeedAlgorithm):
+    #def __init__(self, database:Mongo_Database, feed_algorithm : FeedAlgorithm):
     def __init__(self, database, feed_algorithm=None, managed_feed_bias_table:ManagedFeedBiasTable=None):
         self.__database = database
         self.__feed_algorithm=feed_algorithm

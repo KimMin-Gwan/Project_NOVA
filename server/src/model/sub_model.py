@@ -1,6 +1,6 @@
 from model.base_model import BaseModel
 from model.league_model import LeagueModel
-from model import Local_Database
+from model import Mongo_Database
 from others.data_domain import Bias, User, Report
 from others import CoreControllerLogicError, HTMLEXtractor, ImageDescriper, MailSender
 import copy
@@ -8,7 +8,7 @@ from urllib.parse import urlparse
 import datetime
 
 class BiasBannerModel(BaseModel):
-    def __init__(self, database:Local_Database) -> None:
+    def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)
 
     def get_response_form_data(self, head_parser):
@@ -24,7 +24,7 @@ class BiasBannerModel(BaseModel):
             raise CoreControllerLogicError("response making error | " + e)
 
 class BiasNLeagueModel(LeagueModel):
-    def __init__(self, database:Local_Database) -> None:
+    def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)
         self.__my_league_data = {}
     
@@ -90,7 +90,7 @@ class BiasNLeagueModel(LeagueModel):
             raise CoreControllerLogicError("response making error | " + e)
 
 class UserContributionModel(BaseModel):
-    def __init__(self, database:Local_Database) -> None:
+    def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)
         self._bias = Bias()  # 목표 선택용 bias
         self._users = []   # 랭크 집계를 위한 bias 리스트
@@ -188,7 +188,7 @@ class UserContributionModel(BaseModel):
             raise CoreControllerLogicError("response making error | " + e)
         
 class MyContributionModel(UserContributionModel):
-    def __init__(self, database:Local_Database) -> None:
+    def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)
         self.__result = False  # 내가 팔로우 중이면 True
 
@@ -230,7 +230,7 @@ class MyContributionModel(UserContributionModel):
             raise CoreControllerLogicError("response making error | " + e)
 
 # class NoticeListModel(UserContributionModel):
-#     def __init__(self, database:Local_Database) -> None:
+#     def __init__(self, database:Mongo_Database) -> None:
 #         super().__init__(database)
 #         self.__notice = []
 #
@@ -256,7 +256,7 @@ class MyContributionModel(UserContributionModel):
 #             raise CoreControllerLogicError("response making error | " + e)
 #
 # class NoticeModel(UserContributionModel):
-#     def __init__(self, database:Local_Database) -> None:
+#     def __init__(self, database:Mongo_Database) -> None:
 #         super().__init__(database)
 #         self.__notice = Notice()
 #
@@ -281,7 +281,7 @@ class MyContributionModel(UserContributionModel):
 #             raise CoreControllerLogicError("response making error | " + e)
 
 class ImageTagModel(BaseModel):
-    def __init__(self, database:Local_Database) -> None:
+    def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)
         self.__url = ""
         self.__image = ""
@@ -436,7 +436,7 @@ class ReportModel(BaseModel):
             raise CoreControllerLogicError("response making error | " + e)
 
 class ChangeUserAgeModel(BaseModel):
-    def __init__(self, database:Local_Database) -> None:
+    def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)
         self._result = False
         self._detail = ""
@@ -476,7 +476,7 @@ class ChangeUserAgeModel(BaseModel):
 import uuid
 
 class MakeNewBiasModel(BaseModel):
-    def __init__(self, database:Local_Database) -> None:
+    def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)
         self._info = ""
         self._bias = Bias(state="TEMP")

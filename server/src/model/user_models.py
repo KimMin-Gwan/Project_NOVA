@@ -1,5 +1,5 @@
 from model.base_model import BaseModel
-from model import Local_Database
+from model import Mongo_Database
 from others.data_domain import User, Bias
 from others import CoreControllerLogicError, FeedManager, FeedSearchEngine, ObjectStorageConnection
 from view.jwt_decoder import JWTManager
@@ -10,7 +10,7 @@ import random
 import re
 
 class LoginModel(BaseModel):
-    def __init__(self, database:Local_Database) -> None:
+    def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)
         self.__result = "email"
         self.__token = ''
@@ -62,7 +62,7 @@ class LoginModel(BaseModel):
         return self.__result
 
 class SendEmailModel(BaseModel):
-    def __init__(self, database:Local_Database) -> None:
+    def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)
         self.__result = True
         self.__detail = ''
@@ -172,7 +172,7 @@ class SendEmailModel(BaseModel):
         return uid
    
 class UserPageModel(BaseModel):
-    def __init__(self, database:Local_Database) -> None:
+    def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)
         self.__biases = []
         self._uname = ""
@@ -240,7 +240,7 @@ class UserPageModel(BaseModel):
 
 # 통일성을 위해 Comment 까지 재편 합니다.
 class MyCommentsModel(BaseModel):
-    def __init__(self, database:Local_Database ) -> None:
+    def __init__(self, database:Mongo_Database ) -> None:
         super().__init__(database)
         # self._comments = []
         self._feeds = []
@@ -270,7 +270,7 @@ class MyCommentsModel(BaseModel):
         return
 
 class MyProfileModel(BaseModel):
-    def __init__(self, database:Local_Database) -> None:
+    def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)
         self._uname = ""
         self._uid = ""
@@ -304,7 +304,7 @@ class MyProfileModel(BaseModel):
         return
 
 class ChangePasswordModel(BaseModel):
-    def __init__(self, database:Local_Database) -> None:
+    def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)
         self._result = False
         self._detail = "Something goes bad | ERROR = 422"
@@ -365,7 +365,7 @@ class ChangePasswordModel(BaseModel):
             raise CoreControllerLogicError("response making error | " + e)
 
 class ChangeNickNameModel(BaseModel):
-    def __init__(self, database:Local_Database) -> None:
+    def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)
         self._result = False
         self._uname = ""
@@ -437,7 +437,7 @@ class ChangeNickNameModel(BaseModel):
             raise CoreControllerLogicError("response making error | " + e)
 
 class ChangeProfilePhotoModel(BaseModel):
-    def __init__(self, database:Local_Database) -> None:
+    def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)
         self._result = False
         self._detail = "업로드에 문제가 있음"
@@ -473,7 +473,7 @@ class ChangeProfilePhotoModel(BaseModel):
         return
 
 class DeleteUserModel(BaseModel):
-    def __init__(self, database:Local_Database) -> None:
+    def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)
         self._result = False
         self._detail = "Something goes bad | ERROR = 422"

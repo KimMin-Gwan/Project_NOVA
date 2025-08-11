@@ -5,7 +5,7 @@ from view.jwt_decoder import JWTManager, JWTPayload
 
 class Core_Controller:
     # league 데이터를 뽑아오는 보편적인 함수
-    def get_league(self, database:Local_Database, request) -> BaseModel: 
+    def get_league(self, database:Mongo_Database, request) -> BaseModel: 
         model = LeagueModel(database=database)
         try:
             model.set_leagues(request)
@@ -24,7 +24,7 @@ class Core_Controller:
     # 1. 사용자인지 확인
     # 2. 사용자가 팔로우 중인 bias 가 맞는지 확인
     # 3. 이미 인증 했는지 확인
-    #def get_check_page(self, database:Local_Database, request) -> BaseModel: 
+    #def get_check_page(self, database:Mongo_Database, request) -> BaseModel: 
         #model = CheckPageModel(database=database)
         #try:
             #model.set_user_with_email(request=request.jwt_payload)
@@ -55,7 +55,7 @@ class Core_Controller:
         #finally:
             #return model
         
-    #def _user_already_checked(self, database:Local_Database, model:CheckPageModel):
+    #def _user_already_checked(self, database:Mongo_Database, model:CheckPageModel):
         #new_model = TryCheckModel(database=database)
         ## 일단 초기화 하고
         #new_model.init_with_mother_model(model=model)
@@ -80,7 +80,7 @@ class Core_Controller:
 
         #return model
 
-    #def try_daily_check(self, database:Local_Database, request, league_manager) -> BaseModel: 
+    #def try_daily_check(self, database:Mongo_Database, request, league_manager) -> BaseModel: 
         #model = TryCheckModel(database=database)
         #try:
             #model.set_user_with_email(request=request.jwt_payload)
@@ -122,7 +122,7 @@ class Core_Controller:
         #finally:
             #return model
 
-    #def try_special_check(self, database:Local_Database, request, league_manager) -> BaseModel: 
+    #def try_special_check(self, database:Mongo_Database, request, league_manager) -> BaseModel: 
         #model = TrySpecialCheckModel(database=database)
         
         #try:

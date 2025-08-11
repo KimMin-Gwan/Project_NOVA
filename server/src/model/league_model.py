@@ -1,10 +1,10 @@
 from model.base_model import BaseModel
-from model import Local_Database
+from model import Mongo_Database
 from others.data_domain import League, Bias
 from others import CoreControllerLogicError
 
 class LeagueModel(BaseModel):
-    def __init__(self, database:Local_Database) -> None:
+    def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)
         self._bias = Bias()  # 목표 선택용 bias
         self._league = League()

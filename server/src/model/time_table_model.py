@@ -2,7 +2,7 @@ import re
 from collections import Counter
 
 from model.base_model import BaseModel
-from model import Local_Database
+from model import Mongo_Database
 from others.data_domain import TimeTableUser as TUser
 from others.data_domain import Schedule, ScheduleBundle, ScheduleEvent, Bias, User
 
@@ -259,7 +259,7 @@ class TimeScheduleBundleModel(ScheduleTransformModel):
 
 # ------------------------------------ 기본 타임 테이블 모델 ------------------------------------------
 class TimeTableModel(BaseModel):
-    def __init__(self, database:Local_Database) -> None:
+    def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)
         self._tuser:TUser = TUser()
         self._key = -1
@@ -574,7 +574,7 @@ class TimeTableModel(BaseModel):
         return response
 
 class ScheduleRecommendKeywordModel(TimeTableModel):
-    def __init__(self, database:Local_Database) -> None:
+    def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)
         self._recommend_keywords = []
 
@@ -614,7 +614,7 @@ class ScheduleRecommendKeywordModel(TimeTableModel):
 # 단일 스케줄을 반환할 때 사용하는 모델
 # 사용할 일이 있을지는 모르는데, 아마 수정 같은 상황에 사용될것
 class SingleScheduleModel(TimeTableModel):
-    def __init__(self, database:Local_Database) -> None:
+    def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)
         self.__schedule = Schedule()
         self.__schedule_event = ScheduleEvent()
@@ -634,7 +634,7 @@ class SingleScheduleModel(TimeTableModel):
 # 복수 스케줄을 반환할 때 사용하는 모델 NEW ( Search Engine 사용 )
 # 아마 대부분이 여러개를 반환해야하니 이거 쓰면 될듯
 class MultiScheduleModel(TimeTableModel):
-    def __init__(self, database:Local_Database) -> None:
+    def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)
         self.__schedules:list = []
         self.__schedule_events:list = []
@@ -1080,7 +1080,7 @@ class MultiScheduleModel(TimeTableModel):
 
 # 스케줄 추가 모델 New (Search_Engine) 사용
 class AddScheduleModel(TimeTableModel):
-    def __init__(self, database:Local_Database):
+    def __init__(self, database:Mongo_Database):
         super().__init__(database=database)
         self.__result = False
 
@@ -1841,7 +1841,7 @@ class ScheduleBlockTreater():
 # ]
         
 class ScheduleTimeLayerModel(TimeTableModel):
-    def __init__(self, database:Local_Database) -> None:
+    def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)
         self.__schedules = []
         self.__layer_data = [
@@ -2074,7 +2074,7 @@ class ScheduleTimeLayerModel(TimeTableModel):
 # 복수 스케줄을 반환할 때 사용하는 모델
 # 아마 대부분이 여러개를 반환해야하니 이거 쓰면 될듯
 class ScheduleChartModel(TimeTableModel):
-    def __init__(self, database:Local_Database) -> None:
+    def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)
         self.__schedule_blocks = []
         self.__week_day_datas = []
@@ -2201,7 +2201,7 @@ class ScheduleChartModel(TimeTableModel):
 # 복수 스케줄을 반환할 때 사용하는 모델
 # 아마 대부분이 여러개를 반환해야하니 이거 쓰면 될듯
 # class MultiScheduleModel(TimeTableModel):
-#     def __init__(self, database:Local_Database) -> None:
+#     def __init__(self, database:Mongo_Database) -> None:
 #         super().__init__(database)
 #         self.__schedules:list = []
 #         self.__schedule_events:list = []
@@ -2758,7 +2758,7 @@ class ScheduleChartModel(TimeTableModel):
 
 # 스케쥴 추가 모델
 # class AddScheduleModel(TimeTableModel):
-#     def __init__(self, database:Local_Database) -> None:
+#     def __init__(self, database:Mongo_Database) -> None:
 #         super().__init__(database)
 #         self.__result = False
 #

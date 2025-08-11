@@ -2,7 +2,7 @@ from model.base_model import BaseModel
 from typing import List
 import random
 
-from model import Local_Database
+from model import Mongo_Database
 #from others.data_domain import Alert
 from pprint import pprint
 
@@ -69,7 +69,7 @@ class DiffImageContent(Content):
 
 
 class ContentModel(BaseModel):
-    def __init__(self, database:Local_Database) -> None:
+    def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)
         self.__contents:List[Content] = []
         self.__meta_data = {}

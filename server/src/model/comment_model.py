@@ -1,12 +1,12 @@
 from model.base_model import BaseModel
-from model import Local_Database
+from model import Mongo_Database
 from others import Feed, Comment, User
 from others import CoreControllerLogicError,FeedManager, FeedSearchEngine, ObjectStorageConnection, HTMLEXtractor
 from datetime import datetime
 from pprint import pprint
 
 class CommentModel(BaseModel):
-    def __init__(self, database:Local_Database) -> None:
+    def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)
         self._comments = []
         self._is_more = False

@@ -2,7 +2,7 @@ from model import *
 from others import UserNotExist, CustomError
 
 class Sub_Controller:
-    def sample_func(self, database:Local_Database, request) -> BaseModel: 
+    def sample_func(self, database:Mongo_Database, request) -> BaseModel: 
         model = BaseModel(database=database)
         try:
             # 유저가 있는지 확인
@@ -30,7 +30,7 @@ class Sub_Controller:
             return model
         
     
-    def try_add_new_bias(self, database:Local_Database, request) -> BaseModel:
+    def try_add_new_bias(self, database:Mongo_Database, request) -> BaseModel:
         model = MakeNewBiasModel(database=database)
         
         if not model.set_user_with_email(request=request.jwt_payload):
@@ -50,7 +50,7 @@ class Sub_Controller:
         
     
     # 최애 기반 커뮤니티 페이지에서 노출될 공지시항 리스트
-    def try_get_notice_sample(self, database:Local_Database, data_payload) -> BaseModel: 
+    def try_get_notice_sample(self, database:Mongo_Database, data_payload) -> BaseModel: 
         model = NoticeModel(database=database)
         
         # bid가 선택되었는지 확인
@@ -68,7 +68,7 @@ class Sub_Controller:
         #model.set_send_notice_data(last_nid=data_payload.last_nid)
         return model
 
-    def try_get_image_tag(self, database:Local_Database, data_payload) -> BaseModel:
+    def try_get_image_tag(self, database:Mongo_Database, data_payload) -> BaseModel:
         model = ImageTagModel(database=database)
 
         model.get_image(url = data_payload.url)
@@ -77,7 +77,7 @@ class Sub_Controller:
 
     # SubModel에 있는 Notice 모델과 NoticeListModel의 기능을 notice_model의 NoticeModel에 통합을 시킴
     # 나누는 이유가 없어보여서 통합 했음.
-    def get_notice_list(self, database:Local_Database) -> BaseModel:
+    def get_notice_list(self, database:Mongo_Database) -> BaseModel:
         # model = NoticeListModel(database=database)
         model = NoticeModel(database=database)
 
@@ -86,7 +86,7 @@ class Sub_Controller:
 
         return model
 
-    def get_notice_detail(self, database:Local_Database, request) -> BaseModel: 
+    def get_notice_detail(self, database:Mongo_Database, request) -> BaseModel: 
         model = NoticeModel(database=database)
         model.get_notice(nid = request.nid)
         model.set_send_notice_data_for_details()
@@ -95,7 +95,7 @@ class Sub_Controller:
         
 
     # 최애 페이지의 지지자 기여도 랭크 
-    def get_user_contribution(self, database:Local_Database, request) -> UserContributionModel: 
+    def get_user_contribution(self, database:Mongo_Database, request) -> UserContributionModel: 
         model = UserContributionModel(database=database)
 
         try:
@@ -125,7 +125,7 @@ class Sub_Controller:
             return model
 
     # 최애 페이지의 지지자 기여도 랭크 
-    def get_bias_n_league_data(self, database:Local_Database, request) -> UserContributionModel: 
+    def get_bias_n_league_data(self, database:Mongo_Database, request) -> UserContributionModel: 
         model = BiasNLeagueModel(database=database)
 
         try:
@@ -155,7 +155,7 @@ class Sub_Controller:
             return model
 
     # 최애 페이지의 지지자 본인의 기여도 정보
-    def get_my_contribution(self, database:Local_Database, request) -> MyContributionModel: 
+    def get_my_contribution(self, database:Mongo_Database, request) -> MyContributionModel: 
         model = MyContributionModel(database=database)
         try:
             if not model.set_user_with_email(request=request.jwt_payload):
@@ -196,7 +196,7 @@ class Sub_Controller:
         finally:
             return model
 
-    def try_select_bias(self, database:Local_Database, request, feed_search_engine):
+    def try_select_bias(self, database:Mongo_Database, request, feed_search_engine):
         model = SelectBiasModel(database=database)
         model.set_user_with_email(request=request.jwt_payload)
             
@@ -206,7 +206,7 @@ class Sub_Controller:
         return model
     
     # bias를 문자열로 검색
-    def try_search_bias(self, database:Local_Database, request,
+    def try_search_bias(self, database:Mongo_Database, request,
                                     feed_search_engine,): 
         model = BiasSearchModel(database=database)
 
@@ -215,7 +215,7 @@ class Sub_Controller:
         return model
         
     # bias follow페이지에 노출될 최애들의 리스트
-    def try_get_bias_follow_page(self, database:Local_Database):
+    def try_get_bias_follow_page(self, database:Mongo_Database):
         model = BiasFollowPageModel(database=database)
 
         if model.set_biases():
@@ -224,7 +224,7 @@ class Sub_Controller:
         return model
     
     # bias follow페이지에 노출될 최애들의 리스트
-    def try_search_bias_with_category(self, database:Local_Database, request):
+    def try_search_bias_with_category(self, database:Mongo_Database, request):
         model = BiasSearchModel(database=database)
 
         if model.set_biases():
@@ -232,7 +232,7 @@ class Sub_Controller:
 
         return model
 
-    def try_get_community_side_box(self, database:Local_Database, data_payload):
+    def try_get_community_side_box(self, database:Mongo_Database, data_payload):
         model = CommunitySideBoxModel(database=database)
 
         # 유저가 있는지 확인
@@ -241,7 +241,7 @@ class Sub_Controller:
 
         return model
     
-    def try_report_post_or_comment(self, database:Local_Database, request):
+    def try_report_post_or_comment(self, database:Mongo_Database, request):
         model = ReportModel(database=database)
         
         if request.jwt_payload != "":
@@ -256,7 +256,7 @@ class Sub_Controller:
         
         return model
 
-    def try_report_bug(self, database:Local_Database, request):
+    def try_report_bug(self, database:Mongo_Database, request):
         model = ReportModel(database=database)
         
         if request.jwt_payload != "":
@@ -268,7 +268,7 @@ class Sub_Controller:
         
         return model
 
-    def try_change_users_age(self, database:Local_Database, request):
+    def try_change_users_age(self, database:Mongo_Database, request):
         model = ChangeUserAgeModel(database=database)
 
         model.change_users_age()

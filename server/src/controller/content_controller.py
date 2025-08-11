@@ -1,5 +1,5 @@
 from view.jwt_decoder import JWTManager, JWTPayload, RequestManager
-from model import Local_Database, BaseModel, ContentModel
+from model import Mongo_Database, BaseModel, ContentModel
 from others import ScheduleSearchEngine as SSE
 from datetime import datetime
 from pprint import pprint

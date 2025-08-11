@@ -1,10 +1,10 @@
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import WebSocket, WebSocketDisconnect
 #from model import CommentModel
 from websockets.exceptions import ConnectionClosedError
 import asyncio
 from queue import Queue
 from others.data_domain import User
-from typing import Callable, List
+from typing import List
 from datetime import datetime
 from model import CommentModel
 import random

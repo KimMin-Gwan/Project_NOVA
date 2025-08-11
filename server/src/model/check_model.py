@@ -1,5 +1,5 @@
 #from model.base_model import BaseModel
-#from model import Local_Database
+#from model import Mongo_Database
 #from others.data_domain import User, Bias
 #from others import CoreControllerLogicError, CheckManager
 #from PIL import Image, ImageDraw, ImageFont
@@ -18,7 +18,7 @@
 
 
 #class CheckPageModel(BaseModel):
-    #def __init__(self, database:Local_Database) -> None:
+    #def __init__(self, database:Mongo_Database) -> None:
         #super().__init__(database)
         #self._check_manager = CheckManager()
         #self._bias = Bias()
@@ -121,7 +121,7 @@
             #raise CoreControllerLogicError("response making error | " + e)
 
 #class TryCheckModel(CheckPageModel):
-    #def __init__(self, database:Local_Database) -> None:
+    #def __init__(self, database:Mongo_Database) -> None:
         #super().__init__(database)
         #self._name_card_url = ""
         #self._special_time = []
@@ -266,7 +266,7 @@
             #raise CoreControllerLogicError("response making error | " + e)
         
 #class TrySpecialCheckModel(TryCheckModel):
-    #def __init__(self, database:Local_Database) -> None:
+    #def __init__(self, database:Mongo_Database) -> None:
         #super().__init__(database)
 
     ## 최애 인증 시도 함수

@@ -6,7 +6,7 @@ class Feed_Controller:
     def __init__(self, feed_manager:FeedManager):
         self.__feed_manager = feed_manager
         
-    def init_chatting(self, request, database:Local_Database) ->BaseModel:
+    def init_chatting(self, request, database:Mongo_Database) ->BaseModel:
         model = BaseModel(database=database)
         # 유저가 있으면 세팅
         model.set_user_with_uid(request=request.data_payload)
@@ -15,7 +15,7 @@ class Feed_Controller:
 
 
     # fid를 통한 피드 검색
-    def try_search_in_fid(self, database:Local_Database,
+    def try_search_in_fid(self, database:Mongo_Database,
                         request, feed_search_engine: FeedSearchEngine, feed_manager: FeedManager,
                         num_feed= 1):
         model = FeedSearchModelNew(database=database)
@@ -35,7 +35,7 @@ class Feed_Controller:
         return model
     
     # Bias 기반 커뮤니티 피드 검색
-    def get_feed_in_bias_feed_page(self, database:Local_Database,
+    def get_feed_in_bias_feed_page(self, database:Mongo_Database,
                                 request, feed_search_engine: FeedSearchEngine):
         # model = CommunityFeedModel(database=database)
         model = FilteredFeedModel(database=database)
@@ -76,7 +76,7 @@ class Feed_Controller:
             return model
 
     # 키워드를 통한 피드 검색
-    # def try_search_in_keyword(self, database:Local_Database,
+    # def try_search_in_keyword(self, database:Mongo_Database,
     #                     request, feed_search_engine: FeedSearchEngine,
     #                     num_feed= 4):
     #     model = FeedSearchModel(database=database)
@@ -93,7 +93,7 @@ class Feed_Controller:
     #     return model
     #
     # # 키워드를 통한 피드 검색
-    # def try_search_in_hashtag(self, database:Local_Database,
+    # def try_search_in_hashtag(self, database:Mongo_Database,
     #                     request, feed_search_engine: FeedSearchEngine,
     #                     num_feed= 4):
     #     model = FeedSearchModel(database=database)
@@ -110,7 +110,7 @@ class Feed_Controller:
     #     return model
 
     # 오늘의 인기 게시글
-    def get_today_best(self, database:Local_Database,
+    def get_today_best(self, database:Mongo_Database,
                         request, feed_search_engine: FeedSearchEngine,
                         num_feed=4):
         model = FeedModel(database=database)
@@ -134,7 +134,7 @@ class Feed_Controller:
         return model
 
     # 주간 인기 게시글
-    def get_weekly_best(self, database:Local_Database,
+    def get_weekly_best(self, database:Mongo_Database,
                         request, feed_search_engine: FeedSearchEngine,
                         num_feed= 4):
         model = FeedModel(database=database)
@@ -158,7 +158,7 @@ class Feed_Controller:
         return model
         
     # 전체 개시글(최신순) # 롤백 했음
-    def get_all_feed(self, database:Local_Database,
+    def get_all_feed(self, database:Mongo_Database,
                      request, feed_search_engine: FeedSearchEngine,
                      num_feed=4):
         model = FeedModel(database=database)
@@ -182,7 +182,7 @@ class Feed_Controller:
 
     # 필터링 인터페이스
     # 옵션들을 모두 받아와서 여러번 필터링을 거치게 됩니다.
-    def get_all_feed_filtered(self, database:Local_Database,
+    def get_all_feed_filtered(self, database:Mongo_Database,
                               request, feed_search_engine: FeedSearchEngine,
                               num_feed=4):
 
@@ -203,7 +203,7 @@ class Feed_Controller:
 
 
     # 숏피드에서 다음 피드 요청할 때
-    def get_feed_with_recommend(self, database:Local_Database,
+    def get_feed_with_recommend(self, database:Mongo_Database,
                         request, feed_search_engine: FeedSearchEngine):
         model = FeedSearchModel(database=database)
 
@@ -219,7 +219,7 @@ class Feed_Controller:
         return model
 
     # 안 써서 주석처리
-    # def get_home_hot_hashtag_feed(self, database:Local_Database,
+    # def get_home_hot_hashtag_feed(self, database:Mongo_Database,
     #                         request , feed_manager:FeedManager):
     #     model = FeedModel(database=database)
     #     # 유저가 있으면 세팅
@@ -232,14 +232,14 @@ class Feed_Controller:
     #
     #     return model
     
-    def get_original_feed_data(self, database:Local_Database, data_payload):
+    def get_original_feed_data(self, database:Mongo_Database, data_payload):
         model = FeedModel(database=database)
         # 유저가 있으면 세팅
         model.set_original_feed_data(fid=data_payload.fid)
 
         return model
         
-    def get_original_comment_data(self, database:Local_Database, data_payload):
+    def get_original_comment_data(self, database:Mongo_Database, data_payload):
         model = FeedModel(database=database)
         # 유저가 있으면 세팅
         model.set_original_comment_data(cid=data_payload.cid)
@@ -247,7 +247,7 @@ class Feed_Controller:
     
 
     # bid로 피드 검색하기
-    def get_feed_with_bid(self, database:Local_Database,
+    def get_feed_with_bid(self, database:Mongo_Database,
                           request, feed_search_engine: FeedSearchEngine,
                           num_feed= 4):
         model = FeedSearchModelNew(database=database)
@@ -272,7 +272,7 @@ class Feed_Controller:
         return model
 
     # 해시태그로 피드 검색하기
-    def get_feed_with_hashtag(self, database:Local_Database,
+    def get_feed_with_hashtag(self, database:Mongo_Database,
                               request, feed_search_engine: FeedSearchEngine,
                               feed_manager: FeedManager,
                               num_feed= 4):
@@ -302,7 +302,7 @@ class Feed_Controller:
 
         return model
 
-    def search_feed_with_keyword(self, database:Local_Database,
+    def search_feed_with_keyword(self, database:Mongo_Database,
                                  request, feed_search_engine:FeedSearchEngine,
                                  num_feed=15):
         model = FeedSearchModelNew(database=database)
@@ -337,7 +337,7 @@ class Feed_Controller:
 
         return model
 
-    def search_comment_with_keyword(self, database:Local_Database,
+    def search_comment_with_keyword(self, database:Mongo_Database,
                                     request, feed_search_engine:FeedSearchEngine,
                                     num_comments=10):
         model = CommentSearchModel(database=database)
@@ -356,7 +356,7 @@ class Feed_Controller:
         return model
 
     # 피드 자세히 보기
-    def get_specific_feed_data(self, database:Local_Database,
+    def get_specific_feed_data(self, database:Mongo_Database,
                                request):
         model = FeedModel(database=database)
 
@@ -369,7 +369,7 @@ class Feed_Controller:
         return model
 
     # 피드 상호작용 누르기
-    def try_interact_feed(self, database:Local_Database,
+    def try_interact_feed(self, database:Mongo_Database,
                                request, feed_manager:FeedManager):
         model = FeedModel(database=database)
         # 유저가 있으면 세팅
@@ -381,7 +381,7 @@ class Feed_Controller:
         return model
 
     # 피드 관심 버튼 누르기
-    def try_staring_feed(self, database:Local_Database,
+    def try_staring_feed(self, database:Mongo_Database,
                                request, feed_manager:FeedManager):
         model = FeedModel(database=database)
         # 유저가 있으면 세팅
@@ -393,7 +393,7 @@ class Feed_Controller:
         return model
 
     # comment 만들기
-    def try_make_comment(self, database:Local_Database,
+    def try_make_comment(self, database:Mongo_Database,
                                request, feed_manager:FeedManager,
                                ai_manager
                                ):
@@ -410,7 +410,7 @@ class Feed_Controller:
         return model
 
     # comment 모두 요청
-    def get_all_comment_on_feed(self, database:Local_Database,
+    def get_all_comment_on_feed(self, database:Mongo_Database,
                                request):
         model = FeedModel(database=database)
         
@@ -424,7 +424,7 @@ class Feed_Controller:
         return model
     
     # comment 모두 요청
-    def get_target_comment_on_feed(self, database:Local_Database,
+    def get_target_comment_on_feed(self, database:Mongo_Database,
                                request) -> BaseModel:
         model = CommentModel(database=database)
         
@@ -439,7 +439,7 @@ class Feed_Controller:
     
     
     # comment 지우기
-    def try_remove_comment(self, database:Local_Database,
+    def try_remove_comment(self, database:Mongo_Database,
                                request, feed_manager:FeedManager):
         model = FeedModel(database=database)
           # 유저가 있으면 세팅
@@ -451,7 +451,7 @@ class Feed_Controller:
         return model
 
     # comment 좋아요 누르기
-    def try_like_comment(self, database:Local_Database,
+    def try_like_comment(self, database:Mongo_Database,
                                request, feed_manager:FeedManager):
         model = FeedModel(database=database)
         # 유저가 있으면 세팅
@@ -463,7 +463,7 @@ class Feed_Controller:
         return model
 
     # Feed 편집
-    def try_edit_feed(self, database:Local_Database,
+    def try_edit_feed(self, database:Mongo_Database,
                                request, feed_manager:FeedManager,
                                ai_manager
                                ) -> FeedEditModel:
@@ -482,7 +482,7 @@ class Feed_Controller:
 
         return model
 
-    def try_remove_feed(self, database:Local_Database,
+    def try_remove_feed(self, database:Mongo_Database,
                         request, feed_manager:FeedManager) -> FeedEditModel:
 
         model = FeedEditModel(database=database)

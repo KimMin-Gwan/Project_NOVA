@@ -1,12 +1,12 @@
 from model.base_model import BaseModel
-from model import Local_Database
+from model import Mongo_Database
 #from others.data_domain import Alert
 from others import CoreControllerLogicError, Bias, FeedSearchEngine
 from pprint import pprint
 
 
 class HashTagModel(BaseModel):
-    def __init__(self, database:Local_Database) -> None:
+    def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)
         self._hashtags = []
         self._bias = Bias()

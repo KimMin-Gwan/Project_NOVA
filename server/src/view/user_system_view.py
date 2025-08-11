@@ -91,7 +91,7 @@ class User_Service_View(Master_View):
                                                            token=body_data['body']['token'],)
             return response
 
-        # 임시 로그인 상태에서 비밀번호 변경하기
+        # 임시 로그인 상태(비밀번호찾기 기능)에서 비밀번호 변경하기
         @self.__app.post('/user_home/try_find_password')
         def try_find_password(request:Request, raw_request:dict):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
@@ -111,20 +111,7 @@ class User_Service_View(Master_View):
                 request=request, body_data=body_data)
             
             return response
-
-        # 이메일 중복 검사 기능
-        @self.__app.post('/user_home/try_check_email_duplicate')
-        def try_check_email_duplicate(request:Request, raw_request:dict):
-            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
-            request_manager.data_payload = EmailCheckRequest(raw_request)
-
-            user_controller=UserController()
-            model = user_controller.try_check_email_duplicate(database=self.__database,
-                                                              request=request_manager)
-            body_data = model.get_response_form_data(self._head_parser)
-            response = request_manager.make_json_response(body_data=body_data, request=request)
-            return response
-
+        
         # 회원가입 시도
         # response 포함 정보 -> 'result' : True or False
         #                    -> 'detail' : "실패 사유"
@@ -348,20 +335,3 @@ class SignInRequest(RequestHeader):
         self.verification_code = int(body['verification_code'])
         self.age = body['age']
         self.gender = body['gender']
-
-class ResignRequest(RequestHeader):
-    def __init__(self, request) -> None:
-        super().__init__(request)
-        body = request['body']
-
-# class MyFeedRequest():
-#     def __init__(self, fid) -> None:
-#         self.fid= fid
-#
-# class MyCommentRequest():
-#     def __init__(self, cid) -> None:
-#         self.cid=cid
-#
-# class MyAlertRequest():
-#     def __init__(self, aid) -> None:
-#         self.aid = aid

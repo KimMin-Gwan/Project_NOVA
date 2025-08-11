@@ -1,12 +1,12 @@
 from model.base_model import BaseModel
-from model import Local_Database
+from model import Mongo_Database
 #from others.data_domain import Alert
 from others import CoreControllerLogicError
 from others import Notice, Bias
 from pprint import pprint
 
 class NoticeModel(BaseModel):
-    def __init__(self, database:Local_Database) -> None:
+    def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)
         self._notices = []
         self._all_notice = []

@@ -1,5 +1,5 @@
 from model.base_model import BaseModel
-from model import Local_Database
+from model import Mongo_Database
 from others.data_domain import Bias
 from others import CoreControllerLogicError, FeedSearchEngine
 from random import sample
@@ -7,7 +7,7 @@ from random import sample
 from pprint import pprint
 
 class TokenModel(BaseModel):
-    def __init__(self, database:Local_Database) -> None:
+    def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)
 
     def get_response_form_data(self, head_parser):
@@ -24,7 +24,7 @@ class TokenModel(BaseModel):
             raise CoreControllerLogicError("response making error | " + e)
 
 class BannerModel(BaseModel):
-    def __init__(self, database:Local_Database) -> None:
+    def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)
         self.__banner = []
 
@@ -48,7 +48,7 @@ class BannerModel(BaseModel):
             raise CoreControllerLogicError("response making error | " + e)
 
 class HomeBiasModel(BaseModel):
-    def __init__(self, database:Local_Database) -> None:
+    def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)
         self.__bias_list = []
         
@@ -111,7 +111,7 @@ class HomeBiasModel(BaseModel):
             raise CoreControllerLogicError("response making error | " + e)
 
 class BiasSearchModel(BaseModel):
-    def __init__(self, database:Local_Database) -> None:
+    def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)
         self._biases = []
         
@@ -186,7 +186,7 @@ class BiasSearchModel(BaseModel):
             raise CoreControllerLogicError("response making error | " + e)
 
 class SelectBiasModel(BaseModel):
-    def __init__(self, database:Local_Database) -> None:
+    def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)
         self.__bias= Bias()
         self.__result = False
@@ -230,7 +230,7 @@ class SelectBiasModel(BaseModel):
             raise CoreControllerLogicError("response making error | " + e)
 
 class LeagueMetaModel(BaseModel):
-    def __init__(self, database:Local_Database) -> None:
+    def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)
         self.__leagues = []
 
@@ -256,7 +256,7 @@ class LeagueMetaModel(BaseModel):
             raise CoreControllerLogicError("response making error | " + e)
         
 class BiasFollowPageModel(BiasSearchModel):
-    def __init__(self, database:Local_Database) -> None:
+    def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)
         self.__chzzk= []
         self.__soop= []
@@ -287,7 +287,7 @@ class BiasFollowPageModel(BiasSearchModel):
             raise CoreControllerLogicError("response making error | " + e)
 
 class RecommendKeywordModel(BaseModel):
-    def __init__(self, database:Local_Database) -> None:
+    def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)
         self.__keywords = []
 

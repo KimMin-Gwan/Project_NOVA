@@ -1,4 +1,4 @@
-from model import BannerModel, HomeBiasModel, BiasSearchModel, Local_Database, SelectBiasModel, LeagueMetaModel, TokenModel, HashTagModel, RecommendKeywordModel
+from model import BannerModel, HomeBiasModel, BiasSearchModel, Mongo_Database, SelectBiasModel, LeagueMetaModel, TokenModel, HashTagModel, RecommendKeywordModel
 from others import UserNotExist, CustomError, FeedManager
 
 
@@ -11,24 +11,24 @@ class Home_Controller:
 
 
     # banner 데이터 요청
-    def get_banner_data(self, database:Local_Database) -> BannerModel: 
+    def get_banner_data(self, database:Mongo_Database) -> BannerModel: 
         model = BannerModel(database=database)
         model.set_banner_data()
         return model
         
     # 홈 화면에서 토큰 발급  시도하는동작
-    def get_token(self, database:Local_Database) -> TokenModel: 
+    def get_token(self, database:Mongo_Database) -> TokenModel: 
         model = TokenModel(database=database)
         return model
     
     # 홈 화면에서 토큰 발급  시도하는동작
-    def get_token_need_user(self, request, database:Local_Database) -> TokenModel: 
+    def get_token_need_user(self, request, database:Mongo_Database) -> TokenModel: 
         model = TokenModel(database=database)
         model.set_user_with_email(request=request.jwt_payload)
         return model
     
     # 홈 화면의 bias 정보 
-    def get_my_bias_data(self, database:Local_Database, request) -> HomeBiasModel: 
+    def get_my_bias_data(self, database:Mongo_Database, request) -> HomeBiasModel: 
         model = HomeBiasModel(database=database)
 
         # 유저가 있으면 그 유저의 bias_list로 세팅
@@ -38,11 +38,10 @@ class Home_Controller:
         # 유저가 아니면 랜덤하게
         else:
             model.set_random_bias()
-            
         
         return model
 
-    def search_bias(self, database:Local_Database, request):
+    def search_bias(self, database:Mongo_Database, request):
         model = BiasSearchModel(database=database)
 
         try:
@@ -60,7 +59,7 @@ class Home_Controller:
         finally:
             return model
 
-    def select_bias(self, database:Local_Database, request, feed_search_engine):
+    def select_bias(self, database:Mongo_Database, request, feed_search_engine):
         model = SelectBiasModel(database=database)
         try:
             # 유저가 있는지 확인
@@ -81,7 +80,7 @@ class Home_Controller:
         finally:
             return model
 
-    def get_league_meta_data(self, database:Local_Database, league_manager):
+    def get_league_meta_data(self, database:Mongo_Database, league_manager):
         model = LeagueMetaModel(database=database)
 
         try:
@@ -99,14 +98,14 @@ class Home_Controller:
         finally:
             return model
 
-    def get_realtime_best_hashtag(self, database:Local_Database, request, feed_search_engine) -> HashTagModel:
+    def get_realtime_best_hashtag(self, database:Mongo_Database, request, feed_search_engine) -> HashTagModel:
         model = HashTagModel(database=database)
         # model.set_best_hash_tag()
         model.set_realtime_best_hashtag(feed_search_engine=feed_search_engine, num_hashtag=10)
 
         return model
 
-    def get_hot_hashtag(self, database:Local_Database, request, feed_search_engine) -> HashTagModel:
+    def get_hot_hashtag(self, database:Mongo_Database, request, feed_search_engine) -> HashTagModel:
         model = HashTagModel(database=database)
 
         if request.jwt_payload != "":
@@ -118,7 +117,7 @@ class Home_Controller:
             model.set_realtime_best_hashtag(feed_search_engine=feed_search_engine, num_hashtags=10)
         return model
 
-    def get_today_best_hashtag(self, database:Local_Database, request, feed_search_engine) -> HashTagModel:
+    def get_today_best_hashtag(self, database:Mongo_Database, request, feed_search_engine) -> HashTagModel:
         model = HashTagModel(database=database)
 
         if request.jwt_payload != "":
@@ -128,7 +127,7 @@ class Home_Controller:
 
         return model
 
-    def get_weekly_best_hashtag(self, database:Local_Database, request, feed_search_engine) -> HashTagModel:
+    def get_weekly_best_hashtag(self, database:Mongo_Database, request, feed_search_engine) -> HashTagModel:
         model = HashTagModel(database=database)
         if request.jwt_payload != "":
             model.set_user_with_email(request=request.jwt_payload)
@@ -137,7 +136,7 @@ class Home_Controller:
 
         return model
 
-    def get_monthly_best_hashtag(self, database:Local_Database, request, feed_search_engine) -> HashTagModel:
+    def get_monthly_best_hashtag(self, database:Mongo_Database, request, feed_search_engine) -> HashTagModel:
         model = HashTagModel(database=database)
         if request.jwt_payload != "":
             model.set_user_with_email(request=request.jwt_payload)
@@ -146,7 +145,7 @@ class Home_Controller:
         return model
 
     # 추천 검색어 시스템. 현재는 주간 핫 해시태그들만 보여줌
-    def get_recommend_keyword(self, database:Local_Database, request, feed_search_engine) -> RecommendKeywordModel:
+    def get_recommend_keyword(self, database:Mongo_Database, request, feed_search_engine) -> RecommendKeywordModel:
         model = RecommendKeywordModel(database=database)
         if request.jwt_payload != "":
             model.set_user_with_email(request=request.jwt_payload)

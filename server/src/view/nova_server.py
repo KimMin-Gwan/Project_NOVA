@@ -2,9 +2,7 @@ from fastapi import FastAPI
 from view.core_system_view import Core_Service_View
 from view.user_system_view import User_Service_View
 from view.sub_system_view import Sub_Service_View 
-from view.funding_system_view import Funding_Service_View
-from view.administrator_system_view import Administrator_System_View
-from view.time_table_view import TimeTableView
+from view.time_table_view import Time_Table_View
 from view.content_system_view import Content_Service_view
 from view.parsers import Head_Parser
 import uvicorn
@@ -17,10 +15,9 @@ import random
 
 class NOVA_Server:
     def __init__(self, database, connection_manager,
-                   feed_manager, feed_search_engine,
-                  schedule_search_engine, funding_project_manager,
-                  ai_manager, jwt_secret_key, test_connection_manager,
-                  content_key_storage
+                  feed_manager, feed_search_engine,
+                  schedule_search_engine, 
+                  jwt_secret_key, content_key_storage
                   ) -> None:
         self.__app = FastAPI()
 
@@ -49,9 +46,10 @@ class NOVA_Server:
                                                    connection_manager= connection_manager,
                                                    feed_manager=feed_manager,
                                                    feed_search_engine=feed_search_engine,
-                                                   ai_manager=ai_manager,
+                                                   ai_manager=None,
                                                    jwt_secret_key = jwt_secret_key
                                                    )
+        
         self.__user_system_view = User_Service_View( app=self.__app,
                                                      endpoint='/user_system',
                                                    database=database,
@@ -61,6 +59,7 @@ class NOVA_Server:
                                                    feed_search_engine=feed_search_engine,
                                                    jwt_secret_key = jwt_secret_key
                                                    )
+        
         self.__sub_system_view = Sub_Service_View( app=self.__app,
                                                      endpoint='/sub_system',
                                                    database=database,
@@ -68,19 +67,8 @@ class NOVA_Server:
                                                    feed_search_engine=feed_search_engine,
                                                    jwt_secret_key = jwt_secret_key
                                                    )
-        self.__funding_system_view = Funding_Service_View( app=self.__app,
-                                                    endpoint='/nova_fund_system',
-                                                   database=database,
-                                                   head_parser=head_parser,
-                                                   funding_project_manager=funding_project_manager,
-                                                   jwt_secret_key = jwt_secret_key
-                                                   )
-        self.__administrator_system_view = Administrator_System_View( app=self.__app,
-                                                     endpoint='/administrator_system',
-                                                   database=database,
-                                                   head_parser=head_parser)
         
-        self.__time_tiable_system_view = TimeTableView( app=self.__app,
+        self.__time_tiable_system_view = Time_Table_View( app=self.__app,
                                                      endpoint='/schedule',
                                                    database=database,
                                                    head_parser=head_parser,
@@ -92,15 +80,13 @@ class NOVA_Server:
                                                      endpoint='/content',
                                                    database=database,
                                                    head_parser=head_parser,
-                                                   test_connection_manager=test_connection_manager,
+                                                   test_connection_manager=None,
                                                    jwt_secret_key = jwt_secret_key,
                                                    content_key_storage=content_key_storage
                                                    )
         self.__core_system_view()
         self.__user_system_view()
         self.__sub_system_view()
-        self.__funding_system_view()
-        self.__administrator_system_view()
         self.__time_tiable_system_view()
         self.__content_serviec_view()
 

@@ -1,6 +1,6 @@
 #from others.data_domain import League, Bias
 #from others.socket_manager import ConnectionManager
-##from model import Local_Database
+##from model import Mongo_Database
 #import sys
 #import time
 

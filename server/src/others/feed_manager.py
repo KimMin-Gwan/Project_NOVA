@@ -3,7 +3,7 @@ import copy
 from others.data_domain import Feed, User, Comment, ManagedUser, Interaction, FeedLink
 from others.search_engine import FeedSearchEngine
 from others.object_storage_connector import ObjectStorageConnection, HTMLEXtractor, ImageDescriper
-#from model import Local_Database
+#from model import Mongo_Database
 from datetime import datetime, timedelta
 import string
 import random
@@ -19,7 +19,7 @@ warnings.filterwarnings("ignore", module='boto3.compat')
 class FeedManager:
     def __init__(self, database, feed_search_engine) -> None:
         #self._feedClassManagement = FeedClassManagement(fclasses=fclasses)
-        #self._database:Local_Database= database
+        #self._database:Mongo_Database= database
         self._database= database
         #self._managed_user_table = ManagedUserTable(database=database)
         self._feed_class_analist = FeedClassAnalist()
