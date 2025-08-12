@@ -91,7 +91,7 @@ class Sub_Service_View(Master_View):
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
 
             sub_controller=Sub_Controller()
-            model = sub_controller.try_select_bias(database=self.__database,
+            model = sub_controller.try_follow_bias(database=self.__database,
                                                  request=request_manager,
                                                  feed_search_engine=self.__feed_search_engine)
             body_data = model.get_response_form_data(self._head_parser)
