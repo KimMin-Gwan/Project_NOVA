@@ -1,9 +1,8 @@
 from model.base_model import BaseModel
 from model import Mongo_Database
 from others.data_domain import User, Bias
-from others import CoreControllerLogicError, FeedManager, FeedSearchEngine, ObjectStorageConnection
+from others import CoreControllerLogicError, FeedSearchEngine, ObjectStorageConnection
 from view.jwt_decoder import JWTManager
-import datetime
 import uuid
 from pprint import pprint
 import random
@@ -49,7 +48,6 @@ class LoginModel(BaseModel):
             body = {
                 'result' : self.__result,
                 'detail' : self.__detail,
-                'token' : self.__token
             }
 
             response = self._get_response_data(head_parser=head_parser, body=body)
@@ -66,28 +64,6 @@ class SendEmailModel(BaseModel):
         super().__init__(database)
         self.__result = True
         self.__detail = ''
-        #self.__token = ''
-
-    def make_token(self,request):
-        try:
-            # 비밀 키 설정
-            secret_key = "your_secret_key"
-            # 헤더 설정
-            headers = {
-                "alg": "HS256",
-                "typ": "JWT"
-            }
-            # 페이로드 설정
-            payload = {
-                "email": request.email,
-                "iat": datetime.datetime.utcnow(),
-                "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=30)  # 만료 시간 30분
-            }
-            # 토큰 생성
-            #self.__token = jwt.encode(payload, secret_key, algorithm="HS256", headers=headers)
-
-        except Exception as e:
-            raise CoreControllerLogicError(error_type="make_token | " + str(e))
 
     def __make_user_nickname(self):
         while True:
@@ -114,8 +90,6 @@ class SendEmailModel(BaseModel):
                                         new_data=user.get_dict_form_data())
             
             feed_search_engine.try_add_user(user=user)
-            #self._database.add_new_data(target_id="muid",
-                                        #new_data=managedUser.get_dict_form_data())
 
         except Exception as e:
             raise CoreControllerLogicError(error_type="save_response | " + str(e))
@@ -143,7 +117,6 @@ class SendEmailModel(BaseModel):
         try:
             body = {
                 'result' : self.__result,
-                #'token' : self.__token,
                 'detail' : self.__detail
             }
 
@@ -238,36 +211,7 @@ class UserPageModel(BaseModel):
         except Exception as e:
             raise CoreControllerLogicError("response making error | " + e)
 
-# 통일성을 위해 Comment 까지 재편 합니다.
-class MyCommentsModel(BaseModel):
-    def __init__(self, database:Mongo_Database ) -> None:
-        super().__init__(database)
-        # self._comments = []
-        self._feeds = []
-        self._key = -1
 
-    def get_response_form_data(self, head_parser):
-        try:
-            body = {
-                'feeds' : self._make_dict_list_data(list_data=self._feeds),
-                # 'comments' : self._make_dict_list_data(list_data=self._comments),
-                "key" : self._key
-            }
-
-            response = self._get_response_data(head_parser=head_parser, body=body)
-            return response
-
-        except Exception as e:
-            raise CoreControllerLogicError("response making error | " + e)
-
-    def get_my_comments(self, feed_manager:FeedManager, last_index:int=-1):
-        self._feeds = feed_manager.get_comments_with_type_and_keyword(
-            user=self._user, type="mypage")
-        self._feeds, self._key = feed_manager.paging_fid_list(fid_list=self._feeds, last_index=last_index, page_size=10)
-        # self._comments = feed_manager.get_my_comments(user=self._user)
-        # self._comments, self._key = feed_manager.paging_fid_list(fid_list=self._comments, last_index=last_index, page_size=3)
-
-        return
 
 class MyProfileModel(BaseModel):
     def __init__(self, database:Mongo_Database) -> None:
@@ -300,7 +244,6 @@ class MyProfileModel(BaseModel):
         self._email = self._user.email
         self._age = self._user.age
         self._gender = self._user.gender
-
         return
 
 class ChangePasswordModel(BaseModel):

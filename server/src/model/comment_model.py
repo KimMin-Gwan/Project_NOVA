@@ -168,3 +168,31 @@ class CommentSearchModel(BaseModel):
 
         except Exception as e:
             raise CoreControllerLogicError("response making error | " + e)
+        
+# 통일성을 위해 Comment 까지 재편 합니다.
+class MyCommentsModel(BaseModel):
+    def __init__(self, database:Mongo_Database ) -> None:
+        super().__init__(database)
+        # self._comments = []
+        self._feeds = []
+        self._key = -1
+
+    def get_response_form_data(self, head_parser):
+        try:
+            body = {
+                'feeds' : self._make_dict_list_data(list_data=self._feeds),
+                # 'comments' : self._make_dict_list_data(list_data=self._comments),
+                "key" : self._key
+            }
+
+            response = self._get_response_data(head_parser=head_parser, body=body)
+            return response
+
+        except Exception as e:
+            raise CoreControllerLogicError("response making error | " + e)
+
+    def get_my_comments(self, feed_manager:FeedManager, last_index:int=-1):
+        self._feeds = feed_manager.get_comments_with_type_and_keyword(
+            user=self._user, type="mypage")
+        self._feeds, self._key = feed_manager.paging_fid_list(fid_list=self._feeds, last_index=last_index, page_size=10)
+        return
