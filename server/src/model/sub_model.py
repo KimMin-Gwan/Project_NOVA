@@ -1,5 +1,4 @@
 from model.base_model import BaseModel
-from model.league_model import LeagueModel
 from model import Mongo_Database
 from others.data_domain import Bias, User, Report
 from others import CoreControllerLogicError, HTMLEXtractor, ImageDescriper, MailSender
@@ -15,72 +14,6 @@ class BiasBannerModel(BaseModel):
         try:
             body = {
                 'result' : []
-            }
-
-            response = self._get_response_data(head_parser=head_parser, body=body)
-            return response
-
-        except Exception as e:
-            raise CoreControllerLogicError("response making error | " + e)
-
-class BiasNLeagueModel(LeagueModel):
-    def __init__(self, database:Mongo_Database) -> None:
-        super().__init__(database)
-        self.__my_league_data = {}
-    
-    # 리그 정보 세팅
-    # @override
-    def set_leagues(self) -> bool: 
-        try:
-            league_data = self._database.get_data_with_id(target="lid", id=self._bias.lid)#type = solo
-
-            if not league_data:
-                return False
-
-            self._league.make_with_dict(league_data)
-            return True
-        
-        except Exception as e:
-            raise CoreControllerLogicError(error_type="set_solo_leagues | " + str(e))
-    
-    # 리그 통계정보를 받아야됨
-    def get_my_league_data(self):
-        for dict_data in self._dict_bias_data:
-            if dict_data['bid'] == self._bias.bid:
-                self.__my_league_data = dict_data
-
-        #self.__my_league_data['total_user'] = self._bias.num_user
-
-        if self._bias.type == "solo":
-            user_datas = self._database.get_datas_with_key(target="uid", key="solo_bid", key_datas=[self._bias.bid])
-        elif self._bias.type == "group":
-            user_datas = self._database.get_datas_with_key(target="uid", key="group_bid", key_datas=[self._bias.bid])
-
-        num_user = 0
-
-        if self._bias.type == "solo":
-            for user_data in user_datas:
-                user = User()
-                user.make_with_dict(user_data)
-                if user.solo_point!= 0:
-                    num_user += 1
-        elif self._bias.type == "group":
-            for user_data in user_datas:
-                user = User()
-                user.make_with_dict(user_data)
-                if user.group_point!= 0:
-                    num_user += 1
-        else:
-            False
-        self.__my_league_data['lname'] = self._league.lname
-        self.__my_league_data['contributed_user'] = num_user
-
-        return True
-
-    def get_response_form_data(self, head_parser):
-        try:
-            body = {
-                "result" : self.__my_league_data
             }
 
             response = self._get_response_data(head_parser=head_parser, body=body)
@@ -229,56 +162,6 @@ class MyContributionModel(UserContributionModel):
         except Exception as e:
             raise CoreControllerLogicError("response making error | " + e)
 
-# class NoticeListModel(UserContributionModel):
-#     def __init__(self, database:Mongo_Database) -> None:
-#         super().__init__(database)
-#         self.__notice = []
-#
-#     # rank와 point를 포함한 데이터
-#     def get_notice_list(self):
-#         notice_datas = self._database.get_all_data(target="nid")
-#         for notice_data in notice_datas:
-#             notice = Notice()
-#             notice.make_with_dict(notice_data)
-#             notice.body = ""
-#             self.__notice.append(notice)
-#
-#     def get_response_form_data(self, head_parser):
-#         try:
-#             body = {
-#                 'notice_list' : self._make_dict_list_data(list_data=self.__notice)
-#             }
-#
-#             response = self._get_response_data(head_parser=head_parser, body=body)
-#             return response
-#
-#         except Exception as e:
-#             raise CoreControllerLogicError("response making error | " + e)
-#
-# class NoticeModel(UserContributionModel):
-#     def __init__(self, database:Mongo_Database) -> None:
-#         super().__init__(database)
-#         self.__notice = Notice()
-#
-#     def get_notice(self, nid):
-#         notice_data = self._database.get_data_with_id(target="nid", id=nid)
-#         if not notice_data:
-#             self.__notice.title = "없는 공지사항 입니다"
-#         else:
-#             self.__notice.make_with_dict(notice_data)
-#         return
-#
-#     def get_response_form_data(self, head_parser):
-#         try:
-#             body = {
-#                 'notice' : self.__notice.get_dict_form_data()
-#             }
-#
-#             response = self._get_response_data(head_parser=head_parser, body=body)
-#             return response
-#
-#         except Exception as e:
-#             raise CoreControllerLogicError("response making error | " + e)
 
 class ImageTagModel(BaseModel):
     def __init__(self, database:Mongo_Database) -> None:
