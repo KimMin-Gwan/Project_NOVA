@@ -1,7 +1,7 @@
 from view import NOVA_Server 
 from view.parsers import Configure_File_Reader
 from model import Mongo_Database, Mongo_Database
-from manager import ConnectionManager, TestConnectionManager
+from manager import ConnectionManager
 from others import FeedManager, FeedSearchEngine, ScheduleSearchEngine
 import asyncio
 from uvicorn import run
