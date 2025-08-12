@@ -83,7 +83,7 @@ class Sub_Service_View(Master_View):
             return response        
         
         # 바이어스 선택 또는 취소
-        @self.__app.get('/nova_sub_system/try_follow_bias')
+        @self.__app.post('/nova_sub_system/try_follow_bias')
         def try_follow_bias(request:Request, raw_request:dict):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = BiasSelectRequest(request=raw_request)
