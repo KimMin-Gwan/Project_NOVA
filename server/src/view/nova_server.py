@@ -80,7 +80,6 @@ class NOVA_Server:
                                                      endpoint='/content',
                                                    database=database,
                                                    head_parser=head_parser,
-                                                   test_connection_manager=None,
                                                    jwt_secret_key = jwt_secret_key,
                                                    content_key_storage=content_key_storage
                                                    )
