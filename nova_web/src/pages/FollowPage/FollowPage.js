@@ -135,7 +135,6 @@ export default function FollowPage() {
               </div>
             </header>
 
-            <h2 className={style["fav-title"]}>주제 팔로우</h2>
             <h3>
               <b>슈퍼노바</b>에 등록된 <b>주제</b>를 소개합니다.
             </h3>
@@ -246,13 +245,8 @@ export default function FollowPage() {
       <DesktopLayout>
         <div className="container">
             <div className={`${style["container"]} ${style[getModeClass(mode)]}`}>
-              <header className={style.header}>
-                <div className="logo">
-                  <img src={logo2} alt="logo" onClick={() => navigate("/")} />
-                </div>
-              </header>
-
-              <h2 className={style["fav-title"]}>주제 팔로우</h2>
+              <br>
+              </br>
               <h3>
                 <b>슈퍼노바</b>에 등록된 <b>주제</b>를 소개합니다.
               </h3>
