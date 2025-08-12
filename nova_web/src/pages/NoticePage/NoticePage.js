@@ -12,7 +12,7 @@ export default function NoticePage() {
   const [notices, setNotices] = useState([]);
 
   function fetchNotice() {
-    mainApi.get("nova_sub_system/sample_notice").then((res) => {
+    mainApi.get("nova_sub_system/get_notice_list").then((res) => {
       //console.log(res.data);
       setNotices(res.data.body.notice);
     });

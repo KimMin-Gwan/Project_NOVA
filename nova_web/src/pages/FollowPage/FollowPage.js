@@ -67,7 +67,7 @@ export default function FollowPage() {
     },
   };
   function fetchTryFollowBias() {
-    fetch("https://supernova.io.kr/nova_sub_system/try_select_my_bias", {
+    fetch("https://supernova.io.kr/nova_sub_system/try_follow_bias", {
       method: "POST",
       credentials: "include",
       headers: {
