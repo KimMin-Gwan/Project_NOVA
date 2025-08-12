@@ -1,6 +1,6 @@
 from view.jwt_decoder import JWTManager, JWTPayload, RequestManager
 from model import Mongo_Database, BaseModel , ScheduleChartModel, ScheduleTimeLayerModel
-from model import TimeTableModel,  ScheduleRecommendKeywordModel
+from model import TimeTableModel
 from model import MultiScheduleModel, AddScheduleModel
 from others import ScheduleSearchEngine as SSE
 
@@ -92,11 +92,8 @@ class TImeTableController:
         target_date = datetime.strptime(request.data_payload.date, "%Y/%m/%d")
         
         if datetime.today().date() <= target_date.date():
-            model.make_recommand_schedule_data(
-                target_date=request.data_payload.date,
-                schedule_search_engine=schedule_search_engine
-            )
-            model.set_recommand_schedule_layer()
+            model.make_recommand_schedule_data() # 추천 스케줄 데이터 생성
+            model.set_recommand_schedule_layer() # 추천 스케줄 레이어 생성
         
         model.change_layer_form()
             
