@@ -76,16 +76,10 @@ export default function FollowBoxes({ setBiasId }) {
   }
 
   if (loading) {
-    return <div>loading...</div>;
+    return <div>
+      불러오는 중
+    </div>;
   }
-  let header = {
-    "request-type": "default",
-    "client-version": "v1.0.1",
-    "client-ip": "127.0.0.1",
-    uid: "1234-abcd-5678",
-    endpoint: "/user_system/",
-  };
-
 
   async function fetchTryFollowBias() {
     await mainApi.get( `nova_sub_system/try_follow_bias?bid=${clickedBid}`
