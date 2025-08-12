@@ -137,4 +137,34 @@ class CommentModel(BaseModel):
         
         
         
+class CommentSearchModel(BaseModel):
+    def __init__(self, database:Mongo_Database) -> None:
+        super().__init__(database)
+        self._key = -1
+        self._feeds = []
         
+
+    def try_search_comment_with_keyword(self, feed_manager:FeedManager,
+                                        target:str, last_index=-1, num_comments=8):
+
+        self._feeds = feed_manager.get_comments_with_type_and_keyword(
+            user=self._user, type="search", keyword=target
+        )
+        self._feeds, self._key = feed_manager.paging_fid_list(fid_list=self._feeds, last_index=last_index, page_size=num_comments)
+        # self._comments = feed_manager.get_comments_with_keyword(keyword=target)
+        # self._comments, self._key = feed_manager.paging_fid_list(fid_list=self._comments, last_index=last_index, page_size=num_comments)
+
+        return
+
+    def get_response_form_data(self, head_parser):
+        try:
+            body = {
+                'key' : self._key,
+                'feeds' : self._make_dict_list_data(list_data=self._feeds)
+            }
+
+            response = self._get_response_data(head_parser=head_parser, body=body)
+            return response
+
+        except Exception as e:
+            raise CoreControllerLogicError("response making error | " + e)
