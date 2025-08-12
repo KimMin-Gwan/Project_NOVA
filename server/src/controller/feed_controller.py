@@ -77,21 +77,21 @@ class Feed_Controller:
         return model
 
 
-    # 숏피드에서 다음 피드 요청할 때
-    def get_feed_with_recommend(self, database:Mongo_Database,
-                        request, feed_search_engine: FeedSearchEngine):
-        model = FeedSearchModel(database=database)
+    #    # 숏피드에서 다음 피드 요청할 때
+    #def get_feed_with_recommend(self, database:Mongo_Database,
+                        #request, feed_search_engine: FeedSearchEngine):
+        #model = FeedSearchModel(database=database)
 
-        # 유저가 있으면 세팅
-        if request.jwt_payload != "":
-            model.set_user_with_email(request=request.jwt_payload)
+        ## 유저가 있으면 세팅
+        #if request.jwt_payload != "":
+            #model.set_user_with_email(request=request.jwt_payload)
 
-        model.set_recommend_feed(feed_search_engine,
-                                fid=request.data_payload.fid,
-                                history=request.data_payload.history,
-                                feed_manager=self.__feed_manager
-                                )
-        return model
+        #model.set_recommend_feed(feed_search_engine,
+                                #fid=request.data_payload.fid,
+                                #history=request.data_payload.history,
+                                #feed_manager=self.__feed_manager
+                                #)
+        #return model
 
     # 해시태그로 피드 검색하기
     def get_feed_with_hashtag(self, database:Mongo_Database,
@@ -183,7 +183,7 @@ class Feed_Controller:
         if request.jwt_payload != "":
             model.set_user_with_email(request=request.jwt_payload)
 
-        model.set_single_feed_data(fid=request.data_payload.fid, feed_manager=self.__feed_manager)
+        model.set_single_feed_data(fid=request.data_payload.fid)
 
         return model
 
