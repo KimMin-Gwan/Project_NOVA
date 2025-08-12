@@ -116,23 +116,7 @@ class TImeTableController:
 
         return model
 
-    # Specific Schedule 들고오기 테스트용
-    # 하고나선 무조건 삭제
-    # def try_get_specific_schedules(self, database:Mongo_Database,schedule_search_engine:SSE,
-    #                            request:RequestManager) -> BaseModel:
-    #     model = MultiScheduleModel(database=database)
-    #
-    #     model.set_user_with_email(request=request.data_payload)
-    #     if not model._set_tuser_with_tuid():
-    #         return model
-    #
-    #     model.get_specific_schedules(schedule_search_engine=schedule_search_engine,
-    #                                  specific_date=request.data_payload.target_date,
-    #                                  num_schedules=request.data_payload.num_schedules,
-    #                                  last_index=request.data_payload.key)
-    #
-    #     return model
-    #
+    
     # 스케줄 추가
     def try_add_schedule(self, database:Mongo_Database, request:RequestManager ) -> BaseModel:
         model = AddScheduleModel(database=database)
@@ -230,18 +214,6 @@ class TImeTableController:
         # self.time_section:int=body.get("timeSection", 0) # 0 -> 0~6 / 1 -> 6~12 / 2 -> 12~16 / 3 -> 16~24 / -1 -> 0~24(전체)
         # self.style:int=body.get("style", "all")  # all, vtuber, cam, nocam -> bias 데이터 (tags)
         # self.gender:int=body.get("gender", "all") # male, female, etc -> bias 데이터 (tags)
-
-        return model
-
-    # 인터페이스만 존재. 검색어 저장 시스템이 있어야 제대로 시스템이 구축 가능할 듯
-    # 유이하게 Search Engine을 사용하지 않음
-    def try_get_recommend_keyword(self, database:Mongo_Database, request:RequestManager, num_keywords=6) -> BaseModel:
-        model = ScheduleRecommendKeywordModel(database=database)
-
-        if request.jwt_payload!= "":
-            model.set_user_with_email(request=request.jwt_payload)
-
-        model.get_category_recommend(num_keywords=num_keywords)
 
         return model
 
@@ -344,22 +316,3 @@ class TImeTableController:
 
         return model
 
-
-
-    # 오늘의 이벤트 뽑기
-    # def get_eventboard_data(self, database:Mongo_Database, request:RequestManager) -> BaseModel:
-    #     model = MultiScheduleModelNew(database=database)
-    #
-    #     if request.jwt_payload!= "":
-    #         model.set_user_with_email(request=request.jwt_payload)
-    #         # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
-    #         if not model._set_tuser_with_tuid():
-    #             return model
-    #
-    #
-    #     if model.is_tuser_alive():
-    #         model.set_my_event_in_by_day(date=request.data_payload.date)
-    #     else:
-    #         model.set_event_in_by_day(date=request.data_payload.date)
-    #
-    #     return model
