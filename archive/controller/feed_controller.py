@@ -1,4 +1,72 @@
-    # comment 지우기
+    # fid를 통한 피드 검색
+    def try_search_in_fid(self, database:Mongo_Database,
+                        request, feed_search_engine: FeedSearchEngine, feed_manager: FeedManager,
+                        num_feed= 1):
+        model = FeedSearchModelNew(database=database)
+        # 유저가 있으면 세팅
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
+        model.try_search_feed_with_keyword(feed_search_engine=feed_search_engine,
+                                               feed_manager=feed_manager,
+                                               search_columns="fid",
+                                               target=request.data_payload.fid
+                                               )
+
+        # model.try_search_feed_with_fid(feed_search_engine=feed_search_engine,
+        #                                feed_manager=self.__feed_manager,
+        #                                 fid=request.data_payload.fid)
+
+        return model
+    
+    
+        # 오늘의 인기 게시글
+    def get_today_best(self, database:Mongo_Database,
+                        request, feed_search_engine: FeedSearchEngine,
+                        num_feed=4):
+        model = FeedModel(database=database)
+        
+        # 유저가 있으면 세팅
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
+
+        model.set_best_feed_with_time(feed_search_engine=feed_search_engine,
+                                      feed_manager=self.__feed_manager,
+                                      search_type="best",
+                                      time_type="day",
+                                      last_index=request.data_payload.key,
+                                      num_feed=num_feed)
+        #
+        # model.set_today_best_feed(feed_search_engine=feed_search_engine,
+        #                             feed_manager=self.__feed_manager,
+        #                             index=request.data_payload.key,
+        #                             num_feed=num_feed)
+
+        return model
+    
+    
+    # 주간 인기 게시글
+    def get_weekly_best(self, database:Mongo_Database,
+                        request, feed_search_engine: FeedSearchEngine,
+                        num_feed= 4):
+        model = FeedModel(database=database)
+        
+        # 유저가 있으면 세팅
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
+
+        model.set_best_feed_with_time(feed_search_engine=feed_search_engine,
+                                      feed_manager=self.__feed_manager,
+                                      search_type="best",
+                                      time_type="weekly",
+                                      last_index=request.data_payload.key,
+                                      num_feed=num_feed)
+
+        # model.set_weekly_best_feed(feed_search_engine=feed_search_engine,
+        #                             feed_manager=self.__feed_manager,
+        #                             index=request.data_payload.key,
+        #                             num_feed=num_feed)
+        #
+        return model    # comment 지우기
     def try_remove_comment(self, database:Mongo_Database,
                                request, feed_manager:FeedManager):
         model = FeedModel(database=database)

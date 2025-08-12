@@ -10,51 +10,29 @@ class Feed_Controller:
         model = BaseModel(database=database)
         # 유저가 있으면 세팅
         model.set_user_with_uid(request=request.data_payload)
-
         return model
 
 
-    # fid를 통한 피드 검색
-    def try_search_in_fid(self, database:Mongo_Database,
-                        request, feed_search_engine: FeedSearchEngine, feed_manager: FeedManager,
-                        num_feed= 1):
-        model = FeedSearchModelNew(database=database)
-        # 유저가 있으면 세팅
-        if request.jwt_payload != "":
-            model.set_user_with_email(request=request.jwt_payload)
-        model.try_search_feed_with_keyword(feed_search_engine=feed_search_engine,
-                                               feed_manager=feed_manager,
-                                               search_columns="fid",
-                                               target=request.data_payload.fid
-                                               )
-
-        # model.try_search_feed_with_fid(feed_search_engine=feed_search_engine,
-        #                                feed_manager=self.__feed_manager,
-        #                                 fid=request.data_payload.fid)
-
-        return model
-    
     # Bias 기반 커뮤니티 피드 검색
     def get_feed_in_bias_feed_page(self, database:Mongo_Database,
                                 request, feed_search_engine: FeedSearchEngine):
         # model = CommunityFeedModel(database=database)
         model = FilteredFeedModel(database=database)
-        try:
-            # 유저가 있으면 세팅
-            if request.jwt_payload != "":
-                model.set_user_with_email(request=request.jwt_payload)
+        
+        # 유저가 있으면 세팅
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
                 
-            #model.is_bids_data_empty(data_payload=request.data_payload)
+        #model.is_bids_data_empty(data_payload=request.data_payload)
 
-            model.try_filtered_feed_community(
-                feed_search_engine=feed_search_engine,
-                feed_manager=self.__feed_manager,
-                bid = request.data_payload.bid,
-                category = request.data_payload.category,
-                last_index=request.data_payload.key
-            )
-        except Exception as e:
-            print(e)
+        model.try_filtered_feed_community(
+            feed_search_engine=feed_search_engine,
+            feed_manager=self.__feed_manager,
+            bid = request.data_payload.bid,
+            category = request.data_payload.category,
+            last_index=request.data_payload.key
+        )
+
 
         # # board를 선택하지 않은 경우
         # if request.data_payload.board_type == "":
@@ -72,116 +50,13 @@ class Feed_Controller:
         #         board_type = request.data_payload.board_type,
         #         feed_search_engine=feed_search_engine,
         #         feed_manager=self.__feed_manager)
-        finally:
-            return model
-
-    # 키워드를 통한 피드 검색
-    # def try_search_in_keyword(self, database:Mongo_Database,
-    #                     request, feed_search_engine: FeedSearchEngine,
-    #                     num_feed= 4):
-    #     model = FeedSearchModel(database=database)
-    #
-    #     # 유저가 있으면 세팅
-    #     if request.jwt_payload != "":
-    #         model.set_user_with_email(request=request.jwt_payload)
-    #
-    #     model.try_search_feed(feed_search_engine=feed_search_engine,
-    #                             feed_manager=self.__feed_manager,
-    #                         target=request.data_payload.keyword,
-    #                         num_feed=num_feed)
-    #
-    #     return model
-    #
-    # # 키워드를 통한 피드 검색
-    # def try_search_in_hashtag(self, database:Mongo_Database,
-    #                     request, feed_search_engine: FeedSearchEngine,
-    #                     num_feed= 4):
-    #     model = FeedSearchModel(database=database)
-    #
-    #     # 유저가 있으면 세팅
-    #     if request.jwt_payload != "":
-    #         model.set_user_with_email(request=request.jwt_payload)
-    #     model.try_search_feed_with_hashtag(feed_search_engine=feed_search_engine,
-    #                                         feed_manager=self.__feed_manager,
-    #                                         target=request.data_payload.hashtag,
-    #                                         index=request.data_payload.key,
-    #                                         num_feed=num_feed)
-    #
-    #     return model
-
-    # 오늘의 인기 게시글
-    def get_today_best(self, database:Mongo_Database,
-                        request, feed_search_engine: FeedSearchEngine,
-                        num_feed=4):
-        model = FeedModel(database=database)
-        
-        # 유저가 있으면 세팅
-        if request.jwt_payload != "":
-            model.set_user_with_email(request=request.jwt_payload)
-
-        model.set_best_feed_with_time(feed_search_engine=feed_search_engine,
-                                      feed_manager=self.__feed_manager,
-                                      search_type="best",
-                                      time_type="day",
-                                      last_index=request.data_payload.key,
-                                      num_feed=num_feed)
-        #
-        # model.set_today_best_feed(feed_search_engine=feed_search_engine,
-        #                             feed_manager=self.__feed_manager,
-        #                             index=request.data_payload.key,
-        #                             num_feed=num_feed)
 
         return model
 
-    # 주간 인기 게시글
-    def get_weekly_best(self, database:Mongo_Database,
-                        request, feed_search_engine: FeedSearchEngine,
-                        num_feed= 4):
-        model = FeedModel(database=database)
-        
-        # 유저가 있으면 세팅
-        if request.jwt_payload != "":
-            model.set_user_with_email(request=request.jwt_payload)
-
-        model.set_best_feed_with_time(feed_search_engine=feed_search_engine,
-                                      feed_manager=self.__feed_manager,
-                                      search_type="best",
-                                      time_type="weekly",
-                                      last_index=request.data_payload.key,
-                                      num_feed=num_feed)
-
-        # model.set_weekly_best_feed(feed_search_engine=feed_search_engine,
-        #                             feed_manager=self.__feed_manager,
-        #                             index=request.data_payload.key,
-        #                             num_feed=num_feed)
-        #
-        return model
-        
-    # 전체 개시글(최신순) # 롤백 했음
-    def get_all_feed(self, database:Mongo_Database,
-                     request, feed_search_engine: FeedSearchEngine,
-                     num_feed=4):
-        model = FeedModel(database=database)
-
-        # 유저가 있으면 세팅
-        if request.jwt_payload != "":
-            model.set_user_with_email(request=request.jwt_payload)
-
-        model.set_best_feed_with_time(feed_search_engine=feed_search_engine,
-                                      feed_manager=self.__feed_manager,
-                                      search_type="all",
-                                      time_type="",
-                                      last_index=request.data_payload.key,
-                                      num_feed=num_feed)
-        # model.set_all_feed(feed_search_engine=feed_search_engine,
-        #                    feed_manager=self.__feed_manager,
-        #                    index=request.data_payload.key,
-        #                    num_feed=num_feed)
-        #
-        return model
 
     # 필터링 인터페이스
     # 옵션들을 모두 받아와서 여러번 필터링을 거치게 됩니다.
+    # 신규) ->> 사실 당장에 필터링은 안함
     def get_all_feed_filtered(self, database:Mongo_Database,
                               request, feed_search_engine: FeedSearchEngine,
                               num_feed=4):
@@ -218,38 +93,11 @@ class Feed_Controller:
                                 )
         return model
 
-    # 안 써서 주석처리
-    # def get_home_hot_hashtag_feed(self, database:Mongo_Database,
-    #                         request , feed_manager:FeedManager):
-    #     model = FeedModel(database=database)
-    #     # 유저가 있으면 세팅
-    #     if request.jwt_payload != "":
-    #         model.set_user_with_email(request=request.jwt_payload)
-    #     model.set_feed_data(
-    #         target_type="hashtag", target=request.data_payload.target,
-    #         feed_manager=self.__feed_manager,
-    #         num_feed=4, index= request.data_payload.key)
-    #
-    #     return model
-    
-    def get_original_feed_data(self, database:Mongo_Database, data_payload):
-        model = FeedModel(database=database)
-        # 유저가 있으면 세팅
-        model.set_original_feed_data(fid=data_payload.fid)
-
-        return model
-        
-    def get_original_comment_data(self, database:Mongo_Database, data_payload):
-        model = FeedModel(database=database)
-        # 유저가 있으면 세팅
-        model.set_original_comment_data(cid=data_payload.cid)
-        return model
-    
-
-    # bid로 피드 검색하기
-    def get_feed_with_bid(self, database:Mongo_Database,
-                          request, feed_search_engine: FeedSearchEngine,
-                          num_feed= 4):
+    # 해시태그로 피드 검색하기
+    def get_feed_with_hashtag(self, database:Mongo_Database,
+                              request, feed_search_engine: FeedSearchEngine,
+                              feed_manager: FeedManager,
+                              num_feed= 4):
         model = FeedSearchModelNew(database=database)
 
         # 유저가 있으면 세팅
