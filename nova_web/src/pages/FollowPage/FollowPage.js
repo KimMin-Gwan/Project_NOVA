@@ -5,6 +5,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { getModeClass } from "./../../App.js";
 import useBiasStore from "../../stores/BiasStore/useBiasStore.js";
 import mainApi from "../../services/apis/mainApi.js";
+import postApi from "../../services/apis/postApi.js";
 
 import logo2 from "./../../img/footer-logo.svg";
 
@@ -61,29 +62,25 @@ export default function FollowPage() {
   }, []);
 
   let send_data = {
-    header: HEADER,
     body: {
       bid: clickedBid,
     },
   };
-  function fetchTryFollowBias() {
-    fetch("https://supernova.io.kr/nova_sub_system/try_follow_bias", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(send_data),
-    })
-      .then((res) => {
-        if (res.status === 401) {
-          alert("로그인이 필요한 서비스입니다.");
-          navigate("/novalogin");
-          return Promise.reject("Unauthorized: 로그인 필요");
-        }
-        return res.json();
-      })
-      .then((data) => {
+  async function fetchTryFollowBias() {
+
+    await postApi.post( "nova_sub_system/try_follow_bias",{
+      header: HEADER,
+      body: {
+        bid:clickedBid
+      }
+    }).then((res) => {
+      if (res.status === 401) {
+        alert("로그인이 필요한 서비스입니다.");
+        navigate("/novalogin");
+        return Promise.reject("Unauthorized: 로그인 필요");
+      }
+      return res.data;
+    }).then((data) =>{
         if (biasList.some((item) => item.bid === clickedBid)) {
           alert("팔로우 취소 완료");
         } else {
@@ -91,10 +88,9 @@ export default function FollowPage() {
         }
         setIsModalOpen(false);
         window.location.reload();
-      }) .catch(err => {
+    }) .catch(err => {
         console.error("Error | ", err);
-      });
-      ;
+    });
   }
   const [searchBias, setSearchBias] = useState("");
   const [resultBias, setResultBias] = useState([]);
