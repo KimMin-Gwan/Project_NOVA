@@ -91,41 +91,26 @@ export default function FollowBoxes({ setBiasId }) {
     },
   };
 
-  function fetchTryFollowBias() {
-    //console.log(clickedBid);
-    fetch("https://supernova.io.kr/nova_sub_system/try_select_my_bias", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(send_data),
-    })
-      .then((res) => {
-        if (res.status === 401) {
-          alert("로그인이 필요한 서비스입니다.");
-          navigate("/novalogin");
-          return Promise.reject();
-        }
-        return res.json();
-      })
-      .then((data) => {
+  async function fetchTryFollowBias() {
+    await mainApi.get( `nova_sub_system/try_follow_bias?bid=${clickedBid}`
+    ).then((res) => {
+      if (res.status === 401) {
+        alert("로그인이 필요한 서비스입니다.");
+        navigate("/novalogin");
+        return Promise.reject("Unauthorized: 로그인 필요");
+      }
+      return res.data;
+    }).then((data) =>{
         if (biasList.some((item) => item.bid === clickedBid)) {
           alert("팔로우 취소 완료");
-          window.location.reload();
         } else {
           alert("팔로우 완료!");
         }
         setIsModalOpen(false);
-      });
-
-    // postApi
-    //   .post("nova_sub_system/try_select_my_bias", {
-    //     send_data,
-    //   })
-    //   .then((res) => {
-    //     //console.log(res.data);
-    //   });
+        window.location.reload();
+    }) .catch(err => {
+        console.error("Error | ", err);
+    });
   }
 
   if (biasList.length === 0) {
