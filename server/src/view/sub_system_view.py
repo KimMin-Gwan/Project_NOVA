@@ -83,10 +83,10 @@ class Sub_Service_View(Master_View):
             return response        
         
         # 바이어스 선택 또는 취소
-        @self.__app.post('/nova_sub_system/try_follow_bias')
-        def try_follow_bias(request:Request, raw_request:dict):
+        @self.__app.get('/nova_sub_system/try_follow_bias')
+        def try_follow_bias(request:Request, bid:Optional[str]):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
-            data_payload = BiasSelectRequest(request=raw_request)
+            data_payload = BiasSelectRequest(bid=bid)
             
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
 
@@ -228,10 +228,9 @@ class ImageTagRequest(RequestHeader):
         self.url = body['url']
 
 class BiasSelectRequest(RequestHeader):
-    def __init__(self, request) -> None:
-        super().__init__(request)
-        body = request['body']
-        self.bid = body['bid']
+    def __init__(self, bid) -> None:
+        self.bid = bid
+        
         
 class ReportRequest(RequestHeader):
     def __init__(self, request, image_names=[], images=[]) -> None:
