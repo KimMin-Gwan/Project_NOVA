@@ -27,9 +27,10 @@
   }
   h3 {
     margin-block: 25px 27px;
-    font-size: 18px;
+    font-size: 21px;
+    font-weight: 500;
     b {
-      color: #107bf4;
+      color: #107af4ab;
     }
   }
 
@@ -44,10 +45,11 @@
     border-radius: 12px;
 
     h4 {
+      font-weight: 500;
       margin-block: 7px 17px;
 
       b {
-        color: #107bf4;
+        color: #107af4ab;
       }
     }
   }
