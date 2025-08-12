@@ -5,6 +5,7 @@ import add_bias_icon from "./../img/add_bias.png";
 import { useNavigate } from "react-router-dom";
 import style from "./FollowBoxes.module.css";
 import tempBias from "./../img/tempBias.png";
+import mainApi from "../services/apis/mainApi.js";
 
 export default function FollowBoxes({ setBiasId }) {
   let bias_url = "https://kr.object.ncloudstorage.com/nova-images/";
@@ -84,12 +85,7 @@ export default function FollowBoxes({ setBiasId }) {
     uid: "1234-abcd-5678",
     endpoint: "/user_system/",
   };
-  let send_data = {
-    header: header,
-    body: {
-      bid: clickedBid,
-    },
-  };
+
 
   async function fetchTryFollowBias() {
     await mainApi.get( `nova_sub_system/try_follow_bias?bid=${clickedBid}`
