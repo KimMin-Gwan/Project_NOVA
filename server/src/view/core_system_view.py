@@ -3,7 +3,7 @@ from fastapi import FastAPI, WebSocket, Request, File, UploadFile, Form, WebSock
 from view.master_view import Master_View, RequestHeader
 from view.parsers import Head_Parser
 from view.jwt_decoder import RequestManager
-from controller import Home_Controller, Core_Controller, Feed_Controller
+from controller import Core_Controller, Feed_Controller
 from fastapi.responses import HTMLResponse
 from manager import ConnectionManager as CM
 from others import FeedManager as FM
@@ -45,13 +45,13 @@ class Core_Service_View(Master_View):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             request_manager.try_view_management_need_authorized(cookies=request.cookies)
 
-            home_controller=Home_Controller()
+            core_controller=Core_Controller()
             # 토큰 + 유저 UID 필요할때 (게시글 수정에서 본인 확인 등)
             if only_token == "n": 
-                model = home_controller.get_token_need_user(request=request_manager,
+                model = core_controller.get_token_need_user(request=request_manager,
                                                             database=self.__database)
             else: # 로그인 했는지만 확인할 때
-                model = home_controller.get_token(database=self.__database)
+                model = core_controller.get_token(database=self.__database)
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response
@@ -59,8 +59,8 @@ class Core_Service_View(Master_View):
         # 배너 정보
         @self.__app.get('/home/banner')
         def get_banner():
-            home_controller=Home_Controller()
-            model = home_controller.get_banner_data(database=self.__database,)
+            core_controller=Core_Controller()
+            model = core_controller.get_banner_data(database=self.__database,)
             response = model.get_response_form_data(self._head_parser)
             return response
         
@@ -75,8 +75,8 @@ class Core_Service_View(Master_View):
             #if not request_manager.jwt_payload.result:
                 #raise self._credentials_exception
 
-            home_controller=Home_Controller()
-            model = home_controller.get_my_bias_data(database=self.__database,
+            core_controller=Core_Controller()
+            model = core_controller.get_my_bias_data(database=self.__database,
                                                              request=request_manager)
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
@@ -88,8 +88,8 @@ class Core_Service_View(Master_View):
         @self.__app.get('/home/search_bias')
         def try_search_bias(bias_name:Optional[str] = None):
             request = BiasSearchRequest(bias_name=bias_name)
-            home_controller=Home_Controller()
-            model = home_controller.search_bias(database=self.__database, request=request)
+            core_controller=Core_Controller()
+            model = core_controller.search_bias(database=self.__database, request=request)
             response = model.get_response_form_data(self._head_parser)
             return response
 

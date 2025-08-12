@@ -2,7 +2,7 @@ from typing import Any, Optional, Union
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request, UploadFile, File
 from view.master_view import Master_View, RequestHeader
 from view.parsers import Head_Parser
-from controller import Home_Controller, Core_Controller, UserController
+from controller import Core_Controller, Core_Controller, UserController
 from view.jwt_decoder import RequestManager
 from pprint import pprint
 
@@ -221,8 +221,8 @@ class User_Service_View(Master_View):
             data_payload = ChangePasswordRequest(request=raw_request)
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
 
-            home_controller=UserController()
-            model = home_controller.try_change_password(database=self.__database,
+            core_controller=UserController()
+            model = core_controller.try_change_password(database=self.__database,
                                                         request=request_manager)
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
