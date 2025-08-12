@@ -80,77 +80,9 @@ class Home_Controller:
         finally:
             return model
 
-    def get_league_meta_data(self, database:Mongo_Database, league_manager):
-        model = LeagueMetaModel(database=database)
 
-        try:
-            if not model.set_league(league_manager=league_manager):
-                model.set_state_code("265")
 
-        except CustomError as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
 
-        except Exception as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
 
-        finally:
-            return model
 
-    def get_realtime_best_hashtag(self, database:Mongo_Database, request, feed_search_engine) -> HashTagModel:
-        model = HashTagModel(database=database)
-        # model.set_best_hash_tag()
-        model.set_realtime_best_hashtag(feed_search_engine=feed_search_engine, num_hashtag=10)
-
-        return model
-
-    def get_hot_hashtag(self, database:Mongo_Database, request, feed_search_engine) -> HashTagModel:
-        model = HashTagModel(database=database)
-
-        if request.jwt_payload != "":
-            model.set_user_with_email(request=request.jwt_payload)
-
-        if model.is_user_login():
-            model.set_best_hashtag(feed_search_engine=feed_search_engine)
-        else:
-            model.set_realtime_best_hashtag(feed_search_engine=feed_search_engine, num_hashtags=10)
-        return model
-
-    def get_today_best_hashtag(self, database:Mongo_Database, request, feed_search_engine) -> HashTagModel:
-        model = HashTagModel(database=database)
-
-        if request.jwt_payload != "":
-            model.set_user_with_email(request=request.jwt_payload)
-
-        model.set_today_best_hashtag(feed_search_engine=feed_search_engine, num_hashtags=5)
-
-        return model
-
-    def get_weekly_best_hashtag(self, database:Mongo_Database, request, feed_search_engine) -> HashTagModel:
-        model = HashTagModel(database=database)
-        if request.jwt_payload != "":
-            model.set_user_with_email(request=request.jwt_payload)
-            
-        model.set_weekly_best_hashtag(feed_search_engine=feed_search_engine, num_hashtags=5)
-
-        return model
-
-    def get_monthly_best_hashtag(self, database:Mongo_Database, request, feed_search_engine) -> HashTagModel:
-        model = HashTagModel(database=database)
-        if request.jwt_payload != "":
-            model.set_user_with_email(request=request.jwt_payload)
-        model.set_monthly_best_hashtag(feed_search_engine=feed_search_engine, num_hashtags=5)
-
-        return model
-
-    # 추천 검색어 시스템. 현재는 주간 핫 해시태그들만 보여줌
-    def get_recommend_keyword(self, database:Mongo_Database, request, feed_search_engine) -> RecommendKeywordModel:
-        model = RecommendKeywordModel(database=database)
-        if request.jwt_payload != "":
-            model.set_user_with_email(request=request.jwt_payload)
-        # 작동하는 함수는 현재 주간 핫 해시태그들을 보여줍니다
-        model.get_recommend_keywords(feed_search_engine=feed_search_engine)
-
-        return model
 
