@@ -46,27 +46,17 @@ class UserController:
     # 2. 보안코드 확인
     def try_send_email_password(self, database, request, nova_verification):
         model = SendEmailModel(database=database)
-        try:
-            if model.set_user_with_email(request=request):
-                mailsender = MailSender()
-                temp_user = nova_verification.make_new_user(email=request.email)
+        if model.set_user_with_email(request=request):
+            mailsender = MailSender()
+            temp_user = nova_verification.make_new_user(email=request.email)
 
-                # 여기를 비밀번호 전용 이메일로 바꾸든지 해야됨
-                mailsender.send_email_in_password_find(receiver_email=temp_user.email,verification_code=temp_user.verification_code)
+            # 여기를 비밀번호 전용 이메일로 바꾸든지 해야됨
+            mailsender.send_email_in_password_find(receiver_email=temp_user.email,verification_code=temp_user.verification_code)
 
-            else:
-                model.set_response_in_reverse()
-
-        except CustomError as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
-
-        except Exception as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
-
-        finally:
-            return model
+        else:
+            model.set_response_in_reverse()
+                
+        return model
 
     # 비밀번호 변경하기 임시 유저 로그인
     # 비밀번호 찾기 & 변경하기에 사용되는 엔드포인트
@@ -90,22 +80,12 @@ class UserController:
     # 비밀번호 찾기에서 비밀번호 변경하기
     def try_find_password(self, database, request):
         model = ChangePasswordModel(database=database)
-        try:
-            # 유저가 있으면 세팅
-            model.set_user_with_email(request=request.jwt_payload)
+        # 유저가 있으면 세팅
+        model.set_user_with_email(request=request.jwt_payload)
 
-            model.try_change_password_with_temp_user(data_payload=request.data_payload)
+        model.try_change_password_with_temp_user(data_payload=request.data_payload)
 
-        except CustomError as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
-
-        except Exception as e:
-            print("Error Catched : ", e.error_type)
-            model.set_state_code(e.error_code) # 종합 에러
-
-        finally:
-            return model
+        return model
 
     # 이메일 중복 검사 기능
     # 유저 데이터베이스에서 이메일을 서치해서 중복된 이메일이 있는지 확인합니다
@@ -131,8 +111,6 @@ class UserController:
         else:
             model.save_user(request=request, feed_search_engine=feed_search_engine)
             model.set_response(result=True, detail="회원가입 성공")
-            #model.make_token(request=request)
-
         return model
 
     # 유저 페이지 맨 처음에 띄울 것
@@ -152,8 +130,6 @@ class UserController:
         model.set_user_with_email(request=request.jwt_payload)
         if request.data_payload.type == "post":
             model.get_my_long_feeds(feed_manager=feed_manager, last_index=request.data_payload.key)
-        elif request.data_payload.type == "moment":
-            model.get_my_short_feeds(feed_manager=feed_manager, last_index=request.data_payload.key)
         elif request.data_payload.type == "like":
             model.get_liked_feeds(feed_manager=feed_manager, last_index=request.data_payload.key)
 
