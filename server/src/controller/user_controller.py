@@ -129,7 +129,7 @@ class UserController:
         # 유저가 있으면 세팅함
         model.set_user_with_email(request=request.jwt_payload)
         if request.data_payload.type == "post":
-            model.get_my_long_feeds(feed_manager=feed_manager, last_index=request.data_payload.key)
+            model.get_my_feeds(feed_manager=feed_manager, last_index=request.data_payload.key)
         elif request.data_payload.type == "like":
             model.get_liked_feeds(feed_manager=feed_manager, last_index=request.data_payload.key)
 
