@@ -4,6 +4,7 @@ from view.parsers import Head_Parser
 from others import CoreControllerLogicError
 from pprint import pprint
 
+import string
 import editdistance
 from jamo import h2j, j2hcj
 
@@ -52,7 +53,6 @@ class HeaderModel:
         self._new_token = new_token
         return
 
-import string
 class BaseModel(HeaderModel):
     def __init__(self, database) -> None:
         self._database:Mongo_Database= database
