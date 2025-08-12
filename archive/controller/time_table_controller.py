@@ -127,3 +127,33 @@
         model.delete_bundle(schedule_search_engine=schedule_search_engine, sbid=request.data_payload.sbid)
 
         return model
+    
+    
+    # 인터페이스만 존재. 검색어 저장 시스템이 있어야 제대로 시스템이 구축 가능할 듯
+    # 유이하게 Search Engine을 사용하지 않음
+    def try_get_recommend_keyword(self, database:Mongo_Database, request:RequestManager, num_keywords=6) -> BaseModel:
+        model = ScheduleRecommendKeywordModel(database=database)
+
+        if request.jwt_payload!= "":
+            model.set_user_with_email(request=request.jwt_payload)
+
+        model.get_category_recommend(num_keywords=num_keywords)
+
+        return model
+   # Specific Schedule 들고오기 테스트용
+    # 하고나선 무조건 삭제
+    # def try_get_specific_schedules(self, database:Mongo_Database,schedule_search_engine:SSE,
+    #                            request:RequestManager) -> BaseModel:
+    #     model = MultiScheduleModel(database=database)
+    #
+    #     model.set_user_with_email(request=request.data_payload)
+    #     if not model._set_tuser_with_tuid():
+    #         return model
+    #
+    #     model.get_specific_schedules(schedule_search_engine=schedule_search_engine,
+    #                                  specific_date=request.data_payload.target_date,
+    #                                  num_schedules=request.data_payload.num_schedules,
+    #                                  last_index=request.data_payload.key)
+    #
+    #     return model
+    #
