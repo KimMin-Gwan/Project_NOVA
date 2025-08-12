@@ -64,8 +64,8 @@ class Sub_Controller:
         return model
         
 
-    def try_select_bias(self, database:Mongo_Database, request, feed_search_engine):
-        model = SelectBiasModel(database=database)
+    def try_follow_bias(self, database:Mongo_Database, request, feed_search_engine):
+        model = BiasFollowModel(database=database)
         model.set_user_with_email(request=request.jwt_payload)
             
         if model.find_bias(bid=request.data_payload.bid):
