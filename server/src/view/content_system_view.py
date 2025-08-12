@@ -5,7 +5,6 @@ from view.parsers import Head_Parser
 from view.jwt_decoder import RequestManager
 from controller import ContentController
 from fastapi.responses import HTMLResponse
-from manager import TestConnectionManager as TC
 from others import FeedManager as FM
 from websockets.exceptions import ConnectionClosedError
 from pprint import pprint
@@ -13,15 +12,13 @@ from pprint import pprint
 class Content_Service_view(Master_View):
     def __init__(
         self, app:FastAPI, endpoint: str,
-        database, head_parser:Head_Parser,
-        test_connection_manager:TC, jwt_secret_key,
+        database, head_parser:Head_Parser, jwt_secret_key,
         content_key_storage
         ):
         super().__init__(head_parser=head_parser)
         self.__app = app
         self._endpoint = endpoint
         self.__database = database
-        self.__test_connection_manager = test_connection_manager
         self.__jwt_secret_key = jwt_secret_key
         self.__content_key_storage = content_key_storage
         self.home_route(endpoint=endpoint)
