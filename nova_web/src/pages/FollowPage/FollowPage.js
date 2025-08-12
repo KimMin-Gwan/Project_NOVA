@@ -67,13 +67,8 @@ export default function FollowPage() {
     },
   };
   async function fetchTryFollowBias() {
-
-    await postApi.post( "nova_sub_system/try_follow_bias",{
-      header: HEADER,
-      body: {
-        bid:clickedBid
-      }
-    }).then((res) => {
+    await mainApi.get( `nova_sub_system/try_follow_bias?bid=${clickedBid}`
+    ).then((res) => {
       if (res.status === 401) {
         alert("로그인이 필요한 서비스입니다.");
         navigate("/novalogin");
