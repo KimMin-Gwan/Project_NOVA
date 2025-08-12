@@ -1,5 +1,5 @@
 from model import *
-from others import UserNotExist, CustomError
+from others import UserNotExist
 
 class Sub_Controller:
     
@@ -7,7 +7,7 @@ class Sub_Controller:
         model = MakeNewBiasModel(database=database)
         
         if not model.set_user_with_email(request=request.jwt_payload):
-            raise UserNotExist("Can not find User With uid")
+            raise request.get_bad_request_exception()
         
         result = model.try_make_new_bias(
             name=request.data_payload.name,
