@@ -61,11 +61,7 @@ export default function FollowPage() {
     fetchBiasFollowList();
   }, []);
 
-  let send_data = {
-    body: {
-      bid: clickedBid,
-    },
-  };
+
   async function fetchTryFollowBias() {
     await mainApi.get( `nova_sub_system/try_follow_bias?bid=${clickedBid}`
     ).then((res) => {
