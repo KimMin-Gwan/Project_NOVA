@@ -52,40 +52,6 @@ class Time_Table_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
         
-        # 타임 차트에 임시 일정들 추가로 넣어주기
-        @self.__app.post('/time_table_server/get_time_chart_with_other_schedule')
-        def try_get_today_time_chart_with_other_schedule(request:Request, raw_requset:dict):
-            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
-            data_payload = TimeChartRequest(request=raw_requset)
-            
-            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
-
-            time_table_controller =TImeTableController()
-            model = time_table_controller.get_time_chart_with_sids(database=self.__database,
-                                                              request=request_manager)
-            
-            body_data = model.get_response_form_data(self._head_parser)
-            response = request_manager.make_json_response(body_data=body_data)
-
-            return response
-        
-        # 보류
-        # 홈 화면 젤 밑에 나오는 bias 데이터 들인데 이건 여기다가 만들지 말지 고민중임
-        @self.__app.get('/time_table_server/try_get_recommended_bias_list')
-        def get_recommended_bias_list(request:Request):
-            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
-            data_payload = DummyRequest()
-            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
-
-            time_table_controller =TImeTableController()
-            model = time_table_controller.get_recommended_bias_list(database=self.__database,
-                                                                    request=request_manager,
-                                                                    num_recommend=5)
-            
-            body_data = model.get_response_form_data(self._head_parser)
-            response = request_manager.make_json_response(body_data=body_data)
-
-            return response
         
         # 홈화면의 스케줄 레이어를 바탕으로 검색
         @self.__app.get('/time_table_server/get_time_layer_schedule_with_date')
@@ -359,7 +325,7 @@ class MakeSingleScheduleRequest(RequestHeader):
         super().__init__(request)
         body:dict = request['body']
         self.sname = body['sname']
-        self.location = body['location']
+        self.platform = body['platform']
         self.bid = body.get("bid", "")
         self.start_date = body['start_date']
         self.start_time = body['start_time']
@@ -384,7 +350,7 @@ class ModifySingleScheduleRequest(RequestHeader):
         body:dict = request['body']
         self.sid = body['sid']
         self.sname = body['sname']
-        self.location = body['location']
+        self.platform = body['platform']
         self.bid = body.get('bid', "")
         self.start_date = body["start_date"]
         self.start_time = body["start_time"]

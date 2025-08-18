@@ -137,7 +137,7 @@ const ScheduleMakePage = () => {
     const scheduleFormat = {
       id: Date.now(), 
       sname : '',
-      location : '',
+      platform : '',
       bid : '',
       start_date : '',
       start_time : '',

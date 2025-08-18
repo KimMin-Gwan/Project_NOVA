@@ -261,7 +261,7 @@ function ScheduleComponentList({
           }
           // 목표 item이 있으면 업데이트
           return prev.map((item) =>
-            item.sid === target.sid ? { ...item, is_already_have: true } : item
+            item.sid === target.sid ? { ...item, subscribe: true } : item
           );
         });
       });
@@ -282,7 +282,7 @@ function ScheduleComponentList({
           }
           // 목표 item이 있으면 업데이트
           return prev.map((item) =>
-            item.sid === target.sid ? { ...item, is_already_have: false} : item
+            item.sid === target.sid ? { ...item, subscribe: false} : item
           );
         });
       });
@@ -302,7 +302,7 @@ function ScheduleComponentList({
             />
 
             {moreClick[item.sid] && (
-              item.is_already_have === false ? (
+              item.subscribe === false ? (
                 <ScheduleAdd
                   target={item}
                   detailClick={toggleAddScheduleModal}

@@ -14,7 +14,7 @@ export default function useFeedActions(setFeedData, type) {
               feed.fid === fid
                 ? {
                     ...feed,
-                    star: res.data.body.feed[0].star,
+                    like: res.data.body.feed[0].like,
                     star_flag: res.data.body.feed[0].star_flag,
                   }
                 : feed
@@ -37,7 +37,7 @@ export default function useFeedActions(setFeedData, type) {
         if (err.response.status === 401) {
           navigate("/novalogin");
         } else {
-          console.error("Error checking star:", err);
+          console.error("Error checking like:", err);
         }
       });
   }

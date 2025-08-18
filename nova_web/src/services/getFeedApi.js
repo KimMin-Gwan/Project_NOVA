@@ -15,7 +15,6 @@ export async function fetchAllFeedList(nextData, filterCategory, filterFclass) {
     body: {
       key: nextData,
       category: filterCategory || [""],
-      fclass: filterFclass || "",
     },
   });
   return res.data;

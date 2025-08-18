@@ -150,11 +150,14 @@ class ObjectStorageConnection:
             # <p> 태그의 첫 번째 텍스트 가져오기
             p_body = soup.find_all("p")
             body = []
+            body_str = ""
     
             for p_tag in p_body:
                 striped_data = p_tag.text.strip()
                 if striped_data:
                     body.append(striped_data)
+                    body_str += striped_data + "\n"
+                
         
             # <img> 태그의 모든 src 속성 가져오기
             # ImageBase64 코드의 형태로 저장됨
@@ -162,8 +165,8 @@ class ObjectStorageConnection:
         except Exception as e:
             return ["불러오기에 실패했습니다."], []
         
-        return body, imgs
-        # response.raise_for_status()
+        return body_str, imgs
+        # return body , imgs
 
 
 class HTMLEXtractor:

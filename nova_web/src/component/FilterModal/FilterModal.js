@@ -29,11 +29,6 @@ let FilterData = [
   },
 ];
 
-let ContentData = [
-  { id: 0, value: "short", name: "모멘트" },
-  { id: 1, value: "long", name: "포스트" },
-  { id: 2, value: "", name: "전체" },
-];
 
 export default function FilterModal({
   onClickFilterButton,
@@ -69,12 +64,6 @@ export default function FilterModal({
     });
   }
 
-  function onClickFilterContent(name, value, i) {
-    setIsClickedFilterContent(value);
-    setFilterFclass(ContentData[i].value);
-    let selectContent = value;
-    localStorage.setItem("content", JSON.stringify(selectContent));
-  }
 
   function onClickApplyButton2() {
     onClickApplyButton1();

@@ -284,7 +284,7 @@ export default function NewFeedDetail() {
           return prevData.fid === fid
             ? {
                 ...prevData,
-                star: res.data.body.feed[0].star,
+                like: res.data.body.feed[0].like,
                 star_flag: res.data.body.feed[0].star_flag,
               }
             : prevData;
@@ -294,7 +294,7 @@ export default function NewFeedDetail() {
         if (err.response.status === 401) {
           navigate("/novalogin");
         } else {
-          console.error("Error checking star:", err);
+          console.error("Error checking like:", err);
         }
       });
   }

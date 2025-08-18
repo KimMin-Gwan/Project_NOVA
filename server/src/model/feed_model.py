@@ -44,8 +44,8 @@ class FeedModel(BaseModel):
     
     # 좋아요 누르기
     # 완료
-    def try_staring_feed(self, feed_manager:FeedManager, data_payload):
-        self._feeds = feed_manager.try_staring_feed(user=self._user,
+    def try_like_feed(self, feed_manager:FeedManager, data_payload):
+        self._feeds = feed_manager.try_like_feed(user=self._user,
                                                 fid=data_payload.fid)
         
         
@@ -98,8 +98,6 @@ class FeedModel(BaseModel):
             feed:Feed = feed
 
             feed.raw_body = feed.body
-            
-            feed.p_body = ""
             
             # comment 길이 & image 길이
             feed.num_comment = len(feed.comment)
@@ -176,21 +174,18 @@ class FeedEditModel(BaseModel):
         data_payload.link = feed_links
         return
         
-    def try_edit_feed(self, feed_manager:FeedManager, data_payload, ai_manager):
+    def try_edit_feed(self, feed_manager:FeedManager, data_payload):
         # 만약 fid가 ""가 아니면 수정이나 삭제 요청일것임
         # 근데 삭제 요청은 여기서 처리 안하니까 반드시 수정일것
         if data_payload.fid != "":
             detail, flag = feed_manager.try_modify_feed(
                 user=self._user,
                 data_payload = data_payload,
-                fid=data_payload.fid,
-                ai_manager=ai_manager
-                )
+                fid=data_payload.fid,)
         else:
             detail, flag = feed_manager.try_make_new_feed(
                 user=self._user,
                 data_payload = data_payload,
-                ai_manager=ai_manager
                 )
 
         self._result = flag
@@ -198,7 +193,7 @@ class FeedEditModel(BaseModel):
         return
 
     def try_remove_feed(self, feed_manager:FeedManager, data_payload):
-        detail, flag = feed_manager.try_remove_feed_new(user=self._user, fid=data_payload.fid)
+        detail, flag = feed_manager.try_remove_feed(user=self._user, fid=data_payload.fid)
 
         self._result = flag
         self._detail = detail
@@ -246,14 +241,14 @@ class FeedSearchModelNew(FeedModel):
         return
 
     def try_search_feed_with_keyword(self, feed_search_engine:FeedSearchEngine, feed_manager:FeedManager,
-                                        search_columns:str, fclass="", target="", target_time="", last_index=-1, num_feed=8):
+                                        search_columns:str, target="", target_time="", last_index=-1, num_feed=8):
         if search_columns == "":
             search_columns_list= []
         else:
             search_columns_list = [i.strip() for i in search_columns.split(",")]
 
         searched_fid_list = feed_search_engine.try_search_feed_new(target=target, search_columns=search_columns_list,
-                                                                   fclass=fclass, target_time=target_time)
+                                                                    target_time=target_time)
 
         # 페이징
         searched_fid_list, self._key = feed_manager.paging_fid_list(fid_list=searched_fid_list,
@@ -348,7 +343,7 @@ class MyFeedsModel(FeedModel):
 
     def get_my_feeds(self, feed_manager:FeedManager, last_index:int=-1):
         # 이게 가능한게, 리스트에서, 인덱스로만 사용해서 참조 하기 때문에 이거 써도 된다.
-        self._feeds = feed_manager.get_my_long_feeds(user=self._user)
+        self._feeds = feed_manager.get_my_feeds(user=self._user)
         self._feeds, self._key = feed_manager.paging_fid_list(fid_list=self._feeds, last_index=last_index, page_size=3)
         self._feeds = self.__set_send_data()
         return
@@ -374,7 +369,6 @@ class FilteredFeedModel(FeedModel):
                                        feed_search_engine:FeedSearchEngine,
                                        feed_manager:FeedManager,
                                        category:list,
-                                       fclass:str="",
                                        last_index:int=-1,
                                        num_feed:int=4,
                                        ):
@@ -384,12 +378,10 @@ class FilteredFeedModel(FeedModel):
         # 모든 Feed를 가져온 다음. 게시글을 하나하나씩 쳐내는 방식을 씁니다.
         fid_list = feed_manager.get_all_fids()
 
-        # pprint(fclass)
-
         # 1차 필터링 : FClass를 통한 분류를 먼저 진행합니다.
         #   왜 FClass 부터 먼저 진행하나요? -> 간단한 것부터 먼저 분류합니다.
         #
-        fid_list = feed_search_engine.try_filtered_feed_with_option(fid_list=fid_list, option="fclass", keys=[fclass])
+        fid_list = feed_search_engine.try_filtered_feed_with_option(fid_list=fid_list, option="feed", keys=[])
         # pprint(len(fid_list))
         # 2차 필터링 : Category 별 분류를 진행합니다.
         # AD의 경우, 생각중

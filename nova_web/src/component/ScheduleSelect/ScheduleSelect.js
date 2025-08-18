@@ -185,7 +185,7 @@ export default function ScheduleSelect({
           minute: targetSchedule.endMinute,
         });
         setDetailInput(targetSchedule.sname);
-        setPlaceInput(targetSchedule.location);
+        setPlaceInput(targetSchedule.platform);
         setSid(targetSchedule.sid);
         setBid(targetSchedule.bid);
         initEditTag(targetSchedule.tags)
@@ -401,9 +401,9 @@ export default function ScheduleSelect({
     handleScheduleChange("tags", tagsArrayData);
   }, [tagsArrayData]);
 
-  // 위와 같은 목적 => location
+  // 위와 같은 목적 => platform
   useEffect(() => {
-    handleScheduleChange("location", placeInput);
+    handleScheduleChange("platform", placeInput);
   }, [placeInput]);
 
   return (

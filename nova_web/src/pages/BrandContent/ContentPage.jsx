@@ -366,7 +366,7 @@ function Stopwatch({
 
 function IntroComponent({setStart}){
   const title = "SUPERNOVA 컨텐츠 클럽에 오신걸 환영합니다.";
-  const subtitle = "SUPERNOVA 컨텐츠 클럽은 방송 플랫폼에서 실시간 스트리밍을 통해 사용 가능합니다."
+  const subtitle = "시청자와 함께 여러가지 컨텐츠를 즐겨보세요!";
 
 
   const fetchChzzkAPI= async () => {
@@ -417,10 +417,18 @@ function IntroComponent({setStart}){
                   </div>
                   <div className={brandStyle["sites-box"]}
                     onClick={()=>{
-                        setStart(true);
+                        //setStart(true);
+                        alert("준비 중 입니다.");
                       }}
                   >
                       <img src={soopLogo} className={brandStyle["platform-icon"]} alt="Platform Icon" />
+                  </div>
+                  <div className={brandStyle["sites-box"]}
+                    onClick={()=>{
+                        setStart(true);
+                      }}
+                  >
+                    <span> 채팅 비사용 </span>
                   </div>
               </div>
           </div>

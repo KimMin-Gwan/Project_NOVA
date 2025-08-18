@@ -405,7 +405,7 @@ function Schedules ({
               />
 
               {moreClick[item.sid] && (
-                item.is_already_have === false ? (
+                item.subscribe === false ? (
                   <ScheduleAdd
                     target={item}
                     detailClick={toggleAddScheduleModal}

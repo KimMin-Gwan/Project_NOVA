@@ -34,7 +34,7 @@ class Edge:
         self.target_node = target_node # 타겟 노드 저장
         self.gen_time:datetime = gen_time # 엣지의 생성 시간
 
-        # 이 엣지는 Feed-User 의 경우, 좋아요(star)를 누른 시간, Feed를 작성한 시간을 가지게 됨
+        # 이 엣지는 Feed-User 의 경우, 좋아요(like)를 누른 시간, Feed를 작성한 시간을 가지게 됨
         # Feed-Hashtag 의 경우, Feed 생성 시간을 이어 받게됨.
 
     # 동일한 엣지인지 서로 비교 해야함.

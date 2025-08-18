@@ -101,8 +101,8 @@ class ScheduleTransformModel:
     # 번들은 따로 만들지는 않음. (필요성은 있겠지만 나중에 요청받을 때 하겠습니다.)
     @staticmethod
     def make_temp_schedule(schedule:Schedule, bias:Bias, user:User):
-        location_list = re.split(r"\W+", schedule.location)
-        location_list = [l for l in location_list if l]
+        platform_list = re.split(r"\W+", schedule.platform)
+        platform_list = [l for l in platform_list if l]
 
         schedule = Schedule(
             sname=schedule.sname,
@@ -115,7 +115,7 @@ class ScheduleTransformModel:
             end_date=schedule.end_date,
             end_time=schedule.end_time,
             update_datetime=datetime.today().strftime("%Y/%m/%d-%H:%M:%S"),
-            location=location_list,
+            platform=platform_list,
             state=schedule.state
         )
 
@@ -174,10 +174,10 @@ class TimeScheduleModel(ScheduleTransformModel):
         time_schedule_data["start_date"] = self._transfer_date_str(datetime.strptime(schedule.start_date, "%Y/%m/%d"))
         time_schedule_data["end_date"] = self._transfer_date_str(datetime.strptime(schedule.start_date, "%Y/%m/%d"))
         time_schedule_data["update_datetime"] = self._cal_update_time(datetime.strptime(schedule.update_datetime, "%Y/%m/%d-%H:%M:%S"))
-        time_schedule_data["location"] = self._linked_str(schedule.location)
+        time_schedule_data["platform"] = self._linked_str(schedule.platform)
         time_schedule_data["code"] = schedule.code
         time_schedule_data["color_code"] = schedule.color_code
-        time_schedule_data["is_already_have"] = schedule.is_already_have
+        time_schedule_data["subscribe"] = schedule.subscribe
         time_schedule_data["is_owner"] = schedule.is_owner
         time_schedule_data["url"] = schedule.url
 
@@ -213,7 +213,7 @@ class TimeEventModel(ScheduleTransformModel):
         time_event_data["start"] = self._calculate_day_hour_time(datetime.strptime(event.start_time, "%H:%M"))
         time_event_data["end"] = self._calculate_day_hour_time(datetime.strptime(event.end_time, "%H:%M"))
         time_event_data["sids"] = event.sids
-        time_event_data["location"] = self._linked_str(event.location)
+        time_event_data["platform"] = self._linked_str(event.platform)
 
         return time_event_data
 
@@ -244,7 +244,7 @@ class TimeScheduleBundleModel(ScheduleTransformModel):
         time_schedule_bundle_data["uname"] = schedule_bundle.uname
         time_schedule_bundle_data["sids"] = schedule_bundle.sids
         time_schedule_bundle_data["date"] = self._transfer_date_str_list(schedule_bundle.date)
-        time_schedule_bundle_data["location"] = self._linked_str(schedule_bundle.location)
+        time_schedule_bundle_data["platform"] = self._linked_str(schedule_bundle.platform)
 
         return time_schedule_bundle_data
 
@@ -685,7 +685,7 @@ class MultiScheduleModel(TimeTableModel):
         # 이미 등록 했는지 확인하는 함수
         for schedule in self.__schedules:
             if schedule.sid in self._tuser.sids:
-                schedule.is_already_have = True
+                schedule.subscribe = True
 
             if schedule.sid in self._tuser.my_sids:
                 schedule.is_owner = True
@@ -984,23 +984,6 @@ class MultiScheduleModel(TimeTableModel):
 
         return
 
-    # 바이어스 추천 로직
-    # 근데 아직 추천할게 없어
-    def get_recommend_bias_list(self, num_biases:int):
-        # 바이어스 데이터 로드
-        bias_datas = self._database.get_all_data(target="bid")
-
-        for bias_data in bias_datas:
-            bias = Bias()
-            bias.make_with_dict(bias_data)
-            self.__biases.append(bias)
-
-        # 랜덤하게 뽑기 (만약 데이터가 많다면
-        if len(self.__biases) > num_biases :
-            self.__biases = random.sample(self.__biases, num_biases)
-
-        self._make_send_data_with_datas()
-
     # 전송용 폼데이터를 만드는 함수
     def get_print_forms_schedule(self, schedules:list, bid:str):
         bias_data = self._database.get_data_with_id(target="bid", id=bid)
@@ -1077,12 +1060,12 @@ class AddScheduleModel(TimeTableModel):
 
     # 모든 방송 플랫폼 찾는 함수
     def __find_all_broadcast_location(self, schedule_list:list):
-        location = set()
+        platform = set()
 
         for schedule in schedule_list:
-            location.update(schedule.location)
+            platform.update(schedule.platform)
 
-        return list(location)
+        return list(platform)
 
     # 스케줄 번들 시작 날짜와 끝 날짜 찾기
     def __find_start_n_end_date(self, schedule_list:list, ):
@@ -1201,7 +1184,7 @@ class AddScheduleModel(TimeTableModel):
         # location을 나누는 방법 ( 정규식을 이용해서 구두점, 콤마 등을 걸러냅니다.
         # ", "와 같은 케이스도 말끔히. 근데 이후의 공백이 있을 수 있다는 점이 있어 주의를 요합니다.
         # 또한 플랫폼이 아닌 다른 문자가 들어가는 불상사도 있을 수 있습니다. (이건 어찌할 방도가..)
-        str_list = re.split(r'\W+', data_payload.location)
+        str_list = re.split(r'\W+', data_payload.platform)
         location_list = [s for s in str_list if s]
         # pprint(str_list)
 
@@ -1213,7 +1196,7 @@ class AddScheduleModel(TimeTableModel):
         schedule.code = self.__make_schedule_code()
         schedule.update_datetime = datetime.today().strftime("%Y/%m/%d-%H:%M:%S")
         schedule.color_code = self._make_color_code()
-        schedule.location = location_list
+        schedule.platform = location_list
 
         return schedule
 
@@ -1233,7 +1216,7 @@ class AddScheduleModel(TimeTableModel):
         schedule_bundle.uid = self._user.uid
         schedule_bundle.uname = self._user.uname
         schedule_bundle.date = self.__find_start_n_end_date(schedule_list=schedule_list)
-        schedule_bundle.location = self.__find_all_broadcast_location(schedule_list=schedule_list)
+        schedule_bundle.platform = self.__find_all_broadcast_location(schedule_list=schedule_list)
         schedule_bundle.code = self.__make_schedule_code()
         schedule_bundle.update_datetime = datetime.today().strftime("%Y/%m/%d-%H:%M:%S")
 
@@ -1242,7 +1225,6 @@ class AddScheduleModel(TimeTableModel):
     # 복수 스케줄 만들기
     def make_new_multiple_schedule(self, schedule_search_engine:SSE, schedules:list, sname:str, bid:str, data_type:str):
         schedule_list = []
-        schedules_object = None
 
         for make_schedule in schedules:
             schedule = self.make_new_single_schedule(data_payload=make_schedule, bid=bid)
@@ -1251,12 +1233,7 @@ class AddScheduleModel(TimeTableModel):
         # 스케쥴 등록
         self.save_new_schedules(schedule_search_engine=schedule_search_engine, schedule=schedule_list)
 
-        if data_type == "bundle":
-            schedules_object = self.make_new_schedule_bundle(schedule_list=schedule_list, sbname=sname, bid=bid)
-
-        return schedules_object
-
-
+        return
 
     # 복수 개의 (단일 포함) 스테줄 저장
     def save_new_schedules(self, schedule_search_engine:SSE, schedule:list):
@@ -1268,7 +1245,6 @@ class AddScheduleModel(TimeTableModel):
         for s in schedule:
             self._tuser.sids.append(s.sid)
             self._tuser.my_sids.append(s.sid)
-
 
         self._database.modify_data_with_id(target_id="tuid", target_data=self._tuser.get_dict_form_data())
 
@@ -1285,22 +1261,10 @@ class AddScheduleModel(TimeTableModel):
             self._tuser.my_sbids.append(schedule_object.sbid)
             self._database.modify_data_with_id(target_id="tuid", target_data=self._tuser.get_dict_form_data())
             self.__result = True
-        # elif data_type == "event":
-        #     self._database.add_new_data(target_id="seid", new_data=schedule_object.get_dict_form_data())
-        #     self._tuser.seids.append(schedule_object.seid)
-        #     self._tuser.my_seids.append(schedule_object.seid)
-        #     self._database.modify_data_with_id(target_id="tuid", target_data=self._tuser.get_dict_form_data())
-        #     self.__result = True
-
         return
 
     # 수정한 스케줄들 저장
     def save_modified_schedule(self, schedule_search_engine:SSE, schedules:list):
-        # save_datas = self._make_dict_list_data(list_data=schedule)
-
-        # for s in schedule:
-        #     sids.append(s.sid)
-
         for schedule in schedules:
             save_data = schedule.get_dict_form_data()
             if self._database.get_data_with_id(target="sid", id=schedule.sid):
@@ -1318,30 +1282,6 @@ class AddScheduleModel(TimeTableModel):
         return
 
 
-    # 수정한 스케줄 번들 저장
-    def save_modified_multiple_schedule_object_with_type(self, schedule_search_engine:SSE, schedule_object, data_type:str):
-        if data_type == "bundle":
-            if self._database.get_data_with_id(target="sbid"):
-                self._database.modify_data_with_id(target_id="sbid", target_data=schedule_object.get_dict_form_data())
-                # 서치 엔진에 저장
-                schedule_search_engine.try_modify_bundle(modify_bundle=schedule_object)
-
-                self.__result = True
-            else:
-                self._database.add_new_data(target_id="sbid", new_data=schedule_object.get_dict_form_data())
-                # 서치 엔진에 저장
-                schedule_search_engine.try_add_new_managed_bundle(new_bundle=schedule_object)
-
-                self._tuser.my_sbids.append(schedule_object.sbid)
-                self._database.modify_data_with_id(target_id='tuid', target_data=self._tuser.get_dict_form_data())
-                self.__result = True
-
-
-
-        return
-
-
-
     # 단일 스케줄 편집
     def modify_single_schedule(self, data_payload, sid:str):
         # pprint("Single_schedule_modify")
@@ -1353,17 +1293,17 @@ class AddScheduleModel(TimeTableModel):
         bias_data = self._database.get_data_with_id(target="bid", id=data_payload.bid)
         bias = Bias().make_with_dict(bias_data)
 
-        if isinstance(data_payload.location, str):
-            str_list = re.split(r'\W+', data_payload.location)
+        if isinstance(data_payload.platform, str):
+            str_list = re.split(r'\W+', data_payload.platform)
             str_list = [s for s in str_list if s]
-        elif isinstance(data_payload.location, list):
-            str_list = data_payload.location
+        elif isinstance(data_payload.platform, list):
+            str_list = data_payload.platform
         else:
             str_list = []
 
         schedule.sname = data_payload.sname
         schedule.bid = data_payload.bid
-        schedule.location = str_list
+        schedule.platform = str_list
         schedule.bname = bias.bname
         schedule.tags = data_payload.tags
         schedule.start_date = data_payload.start_date
@@ -1373,47 +1313,6 @@ class AddScheduleModel(TimeTableModel):
         schedule.update_datetime= datetime.today().strftime("%Y/%m/%d-%H:%M:%S")
 
         return schedule
-
-    # 스케줄 번들을 수정
-    def modify_schedule_bundle(self, schedule_list:list, sbid:str, sbname:str, bid:str):
-        schedule_bundle_data = self._database.get_data_with_id(target="sbid", id=sbid)
-        schedule_bundle = ScheduleBundle().make_with_dict(schedule_bundle_data)
-
-        bias_data = self._database.get_data_with_id(target="bid", id=bid)
-        bias = Bias().make_with_dict(bias_data)
-
-        schedule_bundle.sbname = sbname
-        schedule_bundle.bid = bid
-        schedule_bundle.bname = bias.bname
-        schedule_bundle.date = self.__find_start_n_end_date(schedule_list=schedule_list)
-        schedule_bundle.location = self.__find_all_broadcast_location(schedule_list=schedule_list)
-        schedule_bundle.update_datetime = datetime.today().strftime("%Y/%m/%d-%H:%M:%S")
-
-        return schedule_bundle
-
-    # 복수의 스케줄 수정 후 저장 ( Schedule 데이터에 sid가 들어감 )
-    def modify_multiple_schedule(self, schedule_search_engine:SSE, schedules:list[Schedule], sname:str , sbid:str, bid:str, data_type:str):
-        # pprint("Multi_schedule_modify")
-
-        schedule_list = []
-        schedule_object = None
-
-        # 스케줄 데이터들을 편집
-        for schedule in schedules:
-            schedule = self.modify_single_schedule(data_payload=schedule, sid=schedule.sid)
-            schedule_list.append(schedule)
-
-        # 데이터 저장
-        self.save_modified_schedule(schedule_search_engine=schedule_search_engine, schedules=schedule_list)
-
-        # 번들데이터 만들기
-        if data_type == "bundle":
-            if self._database.get_data_with_id(target='sbid', id=sbid):
-                schedule_object = self.modify_schedule_bundle(schedule_list=schedule_list, sbid=sbid, sbname=sname, bid=bid)
-            else:
-                schedule_object = self.make_new_schedule_bundle(schedule_list=schedule_list, sbname=sname, bid=bid)
-
-        return schedule_object
 
 
 
@@ -1468,55 +1367,6 @@ class AddScheduleModel(TimeTableModel):
         self.__result = True
         return
 
-    # 스케줄 번들 삭제
-    # 테스트 아직 안했음 주의 ( Modify 수정이 완료된 후에 하기로)
-    def delete_bundle(self, schedule_search_engine:SSE, sbid:str):
-        # 스케줄 데이터 삭제
-        schedule_bundle_data = self._database.get_data_with_id(target='sbid', id=sbid)
-        schedule_bundle = ScheduleBundle().make_with_dict(schedule_bundle_data)
-        sids = schedule_bundle.sids
-
-        # tuser에서 sid를 삭제
-        tuser_datas = self._database.get_all_data(target="tuid")
-        tu_sids : list[TUser] = []
-        tuids = []
-
-        # 각 Tuser마다 반복합니다
-        for tuser_data in tuser_datas:
-            tuser = TUser().make_with_dict(tuser_data)
-
-            # 본인에 대해서는 따로 처리합니다
-            if tuser.tuid == self._tuser.tuid:
-                continue
-
-
-            # 스케줄 번들 안에 있는 모든 sids에 대해 삭제를 진행합니다.
-            tuser.sids = list(filter(lambda sid: sid not in sids, tuser.sids))      # 잘 됨
-            # if sbid in tuser.sbids:
-            #     tuser.sbids.remove(sbid)
-
-            tu_sids.append({"sids": tuser.sids})
-            tuids.append(tuser.tuid)
-
-        # 본인에 대해 삭제
-        self._tuser.sids = list(filter(lambda sid: sid not in sids, self._tuser.sids))
-        self._tuser.my_sids = list(filter(lambda sid: sid not in sids, self._tuser.my_sids))
-        self._tuser.my_sbids.remove(sbid)
-
-        # 서치 엔진에서 삭제
-        schedule_search_engine.try_remove_schedule_list(sids=sids)
-        schedule_search_engine.try_remove_bundle(sbid=sbid)
-
-        self._database.modify_datas_with_ids(target_id="tuid", ids=tuids, target_datas=tu_sids)
-        self._database.modify_data_with_id(target_id="tuid", target_data=self._tuser.get_dict_form_data())
-
-        self._database.delete_datas_with_ids(target="sid", ids=sids)
-        self._database.delete_data_with_id(target="sbid", id=sbid)
-
-        self.__result = True
-
-        return
-
 
     def get_response_form_data(self, head_parser):
         body = {
@@ -1525,247 +1375,6 @@ class AddScheduleModel(TimeTableModel):
 
         response = self._get_response_data(head_parser=head_parser, body=body)
         return response
-
-
-# 시간 구간 정보 (0-6, 6-12, 12-18, 18-24)
-time_ranges = [(0, 6), (6, 12), (12, 18), (18, 24)]
-weekday_names = ['월', '화', '수', '목', '금', '토', '일']
-
-class ScheduleBlock(Schedule):
-    def __init__(self, start_datetime=None):
-        super().__init__()
-        self.timeblocks = []
-        self.color_code = "#D2D2D2"
-        self.__overflowed = False
-        self.start_datetime = start_datetime
-        self.end_datetime = None
-
-    def is_overflowed(self):
-        return self.__overflowed
-
-    # 이게 전송용 데이터 포멧
-    def get_dict_form_data(self):
-        super_dict_data = super().get_dict_form_data()
-        super_dict_data['timeblocks'] = self.timeblocks
-        super_dict_data['color_code'] = self.color_code
-        return super_dict_data
-
-class WeekDayDataBlock:
-    def __init__(self, day, make_day_data:datetime, num_schedule:int):
-        self.origin_date = make_day_data     # 년 월 일
-        self.year = make_day_data.year       # 년
-        self.month = make_day_data.month     # 월
-        self.date = make_day_data.day        # 일
-        self.day = day          # 요일
-        self.num_schedule = num_schedule
-        self.is_today = False
-
-     # 이게 전송용 데이터 포멧
-    def get_dict_form_data(self):
-        return {
-            'date' : self.date,     #  일
-            'day' : self.day,       # 요일
-            'num_schedule' : self.num_schedule,
-            'is_today' : self.is_today
-        }
-
-class ScheduleBlockTreater():
-    def __init__(self):
-        self.__over_flowed_schedules = []
-
-    # WeekDay Block 데이터 만들기
-    def make_default_week_day_data(self, target_date:datetime, days):
-
-        weekDayDateBlock_list = []
-
-        # 오늘 날짜
-        # 여기 마져 만들어야됨
-        today = datetime.today()
-        today = datetime.combine(today, time.min)
-
-        # 5일 / 7일 분량
-        for i in range(days):
-            current_date = target_date + timedelta(days=i)
-
-            # WeekDayDataBlock 생성
-            day_block = WeekDayDataBlock(
-                day=weekday_names[current_date.weekday()],
-                make_day_data=current_date,
-                num_schedule=0
-            )                           
-            # day_block.origin_date는 datetime에서 년, 월, 일을 포함함
-            if day_block.origin_date== today:
-                day_block.is_today = True
-
-            weekDayDateBlock_list.append(day_block)
-
-        return weekDayDateBlock_list
-
-    def make_week_day_data(self, schedule_blocks):
-        today = datetime.today()
-        weekDayDateBlocks = []
-
-        for schedule_block in schedule_blocks:
-            schedule_block:ScheduleBlock = schedule_block
-
-            # 목표 블럭을 찾고
-            targetWeekDayDateBlock = None
-            for weekDayDateBlock in weekDayDateBlocks:
-                # 있으면 목표블럭
-                if weekDayDateBlock.date == schedule_block.start_datetime.day:
-                    targetWeekDayDateBlock = weekDayDateBlock
-
-            # 없으면 지금찾던걸로 하나 만들어야됨
-            if not targetWeekDayDateBlock:
-                targetWeekDayDateBlock = WeekDayDataBlock(day=weekday_names[schedule_block.start_datetime.weekday()],
-                                                       make_day_data=schedule_block.start_datetime,
-                                                       num_schedule=0
-                                                       )
-                weekDayDateBlocks.append(targetWeekDayDateBlock)
-            
-            # 핵심 - 스케줄 수를 하나 늘려주면됨
-            targetWeekDayDateBlock.num_schedule += 1
-
-         # WeekDayDateBlocks를 date 기준으로 정렬
-        sorted_block_list = sorted(weekDayDateBlocks, key=lambda x: x.date)
-
-        # today와 같은 날짜부터 리스트를 자름
-        today_weekday = today.weekday()
-        trimmed_list = [block for block in sorted_block_list if block.date >= today_weekday]
-
-        return trimmed_list
-
-    def clear_over_flowed_schedule(self) -> list[ScheduleBlock]:
-        schedule_blocks = []
-
-        for schedule in self.__over_flowed_schedules:
-            schedule_block = self.make_schedule_block(schedule=schedule)
-            schedule_blocks.append(schedule_block)
-
-        return schedule_blocks
-
-    # 스케줄 블럭 등록
-    def compare_week_day_block(self, schedule_blocks:list, weekday_blocks):
-        # today = datetime.today()
-        is_flag = False # 스케줄이 있는지 없는지 확인하는 플래그
-        
-        num_schedule_block = 0
-
-        # 목표 블럭 찾기
-        for weekDayBlock in weekday_blocks:
-            is_flag = False
-            # weekDayBlock:WeekDayDataBlock = weekDayBlock
-            
-            for schedule_block in schedule_blocks:
-                schedule_block:ScheduleBlock = schedule_block
-                
-                # 있으면 목표 블럭
-                if weekDayBlock.date == schedule_block.start_datetime.day:
-                    weekDayBlock.num_schedule += 1
-                    num_schedule_block += 1
-                    is_flag = True
-            
-            # 만약 스케줄이 없다면
-            # 가짜 빈 스케줄을 넣으면됨
-            if not is_flag:
-                start_datetime = f'{weekDayBlock.year}/{weekDayBlock.month}/{weekDayBlock.date}'
-                schedule_block = ScheduleBlock(start_datetime=datetime.strptime(start_datetime, "%Y/%m/%d"))
-                schedule_blocks.append(schedule_block)
-                num_schedule_block += 1
-
-        # 날짜 데이터를 바탕으로 정렬합니다.
-        sorted_block_list = sorted(weekday_blocks, key=lambda x : x.origin_date)
-
-        return sorted_block_list, num_schedule_block
-
-    #  만들기
-    def make_schedule_block(self, schedule:Schedule, sids:list=[]):
-        schedule_block = ScheduleBlock()
-        schedule_block.make_with_dict(schedule.get_dict_form_data())
-
-        # 시작 및 종료 시간 합치기
-        schedule_block.start_datetime = datetime.strptime(f"{schedule_block.start_date} {schedule_block.start_time}", "%Y/%m/%d %H:%M")
-        schedule_block.end_datetime = datetime.strptime(f"{schedule_block.end_date} {schedule_block.end_time}", "%Y/%m/%d %H:%M")
-
-        # 위크 데이트 블록 리스트에 날짜가 포함되었는지 확인하고 넣을 것
-        schedule_block = self.__make_timeblocks(schedule_block=schedule_block)
-        
-        # 만약 추가하기 파트에서 선택한 임시 스케줄이라면 색깔을 바꿔서 보낼것임
-        if schedule_block.sid in sids:
-            # 아래의 컬러 코드가 우리 이미지 컬러코드(파스텔톤)
-            schedule_block.color_code = "#D0E4FF"
-
-        return schedule_block
-
-    def __make_timeblocks(self, schedule_block:ScheduleBlock) -> ScheduleBlock:
-        current_datetime = schedule_block.start_datetime
-        first_block = True  # 첫 번째 블록인지 확인하는 플래그
-        end_flag = False
-
-        num_loop = 0
-
-        while current_datetime < schedule_block.end_datetime:
-
-            if num_loop >10000:
-                break
-
-            # 현재 시간의 구간 판별
-            hour = current_datetime.hour
-
-            if end_flag:
-                break
-
-            for i, (start_hour, end_hour) in enumerate(time_ranges):
-                if start_hour <= hour < end_hour:
-
-                    # 첫 번째 구간이 아닌 경우 제외
-                    if (not first_block and i == 0):
-                        end_flag = True
-                        break
-
-                    current_range_start = current_datetime.replace(hour=start_hour, minute=0, second=0, microsecond=0)
-
-                    # 구간 끝나는 시간이 24이면 다음 날 00:00으로 설정
-                    if end_hour == 24:
-                        current_range_end = current_datetime.replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(days=1)
-                    else:
-                        current_range_end = current_datetime.replace(hour=end_hour, minute=0, second=0, microsecond=0)
-
-                    # 구간 종료 시간이 종료 시간보다 크면 종료 시간으로 제한
-                    actual_end = min(schedule_block.end_datetime, current_range_end)
-
-                    # 앞 부분 패딩 및 총 길이 계산
-                    if current_datetime == current_range_start:
-                        padding_minutes = 0
-                    else:
-                        padding_minutes = int((current_datetime - current_range_start).total_seconds() / 60)
-
-                    total_minutes = int((actual_end - current_datetime).total_seconds() / 60)
-
-                    schedule_block.timeblocks.append(
-                        {
-                        "time": i,
-                        "start": padding_minutes,
-                        "length": total_minutes
-                    })
-
-                    # 현재 시간을 다음 구간 시작으로 이동
-                    current_datetime = actual_end
-                    first_block = False# 첫 번째 구간이 끝났으므로 플래그 변경
-
-                    break
-            num_loop += 1
-
-        # 하루를 넘어가면 넘어갔다고 표시하고 보관하기
-        if schedule_block.start_datetime.day != schedule_block.end_datetime.day:
-            overflowed_schedule = Schedule().make_with_dict(schedule_block.get_dict_form_data())
-            overflowed_schedule.start_date = schedule_block.end_datetime.strftime("%Y/%m/%d")
-            overflowed_schedule.start_time = "00:00"
-            overflowed_schedule.end_date = schedule_block.end_datetime.strftime("%Y/%m/%d")
-            overflowed_schedule.end_time = schedule_block.end_datetime.strftime("%H:%M")
-            self.__over_flowed_schedules.append(overflowed_schedule)
-
-        return schedule_block
 
 
     
@@ -2022,130 +1631,3 @@ class ScheduleTimeLayerModel(TimeTableModel):
 
         response = self._get_response_data(head_parser=head_parser, body=body)
         return response
-
-# 복수 스케줄을 반환할 때 사용하는 모델
-# 아마 대부분이 여러개를 반환해야하니 이거 쓰면 될듯
-class ScheduleChartModel(TimeTableModel):
-    def __init__(self, database:Mongo_Database) -> None:
-        super().__init__(database)
-        self.__schedule_blocks = []
-        self.__week_day_datas = []
-        
-    # 내가 추가한 스케줄 데이터 뽑기를 날짜로
-    # date는 날짜임 , 형태는 2025/03/06 임
-    # date안넣으면 기본적으로 오늘자로 감
-    def set_my_schedule_in_by_day(self, target_date="", days=7, sids =[]):
-        if not target_date:
-            target_date = datetime.today().strftime("%Y/%m/%d")
-
-        target_sids = []
-        target_sids.extend(self._tuser.sids)
-        target_sids.extend(sids)
-        
-        # 내가 추가한 스케줄을 다 가지고 옴
-        schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids=target_sids)
-        
-        #today = target_date + timedelta(days=12)
-        # today = target_date - timedelta(days=3)
-
-        temp_schedules:list[Schedule] = []
-
-        # 필요하면 갯수 제한도 두삼
-        for schedule_data in schedule_datas:
-            schedule = Schedule()
-            schedule.make_with_dict(dict_data=schedule_data)
-    
-                    
-            temp_schedules.append(schedule)
-            
-        # 임시로 뽑은 애들 정렬치는 부분
-        sids_schedules = []
-        
-        for schedule in temp_schedules:
-            if schedule.sid in sids:
-                sids_schedules.append(schedule)
-                
-        # 반드시 임시로 뽑은 애들중에서 min_date를 골라야했음
-        min_date = None
-        
-        for sid_schedule in sids_schedules:
-            # 날짜가 오늘부터 지정된 일수만큼 뒤까지 포함되는지 확인
-            schedule_date = datetime.strptime(sid_schedule.start_date, "%Y/%m/%d")
-
-            # 이거 미리보기 일 때 라는 조건문임
-            if sids:
-                # min_date를 가장 빠른 날짜로 설정
-                if min_date is None or schedule_date < min_date:
-                    min_date = schedule_date
-        
-        # 가장 빠른 날짜가 있으면 이걸로 보여줘야됨
-        if min_date:
-            target_date = min_date
-        else:
-            # 아니면 평범하게 오늘자로 하면됨 ==> 수정됨
-            #target_date = datetime.strptime(target_date, ("%Y/%m/%d"))
-            
-            # 오늘이 포함된 주차에서 월요일을 골라야됨
-            # 여기 서버 안끄면 초기화 안되는 쌉 버그가 생김
-            target_date = self._get_monday_date(target_date=target_date)
-        
-        schedules= []
-        
-        for schedule in temp_schedules:
-            if target_date + timedelta(days=days) > datetime.strptime(schedule.start_date, "%Y/%m/%d") >= target_date:
-                schedules.append(schedule)
-                    
-                    
-        schedule_block_treater = ScheduleBlockTreater()
-        
-        # 위크데이 블럭만드는 곳
-        weekday_blocks = schedule_block_treater.make_default_week_day_data(target_date=target_date, days=days)
-
-        # 스케줄 블럭 만드는 곳
-        for schedule in schedules:
-            schedule_block = schedule_block_treater.make_schedule_block(schedule=schedule, sids=sids)
-            self.__schedule_blocks.append(schedule_block)
-        
-        # 오버 플로우된거 처리까지 해서 스케줄 블럭 완성하기
-        over_flowed_schedule:list = schedule_block_treater.clear_over_flowed_schedule()
-        self.__schedule_blocks.extend(over_flowed_schedule)
-        
-        # self.__week_day_datas = schedule_block_treater.make_week_day_data(schedule_blocks=self.__schedule_blocks)
-        # 위크데이 블럭이랑 스케줄 불럭의 수를 받아와야됨 (가짜 블럭의 수도 포함됨)
-        self.__week_day_datas, num_schedule_blocks = schedule_block_treater.compare_week_day_block(schedule_blocks=self.__schedule_blocks,
-                                                                             weekday_blocks=weekday_blocks)
-        
-        # 정렬 순서는 맨 마지막에서 바로 앞으로
-        self.__schedule_blocks = sorted(self.__schedule_blocks, key=lambda x : x.start_datetime)
-        
-        # 이제 안쓰는 블럭(날짜의 데이터는 버려야됨)
-        self.__schedule_blocks = self.__schedule_blocks[:num_schedule_blocks]
-
-        # 시작이 전날이고, 끝나는게 오늘이면 데이터가 안나오기 때문에
-        # 결국 타임 블럭에서 하루 전날꺼를 구하고 그날 데이터를 버려야됨
-        # 이코드가 추가되어야됨
-        
-        return
-    
-    def _get_monday_date(self, target_date: str) -> datetime:
-        # 입력 날짜를 datetime 객체로 변환
-        target_date = datetime.strptime(target_date, "%Y/%m/%d")
-    
-        # 오늘의 요일 계산 (0: 월요일, 6: 일요일)
-        day_of_week = target_date.weekday()
-    
-        # 오늘 날짜에서 요일 값을 빼서 이번 주 월요일 계산
-        monday_date = target_date - timedelta(days=day_of_week)
-    
-        # 월요일 날짜를 datetime 객체로 반환
-        return monday_date
-    
-    def get_response_form_data(self, head_parser):
-        body = {
-            "schedule_blocks" : self._make_dict_list_data(list_data=self.__schedule_blocks),
-            "week_day_datas" : self._make_dict_list_data(list_data=self.__week_day_datas),
-            }
-
-        response = self._get_response_data(head_parser=head_parser, body=body)
-        return response
-

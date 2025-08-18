@@ -44,37 +44,6 @@ class TImeTableController:
 
 
     # 내 타임 차트 가지고 오기
-    def get_time_chart(self, database:Mongo_Database, request:RequestManager) -> BaseModel: 
-        model = ScheduleChartModel(database=database)
-
-        if request.jwt_payload!= "":
-            model.set_user_with_email(request=request.jwt_payload)
-            # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
-            if not model._set_tuser_with_tuid():
-                return model
-
-        #if model.is_tuser_alive():
-        model.set_my_schedule_in_by_day(target_date=request.data_payload.date)
-            
-        return model
-    
-    # 내 타임 차트 가지고 오기
-    def get_time_chart_with_sids(self, database:Mongo_Database, request:RequestManager) -> BaseModel: 
-        model = ScheduleChartModel(database=database)
-
-        if request.jwt_payload!= "":
-            model.set_user_with_email(request=request.jwt_payload)
-            # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
-            if not model._set_tuser_with_tuid():
-                return model
-
-        
-        #if model.is_tuser_alive():
-        model.set_my_schedule_in_by_day(target_date=request.data_payload.date, sids=request.data_payload.sids)
-            
-        return model
-    
-    # 내 타임 차트 가지고 오기
     def get_time_layer_with_date(self, database:Mongo_Database, schedule_search_engine:SSE, request:RequestManager) -> BaseModel: 
         model = ScheduleTimeLayerModel(database=database)
 
@@ -100,20 +69,6 @@ class TImeTableController:
         return model
 
 
-    # 추천하는 바이어스 불러오기
-    def get_recommended_bias_list(self, database:Mongo_Database, request:RequestManager, num_recommend=5) -> BaseModel:
-        model = MultiScheduleModel(database=database)
-
-        if request.jwt_payload!= "":
-            model.set_user_with_email(request=request.jwt_payload)
-            if not model._set_tuser_with_tuid():
-                return model
-
-        model.get_recommend_bias_list(num_biases=num_recommend)
-
-        return model
-
-    
     # 스케줄 추가
     def try_add_schedule(self, database:Mongo_Database, request:RequestManager ) -> BaseModel:
         model = AddScheduleModel(database=database)
@@ -240,18 +195,11 @@ class TImeTableController:
             if not model._set_tuser_with_tuid():
                 return model
 
-        # model.set_user_with_email(request=request.data_payload)
-        # model._set_tuser_with_tuid()
-
-        schedule_object = model.make_new_multiple_schedule(schedule_search_engine=schedule_search_engine,
-                                                           schedules=request.data_payload.schedules,
-                                                           sname=request.data_payload.sname,
-                                                           bid=request.data_payload.bid,
-                                                           data_type=request.data_payload.type)
-
-        model.save_new_multiple_schedule_object_with_type(schedule_search_engine=schedule_search_engine,
-                                                          schedule_object=schedule_object,
-                                                          data_type=request.data_payload.type)
+        model.make_new_multiple_schedule(schedule_search_engine=schedule_search_engine,
+                                            schedules=request.data_payload.schedules,
+                                            sname=request.data_payload.sname,
+                                            bid=request.data_payload.bid,
+                                            data_type=request.data_payload.type)
 
         return model
 

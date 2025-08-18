@@ -333,5 +333,5 @@ class SignInRequest(RequestHeader):
         self.email = body['email']
         self.password= body['password']
         self.verification_code = int(body['verification_code'])
-        self.age = body['age']
+        self.birth_year = body['birth_year']
         self.gender = body['gender']

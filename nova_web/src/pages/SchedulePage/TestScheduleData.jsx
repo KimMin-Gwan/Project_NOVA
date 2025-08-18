@@ -9,7 +9,7 @@ export const schedule = {
   end: "오후 08:00",
   date: "03월 04일",
   update_time: "3시간 전",
-  location: "치지직",
+  platform: "치지직",
   code: "ABCDEFG",
   color_code: "#FF0000",
 };
@@ -29,7 +29,7 @@ export const event = {
   sename: "플레이브 미니 3집 Caligo Pt.1 발매",
   bid: "1008",
   bname: "플레이브", // bias_name
-  location: ["Yes24"],
+  platform: ["Yes24"],
   date: "03월 04일",
   start: "오후 06:00",
   end: "오후 08:00",
@@ -43,7 +43,7 @@ export const schedule_bundle = {
   sbname: "한결 3월 1주차 방송 스케줄",
   bid: "1005",
   bname: "한결", // bias_name
-  location: ["SOOP"],
+  platform: ["SOOP"],
   date: ["25년 03월 01일", "25년 03월 08일"],
   sids: ["1235-0agf-1251", "t215-gh2h-11rc"],
   uid: "1111-abcd-2222",

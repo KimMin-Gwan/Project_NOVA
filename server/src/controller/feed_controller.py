@@ -70,7 +70,6 @@ class Feed_Controller:
         model.try_filtered_feed_with_options(feed_search_engine=feed_search_engine,
                                              feed_manager=self.__feed_manager,
                                              category=request.data_payload.category,
-                                             fclass=request.data_payload.fclass,
                                              last_index=request.data_payload.key,
                                              num_feed=num_feed
                                              )
@@ -141,18 +140,9 @@ class Feed_Controller:
                                                feed_manager=self.__feed_manager,
                                                target=request.data_payload.keyword,
                                                search_columns=request.data_payload.search_columns,
-                                               fclass=request.data_payload.fclass,
                                                last_index=request.data_payload.key,
                                                num_feed=num_feed)
 
-        # model.try_search_feed_with_keyword(
-        #     target=request.data_payload.keyword,
-        #     fclass=request.data_payload.fclass,
-        #     last_index=request.data_payload.key,
-        #     feed_search_engine=feed_search_engine,
-        #     feed_manager=self.__feed_manager,
-        #     num_feed=num_feed
-        # )
 
         return model
 
@@ -189,13 +179,13 @@ class Feed_Controller:
 
 
     # 피드 관심 버튼 누르기
-    def try_staring_feed(self, database:Mongo_Database,
+    def try_like_feed(self, database:Mongo_Database,
                                request, feed_manager:FeedManager):
         model = FeedModel(database=database)
         # 유저가 있으면 세팅
         if request.jwt_payload != "":
             model.set_user_with_email(request=request.jwt_payload)
-        model.try_staring_feed(feed_manager=feed_manager,
+        model.try_like_feed(feed_manager=feed_manager,
                                         data_payload=request.data_payload)
 
         return model

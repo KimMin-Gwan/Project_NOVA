@@ -125,7 +125,7 @@ const SimpleSlider = ({ feedData, brightMode, type, className }) => {
                       </div>
                     </div >
                     <footer className={style["like-comment"]}>
-                      좋아요 {feed.feed.star}개 | 댓글 {feed.feed.num_comment}개
+                      좋아요 {feed.feed.like}개 | 댓글 {feed.feed.num_comment}개
                     </footer>
                   </div>
                 </div>

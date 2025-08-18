@@ -116,10 +116,9 @@ class Core_Service_View(Master_View):
             return response
 
         @self.__app.get('/feed_explore/search_feed_with_keyword')
-        def search_with_keyword(request:Request, key:Optional[int]=-1, keyword:Optional[str]="", fclass:Optional[str]="",
-                                search_columns:Optional[str]=""):
+        def search_with_keyword(request:Request, key:Optional[int]=-1, keyword:Optional[str]="", search_columns:Optional[str]=""):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
-            data_payload = KeywordSearchRequest(key=key, keyword=keyword, fclass=fclass, search_columns=search_columns)
+            data_payload = KeywordSearchRequest(key=key, keyword=keyword, search_columns=search_columns)
             
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
@@ -223,7 +222,7 @@ class Core_Service_View(Master_View):
                 raise request_manager.credentials_exception
 
             feed_controller =Feed_Controller(feed_manager=self.__feed_manager)
-            model = feed_controller.try_staring_feed(database=self.__database,
+            model = feed_controller.try_like_feed(database=self.__database,
                                                         request=request_manager,
                                                         feed_manager=self.__feed_manager)
             
@@ -354,15 +353,13 @@ class AllFeedRequest(RequestHeader):
         super().__init__(request)
         body = request['body']
         self.category = body['category']
-        self.fclass= body['fclass']
         self.key= body['key']
         
 
 class KeywordSearchRequest(RequestHeader):
-    def __init__(self, key, keyword, fclass="", search_columns="") -> None:
+    def __init__(self, key, keyword, search_columns="") -> None:
         self.key = key
         self.keyword = keyword
-        self.fclass = fclass
         self.search_columns = search_columns
         # self.email=""
     
@@ -370,7 +367,6 @@ class KeywordSearchRequest(RequestHeader):
         return {
             "key": self.key,
             "keyword": self.keyword,
-            "fclass": self.fclass,
             "search_columns": self.search_columns
         }
         

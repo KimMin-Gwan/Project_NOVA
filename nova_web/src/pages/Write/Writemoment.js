@@ -30,7 +30,6 @@ const WriteMoment = ({ onClickMoment }) => {
   const [imageFiles, setImageFiles] = useState([]);
   const [imagePreview, setImagePreview] = useState([]);
   const params = useParams();
-  const type = params.type;
   let [linkList, setLinkList] = useState([]);
   let [createOptions, setCreateOptions] = useState(0);
   let [showModal, setShowModal] = useState(false);
@@ -132,7 +131,6 @@ const WriteMoment = ({ onClickMoment }) => {
       body: {
         body: bodyText || longData, // 입력된 글 본문 반영
         fid: "",
-        fclass: type,
         choice: choice, // 4지선다 선택지 반영
         hashtag: tagList,
         link: linkList,
@@ -320,18 +318,16 @@ const WriteMoment = ({ onClickMoment }) => {
 
           <span className={style2["moment_footer"]}>
             <div className={style2["content_button"]}>
-              {type !== "long" && (
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    onClickModal();
-                  }}
-                >
-                  <img src={img_icon} alt="img" />
-                  이미지
-                </button>
-              )}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  onClickModal();
+                }}
+              >
+                <img src={img_icon} alt="img" />
+                이미지
+              </button>
 
               <button
                 onClick={(e) => {

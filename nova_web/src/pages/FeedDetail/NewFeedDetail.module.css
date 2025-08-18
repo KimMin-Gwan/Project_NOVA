@@ -473,3 +473,14 @@
   cursor: pointer;
 }
 
+.content-issue-box{
+  width: 100%;
+  height: 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color : #868686;
+  font-weight: 500;
+}

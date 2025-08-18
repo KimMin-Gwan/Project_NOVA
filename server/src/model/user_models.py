@@ -81,7 +81,7 @@ class SendEmailModel(BaseModel):
             uname = self.__make_user_nickname()
             user = User(uid=uid,
                         uname=uname,
-                        age=request.age,
+                        birth_year=request.birth_year,
                         email=request.email,
                         gender=request.gender,
                         password=request.password)
@@ -150,7 +150,6 @@ class UserPageModel(BaseModel):
         self.__biases = []
         self._uname = ""
         self._uid = ""
-        self._num_long_feed = 0
         self._num_short_feed = 0
         self._num_like = 0
         self._num_comment = 0
@@ -169,28 +168,14 @@ class UserPageModel(BaseModel):
         self._user.password = ""
         return
 
-    # 나의 Feed 중 타입에 따라 개수 세기
-    def __count_my_feeds_type(self, feed_type:str):
-        count = 0
-        feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=self._user.my_feed)
-        for feed_data in feed_datas:
-            if feed_data["fclass"] == feed_type:
-                count += 1
-
-        return count
-
-
     def get_user_data(self):
         self._uname = self._user.uname
         self._uid = self._user.uid
-        self._num_long_feed = self._user.num_long_feed
-        self._num_short_feed = self._user.num_short_feed
+        self._num_feed = self._user.num_feed
         self._num_like = len(self._user.like)
         self._num_comment = self._user.num_comment
         # self._num_comment = count_my_comments()
         # self._num_comment = len(self._user.my_comment)
-
-
 
         return
 
@@ -199,8 +184,7 @@ class UserPageModel(BaseModel):
             body = {
                 'uname' : self._uname,
                 'uid' : self._uid,
-                'num_long_feed' : self._num_long_feed,
-                'num_short_feed' : self._num_short_feed,
+                'num_feed' : self._num_feed,
                 'num_like' : self._num_like,
                 'num_comment' : self._num_comment
             }
@@ -228,7 +212,7 @@ class MyProfileModel(BaseModel):
                 'uname' : self._uname,
                 'uid': self._uid,
                 "email": self._email,
-                "age": self._age,
+                "birth_year": self._age,
                 "gender": self._gender
             }
 
@@ -242,7 +226,7 @@ class MyProfileModel(BaseModel):
         self._uname = self._user.uname
         self._uid = self._user.uid
         self._email = self._user.email
-        self._age = self._user.age
+        self._age = self._user.birth_year
         self._gender = self._user.gender
         return
 

@@ -18,7 +18,7 @@ function ScheduleComponent({
     bname,
     start_date,
     start_time,
-    location,
+    platform,
     code,
     toggleClick,
     selectBack,
@@ -35,7 +35,7 @@ function ScheduleComponent({
                     <div className={style["schedule_time_wrapper"]}>
                         <span className={style["schedule_time"]}>{start_date} | {start_time}</span>
                     </div>
-                    <span className={style["schedule_platform"]}>{location}</span>
+                    <span className={style["schedule_platform"]}>{platform}</span>
                 </div>
             </div>
             {

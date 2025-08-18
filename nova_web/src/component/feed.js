@@ -89,7 +89,7 @@ export function ContentFeed({ detailPage, feed, handleCheckStar, links, fetchRep
           </div>
         </div>
         <div
-          className={`${style["wrapper-container"]} ${feed.fclass === "long" && style["long-wrapper"]}`}
+          className={`${style["wrapper-container"]} ${style["long-wrapper"]}`}
         >
           <FeedHeader date={feed.date} nickname={feed.nickname} />
           {/**
@@ -125,7 +125,7 @@ export function ContentFeed({ detailPage, feed, handleCheckStar, links, fetchRep
               </div>
             ) : null}
 
-            {feed.fclass === "long" && <Viewer initialValue={feed.raw_body} />}
+            {<Viewer initialValue={feed.raw_body} />}
           </div>
 
           {links && <LinkSection links={links} />}
@@ -156,7 +156,7 @@ export function ContentFeed({ detailPage, feed, handleCheckStar, links, fetchRep
           </div>
         </div>
         <div
-          className={`${style["wrapper-container"]} ${feed.fclass === "long" && style["long-wrapper"]}`}
+          className={`${style["wrapper-container"]} ${ style["long-wrapper"]}`}
           onClick={(e) => {
             if (hasDragged) return;
             e.preventDefault();
@@ -197,7 +197,7 @@ export function ContentFeed({ detailPage, feed, handleCheckStar, links, fetchRep
               </div>
             ) : null}
 
-            {feed.fclass === "long" && <Viewer initialValue={feed.raw_body} />}
+            {<Viewer initialValue={feed.raw_body} />}
           </div>
 
           {links && <LinkSection links={links} />}
@@ -287,7 +287,7 @@ function ActionButtons({ feed, handleCheckStar, fetchReportResult }) {
           >
             <img src={feed.star_flag ? star_color : star} alt="star-icon" />
           </button>
-          <span>{feed.star}</span>
+          <span>{feed.like}</span>
         </div>
 
         <div className={style["action-button"]}>

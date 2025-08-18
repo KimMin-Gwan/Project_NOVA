@@ -1,5 +1,5 @@
 from bintrees import AVLTree
-from others.data_domain import Feed, User, Bias, Notice, Comment, Schedule, ScheduleBundle
+from others.data_domain import Feed, User, Bias, Schedule
 from datetime import  datetime, timedelta
 import pandas as pd
 import random
@@ -30,10 +30,10 @@ class Keyword:
 
 # 클래스 목적 : 피드를 검색하거나, 조건에 맞는 피드를 제공하기 위함
 class ManagedFeed:
-    def __init__(self, fid="", like=0, date=None, uname="", bname="", fclass="", display=4,
-                 board_type="", hashtag=[], body="", bid="", iid="", num_images=0):
+    def __init__(self, fid="", like=0, date=None, uname="", bname="", display=4,
+                 board_type="", hashtag=[], body="", bid=""):
         self.fid=fid
-        self.fclass = fclass
+        self.bid = bid
         self.display = display
         self.like=like
         self.date=date
@@ -42,14 +42,10 @@ class ManagedFeed:
         self.hashtag = hashtag
         self.board_type = board_type
         self.body = body
-        self.bid = bid
-        self.iid = iid
-        self.num_images = num_images
 
     # 무슨 데이터인지 출력해보기
     def __call__(self):
         print("fid : ", self.fid)
-        print("fclass: ", self.fclass)
         print("display: ", self.display)
         print("like : ", self.like)
         print("date: ", self.date)
@@ -59,13 +55,10 @@ class ManagedFeed:
         print("board_type: ", self.board_type)
         print("body: ", self.body)
         print("bid: ", self.bid)
-        print("iid: ", self.iid)
-        print("num_images: ", self.num_images)
 
     def to_dict(self):
         return {
             "fid": self.fid,
-            "fclass": self.fclass,
             "display": self.display,
             "like": self.like,
             "date": self.date,
@@ -75,8 +68,6 @@ class ManagedFeed:
             "board_type": self.board_type,
             "body": self.body,
             "bid": self.bid,
-            "iid": self.iid,
-            "num_images": self.num_images
         }
 
 # 이거는 Bias 테이블에 들어가게 되는 Bias 자료형
@@ -99,8 +90,8 @@ class ManagedBias:
 
 class ManagedSchedule:
     def __init__(self, sid="", sname="", uname="", bid="", bname="", bias_gender="", bias_category=[],
-                 date=None, start_date_time=None, end_date_time=None, time_section=[],  location=[],
-                 code="", state:bool=True, tags=[], platform=[]):
+                 date=None, start_date_time=None, end_date_time=None, time_section=[],  platform=[],
+                 code="", state:bool=True, tags=[]):
         self.sid=sid
         self.sname=sname
         self.bid=bid
@@ -113,7 +104,7 @@ class ManagedSchedule:
         self.start_date_time=start_date_time        # start_date + start_time
         self.end_date_time=end_date_time            # end_date + end_time
         self.time_section=time_section              # 타임 섹션
-        self.location=location
+        self.platform=platform
         self.code=code
         self.state=state
         self.platform = platform
@@ -133,7 +124,7 @@ class ManagedSchedule:
         print("start_date_time: ", self.start_date_time)
         print("end_date_time: ", self.end_date_time)
         print("time_section", self.time_section)
-        print("location: ", self.location)
+        print("platform: ", self.platform)
         print("code: ", self.code)
         print("state: ", self.state)
         print("platform: ", self.platform)
@@ -153,64 +144,11 @@ class ManagedSchedule:
             "start_date_time": self.start_date_time,
             "end_date_time": self.end_date_time,
             "time_section": self.time_section,
-            "location": self.location,
+            "platform": self.platform,
             "code": self.code,
             "state": self.state,
             "platform": self.platform
         }
-
-class ManagedScheduleBundle:
-    def __init__(self, sbid="", sbname="", bid="", bname="", bias_gender="", bias_category=[],
-                 tags=[], uname="", date=None, start_date=None, end_date=None, location=[], code="", sids=[]):
-        self.sbid=sbid
-        self.sbname=sbname
-        self.bid=bid
-        self.bname=bname
-        self.bias_gender=bias_gender
-        self.bias_category=bias_category
-        self.tags=tags
-        self.uname=uname
-        self.date=date                      # update_datetime
-        self.start_date=start_date          # 스케쥴 번들 시작 날짜
-        self.end_date=end_date              # 스케쥴 번들 끝 날짜
-        self.location=location
-        self.code=code
-        self.sids=sids
-
-    def __call__(self):
-        print("sbid: ", self.sbid)
-        print("sbname: ", self.sbname)
-        print("bid: ", self.bid)
-        print("bname: ", self.bname)
-        print("bias_gender: ", self.bias_gender)
-        print("bias_category: ", self.bias_category)
-        print("tags: ", self.tags)
-        print("uname: ", self.uname)
-        print("date: ", self.date)
-        print("start_date: ", self.start_date)
-        print("end_date: ", self.end_date)
-        print("location: ", self.location)
-        print("code: ", self.code)
-        print("sids: ", self.sids)
-
-    def to_dict(self):
-        return {
-            "sbid": self.sbid,
-            "sbname": self.sbname,
-            "bid": self.bid,
-            "bname": self.bname,
-            "bias_gender": self.bias_gender,
-            "bias_category": self.bias_category,
-            "tags": self.tags,
-            "uname": self.uname,
-            "date": self.date,
-            "start_date": self.start_date,
-            "end_date": self.end_date,
-            "location": self.location,
-            "code": self.code,
-            "sids": self.sids
-        }
-
 
 
 SKIP_TUPLE = ("", "전체", "all", "선택없음")
@@ -218,8 +156,7 @@ SKIP_TUPLE = ("", "전체", "all", "선택없음")
 class ManagedTable:
     def __init__(self, database):
         self._database = database
-        # self._data_table = []
-        # self._data_df = pd.DataFrame()
+
 
     # 오늘 날짜 반환
     def _get_datetime_now(self):
@@ -435,8 +372,6 @@ class ManagedTable:
 
         # 못 찾은 거면 -1를 반환하고 그에따른 처리를 진행합니다.
         return -1
-
-
 
 
     # conditions를 이용해서 어떤 열이든, 리스트로 검색하든, 문자열로 검색하든, 날짜를 검색하든
@@ -689,461 +624,6 @@ class ManagedTable:
         return filtered_df
 
 
-
-#-------------------------------------------------------------------------------------------------------------------------------------
-
-# ManagedFeed 테이블 클래스.
-# 기존의 SearchEngine 에서는 각 Manager마다 각기 정의된 ManagedTable을 가졌는데
-# 너무 복잡해짐에 따라, 통합하기로 결정. 클래스화 시킵니다.
-# class ManagedFeedBiasTable:
-#     def __init__(self, database, feed_algorithm):
-#         self.__database = database
-#         self.__feed_algorithm = feed_algorithm
-#         self.__feed_table =[]
-#         self.__feed_df = pd.DataFrame()
-#         self.__feed_avltree = AVLTree()
-#         self.__bias_avltree = AVLTree()
-#
-#         self.__init_feed_table()
-#         self.__init_bias_tree()
-#         self.__init_feed_avltree()
-#
-#     def __get_datetime_now(self):
-#         now = datetime.now()
-#         return now
-#
-#     # string to datetime
-#     def __get_date_str_to_object(self, str_date):
-#         date_obj = datetime.strptime(str_date, "%Y/%m/%d-%H:%M:%S")
-#         return date_obj
-#
-#     # datetime to string
-#     def __get_date_object_to_str(self, object:datetime):
-#         formatted_str = object.strftime("%Y/%m/%d-%H:%M:%S")
-#         return formatted_str
-#
-#     # 시간 차이를 분석하는 함수
-#     # target_hour : 1, 24, 168
-#     def __get_time_diff(self, target_time, target_hour=0.5, reverse=False) -> bool:
-#         reference_time=datetime.now()
-#         time_diff = abs(target_time - reference_time)
-#         # pprint("현재 시" + str(reference_time))
-#         # pprint("시간 차 :" + str(time_diff))
-#         # pprint("기준 시간 :" + str(timedelta(hours=target_hour)))
-#
-#         # 차이가 2시간 이상인지 확인
-#         if reverse:
-#             return time_diff < timedelta(hours=target_hour)
-#         return time_diff >= timedelta(hours=target_hour)
-#
-#     # 시간 차이를 바탕으로 정해진 시간대 내의 피드 정보 구하기
-#     # target_hour : 1, 24, 168
-#     def __find_target_index(self, target_hour=1):
-#         target_index = len(self.__feed_table)
-#
-#
-#         for i, managed_feed in enumerate(self.__feed_table):
-#             # 삭제된 피드는 None으로 표시될것이라서
-#             if managed_feed.fid == "":
-#                 continue
-#
-#             if self.__get_time_diff(target_time=managed_feed.date, target_hour=target_hour):
-#                 continue
-#             else:
-#                 target_index = i
-#                 break
-#
-#         return target_index
-#
-#     # Initialize 테이블
-#     def __init_feed_table(self):
-#         feeds = []
-#         # 먼저 피드 데이터를 DB에서 불러오고
-#         feed_datas = self.__database.get_all_data(target="fid")
-#
-#         # 불러온 피드들은 객체화 시켜준다음 잠시 보관
-#         for feed_data in feed_datas:
-#             feed = Feed()
-#             feed.make_with_dict(dict_data=feed_data)
-#             feeds.append(feed)
-#
-#         # 잠시 보관한 피드 데이터에서 필요한 정보만 뽑아서 ManagedFeed 객체 생성
-#         for single_feed in feeds:
-#             managed_feed = ManagedFeed(fid=single_feed.fid,
-#                                        fclass=single_feed.fclass,
-#                                        display=single_feed.display,
-#                                        like=single_feed.star,
-#                                        date=self.__get_date_str_to_object(single_feed.date),
-#                                        hashtag=copy(single_feed.hashtag),
-#                                        uname=single_feed.nickname,
-#                                        board_type=single_feed.board_type,
-#                                        body=single_feed.body,
-#                                        bid=single_feed.bid,
-#                                        iid=single_feed.iid,
-#                                        num_images=len(single_feed.image)
-#                                        )
-#             # 보관
-#             self.__feed_table.append(managed_feed)
-#
-#         # 리턴되면 위에서 잠시 보관한 피드 데이터는 사라지고 self.__feed_table에 ManagedFeed들만 남음
-#         # 최신이 가장 밑으로 오지만, 데이터프레임만 최신 내림차순으로 정렬할 것
-#         self.__feed_table = sorted(self.__feed_table, key=lambda x:x.date, reverse=False)
-#         self.__feed_df = self.__dataframing_feed_list()
-#
-#         num_feed = str(len(self.__feed_table))
-#         print(f'{YELLOW}INFO{RESET}<-[      {num_feed} NOVA FEED IN SEARCH ENGINE NOW READY.')
-#         print(f'{YELLOW}INFO{RESET}<-[      {num_feed} NOVA FEED DATAFRAME IN SEARCH ENGINE NOW READY.')
-#
-#         return
-#
-#     # Feed_avltree 설정
-#     def __init_feed_avltree(self):
-#         for feed in self.__feed_table:
-#             self.__feed_avltree.insert(feed.fid, feed)
-#         print(f'{YELLOW}INFO{RESET}<-[      NOVA FEED AVLTREE IN SEARCH ENGINE NOW READY.')
-#
-#     # Bias Tree 설정
-#     def __init_bias_tree(self):
-#         biases = []
-#         users = []
-#         bias_datas = self.__database.get_all_data(target="bid")
-#         user_datas = self.__database.get_all_data(target="uid")
-#
-#
-#         for bias_data in bias_datas:
-#             bias = Bias()
-#             bias.make_with_dict(bias_data)
-#             biases.append(bias)
-#
-#         for user_data in user_datas:
-#             user = User()
-#             user.make_with_dict(user_data)
-#             users.append(user)
-#
-#         for single_bias in biases:
-#             user_nodes = []
-#             for single_user in users:
-#                 single_user:User = single_user
-#                 # bias를 팔로우하는 유저를 찾아서 노드 연결해야됨
-#                 if single_bias.bid in single_user.bids:
-#                     user_node = self.__feed_algorithm.get_user_node_with_uid(uid=single_user.uid)
-#                     # 못찾 으면 예외 처리할 것
-#                     if user_node:
-#                         user_nodes.append(user_node)
-#             # 이제 관리될 바이어스를 만들고 연결한다음
-#             managed_bias = ManagedBias(bid=single_bias.bid, bname=single_bias.bname, user_nodes=user_nodes, board_types=single_bias.board_types)
-#             #pprint(managed_bias.to_dict())
-#             # avl트리에 넣어주면됨
-#             self.__bias_avltree.insert(key=single_bias.bid, value=managed_bias)
-#
-#         return
-#
-#     # Feed list DataFrame화
-#     def __dataframing_feed_list(self):
-#         # ManagedFeed들은 객체이므로, 딕셔너리화 시켜서 리스트로 만든다.
-#         managed_feed_dict_list = [managed_feed.to_dict() for managed_feed in self.__feed_table]
-#         feed_df = pd.DataFrame(managed_feed_dict_list)
-#         # 데이터프레임을 정렬함
-#         feed_df = feed_df.sort_values(by='date', ascending=False).reset_index(drop=True)
-#
-#         return feed_df
-#
-#     def __add_new_data_in_df(self, managed_feed):
-#         new_data = pd.DataFrame(managed_feed.to_dict())
-#         self.__feed_df = pd.concat([self.__feed_df, new_data], ignore_index=True)
-#         self.__feed_df = self.__feed_df.sort_values(by='date', ascending=False).reset_index(drop=True)
-#         return
-#
-#     def __modify_data_in_df(self, new_managed_feed):
-#         new_data = new_managed_feed.to_dict()
-#         # fid는 고유값이므로, 하나밖에 안 나옴
-#         update_index = self.__feed_df.index[self.__feed_df['fid'] == new_managed_feed.fid].tolist()[0]
-#         self.__feed_df.loc[update_index] = new_data
-#
-#         return
-#
-#     def __remove_data_in_df(self, fid):
-#         remove_index = self.__feed_df.index[self.__feed_df['fid'] == fid].tolist()[0]
-#         self.__feed_df = self.__feed_df.drop(index=remove_index).reset_index(drop=True)
-#         return
-#
-#     #---------------------------------------------------------------------------------------------
-#     def get_managed_feed_test(self):
-#         return self.__feed_table[2].to_dict()
-#
-#     def len_feed_table(self):
-#         # Feed Table의 길이 구하기
-#         return len(self.__feed_table)
-#
-#     # 새로운 ManagedFeed를 추가함
-#     def make_new_managed_feed(self, feed:Feed):
-#         managed_feed = ManagedFeed(
-#             fid=feed.fid,
-#             fclass=feed.fclass,
-#             like=feed.star,
-#             date=self.__get_date_str_to_object(feed.date),
-#             uname=feed.nickname,
-#             hashtag=feed.hashtag,
-#             board_type=feed.board_type, # 이거 추가됨
-#             body=feed.body,
-#             bid=feed.bid,
-#             iid=feed.iid,
-#             num_images=feed.num_image
-#         )
-#
-#         self.__feed_table.append(managed_feed)
-#         self.__feed_avltree.insert(managed_feed.fid, managed_feed)
-#         # 데이터 프레임 추가
-#         self.__add_new_data_in_df(managed_feed)
-#
-#         return
-#
-#     # ManagedFeedTable을 수정, 새로운 Feed가 들어왔기 때문
-#     def modify_feed_table(self, feed:Feed):
-#         # 피드 테이블을 수정하는 함수
-#         # managed_feed를 찾아야 됨
-#         managed_feed:ManagedFeed = self.__feed_avltree.get(feed.fid)
-#
-#         # managed_feed가 가진 데이터로 원본 데이터를 변경
-#         managed_feed.date = feed.date
-#         managed_feed.hashtag = feed.hashtag
-#         managed_feed.body = feed.body
-#         managed_feed.like = feed.star
-#         managed_feed.uname = feed.nickname
-#
-#         # dataframe도 업데이트
-#         self.__modify_data_in_df(managed_feed)
-#
-#         return
-#
-#     # ManagedFeed가 삭제되었기 때문에, 테이블과 트리에서도 삭제시킴
-#     def remove_feed(self, feed:Feed):
-#         # 삭제하는 함수. 피드가  삭제되면 None으로 바뀔것
-#         managed_feed = self.__feed_avltree.get(key=feed.fid)
-#         managed_feed = ManagedFeed()
-#         self.__feed_avltree.remove(key=feed.fid)
-#         # dataframe 삭제
-#         self.__remove_data_in_df(fid=feed.fid)
-#         return
-#
-#     # 랜덤한 Feed 하나 추출
-#     def get_random_feed(self):
-#         random_index = random.randint(0, len(self.__feed_table)-1)
-#         return self.__feed_table[random_index].fid
-#
-#     # 타겟범위내의 Feed를 반환
-#     def get_feeds_target_range(self, index, target_index=0):
-#         return self.__feed_table[target_index:index][::-1]
-#
-#     # 시간 차이를 바탕으로 정해진 시간대 내의 피드 정보 구하기
-#     # target_hour : 1, 24, 168
-#     def search_feed_with_time_or_like(self, search_type:str="", time_type:str=""):
-#         searched_df = self.__feed_df
-#         # pprint(searched_df)
-#
-#         if search_type == "best":
-#             searched_df = searched_df[searched_df['like'] >= 30]
-#
-#         if time_type == "" or time_type == "all" or time_type == "전체":
-#             pass
-#         elif time_type == "day":
-#             searched_df = searched_df[self.__get_time_diff(target_time=searched_df['date'],target_hour=24, reverse=True)]
-#         elif time_type == "weekly":
-#             searched_df = searched_df[self.__get_time_diff(target_time=searched_df['date'],target_hour=168, reverse=True)]
-#
-#         # pprint(searched_df[:10])
-#         return searched_df['fid'].tolist()
-#
-#     def find_target_index(self, target_hour=1):
-#         target_index = len(self.__feed_table)
-#
-#         for i, managed_feed in enumerate(self.__feed_table):
-#             # 삭제된 피드는 None으로 표시될것이라서
-#             if managed_feed.fid == "":
-#                 continue
-#
-#             if self.__get_time_diff(target_time=managed_feed.date, target_hour=target_hour):
-#                 continue
-#             else:
-#                 target_index = i
-#                 break
-#
-#         return target_index
-#
-#     # Managed Feed 찾기
-#     def search_managed_feed(self, fid):
-#         return self.__feed_avltree.get(key=fid)
-#
-#     # 키, 옵션을 통해 Feed를 찾음
-#     # 페이징기법을 적용했음. 역순페이징을 사용함.
-#     # def search_feed_with_key_and_option(self, option:str, key:str="", num_feed=10, index=-1) -> tuple:
-#     #     result_fid = []
-#     #     result_index = -3
-#     #
-#     #     if index == -1:
-#     #         index = self.len_feed_table()
-#     #
-#     #         # target_index default 값은 0
-#     #     search_range = self.get_feeds_target_range(index=index)
-#     #     # search_range = self.__feed_table[:index][::-1]
-#     #
-#     #     if index < 0 or index > self.len_feed_table():
-#     #         return result_fid, -3
-#     #
-#     #     count = 0
-#     #     for i, managed_feed in enumerate(search_range):
-#     #         #i = len(self.__feed_table) - 1 - i
-#     #         # count로 이미 다 살펴 봤다면
-#     #         if count == num_feed:
-#     #             break
-#     #
-#     #         # 삭제된 피드는 None으로 표시될것이라서
-#     #         if managed_feed.fid == "":
-#     #             continue
-#     #
-#     #         if option == "hashtag":
-#     #             # 찾는 해시태그가 아님
-#     #             if key not in managed_feed.hashtag:
-#     #                 continue
-#     #         elif option == "uname":
-#     #             if key not in managed_feed.uname:
-#     #                 continue
-#     #         elif option == "bid":
-#     #             if key != managed_feed.bid:
-#     #                 continue
-#     #
-#     #         elif option == "fid":
-#     #             if key == managed_feed.fid:
-#     #                 result_fid.append(managed_feed)
-#     #                 result_index = i
-#     #                 break
-#     #
-#     #
-#     #         result_fid.append(managed_feed.fid)
-#     #
-#     #         # result_index 업데이트
-#     #         # 마지막 index 발견
-#     #         result_index = index - 1 - i  # 실제 self.__feed_table에서의 인덱스 계산
-#     #         count += 1
-#     #
-#     #     return result_fid, result_index
-#
-#     def search_feeds_with_key_n_option(self, key:str, fclass:str, board_type:str, target_time:str, option):
-#         # Nan값의 경우, False 처리.
-#         # 대소문자를 구분하지 않음
-#         searched_df = self.__feed_df
-#
-#
-#         if option == "keyword":
-#             # 키워드를 통한 서치
-#             searched_df = self.__feed_df[self.__feed_df["body"].str.contains(key, case=False, na=False)]
-#         elif option == "hashtag":
-#             # 해시태그 리스트 안에 들어있는 해시태그들 중 하나만 있어도 찾는다.
-#             searched_df = self.__feed_df[self.__feed_df["hashtag"].apply(lambda hashtag: key in hashtag)]
-#         elif option == "uname":
-#             # 닉네임 서치
-#             searched_df = self.__feed_df[self.__feed_df["uname"] == key]
-#         elif option == "bid":
-#             # bid 서치
-#             searched_df = self.__feed_df[self.__feed_df["bid"] == key]
-#         elif option == "fid":
-#             # fid 서치
-#             searched_df = self.__feed_df[self.__feed_df["fid"] == key]
-#
-#         # board_type 필터링
-#         # board_type이 ""이거나 All이면 다 고름
-#         # 아니라면 board_type 필터링을 진행함
-#         if board_type == "" or board_type == "all" or board_type == "전체":
-#             pass
-#         else:
-#             searched_df = searched_df[searched_df["board_type"] == board_type]
-#
-#         if fclass == "" or fclass == "all" or fclass == "전체":
-#             pass
-#         else:
-#             # Fclass == long 인지 fclass == short인지 분류
-#             searched_df = searched_df[searched_df["fclass"] == fclass]
-#
-#         # 시간에 따라 분류하는 함수 ( 일간 주간 )
-#         if target_time=="" or target_time=="all" or target_time=="전체":
-#             pass
-#         elif target_time=="day":
-#             searched_df = searched_df[self.__get_time_diff(target_time=searched_df['date'],target_hour=24, reverse=True)]
-#         elif target_time=="weekly":
-#             searched_df = searched_df[self.__get_time_diff(target_time=searched_df['date'],target_hour=168, reverse=True)]
-#
-#         return searched_df['fid'].tolist()
-#     #---------------------------------------------------------------------------------------------
-#
-#     # 최애의 정보 하나 반환
-#     def get_managed_bias(self, bid):
-#         return self.__bias_avltree.get(key=bid, default=None)
-#
-#     def get_all_managed_bias(self):
-#         return list(self.__bias_avltree.values())
-#
-#     def get_liked_biases(self, bids):
-#         result = []
-#         for bid in bids:
-#             if bid in self.__bias_avltree:
-#                 result.append(self.__bias_avltree.get(key=bid, default=None))
-#
-#         return result
-#
-#     # 새롭게 최애를 지정했을 때 연결하는 시스템
-#     # 근데 이거 잘생각해보면 최애 지정하기 전에 쓴 글들은 해시태그에 반영되어야 하는가?
-#     def add_new_user_to_bias(self, bid:str, uid:str):
-#         managed_bias:ManagedBias = self.__bias_avltree.get(key=bid)
-#         user_node = self.__feed_algorithm.get_user_node_with_uid(uid=uid)
-#         managed_bias.user_nodes.append(user_node)
-#         return
-#
-#     # 최애 연결 끊기
-#     def remove_user_to_bias(self, bid:str, uid:str):
-#         managed_bias:ManagedBias = self.__bias_avltree.get(key=bid)
-#         user_node = self.__feed_algorithm.get_user_node_with_uid(uid=uid)
-#         managed_bias.user_nodes.remove(user_node)
-#         return
-#
-#     #----------------------------------------------------------------------------------------------
-#     def filtering_bias_community(self, bid:str, board_type:str):
-#         filtered_feeds_df = self.__feed_df[self.__feed_df['bid']==bid]
-#         if board_type == "" or board_type == "전체" or board_type == "all" or board_type == "선택없음":
-#             pass
-#         else:
-#             filtered_feeds_df = filtered_feeds_df[filtered_feeds_df['board_type'] == board_type]
-#         return filtered_feeds_df['fid'].tolist()
-#
-#     # 여기서는 추가적인 필터링을 위해 필터링된 FID리스트를 받고, 2차 필터링을 실시하는 곳입니다.
-#     def filtering_fclass_feed(self, fid_list:list, fclass:str) -> list:
-#         fid_list_df = self.__feed_df[(self.__feed_df['fid'].isin(fid_list))]
-#         # Filtering 시, 다음의 값을 유의
-#         # fclass == ""인 경우, 모든 경우를 가져옵니다. 어짜피 AD는 Notice의 경우로 들어가니까 상관없겠지요.
-#         if fclass != "":
-#             filtered_feeds_df = fid_list_df[(fid_list_df['fclass'] == fclass)]
-#             return filtered_feeds_df['fid'].tolist()
-#         return fid_list_df['fid'].tolist()
-#
-#     def filtering_category_feed(self, fid_list:list, category:str) -> list:
-#         fid_list_df = self.__feed_df[(self.__feed_df['fid'].isin(fid_list))]
-#         # Filtering 시, 다음의 값을 유의
-#         # category == ""인 경우, 모든 경우를 가져옵니다. 똑같이 AD는 현재 아예 다른 모델을 사용하므로... 고려대상에서 제외합니다.
-#         if category != "" or category != "전체" or category != "all" or category != "선택없음" :
-#             filtered_feeds_df = fid_list_df[(fid_list_df['board_type'] == category)]
-#             # pprint(filtered_feeds_df)
-#             return filtered_feeds_df['fid'].tolist()
-#         return fid_list_df['fid'].tolist()
-#
-#     def filtering_categories_feed_new(self, fid_list:list, categories:list):
-#         fid_list_df = self.__feed_df[(self.__feed_df['fid'].isin(fid_list))]
-#         # Filtering 시, 다음의 값을 유의
-#         # fclass == ""인 경우, 모든 경우를 가져옵니다. 어짜피 AD는 Notice의 경우로 들어가니까 상관없겠지요.
-#         if categories[0] != "" or categories[0] != "전체" or categories[0] != "all" or categories[0] != "선택없음":
-#             filtered_feeds_df = fid_list_df[(fid_list_df['board_type'].isin(categories))]
-#             # pprint(filtered_feeds_df)
-#             return filtered_feeds_df['fid'].tolist()
-#         return fid_list_df['fid'].tolist()
-
 class ManagedFeedBiasTable(ManagedTable):
     def __init__(self, database, feed_algorithm):
         super().__init__(database)
@@ -1179,9 +659,8 @@ class ManagedFeedBiasTable(ManagedTable):
             bias.make_with_dict(bias_data)
 
             managed_feed = ManagedFeed(fid=single_feed.fid,
-                                       fclass=single_feed.fclass,
                                        display=single_feed.display,
-                                       like=single_feed.star,
+                                       like=single_feed.like,
                                        date=self._get_date_str_to_object(single_feed.date),
                                        hashtag=copy(single_feed.hashtag),
                                        uname=single_feed.nickname,
@@ -1189,8 +668,6 @@ class ManagedFeedBiasTable(ManagedTable):
                                        board_type=single_feed.board_type,
                                        body=single_feed.body,
                                        bid=single_feed.bid,
-                                       iid=single_feed.iid,
-                                       num_images=len(single_feed.image)
                                        )
             # 보관
             self.__feed_table.append(managed_feed)
@@ -1291,8 +768,7 @@ class ManagedFeedBiasTable(ManagedTable):
 
         managed_feed = ManagedFeed(
             fid=feed.fid,
-            fclass=feed.fclass,
-            like=feed.star,
+            like=feed.like,
             date=self._get_date_str_to_object(feed.date),
             uname=feed.nickname,
             bname=bias.bname,
@@ -1301,7 +777,6 @@ class ManagedFeedBiasTable(ManagedTable):
             body=feed.body,
             bid=feed.bid,
             iid=feed.iid,
-            num_images=feed.num_image
         )
 
         self.__feed_table.append(managed_feed)
@@ -1324,7 +799,7 @@ class ManagedFeedBiasTable(ManagedTable):
         managed_feed.date = feed.date
         managed_feed.hashtag = feed.hashtag
         managed_feed.body = feed.body
-        managed_feed.like = feed.star
+        managed_feed.like = feed.like
         managed_feed.uname = feed.nickname
 
         # dataframe도 업데이트
@@ -1372,7 +847,7 @@ class ManagedFeedBiasTable(ManagedTable):
 
     # 키워드와 필터링을 통해 데이터프레임에서 Feed들을 찾아냅니다.
     # 다양한 옵션들을 제공하고.. 있긴 합니다.
-    def search_feeds_with_key_n_option(self, key:str, fclass:str, board_type:str, target_time:str,
+    def search_feeds_with_key_n_option(self, key:str, board_type:str, target_time:str,
                                        search_columns:list, return_id:bool=True):
         # # Nan값의 경우, False 처리.
         # # 대소문자를 구분하지 않음
@@ -1383,7 +858,7 @@ class ManagedFeedBiasTable(ManagedTable):
             columns = search_columns
 
         searched_df = self._search_data_with_key_str_n_columns(df=self.__feed_df, columns=columns,
-                                                               key=key, board_type=board_type, fclass=fclass)
+                                                               key=key, board_type=board_type)
 
         # 시간에 따라 분류하는 함수 ( 일간, 주간 )
         searched_df = self._filter_data_with_until_before_X_days(df=searched_df, date_column="date", target_time=target_time)
@@ -1408,10 +883,9 @@ class ManagedFeedBiasTable(ManagedTable):
         return filtered_feeds_df.to_dict('records')
 
     # 여기서는 추가적인 필터링을 위해 필터링된 FID리스트를 받고, 2차 필터링을 실시하는 곳입니다.
-    def filtering_fclass_feed(self, fid_list:list, fclass:str, return_id:bool=True):
+    def filtering_fclass_feed(self, fid_list:list, return_id:bool=True):
         # Filtering 시, 다음의 값을 유의
-        # fclass == ""인 경우, 모든 경우를 가져옵니다.
-        filtered_feeds_df = self._search_data_with_key_str_n_columns(df=self.__feed_df, fid=fid_list, fclass=fclass)
+        filtered_feeds_df = self._search_data_with_key_str_n_columns(df=self.__feed_df, fid=fid_list)
 
         # 마지막, 삭제된 Feed는 반환하지 않는다.
         filtered_feeds_df = filtered_feeds_df[filtered_feeds_df['display'] != 0]
@@ -1470,14 +944,8 @@ class ManagedScheduleTable(ManagedTable):
         super().__init__(database)
         self.__schedule_table = []
         self.__schedule_df = pd.DataFrame()
-        self.__schedule_bundle_table = []
-        self.__schedule_bundle_df = pd.DataFrame()
-
         self.__schedule_tree = AVLTree()
-        self.__bundle_tree = AVLTree()
-
         self.__init_schedule_table()
-        self.__init_schedule_bundle_table()
 
     # 최초 스케줄 데이터프레임 초기화 함수
     def __init_schedule_table(self):
@@ -1510,7 +978,6 @@ class ManagedScheduleTable(ManagedTable):
                                                start_date_time=start_date_time,
                                                end_date_time=end_date_time,
                                                time_section=time_sections,
-                                               location=copy(single_schedule.location),
                                                code=single_schedule.code,
                                                state=single_schedule.state,
                                                tags=single_schedule.tags,
@@ -1537,56 +1004,6 @@ class ManagedScheduleTable(ManagedTable):
 
         print(f'{YELLOW}INFO{RESET}<-[      {num_schedules} NOVA SCHEDULES IN SEARCH ENGINE NOW READY.')
         print(f'{YELLOW}INFO{RESET}<-[      {num_schedules} NOVA SCHEDULES DATAFRAME IN SEARCH ENGINE NOW READY.')
-
-        return
-
-    # 최초 스케줄 번들 데이터프레임 초기화 함수
-    def __init_schedule_bundle_table(self):
-        schedule_bundles = []
-
-        schedule_bundle_datas = self._database.get_all_data(target="sbid")
-
-        for schedule_bundle_data in schedule_bundle_datas:
-            schedule_bundle = ScheduleBundle()
-            schedule_bundle.make_with_dict(dict_data=schedule_bundle_data)
-            schedule_bundles.append(schedule_bundle)
-
-        for bundle in schedule_bundles:
-            bias_data = self._database.get_data_with_id(target="bid", id=bundle.bid)
-            bias=Bias().make_with_dict(dict_data=bias_data)
-
-
-            start_date = bundle.date[0]+"-00:00:00"
-            end_date = bundle.date[1]+"-00:00:00"
-
-            managed_bundle = ManagedScheduleBundle(sbid=bundle.sbid,
-                                                   sbname=bundle.sbname,
-                                                   bid=bundle.bid,
-                                                   bname=bundle.bname,
-                                                   bias_gender=bias.gender,
-                                                   bias_category=bias.category,
-                                                   tags=bias.tags,
-                                                   uname=bundle.uname,
-                                                   date=self._get_date_str_to_object(str_date=bundle.update_datetime),
-                                                   start_date=self._get_date_str_to_object(str_date=start_date),
-                                                   end_date=self._get_date_str_to_object(str_date=end_date),
-                                                   location=copy(bundle.location),
-                                                   code=bundle.code,
-                                                   sids=copy(bundle.sids)
-                                               )
-
-            self.__schedule_bundle_table.append(managed_bundle)
-            self.__bundle_tree.insert(managed_bundle.sbid, managed_bundle)
-
-        # 리턴되면 위에서 잠시 보관한 피드 데이터는 사라지고 self.__feed_table에 ManagedFeed들만 남음
-        # 최신이 가장 밑으로 오지만, 데이터프레임만 최신 내림차순으로 정렬할 것
-        self.__schedule_bundle_table = sorted(self.__schedule_bundle_table, key=lambda x:x.date, reverse=False)
-        self.__schedule_bundle_df = self._dataframing_table(data_table=self.__schedule_bundle_table)
-
-        num_schedule_bundles = str(len(self.__schedule_bundle_table))
-
-        print(f'{YELLOW}INFO{RESET}<-[      {num_schedule_bundles} NOVA SCHEDULE BUNDLES IN SEARCH ENGINE NOW READY.')
-        print(f'{YELLOW}INFO{RESET}<-[      {num_schedule_bundles} NOVA SCHEDULE BUNDLES DATAFRAME IN SEARCH ENGINE NOW READY.')
 
         return
 
@@ -1621,7 +1038,7 @@ class ManagedScheduleTable(ManagedTable):
             start_date_time=start_date_time,
             end_date_time=end_date_time,
             time_section=time_section,
-            location=copy(schedule.location),
+            platform=copy(schedule.platform),
             code=schedule.code,
             state=schedule.state,
             tags=schedule.tags
@@ -1667,7 +1084,7 @@ class ManagedScheduleTable(ManagedTable):
         managed_schedule.date = self._get_date_str_to_object(str_date=modify_schedule.update_datetime)
         managed_schedule.start_date_time = self._get_date_str_to_object(str_date=mo_start_date_time)
         managed_schedule.end_date_time = self._get_date_str_to_object(str_date=mo_end_date_time)
-        managed_schedule.location = copy(modify_schedule.location)
+        managed_schedule.platform = copy(modify_schedule.platform)
         managed_schedule.state = modify_schedule.state
 
         self._modify_data_in_df(df=self.__schedule_df,
@@ -1682,8 +1099,8 @@ class ManagedScheduleTable(ManagedTable):
 
     # 스케줄 삭제
     def remove_schedule_in_table(self, sid:str):
-        managed_schedule = self.__schedule_tree.get(key=sid)
-        managed_schedule = ManagedSchedule()
+        #managed_schedule = self.__schedule_tree.get(key=sid)
+        #managed_schedule = ManagedSchedule()
         table_index = self._get_obj_index_in_table_with_id(table=self.__schedule_table, sid=sid)
 
         if table_index != -1:
@@ -1693,92 +1110,6 @@ class ManagedScheduleTable(ManagedTable):
         self.__schedule_df = self._remove_data_in_df(df=self.__schedule_df, sid=sid)
 
         return
-
-    # 새로운 스케줄 번들 추가 함수
-    def make_new_managed_bundle(self, bundle:ScheduleBundle):
-        start_date = bundle.date[0]+"-00:00:00"
-        end_date = bundle.date[1]+"-00:00:00"
-
-        managed_bundle = ManagedScheduleBundle(
-            sbid=bundle.sbid,
-            sbname=bundle.sbname,
-            bid=bundle.bid,
-            bname=bundle.bname,
-            uname=bundle.uname,
-            date=self._get_date_str_to_object(str_date=bundle.update_datetime),
-            start_date=self._get_date_str_to_object(str_date=start_date),
-            end_date=self._get_date_str_to_object(str_date=end_date),
-            location=copy(bundle.location),
-            code=bundle.code,
-            sids=copy(bundle.sids)
-        )
-
-
-        # 바이어스 데이터
-        bias_data = self._database.get_data_with_id(target="bid", id=managed_bundle.bid)
-        bias = Bias()
-        bias.make_with_dict(dict_data=bias_data)
-
-        managed_bundle.bias_gender = bias.gender
-        managed_bundle.tags = bias.tags
-        managed_bundle.bias_category = bias.category
-
-        self.__schedule_bundle_table.append(managed_bundle)
-        self.__bundle_tree.insert(managed_bundle.sbid, managed_bundle)
-
-        self.__schedule_bundle_df = self._add_new_data_in_df(df=self.__schedule_bundle_df,
-                                                             new_dict_data=managed_bundle.to_dict(),
-                                                             sbid=managed_bundle.sbid)
-
-        # start_date_time, end_date_time 강제 형변환
-        # date 열은 Managed_Table 함수 내에서 처리하도록 함
-        date_columns = ['start_date', 'end_date']
-        self.__schedule_bundle_df[date_columns] = self.__schedule_bundle_df[date_columns].apply(pd.to_datetime, errors='coerce')
-
-        self.__schedule_bundle_df = self.__schedule_bundle_df.sort_values(by='date', ascending=False).reset_index(drop=True)
-
-        return
-
-    # 번들 데이터 수정
-    def modify_bundle_table(self, modify_bundle:ScheduleBundle):
-        managed_bundle:ManagedScheduleBundle = self.__bundle_tree.get(modify_bundle.sbid)
-
-        mo_start_date = modify_bundle.date[0]+"-00:00:00"
-        mo_end_date = modify_bundle.date[1]+"-00:00:00"
-
-        managed_bundle.sbname = modify_bundle.sbname
-        managed_bundle.date = self._get_date_str_to_object(str_date=modify_bundle.update_datetime)
-        managed_bundle.start_date = self._get_date_str_to_object(str_date=mo_start_date)
-        managed_bundle.end_date = self._get_date_str_to_object(str_date=mo_end_date)
-        managed_bundle.location = copy(modify_bundle.location)
-        managed_bundle.sids = copy(modify_bundle.sids)
-
-        self._modify_data_in_df(df=self.__schedule_bundle_df,
-                                modify_dict_data=managed_bundle.to_dict(),
-                                sbid=managed_bundle.sbid)
-
-        date_columns = ['start_date', 'end_date']
-        self.__schedule_bundle_df[date_columns] = self.__schedule_bundle_df[date_columns].apply(pd.to_datetime, errors='coerce')
-
-        return
-
-    # 번들 데이터 삭제
-    def remove_bundle_in_table(self, sbid:str):
-        managed_bundle = self.__bundle_tree.get(key=sbid)
-        managed_bundle = ManagedScheduleBundle()
-        table_index = self._get_obj_index_in_table_with_id(table=self.__schedule_bundle_table, sbid=sbid)
-
-        # 못 찾은 경우에는 지우지 못한다
-        if table_index != -1:
-            self.__schedule_bundle_table.pop(table_index)       # 리스트에서 삭제
-
-        self.__bundle_tree.remove(key=sbid)
-        self.__schedule_bundle_df = self._remove_data_in_df(df=self.__schedule_bundle_df, sbid=sbid)
-
-        return
-
-
-
 
     # 탐색 스케줄 얻음
     # 이거 기능을 분리하는게 나을지도 모르겠는데 생각 해볼려고 함
@@ -1829,19 +1160,6 @@ class ManagedScheduleTable(ManagedTable):
         return searched_df.to_dict('records')
 
 
-    # 스케줄 번들 일정 필터링
-    def filtering_bundle_is_in_progress(self, selected_sbids:list, when:str, return_id:bool):
-        # 선택된 sbid 필터링
-        searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_bundle_df, sbid=selected_sbids)
-        # 날짜 필터링
-        searched_df = self._filter_data_with_date_in_progress(df=searched_df,
-                                                              date_columns=["start_date", "end_date"],
-                                                              when=when)
-
-        if return_id:
-            return searched_df['sbid'].to_list()
-        return searched_df.to_dict('records')
-
     # 금주의 일정 필터링
     def filtering_weekday_schedule(self, selected_sids:list, return_id:bool):
         # 선택된 sids 필터링
@@ -1852,18 +1170,6 @@ class ManagedScheduleTable(ManagedTable):
         if return_id:
             return searched_df['sid'].to_list()
         return searched_df.to_dict('records')
-
-    # 금주의 일정 번들 필터링
-    def filtering_weekday_bundle(self, selected_sbids:list, return_id:bool):
-        # 선택한 sbids 필터링
-        searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_bundle_df, sid=selected_sbids)
-        # 금주의 일정 필터링
-        searched_df = self._filter_data_with_date_option(df=searched_df, date_option="weekly", date_columns=["start_date", "end_date"])
-
-        if return_id:
-            return searched_df['sid'].to_list()
-        return searched_df.to_dict('records')
-
 
 
     # 키를 통해 스케줄을 검색합니다.
@@ -1879,18 +1185,6 @@ class ManagedScheduleTable(ManagedTable):
             return searched_df['sid'].to_list()
         return searched_df.to_dict('records')
 
-    # 번들 서치 함수.
-    def search_bundle_with_key(self, key:str, search_columns:list, return_id:bool):
-        if len(search_columns) == 0 or search_columns[0]=="":
-            columns =['sbname', 'bname', 'uname', 'code']
-        else:
-            columns = search_columns
-
-        searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_bundle_df, columns=columns, key=key)
-
-        if return_id:
-            return searched_df['sbid'].to_list()
-        return searched_df.to_dict('records')
 
     # sid를 넣으면 sid에 맞는 것들을 반환합니다.
     def search_schedule_with_sids(self, sids:list, return_id:bool):
@@ -1898,14 +1192,6 @@ class ManagedScheduleTable(ManagedTable):
 
         if return_id:
             return searched_df['sid'].to_list()
-        return searched_df.to_dict('records')
-
-    # sbid를 넣으면 sbid에 맞는 Manged 객체들을 반환합니다.
-    def search_bundle_with_sbids(self, sbids:list, return_id:bool):
-        searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_bundle_df, sbid=sbids)
-
-        if return_id:
-            return searched_df['sbid'].to_list()
         return searched_df.to_dict('records')
 
     # 이거 위의 저 함수들을 쓰게되면 이걸 managed_table에서 해결하는게 아니라 Search_engine에서 2개의 함수를 운용하는게 나을지도 모르겠는데
@@ -1918,10 +1204,3 @@ class ManagedScheduleTable(ManagedTable):
             return searched_df['sbid'].to_list()
         return searched_df.to_dict('records')
 
-    # 내가 선택한 일정 번들들을 보는 함수
-    def search_my_selected_bundles(self, bid:str, selected_sbids:list, return_id:bool):
-        searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_bundle_df, sbid=selected_sbids, bid=bid)
-
-        if return_id:
-            return searched_df['sbid'].to_list()
-        return searched_df.to_dict('records')

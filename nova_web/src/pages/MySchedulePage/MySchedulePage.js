@@ -125,7 +125,7 @@ function ScheduleItem({ schedule, toggleAddScheduleModal, navBoard, fetchTryReje
         toggleClick={() => handleToggleMore(schedule.sid)} // id 전달
       />
       {moreClick[schedule.sid] &&
-        (schedule.is_already_have === false ? null : schedule.is_owner === false ? ( // 이미 가지고 있는게 아니면 여기 나올 필요자체가 없음
+        (schedule.subscribe === false ? null : schedule.is_owner === false ? ( // 이미 가지고 있는게 아니면 여기 나올 필요자체가 없음
           <ScheduleRemove
             target={schedule}
             detailClick={toggleAddScheduleModal}

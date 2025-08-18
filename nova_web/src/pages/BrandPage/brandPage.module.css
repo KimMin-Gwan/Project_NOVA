@@ -244,6 +244,17 @@
     border: 1px solid #E5E5EC;
     background: #FFF;
     box-shadow: 10px 10px 30px 0px rgba(0, 0, 0, 0.06);
+    cursor: pointer;
+
+    span{
+        color: #111;
+        font-style: normal;
+        line-height: 140%; /* 56px */
+        letter-spacing: -1px;
+        font-size: 24px;
+        font-weight: 500;
+        color: #6c6c6c;
+    }
 }
 
 .brand-highlight .platform-icon{

@@ -242,12 +242,6 @@ const ScheduleDashboard = () => {
     //return temp_schedule_data2
   //}
 
-  // 추천 주제 데이터 받기
-  function fetchBiasData() {
-    mainApi.get("time_table_server/try_get_recommended_bias_list").then((res) => {
-      setBiasData(res.data.body.biases);
-    });
-  }
 
   //useEffect(() => {
     //const dateString = targetDate.toISOString().split("T")[0]; // 'YYYY-MM-DD' 형식으로 변환
@@ -265,7 +259,6 @@ const ScheduleDashboard = () => {
   useEffect(() => {
     const dateString = targetDate.toISOString().split("T")[0].replace(/-/g, "/");
     fetchTargetMonthWeek(dateString);
-    fetchBiasData();
     initDataSetting(dateString)
   }, []);
 
@@ -500,16 +493,13 @@ const ScheduleDashboard = () => {
             <div className="dashboard-section">
               <div className="section-title">
                 <p className="element">
-                  <span className="text-wrapper">이런 최애는 어때요?</span>
+                  <span className="text-wrapper">최근 콘텐츠 이슈</span>
                 </p>
-                <span className="add-schedule" onClick={() => handleNavigate("/search/topic")}>
-                  주제 탐색
-                </span>
               </div>
             </div>
-            {biasData.map((item, i) => {
-              return <ScheduleTopicMain key={i} {...item} />;
-            })}
+            <div className={style["content-issue-box"]}>
+              준비중입니다.
+            </div>
           </div>
         </div>
 
@@ -591,7 +581,7 @@ function ScheduleOptionModal({ onClose, targetSid, onClickEdit}) {
       setStartDate(schedule.start_date);
       setStartTime(schedule.start_time);
       setOwner(schedule.is_owner);
-      setIsHave(schedule.is_already_have);
+      setIsHave(schedule.subscribe);
     } catch (error) {
       console.error("Failed to fetch schedule data:", error);
     } finally {
