@@ -266,7 +266,6 @@ class Feed(SampleDomain):
         self.date = date
         self.like = like
         self.board_type = board_type
-        self.image = copy.copy(image)
         self.hashtag = copy.copy(hashtag)
         self.comment:List[str] = copy.copy(comment)
         self.lid = lid  # link id
@@ -287,25 +286,19 @@ class Feed(SampleDomain):
             self.fid = dict_data["fid"]
             self.uid = dict_data["uid"]
             self.body = dict_data["body"]
-            self.fclass = dict_data["fclass"]
             self.display = dict_data["display"]
             self.date = dict_data["date"]
             self.like = dict_data["like"]
             self.board_type = dict_data["board_type"]
-            self.image = copy.copy(dict_data["image"])
             self.hashtag = copy.copy(dict_data["hashtag"])
             self.comment = copy.copy(dict_data["cid"])
-            self.iid = dict_data["iid"]
             self.lid = dict_data["lid"]
             self.bid = dict_data["bid"]
             self.raw_body = dict_data["raw_body"]
-            self.reworked_body = dict_data["reworked_body"]
             self.level = dict_data["level"]
-            self.p_body = dict_data["p_body"]
             self.bname = dict_data.get("bname", "")
 
             self.num_comment = len(self.comment)
-            self.num_image = len(self.image)
             self.star_flag = False
             self.nickname = ""
             return self
@@ -318,25 +311,19 @@ class Feed(SampleDomain):
             "fid": self.fid,
             "uid": self.uid,
             "body": self.body,
-            "fclass": self.fclass,
             "display": self.display,
             "date" : self.date,
             "like": self.like,
             "board_type" :self.board_type,
-            "image": copy.copy(self.image),
             "hashtag": copy.copy(self.hashtag),
             "cid": copy.copy(self.comment),
-            "iid": self.iid,
             "lid": self.lid,
             "bid": self.bid,
             "raw_body" : self.raw_body,
-            "reworked_body" :self.reworked_body,
             "level" : self.level,
-            "p_body": self.p_body,
             "bname" : self.bname,
 
             "num_comment":self.num_comment,
-            "num_image":self.num_image,
             "star_flag":self.star_flag,
             "nickname" : self.nickname,
             "is_owner" : self.is_owner,

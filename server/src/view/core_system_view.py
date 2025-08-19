@@ -391,7 +391,6 @@ class EditFeedRequest(RequestHeader):
         body:dict = request['body']
         self.fid = body['fid']
         self.body = body['body']
-        self.fclass = body.get("fclass", "short")
         self.board_type = body.get("category", "자유게시판")  # 자유게시판 디폴트
         self.choice= body['choice']
         self.hashtag = body['hashtag']
