@@ -92,38 +92,35 @@ export function ContentFeed({ detailPage, feed, handleCheckStar, links, fetchRep
           className={`${style["wrapper-container"]} ${style["long-wrapper"]}`}
         >
           <FeedHeader date={feed.date} nickname={feed.nickname} />
-          {/**
-          <AIFilter
-            isReworked={feed.is_reworked}
-            fid={feed.fid}
-            fetchOriginalText={fetchOriginalText}
-          />
-         
-          */}
 
           <div className={`${style["body-container"]} ${detailPage ? "" : style["long-form-hidden"]}`}>
             <HashTags hashtags={feed.hashtag} />
 
-            {feed.fclass === "short" && <div className={style["body-content"]}>{feed.body}</div>}
-            {feed.image?.length > 0 && feed.fclass === "short" ? (
-              <div className={style["image-container"]}>
-                <div
-                  ref={scrollRef}
-                  className={`${style["image-origin"]} ${style["two-over-image"]}`}
-                  onMouseDown={dragHandlers.onMouseDown}
-                  onMouseMove={dragHandlers.onMouseMove}
-                  onMouseUp={dragHandlers.onMouseUp}
-                >
-                  {feed.num_image >= 2 ? (
-                    feed.image.map((img, i) => {
-                      return <img key={i} src={img} alt="image" />;
-                    })
-                  ) : (
-                    <img src={feed.image[0]} alt="image" />
-                  )}
-                </div>
-              </div>
-            ) : null}
+            {
+              /**
+               * 
+              *{feed.image?.length > 0 === "short" ? (
+                *<div className={style["image-container"]}>
+                  *<div
+                    *ref={scrollRef}
+                    *className={`${style["image-origin"]} ${style["two-over-image"]}`}
+                    *onMouseDown={dragHandlers.onMouseDown}
+                    *onMouseMove={dragHandlers.onMouseMove}
+                    *onMouseUp={dragHandlers.onMouseUp}
+                  *>
+                    *{feed.num_image >= 2 ? (
+                      *feed.image.map((img, i) => {
+                        *return <img key={i} src={img} alt="image" />;
+                      *})
+                    *) : (
+                      *<img src={feed.image[0]} alt="image" />
+                    *)}
+                  *</div>
+                *</div>
+              *) : null}
+               * 
+               */
+            }
 
             {<Viewer initialValue={feed.raw_body} />}
           </div>
@@ -167,36 +164,9 @@ export function ContentFeed({ detailPage, feed, handleCheckStar, links, fetchRep
           }}
         >
           <FeedHeader date={feed.date} nickname={feed.nickname} />
-          <AIFilter
-            isReworked={feed.is_reworked}
-            fid={feed.fid}
-            fetchOriginalText={fetchOriginalText}
-          />
 
           <div className={`${style["body-container"]} ${detailPage ? "" : style["long-form-hidden"]}`}>
             <HashTags hashtags={feed.hashtag} />
-
-            {feed.fclass === "short" && <div className={style["body-content"]}>{feed.body}</div>}
-            {feed.image?.length > 0 && feed.fclass === "short" ? (
-              <div className={style["image-container"]}>
-                <div
-                  ref={scrollRef}
-                  className={`${style["image-origin"]} ${style["two-over-image"]}`}
-                  onMouseDown={dragHandlers.onMouseDown}
-                  onMouseMove={dragHandlers.onMouseMove}
-                  onMouseUp={dragHandlers.onMouseUp}
-                >
-                  {feed.num_image >= 2 ? (
-                    feed.image.map((img, i) => {
-                      return <img key={i} src={img} alt="image" />;
-                    })
-                  ) : (
-                    <img src={feed.image[0]} alt="image" />
-                  )}
-                </div>
-              </div>
-            ) : null}
-
             {<Viewer initialValue={feed.raw_body} />}
           </div>
 
@@ -219,31 +189,6 @@ function FeedHeader({ date, nickname }) {
     <div className={style["user-container"]}>
       <div>{date}</div>
       <div>{nickname}</div>
-    </div>
-  );
-}
-
-function AIFilter({ isReworked, fid, fetchOriginalText }) {
-  if (!isReworked) {
-    return null;
-  }
-  return (
-    <div className={style["AI_container"]}>
-      <div className={style["AI_text_info"]}>
-        <span>
-          <img src={info_icon} alt="info" />
-        </span>
-        본 게시글의 본문은 AI에 의해 필터링 되었습니다.
-      </div>
-      <button
-        onClick={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          fetchOriginalText(fid);
-        }}
-      >
-        원문 보기
-      </button>
     </div>
   );
 }
@@ -376,24 +321,3 @@ function LinkSection({ links }) {
     </>
   );
 }
-
-// function QuizOption({ feed, interaction, handleInteraction }) {
-//   return (
-//     <ol className={style["quiz-container"]}>
-//       {interaction &&
-//         interaction?.choice?.map((option, i) => {
-//           return (
-//             <li
-//               key={i}
-//               onClick={(e) => {
-//                 e.stopPropagation();
-//                 handleInteraction(e, interaction.fid, i);
-//               }}
-//             >
-//               {i + 1}. {option} / {interaction.result[i]}
-//             </li>
-//           );
-//         })}
-//     </ol>
-//   );
-// }

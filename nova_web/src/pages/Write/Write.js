@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useNavigate, useParams } from "react-router-dom";
 import style from "./WriteFeed.module.css";
@@ -6,7 +6,6 @@ import tag from "./../../img/tag.svg";
 import add_icon from "./../../img/add.svg";
 import close_icon from "./../../img/close.svg";
 import img_icon from "./../../img/image.png";
-import vote_icon from "./../../img/vote.png";
 import link_icon from "./../../img/link.png";
 import EditorBox from "../../component/EditorBox.js";
 import postApi from "../../services/apis/postApi.js";
@@ -17,46 +16,34 @@ import DropDown from "../../component/DropDown/DropDown.js";
 import Input from "../../component/Input/Input.js";
 import Button from "../../component/Button/Button.js";
 import mainApi from "../../services/apis/mainApi.js";
-import { use } from "react";
 import DesktopLayout from "../../component/DesktopLayout/DeskTopLayout.jsx";
 
 const categoryData = [
   { key: 0, category: "자유게시판" },
-  { key: 1, category: "팬아트" },
-  { key: 2, category: "유머게시판" },
-  { key: 3, category: "스토리게시판" },
+  { key: 1, category: "아트" },
+  { key: 2, category: "후기" },
 ];
 
-const Write = ({ brightmode}) => {
+const Write = () => {
   const isMobile = useMediaQuery('(max-width:1100px)');
   const param = useParams();
-  const type = "long"
   const navigate = useNavigate();
   const editorRef = useRef();
 
-  //const { fid } = useParams();
-  //const fid = "0cb7-f17f-46ef-eh3YRX";
-
   let [showModal, setShowModal] = useState(false);
-  let [showVoteModal, setShowVoteModal] = useState(false);
   let [showLinkModal, setShowLinkModal] = useState(false);
   let [linkTitle, setLinkTitle] = useState("");
   let [linkUrl, setLinkUrl] = useState("");
   let [linkList, setLinkList] = useState([]);
   let [longData, setLongData] = useState();
-  let [initFeedData, setInitFeedData] = useState({});
   let [initialValue, setInitialValue] = useState("");
   let [user, setUser] = useState("");
   let [category, setCategory] = useState("선택 없음");
-  let [date, setDate] = useState("");
 
   let [biasId, setBiasId] = useState();
 
   function onClickModal() {
     setShowModal(!showModal);
-  }
-  function onClickVoteModal() {
-    setShowVoteModal(!showVoteModal);
   }
   function onClickLinkModal() {
     setShowLinkModal(!showLinkModal);
@@ -83,9 +70,6 @@ const Write = ({ brightmode}) => {
         }
         return 
       })
-      .then((data) => {
-        //console.log(data);
-      })
       .catch((error) => {
         if (error.response.status == 401){
           alert("로그인이 필요합니다.");
@@ -102,7 +86,6 @@ const Write = ({ brightmode}) => {
         alert("잘못된 접근입니다.");
         navigate("/");
       }
-      setInitFeedData(res.data.body.feed[0]);
       setTagList(res.data.body.feed[0].hashtag);
       setLinkList(res.data.body.links);
       setInitialValue(res.data.body.feed[0].raw_body);
@@ -149,14 +132,8 @@ const Write = ({ brightmode}) => {
 
   const [imagePreview, setImagePreview] = useState([]);
   const [imageFiles, setImageFiles] = useState([]);
-
-  const [bodyText, setBodyText] = useState(""); // 글 입력 내용 상태로 저장
-  const [choice, setChoice] = useState([]); // 선택지 4개 상태로 저장
   let [inputTagCount, setInputTagCount] = useState(0); //글자수
-  let [inputBodyCount, setInputBodyCount] = useState(0); //글자수
-
   let [numLink, setNumLink] = useState(0);
-  let [createOptions, setCreateOptions] = useState(0);
 
   function onClickAddLink() {
     setNumLink(numLink + 1);
@@ -166,73 +143,22 @@ const Write = ({ brightmode}) => {
     setLinkUrl("");
   }
 
-  function onClickAdd() {
-    setChoice([...choice, ""]);
-    setCreateOptions((prev) => prev + 1);
-  }
-
-  function onDeleteOption(i) {
-    setChoice((prevChoices) => prevChoices.filter((_, index) => index !== i));
-    setCreateOptions((prev) => Math.max(0, prev - 1));
-  }
 
   function handleRemoveImg(i) {
     setImagePreview((prev) => prev.filter((_, index) => index !== i));
     setImageFiles((prev) => prev.filter((_, index) => index !== i));
   }
 
-  let [currentFileName, setCurrentFileName] = useState([]);
-
-  //const handleFileChange = (event) => {
-    //const files = Array.from(event.target.files);
-    //const names = files.map((file) => file.name);
-    //if (names) {
-      //setCurrentFileName(names);
-    //} else {
-      //setCurrentFileName([""]);
-    //}
-    //const selectedFile = Array.from(event.target.files);
-    //const validFiles = selectedFile.filter((file) => file.type.startsWith("image/"));
-
-    //if (validFiles.length < selectedFile.length) {
-      //alert("이미지 파일만 가능");
-    //}
-
-    //setImageFiles((prevFiles) => [...prevFiles, ...validFiles]);
-
-    //const previewUrls = validFiles.map((file) => {
-      //return URL.createObjectURL(file);
-    //});
-
-    //setImagePreview((prevUrls) => [...prevUrls, ...previewUrls]);
-    //validFiles.forEach((file) => URL.revokeObjectURL(file));
-  //};
 
 
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files);
-    const names = files.map((file) => file.name);
-
-    // 파일 이름 업데이트
-    if (names) {
-      setCurrentFileName(names);
-    } else {
-      setCurrentFileName([""]);
-    }
-
     // 유효한 이미지 파일 필터링
     const validFiles = files.filter((file) => file.type.startsWith("image/"));
 
     if (validFiles.length < files.length) {
       alert("이미지 파일만 가능합니다.");
     }
-
-    // 이미지 파일 추가
-    //setImageFiles((prevFiles) => [...prevFiles, ...validFiles]);
-
-    // 이미지 미리보기 URL 생성
-    //const previewUrls = validFiles.map((file) => URL.createObjectURL(file));
-    //setImagePreview((prevUrls) => [...prevUrls, ...previewUrls]);
 
     const editorInstance = editorRef.current?.getInstance();
 
@@ -255,20 +181,15 @@ const Write = ({ brightmode}) => {
   const handleSubmit = (event) => {
     event.preventDefault(); // 기본 동작을 막음 (중요)
 
-    const loadingText = toast.loading("업로드 중입니다..");
     const send_data = {
       header: header,
       body: {
-        body: bodyText || longData, // 입력된 글 본문 반영
+        body: longData, // 입력된 글 본문 반영
         fid: param.fid || "",
-        fclass: type,
-        choice: choice, // 4지선다 선택지 반영
         hashtag: tagList,
         link: linkList,
         bid: biasId,
-        category: category,
-        image_names: "",
-        date : ""
+        category: category
       },
     };
 
@@ -288,23 +209,15 @@ const Write = ({ brightmode}) => {
       .then((response) => {
         response.json();
       })
-      .then((data) => {
+      .then(() => {
         toast.success("업로드가 완료되었습니다.");
-        // alert("업로드가 완료되었습니다.");
         navigate("/");
       })
       .catch((error) => {
         toast.error("업로드 실패!");
-        // console.error("Error:", error);
-        // alert("업로드 실패!");
       });
   };
 
-  const handleChoiceChange = (index, value) => {
-    const newChoices = [...choice];
-    newChoices[index] = value;
-    setChoice(newChoices); // 4지선다 선택지 업데이트
-  };
 
   function onDeleteLink(i) {
     setLinkList((prev) => prev.filter((_, index) => index !== i));
@@ -355,14 +268,6 @@ const Write = ({ brightmode}) => {
     setTagList(updatedTags); // 업데이트된 해시태그 리스트를 상태에 설정
   };
 
-  function onChangeBody(e) {
-    const inputText = e.target.value;
-
-    if (inputText.length <= 300) {
-      setBodyText(e.target.value);
-      setInputBodyCount(e.target.value.length);
-    }
-  }
 
   function onClickUpload() {
     if (!isUserState) {
@@ -371,18 +276,6 @@ const Write = ({ brightmode}) => {
     }
   }
   let { biasList } = useBiasStore();
-
-  const [showTopic, setShowTopic] = useState(false);
-  const [currentTopic, setCurrentTopic] = useState("선택 없음");
-  function onClickTopic() {
-    setShowTopic(!showTopic);
-  }
-
-  function onClickSelectTopic(e) {
-    // //console.log(e.target.innerText);
-    setCurrentTopic(e.target.innerText);
-    setShowTopic(!showTopic);
-  }
 
   if (isMobile){
     return (
@@ -398,8 +291,7 @@ const Write = ({ brightmode}) => {
           >
             취소
           </p>
-          {type === "long" && <p>포스트 작성</p>}
-          {type === "short" && <p>모멘트 작성</p>}
+          <p>포스트 작성</p>
 
           <p
             className={style["buttons"]}
@@ -478,53 +370,23 @@ const Write = ({ brightmode}) => {
         </div>
 
         <div className={style["content_container"]}>
-
-          {type === "short" && (
-            <>
-              <textarea
-                className={style["write_body"]}
-                name="body"
-                placeholder="내용을 입력해주세요"
-                value={bodyText}
-                onChange={onChangeBody}
-              />
-              <span className={style["count-text"]}>{inputBodyCount}/300</span>
-            </>
-          )}
-
-          {type === "long" && <EditorBox setLongData={setLongData} editorRef={editorRef} initialValue={initialValue}/>}
+          <EditorBox setLongData={setLongData} editorRef={editorRef} initialValue={initialValue}/>
         </div>
 
-        {type === "short" && (
-          <p className={style["alert_message"]}>모멘트 게시글은 작성 후 24시간 동안 노출됩니다.</p>
-        )}
-        {type === "long" && (
-          <p className={style["alert_message"]}>
-            작성 규정을 위반한 게시글은 경고 없이 삭제 될 수 있습니다.
-          </p>
-        )}
+        <p className={style["alert_message"]}>
+          작성 규정을 위반한 게시글은 경고 없이 삭제 될 수 있습니다.
+        </p>
 
         <div className={style["content_button"]}>
-          {type === "long" && (
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onClickModal();
-              }}
-            >
-              <img src={img_icon} alt="img" />
-              이미지
-            </button>
-          )}
-          {/* <button
+          <button
             onClick={(e) => {
               e.stopPropagation();
-              onClickVoteModal();
+              onClickModal();
             }}
           >
-            <img src={vote_icon} alt="img" />
-            투표
-          </button> */}
+            <img src={img_icon} alt="img" />
+            이미지
+          </button>
           <button
             onClick={(e) => {
               e.stopPropagation();
@@ -539,23 +401,8 @@ const Write = ({ brightmode}) => {
           <Modal
             onClickModal={onClickModal}
             handleFileChange={handleFileChange}
-            handleRemoveImg={handleRemoveImg}
-            imagePreview={imagePreview}
-            currentFileName={currentFileName}
-            imageFiles={imageFiles}
           />
         )}
-        {/* {showVoteModal && (
-          <VoteModal
-            onClickModal={onClickVoteModal}
-            createOptions={createOptions}
-            onClickAdd={onClickAdd}
-            onClickDelete={onDeleteOption}
-            handleChoiceChange={handleChoiceChange}
-            choice={choice}
-            setChoice={setChoice}
-          />
-        )} */}
         {showLinkModal && (
           <LinkModal
             onClickModal={onClickLinkModal}
@@ -569,11 +416,9 @@ const Write = ({ brightmode}) => {
           />
         )}
       </div>
-      // {/* </form> */}
     );
 
   }else{
-    // <form onSubmit={handleSubmit}>
     return (
       <DesktopLayout>
         <div className={style["WriteFeed"]}>
@@ -587,8 +432,7 @@ const Write = ({ brightmode}) => {
             >
               취소
             </p>
-            {type === "long" && <p>포스트 작성</p>}
-            {type === "short" && <p>모멘트 작성</p>}
+            <p>포스트 작성</p>
 
             <p
               className={style["buttons"]}
@@ -668,52 +512,23 @@ const Write = ({ brightmode}) => {
 
           <div className={style["content_container"]}>
 
-            {type === "short" && (
-              <>
-                <textarea
-                  className={style["write_body"]}
-                  name="body"
-                  placeholder="내용을 입력해주세요"
-                  value={bodyText}
-                  onChange={onChangeBody}
-                />
-                <span className={style["count-text"]}>{inputBodyCount}/300</span>
-              </>
-            )}
-
-            {type === "long" && <EditorBox setLongData={setLongData} editorRef={editorRef} initialValue={initialValue}/>}
+            <EditorBox setLongData={setLongData} editorRef={editorRef} initialValue={initialValue}/>
           </div>
 
-          {type === "short" && (
-            <p className={style["alert_message"]}>모멘트 게시글은 작성 후 24시간 동안 노출됩니다.</p>
-          )}
-          {type === "long" && (
-            <p className={style["alert_message"]}>
-              작성 규정을 위반한 게시글은 경고 없이 삭제 될 수 있습니다.
-            </p>
-          )}
+          <p className={style["alert_message"]}>
+            작성 규정을 위반한 게시글은 경고 없이 삭제 될 수 있습니다.
+          </p>
 
           <div className={style["content_button"]}>
-            {type === "long" && (
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onClickModal();
-                }}
-              >
-                <img src={img_icon} alt="img" />
-                이미지
-              </button>
-            )}
-            {/* <button
+            <button
               onClick={(e) => {
                 e.stopPropagation();
-                onClickVoteModal();
+                onClickModal();
               }}
             >
-              <img src={vote_icon} alt="img" />
-              투표
-            </button> */}
+              <img src={img_icon} alt="img" />
+              이미지
+            </button>
             <button
               onClick={(e) => {
                 e.stopPropagation();
@@ -728,23 +543,8 @@ const Write = ({ brightmode}) => {
             <Modal
               onClickModal={onClickModal}
               handleFileChange={handleFileChange}
-              handleRemoveImg={handleRemoveImg}
-              imagePreview={imagePreview}
-              currentFileName={currentFileName}
-              imageFiles={imageFiles}
             />
           )}
-          {/* {showVoteModal && (
-            <VoteModal
-              onClickModal={onClickVoteModal}
-              createOptions={createOptions}
-              onClickAdd={onClickAdd}
-              onClickDelete={onDeleteOption}
-              handleChoiceChange={handleChoiceChange}
-              choice={choice}
-              setChoice={setChoice}
-            />
-          )} */}
           {showLinkModal && (
             <LinkModal
               onClickModal={onClickLinkModal}
@@ -758,15 +558,9 @@ const Write = ({ brightmode}) => {
             />
           )}
         </div>
-
       </DesktopLayout>
-      // {/* </form> */}
     );
-
   }
-
-
-
 };
 
 export default Write;
@@ -774,22 +568,11 @@ export default Write;
 export const Modal = ({
   onClickModal,
   handleFileChange,
-  imagePreview,
-  currentFileName,
-  imageFiles,
-  handleRemoveImg,
 }) => {
   return (
     <ModalWrapper title={"이미지 추가"}>
       <div className={style["image-container"]}>
         <ImageUploader handleFileChange={handleFileChange} />
-        {/** 
-        <ImagePreview
-          imagePreview={imagePreview}
-          imageFiles={imageFiles}
-          handleRemoveImg={handleRemoveImg}
-        />
-        */}
       </div>
 
       <div className={style["modal-buttons"]}>
@@ -849,70 +632,6 @@ export function ImageUploader({ handleFileChange }) {
     </>
   );
 }
-
-// export function VoteModal({
-//   onClickModal,
-//   createOptions,
-//   onClickAdd,
-//   onClickDelete,
-//   handleChoiceChange,
-//   optionValue,
-//   choice,
-//   setChoice,
-// }) {
-//   let optionRef = useRef(0);
-
-//   return (
-//     <div className={style["wrapper-container"]}>
-//       <div className={style["modal-container"]}>
-//         <div className={style["modal-title"]}>투표 추가</div>
-//         <div className={style["image-container"]}>
-//           {choice.map((option, i) => {
-//             return (
-//               <div key={i} className={style["vote-option-wrapper"]}>
-//                 <button
-//                   className={`${style["delete-option"]} ${style["remove-icon"]}`}
-//                   onClick={() => {
-//                     onClickDelete(i);
-//                   }}
-//                 >
-//                   <img src={close_icon} alt="remove" />
-//                 </button>
-//                 <input
-//                   ref={optionRef}
-//                   id={style["vote-option"]}
-//                   name="option"
-//                   type="text"
-//                   value={option}
-//                   placeholder="이곳을 눌러 수정"
-//                   onChange={(e) => {
-//                     handleChoiceChange(i, e.target.value);
-//                   }}
-//                 />
-//               </div>
-//             );
-//           })}
-//           {createOptions < 4 && (
-//             <div className={style["option-box"]} onClick={onClickAdd}>
-//               <span className={style["add-icon"]}>
-//                 <img src={add_icon} alt="add" />
-//               </span>
-//               선택지를 추가하려면 여기를 클릭하세요
-//             </div>
-//           )}
-//         </div>
-//         <div className={style["modal-buttons"]}>
-//           <Button type={"close"} onClick={onClickModal}>
-//             닫기
-//           </Button>
-//           <Button type={"apply"} disabled={choice.length === 0} onClick={onClickModal}>
-//             적용
-//           </Button>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
 
 export function LinkModal({
   onClickModal,

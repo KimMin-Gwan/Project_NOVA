@@ -1,7 +1,7 @@
 from model.base_model import BaseModel
 from model import Mongo_Database
 from others import CoreControllerLogicError,FeedManager, FeedSearchEngine 
-from others import Comment, Feed, User, Interaction, FeedLink
+from others import Comment, Feed, User, FeedLink
 from pprint import pprint
 
 
@@ -11,7 +11,6 @@ class FeedModel(BaseModel):
         self._feeds = []
         self._key = -1
         self._comments = []
-        self._interaction = Interaction()
         self._send_data = []
         self._links = []
     

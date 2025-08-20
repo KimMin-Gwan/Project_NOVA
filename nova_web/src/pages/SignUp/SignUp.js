@@ -8,10 +8,9 @@ export default function SignUp() {
   let [code, setCode] = useState("");
   let [pwd, setPwd] = useState("");
   let [checkPwd, setCheckPwd] = useState("");
-  let [age, setAge] = useState("");
+  let [birthYear, setBirthYear] = useState("");
   let [gender, setGender] = useState("");
 
-  let [result, setResult] = useState(false);
   let navigate = useNavigate();
   const [agree1, setAgree1] = useState(false);
   const [agree2, setAgree2] = useState(false);
@@ -46,7 +45,7 @@ export default function SignUp() {
       email: inputEmail,
       password: pwd,
       verification_code: code,
-      age: age,
+      birth_year: birthYear,
       gender: gender,
     },
   };
@@ -78,12 +77,13 @@ export default function SignUp() {
     }
   }
 
-  function handleAge(e) {
+  function handleBirthYear(e) {
     const value = e.target.value;
     if (/^\d*$/.test(value)) {
-      setAge(value);
+      setBirthYear(value);
     }
   }
+
   function handleKeyDown(e) {
     if (!/[0-9]/.test(e.key) && e.key !== "Backspace" && e.key !== "Delete" && e.key !== "Tab") {
       e.preventDefault();
@@ -110,7 +110,6 @@ export default function SignUp() {
     })
       .then((response) => response.json())
       .then((data) => {
-        //console.log(data.body.detail);
         const newAuthen = data.body.result;
         setAuthen(newAuthen);
 
@@ -132,14 +131,12 @@ export default function SignUp() {
     })
       .then((response) => response.json())
       .then((data) => {
-        //console.log(data);
         if (data.body.result) {
           alert("회원가입이 완료되었습니다.");
           navigate("/novalogin");
         } else {
           alert("회원가입 실패");
         }
-        // setResult(data.body.result);
       });
   }
 
@@ -153,12 +150,6 @@ export default function SignUp() {
     fetchSignUp();
   }
 
-  // function handleStart() {
-  //     if (result) {
-  //         alert('회원가입이 완료되었습니다.');
-  //         navigate('/novalogin');
-  //     }
-  // };
   const handleAllAgreeChange = (e) => {
     const isChecked = e.target.checked;
     setAllAgree(isChecked);
@@ -268,7 +259,7 @@ export default function SignUp() {
               나이
               <br />
               <label>
-                <input type="number" name="age" value={age} min="0" max="100" required onChange={handleAge} onKeyDown={handleKeyDown} placeholder="20" />
+                <input type="number" name="age" value={age} min="0" max="100" required onChange={handleBirthYear} onKeyDown={handleKeyDown} placeholder="20" />
               </label>
             </div>
           </div>

@@ -136,8 +136,8 @@ class Schedule(SampleDomain):
 class User(SampleDomain):
     def __init__(self, uid = "", uname = "지지자", birth_year=0, 
                  email = "", gender = "d" ,
-                 credit = 0, bids=[], num_long_feed=0, num_short_feed=0, num_comment=0,
-                 password = "", alert= [], like=[], my_comment=[],
+                 bids=[], num_long_feed=0, num_comment=0,
+                 password = "", like=[], my_comment=[],
                  my_feed = []):
 
         self.uid = uid
@@ -245,7 +245,7 @@ class Bias(SampleDomain):
 class Feed(SampleDomain):
     def __init__(self, fid="", uid="", body="", date="",
                  display=4, like=0, board_type="", image=None, hashtag=None, bname="",
-                 comment=None, lid="", bid="", raw_body ="", p_body=""):
+                 comment=None, lid="", bid="", raw_body =""):
         if image is None:
             image = []
         if hashtag is None:

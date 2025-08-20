@@ -239,18 +239,18 @@ class ManagedTable:
         # 리스트로 반환합니다.
         return list(time_sections)
 
-
-
-    # table list DataFrame화
+    # table list DataFrame만들기
     def _dataframing_table(self, data_table:list):
+        if not data_table:
+            logging.error("데이터 테이블이 비어있음")
+            return pd.DataFrame()
+        
         # ManagedFeed들은 객체이므로, 딕셔너리화 시켜서 리스트로 만든다.
         managed_dict_list = [managed_data.to_dict() for managed_data in data_table]
         data_df = pd.DataFrame(managed_dict_list)
         # 데이터프레임을 정렬함
         data_df = data_df.sort_values(by='date', ascending=False).reset_index(drop=True)
         return data_df
-
-
 
     # 데이터 프레임 삽입 / 삭제 / 편집
     def _add_new_data_in_df(self, df:pd.DataFrame, new_dict_data:dict, **condition):
@@ -679,8 +679,8 @@ class ManagedFeedBiasTable(ManagedTable):
 
         # 데이터 프레임화
         self.__feed_df = self._dataframing_table(data_table=self.__feed_table)
-        self.__feed_df = self.__feed_df.sort_values(by='date', ascending=False).reset_index(drop=True)
-
+        if not self.__feed_df.empty:
+            self.__feed_df = self.__feed_df.sort_values(by='date', ascending=False).reset_index(drop=True)
 
         num_feed = str(len(self.__feed_table))
 

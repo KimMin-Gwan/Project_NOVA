@@ -4,10 +4,8 @@ from collections import Counter
 from model.base_model import BaseModel
 from model import Mongo_Database
 from others.data_domain import TimeTableUser as TUser
-from others.data_domain import Schedule, ScheduleBundle, ScheduleEvent, Bias, User
-
+from others.data_domain import Schedule, Bias, User
 from others.time_table_engine import ScheduleSearchEngine as SSE
-from others import ManagedSchedule
 
 from pprint import pprint
 from datetime import datetime,timedelta, time, date
@@ -192,70 +190,6 @@ class TimeScheduleModel(ScheduleTransformModel):
 
     def get_response_form_data(self):
         return self._schedules
-
-# 일정 스케줄 이벤트 데이터 폼 모델
-class TimeEventModel(ScheduleTransformModel):
-    def __init__(self) -> None:
-        super().__init__()
-        self._events = []
-
-    # Event 보낼 거 만드는 함수
-    def _tevent_data(self, event:ScheduleEvent):
-        time_event_data = {}
-
-        time_event_data["seid"] = event.seid
-        time_event_data["sename"] = event.sename
-        time_event_data["bid"] = event.bid
-        time_event_data["bname"] = event.bname
-        time_event_data["uid"] = event.uid
-        time_event_data["uname"] = event.uname
-        time_event_data["date"] = self._transfer_date_str(datetime.strptime(event.date,"%Y/%m/%d"))
-        time_event_data["start"] = self._calculate_day_hour_time(datetime.strptime(event.start_time, "%H:%M"))
-        time_event_data["end"] = self._calculate_day_hour_time(datetime.strptime(event.end_time, "%H:%M"))
-        time_event_data["sids"] = event.sids
-        time_event_data["platform"] = self._linked_str(event.platform)
-
-        return time_event_data
-
-    # 이벤트 딕셔너리 데이터 리스트를 만드는 곳
-    def get_tevent_list(self, events):
-        for event in events:
-            self._events.append(self._tevent_data(event))
-
-        return
-
-    def get_response_form_data(self):
-        return self._events
-
-# 일정 스케줄 번들 전송 데이터 폼 모델
-class TimeScheduleBundleModel(ScheduleTransformModel):
-    def __init__(self) -> None:
-        super().__init__()
-        self._schedule_bundles = []
-
-    def _time_schedule_bundle(self, schedule_bundle:ScheduleBundle):
-        time_schedule_bundle_data = {}
-
-        time_schedule_bundle_data["sbid"] = schedule_bundle.sbid
-        time_schedule_bundle_data["sbname"] = schedule_bundle.sbname
-        time_schedule_bundle_data["bid"] = schedule_bundle.bid
-        time_schedule_bundle_data["bname"] = schedule_bundle.bname
-        time_schedule_bundle_data["uid"] = schedule_bundle.uid
-        time_schedule_bundle_data["uname"] = schedule_bundle.uname
-        time_schedule_bundle_data["sids"] = schedule_bundle.sids
-        time_schedule_bundle_data["date"] = self._transfer_date_str_list(schedule_bundle.date)
-        time_schedule_bundle_data["platform"] = self._linked_str(schedule_bundle.platform)
-
-        return time_schedule_bundle_data
-
-    def get_tschedule_bundle_list(self, schedule_bundles):
-        for schedule_bundle in schedule_bundles:
-            self._schedule_bundles.append(self._time_schedule_bundle(schedule_bundle))
-
-        return
-
-    def get_response_form_data(self):
-        return self._schedule_bundles
 
 # ------------------------------------ 기본 타임 테이블 모델 ------------------------------------------
 class TimeTableModel(BaseModel):
@@ -452,10 +386,6 @@ class TimeTableModel(BaseModel):
     # 현재 시간이 end_date/ end_time을 넘기면 True, 아니면 False다.
     def __check_schedule_time(self, date:str, when:str, time:str=""):
         # # 날짜 데이터
-        # if bundle:
-        #     date_obj = datetime.strptime(date, "%y년 %m월 %d일")
-        # else:
-        #     date_obj = datetime.strptime(date, "%Y/%m/%d")
 
         date_obj = datetime.strptime(date, "%Y/%m/%d")
 
@@ -479,10 +409,6 @@ class TimeTableModel(BaseModel):
         schedule_id_type = ""
         if search_type == "schedule" or search_type=="sid":
             schedule_id_type = "sid"
-        elif search_type == "schedule_bundle" or search_type == "sbid":
-            schedule_id_type = "sbid"
-        # elif search_type == "event" or search_type == "seid":
-        #     schedule_id_type = "seid"
 
         searched_data = self._database.get_datas_with_ids(target_id=schedule_id_type, ids=id_list)
 
@@ -509,30 +435,6 @@ class TimeTableModel(BaseModel):
                 elif filter_option == "not_end":
                     if not self.__check_schedule_time(date=schedule.end_date, time=schedule.end_time, when="end"):
                         filtered_id_list.append(schedule.sid)
-
-            elif schedule_id_type == "sbid":
-                schedule_bundle = ScheduleBundle()
-                schedule_bundle.make_with_dict(dict_data=data)
-
-                if filter_option == "ended":
-                    # 종료된 일정 번들
-                    if self.__check_schedule_time(date=schedule_bundle.date[1], when="end"):
-                        filtered_id_list.append(schedule_bundle.sbid)
-                elif filter_option == "in_progress":
-                    # 종료되지 않은 일정 번들
-                    if not self.__check_schedule_time(date=schedule_bundle.date[1], when="end"):
-                        # 시작한 일정 번들
-                        if not self.__check_schedule_time(date=schedule_bundle.date[0], when="start"):
-                            filtered_id_list.append(schedule_bundle.sbid)
-                elif filter_option == "not_start":
-                    # 시작하지 않은 일정 번들
-                    if self.__check_schedule_time(date=schedule_bundle.date[0], when="start"):
-                        filtered_id_list.append(schedule_bundle.sbid)
-
-                elif filter_option == "not_end":
-                    if not self.__check_schedule_time(date=schedule_bundle.date[1], when="end"):
-                        filtered_id_list.append(schedule_bundle.sbid)
-
 
         return filtered_id_list
 
@@ -581,14 +483,10 @@ class SingleScheduleModel(TimeTableModel):
     def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)
         self.__schedule = Schedule()
-        self.__schedule_event = ScheduleEvent()
-        self.__schedule_bundle = ScheduleBundle()
 
     def get_response_form_data(self, head_parser):
         body = {
             "schedule" : self.__schedule.get_dict_form_data(),
-            "schedule_event" : self.__schedule_event.get_dict_form_data(),
-            "schedule_bundle" : self.__schedule_bundle.get_dict_form_data(),
             "key" : self._key
             }
 
@@ -601,8 +499,6 @@ class MultiScheduleModel(TimeTableModel):
     def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)
         self.__schedules:list = []
-        self.__schedule_events:list = []
-        self.__schedule_bundles:list = []
         self.__biases:list = []
 
     # 바이어스 서치 함수
@@ -639,10 +535,6 @@ class MultiScheduleModel(TimeTableModel):
         schedule_id_type = ""
         if search_type == "schedule" or search_type=="sid":
             schedule_id_type = "sid"
-        elif search_type == "schedule_bundle" or search_type == "sbid":
-            schedule_id_type = "sbid"
-        elif search_type == "event" or search_type == "seid":
-            schedule_id_type = "seid"
         elif search_type == "bias" or search_type == "bid":
             schedule_id_type = "bid"
 
@@ -653,16 +545,6 @@ class MultiScheduleModel(TimeTableModel):
                 schedule = Schedule()
                 schedule.make_with_dict(data)
                 self.__schedules.append(schedule)
-
-            elif schedule_id_type == "seid":
-                schedule_event = ScheduleEvent()
-                schedule_event.make_with_dict(data)
-                self.__schedule_events.append(schedule_event)
-
-            elif schedule_id_type == "sbid":
-                schedule_bundle = ScheduleBundle()
-                schedule_bundle.make_with_dict(data)
-                self.__schedule_bundles.append(schedule_bundle)
 
             elif schedule_id_type == "bid":
                 bias = Bias()
@@ -678,8 +560,6 @@ class MultiScheduleModel(TimeTableModel):
     def _make_send_data_with_datas(self):
         # 데이터 변환 모델
         schedule_model = TimeScheduleModel()
-        schedule_event_model = TimeEventModel()
-        schedule_bundle_model = TimeScheduleBundleModel()
         schedule_bias_model = TimeBiasModel()
 
         # 이미 등록 했는지 확인하는 함수
@@ -692,116 +572,14 @@ class MultiScheduleModel(TimeTableModel):
 
         # 데이터 변환
         schedule_model.get_tschedule_list(schedules=self.__schedules)
-        schedule_event_model.get_tevent_list(events=self.__schedule_events)
-        schedule_bundle_model.get_tschedule_bundle_list(schedule_bundles=self.__schedule_bundles)
         schedule_bias_model.get_tbias_list(biases=self.__biases)
 
         # 반환받은 건 딕셔너리 리스트
         self.__schedules = schedule_model.get_response_form_data()
-        self.__schedule_events = schedule_event_model.get_response_form_data()
-        self.__schedule_bundles = schedule_bundle_model.get_response_form_data()
         self.__biases = schedule_bias_model.get_response_form_data()
 
         return
 
-    # 안 씀
-    # 내가 이벤트 스케줄 데이터 뽑기를 날짜로
-    # date는 날짜임 , 형태는 2025/03/06 임
-    # date안넣으면 기본적으로 오늘자로 감
-    # def set_my_event_in_by_day(self, date:str=""):
-    #     if not date:
-    #         date = datetime.today().strftime("%Y/%m/%d")
-    #
-    #     # 내가 추가한 이벤트를 다 가지고 옴
-    #     schedule_event_datas = self._database.get_datas_with_ids(target_id="seid", ids=self._tuser.seids)
-    #
-    #     # 필요하면 갯수 제한도 두삼
-    #     for schedule_event_data in schedule_event_datas:
-    #         schedule_event = ScheduleEvent()
-    #         schedule_event.make_with_dict(dict_data=schedule_event_data)
-    #         # 여기서 날짜랑 맞는지 필터링 함
-    #         if date==schedule_event.date:
-    #             self.__schedule_events.append(schedule_event)
-    #
-    #     # 스케줄 이벤트 데이터 폼 수정
-    #     self._make_send_data_with_datas()
-    #
-    #     return
-
-    # 안 씀
-    # 전체 이벤트 데이터 뽑기를 날짜로
-    # date는 날짜임 , 형태는 2025/03/06 임
-    # date안넣으면 기본적으로 오늘자로 감
-    # def set_event_in_by_day(self, date:str=""):
-    #
-    #     if date == "":
-    #         date = datetime.today().strftime("%Y/%m/%d")
-    #
-    #     # 이건 데이터 베이스에서 해당 날짜 이벤트만 전부다 뽑는거임
-    #     schedule_event_datas = self._database.get_datas_with_key(target="seid", key="date", key_datas=[date])
-    #
-    #     # 필요하면 갯수 제한도 두삼
-    #     for schedule_event_data in schedule_event_datas:
-    #         schedule_event = ScheduleEvent()
-    #         schedule_event.make_with_dict(dict_data=schedule_event_data)
-    #         self.__schedule_events.append(schedule_event)
-    #
-    #     # 스케줄 이벤트 데이터 폼 수정
-    #     self._make_send_data_with_datas()
-    #
-    #     return
-
-
-
-    # 이거 로직 수정필요
-    # schedule_data를 들고올 때, key가 잘못됨.
-    # 전체 스케줄 데이터 뽑기를 날짜로
-    # date는 날짜임 , 형태는 2025/03/06 임
-    # date안넣으면 기본적으로 오늘자로 감
-    # def set_schedule_in_by_day(self, date_str:str=''):
-    #
-    #     if date_str== '':
-    #         date_str=datetime.today().strftime("%Y/%m/%d")
-    #
-    #     # 이건 데이터 베이스에서 해당 날짜 이벤트만 전부다 뽑는거임
-    #     schedule_datas = self._database.get_datas_with_key(target="sid", key="date", key_datas=[date_str])
-    #
-    #     # 필요하면 갯수 제한도 두삼
-    #     for schedule_data in schedule_datas:
-    #         schedule= Schedule()
-    #         schedule.make_with_dict(dict_data=schedule_data)
-    #         self.__schedules.append(schedule)
-    #
-    #     # 스케줄 데이터 폼 수정
-    #     self._make_send_data_with_datas()
-    #
-    #     return
-    #
-    ## 이번주에 노출할 스케줄의 리스트가 최신화 되었는지 확인
-    ## 최신화 안되었으면 이번주 노출할 스케줄 리스트를 비움
-    #def is_this_week_sids_r_updated(self):
-    #if self._tuser.this_week_sids:
-    #schedule_data = self._database.get_data_with_id(target="sid", id=self._tuser.this_week_sids[0])
-    #schedule = Schedule().make_with_dict(dict_data=schedule_data)
-
-    ## 오늘 날짜랑 비교해서 이번주에 홈에 노출할 스케줄인지 체크해야됨
-    #today = datetime.today()
-    #today_week_number = today.isocalendar()[1]
-
-    #target_date = datetime.strptime(schedule.date, "%Y/%m/%d")
-    #target_week_number = target_date.isocalendar()[1]
-
-    ## 년도가 같으면?
-    #if today.year == target_week_number:
-    ## 이번주랑 주차가 다르면 싹다 비워버리면됨
-    #if today_week_number != target_week_number:
-    #self._tuser.this_week_sids.clear()
-    #self._database.modify_data_with_id(target_id="tuid", target_data=self._tuser)
-    ## 년도 다르면 걍 비우면됨
-    #else:
-    #self._tuser.this_week_sids.clear()
-    #self._database.modify_data_with_id(target_id="tuid", target_data=self._tuser)
-    #return
 
     def set_schedule_by_this_week(self):
         schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids=self._tuser.this_week_sids)
@@ -891,16 +669,10 @@ class MultiScheduleModel(TimeTableModel):
         else:
             search_columns_list = [i.strip() for i in search_columns.split(",")]
 
-
         if search_type == "schedule" or search_type == "sid":
             searched_list = schedule_search_engine.try_search_schedule_w_keyword(target_keyword=keyword, search_columns=search_columns_list)
             if when != "": # 진행중인 애만 찾고싶으면
                 searched_list = schedule_search_engine.try_filtering_schedule_in_progress(sids=searched_list, when=when)
-        elif search_type == "schedule_bundle" or search_type == "sbid":
-            searched_list = schedule_search_engine.try_search_bundle_w_keyword(target_keyword=keyword, search_columns=search_columns_list)
-            if when != "": # 진행중인 애만 찾고싶으면
-                searched_list = schedule_search_engine.try_filtering_bundle_in_progress(sbids=searched_list, when=when)
-
 
         searched_list, self._key = self.paging_id_list(id_list=searched_list, last_index=last_index, page_size=num_schedules)
         self._make_send_data_with_ids(id_list=searched_list, search_type=search_type)
@@ -946,17 +718,6 @@ class MultiScheduleModel(TimeTableModel):
 
         return
 
-    # def get_specific_schedules(self, schedule_search_engine:SSE, specific_date:str,
-    #                            num_schedules:int, last_index:int=-1):
-    #     searched_list = schedule_search_engine.try_get_schedules_in_specific_date(sids=["all"],
-    #                                                                               specific_date=specific_date,
-    #                                                                               return_id=True)
-    #     searched_list, self._key = self.paging_id_list(id_list=searched_list, last_index=last_index, page_size=num_schedules)
-    #     self._make_send_data_with_ids(id_list=searched_list, search_type="schedule")
-    #
-    #     return
-
-
 
     # 내가 작성한 스케쥴 가져오기 (수정을 위해서)
     def get_written_schedule(self, sid:str):
@@ -971,18 +732,6 @@ class MultiScheduleModel(TimeTableModel):
 
         return
 
-    # 내가 작성한 스케줄 번들을 가져오기 (수정을 위해서)
-    def get_written_bundle(self, sbid:str):
-        schedule_bundle_data = self._database.get_data_with_id(target="sbid", id=sbid)
-        schedule_bundle = ScheduleBundle()
-        schedule_bundle.make_with_dict(schedule_bundle_data)
-
-        schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids=schedule_bundle.sids)
-        self.__schedules.extend(schedule_datas)
-
-        self.__schedule_bundles.append(schedule_bundle.get_dict_form_data())
-
-        return
 
     # 전송용 폼데이터를 만드는 함수
     def get_print_forms_schedule(self, schedules:list, bid:str):
@@ -1014,8 +763,6 @@ class MultiScheduleModel(TimeTableModel):
     def get_response_form_data(self, head_parser):
         body = {
             "schedules" : self.__schedules,
-            "schedule_events" : self.__schedule_events,
-            "schedule_bundles" : self.__schedule_bundles,
             "biases": self.__biases,
             "key" : self._key
         }
@@ -1100,16 +847,6 @@ class AddScheduleModel(TimeTableModel):
     # 대충 일정 보고 끼워넣는 로직도 있으면 좋겠는데
     def add_schedule(self, sids):
         self._tuser.sids = list(set(self._tuser.sids + sids))
-        self._database.modify_data_with_id(target_id='tuid', target_data=self._tuser.get_dict_form_data())
-        self.__result = True
-        return
-
-    # 이벤트를 추가하는 곳
-    def add_event(self, seid):
-        seids = set(self._tuser.seids)
-        seids.add(seid)
-        self._tuser.seids = list(seids)
-
         self._database.modify_data_with_id(target_id='tuid', target_data=self._tuser.get_dict_form_data())
         self.__result = True
         return
@@ -1200,28 +937,6 @@ class AddScheduleModel(TimeTableModel):
 
         return schedule
 
-    # 스케줄 번들 만들기
-    def make_new_schedule_bundle(self, schedule_list:list, sbname:str, bid:str):
-        schedule_bundle = ScheduleBundle(
-            sbname=sbname,
-            bid=bid,
-            sids= [schedule.sid for schedule in schedule_list]
-        )
-
-        bias_data = self._database.get_data_with_id(target="bid", id=bid)
-        bias = Bias().make_with_dict(bias_data)
-
-        schedule_bundle.sbid = self.__make_new_sbid()
-        schedule_bundle.bname = bias.bname
-        schedule_bundle.uid = self._user.uid
-        schedule_bundle.uname = self._user.uname
-        schedule_bundle.date = self.__find_start_n_end_date(schedule_list=schedule_list)
-        schedule_bundle.platform = self.__find_all_broadcast_location(schedule_list=schedule_list)
-        schedule_bundle.code = self.__make_schedule_code()
-        schedule_bundle.update_datetime = datetime.today().strftime("%Y/%m/%d-%H:%M:%S")
-
-        return schedule_bundle
-
     # 복수 스케줄 만들기
     def make_new_multiple_schedule(self, schedule_search_engine:SSE, schedules:list, sname:str, bid:str, data_type:str):
         schedule_list = []
@@ -1249,18 +964,6 @@ class AddScheduleModel(TimeTableModel):
         self._database.modify_data_with_id(target_id="tuid", target_data=self._tuser.get_dict_form_data())
 
         self.__result = True
-        return
-
-    # 스케줄 번들 저장
-    def save_new_multiple_schedule_object_with_type(self, schedule_search_engine:SSE, schedule_object, data_type:str):
-        if data_type == "bundle":
-            schedule_search_engine.try_add_new_managed_bundle(new_bundle=schedule_object)
-
-            self._database.add_new_data(target_id="sbid", new_data=schedule_object.get_dict_form_data())
-            # self._tuser.sbids.append(schedule_object.sbid)
-            self._tuser.my_sbids.append(schedule_object.sbid)
-            self._database.modify_data_with_id(target_id="tuid", target_data=self._tuser.get_dict_form_data())
-            self.__result = True
         return
 
     # 수정한 스케줄들 저장
@@ -1318,25 +1021,6 @@ class AddScheduleModel(TimeTableModel):
 
     # 스케줄 삭제
     def delete_schedule(self, schedule_search_engine:SSE, sid:str):
-        # pprint(sid)
-        schedule_bundle_datas = self._database.get_all_data(target = "sbid")
-
-        sb_sids:list[dict] = []
-        modified_schedule_bundles:list[ScheduleBundle] = []
-        sbids = []
-
-        for schedule_bundle_data in schedule_bundle_datas:
-            schedule_bundle= ScheduleBundle().make_with_dict(schedule_bundle_data)
-            if sid in schedule_bundle.sids:
-                schedule_bundle.sids.remove(sid)
-
-                # 서치 엔진에 수정할 데이터들을 담음
-                modified_schedule_bundles.append(schedule_bundle)
-
-                sb_sids.append({"sids" : schedule_bundle.sids})
-                sbids.append(schedule_bundle.sbid)
-
-
         tuser_datas = self._database.get_all_data(target="tuid")
 
         tu_sids:list[TUser] = []
@@ -1355,13 +1039,11 @@ class AddScheduleModel(TimeTableModel):
         self._tuser.my_sids.remove(sid)
         self._tuser.sids.remove(sid)
 
-        self._database.modify_datas_with_ids(target_id="sbid", ids=sbids, target_datas=sb_sids)
         self._database.modify_datas_with_ids(target_id="tuid", ids=tuids, target_datas=tu_sids)
         self._database.modify_data_with_id(target_id="tuid", target_data=self._tuser.get_dict_form_data())
 
         # 서치 엔진에서 편집합니다.
         schedule_search_engine.try_remove_schedule(sid=sid)
-        schedule_search_engine.try_modify_bundle_list(modify_bundle_list=modified_schedule_bundles)
         self._database.delete_data_with_id(target="sid", id=sid)
 
         self.__result = True

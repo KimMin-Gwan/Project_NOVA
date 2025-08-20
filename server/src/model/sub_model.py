@@ -269,7 +269,6 @@ class BiasSearchModel(BaseModel):
         return result
 
     def try_search_bias(self, bname, feed_search_engine:FeedSearchEngine):
-        # ManagedBias 전체 호출
         managed_bias_list = feed_search_engine.get_all_managed_bias()
 
         # 코사인 유사도 평가를 통한 가장 비슷한 이름 검색
