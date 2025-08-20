@@ -60,12 +60,12 @@ export default function SignUp() {
     const password = e.target.value;
     setPwd(password);
 
-    const passwordRegex = /^(?=.*[a-z])(?=.*\d)(?=.*[@$#!%*?&])[a-z\d@$#!%*?&]{10,}$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*\d)(?=.*[@$#!%*?&])[a-z\d@$#!%*?&]{8,}$/;
 
     const isValid = passwordRegex.test(password);
 
     setPasswordError(!isValid);
-    setPasswordMessage(isValid ? "" : "영문, 숫자, 특수문자를 포함해 10자리 이상이어야 합니다.");
+    setPasswordMessage(isValid ? "" : "영문, 숫자, 특수문자를 포함해 8자리 이상이어야 합니다.");
   }
 
   function handleCheckPassWord(e) {
