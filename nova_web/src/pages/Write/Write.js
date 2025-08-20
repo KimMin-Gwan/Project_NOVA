@@ -221,7 +221,6 @@ const Write = () => {
 
   function onDeleteLink(i) {
     setLinkList((prev) => prev.filter((_, index) => index !== i));
-    setCreateOptions((prev) => Math.max(0, prev - 1));
   }
 
   let [inputTag, setInputTag] = useState("");
