@@ -27,7 +27,7 @@ class Master(Configure_File_Reader):
         super().__init__()
         self._extract_host_port()
         #self.abstract_loop = asyncio.get_event_loop()
-        print('{YELLOW}INFO{RESET}<-[      Application startup.')
+        print(f'{YELLOW}INFO{RESET}<-[      Application startup.')
         print(f'{YELLOW}INFO{RESET}<-[      Application | Welcome to NOVA Server')
         print(f'{YELLOW}INFO{RESET}<-[      Application | Version : v{self._version}')
 
