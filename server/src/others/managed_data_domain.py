@@ -887,6 +887,9 @@ class ManagedFeedBiasTable(ManagedTable):
         # Filtering 시, 다음의 값을 유의
         filtered_feeds_df = self._search_data_with_key_str_n_columns(df=self.__feed_df, fid=fid_list)
 
+        if filtered_feeds_df.empty:
+            return []
+        
         # 마지막, 삭제된 Feed는 반환하지 않는다.
         filtered_feeds_df = filtered_feeds_df[filtered_feeds_df['display'] != 0]
         if return_id:
