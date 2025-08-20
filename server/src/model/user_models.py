@@ -92,6 +92,7 @@ class SendEmailModel(BaseModel):
             feed_search_engine.try_add_user(user=user)
 
         except Exception as e:
+            print(e)
             raise CoreControllerLogicError(error_type="save_response | " + str(e))
         
     def set_response(self, result:bool, detail):
