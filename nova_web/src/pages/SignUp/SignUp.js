@@ -259,7 +259,7 @@ export default function SignUp() {
               나이
               <br />
               <label>
-                <input type="number" name="age" value={age} min="0" max="100" required onChange={handleBirthYear} onKeyDown={handleKeyDown} placeholder="20" />
+                <input type="number" name="age" value={birthYear} min="1900" max="2026" required onChange={handleBirthYear} onKeyDown={handleKeyDown} placeholder="2000" />
               </label>
             </div>
           </div>
