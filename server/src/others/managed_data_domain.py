@@ -1127,6 +1127,10 @@ class ManagedScheduleTable(ManagedTable):
                                                                bias_gender=gender, tags=tags)
         searched_df = self._filter_data_with_date_option(df=searched_df, date_option="weekly", date_columns=["start_date_time"])
 
+        if searched_df.empty:
+            logging.warning(f"Search explore schedule with time_section {time_section}, style {style}, category {category}")
+            return []
+
         if return_id:
             return searched_df['sid'].to_list()
         return searched_df.to_dict('records')
@@ -1134,6 +1138,10 @@ class ManagedScheduleTable(ManagedTable):
     # 날짜와 bid를 통해 일정을 검색합니다.
     def search_schedule_with_date_n_bids(self, selected_sids:list, date:str, bid:str, return_id:bool):
         searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_df, sid=selected_sids, bid=bid, date=date)
+        
+        if searched_df.empty:
+            logging.warning(f"Search schedule with date {date} and bid {bid} returned empty DataFrame.")
+            return []
 
         if return_id:
             return searched_df['sid'].to_list()
@@ -1147,6 +1155,11 @@ class ManagedScheduleTable(ManagedTable):
         searched_df = self._filter_data_with_date_in_progress(df=searched_df,
                                                               date_columns=["start_date_time", "end_date_time"],
                                                               when=when)
+        
+        if searched_df.empty:
+            logging.warning(f"Filtering schedule in progress with condition '{when}' returned empty DataFrame.")
+            return []
+        
         if return_id:
             return searched_df['sid'].to_list()
         return searched_df.to_dict('records')
@@ -1157,6 +1170,10 @@ class ManagedScheduleTable(ManagedTable):
         searched_df = self._filter_data_with_date_option(df=searched_df, date_option="specific",
                                                          date_columns=["start_date_time", "end_date_time"],
                                                          specific_date=specific_date)
+        
+        if searched_df.empty:
+            logging.warning(f"Filtering schedule in specific date {specific_date} returned empty DataFrame.")
+            return []
 
         if return_id:
             return searched_df['sid'].to_list()
@@ -1169,6 +1186,10 @@ class ManagedScheduleTable(ManagedTable):
         searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_df, sid=selected_sids)
         # 금주의 일정 필터링
         searched_df = self._filter_data_with_date_option(df=searched_df, date_option="weekly", date_columns=["start_date_time", "end_date_time"])
+
+        if searched_df.empty:
+            logging.warning("Filtering schedule in this week returned empty DataFrame.")
+            return []
 
         if return_id:
             return searched_df['sid'].to_list()
@@ -1183,6 +1204,10 @@ class ManagedScheduleTable(ManagedTable):
             columns = search_columns
             
         searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_df, columns=columns, key=key)
+        
+        if searched_df.empty:
+            logging.warning(f"Search schedule with key '{key}' returned empty DataFrame.")
+            return []
 
         if return_id:
             return searched_df['sid'].to_list()
@@ -1192,6 +1217,10 @@ class ManagedScheduleTable(ManagedTable):
     # sid를 넣으면 sid에 맞는 것들을 반환합니다.
     def search_schedule_with_sids(self, sids:list, return_id:bool):
         searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_df, sid=sids)
+        
+        if searched_df.empty:
+            logging.warning(f"Search schedule with sids {sids} returned empty DataFrame.")
+            return []
 
         if return_id:
             return searched_df['sid'].to_list()
@@ -1202,8 +1231,13 @@ class ManagedScheduleTable(ManagedTable):
     # 내가 선택한 일정들을 보는 함수
     def search_my_selected_schedules(self, bid:str, selected_sids:list, return_id:bool):
         searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_df, sid=selected_sids, bid=bid)
+        
+        if searched_df.empty:
+            logging.warning(f"Search my selected schedules with bid {bid} and sids {selected_sids} returned empty DataFrame.")
+            return []
 
         if return_id:
-            return searched_df['sbid'].to_list()
+            return searched_df['sid'].to_list()
+        
         return searched_df.to_dict('records')
 
