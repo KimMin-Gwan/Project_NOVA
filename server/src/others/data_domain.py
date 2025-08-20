@@ -188,8 +188,6 @@ class User(SampleDomain):
             "like" : copy.copy(self.like),
             "my_comment" : copy.copy(self.my_comment),
             "my_feed" : copy.copy(self.my_feed),
-            "feed_history" : copy.copy(self.feed_history),
-            "feed_search_history" : copy.copy(self.feed_search_history)
         }
         
         
