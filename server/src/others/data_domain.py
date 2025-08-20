@@ -163,7 +163,7 @@ class User(SampleDomain):
             self.password = dict_data['password']
             self.gender= dict_data['gender']
             self.bids = copy.copy(dict_data['bids'])
-            self.num_feed = dict_data['num_long_feed']
+            self.num_feed = dict_data['num_feed']
             self.num_comment = dict_data.get("num_comment", len(self.my_comment))
             self.like = copy.copy(dict_data["like"])
             self.my_comment = copy.copy(dict_data["my_comment"])
