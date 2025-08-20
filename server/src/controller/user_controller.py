@@ -36,7 +36,7 @@ class UserController:
             temp_user = nova_verification.make_new_user(email=request.email)
 
             mailsender.send_email(receiver_email=temp_user.email,verification_code=temp_user.verification_code)
-            model.set_response(result=True, detail="이메일이 전송되었습니다. 3분 안에 입력 해주세요.")
+            model.set_response(result=True, detail="이메일이 전송되었습니다. 코드는 10분 동안 유효합니다.")
         else:
             model.set_response(result=False, detail="이미 존재하는 이메일 입니다.")
         return model
