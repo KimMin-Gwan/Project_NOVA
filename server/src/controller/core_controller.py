@@ -25,10 +25,7 @@ class Core_Controller:
         if request.jwt_payload != "":
             model.set_user_with_email(request=request.jwt_payload)
             model.set_bias_list()
-        # 유저가 아니면 랜덤하게
-        else:
-            model.set_random_bias()
-        
+            
         return model
 
     def search_bias(self, database:Mongo_Database, request):
