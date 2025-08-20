@@ -42,6 +42,9 @@ class LoginModel(BaseModel):
         jwtManager = JWTManager(secret_key=secret_key)
         self.__token = jwtManager.make_token(email=request.email, usage="temp")
         return
+    
+    def get_token(self):
+        return self.__token
 
     def get_response_form_data(self, head_parser):
         try:
