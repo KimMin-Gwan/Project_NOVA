@@ -6,9 +6,11 @@
   flex-direction: column;
   border: 1px solid #4586e8;
   border-radius: 6px;
-  padding: 12px;
+  padding: 8px 15px;
   position: relative;
   cursor: pointer;
+  color: #333;
+  font-size: 14px;
 }
 
 .Select_options {
@@ -31,12 +33,13 @@
   overflow-y: auto;
 
   li {
-    padding: 0;
-    padding: 5px;
+    padding: 5px 10px;
+    color: #333;
+    font-size: 14px;
   }
   li:hover {
     display: flex;
-    background-color: gray;
+    background-color: #d8eeff;
   }
 
   li:hover:first-child {

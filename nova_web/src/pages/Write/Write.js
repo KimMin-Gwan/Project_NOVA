@@ -290,7 +290,7 @@ const Write = () => {
           >
             취소
           </p>
-          <p>포스트 작성</p>
+          <span className={style["page-title"]}>포스트 작성</span>
 
           <p
             className={style["buttons"]}
@@ -328,7 +328,7 @@ const Write = () => {
         </section>
 
         <div className={style["hashtag_container"]}>
-          <div>해시태그</div>
+          <div className={style["section_title"]}>해시태그</div>
           <div className={style["input-container"]}>
             <div className={style["input-wrapper"]}>
               <input
@@ -424,14 +424,10 @@ const Write = () => {
           <Toaster />
           <div className={style["top_container"]}>
             <p
-              className={style["buttons"]}
-              onClick={() => {
-                navigate(-1);
-              }}
+            style={{padding: "20px"}}
             >
-              취소
             </p>
-            <p>포스트 작성</p>
+            <span className={style["page-title"]}>포스트 작성</span>
 
             <p
               className={style["buttons"]}
@@ -469,7 +465,7 @@ const Write = () => {
           </section>
 
           <div className={style["hashtag_container"]}>
-            <div>해시태그</div>
+            <div className={style["section_title"]}>해시태그</div>
             <div className={style["input-container"]}>
               <div className={style["input-wrapper"]}>
                 <input
