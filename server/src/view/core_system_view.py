@@ -42,8 +42,7 @@ class Core_Service_View(Master_View):
         # 이 클라이언트는 로그인을 했나요?를 확인하는 곳
         @self.__app.get('/home/is_valid')
         def is_valid_user(request:Request, only_token:Optional[str]="y"):
-            print(request.client.host)
-            
+            #print(request.client.host)
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             request_manager.try_view_management_need_authorized(cookies=request.cookies)
 
