@@ -315,6 +315,7 @@ class MyFeedsModel(FeedModel):
             wusers.append(single_user)
 
         for feed in self._feeds:
+            feed:Feed = feed
             # 삭제된거 지우고
             if feed.display < 3:
                 continue
@@ -323,7 +324,6 @@ class MyFeedsModel(FeedModel):
 
             # comment 길이 & image 길이
             feed.num_comment = len(feed.comment)
-            feed.num_image = len(feed.image)
 
             # 좋아요를 누를 전적
             for fid_n_date in self._user.like:
