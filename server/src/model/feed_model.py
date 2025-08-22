@@ -91,16 +91,14 @@ class FeedModel(BaseModel):
         for feed in feeds:
             # 노출 현황 이 1 이하면 죽어야됨
             # 0: 삭제됨 1 : 비공개 2: 차단 3: 댓글 작성 X 4 : 정상(전체 공개)
+            feed:Feed = feed
             if feed.display < 3:
                 continue
-            
-            feed:Feed = feed
 
             feed.raw_body = feed.body
             
             # comment 길이 & image 길이
             feed.num_comment = len(feed.comment)
-            feed.num_image = len(feed.image)
 
             # 좋아요를 누를 전적
             for fid_n_date in user.like:
