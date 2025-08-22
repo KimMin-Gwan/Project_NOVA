@@ -54,17 +54,16 @@ class FeedManager:
     # 새로운 피드 만들기
     # 실제로 피드를 만들고, 서치 엔진에 추가하는 부분이다.
     def __make_new_feed(self, user:User, fid, body, hashtag,
-                        board_type, images, link, bid, raw_body=""):
+                        board_type, link, bid, raw_body=""):
         bname = ""
         bias_data = self._database.get_data_with_id(target="bid", id=bid)
         
         if bias_data:
             bname = bias_data.get("bname", "")
         
-        
         # 검증을 위한 코드는 이곳에 작성하시오
         new_feed = self.__set_new_feed(user=user, fid=fid, body=body, hashtag=hashtag, board_type=board_type,
-                                       image=images, link=link, bid=bid, raw_body=raw_body, bname=bname)
+                                        link=link, bid=bid, raw_body=raw_body, bname=bname)
 
         
         self._database.add_new_data(target_id="fid", new_data=new_feed.get_dict_form_data())
@@ -74,7 +73,7 @@ class FeedManager:
         return
     
     def __modify_feed(self, user:User, fid, body, hashtag, board_type, date,
-                      images, link, bid, raw_body=""):
+                    link, bid, raw_body=""):
         bname = ""
         bias_data = self._database.get_data_with_id(target="bid", id=bid)
         
@@ -83,21 +82,13 @@ class FeedManager:
             
         # 검증을 위한 코드는 이곳에 작성하시오
         feed = self.__set_new_feed(user=user, fid=fid, body=body, hashtag=hashtag, board_type=board_type,
-                                   image=images, link=link, bid=bid, raw_body=raw_body, date=date, bname = bname)
+                                 link=link, bid=bid, raw_body=raw_body, date=date, bname = bname)
 
-
-        #if data_payload_body:
-            ## ai한테 넣어서 다시 만들기
-            #new_feed = ai_manager.treat_new_feed(feed=new_feed, data_payload_body=data_payload_body)
-        #else:
-            #new_feed = ai_manager.treat_new_feed(feed=new_feed)
-            
         self._database.modify_data_with_id(target_id="fid", target_data=feed.get_dict_form_data())
 
         # 이곳에 add와 make가 아닌 modify 되는 함수가 필요함
         self._feed_search_engine.try_modify_managed_feed(feed=feed)
         self._feed_search_engine.try_make_new_managed_feed(feed=feed)
-
         return
 
     # 링크 만들기
@@ -215,8 +206,8 @@ class FeedManager:
         if data_payload.body:
             data_payload_body = data_payload.body
             # 2. body데이터를 오브젝트 스토리지에 저장
-            url = connector.make_new_feed_body_data(fid = fid, body=data_payload.body)
-            body, _ = connector.extract_body_n_image(raw_data=data_payload.body)
+            url = connector.make_new_feed_body_data(fid = fid, body=data_payload_body)
+            body, _ = connector.extract_body_n_image(raw_data=data_payload_body)
                 
         else:
             body = " "
@@ -230,7 +221,6 @@ class FeedManager:
                                 body=body,
                                 hashtag=data_payload.hashtag,
                                 board_type=data_payload.board_type,
-                                images=[],
                                 link=data_payload.link,
                                 bid=data_payload.bid,
                                 date=data_payload.date,
