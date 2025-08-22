@@ -1,6 +1,6 @@
 from model.base_model import BaseModel
 from model import Mongo_Database
-from others import CoreControllerLogicError,FeedManager, FeedSearchEngine 
+from others import CoreControllerLogicError,FeedManager, FeedSearchEngine , ObjectStorageConnection
 from others import Comment, Feed, User, FeedLink
 from pprint import pprint
 
@@ -95,7 +95,9 @@ class FeedModel(BaseModel):
             if feed.display < 3:
                 continue
 
-            feed.raw_body = feed.body
+            feed.raw_body = ObjectStorageConnection().get_feed_body(fid = feed.fid)
+            
+            #feed.raw_body = feed.body
             
             # comment 길이 & image 길이
             feed.num_comment = len(feed.comment)
@@ -320,7 +322,7 @@ class MyFeedsModel(FeedModel):
             if feed.display < 3:
                 continue
             
-            feed.raw_body = feed.body
+            feed.raw_body = ObjectStorageConnection().get_feed_body(fid = feed.fid)
 
             # comment 길이 & image 길이
             feed.num_comment = len(feed.comment)
