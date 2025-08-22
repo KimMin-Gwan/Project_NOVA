@@ -18,7 +18,7 @@ class Core_Service_View(Master_View):
                   database, head_parser:Head_Parser,
                   connection_manager:CM,
                   feed_manager:FM , feed_search_engine:FSE,
-                  ai_manager, jwt_secret_key
+                  jwt_secret_key
                   ) -> None:
         super().__init__(head_parser=head_parser)
         self.__app = app
@@ -27,7 +27,6 @@ class Core_Service_View(Master_View):
         self.__connection_manager=connection_manager
         self.__feed_manager = feed_manager
         self.__feed_search_engine = feed_search_engine
-        self.__ai_manager = ai_manager
         self.__jwt_secret_key = jwt_secret_key
         self.home_route(endpoint)
         #self.check_route()
@@ -236,29 +235,29 @@ class Core_Service_View(Master_View):
         @self.__app.post('/feed_explore/try_edit_feed')
         async def try_edit_feed(request: Request, images: Union[UploadFile, None] = File(None),
                         jsonData: Union[str, None] = Form(None)):
-        #async def try_edit_feed(request:Request, images: UploadFile| None = File(None), 
-                                #jsonData:str | None = Form(None)):
+            
+            #async def try_edit_feed(request:Request, images: UploadFile| None = File(None), 
+                                    #jsonData:str | None = Form(None)):
                                
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
 
-            form_data = await request.form()
-            image_files = form_data.getlist("images")
+            #form_data = await request.form()
+            #image_files = form_data.getlist("images")
             
-            if images is None or len(image_files) == 0:
-                image_names = []
-                imgs = []
-            else:
-                image_names = [image.filename for image in image_files]
-                imgs = [await image.read() for image in image_files]
+            #if images is None or len(image_files) == 0:
+                #image_names = []
+                #imgs = []
+            #else:
+                #image_names = [image.filename for image in image_files]
+                #imgs = [await image.read() for image in image_files]
 
             if jsonData is None:
                 raise request_manager.system_logic_exception
 
             raw_request = json.loads(jsonData)
             
-            data_payload = EditFeedRequest(request=raw_request,
-                                            image_names=image_names,
-                                            images=imgs)
+            data_payload = EditFeedRequest(request=raw_request)
+            
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
             if not request_manager.jwt_payload.result:
                 raise request_manager.credentials_exception
@@ -267,7 +266,6 @@ class Core_Service_View(Master_View):
             model = feed_controller.try_edit_feed(database=self.__database,
                                                         request=request_manager,
                                                         feed_manager=self.__feed_manager,
-                                                        ai_manager = self.__ai_manager
                                                         )
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
@@ -393,20 +391,10 @@ class EditFeedRequest(RequestHeader):
         self.fid = body['fid']
         self.body = body['body']
         self.board_type = body.get("category", "자유게시판")  # 자유게시판 디폴트
-        self.choice= body['choice']
         self.hashtag = body['hashtag']
         self.link:list = body['link']
         self.bid = body.get("bid", "")
         self.date = body.get("date", "")
-        self.image_names = image_names
-        self.images = images
-        
-#class ShortFeedrecommendRequest(RequestHeader):
-    #def __init__(self, request) -> None:
-        #super().__init__(request)
-        #body = request['body']
-        #self.fid = body['fid']
-        #self.history = body['history']
 
 class BiasSearchRequest():
     def __init__(self, bias_name= None) -> None:
