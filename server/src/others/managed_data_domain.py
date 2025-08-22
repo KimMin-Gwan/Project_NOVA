@@ -776,7 +776,6 @@ class ManagedFeedBiasTable(ManagedTable):
             board_type=feed.board_type, # 이거 추가됨
             body=feed.body,
             bid=feed.bid,
-            iid=feed.iid,
         )
 
         self.__feed_table.append(managed_feed)
