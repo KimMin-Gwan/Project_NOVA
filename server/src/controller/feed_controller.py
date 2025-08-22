@@ -221,7 +221,6 @@ class Feed_Controller:
     # Feed 편집
     def try_edit_feed(self, database:Mongo_Database,
                                request, feed_manager:FeedManager,
-                               ai_manager
                                ) -> FeedEditModel:
         model = FeedEditModel(database=database)
 
@@ -232,7 +231,6 @@ class Feed_Controller:
         
         model.try_edit_feed(feed_manager=feed_manager,
                             data_payload=request.data_payload,
-                            ai_manager=ai_manager
                             )
         model.check_result(request_manager=request)
 
