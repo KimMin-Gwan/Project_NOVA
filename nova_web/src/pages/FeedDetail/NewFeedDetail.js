@@ -42,7 +42,7 @@ export default function NewFeedDetail() {
 
   const [isLoading, setIsLoading] = useState(true); // 로딩 상태 관리
   const [isComment, setIsComment] = useState(false);
-  let [feedData, setFeedData] = useState([]);
+  let [feedData, setFeedData] = useState({});
   let [comments, setComments] = useState([]);
   let [commentValue, setCommentValue] = useState("");
 
@@ -232,12 +232,13 @@ export default function NewFeedDetail() {
       setIsLoading(false);
       setIsComment(false);
     });
+
   }
 
   useEffect(() => {
     fetchFeed();
-  }, [comments, fid]);
 
+  }, [comments, fid]);
 
   async function fetchFeedComment() {
     let uid = "-1";
@@ -367,19 +368,14 @@ export default function NewFeedDetail() {
     setShowMoreOption(!showMoreOption);
   }
 
-  if (isLoading) {
-    return <div>Loading</div>;
-  }
 
-  if(isMobile){
-    return (
+  return (
+    isMobile ? (
       <div className="container">
         <div className={style["top-container"]}>
           <button
             className={style["back-button"]}
-            onClick={() => {
-              navigate(-1);
-            }}
+            onClick={() => navigate(-1)}
           >
             <img src={back} alt="back" />
             <span>뒤로</span>
@@ -387,52 +383,63 @@ export default function NewFeedDetail() {
           {feedData.is_owner && (
             <button
               className={style["delete-button"]}
-              onClick={(e) => {
-                onClickOption(e);
-              }}
+              onClick={onClickOption}
             >
-              <img src={more_icon} />
+              <img src={more_icon} alt="more" />
             </button>
           )}
           {showMoreOption && (
-            <OptionModal onClickOption={onClickOption} onClickDelete={fetchRemoveFeed} fid={fid} />
+            <OptionModal
+              onClickOption={onClickOption}
+              onClickDelete={fetchRemoveFeed}
+              fid={fid}
+            />
           )}
         </div>
 
         <div className={style["content-box"]}>
-          <ContentFeed detailPage feed={feedData} handleCheckStar={handleCheckStar} links={links} disableClick={true} />
+          {isLoading ? (
+            <ContentFeed
+              feed={feedData}
+              handleCheckStar={handleCheckStar}
+              links={links}
+              disableClick={false}
+            />
+          ) : (
+            <div>불러오는 중...</div>
+          )}
         </div>
-      
-        <div className="section-separator"></div>
+
+       <div className="section-separator"></div>
 
         {showCommentMoreOption && (
-          <CommentOptionModal onClose={togglePushingComment} onClickDelete={tryDeleteComment} deleteTargetCid={optionTargetComment} />
+          <CommentOptionModal
+            onClose={togglePushingComment}
+            onClickDelete={tryDeleteComment}
+            deleteTargetCid={optionTargetComment}
+          />
         )}
 
-
         <div className={style["comment-wrapper"]}>
-          <div className={style["comment-wrapper-title"]}>
-            실시간 코멘트
-          </div>
-        
-          {
-          isMoreComment && (
-            <button className={style["comment-more-button"]}
-                onClick={() => {
-                  fetchFeedComment();
-                }}
+          <div className={style["comment-wrapper-title"]}>실시간 코멘트</div>
+
+          {isMoreComment && (
+            <button
+              className={style["comment-more-button"]}
+              onClick={fetchFeedComment}
             >
-                지난 댓글 불러오기
+              지난 댓글 불러오기
             </button>
           )}
 
-
-          <div className={style["new-comment-box"]}
-            ref={commentBoxRef} // ref 연결
-          >
-            {comments.map((comment, index) => {
-              return <CommentComponent key={index} {...comment} commentAction={togglePushingComment}/>
-            })}
+          <div className={style["new-comment-box"]} ref={commentBoxRef}>
+            {comments.map((comment, index) => (
+              <CommentComponent
+                key={index}
+                {...comment}
+                commentAction={togglePushingComment}
+              />
+            ))}
           </div>
 
           <div className={style["input-container"]}>
@@ -446,24 +453,23 @@ export default function NewFeedDetail() {
                 onKeyDown={onKeyDownEnter}
                 placeholder={setPlaceholder()}
               />
-              <button className={style["input-button"]} onClick={onClickInput}>
+              <button
+                className={style["input-button"]}
+                onClick={onClickInput}
+              >
                 <img src={input} alt="input" />
               </button>
             </div>
           </div>
         </div>
       </div>
-    );
-  }else{
-    return(
-      <DesktopLayout >
+    ) : (
+      <DesktopLayout>
         <div className="container">
           <div className={style["top-container"]}>
             <button
               className={style["back-button"]}
-              onClick={() => {
-                navigate(-1);
-              }}
+              onClick={() => navigate(-1)}
             >
               <img src={back} alt="back" />
               <span>뒤로</span>
@@ -471,52 +477,60 @@ export default function NewFeedDetail() {
             {feedData.is_owner && (
               <button
                 className={style["delete-button"]}
-                onClick={(e) => {
-                  onClickOption(e);
-                }}
+                onClick={onClickOption}
               >
-                <img src={more_icon} />
+                <img src={more_icon} alt="more" />
               </button>
             )}
             {showMoreOption && (
-              <OptionModal onClickOption={onClickOption} onClickDelete={fetchRemoveFeed} fid={fid} />
+              <OptionModal
+                onClickOption={onClickOption}
+                onClickDelete={fetchRemoveFeed}
+                fid={fid}
+              />
             )}
           </div>
 
           <div className={style["content-box"]}>
-            <ContentFeed detailPage feed={feedData} handleCheckStar={handleCheckStar} links={links} disableClick={true} />
+            <ContentFeed
+              detailPage
+              feed={feedData}
+              handleCheckStar={handleCheckStar}
+              links={links}
+              disableClick={false}
+            />
           </div>
-      
+
           <div className="section-separator"></div>
 
           {showCommentMoreOption && (
-            <CommentOptionModal onClose={togglePushingComment} onClickDelete={tryDeleteComment} deleteTargetCid={optionTargetComment} />
+            <CommentOptionModal
+              onClose={togglePushingComment}
+              onClickDelete={tryDeleteComment}
+              deleteTargetCid={optionTargetComment}
+            />
           )}
 
-
           <div className={style["comment-wrapper"]}>
-            <div className={style["comment-wrapper-title"]}>
-              실시간 코멘트
-            </div>
-        
-            {
-            isMoreComment && (
-              <button className={style["comment-more-button"]}
-                  onClick={() => {
-                    fetchFeedComment();
-                  }}
+            <div className={style["comment-wrapper-title"]}>실시간 코멘트</div>
+
+            {isMoreComment && (
+              <button
+                className={style["comment-more-button"]}
+                onClick={fetchFeedComment}
               >
-                  지난 댓글 불러오기
+                지난 댓글 불러오기
               </button>
             )}
 
-
-            <div className={style["new-comment-box"]}
-              ref={commentBoxRef} // ref 연결
-            >
-              {comments.map((comment, index) => {
-                return <CommentComponent key={index} {...comment} commentAction={togglePushingComment}/>
-              })}
+            <div className={style["new-comment-box"]} ref={commentBoxRef}>
+              {comments.map((comment, index) => (
+                <CommentComponent
+                  key={index}
+                  {...comment}
+                  commentAction={togglePushingComment}
+                />
+              ))}
             </div>
 
             <div className={style["input-container"]}>
@@ -530,7 +544,10 @@ export default function NewFeedDetail() {
                   onKeyDown={onKeyDownEnter}
                   placeholder={setPlaceholder()}
                 />
-                <button className={style["input-button"]} onClick={onClickInput}>
+                <button
+                  className={style["input-button"]}
+                  onClick={onClickInput}
+                >
                   <img src={input} alt="input" />
                 </button>
               </div>
@@ -538,8 +555,8 @@ export default function NewFeedDetail() {
           </div>
         </div>
       </DesktopLayout>
-    );
-  }
+    )
+  );
 
 }
 
