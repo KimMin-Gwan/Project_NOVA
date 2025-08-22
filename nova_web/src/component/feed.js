@@ -61,12 +61,6 @@ export function ContentFeed({ detailPage, feed, handleCheckStar, links, fetchRep
   let navigate = useNavigate();
   const { scrollRef, hasDragged, dragHandlers } = useDragScroll();
 
-  async function fetchOriginalText(fid) {
-    await mainApi.get(`feed_explore/original_feed_data?fid=${fid}`).then((res) => {
-      //console.log("done");
-    });
-  }
-
   if (!feed) {
     return <div>loading 중...</div>;
   }
@@ -93,36 +87,9 @@ export function ContentFeed({ detailPage, feed, handleCheckStar, links, fetchRep
         >
           <FeedHeader date={feed.date} nickname={feed.nickname} />
 
-          <div className={`${style["body-container"]} ${detailPage ? "" : style["long-form-hidden"]}`}>
+          <div className={`${style["body-container"]} `}>
             <HashTags hashtags={feed.hashtag} />
-
-            {
-              /**
-               * 
-              *{feed.image?.length > 0 === "short" ? (
-                *<div className={style["image-container"]}>
-                  *<div
-                    *ref={scrollRef}
-                    *className={`${style["image-origin"]} ${style["two-over-image"]}`}
-                    *onMouseDown={dragHandlers.onMouseDown}
-                    *onMouseMove={dragHandlers.onMouseMove}
-                    *onMouseUp={dragHandlers.onMouseUp}
-                  *>
-                    *{feed.num_image >= 2 ? (
-                      *feed.image.map((img, i) => {
-                        *return <img key={i} src={img} alt="image" />;
-                      *})
-                    *) : (
-                      *<img src={feed.image[0]} alt="image" />
-                    *)}
-                  *</div>
-                *</div>
-              *) : null}
-               * 
-               */
-            }
-
-            {<Viewer initialValue={feed.raw_body} />}
+            <Viewer key={feed.raw_body} initialValue={feed.raw_body} />
           </div>
 
           {links && <LinkSection links={links} />}
@@ -165,9 +132,9 @@ export function ContentFeed({ detailPage, feed, handleCheckStar, links, fetchRep
         >
           <FeedHeader date={feed.date} nickname={feed.nickname} />
 
-          <div className={`${style["body-container"]} ${detailPage ? "" : style["long-form-hidden"]}`}>
+          <div className={`${style["body-container"]}`}>
             <HashTags hashtags={feed.hashtag} />
-            {<Viewer initialValue={feed.raw_body} />}
+            <Viewer key={feed.raw_body} initialValue={feed.raw_body} />
           </div>
 
           {links && <LinkSection links={links} />}
