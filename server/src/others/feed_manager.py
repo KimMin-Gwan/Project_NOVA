@@ -120,7 +120,7 @@ class FeedManager:
 
     # 새로운 피드의 데이터를 추가하여 반환
     def __set_new_feed(self, user:User,fid, body, hashtag, bname,
-                       board_type, image, link, bid, raw_body, date=None):
+                       board_type, link, bid, raw_body, date=None):
         # link가 있다면 작업할 것
         # 수정 하기 기능헤서도 동일하게 링크를 새로 만들어서 배포함
         if link:
@@ -139,7 +139,6 @@ class FeedManager:
         new_feed.body = body
         new_feed.date = date
         new_feed.board_type = board_type
-        new_feed.image= image
         new_feed.hashtag = hashtag
         new_feed.lid = lids
         new_feed.bid = bid
