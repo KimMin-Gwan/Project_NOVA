@@ -385,7 +385,7 @@ class DeleteFeedRequest(RequestHeader):
         
 
 class EditFeedRequest(RequestHeader):
-    def __init__(self, request, image_names, images) -> None:
+    def __init__(self, request) -> None:
         super().__init__(request)
         body:dict = request['body']
         self.fid = body['fid']
