@@ -3,6 +3,7 @@ from model import Mongo_Database
 from others import CoreControllerLogicError,FeedManager, FeedSearchEngine , ObjectStorageConnection
 from others import Comment, Feed, User, FeedLink
 from pprint import pprint
+import time 
 
 
 class FeedModel(BaseModel):
@@ -54,77 +55,79 @@ class FeedModel(BaseModel):
     
     # send_data를 만들때 사용하는 함수임
     def _make_feed_data(self, fid_list):
-        print(1)
         feed_datas = self._database.get_datas_with_ids(target_id="fid", ids=fid_list)
-        print(2)
         feeds = []
 
-        print(3)
         for feed_data in reversed(feed_datas):
             feed = Feed()
             feed.make_with_dict(feed_data)
             feeds.append(feed)
 
-        print(4)
         feeds = self._set_feed_json_data(user=self._user, feeds=feeds)
-        print(5)
         
         send_data = self.__set_send_data(feeds=feeds)
-        print(6)
         return send_data
     
     # 피드 내용을 다듬어서 전송가능한 형태로 세팅
     # 포인터로 동작함
+    
     def _set_feed_json_data(self, user:User, feeds:list):
+        start = time.time()
+        prev = start
+
+        def log(step:str):
+            nonlocal prev
+            now = time.time()
+            print(f"[{step}] {now - prev:.6f}s (누적 {now - start:.6f}s)")
+            prev = now
+
         wusers = []
-        uids=[]
+        uids = []
         result_feeds = []
-        
+        log("init vars")
+
         for single_feed in feeds:
             single_feed:Feed = single_feed
             uids.append(single_feed.uid)
-            
+        log("collect uids")
+
         user_datas = self._database.get_datas_with_ids(target_id="uid", ids=uids)
-        
+        log("fetch user_datas")
+
         user_datas = list(filter(lambda x: x is not None, user_datas))
-        
+        log("filter user_datas")
+
         for user_data in user_datas:
             single_user = User()
             single_user.make_with_dict(user_data)
             wusers.append(single_user)
+        log("make wusers")
 
-        
         for feed in feeds:
-            # 노출 현황 이 1 이하면 죽어야됨
-            # 0: 삭제됨 1 : 비공개 2: 차단 3: 댓글 작성 X 4 : 정상(전체 공개)
             feed:Feed = feed
             if feed.display < 3:
                 continue
 
-            feed.raw_body = ObjectStorageConnection().get_feed_body(fid = feed.fid)
-            
-            #feed.raw_body = feed.body
-            
-            # comment 길이 & image 길이
+            feed.raw_body = ObjectStorageConnection().get_feed_body(fid=feed.fid)
+            log("get feed body")
+
             feed.num_comment = len(feed.comment)
 
-            # 좋아요를 누를 전적
             for fid_n_date in user.like:
                 target_fid = fid_n_date.split('=')[0]
                 if target_fid == feed.fid:
                     feed.star_flag = True
 
-            # 피드 작성자 이름
-            # 나중에 nickname으로 바꿀것
             for wuser in wusers:
                 if wuser.uid == feed.uid:
                     feed.nickname = wuser.uname
-                    
+
             if user.uid == feed.uid:
                 feed.is_owner = True
-                
+
             result_feeds.append(feed)
-            
+        log("process feeds")
+
         return result_feeds
     
     # 전송 데이터 만들기
