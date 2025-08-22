@@ -46,7 +46,6 @@ class NOVA_Server:
                                                    connection_manager= connection_manager,
                                                    feed_manager=feed_manager,
                                                    feed_search_engine=feed_search_engine,
-                                                   ai_manager=None,
                                                    jwt_secret_key = jwt_secret_key
                                                    )
         
