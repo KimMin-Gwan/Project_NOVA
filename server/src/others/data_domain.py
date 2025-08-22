@@ -242,10 +242,9 @@ class Bias(SampleDomain):
 
 class Feed(SampleDomain):
     def __init__(self, fid="", uid="", body="", date="",
-                 display=4, like=0, board_type="", image=None, hashtag=None, bname="",
+                 display=4, like=0, board_type="", hashtag=None, bname="",
                  comment=None, lid="", bid="", raw_body =""):
-        if image is None:
-            image = []
+        
         if hashtag is None:
             hashtag = []
         if comment is None:
