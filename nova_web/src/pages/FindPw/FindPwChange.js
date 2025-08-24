@@ -32,7 +32,7 @@ function FindPwChange() {
   // 비밀번호 정규식 검증 함수
   const validatePassword = (password) => {
     // 특수문자 제거: 대문자, 소문자, 숫자 포함, 8자리 이상
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*\d)[A-Za-z\d]{8,}$/;
     const isValid = passwordRegex.test(password);
 
     setPasswordError(!isValid);
