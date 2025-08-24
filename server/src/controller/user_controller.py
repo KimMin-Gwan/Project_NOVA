@@ -104,14 +104,19 @@ class UserController:
     # 5. 만약 인증번호 틀리면 False 반환 + 실패 사유 detail에 작성
     async def try_sign_up(self, database, request, nova_verification, feed_search_engine):
         model = SendEmailModel(database=database)
-        
-        if not await nova_verification.verificate_user(email=request.email, verification_code=request.verification_code):
-            model.set_response(result=False, detail="잘못된 인증번호")
+        try:
+            if not await nova_verification.verificate_user(email=request.email, verification_code=request.verification_code):
+                model.set_response(result=False, detail="잘못된 인증 코드입니다.")
             
-        else:
-            model.save_user(request=request, feed_search_engine=feed_search_engine)
-            model.set_response(result=True, detail="회원가입 성공")
-        return model
+            else:
+                model.save_user(request=request, feed_search_engine=feed_search_engine)
+                model.set_response(result=True, detail="회원가입 성공")
+                
+        except:
+            model.set_response(result=False, detail="알 수 없는 오류가 발생했습니다. 관리장에게 문의하세요.")
+            
+        finally:
+            return model
 
     # 유저 페이지 맨 처음에 띄울 것
     def try_get_user_page(self, database, request):
