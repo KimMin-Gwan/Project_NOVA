@@ -633,9 +633,11 @@ class ManagedFeedBiasTable(ManagedTable):
         self.__feed_avltree = AVLTree()
         self.__bias_avltree = AVLTree()
 
-
+        print(1)
         self.__init_feed_table()
+        print(2)
         self.__init_bias_tree()
+        print(3)
 
     def get_len_feed_table(self):
         return len(self.__feed_table)
