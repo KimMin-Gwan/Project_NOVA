@@ -655,6 +655,7 @@ class ManagedFeedBiasTable(ManagedTable):
         for single_feed in feeds:
             bias_data = self._database.get_data_with_id(target="bid", id=single_feed.bid)
             bias = Bias()
+            # bias를 선택하지 않은 게시글이면 그냥 가야됨 >>> None type object do not have attribute "get"
             if bias_data:
                 bias.make_with_dict(bias_data)
 
