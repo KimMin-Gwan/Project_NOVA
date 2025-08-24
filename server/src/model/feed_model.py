@@ -72,36 +72,23 @@ class FeedModel(BaseModel):
     # 포인터로 동작함
     
     def _set_feed_json_data(self, user:User, feeds:list):
-        start = time.time()
-        prev = start
-
-        def log(step:str):
-            nonlocal prev
-            now = time.time()
-            print(f"[{step}] {now - prev:.6f}s (누적 {now - start:.6f}s)")
-            prev = now
 
         wusers = []
         uids = []
         result_feeds = []
-        log("init vars")
 
         for single_feed in feeds:
             single_feed:Feed = single_feed
             uids.append(single_feed.uid)
-        log("collect uids")
 
         user_datas = self._database.get_datas_with_ids(target_id="uid", ids=uids)
-        log("fetch user_datas")
 
         user_datas = list(filter(lambda x: x is not None, user_datas))
-        log("filter user_datas")
 
         for user_data in user_datas:
             single_user = User()
             single_user.make_with_dict(user_data)
             wusers.append(single_user)
-        log("make wusers")
 
         for feed in feeds:
             feed:Feed = feed
@@ -109,7 +96,6 @@ class FeedModel(BaseModel):
                 continue
 
             feed.raw_body = ObjectStorageConnection().get_feed_body(fid=feed.fid)
-            log("get feed body")
 
             feed.num_comment = len(feed.comment)
 
@@ -126,7 +112,6 @@ class FeedModel(BaseModel):
                 feed.is_owner = True
 
             result_feeds.append(feed)
-        log("process feeds")
 
         return result_feeds
     
