@@ -10,20 +10,6 @@ from uvicorn import run
 YELLOW = "\033[33m"
 RESET = "\033[0m"
 
-
-import sys
-import traceback
-
-def custom_excepthook(exc_type, exc_value, exc_tb):
-    if isinstance(exc_value, AttributeError) and "'NoneType' object has no attribute 'get'" in str(exc_value):
-        print(">>> None.get() 호출 감지됨!")
-        traceback.print_tb(exc_tb)
-    # 원래 동작 유지
-    sys.__excepthook__(exc_type, exc_value, exc_tb)
-
-sys.excepthook = custom_excepthook
-
-
 class ContentKeyStorage:
     def __init__(self,
                  chzzk_client_id, chzzk_client_secret,
@@ -54,9 +40,14 @@ class Master(Configure_File_Reader):
         connection_manager = ConnectionManager() # 웹소켓 매니저 실행
         
         feed_search_engine = FeedSearchEngine(database=database)
+
+        print("1")
         schedule_search_engine = ScheduleSearchEngine(database=database)
+        print("2")
+        
         feed_manager= FeedManager(database=database,
                                   feed_search_engine=feed_search_engine)
+        print("3")
         
         content_key_storage = ContentKeyStorage(
             chzzk_client_id=self._chzzk_client_id,
