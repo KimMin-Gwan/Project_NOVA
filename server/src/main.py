@@ -11,19 +11,17 @@ YELLOW = "\033[33m"
 RESET = "\033[0m"
 
 
-import types
+import sys
 import traceback
 
-# 원래 NoneType
-NoneType = type(None)
+def custom_excepthook(exc_type, exc_value, exc_tb):
+    if isinstance(exc_value, AttributeError) and "'NoneType' object has no attribute 'get'" in str(exc_value):
+        print(">>> None.get() 호출 감지됨!")
+        traceback.print_tb(exc_tb)
+    # 원래 동작 유지
+    sys.__excepthook__(exc_type, exc_value, exc_tb)
 
-def fake_get(self, *args, **kwargs):
-    print(">>> None.get() 호출됨!")
-    traceback.print_stack()
-    raise AttributeError("'NoneType' object has no attribute 'get'")  # 원래 동작 유지
-
-# NoneType에 get 속성 주입
-NoneType.get = fake_get
+sys.excepthook = custom_excepthook
 
 
 class ContentKeyStorage:
