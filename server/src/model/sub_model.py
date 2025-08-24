@@ -147,6 +147,16 @@ class MakeNewBiasModel(BaseModel):
         self._result = True
         return
     
+    def add_new_bias_in_engine(self, feed_search_engine:FeedSearchEngine):
+        feed_search_engine.try_make_new_managed_bias(bias=self._bias)
+        return
+    
+    def auto_follow(self):
+        self._user.bids.append(self._bias.bid)
+        self._database.modify_data_with_id(target_id="uid", target_data=self._user.get_dict_form_data())
+        return
+        
+    
 class MyBiasModel(BaseModel):
     def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)

@@ -3,7 +3,7 @@ from others import UserNotExist
 
 class Sub_Controller:
     
-    def try_add_new_bias(self, database:Mongo_Database, request) -> BaseModel:
+    def try_add_new_bias(self, database:Mongo_Database, request, feed_search_engine) -> BaseModel:
         model = MakeNewBiasModel(database=database)
         
         if not model.set_user_with_email(request=request.jwt_payload):
@@ -15,8 +15,10 @@ class Sub_Controller:
             )
         
         if result:
+            model.add_new_bias_in_engine(feed_search_engine=feed_search_engine)
             model.try_alert_to_admin(info=request.data_payload.info)
-        
+            model.auto_follow()
+            
         return model
         
     # 최애 기반 커뮤니티 페이지에서 노출될 공지시항 리스트

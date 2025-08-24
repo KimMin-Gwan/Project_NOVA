@@ -52,7 +52,8 @@ class Sub_Service_View(Master_View):
             sub_controller =Sub_Controller()
             model = sub_controller.try_add_new_bias(
                 database=self.__database,
-                request=request_manager
+                request=request_manager,
+                feed_search_engine=self.__feed_search_engine
                 )
 
             body_data = model.get_response_form_data(self._head_parser)

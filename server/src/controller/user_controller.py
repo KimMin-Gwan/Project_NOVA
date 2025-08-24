@@ -42,7 +42,8 @@ class UserController:
         except:
             model.set_response(result=False, detail="알 수 없는 오류가 발생했습니다. 관리자에게 문의하세요.")
             
-        return model
+        finally:
+            return model
         
     # 비밀번호 찾기 시도 이메일 전송
     # 1. 이메일을 전송

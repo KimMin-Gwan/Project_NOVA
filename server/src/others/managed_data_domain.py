@@ -723,10 +723,12 @@ class ManagedFeedBiasTable(ManagedTable):
             #pprint(managed_bias.to_dict())
             # avl트리에 넣어주면됨
             self.__bias_avltree.insert(key=single_bias.bid, value=managed_bias)
-
         return
 
-
+    def make_new_bias(self, bias:Bias):
+        managed_bias= ManagedBias(bid=bias.bid, bname=bias.bname, user_nodes=[], board_types=bias.board_types)
+        self.__bias_avltree.insert(key=bias.bid, value=managed_bias)
+        return
 
     # 랜덤한 Feed 하나 추출
     def get_random_feed(self):
