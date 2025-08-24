@@ -10,19 +10,20 @@ from uvicorn import run
 YELLOW = "\033[33m"
 RESET = "\033[0m"
 
-import builtins
+
+import types
 import traceback
 
-_old_getattribute = object.__getattribute__
+# 원래 NoneType
+NoneType = type(None)
 
-def custom_getattribute(self, name):
-    if self is None and name == 'get':
-        print(">>> None.get() 호출됨 <<<")
-        traceback.print_stack()
-    return _old_getattribute(self, name)
+def fake_get(self, *args, **kwargs):
+    print(">>> None.get() 호출됨!")
+    traceback.print_stack()
+    raise AttributeError("'NoneType' object has no attribute 'get'")  # 원래 동작 유지
 
-object.__getattribute__ = custom_getattribute
-
+# NoneType에 get 속성 주입
+NoneType.get = fake_get
 
 
 class ContentKeyStorage:
