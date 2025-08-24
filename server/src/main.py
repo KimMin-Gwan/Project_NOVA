@@ -86,3 +86,13 @@ if __name__ == '__main__':
     server_master = Master()
     asyncio.run(server_master.server_start_up())
 
+
+
+# 로그 사용기 >>> 복붙 해서 쓰라
+#start = time.time()
+#prev = start
+#def log(step:str):
+    #nonlocal prev
+    #now = time.time()
+    #print(f"[{step}] {now - prev:.6f}s (누적 {now - start:.6f}s)")
+    #prev = now
