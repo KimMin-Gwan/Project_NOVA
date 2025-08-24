@@ -207,7 +207,7 @@ class MyProfileModel(BaseModel):
         self._uname = ""
         self._uid = ""
         self._email = ""
-        self._age = ""
+        self._birth_year = ""
         self._gender = ""
 
     def get_response_form_data(self, head_parser):
@@ -216,7 +216,7 @@ class MyProfileModel(BaseModel):
                 'uname' : self._uname,
                 'uid': self._uid,
                 "email": self._email,
-                "birth_year": self._age,
+                "birth_year": self._birth_year,
                 "gender": self._gender
             }
 
@@ -225,13 +225,25 @@ class MyProfileModel(BaseModel):
 
         except Exception as e:
             raise CoreControllerLogicError("response making error | " + e)
+        
+    def _set_gender_format(self, gender):
+        result = "비공개"
+        
+        if gender == "male":
+            result = "남성"
+        elif gender == "female":
+            result = "여성"
+        else:
+            result = "비공개"
+            
+        return result
 
     def get_my_profile(self):
         self._uname = self._user.uname
         self._uid = self._user.uid
         self._email = self._user.email
-        self._age = self._user.birth_year
-        self._gender = self._user.gender
+        self._birth_year = self._user.birth_year
+        self._gender = self._set_gender_format(gender = self._user.gender)
         return
 
 class ChangePasswordModel(BaseModel):
