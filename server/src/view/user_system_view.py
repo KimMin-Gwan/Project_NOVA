@@ -88,7 +88,7 @@ class User_Service_View(Master_View):
                                                             )
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data,
-                                                           token=body_data['body']['token'],)
+                                                           token=model.get_token())
             return response
 
         # 임시 로그인 상태(비밀번호찾기 기능)에서 비밀번호 변경하기
