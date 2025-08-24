@@ -22,18 +22,13 @@ from collections import Counter
 class FeedSearchEngine:
     def __init__(self, database):
         self.__feed_algorithm= FeedAlgorithm(database=database)
-        print(0)
         self.__managed_feed_bias_table = ManagedFeedBiasTable(database=database, feed_algorithm=self.__feed_algorithm)
-        print(1)
         self.__search_manager = SearchManager(database=database, feed_algorithm=self.__feed_algorithm,
                                               managed_feed_bias_table=self.__managed_feed_bias_table)
-        print(2)
         self.__recommend_manager = RecommendManager(database=database,feed_algorithm=self.__feed_algorithm,
                                                     managed_feed_bias_table=self.__managed_feed_bias_table)
-        print(3)
         self.__filter_manager = FilteringManager(database=database, feed_algorithm=self.__feed_algorithm,
                                                  managed_feed_bias_table=self.__managed_feed_bias_table)
-        print(4)
 
         self.__database=database
 
