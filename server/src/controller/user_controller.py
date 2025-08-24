@@ -30,15 +30,18 @@ class UserController:
     # 6. 이미 있는 email이면 False 반환
     def try_send_email(self, database, request, nova_verification):
         model = SendEmailModel(database=database)
-        
-        if not model.set_user_with_email(request=request):
-            mailsender = MailSender()
-            temp_user = nova_verification.make_new_user(email=request.email)
+        try:
+            if not model.set_user_with_email(request=request):
+                mailsender = MailSender()
+                temp_user = nova_verification.make_new_user(email=request.email)
 
-            mailsender.send_email(receiver_email=temp_user.email,verification_code=temp_user.verification_code)
-            model.set_response(result=True, detail="이메일이 전송되었습니다. 코드는 10분 동안 유효합니다.")
-        else:
-            model.set_response(result=False, detail="이미 존재하는 이메일 입니다.")
+                mailsender.send_email(receiver_email=temp_user.email,verification_code=temp_user.verification_code)
+                model.set_response(result=True, detail="이메일이 전송되었습니다. 코드는 10분 동안 유효합니다.")
+            else:
+                model.set_response(result=False, detail="이미 존재하는 이메일 입니다.")
+        except:
+            model.set_response(result=False, detail="알 수 없는 오류가 발생했습니다. 관리자에게 문의하세요.")
+            
         return model
         
     # 비밀번호 찾기 시도 이메일 전송
