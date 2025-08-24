@@ -39,15 +39,15 @@ class Master(Configure_File_Reader):
 
         connection_manager = ConnectionManager() # 웹소켓 매니저 실행
         
+        print("1")
         feed_search_engine = FeedSearchEngine(database=database)
 
-        print("1")
-        schedule_search_engine = ScheduleSearchEngine(database=database)
         print("2")
+        schedule_search_engine = ScheduleSearchEngine(database=database)
         
+        print("3")
         feed_manager= FeedManager(database=database,
                                   feed_search_engine=feed_search_engine)
-        print("3")
         
         content_key_storage = ContentKeyStorage(
             chzzk_client_id=self._chzzk_client_id,
