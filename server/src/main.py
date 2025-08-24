@@ -10,6 +10,21 @@ from uvicorn import run
 YELLOW = "\033[33m"
 RESET = "\033[0m"
 
+import builtins
+import traceback
+
+_old_getattribute = object.__getattribute__
+
+def custom_getattribute(self, name):
+    if self is None and name == 'get':
+        print(">>> None.get() 호출됨 <<<")
+        traceback.print_stack()
+    return _old_getattribute(self, name)
+
+object.__getattribute__ = custom_getattribute
+
+
+
 class ContentKeyStorage:
     def __init__(self,
                  chzzk_client_id, chzzk_client_secret,
