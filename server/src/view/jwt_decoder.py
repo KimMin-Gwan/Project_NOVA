@@ -260,6 +260,8 @@ class RequestManager(JWTManager):
         
     # json데이터 보내줘야할 때 response 만드는 곳
     def make_json_response_with_hmac(self, body_data:dict):
+        pprint(body_data)
+        
         new_token = HMACManger(secret_key=self._secret_key).sign_count(body_data.get("count", 0))
 
         pprint(new_token)
