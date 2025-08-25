@@ -187,11 +187,11 @@ class RequestManager(JWTManager):
         return
     
     # 로그인 검수 -> 브루트포스 방지
-    def try_view_management_with_hmac(self, cookies = None):
+    def try_view_management_with_hmac(self, cookies:dict):
         hmac_manager = HMACManger(secret_key=self._secret_key)
         login_count = 0
         
-        if "nova_valification_token":
+        if cookies.get("nova_valification_token", ""):
             return login_count
         else:
             login_count = hmac_manager.verify_token(token=cookies["nova_valification_token"])
