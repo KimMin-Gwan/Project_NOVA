@@ -22,7 +22,7 @@ class UserController:
 
         return model
     
-    def try_login_with_recapcha(self, database, request, secret_key, recaptcha_secret_key)->LoginModel:
+    async def try_login_with_recapcha(self, database, request, secret_key, recaptcha_secret_key)->LoginModel:
         model = LoginModel(database=database)
         # 유저가 있는지 확인
 
@@ -30,7 +30,7 @@ class UserController:
             model.email_not_exist(request=request)
             return model
 
-        recaptcha_result = model.requset_login_with_recaptcha(request, recaptcha_secret_key)
+        recaptcha_result = await model.requset_login_with_recaptcha(request, recaptcha_secret_key)
         
         if recaptcha_result:
             model.request_login(request=request, user_data=model._user)
