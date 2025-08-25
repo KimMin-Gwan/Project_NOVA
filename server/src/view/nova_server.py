@@ -17,7 +17,8 @@ class NOVA_Server:
     def __init__(self, database, connection_manager,
                   feed_manager, feed_search_engine,
                   schedule_search_engine, 
-                  jwt_secret_key, content_key_storage
+                  jwt_secret_key, content_key_storage,
+                  recaptcha_secret_key
                   ) -> None:
         self.__app = FastAPI()
 
@@ -56,7 +57,8 @@ class NOVA_Server:
                                                    head_parser=head_parser,
                                                    feed_manager=feed_manager,
                                                    feed_search_engine=feed_search_engine,
-                                                   jwt_secret_key = jwt_secret_key
+                                                   jwt_secret_key = jwt_secret_key,
+                                                   recaptcha_secret_key= recaptcha_secret_key
                                                    )
         
         self.__sub_system_view = Sub_Service_View( app=self.__app,

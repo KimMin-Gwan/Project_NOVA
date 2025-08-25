@@ -1,4 +1,5 @@
 from model.base_model import BaseModel
+import httpx
 from model import Mongo_Database
 from others.data_domain import User, Bias
 from others import CoreControllerLogicError, FeedSearchEngine, ObjectStorageConnection
@@ -14,17 +15,41 @@ class LoginModel(BaseModel):
         self.__result = "email"
         self.__token = ''
         self.__detail = '존재하지 않는 이메일 입니다'
+        self.__count = 0
+        
+    async def requset_login_with_recaptcha(self, request, recaptcha_secret_key):
+        captcha_response = request.captcha_response
+        
+        async with httpx.AsyncClient() as client:
+            verify = await client.post(
+                "https://www.google.com/recaptcha/api/siteverify",
+                data={"secret": recaptcha_secret_key, "response": captcha_response},
+            )
+        result = verify.json()
+        
+        if not result.get("success"):
+            return True
+        else:
+            return False
+        
+    def recpatcha_fail(self, request):
+        self.__result = "recaptcha"
+        self.__detail = "잘못된 보안 코드입니다"
+        self.__count = request.login_count + 1
+        return
 
-    def request_login(self,request,user_data):
+    def request_login(self, request, user_data):
         try:
             if request.email == user_data.email and request.password == user_data.password:
                 self.__result = "done"
             elif request.password != user_data.password:
                 self.__result = "password"
                 self.__detail = '일치하지 않는 비밀번호 입니다'
+                
+            self.__count = request.login_count + 1
 
         except Exception as e:
-            raise CoreControllerLogicError(error_type="request_login | " + str(e))
+            raise CoreControllerLogicError(error_type=str(e))
     
     def make_token(self,request, secret_key):
         try:
@@ -43,6 +68,9 @@ class LoginModel(BaseModel):
         self.__token = jwtManager.make_token(email=request.email, usage="temp")
         return
     
+    def get_result(self):
+        return self.__result
+    
     def get_token(self):
         return self.__token
 
@@ -51,6 +79,7 @@ class LoginModel(BaseModel):
             body = {
                 'result' : self.__result,
                 'detail' : self.__detail,
+                'count' : self.__count
             }
 
             response = self._get_response_data(head_parser=head_parser, body=body)

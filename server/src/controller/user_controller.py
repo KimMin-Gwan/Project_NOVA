@@ -5,7 +5,7 @@ from pprint import pprint
 
 class UserController:
     # 로그인 시도
-    def try_login(self, database, request, secret_key):
+    def try_login(self, database, request, secret_key)->LoginModel:
 
         model = LoginModel(database=database)
         # 유저가 있는지 확인
@@ -14,6 +14,30 @@ class UserController:
             return model
 
         model.request_login(request=request,user_data=model._user)
+        if model.get_result() != "done":
+            return model
+        
+        model.make_token(request=model._user, secret_key=secret_key)
+
+        return model
+    
+    def try_login_with_recapcha(self, database, request, secret_key, recaptcha_secret_key)->LoginModel:
+        model = LoginModel(database=database)
+        # 유저가 있는지 확인
+
+        if not model.set_user_with_email(request=request):
+            return model
+
+        recaptcha_result = model.request_recaptcha(request, recaptcha_secret_key)
+        
+        if recaptcha_result:
+            model.request_login(request=request, user_data=model._user)
+        else: 
+            model.recpatcha_fail(request=request)
+            
+            
+        
+        
         if model.get_result() != "done":
             return model
         

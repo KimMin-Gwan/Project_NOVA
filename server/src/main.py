@@ -60,7 +60,8 @@ class Master(Configure_File_Reader):
             schedule_search_engine=schedule_search_engine,
             jwt_secret_key = self._jwt_secret_key,
             connection_manager=connection_manager,
-            content_key_storage=content_key_storage
+            content_key_storage=content_key_storage,
+            recaptcha_secret_key=self._recaptcha_secret_key
             )
         
         #app = nova_server.get_app()

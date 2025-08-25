@@ -28,6 +28,7 @@ class Configure_File_Reader:
         self._chzzk_client_secret = ''
         self._soop_client_id = ''
         self._soop_client_secret = ''
+        self._recaptcha_secret_key = ''
 
     def _extract_host_port(self, file_path='./configure.txt'):
         with open(file_path, 'r', encoding='utf-8') as file:
@@ -59,6 +60,8 @@ class Configure_File_Reader:
                     self._soop_client_id= line.split('=')[1].strip()
                 elif line.startswith('soop_client_secret'):
                     self._soop_client_secret= line.split('=')[1].strip()
+                elif line.startswith('recaptcha_secret_key'):
+                    self._recaptcha_secret_key= line.split('=')[1].strip()
                     
         self._model_setting = ModelSetting(
             open_api_key=self._open_api_key,

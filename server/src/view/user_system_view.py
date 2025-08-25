@@ -1,14 +1,16 @@
-from typing import Any, Optional, Union
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request, UploadFile, File
+from typing import Optional, Union
+from fastapi import FastAPI,  Request, UploadFile, File
 from view.master_view import Master_View, RequestHeader
 from view.parsers import Head_Parser
-from controller import Core_Controller, Core_Controller, UserController
-from view.jwt_decoder import RequestManager
+from controller import UserController
+from view.jwt_decoder import RequestManager, HMACManger
 from pprint import pprint
 
 class User_Service_View(Master_View):
     def __init__(self, app:FastAPI, endpoint:str, database, head_parser:Head_Parser,
-                 nova_verification, feed_manager, feed_search_engine, jwt_secret_key) -> None:
+                 nova_verification, feed_manager, feed_search_engine, jwt_secret_key,
+                 recaptcha_secret_key
+                 ) -> None:
         super().__init__(head_parser=head_parser)
         self.__app = app
         self._endpoint = endpoint
@@ -17,6 +19,7 @@ class User_Service_View(Master_View):
         self.__feed_manager = feed_manager
         self.__feed_search_engine = feed_search_engine
         self.__jwt_secret_key = jwt_secret_key
+        self.__recaptcha_secret_key = recaptcha_secret_key
         self.user_route(endpoint)
         self.my_page_route()
 
@@ -24,21 +27,51 @@ class User_Service_View(Master_View):
         @self.__app.get(endpoint+'/user')
         def home():
             return 'Hello, This is User system'
+        
+        
+        @self.__app.post('/user_home/is_this_client_robot')
+        def try_login(request:Request):
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
+            login_count = request_manager.try_view_management_with_hmac(cookies=request.cookies)
+            body_data = {"count" : login_count}
+            response = request_manager.make_json_response_with_hmac(body_data=body_data)
+            return response
 
         #로그인
         @self.__app.post('/user_home/try_login')
-        def try_login(raw_request:dict):
+        def try_login(request:Request, raw_request:dict):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
-            data_payload = LoginRequest(request=raw_request)
+            data_payload = LoginRequest(request=raw_request, login_count=login_count)
+            
+            login_count = request_manager.try_view_management_with_hmac(cookies=request.cookies)
+            
+            # 로그인 시도가 5회 이상이라면 recaptcha를 포함한 요청을 처리
+            if login_count >= 5:
+                user_controller=UserController()
+                model = user_controller.try_login_with_recapcha(database=self.__database,
+                                                request=data_payload,
+                                                secret_key=self.__jwt_secret_key,
+                                                recaptcha_secret_key=self.__recaptcha_secret_key
+                                                )
+            else:
+                user_controller=UserController()
+                model = user_controller.try_login(database=self.__database,
+                                                request=data_payload,
+                                                secret_key=self.__jwt_secret_key
+                                                )
 
-            user_controller=UserController()
-            model = user_controller.try_login(database=self.__database,
-                                              request=data_payload,
-                                              secret_key=self.__jwt_secret_key
-                                              )
-            body_data = model.get_response_form_data(self._head_parser)
-            response = request_manager.make_json_response(body_data=body_data,
-                                                           token=model.get_token())
+            # 로그인 성공
+            if model.get_result() == "done":
+                #login 횟수 초기화
+                request_manager.try_clear_only_cookies(request=request)
+                body_data = model.get_response_form_data(self._head_parser)
+                response = request_manager.make_json_response(body_data=body_data,
+                                                            token=model.get_token())
+            # 로그인 실패
+            else:
+                # hmac 토큰에 login 횟수를 작성하여 전송
+                body_data = model.get_response_form_data(self._head_parser)
+                response = request_manager.make_json_response_with_hmac(body_data=body_data)
             return response
 
         # 로그아웃
@@ -300,11 +333,13 @@ class ChangeProfilePhotoRequest(RequestHeader):
         self.image_name =image_name
 
 class LoginRequest(RequestHeader):
-    def __init__(self, request) -> None:
+    def __init__(self, request, login_count) -> None:
         super().__init__(request)
-        body = request['body']
+        body:dict = request['body']
         self.email = body['email']
         self.password = body['password']
+        self.captcha_response = body.get("captcha_response", "")
+        self.login_count = login_count
 
 class TempLoginRequest(RequestHeader):
     def __init__(self, request) -> None:

@@ -1,5 +1,6 @@
 import jwt
 from jwt import ExpiredSignatureError
+import hmac, hashlib, base64
 from datetime import datetime, timezone, timedelta
 from fastapi import Response, Request
 from fastapi import HTTPException, status
@@ -78,7 +79,6 @@ class JWTManager:
 
         token = jwt.encode(payload, self._secret_key, algorithm="HS256", headers=headers)
         return token
-
     
 class JWTPayload:
     def __init__(self, result=False, email=None, exp=None, refresh_exp=None, usage="None"):
@@ -87,6 +87,33 @@ class JWTPayload:
         self.usage=usage
         self.exp=exp
         self.refresh_exp=refresh_exp
+        
+# 로그인 평가에 사용되는 HMAC
+# 로그인 시도 횟수를 기록하는데 사용
+class HMACManger:
+    def __init__(self, secret_key):
+        self._secret_key = secret_key
+
+    # count 값을 서명
+    # count 값을 보낼 때 사용함
+    def sign_count(self, count: int) -> str:
+        msg = str(count).encode()
+        sig = hmac.new(self._secret_key, msg, hashlib.sha256).digest()
+        return f"{count}.{base64.urlsafe_b64encode(sig).decode()}"
+    
+    # 서명된 count 값을 검증
+    # token에서 count값을 뽑을 때 사용
+    def verify_token(self, token: str) -> int:
+        try:
+            count_str, sig_b64 = token.split(".")
+            msg = count_str.encode()
+            expected_sig = hmac.new(self._secret_key, msg, hashlib.sha256).digest()
+            if hmac.compare_digest(expected_sig, base64.urlsafe_b64decode(sig_b64)):
+                return int(count_str)
+        except Exception:
+            pass
+        return 0
+    
 
 # Request를 분석하는 모듈
 class RequestManager(JWTManager):
@@ -116,6 +143,10 @@ class RequestManager(JWTManager):
             status_code=status.HTTP_403_FORBIDDEN,
             detail="403 Forbidden"
         )
+
+    def try_clear_only_cookies(self, request:Request):
+        request.cookies.clear()
+        return
 
     # 쿠키 지우는 마법
     def try_clear_cookies(self, request:Request):
@@ -153,6 +184,19 @@ class RequestManager(JWTManager):
                     headers={"WWW-Authenticate" : "Bearer"})
         self.jwt_payload= payload
         self.new_token = new_token
+        return
+    
+    # 로그인 검수 -> 브루트포스 방지
+    def try_view_management_with_hmac(self, cookies = None):
+        hmac_manager = HMACManger(secret_key=self._secret_key)
+        login_count = 0
+        
+        if "nova_valification_token":
+            return login_count
+        else:
+            login_count = hmac_manager.verify_token(token=cookies["nova_valification_token"])
+            
+        return login_count 
 
     # 로그인이 필수일때
     def try_view_management_need_authorized(self, data_payload = None, cookies = None):
@@ -173,6 +217,7 @@ class RequestManager(JWTManager):
                     headers={"WWW-Authenticate" : "Bearer"})
         self.jwt_payload= payload
         self.new_token = new_token
+        return
 
     # 로그인 필수 아닐때
     def try_view_management(self, data_payload = None, cookies = None):
@@ -198,6 +243,29 @@ class RequestManager(JWTManager):
         self.new_token = ""
         return
         
+    # json데이터 보내줘야할 때 response 만드는 곳
+    def make_json_response_with_hmac(self, body_data:dict):
+        new_token = HMACManger(secret_key=self._secret_key).sign_count(body_data.get("count", 0))
+        
+        self.new_token = new_token
+
+        response = Response(
+            content=json.dumps(body_data),
+            media_type="application/json",
+            status_code=200
+        )
+        
+        if self.new_token != "":
+            response.set_cookie(
+                key="nova_valification_token", 
+                value=self.new_token, 
+                max_age=7*60*60*24,
+                samesite="None",  # Changed to 'Lax' for local testing
+                secure=True,  # Local testing; set to True in production
+                httponly=True
+            )
+            
+        return response
 
     # json데이터 보내줘야할 때 response 만드는 곳
     def make_json_response(self, body_data:dict, token = ""):
@@ -218,7 +286,6 @@ class RequestManager(JWTManager):
                 secure=True,  # Local testing; set to True in production
                 httponly=True
             )
-
         return response
 
     # 비밀번호 변경하기에서 임시 유저 토큰 지우고 전송 데이터를 세팅
