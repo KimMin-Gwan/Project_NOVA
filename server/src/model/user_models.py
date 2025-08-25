@@ -16,6 +16,10 @@ class LoginModel(BaseModel):
         self.__token = ''
         self.__detail = '존재하지 않는 이메일 입니다'
         self.__count = 0
+    
+    def email_not_exist(self, request):
+        self.__count = request.login_count + 1
+        return
         
     async def requset_login_with_recaptcha(self, request, recaptcha_secret_key):
         captcha_response = request.captcha_response
