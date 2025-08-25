@@ -43,6 +43,8 @@ class User_Service_View(Master_View):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
 
             login_count = request_manager.try_view_management_with_hmac(cookies=request.cookies)
+
+            print(login_count)
             
             data_payload = LoginRequest(request=raw_request, login_count=login_count)
             
