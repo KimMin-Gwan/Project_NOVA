@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
+import ReCAPTCHA from "react-google-recaptcha";
 import { useNavigate } from "react-router-dom";
 import backword from "./../../img/back_icon.png";
 import See from "./../../img/pwSee.png";
 import SeeOff from "./../../img/pwNoneSee.png";
 import style from "./NovaLogin.module.css";
 import { getModeClass } from "./../../App.js";
+import mainApi from "../../services/apis/mainApi.js";
 
 import useLoginStore from "../../stores/LoginStore/useLoginStore.js";
 import HEADER from "../../constant/header.js";
@@ -13,10 +15,30 @@ const NOVALogin = ({ brightmode }) => {
   const [password, setPassword] = useState("");
   const [login, setLogin] = useState("");
   const [detail, setDetail] = useState("");
+  const [loginCount, setLoginCount] = useState(0);
+  const [captcha, setCaptcha] = useState("");
+
+  const handleCaptcha = (value) => {
+    setCaptcha(value);
+  };
+
   let emailRef = useRef(null);
+
+  const isThisClientRobot = async () => {
+    await mainApi.get("/user_home/is_this_client_robot").then((res)=>{
+      if (res.status == 200){
+        setLoginCount(res.data.count) 
+      }else{
+        alert("서버에 문제가 있습니다. 관리자에게 문의하세요")
+        navigate("/");
+      }
+    })
+  }
+  console.log(loginCount);
 
   useEffect(() => {
     emailRef.current.focus();
+    isThisClientRobot()
   }, []);
 
   const { tryLogin } = useLoginStore();
@@ -32,6 +54,7 @@ const NOVALogin = ({ brightmode }) => {
       body: {
         email: email,
         password: password,
+        captcha_response: captcha
       },
     };
 
@@ -49,6 +72,7 @@ const NOVALogin = ({ brightmode }) => {
         setLogin(result.body.result);
         setDetail(result.body.detail);
         tryLogin(result.body.result);
+        setLoginCount(result.body.count)
         if (result.body.result === "done") {
           navigate("/");
         }
@@ -138,6 +162,16 @@ const NOVALogin = ({ brightmode }) => {
         </div>
         {/* </div> */}
       </div>
+      
+      {
+        loginCount > 5 && <div>
+          <ReCAPTCHA
+            sitekey="6LePWrErAAAAAHE58_Rrc2Cxe9j01Ioxu8hZaysO"
+            onChange={handleCaptcha}
+          />
+        </div>
+      }
+
 
       <div className={style["login-box"]}>
         <button className={style.loginButton} onClick={handleLogin}>
