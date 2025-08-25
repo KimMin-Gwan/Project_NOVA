@@ -159,6 +159,19 @@ class RequestManager(JWTManager):
     def try_clear_only_cookies(self, request:Request):
         request.cookies.clear()
         return
+    
+    def try_clear_hmac_cookies(self, request:Request):
+        request.cookies.clear()
+        response = Response(
+            content=json.dumps({"result":True}),
+            media_type="application/json",
+            status_code=200
+        )
+        response.delete_cookie(key="nova_valification_token",
+                samesite="None",  # Changed to 'Lax' for local testing
+                secure=True,  # Local testing; set to True in production
+                httponly=True)
+        return response
 
     # 쿠키 지우는 마법
     def try_clear_cookies(self, request:Request):
@@ -282,6 +295,35 @@ class RequestManager(JWTManager):
                 httponly=True
             )
             
+        return response
+    
+    
+    # json데이터 보내줘야할 때 response 만드는 곳
+    def make_json_response_with_login(self, body_data:dict, token = ""):
+        if token != "":
+            self.new_token = token
+
+        response = Response(
+            content=json.dumps(body_data),
+            media_type="application/json",
+            status_code=200
+        )
+        
+        response.delete_cookie(key="nova_valification_token",
+            samesite="None",  # Changed to 'Lax' for local testing
+            secure=True,  # Local testing; set to True in production
+            httponly=True
+            )
+        
+        if self.new_token != "":
+            response.set_cookie(
+                key="nova_token", 
+                value=self.new_token, 
+                max_age=7*60*60*24,
+                samesite="None",  # Changed to 'Lax' for local testing
+                secure=True,  # Local testing; set to True in production
+                httponly=True
+            )
         return response
 
     # json데이터 보내줘야할 때 response 만드는 곳
