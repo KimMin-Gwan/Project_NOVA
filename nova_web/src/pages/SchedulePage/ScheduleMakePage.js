@@ -243,9 +243,6 @@ const ScheduleMakePage = () => {
         }
     };
 
-
-
-
     // 슬라이드 변경 시 애니메이션 실행
     const handleSlideChange = () => {
         const currentIndex = swiperRef.current?.activeIndex;
@@ -497,54 +494,9 @@ const ScheduleMakePage = () => {
                         </div>
                     </SwiperSlide>
                     <SwiperSlide>
-                        <div id="swiperSlide2" className={style["swiper-slide"]}>
-                            <div id ="slideTitleBox" className={style["slide-title-box"]}>
-                                <span id="slideStepTitle" className={style["slide-step-title"]}> 2단계 </span>
-                                <span id="slideStepSubtitle" className={style["slide-step-subtitle"]}> 중복 확인</span>
-                            </div>
-                                <div id="slideBodyContainer" className ={style["slide-body-container"]}>
-                                    <div className={style["slide-box-wrapper"]}>
-                                        <div className={style["slide-body-top-box"]}>
-                                            {targetBias.bid === "" ? (
-                                                <div className={style["target-bias"]}></div>
-                                            ) : (
-                                                <img src={BIAS_URL + `${targetBias.bid}.png`} onError={(e) => (e.target.src = tempBias)}  />
-                                            )}
-                                            <span className={style["top-box-content"]}> 
-                                                {targetBias.bname}
-                                            </span>
-                                        </div>
-                                        <div className={style["slide-body-bottom-box"]}> 
-                                            {searchedSchedule.length === 0 ? (
-                                                <div className={style["no-content-message"]}>등록된 컨텐츠 일정이 없어요!</div>
-                                            ) : (
-                                                searchedSchedule.map((item, i) => (
-                                                    <div>
-                                                        <ScheduleCard key={i} {...item} style={{ width: "90%" }} />
-                                                    </div>
-                                                ))
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div id="slideBottomContainer" className={style["slide-bottom-container"]}>
-                                    <div className={style["bottom-button"]}
-                                        onClick={() => swiperRef.current?.slidePrev()} // 오른쪽 슬라이드 이동
-                                    >
-                                        이전
-                                    </div>
-                                    <div className={style["bottom-button"]}
-                                        onClick={() => swiperRef.current?.slideNext()} // 오른쪽 슬라이드 이동
-                                    >
-                                        확인 완료
-                                    </div>
-                                </div>
-                        </div>
-                    </SwiperSlide>
-                    <SwiperSlide>
                         <div id="swiperSlide3" className={style["swiper-slide"]}>
                             <div id ="slideTitleBox" className={style["slide-title-box"]}>
-                                <span id="slideStepTitle" className={style["slide-step-title"]}> 3단계 </span>
+                                <span id="slideStepTitle" className={style["slide-step-title"]}> 2단계 </span>
                                 <span id="slideStepSubtitle" className={style["slide-step-subtitle"]}> 일정 작성</span>
                             </div>
                                 <div id="slideBodyContainer" className ={style["slide-body-container"]}>
@@ -588,7 +540,7 @@ const ScheduleMakePage = () => {
                     <SwiperSlide>
                         <div id="swiperSlide4" className={style["swiper-slide"]}>
                             <div id ="slideTitleBox" className={style["slide-title-box"]}>
-                                <span id="slideStepTitle" className={style["slide-step-title"]}> 4단계 </span>
+                                <span id="slideStepTitle" className={style["slide-step-title"]}> 3단계 </span>
                                 <span id="slideStepSubtitle" className={style["slide-step-subtitle"]}> 일정 검토</span>
                             </div>
                                 <div id="slideBodyContainer" className ={style["slide-body-container"]}>
