@@ -34,7 +34,7 @@ class User_Service_View(Master_View):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             login_count = request_manager.try_view_management_with_hmac(cookies=request.cookies)
             body_data = {"count" : login_count}
-            response = request_manager.make_json_response_with_hmac(body_data=body_data)
+            response = request_manager.make_json_response_with_hmac(body_data=body_data, count=body_data.get("count", 0))
             return response
 
         #로그인
@@ -72,7 +72,7 @@ class User_Service_View(Master_View):
             else:
                 # hmac 토큰에 login 횟수를 작성하여 전송
                 body_data = model.get_response_form_data(self._head_parser)
-                response = request_manager.make_json_response_with_hmac(body_data=body_data)
+                response = request_manager.make_json_response_with_hmac(body_data=body_data, count=body_data['body']["count"])
             return response
 
         # 로그아웃
