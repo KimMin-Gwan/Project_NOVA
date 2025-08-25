@@ -5,6 +5,7 @@ from datetime import datetime, timezone, timedelta
 from fastapi import Response, Request
 from fastapi import HTTPException, status
 import json
+from pprint import pprint
 
 
 class JWTManager:
@@ -202,6 +203,7 @@ class RequestManager(JWTManager):
         hmac_manager = HMACManger(secret_key=self._secret_key)
         login_count = 0
         
+        pprint(cookies)
         # 토큰이 있으면 토큰 검사해야됨
         if cookies.get("nova_valification_token", ""):
             login_count = hmac_manager.verify_token(token=cookies["nova_valification_token"])
