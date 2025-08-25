@@ -49,6 +49,14 @@ const NOVALogin = ({ brightmode }) => {
       return; // POST 요청을 보내지 않음
     }
 
+    if (loginCount > 5){
+      if (!captcha){
+        alert("보안을 위해 캡차 인증이 필요합니다.");
+        return; // POST 요청을 보내지 않음
+      }
+    }
+
+
     const send_data = {
       header: HEADER,
       body: {
@@ -164,11 +172,17 @@ const NOVALogin = ({ brightmode }) => {
       </div>
       
       {
-        loginCount > 5 && <div>
+        loginCount > 5 && 
+        <div style ={{
+          marginBottom: "10px"
+        }}>
           <ReCAPTCHA
             sitekey="6LePWrErAAAAAHE58_Rrc2Cxe9j01Ioxu8hZaysO"
             onChange={handleCaptcha}
           />
+          <p style={{ marginBottom: "8px", color: "#555" }}>
+            보안을 위해 캡차 인증을 완료해 주세요.
+          </p>
         </div>
       }
 
