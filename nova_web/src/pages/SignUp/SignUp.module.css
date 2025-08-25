@@ -2,7 +2,7 @@
   margin: 0 auto;
   max-width: 500px;
   background-color: white;
-  height: 150vh;
+  height: 120vh;
 }
 
 .Topbar {
@@ -78,6 +78,31 @@
   /* height: 100px; */
   /* background-color: green; */
 }
+
+.genderButtonWrapper{
+  width: 90%;
+  display: flex;
+  gap : 10px;
+}
+
+.genderButton{
+  display: flex;
+  align-items: center;
+  background-color: #f6f6f6;
+  margin-top: 10px;
+  border-radius: 10px;
+  padding : 10px 20px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;;
+  transition: all 0.3s ease-in-out;
+}
+
+.genderButton:hover{
+  background-color: #107af4a4;
+
+}
+
 .errorMessage {
   color: red;
   font-size: 14px;
@@ -138,11 +163,13 @@
   position: absolute;
   cursor: pointer;
   border: none;
-  background-color: transparent;
+  background: transparent;
+  border-radius: 12px;
   margin-top: 23px;
   transform: translateX(-100%);
   z-index: 1;
 }
+
 .agree_box {
   margin-top: 10px;
   border-radius: 10px;
@@ -194,4 +221,12 @@
   width: 95%;
   text-align: end;
   margin-top: 15px;
+}
+
+.termsDetail{
+  color: #111;
+  margin-left: 10px;
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
 }
