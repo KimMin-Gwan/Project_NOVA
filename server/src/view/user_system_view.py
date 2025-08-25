@@ -44,7 +44,6 @@ class User_Service_View(Master_View):
 
             login_count = request_manager.try_view_management_with_hmac(cookies=request.cookies)
 
-            print(login_count)
             
             data_payload = LoginRequest(request=raw_request, login_count=login_count)
             
