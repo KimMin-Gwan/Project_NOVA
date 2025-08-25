@@ -30,7 +30,7 @@ class UserController:
             model.email_not_exist(request=request)
             return model
 
-        recaptcha_result = model.request_recaptcha(request, recaptcha_secret_key)
+        recaptcha_result = model.requset_login_with_recaptcha(request, recaptcha_secret_key)
         
         if recaptcha_result:
             model.request_login(request=request, user_data=model._user)
