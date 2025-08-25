@@ -41,9 +41,11 @@ class User_Service_View(Master_View):
         @self.__app.post('/user_home/try_login')
         def try_login(request:Request, raw_request:dict):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
+
+            login_count = request_manager.try_view_management_with_hmac(cookies=request.cookies)
+            
             data_payload = LoginRequest(request=raw_request, login_count=login_count)
             
-            login_count = request_manager.try_view_management_with_hmac(cookies=request.cookies)
             
             # 로그인 시도가 5회 이상이라면 recaptcha를 포함한 요청을 처리
             if login_count >= 5:
