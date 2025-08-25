@@ -191,10 +191,12 @@ class RequestManager(JWTManager):
         hmac_manager = HMACManger(secret_key=self._secret_key)
         login_count = 0
         
+        # 토큰이 있으면 토큰 검사해야됨
         if cookies.get("nova_valification_token", ""):
-            return login_count
-        else:
             login_count = hmac_manager.verify_token(token=cookies["nova_valification_token"])
+        # 토큰이 없으면 괜찮음
+        else:
+            return login_count
             
         return login_count 
 
