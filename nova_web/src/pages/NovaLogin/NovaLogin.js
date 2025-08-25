@@ -180,7 +180,7 @@ const NOVALogin = ({ brightmode }) => {
             sitekey="6LePWrErAAAAAHE58_Rrc2Cxe9j01Ioxu8hZaysO"
             onChange={handleCaptcha}
           />
-          <p style={{ marginBottom: "8px", color: "#555" }}>
+          <p style={{ display:"flex", justifyContent:"center", marginBottom: "8px", color: "#ff7676ff" }}>
             보안을 위해 캡차 인증을 완료해 주세요.
           </p>
         </div>
