@@ -100,6 +100,7 @@ class HMACManger:
     def sign_count(self, count: int) -> str:
         msg = str(count).encode()
         sig = hmac.new(self._secret_key.encode(), msg, hashlib.sha256).digest()
+        pprint(sig)
         return f"{count}.{base64.urlsafe_b64encode(sig).decode()}"
 
     # 서명된 count 값을 검증 
@@ -261,9 +262,6 @@ class RequestManager(JWTManager):
     # json데이터 보내줘야할 때 response 만드는 곳
     def make_json_response_with_hmac(self, body_data:dict):
         new_token = HMACManger(secret_key=self._secret_key).sign_count(body_data.get("count", 0))
-        
-        pprint(new_token)
-        
         self.new_token = new_token
 
         response = Response(
