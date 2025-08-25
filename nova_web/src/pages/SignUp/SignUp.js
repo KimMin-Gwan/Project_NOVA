@@ -8,8 +8,8 @@ export default function SignUp() {
   let [code, setCode] = useState("");
   let [pwd, setPwd] = useState("");
   let [checkPwd, setCheckPwd] = useState("");
-  let [birthYear, setBirthYear] = useState("");
-  let [gender, setGender] = useState("");
+  let [birthYear, setBirthYear] = useState("2000");
+  let [gender, setGender] = useState("none");
 
   let navigate = useNavigate();
   const [agree1, setAgree1] = useState(false);
@@ -76,12 +76,22 @@ export default function SignUp() {
       setPasswordError(confirmPwd !== pwd);
     }
   }
-
   function handleBirthYear(e) {
     const value = e.target.value;
     if (/^\d*$/.test(value)) {
-      setBirthYear(value);
+      setBirthYear(value); // 입력은 그대로 반영
     }
+  }
+
+  function handleBirthYearBlur() {
+    if (birthYear === "") return; // 빈값이면 패스
+
+    let num = parseInt(birthYear, 10);
+
+    if (num < 1900) num = 1900;
+    if (num > 2020) num = 2020;
+
+    setBirthYear(num.toString());
   }
 
   function handleKeyDown(e) {
@@ -89,11 +99,24 @@ export default function SignUp() {
       e.preventDefault();
     }
   }
-  function handleGender(e) {
-    setGender(e.target.value);
+
+  function handleGender(gender) {
+    console.log(gender);
+    setGender(gender);
   }
+
   function handleCode(e) {
-    setCode(e.target.value);
+    let value = e.target.value;
+
+    // 숫자만 허용
+    value = value.replace(/\D/g, "");
+
+    // 최대 4자리 제한
+    if (value.length > 4) {
+      value = value.slice(0, 4);
+    }
+
+    setCode(value);
   }
 
   useEffect(() => {
@@ -135,7 +158,7 @@ export default function SignUp() {
           alert("회원가입이 완료되었습니다.");
           navigate("/novalogin");
         } else {
-          alert("회원가입 실패");
+          alert(data.body.detail);
         }
       });
   }
@@ -189,7 +212,7 @@ export default function SignUp() {
               이메일 주소
               <br />
               <label>
-                <input type="email" name="email" value={inputEmail} placeholder="testEmail@naver.com" onChange={(e) => handleInputEmail(e)} required className={emailError ? style.error : ""} />
+                <input type="email" name="email" value={inputEmail} placeholder="사용할 이메일 주소를 입력하세요" onChange={(e) => handleInputEmail(e)} required className={emailError ? style.error : ""} />
                 <button
                   className={style.authen}
                   disabled={!inputEmail}
@@ -216,8 +239,9 @@ export default function SignUp() {
               <label>
                 <input
                   name="password"
-                  placeholder="1234"
+                  placeholder="이메일 확인 후 4자리 코드를 입력해주세요"
                   required
+                  maxLength={4}
                   onChange={(e) => {
                     handleCode(e);
                   }}
@@ -231,7 +255,7 @@ export default function SignUp() {
               비밀번호
               <br />
               <label className={style.inputContainer}>
-                <input type={showPassword ? "text" : "password"} name="password" required onChange={(e) => handlePassWord(e)} placeholder="abc123456!@" className={passwordError && passwordMessage ? style.error : ""} />
+                <input type={showPassword ? "text" : "password"} name="password" required onChange={(e) => handlePassWord(e)} placeholder="영문 + 숫자 조합, 8자 이상이어야 합니다" className={passwordError && passwordMessage ? style.error : ""} />
                 <button type="button" onClick={() => setShowPassword(!showPassword)} className={style.toggleButton}>
                   {showPassword ? "숨기기" : "보기"}
                 </button>
@@ -245,7 +269,7 @@ export default function SignUp() {
               비밀번호 확인
               <br />
               <label className={style.inputContainer}>
-                <input type={showCheckPassword ? "text" : "password"} name="check_pwd" required onChange={(e) => handleCheckPassWord(e)} placeholder="abc123456!@" onFocus={() => setIsCheckPwdFocused(true)} className={passwordError && pwd && isCheckPwdFocused ? style.error : ""} />
+                <input type={showCheckPassword ? "text" : "password"} name="check_pwd" required onChange={(e) => handleCheckPassWord(e)} placeholder="비밀번호 확인을 위해 다시 입력해주세요" onFocus={() => setIsCheckPwdFocused(true)} className={passwordError && pwd && isCheckPwdFocused ? style.error : ""} />
                 <button type="button" onClick={() => setShowCheckPassword(!showCheckPassword)} className={style.toggleButton}>
                   {showCheckPassword ? "숨기기" : "보기"}
                 </button>
@@ -256,10 +280,15 @@ export default function SignUp() {
 
           <div className={style.box}>
             <div className={style.test}>
-              나이
+              태어난 해
               <br />
               <label>
-                <input type="number" name="age" value={birthYear} min="1900" max="2026" required onChange={handleBirthYear} onKeyDown={handleKeyDown} placeholder="2000" />
+                <input type="number" name="age" 
+                 value={birthYear} min="1900" max="2020"
+                 required onChange={handleBirthYear}
+                 onKeyDown={handleKeyDown}
+                 onBlur={handleBirthYearBlur}
+                 placeholder="2000" />
               </label>
             </div>
           </div>
@@ -267,13 +296,29 @@ export default function SignUp() {
           <div className={style.box}>
             <div className={style.test}>
               성별
+            <div className={style.genderButtonWrapper}>
               <br />
-              <input type="radio" name="gender" value="m" id="gender1" required onChange={(e) => handleGender(e)} />
-              <label htmlFor="gender1">남성</label>
-              <input type="radio" name="gender" value="f" id="gender2" onChange={(e) => handleGender(e)} />
-              <label htmlFor="gender2">여성</label>
-              <input type="radio" name="gender" value="n" id="gender3" onChange={(e) => handleGender(e)} />
-              <label htmlFor="gender3">비공개</label>
+              <div
+                className={style.genderButton}
+                style={gender === "male" ? { backgroundColor: "#107BF4", color: "white" } : {}}
+                onClick={() => handleGender("male")}
+              >
+                남자
+              </div>
+
+              <div className={style.genderButton}
+                style={gender === "female" ? { backgroundColor: "#107BF4", color: "white" } : {}}
+                onClick={() => handleGender("female")}
+              >
+                여성
+              </div>
+              <div className={style.genderButton}
+                style={gender === "none" ? { backgroundColor: "#107BF4", color: "white" } : {}}
+                onClick={() => handleGender("none")}
+              >
+                비공개
+              </div>
+            </div>
             </div>
           </div>
 
@@ -281,12 +326,16 @@ export default function SignUp() {
             <div className={style.agree_box}>
               <label>
                 <input type="checkbox" name="agree1" checked={agree1} onChange={handleIndividualChange} required />
-                (필수) 이용약관 동의
+                <span className={style.termsDetail}>
+                  (필수) 이용약관 동의
+                </span>
                 <p onClick={() => window.open('https://supernova.io.kr/service_terms_and_conditions.pdf', '_blank')}>상세보기</p>
               </label>
               <label>
                 <input type="checkbox" name="agree2" checked={agree2} onChange={handleIndividualChange} required />
-                (필수) 개인정보처리 동의
+                <span className={style.termsDetail}>
+                  (필수) 개인정보처리 동의
+                </span>
                 <p onClick={() => window.open('https://supernova.io.kr/personal_information_processing_agreement.pdf', '_blank')}>상세보기</p>
               </label>
             </div>
