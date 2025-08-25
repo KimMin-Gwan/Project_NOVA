@@ -78,14 +78,12 @@ class ManagedBias:
         self.bname = bname
         self.trend_hashtags = []
         self.user_nodes:list = user_nodes
-        self.board_types:list = board_types
 
     def to_dict(self):
         return {
             "bid": self.bid,
             "bname": self.bname,
             "trend_hashtags": self.trend_hashtags,
-            "board_types": copy(self.board_types)
         }
 
 class ManagedSchedule:
@@ -719,14 +717,18 @@ class ManagedFeedBiasTable(ManagedTable):
                     if user_node:
                         user_nodes.append(user_node)
             # 이제 관리될 바이어스를 만들고 연결한다음
-            managed_bias = ManagedBias(bid=single_bias.bid, bname=single_bias.bname, user_nodes=user_nodes, board_types=single_bias.board_types)
+            managed_bias = ManagedBias(
+                bid=single_bias.bid,
+                bname=single_bias.bname,
+                user_nodes=user_nodes,
+                )
             #pprint(managed_bias.to_dict())
             # avl트리에 넣어주면됨
             self.__bias_avltree.insert(key=single_bias.bid, value=managed_bias)
         return
 
     def make_new_bias(self, bias:Bias):
-        managed_bias= ManagedBias(bid=bias.bid, bname=bias.bname, user_nodes=[], board_types=bias.board_types)
+        managed_bias= ManagedBias(bid=bias.bid, bname=bias.bname, user_nodes=[])
         self.__bias_avltree.insert(key=bias.bid, value=managed_bias)
         return
 
