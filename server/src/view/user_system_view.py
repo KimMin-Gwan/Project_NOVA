@@ -30,7 +30,7 @@ class User_Service_View(Master_View):
         
         
         @self.__app.get('/user_home/is_this_client_robot')
-        def try_login(request:Request):
+        def is_this_client_robot(request:Request):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             login_count = request_manager.try_view_management_with_hmac(cookies=request.cookies)
             body_data = {"count" : login_count}
