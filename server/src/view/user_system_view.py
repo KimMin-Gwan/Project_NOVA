@@ -29,7 +29,7 @@ class User_Service_View(Master_View):
             return 'Hello, This is User system'
         
         
-        @self.__app.post('/user_home/is_this_client_robot')
+        @self.__app.get('/user_home/is_this_client_robot')
         def try_login(request:Request):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             login_count = request_manager.try_view_management_with_hmac(cookies=request.cookies)
