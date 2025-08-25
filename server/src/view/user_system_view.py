@@ -64,9 +64,8 @@ class User_Service_View(Master_View):
             # 로그인 성공
             if model.get_result() == "done":
                 #login 횟수 초기화
-                request_manager.try_clear_only_cookies(request=request)
                 body_data = model.get_response_form_data(self._head_parser)
-                response = request_manager.make_json_response(body_data=body_data,
+                response = request_manager.make_json_response_with_login(body_data=body_data,
                                                             token=model.get_token())
             # 로그인 실패
             else:
