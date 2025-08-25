@@ -47,7 +47,7 @@ class User_Service_View(Master_View):
             
             
             # 로그인 시도가 5회 이상이라면 recaptcha를 포함한 요청을 처리
-            if login_count >= 5:
+            if login_count >= 6:
                 user_controller=UserController()
                 model = user_controller.try_login_with_recapcha(database=self.__database,
                                                 request=data_payload,
