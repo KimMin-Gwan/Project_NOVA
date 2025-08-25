@@ -11,6 +11,7 @@ class UserController:
         # 유저가 있는지 확인
 
         if not model.set_user_with_email(request=request):
+            model.email_not_exist(request=request)
             return model
 
         model.request_login(request=request,user_data=model._user)
@@ -26,6 +27,7 @@ class UserController:
         # 유저가 있는지 확인
 
         if not model.set_user_with_email(request=request):
+            model.email_not_exist(request=request)
             return model
 
         recaptcha_result = model.request_recaptcha(request, recaptcha_secret_key)
