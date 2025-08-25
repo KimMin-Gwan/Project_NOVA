@@ -73,7 +73,7 @@ class ManagedFeed:
 # 이거는 Bias 테이블에 들어가게 되는 Bias 자료형
 # 데이터베이스에 받아서 만들어진다.
 class ManagedBias:
-    def __init__(self, bid, bname:str, user_nodes:list, board_types:list):
+    def __init__(self, bid, bname:str, user_nodes:list):
         self.bid = bid
         self.bname = bname
         self.trend_hashtags = []
