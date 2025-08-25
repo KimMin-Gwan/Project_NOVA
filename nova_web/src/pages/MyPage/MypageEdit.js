@@ -111,7 +111,7 @@ function MyPage() {
     var Regex = regexArray[index];
 
     if (!Regex.test(e.target.value)) {
-      setWarningMessage("영소문자, 숫자, 특수문자를 포함해 10자리 이상이어야 합니다.");
+      setWarningMessage("영소문자, 숫자, 특수문자를 포함해 8자리 이상이어야 합니다.");
       index === 0 ? setIsVali(true) : setIsValiPw(true);
     } else {
       index === 0 ? setIsVali(false) : setIsValiPw(false);
@@ -364,19 +364,11 @@ function MyPage() {
             readOnly
             tabIndex="-1"
           />
-          <p className={style["input-name"]}>나이</p>
+          <p className={style["input-name"]}>태어난 년도</p>
           <input
             className={style["input-st"]}
             type="text"
-            placeholder={`${myProfile.age}살`}
-            readOnly
-            tabIndex="-1"
-          />
-          <p className={style["input-name"]}>성별</p>
-          <input
-            className={style["input-st"]}
-            type="text"
-            placeholder={myProfile.gender === "f" ? "여성" : "남성"}
+            placeholder={`${myProfile.birth_year}년`}
             readOnly
             tabIndex="-1"
           />
@@ -519,11 +511,11 @@ function MyPage() {
             readOnly
             tabIndex="-1"
           />
-          <p className={style["input-name"]}>나이</p>
+          <p className={style["input-name"]}>태어난 해</p>
           <input
             className={style["input-st"]}
             type="text"
-            placeholder={`${myProfile.age}살`}
+            placeholder={`${myProfile.birth_year}살`}
             readOnly
             tabIndex="-1"
           />
@@ -531,7 +523,7 @@ function MyPage() {
           <input
             className={style["input-st"]}
             type="text"
-            placeholder={myProfile.gender === "f" ? "여성" : "남성"}
+            placeholder={`${myProfile.gender}`}
             readOnly
             tabIndex="-1"
           />
