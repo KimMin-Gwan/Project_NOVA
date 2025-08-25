@@ -92,27 +92,38 @@ class JWTPayload:
 # 로그인 시도 횟수를 기록하는데 사용
 class HMACManger:
     def __init__(self, secret_key):
-        self._secret_key = secret_key
+        self._secret_key:str = secret_key
 
-    # count 값을 서명
+    # count 값을 서명 
     # count 값을 보낼 때 사용함
     def sign_count(self, count: int) -> str:
         msg = str(count).encode()
-        sig = hmac.new(self._secret_key, msg, hashlib.sha256).digest()
+        sig = hmac.new(self._secret_key.encode(), msg, hashlib.sha256).digest()
         return f"{count}.{base64.urlsafe_b64encode(sig).decode()}"
-    
-    # 서명된 count 값을 검증
+
+    # 서명된 count 값을 검증 
     # token에서 count값을 뽑을 때 사용
     def verify_token(self, token: str) -> int:
         try:
             count_str, sig_b64 = token.split(".")
             msg = count_str.encode()
-            expected_sig = hmac.new(self._secret_key, msg, hashlib.sha256).digest()
-            if hmac.compare_digest(expected_sig, base64.urlsafe_b64decode(sig_b64)):
-                return int(count_str)
+
+            # key를 encode 해서 bytes로 맞춤
+            expected_sig = hmac.new(self._secret_key.encode(), msg, hashlib.sha256).digest()
+            provided_sig = base64.urlsafe_b64decode(sig_b64)
+
+            if not hmac.compare_digest(expected_sig, provided_sig):
+                # 해커가 변조 → 승인 거부
+                raise HTTPException(status_code=403, detail="Invalid verification token")
+
+            return int(count_str)
+
+        except ValueError:
+            # count_str이 정수로 안 바뀌는 경우 → 무효 처리
+            return 0
         except Exception:
-            pass
-        return 0
+            # 토큰 형식이 잘못된 경우 → 무효 처리
+            return 0
     
 
 # Request를 분석하는 모듈
