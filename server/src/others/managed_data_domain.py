@@ -840,6 +840,9 @@ class ManagedFeedBiasTable(ManagedTable):
 
         # 게시글 날짜 필터링
         searched_df = self._filter_data_with_until_before_X_days(df=searched_df, date_column="date", target_time=time_type)
+        
+        if searched_df.empty:
+            return []
 
         # 마지막, 삭제된 Feed는 반환하지 않는다.
         searched_df = searched_df[searched_df['display'] != 0]
@@ -864,6 +867,9 @@ class ManagedFeedBiasTable(ManagedTable):
         searched_df = self._search_data_with_key_str_n_columns(df=self.__feed_df, columns=columns,
                                                                key=key, board_type=board_type)
 
+        if searched_df.empty:
+            return []
+        
         # 시간에 따라 분류하는 함수 ( 일간, 주간 )
         searched_df = self._filter_data_with_until_before_X_days(df=searched_df, date_column="date", target_time=target_time)
 
@@ -880,6 +886,9 @@ class ManagedFeedBiasTable(ManagedTable):
     # 바이어스 별 필터링을 진행합니다.
     def filtering_bias_community(self, bid:str, board_type:str, return_id:bool=True):
         filtered_feeds_df = self._search_data_with_key_str_n_columns(df=self.__feed_df, bid=bid, board_type=board_type)
+        if filtered_feeds_df.empty:
+            return []
+        
         # 마지막, 삭제된 Feed는 반환하지 않는다.
         filtered_feeds_df = filtered_feeds_df[filtered_feeds_df['display'] != 0]
         if return_id:
@@ -905,6 +914,8 @@ class ManagedFeedBiasTable(ManagedTable):
         # Filtering 시, 다음의 값을 유의
         # categories[0] == ""인 경우, 모든 경우를 가져옵니다.
         filtered_feeds_df = self._search_data_with_key_str_n_columns(df=self.__feed_df, fid=fid_list, board_type=categories)
+        if filtered_feeds_df.empty:
+            return []
 
         # 마지막, 삭제된 Feed는 반환하지 않는다.
         filtered_feeds_df = filtered_feeds_df[filtered_feeds_df['display'] != 0]
