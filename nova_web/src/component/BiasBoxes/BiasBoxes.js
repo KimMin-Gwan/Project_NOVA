@@ -8,6 +8,7 @@ import useLoginStore from "../../stores/LoginStore/useLoginStore";
 import useDragScroll from "../../hooks/useDragScroll";
 import add_bias_icon from "./../../img/add_bias.png";
 import tempBias from "./../../img/tempBias.png";
+import biasBadge from "./bias_badge.svg";
 
 import "./index.css";
 
@@ -76,6 +77,9 @@ export default function BiasBoxes({ fetchBiasCategoryData, fecthDefaultSetting }
     }
   }, [loading]);
 
+  console.log(biasList);
+
+
   if(biasList.length === 0){
     return (
       <div
@@ -127,7 +131,12 @@ export default function BiasBoxes({ fetchBiasCategoryData, fecthDefaultSetting }
                     />
                   )}
                 </div>
-                <div className="b-name">{bias?.bname || <span>&nbsp;</span>}</div>
+                <div className={"bias-info-wrapper"}>
+                  <img className={"bias-badge-svg"} src={biasBadge}
+                    style={{ display: bias.state == "CONFIRMED" ? "" : "none"  }}
+                   />
+                  <div className="b-name">{bias?.bname || <span>&nbsp;</span>}</div>
+                </div>
                 <div className={clickedBias === i ? "clicked-box" : "non-clicked-box"}></div>
               </div>
             );
@@ -136,7 +145,6 @@ export default function BiasBoxes({ fetchBiasCategoryData, fecthDefaultSetting }
         </div>
       </div>
     );
-
   }
 }
 
