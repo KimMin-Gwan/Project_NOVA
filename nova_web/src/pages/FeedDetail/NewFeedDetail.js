@@ -20,16 +20,6 @@ import style from "./NewFeedDetail.module.css";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import DesktopLayout from "../../component/DesktopLayout/DeskTopLayout";
 
-
-//const temp_comment = [
-  //{cid: "1", uid:"1", owner:false, uname:"익명", is_reply:false, reply:"", body:"원글 그림 왜 잘그림? 님 혹시 제것도 슬쩍 그려주실 수 있음?"},
-  //{cid: "2", uid:"2", owner:false, uname:"니말이다맞음", is_reply:false, reply:"", body:"윗댓 정신좀 차려라. 그냥 날로 처먹으려고 하네;; 님들 같은 사람들 때문에 멀정한 치수들 다 욕먹는거임"},
-  //{cid: "3", uid:"3", owner:true, uname:"관리자", is_reply:false, reply:"", body:"님들 싸우지 말죠 ㅋㅋㅋ"},
-  //{cid: "4", uid:"1", owner:false, uname:"익명", is_reply:false, reply:"", body:"뭐래;; 그냥 하는말인데 왜 급발진함;;"},
-  //{cid: "5", uid:"3", owner:true, uname:"관리자", is_reply:true, reply:{cid:"2", uname:"익명", body:"뭐래;; 그냥 하는말인데 왜 급발진함;;"}, body:"그려드릴테니 진정하십쇼 ㅋㅋㅋㅋㅋ"},
-//]
-
-
 export default function NewFeedDetail() {
   const isMobile = useMediaQuery('(max-width:1100px)');
   let navigate = useNavigate();
@@ -398,16 +388,12 @@ export default function NewFeedDetail() {
         </div>
 
         <div className={style["content-box"]}>
-          {isLoading ? (
-            <ContentFeed
-              feed={feedData}
-              handleCheckStar={handleCheckStar}
-              links={links}
-              disableClick={false}
-            />
-          ) : (
-            <div>불러오는 중...</div>
-          )}
+          <ContentFeed
+            feed={feedData}
+            handleCheckStar={handleCheckStar}
+            links={links}
+            disableClick={false}
+          />
         </div>
 
        <div className="section-separator"></div>
@@ -465,93 +451,97 @@ export default function NewFeedDetail() {
       </div>
     ) : (
       <DesktopLayout>
-        <div className="container">
-          <div className={style["top-container"]}>
-            <button
-              className={style["back-button"]}
-              onClick={() => navigate(-1)}
-            >
-              <img src={back} alt="back" />
-              <span>뒤로</span>
-            </button>
-            {feedData.is_owner && (
+        <div className={style["container"]}>
+          <div className={style["feed-detail-wrapper"]}>
+            <div className={style["top-container"]}>
               <button
-                className={style["delete-button"]}
-                onClick={onClickOption}
+                className={style["back-button"]}
+                onClick={() => navigate(-1)}
               >
-                <img src={more_icon} alt="more" />
+                <img src={back} alt="back" />
+                <span>뒤로</span>
               </button>
-            )}
-            {showMoreOption && (
-              <OptionModal
-                onClickOption={onClickOption}
-                onClickDelete={fetchRemoveFeed}
-                fid={fid}
+              {feedData.is_owner && (
+                <button
+                  className={style["delete-button"]}
+                  onClick={onClickOption}
+                >
+                  <img src={more_icon} alt="more" />
+                </button>
+              )}
+              {showMoreOption && (
+                <OptionModal
+                  onClickOption={onClickOption}
+                  onClickDelete={fetchRemoveFeed}
+                  fid={fid}
+                />
+              )}
+            </div>
+
+            <div className={style["content-box"]}>
+              <ContentFeed
+                detailPage
+                feed={feedData}
+                handleCheckStar={handleCheckStar}
+                links={links}
+                disableClick={false}
+              />
+            </div>
+
+            <div className="section-separator"></div>
+
+            {showCommentMoreOption && (
+              <CommentOptionModal
+                onClose={togglePushingComment}
+                onClickDelete={tryDeleteComment}
+                deleteTargetCid={optionTargetComment}
               />
             )}
-          </div>
 
-          <div className={style["content-box"]}>
-            <ContentFeed
-              detailPage
-              feed={feedData}
-              handleCheckStar={handleCheckStar}
-              links={links}
-              disableClick={false}
-            />
-          </div>
+            <div className={style["comment-wrapper"]}>
+              <div className={style["comment-wrapper-title"]}>실시간 코멘트</div>
 
-          <div className="section-separator"></div>
-
-          {showCommentMoreOption && (
-            <CommentOptionModal
-              onClose={togglePushingComment}
-              onClickDelete={tryDeleteComment}
-              deleteTargetCid={optionTargetComment}
-            />
-          )}
-
-          <div className={style["comment-wrapper"]}>
-            <div className={style["comment-wrapper-title"]}>실시간 코멘트</div>
-
-            {isMoreComment && (
-              <button
-                className={style["comment-more-button"]}
-                onClick={fetchFeedComment}
-              >
-                지난 댓글 불러오기
-              </button>
-            )}
-
-            <div className={style["new-comment-box"]} ref={commentBoxRef}>
-              {comments.map((comment, index) => (
-                <CommentComponent
-                  key={index}
-                  {...comment}
-                  commentAction={togglePushingComment}
-                />
-              ))}
-            </div>
-
-            <div className={style["input-container"]}>
-              <div className={style["input-wrapper"]}>
-                <input
-                  ref={commentRef}
-                  type="text"
-                  id={style["comment"]}
-                  value={commentValue}
-                  onChange={onChangeComment}
-                  onKeyDown={onKeyDownEnter}
-                  placeholder={setPlaceholder()}
-                />
+              {isMoreComment && (
                 <button
-                  className={style["input-button"]}
-                  onClick={onClickInput}
+                  className={style["comment-more-button"]}
+                  onClick={fetchFeedComment}
                 >
-                  <img src={input} alt="input" />
+                  지난 댓글 불러오기
                 </button>
+              )}
+
+              <div className={style["new-comment-box"]} ref={commentBoxRef}>
+                {comments.map((comment, index) => (
+                  <CommentComponent
+                    key={index}
+                    {...comment}
+                    commentAction={togglePushingComment}
+                  />
+                ))}
+              </div>
+
+              <div className={style["input-container"]}>
+                <div className={style["input-wrapper"]}>
+                  <input
+                    ref={commentRef}
+                    type="text"
+                    id={style["comment"]}
+                    value={commentValue}
+                    onChange={onChangeComment}
+                    onKeyDown={onKeyDownEnter}
+                    placeholder={setPlaceholder()}
+                  />
+                  <button
+                    className={style["input-button"]}
+                    onClick={onClickInput}
+                  >
+                    <img src={input} alt="input" />
+                  </button>
+                </div>
               </div>
             </div>
+
+
           </div>
         </div>
       </DesktopLayout>

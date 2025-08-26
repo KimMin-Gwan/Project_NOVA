@@ -7,6 +7,25 @@
   position: relative;
 }
 
+.container{
+  display: flex;
+  align-items:  center;
+  justify-content: center;
+  width: 100%;
+}
+
+.feed-detail-wrapper{
+  align-items : center;
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  max-width: 700px;
+  padding-top: 80px;
+  width: 50%;
+  flex-direction: column;
+}
+
+
 .content-box{
   width: 100%;
   pointer-events: "none";
@@ -69,6 +88,7 @@
   justify-content: center;
   padding-top :20px;
   padding-bottom :20px;
+  align-self: stretch;
 }
 
 .comment-wrapper-title{
