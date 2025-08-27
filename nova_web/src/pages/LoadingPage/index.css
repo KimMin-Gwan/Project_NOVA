@@ -7,17 +7,25 @@
   margin: 0 auto;
   background-color: #fff;
 }
+
 .MyPageLoading {
   display: flex;
+  padding-top : 100px;
+  padding-bottom: 100px;
   justify-content: center;
   align-items: center;
-  height: 600px;
 }
 
 
 .BrandLoader {
   width: 80%; /* 로고 크기 조절 */
   height: auto; /* 비율 유지 */
+}
+
+.DefaultLoader{
+  width: 100%;
+  max-width: 512px;
+  min-width: 300px;
 }
 
 
