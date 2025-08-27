@@ -1,24 +1,26 @@
 .middle {
     color: rgba(189, 189, 189, 0.70);
-    font-family: Pretendard;
+    font-family: Pretendard, sans-serif;
     font-size: 200px;
     font-style: normal;
     font-weight: 800;
     line-height: 140%; /* 280px */
     letter-spacing: -5px;
+    text-align: center;
 }
 
-.span{
+.span {
     color: #000;
-    font-family: Pretendard;
+    font-family: Pretendard, sans-serif;
     font-size: 60px;
     font-style: normal;
     font-weight: 800;
     line-height: 140%; /* 114.8px */
     letter-spacing: -2.05px;
+    text-align: center;
 }
 
-.text-wrapper{
+.text-wrapper {
     display: flex;
     height: 497px;
     flex-direction: column;
@@ -28,7 +30,7 @@
     align-self: stretch;
 }
 
-.screen{
+.screen {
     display: flex;
     width: 1920px;
     height: 100vh;
@@ -36,4 +38,30 @@
     justify-content: center;
     align-items: center;
     gap: 10px;
+}
+
+/* 📱 모바일 화면 (768px 이하) */
+@media (max-width: 768px) {
+    .middle {
+        font-size: 100px;
+        letter-spacing: -3px;
+    }
+
+    .span {
+        font-size: 30px;
+        letter-spacing: -1px;
+    }
+}
+
+/* 📱 아주 작은 화면 (480px 이하) */
+@media (max-width: 480px) {
+    .middle {
+        font-size: 70px;
+        letter-spacing: -2px;
+    }
+
+    .span {
+        font-size: 20px;
+        letter-spacing: -0.5px;
+    }
 }
