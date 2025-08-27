@@ -29,6 +29,7 @@ import ContentTestPage from "./pages/BrandContent/ContentTestPage.jsx";
 import NewHomePage from "./pages/NewHomePage/NewHomePage.jsx";
 import DesktopLayout from "./component/DesktopLayout/DeskTopLayout.jsx";
 import SubmitNewBiasPage from "./pages/SubmitNewBias/SubmitNewBias.jsx";
+import ErrorPage from "./pages/error_page.js";
 
 // 다크 모드 클래스 반환 함수
 export function getModeClass(mode) {
@@ -141,15 +142,11 @@ function App() {
 
       {/* 테스트 페이지 및 에러 페이지 */}
       {/* <Route path="/test2" element={<TestPage />}></Route> */}
-      <Route path="*" element={<div>404 Error</div>}></Route>
+      <Route path="*" element={<ErrorPage/>} />
 
       {/* 홈 화면 */}
       <Route path="/" element={<NewHomePage/>} />
       <Route path="/home_test" element={<HomePage/>}/>
-
-      <Route path="/desktop_test" element={<DesktopLayout/>} />
-
-
       <Route path="/welcome" element={<BrandPage/>} />
       <Route path="/temp_test2" element={<YouTubePlayer/>} />
       <Route path="/content" element={<ContentPage/>} />
