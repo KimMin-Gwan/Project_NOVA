@@ -47,8 +47,7 @@ function MyPage() {
     {
       num_comment : 0,
       num_like : 0,
-      num_long_feed : 0,
-      num_short_feed : 0,
+      num_feed : 0,
       uid : "",
       uname : ''
     }
@@ -165,9 +164,6 @@ function MyPage() {
     setActiveIndex(index);
   };
 
-  if (isLoading) {
-    return <MyPageLoading />;
-  }
 
   const handleCommentToggle = (id) => {
     setClickedComments((prev) => ({
@@ -205,7 +201,7 @@ function MyPage() {
             <section className={style["user-info"]}>
               <ul>
                 <li>
-                  <b>{myData.num_long_feed}</b>
+                  <b>{myData.num_feed}</b>
                   <p>게시글</p>
                 </li>
                 <li>
@@ -322,7 +318,7 @@ function MyPage() {
               <section className={style["user-info"]}>
                 <ul>
                   <li>
-                    <b>{myData.num_long_feed}</b>
+                    <b>{myData.num_feed}</b>
                     <p>게시글</p>
                   </li>
                   <li>
