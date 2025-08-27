@@ -72,6 +72,7 @@
 .feed-box {
   width: 100%;
 }
+
 .scroll-area {
   width: 100%;
   display: flex;
@@ -81,6 +82,9 @@
 }
 
 .none_feed_scroll {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
   height: 100vh;
 }
 /* ----라이트 모드 ----- */
