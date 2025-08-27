@@ -1,0 +1,39 @@
+.middle {
+    color: rgba(189, 189, 189, 0.70);
+    font-family: Pretendard;
+    font-size: 200px;
+    font-style: normal;
+    font-weight: 800;
+    line-height: 140%; /* 280px */
+    letter-spacing: -5px;
+}
+
+.span{
+    color: #000;
+    font-family: Pretendard;
+    font-size: 60px;
+    font-style: normal;
+    font-weight: 800;
+    line-height: 140%; /* 114.8px */
+    letter-spacing: -2.05px;
+}
+
+.text-wrapper{
+    display: flex;
+    height: 497px;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+    align-self: stretch;
+}
+
+.screen{
+    display: flex;
+    width: 1920px;
+    height: 100vh;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
