@@ -1,7 +1,4 @@
-import EventComponent from "./EventComponent.jsx";
 import "./style.css";
-import vertical_line from "./../../img/vertical_line.svg";
-import {ScheduleTopicMain} from "../../component/ScheduleTopic/ScheduleTopic.js";
 import { useNavigate } from "react-router-dom";
 import React, { useRef, useEffect, useState } from "react";
 //import TimeChart from "./TimeChart/TimeChart.jsx";
@@ -10,7 +7,6 @@ import HEADER from "../../constant/header";
 import postApi from "../../services/apis/postApi.js";
 import mainApi from "../../services/apis/mainApi.js";
 import NavBar from "../../component/NavBar/NavBar.js";
-import { MakeSingleSchedule } from "../../component/EventMore/EventMore.js";
 import TimeLayerBox from "./time_layer/time_layer_box.js";
 
 import { EditSingleSchedule } from "../../component/EventMore/EventMore";
@@ -22,7 +18,6 @@ import "swiper/css/navigation";
 
 import style from './../FeedDetail/NewFeedDetail.module.css';
 import style2 from './time_layer/TimeLayerBoxDesktop.module.css';
-import time_layer_box_style from "./time_layer/time_layer_box.module.css";
 
 import arrowRightStop from './Arrow_right_stop.svg';
 import tempBias from "./../../img/tempBias.png";

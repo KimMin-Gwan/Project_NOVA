@@ -23,11 +23,9 @@ import ScheduleExplore from "./pages/ScheduleExplore/ScheduleExplore.js";
 import ScheduleMakePage from "./pages/SchedulePage/ScheduleMakePage.js";
 import NewFeedDetail from "./pages/FeedDetail/NewFeedDetail.js";
 import BrandPage from "./pages/BrandPage/brandPage.jsx";
-import YouTubePlayer from "./pages/BrandContent/TestPage.jsx";
 import ContentPage from "./pages/BrandContent/ContentPage.jsx";
 import ContentTestPage from "./pages/BrandContent/ContentTestPage.jsx";
 import NewHomePage from "./pages/NewHomePage/NewHomePage.jsx";
-import DesktopLayout from "./component/DesktopLayout/DeskTopLayout.jsx";
 import SubmitNewBiasPage from "./pages/SubmitNewBias/SubmitNewBias.jsx";
 import ErrorPage from "./pages/error_page.js";
 
@@ -114,7 +112,7 @@ function App() {
       <Route path="/search" element={<SearchPage />}></Route>
       <Route path="/search_result" element={<SearchResultPage />}></Route>
 
-      {/* 스케줄 페이지 */}
+      {/* 컨텐츠  페이지 */}c
       <Route path="/schedule" element={<ScheduleDashboard />}></Route>
       <Route path="/search/topic" element={<SearchTopicPage />}></Route>
       <Route path="/explore/schedule" element={<ScheduleExplore />}></Route>
@@ -148,7 +146,8 @@ function App() {
       <Route path="/" element={<NewHomePage/>} />
       <Route path="/home_test" element={<HomePage/>}/>
       <Route path="/welcome" element={<BrandPage/>} />
-      <Route path="/temp_test2" element={<YouTubePlayer/>} />
+
+      <Route path="/temp_test2" element={<HomePage/>} />
       <Route path="/content" element={<ContentPage/>} />
 
       <Route path="/content_test" element={<ContentTestPage/>} />
