@@ -20,7 +20,7 @@ import ReportPage from "./pages/ReportPage/ReportPage.js";
 import ScheduleDashboard from "./pages/SchedulePage/ScheduleDashboard.js";
 import SearchTopicPage from "./pages/SearchTopicPage/SearchTopicPage.js";
 import ScheduleExplore from "./pages/ScheduleExplore/ScheduleExplore.js";
-import ScheduleMakePage from "./pages/SchedulePage/ScheduleMakePage.js";
+import ScheduleMakePage from "./pages/ScheduleMakePage/ScheduleMakePage.jsx";
 import NewFeedDetail from "./pages/FeedDetail/NewFeedDetail.js";
 import BrandPage from "./pages/BrandPage/brandPage.jsx";
 import ContentPage from "./pages/BrandContent/ContentPage.jsx";
