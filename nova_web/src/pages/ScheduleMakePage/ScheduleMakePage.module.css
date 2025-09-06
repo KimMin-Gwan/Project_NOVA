@@ -10,13 +10,15 @@
 }
 
 .desktop-section-wrapper{
+    display: flex;
+    justify-content: center;
     overflow: hidden;
     transition: height 0.3s;
-    width: 960px;
+    width: 1000px;
 }
 
 .desktop-calendar-component{
-    width: 896px;
+    width: 900px;
     border-radius: 40px;
     padding : 30px;
     background: linear-gradient(92deg, rgba(255, 255, 255, 0.40) 2.66%, rgba(255, 255, 255, 0.60) 98.95%);
@@ -147,10 +149,6 @@
   background: #83b5ff;
 }
 
-/* 부모 hover 시 body 색상 override */
-.day-component:hover .day-component-body {
-  background: #deebfa;
-}
 
 
 .day-component-body-span{
@@ -302,7 +300,7 @@
     display: flex;
     width: 900px;
     height: 644px;
-    padding: 40px 20px;
+    padding: 40px 28px;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -426,7 +424,6 @@
   align-items: center;
   font-size : 14px;
   font-weight: 500;
-  box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.08);
 }
 
 .removeButton {
@@ -456,7 +453,6 @@
   cursor: pointer;
   font-size : 14px;
   font-weight: 400;
-  box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.08);
 }
 
 .sampleTag:hover {
@@ -469,12 +465,18 @@
 }
 
 .schedule-detail-time-selector-wrapper{
-    display: flex;
-    width: 311px;
-    flex-direction: column;
-    align-items: center;
-    gap: 71px;
-    align-self: stretch;
+  display: flex;
+  width: 311px;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+  gap : 10px;
+}
+
+.schedule-detail-time-selector-title{
+    font-size: 18px;
+    font-weight: 600;
+    color: #111;
 }
 
 .schedule-time-select-box{
@@ -487,6 +489,7 @@
   align-self: stretch;
   border-radius: 20px;
   border: 1px solid #A2A2A2;
+  margin-bottom: 10px;
 }
 
 
@@ -520,6 +523,7 @@
   padding: 0px 10px;
   transition: all 0.3s ease-in-out;
   border-radius: 12px;
+  cursor: pointer;
 }
 
 .time-select-button:hover{
@@ -534,6 +538,7 @@
   font-weight: 700;
   line-height: 140%; /* 72.8px */
   letter-spacing: -1.3px;
+  cursor: pointer;
 }
 
 
@@ -543,4 +548,39 @@
   flex-direction: column;
   transition: all 0.3 ease-in-out;
   justify-content: flex-end;
+}
+
+.schedule-make-info{
+  display: flex;
+  width: 60%;
+  padding : 20px 40px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 14px;
+  border : #acacac solid 1px;
+  border-radius: 14px;
+
+  span{
+    color: #707070;
+    font-family: Pretendard;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 140%; /* 72.8px */
+    letter-spacing: -1.3px;
+  }
+}
+
+.schedule-make-info-title{
+  display: flex;
+  align-self: stretch;
+  color: #3b3b3b;
+  font-family: Pretendard;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 140%; /* 72.8px */
+  letter-spacing: -1.3px;
+
 }
