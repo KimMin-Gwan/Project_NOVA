@@ -10,7 +10,7 @@ import DesktopCalender from "./DesktopCalendar.jsx";
 import MobileBiasSelectSection from "./MobileBiasSelecotr.jsx";
 import MobileCalender from "./MobileCalendar.jsx";
 import MobileScheduleSelectSection from "./MobileScheduleSelector.jsx";
-
+import postApi from "../../services/apis/postApi.js";
 
 const ScheduleMakePage = () => {
     const isMobile = useMediaQuery('(max-width:1100px)');
@@ -32,6 +32,7 @@ const ScheduleMakePage = () => {
 
     const defaultSchedule = {
       sid: "",
+      bid: "",
       title: "",
       tags: [],
       datetime: datetime, // 오늘 22:00
@@ -41,7 +42,7 @@ const ScheduleMakePage = () => {
 
     const [selectedBias, setSelectedBias] = useState("");
     const [selectedDate, setSelectedDate] = useState(defaultDate);
-    const [selecteSchedule, setSelectedSchedule] = useState(defaultSchedule);
+    const [selectedSchedule, setSelectedSchedule] = useState(defaultSchedule);
 
     const handleSelectBias = (bid) => {
         console.log(bid);
@@ -206,17 +207,18 @@ const ScheduleMakePage = () => {
             <div 
               className={style["desktop-section-wrapper"]}
               style={{
-                height: selectedDate.day && selectedBias ? "800px" : "0px",
+                height: selectedDate.day && selectedBias ? "900px" : "0px",
               }}
             >
               <DesktopScheduleSelectSection
-                selectedSchedule={selecteSchedule} setSelectedSchedule={setSelectedSchedule}
+                selectedSchedule={selectedSchedule} setSelectedSchedule={setSelectedSchedule}
               />
             </div>
             <div className={style["schedule-make-info"]}>
               <div className={style["schedule-make-info-title"]}>주의사항</div>
               <span>1. 작성된 콘텐츠 일정은 스트리머 요청으로 삭제될 수 있습니다.</span>
               <span>2. 악의적의 의도로 콘텐츠 일정을 작성할 경우 커뮤니티 지침에 따라 제제될 수 있습니다.</span>
+              <span>3. 작성된 컨텐츠 일정은 대상 스트리머와 작성자가 수정할 수 있습니다.</span>
             </div>
           </div>
         </DesktopLayout>
@@ -253,17 +255,18 @@ const ScheduleMakePage = () => {
               <div 
                 className={style2["mobile-section-wrapper"]}
                 style={{
-                  height: selectedDate.day && selectedBias ? "800px" : "0px",
+                  height: selectedDate.day && selectedBias ? "900px" : "0px",
                 }}
               >
                 <MobileScheduleSelectSection
-                  selectedSchedule={selecteSchedule} setSelectedSchedule={setSelectedSchedule}
+                  selectedSchedule={selectedSchedule} setSelectedSchedule={setSelectedSchedule}
                 />
               </div>
               <div className={style["schedule-make-info"]}>
                 <div className={style["schedule-make-info-title"]}>주의사항</div>
                 <span>1. 작성된 콘텐츠 일정은 스트리머 요청으로 삭제될 수 있습니다.</span>
                 <span>2. 악의적의 의도로 콘텐츠 일정을 작성할 경우 커뮤니티 지침에 따라 제제될 수 있습니다.</span>
+                <span>3. 작성된 컨텐츠 일정은 대상 스트리머와 작성자가 수정할 수 있습니다.</span>
               </div>
           </div>
         </div>
