@@ -12,6 +12,8 @@ import boto3
 from datetime import datetime
 import random
 
+import uuid
+
 class FindSimilarData:
     def __decompose(self, text:str):
         return ''.join(j2hcj(h2j(text.replace(" ", ""))))
@@ -63,11 +65,8 @@ class BaseModel(HeaderModel):
         return self._user
 
     def _make_new_id(self):
-        characters = string.ascii_letters + string.digits
-        
-        random_string = ''.join(random.choice(characters) for _ in range(6))
-        
-        return random_string
+        id = str(uuid.uuid4())
+        return id
     
     def _get_datetime(self, date_str):
         return datetime.strptime(date_str, "%Y/%m/%d-%H:%M:%S")
