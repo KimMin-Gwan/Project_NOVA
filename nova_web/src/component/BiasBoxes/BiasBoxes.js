@@ -77,9 +77,6 @@ export default function BiasBoxes({ fetchBiasCategoryData, fecthDefaultSetting }
     }
   }, [loading]);
 
-  console.log(biasList);
-
-
   if(biasList.length === 0){
     return (
       <div
