@@ -299,7 +299,6 @@
 .schedule-select-section-frame{
     display: flex;
     width: 900px;
-    height: 644px;
     padding: 40px 28px;
     flex-direction: column;
     justify-content: center;
@@ -582,5 +581,49 @@
   font-weight: 500;
   line-height: 140%; /* 72.8px */
   letter-spacing: -1.3px;
-
 }
+
+
+.schedule-make-button-wrapper{
+  display: flex;
+  padding: 10px;
+  justify-content: flex-end;
+  align-items: flex-end;
+  gap: 80px;
+  flex: 1 0 0;
+  align-self: stretch;
+}
+
+.schedule-make-button{
+  display: flex;
+  padding: 20px 100px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 20px;
+  border: 1px solid #FFF;
+  background: #A7BBFF;
+  color: #111;
+  font-family: Pretendard;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 140%; /* 44.8px */
+  letter-spacing: -0.8px;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.schedule-make-button:hover{
+  background-color: #83b5ff;
+}
+
+.schedule-select-section-frame-wrapper{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  align-self: stretch;
+}
+

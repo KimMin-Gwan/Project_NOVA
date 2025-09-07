@@ -546,3 +546,37 @@
     font-weight: 600;
     color: #111;
 }
+
+.schedule-make-button-wrapper{
+  display: flex;
+  padding-top: 40px;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 10px;
+  align-self: stretch;
+}
+
+.schedule-make-button{
+  display: flex;
+  height: 54px;
+  padding: 0 133px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex: 1 0 0;
+  border-radius: 16px;
+  background: #58AEFF;
+  color: #FFF;
+  font-family: Pretendard;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 140%; /* 22.4px */
+  letter-spacing: -0.4px;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.schedule-make-button:hover{
+  background-color: #83b5ff;
+}
