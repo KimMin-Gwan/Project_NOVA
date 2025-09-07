@@ -160,141 +160,167 @@ const DesktopScheduleSelectSection = ({
     }
   },[selectedSchedule])
 
-  console.log(selectedAmPm);
+
+  const handleMakeSchedule = () => {
+    setSelectedSchedule((prev) => ({
+      ...prev,
+      title: detailInput,
+      tags: tagsArrayData,
+      duration: durationInput ? parseInt(durationInput, 10) : "",
+      datetime: (() => {
+        const targetDate = prev.datetime || new Date(); // 기존 datetime이 없으면 오늘 기준
+        return new Date(
+          targetDate.getFullYear(),
+          targetDate.getMonth(),
+          targetDate.getDate(),
+          selectedAmPm === "pm" ? (hours % 12) + 12 : hours % 12,
+          minutes,
+          0
+        );
+      })()
+    }));
+
+    // ㅇ여기서 fecth 하도록 하면됨
+  }
 
   return(
     <div className={style["schedule-select-section-frame"]}>
-      <span className={style["bias-select-section-title"]}>콘텐츠 일정 작성 </span>
-      <div className={style["schedule-detail-frame"]}>
-        <div className={style["schedule-detail-input-wrapper"]}>
-            <div className={style["searchFac"]}>
-              <span>*이름</span>
-              <div className={style["searchBoxMargin"]}>
-                <div className={style["searchBox"]}>
-                  <input
-                    type="text"
-                    value={detailInput}
-                    onChange={onChangeDetailInput}
-                    placeholder="일정의 이름"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className={style["searchFac"]}>
-              <span>태그</span>
-              <div className={style["sampleTagsContainer"]}>
-                {sampleTags.map((tag, index) => (
-                  <div
-                    className={style["sampleTag"]}
-                    key={index}
-                    onClick={() => addSampleTag(tag)}
-                  >
-                    {tag}
+      <div className={style["schedule-select-section-frame-wrapper"]}>
+        <span className={style["bias-select-section-title"]}>콘텐츠 일정 작성 </span>
+        <div className={style["schedule-detail-frame"]}>
+          <div className={style["schedule-detail-input-wrapper"]}>
+              <div className={style["searchFac"]}>
+                <span>*이름</span>
+                <div className={style["searchBoxMargin"]}>
+                  <div className={style["searchBox"]}>
+                    <input
+                      type="text"
+                      value={detailInput}
+                      onChange={onChangeDetailInput}
+                      placeholder="일정의 이름"
+                    />
                   </div>
-                ))}
-              </div>
-
-              <div className={style["searchBoxMargin"]}>
-                <div className={style["searchBox"]}>
-                  <input
-                    type="text"
-                    value={tagsInput}
-                    onChange={onChangeTagsInput}
-                    placeholder="각 태그의 뒤에 쉼표를 입력하세요"
-                  />
                 </div>
               </div>
 
-              <div className={style["tagsContainer"]}>
-                {tagsArrayData.map((tag, index) => (
-                    <div className={style["tag"]} key={index}>
+              <div className={style["searchFac"]}>
+                <span>태그</span>
+                <div className={style["sampleTagsContainer"]}>
+                  {sampleTags.map((tag, index) => (
+                    <div
+                      className={style["sampleTag"]}
+                      key={index}
+                      onClick={() => addSampleTag(tag)}
+                    >
                       {tag}
-                      <button
-                        className={style["removeButton"]}
-                        onClick={() => removeTag(index)}
-                      >
-                        &times;
-                      </button>
                     </div>
                   ))}
+                </div>
+
+                <div className={style["searchBoxMargin"]}>
+                  <div className={style["searchBox"]}>
+                    <input
+                      type="text"
+                      value={tagsInput}
+                      onChange={onChangeTagsInput}
+                      placeholder="각 태그의 뒤에 쉼표를 입력하세요"
+                    />
+                  </div>
+                </div>
+
+                <div className={style["tagsContainer"]}>
+                  {tagsArrayData.map((tag, index) => (
+                      <div className={style["tag"]} key={index}>
+                        {tag}
+                        <button
+                          className={style["removeButton"]}
+                          onClick={() => removeTag(index)}
+                        >
+                          &times;
+                        </button>
+                      </div>
+                    ))}
+                </div>
+              </div>
+          </div>
+          <div className={style["schedule-detail-time-selector-wrapper"]}>
+              <span className={style["schedule-detail-time-selector-title"]}>시작 시간</span>
+            <div className={style["schedule-time-select-box"]}>
+              {/* 시간 */}
+
+              <div className={style["time-select-part-wrapper"]}
+                style={{
+                  height: `${height}px`,
+                  transition: "height 0.3s ease" // 부드럽게 변화
+                }}
+              >
+                <div className={style["time-select-part"]}
+                  onClick={() => setSelectedAmPm("am")}
+                  style={{ color : selectedAmPm === "am" ? "#111" : "#6C6C6C" }}
+                >
+                  am
+                </div>
+                <div className={style["time-select-part"]}
+                  onClick={() => setSelectedAmPm("pm")}
+                  style={{ color : selectedAmPm === "pm" ? "#111" : "#6C6C6C" }}
+                >
+                  pm
+                </div>
+              </div>
+
+              <div className={style["time-select-button-wrapper"]}>
+                <div
+                  className={style["time-select-button"]}
+                  onMouseDown={() => handleMouseDown("hours", 1)}
+                  onMouseUp={handleMouseUp}
+                  onMouseLeave={handleMouseUp}
+                >+</div>
+                <div className={style["time-select-intager"]}>{hours.toString().padStart(2, "0")}</div>
+                <div
+                  className={style["time-select-button"]}
+                  onMouseDown={() => handleMouseDown("hours", -1)}
+                  onMouseUp={handleMouseUp}
+                  onMouseLeave={handleMouseUp}
+                >-</div>
+              </div>
+
+              <div className={style["time-select-intager"]}>:</div>
+
+              {/* 분 */}
+              <div className={style["time-select-button-wrapper"]}>
+                <div
+                  className={style["time-select-button"]}
+                  onMouseDown={() => handleMouseDown("minutes", 10)}
+                  onMouseUp={handleMouseUp}
+                  onMouseLeave={handleMouseUp}
+                >+</div>
+                <div className={style["time-select-intager"]}>{minutes.toString().padStart(2, "0")}</div>
+                <div
+                  className={style["time-select-button"]}
+                  onMouseDown={() => handleMouseDown("minutes", -10)}
+                  onMouseUp={handleMouseUp}
+                  onMouseLeave={handleMouseUp}
+                >-</div>
               </div>
             </div>
+
+            <div className={style["searchFac"]}>
+              <span>예상 방송 시간</span>
+              <div className={style["searchBoxMargin"]}>
+                <div className={style["searchBox"]}>
+                  <input
+                    type="text"
+                    value={durationInput ? durationInput + "시간" : ""}
+                    onChange={onChangeDurationInput}
+                    placeholder="2시간"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div className={style["schedule-detail-time-selector-wrapper"]}>
-            <span className={style["schedule-detail-time-selector-title"]}>시작 시간</span>
-          <div className={style["schedule-time-select-box"]}>
-            {/* 시간 */}
-
-            <div className={style["time-select-part-wrapper"]}
-              style={{
-                height: `${height}px`,
-                transition: "height 0.3s ease" // 부드럽게 변화
-              }}
-            >
-              <div className={style["time-select-part"]}
-                onClick={() => setSelectedAmPm("am")}
-                style={{ color : selectedAmPm === "am" ? "#111" : "#6C6C6C" }}
-              >
-                am
-              </div>
-              <div className={style["time-select-part"]}
-                onClick={() => setSelectedAmPm("pm")}
-                style={{ color : selectedAmPm === "pm" ? "#111" : "#6C6C6C" }}
-              >
-                pm
-              </div>
-            </div>
-
-            <div className={style["time-select-button-wrapper"]}>
-              <div
-                className={style["time-select-button"]}
-                onMouseDown={() => handleMouseDown("hours", 1)}
-                onMouseUp={handleMouseUp}
-                onMouseLeave={handleMouseUp}
-              >+</div>
-              <div className={style["time-select-intager"]}>{hours.toString().padStart(2, "0")}</div>
-              <div
-                className={style["time-select-button"]}
-                onMouseDown={() => handleMouseDown("hours", -1)}
-                onMouseUp={handleMouseUp}
-                onMouseLeave={handleMouseUp}
-              >-</div>
-            </div>
-
-            <div className={style["time-select-intager"]}>:</div>
-
-            {/* 분 */}
-            <div className={style["time-select-button-wrapper"]}>
-              <div
-                className={style["time-select-button"]}
-                onMouseDown={() => handleMouseDown("minutes", 10)}
-                onMouseUp={handleMouseUp}
-                onMouseLeave={handleMouseUp}
-              >+</div>
-              <div className={style["time-select-intager"]}>{minutes.toString().padStart(2, "0")}</div>
-              <div
-                className={style["time-select-button"]}
-                onMouseDown={() => handleMouseDown("minutes", -10)}
-                onMouseUp={handleMouseUp}
-                onMouseLeave={handleMouseUp}
-              >-</div>
-            </div>
-          </div>
-
-          <div className={style["searchFac"]}>
-            <span>예상 방송 시간</span>
-            <div className={style["searchBoxMargin"]}>
-              <div className={style["searchBox"]}>
-                <input
-                  type="text"
-                  value={durationInput ? durationInput + "시간" : ""}
-                  onChange={onChangeDurationInput}
-                  placeholder="2시간"
-                />
-              </div>
-            </div>
-          </div>
+        <div className={style["schedule-make-button-wrapper"]}>
+            <div className={style["schedule-make-button"]}>업로드</div>
         </div>
       </div>
     </div>

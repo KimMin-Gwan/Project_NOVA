@@ -18,6 +18,7 @@ const MobileScheduleSelectSection = ({
 
   const defaultSchedule = {
     sid : "",
+    bid: "",
     title: "어떤데",
     tags : tagsArrayData,
     time : "",
@@ -161,6 +162,28 @@ const MobileScheduleSelectSection = ({
     }
   },[selectedSchedule])
 
+  const handleMakeSchedule = () => {
+    setSelectedSchedule((prev) => ({
+      ...prev,
+      title: detailInput,
+      tags: tagsArrayData,
+      duration: durationInput ? parseInt(durationInput, 10) : "",
+      datetime: (() => {
+        const targetDate = prev.datetime || new Date(); // 기존 datetime이 없으면 오늘 기준
+        return new Date(
+          targetDate.getFullYear(),
+          targetDate.getMonth(),
+          targetDate.getDate(),
+          selectedAmPm === "pm" ? (hours % 12) + 12 : hours % 12,
+          minutes,
+          0
+        );
+      })()
+    }));
+
+    // ㅇ여기서 ecth 하도록 하면됨
+  }
+
   return(
     <div className={style["schedule-select-section-frame"]}>
       <span className={style["bias-select-section-title"]}>콘텐츠 일정 작성 </span>
@@ -279,17 +302,20 @@ const MobileScheduleSelectSection = ({
           </div>
         </div>
         <div className={style["searchFac"]}>
-        <span>예상 방송 시간</span>
-        <div className={style["searchBoxMargin"]}>
-            <div className={style["searchBox"]}>
-            <input
-                type="text"
-                value={durationInput ? durationInput + "시간" : ""}
-                onChange={onChangeDurationInput}
-                placeholder="2시간"
-            />
-            </div>
+          <span>예상 방송 시간</span>
+          <div className={style["searchBoxMargin"]}>
+              <div className={style["searchBox"]}>
+              <input
+                  type="text"
+                  value={durationInput ? durationInput + "시간" : ""}
+                  onChange={onChangeDurationInput}
+                  placeholder="2시간"
+              />
+              </div>
+          </div>
         </div>
+        <div className={style["schedule-make-button-wrapper"]}>
+            <div className={style["schedule-make-button"]}>업로드</div>
         </div>
       </div>
     </div>
