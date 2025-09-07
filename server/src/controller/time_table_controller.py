@@ -7,7 +7,7 @@ from others import ScheduleSearchEngine as SSE
 from datetime import datetime
 
 
-class TImeTableController:
+class TimeTableController:
     # sid 리스트로 스케줄 데이터 뽑아내기
     def get_schedules_with_sids(self, database:Mongo_Database, request:RequestManager) -> BaseModel: 
         model = MultiScheduleModel(database=database)
@@ -176,13 +176,14 @@ class TImeTableController:
         
         if request.jwt_payload!= "":
             model.set_user_with_email(request=request.jwt_payload)
-            # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
-            if not model._set_tuser_with_tuid():
-                return model
+        schedule = model.make_new_single_schedule(request_schedule=request.data_payload.schedule)
 
-        schedule = model.make_new_single_schedule(data_payload=request.data_payload, bid=request.data_payload.bid)
+        if schedule is None:
+            return model
+        
         # 리스트로 넣어야됨(파라미터가 list를 받음)
-        model.save_new_schedules(schedule_search_engine=schedule_search_engine, schedule=[schedule])
+        model.save_new_schedules(schedule_search_engine=schedule_search_engine, schedule=schedule)
+        
         return model
     
     # 스케줄 여러개 만들기

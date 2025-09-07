@@ -203,6 +203,8 @@ class TimeTableModel(BaseModel):
         self.__target_month= f'00년 0월'
         self.__target_week= f'0주차'
         
+        self._detail = ""
+        
     # 로그인이 필수인 유저이거나, 로그인을 한 유저를 처리할 때 필수적으로 사용되는 부분
     def _set_tuser_with_tuid(self, tuid="") -> bool:
         # 유저를 먼져 부르고 해야됨 반드시
@@ -780,25 +782,9 @@ class AddScheduleModel(TimeTableModel):
 
     # sid 만들기
     def __make_new_sid(self):
-        while True:
-            sid = self._make_new_id()
-            if self._database.get_data_with_id(target="sid", id=sid):
-                continue
-            else:
-                break
+        sid = self._make_new_id()
         return sid
 
-    # sbid 만들기
-    def __make_new_sbid(self):
-        while True:
-            sbid = self._make_new_id()
-            if self._database.get_data_with_id(target="sbid", id=sbid):
-                continue
-            else:
-                break
-        return sbid
-
-    # 코드 만들기
     def __make_schedule_code(self):
         # 영어 대문자와 숫자로 이루어진 6자리 코드 생성
         characters = string.ascii_uppercase + string.digits
@@ -897,74 +883,51 @@ class AddScheduleModel(TimeTableModel):
         return
 
 
-
-
     # 단일 스케줄 만들기
-    def make_new_single_schedule(self, data_payload, bid):
+    def make_new_single_schedule(self, request_schedule):
         schedule = Schedule(
-            sname=data_payload.sname,
-            bid = bid,
-            start_date=data_payload.start_date,
-            start_time=data_payload.start_time,
-            end_date=data_payload.end_date,
-            end_time=data_payload.end_time,
-            state=data_payload.state,
-            tags=data_payload.tags
+            bid = request_schedule.bid,
+            title= request_schedule.title,
+            datetime=request_schedule.datetime,
+            duration=request_schedule.duration,
+            tags=request_schedule.tags
         )
 
         bias_data = self._database.get_data_with_id(target="bid", id=schedule.bid)
+        
         if bias_data:
-            bias = Bias().make_with_dict(bias_data)
+            bias = self._bias = Bias().make_with_dict(bias_data)
         else:
-            bias = Bias()
-
-        # location을 나누는 방법 ( 정규식을 이용해서 구두점, 콤마 등을 걸러냅니다.
-        # ", "와 같은 케이스도 말끔히. 근데 이후의 공백이 있을 수 있다는 점이 있어 주의를 요합니다.
-        # 또한 플랫폼이 아닌 다른 문자가 들어가는 불상사도 있을 수 있습니다. (이건 어찌할 방도가..)
-        str_list = re.split(r'\W+', data_payload.platform)
-        location_list = [s for s in str_list if s]
-        # pprint(str_list)
-
+            self._detail = "존재하지 않는 스트리머 입니다."
+            return None
+        
         schedule.sid = self.__make_new_sid()
         schedule.bname = bias.bname
-        schedule.url = bias.homepage
+        schedule.url = bias.platform_url
         schedule.uid = self._user.uid
         schedule.uname = self._user.uname
         schedule.code = self.__make_schedule_code()
         schedule.update_datetime = datetime.today().strftime("%Y/%m/%d-%H:%M:%S")
-        schedule.color_code = self._make_color_code()
-        schedule.platform = location_list
+        schedule.platform = bias.platform 
 
         return schedule
+    
+    
+     # 복수 개의 (단일 포함) 스테줄 저장
+    def save_new_schedules(self, schedule_search_engine:SSE, schedule:Schedule):
+        schedule_search_engine.try_add_new_managed_schedule(new_schedules=schedule)    # 서치 엔진에다가 저장합니다.
+        self._database.add_new_data(target_id="sid", new_datas=schedule.get_dict_form_data())                  # 데이터베이스에 먼저 저장
 
-    # 복수 스케줄 만들기
-    def make_new_multiple_schedule(self, schedule_search_engine:SSE, schedules:list, sname:str, bid:str, data_type:str):
-        schedule_list = []
+        self._user.my_sids.append(schedule.sid)  # 내가 만든 스케줄이기에 내 스케줄에도 추가
+        self._user.subscribed_sids.append(schedule.sid)  # 내가 만든 스케줄이기에 구독한 스케줄에도 추가
+        self._bias.sids.append(schedule.sid)  # 바이어스에도 추가
 
-        for make_schedule in schedules:
-            schedule = self.make_new_single_schedule(data_payload=make_schedule, bid=bid)
-            schedule_list.append(schedule)
-
-        # 스케쥴 등록
-        self.save_new_schedules(schedule_search_engine=schedule_search_engine, schedule=schedule_list)
-
-        return
-
-    # 복수 개의 (단일 포함) 스테줄 저장
-    def save_new_schedules(self, schedule_search_engine:SSE, schedule:list):
-        save_data = self._make_dict_list_data(list_data=schedule)
-        schedule_search_engine.try_add_new_managed_schedule_list(new_schedules=schedule)    # 서치 엔진에다가 저장합니다.
-        self._database.add_new_datas(target_id="sid", new_datas=save_data)                  # 데이터베이스에 먼저 저장
-
-        # 스케쥴 데이터를 추가 할 때, Tuser도 업데이트함
-        for s in schedule:
-            self._tuser.sids.append(s.sid)
-            self._tuser.my_sids.append(s.sid)
-
-        self._database.modify_data_with_id(target_id="tuid", target_data=self._tuser.get_dict_form_data())
-
+        self._database.modify_data_with_id(target_id="uid", target_data=self._user.get_dict_form_data())
+        self._database.modify_data_with_id(target_id="bid", target_data=self._bias.get_dict_form_data())
         self.__result = True
+        self._detail = "스케줄이 성공적으로 저장되었습니다."
         return
+    
 
     # 수정한 스케줄들 저장
     def save_modified_schedule(self, schedule_search_engine:SSE, schedules:list):
@@ -1052,7 +1015,8 @@ class AddScheduleModel(TimeTableModel):
 
     def get_response_form_data(self, head_parser):
         body = {
-            "result" : self.__result
+            "result" : self.__result,
+            "detail" : self._detail
         }
 
         response = self._get_response_data(head_parser=head_parser, body=body)

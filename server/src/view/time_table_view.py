@@ -4,11 +4,11 @@ from others import Schedule
 from view.master_view import Master_View, RequestHeader
 from view.parsers import Head_Parser
 from view.jwt_decoder import RequestManager
-from controller import TImeTableController
+from controller import TimeTableController
 #from websockets.exceptions import ConnectionClosedError
 from pprint import pprint
-import json
 from datetime import datetime
+from pydantic import BaseModel
 
 from others import ScheduleSearchEngine as SSE
 
@@ -42,7 +42,7 @@ class Time_Table_View(Master_View):
 
             # if not request_manager.jwt_payload.result:
             #     raise request_manager.credentials_exception
-            time_table_controller =TImeTableController()
+            time_table_controller =TimeTableController()
             model = time_table_controller.get_dashboard_data(database=self.__database,
                                                            request=request_manager,
                                                            schedule_search_engine=self.__schedule_search_engine
@@ -61,7 +61,7 @@ class Time_Table_View(Master_View):
             
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
-            time_table_controller =TImeTableController()
+            time_table_controller =TimeTableController()
             model = time_table_controller.get_time_layer_with_date(database=self.__database,
                                                                    schedule_search_engine=self.__schedule_search_engine,
                                                               request=request_manager)
@@ -98,7 +98,7 @@ class Time_Table_View(Master_View):
             
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
-            time_table_controller =TImeTableController()
+            time_table_controller =TimeTableController()
             model = time_table_controller.try_search_schedule_with_keyword(database=self.__database,
                                                             schedule_search_engine=self.__schedule_search_engine,
                                                             request=request_manager)
@@ -115,7 +115,7 @@ class Time_Table_View(Master_View):
             data_payload = GetSchedulesRequest(request=raw_request)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
-            time_table_controller =TImeTableController()
+            time_table_controller =TimeTableController()
             model = time_table_controller.get_schedules_with_sids(database=self.__database,
                                                                 request=request_manager)
 
@@ -133,7 +133,7 @@ class Time_Table_View(Master_View):
             
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
-            time_table_controller =TImeTableController()
+            time_table_controller =TimeTableController()
 
             model = time_table_controller.try_explore_schedule_with_category(schedule_search_engine=self.__schedule_search_engine,
                                                                              database=self.__database,
@@ -157,7 +157,7 @@ class Time_Table_View(Master_View):
             
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
 
-            time_table_controller =TImeTableController()
+            time_table_controller =TimeTableController()
             model = time_table_controller.try_add_schedule(database=self.__database,
                                                         request=request_manager)
             
@@ -175,7 +175,7 @@ class Time_Table_View(Master_View):
             data_payload = ScheduleRequest(sid=sid)
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
 
-            time_table_controller =TImeTableController()
+            time_table_controller =TimeTableController()
             model = time_table_controller.try_reject_from_my_schedule(database=self.__database,
                                                                         request=request_manager)
             
@@ -192,7 +192,7 @@ class Time_Table_View(Master_View):
             data_payload = MakeMultipleScheduleRequest(request=raw_request)
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
 
-            time_table_controller =TImeTableController()
+            time_table_controller =TimeTableController()
 
             model = time_table_controller.get_schedule_printed_form(database=self.__database,
                                                                     request=request_manager)
@@ -208,8 +208,7 @@ class Time_Table_View(Master_View):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = DummyRequest()
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
-
-            time_table_controller =TImeTableController()
+            time_table_controller =TimeTableController()
 
             model = time_table_controller.try_get_following_bias_printed_form(database=self.__database, request=request_manager)
 
@@ -222,14 +221,14 @@ class Time_Table_View(Master_View):
     def make_schedule_route(self):
         # 단일 일정을 만들기
         # Managed_Table 테스트 완료
-        @self.__app.post('/time_table_server/try_make_new_single_schedule')
-        def try_make_new_single_schedule(request: Request, raw_request:dict):
+        @self.__app.post('/time_table_server/try_make_new_schedule')
+        def try_make_new_schedule(request: Request, raw_request:dict):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
-            data_payload = MakeSingleScheduleRequest(request=raw_request)
-            # request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            data_payload = MakeScheduleRequest(request=raw_request)
+            
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
-
-            time_table_controller =TImeTableController()
+            
+            time_table_controller =TimeTableController()
             model = time_table_controller.make_new_single_schedule(schedule_search_engine=self.__schedule_search_engine,
                                                                    database=self.__database,
                                                                    request=request_manager)
@@ -248,7 +247,7 @@ class Time_Table_View(Master_View):
             # request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
 
-            time_table_controller =TImeTableController()
+            time_table_controller =TimeTableController()
             model = time_table_controller.make_new_multiple_schedules(schedule_search_engine=self.__schedule_search_engine,
                                                                       database=self.__database,
                                                                       request=request_manager)
@@ -265,7 +264,7 @@ class Time_Table_View(Master_View):
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             # request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
 
-            time_table_controller =TImeTableController()
+            time_table_controller =TimeTableController()
             model = time_table_controller.try_get_written_schedule(database=self.__database,
                                                                    request=request_manager)
 
@@ -285,7 +284,7 @@ class Time_Table_View(Master_View):
             # request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
 
-            time_table_controller =TImeTableController()
+            time_table_controller =TimeTableController()
             model = time_table_controller.try_modify_single_schedule(schedule_search_engine=self.__schedule_search_engine,
                                                                      database=self.__database,
                                                                      request=request_manager)
@@ -302,7 +301,7 @@ class Time_Table_View(Master_View):
             data_payload = DeleteSingleScheduleRequest(sid=sid)
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
 
-            time_table_controller = TImeTableController()
+            time_table_controller = TimeTableController()
             model = time_table_controller.try_delete_schedule(schedule_search_engine=self.__schedule_search_engine,
                                                               database=self.__database,
                                                               request=request_manager)
@@ -319,20 +318,27 @@ class DummyRequest():
     def __init__(self) -> None:
         self.email:str="alsrhks2508@naver.com"
         pass
+    
+class RequestSchedule(BaseModel):
+    sid: str
+    bid: str
+    title: str
+    tags: list[str] = []
+    datetime: datetime
+    duration: int
 
-class MakeSingleScheduleRequest(RequestHeader):
-    def __init__(self, request) -> None:
+class MakeScheduleRequest(RequestHeader):
+    def __init__(self, request: dict) -> None:
         super().__init__(request)
-        body:dict = request['body']
-        self.sname = body['sname']
-        self.platform = body['platform']
-        self.bid = body.get("bid", "")
-        self.start_date = body['start_date']
-        self.start_time = body['start_time']
-        self.end_date = body['end_date']
-        self.end_time = body['end_time']
-        self.state = body.get("state", True)
-        self.tags = body.get("tags", [])
+
+        body: dict = request.get("body", {})
+        schedule_data:dict = body.get("schedule", {})
+        # schedule_data의 필드들을 적절한 타입으로 변환
+        schedule_data["duration"] = int(schedule_data.get("duration", 0))
+
+        # schedule 전체를 Pydantic으로 검증
+        self.schedule = RequestSchedule(**schedule_data)
+        
 
 class MakeMultipleScheduleRequest(RequestHeader):
     def __init__(self, request) -> None:
