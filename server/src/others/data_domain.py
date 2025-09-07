@@ -1,5 +1,6 @@
 from typing import Any, List
 from others.error_lib import DictMakingError
+from datetime import datetime as dt
 import copy
 
 # 추상 클래스
@@ -24,63 +25,28 @@ class TempUser:
         print(self.exp)
         return
     
-class TimeTableUser(SampleDomain):
-    def __init__(self, tuid="", uid="", sids=None, this_week_sids=None,
-                 seids=None, my_sids=None,
-                 my_sbids=None, my_seids=None, category=None):
-        self.tuid: str = tuid               # Time table user ID == User.uid
-        self.sids: list = sids if sids is not None else []         # Schedule IDs
-        self.seids: list = seids if seids is not None else []      # Schedule event IDs
-        self.this_week_sids = this_week_sids if this_week_sids is not None else []  # 이번주에 체크한거
-        self.my_sids: list = my_sids if my_sids is not None else []  # My schedule IDs
-        self.my_sbids: list = my_sbids if my_sbids is not None else []  # My schedule bundle IDs
-        self.my_seids: list = my_seids if my_seids is not None else []  # My schedule event IDs
-        self.category: list = category if category is not None else []  # interest category tag
-
-    def make_with_dict(self, dict_data:dict):
-        self.tuid = dict_data.get('tuid', "")
-        self.sids = dict_data.get('sids', [])
-        self.seids = dict_data.get('seids', [])
-        self.my_sids = dict_data.get('my_sids', [])
-        self.my_sbids = dict_data.get('my_sbids', [])
-        self.my_seids = dict_data.get('my_seids', [])
-        self.category = dict_data.get('category', [])
-        return self
-
-    def get_dict_form_data(self):
-        return {
-            "tuid": self.tuid,
-            "sids": self.sids,
-            "seids": self.seids,
-            "my_sids": self.my_sids,
-            "my_sbids": self.my_sbids,
-            "my_seids": self.my_seids,
-            "category" : self.category
-        }
 
     
 class Schedule(SampleDomain):
-    def __init__(self, sid="", sname="", uid="", uname="",
-                 bid="", bname="", start_date="", end_date="", start_time="",
-                 end_time="", platform=[], code="", update_datetime="",
+    def __init__(self, sid="", title="", uid="", uname="",
+                 bid="", bname="", datetime=dt(), duration= 60,
+                 platform=[], code="", update_datetime="",
                  num_usage=0, state=True, color_code="", tags=[], url=""
                  ):
         self.sid:str = sid                          # schedule id
-        self.sname:str = sname                      # schedule name
+        self.title :str = title# schedule name
         self.uid:str = uid                          # maker's id
         self.uname:str = uname                      # maker's name
         self.bid:str = bid                          # target bias
         self.bname:str = bname                      # target bias's name
-        self.start_date:str = start_date            # 시작 날짜
-        self.start_time:str = start_time            # 시작 시간 
-        self.end_date:str = end_date                # 종료 날짜
-        self.end_time:str = end_time                # 종료 시간
-        self.platform:list = copy.copy(platform)    # 송출 장소
+        self.datetime:str = datetime# 시작 시간 
+        self.duration:int = duration
+        self.platform:list = platform    # 송출 장소
         self.code:str = code                        # 스케줄 코드
         self.update_datetime:str = update_datetime  # 등록된 시간
         self.num_usage:int = num_usage              # 추가된 횟수
         self.state:bool = state                     # 공개 비공개 여부
-        self.color_code = color_code                # 색깔 코드
+        
         self.subscribe = False
         self.is_owner = False                       # 글쓴이 여부
         self.tags = tags
@@ -88,21 +54,18 @@ class Schedule(SampleDomain):
     
     def make_with_dict(self, dict_data:dict):
         self.sid = dict_data.get('sid', "")
-        self.sname = dict_data.get('sname', "")
+        self.title = dict_data.get('title', "")
         self.uid = dict_data.get('uid', "")
         self.uname = dict_data.get('uname', "")
         self.bid = dict_data.get('bid', "")
         self.bname = dict_data.get('bname', "")
-        self.start_date = dict_data.get('start_date', "")
-        self.start_time = dict_data.get('start_time', "")
-        self.end_date = dict_data.get('end_date', "")
-        self.end_time = dict_data.get('end_time', "")
-        self.platform = copy.copy(dict_data.get('platform'))
+        self.datetime = dict_data.get('datetime', dt())
+        self.duration = dict_data.get('duration', 60)
+        self.platform = dict_data.get('platform')
         self.code = dict_data.get('code', "")
         self.update_datetime = dict_data.get('update_datetime', "")
         self.num_usage = dict_data.get('num_usage', 0)  # 기본값 0 설정
         self.state:bool = dict_data.get('state')
-        self.color_code:str= dict_data.get('color_code', "")
         self.tags:list = dict_data.get('tags', [])
         self.url:list = dict_data.get('url', "")
         return self
@@ -110,21 +73,19 @@ class Schedule(SampleDomain):
     def get_dict_form_data(self):
         return {
             "sid": self.sid,
-            "sname": self.sname,
+            "title": self.title,
             "uid": self.uid,
             "uname": self.uname,
             "bid": self.bid,
             "bname": self.bname,
-            "start_date": self.start_date,
-            "start_time": self.start_time,
-            "end_date": self.end_date,
-            "end_time": self.end_time,
-            "platform": copy.copy(self.platform),
+            "datetime": self.datetime,
+            "duration": self.duration,
+            "platform": self.platform,
             "code": self.code,
             "update_datetime": self.update_datetime,
             "num_usage": self.num_usage,
             "state":self.state,
-            "color_code": self.color_code,
+            
             "subscribe" : self.subscribe,
             "is_owner" : self.is_owner,
             "tags" : self.tags,
@@ -138,7 +99,7 @@ class User(SampleDomain):
                  email = "", gender = "d" ,
                  bids=[], num_long_feed=0, num_comment=0,
                  password = "", like=[], my_comment=[],
-                 my_feed = []):
+                 my_feed = [], my_sids = [], subscribed_sids = []):
 
         self.uid = uid
         self.uname = uname
@@ -146,12 +107,14 @@ class User(SampleDomain):
         self.email = email
         self.password = password
         self.gender = gender
-        self.bids:list = copy.copy(bids)
+        self.bids:list = bids
         self.num_feed:int = num_long_feed
         self.num_comment:int = num_comment
-        self.like:list = copy.copy(like)
-        self.my_comment:list = copy.copy(my_comment)
-        self.my_feed:list = copy.copy(my_feed)
+        self.like:list = like
+        self.my_comment:list = my_comment
+        self.my_feed:list = my_feed
+        self.my_sids:list = my_sids
+        self.subscribed_sids:list = subscribed_sids
 
     # database로 부터 받아온 데이터를 사용해 내용 구성
     def make_with_dict(self, dict_data:dict):
@@ -162,12 +125,12 @@ class User(SampleDomain):
             self.email= dict_data['email']
             self.password = dict_data['password']
             self.gender= dict_data['gender']
-            self.bids = copy.copy(dict_data['bids'])
+            self.bids = dict_data['bids']
             self.num_feed = dict_data['num_feed']
             self.num_comment = dict_data.get("num_comment", len(self.my_comment))
-            self.like = copy.copy(dict_data["like"])
-            self.my_comment = copy.copy(dict_data["my_comment"])
-            self.my_feed = copy.copy(dict_data["my_feed"])
+            self.like = dict_data["like"]
+            self.my_comment = dict_data["my_comment"]
+            self.my_feed = dict_data["my_feed"]
             return self
         except Exception as e:
             print(e)
@@ -182,43 +145,43 @@ class User(SampleDomain):
             "email" : self.email,
             "password" : self.password,
             "gender" : self.gender,
-            "bids" : copy.copy(self.bids),
+            "bids" : self.bids,
             "num_feed" : self.num_feed,
             "num_comment" : self.num_comment,
-            "like" : copy.copy(self.like),
-            "my_comment" : copy.copy(self.my_comment),
-            "my_feed" : copy.copy(self.my_feed),
+            "like" : self.like,
+            "my_comment" : self.my_comment,
+            "my_feed" : self.my_feed,
         }
         
         
 class Bias(SampleDomain):
     def __init__(self, bid="", bname="", gender="", category=[], tags=[],
                  num_follower=0, platform=[], platform_url="https://supernova.io.kr",
-                 state="DEFAULT", schedules = []
+                 state="DEFAULT", sids = []
                  ):
-        self.bid = bid
-        self.bname = bname
-        self.gender = gender
-        self.category = copy.copy(category)
-        self.tags = copy.copy(tags)
-        self.num_follower = num_follower
-        self.platform = copy.copy(platform)
-        self.platform_url = platform_url
-        self.state = state
-        self.schedules = schedules
+        self.bid:str = bid
+        self.bname:str = bname
+        self.gender:str = gender
+        self.category:list = category
+        self.tags:list = tags
+        self.num_follower:int = num_follower
+        self.platform:str = platform
+        self.platform_url:str = platform_url
+        self.state:str = state
+        self.sids:list = sids
 
     def make_with_dict(self, dict_data: dict):
         try:
             self.bid = dict_data.get('bid', "")
             self.bname = dict_data.get('bname', "")
             self.gender = dict_data.get('gender', "")
-            self.category = copy.copy(dict_data.get('category', []))
-            self.tags = copy.copy(dict_data.get('tags', []))
+            self.category = dict_data.get('category', [])
+            self.tags = dict_data.get('tags', [])
             self.num_follower = dict_data.get('num_follower', 0)
-            self.platform = copy.copy(dict_data.get("platform", []))
+            self.platform = dict_data.get("platform", [])
             self.state = dict_data.get("state", "DEFAULT")
             self.platform_url = dict_data.get("platform_url", "https://supernova.io.kr")
-            self.schedules = copy.copy(dict_data.get('schedules', []))
+            self.sids = dict_data.get('sids', [])
             
         except Exception as e:
             print(e)
@@ -231,13 +194,13 @@ class Bias(SampleDomain):
             "bid": self.bid,
             "bname": self.bname,
             "gender": self.gender,
-            "category": copy.copy(self.category),
-            "tags": copy.copy(self.tags),
+            "category": self.category,
+            "tags": self.tags,
             "num_follower": self.num_follower,
             "platform" : self.platform,
             "platform_url" : self.platform_url,
             "state" : self.state,
-            "schedules" : copy.copy(self.schedules)
+            "sids" : self.sids
         }
 
 class Feed(SampleDomain):
@@ -263,8 +226,8 @@ class Feed(SampleDomain):
         self.date = date
         self.like = like
         self.board_type = board_type
-        self.hashtag = copy.copy(hashtag)
-        self.comment:List[str] = copy.copy(comment)
+        self.hashtag = hashtag
+        self.comment:List[str] = comment
         self.lid = lid  # link id
         self.bid = bid  # bias id
         self.bname = bname
@@ -287,8 +250,8 @@ class Feed(SampleDomain):
             self.date = dict_data["date"]
             self.like = dict_data["like"]
             self.board_type = dict_data["board_type"]
-            self.hashtag = copy.copy(dict_data["hashtag"])
-            self.comment = copy.copy(dict_data["cid"])
+            self.hashtag = dict_data["hashtag"]
+            self.comment = dict_data["cid"]
             self.lid = dict_data["lid"]
             self.bid = dict_data["bid"]
             self.raw_body = dict_data["raw_body"]
@@ -312,8 +275,8 @@ class Feed(SampleDomain):
             "date" : self.date,
             "like": self.like,
             "board_type" :self.board_type,
-            "hashtag": copy.copy(self.hashtag),
-            "cid": copy.copy(self.comment),
+            "hashtag": self.hashtag,
+            "cid": self.comment,
             "lid": self.lid,
             "bid": self.bid,
             "raw_body" : self.raw_body,
@@ -398,7 +361,7 @@ class Comment(SampleDomain):
         self.date = date
         self.like = like
         self.state = state
-        self.like_user:list = copy.copy(like_user)
+        self.like_user:list = like_user
         self.num_like_user = len(self.like_user)
         self.target_cid = target_cid            # 대댓글을 달 위치 cid
         self.owner = False
@@ -420,7 +383,7 @@ class Comment(SampleDomain):
             self.date = dict_data['date']
             self.like = dict_data['like']
             self.state = dict_data['state']
-            self.like_user= copy.copy(dict_data['like_user'])
+            self.like_user= dict_data['like_user']
             self.target_cid = dict_data['target_cid']
             self.owner = dict_data['owner']
             self.mention = dict_data['mention']
@@ -443,7 +406,7 @@ class Comment(SampleDomain):
             "date": self.date,
             "like": self.like,
             "state": self.state,
-            "like_user": copy.copy(self.like_user),
+            "like_user": self.like_user,
             "target_cid": self.target_cid,
             "owner" : self.owner,
             "mention": self.mention,
