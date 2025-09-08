@@ -3,7 +3,6 @@ from collections import Counter
 
 from model.base_model import BaseModel
 from model import Mongo_Database
-from others.data_domain import TimeTableUser as TUser
 from others.data_domain import Schedule, Bias, User
 from others.time_table_engine import ScheduleSearchEngine as SSE
 
@@ -195,7 +194,7 @@ class TimeScheduleModel(ScheduleTransformModel):
 class TimeTableModel(BaseModel):
     def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)
-        self._tuser:TUser = TUser()
+        self._tuser = None
         self._key = -1
         
         self.__num_bias = 0
@@ -204,30 +203,6 @@ class TimeTableModel(BaseModel):
         self.__target_week= f'0주차'
         
         self._detail = ""
-        
-    # 로그인이 필수인 유저이거나, 로그인을 한 유저를 처리할 때 필수적으로 사용되는 부분
-    def _set_tuser_with_tuid(self, tuid="") -> bool:
-        # 유저를 먼져 부르고 해야됨 반드시
-        if tuid == "" :
-            # 만약 로그인한 상태가 아니면 그냥 빈 TUSER를 가지게 될것임
-            if self._user.uid == "":
-                return False
-            # 만약 로그인한 상태가 아니면 그냥 빈 TUSER를 가지게 될것임
-            else:
-                tuid = self._user.uid
-            
-        
-        tuser_data = self._database.get_data_with_id(target="tuid", id=tuid)
-        # 만약 tuser가 등록된 적이 없는 init 상태라면 여기서 등록도 해야됨
-        if tuser_data:
-            self._tuser.make_with_dict(dict_data=tuser_data)
-        else:
-            # tuid와 uid는 그냥 동일하게 하겠음 그래야 중복이 없음
-            new_tuser = TUser(tuid=self._user.uid)
-            self._database.add_new_data(target_id="tuid", new_data=new_tuser.get_dict_form_data())
-            self._tuser = new_tuser
-        return True
-
 
     # string_date를 넣어서 몇주차인지 알아내는 함수임
     # date_str = "2025/03/06"
@@ -986,23 +961,6 @@ class AddScheduleModel(TimeTableModel):
     def delete_schedule(self, schedule_search_engine:SSE, sid:str):
         tuser_datas = self._database.get_all_data(target="tuid")
 
-        tu_sids:list[TUser] = []
-        tuids = []
-
-        for tuser_data in tuser_datas:
-            tuser = TUser().make_with_dict(tuser_data)
-            # 자기 자신에 대해서는 따로 처리하겠습니다
-            if tuser.tuid == self._tuser.tuid:
-                continue
-            if sid in tuser.sids:
-                tuser.sids.remove(sid)
-                tu_sids.append({"sids" : tuser.sids})
-                tuids.append(tuser.tuid)
-
-        self._tuser.my_sids.remove(sid)
-        self._tuser.sids.remove(sid)
-
-        self._database.modify_datas_with_ids(target_id="tuid", ids=tuids, target_datas=tu_sids)
         self._database.modify_data_with_id(target_id="tuid", target_data=self._tuser.get_dict_form_data())
 
         # 서치 엔진에서 편집합니다.
