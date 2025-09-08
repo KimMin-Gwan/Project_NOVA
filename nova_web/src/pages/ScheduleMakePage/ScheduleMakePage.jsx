@@ -11,6 +11,7 @@ import MobileBiasSelectSection from "./MobileBiasSelecotr.jsx";
 import MobileCalender from "./MobileCalendar.jsx";
 import MobileScheduleSelectSection from "./MobileScheduleSelector.jsx";
 import postApi from "../../services/apis/postApi.js";
+import HEADER from "../../constant/header.js";
 
 const ScheduleMakePage = () => {
     const isMobile = useMediaQuery('(max-width:1100px)');
@@ -181,6 +182,36 @@ const ScheduleMakePage = () => {
     }, [selectedDate])
 
 
+  async function tryFetchNewSchedule(newSchedule) {
+    try {
+      const res = await postApi.post('/time_table_server/try_make_new_schedule', {
+        header: HEADER,
+        body: {
+          schedule: {
+            ...newSchedule,
+            bid: selectedBias,
+          },
+        },
+      });
+
+      console.log(res.data);
+
+      return res.data;
+    } catch (error) {
+      if (error.response) {
+        // 서버에서 응답을 준 경우
+        console.error("❌ 서버 에러:", error.response.status, error.response.data);
+      } else if (error.request) {
+        // 요청은 갔는데 응답이 없는 경우
+        console.error("❌ 네트워크 에러: 응답 없음", error.request);
+      } else {
+        // 요청 설정 문제 등
+        console.error("❌ 요청 에러:", error.message);
+      }
+    }
+  }
+
+
     if (!isMobile){
       return(
         <DesktopLayout>
@@ -212,6 +243,7 @@ const ScheduleMakePage = () => {
             >
               <DesktopScheduleSelectSection
                 selectedSchedule={selectedSchedule} setSelectedSchedule={setSelectedSchedule}
+                tryFetchNewSchedule={tryFetchNewSchedule}
               />
             </div>
             <div className={style["schedule-make-info"]}>
@@ -260,6 +292,7 @@ const ScheduleMakePage = () => {
               >
                 <MobileScheduleSelectSection
                   selectedSchedule={selectedSchedule} setSelectedSchedule={setSelectedSchedule}
+                  tryFetchNewSchedule={tryFetchNewSchedule}
                 />
               </div>
               <div className={style["schedule-make-info"]}>

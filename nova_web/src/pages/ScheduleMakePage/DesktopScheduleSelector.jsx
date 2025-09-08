@@ -2,7 +2,8 @@ import { useEffect, useState, useRef } from "react";
 import style from "./ScheduleMakePage.module.css";
 
 const DesktopScheduleSelectSection = ({
-  selectedSchedule, setSelectedSchedule
+  selectedSchedule, setSelectedSchedule,
+  tryFetchNewSchedule
 }) => {
 
   // 실제로 선택한 종료 시간
@@ -160,15 +161,14 @@ const DesktopScheduleSelectSection = ({
     }
   },[selectedSchedule])
 
-
-  const handleMakeSchedule = () => {
-    setSelectedSchedule((prev) => ({
-      ...prev,
+  const scheduleMaker = () => {
+    const newSchedule = {
+      ...selectedSchedule,
       title: detailInput,
       tags: tagsArrayData,
       duration: durationInput ? parseInt(durationInput, 10) : "",
       datetime: (() => {
-        const targetDate = prev.datetime || new Date(); // 기존 datetime이 없으면 오늘 기준
+        const targetDate = selectedSchedule.datetime || new Date();
         return new Date(
           targetDate.getFullYear(),
           targetDate.getMonth(),
@@ -177,11 +177,19 @@ const DesktopScheduleSelectSection = ({
           minutes,
           0
         );
-      })()
-    }));
+      })(),
+    };
 
-    // ㅇ여기서 fecth 하도록 하면됨
-  }
+    setSelectedSchedule(newSchedule);
+    return newSchedule; // 👈 여기서 반환
+  };
+
+
+  const handleMakeSchedule = async () => {
+    const newSchedule = scheduleMaker(); 
+    await tryFetchNewSchedule(newSchedule); // 새로 만든 값 바로 사용
+  };
+
 
   return(
     <div className={style["schedule-select-section-frame"]}>
@@ -320,7 +328,9 @@ const DesktopScheduleSelectSection = ({
           </div>
         </div>
         <div className={style["schedule-make-button-wrapper"]}>
-            <div className={style["schedule-make-button"]}>업로드</div>
+            <div className={style["schedule-make-button"]}
+              onClick={handleMakeSchedule}
+            >업로드</div>
         </div>
       </div>
     </div>
