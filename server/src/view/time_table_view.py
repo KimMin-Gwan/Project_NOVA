@@ -226,19 +226,16 @@ class Time_Table_View(Master_View):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = MakeScheduleRequest(request=raw_request)
             
-            print(data_payload)
+            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
             
-            #request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+            time_table_controller =TimeTableController()
+            model = time_table_controller.make_new_single_schedule(schedule_search_engine=self.__schedule_search_engine,
+                                                                   database=self.__database,
+                                                                   request=request_manager)
             
-            #time_table_controller =TimeTableController()
-            #model = time_table_controller.make_new_single_schedule(schedule_search_engine=self.__schedule_search_engine,
-                                                                   #database=self.__database,
-                                                                   #request=request_manager)
-            
-            #body_data = model.get_response_form_data(self._head_parser)
-            #response = request_manager.make_json_response(body_data=body_data)
-            #return response
-            return {"status":"success"}
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
 
         # 수정을 위해 작성했던 스케줄을 확인하는 함수
         @self.__app.get('/time_table_server/try_get_written_schedule')
