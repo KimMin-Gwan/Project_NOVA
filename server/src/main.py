@@ -41,7 +41,8 @@ class Master(Configure_File_Reader):
         
         feed_search_engine = FeedSearchEngine(database=database)
 
-        schedule_search_engine = ScheduleSearchEngine(database=database)
+        #schedule_search_engine = ScheduleSearchEngine(database=database)
+        schedule_search_enggine = None
         
         feed_manager= FeedManager(database=database,
                                   feed_search_engine=feed_search_engine)
