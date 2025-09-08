@@ -551,7 +551,7 @@ function ScheduleOptionModal({ onClose, targetSid, onClickEdit}) {
   const bias_url = "https://kr.object.ncloudstorage.com/nova-images/";
 
   const [bid, setBid] = useState("");
-  const [sname, setSname] = useState("");
+  const [title, setSname] = useState("");
   const [startDate, setStartDate] = useState("00월 00일");
   const [startTime, setStartTime] = useState("00:00");
   const [isOwner, setOwner] = useState(false);
@@ -656,7 +656,7 @@ function ScheduleOptionModal({ onClose, targetSid, onClickEdit}) {
             ref={wrapperRef}
           >
             <div className={style["scrolling-text"]} ref={textRef}>
-              {sname}
+              {title}
             </div>
           </div>
 

@@ -31,7 +31,7 @@ export default function ScheduleSelect({
   isEditMode,
   targetSchedule, // fetch로 받아온 수정용 데이터
 }) {
-  //파라미터로 넘어온 데이터 에서 location이랑 sname 바꾸는 함수
+  //파라미터로 넘어온 데이터 에서 location이랑 title 바꾸는 함수
   const handleScheduleChange = (field, value) => {  
     setSendScheduleData((prevState) => {
       const updatedSchedules = [...prevState.schedules];
@@ -184,7 +184,7 @@ export default function ScheduleSelect({
           hour: targetSchedule.endHour,
           minute: targetSchedule.endMinute,
         });
-        setDetailInput(targetSchedule.sname);
+        setDetailInput(targetSchedule.title);
         setPlaceInput(targetSchedule.platform);
         setSid(targetSchedule.sid);
         setBid(targetSchedule.bid);
@@ -391,12 +391,12 @@ export default function ScheduleSelect({
     handleScheduleChange("sid", sid);
   }, [sid]);
 
-  // 위와 같은 목적 => sname
+  // 위와 같은 목적 => title
   useEffect(() => {
-    handleScheduleChange("sname", detailInput);
+    handleScheduleChange("title", detailInput);
   }, [detailInput]);
 
-  // 위와 같은 목적 => sname
+  // 위와 같은 목적 => title
   useEffect(() => {
     handleScheduleChange("tags", tagsArrayData);
   }, [tagsArrayData]);

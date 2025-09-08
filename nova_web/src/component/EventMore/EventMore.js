@@ -303,7 +303,7 @@ export function MakeSingleSchedule({ closeSchedule, isOpen }) {
 
   const scheduleFormat = {
     id: Date.now(), 
-    sname : '',
+    title : '',
     location : '',
     bid : '',
     start_date : '',
@@ -315,7 +315,7 @@ export function MakeSingleSchedule({ closeSchedule, isOpen }) {
   const [scheduleArray, setScheduleArray] = useState([scheduleFormat]);
 
   const bundleFormat = {
-    sname : '',
+    title : '',
     bid : '',
     schedules : scheduleArray
   }
@@ -395,14 +395,14 @@ export function MakeSingleSchedule({ closeSchedule, isOpen }) {
   useEffect(()=>{
     setSendScheduleData(prevState => ({
       ...prevState,
-      bid: biasId, // bundleNameInput 값으로 sname 업데이트
+      bid: biasId, // bundleNameInput 값으로 title 업데이트
     }));
   }, [biasId])
 
   useEffect(() => {
     setSendScheduleData(prevState => ({
       ...prevState,
-      sname: bundleNameInput, // bundleNameInput 값으로 sname 업데이트
+      title: bundleNameInput, // bundleNameInput 값으로 title 업데이트
     }));
   }, [bundleNameInput]);
 
@@ -482,7 +482,7 @@ export function EditSingleSchedule({ closeSchedule, isOpen, target, isSingleSche
   const scheduleFormat = {
     id: Date.now(), 
     sid:'',
-    sname : '',
+    title : '',
     location : '',
     bid : '',
     start_date : '',
@@ -495,7 +495,7 @@ export function EditSingleSchedule({ closeSchedule, isOpen, target, isSingleSche
   const [scheduleArray, setScheduleArray] = useState([scheduleFormat]);
 
   const bundleFormat = {
-    sname : '',
+    title : '',
     bid : '',
     schedules : scheduleArray
   }
@@ -554,7 +554,7 @@ export function EditSingleSchedule({ closeSchedule, isOpen, target, isSingleSche
         bid: schedule.bid,
         sid: schedule.sid,
         location : schedule.location,
-        sname : schedule.sname,
+        title : schedule.title,
         tags : schedule.tags,
         startYear,
         startMonth,
@@ -678,14 +678,14 @@ export function EditSingleSchedule({ closeSchedule, isOpen, target, isSingleSche
   useEffect(()=>{
     setSendScheduleData(prevState => ({
       ...prevState,
-      bid: biasId, // bundleNameInput 값으로 sname 업데이트
+      bid: biasId, // bundleNameInput 값으로 title 업데이트
     }));
   }, [biasId])
 
   useEffect(() => {
     setSendScheduleData(prevState => ({
       ...prevState,
-      sname: bundleNameInput, // bundleNameInput 값으로 sname 업데이트
+      title: bundleNameInput, // bundleNameInput 값으로 title 업데이트
     }));
   }, [bundleNameInput]);
 
