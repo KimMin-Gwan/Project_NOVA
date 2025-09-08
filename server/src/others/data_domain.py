@@ -31,7 +31,7 @@ class Schedule(SampleDomain):
     def __init__(self, sid="", title="", uid="", uname="",
                  bid="", bname="", datetime=dt.now(), duration= 60,
                  platform=[], code="", update_datetime="",
-                 num_usage=0, state=True, color_code="", tags=[], url=""
+                 num_usage=0, display=4, color_code="", tags=[], url=""
                  ):
         self.sid:str = sid                          # schedule id
         self.title :str = title# schedule name
@@ -45,7 +45,7 @@ class Schedule(SampleDomain):
         self.code:str = code                        # 스케줄 코드
         self.update_datetime:str = update_datetime  # 등록된 시간
         self.num_usage:int = num_usage              # 추가된 횟수
-        self.state:bool = state                     # 공개 비공개 여부
+        self.display:bool = display# 공개 비공개 여부
         
         self.subscribe = False
         self.is_owner = False                       # 글쓴이 여부
@@ -65,7 +65,7 @@ class Schedule(SampleDomain):
         self.code = dict_data.get('code', "")
         self.update_datetime = dict_data.get('update_datetime', "")
         self.num_usage = dict_data.get('num_usage', 0)  # 기본값 0 설정
-        self.state:bool = dict_data.get('state')
+        self.display:int = dict_data.get('display', 4)
         self.tags:list = dict_data.get('tags', [])
         self.url:list = dict_data.get('url', "")
         return self
@@ -84,7 +84,7 @@ class Schedule(SampleDomain):
             "code": self.code,
             "update_datetime": self.update_datetime,
             "num_usage": self.num_usage,
-            "state":self.state,
+            "display":self.display,
             
             "subscribe" : self.subscribe,
             "is_owner" : self.is_owner,

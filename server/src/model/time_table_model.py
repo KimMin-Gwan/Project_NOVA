@@ -102,15 +102,12 @@ class ScheduleTransformModel:
         platform_list = [l for l in platform_list if l]
 
         schedule = Schedule(
-            sname=schedule.sname,
+            title=schedule.title,
             bid=bias.bid,
             bname=bias.bname,
             uid=user.uid,
             uname=user.uname,
-            start_date=schedule.start_date,
-            start_time=schedule.start_time,
-            end_date=schedule.end_date,
-            end_time=schedule.end_time,
+            datetime=schedule.datetime,
             update_datetime=datetime.today().strftime("%Y/%m/%d-%H:%M:%S"),
             platform=platform_list,
             state=schedule.state
@@ -314,7 +311,7 @@ class TimeTableModel(BaseModel):
             current_day += timedelta(days=1)  # 하루씩 증가
         
         for sid in sid_list:
-            if sid in self._tuser.sids:
+            if sid in self._user.subscribed_sids:
                 self.__num_schedule += 1
         
         return
@@ -508,25 +505,13 @@ class MultiScheduleModel(TimeTableModel):
 
     # id_list는 서치한 데이터들의 고유 아이디
     # 전송용 데이터를 만드는 함수
-    def _make_send_data_with_ids(self,id_list:list, search_type:str="schedule"):
-        schedule_id_type = ""
-        if search_type == "schedule" or search_type=="sid":
-            schedule_id_type = "sid"
-        elif search_type == "bias" or search_type == "bid":
-            schedule_id_type = "bid"
+    def _make_send_data_with_ids(self, id_list:list):
+        schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids=id_list)
 
-        schedule_type_datas = self._database.get_datas_with_ids(target_id=schedule_id_type, ids=id_list)
-
-        for data in schedule_type_datas:
-            if schedule_id_type == "sid":
-                schedule = Schedule()
-                schedule.make_with_dict(data)
-                self.__schedules.append(schedule)
-
-            elif schedule_id_type == "bid":
-                bias = Bias()
-                bias.make_with_dict(data)
-                self.__biases.append(bias)
+        for data in schedule_datas:
+            schedule = Schedule()
+            schedule.make_with_dict(data)
+            self.__schedules.append(schedule)
 
         # 데이터들을 전부 변환
         self._make_send_data_with_datas()
@@ -535,9 +520,9 @@ class MultiScheduleModel(TimeTableModel):
 
     # 이미 데이터를 받아온 경우에 씀
     def _make_send_data_with_datas(self):
-        # 데이터 변환 모델
-        schedule_model = TimeScheduleModel()
-        schedule_bias_model = TimeBiasModel()
+        ## 데이터 변환 모델
+        #schedule_model = TimeScheduleModel()
+        #schedule_bias_model = TimeBiasModel()
 
         # 이미 등록 했는지 확인하는 함수
         for schedule in self.__schedules:
@@ -547,14 +532,14 @@ class MultiScheduleModel(TimeTableModel):
             if schedule.sid in self._tuser.my_sids:
                 schedule.is_owner = True
 
-        # 데이터 변환
-        schedule_model.get_tschedule_list(schedules=self.__schedules)
-        schedule_bias_model.get_tbias_list(biases=self.__biases)
+        # 이전에 사용했던 데이터 표기용 함수
+        ## 데이터 변환
+        #schedule_model.get_tschedule_list(schedules=self.__schedules)
+        #schedule_bias_model.get_tbias_list(biases=self.__biases)
 
-        # 반환받은 건 딕셔너리 리스트
-        self.__schedules = schedule_model.get_response_form_data()
-        self.__biases = schedule_bias_model.get_response_form_data()
-
+        ## 반환받은 건 딕셔너리 리스트
+        #self.__schedules = schedule_model.get_response_form_data()
+        #self.__biases = schedule_bias_model.get_response_form_data()
         return
 
 
@@ -637,7 +622,7 @@ class MultiScheduleModel(TimeTableModel):
         return
 
     # 키워드를 통해 검색합니다.
-    def search_schedule_with_keyword(self, schedule_search_engine:SSE, keyword:str, search_type:str, search_columns:str,
+    def search_schedule_with_keyword(self, schedule_search_engine:SSE, keyword:str, search_columns:str,
                                       when:str, num_schedules:int, last_index:int=-1):
         searched_list = []
 
@@ -646,35 +631,27 @@ class MultiScheduleModel(TimeTableModel):
         else:
             search_columns_list = [i.strip() for i in search_columns.split(",")]
 
-        if search_type == "schedule" or search_type == "sid":
-            searched_list = schedule_search_engine.try_search_schedule_w_keyword(target_keyword=keyword, search_columns=search_columns_list)
-            if when != "": # 진행중인 애만 찾고싶으면
-                searched_list = schedule_search_engine.try_filtering_schedule_in_progress(sids=searched_list, when=when)
+        searched_list = schedule_search_engine.try_search_schedule_w_keyword(target_keyword=keyword, search_columns=search_columns_list)
+        
+        if when != "": # 진행중인 애만 찾고싶으면
+            searched_list = schedule_search_engine.try_filtering_schedule_in_progress(sids=searched_list, when=when)
 
         searched_list, self._key = self.paging_id_list(id_list=searched_list, last_index=last_index, page_size=num_schedules)
-        self._make_send_data_with_ids(id_list=searched_list, search_type=search_type)
-
+        self._make_send_data_with_ids(id_list=searched_list)
         return
-
-    # 키워드를 통한 바이어스 서치
-    def search_bias_with_keyword(self, keyword:str, num_biases:int ,last_index:int=-1):
-        searched_list = self.__search_bias_list(keyword=keyword)
-        searched_list, self._key = self.paging_id_list(id_list=searched_list, last_index=last_index, page_size=num_biases)
-
-        self._make_send_data_with_ids(id_list=searched_list, search_type="bias")
 
     # 내가 선택한 스케줄들을 반환
     def get_my_selected_schedules(self, schedule_search_engine:SSE, bid:str, num_schedules:int, last_index:int=-1):
         searched_list = schedule_search_engine.try_search_selected_schedules(sids=self._tuser.sids, bid=bid)
         searched_list, self._key = self.paging_id_list(id_list=searched_list, last_index=last_index, page_size=num_schedules)
-        self._make_send_data_with_ids(id_list=searched_list, search_type="schedule")
+        self._make_send_data_with_ids(id_list=searched_list)
 
         return
 
     # 이번 주 일정을 들고 옮
     def get_weekday_schedules(self, schedule_search_engine:SSE):
         searched_list = schedule_search_engine.try_get_weekday_schedule_list(sids=self._tuser.sids)
-        self._make_send_data_with_ids(id_list=searched_list, search_type="schedule")
+        self._make_send_data_with_ids(id_list=searched_list)
 
         return
 
@@ -682,7 +659,7 @@ class MultiScheduleModel(TimeTableModel):
     def search_my_all_schedule(self, schedule_search_engine:SSE):
         # 데이터 불러오고
         searched_list = schedule_search_engine.try_search_selected_schedules(sids=self._tuser.sids)
-        self._make_send_data_with_ids(id_list=searched_list, search_type="schedule")
+        self._make_send_data_with_ids(id_list=searched_list)
 
         return
 
@@ -691,7 +668,7 @@ class MultiScheduleModel(TimeTableModel):
                                            style:str, gender:str, num_schedules:int, last_index:int=-1):
         searched_list = schedule_search_engine.try_get_explore_schedule_list(time_section=time_section, style=style, gender=gender, category=category)
         searched_list, self._key = self.paging_id_list(id_list=searched_list, last_index=last_index, page_size=num_schedules)
-        self._make_send_data_with_ids(id_list=searched_list, search_type="schedule")
+        self._make_send_data_with_ids(id_list=searched_list)
 
         return
 
@@ -702,7 +679,7 @@ class MultiScheduleModel(TimeTableModel):
         schedule=Schedule()
         schedule.make_with_dict(schedule_data)
 
-        if schedule.sid in self._tuser.my_sids:
+        if schedule.sid in self._user.subscribed_sids:
             schedule.is_owner = True
 
         self.__schedules.append(schedule.get_dict_form_data())
@@ -807,8 +784,8 @@ class AddScheduleModel(TimeTableModel):
     # sids리스트를 추가하는 곳
     # 대충 일정 보고 끼워넣는 로직도 있으면 좋겠는데
     def add_schedule(self, sids):
-        self._tuser.sids = list(set(self._tuser.sids + sids))
-        self._database.modify_data_with_id(target_id='tuid', target_data=self._tuser.get_dict_form_data())
+        self._user.subscribed_sids = list(set(self._user.subscribed_sids + sids))
+        self._database.modify_data_with_id(target_id='uid', target_data=self._user.get_dict_form_data())
         self.__result = True
         return
 
@@ -817,12 +794,12 @@ class AddScheduleModel(TimeTableModel):
         # 저장해야하는지 체크하는 플래장
         flag= False
 
-        if sid in self._tuser.sids:
-            self._tuser.sids.remove(sid)
+        if sid in self._user.subscribed_sids:
+            self._user.subscribed_sids.remove(sid)
             flag = True
 
         if flag:
-            self._database.modify_data_with_id(target_id="tuid", target_data=self._tuser.get_dict_form_data())
+            self._database.modify_data_with_id(target_id="uid", target_data=self._user.get_dict_form_data())
             self.__result = True
         return
 
@@ -890,7 +867,7 @@ class AddScheduleModel(TimeTableModel):
     
      # 복수 개의 (단일 포함) 스테줄 저장
     def save_new_schedules(self, schedule_search_engine:SSE, schedule:Schedule):
-        #schedule_search_engine.try_add_new_managed_schedule(new_schedules=schedule)    # 서치 엔진에다가 저장합니다.
+        schedule_search_engine.try_add_new_managed_schedule(new_schedules=schedule)    # 서치 엔진에다가 저장합니다.
         self._database.add_new_data(target_id="sid", new_datas=schedule.get_dict_form_data())                  # 데이터베이스에 먼저 저장
 
         self._user.my_sids.append(schedule.sid)  # 내가 만든 스케줄이기에 내 스케줄에도 추가
@@ -905,63 +882,50 @@ class AddScheduleModel(TimeTableModel):
     
 
     # 수정한 스케줄들 저장
-    def save_modified_schedule(self, schedule_search_engine:SSE, schedules:list):
-        for schedule in schedules:
-            save_data = schedule.get_dict_form_data()
-            if self._database.get_data_with_id(target="sid", id=schedule.sid):
-                self._database.modify_data_with_id(target_id='sid', target_data=save_data)
-            else:
-                schedule_search_engine.try_add_new_managed_schedule(new_schedule=schedule)
-                self._database.add_new_data(target_id="sid", new_data=save_data)
-                self._tuser.sids.append(schedule.sid)
-                self._database.modify_data_with_id(target_id='tuid', target_data=self._tuser.get_dict_form_data())
+    def save_modified_schedule(self, schedule_search_engine:SSE, schedule:Schedule):
+        save_data = schedule.get_dict_form_data()
+        self._database.modify_data_with_id(target_id='sid', target_data=save_data)
 
         # 서치 엔진에도 저장합니다.
-        schedule_search_engine.try_modify_schedule_list(modify_schedule_list=schedules)
+        schedule_search_engine.try_modify_schedule(modify_schedule=schedule)
 
         self.__result = True
         return
 
-
     # 단일 스케줄 편집
-    def modify_single_schedule(self, data_payload, sid:str):
+    def modify_single_schedule(self, modified_schedule:Schedule):
         # pprint("Single_schedule_modify")
 
-        schedule_data = self._database.get_data_with_id(target="sid", id=sid)
+        schedule_data = self._database.get_data_with_id(target="sid", id=modified_schedule.sid)
         schedule = Schedule()
         schedule.make_with_dict(schedule_data)
 
-        bias_data = self._database.get_data_with_id(target="bid", id=data_payload.bid)
+        bias_data = self._database.get_data_with_id(target="bid", id=modified_schedule.bid)
         bias = Bias().make_with_dict(bias_data)
-
-        if isinstance(data_payload.platform, str):
-            str_list = re.split(r'\W+', data_payload.platform)
-            str_list = [s for s in str_list if s]
-        elif isinstance(data_payload.platform, list):
-            str_list = data_payload.platform
-        else:
-            str_list = []
-
-        schedule.sname = data_payload.sname
-        schedule.bid = data_payload.bid
-        schedule.platform = str_list
+        
+        schedule.title = modified_schedule.title
+        schedule.bid = bias.bid
         schedule.bname = bias.bname
-        schedule.tags = data_payload.tags
-        schedule.start_date = data_payload.start_date
-        schedule.start_time = data_payload.start_time
-        schedule.end_date = data_payload.end_date
-        schedule.end_time = data_payload.end_time
+        schedule.platform = bias.platform
+        schedule.url = bias.platform_url
+        schedule.tags = schedule.tags
+        schedule.datetime = schedule.datetime
+        schedule.duration = schedule.duration
         schedule.update_datetime= datetime.today().strftime("%Y/%m/%d-%H:%M:%S")
 
         return schedule
 
-
-
     # 스케줄 삭제
     def delete_schedule(self, schedule_search_engine:SSE, sid:str):
-        tuser_datas = self._database.get_all_data(target="tuid")
+        schedule_data = self._database.get_data_with_id(target="sid", id=sid)
+        if not schedule_data:
+            self._detail = "존재하지 않는 스케줄입니다."
+            return
+        schedule = Schedule().make_with_dict(schedule_data)
+        
+        schedule.display = 0 # 삭제 표시
 
-        self._database.modify_data_with_id(target_id="tuid", target_data=self._tuser.get_dict_form_data())
+        self._database.modify_data_with_id(target_id="sid", target_data=schedule.get_dict_form_data())
 
         # 서치 엔진에서 편집합니다.
         schedule_search_engine.try_remove_schedule(sid=sid)
@@ -1035,16 +999,10 @@ class ScheduleTimeLayerModel(TimeTableModel):
     def __make_single_schedule_data_form(self, type, schedule:Schedule):
         schedule_form = {}
         
-        # 24시간 형식의 문자열을 datetime 객체로 변환
-        time_obj = datetime.strptime(schedule.start_time, "%H:%M")
-
-        # 12시간 형식의 문자열로 변환
-        time_12 = time_obj.strftime("%p %I:%M").lstrip("0").replace("AM", "AM").replace("PM", "PM")
-        
-        schedule_form["time"] = time_12
+        schedule_form["time"] = schedule.datetime
         schedule_form["type"] = type
         schedule_form["schedule_id"] = schedule.sid
-        schedule_form["schedule_title"] = schedule.sname
+        schedule_form["schedule_title"] = schedule.title
         schedule_form["schedule_bias"] = schedule.bname
         schedule_form["schedule_bid"] = schedule.bid
         return schedule_form
@@ -1100,7 +1058,7 @@ class ScheduleTimeLayerModel(TimeTableModel):
 
         # 여기서 managed_schedule은 dict 형태임
         for sid in sids:
-            if sid in self._tuser.sids:
+            if sid in self._user.subscribed_sids:
                 self.__my_target_sids.append(sid)
             else:
                 self.__recommend_target_sids.append(sid)
@@ -1111,7 +1069,6 @@ class ScheduleTimeLayerModel(TimeTableModel):
         for schedule_data in schedule_datas:
             schedule = Schedule().make_with_dict(dict_data=schedule_data)
             self.__schedules.append(schedule)
-        
         return
     
     # 레이어 만들기
@@ -1164,6 +1121,10 @@ class ScheduleTimeLayerModel(TimeTableModel):
         # recommend_target_sids는 이미 추천 대상 스케줄 ID로 채워져 있어야 함 (위에서 채워옴)
         result = random.sample(self.__recommend_target_sids, k=min(sample_size, len(self.__recommend_target_sids)))  # 데이터 크기를 초과하지 않도록 처리
                 
+        # 0개면 걍 끝
+        if  len(result) == 0:
+            return False
+        
         schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids= result)
         
         self.__schedules.clear()
@@ -1173,7 +1134,7 @@ class ScheduleTimeLayerModel(TimeTableModel):
             schedule = Schedule().make_with_dict(dict_data=schedule_data)
             self.__schedules.append(schedule)
         
-        return       
+        return True
     
     
     def set_recommand_schedule_layer(self):

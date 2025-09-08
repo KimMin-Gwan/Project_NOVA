@@ -14,9 +14,6 @@ class TimeTableController:
         
         if request.jwt_payload!= "":
             model.set_user_with_email(request=request.jwt_payload)
-            # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
-            if not model._set_tuser_with_tuid():
-                return model
         
         # 주제 수 찍어주면됨
         model.set_schedules_with_sids(data_payload=request.data_payload)
@@ -29,9 +26,6 @@ class TimeTableController:
         
         if request.jwt_payload!= "":
             model.set_user_with_email(request=request.jwt_payload)
-            # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
-            if not model._set_tuser_with_tuid():
-                return model
         
         # 주제 수 찍어주면됨
         #model.set_num_bias()
@@ -49,9 +43,6 @@ class TimeTableController:
 
         if request.jwt_payload!= "":
             model.set_user_with_email(request=request.jwt_payload)
-            # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
-            if not model._set_tuser_with_tuid():
-                return model
 
         model.make_my_schedule_data(target_date=request.data_payload.date,
                                  schedule_search_engine=schedule_search_engine)
@@ -61,8 +52,8 @@ class TimeTableController:
         target_date = datetime.strptime(request.data_payload.date, "%Y/%m/%d")
         
         if datetime.today().date() <= target_date.date():
-            model.make_recommand_schedule_data() # 추천 스케줄 데이터 생성
-            model.set_recommand_schedule_layer() # 추천 스케줄 레이어 생성
+            if model.make_recommand_schedule_data(): # 추천 스케줄 데이터 생성
+                model.set_recommand_schedule_layer() # 추천 스케줄 레이어 생성
         
         model.change_layer_form()
             
@@ -75,9 +66,6 @@ class TimeTableController:
 
         if request.jwt_payload!= "":
             model.set_user_with_email(request=request.jwt_payload)
-            # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
-            if not model._set_tuser_with_tuid():
-                return model
         else:
             return model
 
@@ -91,9 +79,6 @@ class TimeTableController:
 
         if request.jwt_payload!= "":
             model.set_user_with_email(request=request.jwt_payload)
-            # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
-            if not model._set_tuser_with_tuid():
-                return model
 
         model.reject_from_my_week_schedule(sid=request.data_payload.sid)
         return model
@@ -121,14 +106,10 @@ class TimeTableController:
         
         if request.jwt_payload!= "":
             model.set_user_with_email(request=request.jwt_payload)
-            # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
-            if not model._set_tuser_with_tuid():
-                return model
 
         # 키워드를 넘겨 검색 후, 반환받음
         model.search_schedule_with_keyword(schedule_search_engine=schedule_search_engine,
                                             keyword=request.data_payload.keyword,
-                                            search_type=request.data_payload.type,
                                             search_columns=request.data_payload.search_columns,
                                             when=request.data_payload.filter_option,
                                             last_index=request.data_payload.key,
@@ -143,9 +124,6 @@ class TimeTableController:
 
         if request.jwt_payload!= "":
             model.set_user_with_email(request=request.jwt_payload)
-            # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
-            if not model._set_tuser_with_tuid():
-                return model
 
         model.get_explore_schedule_with_category(schedule_search_engine=schedule_search_engine,
                                                  time_section=request.data_payload.time_section,
@@ -156,16 +134,6 @@ class TimeTableController:
                                                  category=request.data_payload.category
                                                  )
         # data_payload 참고해서 탐색하는 스케줄 데이터를 보내주면됨
-        # 1. 카테고리에 따라 데이터 추출
-        # 2. 필터에 따라 데이터 필터링
-        # 3. 페이징에 따른 데이터 세팅
-
-        # Data Payload
-        # self.category:str=body.get("category", "") # category 는 따로 있을듯
-        # self.key:int=body.get("key", -1)
-        # self.time_section:int=body.get("timeSection", 0) # 0 -> 0~6 / 1 -> 6~12 / 2 -> 12~16 / 3 -> 16~24 / -1 -> 0~24(전체)
-        # self.style:int=body.get("style", "all")  # all, vtuber, cam, nocam -> bias 데이터 (tags)
-        # self.gender:int=body.get("gender", "all") # male, female, etc -> bias 데이터 (tags)
 
         return model
 
@@ -198,7 +166,7 @@ class TimeTableController:
 
         model.make_new_multiple_schedule(schedule_search_engine=schedule_search_engine,
                                             schedules=request.data_payload.schedules,
-                                            sname=request.data_payload.sname,
+                                            title=request.data_payload.title,
                                             bid=request.data_payload.bid,
                                             data_type=request.data_payload.type)
 
@@ -211,8 +179,6 @@ class TimeTableController:
 
         if request.jwt_payload!= "":
             model.set_user_with_email(request=request.jwt_payload)
-            if not model._set_tuser_with_tuid():
-                return model
 
         model.get_print_forms_schedule(schedules = request.data_payload.schedules,
                                         bid=request.data_payload.bid)
@@ -226,12 +192,8 @@ class TimeTableController:
 
         if request.jwt_payload!= "":
             model.set_user_with_email(request=request.jwt_payload)
-            if not model._set_tuser_with_tuid():
-                return model
-
 
         model.get_written_schedule(sid=request.data_payload.sid)
-
         return model
 
 
@@ -241,10 +203,8 @@ class TimeTableController:
 
         if request.jwt_payload!= "":
             model.set_user_with_email(request=request.jwt_payload)
-            if not model._set_tuser_with_tuid():
-                return model
 
-        schedule = model.modify_single_schedule(data_payload=request.data_payload, sid=request.data_payload.sid)
+        schedule = model.modify_single_schedule(schedule=request.data_payload.schedule)
         model.save_modified_schedule(schedule_search_engine=schedule_search_engine, schedules=[schedule])
 
         return model
@@ -255,8 +215,6 @@ class TimeTableController:
 
         if request.jwt_payload!= "":
             model.set_user_with_email(request=request.jwt_payload)
-            if not model._set_tuser_with_tuid():
-                return model
 
         model.delete_schedule(schedule_search_engine=schedule_search_engine, sid=request.data_payload.sid)
 

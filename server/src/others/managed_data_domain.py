@@ -87,60 +87,55 @@ class ManagedBias:
         }
 
 class ManagedSchedule:
-    def __init__(self, sid="", sname="", uname="", bid="", bname="", bias_gender="", bias_category=[],
-                 date=None, start_date_time=None, end_date_time=None, time_section=[],  platform=[],
+    def __init__(self, sid="", title="", uname="", bid="", bname="", bias_category=[],
+                 datetime=None, time_section=[],  platform=[], duration=0,
                  code="", state:bool=True, tags=[]):
         self.sid=sid
-        self.sname=sname
+        self.title=title
         self.bid=bid
         self.bname=bname
-        self.bias_gender=bias_gender
         self.bias_category=bias_category            # 바이어스 카테고리
         self.tags:list=tags                     # 바이어스 태그
         self.uname=uname
-        self.date=date                              # update_datetime
-        self.start_date_time=start_date_time        # start_date + start_time
-        self.end_date_time=end_date_time            # end_date + end_time
+        self.datetime=datetime                              
+        self.duration=duration
+        self.date=self.datetime
         self.time_section=time_section              # 타임 섹션
         self.platform=platform
         self.code=code
         self.state=state
-        self.platform = platform
 
 
     # 무슨 데이터인지 출력해보기
     def __call__(self):
         print("sid: ", self.sid)
-        print("sname: ", self.sname)
+        print("title: ", self.title)
         print("bid: ", self.bid)
         print("bname: ", self.bname)
-        print("bias_gender: ", self.bias_gender)
         print("bias_category: ", self.bias_category)
         print("tags: ", self.tags)
+        print("datetime: ", self.datetime)
+        print("duration: ", self.duration)
         print("uname: ", self.uname)
-        print("date: ", self.date)
-        print("start_date_time: ", self.start_date_time)
-        print("end_date_time: ", self.end_date_time)
         print("time_section", self.time_section)
         print("platform: ", self.platform)
         print("code: ", self.code)
         print("state: ", self.state)
-        print("platform: ", self.platform)
+        print("platform: ", self.platform)\
+    
 
     # 딕셔너리화
     def to_dict(self):
         return {
             "sid": self.sid,
-            "sname": self.sname,
+            "title": self.title,
             "bid": self.bid,
             "bname": self.bname,
-            "bias_gender": self.bias_gender,
             "bias_category": self.bias_category,
             "tags": self.tags,
             "uname": self.uname,
-            "date": self.date,
-            "start_date_time": self.start_date_time,
-            "end_date_time": self.end_date_time,
+            "datetime": self.datetime,
+            "duration": self.duration,
             "time_section": self.time_section,
             "platform": self.platform,
             "code": self.code,
@@ -194,20 +189,38 @@ class ManagedTable:
 
     # 타임 섹션을 얻는 함수
     # 24시간을 4등분 하고 각 구간을 0, 1, 2, 3으로 설정합니다.
-    def _get_schedule_time_section(self, start_time:datetime, end_time:datetime):
-        current_time = start_time
+    def _get_schedule_time_section(self, start_datetime: datetime, duration: int):
+        ##
+        ##일정의 시작 시간(datetime)과 duration(분)을 받아서,
+        ##24시간을 4등분(0~6, 6~12, 12~18, 18~24)한 구간 중
+        ##어느 구간에 해당하는지 리스트로 반환합니다.
+
+        ##Parameters
+        ##----------
+        ##start_datetime : datetime
+            ##일정 시작 시각
+        ##duration : int
+            ##일정 수행 시간 (분 단위)
+
+        ##Returns
+        ##-------
+        ##list[int]
+            ##해당 일정이 포함된 구간 index 리스트 (0~3)
+        ##
+        
+        end_time = start_datetime + timedelta(minutes=duration)
+
+        current_time = start_datetime
         first_section = True
         end_flag = False
-        time_sections = set()       # 타임 섹션을 판별할 때, 0, 1, 2, 3의 값만 가지며, 이후의 날도 넘어간다면 그것도 포함시킨다.
+        time_sections = set()
 
-        # 첫 타임 섹션 설정
+        # 4개 구간 정의
         time_ranges = [(0, 6), (6, 12), (12, 18), (18, 24)]
 
-        # end_time을 넘기전 까지 Time Section을 찾아낸다.
         while current_time < end_time:
             hour = current_time.hour
 
-            # 탈출 구문
             if end_flag:
                 break
 
@@ -217,25 +230,21 @@ class ManagedTable:
                         end_flag = True
                         break
 
-                    # 구간이 끝는 시각이 24면 다음날 00시로 설정
+                    # 구간 끝이 24시인 경우 → 다음날 00시
                     if end_hour == 24:
-                        current_range_end = current_time.replace(hour=0, minute=0, second=0) + timedelta(days=1)
+                        current_range_end = current_time.replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(days=1)
                     else:
-                        current_range_end = current_time.replace(hour=end_hour, minute=0, second=0)
+                        current_range_end = current_time.replace(hour=end_hour, minute=0, second=0, microsecond=0)
 
-                    # 구간 종료 시간이 스케줄 종료 시간보다 크면 종료시간으로 제한
                     actual_end = min(end_time, current_range_end)
 
-                    # time_sections에 추가
                     time_sections.add(i)
-                    current_time = actual_end       # 구간 재설정
-
+                    current_time = actual_end
                     first_section = False
-
                     break
 
-        # 리스트로 반환합니다.
         return list(time_sections)
+
 
     # table list DataFrame만들기
     def _dataframing_table(self, data_table:list):
@@ -279,7 +288,7 @@ class ManagedTable:
         df = pd.concat([df, new_data], ignore_index=True)
 
         # date열의 data type을 datetime으로 강제 형변환
-        df['date'] = df['date'].apply(pd.to_datetime, errors='coerce')
+        #df['date'] = df['date'].apply(pd.to_datetime, errors='coerce')
 
         return df
 
@@ -316,7 +325,7 @@ class ManagedTable:
         df.loc[update_index] = modify_dict_data
 
         # date열의 data type을 datetime으로 강제 형변환
-        df['date'] = df['date'].apply(pd.to_datetime, errors='coerce')
+        #df['date'] = df['date'].apply(pd.to_datetime, errors='coerce')
 
         return df
 
@@ -514,14 +523,31 @@ class ManagedTable:
     # 이거 수정해야함
     # 로직에 살짝 변경이 있을 예정
     # 오늘을 기준으로, 현재 진행 중인, 종료된, 예정인 데이터들을 필터링합니다.
-    def _filter_data_with_date_in_progress(self, df:pd.DataFrame, date_columns:list=None, when:str=''):
-        if date_columns is None:
-            logging.error("date_columns가 입력되지 않음")
+    def _filter_data_with_date_in_progress(
+    self, df: pd.DataFrame, date_columns: list = None, when: str = ""
+    ):
+        ##
+        ##일정 상태(ended, in_progress, not_start, not_end)에 따라 데이터를 필터링합니다.
+
+        ##현재 기획: 단일 이벤트 → 시작 시간(datetime)만 기준
+        ##나중에 duration 추가 가능 (end_time = start + duration)
+
+        ##Parameters
+        ##----------
+        ##df : pd.DataFrame
+            ##일정 데이터
+        ##date_columns : list
+            ##["datetime"] 형식
+        ##when : str
+            ##"ended", "in_progress", "not_start", "not_end"
+        ##
+        if date_columns is None or len(date_columns) < 1:
+            logging.error("date_columns에는 최소한 시작시간 컬럼(datetime)을 포함해야 합니다.")
             return df
 
-        missing_cols = list(set(date_columns) - set(df.columns.values.tolist()))
-        if missing_cols:
-            logging.error("존재하지 않는 열에 대해서는 검색이 불가능")
+        start_column = date_columns[0]
+        if start_column not in df.columns:
+            logging.error(f"존재하지 않는 열: {start_column}")
             return df
 
         if when not in ("ended", "in_progress", "not_start", "not_end"):
@@ -529,97 +555,85 @@ class ManagedTable:
             return df
 
         now = datetime.now()
-
-        # 리스트 분리 시, 조금의 꼼수를 사용합니다.
-        # 리스트 길이가 가변일 수 있음. 길이가 1이거나 2일수있다.
-        # 그래서 Padding을 하고 요소 2개만 가져와서 mapping합니다.
-
-
-        start_column, end_column = date_columns[:2]
         mask = pd.Series(True, index=df.index)
 
-        # 끝난 일정에 대한 필터링
         if when == "ended":
-            mask &= (df[end_column] < now)
+            mask &= (df[start_column] < now)
 
-        # 끝나지 않은 일정에 대한 필터링 ( in_progress + not_start )
         elif when == "not_end":
-            mask &= (df[end_column] >= now)
+            mask &= (df[start_column] >= now)
 
-        # 진행 중인 일정에 대한 필터링
         elif when == "in_progress":
-            mask &= (df[start_column] <= now < df[end_column])
+            # 단일 이벤트 기준: 시작한 순간 = 진행 중
+            mask &= (df[start_column].date() == now.date()) & (df[start_column] <= now)
 
-        # 시작하지 않은 예정 일정에 대한 필터링
         elif when == "not_start":
             mask &= (df[start_column] > now)
 
-        filtered_df = df[mask]
+        return df[mask]
 
-        return filtered_df
+
 
     # 일정에 맞는 데이터를 필터링합니다.
     # 이는 Update_time이 될수도 있고, Start_date, End_date가 될 수 있습니다.
     # date_option = day => 오늘을 기준으로 필터링 (오늘 하루동안 올라온/시작하는/끝나는 데이터를 분류)
     # date_option = week => 오늘을 포함하는 일주일 (월요일 ~ 금요일) 필터링
-    def _filter_data_with_date_option(self, df:pd.DataFrame, date_option:str="", date_columns:list=None, **condition):
-        if date_columns is None:
-            logging.error("date_columns가 입력되지 않음")
+    def _filter_data_with_date_option(
+    self, df: pd.DataFrame, date_option: str = "", date_columns: list = None, **condition
+    ):
+        ##
+        ##일정 데이터를 날짜 기준으로 필터링합니다.
+
+        ##현재 기획: 단일 이벤트 → 시작 시간(datetime)만 기준
+        ##나중에 duration 추가 가능 (end_time 계산 후 범위 비교)
+
+        ##Parameters
+        ##----------
+        ##df : pd.DataFrame
+            ##일정 데이터
+        ##date_option : str
+            ##"day", "weekly", "specific"
+        ##date_columns : list
+            ##["datetime"] 형식
+        ##condition : dict
+            ##specific_date (datetime or str "%Y/%m/%d")
+        ##
+        
+        if date_columns is None or len(date_columns) < 1:
+            logging.error("date_columns에는 최소한 시작시간 컬럼(datetime)을 포함해야 합니다.")
             return df
 
-        missing_cols = list(set(date_columns) - set(df.columns.values.tolist()))
-        if missing_cols:
-            logging.error("존재하지 않는 열에 대해서는 검색이 불가능")
+        start_column = date_columns[0]
+        if start_column not in df.columns:
+            logging.error(f"존재하지 않는 열: {start_column}")
             return df
 
-        # 마스킹 데이터 만들기
+        if date_option not in ("day", "weekly", "specific") and date_option not in SKIP_TUPLE:
+            logging.error("date_option은 day, weekly, specific 에만 대응 됩니다.")
+            return df
+
         mask = pd.Series(True, index=df.index)
+
         if date_option in SKIP_TUPLE:
             pass
 
-        elif date_option not in ("day", "weekly", "specific"):
-            logging.error("date_option은 day, weekly, specific 에만 대응 됨")
-
-        # 데이터가 당일에만 시작하는 / 끝나는 / 진행(시작-끝이 오늘) 인 데이터들만 필터링
         elif date_option == "day":
-            today_str = datetime.now().strftime("%Y/%m/%d")
-            today = datetime.strptime(today_str, "%Y/%m/%d")
-            for date_column in date_columns:
-                mask &= (df[date_column].dt.date == today)
+            today = datetime.now().date()
+            mask &= (df[start_column].dt.date == today)
 
-        # 데이터가 이번 주에만 시작 / 끝/ 진행하는 데이터인지
         elif date_option == "weekly":
-            # 월요일, 일요일 날짜 데이터, 마스킹 데이터 얻음
             monday, sunday = self._get_monday_sunday_of_this_week()
-            for date_column in date_columns:
-                mask &= ((monday <= df[date_column]) & (df[date_column] <= sunday))
+            mask &= ((df[start_column] >= monday) & (df[start_column] <= sunday))
 
         elif date_option == "specific":
             if "specific_date" in condition:
-                # if specific_date == str, transform datetime object
-                if type(condition["specific_date"]) == str and not condition["specific_date"] in SKIP_TUPLE:
+                if isinstance(condition["specific_date"], str) and condition["specific_date"] not in SKIP_TUPLE:
                     specific_date = datetime.strptime(condition["specific_date"], "%Y/%m/%d").date()
                 else:
-                    specific_date = condition["specific_date"].date()      # datetime obj
+                    specific_date = condition["specific_date"].date()
+                mask &= (df[start_column].dt.date == specific_date)
 
-
-                # if date_columns length is not 2, not filtering.
-                if len(date_columns) < 2:
-                    logging.error("시작 날짜, 종료 날짜가 제대로 설정되지 않아 필터링을 할 수 없습니다.")
-                    mask = pd.Series(False, index=df.index)
-                else:
-                    # start_date_columns, end_date_columns가 서로 바뀌어도 날짜가 일찍이면 start, 늦으면 end로 판단함
-
-                    start_date = df[[date_columns[0], date_columns[1]]].min(axis=1).dt.date
-                    end_date = df[[date_columns[0], date_columns[1]]].max(axis=1).dt.date
-
-                    # specific in start date ~ end_date
-                    mask &= ((start_date <= specific_date) & (specific_date <= end_date))
-
-
-        # 최종 필터링
-        filtered_df = df[mask]
-        return filtered_df
+        return df[mask]
 
 
 class ManagedFeedBiasTable(ManagedTable):
@@ -980,21 +994,17 @@ class ManagedScheduleTable(ManagedTable):
             bias_data = self._database.get_data_with_id(target="bid", id=single_schedule.bid)
             bias=Bias().make_with_dict(dict_data=bias_data)
             
-            start_date_time = self._get_date_str_to_object(str_date=single_schedule.start_date+'-'+single_schedule.start_time+':00')
-            end_date_time = self._get_date_str_to_object(str_date=single_schedule.end_date+'-'+single_schedule.end_time+':00')
-
-            time_sections = self._get_schedule_time_section(start_time=start_date_time, end_time=end_date_time)
+            time_sections = self._get_schedule_time_section(start_datetime=schedule.datetime, duration=schedule.duration)
 
             managed_schedule = ManagedSchedule(sid=single_schedule.sid,
-                                               sname=single_schedule.sname,
+                                               title=single_schedule.title,
                                                bid=single_schedule.bid,
                                                bname=single_schedule.bname,
                                                bias_gender=bias.gender,
                                                bias_category=bias.category,
                                                uname=single_schedule.uname,
-                                               date=self._get_date_str_to_object(str_date=single_schedule.update_datetime),
-                                               start_date_time=start_date_time,
-                                               end_date_time=end_date_time,
+                                               datetime=single_schedule.datetime,
+                                               duration=single_schedule.duration,
                                                time_section=time_sections,
                                                code=single_schedule.code,
                                                state=single_schedule.state,
@@ -1003,8 +1013,6 @@ class ManagedScheduleTable(ManagedTable):
                                                )
             managed_schedule.tags.extend( bias.tags)
                                                
-            
-            
             self.__schedule_table.append(managed_schedule)
             self.__schedule_tree.insert(managed_schedule.sid, managed_schedule)
 
@@ -1016,7 +1024,7 @@ class ManagedScheduleTable(ManagedTable):
 
         num_schedules = str(len(self.__schedule_table))
 
-        # pprint(self.__schedule_df[["sid", "sname", "bname", "date", "start_date_time", "end_date_time"]].head(10))
+        # pprint(self.__schedule_df[["sid", "title", "bname", "date", "start_date_time", "end_date_time"]].head(10))
         # pprint(f"init한 start_date_time : {self.__schedule_df['start_date_time'].dtype}")
         # datetime64[ns]로 출력됨. 정상적인 것
 
@@ -1033,12 +1041,9 @@ class ManagedScheduleTable(ManagedTable):
 
     # 새로운 스케줄을 추가하는 함수
     def make_new_managed_schedule(self, schedule:Schedule):
-        start_date_time = self._get_date_str_to_object(schedule.start_date+'-'+schedule.start_time+':00')
-        end_date_time = self._get_date_str_to_object(schedule.end_date+'-'+schedule.end_time+':00')
 
         # 타임 섹션 데이터 삽입
-        time_section = self._get_schedule_time_section(start_time=start_date_time,
-                                                       end_time=end_date_time)
+        time_section = self._get_schedule_time_section(start_datetime=schedule.datetime, duration=schedule.duration)
 
         #pprint("추가된 schedule")
         #pprint(f"start_time : {start_date_time}")
@@ -1048,13 +1053,12 @@ class ManagedScheduleTable(ManagedTable):
         
         managed_schedule = ManagedSchedule(
             sid=schedule.sid,
-            sname=schedule.sname,
+            title=schedule.title,
             bid=schedule.bid,
             bname=schedule.bname,
             uname=schedule.uname,
+            duration=schedule.duration,
             date=self._get_date_str_to_object(str_date=schedule.update_datetime),
-            start_date_time=start_date_time,
-            end_date_time=end_date_time,
             time_section=time_section,
             platform=copy(schedule.platform),
             code=schedule.code,
@@ -1068,7 +1072,6 @@ class ManagedScheduleTable(ManagedTable):
         bias = Bias()
         bias.make_with_dict(dict_data=bias_data)
 
-        managed_schedule.bias_gender = bias.gender
         managed_schedule.tags = bias.tags
         managed_schedule.bias_category = bias.category
 
@@ -1081,8 +1084,8 @@ class ManagedScheduleTable(ManagedTable):
 
         # start_date_time, end_date_time 강제 형변환
         # date 열은 Managed_Table 함수 내에서 처리하도록 함
-        date_columns = ['start_date_time', 'end_date_time']
-        self.__schedule_df[date_columns] = self.__schedule_df[date_columns].apply(pd.to_datetime, errors='coerce')
+        #date_columns = ['datetime']
+        #self.__schedule_df[date_columns] = self.__schedule_df[date_columns].apply(pd.to_datetime, errors='coerce')
 
 
         self.__schedule_df = self.__schedule_df.sort_values(by='date', ascending=False).reset_index(drop=True)
@@ -1093,15 +1096,10 @@ class ManagedScheduleTable(ManagedTable):
     def modify_schedule_table(self, modify_schedule:Schedule):
         managed_schedule:ManagedSchedule = self.__schedule_tree.get(modify_schedule.sid)
 
-        mo_start_date_time = modify_schedule.start_date+'-'+modify_schedule.start_time+':00'
-        mo_end_date_time = modify_schedule.end_date+'-'+modify_schedule.end_time+':00'
-
         # 스케줄 데이터를 변경합니다.
-        managed_schedule.sname = modify_schedule.sname
+        managed_schedule.title = modify_schedule.title
         managed_schedule.tags = modify_schedule.tags
-        managed_schedule.date = self._get_date_str_to_object(str_date=modify_schedule.update_datetime)
-        managed_schedule.start_date_time = self._get_date_str_to_object(str_date=mo_start_date_time)
-        managed_schedule.end_date_time = self._get_date_str_to_object(str_date=mo_end_date_time)
+        managed_schedule.datetime = modify_schedule.datetime
         managed_schedule.platform = copy(modify_schedule.platform)
         managed_schedule.state = modify_schedule.state
 
@@ -1110,8 +1108,8 @@ class ManagedScheduleTable(ManagedTable):
                                 sid=managed_schedule.sid)
 
         # start_date_time, end_date_time 강제 형변환
-        date_columns = ['start_date_time', 'end_date_time']
-        self.__schedule_df[date_columns] = self.__schedule_df[date_columns].apply(pd.to_datetime, errors='coerce')
+        #date_columns = ['start_date_time', 'end_date_time']
+        #self.__schedule_df[date_columns] = self.__schedule_df[date_columns].apply(pd.to_datetime, errors='coerce')
 
         return
 
@@ -1140,7 +1138,7 @@ class ManagedScheduleTable(ManagedTable):
         
         searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_df, time_section=time_section,
                                                                bias_gender=gender, tags=tags)
-        searched_df = self._filter_data_with_date_option(df=searched_df, date_option="weekly", date_columns=["start_date_time"])
+        searched_df = self._filter_data_with_date_option(df=searched_df, date_option="weekly", date_columns=["datetime"])
 
         if searched_df.empty:
             logging.warning(f"Search explore schedule with time_section {time_section}, style {style}, category {category}")
@@ -1168,7 +1166,7 @@ class ManagedScheduleTable(ManagedTable):
         searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_df, sid=selected_sids)
         # 날짜 필터링
         searched_df = self._filter_data_with_date_in_progress(df=searched_df,
-                                                              date_columns=["start_date_time", "end_date_time"],
+                                                              date_columns=["datetime"],
                                                               when=when)
         
         if searched_df.empty:
@@ -1183,7 +1181,7 @@ class ManagedScheduleTable(ManagedTable):
     def filtering_schedule_in_specific_date(self, selected_sids:list, specific_date:str, return_id:bool):
         searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_df, sid=selected_sids)
         searched_df = self._filter_data_with_date_option(df=searched_df, date_option="specific",
-                                                         date_columns=["start_date_time", "end_date_time"],
+                                                         date_columns=["datetime"],
                                                          specific_date=specific_date)
         
         if searched_df.empty:
@@ -1200,7 +1198,7 @@ class ManagedScheduleTable(ManagedTable):
         # 선택된 sids 필터링
         searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_df, sid=selected_sids)
         # 금주의 일정 필터링
-        searched_df = self._filter_data_with_date_option(df=searched_df, date_option="weekly", date_columns=["start_date_time", "end_date_time"])
+        searched_df = self._filter_data_with_date_option(df=searched_df, date_option="weekly", date_columns=["datetime"])
 
         if searched_df.empty:
             logging.warning("Filtering schedule in this week returned empty DataFrame.")
@@ -1214,7 +1212,7 @@ class ManagedScheduleTable(ManagedTable):
     # 키를 통해 스케줄을 검색합니다.
     def search_schedule_with_key(self, key:str, search_columns:list, return_id:bool):
         if len(search_columns) == 0 or search_columns[0]=="":
-            columns =['sname', 'bname', 'uname', 'code']
+            columns =['title', 'bname', 'uname', 'code']
         else:
             columns = search_columns
             
