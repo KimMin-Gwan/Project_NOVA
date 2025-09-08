@@ -29,7 +29,7 @@ class TempUser:
     
 class Schedule(SampleDomain):
     def __init__(self, sid="", title="", uid="", uname="",
-                 bid="", bname="", datetime=dt(), duration= 60,
+                 bid="", bname="", datetime=dt().today(), duration= 60,
                  platform=[], code="", update_datetime="",
                  num_usage=0, state=True, color_code="", tags=[], url=""
                  ):
