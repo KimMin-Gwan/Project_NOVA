@@ -861,7 +861,7 @@ class AddScheduleModel(TimeTableModel):
      # 복수 개의 (단일 포함) 스테줄 저장
     def save_new_schedules(self, schedule_search_engine:SSE, schedule:Schedule):
         schedule_search_engine.try_add_new_managed_schedule(new_schedule=schedule, category=self._bias.category)    # 서치 엔진에다가 저장합니다.
-        self._database.add_new_data(target_id="sid", new_datas=schedule.get_dict_form_data())                  # 데이터베이스에 먼저 저장
+        self._database.add_new_data(target_id="sid", new_data=schedule.get_dict_form_data())                  # 데이터베이스에 먼저 저장
 
         self._user.my_sids.append(schedule.sid)  # 내가 만든 스케줄이기에 내 스케줄에도 추가
         self._user.subscribed_sids.append(schedule.sid)  # 내가 만든 스케줄이기에 구독한 스케줄에도 추가
