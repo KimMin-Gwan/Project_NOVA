@@ -163,23 +163,6 @@ class TimeTableController:
         
         return model
     
-    # 스케줄 여러개 만들기
-    def make_new_multiple_schedules(self, schedule_search_engine:SSE, database:Mongo_Database, request:RequestManager) -> BaseModel:
-        model = AddScheduleModel(database=database)
-
-        if request.jwt_payload!= "":
-            model.set_user_with_email(request=request.jwt_payload)
-            # 이건 뭔가 이상한 상황일때 그냥 모델 리턴하는거
-            if not model._set_tuser_with_tuid():
-                return model
-
-        model.make_new_multiple_schedule(schedule_search_engine=schedule_search_engine,
-                                            schedules=request.data_payload.schedules,
-                                            title=request.data_payload.title,
-                                            bid=request.data_payload.bid,
-                                            data_type=request.data_payload.type)
-
-        return model
 
     # 쁘띠 모델 변환기
     def get_schedule_printed_form(self, database:Mongo_Database, request:RequestManager) -> BaseModel:
