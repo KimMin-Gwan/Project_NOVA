@@ -731,6 +731,7 @@ class ManagedFeedBiasTable(ManagedTable):
         # 데이터 프레임화
         self.__feed_df = self._dataframing_table(data_table=self.__feed_table)
         if not self.__feed_df.empty:
+            self.__feed_df = self.__init_empty_feed_df()
             self.__feed_df = self.__feed_df.sort_values(by='date', ascending=False).reset_index(drop=True)
 
         num_feed = str(len(self.__feed_table))
@@ -739,6 +740,12 @@ class ManagedFeedBiasTable(ManagedTable):
         print(f'{YELLOW}INFO{RESET}<-[      {num_feed} NOVA FEED DATAFRAME IN SEARCH ENGINE NOW READY.')
 
         return
+    
+    def __init_empty_feed_df(self) -> pd.DataFrame:
+        """ManagedFeed 구조에 맞는 빈 DataFrame을 생성"""
+        dummy_feed = ManagedFeed()
+        feed_dict = dummy_feed.to_dict()   # __dict__ 대신 to_dict() 사용
+        return pd.DataFrame(columns=feed_dict.keys())
 
     # Bias Tree 설정
     def __init_bias_tree(self):
@@ -1061,8 +1068,11 @@ class ManagedScheduleTable(ManagedTable):
         
         # 데이터 프레임화
         self.__schedule_df = self._dataframing_table(data_table=self.__schedule_table)
+        
         if not self.__schedule_df.empty:
+            self.__schedule_df = self.__init_empty_schedule_df()
             self.__schedule_df = self.__schedule_df.sort_values(by='date', ascending=False).reset_index(drop=True)
+        
 
         num_schedules = str(len(self.__schedule_table))
 
@@ -1070,6 +1080,11 @@ class ManagedScheduleTable(ManagedTable):
         print(f'{YELLOW}INFO{RESET}<-[      {num_schedules} NOVA SCHEDULES DATAFRAME IN SEARCH ENGINE NOW READY.')
 
         return
+    
+    def __init_empty_schedule_df(self) -> pd.DataFrame:
+        dummy_schedule = ManagedSchedule()
+        schedule_dict = dummy_schedule.__dict__
+        return pd.DataFrame(columns=schedule_dict.keys())
 
     # 랜덤하게 하나 스케줄 나옴
     def get_random_schedule(self):
