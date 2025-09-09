@@ -1,5 +1,5 @@
 from model.local_database_model import Mongo_Database
-from others.data_domain import User
+from others.data_domain import User, Bias
 from view.parsers import Head_Parser
 from others import CoreControllerLogicError
 from pprint import pprint
@@ -133,3 +133,12 @@ class BaseModel(HeaderModel):
         for data in list_data:
             dict_list_data.append(data.get_dict_form_data())
         return dict_list_data
+    
+    # 온 세상에서 사용하는 get bias data 함수 -> 없으면 None 반환함
+    def _get_bias_data(self, bid:str):
+        bias = None
+        bias_data = self._database.get_data_with_id(target="bid", id=bid)
+        if bias_data:
+            bias = Bias().make_with_dict(bias_data)
+        
+        return bias
