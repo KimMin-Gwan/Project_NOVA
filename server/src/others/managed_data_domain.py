@@ -1058,13 +1058,13 @@ class ManagedScheduleTable(ManagedTable):
         # 리턴되면 위에서 잠시 보관한 피드 데이터는 사라지고 self.__feed_table에 ManagedFeed들만 남음
         # 최신이 가장 밑으로 오지만, 데이터프레임만 최신 내림차순으로 정렬할 것
         self.__schedule_table = sorted(self.__schedule_table, key=lambda x:x.date, reverse=False)
+        
+        # 데이터 프레임화
         self.__schedule_df = self._dataframing_table(data_table=self.__schedule_table)
+        if not self.__schedule_df.empty:
+            self.__schedule_df = self.__schedule_df.sort_values(by='date', ascending=False).reset_index(drop=True)
 
         num_schedules = str(len(self.__schedule_table))
-
-        # pprint(self.__schedule_df[["sid", "title", "bname", "date", "start_date_time", "end_date_time"]].head(10))
-        # pprint(f"init한 start_date_time : {self.__schedule_df['start_date_time'].dtype}")
-        # datetime64[ns]로 출력됨. 정상적인 것
 
         print(f'{YELLOW}INFO{RESET}<-[      {num_schedules} NOVA SCHEDULES IN SEARCH ENGINE NOW READY.')
         print(f'{YELLOW}INFO{RESET}<-[      {num_schedules} NOVA SCHEDULES DATAFRAME IN SEARCH ENGINE NOW READY.')
@@ -1078,7 +1078,7 @@ class ManagedScheduleTable(ManagedTable):
 
 
     # 새로운 스케줄을 추가하는 함수
-    def make_new_managed_schedule(self, schedule:Schedule):
+    def make_new_managed_schedule(self, schedule:Schedule, category):
 
         # 타임 섹션 데이터 삽입
         time_section = self._get_schedule_time_section(start_datetime=schedule.datetime, duration=schedule.duration)
@@ -1104,14 +1104,7 @@ class ManagedScheduleTable(ManagedTable):
             tags=schedule.tags
         )
 
-        # managed_schedule()
-        # 바이어스 데이터 삽입
-        bias_data = self._database.get_data_with_id(target="bid", id=managed_schedule.bid)
-        bias = Bias()
-        bias.make_with_dict(dict_data=bias_data)
-
-        managed_schedule.tags = bias.tags
-        managed_schedule.bias_category = bias.category
+        managed_schedule.bias_category = category
 
         self.__schedule_table.append(managed_schedule)
         self.__schedule_tree.insert(managed_schedule.sid, managed_schedule)
