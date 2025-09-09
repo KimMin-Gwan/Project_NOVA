@@ -78,7 +78,6 @@ function App() {
       ></Route>
       <Route path="/mypage" element={<MyPage />}></Route>
       <Route path="/mypage_edit" element={<MyPageEdit />}></Route>
-      <Route path="/submit_new" element={<SubmitNewBiasPage/>} />
 
       {/* 로그인 및 비밀번호 및 회원가입 */}
       <Route
@@ -106,7 +105,10 @@ function App() {
       <Route path="/feed_list/:fid" element={<FeedList />}></Route>
       {/*<Route path="/feed_detail/:fid" element={<FeedDetail />}></Route>*/}
       <Route path="/feed_detail/:fid" element={<NewFeedDetail/>}></Route>
+
+      {/* 스트리머 관련 페이지*/}
       <Route path="/follow_page" element={<FollowPage />}></Route>
+      <Route path="/submit_new" element={<SubmitNewBiasPage/>} />
 
       {/* 검색 페이지 */}
       <Route path="/search" element={<SearchPage />}></Route>
