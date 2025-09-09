@@ -731,9 +731,9 @@ class ManagedFeedBiasTable(ManagedTable):
         # 데이터 프레임화
         self.__feed_df = self._dataframing_table(data_table=self.__feed_table)
         if not self.__feed_df.empty:
-            pprint("feed df 가 비었음")
-            self.__feed_df = self.__init_empty_feed_df()
             self.__feed_df = self.__feed_df.sort_values(by='date', ascending=False).reset_index(drop=True)
+        else:
+            self.__feed_df = self.__init_empty_feed_df()
 
         num_feed = str(len(self.__feed_table))
 
@@ -1070,14 +1070,8 @@ class ManagedScheduleTable(ManagedTable):
         # 데이터 프레임화
         self.__schedule_df = self._dataframing_table(data_table=self.__schedule_table)
         
-        print(self.__schedule_df)
-        print(self.__schedule_df.head())
-        print(self.__schedule_df.empty)
-        
-        if not self.__schedule_df.empty:
-            print("schedule df 가 비었음")
+        if self.__schedule_df.empty:
             self.__schedule_df = self.__init_empty_schedule_df()
-            self.__schedule_df = self.__schedule_df.sort_values(by='date', ascending=False).reset_index(drop=True)
         
 
         num_schedules = str(len(self.__schedule_table))
