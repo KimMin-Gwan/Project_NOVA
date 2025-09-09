@@ -11,17 +11,112 @@ import MobileBiasSelectSection from "./MobileBiasSelecotr.jsx";
 import MobileCalender from "./MobileCalendar.jsx";
 import MobileScheduleSelectSection from "./MobileScheduleSelector.jsx";
 import postApi from "../../services/apis/postApi.js";
+import mainApi from "../../services/apis/mainApi.js";
 import HEADER from "../../constant/header.js";
+import useBiasStore from "../../stores/BiasStore/useBiasStore";
+
+const tempBiasList = [
+    {
+        bid: "1",
+        bname: "도롱햄",
+        platform: "chzzk"
+    },
+    {
+        bid: "2",
+        bname: "유콩콩",
+        platform: "chzzk"
+    },
+    {
+        bid: "3",
+        bname: "쿠레나이 나츠키",
+        platform: "chzzk"
+    },
+    {
+        bid: "4",
+        bname: "모아",
+        platform: "chzzk"
+    },
+    {
+        bid: "5",
+        bname: "어다감?",
+        platform: "chzzk"
+    }
+]
+
+
 
 const ScheduleMakePage = () => {
     const isMobile = useMediaQuery('(max-width:1100px)');
     const navigate = useNavigate();
+    const [isUserState, setIsUserState] = useState(false);
+    const { biasList, biasId, setBiasId, loading, fetchBiasList } = useBiasStore();
+    const [scheduleList, setScheduleList] = useState({});
+
+    function handleValidCheck() {
+        fetch("https://supernova.io.kr/home/is_valid", {
+        credentials: "include",
+        })
+        .then((response) => {
+            if (response.status === 200) {
+              setIsUserState(true);
+            return response.json();
+            } else {
+              setIsUserState(false);
+            return Promise.reject();
+            }
+        })
+        .catch((error) => {
+          setIsUserState(false);
+          alert("로그인이 필요한 서비스입니다.");
+          navigate("/novalogin");
+        });
+    }
+
+    function fetchScheduleList(bid, year, month) {
+      mainApi.get(`/time_table_server/get_monthly_bias_schedule?bid=${bid}&year=${year}&month=${month}`).then((res)=>{
+
+        console.log(res.data.body);
+        const body = res.data.body;
+
+        if (body.result){
+          const scheduleData = body.schedule_list;
+          const formattedSchedule = {};
+          scheduleData.forEach((schedule) => {
+            const date = new Date(schedule.datetime);
+            const day = date.getDate();
+            formattedSchedule[day] = {
+              ...schedule,
+              datetime: date
+            };
+          });
+          setScheduleList(formattedSchedule);
+        } else{
+          alert("스케줄 정보를 불러오지 못했습니다.");
+          setScheduleList({});
+        }
+      }).catch((error)=>{
+        console.error("Error fetching schedule list:", error);
+        setScheduleList({});
+      });
+    }
+
+
+    useEffect(() => {
+      handleValidCheck();
+    }, []);
+
+    useEffect(() => {
+      fetchBiasList();
+    }, [isUserState]);
+
+   
+    const now = new Date(); // 현재 시각
     const defaultDate = {
-      year : "",
-      month: "",
+      year : now.getFullYear(),
+      month: now.getMonth() + 1, // 월은 0부터 시작하므로 +1 
       day : ""
     }
-    const now = new Date(); // 현재 시각
+
     const datetime = new Date(
       now.getFullYear(),
       now.getMonth(),   // 0~11
@@ -46,7 +141,6 @@ const ScheduleMakePage = () => {
     const [selectedSchedule, setSelectedSchedule] = useState(defaultSchedule);
 
     const handleSelectBias = (bid) => {
-        console.log(bid);
         if (selectedBias == bid){
             setSelectedBias("");
         }else{
@@ -66,107 +160,13 @@ const ScheduleMakePage = () => {
       }
     };
 
-
-    const tempBiasList = [
-        {
-            bid: "1",
-            bname: "도롱햄",
-            platform: "chzzk"
-        },
-        {
-            bid: "2",
-            bname: "유콩콩",
-            platform: "chzzk"
-        },
-        {
-            bid: "3",
-            bname: "쿠레나이 나츠키",
-            platform: "chzzk"
-        },
-        {
-            bid: "4",
-            bname: "모아",
-            platform: "chzzk"
-        },
-        {
-            bid: "5",
-            bname: "어다감?",
-            platform: "chzzk"
-        }
-    ]
-
-    const scheduleList = {
-      1: {
-        title : "33원정대",
-        datetime : new Date("2025-09-01T14:00:00"),
-        tags: ["게임"],
-        duration: 120,
-      },
-      2: {
-        title : "33원정대",
-        datetime : new Date("2025-09-02T14:00:00"),
-        tags: ["게임"],
-        duration: 120,
-      },
-      3: {
-        title : "DK vs KT",
-        datetime : new Date("2025-09-03T14:00:00"),
-        tags: ["저챗", "LCK같이보기"],
-        duration: 180,
-      },
-      4:{
-        title : "롤, 오버워치 시참 데이",
-        datetime : new Date("2025-09-04T14:00:00"), 
-        tags: ["게임", "롤", "오버워치"],
-        duration: 300,
-      },
-      8: {
-        title : "저챗 뱅",
-        datetime : new Date("2025-09-08T14:00:00"),
-        tags: ["저챗"],
-        duration: 120,
-      },
-      9: {
-        title : "발로란트", 
-        datetime : new Date("2025-09-09T14:00:00"),
-        tags: ["게임", "발로란트"],
-        duration: 120,  
-      },
-      10: {
-        title : "카페탐방", 
-        datetime : new Date("2025-09-10T14:00:00"),
-        tags: ["일상", "먹방"],
-        duration: 180,
-      },
-      12: {
-        title : "클립 이상형월드컵",  
-        datetime : new Date("2025-09-12T14:00:00"),
-        tags: ["게임"],
-        duration: 120,
-      },
-      15: {
-        title : "33원정대", 
-        datetime : new Date("2025-09-15T14:00:00"),
-        tags: ["게임"],
-        duration: 120,
-      },
-      16: {
-        title : "저챗 뱅", 
-        datetime : new Date("2025-09-16T14:00:00"),
-        tags: ["저챗"],
-        duration: 120,
-      },
-      19: {
-        title : "롤 시참 데이", 
-        datetime : new Date("2025-09-19T14:00:00"),
-        tags: ["게임", "롤"],
-        duration: 300,
-      },
-    };
-
     useEffect(()=>{
-      setSelectedDate(defaultDate);
+      handleSelectDate(defaultDate);
+      if (selectedBias){
+        fetchScheduleList(selectedBias, now.getFullYear(), now.getMonth()+1);
+      }
     }, [selectedBias])
+
 
     useEffect(()=>{
       if (selectedDate.day !== "") {
@@ -217,7 +217,7 @@ const ScheduleMakePage = () => {
         <DesktopLayout>
           <div className={style["frame"]}>
             <DesktopBiasSelectSection
-              biasList={tempBiasList}
+              biasList={biasList}
               selectedBias={selectedBias}
               handleSelectBias={handleSelectBias}
             />
@@ -265,7 +265,7 @@ const ScheduleMakePage = () => {
                 }}
               >
                 <MobileBiasSelectSection
-                  biasList={tempBiasList}
+                  biasList={biasList}
                   selectedBias={selectedBias}
                   handleSelectBias={handleSelectBias}
                 />
@@ -311,3 +311,73 @@ const ScheduleMakePage = () => {
 
 
 export default ScheduleMakePage;
+
+
+    //const scheduleList = {
+      //1: {
+        //title : "33원정대",
+        //datetime : new Date("2025-09-01T14:00:00"),
+        //tags: ["게임"],
+        //duration: 120,
+      //},
+      //2: {
+        //title : "33원정대",
+        //datetime : new Date("2025-09-02T14:00:00"),
+        //tags: ["게임"],
+        //duration: 120,
+      //},
+      //3: {
+        //title : "DK vs KT",
+        //datetime : new Date("2025-09-03T14:00:00"),
+        //tags: ["저챗", "LCK같이보기"],
+        //duration: 180,
+      //},
+      //4:{
+        //title : "롤, 오버워치 시참 데이",
+        //datetime : new Date("2025-09-04T14:00:00"), 
+        //tags: ["게임", "롤", "오버워치"],
+        //duration: 300,
+      //},
+      //8: {
+        //title : "저챗 뱅",
+        //datetime : new Date("2025-09-08T14:00:00"),
+        //tags: ["저챗"],
+        //duration: 120,
+      //},
+      //9: {
+        //title : "발로란트", 
+        //datetime : new Date("2025-09-09T14:00:00"),
+        //tags: ["게임", "발로란트"],
+        //duration: 120,  
+      //},
+      //10: {
+        //title : "카페탐방", 
+        //datetime : new Date("2025-09-10T14:00:00"),
+        //tags: ["일상", "먹방"],
+        //duration: 180,
+      //},
+      //12: {
+        //title : "클립 이상형월드컵",  
+        //datetime : new Date("2025-09-12T14:00:00"),
+        //tags: ["게임"],
+        //duration: 120,
+      //},
+      //15: {
+        //title : "33원정대", 
+        //datetime : new Date("2025-09-15T14:00:00"),
+        //tags: ["게임"],
+        //duration: 120,
+      //},
+      //16: {
+        //title : "저챗 뱅", 
+        //datetime : new Date("2025-09-16T14:00:00"),
+        //tags: ["저챗"],
+        //duration: 120,
+      //},
+      //19: {
+        //title : "롤 시참 데이", 
+        //datetime : new Date("2025-09-19T14:00:00"),
+        //tags: ["게임", "롤"],
+        //duration: 300,
+      //},
+    //};
