@@ -123,12 +123,12 @@ export default function FollowPage() {
             </header>
 
             <h3>
-              <b>슈퍼노바</b>에 등록된 <b>주제</b>를 소개합니다.
+              <b>슈퍼노바</b>에 등록된 <b>스트리머</b>를 소개합니다.
             </h3>
 
             <div className={style["following"]}>
               <h4>
-                <b>팔로우</b>중인 주제
+                <b>팔로우</b>중인 스트리머
               </h4>
               <FollowBoxes setBiasId={setBiasId} />
             </div>
@@ -179,7 +179,7 @@ export default function FollowPage() {
               >
                 <img src={Stackframe} alt="" />
                 <span>
-                  <p>찾는 주제가 없다면 간편하게 신청해요!</p>
+                  <p>찾는 스트리머가 없다면 간편하게 신청해요!</p>
                   <b>1분만에 주제 신청하기</b>
                 </span>
               </button>
