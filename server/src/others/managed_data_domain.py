@@ -1070,6 +1070,10 @@ class ManagedScheduleTable(ManagedTable):
         # 데이터 프레임화
         self.__schedule_df = self._dataframing_table(data_table=self.__schedule_table)
         
+        print(self.__schedule_df)
+        print(self.__schedule_df.head())
+        print(self.__schedule_df.empty)
+        
         if not self.__schedule_df.empty:
             print("schedule df 가 비었음")
             self.__schedule_df = self.__init_empty_schedule_df()
