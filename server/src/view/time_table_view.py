@@ -146,6 +146,23 @@ class Time_Table_View(Master_View):
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response
+        
+        @self.__app.get('/time_table_server/get_monthly_bias_schedule')
+        def get_monthly_bias_schedule(request:Request, bid:Optional[str], month:Optional[str], year:Optional[str]):
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
+            data_payload = ScheduleWithBidnDateRequest(bid=bid, year=year, month=month)
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            
+
+            time_table_controller =TimeTableController()
+            model = time_table_controller.get_monthly_bias_schedule(database=self.__database,
+                                                                     schedule_search_engine=self.__schedule_search_engine,
+                                                                     request=request_manager)
+            
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+        
 
 
     # 로그인 필수
@@ -243,7 +260,6 @@ class Time_Table_View(Master_View):
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response
-
 
         # 단일 스케줄 수정
         # managed_Table 테스트 완료
@@ -417,3 +433,8 @@ class TimeChartRequest(RequestHeader):
         body:dict = request['body']
         self.date:str=body.get('date',datetime.now().strftime("%Y/%m/%d"))
         self.sids = body.get("sids", [])
+        
+class ScheduleWithBidnDateRequest(RequestHeader):
+    def __init__(self, bid, year:str, month:str) -> None:
+        self.bid:str=bid
+        self.date = datetime(int(year), int(month), 1).strftime("%Y/%m/%d")

@@ -66,7 +66,13 @@ class ScheduleSearchEngine:
         if sids is None:
             sids = []
         sid_list = self.__managed_schedule_table.filtering_weekday_schedule(selected_sids=sids, return_id=return_id)
-
+        return sid_list
+    
+    # 금주의 일정들을 얻습니다.
+    def try_get_monthly_schedule_list(self, date, sids:list=None, return_id:bool=True):
+        if sids is None:
+            sids = []
+        sid_list = self.__managed_schedule_table.filtering_monthly_schedule(selected_sids=sids, date=date, return_id=return_id)
         return sid_list
 
     # 탐색용 스케줄을 반환하는 함수

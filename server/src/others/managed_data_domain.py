@@ -634,6 +634,43 @@ class ManagedTable:
                 mask &= (df[start_column].dt.date == specific_date)
 
         return df[mask]
+    
+    
+    def _filter_data_with_month_option( self, df: pd.DataFrame, date:datetime, data_column: str = ""):
+        ##
+        ##일정 데이터를 월별로 필터링합니다.
+
+        ##Parameters
+        ##----------
+        ##df : pd.DataFrame
+            ##일정 데이터
+        ##date : datetime
+            ##특정 날짜 (연, 월 정보 사용)
+        ##date_column : str
+            ##"datetime" 형식
+        ##
+        
+        if data_column == "":
+            logging.error("date_column이 입력되지 않음")
+            return df
+
+        if data_column not in df.columns.values.tolist():
+            logging.error("데이터프레임에 해당 컬럼이 존재하지 않음")
+            return df
+
+        if not isinstance(date, datetime):
+            logging.error("date는 datetime 형식이어야 합니다.")
+            return df
+
+        target_year = date.year
+        target_month = date.month
+
+        mask = (df[data_column].dt.year == target_year) & (df[data_column].dt.month == target_month)
+        filtered_df = df[mask]
+
+        return filtered_df
+        
+        
 
 
 class ManagedFeedBiasTable(ManagedTable):
@@ -1199,6 +1236,21 @@ class ManagedScheduleTable(ManagedTable):
         searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_df, sid=selected_sids)
         # 금주의 일정 필터링
         searched_df = self._filter_data_with_date_option(df=searched_df, date_option="weekly", date_columns=["datetime"])
+
+        if searched_df.empty:
+            logging.warning("Filtering schedule in this week returned empty DataFrame.")
+            return []
+
+        if return_id:
+            return searched_df['sid'].to_list()
+        return searched_df.to_dict('records')
+
+    # 월 단위로 일정 필터링
+    def filtering_monthly_schedule(self, selected_sids:list, date:datetime, return_id:bool):
+        # 선택된 sids 필터링
+        searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_df, sid=selected_sids)
+        # 금주의 일정 필터링
+        searched_df = self._filter_data_with_month_option(df=searched_df, date_column="datetime", date=date)
 
         if searched_df.empty:
             logging.warning("Filtering schedule in this week returned empty DataFrame.")

@@ -133,9 +133,18 @@ class TimeTableController:
                                                  last_index=request.data_payload.key,
                                                  category=request.data_payload.category
                                                  )
-        # data_payload 참고해서 탐색하는 스케줄 데이터를 보내주면됨
-
         return model
+    
+    # 해당 bias 의 스케줄을 월 단위로 반환
+    def get_monthly_bias_schedule(self, schedule_search_engine:SSE, database:Mongo_Database, request:RequestManager) -> BaseModel:
+        model = MultiScheduleModel(database=database)
+        
+        if not model.set_bias_data(bid=request.data_payload.bid):
+            return model
+        
+        model.set_schedule_in_monthly(schedule_search_engine=schedule_search_engine,
+                                            date=request.data_payload.date)
+        return
 
 
     # 새로운 스케줄 만들기

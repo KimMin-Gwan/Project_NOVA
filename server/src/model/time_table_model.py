@@ -199,6 +199,7 @@ class TimeTableModel(BaseModel):
         self.__target_month= f'00년 0월'
         self.__target_week= f'0주차'
         
+        self._result = True
         self._detail = ""
 
     # string_date를 넣어서 몇주차인지 알아내는 함수임
@@ -473,31 +474,17 @@ class MultiScheduleModel(TimeTableModel):
     def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)
         self.__schedules:list = []
-        self.__biases:list = []
-
-    # 바이어스 서치 함수
-    def __search_bias_list(self, keyword:str):
-        # 4가지의 경우가 존재한다
-        # 아티스트 닉네임, 카테고리, 플랫폼, 태그
-
-        bias_datas = self._database.get_all_data(target="bid")
-        search_list = []
-
-        for bias_data in bias_datas:
-            bias = Bias()
-            bias.make_with_dict(bias_data)
-            if keyword in bias.bname:
-                search_list.append(bias.bid)
-            elif keyword in bias.platform:
-                search_list.append(bias.bid)
-            elif keyword in bias.category:
-                search_list.append(bias.bid)
-            elif keyword in bias.tags:
-                search_list.append(bias.bid)
-            elif keyword in bias.agency:
-                search_list.append(bias.bid)
-
-        return search_list
+        self.__bias:Bias= Bias()
+    
+    def set_bias_data(self, bid:str):
+        bias = self._get_bias_data(bid=bid)
+        if bias:
+            self.__bias = bias
+            return True
+        self._detail = "존재하지 않는 스트리머입니다."
+        self._result = False
+        return False
+        
 
     def set_schedules_with_sids(self, data_payload):
         self._make_send_data_with_ids(id_list=data_payload.sids)
@@ -526,6 +513,7 @@ class MultiScheduleModel(TimeTableModel):
 
         # 이미 등록 했는지 확인하는 함수
         for schedule in self.__schedules:
+            schedule:Schedule = schedule
             if schedule.sid in self._tuser.sids:
                 schedule.subscribe = True
 
@@ -685,7 +673,22 @@ class MultiScheduleModel(TimeTableModel):
         self.__schedules.append(schedule.get_dict_form_data())
 
         return
+    
+    # 특정 월에 포함된 일정들 bias에 맞춰서 가져오기
+    def set_schedule_in_monthly(self, schedule_search_engine:SSE, date:datetime):
+        searched_list = schedule_search_engine.try_get_monthly_schedule_list(sids=self.__bias.sids, specific_date=date)
+        if searched_list:
+            schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids=searched_list)
+            for data in schedule_datas:
+                schedule = Schedule().make_with_dict(dict_data=data)
+                if schedule.sid in self._user.subscribed_sids:
+                    schedule.subscribe = True
 
+                if schedule.sid in self._user.my_sids:
+                    schedule.is_owner = True
+
+                self.__schedules.append(schedule)
+        return
 
     # 전송용 폼데이터를 만드는 함수
     def get_print_forms_schedule(self, schedules:list, bid:str):
@@ -701,24 +704,14 @@ class MultiScheduleModel(TimeTableModel):
 
         return
 
-    # 내가 팔로우한 바이어스에 대한 전송 폼을 만드는 함수
-    def get_print_forms_my_bias(self):
-        bias_datas = self._database.get_datas_with_ids(target_id="bid", ids=self._user.bids)
-        for bias_data in bias_datas:
-            bias = Bias()
-            bias.make_with_dict(bias_data)
-            self.__biases.append(bias)
-
-        self._make_send_data_with_datas()
-
-        return
 
     # 전송 데이터 만들기
     def get_response_form_data(self, head_parser):
         body = {
             "schedules" : self.__schedules,
-            "biases": self.__biases,
-            "key" : self._key
+            "key" : self._key,
+            "result" : self._result,
+            "detail" : self._detail
         }
 
         # pprint(body)
