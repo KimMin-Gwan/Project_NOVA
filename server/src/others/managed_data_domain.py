@@ -1099,7 +1099,7 @@ class ManagedScheduleTable(ManagedTable):
             time_section=time_section,
             platform=copy(schedule.platform),
             code=schedule.code,
-            state=schedule.display,
+            display=schedule.display,
             tags=schedule.tags
         )
 
