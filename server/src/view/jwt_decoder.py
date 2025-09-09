@@ -216,7 +216,6 @@ class RequestManager(JWTManager):
         hmac_manager = HMACManger(secret_key=self._secret_key)
         login_count = 0
         
-        pprint(cookies)
         # 토큰이 있으면 토큰 검사해야됨
         if cookies.get("nova_valification_token", ""):
             login_count = hmac_manager.verify_token(token=cookies["nova_valification_token"])
@@ -275,8 +274,6 @@ class RequestManager(JWTManager):
     def make_json_response_with_hmac(self, body_data:dict, count):
         new_token = HMACManger(secret_key=self._secret_key).sign_count(count)
 
-        pprint(new_token)
-        
         self.new_token = new_token
 
         response = Response(
