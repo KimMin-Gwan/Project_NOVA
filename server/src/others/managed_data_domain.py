@@ -1095,7 +1095,7 @@ class ManagedScheduleTable(ManagedTable):
             bname=schedule.bname,
             uname=schedule.uname,
             duration=schedule.duration,
-            date=self._get_date_str_to_object(str_date=schedule.update_datetime),
+            datetime=self._get_date_str_to_object(str_date=schedule.update_datetime),
             time_section=time_section,
             platform=copy(schedule.platform),
             code=schedule.code,
@@ -1138,7 +1138,7 @@ class ManagedScheduleTable(ManagedTable):
         managed_schedule.tags = modify_schedule.tags
         managed_schedule.datetime = modify_schedule.datetime
         managed_schedule.platform = copy(modify_schedule.platform)
-        managed_schedule.state = modify_schedule.state
+        managed_schedule.display= modify_schedule.display
 
         self._modify_data_in_df(df=self.__schedule_df,
                                 modify_dict_data=managed_schedule.to_dict(),
