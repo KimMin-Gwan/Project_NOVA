@@ -735,6 +735,8 @@ class ManagedFeedBiasTable(ManagedTable):
         else:
             self.__feed_df = self.__init_empty_feed_df()
 
+        print(self.__feed_df.head())
+        
         num_feed = str(len(self.__feed_table))
 
         print(f'{YELLOW}INFO{RESET}<-[      {num_feed} NOVA FEED IN SEARCH ENGINE NOW READY.')
@@ -743,7 +745,6 @@ class ManagedFeedBiasTable(ManagedTable):
         return
     
     def __init_empty_feed_df(self) -> pd.DataFrame:
-        """ManagedFeed 구조에 맞는 빈 DataFrame을 생성"""
         dummy_feed = ManagedFeed()
         feed_dict = dummy_feed.to_dict()   # __dict__ 대신 to_dict() 사용
         return pd.DataFrame(columns=feed_dict.keys())
