@@ -1258,7 +1258,7 @@ class ManagedScheduleTable(ManagedTable):
         # 선택된 sids 필터링
         searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_df, sid=selected_sids)
         # 금주의 일정 필터링
-        searched_df = self._filter_data_with_month_option(df=searched_df, date_column="datetime", date=date)
+        searched_df = self._filter_data_with_month_option(df=searched_df, data_column="datetime", date=date)
 
         if searched_df.empty:
             logging.warning("Filtering schedule in this week returned empty DataFrame.")
