@@ -89,7 +89,7 @@ class ManagedBias:
 class ManagedSchedule:
     def __init__(self, sid="", title="", uname="", bid="", bname="", bias_category=[],
                  datetime=None, time_section=[],  platform=[], duration=0,
-                 code="", state:bool=True, tags=[]):
+                 code="", display=4, tags=[]):
         self.sid=sid
         self.title=title
         self.bid=bid
@@ -103,7 +103,7 @@ class ManagedSchedule:
         self.time_section=time_section              # 타임 섹션
         self.platform=platform
         self.code=code
-        self.state=state
+        self.display = display
 
 
     # 무슨 데이터인지 출력해보기
@@ -120,7 +120,7 @@ class ManagedSchedule:
         print("time_section", self.time_section)
         print("platform: ", self.platform)
         print("code: ", self.code)
-        print("state: ", self.state)
+        print("state: ", self.display)
         print("platform: ", self.platform)\
     
 
@@ -139,7 +139,7 @@ class ManagedSchedule:
             "time_section": self.time_section,
             "platform": self.platform,
             "code": self.code,
-            "state": self.state,
+            "state": self.display,
             "platform": self.platform
         }
 
@@ -1099,7 +1099,7 @@ class ManagedScheduleTable(ManagedTable):
             time_section=time_section,
             platform=copy(schedule.platform),
             code=schedule.code,
-            state=schedule.state,
+            state=schedule.display,
             tags=schedule.tags
         )
 
