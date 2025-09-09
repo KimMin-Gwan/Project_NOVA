@@ -16,8 +16,8 @@ class ScheduleSearchEngine:
 
 
     # 새로운 스케줄을 테이블에 추가합니다.
-    def try_add_new_managed_schedule(self, new_schedule:Schedule):
-        self.__managed_schedule_table.make_new_managed_schedule(schedule=new_schedule)
+    def try_add_new_managed_schedule(self, new_schedule:Schedule, category):
+        self.__managed_schedule_table.make_new_managed_schedule(schedule=new_schedule, category=category)
         return
 
     # 새로운 스케줄들을 테이블에 추가하는 함수
