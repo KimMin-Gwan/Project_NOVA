@@ -144,7 +144,7 @@ class TimeTableController:
         
         model.set_schedule_in_monthly(schedule_search_engine=schedule_search_engine,
                                             date=request.data_payload.date)
-        return
+        return model
 
 
     # 새로운 스케줄 만들기
