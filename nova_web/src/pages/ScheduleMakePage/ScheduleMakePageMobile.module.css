@@ -59,14 +59,30 @@
 .bias-component{
    display: flex;
     width: 160px;
-    height: 222px;
+    height: 200px;
     padding: 20px;
     flex-direction: column;
     align-items: center;
-    gap: 11px; 
+    gap: 30px; 
     border-radius: 20px;
     background: rgba(255, 255, 255, 0.70);
 }
+
+.add-bias-component{
+    display: flex;
+    width: 160px;
+    height: 200px;
+    padding: 20px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.70);
+    cursor: pointer;
+    border : 2px dashed #BEC1FF;
+}
+
 
 .bias-image{
     width: 96px;

@@ -1,6 +1,8 @@
 import { useEffect, useState, useRef } from "react";
 import style from "./ScheduleMakePage.module.css";
 import chzzklogo from "./chzzklogo_kor(Green).svg";
+import biasPlusIcon from "./plus_icon.svg";
+import { useNavigate } from "react-router-dom";
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
@@ -12,19 +14,19 @@ const DesktopBiasSelectSection = ({ biasList,
      selectedBias, handleSelectBias 
     }) => {
 
-
     return (
         <div className={style["bias-select-section"]}>
             <span className={style["bias-select-section-title"]}>스트리머 선택</span>
             <div className={style["bias-selection-wrapper"]} >
                 <Swiper
-                    slidesPerView={3.2}
+                    slidesPerView={"auto"}
                     spaceBetween={30}
                     modules={[FreeMode]}
                 >
                     {biasList.map((bias) => (
                         <SwiperSlide
-                                key={bias.bid}
+                            key={bias.bid}
+                            style={{ width: "250px"}}
                         >
                             <BiasComponent
                                 bias={bias}
@@ -33,6 +35,11 @@ const DesktopBiasSelectSection = ({ biasList,
                             />
                         </SwiperSlide>
                     ))}
+                    <SwiperSlide 
+                        style={{ width: "250px"}}
+                    >
+                        <AddNewBiasComponent/>
+                    </SwiperSlide>
                 </Swiper>
             </div>
         </div>
@@ -63,5 +70,25 @@ const BiasComponent = ({
         </div>
     );
 }
+
+const AddNewBiasComponent = () => {
+    const navigate = useNavigate();
+
+    const handleAddNewBias = () => {
+        navigate("/follow_page");
+    }
+
+    return(
+        <div className={style["bias-component-wrapper"]}>
+            <div className={style["add-bias-component"]} 
+                onClick={handleAddNewBias}
+            >
+                    <span className={style["bias-name"]}> 팔로우 바로가기</span>
+                    <img className={style["bias-plus-icon"]} src={biasPlusIcon}/>
+            </div>
+        </div>
+    );
+}
+
 
 export default DesktopBiasSelectSection
