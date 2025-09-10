@@ -708,7 +708,7 @@ class MultiScheduleModel(TimeTableModel):
     # 전송 데이터 만들기
     def get_response_form_data(self, head_parser):
         body = {
-            "schedules" : self.__schedules,
+            "schedules" : self._make_dict_list_data(self.__schedules),
             "key" : self._key,
             "result" : self._result,
             "detail" : self._detail
