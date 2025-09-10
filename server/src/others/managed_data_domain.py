@@ -1046,7 +1046,6 @@ class ManagedScheduleTable(ManagedTable):
                                                title=single_schedule.title,
                                                bid=single_schedule.bid,
                                                bname=single_schedule.bname,
-                                               bias_gender=bias.gender,
                                                bias_category=bias.category,
                                                uname=single_schedule.uname,
                                                datetime=single_schedule.datetime,
