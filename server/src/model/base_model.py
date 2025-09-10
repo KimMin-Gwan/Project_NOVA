@@ -3,14 +3,12 @@ from others.data_domain import User, Bias
 from view.parsers import Head_Parser
 from others import CoreControllerLogicError
 from pprint import pprint
+import json
 
-import string
 import editdistance
 from jamo import h2j, j2hcj
 
-import boto3
 from datetime import datetime
-import random
 
 import uuid
 
@@ -34,7 +32,7 @@ class HeaderModel:
         self._state_code = '500'
         self._new_token = ""
 
-    def _get_response_data(self, head_parser:Head_Parser, body):
+    def _get_response_data(self, head_parser:Head_Parser, body, serializable=False):
         header = head_parser.get_header()
         header['state-code'] = self._state_code
         header['new_token'] = self._new_token
@@ -43,8 +41,10 @@ class HeaderModel:
             'body' : body
         }
 
-        #response = json.dumps(form, ensure_ascii=False)
-        response = form
+        if serializable:
+            response = json.dumps(form, ensure_ascii=False)
+        else:
+            response = form
         return response
 
     def set_state_code(self, state_code):
