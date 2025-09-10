@@ -4,6 +4,7 @@ import hmac, hashlib, base64
 from datetime import datetime, timezone, timedelta
 from fastapi import Response, Request
 from fastapi import HTTPException, status
+from fastapi.responses import JSONResponse
 import json
 from pprint import pprint
 
@@ -328,11 +329,12 @@ class RequestManager(JWTManager):
         if token != "":
             self.new_token = token
 
-        response = Response(
-            content=json.dumps(body_data),
-            media_type="application/json",
-            status_code=200
-        )
+        response = JSONResponse(content=body_data, status_code=200)
+        #response = Response(
+            #content=json.dumps(body_data),
+            #media_type="application/json",
+            #status_code=200
+        #)
         if self.new_token != "":
             response.set_cookie(
                 key="nova_token", 
