@@ -120,7 +120,7 @@ class ManagedSchedule:
         print("time_section", self.time_section)
         print("platform: ", self.platform)
         print("code: ", self.code)
-        print("state: ", self.display)
+        print("display: ", self.display)
         print("platform: ", self.platform)\
     
 
@@ -139,7 +139,7 @@ class ManagedSchedule:
             "time_section": self.time_section,
             "platform": self.platform,
             "code": self.code,
-            "state": self.display,
+            "display": self.display,
             "platform": self.platform
         }
 
@@ -1052,7 +1052,7 @@ class ManagedScheduleTable(ManagedTable):
                                                duration=single_schedule.duration,
                                                time_section=time_sections,
                                                code=single_schedule.code,
-                                               state=single_schedule.state,
+                                               display=single_schedule.display,
                                                tags=single_schedule.tags,
                                                platform=bias.platform
                                                )
