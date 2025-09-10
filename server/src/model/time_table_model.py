@@ -715,7 +715,7 @@ class MultiScheduleModel(TimeTableModel):
         }
 
         # pprint(body)
-        response = self._get_response_data(head_parser=head_parser, body=body)
+        response = self._get_response_data(head_parser=head_parser, body=body, serializable=True)
         return response
 
 
