@@ -59,7 +59,7 @@ class Schedule(SampleDomain):
         self.uname = dict_data.get('uname', "")
         self.bid = dict_data.get('bid', "")
         self.bname = dict_data.get('bname', "")
-        self.datetime = dict_data.get('datetime', dt())
+        self.datetime = dict_data.get('datetime', dt.now())
         self.duration = dict_data.get('duration', 60)
         self.platform = dict_data.get('platform')
         self.code = dict_data.get('code', "")
