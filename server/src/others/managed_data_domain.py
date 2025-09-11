@@ -265,8 +265,6 @@ class ManagedTable:
         # 딕셔너리를 통해 새로운 DF를 만들고 Transpose(전치)시키면 된다
         new_data = pd.DataFrame.from_dict(new_dict_data, orient="index").transpose()
 
-        pprint(new_data)
-
         if not condition:
             logging.error("추가 행 지정 조건 필요")
             return df
@@ -616,7 +614,6 @@ class ManagedTable:
 
         mask = pd.Series(True, index=df.index)
 
-        print(df[start_column])
         if date_option in SKIP_TUPLE:
             pass
 
