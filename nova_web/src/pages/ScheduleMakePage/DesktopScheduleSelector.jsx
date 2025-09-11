@@ -25,8 +25,8 @@ const DesktopScheduleSelectSection = ({
   }
 
   const [detailInput, setDetailInput] = useState("");
-  const [scheduleDetail, setScheduleDetail] = useState(defaultSchedule);
   const [durationInput, setDurationInput] = useState("");
+  const [isValid, setIsValid] = useState(false);
 
   const initEditTag = (tags) => {
     if (!Array.isArray(tags) || tags.length === 0) return; // 유효성 검사
@@ -134,16 +134,12 @@ const DesktopScheduleSelectSection = ({
     clearInterval(intervalRef.current);
   };
 
-
-  useEffect(()=>{
-    initEditTag(scheduleDetail.tags);
-  },[])
-
   useEffect(() => {
     setDetailInput(selectedSchedule.title);
     setTagsArrayData(selectedSchedule.tags || []);
     setTagsInput((selectedSchedule.tags || []).join(", "));
     setDurationInput(selectedSchedule.duration ? String(selectedSchedule.duration) : "");
+    setIsValid(selectedSchedule.is_owner);
     if (selectedSchedule.datetime) {
       const date = selectedSchedule.datetime;
       let hour = date.getHours();
@@ -190,49 +186,67 @@ const DesktopScheduleSelectSection = ({
     await tryFetchNewSchedule(newSchedule); // 새로 만든 값 바로 사용
   };
 
-
   return(
     <div className={style["schedule-select-section-frame"]}>
       <div className={style["schedule-select-section-frame-wrapper"]}>
         <span className={style["bias-select-section-title"]}>콘텐츠 일정 작성 </span>
+        {
+          !isValid &&
+            <span className={style["bias-select-section-valid-info"]}>작성자와 스트리머만 수정할 수 있어요!</span>
+        }
         <div className={style["schedule-detail-frame"]}>
           <div className={style["schedule-detail-input-wrapper"]}>
               <div className={style["searchFac"]}>
                 <span>*이름</span>
                 <div className={style["searchBoxMargin"]}>
                   <div className={style["searchBox"]}>
-                    <input
-                      type="text"
-                      value={detailInput}
-                      onChange={onChangeDetailInput}
-                      placeholder="일정의 이름"
-                    />
+                    {
+                      isValid ? 
+                      <input
+                        type="text"
+                        value={detailInput}
+                        onChange={onChangeDetailInput}
+                        placeholder="일정의 이름"
+                      />
+                      :
+                      <div  className={style["detail-readonly"]}
+                      >{detailInput || "일정의 이름"}</div>
+                    }
                   </div>
                 </div>
               </div>
 
               <div className={style["searchFac"]}>
                 <span>태그</span>
-                <div className={style["sampleTagsContainer"]}>
-                  {sampleTags.map((tag, index) => (
-                    <div
-                      className={style["sampleTag"]}
-                      key={index}
-                      onClick={() => addSampleTag(tag)}
-                    >
-                      {tag}
+                {
+                  isValid &&
+                    <div className={style["sampleTagsContainer"]}>
+                      {sampleTags.map((tag, index) => (
+                        <div
+                          className={style["sampleTag"]}
+                          key={index}
+                          onClick={() => addSampleTag(tag)}
+                        >
+                          {tag}
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
+                }
 
                 <div className={style["searchBoxMargin"]}>
                   <div className={style["searchBox"]}>
-                    <input
-                      type="text"
-                      value={tagsInput}
-                      onChange={onChangeTagsInput}
-                      placeholder="각 태그의 뒤에 쉼표를 입력하세요"
-                    />
+                    {
+                      isValid ? 
+                      <input
+                        type="text"
+                        value={tagsInput}
+                        onChange={onChangeTagsInput}
+                        placeholder="각 태그의 뒤에 쉼표를 입력하세요"
+                      />
+                      :
+                      <div  className={style["detail-readonly"]}
+                      >{tagsInput || "작성된 태그가 없어요"}</div>
+                    }
                   </div>
                 </div>
 
@@ -240,12 +254,15 @@ const DesktopScheduleSelectSection = ({
                   {tagsArrayData.map((tag, index) => (
                       <div className={style["tag"]} key={index}>
                         {tag}
-                        <button
-                          className={style["removeButton"]}
-                          onClick={() => removeTag(index)}
-                        >
-                          &times;
-                        </button>
+                        {
+                          isValid &&
+                            <button
+                              className={style["removeButton"]}
+                              onClick={() => removeTag(index)}
+                            >
+                              &times;
+                            </button>
+                        }
                       </div>
                     ))}
                 </div>
@@ -263,13 +280,17 @@ const DesktopScheduleSelectSection = ({
                 }}
               >
                 <div className={style["time-select-part"]}
-                  onClick={() => setSelectedAmPm("am")}
+                  onClick={() => {
+                    return isValid ? setSelectedAmPm("am") : null}
+                  }
                   style={{ color : selectedAmPm === "am" ? "#111" : "#6C6C6C" }}
                 >
                   am
                 </div>
                 <div className={style["time-select-part"]}
-                  onClick={() => setSelectedAmPm("pm")}
+                  onClick={() => {
+                    return isValid ? setSelectedAmPm("pm") : null}
+                  }
                   style={{ color : selectedAmPm === "pm" ? "#111" : "#6C6C6C" }}
                 >
                   pm
@@ -277,38 +298,68 @@ const DesktopScheduleSelectSection = ({
               </div>
 
               <div className={style["time-select-button-wrapper"]}>
-                <div
-                  className={style["time-select-button"]}
-                  onMouseDown={() => handleMouseDown("hours", 1)}
-                  onMouseUp={handleMouseUp}
-                  onMouseLeave={handleMouseUp}
-                >+</div>
-                <div className={style["time-select-intager"]}>{hours.toString().padStart(2, "0")}</div>
-                <div
-                  className={style["time-select-button"]}
-                  onMouseDown={() => handleMouseDown("hours", -1)}
-                  onMouseUp={handleMouseUp}
-                  onMouseLeave={handleMouseUp}
-                >-</div>
+                {
+                  isValid ?
+                  <>
+                    <div
+                      className={style["time-select-button"]}
+                      onMouseDown={() => handleMouseDown("hours", 1)}
+                      onMouseUp={handleMouseUp}
+                      onMouseLeave={handleMouseUp}
+                    >+</div>
+                    <div className={style["time-select-intager"]}>{hours.toString().padStart(2, "0")}</div>
+                    <div
+                      className={style["time-select-button"]}
+                      onMouseDown={() => handleMouseDown("hours", -1)}
+                      onMouseUp={handleMouseUp}
+                      onMouseLeave={handleMouseUp}
+                    >-</div>
+                  </>
+                  :
+                  <>
+                    <div
+                      className={style["time-select-button"]}
+                    >+</div>
+                    <div className={style["time-select-intager"]}>{hours.toString().padStart(2, "0")}</div>
+                    <div
+                      className={style["time-select-button"]}
+                    >-</div>
+                  </>
+
+                }
               </div>
 
               <div className={style["time-select-intager"]}>:</div>
 
               {/* 분 */}
               <div className={style["time-select-button-wrapper"]}>
-                <div
-                  className={style["time-select-button"]}
-                  onMouseDown={() => handleMouseDown("minutes", 10)}
-                  onMouseUp={handleMouseUp}
-                  onMouseLeave={handleMouseUp}
-                >+</div>
-                <div className={style["time-select-intager"]}>{minutes.toString().padStart(2, "0")}</div>
-                <div
-                  className={style["time-select-button"]}
-                  onMouseDown={() => handleMouseDown("minutes", -10)}
-                  onMouseUp={handleMouseUp}
-                  onMouseLeave={handleMouseUp}
-                >-</div>
+                {isValid ? 
+                <>
+                  <div
+                    className={style["time-select-button"]}
+                    onMouseDown={() => handleMouseDown("minutes", 10)}
+                    onMouseUp={handleMouseUp}
+                    onMouseLeave={handleMouseUp}
+                  >+</div>
+                  <div className={style["time-select-intager"]}>{minutes.toString().padStart(2, "0")}</div>
+                  <div
+                    className={style["time-select-button"]}
+                    onMouseDown={() => handleMouseDown("minutes", -10)}
+                    onMouseUp={handleMouseUp}
+                    onMouseLeave={handleMouseUp}
+                  >-</div>
+                </>
+                : 
+                <>
+                  <div
+                    className={style["time-select-button"]}
+                  >+</div>
+                  <div className={style["time-select-intager"]}>{minutes.toString().padStart(2, "0")}</div>
+                  <div
+                    className={style["time-select-button"]}
+                  >-</div>
+                </>
+                }
               </div>
             </div>
 
@@ -316,21 +367,30 @@ const DesktopScheduleSelectSection = ({
               <span>예상 방송 시간</span>
               <div className={style["searchBoxMargin"]}>
                 <div className={style["searchBox"]}>
-                  <input
-                    type="text"
-                    value={durationInput ? durationInput + "시간" : ""}
-                    onChange={onChangeDurationInput}
-                    placeholder="2시간"
-                  />
+                  {
+                    isValid ?
+                      <input
+                        type="text"
+                        value={durationInput ? durationInput + "시간" : ""}
+                        onChange={onChangeDurationInput}
+                        placeholder="2시간"
+                      />
+                      :
+                      <div  className={style["detail-readonly"]}
+                      >{durationInput ? durationInput + "시간" : "예상 방송 시간이 없어요"}</div>
+                  }
                 </div>
               </div>
             </div>
           </div>
         </div>
         <div className={style["schedule-make-button-wrapper"]}>
-            <div className={style["schedule-make-button"]}
-              onClick={handleMakeSchedule}
-            >업로드</div>
+          {
+            isValid &&
+              <div className={style["schedule-make-button"]}
+                onClick={handleMakeSchedule}
+              >업로드</div>
+          }
         </div>
       </div>
     </div>
