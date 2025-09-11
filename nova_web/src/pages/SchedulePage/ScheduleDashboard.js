@@ -301,6 +301,23 @@ const ScheduleDashboard = () => {
     setEditTarget({sid:target})
   };
 
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isFetching, setIsFetching] = useState(false);
+
+  const handleNext = async () => {
+    if (isFetching) return; // 이미 fetch 중이면 무시
+    setIsFetching(true);
+    await onChangeIndexNext();
+    setCurrentIndex((prev) => (prev + 1) % scheduleData.length);
+    setIsFetching(false);
+  };
+
+  const handlePrev = async () => {
+    if (isFetching) return; // fetch 중이면 무시
+    setIsFetching(true);
+    await justFecthPrevData();
+    setIsFetching(false);
+  };
 
   if(isMobile){
     return (
@@ -520,15 +537,14 @@ const ScheduleDashboard = () => {
                 로딩 중...
               </div>
             ) : (
-              scheduleData.map((schedule, index) => {
-                return (
-                  <TimeLayerBoxDesktop
-                    scheduleData={schedule} formattedDate={formatDate[index]} 
-                    onChangeIndexNext={onChangeIndexNext} onChangeIndexPrev={justFecthPrevData}
-                    onClickSchedule={toggleMoreOption}
-                  />
-                );
-              })
+              <TimeLayerBoxDesktop
+                scheduleData={scheduleData[currentIndex]}
+                formattedDate={formatDate[currentIndex]}
+                onChangeIndexNext={handleNext}
+                onChangeIndexPrev={handlePrev}
+                isFetching={isFetching}
+                onClickSchedule={toggleMoreOption}
+              />
             )
           }
         </div>
