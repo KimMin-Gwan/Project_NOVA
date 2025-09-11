@@ -41,9 +41,11 @@ export default function ScheduleExploreDesktop({
                         })
                     }
                 </div>
-                <div className={style["none_schedule_frame"]}>
-                    {scheduleData.length === 0 && <NoneSchedule/>}
-                </div>
+                {scheduleData.length === 0 && 
+                    <div className={style["none_schedule_frame"]}>
+                        <NoneSchedule/>
+                    </div>
+                }
                 <ScheduleGrid scheduleData={scheduleData} />
             </div>
         </div>
