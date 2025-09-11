@@ -15,7 +15,7 @@ const MobileCalender = ({
 
   const [todayEffect, setTodayEffect] = useState({
     month : true,
-    day : today.getDay()
+    day : today.getDate()
   })
 
   // 임시 일정 데이터
@@ -36,7 +36,7 @@ const MobileCalender = ({
   // 달력 생성
   useEffect(() => {
     generateCalendar(year, month);
-  }, [year, month]);
+  }, [year, month, scheduleList]);
 
   const generateCalendar = (y, m) => {
     const firstDay = new Date(y, m - 1, 1).getDay(); // 시작 요일
