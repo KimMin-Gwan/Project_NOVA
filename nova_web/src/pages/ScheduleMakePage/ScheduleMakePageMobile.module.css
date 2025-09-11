@@ -572,27 +572,75 @@
   align-self: stretch;
 }
 
-.schedule-make-button{
+.schedule-make-button {
   display: flex;
   height: 54px;
-  padding: 0 133px;
+  padding: 0 50px;
   justify-content: center;
   align-items: center;
   gap: 10px;
-  flex: 1 0 0;
   border-radius: 16px;
   background: #58AEFF;
   color: #FFF;
   font-family: Pretendard;
   font-size: 16px;
-  font-style: normal;
   font-weight: 600;
-  line-height: 140%; /* 22.4px */
+  line-height: 140%;
   letter-spacing: -0.4px;
   transition: all 0.2s ease-in-out;
   cursor: pointer;
+  white-space: nowrap; /* 글자가 세로로 안 쌓이도록 */
+  flex: none; /* flex-grow/shrink 제거 */
 }
 
 .schedule-make-button:hover{
   background-color: #83b5ff;
+}
+
+.detail-readonly{
+  padding: 3px 10px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #303030;
+}
+
+.bias-select-section-valid-info{
+  color: #f5365fc5;    
+  font-family: Pretendard;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%; /* 39.2px */
+  letter-spacing: -0.7px;
+  margin-top: -10px;
+  margin-bottom: 10px;
+}
+
+.mobile-top-bar-wrapper{
+  display: flex;
+  padding: 20px 0;
+  margin: 0 4%;
+  justify-content: space-between;
+  align-items: flex-start;
+  align-self: stretch;
+}
+
+.backword-button{
+  color: #797979;
+  font-family: Pretendard;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  cursor: pointer;
+}
+
+.mobile-top-bar-title{
+  color: #000;
+  font-family: Pretendard;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
 }
