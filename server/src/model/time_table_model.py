@@ -1076,7 +1076,7 @@ class ScheduleTimeLayerModel(TimeTableModel):
         for single_schedule in self.__schedules:
             
             single_schedule:Schedule = single_schedule
-            time_obj = datetime.strptime(single_schedule.start_time, "%H:%M")
+            time_obj = single_schedule.datetime
             
             options = [
                 {
@@ -1140,7 +1140,8 @@ class ScheduleTimeLayerModel(TimeTableModel):
         for single_schedule in self.__schedules:
             
             single_schedule:Schedule = single_schedule
-            time_obj = datetime.strptime(single_schedule.start_time, "%H:%M")
+            time_obj = single_schedule.datetime
+            #time_obj = datetime.strptime(single_schedule.start_time, "%H:%M")
             
             options = [
                 {
