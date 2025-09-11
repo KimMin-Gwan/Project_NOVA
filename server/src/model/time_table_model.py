@@ -713,8 +713,14 @@ class MultiScheduleModel(TimeTableModel):
             "result" : self._result,
             "detail" : self._detail
         }
+        
+        if body["schedules"]:
+            for schedule in body["schedules"]:
+                datetime_obj:datetime = schedule["datetime"]
+                schedule["datetime"] = datetime_obj.isoformat()
+            
 
-        # pprint(body)
+        pprint(body)
         response = self._get_response_data(head_parser=head_parser, body=body, serializable=False)
         return response
 
