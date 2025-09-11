@@ -507,27 +507,16 @@ class MultiScheduleModel(TimeTableModel):
 
     # 이미 데이터를 받아온 경우에 씀
     def _make_send_data_with_datas(self):
-        ## 데이터 변환 모델
-        #schedule_model = TimeScheduleModel()
-        #schedule_bias_model = TimeBiasModel()
 
         # 이미 등록 했는지 확인하는 함수
         for schedule in self.__schedules:
             schedule:Schedule = schedule
-            if schedule.sid in self._tuser.sids:
+            if schedule.sid in self._user.subscribed_sids:
                 schedule.subscribe = True
 
-            if schedule.sid in self._tuser.my_sids:
+            if schedule.sid in self._user.my_sids:
                 schedule.is_owner = True
 
-        # 이전에 사용했던 데이터 표기용 함수
-        ## 데이터 변환
-        #schedule_model.get_tschedule_list(schedules=self.__schedules)
-        #schedule_bias_model.get_tbias_list(biases=self.__biases)
-
-        ## 반환받은 건 딕셔너리 리스트
-        #self.__schedules = schedule_model.get_response_form_data()
-        #self.__biases = schedule_bias_model.get_response_form_data()
         return
 
 
