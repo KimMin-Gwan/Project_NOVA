@@ -996,7 +996,7 @@ class ScheduleTimeLayerModel(TimeTableModel):
     def __make_single_schedule_data_form(self, type, schedule:Schedule):
         schedule_form = {}
         
-        schedule_form["time"] = schedule.datetime
+        schedule_form["time"] = schedule.datetime.isoformat()
         schedule_form["type"] = type
         schedule_form["schedule_id"] = schedule.sid
         schedule_form["schedule_title"] = schedule.title
