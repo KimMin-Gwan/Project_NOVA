@@ -139,6 +139,11 @@ class TimeTableController:
     def get_monthly_bias_schedule(self, schedule_search_engine:SSE, database:Mongo_Database, request:RequestManager) -> BaseModel:
         model = MultiScheduleModel(database=database)
         
+        if request.jwt_payload!= "":
+            model.set_user_with_email(request=request.jwt_payload)
+        else:
+            return model
+            
         if not model.set_bias_data(bid=request.data_payload.bid):
             return model
         
