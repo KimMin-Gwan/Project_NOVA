@@ -684,6 +684,7 @@ class MultiScheduleModel(TimeTableModel):
                 if schedule.sid in self._user.subscribed_sids:
                     schedule.subscribe = True
 
+                print(f"schedule.sid : {schedule.sid} | my_sids : {self._user.my_sids}")
                 if schedule.sid in self._user.my_sids:
                     schedule.is_owner = True
 
@@ -719,8 +720,6 @@ class MultiScheduleModel(TimeTableModel):
                 datetime_obj:datetime = schedule["datetime"]
                 schedule["datetime"] = datetime_obj.isoformat()
             
-
-        pprint(body)
         response = self._get_response_data(head_parser=head_parser, body=body, serializable=False)
         return response
 
