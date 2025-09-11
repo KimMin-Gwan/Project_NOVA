@@ -374,44 +374,6 @@ class TimeTableModel(BaseModel):
         elif when == "start":
             return date_obj > datetime.now()
 
-    # 필터링 옵션을 주면 리스트를 필터링 합니다.
-    def filtering_list_with_option(self, id_list:list, filter_option:str, search_type:str="sid"):
-        if filter_option == "all" or filter_option == "":
-            return id_list
-
-        filtered_id_list = []
-
-        schedule_id_type = ""
-        if search_type == "schedule" or search_type=="sid":
-            schedule_id_type = "sid"
-
-        searched_data = self._database.get_datas_with_ids(target_id=schedule_id_type, ids=id_list)
-
-        for data in searched_data:
-            if schedule_id_type == "sid":
-                schedule = Schedule()
-                schedule.make_with_dict(dict_data=data)
-
-                if filter_option == "ended":
-                    # 종료된 일정 서치
-                    if self.__check_schedule_time(date=schedule.end_date, time=schedule.end_time, when="end"):
-                        filtered_id_list.append(schedule.sid)
-                elif filter_option == "in_progress":
-                    # 일정이 끝나지 않았을 떄,
-                    if not self.__check_schedule_time(date=schedule.end_date, time=schedule.end_time, when="end"):
-                        # 현재 시작한 일정
-                        if not self.__check_schedule_time(date=schedule.start_date, time=schedule.start_time, when="start"):
-                            filtered_id_list.append(schedule.sid)
-                elif filter_option == "not_start":
-                    # 시작 전인 일정 서치
-                    if self.__check_schedule_time(date=schedule.start_date, time=schedule.start_time, when="start"):
-                        filtered_id_list.append(schedule.sid)
-
-                elif filter_option == "not_end":
-                    if not self.__check_schedule_time(date=schedule.end_date, time=schedule.end_time, when="end"):
-                        filtered_id_list.append(schedule.sid)
-
-        return filtered_id_list
 
     # 페이징 기법 함수
     def paging_id_list(self, id_list:list, last_index:int, page_size=8):
@@ -737,35 +699,6 @@ class AddScheduleModel(TimeTableModel):
             platform.update(schedule.platform)
 
         return list(platform)
-
-    # 스케줄 번들 시작 날짜와 끝 날짜 찾기
-    def __find_start_n_end_date(self, schedule_list:list, ):
-        # 기준 날짜는 맨 처음 스케줄
-        start_date = datetime.strptime(schedule_list[0].start_date, "%Y/%m/%d")
-        end_date = datetime.strptime(schedule_list[0].end_date, "%Y/%m/%d")
-
-        # 스케줄마다 확인해서 일정 번들 중 가장 빠른 시작날짜와 가장 늦은 끝 날짜를 찾는다.
-        for schedule in schedule_list:
-            other_start = datetime.strptime(schedule.start_date,"%Y/%m/%d")
-            other_end = datetime.strptime(schedule.end_date,"%Y/%m/%d")
-
-            # 시작일 은 가장 오래된 순서
-            if start_date > other_start:
-                start_date = other_start
-            # 종료일은 스케쥴의 가장 나중에 끝나는 날
-            if end_date < other_end:
-                end_date = other_end
-
-        # 문자열화
-        # start_date_str = start_date.strftime("%y년 %m월 %d일")
-        # end_date_str = end_date.strftime("%y년 %m월 %d일")
-        start_date_str = start_date.strftime("%Y/%m/%d")
-        end_date_str = end_date.strftime("%Y/%m/%d")
-
-        # 반환
-        return [start_date_str, end_date_str]
-
-
 
     # sids리스트를 추가하는 곳
     # 대충 일정 보고 끼워넣는 로직도 있으면 좋겠는데
