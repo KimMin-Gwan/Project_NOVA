@@ -609,16 +609,14 @@
 .schedule-make-button-wrapper{
   display: flex;
   padding: 10px;
-  justify-content: flex-end;
-  align-items: flex-end;
-  gap: 80px;
+  justify-content: center;
   flex: 1 0 0;
   align-self: stretch;
 }
 
 .schedule-make-button{
   display: flex;
-  padding: 20px 100px;
+  padding: 15px 90px;
   justify-content: center;
   align-items: center;
   gap: 10px;
@@ -627,7 +625,7 @@
   background: #A7BBFF;
   color: #111;
   font-family: Pretendard;
-  font-size: 32px;
+  font-size: 30px;
   font-style: normal;
   font-weight: 600;
   line-height: 140%; /* 44.8px */
@@ -649,3 +647,41 @@
   align-self: stretch;
 }
 
+.detail-readonly{
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.bias-select-section-valid-info{
+  color: #f5365fc5;    
+  font-family: Pretendard;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%; /* 39.2px */
+  letter-spacing: -0.7px;
+  margin-top: -10px;
+  margin-bottom: 10px;
+  padding: 20px 0;
+}
+
+.detail-readonly{
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+  color: #303030;
+}
+
+.bias-select-section-valid-info{
+  color: #f5365fc5;    
+  font-family: Pretendard;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%; /* 39.2px */
+  letter-spacing: -0.7px;
+  margin-top: -10px;
+  margin-bottom: 10px;
+  padding: 20px 0;
+}
