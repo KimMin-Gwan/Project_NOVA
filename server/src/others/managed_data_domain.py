@@ -88,7 +88,7 @@ class ManagedBias:
 
 class ManagedSchedule:
     def __init__(self, sid="", title="", uname="", bid="", bname="", bias_category=[],
-                 datetime=None, time_section=[],  platform=[], duration=0,
+                 datetime=None, date="", time_section=[],  platform=[], duration=0,
                  code="", display=4, tags=[]):
         self.sid=sid
         self.title=title
@@ -99,7 +99,7 @@ class ManagedSchedule:
         self.uname=uname
         self.datetime=datetime                              
         self.duration=duration
-        self.date=self.datetime
+        self.date=date
         self.time_section=time_section              # 타임 섹션
         self.platform=platform
         self.code=code
@@ -1040,6 +1040,7 @@ class ManagedScheduleTable(ManagedTable):
         for single_schedule in schedules:
             bias_data = self._database.get_data_with_id(target="bid", id=single_schedule.bid)
             bias=Bias().make_with_dict(dict_data=bias_data)
+            single_schedule:Schedule = single_schedule
             
             time_sections = self._get_schedule_time_section(start_datetime=schedule.datetime, duration=schedule.duration)
 
@@ -1051,6 +1052,7 @@ class ManagedScheduleTable(ManagedTable):
                                                uname=single_schedule.uname,
                                                datetime=single_schedule.datetime,
                                                duration=single_schedule.duration,
+                                               date=self._get_date_str_to_object(str_date=single_schedule.update_datetime),
                                                time_section=time_sections,
                                                code=single_schedule.code,
                                                display=single_schedule.display,
@@ -1111,7 +1113,8 @@ class ManagedScheduleTable(ManagedTable):
             bname=schedule.bname,
             uname=schedule.uname,
             duration=schedule.duration,
-            datetime=self._get_date_str_to_object(str_date=schedule.update_datetime),
+            datetime=schedule.datetime,
+            date=self._get_date_str_to_object(str_date=schedule.update_datetime),
             time_section=time_section,
             platform=copy(schedule.platform),
             code=schedule.code,
@@ -1148,6 +1151,7 @@ class ManagedScheduleTable(ManagedTable):
         managed_schedule.datetime = modify_schedule.datetime
         managed_schedule.platform = copy(modify_schedule.platform)
         managed_schedule.display= modify_schedule.display
+        managed_schedule.date=self._get_date_str_to_object(str_date=modify_schedule.update_datetime),
 
         self._modify_data_in_df(df=self.__schedule_df,
                                 modify_dict_data=managed_schedule.to_dict(),
