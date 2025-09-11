@@ -147,6 +147,7 @@ class Time_Table_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
         
+        # 업데이트 완료
         @self.__app.get('/time_table_server/get_monthly_bias_schedule')
         def get_monthly_bias_schedule(request:Request, bid:Optional[str], month:Optional[str], year:Optional[str]):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
