@@ -684,7 +684,8 @@ class MultiScheduleModel(TimeTableModel):
                 if schedule.sid in self._user.subscribed_sids:
                     schedule.subscribe = True
 
-                print(f"schedule.sid : {schedule.sid} | my_sids : {self._user.my_sids}")
+                print(f"schedule.sid : {schedule.sid}")
+                pprint(self._user.get_dict_form_data())
                 if schedule.sid in self._user.my_sids:
                     schedule.is_owner = True
 
