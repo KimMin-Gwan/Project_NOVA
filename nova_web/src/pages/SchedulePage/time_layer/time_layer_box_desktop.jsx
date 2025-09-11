@@ -11,13 +11,11 @@ import style from "./TimeLayerBoxDesktop.module.css";
 
 
 export default function TimeLayerBoxDesktop({
-    scheduleData, formattedDate,
+    scheduleData, formattedDate, isFetching,
     onChangeIndexNext, onChangeIndexPrev, onClickSchedule
 }){
     const [visibleCount, setVisibleCount] = useState(0); // 렌더링된 컴포넌트 개수
     const [opacity, setOpacity] = useState(0);
-
-    console.log(scheduleData)
 
     const delay = 100; // 지연 시간 (0.5초)
 
@@ -40,7 +38,6 @@ export default function TimeLayerBoxDesktop({
         await onChangeIndexPrev()
     }
 
-
     async function onClickNextArrow() {
         await onChangeIndexNext()
     }
@@ -50,7 +47,10 @@ export default function TimeLayerBoxDesktop({
             <div className={time_layer_box_style["time-layer-info"]} style={{display:"flex", alignContent:"center", justifyContent:"center"}}>
                 <div className={time_layer_box_style["slide-arrow-box"]}>
                     <img src={double_arrow_round} style={{cursor:"pointer"}}
-                    onClick={()=>{onChangeIndexPrev()}}
+                    onClick={()=>{
+                        if (isFetching) return;
+                        onChangeIndexPrev();
+                    }}
                     />
                 </div>
                 <div className={time_layer_box_style["calender-box-v1"]}>
@@ -61,7 +61,10 @@ export default function TimeLayerBoxDesktop({
                 </div>
                 <div className={time_layer_box_style["slide-arrow-box"]}>
                     <img src={double_arrow_round} style={{rotate:"180deg", cursor:"pointer"}}
-                    onClick={()=>{onClickNextArrow()}}
+                    onClick={()=>{
+                        if (isFetching) return;
+                        onClickNextArrow()
+                    }}
                     />
                 </div>
             </div>
@@ -91,8 +94,6 @@ function ScheduleComponentDesktop({ section, schedules, onClickSchedule}){
         transform,
         transition: "opacity 1s, transform 1s", // 투명도와 transform을 동시에 애니메이션
     };
-
-    console.log(schedules.length)
 
     return(
         <div className={style["schedule-component-wrapper"]}
@@ -138,7 +139,7 @@ function ScheduleDetail({
             onClick={handleClick}
         >
             <div className={style["schedule-component-left-wrapper"]}>
-                <span>{time}</span>
+                <span>{formatAMPM(time)}</span>
                 <ScheduleExposeType type={type} />
             </div>
             <div className={style["schedule-component-right-wrapper"]}>
@@ -184,3 +185,15 @@ function ScheduleExposeType( {type} ){
     }
 }
 
+
+const formatAMPM = (dateStr) => {
+    const date = new Date(dateStr);
+    let hours = date.getHours();
+    const minutes = date.getMinutes();
+    const ampm = hours >= 12 ? "PM" : "AM";
+    hours = hours % 12;
+    hours = hours ? hours : 12; // 0 -> 12
+    const minStr = minutes.toString().padStart(2, "0");
+
+    return `${ampm} ${hours.toString().padStart(2, "0")}:${minStr}`;
+}
