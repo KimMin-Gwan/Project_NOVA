@@ -131,6 +131,8 @@ class User(SampleDomain):
             self.like = dict_data["like"]
             self.my_comment = dict_data["my_comment"]
             self.my_feed = dict_data["my_feed"]
+            self.my_sids = dict_data.get("my_sids", [])
+            self.subscribed_sids = dict_data.get("subscribed_sids", [])
             return self
         except Exception as e:
             print(e)
@@ -151,6 +153,8 @@ class User(SampleDomain):
             "like" : self.like,
             "my_comment" : self.my_comment,
             "my_feed" : self.my_feed,
+            "my_sids" : self.my_sids,
+            "subscribed_sids" : self.subscribed_sids
         }
         
         
