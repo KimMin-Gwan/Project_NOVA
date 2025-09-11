@@ -196,7 +196,7 @@ function ScheduleDetail({
                 transition: "background-color 0.3s ease",
             }}
         >
-            <span className={component_style["time-span"]}>{time}</span>
+            <span className={component_style["time-span"]}>{formatAMPM(time)}</span>
             <ScheduleExposeType type={type} />
             <div className={component_style["schedule-detail"]}>
                 <div className={component_style["schedule-title"]}>
@@ -227,4 +227,16 @@ function ScheduleExposeType( {type} ){
             </div>
         );
     }
+}
+
+const formatAMPM = (dateStr) => {
+    const date = new Date(dateStr);
+    let hours = date.getHours();
+    const minutes = date.getMinutes();
+    const ampm = hours >= 12 ? "PM" : "AM";
+    hours = hours % 12;
+    hours = hours ? hours : 12; // 0 -> 12
+    const minStr = minutes.toString().padStart(2, "0");
+
+    return `${ampm} ${hours.toString().padStart(2, "0")}:${minStr}`;
 }

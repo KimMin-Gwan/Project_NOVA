@@ -129,13 +129,6 @@ export default function ScheduleExplore() {
         isOpen={addScheduleModal}
         target={targetSchedule}
       />
-
-      <EditSingleSchedule
-        closeSchedule={toggleEditScheduleModal}
-        isOpen={editScheduleModal}
-        target={targetSchedule}
-        isSingleSchedule={true}
-      />
     </div>
   );
   }else{
@@ -326,7 +319,7 @@ function ScheduleComponentList({
                     ()=>{
                       navBoard(item.detail)
                     }}
-                  editClick={toggleEditScheduleModal}
+                  editClick={()=>navigate("/")} /* <<<< 여기부터 해야됨 (수정하기로 넘어가야됨)*/
                 />
               )
             )}
