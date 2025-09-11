@@ -616,6 +616,7 @@ class ManagedTable:
 
         mask = pd.Series(True, index=df.index)
 
+        print(df[start_column])
         if date_option in SKIP_TUPLE:
             pass
 
