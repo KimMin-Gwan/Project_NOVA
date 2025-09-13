@@ -143,9 +143,10 @@ function App() {
       {/* 테스트 페이지 및 에러 페이지 */}
       {/* <Route path="/test2" element={<TestPage />}></Route> */}
       <Route path="*" element={<ErrorPage/>} />
+      <Route path="/" element={<ErrorPage/>} />
 
       {/* 홈 화면 */}
-      <Route path="/" element={<NewHomePage/>} />
+      <Route path="/post_board" element={<NewHomePage/>} />
       <Route path="/home_test" element={<HomePage/>}/>
       <Route path="/welcome" element={<BrandPage/>} />
 
