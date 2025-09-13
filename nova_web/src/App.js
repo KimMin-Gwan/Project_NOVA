@@ -28,6 +28,7 @@ import ContentTestPage from "./pages/BrandContent/ContentTestPage.jsx";
 import NewHomePage from "./pages/NewHomePage/NewHomePage.jsx";
 import SubmitNewBiasPage from "./pages/SubmitNewBias/SubmitNewBias.jsx";
 import ErrorPage from "./pages/error_page.js";
+import NotYet from "./pages/NotYet.jsx";
 
 // 다크 모드 클래스 반환 함수
 export function getModeClass(mode) {
@@ -143,7 +144,7 @@ function App() {
       {/* 테스트 페이지 및 에러 페이지 */}
       {/* <Route path="/test2" element={<TestPage />}></Route> */}
       <Route path="*" element={<ErrorPage/>} />
-      <Route path="/" element={<ErrorPage/>} />
+      <Route path="/" element={<NotYet/>} />
 
       {/* 홈 화면 */}
       <Route path="/post_board" element={<NewHomePage/>} />
