@@ -20,6 +20,20 @@
     text-align: center;
 }
 
+
+.span2 {
+    color: #767676;
+    font-family: Pretendard, sans-serif;
+    font-size: 42px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 140%; /* 114.8px */
+    letter-spacing: -2.05px;
+    text-align: center;
+    padding-top: 20px;
+}
+
+
 .text-wrapper {
     display: flex;
     height: 497px;
@@ -42,8 +56,12 @@
 
 /* 📱 모바일 화면 (768px 이하) */
 @media (max-width: 768px) {
+    .screen{
+        width: 100%;
+    }
+
     .middle {
-        font-size: 100px;
+        font-size: 60px;
         letter-spacing: -3px;
     }
 
@@ -51,17 +69,31 @@
         font-size: 30px;
         letter-spacing: -1px;
     }
+
+    .span2 {
+        font-size: 20px;
+        letter-spacing: -0.5px;
+    }
 }
 
 /* 📱 아주 작은 화면 (480px 이하) */
 @media (max-width: 480px) {
+    .screen{
+        width: 100%;
+    }
+
     .middle {
-        font-size: 70px;
+        font-size: 40px;
         letter-spacing: -2px;
     }
 
     .span {
         font-size: 20px;
+        letter-spacing: -0.5px;
+    }
+
+    .span2 {
+        font-size: 15px;
         letter-spacing: -0.5px;
     }
 }
