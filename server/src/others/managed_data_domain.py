@@ -661,19 +661,11 @@ class ManagedTable:
             return df
 
         if not isinstance(date, datetime):
-            pprint(type(date))
             logging.error("date는 datetime 형식이어야 합니다.")
             return df
 
         target_year = date.year
         target_month = date.month
-
-        # --- 디버깅용 출력 시작 ---
-        print(f"[DEBUG] {data_column} dtype:", df[data_column].dtype)
-        if len(df) > 0:
-            print(f"[DEBUG] {data_column} 상위 5개 값:\n", df[data_column].head())
-            print(f"[DEBUG] 첫 번째 값 타입:", type(df[data_column].iloc[0]))
-        # --- 디버깅용 출력 끝 ---
 
         mask = (df[data_column].dt.year == target_year) & (df[data_column].dt.month == target_month)
         filtered_df = df[mask]
@@ -1067,8 +1059,6 @@ class ManagedScheduleTable(ManagedTable):
                                                platform=bias.platform
                                                )
             
-            managed_schedule()
-            
             managed_schedule.tags.extend( bias.tags)
                                                
             self.__schedule_table.append(managed_schedule)
@@ -1131,7 +1121,6 @@ class ManagedScheduleTable(ManagedTable):
             display=schedule.display,
             tags=schedule.tags
         )
-        managed_schedule()
         managed_schedule.bias_category = category
 
         self.__schedule_table.append(managed_schedule)
