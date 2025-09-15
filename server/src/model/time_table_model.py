@@ -757,13 +757,33 @@ class AddScheduleModel(TimeTableModel):
 
     # 단일 스케줄 만들기
     def make_new_single_schedule(self, request_schedule):
+        dt = request_schedule.datetime
+
+        # 1️⃣ tz-aware -> tz-naive 변환
+        if dt.tzinfo is not None:
+            dt = dt.replace(tzinfo=None)
+
+        # 2️⃣ datetime 객체 확인 (혹시 str로 들어오는 경우 처리)
+        if not isinstance(dt, datetime):
+            import pandas as pd
+            dt = pd.to_datetime(dt, errors='coerce')  # 변환 불가 시 NaT
+
+        # 3️⃣ Schedule 객체 생성
         schedule = Schedule(
-            bid = request_schedule.bid,
-            title= request_schedule.title,
-            datetime=request_schedule.datetime.replace(tzinfo=None),
+            bid=request_schedule.bid,
+            title=request_schedule.title,
+            datetime=dt,
             duration=request_schedule.duration,
             tags=request_schedule.tags
         )
+        
+        #schedule = Schedule(
+            #bid = request_schedule.bid,
+            #title= request_schedule.title,
+            #datetime=request_schedule.datetime.replace(tzinfo=None),
+            #duration=request_schedule.duration,
+            #tags=request_schedule.tags
+        #)
 
         bias_data = self._database.get_data_with_id(target="bid", id=schedule.bid)
         
