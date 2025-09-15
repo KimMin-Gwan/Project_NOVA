@@ -115,6 +115,7 @@ class ManagedSchedule:
         print("bias_category: ", self.bias_category)
         print("tags: ", self.tags)
         print("datetime: ", self.datetime)
+        print("datetime(type) : ", type(self.datetime))
         print("duration: ", self.duration)
         print("uname: ", self.uname)
         print("time_section", self.time_section)
