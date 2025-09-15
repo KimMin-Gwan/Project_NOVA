@@ -659,12 +659,12 @@ class ManagedTable:
             return df
 
         if not isinstance(date, datetime):
+            pprint(type(date))
             logging.error("date는 datetime 형식이어야 합니다.")
             return df
 
         target_year = date.year
         target_month = date.month
-        pprint(date)
 
         mask = (df[data_column].dt.year == target_year) & (df[data_column].dt.month == target_month)
         filtered_df = df[mask]
