@@ -124,9 +124,18 @@ class ManagedSchedule:
         print("display: ", self.display)
         print("platform: ", self.platform)\
     
-
-    # 딕셔너리화
     def to_dict(self):
+        dt = self.datetime
+
+        # 1️⃣ tz-aware -> tz-naive 변환
+        if isinstance(dt, datetime) and dt.tzinfo is not None:
+            dt = dt.replace(tzinfo=None)
+
+        # 2️⃣ str로 들어온 경우 안전하게 변환
+        if not isinstance(dt, datetime):
+            import pandas as pd
+            dt = pd.to_datetime(dt, errors='coerce')  # 변환 불가 시 NaT
+
         return {
             "sid": self.sid,
             "title": self.title,
@@ -135,14 +144,13 @@ class ManagedSchedule:
             "bias_category": self.bias_category,
             "tags": self.tags,
             "uname": self.uname,
-            "datetime": self.datetime,
+            "datetime": dt,  # 여기서 이미 safe datetime
             "date": self.date,
             "duration": self.duration,
             "time_section": self.time_section,
             "platform": self.platform,
             "code": self.code,
-            "display": self.display,
-            "platform": self.platform
+            "display": self.display
         }
 
 
@@ -636,45 +644,6 @@ class ManagedTable:
 
         return df[mask]
     
-    def _filter_data_with_month_option(self, df: pd.DataFrame, date: datetime, data_column: str = ""):
-        ##
-        ##일정 데이터를 월별로 필터링합니다.
-        ##
-    
-        if data_column == "":
-            logging.error("date_column이 입력되지 않음")
-            return df
-
-        if data_column not in df.columns.values.tolist():
-            logging.error("데이터프레임에 해당 컬럼이 존재하지 않음")
-            return df
-
-        if not isinstance(date, datetime):
-            pprint(type(date))
-            logging.error("date는 datetime 형식이어야 합니다.")
-            return df
-
-        target_year = date.year
-        target_month = date.month
-
-        # --- 디버깅용 출력 시작 ---
-        print(f"[DEBUG] {data_column} dtype:", df[data_column].dtype)
-        if len(df) > 0:
-            print(f"[DEBUG] {data_column} 상위 5개 값:\n", df[data_column].head())
-            print(f"[DEBUG] 첫 번째 값 타입:", type(df[data_column].iloc[0]))
-
-            # datetime이 아닌 값 확인
-            non_datetime_mask = df[data_column].apply(lambda x: not isinstance(x, datetime))
-            if non_datetime_mask.any():
-                print(f"[DEBUG] datetime이 아닌 값들:\n", df[data_column][non_datetime_mask])
-            else:
-                print("[DEBUG] 모든 값이 datetime입니다.")
-        # --- 디버깅용 출력 끝 ---
-
-        mask = (df[data_column].dt.year == target_year) & (df[data_column].dt.month == target_month)
-        filtered_df = df[mask]
-
-        return filtered_df
 
         
         
