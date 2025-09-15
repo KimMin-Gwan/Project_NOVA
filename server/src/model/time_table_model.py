@@ -627,7 +627,6 @@ class MultiScheduleModel(TimeTableModel):
     
     # 특정 월에 포함된 일정들 bias에 맞춰서 가져오기
     def set_schedule_in_monthly(self, schedule_search_engine:SSE, date:datetime):
-        pprint(date)
         searched_list = schedule_search_engine.try_get_monthly_schedule_list(sids=self.__bias.sids, date=date)
         if searched_list:
             schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids=searched_list)
