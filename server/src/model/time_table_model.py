@@ -760,7 +760,7 @@ class AddScheduleModel(TimeTableModel):
         schedule = Schedule(
             bid = request_schedule.bid,
             title= request_schedule.title,
-            datetime=request_schedule.datetime.replace(tzinfo=None)
+            datetime=request_schedule.datetime.replace(tzinfo=None),
             duration=request_schedule.duration,
             tags=request_schedule.tags
         )
