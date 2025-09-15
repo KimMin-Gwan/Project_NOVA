@@ -1060,6 +1060,9 @@ class ManagedScheduleTable(ManagedTable):
                                                tags=single_schedule.tags,
                                                platform=bias.platform
                                                )
+            
+            managed_schedule()
+            
             managed_schedule.tags.extend( bias.tags)
                                                
             self.__schedule_table.append(managed_schedule)
@@ -1122,8 +1125,7 @@ class ManagedScheduleTable(ManagedTable):
             display=schedule.display,
             tags=schedule.tags
         )
-        managed_schedule()
-
+        
         managed_schedule.bias_category = category
 
         self.__schedule_table.append(managed_schedule)
