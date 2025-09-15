@@ -636,21 +636,11 @@ class ManagedTable:
 
         return df[mask]
     
-    
-    def _filter_data_with_month_option( self, df: pd.DataFrame, date:datetime, data_column: str = ""):
+    def _filter_data_with_month_option(self, df: pd.DataFrame, date: datetime, data_column: str = ""):
         ##
         ##일정 데이터를 월별로 필터링합니다.
-
-        ##Parameters
-        ##----------
-        ##df : pd.DataFrame
-            ##일정 데이터
-        ##date : datetime
-            ##특정 날짜 (연, 월 정보 사용)
-        ##date_column : str
-            ##"datetime" 형식
         ##
-        
+    
         if data_column == "":
             logging.error("date_column이 입력되지 않음")
             return df
@@ -666,9 +656,14 @@ class ManagedTable:
 
         target_year = date.year
         target_month = date.month
-        
-        print(df[data_column].dtype)
-        
+
+        # --- 디버깅용 출력 시작 ---
+        print(f"[DEBUG] {data_column} dtype:", df[data_column].dtype)
+        if len(df) > 0:
+            print(f"[DEBUG] {data_column} 상위 5개 값:\n", df[data_column].head())
+            print(f"[DEBUG] 첫 번째 값 타입:", type(df[data_column].iloc[0]))
+        # --- 디버깅용 출력 끝 ---
+
         mask = (df[data_column].dt.year == target_year) & (df[data_column].dt.month == target_month)
         filtered_df = df[mask]
 
