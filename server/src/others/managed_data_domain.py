@@ -664,6 +664,7 @@ class ManagedTable:
 
         target_year = date.year
         target_month = date.month
+        pprint(date)
 
         mask = (df[data_column].dt.year == target_year) & (df[data_column].dt.month == target_month)
         filtered_df = df[mask]
