@@ -662,12 +662,20 @@ class ManagedTable:
         if len(df) > 0:
             print(f"[DEBUG] {data_column} 상위 5개 값:\n", df[data_column].head())
             print(f"[DEBUG] 첫 번째 값 타입:", type(df[data_column].iloc[0]))
+
+            # datetime이 아닌 값 확인
+            non_datetime_mask = df[data_column].apply(lambda x: not isinstance(x, datetime))
+            if non_datetime_mask.any():
+                print(f"[DEBUG] datetime이 아닌 값들:\n", df[data_column][non_datetime_mask])
+            else:
+                print("[DEBUG] 모든 값이 datetime입니다.")
         # --- 디버깅용 출력 끝 ---
 
         mask = (df[data_column].dt.year == target_year) & (df[data_column].dt.month == target_month)
         filtered_df = df[mask]
 
         return filtered_df
+
         
         
 
