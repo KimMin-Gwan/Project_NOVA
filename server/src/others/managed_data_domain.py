@@ -270,35 +270,37 @@ class ManagedTable:
         data_df = data_df.sort_values(by='date', ascending=False).reset_index(drop=True)
         return data_df
 
-    # 데이터 프레임 삽입 / 삭제 / 편집
-    def _add_new_data_in_df(self, df:pd.DataFrame, new_dict_data:dict, **condition):
-        # 딕셔너리를 통해 새로운 DF를 만들고 Transpose(전치)시키면 된다
+    def _add_new_data_in_df(self, df: pd.DataFrame, new_dict_data: dict, **condition):
+        # 딕셔너리를 통해 새로운 DF 생성 후 전치
         new_data = pd.DataFrame.from_dict(new_dict_data, orient="index").transpose()
 
         if not condition:
             logging.error("추가 행 지정 조건 필요")
             return df
 
-        mask = pd.Series(True, index=df.index)      # 초기 마스크 생성 모두가 True.
+        mask = pd.Series(True, index=df.index)
         for key, val in condition.items():
-            # 동작 조건은 키가 id만!
             if "id" not in key:
                 logging.error("조건은 ID로만 가능합니다.")
                 return df
             if key == '':
                 logging.error('조건에 값이 입력되지 않음')
+            mask &= (df[key] == val)
 
-            mask &= (df[key] == val)            # df[id] = "아이디" 인 행만 True, 나머지 False인 마스크와 AND 연산으로 MASK 찾아냄
-
-        if mask.sum() > 0 :
+        if mask.sum() > 0:
             logging.error("이미 추가되어 있는 ID!")
             return df
 
-        # 최종 추가 과정
+        # 최종 추가
         df = pd.concat([df, new_data], ignore_index=True)
 
-        # date열의 data type을 datetime으로 강제 형변환
-        #df['date'] = df['date'].apply(pd.to_datetime, errors='coerce')
+        # ✅ datetime 컬럼 dtype 강제 변환
+        if 'datetime' in df.columns:
+            df['datetime'] = pd.to_datetime(df['datetime'], errors='coerce')
+
+        # 필요하면 date 컬럼도 변환
+        if 'date' in df.columns:
+            df['date'] = pd.to_datetime(df['date'], errors='coerce')
 
         return df
 
