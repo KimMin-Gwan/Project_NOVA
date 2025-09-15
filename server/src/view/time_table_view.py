@@ -439,4 +439,4 @@ class TimeChartRequest(RequestHeader):
 class ScheduleWithBidnDateRequest(RequestHeader):
     def __init__(self, bid, year:str, month:str) -> None:
         self.bid:str=bid
-        self.date = datetime(int(year), int(month), 1).strftime("%Y/%m/%d")
+        self.date = datetime(int(year), int(month), 1)
