@@ -154,6 +154,7 @@ class ManagedSchedule:
         }
 
 
+
 SKIP_TUPLE = ("", "전체", "all", "선택없음")
 
 class ManagedTable:
@@ -644,7 +645,38 @@ class ManagedTable:
 
         return df[mask]
     
+    def _filter_data_with_month_option(self, df: pd.DataFrame, date: datetime, data_column: str = ""):
+        ##
+        ##일정 데이터를 월별로 필터링합니다.
+        ##
+    
+        if data_column == "":
+            logging.error("date_column이 입력되지 않음")
+            return df
 
+        if data_column not in df.columns.values.tolist():
+            logging.error("데이터프레임에 해당 컬럼이 존재하지 않음")
+            return df
+
+        if not isinstance(date, datetime):
+            pprint(type(date))
+            logging.error("date는 datetime 형식이어야 합니다.")
+            return df
+
+        target_year = date.year
+        target_month = date.month
+
+        # --- 디버깅용 출력 시작 ---
+        print(f"[DEBUG] {data_column} dtype:", df[data_column].dtype)
+        if len(df) > 0:
+            print(f"[DEBUG] {data_column} 상위 5개 값:\n", df[data_column].head())
+            print(f"[DEBUG] 첫 번째 값 타입:", type(df[data_column].iloc[0]))
+        # --- 디버깅용 출력 끝 ---
+
+        mask = (df[data_column].dt.year == target_year) & (df[data_column].dt.month == target_month)
+        filtered_df = df[mask]
+
+        return filtered_df
         
         
 
