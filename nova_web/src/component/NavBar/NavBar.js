@@ -10,7 +10,8 @@ import post from "./../../img/post_img.png";
 import short_form from "./../../img/short_form_icon.png";
 import feed_write from "./../../img/feed_nav.png";
 import search from "./../../img/search_nav.png";
-import searchSchedule from "./../../img/search_schedule.svg";
+//import searchSchedule from "./../../img/search_schedule.svg";
+import date_icon from "./date_icon.svg";
 
 import "./index.css";
 
@@ -18,20 +19,20 @@ const NavBar = ({ brightMode }) => {
   const navBarList = [
     {
       id: 0,
-      title: "게시글",
-      src: short_form,
-      alt: "bias_board",
-      // end_point: "/feed_list?type=bias",
+      title: "대시보드",
+      src: date_icon,
+      alt: "schedule",
       end_point: "/",
       type: "navigate",
       onClick: (endPoint) => handleNavigate(endPoint),
     },
     {
       id: 1,
-      title: "일정",
-      src: searchSchedule,
-      alt: "schedule",
-      end_point: "/schedule",
+      title: "게시판",
+      src: short_form,
+      alt: "bias_board",
+      // end_point: "/feed_list?type=bias",
+      end_point: "/post_board",
       type: "navigate",
       onClick: (endPoint) => handleNavigate(endPoint),
     },

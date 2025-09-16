@@ -77,19 +77,14 @@ export default function DesktopLayout({ children }) {
 
   const menuData = [
     {
-      title: "게시판",
-      icon: feed_icon,
-      end_point : "/",
-      alt: "bias_board",
-      items: [],
-    },
-    {
       title: "콘텐츠 일정",
       icon: date_icon,
+      end_point : "/",
+      alt: "dashboard",
       items: [
             {
                 title: "구독 중인 콘텐츠", 
-                end_point : "/schedule",
+                end_point : "/",
                 alt: "schedule"
             },
             {
@@ -98,6 +93,13 @@ export default function DesktopLayout({ children }) {
                 alt: "bias_board"
             }
       ],
+    },
+    {
+      title: "게시판",
+      icon: feed_icon,
+      end_point : "/post_board",
+      alt: "post_board",
+      items: [],
     },
     {
       title: "검색",
