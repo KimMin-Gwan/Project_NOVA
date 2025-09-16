@@ -158,6 +158,7 @@ class TimeTableController:
         
         if request.jwt_payload!= "":
             model.set_user_with_email(request=request.jwt_payload)
+            
         schedule = model.make_new_single_schedule(request_schedule=request.data_payload.schedule)
 
         if schedule is None:

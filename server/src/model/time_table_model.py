@@ -615,14 +615,15 @@ class MultiScheduleModel(TimeTableModel):
     # 내가 작성한 스케쥴 가져오기 (수정을 위해서)
     def get_written_schedule(self, sid:str):
         schedule_data = self._database.get_data_with_id(target="sid",id=sid)
-        schedule=Schedule()
-        schedule.make_with_dict(schedule_data)
+        if schedule_data:
+            schedule=Schedule().make_with_dict(schedule_data)
+        else:
+            return
 
-        if schedule.sid in self._user.subscribed_sids:
+        if schedule.sid in self._user.my_sids:
             schedule.is_owner = True
 
-        self.__schedules.append(schedule.get_dict_form_data())
-
+        self.__schedules.append(schedule)
         return
     
     # 특정 월에 포함된 일정들 bias에 맞춰서 가져오기
