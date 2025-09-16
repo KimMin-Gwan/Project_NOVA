@@ -11,7 +11,7 @@ import 'swiper/css/pagination';
 import { FreeMode} from 'swiper/modules';
 
 const DesktopBiasSelectSection = ({ biasList,
-     selectedBias, handleSelectBias 
+     selectedBias, handleSelectBias
     }) => {
 
     return (

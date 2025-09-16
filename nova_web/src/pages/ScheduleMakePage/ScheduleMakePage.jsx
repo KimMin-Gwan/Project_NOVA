@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import style from "./ScheduleMakePage.module.css";
 import style2 from "./ScheduleMakePageMobile.module.css";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -17,10 +17,12 @@ import useBiasStore from "../../stores/BiasStore/useBiasStore";
 
 const ScheduleMakePage = () => {
     const isMobile = useMediaQuery('(max-width:1100px)');
+    const { sid } = useParams();
     const navigate = useNavigate();
     const [isUserState, setIsUserState] = useState(false);
     const { biasList, biasId, setBiasId, loading, fetchBiasList } = useBiasStore();
     const [scheduleList, setScheduleList] = useState({});
+    const [initDate, setInitDate] = useState();
 
     function handleValidCheck() {
         fetch("https://supernova.io.kr/home/is_valid", {
@@ -42,10 +44,10 @@ const ScheduleMakePage = () => {
         });
     }
 
+
     function fetchScheduleList(bid, year, month) {
       mainApi.get(`/time_table_server/get_monthly_bias_schedule?bid=${bid}&year=${year}&month=${month}`).then((res)=>{
         const body = res.data.body;
-
         if (body.result){
           const scheduleData = body.schedules;
           const formattedSchedule = {};
@@ -67,10 +69,9 @@ const ScheduleMakePage = () => {
         setScheduleList({});
       });
     }
+    
 
-    useEffect(() => {
-      handleValidCheck();
-    }, []);
+
 
     useEffect(() => {
       fetchBiasList();
@@ -109,6 +110,10 @@ const ScheduleMakePage = () => {
     const [selectedSchedule, setSelectedSchedule] = useState(defaultSchedule);
 
     const handleSelectBias = (bid) => {
+        if(initDate){
+          setInitDate();
+        }
+
         if (selectedBias == bid){
             setSelectedBias("");
         }else{
@@ -129,7 +134,9 @@ const ScheduleMakePage = () => {
     };
 
     useEffect(()=>{
-      handleSelectDate(defaultDate);
+      if(!initDate){
+        handleSelectDate(defaultDate);
+      }
       if (selectedBias){
         fetchScheduleList(selectedBias, now.getFullYear(), now.getMonth()+1);
       }
@@ -149,29 +156,35 @@ const ScheduleMakePage = () => {
     }
 
     useEffect(()=>{
-      if (selectedDate.day !== "") {
-        const schedule = scheduleList[selectedDate.day];
-        if (schedule) {
-          setSelectedSchedule(schedule);
+      if(!initDate){
+        if (selectedDate.day !== "") {
+          const schedule = scheduleList[selectedDate.day];
+          if (schedule) {
+            setSelectedSchedule(schedule);
+          } else {
+            const newSchedule = {
+              sid: "",
+              bid: "",
+              title: "",
+              tags: [],
+              datetime: selectedDateToDate(selectedDate, 22, 0), // 22:00 고정
+              duration: 1,
+              is_owner: true,
+            };
+            setSelectedSchedule(newSchedule);
+          }
         } else {
-          const newSchedule = {
-            sid: "",
-            bid: "",
-            title: "",
-            tags: [],
-            datetime: selectedDateToDate(selectedDate, 22, 0), // 22:00 고정
-            duration: 1,
-            is_owner: true,
-          };
-          setSelectedSchedule(newSchedule);
+          setSelectedSchedule(defaultSchedule); // 날짜가 빈 값일 때도 초기화
         }
-      } else {
-        setSelectedSchedule(defaultSchedule); // 날짜가 빈 값일 때도 초기화
       }
     }, [selectedDate])
 
 
     async function tryFetchNewSchedule(newSchedule) {
+      if (initDate){
+        setInitDate();
+      }
+
       try {
         const res = await postApi.post('/time_table_server/try_make_new_schedule', {
           header: HEADER,
@@ -198,6 +211,34 @@ const ScheduleMakePage = () => {
       }
     }
 
+    const fetchSingleScheduleData = (sid) => {
+      mainApi.get(`/time_table_server/try_get_written_schedule?sid=${sid}`).then((res)=>{
+        const schedule = res.data.body.schedules[0];
+        setSelectedBias(schedule.bid);
+        const date = new Date(schedule.datetime);
+        setInitDate(date);
+        setSelectedSchedule({
+          ...schedule,
+          datetime: date
+        })
+      })
+    }
+
+    // init
+    useEffect(() => {
+      handleValidCheck();
+      if (sid){
+        fetchSingleScheduleData(sid);
+      }
+    }, []);
+
+    const resetAll = () => {
+      setSelectedBias("");
+      setSelectedDate(defaultDate);
+      setSelectedSchedule(defaultSchedule);
+      setScheduleList({});
+    }
+
 
     if (!isMobile){
       return(
@@ -220,6 +261,9 @@ const ScheduleMakePage = () => {
                 selectedDate={selectedDate}
                 handleSelectDate={handleSelectDate}
                 scheduleList={scheduleList}
+                fetchScheduleList={fetchScheduleList}
+                initDate={initDate}
+                setInitDate={setInitDate}
               />
             </div>
             <div 
@@ -230,8 +274,10 @@ const ScheduleMakePage = () => {
               }}
             >
               <DesktopScheduleSelectSection
-                selectedSchedule={selectedSchedule} setSelectedSchedule={setSelectedSchedule}
+                selectedSchedule={selectedSchedule}
+                setSelectedSchedule={setSelectedSchedule}
                 tryFetchNewSchedule={tryFetchNewSchedule}
+                resetAll={resetAll}
               />
             </div>
             <div className={style["schedule-make-info"]}>
@@ -282,6 +328,9 @@ const ScheduleMakePage = () => {
                   selectedDate={selectedDate}
                   handleSelectDate={handleSelectDate}
                   scheduleList={scheduleList}
+                  fetchScheduleList={fetchScheduleList}
+                  initDate={initDate}
+                  setInitDate={setInitDate}
                 />
               </div>
               <div 
@@ -291,8 +340,10 @@ const ScheduleMakePage = () => {
                 }}
               >
                 <MobileScheduleSelectSection
-                  selectedSchedule={selectedSchedule} setSelectedSchedule={setSelectedSchedule}
+                  selectedSchedule={selectedSchedule}
+                  setSelectedSchedule={setSelectedSchedule}
                   tryFetchNewSchedule={tryFetchNewSchedule}
+                  resetAll={resetAll}
                 />
               </div>
               <div className={style["schedule-make-info"]}>

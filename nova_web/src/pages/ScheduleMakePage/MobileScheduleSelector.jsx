@@ -4,7 +4,7 @@ import { use } from "react";
 
 const MobileScheduleSelectSection = ({
   selectedSchedule, setSelectedSchedule,
-  tryFetchNewSchedule
+  tryFetchNewSchedule, resetAll
 }) => {
 
   // 실제로 선택한 종료 시간
@@ -194,6 +194,7 @@ const MobileScheduleSelectSection = ({
   const handleMakeSchedule = async () => {
     const newSchedule = scheduleMaker(); 
     await tryFetchNewSchedule(newSchedule); // 새로 만든 값 바로 사용
+    resetAll();
   };
 
   return(

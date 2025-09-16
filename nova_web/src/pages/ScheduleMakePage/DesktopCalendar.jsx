@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import style from "./ScheduleMakePage.module.css";
 
 const DesktopCalender = ({
-  selectedBias, selectedDate, handleSelectDate, scheduleList
+  selectedBias, selectedDate, handleSelectDate, scheduleList, fetchScheduleList, initDate, setInitDate
 }) => {
   const weekDays = ["일", "월", "화", "수", "목", "금", "토"];
 
@@ -22,6 +22,15 @@ const DesktopCalender = ({
   useEffect(() => {
     generateCalendar(year, month);
   }, [year, month, scheduleList]);
+
+
+  useEffect(()=>{
+    if(initDate){
+      setYear(initDate.getFullYear())
+      setMonth(initDate.getMonth() + 1);
+      trySelectDay(initDate.getDate());
+    }
+  }, [initDate])
 
   const generateCalendar = (y, m) => {
     const firstDay = new Date(y, m - 1, 1).getDay(); // 시작 요일
@@ -50,57 +59,50 @@ const DesktopCalender = ({
     setWeeks(weekChunks);
   };
 
-  // 이전달 이동
   const handlePrevMonth = () => {
-    if (month === 1) {
-      setYear((prev) => prev - 1);
-      setMonth(12);
-    } else {
-      setMonth((prev) => prev - 1);
-    }
+    // 다음 월과 연도 계산
+    const newMonth = month === 1 ? 12 : month - 1;
+    const newYear = month === 1 ? year - 1 : year;
 
-    if(month == (today.getMonth()+1)){
-      setTodayEffect(
-        {
-          month: true,
-          day : today.getDay()
-        }
-      )
-    }else{
-      setTodayEffect(
-        {
-          month: false,
-          day : today.getDay()
-        }
-      )
-    }
+    // 상태 업데이트
+    setMonth(newMonth);
+    setYear(newYear);
+
+    // todayEffect 업데이트
+    setTodayEffect({
+      month: newMonth === today.getMonth() + 1, // 현재 달이면 true, 아니면 false
+      day: today.getDate()
+    });
+
+    // fetchScheduleList는 계산된 값을 사용
+    fetchScheduleList(selectedBias, newYear, newMonth);
   };
 
-  // 다음달 이동
   const handleNextMonth = () => {
-    if (month === 12) {
-      setYear((prev) => prev + 1);
-      setMonth(1);
-    } else {
-      setMonth((prev) => prev + 1);
-    }
+    // 다음 월과 연도 계산
+    const newMonth = month === 12 ? 1 : month + 1;
+    const newYear = month === 12 ? year + 1 : year;
 
-    if(month == (today.getMonth()+1)){
-      setTodayEffect(
-        {
-          month: true,
-          day : today.getDay()
-        }
-      )
-    }else{
-      setTodayEffect(
-        {
-          month: false,
-          day : today.getDay()
-        }
-      )
-    }
+    // 상태 업데이트
+    setMonth(newMonth);
+    setYear(newYear);
+
+    // todayEffect 업데이트
+    setTodayEffect({
+      month: newMonth === today.getMonth() + 1, // 현재 달이면 true, 아니면 false
+      day: today.getDate()
+    });
+
+    // fetchScheduleList는 계산된 값을 사용
+    fetchScheduleList(selectedBias, newYear, newMonth);
   };
+
+  const onClickSelectDay = (day) => {
+    if (initDate){
+      setInitDate();
+    }
+    trySelectDay(day);
+  }
 
   const trySelectDay = (day) =>{
     setDay(day);
@@ -120,9 +122,12 @@ const DesktopCalender = ({
   },[year, month])
 
   useEffect(()=>{
-    setYear(today.getFullYear());
-    setMonth(today.getMonth() + 1); // JS는 0부터 시작 → +1
-    setDay("");
+    // modify할때는 초기화 하면안됨
+    if (!initDate){
+      setYear(today.getFullYear());
+      setMonth(today.getMonth() + 1); // JS는 0부터 시작 → +1
+      setDay("");
+    }
   }, [selectedBias])
 
   return (
@@ -157,7 +162,7 @@ const DesktopCalender = ({
                 todayEffect={todayEffect}
                 body={item.body}
                 dayState={day}
-                trySelectDay={trySelectDay}
+                onClickSelectDay={onClickSelectDay}
                 />
               ))}
             </div>
@@ -189,7 +194,7 @@ const WeekDayComponent = ({ body }) => {
   );
 };
 
-const DayComponent = ({ day, dayState, todayEffect, body, trySelectDay}) => {
+const DayComponent = ({ day, dayState, todayEffect, body, onClickSelectDay}) => {
   if (!day) {
     return <div className={style["day-component"]}></div>; // 빈칸
   }
@@ -204,7 +209,7 @@ const DayComponent = ({ day, dayState, todayEffect, body, trySelectDay}) => {
         border: IsToday? "2px solid #83b5ff" : "none",
         backgroundColor: day == dayState ? "#83b5ff" : "transparent",
         }}
-      onClick={()=>trySelectDay(day)}
+      onClick={()=> onClickSelectDay(day)}
     >
       <span className={style["day-component-title-span"]}
         style={{fontSize: body ? "30px" : "42px"}}

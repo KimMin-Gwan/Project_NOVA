@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import style from "./ScheduleMakePageMobile.module.css";
 
 const MobileCalender = ({
-  selectedBias, selectedDate, handleSelectDate, scheduleList
+  selectedBias, selectedDate, handleSelectDate, scheduleList, initDate, setInitDate
 }) => {
   const weekDays = ["일", "월", "화", "수", "목", "금", "토"];
 
@@ -37,6 +37,15 @@ const MobileCalender = ({
   useEffect(() => {
     generateCalendar(year, month);
   }, [year, month, scheduleList]);
+
+  useEffect(()=>{
+    if(initDate){
+      setYear(initDate.getFullYear())
+      setMonth(initDate.getMonth() + 1);
+      trySelectDay(initDate.getDate());
+    }
+  }, [initDate])
+
 
   const generateCalendar = (y, m) => {
     const firstDay = new Date(y, m - 1, 1).getDay(); // 시작 요일
@@ -115,6 +124,13 @@ const MobileCalender = ({
     }
   };
 
+  const onClickSelectDay = (day) => {
+    if (initDate){
+      setInitDate();
+    }
+    trySelectDay(day)
+  }
+
   const trySelectDay = (day) =>{
     setDay(day);
     handleSelectDate({ 
@@ -133,9 +149,11 @@ const MobileCalender = ({
   },[year, month])
 
   useEffect(()=>{
-    setYear(today.getFullYear());
-    setMonth(today.getMonth() + 1); // JS는 0부터 시작 → +1
-    setDay("");
+    if(!initDate){
+      setYear(today.getFullYear());
+      setMonth(today.getMonth() + 1); // JS는 0부터 시작 → +1
+      setDay("");
+    }
   }, [selectedBias])
 
   return (
