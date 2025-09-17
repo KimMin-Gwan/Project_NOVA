@@ -122,7 +122,6 @@ class ManagedSchedule:
         print("platform: ", self.platform)
         print("code: ", self.code)
         print("display: ", self.display)
-        print("platform: ", self.platform)\
     
     def to_dict(self):
         dt = self.datetime
@@ -1225,6 +1224,20 @@ class ManagedScheduleTable(ManagedTable):
         if return_id:
             return searched_df['sid'].to_list()
         return searched_df.to_dict('records')
+    
+    def find_schedule_in_specific_date(self, specific_date:str, return_id:bool):
+        searched_df = self._filter_data_with_date_option(df=self.__schedule_df, date_option="specific",
+                                                         date_columns=["datetime"],
+                                                         specific_date=specific_date)
+        
+        if searched_df.empty:
+            logging.warning(f"Filtering schedule in specific date {specific_date} returned empty DataFrame.")
+            return []
+
+        if return_id:
+            return searched_df['sid'].to_list()
+        return searched_df.to_dict('records')
+        
 
     # 오늘 날짜, 혹은 특정 날짜에 대한 일정들을 표시하는 기능.
     def filtering_schedule_in_specific_date(self, selected_sids:list, specific_date:str, return_id:bool):

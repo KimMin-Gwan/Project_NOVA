@@ -90,6 +90,10 @@ class ScheduleSearchEngine:
         sid_list = self.__managed_schedule_table.filtering_schedule_in_specific_date(selected_sids=sids, specific_date=specific_date, return_id=return_id)
         return sid_list
 
+    def try_find_schedules_in_all_schedules_with_specific_date(self, specific_date:str="", return_id:bool=True):
+        sid_list = self.__managed_schedule_table.find_schedule_in_specific_date(specific_date=specific_date, return_id=return_id)
+        return sid_list
+        
 
     # 키워드를 활용한 스케줄 검색 로직
     def try_search_schedule_w_keyword(self, search_columns:list, target_keyword:str="", return_id:bool=True):
