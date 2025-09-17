@@ -945,6 +945,10 @@ class ManagedFeedBiasTable(ManagedTable):
 
     # 바이어스 별 필터링을 진행합니다.
     def filtering_bias_community(self, bid:str, board_type:str, return_id:bool=True):
+        if self.__feed_df.empty:
+            logging.warning(f"Filtering Bias Community with {board_type} and bid {bid} returned empty DataFrame.")
+            return []
+        
         filtered_feeds_df = self._search_data_with_key_str_n_columns(df=self.__feed_df, bid=bid, board_type=board_type)
         if filtered_feeds_df.empty:
             return []
