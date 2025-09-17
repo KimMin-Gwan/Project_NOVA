@@ -8,7 +8,8 @@ from controller import TimeTableController
 #from websockets.exceptions import ConnectionClosedError
 from pprint import pprint
 from datetime import datetime
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+import pytz
 
 from others import ScheduleSearchEngine as SSE
 
@@ -301,7 +302,7 @@ class Time_Table_View(Master_View):
 
 
 
-
+KST = pytz.timezone("Asia/Seoul")
         
 class DummyRequest():
     def __init__(self) -> None:
@@ -315,6 +316,7 @@ class RequestSchedule(BaseModel):
     tags: list[str] = []
     datetime: datetime
     duration: int
+    
 
 class MakeScheduleRequest(RequestHeader):
     def __init__(self, request: dict) -> None:
@@ -323,12 +325,18 @@ class MakeScheduleRequest(RequestHeader):
         body: dict = request.get("body", {})
         schedule_data:dict = body.get("schedule", {})
         
-        pprint(schedule_data)
         # schedule_data의 필드들을 적절한 타입으로 변환
         schedule_data["duration"] = int(schedule_data.get("duration", 0))
 
         # schedule 전체를 Pydantic으로 검증
         self.schedule = RequestSchedule(**schedule_data)
+        
+        # ✅ 생성 후 datetime KST 변환
+        dt = self.schedule.datetime
+        if dt.tzinfo is None:
+            # tz 정보 없으면 UTC로 간주
+            dt = dt.replace(tzinfo=pytz.UTC)
+        self.schedule.datetime = dt.astimezone(KST)
         
     def __call__(self):
         # 호출하면 schedule 객체를 리턴
