@@ -1242,6 +1242,9 @@ class ManagedScheduleTable(ManagedTable):
     # 오늘 날짜, 혹은 특정 날짜에 대한 일정들을 표시하는 기능.
     def filtering_schedule_in_specific_date(self, selected_sids:list, specific_date:str, return_id:bool):
         searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_df, sid=selected_sids)
+        
+        print(searched_df.head())
+        
         searched_df = self._filter_data_with_date_option(df=searched_df, date_option="specific",
                                                          date_columns=["datetime"],
                                                          specific_date=specific_date)
