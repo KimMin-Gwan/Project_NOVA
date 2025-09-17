@@ -158,15 +158,22 @@ class TimeTableController:
         
         if request.jwt_payload!= "":
             model.set_user_with_email(request=request.jwt_payload)
+        
+            
             
         schedule = model.make_new_single_schedule(request_schedule=request.data_payload.schedule)
 
         if schedule is None:
             return model
         
-        # 리스트로 넣어야됨(파라미터가 list를 받음)
-        model.save_new_schedules(schedule_search_engine=schedule_search_engine, schedule=schedule)
-        
+        if request.data_payload.schedule.sid:
+            schedule, result = model.verifiy_modifying_schedule(schedule=schedule, sid=request.data_payload.schedule.sid)
+            if result:
+                model.update_modify_schedule()
+        else:
+            # 해당 날짜에 이미 다른 스케줄이 있는지 검증
+            if model.check_schedule_not_in_time(schedule_search_engine=schedule_search_engine, schedule=schedule):
+                model.save_new_schedule(schedule_search_engine=schedule_search_engine, schedule=schedule)
         return model
     
 
