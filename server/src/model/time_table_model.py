@@ -713,8 +713,8 @@ class AddScheduleModel(TimeTableModel):
 
     # sids리스트를 추가하는 곳
     # 대충 일정 보고 끼워넣는 로직도 있으면 좋겠는데
-    def add_schedule(self, sids):
-        self._user.subscribed_sids = list(set(self._user.subscribed_sids + sids))
+    def add_schedule(self, sid):
+        self._user.subscribed_sids = list(set(self._user.subscribed_sids + [sid]))
         self._database.modify_data_with_id(target_id='uid', target_data=self._user.get_dict_form_data())
         self._result = True
         return
