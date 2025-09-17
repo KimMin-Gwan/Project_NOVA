@@ -1243,7 +1243,9 @@ class ManagedScheduleTable(ManagedTable):
     def filtering_schedule_in_specific_date(self, selected_sids:list, specific_date:str, return_id:bool):
         searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_df, sid=selected_sids)
         
-        print(searched_df.head())
+        if searched_df.empty:
+            logging.warning(f"Filtering schedule in specific date {specific_date} returned empty DataFrame.")
+            return []
         
         searched_df = self._filter_data_with_date_option(df=searched_df, date_option="specific",
                                                          date_columns=["datetime"],
