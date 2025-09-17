@@ -295,12 +295,8 @@ class Mongo_Database():
             # 해당 bias_id를 가진 모든 document 조회
             followers_cursor = selected_collection.find({"bid": bid}, {"_id": 0, "uid": 1})
             
-            print(followers_cursor)
-            
             # uid_list만 뽑아서 반환
             uid_list = [doc["uid"] for doc in followers_cursor] if followers_cursor else []
-            
-            print(uid_list)
         
             return uid_list
 
