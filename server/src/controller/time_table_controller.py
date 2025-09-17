@@ -167,7 +167,7 @@ class TimeTableController:
             return model
         
         if request.data_payload.schedule.sid:
-            schedule, result = model.verifiy_modifying_schedule(schedule=schedule, sid=request.data_payload.schedule.sid)
+            schedule, result = model.verifiy_modifying_schedule(modified_schedule=schedule, sid=request.data_payload.schedule.sid)
             if result:
                 model.update_modify_schedule()
         else:
