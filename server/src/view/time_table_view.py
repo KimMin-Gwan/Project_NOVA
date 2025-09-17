@@ -173,10 +173,10 @@ class Time_Table_View(Master_View):
         # 내 스케줄에 추가하기
         # sids를 받아서 추가할 것(번들은 쪼개서 sid리스트만 받음, 이벤트는 이곳으로 추가하지 않음)
         # 업데이트 완료
-        @self.__app.post('/time_table_server/try_add_schedule')
-        def try_add_schedule(request:Request, raw_request:dict):
+        @self.__app.get('/time_table_server/try_add_schedule')
+        def try_add_schedule(request:Request, sid:str):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
-            data_payload = GetSchedulesRequest(request=raw_request)
+            data_payload = ScheduleRequest(sid=sid)
             
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
 
@@ -409,10 +409,6 @@ class SearchRequest(RequestHeader):
         return
         
 
-class GetSchedulesRequest(RequestHeader):
-    def __init__(self, request:dict)-> None:
-        body:dict = request['body']
-        self.sids=body.get('sids', [])
         
 
 class ExploreScheduleRequset(RequestHeader):
