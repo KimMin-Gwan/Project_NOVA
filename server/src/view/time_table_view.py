@@ -138,6 +138,7 @@ class Time_Table_View(Master_View):
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
             time_table_controller =TimeTableController()
+            
             data_payload()
             model = time_table_controller.try_explore_schedule_with_category(schedule_search_engine=self.__schedule_search_engine,
                                                                              database=self.__database,
@@ -145,6 +146,7 @@ class Time_Table_View(Master_View):
 
 
             body_data = model.get_response_form_data(self._head_parser)
+            pprint(data_payload)
             response = request_manager.make_json_response(body_data=body_data)
             return response
         
