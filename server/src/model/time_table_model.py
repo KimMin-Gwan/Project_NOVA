@@ -815,7 +815,7 @@ class AddScheduleModel(TimeTableModel):
         user_dict_list = []
         for user_data in user_datas:
             user = User().make_with_dict(user_data)
-            temp_list = list(set(user.subscribed_sids.append(sid)))
+            temp_list = list(set(user.subscribed_sids + [sid]))
             user.subscribed_sids = temp_list
             user_dict_list.append(user.get_dict_form_data())
         
