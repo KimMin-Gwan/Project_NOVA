@@ -217,9 +217,11 @@ class BiasFollowModel(BaseModel):
         if self.__bias.bid in self._user.bids:
             self._user.bids.remove(self.__bias.bid)
             feed_search_engine.remove_user_to_bias(bid=self.__bias.bid, uid=self._user.uid)
+            self._database.delete_follower(uid=self._user.uid, bid=self.__bias.bid)
         else:
             self._user.bids.append(self.__bias.bid)
             feed_search_engine.add_new_user_to_bias(bid=self.__bias.bid, uid=self._user.uid)
+            self._database.add_follower(uid=self._user.uid, bid=self.__bias.bid)
 
         self._database.modify_data_with_id(target_id="uid", target_data=self._user.get_dict_form_data())
         self.__result = True
