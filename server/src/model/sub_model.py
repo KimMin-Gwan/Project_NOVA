@@ -153,6 +153,7 @@ class MakeNewBiasModel(BaseModel):
     
     def auto_follow(self):
         self._user.bids.append(self._bias.bid)
+        self._database.add_follower(bid=self._bias.bid, uid=self._user.uid)
         self._database.modify_data_with_id(target_id="uid", target_data=self._user.get_dict_form_data())
         return
         
