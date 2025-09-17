@@ -69,7 +69,7 @@ class TimeTableController:
         else:
             return model
 
-        model.add_schedule(sids=request.data_payload.sid)
+        model.add_schedule(sid=request.data_payload.sid)
         return model
 
 
