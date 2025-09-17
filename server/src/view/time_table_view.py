@@ -344,7 +344,12 @@ class MakeScheduleRequest(RequestHeader):
 
     def __repr__(self):
         return f"MakeScheduleRequest(schedule={self.schedule})"
-        
+  
+class GetSchedulesRequest(RequestHeader):
+    def __init__(self, request:dict)-> None:
+        body:dict = request['body']
+        self.sids=body.get('sids', [])     
+      
 
 class MakeMultipleScheduleRequest(RequestHeader):
     def __init__(self, request) -> None:
