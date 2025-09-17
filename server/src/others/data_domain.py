@@ -99,7 +99,9 @@ class User(SampleDomain):
                  email = "", gender = "d" ,
                  bids=[], num_long_feed=0, num_comment=0,
                  password = "", like=[], my_comment=[],
-                 my_feed = [], my_sids = [], subscribed_sids = []):
+                 my_feed = [], my_sids = [], subscribed_sids = [],
+                 verified_bias = ""
+                 ):
 
         self.uid = uid
         self.uname = uname
@@ -115,6 +117,7 @@ class User(SampleDomain):
         self.my_feed:list = my_feed
         self.my_sids:list = my_sids
         self.subscribed_sids:list = subscribed_sids
+        self.verified_bias = verified_bias
 
     # database로 부터 받아온 데이터를 사용해 내용 구성
     def make_with_dict(self, dict_data:dict):
@@ -133,6 +136,7 @@ class User(SampleDomain):
             self.my_feed = dict_data["my_feed"]
             self.my_sids = dict_data.get("my_sids", [])
             self.subscribed_sids = dict_data.get("subscribed_sids", [])
+            self.verified_bias = dict_data.get("verified_bias", "")
             return self
         except Exception as e:
             print(e)
@@ -154,7 +158,8 @@ class User(SampleDomain):
             "my_comment" : self.my_comment,
             "my_feed" : self.my_feed,
             "my_sids" : self.my_sids,
-            "subscribed_sids" : self.subscribed_sids
+            "subscribed_sids" : self.subscribed_sids,
+            "verified_bias" : self.verified_bias
         }
         
         
@@ -205,6 +210,26 @@ class Bias(SampleDomain):
             "platform_url" : self.platform_url,
             "state" : self.state,
             "sids" : self.sids
+        }
+        
+class Follower(SampleDomain):
+    def __init__(self, bid:str="", uid:str=""):
+        self.bid = bid
+        self.uid = uid
+        
+    def make_with_dict(self, dict_data:dict):
+        try:
+            self.bid = dict_data.get("bid", "")
+            self.uid= dict_data.get("uid", "")
+        except Exception as e:
+            print(e)
+            raise DictMakingError(error_type=e)
+        finally:
+            return self
+    def get_dict_form_data(self):
+        return {
+            "bid" : self.bid,
+            "uid" : self.uid
         }
 
 class Feed(SampleDomain):

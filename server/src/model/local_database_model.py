@@ -155,20 +155,10 @@ class Mongo_Database():
             return "alert"
         elif target == "nid" or target == "notice":
             return "notice"
-        elif target == "pid" or target == "project":
-            return "project"
-        elif target == "iid" or target == "interaction":
-            return "interaction"
         elif target == "lid" or target == "feed_link":
             return "feed_link"
         elif target == "rid" or target == "report":
             return "report"
-        elif target == "tuid" or target == "time_table_user":
-            return "time_table_user"
-        elif target == "seid" or target == "schedule_event":
-            return "schedule_event"
-        elif target == "sbid" or target == "schedule_bundle":
-            return "schedule_bundle"
         elif target == "sid" or target == "schedule":
             return "schedule"
         elif target == "duid" or target == "deleted_user":
@@ -264,3 +254,52 @@ class Mongo_Database():
             print(e)
             raise DatabaseLogicError(error_type="delete_data_with_id error | " + str(e))
     
+
+    def add_follower(self, uid:str, bid:str):
+        try:
+            collection_name = "follower"
+            selected_collection = self.__set_collection(collection=collection_name)
+            
+            selected_collection.insert_one({
+                "bid": bid,
+                "uid": uid
+            })
+            
+            return True
+            
+        except Exception as e:
+            print(e)
+            raise DatabaseLogicError(error_type="add_new_follower error | " + str(e))
+            
+    def delete_follower(self, uid:str, bid:str):
+        try:
+            collection_name = "follower"
+            selected_collection = self.__set_collection(collection=collection_name)
+            
+            selected_collection.delete_one({
+                "bid": bid,
+                "uid": uid
+            })
+            
+            return True
+            
+        except Exception as e:
+            print(e)
+            raise DatabaseLogicError(error_type="add_new_follower error | " + str(e))
+        
+    def get_followers_with_bid(self, bid: str):
+        try:
+            collection_name = "follower"
+            selected_collection = self.__set_collection(collection=collection_name)
+        
+            # 해당 bias_id를 가진 모든 document 조회
+            followers_cursor = selected_collection.find({"bid": bid}, {"_id": 0, "uid": 1})
+        
+            # uid_list만 뽑아서 반환
+            uid_list = [doc["uid"] for doc in followers_cursor] if followers_cursor else []
+        
+            return uid_list
+
+        except Exception as e:
+            print(e)
+            raise DatabaseLogicError(error_type="get_followers_with_bid error | " + str(e))
