@@ -743,6 +743,7 @@ class ManagedFeedBiasTable(ManagedTable):
         return
     
     def __init_empty_feed_df(self) -> pd.DataFrame:
+        print(f'{YELLOW}INFO{RESET}<-[      NOVA FEED DATAFRAME IS EMPTY >> TRY INIT KEY .')
         dummy_feed = ManagedFeed()
         feed_dict = dummy_feed.to_dict()   # __dict__ 대신 to_dict() 사용
         return pd.DataFrame(columns=feed_dict.keys())
