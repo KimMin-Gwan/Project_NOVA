@@ -1226,6 +1226,10 @@ class ManagedScheduleTable(ManagedTable):
         return searched_df.to_dict('records')
     
     def find_schedule_in_specific_date(self, specific_date:str, return_id:bool):
+        if self.__schedule_df.empty:
+            logging.warning(f"Schedule Datframe is Empty and returned empty DataFrame.")
+            return []
+        
         searched_df = self._filter_data_with_date_option(df=self.__schedule_df, date_option="specific",
                                                          date_columns=["datetime"],
                                                          specific_date=specific_date)
