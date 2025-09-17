@@ -159,6 +159,7 @@ function SubmitNewBias() {
             console.log('제출 완료', form);
             fetchNewBias()
         }
+        navigate('/');
     };
 
     const fetchNewBias = async () => {
@@ -167,7 +168,6 @@ function SubmitNewBias() {
                 body: form
             }
         ).then((res) => {
-            console.log(res);
         });
     }
 
