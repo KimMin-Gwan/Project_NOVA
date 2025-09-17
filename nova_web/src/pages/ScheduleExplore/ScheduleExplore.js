@@ -177,6 +177,7 @@ function ScheduleComponentList({
   };
 
   async function fetchSearchData() {
+    console.log("1");
     await postApi
       .post("time_table_server/get_explore_schedules", {
         header: HEADER,
@@ -198,6 +199,7 @@ function ScheduleComponentList({
   }
 
   async function fetchMoreSearchData() {
+    console.log("2");
     await postApi
       .post("time_table_server/get_explore_schedules", {
         header: HEADER,
@@ -260,27 +262,6 @@ function ScheduleComponentList({
       });
   }
 
-  // 내 스케줄에 등록하는 함수 (추가하기 버튼 누르면 동작해야됨)
-  // 완료하면 성공했다고 알려주면 좋을듯
-  async function fetchTryRejectSchedule(target) {
-    // 무조건 리스트로 만들어야됨
-
-    await mainApi 
-      .get(`time_table_server/try_reject_from_my_schedule?sid=${target.sid}`)
-      .then((res) => {
-        setScheduleData((prev) => {
-          if (!prev.some((item) => item.sid === target.sid)) {
-            // 목표 item이 없으면 기존 상태 반환
-            return prev;
-          }
-          // 목표 item이 있으면 업데이트
-          return prev.map((item) =>
-            item.sid === target.sid ? { ...item, subscribe: false} : item
-          );
-        });
-      });
-  }
-
 
   if(isMobile){
     return (
@@ -310,7 +291,6 @@ function ScheduleComponentList({
                   navBoardClick={()=>{
                     navBoard(item.detail)
                   }}
-                  removeClick={fetchTryRejectSchedule}
                 />
               ) : (
                 <ScheduleEdit
@@ -335,6 +315,8 @@ function ScheduleComponentList({
         activeIndex={activeIndex}
         setActiveIndex={setActiveIndex}
         scheduleData={scheduleData}
+        fetchMoreSearchData={fetchMoreSearchData}
+        setKey={setKey}
       />
     );
   }

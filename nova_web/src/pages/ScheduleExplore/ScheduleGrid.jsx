@@ -1,5 +1,6 @@
 import style from "./ScheduleExplore.module.css"
 import { useState } from "react";
+import mainApi from "../../services/apis/mainApi";
 
 export default function ScheduleGrid({ scheduleData }) {
   return (
@@ -13,6 +14,7 @@ export default function ScheduleGrid({ scheduleData }) {
 
 function ScheduleComponent({
     title,
+    sid,
     uname,
     update_time,
     bname,
@@ -21,14 +23,17 @@ function ScheduleComponent({
     code,
     toggleClick,
     selectBack,
+    subscribe
   }){
 
     const [isClicked, setIsClicked] = useState(false);
     const { formattedDate, formattedTime } = formatDateTime(datetime);
+    const [isSubscribe, setIsSubscribe] = useState(subscribe);
 
     return(
         <div className={style["schedule_component_wrapper"]}>
-            <div className={style["schedule_wrapper"]}>
+            <div className={style["schedule_wrapper"]}
+              onClick={()=>{setIsClicked(!isClicked)}} >
                 <span className={style["schedule_title"]}>{title}</span>
                 <div className={style["schedule_detail_container"]}>
                     <span className={style["artist_name"]}>{bname}</span>
@@ -44,7 +49,22 @@ function ScheduleComponent({
                 isClicked && (
                     <div className={style["schedule_extra_control_container"]}>
                         <div className={style["schedule_detail"]}>자세히</div>
-                        <div className={style["schedule_subscribe"]}>구독하기</div>
+                        {
+                          isSubscribe? <div className={style["schedule_subscribe"]}
+                            onClick={()=>{
+                              if (fecthSubScribeSchedule(sid)){
+                                setIsSubscribe(!isSubscribe)
+                              }
+                            }}
+                          >구독취소</div>
+                          : <div className={style["schedule_subscribe"]}
+                            onClick={()=>{
+                              if (fecthSubScribeSchedule(sid)){
+                                setIsSubscribe(!isSubscribe)
+                              }
+                            }}
+                          >구독하기</div>
+                        }
                     </div>
                 )
             }
@@ -74,4 +94,11 @@ function formatDateTime(dateStr) {
   const formattedTime = `${ampm} ${String(hours).padStart(2,"0")}:${minutes}`;
 
   return { formattedDate, formattedTime };
+}
+
+const fecthSubScribeSchedule = (sid) => {
+  mainApi.get(`/time_table_server/try_add_schedule?sid=${sid}`).then((res)=>{
+    const body = res.data.body;
+  })
+  return true
 }

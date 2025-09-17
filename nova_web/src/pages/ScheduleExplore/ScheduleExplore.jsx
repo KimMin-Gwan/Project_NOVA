@@ -4,11 +4,12 @@ import ScheduleGrid from "./ScheduleGrid.jsx";
 
 export default function ScheduleExploreDesktop({
     setCategory, activeIndex, setActiveIndex,
-    scheduleData
+    scheduleData, setKey, fetchMoreSearchData
 }) {
     const scheduleKind = ["게임", "저챗", "음악", "그림", "스포츠", "시참"];
 
     const handleClickCategory = (index) => {
+        setKey(-1);
         setActiveIndex(index);
         setCategory(scheduleKind[index]);
     }
@@ -47,6 +48,11 @@ export default function ScheduleExploreDesktop({
                     </div>
                 }
                 <ScheduleGrid scheduleData={scheduleData} />
+                <div className={style["fetch-more-button-wrapper"]}>
+                    <div className={style["fetch-more-button"]}>
+                        더 불러오기
+                    </div>
+                </div>
             </div>
         </div>
     )
