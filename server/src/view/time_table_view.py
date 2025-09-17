@@ -322,6 +322,8 @@ class MakeScheduleRequest(RequestHeader):
 
         body: dict = request.get("body", {})
         schedule_data:dict = body.get("schedule", {})
+        
+        pprint(schedule_data)
         # schedule_data의 필드들을 적절한 타입으로 변환
         schedule_data["duration"] = int(schedule_data.get("duration", 0))
 
