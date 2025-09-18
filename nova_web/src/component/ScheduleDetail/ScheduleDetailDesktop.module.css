@@ -1,0 +1,192 @@
+.modal-frame{
+    width: 100%;
+    height: 100%;
+    background-color: #00000071;
+    position: absolute;
+    top: 0;
+    left : 0;
+    z-index: 20;
+    display: flex;
+    padding-top: 90px;
+    justify-content: center;
+}
+
+.modal-container{
+    display: flex;
+    width: 1024px;
+    height: fit-content;
+    padding: 40px;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    border-radius: 26px;
+    border: 2px solid #BDBDBD;
+    background: #FFF;
+    box-shadow: 4px 4px 8px 0 rgba(0, 0, 0, 0.08);
+}
+
+.modal-upper-section{
+    display: flex;
+    height: 430px;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    align-self: stretch;
+    background-color: #A4BEFF;
+}
+
+.modal-lower-section{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 48px;
+    align-self: stretch;
+}
+
+.schedule-tag-detail-wrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+    align-self: stretch;
+}
+
+.tag-wrapper{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    align-self: stretch;
+}
+
+.tag-wrapper{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tag-box{
+    display: flex;
+    padding: 6px 12px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 8px;
+    border: 1px solid #000;
+    background: #000;
+    color: #FFF;
+    font-family: Pretendard;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 140%; /* 19.6px */
+    letter-spacing: -0.35px;
+}
+
+.platform-box{
+    display: flex;
+    padding: 6px 12px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 8px;
+    border: 1px solid #E0E0EC;
+}
+
+.schedule-detail-wrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 11px;
+    align-self: stretch;
+}
+
+.schedule-title{
+    color: #111;
+    font-family: Pretendard;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 140%; /* 33.6px */
+    letter-spacing: -0.6px;
+}
+
+.schedule-datetime{
+    color: #767676;
+    font-family: Pretendard;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 140%; /* 33.6px */
+    letter-spacing: -0.6px;
+    display: flex;
+    gap: 20px;
+}
+
+.schedule-bname{
+    color: #767676;
+    font-family: Pretendard;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 140%; /* 25.2px */
+    letter-spacing: -0.45px;
+}
+
+
+.button-wrapper{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    align-self: stretch;
+}
+
+.left-button{
+    display: flex;
+    width: 452px;
+    padding: 16px 24px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 12px;
+    background-color: #F7F7FB;
+    color: #111;
+    font-family: Pretendard;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 140%; /* 22.4px */
+    letter-spacing: -0.4px;
+    cursor: pointer;
+    transition: all 0.3 ease-in-out
+}
+
+.left-button:hover{
+    background-color: #e0e0ff;
+}
+
+
+.right-button{
+    display: flex;
+    width: 452px;
+    padding: 16px 24px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 12px;
+    background-color: #A4BEFF;
+    color: #111;
+    font-family: Pretendard;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 140%; /* 22.4px */
+    letter-spacing: -0.4px;
+    cursor: pointer;
+    transition: all 0.3 ease-in-out
+}
+
+.right-button:hover{
+    background-color: #6490ff;
+}
+
+
