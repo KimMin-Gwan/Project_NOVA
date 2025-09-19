@@ -317,6 +317,12 @@
     letter-spacing: -0.65px;
 }
 
+.schedule-select-section-frame-gap{
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
 
 .schedule-select-section-frame{
     display: flex;
@@ -614,25 +620,50 @@
   align-self: stretch;
 }
 
-.schedule-make-button{
+.schedule-make-button-gap{
   display: flex;
-  padding: 15px 90px;
+  gap: 20px;
+}
+
+.schedule-make-button {
+  display: flex;
   justify-content: center;
   align-items: center;
-  gap: 10px;
+  padding: 15px 60px;
   border-radius: 20px;
   border: 1px solid #FFF;
   background: #A7BBFF;
   color: #111;
-  font-family: Pretendard;
-  font-size: 30px;
-  font-style: normal;
-  font-weight: 600;
+  font-family: Pretendard, sans-serif;
+  font-size: 28px;
+  font-weight: 500;
   line-height: 140%; /* 44.8px */
   letter-spacing: -0.8px;
-  transition: all 0.2s ease-in-out;
   cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  user-select: none; /* 텍스트 드래그 방지 */
 }
+
+.schedule-make-button:hover {
+  background: #8fa6ff; /* hover 시 살짝 어둡게 */
+}
+
+.schedule-make-button:active {
+  transform: scale(0.97); /* 눌렀을 때 살짝 줄어듦 */
+}
+
+.schedule-make-button.delete {
+  background: #FF9A9A; /* 빨강톤 */
+}
+
+.schedule-make-button.image-upload {
+  background: #a0a9b4; /* 초록톤 */
+}
+
+.schedule-make-button.upload {
+  background: #A7BBFF;
+}
+
 
 .schedule-make-button:hover{
   background-color: #83b5ff;
@@ -684,4 +715,21 @@
   margin-top: -10px;
   margin-bottom: 10px;
   padding: 20px 0;
+}
+
+.schedule-image {
+  align-self: stretch;
+  height: 500px;
+  background-color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* 박스 벗어난 부분 잘라냄 */
+  border-radius: 12px; /* 있으면 더 보기 좋음 */
+}
+
+.schedule-image img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain; /* 이미지 비율 유지하면서 박스 안에 맞춤 */
 }

@@ -1,8 +1,10 @@
 import { useEffect, useState, useRef } from "react";
 import style from "./ScheduleMakePage.module.css";
+import HEADER from "../../constant/header";
+import justPostApi from "../../services/apis/imagePostApi";
 
 const DesktopScheduleSelectSection = ({
-  selectedSchedule, setSelectedSchedule,
+  selectedSchedule, setSelectedSchedule, selectedBias,
   tryFetchNewSchedule, resetAll
 }) => {
 
@@ -27,6 +29,7 @@ const DesktopScheduleSelectSection = ({
   const [detailInput, setDetailInput] = useState("");
   const [durationInput, setDurationInput] = useState("");
   const [isValid, setIsValid] = useState(false);
+  const [isImageUpload, setIsImageUpload] = useState(false);
 
   const initEditTag = (tags) => {
     if (!Array.isArray(tags) || tags.length === 0) return; // 유효성 검사
@@ -162,6 +165,7 @@ const DesktopScheduleSelectSection = ({
       ...selectedSchedule,
       title: detailInput,
       tags: tagsArrayData,
+      bid: selectedBias,
       duration: durationInput ? parseInt(durationInput, 10) : "",
       datetime: (() => {
         const targetDate = selectedSchedule.datetime || new Date();
@@ -177,221 +181,341 @@ const DesktopScheduleSelectSection = ({
     };
 
     setSelectedSchedule(newSchedule);
-    return newSchedule; // 👈 여기서 반환
+    return newSchedule; 
   };
 
+  // image upload 로직
+  const [imageFile, setImageFile] = useState([]);
+  const [previewImage, setPreviewImage] = useState(null);
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setPreviewImage(URL.createObjectURL(file));
+    }
+  };
+
+  const handleFileChange = (e) => {
+    const files = e.target.files[0];
+    setImageFile(files);
+  };
+
+  const postImage = async () => {
+    const formData = new FormData();
+
+    if (imageFile) {
+      formData.append("image", imageFile); // 하나만 업로드 → key도 단수 "image"
+    }
+    else{
+      alert("전송할 이미지가 없어요.")
+    }
+
+    console.log(imageFile)
+
+    const send_data = {
+      header: HEADER,
+      body: {
+        datetime: (() => {
+          const targetDate = selectedSchedule.datetime || new Date();
+          return new Date(
+            targetDate.getFullYear(),
+            targetDate.getMonth(),
+            targetDate.getDate(),
+            selectedAmPm === "pm" ? (hours % 12) + 12 : hours % 12,
+            minutes,
+            0
+          );
+        })(),
+        bid : selectedBias
+      },
+    };
+
+    formData.append("jsonData", JSON.stringify(send_data));
+
+    await justPostApi.post("time_table_server/try_upload_schedule_image",
+      formData,
+       ).then((res) => {
+      if (res.data.body.result) {
+        alert("전송 완료");
+      }
+    });
+  };
 
   const handleMakeSchedule = async () => {
     const newSchedule = scheduleMaker(); 
+    if (!newSchedule.title){
+      alert("콘텐츠 제목이 없으면 업로드할 수 없어요.")
+      return
+    }
     await tryFetchNewSchedule(newSchedule); // 새로 만든 값 바로 사용
     resetAll();
+    setImageFile(null);
+    setPreviewImage(null);
   };
 
   return(
-    <div className={style["schedule-select-section-frame"]}>
-      <div className={style["schedule-select-section-frame-wrapper"]}>
-        <span className={style["bias-select-section-title"]}>콘텐츠 일정 작성 </span>
-        {
-          !isValid &&
-            <span className={style["bias-select-section-valid-info"]}>작성자와 스트리머만 수정할 수 있어요!</span>
-        }
-        <div className={style["schedule-detail-frame"]}>
-          <div className={style["schedule-detail-input-wrapper"]}>
-              <div className={style["searchFac"]}>
-                <span>*이름</span>
-                <div className={style["searchBoxMargin"]}>
-                  <div className={style["searchBox"]}>
-                    {
-                      isValid ? 
-                      <input
-                        type="text"
-                        value={detailInput}
-                        onChange={onChangeDetailInput}
-                        placeholder="일정의 이름"
-                      />
-                      :
-                      <div  className={style["detail-readonly"]}
-                      >{detailInput || "일정의 이름"}</div>
-                    }
+    <div className={style["schedule-select-section-frame-gap"]}>
+      <div className={style["schedule-select-section-frame"]}>
+        <div className={style["schedule-select-section-frame-wrapper"]}>
+          <span className={style["bias-select-section-title"]}>콘텐츠 일정 작성 </span>
+          {
+            !isValid &&
+              <span className={style["bias-select-section-valid-info"]}>작성자와 스트리머만 수정할 수 있어요!</span>
+          }
+          <div className={style["schedule-detail-frame"]}>
+            <div className={style["schedule-detail-input-wrapper"]}>
+                <div className={style["searchFac"]}>
+                  <span>*제목</span>
+                  <div className={style["searchBoxMargin"]}>
+                    <div className={style["searchBox"]}>
+                      {
+                        isValid ? 
+                        <input
+                          type="text"
+                          value={detailInput}
+                          onChange={onChangeDetailInput}
+                          placeholder="콘텐츠 일정 제목"
+                        />
+                        :
+                        <div  className={style["detail-readonly"]}
+                        >{detailInput || "일정의 이름"}</div>
+                      }
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div className={style["searchFac"]}>
-                <span>태그</span>
-                {
-                  isValid &&
-                    <div className={style["sampleTagsContainer"]}>
-                      {sampleTags.map((tag, index) => (
-                        <div
-                          className={style["sampleTag"]}
-                          key={index}
-                          onClick={() => addSampleTag(tag)}
-                        >
+                <div className={style["searchFac"]}>
+                  <span>태그</span>
+                  {
+                    isValid &&
+                      <div className={style["sampleTagsContainer"]}>
+                        {sampleTags.map((tag, index) => (
+                          <div
+                            className={style["sampleTag"]}
+                            key={index}
+                            onClick={() => addSampleTag(tag)}
+                          >
+                            {tag}
+                          </div>
+                        ))}
+                      </div>
+                  }
+
+                  <div className={style["searchBoxMargin"]}>
+                    <div className={style["searchBox"]}>
+                      {
+                        isValid ? 
+                        <input
+                          type="text"
+                          value={tagsInput}
+                          onChange={onChangeTagsInput}
+                          placeholder="각 태그의 뒤에 쉼표를 입력하세요"
+                        />
+                        :
+                        <div  className={style["detail-readonly"]}
+                        >{tagsInput || "작성된 태그가 없어요"}</div>
+                      }
+                    </div>
+                  </div>
+
+                  <div className={style["tagsContainer"]}>
+                    {tagsArrayData.map((tag, index) => (
+                        <div className={style["tag"]} key={index}>
                           {tag}
+                          {
+                            isValid &&
+                              <button
+                                className={style["removeButton"]}
+                                onClick={() => removeTag(index)}
+                              >
+                                &times;
+                              </button>
+                          }
                         </div>
                       ))}
-                    </div>
-                }
+                  </div>
+                </div>
+            </div>
+            <div className={style["schedule-detail-time-selector-wrapper"]}>
+                <span className={style["schedule-detail-time-selector-title"]}>시작 시간</span>
+              <div className={style["schedule-time-select-box"]}>
+                {/* 시간 */}
 
-                <div className={style["searchBoxMargin"]}>
-                  <div className={style["searchBox"]}>
-                    {
-                      isValid ? 
-                      <input
-                        type="text"
-                        value={tagsInput}
-                        onChange={onChangeTagsInput}
-                        placeholder="각 태그의 뒤에 쉼표를 입력하세요"
-                      />
-                      :
-                      <div  className={style["detail-readonly"]}
-                      >{tagsInput || "작성된 태그가 없어요"}</div>
+                <div className={style["time-select-part-wrapper"]}
+                  style={{
+                    height: `${height}px`,
+                    transition: "height 0.3s ease" // 부드럽게 변화
+                  }}
+                >
+                  <div className={style["time-select-part"]}
+                    onClick={() => {
+                      return isValid ? setSelectedAmPm("am") : null}
                     }
+                    style={{ color : selectedAmPm === "am" ? "#111" : "#6C6C6C" }}
+                  >
+                    am
+                  </div>
+                  <div className={style["time-select-part"]}
+                    onClick={() => {
+                      return isValid ? setSelectedAmPm("pm") : null}
+                    }
+                    style={{ color : selectedAmPm === "pm" ? "#111" : "#6C6C6C" }}
+                  >
+                    pm
                   </div>
                 </div>
 
-                <div className={style["tagsContainer"]}>
-                  {tagsArrayData.map((tag, index) => (
-                      <div className={style["tag"]} key={index}>
-                        {tag}
-                        {
-                          isValid &&
-                            <button
-                              className={style["removeButton"]}
-                              onClick={() => removeTag(index)}
-                            >
-                              &times;
-                            </button>
-                        }
-                      </div>
-                    ))}
-                </div>
-              </div>
-          </div>
-          <div className={style["schedule-detail-time-selector-wrapper"]}>
-              <span className={style["schedule-detail-time-selector-title"]}>시작 시간</span>
-            <div className={style["schedule-time-select-box"]}>
-              {/* 시간 */}
-
-              <div className={style["time-select-part-wrapper"]}
-                style={{
-                  height: `${height}px`,
-                  transition: "height 0.3s ease" // 부드럽게 변화
-                }}
-              >
-                <div className={style["time-select-part"]}
-                  onClick={() => {
-                    return isValid ? setSelectedAmPm("am") : null}
-                  }
-                  style={{ color : selectedAmPm === "am" ? "#111" : "#6C6C6C" }}
-                >
-                  am
-                </div>
-                <div className={style["time-select-part"]}
-                  onClick={() => {
-                    return isValid ? setSelectedAmPm("pm") : null}
-                  }
-                  style={{ color : selectedAmPm === "pm" ? "#111" : "#6C6C6C" }}
-                >
-                  pm
-                </div>
-              </div>
-
-              <div className={style["time-select-button-wrapper"]}>
-                {
-                  isValid ?
-                  <>
-                    <div
-                      className={style["time-select-button"]}
-                      onMouseDown={() => handleMouseDown("hours", 1)}
-                      onMouseUp={handleMouseUp}
-                      onMouseLeave={handleMouseUp}
-                    >+</div>
-                    <div className={style["time-select-intager"]}>{hours.toString().padStart(2, "0")}</div>
-                    <div
-                      className={style["time-select-button"]}
-                      onMouseDown={() => handleMouseDown("hours", -1)}
-                      onMouseUp={handleMouseUp}
-                      onMouseLeave={handleMouseUp}
-                    >-</div>
-                  </>
-                  :
-                  <>
-                    <div
-                      className={style["time-select-button"]}
-                    >+</div>
-                    <div className={style["time-select-intager"]}>{hours.toString().padStart(2, "0")}</div>
-                    <div
-                      className={style["time-select-button"]}
-                    >-</div>
-                  </>
-
-                }
-              </div>
-
-              <div className={style["time-select-intager"]}>:</div>
-
-              {/* 분 */}
-              <div className={style["time-select-button-wrapper"]}>
-                {isValid ? 
-                <>
-                  <div
-                    className={style["time-select-button"]}
-                    onMouseDown={() => handleMouseDown("minutes", 10)}
-                    onMouseUp={handleMouseUp}
-                    onMouseLeave={handleMouseUp}
-                  >+</div>
-                  <div className={style["time-select-intager"]}>{minutes.toString().padStart(2, "0")}</div>
-                  <div
-                    className={style["time-select-button"]}
-                    onMouseDown={() => handleMouseDown("minutes", -10)}
-                    onMouseUp={handleMouseUp}
-                    onMouseLeave={handleMouseUp}
-                  >-</div>
-                </>
-                : 
-                <>
-                  <div
-                    className={style["time-select-button"]}
-                  >+</div>
-                  <div className={style["time-select-intager"]}>{minutes.toString().padStart(2, "0")}</div>
-                  <div
-                    className={style["time-select-button"]}
-                  >-</div>
-                </>
-                }
-              </div>
-            </div>
-
-            <div className={style["searchFac"]}>
-              <span>예상 방송 시간</span>
-              <div className={style["searchBoxMargin"]}>
-                <div className={style["searchBox"]}>
+                <div className={style["time-select-button-wrapper"]}>
                   {
                     isValid ?
-                      <input
-                        type="text"
-                        value={durationInput ? durationInput + "시간" : ""}
-                        onChange={onChangeDurationInput}
-                        placeholder="2시간"
-                      />
-                      :
-                      <div  className={style["detail-readonly"]}
-                      >{durationInput ? durationInput + "시간" : "예상 방송 시간이 없어요"}</div>
+                    <>
+                      <div
+                        className={style["time-select-button"]}
+                        onMouseDown={() => handleMouseDown("hours", 1)}
+                        onMouseUp={handleMouseUp}
+                        onMouseLeave={handleMouseUp}
+                      >+</div>
+                      <div className={style["time-select-intager"]}>{hours.toString().padStart(2, "0")}</div>
+                      <div
+                        className={style["time-select-button"]}
+                        onMouseDown={() => handleMouseDown("hours", -1)}
+                        onMouseUp={handleMouseUp}
+                        onMouseLeave={handleMouseUp}
+                      >-</div>
+                    </>
+                    :
+                    <>
+                      <div
+                        className={style["time-select-button"]}
+                      >+</div>
+                      <div className={style["time-select-intager"]}>{hours.toString().padStart(2, "0")}</div>
+                      <div
+                        className={style["time-select-button"]}
+                      >-</div>
+                    </>
+
                   }
+                </div>
+
+                <div className={style["time-select-intager"]}>:</div>
+
+                {/* 분 */}
+                <div className={style["time-select-button-wrapper"]}>
+                  {isValid ? 
+                  <>
+                    <div
+                      className={style["time-select-button"]}
+                      onMouseDown={() => handleMouseDown("minutes", 10)}
+                      onMouseUp={handleMouseUp}
+                      onMouseLeave={handleMouseUp}
+                    >+</div>
+                    <div className={style["time-select-intager"]}>{minutes.toString().padStart(2, "0")}</div>
+                    <div
+                      className={style["time-select-button"]}
+                      onMouseDown={() => handleMouseDown("minutes", -10)}
+                      onMouseUp={handleMouseUp}
+                      onMouseLeave={handleMouseUp}
+                    >-</div>
+                  </>
+                  : 
+                  <>
+                    <div
+                      className={style["time-select-button"]}
+                    >+</div>
+                    <div className={style["time-select-intager"]}>{minutes.toString().padStart(2, "0")}</div>
+                    <div
+                      className={style["time-select-button"]}
+                    >-</div>
+                  </>
+                  }
+                </div>
+              </div>
+
+              <div className={style["searchFac"]}>
+                <span>예상 방송 시간</span>
+                <div className={style["searchBoxMargin"]}>
+                  <div className={style["searchBox"]}>
+                    {
+                      isValid ?
+                        <input
+                          type="text"
+                          value={durationInput ? durationInput + "시간" : ""}
+                          onChange={onChangeDurationInput}
+                          placeholder="2시간"
+                        />
+                        :
+                        <div  className={style["detail-readonly"]}
+                        >{durationInput ? durationInput + "시간" : "예상 방송 시간이 없어요"}</div>
+                    }
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+          <div className={style["schedule-make-button-wrapper"]}>
+            {
+              isValid &&
+              <div className={style["schedule-make-button-gap"]}>
+                <div className={`${style["schedule-make-button"]} ${style["delete"]}`}
+                  onClick={()=>{alert("잠만 지우려고?")}}
+                >삭제</div>
+                <div className={`${style["schedule-make-button"]} ${style["image-upload"]}`}
+                  onClick={()=>{setIsImageUpload((prev)=>!prev)}}
+                >이미지 업로드</div>
+                <div className={`${style["schedule-make-button"]} ${style["upload"]}`}
+                  onClick={handleMakeSchedule}
+                >등록하기</div>
+              </div>
+            }
+          </div>
         </div>
-        <div className={style["schedule-make-button-wrapper"]}>
-          {
-            isValid &&
-              <div className={style["schedule-make-button"]}
-                onClick={handleMakeSchedule}
-              >업로드</div>
-          }
+      </div>
+      
+      <div
+        style={{height: isImageUpload ? "760px" : "0px"}}
+      >
+        <div className={style["schedule-select-section-frame"]}>
+          <div className={style["schedule-select-section-frame-wrapper"]}>
+            <span className={style["bias-select-section-title"]}>콘텐츠 일정 이미지 업로드</span>
+            {
+              !isValid &&
+                <span className={style["bias-select-section-valid-info"]}>작성자와 스트리머만 수정할 수 있어요!</span>
+            }
+          </div>
+          <div className={style["schedule-image"]}>
+            {
+              previewImage && <img src={previewImage}/>
+            }
+          </div>
+          <div className={style["schedule-make-button-wrapper"]}>
+            <div className={style["schedule-make-button-gap"]}>
+              <div className={`${style["schedule-make-button"]} ${style["image-upload"]}`}
+                onClick={() => document.getElementById("image").click()}
+              >
+                파일 선택
+                <input
+                  id="image"
+                  type="file"
+                  accept="image/*"
+                  name="image"
+                  style={{ display: "none" }}
+                  onChange={(e) => {
+                    handleImageChange(e);
+                    handleFileChange(e);
+                  }}
+                />
+              </div>
+              <div
+                className={style["schedule-make-button"]}
+                onClick={()=>{
+                  alert("진짜로 업로드 하게?");
+                  postImage();
+                }}
+              >
+                업로드
+              </div>
+          </div>
+          </div>
         </div>
       </div>
     </div>

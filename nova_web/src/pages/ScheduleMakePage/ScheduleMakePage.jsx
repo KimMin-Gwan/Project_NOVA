@@ -189,10 +189,7 @@ const ScheduleMakePage = () => {
         const res = await postApi.post('/time_table_server/try_make_new_schedule', {
           header: HEADER,
           body: {
-            schedule: {
-              ...newSchedule,
-              bid: selectedBias,
-            },
+            schedule: newSchedule,
           },
         });
 
@@ -269,12 +266,12 @@ const ScheduleMakePage = () => {
             <div 
               className={style["desktop-section-wrapper"]}
               style={{
-                height: selectedDate.day && selectedBias ? "900px" : "0px",
-                paddingBottom: selectedDate.day && selectedBias ? "40px" : "0px",
+                height: selectedDate.day && selectedBias ? "fit-content" : "0px",
               }}
             >
               <DesktopScheduleSelectSection
                 selectedSchedule={selectedSchedule}
+                selectedBias={selectedBias}
                 setSelectedSchedule={setSelectedSchedule}
                 tryFetchNewSchedule={tryFetchNewSchedule}
                 resetAll={resetAll}
