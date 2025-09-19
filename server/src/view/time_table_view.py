@@ -268,11 +268,8 @@ class Time_Table_View(Master_View):
         @self.__app.post('/time_table_server/try_upload_schedule_image')
         async def try_upload_schedule_image(request:Request, image: Union[UploadFile, None] = File(None),
                                        jsonData: Union[str, None] = Form(None)):
-            print("???")
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
 
-            form_data = await request.form()
-            image_file = form_data.getlist("image")
             
             # 파일 읽기
             if image is None:
@@ -289,7 +286,9 @@ class Time_Table_View(Master_View):
             raw_request = json.loads(jsonData)
         
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
-            
+            pprint(raw_request)
+            print(image)
+            print(image_name)
             data_payload = ScheduleImageRequest(request=raw_request,
                                                 image=image,
                                                 image_name=image_name)
