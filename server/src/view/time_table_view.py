@@ -270,7 +270,7 @@ class Time_Table_View(Master_View):
                                        jsonData: Union[str, None] = Form(None)):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
 
-            
+            print(image)
             # 파일 읽기
             if image is None:
                 image_name = None
@@ -278,9 +278,6 @@ class Time_Table_View(Master_View):
             else:
                 image_name = image.filename
                 img = await image.read()
-            print(1)
-            print(jsonData)
-            print(2)
 
             if jsonData is None:
                 raise request_manager.system_logic_exception
