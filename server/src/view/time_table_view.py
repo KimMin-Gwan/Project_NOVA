@@ -270,11 +270,14 @@ class Time_Table_View(Master_View):
                                        jsonData: Union[str, None] = Form(None)):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             
-            form_data = await request.json()
-            image_files = form_data["image"]
+            form = await request.form()  # multipart/form-data 전용
+            image_field = form.get("image")  # UploadFile 객체
+            jsonData = form.get("jsonData")  # 문자열
             
-            print(form_data)
-            print(image_files)
+            print(form)
+            print(image_field)
+            
+            image_name =""
 
             if jsonData is None:
                 raise request_manager.system_logic_exception
