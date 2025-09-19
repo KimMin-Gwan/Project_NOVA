@@ -272,7 +272,8 @@ class Time_Table_View(Master_View):
             
             form_data = await request.form()
             image_files = form_data.getlist("images")
-
+            
+            print(form_data)
             print(image_files)
 
             if jsonData is None:
