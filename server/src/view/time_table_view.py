@@ -272,6 +272,8 @@ class Time_Table_View(Master_View):
 
             print(await request.json())
             
+            print(await image.read())
+            
             # 파일 읽기
             if image is None:
                 image_name = None
