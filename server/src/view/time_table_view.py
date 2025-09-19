@@ -270,8 +270,8 @@ class Time_Table_View(Master_View):
                                        jsonData: Union[str, None] = Form(None)):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             
-            form_data = await request.form()
-            image_files = form_data.getlist("images")
+            form_data = await request.json()
+            image_files = form_data["image"]
             
             print(form_data)
             print(image_files)
