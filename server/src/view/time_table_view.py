@@ -280,9 +280,11 @@ class Time_Table_View(Master_View):
                 img = await image.read()
 
 
+            print("1")
             if jsonData is None:
                 raise request_manager.system_logic_exception
 
+            print("2")
             raw_request = json.loads(jsonData)
         
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
