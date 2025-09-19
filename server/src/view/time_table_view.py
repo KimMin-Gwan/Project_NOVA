@@ -276,10 +276,14 @@ class Time_Table_View(Master_View):
             #image_field = form.get("image")  # UploadFile 객체
             #jsonData = form.get("jsonData")  # 문자열
             
-            print(image)
-            print(jsonData)
             
-            image_name =""
+            if image:
+                image_name = image.filename
+                image = await image.read()
+                
+            print(image)
+            print(image_name)
+            
 
             if jsonData is None:
                 raise request_manager.system_logic_exception
