@@ -279,23 +279,15 @@ class Time_Table_View(Master_View):
                 image_name = image.filename
                 img = await image.read()
 
-
-            print("1")
             if jsonData is None:
                 raise request_manager.system_logic_exception
 
-            print("2")
             raw_request = json.loads(jsonData)
         
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
-            pprint(raw_request)
-            print(image)
-            print(image_name)
             data_payload = ScheduleImageRequest(request=raw_request,
                                                 image=image,
                                                 image_name=image_name)
-            
-            pprint(data_payload)
             
             #request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
