@@ -270,7 +270,7 @@ class Time_Table_View(Master_View):
                                        jsonData: Union[str, None] = Form(None)):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
 
-            print(request.json())
+            print(await request.json())
             
             # 파일 읽기
             if image is None:
