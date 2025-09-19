@@ -1,5 +1,5 @@
-from typing import Optional
-from fastapi import FastAPI, Request
+from typing import Optional, Union
+from fastapi import FastAPI, Request, File, UploadFile, Form
 from others import Schedule
 from view.master_view import Master_View, RequestHeader
 from view.parsers import Head_Parser
@@ -10,6 +10,7 @@ from pprint import pprint
 from datetime import datetime
 from pydantic import BaseModel, Field
 import pytz
+import json
 
 from others import ScheduleSearchEngine as SSE
 
@@ -262,25 +263,50 @@ class Time_Table_View(Master_View):
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response
-
-        # 단일 스케줄 수정
-        # managed_Table 테스트 완료
-        # 업데이트 완료
-        @self.__app.post('/time_table_server/try_modify_schedule')
-        def try_modify_schedule(request:Request, raw_request:dict):
+        
+        # 스케줄 이미지 업로드 하는 곳
+        @self.__app.post('/time_table_server/try_upload_schedule_image')
+        async def try_upload_schedule_image(request:Request, image: Union[UploadFile, None] = File(None),
+                                       jsonData: Union[str, None] = Form(None)):
+     
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
 
-            data_payload = MakeScheduleRequest(request=raw_request)
-            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+            form_data = await request.form()
+            image_files = form_data.getlist("images")
+            
+            # 파일 읽기
+            if image is None:
+                image_name = None
+                img = None
+            else:
+                image_name = image.filename
+                img = await image.read()
 
-            time_table_controller =TimeTableController()
-            model = time_table_controller.try_modify_single_schedule(schedule_search_engine=self.__schedule_search_engine,
-                                                                     database=self.__database,
-                                                                     request=request_manager)
 
-            body_data = model.get_response_form_data(self._head_parser)
-            response = request_manager.make_json_response(body_data=body_data)
-            return response
+            if jsonData is None:
+                raise request_manager.system_logic_exception
+
+            raw_request = json.loads(jsonData)
+        
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
+            
+            data_payload = ScheduleImageRequest(request=raw_request,
+                                                image=image,
+                                                image_name=image_name)
+            
+            pprint(data_payload)
+            
+            #request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+
+            #sub_controller=Sub_Controller()
+            #model = sub_controller.try_report_post_or_comment(database=self.__database,
+                                                              #request=request_manager)
+            #body_data = model.get_response_form_data(self._head_parser)
+            #response = request_manager.make_json_response(body_data=body_data)
+            #return response
+
+            return "hello"
+
 
         # 스케줄 데이터 삭제
         # Managed_Table 테스트 완료
@@ -450,3 +476,37 @@ class ScheduleWithBidnDateRequest(RequestHeader):
     def __init__(self, bid, year:str, month:str) -> None:
         self.bid:str=bid
         self.date = datetime(int(year), int(month), 1)
+        
+# 이미지 스케줄용 Pydantic 모델
+class RequestScheduleImage(BaseModel):
+    bid: str
+    datetime: datetime
+    image_name: str | None = None
+    image: bytes | None = None  # 파일 자체를 bytes로 받거나, 필요에 따라 UploadFile로 변경
+
+class ScheduleImageRequest(RequestHeader):
+    def __init__(self, request: dict, image_name=None, image=None) -> None:
+        super().__init__(request)
+
+        body: dict = request.get("body", {})
+        schedule_data: dict = {
+            "bid": body.get("bid", ""),
+            "datetime": body.get("datetime", ""),
+            "image_name": image_name,
+            "image": image
+        }
+
+        # Pydantic 검증
+        self.schedule = RequestScheduleImage(**schedule_data)
+
+        # ✅ datetime KST 변환
+        dt = self.schedule.datetime
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=pytz.UTC)
+        self.schedule.datetime = dt.astimezone(KST)
+
+    def __call__(self):
+        return self.schedule
+
+    def __repr__(self):
+        return f"ScheduleImageRequest(schedule={self.schedule})"
