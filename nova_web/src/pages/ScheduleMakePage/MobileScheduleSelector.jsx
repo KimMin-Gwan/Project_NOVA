@@ -193,6 +193,10 @@ const MobileScheduleSelectSection = ({
 
   const handleMakeSchedule = async () => {
     const newSchedule = scheduleMaker(); 
+    if (!newSchedule.title){
+      alert("콘텐츠 제목이 없으면 업로드할 수 없어요.")
+      return
+    }
     await tryFetchNewSchedule(newSchedule); // 새로 만든 값 바로 사용
     resetAll();
   };
@@ -206,7 +210,7 @@ const MobileScheduleSelectSection = ({
       }
       <div className={style["schedule-detail-frame"]}>
         <div className={style["searchFac"]}>
-            <span>*제목</span>
+            <span>*</span>
             <div className={style["searchBoxMargin"]}>
             <div className={style["searchBox"]}>
               {
@@ -215,7 +219,7 @@ const MobileScheduleSelectSection = ({
                 type="text"
                 value={detailInput}
                 onChange={onChangeDetailInput}
-                placeholder="일정의 이름"
+                placeholder="콘텐츠 일정 제목"
                 /> : 
                 <div  className={style["detail-readonly"]}
                 >{detailInput || "일정의 이름"}</div>
