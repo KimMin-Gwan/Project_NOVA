@@ -202,17 +202,6 @@ class TimeTableController:
         return model
 
 
-    # 단일 스케줄 편집
-    def try_modify_single_schedule(self, schedule_search_engine:SSE, database:Mongo_Database, request:RequestManager):
-        model = AddScheduleModel(database)
-
-        if request.jwt_payload!= "":
-            model.set_user_with_email(request=request.jwt_payload)
-
-        schedule = model.modify_single_schedule(schedule=request.data_payload.schedule)
-        model.save_modified_schedule(schedule_search_engine=schedule_search_engine, schedules=[schedule])
-
-        return model
 
     # 스케줄 삭제
     def try_delete_schedule(self, schedule_search_engine:SSE, database:Mongo_Database, request:RequestManager):
@@ -225,3 +214,47 @@ class TimeTableController:
 
         return model
 
+    def try_upload_schedule_image(self, schedule_search_engine:SSE, database:Mongo_Database, request:RequestManager) -> AddScheduleModel:
+        model = AddScheduleModel(database=database)
+        
+        if request.jwt_payload!= "":
+            model.set_user_with_email(request=request.jwt_payload)
+        
+        # >> 오너인지 확인해야됨
+        
+        # 1. 일단 해당 날짜에 bias의 schedule이 있는지 검사해야됨
+        # >> 일단 sse한테 해당 날짜에 sid 다 불러와 
+        # >> 그다음 bias의 sid 리스트에서 sid 있는지 검사해
+        
+        # 2. 만약 해당 날짜에 bias schedule이 있는 경우
+        # >> 파일 이름을 해당 schedule의 sid로 바꿔야함
+        # >> 그리고 이미지를 업로드 해야됨
+        # >> 이 상태에서는 2가지 상황이 존재함
+            # 1. 이미지가 이미 있음
+                # 1. 이미지가 내꺼임
+                # >> 그럼 ㅈ까고 그냥 업로드 하면됨
+                
+                # 2. 이미지지가 내꺼가 아님
+                # >> 이 경우가 발생하려면
+                    # 1. 스케줄이 삭제되었지만, 이미지는 남아있음
+                    # 2. bias가 자신의 스케줄 이미지를 업로드 하려고함
+            
+            
+            # 2. 이미지가 없음
+            #>>> 그럼 그냥 업로드 하면됨
+        
+        # 3. 근데 bias schedule 이 없다?
+        # 4. 가짜 스케줄을 만들고 sid를 미리 만들어두자.
+        # 5. 그리고 다른 모든 로직에서 title이 ""이면 ㅈ까라고 하자
+        
+        
+        
+        # >> 그럼 gemini로 이미지를 분석해서 업로드 해야됨
+        # >> 아 그럼 gemini 쓴다고 먼저 동의 받고 돌려야됨
+        # >> 일단 실패했다고 돌려주자. ++ 그리고 프론트에서 스케줄 업로드 하고 나서 이미지 업로드하게 만들어야함
+        
+        # 아니면 차라리 schedule make 할때 이미지 업로드 같이해도되긴함
+        # 아니면 sid를 bid 랑 datetime을 합친 어떤 데이터로 하면 되긴해
+        
+        
+        return model

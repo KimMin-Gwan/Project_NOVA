@@ -273,28 +273,27 @@ class Time_Table_View(Master_View):
             if image:
                 image_name = image.filename
                 image = await image.read()
+            else:
+                raise request_manager.system_logic_exception
 
             if jsonData is None:
                 raise request_manager.system_logic_exception
-
             
             raw_request = json.loads(jsonData)
-        
-            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = ScheduleImageRequest(request=raw_request,
                                                 image=image,
                                                 image_name=image_name)
             
-            #request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
 
-            #sub_controller=Sub_Controller()
-            #model = sub_controller.try_report_post_or_comment(database=self.__database,
-                                                              #request=request_manager)
-            #body_data = model.get_response_form_data(self._head_parser)
-            #response = request_manager.make_json_response(body_data=body_data)
-            #return response
+            time_table_controller=TimeTableController()
+            model = time_table_controller.try_upload_schedule_image(database=self.__database,
+                                                                    schedule_search_engine=self.__schedule_search_engine,
+                                                                    request=request_manager)
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
 
-            return "hello"
 
 
         # 스케줄 데이터 삭제

@@ -702,15 +702,6 @@ class AddScheduleModel(TimeTableModel):
         code = ''.join(random.choices(characters, k=6))
         return code
 
-    # 모든 방송 플랫폼 찾는 함수
-    def __find_all_broadcast_location(self, schedule_list:list):
-        platform = set()
-
-        for schedule in schedule_list:
-            platform.update(schedule.platform)
-
-        return list(platform)
-
     
     # 스케줄 구독하기
     def handle_subscribe_schedule(self, sid):
@@ -736,8 +727,6 @@ class AddScheduleModel(TimeTableModel):
             self._database.modify_data_with_id(target_id="uid", target_data=self._user.get_dict_form_data())
             self._result = True
         return
-
-
 
 
     # 단일 스케줄 만들기
@@ -855,39 +844,6 @@ class AddScheduleModel(TimeTableModel):
         self._detail = "스케줄이 성공적으로 저장되었습니다."
         return   
 
-    # 수정한 스케줄들 저장
-    def save_modified_schedule(self, schedule_search_engine:SSE, schedule:Schedule):
-        save_data = schedule.get_dict_form_data()
-        self._database.modify_data_with_id(target_id='sid', target_data=save_data)
-
-        # 서치 엔진에도 저장합니다.
-        schedule_search_engine.try_modify_schedule(modify_schedule=schedule)
-
-        self._result = True
-        return
-
-    # 단일 스케줄 편집
-    def modify_single_schedule(self, target_schedule:Schedule):
-        # pprint("Single_schedule_modify")
-
-        schedule_data = self._database.get_data_with_id(target="sid", id=target_schedule.sid)
-        schedule = Schedule()
-        schedule.make_with_dict(schedule_data)
-
-        bias_data = self._database.get_data_with_id(target="bid", id=target_schedule.bid)
-        bias = Bias().make_with_dict(bias_data)
-        
-        schedule.title = target_schedule.title
-        schedule.bid = bias.bid
-        schedule.bname = bias.bname
-        schedule.platform = bias.platform
-        schedule.url = bias.platform_url
-        schedule.tags = schedule.tags
-        schedule.datetime = schedule.datetime
-        schedule.duration = schedule.duration
-        schedule.update_datetime= datetime.today().strftime("%Y/%m/%d-%H:%M:%S")
-
-        return schedule
 
     # 스케줄 삭제
     def delete_schedule(self, schedule_search_engine:SSE, sid:str):
