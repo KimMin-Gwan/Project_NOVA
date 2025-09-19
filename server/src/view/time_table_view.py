@@ -278,8 +278,9 @@ class Time_Table_View(Master_View):
             else:
                 image_name = image.filename
                 img = await image.read()
-
+            print(1)
             print(jsonData)
+            print(2)
 
             if jsonData is None:
                 raise request_manager.system_logic_exception
