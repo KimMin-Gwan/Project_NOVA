@@ -51,7 +51,7 @@
     align-self: stretch;
 }
 
-.tag-wrapper{
+.tag-wrapper-wrapper{
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -60,7 +60,9 @@
 
 .tag-wrapper{
     display: flex;
+    max-width: 915px;
     align-items: center;
+    flex-wrap: wrap;
     gap: 8px;
 }
 

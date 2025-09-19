@@ -10,14 +10,8 @@ const ScheduleDetailDekstop = () => {
                 </div>
                 <div className={style["modal-lower-section"]}>
                     <div className={style["schedule-tag-detail-wrapper"]}>
-                        <div className={style["tag-wrapper"]}>
+                        <div className={style["tag-wrapper-wrapper"]}>
                             <div className={style["tag-wrapper"]}>
-                                <div className={style["tag-box"]}>
-                                    태그
-                                </div>
-                                <div className={style["tag-box"]}>
-                                    태그
-                                </div>
                                 <div className={style["tag-box"]}>
                                     태그
                                 </div>
