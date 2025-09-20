@@ -891,7 +891,7 @@ class AddScheduleModel(TimeTableModel):
         
     # 이미지 업로드 시도
     def upload_schedule_image(self, extenstion, image, sid):
-        url, result = ImageDescriper().try_schedule_image_upload(sid=sid, extension=extenstion, image=image)
+        url, result = ImageDescriper().try_schedule_image_upload(sid=sid, image=image)
         
         if result:
             self._result = True
