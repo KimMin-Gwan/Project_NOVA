@@ -181,9 +181,11 @@ const ScheduleMakePage = () => {
 
 
     async function tryFetchNewSchedule(newSchedule) {
-      if (initDate){
+      if (initDate) {
         setInitDate();
       }
+
+      setSelectedSchedule(newSchedule);
 
       try {
         const res = await postApi.post('/time_table_server/try_make_new_schedule', {
@@ -193,18 +195,25 @@ const ScheduleMakePage = () => {
           },
         });
 
-        return res.data;
+        // ✅ sid 안전하게 반환
+        if (res?.data?.body?.sid) {
+          return res.data.body.sid;
+        } else {
+          console.error("❌ 서버 응답에 sid가 없습니다:", res.data);
+          return null;
+        }
       } catch (error) {
         if (error.response) {
-          // 서버에서 응답을 준 경우
+          // 서버에서 에러 응답을 받은 경우
           console.error("❌ 서버 에러:", error.response.status, error.response.data);
         } else if (error.request) {
-          // 요청은 갔는데 응답이 없는 경우
+          // 요청은 전송됐지만 응답이 없는 경우
           console.error("❌ 네트워크 에러: 응답 없음", error.request);
         } else {
           // 요청 설정 문제 등
           console.error("❌ 요청 에러:", error.message);
         }
+        return null; // 실패 시 안전하게 null 반환
       }
     }
 
@@ -333,11 +342,12 @@ const ScheduleMakePage = () => {
               <div 
                 className={style2["mobile-section-wrapper"]}
                 style={{
-                  height: selectedDate.day && selectedBias ? "1000px" : "0px",
+                  height: selectedDate.day && selectedBias ? "fit-content" : "0px",
                 }}
               >
                 <MobileScheduleSelectSection
                   selectedSchedule={selectedSchedule}
+                  selectedBias={selectedBias}
                   setSelectedSchedule={setSelectedSchedule}
                   tryFetchNewSchedule={tryFetchNewSchedule}
                   resetAll={resetAll}
