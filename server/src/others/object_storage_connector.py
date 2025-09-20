@@ -339,7 +339,7 @@ class HTMLEXtractor:
         
 class ImageDescriper:
     def __init__(self):
-        self.__feed_temp_path = './model/local_database/feed_temp_image'
+        self.__schedule_temp_path = './model/local_database/schedule_temp_image'
         self.__report_temp_path = './model/local_database/report_temp_image'
         self.__service_name = 's3'
         self.__endpoint_url = 'https://kr.object.ncloudstorage.com'
@@ -350,10 +350,10 @@ class ImageDescriper:
                                  endpoint_url=self.__endpoint_url,
                                  aws_access_key_id=self.__access_key,
                                  aws_secret_access_key=self.__secret_key)
-        self.__feed_bucket_name = "nova-feed-images"
         self.__default_image = "https://kr.object.ncloudstorage.com/nova-feed-images/super_nova.png"
         self.__bias_image_bucket = "nova-bias-profile-images"
         self.__report_image_bucket = "nova-report-images"
+        self.__schedule_bucket_name = "nova-schedule-images"
 
     def __set_images_to_byte(self, images: list):
         pil_images = []
@@ -449,63 +449,67 @@ class ImageDescriper:
             print(f"Error in try_feed_image_upload: {e}")
             return "Something Goes Bad", False
 
-    def try_feed_image_upload(self, fid: str, image_names: list, images):
+    def try_schedule_image_upload(self, sid: str, extension:str , image):
         try:
-            urls = []
+            # Check if GIF or other unsupported formats
+            if extension == 'gif':
+                # 걍 gif 이미지 통째로 저장하는걸로 해★결
+                # PIL를 이용해서 쇼부를 본다
+                gif_file = Image.open(BytesIO(image))
+                temp_path = f"{self.__schedule_temp_path}/{sid}.{extension}"
 
-            for i, image in enumerate(images):
-                try:
-                    image_name:str = image_names[i]
-                    # Check if GIF or other unsupported formats
-                    if image_name.lower().endswith('.gif'):
-                        # 걍 gif 이미지 통째로 저장하는걸로 해★결
-                        # PIL를 이용해서 쇼부를 본다
-                        gif_file = Image.open(BytesIO(image))
-                        temp_path = f"{self.__feed_temp_path}/{fid}_{image_name}"
+                gif_file.save(
+                    temp_path,
+                    save_all=True,
+                    loop=gif_file.info.get("loop", 0),         # 원본 루프 설정 유지
+                    duration=gif_file.info.get("duration", 100)  # 원본 지속 시간 유지
+                )
 
-                        gif_file.save(
-                            temp_path,
-                            save_all=True,
-                            loop=gif_file.info.get("loop", 0),         # 원본 루프 설정 유지
-                            duration=gif_file.info.get("duration", 100)  # 원본 지속 시간 유지
-                        )
+                # if not os.path.exists(temp_path):
+                #     print(f"GIF 파일 생성 실패: {temp_path}")
 
-                        # if not os.path.exists(temp_path):
-                        #     print(f"GIF 파일 생성 실패: {temp_path}")
+                self.__s3.upload_file(temp_path,
+                                    self.__schedule_bucket_name,
+                                    f"{sid}.{extension}",
+                                    ExtraArgs={'ACL': 'public-read'})
+                url = f"{self.__endpoint_url}/{self.__schedule_bucket_name}/{sid}.{extension}"
+                
+            elif extension == 'webp':
+                # WebP 처리
+                pil_image = Image.open(BytesIO(image))
+                temp_path = f"{self.__schedule_temp_path}/{sid}.{extension}"
+                pil_image.save(temp_path, format='WEBP')  # 명시적으로 WEBP 포맷 지정
+                self.__s3.upload_file(
+                    temp_path,
+                    self.__schedule_bucket_name,
+                    f"{sid}.{extension}",
+                    ExtraArgs={'ACL': 'public-read'}
+                )
+                url = f"{self.__endpoint_url}/{self.__schedule_bucket_name}/{sid}.{extension}"
 
-                        self.__s3.upload_file(temp_path,
-                                              self.__feed_bucket_name,
-                                              f"{fid}_{image_name}",
-                                              ExtraArgs={'ACL': 'public-read'})
-                        urls.append(f"{self.__endpoint_url}/{self.__feed_bucket_name}/{fid}_{image_name}")
-
-                    else:
-                        # Process other formats
-                        pil_image = Image.open(BytesIO(image))
-                        temp_path = f"{self.__feed_temp_path}/{fid}_{image_name}"
-                        pil_image.save(temp_path)
-                        self.__s3.upload_file(temp_path,
-                                              self.__feed_bucket_name,
-                                              f"{fid}_{image_name}",
-                                              ExtraArgs={'ACL': 'public-read'})
-                        urls.append(f"{self.__endpoint_url}/{self.__feed_bucket_name}/{fid}_{image_name}")
-                except Exception as e:
-                    print(f"Error processing image {image_names[i]}: {e}")
-
-            #self.delete_temp_image()
-            # 단일 파일만 제거
-            self.delete_specific_file(path=self.__feed_temp_path, file_name=f"{fid}_{image_name}")
-            
-            return urls, True
-
+            else:
+                # Process other formats
+                pil_image = Image.open(BytesIO(image))
+                temp_path = f"{self.__schedule_temp_path}/{sid}.{extension}"
+                pil_image.save(temp_path)
+                self.__s3.upload_file(temp_path,
+                                        self.__schedule_bucket_name,
+                                        f"{sid}.{extension}",
+                                        ExtraArgs={'ACL': 'public-read'})
+                url = f"{self.__endpoint_url}/{self.__schedule_bucket_name}/{sid}.{extension}"
+                
         except Exception as e:
             print(f"Error in try_feed_image_upload: {e}")
-            return "Something Goes Bad", False
+            return "업로드에 문제가 있습니다.", False
+        
+        self.delete_specific_file(path=self.__schedule_temp_path, file_name=f"{sid}.{extension}")
+        return url, True
+
         
 
     def delete_temp_image(self):
         time.sleep(0.1)
-        files = glob.glob(os.path.join(self.__feed_temp_path, '*'))
+        files = glob.glob(os.path.join(self.__schedule_temp_path, '*'))
         for file in files:
             if os.path.isfile(file):
                 os.remove(file)

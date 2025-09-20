@@ -265,6 +265,11 @@ class Time_Table_View(Master_View):
             return response
         
         # 스케줄 이미지 업로드 하는 곳
+        # 사용되는 타이밍
+        # 스케줄이 존재함 -> 이미지 업로드
+        # 스케줄을 업로드함 -> 이미지 업로드
+        
+        # 차후 추가될 내용 -> 이미지 부터 업로드 -> schedule 데이터 생성 (gemini AI 사용)
         @self.__app.post('/time_table_server/try_upload_schedule_image')
         async def try_upload_schedule_image(request:Request, image: Union[UploadFile, None] = File(None),
                                        jsonData: Union[str, None] = Form(None)):
@@ -293,7 +298,6 @@ class Time_Table_View(Master_View):
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response
-
 
 
         # 스케줄 데이터 삭제
@@ -468,6 +472,7 @@ class ScheduleWithBidnDateRequest(RequestHeader):
 # 이미지 스케줄용 Pydantic 모델
 class RequestScheduleImage(BaseModel):
     bid: str
+    sid: str
     datetime: datetime
     image_name: str | None = None
     image: bytes | None = None  # 파일 자체를 bytes로 받거나, 필요에 따라 UploadFile로 변경
@@ -478,6 +483,7 @@ class ScheduleImageRequest(RequestHeader):
 
         body: dict = request.get("body", {})
         schedule_data: dict = {
+            "sid" : body.get("sid", ""),
             "bid": body.get("bid", ""),
             "datetime": body.get("datetime", ""),
             "image_name": image_name,

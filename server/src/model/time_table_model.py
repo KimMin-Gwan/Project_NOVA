@@ -5,6 +5,8 @@ from model.base_model import BaseModel
 from model import Mongo_Database
 from others.data_domain import Schedule, Bias, User
 from others.time_table_engine import ScheduleSearchEngine as SSE
+from others.object_storage_connector import ImageDescriper
+import os
 
 from pprint import pprint
 from datetime import datetime,timedelta, time, date
@@ -201,6 +203,17 @@ class TimeTableModel(BaseModel):
         
         self._result = True
         self._detail = ""
+        
+    def _check_valid_access_schedule(self, bid, sid):
+        # 일단 작성자인지 확인해야됨
+        if sid not in self._user.my_sids:
+            # 작성자가 아니면 스트리머가 직접 수정중인지 확인해야됨
+            if self._user.verified_bias != bid:
+                self._result = False
+                self._detail = "잘못된 접근입니다."
+                return False
+            
+        return True
 
     # string_date를 넣어서 몇주차인지 알아내는 함수임
     # date_str = "2025/03/06"
@@ -825,13 +838,9 @@ class AddScheduleModel(TimeTableModel):
         else:
             return schedule, False
         
-        # 일단 작성자인지 확인해야됨
-        if self._user.uid != schedule.uid:
-            # 작성자가 아니면 스트리머가 직접 수정중인지 확인해야됨
-            if self._user.verified_bias != schedule.bid:
-                self._result = False
-                self._detail = "잘못된 접근입니다."
-                return schedule, False
+        
+        if not self._check_valid_access_schedule(bid=schedule.bid, sid=schedule.sid):
+            return schedule, False
         
         modified_schedule.sid = sid
         return modified_schedule, True
@@ -856,14 +865,43 @@ class AddScheduleModel(TimeTableModel):
         schedule.display = 0 # 삭제 표시
 
         self._database.modify_data_with_id(target_id="sid", target_data=schedule.get_dict_form_data())
+        #self._database.delete_data_with_id(target="sid", id=sid)
 
         # 서치 엔진에서 편집합니다.
         schedule_search_engine.try_remove_schedule(sid=sid)
-        self._database.delete_data_with_id(target="sid", id=sid)
-
         self._result = True
         return
-
+    
+    
+    # 이미지 업로드 준비
+    def prepare_schedule_image(self, image_name, sid, bid):
+        extension = ""
+        
+        if not self._database.get_data_with_id(target="sid", id=sid):
+            self._result = False
+            self._detail = "목표 일정을 찾을 수 없어요"
+            return extension, False
+        
+        if not self._check_valid_access_schedule(bid=bid, sid=sid):
+            return extension, False
+        
+        _, ext = os.path.splitext(image_name)
+        extension = ext[1:].lower()
+        
+        return extension, True
+        
+    # 이미지 업로드 시도
+    def upload_schedule_image(self, extenstion, image, sid):
+        url, result = ImageDescriper().try_schedule_image_upload(sid=sid, extension=extenstion, image=image)
+        
+        if result:
+            self._result = True
+            self._detail = "업로드가 성공적으로 완료되었습니다."
+        else :
+            self._result = False
+            self._detail = "이미지 업로드가 실패했습니다."
+        
+        return
 
     def get_response_form_data(self, head_parser):
         body = {
