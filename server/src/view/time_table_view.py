@@ -127,7 +127,6 @@ class Time_Table_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
         
-        
         # 신기능 (1.2.1)
         # 스케줄 탐색 페이지에서 요청받는 데이터 처리
         # 업데이트 완료
@@ -188,23 +187,6 @@ class Time_Table_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
-
-        # 선택했던 스케줄을 지우는건 여기서 함
-        # 목표 sid를 넘기면 삭제 되게 할 것임. 단 로그인 필수
-        # 업데이트 완료
-        @self.__app.get('/time_table_server/try_reject_from_my_schedule')
-        def try_reject_from_my_schedule(request:Request, sid:Optional[str]=""):
-            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
-            data_payload = ScheduleRequest(sid=sid)
-            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
-
-            time_table_controller =TimeTableController()
-            model = time_table_controller.try_reject_from_my_schedule(database=self.__database,
-                                                                        request=request_manager)
-            
-            body_data = model.get_response_form_data(self._head_parser)
-            response = request_manager.make_json_response(body_data=body_data)
-            return response
 
         # 쁘띠 모델 출력용 인터페이스
         # 테스트 확인 완료
