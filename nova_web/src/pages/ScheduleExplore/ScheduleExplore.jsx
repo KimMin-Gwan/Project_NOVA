@@ -1,6 +1,8 @@
 import style from "./ScheduleExplore.module.css"
 import NoneSchedule from "../../component/NoneFeed/NoneSchedule";
 import ScheduleGrid from "./ScheduleGrid.jsx";
+import { useState } from "react";
+import ScheduleDetailDekstop from "../../component/ScheduleDetail/ScheduleDetailDesktop.jsx";
 
 export default function ScheduleExploreDesktop({
     setCategory, activeIndex, setActiveIndex,
@@ -14,8 +16,24 @@ export default function ScheduleExploreDesktop({
         setCategory(scheduleKind[index]);
     }
 
+    const [showScheduleMoreOption, setShowScheduleMoreOption] = useState(false);
+    const [targetSchedule, setTargetSchedule] = useState("");
+
+    const toggleMoreOption = (targetSchedule) => {
+        setTargetSchedule(targetSchedule);
+        setShowScheduleMoreOption(!showScheduleMoreOption);
+    }
+
+
     return(     
         <div className={style["explore_schedule_main_frame"]}>
+            {
+                showScheduleMoreOption && 
+                <ScheduleDetailDekstop
+                    sid={targetSchedule}
+                    toggleMoreOption={toggleMoreOption}
+                />
+            }
             <div className={style["explore_schedule_container"]}>
                 <div className={style["item_selcet_wrapper"]}>
                     {
@@ -47,7 +65,7 @@ export default function ScheduleExploreDesktop({
                         <NoneSchedule/>
                     </div>
                 }
-                <ScheduleGrid scheduleData={scheduleData} />
+                <ScheduleGrid scheduleData={scheduleData} toggleMoreOption={toggleMoreOption} />
                 <div className={style["fetch-more-button-wrapper"]}>
                     <div className={style["fetch-more-button"]}>
                         더 불러오기

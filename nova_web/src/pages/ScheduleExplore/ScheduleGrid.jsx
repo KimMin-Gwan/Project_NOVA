@@ -2,17 +2,18 @@ import style from "./ScheduleExplore.module.css"
 import { useState } from "react";
 import mainApi from "../../services/apis/mainApi";
 
-export default function ScheduleGrid({ scheduleData }) {
+export default function ScheduleGrid({ scheduleData, toggleMoreOption }) {
   return (
     <div className={style["schedule_grid"]}>
       {scheduleData.map((schedule) => (
-        <ScheduleComponent key={schedule.code} {...schedule} />
+        <ScheduleComponent key={schedule.code} toggleMoreOption={toggleMoreOption} {...schedule} />
       ))}   
       </div>
   );
 }
 
 function ScheduleComponent({
+    toggleMoreOption,
     title,
     sid,
     uname,
@@ -48,7 +49,9 @@ function ScheduleComponent({
             {
                 isClicked && (
                     <div className={style["schedule_extra_control_container"]}>
-                        <div className={style["schedule_detail"]}>자세히</div>
+                        <div className={style["schedule_detail"]}
+                          onClick={()=>{toggleMoreOption(sid)}}
+                        >자세히</div>
                         {
                           isSubscribe? <div className={style["schedule_subscribe"]}
                             onClick={()=>{
