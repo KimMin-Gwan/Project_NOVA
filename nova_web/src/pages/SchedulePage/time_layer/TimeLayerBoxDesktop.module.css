@@ -55,6 +55,7 @@
     border-radius: 22px;
     border: 1px solid #C8C8C8;
     background: linear-gradient(90deg, rgba(255, 255, 255, 0.40) 0%, rgba(255, 255, 255, 0.60) 100%);
+    cursor: pointer;
 }
 
 .schedule-component-empty{
@@ -127,7 +128,7 @@
     background: linear-gradient(111deg, rgba(253, 78, 81, 0.18) 22.79%, rgba(92, 56, 254, 0.20) 60.41%);
     color: #111;
     font-size: 18px;
-    font-weight: 500;
+    font-weight: 400;
 }
 
 
@@ -147,16 +148,16 @@
 }
 
 .schedule-component-arrow{
-    width: 21px;
-    height: 8px;
+    width: 10px;
+    height: 20px;
 }
 
 .schedule-component-title{
-    font-size: 22px;
-    font-weight: 600;
+    font-size: 20px;
+    font-weight: 500;
 }
 
 .schedule-component-streamer{
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 400;
 }
