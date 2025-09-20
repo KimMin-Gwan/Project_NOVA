@@ -222,7 +222,6 @@ class TimeTableController:
             model.set_user_with_email(request=request.jwt_payload)
         
         extension, result = model.prepare_schedule_image(
-            image_name=request.data_payload.image_name,
             sid=request.data_payload.sid,
             bid=request.data_payload.bid
             )

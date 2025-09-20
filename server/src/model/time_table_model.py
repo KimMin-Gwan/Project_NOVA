@@ -876,7 +876,7 @@ class AddScheduleModel(TimeTableModel):
     
     
     # 이미지 업로드 준비
-    def prepare_schedule_image(self, image_name, sid, bid):
+    def prepare_schedule_image(self, sid, bid):
         extension = ""
         
         if not self._database.get_data_with_id(target="sid", id=sid):
@@ -887,10 +887,7 @@ class AddScheduleModel(TimeTableModel):
         if not self._check_valid_access_schedule(bid=bid, sid=sid):
             return extension, False
         
-        _, ext = os.path.splitext(image_name)
-        extension = ext[1:].lower()
-        
-        return extension, True
+        return "png", True
         
     # 이미지 업로드 시도
     def upload_schedule_image(self, extenstion, image, sid):

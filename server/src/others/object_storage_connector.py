@@ -449,63 +449,36 @@ class ImageDescriper:
             print(f"Error in try_feed_image_upload: {e}")
             return "Something Goes Bad", False
 
-    def try_schedule_image_upload(self, sid: str, extension:str , image):
+    def try_schedule_image_upload(self, sid: str, image: bytes):
+        """
+        모든 이미지 포맷을 PNG로 변환 후 S3 업로드
+        URL은 항상 sid.png
+        """
         try:
-            # Check if GIF or other unsupported formats
-            if extension == 'gif':
-                # 걍 gif 이미지 통째로 저장하는걸로 해★결
-                # PIL를 이용해서 쇼부를 본다
-                gif_file = Image.open(BytesIO(image))
-                temp_path = f"{self.__schedule_temp_path}/{sid}.{extension}"
+            pil_image = Image.open(BytesIO(image))
+            pil_image = pil_image.convert("RGBA")  # RGBA 변환으로 안정성 확보
 
-                gif_file.save(
-                    temp_path,
-                    save_all=True,
-                    loop=gif_file.info.get("loop", 0),         # 원본 루프 설정 유지
-                    duration=gif_file.info.get("duration", 100)  # 원본 지속 시간 유지
-                )
+            temp_path = f"{self.__schedule_temp_path}/{sid}.png"
+            pil_image.save(temp_path, "PNG")
 
-                # if not os.path.exists(temp_path):
-                #     print(f"GIF 파일 생성 실패: {temp_path}")
+            self.__s3.upload_file(
+                temp_path,
+                self.__schedule_bucket_name,
+                f"{sid}.png",
+                ExtraArgs={'ACL': 'public-read'}
+            )
 
-                self.__s3.upload_file(temp_path,
-                                    self.__schedule_bucket_name,
-                                    f"{sid}.{extension}",
-                                    ExtraArgs={'ACL': 'public-read'})
-                url = f"{self.__endpoint_url}/{self.__schedule_bucket_name}/{sid}.{extension}"
-                
-            elif extension == 'webp':
-                # WebP 처리
-                pil_image = Image.open(BytesIO(image))
-                temp_path = f"{self.__schedule_temp_path}/{sid}.{extension}"
-                pil_image.save(temp_path, format='WEBP')  # 명시적으로 WEBP 포맷 지정
-                self.__s3.upload_file(
-                    temp_path,
-                    self.__schedule_bucket_name,
-                    f"{sid}.{extension}",
-                    ExtraArgs={'ACL': 'public-read'}
-                )
-                url = f"{self.__endpoint_url}/{self.__schedule_bucket_name}/{sid}.{extension}"
+            url = f"{self.__endpoint_url}/{self.__schedule_bucket_name}/{sid}.png"
 
-            else:
-                # Process other formats
-                pil_image = Image.open(BytesIO(image))
-                temp_path = f"{self.__schedule_temp_path}/{sid}.{extension}"
-                pil_image.save(temp_path)
-                self.__s3.upload_file(temp_path,
-                                        self.__schedule_bucket_name,
-                                        f"{sid}.{extension}",
-                                        ExtraArgs={'ACL': 'public-read'})
-                url = f"{self.__endpoint_url}/{self.__schedule_bucket_name}/{sid}.{extension}"
-                
         except Exception as e:
-            print(f"Error in try_feed_image_upload: {e}")
+            print(f"Error in try_schedule_image_upload: {e}")
+            self.delete_specific_file(path=self.__schedule_temp_path, file_name=f"{sid}.png")
             return "업로드에 문제가 있습니다.", False
-        
-        self.delete_specific_file(path=self.__schedule_temp_path, file_name=f"{sid}.{extension}")
-        return url, True
 
-        
+        # 임시 파일 삭제
+        self.delete_specific_file(path=self.__schedule_temp_path, file_name=f"{sid}.png")
+
+        return url, True
 
     def delete_temp_image(self):
         time.sleep(0.1)
@@ -522,3 +495,56 @@ class ImageDescriper:
             os.remove(target_file)
         else:
             print(f"{file_name} does not exist.")
+            
+            
+            
+    # 여기 gif 업로드 로직이 있으니 나중에 필요하면 쓰라
+#    def try_schedule_image_upload(self, sid: str, image: bytes, extension: str):
+        #"""
+        #- GIF는 애니메이션 유지하며 원본 확장자 그대로 저장
+        #- 나머지 포맷은 PNG로 통일
+        #- URL은 항상 sid.png (또는 GIF는 sid.gif)
+        #"""
+        #try:
+            #extension = extension.lower()
+
+            #if extension == "gif":
+                #pil_image = Image.open(BytesIO(image))
+                #temp_path = f"{self.__schedule_temp_path}/{sid}.gif"
+                #pil_image.save(
+                    #temp_path,
+                    #save_all=True,
+                    #loop=pil_image.info.get("loop", 0),
+                    #duration=pil_image.info.get("duration", 100)
+                #)
+                #self.__s3.upload_file(
+                    #temp_path,
+                    #self.__schedule_bucket_name,
+                    #f"{sid}.gif",
+                    #ExtraArgs={'ACL': 'public-read'}
+                #)
+                #url = f"{self.__endpoint_url}/{self.__schedule_bucket_name}/{sid}.gif"
+
+            #else:
+                #pil_image = Image.open(BytesIO(image))
+                #pil_image = pil_image.convert("RGBA")
+                #temp_path = f"{self.__schedule_temp_path}/{sid}.png"
+                #pil_image.save(temp_path, "PNG")
+                #self.__s3.upload_file(
+                    #temp_path,
+                    #self.__schedule_bucket_name,
+                    #f"{sid}.png",
+                    #ExtraArgs={'ACL': 'public-read'}
+                #)
+                #url = f"{self.__endpoint_url}/{self.__schedule_bucket_name}/{sid}.png"
+
+        #except Exception as e:
+            #print(f"Error in try_schedule_image_upload: {e}")
+            #self.delete_specific_file(path=self.__schedule_temp_path, file_name=f"{sid}.{extension}")
+            #return "업로드에 문제가 있습니다.", False
+
+        ## 임시 파일 삭제
+        #temp_ext = "gif" if extension == "gif" else "png"
+        #self.delete_specific_file(path=self.__schedule_temp_path, file_name=f"{sid}.{temp_ext}")
+
+        #return url, True
