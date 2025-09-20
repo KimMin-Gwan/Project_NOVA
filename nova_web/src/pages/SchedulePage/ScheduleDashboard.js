@@ -25,6 +25,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import DesktopLayout from "../../component/DesktopLayout/DeskTopLayout.jsx";
 import TimeLayerBoxDesktop from "./time_layer/time_layer_box_desktop.jsx";
 import ScheduleDetailDekstop from "../../component/ScheduleDetail/ScheduleDetailDesktop.jsx";
+import ScheduleDetailMobile from "../../component/ScheduleDetail/ScheduleDetailMobile.jsx";
 
 
 const temp_schedule_data2 = [
@@ -108,7 +109,7 @@ const ScheduleDashboard = () => {
     return formatter.format(date)
   }
 
-  const [showScheduleMoreOption, setShowScheduleMoreOption] = useState(true);
+  const [showScheduleMoreOption, setShowScheduleMoreOption] = useState(false);
   const [targetSchedule, setTargetSchedule] = useState("");
 
   const toggleMoreOption = (targetSchedule) => {
@@ -205,12 +206,6 @@ const ScheduleDashboard = () => {
       setTargetWeek(res.data.body.target_week);
       setNumBias(res.data.body.num_bias);
       setNumSchedule(res.data.body.num_schedules);
-    });
-  }
-
-  // 내 스케줄에서 지우기
-  async function fetchRejectSchedule(target){
-    mainApi.get(`time_table_server/try_reject_from_my_schedule?sid=${target}`).then((res)=> {
     });
   }
 
@@ -383,7 +378,10 @@ const ScheduleDashboard = () => {
             */}
             <div style={{display: "flex", justifyContent:"center", alignContent:"center"}}>
               {showScheduleMoreOption && (
-                <></>
+                <ScheduleDetailMobile
+                  sid={targetSchedule}
+                  toggleMoreOption={toggleMoreOption}
+                />
               )}
 
               <Swiper
@@ -516,12 +514,6 @@ const ScheduleDashboard = () => {
           </div>
         </div>
 
-        <EditSingleSchedule
-          closeSchedule={toggleEditScheduleModal}
-          isOpen={editScheduleModal}
-          target={editTarget}
-          isSingleSchedule={true}
-        />
         <NavBar brightMode={brightMode} />
       </div>
     );
@@ -530,7 +522,10 @@ const ScheduleDashboard = () => {
     <DesktopLayout>
         <div className={style2["schedule-dashboard-main-frame"]}>
           {showScheduleMoreOption && (
-            <ScheduleDetailDekstop/>
+            <ScheduleDetailDekstop
+              sid={targetSchedule}
+              toggleMoreOption={toggleMoreOption}
+            />
           )}
           {
             scheduleData.length === 0 ? (
