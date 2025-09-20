@@ -2,6 +2,8 @@ import { useEffect, useState, useRef } from "react";
 import style from "./ScheduleMakePage.module.css";
 import HEADER from "../../constant/header";
 import justPostApi from "../../services/apis/imagePostApi";
+import postApi from "../../services/apis/postApi";
+import { SCHEDULE_IMAGE_URL } from "../../constant/imageUrl";
 
 const DesktopScheduleSelectSection = ({
   selectedSchedule, setSelectedSchedule, selectedBias,
@@ -158,7 +160,33 @@ const DesktopScheduleSelectSection = ({
       setMinutes(10);
       setSelectedAmPm("am");
     }
+
+    if (selectedSchedule.sid){
+      handlePreviewImage(`${SCHEDULE_IMAGE_URL}${selectedSchedule.sid}.png`);
+    }else{
+      setImageFile(null);
+      setPreviewImage(null);
+    }
   },[selectedSchedule])
+
+  const handlePreviewImage = (url) => {
+    let urlWithCacheBuster = url;
+    if (isImageUpload){
+      const cacheBuster = Date.now(); // 캐시 방지용
+      urlWithCacheBuster = `${url}?cb=${cacheBuster}`;
+    }
+
+    const img = new Image();
+    img.src = urlWithCacheBuster;
+
+    img.onload = () => {
+      setPreviewImage(urlWithCacheBuster); // 캐시 방지 URL로 상태 세팅
+    };
+
+    img.onerror = () => {
+      setPreviewImage(null);
+    };
+  };
 
   const scheduleMaker = () => {
     const newSchedule = {
@@ -180,18 +208,32 @@ const DesktopScheduleSelectSection = ({
       })(),
     };
 
-    setSelectedSchedule(newSchedule);
+    //setSelectedSchedule(newSchedule);
     return newSchedule; 
   };
 
   // image upload 로직
   const [imageFile, setImageFile] = useState([]);
   const [previewImage, setPreviewImage] = useState(null);
+  const [imgLoaded, setImgLoaded] = useState(false);
+
+  const handleUploadImageButton = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    handleImageChange(e);
+    handleFileChange(e);
+
+    if (selectedSchedule.sid){
+      postImage(selectedSchedule.sid, file)
+    }
+  }
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       setPreviewImage(URL.createObjectURL(file));
+      setImgLoaded(true);
     }
   };
 
@@ -200,17 +242,14 @@ const DesktopScheduleSelectSection = ({
     setImageFile(files);
   };
 
-  const postImage = async () => {
+  const postImage = async (sid, file) => {
+    if (!file) {
+      alert("전송할 이미지가 없어요.");
+      return;
+    }
+
     const formData = new FormData();
-
-    if (imageFile) {
-      formData.append("image", imageFile); // 하나만 업로드 → key도 단수 "image"
-    }
-    else{
-      alert("전송할 이미지가 없어요.")
-    }
-
-    console.log(imageFile)
+    formData.append("image", file); // 상태 대신 전달된 파일 사용
 
     const send_data = {
       header: HEADER,
@@ -226,7 +265,8 @@ const DesktopScheduleSelectSection = ({
             0
           );
         })(),
-        bid : selectedBias
+        bid : selectedBias,
+        sid : sid
       },
     };
 
@@ -236,7 +276,7 @@ const DesktopScheduleSelectSection = ({
       formData,
        ).then((res) => {
       if (res.data.body.result) {
-        alert("전송 완료");
+        setIsImageUpload(true);
       }
     });
   };
@@ -247,10 +287,13 @@ const DesktopScheduleSelectSection = ({
       alert("콘텐츠 제목이 없으면 업로드할 수 없어요.")
       return
     }
-    await tryFetchNewSchedule(newSchedule); // 새로 만든 값 바로 사용
+    const sid = await tryFetchNewSchedule(newSchedule); // 새로 만든 값 바로 사용
+    if (!sid) alert("업로드에 문제가 있습니다. 잠시후 다시 시도 해주세요.");
+    if (sid && previewImage) await postImage(sid, imageFile);
     resetAll();
     setImageFile(null);
     setPreviewImage(null);
+    alert("업로드 완료!");
   };
 
   return(
@@ -452,6 +495,12 @@ const DesktopScheduleSelectSection = ({
               </div>
             </div>
           </div>
+          {
+            previewImage &&
+            <div className={style["schedule-image"]}>
+              <img src={previewImage} alt="스케줄 이미지" />
+            </div>
+          }
           <div className={style["schedule-make-button-wrapper"]}>
             {
               isValid &&
@@ -460,39 +509,11 @@ const DesktopScheduleSelectSection = ({
                   onClick={()=>{alert("잠만 지우려고?")}}
                 >삭제</div>
                 <div className={`${style["schedule-make-button"]} ${style["image-upload"]}`}
-                  onClick={()=>{setIsImageUpload((prev)=>!prev)}}
-                >이미지 업로드</div>
-                <div className={`${style["schedule-make-button"]} ${style["upload"]}`}
-                  onClick={handleMakeSchedule}
-                >등록하기</div>
-              </div>
-            }
-          </div>
-        </div>
-      </div>
-      
-      <div
-        style={{height: isImageUpload ? "760px" : "0px"}}
-      >
-        <div className={style["schedule-select-section-frame"]}>
-          <div className={style["schedule-select-section-frame-wrapper"]}>
-            <span className={style["bias-select-section-title"]}>콘텐츠 일정 이미지 업로드</span>
-            {
-              !isValid &&
-                <span className={style["bias-select-section-valid-info"]}>작성자와 스트리머만 수정할 수 있어요!</span>
-            }
-          </div>
-          <div className={style["schedule-image"]}>
-            {
-              previewImage && <img src={previewImage}/>
-            }
-          </div>
-          <div className={style["schedule-make-button-wrapper"]}>
-            <div className={style["schedule-make-button-gap"]}>
-              <div className={`${style["schedule-make-button"]} ${style["image-upload"]}`}
-                onClick={() => document.getElementById("image").click()}
-              >
-                파일 선택
+                  onClick={() => document.getElementById("image").click()}
+                >
+                  {
+                    previewImage ? "이미지 변경" : "이미지 업로드"
+                  }
                 <input
                   id="image"
                   type="file"
@@ -500,21 +521,15 @@ const DesktopScheduleSelectSection = ({
                   name="image"
                   style={{ display: "none" }}
                   onChange={(e) => {
-                    handleImageChange(e);
-                    handleFileChange(e);
+                    handleUploadImageButton(e)
                   }}
                 />
+                </div>
+                <div className={`${style["schedule-make-button"]} ${style["upload"]}`}
+                  onClick={handleMakeSchedule}
+                >등록하기</div>
               </div>
-              <div
-                className={style["schedule-make-button"]}
-                onClick={()=>{
-                  alert("진짜로 업로드 하게?");
-                  postImage();
-                }}
-              >
-                업로드
-              </div>
-          </div>
+            }
           </div>
         </div>
       </div>
