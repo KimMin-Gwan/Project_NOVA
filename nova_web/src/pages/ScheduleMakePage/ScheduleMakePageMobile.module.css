@@ -304,11 +304,9 @@
 
 
 
-
-
-
-
-
+.schedule-select-section-frame-gap{
+  padding-bottom: 10px;
+}
 
 .schedule-select-section-frame{
     display: flex;
@@ -424,14 +422,14 @@
   padding-left : 10px;
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 3px;
   padding-left : 10px;
 }
 
 .tag {
   background-color: #B3E5FC;
   border: 2px solid #FFF;
-  border-radius: 16px;
+  border-radius: 12px;
   padding: 6px 10px;
   display: flex;
   align-items: center;
@@ -454,7 +452,7 @@
 .sampleTagsContainer {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 3px;
   margin-bottom: 10px;
   padding-left : 10px;
 }
@@ -462,7 +460,7 @@
 .sampleTag {
   background-color: #D0EFFF;
   border: 2px solid #FFF;
-  border-radius: 16px;
+  border-radius: 12px;
   padding: 6px 10px;
   cursor: pointer;
   font-size : 14px;
@@ -575,7 +573,7 @@
 .schedule-make-button {
   display: flex;
   height: 54px;
-  padding: 0 50px;
+  padding: 0 20px;
   justify-content: center;
   align-items: center;
   gap: 10px;
@@ -593,10 +591,36 @@
   flex: none; /* flex-grow/shrink 제거 */
 }
 
+.schedule-make-button:hover {
+  background: #8fa6ff; /* hover 시 살짝 어둡게 */
+}
+
+.schedule-make-button:active {
+  transform: scale(0.97); /* 눌렀을 때 살짝 줄어듦 */
+}
+
+.schedule-make-button.delete {
+  background: #FF9A9A; /* 빨강톤 */
+}
+
+.schedule-make-button.image-upload {
+  background: #a0a9b4; /* 초록톤 */
+}
+
+.schedule-make-button.upload {
+  background: #A7BBFF;
+}
+
 .schedule-make-button:hover{
   background-color: #83b5ff;
 }
 
+
+
+.schedule-make-button-gap{
+  display: flex;
+  gap: 8px;
+}
 .detail-readonly{
   padding: 3px 10px;
   cursor: pointer;
@@ -643,4 +667,19 @@
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+}
+
+.schedule-image {
+  align-self: stretch;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* 박스 벗어난 부분 잘라냄 */
+  border-radius: 12px; /* 있으면 더 보기 좋음 */
+}
+
+.schedule-image img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain; /* 이미지 비율 유지하면서 박스 안에 맞춤 */
 }
