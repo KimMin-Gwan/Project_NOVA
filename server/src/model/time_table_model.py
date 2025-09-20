@@ -703,6 +703,7 @@ class AddScheduleModel(TimeTableModel):
     def __init__(self, database:Mongo_Database):
         super().__init__(database=database)
         self._result = False
+        self._sid = ""
 
     # sid 만들기
     def __make_new_sid(self):
@@ -810,6 +811,7 @@ class AddScheduleModel(TimeTableModel):
         
         self._result = True
         self._detail = "스케줄이 성공적으로 저장되었습니다."
+        self._sid = schedule.sid
         return
     
     # 자동으로 전부다 스케줄 넣어주는 마법의 함수
@@ -906,7 +908,8 @@ class AddScheduleModel(TimeTableModel):
     def get_response_form_data(self, head_parser):
         body = {
             "result" : self._result,
-            "detail" : self._detail
+            "detail" : self._detail,
+            "sid" : self._sid
         }
 
         response = self._get_response_data(head_parser=head_parser, body=body)
