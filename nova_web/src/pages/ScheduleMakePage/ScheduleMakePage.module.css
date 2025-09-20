@@ -318,9 +318,7 @@
 }
 
 .schedule-select-section-frame-gap{
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
+  padding-bottom: 30px;
 }
 
 
@@ -614,7 +612,7 @@
 
 .schedule-make-button-wrapper{
   display: flex;
-  padding: 10px;
+  padding: 30px;
   justify-content: center;
   flex: 1 0 0;
   align-self: stretch;
@@ -663,7 +661,6 @@
 .schedule-make-button.upload {
   background: #A7BBFF;
 }
-
 
 .schedule-make-button:hover{
   background-color: #83b5ff;
@@ -719,8 +716,6 @@
 
 .schedule-image {
   align-self: stretch;
-  height: 500px;
-  background-color: #333;
   display: flex;
   justify-content: center;
   align-items: center;
