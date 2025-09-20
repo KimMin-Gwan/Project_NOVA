@@ -222,15 +222,15 @@ class TimeTableController:
             model.set_user_with_email(request=request.jwt_payload)
         
         extension, result = model.prepare_schedule_image(
-            sid=request.data_payload.sid,
-            bid=request.data_payload.bid
+            sid=request.data_payload.request.sid,
+            bid=request.data_payload.request.bid
             )
         
         if result:
             model.upload_schedule_image(
                 extenstion=extension,
-                image=request.data_payload.image,
-                sid=request.data_payload.sid
+                image=request.data_payload.request.image,
+                sid=request.data_payload.request.sid
                 )
         
         return model

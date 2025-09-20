@@ -491,16 +491,16 @@ class ScheduleImageRequest(RequestHeader):
         }
 
         # Pydantic 검증
-        self.schedule = RequestScheduleImage(**schedule_data)
+        self.request = RequestScheduleImage(**schedule_data)
 
         # ✅ datetime KST 변환
-        dt = self.schedule.datetime
+        dt = self.request.datetime
         if dt.tzinfo is None:
             dt = dt.replace(tzinfo=pytz.UTC)
-        self.schedule.datetime = dt.astimezone(KST)
+        self.request.datetime = dt.astimezone(KST)
 
     def __call__(self):
-        return self.schedule
+        return self.request
 
     def __repr__(self):
-        return f"ScheduleImageRequest(schedule={self.schedule})"
+        return f"ScheduleImageRequest(schedule={self.request})"
