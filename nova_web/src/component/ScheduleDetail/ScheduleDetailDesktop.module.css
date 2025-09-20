@@ -32,7 +32,7 @@
     align-items: center;
     flex-shrink: 0;
     align-self: stretch;
-    background-color: #A4BEFF;
+    background-color: #363636;
 }
 
 .modal-lower-section{
@@ -129,7 +129,7 @@
     font-family: Pretendard;
     font-size: 18px;
     font-style: normal;
-    font-weight: 600;
+    font-weight: 500;
     line-height: 140%; /* 25.2px */
     letter-spacing: -0.45px;
 }
@@ -191,4 +191,18 @@
     background-color: #6490ff;
 }
 
+.schedule-image {
+  align-self: stretch;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* 박스 벗어난 부분 잘라냄 */
+  border-radius: 12px; /* 있으면 더 보기 좋음 */
+}
+
+.schedule-image img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain; /* 이미지 비율 유지하면서 박스 안에 맞춤 */
+}
 
