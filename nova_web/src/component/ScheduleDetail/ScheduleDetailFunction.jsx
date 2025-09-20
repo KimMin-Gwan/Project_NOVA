@@ -57,7 +57,7 @@ export const fetchScheduleData = async (sid) => {
 }
 
 export const fetchSubscribeSchedule = async (sid) => {
-  const res = await mainApi.post(`/time_table_server/try_add_schedule?sid=${sid}`)
+  const res = await mainApi.post(`/time_table_server/try_subscribe_schedule?sid=${sid}`)
 
   return
 }

@@ -100,7 +100,7 @@ function formatDateTime(dateStr) {
 }
 
 const fecthSubScribeSchedule = (sid) => {
-  mainApi.get(`/time_table_server/try_add_schedule?sid=${sid}`).then((res)=>{
+  mainApi.get(`/time_table_server/try_subscribe_schedule?sid=${sid}`).then((res)=>{
     const body = res.data.body;
   })
   return true
