@@ -58,7 +58,9 @@ const ScheduleDetailMobile = ({sid, toggleMoreOption}) => {
             <div className={style["modal-frame"]}
                 onClick={()=>{toggleMoreOption(false);}}
             >
-                <div className={style["modal-container"]}>
+                <div className={style["modal-container"]}
+                    onClick={(e) => e.stopPropagation()}
+                >
                     {
                         isLoading ?  <MyPageLoading/> 
                         :

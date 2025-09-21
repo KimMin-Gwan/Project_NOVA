@@ -58,7 +58,9 @@ const ScheduleDetailDekstop = ({sid, toggleMoreOption}) => {
             <div className={style["modal-frame"]}
                 onClick={()=>{toggleMoreOption(null);}}
             >
-                <div className={style["modal-container"]}>
+                <div className={style["modal-container"]}
+                    onClick={(e) => e.stopPropagation()}
+                >
                     {
                         isLoading ?  <MyPageLoading/> 
                         :
