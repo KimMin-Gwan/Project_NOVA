@@ -1190,7 +1190,7 @@ class ManagedScheduleTable(ManagedTable):
         # * style을 사용해서 뭔가 필터링하는 부분이 필요하다고 판단됨 
         searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_df, time_section=time_section,
                                                                bias_gender=gender, tags=tags)
-        print(searched_df.head())
+        print(searched_df)
         
         searched_df = self._filter_data_with_date_option(df=searched_df, date_option="weekly", date_columns=["datetime"])
         
