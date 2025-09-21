@@ -622,6 +622,7 @@ class MultiScheduleModel(TimeTableModel):
     def get_explore_schedule_with_category(self, schedule_search_engine:SSE, time_section:int, category:str,
                                            style:str, gender:str, num_schedules:int, last_index:int=-1):
         searched_list = schedule_search_engine.try_get_explore_schedule_list(time_section=time_section, style=style, gender=gender, category=category)
+        pprint(searched_list)
         searched_list, self._key = self.paging_id_list(id_list=searched_list, last_index=last_index, page_size=num_schedules)
         self._make_send_data_with_ids(id_list=searched_list)
 
