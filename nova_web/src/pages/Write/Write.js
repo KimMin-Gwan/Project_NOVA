@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useNavigate, useParams } from "react-router-dom";
 import style from "./WriteFeed.module.css";
+import style2 from "./WriteDesktop.module.css";
+
 import tag from "./../../img/tag.svg";
 import add_icon from "./../../img/add.svg";
 import close_icon from "./../../img/close.svg";
@@ -17,6 +19,8 @@ import Input from "../../component/Input/Input.js";
 import Button from "../../component/Button/Button.js";
 import mainApi from "../../services/apis/mainApi.js";
 import DesktopLayout from "../../component/DesktopLayout/DeskTopLayout.jsx";
+import { DesktopBiasSelectSectionPlus } from "../ScheduleMakePage/DesktopBiasSelector.jsx";
+import SelectCategoryComponent from "./SelectCategoryComponent.jsx";
 
 const categoryData = [
   { key: 0, category: "자유게시판" },
@@ -142,13 +146,6 @@ const Write = () => {
     setLinkTitle("");
     setLinkUrl("");
   }
-
-
-  function handleRemoveImg(i) {
-    setImagePreview((prev) => prev.filter((_, index) => index !== i));
-    setImageFiles((prev) => prev.filter((_, index) => index !== i));
-  }
-
 
 
   const handleFileChange = (event) => {
@@ -322,6 +319,8 @@ const Write = () => {
           </div>
         </section>
 
+
+
         <section className={style["Select_container"]}>
           <div className={style["section_title"]}>카테고리 선택</div>
           <DropDown category={category} options={categoryData} setCategory={setCategory} />
@@ -420,139 +419,145 @@ const Write = () => {
   }else{
     return (
       <DesktopLayout>
-        <div className={style["WriteFeed"]}>
-          <Toaster />
-          <div className={style["top_container"]}>
-            <p
-            style={{padding: "20px"}}
-            >
-            </p>
-            <span className={style["page-title"]}>포스트 작성</span>
+        <div className={style2["write-frame-desktop"]}>
+          <div className={style2["write-frame-wrapper-desktop"]}>
+            <div className={style["top_container"]}>
+              <p
+              style={{padding: "20px"}}
+              >
+              </p>
+              <span className={style["page-title"]}>게시글 작성</span>
 
-            <p
-              className={style["buttons"]}
-              type="submit"
+
+            </div>
+
+            <div className={style2["write-option-wrapper"]}>
+
+              <DesktopBiasSelectSectionPlus
+                biasList={biasList}
+                selectedBias={biasId}
+                handleSelectBias={setBiasId}
+              />
+
+              <SelectCategoryComponent
+                category={category}
+                options={categoryData}
+                setCategory={setCategory}
+              />
+            </div>
+
+            <div className={style2["hashtag_container"]}>
+              
+              <div className={style2["section-title-wrapper"]}
+                style={{marginBottom: "10px"}}
+              >
+                <div className={style2["section-title"]}>해시태그</div>
+              </div>
+              <div className={style["input-container"]}>
+                <div className={style["input-wrapper"]}>
+                  <input
+                    placeholder="#해시태그"
+                    type="text"
+                    value={`${inputTag}`}
+                    onChange={onChangeTag}
+                    onKeyDown={onKeyDown}
+                    className={style["input-hashtag"]}
+                  />
+                  <span className={style["count-text"]}>{inputTagCount}/12</span>
+                </div>
+                <div className={style["button-wrapper"]}>
+                  <button
+                    className={style["check-button"]}
+                    onClick={(e) => {
+                      onClickCheck(e);
+                    }}
+                  >
+                    확인
+                  </button>
+                </div>
+              </div>
+              <div className={style["tag-container"]}>
+                <div className={style["tag-icon-box"]}>
+                  <img src={tag} alt="tag" />
+                </div>
+                {tagList.length !== 0 &&
+                  tagList.map((tag, i) => (
+                    <div className={style["tag-box"]} key={i}>
+                      #{tag}
+                      <button onClick={() => onDeleteTag(i)} className={style["delete-tag"]}>
+                        &times; {/* 삭제 아이콘 */}
+                      </button>
+                    </div>
+                  ))}
+              </div>
+            </div>
+
+            <div className={style2["content_container"]}
+            >
+              <div className={style2["section-title-wrapper"]}
+                style={{marginBottom: "10px"}}
+              >
+                <div className={style2["section-title"]}>본문</div>
+              </div>
+              <EditorBox setLongData={setLongData} editorRef={editorRef} initialValue={initialValue}/>
+            </div>
+
+            <p className={style2["alert-message"]}>
+              작성 규정을 위반한 게시글은 경고 없이 삭제 될 수 있습니다.
+            </p>
+
+            <div className={style2["submit-button"]}
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 handleSubmit(e);
                 onClickUpload();
               }}
+              type="submit"
             >
-              게시
-            </p>
-          </div>
+              게시하기
+            </div>
 
-          <section className={style["Select_container"]}>
-            <div className={style["section_title"]}>주제 선택</div>
-            <DropDown biasId={biasId} options={biasList} setBiasId={setBiasId} />
-
-            <div style={{ textAlign: "right" }}>
-              <div
-                className={style["more-find"]}
-                onClick={() => {
-                  navigate("/follow_page");
+            <div className={style["content_button"]}>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onClickModal();
                 }}
               >
-                더 많은 주제 찾아보기
-              </div>
+                <img src={img_icon} alt="img" />
+                이미지
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onClickLinkModal();
+                }}
+              >
+                <img src={link_icon} alt="img" />
+                링크
+              </button>
             </div>
-          </section>
-
-          <section className={style["Select_container"]}>
-            <div className={style["section_title"]}>카테고리 선택</div>
-            <DropDown category={category} options={categoryData} setCategory={setCategory} />
-          </section>
-
-          <div className={style["hashtag_container"]}>
-            <div className={style["section_title"]}>해시태그</div>
-            <div className={style["input-container"]}>
-              <div className={style["input-wrapper"]}>
-                <input
-                  placeholder="#해시태그"
-                  type="text"
-                  value={`${inputTag}`}
-                  onChange={onChangeTag}
-                  onKeyDown={onKeyDown}
-                  className={style["input-hashtag"]}
-                />
-                <span className={style["count-text"]}>{inputTagCount}/12</span>
-              </div>
-              <div className={style["button-wrapper"]}>
-                <button
-                  className={style["check-button"]}
-                  onClick={(e) => {
-                    onClickCheck(e);
-                  }}
-                >
-                  확인
-                </button>
-              </div>
-            </div>
-            <div className={style["tag-container"]}>
-              <div className={style["tag-icon-box"]}>
-                <img src={tag} alt="tag" />
-              </div>
-              {tagList.length !== 0 &&
-                tagList.map((tag, i) => (
-                  <div className={style["tag-box"]} key={i}>
-                    #{tag}
-                    <button onClick={() => onDeleteTag(i)} className={style["delete-tag"]}>
-                      &times; {/* 삭제 아이콘 */}
-                    </button>
-                  </div>
-                ))}
+            {showModal && (
+              <Modal
+                onClickModal={onClickModal}
+                handleFileChange={handleFileChange}
+              />
+            )}
+            {showLinkModal && (
+              <LinkModal
+                onClickModal={onClickLinkModal}
+                linkTitle={linkTitle}
+                linkUrl={linkUrl}
+                setLinkTitle={setLinkTitle}
+                setLinkUrl={setLinkUrl}
+                onClickAdd={onClickAddLink}
+                linkList={linkList}
+                onDeleteLink={onDeleteLink}
+              />
+            )}
             </div>
           </div>
-
-          <div className={style["content_container"]}>
-
-            <EditorBox setLongData={setLongData} editorRef={editorRef} initialValue={initialValue}/>
-          </div>
-
-          <p className={style["alert_message"]}>
-            작성 규정을 위반한 게시글은 경고 없이 삭제 될 수 있습니다.
-          </p>
-
-          <div className={style["content_button"]}>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onClickModal();
-              }}
-            >
-              <img src={img_icon} alt="img" />
-              이미지
-            </button>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onClickLinkModal();
-              }}
-            >
-              <img src={link_icon} alt="img" />
-              링크
-            </button>
-          </div>
-          {showModal && (
-            <Modal
-              onClickModal={onClickModal}
-              handleFileChange={handleFileChange}
-            />
-          )}
-          {showLinkModal && (
-            <LinkModal
-              onClickModal={onClickLinkModal}
-              linkTitle={linkTitle}
-              linkUrl={linkUrl}
-              setLinkTitle={setLinkTitle}
-              setLinkUrl={setLinkUrl}
-              onClickAdd={onClickAddLink}
-              linkList={linkList}
-              onDeleteLink={onDeleteLink}
-            />
-          )}
-        </div>
       </DesktopLayout>
     );
   }

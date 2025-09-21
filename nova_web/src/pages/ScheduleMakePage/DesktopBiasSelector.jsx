@@ -83,12 +83,77 @@ const AddNewBiasComponent = () => {
             <div className={style["add-bias-component"]} 
                 onClick={handleAddNewBias}
             >
-                    <span className={style["bias-name"]}> 팔로우 바로가기</span>
-                    <img className={style["bias-plus-icon"]} src={biasPlusIcon}/>
+                <span className={style["bias-name"]}> 팔로우 바로가기</span>
+                <img className={style["bias-plus-icon"]} src={biasPlusIcon}/>
             </div>
+        </div>
+    );
+}
+
+const NoneSelectBiasComponent = ({selectedBias, handleSelectBias}) => {
+    return(
+        <div className={style["bias-component-wrapper"]}>
+            <div className={style["add-bias-component"]} 
+                onClick={()=> handleSelectBias("선택 없음")}
+                style={{ border: selectedBias == "선택 없음" ? "2px solid #8CFF99" : "2px solid #fff" }}
+            >
+                    <span className={style["bias-name"]}> 선택 없음 </span>
+            </div>
+            {
+                selectedBias == "선택 없음" &&
+                 <span className={style["bias-selected-span"]}> 선택 </span> 
+            }
         </div>
     );
 }
 
 
 export default DesktopBiasSelectSection
+
+export const DesktopBiasSelectSectionPlus = ({ 
+    biasList,
+    selectedBias,
+    handleSelectBias
+    }) => {
+
+    return (
+        <div className={style["bias-select-section"]}
+            style={{width: "800px"}}
+        >
+            <span className={style["bias-select-section-title"]}>스트리머 선택</span>
+            <div className={style["bias-selection-wrapper"]} >
+                <Swiper
+                    slidesPerView={"auto"}
+                    spaceBetween={30}
+                    modules={[FreeMode]}
+                >
+                    <SwiperSlide 
+                        style={{ width: "250px"}}
+                    >
+                        <NoneSelectBiasComponent
+                        selectedBias={selectedBias}
+                        handleSelectBias={handleSelectBias}
+                        />
+                    </SwiperSlide>
+                    {biasList.map((bias) => (
+                        <SwiperSlide
+                            key={bias.bid}
+                            style={{ width: "250px"}}
+                        >
+                            <BiasComponent
+                                bias={bias}
+                                selectedBias={selectedBias}
+                                handleSelectBias={handleSelectBias}
+                            />
+                        </SwiperSlide>
+                    ))}
+                    <SwiperSlide 
+                        style={{ width: "250px"}}
+                    >
+                        <AddNewBiasComponent/>
+                    </SwiperSlide>
+                </Swiper>
+            </div>
+        </div>
+    );
+};
