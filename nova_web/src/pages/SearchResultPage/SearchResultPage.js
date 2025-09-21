@@ -10,18 +10,15 @@ import Comments from "../../component/Comments/Comments";
 import Tabs from "../../component/Tabs/Tabs";
 import FeedSection from "../../component/FeedSection/FeedSection";
 import useIntersectionObserver from "../../hooks/useIntersectionObserver";
-import { BundleScheduleDetail, ScheduleDetail } from "../../component/EventMore/EventMore";
-import { MakeSingleSchedule, EditSingleSchedule } from "../../component/EventMore/EventMore";
-import { ScheduleMore, ScheduleAdd, ScheduleRemove, ScheduleEdit} from "../../component/ScheduleMore/ScheduleMore";
-import { ScheduleBundle} from "../../component/ScheduleEvent/ScheduleBundle";
-import useToggleMore from "../../hooks/useToggleMore";
-import ScheduleCard from "../../component/EventCard/EventCard";
 import NoneSchedule from "../../component/NoneFeed/NoneSchedule";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import DesktopLayout from "../../component/DesktopLayout/DeskTopLayout";
 import style from "./SearchResultPageDesktop.module.css";
 import SearchBoxDesktop from "../../component/SearchBoxDesktop";
 import ScheduleGrid from "../ScheduleExplore/ScheduleGrid";
+import ScheduleComponentMobile from "../ScheduleExplore/ScheduleComponentMobile";
+import ScheduleDetailMobile from "../../component/ScheduleDetail/ScheduleDetailMobile";
+import ScheduleDetailDekstop from "../../component/ScheduleDetail/ScheduleDetailDesktop";
 
 export default function SearchResultPage() {
   const isMobile = useMediaQuery('(max-width:1100px)');
@@ -37,25 +34,16 @@ export default function SearchResultPage() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [type, setType] = useState("post");
 
-  const [targetSchedule, setTargetSchedule] = useState({});
-  const [targetScheduleBundle, setTargetScheduleBundle] = useState({});
-
   // 데이터 관련 상태
   let [feedData, setFeedData] = useState([]);
   const [comments, setComments] = useState([]);
-  const [scheduleBundleData, setScheduleBundleData] = useState([]);
   const [scheduleData, setScheduleData] = useState([]);
   let [isLoading, setIsLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
 
-  const [addScheduleModal, setAddScheduleModal] = useState(false);
-  const [addScheduleBundleModal, setAddScheduleBundleModal] = useState(false);
-  const [editScheduleModal, setEditScheduleModal] = useState(false);
-
   // 페이지네이션 키
   const [feedNextKey, setFeedNextKey] = useState(-1);
   const [commentNextKey, setCommentNextKey] = useState(-1);
-  const [scheduleBundleKey, setScheduleBundleKey] = useState(-1);
   const [scheduleKey, setScheduleKey] = useState(-1);
 
   useEffect(() => {
@@ -79,11 +67,7 @@ export default function SearchResultPage() {
       fetchCommentKeyword();
     } else if (type === "schedule") {
       fetchScheduleKeyword();
-    } else if (type === "schedule_bundle") {
-      fetchScheduleBundleKeyword();
-    }
-
-
+    } 
   }, [type]);
 
   async function fetchSearchKeyword() {
@@ -125,21 +109,6 @@ export default function SearchResultPage() {
       });
   }
 
-
-  async function fetchScheduleBundleKeyword() {
-    await mainApi
-      .get(
-        `time_table_server/try_search_schedule_with_keyword?keyword=${keyword}&key=${scheduleBundleKey}&type=schedule_bundle`
-      )
-      .then((res) => {
-          setScheduleBundleData((prev) => [...prev, ...res.data.body.schedule_bundles]);
-          setHasMore(res.data.body.schedule_bundles.length > 0);
-          setIsLoading(false);
-          setScheduleBundleKey(res.data.body.key);
-      });
-  }
-
-
   function loadMoreCallBack() {
     if (!hasMore || isLoading) return;
 
@@ -149,9 +118,7 @@ export default function SearchResultPage() {
       fetchCommentKeyword();
     } else if (type === "schedule") {
       fetchScheduleKeyword();
-    } else if (type === "schedule_bundle") {
-      fetchScheduleBundleKeyword();
-    }
+    } 
   }
 
 
@@ -228,24 +195,6 @@ export default function SearchResultPage() {
   };
 
 
-  const toggleEditScheduleModal = (target) => {
-    setEditScheduleModal((editScheduleModal) => !editScheduleModal);
-    setTargetSchedule(target);
-  };
-
-
-  // 일정 추가하기 버튼 누르면 동작하는애
-  const toggleAddScheduleModal = (target) => {
-    setAddScheduleModal((addScheduleModal) => !addScheduleModal);
-    setTargetSchedule(target);
-  };
-
-  // 일정 번들 추가하기 버튼 누르면 동작하는 애
-  const toggleAddScheduleBundleModal = (target) => {
-    setAddScheduleBundleModal((addScheduleBundleModal) => !addScheduleBundleModal);
-    setTargetScheduleBundle(target);
-  };
-
   function getTapStyle(isActive) {
     return {
       border: isActive ? "2px solid transparent" : "2px solid #D8E9FF",
@@ -255,6 +204,14 @@ export default function SearchResultPage() {
       backgroundOrigin: isActive ? "border-box" : "initial",
       backgroundClip: isActive ? "content-box, border-box" : "initial",
     };
+  }
+
+  const [showScheduleMoreOption, setShowScheduleMoreOption] = useState(false);
+  const [targetSchedule, setTargetSchedule] = useState("");
+
+  const toggleMoreOption = (targetSchedule) => {
+      setTargetSchedule(targetSchedule);
+      setShowScheduleMoreOption(!showScheduleMoreOption);
   }
 
   if(isMobile){
@@ -278,36 +235,21 @@ export default function SearchResultPage() {
             onKeyDown={handleKeyDown}
           />
         </div>
+
+        {
+          showScheduleMoreOption && 
+          <ScheduleDetailMobile
+              sid={targetSchedule}
+              toggleMoreOption={toggleMoreOption}
+            />
+        }
         <Tabs activeIndex={activeIndex} handleClick={handleClick} onClickType={onClickType} />
         {type === "comment" && <Comments comments={comments} isLoading={isLoading} />}
         {type === "post" && <FeedSection feedData={feedData} setFeedData={setFeedData} isLoading={isLoading} /> }
-        {type === "schedule" && <Schedules scheduleData={scheduleData}
-        type={type} toggleAddScheduleBundleModal={toggleAddScheduleBundleModal} toggleEditScheduleModal={toggleEditScheduleModal} 
-            fetchNavBoard={handleClickScheduleButton}
+        {type === "schedule" && <ScheduleListMobile toggleMoreOption={toggleMoreOption} scheduleData={scheduleData}
         />}
         <div ref={targetRef} style={{ height: "1px" }}></div>
         <NavBar />
-
-        {/* 자세히 보기 모달창 */}
-        <BundleScheduleDetail
-          closeSchedule={toggleAddScheduleBundleModal}
-          isOpen={addScheduleBundleModal}
-          target={targetScheduleBundle}
-        />
-
-        {/*여기도 target 추가해야될 듯 */}
-        <ScheduleDetail
-          closeSchedule={toggleAddScheduleModal}
-          isOpen={addScheduleModal}
-          target={targetSchedule}
-        />
-
-        <EditSingleSchedule
-          closeSchedule={toggleEditScheduleModal}
-          isOpen={editScheduleModal}
-          target={targetSchedule}
-          isSingleSchedule={true}
-        />
       </div>
     );
   }else{
@@ -315,6 +257,7 @@ export default function SearchResultPage() {
       <DesktopLayout>
         <div className={style["desktop_search_result_page_outer_frame"]}>
           <div className={style["desktop_search_result_page_inner_frame"]}>
+          <div className={style["desktop-search-meta-data-wrapper"]}>
             <SearchBoxDesktop
               type="search"
               searchWord={searchWord}
@@ -323,37 +266,47 @@ export default function SearchResultPage() {
               onKeyDown={handleKeyDown}
             />
 
-          <div className={style["taps_wrapper"]}>
-            <div
-              className={style["single_tap"]}
-              onClick={() => onClickType("게시글")}
-              style={getTapStyle(type === "post")}
-            >
-              게시글
-            </div>
-            <div
-              className={style["single_tap"]}
-              onClick={() => onClickType("일정")}
-              style={getTapStyle(type === "schedule")}
-            >
-              콘텐츠
+            <div className={style["taps_wrapper"]}>
+              <div
+                className={style["single_tap"]}
+                onClick={() => onClickType("게시글")}
+                style={getTapStyle(type === "post")}
+              >
+                게시글
+              </div>
+              <div
+                className={style["single_tap"]}
+                onClick={() => onClickType("일정")}
+                style={getTapStyle(type === "schedule")}
+              >
+                콘텐츠
+              </div>
             </div>
           </div>
+          {
+            showScheduleMoreOption && 
+            <ScheduleDetailDekstop
+                sid={targetSchedule}
+                toggleMoreOption={toggleMoreOption}
+              />
+          }
 
-          {type === "post" && <FeedSection feedData={feedData} setFeedData={setFeedData} isLoading={isLoading} /> }
-          {type === "schedule" && (
-            scheduleData.length === 0 ? (
-              <div className={style["none_schedule_frame"]}>
-                <NoneSchedule />
-              </div>
-            ) : (
-              <ScheduleGrid scheduleData={scheduleData} />
-            )
-          )}
+          <div
+            style={{width: type == "post" ? "800px" : "1020px"}}
+          >
+            {type === "post" && <FeedSection feedData={feedData} setFeedData={setFeedData} isLoading={isLoading} /> }
+            {type === "schedule" && (
+              scheduleData.length === 0 ? (
+                <div className={style["none_schedule_frame"]}>
+                  <NoneSchedule />
+                </div>
+              ) : (
+                <ScheduleGrid scheduleData={scheduleData} toggleMoreOption={toggleMoreOption} />
+              )
+            )}
 
-
-          <div ref={targetRef} style={{ height: "1px" }}></div>
-
+            <div ref={targetRef} style={{ height: "1px" }}></div>
+          </div>
           </div>
         </div>
       </DesktopLayout>
@@ -361,84 +314,21 @@ export default function SearchResultPage() {
   }
 }
 
-function Schedules ({
-  scheduleData, type, toggleAddScheduleBundleModal,
-  toggleAddScheduleModal, toggleEditScheduleModal,
-   fetchTryAddSchedule, fetchTryRejectSchedule,
-   fetchNavBoard
-  }) {
-  const { moreClick, handleToggleMore } = useToggleMore();
-  let navigate = useNavigate();
-  // 게시판으로 이동
-  const navBoard = (target) => {
-    console.log(target)
-    setTimeout(() => {
-      navigate(`/search_result?keyword=${target}`);
-    }, 0);
-  };
 
 
-  return(
-        <ul className="scheduleList" style={{ display: "flex", flexDirection: "column", gap: "4px", paddingLeft:"0px"}}>
-        {scheduleData.length === 0 && <NoneSchedule/>}
-        {type=== "schedule_bundle"
-          ? scheduleData.map((item) => (
-              <div key={item.sbid}>
-                <ScheduleBundle
-                  item={item}
-                  toggleClick={() => handleToggleMore(item.sbid)} // id 전달
-                />
-                {moreClick[item.sbid] && ( // 해당 id의 상태만 확인
-                  <ScheduleMore
-                    target={item}
-                    navBoardClick={navBoard}
-                    scheduleClick={toggleAddScheduleBundleModal}
-                  />
-                )}
-              </div>
-            ))
-          : scheduleData.map((item) => (
-            <div key={item.sid}>
-              <ScheduleCard
-                {...item}
-                toggleClick={() => handleToggleMore(item.sid)} // id 전달
-              />
+const ScheduleListMobile = ({toggleMoreOption, scheduleData}) => {
+  return (
+    <>
+      {scheduleData.length === 0 && <NoneSchedule/>}
 
-              {moreClick[item.sid] && (
-                item.subscribe === false ? (
-                  <ScheduleAdd
-                    target={item}
-                    detailClick={toggleAddScheduleModal}
-                    navBoardClick={(e)=>{
-                      fetchNavBoard(e, item.detail)
-                    }}
-                    addClick={fetchTryAddSchedule}
-                  />
-                ) : item.is_owner === false? (
-                  <ScheduleRemove
-                    target={item}
-                    navBoardClick={(e)=>{
-                      fetchNavBoard(e, item.detail)
-                    }}
-                    removeClick={fetchTryRejectSchedule}
-                  />
-                ) : (
-                  <ScheduleEdit
-                    target={item}
-                    navBoardClick={
-                      (e)=>{
-                        fetchNavBoard(e,item.detail)
-                      }}
-                    editClick={toggleEditScheduleModal}
-                  />
-                )
-              )}
-            </div>
-            ))}
-          <div style={{height:"48px"}}></div>
 
-      </ul>
+      {scheduleData.map((singleSchedule, index) => (
+        <ScheduleComponentMobile
+          key={index}
+          toggleMoreOption={toggleMoreOption}
+          {...singleSchedule}
+        />
+        ))}
+    </>
   );
 }
-
-
