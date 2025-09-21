@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import React, { useEffect, useRef, useState } from "react";
+import  { useEffect, useRef, useState } from "react";
 import style from "./Mypage.module.css";
-import mypage_more_icon from "./../../img/mypage_more.png";
 import user_icon from "./../../img/user_profile.svg";
 import mainApi from "../../services/apis/mainApi";
 import Feed from "../../component/feed";
@@ -12,7 +11,6 @@ import reArrow1 from "./../../img/reArrow1.svg";
 import reArrow2 from "./../../img/reArrow2.svg";
 import reArrow3 from "./../../img/reArrow3.svg";
 import reArrow4 from "./../../img/reArrow4.svg";
-import LoadingPage from "../LoadingPage/LoadingPage";
 import MyPageLoading from "../LoadingPage/MypageLoading";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import DesktopLayout from "../../component/DesktopLayout/DeskTopLayout";
