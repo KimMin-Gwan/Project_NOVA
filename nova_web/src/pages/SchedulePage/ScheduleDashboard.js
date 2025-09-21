@@ -9,7 +9,6 @@ import mainApi from "../../services/apis/mainApi.js";
 import NavBar from "../../component/NavBar/NavBar.js";
 import TimeLayerBox from "./time_layer/time_layer_box.js";
 
-import { EditSingleSchedule } from "../../component/EventMore/EventMore";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import "swiper/css";
@@ -120,7 +119,7 @@ const ScheduleDashboard = () => {
   const [formatDate, setFormatDate] = useState([getFormattedDate(targetDate)])
 
 
-  async function justFecthPrevData() {
+  async function justFetchPrevData() {
     // 일단 왼쪽 날짜를 하나 지워야됨
     const yieldDate = new Date(leftTargetDate); // 기존 날짜 복사
     yieldDate.setDate(leftTargetDate.getDate() - 1); // 날짜를 계산
@@ -180,17 +179,21 @@ const ScheduleDashboard = () => {
 
 
   async function onChangeIndexNext() {
-    // 일단 왼쪽 날짜를 하나 지워야됨
-    const yieldDate = new Date(rightTargetDate); // 기존 날짜 복사
-    yieldDate.setDate(rightTargetDate.getDate() + 1); // 날짜를 계산
+    const yieldDate = new Date(rightTargetDate);
+    yieldDate.setDate(rightTargetDate.getDate() + 1);
     setRightTargetDate(yieldDate);
 
     const dateString = yieldDate.toISOString().split("T")[0].replace(/-/g, "/");
+    const newSchedule = await fetchScheduleDataWithDate(dateString);
 
-    const newSchedule = await fetchScheduleDataWithDate(dateString)
-    setScheduleData((prev) => [...prev, newSchedule])
-    setFormatDate((prev) => [...prev, getFormattedDate(yieldDate)])
+    setScheduleData((prev) => {
+      const updated = [...prev, newSchedule];
+      return updated;
+    });
+
+    setFormatDate((prev) => [...prev, getFormattedDate(yieldDate)]);
   }
+
 
   const brightMode = "brigthMode";
 
@@ -299,21 +302,35 @@ const ScheduleDashboard = () => {
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFetching, setIsFetching] = useState(false);
+  const [lastAction, setLastAction] = useState(null);
 
   const handleNext = async () => {
-    if (isFetching) return; // 이미 fetch 중이면 무시
+    if (isFetching) return;
     setIsFetching(true);
     await onChangeIndexNext();
-    setCurrentIndex((prev) => (prev + 1) % scheduleData.length);
+    setLastAction('next');
     setIsFetching(false);
   };
 
   const handlePrev = async () => {
-    if (isFetching) return; // fetch 중이면 무시
+    if (isFetching) return;
     setIsFetching(true);
-    await justFecthPrevData();
+    await justFetchPrevData();
+    setLastAction('prev');
     setIsFetching(false);
   };
+
+  useEffect(() => {
+    if (!isFetching && scheduleData.length > 0) {
+      if (lastAction === 'next') {
+        setCurrentIndex((prev) => (prev + 1) % scheduleData.length);
+      } else if (lastAction === 'prev') {
+        // prev는 index 유지하거나 필요시 조정
+        setCurrentIndex((prev) => prev); 
+      }
+    }
+  }, [scheduleData, lastAction]);
+
 
   if(isMobile){
     return (
