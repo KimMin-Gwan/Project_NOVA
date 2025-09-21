@@ -7,8 +7,9 @@
 
 .desktop_search_result_page_inner_frame{
     display: flex;
-    width: calc(100% - 800px);
-    padding: 50px 400px;
+    width: 100%;
+    max-width: 1200px;
+    padding-top: 40px;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
@@ -19,6 +20,12 @@
     letter-spacing: -0.8px;
     font-style: normal;
 }
+
+.desktop-search-meta-data-wrapper{
+    width: 100%;
+    max-width: 800px;
+}
+
 
 .taps_wrapper{
     display: flex;
