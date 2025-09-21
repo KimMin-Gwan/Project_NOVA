@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import style from "./Termslist.module.css";
 import backword from "./../../img/back_icon.png";
 import useMediaQuery from "@mui/material/useMediaQuery";
