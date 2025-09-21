@@ -138,6 +138,8 @@ class Time_Table_View(Master_View):
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
             time_table_controller =TimeTableController()
+            
+            data_payload()
             model = time_table_controller.try_explore_schedule_with_category(schedule_search_engine=self.__schedule_search_engine,
                                                                              database=self.__database,
                                                                              request=request_manager)
