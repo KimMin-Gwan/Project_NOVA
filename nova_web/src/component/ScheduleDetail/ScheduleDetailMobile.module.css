@@ -2,9 +2,9 @@
     width: 100%;
     height: 100%;
     background-color: #00000071;
-    position: absolute;
-    top: 0;
-    left : 0;
+    position: fixed;
+    top: 0px;
+    left : 0px;
     z-index: 20;
     display: flex;
     padding-top: 90px;
@@ -13,7 +13,9 @@
 
 .modal-container{
     display: flex;
+    max-width: 430px;
     padding: 20px;
+    margin: 2%;
     height: fit-content;
     flex-direction: column;
     align-items: flex-start;
