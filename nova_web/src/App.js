@@ -15,10 +15,8 @@ import Write from "./pages/Write/Write.js";
 import SearchPage from "./pages/SearchPage/SearchPage.js";
 import SearchResultPage from "./pages/SearchResultPage/SearchResultPage.js";
 import NoticePage from "./pages/NoticePage/NoticePage.js";
-import HomePage from "./pages/HomePage/HomePage.js";
 import ReportPage from "./pages/ReportPage/ReportPage.js";
 import ScheduleDashboard from "./pages/SchedulePage/ScheduleDashboard.js";
-import SearchTopicPage from "./pages/SearchTopicPage/SearchTopicPage.js";
 import ScheduleExplore from "./pages/ScheduleExplore/ScheduleExplore.js";
 import ScheduleMakePage from "./pages/ScheduleMakePage/ScheduleMakePage.jsx";
 import NewFeedDetail from "./pages/FeedDetail/NewFeedDetail.js";
@@ -116,30 +114,11 @@ function App() {
       <Route path="/search_result" element={<SearchResultPage />}></Route>
 
       {/* 컨텐츠  페이지 */}c
-      <Route path="/schedule" element={<ScheduleDashboard />}></Route>
-      <Route path="/search/topic" element={<SearchTopicPage />}></Route>
+      <Route path="/temp" element={<ScheduleDashboard />}></Route>
       <Route path="/explore/schedule" element={<ScheduleExplore />}></Route>
-      <Route path="/schedule/make_new" element={<ScheduleMakePage/>}></Route>
-
-
-      {/* 광고 페이지 */}
-      {/**
-      <Route path="/nova_ad/home" element={<NovaADHomepage/>}></Route>
-      <Route path="/nova_ad/charging" element={<PaymentPage/>}></Route>
-      */}
-
-      {/* 이벤트는 다다음 버전에 추가 */}
-      {/*<Route path="/search/event" element={<ScheduleResearch />}></Route>/*}
-
-      {/* 펀딩 페이지 목록 */}
-      {/* 
-      <Route path="/like_funding" element={<LikeFunding />}></Route>
-      <Route path="/duck_funding" element={<DuckFunding />}></Route>
-      <Route path="/funding_project/:type" element={<SuccessFunding />}></Route>
-      <Route path="/funding_ranking" element={<RankingFunding />}></Route>
-      <Route path="/open_ranking" element={<OpenRanking />}></Route>
-      <Route path="/bias_funding" element={<BiasFunding />}></Route>
-      <Route path="/bias_funding/:type" element={<MoreProjects />}></Route> */}
+      <Route path="/schedule/make_new" element={<ScheduleMakePage/>}>
+        <Route path=":sid" element={<ScheduleMakePage/>}></Route>
+      </Route>
 
       {/* 테스트 페이지 및 에러 페이지 */}
       {/* <Route path="/test2" element={<TestPage />}></Route> */}
@@ -148,10 +127,7 @@ function App() {
 
       {/* 홈 화면 */}
       <Route path="/post_board" element={<NewHomePage/>} />
-      <Route path="/home_test" element={<HomePage/>}/>
       <Route path="/welcome" element={<BrandPage/>} />
-
-      <Route path="/temp_test2" element={<HomePage/>} />
       <Route path="/content" element={<ContentPage/>} />
 
       <Route path="/content_test" element={<ContentTestPage/>} />
@@ -161,3 +137,9 @@ function App() {
 
 
 export default App;
+
+      //{/* 광고 페이지 */}
+      //{/**
+      //<Route path="/nova_ad/home" element={<NovaADHomepage/>}></Route>
+      //<Route path="/nova_ad/charging" element={<PaymentPage/>}></Route>
+      //*/}
