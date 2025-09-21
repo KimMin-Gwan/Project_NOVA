@@ -5,15 +5,10 @@ import { Scrollbar } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/scrollbar";
 import back from "./../../img/detail_back.png";
-import arrow from "./../../img/explore_down.png";
 import useToggleMore from "../../hooks/useToggleMore";
 import HEADER from "../../constant/header";
-import mainApi from "../../services/apis/mainApi";
 import postApi from "../../services/apis/mainApi";
 
-import ScheduleCard from "../../component/EventCard/EventCard";
-import { ScheduleAdd, ScheduleEdit, ScheduleRemove } from "../../component/ScheduleMore/ScheduleMore";
-import { ScheduleDetail, EditSingleSchedule } from "../../component/EventMore/EventMore";
 
 import "./index.css";
 import useIntersectionObserver from "../../hooks/useIntersectionObserver";
@@ -22,6 +17,8 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import DesktopLayout from "../../component/DesktopLayout/DeskTopLayout";
 
 import ScheduleExploreDesktop from "./ScheduleExplore.jsx";
+import ScheduleComponentMobile from "./ScheduleComponentMobile.jsx";
+import ScheduleDetailMobile from "../../component/ScheduleDetail/ScheduleDetailMobile.jsx";
 const scheduleKind = ["게임", "저챗", "음악", "그림", "스포츠", "시참"];
 
 export default function ScheduleExplore() {
@@ -34,7 +31,6 @@ export default function ScheduleExplore() {
   const [addScheduleModal, setAddScheduleModal] = useState(false);
   const [addScheduleBundleModal, setAddScheduleBundleModal] = useState(false);
 
-  const [targetSchedule, setTargetSchedule] = useState({});
   const [editScheduleModal, setEditScheduleModal] = useState(false);
 
 
@@ -52,17 +48,6 @@ export default function ScheduleExplore() {
     swiperRef.current.swiper.slideTo(index);
   };
 
-  const toggleEditScheduleModal = (target) => {
-    setEditScheduleModal((editScheduleModal) => !editScheduleModal);
-    setTargetSchedule(target);
-  };
-
-
-  // 일정 추가하기 버튼 누르면 동작하는애
-  const toggleAddScheduleModal = (target) => {
-    setAddScheduleModal((addScheduleModal) => !addScheduleModal);
-    setTargetSchedule(target);
-  };
 
 
   function handleModal(type) {
@@ -75,9 +60,27 @@ export default function ScheduleExplore() {
     setActiveIndex(swiper.activeIndex);
   };
 
+
+  const [showScheduleMoreOption, setShowScheduleMoreOption] = useState(false);
+  const [targetSchedule, setTargetSchedule] = useState("");
+
+  const toggleMoreOption = (targetSchedule) => {
+      setTargetSchedule(targetSchedule);
+      setShowScheduleMoreOption(!showScheduleMoreOption);
+  }
+
+
   if(isMobile){
   return (
     <div className="container ExploreSchedulePage">
+
+      {
+          showScheduleMoreOption && 
+          <ScheduleDetailMobile
+              sid={targetSchedule}
+              toggleMoreOption={toggleMoreOption}
+          />
+      }
       <nav className="navBar">
         <button onClick={() => navigate(-1)} className="backButton">
           <img src={back} alt="" />
@@ -107,8 +110,7 @@ export default function ScheduleExplore() {
                 <ScheduleComponentList
                   isMobile={isMobile}
                   category={item}
-                  toggleEditScheduleModal={toggleEditScheduleModal}
-                  toggleAddScheduleModal={toggleAddScheduleModal}
+                  toggleMoreOption={toggleMoreOption}
                   activeIndex={activeIndex}
                   setActiveIndex={setActiveIndex}
                   myIndex={index}
@@ -123,12 +125,6 @@ export default function ScheduleExplore() {
         isOpen={modalButton}
         type={buttonType}
       />
-
-      <ScheduleDetail
-        closeSchedule={toggleAddScheduleModal}
-        isOpen={addScheduleModal}
-        target={targetSchedule}
-      />
     </div>
   );
   }else{
@@ -138,8 +134,6 @@ export default function ScheduleExplore() {
           isMobile={isMobile}
           category={targetCategory}
           setCategory={setTargetCategory}
-          toggleEditScheduleModal={toggleEditScheduleModal}
-          toggleAddScheduleModal={toggleAddScheduleModal}
           activeIndex={activeIndex}
           setActiveIndex={setActiveIndex}
           myIndex={0}
@@ -152,8 +146,7 @@ export default function ScheduleExplore() {
 
 
 function ScheduleComponentList({
-  isMobile, category, setCategory,
-  toggleEditScheduleModal, toggleAddScheduleModal,
+  isMobile, category, setCategory, toggleMoreOption,
    activeIndex, setActiveIndex, myIndex
 }){
 
@@ -268,42 +261,13 @@ function ScheduleComponentList({
       <>
         {scheduleData.length === 0 && <NoneSchedule/>}
 
-        {scheduleData.map((item) => (
-          <li key={item.sid}>
-            <ScheduleCard
-              {...item}
-              toggleClick={() => handleToggleMore(item.sid)} // id 전달
-            />
 
-            {moreClick[item.sid] && (
-              item.subscribe === false ? (
-                <ScheduleAdd
-                  target={item}
-                  detailClick={toggleAddScheduleModal}
-                  navBoardClick={()=>{
-                    navBoard(item.detail)
-                  }}
-                  addClick={fetchTryAddSchedule}
-                />
-              ) : item.is_owner === false? (
-                <ScheduleRemove
-                  target={item}
-                  navBoardClick={()=>{
-                    navBoard(item.detail)
-                  }}
-                />
-              ) : (
-                <ScheduleEdit
-                  target={item}
-                  navBoardClick={
-                    ()=>{
-                      navBoard(item.detail)
-                    }}
-                  editClick={()=>navigate("/")} /* <<<< 여기부터 해야됨 (수정하기로 넘어가야됨)*/
-                />
-              )
-            )}
-          </li>
+        {scheduleData.map((singleSchedule, index) => (
+          <ScheduleComponentMobile
+            key={index}
+            toggleMoreOption={toggleMoreOption}
+            {...singleSchedule}
+          />
           ))}
           <div ref={targetRef} style={{ height: "1px" }}></div>
       </>
@@ -320,9 +284,9 @@ function ScheduleComponentList({
       />
     );
   }
-
-
 }
+
+
 
 
 
