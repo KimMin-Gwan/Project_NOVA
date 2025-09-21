@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import React, { useEffect, useState, useRef } from "react";
+import  { useEffect, useState, useRef } from "react";
 import style from "./Mypage.module.css";
-import axios from "axios";
 import user_icon from "./../../img/user_profile.svg";
 import useLoginStore from "../../stores/LoginStore/useLoginStore";
 import useBiasStore from "../../stores/BiasStore/useBiasStore";
