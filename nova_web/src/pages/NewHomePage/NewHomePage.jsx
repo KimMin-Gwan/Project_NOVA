@@ -6,7 +6,6 @@ import style2 from "./NewHomePage.module.css";
 
 import NavBar from "../../component/NavBar/NavBar.js";
 import BiasBoxes from "../../component/BiasBoxes/BiasBoxes.js";
-import Banner from "../../component/Banner/Banner.js";
 import SearchBox from "../../component/SearchBox.js";
 import Header from "../../component/Header/Header.js";
 import { fetchAllFeedList } from "../../services/getFeedApi.js";
