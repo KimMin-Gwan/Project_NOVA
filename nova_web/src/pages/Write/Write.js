@@ -237,7 +237,7 @@ const Write = () => {
   function onKeyDown(e) {
     if (e.key === "Enter") {
       // Enter 키로 태그 추가
-      if (inputTag && inputTagCount <= 12) {
+      if (inputTag && inputTagCount <= 30) {
         // 해시태그가 최대 글자 수 이내일 때만 추가
         setTagList([...tagList, `${inputTag}`]); // 태그 목록에 추가
         setInputTag(""); // 입력 필드 초기화
@@ -249,7 +249,7 @@ const Write = () => {
 
   function onClickCheck(e) {
     e.stopPropagation();
-    if (inputTag && inputTagCount <= 12) {
+    if (inputTag && inputTagCount <= 30) {
       // 해시태그가 최대 글자 수 이내일 때만 추가
       setTagList([...tagList, `${inputTag}`]); // 태그 목록에 추가
       setInputTag(""); // 입력 필드 초기화
@@ -287,7 +287,7 @@ const Write = () => {
           >
             취소
           </p>
-          <span className={style["page-title"]}>포스트 작성</span>
+          <span className={style["page-title"]}>게시글 작성</span>
 
           <p
             className={style["buttons"]}
