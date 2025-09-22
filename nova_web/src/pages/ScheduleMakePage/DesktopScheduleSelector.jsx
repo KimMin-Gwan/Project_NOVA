@@ -288,7 +288,6 @@ const DesktopScheduleSelectSection = ({
       return
     }
     const sid = await tryFetchNewSchedule(newSchedule); // 새로 만든 값 바로 사용
-    if (!sid) alert("업로드에 문제가 있습니다. 잠시후 다시 시도 해주세요.");
     if (sid && previewImage) await postImage(sid, imageFile);
     resetAll();
     setImageFile(null);
