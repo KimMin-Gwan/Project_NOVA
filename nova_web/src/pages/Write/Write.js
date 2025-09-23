@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams} from "react-router-dom";
 import style from "./WriteFeed.module.css";
 import style2 from "./WriteDesktop.module.css";
 
@@ -31,6 +31,13 @@ const categoryData = [
 const Write = () => {
   const isMobile = useMediaQuery('(max-width:1100px)');
   const param = useParams();
+  const [searchParams] = useSearchParams();
+
+  const targetFid =  searchParams.get("fid");
+  const targetTitle = searchParams.get("title");
+  const targetBias  = searchParams.get("bias");
+  const targetName = searchParams.get("biasName")
+
   const navigate = useNavigate();
   const editorRef = useRef();
 
@@ -45,6 +52,9 @@ const Write = () => {
   let [category, setCategory] = useState("선택 없음");
 
   let [biasId, setBiasId] = useState();
+  let [tagList, setTagList] = useState([]);
+  let { biasList, loading, fetchBiasList } = useBiasStore();
+
 
   function onClickModal() {
     setShowModal(!showModal);
@@ -62,6 +72,7 @@ const Write = () => {
   };
 
   let [isUserState, setIsUserState] = useState(false);
+
   function handleValidCheck() {
     mainApi.get("https://supernova.io.kr/home/is_valid?only_token=n").then((res) => {
         if (res.status === 200) {
@@ -85,7 +96,7 @@ const Write = () => {
   }
 
   async function fetchFeed() {
-    await mainApi.get(`feed_explore/feed_detail/feed_data?fid=${param.fid}`).then((res) => {
+    await mainApi.get(`feed_explore/feed_detail/feed_data?fid=${targetFid}`).then((res) => {
       if (res.data.body.feed[0].uid !== user) {
         alert("잘못된 접근입니다.");
         navigate("/");
@@ -104,10 +115,33 @@ const Write = () => {
   }, []);
 
   useEffect(() => {
-    if (user && param.fid){
+    if (user){
+      fetchBiasList();
+    }
+
+    if (user && targetFid){
       fetchFeed();
     }
+
+    if (user && targetTitle && targetBias && targetName){
+      setTagList((prev)=>
+        [
+          ...prev,
+          "후기",
+          targetTitle,
+          targetName
+        ]
+      )
+    }
   }, [user]);
+
+  useEffect(()=>{
+    if (biasList.length > 0){
+      if (biasList.some(bias => bias.bid === targetBias)) {
+        setBiasId(targetBias);
+      }
+    }
+  }, [biasList])
 
 
   // 에디터 내용 관찰
@@ -221,7 +255,6 @@ const Write = () => {
   }
 
   let [inputTag, setInputTag] = useState("");
-  let [tagList, setTagList] = useState([]);
 
   function onChangeTag(e) {
     const inputText = e.target.value;
@@ -271,7 +304,6 @@ const Write = () => {
       navigate("/nova_login");
     }
   }
-  let { biasList } = useBiasStore();
 
   if (isMobile){
     return (

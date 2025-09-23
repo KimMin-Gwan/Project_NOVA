@@ -115,21 +115,50 @@ const ScheduleDetailDekstop = ({sid, toggleMoreOption}) => {
                                     </div>
                                 </div>
                                 <div className={style["button-wrapper"]}>
-                                    <div className={style["left-button"]}
-                                        onClick={() => {
-                                            if (schedule.url != "https://supernova.io.kr"){
-                                                window.open(schedule.url, "_blank")
-                                            } else{
-                                                if (schedule.platform == "치지직"){
-                                                    window.open(`https://chzzk.naver.com/search?query=${schedule.bname}`, "_blank")
-                                                }else{
-                                                    window.open(`https://www.sooplive.co.kr/search?szLocation=total_search&szSearchType=total&szKeyword=${schedule.bname}&szStype=di&szActype=input_field`, "_blank")
-                                                }
-                                            }
-                                        }}
-                                    >
-                                        플랫폼 바로가기
-                                    </div>
+                                    {
+                                        subscribe ? (
+                                            <div className={style["left-button-wrapper"]}>
+                                                <div className={style["inner-button-left"]}
+                                                    onClick={() => {
+                                                        if (schedule.url != "https://supernova.io.kr"){
+                                                            window.open(schedule.url, "_blank")
+                                                        } else{
+                                                            if (schedule.platform == "치지직"){
+                                                                window.open(`https://chzzk.naver.com/search?query=${schedule.bname}`, "_blank")
+                                                            }else{
+                                                                window.open(`https://www.sooplive.co.kr/search?szLocation=total_search&szSearchType=total&szKeyword=${schedule.bname}&szStype=di&szActype=input_field`, "_blank")
+                                                            }
+                                                        }
+                                                    }}
+                                                >
+                                                    플랫폼 바로가기
+                                                </div>
+                                                <div className={style["inner-button-right"]}
+                                                    onClick={() => {
+                                                        navigate(`/write_feed?title=${schedule.title}&bias=${schedule.bid}&biasName=${schedule.bname}`)
+                                                    }}
+                                                >
+                                                    후기 작성하기
+                                                </div>
+                                            </div>
+                                        ):(
+                                            <div className={style["left-button"]}
+                                                onClick={() => {
+                                                    if (schedule.url != "https://supernova.io.kr"){
+                                                        window.open(schedule.url, "_blank")
+                                                    } else{
+                                                        if (schedule.platform == "치지직"){
+                                                            window.open(`https://chzzk.naver.com/search?query=${schedule.bname}`, "_blank")
+                                                        }else{
+                                                            window.open(`https://www.sooplive.co.kr/search?szLocation=total_search&szSearchType=total&szKeyword=${schedule.bname}&szStype=di&szActype=input_field`, "_blank")
+                                                        }
+                                                    }
+                                                }}
+                                            >
+                                                플랫폼 바로가기
+                                            </div>
+                                        )
+                                    }
                                     {
                                     schedule.is_owner ? (
                                         <div className={style["right-button"]}

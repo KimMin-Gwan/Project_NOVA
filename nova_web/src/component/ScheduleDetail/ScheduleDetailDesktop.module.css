@@ -192,6 +192,10 @@
     background-color: #6490ff;
 }
 
+.right-button:active{
+    transform : scale(0.9);
+}
+
 .schedule-image {
   align-self: stretch;
   display: flex;
@@ -207,3 +211,66 @@
   object-fit: contain; /* 이미지 비율 유지하면서 박스 안에 맞춤 */
 }
 
+.inner-button-left{
+    display: flex;
+    width: 225px;
+    padding: 16px 0px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    background: #F7F7FB;
+    border-right: 1px solid #D4D4D4;
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+    transition: all 0.3s ease-in-out;
+}
+
+.inner-button-right{
+    display: flex;
+    width: 225px;
+    padding: 16px 0px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    background: #F7F7FB;
+    border-left: 1px solid #D4D4D4;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    transition: all 0.3s ease-in-out;
+}
+
+
+.inner-button-left:hover{
+    background: #afbde2;
+}
+
+.inner-button-right:hover{
+    background: #afbde2;
+}
+
+.inner-button-left:active{
+    transform : scale(0.9);
+}
+
+.inner-button-right:active{
+    transform : scale(0.9);
+}
+
+
+.left-button-wrapper{
+    display: flex;
+    width: 452px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 12px;
+    cursor: pointer;
+    color: #111;
+    font-family: Pretendard;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 140%; /* 22.4px */
+    letter-spacing: -0.4px;
+}

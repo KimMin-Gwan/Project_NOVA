@@ -712,7 +712,7 @@ function OptionModal({ onClickOption, onClickDelete, fid }) {
   const navigate = useNavigate();
 
   const handleNavigate = () => {
-    navigate(`/write_feed/${fid}`);
+    navigate(`/write_feed?fid=${fid}`);
   };
 
   return (
