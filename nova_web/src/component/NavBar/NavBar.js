@@ -141,7 +141,7 @@ const NavBar = ({ brightMode }) => {
               e.stopPropagation();
             }}
           >
-            <h4>새로운 게시글 작성하기</h4>
+            <h4>슈퍼노바에 추가하기</h4>
 
             <section>
               <button
@@ -174,14 +174,14 @@ const NavBar = ({ brightMode }) => {
                   navigate("/follow_page");
                 }}
               >
-                주제 팔로우
+                스트리머 팔로우
               </button>
               <button
-                onClick={(e) => {
-                  e.stopPropagation();
+                onClick={() => {
+                  navigate("/submit_new");
                 }}
               >
-                추가 기능
+                스트리머 등록
               </button>
             </section>
           </div>
