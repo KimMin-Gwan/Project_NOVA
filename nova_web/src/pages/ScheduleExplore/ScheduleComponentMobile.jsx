@@ -4,7 +4,7 @@ import { formatDateTime, fecthSubScribeSchedule} from "./ScheduleComponentFunc";
 
 
 const ScheduleComponentMobile = ({
-    toggleMoreOption,
+    toggleDetailOption,
     title,
     sid,
     uname,
@@ -45,7 +45,7 @@ const ScheduleComponentMobile = ({
                 isClicked && 
                 <div className={style["schedule-button-wrapper"]}>
                     <div className={style["schedule-button-left"]}
-                        onClick={()=>{toggleMoreOption(sid)}}
+                        onClick={()=>{toggleDetailOption(sid)}}
                     >
                         자세히
                     </div>

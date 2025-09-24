@@ -5,7 +5,7 @@ import { SCHEDULE_IMAGE_URL } from "../../constant/imageUrl";
 import { useNavigate } from "react-router-dom";
 import MyPageLoading from "../../pages/LoadingPage/MypageLoading";
 
-const ScheduleDetailMobile = ({sid, toggleMoreOption}) => {
+const ScheduleDetailMobile = ({sid, toggleDetailOption}) => {
     const url = "";
     const [image, setImage] = useState(null);
     const [tags, setTags] = useState([]);
@@ -22,7 +22,7 @@ const ScheduleDetailMobile = ({sid, toggleMoreOption}) => {
                 const schedule = await fetchScheduleData(sid); // ✅ 데이터 기다림
                 if (!schedule || !schedule.sid) {
                     alert("콘텐츠 일정을 불러오는데 문제가 있습니다.");
-                    toggleMoreOption(false);
+                    toggleDetailOption(false);
                     return;
                 }
                 
@@ -36,7 +36,7 @@ const ScheduleDetailMobile = ({sid, toggleMoreOption}) => {
             } catch (error) {
                 console.error("일정 불러오기 실패:", error);
                 alert("일정을 불러오는 중 오류가 발생했습니다.");
-                toggleMoreOption(false);
+                toggleDetailOption(false);
             }
         };
 
@@ -47,7 +47,7 @@ const ScheduleDetailMobile = ({sid, toggleMoreOption}) => {
 
     if (isLoading){
         <div className={style["modal-frame"]}
-            onClick={()=>{toggleMoreOption(false);}}
+            onClick={()=>{toggleDetailOption(false);}}
         >
             <div className={style["modal-container"]}>
                 <MyPageLoading/>
@@ -56,7 +56,7 @@ const ScheduleDetailMobile = ({sid, toggleMoreOption}) => {
     }else{
         return(
             <div className={style["modal-frame"]}
-                onClick={()=>{toggleMoreOption(false);}}
+                onClick={()=>{toggleDetailOption(false);}}
             >
                 <div className={style["modal-container"]}
                     onClick={(e) => e.stopPropagation()}

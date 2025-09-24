@@ -111,7 +111,7 @@ const ScheduleDashboard = () => {
   const [showScheduleMoreOption, setShowScheduleMoreOption] = useState(false);
   const [targetSchedule, setTargetSchedule] = useState("");
 
-  const toggleMoreOption = (targetSchedule) => {
+  const toggleDetailOption = (targetSchedule) => {
     setTargetSchedule(targetSchedule);
     setShowScheduleMoreOption(!showScheduleMoreOption);
   }
@@ -397,7 +397,7 @@ const ScheduleDashboard = () => {
               {showScheduleMoreOption && (
                 <ScheduleDetailMobile
                   sid={targetSchedule}
-                  toggleMoreOption={toggleMoreOption}
+                  toggleDetailOption={toggleDetailOption}
                 />
               )}
 
@@ -486,7 +486,7 @@ const ScheduleDashboard = () => {
                         <SwiperSlide key={index}>
                           <TimeLayerBox swiperRef={swiperRef2} scheduleData={schedule} formattedDate={formatDate[index]} 
                           onChangeIndexNext={onChangeNextAsync} onChangeIndexPrev={onChangeIndexPrev}
-                          scheduleDayList={scheduleData} onClickSchedule={toggleMoreOption}
+                          scheduleDayList={scheduleData} onClickSchedule={toggleDetailOption}
                           />
                         </SwiperSlide>
                       );
@@ -541,7 +541,7 @@ const ScheduleDashboard = () => {
           {showScheduleMoreOption && (
             <ScheduleDetailDekstop
               sid={targetSchedule}
-              toggleMoreOption={toggleMoreOption}
+              toggleDetailOption={toggleDetailOption}
             />
           )}
           {
@@ -556,7 +556,7 @@ const ScheduleDashboard = () => {
                 onChangeIndexNext={handleNext}
                 onChangeIndexPrev={handlePrev}
                 isFetching={isFetching}
-                onClickSchedule={toggleMoreOption}
+                onClickSchedule={toggleDetailOption}
               />
             )
           }

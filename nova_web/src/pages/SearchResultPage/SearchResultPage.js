@@ -209,7 +209,7 @@ export default function SearchResultPage() {
   const [showScheduleMoreOption, setShowScheduleMoreOption] = useState(false);
   const [targetSchedule, setTargetSchedule] = useState("");
 
-  const toggleMoreOption = (targetSchedule) => {
+  const toggleDetailOption = (targetSchedule) => {
       setTargetSchedule(targetSchedule);
       setShowScheduleMoreOption(!showScheduleMoreOption);
   }
@@ -240,13 +240,13 @@ export default function SearchResultPage() {
           showScheduleMoreOption && 
           <ScheduleDetailMobile
               sid={targetSchedule}
-              toggleMoreOption={toggleMoreOption}
+              toggleDetailOption={toggleDetailOption}
             />
         }
         <Tabs activeIndex={activeIndex} handleClick={handleClick} onClickType={onClickType} />
         {type === "comment" && <Comments comments={comments} isLoading={isLoading} />}
         {type === "post" && <FeedSection feedData={feedData} setFeedData={setFeedData} isLoading={isLoading} /> }
-        {type === "schedule" && <ScheduleListMobile toggleMoreOption={toggleMoreOption} scheduleData={scheduleData}
+        {type === "schedule" && <ScheduleListMobile toggleDetailOption={toggleDetailOption} scheduleData={scheduleData}
         />}
         <div ref={targetRef} style={{ height: "1px" }}></div>
         <NavBar />
@@ -287,7 +287,7 @@ export default function SearchResultPage() {
             showScheduleMoreOption && 
             <ScheduleDetailDekstop
                 sid={targetSchedule}
-                toggleMoreOption={toggleMoreOption}
+                toggleDetailOption={toggleDetailOption}
               />
           }
 
@@ -301,7 +301,7 @@ export default function SearchResultPage() {
                   <NoneSchedule />
                 </div>
               ) : (
-                <ScheduleGrid scheduleData={scheduleData} toggleMoreOption={toggleMoreOption} />
+                <ScheduleGrid scheduleData={scheduleData} toggleDetailOption={toggleDetailOption} />
               )
             )}
 
@@ -316,7 +316,7 @@ export default function SearchResultPage() {
 
 
 
-const ScheduleListMobile = ({toggleMoreOption, scheduleData}) => {
+const ScheduleListMobile = ({toggleDetailOption, scheduleData}) => {
   return (
     <>
       {scheduleData.length === 0 && <NoneSchedule/>}
@@ -325,7 +325,7 @@ const ScheduleListMobile = ({toggleMoreOption, scheduleData}) => {
       {scheduleData.map((singleSchedule, index) => (
         <ScheduleComponentMobile
           key={index}
-          toggleMoreOption={toggleMoreOption}
+          toggleDetailOption={toggleDetailOption}
           {...singleSchedule}
         />
         ))}

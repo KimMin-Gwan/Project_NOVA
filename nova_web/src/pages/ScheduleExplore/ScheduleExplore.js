@@ -54,7 +54,7 @@ export default function ScheduleExplore() {
   const [showScheduleMoreOption, setShowScheduleMoreOption] = useState(false);
   const [targetSchedule, setTargetSchedule] = useState("");
 
-  const toggleMoreOption = (targetSchedule) => {
+  const toggleDetailOption = (targetSchedule) => {
       setTargetSchedule(targetSchedule);
       setShowScheduleMoreOption(!showScheduleMoreOption);
   }
@@ -68,7 +68,7 @@ export default function ScheduleExplore() {
           showScheduleMoreOption && 
           <ScheduleDetailMobile
               sid={targetSchedule}
-              toggleMoreOption={toggleMoreOption}
+              toggleDetailOption={toggleDetailOption}
           />
       }
       <nav className="navBar">
@@ -100,7 +100,7 @@ export default function ScheduleExplore() {
                 <ScheduleComponentList
                   isMobile={isMobile}
                   category={item}
-                  toggleMoreOption={toggleMoreOption}
+                  toggleDetailOption={toggleDetailOption}
                   activeIndex={activeIndex}
                   setActiveIndex={setActiveIndex}
                   myIndex={index}
@@ -136,7 +136,7 @@ export default function ScheduleExplore() {
 
 
 function ScheduleComponentList({
-  isMobile, category, setCategory, toggleMoreOption,
+  isMobile, category, setCategory, toggleDetailOption,
    activeIndex, setActiveIndex, myIndex
 }){
 
@@ -255,7 +255,7 @@ function ScheduleComponentList({
         {scheduleData.map((singleSchedule, index) => (
           <ScheduleComponentMobile
             key={index}
-            toggleMoreOption={toggleMoreOption}
+            toggleDetailOption={toggleDetailOption}
             {...singleSchedule}
           />
           ))}
