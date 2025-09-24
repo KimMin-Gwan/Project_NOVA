@@ -109,19 +109,21 @@ function MoreSee({ onModeChange }) {
     },
     {
       id: 2,
-      title: "최애 주제 팔로우",
+      title: "스트리머 팔로우",
       src: fav_follow,
-      alt: "최애 주제 팔로우",
+      alt: "스트리머 팔로우",
       end_point: "/follow_page",
       onClick: (endPoint) => handlePage(endPoint),
     },
     {
       id: 3,
-      title: "최애 주제 신청",
+      title: "스트리머 등록",
       src: fav_sub,
-      alt: "최애 주제 신청",
-      requestURL: "https://naver.me/xGImCJSN",
-      onClick: (requestURL) => handleRequestURL(requestURL),
+      alt: "스트리머 등록",
+      //requestURL: "https://naver.me/xGImCJSN",
+      //onClick: (requestURL) => handleRequestURL(requestURL),
+      end_point: "/submit_new",
+      onClick: (endPoint) => handlePage(endPoint),
     },
   ];
 
@@ -262,7 +264,7 @@ function MoreSee({ onModeChange }) {
 
             {/* 서비스 목록 */}
             <div className={style["service-container"]}>
-              <h3>서비스</h3>
+              <h3>추천 서비스</h3>
               <section className={style["button-container"]}>
                 {serviceList.map((service, i) => {
                   return (

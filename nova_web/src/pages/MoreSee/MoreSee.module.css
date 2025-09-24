@@ -221,12 +221,13 @@ hr {
 
 .service-container {
   border: 1px solid #f2f2f2;
-  margin-inline: 21px;
-  padding: 14px;
+  margin-inline: 4%;
+  padding: 3%;
+  border-radius: 10px;
 
   & h3 {
     margin: 0;
-    font-weight: 300;
+    font-weight: 400;
     font-size: 15px;
     color: #626262;
   }
@@ -234,8 +235,8 @@ hr {
   .button-container {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    margin-top: 21px;
+    gap: 14px 6px;
+    margin-top: 4%;
 
     & button {
       border: 0;
@@ -244,13 +245,13 @@ hr {
       display: flex;
       align-items: center;
       color: #1c1c1c;
-      font-size: 13px;
+      font-size: 14px;
       cursor: pointer;
 
       & img {
         width: 24px;
         height: 24px;
-        margin-inline: 11px 24px;
+        margin-inline: 8px 7px;
       }
     }
   }
