@@ -12,6 +12,7 @@
   gap: 20px;
   padding: 0px 20px;
   cursor: pointer;
+  align-items: flex-start;
 }
 
 .bias-info-wrapper{
