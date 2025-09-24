@@ -3,18 +3,18 @@ import { useState } from "react";
 import { formatDateTime, fecthSubScribeSchedule } from "./ScheduleComponentFunc";
 import { fetchSubscribeSchedule } from "./ScheduleComponentFunc";
 
-export default function ScheduleGrid({ scheduleData, toggleMoreOption }) {
+export default function ScheduleGrid({ scheduleData, toggleDetailOption }) {
   return (
     <div className={style["schedule_grid"]}>
       {scheduleData.map((schedule) => (
-        <ScheduleComponent key={schedule.code} toggleMoreOption={toggleMoreOption} {...schedule} />
+        <ScheduleComponent key={schedule.code} toggleDetailOption={toggleDetailOption} {...schedule} />
       ))}   
       </div>
   );
 }
 
 function ScheduleComponent({
-    toggleMoreOption,
+    toggleDetailOption,
     title,
     sid,
     uname,
@@ -48,10 +48,10 @@ function ScheduleComponent({
                 </div>
             </div>
             {
-                isClicked && (
+                isClicked ? (
                     <div className={style["schedule_extra_control_container"]}>
                         <div className={style["schedule_detail"]}
-                          onClick={()=>{toggleMoreOption(sid)}}
+                          onClick={()=>{toggleDetailOption(sid)}}
                         >자세히</div>
                         {
                           isSubscribe? <div className={style["schedule_subscribe"]}
@@ -70,6 +70,11 @@ function ScheduleComponent({
                           >구독하기</div>
                         }
                     </div>
+                ):(
+                  <div 
+                    style={{height: "68px"}}
+                  >
+                  </div>
                 )
             }
         </div>

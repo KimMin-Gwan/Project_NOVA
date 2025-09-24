@@ -23,17 +23,9 @@ const scheduleKind = ["게임", "저챗", "음악", "그림", "스포츠", "시�
 
 export default function ScheduleExplore() {
   const isMobile = useMediaQuery('(max-width:1100px)');
-  const { moreClick, handleToggleMore } = useToggleMore();
   const navigate = useNavigate();
 
   const [modalButton, setModalButton] = useState(false);
-
-  const [addScheduleModal, setAddScheduleModal] = useState(false);
-  const [addScheduleBundleModal, setAddScheduleBundleModal] = useState(false);
-
-  const [editScheduleModal, setEditScheduleModal] = useState(false);
-
-
 
   const swiperRef = useRef(null);
 
@@ -47,8 +39,6 @@ export default function ScheduleExplore() {
     setActiveIndex(index);
     swiperRef.current.swiper.slideTo(index);
   };
-
-
 
   function handleModal(type) {
     setModalButton((modalButton) => !modalButton);

@@ -19,7 +19,7 @@ export default function ScheduleExploreDesktop({
     const [showScheduleMoreOption, setShowScheduleMoreOption] = useState(false);
     const [targetSchedule, setTargetSchedule] = useState("");
 
-    const toggleMoreOption = (targetSchedule) => {
+    const toggleDetailOption = (targetSchedule) => {
         setTargetSchedule(targetSchedule);
         setShowScheduleMoreOption(!showScheduleMoreOption);
     }
@@ -31,7 +31,7 @@ export default function ScheduleExploreDesktop({
                 showScheduleMoreOption && 
                 <ScheduleDetailDekstop
                     sid={targetSchedule}
-                    toggleMoreOption={toggleMoreOption}
+                    toggleDetailOption={toggleDetailOption}
                 />
             }
             <div className={style["explore_schedule_container"]}>
@@ -65,7 +65,7 @@ export default function ScheduleExploreDesktop({
                         <NoneSchedule/>
                     </div>
                 }
-                <ScheduleGrid scheduleData={scheduleData} toggleMoreOption={toggleMoreOption} />
+                <ScheduleGrid scheduleData={scheduleData} toggleDetailOption={toggleDetailOption} />
                 <div className={style["fetch-more-button-wrapper"]}>
                     <div className={style["fetch-more-button"]}>
                         더 불러오기

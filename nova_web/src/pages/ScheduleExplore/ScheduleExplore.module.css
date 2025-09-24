@@ -138,6 +138,7 @@
     line-height: 140%; /* 19.6px */
     letter-spacing: -0.35px;
 }
+
 .schedule_extra_control_container{
     display: flex;
     padding: 16px 26px;
@@ -146,6 +147,7 @@
     flex: 1 0 0;
     align-self: stretch;
 }
+
 .schedule_detail{
     display: flex;
     width: 80px;
