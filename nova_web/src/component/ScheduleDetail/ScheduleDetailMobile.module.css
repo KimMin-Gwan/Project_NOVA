@@ -145,13 +145,12 @@
 .button-wrapper{
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     align-self: stretch;
 }
 
 .left-button{
     display: flex;
-    width: 30%;
     padding: 12px 24px;
     justify-content: center;
     align-items: center;
@@ -169,6 +168,29 @@
     transition: all 0.3 ease-in-out
 }
 
+.left-button2{
+    display: flex;
+    align-self: stretch;
+    max-width: 129px;
+    min-width: 76px;
+    padding: 12px 24px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 12px;
+    background-color: #F7F7FB;
+    color: #111;
+    font-family: Pretendard;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 140%; /* 22.4px */
+    letter-spacing: -0.4px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out
+}
+
+
 .left-button:hover{
     background-color: #e0e0ff;
 }
@@ -177,6 +199,8 @@
 .right-button{
     display: flex;
     width: 30%;
+    max-width: 129px;
+    min-width: 76px;
     padding: 12px 24px;
     justify-content: center;
     align-items: center;
@@ -191,7 +215,7 @@
     line-height: 140%; /* 22.4px */
     letter-spacing: -0.4px;
     cursor: pointer;
-    transition: all 0.3 ease-in-out
+    transition: all 0.3s ease-in-out
 }
 
 .right-button:hover{
@@ -213,3 +237,31 @@
   object-fit: contain; /* 이미지 비율 유지하면서 박스 안에 맞춤 */
 }
 
+.left-button-wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 4px;
+    width: calc(30% + 48px);
+}
+
+
+.left-span-button{
+    color: #2f78ff;
+    font-family: Pretendard;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 140%; /* 22.4px */
+    letter-spacing: -0.4px;
+    cursor: pointer;
+    border-bottom: #2f78ff 1px solid;
+    transition: all 0.2s ease-in-out;
+}
+
+.left-span-button:hover{
+    font-weight: 600;
+    color: #2362d6;
+    border-bottom: #2362d6 1px solid;
+}

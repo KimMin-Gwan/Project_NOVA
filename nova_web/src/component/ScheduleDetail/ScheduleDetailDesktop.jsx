@@ -5,7 +5,7 @@ import { SCHEDULE_IMAGE_URL } from "../../constant/imageUrl";
 import { useNavigate } from "react-router-dom";
 import MyPageLoading from "../../pages/LoadingPage/MypageLoading";
 
-const ScheduleDetailDekstop = ({sid, toggleMoreOption}) => {
+const ScheduleDetailDekstop = ({sid, toggleDetailOption}) => {
     const url = "";
     const [image, setImage] = useState(null);
     const [tags, setTags] = useState([]);
@@ -22,7 +22,7 @@ const ScheduleDetailDekstop = ({sid, toggleMoreOption}) => {
                 const schedule = await fetchScheduleData(sid); // ✅ 데이터 기다림
                 if (!schedule || !schedule.sid) {
                     alert("콘텐츠 일정을 불러오는데 문제가 있습니다.");
-                    toggleMoreOption(null);
+                    toggleDetailOption(null);
                     return;
                 }
                 
@@ -36,7 +36,7 @@ const ScheduleDetailDekstop = ({sid, toggleMoreOption}) => {
             } catch (error) {
                 console.error("일정 불러오기 실패:", error);
                 alert("일정을 불러오는 중 오류가 발생했습니다.");
-                toggleMoreOption(null);
+                toggleDetailOption(null);
             }
         };
 
@@ -47,7 +47,7 @@ const ScheduleDetailDekstop = ({sid, toggleMoreOption}) => {
 
     if (isLoading){
         <div className={style["modal-frame"]}
-            onClick={()=>{toggleMoreOption(false);}}
+            onClick={()=>{toggleDetailOption(false);}}
         >
             <div className={style["modal-container"]}>
                 <MyPageLoading/>
@@ -56,7 +56,7 @@ const ScheduleDetailDekstop = ({sid, toggleMoreOption}) => {
     }else{
         return(
             <div className={style["modal-frame"]}
-                onClick={()=>{toggleMoreOption(null);}}
+                onClick={()=>{toggleDetailOption(null);}}
             >
                 <div className={style["modal-container"]}
                     onClick={(e) => e.stopPropagation()}
@@ -118,7 +118,7 @@ const ScheduleDetailDekstop = ({sid, toggleMoreOption}) => {
                                     {
                                         subscribe ? (
                                             <div className={style["left-button-wrapper"]}>
-                                                <div className={style["inner-button-left"]}
+                                                <div className={style["left-button"]}
                                                     onClick={() => {
                                                         if (schedule.url != "https://supernova.io.kr"){
                                                             window.open(schedule.url, "_blank")
@@ -133,13 +133,13 @@ const ScheduleDetailDekstop = ({sid, toggleMoreOption}) => {
                                                 >
                                                     플랫폼 바로가기
                                                 </div>
-                                                <div className={style["inner-button-right"]}
+                                                <span className={style["left-span-button"]}
                                                     onClick={() => {
                                                         navigate(`/write_feed?title=${schedule.title}&bias=${schedule.bid}&biasName=${schedule.bname}`)
                                                     }}
                                                 >
-                                                    후기 작성하기
-                                                </div>
+                                                    태그하고 글쓰기
+                                                </span>
                                             </div>
                                         ):(
                                             <div className={style["left-button"]}

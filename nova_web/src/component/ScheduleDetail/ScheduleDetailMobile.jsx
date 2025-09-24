@@ -115,45 +115,73 @@ const ScheduleDetailMobile = ({sid, toggleMoreOption}) => {
                                     </div>
                                 </div>
                                 <div className={style["button-wrapper"]}>
-                                    <div className={style["left-button"]}
-                                        onClick={() => {
-                                            if (schedule.url != "https://supernova.io.kr"){
-                                                window.open(schedule.url, "_blank")
-                                            } else{
-                                                if (schedule.platform == "치지직"){
-                                                    window.open(`https://chzzk.naver.com/search?query=${schedule.bname}`, "_blank")
-                                                }else{
-                                                    window.open(`https://www.sooplive.co.kr/search?szLocation=total_search&szSearchType=total&szKeyword=${schedule.bname}&szStype=di&szActype=input_field`, "_blank")
-                                                }
-                                            }
-                                        }}
-                                    >
-                                        플랫폼 바로가기
-                                    </div>
                                     {
-                                    schedule.is_owner ? (
-                                        <div className={style["right-button"]}
-                                            onClick={()=>{
-                                                navigate(`/schedule/make_new/${schedule.sid}`)
-                                            }}
-                                        >콘텐츠 수정</div>
-                                    ) : (
                                         subscribe ? (
-                                        <div className={style["right-button"]}
-                                            onClick={()=>{
-                                                fetchSubscribeSchedule(schedule.sid);
-                                                setSubscribe(false);
-                                            }}
-                                        >구독 취소</div>
-                                        ) : (
-                                        <div className={style["right-button"]}
-                                            onClick={()=>{
-                                                fetchSubscribeSchedule(schedule.sid);
-                                                setSubscribe(true);
-                                            }}
-                                        >콘텐츠 구독</div>
+                                            <div className={style["left-button-wrapper"]}>
+                                                <div className={style["left-button2"]}
+                                                    onClick={() => {
+                                                        if (schedule.url != "https://supernova.io.kr"){
+                                                            window.open(schedule.url, "_blank")
+                                                        } else{
+                                                            if (schedule.platform == "치지직"){
+                                                                window.open(`https://chzzk.naver.com/search?query=${schedule.bname}`, "_blank")
+                                                            }else{
+                                                                window.open(`https://www.sooplive.co.kr/search?szLocation=total_search&szSearchType=total&szKeyword=${schedule.bname}&szStype=di&szActype=input_field`, "_blank")
+                                                            }
+                                                        }
+                                                    }}
+                                                >
+                                                    플랫폼 바로가기
+                                                </div>
+                                                <span className={style["left-span-button"]}
+                                                    onClick={() => {
+                                                        navigate(`/write_feed?title=${schedule.title}&bias=${schedule.bid}&biasName=${schedule.bname}`)
+                                                    }}
+                                                >
+                                                    태그하고 글쓰기
+                                                </span>
+                                            </div>
+                                        ):(
+                                            <div className={style["left-button"]}
+                                                onClick={() => {
+                                                    if (schedule.url != "https://supernova.io.kr"){
+                                                        window.open(schedule.url, "_blank")
+                                                    } else{
+                                                        if (schedule.platform == "치지직"){
+                                                            window.open(`https://chzzk.naver.com/search?query=${schedule.bname}`, "_blank")
+                                                        }else{
+                                                            window.open(`https://www.sooplive.co.kr/search?szLocation=total_search&szSearchType=total&szKeyword=${schedule.bname}&szStype=di&szActype=input_field`, "_blank")
+                                                        }
+                                                    }
+                                                }}
+                                            >
+                                                플랫폼 바로가기
+                                            </div>
                                         )
-                                    )
+                                    }{
+                                        schedule.is_owner ? (
+                                            <div className={style["right-button"]}
+                                                onClick={()=>{
+                                                    navigate(`/schedule/make_new/${schedule.sid}`)
+                                                }}
+                                            >콘텐츠 수정</div>
+                                        ) : (
+                                            subscribe ? (
+                                            <div className={style["right-button"]}
+                                                onClick={()=>{
+                                                    fetchSubscribeSchedule(schedule.sid);
+                                                    setSubscribe(false);
+                                                }}
+                                            >구독 취소</div>
+                                            ) : (
+                                            <div className={style["right-button"]}
+                                                onClick={()=>{
+                                                    fetchSubscribeSchedule(schedule.sid);
+                                                    setSubscribe(true);
+                                                }}
+                                            >콘텐츠 구독</div>
+                                            )
+                                        )
                                     }
                                 </div>
                             </div>
