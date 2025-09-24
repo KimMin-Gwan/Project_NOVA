@@ -98,7 +98,7 @@ export default function NewHomePage () {
         return(
             <div className={`all-box ${style["all_container"]}`}>
                 <div className={style["container"]}>
-                    <div className={'top-area'}>
+                    <div className={style['top-area']}>
                         {/*<DisplayAds />*/}
 
                         <Header />

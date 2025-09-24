@@ -81,6 +81,14 @@
   /* overflow: hidden; */
 }
 
+.top-area{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  align-self: stretch;
+}
+
 .none_feed_scroll {
   display: flex;
   flex-direction: column;
