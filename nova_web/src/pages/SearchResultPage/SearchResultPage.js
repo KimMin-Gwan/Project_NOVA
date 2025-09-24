@@ -36,14 +36,14 @@ export default function SearchResultPage() {
 
   // 데이터 관련 상태
   let [feedData, setFeedData] = useState([]);
-  const [comments, setComments] = useState([]);
+  //const [comments, setComments] = useState([]);
   const [scheduleData, setScheduleData] = useState([]);
   let [isLoading, setIsLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
 
   // 페이지네이션 키
   const [feedNextKey, setFeedNextKey] = useState(-1);
-  const [commentNextKey, setCommentNextKey] = useState(-1);
+  //const [commentNextKey, setCommentNextKey] = useState(-1);
   const [scheduleKey, setScheduleKey] = useState(-1);
 
   useEffect(() => {
@@ -57,15 +57,17 @@ export default function SearchResultPage() {
 
   useEffect(() => {
     setFeedNextKey(-1);
-    setCommentNextKey(-1);
+    //setCommentNextKey(-1);
     setFeedData([]);
-    setComments([]);
+    //setComments([]);
 
     if (type === "post") {
       fetchSearchKeyword();
-    } else if (type === "comment") {
-      fetchCommentKeyword();
-    } else if (type === "schedule") {
+    } 
+    //else if (type === "comment") {
+      //fetchCommentKeyword();
+    //} 
+    else if (type === "schedule") {
       fetchScheduleKeyword();
     } 
   }, [type]);
@@ -84,16 +86,16 @@ export default function SearchResultPage() {
   }
 
 
-  async function fetchCommentKeyword() {
-    await mainApi
-      .get(`feed_explore/search_comment_with_keyword?keyword=${keyword}&key=${commentNextKey}`)
-      .then((res) => {
-        setComments((prev) => [...prev, ...res.data.body.feeds]);
-        setHasMore(res.data.body.feeds.length > 0);
-        setIsLoading(false);
-        setCommentNextKey(res.data.body.key);
-      });
-  }
+//  async function fetchCommentKeyword() {
+    //await mainApi
+      //.get(`feed_explore/search_comment_with_keyword?keyword=${keyword}&key=${commentNextKey}`)
+      //.then((res) => {
+        //setComments((prev) => [...prev, ...res.data.body.feeds]);
+        //setHasMore(res.data.body.feeds.length > 0);
+        //setIsLoading(false);
+        //setCommentNextKey(res.data.body.key);
+      //});
+  //}
 
 
   async function fetchScheduleKeyword() {
@@ -114,9 +116,11 @@ export default function SearchResultPage() {
 
     if (type === "post") {
       fetchSearchKeyword();
-    } else if (type === "comment") {
-      fetchCommentKeyword();
-    } else if (type === "schedule") {
+    }
+     //else if (type === "comment") {
+      //fetchCommentKeyword();
+    //}
+     else if (type === "schedule") {
       fetchScheduleKeyword();
     } 
   }
@@ -147,15 +151,6 @@ export default function SearchResultPage() {
     setSearchWord(e.target.value);
   }
 
-  function handleClickScheduleButton(e, detail){
-    e.stopPropagation();
-    setSearchWord(prev => {
-      const newWord = detail;
-      handleNavigate(newWord); // 새로운 검색어와 함께 handleSearch 실행
-      return newWord;
-    });
-  }
-
   function handleKeyDown(event) {
     if (event.key === "Enter") {
       handleNavigate();
@@ -180,10 +175,10 @@ export default function SearchResultPage() {
     if (data === "게시글"){
       setType("post");
     }
-    else if (data === "댓글"){
-      setType("comment");
-    }
-    else if (data === "일정"){
+    //else if (data === "댓글"){
+      //setType("comment");
+    //}
+    else if (data === "콘텐츠"){
       setType("schedule");
     }
     //else if (data === "일정 번들"){
@@ -244,7 +239,11 @@ export default function SearchResultPage() {
             />
         }
         <Tabs activeIndex={activeIndex} handleClick={handleClick} onClickType={onClickType} />
-        {type === "comment" && <Comments comments={comments} isLoading={isLoading} />}
+        {
+          /**
+           * {type === "comment" && <Comments comments={comments} isLoading={isLoading} />}
+           */
+        }
         {type === "post" && <FeedSection feedData={feedData} setFeedData={setFeedData} isLoading={isLoading} /> }
         {type === "schedule" && <ScheduleListMobile toggleDetailOption={toggleDetailOption} scheduleData={scheduleData}
         />}
@@ -276,7 +275,7 @@ export default function SearchResultPage() {
               </div>
               <div
                 className={style["single_tap"]}
-                onClick={() => onClickType("일정")}
+                onClick={() => onClickType("콘텐츠")}
                 style={getTapStyle(type === "schedule")}
               >
                 콘텐츠

@@ -1,10 +1,16 @@
 import style from "./Tabs.module.css";
 
 export default function Tabs({ activeIndex, handleClick, onClickType }) {
+  const tabElement = [
+    "게시글",
+    //"댓글",
+    "콘텐츠"
+  ]
+
   return (
     <section className={`${style["info-list"]} ${style["search-nav-bar"]}`}>
       <ul className={style["post-list"]} data-active-index={activeIndex}>
-        {["게시글", "댓글", "일정"].map((post, index) => (
+        {tabElement.map((post, index) => (
           <li
             key={index}
             className={`${style.post} ${activeIndex === index ? style.active : ""}`}
