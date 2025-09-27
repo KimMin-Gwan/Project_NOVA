@@ -3,12 +3,13 @@
     width: 100%;
     justify-content: center;
     align-items: center;
+    gap: 60px;
 }
 
 .desktop_search_result_page_inner_frame{
     display: flex;
     width: 100%;
-    max-width: 1200px;
+    max-width: 1020px;
     padding-top: 40px;
     flex-direction: column;
     justify-content: flex-start;

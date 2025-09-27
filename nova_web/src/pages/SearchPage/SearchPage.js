@@ -129,6 +129,7 @@ export default function SearchPage() {
               onChangeSearchWord={onChangeSearchWord}
               onKeyDown={onKeyDown}
             />
+            <AdComponent type={"link"}/>
           </div>
         </div>
       </DesktopLayout>

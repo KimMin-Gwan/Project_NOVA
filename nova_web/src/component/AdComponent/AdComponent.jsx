@@ -8,7 +8,7 @@ const AdComponent = ({ type }) => {
   const sizeRules = {
     "image_32x60": { min: 200, max: 260 },
     "image_50x32": { min: 340, max: 460 },
-    "link": { min: 360, max: 1020 },
+    "link": { min: 340, max: 1020 },
   };
 
   useEffect(() => {

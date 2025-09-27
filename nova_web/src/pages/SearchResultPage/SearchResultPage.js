@@ -19,6 +19,7 @@ import ScheduleGrid from "../ScheduleExplore/ScheduleGrid";
 import ScheduleComponentMobile from "../ScheduleExplore/ScheduleComponentMobile";
 import ScheduleDetailMobile from "../../component/ScheduleDetail/ScheduleDetailMobile";
 import ScheduleDetailDekstop from "../../component/ScheduleDetail/ScheduleDetailDesktop";
+import AdComponent from "../../component/AdComponent/AdComponent";
 
 export default function SearchResultPage() {
   const isMobile = useMediaQuery('(max-width:1100px)');
@@ -307,6 +308,7 @@ export default function SearchResultPage() {
             <div ref={targetRef} style={{ height: "1px" }}></div>
           </div>
           </div>
+          <AdComponent type={"image_32x60"}/>
         </div>
       </DesktopLayout>
     );

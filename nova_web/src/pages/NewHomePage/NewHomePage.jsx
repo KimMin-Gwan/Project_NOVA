@@ -104,6 +104,7 @@ export default function NewHomePage () {
 
                         <Header />
                         <SearchBox />
+                        <AdComponent type={"link"}/>
                     </div>
                     <BiasBoxes setBiasId={setBiasId} fetchBiasCategoryData={fetchBiasCategoryData}  fecthDefaultSetting={fetchAllFeed}/>
                     <div className="section-separator"></div>
