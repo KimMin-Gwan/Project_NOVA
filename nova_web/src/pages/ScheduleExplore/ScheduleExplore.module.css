@@ -1,6 +1,6 @@
 .explore_schedule_main_frame{
     display: flex;
-    padding: 50px 300px;
+    padding: 50px;
     justify-content: center;
     align-items: center;
     gap: 20px;

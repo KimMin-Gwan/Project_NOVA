@@ -9,6 +9,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import DesktopLayout from "../../component/DesktopLayout/DeskTopLayout";
 import style from "./SearchPageDesktop.module.css";
 import SearchBoxDesktop from "../../component/SearchBoxDesktop";
+import AdComponent from "../../component/AdComponent/AdComponent";
 
 
 export default function SearchPage() {
@@ -107,7 +108,9 @@ export default function SearchPage() {
               onDeleteHistoryItem={onDeleteHistoryItem}
             />
           </div>
+
         </section>
+        <AdComponent type={"image_50x32"}/>
         <NavBar />
       </div>
     );

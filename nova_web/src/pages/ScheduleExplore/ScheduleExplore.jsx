@@ -3,6 +3,7 @@ import NoneSchedule from "../../component/NoneFeed/NoneSchedule";
 import ScheduleGrid from "./ScheduleGrid.jsx";
 import { useState } from "react";
 import ScheduleDetailDekstop from "../../component/ScheduleDetail/ScheduleDetailDesktop.jsx";
+import AdComponent from "../../component/AdComponent/AdComponent.jsx";
 
 export default function ScheduleExploreDesktop({
     setCategory, activeIndex, setActiveIndex,
@@ -35,6 +36,7 @@ export default function ScheduleExploreDesktop({
                 />
             }
             <div className={style["explore_schedule_container"]}>
+                <AdComponent type={"link"}/>
                 <div className={style["item_selcet_wrapper"]}>
                     {
                         scheduleKind.map((item, index) => {
@@ -72,6 +74,7 @@ export default function ScheduleExploreDesktop({
                     </div>
                 </div>
             </div>
+            <AdComponent type={"image_32x60"}/>
         </div>
     )
   }

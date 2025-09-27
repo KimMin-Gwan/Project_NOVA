@@ -25,6 +25,7 @@ import DesktopLayout from "../../component/DesktopLayout/DeskTopLayout.jsx";
 import TimeLayerBoxDesktop from "./time_layer/time_layer_box_desktop.jsx";
 import ScheduleDetailDekstop from "../../component/ScheduleDetail/ScheduleDetailDesktop.jsx";
 import ScheduleDetailMobile from "../../component/ScheduleDetail/ScheduleDetailMobile.jsx";
+import AdComponent from "../../component/AdComponent/AdComponent.jsx";
 
 
 const temp_schedule_data2 = [
@@ -544,22 +545,26 @@ const ScheduleDashboard = () => {
               toggleDetailOption={toggleDetailOption}
             />
           )}
-          {
-            scheduleData.length === 0 ? (
-              <div className="loading-screen">
-                로딩 중...
-              </div>
-            ) : (
-              <TimeLayerBoxDesktop
-                scheduleData={scheduleData[currentIndex]}
-                formattedDate={formatDate[currentIndex]}
-                onChangeIndexNext={handleNext}
-                onChangeIndexPrev={handlePrev}
-                isFetching={isFetching}
-                onClickSchedule={toggleDetailOption}
-              />
-            )
-          }
+            <AdComponent type={"image_32x60"}/>
+            <div className={style2["schedule-dashboard-main-inner-frame"]}>
+            {
+              scheduleData.length === 0 ? (
+                <div className="loading-screen">
+                  로딩 중...
+                </div>
+              ) : (
+                <TimeLayerBoxDesktop
+                  scheduleData={scheduleData[currentIndex]}
+                  formattedDate={formatDate[currentIndex]}
+                  onChangeIndexNext={handleNext}
+                  onChangeIndexPrev={handlePrev}
+                  isFetching={isFetching}
+                  onClickSchedule={toggleDetailOption}
+                />
+              )
+            }
+            </div>
+            <AdComponent type={"image_32x60"}/>
         </div>
     </DesktopLayout>
     );

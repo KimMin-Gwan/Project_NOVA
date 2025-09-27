@@ -4,15 +4,24 @@
     width: 100%;
     min-height: 100%;
     padding-top: 50px;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
     gap: 40px;
     font-family: Pretendard;
     letter-spacing: -0.55px;
     line-height: 140%; /* 30.8px */
     font-style: normal;
     position: relative; /* 추가 */
+}
+
+.schedule-dashboard-main-inner-frame{
+    display: flex;
+    width: fit-content;
+    padding-top: 50px;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
 }
 
 .schedule-dashboard-main-container{

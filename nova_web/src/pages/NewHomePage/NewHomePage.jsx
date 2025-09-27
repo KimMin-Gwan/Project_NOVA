@@ -16,6 +16,7 @@ import useBiasStore from "../../stores/BiasStore/useBiasStore.js";
 import HEADER from "../../constant/header.js";
 import postApi from "../../services/apis/postApi.js";
 import DesktopLayout from "../../component/DesktopLayout/DeskTopLayout.jsx";
+import AdComponent from '../../component/AdComponent/AdComponent.jsx';
 
 export default function NewHomePage () {
     const isMobile = useMediaQuery('(max-width:1100px)');
@@ -140,6 +141,7 @@ export default function NewHomePage () {
         return(
             <DesktopLayout>
                 <div className={style2["desktop_feed_list_outer_frame"]}>
+                    <AdComponent type={"image_32x60"}/>
                     <div className={style2["desktop_feed_list_inner_frame"]}>
                         <BiasBoxes setBiasId={setBiasId} fetchBiasCategoryData={fetchBiasCategoryData}  fecthDefaultSetting={fetchAllFeed}/>
                         <section>
@@ -167,6 +169,7 @@ export default function NewHomePage () {
                             </div>
                         </section>
                     </div>
+                    <AdComponent type={"image_32x60"}/>
                 </div>
             </DesktopLayout>
         );
