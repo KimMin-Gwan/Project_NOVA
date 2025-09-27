@@ -2,16 +2,53 @@ import { useRef, useState, useEffect } from "react";
 import style from "./AdComponents.module.css";
 import arrow from "./arrow.svg";
 
-const AdComponent = () =>{
+const AdComponent = ({ type }) => {
+  const [nowWidth, setNowWidth] = useState(0);
 
-    return(
-        <div className={style["frame"]}>
-            <div className={style["test-background"]}>
-                <LinkAd />
-            </div>
-        </div>
-    );
-}
+  const sizeRules = {
+    "image_32x60": { min: 200, max: 260 },
+    "image_50x32": { min: 340, max: 460 },
+    "link": { min: 360, max: 1020 },
+  };
+
+  useEffect(() => {
+    const handleResize = () => {
+      const el = document.getElementById("ad-frame");
+      if (el) {
+        setNowWidth(el.clientWidth);
+      }
+    };
+
+    handleResize(); // 초기 실행
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const rule = sizeRules[type] || { min: 0, max: "100%" };
+
+  return (
+    <div
+      id="ad-frame"
+      className={style["frame"]}
+      style={{ maxWidth: rule.max }}
+    >
+      <div className={style["test-background"]}>
+        {nowWidth >= rule.min ? (
+          type === "image_32x60" ? (
+            <ImageAd_32x60 />
+          ) : type === "image_50x32" ? (
+            <ImageAd_50x32 />
+          ) : type === "link" ? (
+            <LinkAd />
+          ) : null
+        ) : (
+          <div style={{ width: "100%", height: "100%" }} />
+        )}
+      </div>
+    </div>
+  );
+};
+
 
 export default AdComponent;
 
@@ -140,14 +177,20 @@ const LinkComponent = ({title, detail, _url}) => {
     return (
         <div className={style["link-component-wrapper"]}>
             <div className={style["link-component-detail-wrapper"]}>
-                <div className={style["link-component-title"]}>
+                <div className={style["link-component-title"]}
+                    onClick={() => window.open(_url, "_blank")}
+                >
                     {title}
                 </div>
-                <div className={style["link-component-detail"]}>
+                <div className={style["link-component-detail"]}
+                    onClick={() => window.open(_url, "_blank")}
+                >
                     {detail}
                 </div>
             </div>
-            <div className={style["link-component-direct-button-wrapper"]}>
+            <div className={style["link-component-direct-button-wrapper"]}
+                onClick={() => window.open(_url, "_blank")}
+            >
                 <div className={style["link-component-direct-button"]}>
                     바로가기
                 </div>
