@@ -137,39 +137,62 @@ function SubmitNewBias() {
         setErrors(prev => ({ ...prev, checkbox: '' }));
     };
 
-    const handleSubmit = () => {
-        const { name, platform, info} = form;
+    const handleSubmit = async () => {
+        const { name, platform, info } = form;
         const newErrors = {
-            name: '',
-            platform: '',
-            info: '',
-            checkbox: '',
+            name: "",
+            platform: "",
+            info: "",
+            checkbox: "",
         };
 
-        if (!name.trim()) newErrors.name = '이름을 입력해주세요.';
-        if (!platform.trim()) newErrors.platform = '플랫폼을 입력해주세요.';
-        if (!info.trim()) newErrors.info = '관련 정보를 입력해주세요.';
-        if (!isChecked) newErrors.checkbox = '필수조건을 확인해주세요.';
+        if (!name.trim()) newErrors.name = "이름을 입력해주세요.";
+        if (!platform.trim()) {
+            newErrors.platform = "플랫폼을 입력해주세요.";
+        } else {
+            // 치지직, SOOP만 허용
+            const allowed = ["치지직", "SOOP"];
+            if (!allowed.includes(platform.trim())) {
+            newErrors.platform = "플랫폼은 치지직 또는 SOOP으로 입력해주세요.";
+            }
+        }
+        if (!info.trim()) newErrors.info = "관련 정보를 입력해주세요.";
+        if (!isChecked) newErrors.checkbox = "필수조건을 확인해주세요.";
 
         setErrors(newErrors);
 
         // 모든 에러가 비어있을 때만 제출
-        const hasError = Object.values(newErrors).some(msg => msg);
+        const hasError = Object.values(newErrors).some((msg) => msg);
         if (!hasError) {
-            console.log('제출 완료', form);
-            fetchNewBias()
+            console.log("제출 완료", form);
+            const ok = await fetchNewBias();
+            if (ok) {
+            alert("등록이 완료되었습니다.");
+            navigate("/");
+            }
         }
-        navigate('/');
     };
 
+
     const fetchNewBias = async () => {
-        await mainApi.post("nova_sub_system/try_add_new_bias", {
-                header: HEADER,
-                body: form
+        try{
+            const res = await mainApi.post("nova_sub_system/try_add_new_bias", 
+                                {
+                                    header: HEADER,
+                                    body: form
+                                })
+            return true;
+        } catch (err){
+            if (err.response && err.response.status === 401) {
+                alert("신청 권한이 없습니다.");
+                return false;
+            } else {
+                alert("요청 중 오류 발생:");
+                return false;
             }
-        ).then((res) => {
-        });
+        }
     }
+
 
 
     const renderCondition = (condition, idx) => (
