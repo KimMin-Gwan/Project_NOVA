@@ -67,7 +67,7 @@ class FeedSearchEngine:
         return
     
     def try_make_new_managed_bias(self, bias:Bias):
-        self.__search_manager.try_maeke_new_managed_bias(bias)
+        self.__search_manager.try_make_new_managed_bias(bias)
         return
 
     def try_modify_managed_feed(self, feed):
@@ -377,7 +377,7 @@ class SearchManager:
     def try_search_managed_feed(self, fid):
         return self.__managed_feed_bias_table.search_managed_feed(fid)
     
-    def try_maeke_new_managed_bias(self, bias:Bias):
+    def try_make_new_managed_bias(self, bias:Bias):
         self.__managed_feed_bias_table.make_new_bias(bias)
         return
 
