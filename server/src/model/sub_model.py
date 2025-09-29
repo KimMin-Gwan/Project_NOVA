@@ -151,9 +151,11 @@ class MakeNewBiasModel(BaseModel):
         feed_search_engine.try_make_new_managed_bias(bias=self._bias)
         return
     
-    def auto_follow(self):
+    def auto_follow(self, feed_search_engine:FeedSearchEngine):
+        """bid와 uid 쌍을 가진 follow 생성 생성한 bias 자동으로 follow 하고 저장"""
         self._user.bids.append(self._bias.bid)
         self._database.add_follower(bid=self._bias.bid, uid=self._user.uid)
+        feed_search_engine.add_new_user_to_bias(bid=self._bias.bid, uid=self._user.uid)
         self._database.modify_data_with_id(target_id="uid", target_data=self._user.get_dict_form_data())
         return
         

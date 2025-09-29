@@ -17,7 +17,7 @@ class Sub_Controller:
         if result:
             model.add_new_bias_in_engine(feed_search_engine=feed_search_engine)
             model.try_alert_to_admin(info=request.data_payload.info)
-            model.auto_follow()
+            model.auto_follow(feed_search_engine=feed_search_engine)
             
         return model
         
