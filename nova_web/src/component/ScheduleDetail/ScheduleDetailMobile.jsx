@@ -168,16 +168,24 @@ const ScheduleDetailMobile = ({sid, toggleDetailOption}) => {
                                         ) : (
                                             subscribe ? (
                                             <div className={style["right-button"]}
-                                                onClick={()=>{
-                                                    fetchSubscribeSchedule(schedule.sid);
-                                                    setSubscribe(false);
+                                                onClick={async () => {
+                                                    const ok = await fetchSubscribeSchedule(schedule.sid, setSubscribe);
+                                                    if (!ok) {
+                                                        if (window.confirm("로그인이 필요합니다. 로그인 페이지로 이동할까요?")) {
+                                                            navigate("/novalogin");
+                                                        }
+                                                    }
                                                 }}
                                             >구독 취소</div>
                                             ) : (
                                             <div className={style["right-button"]}
-                                                onClick={()=>{
-                                                    fetchSubscribeSchedule(schedule.sid);
-                                                    setSubscribe(true);
+                                                onClick={async () => {
+                                                    const ok = await fetchSubscribeSchedule(schedule.sid, setSubscribe);
+                                                    if (!ok) {
+                                                        if (window.confirm("로그인이 필요합니다. 로그인 페이지로 이동할까요?")) {
+                                                            navigate("/novalogin");
+                                                        }
+                                                    }
                                                 }}
                                             >콘텐츠 구독</div>
                                             )
