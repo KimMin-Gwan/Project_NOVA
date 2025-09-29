@@ -6,6 +6,7 @@ import string
 import random
 import warnings
 from pprint import pprint
+import uuid
 
 # Boto3의 경고 메시지 무시
 warnings.filterwarnings("ignore", module='boto3.compat')
@@ -90,6 +91,9 @@ class FeedManager:
         self._feed_search_engine.try_modify_managed_feed(feed=feed)
         self._feed_search_engine.try_make_new_managed_feed(feed=feed)
         return
+    
+    def _make_new_id(self):
+        return id
 
     # 링크 만들기
     def _make_new_link(self, fid, feed_links):
@@ -102,7 +106,7 @@ class FeedManager:
         for feed_link in feed_links:
             feed_link:FeedLink = feed_link
             # pprint(feed_link.get_dict_form_data())
-            lid = self.__make_new_iid()
+            lid = str(uuid.uuid4())
             feed_link.lid = lid
             feed_link.fid = fid
             result, feed_link.url, feed_link.title = HTMLEXtractor().extract_external_webpage_title_tag(url=feed_link.url)
