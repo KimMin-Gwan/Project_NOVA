@@ -786,8 +786,10 @@ class AddScheduleModel(TimeTableModel):
     
     # 해당 날짜에 이미 스케줄이 있는지 체크
     def check_schedule_not_in_time(self, schedule_search_engine:SSE, schedule:Schedule):
-        result = schedule_search_engine.try_find_schedules_in_all_schedules_with_specific_date(specific_date=schedule.datetime)
-        if result:
+        """해당 날짜에 이미 스케줄이 있는지 체크"""
+        sid_list = schedule_search_engine.try_find_schedules_in_all_schedules_with_specific_date(specific_date=schedule.datetime)
+        
+        if self._has_overlap(sid_list, self._bias.sids):
             self._result = False
             self._detail = "선택한 날짜에 이미 스케줄이 존재합니다."
             return False
@@ -795,8 +797,8 @@ class AddScheduleModel(TimeTableModel):
             return True
     
     
-     # 복수 개의 (단일 포함) 스테줄 저장
     def save_new_schedule(self, schedule_search_engine:SSE, schedule:Schedule):
+        """단일 스케줄 저장"""
         schedule_search_engine.try_add_new_managed_schedule(new_schedule=schedule, category=self._bias.category)    # 서치 엔진에다가 저장합니다.
         self._database.add_new_data(target_id="sid", new_data=schedule.get_dict_form_data())                  # 데이터베이스에 먼저 저장
 
@@ -833,6 +835,7 @@ class AddScheduleModel(TimeTableModel):
     
     # 검증 해야됨
     def verifiy_modifying_schedule(self, modified_schedule:Schedule, sid):
+        """목표 스케줄에 접근가능한지 검증"""
         schedule_data = self._database.get_data_with_id(target="sid", id=sid)
         
         if schedule_data:
@@ -849,6 +852,7 @@ class AddScheduleModel(TimeTableModel):
     
       # 복수 개의 (단일 포함) 스테줄 저장
     def update_modify_schedule(self, schedule_search_engine:SSE, schedule:Schedule):
+        """단일 스케줄 수정하기"""
         schedule_search_engine.try_modify_schedule(modify_schedule=schedule)
         self._database.modify_data_with_id(target_id="sid", target_data=schedule.get_dict_form_data())                  # 데이터베이스에 먼저 저장
         self._result = True

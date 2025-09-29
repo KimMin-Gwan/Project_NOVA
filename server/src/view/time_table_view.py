@@ -188,26 +188,6 @@ class Time_Table_View(Master_View):
             return response
 
 
-        # 쁘띠 모델 출력용 인터페이스
-        # 테스트 확인 완료
-        # 업데이트 완료
-        @self.__app.post('/time_table_server/get_schedule_printed_form')
-        def try_get_printed_form(request:Request, raw_request:dict):
-            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
-            
-            data_payload = MakeMultipleScheduleRequest(request=raw_request)
-            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
-
-            time_table_controller =TimeTableController()
-
-            model = time_table_controller.get_schedule_printed_form(database=self.__database,
-                                                                    request=request_manager)
-
-            body_data = model.get_response_form_data(self._head_parser)
-            response = request_manager.make_json_response(body_data=body_data)
-            return response
-
-
     # 스케줄을 만들 때 사용하는 기능.
     def make_schedule_route(self):
         # 단일 일정을 만들기
