@@ -23,9 +23,9 @@ import { DesktopBiasSelectSectionPlus } from "../ScheduleMakePage/DesktopBiasSel
 import SelectCategoryComponent from "./SelectCategoryComponent.jsx";
 
 const categoryData = [
+  { key: 2, category: "후기" },
   { key: 0, category: "자유게시판" },
   { key: 1, category: "아트" },
-  { key: 2, category: "후기" },
 ];
 
 const Write = () => {
@@ -211,6 +211,13 @@ const Write = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault(); // 기본 동작을 막음 (중요)
+
+    const editorInstance = editorRef.current?.getInstance();
+    const currentHtml = editorInstance?.getHTML() || "";
+    if (currentHtml == "<p><br></p>"){
+      alert("본문이 비었습니다.")
+      return;
+    }
 
     const send_data = {
       header: header,
@@ -621,26 +628,6 @@ export const Modal = ({
   );
 };
 
-export function ImagePreview({ imagePreview, imageFiles, handleRemoveImg }) {
-  return (
-    <>
-      {imagePreview.length !== 0 &&
-        imagePreview.map((preview, index) => {
-          return (
-            <div key={index} className={style["preview-container"]}>
-              <div className={style["remove-icon"]} onClick={() => handleRemoveImg(index)}>
-                <img src={close_icon} alt="remove" />
-              </div>
-              <div className={style["img-name"]}>{imageFiles[index].name}</div>
-              <div className={style["preview-image"]}>
-                <img key={index} src={preview} />
-              </div>
-            </div>
-          );
-        })}
-    </>
-  );
-}
 
 export function ImageUploader({ handleFileChange }) {
   return (
