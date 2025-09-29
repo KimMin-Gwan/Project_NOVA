@@ -54,7 +54,7 @@ const boardList = [
     id: 4,
     title: "컨텐츠 일정 대시보드",
     src: calendar,
-    end_point: "/schedule",
+    end_point: "/",
   },
   {
     id: 5,
@@ -181,21 +181,6 @@ function MoreSee({ onModeChange }) {
     handleFetch();
   }, []);
 
-  const [brightMode, setBrightMode] = useState(() => {
-    return localStorage.getItem("brightMode") || "bright"; // 기본값은 'bright'
-  });
-
-  const handleChangeMode = () => {
-    const newMode = brightMode === "dark" ? "bright" : "dark";
-    setBrightMode(newMode);
-    localStorage.setItem("brightMode", newMode); // 상태를 localStorage에 저장
-    onModeChange(newMode); // 부모 컴포넌트에 변경된 상태 전달
-  };
-
-  useEffect(() => {
-    document.body.className = brightMode === "dark" ? "dark-mode" : "bright-mode";
-  }, [brightMode]);
-
 
   const profile = `https://kr.object.ncloudstorage.com/nova-profile-bucket/${user}.png`;
 
@@ -206,7 +191,7 @@ function MoreSee({ onModeChange }) {
   if (isMobile){
     return (
       <div className={style.font}>
-        <div className={`${style["container"]} ${style[getModeClass(brightMode)]}`}>
+        <div className={style["container"]}>
           <div className={style.TopBar}>
             <img
               src={backword}
