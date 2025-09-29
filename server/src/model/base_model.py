@@ -64,9 +64,14 @@ class BaseModel(HeaderModel):
     def get_user(self):
         return self._user
 
-    def _make_new_id(self):
+    def _make_new_id(self) -> str:
+        """ uuid4를 사용해서 만드는 데이터 """
         id = str(uuid.uuid4())
         return id
+    
+    def _has_overlap(self, list1, list2):
+        """두 리스트에 겹치는 원소가 있는지 확인 -> 겹치는게 있으면 true 없으면 false """
+        return not set(list1).isdisjoint(list2)
     
     def _get_datetime(self, date_str):
         return datetime.strptime(date_str, "%Y/%m/%d-%H:%M:%S")
