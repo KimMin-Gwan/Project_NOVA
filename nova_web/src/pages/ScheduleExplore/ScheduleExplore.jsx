@@ -69,7 +69,13 @@ export default function ScheduleExploreDesktop({
                 }
                 <ScheduleGrid scheduleData={scheduleData} toggleDetailOption={toggleDetailOption} />
                 <div className={style["fetch-more-button-wrapper"]}>
-                    <div className={style["fetch-more-button"]}>
+                    <div className={style["fetch-more-button"]}
+                        onClick={()=>{
+                            if (fetchMoreSearchData()){
+                                alert("더 이상 불러올 콘텐츠가 없습니다.")
+                            }}
+                        }
+                    >
                         더 불러오기
                     </div>
                 </div>

@@ -160,7 +160,6 @@ function ScheduleComponentList({
   };
 
   async function fetchSearchData() {
-    console.log("1");
     await postApi
       .post("time_table_server/get_explore_schedules", {
         header: HEADER,
@@ -182,7 +181,6 @@ function ScheduleComponentList({
   }
 
   async function fetchMoreSearchData() {
-    console.log("2");
     await postApi
       .post("time_table_server/get_explore_schedules", {
         header: HEADER,
@@ -198,6 +196,7 @@ function ScheduleComponentList({
         setScheduleData((prev) => [...prev, ...res.data.body.schedules]);
         setHasMore(res.data.body.schedules.length > 0);
         setKey(res.data.body.key);
+        return res.data.body.schedules.length;
       });
   }
 
@@ -256,6 +255,7 @@ function ScheduleComponentList({
           <ScheduleComponentMobile
             key={index}
             toggleDetailOption={toggleDetailOption}
+            navigate={navigate}
             {...singleSchedule}
           />
           ))}
