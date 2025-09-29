@@ -1,13 +1,19 @@
 import style from "./ScheduleExplore.module.css"
 import { useState } from "react";
-import { formatDateTime, fecthSubScribeSchedule } from "./ScheduleComponentFunc";
+import { formatDateTime, fetchSubScribeSchedule } from "./ScheduleComponentFunc";
 import { fetchSubscribeSchedule } from "./ScheduleComponentFunc";
+import { useNavigate } from "react-router-dom";
 
 export default function ScheduleGrid({ scheduleData, toggleDetailOption }) {
+  const navigate = useNavigate()
   return (
     <div className={style["schedule_grid"]}>
       {scheduleData.map((schedule) => (
-        <ScheduleComponent key={schedule.code} toggleDetailOption={toggleDetailOption} {...schedule} />
+        <ScheduleComponent 
+          key={schedule.code}
+          toggleDetailOption={toggleDetailOption} 
+          navigate={navigate}
+          {...schedule} />
       ))}   
       </div>
   );
@@ -15,6 +21,7 @@ export default function ScheduleGrid({ scheduleData, toggleDetailOption }) {
 
 function ScheduleComponent({
     toggleDetailOption,
+    navigate,
     title,
     sid,
     uname,
@@ -55,18 +62,24 @@ function ScheduleComponent({
                         >자세히</div>
                         {
                           isSubscribe? <div className={style["schedule_subscribe"]}
-                            onClick={()=>{
-                              if (fecthSubScribeSchedule(sid)){
-                                setIsSubscribe(!isSubscribe)
-                              }
+                            onClick={async () => {
+                                const ok = await fetchSubscribeSchedule(sid, setIsSubscribe);
+                                if (!ok) {
+                                    if (window.confirm("로그인이 필요합니다. 로그인 페이지로 이동할까요?")) {
+                                        navigate("/novalogin");
+                                    }
+                                }
                             }}
                           >구독취소</div>
                           : <div className={style["schedule_subscribe"]}
-                            onClick={()=>{
-                              if (fecthSubScribeSchedule(sid)){
-                                setIsSubscribe(!isSubscribe)
-                              }
-                            }}
+                              onClick={async () => {
+                                  const ok = await fetchSubscribeSchedule(sid, setIsSubscribe);
+                                  if (!ok) {
+                                      if (window.confirm("로그인이 필요합니다. 로그인 페이지로 이동할까요?")) {
+                                          navigate("/novalogin");
+                                      }
+                                  }
+                              }}
                           >구독하기</div>
                         }
                     </div>
