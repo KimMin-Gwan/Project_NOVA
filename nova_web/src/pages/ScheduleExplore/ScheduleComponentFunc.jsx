@@ -25,9 +25,18 @@ export function formatDateTime(dateStr) {
   return { formattedDate, formattedTime };
 }
 
-export const fecthSubScribeSchedule = (sid) => {
-  mainApi.get(`/time_table_server/try_subscribe_schedule?sid=${sid}`).then((res)=>{
-    const body = res.data.body;
-  })
-  return true
-}
+export const fetchSubscribeSchedule = async (sid, setSubscribe) => {
+  try {
+    const res = await mainApi.get(`/time_table_server/try_subscribe_schedule?sid=${sid}`);
+    setSubscribe((prev) => !prev);
+    return true;
+  } catch (err) {
+    if (err.response && err.response.status === 401) {
+      return false;
+    } else {
+      console.error("요청 중 오류 발생:", err);
+      return false;
+    }
+  }
+};
+

@@ -1,10 +1,11 @@
 import { useState } from "react";
 import style from "./ScheduleComponentMobile.module.css";
-import { formatDateTime, fecthSubScribeSchedule} from "./ScheduleComponentFunc";
+import { formatDateTime, fetchSubscribeSchedule} from "./ScheduleComponentFunc";
 
 
 const ScheduleComponentMobile = ({
     toggleDetailOption,
+    navigate,
     title,
     sid,
     uname,
@@ -52,19 +53,26 @@ const ScheduleComponentMobile = ({
                     {
                         isSubscribe ? 
                         <div className={style["schedule-button-right"]}
-                            onClick={()=>{
-                              if (fecthSubScribeSchedule(sid)){
-                                setIsSubscribe(!isSubscribe)
-                              }}}
+                            onClick={async () => {
+                                const ok = await fetchSubscribeSchedule(sid, setIsSubscribe);
+                                if (!ok) {
+                                    if (window.confirm("로그인이 필요합니다. 로그인 페이지로 이동할까요?")) {
+                                        navigate("/novalogin");
+                                    }
+                                }
+                            }}
                         >
                             구독취소
                         </div>
                         :
                         <div className={style["schedule-button-right"]}
-                            onClick={()=>{
-                              if (fecthSubScribeSchedule(sid)){
-                                setIsSubscribe(!isSubscribe)
-                              }
+                            onClick={async () => {
+                                const ok = await fetchSubscribeSchedule(sid, setIsSubscribe);
+                                if (!ok) {
+                                    if (window.confirm("로그인이 필요합니다. 로그인 페이지로 이동할까요?")) {
+                                        navigate("/novalogin");
+                                    }
+                                }
                             }}
                         >
                             구독하기
