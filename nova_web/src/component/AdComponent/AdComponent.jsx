@@ -4,6 +4,7 @@ import arrow from "./arrow.svg";
 
 const AdComponent = ({ type }) => {
   const [nowWidth, setNowWidth] = useState(0);
+  const frameRef = useRef(null);
 
   const sizeRules = {
     "image_32x60": { min: 200, max: 260 },
@@ -12,23 +13,26 @@ const AdComponent = ({ type }) => {
   };
 
   useEffect(() => {
-    const handleResize = () => {
-      const el = document.getElementById("ad-frame");
-      if (el) {
-        setNowWidth(el.clientWidth);
-      }
-    };
+    if (!frameRef.current) return;
 
-    handleResize(); // 초기 실행
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    const observer = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        setNowWidth(entry.contentRect.width);
+      }
+    });
+
+    observer.observe(frameRef.current);
+
+    return () => {
+      observer.disconnect();
+    };
   }, []);
 
   const rule = sizeRules[type] || { min: 0, max: "100%" };
 
   return (
     <div
-      id="ad-frame"
+      ref={frameRef}
       className={style["frame"]}
       style={{ maxWidth: rule.max }}
     >
@@ -42,7 +46,7 @@ const AdComponent = ({ type }) => {
             <LinkAd />
           ) : null
         ) : (
-          <div style={{ width: "100%", height: "100%" }} />
+          <div style={{ width: "100%", height: "100%" }}>공간이 작아</div>
         )}
       </div>
     </div>
