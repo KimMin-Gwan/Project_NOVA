@@ -3,7 +3,7 @@
     display: flex;
     width: 100%;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
 }
 
 .desktop_feed_list_inner_frame{
@@ -21,4 +21,13 @@
     display: flex;
     width: 100%;
     gap: 20px;
+}
+
+.desktop-ad-section-style{
+    width: 100%;
+    max-width: 300px;
+    min-width: 200px;
+    position:sticky;
+    top: 200px;
+    margin: 0px 30px;
 }

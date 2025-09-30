@@ -80,7 +80,9 @@ export default function ScheduleExploreDesktop({
                     </div>
                 </div>
             </div>
-            <AdComponent type={"image_32x60"}/>
+            <div className={style["desktop-ad-section-style"]}>
+                <AdComponent type={"image_32x60"}/>
+            </div>
         </div>
     )
   }

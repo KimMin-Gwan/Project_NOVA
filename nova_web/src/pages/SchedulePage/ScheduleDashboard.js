@@ -545,7 +545,9 @@ const ScheduleDashboard = () => {
               toggleDetailOption={toggleDetailOption}
             />
           )}
-            <AdComponent type={"image_32x60"}/>
+            <div className={style2["desktop-ad-section-style"]}>
+              <AdComponent type={"image_32x60"}/>
+            </div>
             <div className={style2["schedule-dashboard-main-inner-frame"]}>
             {
               scheduleData.length === 0 ? (
@@ -564,7 +566,9 @@ const ScheduleDashboard = () => {
               )
             }
             </div>
-            <AdComponent type={"image_32x60"}/>
+            <div className={style2["desktop-ad-section-style"]}>
+              <AdComponent type={"image_32x60"}/>
+            </div>
         </div>
     </DesktopLayout>
     );

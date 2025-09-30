@@ -308,7 +308,9 @@ export default function SearchResultPage() {
             <div ref={targetRef} style={{ height: "1px" }}></div>
           </div>
           </div>
-          <AdComponent type={"image_32x60"}/>
+          <div className={style["desktop-ad-section-style"]}>
+            <AdComponent type={"image_32x60"}/>
+          </div>
         </div>
       </DesktopLayout>
     );

@@ -19,6 +19,7 @@ import { ContentFeed } from "../../component/feed";
 import style from "./NewFeedDetail.module.css";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import DesktopLayout from "../../component/DesktopLayout/DeskTopLayout";
+import AdComponent from "../../component/AdComponent/AdComponent";
 
 export default function NewFeedDetail() {
   const isMobile = useMediaQuery('(max-width:1100px)');
@@ -32,6 +33,7 @@ export default function NewFeedDetail() {
 
   const [isLoading, setIsLoading] = useState(true); // 로딩 상태 관리
   const [isComment, setIsComment] = useState(false);
+
   let [feedData, setFeedData] = useState({});
   let [comments, setComments] = useState([]);
   let [commentValue, setCommentValue] = useState("");
@@ -43,10 +45,8 @@ export default function NewFeedDetail() {
   const [showMoreOption, setShowMoreOption] = useState(false);
   const [links, setLinks] = useState([]);
 
-  const [messages, setMessages] = useState([]);
   const [connectionStatus, setConnectionStatus] = useState('Disconnected');
 
-  const [socket, setSocket] = useState(null);
   const [user, setUser] = useState("");
   const [newComment, setNewComment] = useState(false);
 
@@ -305,28 +305,8 @@ export default function NewFeedDetail() {
   function onClickInput() {
 
     tryAddComment();
-    //fetchMakeComment();
     setCommentValue("");
-
   }
-
-  const header = HEADER;
-
-  //async function fetchMakeComment() {
-    //await postApi
-      //.post("feed_explore/make_comment", {
-        //header: header,
-        //body: {
-          //fid: `${fid}`,
-          //body: `${commentValue}`,
-          //target_cid: commentId,
-        //},
-      //})
-      //.then((res) => {
-        //setComments(res.data.body.comments);
-        //setCommentId("");
-      //});
-  //}
 
   const setPlaceholder = () => {
     if (user !== "") { 
@@ -452,6 +432,9 @@ export default function NewFeedDetail() {
     ) : (
       <DesktopLayout>
         <div className={style["container"]}>
+          <div className={style["desktop-ad-section-style"]}>
+            <AdComponent type={"image_32x60"}/>
+          </div>
           <div className={style["feed-detail-wrapper"]}>
             <div className={style["top-container"]}>
               <button
@@ -477,6 +460,7 @@ export default function NewFeedDetail() {
                 />
               )}
             </div>
+            <AdComponent type={"link"}/>
 
             <div className={style["content-box"]}>
               <ContentFeed
@@ -487,7 +471,8 @@ export default function NewFeedDetail() {
                 disableClick={false}
               />
             </div>
-
+            
+            <AdComponent type={"link"}/>
             <div className="section-separator"></div>
 
             {showCommentMoreOption && (
@@ -540,8 +525,9 @@ export default function NewFeedDetail() {
                 </div>
               </div>
             </div>
-
-
+          </div>
+          <div className={style["desktop-ad-section-style"]}>
+            <AdComponent type={"image_32x60"}/>
           </div>
         </div>
       </DesktopLayout>

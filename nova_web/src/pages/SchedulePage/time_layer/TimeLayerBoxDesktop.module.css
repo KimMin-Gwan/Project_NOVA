@@ -170,3 +170,12 @@
     font-size: 16px;
     font-weight: 400;
 }
+
+.desktop-ad-section-style{
+    width: 100%;
+    max-width: 300px;
+    min-width: 200px;
+    position:sticky;
+    top: 140px;
+    margin: 0px 40px;
+}

@@ -2,7 +2,7 @@
     display: flex;
     width: 100%;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     gap: 60px;
 }
 
@@ -57,4 +57,12 @@
     height: 500px;
     justify-content: center;
     align-items: center;
+}
+
+.desktop-ad-section-style{
+    width: 100%;
+    max-width: 300px;
+    min-width: 200px;
+    position:sticky;
+    top: 200px;
 }
