@@ -19,11 +19,11 @@ const SelectCategoryComponent = ({
             <div className={style["bias-selection-wrapper"]} >
                 <Swiper
                     slidesPerView={"auto"}
-                    spaceBetween={30}
+                    spaceBetween={10}
                     modules={[FreeMode]}
                 >
                     <SwiperSlide 
-                        style={{ width: "250px"}}
+                        style={{ width: "200px"}}
                     >
                         <NoneSelectCategoryComponent
                             selectedCategory={category}
@@ -33,7 +33,7 @@ const SelectCategoryComponent = ({
                     {options.map((option) => (
                         <SwiperSlide
                             key={option.category}
-                            style={{ width: "250px"}}
+                            style={{ width: "200px"}}
                         >
                             <CategoryComponent
                                 option={option.category}

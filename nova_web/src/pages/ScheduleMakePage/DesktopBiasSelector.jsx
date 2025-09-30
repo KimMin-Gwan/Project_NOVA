@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import style from "./ScheduleMakePage.module.css";
 import chzzklogo from "./chzzklogo_kor(Green).svg";
+import sooplogo from "./SOOP_LOGO_Blue 1.png";
 import biasPlusIcon from "./plus_icon.svg";
 import { useNavigate } from "react-router-dom";
 
@@ -26,7 +27,7 @@ const DesktopBiasSelectSection = ({ biasList,
                     {biasList.map((bias) => (
                         <SwiperSlide
                             key={bias.bid}
-                            style={{ width: "250px"}}
+                            style={{ width: "205px"}}
                         >
                             <BiasComponent
                                 bias={bias}
@@ -36,7 +37,7 @@ const DesktopBiasSelectSection = ({ biasList,
                         </SwiperSlide>
                     ))}
                     <SwiperSlide 
-                        style={{ width: "250px"}}
+                        style={{ width: "205px"}}
                     >
                         <AddNewBiasComponent/>
                     </SwiperSlide>
@@ -60,7 +61,14 @@ const BiasComponent = ({
                 <div className={style["bias-image"]}></div>
                 <div className={style["bias-detail-wrapper"]}>
                     <span className={style["bias-name"]}> {bias.bname}</span>
-                    <img className={style["bias-platform-logo"]} src={chzzklogo}/>
+                    {
+                        bias.platform == "치지직" ? (
+                            <img className={style["bias-platform-logo"]} src={chzzklogo}/>
+                        ):(
+                            <img className={style["bias-platform-logo"]} src={sooplogo}/>
+                        )
+
+                    }
                 </div>
             </div>
             {
@@ -128,7 +136,7 @@ export const DesktopBiasSelectSectionPlus = ({
                     modules={[FreeMode]}
                 >
                     <SwiperSlide 
-                        style={{ width: "250px"}}
+                        style={{ width: "205px"}}
                     >
                         <NoneSelectBiasComponent
                         selectedBias={selectedBias}
@@ -138,7 +146,7 @@ export const DesktopBiasSelectSectionPlus = ({
                     {biasList.map((bias) => (
                         <SwiperSlide
                             key={bias.bid}
-                            style={{ width: "250px"}}
+                            style={{ width: "205px"}}
                         >
                             <BiasComponent
                                 bias={bias}
@@ -148,7 +156,7 @@ export const DesktopBiasSelectSectionPlus = ({
                         </SwiperSlide>
                     ))}
                     <SwiperSlide 
-                        style={{ width: "250px"}}
+                        style={{ width: "205px"}}
                     >
                         <AddNewBiasComponent/>
                     </SwiperSlide>
