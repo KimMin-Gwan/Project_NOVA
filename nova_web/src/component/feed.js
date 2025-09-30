@@ -14,24 +14,11 @@ import mainApi from "../services/apis/mainApi";
 import useDragScroll from "../hooks/useDragScroll";
 import useFeedActions from "../hooks/useFeedActions";
 
-export function useBrightMode() {
-  const params = new URLSearchParams(window.location.search);
-  const brightModeFromUrl = params.get("brightMode");
-
-  const initialMode = brightModeFromUrl || localStorage.getItem("brightMode") || "bright";
-
-  const [mode, setMode] = useState(initialMode);
-
-  useEffect(() => {
-    localStorage.setItem("brightMode", mode);
-  }, [mode]);
-
-  return [mode, setMode];
-}
-const header = HEADER;
 
 export default function Feed({ feed, setFeedData, type }) {
+  const header = HEADER;
   const { handleCheckStar } = useFeedActions(setFeedData, type);
+  const navigate = useNavigate();
 
   const [report, setReport] = useState();
 
@@ -47,27 +34,30 @@ export default function Feed({ feed, setFeedData, type }) {
 
   return (
     <>
-      <ContentFeed
+      <PreviewContentFeed
         feed={feed}
         handleCheckStar={handleCheckStar}
         fetchReportResult={fetchReportResult}
-        disableClick={false}
+        navigate={navigate}
       />
     </>
   );
 }
 
-export function ContentFeed({ detailPage, feed, handleCheckStar, links, fetchReportResult, disableClick}) {
-  let navigate = useNavigate();
-  const { scrollRef, hasDragged, dragHandlers } = useDragScroll();
+export const PreviewContentFeed = ({ 
+    feed,
+    handleCheckStar,
+    links,
+    fetchReportResult,
+    navigate
+  }) =>{
+    const { scrollRef, hasDragged, dragHandlers } = useDragScroll();
+    if (!feed) {
+      return <div>loading 중...</div>;
+    }
 
-  if (!feed) {
-    return <div>loading 중...</div>;
-  }
-
-  if (disableClick){
     return (
-      <div>
+      <div className={style["preview-content-feed-wrapper"]}>
         <div className={style["wrapper-top-component"]}>
           {feed.bname && (
             <div className={style["meta-data-1"]}>
@@ -83,44 +73,7 @@ export function ContentFeed({ detailPage, feed, handleCheckStar, links, fetchRep
           </div>
         </div>
         <div
-          className={`${style["wrapper-container"]} ${style["long-wrapper"]}`}
-        >
-          <FeedHeader date={feed.date} nickname={feed.nickname} />
-
-          <div className={`${style["body-container"]} `}>
-            <HashTags hashtags={feed.hashtag} />
-            <Viewer key={feed.raw_body} initialValue={feed.raw_body} />
-          </div>
-
-          {links && <LinkSection links={links} />}
-
-          <ActionButtons
-            feed={feed}
-            handleCheckStar={handleCheckStar}
-            fetchReportResult={fetchReportResult}
-          />
-        </div>
-      </div>
-    );
-  }else{
-    return (
-      <div style={{breakInside: "avoid", marginBottom: "20px"}}>
-        <div className={style["wrapper-top-component"]}>
-          {feed.bname && (
-            <div className={style["meta-data-1"]}>
-              <p>
-                {feed.bname}
-              </p>
-            </div>
-          )}
-          <div className={style["meta-data-2"]}>
-              <p>
-                {feed.board_type}
-              </p>
-          </div>
-        </div>
-        <div
-          className={`${style["wrapper-container"]} ${ style["long-wrapper"]}`}
+          className={`${style["wrapper-container2"]} ${style["long-wrapper"]}`}
           onClick={(e) => {
             if (hasDragged) return;
             e.preventDefault();
@@ -132,7 +85,7 @@ export function ContentFeed({ detailPage, feed, handleCheckStar, links, fetchRep
         >
           <FeedHeader date={feed.date} nickname={feed.nickname} />
 
-          <div className={`${style["body-container"]}`}>
+          <div className={`${style["preview-body-container"]} `}>
             <HashTags hashtags={feed.hashtag} />
             <Viewer key={feed.raw_body} initialValue={feed.raw_body} />
           </div>
@@ -147,7 +100,51 @@ export function ContentFeed({ detailPage, feed, handleCheckStar, links, fetchRep
         </div>
       </div>
     );
+}
+
+
+export function ContentFeed({ detailPage, feed, handleCheckStar, links, fetchReportResult}) {
+
+  if (!feed) {
+    return <div>loading 중...</div>;
   }
+
+  return (
+    <div style={{breakInside: "avoid", marginBottom: "20px"}}>
+      <div className={style["wrapper-top-component"]}>
+        {feed.bname && (
+          <div className={style["meta-data-1"]}>
+            <p>
+              {feed.bname}
+            </p>
+          </div>
+        )}
+        <div className={style["meta-data-2"]}>
+            <p>
+              {feed.board_type}
+            </p>
+        </div>
+      </div>
+      <div
+        className={`${style["wrapper-container"]} ${ style["long-wrapper"]}`}
+      >
+        <FeedHeader date={feed.date} nickname={feed.nickname} />
+
+        <div className={`${style["body-container"]}`}>
+          <HashTags hashtags={feed.hashtag} />
+          <Viewer key={feed.raw_body} initialValue={feed.raw_body} />
+        </div>
+
+        {links && <LinkSection links={links} />}
+
+        <ActionButtons
+          feed={feed}
+          handleCheckStar={handleCheckStar}
+          fetchReportResult={fetchReportResult}
+        />
+      </div>
+    </div>
+  );
 }
 
 // 피드 날짜 및 작성자
