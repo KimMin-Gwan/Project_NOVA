@@ -461,23 +461,15 @@ const Write = () => {
         <div className={style2["write-frame-desktop"]}>
           <div className={style2["write-frame-wrapper-desktop"]}>
             <div className={style["top_container"]}>
-              <p
-              style={{padding: "20px"}}
-              >
-              </p>
               <span className={style["page-title"]}>게시글 작성</span>
-
-
             </div>
 
             <div className={style2["write-option-wrapper"]}>
-
               <DesktopBiasSelectSectionPlus
                 biasList={biasList}
                 selectedBias={biasId}
                 handleSelectBias={setBiasId}
               />
-
               <SelectCategoryComponent
                 category={category}
                 options={categoryData}
@@ -486,7 +478,6 @@ const Write = () => {
             </div>
 
             <div className={style2["hashtag_container"]}>
-              
               <div className={style2["section-title-wrapper"]}
                 style={{marginBottom: "10px"}}
               >
@@ -500,7 +491,7 @@ const Write = () => {
                     value={`${inputTag}`}
                     onChange={onChangeTag}
                     onKeyDown={onKeyDown}
-                    className={style["input-hashtag"]}
+                    className={style2["input-hashtag"]}
                   />
                   <span className={style["count-text"]}>{inputTagCount}/12</span>
                 </div>
@@ -521,7 +512,7 @@ const Write = () => {
                 </div>
                 {tagList.length !== 0 &&
                   tagList.map((tag, i) => (
-                    <div className={style["tag-box"]} key={i}>
+                    <div className={style2["tag-box"]} key={i}>
                       #{tag}
                       <button onClick={() => onDeleteTag(i)} className={style["delete-tag"]}>
                         &times; {/* 삭제 아이콘 */}
