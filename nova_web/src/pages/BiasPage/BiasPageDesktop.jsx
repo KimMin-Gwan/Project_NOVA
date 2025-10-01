@@ -5,6 +5,7 @@ import 'swiper/css';
 import 'swiper/css/free-mode';
 import 'swiper/css/pagination';
 import { FreeMode} from 'swiper/modules';
+import chzzkLogo from './chzzklogo_kor(Green).svg';
 
 const BiasPageDesktop = () => {
 
@@ -31,6 +32,7 @@ const BiasPageDesktop = () => {
                 </div>
                 <div className={style["bias-info-wrapper"]}>
                     <div className={style["bias-image-container"]}>
+                        <img src={"https://kr.object.ncloudstorage.com/nova-images/ham.png"}/>
                     </div>
                     <div className={style["bias-detail-wrapper"]}>
                         <div className={style["bias-detail-container"]}>
@@ -43,10 +45,11 @@ const BiasPageDesktop = () => {
                                 </div>
                             </div>
                             <div className={style["bias-state"]}>
-                                임시 등록
+                                임시 등록 상태
                             </div>
                         </div>
                         <div className={style["bias-platform-container"]}>
+                            <img src={chzzkLogo}/>
                         </div>
                     </div>
                 </div>
@@ -55,6 +58,7 @@ const BiasPageDesktop = () => {
             <div className={style["schedule-section"]}>
                 <div className={style["schedule-right-section"]}>
                     <div className={style["single-schedule-image"]}>
+                        <img src={"https://kr.object.ncloudstorage.com/nova-images/no-image.png"}/>
                     </div>
                     <div className={style["single-schedule-detail-wrapper"]}>
                         <div className={style["single-schedule-detail-sub-wrapper"]}>
@@ -127,13 +131,13 @@ const BiasPageDesktop = () => {
                             {schedules.map((schedule, index) => (
                                 <SwiperSlide
                                     key={index}
+                                    style={{ width: "380px", height: "fit-content"}}
                                 >
                                     <ScheduleComponent
                                     />
                                 </SwiperSlide>
                             ))}
                         </Swiper>
-
                     </div>
                 </div>
             </div>
@@ -147,8 +151,10 @@ const ScheduleComponent = () => {
         <div className={style["schedule-component"]}>
             <div className={style["schedule-date-wrapper"]}>
                 <div className={style["schedule-date"]}>
+                    10월 01일
                 </div>
                 <div className={style["schedule-weekday"]}>
+                    수요일
                 </div>
             </div>
             <div className={style["schedule-detaile-wrapper"]}>
