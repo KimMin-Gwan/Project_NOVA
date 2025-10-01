@@ -350,9 +350,25 @@ class BiasFollowPageModel(BiasSearchModel):
             raise CoreControllerLogicError("response making error | " + e)
         
         
+class BiasModel(BaseModel):
+    def __init__(self, database:Mongo_Database) -> None:
+        super().__init__(database)
+        self._bias = Bias()
         
+    def set_bias_data(self, bid:str):
+        bias_data = self._database.get_data_with_id(target="bid", id=bid)
         
+        if bias_data:
+            self._bias.make_with_dict(bias_data)
+        return
         
-        
+    def get_response_form_data(self, head_parser):
+        body = {
+            'bias' : self._bias.get_dict_form_data()
+        }
+
+        response = self._get_response_data(head_parser=head_parser, body=body)
+        return response
+
         
         

@@ -122,6 +122,22 @@ class Sub_Service_View(Master_View):
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response
+        
+        # 바이어스를 카테고리로 검색
+        @self.__app.get('/nova_sub_system/get_single_bias')
+        def try_search_bias_with_category(request:Request, bid:Optional[str]):
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
+
+            data_payload = BiasRequest(bid=bid)
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+
+            sub_controller=Sub_Controller()
+            model = sub_controller.get_single_bias(database=self.__database,
+                                                    request=request_manager)
+            
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
 
 
     def sub_service(self):
@@ -195,6 +211,10 @@ class Sub_Service_View(Master_View):
 class DummyRequest():
     def __init__(self) -> None:
         pass
+        
+class BiasRequest():
+    def __init__(self, bid) -> None:
+        self.bid=bid
         
 class BiasWithCategoryRequest():
     def __init__(self, category) -> None:

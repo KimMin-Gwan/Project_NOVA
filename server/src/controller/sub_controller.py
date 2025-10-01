@@ -2,6 +2,16 @@ from model import *
 from others import UserNotExist
 
 class Sub_Controller:
+    def get_single_bias(self, database:Mongo_Database, request) -> BiasModel:
+        model = BiasModel(database=database)
+        
+        #if request.jwt_payload!= "":
+            #model.set_user_with_email(request=request.jwt_payload)
+            
+        model.set_bias_data(bid=request.data_payload.bid)
+        return model
+        
+    
     
     def try_add_new_bias(self, database:Mongo_Database, request, feed_search_engine) -> BaseModel:
         model = MakeNewBiasModel(database=database)
