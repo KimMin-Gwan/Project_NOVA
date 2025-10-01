@@ -39,7 +39,7 @@ class Schedule(SampleDomain):
         self.uname:str = uname                      # maker's name
         self.bid:str = bid                          # target bias
         self.bname:str = bname                      # target bias's name
-        self.datetime:str = datetime# 시작 시간 
+        self.datetime:dt = datetime# 시작 시간 
         self.duration:int = duration
         self.platform:list = platform    # 송출 장소
         self.code:str = code                        # 스케줄 코드

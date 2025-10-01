@@ -58,7 +58,7 @@ class Time_Table_View(Master_View):
         # 홈화면의 스케줄 레이어를 바탕으로 검색
         # 업데이트 완료
         @self.__app.get('/time_table_server/get_time_layer_schedule_with_date')
-        def get_time_layer_schedule_with_date(request:Request,date:Optional[str]=datetime.now().strftime("%Y/%m/%d")):
+        def get_time_layer_schedule_with_date(request:Request, date:Optional[str]=datetime.now().strftime("%Y/%m/%d")):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = DateRequest(date=date)
             
@@ -68,6 +68,24 @@ class Time_Table_View(Master_View):
             model = time_table_controller.get_time_layer_with_date(database=self.__database,
                                                               schedule_search_engine=self.__schedule_search_engine,
                                                               request=request_manager)
+            
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response       
+        
+        # bias 페이지에서 요청하는 데이터로 세팅
+        # 업데이트 완료
+        @self.__app.get('/time_table_server/get_bias_page_schedule')
+        def get_bias_page_schedule(request:Request, bid=Optional[str], date:Optional[str]=datetime.now().strftime("%Y/%m/%d")):
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
+            data_payload = BiasDateRequest(bid=bid, date=date)
+            
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+
+            time_table_controller =TimeTableController()
+            model = time_table_controller.get_bias_date_schedule(database=self.__database,
+                                                                schedule_search_engine=self.__schedule_search_engine,
+                                                                request=request_manager)
             
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
@@ -420,6 +438,12 @@ class ScheduleRequest(RequestHeader):
 class DateRequest(RequestHeader):
     def __init__(self, date)-> None:
         self.date:str = date
+
+class BiasDateRequest(RequestHeader):
+    def __init__(self, bid, date)-> None:
+        print(date)
+        self.bid:str = bid
+        self.date:str = datetime.strptime(date)
         
 class TimeChartRequest(RequestHeader):
     def __init__(self, request):

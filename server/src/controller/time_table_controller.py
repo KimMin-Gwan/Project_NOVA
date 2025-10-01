@@ -1,10 +1,10 @@
 from view.jwt_decoder import RequestManager
 from model import Mongo_Database, BaseModel , ScheduleTimeLayerModel
 from model import TimeTableModel
-from model import MultiScheduleModel, AddScheduleModel
+from model import MultiScheduleModel, AddScheduleModel, BiasScheduleModel
 from others import ScheduleSearchEngine as SSE
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 class TimeTableController:
@@ -219,3 +219,20 @@ class TimeTableController:
                 )
         
         return model
+    
+    
+    def get_bias_date_schedule(self, schedule_search_engine:SSE, database:Mongo_Database, request:RequestManager) -> BiasScheduleModel:
+        model = BiasScheduleModel(database=database)
+        
+        if request.jwt_payload!= "":
+            model.set_user_with_email(request=request.jwt_payload)
+            
+        data_payload = request.data_payload
+            
+        model.set_bias(bid=data_payload.bid)
+        model.set_schedule_ids_in_week(schedule_search_engine=schedule_search_engine, date=data_payload.date)
+        model.set_send_form(date=data_payload.date)
+        model.set_target_date(date=data_payload.date)
+        
+        return model
+        

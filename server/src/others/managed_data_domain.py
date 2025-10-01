@@ -537,21 +537,22 @@ class ManagedTable:
     def _filter_data_with_date_in_progress(
     self, df: pd.DataFrame, date_columns: list = None, when: str = ""
     ):
-        ##
-        ##일정 상태(ended, in_progress, not_start, not_end)에 따라 데이터를 필터링합니다.
+        """
+        일정 상태(ended, in_progress, not_start, not_end)에 따라 데이터를 필터링합니다.
 
-        ##현재 기획: 단일 이벤트 → 시작 시간(datetime)만 기준
-        ##나중에 duration 추가 가능 (end_time = start + duration)
+        현재 기획: 단일 이벤트 → 시작 시간(datetime)만 기준
+        나중에 duration 추가 가능 (end_time = start + duration)
 
-        ##Parameters
-        ##----------
-        ##df : pd.DataFrame
-            ##일정 데이터
-        ##date_columns : list
-            ##["datetime"] 형식
-        ##when : str
-            ##"ended", "in_progress", "not_start", "not_end"
-        ##
+        Parameters
+        ----------
+        df : pd.DataFrame
+            일정 데이터
+        date_columns : list
+            ["datetime"] 형식
+        when : str
+            "ended", "in_progress", "not_start", "not_end"
+        """
+        
         if date_columns is None or len(date_columns) < 1:
             logging.error("date_columns에는 최소한 시작시간 컬럼(datetime)을 포함해야 합니다.")
             return df
@@ -592,23 +593,23 @@ class ManagedTable:
     def _filter_data_with_date_option(
     self, df: pd.DataFrame, date_option: str = "", date_columns: list = None, **condition
     ):
-        ##
-        ##일정 데이터를 날짜 기준으로 필터링합니다.
+        """
+        일정 데이터를 날짜 기준으로 필터링합니다.
 
-        ##현재 기획: 단일 이벤트 → 시작 시간(datetime)만 기준
-        ##나중에 duration 추가 가능 (end_time 계산 후 범위 비교)
+        현재 기획: 단일 이벤트 → 시작 시간(datetime)만 기준
+        나중에 duration 추가 가능 (end_time 계산 후 범위 비교)
 
-        ##Parameters
-        ##----------
-        ##df : pd.DataFrame
-            ##일정 데이터
-        ##date_option : str
-            ##"day", "weekly", "specific"
-        ##date_columns : list
-            ##["datetime"] 형식
-        ##condition : dict
-            ##specific_date (datetime or str "%Y/%m/%d")
-        ##
+        Parameters
+        ----------
+        df : pd.DataFrame
+            일정 데이터
+        date_option : str
+            "day", "weekly", "specific"
+        date_columns : list
+            ["datetime"] 형식
+        condition : dict
+            specific_date (datetime or str "%Y/%m/%d")
+        """
         
         if date_columns is None or len(date_columns) < 1:
             logging.error("date_columns에는 최소한 시작시간 컬럼(datetime)을 포함해야 합니다.")
@@ -647,9 +648,10 @@ class ManagedTable:
         return df[mask]
     
     def _filter_data_with_month_option(self, df: pd.DataFrame, date: datetime, data_column: str = ""):
-        ##
-        ##일정 데이터를 월별로 필터링합니다.
-        ##
+        """
+        일정 데이터를 월별로 필터링합니다.
+        """
+        
     
         if data_column == "":
             logging.error("date_column이 입력되지 않음")
@@ -672,6 +674,30 @@ class ManagedTable:
         return filtered_df
         
         
+    def _filter_data_with_week_option(self, df: pd.DataFrame, date: datetime, data_column: str = ""):
+        """
+        일정 데이터를 주(월요일~일요일) 단위로 필터링합니다.
+        """
+        if data_column == "":
+            logging.error("date_column이 입력되지 않음")
+            return df
+
+        if data_column not in df.columns.values.tolist():
+            logging.error("데이터프레임에 해당 컬럼이 존재하지 않음")
+            return df
+
+        if not isinstance(date, datetime):
+            logging.error("date는 datetime 형식이어야 합니다.")
+            return df
+
+        # 주의 시작(월요일)과 끝(일요일) 계산
+        week_start = date - timedelta(days=date.weekday())
+        week_end = week_start + timedelta(days=6)
+
+        mask = (df[data_column] >= week_start) & (df[data_column] <= week_end)
+        filtered_df = df[mask]
+
+        return filtered_df
 
 
 class ManagedFeedBiasTable(ManagedTable):
@@ -1272,6 +1298,9 @@ class ManagedScheduleTable(ManagedTable):
 
     # 금주의 일정 필터링
     def filtering_weekday_schedule(self, selected_sids:list, return_id:bool):
+        """
+        이번주 데이터만 뽑는 함수
+        """
         # 선택된 sids 필터링
         searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_df, sid=selected_sids)
         # 금주의 일정 필터링
@@ -1287,10 +1316,31 @@ class ManagedScheduleTable(ManagedTable):
 
     # 월 단위로 일정 필터링
     def filtering_monthly_schedule(self, selected_sids:list, date:datetime, return_id:bool):
+        """
+            입력한 date가 포함된 month의 schedule을 뽑는 함수
+        """
         # 선택된 sids 필터링
         searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_df, sid=selected_sids)
         # 금주의 일정 필터링
         searched_df = self._filter_data_with_month_option(df=searched_df, data_column="datetime", date=date)
+
+        if searched_df.empty:
+            logging.warning("Filtering schedule in this week returned empty DataFrame.")
+            return []
+
+        if return_id:
+            return searched_df['sid'].to_list()
+        return searched_df.to_dict('records')
+    
+    # 주 단위 일정 필터링
+    def filtering_weekly_schedule(self, selected_sids:list, date:datetime, return_id:bool):
+        """
+            입력한 date가 포함된 week의 schedule을 뽑는 함수
+        """
+        # 선택된 sids 필터링
+        searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_df, sid=selected_sids)
+        # 금주의 일정 필터링
+        searched_df = self._filter_data_with_week_option(df=searched_df, data_column="datetime", date=date)
 
         if searched_df.empty:
             logging.warning("Filtering schedule in this week returned empty DataFrame.")

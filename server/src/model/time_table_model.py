@@ -1169,3 +1169,98 @@ class ScheduleTimeLayerModel(TimeTableModel):
 
         response = self._get_response_data(head_parser=head_parser, body=body)
         return response
+
+
+class BiasScheduleModel(BaseModel):
+    def __init__(self, database:Mongo_Database) -> None:
+        super().__init__(database)
+        self._bias = Bias()
+        self._schedules = []
+        self._send_form = []
+        self.__target_week = ""
+        
+    def set_bias(self, bid):
+        bias_data = self._database.get_data_with_id(target="bid", id=bid)
+        self._bias.make_with_dict(bias_data)
+        return
+        
+    def set_schedule_ids_in_week(self, schedule_search_engine:SSE, date:datetime):
+        sid_list = schedule_search_engine.try_get_weekly_schedule_list(date=date, sids=self._bias.sids)
+        if sid_list:
+            schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids=sid_list)
+            
+        for schedule_data in schedule_datas:
+            schedule = Schedule().make_with_dict(schedule_data)
+            self._schedules.append(schedule)
+        
+        return
+        
+    def set_send_form(self, date:datetime):
+        week_start = date - timedelta(days=date.weekday())
+        weekdays = ["월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"]
+        
+        for i in range(7):
+            current_day = week_start + timedelta(days=i)
+            
+            target_schedule = Schedule()
+            for schedule in self._schedules:
+                schedule:Schedule = schedule
+                if schedule.datetime.date() == current_day.date():
+                    target_schedule=schedule
+                    
+            self._send_form.append(
+                {
+                    "date": current_day.strftime("%m월 %d일"),
+                    "weekday": weekdays[i],
+                    "schedule": target_schedule.get_dict_form_data()
+                }
+            )
+        return
+    
+    def set_target_date(self, date:datetime):
+        today = date
+        start_week, current_week = self.__calc_date(today)
+    
+        if start_week > current_week:
+            # 이번 주의 월요일이 today임
+            today = today = today - timedelta(days=today.weekday())
+            start_week, current_week = self.__calc_date(today)
+        
+        # 현재 주가 이번 달 내 몇 번째 주인지 계산합니다.
+        week_in_month = current_week - start_week + 1
+        
+        shorted_year = today.year % 100
+        
+        # 만약 미래에 있는 사람이 2100에 산다면 이 곳의 코드를 고치면 됩니다
+        self.__target_month = f'{shorted_year}년 {today.month}월'
+        self.__target_week = f'{week_in_month}주차'
+        return
+    
+    def __calc_date(self, today:datetime):
+        first_day_of_month = datetime(today.year, today.month, 1)
+        #print(first_day_of_month)
+
+        # 월요일이 가장 빠른 날을 찾기 위해 이번 달 첫째 날부터 시작해서 월요일을 찾습니다.
+        current_date = first_day_of_month
+        while current_date.weekday() != 0:  # 0은 월요일을 나타냅니다.
+            current_date += timedelta(days=1)
+
+        # 해당 주가 1주차인지 계산합니다.
+        start_week = current_date.isocalendar()[1]  # 해당 달 첫 번째 월요일이 속한 주 번호
+        current_week = today.isocalendar()[1]       # 오늘 날짜의 주 번호
+        
+        return start_week, current_week
+    
+    
+    def get_response_form_data(self, head_parser):
+        body = {
+            "schedule_data" : self._send_form,
+            "week_data" : self.__target_week
+            }
+
+        response = self._get_response_data(head_parser=head_parser, body=body)
+        return response
+        
+        
+        
+        
