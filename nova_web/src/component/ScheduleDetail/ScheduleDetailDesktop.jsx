@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import MyPageLoading from "../../pages/LoadingPage/MypageLoading";
 
 const ScheduleDetailDekstop = ({sid, toggleDetailOption}) => {
-    const url = "";
+    const defaultImage = "https://kr.object.ncloudstorage.com/nova-images/no-image.png";
     const [image, setImage] = useState(null);
     const [tags, setTags] = useState([]);
     const [schedule, setSchedule] = useState({});
@@ -67,10 +67,15 @@ const ScheduleDetailDekstop = ({sid, toggleDetailOption}) => {
                         <>
                             <div className={style["modal-upper-section"]}>
                             {
-                                image &&
-                                <div className={style["schedule-image"]}>
-                                    <img src={image} alt="스케줄 이미지" />
-                                </div>
+                                image != null ? (
+                                    <div className={style["schedule-image"]}>
+                                        <img src={image} alt="스케줄 이미지" />
+                                    </div>
+                                ) : (
+                                    <div className={style["schedule-image"]}>
+                                        <img src={defaultImage} alt="스케줄 이미지" />
+                                    </div>
+                                )
                             }   
                             </div>
                             <div className={style["modal-lower-section"]}>
