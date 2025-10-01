@@ -46,7 +46,7 @@ const AdComponent = ({ type }) => {
             <LinkAd />
           ) : null
         ) : (
-          <div style={{ width: "100%", height: "100%" }}>공간이 작아</div>
+          <div style={{ width: "100%", height: "100%" }}></div>
         )}
       </div>
     </div>
