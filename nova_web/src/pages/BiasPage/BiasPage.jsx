@@ -7,6 +7,7 @@ import AdComponent from "../../component/AdComponent/AdComponent";
 import BiasPageDesktop from "./BiasPageDesktop";
 import DesktopLayout from "../../component/DesktopLayout/DeskTopLayout.jsx";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import chzzkLogo from './chzzklogo_kor(Green).svg';
 
 const BiasPage = () => {
     const isMobile = useMediaQuery('(max-width:1100px)');
@@ -68,14 +69,18 @@ const BiasPageMobile = () => {
             </div>
             <div className={style["inner-box"]}>
                 <div className={style["bias-meta-data-wrapper"]}>
-                    <div className={style["bias-image-wrapper"]}></div>
+                    <div className={style["bias-image-wrapper"]}>
+                        <img src={"https://kr.object.ncloudstorage.com/nova-images/ham.png"}/>
+                    </div>
                     <div className={style["bias-detail-container-wrapper"]}>
                         <div className={style["bias-name-container"]}>
                             <div className={style["bias-state"]}>임시 등록</div>
                             <div className={style["bias-name"]}>도롱햄</div>
                         </div>
                         <div className={style["bias-platform-container"]}>
-                            <div className={style["platform-image"]}></div>
+                            <div className={style["platform-image"]}>
+                                <img src={chzzkLogo}/>
+                            </div>
                             <div className={style["platform-direct-link"]}>바로가기</div>
                         </div>
                         <div className={style["bias-meta-data-button-container"]}>

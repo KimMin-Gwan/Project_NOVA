@@ -39,7 +39,16 @@
         );
     background-origin: border-box;
     background-clip: content-box, border-box;
+    overflow: hidden;
 }
+
+.bias-image-wrapper img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;   /* cover → 꽉 채움 / contain → 전부 보임 */
+    border-radius: inherit; /* 모서리 맞춰서 잘림 */
+}
+
 
 .bias-detail-container-wrapper{
     display: flex;
@@ -111,9 +120,6 @@
 }
 
 .platform-image{
-    width: 116.606px;
-    flex: 1 0 0;
-    aspect-ratio: 116.61/36.50;
 }
 
 .platform-direct-link{
