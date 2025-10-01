@@ -9,13 +9,16 @@
     display: flex;
     flex-direction: column;
     padding: 4%;
-    gap: 40px;
+}
+
+.top-bar{
+    padding-bottom: 5px;
 }
 
 .bias-meta-data-wrapper{
     display: flex;
     align-items: flex-start;
-    gap: 10px;
+    gap: 6px;
     align-self: stretch;
 }
 
@@ -27,13 +30,22 @@
     aspect-ratio: 1/1;
     border-radius: 100px 14px 14px 14px;
     background-color: #767676;;
+    border: 1px solid transparent;
+    background-image: linear-gradient(#F1F7FF, #F1F7FF),
+        linear-gradient(
+        240deg,
+        #02FF31 0%,
+        #0095ff 100%
+        );
+    background-origin: border-box;
+    background-clip: content-box, border-box;
 }
 
 .bias-detail-container-wrapper{
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 10px;
+    gap: 6px;
     flex: 1 0 0;
     align-self: stretch;
     font-family: Pretendard;
@@ -51,7 +63,6 @@
     flex: 1 0 0;
     align-self: stretch;
     border-radius: 14px 60px 14px 14px;
-    padding: 1px 1px;
     border: 1px solid transparent;
     background-image: linear-gradient(#F1F7FF, #F1F7FF),
         linear-gradient(
@@ -88,7 +99,6 @@
     flex: 1 0 0;
     align-self: stretch;
     border-radius: 14px;
-    padding: 1px 1px;
     border: 1px solid transparent;
     background-image: linear-gradient(#F1F7FF, #F1F7FF),
         linear-gradient(
@@ -127,7 +137,6 @@
     line-height: normal;
     letter-spacing: -0.35px;
     border-radius: 14px;
-    padding: 1px 1px;
     border: 1px solid transparent;
     background-image: linear-gradient(#F1F7FF, #F1F7FF),
         linear-gradient(
@@ -149,7 +158,18 @@
     flex: 1 0 0;
     border-radius: 14px 0 0 14px;
     background: #02FF314D;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
 }
+
+.bias-meta-data-left-button:hover{
+    background: #02ff308f;
+}
+
+.bias-meta-data-left-button:active{
+    background: #02ff308f;
+}
+
 
 .bias-meta-data-right-button{
     display: flex;
@@ -161,16 +181,26 @@
     flex: 1 0 0;
     border-radius: 0 14px 14px 0;
     background: rgba(0, 149, 255, 0.30);
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.bias-meta-data-right-button:hover{
+    background: rgba(0, 149, 255, 0.50);
+}
+
+.bias-meta-data-right-button:active{
+    background: rgba(0, 149, 255, 0.50);
 }
 
 .week-select-box{
     display: flex;
-    padding: 28px 15px;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    padding: 10px;
     justify-content: space-between;
     align-items: center;
     align-self: stretch;
-    border-radius: 20px 20px 8px 8px;
-    border: 1px solid #878787;
     font-family: Pretendard;
     text-align: center;
     font-style: normal;
@@ -178,10 +208,22 @@
     letter-spacing: -0.45px;
 }
 
+.week-select-button-wrapper{
+    display: flex;
+    gap: 10px;
+    
+}
+
 .prev-button{
     color: #656565;
     font-size: 15px;
     font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.prev-button:active{
+    transform: scale(0.8);
 }
 
 .week-data{
@@ -194,6 +236,12 @@
     color: #656565;
     font-size: 15px;
     font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.next-button:active{
+    transform: scale(0.8);
 }
 
 .schedule-list-wrapper{
@@ -250,21 +298,29 @@
     border-radius: 14px;
     border: 1px solid #FFF;
     background: linear-gradient(90deg, rgba(255, 255, 255, 0.50) 0%, rgba(255, 255, 255, 0.70) 100%);
-    box-shadow: 7px 7px 8px 0 rgba(0, 0, 0, 0.08);
+    box-shadow: 0.7px 0.7px 0.7px 0 rgba(0, 0, 0, 0.08);
 }
 
-.single-schedule-image{
+.single-schedule-image {
     display: flex;
-    padding: 10px;
+    max-width: 20%;
+    height: 100%;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;   /* 이미지 중앙 정렬 */
+    justify-content: center;
     gap: 10px;
     flex: 1 0 0;
-    align-self: stretch;
-    aspect-ratio: 1/1;
     border-radius: 7px;
     background: #BEBEBE;
     min-width: 90px;
+    overflow: hidden; /* 이미지가 영역 밖으로 안나가게 */
+}
+
+.single-schedule-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* or contain */
+    border-radius: 7px; /* 모서리 깔끔하게 */
 }
 
 .single-schedule-detail-wrapper{
@@ -281,18 +337,18 @@
     font-family: Pretendard;
     font-size: 18px;
     font-style: normal;
-    font-weight: 500;
+    font-weight: 400;
     line-height: normal;
     letter-spacing: -0.45px;
     align-self: stretch;
 }
 
-.single-schedule-time{
+.single-start-time{
     color: #4B4B4B;
     font-family: Pretendard;
     font-size: 15px;
     font-style: normal;
-    font-weight: 400;
+    font-weight: 300;
     line-height: normal;
     letter-spacing: -0.375px;
     align-self: stretch;
@@ -305,14 +361,31 @@
     align-self: stretch;
 }
 
+.empty-schedule{
+    color: #222;
+    width:80%;
+    font-family: Pretendard;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: -0.45px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    align-self: stretch;
+}
+
 .tag{
     display: flex;
-    padding: 6px 4px;
+    padding: 4px 4px;
     justify-content: center;
     align-items: center;
     gap: 10px;
     border-radius: 7px;
-    background: rgba(0, 0, 0, 0.80);
+    background: rgba(0, 0, 0, 0.75);
     color: #fff;
 }
 
@@ -320,6 +393,13 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 15px;
+    gap: 16px;
     align-self: stretch;
+}
+
+.background-gradient{
+    position: absolute;
+    width: 100%;
+    top: 450px;
+    z-index: -1;
 }
