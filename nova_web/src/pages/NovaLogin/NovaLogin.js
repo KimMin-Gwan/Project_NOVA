@@ -10,6 +10,8 @@ import mainApi from "../../services/apis/mainApi.js";
 
 import useLoginStore from "../../stores/LoginStore/useLoginStore.js";
 import HEADER from "../../constant/header.js";
+import AdComponent from "../../component/AdComponent/AdComponent.jsx";
+
 const NOVALogin = ({ brightmode }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
