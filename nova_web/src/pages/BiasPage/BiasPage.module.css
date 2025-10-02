@@ -21,6 +21,10 @@
     align-items: flex-start;
     gap: 6px;
     align-self: stretch;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.50) 0%, rgba(255, 255, 255, 0.70) 100%);
+    padding:3%;
+    border-radius: 12px;
+    box-shadow: 0.7px 0.7px 0.7px 0 rgba(0, 0, 0, 0.08);
 }
 
 .bias-image-wrapper{
@@ -65,6 +69,7 @@
     align-self: stretch;
     border-radius: 14px 60px 14px 14px;
     border: 1px solid #969696;
+    background-color: #fff;
 }
 
 .bias-state{
@@ -79,7 +84,7 @@
     color: #222;
     margin-left: 10px;
     text-align: center;
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 500;
 }
 
@@ -93,6 +98,7 @@
     align-self: stretch;
     border-radius: 14px;
     border: 1px solid #969696;
+    background-color: #fff;
 }
 
 .platform-image{
@@ -188,6 +194,8 @@
     font-style: normal;
     line-height: normal;
     letter-spacing: -0.45px;
+    background-color: #fff;
+    border-radius: 8px;
 }
 
 .week-select-button-wrapper{
