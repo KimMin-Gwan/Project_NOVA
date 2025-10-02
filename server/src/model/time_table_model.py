@@ -1208,6 +1208,8 @@ class BiasScheduleModel(BaseModel):
                 if schedule.datetime.date() == current_day.date():
                     target_schedule=schedule
                     
+            schedule=self.__get_isoformat_schedule(schedule=target_schedule)
+                    
             self._send_form.append(
                 {
                     "date": current_day.strftime("%m월 %d일"),
@@ -1216,6 +1218,11 @@ class BiasScheduleModel(BaseModel):
                 }
             )
         return
+    
+    def __get_isoformat_schedule(self, schedule:Schedule):
+        iso_datetime = schedule.datetime.isoformat()
+        schedule.datetime=iso_datetime
+        return 
     
     def set_target_date(self, date:datetime):
         today = date
