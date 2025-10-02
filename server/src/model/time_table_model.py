@@ -1242,8 +1242,7 @@ class BiasScheduleModel(BaseModel):
         shorted_year = today.year % 100
         
         # 만약 미래에 있는 사람이 2100에 산다면 이 곳의 코드를 고치면 됩니다
-        self.__target_month = f'{shorted_year}년 {today.month}월'
-        self.__target_week = f'{week_in_month}주차'
+        self.__target_week = f'{today.month}월 {week_in_month}주차'
         return
     
     def __calc_date(self, today:datetime):
