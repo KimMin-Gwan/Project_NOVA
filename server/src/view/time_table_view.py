@@ -443,7 +443,7 @@ class BiasDateRequest(RequestHeader):
     def __init__(self, bid, date)-> None:
         print(date)
         self.bid:str = bid
-        self.date:str = datetime.strptime(date)
+        self.date:str = datetime.strptime(date, "%Y-%m-%d")
         
 class TimeChartRequest(RequestHeader):
     def __init__(self, request):
