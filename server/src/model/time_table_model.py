@@ -1189,9 +1189,9 @@ class BiasScheduleModel(BaseModel):
         if sid_list:
             schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids=sid_list)
             
-        for schedule_data in schedule_datas:
-            schedule = Schedule().make_with_dict(schedule_data)
-            self._schedules.append(schedule)
+            for schedule_data in schedule_datas:
+                schedule = Schedule().make_with_dict(schedule_data)
+                self._schedules.append(schedule)
         
         return
         
