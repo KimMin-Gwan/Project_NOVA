@@ -8,6 +8,7 @@ import soopLogo from './SOOP_LOGO_Blue 1.png';
 import { getBiasStateStr, getStartTime, handlePreviewImage, defaultImage } from "./BiasPageFunc";
 import { useEffect, useState } from "react";
 import { SCHEDULE_IMAGE_URL } from "../../constant/imageUrl";
+import NavBar from "../../component/NavBar/NavBar";
 
 const BiasPageMobile = ({
     scheduleList, targetBias, weekData, prevWeek, nextWeek
@@ -140,8 +141,8 @@ const BiasPageMobile = ({
                 </div>
             </div>
             <div style={{height:"100px"}}>
-
             </div>
+            <NavBar />
         </div>
     );
 }

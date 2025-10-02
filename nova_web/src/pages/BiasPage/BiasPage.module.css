@@ -3,6 +3,7 @@
     margin : 0 auto;
     min-height: 100vh;
     max-width: 500px;
+    position: relative;
 }
 
 .inner-box{
@@ -28,17 +29,8 @@
     align-items: center;
     flex: 1 0 0;
     aspect-ratio: 1/1;
-    border-radius: 100px 14px 14px 14px;
-    background-color: #767676;;
-    border: 1px solid transparent;
-    background-image: linear-gradient(#F1F7FF, #F1F7FF),
-        linear-gradient(
-        240deg,
-        #02FF31 0%,
-        #0095ff 100%
-        );
-    background-origin: border-box;
-    background-clip: content-box, border-box;
+    border-radius: 14px 14px 14px 14px;
+    border: 1px solid #797979;
     overflow: hidden;
 }
 
@@ -72,15 +64,7 @@
     flex: 1 0 0;
     align-self: stretch;
     border-radius: 14px 60px 14px 14px;
-    border: 1px solid transparent;
-    background-image: linear-gradient(#F1F7FF, #F1F7FF),
-        linear-gradient(
-        160deg,
-        #02FF31 0%,
-        #0095ff 100%
-        );
-    background-origin: border-box;
-    background-clip: content-box, border-box;
+    border: 1px solid #969696;
 }
 
 .bias-state{
@@ -108,15 +92,7 @@
     flex: 1 0 0;
     align-self: stretch;
     border-radius: 14px;
-    border: 1px solid transparent;
-    background-image: linear-gradient(#F1F7FF, #F1F7FF),
-        linear-gradient(
-        101deg,
-        #02FF31 0%,
-        #0095ff 100%
-        );
-    background-origin: border-box;
-    background-clip: content-box, border-box;
+    border: 1px solid #969696;
 }
 
 .platform-image{
@@ -409,3 +385,4 @@
     top: 450px;
     z-index: -1;
 }
+
