@@ -1205,6 +1205,9 @@ class BiasScheduleModel(BaseModel):
             target_schedule = Schedule()
             for schedule in self._schedules:
                 schedule:Schedule = schedule
+                print(schedule.datetime)
+                schedule.datetime = datetime.strptime(schedule.datetime, "%$")
+                
                 if schedule.datetime.date() == current_day.date():
                     target_schedule=schedule
                     
