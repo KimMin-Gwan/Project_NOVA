@@ -1216,21 +1216,22 @@ class BiasScheduleModel(BaseModel):
                 if schedule.datetime.date() == current_day.date():
                     target_schedule=schedule
                     
-            schedule=self.__get_isoformat_schedule(schedule=target_schedule)
+            iso_schedule=self.__get_isoformat_schedule(schedule=target_schedule)
                     
             self._send_form.append(
                 {
                     "date": current_day.strftime("%m월 %d일"),
                     "weekday": weekdays[i],
-                    "schedule": target_schedule.get_dict_form_data()
+                    "schedule": iso_schedule.get_dict_form_data()
                 }
             )
         return
     
     def __get_isoformat_schedule(self, schedule:Schedule):
-        iso_datetime = schedule.datetime.isoformat()
-        schedule.datetime=iso_datetime
-        return 
+        iso_schedule = Schedule().make_with_dict(schedule.get_dict_form_data())
+        iso_datetime = iso_schedule.datetime.isoformat()
+        iso_schedule.datetime=iso_datetime
+        return iso_schedule
     
     def set_target_date(self, date:datetime):
         today = date
