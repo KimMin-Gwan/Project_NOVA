@@ -281,7 +281,14 @@
 .week-button{
     width: 22px;
     height: 22px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
 }
+
+.week-button:active{
+    transform: scale(0.9);
+}
+
 
 .schedule-list-wrapper{
     display: flex;
@@ -318,7 +325,7 @@
 }
 
 .schedule-component:active{
-    transform: scale(0.9);
+    transform: scale(0.98);
 }
 
 .schedule-date-wrapper{
