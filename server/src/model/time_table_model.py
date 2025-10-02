@@ -1206,7 +1206,10 @@ class BiasScheduleModel(BaseModel):
             for schedule in self._schedules:
                 schedule:Schedule=schedule
                 
+                print("--------------------")
                 print(type(schedule.datetime))
+                pprint(schedule.get_dict_form_data())
+                print("--------------------")
                 
                 #schedule.datetime = datetime.strptime(schedule.datetime, "%Y-%m-%d %H:%M:%S")
                 
