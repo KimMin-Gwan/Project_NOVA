@@ -230,8 +230,13 @@ export default function DesktopLayout({ children }) {
             <div className={style["separate-line"]}></div>
 
             {/* Menu groups */}
-            {menuData.map((group, i) =>
-              renderMenuGroup(group.title, group.end_point, group.icon, group.items, group.isSub)
+            {menuData.map((group, i) =>(
+              <div key={i}>
+                {
+                  renderMenuGroup(group.title, group.end_point, group.icon, group.items, group.isSub)
+                }
+              </div>
+            )
             )}
           </div>
 
