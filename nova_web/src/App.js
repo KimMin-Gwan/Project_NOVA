@@ -27,6 +27,8 @@ import NewHomePage from "./pages/NewHomePage/NewHomePage.jsx";
 import SubmitNewBiasPage from "./pages/SubmitNewBias/SubmitNewBias.jsx";
 import ErrorPage from "./pages/error_page.js";
 import NotYet from "./pages/NotYet.jsx";
+import AdComponent from "./component/AdComponent/AdComponent.jsx";
+import BiasPage from "./pages/BiasPage/BiasPage.jsx";
 
 // 다크 모드 클래스 반환 함수
 export function getModeClass(mode) {
@@ -113,11 +115,14 @@ function App() {
       <Route path="/search" element={<SearchPage />}></Route>
       <Route path="/search_result" element={<SearchResultPage />}></Route>
 
-      {/* 컨텐츠  페이지 */}c
+      {/* 컨텐츠  페이지 */}
       <Route path="/temp" element={<ScheduleDashboard />}></Route>
       <Route path="/explore/schedule" element={<ScheduleExplore />}></Route>
       <Route path="/schedule/make_new" element={<ScheduleMakePage/>}>
         <Route path=":sid" element={<ScheduleMakePage/>}></Route>
+      </Route>
+      <Route path="/bias" element={<BiasPage/>}>
+        <Route path=":bid" element={<BiasPage/>}></Route>
       </Route>
 
       {/* 테스트 페이지 및 에러 페이지 */}
@@ -129,6 +134,8 @@ function App() {
       <Route path="/post_board" element={<NewHomePage/>} />
       <Route path="/welcome" element={<BrandPage/>} />
       <Route path="/content" element={<ContentPage/>} />
+
+      <Route path="/test_component" element={<AdComponent type={"image_50x32"}/>} />
 
       <Route path="/content_test" element={<ContentTestPage/>} />
     </Routes>
