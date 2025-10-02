@@ -6,117 +6,212 @@ import 'swiper/css/free-mode';
 import 'swiper/css/pagination';
 import { FreeMode} from 'swiper/modules';
 import chzzkLogo from './chzzklogo_kor(Green).svg';
+import soopLogo from './SOOP_LOGO_Blue 1.png';
+import { getBiasStateStr, getStartTime, getEndTime, handlePreviewImage, defaultImage} from "./BiasPageFunc";
+import { useEffect, useState } from "react";
+import { SCHEDULE_IMAGE_URL } from "../../constant/imageUrl";
+import MyPageLoading from "../LoadingPage/MypageLoading";
 
-const BiasPageDesktop = () => {
+const BiasPageDesktop = ({
+    scheduleList, targetBias, weekData, prevWeek, nextWeek, targetSchedule, setTargetSchedule
+}) => {
+    const [image, setImage] = useState(null);
+    const [loadgin, setLoading] = useState(false);
 
-    const schedules = [
-        { date: "25년 09월 29일", sid:"1", weekday: "월요일", title: "콘텐츠 제목 1", startTime: "오후 01시 시작", tags: ["태그1"] },
-        { date: "25년 09월 30일", sid:"2", weekday: "화요일", title: "콘텐츠 제목 2", startTime: "오후 03시 시작", tags: ["태그2"] },
-        { date: "25년 10월 01일", sid:"3", weekday: "수요일", title: "콘텐츠 제목 3", startTime: "오전 11시 시작", tags: ["태그3"] },
-        { date: "25년 10월 02일", sid:"2", weekday: "목요일", title: "콘텐츠 제목 2", startTime: "오후 03시 시작", tags: ["태그2"] },
-        { date: "25년 10월 03일", sid:"", weekday: "금요일", title: "콘텐츠 제목 3", startTime: "오전 11시 시작", tags: ["태그3"] },
-        { date: "25년 10월 04일", sid:"4", weekday: "토요일", title: "콘텐츠 제목 2", startTime: "오후 03시 시작", tags: ["태그2"] },
-        { date: "25년 10월 05일", sid:"5", weekday: "일요일", title: "콘텐츠 제목 3", startTime: "오전 11시 시작", tags: ["태그3"] },
-    ];
+    useEffect(()=>{
+        const url = `${SCHEDULE_IMAGE_URL}${targetSchedule.sid}.png`;
+        handlePreviewImage(url, setImage);
+    }, [targetSchedule])
 
     return(
         <div className={style["frame"]}>
-            <div className={style["upper-section"]}>
-                <div className={style["top-button-wrapper"]}>
-                    <div className={style["try-search-button"]}>
-                        유튜브에서 검색
-                    </div>
-                    <div className={style["try-follow-button"]}>
-                        팔로우
-                    </div>
-                </div>
-                <div className={style["bias-info-wrapper"]}>
-                    <div className={style["bias-image-container"]}>
-                        <img src={"https://kr.object.ncloudstorage.com/nova-images/ham.png"}/>
-                    </div>
-                    <div className={style["bias-detail-wrapper"]}>
-                        <div className={style["bias-detail-container"]}>
-                            <div className={style["bias-name-wrapper"]}>
-                                <div className={style["bias-detail-title"]}>
-                                    이름
-                                </div>
-                                <div className={style["bias-name"]}>
-                                    도롱햄
-                                </div>
+            {
+                targetBias.bid != "" ? (
+                    <div className={style["upper-section"]}>
+                        <div className={style["top-button-wrapper"]}>
+                            <div className={style["try-search-button"]}>
+                                유튜브에서 검색
                             </div>
-                            <div className={style["bias-state"]}>
-                                임시 등록 상태
+                            <div className={style["try-follow-button"]}>
+                                팔로우
                             </div>
                         </div>
-                        <div className={style["bias-platform-container"]}>
-                            <img src={chzzkLogo}/>
+                        <div className={style["bias-info-wrapper"]}>
+                            <div className={style["bias-image-container"]}>
+                                <img src={"https://kr.object.ncloudstorage.com/nova-images/ham.png"}/>
+                            </div>
+                            <div className={style["bias-detail-wrapper"]}>
+                                <div className={style["bias-detail-container"]}>
+                                    <div className={style["bias-name-wrapper"]}>
+                                        <div className={style["bias-detail-title"]}>
+                                            이름
+                                        </div>
+                                        <div className={style["bias-name"]}>
+                                            {targetBias.bname}
+                                        </div>
+                                    </div>
+                                    <div className={style["bias-state"]}>
+                                    {
+                                        getBiasStateStr(targetBias.state)
+                                    }
+                                    </div>
+                                </div>
+                                <div className={style["bias-platform-container"]}>
+                                    {
+                                        targetBias.platform == "치지직" ? (
+                                            <img src={chzzkLogo}/>
+                                        ):(
+                                            <img src={soopLogo}/>
+                                        )
+                                    }
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                ):(
+                    <div className={style["upper-section"]}>
+                        <MyPageLoading/>
+                    </div>
+                )
+            }
 
             <div className={style["schedule-section"]}>
-                <div className={style["schedule-right-section"]}>
-                    <div className={style["single-schedule-image"]}>
-                        <img src={"https://kr.object.ncloudstorage.com/nova-images/no-image.png"}/>
-                    </div>
-                    <div className={style["single-schedule-detail-wrapper"]}>
-                        <div className={style["single-schedule-detail-sub-wrapper"]}>
-                            <div className={style["single-schedule-data-wrapper"]}>
-                                <div className={style["single-schedule-data-title"]}>
-                                    제목
-                                </div>
-                                <div className={style["single-schedule-data-body"]}>
-                                    본문
-                                </div>
+                {
+                    targetSchedule.sid != "" ? (
+                        <div className={style["schedule-right-section"]}>
+                            <div className={style["single-schedule-image"]}>
+                            {
+                                image != null ? (
+                                    <img src={image} alt="스케줄 이미지" />
+                                ) : (
+                                    <img src={defaultImage} alt="스케줄 이미지" />
+                                )
+                            }   
                             </div>
-                            <div className={style["single-schedule-data-wrapper"]}>
-                                <div className={style["single-schedule-data-title"]}>
-                                    제목
+                            <div className={style["single-schedule-detail-wrapper"]}>
+                                <div className={style["single-schedule-detail-sub-wrapper"]}>
+                                    <div className={style["single-schedule-data-wrapper"]}>
+                                        <div className={style["single-schedule-data-title"]}>
+                                            제목
+                                        </div>
+                                        <div className={style["single-schedule-data-body"]}>
+                                            {targetSchedule.title}
+                                        </div>
+                                    </div>
+                                    <div className={style["single-schedule-data-wrapper"]}>
+                                        <div className={style["single-schedule-data-title"]}>
+                                            태그
+                                        </div>
+                                        <div className={style["single-schedule-data-body"]}>
+                                            <div className={style["tag-wrapper"]}>
+                                            {
+                                                targetSchedule.tags.map((tag, index)=>{
+                                                    return(
+                                                        <div
+                                                        className={style["tag"]}
+                                                        key={`tag ${index}`}
+                                                        >
+                                                            {tag}
+                                                        </div>
+                                                    );
+                                                })
+                                            }
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className={style["single-schedule-data-body"]}>
-                                    본문
+                                <div className={style["single-schedule-detail-sub-wrapper"]}>
+                                    <div className={style["single-schedule-data-wrapper"]}>
+                                        <div className={style["single-schedule-data-title"]}>
+                                            스트리밍 시작 시간
+                                        </div>
+                                        <div className={style["single-schedule-data-body"]}>
+                                            {
+                                                getStartTime(targetSchedule.datetime)
+                                            }
+                                        </div>
+                                    </div>
+                                    <div className={style["single-schedule-data-wrapper"]}>
+                                        <div className={style["single-schedule-data-title"]}>
+                                            스트리밍 예상 종료 시각
+                                        </div>
+                                        <div className={style["single-schedule-data-body"]}>
+                                            {
+                                                getEndTime(targetSchedule.datetime, targetSchedule.duration)
+                                            }
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div className={style["single-schedule-detail-sub-wrapper"]}>
-                            <div className={style["single-schedule-data-wrapper"]}>
-                                <div className={style["single-schedule-data-title"]}>
-                                    제목
-                                </div>
-                                <div className={style["single-schedule-data-body"]}>
-                                    본문
-                                </div>
+                    ):(
+                        <div className={style["schedule-right-section"]}>
+                            <div className={style["single-schedule-image"]}>
+                                <img src={defaultImage} alt="스케줄 이미지" />
                             </div>
-                            <div className={style["single-schedule-data-wrapper"]}>
-                                <div className={style["single-schedule-data-title"]}>
-                                    제목
+                            <div className={style["single-schedule-detail-wrapper"]}>
+                                <div className={style["single-schedule-detail-sub-wrapper"]}>
+                                    <div className={style["single-schedule-data-wrapper"]}>
+                                        <div className={style["single-schedule-data-title"]}>
+                                            제목
+                                        </div>
+                                        <div className={style["single-schedule-data-body"]}>
+                                            콘텐츠가 없습니다.
+                                        </div>
+                                    </div>
+                                    <div className={style["single-schedule-data-wrapper"]}>
+                                        <div className={style["single-schedule-data-title"]}>
+                                            태그
+                                        </div>
+                                        <div className={style["single-schedule-data-body"]}>
+                                            태그가 없습니다.
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className={style["single-schedule-data-body"]}>
-                                    본문
+                                <div className={style["single-schedule-detail-sub-wrapper"]}>
+                                    <div className={style["single-schedule-data-wrapper"]}>
+                                        <div className={style["single-schedule-data-title"]}>
+                                            스트리밍 시작 시간
+                                        </div>
+                                        <div className={style["single-schedule-data-body"]}>
+                                            비었습니다.
+                                        </div>
+                                    </div>
+                                    <div className={style["single-schedule-data-wrapper"]}>
+                                        <div className={style["single-schedule-data-title"]}>
+                                            스트리밍 예상 종료 시각
+                                        </div>
+                                        <div className={style["single-schedule-data-body"]}>
+                                            비었습니다.
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
+                    )
+                }
                 <div className={style["schedule-left-section"]}>
                     <div className={style["week-data-container"]}>
                         <div className={style["week-data"]}>
-                            10월 1주차 콘텐츠
+                            {`${weekData} 콘텐츠`}
                         </div>
                         <div className={style["week-button-wrapper"]}>
-                            <div className={style["week-button"]}>
+                            <div className={style["week-button"]}
+                                onClick={prevWeek}
+                            >
                                 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
                                     <rect x="0.5" y="0.5" width="21" height="21" rx="10.5" fill="white"/>
                                     <rect x="0.5" y="0.5" width="21" height="21" rx="10.5" stroke="#DBDBDB"/>
-                                    <path d="M14 5L7.06667 10.2C6.53333 10.6 6.53333 11.4 7.06667 11.8L14 17" stroke="#24272C" stroke-width="1.5" stroke-linecap="round"/>
+                                    <path d="M14 5L7.06667 10.2C6.53333 10.6 6.53333 11.4 7.06667 11.8L14 17" stroke="#24272C" strokeWidth="1.5" strokeLinecap="round"/>
                                 </svg>
                             </div>
-                            <div className={style["week-button"]}>
+                            <div className={style["week-button"]}
+                                onClick={nextWeek}
+                            >
                                 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
                                     <rect x="-0.5" y="0.5" width="21" height="21" rx="10.5" transform="matrix(-1 0 0 1 21 0)" fill="white"/>
                                     <rect x="-0.5" y="0.5" width="21" height="21" rx="10.5" transform="matrix(-1 0 0 1 21 0)" stroke="#DBDBDB"/>
-                                    <path d="M8 5L14.9333 10.2C15.4667 10.6 15.4667 11.4 14.9333 11.8L8 17" stroke="#24272C" stroke-width="1.5" stroke-linecap="round"/>
+                                    <path d="M8 5L14.9333 10.2C15.4667 10.6 15.4667 11.4 14.9333 11.8L8 17" stroke="#24272C" strokeWidth="1.5" strokeLinecap="round"/>
                                 </svg>
                             </div>
                         </div>
@@ -124,16 +219,20 @@ const BiasPageDesktop = () => {
                     <div className={style["schedule-list-wrapper"]}>
                         <Swiper
                             slidesPerView={"auto"}
-                            spaceBetween={30}
+                            spaceBetween={10}
                             modules={[FreeMode]}
                             direction={"vertical"}
+                            observer={true}         // ← DOM 변경 감지
+                            observeParents={true}
                         >
-                            {schedules.map((schedule, index) => (
+                            {scheduleList.map((scheduleData, index) => (
                                 <SwiperSlide
                                     key={index}
                                     style={{ width: "380px", height: "fit-content"}}
                                 >
                                     <ScheduleComponent
+                                        scheduleData={scheduleData}
+                                        setTargetSchedule={setTargetSchedule}
                                     />
                                 </SwiperSlide>
                             ))}
@@ -141,41 +240,91 @@ const BiasPageDesktop = () => {
                     </div>
                 </div>
             </div>
+
+            <div style={{height: "100px"}}>
+
+            </div>
         </div>
     );
 }
 
 
-const ScheduleComponent = () => {
-    return(
-        <div className={style["schedule-component"]}>
-            <div className={style["schedule-date-wrapper"]}>
-                <div className={style["schedule-date"]}>
-                    10월 01일
+const ScheduleComponent = ({
+    scheduleData, setTargetSchedule
+}) => {
+
+    if(scheduleData.schedule.sid == ""){
+        return(
+            <EmptyScheduleComponent scheduleData={scheduleData}/>
+        );
+    }else{
+        return(
+            <div className={style["schedule-component"]}
+                onClick={()=>{
+                    setTargetSchedule(scheduleData.schedule)
+                }}
+            >
+                <div className={style["schedule-date-wrapper"]}>
+                    <div className={style["schedule-date"]}>
+                        {scheduleData.date}
+                    </div>
+                    <div className={style["schedule-weekday"]}>
+                        {scheduleData.weekday}
+                    </div>
                 </div>
-                <div className={style["schedule-weekday"]}>
-                    수요일
+                <div className={style["schedule-detail-wrapper"]}>
+                    <div className={style["schedule-title"]}>
+                        {scheduleData.schedule.title}
+                    </div>
+                    <div className={style["schedule-start"]}>
+                        {
+                            getStartTime(scheduleData.schedule.datetime)
+                        }
+                    </div>
+                </div>
+                <div className={style["tag-wrapper"]}>
+                {
+                    scheduleData.schedule.tags.map((tag, index)=>{
+                        return(
+                            <div
+                            className={style["tag"]}
+                            key={`tag ${index}`}
+                            >
+                                {tag}
+                            </div>
+                        );
+                    })
+                }
                 </div>
             </div>
-            <div className={style["schedule-detaile-wrapper"]}>
-                <div className={style["schedule-title"]}>
-                    콘텐츠 이름
+        );
+    }
+}
+
+const EmptyScheduleComponent = ({
+    scheduleData
+})=> {
+    return(
+        <div className={style["schedule-component"]}
+            style={{minHeight:"117px"}}
+        >
+            <div className={style["schedule-date-wrapper"]}>
+                <div className={style["schedule-date"]}>
+                    {scheduleData.date}
                 </div>
-                <div className={style["schedule-start"]}>
-                    PM 09:00 시작
+                <div className={style["schedule-weekday"]}>
+                    {scheduleData.weekday}
+                </div>
+            </div>
+            <div className={style["schedule-detail-empty-wrapper"]}>
+                <div className={style["schedule-title"]}>
+                    {"휴방 / 미지정"}
                 </div>
             </div>
             <div className={style["tag-wrapper"]}>
-                <div className={style["tag"]}>
-                    태그
-                </div>
-                <div className={style["tag"]}>
-                    태그
-                </div>
             </div>
         </div>
     );
 }
-
 
 export default BiasPageDesktop;
