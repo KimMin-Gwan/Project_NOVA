@@ -83,7 +83,7 @@ const BiasPageMobile = ({
                             </svg>
                         </div>
                         <div className={style["next-button"]}
-                            onClick={prevWeek}
+                            onClick={nextWeek}
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
                                 <rect width="22" height="22" rx="11" transform="matrix(-1 0 0 1 22 0)" fill="white"/>
