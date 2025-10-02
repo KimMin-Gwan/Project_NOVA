@@ -12,11 +12,12 @@
   height: 60px;
   position: fixed;
   z-index: 10000;
+  max-width: 500px;
+  width: 100vw;
 
   bottom: 0px;
   left: 0;
   right: 0;
-  max-width: 500px;
   margin: 0 auto;
   background-color: #101010;
   display: flex;
