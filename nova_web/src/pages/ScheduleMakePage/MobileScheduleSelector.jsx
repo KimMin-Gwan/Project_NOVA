@@ -196,6 +196,7 @@ const MobileScheduleSelectSection = ({
       ...selectedSchedule,
       title: detailInput,
       tags: tagsArrayData,
+      bid: selectedBias,
       duration: durationInput ? parseInt(durationInput, 10) : "",
       datetime: (() => {
         const targetDate = selectedSchedule.datetime || new Date();
