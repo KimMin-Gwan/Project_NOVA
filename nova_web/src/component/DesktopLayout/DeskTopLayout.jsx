@@ -113,7 +113,7 @@ export default function DesktopLayout({ children }) {
       end_point: "/etc",
       items: [
             {
-                title: "주제 팔로우",
+                title: "스트리머 팔로우",
                 end_point : "/follow_page",
                 alt: "follow_page"
             },

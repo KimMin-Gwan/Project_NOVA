@@ -230,7 +230,7 @@ function MoreSee({ onModeChange }) {
 
             <Banner/>
             {/* 게시판 목록 */}
-            <div className={style["list-bar"]}>게시판 목록</div>
+            <div className={style["list-bar"]}>서비스 목록</div>
             <ul className={style.listContainer}>
               {firstBoardList.map((board, i) => {
                 return (

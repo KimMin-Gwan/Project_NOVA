@@ -26,7 +26,7 @@ export default function ScheduleExploreDesktop({
     }
 
     const handleFetchMoreSearchData = async () =>{
-        const result = await fetchMoreSearchData();
+        const result = fetchMoreSearchData();
         if (!result){
             alert("더 불러올 콘텐츠가 없습니다.");
         }
