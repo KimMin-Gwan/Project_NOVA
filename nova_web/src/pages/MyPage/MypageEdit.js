@@ -363,11 +363,19 @@ function MyPage() {
             readOnly
             tabIndex="-1"
           />
-          <p className={style["input-name"]}>태어난 년도</p>
+          <p className={style["input-name"]}>태어난 해</p>
           <input
             className={style["input-st"]}
             type="text"
             placeholder={`${myProfile.birth_year}년`}
+            readOnly
+            tabIndex="-1"
+          />
+          <p className={style["input-name"]}>성별</p>
+          <input
+            className={style["input-st"]}
+            type="text"
+            placeholder={`${myProfile.gender}`}
             readOnly
             tabIndex="-1"
           />
@@ -514,7 +522,7 @@ function MyPage() {
           <input
             className={style["input-st"]}
             type="text"
-            placeholder={`${myProfile.birth_year}살`}
+            placeholder={`${myProfile.birth_year}년`}
             readOnly
             tabIndex="-1"
           />
