@@ -26,12 +26,12 @@ import Banner from "../../component/Banner/Banner.js";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 const boardList = [
-  {
-    id: 0,
-    title: "최애 주제 게시판",
-    src: fav_icon,
-    end_point: "/feed_list?type=bias",
-  },
+  //{
+    //id: 0,
+    //title: "최애 주제 게시판",
+    //src: fav_icon,
+    //end_point: "/feed_list?type=bias",
+  //},
   //{
     //id: 1,
     //title: "오늘의 급상승 게시글",
@@ -185,8 +185,8 @@ function MoreSee({ onModeChange }) {
   const profile = `https://kr.object.ncloudstorage.com/nova-profile-bucket/${user}.png`;
 
   const firstBoardList = boardList.slice(0, 2);
-  const secondBoardList = boardList.slice(2, 5);
-  const otherFunctionList = boardList.slice(5);
+  const secondBoardList = boardList.slice(2, 4);
+  const otherFunctionList = boardList.slice(4);
 
   if (isMobile){
     return (
