@@ -211,7 +211,7 @@ const MobileScheduleSelectSection = ({
       })(),
     };
 
-    setImgLoaded(false);
+    //setImgLoaded(false);
     return newSchedule; // 👈 여기서 반환
   };
 
