@@ -181,23 +181,22 @@ function ScheduleComponentList({
   }
 
   async function fetchMoreSearchData() {
-    await postApi
-      .post("time_table_server/get_explore_schedules", {
-        header: HEADER,
-        body: {
-          category: category,
-          key:key,
-          time_section: -1,
-          style: "all",
-          gender : "all"
-        },
-      })
-      .then((res) => {
-        setScheduleData((prev) => [...prev, ...res.data.body.schedules]);
-        setHasMore(res.data.body.schedules.length > 0);
-        setKey(res.data.body.key);
-        return res.data.body.schedules.length;
-      });
+    const res = await postApi.post("time_table_server/get_explore_schedules", {
+      header: HEADER,
+      body: {
+        category: category,
+        key: key,
+        time_section: -1,
+        style: "all",
+        gender: "all",
+      },
+    });
+    
+    setScheduleData((prev) => [...prev, ...res.data.body.schedules]);
+    setHasMore(res.data.body.schedules.length > 0);
+    setKey(res.data.body.key);
+
+    return res.data.body.schedules.length;  // ✅ 이제 값이 리턴됨
   }
 
   useEffect(() => {

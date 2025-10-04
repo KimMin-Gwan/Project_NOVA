@@ -25,6 +25,13 @@ export default function ScheduleExploreDesktop({
         setShowScheduleMoreOption(!showScheduleMoreOption);
     }
 
+    const handleFetchMoreSearchData = async () =>{
+        const result = await fetchMoreSearchData();
+        if (!result){
+            alert("더 불러올 콘텐츠가 없습니다.");
+        }
+    }
+
 
     return(     
         <div className={style["explore_schedule_main_frame"]}>
@@ -71,10 +78,8 @@ export default function ScheduleExploreDesktop({
                 <div className={style["fetch-more-button-wrapper"]}>
                     <div className={style["fetch-more-button"]}
                         onClick={()=>{
-                            if (fetchMoreSearchData()){
-                                alert("더 이상 불러올 콘텐츠가 없습니다.")
-                            }}
-                        }
+                            handleFetchMoreSearchData()
+                        }}
                     >
                         더 불러오기
                     </div>
