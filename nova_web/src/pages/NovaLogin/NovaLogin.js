@@ -1,6 +1,6 @@
 import  { useEffect, useState, useRef } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import backword from "./../../img/back_icon.png";
 import See from "./../../img/pwSee.png";
 import SeeOff from "./../../img/pwNoneSee.png";
@@ -20,9 +20,26 @@ const NOVALogin = ({ brightmode }) => {
   const [loginCount, setLoginCount] = useState(0);
   const [captcha, setCaptcha] = useState("");
 
+  const location = useLocation();
+  const redirect = location.state?.from || "/"
+
   const handleCaptcha = (value) => {
     setCaptcha(value);
   };
+
+  function isValidRedirect(url) {
+    try {
+      const u = new URL(url, window.location.origin);
+      return u.origin === window.location.origin && u.pathname.startsWith("/");
+    } catch(e) {
+      return false;
+    }
+  }
+
+  if (!isValidRedirect(redirect)) {
+    // 안전한 기본 경로로 대체
+    redirect = '/';
+  }
 
   let emailRef = useRef(null);
 
@@ -36,7 +53,6 @@ const NOVALogin = ({ brightmode }) => {
       }
     })
   }
-  console.log(loginCount);
 
   useEffect(() => {
     emailRef.current.focus();
@@ -57,7 +73,6 @@ const NOVALogin = ({ brightmode }) => {
         return; // POST 요청을 보내지 않음
       }
     }
-
 
     const send_data = {
       header: HEADER,
@@ -84,7 +99,7 @@ const NOVALogin = ({ brightmode }) => {
         tryLogin(result.body.result);
         setLoginCount(result.body.count)
         if (result.body.result === "done") {
-          navigate("/");
+          navigate(redirect);
         }
       });
   };

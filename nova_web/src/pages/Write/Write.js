@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { useNavigate, useParams, useSearchParams} from "react-router-dom";
+import { useLocation, useNavigate, useParams, useSearchParams} from "react-router-dom";
 import style from "./WriteFeed.module.css";
 import style2 from "./WriteDesktop.module.css";
 
@@ -40,6 +40,7 @@ const Write = () => {
 
   const navigate = useNavigate();
   const editorRef = useRef();
+  const location = useLocation();
 
   let [showModal, setShowModal] = useState(false);
   let [showLinkModal, setShowLinkModal] = useState(false);
@@ -62,7 +63,6 @@ const Write = () => {
   function onClickLinkModal() {
     setShowLinkModal(!showLinkModal);
   }
-
   let header = {
     "request-type": "default",
     "client-version": "v1.0.1",
@@ -88,7 +88,7 @@ const Write = () => {
       .catch((error) => {
         if (error.response.status == 401){
           alert("로그인이 필요합니다.");
-          navigate("/novalogin");
+          navigate("/novalogin", { state: { from: location.pathname } });
           setIsUserState(false);
         }
         setIsUserState(false);

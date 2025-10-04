@@ -1,5 +1,5 @@
 import { useEffect, useState} from 'react';
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import style from "./SubmitNewBias.module.css";
 import title_star from "./title_star.svg";
 import info from "./Info.svg";
@@ -78,6 +78,7 @@ export default function SubmitNewBiasPage(){
 
 function SubmitNewBias() {
     const navigate = useNavigate();
+    const location = useLocation();
 
     function handleFetch() {
         fetch("https://supernova.io.kr/home/is_valid", {
@@ -87,7 +88,7 @@ function SubmitNewBias() {
             if (!response.ok) {
                 if (response.status === 401) {
                     alert("로그인이 필요한 서비스입니다.");
-                    navigate("/novalogin");
+                    navigate("/novalogin", { state: { from: location.pathname } });
                     return Promise.reject();
                 }
             }

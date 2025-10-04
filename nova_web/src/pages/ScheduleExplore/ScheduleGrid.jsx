@@ -2,7 +2,7 @@ import style from "./ScheduleExplore.module.css"
 import { useState } from "react";
 import { formatDateTime, fetchSubScribeSchedule } from "./ScheduleComponentFunc";
 import { fetchSubscribeSchedule } from "./ScheduleComponentFunc";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function ScheduleGrid({ scheduleData, toggleDetailOption }) {
   const navigate = useNavigate()
@@ -34,7 +34,7 @@ function ScheduleComponent({
     selectBack,
     subscribe
   }){
-
+    const location = useLocation();
     const [isClicked, setIsClicked] = useState(false);
     const { formattedDate, formattedTime } = formatDateTime(datetime);
     const [isSubscribe, setIsSubscribe] = useState(subscribe);
@@ -66,7 +66,7 @@ function ScheduleComponent({
                                 const ok = await fetchSubscribeSchedule(sid, setIsSubscribe);
                                 if (!ok) {
                                     if (window.confirm("로그인이 필요합니다. 로그인 페이지로 이동할까요?")) {
-                                        navigate("/novalogin");
+                                        navigate("/novalogin", { state: { from: location.pathname } });
                                     }
                                 }
                             }}
@@ -76,7 +76,7 @@ function ScheduleComponent({
                                   const ok = await fetchSubscribeSchedule(sid, setIsSubscribe);
                                   if (!ok) {
                                       if (window.confirm("로그인이 필요합니다. 로그인 페이지로 이동할까요?")) {
-                                          navigate("/novalogin");
+                                          navigate("/novalogin", { state: { from: location.pathname } });
                                       }
                                   }
                               }}

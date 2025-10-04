@@ -1,6 +1,7 @@
 import { useState } from "react";
 import style from "./ScheduleComponentMobile.module.css";
 import { formatDateTime, fetchSubscribeSchedule} from "./ScheduleComponentFunc";
+import { useLocation } from "react-router-dom";
 
 
 const ScheduleComponentMobile = ({
@@ -22,6 +23,7 @@ const ScheduleComponentMobile = ({
     const { formattedDate, formattedTime } = formatDateTime(datetime);
     const [isClicked, setIsClicked] = useState(false);
     const [isSubscribe, setIsSubscribe] = useState(subscribe);
+    const location= useLocation();
 
     return (
         <div className={style["schedule-component-wrapper"]}>
@@ -57,7 +59,7 @@ const ScheduleComponentMobile = ({
                                 const ok = await fetchSubscribeSchedule(sid, setIsSubscribe);
                                 if (!ok) {
                                     if (window.confirm("로그인이 필요합니다. 로그인 페이지로 이동할까요?")) {
-                                        navigate("/novalogin");
+                                        navigate("/novalogin", { state: { from: location.pathname } });
                                     }
                                 }
                             }}
@@ -70,7 +72,7 @@ const ScheduleComponentMobile = ({
                                 const ok = await fetchSubscribeSchedule(sid, setIsSubscribe);
                                 if (!ok) {
                                     if (window.confirm("로그인이 필요합니다. 로그인 페이지로 이동할까요?")) {
-                                        navigate("/novalogin");
+                                        navigate("/novalogin", { state: { from: location.pathname } });
                                     }
                                 }
                             }}

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import style from "./SignUp.module.css";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import backword from "./../../img/back_icon.png";
 export default function SignUp() {
   let [inputEmail, setInputEmail] = useState("");
@@ -10,7 +10,7 @@ export default function SignUp() {
   let [checkPwd, setCheckPwd] = useState("");
   let [birthYear, setBirthYear] = useState("2000");
   let [gender, setGender] = useState("none");
-
+  const location = useLocation();
   let navigate = useNavigate();
   const [agree1, setAgree1] = useState(false);
   const [agree2, setAgree2] = useState(false);
@@ -156,7 +156,7 @@ export default function SignUp() {
       .then((data) => {
         if (data.body.result) {
           alert("회원가입이 완료되었습니다.");
-          navigate("/novalogin");
+          navigate("/novalogin", { state: { from: location.pathname } });
         } else {
           alert(data.body.detail);
         }

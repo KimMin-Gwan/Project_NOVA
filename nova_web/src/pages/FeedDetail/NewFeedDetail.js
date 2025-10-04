@@ -283,7 +283,7 @@ export default function NewFeedDetail() {
       })
       .catch((err) => {
         if (err.response.status === 401) {
-          navigate("/novalogin");
+          navigate("/novalogin", { state: { from: location.pathname } });
         } else {
           console.error("Error checking like:", err);
         }

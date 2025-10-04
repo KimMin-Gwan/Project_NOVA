@@ -1,8 +1,9 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import mainApi from "../services/apis/mainApi";
 
 export default function useFeedActions(setFeedData, type) {
-  let navigate = useNavigate();
+  const navigate = useNavigate();
+  const location = useLocation()
 
   function handleCheckStar(fid, e) {
     mainApi
@@ -35,7 +36,7 @@ export default function useFeedActions(setFeedData, type) {
       })
       .catch((err) => {
         if (err.response.status === 401) {
-          navigate("/novalogin");
+          navigate("/novalogin", { state: { from: location.pathname } });
         } else {
           console.error("Error checking like:", err);
         }

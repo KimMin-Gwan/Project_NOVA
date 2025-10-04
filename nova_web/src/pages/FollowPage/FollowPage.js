@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
 import { getModeClass } from "./../../App.js";
 import useBiasStore from "../../stores/BiasStore/useBiasStore.js";
@@ -25,6 +25,7 @@ export default function FollowPage() {
   const isMobile = useMediaQuery('(max-width:1100px)');
   const navigate = useNavigate();
   let { biasList } = useBiasStore();
+  const location = useLocation();
 
   const [params] = useSearchParams();
   let [biasId, setBiasId] = useState();
@@ -67,7 +68,7 @@ export default function FollowPage() {
     ).then((res) => {
       if (res.status === 401) {
         alert("로그인이 필요한 서비스입니다.");
-        navigate("/novalogin");
+        navigate("/novalogin", { state: { from: location.pathname } });
         return Promise.reject("Unauthorized: 로그인 필요");
       }
       return res.data;

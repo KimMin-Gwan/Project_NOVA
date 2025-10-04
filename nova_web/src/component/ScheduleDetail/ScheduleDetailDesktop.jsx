@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from "react";
 import style from "./ScheduleDetailDesktop.module.css";
 import { handlePreviewImage, formatKoreanDateTime, fetchScheduleData, fetchSubscribeSchedule } from "./ScheduleDetailFunction";
 import { SCHEDULE_IMAGE_URL } from "../../constant/imageUrl";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import MyPageLoading from "../../pages/LoadingPage/MypageLoading";
 
 const ScheduleDetailDekstop = ({sid, toggleDetailOption}) => {
@@ -13,6 +13,7 @@ const ScheduleDetailDekstop = ({sid, toggleDetailOption}) => {
     const [subscribe, setSubscribe] = useState(true);
     const [isLoading, setIsLoading] = useState(true);
     const datetime = new Date(schedule.datetime);
+    const location = useLocation();
 
     const navigate = useNavigate();
     
@@ -178,7 +179,7 @@ const ScheduleDetailDekstop = ({sid, toggleDetailOption}) => {
                                             const ok = await fetchSubscribeSchedule(schedule.sid, setSubscribe);
                                             if (!ok) {
                                                 if (window.confirm("로그인이 필요합니다. 로그인 페이지로 이동할까요?")) {
-                                                    navigate("/novalogin");
+                                                    navigate("/novalogin", { state: { from: location.pathname } });
                                                 }
                                             }
                                         }}
@@ -189,7 +190,7 @@ const ScheduleDetailDekstop = ({sid, toggleDetailOption}) => {
                                             const ok = await fetchSubscribeSchedule(schedule.sid, setSubscribe);
                                             if (!ok) {
                                                 if (window.confirm("로그인이 필요합니다. 로그인 페이지로 이동할까요?")) {
-                                                    navigate("/novalogin");
+                                                    navigate("/novalogin", { state: { from: location.pathname } });
                                                 }
                                             }
                                         }}

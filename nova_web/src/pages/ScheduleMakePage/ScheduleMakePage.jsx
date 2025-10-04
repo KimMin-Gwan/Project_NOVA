@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import style from "./ScheduleMakePage.module.css";
 import style2 from "./ScheduleMakePageMobile.module.css";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -23,6 +23,7 @@ const ScheduleMakePage = () => {
     const { biasList, biasId, setBiasId, loading, fetchBiasList } = useBiasStore();
     const [scheduleList, setScheduleList] = useState({});
     const [initDate, setInitDate] = useState();
+    const location = useLocation();
 
     function handleValidCheck() {
         fetch("https://supernova.io.kr/home/is_valid", {
@@ -40,7 +41,7 @@ const ScheduleMakePage = () => {
         .catch((error) => {
           setIsUserState(false);
           alert("로그인이 필요한 서비스입니다.");
-          navigate("/novalogin");
+          navigate("/novalogin", { state: { from: location.pathname } });
         });
     }
 

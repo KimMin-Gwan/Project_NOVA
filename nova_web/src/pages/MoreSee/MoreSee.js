@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import backword from "./../../img/back_icon.png";
 import fav_icon from "./../../img/favset_icon.svg";
@@ -143,6 +143,7 @@ function MoreSee({ onModeChange }) {
     navigate(url);
   }
   let navigate = useNavigate();
+  const location = useLocation();
 
   let [isLogin, setIsLogin] = useState();
   let [isError, setIsError] = useState();
@@ -214,7 +215,7 @@ function MoreSee({ onModeChange }) {
                 if (isLogin) {
                   navigate("/mypage");
                 } else {
-                  navigate("/novalogin");
+                  navigate("/novalogin", { state: { from: location.pathname } });
                 }
               }}
             >

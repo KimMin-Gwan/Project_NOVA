@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
 import { BIAS_URL } from "../../constant/biasUrl";
@@ -14,6 +14,7 @@ import "./index.css";
 
 export default function BiasBoxes({ fetchBiasCategoryData, fecthDefaultSetting }) {
   const navigate = useNavigate();
+  const location = useLocation();
   const { scrollRef, hasDragged, dragHandlers } = useDragScroll();
   let { biasList, biasId, setBiasId, loading, fetchBiasList } = useBiasStore();
 
@@ -65,7 +66,7 @@ export default function BiasBoxes({ fetchBiasCategoryData, fecthDefaultSetting }
     if (isUserState) {
       navigate("/follow_page");
     } else {
-      navigate("/novalogin");
+      navigate("/novalogin", { state: { from: location.pathname } });
     }
   }
 

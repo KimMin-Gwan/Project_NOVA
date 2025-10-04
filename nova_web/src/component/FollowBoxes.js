@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import useBiasStore from "../stores/BiasStore/useBiasStore";
 import useLoginStore from "../stores/LoginStore/useLoginStore";
 import add_bias_icon from "./../img/add_bias.png";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import style from "./FollowBoxes.module.css";
 import tempBias from "./../img/tempBias.png";
 import mainApi from "../services/apis/mainApi.js";
@@ -11,6 +11,7 @@ export default function FollowBoxes({ setBiasId }) {
   let bias_url = "https://kr.object.ncloudstorage.com/nova-images/";
 
   const navigate = useNavigate();
+  const location = useLocation();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = (bid, bname) => {
@@ -86,7 +87,7 @@ export default function FollowBoxes({ setBiasId }) {
     ).then((res) => {
       if (res.status === 401) {
         alert("로그인이 필요한 서비스입니다.");
-        navigate("/novalogin");
+        navigate("/novalogin", { state: { from: location.pathname } }); 
         return Promise.reject("Unauthorized: 로그인 필요");
       }
       return res.data;
