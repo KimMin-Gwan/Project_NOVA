@@ -232,7 +232,7 @@ class NoticeSampleRequest():
 
 class BiasSearchRequest():
     def __init__(self, keyword, category, len_bias) -> None:
-        self.keyowrd=keyword
+        self.keyword=keyword
         self.category=category
         self.len_bias=len_bias
         
