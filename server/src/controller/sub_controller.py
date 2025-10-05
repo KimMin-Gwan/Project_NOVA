@@ -119,7 +119,7 @@ class Sub_Controller:
         if bias_list:
             if request.data_payload.category != "모두":
                 model.try_filetering_bias_with_category(
-                    category=request.data_payload.catetory,
+                    category=request.data_payload.category,
                 )
         
             model.try_paging(
