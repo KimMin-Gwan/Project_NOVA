@@ -313,7 +313,7 @@ class BiasSearchModel(BaseModel):
                 bias = Bias()
                 bias.make_with_dict(bias_data)
                 self._biases.append(bias)
-        return
+        return self._biases
     
     def try_filetering_bias_with_category(self, category:str):
         bias_list = []
