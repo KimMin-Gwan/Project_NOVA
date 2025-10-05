@@ -9,6 +9,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import DesktopLayout from '../../component/DesktopLayout/DeskTopLayout';
 import mainApi from '../../services/apis/mainApi';
 import HEADER from '../../constant/header';
+import Header from "../../component/Header/Header";
 
 const TEXT = {
   title: "최애 주제 등록",
@@ -49,7 +50,7 @@ const mainConditions = [
   { type: "negative", text: "가상의 인물은 등록할 수 없습니다." },
   { type: "negative", text: "정치와 관련 있는 인물은 등록할 수 없습니다." },
   { type: "negative", text: "논란이 있을 수 있는 인물은 등록할 수 없습니다." },
-  { type: "negative", text: "일반인은 등록할 수 없습니다." },
+  { type: "negative", text: "총 방송시간이 최소 100시간 이상이어야 합니다." },
 ];
 
 const subConditions = [
@@ -213,6 +214,7 @@ function SubmitNewBias() {
 
     return (
         <div className="container">
+            <Header/>
             <div className={style["submit-page-frame"]}>
                 {/* 제목 영역 */}
                 <div className={style["default-container"]}>
