@@ -106,7 +106,7 @@ class Sub_Controller:
         if request.jwt_payload != "":
             model.set_user_with_email(request=request.jwt_payload)
             
-        managed_bias_list= model.get_managed_bias_list()
+        managed_bias_list= model.get_managed_bias_list(feed_search_engine=feed_search_engine)
         
         if request.data_payload.keyword:
             managed_bias_list = model.try_filtering_with_keyword( 
