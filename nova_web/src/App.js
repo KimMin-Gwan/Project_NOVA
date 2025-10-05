@@ -29,6 +29,7 @@ import ErrorPage from "./pages/error_page.js";
 import NotYet from "./pages/NotYet.jsx";
 import AdComponent from "./component/AdComponent/AdComponent.jsx";
 import BiasPage from "./pages/BiasPage/BiasPage.jsx";
+import NewFollowPage from "./pages/FollowPage/NewFollowePage.jsx";
 
 // 다크 모드 클래스 반환 함수
 export function getModeClass(mode) {
@@ -108,7 +109,7 @@ function App() {
       <Route path="/feed_detail/:fid" element={<NewFeedDetail/>}></Route>
 
       {/* 스트리머 관련 페이지*/}
-      <Route path="/follow_page" element={<FollowPage />}></Route>
+      <Route path="/follow_page" element={<NewFollowPage/>}></Route>
       <Route path="/submit_new" element={<SubmitNewBiasPage/>} />
 
       {/* 검색 페이지 */}
