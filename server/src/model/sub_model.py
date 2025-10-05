@@ -248,6 +248,7 @@ class BiasSearchModel(BaseModel):
     def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)
         self._biases = []
+        self._len_bias = 0
         
     # 바이어스 전체 데이터 세팅
     def set_biases(self):
@@ -264,7 +265,7 @@ class BiasSearchModel(BaseModel):
             return False
             
     
-    def try_search_bias_with_category(self, category:str, biases=[]):
+    def try_search_bias_with_category(self, keyword:str, category:str, page:int):
         self._biases=self._try_search_bias_with_category(category=category, biases=biases)
         return
         
@@ -282,34 +283,60 @@ class BiasSearchModel(BaseModel):
                     result.append(bias)
                     
         return result
-
-    def try_search_bias(self, bname, feed_search_engine:FeedSearchEngine):
+    
+    def get_managed_bias_list(self, feed_search_engine:FeedSearchEngine):
         managed_bias_list = feed_search_engine.get_all_managed_bias()
-
+        return managed_bias_list
+    
+    def try_filtering_with_keyword(self, keyword:str, managed_bias_list:list):
         # 코사인 유사도 평가를 통한 가장 비슷한 이름 검색
-        result:list = self._search_similar_data(data_list=managed_bias_list,
-                                    key_word=bname, key_attr="bname")
+        result:list = self._search_similar_data(
+            data_list=managed_bias_list,
+            keyword=keyword,
+            key_attr="bname"
+            )
+        return result
             
+    def try_get_data_in_database(self, managed_bias_list:list, platform:str):
         # 검색 결과가 있으면 데이터 베이스에서 찾아서 보내줌
-        if result:
+        if managed_bias_list:
             bids = []
                 
             # ManagedBias에서 bid 추출
-            for managed_bias in result:
+            for managed_bias in managed_bias_list:
                 bids.append(managed_bias.bid)
                     
-            # 검색 후 만들기
+            # 검색 후 만들
             bias_datas = self._database.get_datas_with_ids(target_id="bid", ids=bids)
+            
             for bias_data in bias_datas:
                 bias = Bias()
                 bias.make_with_dict(bias_data)
                 self._biases.append(bias)
         return
+    
+    def try_filetering_bias_with_category(self, category:str):
+        bias_list = []
+        for bias in self._biases:
+            bias:Bias = bias
+            if bias.platform == category:
+                bias_list.append(bias)
+            
+        self._biases = bias_list
+        return 
+        
+    def try_paging(self, len_bias):
+        # len_bias 이후부터 6개만 가져오기
+        self._biases = self._biases[len_bias:len_bias + 6]
+        self._len_bias = len_bias + len(self._biases)
+        return
+        
 
     def get_response_form_data(self, head_parser):
         try:
             body = {
-                'biases' : self._make_dict_list_data(list_data=self._biases)
+                'biases' : self._make_dict_list_data(list_data=self._biases),
+                'len_bias' : self._len_bias
             }
 
             response = self._get_response_data(head_parser=head_parser, body=body)

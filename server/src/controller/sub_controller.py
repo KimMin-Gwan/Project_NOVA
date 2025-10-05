@@ -1,8 +1,9 @@
 from model import *
 from others import UserNotExist
+from view.jwt_decoder import RequestManager
 
 class Sub_Controller:
-    def get_single_bias(self, database:Mongo_Database, request) -> BiasModel:
+    def get_single_bias(self, database:Mongo_Database, request:RequestManager) -> BiasModel:
         model = BiasModel(database=database)
         
         #if request.jwt_payload!= "":
@@ -13,7 +14,7 @@ class Sub_Controller:
         
     
     
-    def try_add_new_bias(self, database:Mongo_Database, request, feed_search_engine) -> BaseModel:
+    def try_add_new_bias(self, database:Mongo_Database, request:RequestManager, feed_search_engine) -> BaseModel:
         model = MakeNewBiasModel(database=database)
         
         if not model.set_user_with_email(request=request.jwt_payload):
@@ -76,7 +77,7 @@ class Sub_Controller:
         return model
         
 
-    def try_follow_bias(self, database:Mongo_Database, request, feed_search_engine):
+    def try_follow_bias(self, database:Mongo_Database, request:RequestManager, feed_search_engine):
         model = BiasFollowModel(database=database)
         model.set_user_with_email(request=request.jwt_payload)
             
@@ -86,12 +87,45 @@ class Sub_Controller:
         return model
     
     # bias를 문자열로 검색
-    def try_search_bias(self, database:Mongo_Database, request,
+    def try_search_bias(self, database:Mongo_Database, request:RequestManager,
                                     feed_search_engine,): 
         model = BiasSearchModel(database=database)
 
-        model.try_search_bias(bname=request.data_payload.bname, feed_search_engine=feed_search_engine)
+        # managed_bias_list 를 불러옴
+        
+        # 1. 만약 keyword가 있으면 managed_bias에서 키워드에 필터링 해야함
+        # 2. 만약 keyword가 없다면 필터링 할 필요없음
+        
+        # 2-2. database에서 데이터를 불러옴
+        
+        # 3. 만약 category가 모두라면 필터링 필요 없음
+        # 4. 만약 category가 모두가 아니라면 필터링 해야함
 
+        # 5. 페이징 함
+        
+        if request.jwt_payload != "":
+            model.set_user_with_email(request=request.jwt_payload)
+            
+        managed_bias_list= model.get_managed_bias_list()
+        
+        if request.data_payload.keyword:
+            managed_bias_list = model.try_filtering_with_keyword( 
+                keyword=request.data_payload.keyword, 
+                managed_bias_list=managed_bias_list
+                )
+            
+        bias_list = model.try_get_data_in_database(managed_bias_list=managed_bias_list)
+        
+        if bias_list:
+            if request.data_payload.category != "모두":
+                model.try_filetering_bias_with_category(
+                    category=request.data_payload.catetory,
+                )
+        
+            model.try_paging(
+                len_bias=request.data_payload.len_bias
+            )
+            
         return model
         
     # bias follow페이지에 노출될 최애들의 리스트

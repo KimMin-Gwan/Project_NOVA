@@ -16,9 +16,9 @@ class FindSimilarData:
     def __decompose(self, text:str):
         return ''.join(j2hcj(h2j(text.replace(" ", ""))))
 
-    def search_similar(self, data_list:list, key_word:str, key_attr:str):
+    def search_similar(self, data_list:list, keyword:str, key_attr:str):
         results = []
-        decomposed_key_data = self.__decompose(key_word)
+        decomposed_key_data = self.__decompose(keyword)
         for item in data_list:
             target_item = getattr(item, key_attr)
             decomposed_item = self.__decompose(target_item)
@@ -99,10 +99,10 @@ class BaseModel(HeaderModel):
         return True
 
     # 가장 근접한 문자열을 찾는 함수
-    def _search_similar_data(self, data_list:list, key_word:str, key_attr:str):
+    def _search_similar_data(self, data_list:list, keyword:str, key_attr:str):
         find_similar_data = FindSimilarData()
         result = find_similar_data.search_similar(data_list=data_list,
-                                          key_word=key_word, key_attr=key_attr)
+                                          keyword=keyword, key_attr=key_attr)
         return result
     
     # 정렬 함수
