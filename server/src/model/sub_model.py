@@ -327,9 +327,7 @@ class BiasSearchModel(BaseModel):
         
     def try_paging(self, len_bias):
         # len_bias 이후부터 6개만 가져오기
-        print(len_bias)
         self._biases = self._biases[len_bias:len_bias + 6]
-        print(self._biases)
         self._len_bias = len_bias + len(self._biases)
         return
         
