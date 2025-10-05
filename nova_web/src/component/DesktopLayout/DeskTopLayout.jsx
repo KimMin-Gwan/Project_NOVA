@@ -260,7 +260,7 @@ export default function DesktopLayout({ children }) {
         </div>
 
         {/* Main content */}
-        <div className={style["main-frame"]}>
+        <div id="desktop-scroll-container" className={style["main-frame"]}>
           {children}
         </div>
       </div>
