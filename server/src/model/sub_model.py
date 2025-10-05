@@ -297,7 +297,7 @@ class BiasSearchModel(BaseModel):
             )
         return result
             
-    def try_get_data_in_database(self, managed_bias_list:list, platform:str):
+    def try_get_data_in_database(self, managed_bias_list:list):
         # 검색 결과가 있으면 데이터 베이스에서 찾아서 보내줌
         if managed_bias_list:
             bids = []
