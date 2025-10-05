@@ -106,34 +106,26 @@ class Sub_Controller:
         if request.jwt_payload != "":
             model.set_user_with_email(request=request.jwt_payload)
         
-        print(1)
         managed_bias_list= model.get_managed_bias_list(feed_search_engine=feed_search_engine)
         
-        print(2)
         if request.data_payload.keyword:
             managed_bias_list = model.try_filtering_with_keyword( 
                 keyword=request.data_payload.keyword, 
                 managed_bias_list=managed_bias_list
                 )
             
-        print(3)
         bias_list = model.try_get_data_in_database(managed_bias_list=managed_bias_list)
-        print(4)
         
         if bias_list:
-            print(5)
             if request.data_payload.category != "모두":
                 model.try_filetering_bias_with_category(
                     category=request.data_payload.catetory,
                 )
         
-            print(6)
             model.try_paging(
                 len_bias=request.data_payload.len_bias
             )
-            print(7)
             
-        print(8)
         return model
         
     # bias follow페이지에 노출될 최애들의 리스트
