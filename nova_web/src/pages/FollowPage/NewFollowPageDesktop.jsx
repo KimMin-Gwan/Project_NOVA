@@ -57,7 +57,7 @@ const FollowPageDesktop = ({
     return(
         <div className={style["following-page-frame"]}>
             <div className={style["bias-select-container"]}>
-                <span className={style["bias-select-section-title"]}>스트리머 선택</span>
+                <span className={style["bias-select-section-title"]}>팔로우 중인 스트리머</span>
                 <div className={style["bias-selection-wrapper"]} >
                     <Swiper
                         slidesPerView={"auto"}

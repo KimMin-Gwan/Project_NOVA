@@ -66,7 +66,7 @@ const FollowPageMobile= ({
             </div>
             <div className={style["inner-box"]}>
                 <div className={style["bias-select-section"]}>
-                    <span className={style["bias-select-section-title"]}>스트리머 선택</span>
+                    <span className={style["bias-select-section-title"]}>팔로우 중인 스트리머</span>
                     <div className={style["bias-selection-wrapper"]} >
                         <Swiper
                             slidesPerView={"auto"}

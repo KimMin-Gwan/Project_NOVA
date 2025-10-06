@@ -13,7 +13,8 @@ import { SCHEDULE_IMAGE_URL } from "../../constant/imageUrl";
 import MyPageLoading from "../LoadingPage/MypageLoading";
 
 const BiasPageDesktop = ({
-    scheduleList, targetBias, weekData, prevWeek, nextWeek, targetSchedule, setTargetSchedule
+    scheduleList, targetBias, weekData, prevWeek,
+     nextWeek, targetSchedule, setTargetSchedule, fetchTryFollowBias, is_following
 }) => {
     const [image, setImage] = useState(null);
     const [loadgin, setLoading] = useState(false);
@@ -29,11 +30,17 @@ const BiasPageDesktop = ({
                 targetBias.bid != "" ? (
                     <div className={style["upper-section"]}>
                         <div className={style["top-button-wrapper"]}>
-                            <div className={style["try-search-button"]}>
+                            <div className={style["try-search-button"]}
+                                onClick={()=>{window.open(`https://www.youtube.com/results?search_query=${targetBias.bname}`, '_blank');}}
+                            >
                                 유튜브에서 검색
                             </div>
-                            <div className={style["try-follow-button"]}>
-                                팔로우
+                            <div className={style["try-follow-button"]}
+                                onClick={()=>{fetchTryFollowBias(targetBias.bid)}}
+                            >
+                            {
+                                is_following ?  "언팔로우" : "팔로우"
+                            }
                             </div>
                         </div>
                         <div className={style["bias-info-wrapper"]}>

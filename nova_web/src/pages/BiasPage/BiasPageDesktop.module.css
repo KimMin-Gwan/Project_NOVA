@@ -38,10 +38,22 @@
     padding: 8px 18px;
     justify-content: center;
     align-items: center;
+    border-radius: 8px;
     color: #111;
     font-size: 18px;
     font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
 }
+
+.try-search-button:hover{
+    background: #E1F0FF;
+}
+
+.try-search-button:active{
+    transform: scale(0.95);
+}
+
 
 .try-follow-button{
     display: flex;
@@ -53,6 +65,16 @@
     color: #fff;
     font-size: 18px;
     font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.try-follow-button:hover{
+    background: #007ACC;
+}
+
+.try-follow-button:active{
+    transform: scale(0.95);
 }
 
 .bias-info-wrapper{

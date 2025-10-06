@@ -4,15 +4,17 @@ import DesktopLayout from "../../component/DesktopLayout/DeskTopLayout.jsx";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import mainApi from "../../services/apis/mainApi";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 const BiasPage = () => {
     const isMobile = useMediaQuery('(max-width:1100px)');
     const { bid } = useParams();
     const [targetDate, setTargetDate] = useState(new Date());
     const navigate = useNavigate();
+    const location = useLocation();
     const [scheduleList, setScheduleList] = useState([]);
     const [weekData, setWeekData] = useState("");
+    const [is_following, setIsFollowing] = useState(false);
 
     const [targetBias, setTargetBias] = useState({
         bname :"",
@@ -32,6 +34,8 @@ const BiasPage = () => {
     const fetchBiasData = async (bid) => {
         const res = await mainApi.get(`/nova_sub_system/get_single_bias?bid=${bid}`);
         const bias = res.data.body.bias
+        const is_following = res.data.body.is_following
+        setIsFollowing(is_following);
         return bias
     }
 
@@ -41,6 +45,36 @@ const BiasPage = () => {
         const response = res.data.body;
         return response
     }
+
+    const fetchTryFollowBias = async (bid) => {
+        try {
+            const res = await mainApi.get(`nova_sub_system/try_follow_bias?bid=${bid}`);
+
+            if (res.status === 401) {
+                alert("로그인이 필요한 서비스입니다.");
+                navigate("/novalogin", { state: { from: location.pathname } });
+            }
+
+            const result = res.data.body.now_following;
+
+            if (result){
+                alert("팔로우 완료!");
+            }else{
+                alert("팔로우 취소 완료");
+            }
+
+            setIsFollowing(result);
+            return result;
+        } catch (err) {
+            const status = err.response.status;
+            if (status === 401) {
+                alert("로그인이 필요한 서비스입니다.");
+                navigate("/novalogin", { state: { from: location.pathname } });
+            }else{
+                alert("오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+            }
+        }
+    };
 
     useEffect(() => {
         const loadData = async () => {
@@ -124,6 +158,8 @@ const BiasPage = () => {
                 weekData={weekData}
                 prevWeek={prevWeek}
                 nextWeek={nextWeek}
+                fetchTryFollowBias={fetchTryFollowBias}
+                is_following={is_following}
             />
         );
     }else{
@@ -137,6 +173,8 @@ const BiasPage = () => {
                     nextWeek={nextWeek}
                     targetSchedule={targetSchedule}
                     setTargetSchedule={setTargetSchedule}
+                    fetchTryFollowBias={fetchTryFollowBias}
+                    is_following={is_following}
                  />
             </DesktopLayout>
         );

@@ -11,7 +11,7 @@ import { SCHEDULE_IMAGE_URL } from "../../constant/imageUrl";
 import NavBar from "../../component/NavBar/NavBar";
 
 const BiasPageMobile = ({
-    scheduleList, targetBias, weekData, prevWeek, nextWeek
+    scheduleList, targetBias, weekData, prevWeek, nextWeek, fetchTryFollowBias, is_following
 }) => {
 
     // 부모 컨테이너 애니메이션 설정
@@ -66,8 +66,16 @@ const BiasPageMobile = ({
                             <div className={style["platform-direct-link"]}>바로가기</div>
                         </div>
                         <div className={style["bias-meta-data-button-container"]}>
-                            <div className={style["bias-meta-data-left-button"]}>외부 검색</div>
-                            <div className={style["bias-meta-data-right-button"]}>팔로우</div>
+                            <div className={style["bias-meta-data-left-button"]}
+                                onClick={()=>{window.open(`https://www.youtube.com/results?search_query=${targetBias.bname}`, '_blank');}}
+                            >외부 검색</div>
+                            <div className={style["bias-meta-data-right-button"]}
+                                onClick={()=>{fetchTryFollowBias(targetBias.bid)}}
+                            >
+                            {
+                                is_following ?  "언팔로우" : "팔로우"
+                            }
+                            </div>
                         </div>
                     </div>
                 </div>
