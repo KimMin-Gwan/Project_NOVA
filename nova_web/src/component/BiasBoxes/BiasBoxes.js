@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
-import { BIAS_URL } from "../../constant/biasUrl";
+import { BIAS_URL, DEFAULT_BIAS_URL } from "../../constant/biasUrl";
 import useBiasStore from "../../stores/BiasStore/useBiasStore";
 import useLoginStore from "../../stores/LoginStore/useLoginStore";
 import useDragScroll from "../../hooks/useDragScroll";
@@ -112,7 +112,10 @@ export default function BiasBoxes({ fetchBiasCategoryData, fecthDefaultSetting }
                   {bias && (
                     <img
                       src={BIAS_URL + `${bias.bid}.png`}
-                      onError={(e) => (e.target.src = tempBias)}
+                        onError={(e) => {
+                            e.currentTarget.onerror = null; // 무한 루프 방지
+                            e.currentTarget.src = DEFAULT_BIAS_URL;
+                        }}
                       alt="bias"
                       onClick={() => {
                         if (hasDragged) return;
