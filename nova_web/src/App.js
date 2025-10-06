@@ -116,7 +116,7 @@ function App() {
       <Route path="/search_result" element={<SearchResultPage />}></Route>
 
       {/* 컨텐츠  페이지 */}
-      <Route path="/" element={<ScheduleDashboard />}></Route>
+      <Route path="/temp" element={<ScheduleDashboard />}></Route>
       <Route path="/explore/schedule" element={<ScheduleExplore />}></Route>
       <Route path="/schedule/make_new" element={<ScheduleMakePage/>}>
         <Route path=":sid" element={<ScheduleMakePage/>}></Route>
@@ -128,7 +128,7 @@ function App() {
       {/* 테스트 페이지 및 에러 페이지 */}
       {/* <Route path="/test2" element={<TestPage />}></Route> */}
       <Route path="*" element={<ErrorPage/>} />
-      <Route path="/temp" element={<NotYet/>} />
+      <Route path="/" element={<NotYet/>} />
 
       {/* 홈 화면 */}
       <Route path="/post_board" element={<NewHomePage/>} />
