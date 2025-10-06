@@ -96,6 +96,14 @@
     background: #BEC1FF;
 }
 
+.bias-image img {
+  border-radius: 100px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* ✅ 이미지 비율 유지하며 꽉 채움 */
+  object-position: center; /* ✅ 가운데 기준으로 잘리게 */
+}
+
 .bias-detail-wrapper{
     display: flex;
     height: 70px;

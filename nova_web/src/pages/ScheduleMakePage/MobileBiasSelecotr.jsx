@@ -2,6 +2,8 @@ import { useEffect, useState, useRef } from "react";
 import style from "./ScheduleMakePageMobile.module.css";
 import chzzklogo from "./chzzklogo_kor(Green).svg";
 import biasPlusIcon from "./plus_icon.svg";
+import { BIAS_URL, DEFAULT_BIAS_URL } from "../../constant/biasUrl";
+import sooplogo from "./SOOP_LOGO_Blue 1.png";
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
@@ -21,13 +23,13 @@ const MobileBiasSelectSection = ({ biasList,
             <div className={style["bias-selection-wrapper"]} >
                 <Swiper
                     slidesPerView={"auto"}
-                    spaceBetween={10}
+                    spaceBetween={5}
                     modules={[FreeMode]}
                 >
                     {biasList.map((bias) => (
                         <SwiperSlide
                             key={bias.bid}
-                            style={{ width: "205px"}}
+                            style={{ width: "180px"}}
                         >
                             <BiasComponent
                                 bias={bias}
@@ -37,7 +39,7 @@ const MobileBiasSelectSection = ({ biasList,
                         </SwiperSlide>
                     ))}
                     <SwiperSlide 
-                        style={{ width: "205px"}}
+                        style={{ width: "180px"}}
                     >
                         <AddNewBiasComponent/>
                     </SwiperSlide>
@@ -58,10 +60,25 @@ const BiasComponent = ({
                 onClick={()=>handleSelectBias(bias.bid)}
                 style={{ border: selectedBias == bias.bid ? "2px solid #8CFF99" : "2px solid #cacacaff" }}
             >
-                <div className={style["bias-image"]}></div>
+                <div className={style["bias-image"]}>
+                    <img
+                      src={BIAS_URL + `${bias.bid}.png`}
+                        onError={(e) => {
+                            e.currentTarget.onerror = null; // 무한 루프 방지
+                            e.currentTarget.src = DEFAULT_BIAS_URL;
+                        }}
+                        alt="bias"
+                      />
+                </div>
                 <div className={style["bias-detail-wrapper"]}>
                     <span className={style["bias-name"]}> {bias.bname}</span>
-                    <img className={style["bias-platform-logo"]} src={chzzklogo}/>
+                    {
+                        bias.platform == "치지직" ? (
+                            <img className={style["bias-platform-logo"]} src={chzzklogo}/>
+                        ) : (
+                            <img className={style["bias-platform-logo"]} src={sooplogo}/>
+                        )
+                    }
                 </div>
             </div>
             {

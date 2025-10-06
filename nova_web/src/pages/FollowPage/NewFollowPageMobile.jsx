@@ -4,6 +4,7 @@ import chzzklogo from "./chzzklogo_kor(Green).svg";
 import sooplogo from "./SOOP_LOGO_Blue 1.png";
 import biasPlusIcon from "./plus_icon.svg";
 import { useNavigate } from "react-router-dom";
+import { BIAS_URL, DEFAULT_BIAS_URL } from "../../constant/biasUrl";
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
@@ -80,7 +81,7 @@ const FollowPageMobile= ({
                             {biasList.map((bias) => (
                                 <SwiperSlide
                                     key={bias.bid}
-                                    style={{ width: "205px"}}
+                                    style={{ width: "180px"}}
                                 >
                                     <BiasComponent
                                         bias={bias}
@@ -91,58 +92,61 @@ const FollowPageMobile= ({
                         </Swiper>
                     </div>
                 </div>
-                <div className={style["follow-search-container"]}>
-                    <span className={style["bias-select-section-title"]}>주제 탐색</span>
-                    <div className={style["search_input_wrapper"]}>
-                        <input className={style["search_input"]}
-                            onKeyDown={handleKeyDown}
-                            onChange={(e) => {
-                                handleSearchWord(e);
-                            }}
-                            placeholder="슈퍼노바에 등록된 스트리머를 검색 할 수 있어요."
-                            type="text"
-                        />
+                <div className={style["follow-search-container-wrapper"]}>
+                    <div className={style["follow-search-container"]}>
+                        <span className={style["bias-select-section-title"]}>주제 탐색</span>
+                        <div className={style["search_input_wrapper"]}>
+                            <input className={style["search_input"]}
+                                onKeyDown={handleKeyDown}
+                                onChange={(e) => {
+                                    handleSearchWord(e);
+                                }}
+                                placeholder="슈퍼노바에 등록된 스트리머를 검색 할 수 있어요."
+                                type="text"
+                            />
+                        </div>
+                        <div className={style["follow-search-options-wrapper"]}>
+                            {   
+                                tags.map((tag) => {
+                                    return(
+                                        <Tag key={tag} tag={tag} targetPlatform={targetPlatform}
+                                            handleChangePlatform={handleChangePlatform}
+                                        />
+                                    )
+                                })
+                            }
+                        </div>
                     </div>
-                    <div className={style["follow-search-options-wrapper"]}>
+                    <div className={style["search-result-container"]}>
                         {   
-                            tags.map((tag) => {
+                            searchResult.map((searchedBias) => {
                                 return(
-                                    <Tag key={tag} tag={tag} targetPlatform={targetPlatform}
-                                        handleChangePlatform={handleChangePlatform}
+                                    <WideBiasComponent
+                                        bias={searchedBias}
+                                        onClickComponent={onClickComponent}
                                     />
                                 )
                             })
                         }
-                    </div>
-                </div>
-                <div className={style["search-result-container"]}>
-                    {   
-                        searchResult.map((searchedBias) => {
-                            return(
-                                <WideBiasComponent
-                                    bias={searchedBias}
-                                    onClickComponent={onClickComponent}
-                                />
-                            )
-                        })
-                    }
-                    {
-                        !isLeft && (
-                            <div className={style["more-info-wrapper"]}>
-                                <div className={style["more-info"]}>
-                                    더 이상 불러올 내용이 없어요.
+                        {
+                            !isLeft && (
+                                <div className={style["more-info-wrapper"]}>
+                                    <div className={style["more-info"]}>
+                                        더 이상 불러올 내용이 없어요.
+                                    </div>
+                                    <div className={style["try-submit-new"]}
+                                        onClick={()=>{
+                                            navigate("/submit_new")
+                                        }}
+                                    >
+                                        새로운 스트리머 등록하기
+                                    </div>
                                 </div>
-                                <div className={style["try-submit-new"]}
-                                    onClick={()=>{
-                                        navigate("/submit_new")
-                                    }}
-                                >
-                                    새로운 스트리머 등록하기
-                                </div>
-                            </div>
 
-                        )
-                    }
+                            )
+                        }
+
+                    </div>
 
                 </div>
                 <div ref={targetRef} style={{ height: "1px" }}></div>
@@ -174,13 +178,28 @@ const BiasComponent = ({
         <div className={style["bias-component-wrapper"]}>
             <div className={style["bias-component"]}
                 onClick={()=>{
-                    onClickComponent()
+                    onClickComponent(bias)
                 }}
             >
-                <div className={style["bias-image"]}></div>
+                <div className={style["bias-image"]}>
+                    <img
+                      src={BIAS_URL + `${bias.bid}.png`}
+                        onError={(e) => {
+                            e.currentTarget.onerror = null; // 무한 루프 방지
+                            e.currentTarget.src = DEFAULT_BIAS_URL;
+                        }}
+                        alt="bias"
+                      />
+                </div>
                 <div className={style["bias-detail-wrapper"]}>
                     <span className={style["bias-name"]}> {bias.bname}</span>
-                    <img className={style["bias-platform-logo"]} src={chzzklogo}/>
+                    {
+                        bias.platform == "치지직" ? (
+                            <img className={style["bias-platform-logo"]} src={chzzklogo}/>
+                        ) : (
+                            <img className={style["bias-platform-logo"]} src={sooplogo}/>
+                        )
+                    }
                 </div>
             </div>
         </div>
@@ -197,7 +216,16 @@ const WideBiasComponent = ({
             onClick={()=>{setIsClicked((prev)=>!prev)}}
         >
             <div className={style["wide-bias-component-upper-section"]}>
-                <div className={style["wide-bias-image"]}></div>
+                <div className={style["wide-bias-image"]}>
+                    <img
+                      src={BIAS_URL + `${bias.bid}.png`}
+                        onError={(e) => {
+                            e.currentTarget.onerror = null; // 무한 루프 방지
+                            e.currentTarget.src = DEFAULT_BIAS_URL;
+                        }}
+                        alt="bias"
+                      />
+                </div>
                 <div className={style["wide-bias-detail-wrapper"]}>
                     <span className={style["wide-bias-name"]}> {bias.bname}</span>
                     <span className={style["wide-bias-platform"]}> {bias.platform}</span>

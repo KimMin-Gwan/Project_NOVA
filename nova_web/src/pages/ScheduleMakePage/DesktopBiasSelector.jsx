@@ -4,6 +4,7 @@ import chzzklogo from "./chzzklogo_kor(Green).svg";
 import sooplogo from "./SOOP_LOGO_Blue 1.png";
 import biasPlusIcon from "./plus_icon.svg";
 import { useNavigate } from "react-router-dom";
+import { BIAS_URL, DEFAULT_BIAS_URL } from "../../constant/biasUrl";
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
@@ -58,7 +59,17 @@ const BiasComponent = ({
                 onClick={()=>handleSelectBias(bias.bid)}
                 style={{ border: selectedBias == bias.bid ? "2px solid #8CFF99" : "2px solid #fff" }}
             >
-                <div className={style["bias-image"]}></div>
+ 
+                <div className={style["bias-image"]}>
+                    <img
+                      src={BIAS_URL + `${bias.bid}.png`}
+                        onError={(e) => {
+                            e.currentTarget.onerror = null; // 무한 루프 방지
+                            e.currentTarget.src = DEFAULT_BIAS_URL;
+                        }}
+                        alt="bias"
+                      />
+                </div>
                 <div className={style["bias-detail-wrapper"]}>
                     <span className={style["bias-name"]}> {bias.bname}</span>
                     {
