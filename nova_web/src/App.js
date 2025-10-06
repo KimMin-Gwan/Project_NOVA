@@ -10,7 +10,6 @@ import Temrs from "./pages/Temrs/Temrs.js";
 import FindPw from "./pages/FindPw/FindPw.js";
 import FindPwChange from "./pages/FindPw/FindPwChange.js";
 import FeedList from "./pages/FeedList/FeedList.js";
-import FollowPage from "./pages/FollowPage/FollowPage.js";
 import Write from "./pages/Write/Write.js";
 import SearchPage from "./pages/SearchPage/SearchPage.js";
 import SearchResultPage from "./pages/SearchResultPage/SearchResultPage.js";
@@ -117,7 +116,7 @@ function App() {
       <Route path="/search_result" element={<SearchResultPage />}></Route>
 
       {/* 컨텐츠  페이지 */}
-      <Route path="/temp" element={<ScheduleDashboard />}></Route>
+      <Route path="/" element={<ScheduleDashboard />}></Route>
       <Route path="/explore/schedule" element={<ScheduleExplore />}></Route>
       <Route path="/schedule/make_new" element={<ScheduleMakePage/>}>
         <Route path=":sid" element={<ScheduleMakePage/>}></Route>
@@ -129,7 +128,7 @@ function App() {
       {/* 테스트 페이지 및 에러 페이지 */}
       {/* <Route path="/test2" element={<TestPage />}></Route> */}
       <Route path="*" element={<ErrorPage/>} />
-      <Route path="/" element={<NotYet/>} />
+      <Route path="/temp" element={<NotYet/>} />
 
       {/* 홈 화면 */}
       <Route path="/post_board" element={<NewHomePage/>} />
