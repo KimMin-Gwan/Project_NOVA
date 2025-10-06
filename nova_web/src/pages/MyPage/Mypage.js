@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import  { useEffect, useRef, useState } from "react";
 import style from "./Mypage.module.css";
 import user_icon from "./../../img/user_profile.svg";
@@ -38,7 +38,8 @@ function MyPage() {
   const target = useRef(null);
   const observerRef = useRef(null);
   let navigate = useNavigate();
-
+  const location = useLocation();
+  const [isUserState, setIsUserState] = useState(false);
   let [isLoading, setIsLoading] = useState(true);
   let [categoryLoading, setCategoryLoading] = useState(false);
   let [myData, setMyData] = useState(
@@ -64,10 +65,41 @@ function MyPage() {
     });
   }
 
+  const handleValidCheck = async () => {
+    mainApi.get("https://supernova.io.kr/home/is_valid?only_token=n").then((res) => {
+        if (res.status === 200) {
+          setIsUserState(true);
+        } else {
+          if (window.confirm("로그인이 필요합니다.")){
+            navigate("/novalogin", { state: { from: location.pathname } });
+          }else{
+            navigate("/");
+          }
+          setIsUserState(false);
+        }
+        return 
+      })
+      .catch((error) => {
+        if (error.response.status == 401){
+          if (window.confirm("로그인이 필요합니다.")){
+            navigate("/novalogin", { state: { from: location.pathname } });
+          }else{
+            navigate("/");
+          }
+          setIsUserState(false);
+        }
+        setIsUserState(false);
+      });
+  }
+
   useEffect(() => {
-    fetchMyPage();
-    fetchMyFeed(nowCategory);
-  }, []);
+    if (!isUserState) {
+      handleValidCheck();
+    }else{
+      fetchMyPage();
+      fetchMyFeed(nowCategory);
+    }
+  }, [isUserState]);
 
   useEffect(() => {
     if (nowCategory === "comment") {
