@@ -203,6 +203,7 @@ class BiasFollowModel(BaseModel):
         super().__init__(database)
         self.__bias= Bias()
         self.__result = False
+        self.__now_following = False
 
     def find_bias(self, bid):
         try:
@@ -221,10 +222,12 @@ class BiasFollowModel(BaseModel):
             self._user.bids.remove(self.__bias.bid)
             feed_search_engine.remove_user_to_bias(bid=self.__bias.bid, uid=self._user.uid)
             self._database.delete_follower(uid=self._user.uid, bid=self.__bias.bid)
+            self.__now_following = False
         else:
             self._user.bids.append(self.__bias.bid)
             feed_search_engine.add_new_user_to_bias(bid=self.__bias.bid, uid=self._user.uid)
             self._database.add_follower(uid=self._user.uid, bid=self.__bias.bid)
+            self.__now_following = True
 
         self._database.modify_data_with_id(target_id="uid", target_data=self._user.get_dict_form_data())
         self.__result = True
@@ -235,7 +238,8 @@ class BiasFollowModel(BaseModel):
     def get_response_form_data(self, head_parser):
         try:
             body = {
-                'result' : self.__result
+                'result' : self.__result,
+                'now_following' : self.__now_following
             }
 
             response = self._get_response_data(head_parser=head_parser, body=body)
@@ -381,6 +385,7 @@ class BiasModel(BaseModel):
     def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)
         self._bias = Bias()
+        self._is_following = False
         
     def set_bias_data(self, bid:str):
         bias_data = self._database.get_data_with_id(target="bid", id=bid)
@@ -388,10 +393,18 @@ class BiasModel(BaseModel):
         if bias_data:
             self._bias.make_with_dict(bias_data)
         return
+    
+    def set_is_following(self):
+        if self._bias.bid in self._user.bids:
+            self._is_following = True
+        else:
+            self._is_following = False
+        return
         
     def get_response_form_data(self, head_parser):
         body = {
-            'bias' : self._bias.get_dict_form_data()
+            'bias' : self._bias.get_dict_form_data(),
+            'is_following' : self._is_following
         }
 
         response = self._get_response_data(head_parser=head_parser, body=body)

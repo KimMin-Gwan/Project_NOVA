@@ -6,10 +6,12 @@ class Sub_Controller:
     def get_single_bias(self, database:Mongo_Database, request:RequestManager) -> BiasModel:
         model = BiasModel(database=database)
         
-        #if request.jwt_payload!= "":
-            #model.set_user_with_email(request=request.jwt_payload)
+        if request.jwt_payload!= "":
+            model.set_user_with_email(request=request.jwt_payload)
             
         model.set_bias_data(bid=request.data_payload.bid)
+        
+        
         return model
         
     
