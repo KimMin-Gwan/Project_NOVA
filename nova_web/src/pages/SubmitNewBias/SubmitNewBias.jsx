@@ -88,8 +88,11 @@ function SubmitNewBias() {
         .then((response) => {
             if (!response.ok) {
                 if (response.status === 401) {
-                    alert("로그인이 필요한 서비스입니다.");
-                    navigate("/novalogin", { state: { from: location.pathname } });
+                    if (window.confirm("로그인이 필요합니다.")){
+                        navigate("/novalogin", { state: { from: location.pathname } });
+                    }else{
+                        navigate("/");
+                    }
                     return Promise.reject();
                 }
             }

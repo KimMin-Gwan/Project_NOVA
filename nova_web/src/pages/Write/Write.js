@@ -79,16 +79,22 @@ const Write = () => {
           setUser(res.data.body.user);
           setIsUserState(true);
         } else {
-          alert("로그인이 필요합니다.");
-          navigate("/nova_login");
+          if (window.confirm("로그인이 필요합니다.")){
+            navigate("/novalogin", { state: { from: location.pathname } });
+          }else{
+            navigate("/");
+          }
           setIsUserState(false);
         }
         return 
       })
       .catch((error) => {
         if (error.response.status == 401){
-          alert("로그인이 필요합니다.");
-          navigate("/novalogin", { state: { from: location.pathname } });
+          if (window.confirm("로그인이 필요합니다.")){
+            navigate("/novalogin", { state: { from: location.pathname } });
+          }else{
+            navigate("/");
+          }
           setIsUserState(false);
         }
         setIsUserState(false);
