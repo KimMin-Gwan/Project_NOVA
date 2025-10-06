@@ -42,7 +42,7 @@
 .bias-selection-wrapper{
     display: flex;
     align-self: stretch;
-    height: 370px;
+    height: fit-content;
     align-items: flex-start;
     gap: 10px;
 }
