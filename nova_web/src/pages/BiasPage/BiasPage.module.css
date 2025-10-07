@@ -193,10 +193,11 @@
 
 .week-select-box{
     display: flex;
+    flex-direction: column;
+    gap : 5px;
     margin-top: 35px;
     margin-bottom: 15px;
-    padding: 12px;
-    justify-content: space-between;
+    padding: 8px;
     align-items: center;
     align-self: stretch;
     font-family: Pretendard;
@@ -204,18 +205,19 @@
     font-style: normal;
     line-height: normal;
     letter-spacing: -0.45px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 3px 3px 8px 0 rgba(0, 0, 0, 0.08);
+    border: 2px solid #fff;
+    border-radius: 12px;
 }
 
 .week-select-button-wrapper{
     display: flex;
-    gap: 10px;
-    
+    gap : 40px;
 }
 
 .prev-button{
+    display : flex;
+    justify-content: center;
+    align-items: center;
     color: #656565;
     font-size: 15px;
     font-weight: 500;
@@ -228,12 +230,18 @@
 }
 
 .week-data{
+    display : flex;
+    justify-content: center;
+    align-items: center;
     color: #353535;
     font-size: 15px;
     font-weight: 400;
 }
 
 .next-button{
+    display : flex;
+    justify-content: center;
+    align-items: center;
     color: #656565;
     font-size: 15px;
     font-weight: 500;
@@ -343,6 +351,7 @@
     gap : 4px;
     min-width: 0;               /* 💡 flex 내부에서 ellipsis 제대로 작동하게 함 */
     width: 100%;                /* 💡 디바이스 가로폭 기준으로 꽉 채움 */
+    padding: 2px 0;
 }
 
 .single-schedule-title {

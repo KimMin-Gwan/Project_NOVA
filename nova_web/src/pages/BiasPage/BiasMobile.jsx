@@ -83,7 +83,6 @@ const BiasPageMobile = ({
                 </div>
 
                 <div className={style["week-select-box"]}>
-                    <div className={style["week-data"]}>{`${weekData} 콘텐츠`}</div>
                     <div className={style["week-select-button-wrapper"]}>
                         <div className={style["prev-button"]}
                             onClick={prevWeek}
@@ -93,6 +92,9 @@ const BiasPageMobile = ({
                                 <path d="M14 5L7.06667 10.2C6.53333 10.6 6.53333 11.4 7.06667 11.8L14 17" stroke="#24272C" strokeWidth="1.5" strokeLinecap="round"/>
                             </svg>
                         </div>
+
+                        <div className={style["week-data"]}>{`${weekData} 콘텐츠`}</div>
+
                         <div className={style["next-button"]}
                             onClick={nextWeek}
                         >
