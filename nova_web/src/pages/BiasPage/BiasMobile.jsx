@@ -24,6 +24,8 @@ const BiasPageMobile = ({
         },
     };
 
+    console.log(is_following);
+
     // 자식(각 아이템) 애니메이션 설정
     const itemVariants = {
         hidden: { opacity: 0, y: 20 }, // 아래에서 올라옴
@@ -65,18 +67,18 @@ const BiasPageMobile = ({
                             </div>
                             <div className={style["platform-direct-link"]}>바로가기</div>
                         </div>
-                        <div className={style["bias-meta-data-button-container"]}>
-                            <div className={style["bias-meta-data-left-button"]}
-                                onClick={()=>{window.open(`https://www.youtube.com/results?search_query=${targetBias.bname}`, '_blank');}}
-                            >외부 검색</div>
-                            <div className={style["bias-meta-data-right-button"]}
-                                onClick={()=>{fetchTryFollowBias(targetBias.bid)}}
-                            >
-                            {
-                                is_following ?  "언팔로우" : "팔로우"
-                            }
-                            </div>
-                        </div>
+                    </div>
+                </div>
+                <div className={style["bias-meta-data-button-container"]}>
+                    <div className={style["bias-meta-data-left-button"]}
+                        onClick={()=>{window.open(`https://www.youtube.com/results?search_query=${targetBias.bname}`, '_blank');}}
+                    >외부 검색</div>
+                    <div className={style["bias-meta-data-right-button"]}
+                        onClick={()=>{fetchTryFollowBias(targetBias.bid)}}
+                    >
+                    {
+                        is_following ?  "팔로우 중" : "팔로우"
+                    }
                     </div>
                 </div>
 
@@ -174,17 +176,19 @@ const ScheduleComponent = (schedule) => {
                 }   
             </div>
             <div className={style["single-schedule-detail-wrapper"]}>
-                <div className={style["single-schedule-title"]}>
-                    {schedule.schedule.title || "콘텐츠 없음"}
-                </div>
-                <div className={style["single-start-time"]}>
-                    {
-                        getStartTime(schedule.schedule.datetime)
-                    }
+                <div className={style["single-schedule-title-wrapper"]}>
+                    <div className={style["single-schedule-title"]}>
+                        {schedule.schedule.title || "콘텐츠 없음"}
+                    </div>
+                    <div className={style["single-start-time"]}>
+                        {
+                            getStartTime(schedule.schedule.datetime)
+                        }
+                    </div>
                 </div>
                 <div className={style["schedule-tag-wrapper"]}>
                     {schedule.schedule.tags.length > 0 ? (
-                        schedule.schedule.tags.map((tag, tIdx) => (
+                        schedule.schedule.tags.slice(0, 3).map((tag, tIdx) => (
                             <div key={tIdx} className={style["tag"]}>
                                 {tag}
                             </div>

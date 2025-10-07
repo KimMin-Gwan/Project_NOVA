@@ -11,6 +11,7 @@ import { getBiasStateStr, getStartTime, getEndTime, handlePreviewImage, defaultI
 import { useEffect, useState } from "react";
 import { SCHEDULE_IMAGE_URL } from "../../constant/imageUrl";
 import MyPageLoading from "../LoadingPage/MypageLoading";
+import { BIAS_URL, DEFAULT_BIAS_URL } from "../../constant/biasUrl";
 
 const BiasPageDesktop = ({
     scheduleList, targetBias, weekData, prevWeek,
@@ -45,7 +46,14 @@ const BiasPageDesktop = ({
                         </div>
                         <div className={style["bias-info-wrapper"]}>
                             <div className={style["bias-image-container"]}>
-                                <img src={"https://kr.object.ncloudstorage.com/nova-images/ham.png"}/>
+                                <img
+                                    src={BIAS_URL + `${targetBias.bid}.png`}
+                                    onError={(e) => {
+                                        e.currentTarget.onerror = null; // 무한 루프 방지
+                                        e.currentTarget.src = DEFAULT_BIAS_URL;
+                                    }}
+                                    alt="bias"
+                                />
                             </div>
                             <div className={style["bias-detail-wrapper"]}>
                                 <div className={style["bias-detail-container"]}>
@@ -97,7 +105,7 @@ const BiasPageDesktop = ({
                             </div>
                             <div className={style["single-schedule-detail-wrapper"]}>
                                 <div className={style["single-schedule-detail-sub-wrapper"]}>
-                                    <div className={style["single-schedule-data-wrapper"]}>
+                                    <div className={style["single-schedule-data-wrapper-left"]}>
                                         <div className={style["single-schedule-data-title"]}>
                                             제목
                                         </div>
@@ -105,7 +113,19 @@ const BiasPageDesktop = ({
                                             {targetSchedule.title}
                                         </div>
                                     </div>
-                                    <div className={style["single-schedule-data-wrapper"]}>
+                                    <div className={style["single-schedule-data-wrapper-right"]}>
+                                        <div className={style["single-schedule-data-title"]}>
+                                            스트리밍 시작 시간
+                                        </div>
+                                        <div className={style["single-schedule-data-body"]}>
+                                            {
+                                                getStartTime(targetSchedule.datetime)
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className={style["single-schedule-detail-sub-wrapper"]}>
+                                    <div className={style["single-schedule-data-wrapper-left"]}>
                                         <div className={style["single-schedule-data-title"]}>
                                             태그
                                         </div>
@@ -126,19 +146,7 @@ const BiasPageDesktop = ({
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div className={style["single-schedule-detail-sub-wrapper"]}>
-                                    <div className={style["single-schedule-data-wrapper"]}>
-                                        <div className={style["single-schedule-data-title"]}>
-                                            스트리밍 시작 시간
-                                        </div>
-                                        <div className={style["single-schedule-data-body"]}>
-                                            {
-                                                getStartTime(targetSchedule.datetime)
-                                            }
-                                        </div>
-                                    </div>
-                                    <div className={style["single-schedule-data-wrapper"]}>
+                                    <div className={style["single-schedule-data-wrapper-right"]}>
                                         <div className={style["single-schedule-data-title"]}>
                                             스트리밍 예상 종료 시각
                                         </div>
@@ -158,7 +166,7 @@ const BiasPageDesktop = ({
                             </div>
                             <div className={style["single-schedule-detail-wrapper"]}>
                                 <div className={style["single-schedule-detail-sub-wrapper"]}>
-                                    <div className={style["single-schedule-data-wrapper"]}>
+                                    <div className={style["single-schedule-data-wrapper-left"]}>
                                         <div className={style["single-schedule-data-title"]}>
                                             제목
                                         </div>
@@ -166,17 +174,7 @@ const BiasPageDesktop = ({
                                             콘텐츠가 없습니다.
                                         </div>
                                     </div>
-                                    <div className={style["single-schedule-data-wrapper"]}>
-                                        <div className={style["single-schedule-data-title"]}>
-                                            태그
-                                        </div>
-                                        <div className={style["single-schedule-data-body"]}>
-                                            태그가 없습니다.
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className={style["single-schedule-detail-sub-wrapper"]}>
-                                    <div className={style["single-schedule-data-wrapper"]}>
+                                    <div className={style["single-schedule-data-wrapper-right"]}>
                                         <div className={style["single-schedule-data-title"]}>
                                             스트리밍 시작 시간
                                         </div>
@@ -184,7 +182,17 @@ const BiasPageDesktop = ({
                                             비었습니다.
                                         </div>
                                     </div>
-                                    <div className={style["single-schedule-data-wrapper"]}>
+                                </div>
+                                <div className={style["single-schedule-detail-sub-wrapper"]}>
+                                    <div className={style["single-schedule-data-wrapper-left"]}>
+                                        <div className={style["single-schedule-data-title"]}>
+                                            태그
+                                        </div>
+                                        <div className={style["single-schedule-data-body"]}>
+                                            태그가 없습니다.
+                                        </div>
+                                    </div>
+                                    <div className={style["single-schedule-data-wrapper-right"]}>
                                         <div className={style["single-schedule-data-title"]}>
                                             스트리밍 예상 종료 시각
                                         </div>
@@ -291,16 +299,16 @@ const ScheduleComponent = ({
                 </div>
                 <div className={style["tag-wrapper"]}>
                 {
-                    scheduleData.schedule.tags.map((tag, index)=>{
-                        return(
-                            <div
-                            className={style["tag"]}
-                            key={`tag ${index}`}
-                            >
-                                {tag}
-                            </div>
-                        );
-                    })
+                    scheduleData.schedule.tags
+                    .slice(0, 3)
+                    .map((tag, index) => (
+                        <div
+                        className={style["tag"]}
+                        key={`tag-${index}`}
+                        >
+                        {tag}
+                        </div>
+                    ))
                 }
                 </div>
             </div>

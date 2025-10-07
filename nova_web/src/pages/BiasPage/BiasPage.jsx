@@ -29,8 +29,6 @@ const BiasPage = () => {
         tags : []
     })
 
-    //const bid = "203c35b9-dcd7-4a4f-bce9-96085a465446";
-
     const fetchBiasData = async (bid) => {
         const res = await mainApi.get(`/nova_sub_system/get_single_bias?bid=${bid}`);
         const bias = res.data.body.bias
