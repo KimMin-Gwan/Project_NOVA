@@ -28,7 +28,8 @@
 
 .modal-upper-section{
     display: flex;
-    height: 286px;
+    max-height: 286px;
+
     padding: 10px;
     align-items: flex-start;
     gap: 10px;
@@ -55,8 +56,9 @@
 .tag-wrapper-wrapper{
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     align-self: stretch;
+    gap :8px;
 }
 
 .tag-wrapper{
@@ -65,16 +67,17 @@
     align-items: center;
     flex-wrap: wrap;
     gap: 8px;
+    min-width: 0;
 }
 
 .tag-box{
     display: flex;
-    padding: 6px 12px;
+    padding: 4px 9px;
     justify-content: center;
     align-items: center;
     border-radius: 8px;
-    border: 1px solid #000;
-    background: #111;
+    border: 1px solid #222;
+    background: #2b304d;
     color: #FFF;
     font-family: Pretendard;
     font-size: 13px;
@@ -113,7 +116,7 @@
     font-family: Pretendard;
     font-size: 18px;
     font-style: normal;
-    font-weight: 600;
+    font-weight: 500;
     line-height: 140%; /* 33.6px */
     letter-spacing: -0.6px;
 }
@@ -123,7 +126,7 @@
     font-family: Pretendard;
     font-size: 14px;
     font-style: normal;
-    font-weight: 500;
+    font-weight: 400;
     line-height: 140%; /* 33.6px */
     letter-spacing: -0.6px;
     display: flex;
@@ -131,11 +134,13 @@
 }
 
 .schedule-bname{
+    flex-shrink: 0;
+    white-space: nowrap;
     color: #767676;
     font-family: Pretendard;
     font-size: 14px;
     font-style: normal;
-    font-weight: 500;
+    font-weight: 400;
     line-height: 140%; /* 25.2px */
     letter-spacing: -0.45px;
 }
@@ -160,7 +165,7 @@
     font-family: Pretendard;
     font-size: 14px;
     font-style: normal;
-    font-weight: 600;
+    font-weight: 500;
     line-height: 140%; /* 22.4px */
     letter-spacing: -0.4px;
     cursor: pointer;
@@ -182,7 +187,7 @@
     font-family: Pretendard;
     font-size: 14px;
     font-style: normal;
-    font-weight: 600;
+    font-weight: 500;
     line-height: 140%; /* 22.4px */
     letter-spacing: -0.4px;
     cursor: pointer;
@@ -210,7 +215,7 @@
     font-family: Pretendard;
     font-size: 14px;
     font-style: normal;
-    font-weight: 600;
+    font-weight: 400;
     line-height: 140%; /* 22.4px */
     letter-spacing: -0.4px;
     cursor: pointer;
@@ -260,7 +265,7 @@
 }
 
 .left-span-button:hover{
-    font-weight: 600;
+    font-weight: 400;
     color: #2362d6;
     border-bottom: #2362d6 1px solid;
 }
