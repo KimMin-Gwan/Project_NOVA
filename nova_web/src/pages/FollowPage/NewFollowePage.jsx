@@ -44,11 +44,8 @@ const NewFollowPage = () => {
 
             // ✅ 숫자면 (0 포함) 초기 로드 완료로 간주
             if (typeof count === "number" && !isNaN(count)) {
-                console.log("🔹 fetch 결과 개수:", count);
                 setInitialLoaded(true);
-            } else {
-                console.warn("⚠️ fetchSearchBias가 숫자를 반환하지 않음:", count);
-            }
+            } 
         } catch (err) {
             console.error("❌ 초기 검색 실패:", err);
         }
@@ -61,7 +58,6 @@ const NewFollowPage = () => {
 
         if(!isMobile){
             const savedState = sessionStorage.getItem("followPageState");
-            console.log(savedState);
             if (savedState) {
                 const parsed = JSON.parse(savedState);
                 setSearchResult(parsed.searchResult);

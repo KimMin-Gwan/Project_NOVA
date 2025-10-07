@@ -109,9 +109,10 @@ const FollowPageDesktop = ({
             <div className={style["search-result-container"]}>
                 <div className={style["search-result-grid"]}>
                 {   
-                    searchResult.map((searchedBias) => {
+                    searchResult.map((searchedBias, index) => {
                         return(
                             <div className={style["grid-component-wrapper"]}
+                                key={index}
                             >
                                 <BiasComponent 
                                     bias={searchedBias}
