@@ -69,10 +69,10 @@
 }
 
 .search-box-wrapper {
-  width: 90%;
+  width: 92%;
   /* margin-left: 38px; */
   padding-bottom: 12px;
-  min-height: 200px;
+  max-height: 200px;
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
