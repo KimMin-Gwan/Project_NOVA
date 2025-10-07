@@ -30,7 +30,8 @@
     justify-content: center;
     width : 100%;
     font-size : 16px;
-    font-weight: 700;
+    font-weight: 400;
+    color: #111;
 }
 
 .empty-schedule-span {
@@ -40,7 +41,7 @@
     align-items: center;
     justify-content: center;
     font-size : 15px;
-    font-weight: 600;
+    font-weight: 400;
     color: #797979;
 }
 
@@ -49,13 +50,14 @@
     align-items: center;
     justify-content: space-around;
     min-height : 48.64px;
-    padding : 5.2%;
+    padding : 2% 5% 2% 3%;
     cursor: pointer;
 
     .time-span {
         font-size : 12px;
-        font-weight : 500;
+        font-weight : 400;
         width : 22%;
+        color: #222;
     }
 
     .schedule-arrow{
@@ -106,14 +108,14 @@
         overflow: hidden; /* 넘치는 텍스트를 숨김 */
         text-overflow: ellipsis; /* 생략 부호 (...) 표시 */
         white-space: nowrap; /* 텍스트를 한 줄로 표시 */
-        font-size:16px;
-        font-weight: 600;
+        font-size: 16px;
+        font-weight: 400;
         color: #000000;
     }
 
     .schedule-bias{
-        font-size:12px;
-        font-weight: 500;
+        font-size:14px;
+        font-weight: 300;
         color: #3d3d3d;
     }
 }

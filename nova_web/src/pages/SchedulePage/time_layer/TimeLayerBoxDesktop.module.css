@@ -51,7 +51,7 @@
     gap: 10px;
     color: #333;
     font-size: 22px;
-    font-weight: 500;
+    font-weight: 400;
 }
 
 .schedule-component{
@@ -69,8 +69,8 @@
 
 .schedule-component-empty{
     color: #999;
-    font-size: 22px;
-    font-weight: 500;
+    font-size: 19px;
+    font-weight: 400;
 }
 
 .schedule-component-left-wrapper{
@@ -81,7 +81,7 @@
     span{
         color: #111;
         font-size: 16px;
-        font-weight: 500;
+        font-weight:400;
     }
 }
 
@@ -162,13 +162,13 @@
 }
 
 .schedule-component-title{
-    font-size: 20px;
-    font-weight: 500;
+    font-size: 19px;
+    font-weight: 400;
 }
 
 .schedule-component-streamer{
-    font-size: 16px;
-    font-weight: 400;
+    font-size: 15px;
+    font-weight: 300;
 }
 
 .desktop-ad-section-style{

@@ -79,7 +79,7 @@
     font-family: Pretendard;
     font-size: 28px;
     font-style: normal;
-    font-weight: 600;
+    font-weight: 500;
     line-height: 140%; /* 58.8px */
     letter-spacing: -1.05px;
 }
@@ -125,7 +125,7 @@
     font-family: Pretendard;
     font-size: 32px;
     font-style: normal;
-    font-weight: 500;
+    font-weight: 400;
     line-height: 140%; /* 44.8px */
     letter-spacing: -0.8px;
 }
@@ -172,7 +172,7 @@
     font-family: Pretendard;
     font-size: 20px;
     font-style: normal;
-    font-weight: 500;
+    font-weight: 400;
     line-height: 140%; /* 33.6px */
     letter-spacing: -0.6px;
     color: #111;
@@ -207,7 +207,7 @@
     font-family: Pretendard;
     font-size: 22px;
     font-style: normal;
-    font-weight: 600;
+    font-weight: 500;
     line-height: 140%; /* 39.2px */
     letter-spacing: -0.7px;
 }
@@ -296,7 +296,7 @@
     font-family: Pretendard;
     font-size: 20px;
     font-style: normal;
-    font-weight: 500;
+    font-weight: 400;
     line-height: 140%; /* 42px */
     letter-spacing: -0.75px;
 }
@@ -320,7 +320,7 @@
     font-family: Pretendard;
     font-size: 22px;
     font-style: normal;
-    font-weight: 600;
+    font-weight: 500;
     line-height: 140%; /* 36.4px */
     letter-spacing: -0.65px;
 }
@@ -402,7 +402,7 @@
 
   span {
     font-size: 18px;
-    font-weight: 600;
+    font-weight: 500;
     color: #111;
   }
 
@@ -426,7 +426,7 @@
     padding: 8px 12px;
     margin: 0;
     font-size: 15px;
-    font-weight: 500;
+    font-weight: 400;
     color: #303030;
 
     &::placeholder {
@@ -456,7 +456,7 @@
   display: flex;
   align-items: center;
   font-size : 14px;
-  font-weight: 500;
+  font-weight: 400;
 }
 
 .removeButton {
@@ -508,7 +508,7 @@
 
 .schedule-detail-time-selector-title{
     font-size: 18px;
-    font-weight: 600;
+    font-weight: 500;
     color: #111;
 }
 
@@ -612,7 +612,7 @@
   font-family: Pretendard;
   font-size: 20px;
   font-style: normal;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 140%; /* 72.8px */
   letter-spacing: -1.3px;
 }
@@ -642,7 +642,7 @@
   color: #111;
   font-family: Pretendard, sans-serif;
   font-size: 28px;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 140%; /* 44.8px */
   letter-spacing: -0.8px;
   cursor: pointer;
@@ -705,7 +705,7 @@
   padding: 8px 12px;
   cursor: pointer;
   font-size: 15px;
-  font-weight: 500;
+  font-weight: 400;
   color: #303030;
 }
 
