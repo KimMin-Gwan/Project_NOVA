@@ -96,7 +96,12 @@ export default function SearchPage() {
         {/* <p onClick={onDeleteAllHistory}>X</p> */}
 
         <section className="search-category">
-          <h3>최근 검색어</h3>
+          <div style={{
+            fontSize:"15px",
+            fontWeight:"400",
+            marginBottom:"10px",
+            paddingLeft:"4%"
+          }}>최근 검색어</div>
           <div classname="ad-banner-strip">
 
           </div>
