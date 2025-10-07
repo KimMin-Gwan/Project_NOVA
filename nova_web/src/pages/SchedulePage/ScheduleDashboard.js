@@ -387,13 +387,6 @@ const ScheduleDashboard = () => {
               </div>
             </div>
 
-            {/**   타임차트 만들던 곳
-            <TimeChart
-              weekDayData={weekDayData}
-              scheduleData={scheduleData}
-              onChangeIndex={onChangeIndex}
-            />
-            */}
             <div style={{display: "flex", justifyContent:"center", alignContent:"center"}}>
               {showScheduleMoreOption && (
                 <ScheduleDetailMobile
