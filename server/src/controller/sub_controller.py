@@ -10,8 +10,7 @@ class Sub_Controller:
             model.set_user_with_email(request=request.jwt_payload)
             
         model.set_bias_data(bid=request.data_payload.bid)
-        
-        
+        model.set_is_following()
         return model
         
     
