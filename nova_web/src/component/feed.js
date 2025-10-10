@@ -71,11 +71,11 @@ export const PreviewContentFeed = ({
         }
 
       } catch (err) {
-        console.error("요청 에러:", err);
+        //console.error("요청 에러:", err);
 
         // CORS 에러인 경우
         if (err.message === "Network Error") {
-          console.warn("네트워크 에러 발생");
+          //console.warn("네트워크 에러 발생");
         }
 
         setResult(false);
