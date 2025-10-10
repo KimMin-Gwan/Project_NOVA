@@ -95,7 +95,8 @@ class FeedModel(BaseModel):
             if feed.display < 3:
                 continue
 
-            feed.raw_body = ObjectStorageConnection().get_feed_body(fid=feed.fid)
+            #feed.raw_body = ObjectStorageConnection().get_feed_body(fid=feed.fid)
+            feed.raw_body = ""
 
             feed.num_comment = len(feed.comment)
 
@@ -316,7 +317,8 @@ class MyFeedsModel(FeedModel):
             if feed.display < 3:
                 continue
             
-            feed.raw_body = ObjectStorageConnection().get_feed_body(fid = feed.fid)
+            #feed.raw_body = ObjectStorageConnection().get_feed_body(fid = feed.fid)
+            feed.raw_body = ""
 
             # comment 길이 & image 길이
             feed.num_comment = len(feed.comment)
