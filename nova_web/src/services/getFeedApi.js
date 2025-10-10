@@ -9,7 +9,7 @@ export async function fetchDateFeedList(type, nextData = -1) {
 }
 
 // 전체 피드 데이터 추가 받기
-export async function fetchAllFeedList(nextData, filterCategory, filterFclass) {
+export async function fetchAllFeedList(nextData, filterCategory) {
   const res = await postApi.post(`feed_explore/all_feed`, {
     header: HEADER,
     body: {

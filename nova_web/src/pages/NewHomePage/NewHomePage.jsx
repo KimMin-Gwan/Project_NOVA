@@ -23,7 +23,7 @@ export default function NewHomePage () {
     const [feedData, setFeedData] = useState([]);
     const [nextData, setNextData] = useState(-1);
     const [hasMore, setHasMore] = useState(true);
-    const [isLoading, setIsLoading] = useState(true);
+    const [initialLoaded, setInitialLoaded] = useState(true);
     const [filterFclass, setFilterFclass] = useState(JSON.parse(localStorage.getItem("content")) || "");
     const [filterCategory, setFilterCategory] = useState( JSON.parse(localStorage.getItem("board")) || [""]);
     const { biasId, biasList, setBiasId, fetchBiasList} = useBiasStore();
@@ -32,28 +32,22 @@ export default function NewHomePage () {
         return item.bid;
     });
 
-    const fetchingRef = useRef(false); // fetch 중인지 추적
 
     const fetchAllFeed = async () => {
-        if (fetchingRef.current) return; // 이미 fetch 중이면 종료
-        fetchingRef.current = true;
-
         try {
-            const data = await fetchAllFeedList(nextData, filterCategory, filterFclass);
-            console.log(data);
+            const data = await fetchAllFeedList(nextData, filterCategory);
             setFeedData(data.body.send_data);
             setNextData(data.body.key);
-            setHasMore(data.body.send_data.length > 0);
-            setIsLoading(false);
+            setInitialLoaded(false);
+            return data.body.send_data.length;
         } catch (err) {
             console.error(err);
-        } finally {
-            fetchingRef.current = false; // fetch 끝나면 false
-        }
+        } 
+        return 0;
     }
 
     async function fetchBiasCategoryData(targetBid) {
-        setIsLoading(true);
+        setInitialLoaded(true);
         await postApi.post(`feed_explore/feed_with_community`, {
             header: HEADER,
             body: {
@@ -64,14 +58,19 @@ export default function NewHomePage () {
         })
         .then((res) => {
             setFeedData(res.data.body.send_data);
-            setIsLoading(false);
+            setInitialLoaded(false);
         });
+    }
+
+    const fetchInitialData = async () => {
+        const res = await fetchAllFeed();
+        if (!res) setHasMore(false);
     }
 
 
     useEffect(() => {
         fetchBiasList();
-        fetchAllFeed();
+        fetchInitialData();
 
         return () => {
             setFeedData([]);
@@ -79,38 +78,31 @@ export default function NewHomePage () {
     }, []);
 
 
-    // fetchFeedListType을 안전하게 감싸기
-    async function fetchFeedListType(fetchFunction, type, nextData, filterCategory, filterFclass) {
-        fetchingRef.current = true;
-
+    const fetchPlusAllFeed = async () => {
         try {
-            const data = await fetchFunction(type, nextData, filterCategory, filterFclass);
+            const data = await fetchAllFeedList(nextData, filterCategory);
             setFeedData((prevData) => [...prevData, ...data.body.send_data]);
             setNextData(data.body.key);
-            setHasMore(data.body.send_data.length > 0);
+            return data.body.send_data.length;
         } catch (err) {
             console.error(err);
-        } finally {
-            fetchingRef.current = false; // fetch 끝나면 상태 초기화
+        } 
+        return 0;
+    }
+
+
+    const loadMoreCallBack = async () => {
+        if (initialLoaded){
+            const res = await fetchPlusAllFeed()
+            if (!res) setHasMore(false);
         }
-    }
-
-    // 기존 fetchPlusData는 이제 이걸 호출
-    async function fetchPlusData() {
-        await fetchFeedListType(fetchAllFeedList, nextData, filterCategory, filterFclass);
-    }
-
-    const loadMoreCallBack = () => {
-        if (!hasMore || fetchingRef.current || isLoading) return;
-        fetchingRef.current = true; // observer에서 바로 세팅
-        fetchPlusData().finally(() => {
-            fetchingRef.current = false;
-        });
     };
 
     const scrollRef = useRef(null);
     const targetRef = useIntersectionObserver(loadMoreCallBack, 
         { root:scrollRef.current, threshold: 0.5 }, hasMore);
+
+
 
     if (isMobile){
         return(
@@ -131,7 +123,7 @@ export default function NewHomePage () {
                             style={{columnCount:2, columnGap: "20px"}}
                             >
                         {
-                            isLoading ? (
+                            initialLoaded? (
                                 <MyPageLoading />
                             ) : feedData.length > 0 ? (
                                 feedData.map((feed, i) => {
@@ -166,7 +158,7 @@ export default function NewHomePage () {
                             ref={scrollRef}
                         >
                         {
-                            isLoading ? (
+                            initialLoaded? (
                                 <MyPageLoading />
                             ) : feedData.length > 0 ? (
                                 feedData.map((feed, i) => {
