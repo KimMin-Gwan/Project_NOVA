@@ -2674,3 +2674,32 @@ h5 {
     word-wrap: break-word;
   }
 }
+
+
+.loading-feed-sign{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 15px;
+  color: #797979;
+  font-weight: 400;
+}
+
+
+.deleted-feed{
+  width: 92%;
+  padding: 4%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  margin-top: 10px;
+  border-radius: 16px;
+  margin-bottom: 10px;
+  font-size: 15px;
+  color: #797979;
+  font-weight: 400;
+}

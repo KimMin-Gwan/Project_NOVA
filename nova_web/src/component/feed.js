@@ -11,8 +11,10 @@ import comment from "./../img/comment.png";
 import postApi from "../services/apis/postApi";
 import HEADER from "../constant/header";
 import mainApi from "../services/apis/mainApi";
+import feedApi from "../services/apis/feedApi";
 import useDragScroll from "../hooks/useDragScroll";
 import useFeedActions from "../hooks/useFeedActions";
+import { use } from "react";
 
 
 export default function Feed({ feed, setFeedData, type }) {
@@ -52,54 +54,111 @@ export const PreviewContentFeed = ({
     navigate
   }) =>{
     const { scrollRef, hasDragged, dragHandlers } = useDragScroll();
+    const [isLoading, setIsLoading] = useState(true);
+    const [result, setResult] = useState(true);
+    const [fid, setFid] = useState("");
+    const [rawBody, setRawBody] = useState("");
+
+    const fetchBodyData = async (fid) => {
+      try {
+        const res = await feedApi.get(fid);
+
+        if (res.status === 200) {
+          setIsLoading(false);
+          setRawBody(res.data);
+        } else {
+          setResult(false);
+        }
+
+      } catch (err) {
+        console.error("요청 에러:", err);
+
+        // CORS 에러인 경우
+        if (err.message === "Network Error") {
+          console.warn("네트워크 에러 발생");
+        }
+
+        setResult(false);
+        setIsLoading(false);
+      }
+    };
+
+    useEffect(() => {
+      if (feed && feed.fid !== fid) {
+        setFid(feed.fid);
+      }
+    }, [feed]);
+
+    useEffect(() => {
+      if (fid) {
+        fetchBodyData(fid);
+      }
+    }, [fid]);
+
+
+
     if (!feed) {
       return <div>loading 중...</div>;
     }
 
-    return (
-      <div className={style["preview-content-feed-wrapper"]}>
-        <div className={style["wrapper-top-component"]}>
-          {feed.bname && (
-            <div className={style["meta-data-1"]}>
-              <p>
-                {feed.bname}
-              </p>
+    if (result){
+      return (
+        <div className={style["preview-content-feed-wrapper"]}>
+          <div className={style["wrapper-top-component"]}>
+            {feed.bname && (
+              <div className={style["meta-data-1"]}>
+                <p>
+                  {feed.bname}
+                </p>
+              </div>
+            )}
+            <div className={style["meta-data-2"]}>
+                <p>
+                  {feed.board_type}
+                </p>
             </div>
-          )}
-          <div className={style["meta-data-2"]}>
-              <p>
-                {feed.board_type}
-              </p>
+          </div>
+          <div
+            className={`${style["wrapper-container2"]} ${style["long-wrapper"]}`}
+            onClick={(e) => {
+              if (hasDragged) return;
+              e.preventDefault();
+              e.stopPropagation();
+              navigate(`/feed_detail/${feed.fid}`, {
+                state: { commentClick: false },
+              });
+            }}
+          >
+            <FeedHeader date={feed.date} nickname={feed.nickname} />
+
+            <div className={`${style["preview-body-container"]} `}>
+              <HashTags hashtags={feed.hashtag} />
+              {
+                isLoading && <div
+                className={style["loading-feed-sign"]}
+                >본문 불러오는 중</div>
+              }
+
+              <Viewer key={rawBody} initialValue={rawBody} />
+            </div>
+
+            {/* {links && <LinkSection links={links} />} */}
+
+            <ActionButtons
+              feed={feed}
+              handleCheckStar={handleCheckStar}
+              fetchReportResult={fetchReportResult}
+            />
           </div>
         </div>
-        <div
-          className={`${style["wrapper-container2"]} ${style["long-wrapper"]}`}
-          onClick={(e) => {
-            if (hasDragged) return;
-            e.preventDefault();
-            e.stopPropagation();
-            navigate(`/feed_detail/${feed.fid}`, {
-              state: { commentClick: false },
-            });
-          }}
-        >
-          <FeedHeader date={feed.date} nickname={feed.nickname} />
-
-          <div className={`${style["preview-body-container"]} `}>
-            <HashTags hashtags={feed.hashtag} />
-            <Viewer key={feed.raw_body} initialValue={feed.raw_body} />
-          </div>
-
-          {links && <LinkSection links={links} />}
-
-          <ActionButtons
-            feed={feed}
-            handleCheckStar={handleCheckStar}
-            fetchReportResult={fetchReportResult}
-          />
+      );
+    } else{
+      return (
+        <div className={style["deleted-feed"]}>
+          삭제되거나 제한된 게시글
         </div>
-      </div>
-    );
+      );
+    }
 }
 
 
