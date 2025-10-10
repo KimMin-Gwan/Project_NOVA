@@ -79,7 +79,6 @@ export const PreviewContentFeed = ({
         }
 
         setResult(false);
-        setIsLoading(false);
       }
     };
 
@@ -101,7 +100,7 @@ export const PreviewContentFeed = ({
       return <div>loading 중...</div>;
     }
 
-    if (result){
+    if (!isLoading){
       return (
         <div className={style["preview-content-feed-wrapper"]}>
           <div className={style["wrapper-top-component"]}>
