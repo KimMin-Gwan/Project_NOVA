@@ -101,9 +101,11 @@ export default function NewHomePage () {
     }
 
     const loadMoreCallBack = () => {
-        console.log(hasMore, fetchingRef.current, isLoading);
         if (!hasMore || fetchingRef.current || isLoading) return;
-        fetchPlusData();
+        fetchingRef.current = true; // observer에서 바로 세팅
+        fetchPlusData().finally(() => {
+            fetchingRef.current = false;
+        });
     };
 
     const scrollRef = useRef(null);
