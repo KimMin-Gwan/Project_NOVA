@@ -32,13 +32,24 @@ export default function NewHomePage () {
         return item.bid;
     });
 
+    const fetchingRef = useRef(false); // fetch 중인지 추적
+
     const fetchAllFeed = async () => {
-      setIsLoading(true);
-      const data = await fetchAllFeedList(nextData, filterCategory, filterFclass);
-      setFeedData(data.body.send_data);
-      setNextData(data.body.key);
-      setHasMore(data.body.send_data.length > 0);
-      setIsLoading(false);
+        if (fetchingRef.current) return; // 이미 fetch 중이면 종료
+        fetchingRef.current = true;
+
+        try {
+            const data = await fetchAllFeedList(nextData, filterCategory, filterFclass);
+            console.log(data);
+            setFeedData(data.body.send_data);
+            setNextData(data.body.key);
+            setHasMore(data.body.send_data.length > 0);
+            setIsLoading(false);
+        } catch (err) {
+            console.error(err);
+        } finally {
+            fetchingRef.current = false; // fetch 끝나면 false
+        }
     }
 
     async function fetchBiasCategoryData(targetBid) {
@@ -68,28 +79,32 @@ export default function NewHomePage () {
     }, []);
 
 
+    // fetchFeedListType을 안전하게 감싸기
     async function fetchFeedListType(fetchFunction, type, nextData, filterCategory, filterFclass) {
-        const data = await fetchFunction(type, nextData, filterCategory, filterFclass);
+        fetchingRef.current = true;
 
-        setFeedData((prevData) => {
-            const newData = [...prevData, ...data.body.send_data];
-            return newData;
-        });
-        setNextData(data.body.key);
-        setIsLoading(false);
-        setHasMore(data.body.send_data.length > 0);
+        try {
+            const data = await fetchFunction(type, nextData, filterCategory, filterFclass);
+            setFeedData((prevData) => [...prevData, ...data.body.send_data]);
+            setNextData(data.body.key);
+            setHasMore(data.body.send_data.length > 0);
+        } catch (err) {
+            console.error(err);
+        } finally {
+            fetchingRef.current = false; // fetch 끝나면 상태 초기화
+        }
     }
 
+    // 기존 fetchPlusData는 이제 이걸 호출
     async function fetchPlusData() {
         await fetchFeedListType(fetchAllFeedList, nextData, filterCategory, filterFclass);
     }
 
     const loadMoreCallBack = () => {
-        if (!isLoading && hasMore) {
-            fetchPlusData();
-        }
+        console.log(hasMore, fetchingRef.current, isLoading);
+        if (!hasMore || fetchingRef.current || isLoading) return;
+        fetchPlusData();
     };
-
 
     const scrollRef = useRef(null);
     const targetRef = useIntersectionObserver(loadMoreCallBack, 
@@ -175,8 +190,6 @@ export default function NewHomePage () {
             </DesktopLayout>
         );
     }
-
-
 }
 
 
