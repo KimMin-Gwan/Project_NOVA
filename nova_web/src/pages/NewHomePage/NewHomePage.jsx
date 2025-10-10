@@ -110,7 +110,6 @@ export default function NewHomePage () {
                     <div className="section-separator"></div>
 
 
-                    <section>
                         <div className={feedData.length > 0 ? style["scroll-area"] : style["none_feed_scroll"]}
                             style={{columnCount:2, columnGap: "20px"}}
                             >
@@ -133,7 +132,6 @@ export default function NewHomePage () {
                         )}
                         <div ref={targetRef} style={{ height: "1px" }}></div>
                         </div>
-                    </section>
                     <NavBar brightMode={true}></NavBar>
                 </div>
             </div>
@@ -147,30 +145,28 @@ export default function NewHomePage () {
                     </div>
                     <div className={style2["desktop_feed_list_inner_frame"]}>
                         <BiasBoxes setBiasId={setBiasId} fetchBiasCategoryData={fetchBiasCategoryData}  fecthDefaultSetting={fetchAllFeed}/>
-                        <section>
-                            <div className={feedData.length > 0 ? style["scroll-area"] : style["none_feed_scroll"]}
-                                ref={scrollRef}
-                            >
-                            {
-                                isLoading ? (
-                                    <MyPageLoading />
-                                ) : feedData.length > 0 ? (
-                                    feedData.map((feed, i) => {
-                                    return (
-                                        <Feed
-                                        key={`feed_${feed.feed.fid}`}
-                                        className={style["feed-box"]}
-                                        feed={feed.feed}
-                                        setFeedData={setFeedData}
-                                        ></Feed>
-                                    );
-                                    })
-                                ) : (
-                                    <NoneFeed />
-                            )}
-                            <div ref={targetRef} style={{ height: "1px" }}></div>
-                            </div>
-                        </section>
+                        <div className={feedData.length > 0 ? style["scroll-area"] : style["none_feed_scroll"]}
+                            ref={scrollRef}
+                        >
+                        {
+                            isLoading ? (
+                                <MyPageLoading />
+                            ) : feedData.length > 0 ? (
+                                feedData.map((feed, i) => {
+                                return (
+                                    <Feed
+                                    key={`feed_${feed.feed.fid}`}
+                                    className={style["feed-box"]}
+                                    feed={feed.feed}
+                                    setFeedData={setFeedData}
+                                    ></Feed>
+                                );
+                                })
+                            ) : (
+                                <NoneFeed />
+                        )}
+                        <div ref={targetRef} style={{ height: "1px" }}></div>
+                        </div>
                     </div>
                     <div className={style2["desktop-ad-section-style"]}>
                         <AdComponent type={"image_32x60"}/>
