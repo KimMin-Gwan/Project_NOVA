@@ -23,7 +23,7 @@ export default function NewHomePage () {
     const [feedData, setFeedData] = useState([]);
     const [nextData, setNextData] = useState(-1);
     const [hasMore, setHasMore] = useState(true);
-    const [initialLoaded, setInitialLoaded] = useState(true);
+    const [initialLoaded, setInitialLoaded] = useState(false);
     const [filterFclass, setFilterFclass] = useState(JSON.parse(localStorage.getItem("content")) || "");
     const [filterCategory, setFilterCategory] = useState( JSON.parse(localStorage.getItem("board")) || [""]);
     const { biasId, biasList, setBiasId, fetchBiasList} = useBiasStore();
@@ -38,7 +38,7 @@ export default function NewHomePage () {
             const data = await fetchAllFeedList(nextData, filterCategory);
             setFeedData(data.body.send_data);
             setNextData(data.body.key);
-            setInitialLoaded(false);
+            setInitialLoaded(true);
             return data.body.send_data.length;
         } catch (err) {
             console.error(err);
@@ -47,19 +47,20 @@ export default function NewHomePage () {
     }
 
     async function fetchBiasCategoryData(targetBid) {
-        setInitialLoaded(true);
-        await postApi.post(`feed_explore/feed_with_community`, {
-            header: HEADER,
-            body: {
-            bid: targetBid || bids?.[0] || "",
-            board: "자유게시판",
-            key: -1,
-            },
-        })
-        .then((res) => {
+        try {
+            const res = await postApi.post(`feed_explore/feed_with_community`, {
+                header: HEADER,
+                body: {
+                bid: targetBid || bids?.[0] || "",
+                board: "자유게시판",
+                key: -1,
+                },
+            })
             setFeedData(res.data.body.send_data);
+            setInitialLoaded(true);
+        } catch (err) {
             setInitialLoaded(false);
-        });
+        }
     }
 
     const fetchInitialData = async () => {
@@ -92,6 +93,7 @@ export default function NewHomePage () {
 
 
     const loadMoreCallBack = async () => {
+        console.log("콜백 실행됨");
         if (initialLoaded){
             const res = await fetchPlusAllFeed()
             if (!res) setHasMore(false);
@@ -117,30 +119,28 @@ export default function NewHomePage () {
                     </div>
                     <BiasBoxes setBiasId={setBiasId} fetchBiasCategoryData={fetchBiasCategoryData}  fecthDefaultSetting={fetchAllFeed}/>
                     <div className="section-separator"></div>
-
-
-                        <div className={feedData.length > 0 ? style["scroll-area"] : style["none_feed_scroll"]}
-                            style={{columnCount:2, columnGap: "20px"}}
-                            >
-                        {
-                            initialLoaded? (
-                                <MyPageLoading />
-                            ) : feedData.length > 0 ? (
-                                feedData.map((feed, i) => {
-                                return (
-                                    <Feed
-                                    key={`feed_${feed.feed.fid}`}
-                                    className={style["feed-box"]}
-                                    feed={feed.feed}
-                                    setFeedData={setFeedData}
-                                    ></Feed>
-                                );
-                                })
-                            ) : (
-                                <NoneFeed />
-                        )}
-                        <div ref={targetRef} style={{ height: "1px" }}></div>
-                        </div>
+                    <div className={feedData.length > 0 ? style["scroll-area"] : style["none_feed_scroll"]}
+                        style={{columnCount:2, columnGap: "20px"}}
+                        >
+                    {
+                        !initialLoaded ? (
+                            <MyPageLoading />
+                        ) : feedData.length > 0 ? (
+                            feedData.map((feed, i) => {
+                            return (
+                                <Feed
+                                key={`feed_${feed.feed.fid}`}
+                                className={style["feed-box"]}
+                                feed={feed.feed}
+                                setFeedData={setFeedData}
+                                ></Feed>
+                            );
+                            })
+                        ) : (
+                            <NoneFeed />
+                    )}
+                    <div ref={targetRef} style={{ height: "1px" }}></div>
+                    </div>
                     <NavBar brightMode={true}></NavBar>
                 </div>
             </div>
@@ -155,19 +155,18 @@ export default function NewHomePage () {
                     <div className={style2["desktop_feed_list_inner_frame"]}>
                         <BiasBoxes setBiasId={setBiasId} fetchBiasCategoryData={fetchBiasCategoryData}  fecthDefaultSetting={fetchAllFeed}/>
                         <div className={feedData.length > 0 ? style["scroll-area"] : style["none_feed_scroll"]}
-                            ref={scrollRef}
                         >
                         {
-                            initialLoaded? (
+                            !initialLoaded ? (
                                 <MyPageLoading />
                             ) : feedData.length > 0 ? (
                                 feedData.map((feed, i) => {
                                 return (
                                     <Feed
-                                    key={`feed_${feed.feed.fid}`}
-                                    className={style["feed-box"]}
-                                    feed={feed.feed}
-                                    setFeedData={setFeedData}
+                                        key={`feed_${feed.feed.fid}`}
+                                        className={style["feed-box"]}
+                                        feed={feed.feed}
+                                        setFeedData={setFeedData}
                                     ></Feed>
                                 );
                                 })
