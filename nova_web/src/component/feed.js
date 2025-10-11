@@ -153,9 +153,7 @@ export const PreviewContentFeed = ({
       );
     } else{
       return (
-        <div className={style["deleted-feed"]}>
-          삭제되거나 제한된 게시글
-        </div>
+        <></>
       );
     }
 }
