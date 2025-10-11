@@ -125,7 +125,7 @@ export default function NewHomePage () {
             if (biasId) {
                 const targetBias = biasId;
                 const key = nextData;
-                const res = await fetchPlusCategoryFeed (targetBias, nextData);
+                const res = await fetchPlusCategoryFeed (targetBias, key);
                 if (!res) setHasMore(false);
             }else{
                 const res = await fetchPlusAllFeed()
