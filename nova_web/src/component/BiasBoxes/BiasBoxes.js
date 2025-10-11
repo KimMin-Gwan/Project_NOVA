@@ -12,7 +12,7 @@ import biasBadge from "./bias_badge.svg";
 
 import "./index.css";
 
-export default function BiasBoxes({ fetchBiasCategoryData, fecthDefaultSetting }) {
+export default function BiasBoxes({ fecthDefaultSetting }) {
   const navigate = useNavigate();
   const location = useLocation();
   const { scrollRef, hasDragged, dragHandlers } = useDragScroll();
@@ -126,7 +126,6 @@ export default function BiasBoxes({ fetchBiasCategoryData, fecthDefaultSetting }
                         }else{
                           onClickCurrentBias(i);
                           onClickBiasId(bias.bid);
-                          fetchBiasCategoryData && fetchBiasCategoryData(bias.bid);
                         }
                       }}
                     />

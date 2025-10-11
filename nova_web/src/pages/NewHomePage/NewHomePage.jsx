@@ -46,7 +46,8 @@ export default function NewHomePage () {
         return 0;
     }
 
-    async function fetchBiasCategoryData(targetBid) {
+
+    const fetchBiasCategoryData = async (targetBid) => {
         try {
             const res = await postApi.post(`feed_explore/feed_with_community`, {
                 header: HEADER,
@@ -56,7 +57,10 @@ export default function NewHomePage () {
                 key: -1,
                 },
             })
-            setFeedData(res.data.body.send_data);
+
+            const body = res.data.body;
+            setFeedData(body.send_data);
+            setNextData(body.key);
             setInitialLoaded(true);
         } catch (err) {
             setInitialLoaded(false);
@@ -68,6 +72,11 @@ export default function NewHomePage () {
         if (!res) setHasMore(false);
     }
 
+    useEffect(() => {
+        setInitialLoaded(false);
+        const targetBias = biasId;
+        fetchBiasCategoryData(targetBias);
+    }, [biasId])
 
     useEffect(() => {
         fetchBiasList();
@@ -86,17 +95,42 @@ export default function NewHomePage () {
             setNextData(data.body.key);
             return data.body.send_data.length;
         } catch (err) {
-            console.error(err);
         } 
         return 0;
     }
 
+    const fetchPlusCategoryFeed = async (targetBid, key) => {
+        try {
+            const res = await postApi.post(`feed_explore/feed_with_community`, {
+                header: HEADER,
+                body: {
+                bid: targetBid || bids?.[0] || "",
+                board: "자유게시판",
+                key: key,
+                },
+            })
+
+            const body = res.data.body;
+            setFeedData(body.send_data);
+            setNextData(body.key);
+        } catch (err) {
+        }
+        return 0;
+    }
+
+
 
     const loadMoreCallBack = async () => {
-        console.log("콜백 실행됨");
         if (initialLoaded){
-            const res = await fetchPlusAllFeed()
-            if (!res) setHasMore(false);
+            if (biasId) {
+                const targetBias = biasId;
+                const key = nextData;
+                const res = await fetchPlusCategoryFeed (targetBias, nextData);
+                if (!res) setHasMore(false);
+            }else{
+                const res = await fetchPlusAllFeed()
+                if (!res) setHasMore(false);
+            }
         }
     };
 
