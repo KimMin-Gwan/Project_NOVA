@@ -246,27 +246,27 @@ function MyPage() {
 
               <div className={style3["user-detail-container"]}>
                 <div className={style3["user-info-wrapper"]}>
-                  <div className={style3["user-data-number"]}>
-                    {myData.num_feed}
-                  </div>
                   <div className={style3["user-data-type"]}>
                     게시글
                   </div>
+                  <div className={style3["user-data-number"]}>
+                    {myData.num_feed}
+                  </div>
                 </div>
                 <div className={style3["user-info-wrapper"]}>
-                  <div className={style3["user-data-number"]}>
-                    {myData.num_comment}
-                  </div>
                   <div className={style3["user-data-type"]}>
                     댓글
                   </div>
+                  <div className={style3["user-data-number"]}>
+                    {myData.num_comment}
+                  </div>
                 </div>
                 <div className={style3["user-info-wrapper"]}>
-                  <div className={style3["user-data-number"]}>
-                    {myData.num_like}
-                  </div>
                   <div className={style3["user-data-type"]}>
                     좋아요
+                  </div>
+                  <div className={style3["user-data-number"]}>
+                    {myData.num_like}
                   </div>
                 </div>
               </div>

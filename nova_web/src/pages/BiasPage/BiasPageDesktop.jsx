@@ -40,7 +40,7 @@ const BiasPageDesktop = ({
                                 onClick={()=>{fetchTryFollowBias(targetBias.bid)}}
                             >
                             {
-                                is_following ?  "언팔로우" : "팔로우"
+                                is_following ?  "팔로우 중" : "팔로우"
                             }
                             </div>
                         </div>
