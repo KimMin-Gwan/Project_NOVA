@@ -109,6 +109,7 @@ export default function NewHomePage () {
                 }, 0);
 
                 sessionStorage.removeItem("postBoardState");
+                setInitialLoaded(true);
             } else {
                 fetchInitialData();
             }
@@ -124,6 +125,7 @@ export default function NewHomePage () {
                 // 복원 후 스크롤 이동
                 setTimeout(() => window.scrollTo(0, parsed.scrollY || 0), 0);
                 sessionStorage.removeItem("postBoardState");
+                setInitialLoaded(true);
             } else {
                 fetchInitialData();
             }
