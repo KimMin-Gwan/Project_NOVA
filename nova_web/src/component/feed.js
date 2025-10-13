@@ -160,7 +160,6 @@ export const PreviewContentFeed = ({
 
 export function ContentFeed({ detailPage, feed, handleCheckStar, links, fetchReportResult}) {
 
-  const { scrollRef, hasDragged, dragHandlers } = useDragScroll();
   const [isLoading, setIsLoading] = useState(true);
   const [result, setResult] = useState(true);
   const [fid, setFid] = useState("");
@@ -235,7 +234,7 @@ export function ContentFeed({ detailPage, feed, handleCheckStar, links, fetchRep
               >본문 불러오는 중</div>
             }
 
-            <Viewer key={feed.raw_body} initialValue={feed.raw_body} />
+            <Viewer key={rawBody} initialValue={rawBody} />
           </div>
 
           {links && <LinkSection links={links} />}
