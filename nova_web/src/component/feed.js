@@ -62,7 +62,6 @@ export const PreviewContentFeed = ({
     const fetchBodyData = async (fid) => {
       try {
         const res = await feedApi.get(fid);
-        console.log(res);
         if (res.status === 200) {
           setIsLoading(false);
           setRawBody(res.data);
