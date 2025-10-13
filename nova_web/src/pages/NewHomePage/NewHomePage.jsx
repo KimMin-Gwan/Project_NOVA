@@ -35,7 +35,7 @@ export default function NewHomePage () {
 
     const fetchAllFeed = async () => {
         try {
-            const data = await fetchAllFeedList(nextData, filterCategory);
+            const data = await fetchAllFeedList(-1, filterCategory);
             setFeedData(data.body.send_data);
             setNextData(data.body.key);
             setInitialLoaded(true);
