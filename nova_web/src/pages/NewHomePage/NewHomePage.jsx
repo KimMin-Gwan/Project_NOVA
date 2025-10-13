@@ -53,7 +53,7 @@ export default function NewHomePage () {
                 header: HEADER,
                 body: {
                 bid: targetBid || bids?.[0] || "",
-                board: "자유게시판",
+                board: "",
                 key: -1,
                 },
             })
@@ -106,7 +106,7 @@ export default function NewHomePage () {
                 header: HEADER,
                 body: {
                 bid: targetBid || bids?.[0] || "",
-                board: "자유게시판",
+                board: "",
                 key: key,
                 },
             })
