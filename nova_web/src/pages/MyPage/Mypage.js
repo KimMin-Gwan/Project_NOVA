@@ -239,7 +239,9 @@ function MyPage() {
                 <div className={style3["user-name"]}>
                   {myData.uname}
                 </div>
-                <div className={style3["profile-edit-button"]}>
+                <div className={style3["profile-edit-button"]}
+                  onClick={(e) => handleMovePage(e, "/mypage_edit")} style={{ cursor: "pointer" }}
+                >
                   프로필 수정
                 </div>
               </div>
