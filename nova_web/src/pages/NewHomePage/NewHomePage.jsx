@@ -17,8 +17,10 @@ import HEADER from "../../constant/header.js";
 import postApi from "../../services/apis/postApi.js";
 import DesktopLayout from "../../component/DesktopLayout/DeskTopLayout.jsx";
 import AdComponent from '../../component/AdComponent/AdComponent.jsx';
+import { useNavigate } from 'react-router-dom';
 
 export default function NewHomePage () {
+    const navigate = useNavigate();
     const isMobile = useMediaQuery('(max-width:1100px)');
     const [feedData, setFeedData] = useState([]);
     const [nextData, setNextData] = useState(-1);
