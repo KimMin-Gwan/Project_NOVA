@@ -68,6 +68,7 @@ export const PreviewContentFeed = ({
           setRawBody(res.data);
         } else {
           setResult(false);
+          console.log("여기 오류 1")
         }
 
       } catch (err) {
@@ -78,6 +79,7 @@ export const PreviewContentFeed = ({
           //console.warn("네트워크 에러 발생");
         }
 
+        console.log("여기 오류 2")
         setResult(false);
       }
     };
