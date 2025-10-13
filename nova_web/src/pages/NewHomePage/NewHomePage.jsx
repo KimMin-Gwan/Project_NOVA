@@ -76,6 +76,7 @@ export default function NewHomePage () {
         setInitialLoaded(false);
         const targetBias = biasId;
         setFeedData([]);
+        setNextData(-1);
 
         if (biasId){
             fetchBiasCategoryData(targetBias);
