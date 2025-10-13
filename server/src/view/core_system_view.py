@@ -156,8 +156,6 @@ class Core_Service_View(Master_View):
             
             data_payload = AllFeedRequest(request=raw_request)
             
-            print(data_payload)
-            
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
                 #raise request_manager.credentials_exception
