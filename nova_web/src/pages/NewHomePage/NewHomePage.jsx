@@ -75,6 +75,7 @@ export default function NewHomePage () {
     useEffect(() => {
         setInitialLoaded(false);
         const targetBias = biasId;
+        setFeedData([]);
         fetchBiasCategoryData(targetBias);
     }, [biasId])
 
@@ -111,7 +112,7 @@ export default function NewHomePage () {
             })
 
             const body = res.data.body;
-            setFeedData(body.send_data);
+            setFeedData((prevData) => [...prevData, ...body.send_data]);
             setNextData(body.key);
         } catch (err) {
         }
