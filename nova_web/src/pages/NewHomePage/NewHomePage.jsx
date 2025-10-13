@@ -76,7 +76,13 @@ export default function NewHomePage () {
         setInitialLoaded(false);
         const targetBias = biasId;
         setFeedData([]);
-        fetchBiasCategoryData(targetBias);
+
+        if (biasId){
+            fetchBiasCategoryData(targetBias);
+        }else{
+            fetchAllFeed();
+        }
+
     }, [biasId])
 
     useEffect(() => {
