@@ -235,7 +235,17 @@ const WideBiasComponent = ({
                 isClicked && (
                     <div className={style["wide-bias-component-button-wrapper"]}>
                         <div className={style["wide-bias-component-button1"]}
-                            onClick={()=>window.open("https://supernova.io.kr", "_blank", "noopener,noreferrer")}
+                            onClick={() => {
+                                if (bias.platform_url != "https://supernova.io.kr"){
+                                    window.open(bias.platform_url, "_blank")
+                                } else{
+                                    if (bias.platform == "치지직"){
+                                        window.open(`https://chzzk.naver.com/search?query=${bias.bname}`, "_blank")
+                                    }else{
+                                        window.open(`https://www.sooplive.co.kr/search?szLocation=total_search&szSearchType=total&szKeyword=${bias.bname}&szStype=di&szActype=input_field`, "_blank")
+                                    }
+                                }
+                            }}
                         >
                             방송국 바로가기
                         </div>

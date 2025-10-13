@@ -71,7 +71,19 @@ const BiasPageDesktop = ({
                                     }
                                     </div>
                                 </div>
-                                <div className={style["bias-platform-container"]}>
+                                <div className={style["bias-platform-container"]}
+                                    onClick={() => {
+                                        if (targetBias.platform_url != "https://supernova.io.kr"){
+                                            window.open(targetBias.platform_url, "_blank")
+                                        } else{
+                                            if (targetBias.platform == "치지직"){
+                                                window.open(`https://chzzk.naver.com/search?query=${targetBias.bname}`, "_blank")
+                                            }else{
+                                                window.open(`https://www.sooplive.co.kr/search?szLocation=total_search&szSearchType=total&szKeyword=${targetBias.bname}&szStype=di&szActype=input_field`, "_blank")
+                                            }
+                                        }
+                                    }}
+                                >
                                     {
                                         targetBias.platform == "치지직" ? (
                                             <img src={chzzkLogo}/>
@@ -79,6 +91,10 @@ const BiasPageDesktop = ({
                                             <img src={soopLogo}/>
                                         )
                                     }
+                                    <div className={style["bias-platform-info"]}
+                                    >
+                                        바로가기
+                                    </div>
                                 </div>
                             </div>
                         </div>
