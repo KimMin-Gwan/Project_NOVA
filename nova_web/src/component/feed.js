@@ -160,46 +160,92 @@ export const PreviewContentFeed = ({
 
 export function ContentFeed({ detailPage, feed, handleCheckStar, links, fetchReportResult}) {
 
+  const { scrollRef, hasDragged, dragHandlers } = useDragScroll();
+  const [isLoading, setIsLoading] = useState(true);
+  const [result, setResult] = useState(true);
+  const [fid, setFid] = useState("");
+  const [rawBody, setRawBody] = useState("");
+
+  const fetchBodyData = async (fid) => {
+    try {
+      const res = await feedApi.get(fid);
+      if (res.status === 200) {
+        setIsLoading(false);
+        setRawBody(res.data);
+      } else {
+        setResult(false);
+      }
+
+    } catch (err) {
+      //console.error("요청 에러:", err);
+
+      // CORS 에러인 경우
+      if (err.message === "Network Error") {
+        //console.warn("네트워크 에러 발생");
+      }
+
+      setResult(false);
+    }
+  };
+
+  useEffect(() => {
+    if (feed && feed.fid !== fid) {
+      setFid(feed.fid);
+    }
+  }, [feed]);
+
+  useEffect(() => {
+    if (fid) {
+      fetchBodyData(fid);
+    }
+  }, [fid]);
+
   if (!feed) {
     return <div>loading 중...</div>;
   }
 
-  return (
-    <div style={{breakInside: "avoid", marginBottom: "20px"}}>
-      <div className={style["wrapper-top-component"]}>
-        {feed.bname && (
-          <div className={style["meta-data-1"]}>
-            <p>
-              {feed.bname}
-            </p>
+  if (result){
+    return (
+      <div style={{breakInside: "avoid", marginBottom: "20px"}}>
+        <div className={style["wrapper-top-component"]}>
+          {feed.bname && (
+            <div className={style["meta-data-1"]}>
+              <p>
+                {feed.bname}
+              </p>
+            </div>
+          )}
+          <div className={style["meta-data-2"]}>
+              <p>
+                {feed.board_type}
+              </p>
           </div>
-        )}
-        <div className={style["meta-data-2"]}>
-            <p>
-              {feed.board_type}
-            </p>
+        </div>
+        <div
+          className={`${style["wrapper-container"]} ${ style["long-wrapper"]}`}
+        >
+          <FeedHeader date={feed.date} nickname={feed.nickname} />
+
+          <div className={`${style["body-container"]}`}>
+            <HashTags hashtags={feed.hashtag} />
+            <Viewer key={feed.raw_body} initialValue={feed.raw_body} />
+          </div>
+
+          {links && <LinkSection links={links} />}
+
+          <ActionButtons
+            feed={feed}
+            handleCheckStar={handleCheckStar}
+            fetchReportResult={fetchReportResult}
+          />
         </div>
       </div>
-      <div
-        className={`${style["wrapper-container"]} ${ style["long-wrapper"]}`}
-      >
-        <FeedHeader date={feed.date} nickname={feed.nickname} />
-
-        <div className={`${style["body-container"]}`}>
-          <HashTags hashtags={feed.hashtag} />
-          <Viewer key={feed.raw_body} initialValue={feed.raw_body} />
-        </div>
-
-        {links && <LinkSection links={links} />}
-
-        <ActionButtons
-          feed={feed}
-          handleCheckStar={handleCheckStar}
-          fetchReportResult={fetchReportResult}
-        />
-      </div>
-    </div>
-  );
+    );
+  } else{
+    return (
+      <div> 제한된 게시글 입니다. </div>
+    );
+  }
 }
 
 // 피드 날짜 및 작성자
