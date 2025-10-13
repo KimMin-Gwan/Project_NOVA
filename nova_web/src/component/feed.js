@@ -17,7 +17,7 @@ import useFeedActions from "../hooks/useFeedActions";
 import { use } from "react";
 
 
-export default function Feed({ feed, setFeedData, type }) {
+export default function Feed({ feed, setFeedData, type, onClickComponent }) {
   const header = HEADER;
   const { handleCheckStar } = useFeedActions(setFeedData, type);
   const navigate = useNavigate();
@@ -41,6 +41,7 @@ export default function Feed({ feed, setFeedData, type }) {
         handleCheckStar={handleCheckStar}
         fetchReportResult={fetchReportResult}
         navigate={navigate}
+        onClickComponent={onClickComponent}
       />
     </>
   );
@@ -49,9 +50,9 @@ export default function Feed({ feed, setFeedData, type }) {
 export const PreviewContentFeed = ({ 
     feed,
     handleCheckStar,
-    links,
     fetchReportResult,
-    navigate
+    navigate,
+    onClickComponent
   }) =>{
     const { scrollRef, hasDragged, dragHandlers } = useDragScroll();
     const [isLoading, setIsLoading] = useState(true);
@@ -120,11 +121,11 @@ export const PreviewContentFeed = ({
             className={`${style["wrapper-container2"]} ${style["long-wrapper"]}`}
             onClick={(e) => {
               if (hasDragged) return;
+
               e.preventDefault();
               e.stopPropagation();
-              navigate(`/feed_detail/${feed.fid}`, {
-                state: { commentClick: false },
-              });
+
+              onClickComponent(feed);
             }}
           >
             <FeedHeader date={feed.date} nickname={feed.nickname} />
