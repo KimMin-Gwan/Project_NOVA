@@ -99,11 +99,8 @@ function App() {
       <Route path="/write_feed" element={<Write />}>
         <Route path=":fid" element={<Write />}></Route>
       </Route>
-      <Route
-        path="/feed_list"
-        element={<FeedList brightMode={brightMode} />}
-      ></Route>
-      <Route path="/feed_list/:fid" element={<FeedList />}></Route>
+      {/*<Route path="/feed_list" element={<FeedList brightMode={brightMode} />} ></Route>*/}
+      {/*<Route path="/feed_list/:fid" element={<FeedList />}></Route>*/}
       {/*<Route path="/feed_detail/:fid" element={<FeedDetail />}></Route>*/}
       <Route path="/feed_detail/:fid" element={<NewFeedDetail/>}></Route>
 
@@ -116,7 +113,7 @@ function App() {
       <Route path="/search_result" element={<SearchResultPage />}></Route>
 
       {/* 컨텐츠  페이지 */}
-      <Route path="/temp" element={<ScheduleDashboard />}></Route>
+      <Route path="/" element={<ScheduleDashboard />}></Route>
       <Route path="/explore/schedule" element={<ScheduleExplore />}></Route>
       <Route path="/schedule/make_new" element={<ScheduleMakePage/>}>
         <Route path=":sid" element={<ScheduleMakePage/>}></Route>
@@ -128,7 +125,7 @@ function App() {
       {/* 테스트 페이지 및 에러 페이지 */}
       {/* <Route path="/test2" element={<TestPage />}></Route> */}
       <Route path="*" element={<ErrorPage/>} />
-      <Route path="/" element={<NotYet/>} />
+      <Route path="/temp" element={<NotYet/>} />
 
       {/* 홈 화면 */}
       <Route path="/post_board" element={<NewHomePage/>} />
