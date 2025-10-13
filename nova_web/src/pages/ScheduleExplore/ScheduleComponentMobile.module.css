@@ -38,13 +38,14 @@
     font-style: normal;
     line-height: 130%; /* 19.5px */
     letter-spacing: -0.3px;
+    min-width: 0;
 }
 
 .schedule-title{
     color: #111;
+    max-width: 100%;
     font-size: 16px;
     font-weight: 500;
-    max-width: 100%; /* 부모 영역 넘지 않도록 */
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
