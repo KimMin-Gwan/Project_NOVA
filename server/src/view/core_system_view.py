@@ -180,7 +180,7 @@ class Core_Service_View(Master_View):
             
             data_payload = CommunityRequest(request=raw_request)
             
-            pprint(data_payload)
+            print(data_payload)
             
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
