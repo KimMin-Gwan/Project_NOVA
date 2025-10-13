@@ -228,6 +228,13 @@ export function ContentFeed({ detailPage, feed, handleCheckStar, links, fetchRep
 
           <div className={`${style["body-container"]}`}>
             <HashTags hashtags={feed.hashtag} />
+
+            {
+              isLoading && <div
+              className={style["loading-feed-sign"]}
+              >본문 불러오는 중</div>
+            }
+
             <Viewer key={feed.raw_body} initialValue={feed.raw_body} />
           </div>
 
