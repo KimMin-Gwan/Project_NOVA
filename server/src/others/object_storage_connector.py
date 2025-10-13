@@ -5,7 +5,7 @@ import time
 import glob
 import os
 from bs4 import BeautifulSoup
-from PIL import Image
+from PIL import Image, ExifTags
 from io import BytesIO
 import imageio
 from io import BytesIO
@@ -68,32 +68,26 @@ class ObjectStorageConnection:
         return html_content
     
     def make_new_profile_image(self, uid:str, image_name:str, image):
-        
-        # 자주 사용되는 이미지 확장자들
-        valid_extensions = ['.png', '.jpg', '.jpeg', '.PNG']  
-    
-        # 이미지 확장자가 주어진 확장자 중 하나인지 검사
+        valid_extensions = ['.png', '.jpg', '.jpeg', '.PNG']
+
         if not any(image_name.lower().endswith(ext) for ext in valid_extensions):
             return False
-            
+
         self.__init_boto3()
-        
         path = './model/local_database/temp_profile_image/'
-        
-        extension = image_name.split('.')[-1]
-        
         file_name = f"{uid}.png"
-        
-        pil_image = Image.open(BytesIO(image))
+
+        pil_image = _normalize_image(image)
         file_path = path + file_name
-        
         pil_image.save(file_path, format='PNG')
-        
-        self.__s3.upload_file(  file_path,
-                                self.__profile_bucket,
-                                file_name,
-                                ExtraArgs={'ACL': 'public-read'})
-        
+
+        self.__s3.upload_file(
+            file_path,
+            self.__profile_bucket,
+            file_name,
+            ExtraArgs={'ACL': 'public-read'}
+        )
+
         self.delete_specific_file(path=path, file_name=file_name)
         return True
         
@@ -455,8 +449,7 @@ class ImageDescriper:
         URL은 항상 sid.png
         """
         try:
-            pil_image = Image.open(BytesIO(image))
-            pil_image = pil_image.convert("RGBA")  # RGBA 변환으로 안정성 확보
+            pil_image = self._normalize_image(image)
 
             temp_path = f"{self.__schedule_temp_path}/{sid}.png"
             pil_image.save(temp_path, "PNG")
@@ -548,3 +541,31 @@ class ImageDescriper:
         #self.delete_specific_file(path=self.__schedule_temp_path, file_name=f"{sid}.{temp_ext}")
 
         #return url, True
+        
+def _normalize_image(image_bytes: bytes) -> Image.Image:
+    """
+    이미지 바이트를 PIL 이미지로 변환하면서
+    EXIF Orientation 보정 + RGBA 변환 수행
+    """
+    pil_image = Image.open(BytesIO(image_bytes))
+
+    # EXIF Orientation 교정
+    try:
+        exif = pil_image._getexif()
+        if exif is not None:
+            for orientation in ExifTags.TAGS.keys():
+                if ExifTags.TAGS[orientation] == 'Orientation':
+                    orientation_value = exif.get(orientation, None)
+                    if orientation_value == 3:
+                        pil_image = pil_image.rotate(180, expand=True)
+                    elif orientation_value == 6:
+                        pil_image = pil_image.rotate(270, expand=True)
+                    elif orientation_value == 8:
+                        pil_image = pil_image.rotate(90, expand=True)
+                    break
+    except Exception as e:
+        print("EXIF orientation 처리 중 오류:", e)
+
+    # RGBA 변환 (투명도 포함)
+    pil_image = pil_image.convert("RGBA")
+    return pil_image
