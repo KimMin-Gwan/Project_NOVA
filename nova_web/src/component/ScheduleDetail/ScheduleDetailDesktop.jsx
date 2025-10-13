@@ -99,7 +99,12 @@ const ScheduleDetailDekstop = ({sid, toggleDetailOption}) => {
                                                 </div>
                                             }
                                         </div>
-                                        <div className={style["schedule-bname"]}>
+                                        <div className={style["schedule-bname"]}
+                                            onClick={()=>{
+                                                navigate(`/bias/${schedule.bid}`);
+                                                toggleDetailOption(null);
+                                            }}
+                                        >
                                             {schedule.bname}
                                         </div>
                                     </div>
