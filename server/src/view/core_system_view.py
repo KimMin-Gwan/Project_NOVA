@@ -180,6 +180,8 @@ class Core_Service_View(Master_View):
             
             data_payload = CommunityRequest(request=raw_request)
             
+            print(data_payload)
+            
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
             feed_controller =Feed_Controller(feed_manager=self.__feed_manager)
@@ -345,6 +347,9 @@ class CommunityRequest(RequestHeader):
         self.bid = body['bid']
         self.category = body['board']
         self.key:int = body['key']
+        
+    def __str__(self) -> str:
+        return f"bid : {self.bid}, category : {self.category}, key : {self.key}"
 
 class AllFeedRequest(RequestHeader):
     def __init__(self, request) -> None:
