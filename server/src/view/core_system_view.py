@@ -156,6 +156,8 @@ class Core_Service_View(Master_View):
             
             data_payload = AllFeedRequest(request=raw_request)
             
+            print(data_payload)
+            
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
             #if not request_manager.jwt_payload.result:
                 #raise request_manager.credentials_exception
@@ -180,8 +182,6 @@ class Core_Service_View(Master_View):
             
             data_payload = CommunityRequest(request=raw_request)
             
-            print(data_payload)
-            
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
             feed_controller =Feed_Controller(feed_manager=self.__feed_manager)
@@ -190,8 +190,6 @@ class Core_Service_View(Master_View):
                                                     feed_search_engine=self.__feed_search_engine)
 
             body_data = model.get_response_form_data(self._head_parser)
-            
-            pprint(body_data)
             
             response = request_manager.make_json_response(body_data=body_data)
             return response
@@ -361,6 +359,8 @@ class AllFeedRequest(RequestHeader):
         self.category = body['category']
         self.key= body['key']
         
+    def __str__(self) -> str:
+        return f"category : {self.category}, key : {self.key}"
 
 class KeywordSearchRequest(RequestHeader):
     def __init__(self, key, keyword, search_columns="") -> None:
