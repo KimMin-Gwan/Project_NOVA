@@ -9,10 +9,24 @@ import { getBiasStateStr, getStartTime, handlePreviewImage, defaultImage } from 
 import { useEffect, useState } from "react";
 import { SCHEDULE_IMAGE_URL } from "../../constant/imageUrl";
 import NavBar from "../../component/NavBar/NavBar";
+import { BIAS_URL, DEFAULT_BIAS_URL } from "../../constant/biasUrl";
+import ScheduleDetailMobile from "../../component/ScheduleDetail/ScheduleDetailMobile";
 
 const BiasPageMobile = ({
     scheduleList, targetBias, weekData, prevWeek, nextWeek, fetchTryFollowBias, is_following
 }) => {
+
+    const [targetSchedule, setTargetSchedule] = useState(null);
+    const [showScheduleMoreOption, setShowScheduleMoreOption] = useState(false);
+
+    const handleTargetSchedule = (schedule) => {
+        setTargetSchedule(schedule.sid);
+        toggleDetailOption();
+    }
+
+    const toggleDetailOption = () => {
+        setShowScheduleMoreOption(!showScheduleMoreOption);
+    }
 
     // 부모 컨테이너 애니메이션 설정
     const containerVariants = {
@@ -24,7 +38,6 @@ const BiasPageMobile = ({
         },
     };
 
-    console.log(is_following);
 
     // 자식(각 아이템) 애니메이션 설정
     const itemVariants = {
@@ -34,6 +47,13 @@ const BiasPageMobile = ({
 
     return (
         <div className={style["frame"]}>
+            {
+                showScheduleMoreOption && 
+                <ScheduleDetailMobile
+                    sid={targetSchedule}
+                    toggleDetailOption={toggleDetailOption}
+                />
+            }
             <div className={style["top-bar"]}>
                 <Header/>
             </div>
@@ -43,7 +63,14 @@ const BiasPageMobile = ({
             <div className={style["inner-box"]}>
                 <div className={style["bias-meta-data-wrapper"]}>
                     <div className={style["bias-image-wrapper"]}>
-                        <img src={"https://kr.object.ncloudstorage.com/nova-images/ham.png"}/>
+                        <img
+                            src={BIAS_URL + `${targetBias.bid}.png`}
+                            onError={(e) => {
+                                e.currentTarget.onerror = null; // 무한 루프 방지
+                                e.currentTarget.src = DEFAULT_BIAS_URL;
+                            }}
+                            alt="bias"
+                        />
                     </div>
                     <div className={style["bias-detail-container-wrapper"]}>
                         <div className={style["bias-name-container"]}>
@@ -54,7 +81,19 @@ const BiasPageMobile = ({
                             </div>
                             <div className={style["bias-name"]}>{targetBias.bname}</div>
                         </div>
-                        <div className={style["bias-platform-container"]}>
+                        <div className={style["bias-platform-container"]}
+                            onClick={() => {
+                                if (targetBias.platform_url != "https://supernova.io.kr"){
+                                    window.open(targetBias.platform_url, "_blank")
+                                } else{
+                                    if (targetBias.platform == "치지직"){
+                                        window.open(`https://chzzk.naver.com/search?query=${targetBias.bname}`, "_blank")
+                                    }else{
+                                        window.open(`https://www.sooplive.co.kr/search?szLocation=total_search&szSearchType=total&szKeyword=${targetBias.bname}&szStype=di&szActype=input_field`, "_blank")
+                                    }
+                                }
+                            }}
+                        >
                             <div className={style["platform-image"]}>
                             {
                                 targetBias.platform == "치지직" ? (
@@ -134,7 +173,7 @@ const BiasPageMobile = ({
                                 </div>
 
                                 {schedule.schedule.sid !== "" ? (
-                                    <ScheduleComponent schedule={schedule.schedule} />
+                                    <ScheduleComponent schedule={schedule.schedule} handleTargetSchedule={handleTargetSchedule} />
                                 ) : (
                                     <div className={style["single-schedule-container"]}>
                                         <div className={style["single-schedule-image"]}>
@@ -149,7 +188,6 @@ const BiasPageMobile = ({
                 </motion.div>
 
                 <div className={style["background-gradient"]}>
-                    <img src={background}/>
                 </div>
             </div>
             <div style={{height:"100px"}}> </div>
@@ -158,7 +196,7 @@ const BiasPageMobile = ({
     );
 }
 
-const ScheduleComponent = (schedule) => {
+const ScheduleComponent = ({schedule, handleTargetSchedule}) => {
     const [image, setImage] = useState(null);
 
     useEffect(()=>{
@@ -167,7 +205,9 @@ const ScheduleComponent = (schedule) => {
     }, [])
 
     return(
-        <div className={style["single-schedule-container"]}>
+        <div className={style["single-schedule-container"]}
+            onClick={()=>{handleTargetSchedule(schedule)}}
+        >
             <div className={style["single-schedule-image"]}>
                 {
                     image != null ? (
@@ -180,17 +220,17 @@ const ScheduleComponent = (schedule) => {
             <div className={style["single-schedule-detail-wrapper"]}>
                 <div className={style["single-schedule-title-wrapper"]}>
                     <div className={style["single-schedule-title"]}>
-                        {schedule.schedule.title || "콘텐츠 없음"}
+                        {schedule.title || "콘텐츠 없음"}
                     </div>
                     <div className={style["single-start-time"]}>
                         {
-                            getStartTime(schedule.schedule.datetime)
+                            getStartTime(schedule.datetime)
                         }
                     </div>
                 </div>
                 <div className={style["schedule-tag-wrapper"]}>
-                    {schedule.schedule.tags.length > 0 ? (
-                        schedule.schedule.tags.slice(0, 3).map((tag, tIdx) => (
+                    {schedule.tags.length > 0 ? (
+                        schedule.tags.slice(0, 3).map((tag, tIdx) => (
                             <div key={tIdx} className={style["tag"]}>
                                 {tag}
                             </div>
