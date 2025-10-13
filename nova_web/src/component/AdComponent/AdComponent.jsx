@@ -138,7 +138,6 @@ export const LinkAd = () => {
   useEffect(() => {
     const el = document.getElementById("link-container");
     if (el) {
-      console.log("clientWidth:", el.clientWidth);
       if (el.clientWidth > 600) {
         setMaxItems(sampleList.length); // 전체 다 보여줌
       } else {

@@ -48,7 +48,6 @@ export default function ImageChecker() {
             setDots([]);
         } else if (event.key ==="Enter" || event.key === "3"){
             if( mode != "CHECK"){
-                console.log(dots)
                 const firstDot = dots.find((dot) => dot.mode === "FIRST");
                 const secondDot = dots.find((dot) => dot.mode === "SECOND");
                 if (!firstDot || !secondDot){

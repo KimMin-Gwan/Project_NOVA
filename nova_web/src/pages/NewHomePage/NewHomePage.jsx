@@ -129,7 +129,6 @@ export default function NewHomePage () {
 
 
     const loadMoreCallBack = async () => {
-        console.log(initialLoaded);
         if (initialLoaded){
             if (biasId) {
                 const targetBias = biasId;

@@ -2513,7 +2513,6 @@ function ContentIntroSlide2({
 
 function ToggleSwitch({id, isChecked, setIsChecked}) {
   const handleToggle = (e) => {
-    console.log("Toggle Switch Changed:", e.target.checked);
     setIsChecked(e.target.checked);
   };
 

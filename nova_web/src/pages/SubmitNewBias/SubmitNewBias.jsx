@@ -169,7 +169,6 @@ function SubmitNewBias() {
         // 모든 에러가 비어있을 때만 제출
         const hasError = Object.values(newErrors).some((msg) => msg);
         if (!hasError) {
-            console.log("제출 완료", form);
             const ok = await fetchNewBias();
             if (ok) {
             alert("등록이 완료되었습니다.");
