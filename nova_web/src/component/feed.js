@@ -20,8 +20,6 @@ import { use } from "react";
 export default function Feed({ feed, setFeedData, type, onClickComponent }) {
   const header = HEADER;
   const { handleCheckStar } = useFeedActions(setFeedData, type);
-  const navigate = useNavigate();
-
   const [report, setReport] = useState();
 
   async function fetchReportResult(fid) {
@@ -40,7 +38,6 @@ export default function Feed({ feed, setFeedData, type, onClickComponent }) {
         feed={feed}
         handleCheckStar={handleCheckStar}
         fetchReportResult={fetchReportResult}
-        navigate={navigate}
         onClickComponent={onClickComponent}
       />
     </>
@@ -51,7 +48,6 @@ export const PreviewContentFeed = ({
     feed,
     handleCheckStar,
     fetchReportResult,
-    navigate,
     onClickComponent
   }) =>{
     const { scrollRef, hasDragged, dragHandlers } = useDragScroll();
