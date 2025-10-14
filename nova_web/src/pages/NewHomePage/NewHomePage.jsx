@@ -149,7 +149,6 @@ export default function NewHomePage () {
             currentScroll = scrollContainer ? scrollContainer.scrollTop : window.scrollY;
         }
 
-
         // ✅ 세션 저장
         sessionStorage.setItem(
             "postBoardState",
