@@ -48,7 +48,7 @@ const boardList = [
     id: 3,
     title: "전체 게시글",
     src: all_post,
-    end_point: "/feed_list?type=all",
+    end_point: "/post_board",
   },
   {
     id: 4,
