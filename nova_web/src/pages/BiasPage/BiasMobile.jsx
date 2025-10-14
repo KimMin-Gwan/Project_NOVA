@@ -1,10 +1,8 @@
 import { motion, AnimatePresence} from "framer-motion";
 import style from "./BiasPage.module.css";
 import Header from "../../component/Header/Header";
-import background from "./background.svg";
+import background from "./icons/background.svg";
 import AdComponent from "../../component/AdComponent/AdComponent";
-import chzzkLogo from './chzzklogo_kor(Green).svg';
-import soopLogo from './SOOP_LOGO_Blue 1.png';
 import { getBiasStateStr, getStartTime, handlePreviewImage, defaultImage } from "./BiasPageFunc";
 import { useEffect, useState } from "react";
 import { SCHEDULE_IMAGE_URL } from "../../constant/imageUrl";
@@ -12,9 +10,16 @@ import NavBar from "../../component/NavBar/NavBar";
 import { BIAS_URL, DEFAULT_BIAS_URL } from "../../constant/biasUrl";
 import ScheduleDetailMobile from "../../component/ScheduleDetail/ScheduleDetailMobile";
 
+import follow from "./icons/follow.svg";
+import share from "./icons/share.svg";
+import chzzk_icon from "./icons/chzzk Icon_02.png";
+import soop_icon from "./icons/soop Icon_02.png";
+
+
 const BiasPageMobile = ({
     scheduleList, targetBias, weekData, prevWeek, nextWeek, fetchTryFollowBias, is_following
 }) => {
+    const [isChecked, setIsChecked] = useState(true);
 
     const [targetSchedule, setTargetSchedule] = useState(null);
     const [showScheduleMoreOption, setShowScheduleMoreOption] = useState(false);
@@ -45,6 +50,15 @@ const BiasPageMobile = ({
         visible: { opacity: 1, y: 0 }, // 원래 위치
     };
 
+    const handleCopy = () => {
+        const currentUrl = window.location.href; // 현재 페이지 URL
+        navigator.clipboard.writeText(currentUrl).then(() => {
+            alert("URL이 클립보드에 복사되었습니다!");
+        }).catch((err) => {
+            console.error("클립보드 복사 실패:", err);
+        });
+    }
+
     return (
         <div className={style["frame"]}>
             {
@@ -60,28 +74,84 @@ const BiasPageMobile = ({
             <div className={style["link-ad-wrapper"]}>
                 <AdComponent type={"none"}/>
             </div>
+
+
+
             <div className={style["inner-box"]}>
-                <div className={style["bias-meta-data-wrapper"]}>
-                    <div className={style["bias-image-wrapper"]}>
-                        <img
-                            src={BIAS_URL + `${targetBias.bid}.png`}
-                            onError={(e) => {
-                                e.currentTarget.onerror = null; // 무한 루프 방지
-                                e.currentTarget.src = DEFAULT_BIAS_URL;
-                            }}
-                            alt="bias"
-                        />
-                    </div>
-                    <div className={style["bias-detail-container-wrapper"]}>
-                        <div className={style["bias-name-container"]}>
-                            <div className={style["bias-state"]}>
-                            {
-                                getBiasStateStr(targetBias.state)
-                            }
+                <div className={style["inner-box-top-section"]}>
+                    <div className={style["bias-meta-data-wrapper"]}>
+                        <div className={style["bias-share-wrapper"]}>
+                            <div className={style["bias-share-button"]}>
+                                <div className={style["bias-share-icon"]}>
+                                    <img src={share}/>
+                                </div>
+                                <div className={style["bias-share-text"]}
+                                    onClick={handleCopy}
+                                >
+                                    이 페이지 공유
+                                </div>
                             </div>
-                            <div className={style["bias-name"]}>{targetBias.bname}</div>
                         </div>
-                        <div className={style["bias-platform-container"]}
+
+                        <div className={style["bias-image-wrapper"]}>
+                            <img
+                                src={BIAS_URL + `${targetBias.bid}.png`}
+                                onError={(e) => {
+                                    e.currentTarget.onerror = null; // 무한 루프 방지
+                                    e.currentTarget.src = DEFAULT_BIAS_URL;
+                                }}
+                                alt="bias"
+                            />
+                        </div>
+
+                        <div className={style["bias-detail-container-wrapper"]}>
+                            <div className={style["bias-name-container"]}>
+                                <div className={style["bias-platform-icon"]}>
+                                    {
+                                        targetBias.platform == "치지직" ? (
+                                            <img src={soop_icon}/>
+                                        ):(
+                                            <img src={chzzk_icon}/>
+                                        )
+                                    }
+                                </div>
+                                <div className={style["bias-name"]}>
+                                    {targetBias.bname}
+                                </div>
+                            </div>
+
+                            <div className={style["bias-introduce-myself"]}>
+                                안녕하세요. 치지직 버튜버 도롱햄입니다.
+                            </div>
+
+                            <div className={style["bias-option-wrapper"]}>
+                                <div className={style["bias-option-text"]}>
+                                    콘텐츠 일정 등록 제한
+                                </div>
+                                <div className={style["bias-option-toggle-button"]}>
+                                    <ToggleSwitch
+                                        id={"bias-option-input"}
+                                        isChecked={isChecked}
+                                        setIsChecked={setIsChecked}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className={style["bias-meta-data-button-container"]}>
+                        <div className={style["bias-meta-data-left-button"]}
+                            onClick={()=>{fetchTryFollowBias(targetBias.bid)}}
+                        >
+                            <div className={style["platform-direct-follow-icon"]}>
+                                <img src={follow}/>
+                            </div>
+                            <div className={style["platform-direct-follow-text"]}>
+                                {
+                                    is_following ?  "팔로우 중" : "팔로우"
+                                }
+                            </div>
+                        </div>
+                        <div className={style["bias-meta-data-right-button"]}
                             onClick={() => {
                                 if (targetBias.platform_url != "https://supernova.io.kr"){
                                     window.open(targetBias.platform_url, "_blank")
@@ -93,33 +163,10 @@ const BiasPageMobile = ({
                                     }
                                 }
                             }}
-                        >
-                            <div className={style["platform-image"]}>
-                            {
-                                targetBias.platform == "치지직" ? (
-                                    <img src={chzzkLogo}/>
-                                ):(
-                                    <img src={soopLogo}/>
-                                )
+                        >플랫폼 바로가기</div>
+                    </div>
+                </div>
 
-                            }
-                            </div>
-                            <div className={style["platform-direct-link"]}>바로가기</div>
-                        </div>
-                    </div>
-                </div>
-                <div className={style["bias-meta-data-button-container"]}>
-                    <div className={style["bias-meta-data-left-button"]}
-                        onClick={()=>{window.open(`https://www.youtube.com/results?search_query=${targetBias.bname}`, '_blank');}}
-                    >외부 검색</div>
-                    <div className={style["bias-meta-data-right-button"]}
-                        onClick={()=>{fetchTryFollowBias(targetBias.bid)}}
-                    >
-                    {
-                        is_following ?  "팔로우 중" : "팔로우"
-                    }
-                    </div>
-                </div>
 
                 <div className={style["week-select-box"]}>
                     <div className={style["week-select-button-wrapper"]}>
@@ -188,6 +235,7 @@ const BiasPageMobile = ({
                 </motion.div>
 
                 <div className={style["background-gradient"]}>
+                    <img src={background}/>
                 </div>
             </div>
             <div style={{height:"100px"}}> </div>
@@ -242,6 +290,27 @@ const ScheduleComponent = ({schedule, handleTargetSchedule}) => {
             </div>
         </div>
     );
+}
+
+function ToggleSwitch({id, isChecked, setIsChecked}) {
+  const handleToggle = (e) => {
+    setIsChecked(e.target.checked);
+  };
+
+  return (
+    <div className={style["toggleSwitchWrapper"]}>
+      <input
+        type="checkbox"
+        id={id}
+        hidden
+        checked={isChecked}
+        onChange={handleToggle}
+      />
+      <label htmlFor={id} className={style["toggleSwitch"]}>
+        <span className={style["toggleButton"]}></span>
+      </label>
+    </div>
+  )
 }
 
 

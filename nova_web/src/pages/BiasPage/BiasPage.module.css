@@ -9,7 +9,16 @@
 .inner-box{
     display: flex;
     flex-direction: column;
-    padding: 4%;
+    padding : 4%;
+}
+
+.inner-box-top-section{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    align-self: stretch;
 }
 
 .top-bar{
@@ -18,24 +27,107 @@
 
 .bias-meta-data-wrapper{
     display: flex;
-    align-items: flex-start;
-    gap: 6px;
+    padding: 10px;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
     align-self: stretch;
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0.50) 0%, rgba(255, 255, 255, 0.70) 100%);
-    padding:3%;
-    border-radius: 12px;
-    box-shadow: 3px 3px 8px 0 rgba(0, 0, 0, 0.08);
+    text-align: center;
+    font-family: Pretendard;
+    font-style: normal;
+    line-height: 140%; /* 21px */
+    letter-spacing: -0.375px;
 }
+
+.bias-share-wrapper{
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+    gap: 10px;
+    align-self: stretch;
+}
+
+.bias-share-button{
+    display: flex;
+    padding: 6px 12px;
+    align-items: center;
+    gap: 10px;
+    border-radius: 8px;
+    border: 1px solid #BEBEBE;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out
+}
+
+.toggleSwitch {
+  width: 40px;
+  height: 20px;
+  display: block;
+  position: relative;
+  border-radius: 30px;
+  background-color: #fff;
+  box-shadow: 0 0 16px 3px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* 토글 버튼 기본 위치 (왼쪽) */
+.toggleSwitch .toggleButton {
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  top: 50%;
+  left: 4px;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  background: #2457FF;
+  transition: left 0.3s ease, background 0.3s ease;
+}
+
+/* ✅ 토글이 체크된 상태일 때 버튼 이동 */
+input[type="checkbox"]:checked + .toggleSwitch .toggleButton {
+  left: 19px;
+  background: #2457ff;
+}
+
+/* (선택) 배경색도 변경하고 싶다면 */
+input[type="checkbox"]:checked + .toggleSwitch {
+  background-color: #e0e9ff;
+}
+
+.toggleSwitchWrapper{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 40px;
+    height: fit-content
+}
+
+.bias-share-button:hover{
+    background-color: #fff;
+}
+
+.bias-share-icon{
+    width: 24px;
+    height: 24px;
+    color: #6C6C6C;
+}
+
+.bias-share-text{
+    font-size: 15px;
+    font-weight: 300;
+}
+
 
 .bias-image-wrapper{
     display: flex;
     justify-content: flex-end;
     align-items: center;
     flex: 1 0 0;
-    aspect-ratio: 1/1;
-    border-radius: 14px 14px 14px 14px;
-    border: 1px solid #797979;
+    border: 1px solid #fff;
     overflow: hidden;
+    width: 190px;
+    height: 190px;
+    border-radius: 200px;
 }
 
 .bias-image-wrapper img{
@@ -49,147 +141,143 @@
 .bias-detail-container-wrapper{
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    gap: 6px;
-    flex: 1 0 0;
+    align-items: center;
+    gap: 10px;
     align-self: stretch;
+}
+
+.bias-introduce-myself{
+    color: #6C6C6C;
+    text-align: center;
     font-family: Pretendard;
+    font-size: 16px;
     font-style: normal;
+    font-weight: 300;
     line-height: normal;
-    letter-spacing: -0.35px;
+    letter-spacing: -0.4px;
+}
+
+.bias-option-wrapper{
+    display: flex;
+    align-self: stretch;
+    padding: 8px 18px;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.bias-option-text{
+    color: #767676;
+    font-family: Pretendard;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 140%; /* 21px */
+    letter-spacing: -0.375px;
+}
+
+.bias-option-toggle-button{
+    width: 30px;
 }
 
 
 .bias-name-container{
     display: flex;
-    flex-direction: column;
     justify-content: center;
-    align-items: flex-start;
-    gap: 6px;
+    align-items: center;
+    gap: 8px;
     flex: 1 0 0;
-    align-self: stretch;
-    border-radius: 14px 60px 14px 14px;
-    border: 1px solid #c2c2c2;
-    background-color: #fff;
 }
 
-.bias-state{
-    color: #767676;
-    margin-left: 10px;
-    text-align: center;
-    font-size: 13px;
-    font-weight: 300;
+.bias-platform-icon{
+    width: 23px;
+    height: 23px;
+    aspect-ratio: 1/1;
 }
+
+.bias-platform-icon img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;   /* cover → 꽉 채움 / contain → 전부 보임 */
+    border-radius: inherit; /* 모서리 맞춰서 잘림 */
+}
+
 
 .bias-name{
     color: #222;
-    margin-left: 10px;
-    text-align: center;
-    font-size: 18px;
+    font-size: 22px;
     font-weight: 400;
 }
 
-.bias-platform-container{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 4px;
-    height: 80px;
-    padding : 0px 0px 10px 0px;
-    align-self: stretch;
-    border-radius: 14px;
-    border: 1px solid #c2c2c2;
-    background-color: #fff;
-}
-
-.platform-image{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-}
-
-.platform-direct-link{
-    color: #5C5C5C;
-    text-align: center;
-    font-size: 13px;
-    font-weight: 300;
-}
 
 .bias-meta-data-button-container{
     display: flex;
+    padding: 10px;
     justify-content: center;
     align-items: center;
+    gap: 10px;
     align-self: stretch;
-    color: #111;
-    text-align: center;
-    margin-top: 10px;
-    font-family: Pretendard;
-    font-size: 14px;
-    font-style: normal;
+    border-radius: 30px;
+    background: #0b0c14a6;
+    color: #FFF;
+    font-size: 16px;
     font-weight: 400;
-    line-height: normal;
-    letter-spacing: -0.35px;
-    border-radius: 10px;
-    border: 1px solid transparent;
-    background-image: linear-gradient(#F1F7FF, #F1F7FF),
-        linear-gradient(
-        135deg,
-        #02ff309a 0%,
-        #0095ff94 100%
-        );
-    background-origin: border-box;
-    background-clip: content-box, border-box;
-    box-shadow: 3px 3px 8px 0 rgba(0, 0, 0, 0.08);
+    line-height: 140%; /* 22.4px */
+    letter-spacing: -0.4px;
+    cursor: pointer;
 }
 
 .bias-meta-data-left-button{
     display: flex;
-    padding: 10px;
-    flex-direction: column;
+    padding: 13px 12px;
     justify-content: center;
     align-items: center;
-    gap: 10px;
+    gap: 6px;
     flex: 1 0 0;
-    border-radius: 10px 0 0 10px;
+    align-self: stretch;
+    border-radius: 20px;
+    background: #009DFF;
     cursor: pointer;
-    transition: all 0.3s ease-in-out;
-    background-color: #fff;
+    transition : all 0.3s ease-in-out;
 }
 
 .bias-meta-data-left-button:hover{
-    background: #02ff308f;
+    background: #0084ff;
 }
 
-.bias-meta-data-left-button:active{
-    background: #02ff308f;
+.platform-direct-follow-icon{
+    width: 24px;
+    height: 24px;
+}
+
+.platform-direct-follow-text{
+    color: #FFF;
+    font-family: Pretendard;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 140%; /* 22.4px */
+    letter-spacing: -0.4px;
 }
 
 
 .bias-meta-data-right-button{
     display: flex;
-    padding: 10px;
-    flex-direction: column;
+    padding: 13px 12px;
     justify-content: center;
     align-items: center;
     gap: 10px;
     flex: 1 0 0;
-    border-radius: 0 10px 10px 0;
-    background: rgba(73, 179, 255, 0.3);
+    align-self: stretch;
+    border-radius: 20px;
     cursor: pointer;
-    transition: all 0.3s ease-in-out;
+    transition : all 0.3s ease-in-out;
 }
 
 .bias-meta-data-right-button:hover{
-    background: rgba(0, 149, 255, 0.50);
+    background-color: #494C53;
 }
 
-.bias-meta-data-right-button:active{
-    background: rgba(0, 149, 255, 0.50);
-}
 
 .week-select-box{
     display: flex;
@@ -203,7 +291,7 @@
     font-family: Pretendard;
     text-align: center;
     font-style: normal;
-    line-height: normal;
+    line-height: 140%;
     letter-spacing: -0.45px;
     border-radius: 12px;
 }
@@ -437,7 +525,7 @@
     width: 100%;       /* 부모 기준 100% */
     max-width: 500px;  /* 최대폭 500px로 제한 */
     height: auto;      /* 비율 유지 */
-    top: 450px;
+    top: 200px;
     z-index: -1;
 }
 
