@@ -282,6 +282,7 @@ export default function NewHomePage () {
                                         className={style["feed-box"]}
                                         feed={feed.feed}
                                         setFeedData={setFeedData}
+                                        onClickComponent={onClickComponent}
                                     ></Feed>
                                 );
                                 })
