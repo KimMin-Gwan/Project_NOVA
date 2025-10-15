@@ -493,6 +493,32 @@ class Report(SampleDomain):
             "result" : self.result,
             "aid_date" : self.aid_date
         }
+        
+class Violation(SampleDomain):
+    def __init__(self, vid ="", report_type="none", target_id="", report_option=""):
+        self.vid = vid
+        self.report_type = report_type
+        self.target_id = target_id
+        self.report_option = report_option
+        
+    def make_with_dict(self, dict_data:dict):
+        try:
+            self.vid = dict_data.get("vid", "")
+            self.report_type = dict_data.get("report_type", "")
+            self.target_id = dict_data.get("target_id", "")
+            self.report_option = dict_data.get("report_option", "")
+            
+            return self
+        except KeyError as e:
+            raise DictMakingError(error_type=f"Missing key: {str(e)}")
+
+    def get_dict_form_data(self):
+        return {
+            "vid" : self.vid,
+            "report_type" :self.report_option,
+            "target_id" : self.target_id,
+            "report_option" : self.report_option
+        }
 
 # 유저 특화 시스템 구성을 위한 관리 유저
 class Notice:
