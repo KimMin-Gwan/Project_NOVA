@@ -1,7 +1,7 @@
 from model.base_model import BaseModel
 from model import Mongo_Database
 from others.data_domain import Bias, User, Report
-from others import CoreControllerLogicError, HTMLEXtractor, ImageDescriper, MailSender, FeedSearchEngine
+from others import CoreControllerLogicError, HTMLEXtractor, ImageDescriper, MailSender, FeedSearchEngine, ObjectStorageConnection
 import uuid
 
 class BannerModel(BaseModel):
@@ -425,6 +425,29 @@ class BiasModifyModel(BaseModel):
         else:
             self._detail = 'Failed : You are not authorized to change open content mode'
 
+        return
+
+
+    def try_change_bias_profile_photo(self, data_payload):
+        if not self.is_valid_bias():
+            self._result = False
+            self._detail = "Failed : You are not authorized to change bias profile photo"
+            return
+
+        connector = ObjectStorageConnection()
+        result = connector.make_new_bias_profile_image(
+                                            bid=self._bias.bid,
+                                            image=data_payload.image,
+                                            image_name=data_payload.image_name
+                                        )
+        
+        if not result:
+            self._result = False
+            self._detail = "Failed : Invalid extension"
+        else:
+            self._result = True
+            self._detail = "Success : Succeed to change bias profile photo"
+        
         return
 
     def get_response_form_data(self, head_parser):

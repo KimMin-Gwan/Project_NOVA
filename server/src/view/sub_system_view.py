@@ -186,6 +186,29 @@ class Sub_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
+        @self.__app.post('/nova_sub_system/try_change_bias_profile_photo')
+        async def try_change_bias_profile_photo(request:Request, bid:Optional[str], image:Union[UploadFile, None] = File(None)):
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
+            
+            if image is None:
+                image_name = ""
+            else:
+                image_name = image.filename
+                image = await image.read()
+        
+            data_payload = ChangeBiasProfilePhotoRequest(bid=bid, image=image, image_name=image_name)
+            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+            if not request_manager.jwt_payload.result:
+                raise request_manager.credentials_exception
+
+            sub_controller=Sub_Controller()
+            model = sub_controller.try_change_bias_profile_photo(database=self.__database,
+                                                             request=request_manager)
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+
+            return response
+
     def sub_service(self):
         @self.__app.post('/nova_sub_system/image_tag')
         def get_image_tag(raw_request:dict):
@@ -309,7 +332,12 @@ class ImageTagRequest(RequestHeader):
 class BiasSelectRequest(RequestHeader):
     def __init__(self, bid) -> None:
         self.bid = bid
-        
+
+class ChangeBiasProfilePhotoRequest(RequestHeader):
+    def __init__(self, bid, image, image_name) -> None:
+        self.bid = bid
+        self.image = image
+        self.image_name = image_name
         
 class ReportRequest(RequestHeader):
     def __init__(self, request, image_names=[], images=[]) -> None:

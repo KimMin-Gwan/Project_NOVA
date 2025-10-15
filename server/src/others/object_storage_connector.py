@@ -92,6 +92,29 @@ class ObjectStorageConnection:
         self.delete_specific_file(path=path, file_name=file_name)
         return True
         
+    def make_new_bias_profile_image(self, bid:str, image_name:str, image):
+        valid_extensions = ['.png', '.jpg', '.jpeg', '.PNG']
+
+        if not any(image_name.lower().endswith(ext) for ext in valid_extensions):
+            return False
+
+        self.__init_boto3()
+        path = './model/local_database/temp_bias_profile_image/'
+        file_name = f"{bid}.png"
+
+        pil_image = _normalize_image(image)
+        file_path = path + file_name
+        pil_image.save(file_path, format='PNG')
+
+        self.__s3.upload_file(
+            file_path,
+            self.__bias_image_bucket,
+            file_name,
+            ExtraArgs={'ACL': 'public-read'}
+        )
+
+        self.delete_specific_file(path=path, file_name=file_name)
+        return True
     
     # 피드 바디 데이터 만들기
     def make_new_feed_body_data(self, fid, body):

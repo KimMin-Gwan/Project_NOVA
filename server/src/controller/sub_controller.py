@@ -184,6 +184,18 @@ class Sub_Controller:
         result = model.change_open_content_mode(open_content_mode=request.data_payload.open_content_mode)
         return model
 
+    # 바이어스 프로필 이미지 바꾸기
+    def try_change_bias_profile_photo(self, database:Mongo_Database, request):
+        model = BiasModifyModel(database=database)
+
+        if request.jwt_payload!= "":
+            model.set_user_with_email(request=request.jwt_payload)
+        
+        model.set_bias_data(bid=request.data_payload.bid)
+        
+        result = model.try_change_bias_profile_photo(data_payload=request.data_payload)
+        return model
+
     def try_report_post_or_comment(self, database:Mongo_Database, request):
         model = ReportModel(database=database)
         
