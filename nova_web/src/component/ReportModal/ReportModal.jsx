@@ -13,15 +13,34 @@ const ReportModal = ({ type, target, toggleReportOption }) => {
     6: "커뮤니티 지침 위반",
   };
 
-
   const [selected, setSelected] = useState(null);
+  const [targetOption, setTargetOption] = useState("");
+  
 
   const handleReport = async (key) => {
     setSelected(reportOption[key]);
-
-    console.log("신고 사유 선택:", key);
-    console.log("목표:", target.fid);
   };
+
+  const fetchViolationReport = async () => {
+    let id = "";
+
+    if (type == "feed") {
+      id = target.fid
+    }else if (type=="schedule"){
+      id = target.sid
+    }else{
+      return null;
+    }
+
+    const res = await mainApi.get(`/nova_sub_system/try_report_violation?report_type=${type}&target_id=${id}&report_option=${targetOption}`)
+
+    if (res.data.body.result) {
+      alert("신고 제출이 완료 되었습니다.")
+    }else{
+      alert("신고 제출 중 문제가 생겼습니다.")
+    }
+    return
+  }
 
   return (
     <div
@@ -34,14 +53,14 @@ const ReportModal = ({ type, target, toggleReportOption }) => {
       >
         <div className={style["modal-title-wrapper"]}>
             <div className={style["modal-title"]}>신고 사유 선택</div>
-            <div className={style["modal-sub-title"]}>신고된 게시물은 비활성화 됩니다.</div>
+            <div className={style["modal-sub-title"]}>신고된 게시물은 검토 후 비활성화 됩니다.</div>
         </div>
         <div className={style["option-list"]}>
             {Object.entries(reportOption).map(([key, value]) => (
                 <div
-                key={key}
-                className={style["option-item"]}
-                onClick={() => handleReport(key)}
+                  key={key}
+                  className={style["option-item"]}
+                  onClick={() => handleReport(key)}
                 >
                     <div className={style["radio-circle"]}>
                         {selected === key && <div className={style["radio-selected"]} />}
@@ -49,6 +68,13 @@ const ReportModal = ({ type, target, toggleReportOption }) => {
                     <span>{value}</span>
                 </div>
             ))}
+        </div>
+        <div className={style["button-wrapper"]}>
+          <div className={style["submit-button"]}
+            onClick={fetchViolationReport}
+          >
+            제출하기
+          </div>
         </div>
       </div>
     </div>

@@ -32,7 +32,7 @@ export default function NewHomePage () {
     const { biasId, biasList, setBiasId, fetchBiasList} = useBiasStore();
 
     const [targetFeed, setTargetFeed] = useState({fid:""});
-    const [reportModal, setReportModal] = useState(false);
+    const [reportModal, setReportModal] = useState(true);
 
     const handleReport = (target) => {
         setTargetFeed(target);

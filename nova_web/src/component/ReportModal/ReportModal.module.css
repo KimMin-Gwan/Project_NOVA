@@ -100,3 +100,26 @@
   background-color: #555;
   border-radius: 50%;
 }
+
+.button-wrapper{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-self: stretch;
+}
+
+.submit-button{
+  font-size: 16px;
+  font-weight: 500;
+  padding: 12px 40px;
+  color: #333;
+  background-color: #ff8d8d;
+  border-radius: 16px;
+  border: 2px solid #e6e6e6;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.submit-button:hover{
+  background-color: #ff6e6e;
+}
