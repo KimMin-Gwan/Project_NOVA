@@ -1,22 +1,24 @@
 import React, { useState } from "react";
 import style from "./ReportModal.module.css";
+import mainApi from "../../services/apis/mainApi";
 
 const ReportModal = ({ type, target, toggleReportOption }) => {
+
   const reportOption = {
-    1: "1번 사유",
-    2: "2번 사유",
-    3: "3번 사유",
-    4: "4번 사유",
-    5: "5번 사유",
-    6: "6번 사유",
-    7: "7번 사유",
+    1: "성적인 콘텐츠",
+    2: "폭력적 또는 혐오스러운 콘텐츠",
+    3: "증오 또는 악의적인 콘텐츠",
+    4: "유해하거나 위험한 행위",
+    5: "잘못된 정보",
+    6: "커뮤니티 지침 위반",
   };
 
 
   const [selected, setSelected] = useState(null);
 
-  const handleReport = (key) => {
-    setSelected(key);
+  const handleReport = async (key) => {
+    setSelected(reportOption[key]);
+
     console.log("신고 사유 선택:", key);
     console.log("목표:", target.fid);
   };
