@@ -291,7 +291,7 @@ function MyPage() {
             />
           </div>
           <button onClick={handleButtonClick}>
-            <label htmlFor="profileImg">프로필 이미지 추가</label>
+            <label htmlFor="profileImg">프로필 이미지 변경</label>
             <input
               type="file"
               accept="image/*"
@@ -448,7 +448,7 @@ function MyPage() {
             />
           </div>
           <button onClick={handleButtonClick}>
-            <label htmlFor="profileImg">프로필 이미지 추가</label>
+            <label htmlFor="profileImg">프로필 이미지 변경</label>
             <input
               type="file"
               accept="image/*"
