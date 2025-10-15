@@ -3,7 +3,11 @@ import style from "./BiasPage.module.css";
 import Header from "../../component/Header/Header";
 import background from "./icons/background.svg";
 import AdComponent from "../../component/AdComponent/AdComponent";
-import { getBiasStateStr, getStartTime, handlePreviewImage, defaultImage } from "./BiasPageFunc";
+import {
+    getBiasStateStr, getStartTime,
+    handlePreviewImage, defaultImage,
+    ToggleSwitch, fetchChangeBiasIntro, fetchChangeBiasUploadMode
+} from "./BiasPageFunc";
 import { useEffect, useState } from "react";
 import { SCHEDULE_IMAGE_URL } from "../../constant/imageUrl";
 import NavBar from "../../component/NavBar/NavBar";
@@ -14,23 +18,54 @@ import follow from "./icons/follow.svg";
 import share from "./icons/share.svg";
 import chzzk_icon from "./icons/chzzk Icon_02.png";
 import soop_icon from "./icons/soop Icon_02.png";
+import edit1 from "./icons/edit1.svg";
 
 
 const BiasPageMobile = ({
-    scheduleList, targetBias, weekData, prevWeek, nextWeek, fetchTryFollowBias, is_following
+    scheduleList, targetBias, weekData, prevWeek,
+     nextWeek, fetchTryFollowBias, is_following, isValidUser
 }) => {
     const [isChecked, setIsChecked] = useState(true);
-
     const [targetSchedule, setTargetSchedule] = useState(null);
     const [showScheduleMoreOption, setShowScheduleMoreOption] = useState(false);
+
+
+    const [openInput, setOpenInput] = useState(false);
+    const [introduce, setIntroduce] = useState("설명글 입니다.");
+    const [introduceInput, setIntroduceInput] = useState(introduce);
+
+    useEffect(()=>{
+        setIsChecked(targetBias.open_content_mode);
+        setIntroduce(targetBias.introduce);
+        setIntroduceInput(targetBias.introduce);
+    }, [targetBias])
+
+    const handleChecked = async (checked) => {
+        const res = await fetchChangeBiasUploadMode(targetBias.bid, !isChecked);
+        setIsChecked(res);
+    }
 
     const handleTargetSchedule = (schedule) => {
         setTargetSchedule(schedule.sid);
         toggleDetailOption();
     }
 
+    const handleChangeIntroduce = async () => {
+        const res = await fetchChangeBiasIntro(targetBias.bid, introduceInput);
+        if (res){
+            setIntroduce(introduceInput);
+            setOpenInput(false);
+        }
+    }
+
+
+
     const toggleDetailOption = () => {
         setShowScheduleMoreOption(!showScheduleMoreOption);
+    }
+
+    function onChangeIntroduceInput(e) {
+        setIntroduceInput(e.target.value);
     }
 
     // 부모 컨테이너 애니메이션 설정
@@ -120,22 +155,55 @@ const BiasPageMobile = ({
                                 </div>
                             </div>
 
-                            <div className={style["bias-introduce-myself"]}>
-                                안녕하세요. 치지직 버튜버 도롱햄입니다.
-                            </div>
-
-                            <div className={style["bias-option-wrapper"]}>
-                                <div className={style["bias-option-text"]}>
-                                    콘텐츠 일정 등록 제한
+                            <div className={style["bias-introduce-wrapper"]}>
+                                <div className={style["bias-introduce-myself"]}>
+                                    {introduce}
                                 </div>
-                                <div className={style["bias-option-toggle-button"]}>
-                                    <ToggleSwitch
-                                        id={"bias-option-input"}
-                                        isChecked={isChecked}
-                                        setIsChecked={setIsChecked}
-                                    />
-                                </div>
+                                {
+                                    isValidUser && (
+                                        <div className={style["platform-direct-follow-icon"]}
+                                            onClick={()=>setOpenInput(!openInput)}
+                                        >
+                                            <img src={edit1}/>
+                                        </div>
+                                    )
+                                }
                             </div>
+                            {
+                                openInput && (
+                                    <div className={style["bias-introduce-input-wrapper"]}>
+                                        <input className={style["bias-introduce-input"]}
+                                            value={introduceInput}
+                                            onChange={(e) => {
+                                                onChangeIntroduceInput(e);
+                                            }}
+                                            placeholder={introduce}
+                                            type="text"
+                                        />
+                                        <div className={style["fetch-intro-button"]}
+                                            onClick={handleChangeIntroduce}
+                                        >
+                                            완료
+                                        </div>
+                                    </div>
+                                )
+                            }
+                            {
+                                isValidUser && (
+                                    <div className={style["bias-option-wrapper"]}>
+                                        <div className={style["bias-option-text"]}>
+                                            열린 일정 모드
+                                        </div>
+                                        <div className={style["bias-option-toggle-button"]}>
+                                            <ToggleSwitch
+                                                id={"bias-option-input"}
+                                                isChecked={isChecked}
+                                                handleChecked={handleChecked}
+                                            />
+                                        </div>
+                                    </div>
+                                )
+                            }
                         </div>
                     </div>
                     <div className={style["bias-meta-data-button-container"]}>
@@ -315,26 +383,7 @@ const ScheduleComponent = ({schedule, metaData, handleTargetSchedule}) => {
     );
 }
 
-function ToggleSwitch({id, isChecked, setIsChecked}) {
-  const handleToggle = (e) => {
-    setIsChecked(e.target.checked);
-  };
 
-  return (
-    <div className={style["toggleSwitchWrapper"]}>
-      <input
-        type="checkbox"
-        id={id}
-        hidden
-        checked={isChecked}
-        onChange={handleToggle}
-      />
-      <label htmlFor={id} className={style["toggleSwitch"]}>
-        <span className={style["toggleButton"]}></span>
-      </label>
-    </div>
-  )
-}
 
 
 export default BiasPageMobile;

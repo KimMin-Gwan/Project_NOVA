@@ -1,4 +1,6 @@
 import { duration } from "@mui/material/styles";
+import style from "./BiasPage.module.css";
+import mainApi from "../../services/apis/mainApi";
 
 const biasState = {
     "TEMP": "임시 등록 상태",
@@ -64,3 +66,59 @@ export const handlePreviewImage = (url, setImage) => {
 };
 
 export const defaultImage = "https://kr.object.ncloudstorage.com/nova-images/no-image.png";
+
+export const ToggleSwitch = ({id, isChecked, handleChecked}) => {
+  const handleToggle = (e) => {
+    handleChecked(e.target.checked);
+  };
+
+  return (
+    <div className={style["toggleSwitchWrapper"]}>
+      <input
+        type="checkbox"
+        id={id}
+        hidden
+        checked={isChecked}
+        onChange={handleToggle}
+      />
+      <label htmlFor={id} className={style["toggleSwitch"]}>
+        <span className={style["toggleButton"]}></span>
+      </label>
+    </div>
+  )
+}
+
+export const fetchIsValidUser = async (bid) => {
+  const res = await mainApi.get(`/nova_sub_system/is_valid_bias?bid=${bid}`)
+
+  console.log(res.data.body)
+  if(res.data.body.result){
+    return true
+  }else{
+    return false
+  }
+}
+
+export const fetchChangeBiasIntro = async (bid, intro) => {
+  const res = await mainApi.get(`/nova_sub_system/modify_bias_introduce?bid=${bid}&introduce=${intro}`)
+
+  if(res.data.body.result){
+    return true
+  }else{
+    return false
+  }
+}
+
+export const fetchChangeBiasUploadMode = async (bid, nowState) => {
+  const res = await mainApi.get(`/nova_sub_system/change_open_content_mode?bid=${bid}&open_content_mode=${nowState}`)
+
+  if(res.data.body.result){
+    return true
+  }else{
+    return false
+  }
+}
+
+
+
+

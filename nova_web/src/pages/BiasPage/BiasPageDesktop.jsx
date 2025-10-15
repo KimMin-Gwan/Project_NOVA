@@ -5,25 +5,59 @@ import 'swiper/css';
 import 'swiper/css/free-mode';
 import 'swiper/css/pagination';
 import { FreeMode} from 'swiper/modules';
-import chzzkLogo from './chzzklogo_kor(Green).svg';
-import soopLogo from './SOOP_LOGO_Blue 1.png';
-import { getBiasStateStr, getStartTime, getEndTime, handlePreviewImage, defaultImage} from "./BiasPageFunc";
+import { 
+    getBiasStateStr, getStartTime, getEndTime,
+    handlePreviewImage, defaultImage, ToggleSwitch,
+    fetchChangeBiasIntro, fetchChangeBiasUploadMode
+} from "./BiasPageFunc";
 import { useEffect, useState } from "react";
 import { SCHEDULE_IMAGE_URL } from "../../constant/imageUrl";
 import MyPageLoading from "../LoadingPage/MypageLoading";
 import { BIAS_URL, DEFAULT_BIAS_URL } from "../../constant/biasUrl";
 
+import follow from "./icons/follow.svg";
+import share from "./icons/share.svg";
+import chzzkLogo from "./icons/chzzk Icon_02.png";
+import soopLogo from "./icons/soop Icon_02.png";
+
 const BiasPageDesktop = ({
     scheduleList, targetBias, weekData, prevWeek,
-     nextWeek, targetSchedule, setTargetSchedule, fetchTryFollowBias, is_following
+     nextWeek, targetSchedule, setTargetSchedule,
+      fetchTryFollowBias, is_following, isValidUser
 }) => {
     const [image, setImage] = useState(null);
-    const [loadgin, setLoading] = useState(false);
+    const [isChecked, setIsChecked] = useState(false);
+
+    const [introduce, setIntroduce] = useState("설명글 입니다.");
+    const [introduceInput, setIntroduceInput] = useState(introduce);
+
+    useEffect(()=>{
+        setIsChecked(targetBias.open_content_mode);
+        setIntroduce(targetBias.introduce);
+        setIntroduceInput(targetBias.introduce);
+    }, [targetBias])
+
+    const handleChecked = async (checked) => {
+        const res = await fetchChangeBiasUploadMode(targetBias.bid, !isChecked);
+        setIsChecked(!isChecked);
+    }
 
     useEffect(()=>{
         const url = `${SCHEDULE_IMAGE_URL}${targetSchedule.sid}.png`;
         handlePreviewImage(url, setImage);
     }, [targetSchedule])
+
+
+    const handleChangeIntroduce = async () => {
+        const res = await fetchChangeBiasIntro(targetBias.bid, introduceInput);
+        if (res){
+            setIntroduce(introduceInput);
+        }
+    }
+
+    function onChangeIntroduceInput(e) {
+        setIntroduceInput(e.target.value);
+    }
 
     return(
         <div className={style["frame"]}>
@@ -44,6 +78,20 @@ const BiasPageDesktop = ({
                                 is_following ?  "팔로우 중" : "팔로우"
                             }
                             </div>
+                            {
+                                isValidUser && (
+                                    <div className={style["bias-option-wrapper"]}>
+                                        <div className={style["bias-option-text"]}>
+                                            열린 일정 모드
+                                        </div>
+                                        <ToggleSwitch 
+                                            id={"bias-option-input"}
+                                            isChecked={isChecked}
+                                            handleChecked={handleChecked}
+                                        />
+                                    </div>
+                                )
+                            }
                         </div>
                         <div className={style["bias-info-wrapper"]}>
                             <div className={style["bias-image-container"]}>
@@ -66,35 +114,57 @@ const BiasPageDesktop = ({
                                             {targetBias.bname}
                                         </div>
                                     </div>
-                                    <div className={style["bias-state"]}>
-                                    {
-                                        getBiasStateStr(targetBias.state)
-                                    }
+                                    <div className={style["bias-platform-container"]}
+                                        onClick={() => {
+                                            if (targetBias.platform_url != "https://supernova.io.kr"){
+                                                window.open(targetBias.platform_url, "_blank")
+                                            } else{
+                                                if (targetBias.platform == "치지직"){
+                                                    window.open(`https://chzzk.naver.com/search?query=${targetBias.bname}`, "_blank")
+                                                }else{
+                                                    window.open(`https://www.sooplive.co.kr/search?szLocation=total_search&szSearchType=total&szKeyword=${targetBias.bname}&szStype=di&szActype=input_field`, "_blank")
+                                                }
+                                            }
+                                        }}
+                                    >
+                                        {
+                                            targetBias.platform == "치지직" ? (
+                                                <img src={chzzkLogo}/>
+                                            ):(
+                                                <img src={soopLogo}/>
+                                            )
+                                        }
                                     </div>
                                 </div>
-                                <div className={style["bias-platform-container"]}
-                                    onClick={() => {
-                                        if (targetBias.platform_url != "https://supernova.io.kr"){
-                                            window.open(targetBias.platform_url, "_blank")
-                                        } else{
-                                            if (targetBias.platform == "치지직"){
-                                                window.open(`https://chzzk.naver.com/search?query=${targetBias.bname}`, "_blank")
-                                            }else{
-                                                window.open(`https://www.sooplive.co.kr/search?szLocation=total_search&szSearchType=total&szKeyword=${targetBias.bname}&szStype=di&szActype=input_field`, "_blank")
-                                            }
+
+                                <div className={style["bias-detail-container2"]}>
+                                    <div className={style["bias-name-wrapper2"]}>
+                                        <div className={style["bias-detail-title"]}>
+                                            자기소개
+                                        </div>
+                                        {
+                                            isValidUser ? (
+                                                <div className={style["bias-introduce-input-wrapper"]}>
+                                                    <input className={style["bias-introduce-input"]}
+                                                        value={introduceInput}
+                                                        onChange={(e) => {
+                                                            onChangeIntroduceInput(e);
+                                                        }}
+                                                        placeholder={introduce}
+                                                        type="text"
+                                                    />
+                                                    <div className={style["fetch-intro-button"]}
+                                                        onClick={handleChangeIntroduce}
+                                                    >
+                                                        수정하기
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <div className={style["bias-introduce"]}>
+                                                    {targetBias.introduce || "아니"}
+                                                </div>
+                                            )
                                         }
-                                    }}
-                                >
-                                    {
-                                        targetBias.platform == "치지직" ? (
-                                            <img src={chzzkLogo}/>
-                                        ):(
-                                            <img src={soopLogo}/>
-                                        )
-                                    }
-                                    <div className={style["bias-platform-info"]}
-                                    >
-                                        바로가기
                                     </div>
                                 </div>
                             </div>

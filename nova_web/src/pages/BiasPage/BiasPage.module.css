@@ -17,7 +17,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 12px;
+    gap: 30px;
     align-self: stretch;
 }
 
@@ -362,7 +362,7 @@ input[type="checkbox"]:checked + .toggleSwitch {
     align-items: flex-start;
     width: 100%;
     justify-content: space-between;
-    padding: 4px 0;
+    padding-bottom: 4px;
     gap: 6px;
 }
 
@@ -558,3 +558,67 @@ input[type="checkbox"]:checked + .toggleSwitch {
     background: #aab5db;
 }
 
+.bias-introduce-input-wrapper{
+    display: flex;
+    width: 80%;
+    height: fit-content;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff71;
+    padding: 10px;
+    border-radius: 12px;
+}
+
+.bias-introduce-input{
+    display: flex;
+    width: 100%;
+    margin-right: 20px;
+    justify-content: center;
+    border: none;
+    border-radius: 8px;
+    padding: 7px 14px;
+    outline: none;
+    background: transparent;
+    resize: none;       /* 사용자가 마우스로 크기 조절 못 하게 */
+    overflow-y: hidden; /* 스크롤바 안 보이게 */
+    white-space: pre-wrap; /* 줄바꿈 허용 */
+    color: #686868;
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 140%; /* 25.2px */
+    letter-spacing: -0.45px;
+}
+
+.fetch-intro-button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 36px;
+    width: 110px;
+    color: #222;
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 140%; /* 25.2px */
+    letter-spacing: -0.45px;
+    border: 1px solid #686868;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    background-color: #c8d3f7;
+}
+
+
+.fetch-intro-button:hover{
+    background-color: #afcfff;
+}
+.fetch-intro-button:active{
+    transform: scale(0.95);
+}
+
+.bias-introduce-wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
