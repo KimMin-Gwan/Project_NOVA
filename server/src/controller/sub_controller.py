@@ -229,5 +229,6 @@ class Sub_Controller:
         
         model.try_set_violation_report(data_payload=request.data_payload)
         model.save_violation_report()
+        model.send_mail_to_manager()
 
         return model
