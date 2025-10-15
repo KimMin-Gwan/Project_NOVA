@@ -5,6 +5,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import mainApi from "../../services/apis/mainApi";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { fetchIsValidUser } from "./BiasPageFunc.jsx";
 
 const BiasPage = () => {
     const isMobile = useMediaQuery('(max-width:1100px)');
@@ -15,6 +16,7 @@ const BiasPage = () => {
     const [scheduleList, setScheduleList] = useState([]);
     const [weekData, setWeekData] = useState("");
     const [is_following, setIsFollowing] = useState(false);
+    const [isValidUser, setIsValidUser] = useState(false);
 
     const [targetBias, setTargetBias] = useState({
         bname :"",
@@ -95,6 +97,13 @@ const BiasPage = () => {
                     alert("데이터를 불러오는 중 오류가 발생했습니다.");
                     navigate("/");
                 }
+
+                try{
+                    const validResult = await fetchIsValidUser(bid);
+                    setIsValidUser(validResult)
+                } catch (err) {
+                    console.error("알 수 없는 오류", err);
+                }
             } else {
                 alert("잘못된 경로 입니다.");
                 navigate("/");
@@ -158,6 +167,7 @@ const BiasPage = () => {
                 nextWeek={nextWeek}
                 fetchTryFollowBias={fetchTryFollowBias}
                 is_following={is_following}
+                isValidUser={isValidUser}
             />
         );
     }else{
@@ -173,6 +183,7 @@ const BiasPage = () => {
                     setTargetSchedule={setTargetSchedule}
                     fetchTryFollowBias={fetchTryFollowBias}
                     is_following={is_following}
+                    isValidUser={isValidUser}
                  />
             </DesktopLayout>
         );
