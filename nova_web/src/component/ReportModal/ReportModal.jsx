@@ -24,6 +24,7 @@ const ReportModal = ({ type, target, toggleReportOption }) => {
 
   const fetchViolationReport = async () => {
     let id = "";
+    console.log(type);
 
     if (type == "feed") {
       id = target.fid
