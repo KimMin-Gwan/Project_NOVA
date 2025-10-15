@@ -119,6 +119,7 @@ class MailSender:
     # 전송하는 함수
     # send_email(보낼 주소, 인증번호)
     def alert_new_bias(self, user, bias, info):
+        """운영진한테 보내는 거임"""
         receiver_email = "youths0828@naver.com"
         
         # 이메일 메시지 구성
@@ -152,6 +153,67 @@ class MailSender:
                     </div>
 
                     <p style="margin: 10px 0;">요청 내용을 검토하시고, 등록 상태를 <strong>CONFIRMED</strong>로 변경해 주세요.</p>
+                </div>
+                <div style="text-align: center; font-size: 13px; color: #999999; margin-top: 40px; border-top: 1px solid #dddddd; padding-top: 10px;">
+                    이 메일은 시스템에 의해 자동 발송되었습니다.
+                </div>
+            </div>
+        </body>
+        </html>
+        """
+        # MIMEText 객체로 HTML 본문 생성
+        part = MIMEText(html_content, "html")
+
+        # 이메일에 HTML 본문 추가
+        message.attach(part)
+        server = smtplib.SMTP(self.smtp_server, self.smtp_port)
+        # SMTP 서버에 연결 및 이메일 전송
+        try:
+            server.starttls()  # TLS 보안 연결
+            server.login(self.sender_email, self.sender_password)
+            server.sendmail(self.sender_email, receiver_email, message.as_string())
+        except Exception as e:
+            print(f"이메일 전송 실패: {e}")
+        finally:
+            server.quit()
+            
+    # 전송하는 함수
+    # send_email(보낼 주소, 인증번호)
+    def alert_new_violation_report(self, violation):
+        """운영진한테 보내는 거임"""
+        receiver_email = "youths0828@naver.com"
+        
+        # 이메일 메시지 구성
+        message = MIMEMultipart("alternative")
+        message["Subject"] = f"새로운 지침 위반 신고 제출됨 |  {violation.vid}"
+        message["From"] = self.sender_email
+        message["To"] = receiver_email
+        
+        # HTML 본문 작성 (인증번호 포함)
+        html_content = f"""
+        <!DOCTYPE html>
+        <html lang="ko">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>새로운 지침 위반 신고 제출됨</title>
+        </head>
+        <body style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0;">
+            <div style="max-width: 600px; margin: 40px auto; background-color: #ffffff; padding: 30px; border: 1px solid #dddddd; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <h2 style="font-size: 22px; color: #333333; margin: 0;">새로운 지침 위반 신고</h2>
+                </div>
+                <div style="font-size: 16px; color: #555555; line-height: 1.7;">
+                    <p style="margin: 10px 0;">다음 새로운 지침 위반 신고가 발생하였으므로 절차에 따른 권고사항을 수행하시오.</p>
+
+                    <div style="background-color: #f9f9f9; border-left: 4px solid #007bff; padding: 15px; margin: 20px 0;">
+                        <p style="margin: 5px 0; font-weight: bold;">신고 ID: {violation.vid}</p>
+                        <p style="margin: 5px 0; font-weight: bold;">신고 타입: {violation.report_type}</p>
+                        <p style="margin: 5px 0; font-weight: bold;">목표 게시물 : {violation.target_id}</p>
+                        <p style="margin: 5px 0; font-weight: bold;">신고 상세: {violation.report_option}</p>
+                    </div>
+
+                    <p style="margin: 10px 0;">요청 내용을 검토하시고, 절차에 따라 해당 게시글 (콘텐츠)의 diplay를 1로 변경해 주세요.</p>
                 </div>
                 <div style="text-align: center; font-size: 13px; color: #999999; margin-top: 40px; border-top: 1px solid #dddddd; padding-top: 10px;">
                     이 메일은 시스템에 의해 자동 발송되었습니다.

@@ -165,6 +165,8 @@ class Mongo_Database():
             return "deleted_user"
         elif target == "content_id" or target == "content":
             return "content"
+        elif target == "vid" or target == "violation":
+            return "violation"
         else:
             raise DatabaseLogicError("target id did not define")
         

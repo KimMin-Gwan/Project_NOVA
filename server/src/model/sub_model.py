@@ -122,6 +122,10 @@ class ViolationReportModel(BaseModel):
         self.__result = True
         return
     
+    def send_mail_to_manager(self):
+        MailSender().alert_new_violation_report(violation=self.__violation)
+        return
+    
     def get_response_form_data(self, head_parser):
         try:
             body = {
