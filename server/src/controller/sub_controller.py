@@ -14,7 +14,6 @@ class Sub_Controller:
         return model
         
     
-    
     def try_add_new_bias(self, database:Mongo_Database, request:RequestManager, feed_search_engine) -> BaseModel:
         model = MakeNewBiasModel(database=database)
         
@@ -147,7 +146,44 @@ class Sub_Controller:
 
         return model
 
+
+    # 바이어스 유효성 검사 인터페이스
+    def is_valid_bias(self, database:Mongo_Database, request):
+        model = BiasModifyModel(database=database)
+        
+        if request.jwt_payload!= "":
+            model.set_user_with_email(request=request.jwt_payload)
+
+        model.set_bias_data(bid=request.data_payload.bid)
+        
+        result = model.is_valid_bias(api_request=True)
+        return result
+
+    # 바이어스 자기소개 수정
+    def modify_bias_introduce(self, database:Mongo_Database, request):
+        model = BiasModifyModel(database=database)
+
+        if request.jwt_payload!= "":
+            model.set_user_with_email(request=request.jwt_payload)
+        
+        model.set_bias_data(bid=request.data_payload.bid)
+        
+        result = model.modify_bias_introduce(introduce=request.data_payload.introduce)
+        
+        return result
     
+    # 콘텐츠 등록 제한 토글 변경 수정
+    def change_open_content_mode(self, database:Mongo_Database, request):
+        model = BiasModifyModel(database=database)
+        
+        if request.jwt_payload!= "":
+            model.set_user_with_email(request=request.jwt_payload)
+
+        model.set_bias_data(bid=request.data_payload.bid)
+        
+        result = model.change_open_content_mode(open_content_mode=request.data_payload.open_content_mode)
+        return result
+
     def try_report_post_or_comment(self, database:Mongo_Database, request):
         model = ReportModel(database=database)
         

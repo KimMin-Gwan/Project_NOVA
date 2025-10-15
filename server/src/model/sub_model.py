@@ -380,7 +380,63 @@ class BiasFollowPageModel(BiasSearchModel):
         except Exception as e:
             raise CoreControllerLogicError("response making error | " + e)
         
+class BiasModifyModel(BaseModel):
+    def __init__(self, database:Mongo_Database) -> None:
+        super().__init__(database)
+        self._bias = Bias()
+        self._result = False
+        self._detail = ""
         
+    def set_bias_data(self, bid:str):
+        bias_data = self._database.get_data_with_id(target="bid", id=bid)
+        self._bias.make_with_dict(bias_data)
+        return
+
+    def is_valid_bias(self, api_request=False):
+        if self._user.verified_bias == self._bias.bid:
+            if api_request:
+                self._result = True
+                self._detail = 'Success : Succeed to validate bias'
+            return True
+        else:
+            if api_request:
+                self._result = False
+                self._detail = 'Failed : You are not authorized to validate bias'
+            return False
+        
+
+    def modify_bias_introduce(self, introduce:str):
+        if self.is_valid_bias():
+            self._bias.introduce = introduce
+            self._database.modify_data_with_id(target_id="bid", target_data=self._bias.get_dict_form_data())
+            self._result = True
+            self._detail = 'Success : Succeed to modify bias introduce'
+        else:
+            self._detail = 'Failed : You are not authorized to modify this bias introduce'
+
+        return
+
+    def change_open_content_mode(self, open_content_mode:bool):
+        if self.is_valid_bias():
+            self._bias.open_content_mode = open_content_mode
+            self._database.modify_data_with_id(target_id="bid", target_data=self._bias.get_dict_form_data())
+            self._result = True
+            self._detail = 'Success : Succeed to change open content mode'
+        else:
+            self._detail = 'Failed : You are not authorized to change open content mode'
+
+        return
+
+    def get_response_form_data(self, head_parser):
+        body = {
+            'result' : self._result,
+            'detail' : self._detail
+        }
+
+        response = self._get_response_data(head_parser=head_parser, body=body)
+        return response
+
+
 class BiasModel(BaseModel):
     def __init__(self, database:Mongo_Database) -> None:
         super().__init__(database)

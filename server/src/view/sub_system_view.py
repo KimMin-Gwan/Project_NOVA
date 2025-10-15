@@ -139,6 +139,52 @@ class Sub_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
+        # 바이어스 자기소개 보여주기
+        @self.__app.get('/nova_sub_system/modify_bias_introduce')
+        def modify_bias_introduce(request:Request, bid:Optional[str], introduce:Optional[str]):
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
+
+            data_payload = BiasIntroduceRequest(bid=bid, introduce=introduce)
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            
+            sub_controller=Sub_Controller()
+            model = sub_controller.modify_bias_introduce(database=self.__database,
+                                                      request=request_manager)
+            
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
+        # 바이어스 콘텐츠 등록 제한 토글 변경
+        @self.__app.get('/nova_sub_system/change_open_content_mode')
+        def change_open_content_mode(request:Request, bid:Optional[str], open_content_mode:Optional[bool]):
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
+            
+            data_payload = BiasOpenContentModeRequest(bid=bid, open_content_mode=open_content_mode)
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            
+            sub_controller=Sub_Controller()
+            model = sub_controller.change_open_content_mode(database=self.__database,
+                                                          request=request_manager)
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
+        # 바이어스 유효성 검사
+        @self.__app.get("/nova_sub_system/is_valid_bias")
+        def is_valid_bias(request:Request, bid:Optional[str]):
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
+            
+            data_payload = BiasRequest(bid=bid)
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
+            
+            sub_controller=Sub_Controller()
+            model = sub_controller.is_valid_bias(database=self.__database,
+                                                  request=request_manager)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
 
     def sub_service(self):
         @self.__app.post('/nova_sub_system/image_tag')
@@ -215,6 +261,16 @@ class DummyRequest():
 class BiasRequest():
     def __init__(self, bid) -> None:
         self.bid=bid
+
+class BiasIntroduceRequest():
+    def __init__(self, bid, introduce) -> None:
+        self.bid=bid
+        self.introduce=introduce
+
+class BiasOpenContentModeRequest():
+    def __init__(self, bid, open_content_mode) -> None:
+        self.bid=bid
+        self.open_content_mode=open_content_mode
         
 class BiasWithCategoryRequest():
     def __init__(self, category) -> None:

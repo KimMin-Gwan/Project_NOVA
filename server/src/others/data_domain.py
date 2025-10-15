@@ -166,7 +166,7 @@ class User(SampleDomain):
 class Bias(SampleDomain):
     def __init__(self, bid="", bname="", gender="", category=[], tags=[],
                  num_follower=0, platform=[], platform_url="https://supernova.io.kr",
-                 state="DEFAULT", sids = []
+                 state="DEFAULT", sids = [], introduce='', open_content_mode=True
                  ):
         self.bid:str = bid
         self.bname:str = bname
@@ -178,6 +178,8 @@ class Bias(SampleDomain):
         self.platform_url:str = platform_url
         self.state:str = state
         self.sids:list = sids
+        self.introduce:str = introduce
+        self.open_content_mode:bool = open_content_mode
 
     def make_with_dict(self, dict_data: dict):
         try:
@@ -191,7 +193,8 @@ class Bias(SampleDomain):
             self.state = dict_data.get("state", "DEFAULT")
             self.platform_url = dict_data.get("platform_url", "https://supernova.io.kr")
             self.sids = dict_data.get('sids', [])
-            
+            self.introduce = dict_data.get('introduce', "설명글 입니다.")
+            self.open_content_mode = dict_data.get('open_content_mode', True)
         except Exception as e:
             print(e)
             raise DictMakingError(error_type=e)
@@ -209,7 +212,9 @@ class Bias(SampleDomain):
             "platform" : self.platform,
             "platform_url" : self.platform_url,
             "state" : self.state,
-            "sids" : self.sids
+            "sids" : self.sids,
+            "introduce" : self.introduce,
+            "open_content_mode" : self.open_content_mode
         }
         
 class Follower(SampleDomain):
