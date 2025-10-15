@@ -73,12 +73,12 @@
 
 .tag-box{
     display: flex;
-    padding: 4px 8px;
+    padding: 3px 6.2px;
     justify-content: center;
     align-items: center;
     border-radius: 6px;
-    border: 1px solid #5c59ff;
-    background: #6271fff1;
+    border: 1px solid #ffffff;
+    background: #797979f1;
     color: #FFF;
     font-family: Pretendard;
     font-size: 13px;
@@ -90,10 +90,10 @@
 
 .platform-box{
     display: flex;
-    padding: 6px 12px;
+    padding: 3px 6.2px;
     justify-content: center;
     align-items: center;
-    border-radius: 8px;
+    border-radius: 6px;
     border: 1px solid #E0E0EC;
     font-family: Pretendard;
     font-size: 13px;
@@ -101,7 +101,7 @@
     font-weight: 300;
     line-height: 140%; /* 19.6px */
     letter-spacing: -0.35px;
-    color: #111;
+    color: #222;
 }
 
 .schedule-detail-wrapper{
