@@ -418,6 +418,8 @@ function MyPage() {
         <button className={`${style["logout_box"]}`} onClick={handleLogout}>
           로그아웃
         </button>
+        <div style={{height: "100px"}}>
+        </div>
         <button className={style["withdrawal_button"]} onClick={handleWithdrawal}>
           회원 탈퇴
         </button>
@@ -573,6 +575,9 @@ function MyPage() {
         <button className={`${style["logout_box"]}`} onClick={handleLogout}>
           로그아웃
         </button>
+        <div style={{height: "100px"}}>
+
+        </div>
         <button className={style["withdrawal_button"]} onClick={handleWithdrawal}>
           회원 탈퇴
         </button>
