@@ -1,6 +1,6 @@
 from model.base_model import BaseModel
 from model import Mongo_Database
-from others.data_domain import Bias, User, Report
+from others.data_domain import Bias, User, Report, Violation
 from others import CoreControllerLogicError, HTMLEXtractor, ImageDescriper, MailSender, FeedSearchEngine, ObjectStorageConnection
 import uuid
 
@@ -102,7 +102,38 @@ class ReportModel(BaseModel):
         except Exception as e:
             raise CoreControllerLogicError("response making error | " + e)
 
-# bias.state => "DEFAULT", "TEMP", "CONFIRMED", "APPROVED"
+# 부정행위 신고 리포트 모델 
+class ViolationReportModel(BaseModel):
+    def __init__(self, database:Mongo_Database) -> None:
+        super().__init__(database)
+        self.__violation = Violation()
+        self.__result:bool = False
+    
+    def try_set_violation_report(self, data_payload):
+        self.__violation.vid = self._make_new_id()
+        self.__violation.report_type = data_payload.report_type
+        self.__violation.target_id = data_payload.target_id
+        self.__violation.report_option = data_payload.report_option
+
+        return
+    
+    def save_violation_report(self):
+        self._database.add_new_data(target_id="vid", new_data=self.__violation.get_dict_form_data())
+        self.__result = True
+        return
+    
+    def get_response_form_data(self, head_parser):
+        try:
+            body = {
+                'result' : self.__result,
+                'detail' : self.__detail
+            }
+
+            response = self._get_response_data(head_parser=head_parser, body=body)
+            return response
+
+        except Exception as e:
+            raise CoreControllerLogicError("response making error | " + e)
 
 class MakeNewBiasModel(BaseModel):
     def __init__(self, database:Mongo_Database) -> None:

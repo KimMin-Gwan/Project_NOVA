@@ -222,3 +222,12 @@ class Sub_Controller:
         model.save_report()
         
         return model
+
+    # 부정행위 신고 기능 인터페이스
+    def try_report_violation(self, database:Mongo_Database, request):
+        model = ViolationReportModel(database=database)
+        
+        model.try_set_violation_report(data_payload=request.data_payload)
+        model.save_violation_report()
+
+        return model

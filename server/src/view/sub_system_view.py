@@ -220,7 +220,7 @@ class Sub_Service_View(Master_View):
             response = model.get_response_form_data(self._head_parser)
             return response
         
-        # 신고 기능
+        # 포스트 리포트 보내기
         @self.__app.post('/nova_sub_system/try_report')
         def try_report_post_or_comment(request:Request, raw_request:dict):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
@@ -236,7 +236,7 @@ class Sub_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
         
-        # 신고 기능
+        # 버그 리포트 보내기
         @self.__app.post('/nova_sub_system/try_report_bug')
         async def try_report_bug(request:Request, images: Union[UploadFile, None] = File(None),
                                        jsonData: Union[str, None] = Form(None)):
@@ -275,8 +275,23 @@ class Sub_Service_View(Master_View):
             response = request_manager.make_json_response(body_data=body_data)
             return response
 
+        # 부정행위 신고 (지침 위반 등)
+        @self.__app.get('/nova_sub_system/try_report_violation')
+        def try_report_violation(request:Request, report_type:Optional[str], target_id:Optional[str], report_option:Optional[str]):
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
 
+            data_payload = ViolationReportRequest(report_type=report_type, target_id=target_id, report_option=report_option)
+            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
+            sub_controller=Sub_Controller()
+            model = sub_controller.try_report_violation(database=self.__database,
+                                                    request=request_manager)
+            
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+
+            
 class DummyRequest():
     def __init__(self) -> None:
         pass
@@ -350,3 +365,8 @@ class ReportRequest(RequestHeader):
         self.image_names = image_names
         self.images = images
 
+class ViolationReportRequest(RequestHeader):
+    def __init__(self, report_type, target_id, report_option) -> None:
+        self.report_type = report_type
+        self.target_id = target_id
+        self.report_option = report_option
