@@ -31,8 +31,8 @@ export default function NewHomePage () {
     const [filterCategory, setFilterCategory] = useState( JSON.parse(localStorage.getItem("board")) || [""]);
     const { biasId, biasList, setBiasId, fetchBiasList} = useBiasStore();
 
-    const [targetFeed, setTargetFeed] = useState(true);
-    const [reportModal, setReportModal] = useState(true);
+    const [targetFeed, setTargetFeed] = useState({fid:""});
+    const [reportModal, setReportModal] = useState(false);
 
     const handleReport = (target) => {
         setTargetFeed(target);
