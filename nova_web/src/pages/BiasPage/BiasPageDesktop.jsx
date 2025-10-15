@@ -27,6 +27,7 @@ const BiasPageDesktop = ({
 
     return(
         <div className={style["frame"]}>
+            <div className={style["inner-wrapper"]}>
             {
                 targetBias.bid != "" ? (
                     <div className={style["upper-section"]}>
@@ -276,6 +277,7 @@ const BiasPageDesktop = ({
 
             </div>
         </div>
+    </div>
     );
 }
 
