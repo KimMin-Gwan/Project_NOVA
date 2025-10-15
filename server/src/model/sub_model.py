@@ -129,8 +129,7 @@ class ViolationReportModel(BaseModel):
     def get_response_form_data(self, head_parser):
         try:
             body = {
-                'result' : self.__result,
-                'detail' : self.__detail
+                'result' : self.__result
             }
 
             response = self._get_response_data(head_parser=head_parser, body=body)
