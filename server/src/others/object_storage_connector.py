@@ -27,6 +27,7 @@ class ObjectStorageConnection:
         self.__feed_bucket= "nova-feed-project-body"
         self.__notice_bucket= "nova-notice-body"
         self.__profile_bucket= "nova-profile-bucket"
+        self.__bias_image_bucket = "nova-images"
 
     # 오브젝트 스토리지와 연결할때는 이것을 실행해야함
     def __init_boto3(self):
