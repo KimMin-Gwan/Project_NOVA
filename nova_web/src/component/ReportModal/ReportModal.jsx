@@ -41,10 +41,10 @@ const ReportModal = ({ type, target, toggleReportOption }) => {
                 className={style["option-item"]}
                 onClick={() => handleReport(key)}
                 >
-                <div className={style["radio-circle"]}>
-                    {selected === key && <div className={style["radio-selected"]} />}
-                </div>
-                <span>{value}</span>
+                    <div className={style["radio-circle"]}>
+                        {selected === key && <div className={style["radio-selected"]} />}
+                    </div>
+                    <span>{value}</span>
                 </div>
             ))}
         </div>
