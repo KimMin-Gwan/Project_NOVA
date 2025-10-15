@@ -20,7 +20,4 @@ const useBiasStore = create((set) => (
   },
 }));
 
-
-
-
 export default useBiasStore;
