@@ -344,15 +344,16 @@ input[type="checkbox"]:checked + .toggleSwitch {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 16px;
+    justify-content: center;
+    gap: 10px;
     align-self: stretch;
 }
 
 .single-schedule-wrapper{
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    gap: 6px;
+    align-items: center;
+    gap: 10px;
     align-self: stretch;
 }
 
@@ -360,7 +361,7 @@ input[type="checkbox"]:checked + .toggleSwitch {
     display: flex;
     align-items: flex-start;
     width: 100%;
-    justify-content: center;
+    justify-content: space-between;
     padding: 4px 0;
     gap: 6px;
 }
@@ -389,8 +390,9 @@ input[type="checkbox"]:checked + .toggleSwitch {
 
 .single-schedule-container{
     display: flex;
+    flex-direction: column;
     padding: 12px;
-    height: 93px;
+    height: fit-content;
     align-items: flex-start;
     gap: 10px;
     align-self: stretch;
@@ -398,6 +400,14 @@ input[type="checkbox"]:checked + .toggleSwitch {
     border: 2px solid #FFF;
     background: linear-gradient(90deg, rgba(255, 255, 255, 0.50) 0%, rgba(255, 255, 255, 0.70) 100%);
     box-shadow: 3px 3px 8px 0 rgba(0, 0, 0, 0.08);
+}
+
+.single-schedule-container-wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    align-self: stretch;
 }
 
 .single-schedule-image {
@@ -410,6 +420,7 @@ input[type="checkbox"]:checked + .toggleSwitch {
     gap: 10px;
     flex: 1 0 0;
     border-radius: 7px;
+    aspect-ratio: 1/1;
     background: #BEBEBE;
     min-width: 90px;
     overflow: hidden; /* 이미지가 영역 밖으로 안나가게 */
@@ -430,6 +441,7 @@ input[type="checkbox"]:checked + .toggleSwitch {
     align-items: flex-start;
     align-self: stretch;
     min-width: 0;               /* 💡 flex 내부에서 ellipsis 제대로 작동하게 함 */
+    gap: 8px;
 }
 
 .single-schedule-title-wrapper {
@@ -470,14 +482,15 @@ input[type="checkbox"]:checked + .toggleSwitch {
 .schedule-tag-wrapper{
     display: flex;
     align-items: flex-start;
-    gap: 10px;
+    gap: 4px;
     align-self: stretch;
     flex-wrap: wrap;
 }
 
 .empty-schedule{
     color: #414141;
-    width:80%;
+    width:100%;
+    height: 90px;
     font-family: Pretendard;
     font-size: 18px;
     font-style: normal;
@@ -494,7 +507,7 @@ input[type="checkbox"]:checked + .toggleSwitch {
 
 .tag{
     display: flex;
-    padding: 4px 4px;
+    padding: 3px 4px;
     justify-content: center;
     align-items: center;
     gap: 10px;
@@ -538,5 +551,10 @@ input[type="checkbox"]:checked + .toggleSwitch {
     display: block;     /* inline-gap 제거 */
 }
 
-
+.schedule-connect-line{
+    width: 2px;
+    height: 16px;
+    border-radius: 2px;
+    background: #aab5db;
+}
 
