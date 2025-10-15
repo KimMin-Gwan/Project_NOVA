@@ -449,7 +449,7 @@ export default function NewFeedDetail() {
         <div className={style["container"]}>
           {
               reportModal && (
-                  <ReportModal target={targetFeed} toggleReportOption={setReportModal} />
+                <ReportModal type={"feed"} target={targetFeed} toggleReportOption={setReportModal} />
               )
           }
           <div className={style["desktop-ad-section-style"]}>

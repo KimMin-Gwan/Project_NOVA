@@ -15,7 +15,6 @@ const ReportModal = ({ type, target, toggleReportOption }) => {
 
   const [selected, setSelected] = useState(null);
   const [targetOption, setTargetOption] = useState("");
-  
 
   const handleReport = async (key) => {
     setSelected(key);
@@ -24,7 +23,6 @@ const ReportModal = ({ type, target, toggleReportOption }) => {
 
   const fetchViolationReport = async () => {
     let id = "";
-    console.log(type);
 
     if (type == "feed") {
       id = target.fid

@@ -32,7 +32,7 @@ export default function NewHomePage () {
     const { biasId, biasList, setBiasId, fetchBiasList} = useBiasStore();
 
     const [targetFeed, setTargetFeed] = useState({fid:""});
-    const [reportModal, setReportModal] = useState(false);
+    const [reportModal, setReportModal] = useState(true);
 
     const handleReport = (target) => {
         setTargetFeed(target);
@@ -280,7 +280,7 @@ export default function NewHomePage () {
                 <div className={style2["desktop_feed_list_outer_frame"]}>
                     {
                         reportModal && (
-                            <ReportModal toggleReportOption={setReportModal} />
+                            <ReportModal type={"feed"} target={targetFeed} toggleReportOption={setReportModal} />
                         )
                     }
                     <div className={style2["desktop-ad-section-style"]}>
