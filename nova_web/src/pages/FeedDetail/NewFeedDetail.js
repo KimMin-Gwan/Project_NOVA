@@ -57,8 +57,8 @@ export default function NewFeedDetail() {
   const [showCommentMoreOption, setShowCommentMoreOption] = useState(false);
   const [optionTargetComment, setOptionTargetComment] = useState("");
 
-  const [targetFeed, setTargetFeed] = useState(true);
-  const [reportModal, setReportModal] = useState(true);
+  const [targetFeed, setTargetFeed] = useState({fid:""});
+  const [reportModal, setReportModal] = useState(false);
 
   const handleReport = (target) => {
       setTargetFeed(target);
