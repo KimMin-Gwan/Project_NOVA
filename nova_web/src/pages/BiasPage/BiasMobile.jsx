@@ -6,9 +6,9 @@ import AdComponent from "../../component/AdComponent/AdComponent";
 import {
     getBiasStateStr, getStartTime,
     handlePreviewImage, defaultImage,
-    ToggleSwitch, fetchChangeBiasIntro, fetchChangeBiasUploadMode
+    ToggleSwitch, fetchChangeBiasIntro, fetchChangeBiasUploadMode, handleFileChange
 } from "./BiasPageFunc";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SCHEDULE_IMAGE_URL } from "../../constant/imageUrl";
 import NavBar from "../../component/NavBar/NavBar";
 import { BIAS_URL, DEFAULT_BIAS_URL } from "../../constant/biasUrl";
@@ -59,7 +59,6 @@ const BiasPageMobile = ({
     }
 
 
-
     const toggleDetailOption = () => {
         setShowScheduleMoreOption(!showScheduleMoreOption);
     }
@@ -78,7 +77,6 @@ const BiasPageMobile = ({
         },
     };
 
-
     // 자식(각 아이템) 애니메이션 설정
     const itemVariants = {
         hidden: { opacity: 0, y: 20 }, // 아래에서 올라옴
@@ -94,6 +92,30 @@ const BiasPageMobile = ({
         });
     }
 
+
+    const fileInputRef = useRef(null);
+    const [imagePre, setImagePre] = useState(null);
+    const [image, setImage] = useState(null);
+
+    const handleButtonClick = () => {
+        if (fileInputRef.current) {
+            fileInputRef.current.click();
+        }
+    };
+
+    const handlePreview = (e) => {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+
+        return new Promise((resolve) => {
+        reader.onload = () => {
+            setImagePre(reader.result || null);
+            resolve();
+        };
+        });
+    };
+
     return (
         <div className={style["frame"]}>
             {
@@ -106,9 +128,7 @@ const BiasPageMobile = ({
             <div className={style["top-bar"]}>
                 <Header/>
             </div>
-            <div className={style["link-ad-wrapper"]}>
-                <AdComponent type={"none"}/>
-            </div>
+            <AdComponent type={"link"}/>
 
 
 
@@ -128,15 +148,31 @@ const BiasPageMobile = ({
                             </div>
                         </div>
 
-                        <div className={style["bias-image-wrapper"]}>
-                            <img
-                                src={BIAS_URL + `${targetBias.bid}.png`}
+                        <div className={style["bias-image-wrapper"]}
+                            onClick={() => fileInputRef.current?.click()} // 클릭 시 input 열기
+                        >
+                            <img src={BIAS_URL + `${targetBias.bid}.png`}
                                 onError={(e) => {
-                                    e.currentTarget.onerror = null; // 무한 루프 방지
-                                    e.currentTarget.src = DEFAULT_BIAS_URL;
+                                e.currentTarget.onerror = null;
+                                e.currentTarget.src = DEFAULT_BIAS_URL;
                                 }}
                                 alt="bias"
                             />
+                            {
+                                isValidUser && (
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        ref={fileInputRef}
+                                        onChange={(e) => {
+                                        handleFileChange(e, targetBias.bid, setImage);
+                                        handlePreview(e);
+                                        }}
+                                        style={{ display: "none" }} 
+                                    />
+
+                                )
+                            }
                         </div>
 
                         <div className={style["bias-detail-container-wrapper"]}>
@@ -144,9 +180,9 @@ const BiasPageMobile = ({
                                 <div className={style["bias-platform-icon"]}>
                                     {
                                         targetBias.platform == "치지직" ? (
-                                            <img src={soop_icon}/>
-                                        ):(
                                             <img src={chzzk_icon}/>
+                                        ):(
+                                            <img src={soop_icon}/>
                                         )
                                     }
                                 </div>
@@ -177,7 +213,7 @@ const BiasPageMobile = ({
                                             onChange={(e) => {
                                                 onChangeIntroduceInput(e);
                                             }}
-                                            placeholder={introduce}
+                                            placeholder={"자기소개를 입력하세요."}
                                             type="text"
                                         />
                                         <div className={style["fetch-intro-button"]}

@@ -120,5 +120,31 @@ export const fetchChangeBiasUploadMode = async (bid, nowState) => {
 }
 
 
+export const handleFileChange = (event, bid, setImage) => {
+  const formData = new FormData();
+  const file = event.target.files[0];
+  formData.append("image", file);
+
+  if (file) {
+    const imageUrl = URL.createObjectURL(file);
+    setImage(imageUrl);
+  }
+
+  fetch(`https://supernova.io.kr/nova_sub_system/try_change_bias_profile_photo?bid=${bid}`, {
+    method: "POST",
+    credentials: "include",
+    body: formData,
+  })
+    .then((res) => {
+      res.json();
+    })
+    .then((data) => {
+      alert("완료");
+      window.location.reload();
+    })
+    .catch((error) => {
+      alert("실패");
+    });
+};
 
 
