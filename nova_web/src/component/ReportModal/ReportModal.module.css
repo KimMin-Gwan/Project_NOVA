@@ -72,6 +72,12 @@
   align-self: stretch;
   gap: 15px;
   transition: background 0.2s;
+
+  span{
+    font-size: 15px;
+    font-weight: 400;
+  }
+
 }
 
 .option-item:hover {
