@@ -102,7 +102,6 @@ function App() {
       {/*<Route path="/feed_list" element={<FeedList brightMode={brightMode} />} ></Route>*/}
       {/*<Route path="/feed_list/:fid" element={<FeedList />}></Route>*/}
       {/*<Route path="/feed_detail/:fid" element={<FeedDetail />}></Route>*/}
-      <Route path="/feed_detail/:fid" element={<NewFeedDetail/>}></Route>
 
       {/* 스트리머 관련 페이지*/}
       <Route path="/follow_page" element={<NewFollowPage/>}></Route>
@@ -129,6 +128,8 @@ function App() {
 
       {/* 홈 화면 */}
       <Route path="/post_board" element={<NewHomePage/>} />
+      <Route path="/feed_detail/:fid" element={<NewFeedDetail/>}></Route>
+
       <Route path="/welcome" element={<BrandPage/>} />
       <Route path="/content" element={<ContentPage/>} />
 
