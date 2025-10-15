@@ -534,7 +534,7 @@ input[type="checkbox"]:checked + .toggleSwitch {
 
 .background-gradient{
     position: absolute;
-    width: 100%;       /* 부모 기준 100% */
+    width: 92%;       /* 부모 기준 100% */
     max-width: 500px;  /* 최대폭 500px로 제한 */
     height: auto;      /* 비율 유지 */
     top: 200px;
