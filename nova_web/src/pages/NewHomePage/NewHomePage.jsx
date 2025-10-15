@@ -18,6 +18,7 @@ import postApi from "../../services/apis/postApi.js";
 import DesktopLayout from "../../component/DesktopLayout/DeskTopLayout.jsx";
 import AdComponent from '../../component/AdComponent/AdComponent.jsx';
 import { useNavigate } from 'react-router-dom';
+import ReportModal from '../../component/ReportModal/ReportModal.jsx';
 
 export default function NewHomePage () {
     const navigate = useNavigate();
@@ -29,6 +30,14 @@ export default function NewHomePage () {
     const [filterFclass, setFilterFclass] = useState(JSON.parse(localStorage.getItem("content")) || "");
     const [filterCategory, setFilterCategory] = useState( JSON.parse(localStorage.getItem("board")) || [""]);
     const { biasId, biasList, setBiasId, fetchBiasList} = useBiasStore();
+
+    const [targetFeed, setTargetFeed] = useState(true);
+    const [reportModal, setReportModal] = useState(true);
+
+    const handleReport = (target) => {
+        setTargetFeed(target);
+        setReportModal(true);
+    }
 
     let bids = biasList.map((item, i) => {
         return item.bid;
@@ -223,6 +232,11 @@ export default function NewHomePage () {
         return(
             <div className={`all-box ${style["all_container"]}`}>
                 <div className={style["container"]}>
+                    {
+                        reportModal && (
+                            <ReportModal target={targetFeed} toggleReportOption={setReportModal} />
+                        )
+                    }
                     <div className={style['top-area']}>
                         {/*<DisplayAds />*/}
 
@@ -247,6 +261,7 @@ export default function NewHomePage () {
                                     feed={feed.feed}
                                     setFeedData={setFeedData}
                                     onClickComponent={onClickComponent}
+                                    handleReport={handleReport}
                                 ></Feed>
                             );
                             })
@@ -263,6 +278,11 @@ export default function NewHomePage () {
         return(
             <DesktopLayout>
                 <div className={style2["desktop_feed_list_outer_frame"]}>
+                    {
+                        reportModal && (
+                            <ReportModal toggleReportOption={setReportModal} />
+                        )
+                    }
                     <div className={style2["desktop-ad-section-style"]}>
                         <AdComponent type={"image_32x60"}/>
                     </div>
@@ -282,6 +302,7 @@ export default function NewHomePage () {
                                         feed={feed.feed}
                                         setFeedData={setFeedData}
                                         onClickComponent={onClickComponent}
+                                        handleReport={handleReport}
                                     ></Feed>
                                 );
                                 })

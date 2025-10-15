@@ -17,7 +17,10 @@ import useFeedActions from "../hooks/useFeedActions";
 import { use } from "react";
 
 
-export default function Feed({ feed, setFeedData, type, onClickComponent }) {
+export default function Feed({ 
+  feed, setFeedData,
+  type, onClickComponent , handleReport
+}) {
   const header = HEADER;
   const { handleCheckStar } = useFeedActions(setFeedData, type);
   const [report, setReport] = useState();
@@ -39,6 +42,7 @@ export default function Feed({ feed, setFeedData, type, onClickComponent }) {
         handleCheckStar={handleCheckStar}
         fetchReportResult={fetchReportResult}
         onClickComponent={onClickComponent}
+        handleReport={handleReport}
       />
     </>
   );
@@ -48,7 +52,8 @@ export const PreviewContentFeed = ({
     feed,
     handleCheckStar,
     fetchReportResult,
-    onClickComponent
+    onClickComponent,
+    handleReport
   }) =>{
     const { scrollRef, hasDragged, dragHandlers } = useDragScroll();
     const [isLoading, setIsLoading] = useState(true);
@@ -142,7 +147,7 @@ export const PreviewContentFeed = ({
             <ActionButtons
               feed={feed}
               handleCheckStar={handleCheckStar}
-              fetchReportResult={fetchReportResult}
+              handleReport={handleReport}
             />
           </div>
         </div>
@@ -155,7 +160,7 @@ export const PreviewContentFeed = ({
 }
 
 
-export function ContentFeed({ detailPage, feed, handleCheckStar, links, fetchReportResult}) {
+export function ContentFeed({ detailPage, feed, handleCheckStar, links, handleReport}) {
 
   const [isLoading, setIsLoading] = useState(true);
   const [result, setResult] = useState(true);
@@ -239,7 +244,7 @@ export function ContentFeed({ detailPage, feed, handleCheckStar, links, fetchRep
           <ActionButtons
             feed={feed}
             handleCheckStar={handleCheckStar}
-            fetchReportResult={fetchReportResult}
+            handleReport={handleReport}
           />
         </div>
       </div>
@@ -277,7 +282,7 @@ function HashTags({ hashtags }) {
   );
 }
 
-function ActionButtons({ feed, handleCheckStar, fetchReportResult }) {
+function ActionButtons({ feed, handleCheckStar, handleReport}) {
   const navigate = useNavigate();
 
   return (
@@ -285,7 +290,7 @@ function ActionButtons({ feed, handleCheckStar, fetchReportResult }) {
       <div
         onClick={(e) => {
           e.stopPropagation();
-          fetchReportResult(feed.fid);
+          handleReport(feed);
         }}
       >
         신고

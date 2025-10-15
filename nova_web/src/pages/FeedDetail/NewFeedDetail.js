@@ -20,6 +20,7 @@ import style from "./NewFeedDetail.module.css";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import DesktopLayout from "../../component/DesktopLayout/DeskTopLayout";
 import AdComponent from "../../component/AdComponent/AdComponent";
+import ReportModal from "../../component/ReportModal/ReportModal";
 
 export default function NewFeedDetail() {
   const isMobile = useMediaQuery('(max-width:1100px)');
@@ -55,6 +56,14 @@ export default function NewFeedDetail() {
 
   const [showCommentMoreOption, setShowCommentMoreOption] = useState(false);
   const [optionTargetComment, setOptionTargetComment] = useState("");
+
+  const [targetFeed, setTargetFeed] = useState(true);
+  const [reportModal, setReportModal] = useState(true);
+
+  const handleReport = (target) => {
+      setTargetFeed(target);
+      setReportModal(true);
+  }
 
   const togglePushingComment = (cid) => {
     setOptionTargetComment(cid);
@@ -342,6 +351,11 @@ export default function NewFeedDetail() {
   return (
     isMobile ? (
       <div className="container">
+        {
+            reportModal && (
+                <ReportModal target={targetFeed} toggleReportOption={setReportModal} />
+            )
+        }
         <div className={style["top-container"]}>
           <button
             className={style["back-button"]}
@@ -373,6 +387,7 @@ export default function NewFeedDetail() {
             handleCheckStar={handleCheckStar}
             links={links}
             disableClick={false}
+            handleReport={handleReport}
           />
         </div>
 
@@ -432,6 +447,11 @@ export default function NewFeedDetail() {
     ) : (
       <DesktopLayout>
         <div className={style["container"]}>
+          {
+              reportModal && (
+                  <ReportModal target={targetFeed} toggleReportOption={setReportModal} />
+              )
+          }
           <div className={style["desktop-ad-section-style"]}>
             <AdComponent type={"image_32x60"}/>
           </div>
@@ -469,6 +489,7 @@ export default function NewFeedDetail() {
                 handleCheckStar={handleCheckStar}
                 links={links}
                 disableClick={false}
+                handleReport={handleReport}
               />
             </div>
             

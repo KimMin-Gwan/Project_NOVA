@@ -1,0 +1,96 @@
+.modal-frame{
+    width: 100%;
+    height: 100%;
+    background-color: #00000071;
+    position: fixed;
+    top: 0px;
+    left : 0px;
+    z-index: 20;
+    padding-top: 16%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-container{
+    display: flex;
+    width: 80%;
+    max-width: 400px;
+    padding: 20px;
+    height: fit-content;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 22px;
+    align-self: stretch;
+    border-radius: 20px;
+    border: 1px solid #FFF;
+    background: #fff
+}
+
+.modal-title-wrapper{
+    display:flex;
+    justify-content: center;
+    align-self: stretch;
+    flex-direction: column;
+}
+
+.modal-title {
+    display:flex;
+    justify-content: center;
+    align-self: stretch;
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 6px;
+    color: #333;
+    text-align: center;
+}
+
+.modal-sub-title {
+    display:flex;
+    justify-content: center;
+    align-self: stretch;
+    font-size: 14px;
+    font-weight: 400;
+    color: #ff3636;
+    text-align: center;
+}
+
+.option-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-self: stretch;
+}
+
+.option-item {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border-radius: 10px;
+  background: #f2f4f8;
+  cursor: pointer;
+  align-self: stretch;
+  gap: 15px;
+  transition: background 0.2s;
+}
+
+.option-item:hover {
+  background: #e3e8ef;
+}
+
+.radio-circle {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #555;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.radio-selected {
+  width: 12px;
+  height: 12px;
+  background-color: #555;
+  border-radius: 50%;
+}
