@@ -353,7 +353,7 @@ export default function NewFeedDetail() {
       <div className="container">
         {
             reportModal && (
-                <ReportModal target={targetFeed} toggleReportOption={setReportModal} />
+                <ReportModal type={"feed"} target={targetFeed} toggleReportOption={setReportModal} />
             )
         }
         <div className={style["top-container"]}>

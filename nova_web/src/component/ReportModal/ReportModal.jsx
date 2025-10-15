@@ -18,7 +18,8 @@ const ReportModal = ({ type, target, toggleReportOption }) => {
   
 
   const handleReport = async (key) => {
-    setSelected(reportOption[key]);
+    setSelected(key);
+    setTargetOption(reportOption[key]);
   };
 
   const fetchViolationReport = async () => {
@@ -69,13 +70,17 @@ const ReportModal = ({ type, target, toggleReportOption }) => {
                 </div>
             ))}
         </div>
-        <div className={style["button-wrapper"]}>
-          <div className={style["submit-button"]}
-            onClick={fetchViolationReport}
-          >
-            제출하기
-          </div>
-        </div>
+        {
+          selected && (
+            <div className={style["button-wrapper"]}>
+              <div className={style["submit-button"]}
+                onClick={fetchViolationReport}
+              >
+                제출하기
+              </div>
+            </div>
+          )
+        }
       </div>
     </div>
   );
