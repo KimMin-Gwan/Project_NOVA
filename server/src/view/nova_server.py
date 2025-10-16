@@ -98,13 +98,18 @@ class NOVA_Server:
 
     #def run_server(self, host='127.0.0.1', port=6000):
         #uvicorn.run(app=self.__app, host=host, port=port)
+    
     def run_server(self, host='127.0.0.1', port=6000):
+        log_config = uvicorn.config.LOGGING_CONFIG
+        log_config["formatters"]["access"]["fmt"] = "%(asctime)s - %(levelname)s - %(message)s"
+        log_config["formatters"]["default"]["fmt"] = "%(asctime)s - %(levelname)s - %(message)s"
+        
         uvicorn.run(
             app=self.__app,
             host=host,
             port=port,
             access_log=True,
-            access_log_format='[%(asctime)s] %(client_addr)s - "%(request_line)s" %(status_code)s'
+            log_config=log_config
         )
 
 class NOVAVerification:
