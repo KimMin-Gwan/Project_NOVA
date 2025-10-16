@@ -103,9 +103,10 @@ class LogProcessor:
     def compress_log_files(self, log_name:str, folder_path:str) -> bool:
         try:
             datestamp = datetime.now().strftime("%Y-%m-%d")
-            filename = f"{log_name}_{datestamp}.tar.xz" # tar.xz 파일 이름
-            shutil.make_archive(filename, 'xztar', folder_path) # tar.xz 파일 생성
-            xz_file_path = os.path.join(folder_path, filename) # tar.xz 파일 경로
+            filename = f"{log_name}_{datestamp}" # tar.xz 파일 이름
+            base_path = os.path.join(folder_path, filename)
+            xz_file_path = shutil.make_archive(base_path, 'xztar', folder_path) # tar.xz 파일 생성
+
             return xz_file_path
 
         except Exception as e:
@@ -215,7 +216,10 @@ class LogProcessor:
 
     def compress_process(self):
         self.compress_log_files(log_name="supernova_access_log", folder_path=self.__access_log_local_storage_path)
+        print(' TEST! Access Log File compressed')
+
         self.compress_log_files(log_name="supernova_error_log", folder_path=self.__error_log_local_storage_path)
+        print(' TEST! Error Log File compressed')
 
         return
 
