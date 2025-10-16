@@ -21,19 +21,17 @@ secret_key = "your_secret_key"
 
 class LogProcessor:
     def __init__(self):
-        self.__log_s3_path = ''             # 스토리지에 저장 시, 로그의 s3 경로
-        self.__access_log_local_path = './... /access.log'        # 저장되는 access.log 로그의 위치
-        self.__error_log_local_path = './... /error.log'        # 저장되는 error.log 로그의 위치
+        self.__access_log_local_path = '/home/nova/Project_NOVA/server/log/access.log'          # 저장되는 access.log 로그의 위치
+        self.__error_log_local_path = '/home/nova/Project_NOVA/server/log/error.log'            # 저장되는 error.log 로그의 위치
 
-        self.__access_log_local_storage_path = './model/local_database/log/access/'
-        self.__error_log_local_storage_path = './model/local_database/log/error/'
+        self.__access_log_local_storage_path = '/home/nova/Project_NOVA/server/log/access/'     # 따로 만들어진 로그파일 저장 경로 1 
+        self.__error_log_local_storage_path = '/home/nova/Project_NOVA/server/log/error/'       # 따로 만들어진 로그파일 저장 경로 2
 
-        self.__access_log_xz_file_path = ''
-        self.__error_log_xz_file_path = ''
+        self.__access_log_xz_file_path = ''     # 로그 파일 압축 경로 1
+        self.__error_log_xz_file_path = ''      # 로그 파일 압축 경로 2 
 
-        self.__access_log_bucket = 'nova-access-log-bucket'  # 스토리지 버킷 이름
-        self.__error_log_bucket = 'nova-error-log-bucket'  # 스토리지 버킷 이름
-
+        self.__access_log_bucket = 'nova-access-log-bucket'     # 스토리지 버킷 이름
+        self.__error_log_bucket = 'nova-error-log-bucket'       # 스토리지 버킷 이름
 
         self.buffer = []
 
@@ -191,11 +189,17 @@ class LogProcessor:
 
     # 업로드 프로세스
     def upload_process(self):
+        # 로그 파일 압축
         self.__access_xz_file_path = self.compress_log_files(log_name="supernova_access_log", folder_path=self.__access_log_local_storage_path)
         self.__error_xz_file_path = self.compress_log_files(log_name="supernova_error_log", folder_path=self.__error_log_local_storage_path)
 
+        # S3 업로드
         self.upload_log_files_to_s3()
-        self.clear_log_folders()
+        self.clear_log_folders()        # 로그 파일 삭제 (압축 파일마저 삭제)
+
+        # 압축 파일 경로 초기화
+        self.__access_xz_file_path = ''
+        self.__error_xz_file_path = ''
 
         return
 
@@ -203,7 +207,6 @@ class LogProcessor:
     def make_log_file_process(self):
         self.make_log_file()
         return
-
 
 def main():
     log_processor = LogProcessor()
