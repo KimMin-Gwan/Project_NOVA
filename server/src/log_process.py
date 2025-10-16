@@ -119,11 +119,15 @@ class LogProcessor:
         self.__clear_log_file(self.__access_log_local_path) # 로그 파일 초기화
         self.buffer = [] # 버퍼 초기화
 
+        print(' TEST! Access Log File created')
+
         # Error 로그 파일 만들기
         self.__load_log_file(self.__error_log_local_path)  #  버퍼 로드
         self.__save_log_file(self.__error_log_local_storage_path) # 버퍼 저장
         self.__clear_log_file(self.__error_log_local_path) # 로그 파일 초기화
         self.buffer = [] # 버퍼 초기화
+
+        print(' TEST! Error Log File created')
 
         return
 
@@ -212,11 +216,11 @@ def main():
     log_processor = LogProcessor()
     try:
         schedule.every().day.at("03:00").do(log_processor.upload_process)
-        schedule.every(5).minutes.do(log_processor.make_log_file_process)
+        schedule.every(1).minutes.do(log_processor.make_log_file_process)
 
         print("스케줄이 설정되었습니다:")
         print("- 매일 03:00에 로그 업로드")
-        print("- 5분마다 로그 파일 생성")
+        print("- 1분마다 로그 파일 생성")
 
         # 스케줄 실행
         while True:
