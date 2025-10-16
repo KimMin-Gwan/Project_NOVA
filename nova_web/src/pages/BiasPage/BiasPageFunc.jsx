@@ -91,7 +91,6 @@ export const ToggleSwitch = ({id, isChecked, handleChecked}) => {
 export const fetchIsValidUser = async (bid) => {
   const res = await mainApi.get(`/nova_sub_system/is_valid_bias?bid=${bid}`)
 
-  console.log(res.data.body)
   if(res.data.body.result){
     return true
   }else{

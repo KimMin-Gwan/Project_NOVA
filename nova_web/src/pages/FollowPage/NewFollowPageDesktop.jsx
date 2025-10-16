@@ -159,9 +159,7 @@ const BiasComponent = ({
                 onClickComponent(bias)
             }}
         >
-            <div className={style["bias-component"]}
-                onClick={()=>{console.log(bias.bname)}}
-            >
+            <div className={style["bias-component"]} >
                 <div className={style["bias-image"]}>
                     <img
                       src={BIAS_URL + `${bias.bid}.png`}
