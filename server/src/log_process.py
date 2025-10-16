@@ -74,7 +74,7 @@ class LogProcessor:
 
             with open(file_path, 'w') as f:
                 for line in self.buffer:
-                    f.write(str(line) + "\n")
+                    f.write(str(line))
             
             return True
         
@@ -213,20 +213,28 @@ class LogProcessor:
         self.make_log_file()
         return
 
+    def compress_process(self):
+        self.compress_log_files(log_name="supernova_access_log", folder_path=self.__access_log_local_storage_path)
+        self.compress_log_files(log_name="supernova_error_log", folder_path=self.__error_log_local_storage_path)
+
+        return
+
 def main():
     log_processor = LogProcessor()
     try:
-        schedule.every().day.at("03:00").do(log_processor.upload_process)
+        # schedule.every().day.at("03:00").do(log_processor.upload_process)
         schedule.every(1).minutes.do(log_processor.make_log_file_process)
+        schedule.every(5).minutes.do(log_processor.compress_process)
 
         print("스케줄이 설정되었습니다:")
-        print("- 매일 03:00에 로그 업로드")
+        # print("- 매일 03:00에 로그 업로드")
         print("- 1분마다 로그 파일 생성")
+        print("- 5분마다 로그 파일 압축")
 
         # 스케줄 실행
         while True:
             schedule.run_pending()
-            time.sleep(60)  # 1분마다 체크 (CPU 사용량 절약)
+            time.sleep(30)  # 30초마다 체크 (CPU 사용량 절약)
 
     except KeyboardInterrupt:
         print("\nLog Process stopped by user")
