@@ -67,13 +67,14 @@ class LogProcessor:
     # 로컬 로그 파일을 저장하는 작업
     def __save_log_file(self, path):
         try:
-            timestamp = datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
+            timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
             filename = f"log_{timestamp}.txt"
 
             file_path = os.path.join(path, filename)
 
             with open(file_path, 'w') as f:
-                f.write(self.buffer)
+                for line in self.buffer:
+                    f.write(str(line) + "\n")
             
             return True
         
