@@ -473,7 +473,16 @@ class MultiScheduleModel(TimeTableModel):
         for data in schedule_datas:
             schedule = Schedule()
             schedule.make_with_dict(data)
-            self.__schedules.append(schedule)
+            
+            # 디스플레이 옵션
+            #   0 : 삭제
+            #   1 : 비공개
+            #   2 : 차단
+            #   3 : 비활성화
+            #   4 : 전체 공개
+            
+            if schedule.display > 3:
+                self.__schedules.append(schedule)
 
         # 데이터들을 전부 변환
         self._make_send_data_with_datas()
@@ -652,6 +661,10 @@ class MultiScheduleModel(TimeTableModel):
             schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids=searched_list)
             for data in schedule_datas:
                 schedule = Schedule().make_with_dict(dict_data=data)
+
+                if schedule.display < 4:
+                    continue
+                
                 if schedule.sid in self._user.subscribed_sids:
                     schedule.subscribe = True
 
@@ -1040,7 +1053,8 @@ class ScheduleTimeLayerModel(TimeTableModel):
         # 다 만들면 보관
         for schedule_data in schedule_datas:
             schedule = Schedule().make_with_dict(dict_data=schedule_data)
-            self.__schedules.append(schedule)
+            if schedule.display > 3: 
+                self.__schedules.append(schedule)
         return
     
     # 레이어 만들기
@@ -1191,7 +1205,8 @@ class BiasScheduleModel(BaseModel):
             
             for schedule_data in schedule_datas:
                 schedule = Schedule().make_with_dict(schedule_data)
-                self._schedules.append(schedule)
+                if schedule.display > 3:
+                    self._schedules.append(schedule)
         
         return
         

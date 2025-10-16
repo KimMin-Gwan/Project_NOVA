@@ -96,9 +96,16 @@ class NOVA_Server:
     def get_app(self):
         return self.__app
 
+    #def run_server(self, host='127.0.0.1', port=6000):
+        #uvicorn.run(app=self.__app, host=host, port=port)
     def run_server(self, host='127.0.0.1', port=6000):
-        uvicorn.run(app=self.__app, host=host, port=port)
-
+        uvicorn.run(
+            app=self.__app,
+            host=host,
+            port=port,
+            access_log=True,
+            access_log_format='[%(asctime)s] %(client_addr)s - "%(request_line)s" %(status_code)s'
+        )
 
 class NOVAVerification:
     def __init__(self):
