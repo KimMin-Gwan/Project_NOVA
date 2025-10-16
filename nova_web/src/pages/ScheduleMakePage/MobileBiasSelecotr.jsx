@@ -12,8 +12,8 @@ import 'swiper/css/pagination';
 import { FreeMode} from 'swiper/modules';
 import { useNavigate } from "react-router-dom";
 
-const MobileBiasSelectSection = ({ biasList,
-     selectedBias, handleSelectBias 
+const MobileBiasSelectSection = ({ 
+    biasList, selectedBias, handleSelectBias 
     }) => {
 
 
@@ -50,14 +50,13 @@ const MobileBiasSelectSection = ({ biasList,
 };
 
 const BiasComponent = ({
-    bias,
-    selectedBias, handleSelectBias
+    bias, selectedBias, handleSelectBias
 }) => {
 
     return(
         <div className={style["bias-component-wrapper"]}>
             <div className={style["bias-component"]}
-                onClick={()=>handleSelectBias(bias.bid)}
+                onClick={()=>handleSelectBias(bias)}
                 style={{ border: selectedBias == bias.bid ? "2px solid #8CFF99" : "2px solid #cacacaff" }}
             >
                 <div className={style["bias-image"]}>

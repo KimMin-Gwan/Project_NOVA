@@ -21,6 +21,7 @@ import mainApi from "../../services/apis/mainApi.js";
 import DesktopLayout from "../../component/DesktopLayout/DeskTopLayout.jsx";
 import { DesktopBiasSelectSectionPlus } from "../ScheduleMakePage/DesktopBiasSelector.jsx";
 import SelectCategoryComponent from "./SelectCategoryComponent.jsx";
+import feedApi from "../../services/apis/feedApi.js";
 
 const categoryData = [
   { key: 2, category: "후기" },
@@ -109,12 +110,29 @@ const Write = () => {
       }
       setTagList(res.data.body.feed[0].hashtag);
       setLinkList(res.data.body.links);
-      setInitialValue(res.data.body.feed[0].raw_body);
       setCategory(res.data.body.feed[0].board_type);
       setBiasId(res.data.body.feed[0].bid);
       setLinkList(res.data.body.links)
     });
+    await fetchBodyData(targetFid)
   }
+
+  const fetchBodyData = async (fid) => {
+    try {
+      const res = await feedApi.get(fid);
+      if (res.status === 200) {
+        setInitialValue(res.data);
+      }
+
+    } catch (err) {
+      //console.error("요청 에러:", err);
+
+      // CORS 에러인 경우
+      if (err.message === "Network Error") {
+        alert("본문 내용을 불러오는데 실패했습니다.")
+      }
+    }
+  };
 
   useEffect(() => {
     handleValidCheck();
@@ -318,6 +336,10 @@ const Write = () => {
     }
   }
 
+  const handleSelectBias = (bias) =>{
+    setBiasId(bias.bid);
+  }
+
   if (isMobile){
     return (
       // <form onSubmit={handleSubmit}>
@@ -474,7 +496,7 @@ const Write = () => {
               <DesktopBiasSelectSectionPlus
                 biasList={biasList}
                 selectedBias={biasId}
-                handleSelectBias={setBiasId}
+                handleSelectBias={handleSelectBias}
               />
               <SelectCategoryComponent
                 category={category}
@@ -750,3 +772,5 @@ export function ModalWrapper({ title, children }) {
     </div>
   );
 }
+
+

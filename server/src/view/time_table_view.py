@@ -198,7 +198,7 @@ class Time_Table_View(Master_View):
             request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
 
             time_table_controller =TimeTableController()
-            model = time_table_controller.try_add_schedule(database=self.__database,
+            model = time_table_controller.try_subscribe_schedule(database=self.__database,
                                                         request=request_manager)
             
             body_data = model.get_response_form_data(self._head_parser)

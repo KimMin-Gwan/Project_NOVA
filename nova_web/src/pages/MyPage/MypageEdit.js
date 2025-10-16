@@ -239,12 +239,16 @@ function MyPage() {
   };
 
   const handleWithdrawal = () => {
+    alert("회원 탈퇴를 하더라도 게시글과 콘텐츠는 삭제되지 않습니다.");
     if (window.confirm("화원 탈퇴를 진행하시겠습니까?")) {
-      mainApi.get("user_home/try_resign").then((res) => {
-        if (res.data.result) {
-          navigate("/");
-        }
-      });
+      if (window.confirm("회원 탈퇴를 진행하면 이미 작성한 게시글과 콘텐츠를 더 이상 수정하거나 삭제할 수 없습니다. 탈퇴를 계속 진행하시겠습니까?")){
+        mainApi.get("user_home/try_resign").then((res) => {
+          if (res.data.result) {
+            alert("슈퍼노바를 이용해 주셔서 진심으로 감사드립니다. 다시 만날 수 있기를 바랍니다.")
+            navigate("/");
+          }
+        });
+      }
     } else {
       return null;
     }

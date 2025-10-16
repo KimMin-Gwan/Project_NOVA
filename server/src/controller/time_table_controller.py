@@ -61,7 +61,7 @@ class TimeTableController:
 
 
     # 스케줄 추가
-    def try_add_schedule(self, database:Mongo_Database, request:RequestManager ) -> BaseModel:
+    def try_subscribe_schedule(self, database:Mongo_Database, request:RequestManager ) -> BaseModel:
         model = AddScheduleModel(database=database)
 
         if request.jwt_payload!= "":

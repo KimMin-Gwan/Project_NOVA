@@ -159,8 +159,11 @@ const BiasComponent = ({
                 onClickComponent(bias)
             }}
         >
-            <div className={style["bias-component"]}
-                onClick={()=>{console.log(bias.bname)}}
+            <div className={style["bias-component"]} 
+                style={{
+                    border : bias.platform == "치지직" ? "2px solid #8CFF99" : "2px solid #0E4194"
+                }}
+            
             >
                 <div className={style["bias-image"]}>
                     <img

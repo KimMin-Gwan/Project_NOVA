@@ -12,8 +12,8 @@ import 'swiper/css/free-mode';
 import 'swiper/css/pagination';
 import { FreeMode} from 'swiper/modules';
 
-const DesktopBiasSelectSection = ({ biasList,
-     selectedBias, handleSelectBias
+const DesktopBiasSelectSection = ({ 
+    biasList, selectedBias, handleSelectBias
     }) => {
 
     return (
@@ -49,14 +49,13 @@ const DesktopBiasSelectSection = ({ biasList,
 };
 
 const BiasComponent = ({
-    bias,
-    selectedBias, handleSelectBias
+    bias, selectedBias, handleSelectBias
 }) => {
 
     return(
         <div className={style["bias-component-wrapper"]}>
             <div className={style["bias-component"]}
-                onClick={()=>handleSelectBias(bias.bid)}
+                onClick={()=>handleSelectBias(bias)}
                 style={{ border: selectedBias == bias.bid ? "2px solid #8CFF99" : "2px solid #fff" }}
             >
  
@@ -113,7 +112,7 @@ const NoneSelectBiasComponent = ({selectedBias, handleSelectBias}) => {
     return(
         <div className={style["bias-component-wrapper"]}>
             <div className={style["add-bias-component"]} 
-                onClick={()=> handleSelectBias("선택 없음")}
+                onClick={()=> handleSelectBias({bid:"선택 없음"})}
                 style={{ border: selectedBias == "선택 없음" ? "2px solid #8CFF99" : "2px solid #fff" }}
             >
                     <span className={style["bias-name"]}> 선택 없음 </span>

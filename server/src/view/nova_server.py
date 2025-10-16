@@ -96,9 +96,21 @@ class NOVA_Server:
     def get_app(self):
         return self.__app
 
+    #def run_server(self, host='127.0.0.1', port=6000):
+        #uvicorn.run(app=self.__app, host=host, port=port)
+    
     def run_server(self, host='127.0.0.1', port=6000):
-        uvicorn.run(app=self.__app, host=host, port=port)
-
+        log_config = uvicorn.config.LOGGING_CONFIG
+        log_config["formatters"]["access"]["fmt"] = "%(asctime)s - %(levelname)s - %(message)s"
+        log_config["formatters"]["default"]["fmt"] = "%(asctime)s - %(levelname)s - %(message)s"
+        
+        uvicorn.run(
+            app=self.__app,
+            host=host,
+            port=port,
+            access_log=True,
+            log_config=log_config
+        )
 
 class NOVAVerification:
     def __init__(self):
