@@ -4,10 +4,11 @@ import HEADER from "../../constant/header";
 import justPostApi from "../../services/apis/imagePostApi";
 import postApi from "../../services/apis/postApi";
 import { SCHEDULE_IMAGE_URL } from "../../constant/imageUrl";
+import { fetchIsValidUser } from "../BiasPage/BiasPageFunc.jsx";
 
 const DesktopScheduleSelectSection = ({
   selectedSchedule, setSelectedSchedule, selectedBias,
-  tryFetchNewSchedule, resetAll
+  tryFetchNewSchedule, resetAll, openContentMode
 }) => {
 
   // 실제로 선택한 종료 시간
@@ -139,12 +140,14 @@ const DesktopScheduleSelectSection = ({
     clearInterval(intervalRef.current);
   };
 
+
+  const [validationText, setValidationText] = useState("작성자와 스트리머만 수정할 수 있어요!");
+
   useEffect(() => {
     setDetailInput(selectedSchedule.title);
     setTagsArrayData(selectedSchedule.tags || []);
     setTagsInput((selectedSchedule.tags || []).join(", "));
     setDurationInput(selectedSchedule.duration ? String(selectedSchedule.duration) : "");
-    setIsValid(selectedSchedule.is_owner);
     if (selectedSchedule.datetime) {
       const date = selectedSchedule.datetime;
       let hour = date.getHours();
@@ -167,7 +170,21 @@ const DesktopScheduleSelectSection = ({
       setImageFile(null);
       setPreviewImage(null);
     }
+
+    if(openContentMode){
+      setIsValid(selectedSchedule.is_owner);
+      setValidationText("작성자와 스트리머만 수정할 수 있어요!")
+    }else{
+      handleBiasOwner()
+    }
+
   },[selectedSchedule])
+
+  const handleBiasOwner = async () => {
+    const res = await fetchIsValidUser(selectedBias);
+    setIsValid(res);
+    setValidationText("작성은 스트리머 본인만 가능해요.")
+  }
 
   const handlePreviewImage = (url) => {
     let urlWithCacheBuster = url;
@@ -302,7 +319,7 @@ const DesktopScheduleSelectSection = ({
           <span className={style["bias-select-section-title"]}>콘텐츠 일정 작성 </span>
           {
             !isValid &&
-              <span className={style["bias-select-section-valid-info"]}>작성자와 스트리머만 수정할 수 있어요!</span>
+              <span className={style["bias-select-section-valid-info"]}>{validationText}</span>
           }
           <div className={style["schedule-detail-frame"]}>
             <div className={style["schedule-detail-input-wrapper"]}>

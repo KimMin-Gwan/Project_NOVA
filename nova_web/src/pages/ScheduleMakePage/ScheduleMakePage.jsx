@@ -112,17 +112,20 @@ const ScheduleMakePage = () => {
     const [selectedBias, setSelectedBias] = useState("");
     const [selectedDate, setSelectedDate] = useState(defaultDate);
     const [selectedSchedule, setSelectedSchedule] = useState(defaultSchedule);
+    const [openCotentMode, setOpenContentMode] = useState(true);
 
-    const handleSelectBias = (bid) => {
-        if(initDate){
-          setInitDate();
-        }
+    const handleSelectBias = (bias) => {
+      if(initDate){
+        setInitDate();
+      }
 
-        if (selectedBias == bid){
-            setSelectedBias("");
-        }else{
-            setSelectedBias(bid);
-        }
+      if (selectedBias == bias.bid){
+          setSelectedBias("");
+      }else{
+        setSelectedBias(bias.bid);
+      }
+
+      setOpenContentMode(bias.open_content_mode);
     }
 
     const handleSelectDate = (date) => {
@@ -288,6 +291,7 @@ const ScheduleMakePage = () => {
                 setSelectedSchedule={setSelectedSchedule}
                 tryFetchNewSchedule={tryFetchNewSchedule}
                 resetAll={resetAll}
+                openContentMode={openCotentMode}
               />
             </div>
             <div className={style["schedule-make-info"]}>
@@ -355,6 +359,7 @@ const ScheduleMakePage = () => {
                   setSelectedSchedule={setSelectedSchedule}
                   tryFetchNewSchedule={tryFetchNewSchedule}
                   resetAll={resetAll}
+                  openContentMode={openCotentMode}
                 />
               </div>
               <div className={style["schedule-make-info"]}>
