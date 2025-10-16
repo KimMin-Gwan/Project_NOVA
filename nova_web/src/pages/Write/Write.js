@@ -336,6 +336,10 @@ const Write = () => {
     }
   }
 
+  const handleSelectBias = (bias) =>{
+    setBiasId(bias.bid);
+  }
+
   if (isMobile){
     return (
       // <form onSubmit={handleSubmit}>
@@ -492,7 +496,7 @@ const Write = () => {
               <DesktopBiasSelectSectionPlus
                 biasList={biasList}
                 selectedBias={biasId}
-                handleSelectBias={setBiasId}
+                handleSelectBias={handleSelectBias}
               />
               <SelectCategoryComponent
                 category={category}
