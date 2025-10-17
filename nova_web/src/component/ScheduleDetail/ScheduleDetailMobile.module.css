@@ -29,7 +29,7 @@
 
 .modal-upper-section{
     display: flex;
-    max-height: 286px;
+    height: 260px;
     padding: 10px;
     align-items: flex-start;
     gap: 10px;
@@ -47,6 +47,21 @@
   width: 100%;
   height: 100%;
   cursor: pointer;
+}
+
+.schedule-image {
+  align-self: stretch;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* 박스 벗어난 부분 잘라냄 */
+  border-radius: 12px; /* 있으면 더 보기 좋음 */
+}
+
+.schedule-image img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain; /* 이미지 비율 유지하면서 박스 안에 맞춤 */
 }
 
 /* 오버레이 텍스트 */
@@ -262,20 +277,6 @@
     background-color: #6490ff;
 }
 
-.schedule-image {
-  align-self: stretch;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden; /* 박스 벗어난 부분 잘라냄 */
-  border-radius: 12px; /* 있으면 더 보기 좋음 */
-}
-
-.schedule-image img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain; /* 이미지 비율 유지하면서 박스 안에 맞춤 */
-}
 
 .left-button-wrapper{
     display: flex;
