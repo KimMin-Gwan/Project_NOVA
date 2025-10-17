@@ -136,7 +136,7 @@ function MyPage() {
         <div className={style2["inner-box"]}>
           <div className={style2["top_area"]}>
             <div className={style2["backword-button"]}
-              onClick={() => { navigate(-1); }}
+              onClick={() => { navigate("/"); }}
             >
               뒤로
             </div>

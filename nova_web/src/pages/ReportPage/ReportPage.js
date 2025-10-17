@@ -67,7 +67,7 @@ export default function ReportPage() {
         <div className="ReportPage_title">
           <button
             onClick={() => {
-              navigate(-1);
+              navigate('/');
             }}
           >
             돌아가기
@@ -129,7 +129,7 @@ export default function ReportPage() {
         <div className="ReportPage_title">
           <button
             onClick={() => {
-              navigate(-1);
+              navigate('/');
             }}
           >
             돌아가기

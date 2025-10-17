@@ -17,7 +17,7 @@ function Terms() {
             alt="Arrow"
             className={style.backword}
             onClick={() => {
-              navigate(-1);
+              navigate('/');
             }}
           />
           <div className={style.TitleBox}>
@@ -64,7 +64,7 @@ function Terms() {
               alt="Arrow"
               className={style.backword}
               onClick={() => {
-                navigate(-1);
+                navigate('/');
               }}
             />
             <div className={style.TitleBox}>

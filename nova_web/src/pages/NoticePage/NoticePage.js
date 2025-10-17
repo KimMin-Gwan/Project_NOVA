@@ -28,7 +28,7 @@ export default function NoticePage() {
         <div className="NoticePage_title">
           <button
             onClick={() => {
-              navigate(-1);
+              navigate('/');
             }}
           >
             돌아가기
@@ -64,7 +64,7 @@ export default function NoticePage() {
         <div className="NoticePage_title">
           <button
             onClick={() => {
-              navigate(-1);
+              navigate('/');
             }}
           >
             돌아가기

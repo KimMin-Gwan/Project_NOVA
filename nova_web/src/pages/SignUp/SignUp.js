@@ -199,7 +199,7 @@ export default function SignUp() {
           alt="Arrow"
           className={style.backword}
           onClick={() => {
-            navigate(-1);
+            navigate('/');
           }}
         />
         <div className={style.title}>회원가입</div>

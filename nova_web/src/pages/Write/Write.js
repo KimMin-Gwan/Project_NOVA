@@ -352,7 +352,7 @@ const Write = () => {
           <p
             className={style["buttons"]}
             onClick={() => {
-              navigate(-1);
+              navigate('/');
             }}
           >
             취소
