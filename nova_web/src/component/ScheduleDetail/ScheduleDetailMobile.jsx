@@ -88,7 +88,10 @@ const ScheduleDetailMobile = ({sid, toggleDetailOption}) => {
                                             {
                                                 tags.map((tag, i)=>{
                                                     return(
-                                                        <div className={style["tag-box"]}>
+                                                        <div
+                                                        key={i}
+                                                         className={style["tag-box"]}
+                                                         >
                                                             {tag}
                                                         </div>
                                                     )
