@@ -554,6 +554,10 @@ function CommentComponent({cid, uid, owner, uname, isReply, reply, body, date, c
   const pressTimer = useRef(null);
 
   const handlePressStart = () => {
+    if (body == "삭제된 댓글입니다."){
+      return;
+    }
+
     pressTimer.current = setTimeout(() => {
       // 꾹 누르기 감지 시 실행할 작업
       commentAction(cid);
@@ -563,8 +567,6 @@ function CommentComponent({cid, uid, owner, uname, isReply, reply, body, date, c
   const handlePressEnd = () => {
     clearTimeout(pressTimer.current); // 타이머 초기화
   };
-
-  console.log(body, cid);
 
   if(owner){
     return(
