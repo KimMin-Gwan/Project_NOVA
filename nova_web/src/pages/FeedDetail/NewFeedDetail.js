@@ -217,13 +217,6 @@ export default function NewFeedDetail() {
     }
   }
 
-
-  //useEffect(() => {
-    //if (!isLoading && commentRef.current && state.commentClick) {
-      //commentRef.current.focus();
-    //}
-  //}, [isLoading]);
-
   async function fetchFeed() {
     await mainApi.get(`feed_explore/feed_detail/feed_data?fid=${fid}`).then((res) => {
       setFeedData(res.data.body.feed[0]);
