@@ -22,12 +22,6 @@ button, a, div {
   user-select: none;
 }
 
-/* 모바일 크롬 회색 배경 방지 */
-button:active,
-a:active,
-div:active {
-  background-color: transparent !important;
-}
 
 
 
