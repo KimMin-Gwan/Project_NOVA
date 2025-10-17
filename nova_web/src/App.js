@@ -97,6 +97,9 @@ function App() {
       {/* 스트리머 관련 페이지*/}
       <Route path="/follow_page" element={<NewFollowPage/>}></Route>
       <Route path="/submit_new" element={<SubmitNewBiasPage/>} />
+      <Route path="/bias" element={<BiasPage/>}>
+        <Route path=":bid" element={<BiasPage/>}></Route>
+      </Route>
 
       {/* 검색 페이지 */}
       <Route path="/search" element={<SearchPage />}></Route>
@@ -107,9 +110,6 @@ function App() {
       <Route path="/explore/schedule" element={<ScheduleExplore />}></Route>
       <Route path="/schedule/make_new" element={<ScheduleMakePage/>}>
         <Route path=":sid" element={<ScheduleMakePage/>}></Route>
-      </Route>
-      <Route path="/bias" element={<BiasPage/>}>
-        <Route path=":bid" element={<BiasPage/>}></Route>
       </Route>
 
       {/* 테스트 페이지 및 에러 페이지 */}
