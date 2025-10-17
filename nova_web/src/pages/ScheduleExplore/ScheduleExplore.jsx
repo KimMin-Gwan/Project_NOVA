@@ -51,6 +51,7 @@ export default function ScheduleExploreDesktop({
 
                             return (
                                 <div
+                                    key={index}
                                     className={style["category_item"]}
                                     style={{
                                         width: isSelected ? "160px" : "120px",
