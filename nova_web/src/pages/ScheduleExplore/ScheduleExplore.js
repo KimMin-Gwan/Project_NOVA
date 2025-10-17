@@ -19,6 +19,7 @@ import DesktopLayout from "../../component/DesktopLayout/DeskTopLayout";
 import ScheduleExploreDesktop from "./ScheduleExplore.jsx";
 import ScheduleComponentMobile from "./ScheduleComponentMobile.jsx";
 import ScheduleDetailMobile from "../../component/ScheduleDetail/ScheduleDetailMobile.jsx";
+
 const scheduleKind = ["게임", "저챗", "음악", "그림", "스포츠", "시참"];
 
 export default function ScheduleExplore() {
@@ -50,7 +51,6 @@ export default function ScheduleExplore() {
     setActiveIndex(swiper.activeIndex);
   };
 
-
   const [showScheduleMoreOption, setShowScheduleMoreOption] = useState(false);
   const [targetSchedule, setTargetSchedule] = useState("");
 
@@ -58,6 +58,11 @@ export default function ScheduleExplore() {
       setTargetSchedule(targetSchedule);
       setShowScheduleMoreOption(!showScheduleMoreOption);
   }
+
+  useEffect(()=>{
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  },[activeIndex])
+
 
 
   if(isMobile){
