@@ -423,6 +423,22 @@
   }
 }
 
+.duration-wrapper{
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  gap: 28px;
+  align-items: center;
+}
+
+.duration-text{
+  width: 90px;
+  flex-wrap: nowrap;
+  font-size: 15px;
+  font-weight: 500;
+  color: #222;
+}
+
 .tagsContainer {
   padding-left : 10px;
   display: flex;

@@ -91,7 +91,10 @@ const DesktopScheduleSelectSection = ({
   const onChangeDurationInput = (e) => {
     // 숫자만 허용
     const onlyNumbers = e.target.value.replace(/\D/g, "");
-    setDurationInput(onlyNumbers);
+
+    // 숫자로 변환 후 40 초과 시 40으로 고정
+    const limitedNumber = onlyNumbers ? Math.min(Number(onlyNumbers), 40) : "";
+    setDurationInput(limitedNumber);
   };
 
   const [selectedAmPm, setSelectedAmPm] = useState("am"); // 기본 선택
@@ -501,20 +504,25 @@ const DesktopScheduleSelectSection = ({
 
               <div className={style["searchFac"]}>
                 <span>예상 방송 시간</span>
-                <div className={style["searchBoxMargin"]}>
-                  <div className={style["searchBox"]}>
-                    {
-                      isValid ?
-                        <input
-                          type="text"
-                          value={durationInput ? durationInput + "시간" : ""}
-                          onChange={onChangeDurationInput}
-                          placeholder="2시간"
-                        />
-                        :
-                        <div  className={style["detail-readonly"]}
-                        >{durationInput ? durationInput + "시간" : "예상 방송 시간이 없어요"}</div>
-                    }
+                <div className={style["duration-wrapper"]}>
+                  <div className={style["searchBoxMargin"]}>
+                    <div className={style["searchBox"]}>
+                      {
+                        isValid ?
+                          <input
+                            type="text"
+                            value={durationInput}
+                            onChange={onChangeDurationInput}
+                            placeholder="2"
+                          />
+                          :
+                          <div  className={style["detail-readonly"]}
+                          >{durationInput ? durationInput : "예상 방송 시간이 없어요"}</div>
+                      }
+                    </div>
+                  </div>
+                  <div className={style["duration-text"]}>
+                    시간 예정
                   </div>
                 </div>
               </div>
