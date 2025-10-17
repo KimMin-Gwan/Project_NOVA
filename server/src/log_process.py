@@ -102,7 +102,8 @@ class LogProcessor:
     # 로그 파일 압축 (tar.xz 파일 생성)
     def compress_log_files(self, log_name:str, folder_path:str) -> bool:
         try:
-            datestamp = datetime.now().strftime("%Y-%m-%d")
+            # datestamp = datetime.now().strftime("%Y-%m-%d")
+            datestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")        # 테스트용 압축 파일 이름
             filename = f"{log_name}_{datestamp}" # tar.xz 파일 이름
             base_path = os.path.join(folder_path, filename)
             xz_file_path = shutil.make_archive(base_path, 'xztar', folder_path) # tar.xz 파일 생성
@@ -121,7 +122,7 @@ class LogProcessor:
         self.__clear_log_file(self.__access_log_local_path) # 로그 파일 초기화
         self.buffer = [] # 버퍼 초기화
 
-        print(' TEST! Access Log File created')
+        # print(' TEST! Access Log File created')
 
         # Error 로그 파일 만들기
         self.__load_log_file(self.__error_log_local_path)  #  버퍼 로드
@@ -187,6 +188,11 @@ class LogProcessor:
             logging.error(f"Error to Upload Log files to S3: {str(e)}")
             return False
 
+
+
+    # Processes 
+    #########################################################
+
     # 로그 폴더 초기화
     def clear_log_folders(self):
         self.__clear_folder(self.__access_log_local_storage_path)
@@ -198,10 +204,14 @@ class LogProcessor:
         # 로그 파일 압축
         self.__access_xz_file_path = self.compress_log_files(log_name="supernova_access_log", folder_path=self.__access_log_local_storage_path)
         self.__error_xz_file_path = self.compress_log_files(log_name="supernova_error_log", folder_path=self.__error_log_local_storage_path)
+        print(' TEST! Log File compressed')   
 
         # S3 업로드
         self.upload_log_files_to_s3()
+        print(' TEST! Log File uploaded')
+
         self.clear_log_folders()        # 로그 파일 삭제 (압축 파일마저 삭제)
+        print(' TEST! Log File reseted')
 
         # 압축 파일 경로 초기화
         self.__access_xz_file_path = ''
@@ -212,28 +222,36 @@ class LogProcessor:
     # 로그 제작 프로세스 실행
     def make_log_file_process(self):
         self.make_log_file()
+        print(' TEST! Log File created')
         return
 
+    # 테스트용 압축 프로세스
     def compress_process(self):
         self.compress_log_files(log_name="supernova_access_log", folder_path=self.__access_log_local_storage_path)
-        print(' TEST! Access Log File compressed')
+        # print(' TEST! Access Log File compressed')
 
         self.compress_log_files(log_name="supernova_error_log", folder_path=self.__error_log_local_storage_path)
-        print(' TEST! Error Log File compressed')
+        # print(' TEST! Error Log File compressed')
 
         return
+
+    #########################################################
+
+
+
 
 def main():
     log_processor = LogProcessor()
     try:
         # schedule.every().day.at("03:00").do(log_processor.upload_process)
         schedule.every(1).minutes.do(log_processor.make_log_file_process)
-        schedule.every(5).minutes.do(log_processor.compress_process)
+        # schedule.every(5).minutes.do(log_processor.compress_process)
+        schedule.every(5).minutes.do(log_processor.upload_process)
 
         print("스케줄이 설정되었습니다:")
         # print("- 매일 03:00에 로그 업로드")
         print("- 1분마다 로그 파일 생성")
-        print("- 5분마다 로그 파일 압축")
+        print("- 5분마다 로그 파일 압축 후 업로드")
 
         # 스케줄 실행
         while True:
