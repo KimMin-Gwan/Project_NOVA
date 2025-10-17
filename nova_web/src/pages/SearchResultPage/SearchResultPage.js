@@ -62,7 +62,7 @@ export default function SearchResultPage() {
       if(!feedData){ 
         fetchSearchKeyword();
       }
-    } else if (type = "schedule") {
+    } else if (type == "schedule") {
       if(!scheduleData){
         fetchScheduleKeyword();
       }
