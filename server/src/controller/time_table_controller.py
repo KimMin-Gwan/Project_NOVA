@@ -194,7 +194,7 @@ class TimeTableController:
 
         if request.jwt_payload!= "":
             model.set_user_with_email(request=request.jwt_payload)
-
+            
         model.delete_schedule(schedule_search_engine=schedule_search_engine, sid=request.data_payload.sid)
 
         return model

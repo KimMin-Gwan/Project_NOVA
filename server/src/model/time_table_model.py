@@ -881,15 +881,21 @@ class AddScheduleModel(TimeTableModel):
             return
         schedule = Schedule().make_with_dict(schedule_data)
         
-        schedule.display = 0 # 삭제 표시
+        
+        if schedule.uid == self._user or self._user.verified_bias == schedule.bid:
+            schedule.display = 0 # 삭제 표시
 
-        self._database.modify_data_with_id(target_id="sid", target_data=schedule.get_dict_form_data())
-        #self._database.delete_data_with_id(target="sid", id=sid)
+            self._database.modify_data_with_id(target_id="sid", target_data=schedule.get_dict_form_data())
+            #self._database.delete_data_with_id(target="sid", id=sid)
 
-        # 서치 엔진에서 편집합니다.
-        schedule_search_engine.try_remove_schedule(sid=sid)
-        self._result = True
-        return
+            # 서치 엔진에서 편집합니다.
+            schedule_search_engine.try_remove_schedule(sid=sid)
+            self._result = True
+            return
+        else:
+            self._detail = "비정상적인 접근입니다."
+            return
+            
     
     
     # 이미지 업로드 준비
