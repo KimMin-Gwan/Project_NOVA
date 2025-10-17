@@ -173,7 +173,7 @@ function MoreSee({ onModeChange }) {
               alt="Arrow"
               className={style.backword}
               onClick={() => {
-                navigate(-1);
+                navigate("/");
               }}
             />
             <div className={style.TitleBox}>

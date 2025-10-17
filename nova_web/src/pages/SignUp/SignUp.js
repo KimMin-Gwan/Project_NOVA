@@ -156,7 +156,7 @@ export default function SignUp() {
       .then((data) => {
         if (data.body.result) {
           alert("회원가입이 완료되었습니다.");
-          navigate("/novalogin", { state: { from: location.pathname } });
+          navigate("/novalogin");
         } else {
           alert(data.body.detail);
         }
