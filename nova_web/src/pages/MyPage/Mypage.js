@@ -159,7 +159,11 @@ function MyPage() {
           <div className={style2["user-profile-wrapper"]}>
             <div className={style2["user-image-container"]}>
               <div className={style2["user-image"]}>
-                <img src={profile} />
+                <img
+                  src={profile}
+                  alt="profile-image"
+                  onError={(e) => (e.target.src = user_icon)}
+                />
               </div>
               <div className={style2["user-name"]}>
                 {myData.uname}
@@ -229,7 +233,11 @@ function MyPage() {
           <div className={style3["user-profile-wrapper"]}>
             <div className={style3["user-image-container"]}>
               <div className={style3["user-image"]}>
-                <img src={profile} />
+                <img
+                  src={profile}
+                  alt="profile-image"
+                  onError={(e) => (e.target.src = user_icon)}
+                />
               </div>
             </div>
 
@@ -276,7 +284,7 @@ function MyPage() {
           </div>
 
           <div className={
-              feedData.length > 0 ? style2["scroll-area"] : style2["none_feed_scroll"]}
+              feedData.length > 0 ? style3["scroll-area"] : style3["none_feed_scroll"]}
               ref={scrollRef}
           >
           {

@@ -280,7 +280,7 @@ function MyPage() {
           <p
             className={style.backword}
             onClick={() => {
-              navigate(-1);
+              navigate("/");
             }}
           >
             뒤로
@@ -437,7 +437,7 @@ function MyPage() {
           <p
             className={style.backword}
             onClick={() => {
-              navigate(-1);
+              navigate("/");
             }}
           >
             뒤로
