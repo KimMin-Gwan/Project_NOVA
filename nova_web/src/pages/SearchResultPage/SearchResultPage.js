@@ -217,9 +217,9 @@ export default function SearchResultPage() {
           "postBoardState",
           JSON.stringify({
           feedData,
-          nextData,
+          feedNextKey,
           scheduleData,
-          nextData,
+          scheduleKey,
           activeIndex,
           type,
           scrollY: currentScroll,
@@ -242,9 +242,9 @@ export default function SearchResultPage() {
             const parsed = JSON.parse(savedState);
 
             setFeedData(parsed.feedData);
-            setFeedNextKey(parsed.nextData);
+            setFeedNextKey(parsed.feedNextKey);
             setScheduleData(parsed.scheduleData);
-            setScheduleKey(parsed.nextData);
+            setScheduleKey(parsed.scheduleKey);
             setActiveIndex(parsed.activeIndex);
             setType(parsed.type);
 
@@ -269,9 +269,9 @@ export default function SearchResultPage() {
             const parsed = JSON.parse(savedState);
 
             setFeedData(parsed.feedData);
-            setFeedNextKey(parsed.nextData);
+            setFeedNextKey(parsed.feedNextKey);
             setScheduleData(parsed.scheduleData);
-            setScheduleKey(parsed.nextData);
+            setScheduleKey(parsed.scheduleKey);
             setActiveIndex(parsed.activeIndex);
             setType(parsed.type);
 
