@@ -30,13 +30,48 @@
 .modal-upper-section{
     display: flex;
     max-height: 286px;
-
     padding: 10px;
     align-items: flex-start;
     gap: 10px;
     align-self: stretch;
     border-radius: 12px;
 }
+
+/* 이미지 + 오버레이 묶는 래퍼 */
+.schedule-image-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+/* 오버레이 텍스트 */
+.schedule-bias-hyper-link {
+  position: absolute;
+  bottom: 15px;
+  color: #fff;
+  font-family: Pretendard;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: -0.35px;
+  background: rgba(0, 0, 0, 0.5); /* 반투명 배경 */
+  padding: 6px 12px;
+  border-radius: 6px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* hover 시 텍스트 표시 */
+.schedule-image-wrapper:hover .schedule-bias-hyper-link {
+  opacity: 1;
+}
+
+
 
 .modal-lower-section{
     display: flex;

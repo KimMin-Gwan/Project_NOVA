@@ -67,17 +67,19 @@ const ScheduleDetailMobile = ({sid, toggleDetailOption}) => {
                         :
                         <>
                             <div className={style["modal-upper-section"]}>
-                            {
-                                image != null ? (
+                                <div className={style["schedule-image-wrapper"]}
+                                    onClick={()=>{
+                                        toggleDetailOption(null);
+                                        navigate(`/bias/${schedule.bid}`);
+                                    }}
+                                >
                                     <div className={style["schedule-image"]}>
-                                        <img src={image} alt="스케줄 이미지" />
+                                        <img src={image ?? defaultImage} alt="스케줄 이미지" />
                                     </div>
-                                ) : (
-                                    <div className={style["schedule-image"]}>
-                                        <img src={defaultImage} alt="스케줄 이미지" />
+                                    <div className={style["schedule-bias-hyper-link"]}>
+                                        이미지를 눌러 스트리머 페이지로 이동
                                     </div>
-                                )
-                            }   
+                                </div>
                             </div>
                             <div className={style["modal-lower-section"]}>
                                 <div className={style["schedule-tag-detail-wrapper"]}>
