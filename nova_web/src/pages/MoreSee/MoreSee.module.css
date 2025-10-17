@@ -170,8 +170,12 @@ hr {
 }
 
 .vector_login {
-  width: 65px;
-  height: 65px;
+  border-radius: 20px;
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  border: #c8e1ff solid 2px;
+  padding: 8px;
   margin: 0;
 }
 

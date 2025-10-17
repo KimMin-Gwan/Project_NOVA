@@ -26,24 +26,6 @@ import Banner from "../../component/Banner/Banner.js";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 const boardList = [
-  //{
-    //id: 0,
-    //title: "최애 주제 게시판",
-    //src: fav_icon,
-    //end_point: "/feed_list?type=bias",
-  //},
-  //{
-    //id: 1,
-    //title: "오늘의 급상승 게시글",
-    //src: today_up,
-    //end_point: "/feed_list?type=today",
-  //},
-  //{
-    //id: 2,
-    //title: "주간 급상승 게시글",
-    //src: week_up,
-    //end_point: "/feed_list?type=weekly",
-  //},
   {
     id: 3,
     title: "전체 게시글",
@@ -91,14 +73,6 @@ const boardList = [
 function MoreSee({ onModeChange }) {
   const isMobile = useMediaQuery('(max-width:1100px)');
   const serviceList = [
-    //{
-      //id: 0,
-      //title: "새로운 모멘트 작성",
-      //src: new_moment,
-      //alt: "새로운 모멘트 작성",
-      //end_point: "/write_feed/short",
-      //onClick: (endPoint) => handlePage(endPoint),
-    //},
     {
       id: 1,
       title: "새로운 게시글 작성",
@@ -150,7 +124,7 @@ function MoreSee({ onModeChange }) {
   let [user, setUser] = useState("")
 
   function handleFetch() {
-    fetch("https://supernova.io.kr/home/is_valid", {
+    fetch("https://supernova.io.kr/home/is_valid?only_token=n", {
       credentials: "include", // 쿠키를 함께 포함한다는 것
     })
       .then((response) => {
@@ -167,7 +141,6 @@ function MoreSee({ onModeChange }) {
       })
       .then((data) => {
         if (data) {
-          //console.log(data);
           setIsLogin(data.body.result);
           setUser(data.body.user);
         }
@@ -182,6 +155,7 @@ function MoreSee({ onModeChange }) {
     handleFetch();
   }, []);
 
+  console.log(user);
 
   const profile = `https://kr.object.ncloudstorage.com/nova-profile-bucket/${user}.png`;
 
