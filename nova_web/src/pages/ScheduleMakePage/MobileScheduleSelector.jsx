@@ -9,7 +9,7 @@ import { fetchIsValidUser } from "../BiasPage/BiasPageFunc";
 const MobileScheduleSelectSection = ({
   selectedSchedule, setSelectedSchedule, selectedBias,
   tryFetchNewSchedule, resetAll, openContentMode,
-  isUploading, setIsUploading
+  isUploading, setIsUploading, handleDeleteSchedule
 }) => {
   // 실제로 선택한 종료 시간
   const [timePickerValue, setTimePickerValue] = useState({
@@ -540,7 +540,7 @@ const MobileScheduleSelectSection = ({
               isValid &&
               <div className={style["schedule-make-button-gap"]}>
                 <div className={`${style["schedule-make-button"]} ${style["delete"]}`}
-                  onClick={()=>{alert("잠만 지우려고?")}}
+                  onClick={()=>{handleDeleteSchedule(selectedSchedule)}}
                 >삭제</div>
                 <div className={`${style["schedule-make-button"]} ${style["image-upload"]}`}
                   onClick={() => document.getElementById("image").click()}

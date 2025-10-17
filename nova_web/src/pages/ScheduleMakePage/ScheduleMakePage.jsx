@@ -50,8 +50,8 @@ const ScheduleMakePage = () => {
     }
 
 
-    function fetchScheduleList(bid, year, month) {
-      mainApi.get(`/time_table_server/get_monthly_bias_schedule?bid=${bid}&year=${year}&month=${month}`).then((res)=>{
+    const fetchScheduleList = async (bid, year, month) => {
+      await mainApi.get(`/time_table_server/get_monthly_bias_schedule?bid=${bid}&year=${year}&month=${month}`).then((res)=>{
         const body = res.data.body;
         if (body.result){
           const scheduleData = body.schedules;
@@ -74,6 +74,32 @@ const ScheduleMakePage = () => {
         setScheduleList({});
       });
     }
+
+    const fetchDeleteSchedule = async (schedule) => {
+      const sid = schedule.sid;
+      try{
+        const res = await mainApi.get(`/time_table_server/try_delete_schedule?sid=${sid}`);
+
+        if (res.data.body.result){
+          alert("삭제되었습니다.")
+        }else{
+          alert(res.data.body.result)
+        }
+      }catch{
+        alert("삭제에 실패했습니다. 관리자에게 문의하세요.")
+      }
+    }
+
+    const handleDeleteSchedule = async (schedule) => {
+      if (window.confirm("콘텐츠 일정을 삭제하시겠습니까?")){
+        await fetchDeleteSchedule(schedule)
+        const currentPath = window.location.pathname; // 예: /schedule/make_new/97da9...
+        const newPath = currentPath.split("/").slice(0, 3).join("/"); 
+        window.location.href = newPath; 
+      }
+    }
+
+
 
     useEffect(() => {
       fetchBiasList();
@@ -250,6 +276,9 @@ const ScheduleMakePage = () => {
     }
 
 
+    console.log(selectedSchedule);
+
+
     if (!isMobile){
       return(
         <DesktopLayout>
@@ -300,6 +329,7 @@ const ScheduleMakePage = () => {
                 openContentMode={openCotentMode}
                 isUploading={isUploading}
                 setIsUploading={setIsUploading}
+                handleDeleteSchedule={handleDeleteSchedule}
               />
             </div>
             <div className={style["schedule-make-info"]}>
@@ -379,6 +409,7 @@ const ScheduleMakePage = () => {
                   openContentMode={openCotentMode}
                   isUploading={isUploading}
                   setIsUploading={setIsUploading}
+                  handleDeleteSchedule={handleDeleteSchedule}
                 />
               </div>
               <div className={style["schedule-make-info"]}>
