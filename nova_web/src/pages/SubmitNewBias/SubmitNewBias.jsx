@@ -151,16 +151,22 @@ function SubmitNewBias() {
             checkbox: "",
         };
 
-        if (!name.trim()) newErrors.name = "이름을 입력해주세요.";
+        if (!name.trim()) {
+            newErrors.name = "이름을 입력해주세요.";
+        } else if (name.trim().length > 8) {
+            newErrors.name = "이름은 최대 8자까지 입력 가능합니다.";
+        }
+
         if (!platform.trim()) {
             newErrors.platform = "플랫폼을 입력해주세요.";
         } else {
             // 치지직, SOOP만 허용
             const allowed = ["치지직", "SOOP"];
             if (!allowed.includes(platform.trim())) {
-            newErrors.platform = "플랫폼은 치지직 또는 SOOP으로 입력해주세요.";
+                newErrors.platform = "플랫폼은 치지직 또는 SOOP으로 입력해주세요.";
             }
         }
+
         if (!info.trim()) newErrors.info = "관련 정보를 입력해주세요.";
         if (!isChecked) newErrors.checkbox = "필수조건을 확인해주세요.";
 
@@ -171,12 +177,11 @@ function SubmitNewBias() {
         if (!hasError) {
             const ok = await fetchNewBias();
             if (ok) {
-            alert("등록이 완료되었습니다.");
-            navigate("/");
+                alert("등록이 완료되었습니다.");
+                navigate("/");
             }
         }
     };
-
 
     const fetchNewBias = async () => {
         try{
