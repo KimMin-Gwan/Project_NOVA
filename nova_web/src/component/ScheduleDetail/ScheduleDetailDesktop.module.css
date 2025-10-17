@@ -14,9 +14,9 @@
 
 .modal-container{
     display: flex;
-    width: 1024px;
+    width: 800px;
     height: fit-content;
-    padding: 40px;
+    padding: 28px;
     flex-direction: column;
     align-items: center;
     gap: 20px;
@@ -26,20 +26,71 @@
     box-shadow: 4px 4px 8px 0 rgba(0, 0, 0, 0.08);
 }
 
-.modal-upper-section{
-    display: flex;
-    height: 430px;
-    justify-content: center;
-    align-items: center;
-    flex-shrink: 0;
-    align-self: stretch;
+.modal-upper-section {
+  display: flex;
+  flex-direction: column;
+  height: 340px;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  align-self: stretch;
+}
+
+/* 이미지 + 오버레이 묶는 래퍼 */
+.schedule-image-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+/* 이미지 박스 */
+.schedule-image {
+  align-self: stretch;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.schedule-image img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* 오버레이 텍스트 */
+.schedule-bias-hyper-link {
+  position: absolute;
+  bottom: 15px;
+  color: #fff;
+  font-family: Pretendard;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: -0.35px;
+  background: rgba(0, 0, 0, 0.5); /* 반투명 배경 */
+  padding: 6px 12px;
+  border-radius: 6px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* hover 시 텍스트 표시 */
+.schedule-image-wrapper:hover .schedule-bias-hyper-link {
+  opacity: 1;
 }
 
 .modal-lower-section{
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 48px;
+    gap: 24px;
     align-self: stretch;
 }
 
@@ -47,7 +98,7 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 24px;
+    gap: 14px;
     align-self: stretch;
 }
 
@@ -63,23 +114,23 @@
     max-width: 915px;
     align-items: center;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 4px;
 }
 
 .tag-box{
     display: flex;
-    padding: 6px 12px;
+    padding: 5px 10px;
     justify-content: center;
     align-items: center;
     gap: 10px;
     border-radius: 8px;
-    border: 1px solid #000;
-    background: #000;
+    border: 1px solid #222;
+    background: #333;
     color: #FFF;
     font-family: Pretendard;
     font-size: 14px;
     font-style: normal;
-    font-weight: 500;
+    font-weight: 400;
     line-height: 140%; /* 19.6px */
     letter-spacing: -0.35px;
 }
@@ -98,26 +149,29 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 11px;
+    gap: 2px;
     align-self: stretch;
 }
 
 .schedule-title{
-    color: #111;
+    width: 100%;
+    color: #222;
     font-family: Pretendard;
-    font-size: 24px;
+    font-size: 22px;
     font-style: normal;
-    font-weight: 600;
+    font-weight: 500;
     line-height: 140%; /* 33.6px */
     letter-spacing: -0.6px;
+    white-space: normal; /* 줄바꿈 허용 */
+    word-break: break-word; /* 긴 단어나 URL도 강제로 줄바꿈 */
 }
 
 .schedule-datetime{
     color: #767676;
     font-family: Pretendard;
-    font-size: 20px;
+    font-size: 19px;
     font-style: normal;
-    font-weight: 500;
+    font-weight: 400;
     line-height: 140%; /* 33.6px */
     letter-spacing: -0.6px;
     display: flex;
@@ -132,19 +186,27 @@
     font-weight: 500;
     line-height: 140%; /* 25.2px */
     letter-spacing: -0.45px;
+    padding-bottom: 0.2px;
+    border-bottom: 1px solid #fff;
+    cursor: pointer;
 }
 
+.schedule-bname:hover{
+    color: #414141;
+    border-bottom: 1px solid #414141;
+}
 
 .button-wrapper{
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     align-self: stretch;
+    gap: 44px;
 }
 
 .left-button{
     display: flex;
-    width: 452px;
+    width: 330px;
     padding: 16px 24px;
     justify-content: center;
     align-items: center;
@@ -159,7 +221,7 @@
     line-height: 140%; /* 22.4px */
     letter-spacing: -0.4px;
     cursor: pointer;
-    transition: all 0.3s ease-in-out
+    transition: all 0.3s ease-in-out;
 }
 
 
@@ -196,20 +258,6 @@
     transform : scale(0.9);
 }
 
-.schedule-image {
-  align-self: stretch;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden; /* 박스 벗어난 부분 잘라냄 */
-  border-radius: 12px; /* 있으면 더 보기 좋음 */
-}
-
-.schedule-image img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain; /* 이미지 비율 유지하면서 박스 안에 맞춤 */
-}
 
 .left-button-wrapper{
     display: flex;
