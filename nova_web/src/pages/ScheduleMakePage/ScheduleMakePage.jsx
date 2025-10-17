@@ -275,10 +275,6 @@ const ScheduleMakePage = () => {
       setScheduleList({});
     }
 
-
-    console.log(selectedSchedule);
-
-
     if (!isMobile){
       return(
         <DesktopLayout>
