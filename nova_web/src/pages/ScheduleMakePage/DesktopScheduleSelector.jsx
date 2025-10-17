@@ -8,7 +8,8 @@ import { fetchIsValidUser } from "../BiasPage/BiasPageFunc.jsx";
 
 const DesktopScheduleSelectSection = ({
   selectedSchedule, setSelectedSchedule, selectedBias,
-  tryFetchNewSchedule, resetAll, openContentMode
+  tryFetchNewSchedule, resetAll, openContentMode, 
+  isUploading, setIsUploading
 }) => {
 
   // 실제로 선택한 종료 시간
@@ -165,7 +166,9 @@ const DesktopScheduleSelectSection = ({
     }
 
     if (selectedSchedule.sid){
-      handlePreviewImage(`${SCHEDULE_IMAGE_URL}${selectedSchedule.sid}.png`);
+      if (!isUploading){
+        handlePreviewImage(`${SCHEDULE_IMAGE_URL}${selectedSchedule.sid}.png`);
+      }
     }else{
       setImageFile(null);
       setPreviewImage(null);
@@ -241,9 +244,9 @@ const DesktopScheduleSelectSection = ({
     handleImageChange(e);
     handleFileChange(e);
 
-    if (selectedSchedule.sid){
-      postImage(selectedSchedule.sid, file)
-    }
+    //if (selectedSchedule.sid){
+      //postImage(selectedSchedule.sid, file)
+    //}
   }
 
   const handleImageChange = (e) => {
@@ -304,12 +307,18 @@ const DesktopScheduleSelectSection = ({
       alert("콘텐츠 제목이 없으면 업로드할 수 없어요.")
       return
     }
+    setIsUploading(true);
     const sid = await tryFetchNewSchedule(newSchedule); // 새로 만든 값 바로 사용
-    if (sid && previewImage) await postImage(sid, imageFile);
+    if (sid && previewImage){
+      await postImage(sid, imageFile);
+    } else if (selectedSchedule.sid && imageFile){
+      await postImage(selectedSchedule.sid, imageFile)
+    } 
     resetAll();
+    setIsUploading(false);
+    alert("업로드 완료!");
     setImageFile(null);
     setPreviewImage(null);
-    alert("업로드 완료!");
   };
 
   return(
@@ -543,7 +552,11 @@ const DesktopScheduleSelectSection = ({
                 </div>
                 <div className={`${style["schedule-make-button"]} ${style["upload"]}`}
                   onClick={handleMakeSchedule}
-                >등록하기</div>
+                >
+                  {
+                    selectedSchedule.sid ? "수정하기" : "등록하기"
+                  }
+                  </div>
               </div>
             }
           </div>

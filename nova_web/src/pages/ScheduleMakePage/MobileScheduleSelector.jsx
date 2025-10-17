@@ -8,7 +8,8 @@ import { fetchIsValidUser } from "../BiasPage/BiasPageFunc";
 
 const MobileScheduleSelectSection = ({
   selectedSchedule, setSelectedSchedule, selectedBias,
-  tryFetchNewSchedule, resetAll, openContentMode
+  tryFetchNewSchedule, resetAll, openContentMode,
+  isUploading, setIsUploading
 }) => {
   // 실제로 선택한 종료 시간
   const [timePickerValue, setTimePickerValue] = useState({
@@ -167,11 +168,15 @@ const MobileScheduleSelectSection = ({
     }
 
     if (selectedSchedule.sid){
-      handlePreviewImage(`${SCHEDULE_IMAGE_URL}${selectedSchedule.sid}.png`);
+      if (!isUploading){
+        console.log(isUploading);
+        handlePreviewImage(`${SCHEDULE_IMAGE_URL}${selectedSchedule.sid}.png`);
+      }
     }else{
       setImageFile(null);
       setPreviewImage(null);
     }
+
 
     if(openContentMode){
       setIsValid(selectedSchedule.is_owner);
@@ -246,9 +251,9 @@ const MobileScheduleSelectSection = ({
     handleImageChange(e);
     handleFileChange(e);
 
-    if (selectedSchedule.sid){
-      postImage(selectedSchedule.sid, file)
-    }
+    //if (selectedSchedule.sid){
+      //postImage(selectedSchedule.sid, file)
+    //}
   }
 
   const handleImageChange = (e) => {
@@ -309,12 +314,18 @@ const MobileScheduleSelectSection = ({
       alert("콘텐츠 제목이 없으면 업로드할 수 없어요.")
       return
     }
+    setIsUploading(true);
     const sid = await tryFetchNewSchedule(newSchedule); // 새로 만든 값 바로 사용
     if (!sid) alert("업로드에 문제가 있습니다. 잠시후 다시 시도 해주세요.");
-    if (sid && previewImage) await postImage(sid, imageFile);
+    if (sid && previewImage){
+      await postImage(sid, imageFile);
+    } else if (selectedSchedule.sid && imageFile){
+      await postImage(selectedSchedule.sid, imageFile)
+    } 
     resetAll();
     setImageFile(null);
     setPreviewImage(null);
+    setIsUploading(false);
     alert("업로드 완료!");
   };
 

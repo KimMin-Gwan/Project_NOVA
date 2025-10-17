@@ -24,6 +24,7 @@ const ScheduleMakePage = () => {
     const [scheduleList, setScheduleList] = useState({});
     const [initDate, setInitDate] = useState();
     const location = useLocation();
+    const [isUploading, setIsUploading] = useState(false);
 
     function handleValidCheck() {
         fetch("https://supernova.io.kr/home/is_valid", {
@@ -73,9 +74,6 @@ const ScheduleMakePage = () => {
         setScheduleList({});
       });
     }
-    
-
-
 
     useEffect(() => {
       fetchBiasList();
@@ -206,7 +204,6 @@ const ScheduleMakePage = () => {
         if (res?.data?.body?.sid) {
           return res.data.body.sid;
         } else {
-          console.error("❌ 서버 응답에 sid가 없습니다:", res.data);
           return null;
         }
       } catch (error) {
@@ -257,6 +254,15 @@ const ScheduleMakePage = () => {
       return(
         <DesktopLayout>
           <div className={style["frame"]}>
+            {
+              isUploading && (
+                <div className={style["upload-feedback-background"]}>
+                  <div className={style["upload-feedback"]}>
+                    업로드 중입니다.
+                  </div>
+                </div>
+              )
+            }
             <DesktopBiasSelectSection
               biasList={biasList}
               selectedBias={selectedBias}
@@ -292,6 +298,8 @@ const ScheduleMakePage = () => {
                 tryFetchNewSchedule={tryFetchNewSchedule}
                 resetAll={resetAll}
                 openContentMode={openCotentMode}
+                isUploading={isUploading}
+                setIsUploading={setIsUploading}
               />
             </div>
             <div className={style["schedule-make-info"]}>
@@ -307,6 +315,15 @@ const ScheduleMakePage = () => {
       return(
         <div className="container">
             <div className={style2["mobile-frame"]} >
+              {
+                isUploading && (
+                  <div className={style["upload-feedback-background"]}>
+                    <div className={style["upload-feedback"]}>
+                      업로드 중입니다.
+                    </div>
+                  </div>
+                )
+              }
               <div className={style2["mobile-top-bar-wrapper"]}>
                 <div className={style2["backword-button"]}
                   onClick={()=>{
@@ -360,6 +377,8 @@ const ScheduleMakePage = () => {
                   tryFetchNewSchedule={tryFetchNewSchedule}
                   resetAll={resetAll}
                   openContentMode={openCotentMode}
+                  isUploading={isUploading}
+                  setIsUploading={setIsUploading}
                 />
               </div>
               <div className={style["schedule-make-info"]}>
