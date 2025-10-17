@@ -38,6 +38,7 @@ const Write = () => {
   const targetTitle = searchParams.get("title");
   const targetBias  = searchParams.get("bias");
   const targetName = searchParams.get("biasName")
+  const [isUploading, setIsUploading] = useState(false);
 
   const navigate = useNavigate();
   const editorRef = useRef();
@@ -233,7 +234,7 @@ const Write = () => {
 
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault(); // 기본 동작을 막음 (중요)
 
     const editorInstance = editorRef.current?.getInstance();
@@ -263,13 +264,14 @@ const Write = () => {
     }
     formData.append("jsonData", JSON.stringify(send_data)); // JSON 데이터 추가
 
-    fetch("https://supernova.io.kr/feed_explore/try_edit_feed", {
+    await fetch("https://supernova.io.kr/feed_explore/try_edit_feed", {
       method: "POST",
       credentials: "include",
       body: formData,
     })
       .then((response) => {
         response.json();
+        setIsUploading(false);
       })
       .then(() => {
         toast.success("업로드가 완료되었습니다.");
@@ -278,6 +280,7 @@ const Write = () => {
       .catch((error) => {
         toast.error("업로드 실패!");
       });
+
   };
 
 
@@ -357,16 +360,8 @@ const Write = () => {
           <span className={style["page-title"]}>게시글 작성</span>
 
           <p
-            className={style["buttons"]}
-            type="submit"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              handleSubmit(e);
-              onClickUpload();
-            }}
+            className={style["fake-buttons"]}
           >
-            게시
           </p>
         </div>
 
@@ -441,6 +436,32 @@ const Write = () => {
         <p className={style["alert_message"]}>
           작성 규정을 위반한 게시글은 경고 없이 삭제 될 수 있습니다.
         </p>
+        
+        
+        <div className={style["submit-button-wrapper"]}>
+          <div className={style["submit-button"]}
+            type="submit"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setIsUploading(true);
+              handleSubmit(e);
+              onClickUpload();
+            }}
+          >
+            게시하기
+          </div>
+        </div>
+
+        {
+          isUploading && (
+            <div className={style["upload-feedback-background"]}>
+              <div className={style["upload-feedback"]}>
+                업로드 중입니다.
+              </div>
+            </div>
+          )
+        }
 
         <div className={style["content_button"]}>
           <button
@@ -462,6 +483,7 @@ const Write = () => {
             링크
           </button>
         </div>
+
         {showModal && (
           <Modal
             onClickModal={onClickModal}
@@ -568,6 +590,7 @@ const Write = () => {
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
+                setIsUploading(true);
                 handleSubmit(e);
                 onClickUpload();
               }}
@@ -575,6 +598,17 @@ const Write = () => {
             >
               게시하기
             </div>
+
+            {
+              isUploading && (
+                <div className={style2["upload-feedback-background"]}>
+                  <div className={style2["upload-feedback"]}>
+                    업로드 중입니다.
+                  </div>
+                </div>
+              )
+            }
+
 
             <div className={style["content_button"]}>
               <button
@@ -596,6 +630,7 @@ const Write = () => {
                 링크
               </button>
             </div>
+
             {showModal && (
               <Modal
                 onClickModal={onClickModal}

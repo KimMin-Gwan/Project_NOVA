@@ -188,7 +188,7 @@
   display: flex;
   justify-content: start;
   margin: 0 auto;
-  width: 100%;
+  width: 98%;
   bottom: 0px;
   left: 0px;
   gap: 20px;
@@ -306,6 +306,10 @@
     width: 100%;
     object-fit: cover;
   }
+}
+
+.fake-buttons{
+  width: 57px
 }
 
 .modal-buttons {
@@ -475,7 +479,6 @@
   border-radius: 12px;
   box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.08);
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.6) 100%);
-
 }
 
 .section_title {
@@ -500,3 +503,60 @@
   margin: 20px 0;
   color: #333;
 }
+
+.submit-button-wrapper{
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+
+.submit-button{
+  padding: 10px 50px;
+  border-radius: 10px;
+  background-color: #8ebbff;
+  border: 2px solid #b8d4ff;
+  box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.08);
+  font-size: 16px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.submit-button:hover{
+  background-color: #78aeff;
+}
+
+
+.upload-feedback-background{
+  background-color: #20202034;
+  position: fixed;
+  z-index: 11000;
+  display: flex;
+  justify-content: start;
+  margin: 0 auto;
+  height: 100%;
+  width: 100%;
+  bottom: 0px;
+  left: 0px;
+  justify-content: center;
+  align-items: center;
+}
+
+.upload-feedback{
+  position: relative;
+  bottom: 15px;
+  color: #fff;
+  font-family: Pretendard;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: -0.35px;
+  background: rgba(0, 0, 0, 0.5); /* 반투명 배경 */
+  padding: 6px 12px;
+  border-radius: 6px;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+
