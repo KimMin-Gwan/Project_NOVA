@@ -349,7 +349,7 @@ const ScheduleDashboard = () => {
               </div>
               <div className="my-dashboard">
                 <div className="left-group">
-                  <span>이번주 컨텐츠</span>
+                  <span>이번주 콘텐츠</span>
                   <span className="num-bias">{numSchedule}</span>
                   <span>개</span>
                 </div>
@@ -379,7 +379,7 @@ const ScheduleDashboard = () => {
             <div className="dashboard-section" style={{paddingBottom: "0px"}}>
               <div className="section-title">
                 <p className="element">
-                  <span className="text-wrapper">컨텐츠 목록</span>
+                  <span className="text-wrapper">콘텐츠 목록</span>
                 </p>
                 <span className="add-schedule" onClick={() => handleNavigate("/explore/schedule")}>
                   일정 탐색

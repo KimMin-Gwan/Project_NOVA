@@ -41,7 +41,7 @@
   overflow-y: auto; /* 세로 스크롤 추가 */
   display: inline-block; /* 크기를 자동 조정 */
   border-radius: 8px; /* 둥근 모서리 */
-  padding-right: 10px; /* 스크롤바와 컨텐츠 간의 여백 추가 */
+  padding-right: 10px; /* 스크롤바와 콘텐츠 간의 여백 추가 */
 }
 
 

@@ -119,7 +119,7 @@ class ContentController:
         
     
     
-    # 뮤직 컨텐츠에서 초기에 갯수 받아오게 하는 부분
+    # 뮤직 콘텐츠에서 초기에 갯수 받아오게 하는 부분
     def get_num_music_content(self, database, request):
         model = ContentModel(database=database)
         

@@ -103,7 +103,7 @@ function TopBar({scrollToSection1, scrollToSection2, scrollToSection3}) {
                 <div className={style["topBar-text-wrapper"]}
                     onClick={()=>scrollToSection2()}
                 >
-                    전용 컨텐츠
+                    전용 콘텐츠
                 </div>
                 <div className={style["topBar-text-wrapper"]}
                     onClick={()=>scrollToSection3()}
@@ -149,7 +149,7 @@ function BrandHighlight() {
                         슈퍼노바, 스트리머와 팬이 하나되는 공간
                     </div>
                     <div className={style["brand-subtitle"]}>
-                        다양한 커뮤니티와 방송 일정을 한눈에 확인하고, 컨텐츠를 공유해보세요!
+                        다양한 커뮤니티와 방송 일정을 한눈에 확인하고, 콘텐츠를 공유해보세요!
                     </div>
                     <div className={style["button-div"]}>
                         <div className={style["button-1"]}
@@ -163,13 +163,13 @@ function BrandHighlight() {
                     </div>
                 </div>
                 <div className={style["brand-highlight-button-wrapper"]}>
-                    <span> 컨텐츠를 즐기러 온 스트리머는! </span>
+                    <span> 콘텐츠를 즐기러 온 스트리머는! </span>
                     <div className={style["brand-highlight-button"]}
                         onClick={() => window.open(url, "_blank")}
                     >
                         <img src={buttonStar} alt="button image" className={style["brand-highlight-button-image"]} />
                         <span>
-                                컨텐츠 클럽 바로가기
+                                콘텐츠 클럽 바로가기
                         </span>
                     </div>
                 </div>
@@ -253,7 +253,7 @@ function AppServices1({targetRef}){
             tag1: "스트리밍",
             tag2: "일정",
             title: "방송 일정과 알림 기능",
-            detail: "스트리머의 방송 일정을 확인하고 다양한 컨텐츠를 탐색해보세요!",
+            detail: "스트리머의 방송 일정을 확인하고 다양한 콘텐츠를 탐색해보세요!",
             image: intro2,
             button: "일정 확인하기"
         },
@@ -261,17 +261,17 @@ function AppServices1({targetRef}){
             tag1: "후기",
             tag2: "실시간",
             title: "팬들과 대중의 피드백 공간",
-            detail: "컨텐츠에 대한 다양한 생각을 실시간으로 공유해요!",
+            detail: "콘텐츠에 대한 다양한 생각을 실시간으로 공유해요!",
             image: intro3,
-            button: "컨텐츠 공유하기"
+            button: "콘텐츠 공유하기"
         },
         {
             tag1: "탐색",
-            tag2: "컨텐츠",
-            title: "등록된 컨텐츠를 탐색하고 추가하기",
-            detail: "누구나 최애의 컨텐츠를 등록하거나 탐색할 수 있어요!",
+            tag2: "콘텐츠",
+            title: "등록된 콘텐츠를 탐색하고 추가하기",
+            detail: "누구나 최애의 콘텐츠를 등록하거나 탐색할 수 있어요!",
             image: intro4,
-            button: "컨텐츠 공유하기"
+            button: "콘텐츠 공유하기"
         },
     ]
 
@@ -297,8 +297,8 @@ function AppServices1({targetRef}){
 }
 
 function AppServices2({targetRef}) {
-    const title = "SUPERNOVA에서만 제공하는 스트리밍 전용 컨텐츠";
-    const subtitle = "지원되는 플랫폼에서 스트리밍 하는 스트리머들은 누구나 사용가능!\n  SUPERNOVA의 스트리밍 전용 컨텐츠를 시청자와 함께 지금 바로 즐겨보세요!"
+    const title = "SUPERNOVA에서만 제공하는 스트리밍 전용 콘텐츠";
+    const subtitle = "지원되는 플랫폼에서 스트리밍 하는 스트리머들은 누구나 사용가능!\n  SUPERNOVA의 스트리밍 전용 콘텐츠를 시청자와 함께 지금 바로 즐겨보세요!"
 
     let cards = [
         {

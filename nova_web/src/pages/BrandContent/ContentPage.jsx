@@ -365,8 +365,8 @@ function Stopwatch({
 
 
 function IntroComponent({setStart}){
-  const title = "SUPERNOVA 컨텐츠 클럽에 오신걸 환영합니다.";
-  const subtitle = "시청자와 함께 여러가지 컨텐츠를 즐겨보세요!";
+  const title = "SUPERNOVA 콘텐츠 클럽에 오신걸 환영합니다.";
+  const subtitle = "시청자와 함께 여러가지 콘텐츠를 즐겨보세요!";
 
 
   const fetchChzzkAPI= async () => {
@@ -447,7 +447,7 @@ function ConnectedComponent({
 }) {
   const swiperRef = useRef(null); // Swiper 인스턴스를 참조하기 위한 Ref 생성
   const pageTitle = "어서오세요!";
-  const subTitle = "화면 오른쪽에서 원하는 컨텐츠로 선택하세요!";
+  const subTitle = "화면 오른쪽에서 원하는 콘텐츠로 선택하세요!";
   const [duration, setDuration] = useState(0); // 5초
 
   const pages = [
@@ -591,7 +591,7 @@ function WatiingRoomComponent({
 }){
   const [syncFlag, setSyncFlag] = useState(false);
   const pageTitle = "닉네임1234님 어서오세요!";
-  const subTitle = "화면 오른쪽에서 원하는 컨텐츠로 선택하세요!";
+  const subTitle = "화면 오른쪽에서 원하는 콘텐츠로 선택하세요!";
 
   const howToUse = [
     "1. 실제 스트리밍 창 (치지직, SOOP 등)을 크롬을 사용하여 입장합니다.",
@@ -1495,7 +1495,7 @@ function MusicGuessorComponent({
 
   const title = "뮤직게서";
   const howToUse =[
-    "1. 노래 듣고 정답을 맞추는 컨텐츠입니다.",
+    "1. 노래 듣고 정답을 맞추는 콘텐츠입니다.",
     "2. 시청자는 채팅창에 정답을 입력합니다.",
     "3. 예시: 정답 노래이름",
     "4. 스트리머는 화면 하단에 정답을 입력합니다.",

@@ -298,7 +298,7 @@ const ScheduleMakePage = () => {
               <div className={style["schedule-make-info-title"]}>주의사항</div>
               <span>1. 작성된 콘텐츠 일정은 스트리머 요청으로 삭제될 수 있습니다.</span>
               <span>2. 악의적의 의도로 콘텐츠 일정을 작성할 경우 커뮤니티 지침에 따라 제제될 수 있습니다.</span>
-              <span>3. 작성된 컨텐츠 일정은 대상 스트리머와 작성자가 수정할 수 있습니다.</span>
+              <span>3. 작성된 콘텐츠 일정은 대상 스트리머와 작성자가 수정할 수 있습니다.</span>
             </div>
           </div>
         </DesktopLayout>
@@ -366,7 +366,7 @@ const ScheduleMakePage = () => {
                 <div className={style["schedule-make-info-title"]}>주의사항</div>
                 <span>1. 작성된 콘텐츠 일정은 스트리머 요청으로 삭제될 수 있습니다.</span>
                 <span>2. 악의적의 의도로 콘텐츠 일정을 작성할 경우 커뮤니티 지침에 따라 제제될 수 있습니다.</span>
-                <span>3. 작성된 컨텐츠 일정은 대상 스트리머와 작성자가 수정할 수 있습니다.</span>
+                <span>3. 작성된 콘텐츠 일정은 대상 스트리머와 작성자가 수정할 수 있습니다.</span>
               </div>
           </div>
         </div>

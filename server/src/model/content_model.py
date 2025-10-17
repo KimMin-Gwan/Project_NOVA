@@ -75,7 +75,7 @@ class ContentModel(BaseModel):
         self.__meta_data = {}
 
 
-    # 뮤직 컨텐츠에서 뮤직의 갯수를 알아야 문제 갯수를 정할 수 있음
+    # 뮤직 콘텐츠에서 뮤직의 갯수를 알아야 문제 갯수를 정할 수 있음
     def get_num_music_content( self):
         music_datas = self._database.get_datas_with_key(target="content", key="type", key_datas=["music"])
         
@@ -103,7 +103,7 @@ class ContentModel(BaseModel):
         self.__meta_data = dict_data
         return 
 
-    # 노래 맞추기 컨텐츠 불러오는곳
+    # 노래 맞추기 콘텐츠 불러오는곳
     # type은 노래 타입임. 대충 무슨 장르, 특징 같은거
     def get_music_content(
             self, data_payload

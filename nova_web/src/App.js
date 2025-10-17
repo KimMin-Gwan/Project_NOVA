@@ -111,7 +111,7 @@ function App() {
       <Route path="/search" element={<SearchPage />}></Route>
       <Route path="/search_result" element={<SearchResultPage />}></Route>
 
-      {/* 컨텐츠  페이지 */}
+      {/* 콘텐츠  페이지 */}
       <Route path="/" element={<ScheduleDashboard />}></Route>
       <Route path="/explore/schedule" element={<ScheduleExplore />}></Route>
       <Route path="/schedule/make_new" element={<ScheduleMakePage/>}>

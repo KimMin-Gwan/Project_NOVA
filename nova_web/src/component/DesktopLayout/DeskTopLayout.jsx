@@ -69,7 +69,7 @@ export default function DesktopLayout({ children }) {
         alt: "write_feed"
     },
     {
-        title: "컨텐츠 일정 등록",
+        title: "콘텐츠 일정 등록",
         end_point : "/schedule/make_new",
         alt: "schedule_make_new"
     }
@@ -128,7 +128,7 @@ export default function DesktopLayout({ children }) {
                 alt: "terms_page"
             },
             {
-                title: "컨텐츠 클럽",
+                title: "콘텐츠 클럽",
                 end_point : "/content",
                 alt: "terms_page"
             }
