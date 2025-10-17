@@ -20,6 +20,7 @@ import ScheduleComponentMobile from "../ScheduleExplore/ScheduleComponentMobile"
 import ScheduleDetailMobile from "../../component/ScheduleDetail/ScheduleDetailMobile";
 import ScheduleDetailDekstop from "../../component/ScheduleDetail/ScheduleDetailDesktop";
 import AdComponent from "../../component/AdComponent/AdComponent";
+import ReportModal from "../../component/ReportModal/ReportModal";
 
 export default function SearchResultPage() {
   const isMobile = useMediaQuery('(max-width:1100px)');
@@ -41,6 +42,12 @@ export default function SearchResultPage() {
   const [scheduleData, setScheduleData] = useState([]);
   let [isLoading, setIsLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
+  const [reportModal, setReportModal] = useState(false);
+  const [targetFeed, setTargetFeed] = useState({fid:""});
+  const handleReport = (target) => {
+      setTargetFeed(target);
+      setReportModal(true);
+  }
 
   // 페이지네이션 키
   const [feedNextKey, setFeedNextKey] = useState(-1);
@@ -213,6 +220,11 @@ export default function SearchResultPage() {
   if(isMobile){
     return (
       <div className="container search_result_page">
+        {
+            reportModal && (
+                <ReportModal type={"feed"} target={targetFeed} toggleReportOption={setReportModal} />
+            )
+        }
         <Header />
         <div className="top-bar ">
           <div
@@ -240,12 +252,10 @@ export default function SearchResultPage() {
             />
         }
         <Tabs activeIndex={activeIndex} handleClick={handleClick} onClickType={onClickType} />
-        {
-          /**
-           * {type === "comment" && <Comments comments={comments} isLoading={isLoading} />}
-           */
-        }
-        {type === "post" && <FeedSection feedData={feedData} setFeedData={setFeedData} isLoading={isLoading} /> }
+        {type === "post" && 
+        <FeedSection feedData={feedData} setFeedData={setFeedData} isLoading={isLoading} 
+          onClickComponent={toggleDetailOption} handleReport={handleReport}
+          /> }
         {type === "schedule" && <ScheduleListMobile toggleDetailOption={toggleDetailOption} scheduleData={scheduleData}
         />}
         <div ref={targetRef} style={{ height: "1px" }}></div>
@@ -256,6 +266,11 @@ export default function SearchResultPage() {
     return(
       <DesktopLayout>
         <div className={style["desktop_search_result_page_outer_frame"]}>
+            {
+                reportModal && (
+                    <ReportModal type={"feed"} target={targetFeed} toggleReportOption={setReportModal} />
+                )
+            }
           <div className={style["desktop_search_result_page_inner_frame"]}>
           <div className={style["desktop-search-meta-data-wrapper"]}>
             <SearchBoxDesktop
@@ -294,7 +309,12 @@ export default function SearchResultPage() {
           <div
             style={{width: type == "post" ? "800px" : "1020px"}}
           >
-            {type === "post" && <FeedSection feedData={feedData} setFeedData={setFeedData} isLoading={isLoading} /> }
+            {type === "post" && <FeedSection 
+                feedData={feedData} setFeedData={setFeedData}
+                isLoading={isLoading}
+                 onClickComponent={toggleDetailOption} 
+                handleReport={handleReport}
+                /> }
             {type === "schedule" && (
               scheduleData.length === 0 ? (
                 <div className={style["none_schedule_frame"]}>
