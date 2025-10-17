@@ -9,7 +9,6 @@ import SignUp from "./pages/SignUp/SignUp.js";
 import Temrs from "./pages/Temrs/Temrs.js";
 import FindPw from "./pages/FindPw/FindPw.js";
 import FindPwChange from "./pages/FindPw/FindPwChange.js";
-import FeedList from "./pages/FeedList/FeedList.js";
 import Write from "./pages/Write/Write.js";
 import SearchPage from "./pages/SearchPage/SearchPage.js";
 import SearchResultPage from "./pages/SearchResultPage/SearchResultPage.js";
@@ -22,7 +21,7 @@ import NewFeedDetail from "./pages/FeedDetail/NewFeedDetail.js";
 import BrandPage from "./pages/BrandPage/brandPage.jsx";
 import ContentPage from "./pages/BrandContent/ContentPage.jsx";
 import ContentTestPage from "./pages/BrandContent/ContentTestPage.jsx";
-import NewHomePage from "./pages/NewHomePage/NewHomePage.jsx";
+import PostBoard from "./pages/PostBoard/PostBoard.jsx";
 import SubmitNewBiasPage from "./pages/SubmitNewBias/SubmitNewBias.jsx";
 import ErrorPage from "./pages/error_page.js";
 import NotYet from "./pages/NotYet.jsx";
@@ -95,14 +94,6 @@ function App() {
       <Route path="/report" element={<ReportPage />} />
       {/* <Route path="/notice/:nid" element={<Notice />} /> */}
 
-      {/* 피드 페이지 */}
-      <Route path="/write_feed" element={<Write />}>
-        <Route path=":fid" element={<Write />}></Route>
-      </Route>
-      {/*<Route path="/feed_list" element={<FeedList brightMode={brightMode} />} ></Route>*/}
-      {/*<Route path="/feed_list/:fid" element={<FeedList />}></Route>*/}
-      {/*<Route path="/feed_detail/:fid" element={<FeedDetail />}></Route>*/}
-
       {/* 스트리머 관련 페이지*/}
       <Route path="/follow_page" element={<NewFollowPage/>}></Route>
       <Route path="/submit_new" element={<SubmitNewBiasPage/>} />
@@ -126,9 +117,12 @@ function App() {
       <Route path="*" element={<ErrorPage/>} />
       <Route path="/temp" element={<NotYet/>} />
 
-      {/* 홈 화면 */}
-      <Route path="/post_board" element={<NewHomePage/>} />
+      {/* 게시글 */}
+      <Route path="/post_board" element={<PostBoard/>} />
       <Route path="/feed_detail/:fid" element={<NewFeedDetail/>}></Route>
+      <Route path="/write_feed" element={<Write />}>
+        <Route path=":fid" element={<Write />}></Route>
+      </Route>
 
       <Route path="/welcome" element={<BrandPage/>} />
       <Route path="/content" element={<ContentPage/>} />
