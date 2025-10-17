@@ -29,56 +29,60 @@ export default function SearchResultPage() {
   let navigate = useNavigate();
 
   // 검색어 상태
-  let [searchWord, setSearchWord] = useState(keyword);
-  let [searchHistory, setSearchHistory] = useState([]);
+  const [searchWord, setSearchWord] = useState(keyword);
+  const [searchHistory, setSearchHistory] = useState([]);
 
   // 탭 및 데이터 타입 상태
   const [activeIndex, setActiveIndex] = useState(0);
   const [type, setType] = useState("post");
 
   // 데이터 관련 상태
-  let [feedData, setFeedData] = useState([]);
-  //const [comments, setComments] = useState([]);
+  const [feedData, setFeedData] = useState([]);
   const [scheduleData, setScheduleData] = useState([]);
-  let [isLoading, setIsLoading] = useState(true);
-  const [hasMore, setHasMore] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasMore, setHasMore] = useState(false);
   const [reportModal, setReportModal] = useState(false);
   const [targetFeed, setTargetFeed] = useState({fid:""});
+  const [initialLoaded, setInitialLoaded] = useState(false);
+
   const handleReport = (target) => {
       setTargetFeed(target);
       setReportModal(true);
   }
-
   // 페이지네이션 키
   const [feedNextKey, setFeedNextKey] = useState(-1);
-  //const [commentNextKey, setCommentNextKey] = useState(-1);
   const [scheduleKey, setScheduleKey] = useState(-1);
-
-  useEffect(() => {
-    let historyList = JSON.parse(localStorage.getItem("history")) || [];
-    setSearchHistory(historyList);
-  }, []);
 
   useEffect(() => {
     setIsLoading(true);
   }, [activeIndex]);
 
   useEffect(() => {
+    if (type == "post"){
+      if(!feedData){ 
+        fetchSearchKeyword();
+      }
+    } else if (type = "schedule") {
+      if(!scheduleData){
+        fetchScheduleKeyword();
+      }
+    }
+  }, [type]);
+
+  const InitSearchResult = async () => {
     setFeedNextKey(-1);
-    //setCommentNextKey(-1);
     setFeedData([]);
-    //setComments([]);
+    setScheduleKey(-1);
+    setScheduleData([]);
 
     if (type === "post") {
-      fetchSearchKeyword();
+      await fetchSearchKeyword();
     } 
-    //else if (type === "comment") {
-      //fetchCommentKeyword();
-    //} 
     else if (type === "schedule") {
-      fetchScheduleKeyword();
+      await fetchScheduleKeyword();
     } 
-  }, [type]);
+    setInitialLoaded(true);
+  }
 
   async function fetchSearchKeyword() {
     await mainApi
@@ -92,19 +96,6 @@ export default function SearchResultPage() {
         setIsLoading(false);
       });
   }
-
-
-//  async function fetchCommentKeyword() {
-    //await mainApi
-      //.get(`feed_explore/search_comment_with_keyword?keyword=${keyword}&key=${commentNextKey}`)
-      //.then((res) => {
-        //setComments((prev) => [...prev, ...res.data.body.feeds]);
-        //setHasMore(res.data.body.feeds.length > 0);
-        //setIsLoading(false);
-        //setCommentNextKey(res.data.body.key);
-      //});
-  //}
-
 
   async function fetchScheduleKeyword() {
     await mainApi
@@ -120,7 +111,7 @@ export default function SearchResultPage() {
   }
 
   function loadMoreCallBack() {
-    if (!hasMore || isLoading) return;
+    if (!initialLoaded || hasMore || isLoading) return;
 
     if (type === "post") {
       fetchSearchKeyword();
@@ -183,15 +174,9 @@ export default function SearchResultPage() {
     if (data === "게시글"){
       setType("post");
     }
-    //else if (data === "댓글"){
-      //setType("comment");
-    //}
     else if (data === "콘텐츠"){
       setType("schedule");
     }
-    //else if (data === "일정 번들"){
-      //setType("schedule_bundle");
-    //}
     else{
       setType("post");
     }
@@ -216,6 +201,94 @@ export default function SearchResultPage() {
       setTargetSchedule(targetSchedule);
       setShowScheduleMoreOption(!showScheduleMoreOption);
   }
+
+  const onClickComponent = (feed) => {
+      let currentScroll = 0;
+
+      if (isMobile){
+          currentScroll = window.scrollY;
+      }else{
+          const scrollContainer = document.getElementById("desktop-scroll-container");
+          currentScroll = scrollContainer ? scrollContainer.scrollTop : window.scrollY;
+      }
+
+      // ✅ 세션 저장
+      sessionStorage.setItem(
+          "postBoardState",
+          JSON.stringify({
+          feedData,
+          nextData,
+          scheduleData,
+          nextData,
+          activeIndex,
+          type,
+          scrollY: currentScroll,
+          })
+      );
+
+      // ✅ 페이지 이동
+      navigate(`/feed_detail/${feed.fid}`, {
+          state: { fromBoard: true } 
+      });
+  }
+
+  useEffect(() => {
+    let historyList = JSON.parse(localStorage.getItem("history")) || [];
+    setSearchHistory(historyList);
+
+    if(!isMobile){
+        const savedState = sessionStorage.getItem("postBoardState");
+        if (savedState) {
+            const parsed = JSON.parse(savedState);
+
+            setFeedData(parsed.feedData);
+            setFeedNextKey(parsed.nextData);
+            setScheduleData(parsed.scheduleData);
+            setScheduleKey(parsed.nextData);
+            setActiveIndex(parsed.activeIndex);
+            setType(parsed.type);
+
+            // 복원 후 스크롤 이동
+            setTimeout(() => {
+                const scrollContainer = document.getElementById("desktop-scroll-container");
+                if (scrollContainer) {
+                    scrollContainer.scrollTop = parsed.scrollY || 0;  // ✅ 여기서 내부 컨테이너 scrollTop 설정
+                } else {
+                    window.scrollTo(0, parsed.scrollY || 0);  // fallback
+                }
+            }, 0);
+
+            sessionStorage.removeItem("postBoardState");
+            setInitialLoaded(true);
+        } else {
+          InitSearchResult();
+        }
+    }else{
+        const savedState = sessionStorage.getItem("postBoardState");
+        if (savedState) {
+            const parsed = JSON.parse(savedState);
+
+            setFeedData(parsed.feedData);
+            setFeedNextKey(parsed.nextData);
+            setScheduleData(parsed.scheduleData);
+            setScheduleKey(parsed.nextData);
+            setActiveIndex(parsed.activeIndex);
+            setType(parsed.type);
+
+            // 복원 후 스크롤 이동
+            setTimeout(() => window.scrollTo(0, parsed.scrollY || 0), 0);
+            sessionStorage.removeItem("postBoardState");
+            setInitialLoaded(true);
+        } else {
+          InitSearchResult();
+        }
+    }
+
+    return () => {
+        setFeedData([]);
+    };
+}, []);
+
 
   if(isMobile){
     return (
@@ -254,7 +327,7 @@ export default function SearchResultPage() {
         <Tabs activeIndex={activeIndex} handleClick={handleClick} onClickType={onClickType} />
         {type === "post" && 
         <FeedSection feedData={feedData} setFeedData={setFeedData} isLoading={isLoading} 
-          onClickComponent={toggleDetailOption} handleReport={handleReport}
+          onClickComponent={onClickComponent} handleReport={handleReport}
           /> }
         {type === "schedule" && <ScheduleListMobile toggleDetailOption={toggleDetailOption} scheduleData={scheduleData}
         />}
@@ -312,7 +385,7 @@ export default function SearchResultPage() {
             {type === "post" && <FeedSection 
                 feedData={feedData} setFeedData={setFeedData}
                 isLoading={isLoading}
-                 onClickComponent={toggleDetailOption} 
+                 onClickComponent={onClickComponent} 
                 handleReport={handleReport}
                 /> }
             {type === "schedule" && (
