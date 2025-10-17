@@ -76,7 +76,6 @@ hr {
 
 .fullWidthComponent {
   width: calc(100% - 40px);
-  height: 134px;
   background-color: white;
   display: flex;
   align-items: center;
