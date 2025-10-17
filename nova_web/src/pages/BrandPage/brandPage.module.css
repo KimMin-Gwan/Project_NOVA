@@ -83,6 +83,30 @@
     cursor: pointer;
 }
 
+.sign-button-wrapper{
+    display: flex;
+    align-items: center;
+    padding-right: 60px;
+    gap: 17px;
+}
+
+.sign-up-button{
+    display: flex;
+    width: 91px;
+    height: 45px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 12px;
+    color: #111;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.sign-up-button:hover{
+    background: #d9f0ff;
+}
+
 .brand-highlight {
     display: flex;
     flex-direction: column;

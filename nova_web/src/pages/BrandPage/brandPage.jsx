@@ -51,6 +51,8 @@ export default function BrandPage() {
     //const [loading, setLoading] = useState(true);
     //const brandRef = useRef(null);
 
+
+
     const rights = " © 2025 TEAM SUPERNOVA. All rights reserved."
     const info =" 대표 : 김민관 | 이메일: youths0828@naver.com"
     return (
@@ -84,6 +86,35 @@ export default function BrandPage() {
 
 
 function TopBar({scrollToSection1, scrollToSection2, scrollToSection3}) {
+    const [isLogin, setIsLogin] = useState(false);
+
+    const handleFetch = () => {
+        fetch("https://supernova.io.kr/home/is_valid", {
+        credentials: "include", // 쿠키를 함께 포함한다는 것
+        })
+        .then((response) => {
+            if (!response.ok) {
+            if (response.status === 401) {
+                setIsLogin(false);
+                return null;
+            } else {
+                throw new Error(`status: ${response.status}`);
+            }
+            }
+            return response.json();
+        })
+        .then((data) => {
+            if (data) {
+                setIsLogin(data.body.result);
+            }
+        })
+        .catch((error) => {
+        });
+    }
+
+  useEffect(() => {
+    handleFetch();
+  }, []);
 
   const navigate = useNavigate();
 
@@ -112,14 +143,22 @@ function TopBar({scrollToSection1, scrollToSection2, scrollToSection3}) {
                 </div>
             </div>
             <div className={style["topBar-div-2"]}>
-                <div className={style["topBar-button-1"]}
-                    onClick={() => handleNavigate("/signup")}>
-                    회원가입
-                </div>
-                <div className={style["topBar-button-2"]}
-                    onClick={() => handleNavigate("/novalogin")}>
-                로그인
-                </div>
+                {isLogin ? (
+                  <div className={style["sign-up-button"]}
+                    onClick={()=>{handleNavigate('/mypage')}}
+                  >마이페이지</div>
+                ):(
+                  <>
+                    <div className={style["topBar-button-1"]}
+                        onClick={() => handleNavigate("/signup")}>
+                        회원가입
+                    </div>
+                    <div className={style["topBar-button-2"]}
+                        onClick={() => handleNavigate("/novalogin")}>
+                    로그인
+                    </div>
+                  </>
+                )}
             </div>
         </div>
     );
