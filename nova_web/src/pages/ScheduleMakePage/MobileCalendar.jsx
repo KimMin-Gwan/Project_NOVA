@@ -189,7 +189,7 @@ const MobileCalender = ({
                 todayEffect={todayEffect}
                 body={item.body}
                 dayState={day}
-                trySelectDay={trySelectDay}
+                trySelectDay={onClickSelectDay}
                 />
               ))}
             </div>
