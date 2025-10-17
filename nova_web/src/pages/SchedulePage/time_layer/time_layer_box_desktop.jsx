@@ -163,23 +163,15 @@ function ScheduleExposeType( {type} ){
 
     if(type === "추천"){
         return (
-            <div className={style["schedule-component-recommend-outer"]}>
-                <div className={style["schedule-component-state-white-background"]}>
-                    <div className={style["schedule-component-recommend-inner"]}>
-                        추천
-                    </div>
-                </div>
+            <div className={style["schedule-component-recommend"]}>
+                추천
             </div>
         );
     }
     else{
         return (
-            <div className={style["schedule-component-subscribe-outer"]}>
-                <div className={style["schedule-component-state-white-background"]}>
-                    <div className={style["schedule-component-subscribe-inner"]}>
-                        구독
-                    </div>
-                </div>
+            <div className={style["schedule-component-subscribe"]}>
+                구독
             </div>
         );
     }
