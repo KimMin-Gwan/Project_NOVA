@@ -265,3 +265,39 @@
     font-size: 12px;
     margin-top: 4px;
 }
+
+.platform-button-wrapper {
+    display: flex;
+    align-self: stretch;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.platform-button {
+    width: 50%;
+    padding: 8px 0px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+    background-color: #ffffff;
+    transition: all 0.2s ease;
+    font-size: 15px;
+    font-weight: 5400;
+    cursor: pointer;
+}
+
+.platform-button:hover {
+}
+
+
+.platform-button-selected-SOOP {
+  border-color: #0E4194;
+  background-color: #bcd6ff;
+}
+
+.platform-button-selected-치지직 {
+  border-color: #00FFA3;
+  background-color: #c9ffeb;
+}

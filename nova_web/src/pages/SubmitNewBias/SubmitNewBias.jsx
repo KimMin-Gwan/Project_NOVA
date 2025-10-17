@@ -246,36 +246,65 @@ function SubmitNewBias() {
 
                 {/* 입력 폼 */}
                 <div className={style["default-container"]}>
-                    <div className={style["container-title-wrapper"]}>
-                        <div className={style["container-title"]}>{TEXT.formTitle}</div>
-                    </div>
-                    {formFields.map((field, index) => {
-                        const key = ["name", "platform", "info", "email"][index];
-                        return (
-                            <div className={style["input-section"]} key={index}>
-                            <div className={style["input-section-title"]}>{field.label}</div>
-                            {field.multiline ? (
-                                <textarea
-                                className={style["multi-line-input-box"]}
-                                placeholder={field.placeholder}
-                                value={form[key]}
-                                onChange={handleChange(key)}
-                                />
-                            ) : (
-                                <input
-                                className={style["single-line-input-box"]}
-                                placeholder={field.placeholder}
-                                value={form[key]}
-                                onChange={handleChange(key)}
-                                />
-                            )}
-                            {errors[key] && (
-                                <div className={style["error-message"]}>{errors[key]}</div>
-                            )}
+                <div className={style["container-title-wrapper"]}>
+                    <div className={style["container-title"]}>{TEXT.formTitle}</div>
+                </div>
+                {formFields.map((field, index) => {
+                    const key = ["name", "platform", "info", "email"][index];
+
+                    // 플랫폼 필드일 경우 버튼 선택으로 처리
+                    if (key === "platform") {
+                    return (
+                        <div className={style["input-section"]} key={index}>
+                        <div className={style["input-section-title"]}>{field.label}</div>
+                        <div className={style["platform-button-wrapper"]}>
+                            {["치지직", "SOOP"].map((platformOption) => (
+                            <div
+                                key={platformOption}
+                                className={`${style["platform-button"]} ${
+                                    form.platform === platformOption ? style[`platform-button-selected-${platformOption}`] : ""
+                                }`}
+                                onClick={() => {
+                                    setForm(prev => ({ ...prev, platform: platformOption }));
+                                    setErrors(prev => ({ ...prev, platform: "" }));
+                                }}
+                            >
+                                {platformOption}
                             </div>
-                        );
-                    })}
-                    
+                            ))}
+                        </div>
+                        {errors.platform && (
+                            <div className={style["error-message"]}>{errors.platform}</div>
+                        )}
+                        </div>
+                    );
+                    }
+
+                    // 나머지 일반 입력 필드
+                    return (
+                    <div className={style["input-section"]} key={index}>
+                        <div className={style["input-section-title"]}>{field.label}</div>
+                        {field.multiline ? (
+                        <textarea
+                            className={style["multi-line-input-box"]}
+                            placeholder={field.placeholder}
+                            value={form[key]}
+                            onChange={handleChange(key)}
+                        />
+                        ) : (
+                        <input
+                            className={style["single-line-input-box"]}
+                            placeholder={field.placeholder}
+                            value={form[key]}
+                            onChange={handleChange(key)}
+                        />
+                        )}
+                        {errors[key] && (
+                        <div className={style["error-message"]}>{errors[key]}</div>
+                        )}
+                    </div>
+                    );
+                })}
                 </div>
 
                 {/* 조건 */}
