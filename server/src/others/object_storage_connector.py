@@ -473,7 +473,7 @@ class ImageDescriper:
         URL은 항상 sid.png
         """
         try:
-            pil_image = self._normalize_image(image)
+            pil_image = _normalize_image(image)
 
             temp_path = f"{self.__schedule_temp_path}/{sid}.png"
             pil_image.save(temp_path, "PNG")
