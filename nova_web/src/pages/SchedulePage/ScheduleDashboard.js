@@ -126,7 +126,7 @@ const ScheduleDashboard = () => {
     yieldDate.setDate(leftTargetDate.getDate() - 1); // 날짜를 계산
     setLeftTargetDate(yieldDate);
 
-    const dateString = yieldDate.toISOString().split("T")[0].replace(/-/g, "/");
+    const dateString = yieldDate.toLocaleString('ko-KR').replace(/\./g, '/').replace(/\s/g, '').split('/오')[0];
 
     const newSchedule = await fetchScheduleDataWithDate(dateString)
     setScheduleData((prev) => [newSchedule, ...prev])
@@ -140,7 +140,7 @@ const ScheduleDashboard = () => {
     yieldDate.setDate(leftTargetDate.getDate() - 1); // 날짜를 계산
     setLeftTargetDate(yieldDate);
 
-    const dateString = yieldDate.toISOString().split("T")[0].replace(/-/g, "/");
+    const dateString = yieldDate.toLocaleString('ko-KR').replace(/\./g, '/').replace(/\s/g, '').split('/오')[0];
 
     const newSchedule = await fetchScheduleDataWithDate(dateString)
     setScheduleData((prev) => [newSchedule, ...prev])
@@ -184,7 +184,7 @@ const ScheduleDashboard = () => {
     yieldDate.setDate(rightTargetDate.getDate() + 1);
     setRightTargetDate(yieldDate);
 
-    const dateString = yieldDate.toISOString().split("T")[0].replace(/-/g, "/");
+    const dateString = yieldDate.toLocaleString('ko-KR').replace(/\./g, '/').replace(/\s/g, '').split('/오')[0];
     const newSchedule = await fetchScheduleDataWithDate(dateString);
 
     setScheduleData((prev) => {
@@ -239,7 +239,7 @@ const ScheduleDashboard = () => {
 
 
   //useEffect(() => {
-    //const dateString = targetDate.toISOString().split("T")[0]; // 'YYYY-MM-DD' 형식으로 변환
+    //const dateString = targetDate.toLocaleString('ko-KR').split("T")[0]; // 'YYYY-MM-DD' 형식으로 변환
     //fetchTargetMonthWeek(dateString);
     ////fetchTimeChartData(dateString);
     ////fetchScheduleDataWithDate(dateString);
@@ -252,7 +252,7 @@ const ScheduleDashboard = () => {
   }
 
   useEffect(() => {
-    const dateString = targetDate.toISOString().split("T")[0].replace(/-/g, "/");
+    const dateString = targetDate.toLocaleString('ko-KR').replace(/\./g, '/').replace(/\s/g, '').split('/오')[0];
     fetchTargetMonthWeek(dateString);
     initDataSetting(dateString)
   }, []);

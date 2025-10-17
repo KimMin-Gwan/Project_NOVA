@@ -40,7 +40,7 @@ const BiasPage = () => {
     }
 
     const fetchScheduleData = async ({bid, date}) => {
-        const strDate = date.toISOString().split("T")[0];
+        const strDate = date.toLocaleString('ko-KR').replace(/\./g, '-').replace(/\s/g, '').split('-오')[0];
         const res = await mainApi.get(`/time_table_server/get_bias_page_schedule?bid=${bid}&date=${strDate}`);
         const response = res.data.body;
         return response
