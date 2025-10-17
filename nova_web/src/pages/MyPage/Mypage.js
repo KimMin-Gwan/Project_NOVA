@@ -6,13 +6,6 @@ import style3 from "./MypageDesktop.module.css";
 import user_icon from "./../../img/user_profile.svg";
 import mainApi from "../../services/apis/mainApi";
 import Feed from "../../component/feed";
-import arrow from "./../../img/comment_arrow.svg";
-import reArrow from "./../../img/recomment.svg";
-
-import reArrow1 from "./../../img/reArrow1.svg";
-import reArrow2 from "./../../img/reArrow2.svg";
-import reArrow3 from "./../../img/reArrow3.svg";
-import reArrow4 from "./../../img/reArrow4.svg";
 import MyPageLoading from "../LoadingPage/MypageLoading";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import DesktopLayout from "../../component/DesktopLayout/DeskTopLayout";

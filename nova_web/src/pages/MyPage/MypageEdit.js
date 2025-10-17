@@ -23,6 +23,8 @@ function MyPage() {
   let [newPassword, setNewPassword] = useState("");
   let [checkPassword, setCheckPassword] = useState("");
   let [myProfile, setMyProfile] = useState();
+
+  const [isUploading, setIsUploading] = useState(false);
   const [image, setImage] = useState(null);
   const fileInputRef = useRef(null);
   const [imagePre, setImagePre] = useState(null);
@@ -212,7 +214,7 @@ function MyPage() {
 
   const profile = `https://kr.object.ncloudstorage.com/nova-profile-bucket/${myProfile.uid}.png`;
 
-  const handleFileChange = (event) => {
+  const handleFileChange = async (event) => {
     const formData = new FormData();
     const file = event.target.files[0];
     formData.append("image", file);
@@ -222,13 +224,14 @@ function MyPage() {
       setImage(imageUrl);
     }
 
-    fetch("https://supernova.io.kr/user_home/try_change_profile_photo", {
+    await fetch("https://supernova.io.kr/user_home/try_change_profile_photo", {
       method: "POST",
       credentials: "include",
       body: formData,
     })
       .then((res) => {
         res.json();
+        setIsUploading(false);
       })
       .then((data) => {
         alert("완료");
@@ -273,9 +276,22 @@ function MyPage() {
     }
   };
 
+
+
   if (isMobile){
     return (
       <div className={`${style["container"]} ${style["edit-container"]}`}>
+
+        {
+          isUploading && (
+            <div className={style["upload-feedback-background"]}>
+              <div className={style["upload-feedback"]}>
+                업로드 중입니다.
+              </div>
+            </div>
+          )
+        }
+
         <div className={style.top_area}>
           <p
             className={style.backword}
@@ -301,6 +317,7 @@ function MyPage() {
               accept="image/*"
               ref={fileInputRef}
               onChange={(e) => {
+                setIsUploading(true);
                 handleFileChange(e);
                 handlePreview(e);
               }}
@@ -422,7 +439,7 @@ function MyPage() {
         <button className={`${style["logout_box"]}`} onClick={handleLogout}>
           로그아웃
         </button>
-        <div style={{height: "100px"}}>
+        <div style={{height: "130px"}}>
         </div>
         <button className={style["withdrawal_button"]} onClick={handleWithdrawal}>
           회원 탈퇴
@@ -579,7 +596,7 @@ function MyPage() {
         <button className={`${style["logout_box"]}`} onClick={handleLogout}>
           로그아웃
         </button>
-        <div style={{height: "100px"}}>
+        <div style={{height: "130px"}}>
 
         </div>
         <button className={style["withdrawal_button"]} onClick={handleWithdrawal}>
