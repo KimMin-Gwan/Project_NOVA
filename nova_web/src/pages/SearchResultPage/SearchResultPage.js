@@ -40,7 +40,7 @@ export default function SearchResultPage() {
   const [feedData, setFeedData] = useState([]);
   const [scheduleData, setScheduleData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [hasMore, setHasMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
   const [reportModal, setReportModal] = useState(false);
   const [targetFeed, setTargetFeed] = useState({fid:""});
   const [initialLoaded, setInitialLoaded] = useState(false);
@@ -59,13 +59,11 @@ export default function SearchResultPage() {
 
   useEffect(() => {
     if (type == "post"){
-      if(!feedData){ 
+      if(hasMore){
         fetchSearchKeyword();
       }
     } else if (type == "schedule") {
-      if(!scheduleData){
-        fetchScheduleKeyword();
-      }
+      fetchScheduleKeyword();
     }
   }, [type]);
 
