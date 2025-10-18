@@ -345,24 +345,43 @@ class TimeTableModel(BaseModel):
         
         return start_week, current_week
     
-    def set_target_date(self, date=datetime.today().strftime("%Y/%m/%d")):
-        today = datetime.strptime(date, "%Y/%m/%d")
-        start_week, current_week = self.__calc_date(today)
-    
-        if start_week > current_week:
-            # 이번 주의 월요일이 today임
-            today = today = today - timedelta(days=today.weekday())
-            start_week, current_week = self.__calc_date(today)
-        
-        # 현재 주가 이번 달 내 몇 번째 주인지 계산합니다.
-        week_in_month = current_week - start_week + 1
-        
-        shorted_year = today.year % 100
-        
-        # 만약 미래에 있는 사람이 2100에 산다면 이 곳의 코드를 고치면 됩니다
-        self.__target_month = f'{shorted_year}년 {today.month}월'
-        self.__target_week = f'{week_in_month}주차'
-        return
+    def set_target_date(self, date: datetime):
+        today = date
+        year = today.year
+        month = today.month
+
+        first_day = today.replace(day=1)
+        first_weekday = first_day.weekday()  # 월=0, ..., 일=6
+
+        if first_weekday <= 2:  # 월/화/수
+            # 1일이 포함된 주가 1주차
+            week1_start = first_day - timedelta(days=first_weekday)
+        else:  # 목/금/토/일
+            # 1일이 포함된 주는 이전 달 마지막 주
+            days_until_next_monday = 7 - first_weekday
+            week1_start = first_day + timedelta(days=days_until_next_monday)
+
+        # date가 1주차 시작일 이전이면, 이전 달 기준으로 재귀 호출
+        if today < week1_start:
+            # 이전 달 구하기
+            if month == 1:
+                prev_month = 12
+                prev_year = year - 1
+            else:
+                prev_month = month - 1
+                prev_year = year
+
+            prev_date = today.replace(year=prev_year, month=prev_month)
+            # 1일로 바꿔서 재귀 호출
+            prev_month_last_day = (prev_date.replace(day=1) + timedelta(days=32)).replace(day=1) - timedelta(days=1)
+            return self.set_target_date(prev_month_last_day)
+
+        # date가 몇 주차인지 계산
+        delta_days = (today - week1_start).days
+        week_in_month = (delta_days // 7) + 1
+
+        self.__target_week = f"{month}월 {week_in_month}주차"
+        return self.__target_week
     
     # 컨트롤러에서 유저가 있는지 확인이 가능하게 하는 부분
     def is_tuser_alive(self):
