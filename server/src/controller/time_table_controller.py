@@ -231,7 +231,6 @@ class TimeTableController:
             
         model.set_bias(bid=data_payload.bid)
         model.set_schedule_ids_in_week(schedule_search_engine=schedule_search_engine, date=data_payload.date)
-        model.is_subscribed()
         model.set_send_form(date=data_payload.date)
         model.set_target_date(date=data_payload.date)
         
