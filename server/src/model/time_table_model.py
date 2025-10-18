@@ -1281,6 +1281,14 @@ class BiasScheduleModel(BaseModel):
         
         return start_week, current_week
     
+    def is_subscribed(self):
+        for schedule in self._schedules:
+            schedule:Schedule=schedule
+            if schedule.sid in self._user.subscribed_sids:
+                schedule.subscribe = True
+            if schedule.uid == self._user.uid or schedule.bid == self._user.verified_bias:
+                schedule.is_owner = True
+        
     
     def get_response_form_data(self, head_parser):
         body = {
