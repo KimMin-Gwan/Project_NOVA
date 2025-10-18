@@ -1239,6 +1239,9 @@ class BiasScheduleModel(BaseModel):
                     "schedule": iso_schedule.get_dict_form_data()
                 }
             )
+
+        pprint(self._send_form)
+            
         return
     
     def __get_isoformat_schedule(self, schedule:Schedule):
