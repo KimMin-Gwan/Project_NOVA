@@ -1249,22 +1249,28 @@ class BiasScheduleModel(BaseModel):
         iso_schedule.datetime=iso_datetime
         return iso_schedule
     
-    def set_target_date(self, date:datetime):
+    def set_target_date(self, date: datetime):
         today = date
-        start_week, current_week = self.__calc_date(today)
-    
-        if start_week > current_week:
-            # 이번 주의 월요일이 today임
-            today = today = today - timedelta(days=today.weekday())
-            start_week, current_week = self.__calc_date(today)
-        
-        # 현재 주가 이번 달 내 몇 번째 주인지 계산합니다.
+
+        # 이번 달의 첫째 날
+        first_day_of_month = today.replace(day=1)
+
+        # 첫째 날 기준 주차와 오늘 기준 주차 계산
+        start_year, start_week = self.__calc_date(first_day_of_month)
+        current_year, current_week = self.__calc_date(today)
+
+        # 연도 경계(12월 말 ~ 1월 초) 보정
+        if current_year > start_year:
+            # ex) 12월 31일인데 다음 해 1주차로 계산된 경우
+            # 올해의 마지막 주차를 구해서 current_week에 더해줌
+            last_week_of_start_year = datetime(start_year, 12, 28).isocalendar()[1]
+            current_week += last_week_of_start_year
+
+        # 이번 달 내에서의 주차 계산
         week_in_month = current_week - start_week + 1
-        
-        shorted_year = today.year % 100
-        
-        # 만약 미래에 있는 사람이 2100에 산다면 이 곳의 코드를 고치면 됩니다
-        self.__target_week = f'{today.month}월 {week_in_month}주차'
+
+        # 월 표시 (12월 등)
+        self.__target_week = f"{today.month}월 {week_in_month}주차"
         return
     
     def __calc_date(self, today:datetime):
