@@ -1231,9 +1231,8 @@ class BiasScheduleModel(BaseModel):
                 if schedule.datetime.date() == current_day.date():
                     target_schedule=schedule
                     
+            pprint(target_schedule.get_dict_form_data())
             iso_schedule=self.__get_isoformat_schedule(schedule=target_schedule)
-            
-            pprint(iso_schedule.get_dict_form_data())
             
             self._send_form.append(
                 {
