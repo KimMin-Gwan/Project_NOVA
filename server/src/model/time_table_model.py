@@ -1254,26 +1254,33 @@ class BiasScheduleModel(BaseModel):
         year = today.year
         month = today.month
 
-        # 1️⃣ 이번 달 1일
         first_day = today.replace(day=1)
         first_weekday = first_day.weekday()  # 월=0, ..., 일=6
 
-        # 2️⃣ 1주차 시작일 결정
         if first_weekday <= 2:  # 월/화/수
-            # 1일 포함 주가 1주차
+            # 1일이 포함된 주가 1주차
             week1_start = first_day - timedelta(days=first_weekday)
         else:  # 목/금/토/일
-            # 1일 포함 주는 이전 달 마지막 주 → 다음 주 월요일이 1주차 시작
+            # 1일이 포함된 주는 이전 달 마지막 주
             days_until_next_monday = 7 - first_weekday
             week1_start = first_day + timedelta(days=days_until_next_monday)
 
-        # 3️⃣ date가 1주차 시작일 이전이면 전 달 마지막 주
+        # date가 1주차 시작일 이전이면, 이전 달 기준으로 재귀 호출
         if today < week1_start:
-            # 전 달 마지막 주차로 처리 (0주차 혹은 -1로 표시 가능)
-            self.__target_week = f"{month}월 이전 달 마지막 주"
-            return self.__target_week
+            # 이전 달 구하기
+            if month == 1:
+                prev_month = 12
+                prev_year = year - 1
+            else:
+                prev_month = month - 1
+                prev_year = year
 
-        # 4️⃣ date가 몇 주차인지 계산
+            prev_date = today.replace(year=prev_year, month=prev_month)
+            # 1일로 바꿔서 재귀 호출
+            prev_month_last_day = (prev_date.replace(day=1) + timedelta(days=32)).replace(day=1) - timedelta(days=1)
+            return self.set_target_date(prev_month_last_day)
+
+        # date가 몇 주차인지 계산
         delta_days = (today - week1_start).days
         week_in_month = (delta_days // 7) + 1
 
