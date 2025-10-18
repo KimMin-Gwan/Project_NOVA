@@ -1227,12 +1227,13 @@ class BiasScheduleModel(BaseModel):
             for schedule in self._schedules:
                 schedule:Schedule=schedule
                 #schedule.datetime = datetime.strptime(schedule.datetime, "%Y-%m-%d %H:%M:%S")
+                pprint(schedule.get_dict_form_data())
                 
                 if schedule.datetime.date() == current_day.date():
                     target_schedule=schedule
                     
             iso_schedule=self.__get_isoformat_schedule(schedule=target_schedule)
-                    
+            pprint(iso_schedule.get_dict_form_data())
             self._send_form.append(
                 {
                     "date": current_day.strftime("%m월 %d일"),
@@ -1288,7 +1289,6 @@ class BiasScheduleModel(BaseModel):
                 schedule.subscribe = True
             if schedule.uid == self._user.uid or schedule.bid == self._user.verified_bias:
                 schedule.is_owner = True
-            print(schedule.get_dict_form_data())
     
     def get_response_form_data(self, head_parser):
         body = {
