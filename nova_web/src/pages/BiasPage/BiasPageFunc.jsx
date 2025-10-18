@@ -119,7 +119,7 @@ export const fetchChangeBiasUploadMode = async (bid, nowState) => {
 }
 
 
-export const handleFileChange = (event, bid, setImage) => {
+export const handleFileChange = async (event, bid, setImage) => {
   const formData = new FormData();
   const file = event.target.files[0];
   formData.append("image", file);
@@ -145,5 +145,6 @@ export const handleFileChange = (event, bid, setImage) => {
       alert("실패");
     });
 };
+
 
 

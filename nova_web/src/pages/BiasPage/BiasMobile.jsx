@@ -28,6 +28,7 @@ const BiasPageMobile = ({
     const [isChecked, setIsChecked] = useState(true);
     const [targetSchedule, setTargetSchedule] = useState(null);
     const [showScheduleMoreOption, setShowScheduleMoreOption] = useState(false);
+    const [isUploading, setIsUploading] = useState(false);
 
 
     const [openInput, setOpenInput] = useState(false);
@@ -103,7 +104,7 @@ const BiasPageMobile = ({
         }
     };
 
-    const handlePreview = (e) => {
+    const handlePreview = async (e) => {
         const file = e.target.files[0];
         const reader = new FileReader();
         reader.readAsDataURL(file);
@@ -130,7 +131,15 @@ const BiasPageMobile = ({
             </div>
             <AdComponent type={"link"}/>
 
-
+            {
+                isUploading && (
+                    <div className={style["upload-feedback-background"]}>
+                    <div className={style["upload-feedback"]}>
+                        업로드 중입니다.
+                    </div>
+                    </div>
+                )
+            }
 
             <div className={style["inner-box"]}>
                 <div className={style["inner-box-top-section"]}>
@@ -164,9 +173,11 @@ const BiasPageMobile = ({
                                         type="file"
                                         accept="image/*"
                                         ref={fileInputRef}
-                                        onChange={(e) => {
-                                        handleFileChange(e, targetBias.bid, setImage);
-                                        handlePreview(e);
+                                        onChange={async(e) => {
+                                            setIsUploading(true);
+                                            await handleFileChange(e, targetBias.bid, setImage);
+                                            await handlePreview(e);
+                                            setIsUploading(false);
                                         }}
                                         style={{ display: "none" }} 
                                     />

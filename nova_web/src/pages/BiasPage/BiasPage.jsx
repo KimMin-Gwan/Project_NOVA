@@ -133,9 +133,11 @@ const BiasPage = () => {
 
     useEffect(()=>{
         const loadScheduleData = async () => {
-            const response = await fetchScheduleData({ bid: targetBias.bid, date: targetDate }); // await 추가
-            setScheduleList(response.schedule_data);
-            setWeekData(response.week_data);
+            if (targetBias.bid){
+                const response = await fetchScheduleData({ bid: targetBias.bid, date: targetDate }); // await 추가
+                setScheduleList(response.schedule_data);
+                setWeekData(response.week_data);
+            }
         }
         loadScheduleData()
     }, [targetDate])
