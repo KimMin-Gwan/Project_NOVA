@@ -1252,29 +1252,22 @@ class BiasScheduleModel(BaseModel):
     def set_target_date(self, date: datetime):
         today = date
 
-        # 이번 달의 첫째 날
-        first_day_of_month = today.replace(day=1)
+        # 이번 달 1일
+        first_day = today.replace(day=1)
 
-        # 첫째 날 기준 주차와 오늘 기준 주차 계산
-        start_year, start_week = self.__calc_date(first_day_of_month)
-        current_year, current_week = self.__calc_date(today)
+        # 월요일 기준으로 각 날짜의 주차 계산
+        # (월요일을 0번째로 기준 잡음)
+        first_day_monday = first_day - timedelta(days=first_day.weekday())
+        today_monday = today - timedelta(days=today.weekday())
 
-        # ✅ 첫째 날이 이전 달 주로 계산된 경우 (예: 12월 1일이 11월 마지막 주에 포함)
-        if first_day_of_month.month != today.month or first_day_of_month.isocalendar()[1] > current_week:
-            # 강제로 이번 달의 첫 주를 1주차로 리셋
-            start_week = current_week - 1
+        # 이번 달의 몇 번째 주인지 계산
+        week_in_month = ((today_monday - first_day_monday).days // 7) + 1
 
-        # ✅ 연도 경계(12월 말 ~ 1월 초) 보정
-        if current_year > start_year:
-            # 예: 12월 31일이 다음 해 1주차로 계산된 경우
-            last_week_of_start_year = datetime(start_year, 12, 28).isocalendar()[1]
-            current_week += last_week_of_start_year
-
-        # ✅ 이번 달 내에서의 주차 계산
-        week_in_month = current_week - start_week + 1
+        # 안전하게 1 이상으로 설정
+        week_in_month = max(week_in_month, 1)
 
         self.__target_week = f"{today.month}월 {week_in_month}주차"
-        return
+        return self.__target_week
 
     def __calc_date(self, today:datetime):
         first_day_of_month = datetime(today.year, today.month, 1)
