@@ -1256,18 +1256,24 @@ class BiasScheduleModel(BaseModel):
 
         # 1️⃣ 이번 달 1일
         first_day = today.replace(day=1)
-        first_weekday = first_day.weekday()  # 월=0, 화=1, ..., 일=6
+        first_weekday = first_day.weekday()  # 월=0, ..., 일=6
 
-        # 2️⃣ 1일 요일에 따라 1주차 시작일 결정
+        # 2️⃣ 1주차 시작일 결정
         if first_weekday <= 2:  # 월/화/수
-            # 1일이 포함된 주가 1주차
+            # 1일 포함 주가 1주차
             week1_start = first_day - timedelta(days=first_weekday)
         else:  # 목/금/토/일
-            # 1일이 포함된 주는 이전 달 마지막 주 → 다음 주 월요일이 1주차
+            # 1일 포함 주는 이전 달 마지막 주 → 다음 주 월요일이 1주차 시작
             days_until_next_monday = 7 - first_weekday
             week1_start = first_day + timedelta(days=days_until_next_monday)
 
-        # 3️⃣ date가 몇 주차인지 계산
+        # 3️⃣ date가 1주차 시작일 이전이면 전 달 마지막 주
+        if today < week1_start:
+            # 전 달 마지막 주차로 처리 (0주차 혹은 -1로 표시 가능)
+            self.__target_week = f"{month}월 이전 달 마지막 주"
+            return self.__target_week
+
+        # 4️⃣ date가 몇 주차인지 계산
         delta_days = (today - week1_start).days
         week_in_month = (delta_days // 7) + 1
 
