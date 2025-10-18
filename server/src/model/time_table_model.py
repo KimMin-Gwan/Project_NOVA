@@ -1283,8 +1283,6 @@ class BiasScheduleModel(BaseModel):
     
     def is_subscribed(self):
         for schedule in self._schedules:
-            print(schedule.sid)
-            print(self._user.subscribed_sids)
             if schedule.sid in self._user.subscribed_sids:
                 schedule.subscribe = True
             if schedule.uid == self._user.uid or schedule.bid == self._user.verified_bias:
