@@ -1232,6 +1232,9 @@ class BiasScheduleModel(BaseModel):
                     target_schedule=schedule
                     
             iso_schedule=self.__get_isoformat_schedule(schedule=target_schedule)
+            
+            pprint(iso_schedule.get_dict_form_data())
+            
             self._send_form.append(
                 {
                     "date": current_day.strftime("%m월 %d일"),
@@ -1240,8 +1243,6 @@ class BiasScheduleModel(BaseModel):
                 }
             )
 
-        pprint(self._send_form)
-            
         return
     
     def __get_isoformat_schedule(self, schedule:Schedule):
