@@ -1231,14 +1231,13 @@ class BiasScheduleModel(BaseModel):
                 if schedule.datetime.date() == current_day.date():
                     target_schedule=schedule
                     
-            pprint(target_schedule.get_dict_form_data())
             iso_schedule=self.__get_isoformat_schedule(schedule=target_schedule)
-            
+            result_schedule = self.is_subscribed(schedule=iso_schedule)
             self._send_form.append(
                 {
                     "date": current_day.strftime("%m월 %d일"),
                     "weekday": weekdays[i],
-                    "schedule": iso_schedule.get_dict_form_data()
+                    "schedule": result_schedule.get_dict_form_data()
                 }
             )
 
@@ -1283,13 +1282,12 @@ class BiasScheduleModel(BaseModel):
         
         return start_week, current_week
     
-    def is_subscribed(self):
-        for schedule in self._schedules:
-            schedule:Schedule=schedule
-            if schedule.sid in self._user.subscribed_sids:
-                schedule.subscribe = True
-            if schedule.uid == self._user.uid or schedule.bid == self._user.verified_bias:
-                schedule.is_owner = True
+    def is_subscribed(self, schedule:Schedule):
+        if schedule.sid in self._user.subscribed_sids:
+            schedule.subscribe = True
+        if schedule.uid == self._user.uid or schedule.bid == self._user.verified_bias:
+            schedule.is_owner = True
+        return schedule
     
     def get_response_form_data(self, head_parser):
         body = {
