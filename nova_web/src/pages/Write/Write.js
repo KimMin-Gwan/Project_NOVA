@@ -271,7 +271,6 @@ const Write = () => {
     })
       .then((response) => {
         response.json();
-        setIsUploading(false);
       })
       .then(() => {
         toast.success("업로드가 완료되었습니다.");
@@ -441,12 +440,13 @@ const Write = () => {
         <div className={style["submit-button-wrapper"]}>
           <div className={style["submit-button"]}
             type="submit"
-            onClick={(e) => {
+            onClick={async (e) => {
               e.preventDefault();
               e.stopPropagation();
               setIsUploading(true);
-              handleSubmit(e);
               onClickUpload();
+              await handleSubmit(e);
+              setIsUploading(false);
             }}
           >
             게시하기
@@ -587,14 +587,15 @@ const Write = () => {
             </p>
 
             <div className={style2["submit-button"]}
-              onClick={(e) => {
+              type="submit"
+              onClick={async (e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 setIsUploading(true);
-                handleSubmit(e);
                 onClickUpload();
+                await handleSubmit(e);
+                setIsUploading(false);
               }}
-              type="submit"
             >
               게시하기
             </div>
