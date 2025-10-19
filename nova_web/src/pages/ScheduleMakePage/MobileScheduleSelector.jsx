@@ -95,7 +95,7 @@ const MobileScheduleSelectSection = ({
     const onlyNumbers = e.target.value.replace(/\D/g, "");
 
     // 숫자로 변환 후 40 초과 시 40으로 고정
-    const limitedNumber = onlyNumbers ? Math.min(Number(onlyNumbers), 40) : "";
+    const limitedNumber = onlyNumbers ? Math.min(Number(onlyNumbers), 24) : "";
 
     setDurationInput(limitedNumber);
   };
@@ -177,8 +177,10 @@ const MobileScheduleSelectSection = ({
         handlePreviewImage(`${SCHEDULE_IMAGE_URL}${selectedSchedule.sid}.png`);
       }
     }else{
-      setImageFile(null);
-      setPreviewImage(null);
+      if(selectedSchedule.bid == ""){
+        setImageFile(null);
+        setPreviewImage(null);
+      }
     }
 
 

@@ -93,7 +93,7 @@ const DesktopScheduleSelectSection = ({
     const onlyNumbers = e.target.value.replace(/\D/g, "");
 
     // 숫자로 변환 후 40 초과 시 40으로 고정
-    const limitedNumber = onlyNumbers ? Math.min(Number(onlyNumbers), 40) : "";
+    const limitedNumber = onlyNumbers ? Math.min(Number(onlyNumbers), 24) : "";
     setDurationInput(limitedNumber);
   };
 
@@ -173,8 +173,10 @@ const DesktopScheduleSelectSection = ({
         handlePreviewImage(`${SCHEDULE_IMAGE_URL}${selectedSchedule.sid}.png`);
       }
     }else{
-      setImageFile(null);
-      setPreviewImage(null);
+      if(selectedSchedule.bid == ""){
+        setImageFile(null);
+        setPreviewImage(null);
+      }
     }
 
     if(openContentMode){
@@ -185,6 +187,7 @@ const DesktopScheduleSelectSection = ({
     }
 
   },[selectedSchedule])
+
 
   const handleBiasOwner = async () => {
     const res = await fetchIsValidUser(selectedBias);
@@ -241,6 +244,7 @@ const DesktopScheduleSelectSection = ({
   const [imgLoaded, setImgLoaded] = useState(false);
 
   const handleUploadImageButton = (e) => {
+
     const file = e.target.files[0];
     if (!file) return;
     

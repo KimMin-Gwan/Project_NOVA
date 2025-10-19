@@ -384,7 +384,7 @@
 
   span {
     font-size: 18px;
-    font-weight: 600;
+    font-weight: 500;
     color: #111;
   }
 
@@ -578,7 +578,7 @@
 
 .schedule-detail-time-selector-title{
     font-size: 18px;
-    font-weight: 600;
+    font-weight: 500;
     color: #111;
 }
 
@@ -593,7 +593,7 @@
 
 .schedule-make-button {
   display: flex;
-  height: 54px;
+  height: 48px;
   padding: 0 20px;
   justify-content: center;
   align-items: center;
@@ -621,15 +621,33 @@
 }
 
 .schedule-make-button.delete {
+  border: 2px solid #ffdbdb;
   background: #FF9A9A; /* 빨강톤 */
 }
 
+.schedule-make-button.delete:hover {
+  border: 2px solid #ffe5e5;
+  background: #ff8383; /* 빨강톤 */
+}
+
 .schedule-make-button.image-upload {
+  border: 2px solid #cad3df;
   background: #a0a9b4; /* 초록톤 */
 }
 
+.schedule-make-button.image-upload:hover {
+  border: 2px solid #dee4ec;
+  background: #91a3b9; /* 초록톤 */
+}
+
 .schedule-make-button.upload {
+  border: 2px solid #c5d2ff;
   background: #A7BBFF;
+}
+
+.schedule-make-button.upload:hover {
+  border: 2px solid #d6dfff;
+  background: #9cb3ff;
 }
 
 .schedule-make-button:hover{
