@@ -8,7 +8,6 @@ import postApi from "../../services/apis/postApi";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import DesktopLayout from "../../component/DesktopLayout/DeskTopLayout";
 const user_icon= 'https://supernova.io.kr/bravo/user_profile.svg';
-//const user_icon = "https://kr.object.ncloudstorage.com/nova-profile-bucket/user_profile.svg";
 
 function MyPage() {
   const isMobile = useMediaQuery('(max-width:1100px)');
@@ -214,7 +213,6 @@ function MyPage() {
   }
 
   const profile = `https://supernova.io.kr/bravo/${myProfile.uid}.png`;
-  //const profile = `https://kr.object.ncloudstorage.com/nova-profile-bucket/${myProfile.uid}.png`;
 
 
   const handleFileChange = async (event) => {
