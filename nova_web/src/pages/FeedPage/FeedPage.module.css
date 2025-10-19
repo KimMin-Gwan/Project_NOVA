@@ -2343,6 +2343,7 @@ h5 {
   border-top: 2px solid #C2DCFF;
   border-left: 2px solid #C2DCFF;
   border-right: 2px solid #C2DCFF;
+  cursor: pointer;
 
   p{
     color: #383838;
@@ -2396,6 +2397,10 @@ h5 {
 
     span {
       margin-right: 10px;
+      cursor: pointer;
+    }
+    span:hover{
+      color: #0481ff;
     }
   }
 

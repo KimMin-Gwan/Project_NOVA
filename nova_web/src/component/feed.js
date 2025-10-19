@@ -21,10 +21,12 @@ export default function Feed({
   feed, setFeedData, hideReport,
   type, onClickComponent , handleReport
 }) {
+  const navigate = useNavigate();
 
   return (
     <>
       <PreviewContentFeed
+        navigate={navigate}
         feed={feed}
         onClickComponent={onClickComponent}
         handleReport={handleReport}
@@ -35,6 +37,7 @@ export default function Feed({
 }
 
 export const PreviewContentFeed = ({ 
+    navigate,
     feed,
     onClickComponent,
     handleReport,
@@ -91,7 +94,9 @@ export const PreviewContentFeed = ({
         <div className={style["preview-content-feed-wrapper"]}>
           <div className={style["wrapper-top-component"]}>
             {feed.bname && (
-              <div className={style["meta-data-1"]}>
+              <div className={style["meta-data-1"]}
+                onClick={()=>navigate(`/bias/${feed.bid}`)}
+              >
                 <p>
                   {feed.bname}
                 </p>
@@ -117,7 +122,7 @@ export const PreviewContentFeed = ({
             <FeedHeader date={feed.date} nickname={feed.nickname} />
 
             <div className={`${style["preview-body-container"]} `}>
-              <HashTags hashtags={feed.hashtag} />
+              <HashTags navigate={navigate} hashtags={feed.hashtag} />
               {
                 isLoading && <div
                 className={style["loading-feed-sign"]}
@@ -141,7 +146,9 @@ export const PreviewContentFeed = ({
         <div className={style["preview-content-feed-wrapper"]}>
           <div className={style["wrapper-top-component"]}>
             {feed.bname && (
-              <div className={style["meta-data-1"]}>
+              <div className={style["meta-data-1"]}
+                onClick={()=>navigate(`/bias/${feed.bid}`)}
+              >
                 <p>
                   {feed.bname}
                 </p>
@@ -167,7 +174,7 @@ export const PreviewContentFeed = ({
             <FeedHeader date={feed.date} nickname={feed.nickname} />
 
             <div className={`${style["preview-body-container"]} `}>
-              <HashTags hashtags={feed.hashtag} />
+              <HashTags hashtags={feed.hashtag} navigate={navigate}/>
               {
                 isLoading && <div
                 className={style["loading-feed-sign"]}
@@ -196,6 +203,7 @@ export function ContentFeed({ detailPage, feed, handleCheckStar, links, handleRe
   const [result, setResult] = useState(true);
   const [fid, setFid] = useState("");
   const [rawBody, setRawBody] = useState("");
+  const navigate = useNavigate();
 
   const fetchBodyData = async (fid) => {
     try {
@@ -240,7 +248,9 @@ export function ContentFeed({ detailPage, feed, handleCheckStar, links, handleRe
       <div style={{breakInside: "avoid", marginBottom: "20px"}}>
         <div className={style["wrapper-top-component"]}>
           {feed.bname && (
-            <div className={style["meta-data-1"]}>
+            <div className={style["meta-data-1"]}
+              onClick={()=>navigate(`/bias/${feed.bid}`)}
+            >
               <p>
                 {feed.bname}
               </p>
@@ -258,7 +268,7 @@ export function ContentFeed({ detailPage, feed, handleCheckStar, links, handleRe
           <FeedHeader date={feed.date} nickname={feed.nickname} />
 
           <div className={`${style["body-container"]}`}>
-            <HashTags hashtags={feed.hashtag} />
+            <HashTags hashtags={feed.hashtag} navigate={navigate}/>
 
             {
               isLoading && <div
@@ -297,7 +307,7 @@ function FeedHeader({ date, nickname }) {
 }
 
 // 해시 태그
-function HashTags({ hashtags }) {
+function HashTags({hashtags, navigate}) {
   if (!hashtags || hashtags.length === 0) {
     return null;
   }
@@ -306,7 +316,7 @@ function HashTags({ hashtags }) {
     <div className={style["body-hashtag"]}>
       {hashtags.length !== 0 &&
         hashtags.map((tag, i) => {
-          return <span key={i}>#{tag}</span>;
+          return <span key={i} onClick={()=>{navigate(`/search_result?keyword=${tag}`)}}>#{tag}</span>;
         })}
     </div>
   );
