@@ -399,6 +399,7 @@ class TimeTableModel(BaseModel):
         delta_days = (today - week1_start).days
         week_in_month = (delta_days // 7) + 1
 
+        self.__target_month = f'{year}년 {month}월'
         self.__target_week = f"{month}월 {week_in_month}주차"
         return self.__target_week
     
