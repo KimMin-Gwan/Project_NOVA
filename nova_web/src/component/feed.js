@@ -145,7 +145,7 @@ export const PreviewContentFeed = ({
 
             {/* {links && <LinkSection links={links} />} */}
             
-            {!hideReport && (
+            {hideReport && (
               <ActionButtons
                 feed={feed}
                 handleCheckStar={handleCheckStar}
