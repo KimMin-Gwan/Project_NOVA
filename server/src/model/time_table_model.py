@@ -345,7 +345,26 @@ class TimeTableModel(BaseModel):
         
         return start_week, current_week
     
-    def set_target_date(self, date: datetime):
+    #def set_target_date(self, date=datetime.today().strftime("%Y/%m/%d")):
+        #today = datetime.strptime(date, "%Y/%m/%d")
+        #start_week, current_week = self.__calc_date(today)
+    
+        #if start_week > current_week:
+            ## 이번 주의 월요일이 today임
+            #today = today = today - timedelta(days=today.weekday())
+            #start_week, current_week = self.__calc_date(today)
+        
+        ## 현재 주가 이번 달 내 몇 번째 주인지 계산합니다.
+        #week_in_month = current_week - start_week + 1
+        
+        #shorted_year = today.year % 100
+        
+        ## 만약 미래에 있는 사람이 2100에 산다면 이 곳의 코드를 고치면 됩니다
+        #self.__target_month = f'{shorted_year}년 {today.month}월'
+        #self.__target_week = f'{week_in_month}주차'
+        #return
+        
+    def set_target_date(self, date=datetime.today()):
         today = date
         year = today.year
         month = today.month
