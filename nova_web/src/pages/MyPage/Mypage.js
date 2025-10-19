@@ -11,7 +11,6 @@ import DesktopLayout from "../../component/DesktopLayout/DeskTopLayout";
 import useIntersectionObserver from "../../hooks/useIntersectionObserver";
 import NoneFeed from "../../component/NoneFeed/NoneFeed";
 const user_icon= 'https://supernova.io.kr/bravo/user_profile.svg';
-//const user_icon = "https://kr.object.ncloudstorage.com/nova-profile-bucket/user_profile.svg";
 
 function MyPage() {
   const isMobile = useMediaQuery('(max-width:1100px)');
@@ -168,7 +167,6 @@ function MyPage() {
       { root:scrollRef.current, threshold: 0.5 }, hasMore);
 
   const profile = `https://supernova.io.kr/bravo/${myData.uid}.png`;
-  //const profile = `https://kr.object.ncloudstorage.com/nova-profile-bucket/${myData.uid}.png`
 
   const onClickComponent = (feed) => {
       let currentScroll = 0;
