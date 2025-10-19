@@ -86,8 +86,6 @@ export const PreviewContentFeed = ({
       return <div>loading 중...</div>;
     }
 
-    console.log(hideReport);
-
     if (result){
       return (
         <div className={style["preview-content-feed-wrapper"]}>
