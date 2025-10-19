@@ -39,7 +39,7 @@ class Time_Table_View(Master_View):
         @self.__app.get('/time_table_server/try_get_dashboard_data')
         def get_dashboard_data(request:Request, date:Optional[str]=datetime.now()):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
-            data_payload = DateRequest(date=date)
+            data_payload = DatetimeRequest(date=date)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
             # if not request_manager.jwt_payload.result:
