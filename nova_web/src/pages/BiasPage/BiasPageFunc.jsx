@@ -65,7 +65,7 @@ export const handlePreviewImage = (url, setImage) => {
     };
 };
 
-export const defaultImage = "https://kr.object.ncloudstorage.com/nova-images/no-image.png";
+export const defaultImage = "https://supernova.io.kr/d/no-image.png";
 
 export const ToggleSwitch = ({id, isChecked, handleChecked}) => {
   const handleToggle = (e) => {

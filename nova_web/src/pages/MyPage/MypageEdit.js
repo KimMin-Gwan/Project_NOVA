@@ -212,7 +212,8 @@ function MyPage() {
     return <div>loading...</div>;
   }
 
-  const profile = `https://kr.object.ncloudstorage.com/nova-profile-bucket/${myProfile.uid}.png`;
+  const profile = `https://supernova.io.kr/b/${myProfile.uid}.png`;
+
 
   const handleFileChange = async (event) => {
     const formData = new FormData();

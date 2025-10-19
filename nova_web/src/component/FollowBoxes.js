@@ -8,7 +8,7 @@ import tempBias from "./../img/tempBias.png";
 import mainApi from "../services/apis/mainApi.js";
 
 export default function FollowBoxes({ setBiasId }) {
-  let bias_url = "https://kr.object.ncloudstorage.com/nova-images/";
+  let bias_url = "https://supernova.io.kr/d/";
 
   const navigate = useNavigate();
   const location = useLocation();

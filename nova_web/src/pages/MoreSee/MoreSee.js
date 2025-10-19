@@ -157,7 +157,7 @@ function MoreSee({ onModeChange }) {
 
   console.log(user);
 
-  const profile = `https://kr.object.ncloudstorage.com/nova-profile-bucket/${user}.png`;
+  const profile = `https://supernova.io.kr/b/${user}.png`;
 
   const firstBoardList = boardList.slice(0, 2);
   const secondBoardList = boardList.slice(2, 4);

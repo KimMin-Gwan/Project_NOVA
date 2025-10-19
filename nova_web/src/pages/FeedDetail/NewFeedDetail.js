@@ -584,7 +584,7 @@ export default function NewFeedDetail() {
 function CommentComponent({cid, uid, owner, uname, isReply,
    reply, body, date, commentAction, commentReport
   }){
-  const profile = `https://kr.object.ncloudstorage.com/nova-profile-bucket/${uid}.png`;
+  const profile = `https://supernova.io.kr/b/${uid}.png`;
   const pressTimer = useRef(null);
 
   const handlePressStart = () => {

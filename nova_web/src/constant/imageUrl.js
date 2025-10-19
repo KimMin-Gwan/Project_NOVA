@@ -1,1 +1,1 @@
-export const SCHEDULE_IMAGE_URL = "https://kr.object.ncloudstorage.com/nova-schedule-images/";
+export const SCHEDULE_IMAGE_URL = "https://supernova.io.kr/a/";

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const feedApi = axios.create({
-  baseURL: "https://kr.object.ncloudstorage.com/nova-feed-project-body/",
+  baseURL: "https://supernova.io.kr/c/",
   withCredentials: true,
 });
 

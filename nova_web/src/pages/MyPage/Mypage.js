@@ -166,7 +166,7 @@ function MyPage() {
   const targetRef = useIntersectionObserver(handleFetchMore,
       { root:scrollRef.current, threshold: 0.5 }, hasMore);
 
-  const profile = `https://kr.object.ncloudstorage.com/nova-profile-bucket/${myData.uid}.png`;
+  const profile = `https://supernova.io.kr/b/${myData.uid}.png`;
 
   const onClickComponent = (feed) => {
       let currentScroll = 0;
