@@ -262,6 +262,7 @@ export default function PostBoard () {
                                     setFeedData={setFeedData}
                                     onClickComponent={onClickComponent}
                                     handleReport={handleReport}
+                                    hideReport={false}
                                 ></Feed>
                             );
                             })
@@ -303,6 +304,7 @@ export default function PostBoard () {
                                         setFeedData={setFeedData}
                                         onClickComponent={onClickComponent}
                                         handleReport={handleReport}
+                                        hideReport={false}
                                     ></Feed>
                                 );
                                 })

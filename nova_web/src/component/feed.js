@@ -18,12 +18,11 @@ import { use } from "react";
 
 
 export default function Feed({ 
-  feed, setFeedData,
+  feed, setFeedData, hideReport,
   type, onClickComponent , handleReport
 }) {
   const header = HEADER;
   const { handleCheckStar } = useFeedActions(setFeedData, type);
-  const [report, setReport] = useState();
 
   async function fetchReportResult(fid) {
     await postApi.post("nova_sub_system/try_report", {
@@ -43,6 +42,7 @@ export default function Feed({
         fetchReportResult={fetchReportResult}
         onClickComponent={onClickComponent}
         handleReport={handleReport}
+        displayReport={hideReport}
       />
     </>
   );
@@ -53,7 +53,8 @@ export const PreviewContentFeed = ({
     handleCheckStar,
     fetchReportResult,
     onClickComponent,
-    handleReport
+    handleReport,
+    hideReport
   }) =>{
     const { scrollRef, hasDragged, dragHandlers } = useDragScroll();
     const [isLoading, setIsLoading] = useState(true);
@@ -143,12 +144,14 @@ export const PreviewContentFeed = ({
             </div>
 
             {/* {links && <LinkSection links={links} />} */}
-
-            <ActionButtons
-              feed={feed}
-              handleCheckStar={handleCheckStar}
-              handleReport={handleReport}
-            />
+            
+            {!hideReport && (
+              <ActionButtons
+                feed={feed}
+                handleCheckStar={handleCheckStar}
+                handleReport={handleReport}
+              />
+            )}
           </div>
         </div>
       );

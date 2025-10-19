@@ -64,7 +64,45 @@ function MyPage() {
       handleValidCheck();
     }else{
       fetchMyPage();
-      initMyPageResult();
+        if(!isMobile){
+            const savedState = sessionStorage.getItem("myPageState");
+            if (savedState) {
+                const parsed = JSON.parse(savedState);
+
+                setFeedData(parsed.feedData);
+                setNextKey(parsed.nextKey);
+
+                // 복원 후 스크롤 이동
+                setTimeout(() => {
+                    const scrollContainer = document.getElementById("desktop-scroll-container");
+                    if (scrollContainer) {
+                        scrollContainer.scrollTop = parsed.scrollY || 0;  // ✅ 여기서 내부 컨테이너 scrollTop 설정
+                    } else {
+                        window.scrollTo(0, parsed.scrollY || 0);  // fallback
+                    }
+                }, 0);
+
+                sessionStorage.removeItem("myPageState");
+                setInitialLoaded(true);
+            } else {
+              initMyPageResult();
+            }
+        }else{
+            const savedState = sessionStorage.getItem("myPageState");
+            if (savedState) {
+                const parsed = JSON.parse(savedState);
+
+                setFeedData(parsed.feedData);
+                setNextKey(parsed.nextKey);
+
+                // 복원 후 스크롤 이동
+                setTimeout(() => window.scrollTo(0, parsed.scrollY || 0), 0);
+                sessionStorage.removeItem("myPageState");
+                setInitialLoaded(true);
+            } else {
+              initMyPageResult();
+            }
+        }
     }
   }, [isUserState]);
 
@@ -129,6 +167,32 @@ function MyPage() {
       { root:scrollRef.current, threshold: 0.5 }, hasMore);
 
   const profile = `https://kr.object.ncloudstorage.com/nova-profile-bucket/${myData.uid}.png`;
+
+  const onClickComponent = (feed) => {
+      let currentScroll = 0;
+
+      if (isMobile){
+          currentScroll = window.scrollY;
+      }else{
+          const scrollContainer = document.getElementById("desktop-scroll-container");
+          currentScroll = scrollContainer ? scrollContainer.scrollTop : window.scrollY;
+      }
+
+      // ✅ 세션 저장
+      sessionStorage.setItem(
+          "myPageState",
+          JSON.stringify({
+          feedData,
+          nextKey,
+          scrollY: currentScroll,
+          })
+      );
+
+      // ✅ 페이지 이동
+      navigate(`/feed_detail/${feed.fid}`, {
+          state: { fromBoard: true } 
+      });
+  }
 
   if(isMobile){
     return (
@@ -206,6 +270,8 @@ function MyPage() {
                         className={style["feed-box"]}
                         feed={feed}
                         setFeedData={setFeedData}
+                        onClickComponent={onClickComponent}
+                        hideReport={true}
                       ></Feed>
                   );
                   })
@@ -291,6 +357,8 @@ function MyPage() {
                       className={style["feed-box"]}
                       feed={feed}
                       setFeedData={setFeedData}
+                      onClickComponent={onClickComponent}
+                      hideReport={true}
                       ></Feed>
                   );
                   })

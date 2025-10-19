@@ -19,6 +19,7 @@ export default function FeedSection({ feedData, setFeedData,
         return <Feed 
         key={feed.feed.fid} setFeedData={setFeedData} feed={feed.feed} 
         onClickComponent={onClickComponent} handleReport={handleReport}
+        hideReport={false}
         />;
       })}
     </section>
