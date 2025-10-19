@@ -21,25 +21,11 @@ export default function Feed({
   feed, setFeedData, hideReport,
   type, onClickComponent , handleReport
 }) {
-  const header = HEADER;
-  const { handleCheckStar } = useFeedActions(setFeedData, type);
-
-  async function fetchReportResult(fid) {
-    await postApi.post("nova_sub_system/try_report", {
-      header: header,
-      body: {
-        fid: fid,
-      },
-    });
-    //.then((res) => //console.log("rerere", res.data));
-  }
 
   return (
     <>
       <PreviewContentFeed
         feed={feed}
-        handleCheckStar={handleCheckStar}
-        fetchReportResult={fetchReportResult}
         onClickComponent={onClickComponent}
         handleReport={handleReport}
         hideReport={hideReport}
@@ -50,8 +36,6 @@ export default function Feed({
 
 export const PreviewContentFeed = ({ 
     feed,
-    handleCheckStar,
-    fetchReportResult,
     onClickComponent,
     handleReport,
     hideReport
@@ -146,9 +130,8 @@ export const PreviewContentFeed = ({
             {/* {links && <LinkSection links={links} />} */}
             
             {hideReport && (
-              <ActionButtons
+              <ActionButtons2
                 feed={feed}
-                handleCheckStar={handleCheckStar}
                 handleReport={handleReport}
               />
             )}
@@ -286,8 +269,6 @@ function HashTags({ hashtags }) {
 }
 
 function ActionButtons({ feed, handleCheckStar, handleReport}) {
-  const navigate = useNavigate();
-
   return (
     <div className={style["button-container"]}>
       <div
@@ -322,6 +303,32 @@ function ActionButtons({ feed, handleCheckStar, handleReport}) {
     </div>
   );
 }
+
+
+function ActionButtons2({ feed, handleReport}) {
+  return (
+    <div className={style["button-container"]}>
+      <div
+        onClick={(e) => {
+          e.stopPropagation();
+          handleReport(feed);
+        }}
+      >
+        신고
+      </div>
+      <div className={style["button-box1"]}>
+        <div className={style["action-button"]}>
+          <button
+          >
+            <img src={comment} alt="comment-icon" />
+          </button>
+          <span>{feed.num_comment}</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 
 function LinkSection({ links }) {
   const [isLoading, setIsLoading] = useState(true);
