@@ -42,7 +42,7 @@ export default function Feed({
         fetchReportResult={fetchReportResult}
         onClickComponent={onClickComponent}
         handleReport={handleReport}
-        displayReport={hideReport}
+        hideReport={hideReport}
       />
     </>
   );
