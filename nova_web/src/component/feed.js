@@ -86,6 +86,8 @@ export const PreviewContentFeed = ({
       return <div>loading 중...</div>;
     }
 
+    console.log(hideReport);
+
     if (result){
       return (
         <div className={style["preview-content-feed-wrapper"]}>
@@ -127,9 +129,7 @@ export const PreviewContentFeed = ({
               <Viewer key={rawBody} initialValue={rawBody} />
             </div>
 
-            {/* {links && <LinkSection links={links} />} */}
-            
-            {hideReport && (
+            {!hideReport && (
               <ActionButtons2
                 feed={feed}
                 handleReport={handleReport}
@@ -140,7 +140,53 @@ export const PreviewContentFeed = ({
       );
     } else{
       return (
-        <></>
+        <div className={style["preview-content-feed-wrapper"]}>
+          <div className={style["wrapper-top-component"]}>
+            {feed.bname && (
+              <div className={style["meta-data-1"]}>
+                <p>
+                  {feed.bname}
+                </p>
+              </div>
+            )}
+            <div className={style["meta-data-2"]}>
+                <p>
+                  {feed.board_type}
+                </p>
+            </div>
+          </div>
+          <div
+            className={`${style["wrapper-container2"]} ${style["long-wrapper"]}`}
+            onClick={(e) => {
+              if (hasDragged) return;
+
+              e.preventDefault();
+              e.stopPropagation();
+
+              onClickComponent(feed);
+            }}
+          >
+            <FeedHeader date={feed.date} nickname={feed.nickname} />
+
+            <div className={`${style["preview-body-container"]} `}>
+              <HashTags hashtags={feed.hashtag} />
+              {
+                isLoading && <div
+                className={style["loading-feed-sign"]}
+                >본문 불러오는 중</div>
+              }
+
+              <Viewer key={rawBody} initialValue={rawBody} />
+            </div>
+
+            {!hideReport && (
+              <ActionButtons2
+                feed={feed}
+                handleReport={handleReport}
+              />
+            )}
+          </div>
+        </div>
       );
     }
 }
