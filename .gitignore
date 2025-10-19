@@ -9,3 +9,4 @@ server/test/data_format/gpt_prompt_manager.py
 server/test/data_format/index.html
 /server/test/data_format
 server/test/cors_setting.py
+bucket_map.txt
