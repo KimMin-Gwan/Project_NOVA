@@ -37,7 +37,7 @@ class Time_Table_View(Master_View):
         # 파라미터 없음, 비로그인 상태에서는 0으로 리턴함 
         # 업데이트 완료
         @self.__app.get('/time_table_server/try_get_dashboard_data')
-        def get_dashboard_data(request:Request, date:Optional[str]=datetime.now().strftime("%Y/%m/%d")):
+        def get_dashboard_data(request:Request, date:Optional[str]=datetime.now()):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = DateRequest(date=date)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
@@ -437,6 +437,10 @@ class ScheduleRequest(RequestHeader):
 class DateRequest(RequestHeader):
     def __init__(self, date)-> None:
         self.date:str = date
+
+class DatetimeRequest(RequestHeader):
+    def __init__(self, date:str)-> None:
+        self.date:datetime = datetime.strptime(date, "%Y/%m/%d")
 
 class BiasDateRequest(RequestHeader):
     def __init__(self, bid, date)-> None:
