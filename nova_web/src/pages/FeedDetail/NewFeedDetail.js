@@ -1,19 +1,10 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import mainApi from "../../services/apis/mainApi";
-import postApi from "../../services/apis/postApi";
-
-import HEADER from "../../constant/header";
 
 import more_icon from "./../../img/more_icon.svg";
-import user_icon from "./../../img/user_profile.svg";
 import back from "./../../img/detail_back.png";
 import input from "./../../img/input.svg";
-import reArrow1 from "./../../img/reArrow1.svg";
-import reArrow2 from "./../../img/reArrow2.svg";
-import reArrow3 from "./../../img/reArrow3.svg";
-import reArrow4 from "./../../img/reArrow4.svg";
-
 import { ContentFeed } from "../../component/feed";
 
 import style from "./NewFeedDetail.module.css";
@@ -21,6 +12,8 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import DesktopLayout from "../../component/DesktopLayout/DeskTopLayout";
 import AdComponent from "../../component/AdComponent/AdComponent";
 import ReportModal from "../../component/ReportModal/ReportModal";
+
+const user_icon= 'https://supernova.io.kr/b/user_profile.svg';
 
 export default function NewFeedDetail() {
   const isMobile = useMediaQuery('(max-width:1100px)');
@@ -59,7 +52,6 @@ export default function NewFeedDetail() {
   const [optionTargetComment, setOptionTargetComment] = useState("");
 
   const [targetReport, setTargetReport] = useState({fid:""});
-  const [targetComment, setTargetComment] = useState({cid:""});
   const [reportModal, setReportModal] = useState(false);
   const [reportType, setReportType] = useState(false);
 

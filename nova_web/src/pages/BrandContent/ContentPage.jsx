@@ -7,17 +7,17 @@ import style from "./style.module.css";
 
 import chzzkLogo from "./../BrandPage/chzzklogo_kor(Green) 1.png";
 import soopLogo from "./../BrandPage/SOOP_LOGO_Blue 1.png";
-import contentBackgroundImage from "./content-background-svg.svg";
-import bluredBackgroundImage from "./blurBackground.png";
-import brandImg from "./brand_img.png";
 import mainApi from "../../services/apis/mainApi.js";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import chzzkApi from '../../services/apis/chzzkApi.js';
-//import { io, Socket } from "socket.io-client";
+
+const contentBackgroundImage = "https://supernova.io.kr/d/content-background-svg.svg";
+const bluredBackgroundImage = "https://supernova.io.kr/d/blurBackground.png";
+const brandImg = "https://supernova.io.kr/d/brand_img.png";
+
 
 export default function ContentPage (){
   const socketRef = useRef(null);

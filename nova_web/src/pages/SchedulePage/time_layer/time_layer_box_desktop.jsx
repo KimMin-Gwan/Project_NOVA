@@ -1,11 +1,9 @@
-import React, { act, useEffect, useState, useRef } from "react";
+import { useEffect, useState} from "react";
 import time_layer_box_style from "./time_layer_box.module.css";
-import component_style from "./schedule_component.module.css";
 import right_vector_arrow from "./../../../img/right-vector-arrow.svg";
 import background_gradient from "./../../../img/background_gradient.svg";
 import calender_icon from "./../../../img/calender.svg";
 import double_arrow_round from "./../../../img/double_arrow_round.svg";
-import shop_icon from "./../../../img/3d_shop_icon.png";
 
 import style from "./TimeLayerBoxDesktop.module.css";
 
@@ -33,10 +31,9 @@ export default function TimeLayerBoxDesktop({
         return () => clearTimeout(timer); // 컴포넌트 언마운트 시 타이머 정리
     }, [visibleCount, scheduleData.length]);
 
-
-    async function onClickPrevArrow() {
-        await onChangeIndexPrev()
-    }
+    //async function onClickPrevArrow() {
+        //await onChangeIndexPrev()
+    //}
 
     async function onClickNextArrow() {
         await onChangeIndexNext()
@@ -46,7 +43,7 @@ export default function TimeLayerBoxDesktop({
         <div className={style["schedule-dashboard-main-container"]}>
             <div className={time_layer_box_style["time-layer-info"]} style={{display:"flex", alignContent:"center", justifyContent:"center"}}>
                 <div className={time_layer_box_style["slide-arrow-box"]}>
-                    <img src={double_arrow_round} style={{cursor:"pointer"}}
+                    <img alt={"double-arrow-round"} src={double_arrow_round} style={{cursor:"pointer"}}
                     onClick={()=>{
                         if (isFetching) return;
                         onChangeIndexPrev();
@@ -54,13 +51,13 @@ export default function TimeLayerBoxDesktop({
                     />
                 </div>
                 <div className={time_layer_box_style["calender-box-v1"]}>
-                    <img src={calender_icon}/>
+                    <img alt={"calender-icon"} src={calender_icon}/>
                     <span>
                         {formattedDate}
                     </span>
                 </div>
                 <div className={time_layer_box_style["slide-arrow-box"]}>
-                    <img src={double_arrow_round} style={{rotate:"180deg", cursor:"pointer"}}
+                    <img alt={"double-arrow-round"} src={double_arrow_round} style={{rotate:"180deg", cursor:"pointer"}}
                     onClick={()=>{
                         if (isFetching) return;
                         onClickNextArrow()
@@ -103,7 +100,7 @@ function ScheduleComponentDesktop({ section, schedules, onClickSchedule}){
                 {section}
             </div>
             {
-                schedules.length == 0 ? (
+                schedules.length === 0 ? (
                     <div className={style["schedule-component"]}
                         style={{justifyContent:"center"}}
                     >
@@ -152,7 +149,7 @@ function ScheduleDetail({
                     </span>
                 </div>
                 <div className={style["schedule-component-arrow"]}>
-                    <img src={right_vector_arrow}/>
+                    <img alt={"right-vector-arrow"} src={right_vector_arrow}/>
                 </div>
             </div>
         </div>

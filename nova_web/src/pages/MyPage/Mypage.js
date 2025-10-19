@@ -3,7 +3,6 @@ import  { useEffect, useRef, useState } from "react";
 import style from "./Mypage.module.css";
 import style2 from "./MypageMobile.module.css";
 import style3 from "./MypageDesktop.module.css";
-import user_icon from "./../../img/user_profile.svg";
 import mainApi from "../../services/apis/mainApi";
 import Feed from "../../component/feed";
 import MyPageLoading from "../LoadingPage/MypageLoading";
@@ -11,6 +10,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import DesktopLayout from "../../component/DesktopLayout/DeskTopLayout";
 import useIntersectionObserver from "../../hooks/useIntersectionObserver";
 import NoneFeed from "../../component/NoneFeed/NoneFeed";
+const user_icon= 'https://supernova.io.kr/b/user_profile.svg';
 
 function MyPage() {
   const isMobile = useMediaQuery('(max-width:1100px)');

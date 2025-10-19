@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { getModeClass } from "../../App.js";
-import WriteMoment from "../../pages/Write/Writemoment.js";
 
 import more_see from "./../../img/more_see.png";
 import moment from "./../../img/moment_img.png";
@@ -73,7 +72,7 @@ const NavBar = ({ brightMode }) => {
   });
   let [writeOptions, setWriteOptions] = useState(false);
 
-  const [writeMoment, setWriteMoment] = useState(false);
+  const writeMoment = false;
   useEffect(() => {
     const currentIndex = navBarList.findIndex((item) => item.end_point === location.pathname);
     setActiveIndex(currentIndex !== -1 ? currentIndex : 0);
@@ -111,9 +110,6 @@ const NavBar = ({ brightMode }) => {
     }
   }
 
-  const onClickMoment = () => {
-    setWriteMoment(!writeMoment);
-  };
 
   const [mode, setMode] = useState(brightMode); // 초기 상태는 부모로부터 받은 brightMode 값
   useEffect(() => {
@@ -127,7 +123,6 @@ const NavBar = ({ brightMode }) => {
         if (writeMoment) {
           e.stopPropagation();
           e.preventDefault();
-          setWriteMoment(false);
         } else if (writeOptions) {
           setWriteOptions(false);
         }
@@ -187,7 +182,6 @@ const NavBar = ({ brightMode }) => {
           </div>
         )}
 
-        {writeMoment && <WriteMoment onClickMoment={onClickMoment} />}
 
         {navBarList.map((item, index) => (
           <div

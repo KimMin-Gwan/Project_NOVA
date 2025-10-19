@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import style from './DeskTopLayout.module.css';
 
-import top_logo from "./logo.svg";
+
 import feed_icon from "./feed_icon.svg";
 import date_icon from "./date_icon.svg";
 import search_icon from "./search_icon.svg";
 import right_arrow from "./right_arrow.svg";
 import { useLocation, useNavigate } from 'react-router-dom';
 
+const top_logo = "https://supernova.io.kr/d/logo.svg";
 export default function DesktopLayout({ children }) {
   const navigate = useNavigate();
   const [targetMenu, setTargetMenu] = useState("");

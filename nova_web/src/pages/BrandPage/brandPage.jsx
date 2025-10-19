@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import style from "./brandPage.module.css";
 
-import brandBackgroundImage from "./brand-background.svg";
 import buttonStar from "./Star_fill.svg";
 import chzzkLogo from "./chzzklogo_kor(Green) 1.png";
 import soopLogo from "./SOOP_LOGO_Blue 1.png";
@@ -23,12 +22,9 @@ import sample3 from "./sample3.png";
 import Card from "./carosel/Card.jsx";
 import Carousel from "./carosel/Carosel.jsx"
 
-import { config } from "react-spring";
-import { useDrag } from "@use-gesture/react";
-
 import { useNavigate } from "react-router-dom";
 
-
+const brandBackgroundImage = "https://supernova.io.kr/d/brand-background.svg";
 
 export default function BrandPage() {
     const targetRef1 = useRef(null);

@@ -1,11 +1,10 @@
-import React, { act, useEffect, useState, useRef } from "react";
+import { useEffect, useState} from "react";
 import style from "./time_layer_box.module.css";
 import component_style from "./schedule_component.module.css";
 import right_vector_arrow from "./../../../img/right-vector-arrow.svg";
 import background_gradient from "./../../../img/background_gradient.svg";
 import calender_icon from "./../../../img/calender.svg";
 import double_arrow_round from "./../../../img/double_arrow_round.svg";
-import shop_icon from "./../../../img/3d_shop_icon.png";
 
 
 export default function TimeLayerBox({
@@ -33,7 +32,7 @@ export default function TimeLayerBox({
 
     async function onClickPrevArrow() {
         const activeIndex = swiperRef.current?.activeIndex
-        if (activeIndex==0){
+        if (activeIndex===0){
             await onChangeIndexPrev()
         }else{
             swiperRef.current?.slidePrev()
@@ -43,7 +42,7 @@ export default function TimeLayerBox({
     }
 
     async function onClickNextArrow() {
-        if (swiperRef.current?.activeIndex==(scheduleDayList.length-1)){
+        if (swiperRef.current?.activeIndex===(scheduleDayList.length-1)){
             await onChangeIndexNext()
         }
         swiperRef.current?.slideNext()
@@ -69,20 +68,20 @@ export default function TimeLayerBox({
                 </div>
                  */}
                 <div className={style["slide-arrow-box"]}>
-                    <img src={double_arrow_round} style={{cursor:"pointer"}}
+                    <img alt={"double-arrow-round"} src={double_arrow_round} style={{cursor:"pointer"}}
                     onClick={()=>
                         onClickPrevArrow()
                     }
                     />
                 </div>
                 <div className={style["calender-box-v1"]}>
-                    <img src={calender_icon}/>
+                    <img alt={"calender-icon"} src={calender_icon}/>
                     <span>
                         {formattedDate}
                     </span>
                 </div>
                 <div className={style["slide-arrow-box"]}>
-                    <img src={double_arrow_round} style={{rotate:"180deg", cursor:"pointer"}}
+                    <img alt={"double-arrow-round"} src={double_arrow_round} style={{rotate:"180deg", cursor:"pointer"}}
                     onClick={()=>
                         onClickNextArrow()}
                     />

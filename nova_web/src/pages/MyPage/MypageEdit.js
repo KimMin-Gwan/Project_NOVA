@@ -1,13 +1,13 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import  { useEffect, useState, useRef } from "react";
 import style from "./Mypage.module.css";
-import user_icon from "./../../img/user_profile.svg";
 import useLoginStore from "../../stores/LoginStore/useLoginStore";
 import useBiasStore from "../../stores/BiasStore/useBiasStore";
 import mainApi from "../../services/apis/mainApi";
 import postApi from "../../services/apis/postApi";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import DesktopLayout from "../../component/DesktopLayout/DeskTopLayout";
+const user_icon= 'https://supernova.io.kr/b/user_profile.svg';
 
 function MyPage() {
   const isMobile = useMediaQuery('(max-width:1100px)');

@@ -18,10 +18,8 @@ import BiasBoxes from "../../component/BiasBoxes/BiasBoxes.js";
 import FilterModal from "../../component/FilterModal/FilterModal.js";
 import SearchBox from "../../component/SearchBox.js";
 import KeywordBox from "../../component/keyword/KeywordBox.js";
-import CategoryModal from "../../component/CategoryModal/CategoryModal.js";
 import NoneFeed from "../../component/NoneFeed/NoneFeed.js";
 import Header from "../../component/Header/Header.js";
-import StoryFeed from "../../component/StoryFeed/StoryFeed.js";
 
 import "@toast-ui/editor/dist/toastui-editor-viewer.css";
 import style from "./FeedHashList.module.css";
@@ -240,25 +238,6 @@ export default function FeedList() {
           <div className={style["bias-section"]}>
             <BiasBoxes setBiasId={setBiasId} fetchBiasCategoryData={fetchBiasCategoryData} />
             <h4>게시글 미리보기</h4>
-            <div
-              ref={scrollRef}
-              className={style["story_container"]}
-              onMouseDown={dragHandlers.onMouseDown}
-              onMouseUp={dragHandlers.onMouseUp}
-              onMouseMove={dragHandlers.onMouseMove}
-            >
-              <div className={style["story_wrapper"]}>
-                {feedData.map((feed, i) => {
-                  return (
-                    <StoryFeed
-                      key={`story_${feed.feed.fid}`}
-                      feedData={feed}
-                      hasDragged={hasDragged}
-                    />
-                  );
-                })}
-              </div>
-            </div>
 
             <div className={style["category-info"]}>
               <p>게시글 목록</p>
@@ -267,14 +246,6 @@ export default function FeedList() {
               </p>
             </div>
 
-            {biasId && (
-              <CategoryModal
-                SetIsOpen={setIsOpendCategory}
-                onClickCategory={onClickCategory}
-                biasId={biasId}
-                isOpend={isOpendCategory}
-              />
-            )}
           </div>
         )}
         {type === "all" && (

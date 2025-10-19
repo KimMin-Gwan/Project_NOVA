@@ -1,17 +1,12 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import backword from "./../../img/back_icon.png";
-import fav_icon from "./../../img/favset_icon.svg";
 import bug_icon from "./../../img/bug_icon.svg";
-import user_icon from "./../../img/user_profile.svg";
 import login_icon from "./../../img/login_icon.png";
 import terms_icon from "./../../img/agree.svg";
 import more_icon from "./../../img/Icon.png";
 import new_moment from "./../../img/new_moment.svg";
-import today_up from "./../../img/today_up.svg";
-import week_up from "./../../img/week_up.svg";
 import all_post from "./../../img/all_post.svg";
-import new_post from "./../../img/new_post.svg";
 import calendar from "./../../img/calendar.svg";
 import calendar_plus from "./../../img/calendar_plus.svg";
 import calendar_check from "./../../img/calendar_check.svg";
@@ -20,11 +15,11 @@ import fav_sub from "./../../img/fav_sub.svg";
 import notice from "./../../img/notice_more.svg";
 import NavBar from "../../component/NavBar/NavBar.js";
 import Footer from "../../component/Footer/Footer.js";
-import { getModeClass } from "./../../App.js";
 import style from "./MoreSee.module.css";
 import Banner from "../../component/Banner/Banner.js";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
+const user_icon= 'https://supernova.io.kr/b/user_profile.svg';
 const boardList = [
   {
     id: 3,
