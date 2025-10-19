@@ -19,7 +19,8 @@ import style from "./MoreSee.module.css";
 import Banner from "../../component/Banner/Banner.js";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
-const user_icon= 'https://supernova.io.kr/b/user_profile.svg';
+const user_icon= 'https://supernova.io.kr/bravo/user_profile.svg';
+
 const boardList = [
   {
     id: 3,
@@ -152,7 +153,7 @@ function MoreSee({ onModeChange }) {
 
   console.log(user);
 
-  const profile = `https://supernova.io.kr/b/${user}.png`;
+  const profile = `https://supernova.io.kr/bravo/${user}.png`;
 
   const firstBoardList = boardList.slice(0, 2);
   const secondBoardList = boardList.slice(2, 4);

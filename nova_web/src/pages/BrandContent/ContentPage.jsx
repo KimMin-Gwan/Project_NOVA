@@ -14,9 +14,9 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 
-const contentBackgroundImage = "https://supernova.io.kr/d/content-background-svg.svg";
-const bluredBackgroundImage = "https://supernova.io.kr/d/blurBackground.png";
-const brandImg = "https://supernova.io.kr/d/brand_img.png";
+const contentBackgroundImage = "https://supernova.io.kr/delta/content-background-svg.svg";
+const bluredBackgroundImage = "https://supernova.io.kr/delta/blurBackground.png";
+const brandImg = "https://supernova.io.kr/delta/brand_img.png";
 
 
 export default function ContentPage (){

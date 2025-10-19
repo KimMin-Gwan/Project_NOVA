@@ -1,1 +1,1 @@
-export const SCHEDULE_IMAGE_URL = "https://supernova.io.kr/a/";
+export const SCHEDULE_IMAGE_URL = "https://supernova.io.kr/alpha/";

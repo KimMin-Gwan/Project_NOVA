@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const feedApi = axios.create({
-  baseURL: "https://supernova.io.kr/c/",
+  baseURL: "https://supernova.io.kr/charlie/",
   withCredentials: true,
 });
 

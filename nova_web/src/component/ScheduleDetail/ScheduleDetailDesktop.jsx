@@ -6,7 +6,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import MyPageLoading from "../../pages/LoadingPage/MypageLoading";
 
 const ScheduleDetailDekstop = ({sid, toggleDetailOption}) => {
-    const defaultImage = "https://supernova.io.kr/d/no-image.png"
+    const defaultImage = "https://supernova.io.kr/delta/no-image.png"
     const [image, setImage] = useState(null);
     const [tags, setTags] = useState([]);
     const [schedule, setSchedule] = useState({});

@@ -24,7 +24,7 @@ import Carousel from "./carosel/Carosel.jsx"
 
 import { useNavigate } from "react-router-dom";
 
-const brandBackgroundImage = "https://supernova.io.kr/d/brand-background.svg";
+const brandBackgroundImage = "https://supernova.io.kr/delta/brand-background.svg";
 
 export default function BrandPage() {
     const targetRef1 = useRef(null);

@@ -13,7 +13,7 @@ import DesktopLayout from "../../component/DesktopLayout/DeskTopLayout";
 import AdComponent from "../../component/AdComponent/AdComponent";
 import ReportModal from "../../component/ReportModal/ReportModal";
 
-const user_icon= 'https://supernova.io.kr/b/user_profile.svg';
+const user_icon= 'https://supernova.io.kr/bravo/user_profile.svg';
 
 export default function NewFeedDetail() {
   const isMobile = useMediaQuery('(max-width:1100px)');
@@ -576,7 +576,7 @@ export default function NewFeedDetail() {
 function CommentComponent({cid, uid, owner, uname, isReply,
    reply, body, date, commentAction, commentReport
   }){
-  const profile = `https://supernova.io.kr/b/${uid}.png`;
+  const profile = `https://supernova.io.kr/bravo/${uid}.png`;
   const pressTimer = useRef(null);
 
   const handlePressStart = () => {
