@@ -110,29 +110,30 @@
   width: 100%;
   margin-top : 14px;
   margin-bottom: 14px;
-
 }
 
 
 .comment-component {
   display:flex;
-  align-content: center;
-  align-items: center;
+  justify-content: flex-start;
+  align-items: flex-start;
   width: 100%;
-  margin-top : 28px;
-  margin-bottom: 28px;
+  margin-top : 10px;
+  margin-bottom: 14px;
 }
 
 .profile-box {
+  flex-shrink: 0;
   width: 36px;
   height: 36px;
   padding: 3px;
   border-radius: 50%;
-  background: linear-gradient(131deg, rgba(255, 255, 255, 0.40) 16.75%, rgba(255, 255, 255, 0.60) 83.82%);
   filter: drop-shadow(3px 3px 8px rgba(0, 0, 0, 0.08));
   display: flex; /* 추가 */
   justify-content: center; /* 추가 */
   align-items: center; /* 추가 */
+  margin-top: 4px;
+  margin-right: 0px;
 
   img{
     width: 100%;
@@ -146,13 +147,13 @@
 .comment-box {
   display: flex;
   flex-direction: column;
-  max-width: calc(100%); /* 부모 컨테이너에서의 최대 너비 설정 */
+  max-width: calc(100% - 50px); /* 부모 컨테이너에서의 최대 너비 설정 */
   gap: 7px;
 }
 
 .comment-writer {
   color: #2c2c2c;
-  margin-top: 18px;
+  margin-top: 4px;
   font-size: 15px;
   font-style: normal;
   font-weight: 600;
@@ -161,6 +162,7 @@
 
 .comment-body {
   display: inline-block; /* 인라인 블록으로 크기를 자동 조정 */
+  max-width: 76%;
   padding: 8px;
   font-size: 14px;
   font-weight: 600;
@@ -197,7 +199,7 @@
 .comment-flex-vertical-container{
   display: flex;
   align-items: flex-end;
-  width: 100%; /* 부모 컨테이너에서의 최대 너비 설정 */
+  max-width: 100%; /* 부모 컨테이너에서의 최대 너비 설정 */
   gap: 4px;
 } 
 

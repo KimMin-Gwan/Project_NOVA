@@ -55,19 +55,35 @@ export default function NewFeedDetail() {
   const commentBoxRef = useRef(null);
 
   const [showCommentMoreOption, setShowCommentMoreOption] = useState(false);
+  const [showCommentReportOption, setShowCommentReportOption] = useState(false);
   const [optionTargetComment, setOptionTargetComment] = useState("");
 
-  const [targetFeed, setTargetFeed] = useState({fid:""});
+  const [targetReport, setTargetReport] = useState({fid:""});
+  const [targetComment, setTargetComment] = useState({cid:""});
   const [reportModal, setReportModal] = useState(false);
+  const [reportType, setReportType] = useState(false);
 
   const handleReport = (target) => {
-      setTargetFeed(target);
-      setReportModal(true);
+    setReportType("feed")
+    setTargetReport(target);
+    setReportModal(true);
+  }
+
+  const handleCommentReport = () => {
+    setReportType("comment")
+    setShowCommentReportOption(false);
+    setReportModal(true);
   }
 
   const togglePushingComment = (cid) => {
     setOptionTargetComment(cid);
     setShowCommentMoreOption(!showCommentMoreOption);
+  }
+
+  // 신고 전용
+  const toggleReportComment = (comment) => {
+    setTargetReport(comment);
+    setShowCommentReportOption(!showCommentReportOption);
   }
 
   useEffect(() => {
@@ -316,12 +332,11 @@ export default function NewFeedDetail() {
     }
   }
 
-
-  const onClickComment = (cid, targetCid, uname) => {
-    setCommentId(targetCid || cid);
-    setCommentValue(`@${uname} `);
-    commentRef.current.focus();
-  };
+  //const onClickComment = (cid, targetCid, uname) => {
+    //setCommentId(targetCid || cid);
+    //setCommentValue(`@${uname} `);
+    //commentRef.current.focus();
+  //};
 
   function fetchRemoveFeed() {
     mainApi.get(`feed_explore/try_remove_feed?fid=${fid}`).then((res) => {
@@ -343,14 +358,14 @@ export default function NewFeedDetail() {
     isMobile ? (
       <div className="container">
         {
-            reportModal && (
-                <ReportModal type={"feed"} target={targetFeed} toggleReportOption={setReportModal} />
-            )
+          reportModal && (
+            <ReportModal type={reportType} target={targetReport} toggleReportOption={setReportModal} />
+          )
         }
         <div className={style["top-container"]}>
           <button
             className={style["back-button"]}
-            onClick={() => navigate(-1)}
+            onClick={() => navigate('/post_board')}
           >
             <img src={back} alt="back" />
             <span>뒤로</span>
@@ -392,6 +407,14 @@ export default function NewFeedDetail() {
           />
         )}
 
+
+        {showCommentReportOption && (
+          <CommentReportOptionModal
+            onClose={toggleReportComment}
+            onClickReport={handleCommentReport}
+          />
+        )}
+
         <div className={style["comment-wrapper"]}>
           <div className={style["comment-wrapper-title"]}>실시간 코멘트</div>
 
@@ -410,6 +433,7 @@ export default function NewFeedDetail() {
                 key={index}
                 {...comment}
                 commentAction={togglePushingComment}
+                commentReport={toggleReportComment}
               />
             ))}
           </div>
@@ -440,7 +464,7 @@ export default function NewFeedDetail() {
         <div className={style["container"]}>
           {
               reportModal && (
-                <ReportModal type={"feed"} target={targetFeed} toggleReportOption={setReportModal} />
+                <ReportModal type={reportType} target={targetReport} toggleReportOption={setReportModal} />
               )
           }
           <div className={style["desktop-ad-section-style"]}>
@@ -450,7 +474,7 @@ export default function NewFeedDetail() {
             <div className={style["top-container"]}>
               <button
                 className={style["back-button"]}
-                onClick={() => navigate(-1)}
+                  onClick={() => navigate('/post_board')}
               >
                 <img src={back} alt="back" />
                 <span>뒤로</span>
@@ -495,6 +519,13 @@ export default function NewFeedDetail() {
               />
             )}
 
+            {showCommentReportOption && (
+              <CommentReportOptionModal
+                onClose={toggleReportComment}
+                onClickReport={handleCommentReport}
+              />
+            )}
+
             <div className={style["comment-wrapper"]}>
               <div className={style["comment-wrapper-title"]}>실시간 코멘트</div>
 
@@ -513,6 +544,7 @@ export default function NewFeedDetail() {
                     key={index}
                     {...comment}
                     commentAction={togglePushingComment}
+                    commentReport={toggleReportComment}
                   />
                 ))}
               </div>
@@ -549,7 +581,9 @@ export default function NewFeedDetail() {
 }
 
 
-function CommentComponent({cid, uid, owner, uname, isReply, reply, body, date, commentAction}){
+function CommentComponent({cid, uid, owner, uname, isReply,
+   reply, body, date, commentAction, commentReport
+  }){
   const profile = `https://kr.object.ncloudstorage.com/nova-profile-bucket/${uid}.png`;
   const pressTimer = useRef(null);
 
@@ -565,6 +599,21 @@ function CommentComponent({cid, uid, owner, uname, isReply, reply, body, date, c
   };
 
   const handlePressEnd = () => {
+    clearTimeout(pressTimer.current); // 타이머 초기화
+  };
+
+  const handlePressStart2 = () => {
+    if (body == "삭제된 댓글입니다."){
+      return;
+    }
+
+    pressTimer.current = setTimeout(() => {
+      // 꾹 누르기 감지 시 실행할 작업
+      commentReport({cid:cid});
+    }, 500); // 500ms 이상 눌렀을 때 실행
+  };
+
+  const handlePressEnd2 = () => {
     clearTimeout(pressTimer.current); // 타이머 초기화
   };
 
@@ -594,17 +643,15 @@ function CommentComponent({cid, uid, owner, uname, isReply, reply, body, date, c
       return (
         <div id={cid} className={style["comment-component"]}>
           <div className={style["profile-box"]}>
-              <img className={style=["profile-img"]} src={profile} alt="img" onError={(e) => (e.target.src = user_icon)} />
+            <img className={style=["profile-img"]} src={profile} alt="img" onError={(e) => (e.target.src = user_icon)} />
           </div>
-            <div style={{width:"14px"}}>
-            </div>
-
           <div className={style["comment-box"]}>
             <div className={style["comment-writer"]}>
               {uname}
             </div>
             <div className={style["comment-flex-vertical-container"]}>
-              <div className={style["comment-body"]}>
+              <div className={style["comment-body"]}
+              >
                 {body}
               </div>
               <div className={style["comment-date"]}>
@@ -628,7 +675,13 @@ function CommentComponent({cid, uid, owner, uname, isReply, reply, body, date, c
             </div>
 
             <div className={style["comment-flex-vertical-container"]}>
-              <div className={style["comment-body"]}>
+              <div className={style["comment-body"]}
+                onMouseDown={handlePressStart2}
+                onMouseUp={handlePressEnd2}
+                onMouseLeave={handlePressEnd2} // 마우스가 벗어날 경우 초기화
+                onTouchStart={handlePressStart2}
+                onTouchEnd={handlePressEnd2} // 모바일 터치 지원
+              >
                 {body}
               </div>
               <div className={style["comment-date"]}>
@@ -674,7 +727,27 @@ function OptionModal({ onClickOption, onClickDelete, fid }) {
 }
 
 // 댓글 옵션 모달
-function CommentOptionModal({ onClose, onClickDelete, deleteTargetCid }) {
+function CommentReportOptionModal({ onClose, onClickReport}) {
+  return (
+    <div className={style["OptionModal"]} onClick={()=>onClose({cid:""})}>
+      <div
+        className={style["modal_container"]}
+        onClick={(e) => e.stopPropagation()} // 이벤트 버블링 방지
+      >
+        <div className={style["modal_title"]}>댓글</div>
+        <div
+          className={`${style["modal_content"]} ${style["modal_content_accent"]}`}
+          onClick={() => onClickReport()}
+        >
+          신고 
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// 댓글 옵션 모달
+function CommentOptionModal({ onClose, handleCommentReport, onClickDelete, deleteTargetCid }) {
   return (
     <div className={style["OptionModal"]} onClick={()=>onClose("")}>
       <div
@@ -683,6 +756,12 @@ function CommentOptionModal({ onClose, onClickDelete, deleteTargetCid }) {
       >
         <div className={style["modal_title"]}>댓글</div>
         {/* <div className={style["modal_content"]}>수정</div> */}
+        <div
+          className={`${style["modal_content"]} ${style["modal_content_accent"]}`}
+          onClick={() => onClickDelete(deleteTargetCid)}
+        >
+          신고 
+        </div>
         <div
           className={`${style["modal_content"]} ${style["modal_content_accent"]}`}
           onClick={() => onClickDelete(deleteTargetCid)}

@@ -10,7 +10,8 @@ const ReportModal = ({ type, target, toggleReportOption }) => {
     3: "증오 또는 악의적인 콘텐츠",
     4: "유해하거나 위험한 행위",
     5: "잘못된 정보",
-    6: "커뮤니티 지침 위반",
+    6: "부적절한 프로필 또는 닉네임",
+    7: "커뮤니티 지침 위반",
   };
 
   const [selected, setSelected] = useState(null);
@@ -25,21 +26,27 @@ const ReportModal = ({ type, target, toggleReportOption }) => {
     let id = "";
 
     if (type == "feed") {
-      id = target.fid
+      id = target.fid;
     }else if (type=="schedule"){
-      id = target.sid
+      id = target.sid;
+    }else if (type=="comment"){
+      id = target.cid;
     }else{
       return null;
     }
 
-    const res = await mainApi.get(`/nova_sub_system/try_report_violation?report_type=${type}&target_id=${id}&report_option=${targetOption}`)
-
-    if (res.data.body.result) {
-      alert("신고 제출이 완료 되었습니다.")
-    }else{
-      alert("신고 제출 중 문제가 생겼습니다.")
+    try{
+      const res = await mainApi.get(`/nova_sub_system/try_report_violation?report_type=${type}&target_id=${id}&report_option=${targetOption}`)
+      if (res.data.body.result) {
+        alert("신고 제출이 완료 되었습니다.");
+      }else{
+        alert("신고 제출 중 문제가 생겼습니다.");
+      }
     }
-    return
+    catch{
+      alert("신고 제출 중 문제가 생겼습니다. 관리자에게 문의하세요.");
+    }
+    return;
   }
 
   return (
@@ -73,7 +80,10 @@ const ReportModal = ({ type, target, toggleReportOption }) => {
           selected && (
             <div className={style["button-wrapper"]}>
               <div className={style["submit-button"]}
-                onClick={fetchViolationReport}
+                onClick={async ()=>{
+                  await fetchViolationReport();
+                  toggleReportOption();
+                }}
               >
                 제출하기
               </div>
