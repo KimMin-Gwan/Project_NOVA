@@ -23,7 +23,7 @@ const NewFollowPage = () => {
 
     const handleKeyDown = (event) => {
         if (event.key === "Enter") {
-            fetchSearchBias(searchWord, targetPlatform, searchResult.length, false);
+            fetchSearchBias(searchWord, targetPlatform);
         }
     }
 
@@ -34,6 +34,12 @@ const NewFollowPage = () => {
         }else{
             setSearchResult(res.data.body.biases);
         }
+        return res.data.body.biases.length;
+    }
+
+    const fetchSearchBiasInit = async (keyword, platform) => {
+        const res = await mainApi.get(`/nova_sub_system/try_search_bias?keyword=${keyword}&category=${platform}&len_bias=${0}`);
+        setSearchResult(res.data.body.biases);
         return res.data.body.biases.length;
     }
 
