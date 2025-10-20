@@ -248,7 +248,7 @@ const Write = () => {
       header: header,
       body: {
         body: longData, // 입력된 글 본문 반영
-        fid: param.fid || "",
+        fid: targetFid || "",
         hashtag: tagList,
         link: linkList,
         bid: biasId,
