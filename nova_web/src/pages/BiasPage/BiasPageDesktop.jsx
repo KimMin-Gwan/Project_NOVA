@@ -28,7 +28,7 @@ const BiasPageDesktop = ({
     scheduleList, targetBias, weekData, prevWeek,
      nextWeek, targetSchedule, setTargetSchedule,
      targetScheduleDatetime, setTargetScheduleDatetime,
-      fetchTryFollowBias, is_following, isValidUser
+      fetchTryFollowBias, is_following, isValidUser, todayIndex
 }) => {
     const navigate = useNavigate();
     const location = useLocation();
@@ -479,6 +479,8 @@ const BiasPageDesktop = ({
                                             scheduleData={scheduleData}
                                             setTargetSchedule={setTargetSchedule}
                                             setTargetScheduleDatetime={setTargetScheduleDatetime}
+                                            index={index}
+                                            todayIndex={todayIndex}
                                         />
                                     </SwiperSlide>
                                 ))}
@@ -498,21 +500,117 @@ const BiasPageDesktop = ({
 
 
 const ScheduleComponent = ({
-    scheduleData, setTargetSchedule, setTargetScheduleDatetime
+    scheduleData, setTargetSchedule, setTargetScheduleDatetime,
+    index, todayIndex
 }) => {
 
     if(scheduleData.schedule.sid == ""){
         return(
-            <EmptyScheduleComponent scheduleData={scheduleData}/>
+            <>
+                <EmptyScheduleComponent 
+                    scheduleData={scheduleData} index={index} todayIndex={todayIndex}
+                />
+            </>
         );
     }else{
+        if(index == todayIndex){
+            return(
+                <div className={style["schedule-component-today"]}
+                    onClick={()=>{
+                        setTargetSchedule(scheduleData.schedule)
+                        const str_datetime = `${scheduleData.date} ${scheduleData.weekday}`
+                        setTargetScheduleDatetime(str_datetime);
+                    }}
+                >
+                    <div className={style["schedule-date-wrapper"]}>
+                        <div className={style["schedule-date"]}>
+                            {scheduleData.date}
+                        </div>
+                        <div className={style["schedule-weekday"]}>
+                            {scheduleData.weekday}
+                        </div>
+                    </div>
+                    <div className={style["schedule-detail-wrapper"]}>
+                        <div className={style["schedule-title"]}>
+                            {scheduleData.schedule.title}
+                        </div>
+                        <div className={style["schedule-start"]}>
+                            {
+                                getStartTime(scheduleData.schedule.datetime)
+                            }
+                        </div>
+                    </div>
+                    <div className={style["tag-wrapper"]}>
+                    {
+                        scheduleData.schedule.tags
+                        .slice(0, 3)
+                        .map((tag, index) => (
+                            <div
+                            className={style["tag"]}
+                            key={`tag-${index}`}
+                            >
+                            {tag}
+                            </div>
+                        ))
+                    }
+                    </div>
+                </div>
+            );
+        } else{
+            return(
+                <div className={style["schedule-component"]}
+                    onClick={()=>{
+                        setTargetSchedule(scheduleData.schedule)
+                        const str_datetime = `${scheduleData.date} ${scheduleData.weekday}`
+                        setTargetScheduleDatetime(str_datetime);
+                    }}
+                >
+                    <div className={style["schedule-date-wrapper"]}>
+                        <div className={style["schedule-date"]}>
+                            {scheduleData.date}
+                        </div>
+                        <div className={style["schedule-weekday"]}>
+                            {scheduleData.weekday}
+                        </div>
+                    </div>
+                    <div className={style["schedule-detail-wrapper"]}>
+                        <div className={style["schedule-title"]}>
+                            {scheduleData.schedule.title}
+                        </div>
+                        <div className={style["schedule-start"]}>
+                            {
+                                getStartTime(scheduleData.schedule.datetime)
+                            }
+                        </div>
+                    </div>
+                    <div className={style["tag-wrapper"]}>
+                    {
+                        scheduleData.schedule.tags
+                        .slice(0, 3)
+                        .map((tag, index) => (
+                            <div
+                            className={style["tag"]}
+                            key={`tag-${index}`}
+                            >
+                            {tag}
+                            </div>
+                        ))
+                    }
+                    </div>
+                </div>
+            );
+        }
+    }
+}
+
+const EmptyScheduleComponent = ({
+    scheduleData, index, todayIndex
+})=> {
+
+    if(index == todayIndex){
         return(
-            <div className={style["schedule-component"]}
-                onClick={()=>{
-                    setTargetSchedule(scheduleData.schedule)
-                    const str_datetime = `${scheduleData.date} ${scheduleData.weekday}`
-                    setTargetScheduleDatetime(str_datetime);
-                }}
+            <div className={style["schedule-component-today"]}
+                style={{minHeight:"117px"}}
             >
                 <div className={style["schedule-date-wrapper"]}>
                     <div className={style["schedule-date"]}>
@@ -522,59 +620,38 @@ const ScheduleComponent = ({
                         {scheduleData.weekday}
                     </div>
                 </div>
-                <div className={style["schedule-detail-wrapper"]}>
+                <div className={style["schedule-detail-empty-wrapper"]}>
                     <div className={style["schedule-title"]}>
-                        {scheduleData.schedule.title}
-                    </div>
-                    <div className={style["schedule-start"]}>
-                        {
-                            getStartTime(scheduleData.schedule.datetime)
-                        }
+                        {"휴방 / 미지정"}
                     </div>
                 </div>
                 <div className={style["tag-wrapper"]}>
-                {
-                    scheduleData.schedule.tags
-                    .slice(0, 3)
-                    .map((tag, index) => (
-                        <div
-                        className={style["tag"]}
-                        key={`tag-${index}`}
-                        >
-                        {tag}
-                        </div>
-                    ))
-                }
+                </div>
+            </div>
+        );
+    }else{
+        return(
+            <div className={style["schedule-component"]}
+                style={{minHeight:"117px"}}
+            >
+                <div className={style["schedule-date-wrapper"]}>
+                    <div className={style["schedule-date"]}>
+                        {scheduleData.date}
+                    </div>
+                    <div className={style["schedule-weekday"]}>
+                        {scheduleData.weekday}
+                    </div>
+                </div>
+                <div className={style["schedule-detail-empty-wrapper"]}>
+                    <div className={style["schedule-title"]}>
+                        {"휴방 / 미지정"}
+                    </div>
+                </div>
+                <div className={style["tag-wrapper"]}>
                 </div>
             </div>
         );
     }
-}
-
-const EmptyScheduleComponent = ({
-    scheduleData
-})=> {
-    return(
-        <div className={style["schedule-component"]}
-            style={{minHeight:"117px"}}
-        >
-            <div className={style["schedule-date-wrapper"]}>
-                <div className={style["schedule-date"]}>
-                    {scheduleData.date}
-                </div>
-                <div className={style["schedule-weekday"]}>
-                    {scheduleData.weekday}
-                </div>
-            </div>
-            <div className={style["schedule-detail-empty-wrapper"]}>
-                <div className={style["schedule-title"]}>
-                    {"휴방 / 미지정"}
-                </div>
-            </div>
-            <div className={style["tag-wrapper"]}>
-            </div>
-        </div>
-    );
 }
 
 export default BiasPageDesktop;

@@ -23,7 +23,7 @@ import edit1 from "./icons/edit1.svg";
 
 const BiasPageMobile = ({
     scheduleList, targetBias, weekData, prevWeek,
-     nextWeek, fetchTryFollowBias, is_following, isValidUser
+     nextWeek, fetchTryFollowBias, is_following, isValidUser, todayIndex
 }) => {
     const [isChecked, setIsChecked] = useState(true);
     const [targetSchedule, setTargetSchedule] = useState(null);
@@ -333,9 +333,19 @@ const BiasPageMobile = ({
                                 transition={{ duration: 0.5, ease: "easeOut" }}
                             >
                                 {schedule.schedule.sid !== "" ? (
-                                    <ScheduleComponent schedule={schedule.schedule} metaData={schedule} handleTargetSchedule={handleTargetSchedule} />
+                                    <ScheduleComponent 
+                                        schedule={schedule.schedule}
+                                        metaData={schedule}
+                                        handleTargetSchedule={handleTargetSchedule} 
+                                        index={index}
+                                        todayIndex={todayIndex}
+                                    />
                                 ) : (
-                                    <EmptyScheduleComponent metaData={schedule}/>
+                                    <EmptyScheduleComponent 
+                                        metaData={schedule}
+                                        index={index}
+                                        todayIndex={todayIndex}
+                                    />
                                 )}
                                 {
                                     index != 6 && (
@@ -361,25 +371,41 @@ const BiasPageMobile = ({
 
 
 
-const EmptyScheduleComponent = ({metaData}) => {
+const EmptyScheduleComponent = ({metaData, index, todayIndex}) => {
 
-    return(
-        <div className={style["single-schedule-container"]}>
-            <div className={style["schedule-datetime-wrapper"]}>
-                <div className={style["schedule-datetime"]}>
-                    {metaData.date || "날짜 없음"}
+    if (index == todayIndex){
+        return(
+            <div className={style["single-schedule-container-today"]}>
+                <div className={style["schedule-datetime-wrapper"]}>
+                    <div className={style["schedule-datetime"]}>
+                        {metaData.date || "날짜 없음"}
+                    </div>
+                    <div className={style["datetime-weekday"]}>
+                        {metaData.weekday || ""}
+                    </div>
                 </div>
-                <div className={style["datetime-weekday"]}>
-                    {metaData.weekday || ""}
-                </div>
+                <div className={style["empty-schedule"]}>휴방 / 미지정</div>
             </div>
-            <div className={style["empty-schedule"]}>휴방 / 미지정</div>
-        </div>
-    );
+        );
+    }else{
+        return(
+            <div className={style["single-schedule-container"]}>
+                <div className={style["schedule-datetime-wrapper"]}>
+                    <div className={style["schedule-datetime"]}>
+                        {metaData.date || "날짜 없음"}
+                    </div>
+                    <div className={style["datetime-weekday"]}>
+                        {metaData.weekday || ""}
+                    </div>
+                </div>
+                <div className={style["empty-schedule"]}>휴방 / 미지정</div>
+            </div>
+        );
+    }
 }
 
 
-const ScheduleComponent = ({schedule, metaData, handleTargetSchedule}) => {
+const ScheduleComponent = ({schedule, metaData, handleTargetSchedule, index, todayIndex}) => {
     const [image, setImage] = useState(null);
 
     useEffect(()=>{
@@ -387,54 +413,107 @@ const ScheduleComponent = ({schedule, metaData, handleTargetSchedule}) => {
         handlePreviewImage(url, setImage);
     }, [])
 
-    return(
-        <div className={style["single-schedule-container"]}
-            onClick={()=>{handleTargetSchedule(schedule)}}
-        >
-            <div className={style["schedule-datetime-wrapper"]}>
-                <div className={style["schedule-datetime"]}>
-                    {metaData.date || "날짜 없음"}
-                </div>
-                <div className={style["datetime-weekday"]}>
-                    {metaData.weekday || ""}
-                </div>
-            </div>
-            <div className={style["single-schedule-container-wrapper"]}>
-                <div className={style["single-schedule-image"]}>
-                    {
-                        image != null ? (
-                            <img src={image} alt="스케줄 이미지" />
-                        ) : (
-                            <img src={defaultImage} alt="스케줄 이미지" />
-                        )
-                    }   
-                </div>
-                <div className={style["single-schedule-detail-wrapper"]}>
-                    <div className={style["single-schedule-title-wrapper"]}>
-                        <div className={style["single-schedule-title"]}>
-                            {schedule.title || "콘텐츠 없음"}
-                        </div>
-                        <div className={style["single-start-time"]}>
-                            {
-                                getStartTime(schedule.datetime)
-                            }
-                        </div>
+    if (index == todayIndex){
+        return(
+            <div className={style["single-schedule-container-today"]}
+                onClick={()=>{handleTargetSchedule(schedule)}}
+            >
+                <div className={style["schedule-datetime-wrapper"]}>
+                    <div className={style["schedule-datetime"]}>
+                        {metaData.date || "날짜 없음"}
                     </div>
-                    <div className={style["schedule-tag-wrapper"]}>
-                        {schedule.tags.length > 0 ? (
-                            schedule.tags.slice(0, 3).map((tag, tIdx) => (
-                                <div key={tIdx} className={style["tag"]}>
-                                    {tag}
-                                </div>
-                            ))
-                        ) : (
-                            <div className={style["tag"]}>-</div>
-                        )}
+                    <div className={style["datetime-weekday"]}>
+                        {metaData.weekday || ""}
                     </div>
                 </div>
+                <div className={style["single-schedule-container-wrapper"]}>
+                    <div className={style["single-schedule-image"]}>
+                        {
+                            image != null ? (
+                                <img src={image} alt="스케줄 이미지" />
+                            ) : (
+                                <img src={defaultImage} alt="스케줄 이미지" />
+                            )
+                        }   
+                    </div>
+                    <div className={style["single-schedule-detail-wrapper"]}>
+                        <div className={style["single-schedule-title-wrapper"]}>
+                            <div className={style["single-schedule-title"]}>
+                                {schedule.title || "콘텐츠 없음"}
+                            </div>
+                            <div className={style["single-start-time"]}>
+                                {
+                                    getStartTime(schedule.datetime)
+                                }
+                            </div>
+                        </div>
+                        <div className={style["schedule-tag-wrapper"]}>
+                            {schedule.tags.length > 0 ? (
+                                schedule.tags.slice(0, 3).map((tag, tIdx) => (
+                                    <div key={tIdx} className={style["tag"]}>
+                                        {tag}
+                                    </div>
+                                ))
+                            ) : (
+                                <div className={style["tag"]}>-</div>
+                            )}
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-    );
+        );
+    }else{
+        return(
+            <div className={style["single-schedule-container"]}
+                onClick={()=>{handleTargetSchedule(schedule)}}
+            >
+                <div className={style["schedule-datetime-wrapper"]}>
+                    <div className={style["schedule-datetime"]}>
+                        {metaData.date || "날짜 없음"}
+                    </div>
+                    <div className={style["datetime-weekday"]}>
+                        {metaData.weekday || ""}
+                    </div>
+                </div>
+                <div className={style["single-schedule-container-wrapper"]}>
+                    <div className={style["single-schedule-image"]}>
+                        {
+                            image != null ? (
+                                <img src={image} alt="스케줄 이미지" />
+                            ) : (
+                                <img src={defaultImage} alt="스케줄 이미지" />
+                            )
+                        }   
+                    </div>
+                    <div className={style["single-schedule-detail-wrapper"]}>
+                        <div className={style["single-schedule-title-wrapper"]}>
+                            <div className={style["single-schedule-title"]}>
+                                {schedule.title || "콘텐츠 없음"}
+                            </div>
+                            <div className={style["single-start-time"]}>
+                                {
+                                    getStartTime(schedule.datetime)
+                                }
+                            </div>
+                        </div>
+                        <div className={style["schedule-tag-wrapper"]}>
+                            {schedule.tags.length > 0 ? (
+                                schedule.tags.slice(0, 3).map((tag, tIdx) => (
+                                    <div key={tIdx} className={style["tag"]}>
+                                        {tag}
+                                    </div>
+                                ))
+                            ) : (
+                                <div className={style["tag"]}>-</div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+
+    }
+
 }
 
 

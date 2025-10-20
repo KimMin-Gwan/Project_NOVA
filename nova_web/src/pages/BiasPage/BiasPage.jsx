@@ -17,6 +17,7 @@ const BiasPage = () => {
     const [weekData, setWeekData] = useState("");
     const [is_following, setIsFollowing] = useState(false);
     const [isValidUser, setIsValidUser] = useState(false);
+    const [todayIndex, setTodayIndex] = useState(-1);
 
     const [targetBias, setTargetBias] = useState({
         bname :"",
@@ -93,6 +94,7 @@ const BiasPage = () => {
                     const response = await fetchScheduleData({ bid: bias.bid, date: targetDate}); // await 추가
                     setScheduleList(response.schedule_data);
                     setWeekData(response.week_data);
+                    setTodayIndex(response.today_index)
                 } catch (err) {
                     console.error("데이터 로딩 실패:", err);
                     alert("데이터를 불러오는 중 오류가 발생했습니다.");
@@ -138,6 +140,7 @@ const BiasPage = () => {
                 const response = await fetchScheduleData({ bid: targetBias.bid, date: targetDate }); // await 추가
                 setScheduleList(response.schedule_data);
                 setWeekData(response.week_data);
+                setTodayIndex(response.today_index)
             }
         }
         loadScheduleData()
@@ -174,6 +177,7 @@ const BiasPage = () => {
                 fetchTryFollowBias={fetchTryFollowBias}
                 is_following={is_following}
                 isValidUser={isValidUser}
+                todayIndex={todayIndex}
             />
         );
     }else{
@@ -192,6 +196,7 @@ const BiasPage = () => {
                     fetchTryFollowBias={fetchTryFollowBias}
                     is_following={is_following}
                     isValidUser={isValidUser}
+                    todayIndex={todayIndex}
                  />
             </DesktopLayout>
         );

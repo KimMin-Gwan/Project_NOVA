@@ -419,6 +419,20 @@ input[type="checkbox"]:checked + .toggleSwitch {
     box-shadow: 3px 3px 8px 0 rgba(0, 0, 0, 0.08);
 }
 
+.single-schedule-container-today{
+    display: flex;
+    flex-direction: column;
+    padding: 12px;
+    height: fit-content;
+    align-items: flex-start;
+    gap: 10px;
+    align-self: stretch;
+    border-radius: 14px;
+    border: 2px solid #b6ffaf;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.50) 0%, rgba(255, 255, 255, 0.70) 100%);
+    box-shadow: 3px 3px 8px 0 rgba(0, 0, 0, 0.08);
+}
+
 .single-schedule-container-wrapper{
     display: flex;
     justify-content: center;

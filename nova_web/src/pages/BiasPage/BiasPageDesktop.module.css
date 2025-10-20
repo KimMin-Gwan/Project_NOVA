@@ -542,6 +542,32 @@
     transform: scale(0.98);
 }
 
+.schedule-component-today{
+    display: flex;
+    padding: 10px 20px 14px 20px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    align-self: stretch;
+    border-radius: 16px;
+    border: 1px solid #5bff4c;
+    background: #FFF;
+    font-family: Pretendard;
+    font-style: normal;
+    line-height: 140%; /* 19.6px */
+    letter-spacing: -0.35px;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+.schedule-component-today:hover{
+    background: #f2f6ff;
+}
+
+.schedule-component-today:active{
+    transform: scale(0.98);
+}
+
 .schedule-date-wrapper{
     display: flex;
     justify-content: center;
