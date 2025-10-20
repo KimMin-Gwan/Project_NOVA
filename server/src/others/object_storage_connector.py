@@ -15,8 +15,8 @@ import numpy as np
 import re
 from urllib.parse import urlparse
 
-access_key = 
-secret_key = 
+access_key = "your_access_key"
+secret_key = "your_secret_key"
 
 
 # 건들지 않음

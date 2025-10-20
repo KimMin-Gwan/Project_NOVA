@@ -620,7 +620,7 @@ class ManagedTable:
             logging.error(f"존재하지 않는 열: {start_column}")
             return df
 
-        if date_option not in ("day", "weekly", "specific") and date_option not in SKIP_TUPLE:
+        if date_option not in ("day", "weekly", "specific", "specific_range") and date_option not in SKIP_TUPLE:
             logging.error("date_option은 day, weekly, specific 에만 대응 됩니다.")
             return df
 
@@ -643,8 +643,23 @@ class ManagedTable:
                     specific_date = datetime.strptime(condition["specific_date"], "%Y/%m/%d").date()
                 else:
                     specific_date = condition["specific_date"].date()
-                mask &= (df[start_column].dt.date == specific_date)
 
+                # 날짜 범위 고려 필터링()
+                if isinstance(condition["duration"], int) and condition["duration"] != 0:
+                    duration = timedelta(hours=condition["duration"])
+                    start_date = min(specific_date, specific_date + duration)
+                    end_date = max(specific_date, specific_date + duration)
+
+                    print("start_date: ", start_date)
+                    print("end_date: ", end_date)
+                    
+                    mask &= (df[start_column].dt.date >= start_date) & (df[start_column].dt.date <= end_date)   # 날짜 범위 내의 데이터 필터링
+                else:
+                    mask &= (df[start_column].dt.date == specific_date)
+            else:
+                pass
+        
+    
         return df[mask]
     
     def _filter_data_with_month_option(self, df: pd.DataFrame, date: datetime, data_column: str = ""):
@@ -1276,7 +1291,7 @@ class ManagedScheduleTable(ManagedTable):
         
 
     # 오늘 날짜, 혹은 특정 날짜에 대한 일정들을 표시하는 기능.
-    def filtering_schedule_in_specific_date(self, selected_sids:list, specific_date:str, return_id:bool):
+    def filtering_schedule_in_specific_date(self, selected_sids:list, specific_date:str, duration:int, return_id:bool):
         searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_df, sid=selected_sids)
         
         if searched_df.empty:
@@ -1285,7 +1300,8 @@ class ManagedScheduleTable(ManagedTable):
         
         searched_df = self._filter_data_with_date_option(df=searched_df, date_option="specific",
                                                          date_columns=["datetime"],
-                                                         specific_date=specific_date)
+                                                         specific_date=specific_date,
+                                                         duration=duration)
         
         if searched_df.empty:
             logging.warning(f"Filtering schedule in specific date {specific_date} returned empty DataFrame.")

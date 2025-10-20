@@ -1084,12 +1084,9 @@ class ScheduleTimeLayerModel(TimeTableModel):
         # specific_date의 자료형은 str 그대로 써도됩니다. managed_table에서 Datetime 객체로 변환시키도록 만들었음.
         # return_id = True -> sid list 반환, False -> managed_Schedule list 반환
 
-        print("target_date: ", target_date)
-        specific_date = datetime.strptime(target_date, "%Y/%m/%d") - timedelta(days=1)
-        specific_date = specific_date.strftime("%Y/%m/%d")
-        #  하루 전 데이터를 들고옵니다. 
-        
-        sids = schedule_search_engine.try_get_schedules_in_specific_date(sids=["all"], specific_date=specific_date, return_id=True)
+        #  하루 전 데이터까지 들고옵니다. 
+
+        sids = schedule_search_engine.try_get_schedules_in_specific_date(sids=["all"], specific_date=target_date, duration=-1, return_id=True)
 
         # 여기서 managed_schedule은 dict 형태임
         for sid in sids:
@@ -1099,8 +1096,7 @@ class ScheduleTimeLayerModel(TimeTableModel):
                 self.__recommend_target_sids.append(sid)
                 
         schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids= self.__my_target_sids)
-
-        # print("schedule_datas: ", schedule_datas)
+        print("schedule_datas: ", schedule_datas)
         
         # 다 만들면 보관
         for schedule_data in schedule_datas:
