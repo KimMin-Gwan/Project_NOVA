@@ -155,7 +155,7 @@ class LogProcessor:
                 except Exception as e:
                     logging.error(f"Error to Upload Access Log compressed file to S3: {str(e)}")
             else:
-                logging.warning("Pass to Upload Access Log compressed file to S3")
+                logging.warning(f"Pass to Upload Access Log compressed file to S3 - File not found: {self.__access_log_xz_file_path}")
 
             # Error 로그 파일 업로드 (독립적으로 처리)
             if self.is_exist_file(self.__error_log_xz_file_path):
