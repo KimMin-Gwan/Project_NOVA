@@ -130,7 +130,7 @@ class LogProcessor:
         self.__clear_log_file(self.__error_log_local_path) # 로그 파일 초기화
         self.buffer = [] # 버퍼 초기화
 
-        print(' TEST! Error Log File created')
+        # print(' TEST! Error Log File created')
 
         return
 
@@ -204,11 +204,16 @@ class LogProcessor:
         # 로그 파일 압축
         self.__access_xz_file_path = self.compress_log_files(log_name="supernova_access_log", folder_path=self.__access_log_local_storage_path)
         self.__error_xz_file_path = self.compress_log_files(log_name="supernova_error_log", folder_path=self.__error_log_local_storage_path)
-        print(' TEST! Log File compressed')   
+        print(' TEST! Log File compressed')
+        print(f'Compressed Path 1 : {self.__access_xz_file_path}')
+        print(f'Compressed Path 2 : {self.__error_xz_file_path}')
 
         # S3 업로드
-        self.upload_log_files_to_s3()
-        print(' TEST! Log File uploaded')
+        result = self.upload_log_files_to_s3()
+        if result:
+            print(' TEST! Log File uploaded')
+        else:
+            print(' TEST! Log File Not Uploaded')
 
         self.clear_log_folders()        # 로그 파일 삭제 (압축 파일마저 삭제)
         print(' TEST! Log File reseted')
