@@ -8,7 +8,7 @@ import search_icon from "./search_icon.svg";
 import right_arrow from "./right_arrow.svg";
 import { useLocation, useNavigate } from 'react-router-dom';
 
-const top_logo = "https://supernova.io.kr/delta/logo.svg";
+const top_logo = "https://zvcgcnyd12501.edge.naverncp.com/logo.svg";
 export default function DesktopLayout({ children }) {
   const navigate = useNavigate();
   const [targetMenu, setTargetMenu] = useState("");
