@@ -117,6 +117,12 @@ input[type="checkbox"]:checked + .toggleSwitch {
     font-weight: 300;
 }
 
+.bias-image-outer-wrapper{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center
+}
 
 .bias-image-wrapper{
     display: flex;
@@ -127,6 +133,17 @@ input[type="checkbox"]:checked + .toggleSwitch {
     width: 190px;
     height: 190px;
     border-radius: 200px;
+}
+
+.image-change-meta-text{
+    color: #ff8198;
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+    letter-spacing: -0.7px;
 }
 
 .bias-image-wrapper img{

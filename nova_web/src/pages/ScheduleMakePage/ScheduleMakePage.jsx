@@ -81,9 +81,9 @@ const ScheduleMakePage = () => {
         const res = await mainApi.get(`/time_table_server/try_delete_schedule?sid=${sid}`);
 
         if (res.data.body.result){
-          alert("삭제되었습니다.")
+          alert("삭제되었습니다.");
         }else{
-          alert(res.data.body.result)
+          alert(res.data.body.detail);
         }
       }catch{
         alert("삭제에 실패했습니다. 관리자에게 문의하세요.")

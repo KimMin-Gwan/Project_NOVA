@@ -157,35 +157,42 @@ const BiasPageMobile = ({
                             </div>
                         </div>
 
-                        <div className={style["bias-image-wrapper"]}
-                            onClick={() => fileInputRef.current?.click()} // 클릭 시 input 열기
-                        >
-                            <img src={BIAS_URL + `${targetBias.bid}.png`}
-                                onError={(e) => {
-                                e.currentTarget.onerror = null;
-                                e.currentTarget.src = DEFAULT_BIAS_URL;
-                                }}
-                                alt="bias"
-                            />
+                        <div className={style["bias-image-outer-wrapper"]}>
+                            <div className={style["bias-image-wrapper"]}
+                                onClick={() => fileInputRef.current?.click()} // 클릭 시 input 열기
+                            >
+                                <img src={BIAS_URL + `${targetBias.bid}.png`}
+                                    onError={(e) => {
+                                    e.currentTarget.onerror = null;
+                                    e.currentTarget.src = DEFAULT_BIAS_URL;
+                                    }}
+                                    alt="bias"
+                                />
+                                {
+                                    isValidUser && (
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            ref={fileInputRef}
+                                            onChange={async(e) => {
+                                                setIsUploading(true);
+                                                await handleFileChange(e, targetBias.bid, setImage);
+                                                await handlePreview(e);
+                                                setIsUploading(false);
+                                            }}
+                                            style={{ display: "none" }} 
+                                        />
+                                    )
+                                }
+                            </div>
                             {
                                 isValidUser && (
-                                    <input
-                                        type="file"
-                                        accept="image/*"
-                                        ref={fileInputRef}
-                                        onChange={async(e) => {
-                                            setIsUploading(true);
-                                            await handleFileChange(e, targetBias.bid, setImage);
-                                            await handlePreview(e);
-                                            setIsUploading(false);
-                                        }}
-                                        style={{ display: "none" }} 
-                                    />
-
+                                    <div className={style["image-change-meta-text"]}>
+                                        이미지를 변경하려면 이미지를 터치하세요!
+                                    </div>
                                 )
                             }
                         </div>
-
                         <div className={style["bias-detail-container-wrapper"]}>
                             <div className={style["bias-name-container"]}>
                                 <div className={style["bias-platform-icon"]}>

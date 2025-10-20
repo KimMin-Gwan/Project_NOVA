@@ -320,7 +320,7 @@
     gap: 10px;
     align-self: stretch;
     min-width: 1000px;
-    height: 600px;
+    height: 700px;
 }
 
 .schedule-right-section{
@@ -333,7 +333,7 @@
     align-self: stretch;
     border-radius: 16px;
     background: #FFF;
-    height: calc(100% - 48px);
+    max-height: calc(100% - 48px);
 }
 
 .schedule-left-section{
@@ -346,11 +346,23 @@
     align-self: stretch;
 }
 
+.single-schedule-datetime{
+    display: flex;
+    align-self: stretch;
+    justify-content: center;
+    font-family: Pretendard;
+    font-style: normal;
+    line-height: 140%; /* 28px */
+    letter-spacing: -0.5px;
+    color: #333;
+    font-size: 21px;
+    font-weight: 500;
+}
+
 .single-schedule-image{
     display: flex;
     justify-content: center;
     align-items: center;
-    flex: 1 0 0;
     align-self: stretch;
     overflow: hidden;
 }
@@ -455,6 +467,7 @@
 
 
 .schedule-list-wrapper{
+    position: relative;
     display: flex;
     padding: 10px;
     flex-direction: column;
@@ -464,6 +477,43 @@
     border-radius: 16px;
     background: #FFF;
     overflow-y: hidden;
+}
+
+/* 👇 안내 오버레이 */
+.scroll-guide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  pointer-events: none; /* 스와이프 방해 금지 */
+  z-index: 10;
+  background: linear-gradient(to top, rgba(255,255,255,0.8) 20%, transparent 100%);
+  animation: fadeOut 3s ease 10s forwards;
+}
+
+.scroll-guide-inner {
+  margin-bottom: 130px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 8px 14px;
+  border-radius: 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  animation: floatY 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes floatY {
+  from { transform: translateY(0); }
+  to { transform: translateY(6px); }
+}
+
+@keyframes fadeOut {
+  to { opacity: 0; visibility: hidden; }
 }
 
 .schedule-component{

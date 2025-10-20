@@ -45,6 +45,7 @@ export default function PostBoard () {
 
 
     const fetchAllFeed = async () => {
+
         try {
             const data = await fetchAllFeedList(-1, filterCategory);
             setFeedData(data.body.send_data);
@@ -88,12 +89,16 @@ export default function PostBoard () {
         const targetBias = biasId;
         setFeedData([]);
         setNextData(-1);
+        setHasMore(true);
 
-        if (biasId){
-            fetchBiasCategoryData(targetBias);
-        }else{
-            fetchAllFeed();
+        const initNow = async () => {
+            if (biasId){
+                await fetchBiasCategoryData(targetBias);
+            }else{
+                await fetchAllFeed();
+            }
         }
+        initNow();
 
     }, [biasId])
 
@@ -179,7 +184,18 @@ export default function PostBoard () {
     const fetchPlusAllFeed = async () => {
         try {
             const data = await fetchAllFeedList(nextData, filterCategory);
-            setFeedData((prevData) => [...prevData, ...data.body.send_data]);
+
+            setFeedData((prevData) => {
+            const combined = [...prevData, ...data.body.send_data];
+
+            // 중복 제거 (feed_id 기준)
+            const unique = Array.from(
+                new Map(combined.map((item) => [item.feed.fid, item])).values()
+            );
+
+            return unique;
+            });
+
             setNextData(data.body.key);
             return data.body.send_data.length;
         } catch (err) {
@@ -199,7 +215,17 @@ export default function PostBoard () {
             })
 
             const body = res.data.body;
-            setFeedData((prevData) => [...prevData, ...body.send_data]);
+
+            setFeedData((prevData) => {
+                const combined = [...prevData, ...body.send_data];
+
+                // 중복 제거 (feed_id 기준)
+                const unique = Array.from(
+                    new Map(combined.map((item) => [item.feed.fid, item])).values()
+                );
+
+                return unique;
+            });
             setNextData(body.key);
         } catch (err) {
         }
@@ -209,6 +235,8 @@ export default function PostBoard () {
 
 
     const loadMoreCallBack = async () => {
+        console.log(initialLoaded);
+
         if (initialLoaded){
             if (biasId) {
                 const targetBias = biasId;
@@ -223,10 +251,10 @@ export default function PostBoard () {
     };
 
     const scrollRef = useRef(null);
-    const targetRef = useIntersectionObserver(loadMoreCallBack, 
+    const targetRef = useIntersectionObserver2(loadMoreCallBack, 
         { root:scrollRef.current, threshold: 0.5 }, hasMore);
 
-
+    console.log(biasId, hasMore);
 
     if (isMobile){
         return(
@@ -244,7 +272,7 @@ export default function PostBoard () {
                         <SearchBox />
                         <AdComponent type={"link"}/>
                     </div>
-                    <BiasBoxes setBiasId={setBiasId} fetchBiasCategoryData={fetchBiasCategoryData}  fecthDefaultSetting={fetchAllFeed}/>
+                    <BiasBoxes fecthDefaultSetting={fetchAllFeed}/>
                     <div className="section-separator"></div>
                     <div className={feedData.length > 0 ? style["scroll-area"] : style["none_feed_scroll"]}
                         style={{columnCount:2, columnGap: "20px"}}
@@ -311,8 +339,8 @@ export default function PostBoard () {
                             ) : (
                                 <NoneFeed />
                         )}
-                        <div ref={targetRef} style={{ height: "1px" }}></div>
                         </div>
+                        <div ref={targetRef} style={{ height: "1px" }}></div>
                     </div>
                     <div className={style2["desktop-ad-section-style"]}>
                         <AdComponent type={"image_32x60"}/>
@@ -325,3 +353,27 @@ export default function PostBoard () {
 
 
 
+const useIntersectionObserver2 = (callback, options = {}, hasMore) => {
+  const targetRef = useRef(null);
+
+  console.log(hasMore);
+  useEffect(() => {
+    if (!hasMore || !targetRef.current) return;
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          callback();
+        }
+      });
+    }, options);
+
+    observer.observe(targetRef.current);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [callback, options, hasMore, targetRef.current]); // 👈 핵심 수정
+
+  return targetRef;
+}

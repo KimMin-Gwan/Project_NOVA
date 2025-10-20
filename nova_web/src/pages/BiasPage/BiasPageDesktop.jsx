@@ -27,6 +27,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 const BiasPageDesktop = ({
     scheduleList, targetBias, weekData, prevWeek,
      nextWeek, targetSchedule, setTargetSchedule,
+     targetScheduleDatetime, setTargetScheduleDatetime,
       fetchTryFollowBias, is_following, isValidUser
 }) => {
     const navigate = useNavigate();
@@ -38,6 +39,8 @@ const BiasPageDesktop = ({
     const [subscribe, setSubscribe] = useState(false);
     const [openInput, setOpenInput] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
+
+    const [showGuide, setShowGuide] = useState(true);
 
     useEffect(()=>{
         setIsChecked(targetBias.open_content_mode);
@@ -198,8 +201,8 @@ const BiasPageDesktop = ({
                                             ref={fileInputRef}
                                             onChange={async (e) => {
                                                 setIsUploading(true);
-                                                handleFileChange(e, targetBias.bid, setBiasImage);
-                                                handlePreview(e);
+                                                await handleFileChange(e, targetBias.bid, setBiasImage);
+                                                await handlePreview(e);
                                                 setIsUploading(false);
                                             }}
                                             style={{ display: "none" }}
@@ -294,6 +297,9 @@ const BiasPageDesktop = ({
                     {
                         targetSchedule.sid != "" ? (
                             <div className={style["schedule-right-section"]}>
+                                <div className={style["single-schedule-datetime"]}>
+                                    {targetScheduleDatetime}
+                                </div>
                                 <div className={style["single-schedule-image"]}>
                                 {
                                     image != null ? (
@@ -445,7 +451,17 @@ const BiasPageDesktop = ({
                                 </div>
                             </div>
                         </div>
-                        <div className={style["schedule-list-wrapper"]}>
+                        <div className={style["schedule-list-wrapper"]}
+                            onMouseEnter={() => setShowGuide(false)}
+                        >
+                            {showGuide && (
+                                <div className={style["scroll-guide"]}>
+                                <div className={style["scroll-guide-inner"]}>
+                                    <span>더 많은 일정이 있어요 ↓</span>
+                                </div>
+                                </div>
+                            )}
+
                             <Swiper
                                 slidesPerView={"auto"}
                                 spaceBetween={10}
@@ -462,6 +478,7 @@ const BiasPageDesktop = ({
                                         <ScheduleComponent
                                             scheduleData={scheduleData}
                                             setTargetSchedule={setTargetSchedule}
+                                            setTargetScheduleDatetime={setTargetScheduleDatetime}
                                         />
                                     </SwiperSlide>
                                 ))}
@@ -481,7 +498,7 @@ const BiasPageDesktop = ({
 
 
 const ScheduleComponent = ({
-    scheduleData, setTargetSchedule
+    scheduleData, setTargetSchedule, setTargetScheduleDatetime
 }) => {
 
     if(scheduleData.schedule.sid == ""){
@@ -493,6 +510,8 @@ const ScheduleComponent = ({
             <div className={style["schedule-component"]}
                 onClick={()=>{
                     setTargetSchedule(scheduleData.schedule)
+                    const str_datetime = `${scheduleData.date} ${scheduleData.weekday}`
+                    setTargetScheduleDatetime(str_datetime);
                 }}
             >
                 <div className={style["schedule-date-wrapper"]}>

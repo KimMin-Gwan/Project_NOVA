@@ -65,7 +65,7 @@ export const handlePreviewImage = (url, setImage) => {
     };
 };
 
-export const defaultImage = "https://supernova.io.kr/delta/no-image.png";
+export const defaultImage = "https://zvcgcnyd12501.edge.naverncp.com/no-image.png";
 
 export const ToggleSwitch = ({id, isChecked, handleChecked}) => {
   const handleToggle = (e) => {
@@ -129,7 +129,7 @@ export const handleFileChange = async (event, bid, setImage) => {
     setImage(imageUrl);
   }
 
-  fetch(`https://supernova.io.kr/nova_sub_system/try_change_bias_profile_photo?bid=${bid}`, {
+  await fetch(`https://supernova.io.kr/nova_sub_system/try_change_bias_profile_photo?bid=${bid}`, {
     method: "POST",
     credentials: "include",
     body: formData,
