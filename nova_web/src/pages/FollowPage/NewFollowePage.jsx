@@ -23,7 +23,7 @@ const NewFollowPage = () => {
 
     const handleKeyDown = (event) => {
         if (event.key === "Enter") {
-            fetchSearchBias(searchWord, targetPlatform);
+            fetchSearchBiasInit(searchWord, targetPlatform);
         }
     }
 
