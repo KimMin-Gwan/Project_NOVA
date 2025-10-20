@@ -1108,38 +1108,37 @@ class ScheduleTimeLayerModel(TimeTableModel):
         
         # 섹션마다 분류
         for single_schedule in self.__schedules:
-            
             single_schedule:Schedule = single_schedule
             time_obj = single_schedule.datetime
             end_time_obj = time_obj + single_schedule.duration
-            
-            options = [
-                {
-                    "start": datetime.combine(time_obj, datetime.min.time()),
-                    "end": datetime.combine(time_obj, datetime.min.time()).replace(hour=6, minute=0)    ,
-                },
-                {
-                    "start": datetime.combine(time_obj, datetime.min.time()).replace(hour=6, minute=0),
-                    "end": datetime.combine(time_obj, datetime.min.time()).replace(hour=12, minute=0),
-                },
-                {
-                    "start": datetime.combine(time_obj, datetime.min.time()).replace(hour=12, minute=0),
-                    "end": datetime.combine(time_obj, datetime.min.time()).replace(hour=18, minute=0),
-                },
-                {
-                    "start": datetime.combine(time_obj, datetime.min.time()).replace(hour=18, minute=0),
-                    "end": datetime.combine(time_obj, datetime.min.time()).replace(hour=23, minute=59),
-                },
-            ]            
 
-            if (time_obj < options[0]["end"]) and (end_time_obj >= options[0]["start"]):
-                self.__my_layer_data[1]["schedules"].append(single_schedule)
-            if (time_obj < options[1]["end"]) and (end_time_obj >= options[1]["start"]):
-                self.__my_layer_data[2]["schedules"].append(single_schedule)
-            if (time_obj < options[2]["end"]) and (end_time_obj >= options[2]["start"]):
-                self.__my_layer_data[3]["schedules"].append(single_schedule)
-            if (time_obj <= options[3]["end"]) and (end_time_obj >= options[3]["start"]):  # 하루 끝 비교는 <= 사용
-                self.__my_layer_data[4]["schedules"].append(single_schedule)
+            print("time_obj: ", time_obj)
+            print("end_time_obj: ", end_time_obj)
+
+            # 시간대 섹션 생성 (더 간단한 방법)
+            options = [
+                {"start": time_obj.replace(hour=h, minute=m), "end": time_obj.replace(hour=eh, minute=em)}
+                for h, m, eh, em in [(0,0,6,0), (6,0,12,0), (12,0,18,0), (18,0,23,59)]
+            ]
+
+            for i, option in enumerate(options):
+                if i == len(options) - 1:
+                    if (time_obj <= option["end"]) and (end_time_obj >= option["start"]):
+                        self.__my_layer_data[i+1]["schedules"].append(single_schedule)
+                else :
+                    if (time_obj < option["end"]) and (end_time_obj >= option["start"]):
+                        self.__my_layer_data[i+1]["schedules"].append(single_schedule)
+
+
+
+            # if (time_obj < options[0]["end"]) and (end_time_obj >= options[0]["start"]):
+                # self.__my_layer_data[1]["schedules"].append(single_schedule)
+            # if (time_obj < options[1]["end"]) and (end_time_obj >= options[1]["start"]):
+                # self.__my_layer_data[2]["schedules"].append(single_schedule)
+            # if (time_obj < options[2]["end"]) and (end_time_obj >= options[2]["start"]):
+                # self.__my_layer_data[3]["schedules"].append(single_schedule)
+            # if (time_obj <= options[3]["end"]) and (end_time_obj >= options[3]["start"]):  # 하루 끝 비교는 <= 사용
+                # self.__my_layer_data[4]["schedules"].append(single_schedule)
 
 
     # 날짜에 맞는 스케줄 데이터 불러오기
@@ -1173,38 +1172,34 @@ class ScheduleTimeLayerModel(TimeTableModel):
             
             single_schedule:Schedule = single_schedule
             time_obj = single_schedule.datetime
+            end_time_obj = time_obj + single_schedule.duration
             #time_obj = datetime.strptime(single_schedule.start_time, "%H:%M")
-            
+
+            # 시간대 섹션 생성 (더 간단한 방법)
             options = [
-                {
-                    "start": datetime.combine(time_obj, datetime.min.time()),
-                    "end": datetime.combine(time_obj, datetime.min.time()).replace(hour=6, minute=0),
-                },
-                {
-                    "start": datetime.combine(time_obj, datetime.min.time()).replace(hour=6, minute=0),
-                    "end": datetime.combine(time_obj, datetime.min.time()).replace(hour=12, minute=0),
-                },
-                {
-                    "start": datetime.combine(time_obj, datetime.min.time()).replace(hour=12, minute=0),
-                    "end": datetime.combine(time_obj, datetime.min.time()).replace(hour=18, minute=0),
-                },
-                {
-                    "start": datetime.combine(time_obj, datetime.min.time()).replace(hour=18, minute=0),
-                    "end": datetime.combine(time_obj, datetime.min.time()).replace(hour=23, minute=59),
-                },
+                {"start": time_obj.replace(hour=h, minute=m),
+                 "end": time_obj.replace(hour=eh, minute=em)}
+                for h, m, eh, em in [(0,0,6,0), (6,0,12,0), (12,0,18,0), (18,0,23,59)]
             ]
-            
         
-            if options[0]["start"] <= time_obj < options[0]["end"]:
-                self.__recommand_layer_data[1]["schedules"].append(single_schedule)
-            elif options[1]["start"] <= time_obj < options[1]["end"]:
-                self.__recommand_layer_data[2]["schedules"].append(single_schedule)
-            elif options[2]["start"] <= time_obj < options[2]["end"]:
-                self.__recommand_layer_data[3]["schedules"].append(single_schedule)
-            elif options[3]["start"] <= time_obj <= options[3]["end"]:  # 하루 끝 비교는 <= 사용
-                self.__recommand_layer_data[4]["schedules"].append(single_schedule)
-            else:
-                continue
+            for i, option in enumerate(options):
+                if i == len(options) - 1:
+                    if (time_obj <= option["end"]) and (end_time_obj >= option["start"]):
+                        self.__my_layer_data[i+1]["schedules"].append(single_schedule)
+                else :
+                    if (time_obj < option["end"]) and (end_time_obj >= option["start"]):
+                        self.__my_layer_data[i+1]["schedules"].append(single_schedule)
+            
+            # if options[0]["start"] <= time_obj < options[0]["end"]:
+            #     self.__recommand_layer_data[1]["schedules"].append(single_schedule)
+            # elif options[1]["start"] <= time_obj < options[1]["end"]:
+            #     self.__recommand_layer_data[2]["schedules"].append(single_schedule)
+            # elif options[2]["start"] <= time_obj < options[2]["end"]:
+            #     self.__recommand_layer_data[3]["schedules"].append(single_schedule)
+            # elif options[3]["start"] <= time_obj <= options[3]["end"]:  # 하루 끝 비교는 <= 사용
+            #     self.__recommand_layer_data[4]["schedules"].append(single_schedule)
+            # else:
+            #     continue
 
         
     # 전송용 폼으로 교체
