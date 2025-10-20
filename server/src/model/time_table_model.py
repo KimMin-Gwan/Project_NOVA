@@ -921,7 +921,7 @@ class AddScheduleModel(TimeTableModel):
         schedule = Schedule().make_with_dict(schedule_data)
         
         
-        if schedule.uid == self._user or self._user.verified_bias == schedule.bid:
+        if schedule.uid == self._user.uid or self._user.verified_bias == schedule.bid:
             schedule.display = 0 # 삭제 표시
 
             self._database.modify_data_with_id(target_id="sid", target_data=schedule.get_dict_form_data())
