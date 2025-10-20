@@ -1111,11 +1111,12 @@ class ScheduleTimeLayerModel(TimeTableModel):
             
             single_schedule:Schedule = single_schedule
             time_obj = single_schedule.datetime
+            end_time_obj = time_obj + single_schedule.duration
             
             options = [
                 {
                     "start": datetime.combine(time_obj, datetime.min.time()),
-                    "end": datetime.combine(time_obj, datetime.min.time()).replace(hour=6, minute=0),
+                    "end": datetime.combine(time_obj, datetime.min.time()).replace(hour=6, minute=0)    ,
                 },
                 {
                     "start": datetime.combine(time_obj, datetime.min.time()).replace(hour=6, minute=0),
@@ -1129,21 +1130,18 @@ class ScheduleTimeLayerModel(TimeTableModel):
                     "start": datetime.combine(time_obj, datetime.min.time()).replace(hour=18, minute=0),
                     "end": datetime.combine(time_obj, datetime.min.time()).replace(hour=23, minute=59),
                 },
-            ]
-            
-        
-            if options[0]["start"] <= time_obj < options[0]["end"]:
+            ]            
+
+            if (time_obj < options[0]["end"]) and (end_time_obj >= options[0]["start"]):
                 self.__my_layer_data[1]["schedules"].append(single_schedule)
-            elif options[1]["start"] <= time_obj < options[1]["end"]:
+            if (time_obj < options[1]["end"]) and (end_time_obj >= options[1]["start"]):
                 self.__my_layer_data[2]["schedules"].append(single_schedule)
-            elif options[2]["start"] <= time_obj < options[2]["end"]:
+            if (time_obj < options[2]["end"]) and (end_time_obj >= options[2]["start"]):
                 self.__my_layer_data[3]["schedules"].append(single_schedule)
-            elif options[3]["start"] <= time_obj <= options[3]["end"]:  # 하루 끝 비교는 <= 사용
+            if (time_obj <= options[3]["end"]) and (end_time_obj >= options[3]["start"]):  # 하루 끝 비교는 <= 사용
                 self.__my_layer_data[4]["schedules"].append(single_schedule)
-            else:
-                continue
-            
-            
+
+
     # 날짜에 맞는 스케줄 데이터 불러오기
     def make_recommand_schedule_data(self):
         # 0개에서 3개 랜덤 선택
