@@ -620,7 +620,7 @@ class ManagedTable:
             logging.error(f"존재하지 않는 열: {start_column}")
             return df
 
-        if date_option not in ("day", "weekly", "specific", "specific_range") and date_option not in SKIP_TUPLE:
+        if date_option not in ("day", "weekly", "specific") and date_option not in SKIP_TUPLE:
             logging.error("date_option은 day, weekly, specific 에만 대응 됩니다.")
             return df
 
@@ -646,13 +646,13 @@ class ManagedTable:
 
                 # 날짜 범위 고려 필터링()
                 if isinstance(condition["duration"], int) and condition["duration"] != 0:
-                    duration = timedelta(hours=condition["duration"])
+                    duration = timedelta(days=condition["duration"])
                     start_date = min(specific_date, specific_date + duration)
                     end_date = max(specific_date, specific_date + duration)
 
                     print("start_date: ", start_date)
                     print("end_date: ", end_date)
-                    
+
                     mask &= (df[start_column].dt.date >= start_date) & (df[start_column].dt.date <= end_date)   # 날짜 범위 내의 데이터 필터링
                 else:
                     mask &= (df[start_column].dt.date == specific_date)
