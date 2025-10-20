@@ -170,7 +170,7 @@ class LogProcessor:
                 except Exception as e:
                     logging.error(f"Error to Upload Error Log compressed file to S3: {str(e)}")
             else:
-                logging.warning("Pass to Upload Error Log compressed file to S3")
+                logging.warning(f"Pass to Upload Error Log compressed file to S3 - File not found: {self.__error_log_xz_file_path}")
 
             all_success = access_upload_success and error_upload_success
             xor_success = access_upload_success ^ error_upload_success # XOR
@@ -202,11 +202,11 @@ class LogProcessor:
     # 업로드 프로세스
     def upload_process(self):
         # 로그 파일 압축
-        self.__access_xz_file_path = self.compress_log_files(log_name="supernova_access_log", folder_path=self.__access_log_local_storage_path)
-        self.__error_xz_file_path = self.compress_log_files(log_name="supernova_error_log", folder_path=self.__error_log_local_storage_path)
+        self.__access_log_xz_file_path = self.compress_log_files(log_name="supernova_access_log", folder_path=self.__access_log_local_storage_path)
+        self.__error_log_xz_file_path = self.compress_log_files(log_name="supernova_error_log", folder_path=self.__error_log_local_storage_path)
         print(' TEST! Log File compressed')
-        print(f'Compressed Path 1 : {self.__access_xz_file_path}')
-        print(f'Compressed Path 2 : {self.__error_xz_file_path}')
+        print(f'Compressed Path 1 : {self.__access_log_xz_file_path}')
+        print(f'Compressed Path 2 : {self.__error_log_xz_file_path}')
 
         # S3 업로드
         result = self.upload_log_files_to_s3()
@@ -219,8 +219,8 @@ class LogProcessor:
         print(' TEST! Log File reseted')
 
         # 압축 파일 경로 초기화
-        self.__access_xz_file_path = ''
-        self.__error_xz_file_path = ''
+        self.__access_log_xz_file_path = ''
+        self.__error_log_xz_file_path = ''
 
         return
 
