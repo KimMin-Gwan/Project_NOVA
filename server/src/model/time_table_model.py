@@ -1123,6 +1123,8 @@ class ScheduleTimeLayerModel(TimeTableModel):
                 {"start": time_obj.replace(hour=h, minute=m), "end": time_obj.replace(hour=eh, minute=em)}
                 for h, m, eh, em in [(0,0,6,0), (6,0,12,0), (12,0,18,0), (18,0,23,59)]
             ]
+            print("options: ", options)
+            
 
             for i, option in enumerate(options):
                 if i == len(options) - 1:
