@@ -1110,7 +1110,7 @@ class ScheduleTimeLayerModel(TimeTableModel):
         for single_schedule in self.__schedules:
             single_schedule:Schedule = single_schedule
             time_obj = single_schedule.datetime
-            end_time_obj = time_obj + single_schedule.duration
+            end_time_obj = time_obj + timedelta(hours=single_schedule.duration)
 
             print("time_obj: ", time_obj)
             print("end_time_obj: ", end_time_obj)
@@ -1169,10 +1169,10 @@ class ScheduleTimeLayerModel(TimeTableModel):
         # 핵심 시간 섹션
         # 섹션마다 분류
         for single_schedule in self.__schedules:
-            
+
             single_schedule:Schedule = single_schedule
             time_obj = single_schedule.datetime
-            end_time_obj = time_obj + single_schedule.duration
+            end_time_obj = time_obj + timedelta(hours=single_schedule.duration)
             #time_obj = datetime.strptime(single_schedule.start_time, "%H:%M")
 
             # 시간대 섹션 생성 (더 간단한 방법)
