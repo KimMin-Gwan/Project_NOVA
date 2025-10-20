@@ -129,7 +129,7 @@ export const handleFileChange = async (event, bid, setImage) => {
     setImage(imageUrl);
   }
 
-  fetch(`https://supernova.io.kr/nova_sub_system/try_change_bias_profile_photo?bid=${bid}`, {
+  await fetch(`https://supernova.io.kr/nova_sub_system/try_change_bias_profile_photo?bid=${bid}`, {
     method: "POST",
     credentials: "include",
     body: formData,
