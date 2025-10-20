@@ -19,7 +19,7 @@ import style from "./MoreSee.module.css";
 import Banner from "../../component/Banner/Banner.js";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
-const user_icon= 'https://ltpk5i3g12503.edge.naverncp.com/user_profile.svg';
+const user_icon= 'https://sgsryiav12510.edge.naverncp.com/user_profile.svg';
 
 const boardList = [
   {
@@ -153,7 +153,7 @@ function MoreSee({ onModeChange }) {
 
   console.log(user);
 
-  const profile = `https://ltpk5i3g12503.edge.naverncp.com/${user}.png`;
+  const profile = `https://sgsryiav12510.edge.naverncp.com/${user}.png`;
 
   const firstBoardList = boardList.slice(0, 2);
   const secondBoardList = boardList.slice(2, 4);

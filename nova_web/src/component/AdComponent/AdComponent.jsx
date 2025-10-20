@@ -59,7 +59,7 @@ export default AdComponent;
 
 
 export const ImageAd_32x60 = () => {
-    const testURL = "https://4dowshpq12505.edge.naverncp.com/%EB%8F%84%EB%A1%B1%ED%96%84%201.png";
+    const testURL = "https://hxb87ac312512.edge.naverncp.com/%EB%8F%84%EB%A1%B1%ED%96%84%201.png";
     const targetURL = "https://supernova.io.kr";
 
     return (
@@ -86,7 +86,7 @@ export const ImageAd_32x60 = () => {
 }
 
 export const ImageAd_50x32= () => {
-    const testURL = "https://4dowshpq12505.edge.naverncp.com/Frame%201707482528%202.png";
+    const testURL = "https://hxb87ac312512.edge.naverncp.com/Frame%201707482528%202.png";
     const targetURL = "https://supernova.io.kr";
 
     return (

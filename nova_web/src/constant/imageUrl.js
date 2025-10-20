@@ -1,1 +1,1 @@
-export const SCHEDULE_IMAGE_URL = "https://b010rhws12502.edge.naverncp.com/";
+export const SCHEDULE_IMAGE_URL = "https://yjknquvw12509.edge.naverncp.com/";

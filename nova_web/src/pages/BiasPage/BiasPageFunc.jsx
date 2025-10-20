@@ -65,7 +65,7 @@ export const handlePreviewImage = (url, setImage) => {
     };
 };
 
-export const defaultImage = "https://zvcgcnyd12501.edge.naverncp.com/no-image.png";
+export const defaultImage = "https://9dgb8rmc12508.edge.naverncp.com/no-image.png";
 
 export const ToggleSwitch = ({id, isChecked, handleChecked}) => {
   const handleToggle = (e) => {

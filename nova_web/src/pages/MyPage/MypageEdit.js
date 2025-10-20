@@ -7,7 +7,7 @@ import mainApi from "../../services/apis/mainApi";
 import postApi from "../../services/apis/postApi";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import DesktopLayout from "../../component/DesktopLayout/DeskTopLayout";
-const user_icon= 'https://ltpk5i3g12503.edge.naverncp.com/user_profile.svg';
+const user_icon= 'https://sgsryiav12510.edge.naverncp.com/user_profile.svg';
 
 function MyPage() {
   const isMobile = useMediaQuery('(max-width:1100px)');
@@ -212,7 +212,7 @@ function MyPage() {
     return <div>loading...</div>;
   }
 
-  const profile = `https://ltpk5i3g12503.edge.naverncp.com/${myProfile.uid}.png`;
+  const profile = `https://sgsryiav12510.edge.naverncp.com/${myProfile.uid}.png`;
 
 
   const handleFileChange = async (event) => {

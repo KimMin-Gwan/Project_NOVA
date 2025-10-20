@@ -6,7 +6,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import MyPageLoading from "../../pages/LoadingPage/MypageLoading";
 
 const ScheduleDetailDekstop = ({sid, toggleDetailOption}) => {
-    const defaultImage = "https://zvcgcnyd12501.edge.naverncp.com/no-image.png"
+    const defaultImage = "https://9dgb8rmc12508.edge.naverncp.com/no-image.png"
     const [image, setImage] = useState(null);
     const [tags, setTags] = useState([]);
     const [schedule, setSchedule] = useState({});

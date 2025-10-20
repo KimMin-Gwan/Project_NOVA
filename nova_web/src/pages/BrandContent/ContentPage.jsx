@@ -14,9 +14,9 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 
-const contentBackgroundImage = "https://zvcgcnyd12501.edge.naverncp.com/content-background-svg.svg";
-const bluredBackgroundImage = "https://zvcgcnyd12501.edge.naverncp.com/blurBackground.png";
-const brandImg = "https://zvcgcnyd12501.edge.naverncp.com/brand_img.png";
+const contentBackgroundImage = "https://9dgb8rmc12508.edge.naverncp.com/content-background-svg.svg";
+const bluredBackgroundImage = "https://9dgb8rmc12508.edge.naverncp.com/blurBackground.png";
+const brandImg = "https://9dgb8rmc12508.edge.naverncp.com/brand_img.png";
 
 
 export default function ContentPage (){

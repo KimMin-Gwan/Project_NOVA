@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const feedApi = axios.create({
-  baseURL: "https://d1qfycqr12504.edge.naverncp.com/",
+  baseURL: "https://zesqmjp712511.edge.naverncp.com/",
   withCredentials: true,
 });
 

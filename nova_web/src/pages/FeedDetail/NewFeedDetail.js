@@ -13,7 +13,7 @@ import DesktopLayout from "../../component/DesktopLayout/DeskTopLayout";
 import AdComponent from "../../component/AdComponent/AdComponent";
 import ReportModal from "../../component/ReportModal/ReportModal";
 
-const user_icon= 'https://ltpk5i3g12503.edge.naverncp.com/user_profile.svg';
+const user_icon= 'https://sgsryiav12510.edge.naverncp.com/user_profile.svg';
 
 export default function NewFeedDetail() {
   const isMobile = useMediaQuery('(max-width:1100px)');
@@ -576,7 +576,7 @@ export default function NewFeedDetail() {
 function CommentComponent({cid, uid, owner, uname, isReply,
    reply, body, date, commentAction, commentReport
   }){
-  const profile = `https://ltpk5i3g12503.edge.naverncp.com/${uid}.png`;
+  const profile = `https://sgsryiav12510.edge.naverncp.com/${uid}.png`;
   const pressTimer = useRef(null);
 
   const handlePressStart = () => {
