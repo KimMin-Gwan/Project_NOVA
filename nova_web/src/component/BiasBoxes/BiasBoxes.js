@@ -78,6 +78,7 @@ export default function BiasBoxes({ fecthDefaultSetting }) {
     }
   }, [loading]);
 
+
   if(biasList.length === 0){
     return (
       <div
