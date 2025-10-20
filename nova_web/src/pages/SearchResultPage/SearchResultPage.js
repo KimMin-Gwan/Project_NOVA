@@ -86,8 +86,17 @@ export default function SearchResultPage() {
     await mainApi
       .get(`feed_explore/search_feed_with_keyword?keyword=${keyword}&key=${feedNextKey}`)
       .then((res) => {
-        setFeedData((prev) => {
-          return [...prev, ...res.data.body.send_data];
+        const data = res.data;
+
+        setFeedData((prevData) => {
+          const combined = [...prevData, ...data.body.send_data];
+
+          // 중복 제거 (feed_id 기준)
+          const unique = Array.from(
+              new Map(combined.map((item) => [item.feed.fid, item])).values()
+          );
+
+          return unique;
         });
         setHasMore(res.data.body.send_data.length > 0);
         setFeedNextKey(res.data.body.key);
