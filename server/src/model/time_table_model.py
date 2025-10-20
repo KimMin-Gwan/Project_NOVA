@@ -1235,6 +1235,7 @@ class BiasScheduleModel(BaseModel):
         self._schedules = []
         self._send_form = []
         self.__target_week = ""
+        self.__today_index = -1
         
     def set_bias(self, bid):
         bias_data = self._database.get_data_with_id(target="bid", id=bid)
@@ -1252,10 +1253,24 @@ class BiasScheduleModel(BaseModel):
                     self._schedules.append(schedule)
         
         return
+    
         
     def set_send_form(self, date:datetime):
         week_start = date - timedelta(days=date.weekday())
         weekdays = ["월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"]
+        
+        # 오늘 날짜
+        today = datetime.today().date()
+        self.__today_index = -1  # 기본값 (-1 = 이번 주 아님)
+
+        # 이번 주의 월요일~일요일 범위 계산
+        this_week_start = today - timedelta(days=today.weekday())
+        #this_week_end = this_week_start + timedelta(days=6)
+
+        # 만약 date가 이번 주 안에 포함되어 있다면
+        if week_start.date() == this_week_start:
+            # 오늘의 요일 인덱스 설정
+            self.__today_index = today.weekday()  # 월=0, 화=1, ..., 일=6
         
         for i in range(7):
             current_day = week_start + timedelta(days=i)
@@ -1350,7 +1365,8 @@ class BiasScheduleModel(BaseModel):
     def get_response_form_data(self, head_parser):
         body = {
             "schedule_data" : self._send_form,
-            "week_data" : self.__target_week
+            "week_data" : self.__target_week,
+            "today_index" : self.__today_index
             }
 
         response = self._get_response_data(head_parser=head_parser, body=body)
