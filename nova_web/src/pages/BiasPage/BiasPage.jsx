@@ -30,6 +30,7 @@ const BiasPage = () => {
         datetime : "",
         tags : []
     })
+    const [targetScheduleDatetime, setTargetScheduleDatetime] = useState("");
 
     const fetchBiasData = async (bid) => {
         const res = await mainApi.get(`/nova_sub_system/get_single_bias?bid=${bid}`);
@@ -152,6 +153,9 @@ const BiasPage = () => {
         const target = firstValid || scheduleList[0];
 
         setTargetSchedule(target.schedule);
+
+        const str_datetime = `${target.date} ${target.weekday}`
+        setTargetScheduleDatetime(str_datetime);
     };
 
     useEffect(()=>{
@@ -183,6 +187,8 @@ const BiasPage = () => {
                     nextWeek={nextWeek}
                     targetSchedule={targetSchedule}
                     setTargetSchedule={setTargetSchedule}
+                    targetScheduleDatetime={targetScheduleDatetime}
+                    setTargetScheduleDatetime={setTargetScheduleDatetime}
                     fetchTryFollowBias={fetchTryFollowBias}
                     is_following={is_following}
                     isValidUser={isValidUser}
