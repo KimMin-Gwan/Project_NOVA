@@ -1267,14 +1267,10 @@ class BiasScheduleModel(BaseModel):
         this_week_start = today - timedelta(days=today.weekday())
         #this_week_end = this_week_start + timedelta(days=6)
 
-        print(week_start.date())
-        print(this_week_start)
-
         # 만약 date가 이번 주 안에 포함되어 있다면
         if week_start.date() == this_week_start:
             # 오늘의 요일 인덱스 설정
             self.__today_index = today.weekday()  # 월=0, 화=1, ..., 일=6
-            print(self.__today_index)
         
         for i in range(7):
             current_day = week_start + timedelta(days=i)
