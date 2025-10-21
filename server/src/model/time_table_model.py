@@ -1118,9 +1118,6 @@ class ScheduleTimeLayerModel(TimeTableModel):
             time_obj = single_schedule.datetime    #  스케줄의 시작 시간
             end_time_obj = time_obj + timedelta(hours=single_schedule.duration)   #  스케줄의 종료 시간
 
-            # print("time_obj: ", time_obj)
-            # print("end_time_obj: ", end_time_obj)
-
             # 시간대 섹션 생성
             target_date_obj = datetime.strptime(target_date, "%Y/%m/%d")    #  페이지에서 보여주는 날짜
             target_date_combine = lambda hour, minute : datetime.combine(target_date_obj, datetime.min.time()).replace(hour=hour, minute=minute)
@@ -1139,8 +1136,6 @@ class ScheduleTimeLayerModel(TimeTableModel):
                     if (time_obj < option["end"]) and (end_time_obj >= option["start"]):
                         self.__my_layer_data[i+1]["schedules"].append(single_schedule)
 
-
-
             # if (time_obj < options[0]["end"]) and (end_time_obj >= options[0]["start"]):
                 # self.__my_layer_data[1]["schedules"].append(single_schedule)
             # if (time_obj < options[1]["end"]) and (end_time_obj >= options[1]["start"]):
@@ -1152,13 +1147,13 @@ class ScheduleTimeLayerModel(TimeTableModel):
 
 
     # 날짜에 맞는 스케줄 데이터 불러오기
-    def make_recommand_schedule_data(self):
+    def make_recommand_schedule_data(self, recommend_list:list[str]=[]):
         # 0개에서 3개 랜덤 선택
         sample_size = random.randint(0, 3)  # 0부터 3까지의 개수 선택
         
         # recommend_target_sids는 이미 추천 대상 스케줄 ID로 채워져 있어야 함 (위에서 채워옴)
         result = random.sample(self.__recommend_target_sids, k=min(sample_size, len(self.__recommend_target_sids)))  # 데이터 크기를 초과하지 않도록 처리
-                
+
         # 0개면 걍 끝
         if  len(result) == 0:
             return False
@@ -1227,7 +1222,8 @@ class ScheduleTimeLayerModel(TimeTableModel):
     
     def get_response_form_data(self, head_parser):
         body = {
-            "schedule_layer" : self.__layer_data
+            "schedule_layer" : self.__layer_data,
+            "recommend_list" : self.__recommend_target_sids
             }
 
         response = self._get_response_data(head_parser=head_parser, body=body)

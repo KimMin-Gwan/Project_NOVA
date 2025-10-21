@@ -57,11 +57,12 @@ class Time_Table_View(Master_View):
         
         # 홈화면의 스케줄 레이어를 바탕으로 검색
         # 업데이트 완료
-        @self.__app.get('/time_table_server/get_time_layer_schedule_with_date')
-        def get_time_layer_schedule_with_date(request:Request, date:Optional[str]=datetime.now().strftime("%Y/%m/%d")):
+        @self.__app.post('/time_table_server/get_time_layer_schedule_with_date')
+        def get_time_layer_schedule_with_date(request:Request, raw_request:dict):
+        
+        #  date:Optional[str]=datetime.now().strftime("%Y/%m/%d")):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
-            data_payload = DateRequest(date=date)
-            print("date: ", date)
+            data_payload = DateRequest(request=raw_request)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
             time_table_controller =TimeTableController()
@@ -71,7 +72,8 @@ class Time_Table_View(Master_View):
             
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
-            return response       
+            return response
+        
         
         # bias 페이지에서 요청하는 데이터로 세팅
         # 업데이트 완료
@@ -435,8 +437,10 @@ class ScheduleRequest(RequestHeader):
         self.sid:str=sid
 
 class DateRequest(RequestHeader):
-    def __init__(self, date)-> None:
-        self.date:str = date
+    def __init__(self, request:dict)-> None:
+        body:dict = request['body']
+        self.date:str = body.get('date', datetime.now().strftime("%Y/%m/%d"))
+        self.recommend_list:list[str] = body.get('recommend_list', [])
 
 class DatetimeRequest(RequestHeader):
     def __init__(self, date:str)-> None:

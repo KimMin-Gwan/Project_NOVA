@@ -50,7 +50,7 @@ class TimeTableController:
         
         target_date = datetime.strptime(request.data_payload.date, "%Y/%m/%d")
         if datetime.today().date() <= target_date.date():
-            if model.make_recommand_schedule_data(): # 추천 스케줄 데이터 생성
+            if model.make_recommand_schedule_data(recommend_list=request.data_payload.recommend_list): # 추천 스케줄 데이터 생성
                 model.set_recommand_schedule_layer(target_date=request.data_payload.date) # 추천 스케줄 레이어 생성
         
         model.change_layer_form()
