@@ -1224,6 +1224,7 @@ class ScheduleTimeLayerModel(TimeTableModel):
             for my_single_schedule in my_single_time_section['schedules']:
                 temp_list.append(self.__make_single_schedule_data_form(type="구독", schedule=my_single_schedule))
             for recommand_single_schedule in recommand_single_time_section['schedules']:
+                print("추천 섹션을 만들어냅니다.")
                 temp_list.append(self.__make_single_schedule_data_form(type="추천", schedule=recommand_single_schedule))
             layer_data['schedules'].extend(temp_list)
         return
