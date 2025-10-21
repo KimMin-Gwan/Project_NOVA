@@ -649,10 +649,6 @@ class ManagedTable:
                     duration = timedelta(days=condition["duration"])
                     start_date = min(specific_date, specific_date + duration)
                     end_date = max(specific_date, specific_date + duration)
-
-                    print("start_date: ", start_date)
-                    print("end_date: ", end_date)
-
                     mask &= (df[start_column].dt.date >= start_date) & (df[start_column].dt.date <= end_date)   # 날짜 범위 내의 데이터 필터링
                 else:
                     mask &= (df[start_column].dt.date == specific_date)

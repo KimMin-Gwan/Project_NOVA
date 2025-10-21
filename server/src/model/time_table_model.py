@@ -1096,7 +1096,6 @@ class ScheduleTimeLayerModel(TimeTableModel):
                 self.__recommend_target_sids.append(sid)
                 
         schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids= self.__my_target_sids)
-        print("schedule_datas: ", schedule_datas)
         
         # 다 만들면 보관
         for schedule_data in schedule_datas:
@@ -1111,7 +1110,6 @@ class ScheduleTimeLayerModel(TimeTableModel):
         for single_schedule in self.__schedules:
             single_schedule:Schedule = single_schedule
 
-            target_date = datetime.strptime(target_date, "%Y/%m/%d")    #  페이지에서 보여주는 날짜
             time_obj = single_schedule.datetime    #  스케줄의 시작 시간
             end_time_obj = time_obj + timedelta(hours=single_schedule.duration)   #  스케줄의 종료 시간
 
@@ -1119,7 +1117,8 @@ class ScheduleTimeLayerModel(TimeTableModel):
             print("end_time_obj: ", end_time_obj)
 
             # 시간대 섹션 생성
-            target_date_combine = lambda hour, minute : datetime.combine(target_date, datetime.min.time()).replace(hour=hour, minute=minute)
+            target_date_obj = datetime.strptime(target_date, "%Y/%m/%d")    #  페이지에서 보여주는 날짜
+            target_date_combine = lambda hour, minute : datetime.combine(target_date_obj, datetime.min.time()).replace(hour=hour, minute=minute)
             options = [
                 {"start": target_date_combine(hour=h, minute=m),
                  "end": target_date_combine(hour=eh, minute=em)}   #  시간대 섹션 생성
@@ -1172,18 +1171,17 @@ class ScheduleTimeLayerModel(TimeTableModel):
     
     
     def set_recommand_schedule_layer(self, target_date:str):
-        # 핵심 시간 섹션
         # 섹션마다 분류
         for single_schedule in self.__schedules:
 
             single_schedule:Schedule = single_schedule
-            
-            target_date = datetime.strptime(target_date, "%Y/%m/%d")    #  페이지에서 보여주는 날짜
+                    
             time_obj = single_schedule.datetime         # 일정의 시작 시간
             end_time_obj = time_obj + timedelta(hours=single_schedule.duration)   # 일정의 종료 시간
 
             # 시간대 섹션 생성 (더 간단한 방법)
-            target_date_combine = lambda hour, minute : datetime.combine(target_date, datetime.min.time()).replace(hour=hour, minute=minute)
+            target_date_obj = datetime.strptime(target_date, "%Y/%m/%d")    #  페이지에서 보여주는 날짜
+            target_date_combine = lambda hour, minute : datetime.combine(target_date_obj, datetime.min.time()).replace(hour=hour, minute=minute)
             options = [
                 {"start": target_date_combine(hour=h, minute=m),
                  "end": target_date_combine(hour=eh, minute=em)}

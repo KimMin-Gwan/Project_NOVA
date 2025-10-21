@@ -48,9 +48,7 @@ class TimeTableController:
                                  schedule_search_engine=schedule_search_engine)
         model.set_my_schedule_layer(target_date=request.data_payload.date)
         
-        
         target_date = datetime.strptime(request.data_payload.date, "%Y/%m/%d")
-        
         if datetime.today().date() <= target_date.date():
             if model.make_recommand_schedule_data(): # 추천 스케줄 데이터 생성
                 model.set_recommand_schedule_layer(target_date=request.data_payload.date) # 추천 스케줄 레이어 생성
