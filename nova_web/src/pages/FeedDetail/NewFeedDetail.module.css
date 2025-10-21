@@ -98,6 +98,16 @@
   font-weight: 500;
   line-height: normal;
   letter-spacing: -0.8px;
+  margin-bottom: 8px;
+}
+
+.comment-wrapper-subtitle{
+  color: #797979;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
+  letter-spacing: -0.8px;
   margin-bottom: 20px;
 }
 
@@ -201,6 +211,7 @@
   align-items: flex-end;
   max-width: 100%; /* 부모 컨테이너에서의 최대 너비 설정 */
   gap: 4px;
+  cursor: pointer;
 } 
 
 .comment-date{

@@ -409,6 +409,7 @@ export default function NewFeedDetail() {
 
         <div className={style["comment-wrapper"]}>
           <div className={style["comment-wrapper-title"]}>실시간 코멘트</div>
+          <div className={style["comment-wrapper-subtitle"]}>커뮤니티 규정을 위반한 댓글을 꾹 눌러 신고 할 수 있어요.</div>
 
           {isMoreComment && (
             <button
@@ -520,6 +521,7 @@ export default function NewFeedDetail() {
 
             <div className={style["comment-wrapper"]}>
               <div className={style["comment-wrapper-title"]}>실시간 코멘트</div>
+              <div className={style["comment-wrapper-subtitle"]}>커뮤니티 규정을 위반한 댓글을 꾹 눌러 신고 할 수 있어요.</div>
 
               {isMoreComment && (
                 <button
@@ -748,12 +750,6 @@ function CommentOptionModal({ onClose, handleCommentReport, onClickDelete, delet
       >
         <div className={style["modal_title"]}>댓글</div>
         {/* <div className={style["modal_content"]}>수정</div> */}
-        <div
-          className={`${style["modal_content"]} ${style["modal_content_accent"]}`}
-          onClick={() => onClickDelete(deleteTargetCid)}
-        >
-          신고 
-        </div>
         <div
           className={`${style["modal_content"]} ${style["modal_content_accent"]}`}
           onClick={() => onClickDelete(deleteTargetCid)}
