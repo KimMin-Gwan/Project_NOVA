@@ -1088,8 +1088,8 @@ class ScheduleTimeLayerModel(TimeTableModel):
 
         sids = schedule_search_engine.try_get_schedules_in_specific_date(sids=["all"], specific_date=target_date, duration=-1, return_id=True)
 
-        all_schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids=sids)
-        print("all_schedule_datas: ", all_schedule_datas)
+        # all_schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids=sids)
+        # print("all_schedule_datas: ", all_schedule_datas)
 
 
         # 여기서 managed_schedule은 dict 형태임
