@@ -840,6 +840,8 @@ class AddScheduleModel(TimeTableModel):
     def check_schedule_not_in_time(self, schedule_search_engine:SSE, schedule:Schedule):
         """해당 날짜에 이미 스케줄이 있는지 체크"""
         sid_list = schedule_search_engine.try_find_schedules_in_all_schedules_with_specific_date(specific_date=schedule.datetime)
+
+        print(sid_list)
         
         if self._has_overlap(sid_list, self._bias.sids):
             self._result = False
