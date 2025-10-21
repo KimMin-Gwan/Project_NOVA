@@ -234,7 +234,7 @@ const ScheduleDashboard = () => {
           }
         }
       )
-      setRecommandList((prev)=>[...prev, res.data.body.recommand_list]);
+      setRecommandList(res.data.body.recommend_list);
 
       return res.data.body.schedule_layer; // 반환값을 명시적으로 설정
     } catch (error) {
