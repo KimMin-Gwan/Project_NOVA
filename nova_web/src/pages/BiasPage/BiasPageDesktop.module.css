@@ -222,7 +222,7 @@
 
 .bias-introduce-wrapper{
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 20px;
     align-self: stretch;
 }
@@ -237,7 +237,7 @@
 .bias-detail-title{
     color: #767676;
     font-family: Pretendard;
-    font-size: 15px;
+    font-size: 16px;
     font-style: normal;
     font-weight: 400;
     line-height: 140%; /* 22.4px */
@@ -254,9 +254,9 @@
 .bias-name{
     color: #000;
     font-family: Pretendard;
-    font-size: 22px;
+    font-size: 28px;
     font-style: normal;
-    font-weight: 500;
+    font-weight: 600;
     line-height: 140%; /* 28px */
     letter-spacing: -0.5px;
 }
@@ -266,11 +266,11 @@
     gap: 5px;
     width: 100%;
     justify-content: space-between;
-    color: #686868;
+    color: #505050;
     font-family: Pretendard;
-    font-size: 18px;
+    font-size: 16px;
     font-style: normal;
-    font-weight: 500;
+    font-weight: 400;
     line-height: 140%; /* 25.2px */
     letter-spacing: -0.45px;
 }
@@ -281,7 +281,7 @@
     font-family: Pretendard;
     font-size: 16px;
     font-style: normal;
-    font-weight: 500;
+    font-weight: 400;
     line-height: 140%; /* 22.4px */
     letter-spacing: -0.4px;
 }
@@ -437,9 +437,9 @@
 }
 
 .week-data{
-    color: #797979;
+    color: #6c6c6c;
     font-family: Pretendard;
-    font-size: 14px;
+    font-size: 16px;
     font-style: normal;
     font-weight: 400;
     line-height: 140%; /* 19.6px */
@@ -488,15 +488,15 @@
   bottom: 0;
   display: flex;
   justify-content: center;
-  align-items: flex-end;
+  align-items: flex-start;
   pointer-events: none; /* 스와이프 방해 금지 */
   z-index: 10;
-  background: linear-gradient(to top, rgba(255,255,255,0.8) 20%, transparent 100%);
+  background: linear-gradient(to bottom, rgba(255,255,255,0.8) 20%, transparent 100%);
   animation: fadeOut 3s ease 10s forwards;
 }
 
 .scroll-guide-inner {
-  margin-bottom: 130px;
+  margin-top: 30px;
   font-size: 14px;
   font-weight: 500;
   color: #333;
@@ -702,12 +702,11 @@
 .try-subscribe-button{
     display: flex;
     padding: 8px 90px;
-    background-color: #4b99ff;
     border-radius: 12px;
     color: #fff;
     font-size: 17px;
     font-weight: 400;
-    border: 2px solid #c6deff;
+    border: 2px solid #f3f3f3;
     transition: all 0.2s ease-in-out;
     cursor: pointer;
 }

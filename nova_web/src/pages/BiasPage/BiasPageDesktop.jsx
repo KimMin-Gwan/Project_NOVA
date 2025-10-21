@@ -66,10 +66,11 @@ const BiasPageDesktop = ({
             setIntroduce(introduceInput);
             setOpenInput(false);
         }
+        window.location.reload();
     }
 
     function onChangeIntroduceInput(e) {
-        const value = e.target.value.slice(0, 20); // 최대 20자
+        const value = e.target.value.slice(0, 100); // 최대 20자
         setIntroduceInput(value);
     }
 
@@ -125,7 +126,6 @@ const BiasPageDesktop = ({
             }
             <div className={style["ad-wrapper"]}>
                 <div className={style["inner-wrapper"]}>
-                <AdComponent type={"link"}/>
                 {
                     targetBias.bid != "" ? (
                         <div className={style["upper-section"]}>
@@ -366,6 +366,7 @@ const BiasPageDesktop = ({
                                 </div>
                                 <div className={style["try-subscribe-wrapper"]}>
                                     <div className={style["try-subscribe-button"]}
+                                        style={{backgroundColor : subscribe ? "#999" : "#4b99ff"}}
                                         onClick={async ()=>{
                                             const res = await fetchSubscribeSchedule(targetSchedule.sid, handleSubscribe);
                                             if (!res){
@@ -457,7 +458,7 @@ const BiasPageDesktop = ({
                             {showGuide && (
                                 <div className={style["scroll-guide"]}>
                                 <div className={style["scroll-guide-inner"]}>
-                                    <span>더 많은 일정이 있어요 ↓</span>
+                                    <span>↓ 드래그 해서 모두 확인해보세요! ↓</span>
                                 </div>
                                 </div>
                             )}
