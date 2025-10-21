@@ -1,4 +1,4 @@
-from others.data_domain import Feed, User, Comment,  FeedLink
+from others.data_domain import Feed, User, Comment,  FeedLink, Bias
 from others.search_engine import FeedSearchEngine
 from others.object_storage_connector import ObjectStorageConnection, HTMLEXtractor, ImageDescriper
 from datetime import datetime
@@ -79,7 +79,8 @@ class FeedManager:
         bias_data = self._database.get_data_with_id(target="bid", id=bid)
         
         if bias_data:
-            bname = bias_data.bname
+            bias = Bias().make_with_dict(bias_data)
+            bname = bias.bname
             
         # 검증을 위한 코드는 이곳에 작성하시오
         feed = self.__set_new_feed(user=user, fid=fid, body=body, hashtag=hashtag, board_type=board_type,
