@@ -169,7 +169,10 @@ class TimeTableController:
         else:
             # 해당 날짜에 이미 다른 스케줄이 있는지 검증
             if model.check_schedule_not_in_time(schedule_search_engine=schedule_search_engine, schedule=schedule):
+                print(1)
                 model.save_new_schedule(schedule_search_engine=schedule_search_engine, schedule=schedule)
+                print(2)
+            print(3)
         return model
 
 
