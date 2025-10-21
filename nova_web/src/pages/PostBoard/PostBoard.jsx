@@ -352,7 +352,6 @@ export default function PostBoard () {
 const useIntersectionObserver2 = (callback, options = {}, hasMore) => {
   const targetRef = useRef(null);
 
-  console.log(hasMore);
   useEffect(() => {
     if (!hasMore || !targetRef.current) return;
 
