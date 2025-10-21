@@ -46,7 +46,7 @@ class TimeTableController:
 
         model.make_my_schedule_data(target_date=request.data_payload.date,
                                  schedule_search_engine=schedule_search_engine)
-        model.set_my_schedule_layer()
+        model.set_my_schedule_layer(target_date=request.data_payload.date)
         
         
         target_date = datetime.strptime(request.data_payload.date, "%Y/%m/%d")
