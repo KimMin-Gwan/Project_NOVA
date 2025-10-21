@@ -427,20 +427,7 @@
 }
 
 
-.upload-feedback-background2{
-  background-color: #20202034;
-  position: fixed;
-  z-index: 11000;
-  display: flex;
-  justify-content: start;
-  margin: 0 auto;
-  height: 100%;
-  width: 100%;
-  bottom: 0px;
-  left: 0px;
-  justify-content: center;
-  align-items: center;
-}
+
 
 .upload-feedback2{
   position: relative;
