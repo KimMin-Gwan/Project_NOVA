@@ -1113,8 +1113,8 @@ class ScheduleTimeLayerModel(TimeTableModel):
             time_obj = single_schedule.datetime    #  스케줄의 시작 시간
             end_time_obj = time_obj + timedelta(hours=single_schedule.duration)   #  스케줄의 종료 시간
 
-            print("time_obj: ", time_obj)
-            print("end_time_obj: ", end_time_obj)
+            # print("time_obj: ", time_obj)
+            # print("end_time_obj: ", end_time_obj)
 
             # 시간대 섹션 생성
             target_date_obj = datetime.strptime(target_date, "%Y/%m/%d")    #  페이지에서 보여주는 날짜
@@ -1124,7 +1124,7 @@ class ScheduleTimeLayerModel(TimeTableModel):
                  "end": target_date_combine(hour=eh, minute=em)}   #  시간대 섹션 생성
                 for h, m, eh, em in [(0,0,6,0), (6,0,12,0), (12,0,18,0), (18,0,23,59)]
             ]
-            print("options: ", options)
+            # print("options: ", options)
 
             for i, option in enumerate(options):
                 if i == len(options) - 1:
@@ -1175,7 +1175,7 @@ class ScheduleTimeLayerModel(TimeTableModel):
         for single_schedule in self.__schedules:
 
             single_schedule:Schedule = single_schedule
-                    
+
             time_obj = single_schedule.datetime         # 일정의 시작 시간
             end_time_obj = time_obj + timedelta(hours=single_schedule.duration)   # 일정의 종료 시간
 
