@@ -756,6 +756,8 @@ class ManagedFeedBiasTable(ManagedTable):
         for feed_data in feed_datas:
             feed = Feed()
             feed.make_with_dict(dict_data=feed_data)
+            if feed.display > 3:
+                feeds.append(feed)
             feeds.append(feed)
 
         # 잠시 보관한 피드 데이터에서 필요한 정보만 뽑아서 ManagedFeed 객체 생성
@@ -1095,7 +1097,8 @@ class ManagedScheduleTable(ManagedTable):
         for schedule_data in schedule_datas:
             schedule = Schedule()
             schedule.make_with_dict(dict_data=schedule_data)
-            schedules.append(schedule)
+            if schedule.display > 3:
+                schedules.append(schedule)
             
         for single_schedule in schedules:
             bias_data = self._database.get_data_with_id(target="bid", id=single_schedule.bid)
