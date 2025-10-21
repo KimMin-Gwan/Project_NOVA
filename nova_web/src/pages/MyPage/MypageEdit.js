@@ -232,7 +232,6 @@ function MyPage() {
     })
       .then((res) => {
         res.json();
-        setIsUploading(false);
       })
       .then((data) => {
         alert("완료");
@@ -317,10 +316,11 @@ function MyPage() {
               type="file"
               accept="image/*"
               ref={fileInputRef}
-              onChange={(e) => {
+              onChange={async(e) => {
                 setIsUploading(true);
-                handleFileChange(e);
-                handlePreview(e);
+                await handleFileChange(e);
+                await handlePreview(e);
+                setIsUploading(false);
               }}
             />
           </button>
@@ -451,6 +451,16 @@ function MyPage() {
     return(
     <DesktopLayout>
       <div className={`${style["container"]} ${style["edit-container"]}`}>
+          {
+            isUploading && (
+              <div className={style["upload-feedback-background"]}>
+                <div className={style["upload-feedback2"]}>
+                  업로드 중입니다.
+                </div>
+              </div>
+            )
+          }
+
         <div className={style.top_area}>
           <p
             className={style.backword}
@@ -475,9 +485,11 @@ function MyPage() {
               type="file"
               accept="image/*"
               ref={fileInputRef}
-              onChange={(e) => {
-                handleFileChange(e);
-                handlePreview(e);
+              onChange={async(e) => {
+                setIsUploading(true);
+                await handleFileChange(e);
+                await handlePreview(e);
+                setIsUploading(false);
               }}
             />
           </button>
