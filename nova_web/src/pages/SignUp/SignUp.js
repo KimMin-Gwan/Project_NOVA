@@ -23,6 +23,7 @@ export default function SignUp() {
   let [showCheckPassword, setShowCheckPassword] = useState(false);
 
   let [errorMessage, setErrorMessage] = useState("이메일 형식으로 아이디를 입력해주세요.");
+  const [isUploading, setIsUploading] = useState(false);
 
   let header = {
     "request-type": "default",
@@ -144,7 +145,7 @@ export default function SignUp() {
     }
   }
 
-  function fetchSignUp() {
+  const fetchSignUp = async () => {
     fetch(`https://supernova.io.kr/user_home/try_sign_up`, {
       headers: {
         "Content-Type": "application/json",
@@ -163,14 +164,17 @@ export default function SignUp() {
       });
   }
 
-  function handleSubmit(e) {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (pwd !== checkPwd) {
       alert("비밀번호가 같지 않습니다.");
       return;
     }
-    fetchSignUp();
+
+    setIsUploading(true);
+    await fetchSignUp();
+    setIsUploading(false);
   }
 
   const handleAllAgreeChange = (e) => {
@@ -193,6 +197,15 @@ export default function SignUp() {
 
   return (
     <div className={style.container}>
+      {
+        isUploading && (
+          <div className={style["upload-feedback-background"]}>
+            <div className={style["upload-feedback"]}>
+              시작하는 중 입니다.
+            </div>
+          </div>
+        )
+      }
       <div className={style.Topbar}>
         <img
           src={backword}
