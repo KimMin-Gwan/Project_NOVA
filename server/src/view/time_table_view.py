@@ -61,7 +61,7 @@ class Time_Table_View(Master_View):
         def get_time_layer_schedule_with_date(request:Request, date:Optional[str]=datetime.now().strftime("%Y/%m/%d")):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = DateRequest(date=date)
-            print("data_payload: ", data_payload)
+            print("date: ", date)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
             time_table_controller =TimeTableController()
