@@ -1093,7 +1093,6 @@ class ScheduleTimeLayerModel(TimeTableModel):
 
 
         # 여기서 managed_schedule은 dict 형태임
-        print("user.subscribed_sids: ", self._user.subscribed_sids)
         for sid in sids:
             if sid in self._user.subscribed_sids:
                 self.__my_target_sids.append(sid)
@@ -1101,7 +1100,6 @@ class ScheduleTimeLayerModel(TimeTableModel):
                 self.__recommend_target_sids.append(sid)
                 
         schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids= self.__my_target_sids)
-        print("schedule_datas: ", schedule_datas)
 
         # 다 만들면 보관
         for schedule_data in schedule_datas:
@@ -1163,7 +1161,6 @@ class ScheduleTimeLayerModel(TimeTableModel):
         else:
             self.__recommend_target_sids = result       # 새롭게 만들어지는 recommend_list 추가함. (추천된 리스트)
 
-        print("result: ", result)
         # 0개면 걍 끝
         if  len(result) == 0:
             return False
@@ -1201,10 +1198,10 @@ class ScheduleTimeLayerModel(TimeTableModel):
             for i, option in enumerate(options):
                 if i == len(options) - 1:
                     if (time_obj <= option["end"]) and (end_time_obj >= option["start"]):
-                        self.__my_layer_data[i+1]["schedules"].append(single_schedule)
+                        self.__recommand_layer_data[i+1]["schedules"].append(single_schedule)
                 else :
                     if (time_obj < option["end"]) and (end_time_obj >= option["start"]):
-                        self.__my_layer_data[i+1]["schedules"].append(single_schedule)
+                        self.__recommand_layer_data[i+1]["schedules"].append(single_schedule)
             
             # if options[0]["start"] <= time_obj < options[0]["end"]:
             #     self.__recommand_layer_data[1]["schedules"].append(single_schedule)
