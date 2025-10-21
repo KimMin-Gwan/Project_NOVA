@@ -1100,7 +1100,7 @@ class ScheduleTimeLayerModel(TimeTableModel):
                 self.__recommend_target_sids.append(sid)
                 
         schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids= self.__my_target_sids)
-        print("schedule_datas: ", schedule_datas)
+        # print("schedule_datas: ", schedule_datas)
 
         # 다 만들면 보관
         for schedule_data in schedule_datas:
