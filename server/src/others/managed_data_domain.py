@@ -645,7 +645,7 @@ class ManagedTable:
                     specific_date = condition["specific_date"].date()
 
                 # 날짜 범위 고려 필터링()
-                if isinstance(condition["duration"], int) and condition["duration"] != 0:
+                if "duration" in condition and isinstance(condition["duration"], int) and condition["duration"] != 0:
                     duration = timedelta(days=condition["duration"])
                     start_date = min(specific_date, specific_date + duration)
                     end_date = max(specific_date, specific_date + duration)
