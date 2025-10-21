@@ -493,6 +493,9 @@ class ManagedTable:
                 )
                 searched_df = searched_df[mask]
 
+        if "display" in searched_df.columns:
+            searched_df = searched_df[searched_df["display"] > 3]
+
         return searched_df
 
     # 날짜에 따라서 필터링 합니다. Update_time 필터링
@@ -528,6 +531,10 @@ class ManagedTable:
         # 날짜 필터링
         mask = df[date_column].apply(lambda dt: self._get_time_diff(target_time=dt, target_hour=target_hour, reverse=True))
         filtered_df = df[mask]
+        
+        # ✅ display > 3 필터 추가
+        if "display" in filtered_df.columns:
+            filtered_df = filtered_df[filtered_df["display"] > 3]
 
         return filtered_df
 
@@ -581,6 +588,9 @@ class ManagedTable:
 
         elif when == "not_start":
             mask &= (df[start_column] > now)
+
+        if "display" in df.columns:
+            mask &= (df["display"] > 3)
 
         return df[mask]
 
@@ -654,8 +664,11 @@ class ManagedTable:
                     mask &= (df[start_column].dt.date == specific_date)
             else:
                 pass
-        
-    
+            
+        # ✅ display가 3 초과인 데이터만 남김
+        if "display" in df.columns:
+            mask &= (df["display"] > 3)
+
         return df[mask]
     
     def _filter_data_with_month_option(self, df: pd.DataFrame, date: datetime, data_column: str = ""):
@@ -681,6 +694,10 @@ class ManagedTable:
 
         mask = (df[data_column].dt.year == target_year) & (df[data_column].dt.month == target_month)
         filtered_df = df[mask]
+        
+        # ✅ display가 3 초과인 데이터만 남김
+        if "display" in filtered_df.columns:
+            filtered_df = filtered_df[filtered_df["display"] > 3]
 
         return filtered_df
         
@@ -708,6 +725,9 @@ class ManagedTable:
         mask = (df[data_column] >= week_start) & (df[data_column] <= week_end)
         filtered_df = df[mask]
 
+        if "display" in filtered_df.columns:
+            filtered_df = filtered_df[filtered_df["display"] > 3]
+        
         return filtered_df
 
 
