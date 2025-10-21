@@ -1163,6 +1163,7 @@ class ScheduleTimeLayerModel(TimeTableModel):
         else:
             self.__recommend_target_sids = result       # 새롭게 만들어지는 recommend_list 추가함. (추천된 리스트)
 
+        print("result: ", result)
         # 0개면 걍 끝
         if  len(result) == 0:
             return False
