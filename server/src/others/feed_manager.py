@@ -74,7 +74,7 @@ class FeedManager:
         return
     
     def __modify_feed(self, user:User, fid, body, hashtag, board_type, date,
-                    link, bid, raw_body=""):
+                    link, bid, raw_body="", comment=[]):
         bname = ""
         bias_data = self._database.get_data_with_id(target="bid", id=bid)
         
@@ -85,7 +85,7 @@ class FeedManager:
         # 검증을 위한 코드는 이곳에 작성하시오
         feed = self.__set_new_feed(user=user, fid=fid, body=body, hashtag=hashtag, board_type=board_type,
                                  link=link, bid=bid, raw_body=raw_body, date=date, bname = bname)
-
+        feed.comment = comment
         self._database.modify_data_with_id(target_id="fid", target_data=feed.get_dict_form_data())
 
         # 이곳에 add와 make가 아닌 modify 되는 함수가 필요함
@@ -229,6 +229,7 @@ class FeedManager:
                                 bid=data_payload.bid,
                                 date=data_payload.date,
                                 raw_body = url, # 이거 url이라는 변수가 없어서
+                                comment= feed.comment
                                 )
         
         return "Upload Success", True
