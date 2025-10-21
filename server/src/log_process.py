@@ -92,7 +92,7 @@ class LogProcessor:
         ''' 로그 파일 초기화 함수 '''
         try:
             with open(path, 'w') as f:
-                f.write("")
+                pass
             return True
 
         except Exception as e:
