@@ -1294,6 +1294,7 @@ class ManagedScheduleTable(ManagedTable):
             logging.warning(f"Filtering schedule in specific date {specific_date} returned empty DataFrame.")
             return []
         
+        print("specific_date: ", specific_date)
         searched_df = self._filter_data_with_date_option(df=searched_df, date_option="specific",
                                                          date_columns=["datetime"],
                                                          specific_date=specific_date,
