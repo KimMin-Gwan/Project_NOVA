@@ -1084,7 +1084,13 @@ class ScheduleTimeLayerModel(TimeTableModel):
         # specific_date의 자료형은 str 그대로 써도됩니다. managed_table에서 Datetime 객체로 변환시키도록 만들었음.
         # return_id = True -> sid list 반환, False -> managed_Schedule list 반환
 
-        sids = schedule_search_engine.try_get_schedules_in_specific_date(sids=["all"], specific_date=target_date, return_id=True)
+        #  하루 전 데이터까지 들고옵니다. 
+
+        sids = schedule_search_engine.try_get_schedules_in_specific_date(sids=["all"], specific_date=target_date, duration=-1, return_id=True)
+
+        all_schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids=sids)
+        print("all_schedule_datas: ", all_schedule_datas)
+
 
         # 여기서 managed_schedule은 dict 형태임
         for sid in sids:
@@ -1094,7 +1100,8 @@ class ScheduleTimeLayerModel(TimeTableModel):
                 self.__recommend_target_sids.append(sid)
                 
         schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids= self.__my_target_sids)
-        
+        # print("schedule_datas: ", schedule_datas)
+
         # 다 만들면 보관
         for schedule_data in schedule_datas:
             schedule = Schedule().make_with_dict(dict_data=schedule_data)
@@ -1103,23 +1110,26 @@ class ScheduleTimeLayerModel(TimeTableModel):
         return
     
     # 레이어 만들기
-    def set_my_schedule_layer(self):
-        # 핵심 시간 섹션
-        
+    def set_my_schedule_layer(self, target_date:str):
         # 섹션마다 분류
         for single_schedule in self.__schedules:
             single_schedule:Schedule = single_schedule
-            time_obj = single_schedule.datetime
-            end_time_obj = time_obj + single_schedule.duration
 
-            print("time_obj: ", time_obj)
-            print("end_time_obj: ", end_time_obj)
+            time_obj = single_schedule.datetime    #  스케줄의 시작 시간
+            end_time_obj = time_obj + timedelta(hours=single_schedule.duration)   #  스케줄의 종료 시간
 
-            # 시간대 섹션 생성 (더 간단한 방법)
+            # print("time_obj: ", time_obj)
+            # print("end_time_obj: ", end_time_obj)
+
+            # 시간대 섹션 생성
+            target_date_obj = datetime.strptime(target_date, "%Y/%m/%d")    #  페이지에서 보여주는 날짜
+            target_date_combine = lambda hour, minute : datetime.combine(target_date_obj, datetime.min.time()).replace(hour=hour, minute=minute)
             options = [
-                {"start": time_obj.replace(hour=h, minute=m), "end": time_obj.replace(hour=eh, minute=em)}
+                {"start": target_date_combine(hour=h, minute=m),
+                 "end": target_date_combine(hour=eh, minute=em)}   #  시간대 섹션 생성
                 for h, m, eh, em in [(0,0,6,0), (6,0,12,0), (12,0,18,0), (18,0,23,59)]
             ]
+            # print("options: ", options)
 
             for i, option in enumerate(options):
                 if i == len(options) - 1:
@@ -1165,20 +1175,21 @@ class ScheduleTimeLayerModel(TimeTableModel):
         return True
     
     
-    def set_recommand_schedule_layer(self):
-        # 핵심 시간 섹션
+    def set_recommand_schedule_layer(self, target_date:str):
         # 섹션마다 분류
         for single_schedule in self.__schedules:
-            
+
             single_schedule:Schedule = single_schedule
-            time_obj = single_schedule.datetime
-            end_time_obj = time_obj + single_schedule.duration
-            #time_obj = datetime.strptime(single_schedule.start_time, "%H:%M")
+
+            time_obj = single_schedule.datetime         # 일정의 시작 시간
+            end_time_obj = time_obj + timedelta(hours=single_schedule.duration)   # 일정의 종료 시간
 
             # 시간대 섹션 생성 (더 간단한 방법)
+            target_date_obj = datetime.strptime(target_date, "%Y/%m/%d")    #  페이지에서 보여주는 날짜
+            target_date_combine = lambda hour, minute : datetime.combine(target_date_obj, datetime.min.time()).replace(hour=hour, minute=minute)
             options = [
-                {"start": time_obj.replace(hour=h, minute=m),
-                 "end": time_obj.replace(hour=eh, minute=em)}
+                {"start": target_date_combine(hour=h, minute=m),
+                 "end": target_date_combine(hour=eh, minute=em)}
                 for h, m, eh, em in [(0,0,6,0), (6,0,12,0), (12,0,18,0), (18,0,23,59)]
             ]
         
