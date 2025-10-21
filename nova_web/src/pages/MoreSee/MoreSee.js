@@ -151,8 +151,6 @@ function MoreSee({ onModeChange }) {
     handleFetch();
   }, []);
 
-  console.log(user);
-
   const profile = `https://sgsryiav12510.edge.naverncp.com/${user}.png`;
 
   const firstBoardList = boardList.slice(0, 2);

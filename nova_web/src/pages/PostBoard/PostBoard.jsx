@@ -235,8 +235,6 @@ export default function PostBoard () {
 
 
     const loadMoreCallBack = async () => {
-        console.log(initialLoaded);
-
         if (initialLoaded){
             if (biasId) {
                 const targetBias = biasId;
@@ -253,8 +251,6 @@ export default function PostBoard () {
     const scrollRef = useRef(null);
     const targetRef = useIntersectionObserver2(loadMoreCallBack, 
         { root:scrollRef.current, threshold: 0.5 }, hasMore);
-
-    console.log(biasId, hasMore);
 
     if (isMobile){
         return(

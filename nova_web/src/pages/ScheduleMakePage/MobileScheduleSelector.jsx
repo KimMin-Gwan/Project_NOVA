@@ -173,7 +173,6 @@ const MobileScheduleSelectSection = ({
 
     if (selectedSchedule.sid){
       if (!isUploading){
-        console.log(isUploading);
         handlePreviewImage(`${SCHEDULE_IMAGE_URL}${selectedSchedule.sid}.png`);
       }
     }else{

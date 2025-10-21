@@ -102,7 +102,6 @@ export default function SignUp() {
   }
 
   function handleGender(gender) {
-    console.log(gender);
     setGender(gender);
   }
 
