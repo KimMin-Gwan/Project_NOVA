@@ -1,7 +1,7 @@
 from model.base_model import BaseModel
 import httpx
 from model import Mongo_Database
-from others.data_domain import User, Bias
+from others.data_domain import User, Bias, Comment
 from others import CoreControllerLogicError, FeedSearchEngine, ObjectStorageConnection
 from view.jwt_decoder import JWTManager
 import uuid
@@ -468,8 +468,8 @@ class DeleteUserModel(BaseModel):
             raise CoreControllerLogicError("response making error | " + e)
 
     def try_delete_user(self):
-        deleted_user_data = self._database.get_data_with_id(target="uid", id=self._user.uid)
-        deleted_user = User().make_with_dict(deleted_user_data)
+        #deleted_user_data = self._database.get_data_with_id(target="uid", id=self._user.uid)
+        deleted_user = self._user
 
         cleaned_user = User(uid=deleted_user.uid, uname="탈퇴한유저")
 
@@ -478,4 +478,18 @@ class DeleteUserModel(BaseModel):
 
         # 삭제된 유저는 다른 DB에 저장 됩니다. UID, 닉네임, 개인 정보 등을 저장합니다.
         self._database.add_new_data(target_id="duid", new_data=self._user.get_dict_form_data())
+        return
+
+    def set_comment_uname(self):
+        comment_list = self._user.my_comment
+        
+        comments = []
+        comment_datas = self._database.get_datas_with_ids("cid", comment_list)
+        
+        for comment_data in comment_datas:
+            comment = Comment().make_with_dict(comment_data)
+            comment.uname = "탈퇴한유저"
+            comments.append(comment)
+    
+        self._database.modify_datas_with_ids(target_id="cid", ids=comment_list, target_datas=self._make_dict_list_data(list_data=comments) )
         return
