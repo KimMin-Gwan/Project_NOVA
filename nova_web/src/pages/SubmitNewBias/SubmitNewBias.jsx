@@ -158,7 +158,7 @@ function SubmitNewBias() {
         }
 
         if (!platform.trim()) {
-            newErrors.platform = "플랫폼을 입력해주세요.";
+            newErrors.platform = "플랫폼을 선택해주세요.";
         } else {
             // 치지직, SOOP만 허용
             const allowed = ["치지직", "SOOP"];
