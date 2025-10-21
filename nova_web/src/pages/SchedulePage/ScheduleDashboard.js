@@ -91,12 +91,12 @@ const ScheduleDashboard = () => {
   let [numBias, setNumBias] = useState(0);
   let [numSchedule, setNumSchedule] = useState(0);
 
-  let [biasData, setBiasData] = useState([]);
-
   //const [pageIndex, setPageIndex] = useState(0);
   const [targetDate, setTargetDate] = useState(new Date());
   const [leftTargetDate, setLeftTargetDate] = useState(targetDate);
   const [rightTargetDate, setRightTargetDate] = useState(targetDate);
+
+  const [recommandList, setRecommandList] = useState([]);
 
   // 4. 26. 토요일 이렇게 나오게 하려고 만든거
   const getFormattedDate = (date) => {
@@ -225,12 +225,23 @@ const ScheduleDashboard = () => {
   // 시간 레이어 데이터 받기
   async function fetchScheduleDataWithDate(date) {
     try {
-      const res = await mainApi.get(`/time_table_server/get_time_layer_schedule_with_date?date=${date}`);
+      //const res = await mainApi.get(`/time_table_server/get_time_layer_schedule_with_date?date=${date}`);
+      const res = await postApi.post('/time_table_server/get_time_layer_schedule_with_date', {
+          header : HEADER,
+          body: {
+            date: date,
+            recommand_list:recommandList
+          }
+        }
+      )
+      setRecommandList((prev)=>[...prev, res.data.body.recommand_list]);
+
       return res.data.body.schedule_layer; // 반환값을 명시적으로 설정
     } catch (error) {
       return temp_schedule_data
     }
   }
+
 
   //// 시간 레이어 데이터 받기
   //async function fetchScheduleDataWithDate(date) {
