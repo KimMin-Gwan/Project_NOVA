@@ -161,7 +161,7 @@ class UserController:
                     model.set_response(result=True, detail="회원가입 성공")
                 
         except:
-            model.set_response(result=False, detail="알 수 없는 오류가 발생했습니다. 관리장에게 문의하세요.")
+            model.set_response(result=False, detail="알 수 없는 오류가 발생했습니다. 관리자에게 문의하세요.")
             
         finally:
             return model
