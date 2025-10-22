@@ -1286,7 +1286,7 @@ class BiasScheduleModel(BaseModel):
             self.__today_index = today.weekday()  # 월=0, 화=1, ..., 일=6
         
         for i in range(7):
-            current_day = week_start + timedelta(days=i)
+            current_day:datetime = week_start + timedelta(days=i)
             
             target_schedule = Schedule()
             for schedule in self._schedules:
@@ -1295,6 +1295,7 @@ class BiasScheduleModel(BaseModel):
                 
                 if schedule.datetime.date() == current_day.date():
                     target_schedule=schedule
+                    break
                     
             iso_schedule=self.__get_isoformat_schedule(schedule=target_schedule)
             result_schedule = self.is_subscribed(schedule=iso_schedule)
@@ -1302,7 +1303,8 @@ class BiasScheduleModel(BaseModel):
                 {
                     "date": current_day.strftime("%m월 %d일"),
                     "weekday": weekdays[i],
-                    "schedule": result_schedule.get_dict_form_data()
+                    "schedule": result_schedule.get_dict_form_data(),
+                    "str_date": current_day.strftime("%Y-%m-%d")
                 }
             )
 
