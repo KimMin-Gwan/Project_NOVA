@@ -27,42 +27,6 @@ import ScheduleDetailDekstop from "../../component/ScheduleDetail/ScheduleDetail
 import ScheduleDetailMobile from "../../component/ScheduleDetail/ScheduleDetailMobile.jsx";
 import AdComponent from "../../component/AdComponent/AdComponent.jsx";
 
-
-const temp_schedule_data2 = [
-    { tag : "노래/음악"},
-    { section : "새벽", schedules : [
-        ]
-    },
-    { section : "오전", schedules : [
-        { time: "AM 11:00", type: "추천", schedule_id: "aaa", schedule_title: "아침 노래뱅", schedule_bias: "주제이름1" },
-        { time: "AM 11:00", type: "구독", schedule_id: "bbb", schedule_title: "한식 맛집 아테의 노래뱅", schedule_bias: "주제이름2" },
-        ]
-    },
-    { section : "오후", schedules : [
-        { time: "PM 01:00", type: "추천", schedule_id: "ccc", schedule_title: "마지막 노래 방송", schedule_bias: "주제이름2" },
-        ]
-    },
-    { section : "저녁", schedules : [
-        { time: "PM 07:00", type: "구독", schedule_id: "3", schedule_title: "잔잔노래짧뱅", schedule_bias: "주제이름4" },
-        { time: "PM 08:00", type: "추천", schedule_id: "4", schedule_title: "이쁜이들이랑 싱크룸", schedule_bias: "주제이름5" },
-        ]
-    }
-    //{ section : "오전", schedules : [
-        //{ time: "AM 11:00", type: "recommened", schedule_id: "0", schedule_title: "아침 노래뱅", schedule_bias: "성화린" },
-        //{ time: "AM 11:00", type: "recommened", schedule_id: "1", schedule_title: "한식 맛집 아테의 노래뱅", schedule_bias: "김아테" },
-        //]
-    //},
-    //{ section : "오후", schedules : [
-        //{ time: "PM 01:00", type: "added", schedule_id: "2", schedule_title: "마지막 노래 방송", schedule_bias: "슈메히메" },
-        //]
-    //},
-    //{ section : "저녁", schedules : [
-        //{ time: "PM 07:00", type: "recommened", schedule_id: "3", schedule_title: "잔잔노래짧뱅", schedule_bias: "후츄후츄" },
-        //{ time: "PM 08:00", type: "recommened", schedule_id: "4", schedule_title: "이쁜이들이랑 싱크룸", schedule_bias: "밍수진" },
-        //]
-    //}
-]
-
 const temp_schedule_data = [
     { tag : ""},
     { section : "새벽", schedules : [ ] },
@@ -214,15 +178,7 @@ const ScheduleDashboard = () => {
   }
 
 
-  //// 시간 차트 데이터 받기
-  //function fetchTimeChartData(date) {
-    //mainApi.get(`time_table_server/try_get_today_time_chart?date=${date}`).then((res) => {
-      //setScheduleData(res.data.body.schedule_blocks);
-      //setWeekDayData(res.data.body.week_day_datas);
-    //});
-  //}
-
-  // 시간 레이어 데이터 받기
+  
   async function fetchScheduleDataWithDate(date) {
     try {
       //const res = await mainApi.get(`/time_table_server/get_time_layer_schedule_with_date?date=${date}`);
@@ -243,18 +199,6 @@ const ScheduleDashboard = () => {
   }
 
 
-  //// 시간 레이어 데이터 받기
-  //async function fetchScheduleDataWithDate(date) {
-    //return temp_schedule_data2
-  //}
-
-
-  //useEffect(() => {
-    //const dateString = targetDate.toLocaleString('ko-KR').split("T")[0]; // 'YYYY-MM-DD' 형식으로 변환
-    //fetchTargetMonthWeek(dateString);
-    ////fetchTimeChartData(dateString);
-    ////fetchScheduleDataWithDate(dateString);
-  //}, [targetDate]);
 
   async function initDataSetting(dateString){
     const newSchedule = await fetchScheduleDataWithDate(dateString)
