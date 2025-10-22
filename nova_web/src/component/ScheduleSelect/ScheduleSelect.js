@@ -417,6 +417,7 @@ export default function ScheduleSelect({
               value={detailInput}
               onChange={onChangeDetailInput}
               placeholder="일정의 이름"
+              enterKeyHint="done"
             />
           </div>
         </div>
@@ -430,6 +431,7 @@ export default function ScheduleSelect({
               value={placeInput}
               onChange={onChangePlaceInput}
               placeholder="쉼표(,)를 사용하여 여러개의 장소를 입력"
+              enterKeyHint="done"
             />
           </div>
         </div>
@@ -505,6 +507,7 @@ export default function ScheduleSelect({
               value={tagsInput}
               onChange={onChangeTagsInput}
               placeholder="각 태그의 뒤에 쉼표를 입력하세요"
+              enterKeyHint="next"
             />
           </div>
         </div>

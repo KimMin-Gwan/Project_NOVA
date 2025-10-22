@@ -112,6 +112,7 @@ function FindPw() {
             onChange={(e) => setEmail(e.target.value)}
             className={style.input}
             placeholder="이메일을 입력해주세요"
+            enterKeyHint="done"
           />
           {feedbackMessage && <p className={style.feedback}>{feedbackMessage}</p>} {/* ✅ 피드백 표시 */}
           <button type="button" className={style.button} onClick={clickVerifyCode}>
@@ -128,6 +129,7 @@ function FindPw() {
             onChange={(e) => handleCode(e)}
             className={style.input}
             placeholder="보안코드를 입력해주세요"
+            enterKeyHint="done"
           />
           <button type="button" className={style.button} onClick={handleSecurityCode}>
             보안코드 확인

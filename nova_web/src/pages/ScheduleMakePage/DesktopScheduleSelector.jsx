@@ -360,6 +360,7 @@ const DesktopScheduleSelectSection = ({
                           value={detailInput}
                           onChange={onChangeDetailInput}
                           placeholder="콘텐츠 일정 제목"
+                          enterKeyHint="done"
                         />
                         :
                         <div  className={style["detail-readonly"]}
@@ -395,6 +396,7 @@ const DesktopScheduleSelectSection = ({
                           value={tagsInput}
                           onChange={onChangeTagsInput}
                           placeholder="각 태그의 뒤에 쉼표를 입력하세요"
+                          enterKeyHint="done"
                         />
                         :
                         <div  className={style["detail-readonly"]}
@@ -528,6 +530,7 @@ const DesktopScheduleSelectSection = ({
                             value={durationInput}
                             onChange={onChangeDurationInput}
                             placeholder="2"
+                            enterKeyHint="done"
                           />
                           :
                           <div  className={style["detail-readonly"]}
@@ -570,6 +573,7 @@ const DesktopScheduleSelectSection = ({
                   onChange={(e) => {
                     handleUploadImageButton(e)
                   }}
+                  enterKeyHint="done"
                 />
                 </div>
                 <div className={`${style["schedule-make-button"]} ${style["upload"]}`}

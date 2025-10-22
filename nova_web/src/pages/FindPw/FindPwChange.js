@@ -121,6 +121,7 @@ function FindPwChange() {
             value={newPassword}
             placeholder="새로운 비밀번호를 입력해주세요"
             onChange={handlePasswordChange}
+            enterKeyHint="done"
           />
         </section>
 
@@ -133,6 +134,7 @@ function FindPwChange() {
             value={confirmPassword}
             placeholder="비밀번호를 다시 입력해주세요"
             onChange={handleConfirmPasswordChange}
+            enterKeyHint="done"
           />
         </section>
 

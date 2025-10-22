@@ -398,6 +398,7 @@ const Write = () => {
                 onChange={onChangeTag}
                 onKeyDown={onKeyDown}
                 className={style["input-hashtag"]}
+                enterKeyHint="done"
               />
               <span className={style["count-text"]}>{inputTagCount}/12</span>
             </div>
@@ -542,6 +543,7 @@ const Write = () => {
                     onChange={onChangeTag}
                     onKeyDown={onKeyDown}
                     className={style2["input-hashtag"]}
+                    enterKeyHint="done"
                   />
                   <span className={style["count-text"]}>{inputTagCount}/12</span>
                 </div>
@@ -766,12 +768,14 @@ export function LinkModal({
             value={linkTitle}
             onChange={(e) => setLinkTitle(e.target.value)}
             placeholder="좌표 설명"
+            enterKeyHint="done"
           />
           <Input
             type="url"
             value={linkUrl}
             onChange={(e) => setLinkUrl(e.target.value)}
             placeholder="이곳을 클릭해서 URL을 추가하세요"
+            enterKeyHint="done"
           />
         </div>
         <button

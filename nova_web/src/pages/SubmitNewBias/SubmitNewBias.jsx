@@ -302,6 +302,7 @@ function SubmitNewBias() {
                             placeholder={field.placeholder}
                             value={form[key]}
                             onChange={handleChange(key)}
+                            enterKeyHint="done"
                         />
                         )}
                         {errors[key] && (
@@ -343,6 +344,7 @@ function SubmitNewBias() {
                             className={style["checkbox-input"]}
                             checked={isChecked}
                             onChange={handleCheckboxChange}
+                            enterKeyHint="done"
                         />
                         <span className={style["checkbox-placeholder"]}>
                             {TEXT.checkboxLabel}

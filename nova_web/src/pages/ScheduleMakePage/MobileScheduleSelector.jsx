@@ -364,6 +364,7 @@ const MobileScheduleSelectSection = ({
                   value={detailInput}
                   onChange={onChangeDetailInput}
                   placeholder="콘텐츠 일정 제목"
+                  enterKeyHint="done"
                   /> : 
                   <div  className={style["detail-readonly"]}
                   >{detailInput || "일정의 이름"}</div>
@@ -398,6 +399,7 @@ const MobileScheduleSelectSection = ({
                   value={tagsInput}
                   onChange={onChangeTagsInput}
                   placeholder="각 태그의 뒤에 쉼표를 입력하세요"
+                  enterKeyHint="done"
                   /> :
                   <div  className={style["detail-readonly"]}
                   >{tagsInput || "작성된 태그가 없어요"}</div>
@@ -528,6 +530,7 @@ const MobileScheduleSelectSection = ({
                           value={durationInput}
                           onChange={onChangeDurationInput}
                           placeholder="2"
+                          enterKeyHint="done"
                         />
                         :
                         <div  className={style["detail-readonly"]}
