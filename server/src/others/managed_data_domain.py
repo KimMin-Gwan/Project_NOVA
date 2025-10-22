@@ -1072,8 +1072,6 @@ class ManagedFeedBiasTable(ManagedTable):
 
         return result
     
-    def search_bias_with_key(self, key:str):
-        searched_df = self._search_data_with_key_str_n_columns(df=)
     # 새롭게 최애를 지정했을 때 연결하는 시스템
     # 근데 이거 잘생각해보면 최애 지정하기 전에 쓴 글들은 해시태그에 반영되어야 하는가?
     def add_new_user_to_bias(self, bid:str, uid:str):

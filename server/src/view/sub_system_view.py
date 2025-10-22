@@ -81,24 +81,8 @@ class Sub_Service_View(Master_View):
 
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
-            return response        
-
-        @self.__app.get('/nova_sub_system/try_search_bias_with_keyword')
-        def try_search_bias_with_keyword(request:Request, keyword:Optional[str] = ""):
-            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
-
-            data_payload = BiasSearchRequest(keyword=keyword, category="모두", len_bias=0)
-
-            request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
-            sub_controller = Sub_Controller()
-            model = sub_controller.try_search_bias_with_keyword(database=self.__database,
-                                                                request=request_manager,
-                                                                feed_search_engine=self.__feed_search_engine)
-
-            body_data = model.get_response_form_data(self._head_parser)
-            response = request_manager.make_json_response(body_data=body_data)
-            return response        
-
+            return response
+            
         # 바이어스 선택 또는 취소
         @self.__app.get('/nova_sub_system/try_follow_bias')
         def try_follow_bias(request:Request, bid:Optional[str]):

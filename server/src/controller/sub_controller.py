@@ -127,17 +127,6 @@ class Sub_Controller:
             )
             
         return model
-    
-    def try_search_bias_with_keyword(self, database:Mongo_Database, request:RequestManager, feed_search_engine:FeedSearchEngine):
-        model = BiasSearchModel(database=database)
-
-        if request.jwt_payload != "":
-            model.set_user_with_email(request=request.jwt_payload)
-
-        model.try_search_bias_with_keyword(feed_search_engine=feed_search_engine)
-        
-        return model
-
 
     # bias follow페이지에 노출될 최애들의 리스트
     def try_get_bias_follow_page(self, database:Mongo_Database):

@@ -321,9 +321,6 @@ class BiasSearchModel(BaseModel):
                     result.append(bias)
                     
         return result
-    
-    def try_search_bias_with_keyword(self, keyword:str, num_biases:int=5, feed_search_engine:FeedSearchEngine):
-        searched_bias = feed_search_engine.try_search_managed_biases(keyword=keyword)
 
     def get_managed_bias_list(self, feed_search_engine:FeedSearchEngine):
         managed_bias_list = feed_search_engine.get_all_managed_bias()
