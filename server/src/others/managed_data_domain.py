@@ -758,7 +758,6 @@ class ManagedFeedBiasTable(ManagedTable):
             feed.make_with_dict(dict_data=feed_data)
             if feed.display > 3:
                 feeds.append(feed)
-            feeds.append(feed)
 
         # 잠시 보관한 피드 데이터에서 필요한 정보만 뽑아서 ManagedFeed 객체 생성
         for single_feed in feeds:
