@@ -61,6 +61,9 @@ class FeedSearchEngine:
     
     def try_search_managed_feeds(self, fids:list):
         return self.__search_manager.try_search_managed_feeds(fids=fids)
+
+    def try_get_all_managed_feeds(self):
+        return self.__search_manager.try_get_all_managed_feeds()
     
     # 새로운  관리 피드를 추가하는 함수
     def try_make_new_managed_feed(self, feed):
