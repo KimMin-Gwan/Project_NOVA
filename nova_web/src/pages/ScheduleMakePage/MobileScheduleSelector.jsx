@@ -192,6 +192,16 @@ const MobileScheduleSelectSection = ({
 
   },[selectedSchedule])
 
+  useEffect(()=>{
+    if(openContentMode){
+      setIsValid(selectedSchedule.is_owner);
+      setValidationText("작성자와 스트리머만 수정할 수 있어요!")
+    }else{
+      handleBiasOwner()
+    }
+  },[openContentMode])
+
+
   const handleBiasOwner = async () => {
     const res = await fetchIsValidUser(selectedBias);
     setIsValid(res);

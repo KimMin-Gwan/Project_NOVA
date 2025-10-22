@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import style from "./ScheduleMakePage.module.css";
 import style2 from "./ScheduleMakePageMobile.module.css";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -17,7 +17,10 @@ import useBiasStore from "../../stores/BiasStore/useBiasStore";
 
 const ScheduleMakePage = () => {
     const isMobile = useMediaQuery('(max-width:1100px)');
-    const { sid } = useParams();
+    const [searchParams] = useSearchParams();
+    const sid = searchParams.get("sid");
+    const targetDate = searchParams.get("targetDate");
+    const targetBid = searchParams.get("targetBias");
     const navigate = useNavigate();
     const [isUserState, setIsUserState] = useState(false);
     const { biasList, biasId, setBiasId, loading, fetchBiasList } = useBiasStore();
@@ -48,6 +51,23 @@ const ScheduleMakePage = () => {
           }
         });
     }
+
+
+    useEffect(() => {
+      if (!initDate || !targetBid) return;
+
+      if (biasList){
+        //const isValidBid = biasList.some(bias => bias.bid === targetBid);
+        const resultBias = biasList.find(bias => bias.bid === targetBid);
+
+        if (!resultBias) {
+          alert("팔로우 하지 않은 스트리머 입니다")
+          navigate(`/bias/${targetBid}`);
+        }else{
+          setOpenContentMode(resultBias.open_content_mode);
+        }
+      }
+    }, [biasList]);
 
 
     const fetchScheduleList = async (bid, year, month) => {
@@ -102,7 +122,7 @@ const ScheduleMakePage = () => {
 
 
     useEffect(() => {
-      fetchBiasList();
+      fetchBiasList()
     }, [isUserState]);
 
    
@@ -137,6 +157,7 @@ const ScheduleMakePage = () => {
     const [selectedDate, setSelectedDate] = useState(defaultDate);
     const [selectedSchedule, setSelectedSchedule] = useState(defaultSchedule);
     const [openCotentMode, setOpenContentMode] = useState(true);
+
 
     const handleSelectBias = (bias) => {
       if(initDate){
@@ -186,6 +207,7 @@ const ScheduleMakePage = () => {
       );
     }
 
+
     useEffect(()=>{
       if(!initDate){
         if (selectedDate.day !== "") {
@@ -209,6 +231,7 @@ const ScheduleMakePage = () => {
         }
       }
     }, [selectedDate])
+
 
 
     async function tryFetchNewSchedule(newSchedule) {
@@ -247,7 +270,7 @@ const ScheduleMakePage = () => {
       }
     }
 
-    const fetchSingleScheduleData = (sid) => {
+    const fetchSingleScheduleData = async (sid) => {
       mainApi.get(`/time_table_server/try_get_written_schedule?sid=${sid}`).then((res)=>{
         const schedule = res.data.body.schedules[0];
         setSelectedBias(schedule.bid);
@@ -266,6 +289,34 @@ const ScheduleMakePage = () => {
       if (sid){
         fetchSingleScheduleData(sid);
       }
+      
+      const checkIsValid = async () => {
+        try {
+          // API 호출 (유효성 검사)
+          await mainApi.get(
+            `/time_table_server/try_find_schedule_with_bid_n_datetime?bid=${targetBid}&datetime=${targetDate}`
+          );
+
+          // 성공 시 — 유효하니까 계속 진행
+          setSelectedBias(targetBid);
+          const date = new Date(targetDate);
+          setInitDate(date);
+          setSelectedSchedule({
+            ...defaultSchedule,
+            datetime: date,
+          });
+        } catch (err) {
+          // 400이면 잘못된 접근으로 판단
+          console.log(err)
+          alert("잘못된 접근입니다.");
+          navigate("/");
+        }
+      };
+
+      if (targetBid && targetDate) {
+        checkIsValid(); // ✅ 함수 실행 (괄호 추가)
+      }
+
     }, []);
 
     const resetAll = () => {

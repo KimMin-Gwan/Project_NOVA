@@ -482,6 +482,7 @@ const BiasPageDesktop = ({
                                             setTargetScheduleDatetime={setTargetScheduleDatetime}
                                             index={index}
                                             todayIndex={todayIndex}
+                                            naviagte={navigate}
                                         />
                                     </SwiperSlide>
                                 ))}
@@ -502,14 +503,14 @@ const BiasPageDesktop = ({
 
 const ScheduleComponent = ({
     scheduleData, setTargetSchedule, setTargetScheduleDatetime,
-    index, todayIndex
+    index, todayIndex, naviagte
 }) => {
 
     if(scheduleData.schedule.sid == ""){
         return(
             <>
                 <EmptyScheduleComponent 
-                    scheduleData={scheduleData} index={index} todayIndex={todayIndex}
+                    scheduleData={scheduleData} index={index} todayIndex={todayIndex} navigate={naviagte}
                 />
             </>
         );
@@ -605,13 +606,18 @@ const ScheduleComponent = ({
 }
 
 const EmptyScheduleComponent = ({
-    scheduleData, index, todayIndex
+    scheduleData, index, todayIndex, navigate, bias
 })=> {
+
+    const navigateToMakeNew = () => {
+        navigate(`/schedule/make_new?targetBias=${scheduleData.bid}&targetDate=${scheduleData.str_date}`)
+    }
 
     if(index == todayIndex){
         return(
             <div className={style["schedule-component-today"]}
                 style={{minHeight:"117px"}}
+                onClick={navigateToMakeNew}
             >
                 <div className={style["schedule-date-wrapper"]}>
                     <div className={style["schedule-date"]}>
@@ -634,6 +640,7 @@ const EmptyScheduleComponent = ({
         return(
             <div className={style["schedule-component"]}
                 style={{minHeight:"117px"}}
+                onClick={navigateToMakeNew}
             >
                 <div className={style["schedule-date-wrapper"]}>
                     <div className={style["schedule-date"]}>

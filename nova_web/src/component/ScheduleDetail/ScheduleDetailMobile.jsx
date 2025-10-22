@@ -178,7 +178,7 @@ const ScheduleDetailMobile = ({sid, toggleDetailOption}) => {
                                         schedule.is_owner ? (
                                             <div className={style["right-button"]}
                                                 onClick={()=>{
-                                                    navigate(`/schedule/make_new/${schedule.sid}`)
+                                                    navigate(`/schedule/make_new?sid=${schedule.sid}`)
                                                 }}
                                             >콘텐츠 수정</div>
                                         ) : (
