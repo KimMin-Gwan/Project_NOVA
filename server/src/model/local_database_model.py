@@ -305,3 +305,45 @@ class Mongo_Database():
         except Exception as e:
             print(e)
             raise DatabaseLogicError(error_type="get_followers_with_bid error | " + str(e))
+
+
+    def is_valid_email(self, email: str) -> bool:
+        """
+            블랙리스트 이메일 검증용 함수
+            사용가능하면 True
+            불가능 하면 False
+        """
+        try:
+            collection_name = "emailBlackList"
+            selected_collection = self.__set_collection(collection=collection_name)
+
+            # email이 블랙리스트에 존재하는지 확인
+            exists = selected_collection.find_one({"email": email})
+
+            # 있으면 False, 없으면 True 반환
+            return not bool(exists)
+
+        except Exception as e:
+            print(e)
+            raise DatabaseLogicError(error_type="is_valid_email error | " + str(e))
+        
+        
+    def is_valid_nickname(self, nickname: str) -> bool:
+        """
+            닉네임 검증용 함수
+            사용가능하면 True
+            불가능 하면 False
+        """
+        try:
+            collection_name = "nicknameBlackList"
+            selected_collection = self.__set_collection(collection=collection_name)
+
+            # nickname이 블랙리스트에 존재하는지 확인
+            exists = selected_collection.find_one({"nickname": nickname})
+
+            # 있으면 False, 없으면 True 반환
+            return not bool(exists)
+
+        except Exception as e:
+            print(e)
+            raise DatabaseLogicError(error_type="is_valid_nickname error | " + str(e))
