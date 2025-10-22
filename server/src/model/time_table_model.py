@@ -1304,7 +1304,8 @@ class BiasScheduleModel(BaseModel):
                     "date": current_day.strftime("%m월 %d일"),
                     "weekday": weekdays[i],
                     "schedule": result_schedule.get_dict_form_data(),
-                    "str_date": current_day.strftime("%Y-%m-%d")
+                    "str_date": current_day.strftime("%Y-%m-%d"),
+                    "bid" : self._bias.bid
                 }
             )
 
