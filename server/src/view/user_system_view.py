@@ -1,6 +1,5 @@
 from typing import Optional, Union
 from fastapi import FastAPI,  Request, UploadFile, File
-from server.src.controller import user_controller
 from view.master_view import Master_View, RequestHeader
 from view.parsers import Head_Parser
 from controller import UserController
