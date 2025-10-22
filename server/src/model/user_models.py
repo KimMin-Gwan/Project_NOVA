@@ -228,7 +228,7 @@ class UserPageModel(BaseModel):
         # print("liked_fids : ", liked_fids)
 
         df = feed_search_engine.try_get_all_managed_feeds()
-        print("len of df : " len(df))
+        print("len of df : ", len(df))
         pprint(df)
     
 
