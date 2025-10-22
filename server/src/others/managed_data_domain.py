@@ -864,6 +864,16 @@ class ManagedFeedBiasTable(ManagedTable):
     def search_managed_feed(self, fid):
         return self.__feed_avltree.get(key=fid)
 
+    # Managed Feed 여러개 찾아오기
+    def search_managed_feeds(self, fids:list, return_id:bool=True):
+        searched_df = self._search_data_with_key_str_n_columns(df=self.__feed_df, fid=fids)
+        # 삭제된 Feed는 반환하지 않는다.
+        searched_df = searched_df[searched_df['display'] != 0]
+
+        if return_id:
+            return searched_df['fid'].tolist()
+        return searched_df.to_dict('records')
+
     # 시간에 따라서 찾는 함수. Feed 전용
     def find_target_index(self, target_hour=1):
         target_index = len(self.__feed_table)

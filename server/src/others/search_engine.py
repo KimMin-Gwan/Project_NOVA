@@ -377,6 +377,9 @@ class SearchManager:
     def try_search_managed_feed(self, fid):
         return self.__managed_feed_bias_table.search_managed_feed(fid)
     
+    def try_search_managed_feeds(self, fids:list):
+        return self.__managed_feed_bias_table.search_managed_feeds(fids=fids)
+    
     def try_make_new_managed_bias(self, bias:Bias):
         self.__managed_feed_bias_table.make_new_bias(bias)
         return

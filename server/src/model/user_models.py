@@ -2,7 +2,7 @@ from model.base_model import BaseModel
 import httpx
 from model import Mongo_Database
 from others.data_domain import User, Bias, Comment
-from others import CoreControllerLogicError, FeedSearchEngine, ObjectStorageConnection, FeedManager
+from others import CoreControllerLogicError, FeedSearchEngine, ObjectStorageConnection
 from view.jwt_decoder import JWTManager
 import uuid
 from pprint import pprint
@@ -217,8 +217,9 @@ class UserPageModel(BaseModel):
         return
 
     # 좋아요한 게시글의 개수 가져오기
-    def get_num_like_data(self, feed_manager:FeedManager):
-        self._num_like = len(feed_manager.get_liked_feeds(user=self._user))
+    def get_num_like_data(self, feed_search_engine:FeedSearchEngine):
+        liked_fids = [liked_feed.split('=')[0] for liked_feed in self._user.like]
+        self._num_like = len(feed_search_engine.try_search_managed_feeds(fids=liked_fids))
         return
 
     def get_response_form_data(self, head_parser):
