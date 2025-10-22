@@ -197,7 +197,7 @@ class User_Service_View(Master_View):
                 raise request_manager.credentials_exception
 
             user_controller = UserController()
-            model = user_controller.try_get_user_page(database=self.__database,request=request_manager, feed_manager=self.__feed_manager)
+            model = user_controller.try_get_user_page(database=self.__database,request=request_manager, feed_search_engine==self.__feed_search_engine)
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
             return response

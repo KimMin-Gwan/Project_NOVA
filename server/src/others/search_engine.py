@@ -59,6 +59,9 @@ class FeedSearchEngine:
     def try_search_managed_feed(self, fid):
         return self.__search_manager.try_search_managed_feed(fid=fid)
     
+    def try_search_managed_feeds(self, fids:list):
+        return self.__search_manager.try_search_managed_feeds(fids=fids)
+    
     # 새로운  관리 피드를 추가하는 함수
     def try_make_new_managed_feed(self, feed):
         # 알고리즘에도 추가해야되ㅏㅁ
@@ -411,6 +414,10 @@ class SearchManager:
 
         return result_cids
 
+
+    # 바이어스 검색 로직 
+    def search_biases_with_keyword(self, target:str):
+        bid_list = self.__managed_feed_bias_table.search_bias_with_keyword(key=target)
     # def search_feed_with_string(self, string, num_feed=10) -> list: #본문 내용을 가지고 찾는거같음
     #return self.__feed_algorithm.get_feed_with_string(string,num_feed)
 

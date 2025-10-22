@@ -161,18 +161,18 @@ class UserController:
                     model.set_response(result=True, detail="회원가입 성공")
                 
         except:
-            model.set_response(result=False, detail="알 수 없는 오류가 발생했습니다. 관리자에게 문의하세요.")
+            model.set_response(result=False, detail="알 수 없는 오류가 발생했습니다. 관리장에게 문의하세요.")
             
         finally:
             return model
 
     # 유저 페이지 맨 처음에 띄울 것
-    def try_get_user_page(self, database, request, feed_manager: FeedManager):
+    def try_get_user_page(self, database, request, feed_search_engine:FeedSearchEngine):
         model = UserPageModel(database=database)
 
         model.set_user_with_email(request=request.jwt_payload)
         model.get_user_data()
-        model.get_num_like_data(feed_manager=feed_manager)
+        model.get_num_like_data(feed_search_engine=feed_search_engine)
         
         return model
 
