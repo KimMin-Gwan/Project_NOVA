@@ -1153,11 +1153,13 @@ class ScheduleTimeLayerModel(TimeTableModel):
         
         # recommend_target_sids는 이미 추천 대상 스케줄 ID로 채워져 있어야 함 (위에서 채워옴)
         result = random.sample(self.__recommend_target_sids, k=min(sample_size, len(self.__recommend_target_sids)))  # 데이터 크기를 초과하지 않도록 처리
-
+        print ("recommend_list : ", recommend_list)
+        print ("result : ", result )
         # 추천 리스트를 갱신함.
         # 기존에 있던 추천리스트와 새롭게 추가되는 리스트를 비교해서 추천 리스트를 갱신함.
         if recommend_list != []:
             recommend_list_new = list((set(recommend_list) - set(result)) | set(result))    # 이미 추천된 건 삭제하고, 새롭게 result를 이어붙임
+            print("recommend_list_new" : recommmend_list_new) 
             self.__recommend_target_sids = recommend_list_new
         else:
             self.__recommend_target_sids = result       # 새롭게 만들어지는 recommend_list 추가함. (추천된 리스트)
