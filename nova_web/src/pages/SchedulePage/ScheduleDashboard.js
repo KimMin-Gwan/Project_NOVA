@@ -96,7 +96,7 @@ const ScheduleDashboard = () => {
   const [leftTargetDate, setLeftTargetDate] = useState(targetDate);
   const [rightTargetDate, setRightTargetDate] = useState(targetDate);
 
-  const [recommandList, setRecommandList] = useState([]);
+  const [recommendList, setRecommendList] = useState([]);
 
   // 4. 26. 토요일 이렇게 나오게 하려고 만든거
   const getFormattedDate = (date) => {
@@ -230,11 +230,11 @@ const ScheduleDashboard = () => {
           header : HEADER,
           body: {
             date: date,
-            recommand_list:recommandList
+            recommend_list:recommendList
           }
         }
       )
-      setRecommandList(res.data.body.recommend_list);
+      setRecommendList(res.data.body.recommend_list);
 
       return res.data.body.schedule_layer; // 반환값을 명시적으로 설정
     } catch (error) {
