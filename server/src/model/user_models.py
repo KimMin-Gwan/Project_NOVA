@@ -383,6 +383,20 @@ class ChangeNickNameModel(BaseModel):
         else:
             return True
 
+    # 임시. 닉네임 제한 요소 추가 
+    def __check_inappropriate_nickname(self, uname:str) -> bool:
+        admin_keywords = ["관리", "운영", "admin", "Admin", "ADMIN"]
+        inappropriate_keywords = ["섹스", "자지", "보지", "dick", "pussy", "자살", "살자", "뒤져", "칼빵", "살해", "살인"]
+        
+
+        banned_nicknames = admin_keywords + inappropriate_keywords
+
+        for word in banned_nicknames:
+            if word in uname:
+                return False
+        return True
+
+
     # 닉네임 변경하기
     def try_change_nickname(self, data_payload):
         # check uname, 변동사항이 없으면 False를 반환
@@ -390,7 +404,9 @@ class ChangeNickNameModel(BaseModel):
 
         if self.__check_new_nickname(data_payload.new_uname):
             if self.check_uname_format(data_payload.new_uname):
-                if self.__change_nickname(data_payload.new_uname):
+                if self.__check_inappropriate_nickname(data_payload.new_uname):
+                    self._detail = "부적절한 닉네임입니다. 다른 닉네임을 입력해주세요."
+                elif self.__change_nickname(data_payload.new_uname):
                     self._result = True
                     self._detail = "닉네임이 변경되었습니다."
                 else:
