@@ -149,12 +149,13 @@ class UserController:
             return model
 
     # 유저 페이지 맨 처음에 띄울 것
-    def try_get_user_page(self, database, request):
+    def try_get_user_page(self, database, request, feed_manager: FeedManager):
         model = UserPageModel(database=database)
 
         model.set_user_with_email(request=request.jwt_payload)
         model.get_user_data()
-
+        model.get_num_like_data(feed_manager=feed_manager)
+        
         return model
 
     # 타입별 Feed 불러오기

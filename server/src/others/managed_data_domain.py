@@ -685,9 +685,9 @@ class ManagedTable:
             logging.error("데이터프레임에 해당 컬럼이 존재하지 않음")
             return df
 
-        if not isinstance(date, datetime):
-            logging.error("date는 datetime 형식이어야 합니다.")
-            return df
+        # if not isinstance(date, datetime):
+        #     logging.error("date는 datetime 형식이어야 합니다.")
+        #     return df
 
         target_year = date.year
         target_month = date.month
@@ -714,9 +714,9 @@ class ManagedTable:
             logging.error("데이터프레임에 해당 컬럼이 존재하지 않음")
             return df
 
-        if not isinstance(date, datetime):
-            logging.error("date는 datetime 형식이어야 합니다.")
-            return df
+        # if not isinstance(date, datetime):
+        #     logging.error("date는 datetime 형식이어야 합니다.")
+        #     return df
 
         # 주의 시작(월요일)과 끝(일요일) 계산
         week_start = date - timedelta(days=date.weekday())

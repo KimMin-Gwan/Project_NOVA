@@ -209,11 +209,16 @@ class UserPageModel(BaseModel):
         self._uname = self._user.uname
         self._uid = self._user.uid
         self._num_feed = self._user.num_feed
-        self._num_like = len(self._user.like)
+        # self._num_like = len(self._user.like)
         self._num_comment = self._user.num_comment
         # self._num_comment = count_my_comments()
         # self._num_comment = len(self._user.my_comment)
 
+        return
+
+    # 좋아요한 게시글의 개수 가져오기
+    def get_num_like_data(self, feed_manager:FeedManager):
+        self._num_like = len(feed_manager.get_liked_feeds(user=self._user))
         return
 
     def get_response_form_data(self, head_parser):
