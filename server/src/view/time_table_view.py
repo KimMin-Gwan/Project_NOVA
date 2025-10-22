@@ -1,5 +1,5 @@
 from typing import Optional, Union
-from fastapi import FastAPI, Request, File, UploadFile, Form
+from fastapi import FastAPI, Request, File, UploadFile, Form, HTTPException, status
 from others import Schedule
 from view.master_view import Master_View, RequestHeader
 from view.parsers import Head_Parser
@@ -300,6 +300,24 @@ class Time_Table_View(Master_View):
             return response
 
 
+        @self.__app.get('/time_table_server/try_find_schedule_with_bid_n_datetime')
+        def find_schedule_with_bid_n_datetime(request:Request, bid:Optional[str]="", datetime:Optional[str]=""):
+            request_manager = RequestManager(secret_key=self.__jwt_secret_key)
+            data_payload = BiasDateRequest(bid=bid, date=datetime)
+            request_manager.try_view_management_need_authorized(data_payload=data_payload, cookies=request.cookies)
+
+            time_table_controller = TimeTableController()
+            model = time_table_controller.try_find_schedule_with_bid_n_datetime(
+                schedule_search_engine=self.__schedule_search_engine,
+                database=self.__database,
+                request=request_manager)
+
+            body_data = model.get_response_form_data(self._head_parser)
+            response = request_manager.make_json_response(body_data=body_data)
+            return response
+            
+            
+
 
 KST = pytz.timezone("Asia/Seoul")
         
@@ -448,8 +466,14 @@ class DatetimeRequest(RequestHeader):
 
 class BiasDateRequest(RequestHeader):
     def __init__(self, bid, date)-> None:
-        self.bid:str = bid
-        self.date:str = datetime.strptime(date, "%Y-%m-%d")
+        try:
+            self.bid:str = bid
+            self.date:datetime= datetime.strptime(date, "%Y-%m-%d")
+        except Exception:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Invalid date format. Expected 'YYYY-MM-DD'."
+            )
         
 class TimeChartRequest(RequestHeader):
     def __init__(self, request):

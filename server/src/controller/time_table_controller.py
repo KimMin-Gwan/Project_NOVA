@@ -5,6 +5,7 @@ from model import MultiScheduleModel, AddScheduleModel, BiasScheduleModel
 from others import ScheduleSearchEngine as SSE
 
 from datetime import datetime, timedelta
+from fastapi import HTTPException, status
 
 
 class TimeTableController:
@@ -237,3 +238,16 @@ class TimeTableController:
         
         return model
         
+    def try_find_schedule_with_bid_n_datetime(self, schedule_search_engine:SSE, database:Mongo_Database, request:RequestManager) -> BiasScheduleModel:
+        model = BiasScheduleModel(database=database)
+        
+        model.set_bias(bid= request.data_payload.bid)
+        if not model.check_schedule_not_in_time( schedule_search_engine=schedule_search_engine, datetime=request.data_payload.date):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Bad Request"
+            )
+            
+        return model
+            
+            
