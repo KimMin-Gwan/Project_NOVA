@@ -154,8 +154,11 @@ class UserController:
                 model.set_response(result=False, detail="잘못된 인증 코드입니다.")
             
             else:
-                model.save_user(request=request, feed_search_engine=feed_search_engine)
-                model.set_response(result=True, detail="회원가입 성공")
+                if model.check_blacklist_email(email=request.email)
+                    model.set_response(result=False, detail="현재 사용할 수 없는 이메일입니다.")
+                else:
+                    model.save_user(request=request, feed_search_engine=feed_search_engine)
+                    model.set_response(result=True, detail="회원가입 성공")
                 
         except:
             model.set_response(result=False, detail="알 수 없는 오류가 발생했습니다. 관리장에게 문의하세요.")
