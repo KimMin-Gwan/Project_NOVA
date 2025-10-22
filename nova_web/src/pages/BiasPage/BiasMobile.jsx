@@ -19,6 +19,7 @@ import share from "./icons/share.svg";
 import chzzk_icon from "./icons/chzzk Icon_02.png";
 import soop_icon from "./icons/soop Icon_02.png";
 import edit1 from "./icons/edit1.svg";
+import { useNavigate } from "react-router-dom";
 
 
 const BiasPageMobile = ({
@@ -30,7 +31,7 @@ const BiasPageMobile = ({
     const [showScheduleMoreOption, setShowScheduleMoreOption] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
 
-
+    const navigate = useNavigate();
     const [openInput, setOpenInput] = useState(false);
     const [introduce, setIntroduce] = useState("설명글 입니다.");
     const [introduceInput, setIntroduceInput] = useState(introduce);
@@ -342,9 +343,11 @@ const BiasPageMobile = ({
                                     />
                                 ) : (
                                     <EmptyScheduleComponent 
+                                        scheduleData={schedule}
                                         metaData={schedule}
                                         index={index}
                                         todayIndex={todayIndex}
+                                        navigate={navigate}
                                     />
                                 )}
                                 {
@@ -371,11 +374,17 @@ const BiasPageMobile = ({
 
 
 
-const EmptyScheduleComponent = ({metaData, index, todayIndex}) => {
+const EmptyScheduleComponent = ({scheduleData, metaData, index, todayIndex, navigate}) => {
+
+    const navigateToMakeNew = () => {
+        navigate(`/schedule/make_new?targetBias=${scheduleData.bid}&targetDate=${scheduleData.str_date}`)
+    }
 
     if (index == todayIndex){
         return(
-            <div className={style["single-schedule-container-today"]}>
+            <div className={style["single-schedule-container-today"]}
+                onClick={navigateToMakeNew}
+            >
                 <div className={style["schedule-datetime-wrapper"]}>
                     <div className={style["schedule-datetime"]}>
                         {metaData.date || "날짜 없음"}
@@ -389,7 +398,9 @@ const EmptyScheduleComponent = ({metaData, index, todayIndex}) => {
         );
     }else{
         return(
-            <div className={style["single-schedule-container"]}>
+            <div className={style["single-schedule-container"]}
+                onClick={navigateToMakeNew}
+            >
                 <div className={style["schedule-datetime-wrapper"]}>
                     <div className={style["schedule-datetime"]}>
                         {metaData.date || "날짜 없음"}
