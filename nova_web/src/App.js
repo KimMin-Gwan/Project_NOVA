@@ -108,9 +108,7 @@ function App() {
       {/* 콘텐츠  페이지 */}
       <Route path="/" element={<ScheduleDashboard />}></Route>
       <Route path="/explore/schedule" element={<ScheduleExplore />}></Route>
-      <Route path="/schedule/make_new" element={<ScheduleMakePage/>}>
-        <Route path=":sid" element={<ScheduleMakePage/>}></Route>
-      </Route>
+      <Route path="/schedule/make_new" element={<ScheduleMakePage/>}> </Route>
 
       {/* 테스트 페이지 및 에러 페이지 */}
       {/* <Route path="/test2" element={<TestPage />}></Route> */}
