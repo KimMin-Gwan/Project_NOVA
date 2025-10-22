@@ -441,6 +441,7 @@ export default function NewFeedDetail() {
                 onChange={onChangeComment}
                 onKeyDown={onKeyDownEnter}
                 placeholder={setPlaceholder()}
+                enterKeyHint="done"
               />
               <button
                 className={style["input-button"]}
@@ -553,6 +554,7 @@ export default function NewFeedDetail() {
                     onChange={onChangeComment}
                     onKeyDown={onKeyDownEnter}
                     placeholder={setPlaceholder()}
+                    enterKeyHint="done"
                   />
                   <button
                     className={style["input-button"]}

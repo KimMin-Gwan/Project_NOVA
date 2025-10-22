@@ -234,6 +234,7 @@ const BiasPageMobile = ({
                                             }}
                                             placeholder={"자기소개를 입력하세요."}
                                             type="text"
+                                            enterKeyHint="done"
                                         />
                                         <div className={style["fetch-intro-button"]}
                                             onClick={handleChangeIntroduce}

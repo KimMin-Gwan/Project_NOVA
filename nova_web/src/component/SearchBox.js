@@ -38,6 +38,7 @@ export default function SearchBox({
           }}
           placeholder={searchWord ? searchWord : "보고 싶은 스트리머를 검색해보세요"}
           type="text"
+          enterKeyHint="search"
         ></input>
       ) : (
         <div className={style["search-box"]}>보고 싶은 스트리머를 검색해보세요</div>

@@ -92,6 +92,7 @@ const FollowPageDesktop = ({
                         }}
                         placeholder="슈퍼노바에 등록된 스트리머를 검색 할 수 있어요."
                         type="text"
+                        enterKeyHint="search"
                     />
                 </div>
                 <div className={style["follow-search-options-wrapper"]}>

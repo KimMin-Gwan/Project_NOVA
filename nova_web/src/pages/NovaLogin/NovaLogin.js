@@ -150,6 +150,7 @@ const NOVALogin = ({ brightmode }) => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className={style.input}
+              enterKeyHint="next"
             />
           </label>
           {login === "email" && <div className={style.errorMessage}>{detail}</div>}
@@ -170,6 +171,7 @@ const NOVALogin = ({ brightmode }) => {
               onKeyDown={(e) => {
                 onKeyDown(e);
               }}
+              enterKeyHint="done"
             />
             <button
               type="button"
