@@ -119,9 +119,6 @@ class Time_Table_View(Master_View):
             request_manager = RequestManager(secret_key=self.__jwt_secret_key)
             data_payload = SearchRequest(keyword=keyword, search_columns=search_columns, key=key, search_type=type, filter_option=filter_option)
             
-            print('keyword : ', keyword)
-            print("search_columns : ", search_columns)
-            print("filter_options : ", filter_option)
             request_manager.try_view_management(data_payload=data_payload, cookies=request.cookies)
 
             time_table_controller =TimeTableController()

@@ -412,6 +412,9 @@ class SearchManager:
         return result_cids
 
 
+    # 바이어스 검색 로직 
+    def search_biases_with_keyword(self, target:str):
+        bid_list = self.__managed_feed_bias_table.search_bias_with_keyword(key=target)
     # def search_feed_with_string(self, string, num_feed=10) -> list: #본문 내용을 가지고 찾는거같음
     #return self.__feed_algorithm.get_feed_with_string(string,num_feed)
 
