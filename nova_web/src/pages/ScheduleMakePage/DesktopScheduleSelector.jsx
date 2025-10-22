@@ -573,7 +573,6 @@ const DesktopScheduleSelectSection = ({
                   onChange={(e) => {
                     handleUploadImageButton(e)
                   }}
-                  enterKeyHint="done"
                 />
                 </div>
                 <div className={`${style["schedule-make-button"]} ${style["upload"]}`}
