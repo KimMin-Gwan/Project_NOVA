@@ -24,9 +24,9 @@ import ReportModal from "../../component/ReportModal/ReportModal";
 
 export default function SearchResultPage() {
   const isMobile = useMediaQuery('(max-width:1100px)');
-  let [searchParams] = useSearchParams();
-  let keyword = searchParams.get("keyword");
-  let navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const keyword = searchParams.get("keyword");
+  const navigate = useNavigate();
 
   // 검색어 상태
   const [searchWord, setSearchWord] = useState(keyword);
@@ -210,86 +210,14 @@ export default function SearchResultPage() {
   }
 
   const onClickComponent = (feed) => {
-      let currentScroll = 0;
-
-      if (isMobile){
-          currentScroll = window.scrollY;
-      }else{
-          const scrollContainer = document.getElementById("desktop-scroll-container");
-          currentScroll = scrollContainer ? scrollContainer.scrollTop : window.scrollY;
-      }
-
-      // ✅ 세션 저장
-      sessionStorage.setItem(
-          "postBoardState",
-          JSON.stringify({
-          feedData,
-          feedNextKey,
-          scheduleData,
-          scheduleKey,
-          activeIndex,
-          type,
-          scrollY: currentScroll,
-          })
-      );
-
       // ✅ 페이지 이동
-      navigate(`/feed_detail/${feed.fid}`, {
-          state: { fromBoard: true } 
-      });
+      navigate(`/feed_detail/${feed.fid}`);
   }
 
   useEffect(() => {
     let historyList = JSON.parse(localStorage.getItem("history")) || [];
     setSearchHistory(historyList);
-
-    if(!isMobile){
-        const savedState = sessionStorage.getItem("postBoardState");
-        if (savedState) {
-            const parsed = JSON.parse(savedState);
-
-            setFeedData(parsed.feedData);
-            setFeedNextKey(parsed.feedNextKey);
-            setScheduleData(parsed.scheduleData);
-            setScheduleKey(parsed.scheduleKey);
-            setActiveIndex(parsed.activeIndex);
-            setType(parsed.type);
-
-            // 복원 후 스크롤 이동
-            setTimeout(() => {
-                const scrollContainer = document.getElementById("desktop-scroll-container");
-                if (scrollContainer) {
-                    scrollContainer.scrollTop = parsed.scrollY || 0;  // ✅ 여기서 내부 컨테이너 scrollTop 설정
-                } else {
-                    window.scrollTo(0, parsed.scrollY || 0);  // fallback
-                }
-            }, 0);
-
-            sessionStorage.removeItem("postBoardState");
-            setInitialLoaded(true);
-        } else {
-          InitSearchResult();
-        }
-    }else{
-        const savedState = sessionStorage.getItem("postBoardState");
-        if (savedState) {
-            const parsed = JSON.parse(savedState);
-
-            setFeedData(parsed.feedData);
-            setFeedNextKey(parsed.feedNextKey);
-            setScheduleData(parsed.scheduleData);
-            setScheduleKey(parsed.scheduleKey);
-            setActiveIndex(parsed.activeIndex);
-            setType(parsed.type);
-
-            // 복원 후 스크롤 이동
-            setTimeout(() => window.scrollTo(0, parsed.scrollY || 0), 0);
-            sessionStorage.removeItem("postBoardState");
-            setInitialLoaded(true);
-        } else {
-          InitSearchResult();
-        }
-    }
+    InitSearchResult();
 
     return () => {
         setFeedData([]);
