@@ -105,19 +105,17 @@ export default function SignUp() {
     setGender(gender);
   }
 
-  function handleCode(e) {
-    let value = e.target.value;
+  const handleCode = (e) => {
+    const value = e.target.value;
 
-    // 숫자만 허용
-    value = value.replace(/\D/g, "");
+    // 숫자만 남기기
+    const onlyNums = value.replace(/[^0-9]/g, '');
 
-    // 최대 4자리 제한
-    if (value.length > 4) {
-      value = value.slice(0, 4);
-    }
+    // 4자리까지만 허용
+    const limited = onlyNums.slice(0, 4);
 
-    setCode(value);
-  }
+    setCode(limited);
+  };
 
   useEffect(() => {
     return setInputEmail("");
@@ -253,7 +251,7 @@ export default function SignUp() {
                   name="password"
                   placeholder="이메일 확인 후 4자리 코드를 입력해주세요"
                   required
-                  maxLength={4}
+                  value={code}
                   onChange={(e) => {
                     handleCode(e);
                   }}

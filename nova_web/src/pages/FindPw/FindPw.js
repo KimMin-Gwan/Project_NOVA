@@ -82,6 +82,18 @@ function FindPw() {
       });
   };
 
+  const handleCode = (e) => {
+    const value = e.target.value;
+
+    // 숫자만 남기기
+    const onlyNums = value.replace(/[^0-9]/g, '');
+
+    // 4자리까지만 허용
+    const limited = onlyNums.slice(0, 4);
+
+    setCode(limited);
+  };
+
   return (
     <div className={style.container}>
       <div className={style.Topbar}>
@@ -113,7 +125,7 @@ function FindPw() {
             type="text"
             name="code"
             value={code}
-            onChange={(e) => setCode(e.target.value)}
+            onChange={(e) => handleCode(e)}
             className={style.input}
             placeholder="보안코드를 입력해주세요"
           />
