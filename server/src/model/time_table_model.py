@@ -1146,7 +1146,8 @@ class ScheduleTimeLayerModel(TimeTableModel):
 
 
     # 날짜에 맞는 스케줄 데이터 불러오기
-    def make_recommand_schedule_data(self, recommend_list:list[str]=[]):
+    def make_recommand_schedule_data(self, recommend_list:list[str]=[]): 
+        # 새롭게 추천할 스케쥴을 뽑아내는 과정
         # 0개에서 3개 랜덤 선택
         sample_size = random.randint(1, 3)  # 0부터 3까지의 개수 선택
         
@@ -1165,7 +1166,8 @@ class ScheduleTimeLayerModel(TimeTableModel):
         if  len(result) == 0:
             return False
         
-        schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids= result)
+        # 추천 스케쥴을 데이터베이스에서 호출
+        schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids=self.__recommend_target_sids)
         
         self.__schedules.clear()
         
