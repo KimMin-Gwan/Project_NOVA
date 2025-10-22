@@ -291,7 +291,49 @@ export function ContentFeed({ detailPage, feed, handleCheckStar, links, handleRe
     );
   } else{
     return (
-      <div> 제한된 게시글 입니다. </div>
+      <div style={{breakInside: "avoid", marginBottom: "20px"}}>
+        <div className={style["wrapper-top-component"]}>
+          {feed.bname && (
+            <div className={style["meta-data-1"]}
+              onClick={()=>navigate(`/bias/${feed.bid}`)}
+            >
+              <p>
+                {feed.bname}
+              </p>
+            </div>
+          )}
+          <div className={style["meta-data-2"]}>
+              <p>
+                {feed.board_type}
+              </p>
+          </div>
+        </div>
+        <div
+          className={`${style["wrapper-container"]} ${ style["long-wrapper"]}`}
+        >
+          <FeedHeader date={feed.date} nickname={feed.nickname} />
+
+          <div className={`${style["body-container"]}`}>
+            <HashTags hashtags={feed.hashtag} navigate={navigate}/>
+
+            {
+              isLoading && <div
+              className={style["loading-feed-sign"]}
+              >본문 불러오는 중</div>
+            }
+
+            <Viewer key={rawBody} initialValue={rawBody} />
+          </div>
+
+          {links && <LinkSection links={links} />}
+
+          <ActionButtons
+            feed={feed}
+            handleCheckStar={handleCheckStar}
+            handleReport={handleReport}
+          />
+        </div>
+      </div>
     );
   }
 }
