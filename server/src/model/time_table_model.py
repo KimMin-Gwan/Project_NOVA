@@ -1159,7 +1159,7 @@ class ScheduleTimeLayerModel(TimeTableModel):
         # 기존에 있던 추천리스트와 새롭게 추가되는 리스트를 비교해서 추천 리스트를 갱신함.
         if recommend_list != []:
             recommend_list_new = list((set(recommend_list) - set(result)) | set(result))    # 이미 추천된 건 삭제하고, 새롭게 result를 이어붙임
-            print("recommend_list_new" : recommmend_list_new) 
+            print("recommend_list_new: ", recommend_list_new) 
             self.__recommend_target_sids = recommend_list_new
         else:
             self.__recommend_target_sids = result       # 새롭게 만들어지는 recommend_list 추가함. (추천된 리스트)
