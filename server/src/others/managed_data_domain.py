@@ -1169,6 +1169,8 @@ class ManagedScheduleTable(ManagedTable):
         random_index = random.randint(0, len(self.__schedule_table)-1)
         return self.__schedule_table[random_index].sid
 
+    def get_all_schedule_df(self):
+        return self.__schedule_df
 
     # 새로운 스케줄을 추가하는 함수
     def make_new_managed_schedule(self, schedule:Schedule, category):

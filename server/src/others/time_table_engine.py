@@ -14,6 +14,8 @@ class ScheduleSearchEngine:
     def try_get_random_schedule(self):
         return self.__managed_schedule_table.get_random_schedule()
 
+    def try_get_all_managed_schedule(self):
+        return self.__managed_schedule_table.get_all_schedule_df()
 
     # 새로운 스케줄을 테이블에 추가합니다.
     def try_add_new_managed_schedule(self, new_schedule:Schedule, category):
