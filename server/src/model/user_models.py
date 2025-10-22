@@ -2,7 +2,7 @@ from model.base_model import BaseModel
 import httpx
 from model import Mongo_Database
 from others.data_domain import User, Bias, Comment
-from others import CoreControllerLogicError, FeedSearchEngine, ObjectStorageConnection
+from others import CoreControllerLogicError, FeedSearchEngine, ObjectStorageConnection, FeedManager
 from view.jwt_decoder import JWTManager
 import uuid
 from pprint import pprint
