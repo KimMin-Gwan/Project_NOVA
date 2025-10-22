@@ -125,10 +125,16 @@ class CommentModel(BaseModel):
     async def delete_comment(self, cid:str):
         try:
             comment_data = self._database.get_data_with_id(target="cid", id=cid)
-            comment = Comment().make_with_dict(comment_data)
-            comment.display = 0
+            if (comment_data):
+                comment = Comment().make_with_dict(comment_data)
+                comment.display = 0
+                self._database.modify_data_with_id(target_id="cid", target_data=comment.get_dict_form_data())
             
-            self._database.modify_data_with_id(target_id="cid", target_data=comment.get_dict_form_data())
+                user_data = self._database.get_data_with_id(target="uid", id=comment.uid)
+                if(user_data):
+                    user = User().make_with_dict(user_data)
+                    user.num_comment = user.num_comment - 1
+                    self._database.modify_data_with_id(target_id="uid", target_data=user.get_dict_form_data())
             
         except Exception as e:
             print(e)
