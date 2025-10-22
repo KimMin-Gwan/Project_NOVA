@@ -411,7 +411,6 @@ class SearchManager:
 
         return result_cids
 
-
     # def search_feed_with_string(self, string, num_feed=10) -> list: #본문 내용을 가지고 찾는거같음
     #return self.__feed_algorithm.get_feed_with_string(string,num_feed)
 

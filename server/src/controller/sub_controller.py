@@ -127,7 +127,7 @@ class Sub_Controller:
             )
             
         return model
-        
+
     # bias follow페이지에 노출될 최애들의 리스트
     def try_get_bias_follow_page(self, database:Mongo_Database):
         model = BiasFollowPageModel(database=database)

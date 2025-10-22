@@ -81,8 +81,8 @@ class Sub_Service_View(Master_View):
 
             body_data = model.get_response_form_data(self._head_parser)
             response = request_manager.make_json_response(body_data=body_data)
-            return response        
-        
+            return response
+            
         # 바이어스 선택 또는 취소
         @self.__app.get('/nova_sub_system/try_follow_bias')
         def try_follow_bias(request:Request, bid:Optional[str]):
