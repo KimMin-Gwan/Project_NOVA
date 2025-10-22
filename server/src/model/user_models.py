@@ -225,18 +225,7 @@ class UserPageModel(BaseModel):
     # 좋아요한 게시글의 개수 가져오기
     def get_num_like_data(self, feed_search_engine:FeedSearchEngine):
         liked_fids = [liked_feed.split('=')[0] for liked_feed in self._user.like]
-        # print("liked_fids : ", liked_fids)
-
-        # df = feed_search_engine.try_get_all_managed_feeds()
-        # print("len of df : ", len(df))
-        pprint(df)
-    
-
-
-        lists = feed_search_engine.try_search_managed_feeds(fids=liked_fids)
-        # print("lists : ", lists)
         self._num_like = len(feed_search_engine.try_search_managed_feeds(fids=liked_fids))
-        # print("num_likes : " , self._num_like)
         return
 
     def get_response_form_data(self, head_parser):
