@@ -45,9 +45,6 @@ class TimeTableController:
         if request.jwt_payload!= "":
             model.set_user_with_email(request=request.jwt_payload)
 
-        print("recommend_list_in_payload", request.data_payload.recommend_list)
-
-        
         model.make_my_schedule_data(target_date=request.data_payload.date,
                                  schedule_search_engine=schedule_search_engine)
         model.set_my_schedule_layer(target_date=request.data_payload.date)
