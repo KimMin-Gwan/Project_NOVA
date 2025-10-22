@@ -234,7 +234,7 @@ class FeedManager:
         
         return "Upload Success", True
 
-    def try_remove_feed(self, user:User, fid):
+    def try_remove_feed(self, user:User, fid:str):
         feed_data=self._database.get_data_with_id(target="fid",id=fid)
         feed = Feed()
         feed.make_with_dict(feed_data)
@@ -255,6 +255,10 @@ class FeedManager:
         feed.display = 0
         user.num_feed-=1
 
+        # managed_feed_table 업데이트
+        self._feed_search_engine.try_remove_managed_feed(feed=feed)
+
+        # 게시글 DB 수정
         self._database.modify_data_with_id(target_id="fid", target_data=feed.get_dict_form_data())
         # 유저 데이터 수정
         self._database.modify_data_with_id(target_id="uid", target_data=user.get_dict_form_data())
