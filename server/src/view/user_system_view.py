@@ -1,5 +1,6 @@
 from typing import Optional, Union
 from fastapi import FastAPI,  Request, UploadFile, File
+from server.src.controller import user_controller
 from view.master_view import Master_View, RequestHeader
 from view.parsers import Head_Parser
 from controller import UserController
@@ -157,6 +158,16 @@ class User_Service_View(Master_View):
                                               nova_verification=self.__nova_verification,
                                               feed_search_engine=self.__feed_search_engine
                                               )
+            response = model.get_response_form_data(self._head_parser)
+            return response
+
+        @self.__app.post('/user_home/try_check_blacklist_email')
+        async def try_check_blacklist_email(raw_request:dict):
+            request = EmailCheckRequest(request=raw_request)
+            user_controller = UserController()
+            model = await user_controller.try_check_email_blacklist(database=self.__database,
+                                                                    request=request)
+            
             response = model.get_response_form_data(self._head_parser)
             return response
 
