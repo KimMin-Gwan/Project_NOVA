@@ -845,6 +845,9 @@ class ManagedFeedBiasTable(ManagedTable):
             # avl트리에 넣어주면됨
             self.__bias_avltree.insert(key=single_bias.bid, value=managed_bias)
         return
+    
+    def get_managed_df(self):
+        return self.__feed_df
 
     def make_new_bias(self, bias:Bias):
         managed_bias= ManagedBias(bid=bias.bid, bname=bias.bname, user_nodes=[])

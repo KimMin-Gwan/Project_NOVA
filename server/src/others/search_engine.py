@@ -377,6 +377,9 @@ class SearchManager:
         return
 
     # 피드 매니저에서 사용가능하게 만든 검색 기능
+    def try_get_all_managed_feeds(self):
+        return self.__managed_feed_bias_table.get_managed_df()
+
     def try_search_managed_feed(self, fid):
         return self.__managed_feed_bias_table.search_managed_feed(fid)
     
