@@ -160,6 +160,16 @@ class User_Service_View(Master_View):
             response = model.get_response_form_data(self._head_parser)
             return response
 
+        # @self.__app.post('/user_home/try_check_blacklist_email')
+        # async def try_check_blacklist_email(raw_request:dict):
+        #     request = EmailCheckRequest(request=raw_request)
+        #     user_controller = UserController()
+        #     model = await user_controller.try_check_email_blacklist(database=self.__database,
+        #                                                             request=request)
+            
+        #     response = model.get_response_form_data(self._head_parser)
+        #     return response
+
 
         # 회원탈퇴
         @self.__app.get('/user_home/try_resign')

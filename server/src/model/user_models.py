@@ -1,3 +1,4 @@
+from math import e
 from model.base_model import BaseModel
 import httpx
 from model import Mongo_Database
@@ -115,6 +116,7 @@ class SendEmailModel(BaseModel):
         try:
             uid = self.__make_uid()
             uname = self.__make_user_nickname()
+
             user = User(uid=uid,
                         uname=uname,
                         birth_year=request.birth_year,
@@ -146,9 +148,13 @@ class SendEmailModel(BaseModel):
     def check_email_duplicate(self, email:str):
         user_data = self._database.get_data_with_key(target="uid", key="email", key_data=email)
         if user_data is not None:
-            self.set_response()
+            return True
         else:
-            self.__detail = "사용 가능한 이메일 입니다."
+            return False
+
+    def check_blacklist_email(self, email:str):
+        return self._database.is_valid_email(email=email)
+
 
     def get_response_form_data(self, head_parser):
         try:
@@ -386,17 +392,7 @@ class ChangeNickNameModel(BaseModel):
 
     # 임시. 닉네임 제한 요소 추가 
     def __check_inappropriate_nickname(self, uname:str) -> bool:
-        admin_keywords = ["관리", "운영", "admin", "Admin", "ADMIN"]
-        inappropriate_keywords = ["섹스", "자지", "보지", "dick", "pussy", "자살", "살자", "뒤져", "칼빵", "살해", "살인"]
-        
-
-        banned_nicknames = admin_keywords + inappropriate_keywords
-
-        for word in banned_nicknames:
-            if word in uname:
-                return False
-        return True
-
+        return self._database.is_valid_nickname(uname)
 
     # 닉네임 변경하기
     def try_change_nickname(self, data_payload):

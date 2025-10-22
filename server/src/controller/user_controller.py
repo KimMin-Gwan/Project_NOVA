@@ -126,6 +126,21 @@ class UserController:
         model.check_email_duplicate(email=request.data_payload.email)
         return model
 
+    # 이메일 블랙리스트 검사 
+    async def try_check_email_blacklist(self, database, request):
+        model = SendEmailModel(database=database)
+        
+        try: 
+            if model.check_blacklist_email(email=request.data_payload.email):
+                model.set_response(result=True, detail="사용할 수 있는 이메일입니다.")
+            else:
+                model.set_response(result=False, detail="현재 사용할 수 없는 이메일입니다.") 
+
+        except: 
+            model.set_response(result=False, detail="알 수 없는 오류가 발생했습니다. 관리장에게 문의하세요.")
+        finally:
+            return model
+
     # 회원가입 시도
     # 1. 인증번호 맞는지 확인
     # 2. 맞으면 데이터 베이스에 새로운 유저 생성해서
@@ -139,8 +154,11 @@ class UserController:
                 model.set_response(result=False, detail="잘못된 인증 코드입니다.")
             
             else:
-                model.save_user(request=request, feed_search_engine=feed_search_engine)
-                model.set_response(result=True, detail="회원가입 성공")
+                if not model.check_blacklist_email(email=request.email): #  is_valid_email -> 사용가능 = True, 사용불가능 = False
+                    model.set_response(result=False, detail="현재 사용할 수 없는 이메일입니다.")
+                else:
+                    model.save_user(request=request, feed_search_engine=feed_search_engine)
+                    model.set_response(result=True, detail="회원가입 성공")
                 
         except:
             model.set_response(result=False, detail="알 수 없는 오류가 발생했습니다. 관리장에게 문의하세요.")
