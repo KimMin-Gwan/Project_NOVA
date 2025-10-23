@@ -277,18 +277,18 @@ function AppServices1({targetRef}){
 
     const features = [
         {
-            tag1: "커뮤니티",
-            tag2: "소통",
-            title: "스트리머와 팬이 소통하는 커뮤니티",
-            detail: "스트리머를 주제로 하는 커뮤니티에서 팬들과 소통해보세요!",
+            tag1: "콘텐츠",
+            tag2: "팬참여",
+            title: "팬도 함께 적는 콘텐츠 일정 작성",
+            detail: "방송 일정을 팬들과 함께 쉽고 빠르게 올려보세요!",
             image: intro1,
-            button: "커뮤니티 바로가기"
+            button: "일정 작성 바로가기"
         },
         {
             tag1: "스트리밍",
             tag2: "일정",
-            title: "방송 일정과 알림 기능",
-            detail: "스트리머의 방송 일정을 확인하고 다양한 콘텐츠를 탐색해보세요!",
+            title: "나만의 방송 일정 대시보드",
+            detail: "흩어져 있는 방송 일정들을 한 곳에서 쉽고 빠르게 확인해요!",
             image: intro2,
             button: "일정 확인하기"
         },
@@ -301,12 +301,12 @@ function AppServices1({targetRef}){
             button: "콘텐츠 공유하기"
         },
         {
-            tag1: "탐색",
-            tag2: "콘텐츠",
-            title: "등록된 콘텐츠를 탐색하고 추가하기",
-            detail: "누구나 최애의 콘텐츠를 등록하거나 탐색할 수 있어요!",
+            tag1: "편성표",
+            tag2: "주간일정",
+            title: "한눈에 보는 주간 방송 일정표",
+            detail: "스트리머의 방송 일정을 확인하고 다양한 콘텐츠를 탐색해보세요!",
             image: intro4,
-            button: "콘텐츠 공유하기"
+            button: "주간 일정 탐색하기"
         },
     ]
 
@@ -335,7 +335,7 @@ function AppServices2({targetRef}) {
     const title = "SUPERNOVA에서만 제공하는 스트리밍 전용 콘텐츠";
     const subtitle = "지원되는 플랫폼에서 스트리밍 하는 스트리머들은 누구나 사용가능!\n  SUPERNOVA의 스트리밍 전용 콘텐츠를 시청자와 함께 지금 바로 즐겨보세요!"
 
-    let cards = [
+    const cards = [
         {
         key: "1",
         content: (
