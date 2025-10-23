@@ -941,7 +941,7 @@ class AddScheduleModel(TimeTableModel):
     def prepare_schedule_image(self, sid, bid):
         extension = ""
         
-        schedule_data = self._database.get_data_with_id(target="sid", id=sid):
+        schedule_data = self._database.get_data_with_id(target="sid", id=sid)
             
             
         if schedule_data:
