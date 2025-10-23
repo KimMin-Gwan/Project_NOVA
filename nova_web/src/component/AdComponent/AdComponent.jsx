@@ -63,7 +63,11 @@ export const ImageAd_32x60 = () => {
     const testURL2 = "https://hxb87ac312512.edge.naverncp.com/ad-default-3.png";
     const targetURL = "https://supernova.io.kr/submit_new";
 
-    const selectedURL = Math.random() < 0.5 ? testURL1 : testURL2;
+    // 최초 렌더링 시 한 번만 랜덤 선택
+    const [selectedURL] = useState(() =>
+        Math.random() < 0.5 ? testURL1 : testURL2
+    );
+
     return (
         <div className={style["image-32-60-frame"]}>
             <img
