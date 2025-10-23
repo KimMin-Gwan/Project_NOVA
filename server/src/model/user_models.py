@@ -401,7 +401,7 @@ class ChangeNickNameModel(BaseModel):
 
         if self.__check_new_nickname(data_payload.new_uname):
             if self.check_uname_format(data_payload.new_uname):
-                if self.__check_inappropriate_nickname(data_payload.new_uname):
+                if not self.__check_inappropriate_nickname(data_payload.new_uname):
                     self._detail = "부적절한 닉네임입니다. 다른 닉네임을 입력해주세요."
                 elif self.__change_nickname(data_payload.new_uname):
                     self._result = True
