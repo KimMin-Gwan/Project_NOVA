@@ -113,7 +113,8 @@ function App() {
       {/* 테스트 페이지 및 에러 페이지 */}
       {/* <Route path="/test2" element={<TestPage />}></Route> */}
       <Route path="*" element={<ErrorPage/>} />
-      <Route path="/temp" element={<NotYet/>} />
+      {/* 가림막 */}
+      {/*<Route path="/temp" element={<NotYet/>} /> */}
 
       {/* 게시글 */}
       <Route path="/post_board" element={<PostBoard/>} />
