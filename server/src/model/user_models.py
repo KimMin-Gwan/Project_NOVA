@@ -371,10 +371,10 @@ class ChangeNickNameModel(BaseModel):
         self._uname = new_uname
         
         
-        pprint(new_uname)
+        # pprint(new_uname)
         result = self._database.get_data_with_key(target="uid", key="uname", key_data=new_uname)
         
-        print("닉찾기 :", result)
+        # print("닉찾기 :", result)
             
             
         if result:
@@ -401,7 +401,7 @@ class ChangeNickNameModel(BaseModel):
 
         if self.__check_new_nickname(data_payload.new_uname):
             if self.check_uname_format(data_payload.new_uname):
-                if self.__check_inappropriate_nickname(data_payload.new_uname):
+                if not self.__check_inappropriate_nickname(data_payload.new_uname):
                     self._detail = "부적절한 닉네임입니다. 다른 닉네임을 입력해주세요."
                 elif self.__change_nickname(data_payload.new_uname):
                     self._result = True
