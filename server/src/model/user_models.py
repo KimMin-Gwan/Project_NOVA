@@ -371,10 +371,10 @@ class ChangeNickNameModel(BaseModel):
         self._uname = new_uname
         
         
-        pprint(new_uname)
+        # pprint(new_uname)
         result = self._database.get_data_with_key(target="uid", key="uname", key_data=new_uname)
         
-        print("닉찾기 :", result)
+        # print("닉찾기 :", result)
             
             
         if result:
