@@ -59,14 +59,17 @@ export default AdComponent;
 
 
 export const ImageAd_32x60 = () => {
-    const testURL = "https://hxb87ac312512.edge.naverncp.com/%EB%8F%84%EB%A1%B1%ED%96%84%201.png";
-    const targetURL = "https://supernova.io.kr";
+    const testURL1 = "https://hxb87ac312512.edge.naverncp.com/ad-default-2.png";
+    const testURL2 = "https://hxb87ac312512.edge.naverncp.com/ad-default-3.png";
+    const targetURL = "https://supernova.io.kr/submit_new";
+
+    const selectedURL = Math.random() < 0.5 ? testURL1 : testURL2;
 
     return (
         <div className={style["image-32-60-frame"]}>
             <img
                 className={style["image-iframe"]}
-                src={testURL}
+                src={selectedURL}
                 frameBorder="0"
             />
             <div className={style["ad-desktop-top-tag-wrapper"]}>
@@ -86,7 +89,7 @@ export const ImageAd_32x60 = () => {
 }
 
 export const ImageAd_50x32= () => {
-    const testURL = "https://hxb87ac312512.edge.naverncp.com/Frame%201707482528%202.png";
+    const testURL = "https://hxb87ac312512.edge.naverncp.com/ad-default-4.png";
     const targetURL = "https://supernova.io.kr";
 
     return (
@@ -113,21 +116,21 @@ export const ImageAd_50x32= () => {
 }
 
 const sampleAd1 = {
-    title : "액션 도트 로그라이크 게임 출시",
-    detail : "LUNACY에서 만든 신작 액션 도트 로그라이크 출시 했는데 이름이 뭔지 몰라요...",
-    _url : "https://supernova.io.kr"
+    title : "SUPERNOVA 드디어 출시",
+    detail : "생방송 일정 작성과 생방송 일정 탐색을 위한 유일무이한 공간! SUPERNOVA",
+    _url : "https://supernova.io.kr/welcome"
 }
 
 const sampleAd2 = {
-    title : "한결 단독 콘서트 결정",
-    detail : "9월 27 - 9월 28일 서울랜드에서 아카이브 단독공연! [ OH! duck FESTIVAL ]",
-    _url : "https://supernova.io.kr"
+    title : "TEAM SUPERNOVA",
+    detail : "스트리머와 팬들을 위한 특별한 공간을 만들어낸 대학생들. TEAM SUPERNOVA",
+    _url : "https://projectsupernova.notion.site/"
 }
 
 const sampleAd3 = {
-    title : "별조각 게임 참여 광고주 모집",
-    detail : "김루야가 운영하는 마크서버 별조각 게임의 인게임 내 광고를 해주실 광고주 모집",
-    _url : "https://supernova.io.kr"
+    title : "게임 및 방송 콘텐츠 홍보",
+    detail : "이 위치에 게임 또는 방송 콘텐츠, 스트리머 등등 홍보를 할 수 있게 됩니다!!",
+    _url : "https://supernova.io.kr/welcome"
 }
 
 
