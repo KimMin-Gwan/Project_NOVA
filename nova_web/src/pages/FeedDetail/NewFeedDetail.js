@@ -577,7 +577,7 @@ export default function NewFeedDetail() {
 }
 
 
-function CommentComponent({cid, uid, owner, uname, isReply,
+function CommentComponent({cid, uid, uimage, owner, uname, isReply,
    reply, body, date, commentAction, commentReport
   }){
   const profile = `https://sgsryiav12510.edge.naverncp.com/${uid}.png`;
