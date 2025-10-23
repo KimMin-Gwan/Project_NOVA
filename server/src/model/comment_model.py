@@ -91,7 +91,7 @@ class CommentModel(BaseModel):
             # 타겟 CID도 Comment 객체 멤버로 담아버림. CID 너무 길어지기도 하고, 프론트에서 작업을 안시키게 함.
             new_comment = Comment(
                 cid=cid, fid=feed.fid, uid=user.uid, uname=user.uname,
-                body=body, date=date, mention=""
+                body=body, date=date, mention="", uimage=user.uimage
             )
             # 이거 일단 대기
             #new_comment = ai_manager.treat_new_comment(comment=new_comment)
