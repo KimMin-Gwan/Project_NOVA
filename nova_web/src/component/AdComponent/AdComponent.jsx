@@ -64,7 +64,6 @@ export const ImageAd_32x60 = () => {
     const targetURL = "https://supernova.io.kr/submit_new";
 
     const selectedURL = Math.random() < 0.5 ? testURL1 : testURL2;
-
     return (
         <div className={style["image-32-60-frame"]}>
             <img
