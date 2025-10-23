@@ -184,7 +184,7 @@ const BiasComponent = ({
             >
                 <div className={style["bias-image"]}>
                     <img
-                      src={BIAS_URL + `${bias.bid}.png`}
+                      src={BIAS_URL + `${bias.bimage}.png`}
                         onError={(e) => {
                             e.currentTarget.onerror = null; // 무한 루프 방지
                             e.currentTarget.src = DEFAULT_BIAS_URL;
@@ -219,7 +219,7 @@ const WideBiasComponent = ({
             <div className={style["wide-bias-component-upper-section"]}>
                 <div className={style["wide-bias-image"]}>
                     <img
-                      src={BIAS_URL + `${bias.bid}.png`}
+                      src={BIAS_URL + `${bias.bimage}.png`}
                         onError={(e) => {
                             e.currentTarget.onerror = null; // 무한 루프 방지
                             e.currentTarget.src = DEFAULT_BIAS_URL;

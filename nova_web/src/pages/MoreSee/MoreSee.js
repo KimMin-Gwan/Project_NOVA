@@ -118,6 +118,7 @@ function MoreSee({ onModeChange }) {
   let [isLogin, setIsLogin] = useState();
   let [isError, setIsError] = useState();
   let [user, setUser] = useState("")
+  const [uimage, setUimage] = useState("")
 
   function handleFetch() {
     fetch("https://supernova.io.kr/home/is_valid?only_token=n", {
@@ -139,6 +140,7 @@ function MoreSee({ onModeChange }) {
         if (data) {
           setIsLogin(data.body.result);
           setUser(data.body.user);
+          setUimage(data.body.uimage);
         }
       })
       .catch((error) => {
@@ -151,7 +153,7 @@ function MoreSee({ onModeChange }) {
     handleFetch();
   }, []);
 
-  const profile = `https://sgsryiav12510.edge.naverncp.com/${user}.png`;
+  const profile = `https://sgsryiav12510.edge.naverncp.com/${uimage}.png`;
 
   const firstBoardList = boardList.slice(0, 2);
   const secondBoardList = boardList.slice(2, 4);

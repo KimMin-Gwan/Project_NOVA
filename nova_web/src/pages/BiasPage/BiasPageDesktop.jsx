@@ -54,7 +54,7 @@ const BiasPageDesktop = ({
     }
 
     useEffect(()=>{
-        const url = `${SCHEDULE_IMAGE_URL}${targetSchedule.sid}.png`;
+        const url = `${SCHEDULE_IMAGE_URL}${targetSchedule.simage}.png`;
         handlePreviewImage(url, setImage);
         setSubscribe(targetSchedule.subscribe);
     }, [targetSchedule])
@@ -184,7 +184,7 @@ const BiasPageDesktop = ({
                                     onClick={() => fileInputRef.current?.click()}
                                 >
                                     <img
-                                        src={imagePre || BIAS_URL + `${targetBias.bid}.png`}
+                                        src={imagePre || BIAS_URL + `${targetBias.bimage}.png`}
                                         onError={(e) => {
                                         e.currentTarget.onerror = null;
                                         e.currentTarget.src = DEFAULT_BIAS_URL;

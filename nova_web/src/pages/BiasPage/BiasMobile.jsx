@@ -162,7 +162,7 @@ const BiasPageMobile = ({
                             <div className={style["bias-image-wrapper"]}
                                 onClick={() => fileInputRef.current?.click()} // 클릭 시 input 열기
                             >
-                                <img src={BIAS_URL + `${targetBias.bid}.png`}
+                                <img src={BIAS_URL + `${targetBias.bimage}.png`}
                                     onError={(e) => {
                                     e.currentTarget.onerror = null;
                                     e.currentTarget.src = DEFAULT_BIAS_URL;
@@ -421,7 +421,7 @@ const ScheduleComponent = ({schedule, metaData, handleTargetSchedule, index, tod
     const [image, setImage] = useState(null);
 
     useEffect(()=>{
-        const url = `${SCHEDULE_IMAGE_URL}${schedule.sid}.png`;
+        const url = `${SCHEDULE_IMAGE_URL}${schedule.simge}.png`;
         handlePreviewImage(url, setImage);
     }, [])
 

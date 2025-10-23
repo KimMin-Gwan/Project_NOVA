@@ -112,7 +112,7 @@ export default function BiasBoxes({ fecthDefaultSetting }) {
                 <div className={clickedBias === i ? "clicked_bias" : "bias-box"}>
                   {bias && (
                     <img
-                      src={BIAS_URL + `${bias.bid}.png`}
+                      src={BIAS_URL + `${bias.bimage}.png`}
                         onError={(e) => {
                             e.currentTarget.onerror = null; // 무한 루프 방지
                             e.currentTarget.src = DEFAULT_BIAS_URL;

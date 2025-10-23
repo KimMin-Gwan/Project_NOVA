@@ -170,7 +170,7 @@ const DesktopScheduleSelectSection = ({
 
     if (selectedSchedule.sid){
       if (!isUploading){
-        handlePreviewImage(`${SCHEDULE_IMAGE_URL}${selectedSchedule.sid}.png`);
+        handlePreviewImage(`${SCHEDULE_IMAGE_URL}${selectedSchedule.simage}.png`);
       }
     }else{
       if(selectedSchedule.bid == ""){

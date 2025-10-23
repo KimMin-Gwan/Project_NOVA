@@ -212,7 +212,7 @@ function MyPage() {
     return <div>loading...</div>;
   }
 
-  const profile = `https://sgsryiav12510.edge.naverncp.com/${myProfile.uid}.png`;
+  const profile = `https://sgsryiav12510.edge.naverncp.com/${myProfile.uimage}.png`;
 
 
   const handleFileChange = async (event) => {

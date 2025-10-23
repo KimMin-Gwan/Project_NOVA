@@ -31,7 +31,7 @@ const ScheduleDetailMobile = ({sid, toggleDetailOption}) => {
                 setTags(schedule.tags);
                 setSubscribe(schedule.subscribe);
 
-                const url = `${SCHEDULE_IMAGE_URL}${schedule.sid}.png`;
+                const url = `${SCHEDULE_IMAGE_URL}${schedule.simage}.png`;
                 handlePreviewImage(url, setImage);
                 setIsLoading(false);
             } catch (error) {

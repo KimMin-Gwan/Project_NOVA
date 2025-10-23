@@ -166,7 +166,7 @@ function MyPage() {
   const targetRef = useIntersectionObserver(handleFetchMore,
       { root:scrollRef.current, threshold: 0.5 }, hasMore);
 
-  const profile = `https://sgsryiav12510.edge.naverncp.com/${myData.uid}.png`;
+  const profile = `https://sgsryiav12510.edge.naverncp.com/${myData.uimage}.png`;
 
   const onClickComponent = (feed) => {
       let currentScroll = 0;
