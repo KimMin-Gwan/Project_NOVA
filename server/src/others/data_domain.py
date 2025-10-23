@@ -31,7 +31,8 @@ class Schedule(SampleDomain):
     def __init__(self, sid="", title="", uid="", uname="",
                  bid="", bname="", datetime=dt.now(), duration= 60,
                  platform=[], code="", update_datetime="",
-                 num_usage=0, display=4, color_code="", tags=[], url=""
+                 num_usage=0, display=4, color_code="", tags=[], url="",
+                 simage=""
                  ):
         self.sid:str = sid                          # schedule id
         self.title :str = title# schedule name
@@ -46,6 +47,7 @@ class Schedule(SampleDomain):
         self.update_datetime:str = update_datetime  # 등록된 시간
         self.num_usage:int = num_usage              # 추가된 횟수
         self.display:bool = display# 공개 비공개 여부
+        self.simage:str = simage
         
         self.subscribe = False
         self.is_owner = False                       # 글쓴이 여부
@@ -68,6 +70,7 @@ class Schedule(SampleDomain):
         self.display:int = dict_data.get('display', 4)
         self.tags:list = dict_data.get('tags', [])
         self.url:list = dict_data.get('url', "")
+        self.simage = dict_data.get('simage', self.sid)
         return self
 
     def get_dict_form_data(self):
@@ -85,6 +88,7 @@ class Schedule(SampleDomain):
             "update_datetime": self.update_datetime,
             "num_usage": self.num_usage,
             "display":self.display,
+            "simage":self.simage,
             
             "subscribe" : self.subscribe,
             "is_owner" : self.is_owner,
@@ -100,7 +104,7 @@ class User(SampleDomain):
                  bids=[], num_long_feed=0, num_comment=0,
                  password = "", like=[], my_comment=[],
                  my_feed = [], my_sids = [], subscribed_sids = [],
-                 verified_bias = ""
+                 verified_bias = "", uimage = ""
                  ):
 
         self.uid = uid
@@ -118,6 +122,7 @@ class User(SampleDomain):
         self.my_sids:list = my_sids
         self.subscribed_sids:list = subscribed_sids
         self.verified_bias = verified_bias
+        self.uimage = uimage
 
     # database로 부터 받아온 데이터를 사용해 내용 구성
     def make_with_dict(self, dict_data:dict):
@@ -137,6 +142,7 @@ class User(SampleDomain):
             self.my_sids = dict_data.get("my_sids", [])
             self.subscribed_sids = dict_data.get("subscribed_sids", [])
             self.verified_bias = dict_data.get("verified_bias", "")
+            self.uimage = dict_data.get('uimage', self.uid)
             return self
         except Exception as e:
             print(e)
@@ -159,14 +165,16 @@ class User(SampleDomain):
             "my_feed" : self.my_feed,
             "my_sids" : self.my_sids,
             "subscribed_sids" : self.subscribed_sids,
-            "verified_bias" : self.verified_bias
+            "verified_bias" : self.verified_bias,
+            "uimage" : self.uimage
         }
         
         
 class Bias(SampleDomain):
     def __init__(self, bid="", bname="", gender="", category=[], tags=[],
                  num_follower=0, platform=[], platform_url="https://supernova.io.kr",
-                 state="DEFAULT", sids = [], introduce='', open_content_mode=True
+                 state="DEFAULT", sids = [], introduce='', open_content_mode=True,
+                 bimage=""
                  ):
         self.bid:str = bid
         self.bname:str = bname
@@ -180,6 +188,7 @@ class Bias(SampleDomain):
         self.sids:list = sids
         self.introduce:str = introduce
         self.open_content_mode:bool = open_content_mode
+        self.bimage = bimage
 
     def make_with_dict(self, dict_data: dict):
         try:
@@ -195,6 +204,7 @@ class Bias(SampleDomain):
             self.sids = dict_data.get('sids', [])
             self.introduce = dict_data.get('introduce', "설명글 입니다.")
             self.open_content_mode = dict_data.get('open_content_mode', True)
+            self.bimage = dict_data.get("bimage", self.bid)
         except Exception as e:
             print(e)
             raise DictMakingError(error_type=e)
@@ -214,7 +224,8 @@ class Bias(SampleDomain):
             "state" : self.state,
             "sids" : self.sids,
             "introduce" : self.introduce,
-            "open_content_mode" : self.open_content_mode
+            "open_content_mode" : self.open_content_mode,
+            "bimage" : self.bimage
         }
         
 class Follower(SampleDomain):

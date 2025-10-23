@@ -235,7 +235,8 @@ class UserPageModel(BaseModel):
                 'uid' : self._uid,
                 'num_feed' : self._num_feed,
                 'num_like' : self._num_like,
-                'num_comment' : self._num_comment
+                'num_comment' : self._num_comment,
+                'uimage' : self._user.uimage
             }
 
             response = self._get_response_data(head_parser=head_parser, body=body)
@@ -262,7 +263,8 @@ class MyProfileModel(BaseModel):
                 'uid': self._uid,
                 "email": self._email,
                 "birth_year": self._birth_year,
-                "gender": self._gender
+                "gender": self._gender,
+                "uimage" : self._user.uimage
             }
 
             response = self._get_response_data(head_parser=head_parser, body=body)
@@ -453,7 +455,10 @@ class ChangeProfilePhotoModel(BaseModel):
     def try_change_profile_photo(self, data_payload):
           
         connector = ObjectStorageConnection()
-        result = connector.make_new_profile_image(uid=self._user.uid,
+        uimage = self._make_new_id()
+        self._user.uimage = uimage
+        
+        result = connector.make_new_profile_image(uimage=uimage,
                                          image=data_payload.image,
                                          image_name=data_payload.image_name
                                          )
@@ -464,6 +469,7 @@ class ChangeProfilePhotoModel(BaseModel):
             self._result = True
             self._detail = "업로드 성공"
         
+        self._database.modify_data_with_id(target_id="uid", target_data=self._user.get_dict_form_data())
         return
 
 class DeleteUserModel(BaseModel):

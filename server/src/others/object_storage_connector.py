@@ -68,7 +68,7 @@ class ObjectStorageConnection:
         #html_content = response.content
         return html_content
     
-    def make_new_profile_image(self, uid:str, image_name:str, image):
+    def make_new_profile_image(self, uimage:str, image_name:str, image):
         valid_extensions = ['.png', '.jpg', '.jpeg', '.PNG']
 
         if not any(image_name.lower().endswith(ext) for ext in valid_extensions):
@@ -76,7 +76,7 @@ class ObjectStorageConnection:
 
         self.__init_boto3()
         path = './model/local_database/temp_profile_image/'
-        file_name = f"{uid}.png"
+        file_name = f"{uimage}.png"
 
         pil_image = _normalize_image(image)
         file_path = path + file_name
@@ -92,7 +92,7 @@ class ObjectStorageConnection:
         self.delete_specific_file(path=path, file_name=file_name)
         return True
         
-    def make_new_bias_profile_image(self, bid:str, image_name:str, image):
+    def make_new_bias_profile_image(self, bimage:str, image_name:str, image):
         valid_extensions = ['.png', '.jpg', '.jpeg', '.PNG']
 
         if not any(image_name.lower().endswith(ext) for ext in valid_extensions):
@@ -100,7 +100,7 @@ class ObjectStorageConnection:
 
         self.__init_boto3()
         path = './model/local_database/temp_bias_profile_image/'
-        file_name = f"{bid}.png"
+        file_name = f"{bimage}.png"
 
         pil_image = _normalize_image(image)
         file_path = path + file_name
@@ -467,7 +467,7 @@ class ImageDescriper:
             print(f"Error in try_feed_image_upload: {e}")
             return "Something Goes Bad", False
 
-    def try_schedule_image_upload(self, sid: str, image: bytes):
+    def try_schedule_image_upload(self, simage: str, image: bytes):
         """
         모든 이미지 포맷을 PNG로 변환 후 S3 업로드
         URL은 항상 sid.png
@@ -475,25 +475,25 @@ class ImageDescriper:
         try:
             pil_image = _normalize_image(image)
 
-            temp_path = f"{self.__schedule_temp_path}/{sid}.png"
+            temp_path = f"{self.__schedule_temp_path}/{simage}.png"
             pil_image.save(temp_path, "PNG")
 
             self.__s3.upload_file(
                 temp_path,
                 self.__schedule_bucket_name,
-                f"{sid}.png",
+                f"{simage}.png",
                 ExtraArgs={'ACL': 'public-read'}
             )
 
-            url = f"{self.__endpoint_url}/{self.__schedule_bucket_name}/{sid}.png"
+            url = f"{self.__endpoint_url}/{self.__schedule_bucket_name}/{simage}.png"
 
         except Exception as e:
             print(f"Error in try_schedule_image_upload: {e}")
-            self.delete_specific_file(path=self.__schedule_temp_path, file_name=f"{sid}.png")
+            self.delete_specific_file(path=self.__schedule_temp_path, file_name=f"{simage}.png")
             return "업로드에 문제가 있습니다.", False
 
         # 임시 파일 삭제
-        self.delete_specific_file(path=self.__schedule_temp_path, file_name=f"{sid}.png")
+        self.delete_specific_file(path=self.__schedule_temp_path, file_name=f"{simage}.png")
 
         return url, True
 

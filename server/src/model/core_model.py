@@ -12,7 +12,8 @@ class TokenModel(BaseModel):
         try:
             body = {
                 'result' : True,
-                'user' : self._user.uid
+                'user' : self._user.uid,
+                'uimage' : self._user.uimage
             }
 
             response = self._get_response_data(head_parser=head_parser, body=body)

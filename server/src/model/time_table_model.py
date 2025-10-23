@@ -941,7 +941,11 @@ class AddScheduleModel(TimeTableModel):
     def prepare_schedule_image(self, sid, bid):
         extension = ""
         
-        if not self._database.get_data_with_id(target="sid", id=sid):
+        schedule_data = self._database.get_data_with_id(target="sid", id=sid):
+            
+            
+        if schedule_data:
+            self._schedule = Schedule().make_with_dict(schedule_data)
             self._result = False
             self._detail = "목표 일정을 찾을 수 없어요"
             return extension, False
@@ -953,7 +957,10 @@ class AddScheduleModel(TimeTableModel):
         
     # 이미지 업로드 시도
     def upload_schedule_image(self, extenstion, image, sid):
-        url, result = ImageDescriper().try_schedule_image_upload(sid=sid, image=image)
+        simage = self._make_new_id()
+        self._schedule.simage = simage
+        
+        url, result = ImageDescriper().try_schedule_image_upload(simage=simage, image=image)
         
         if result:
             self._result = True
@@ -962,6 +969,7 @@ class AddScheduleModel(TimeTableModel):
             self._result = False
             self._detail = "이미지 업로드가 실패했습니다."
         
+        self._database.modify_data_with_id(target_id="sid", target_data=self._schedule.make_with_dict())
         return
 
     def get_response_form_data(self, head_parser):

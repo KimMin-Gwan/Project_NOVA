@@ -469,8 +469,13 @@ class BiasModifyModel(BaseModel):
             return
 
         connector = ObjectStorageConnection()
+        
+        bimage = self._make_new_id()
+        
+        self._bias.bimage = bimage
+        
         result = connector.make_new_bias_profile_image(
-                                            bid=self._bias.bid,
+                                            bimage=bimage,
                                             image=data_payload.image,
                                             image_name=data_payload.image_name
                                         )
@@ -481,6 +486,9 @@ class BiasModifyModel(BaseModel):
         else:
             self._result = True
             self._detail = "Success : Succeed to change bias profile photo"
+        
+        
+        self._database.modify_data_with_id(target_id="bid", target_data=self._bias.get_dict_form_data())
         
         return
 
