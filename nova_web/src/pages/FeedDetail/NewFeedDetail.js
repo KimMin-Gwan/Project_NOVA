@@ -169,7 +169,7 @@ export default function NewFeedDetail() {
         setComments((prevComments) =>
           prevComments.map((comment) =>
             comment.cid === transformedMessage.body
-              ? { ...comment, body: "삭제된 메시지입니다" }
+              ? { ...comment, body: "삭제된 댓글입니다." }
               : comment
           )
         );
@@ -584,7 +584,7 @@ function CommentComponent({cid, uid, uimage, owner, uname, isReply,
   const pressTimer = useRef(null);
 
   const handlePressStart = () => {
-    if (body == "삭제된 댓글입니다."){
+    if (body == "삭제된 댓글입니다." || body == "삭제된 댓글입니다"){
       return;
     }
 
@@ -599,7 +599,7 @@ function CommentComponent({cid, uid, uimage, owner, uname, isReply,
   };
 
   const handlePressStart2 = () => {
-    if (body == "삭제된 댓글입니다."){
+    if (body == "삭제된 댓글입니다." || body == "삭제된 댓글입니다"){
       return;
     }
 
