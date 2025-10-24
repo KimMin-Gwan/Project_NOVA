@@ -939,20 +939,30 @@ class AddScheduleModel(TimeTableModel):
     
     # 이미지 업로드 준비
     def prepare_schedule_image(self, sid, bid):
+        
+        print(sid, bid)
+        
+        print(1)
         extension = ""
         
+        print(2)
         schedule_data = self._database.get_data_with_id(target="sid", id=sid)
             
             
+        print(3)
         if schedule_data:
+            print(6)
             self._schedule = Schedule().make_with_dict(schedule_data)
             self._result = False
             self._detail = "목표 일정을 찾을 수 없어요"
             return extension, False
         
+        print(4)
         if not self._check_valid_access_schedule(bid=bid, sid=sid):
+            print(7)
             return extension, False
         
+        print(5)
         return "png", True
         
     # 이미지 업로드 시도
