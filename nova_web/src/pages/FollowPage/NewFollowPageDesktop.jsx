@@ -87,6 +87,7 @@ const FollowPageDesktop = ({
                 <div className={style["search_input_wrapper"]}>
                     <input className={style["search_input"]}
                         onKeyDown={handleKeyDown}
+                        value={searchWord}
                         onChange={(e) => {
                             handleSearchWord(e);
                         }}
