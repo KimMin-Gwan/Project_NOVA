@@ -611,7 +611,9 @@ const EmptyScheduleComponent = ({
 })=> {
 
     const navigateToMakeNew = () => {
-        navigate(`/schedule/make_new?targetBias=${scheduleData.bid}&targetDate=${scheduleData.str_date}`)
+        if(window.confirm((`${scheduleData.date} 일정 등록 페이지로 이동하시겠습니까?`))){
+            navigate(`/schedule/make_new?targetBias=${scheduleData.bid}&targetDate=${scheduleData.str_date}`)
+        }
     }
 
     if(index == todayIndex){
