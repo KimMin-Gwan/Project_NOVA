@@ -970,7 +970,7 @@ class AddScheduleModel(TimeTableModel):
             self._result = False
             self._detail = "이미지 업로드가 실패했습니다."
         
-        self._database.modify_data_with_id(target_id="sid", target_data=self._schedule.make_with_dict())
+        self._database.modify_data_with_id(target_id="sid", target_data=self._schedule.get_dict_form_data())
         return
 
     def get_response_form_data(self, head_parser):
