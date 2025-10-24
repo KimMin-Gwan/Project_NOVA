@@ -394,8 +394,8 @@ const ScheduleMakePage = () => {
             <div className={style2["mobile-frame"]} >
               {
                 isUploading && (
-                  <div className={style["upload-feedback-background"]}>
-                    <div className={style["upload-feedback"]}>
+                  <div className={style2["upload-feedback-background"]}>
+                    <div className={style2["upload-feedback"]}>
                       업로드 중입니다.
                     </div>
                   </div>
