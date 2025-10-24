@@ -53,9 +53,9 @@ export default function SearchResultPage() {
   const [feedNextKey, setFeedNextKey] = useState(-1);
   const [scheduleKey, setScheduleKey] = useState(-1);
 
-  useEffect(() => {
-    setIsLoading(true);
-  }, [activeIndex]);
+  //useEffect(() => {
+    //setIsLoading(true);
+  //}, [activeIndex]);
 
   useEffect(() => {
     if (type == "post"){
