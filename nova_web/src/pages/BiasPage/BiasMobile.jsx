@@ -26,7 +26,7 @@ const BiasPageMobile = ({
     scheduleList, targetBias, weekData, prevWeek,
      nextWeek, fetchTryFollowBias, is_following, isValidUser, todayIndex
 }) => {
-    const [isChecked, setIsChecked] = useState(true);
+    const [isChecked, setIsChecked] = useState(false);
     const [targetSchedule, setTargetSchedule] = useState(null);
     const [showScheduleMoreOption, setShowScheduleMoreOption] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
@@ -44,7 +44,7 @@ const BiasPageMobile = ({
 
     const handleChecked = async (checked) => {
         const res = await fetchChangeBiasUploadMode(targetBias.bid, !isChecked);
-        setIsChecked(res);
+        setIsChecked(!isChecked);
     }
 
     const handleTargetSchedule = (schedule) => {
