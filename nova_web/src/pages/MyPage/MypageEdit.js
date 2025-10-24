@@ -31,7 +31,7 @@ function MyPage() {
   const [isVali, setIsVali] = useState(false);
   const [isValiPw, setIsValiPw] = useState(false);
   const [warningMessage, setWarningMessage] = useState(
-    "영소문자, 숫자, 특수문자를 포함해 10자리 이상이어야 합니다."
+    "영소문자, 숫자, 특수문자를 포함해 8자리 이상이어야 합니다."
   );
   const regexArray = [
     /^[a-zA-Z0-9가-힣]{2,6}$/, // 알파벳, 숫자, 한글만 허용, 2~6글자
