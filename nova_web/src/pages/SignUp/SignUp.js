@@ -175,10 +175,10 @@ export default function SignUp() {
   }
 
   const handleAllAgreeChange = (e) => {
-    const isChecked = e.target.checked;
-    setAllAgree(isChecked);
-    setAgree1(isChecked);
-    setAgree2(isChecked);
+    //const isChecked = e.target.checked;
+    setAllAgree(!allAgree);
+    setAgree1(!allAgree);
+    setAgree2(!allAgree);
   };
 
   const handleIndividualChange = (e) => {
@@ -336,7 +336,7 @@ export default function SignUp() {
             <div className={style.agree_box}>
               <label>
                 <input type="checkbox" name="agree1" checked={agree1} onChange={handleIndividualChange} required />
-                <span className={style.termsDetail}>
+                <span className={style.termsDetail} name="agree1" onChange={handleIndividualChange}>
                   (필수) 이용약관 동의
                 </span>
                 <p onClick={() => window.open('https://supernova.io.kr/service_terms_and_conditions.pdf', '_blank')}>상세보기</p>
@@ -352,7 +352,9 @@ export default function SignUp() {
           </div>
           <div className={style.all_check}>
             <input type="checkbox" name="all-agree" checked={allAgree} onChange={handleAllAgreeChange} />
-            약관 전체 동의
+            <span name="all-agree" onClick={()=>handleAllAgreeChange()}>
+              약관 전체 동의
+            </span>
           </div>
           <div className={style["submit_area"]}>
             <button type="submit" className={style["submit_btn"]}>
