@@ -420,8 +420,6 @@ const EmptyScheduleComponent = ({scheduleData, metaData, index, todayIndex, navi
 const ScheduleComponent = ({schedule, metaData, handleTargetSchedule, index, todayIndex}) => {
     const [image, setImage] = useState(null);
 
-
-
     useEffect(()=>{
         const url = `${SCHEDULE_IMAGE_URL}${schedule.simage}.png`;
         handlePreviewImage(url, setImage);
