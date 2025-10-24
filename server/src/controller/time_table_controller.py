@@ -202,20 +202,26 @@ class TimeTableController:
     def try_upload_schedule_image(self, schedule_search_engine:SSE, database:Mongo_Database, request:RequestManager) -> AddScheduleModel:
         model = AddScheduleModel(database=database)
         
+        print(1)
         if request.jwt_payload!= "":
             model.set_user_with_email(request=request.jwt_payload)
         
+        print(2)
         extension, result = model.prepare_schedule_image(
             sid=request.data_payload.request.sid,
             bid=request.data_payload.request.bid
             )
         
+        print(3)
         if result:
+            print(4)
             model.upload_schedule_image(
                 extenstion=extension,
                 image=request.data_payload.request.image,
                 sid=request.data_payload.request.sid
                 )
+        
+        print(5)
         
         return model
     
