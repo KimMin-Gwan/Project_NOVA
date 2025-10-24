@@ -409,8 +409,8 @@ function IntroComponent({setStart}){
               <div className={brandStyle["platforms-div"]} >
                   <div className={brandStyle["sites-box"]}
                     onClick={()=>{
-                        fetchChzzkAPI();
-                        //alert("준비 중 입니다.");
+                        //fetchChzzkAPI();
+                        alert("준비 중 입니다.");
                       }}
                   >
                       <img src={chzzkLogo} className={brandStyle["platform-icon"]} alt="Platform Icon" />
@@ -425,7 +425,8 @@ function IntroComponent({setStart}){
                   </div>
                   <div className={brandStyle["sites-box"]}
                     onClick={()=>{
-                        setStart(true);
+                        //setStart(true);
+                        alert("준비 중 입니다.");
                       }}
                   >
                     <span> 채팅 비사용 </span>
