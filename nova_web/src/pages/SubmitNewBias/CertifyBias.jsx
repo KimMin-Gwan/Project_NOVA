@@ -178,7 +178,7 @@ const CertifyBiasComponent= () => {
                                     alert("보안을 위해 캡챠 인증을 완료해주세요.")
                                 }
                             }
-                            
+                            }
                         >
                             등록하기
                         </div>
