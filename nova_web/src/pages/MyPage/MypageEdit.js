@@ -609,6 +609,12 @@ function MyPage() {
         <button className={`${style["logout_box"]}`} onClick={handleLogout}>
           로그아웃
         </button>
+
+        <button className={style["withdrawal_button"]} onClick={()=>{
+          navigate("/certify_bias")
+        }}>
+          스트리머 전용 계정 전환
+        </button>
         <div style={{height: "130px"}}>
 
         </div>

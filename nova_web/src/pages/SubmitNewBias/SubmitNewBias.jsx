@@ -12,7 +12,7 @@ import HEADER from '../../constant/header';
 import Header from "../../component/Header/Header";
 
 const TEXT = {
-  title: "최애 주제 등록",
+  title: "스트리머 신규 등록",
   subtitle: "슈퍼노바 앱에 새로운 스트리머를 등록하세요!",
   noticeTitle: "유의사항",
   noticeDesc:
