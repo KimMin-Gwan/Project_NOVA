@@ -1403,7 +1403,7 @@ class ManagedScheduleTable(ManagedTable):
     # 키를 통해 스케줄을 검색합니다.
     def search_schedule_with_key(self, key:str, search_columns:list, return_id:bool):
         if len(search_columns) == 0 or search_columns[0]=="":
-            columns =['title', 'bname', 'uname', 'code']
+            columns =['title', 'bname', 'uname', 'code', 'tags']
         else:
             columns = search_columns
             
