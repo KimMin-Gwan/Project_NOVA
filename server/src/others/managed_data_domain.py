@@ -412,6 +412,8 @@ class ManagedTable:
                     return str(search_value) == cell.strftime("%Y/%m/%d-%H:%M:%S")
 
             if isinstance(cell, list):
+                print("cell :", cell)
+                print("search_value :", search_value)
                 return any(str(search_value) == str(item) for item in cell)
 
             return str(search_value) == str(cell)
