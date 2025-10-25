@@ -43,7 +43,6 @@ export default function PostBoard () {
         return item.bid;
     });
 
-
     const fetchAllFeed = async () => {
 
         try {
@@ -186,14 +185,14 @@ export default function PostBoard () {
             const data = await fetchAllFeedList(nextData, filterCategory);
 
             setFeedData((prevData) => {
-            const combined = [...prevData, ...data.body.send_data];
+                const combined = [...prevData, ...data.body.send_data];
 
-            // 중복 제거 (feed_id 기준)
-            const unique = Array.from(
-                new Map(combined.map((item) => [item.feed.fid, item])).values()
-            );
+                // 중복 제거 (feed_id 기준)
+                const unique = Array.from(
+                    new Map(combined.map((item) => [item.feed.fid, item])).values()
+                );
 
-            return unique;
+                return unique;
             });
 
             setNextData(data.body.key);
@@ -216,6 +215,7 @@ export default function PostBoard () {
 
             const body = res.data.body;
 
+
             setFeedData((prevData) => {
                 const combined = [...prevData, ...body.send_data];
 
@@ -227,6 +227,8 @@ export default function PostBoard () {
                 return unique;
             });
             setNextData(body.key);
+
+            return res.data.body.send_data.length;
         } catch (err) {
         }
         return 0;
@@ -252,6 +254,7 @@ export default function PostBoard () {
     const targetRef = useIntersectionObserver2(loadMoreCallBack, 
         { root:scrollRef.current, threshold: 0.5 }, hasMore);
 
+    
     if (isMobile){
         return(
             <div className={`all-box ${style["all_container"]}`}>
