@@ -118,7 +118,7 @@ function App() {
       {/* 가림막 */}
       {/*<Route path="/temp" element={<NotYet/>} /> */}
 
-      {/* 게시글 */}
+      {/* 후기 */}
       <Route path="/post_board" element={<PostBoard/>} />
       <Route path="/feed_detail/:fid" element={<NewFeedDetail/>}></Route>
       <Route path="/write_feed" element={<Write />}>
