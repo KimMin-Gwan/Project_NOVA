@@ -634,6 +634,7 @@ class MultiScheduleModel(TimeTableModel):
         else:
             search_columns_list = [i.strip() for i in search_columns.split(",")]
 
+        print("search_columns :", search_columns_list)
         searched_list = schedule_search_engine.try_search_schedule_w_keyword(target_keyword=keyword, search_columns=search_columns_list)
         
         if when != "": # 진행중인 애만 찾고싶으면
@@ -814,7 +815,7 @@ class AddScheduleModel(TimeTableModel):
             title=request_schedule.title,
             datetime=dt,
             duration=request_schedule.duration,
-            tags=request_schedule.tags,
+            tags=request_schedule.tags
         )
 
         bias_data = self._database.get_data_with_id(target="bid", id=schedule.bid)
@@ -899,9 +900,7 @@ class AddScheduleModel(TimeTableModel):
         if not self._check_valid_access_schedule(bid=schedule.bid, sid=schedule.sid):
             return schedule, False
         
-        modified_schedule.sid = schedule.sid
-        modified_schedule.simage = schedule.simage
-        
+        modified_schedule.sid = sid
         return modified_schedule, True
     
       # 복수 개의 (단일 포함) 스테줄 저장
@@ -943,15 +942,10 @@ class AddScheduleModel(TimeTableModel):
     def prepare_schedule_image(self, sid, bid):
         extension = ""
         
-        schedule_data = self._database.get_data_with_id(target="sid", id=sid)
-            
-            
-        if not schedule_data:
+        if not self._database.get_data_with_id(target="sid", id=sid):
             self._result = False
             self._detail = "목표 일정을 찾을 수 없어요"
             return extension, False
-
-        self._schedule = Schedule().make_with_dict(schedule_data)
         
         if not self._check_valid_access_schedule(bid=bid, sid=sid):
             return extension, False
@@ -960,10 +954,7 @@ class AddScheduleModel(TimeTableModel):
         
     # 이미지 업로드 시도
     def upload_schedule_image(self, extenstion, image, sid):
-        simage = self._make_new_id()
-        self._schedule.simage = simage
-        
-        url, result = ImageDescriper().try_schedule_image_upload(simage=simage, image=image)
+        url, result = ImageDescriper().try_schedule_image_upload(sid=sid, image=image)
         
         if result:
             self._result = True
@@ -972,7 +963,6 @@ class AddScheduleModel(TimeTableModel):
             self._result = False
             self._detail = "이미지 업로드가 실패했습니다."
         
-        self._database.modify_data_with_id(target_id="sid", target_data=self._schedule.get_dict_form_data())
         return
 
     def get_response_form_data(self, head_parser):
@@ -1287,7 +1277,7 @@ class BiasScheduleModel(BaseModel):
         # 이번 주의 월요일~일요일 범위 계산
         this_week_start = today - timedelta(days=today.weekday())
         #this_week_end = this_week_start + timedelta(days=6)
-        
+
         # 만약 date가 이번 주 안에 포함되어 있다면
         if week_start.date() == this_week_start:
             # 오늘의 요일 인덱스 설정
@@ -1295,8 +1285,8 @@ class BiasScheduleModel(BaseModel):
         
         for i in range(7):
             current_day:datetime = week_start + timedelta(days=i)
-            target_schedule = Schedule()
             
+            target_schedule = Schedule()
             for schedule in self._schedules:
                 schedule:Schedule=schedule
                 #schedule.datetime = datetime.strptime(schedule.datetime, "%Y-%m-%d %H:%M:%S")

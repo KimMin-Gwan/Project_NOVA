@@ -1406,7 +1406,10 @@ class ManagedScheduleTable(ManagedTable):
             columns =['title', 'bname', 'uname', 'code', 'tags']
         else:
             columns = search_columns
-            
+
+
+        print("managed_data_search_columns : ", columns) 
+        print("managed_data_search_key : ", key)
         searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_df, columns=columns, key=key)
         
         if searched_df.empty:
