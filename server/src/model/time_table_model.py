@@ -1264,7 +1264,9 @@ class BiasScheduleModel(BaseModel):
         return
         
     def set_schedule_ids_in_week(self, schedule_search_engine:SSE, date:datetime):
+        print(date)
         sid_list = schedule_search_engine.try_get_weekly_schedule_list(date=date, sids=self._bias.sids)
+        print(sid_list)
         if sid_list:
             schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids=sid_list)
             
@@ -1288,8 +1290,6 @@ class BiasScheduleModel(BaseModel):
         this_week_start = today - timedelta(days=today.weekday())
         #this_week_end = this_week_start + timedelta(days=6)
         
-        pprint(self._make_dict_list_data(self._schedules))
-
         # 만약 date가 이번 주 안에 포함되어 있다면
         if week_start.date() == this_week_start:
             # 오늘의 요일 인덱스 설정
