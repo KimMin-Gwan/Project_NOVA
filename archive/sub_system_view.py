@@ -1,5 +1,5 @@
        # 임시 URL주소. 바꾸면 됨
-        # 사이드박스에서 각 BIAS별 설정된 Board_type(게시판들)과, BIAS의 플랫폼, 인스타 등 주소를 보내야 함.
+        # 사이드박스에서 각 BIAS별 설정된 Board_type(후기 게시판들)과, BIAS의 플랫폼, 인스타 등 주소를 보내야 함.
         # 펀딩부분은 뭐.. 프론트에서 URL로 이어주겠죠?
         @self.__app.get('/nova_sub_system/try_get_community_side_box')
         def try_get_community_side_box(bid:Optional[str] = ""):
