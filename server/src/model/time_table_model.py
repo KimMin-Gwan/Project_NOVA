@@ -1264,9 +1264,7 @@ class BiasScheduleModel(BaseModel):
         return
         
     def set_schedule_ids_in_week(self, schedule_search_engine:SSE, date:datetime):
-        print(date)
         sid_list = schedule_search_engine.try_get_weekly_schedule_list(date=date, sids=self._bias.sids)
-        print(sid_list)
         if sid_list:
             schedule_datas = self._database.get_datas_with_ids(target_id="sid", ids=sid_list)
             
@@ -1297,7 +1295,7 @@ class BiasScheduleModel(BaseModel):
         
         for i in range(7):
             current_day:datetime = week_start + timedelta(days=i)
-            
+            print(current_day)
             target_schedule = Schedule()
             for schedule in self._schedules:
                 schedule:Schedule=schedule
