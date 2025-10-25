@@ -40,7 +40,7 @@ export default function SearchResultPage() {
   const [feedData, setFeedData] = useState([]);
   const [scheduleData, setScheduleData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [hasMore, setHasMore] = useState(true);
+  const [hasMore, setHasMore] = useState(false);
   const [reportModal, setReportModal] = useState(false);
   const [targetFeed, setTargetFeed] = useState({fid:""});
   const [initialLoaded, setInitialLoaded] = useState(false);
@@ -58,81 +58,114 @@ export default function SearchResultPage() {
   //}, [activeIndex]);
 
   useEffect(() => {
-    if (type == "post"){
-      if(hasMore){
-        fetchSearchKeyword();
+    setInitialLoaded(false);
+
+    const initData = async() => {
+      if (type == "post"){
+        const res = await fetchInitSearchKeyword();
+        if (!res){
+          setInitialLoaded(false);
+          setHasMore(false);
+        }else{
+          setInitialLoaded(true);
+          setHasMore(true);
+        }
+      } else if (type == "schedule") {
+        const res = await fetchInitScheduleKeyword();
+        if (!res){
+          setInitialLoaded(false);
+          setHasMore(false);
+        }else{
+          setInitialLoaded(true);
+          setHasMore(true);
+        }
       }
-    } else if (type == "schedule") {
-      fetchScheduleKeyword();
     }
+
+    initData();
   }, [type]);
 
-  const InitSearchResult = async () => {
-    setFeedNextKey(-1);
-    setFeedData([]);
-    setScheduleKey(-1);
-    setScheduleData([]);
+  async function fetchInitSearchKeyword() {
+    try{
+      const res = await mainApi.get(`feed_explore/search_feed_with_keyword?keyword=${keyword}&key=${-1}`)
 
-    if (type === "post") {
-      await fetchSearchKeyword();
-    } 
-    else if (type === "schedule") {
-      await fetchScheduleKeyword();
-    } 
-    setInitialLoaded(true);
+      const data = res.data;
+
+      setFeedData((prevData) => {
+        const combined = [...prevData, ...data.body.send_data];
+
+        // 중복 제거 (feed_id 기준)
+        const unique = Array.from(
+            new Map(combined.map((item) => [item.feed.fid, item])).values()
+        );
+
+        return unique;
+      });
+
+      setFeedNextKey(res.data.body.key);
+      setIsLoading(false);
+
+      return res.data.body.send_data.length;
+    }catch{
+      return 0
+    }
   }
 
+  async function fetchInitScheduleKeyword() {
+    try{
+      const res = await mainApi.get(`time_table_server/try_search_schedule_with_keyword?keyword=${keyword}&key=${-1}&type=schedule`)
+      setScheduleData(res.data.body.schedules);
+      setScheduleKey(res.data.body.key);
+      setIsLoading(false);
+
+      return res.data.body.schedules.length;
+    }catch{
+      return 0;
+    }
+  }
+
+
   async function fetchSearchKeyword() {
-    await mainApi
-      .get(`feed_explore/search_feed_with_keyword?keyword=${keyword}&key=${feedNextKey}`)
-      .then((res) => {
-        const data = res.data;
+    try{
+      const res = await mainApi.get(`feed_explore/search_feed_with_keyword?keyword=${keyword}&key=${feedNextKey}`)
 
-        setFeedData((prevData) => {
-          const combined = [...prevData, ...data.body.send_data];
+      const data = res.data;
 
-          // 중복 제거 (feed_id 기준)
-          const unique = Array.from(
-              new Map(combined.map((item) => [item.feed.fid, item])).values()
-          );
+      setFeedData((prevData) => {
+        const combined = [...prevData, ...data.body.send_data];
 
-          return unique;
-        });
-        setHasMore(res.data.body.send_data.length > 0);
-        setFeedNextKey(res.data.body.key);
-        setIsLoading(false);
+        // 중복 제거 (feed_id 기준)
+        const unique = Array.from(
+            new Map(combined.map((item) => [item.feed.fid, item])).values()
+        );
+
+        return unique;
       });
+
+      setFeedNextKey(res.data.body.key);
+      setIsLoading(false);
+
+      return res.data.body.send_data.length;
+    }catch{
+      return 0
+    }
   }
 
   async function fetchScheduleKeyword() {
-    await mainApi
-      .get(
-        `time_table_server/try_search_schedule_with_keyword?keyword=${keyword}&key=${scheduleKey}&type=schedule`
-      )
-      .then((res) => {
-          setScheduleData((prev) => [...prev, ...res.data.body.schedules]);
-          setHasMore(res.data.body.schedules.length > 0);
-          setIsLoading(false);
-          setScheduleKey(res.data.body.key);
-      });
-  }
+    try{
+      const res = await mainApi.get(`time_table_server/try_search_schedule_with_keyword?keyword=${keyword}&key=${scheduleKey}&type=schedule`)
+      setScheduleData((prev) => [...prev, ...res.data.body.schedules]);
+      setScheduleKey(res.data.body.key);
+      setIsLoading(false);
 
-  function loadMoreCallBack() {
-    if (!initialLoaded || hasMore || isLoading) return;
+      console.log(res);
 
-    if (type === "post") {
-      fetchSearchKeyword();
+      return res.data.body.schedule.length;
+    }catch{
+      return 0;
     }
-     //else if (type === "comment") {
-      //fetchCommentKeyword();
-    //}
-     else if (type === "schedule") {
-      fetchScheduleKeyword();
-    } 
   }
 
-
-  const targetRef = useIntersectionObserver(loadMoreCallBack, { threshold: 0.5 }, hasMore);
 
   // 다른 버튼 눌러서 동작할때 파라미터를 사용함
   function handleNavigate(searchDetail) {
@@ -215,15 +248,32 @@ export default function SearchResultPage() {
   }
 
   useEffect(() => {
-    let historyList = JSON.parse(localStorage.getItem("history")) || [];
+    const historyList = JSON.parse(localStorage.getItem("history")) || [];
     setSearchHistory(historyList);
-    InitSearchResult();
 
     return () => {
         setFeedData([]);
     };
-}, []);
+  }, []);
 
+
+  const loadMoreCallBack = async() => {
+    if (initialLoaded){
+      if (type === "post") {
+        const result = await fetchSearchKeyword();
+        if (!result) setHasMore(false);
+      }
+      else if (type === "schedule") {
+        const result = await fetchScheduleKeyword();
+        if (!result) setHasMore(false);
+      } 
+    }
+  }
+
+
+  const scrollRef = useRef(null);
+  const targetRef = useIntersectionObserver2(loadMoreCallBack, 
+    { root:scrollRef.current, threshold: 0.5 }, hasMore);
 
   if(isMobile){
     return (
@@ -260,13 +310,24 @@ export default function SearchResultPage() {
             />
         }
         <Tabs activeIndex={activeIndex} handleClick={handleClick} onClickType={onClickType} />
-        {type === "post" && 
-        <FeedSection feedData={feedData} setFeedData={setFeedData} isLoading={isLoading} 
-          onClickComponent={onClickComponent} handleReport={handleReport}
-          /> }
-        {type === "schedule" && <ScheduleListMobile toggleDetailOption={toggleDetailOption} scheduleData={scheduleData}
-        />}
-        <div ref={targetRef} style={{ height: "1px" }}></div>
+        <div
+          style={{marginBottom: "100px"}}
+        >
+          {type === "post" && 
+          <FeedSection feedData={feedData} setFeedData={setFeedData} isLoading={isLoading} 
+            onClickComponent={onClickComponent} handleReport={handleReport}
+            /> }
+          {type === "schedule" && <ScheduleListMobile toggleDetailOption={toggleDetailOption} scheduleData={scheduleData}
+          />}
+          {
+            (hasMore && initialLoaded) && (
+              <div>
+                더 불러오기
+              </div>
+            )
+          }
+          <div ref={targetRef} style={{ height: "1px" }}></div>
+        </div>
         <NavBar />
       </div>
     );
@@ -362,4 +423,30 @@ const ScheduleListMobile = ({toggleDetailOption, scheduleData}) => {
         ))}
     </>
   );
+}
+
+
+
+const useIntersectionObserver2 = (callback, options = {}, hasMore) => {
+  const targetRef = useRef(null);
+
+  useEffect(() => {
+    if (!hasMore || !targetRef.current) return;
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          callback();
+        }
+      });
+    }, options);
+
+    observer.observe(targetRef.current);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [callback, options, hasMore, targetRef.current]); // 👈 핵심 수정
+
+  return targetRef;
 }
