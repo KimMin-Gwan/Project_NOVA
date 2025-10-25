@@ -814,7 +814,8 @@ class AddScheduleModel(TimeTableModel):
             title=request_schedule.title,
             datetime=dt,
             duration=request_schedule.duration,
-            tags=request_schedule.tags
+            tags=request_schedule.tags,
+            simage=request_schedule.simage
         )
 
         bias_data = self._database.get_data_with_id(target="bid", id=schedule.bid)
