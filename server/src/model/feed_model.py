@@ -403,6 +403,9 @@ class FilteredFeedModel(FeedModel):
         #       선택 시, 추가로 카테고리 필터링을 거치게됨
 
         fid_list = feed_search_engine.try_feed_with_bid_n_filtering(target_bid=bid, category=category)
+        
+        print(len(fid_list))
+        print(fid_list)
 
         fid_list, self._key = feed_manager.paging_fid_list(fid_list=fid_list, last_index=last_index, page_size=num_feed)
         # pprint(fid_list)
