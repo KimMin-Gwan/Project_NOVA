@@ -54,8 +54,10 @@ const BiasPageDesktop = ({
     }
 
     useEffect(()=>{
-        const url = `${SCHEDULE_IMAGE_URL}${targetSchedule.simage}.png`;
-        handlePreviewImage(url, setImage);
+        if(targetSchedule.simage){
+            const url = `${SCHEDULE_IMAGE_URL}${targetSchedule.simage}.png`;
+            handlePreviewImage(url, setImage);
+        }
         setSubscribe(targetSchedule.subscribe);
     }, [targetSchedule])
 
@@ -304,9 +306,20 @@ const BiasPageDesktop = ({
                                 <div className={style["single-schedule-image"]}>
                                 {
                                     image != null ? (
-                                        <img src={image} alt="스케줄 이미지" />
+                                        <img src={image} alt="스케줄 이미지" 
+                                            onError={(e) => {
+                                            e.currentTarget.onerror = null;
+                                            e.currentTarget.src = defaultImage;
+                                        }}
+
+                                        />
                                     ) : (
-                                        <img src={defaultImage} alt="스케줄 이미지" />
+                                        <img src={defaultImage} alt="스케줄 이미지" 
+                                            onError={(e) => {
+                                            e.currentTarget.onerror = null;
+                                            e.currentTarget.src = defaultImage;
+                                        }}
+                                        />
                                     )
                                 }   
                                 </div>

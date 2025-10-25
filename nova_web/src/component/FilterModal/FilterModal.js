@@ -9,8 +9,8 @@ let FilterData = [
   },
   {
     id: 1,
-    value: "자유 후기 게시판",
-    name: "자유 후기 게시판",
+    value: "자유 게시판",
+    name: "자유 게시판",
   },
   {
     id: 2,

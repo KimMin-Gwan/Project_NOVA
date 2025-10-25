@@ -25,7 +25,7 @@ import feedApi from "../../services/apis/feedApi.js";
 
 const categoryData = [
   { key: 2, category: "후기" },
-  { key: 0, category: "자유후기 게시판" },
+  { key: 0, category: "자유 게시판" },
   { key: 1, category: "아트" },
 ];
 
