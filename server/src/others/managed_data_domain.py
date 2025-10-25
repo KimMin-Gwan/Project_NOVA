@@ -722,6 +722,9 @@ class ManagedTable:
         week_start = date - timedelta(days=date.weekday())
         week_end = week_start + timedelta(days=6)
 
+        print(week_start)
+        print(week_end)
+
         mask = (df[data_column] >= week_start) & (df[data_column] <= week_end)
         filtered_df = df[mask]
 
