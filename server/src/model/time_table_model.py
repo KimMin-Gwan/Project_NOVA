@@ -815,7 +815,6 @@ class AddScheduleModel(TimeTableModel):
             datetime=dt,
             duration=request_schedule.duration,
             tags=request_schedule.tags,
-            simage=request_schedule.simage
         )
 
         bias_data = self._database.get_data_with_id(target="bid", id=schedule.bid)
@@ -900,7 +899,9 @@ class AddScheduleModel(TimeTableModel):
         if not self._check_valid_access_schedule(bid=schedule.bid, sid=schedule.sid):
             return schedule, False
         
-        modified_schedule.sid = sid
+        modified_schedule.sid = schedule.sid
+        modified_schedule.simage = schedule.simage
+        
         return modified_schedule, True
     
       # 복수 개의 (단일 포함) 스테줄 저장
