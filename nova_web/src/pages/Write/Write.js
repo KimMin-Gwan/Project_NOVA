@@ -25,7 +25,7 @@ import feedApi from "../../services/apis/feedApi.js";
 
 const categoryData = [
   { key: 2, category: "후기" },
-  { key: 0, category: "자유게시판" },
+  { key: 0, category: "자유후기 게시판" },
   { key: 1, category: "아트" },
 ];
 
@@ -356,7 +356,7 @@ const Write = () => {
           >
             취소
           </p>
-          <span className={style["page-title"]}>게시글 작성</span>
+          <span className={style["page-title"]}>후기글 작성</span>
 
           <p
             className={style["fake-buttons"]}
@@ -434,7 +434,7 @@ const Write = () => {
         </div>
 
         <p className={style["alert_message"]}>
-          작성 규정을 위반한 게시글은 경고 없이 삭제 될 수 있습니다.
+          작성 규정을 위반한 후기글은 경고 없이 삭제 될 수 있습니다.
         </p>
         
         
@@ -512,7 +512,7 @@ const Write = () => {
         <div className={style2["write-frame-desktop"]}>
           <div className={style2["write-frame-wrapper-desktop"]}>
             <div className={style["top_container"]}>
-              <span className={style["page-title"]}>게시글 작성</span>
+              <span className={style["page-title"]}>후기글 작성</span>
             </div>
 
             <div className={style2["write-option-wrapper"]}>
@@ -585,7 +585,7 @@ const Write = () => {
             </div>
 
             <p className={style2["alert-message"]}>
-              작성 규정을 위반한 게시글은 경고 없이 삭제 될 수 있습니다.
+              작성 규정을 위반한 후기글은 경고 없이 삭제 될 수 있습니다.
             </p>
 
             <div className={style2["submit-button"]}

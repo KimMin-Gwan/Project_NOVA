@@ -159,7 +159,7 @@ function ScheduleComponentList({
   const targetRef = useIntersectionObserver(loadMoreCallBack, { threshold: 0.5 }, hasMore);
 
   const navigate = useNavigate();
-  // 게시판으로 이동
+  // 후기 게시판으로 이동
   const navBoard = (target) => {
     navigate(`/search_result?keyword=${target}`);
   };

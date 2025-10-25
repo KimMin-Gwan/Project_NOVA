@@ -26,7 +26,7 @@ export default function SearchBoxDesktop({
         onChange={(e) => {
             onChangeSearchWord(e);
         }}
-        placeholder="콘텐츠 또는 게시글을 검색 할 수 있어요"
+        placeholder="콘텐츠 또는 후기를 검색 할 수 있어요"
         type="text"
         />
     </div>

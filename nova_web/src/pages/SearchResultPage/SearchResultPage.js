@@ -9,7 +9,6 @@ import Header from "../../component/Header/Header";
 import Comments from "../../component/Comments/Comments";
 import Tabs from "../../component/Tabs/Tabs";
 import FeedSection from "../../component/FeedSection/FeedSection";
-import useIntersectionObserver from "../../hooks/useIntersectionObserver";
 import NoneSchedule from "../../component/NoneFeed/NoneSchedule";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import DesktopLayout from "../../component/DesktopLayout/DeskTopLayout";
@@ -158,9 +157,7 @@ export default function SearchResultPage() {
       setScheduleKey(res.data.body.key);
       setIsLoading(false);
 
-      console.log(res);
-
-      return res.data.body.schedule.length;
+      return res.data.body.schedules.length;
     }catch{
       return 0;
     }
@@ -211,7 +208,7 @@ export default function SearchResultPage() {
   }
 
   const onClickType = (data) => {
-    if (data === "게시글"){
+    if (data === "후기글"){
       setType("post");
     }
     else if (data === "콘텐츠"){
@@ -353,10 +350,10 @@ export default function SearchResultPage() {
             <div className={style["taps_wrapper"]}>
               <div
                 className={style["single_tap"]}
-                onClick={() => onClickType("게시글")}
+                onClick={() => onClickType("후기글")}
                 style={getTapStyle(type === "post")}
               >
-                게시글
+                후기글
               </div>
               <div
                 className={style["single_tap"]}

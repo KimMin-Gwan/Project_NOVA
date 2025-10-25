@@ -24,7 +24,7 @@ const user_icon= 'https://sgsryiav12510.edge.naverncp.com/user_profile.svg';
 const boardList = [
   {
     id: 3,
-    title: "전체 게시글",
+    title: "전체 후기글",
     src: all_post,
     end_point: "/post_board",
   },
@@ -71,9 +71,9 @@ function MoreSee({ onModeChange }) {
   const serviceList = [
     {
       id: 1,
-      title: "새로운 게시글 작성",
+      title: "새로운 후기글 작성",
       src: new_moment,
-      alt: "새로운 게시글 작성",
+      alt: "새로운 후기글 작성",
       end_point: "/write_feed",
       onClick: (endPoint) => handlePage(endPoint),
     },
@@ -199,7 +199,7 @@ function MoreSee({ onModeChange }) {
             </div>
 
             <Banner/>
-            {/* 게시판 목록 */}
+            {/* 후기 게시판 목록 */}
             <div className={style["list-bar"]}>서비스 목록</div>
             <ul className={style.listContainer}>
               {firstBoardList.map((board, i) => {

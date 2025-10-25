@@ -65,7 +65,7 @@ export default function DesktopLayout({ children }) {
 
   const actionButtons = [
     {
-        title: "게시글 작성",
+        title: "후기 작성",
         end_point : "/write_feed",
         alt: "write_feed"
     },
@@ -96,7 +96,7 @@ export default function DesktopLayout({ children }) {
       ],
     },
     {
-      title: "게시판",
+      title: "후기 게시판",
       icon: feed_icon,
       end_point : "/post_board",
       alt: "post_board",

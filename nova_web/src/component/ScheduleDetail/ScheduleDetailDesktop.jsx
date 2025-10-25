@@ -31,8 +31,10 @@ const ScheduleDetailDekstop = ({sid, toggleDetailOption}) => {
                 setTags(schedule.tags);
                 setSubscribe(schedule.subscribe);
 
-                const url = `${SCHEDULE_IMAGE_URL}${schedule.simage}.png`;
-                handlePreviewImage(url, setImage);
+                if (schedule.simage){
+                    const url = `${SCHEDULE_IMAGE_URL}${schedule.simage}.png`;
+                    handlePreviewImage(url, setImage);
+                }
                 setIsLoading(false);
             } catch (error) {
                 console.error("일정 불러오기 실패:", error);
@@ -74,7 +76,12 @@ const ScheduleDetailDekstop = ({sid, toggleDetailOption}) => {
                                     }}
                                 >
                                     <div className={style["schedule-image"]}>
-                                        <img src={image ?? defaultImage} alt="스케줄 이미지" />
+                                        <img src={image ?? defaultImage} alt="스케줄 이미지" 
+                                            onError={(e) => {
+                                                e.currentTarget.onerror = null;
+                                                e.currentTarget.src = defaultImage;
+                                            }}
+                                        />
                                     </div>
                                     <div className={style["schedule-bias-hyper-link"]}>
                                         이미지를 눌러 스트리머 페이지로 이동

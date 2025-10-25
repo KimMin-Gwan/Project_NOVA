@@ -9,8 +9,8 @@ let FilterData = [
   },
   {
     id: 1,
-    value: "자유게시판",
-    name: "자유게시판",
+    value: "자유 후기 게시판",
+    name: "자유 후기 게시판",
   },
   {
     id: 2,
@@ -19,8 +19,8 @@ let FilterData = [
   },
   {
     id: 3,
-    value: "유머게시판",
-    name: "유머게시판",
+    value: "유머 후기 게시판",
+    name: "유머 후기 게시판",
   },
   {
     id: 4,
@@ -81,12 +81,12 @@ export default function FilterModal({
       >
         <div className="FilterModal_title">
           <h3>딱 맞는 피드를 추천해드려요!</h3>
-          <p>보고 싶은 게시글만 보여질 수 있도록, 지금 바로 경험해보세요.</p>
+          <p>보고 싶은 후기글만 보여질 수 있도록, 지금 바로 경험해보세요.</p>
         </div>
 
         <div className="FilterModal_kind">
           <h5>
-            게시글 종류 <span>(중복선택 가능)</span>
+            후기글 종류 <span>(중복선택 가능)</span>
           </h5>
           <div className="button_container">
             {FilterData.map((data, i) => {

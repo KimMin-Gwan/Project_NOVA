@@ -31,8 +31,10 @@ const ScheduleDetailMobile = ({sid, toggleDetailOption}) => {
                 setTags(schedule.tags);
                 setSubscribe(schedule.subscribe);
 
-                const url = `${SCHEDULE_IMAGE_URL}${schedule.simage}.png`;
-                handlePreviewImage(url, setImage);
+                if (schedule.simage){
+                    const url = `${SCHEDULE_IMAGE_URL}${schedule.simage}.png`;
+                    handlePreviewImage(url, setImage);
+                }
                 setIsLoading(false);
             } catch (error) {
                 console.error("일정 불러오기 실패:", error);

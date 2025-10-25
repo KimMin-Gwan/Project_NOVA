@@ -10,13 +10,12 @@ import DesktopLayout from '../../component/DesktopLayout/DeskTopLayout';
 import mainApi from '../../services/apis/mainApi';
 import HEADER from '../../constant/header';
 import Header from "../../component/Header/Header";
+import ReCAPTCHA from 'react-google-recaptcha';
 
 const TEXT = {
   title: "스트리머 전용 계정 등록",
   subtitle: "스트리머라면 전용 계정으로 직접 관리해요!",
 };
-
-
 
 export default function CertifyBiasPage(){
     const isMobile = useMediaQuery('(max-width:1100px)');
@@ -39,6 +38,13 @@ export default function CertifyBiasPage(){
 const CertifyBiasComponent= () => {
     const navigate = useNavigate();
     const location = useLocation();
+
+    const [captcha, setCaptcha] = useState("");
+
+    const handleCaptcha = (value) => {
+        setCaptcha(value);
+    };
+
 
     function handleFetch() {
         fetch("https://supernova.io.kr/home/is_valid", {
@@ -152,7 +158,17 @@ const CertifyBiasComponent= () => {
                             "비정상적인 요청을 반복하는 계정은 운영 지침에 따라 제재될 수 있습니다."
                         }
                     </div>
-
+                    <div style ={{
+                    marginBottom: "10px"
+                    }}>
+                    <ReCAPTCHA
+                        sitekey="6LePWrErAAAAAHE58_Rrc2Cxe9j01Ioxu8hZaysO"
+                        onChange={handleCaptcha}
+                    />
+                    <p style={{ display:"flex", justifyContent:"center", marginBottom: "8px", color: "#ff7676ff" }}>
+                        보안을 위해 캡차 인증을 완료해 주세요.
+                    </p>
+                    </div>
                     <div className={style["submit-button-wrapper"]}>
                         <div className={style["submit-button"]}
                             onClick={()=>alert("준비중입니다.")}

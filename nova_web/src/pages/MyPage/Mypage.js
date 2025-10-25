@@ -233,7 +233,7 @@ function MyPage() {
                   {myData.num_feed}
                 </div>
                 <div className={style2["user-data-type"]}>
-                  게시글
+                  후기글
                 </div>
               </div>
               <div className={style2["user-detail-wrapper"]}>
@@ -316,7 +316,7 @@ function MyPage() {
               <div className={style3["user-detail-container"]}>
                 <div className={style3["user-info-wrapper"]}>
                   <div className={style3["user-data-type"]}>
-                    게시글
+                    후기글
                   </div>
                   <div className={style3["user-data-number"]}>
                     {myData.num_feed}

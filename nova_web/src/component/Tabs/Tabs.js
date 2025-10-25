@@ -2,7 +2,7 @@ import style from "./Tabs.module.css";
 
 export default function Tabs({ activeIndex, handleClick, onClickType }) {
   const tabElement = [
-    "게시글",
+    "후기글",
     //"댓글",
     "콘텐츠"
   ]

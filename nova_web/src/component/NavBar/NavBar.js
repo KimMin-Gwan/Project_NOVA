@@ -27,7 +27,7 @@ const NavBar = ({ brightMode }) => {
     },
     {
       id: 1,
-      title: "게시판",
+      title: "후기 게시판",
       src: short_form,
       alt: "bias_board",
       // end_point: "/feed_list?type=bias",
@@ -148,7 +148,7 @@ const NavBar = ({ brightMode }) => {
                 <div className="img-box">
                   <img src={moment} alt="moment" />
                 </div>
-                새 게시글
+                새 후기
               </button>
 
               <button
