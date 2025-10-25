@@ -431,8 +431,6 @@ class ManagedTable:
                     return str(search_value) == cell.strftime("%Y/%m/%d-%H:%M:%S")
 
             if isinstance(cell, list):
-                print("cell :", cell)
-                print("search_value :", search_value)
                 return any(str(search_value) == str(item) for item in cell)
 
             return str(search_value) in str(cell)
@@ -1409,9 +1407,6 @@ class ManagedScheduleTable(ManagedTable):
         else:
             columns = search_columns
 
-
-        print("managed_data_search_columns : ", columns) 
-        print("managed_data_search_key : ", key)
         searched_df = self._search_data_with_key_str_n_columns(df=self.__schedule_df, columns=columns, key=key)
         
         if searched_df.empty:

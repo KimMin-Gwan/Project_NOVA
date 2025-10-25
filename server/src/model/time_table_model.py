@@ -634,7 +634,6 @@ class MultiScheduleModel(TimeTableModel):
         else:
             search_columns_list = [i.strip() for i in search_columns.split(",")]
 
-        print("search_columns :", search_columns_list)
         searched_list = schedule_search_engine.try_search_schedule_w_keyword(target_keyword=keyword, search_columns=search_columns_list)
         
         if when != "": # 진행중인 애만 찾고싶으면
