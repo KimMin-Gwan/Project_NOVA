@@ -720,10 +720,7 @@ class ManagedTable:
 
         # 주의 시작(월요일)과 끝(일요일) 계산
         week_start = date - timedelta(days=date.weekday())
-        week_end = week_start + timedelta(days=6)
-
-        print(week_start)
-        print(week_end)
+        week_end = (week_start + timedelta(days=6)).replace(hour=23, minute=59, second=59, microsecond=999999)
 
         mask = (df[data_column] >= week_start) & (df[data_column] <= week_end)
         filtered_df = df[mask]
