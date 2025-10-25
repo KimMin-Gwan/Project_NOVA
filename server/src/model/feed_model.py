@@ -405,7 +405,7 @@ class FilteredFeedModel(FeedModel):
         fid_list = feed_search_engine.try_feed_with_bid_n_filtering(target_bid=bid, category=category)
         
         print(len(fid_list))
-        print(fid_list)
+        print(last_index)
 
         fid_list, self._key = feed_manager.paging_fid_list(fid_list=fid_list, last_index=last_index, page_size=num_feed)
         # pprint(fid_list)
