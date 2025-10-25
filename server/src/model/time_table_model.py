@@ -1287,6 +1287,8 @@ class BiasScheduleModel(BaseModel):
         # 이번 주의 월요일~일요일 범위 계산
         this_week_start = today - timedelta(days=today.weekday())
         #this_week_end = this_week_start + timedelta(days=6)
+        
+        pprint(self._make_dict_list_data(self._schedules))
 
         # 만약 date가 이번 주 안에 포함되어 있다면
         if week_start.date() == this_week_start:
