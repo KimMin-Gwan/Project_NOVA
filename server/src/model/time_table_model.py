@@ -1295,13 +1295,14 @@ class BiasScheduleModel(BaseModel):
         
         for i in range(7):
             current_day:datetime = week_start + timedelta(days=i)
-            print(current_day)
             target_schedule = Schedule()
+            
             for schedule in self._schedules:
                 schedule:Schedule=schedule
                 #schedule.datetime = datetime.strptime(schedule.datetime, "%Y-%m-%d %H:%M:%S")
                 
                 if schedule.datetime.date() == current_day.date():
+                    print(schedule.get_dict_form_data())
                     target_schedule=schedule
                     break
                     
