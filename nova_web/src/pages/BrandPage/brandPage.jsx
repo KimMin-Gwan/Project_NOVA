@@ -332,34 +332,34 @@ function AppServices1({targetRef}){
 }
 
 function AppServices2({targetRef}) {
-    const title = "SUPERNOVA에서만 제공하는 스트리밍 전용 콘텐츠";
-    const subtitle = "지원되는 플랫폼에서 스트리밍 하는 스트리머들은 누구나 사용가능!\n  SUPERNOVA의 스트리밍 전용 콘텐츠를 시청자와 함께 지금 바로 즐겨보세요!"
+    const title = "스트리머의 콘텐츠, SUPERNOVA가 빛나게 합니다.";
+    const subtitle = "당신의 방송이 더 많은 사람에게 닿을 수 있도록, SUPERNOVA는 콘텐츠의 본질에 집중합니다. \n이제 진짜 방송에만 몰입하세요."
 
     const cards = [
         {
         key: "1",
         content: (
-            <Card imagen={sample1}
-                title={"스트리머 vs 모두의 두뇌! 실시간 [ 스무고개 ]"}
-                body={"스트리머가 떠올린 정답, 시청자 여러분의 질문으로 풀어보세요. \n채팅 하나면 누구나 참여 가능! \n 하나의 질문, 수많은 추리. 집단 지성의 힘으로 정답에 다가가 보세요!"}
+            <Card imagen={sample3}
+                title={"[ 국산 인디 게임 ] 콘텐츠 홍보 서비스"}
+                body={"방송 콘텐츠를 고민하시나요? 어떤 게임을 하면 좋을지 찾기 어렵다고요? \n운영진이 직접 엄선한 국산 인디 게임과 콜라보 해보세요!"}
             />
         )
         },
         {
         key: "2",
         content: (
-            <Card imagen={sample3}
-                title={"시청자와 함께 하는 [ 틀린 그림 찾기 ]"}
-                body={"함께 보면 더 잘 보여요!\n 여러 사람의 관찰력이 모여 정답을 찾아가는 집단 지성 기반의 실시간 협력형 콘텐츠입니다."}
+            <Card imagen={sample2}
+                title={"SUPERNOVA에서 제공하는 특별 [ 광고 서비스 ]"}
+                body={"스트리머 전용 광고 기능으로 콘텐츠와 자신을 홍보해보세요. \nSUPERNOVA 이용자라면? 💸 특별 할인은 덤!"}
             />
         )
         },
         {
         key: "3",
         content: (
-            <Card imagen={sample2}
-                title={"채팅으로 참여하는 노래 맞추기! [ 뮤직게서 ]"}
-                body={"이 노래, 어디서 많이 들어봤는데…? \n 시청자는 채팅으로 참여해 곡명을 추리하고 정답을 맞힙니다. \n 다같이 추리하면 전부다 맞출 수 있을지도??"}
+            <Card imagen={sample1}
+                title={"SUPERNOVA가 특별 제작한 [ 저챗 콘텐츠] "}
+                body={"시청자랑 토크만 하긴 아쉽죠? \n방송 화면에서 바로 참여 가능한 [ 채팅형 콘텐츠 ] \n이제 채팅이 곧 콘텐츠가 됩니다. 오직 SUPERNOVA에서만!"}
             />
         )
         }
@@ -384,8 +384,8 @@ function AppServices2({targetRef}) {
 }
 
 function AppServices3({targetRef}) {
-    const title = "이 모든걸 만들고 운영하는 팀 [ SUPERNOVA ]는 누구?";
-    const subtitle = "팀 슈퍼노바는 총 4명의 청년 개발자로 이루어진 팀입니다.\n 20대의 청춘을 바쳐 더 쉬운 스트리머 활동과 더 포괄적인 팬활동을 위해 노력합니다. ";
+    const title = "이 모든걸 만들고 운영하는 [ TEAM SUPERNOVA ]는 누구?";
+    const subtitle = "팀 슈퍼노바는 총 4명의 대학생 개발자로 이루어진 팀입니다.\n 20대의 청춘을 바쳐 더 쉬운 스트리머 활동과 더 포괄적인 팬활동을 위해 노력합니다. ";
 
     const features = [
         {
